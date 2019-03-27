@@ -12,6 +12,7 @@ mantra: Simplicity above all else
  */
 package test.apis
 
+import org.junit.Assert
 import org.junit.Test
 import slatekit.apis.helpers.ApiHelper
 import slatekit.common.auth.Roles
@@ -25,16 +26,16 @@ class Api_Helper_Tests : ApiTestsBase() {
 
 
     @Test fun is_api_action_not_authed() {
-        assert(ApiHelper.isActionNotAuthed(Roles.none))
-        assert(ApiHelper.isActionNotAuthed(Roles.guest))
-        assert(!ApiHelper.isActionNotAuthed(Roles.parent))
+        Assert.assertTrue(ApiHelper.isActionNotAuthed(Roles.none))
+        Assert.assertTrue(ApiHelper.isActionNotAuthed(Roles.guest))
+        Assert.assertTrue(!ApiHelper.isActionNotAuthed(Roles.parent))
     }
 
 
     @Test fun is_api_not_authed() {
-        assert(ApiHelper.isApiNotAuthed("@parent", "?"))
-        assert(ApiHelper.isApiNotAuthed(Roles.parent, Roles.guest))
-        assert(ApiHelper.isApiNotAuthed("@parent", ""))
-        assert(ApiHelper.isApiNotAuthed(Roles.parent, Roles.none))
+        Assert.assertTrue(ApiHelper.isApiNotAuthed("@parent", "?"))
+        Assert.assertTrue(ApiHelper.isApiNotAuthed(Roles.parent, Roles.guest))
+        Assert.assertTrue(ApiHelper.isApiNotAuthed("@parent", ""))
+        Assert.assertTrue(ApiHelper.isApiNotAuthed(Roles.parent, Roles.none))
     }
 }

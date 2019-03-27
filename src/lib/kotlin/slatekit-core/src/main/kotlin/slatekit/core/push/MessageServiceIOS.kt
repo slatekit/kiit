@@ -13,19 +13,13 @@
 
 package slatekit.core.push
 
-import slatekit.common.TODO
+import slatekit.common.TODO.IMPLEMENT
 import slatekit.results.Failure
 import slatekit.results.Notice
-import java.util.concurrent.ExecutorService
-import java.util.concurrent.Executors
 
-class MessageServiceIOS(executor: ExecutorService? = null) : MessageServiceBase() {
-
-  // TODO.IMPLEMENT("ASYNC", "Figure out an async Http library to use or look at Kotlin CoRoutines")
-  private val exec = executor ?: Executors.newSingleThreadExecutor()
+class MessageServiceIOS() : MessageServiceBase() {
 
   override fun send(msg: Message): Notice<Boolean> {
-    // TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     return Failure("Not implemented")
   }
 
@@ -37,7 +31,6 @@ class MessageServiceIOS(executor: ExecutorService? = null) : MessageServiceBase(
    * @note : implement in derived class that can actually send the message
    */
   override fun sendAsync(msg: Message, callback:(Notice<Boolean>) -> Unit) {
-    TODO.IMPLEMENT("ASYNC", "Figure out an async Http library to use or look at Kotlin CoRoutines")
-
+    IMPLEMENT("ASYNC", "Figure out an async Http library to use or look at Kotlin CoRoutines")
   }
 }

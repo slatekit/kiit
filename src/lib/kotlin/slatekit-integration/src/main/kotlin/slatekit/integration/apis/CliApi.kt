@@ -17,9 +17,7 @@ import slatekit.apis.ApiHost
 import slatekit.apis.security.CliProtocol
 import slatekit.apis.core.Api
 import slatekit.cli.*
-import slatekit.common.args.Args
 import slatekit.common.requests.InputArgs
-import slatekit.common.info.Credentials
 import slatekit.common.info.Info
 import slatekit.results.StatusCodes
 import slatekit.results.Success
@@ -52,8 +50,7 @@ class CliApi(
         val metaTransform: ((Map<String,Any>) -> List<Pair<String,String>>)? = null
         //val cliMeta: CliMeta? = null
 )
-    // TODO: get rid of the "!!" its left over from early days
-    : CLI(settings, Info(ctx.app, ctx.build, ctx.start, ctx.sys), ctx.dirs!!)
+    : CLI(settings, Info(ctx.app, ctx.build, ctx.start, ctx.sys), ctx.dirs)
 {
 
     val metaNameForApiKey = "api-key"
@@ -142,9 +139,9 @@ class CliApi(
 
     fun checkForHelp(req:CliRequest):Pair<Boolean, ApiHelpType> {
         val args = req.args
-        val hasQuestion = args.actionParts.isNotEmpty() && args.actionParts.last() == "?"
+        val hasQuestion = args.parts.isNotEmpty() && args.parts.last() == "?"
         return if( hasQuestion ) {
-            when(args.actionParts.size ) {
+            when(args.parts.size ) {
                 1    -> Pair(true, ApiHelpType.Listing)
                 2    -> Pair(true, ApiHelpType.Area)
                 3    -> Pair(true, ApiHelpType.Api)
@@ -152,7 +149,7 @@ class CliApi(
                 else -> Pair(false, ApiHelpType.NA)
             }
         } else {
-            if(args.actionParts.isNotEmpty() && args.actionParts[0] == "?" ){
+            if(args.parts.isNotEmpty() && args.parts[0] == "?" ){
                 Pair(true, ApiHelpType.Listing)
             } else {
                 Pair(false, ApiHelpType.NA)

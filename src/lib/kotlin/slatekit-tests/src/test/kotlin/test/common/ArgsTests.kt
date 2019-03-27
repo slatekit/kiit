@@ -17,9 +17,10 @@ package test.common
  * Created by kishorereddy on 5/22/17.
  */
 
+import org.junit.Assert
 import org.junit.Test
 import slatekit.common.args.Args
-import slatekit.common.args.ArgsFuncs
+import slatekit.common.args.ArgsCheck
 import slatekit.results.Try
 import slatekit.results.getOrElse
 
@@ -43,6 +44,17 @@ class ArgsTests {
             Pair("env"   , "loc" ),
             Pair("log"   , "info"),
             Pair("region", "ny"  )
+        ))
+    }
+
+
+    @Test fun can_parse_args_with_aliases() {
+
+        val result = Args.parse("--e:loc --l:info --r:ny")
+        ensure(result, true, 3, listOf(
+                Pair("e"   , "loc" ),
+                Pair("l"   , "info"),
+                Pair("r"   , "ny"  )
         ))
     }
 
@@ -193,22 +205,22 @@ class ArgsTests {
 
 
     @Test fun is_meta_arg_with_help() {
-        assert( ArgsFuncs.isMetaArg(listOf("help"  ), 0, "help", "info") )
-        assert( ArgsFuncs.isMetaArg(listOf("-help" ), 0, "help", "info") )
-        assert( ArgsFuncs.isMetaArg(listOf("--help"), 0, "help", "info") )
-        assert( ArgsFuncs.isMetaArg(listOf("/help" ), 0, "help", "info") )
+        Assert.assertTrue( ArgsCheck.isMetaArg(listOf("help"  ), 0, "help", "info") )
+        Assert.assertTrue( ArgsCheck.isMetaArg(listOf("-help" ), 0, "help", "info") )
+        Assert.assertTrue( ArgsCheck.isMetaArg(listOf("--help"), 0, "help", "info") )
+        Assert.assertTrue( ArgsCheck.isMetaArg(listOf("/help" ), 0, "help", "info") )
 
-        assert( ArgsFuncs.isMetaArg(listOf("info"  ), 0, "help", "info") )
-        assert( ArgsFuncs.isMetaArg(listOf("-info" ), 0, "help", "info") )
-        assert( ArgsFuncs.isMetaArg(listOf("--info"), 0, "help", "info") )
-        assert( ArgsFuncs.isMetaArg(listOf("/info" ), 0, "help", "info") )
+        Assert.assertTrue( ArgsCheck.isMetaArg(listOf("info"  ), 0, "help", "info") )
+        Assert.assertTrue( ArgsCheck.isMetaArg(listOf("-info" ), 0, "help", "info") )
+        Assert.assertTrue( ArgsCheck.isMetaArg(listOf("--info"), 0, "help", "info") )
+        Assert.assertTrue( ArgsCheck.isMetaArg(listOf("/info" ), 0, "help", "info") )
 
-        assert( !ArgsFuncs.isMetaArg(listOf("/about" ), 0, "help", "info"))
+        Assert.assertTrue( !ArgsCheck.isMetaArg(listOf("/about" ), 0, "help", "info"))
     }
 
 
     @Test fun is_help_on_area() {
-        assert( ArgsFuncs.isHelp(listOf("app", "?"), 1) )
+        Assert.assertTrue( ArgsCheck.isHelp(listOf("app", "?"), 1) )
     }
 
 
@@ -219,40 +231,40 @@ class ArgsTests {
                        parts:List<String>? = null) : Unit {
 
         // success / fail
-        assert( result.success == success )
+        Assert.assertTrue( result.success == success )
 
         val args = result.getOrElse { Args.default() }
 
         // size
-        assert( args.size() == size)
+        Assert.assertTrue( args.size() == size)
 
         // expected
         for(item in expectedNamed){
-            assert( args.containsKey(item.first))
-            assert( args.getString(item.first) == item.second)
+            Assert.assertTrue( args.containsKey(item.first))
+            Assert.assertTrue( args.getString(item.first) == item.second)
         }
 
         expectedMeta?.let { metaArgs ->
             for((first, second) in metaArgs){
-                assert( args.containsMetaKey(first))
-                assert( args.getMetaString(first) == second)
+                Assert.assertTrue( args.containsMetaKey(first))
+                Assert.assertTrue( args.getMetaString(first) == second)
             }
         }
 
         expectedSys?.let { sysArgs ->
             for((first, second) in sysArgs){
-                assert( args.containsSysKey(first))
-                assert( args.getSysString(first) == second)
+                Assert.assertTrue( args.containsSysKey(first))
+                Assert.assertTrue( args.getSysString(first) == second)
             }
         }
 
         parts?.let { p ->
 
             if(p.isNotEmpty()){
-                assert(args.actionParts.size == p.size)
+                Assert.assertTrue(args.parts.size == p.size)
                 for(i in 0 .. p.size - 1){
                     val part = p[i]
-                    assert( args.getVerb(i) == part)
+                    Assert.assertTrue( args.getVerb(i) == part)
                 }
             }
         }

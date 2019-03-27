@@ -40,7 +40,7 @@ data class ModelField(
         @JvmField val example: String = "",
         @JvmField val format: String = "",
         @JvmField val tag: String = "",
-        @JvmField val category: String = "",
+        @JvmField val category: ModelFieldCategory = ModelFieldCategory.Data,
         @JvmField val model: Model? = null
 ) {
 
@@ -86,7 +86,9 @@ data class ModelField(
          */
         @JvmStatic
         fun id(name: String, dataType: KClass<*>, dataTpe: ModelFieldType): ModelField {
-            return build(null, name, "", dataType, dataTpe, true, true, true, false, 0, 0, name, 0, cat = "id")
+            return build(null, name, "", dataType, dataTpe, true,
+                    true, true, false,
+                    0, 0, name, 0, cat = ModelFieldCategory.Id)
         }
 
         /**
@@ -105,23 +107,23 @@ data class ModelField(
          */
         @JvmStatic
         fun build(
-            prop: KProperty<*>?,
-            name: String,
-            desc: String = "",
-            dataType: KClass<*>,
-            dataFieldType: ModelFieldType,
-            isRequired: Boolean = false,
-            isUnique: Boolean = false,
-            isIndexed: Boolean = false,
-            isUpdatable: Boolean = true,
-            minLength: Int = -1,
-            maxLength: Int = -1,
-            destName: String? = null,
-            defaultValue: Any? = null,
-            encrypt: Boolean = false,
-            tag: String = "",
-            cat: String = "data",
-            namer: Namer? = null
+                prop: KProperty<*>?,
+                name: String,
+                desc: String = "",
+                dataType: KClass<*>,
+                dataFieldType: ModelFieldType,
+                isRequired: Boolean = false,
+                isUnique: Boolean = false,
+                isIndexed: Boolean = false,
+                isUpdatable: Boolean = true,
+                minLength: Int = -1,
+                maxLength: Int = -1,
+                destName: String? = null,
+                defaultValue: Any? = null,
+                encrypt: Boolean = false,
+                tag: String = "",
+                cat: ModelFieldCategory = ModelFieldCategory.Data,
+                namer: Namer? = null
         ): ModelField {
 
             val finalName = buildDestName(name, destName, namer)

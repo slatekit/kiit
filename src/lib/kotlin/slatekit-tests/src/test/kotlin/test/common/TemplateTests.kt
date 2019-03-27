@@ -12,6 +12,7 @@ mantra: Simplicity above all else
  */
 package test.common
 
+import org.junit.Assert
 import org.junit.Test
 import slatekit.common.*
 import slatekit.common.templates.TemplateConstants.TypeSub
@@ -30,7 +31,7 @@ class TemplateTests {
     @Test fun can_parse() {
         val p = TemplateParser("Hi @{user.api}.")
         val result = p.parse()
-        assert(result.success)
+        Assert.assertTrue(result.success)
     }
 
 
@@ -128,14 +129,14 @@ class TemplateTests {
 
     @Test fun can_substitute_basic_name() {
         val name = subs().resolve("@{user.home}/slatekit/env.conf")
-        assert ( name == "c:/users/johndoe/slatekit/env.conf")
+        Assert.assertTrue ( name == "c:/users/johndoe/slatekit/env.conf")
     }
 
 
     @Test fun can_parse_on_demand_template_as_result() {
         val result = subs().parse(TEST_TEMPLATE)
-        assert( result.success )
-        assert( result.map { it.size == 5 }.success)
+        Assert.assertTrue( result.success )
+        Assert.assertTrue( result.map { it.size == 5 }.success)
         checkResult(result, listOf(
             Pair(TypeText  , "Hi "           ),
             Pair(TypeSub   , "user.api"     ),
@@ -149,12 +150,12 @@ class TemplateTests {
     @Test fun can_parse_demand_template_as_template() {
         val templates = Templates()
         val result = templates.parseTemplate("showWelcome", TEST_TEMPLATE)
-        assert( result.valid )
-        assert( result.name == "showWelcome")
-        assert( result.parsed)
-        assert( result.valid )
-        assert( result.content == TEST_TEMPLATE )
-        assert( result.parts!!.size == 5 )
+        Assert.assertTrue( result.valid )
+        Assert.assertTrue( result.name == "showWelcome")
+        Assert.assertTrue( result.parsed)
+        Assert.assertTrue( result.valid )
+        Assert.assertTrue( result.content == TEST_TEMPLATE )
+        Assert.assertTrue( result.parts!!.size == 5 )
 
         check(result.parts!!, listOf(
             Pair(TypeText  , "Hi "           ),
@@ -175,8 +176,8 @@ class TemplateTests {
             Pair("code"         , { s  -> Random.alpha6()                   })
         ))
         val result = templates.resolve(TEST_TEMPLATE)
-        assert( result != null )
-        assert(result!! == "Hi john.doe, Welcome to CodeHelix.")
+        Assert.assertTrue( result != null )
+        Assert.assertTrue(result!! == "Hi john.doe, Welcome to CodeHelix.")
     }
 
 
@@ -190,8 +191,8 @@ class TemplateTests {
         ))
 
         val result = templates.resolve(TEST_TEMPLATE, subs)
-        assert(result != null)
-        assert(result!! == "Hi john.doe, Welcome to CodeHelix.")
+        Assert.assertTrue(result != null)
+        Assert.assertTrue(result!! == "Hi john.doe, Welcome to CodeHelix.")
     }
 
 
@@ -209,8 +210,8 @@ class TemplateTests {
                 ))
 
         val result = templates.resolveTemplate("showWelcome", null)
-        assert(result != null )
-        assert(result!! == "Hi john.doe, Welcome to CodeHelix.")
+        Assert.assertTrue(result != null )
+        Assert.assertTrue(result!! == "Hi john.doe, Welcome to CodeHelix.")
     }
 
 
@@ -228,8 +229,8 @@ class TemplateTests {
                 Pair("code"         , { s -> Random.alpha6()                   })
         ))
         val result = templates.resolveTemplate("showWelcome", subs)
-        assert(result != null )
-        assert(result!! == "Hi john.doe, Welcome to CodeHelix.")
+        Assert.assertTrue(result != null )
+        Assert.assertTrue(result!! == "Hi john.doe, Welcome to CodeHelix.")
     }
 
 
@@ -252,25 +253,25 @@ class TemplateTests {
                 "code"         to  "abc123"
         )
         val result = templates.resolveTemplateWithVars("confirm", subs)
-        assert(result != null)
-        assert(result!! == "Your confirmation code for slatekit.sampleapp2 is abc123.")
+        Assert.assertTrue(result != null)
+        Assert.assertTrue(result!! == "Your confirmation code for slatekit.sampleapp2 is abc123.")
     }
 
 
     fun checkResult(subsResult: Try<List<TemplatePart>>, expected:List<Pair<Short,String>>)  {
-        assert(subsResult.success)
+        Assert.assertTrue(subsResult.success)
         val subs = (subsResult as Success).value
         check(subs, expected)
     }
 
 
     fun check(subs:List<TemplatePart>, expected:List<Pair<Short,String>>)  {
-        assert( subs.size == expected.size)
+        Assert.assertTrue( subs.size == expected.size)
         for( ndx in 0 .. expected.size -1 ) {
             val actual = subs[ndx]
             val expect = expected[ndx]
-            assert( actual.subType == expect.first)
-            assert( actual.text == expect.second)
+            Assert.assertTrue( actual.subType == expect.first)
+            Assert.assertTrue( actual.text == expect.second)
         }
     }
 

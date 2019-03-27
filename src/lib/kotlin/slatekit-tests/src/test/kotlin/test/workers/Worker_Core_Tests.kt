@@ -113,8 +113,8 @@ class Worker_Core_Tests {
 
 
     fun <T> assertResult(res: Try<Any>, value: T, code: Int, msg: String) {
-        assert(res.getOrElse { null } == value)
-        assert(res.code == code)
-        assert(res.msg == msg)
+        Assert.assertTrue(res.getOrElse { null } == value)
+        Assert.assertTrue(res.code == code)
+        Assert.assertTrue(res.msg == msg)
     }
 }

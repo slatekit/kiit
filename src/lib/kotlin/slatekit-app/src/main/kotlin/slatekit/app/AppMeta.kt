@@ -9,7 +9,7 @@ class AppMeta(val about:About, val args:ArgsSchema) {
 
     companion object {
         fun process(rawArgs:List<String>, args:Args, about: About, schema:ArgsSchema?):Try<Args> {
-            val isHelp = AppFuncs.isMetaCommand(rawArgs.toList())
+            val isHelp = AppUtils.isMetaCommand(rawArgs.toList())
             return if (isHelp.success) {
                 // Delegate help to the AppMeta component for (help | version | about )
                 val appMeta = AppMeta(about, schema ?: AppBuilder.schema())

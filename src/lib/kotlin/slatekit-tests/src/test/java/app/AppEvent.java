@@ -3,7 +3,7 @@ package app;
 import core.Event;
 import entities.IEntityUnique;
 import org.threeten.bp.ZonedDateTime;
-import slatekit.entities.core.Entity;
+import slatekit.entities.Entity;
 import slatekit.meta.models.Model;
 
 /**

@@ -12,6 +12,7 @@ mantra: Simplicity above all else
  */
 package test.apis
 
+import org.junit.Assert
 import org.junit.Test
 import slatekit.apis.*
 import slatekit.apis.core.Api
@@ -93,12 +94,12 @@ class Api_Middleware_Tests : ApiTestsBase() {
         val r1 = apis.call("app", "SampleMiddleware", "hello", "get", mapOf(), mapOf())
         val r2 = apis.call("app", "SampleMiddleware", "hello", "get", mapOf(), mapOf())
 
-        assert(api.onBeforeHookCount.size == 2)
-        assert(api.onAfterHookCount.size == 2)
-        assert(api.onBeforeHookCount[0].path == "app.SampleMiddleware.hello")
-        assert(api.onBeforeHookCount[1].path == "app.SampleMiddleware.hello")
-        assert(api.onAfterHookCount[0].path  == "app.SampleMiddleware.hello")
-        assert(api.onAfterHookCount[1].path  == "app.SampleMiddleware.hello")
+        Assert.assertTrue(api.onBeforeHookCount.size == 2)
+        Assert.assertTrue(api.onAfterHookCount.size == 2)
+        Assert.assertTrue(api.onBeforeHookCount[0].path == "app.SampleMiddleware.hello")
+        Assert.assertTrue(api.onBeforeHookCount[1].path == "app.SampleMiddleware.hello")
+        Assert.assertTrue(api.onAfterHookCount[0].path  == "app.SampleMiddleware.hello")
+        Assert.assertTrue(api.onAfterHookCount[1].path  == "app.SampleMiddleware.hello")
     }
 
 
@@ -107,9 +108,9 @@ class Api_Middleware_Tests : ApiTestsBase() {
         val apis = ApiHost(ctx, apis = listOf(Api(api, "app", "SampleMiddleware")), allowIO = false)
         val r1 = apis.call("app", "SampleMiddleware", "hi", "get", mapOf(), mapOf())
 
-        assert(!r1.success)
-        assert(r1.code == StatusCodes.IGNORED.code)
-        assert(r1.msg == "Ignored")
+        Assert.assertTrue(!r1.success)
+        Assert.assertTrue(r1.code == StatusCodes.IGNORED.code)
+        Assert.assertTrue(r1.msg == "Ignored")
     }
 
 
@@ -118,8 +119,8 @@ class Api_Middleware_Tests : ApiTestsBase() {
         val apis = ApiHost(ctx, apis = listOf(Api(api, "app", "SampleMiddleware")), allowIO = false)
         val r1 = apis.call("app", "SampleMiddleware", "hello", "get", mapOf(), mapOf())
 
-        assert(r1.success)
-        assert(r1.code == StatusCodes.SUCCESS.code)
-        assert(r1.getOrElse { ""} == "hello world")
+        Assert.assertTrue(r1.success)
+        Assert.assertTrue(r1.code == StatusCodes.SUCCESS.code)
+        Assert.assertTrue(r1.getOrElse { ""} == "hello world")
     }
 }

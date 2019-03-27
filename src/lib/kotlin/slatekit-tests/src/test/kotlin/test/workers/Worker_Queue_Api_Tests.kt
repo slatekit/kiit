@@ -101,7 +101,7 @@ class Worker_Queue_Api_Tests {
         val queueInfo = Queue("tests", Priority.Medium, queue)
         val job = Job(entry, queueInfo)
         val result = worker.perform(job)
-        assert( result.success )
-        assert( result.getOrElse { null } == "user1@abc.com, true, 123, 2018-01-27T09:30:45Z" )
+        Assert.assertTrue( result.success )
+        Assert.assertTrue( result.getOrElse { null } == "user1@abc.com, true, 123, 2018-01-27T09:30:45Z" )
     }
 }

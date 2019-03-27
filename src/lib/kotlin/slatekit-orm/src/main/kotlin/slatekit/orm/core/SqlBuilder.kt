@@ -1,4 +1,4 @@
-package slatekit.orm.databases
+package slatekit.orm.core
 
 import slatekit.common.naming.Namer
 import slatekit.common.db.DbFieldType
@@ -13,7 +13,7 @@ import slatekit.meta.models.Model
  * 2. ALTER TABLE message DROP INDEX idx_status;
  * 3. ALTER TABLE message ADD UNIQUE (uuid);
  */
-open class SqlBuilder(val types:TypeMap, val namer: Namer?) {
+open class SqlBuilder(val types: TypeMap, val namer: Namer?) {
 
     /**
      * Builds the table DDL sql statement using the model supplied.
@@ -87,7 +87,7 @@ open class SqlBuilder(val types:TypeMap, val namer: Namer?) {
             if (field.isEnum) {
                 acc + ", " + createCol(finalStoredName, DbFieldType.DbNumber, field.isRequired, field.maxLength)
             } else if (field.model != null) {
-                val sql = createColumns(field.storedName, field.model!!, false)
+                val sql = field.model?.let { createColumns(field.storedName, it, false) }
                 acc + sql
             } else {
                 val sqlType = DbUtils.getTypeFromLang(field.dataCls.java)

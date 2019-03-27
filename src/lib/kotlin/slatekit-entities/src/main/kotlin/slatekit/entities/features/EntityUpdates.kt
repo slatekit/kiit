@@ -2,14 +2,14 @@ package slatekit.entities.features
 
 import slatekit.common.DateTime
 import slatekit.query.IQuery
-import slatekit.entities.core.Entity
+import slatekit.entities.Entity
 import slatekit.entities.core.ServiceSupport
 import slatekit.meta.Reflector
 import slatekit.meta.kClass
 import slatekit.entities.core.EntityEvent
 import kotlin.reflect.KProperty
 
-interface EntityUpdates<TId, T> : ServiceSupport<TId, T> where TId: kotlin.Comparable<TId>, T:Entity<TId> {
+interface EntityUpdates<TId, T> : ServiceSupport<TId, T> where TId: kotlin.Comparable<TId>, T: Entity<TId> {
 
     /**
      * updates the entity in the datastore

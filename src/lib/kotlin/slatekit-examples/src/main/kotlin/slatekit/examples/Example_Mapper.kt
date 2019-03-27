@@ -18,11 +18,10 @@ import slatekit.common.db.DbCon
 import slatekit.meta.models.Model
 import slatekit.core.cmds.Cmd
 import slatekit.db.Db
-import slatekit.entities.core.EntityMapper
-import slatekit.entities.core.EntityWithId
+import slatekit.entities.EntityWithId
 import slatekit.examples.common.User
 import slatekit.meta.models.ModelMapper
-import slatekit.orm.core.OrmMapper
+import slatekit.orm.OrmMapper
 import slatekit.orm.databases.vendors.MySqlBuilder
 import slatekit.orm.databases.vendors.MySqlConverter
 

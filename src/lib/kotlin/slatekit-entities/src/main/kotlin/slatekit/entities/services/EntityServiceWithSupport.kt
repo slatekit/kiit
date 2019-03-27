@@ -18,10 +18,10 @@ import slatekit.common.encrypt.EncryptSupport
 import slatekit.common.encrypt.Encryptor
 import slatekit.common.log.LogSupport
 import slatekit.common.log.Logger
-import slatekit.entities.core.Entities
-import slatekit.entities.core.Entity
-import slatekit.entities.core.EntityRepo
-import slatekit.entities.core.EntityService
+import slatekit.entities.Entities
+import slatekit.entities.Entity
+import slatekit.entities.EntityRepo
+import slatekit.entities.EntityService
 import slatekit.results.Notice
 
 /**

@@ -13,7 +13,7 @@ package slatekit.examples
 
 
 //<doc:import_required>
-import slatekit.entities.core.Entities
+import slatekit.entities.Entities
 import slatekit.entities.core.EntityContext
 //</doc:import_required>
 
@@ -21,19 +21,16 @@ import slatekit.entities.core.EntityContext
 import slatekit.results.Try
 import slatekit.results.Success
 import slatekit.common.conf.ConfFuncs
-import slatekit.common.db.DbCon
 import slatekit.common.db.DbConString
 import slatekit.common.db.DbLookup
 import slatekit.common.db.DbType
-import slatekit.common.db.DbType.DbTypeMySql
 import slatekit.core.cmds.Cmd
 import slatekit.db.Db
 import slatekit.examples.common.User
 import slatekit.examples.common.UserRepository
 import slatekit.examples.common.UserService
-import slatekit.meta.models.Model
 import slatekit.meta.models.ModelMapper
-import slatekit.orm.core.orm
+import slatekit.orm.orm
 import slatekit.orm.databases.vendors.MySqlEntityMapper
 import slatekit.orm.databases.vendors.MySqlEntityRepo
 
@@ -70,7 +67,7 @@ class Example_Entities_Reg : Cmd("types") {
         // - use a certain type of database ( mysql only for now )
         // - use the default EntityRepository ( mysql ) or a custom repository
         // - use a supplied EntityMapper or a custom mapper
-        val entities = Entities({con -> Db(con) })
+        val entities = Entities({ con -> Db(con) })
 
         // Case 1: In-memory
         showResults("Case 1", entities.prototype<User>(User::class))

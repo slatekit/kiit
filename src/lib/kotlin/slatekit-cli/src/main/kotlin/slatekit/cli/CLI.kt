@@ -19,6 +19,7 @@ import slatekit.common.info.Info
 import slatekit.common.info.Folders
 import slatekit.results.*
 import slatekit.results.builders.Tries
+import java.nio.file.Paths
 import java.util.concurrent.atomic.AtomicReference
 
 /**
@@ -37,7 +38,7 @@ import java.util.concurrent.atomic.AtomicReference
 open class CLI(
         val settings: CliSettings,
         val info: Info,
-        val folders: Folders,
+        val folders: Folders?,
         val callback: ((CLI, CliRequest) -> CliResponse<*>)? = null,
         commands: List<String?>? = listOf(),
         ioReader:((Unit) -> String?)? = null,
@@ -180,7 +181,7 @@ open class CLI(
 
         // Single command ( e.g. help, quit, about, version )
         // These are typically system level
-        return if( args.actionParts.size == 1 ){
+        return if( args.parts.size == 1 ){
             when(args.line) {
                 Command.About  .id -> { context.help.showAbout()  ; Success(true, StatusCodes.ABOUT)   }
                 Command.Help   .id -> { context.help.showHelp()   ; Success(true, StatusCodes.HELP)    }
@@ -264,9 +265,10 @@ open class CLI(
      * Print the result of the CLI command
      */
     open fun print(result:Try<CliResponse<*>>) {
+        val pathToOutputs = folders?.pathToOutputs ?: Paths.get("").toString()
         when(result) {
-            is Success -> context.output.output(Success(result.value), folders.pathToOutputs)
-            is Failure -> context.output.output(Failure(result.error), folders.pathToOutputs)
+            is Success -> context.output.output(Success(result.value), pathToOutputs)
+            is Failure -> context.output.output(Failure(result.error), pathToOutputs)
         }
     }
 

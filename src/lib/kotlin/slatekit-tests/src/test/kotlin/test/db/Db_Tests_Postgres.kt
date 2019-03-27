@@ -1,5 +1,6 @@
 package test.db
 
+import org.junit.Assert
 import org.junit.Before
 import org.junit.Ignore
 import org.junit.Test
@@ -7,6 +8,7 @@ import slatekit.common.DateTime
 import slatekit.common.DateTimes
 import slatekit.common.conf.ConfFuncs
 import slatekit.db.Db
+import test.setup.TestSupport
 import java.time.LocalDate
 import java.time.LocalDateTime
 import java.time.LocalTime
@@ -33,7 +35,7 @@ $$ LANGUAGE sql;
 
  */
 @Ignore
-class Db_Tests_Postgres {
+class Db_Tests_Postgres : TestSupport {
 
     companion object {
         var id = 0L
@@ -45,7 +47,7 @@ class Db_Tests_Postgres {
 
     @Before
     fun can_setup() {
-        val db = Db(con!!)
+        val db = Db(getConnection())
         db.open()
         val sqlInsert = """
             INSERT INTO sample_entity
@@ -144,23 +146,23 @@ class Db_Tests_Postgres {
 
     @Test
     fun can_execute_proc() {
-        val db = Db(con!!)
+        val db = Db(getConnection())
         val result = db.callQuery("get_max_id", { rs -> rs.getLong(1) })
-        assert(result!! > 0L)
+        Assert.assertTrue(result!! > 0L)
     }
 
 
     @Ignore
     fun can_execute_proc_update() {
-        val db = Db(con!!)
+        val db = Db(getConnection())
         val result = db.callUpdate("dbtests_update_by_id", listOf(6))
-        assert(result!! >= 1)
+        Assert.assertTrue(result!! >= 1)
     }
 
 
     @Test
     fun can_add_update() {
-        val db = Db(con!!)
+        val db = Db(getConnection())
         val sqlInsert = """
             INSERT INTO sample_entity
             (
@@ -182,25 +184,25 @@ class Db_Tests_Postgres {
 
         // 1. add
         val id = db.insert(sqlInsert)
-        assert(id > 0)
+        Assert.assertTrue(id > 0)
 
         // 2. update
         val sqlUpdate = "update $tableName set test_int = 987 where id = $id"
         val count = db.update(sqlUpdate)
-        assert(count > 0)
+        Assert.assertTrue(count > 0)
 
         // 3. get
         val sql = "select test_int from $tableName where id = $id"
         val updatedVal = db.getScalarInt(sql, null)
-        assert(updatedVal == 987)
+        Assert.assertTrue(updatedVal == 987)
     }
 
 
     fun <T> ensure_scalar(colName: String, callback: (Db, String) -> T, expected: T): Unit {
 
-        val db = Db(con!!)
+        val db = Db(getConnection())
         val sql = "select $colName from $tableName where id = " + Db_Tests_Postgres.id
         val actual = callback(db, sql)
-        assert(expected == actual)
+        Assert.assertTrue(expected == actual)
     }
 }

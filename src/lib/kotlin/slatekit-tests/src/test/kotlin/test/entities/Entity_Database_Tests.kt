@@ -23,9 +23,11 @@ import slatekit.common.conf.ConfFuncs
 import slatekit.common.db.DbLookup
 import slatekit.common.db.DbType
 import slatekit.db.Db
-import slatekit.entities.core.*
-import slatekit.orm.core.orm
-import slatekit.orm.core.sqlBuilder
+import slatekit.entities.Entities
+import slatekit.entities.EntityUpdatable
+import slatekit.entities.EntityWithId
+import slatekit.orm.orm
+import slatekit.orm.sqlBuilder
 import test.setup.MyEncryptor
 import test.setup.StatusEnum
 import java.util.*

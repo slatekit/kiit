@@ -10,11 +10,18 @@
  * mantra: Simplicity above all else
  * </slate_header>
  */
+package test
 
-package slatekit.integration.mods
 
-import slatekit.entities.Entities
-import slatekit.entities.EntityRepo
-import slatekit.entities.EntityService
+import org.junit.Test
+import slatekit.common.*
+import slatekit.core.cmds.Cmd
+import slatekit.core.cmds.Cmds
+import slatekit.results.Success
+import slatekit.results.Try
 
-class ModService(entities: Entities, repo: EntityRepo<Long, Mod>) : EntityService<Long, Mod>(entities, repo)
+
+class CoreTests {
+
+
+}

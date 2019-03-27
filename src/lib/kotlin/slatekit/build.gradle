@@ -81,7 +81,7 @@ dependencies {
     compile "com.slatekit:slatekit-results:0.9.9"
     compile 'org.threeten:threetenbp:1.3.8'
 
-    // /* <slatekit_local>
+    /* <slatekit_local>
     if( slatekitSetupViaMaven ) {
         compile "com.slatekit:slatekit-common:$slatekit_version"
         compile "com.slatekit:slatekit-app:$slatekit_version"
@@ -114,5 +114,5 @@ dependencies {
         compile project(":slatekit-server")
         compile project(":slatekit-providers")
         compile project(":slatekit-workers")
-    } //</slatekit_local>
+    //</slatekit_local>
 }

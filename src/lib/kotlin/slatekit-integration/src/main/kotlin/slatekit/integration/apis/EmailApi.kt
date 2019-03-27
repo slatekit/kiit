@@ -52,8 +52,8 @@ class EmailApi(val svc: EmailService, override val context: Context) : ApiWithSu
      */
     @ApiAction(desc = "send an email")
     fun sendFile(to: String, subject: String, filePath: String, html: Boolean): Notice<Boolean> {
-        val content = Uris.readText(filePath)!!
-        return this.svc.send(to, subject, content, html)
+        val content = Uris.readText(filePath)
+        return this.svc.send(to, subject, content ?: "", html)
     }
 
     /**

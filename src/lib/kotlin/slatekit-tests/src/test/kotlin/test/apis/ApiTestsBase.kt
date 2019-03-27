@@ -12,6 +12,7 @@ mantra: Simplicity above all else
  */
 package test.apis
 
+import org.junit.Assert
 import slatekit.apis.*
 import slatekit.apis.core.Annotated
 import slatekit.apis.core.Api
@@ -32,7 +33,7 @@ import slatekit.common.log.LogsDefault
 import slatekit.common.requests.Request
 import slatekit.common.requests.Response
 import slatekit.db.Db
-import slatekit.entities.core.Entities
+import slatekit.entities.Entities
 import slatekit.integration.common.AppEntContext
 import slatekit.results.Try
 import test.setup.MyAuthProvider
@@ -114,9 +115,9 @@ open class ApiTestsBase {
         val cmd = ApiHelper.buildCliRequest(path, inputs, opts)
         val actual = apis.call(cmd)
 
-        assert(actual.code == expected.code)
-        assert(actual.success == expected.success)
-        assert(actual.msg == expected.msg)
+        Assert.assertTrue(actual.code == expected.code)
+        Assert.assertTrue(actual.success == expected.success)
+        Assert.assertTrue(actual.msg == expected.msg)
     }
 
 
@@ -148,8 +149,8 @@ open class ApiTestsBase {
         val actual = host.call(request)
 
         // Compare here.
-        assert(actual.code == response.code)
-        assert(actual.success == response.success)
-        assert(actual.msg == response.msg)
+        Assert.assertTrue(actual.code == response.code)
+        Assert.assertTrue(actual.success == response.success)
+        Assert.assertTrue(actual.msg == response.msg)
     }
 }

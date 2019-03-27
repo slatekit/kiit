@@ -40,8 +40,6 @@ object AwsFuncs {
 
     /**
      * build sqs client from optional conf paths
-     * @param path : Path to config ( None => default aws {user_dir}/.aws/credentials file}
-     * @param section : Section name in config containing slate kit ApiCredentials
      * @return
      */
     fun sqs(credentials: AWSCredentials): AmazonSQSClient {

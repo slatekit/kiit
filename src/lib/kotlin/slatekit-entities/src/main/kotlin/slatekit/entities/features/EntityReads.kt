@@ -1,9 +1,9 @@
 package slatekit.entities.features
 
-import slatekit.entities.core.Entity
+import slatekit.entities.Entity
 import slatekit.entities.core.ServiceSupport
 
-interface EntityReads<TId, T> : ServiceSupport<TId, T> where TId: kotlin.Comparable<TId>, T:Entity<TId> {
+interface EntityReads<TId, T> : ServiceSupport<TId, T> where TId: kotlin.Comparable<TId>, T: Entity<TId> {
 
     /**
      * gets the entity from the datastore using the id

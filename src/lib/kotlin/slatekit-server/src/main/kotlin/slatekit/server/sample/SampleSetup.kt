@@ -36,7 +36,7 @@ object SampleSetup {
     val context by lazy {
         CommonContext(
                 arg = Args.default(),
-                env = Env.defaults().select("dev").current!!,
+                env = Env.defaults().select("dev").current,
                 cfg = Config(),
                 logs = LogsDefault,
                 app = About.none,

@@ -16,10 +16,10 @@ package slatekit.integration.common
 import slatekit.apis.ApiAction
 import slatekit.common.Ignore
 import slatekit.query.Query
-import slatekit.entities.core.Entities
-import slatekit.entities.core.Entity
-import slatekit.entities.core.EntityService
-import slatekit.entities.core.EntityUpdatable
+import slatekit.entities.Entities
+import slatekit.entities.Entity
+import slatekit.entities.EntityService
+import slatekit.entities.EntityUpdatable
 import java.util.*
 import kotlin.reflect.KClass
 
@@ -48,7 +48,7 @@ interface ApiWithEntitySupport<TId, T, TSvc> where TId:Comparable<TId>, T : Enti
         val item = entitySvc.get(id)
         return item?.let { model ->
             when (model) {
-                is EntityUpdatable<*,*> -> createFrom(model as EntityUpdatable<TId, T>)
+                is EntityUpdatable<*, *> -> createFrom(model as EntityUpdatable<TId, T>)
                 else -> null
             }
         }

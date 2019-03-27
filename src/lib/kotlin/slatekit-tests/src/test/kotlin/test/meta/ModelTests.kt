@@ -31,16 +31,16 @@ class ModelTests {
     @Test fun can_build_complex_model_from_schema(){
         val model = ModelMapper.loadSchema(UserWithAddress::class, UserWithAddress::id.name)
         val addrProp = model.fields.find { it.name == "addr" }
-        assert( addrProp != null)
-        assert( addrProp!!.model != null)
-        assert( addrProp!!.model?.dataType == Address::class)
+        Assert.assertTrue( addrProp != null)
+        Assert.assertTrue( addrProp!!.model != null)
+        Assert.assertTrue( addrProp!!.model?.dataType == Address::class)
     }
 
 
     @Test fun can_build_simple_model_with_nullable(){
         val model = ModelMapper.loadSchema(AuthorRNull::class, AuthorRNull::id.name)
-        assert(model.hasId)
-        assert(model.any)
+        Assert.assertTrue(model.hasId)
+        Assert.assertTrue(model.any)
         ensureField(model, "id"        , false, Long::class       )
         ensureField(model, "email"     , false, String::class     )
         ensureField(model, "isActive"  , false, Boolean::class    )
@@ -89,16 +89,16 @@ class ModelTests {
 
     fun ensureField(model: Model, name:String, required:Boolean, tpe: KClass<*>):Unit {
         val field = model.fields.find { it.name == name }
-        assert(field != null)
-        assert(field!!.isRequired == required)
-        assert(field!!.dataCls == tpe)
+        Assert.assertTrue(field != null)
+        Assert.assertTrue(field!!.isRequired == required)
+        Assert.assertTrue(field!!.dataCls == tpe)
     }
 
 
     fun ensureAuthorModel(model: Model):Unit {
 
-        assert(model.hasId)
-        assert(model.any)
+        Assert.assertTrue(model.hasId)
+        Assert.assertTrue(model.any)
         ensureField(model, "id"        , true, Long::class     )
         ensureField(model, "createdAt" , true, DateTime::class )
         ensureField(model, "createdBy" , true, Long::class     )

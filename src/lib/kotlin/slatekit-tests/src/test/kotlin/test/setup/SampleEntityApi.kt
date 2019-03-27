@@ -2,7 +2,7 @@ package test.setup
 
 import slatekit.apis.Api
 import slatekit.apis.ApiAction
-import slatekit.entities.core.EntityService
+import slatekit.entities.EntityService
 import slatekit.integration.common.ApiBaseEntity
 import slatekit.integration.common.AppEntContext
 

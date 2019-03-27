@@ -1,12 +1,12 @@
 package slatekit.entities.features
 
 import slatekit.common.TODO
-import slatekit.entities.core.Entity
+import slatekit.entities.Entity
 import slatekit.entities.core.ServiceSupport
 import kotlin.reflect.KClass
 import kotlin.reflect.KProperty
 
-interface EntityRelations<TId, T> : ServiceSupport<TId, T> where TId: kotlin.Comparable<TId>, T:Entity<TId> {
+interface EntityRelations<TId, T> : ServiceSupport<TId, T> where TId: kotlin.Comparable<TId>, T: Entity<TId> {
 
     /**
      * Gets a relation model associated w the current model by the property supplied.
