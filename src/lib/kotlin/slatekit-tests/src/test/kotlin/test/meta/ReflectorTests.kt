@@ -67,17 +67,17 @@ class ReflectorTests {
 
 
     @Test fun can_match_java_to_kotlin_types() {
-        assert(Types.JStringClass        == KTypes.KStringClass       .java)
-        assert(Types.JBoolClass          == KTypes.KBoolClass         .java)
-        assert(Types.JShortClass         == KTypes.KShortClass        .java)
-        assert(Types.JIntClass           == KTypes.KIntClass          .java)
-        assert(Types.JLongClass          == KTypes.KLongClass         .java)
-        assert(Types.JFloatClass         == KTypes.KFloatClass        .java)
-        assert(Types.JDoubleClass        == KTypes.KDoubleClass       .java)
-        assert(Types.JDateTimeClass      == KTypes.KDateTimeClass     .java)
-        assert(Types.JLocalDateClass     == KTypes.KLocalDateClass    .java)
-        assert(Types.JLocalTimeClass     == KTypes.KLocalTimeClass    .java)
-        assert(Types.JLocalDateTimeClass == KTypes.KLocalDateTimeClass.java)
+        Assert.assertTrue(Types.JStringClass        == KTypes.KStringClass       .java)
+        Assert.assertTrue(Types.JBoolClass          == KTypes.KBoolClass         .java)
+        Assert.assertTrue(Types.JShortClass         == KTypes.KShortClass        .java)
+        Assert.assertTrue(Types.JIntClass           == KTypes.KIntClass          .java)
+        Assert.assertTrue(Types.JLongClass          == KTypes.KLongClass         .java)
+        Assert.assertTrue(Types.JFloatClass         == KTypes.KFloatClass        .java)
+        Assert.assertTrue(Types.JDoubleClass        == KTypes.KDoubleClass       .java)
+        Assert.assertTrue(Types.JDateTimeClass      == KTypes.KDateTimeClass     .java)
+        Assert.assertTrue(Types.JLocalDateClass     == KTypes.KLocalDateClass    .java)
+        Assert.assertTrue(Types.JLocalTimeClass     == KTypes.KLocalTimeClass    .java)
+        Assert.assertTrue(Types.JLocalDateTimeClass == KTypes.KLocalDateTimeClass.java)
     }
 
 
@@ -85,7 +85,7 @@ class ReflectorTests {
 
         val id:Any = 0
         val actualCls = id.javaClass
-        assert(Types.JIntAnyClass == actualCls)
+        Assert.assertTrue(Types.JIntAnyClass == actualCls)
     }
 
 
@@ -93,7 +93,7 @@ class ReflectorTests {
         val tpe = PhoneUS::class
         tpe.supertypes.forEach { println(it) }
         val ndx = tpe.supertypes.indexOf(SmartValued::class.createType())
-        assert(ndx == 0)
+        Assert.assertTrue(ndx == 0)
     }
 
 
@@ -123,23 +123,23 @@ class ReflectorTests {
 
     @Test fun can_create_normal_class() {
       val i2 = Reflector.create<UserNormal1>(UserNormal1::class)
-      assert(i2 is UserNormal1)
+      Assert.assertTrue(i2 is UserNormal1)
     }
 
 
     @Test fun can_create_normal_class_with_args() {
         val user = Reflector.createWithArgs<UserNormal2>(UserNormal2::class, arrayOf("k@abc.com", "ki"))
-        assert(user is UserNormal2)
-        assert(user.name == "ki")
-        assert(user.email == "k@abc.com")
+        Assert.assertTrue(user is UserNormal2)
+        Assert.assertTrue(user.name == "ki")
+        Assert.assertTrue(user.email == "k@abc.com")
     }
 
 
     @Test fun can_create_data_class_with_args() {
         val user = Reflector.createWithArgs<User3>(User3::class, arrayOf("k@abc.com", "ki"))
-        assert(user is User3)
-        assert(user.name == "ki")
-        assert(user.email == "k@abc.com")
+        Assert.assertTrue(user is User3)
+        Assert.assertTrue(user.name == "ki")
+        Assert.assertTrue(user.email == "k@abc.com")
     }
 
 
@@ -167,7 +167,7 @@ class ReflectorTests {
       val user = UserNormal1()
       user.email = "johndoe@home.com"
       val actual = Reflector.getFieldValue(user, "email")
-      assert(actual == user.email)
+      Assert.assertTrue(actual == user.email)
     }
 
 
@@ -175,21 +175,21 @@ class ReflectorTests {
         val email = "johndoe@home.com"
         val user = User3(email, "johndoe")
         val actual = Reflector.getFieldValue(user, "email")
-        assert(actual == email)
+        Assert.assertTrue(actual == email)
     }
 
 
     @Test fun can_get_member_method() {
 
       val sym = Reflector.getMethod(UserApi::class, "activate")
-      assert(sym!!.name == "activate")
+      Assert.assertTrue(sym!!.name == "activate")
     }
 
 
     @Test fun can_get_member_method_parameters() {
 
         val args = Reflector.getMethodArgs(UserApi::class, "activate")
-        assert(args!!.size - 1 == 4)
+        Assert.assertTrue(args!!.size - 1 == 4)
     }
 
 
@@ -198,12 +198,12 @@ class ReflectorTests {
         val args = params!!.toList()
 
         fun assertArg(param:KParameter, name:String, type: KClass<*>){
-            assert(param.name == name)
+            Assert.assertTrue(param.name == name)
             val paramTypeName = param.type.javaType.typeName
             val typeName= type.java.name
-            assert(paramTypeName == typeName)
+            Assert.assertTrue(paramTypeName == typeName)
         }
-        assert(args.size == 5)
+        Assert.assertTrue(args.size == 5)
 
         assertArg(args[1], "phone", String::class)
         assertArg(args[2], "code", Int::class)
@@ -218,8 +218,8 @@ class ReflectorTests {
         val res = Reflector.callMethod(UserApi::class, api, "activate", arrayOf("123456789", 987, true, DateTimes.of(2017, 5, 27)))
         val result = res as Notice<String>
         val v = result.getOrElse { "" }
-        assert(v == "ok")
-        assert(result.msg == "activated 123456789, 987, true, 2017-05-27T00:00-04:00[America/New_York]")
+        Assert.assertTrue(v == "ok")
+        Assert.assertTrue(result.msg == "activated 123456789, 987, true, 2017-05-27T00:00-04:00[America/New_York]")
     }
 
 
@@ -317,7 +317,7 @@ class ReflectorTests {
         // val prop = AuthorW::class.declaredMemberProperties.find { it.name == "email" }
 
         //AuthorW::email.javaSetter?.invoke(obj, "poster2@abc.com")
-        assert(author.email == "poster2@abc.com")
+        Assert.assertTrue(author.email == "poster2@abc.com")
     }
 
     /*
@@ -327,15 +327,15 @@ class ReflectorTests {
 
     it("can get full api"){
       val re = new ReflectedClassT[User]()
-      assert( re.api == "User" )
-      assert( re.fullname == "slate.test._setup.User" )
+      Assert.assertTrue( re.api == "User" )
+      Assert.assertTrue( re.fullname == "slate.test._setup.User" )
     }
 
 
     it("can get method"){
       val re = new ReflectedClassT[User]()
-      assert( re.api == "User" )
-      assert( re.fullname == "slate.test._setup.User" )
+      Assert.assertTrue( re.api == "User" )
+      Assert.assertTrue( re.fullname == "slate.test._setup.User" )
     }
 
 
@@ -344,7 +344,7 @@ class ReflectorTests {
       val user = new User()
       user.email = "johndoe@home.com"
       val email = re.getValue(user, "email")
-      assert(email == user.email)
+      Assert.assertTrue(email == user.email)
     }
 
 
@@ -352,7 +352,7 @@ class ReflectorTests {
       val re = new ReflectedClassT[User]()
       val user = new User()
       re.setValue(user, "email", "johndoe@work.com")
-      assert(user.email == "johndoe@work.com")
+      Assert.assertTrue(user.email == "johndoe@work.com")
     }
   }
 

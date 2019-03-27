@@ -1,5 +1,6 @@
 package test.common
 
+import org.junit.Assert
 import org.junit.Test
 import slatekit.common.queues.QueueSourceInMemory
 
@@ -10,7 +11,7 @@ class QueueSourceTests {
         val queue = QueueSourceInMemory.stringQueue()
         queue.send("1")
         queue.send("2")
-        assert( queue.count() == 2)
+        Assert.assertTrue( queue.count() == 2)
     }
 
 
@@ -20,14 +21,14 @@ class QueueSourceTests {
         queue.send("1")
         queue.send("2")
         queue.send("3")
-        assert( queue.count() == 3)
+        Assert.assertTrue( queue.count() == 3)
 
         val item1 = queue.next()?.getValue()
         val item2 = queue.next()?.getValue()
 
-        assert(queue.count() == 1)
-        assert(item1 == "1")
-        assert( item2 == "2")
+        Assert.assertTrue(queue.count() == 1)
+        Assert.assertTrue(item1 == "1")
+        Assert.assertTrue( item2 == "2")
     }
 
 
@@ -37,15 +38,15 @@ class QueueSourceTests {
         queue.send("1")
         queue.send("2")
         queue.send("3")
-        assert( queue.count() == 3)
+        Assert.assertTrue( queue.count() == 3)
 
         val items = queue.next(2)!!
         val item1 = items[0].getValue()
         val item2 = items[1].getValue()
 
-        assert(queue.count() == 1)
-        assert(item1 == "1")
-        assert( item2 == "2")
+        Assert.assertTrue(queue.count() == 1)
+        Assert.assertTrue(item1 == "1")
+        Assert.assertTrue( item2 == "2")
     }
 
 
@@ -56,8 +57,8 @@ class QueueSourceTests {
         queue.send("2")
         val result3 = queue.send("3")
         val result4 = queue.send("4")
-        assert( queue.count() == 3)
-        assert( result3.success )
-        assert( !result4.success )
+        Assert.assertTrue( queue.count() == 3)
+        Assert.assertTrue( result3.success )
+        Assert.assertTrue( !result4.success )
     }
 }

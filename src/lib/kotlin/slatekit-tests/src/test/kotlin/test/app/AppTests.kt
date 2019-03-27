@@ -84,9 +84,9 @@ class AppTests {
 
     fun assertConfigResult(res: Try<ConfigValueTest>,
                            expected: ConfigValueTest, code: Int, msg: String): Unit {
-        assert(res.code == code)
-        assert(res.msg == msg)
-        assert(res.getOrElse { null } == expected)
+        Assert.assertTrue(res.code == code)
+        Assert.assertTrue(res.msg == msg)
+        Assert.assertTrue(res.getOrElse { null } == expected)
     }
 
 
@@ -117,9 +117,9 @@ class AppTests {
 
 
     fun assertResult(res: Try<Any>, value: String, code: Int, msg: String) {
-        assert(res.getOrElse { null } == value)
-        assert(res.code == code)
-        assert(res.msg == msg)
+        Assert.assertTrue(res.getOrElse { null } == value)
+        Assert.assertTrue(res.code == code)
+        Assert.assertTrue(res.msg == msg)
     }
 
 
@@ -132,8 +132,8 @@ class AppTests {
 
 
     fun assertResultBasic(res: Try<Any>, code: Int, msg: String) {
-        assert(res.code == code)
-        assert(res.msg == msg)
+        Assert.assertTrue(res.code == code)
+        Assert.assertTrue(res.msg == msg)
     }
 
 

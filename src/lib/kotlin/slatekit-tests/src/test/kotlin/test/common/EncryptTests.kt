@@ -12,6 +12,7 @@ mantra: Simplicity above all else
  */
 package test.common
 
+import org.junit.Assert
 import slatekit.common.encrypt.Encryptor
 
 /**
@@ -53,7 +54,7 @@ class EncryptTests {
 
         for(pair in pairs){
             val encrypted = enc.encrypt(pair.item1)
-            assert( encrypted == pair.item2)
+            Assert.assertTrue( encrypted == pair.item2)
         }
     }
 
@@ -64,7 +65,7 @@ class EncryptTests {
 
         for(pair in pairs){
             val encrypted = enc.decrypt(pair.item2)
-            assert( encrypted == pair.item1)
+            Assert.assertTrue( encrypted == pair.item1)
         }
     }
 }

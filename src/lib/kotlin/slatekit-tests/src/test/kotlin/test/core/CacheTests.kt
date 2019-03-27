@@ -29,9 +29,9 @@ class CacheTests {
       Thread.sleep(300)
       val result = cache.get<List<String>>("countries")
 
-      assert(result!!.size == 2)
-      assert(result[0] == "us")
-      assert(result[1] == "ca")
+      Assert.assertTrue(result!!.size == 2)
+      Assert.assertTrue(result[0] == "us")
+      Assert.assertTrue(result[1] == "ca")
     }
 
 
@@ -43,9 +43,9 @@ class CacheTests {
 
       Thread.sleep(300)
       val result = cache.get<List<String>>("countries")
-      assert(result!!.size == 2)
-      assert(result!![0] == "us")
-      assert(result!![1] == "ca")
+      Assert.assertTrue(result!!.size == 2)
+      Assert.assertTrue(result!![0] == "us")
+      Assert.assertTrue(result!![1] == "ca")
     }
 
 
@@ -63,9 +63,9 @@ class CacheTests {
       Thread.sleep(300)
       val result2 = cache.getCacheItem("countries")
 
-      assert(result1 != null )
-      assert(result2 != null )
-      assert(result1!!.updated!! < result2!!.updated!!)
+      Assert.assertTrue(result1 != null )
+      Assert.assertTrue(result2 != null )
+      Assert.assertTrue(result1!!.updated!! < result2!!.updated!!)
     }
 
 
@@ -82,9 +82,9 @@ class CacheTests {
       val result = cache.getFresh<List<String>>("countries")
 
       val result2 = cache.getCacheItem("countries")
-      assert(result1 != null)
-      assert(result2 != null)
-      assert(result1!!.updated!! < result2!!.updated!!)
+      Assert.assertTrue(result1 != null)
+      Assert.assertTrue(result2 != null)
+      Assert.assertTrue(result1!!.updated!! < result2!!.updated!!)
 
       Thread.sleep(300)
     }

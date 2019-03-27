@@ -34,7 +34,7 @@ class CallTests {
 //        val p = method!!.parameters[3]
 //        println(p.type)
 //        println(t)
-//        assert(p.type == t)
+//        Assert.assertTrue(p.type == t)
 //    }
 //
 //
@@ -53,9 +53,9 @@ class CallTests {
 //        }
 //
 //        val isListType = listParam.type.isSubtypeOf(listtype)
-//        assert(isListType)
+//        Assert.assertTrue(isListType)
 //        val tp = listParam.type.arguments[0]
-//        assert( tp.type!! == Reflector.IntType)
+//        Assert.assertTrue( tp.type!! == Reflector.IntType)
 //    }
 
 

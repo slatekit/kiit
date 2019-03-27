@@ -1,5 +1,6 @@
 package test.apis
 
+import org.junit.Assert
 import org.junit.Test
 import slatekit.apis.core.Api
 import slatekit.apis.ApiHost
@@ -18,18 +19,18 @@ class Api_Naming_Tests : ApiTestsBase() {
                 "app", "SamplePOKO"))
                 , auth = null, allowIO = false, namer = LowerHyphenNamer()
         )
-        assert( apis.getApi("app"   , "sample-poko", "get-time"    ).success)
-        assert(!apis.getApi("app"   , "SamplePOKO" , "getTime"      ).success)
-        assert( apis.getApi("app"   , "sample-poko", "get-counter" ).success)
-        assert( apis.getApi("app"   , "sample-poko", "hello"       ).success)
-        assert( apis.getApi("app"   , "sample-poko", "request"     ).success)
-        assert( apis.getApi("app"   , "sample-poko", "response"    ).success)
-        assert(!apis.getApi("app"   , "sample-poko", "get-email"   ).success)
-        assert(!apis.getApi("app"   , "sample-poko", "get-ssn"     ).success)
+        Assert.assertTrue( apis.getApi("app"   , "sample-poko", "get-time"    ).success)
+        Assert.assertTrue(!apis.getApi("app"   , "SamplePOKO" , "getTime"      ).success)
+        Assert.assertTrue( apis.getApi("app"   , "sample-poko", "get-counter" ).success)
+        Assert.assertTrue( apis.getApi("app"   , "sample-poko", "hello"       ).success)
+        Assert.assertTrue( apis.getApi("app"   , "sample-poko", "request"     ).success)
+        Assert.assertTrue( apis.getApi("app"   , "sample-poko", "response"    ).success)
+        Assert.assertTrue(!apis.getApi("app"   , "sample-poko", "get-email"   ).success)
+        Assert.assertTrue(!apis.getApi("app"   , "sample-poko", "get-ssn"     ).success)
 
         val result = apis.call("app", "sample-poko", "get-counter", "", mapOf(), mapOf())
-        assert(result.success)
-        assert(result.getOrElse { 0 } == 1)
+        Assert.assertTrue(result.success)
+        Assert.assertTrue(result.getOrElse { 0 } == 1)
     }
 
 
@@ -38,17 +39,17 @@ class Api_Naming_Tests : ApiTestsBase() {
                 "app", "SampleExtended", declaredOnly = false)),
                 auth = null, allowIO = false, namer = LowerUnderscoreNamer()
         )
-        assert( apis.getApi("app"   , "sample_extended", "get_seconds" ).success)
-        assert( apis.getApi("app"   , "sample_extended", "get_time"    ).success)
-        assert( apis.getApi("app"   , "sample_extended", "get_counter" ).success)
-        assert( apis.getApi("app"   , "sample_extended", "hello"       ).success)
-        assert( apis.getApi("app"   , "sample_extended", "request"     ).success)
-        assert( apis.getApi("app"   , "sample_extended", "response"    ).success)
-        assert(!apis.getApi("app"   , "sample_extended", "get_email"   ).success)
-        assert(!apis.getApi("app"   , "sample_extended", "get_ssn"     ).success)
+        Assert.assertTrue( apis.getApi("app"   , "sample_extended", "get_seconds" ).success)
+        Assert.assertTrue( apis.getApi("app"   , "sample_extended", "get_time"    ).success)
+        Assert.assertTrue( apis.getApi("app"   , "sample_extended", "get_counter" ).success)
+        Assert.assertTrue( apis.getApi("app"   , "sample_extended", "hello"       ).success)
+        Assert.assertTrue( apis.getApi("app"   , "sample_extended", "request"     ).success)
+        Assert.assertTrue( apis.getApi("app"   , "sample_extended", "response"    ).success)
+        Assert.assertTrue(!apis.getApi("app"   , "sample_extended", "get_email"   ).success)
+        Assert.assertTrue(!apis.getApi("app"   , "sample_extended", "get_ssn"     ).success)
 
         val result = apis.call("app", "sample_extended", "get_seconds", "", mapOf(), mapOf())
-        assert(result.success)
-        assert(result.getOrElse { 0 } in 0..59)
+        Assert.assertTrue(result.success)
+        Assert.assertTrue(result.getOrElse { 0 } in 0..59)
     }
 }

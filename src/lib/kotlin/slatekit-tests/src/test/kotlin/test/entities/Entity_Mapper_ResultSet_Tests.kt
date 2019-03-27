@@ -12,6 +12,7 @@ mantra: Simplicity above all else
  */
 package test.entities
 
+import org.junit.Assert
 import org.junit.Test
 import slatekit.common.db.DbCon
 import slatekit.common.utils.RecordMap
@@ -40,15 +41,15 @@ class Entity_Mapper_ResultSet_Tests {
         val source = RecordMap(data)
         val entity = mapper.mapFrom<AuthorR>(source)!!
 
-        assert( entity.id == 1L )
-        assert( entity.uuid == "ABC" )
-        assert( entity.email == "kishore@abc.com" )
-        assert( entity.isActive )
-        assert( entity.age == 35 )
-        assert( entity.salary == 400.5 )
-        assert( entity.status == StatusEnum.Active )
-        assert( entity.uid == UUID.fromString(sampleUUID1) )
-        assert( entity.shardId == UniqueId.fromString(sampleUUID2) )
+        Assert.assertTrue( entity.id == 1L )
+        Assert.assertTrue( entity.uuid == "ABC" )
+        Assert.assertTrue( entity.email == "kishore@abc.com" )
+        Assert.assertTrue( entity.isActive )
+        Assert.assertTrue( entity.age == 35 )
+        Assert.assertTrue( entity.salary == 400.5 )
+        Assert.assertTrue( entity.status == StatusEnum.Active )
+        Assert.assertTrue( entity.uid == UUID.fromString(sampleUUID1) )
+        Assert.assertTrue( entity.shardId == UniqueId.fromString(sampleUUID2) )
     }
 
 
@@ -60,15 +61,15 @@ class Entity_Mapper_ResultSet_Tests {
         val source = RecordMap(data)
         val entity = mapper.mapFrom<AuthorW>(source)!!
 
-        assert( entity.id == 1L )
-        assert( entity.uuid == "ABC" )
-        assert( entity.email == "kishore@abc.com" )
-        assert( entity.isActive )
-        assert( entity.age == 35 )
-        assert( entity.status == StatusEnum.Active )
-        assert( entity.salary == 400.5 )
-        assert( entity.uid == UUID.fromString(sampleUUID1) )
-        assert( entity.shardId == UniqueId.fromString(sampleUUID2) )
+        Assert.assertTrue( entity.id == 1L )
+        Assert.assertTrue( entity.uuid == "ABC" )
+        Assert.assertTrue( entity.email == "kishore@abc.com" )
+        Assert.assertTrue( entity.isActive )
+        Assert.assertTrue( entity.age == 35 )
+        Assert.assertTrue( entity.status == StatusEnum.Active )
+        Assert.assertTrue( entity.salary == 400.5 )
+        Assert.assertTrue( entity.uid == UUID.fromString(sampleUUID1) )
+        Assert.assertTrue( entity.shardId == UniqueId.fromString(sampleUUID2) )
     }
 
 
@@ -80,14 +81,14 @@ class Entity_Mapper_ResultSet_Tests {
         val source = RecordMap(data)
         val entity = mapper.mapFrom<UserWithAddress>(source)!!
 
-        assert( entity.id == 1L )
-        assert( entity.email == "kishore@abc.com" )
-        assert( entity.isActive )
-        assert( entity.age == 35 )
-        assert( entity.salary == 400.5 )
-        assert( entity.addr == Address("street 1", "city 1", "state 1", 1,"12345", true))
-        assert( entity.uid == UUID.fromString(sampleUUID1) )
-        assert( entity.shardId == UniqueId.fromString(sampleUUID2) )
+        Assert.assertTrue( entity.id == 1L )
+        Assert.assertTrue( entity.email == "kishore@abc.com" )
+        Assert.assertTrue( entity.isActive )
+        Assert.assertTrue( entity.age == 35 )
+        Assert.assertTrue( entity.salary == 400.5 )
+        Assert.assertTrue( entity.addr == Address("street 1", "city 1", "state 1", 1,"12345", true))
+        Assert.assertTrue( entity.uid == UUID.fromString(sampleUUID1) )
+        Assert.assertTrue( entity.shardId == UniqueId.fromString(sampleUUID2) )
     }
 
 

@@ -1,5 +1,6 @@
 package test.common
 
+import org.junit.Assert
 import org.junit.Test
 import slatekit.common.DateTime
 import slatekit.common.requests.InputArgs
@@ -41,12 +42,12 @@ class ConvertTests {
         val test = """{ "tstr": "abc", "tbool": false, "tshort": 1, "tint": 12, "tlong": 123, "tdoub": 123.45 }"""
         val deserializer = Deserializer(CommonRequest.cli("a", "b", "c", "post", mapOf(), mapOf()))
         val results = deserializer.convert(this::test_basic_types.parameters, test)
-        assert(results[0] == "abc")
-        assert(results[1] == false)
-        assert(results[2] == 1.toShort())
-        assert(results[3] == 12)
-        assert(results[4] == 123L)
-        assert(results[5] == 123.45)
+        Assert.assertTrue(results[0] == "abc")
+        Assert.assertTrue(results[1] == false)
+        Assert.assertTrue(results[2] == 1.toShort())
+        Assert.assertTrue(results[3] == 12)
+        Assert.assertTrue(results[4] == 123L)
+        Assert.assertTrue(results[5] == 123.45)
     }
 
 
@@ -55,10 +56,10 @@ class ConvertTests {
         val test = """{ "tdate": "2017-07-06", "ttime": "10:30:45", "tlocaldatetime": "2017-07-06T10:30:45", "tdatetime": "201707061030" }"""
         val deserializer = Deserializer(CommonRequest.cli("a", "b", "c", "post", mapOf(), mapOf()))
         val results = deserializer.convert(this::test_dates.parameters, test)
-        assert(results[0] == LocalDate.of(2017, 7, 6))
-        assert(results[1] == LocalTime.of(10,30,45))
-        assert(results[2] == LocalDateTime.of(2017,7,6, 10,30, 45))
-        assert(results[3] == DateTimes.of(2017,7,6, 10,30))
+        Assert.assertTrue(results[0] == LocalDate.of(2017, 7, 6))
+        Assert.assertTrue(results[1] == LocalTime.of(10,30,45))
+        Assert.assertTrue(results[2] == LocalDateTime.of(2017,7,6, 10,30, 45))
+        Assert.assertTrue(results[3] == DateTimes.of(2017,7,6, 10,30))
     }
 
 
@@ -68,7 +69,7 @@ class ConvertTests {
         val test = """{ "uid": "$guid" }"""
         val deserializer = Deserializer(CommonRequest.cli("a", "b", "c", "post", mapOf(), mapOf()))
         val results = deserializer.convert(this::test_uuid.parameters, test)
-        assert(results[0] == UUID.fromString(guid))
+        Assert.assertTrue(results[0] == UUID.fromString(guid))
     }
 
 
@@ -78,7 +79,7 @@ class ConvertTests {
         val test = """{ "status": ${enumVal.value} }"""
         val deserializer = Deserializer(CommonRequest.cli("a", "b", "c", "post", mapOf(), mapOf()))
         val results = deserializer.convert(this::test_enum.parameters, test)
-        assert(results[0] == enumVal)
+        Assert.assertTrue(results[0] == enumVal)
     }
 
 
@@ -93,10 +94,10 @@ class ConvertTests {
         val test = """{ "decString": "$decStr", "decInt": "$decInt", "decLong": "$decLong", "decDouble": "$decDoub" }"""
         val deserializer = Deserializer(CommonRequest.cli("a", "b", "c", "post", mapOf(), mapOf()), MyEncryptor)
         val results = deserializer.convert(this::test_decrypted.parameters, test)
-        assert((results[0] as EncString).value == "abc123")
-        assert((results[1] as EncInt).value == 123)
-        assert((results[2] as EncLong).value == 12345L)
-        assert((results[3] as EncDouble).value == 12345.67)
+        Assert.assertTrue((results[0] as EncString).value == "abc123")
+        Assert.assertTrue((results[1] as EncInt).value == 123)
+        Assert.assertTrue((results[2] as EncLong).value == 12345L)
+        Assert.assertTrue((results[3] as EncDouble).value == 12345.67)
     }
 
 
@@ -105,21 +106,21 @@ class ConvertTests {
         val test = """{ "strings": ["a", "b", "c"], "bools": [true, false, true], "ints": [1,2,3], "longs": [100,200,300], "doubles": [1.2,3.4,5.6] }"""
         val deserializer = Deserializer(CommonRequest.cli("a", "b", "c", "post", mapOf(), mapOf()), MyEncryptor)
         val results = deserializer.convert(this::test_arrays.parameters, test)
-        assert((results[0] as List<String>)[0] == "a")
-        assert((results[0] as List<String>)[1] == "b")
-        assert((results[0] as List<String>)[2] == "c")
-        assert((results[1] as List<Boolean>)[0] == true)
-        assert((results[1] as List<Boolean>)[1] == false)
-        assert((results[1] as List<Boolean>)[2] == true)
-        assert((results[2] as List<Int>)[0] == 1)
-        assert((results[2] as List<Int>)[1] == 2)
-        assert((results[2] as List<Int>)[2] == 3)
-        assert((results[3] as List<Long>)[0] == 100L)
-        assert((results[3] as List<Long>)[1] == 200L)
-        assert((results[3] as List<Long>)[2] == 300L)
-        assert((results[4] as List<Double>)[0] == 1.2)
-        assert((results[4] as List<Double>)[1] == 3.4)
-        assert((results[4] as List<Double>)[2] == 5.6)
+        Assert.assertTrue((results[0] as List<String>)[0] == "a")
+        Assert.assertTrue((results[0] as List<String>)[1] == "b")
+        Assert.assertTrue((results[0] as List<String>)[2] == "c")
+        Assert.assertTrue((results[1] as List<Boolean>)[0] == true)
+        Assert.assertTrue((results[1] as List<Boolean>)[1] == false)
+        Assert.assertTrue((results[1] as List<Boolean>)[2] == true)
+        Assert.assertTrue((results[2] as List<Int>)[0] == 1)
+        Assert.assertTrue((results[2] as List<Int>)[1] == 2)
+        Assert.assertTrue((results[2] as List<Int>)[2] == 3)
+        Assert.assertTrue((results[3] as List<Long>)[0] == 100L)
+        Assert.assertTrue((results[3] as List<Long>)[1] == 200L)
+        Assert.assertTrue((results[3] as List<Long>)[2] == 300L)
+        Assert.assertTrue((results[4] as List<Double>)[0] == 1.2)
+        Assert.assertTrue((results[4] as List<Double>)[1] == 3.4)
+        Assert.assertTrue((results[4] as List<Double>)[2] == 5.6)
     }
 
 
@@ -129,7 +130,7 @@ class ConvertTests {
         val test = """{ "sample1": { "tstr": "abc", "tbool": false, "tshort": 1, "tint": 12, "tlong": 123, "tdoub": 123.45 } }"""
         val deserializer = Deserializer(CommonRequest.cli("a", "b", "c", "post", mapOf(), mapOf()))
         val results = deserializer.convert(this::test_object.parameters, test)
-        assert(results[0] == ConvertTests.SampleObject1("abc", false, 1, 12, 123, 123.45))
+        Assert.assertTrue(results[0] == ConvertTests.SampleObject1("abc", false, 1, 12, 123, 123.45))
     }
 
 
@@ -144,8 +145,8 @@ class ConvertTests {
         val inputs = deserializer.convert(this::test_object_list.parameters, test)
         val results = inputs.get(0) as ArrayList<*>
         println(results)
-        assert(results[0] == ConvertTests.SampleObject1("abc", false, 1, 12, 123, 123.45))
-        assert(results[1] == ConvertTests.SampleObject1("def", true, 2, 34, 456, 678.91))
+        Assert.assertTrue(results[0] == ConvertTests.SampleObject1("abc", false, 1, 12, 123, 123.45))
+        Assert.assertTrue(results[1] == ConvertTests.SampleObject1("def", true, 2, 34, 456, 678.91))
     }
 
 
@@ -167,9 +168,9 @@ class ConvertTests {
         val deserializer = Deserializer(CommonRequest.cli("a", "b", "c", "post", mapOf(), mapOf()))
         val results = deserializer.convert(this::test_nested_object_list.parameters, test)
         val item = results[1] as NestedObject1
-        assert(results[0] == "abc")
-        assert(item.items[0] == ConvertTests.SampleObject1("abc", false, 1, 12, 123, 123.45))
-        assert(item.items[1] == ConvertTests.SampleObject1("def", true, 2, 34, 456, 678.91))
+        Assert.assertTrue(results[0] == "abc")
+        Assert.assertTrue(item.items[0] == ConvertTests.SampleObject1("abc", false, 1, 12, 123, 123.45))
+        Assert.assertTrue(item.items[1] == ConvertTests.SampleObject1("def", true, 2, 34, 456, 678.91))
     }
 
 
@@ -182,10 +183,10 @@ class ConvertTests {
             Movie(0L, request.meta.getString("movie"), cost = 0, rating = 4.0, released = DateTime.now() )
         })))
         val results = deserializer.convert(this::test_custom_converter.parameters, test)
-        assert(results[0] == "abc")
-        assert(results[1] == false)
-        assert(results[2] is Movie )
-        assert((results[2] as Movie ).title == "batman")
+        Assert.assertTrue(results[0] == "abc")
+        Assert.assertTrue(results[1] == false)
+        Assert.assertTrue(results[2] is Movie )
+        Assert.assertTrue((results[2] as Movie ).title == "batman")
     }
 
 

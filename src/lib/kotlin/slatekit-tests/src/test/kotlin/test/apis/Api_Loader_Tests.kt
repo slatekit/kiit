@@ -125,14 +125,14 @@ class Api_Loader_Tests : ApiTestsBase() {
             true, "users", "app-roles", "*",
             CliProtocol.name, true, null)
 
-        assert(api.actions.size == 2)
-        assert(api.area == "app")
-        assert(api.name == "sampleExtended")
-        assert(api.desc == "sample using plain kotlin class")
-        assert(api.roles == "users")
-        assert(api.auth == "app-roles")
-        assert(api.verb == "*")
-        assert(api.protocol == CliProtocol.name)
+        Assert.assertTrue(api.actions.size == 2)
+        Assert.assertTrue(api.area == "app")
+        Assert.assertTrue(api.name == "sampleExtended")
+        Assert.assertTrue(api.desc == "sample using plain kotlin class")
+        Assert.assertTrue(api.roles == "users")
+        Assert.assertTrue(api.auth == "app-roles")
+        Assert.assertTrue(api.verb == "*")
+        Assert.assertTrue(api.protocol == CliProtocol.name)
     }
 
 
@@ -146,14 +146,14 @@ class Api_Loader_Tests : ApiTestsBase() {
             false, "users", "app-roles", "*",
             CliProtocol.name, true, null)
 
-        assert(api.actions.size == 8)
-        assert(api.area == "app")
-        assert(api.name == "sampleExtended")
-        assert(api.desc == "sample using plain kotlin class")
-        assert(api.roles == "users")
-        assert(api.auth == "app-roles")
-        assert(api.verb == "*")
-        assert(api.protocol == CliProtocol.name)
+        Assert.assertTrue(api.actions.size == 8)
+        Assert.assertTrue(api.area == "app")
+        Assert.assertTrue(api.name == "sampleExtended")
+        Assert.assertTrue(api.desc == "sample using plain kotlin class")
+        Assert.assertTrue(api.roles == "users")
+        Assert.assertTrue(api.auth == "app-roles")
+        Assert.assertTrue(api.verb == "*")
+        Assert.assertTrue(api.protocol == CliProtocol.name)
     }
 
 
@@ -167,14 +167,14 @@ class Api_Loader_Tests : ApiTestsBase() {
             "users", "app-roles", "*",
             CliProtocol.name, true, null), null)
 
-        assert(api.actions.size == 2)
-        assert(api.area == "app")
-        assert(api.name == "sampleExtended")
-        assert(api.desc == "sample using plain kotlin class")
-        assert(api.roles == "users")
-        assert(api.auth == "app-roles")
-        assert(api.verb == "*")
-        assert(api.protocol == CliProtocol.name)
+        Assert.assertTrue(api.actions.size == 2)
+        Assert.assertTrue(api.area == "app")
+        Assert.assertTrue(api.name == "sampleExtended")
+        Assert.assertTrue(api.desc == "sample using plain kotlin class")
+        Assert.assertTrue(api.roles == "users")
+        Assert.assertTrue(api.auth == "app-roles")
+        Assert.assertTrue(api.verb == "*")
+        Assert.assertTrue(api.protocol == CliProtocol.name)
     }
 
 
@@ -200,11 +200,11 @@ class Api_Loader_Tests : ApiTestsBase() {
                 CliProtocol.name, true, null)
         ))
 
-        assert(areas.size == 2)
-        assert(areas.contains("app"))
-        assert(areas.contains("tests"))
-        assert(areas.get("app")?.apis?.size == 2)
-        assert(areas.get("tests")?.apis?.size == 1)
+        Assert.assertTrue(areas.size == 2)
+        Assert.assertTrue(areas.contains("app"))
+        Assert.assertTrue(areas.contains("tests"))
+        Assert.assertTrue(areas.get("app")?.apis?.size == 2)
+        Assert.assertTrue(areas.get("tests")?.apis?.size == 1)
     }
 
 
@@ -228,19 +228,19 @@ class Api_Loader_Tests : ApiTestsBase() {
         ))
 
         val routes = Routes(areas, null)
-        assert(routes.areas.size == 2)
-        assert(routes.contains("app"))
-        assert(routes.contains("tests"))
+        Assert.assertTrue(routes.areas.size == 2)
+        Assert.assertTrue(routes.contains("app"))
+        Assert.assertTrue(routes.contains("tests"))
 
         // Declared locally in class
-        assert(routes.contains("tests", "sampleExtended", "ping"))
+        Assert.assertTrue(routes.contains("tests", "sampleExtended", "ping"))
 
         // Inherited from super class
-        assert(routes.contains("tests", "sampleExtended","hello"))
+        Assert.assertTrue(routes.contains("tests", "sampleExtended","hello"))
 
         val api = routes.api("tests", "sampleExtended")
-        assert(api?.area == "tests")
-        assert(api?.name == "sampleExtended")
-        assert(api?.actions?.size == 8)
+        Assert.assertTrue(api?.area == "tests")
+        Assert.assertTrue(api?.name == "sampleExtended")
+        Assert.assertTrue(api?.actions?.size == 8)
     }
 }

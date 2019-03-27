@@ -15,6 +15,7 @@ package test.common
 //import org.jetbrains.spek.api.Spek
 //import org.jetbrains.spek.api.dsl.*
 //import kotlin.test.assertEquals
+import org.junit.Assert
 import slatekit.common.envs.*
 
 import org.junit.Test
@@ -24,18 +25,18 @@ class EnvTests {
 
      fun ensureMatch(envs:Envs, name:String, envType:EnvMode, desc:String) {
         val env = envs.get(name)
-        assert( env != null  )
-        assert( env!!.name == name )
-        assert( env!!.mode.name == envType.name)
-        assert( env!!.desc == desc )
+        Assert.assertTrue( env != null  )
+        Assert.assertTrue( env!!.name == name )
+        Assert.assertTrue( env!!.mode.name == envType.name)
+        Assert.assertTrue( env!!.desc == desc )
     }
 
 
     @Test fun can_construct() {
         val env = Env("qa1", EnvMode.Qat, "nyc")
-        assert( env.name      == "qa1" )
-        assert( env.mode.name == "qat" )
-        assert( env.region    == "nyc" )
+        Assert.assertTrue( env.name      == "qa1" )
+        Assert.assertTrue( env.mode.name == "qat" )
+        Assert.assertTrue( env.region    == "nyc" )
     }
 
 
@@ -52,71 +53,71 @@ class EnvTests {
 
     @Test fun default_envs_have_default_current_environment() {
         val envs = Env.defaults()
-        assert( envs.current != null )
-        assert( envs.name == "loc")
-        assert( envs.env == EnvMode.Dev.name )
-        assert( envs.isDev )
+        Assert.assertTrue( envs.current != null )
+        Assert.assertTrue( envs.name == "loc")
+        Assert.assertTrue( envs.env == EnvMode.Dev.name )
+        Assert.assertTrue( envs.isDev )
     }
 
 
     @Test fun default_envs_can_select_environment() {
         val envAll = Env.defaults()
         val envs = envAll.select("qa1")
-        assert( envs.current != null )
-        assert( envs.name == "qa1")
-        assert( envs.env == EnvMode.Qat.name )
-        assert( envs.isQat )
+        Assert.assertTrue( envs.current != null )
+        Assert.assertTrue( envs.name == "qa1")
+        Assert.assertTrue( envs.env == EnvMode.Qat.name )
+        Assert.assertTrue( envs.isQat )
     }
 
 
     @Test fun default_envs_can_validate_env_against_defaults() {
         val envAll = Env.defaults()
-        assert( envAll.isValid("qa1") )
-        assert( !envAll.isValid("abc") )
+        Assert.assertTrue( envAll.isValid("qa1") )
+        Assert.assertTrue( !envAll.isValid("abc") )
     }
 
 
     @Test fun can_build_key() {
-        assert( Env("qa1", EnvMode.Qat).key == "qa1:qat" )
+        Assert.assertTrue( Env("qa1", EnvMode.Qat).key == "qa1:qat" )
     }
 
 
     @Test fun can_check_loc() {
-        assert( Env("loc", EnvMode.Dev).isDev )
+        Assert.assertTrue( Env("loc", EnvMode.Dev).isDev )
     }
 
 
     @Test fun can_check_dev() {
-        assert( Env("qa1", EnvMode.Qat).isQat )
+        Assert.assertTrue( Env("qa1", EnvMode.Qat).isQat )
     }
 
 
     @Test fun can_check_qa() {
-        assert( Env("qa1", EnvMode.Qat).isQat )
+        Assert.assertTrue( Env("qa1", EnvMode.Qat).isQat )
     }
 
 
     @Test fun can_check_stg() {
-        assert( Env("stg", EnvMode.Uat).isUat )
+        Assert.assertTrue( Env("stg", EnvMode.Uat).isUat )
     }
 
 
     @Test fun can_check_pro() {
-        assert( Env("pro", EnvMode.Pro).isPro )
+        Assert.assertTrue( Env("pro", EnvMode.Pro).isPro )
     }
 
 
     @Test fun can_parse_with_name() {
-        assert( Env.parse("dev").isDev)
-        assert( Env.parse("qat").isQat)
-        assert( Env.parse("uat").isUat)
-        assert( Env.parse("pro").isPro)
-        assert( Env.parse("dis").isDis)
-        assert( Env.parse("abc").isOther)
+        Assert.assertTrue( Env.parse("dev").isDev)
+        Assert.assertTrue( Env.parse("qat").isQat)
+        Assert.assertTrue( Env.parse("uat").isUat)
+        Assert.assertTrue( Env.parse("pro").isPro)
+        Assert.assertTrue( Env.parse("dis").isDis)
+        Assert.assertTrue( Env.parse("abc").isOther)
     }
 
 
     @Test fun can_parse_with_name_and_mode() {
-        assert( Env.parse("qa1:qat").isQat)
+        Assert.assertTrue( Env.parse("qa1:qat").isQat)
     }
 }
