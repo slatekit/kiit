@@ -66,12 +66,12 @@ class ModuleApi(val ctx: slatekit.integration.mods.ModuleContext, override val c
 
     @ApiAction(desc = "installs a specific module")
     fun installByName(name: String): Notice<Any> {
-        return _items[name]?.let { installUpdate(it, false) } ?: Failure("Unknown module : " + name)
+        return _items[name]?.let { installUpdate(it, false) } ?: Failure("Unknown module : $name")
     }
 
     @ApiAction(desc = "forces the install of a specific module or updates it. updates the mod entry and creates table")
     fun forceInstallByName(name: String): Notice<Any> {
-        return _items[name]?.let { installUpdate(it, true) } ?: Failure("Unknown module : " + name)
+        return _items[name]?.let { installUpdate(it, true) } ?: Failure("Unknown module : $name")
     }
 
     @ApiAction(desc = "gets the names of the modules")
@@ -113,9 +113,14 @@ class ModuleApi(val ctx: slatekit.integration.mods.ModuleContext, override val c
 
     @ApiAction(desc = "seeds all the modules")
     fun seed(): Notice<Any> {
-        val res = _items.all().map { module -> seedModule(module) }
+        val res = _items.all().map { module -> seedMod(module) }
         val finalResult = res.reduce({ acc, item -> if (!acc.success) acc else item })
         return finalResult
+    }
+
+    @ApiAction(desc = "seeds all the modules")
+    fun seedModule(name: String): Notice<Any> {
+        return _items[name]?.let { seedMod(it) } ?: Failure("Unknown module : $name")
     }
 
     /**
@@ -124,7 +129,7 @@ class ModuleApi(val ctx: slatekit.integration.mods.ModuleContext, override val c
      * @param mod
      * @return
      */
-    fun seedModule(mod: Module): Notice<Any> {
+    private fun seedMod(mod: Module): Notice<Any> {
         val result = try {
             mod.seed()
             Success("Seeded module: " + mod.info.name)
