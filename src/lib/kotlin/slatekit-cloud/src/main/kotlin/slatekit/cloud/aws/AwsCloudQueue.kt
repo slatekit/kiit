@@ -128,12 +128,10 @@ class AwsCloudQueue<T>(
      * @param msg: String message, or map containing the fields "message", and "atts"
      */
     override fun send(value: T, tagName: String, tagValue: String): Try<String> {
-        val tags:Map<String, Any> = mapOf(
-                tagName to tagValue,
-                "id" to Random.uuid(),
-                "createdAt" to DateTime.now().toStringUtc()
-        )
-        return send(value, tags)
+        return when(tagName){
+            null, "" -> send(value, mapOf("id" to Random.uuid(), "createdAt" to DateTime.now().toStringUtc()))
+            else     -> send(value, mapOf(tagName to tagValue, "id" to Random.uuid(), "createdAt" to DateTime.now().toStringUtc()))
+        }
     }
 
 
@@ -211,7 +209,7 @@ class AwsCloudQueue<T>(
         when (item.raw) {
             is Message -> {
                 execute(SOURCE, action, data = item, call = {
-                    val message = item as Message
+                    val message = item.raw as Message
                     val msgHandle = message.receiptHandle
 
                     sqs.deleteMessage(DeleteMessageRequest(queueUrl, msgHandle))
