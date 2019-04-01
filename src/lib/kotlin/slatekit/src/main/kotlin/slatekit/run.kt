@@ -32,7 +32,7 @@ fun main(args: Array<String>) {
 
 
 fun run2(args: Array<String>) {
-    val result = AppRunner.run(
+    AppRunner.run(
             rawArgs = args,
             about = SlateKit.about,
             schema = SlateKit.schema,
@@ -40,8 +40,4 @@ fun run2(args: Array<String>) {
             logs = LogbackLogs(),
             builder = { ctx -> SlateKit(AppEntContext.fromContext(ctx)) }
     )
-    result.onFailure {
-        println(it.message)
-        println(it.toString())
-    }
 }

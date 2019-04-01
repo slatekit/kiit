@@ -45,21 +45,18 @@ object ArgsService {
             sysChar: String = "$"
     ): Try<Args> {
 
-         return check(text)
+         return cleanse(text)
         .then { line:String         -> tokenize(line) }
-        .then { result:LexResult    -> validate(result) }
+        .then { result:LexResult    -> convert(result) }
         .then { tokens:List<String> -> process(text.trim(), tokens, prefix, sep, hasAction, metaChar, sysChar) }
     }
 
     /**
-     * Check for empty line
+     * Cleanse the line before processing
      */
-    private fun check(line:String): Try<String> {
+    private fun cleanse(line:String): Try<String> {
         val cleaned = line.trim()
-        return when(cleaned.isEmpty() || cleaned.isBlank()) {
-            true  -> Failure(Exception("No data provided"), msg = "Error parsing arguments")
-            false -> Success(line)
-        }
+        return Success(cleaned)
     }
 
 
@@ -78,12 +75,9 @@ object ArgsService {
     /**
      * Validate the tokens
      */
-    private fun validate(lexResult:LexResult): Try<List<String>> {
+    private fun convert(lexResult:LexResult): Try<List<String>> {
         val args = lexResult.tokens.map { t -> t.text }.take(lexResult.tokens.size - 1)
-        return when(args.isEmpty()){
-            true -> Failure(Exception("No data provided"), msg = "Error parsing arguments")
-            else -> Success(args)
-        }
+        return Success(args)
     }
 
 
