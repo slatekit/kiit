@@ -20,16 +20,17 @@ import slatekit.common.queues.QueueStringConverter
 //</doc:import_required>
 
 //<doc:import_examples>
-import slatekit.core.cmds.Cmd
+import slatekit.core.cmds.Command
+import slatekit.core.cmds.CommandRequest
 import slatekit.results.Success
 import slatekit.results.Try
 
 //</doc:import_examples>
 
 
-class Example_Aws_Sqs  : Cmd("sqs") {
+class Example_Aws_Sqs  : Command("sqs") {
 
-  override fun executeInternal(args: Array<String>?) : Try<Any>
+  override fun execute(request: CommandRequest) : Try<Any>
   {
     //<doc:setup>
     val converter = QueueStringConverter()

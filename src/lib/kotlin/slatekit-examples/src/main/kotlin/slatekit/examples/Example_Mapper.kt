@@ -16,7 +16,8 @@ package slatekit.examples
 import slatekit.common.*
 import slatekit.common.db.DbCon
 import slatekit.meta.models.Model
-import slatekit.core.cmds.Cmd
+import slatekit.core.cmds.Command
+import slatekit.core.cmds.CommandRequest
 import slatekit.db.Db
 import slatekit.entities.EntityWithId
 import slatekit.examples.common.User
@@ -33,7 +34,7 @@ import slatekit.results.Success
 //</doc:import_examples>
 
 
-class Example_Mapper : Cmd("mapper") {
+class Example_Mapper : Command("mapper") {
 
     //<doc:setup>
     data class Movie(
@@ -109,7 +110,7 @@ class Example_Mapper : Cmd("mapper") {
     //</doc:setup>
 
 
-    override fun executeInternal(args: Array<String>?) : Try<Any>
+    override fun execute(request: CommandRequest) : Try<Any>
     {
         //<doc:examples>
         // NOTE: There are 3 different ways to load the schema of the entity.

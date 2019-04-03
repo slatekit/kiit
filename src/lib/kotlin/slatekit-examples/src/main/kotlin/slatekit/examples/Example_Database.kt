@@ -20,7 +20,8 @@ import slatekit.common.db.DbConString
 //<doc:import_examples>
 import slatekit.results.Try
 import slatekit.results.Success
-import slatekit.core.cmds.Cmd
+import slatekit.core.cmds.Command
+import slatekit.core.cmds.CommandRequest
 import slatekit.examples.common.User
 import slatekit.meta.models.ModelMapper
 import slatekit.orm.OrmMapper
@@ -28,9 +29,9 @@ import slatekit.orm.databases.vendors.MySqlConverter
 
 //</doc:import_examples>
 
-class Example_Database : Cmd("db") {
+class Example_Database : Command("db") {
 
-    override fun executeInternal(args: Array<String>?): Try<Any> {
+    override fun execute(request: CommandRequest): Try<Any> {
         //<doc:examples>
         // NOTES:
         // 1. The Db.kt simply uses JDBC

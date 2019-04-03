@@ -24,7 +24,8 @@ import slatekit.common.conf.ConfFuncs
 import slatekit.common.db.DbConString
 import slatekit.common.db.DbLookup
 import slatekit.common.db.DbType
-import slatekit.core.cmds.Cmd
+import slatekit.core.cmds.Command
+import slatekit.core.cmds.CommandRequest
 import slatekit.db.Db
 import slatekit.examples.common.User
 import slatekit.examples.common.UserRepository
@@ -40,9 +41,9 @@ import slatekit.orm.databases.vendors.MySqlEntityRepo
 /**
  * Created by kreddy on 3/15/2016.
  */
-class Example_Entities_Reg : Cmd("types") {
+class Example_Entities_Reg : Command("types") {
 
-    override fun executeInternal(args: Array<String>?): Try<Any> {
+    override fun execute(request: CommandRequest): Try<Any> {
         //<doc:setup>
         // The entities are dependent on the database connections setup.
         // See Example_Database.kt for more info

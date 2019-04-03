@@ -111,6 +111,7 @@ dependencies {
         compile project(":slatekit-core")
         compile project(":slatekit-apis")
         compile project(":slatekit-integration")
+        compile project(":slatekit-result")
         compile project(":slatekit-server")
         compile project(":slatekit-providers")
         compile project(":slatekit-workers")

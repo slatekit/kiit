@@ -5,7 +5,8 @@ import slatekit.apis.core.Api
 import slatekit.common.conf.Config
 import slatekit.results.Try
 import slatekit.results.Success
-import slatekit.core.cmds.Cmd
+import slatekit.core.cmds.Command
+import slatekit.core.cmds.CommandRequest
 import slatekit.examples.common.*
 import slatekit.integration.common.AppEntContext
 
@@ -13,9 +14,9 @@ import slatekit.integration.common.AppEntContext
 /**
  * Created by kreddy on 3/15/2016.
  */
-class Guide_APIs : Cmd("types") {
+class Guide_APIs : Command("types") {
 
-    override fun executeInternal(args: Array<String>?): Try<Any> {
+    override fun execute(request: CommandRequest): Try<Any> {
 
         return Success("")
     }

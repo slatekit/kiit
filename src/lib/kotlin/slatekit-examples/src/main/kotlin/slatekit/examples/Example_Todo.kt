@@ -18,16 +18,17 @@ import slatekit.common.TODO
 //</doc:import_required>
 
 //<doc:import_examples>
-import slatekit.core.cmds.Cmd
+import slatekit.core.cmds.Command
+import slatekit.core.cmds.CommandRequest
 import slatekit.results.Success
 import slatekit.results.Try
 
 //</doc:import_examples>
 
 
-class Example_Todo  : Cmd("todo") {
+class Example_Todo  : Command("todo") {
 
-  override fun executeInternal(args: Array<String>?) : Try<Any>
+  override fun execute(request: CommandRequest) : Try<Any>
   {
     //<doc:examples>
     // About: Strongly typed, structured representation of code notes/tasks

@@ -38,7 +38,7 @@ class SampleServer(val args:Array<String>) {
         val container = SampleSetup.container(auth)
 
         // Ktor handler
-        val handler = KtorHandler(context, config, container, diagnostics)
+        val handler = KtorHandler(context, config, container, diagnostics, KtorResponse)
 
         // Ktor
         val server = embeddedServer(Netty, config.port) {

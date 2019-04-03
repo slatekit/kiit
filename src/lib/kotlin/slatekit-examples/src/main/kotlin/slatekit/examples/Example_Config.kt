@@ -22,14 +22,15 @@ import slatekit.common.conf.Config
 import slatekit.common.db.DbCon
 import slatekit.common.encrypt.B64Java8
 import slatekit.common.encrypt.Encryptor
-import slatekit.core.cmds.Cmd
+import slatekit.core.cmds.Command
+import slatekit.core.cmds.CommandRequest
 
 //</doc:import_examples>
 
 
-class Example_Config : Cmd("config") {
+class Example_Config : Command("config") {
 
-    override fun executeInternal(args: Array<String>?): Try<Any> {
+    override fun execute(request: CommandRequest): Try<Any> {
         //<doc:examples>
         // CASE 1: Load up config from resources directory
         val conf = Config("env.dev.conf")

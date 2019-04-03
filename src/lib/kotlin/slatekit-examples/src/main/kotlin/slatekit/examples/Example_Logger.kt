@@ -18,14 +18,15 @@ import slatekit.common.log.*
 //</doc:import_required>
 
 //<doc:import_examples>
-import slatekit.core.cmds.Cmd
+import slatekit.core.cmds.Command
+import slatekit.core.cmds.CommandRequest
 import slatekit.results.Try
 import slatekit.results.Success
 
 //</doc:import_examples>
 
 
-class Example_Logger  : Cmd("logger"), LogSupport {
+class Example_Logger  : Command("logger"), LogSupport {
 
   //<doc:setup>
   // NOTE: The logger is very simple and designed to be extended for customization
@@ -51,7 +52,7 @@ class Example_Logger  : Cmd("logger"), LogSupport {
 
 
   //</doc:setup>
-  override fun executeInternal(args: Array<String>?) : Try<Any>
+  override fun execute(request: CommandRequest) : Try<Any>
   {
 
     //<doc:examples>

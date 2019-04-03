@@ -15,19 +15,19 @@ package slatekit.examples
 import slatekit.common.smartvalues.Email
 import slatekit.results.Try
 import slatekit.results.Success
-import slatekit.common.smartvalues.*
 //</doc:import_required>
 
 //<doc:import_examples>
-import slatekit.core.cmds.Cmd
+import slatekit.core.cmds.Command
+import slatekit.core.cmds.CommandRequest
 import slatekit.results.Outcome
 
 //</doc:import_examples>
 
 
-class Example_SmartValues : Cmd("results") {
+class Example_SmartValues : Command("results") {
 
-    override fun executeInternal(args: Array<String>?): Try<Any> {
+    override fun execute(request: CommandRequest): Try<Any> {
         //<doc:examples>
         // Smart strings provide a way to store, validate and describe
         // a strongly typed/formatted string. This concept is called

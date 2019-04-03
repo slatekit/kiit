@@ -25,13 +25,14 @@ import slatekit.common.db.DbConString
 import slatekit.common.db.DbLookup
 import slatekit.common.db.DbLookup.Companion.defaultDb
 import slatekit.common.db.DbLookup.Companion.namedDbs
-import slatekit.core.cmds.Cmd
+import slatekit.core.cmds.Command
+import slatekit.core.cmds.CommandRequest
 
 //</doc:import_examples>
 
-class Example_DbLookup : Cmd("db") {
+class Example_DbLookup : Command("db") {
 
-    override fun executeInternal(args: Array<String>?): Try<Any> {
+    override fun execute(request: CommandRequest): Try<Any> {
         //<doc:examples>
         // These examples just shows the database connection registration
         // There is separate Db component in slatekit.common.db.Db

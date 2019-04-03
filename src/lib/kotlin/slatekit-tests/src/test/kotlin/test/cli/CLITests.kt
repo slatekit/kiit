@@ -11,7 +11,7 @@
  * </slate_header>
  */
 
-package test.core
+package test.cli
 
 import org.junit.Assert
 import org.junit.Test

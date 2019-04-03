@@ -29,8 +29,10 @@ import slatekit.common.info.*
 import slatekit.common.log.LogsDefault
 import slatekit.common.Context
 import slatekit.entities.Entities
-import slatekit.core.cmds.Cmd
+import slatekit.core.cmds.Command
+import slatekit.core.cmds.CommandRequest
 import slatekit.db.Db
+import slatekit.integration.common.AppEntContext
 import slatekit.results.StatusCodes
 import slatekit.results.Try
 import slatekit.results.Success
@@ -39,9 +41,9 @@ import slatekit.results.getOrElse
 //</doc:import_examples>
 
 
-class Example_Context : Cmd("cmd") {
+class Example_Context : Command("cmd") {
 
-    override fun executeInternal(args: Array<String>?): Try<Any> {
+    override fun execute(request: CommandRequest): Try<Any> {
         //<doc:examples>
 
         // OVERVIEW:
@@ -78,7 +80,7 @@ class Example_Context : Cmd("cmd") {
         // - Config() representing conf settings from "env.conf"
         // - default logger ( console )
         // - entities ( registrations for orm )
-        val ctx1 = CommonContext(
+        val ctx1 = AppEntContext(
                 arg = Args.default(),
                 env = Env("dev", EnvMode.Dev, "ny", "dev environment"),
                 cfg = Config(),

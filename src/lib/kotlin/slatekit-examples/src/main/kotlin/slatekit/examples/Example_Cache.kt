@@ -20,14 +20,15 @@ import slatekit.core.cache.CacheSettings
 //</doc:import_required>
 
 //<doc:import_examples>
-import slatekit.core.cmds.Cmd
+import slatekit.core.cmds.Command
+import slatekit.core.cmds.CommandRequest
 import slatekit.results.Try
 import slatekit.results.Success
 
 //</doc:import_examples>
 
 
-class Example_Cache  : Cmd("auth") {
+class Example_Cache  : Command("auth") {
 
   //<doc:setup>
   data class Movie(val title:String)
@@ -35,7 +36,7 @@ class Example_Cache  : Cmd("auth") {
   val cache = Cache(CacheSettings(10) )
   //</doc:setup>
 
-  override fun executeInternal(args: Array<String>?) : Try<Any>
+  override fun execute(request: CommandRequest) : Try<Any>
   {
     //<doc:examples>
     // CASE 1: Put a non-expiring item in the cache

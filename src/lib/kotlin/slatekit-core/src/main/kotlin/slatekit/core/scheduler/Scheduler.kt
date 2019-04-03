@@ -3,8 +3,6 @@ package slatekit.core.scheduler
 import slatekit.common.*
 import slatekit.common.log.Logs
 import slatekit.common.metrics.Metrics
-import slatekit.core.scheduler.core.ErrorMode
-import slatekit.core.scheduler.core.RunMode
 import slatekit.common.Status
 import slatekit.results.*
 //import java.time.Duration

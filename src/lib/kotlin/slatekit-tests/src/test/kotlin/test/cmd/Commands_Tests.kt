@@ -16,27 +16,27 @@ package test
 import org.junit.Assert
 import org.junit.Test
 import slatekit.common.*
-import slatekit.core.cmds.Cmd
-import slatekit.core.cmds.Cmds
+import slatekit.core.cmds.Command
+import slatekit.core.cmds.CommandRequest
+import slatekit.core.cmds.Commands
 import slatekit.results.Success
 import slatekit.results.Try
 
 
-class CmdTests {
+class Commands_Tests {
   var userCount:Int = 0
   val inc = { userCount += 1; userCount }
 
 
-  class CmdCreateUser(var count:Int = 0)  :  Cmd("create user", "", { a ->
-
+  class CmdCreateUser(var count:Int = 0)  :  Command("create user", "", { a:CommandRequest ->
     "user_" + count
   })
 
 
 
-  class CmdCreateAdmin(var count:Int = 0) :  Cmd("create admin") {
+  class CmdCreateAdmin(var count:Int = 0) :  Command("create admin") {
 
-    override fun executeInternal(args: Array<String>?) : Try<Any> {
+    override fun execute(request: CommandRequest) : Try<Any> {
       count += 1
       return Success("admin_" + count )
     }
@@ -44,9 +44,9 @@ class CmdTests {
 
 
 
-  class CmdError(var count:Int = 0) :  Cmd("create error")  {
+  class CmdError(var count:Int = 0) :  Command("create error")  {
 
-    override fun executeInternal(args: Array<String>?) : Try<Any> {
+    override fun execute(request:CommandRequest) : Try<Any> {
       count += 1
       throw IllegalArgumentException("error_" + count)
     }
@@ -56,7 +56,7 @@ class CmdTests {
 
 
     @Test fun can_load_with_commands() {
-      val cmds = Cmds(
+      val cmds = Commands(
         listOf(
           CmdCreateUser(),
           CmdCreateAdmin()
@@ -69,7 +69,7 @@ class CmdTests {
 
 
     @Test fun can_load_default_states() {
-      val cmds = Cmds(
+      val cmds = Commands(
         listOf(
           CmdCreateUser(),
           CmdCreateAdmin()
@@ -81,7 +81,7 @@ class CmdTests {
 
 
     @Test fun can_run_using_callback() {
-      val cmds = Cmds(
+      val cmds = Commands(
         listOf(
           CmdCreateUser(),
           CmdCreateAdmin()
@@ -97,7 +97,7 @@ class CmdTests {
 
 
     @Test fun can_run_using_overriden_method() {
-      val cmds = Cmds(
+      val cmds = Commands(
         listOf(
           CmdCreateUser(),
           CmdCreateAdmin()
@@ -113,7 +113,7 @@ class CmdTests {
 
 
     @Test fun can_get_state() {
-      val cmds = Cmds(
+      val cmds = Commands(
         listOf(
           CmdCreateUser(),
           CmdCreateAdmin()
@@ -131,7 +131,7 @@ class CmdTests {
 
 
     @Test fun can_get_state_after_multiple_runs() {
-      val cmds = Cmds(
+      val cmds = Commands(
         listOf(
           CmdCreateUser(),
           CmdCreateAdmin()
@@ -150,7 +150,7 @@ class CmdTests {
 
 
     @Test fun can_handle_error() {
-      val cmds = Cmds(
+      val cmds = Commands(
         listOf(
           CmdError()
         )
@@ -167,7 +167,7 @@ class CmdTests {
 
 
     @Test fun can_get_error_state() {
-      val cmds = Cmds(
+      val cmds = Commands(
         listOf(
           CmdError()
         )
@@ -185,7 +185,7 @@ class CmdTests {
 
 
     @Test fun can_get_error_state_with_multiple_error_counts() {
-      val cmds = Cmds(
+      val cmds = Commands(
         listOf(
           CmdError()
         )

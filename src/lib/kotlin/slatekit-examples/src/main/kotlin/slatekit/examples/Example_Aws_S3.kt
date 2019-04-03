@@ -7,15 +7,16 @@ import slatekit.cloud.aws.AwsCloudFiles
 //</doc:import_required>
 
 //<doc:import_examples>
-import slatekit.core.cmds.Cmd
+import slatekit.core.cmds.Command
+import slatekit.core.cmds.CommandRequest
 import slatekit.results.Success
 import slatekit.results.Try
 
 //</doc:import_examples>
 
-class Example_Aws_S3  : Cmd("s3") {
+class Example_Aws_S3  : Command("s3") {
 
-  override fun executeInternal(args: Array<String>?) : Try<Any>
+  override fun execute(request: CommandRequest) : Try<Any>
   {
     //<doc:setup>
     // Not storing any key/secret in source code for security purposes

@@ -7,7 +7,7 @@ package slatekit.examples
 /*
 class Guide_ORM : Cmd("types") {
 
-    override fun executeInternal(args: Array<String>?): Try<Any> {
+    override fun execute(request:CommandRequest): Try<Any> {
         //<doc:setup>
         // The entities are dependent on the database connections setup.
         // See Example_Database.kt for more info

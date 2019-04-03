@@ -1,4 +1,4 @@
-package slatekit.core.scheduler.core
+package slatekit.core.scheduler
 
 sealed class RunMode(val name:String, val value:Int, val desc:String) {
     object  Periodic : RunMode("Periodic", 0, "Runs periodically")

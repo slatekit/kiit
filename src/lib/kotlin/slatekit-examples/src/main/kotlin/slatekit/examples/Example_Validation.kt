@@ -19,7 +19,7 @@ import slatekit.common.validations.ValidationResults
 //</doc:import_required>
 
 //<doc:import_examples>
-import slatekit.core.cmds.Cmd
+import slatekit.core.cmds.Command
 import slatekit.results.Try
 import slatekit.results.Success
 import slatekit.common.validations.ValidationFuncs.isEmpty
@@ -42,15 +42,16 @@ import slatekit.common.validations.ValidationFuncs.isNumeric
 import slatekit.common.validations.ValidationFuncs.isPhoneUS
 import slatekit.common.validations.ValidationFuncs.isUrl
 import slatekit.common.validations.ValidationFuncs.isZipCodeUS
+import slatekit.core.cmds.CommandRequest
 
 //</doc:import_examples>
 
 /**
   * Created by kreddy on 10/21/2016.
   */
-class Example_Validation : Cmd("validation") {
+class Example_Validation : Command("validation") {
 
-  override fun executeInternal(args: Array<String>?) : Try<Any>
+  override fun execute(request: CommandRequest) : Try<Any>
   {
     showSimple()
     showSimpleRegEx()

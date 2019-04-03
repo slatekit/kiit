@@ -14,6 +14,7 @@
 package slatekit.core.cmds
 
 import slatekit.common.DateTime
+import slatekit.common.DateTimes
 
 /**
  *
@@ -24,14 +25,14 @@ import slatekit.common.DateTime
  * @param errorCount : The total errors
  * @param lastResult : The last result
  */
-data class CmdState(
+data class CommandState(
     val name: String,
     val msg: String,
     val lastRuntime: DateTime,
     val hasRun: Boolean,
     val runCount: Int,
     val errorCount: Int,
-    val lastResult: CmdResult?
+    val lastResult: CommandResult?
 ) {
     /**
      * Builds a copy of the this state with bumped up numbers ( run count, error count, etc )
@@ -39,7 +40,7 @@ data class CmdState(
      * @param result
      * @return
      */
-    fun update(result: CmdResult): CmdState =
+    fun update(result: CommandResult): CommandState =
 
             this.copy(
                     msg = result.message ?: "",
@@ -49,4 +50,23 @@ data class CmdState(
                     errorCount = (result.error?.let { errorCount + 1 } ?: errorCount),
                     lastResult = result
             )
+
+
+    companion object {
+        /**
+         * builds a default Command State
+         * @param name
+         * @return
+         */
+        fun empty(name: String): CommandState =
+                CommandState(
+                        name = name,
+                        msg = "Not yet run",
+                        lastRuntime = DateTimes.MIN,
+                        hasRun = false,
+                        runCount = 0,
+                        errorCount = 0,
+                        lastResult = null
+                )
+    }
 }

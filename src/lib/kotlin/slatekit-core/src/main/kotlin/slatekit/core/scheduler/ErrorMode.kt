@@ -1,4 +1,4 @@
-package slatekit.core.scheduler.core
+package slatekit.core.scheduler
 
 sealed class ErrorMode(val name:String, val value:Int, val desc:String) {
     object Strict   : ErrorMode("Strict"  , 0, "No errors allowed, an exception will fail the task")

@@ -22,7 +22,8 @@ import slatekit.results.Try
 import slatekit.results.Success
 import slatekit.db.Db
 import slatekit.common.db.DbConString
-import slatekit.core.cmds.Cmd
+import slatekit.core.cmds.Command
+import slatekit.core.cmds.CommandRequest
 import slatekit.entities.*
 import slatekit.entities.repos.EntityRepoInMemoryWithLongId
 import slatekit.meta.models.ModelMapper
@@ -33,7 +34,7 @@ import slatekit.orm.databases.vendors.MySqlEntityRepo
 //</doc:import_examples>
 
 
-class Example_Entities_Service : Cmd("service") {
+class Example_Entities_Service : Command("service") {
 
     //<doc:setup>
     // Example entity that the Repo with manage via CRUD operations
@@ -98,7 +99,7 @@ class Example_Entities_Service : Cmd("service") {
     //</doc:setup>
 
 
-    override protected fun executeInternal(args: Array<String>?): Try<Any> {
+    override protected fun execute(request: CommandRequest): Try<Any> {
 
         //<doc:examples>
         // The Service layer initialized with an repository .

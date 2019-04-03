@@ -20,15 +20,16 @@ import slatekit.common.requests.Source
 //</doc:import_required>
 
 //<doc:import_examples>
-import slatekit.core.cmds.Cmd
+import slatekit.core.cmds.Command
+import slatekit.core.cmds.CommandRequest
 import slatekit.results.Try
 import slatekit.results.Success
 //</doc:import_examples>
 
 
-class Example_Request : Cmd("request") {
+class Example_Request : Command("request") {
 
-    override fun executeInternal(args: Array<String>?): Try<Any> {
+    override fun execute(request: CommandRequest): Try<Any> {
         //<doc:examples>
         // The Request class models and abstracts both an
         // HTTP Request and a CLI ( command line interface ) request.
