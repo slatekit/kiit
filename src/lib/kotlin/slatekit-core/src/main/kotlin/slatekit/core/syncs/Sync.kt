@@ -58,7 +58,7 @@ open class Sync(
 
     override fun execute(args: Array<String>, mode: FunctionMode) {
         Try.attempt {
-            val canSync = canSync().success
+            val canSync = canExecute().success
             val run = canSync || mode == FunctionMode.Triggered
             if (run) {
                 lastSyncTime = DateTime.now()
@@ -81,7 +81,7 @@ open class Sync(
      * Determines if a sync can be run based on time elapsed and if one is currently running
      * @return
      */
-    open fun canSync(): Notice<Boolean> {
+    open fun canExecute(): Notice<Boolean> {
         if (isInProgress) return Notices.errored("Sync in progress")
         if (!settings.enabled) return Notices.errored("Sync is disabled")
         return when (hasTimeElapsed()) {
