@@ -99,7 +99,7 @@ open class Sync(
     }
 
 
-    private fun onComplete(result: Notice<Int>) {
+    protected open fun onComplete(result: Notice<Int>) {
         val start = lastSyncTime ?: DateTime.now()
         val end = DateTime.now()
         val duration = end.durationFrom(start).seconds
@@ -130,7 +130,7 @@ open class Sync(
      * @param result
      * @return
      */
-    private fun track(result: SyncResult): SyncResult {
+    protected open fun track(result: SyncResult): SyncResult {
         val last = lastStatus()
         val curr = last.update(result)
         lastStatus.set(curr)
@@ -138,7 +138,7 @@ open class Sync(
     }
 
 
-    private fun hasTimeElapsed(): Boolean {
+    protected open fun hasTimeElapsed(): Boolean {
         val sync = lastSyncTime
         return when (sync) {
             null -> true

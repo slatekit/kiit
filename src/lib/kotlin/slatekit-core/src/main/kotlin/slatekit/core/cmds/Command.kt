@@ -184,7 +184,7 @@ open class Command(
      * @param result
      * @return
      */
-    private fun track(result: CommandResult): CommandResult {
+    protected open fun track(result: CommandResult): CommandResult {
         val last = lastStatus()
         val curr = last.update(result)
         lastStatus.set(curr)
