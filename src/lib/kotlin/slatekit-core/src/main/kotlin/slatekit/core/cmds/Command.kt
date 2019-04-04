@@ -16,6 +16,7 @@ package slatekit.core.cmds
 import slatekit.common.DateTime
 import slatekit.common.args.Args
 import slatekit.common.ext.durationFrom
+import slatekit.core.common.FunctionInfo
 import slatekit.results.*
 import slatekit.results.builders.Tries
 import java.util.concurrent.atomic.AtomicReference
@@ -43,20 +44,20 @@ import java.util.concurrent.atomic.AtomicReference
  * @param name
  */
 open class Command(
-        val info: CommandInfo,
+        val info: FunctionInfo,
         val call: ((CommandRequest) -> Any?)? = null
 ) {
 
     /**
      * Initialize the command info with just name and optional description
      */
-    constructor(name: String, desc: String? = null) : this(CommandInfo(name, desc ?: ""))
+    constructor(name: String, desc: String? = null) : this(FunctionInfo(name, desc ?: ""))
 
 
     /**
      * Initialize the command info with just name and optional description
      */
-    constructor(name: String, desc: String?, call: ((CommandRequest) -> Any?)? = null) : this(CommandInfo(name, desc ?: ""), call)
+    constructor(name: String, desc: String?, call: ((CommandRequest) -> Any?)? = null) : this(FunctionInfo(name, desc ?: ""), call)
 
 
     val name: String get() { return info.name }
@@ -71,7 +72,7 @@ open class Command(
     /**
      * Stores the last status
      */
-    private val lastStatus = AtomicReference<CommandState>(CommandState.empty(name))
+    private val lastStatus = AtomicReference<CommandState>(CommandState.empty(info))
 
 
     /**
@@ -148,7 +149,7 @@ open class Command(
         val response = CommandResponse(request, result)
         val end = DateTime.now()
         val duration = end.durationFrom(start).toMillis()
-        return CommandResult(info, result, request, response, start, end, duration)
+        return CommandResult(request, response, info, result, start, end, duration)
     }
 
 

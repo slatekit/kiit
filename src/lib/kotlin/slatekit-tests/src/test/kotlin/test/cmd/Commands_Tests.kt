@@ -90,7 +90,7 @@ class Commands_Tests {
       val result = cmds.run("create user")
       Assert.assertTrue(result.success)
       Assert.assertTrue(result.ended > DateTimes.MIN)
-      Assert.assertTrue(result.error == null)
+      Assert.assertTrue(result.error() == null)
       Assert.assertTrue(result.value == "user_0")
       Assert.assertTrue(result.started > DateTimes.MIN)
     }
@@ -106,7 +106,7 @@ class Commands_Tests {
       val result = cmds.run("create admin")
       Assert.assertTrue(result.success)
       Assert.assertTrue(result.ended > DateTimes.MIN)
-      Assert.assertTrue(result.error == null)
+      Assert.assertTrue(result.error() == null)
       Assert.assertTrue(result.value == "admin_1")
       Assert.assertTrue(result.started > DateTimes.MIN)
     }
@@ -123,10 +123,10 @@ class Commands_Tests {
       val state = cmds.state("create user")
 
       Assert.assertTrue(state.hasRun)
-      Assert.assertTrue(state.errorCount == 0)
-      Assert.assertTrue(state.runCount == 1)
+      Assert.assertTrue(state.errorCount == 0L)
+      Assert.assertTrue(state.runCount == 1L)
       Assert.assertTrue(state.lastResult?.value == "user_0")
-      Assert.assertTrue(state.name == "create user")
+      Assert.assertTrue(state.info.name == "create user")
     }
 
 
@@ -142,10 +142,10 @@ class Commands_Tests {
       val state = cmds.state("create admin")
 
       Assert.assertTrue(state.hasRun)
-      Assert.assertTrue(state.errorCount == 0)
-      Assert.assertTrue(state.runCount == 2)
+      Assert.assertTrue(state.errorCount == 0L)
+      Assert.assertTrue(state.runCount == 2L)
       Assert.assertTrue(state.lastResult!!.value == "admin_2")
-      Assert.assertTrue(state.name == "create admin")
+      Assert.assertTrue(state.info.name == "create admin")
     }
 
 
@@ -158,10 +158,10 @@ class Commands_Tests {
       val result = cmds.run("create error")
       Assert.assertTrue(!result.success)
       Assert.assertTrue(result.ended > DateTimes.MIN)
-      Assert.assertTrue(result.error != null)
+      Assert.assertTrue(result.error() != null)
       Assert.assertTrue(result.message == "Unexpected")
-      Assert.assertTrue(result.error!!.message == "Error while executing : create error. error_1")
-      Assert.assertTrue(result.error!!.cause!!.message == "error_1")
+      Assert.assertTrue(result.error()!!.message == "Error while executing : create error. error_1")
+      Assert.assertTrue(result.error()!!.cause!!.message == "error_1")
       Assert.assertTrue(result.started > DateTimes.MIN)
     }
 
@@ -176,11 +176,11 @@ class Commands_Tests {
       val state = cmds.state("create error")
 
       Assert.assertTrue(state.hasRun)
-      Assert.assertTrue(state.errorCount == 1)
-      Assert.assertTrue(state.runCount == 1)
+      Assert.assertTrue(state.errorCount == 1L)
+      Assert.assertTrue(state.runCount == 1L)
       Assert.assertTrue(state.lastResult!!.message == "Unexpected")
-      Assert.assertTrue(state.lastResult!!.error!!.message == "Error while executing : create error. error_1")
-      Assert.assertTrue(state.name == "create error")
+      Assert.assertTrue(state.lastResult!!.error()!!.message == "Error while executing : create error. error_1")
+      Assert.assertTrue(state.info.name == "create error")
     }
 
 
@@ -195,9 +195,9 @@ class Commands_Tests {
       val state = cmds.state("create error")
 
       Assert.assertTrue(state.hasRun)
-      Assert.assertTrue(state.errorCount == 2)
-      Assert.assertTrue(state.runCount == 2)
-      Assert.assertTrue(state.lastResult!!.error!!.message == "Error while executing : create error. error_2")
-      Assert.assertTrue(state.name == "create error")
+      Assert.assertTrue(state.errorCount == 2L)
+      Assert.assertTrue(state.runCount == 2L)
+      Assert.assertTrue(state.lastResult!!.error()!!.message == "Error while executing : create error. error_2")
+      Assert.assertTrue(state.info.name == "create error")
     }
 }

@@ -1,17 +1,4 @@
-/**
- * <slate_header>
- * url: www.slatekit.com
- * git: www.github.com/code-helix/slatekit
- * org: www.codehelix.co
- * author: Kishore Reddy
- * copyright: 2016 CodeHelix Solutions Inc.
- * license: refer to website and/or github
- * about: A tool-kit, utility library and server-backend
- * mantra: Simplicity above all else
- * </slate_header>
- */
-
-package slatekit.core.cmds
+package slatekit.core.syncs
 
 import slatekit.common.DateTime
 import slatekit.common.DateTimes
@@ -27,15 +14,15 @@ import slatekit.core.common.FunctionState
  * @param errorCount : The total errors
  * @param lastResult : The last result
  */
-data class CommandState(
+data class SyncState(
         override val info: FunctionInfo,
         override val msg: String,
         override val lastRuntime: DateTime,
         override val hasRun: Boolean,
         override val runCount: Long,
         override val errorCount: Long,
-        override val lastResult: CommandResult?
-) : FunctionState<CommandResult> {
+        override val lastResult: SyncResult?
+) : FunctionState<SyncResult> {
 
     /**
      * Builds a copy of the this state with bumped up numbers ( run count, error count, etc )
@@ -43,7 +30,7 @@ data class CommandState(
      * @param result
      * @return
      */
-    fun update(result: CommandResult): CommandState =
+    fun update(result: SyncResult): SyncState =
 
             this.copy(
                     msg = result.message ?: "",
@@ -61,8 +48,8 @@ data class CommandState(
          * @param name
          * @return
          */
-        fun empty(info:FunctionInfo): CommandState =
-                CommandState(
+        fun empty(info: FunctionInfo): SyncState =
+                SyncState(
                         info = info,
                         msg = "Not yet run",
                         lastRuntime = DateTimes.MIN,

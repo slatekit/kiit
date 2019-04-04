@@ -1,4 +1,4 @@
-package slatekit.core.cmds
+package slatekit.core.common
 
 /**
  * @param name     : name of the command e.g "createUser" "admin.users.create"
@@ -6,12 +6,12 @@ package slatekit.core.cmds
  * @param version  : optional version of the command
  * @param category : optional category of the command
  */
-data class CommandInfo(
+data class FunctionInfo(
         val name: String,
         val desc: String,
         val alias: String = name,
         val version: String = "1.0",
-        val category: CommandCategory = CommandCategory.Generic
+        val category: FunctionType = FunctionType.Generic
 ) {
 
     /**

@@ -13,6 +13,7 @@
 
 package slatekit.core.cmds
 
+import slatekit.core.common.FunctionInfo
 import slatekit.results.Failure
 import slatekit.results.Success
 import slatekit.results.Try
@@ -58,7 +59,7 @@ class Commands(cmds: List<Command>) {
             null -> Tries.errored("Command $name not found")
             else -> command.execute(args)
         }
-        return flatten(result, CommandResult.empty(CommandInfo(name, "$name not found")))
+        return flatten(result, CommandResult.empty(FunctionInfo(name, "$name not found")))
     }
 
     /**
@@ -72,7 +73,7 @@ class Commands(cmds: List<Command>) {
             null -> Tries.errored("Command $name not found")
             else -> Tries.success(command.lastStatus())
         }
-        return flatten(result, CommandState.empty(name))
+        return flatten(result, CommandState.empty(FunctionInfo(name, "")))
     }
 
 

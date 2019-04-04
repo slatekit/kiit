@@ -15,6 +15,8 @@ package slatekit.core.cmds
 
 import slatekit.common.DateTime
 import slatekit.common.args.Args
+import slatekit.core.common.FunctionInfo
+import slatekit.core.common.FunctionResult
 import slatekit.results.Failure
 import slatekit.results.Result
 import slatekit.results.Success
@@ -30,32 +32,23 @@ import slatekit.results.builders.Tries
  * @param ended    : End time of the command
  */
 data class CommandResult(
-        val info: CommandInfo,
-        val result: Result<*, *>,
         val request: CommandRequest,
         val response: CommandResponse<*>,
-        val started: DateTime,
-        val ended: DateTime,
-        val totalMs: Long
-) {
-
-    val success: Boolean = result.success
-    val message: String = result.msg
-    val value: Any? = result.getOrNull()
-    val error: Throwable? = when (result) {
-        is Success -> null
-        is Failure -> result.error as Throwable?
-    }
+        override val info: FunctionInfo,
+        override val result: Result<*, *>,
+        override val started: DateTime,
+        override val ended: DateTime,
+        override val totalMs: Long
+) : FunctionResult {
 
 
     companion object {
-        fun empty(info: CommandInfo): CommandResult {
-            val args = Args.default()
+        fun empty(info: FunctionInfo): CommandResult {
             val result = Tries.errored<Any>("Not started")
             val request = CommandRequest.empty()
             val response = CommandResponse(request, result)
             val start = DateTime.now()
-            return CommandResult(info, result, request, response, start, start, 0L)
+            return CommandResult(request, response, info, result, start, start, 0L)
         }
     }
 }
