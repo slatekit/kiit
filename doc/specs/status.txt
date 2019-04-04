@@ -2,13 +2,13 @@
 
 STATUS RESULTS
 
-id  |  name        |  area  |  source   | action   |  desc           |  version    |  category  |  executed  |  count  |  origin       |  request    |  revision  |  success  |  code  |  message      |  tag  | timestamp             
-1   ,  space_sync  ,  app   ,  spaces   , sync     ,  syncs spaces   ,  2.0.2.450  ,  sync      ,  schedule  ,  100    ,  usa-all-001  ,  2days      ,  0         ,  true     ,  1000  ,  data synced  ,  a1   , 04/02/2018 9:00:00 AM 
-2   ,  messg_sync  ,  app   ,  messages , sync     ,  syncs shares   ,  2.0.2.450  ,  sync      ,  schedule  ,  100    ,  usa-all-001  ,  2days      ,  0         ,  true     ,  1000  ,  data synced  ,  a1   , 04/02/2018 9:00:00 AM 
-3   ,  backup_sync ,  app   ,  backup   , sync     ,  syncs data     ,  2.0.2.450  ,  sync      ,  schedule  ,  100    ,  usa-all-001  ,  2days      ,  0         ,  true     ,  1000  ,  data synced  ,  a1   , 04/02/2018 9:00:00 AM 
-4   ,  token_sync  ,  app   ,  tokens   , sync     ,  refresh token  ,  2.0.2.450  ,  sync      ,  schedule  ,  100    ,  usa-all-001  ,  2days      ,  0         ,  true     ,  1000  ,  data synced  ,  a1   , 04/02/2018 9:00:00 AM 
-5   ,  cmd_cleanup ,  app   ,  todos    , purge    ,  purge todos    ,  2.0.2.451  ,  cmd       ,  normal    ,  100    ,  android      ,  2days      ,  0         ,  true     ,  1000  ,  cleared      ,  a2   , 04/02/2018 9:00:00 AM 
-6   ,  cmd_cleanup ,  app   ,  todos    , purge    ,  purge todos    ,  2.0.2.451  ,  cmd       ,  normal    ,  100    ,  android      ,  2days      ,  1         ,  false    ,  3000  ,  no data      ,  a2   , 04/02/2018 9:00:00 AM 
+id  |  name        |  desc           |  version    |  category  |  mode      |  count  |  origin       |  request    |  success  |  code  |  message      |  tag  | timestamp             
+1   ,  abc123      ,  syncs spaces   ,  2.0.2.450  ,  sync      ,  schedule  ,  100    ,  usa-all-001  ,  2days      ,  true     ,  1000  ,  data synced  ,  a1   , 04/02/2018 9:00:00 AM 
+2   ,  abc123      ,  syncs shares   ,  2.0.2.450  ,  sync      ,  schedule  ,  100    ,  usa-all-001  ,  2days      ,  true     ,  1000  ,  data synced  ,  a1   , 04/02/2018 9:00:00 AM 
+3   ,  abc123.     ,  syncs data     ,  2.0.2.450  ,  sync      ,  schedule  ,  100    ,  usa-all-001  ,  2days      ,  true     ,  1000  ,  data synced  ,  a1   , 04/02/2018 9:00:00 AM 
+4   ,  token_sync  ,  refresh token  ,  2.0.2.450  ,  sync      ,  schedule  ,  100    ,  usa-all-001  ,  2days      ,  true     ,  1000  ,  data synced  ,  a1   , 04/02/2018 9:00:00 AM 
+5   ,  cmd_cleanup ,  purge todos    ,  2.0.2.451  ,  cmd       ,  normal    ,  100    ,  android      ,  2days      ,  true     ,  1000  ,  cleared      ,  a2   , 04/02/2018 9:00:00 AM 
+6   ,  cmd_cleanup ,  purge todos    ,  2.0.2.451  ,  cmd       ,  normal    ,  100    ,  android      ,  2days      ,  false    ,  3000  ,  no data      ,  a2   , 04/02/2018 9:00:00 AM 
 
 
 STATUS OVERVIEW
@@ -30,7 +30,7 @@ id,  componentId, code,  count
 class CommandRequest(val )
 
 
-class SpacesSync : Command<Unit>() {
+class Sync : Command<Unit>() {
 	
 	override val about = info(
 		name     = space_sync,  
@@ -109,17 +109,6 @@ CommandContext
 CommandResult
 CommandRunner
 CommandState
-
-
-SpeechRequest
-SpeechResponse
-SpeechContext
-SpeechHandler
-SpeechInputs
-SpeechCache
-SpeechUser
-
-SSML
 
 
 
