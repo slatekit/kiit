@@ -15,8 +15,9 @@ package slatekit.core.cmds
 
 import slatekit.common.DateTime
 import slatekit.common.DateTimes
-import slatekit.core.common.FunctionInfo
-import slatekit.core.common.FunctionState
+import slatekit.common.functions.FunctionInfo
+import slatekit.common.functions.FunctionMode
+import slatekit.common.functions.FunctionState
 
 /**
  *
@@ -31,6 +32,7 @@ data class CommandState(
         override val info: FunctionInfo,
         override val msg: String,
         override val lastRuntime: DateTime,
+        override val lastMode: FunctionMode,
         override val hasRun: Boolean,
         override val runCount: Long,
         override val errorCount: Long,
@@ -48,6 +50,7 @@ data class CommandState(
             this.copy(
                     msg = result.message ?: "",
                     lastRuntime = result.started,
+                    lastMode = result.mode,
                     hasRun = true,
                     runCount = runCount + 1,
                     errorCount = (result.error()?.let { errorCount + 1 } ?: errorCount),
@@ -61,11 +64,12 @@ data class CommandState(
          * @param name
          * @return
          */
-        fun empty(info:FunctionInfo): CommandState =
+        fun empty(info: FunctionInfo): CommandState =
                 CommandState(
                         info = info,
                         msg = "Not yet run",
                         lastRuntime = DateTimes.MIN,
+                        lastMode = FunctionMode.Normal,
                         hasRun = false,
                         runCount = 0,
                         errorCount = 0,

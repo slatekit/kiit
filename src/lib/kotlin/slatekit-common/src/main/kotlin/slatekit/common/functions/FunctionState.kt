@@ -1,4 +1,4 @@
-package slatekit.core.common
+package slatekit.common.functions
 
 import slatekit.common.DateTime
 
@@ -21,6 +21,11 @@ interface FunctionState<out T> {
      * Last time the function was run
      */
     val lastRuntime: DateTime
+
+    /**
+     * Last mode of operation ( e.g. interactive, scheduled, triggered )
+     */
+    val lastMode: FunctionMode
 
     /**
      * Whether or not the function has been run

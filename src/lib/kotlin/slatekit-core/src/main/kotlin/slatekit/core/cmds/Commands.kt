@@ -13,40 +13,21 @@
 
 package slatekit.core.cmds
 
-import slatekit.core.common.FunctionInfo
+import slatekit.common.args.Args
+import slatekit.common.functions.FunctionInfo
+import slatekit.common.functions.FunctionMode
+import slatekit.common.functions.Functions
 import slatekit.results.Failure
 import slatekit.results.Success
-import slatekit.results.Try
 import slatekit.results.builders.Tries
+import slatekit.results.getOrElse
 
 /**
  * Command manager to run commands and get back the status of each command
  * and their last results.
- * @param cmds
+ * @param all
  */
-class Commands(cmds: List<Command>) {
-
-    /**
-     * Create a lookup of command name to command
-     */
-    private val lookup = cmds.map { cmd -> cmd.name to cmd }.toMap()
-
-    /**
-     * names of commands
-     */
-    val names: List<String> = cmds.map { cmd -> cmd.name }
-
-    /**
-     * number of commands
-     */
-    val size: Int = lookup.size
-
-    /**
-     * whether or not there is a command with the supplied name.
-     * @param name
-     * @return
-     */
-    fun contains(name: String): Boolean = lookup.contains(name)
+class Commands(override val all: List<Command>) : Functions<Command> {
 
     /**
      * Runs the command with the supplied name
@@ -56,10 +37,16 @@ class Commands(cmds: List<Command>) {
     fun run(name: String, args: Array<String>? = null): CommandResult {
         val command = getOrNull(name)
         val result = when(command) {
-            null -> Tries.errored("Command $name not found")
-            else -> command.execute(args)
+            null -> Tries.errored<CommandResult>("$name not found")
+            else -> {
+                val parseResult = Args.parseArgs(args ?: arrayOf())
+                when (parseResult) {
+                    is Failure<Exception> -> Failure(parseResult.error)
+                    is Success<Args> -> command.execute(parseResult.value, FunctionMode.Interacted)
+                }
+            }
         }
-        return flatten(result, CommandResult.empty(FunctionInfo(name, "$name not found")))
+        return result.getOrElse{ CommandResult.empty(FunctionInfo(name, "$name not found")) }
     }
 
     /**
@@ -73,22 +60,6 @@ class Commands(cmds: List<Command>) {
             null -> Tries.errored("Command $name not found")
             else -> Tries.success(command.lastStatus())
         }
-        return flatten(result, CommandState.empty(FunctionInfo(name, "")))
-    }
-
-
-    private fun getOrNull(name:String):Command? {
-        if(!contains(name)) {
-            return null
-        }
-        return lookup[name]
-    }
-
-
-    private fun <T> flatten(result:Try<T>, default:T): T {
-        return when(result){
-            is Failure<*> -> default
-            is Success<T> -> result.value
-        }
+        return result.getOrElse{ CommandState.empty(FunctionInfo(name, "")) }
     }
 }

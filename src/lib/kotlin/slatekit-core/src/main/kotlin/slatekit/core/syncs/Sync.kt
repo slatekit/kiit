@@ -4,17 +4,30 @@ import slatekit.common.DateTime
 import slatekit.common.ext.durationFrom
 import slatekit.common.log.LogSupport
 import slatekit.common.log.Logger
-import slatekit.core.common.FunctionInfo
+import slatekit.common.functions.Function
+import slatekit.common.functions.FunctionCalls
+import slatekit.common.functions.FunctionInfo
+import slatekit.common.functions.FunctionMode
+import slatekit.core.slatekit.core.syncs.SyncCallback
+import slatekit.core.slatekit.core.syncs.SyncCompletion
 import slatekit.results.Notice
+import slatekit.results.Success
 import slatekit.results.Try
 import slatekit.results.builders.Notices
+import slatekit.results.getOrElse
 import java.util.concurrent.atomic.AtomicReference
 
 
-open class Sync(val info: FunctionInfo, protected val settings: SyncSettings) : LogSupport {
+open class Sync(
+        override val info: FunctionInfo,
+        val settings: SyncSettings,
+        val call: SyncCallback = null )
+    : Function, FunctionCalls<SyncResult>,  LogSupport {
+
     override val logger: Logger? = null
     protected var lastSyncTime: DateTime? = null
-    protected var lastSyncResult = Notices.success(true)
+    protected var lastSyncMode: FunctionMode = FunctionMode.Normal
+    protected var lastSyncResult = Notices.success(0)
     private var isInProgress = false
 
 
@@ -43,35 +56,22 @@ open class Sync(val info: FunctionInfo, protected val settings: SyncSettings) : 
     fun lastStatus(): SyncState = lastStatus.get()
 
 
-    /**
-     * Forces another sync ( this allows for on-demand execution )
-     */
-    fun force() {
-        run("forced", true)
-    }
-
-    /**
-     * Attempts to run a sync factoring in whether or not the
-     * time since last sync has elapsed or if a sync is currently in progress
-     */
-    fun sync() {
-        run("sync", false)
-    }
-
-    /**
-     * Perform a sync from the server.
-     */
-    fun run(mode: String, force: Boolean) {
+    override fun execute(args: Array<String>, mode: FunctionMode) {
         Try.attempt {
             val canSync = canSync().success
-            val run = canSync || force
+            val run = canSync || mode == FunctionMode.Triggered
             if (run) {
                 lastSyncTime = DateTime.now()
+                lastSyncMode = mode
                 isInProgress = true
-                perform(this::onComplete)
+                val rawValue = when(call){
+                    null -> perform(this::onComplete)
+                    else -> call.invoke({ r -> onComplete(r)})
+                }
+                Success(true, "Triggered sync")
             }
         }.onFailure {
-            val err = Notices.errored<Boolean>(it.message ?: "Error executing : ${info.name}")
+            val err = Notices.errored<Int>(it.message ?: "Error executing : ${info.name}")
             this.onComplete(err)
         }
     }
@@ -95,18 +95,22 @@ open class Sync(val info: FunctionInfo, protected val settings: SyncSettings) : 
      * Performs the sync with a supplied callback
      * NOTE: Switch to Co-Routines at some point
      */
-    protected open fun perform(onComplete: ((Notice<Boolean>) -> Unit)) {}
+    protected open fun perform(onComplete: SyncCompletion) {
+    }
 
 
-    private fun onComplete(result: Notice<Boolean>) {
-        lastSyncResult = result
-        isInProgress = false
+    private fun onComplete(result: Notice<Int>) {
         val start = lastSyncTime ?: DateTime.now()
         val end = DateTime.now()
         val duration = end.durationFrom(start).seconds
-        val result = SyncResult(info, result, start, end, duration)
-        track(result)
-        handle(result)
+        val syncResult = SyncResult(result.getOrElse { 0 }, info, lastSyncMode, result, start, end, duration)
+
+        lastSyncResult = result
+        isInProgress = false
+        lastSyncMode = FunctionMode.Normal
+
+        track(syncResult)
+        handle(syncResult)
     }
 
 

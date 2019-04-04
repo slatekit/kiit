@@ -16,9 +16,11 @@ package slatekit.core.cmds
 import slatekit.common.DateTime
 import slatekit.common.args.Args
 import slatekit.common.ext.durationFrom
-import slatekit.core.common.FunctionInfo
+import slatekit.common.functions.Function
+import slatekit.common.functions.FunctionCalls
+import slatekit.common.functions.FunctionInfo
+import slatekit.common.functions.FunctionMode
 import slatekit.results.*
-import slatekit.results.builders.Tries
 import java.util.concurrent.atomic.AtomicReference
 
 /**
@@ -44,35 +46,37 @@ import java.util.concurrent.atomic.AtomicReference
  * @param name
  */
 open class Command(
-        val info: FunctionInfo,
+        functionInfo: FunctionInfo,
         val call: ((CommandRequest) -> Any?)? = null
-) {
+) : Function, FunctionCalls<CommandResult> {
 
     /**
      * Initialize the command info with just name and optional description
      */
-    constructor(name: String, desc: String? = null) : this(FunctionInfo(name, desc ?: ""))
+    constructor(name: String, desc: String? = null) : this(FunctionInfo(name, desc
+            ?: ""))
 
 
     /**
      * Initialize the command info with just name and optional description
      */
-    constructor(name: String, desc: String?, call: ((CommandRequest) -> Any?)? = null) : this(FunctionInfo(name, desc ?: ""), call)
+    constructor(name: String, desc: String?, call: ((CommandRequest) -> Any?)? = null) : this(FunctionInfo(name, desc
+            ?: ""), call)
 
 
-    val name: String get() { return info.name }
+    override val info = functionInfo
 
 
     /**
      * Stores the last result
      */
-    private val lastResult = AtomicReference<CommandResult>(CommandResult.empty(info))
+    private val lastResult = AtomicReference<CommandResult>(CommandResult.empty(functionInfo))
 
 
     /**
      * Stores the last status
      */
-    private val lastStatus = AtomicReference<CommandState>(CommandState.empty(info))
+    private val lastStatus = AtomicReference<CommandState>(CommandState.empty(functionInfo))
 
 
     /**
@@ -87,17 +91,18 @@ open class Command(
      */
     fun lastStatus(): CommandState = lastStatus.get()
 
+
     /**
-     * execute this command with optional arguments
+     * execute this function with the supplied args
      *
-     * @param argsArray
+     * @param args
      * @return
      */
-    fun execute(argsArray: Array<String>? = null): Try<CommandResult> {
-        val parseResult = Args.parseArgs(argsArray ?: arrayOf())
-        return when(parseResult) {
+    override fun execute(args: Array<String>, mode: FunctionMode) {
+        val parseResult = Args.parseArgs(args)
+        when (parseResult) {
             is Failure<Exception> -> Failure(parseResult.error)
-            is Success<Args>      -> execute(parseResult.value)
+            is Success<Args> -> execute(parseResult.value, mode)
         }
     }
 
@@ -108,11 +113,11 @@ open class Command(
      * @param args
      * @return
      */
-    fun execute(args: Args): Try<CommandResult> {
+    fun execute(args: Args, mode: FunctionMode): Try<CommandResult> {
         val result = Try.attempt {
             Success(args)
                     .map { args -> convert(args) }
-                    .map { request -> perform(request) }
+                    .map { request -> perform(request, mode) }
                     .map { result -> track(result) }
                     .map { result -> handle(result) }
         }
@@ -134,22 +139,21 @@ open class Command(
      * @param request
      * @return
      */
-    fun perform(request: CommandRequest): CommandResult {
+    fun perform(request: CommandRequest, mode: FunctionMode): CommandResult {
         val start = DateTime.now()
         val result = try {
             val rawValue = call?.invoke(request) ?: execute(request)
-            val finalValue = when(rawValue) {
+            val finalValue = when (rawValue) {
                 is Success<*> -> rawValue.value
-                else          -> rawValue
+                else -> rawValue
             }
             Success(finalValue)
-        } catch (ex:Exception) {
+        } catch (ex: Exception) {
             Failure(buildError(ex), StatusCodes.UNEXPECTED)
         }
-        val response = CommandResponse(request, result)
         val end = DateTime.now()
         val duration = end.durationFrom(start).toMillis()
-        return CommandResult(request, response, info, result, start, end, duration)
+        return CommandResult(request, info, mode, result, start, end, duration)
     }
 
 
@@ -188,7 +192,7 @@ open class Command(
     }
 
 
-    private fun buildError(ex:Exception):Exception {
+    private fun buildError(ex: Exception): Exception {
         return Exception("Error while executing : ${info.name}. ${ex.message}", ex)
     }
 }

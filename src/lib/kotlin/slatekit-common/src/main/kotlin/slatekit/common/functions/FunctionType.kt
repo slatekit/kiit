@@ -1,4 +1,4 @@
-package slatekit.core.common
+package slatekit.common.functions
 
 
 /**

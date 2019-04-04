@@ -1,4 +1,4 @@
-package slatekit.core.common
+package slatekit.common.functions
 
 import slatekit.common.DateTime
 import slatekit.results.Failure
@@ -17,6 +17,7 @@ import slatekit.results.Success
  */
 interface FunctionResult {
     val info: FunctionInfo
+    val mode: FunctionMode
     val result: Result<*, *>
     val started: DateTime
     val ended: DateTime
