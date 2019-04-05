@@ -17,21 +17,22 @@ import slatekit.meta.models.*
 //</doc:import_required>
 
 //<doc:import_examples>
-import slatekit.core.cmds.Cmd
+import slatekit.core.cmds.Command
 import slatekit.common.DateTime
 import slatekit.results.Try
 import slatekit.results.Success
 import slatekit.common.auth.User
 import slatekit.common.info.Host
+import slatekit.core.cmds.CommandRequest
 import slatekit.orm.databases.vendors.MySqlBuilder
 
 //</doc:import_examples>
 
 
 
-class Example_Model : Cmd("model") {
+class Example_Model : Command("model") {
 
-  override fun executeInternal(args: Array<String>?) : Try<Any>
+  override fun execute(request: CommandRequest) : Try<Any>
   {
     //<doc:examples>
     // ABOUT:
@@ -67,14 +68,14 @@ class Example_Model : Cmd("model") {
                  .addDateTime(name = "updated"  , isRequired = true                )
 
     // CASE 3: add fields for text, bool, int, date etc.
-    model = Model("Resource", "", dataType = User::class, desc = "", tableName = "users", fields = listOf(
-                 ModelField(name = "key"        , isRequired = true, maxLength = 30, dataCls = String::class),
-                 ModelField(name = "api"       , isRequired = true, maxLength = 30, dataCls = String::class),
-                 ModelField(name = "recordState", isRequired = true, dataCls = Int::class),
-                 ModelField(name = "hostInfo"   , isRequired = true, dataCls = Host::class),
-                 ModelField(name = "created"    , isRequired = true, dataCls = DateTime::class),
-                 ModelField(name = "updated"    , isRequired = true, dataCls = DateTime::class)
-      ))
+    model = Model("Resource", "", dataType = User::class, desc = "", tableName = "users", modelFields = listOf(
+            ModelField(name = "key"        , isRequired = true, maxLength = 30, dataCls = String::class),
+            ModelField(name = "api"        , isRequired = true, maxLength = 30, dataCls = String::class),
+            ModelField(name = "recordState", isRequired = true, dataCls = Int::class),
+            ModelField(name = "hostInfo"   , isRequired = true, dataCls = Host::class),
+            ModelField(name = "created"    , isRequired = true, dataCls = DateTime::class),
+            ModelField(name = "updated"    , isRequired = true, dataCls = DateTime::class)
+    ))
 
     // CASE 4. check for any fields
     showResult( "any fields: " + model.any )

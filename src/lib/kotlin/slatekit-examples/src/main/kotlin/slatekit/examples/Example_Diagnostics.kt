@@ -24,16 +24,17 @@ import slatekit.common.log.LoggerConsole
 import slatekit.common.metrics.MetricsLite
 import slatekit.common.requests.Response
 import slatekit.common.CommonResponse
-import slatekit.core.cmds.Cmd
+import slatekit.core.cmds.Command
+import slatekit.core.cmds.CommandRequest
 import slatekit.results.Try
 import slatekit.results.Success
 
 //</doc:import_examples>
 
 
-class Example_Diagnostics : Cmd("cmd") {
+class Example_Diagnostics : Command("cmd") {
 
-    override fun executeInternal(args: Array<String>?): Try<Any> {
+    override fun execute(request: CommandRequest): Try<Any> {
         //<doc:examples>
 
         // OVERVIEW:

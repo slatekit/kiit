@@ -17,13 +17,14 @@ import slatekit.common.*
 //</doc:import_required>
 
 //<doc:import_examples>
-import slatekit.core.cmds.Cmd
+import slatekit.core.cmds.Command
 import slatekit.common.templates.Template
 import slatekit.common.templates.TemplatePart
 import slatekit.common.templates.Templates
 import slatekit.common.conf.Config
 import slatekit.common.info.ApiLogin
 import slatekit.common.types.CountryCode
+import slatekit.core.cmds.CommandRequest
 import slatekit.core.sms.SmsMessage
 import slatekit.core.sms.SmsServiceTwilio
 import slatekit.results.Try
@@ -33,9 +34,9 @@ import slatekit.results.Success
 
 
 
-class Example_Sms : Cmd("sms") {
+class Example_Sms : Command("sms") {
 
-  override fun executeInternal(args: Array<String>?) : Try<Any>
+  override fun execute(request: CommandRequest) : Try<Any>
   {
     //<doc:setup>
     // Setup 1: Getting key from config

@@ -25,13 +25,15 @@ import slatekit.common.requests.Response
 import slatekit.meta.Serialization
 import slatekit.results.StatusCodes
 import slatekit.results.StatusGroup
+import slatekit.server.common.ResponseHandler
 
-object KtorResponse {
+
+object KtorResponse : ResponseHandler {
 
     /**
      * Returns the value of the result as an html(string)
      */
-    suspend fun result(call: ApplicationCall, result: Response<Any>): Any {
+    override suspend fun result(call: ApplicationCall, result: Response<Any>): Any {
         return when (result.value) {
             is Content -> content(call, result, result.value as Content)
             is Doc -> file(call, result, result.value as Doc)
@@ -42,7 +44,7 @@ object KtorResponse {
     /**
      * Returns the value of the resulut as JSON.
      */
-    suspend fun json(call: ApplicationCall, result: Response<Any>) {
+    override suspend fun json(call: ApplicationCall, result: Response<Any>) {
         val text = Serialization.json(true).serialize(result)
         val contentType = io.ktor.http.ContentType.Application.Json // "application/json"
         val statusCode = toHttpStatus(result)
@@ -53,7 +55,7 @@ object KtorResponse {
      * Explicitly supplied content
      * Return the value of the result as a content with type
      */
-    suspend fun content(call: ApplicationCall, result: Response<Any>, content: Content?) {
+    override suspend fun content(call: ApplicationCall, result: Response<Any>, content: Content?) {
         val text = content?.text ?: ""
         val contentType = content?.let { ContentType.parse(it.tpe.http) } ?: io.ktor.http.ContentType.Text.Plain
         val statusCode = toHttpStatus(result)
@@ -63,7 +65,7 @@ object KtorResponse {
     /**
      * Returns the value of the result as a file document
      */
-    suspend fun file(call: ApplicationCall, result: Response<Any>, doc: Doc) {
+    override suspend fun file(call: ApplicationCall, result: Response<Any>, doc: Doc) {
         val bytes = doc.content.toByteArray()
         val statusCode = toHttpStatus(result)
 
@@ -73,7 +75,7 @@ object KtorResponse {
     }
 
 
-    private fun toHttpStatus(response:Response<Any>): HttpStatusCode {
+    override fun toHttpStatus(response:Response<Any>): HttpStatusCode {
         val http = StatusCodes.toHttp(StatusGroup.Succeeded(response.code, response.msg ?: ""))
         return HttpStatusCode(http.first, http.second.msg)
     }

@@ -18,16 +18,17 @@ import slatekit.common.console.*
 //</doc:import_required>
 
 //<doc:import_examples>
-import slatekit.core.cmds.Cmd
+import slatekit.core.cmds.Command
 import slatekit.common.DateTime
+import slatekit.core.cmds.CommandRequest
 import slatekit.results.Try
 import slatekit.results.Success
 //</doc:import_examples>
 
 
-class Example_Console : Cmd("console") {
+class Example_Console : Command("console") {
 
-  override fun executeInternal(args: Array<String>?) : Try<Any>
+  override fun execute(request: CommandRequest) : Try<Any>
   {
     //<doc:examples>
     // ConsoleWriter with semantic ( title, url, error, success, highlight ) writing.

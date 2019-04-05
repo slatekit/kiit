@@ -19,7 +19,8 @@ import slatekit.common.lex.TokenType
 //</doc:import_required>
 
 //<doc:import_examples>
-import slatekit.core.cmds.Cmd
+import slatekit.core.cmds.Command
+import slatekit.core.cmds.CommandRequest
 import slatekit.results.Try
 import slatekit.results.Success
 
@@ -27,9 +28,9 @@ import slatekit.results.Success
 
 
 
-class Example_Lexer : Cmd("lexer") {
+class Example_Lexer : Command("lexer") {
 
-  override fun executeInternal(args: Array<String>?) : Try<Any>
+  override fun execute(request: CommandRequest) : Try<Any>
   {
     //<doc:examples>
     val lexer = Lexer("-env:dev -text:'hello word' -batch:10 ")

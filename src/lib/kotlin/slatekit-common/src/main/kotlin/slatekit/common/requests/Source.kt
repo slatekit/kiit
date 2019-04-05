@@ -5,6 +5,7 @@ sealed class Source(val id: String) {
     object Auto  : Source("auto")  // automation
     object Chat  : Source("bot")   // chat / bots
     object CLI   : Source("cli")   // command line interaction
+    object Cmd   : Source("cmd")   // function
     object File  : Source("file")  // files / scripts
     object Queue : Source("queue") // queues
     object Web   : Source("web")   // http

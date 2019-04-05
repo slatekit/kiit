@@ -18,14 +18,15 @@ import slatekit.apis.ApiAction
 import slatekit.apis.security.AuthModes
 import slatekit.apis.security.Protocols
 import slatekit.apis.security.Verbs
-import slatekit.core.cmds.CmdResult
-import slatekit.core.cmds.CmdState
-import slatekit.core.cmds.Cmds
+import slatekit.core.cmds.CommandResult
+import slatekit.core.cmds.CommandState
+import slatekit.core.cmds.Commands
 import slatekit.common.CommonContext
+import slatekit.results.Try
 
 @Api(area = "infra", name = "commands", desc = "api info about the application and host",
         auth = AuthModes.apiKey, roles = "admin", verb = Verbs.auto, protocol = Protocols.all)
-class CmdApi(val cmd: Cmds, context: CommonContext) {
+class CmdApi(val cmd: Commands, context: CommonContext) {
 
     @ApiAction(desc = "get the number of commands available")
     fun names(): List<String> = cmd.names
@@ -37,8 +38,8 @@ class CmdApi(val cmd: Cmds, context: CommonContext) {
     fun exists(name: String): Boolean = cmd.contains(name)
 
     @ApiAction(desc = "runs the command by its name")
-    fun run(name: String): CmdResult = cmd.run(name)
+    fun run(name: String): CommandResult = cmd.run(name)
 
     @ApiAction(desc = "get the current state of the command")
-    fun state(name: String): CmdState = cmd.state(name)
+    fun state(name: String): CommandState = cmd.state(name)
 }

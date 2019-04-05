@@ -21,19 +21,20 @@ import slatekit.common.*
 //</doc:import_required>
 
 //<doc:import_examples>
-import slatekit.core.cmds.Cmd
+import slatekit.core.cmds.Command
 import slatekit.common.db.DbConString
 import slatekit.common.info.ApiKey
 import slatekit.common.info.ApiLogin
+import slatekit.core.cmds.CommandRequest
 import slatekit.results.Try
 import slatekit.results.Success
 
 //</doc:import_examples>
 
 
-class Example_Utils : Cmd("utils") {
+class Example_Utils : Command("utils") {
 
-  override fun executeInternal(args: Array<String>?) : Try<Any>
+  override fun execute(request: CommandRequest) : Try<Any>
   {
     //<doc:examples>
     // Miscellaneous utilities.

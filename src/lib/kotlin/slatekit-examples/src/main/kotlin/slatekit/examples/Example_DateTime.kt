@@ -17,19 +17,20 @@ import slatekit.common.DateTimes
 //</doc:import_required>
 
 //<doc:import_examples>
-import slatekit.core.cmds.Cmd
+import slatekit.core.cmds.Command
 import slatekit.results.Try
 import slatekit.results.Success
 //import java.time.ZoneId
 import org.threeten.bp.*
 import slatekit.common.ext.*
+import slatekit.core.cmds.CommandRequest
 
 //</doc:import_examples>
 
 
-class Example_DateTime  : Cmd("datetime") {
+class Example_DateTime  : Command("datetime") {
 
-  override fun executeInternal(args: Array<String>?) : Try<Any>
+  override fun execute(request: CommandRequest) : Try<Any>
   {
     //<doc:examples>
     //

@@ -13,26 +13,27 @@
 package slatekit.examples
 
 //<doc:import_required>
-import slatekit.core.cmds.Cmd
+import slatekit.core.cmds.Command
+import slatekit.core.cmds.CommandRequest
 
 //</doc:import_required>
 
 //<doc:import_examples>
 import slatekit.results.Try
 import slatekit.results.Success
-import slatekit.core.cmds.Cmds
+import slatekit.core.cmds.Commands
 
 //</doc:import_examples>
 
-class Example_Command : Cmd("auth") {
+class Example_Command : Command("auth") {
 
   //<doc:setup>
   /**
    * Sample command to cleanup the temp directory.
    */
-  class CmdCleanTempDirectory : Cmd("clean_temp_dir")  {
+  class CmdCleanTempDirectory : Command("clean_temp_dir")  {
 
-    override fun executeInternal(args: Array<String>?) : Try<Any> {
+    override fun execute(request: CommandRequest) : Try<Any> {
       // Your code here
       return Success("temp directory cleared")
     }
@@ -42,16 +43,16 @@ class Example_Command : Cmd("auth") {
   /**
    * Sample command to create a set of test users
    */
-  class CmdCreateTestUsers : Cmd("create_test_users") {
+  class CmdCreateTestUsers : Command("create_test_users") {
 
-    override fun executeInternal(args: Array<String>?) : Try<Any> {
+    override fun execute(request:CommandRequest) : Try<Any> {
       // Your code here
       return Success("demo users created")
     }
   }
 
 
-  val commands =  Cmds(
+  val commands =  Commands(
     listOf(
          CmdCleanTempDirectory(),
          CmdCreateTestUsers()
@@ -60,7 +61,7 @@ class Example_Command : Cmd("auth") {
   //</doc:setup>
 
 
-  override fun executeInternal(args: Array<String>?) : Try<Any>
+  override fun execute(request:CommandRequest) : Try<Any>
   { 
 
     //<doc:examples>
@@ -81,12 +82,14 @@ class Example_Command : Cmd("auth") {
     // - started: start time of the command
     // - ended  : end time of the command
     // - result : the result of the command
-    println( result.name    )
-    println( result.success )
-    println( result.message )
-    println( result.started )
-    println( result.ended   )
-    println( result.result  )
+    result.onSuccess {
+      println(it.info.name)
+      println(it.success)
+      println(it.message)
+      println(it.started)
+      println(it.ended)
+      println(it.result)
+    }
 
     // Use case 4: get the current state of the command
     val state = commands.state("clean_temp_dir")
@@ -99,13 +102,15 @@ class Example_Command : Cmd("auth") {
     // - lastRunTime : the timestamp of the last run
     // - errorCount  : the number or errors
     // - lastResult  : the result of the last run ( see above )
-    println( state.name        )
-    println( state.msg         )
-    println( state.hasRun      )
-    println( state.runCount    )
-    println( state.lastRuntime )
-    println( state.errorCount  )
-    println( state.lastResult  )
+    state.onSuccess { it ->
+      println(it.name)
+      println(it.msg)
+      println(it.hasRun)
+      println(it.runCount)
+      println(it.lastRuntime)
+      println(it.errorCount)
+      println(it.lastResult)
+    }
     //</doc:examples>
 
     return Success("")

@@ -13,14 +13,14 @@
 
 package slatekit.tutorial
 
-import slatekit.core.cmds.Cmd
+import slatekit.core.cmds.Command
 import slatekit.results.Success
 import slatekit.results.Try
 
 
-class Example_Kotlin_Classes : Cmd("types") {
+class Example_Kotlin_Classes : Command("types") {
 
-    override fun executeInternal(args: Array<String>?): Try<Any> {
+    override fun execute(request:CommandRequest): Try<Any> {
 
         return Success("")
     }

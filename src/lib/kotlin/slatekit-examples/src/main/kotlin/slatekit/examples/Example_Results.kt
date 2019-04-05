@@ -12,12 +12,12 @@ usage: Please refer to license on github for more info.
 package slatekit.examples
 
 //<doc:import_required>
-import slatekit.common.*
 
 //</doc:import_required>
 
 //<doc:import_examples>
-import slatekit.core.cmds.Cmd
+import slatekit.core.cmds.Command
+import slatekit.core.cmds.CommandRequest
 import slatekit.results.*
 import slatekit.results.Try
 import slatekit.results.Success
@@ -28,9 +28,9 @@ import slatekit.results.builders.Tries
 //</doc:import_examples>
 
 
-class Example_Results : Cmd("results") , OutcomeBuilder {
+class Example_Results : Command("results") , OutcomeBuilder {
 
-    override fun executeInternal(args: Array<String>?): Try<Any> {
+    override fun execute(request: CommandRequest): Try<Any> {
         //<doc:examples>
         // The Result<S,F> class is a way to model successes and failures.
         // Design: This is essentially a specialized Either[L,R] with optional integer code/string message.

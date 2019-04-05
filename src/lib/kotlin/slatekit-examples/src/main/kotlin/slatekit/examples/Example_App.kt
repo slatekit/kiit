@@ -30,10 +30,12 @@ import slatekit.common.info.Build
 import slatekit.common.info.StartInfo
 import slatekit.common.info.Sys
 import slatekit.common.log.LogsDefault
-import slatekit.core.cmds.Cmd
+import slatekit.core.cmds.Command
 import slatekit.common.CommonContext
+import slatekit.core.cmds.CommandRequest
 import slatekit.db.Db
 import slatekit.entities.Entities
+import slatekit.integration.common.AppEntContext
 import slatekit.providers.logs.logback.LogbackLogs
 import slatekit.results.Success
 import slatekit.results.Try
@@ -151,9 +153,9 @@ class SampleApp(ctx: Context) : App<Context>(ctx, AppOptions(
 //</doc:setup>
 
 
-class Example_App : Cmd("app") {
+class Example_App : Command("app") {
 
-    override fun executeInternal(args: Array<String>?): Try<Any> {
+    override fun execute(request: CommandRequest): Try<Any> {
         //<doc:examples>
         // NOTE: The application uses an AppContext ( see docs for more info )
         // which contains many core dependencies available in a single container
@@ -166,7 +168,7 @@ class Example_App : Cmd("app") {
         // APPROACH 1: Manually / Explicitly build up the AppContext
         // Load the config "env.conf" from resources
         val conf = Config("env.conf")
-        val ctx = CommonContext(
+        val ctx = AppEntContext(
                 arg = Args.default(),
                 env = conf.env(),
                 cfg = conf,
@@ -208,7 +210,7 @@ class Example_App : Cmd("app") {
         // - Conf: By default, the config file associated w/ the environment is loaded "env.local.conf"
         // - You can store info about the your app in your config file and that can be loaded.
         val res = AppRunner.run(
-                rawArgs = args ?: arrayOf(),
+                rawArgs = request.args.raw.toTypedArray(),
                 schema = ArgsSchema(),
                 enc = Encryptor("wejklhviuxywehjk", "3214maslkdf03292", B64Java8),
                 logs = LogbackLogs(),

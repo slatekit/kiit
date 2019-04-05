@@ -21,8 +21,9 @@ import slatekit.common.metrics.MetricsLite
 //<doc:import_examples>
 import slatekit.common.queues.QueueSourceInMemory
 import slatekit.common.queues.QueueValueConverter
-import slatekit.core.cmds.Cmd
+import slatekit.core.cmds.Command
 import slatekit.common.CommonContext
+import slatekit.core.cmds.CommandRequest
 import slatekit.workers.*
 import slatekit.results.Try
 import slatekit.results.Success
@@ -30,9 +31,9 @@ import slatekit.results.Success
 //</doc:import_examples>
 
 
-class Example_Workers : Cmd("utils") {
+class Example_Workers : Command("utils") {
 
-    override fun executeInternal(args: Array<String>?): Try<Any> {
+    override fun execute(request: CommandRequest): Try<Any> {
         //<doc:setup>
         // The background workers system is designed with a few basic
         // principles and concepts:

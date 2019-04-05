@@ -10,15 +10,19 @@ import slatekit.apis.ApiHost
 import slatekit.common.Context
 import slatekit.server.ServerConfig
 import slatekit.server.common.Diagnostics
+import slatekit.server.common.RequestHandler
+import slatekit.server.common.ResponseHandler
+
 
 class KtorHandler(
-        val context: Context,
+        override val context: Context,
         val config: ServerConfig,
-        val container:ApiHost,
-        val diagnostics: Diagnostics
-) {
+        override val container:ApiHost,
+        override val diagnostics: Diagnostics,
+        override val responses: ResponseHandler
+) : RequestHandler {
 
-    fun register(routes:Routing){
+    override fun register(routes:Routing){
         routes.get(config.prefix + "/*/*/*") {
             exec(call)
         }
@@ -42,7 +46,7 @@ class KtorHandler(
      * which handles abstracted Requests and dispatches them to
      * Slate Kit "Protocol Independent APIs".
      */
-    suspend fun exec(call: ApplicationCall) {
+    override suspend fun exec(call: ApplicationCall) {
         val body = when (call.request.httpMethod) {
             HttpMethod.Post -> call.receiveText()
             HttpMethod.Put -> call.receiveText()
@@ -68,6 +72,6 @@ class KtorHandler(
         diagnostics.record(container, request, result)
 
         // Finally convert the result back to a HttpResult
-        KtorResponse.result(call, result)
+        responses.result(call, result)
     }
 }

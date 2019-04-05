@@ -20,15 +20,16 @@ import slatekit.common.auth.User
 //</doc:import_required>
 
 //<doc:import_examples>
-import slatekit.core.cmds.Cmd
+import slatekit.core.cmds.Command
+import slatekit.core.cmds.CommandRequest
 import slatekit.results.Try
 import slatekit.results.Success
 
 //</doc:import_examples>
 
-class Example_Auth  : Cmd("auth") {
+class Example_Auth  : Command("auth") {
 
-  override fun executeInternal(args: Array<String>?) : Try<Any>
+  override fun execute(request: CommandRequest) : Try<Any>
   {
     //<doc:setup>
     // Setup: Setup the Auth wrapper with the user to inspect info about the user

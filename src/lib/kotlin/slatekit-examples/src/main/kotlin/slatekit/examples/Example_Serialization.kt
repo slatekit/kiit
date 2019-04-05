@@ -18,16 +18,17 @@ import slatekit.common.serialization.*
 //</doc:import_required>
 
 //<doc:import_examples>
-import slatekit.core.cmds.Cmd
+import slatekit.core.cmds.Command
+import slatekit.core.cmds.CommandRequest
 import slatekit.examples.common.User
 
 //</doc:import_examples>
 
 
 
-class Example_Serialization : Cmd("serialization") {
+class Example_Serialization : Command("serialization") {
 
-  override fun executeInternal(args: Array<String>?) : Try<Any>
+  override fun execute(request: CommandRequest) : Try<Any>
   {
 
     //<doc:setup>

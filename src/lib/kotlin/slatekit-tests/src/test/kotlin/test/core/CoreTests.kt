@@ -13,14 +13,6 @@
 package test
 
 
-import org.junit.Test
-import slatekit.common.*
-import slatekit.core.cmds.Cmd
-import slatekit.core.cmds.Cmds
-import slatekit.results.Success
-import slatekit.results.Try
-
-
 class CoreTests {
 
 
