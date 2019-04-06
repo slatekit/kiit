@@ -8,8 +8,6 @@ import slatekit.common.functions.Function
 import slatekit.common.functions.FunctionCalls
 import slatekit.common.functions.FunctionInfo
 import slatekit.common.functions.FunctionMode
-import slatekit.core.slatekit.core.syncs.SyncCallback
-import slatekit.core.slatekit.core.syncs.SyncCompletion
 import slatekit.results.Notice
 import slatekit.results.Success
 import slatekit.results.Try
@@ -22,7 +20,7 @@ open class Sync(
         override val info: FunctionInfo,
         val settings: SyncSettings,
         val call: SyncCallback = null )
-    : Function, FunctionCalls<SyncResult>,  LogSupport {
+    : Function, FunctionCalls<SyncResult>, LogSupport {
 
     override val logger: Logger? = null
     protected var lastSyncTime: DateTime? = null

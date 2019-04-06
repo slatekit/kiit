@@ -69,6 +69,11 @@ interface Builder<out E> {
     fun <T> denied(ex: Exception): Result<T, E> = Failure(errorFromEx(ex, StatusCodes.DENIED), StatusCodes.DENIED)
     fun <T> denied(err: Err): Result<T, E> = Failure(errorFromErr(err, StatusCodes.DENIED), StatusCodes.DENIED)
 
+    fun <T> conflict(): Result<T, E> = Failure(errorFromStr(null, StatusCodes.CONFLICT), StatusCodes.CONFLICT)
+    fun <T> conflict(msg: String): Result<T, E> = Failure(errorFromStr(msg, StatusCodes.CONFLICT), StatusCodes.CONFLICT)
+    fun <T> conflict(ex: Exception): Result<T, E> = Failure(errorFromEx(ex, StatusCodes.CONFLICT), StatusCodes.CONFLICT)
+    fun <T> conflict(err: Err): Result<T, E> = Failure(errorFromErr(err, StatusCodes.CONFLICT), StatusCodes.CONFLICT)
+
     fun <T> unexpected(): Result<T, E> = Failure(errorFromStr(null, StatusCodes.UNEXPECTED), StatusCodes.UNEXPECTED)
     fun <T> unexpected(msg: String): Result<T, E> = Failure(errorFromStr(msg, StatusCodes.UNEXPECTED), StatusCodes.UNEXPECTED)
     fun <T> unexpected(ex: Exception): Result<T, E> = Failure(errorFromEx(ex, StatusCodes.UNEXPECTED), StatusCodes.UNEXPECTED)
