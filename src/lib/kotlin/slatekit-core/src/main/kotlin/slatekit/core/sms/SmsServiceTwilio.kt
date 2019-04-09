@@ -13,6 +13,7 @@
 
 package slatekit.core.sms
 
+import okhttp3.Request
 import slatekit.common.*
 import slatekit.common.info.ApiLogin
 import slatekit.common.templates.Templates
@@ -20,6 +21,7 @@ import slatekit.common.types.CountryCode
 import slatekit.results.Failure
 import slatekit.results.Notice
 import slatekit.results.Success
+import slatekit.results.then
 
 /**
  * simple service to send sms messages using Twilio with support for templates and
@@ -64,16 +66,16 @@ class SmsServiceTwilio(
      * @param msg : message to send
      * @return
      */
-    override fun send(msg: SmsMessage): Notice<Boolean> {
+    fun build(msg: SmsMessage): Notice<Request> {
 
         val phoneResult = massagePhone(msg.countryCode, msg.phone)
         return when(phoneResult) {
             is Success -> {
                 val phone = phoneResult.value
-                val result = HttpRPC().sendSync(
+                val request = HttpRPC().build(
                         method = HttpRPC.Method.Post,
-                        url = baseUrl,
-                        headers = null,
+                        urlRaw = baseUrl,
+                        headerParams = null,
                         creds = HttpRPC.Auth.Basic(settings.key, settings.password),
                         body = HttpRPC.Body.FormData(listOf(
                                 Pair("To", phone),
@@ -81,9 +83,23 @@ class SmsServiceTwilio(
                                 Pair("Body", msg.msg))
                         )
                 )
-                result.fold( { Success(true) }, { Failure(it.message ?: "") })
+                Success(request)
             }
             is Failure -> Failure(phoneResult.msg)
+        }
+    }
+
+    /**
+     * sends the sms message to the phone
+     *
+     * @param msg : message to send
+     * @return
+     */
+    override fun send(msg: SmsMessage): Notice<Boolean> {
+        return build(msg).then {
+            val response = HttpRPC().call(it)
+            val result = response.fold( { Success(true) }, { Failure(it.message ?: "") })
+            result
         }
     }
 

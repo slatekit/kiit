@@ -202,8 +202,16 @@ class HttpRPC(val serializer:((Any?) -> String)? = null) {
                   queryParams: Map<String, String>? = null,
                   creds: Auth? = null,
                   body: Body? = null): Result<Response, Exception> {
-        val client = OkHttpClient()
         val request = build(method, url, headers, queryParams, creds, body)
+        return call(request)
+    }
+
+    /**
+     * Performs an HTTP operation and supplies synchronously
+     * @param request     : A pre-built okhttp request
+     */
+    fun call(request:Request): Result<Response, Exception> {
+        val client = OkHttpClient()
         val response = client.newCall(request).execute()
         return if(response.isSuccessful) {
             Success(response)
