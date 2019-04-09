@@ -32,7 +32,7 @@ data class SyncResult(
         fun empty(info: FunctionInfo): SyncResult {
             val result = Tries.errored<Any>("Not started")
             val start = DateTime.now()
-            return SyncResult(0, info, FunctionMode.Normal, result, start, start, 0L)
+            return SyncResult(0, info, FunctionMode.Called, result, start, start, 0L)
         }
     }
 }

@@ -44,7 +44,7 @@ data class CommandResult(
             val result = Tries.errored<Any>("Not started")
             val request = CommandRequest.empty()
             val start = DateTime.now()
-            return CommandResult(request, info, FunctionMode.Normal, result, start, start, 0L)
+            return CommandResult(request, info, FunctionMode.Called, result, start, start, 0L)
         }
     }
 }

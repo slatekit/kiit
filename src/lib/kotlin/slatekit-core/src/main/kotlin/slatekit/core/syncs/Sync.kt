@@ -24,7 +24,7 @@ open class Sync(
 
     override val logger: Logger? = null
     protected var lastSyncTime: DateTime? = null
-    protected var lastSyncMode: FunctionMode = FunctionMode.Normal
+    protected var lastSyncMode: FunctionMode = FunctionMode.Called
     protected var lastSyncResult = Notices.success(0)
     private var isInProgress = false
 
@@ -122,7 +122,7 @@ open class Sync(
 
         lastSyncResult = result
         isInProgress = false
-        lastSyncMode = FunctionMode.Normal
+        lastSyncMode = FunctionMode.Called
 
         track(curr)
         handle(curr)

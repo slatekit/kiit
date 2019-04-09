@@ -35,18 +35,18 @@ class SyncTests {
             counter++
             it(Notices.success(counter, "ensure tracking"))
         })
-        sync.execute()
+        sync.call()
         Assert.assertEquals(1, counter)
 
         val state = sync.lastStatus()
         Assert.assertEquals(0, state.errorCount)
         Assert.assertEquals(true, state.hasRun)
-        Assert.assertEquals(FunctionMode.Normal, state.lastMode)
+        Assert.assertEquals(FunctionMode.Called, state.lastMode)
         Assert.assertEquals(1, state.runCount)
 
         val result = sync.lastResult()
         Assert.assertEquals(1, result.count)
-        Assert.assertEquals(FunctionMode.Normal, result.mode)
+        Assert.assertEquals(FunctionMode.Called, result.mode)
         Assert.assertEquals(true, result.success)
         Assert.assertEquals(1, result.value)
     }
@@ -59,7 +59,7 @@ class SyncTests {
             counter++
             it(Notices.success(counter, "ensure interval"))
         })
-        sync.execute()
+        sync.call()
         Assert.assertEquals(1, counter)
 
         val canExec = sync.canExecute().success
@@ -74,7 +74,7 @@ class SyncTests {
             counter++
             it(Notices.success(counter, "ensure trigger"))
         })
-        sync.execute()
+        sync.call()
         sync.trigger()
         Assert.assertEquals(2, counter)
 

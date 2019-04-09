@@ -69,7 +69,7 @@ data class CommandState(
                         info = info,
                         msg = "Not yet run",
                         lastRuntime = DateTimes.MIN,
-                        lastMode = FunctionMode.Normal,
+                        lastMode = FunctionMode.Called,
                         hasRun = false,
                         runCount = 0,
                         errorCount = 0,

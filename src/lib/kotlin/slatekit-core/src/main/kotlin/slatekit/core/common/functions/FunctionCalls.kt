@@ -5,6 +5,14 @@ interface FunctionCalls<out Result> {
 
 
     /**
+     * execute this function in normal mode with empty args
+     */
+    fun call(){
+        this.execute(arrayOf(), FunctionMode.Called)
+    }
+
+
+    /**
      * execute this function indicating triggered or forced mode
      *
      * @param
@@ -34,14 +42,6 @@ interface FunctionCalls<out Result> {
      */
     fun interact(line: String, mode: FunctionMode) {
         execute(arrayOf(line), FunctionMode.Interacted)
-    }
-
-
-    /**
-     * execute this function in normal mode with empty args
-     */
-    fun execute(){
-        this.execute(arrayOf(), FunctionMode.Normal)
     }
 
 

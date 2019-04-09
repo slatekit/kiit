@@ -68,7 +68,7 @@ data class SyncState(
                 SyncState(
                         info = info,
                         msg = "Not yet run",
-                        lastMode = FunctionMode.Normal,
+                        lastMode = FunctionMode.Called,
                         lastRuntime = DateTimes.MIN,
                         hasRun = false,
                         runCount = 0,
