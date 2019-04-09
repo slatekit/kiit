@@ -18,6 +18,7 @@ import slatekit.common.requests.Response
 import slatekit.common.CommonRequest
 import slatekit.meta.*
 import slatekit.results.*
+import slatekit.results.Status
 import slatekit.results.builders.Notices
 import java.io.File
 import kotlin.reflect.KCallable
@@ -313,5 +314,5 @@ open class ApiHost(
     }
 
 
-    val HELP = StatusGroup.Errored(10000, "help")
+    val HELP = Status.Errored(10000, "help")
 }
