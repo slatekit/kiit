@@ -4,13 +4,12 @@ import org.junit.Test
 import slatekit.results.*
 import slatekit.results.Status
 import slatekit.results.StatusCodes
-import slatekit.results.StatusGroup
 
 class StatusTests {
 
     @Test
     fun can_build_basic(){
-        val status = StatusGroup.Succeeded(1, "success")
+        val status = Status.Succeeded(1, "success")
         Assert.assertEquals(1, status.code)
         Assert.assertEquals("success", status.msg)
     }
@@ -22,8 +21,8 @@ class StatusTests {
             Assert.assertEquals(code, status.code)
             Assert.assertEquals(msg, status.msg)
         }
-        val status = StatusGroup.Succeeded(1, "success")
-        val statusGroup: StatusGroup = status
+        val status = Status.Succeeded(1, "success")
+        val statusGroup: Status = status
         check(statusGroup.copyMsg("ok"), status.code, "ok")
         check(statusGroup.copyAll("ok", 2), 2, "ok")
     }
@@ -45,25 +44,25 @@ class StatusTests {
 
     @Test
     fun confirm_codes_values() {
-        checkCode(StatusCodes.SUCCESS   , 1001, "Success")
-        checkCode(StatusCodes.PENDING   , 1008, "Pending")
-        checkCode(StatusCodes.IGNORED   , 2001, "Ignored")
-        checkCode(StatusCodes.INVALID   , 2003, "Invalid")
-        checkCode(StatusCodes.DENIED    , 2004, "Denied" )
-        checkCode(StatusCodes.ERRORED   , 3007, "Errored")
-        checkCode(StatusCodes.UNEXPECTED, 3008, "Unexpected")
+        checkCode(StatusCodes.SUCCESS   , 200001, "Success")
+        checkCode(StatusCodes.PENDING   , 200008, "Pending")
+        checkCode(StatusCodes.IGNORED   , 400001, "Ignored")
+        checkCode(StatusCodes.INVALID   , 400003, "Invalid")
+        checkCode(StatusCodes.DENIED    , 400004, "Denied" )
+        checkCode(StatusCodes.ERRORED   , 500007, "Errored")
+        checkCode(StatusCodes.UNEXPECTED, 500008, "Unexpected")
     }
 
 
     @Test
     fun confirm_group_types() {
-        Assert.assertTrue(StatusCodes.SUCCESS    is StatusGroup.Succeeded )
-        Assert.assertTrue(StatusCodes.PENDING    is StatusGroup.Pending   )
-        Assert.assertTrue(StatusCodes.IGNORED    is StatusGroup.Ignored   )
-        Assert.assertTrue(StatusCodes.INVALID    is StatusGroup.Invalid   )
-        Assert.assertTrue(StatusCodes.DENIED     is StatusGroup.Denied    )
-        Assert.assertTrue(StatusCodes.ERRORED    is StatusGroup.Errored   )
-        Assert.assertTrue(StatusCodes.UNEXPECTED is StatusGroup.Unhandled )
+        Assert.assertTrue(StatusCodes.SUCCESS    is Status.Succeeded )
+        Assert.assertTrue(StatusCodes.PENDING    is Status.Pending   )
+        Assert.assertTrue(StatusCodes.IGNORED    is Status.Ignored   )
+        Assert.assertTrue(StatusCodes.INVALID    is Status.Invalid   )
+        Assert.assertTrue(StatusCodes.DENIED     is Status.Denied    )
+        Assert.assertTrue(StatusCodes.ERRORED    is Status.Errored   )
+        Assert.assertTrue(StatusCodes.UNEXPECTED is Status.Unhandled )
     }
 
     @Test

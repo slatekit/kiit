@@ -330,7 +330,7 @@ sealed class Result<out T, out E> {
 
 
         @JvmStatic
-        fun status(msg: String?, code: Int?, status: StatusGroup): Status {
+        fun status(msg: String?, code: Int?, status: Status): Status {
             // NOTE: There is small optimization here to avoid creating a new instance
             // of [Status] if the msg/code are empty and or they are the same as Success.
             if (code == null && msg == null || msg == "") return status

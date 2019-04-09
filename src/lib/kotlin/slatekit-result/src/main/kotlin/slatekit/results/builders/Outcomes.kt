@@ -14,16 +14,15 @@
 package slatekit.results.builders
 
 import slatekit.results.*
-import slatekit.results.StatusGroup
 
 
 /**
  * Builds [Result] with [Failure] error type of [Err]
  */
 interface OutcomeBuilder : Builder<Err> {
-    override fun errorFromEx(ex: Exception, defaultStatus: StatusGroup): Err = Err.of(ex)
-    override fun errorFromStr(msg: String?, defaultStatus: StatusGroup): Err = Err.of(msg ?: defaultStatus.msg)
-    override fun errorFromErr(err: Err, defaultStatus: StatusGroup): Err = err
+    override fun errorFromEx(ex: Exception, defaultStatus: Status): Err = Err.of(ex)
+    override fun errorFromStr(msg: String?, defaultStatus: Status): Err = Err.of(msg ?: defaultStatus.msg)
+    override fun errorFromErr(err: Err, defaultStatus: Status): Err = err
 }
 
 

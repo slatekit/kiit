@@ -16,7 +16,6 @@ package slatekit.results.builders
 import slatekit.results.*
 import slatekit.results.Status
 import slatekit.results.StatusCodes
-import slatekit.results.StatusGroup
 
 /**
  * Builder interface with builder functions to create the most common Successes/Failures with
@@ -27,17 +26,17 @@ interface Builder<out E> {
     /**
      * Build the error type [E] from a [Exception]
      */
-    fun errorFromEx(ex: Exception, defaultStatus: StatusGroup): E
+    fun errorFromEx(ex: Exception, defaultStatus: Status): E
 
     /**
      * Build the error type [E] from a [String]
      */
-    fun errorFromStr(msg: String?, defaultStatus: StatusGroup): E
+    fun errorFromStr(msg: String?, defaultStatus: Status): E
 
     /**
      * Build the error type [E] from a [Err]
      */
-    fun errorFromErr(err: Err, defaultStatus: StatusGroup): E
+    fun errorFromErr(err: Err, defaultStatus: Status): E
 
     // The success(...) methods below could be 100% replaced with direct usage of top level class Success
     // But its here for completeness to be able to build all the various types
@@ -93,7 +92,7 @@ interface Builder<out E> {
      * NOTE: This is a minor optimization where there is no need to create a status from the
      * message if the message is null / empty.
      */
-    fun msgToStatus(msg: String?, defaultStatus: StatusGroup): Status = when (msg) {
+    fun msgToStatus(msg: String?, defaultStatus: Status): Status = when (msg) {
         null, "" -> defaultStatus
         else -> defaultStatus.copyMsg(msg)
     }
@@ -103,9 +102,5 @@ interface Builder<out E> {
      * NOTE: This is a minor optimization where there is no need to create a status from the
      * message if the message is null / empty.
      */
-    fun get(status:Status?, defaultStatus: StatusGroup): StatusGroup = when (status) {
-        null -> defaultStatus
-        is StatusGroup -> status
-        else -> defaultStatus
-    }
+    fun get(status:Status?, defaultStatus: Status): Status = status ?: defaultStatus
 }

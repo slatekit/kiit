@@ -7,25 +7,25 @@ public class StatusTestsJava {
 
     @Test
     public void confirm_success_codes() {
-        checkCode(StatusCodes.SUCCESS, 1001, "Success");
+        checkCode(StatusCodes.SUCCESS, 200001, "Success");
     }
 
 
     @Test
     public void confirm_filter_codes() {
-        checkCode(StatusCodes.IGNORED, 2001, "Ignored");
+        checkCode(StatusCodes.IGNORED, 400001, "Ignored");
     }
 
 
     @Test
     public void confirm_invalid_codes() {
-        checkCode(StatusCodes.INVALID, 2003, "Invalid");
+        checkCode(StatusCodes.INVALID, 400003, "Invalid");
     }
 
 
     @Test
     public void confirm_errored_codes() {
-        checkCode(StatusCodes.ERRORED, 3007, "Errored");
+        checkCode(StatusCodes.ERRORED, 500007, "Errored");
     }
 
 

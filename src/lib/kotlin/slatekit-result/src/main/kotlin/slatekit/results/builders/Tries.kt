@@ -14,16 +14,15 @@
 package slatekit.results.builders
 
 import slatekit.results.*
-import slatekit.results.StatusGroup
 
 
 /**
  * Builds [Result] with [Failure] error type of [Exception]
  */
 interface TryBuilder : Builder<Exception> {
-    override fun errorFromEx(ex: Exception, defaultStatus: StatusGroup): Exception = ex
-    override fun errorFromStr(msg: String?, defaultStatus: StatusGroup): Exception = Exception(msg ?: defaultStatus.msg)
-    override fun errorFromErr(err: Err, defaultStatus: StatusGroup): Exception = ExceptionWithErr(defaultStatus.msg, err)
+    override fun errorFromEx(ex: Exception, defaultStatus: Status): Exception = ex
+    override fun errorFromStr(msg: String?, defaultStatus: Status): Exception = Exception(msg ?: defaultStatus.msg)
+    override fun errorFromErr(err: Err, defaultStatus: Status): Exception = ExceptionWithErr(defaultStatus.msg, err)
 }
 
 
