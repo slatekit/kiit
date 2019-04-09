@@ -31,8 +31,17 @@ open class Sync(
     /**
      * Convenience instantiation via just name and desc
      */
-    constructor(name: String, desc: String, settings: SyncSettings = SyncSettings(true, 60, ""))
-            : this(FunctionInfo(name, desc), settings )
+    constructor(name: String, desc: String,
+                settings: SyncSettings = SyncSettings(true, 60, ""))
+            : this(name, desc, settings, null)
+
+    /**
+     * Convenience instantiation via just name and desc
+     */
+    constructor(name: String, desc: String,
+                settings: SyncSettings = SyncSettings(true, 60, ""),
+                call: SyncCallback = null )
+            : this(FunctionInfo(name, desc), settings, call)
 
 
 
@@ -108,14 +117,15 @@ open class Sync(
         val start = lastSyncTime ?: DateTime.now()
         val end = DateTime.now()
         val duration = end.durationFrom(start).seconds
-        val syncResult = SyncResult(result.getOrElse { 0 }, info, lastSyncMode, result, start, end, duration)
+        val last = lastResult()
+        val curr = SyncResult(last.count + result.getOrElse { 0 }, info, lastSyncMode, result, start, end, duration)
 
         lastSyncResult = result
         isInProgress = false
         lastSyncMode = FunctionMode.Normal
 
-        track(syncResult)
-        handle(syncResult)
+        track(curr)
+        handle(curr)
     }
 
 
@@ -139,6 +149,7 @@ open class Sync(
         val last = lastStatus()
         val curr = last.update(result)
         lastStatus.set(curr)
+        lastResult.set(result)
         return result
     }
 
