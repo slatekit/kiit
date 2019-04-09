@@ -1,4 +1,4 @@
-package slatekit.common.functions
+package slatekit.core.common.functions
 
 /**
  * @param name     : name of the command e.g "createUser" "admin.users.create"

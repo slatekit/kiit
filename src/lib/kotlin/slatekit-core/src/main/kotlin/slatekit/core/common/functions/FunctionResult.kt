@@ -1,4 +1,4 @@
-package slatekit.common.functions
+package slatekit.core.common.functions
 
 import slatekit.common.DateTime
 import slatekit.results.Failure

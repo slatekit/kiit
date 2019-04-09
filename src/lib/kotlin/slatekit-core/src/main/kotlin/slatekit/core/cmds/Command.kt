@@ -16,10 +16,10 @@ package slatekit.core.cmds
 import slatekit.common.DateTime
 import slatekit.common.args.Args
 import slatekit.common.ext.durationFrom
-import slatekit.common.functions.Function
-import slatekit.common.functions.FunctionCalls
-import slatekit.common.functions.FunctionInfo
-import slatekit.common.functions.FunctionMode
+import slatekit.core.common.functions.Function
+import slatekit.core.common.functions.FunctionCalls
+import slatekit.core.common.functions.FunctionInfo
+import slatekit.core.common.functions.FunctionMode
 import slatekit.results.*
 import java.util.concurrent.atomic.AtomicReference
 

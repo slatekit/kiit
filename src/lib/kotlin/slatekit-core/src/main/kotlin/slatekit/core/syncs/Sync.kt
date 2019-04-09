@@ -4,10 +4,10 @@ import slatekit.common.DateTime
 import slatekit.common.ext.durationFrom
 import slatekit.common.log.LogSupport
 import slatekit.common.log.Logger
-import slatekit.common.functions.Function
-import slatekit.common.functions.FunctionCalls
-import slatekit.common.functions.FunctionInfo
-import slatekit.common.functions.FunctionMode
+import slatekit.core.common.functions.Function
+import slatekit.core.common.functions.FunctionCalls
+import slatekit.core.common.functions.FunctionInfo
+import slatekit.core.common.functions.FunctionMode
 import slatekit.results.Notice
 import slatekit.results.Success
 import slatekit.results.Try
@@ -27,6 +27,13 @@ open class Sync(
     protected var lastSyncMode: FunctionMode = FunctionMode.Normal
     protected var lastSyncResult = Notices.success(0)
     private var isInProgress = false
+
+    /**
+     * Convenience instantiation via just name and desc
+     */
+    constructor(name: String, desc: String, settings: SyncSettings = SyncSettings(true, 60, ""))
+            : this(FunctionInfo(name, desc), settings )
+
 
 
     /**

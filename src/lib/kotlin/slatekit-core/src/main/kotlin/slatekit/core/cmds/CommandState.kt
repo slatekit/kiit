@@ -15,9 +15,9 @@ package slatekit.core.cmds
 
 import slatekit.common.DateTime
 import slatekit.common.DateTimes
-import slatekit.common.functions.FunctionInfo
-import slatekit.common.functions.FunctionMode
-import slatekit.common.functions.FunctionState
+import slatekit.core.common.functions.FunctionInfo
+import slatekit.core.common.functions.FunctionMode
+import slatekit.core.common.functions.FunctionState
 
 /**
  *
