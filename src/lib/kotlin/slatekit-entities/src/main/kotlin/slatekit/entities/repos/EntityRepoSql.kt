@@ -221,6 +221,15 @@ abstract class EntityRepoSql<TId, T>(
     }
 
     /**
+     * finds first item based on the query
+     * @param query: name of field
+     * @return
+     */
+    override fun findFirst(query:IQuery): T? {
+        return find(query.limit(1)).firstOrNull()
+    }
+
+    /**
      * finds items by using the sql
      * @param query
      * @return

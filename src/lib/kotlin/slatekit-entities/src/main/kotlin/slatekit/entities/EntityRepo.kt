@@ -13,6 +13,7 @@
 
 package slatekit.entities
 
+import slatekit.common.DateTime
 import slatekit.common.naming.Namer
 import slatekit.common.encrypt.Encryptor
 import slatekit.meta.models.Model
@@ -20,6 +21,7 @@ import slatekit.query.IQuery
 import slatekit.query.Query
 import slatekit.entities.Consts.idCol
 import slatekit.entities.core.IEntityRepo
+import slatekit.query.where
 import kotlin.reflect.KClass
 import kotlin.reflect.KProperty
 
@@ -257,6 +259,13 @@ abstract class EntityRepo<TId, T>(
     open fun findIn(field: String, value: List<Any>): List<T> = listOf()
 
     /**
+     * finds first item based on the query
+     * @param query: name of field
+     * @return
+     */
+    open fun findFirst(query:IQuery): T? = null
+
+    /**
      * finds first item based on the field
      * @param field: name of field
      * @param op : operator e.g. "="
@@ -283,5 +292,14 @@ abstract class EntityRepo<TId, T>(
             null -> prop.name
             else -> if (model.any) model.fields.first { it.name == prop.name }.storedName else prop.name
         }
+    }
+
+    /**
+     * Purges data older than the number of days supplied
+     */
+    fun <ETimed> purge(days:Int):Int where ETimed:EntityWithTime {
+        val since = DateTime.now().plusDays((days * -1).toLong())
+        val count = deleteByQuery(Query().where(EntityWithTime::createdAt, "<", since))
+        return count
     }
 }
