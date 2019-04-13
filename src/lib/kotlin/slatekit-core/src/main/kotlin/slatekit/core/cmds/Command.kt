@@ -152,8 +152,7 @@ open class Command(
             Failure(buildError(ex), StatusCodes.UNEXPECTED)
         }
         val end = DateTime.now()
-        val duration = end.durationFrom(start).toMillis()
-        return CommandResult(request, info, mode, result, start, end, duration)
+        return CommandResult(request, info, mode, result, start, end)
     }
 
 

@@ -9,7 +9,6 @@ import slatekit.core.email.EmailService
 import slatekit.core.email.EmailServiceSendGrid
 import slatekit.core.sms.SmsService
 import slatekit.core.sms.SmsServiceTwilio
-import slatekit.integration.apis.ModuleApi
 import slatekit.integration.common.AppEntContext
 import slatekit.integration.mods.Mod
 import slatekit.integration.mods.ModService

@@ -252,7 +252,7 @@ open class Entities(
     }
 
 
-    private fun getSvcByType(entityType: KClass<*>, dbKey: String = "", dbShard: String = ""): IEntityService {
+    fun getSvcByType(entityType: KClass<*>, dbKey: String = "", dbShard: String = ""): IEntityService {
         val info = getInfo(entityType, dbKey, dbShard)
         return info.entityServiceInstance ?: throw Exception("Entity service not available")
     }

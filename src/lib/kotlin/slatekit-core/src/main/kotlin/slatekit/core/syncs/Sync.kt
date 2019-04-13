@@ -116,9 +116,8 @@ open class Sync(
     protected open fun onComplete(result: Notice<Int>) {
         val start = lastSyncTime ?: DateTime.now()
         val end = DateTime.now()
-        val duration = end.durationFrom(start).seconds
         val last = lastResult()
-        val curr = SyncResult(last.count + result.getOrElse { 0 }, info, lastSyncMode, result, start, end, duration)
+        val curr = SyncResult(last.count + result.getOrElse { 0 }, info, lastSyncMode, result, start, end)
 
         lastSyncResult = result
         isInProgress = false

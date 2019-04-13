@@ -109,11 +109,11 @@ open class EntityBuilder(
             serviceType: KClass<*>?,
             repo: EntityRepo<TId, T>,
             args: Any?
-    ): EntityService<TId, T> where TId:Comparable<TId>, T : Entity<TId> {
+    ): IEntityService where TId:Comparable<TId>, T : Entity<TId> {
         return serviceType?.let {
             // Parameters to service is the context and repo
             val params = args?.let { args -> listOf(args, entities, repo) } ?: listOf(entities, repo)
-            Reflector.createWithArgs<EntityService<TId, T>>(it, params.toTypedArray())
+            Reflector.createWithArgs<IEntityService>(it, params.toTypedArray())
         } ?: EntityService(entities, repo)
     }
 }

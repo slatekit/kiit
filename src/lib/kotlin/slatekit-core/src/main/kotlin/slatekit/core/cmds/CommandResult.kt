@@ -34,8 +34,7 @@ data class CommandResult(
         override val mode: FunctionMode,
         override val result: Result<*, *>,
         override val started: DateTime,
-        override val ended: DateTime,
-        override val totalMs: Long
+        override val ended: DateTime
 ) : FunctionResult {
 
 
@@ -44,7 +43,7 @@ data class CommandResult(
             val result = Tries.errored<Any>("Not started")
             val request = CommandRequest.empty()
             val start = DateTime.now()
-            return CommandResult(request, info, FunctionMode.Called, result, start, start, 0L)
+            return CommandResult(request, info, FunctionMode.Called, result, start, start)
         }
     }
 }

@@ -21,6 +21,7 @@ import slatekit.query.IQuery
 import slatekit.query.Query
 import slatekit.entities.Consts.idCol
 import slatekit.entities.core.IEntityRepo
+import slatekit.query.Op
 import slatekit.query.where
 import kotlin.reflect.KClass
 import kotlin.reflect.KProperty
@@ -126,7 +127,7 @@ abstract class EntityRepo<TId, T>(
      * @param value: The value to check for
      * @return
      */
-    abstract fun deleteByField(field: String, value: Any): Int
+    abstract fun deleteByField(field: String, op: Op, value: Any): Int
 
     /**
      * deletes items using the query
