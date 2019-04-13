@@ -1,4 +1,4 @@
-package slatekit.core.common.functions
+package slatekit.common.functions
 
 
 interface Function {

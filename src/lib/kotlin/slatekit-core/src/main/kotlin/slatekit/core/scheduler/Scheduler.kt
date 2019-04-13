@@ -87,7 +87,7 @@ class Scheduler(val settings: SchedulerSettings,
         return commands[name]?.let { task ->
 
             // Pause the task
-            task.moveToState(Status.Paused)
+            task.transition(Status.Paused)
 
             // Old status
             val oldState = task.status()
@@ -109,7 +109,7 @@ class Scheduler(val settings: SchedulerSettings,
      */
     fun stop(name: String): Try<Boolean> {
         return commands[name]?.let { task ->
-            task.moveToState(Status.Stopped)
+            task.transition(Status.Stopped)
             Success(true)
         } ?: Failure(Exception("Could not find task with name: $name"))
     }
@@ -208,17 +208,17 @@ class Scheduler(val settings: SchedulerSettings,
 
         when {
             // CASE 1: Manually forced or edge case of running when off
-            isOff -> task.moveToState(oldState)
+            isOff -> task.transition(oldState)
 
             // CASE 2: Failed
             failed -> when(task.errorMode) {
-                ErrorMode.Strict   -> task.moveToState(Status.Failed)
-                ErrorMode.Flexible -> task.moveToState(Status.Idle)
+                ErrorMode.Strict   -> task.transition(Status.Failed)
+                ErrorMode.Flexible -> task.transition(Status.Idle)
                 ErrorMode.Moderate -> pause(task.name, Duration.ofSeconds(task.delay * 3))
             }
 
             // CASE 3: Success!
-            success -> task.moveToState(Status.Idle)
+            success -> task.transition(Status.Idle)
         }
     }
 }

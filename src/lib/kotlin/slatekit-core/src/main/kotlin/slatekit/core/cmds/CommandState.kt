@@ -15,14 +15,15 @@ package slatekit.core.cmds
 
 import slatekit.common.DateTime
 import slatekit.common.DateTimes
-import slatekit.core.common.functions.FunctionInfo
-import slatekit.core.common.functions.FunctionMode
-import slatekit.core.common.functions.FunctionState
+import slatekit.common.Status
+import slatekit.common.functions.FunctionInfo
+import slatekit.common.functions.FunctionMode
+import slatekit.common.functions.FunctionState
 
 /**
  *
  * @param name : Name of the command
- * @param lastRuntime : Last time the command was run
+ * @param lastRun : Last time the command was run
  * @param hasRun : Whether command has run at least once
  * @param runCount : The total times the command was run
  * @param errorCount : The total errors
@@ -30,8 +31,9 @@ import slatekit.core.common.functions.FunctionState
  */
 data class CommandState(
         override val info: FunctionInfo,
+        override val status: Status,
         override val msg: String,
-        override val lastRuntime: DateTime,
+        override val lastRun: DateTime,
         override val lastMode: FunctionMode,
         override val hasRun: Boolean,
         override val runCount: Long,
@@ -49,7 +51,7 @@ data class CommandState(
 
             this.copy(
                     msg = result.message ?: "",
-                    lastRuntime = result.started,
+                    lastRun = result.started,
                     lastMode = result.mode,
                     hasRun = true,
                     runCount = runCount + 1,
@@ -67,8 +69,9 @@ data class CommandState(
         fun empty(info: FunctionInfo): CommandState =
                 CommandState(
                         info = info,
+                        status = Status.InActive,
                         msg = "Not yet run",
-                        lastRuntime = DateTimes.MIN,
+                        lastRun = DateTimes.MIN,
                         lastMode = FunctionMode.Called,
                         hasRun = false,
                         runCount = 0,

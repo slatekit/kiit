@@ -1,4 +1,4 @@
-package slatekit.core.common.functions
+package slatekit.common.functions
 
 import slatekit.common.DateTime
 import slatekit.results.Failure
@@ -7,11 +7,10 @@ import slatekit.results.Success
 
 
 /**
- * The result of command ( cmd ) that was run
+ * The result a single execution of the function
  * @param info     : The command info
+ * @param mode     : Mode of execution
  * @param result   : Result of execution of the command
- * @param request  : Total time in milliseconds
- * @param response : Response of the command ( converted
  * @param started  : Start time of the command
  * @param ended    : End time of the command
  */
@@ -23,20 +22,11 @@ interface FunctionResult {
     val ended: DateTime
     val totalMs: Long
 
-    val success: Boolean
-        get() {
-            return result.success
-        }
+    val success: Boolean get() { return result.success }
 
-    val message: String
-        get() {
-            return result.msg
-        }
+    val message: String get() { return result.msg }
 
-    val value: Any?
-        get() {
-            return result.getOrNull()
-        }
+    val value: Any? get() { return result.getOrNull() }
 
     fun error(): Throwable? {
         val r = result

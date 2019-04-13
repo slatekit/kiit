@@ -91,7 +91,7 @@ open class System(
 
     fun getWorkerNames(): List<About> = workers.values.map { it.about }
 
-    fun getWorkerStats(): List<WorkerStats> = workers.values.map { it.stats() }
+    fun getWorkerStats(): List<WorkerState> = workers.values.map { it.stats() }
 
     /**
      * Start up and run all the background workers
@@ -132,7 +132,7 @@ open class System(
         perform("$logPrefix starting workers") {
             workers.forEach { id, worker ->
                 log.info("moving worker to running $id")
-                worker.moveToState(Status.Running)
+                worker.transition(Status.Running)
             }
         }
 

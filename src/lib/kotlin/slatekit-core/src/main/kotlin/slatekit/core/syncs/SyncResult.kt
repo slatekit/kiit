@@ -1,9 +1,9 @@
 package slatekit.core.syncs
 
 import slatekit.common.DateTime
-import slatekit.core.common.functions.FunctionInfo
-import slatekit.core.common.functions.FunctionMode
-import slatekit.core.common.functions.FunctionResult
+import slatekit.common.functions.FunctionInfo
+import slatekit.common.functions.FunctionMode
+import slatekit.common.functions.FunctionResult
 import slatekit.results.Result
 import slatekit.results.builders.Tries
 

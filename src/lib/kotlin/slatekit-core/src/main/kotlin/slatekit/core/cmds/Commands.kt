@@ -14,9 +14,9 @@
 package slatekit.core.cmds
 
 import slatekit.common.args.Args
-import slatekit.core.common.functions.FunctionInfo
-import slatekit.core.common.functions.FunctionMode
-import slatekit.core.common.functions.Functions
+import slatekit.common.functions.FunctionInfo
+import slatekit.common.functions.FunctionMode
+import slatekit.common.functions.Functions
 import slatekit.results.Failure
 import slatekit.results.Success
 import slatekit.results.builders.Tries

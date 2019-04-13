@@ -4,10 +4,10 @@ import slatekit.common.DateTime
 import slatekit.common.ext.durationFrom
 import slatekit.common.log.LogSupport
 import slatekit.common.log.Logger
-import slatekit.core.common.functions.Function
-import slatekit.core.common.functions.FunctionCalls
-import slatekit.core.common.functions.FunctionInfo
-import slatekit.core.common.functions.FunctionMode
+import slatekit.common.functions.Function
+import slatekit.common.functions.FunctionTriggers
+import slatekit.common.functions.FunctionInfo
+import slatekit.common.functions.FunctionMode
 import slatekit.results.Notice
 import slatekit.results.Success
 import slatekit.results.Try
@@ -20,7 +20,7 @@ open class Sync(
         override val info: FunctionInfo,
         val settings: SyncSettings,
         val call: SyncCallback = null )
-    : Function, FunctionCalls<SyncResult>, LogSupport {
+    : Function, FunctionTriggers<SyncResult>, LogSupport {
 
     override val logger: Logger? = null
     protected var lastSyncTime: DateTime? = null
@@ -73,7 +73,7 @@ open class Sync(
     override fun execute(args: Array<String>, mode: FunctionMode) {
         Try.attempt {
             val canSync = canExecute().success
-            val run = canSync || mode == FunctionMode.Triggered
+            val run = canSync || mode == FunctionMode.Forced
             if (run) {
                 lastSyncTime = DateTime.now()
                 lastSyncMode = mode
@@ -82,7 +82,7 @@ open class Sync(
                     null -> perform(this::onComplete)
                     else -> call.invoke({ r -> onComplete(r)})
                 }
-                Success(true, "Triggered sync")
+                Success(true, "Forced sync")
             }
         }.onFailure {
             val err = Notices.errored<Int>(it.message ?: "Error executing : ${info.name}")

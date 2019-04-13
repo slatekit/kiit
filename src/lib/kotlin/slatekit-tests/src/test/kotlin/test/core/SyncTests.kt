@@ -2,7 +2,7 @@ package test.core
 
 import org.junit.Assert
 import org.junit.Test
-import slatekit.core.common.functions.FunctionMode
+import slatekit.common.functions.FunctionMode
 import slatekit.core.syncs.Sync
 import slatekit.results.builders.Notices
 
@@ -75,18 +75,18 @@ class SyncTests {
             it(Notices.success(counter, "ensure trigger"))
         })
         sync.call()
-        sync.trigger()
+        sync.force()
         Assert.assertEquals(2, counter)
 
         val state = sync.lastStatus()
         Assert.assertEquals(0, state.errorCount)
         Assert.assertEquals(true, state.hasRun)
-        Assert.assertEquals(FunctionMode.Triggered, state.lastMode)
+        Assert.assertEquals(FunctionMode.Forced, state.lastMode)
         Assert.assertEquals(2, state.runCount)
 
         val result = sync.lastResult()
         Assert.assertEquals(3, result.count)
-        Assert.assertEquals(FunctionMode.Triggered, result.mode)
+        Assert.assertEquals(FunctionMode.Forced, result.mode)
         Assert.assertEquals(true, result.success)
         Assert.assertEquals(2, result.value)
 

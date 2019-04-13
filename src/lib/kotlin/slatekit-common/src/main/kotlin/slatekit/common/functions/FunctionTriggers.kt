@@ -1,7 +1,7 @@
-package slatekit.core.common.functions
+package slatekit.common.functions
 
 
-interface FunctionCalls<out Result> {
+interface FunctionTriggers<out Result> {
 
 
     /**
@@ -18,8 +18,8 @@ interface FunctionCalls<out Result> {
      * @param
      * @return
      */
-    fun trigger() {
-        execute(arrayOf(), FunctionMode.Triggered)
+    fun force() {
+        execute(arrayOf(), FunctionMode.Forced)
     }
 
 

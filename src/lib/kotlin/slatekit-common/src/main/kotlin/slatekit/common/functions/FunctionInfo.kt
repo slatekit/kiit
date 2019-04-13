@@ -1,21 +1,26 @@
-package slatekit.core.common.functions
+package slatekit.common.functions
+
+import slatekit.common.Random
 
 /**
  * @param name     : name of the command e.g "createUser" "admin.users.create"
- * @param desc     : description of what this command does
- * @param version  : optional version of the command
- * @param category : optional category of the command
+ * @param desc     : description of what this function does
+ * @param uuid     : optional uuid to uniquely identify this function
+ * @param alias    : optional alias for the function
+ * @param version  : optional version of the function
+ * @param category : optional category of the function
  */
 data class FunctionInfo(
         val name: String,
         val desc: String,
+        val uuid: String = Random.uuid(),
         val alias: String = name,
         val version: String = "1.0",
-        val category: FunctionType = FunctionType.Generic
+        val category: FunctionType = FunctionType.Misc
 ) {
 
     /**
-     * Parts of the name. This is if the name namespaced such as area.group.action
+     * Parts of the name. This is if the name has a namespace such as area.group.action
      */
     val parts: List<String> = if (name.contains(".")) name.split(".").toList() else listOf()
 

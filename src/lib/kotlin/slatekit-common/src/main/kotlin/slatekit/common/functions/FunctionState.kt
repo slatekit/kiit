@@ -1,6 +1,7 @@
-package slatekit.core.common.functions
+package slatekit.common.functions
 
 import slatekit.common.DateTime
+import slatekit.common.Status
 
 
 /**
@@ -13,6 +14,11 @@ interface FunctionState<out T> {
     val info: FunctionInfo
 
     /**
+     * Function [slatekit.common.Status]
+     */
+    val status: Status
+
+    /**
      * The last message from the result
      */
     val msg: String
@@ -20,7 +26,7 @@ interface FunctionState<out T> {
     /**
      * Last time the function was run
      */
-    val lastRuntime: DateTime
+    val lastRun: DateTime
 
     /**
      * Last mode of operation ( e.g. interactive, scheduled, triggered )
