@@ -65,13 +65,6 @@ abstract class EntityRepoSql<TId, T>(
     }
 
     /**
-     * updates items using the proc and args
-     */
-    override fun updateByProc(name: String, args: List<Any>?): Int {
-        return db.callUpdate(name, args)
-    }
-
-    /**
      * updates items using the query
      * @param query: The query builder
      */
@@ -159,14 +152,14 @@ abstract class EntityRepoSql<TId, T>(
     }
 
     override fun count(): Long {
-        val count = db.getScalarLong("select count(*) from ${repoName()};", null)
+        val count = getScalarLong("select count(*) from ${repoName()};")
         return count
     }
 
     override fun top(count: Int, desc: Boolean): List<T> {
         val orderBy = if (desc) " order by id desc" else " order by id asc"
         val sql = "select * from " + repoName() + orderBy + " limit " + count
-        val items = db.mapMany<T>(sql, entityMapper) ?: listOf<T>()
+        val items = sqlMapMany(sql) ?: listOf<T>()
         return items
     }
 
@@ -177,7 +170,7 @@ abstract class EntityRepoSql<TId, T>(
     override fun count(query: IQuery):Long {
         val filter = query.toFilter()
         val sql = "select count( * ) from ${repoName()} where " + filter
-        val count = db.getScalarLong(sql, null)
+        val count = getScalarLong(sql)
         return count
     }
 
@@ -238,9 +231,23 @@ abstract class EntityRepoSql<TId, T>(
         return db.callQueryMapped(name, entityMapper, args)
     }
 
+    /**
+     * Updates records using sql provided and returns the number of updates made
+     */
     protected open fun update(sql: String): Int {
         val count = db.update(sql)
         return count
+    }
+
+    /**
+     * updates items using the proc and args
+     */
+    override fun updateByProc(name: String, args: List<Any>?): Int {
+        return db.callUpdate(name, args)
+    }
+
+    protected open fun getScalarLong(sql:String):Long {
+        return db.getScalarLong("select count(*) from ${repoName()};", null)
     }
 
     protected open fun sqlMapMany(sql: String): List<T>? {
