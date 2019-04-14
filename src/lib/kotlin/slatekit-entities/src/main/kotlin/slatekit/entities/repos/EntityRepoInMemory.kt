@@ -93,7 +93,7 @@ open class EntityRepoInMemory<TId, T>(
             val id = getNextId()
             val en = when (entity) {
                 is EntityUpdatable<*, *> -> entity.withIdAny(id)
-                else -> { }
+                else -> entity
             }
 
             // store

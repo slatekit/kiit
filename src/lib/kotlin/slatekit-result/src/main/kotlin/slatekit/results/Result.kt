@@ -210,6 +210,26 @@ sealed class Result<out T, out E> {
 
 
     /**
+     *
+     * Applies the supplied message to this result
+     *
+     * @param successCode: The [Status] code to apply if success
+     * @param failureCode: The [Status] code to apply if failure
+     *
+     * # Example
+     * ```
+     * Success(42).withStatus( StatusCodes. ) // Result<String,E>
+     * ```
+     */
+    @Suppress("NOTHING_TO_INLINE")
+    inline fun withMessage(successMessage: String, failureMessage: String): Result<T, E> =
+            when (this) {
+                is Success -> this.copy(status = status.copyMsg(successMessage))
+                is Failure -> this.copy(status = status.copyMsg(failureMessage))
+            }
+
+
+    /**
      * Transform this to a Notice (type alias ) with error type of [String]
      *
      * # Example
