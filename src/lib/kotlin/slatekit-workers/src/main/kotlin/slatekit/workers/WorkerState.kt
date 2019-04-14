@@ -15,14 +15,17 @@ package slatekit.workers
 import slatekit.common.DateTime
 import slatekit.common.requests.Response
 import slatekit.common.Status
+import slatekit.common.functions.FunctionInfo
+import slatekit.common.functions.FunctionMode
+import slatekit.common.functions.FunctionState
 import slatekit.results.Try
-import slatekit.workers.WorkRequest
+import slatekit.workers.slatekit.workers.JobResult
 
 /**
  * Worker level status that can be supplied to a front-end
  * and / or for logging/diagnostics purposes.
  */
-data class WorkerStats(
+data class WorkerState(
         val id: String,
         val name: String,
         val status: Status,
@@ -34,3 +37,21 @@ data class WorkerStats(
         val lastSuccess: Pair<WorkRequest, Response<*>>?,
         val lastErrored: Pair<WorkRequest, Exception?>?
 )
+
+
+data class WorkerState2(
+        val totals:List<Pair<String,Long>>,
+        val lastRequest: WorkRequest?,
+        val lastFiltered: WorkRequest?,
+        val lastSuccess: Pair<WorkRequest, Response<*>>?,
+        val lastErrored: Pair<WorkRequest, Exception?>?,
+        override val info: FunctionInfo,
+        override val status: Status,
+        override val msg: String,
+        override val lastRun: DateTime,
+        override val lastMode: FunctionMode,
+        override val hasRun: Boolean,
+        override val runCount: Long,
+        override val errorCount: Long,
+        override val lastResult: JobResult
+) : FunctionState<JobResult>

@@ -61,14 +61,7 @@ abstract class EntityRepoSql<TId, T>(
         val query = Query().set(field, value)
         val updateSql = query.toUpdatesText()
         val sql = "update " + repoName() + updateSql
-        return db.update(sql)
-    }
-
-    /**
-     * updates items using the proc and args
-     */
-    override fun updateByProc(name: String, args: List<Any>?): Int {
-        return db.callUpdate(name, args)
+        return update(sql)
     }
 
     /**
@@ -78,7 +71,7 @@ abstract class EntityRepoSql<TId, T>(
     override fun updateByQuery(query: IQuery): Int {
         val updateSql = query.toUpdatesText()
         val sql = "update " + repoName() + updateSql
-        return db.update(sql)
+        return update(sql)
     }
 
     /**
@@ -87,7 +80,7 @@ abstract class EntityRepoSql<TId, T>(
      * @param id
      */
     override fun delete(id: TId): Boolean {
-        val count = db.update("delete from ${repoName()} where ${idName()} = $id;")
+        val count = update("delete from ${repoName()} where ${idName()} = $id;")
         return count > 0
     }
 
@@ -98,8 +91,7 @@ abstract class EntityRepoSql<TId, T>(
      */
     override fun delete(ids: List<TId>): Int {
         val delimited = ids.joinToString(",")
-        val count = db.update("delete from ${repoName()} where ${idName()} in ($delimited);")
-        return count
+        return update("delete from ${repoName()} where ${idName()} in ($delimited);")
     }
 
     /**
@@ -108,21 +100,22 @@ abstract class EntityRepoSql<TId, T>(
      * @return
      */
     override fun deleteAll(): Long {
-        val count = db.update("delete from ${repoName()};")
+        val count = update("delete from ${repoName()};")
         return count.toLong()
     }
 
     /**
      * deletes items based on the field name and value
      * @param field: The field name
+     * @param op: The operation for the filter
      * @param value: The value to check for
      * @return
      */
-    override fun deleteByField(field: String, value: Any): Int {
-        val query = Query().where(field, "=", value)
+    override fun deleteByField(field: String, op:Op, value: Any): Int {
+        val query = Query().where(field, op, value)
         val filter = query.toFilter()
         val sql = "delete from " + repoName() + " where " + filter
-        return db.update(sql)
+        return update(sql)
     }
 
     /**
@@ -133,7 +126,7 @@ abstract class EntityRepoSql<TId, T>(
     override fun deleteByQuery(query: IQuery): Int {
         val filter = query.toFilter()
         val sql = "delete from " + repoName() + " where " + filter
-        return db.update(sql)
+        return update(sql)
     }
 
     /**
@@ -159,14 +152,14 @@ abstract class EntityRepoSql<TId, T>(
     }
 
     override fun count(): Long {
-        val count = db.getScalarLong("select count(*) from ${repoName()};", null)
+        val count = getScalarLong("select count(*) from ${repoName()};")
         return count
     }
 
     override fun top(count: Int, desc: Boolean): List<T> {
         val orderBy = if (desc) " order by id desc" else " order by id asc"
         val sql = "select * from " + repoName() + orderBy + " limit " + count
-        val items = db.mapMany<T>(sql, entityMapper) ?: listOf<T>()
+        val items = sqlMapMany(sql) ?: listOf<T>()
         return items
     }
 
@@ -177,7 +170,7 @@ abstract class EntityRepoSql<TId, T>(
     override fun count(query: IQuery):Long {
         val filter = query.toFilter()
         val sql = "select count( * ) from ${repoName()} where " + filter
-        val count = db.getScalarLong(sql, null)
+        val count = getScalarLong(sql)
         return count
     }
 
@@ -221,6 +214,15 @@ abstract class EntityRepoSql<TId, T>(
     }
 
     /**
+     * finds first item based on the query
+     * @param query: name of field
+     * @return
+     */
+    override fun findFirst(query:IQuery): T? {
+        return find(query.limit(1)).firstOrNull()
+    }
+
+    /**
      * finds items by using the sql
      * @param query
      * @return
@@ -229,11 +231,30 @@ abstract class EntityRepoSql<TId, T>(
         return db.callQueryMapped(name, entityMapper, args)
     }
 
-    private fun sqlMapMany(sql: String): List<T>? {
+    /**
+     * Updates records using sql provided and returns the number of updates made
+     */
+    protected open fun update(sql: String): Int {
+        val count = db.update(sql)
+        return count
+    }
+
+    /**
+     * updates items using the proc and args
+     */
+    override fun updateByProc(name: String, args: List<Any>?): Int {
+        return db.callUpdate(name, args)
+    }
+
+    protected open fun getScalarLong(sql:String):Long {
+        return db.getScalarLong("select count(*) from ${repoName()};", null)
+    }
+
+    protected open fun sqlMapMany(sql: String): List<T>? {
         return db.mapMany(sql, entityMapper)
     }
 
-    private fun sqlMapOne(sql: String): T? {
+    protected open fun sqlMapOne(sql: String): T? {
         return db.mapOne<T>(sql, entityMapper)
     }
 }

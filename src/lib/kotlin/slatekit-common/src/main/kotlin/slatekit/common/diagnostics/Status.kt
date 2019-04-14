@@ -9,7 +9,6 @@ import slatekit.common.DateTime
 *   queue1,  usa-est,   queue,   sql   ,  success,   5000     , 5       ,  99.99       , .001      ,   11-20-2018T4:00:00PM
 *   sms   ,  usa-est,   sms  ,   twilio,  success,   5000     , 75      ,  99.99       , .05       ,   11-20-2018T4:00:00PM
 *   email ,  usa-est,   email,   sendgr,  success,   5000     , 75      ,  99.99       , .05       ,   11-20-2018T4:00:00PM
-
  */
 open class Status(val name: String,
                   val shard: String,

@@ -1,4 +1,5 @@
 
+cd slatekit-result      && gradle clean build bintrayUpload && cd ../ && echo 'sleeping 15s' && sleep 15s     
 cd slatekit-common      && gradle clean build bintrayUpload && cd ../ && echo 'sleeping 15s' && sleep 15s     
 cd slatekit-db          && gradle clean build bintrayUpload && cd ../ && echo 'sleeping 15s' && sleep 15s 
 cd slatekit-query       && gradle clean build bintrayUpload && cd ../ && echo 'sleeping 15s' && sleep 15s    

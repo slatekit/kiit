@@ -57,13 +57,13 @@ class Worker_Core_Tests {
 
     @Test
     fun can_change_state_to_started() {
-        assertState( { it.moveToState(Status.Idle) }, Status.Idle)
+        assertState( { it.transition(Status.Idle) }, Status.Idle)
     }
 
 
     @Test
     fun can_change_state_to_working() {
-        assertState( { it.moveToState(Status.Running) }, Status.Running)
+        assertState( { it.transition(Status.Running) }, Status.Running)
     }
 
 

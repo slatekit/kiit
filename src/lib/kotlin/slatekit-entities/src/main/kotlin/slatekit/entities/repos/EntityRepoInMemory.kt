@@ -29,6 +29,7 @@ import java.util.*
 import org.threeten.bp.*
 import slatekit.common.Record
 import slatekit.meta.models.Model
+import slatekit.query.Op
 import kotlin.reflect.KClass
 
 
@@ -92,7 +93,7 @@ open class EntityRepoInMemory<TId, T>(
             val id = getNextId()
             val en = when (entity) {
                 is EntityUpdatable<*, *> -> entity.withIdAny(id)
-                else -> { }
+                else -> entity
             }
 
             // store
@@ -234,7 +235,7 @@ open class EntityRepoInMemory<TId, T>(
         TODO("not implemented") // To change body of created functions use File | Settings | File Templates.
     }
 
-    override fun deleteByField(field: String, value: Any): Int {
+    override fun deleteByField(field: String, op: Op, value: Any): Int {
         TODO("not implemented") // To change body of created functions use File | Settings | File Templates.
     }
 

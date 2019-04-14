@@ -17,7 +17,7 @@ import slatekit.common.DateTime
 import slatekit.common.args.Args
 import slatekit.common.ext.durationFrom
 import slatekit.common.functions.Function
-import slatekit.common.functions.FunctionCalls
+import slatekit.common.functions.FunctionTriggers
 import slatekit.common.functions.FunctionInfo
 import slatekit.common.functions.FunctionMode
 import slatekit.results.*
@@ -48,7 +48,7 @@ import java.util.concurrent.atomic.AtomicReference
 open class Command(
         functionInfo: FunctionInfo,
         val call: ((CommandRequest) -> Any?)? = null
-) : Function, FunctionCalls<CommandResult> {
+) : Function, FunctionTriggers<CommandResult> {
 
     /**
      * Initialize the command info with just name and optional description
@@ -152,8 +152,7 @@ open class Command(
             Failure(buildError(ex), StatusCodes.UNEXPECTED)
         }
         val end = DateTime.now()
-        val duration = end.durationFrom(start).toMillis()
-        return CommandResult(request, info, mode, result, start, end, duration)
+        return CommandResult(request, info, mode, result, start, end)
     }
 
 

@@ -1,7 +1,16 @@
 package slatekit.common.functions
 
 
-interface FunctionCalls<out Result> {
+interface FunctionTriggers<out Result> {
+
+
+    /**
+     * execute this function in normal mode with empty args
+     */
+    fun call(){
+        this.execute(arrayOf(), FunctionMode.Called)
+    }
+
 
     /**
      * execute this function indicating triggered or forced mode
@@ -9,8 +18,8 @@ interface FunctionCalls<out Result> {
      * @param
      * @return
      */
-    fun trigger() {
-        execute(arrayOf(), FunctionMode.Triggered)
+    fun force() {
+        execute(arrayOf(), FunctionMode.Forced)
     }
 
 

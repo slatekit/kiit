@@ -22,7 +22,7 @@ class Syncs(override val all: List<Sync>) : Functions<Sync> {
         val sync = getOrNull(name)
         when(sync) {
             null -> Notices.errored<Int>("$name not found")
-            else -> sync.trigger()
+            else -> sync.force()
         }
     }
 

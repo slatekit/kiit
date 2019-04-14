@@ -140,7 +140,7 @@ open class Worker<T>(
      * @return
      */
     fun init(): Notice<Boolean> {
-        moveToState(Status.Starting)
+        transition(Status.Starting)
         return onInit()
     }
 
@@ -149,7 +149,7 @@ open class Worker<T>(
      */
     fun end() {
         onEnd()
-        moveToState(Status.Complete)
+        transition(Status.Complete)
     }
 
     /**
@@ -186,12 +186,12 @@ open class Worker<T>(
         }
 
         // Update state
-        moveToState(Status.Running)
+        transition(Status.Running)
         lastRunTime.set(DateTime.now())
 
         val result = work?.invoke(job) ?: perform(job)
         lastResult.set(result)
-        moveToState(Status.Idle)
+        transition(Status.Idle)
         return result
     }
 
@@ -204,12 +204,12 @@ open class Worker<T>(
         return slatekit.results.Failure(Exception("Not implemented"), StatusCodes.UNIMPLEMENTED)
     }
 
-    fun stats(): WorkerStats {
+    fun stats(): WorkerState {
         val lastRequest  = diagnostics.tracker?.lastRequest?.get()
         val lastFiltered = diagnostics.tracker?.lastFiltered?.get()
         val lastSuccess  = diagnostics.tracker?.lastSuccess?.get()
         val lastErrored  = diagnostics.tracker?.lastFailure?.get()
-        return WorkerStats(
+        return WorkerState(
                 about.id,
                 about.name,
                 status = runState.get(),
@@ -234,7 +234,7 @@ open class Worker<T>(
      * @param state
      * @return
      */
-    override fun moveToState(state: Status): Status {
+    override fun transition(state: Status): Status {
         val last = runStatus.get()
         runState.set(state)
         runStatus.set(WorkerStatus(about.id, about.name, DateTime.now(), state))

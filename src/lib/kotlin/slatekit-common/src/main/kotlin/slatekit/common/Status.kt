@@ -29,42 +29,42 @@ interface StatusSupport {
      *
      * @return
      */
-    fun start(): Status = moveToState(Status.Running)
+    fun start(): Status = transition(Status.Running)
 
     /**
      * moves the current state to paused
      *
      * @return
      */
-    fun pause(): Status = moveToState(Status.Paused)
+    fun pause(): Status = transition(Status.Paused)
 
     /**
      * moves the current state to stopped.
      *
      * @return
      */
-    fun stop(): Status = moveToState(Status.Stopped)
+    fun stop(): Status = transition(Status.Stopped)
 
     /**
      * moves the current state to resumed
      *
      * @return
      */
-    fun resume(): Status = moveToState(Status.Running)
+    fun resume(): Status = transition(Status.Running)
 
     /**
      * moves the current state to complete
      *
      * @return
      */
-    fun complete(): Status = moveToState(Status.Complete)
+    fun complete(): Status = transition(Status.Complete)
 
     /**
      * moves the current state to failed
      *
      * @return
      */
-    fun fail(): Status = moveToState(Status.Failed)
+    fun fail(): Status = transition(Status.Failed)
 
     /**
      * whether this is executing
@@ -128,5 +128,5 @@ interface StatusSupport {
      * @param state
      * @return
      */
-    fun moveToState(state: Status): Status
+    fun transition(state: Status): Status
 }

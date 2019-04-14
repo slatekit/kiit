@@ -1,4 +1,4 @@
-package slatekit.core.slatekit.core.syncs
+package slatekit.core.syncs
 
 import slatekit.results.Notice
 

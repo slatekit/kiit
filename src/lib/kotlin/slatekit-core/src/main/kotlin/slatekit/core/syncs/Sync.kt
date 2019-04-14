@@ -5,11 +5,9 @@ import slatekit.common.ext.durationFrom
 import slatekit.common.log.LogSupport
 import slatekit.common.log.Logger
 import slatekit.common.functions.Function
-import slatekit.common.functions.FunctionCalls
+import slatekit.common.functions.FunctionTriggers
 import slatekit.common.functions.FunctionInfo
 import slatekit.common.functions.FunctionMode
-import slatekit.core.slatekit.core.syncs.SyncCallback
-import slatekit.core.slatekit.core.syncs.SyncCompletion
 import slatekit.results.Notice
 import slatekit.results.Success
 import slatekit.results.Try
@@ -22,13 +20,29 @@ open class Sync(
         override val info: FunctionInfo,
         val settings: SyncSettings,
         val call: SyncCallback = null )
-    : Function, FunctionCalls<SyncResult>,  LogSupport {
+    : Function, FunctionTriggers<SyncResult>, LogSupport {
 
     override val logger: Logger? = null
     protected var lastSyncTime: DateTime? = null
-    protected var lastSyncMode: FunctionMode = FunctionMode.Normal
+    protected var lastSyncMode: FunctionMode = FunctionMode.Called
     protected var lastSyncResult = Notices.success(0)
     private var isInProgress = false
+
+    /**
+     * Convenience instantiation via just name and desc
+     */
+    constructor(name: String, desc: String,
+                settings: SyncSettings = SyncSettings(true, 60, ""))
+            : this(name, desc, settings, null)
+
+    /**
+     * Convenience instantiation via just name and desc
+     */
+    constructor(name: String, desc: String,
+                settings: SyncSettings = SyncSettings(true, 60, ""),
+                call: SyncCallback = null )
+            : this(FunctionInfo(name, desc), settings, call)
+
 
 
     /**
@@ -59,7 +73,7 @@ open class Sync(
     override fun execute(args: Array<String>, mode: FunctionMode) {
         Try.attempt {
             val canSync = canExecute().success
-            val run = canSync || mode == FunctionMode.Triggered
+            val run = canSync || mode == FunctionMode.Forced
             if (run) {
                 lastSyncTime = DateTime.now()
                 lastSyncMode = mode
@@ -68,7 +82,7 @@ open class Sync(
                     null -> perform(this::onComplete)
                     else -> call.invoke({ r -> onComplete(r)})
                 }
-                Success(true, "Triggered sync")
+                Success(true, "Forced sync")
             }
         }.onFailure {
             val err = Notices.errored<Int>(it.message ?: "Error executing : ${info.name}")
@@ -102,15 +116,15 @@ open class Sync(
     protected open fun onComplete(result: Notice<Int>) {
         val start = lastSyncTime ?: DateTime.now()
         val end = DateTime.now()
-        val duration = end.durationFrom(start).seconds
-        val syncResult = SyncResult(result.getOrElse { 0 }, info, lastSyncMode, result, start, end, duration)
+        val last = lastResult()
+        val curr = SyncResult(last.count + result.getOrElse { 0 }, info, lastSyncMode, result, start, end)
 
         lastSyncResult = result
         isInProgress = false
-        lastSyncMode = FunctionMode.Normal
+        lastSyncMode = FunctionMode.Called
 
-        track(syncResult)
-        handle(syncResult)
+        track(curr)
+        handle(curr)
     }
 
 
@@ -134,6 +148,7 @@ open class Sync(
         val last = lastStatus()
         val curr = last.update(result)
         lastStatus.set(curr)
+        lastResult.set(result)
         return result
     }
 

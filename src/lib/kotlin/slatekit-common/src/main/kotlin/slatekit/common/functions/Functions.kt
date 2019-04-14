@@ -13,17 +13,17 @@ interface Functions<out T: Function> {
     val all:List<T>
 
     /**
-     * names of commands
+     * names of the functions
      */
     val names: List<String> get() { return all.map { f -> f.name } }
 
     /**
-     * number of commands
+     * number of functions
      */
     val size: Int get() { return all.size }
 
     /**
-     * whether or not there is a command with the supplied name.
+     * whether or not there is a function with the supplied name.
      * @param name
      * @return
      */

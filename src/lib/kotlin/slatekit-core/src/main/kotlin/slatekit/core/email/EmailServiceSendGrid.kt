@@ -13,12 +13,14 @@
 
 package slatekit.core.email
 
+import okhttp3.Request
 import slatekit.common.*
 import slatekit.common.info.ApiLogin
 import slatekit.common.templates.Templates
 import slatekit.results.Failure
 import slatekit.results.Notice
 import slatekit.results.Success
+import slatekit.results.then
 
 class EmailServiceSendGrid(
     user: String,
@@ -38,15 +40,13 @@ class EmailServiceSendGrid(
     constructor(apiKey: ApiLogin, templates: Templates? = null) :
             this(apiKey.key, apiKey.pass, apiKey.account, templates)
 
-    override fun send(msg: EmailMessage): Notice<Boolean> {
-
+    fun build(msg: EmailMessage): Notice<Request> {
         // Parameters
         val bodyArg = if (msg.html) "html" else "text"
-
-        val result = HttpRPC().sendSync(
+        val request = HttpRPC().build(
                 method = HttpRPC.Method.Post,
-                url = baseUrl,
-                headers = null,
+                urlRaw = baseUrl,
+                headerParams = null,
                 creds = HttpRPC.Auth.Basic(settings.user, settings.key),
                 body = HttpRPC.Body.FormData(listOf(
                         Pair("api_user", settings.user),
@@ -57,6 +57,14 @@ class EmailServiceSendGrid(
                         Pair(bodyArg, msg.body)
                 )
         ))
-        return result.fold( { Success(true) }, { Failure(it.message ?: "") })
+        return Success(request)
+    }
+
+    override fun send(msg: EmailMessage): Notice<Boolean> {
+        return build(msg).then {
+            val response = HttpRPC().call(it)
+            val result = response.fold({ Success(true) }, { Failure(it.message ?: "") })
+            result
+        }
     }
 }

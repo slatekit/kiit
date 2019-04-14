@@ -23,16 +23,14 @@ data class SyncResult(
         override val mode: FunctionMode,
         override val result: Result<*, *>,
         override val started: DateTime,
-        override val ended: DateTime,
-        override val totalMs: Long
+        override val ended: DateTime
 ) : FunctionResult {
-
 
     companion object {
         fun empty(info: FunctionInfo): SyncResult {
             val result = Tries.errored<Any>("Not started")
             val start = DateTime.now()
-            return SyncResult(0, info, FunctionMode.Normal, result, start, start, 0L)
+            return SyncResult(0, info, FunctionMode.Called, result, start, start)
         }
     }
 }

@@ -14,16 +14,16 @@
 package slatekit.results.builders
 
 import slatekit.results.*
-import slatekit.results.StatusGroup
+import slatekit.results.Status
 
 
 /**
  * Builds [Result] with [Failure] error type of [String]
  */
 interface NoticeBuilder: Builder<String> {
-    override fun errorFromEx(ex: Exception, defaultStatus: StatusGroup): String = ex.message ?: defaultStatus.msg
-    override fun errorFromStr(msg: String?, defaultStatus: StatusGroup):String = msg ?: defaultStatus.msg
-    override fun errorFromErr(err: Err, defaultStatus: StatusGroup): String = err.toString()
+    override fun errorFromEx(ex: Exception, defaultStatus: Status): String = ex.message ?: defaultStatus.msg
+    override fun errorFromStr(msg: String?, defaultStatus: Status):String = msg ?: defaultStatus.msg
+    override fun errorFromErr(err: Err, defaultStatus: Status): String = err.toString()
 }
 
 

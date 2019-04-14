@@ -15,6 +15,7 @@ package slatekit.core.syncs
 
 import slatekit.common.DateTime
 import slatekit.common.DateTimes
+import slatekit.common.Status
 import slatekit.common.functions.FunctionInfo
 import slatekit.common.functions.FunctionMode
 import slatekit.common.functions.FunctionState
@@ -22,7 +23,7 @@ import slatekit.common.functions.FunctionState
 /**
  *
  * @param name : Name of the command
- * @param lastRuntime : Last time the command was run
+ * @param lastRun : Last time the command was run
  * @param hasRun : Whether command has run at least once
  * @param runCount : The total times the command was run
  * @param errorCount : The total errors
@@ -30,8 +31,9 @@ import slatekit.common.functions.FunctionState
  */
 data class SyncState(
         override val info: FunctionInfo,
+        override val status: Status,
         override val msg: String,
-        override val lastRuntime: DateTime,
+        override val lastRun: DateTime,
         override val lastMode: FunctionMode,
         override val hasRun: Boolean,
         override val runCount: Long,
@@ -50,7 +52,7 @@ data class SyncState(
             this.copy(
                     msg = result.message ,
                     lastMode = result.mode,
-                    lastRuntime = result.started,
+                    lastRun = result.started,
                     hasRun = true,
                     runCount = runCount + 1,
                     errorCount = (result.error()?.let { errorCount + 1 } ?: errorCount),
@@ -67,9 +69,10 @@ data class SyncState(
         fun empty(info: FunctionInfo): SyncState =
                 SyncState(
                         info = info,
+                        status = Status.InActive,
                         msg = "Not yet run",
-                        lastMode = FunctionMode.Normal,
-                        lastRuntime = DateTimes.MIN,
+                        lastMode = FunctionMode.Called,
+                        lastRun = DateTimes.MIN,
                         hasRun = false,
                         runCount = 0,
                         errorCount = 0,

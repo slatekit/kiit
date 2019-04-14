@@ -32,7 +32,7 @@ data class Task(val name:String, val runMode: RunMode, val errorMode: ErrorMode,
     /**
      * Move the status to the one supplied.
      */
-    override fun moveToState(state: Status): Status {
+    override fun transition(state: Status): Status {
         status.set(state)
         return status.get()
     }

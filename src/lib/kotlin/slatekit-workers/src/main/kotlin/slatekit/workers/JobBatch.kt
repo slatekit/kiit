@@ -17,6 +17,8 @@ import slatekit.common.DateTime
 /**
  * Represents a batch of jobs from a specific queue
  */
-data class JobBatch(val jobs: List<Job>, val queue: Queue, val timestamp: DateTime) {
+data class JobBatch(val jobs: List<Job>,
+                    val queue: Queue,
+                    val timestamp: DateTime) {
     val isEmpty = jobs.isEmpty()
 }

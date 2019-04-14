@@ -16,23 +16,59 @@ package slatekit.results
 
 /**
  * Interface to represent a Status Code with both an integer and descriptive message
- * Default implementations are available in [StatusGroup]
+ * Default implementations are available in [Status]
  * @sample :
  * { code: 8000, msg: "Invalid request" }
  * { code: 8001, msg: "Unauthorized"    }
  *
  * NOTE: A good example would be Http Status Codes
  */
-interface Status {
-    val code: Int
-    val msg: String
-}
+sealed class Status {
+    abstract val code: Int
+    abstract val msg: String
 
 
+    fun copyAll(msg:String, code:Int): Status {
+        return when(this){
+            is Succeeded -> this.copy(code = code, msg = msg)
+            is Pending -> this.copy(code = code, msg = msg)
+            is Denied -> this.copy(code = code, msg = msg)
+            is Invalid -> this.copy(code = code, msg = msg)
+            is Ignored -> this.copy(code = code, msg = msg)
+            is Errored -> this.copy(code = code, msg = msg)
+            is Unhandled -> this.copy(code = code, msg = msg)
+        }
+    }
 
-/**
- * Provides an interface to mark a class / interface as convertible to an Http Status code
- */
-interface HttpCode {
-    fun toHttpCode():Int
+    fun copyMsg(msg:String): Status {
+        return when(this){
+            is Succeeded -> this.copy(msg = msg)
+            is Pending -> this.copy(msg = msg)
+            is Denied -> this.copy(msg = msg)
+            is Invalid -> this.copy(msg = msg)
+            is Ignored -> this.copy(msg = msg)
+            is Errored -> this.copy(msg = msg)
+            is Unhandled -> this.copy(msg = msg)
+        }
+    }
+
+
+    /**
+     * Default implementations of status codes with logical groups of [Status]
+     *
+     * 1. [Succeeded] : Used for any successful codes/scenarios
+     * 2. [Pending]   : Success group for pending/queued results
+     * 2. [Invalid]   : Err group to represent a bad request / inputs
+     * 4. [Ignored]   : Err group to represent ignored / filtered cases
+     * 3. [Denied]    : Err group to represent denied requests
+     * 5. [Errored]   : Err group to represent any error/failure scenarios known at compile time
+     * 6. [Unhandled] : Err group to represent any unhandled exceptions
+     */
+    data class Succeeded  (override val code: Int, override val msg:String) :  Status()
+    data class Pending    (override val code: Int, override val msg:String) :  Status()
+    data class Denied     (override val code: Int, override val msg:String) :  Status()
+    data class Ignored    (override val code: Int, override val msg:String) :  Status()
+    data class Invalid    (override val code: Int, override val msg:String) :  Status()
+    data class Errored    (override val code: Int, override val msg:String) :  Status()
+    data class Unhandled  (override val code: Int, override val msg:String) :  Status()
 }

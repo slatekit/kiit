@@ -5,6 +5,7 @@ import slatekit.query.IQuery
 import slatekit.entities.Entity
 import slatekit.entities.core.EntityEvent
 import slatekit.entities.core.ServiceSupport
+import slatekit.query.Op
 import kotlin.reflect.KProperty
 
 interface EntityDeletes<TId, T> : ServiceSupport<TId, T> where TId: kotlin.Comparable<TId>, T: Entity<TId> {
@@ -69,7 +70,17 @@ interface EntityDeletes<TId, T> : ServiceSupport<TId, T> where TId: kotlin.Compa
      * @return
      */
     fun deleteByField(prop: KProperty<*>, value: Any): Int {
-        return repoT().deleteByField(prop.name, value)
+        return repoT().deleteByField(prop.name, Op.Eq, value)
+    }
+
+    /**
+     * deletes items based on the field value
+     * @param prop: The property reference
+     * @param value: The value to check for
+     * @return
+     */
+    fun deleteByField(prop: KProperty<*>, op:Op, value: Any): Int {
+        return repoT().deleteByField(prop.name, op, value)
     }
 
     /**
