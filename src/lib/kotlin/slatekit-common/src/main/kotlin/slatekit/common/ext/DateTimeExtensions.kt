@@ -45,7 +45,9 @@ operator fun ZonedDateTime.minus(period: Period): ZonedDateTime = this.minus(per
 // ********************************************
 fun LocalDateTime.format(pattern: String): String = this.format(DateTimeFormatter.ofPattern(pattern))
 fun LocalDateTime.toStringMySql(): String = format("yyyy-MM-dd HH:mm:ss")
+fun LocalDateTime.toNumeric(): Long = format("yyyyMMddHHmmss").toLong()
 fun LocalDateTime.toStringNumeric(sep: String = "-"): String = format("yyyy${sep}MM${sep}dd${sep}HH${sep}mm${sep}ss")
+
 fun ZonedDateTime.format(pattern: String): String = this.format(DateTimeFormatter.ofPattern(pattern))
 fun ZonedDateTime.toIdWithRandom(digits:Int = 5): String = format("yyMMddHHmmss").toLong().toString() + Random.digitsN(digits)
 fun ZonedDateTime.toStringNumeric(sep: String = "-"): String = format("yyyy${sep}MM${sep}dd${sep}HH${sep}mm${sep}ss")
