@@ -21,7 +21,7 @@ interface EntitySupport<TId, T> : IEntityService,
     val repo:EntityRepo<TId, T>
 
 
-    override fun entities(): Entities = entities
+    //override fun entities(): Entities = entities
 
     override fun repo(): IEntityRepo = repo
 

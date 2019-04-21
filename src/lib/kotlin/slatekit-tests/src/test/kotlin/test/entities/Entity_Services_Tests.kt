@@ -20,7 +20,10 @@ import slatekit.common.db.DbConString
 import slatekit.common.db.DbLookup
 import slatekit.db.Db
 import slatekit.entities.Entities
+import slatekit.entities.Entity
+import slatekit.entities.EntityRepo
 import slatekit.entities.EntityService
+import slatekit.entities.features.EntityRelations
 import test.setup.Group
 import test.setup.Member
 import test.setup.User5
@@ -157,7 +160,8 @@ class Entity_Services_Tests {
 
     @Test fun can_get_relation() {
         val userSvc = getUserService(true)
-        val memsSvc = entities.getSvc<Long, Member>(Member::class)
+        val memsSvcRaw = entities.getSvc<Long, Member>(Member::class)
+        val memsSvc = EntityServiceRelational<Long, Member>(entities, memsSvcRaw.repoT())
         val user = memsSvc.getRelation<User5>(1, Member::userId, User5::class)
         Assert.assertTrue( user != null)
         Assert.assertTrue( user!!.email == "jdoe1@abc.com")
@@ -166,7 +170,8 @@ class Entity_Services_Tests {
 
     @Test fun can_get_relation_with_object() {
         val userSvc = getUserService(true)
-        val memsSvc = entities.getSvc<Long, Member>(Member::class)
+        val memsSvcRaw = entities.getSvc<Long, Member>(Member::class)
+        val memsSvc = EntityServiceRelational<Long, Member>(entities, memsSvcRaw.repoT())
         val userAndMember = memsSvc.getWithRelation<User5>(2, Member::userId, User5::class)
         Assert.assertTrue( userAndMember != null)
         Assert.assertTrue(userAndMember!!.first?.groupId == 2L)
@@ -177,14 +182,25 @@ class Entity_Services_Tests {
 
     @Test fun can_get_relations() {
         val userSvc = getUserService(true)
-        val grpSvc = entities.getSvc<Long, Group>(Group::class)
-
+        val grpSvcRaw = entities.getSvc<Long, Group>(Group::class)
+        val grpSvc = EntityServiceRelational<Long, Group>(entities, grpSvcRaw.repoT())
         val results = grpSvc.getWithRelations<Member>(2, Member::class, Member::groupId)
         Assert.assertTrue(results != null)
         Assert.assertTrue(results.first?.name == "group 2")
         Assert.assertTrue(results.second.size == 2)
         Assert.assertTrue(results.second.get(0).userId == 1L)
         Assert.assertTrue(results.second.get(1).userId == 2L)
+    }
+
+
+    class EntityServiceRelational<TId, T>(val entities:Entities, repo: EntityRepo<TId, T>)
+        : EntityService<TId, T>(repo), EntityRelations<TId, T>
+            where TId:Comparable<TId>, T: Entity<TId> {
+
+        override fun entities(): Entities {
+            return entities
+        }
+
     }
 
 }
