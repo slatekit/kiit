@@ -21,6 +21,12 @@ class HttpRPC(val serializer:((Any?) -> String)? = null) {
     }
 
 
+    interface HttpRPCResult {
+        fun onSuccess(result: Response)
+        fun onFailure(e: Exception?)
+    }
+
+
     sealed class Auth {
         data class Basic(val name:String, val pswd:String): Auth()
         data class Bearer(val token:String): Auth()
@@ -188,6 +194,20 @@ class HttpRPC(val serializer:((Any?) -> String)? = null) {
         })
     }
 
+    fun sendAsync(request: Request,
+                  callback: HttpRPCResult) {
+        val client = OkHttpClient()
+        client.newCall(request).enqueue(object : Callback {
+            override fun onResponse(call: Call?, response: Response) {
+                callback.onSuccess(response)
+            }
+
+            override fun onFailure(call: Call?, ex: IOException) {
+                callback.onFailure(ex)
+            }
+        })
+    }
+
     /**
      * Performs an HTTP operation and supplies synchronously
      * @param method      : The http method
@@ -252,6 +272,7 @@ class HttpRPC(val serializer:((Any?) -> String)? = null) {
 
         // SEND ( post / put / etc )
         val request = when (method) {
+            Method.Get    -> builder.get().build()
             Method.Post   -> builder.post(finalBody).build()
             Method.Delete -> builder.delete(finalBody).build()
             Method.Put    -> builder.put(finalBody).build()
