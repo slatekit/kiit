@@ -22,9 +22,9 @@ import slatekit.workers.Queue
 
 fun main(args: Array<String>) {
 
-    DIKoin().test()
-    DITest().test()
-    println("slatekit.tests 1.1")
+//    DIKoin().test()
+//    DITest().test()
+//    println("slatekit.tests 1.1")
     //testSlack()
     //testWorkers()
 }
