@@ -31,7 +31,7 @@ import slatekit.results.Notice
  * @tparam T
  */
 open class EntityServiceWithSupport<TId, T>(val context: Context, entities: Entities, repo: EntityRepo<TId, T>)
-    : EntityService<TId, T>(entities, repo), EncryptSupport, LogSupport where TId:Comparable<TId>, T : Entity<TId> {
+    : EntityService<TId, T>(repo), EncryptSupport, LogSupport where TId:Comparable<TId>, T : Entity<TId> {
 
     override val logger: Logger? get() = context.logs.getLogger()
     override val encryptor: Encryptor? get() = context.enc
