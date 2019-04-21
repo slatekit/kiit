@@ -6,6 +6,9 @@ import slatekit.common.metrics.MetricsLite
 import slatekit.common.queues.QueueSourceInMemory
 import slatekit.common.queues.QueueStringConverter
 import slatekit.common.CommonContext
+import slatekit.common.DateTime
+import slatekit.common.ext.toStringUtc
+import slatekit.support.alerts.*
 import slatekit.workers.System
 import test.workers.WorkerSample
 import slatekit.workers.Priority
@@ -19,8 +22,47 @@ import slatekit.workers.Queue
 
 fun main(args: Array<String>) {
 
+    DIKoin().test()
+    DITest().test()
     println("slatekit.tests 1.1")
+    //testSlack()
     //testWorkers()
+}
+
+
+fun testSlack(){
+    val slack = AlertServiceSlack(
+            AlertSettings(
+                    listOf(
+                        AlertTarget(
+                                "slack-slatekit-tests",
+                                "slatekit-alerts",
+                                "C12345678",
+                                "TEST12345",
+                                "slatekit-tests",
+                                "key1234567890abcdef",
+                                true
+                        )
+    )))
+    val alert = Alert(
+            "registration",
+            "NEW_DEVICE_REGISTRATION",
+            "ecda8cd6-f46b-4ba9-82f3-daab68f687f3",
+            "New user registration via mobile",
+            true,
+            1,
+            "registration",
+            listOf(
+                    AlertField("type", "reg"),
+                    AlertField("time", DateTime.now().toStringUtc()),
+                    AlertField("version", "0.9.24"),
+                    AlertField("env", "loc")
+            )
+    )
+    val json = slack.build(alert, slack.settings.targets[0])
+    val jsonText = json.toJSONString()
+    slack.send(alert, "slack-slatekit-tests")
+    println("done")
 }
 
 
