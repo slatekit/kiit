@@ -22,7 +22,7 @@ import slatekit.entities.Entities
 // 2. this wraps the repo for purpose of adding optional business logic
 //    before and/or after any crud operations
 // 3. can also add additional methods specific to user here.
-class UserService(entities: Entities, repo: EntityRepo<Long, User>) : EntityService<Long, User>(entities, repo)
+class UserService(entities: Entities, repo: EntityRepo<Long, User>) : EntityService<Long, User>(repo)
 {
   // validate for login
   fun validate(email:String, pass:String) : Boolean {

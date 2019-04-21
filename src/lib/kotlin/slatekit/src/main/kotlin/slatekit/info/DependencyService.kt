@@ -7,7 +7,7 @@ import slatekit.results.Outcome
 import slatekit.results.Success
 
 class DependencyService(entities: Entities, repo: EntityRepo<Long, Dependency>)
-    : EntityService<Long, Dependency>(entities, repo) {
+    : EntityService<Long, Dependency>(repo) {
 
 
     fun seed():Outcome<List<String>>{

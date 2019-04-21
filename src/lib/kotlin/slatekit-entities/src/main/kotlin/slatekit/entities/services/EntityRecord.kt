@@ -10,8 +10,8 @@ interface EntityRecord<TId,T> : ServiceSupport<TId, T>,
         EntityDeletes<TId, T>,
         EntityFinds<TId, T>,
         EntityReads<TId, T>,
-        EntityRelations<TId, T>,
         EntitySaves<TId, T>,
         EntityUpdates<TId, T>
+        //EntityRelations<TId, T>
 
         where TId: kotlin.Comparable<TId>, T: Entity<TId>
