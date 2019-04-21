@@ -6,6 +6,9 @@ import slatekit.common.metrics.MetricsLite
 import slatekit.common.queues.QueueSourceInMemory
 import slatekit.common.queues.QueueStringConverter
 import slatekit.common.CommonContext
+import slatekit.common.DateTime
+import slatekit.common.ext.toStringUtc
+import slatekit.support.alerts.*
 import slatekit.workers.System
 import test.workers.WorkerSample
 import slatekit.workers.Priority
@@ -19,7 +22,10 @@ import slatekit.workers.Queue
 
 fun main(args: Array<String>) {
 
-    println("slatekit.tests 1.1")
+//    DIKoin().test()
+//    DITest().test()
+//    println("slatekit.tests 1.1")
+    //testSlack()
     //testWorkers()
 }
 
