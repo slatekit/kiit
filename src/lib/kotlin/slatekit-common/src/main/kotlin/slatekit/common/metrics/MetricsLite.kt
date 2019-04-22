@@ -1,6 +1,5 @@
 package slatekit.common.metrics
 
-import java.lang.Number
 
 
 class MetricsLite(

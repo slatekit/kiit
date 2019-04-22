@@ -19,14 +19,14 @@ import slatekit.common.Status
 import slatekit.common.functions.FunctionInfo
 import slatekit.common.functions.FunctionMode
 import slatekit.common.functions.FunctionState
+import slatekit.common.metrics.Metrics
+import slatekit.common.metrics.MetricsLite
 
 /**
  *
  * @param name : Name of the command
  * @param lastRun : Last time the command was run
  * @param hasRun : Whether command has run at least once
- * @param runCount : The total times the command was run
- * @param errorCount : The total errors
  * @param lastResult : The last result
  */
 data class SyncState(
@@ -36,8 +36,7 @@ data class SyncState(
         override val lastRun: DateTime,
         override val lastMode: FunctionMode,
         override val hasRun: Boolean,
-        override val runCount: Long,
-        override val errorCount: Long,
+        override val metrics: Metrics,
         override val lastResult: SyncResult?
 ) : FunctionState<SyncResult> {
 
@@ -47,17 +46,21 @@ data class SyncState(
      * @param result
      * @return
      */
-    fun update(result: SyncResult): SyncState =
+    fun update(result: SyncResult): SyncState {
 
-            this.copy(
-                    msg = result.message ,
-                    lastMode = result.mode,
-                    lastRun = result.started,
-                    hasRun = true,
-                    runCount = runCount + 1,
-                    errorCount = (result.error()?.let { errorCount + 1 } ?: errorCount),
-                    lastResult = result
-            )
+        val updated = this.copy(
+                msg = result.message,
+                lastMode = result.mode,
+                lastRun = result.started,
+                hasRun = true,
+                lastResult = result
+        )
+
+        // Update the metrics based on the slatekit.results.status.code
+        // which is standardized across all modules
+        updated.increment(result.result.code, null)
+        return updated
+    }
 
 
     companion object {
@@ -74,8 +77,7 @@ data class SyncState(
                         lastMode = FunctionMode.Called,
                         lastRun = DateTimes.MIN,
                         hasRun = false,
-                        runCount = 0,
-                        errorCount = 0,
+                        metrics = MetricsLite(),
                         lastResult = null
                 )
     }

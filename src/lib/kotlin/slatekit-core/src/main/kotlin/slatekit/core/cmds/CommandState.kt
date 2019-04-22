@@ -19,14 +19,14 @@ import slatekit.common.Status
 import slatekit.common.functions.FunctionInfo
 import slatekit.common.functions.FunctionMode
 import slatekit.common.functions.FunctionState
+import slatekit.common.metrics.Metrics
+import slatekit.common.metrics.MetricsLite
 
 /**
  *
  * @param name : Name of the command
  * @param lastRun : Last time the command was run
  * @param hasRun : Whether command has run at least once
- * @param runCount : The total times the command was run
- * @param errorCount : The total errors
  * @param lastResult : The last result
  */
 data class CommandState(
@@ -36,8 +36,7 @@ data class CommandState(
         override val lastRun: DateTime,
         override val lastMode: FunctionMode,
         override val hasRun: Boolean,
-        override val runCount: Long,
-        override val errorCount: Long,
+        override val metrics: Metrics,
         override val lastResult: CommandResult?
 ) : FunctionState<CommandResult> {
 
@@ -47,17 +46,20 @@ data class CommandState(
      * @param result
      * @return
      */
-    fun update(result: CommandResult): CommandState =
+    fun update(result: CommandResult): CommandState {
 
-            this.copy(
-                    msg = result.message ?: "",
-                    lastRun = result.started,
-                    lastMode = result.mode,
-                    hasRun = true,
-                    runCount = runCount + 1,
-                    errorCount = (result.error()?.let { errorCount + 1 } ?: errorCount),
-                    lastResult = result
-            )
+        val updated = this.copy(
+                msg = result.message ?: "",
+                lastRun = result.started,
+                lastMode = result.mode,
+                hasRun = true,
+                lastResult = result
+        )
+        // Update the metrics based on the slatekit.results.status.code
+        // which is standardized across all modules
+        updated.increment(result.result.code, null)
+        return updated
+    }
 
 
     companion object {
@@ -74,8 +76,7 @@ data class CommandState(
                         lastRun = DateTimes.MIN,
                         lastMode = FunctionMode.Called,
                         hasRun = false,
-                        runCount = 0,
-                        errorCount = 0,
+                        metrics = MetricsLite(),
                         lastResult = null
                 )
     }

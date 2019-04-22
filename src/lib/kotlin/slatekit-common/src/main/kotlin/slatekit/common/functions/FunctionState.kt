@@ -2,12 +2,17 @@ package slatekit.common.functions
 
 import slatekit.common.DateTime
 import slatekit.common.Status
+import slatekit.common.ext.isFilteredOut
+import slatekit.common.ext.isInBadRequestRange
+import slatekit.common.ext.isInFailureRange
+import slatekit.common.ext.isInSuccessRange
+import slatekit.common.metrics.Metrics
 
 
 /**
  * Stores the state of the function execution
  */
-interface FunctionState<out T> {
+interface FunctionState<out T> where T:FunctionResult{
     /**
      * Information about the function
      */
@@ -39,17 +44,25 @@ interface FunctionState<out T> {
     val hasRun: Boolean
 
     /**
-     * Number of times the function has been run
+     * Metrics to capture counts of attempts, runs, failures, etc
      */
-    val runCount: Long
-
-    /**
-     * Number of times the function errored out
-     */
-    val errorCount: Long
+    val metrics:Metrics
 
     /**
      * The last result of running the function
      */
     val lastResult: T?
+
+    /**
+     * Increments the metrics
+     */
+    fun increment(code:Int, tags:List<String>?){
+        when {
+            code.isInSuccessRange()    -> metrics.count("${info.nameId}_total_successes", tags)
+            code.isFilteredOut()       -> metrics.count("${info.nameId}_total_filtered", tags)
+            code.isInBadRequestRange() -> metrics.count("${info.nameId}_total_invalid", tags)
+            code.isInFailureRange()    -> metrics.count("${info.nameId}_total_failed", tags)
+            else                       -> metrics.count("${info.nameId}_total_other", tags)
+        }
+    }
 }
