@@ -121,17 +121,17 @@ var codeHelixMeta = {
   
   menu: 
   [
-	//{ name: "Home"          ,  page: "index.html"         , children: null },
+	{ name: "Home"          ,  page: "index.html"         , children: null },
 	{ name: "Intro"         ,  page: "info/intro"         , children: null },
 	{ name: "Setup"         ,  page: "info/setup"         , children: null },
-	{ name: "Learn"         ,  page: "info/learn"         , children: null },
+	//{ name: "Learn"         ,  page: "info/learn"         , children: null },
 	{ name: "Features"      ,  page: "core/overview"      , children: null },
 	{ name: "Utilities"     ,  page: "utils/overview"     , children: null },
-	{ name: "Pricing"       ,  page: "info/pricing"       , children: null },
+	//{ name: "Pricing"       ,  page: "info/pricing"       , children: null },
 	//{ name: "Features"      ,  page: "features.html"    , children: null },
 	{ name: "Releases"      ,  page: "info/releases"      , children: null },	
-	{ name: "Contact"       ,  page: "info/contact"       , children: null },
-	{ name: "More"          ,  page: "info/more"          , children: null },
+	//{ name: "Contact"       ,  page: "info/contact"       , children: null },
+	//{ name: "More"          ,  page: "info/more"          , children: null },
 	{ name: "Git"           ,  page: "https://github.com/code-helix/slatekit", children: null }
   ]
 };  
