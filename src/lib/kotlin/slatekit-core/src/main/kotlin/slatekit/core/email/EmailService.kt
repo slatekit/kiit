@@ -15,18 +15,11 @@ package slatekit.core.email
 
 import slatekit.common.*
 import slatekit.common.templates.Templates
-import slatekit.results.Failure
-import slatekit.results.Notice
-import slatekit.results.Success
+import slatekit.core.common.Sender
+import slatekit.results.*
+import slatekit.results.builders.Outcomes
 
-abstract class EmailService(val templates: Templates? = null) {
-
-    /**
-     * Sends the email message
-     * @param msg
-     * @return
-     */
-    abstract fun send(msg: EmailMessage): Notice<Boolean>
+abstract class EmailService(val templates: Templates? = null) : Sender<EmailMessage> {
 
     /**
      * Sends the email message
@@ -36,14 +29,13 @@ abstract class EmailService(val templates: Templates? = null) {
      * @param html : Whether or not the email is html formatted
      * @return
      */
-    fun send(to: String, subject: String, body: String, html: Boolean): Notice<Boolean> {
+    fun send(to: String, subject: String, body: String, html: Boolean): Outcome<String> {
         // NOTE: This guards are more readable that other alternatives
-        val result = validate(to, subject)
-        return if (result.success) {
-            send(EmailMessage(to, subject, body, html))
-        } else {
-            Failure(result.msg)
-        }
+        val validationResult = validate(to, subject)
+        val result = validationResult.then {
+            sendSync(EmailMessage(to, subject, body, html))
+        }.toOutcome()
+        return result
     }
 
     /**
@@ -53,7 +45,7 @@ abstract class EmailService(val templates: Templates? = null) {
      * @param html : Whether or not the email is html formatted
      * @param variables : values to replace the variables in template
      */
-    fun sendUsingTemplate(name: String, to: String, subject: String, html: Boolean, variables: Vars): Notice<Boolean> {
+    fun sendUsingTemplate(name: String, to: String, subject: String, html: Boolean, variables: Vars): Outcome<String> {
         val result = validate(to, subject)
         return if (result.success) {
             // Send the message
@@ -61,15 +53,17 @@ abstract class EmailService(val templates: Templates? = null) {
             templates?.let { t ->
                 val result = t.resolveTemplateWithVars(name, variables.toMap())
                 val message = result
-                send(EmailMessage(to, subject, message ?: "", html))
-            } ?: Failure("templates are not setup")
+                sendSync(EmailMessage(to, subject, message ?: "", html))
+            } ?: Outcomes.invalid("templates are not setup")
         } else {
-            Failure(result.msg)
+            Outcomes.errored(result.msg)
         }
     }
 
     private fun validate(to: String, subject: String): Notice<String> =
-            if (to.isNullOrEmpty()) Failure("to not provided")
-            else if (subject.isNullOrEmpty()) Failure("subject not provided")
-            else Success("")
+            when {
+                to.isNullOrEmpty() -> Failure("to not provided")
+                subject.isNullOrEmpty() -> Failure("subject not provided")
+                else -> Success("")
+            }
 }

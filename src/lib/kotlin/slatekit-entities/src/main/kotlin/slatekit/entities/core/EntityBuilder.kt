@@ -114,6 +114,6 @@ open class EntityBuilder(
             // Parameters to service is the context and repo
             val params = args?.let { args -> listOf(args, entities, repo) } ?: listOf(entities, repo)
             Reflector.createWithArgs<IEntityService>(it, params.toTypedArray())
-        } ?: EntityService(entities, repo)
+        } ?: EntityService(repo)
     }
 }

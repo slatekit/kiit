@@ -13,24 +13,17 @@
 
 package slatekit.core.push
 
-import slatekit.common.TODO.IMPLEMENT
-import slatekit.results.Failure
-import slatekit.results.Notice
+import okhttp3.Request
+import slatekit.core.common.Sender
+import slatekit.results.Outcome
 
-class MessageServiceIOS() : MessageServiceBase() {
+class MessageServiceIOS : Sender<Message> {
 
-  override fun send(msg: Message): Notice<Boolean> {
-    return Failure("Not implemented")
+  override fun validate(model: Message): Outcome<Message> {
+    TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
   }
 
-  /**
-   * Sends the message asynchronously
-   *
-   * @param msg : message to send
-   * @return
-   * @note : implement in derived class that can actually send the message
-   */
-  override fun sendAsync(msg: Message, callback:(Notice<Boolean>) -> Unit) {
-    IMPLEMENT("ASYNC", "Figure out an async Http library to use or look at Kotlin CoRoutines")
+  override fun build(model: Message): Outcome<Request> {
+    TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
   }
 }

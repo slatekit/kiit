@@ -15,18 +15,20 @@ package slatekit.core.push
 import slatekit.common.EnumLike
 import slatekit.common.EnumSupport
 
-data class Platform(
+sealed class Platform(
     override val name: String,
     override val value: Int
 ) : EnumLike {
 
-    companion object : EnumSupport() {
+    object PlatformIOS     : Platform("ios", 0)
+    object PlatformAnd     : Platform("android", 1)
+    object PlatformWeb     : Platform("web", 2)
+    object PlatformSrv     : Platform("server", 3)
+    object PlatformNone    : Platform("none", 4)
+    data class PlatformUnknown(val text:String) : Platform("unknown", 5)
 
-        val PlatformIOS = Platform("ios", 0)
-        val PlatformAnd = Platform("android", 1)
-        val PlatformWeb = Platform("web", 2)
-        val PlatformSrv = Platform("server", 3)
-        val PlatformNone = Platform("none", 4)
+
+    companion object : EnumSupport() {
 
         override fun all(): Array<EnumLike> {
             return arrayOf(PlatformIOS, PlatformAnd, PlatformWeb, PlatformWeb, PlatformSrv, PlatformNone)
@@ -37,11 +39,11 @@ data class Platform(
         }
 
         override fun unknown(name: String): EnumLike {
-            return Platform(name, 6)
+            return PlatformUnknown(name)
         }
 
         override fun unknown(value: Int): EnumLike {
-            return Platform("unknown", 6)
+            return PlatformUnknown("unknown")
         }
     }
 }

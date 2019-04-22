@@ -13,12 +13,14 @@
 
 package slatekit.core.push
 
+import okhttp3.Request
 import slatekit.common.*
 import slatekit.common.conf.Conf
 import slatekit.common.log.Logs
-import slatekit.results.Failure
-import slatekit.results.Notice
+import slatekit.core.common.Sender
+import slatekit.results.Outcome
 import slatekit.results.Success
+import slatekit.results.builders.Outcomes
 
 /**
  * Google FCM ( Fire base Cloud Messaging ) Service.
@@ -80,36 +82,26 @@ open class MessageServiceGoogle(
         _key: String,
         val config: Conf,
         val logs: Logs
-) :
-    MessageServiceBase() {
+) : Sender<Message> {
 
     private val settings = MessageSettings("", _key, "")
     private val baseUrl = config.getStringOrElse("android.sendUrl", fcmUrl)
     private val sendNotifications = config.getBoolOrElse("android.sendNotifications", true)
     private val logger = logs.getLogger(this.javaClass)
 
+
     /**
-     * Sends a push notification to Android using the data from the Message supplied.
+     * Validates the model supplied
+     * @param model: The data model to send ( e.g. EmailMessage )
      */
-    override fun send(msg: Message): Notice<Boolean> {
-        return if (sendNotifications) {
-            sendSync(msg)
-        } else {
-            logger.warn("Push notification disabled for: ${msg.to}")
-            Success(true, msg = "Disabled")
+    override fun validate(model: Message): Outcome<Message> {
+        return when {
+            model.to.isNullOrEmpty() -> Outcomes.invalid("recipient not provided")
+            model.payload.isNullOrEmpty() -> Outcomes.invalid("payload not provided")
+            else -> Outcomes.success(model)
         }
     }
 
-    /**
-     * Sends the message asynchronously
-     *
-     * @param msg : message to send
-     * @return
-     * @note : implement in derived class that can actually send the message
-     */
-    override fun sendAsync(msg: Message, callback:(Notice<Boolean>) -> Unit) {
-
-    }
 
     /**
      * Builds the Message to send as Push notification as an immutable HTTP Request
@@ -121,41 +113,42 @@ open class MessageServiceGoogle(
      * https://stackoverflow.com/questions/37711082/how-to-handle-notification-when-app-in-background-in-firebase/42279260#42279260
      * https://firebase.google.com/docs/cloud-messaging/android/receive
      */
-    protected fun sendSync(msg: Message):Notice<Boolean> {
+    override fun build(model: Message):Outcome<Request> {
 
         // 1. Build "to" field
         // This correctly based on if sending to multiple devices
         // 1  = "to" : "regid1"
         // 2+ = "registration_ids" : ["regid1", "regid2" ]
-        val ids = msg.to.joinToString(",") { "\"" + it + "\"" }
-        val to = if (msg.isMultiDelivery) "\"registration_ids\"" else "\"to\""
-        val recipient = if (msg.isMultiDelivery) "[$ids]" else ids
-        val alert = msg.alert?.let { buildAlert(it) } ?: ""
+        val ids = model.to.joinToString(",") { "\"" + it + "\"" }
+        val to = if (model.isMultiDelivery) "\"registration_ids\"" else "\"to\""
+        val recipient = if (model.isMultiDelivery) "[$ids]" else ids
+        val alert = model.alert?.let { buildAlert(it) } ?: ""
 
         // 2. Build the content
         // This depends on if your sending a "notification" | "data" message or both.
         // Notifications only showup in the notification area on android.
         // Data messages will be handled in the app.
         // Use both for when an app is closed/backgrounded.
-        val content = when (msg.messageType) {
-            is MessageTypeData -> "{$to:$recipient, \"data\":${msg.payload}}"
+        val content = when (model.messageType) {
+            is MessageTypeData -> "{$to:$recipient, \"data\":${model.payload}}"
             is MessageTypeAlert -> "{$to:$recipient, \"notification\":$alert}"
-            is MessageTypeBoth -> "{$to:$recipient, \"notification\":$alert, \"data\":${msg.payload}}"
+            is MessageTypeBoth -> "{$to:$recipient, \"notification\":$alert, \"data\":${model.payload}}"
             else -> "{$to:$recipient, \"notification\":$alert}"
         }
 
         // 3. Send off w/ json
-        val result = HttpRPC().sendSync(
+        val request = HttpRPC().build(
                 method = HttpRPC.Method.Post,
-                url = baseUrl,
-                headers = mapOf(
+                urlRaw = baseUrl,
+                headerParams = mapOf(
                         "Content-Type" to "application/json",
                         "Authorization" to "key=" + settings.key
                 ),
                 body = HttpRPC.Body.JsonContent(content)
         )
-        return result.fold( { Success(true) }, { Failure(it.message ?: "") })
+        return Success(request)
     }
+
 
     private fun buildAlert(alert: Notification): String {
         return """{
@@ -172,15 +165,3 @@ open class MessageServiceGoogle(
         val fcmUrl = "https://fcm.googleapis.com/fcm/send"
     }
 }
-
-/*
-byte[] bytes = body.getBytes(UTF8);
-HttpURLConnection conn = getConnection(url);
-conn.setDoOutput(true);
-conn.setUseCaches(false);
-conn.setFixedLengthStreamingMode(bytes.length);
-conn.setRequestMethod("POST");
-conn.setRequestProperty("Content-Type", "application/json");
-conn.setRequestProperty("Authorization", "key=" + key);
-OutputStream out = conn.getOutputStream();
-*/

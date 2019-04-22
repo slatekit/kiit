@@ -18,10 +18,9 @@ import slatekit.common.*
 import slatekit.common.info.ApiLogin
 import slatekit.common.templates.Templates
 import slatekit.common.types.CountryCode
-import slatekit.results.Failure
-import slatekit.results.Notice
-import slatekit.results.Success
-import slatekit.results.then
+import slatekit.core.common.Sender
+import slatekit.results.*
+import slatekit.results.builders.Outcomes
 
 /**
  * simple service to send sms messages using Twilio with support for templates and
@@ -38,7 +37,7 @@ curl -X POST 'https://api.twilio.com/2010-04-01/Accounts/BCa1234567890d49dcffd51
 --data-urlencode 'To=3475143333'  \
 --data-urlencode 'From=+17181234567'  \
 --data-urlencode 'Body=test from slate sms service' \
--u ACb1234567890d49dcffd51736e0e2e123:xyz5a123456d78d415eaab7ab92e3bab
+-u ACb1234567890d49dcffd51736e0e2e123:xyz5a123456d78d415eaab7ab90e4bab
  */
 class SmsServiceTwilio(
     key: String,
@@ -48,7 +47,6 @@ class SmsServiceTwilio(
     countries: List<CountryCode>? = null
 )
     : SmsService(templates, countries) {
-
     private val settings = SmsSettings(key, password, phone)
     private val baseUrl = "https://api.twilio.com/2010-04-01/Accounts/$key/Messages.json"
 
@@ -60,15 +58,28 @@ class SmsServiceTwilio(
     constructor(apiKey: ApiLogin, templates: Templates? = null, countries:List<CountryCode>? = null) :
             this(apiKey.key, apiKey.pass, apiKey.account, templates, countries)
 
+
+    /**
+     * Validates the model supplied
+     * @param model: The data model to send ( e.g. EmailMessage )
+     */
+    override fun validate(model: SmsMessage): Outcome<SmsMessage> {
+        return when {
+            model.countryCode.isNullOrEmpty() -> Outcomes.invalid("country code not provided")
+            model.phone.isNullOrEmpty() -> Outcomes.invalid("phone not provided")
+            else -> Outcomes.success(model)
+        }
+    }
+
     /**
      * sends the sms message to the phone
      *
-     * @param msg : message to send
+     * @param model : message to send
      * @return
      */
-    fun build(msg: SmsMessage): Notice<Request> {
+    override fun build(model: SmsMessage): Outcome<Request> {
 
-        val phoneResult = massagePhone(msg.countryCode, msg.phone)
+        val phoneResult = massagePhone(model.countryCode, model.phone)
         return when(phoneResult) {
             is Success -> {
                 val phone = phoneResult.value
@@ -80,29 +91,14 @@ class SmsServiceTwilio(
                         body = HttpRPC.Body.FormData(listOf(
                                 Pair("To", phone),
                                 Pair("From", settings.account),
-                                Pair("Body", msg.msg))
+                                Pair("Body", model.msg))
                         )
                 )
                 Success(request)
             }
-            is Failure -> Failure(phoneResult.msg)
+            is Failure -> Outcomes.errored(phoneResult.msg)
         }
     }
-
-    /**
-     * sends the sms message to the phone
-     *
-     * @param msg : message to send
-     * @return
-     */
-    override fun send(msg: SmsMessage): Notice<Boolean> {
-        return build(msg).then {
-            val response = HttpRPC().call(it)
-            val result = response.fold( { Success(true) }, { Failure(it.message ?: "") })
-            result
-        }
-    }
-
 
     /**
      * Format phone to ensure "+" and "iso" is present. e.g. "+{iso}{phone}"

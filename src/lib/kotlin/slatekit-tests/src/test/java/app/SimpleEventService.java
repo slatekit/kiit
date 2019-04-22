@@ -7,6 +7,6 @@ import slatekit.entities.EntityService;
 public class SimpleEventService extends EntityService<Integer, SimpleEvent> implements ISimpleEventService {
 
     public SimpleEventService(Entities entities, EntityRepo<Integer, SimpleEvent> repo){
-        super(entities, repo);
+        super( repo);
     }
 }
