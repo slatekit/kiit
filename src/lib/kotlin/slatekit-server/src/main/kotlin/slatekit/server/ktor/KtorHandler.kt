@@ -8,6 +8,7 @@ import io.ktor.request.receiveText
 import io.ktor.routing.*
 import slatekit.apis.ApiHost
 import slatekit.common.Context
+import slatekit.common.Diagnostics
 import slatekit.server.ServerConfig
 import slatekit.server.common.Diagnostics
 import slatekit.server.common.RequestHandler

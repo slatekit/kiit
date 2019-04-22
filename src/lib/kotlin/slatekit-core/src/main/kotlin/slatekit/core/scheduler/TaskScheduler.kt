@@ -32,7 +32,7 @@ class TaskScheduler(val settings: SchedulerSettings,
     /**
      * Diagnostic wrapper
      */
-    val diagnostics = Diagnostics(metrics, logger)
+    val diagnostics = TaskDiagnostics("scheduler", logger, metrics, listOf())
 
 
     /**

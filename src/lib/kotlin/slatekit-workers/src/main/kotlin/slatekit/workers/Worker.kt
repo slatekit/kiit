@@ -110,7 +110,7 @@ open class Worker<T>(
     /**
      * Diagnostics for full logs/metric/tracking/events
      */
-    val diagnostics = WorkDiagnostics(metricId, metrics, log)
+    val diagnostics = WorkerDiagnostics(id, log, metrics, listOf())
 
 
     /**

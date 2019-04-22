@@ -4,6 +4,7 @@ import io.ktor.application.ApplicationCall
 import io.ktor.routing.Routing
 import slatekit.apis.ApiHost
 import slatekit.common.Context
+import slatekit.common.Diagnostics
 
 interface RequestHandler {
     val context: Context
