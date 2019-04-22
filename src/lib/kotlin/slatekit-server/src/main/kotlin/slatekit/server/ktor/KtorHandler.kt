@@ -9,8 +9,8 @@ import io.ktor.routing.*
 import slatekit.apis.ApiHost
 import slatekit.common.Context
 import slatekit.common.Diagnostics
+import slatekit.common.requests.Request
 import slatekit.server.ServerConfig
-import slatekit.server.common.Diagnostics
 import slatekit.server.common.RequestHandler
 import slatekit.server.common.ResponseHandler
 
@@ -19,7 +19,7 @@ class KtorHandler(
         override val context: Context,
         val config: ServerConfig,
         override val container:ApiHost,
-        override val diagnostics: Diagnostics,
+        override val diagnostics: Diagnostics<Request>,
         override val responses: ResponseHandler
 ) : RequestHandler {
 
