@@ -3,6 +3,7 @@
 ![Build](https://travis-ci.org/code-helix/slatekit.svg?branch=master)
 ![macOS](https://img.shields.io/badge/os-linux-green.svg?style=flat)
 ![Apache 2](https://img.shields.io/badge/license-Apache2-blue.svg?style=flat)
+![LGPL V3](https://img.shields.io/badge/license-LGPL__v3-blue.svg?style=flat)
 [![Join the chat at https://gitter.im/code-helix/slatekit](https://badges.gitter.im/code-helix/slatekit.svg)](https://gitter.im/code-helix/slatekit?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 [![Follow us on twitter](https://img.shields.io/badge/twitter-kishore__reddy-green.svg)](https://twitter.com/kishore_reddy)
 
@@ -33,35 +34,33 @@ dependencies {
 	// other libraries
 	
 	// slatekit-results: Result<T,E> to model successes/failures with optional status codes
-    	compile 'com.slatekit:slatekit-results:0.9.9'
+    	compile 'com.slatekit:slatekit-results:0.9.24'
 	
 	// slatekit-common: Utilities for Android or Server
-    	compile 'com.slatekit:slatekit-common:0.9.9'
+    	compile 'com.slatekit:slatekit-common:0.9.24'
 	
 	// Misc architecture components ( all depend on results/common components above )
-	compile 'com.slatekit:slatekit-app:0.9.9'
-	compile 'com.slatekit:slatekit-db:0.9.9'
-	compile 'com.slatekit:slatekit-meta:0.9.9'
-	compile 'com.slatekit:slatekit-cloud:0.9.9'
-	compile 'com.slatekit:slatekit-query:0.9.9'
-	compile 'com.slatekit:slatekit-entities:0.9.9'
-	compile 'com.slatekit:slatekit-orm:0.9.9'
-	compile 'com.slatekit:slatekit-core:0.9.9'
-	compile 'com.slatekit:slatekit-apis:0.9.9'
-	compile 'com.slatekit:slatekit-integration:0.9.9'
-	compile 'com.slatekit:slatekit-server:0.9.9'
-	compile 'com.slatekit:slatekit-providers:0.9.9'
-	compile 'com.slatekit:slatekit-workers:0.9.9'
+	compile 'com.slatekit:slatekit-app:0.9.24'
+	compile 'com.slatekit:slatekit-db:0.9.24'
+	compile 'com.slatekit:slatekit-meta:0.9.24'
+	compile 'com.slatekit:slatekit-cloud:0.9.24'
+	compile 'com.slatekit:slatekit-query:0.9.24'
+	compile 'com.slatekit:slatekit-entities:0.9.24'
+	compile 'com.slatekit:slatekit-orm:0.9.24'
+	compile 'com.slatekit:slatekit-core:0.9.24'
+	compile 'com.slatekit:slatekit-apis:0.9.24'
+	compile 'com.slatekit:slatekit-integration:0.9.24'
+	compile 'com.slatekit:slatekit-server:0.9.24'
+	compile 'com.slatekit:slatekit-providers:0.9.24'
+	compile 'com.slatekit:slatekit-workers:0.9.24'
 }
 ```
 
 # Goals
 Slate Kit is a Kotlin based open-source set of utilities, libraries and modular architecture components
-TODO
 
 # Design
 Slate Kit is designed as a collection of modular components. In this way, it is more like a library than an `framework`.
-TODO
 
 # Links
 Some important links / pages for more info.
@@ -74,7 +73,7 @@ setup    | www.slatekit.com/setup.html | setup kotlin / slatekit
 starting | http://www.slatekit.com/components.html | key concepts / steps
 releases | http://www.slatekit.com/releases.html | relase history / notes
 utilities| http://www.slatekit.com/utils.html    | utilities for client/server
-modules  | http://www.slatekit.com/infra.html    | architecture components
+modules  | http://www.slatekit.com/core.html    | architecture components
 learn    | http://www.slatekit.com/kotlin101.html | kotlin 101
 standards| http://www.slatekit.com/kotlin-standards.html | coding standards
 
@@ -107,7 +106,7 @@ You can use maven/gradle to reference Slate Kit libraries. Refer to [Setup](http
 
 ```groovy
 buildscript {
-    ext.kotlin_version = '1.3.0'
+    ext.kotlin_version = '1.3.21'
 
     repositories {
         mavenCentral()
@@ -132,13 +131,13 @@ dependencies {
     compile "org.jetbrains.kotlin:kotlin-stdlib-jre8:$kotlin_version"
 	
     // Reference the slate kit binaries here
-    compile 'com.slatekit:slatekit-common:0.9.9'
-    compile 'com.slatekit:slatekit-meta:0.9.9'
+    compile 'com.slatekit:slatekit-results:0.9.24'
+    compile 'com.slatekit:slatekit-common:0.9.24'
 }
 ```
 
 # Upcoming
-1. A stable 1.0.0 release coming in March 2019
+1. A stable 1.0.0 release coming in April 2019
 2. A technical white-paper on the slatekit-results component
 3. A techincal white-paper on the slatekit-apis ( Universal APIs ) component
 
