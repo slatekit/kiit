@@ -17,6 +17,7 @@ import slatekit.common.Types
 import slatekit.common.console.SemanticConsole
 import slatekit.results.Failure
 import slatekit.results.Notice
+import slatekit.results.Try
 
 /**
  * stores and builds a list of 1 or more arguments which collectively represent the schema.
@@ -167,6 +168,13 @@ class ArgsSchema(val items: List<Arg> = listOf()) {
 
     companion object {
 
+        /**
+         * Parses the line against the schema and transforms any aliases into canonical names
+         */
+        @JvmStatic fun parse(schema:ArgsSchema, line:String):Try<Args> {
+            val parsed = Args.parse(line, "-", "=", true)
+            return parsed.map { transform(schema, it)  }
+        }
 
         /**
          * Transforms the arguments which may have aliases into their canonical names
