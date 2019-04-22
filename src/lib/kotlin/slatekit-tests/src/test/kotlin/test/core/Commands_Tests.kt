@@ -146,8 +146,8 @@ class Commands_Tests {
         val state = cmds.state("create user")
 
         Assert.assertTrue(state.hasRun)
-        Assert.assertTrue(state.errorCount == 0L)
-        Assert.assertTrue(state.runCount == 1L)
+        Assert.assertTrue(state.countFailure() == 0L)
+        Assert.assertTrue(state.countAttempt() == 1L)
         Assert.assertTrue(state.lastResult?.value == "user_0")
         Assert.assertTrue(state.info.name == "create user")
     }
@@ -166,8 +166,8 @@ class Commands_Tests {
         val state = cmds.state("create admin")
 
         Assert.assertTrue(state.hasRun)
-        Assert.assertTrue(state.errorCount == 0L)
-        Assert.assertTrue(state.runCount == 2L)
+        Assert.assertTrue(state.countFailure() == 0L)
+        Assert.assertTrue(state.countAttempt() == 2L)
         Assert.assertTrue(state.lastResult!!.value == "admin_2")
         Assert.assertTrue(state.info.name == "create admin")
     }
@@ -202,8 +202,8 @@ class Commands_Tests {
         val state = cmds.state("create error")
 
         Assert.assertTrue(state.hasRun)
-        Assert.assertTrue(state.errorCount == 1L)
-        Assert.assertTrue(state.runCount == 1L)
+        Assert.assertTrue(state.countFailure() == 1L)
+        Assert.assertTrue(state.countAttempt() == 1L)
         Assert.assertTrue(state.lastResult!!.message == "Unexpected")
         Assert.assertTrue(state.lastResult!!.error()!!.message == "Error while executing : create error. error_1")
         Assert.assertTrue(state.info.name == "create error")
@@ -222,8 +222,8 @@ class Commands_Tests {
         val state = cmds.state("create error")
 
         Assert.assertTrue(state.hasRun)
-        Assert.assertTrue(state.errorCount == 2L)
-        Assert.assertTrue(state.runCount == 2L)
+        Assert.assertTrue(state.countFailure() == 2L)
+        Assert.assertTrue(state.countAttempt() == 2L)
         Assert.assertTrue(state.lastResult!!.error()!!.message == "Error while executing : create error. error_2")
         Assert.assertTrue(state.info.name == "create error")
     }

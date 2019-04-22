@@ -57,12 +57,24 @@ interface FunctionState<out T> where T:FunctionResult{
      * Increments the metrics
      */
     fun increment(code:Int, tags:List<String>?){
+        metrics.count("${info.nameId}_total_attempt", tags)
         when {
-            code.isInSuccessRange()    -> metrics.count("${info.nameId}_total_successes", tags)
-            code.isFilteredOut()       -> metrics.count("${info.nameId}_total_filtered", tags)
+            code.isInSuccessRange()    -> metrics.count("${info.nameId}_total_success", tags)
+            code.isFilteredOut()       -> metrics.count("${info.nameId}_total_ignored", tags)
             code.isInBadRequestRange() -> metrics.count("${info.nameId}_total_invalid", tags)
-            code.isInFailureRange()    -> metrics.count("${info.nameId}_total_failed", tags)
-            else                       -> metrics.count("${info.nameId}_total_other", tags)
+            code.isInFailureRange()    -> metrics.count("${info.nameId}_total_failure", tags)
+            else                       -> metrics.count("${info.nameId}_total_unknown", tags)
         }
+    }
+
+    fun countAttempt():Long = metricCount("${info.nameId}_total_attempt")
+    fun countSuccess():Long = metricCount("${info.nameId}_total_success")
+    fun countIgnored():Long = metricCount("${info.nameId}_total_ignored")
+    fun countInvalid():Long = metricCount("${info.nameId}_total_invalid")
+    fun countFailure():Long = metricCount("${info.nameId}_total_failure")
+    fun countUnknown():Long = metricCount("${info.nameId}_total_unknown")
+
+    fun metricCount(name:String):Long {
+        return metrics.total (name).toLong()
     }
 }
