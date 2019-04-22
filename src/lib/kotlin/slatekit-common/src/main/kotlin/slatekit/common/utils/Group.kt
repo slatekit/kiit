@@ -1,4 +1,4 @@
-package slatekit.integration.common
+package slatekit.common.utils
 
 /**
  * Represents a group of items with contextual info
