@@ -2,11 +2,11 @@ package slatekit.common.functions
 
 import slatekit.common.DateTime
 import slatekit.common.Status
-import slatekit.common.ext.isFilteredOut
-import slatekit.common.ext.isInBadRequestRange
-import slatekit.common.ext.isInFailureRange
-import slatekit.common.ext.isInSuccessRange
 import slatekit.common.metrics.Metrics
+import slatekit.results.isFilteredOut
+import slatekit.results.isInBadRequestRange
+import slatekit.results.isInFailureRange
+import slatekit.results.isInSuccessRange
 
 
 /**
