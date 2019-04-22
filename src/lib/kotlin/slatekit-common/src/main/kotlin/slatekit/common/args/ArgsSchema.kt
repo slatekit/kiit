@@ -31,6 +31,7 @@ class ArgsSchema(val items: List<Arg> = listOf()) {
     /**
      * Adds a argument of type text to the schema
      *
+     * @param alias : Short hand alias for the name
      * @param name : Name of argument
      * @param desc : Description
      * @param required : Whether this is required or not
@@ -41,6 +42,7 @@ class ArgsSchema(val items: List<Arg> = listOf()) {
      * @return
      */
     fun text(
+            alias: String = "",
             name: String,
             desc: String = "",
             required: Boolean = false,
@@ -49,11 +51,12 @@ class ArgsSchema(val items: List<Arg> = listOf()) {
             exampleMany: String = "",
             group: String = ""
     ): ArgsSchema =
-            add(name, desc, Types.JStringClass, required, defaultVal, example, exampleMany, group)
+            add(alias, name, desc, Types.JStringClass, required, defaultVal, example, exampleMany, group)
 
     /**
      * Adds a argument of type boolean to the schema
      *
+     * @param alias : Short hand alias for the name
      * @param name : Name of argument
      * @param desc : Description
      * @param required : Whether this is required or not
@@ -64,6 +67,7 @@ class ArgsSchema(val items: List<Arg> = listOf()) {
      * @return
      */
     fun flag(
+            alias: String = "",
             name: String,
             desc: String = "",
             required: Boolean = false,
@@ -72,11 +76,12 @@ class ArgsSchema(val items: List<Arg> = listOf()) {
             exampleMany: String = "",
             group: String = ""
     ): ArgsSchema =
-            add(name, desc, Types.JBoolClass, required, defaultVal, example, exampleMany, group)
+            add(alias, name, desc, Types.JBoolClass, required, defaultVal, example, exampleMany, group)
 
     /**
      * Adds a argument of type number to the schema
      *
+     * @param alias : Short hand alias for the name
      * @param name : Name of argument
      * @param desc : Description
      * @param required : Whether this is required or not
@@ -87,6 +92,7 @@ class ArgsSchema(val items: List<Arg> = listOf()) {
      * @return
      */
     fun number(
+            alias: String = "",
             name: String,
             desc: String = "",
             required: Boolean = false,
@@ -95,11 +101,12 @@ class ArgsSchema(val items: List<Arg> = listOf()) {
             exampleMany: String = "",
             group: String = ""
     ): ArgsSchema =
-            add(name, desc, Types.JIntClass, required, defaultVal, example, exampleMany, group)
+            add(alias, name, desc, Types.JIntClass, required, defaultVal, example, exampleMany, group)
 
     /**
      * Adds a argument to the schema
      *
+     * @param alias : Short hand alias for the name
      * @param name : Name of argument
      * @param desc : Description
      * @param dataType : Data type of the argument
@@ -111,6 +118,7 @@ class ArgsSchema(val items: List<Arg> = listOf()) {
      * @return
      */
     fun add(
+            alias: String = "",
             name: String,
             desc: String = "",
             dataType: Class<*>,
@@ -121,7 +129,7 @@ class ArgsSchema(val items: List<Arg> = listOf()) {
             group: String = ""
     ): ArgsSchema {
         val typeName = dataType.simpleName
-        val arg = Arg("", name, desc, typeName
+        val arg = Arg(alias, name, desc, typeName
                 ?: "string", required, false, false, false, group, "", defaultVal, example, exampleMany)
         val newList = items.plus(arg)
         return ArgsSchema(newList)
@@ -165,7 +173,8 @@ class ArgsSchema(val items: List<Arg> = listOf()) {
          * @param schema: The argument schema to transform aliases against
          * @param args  : The parsed arguments
          */
-        @JvmStatic fun transform(schema: ArgsSchema, args: Args): Args {
+        @JvmStatic fun transform(schema: ArgsSchema?, args: Args): Args {
+            if(schema == null) return args
             val canonical = args.named.toMutableMap()
             val aliased = schema.items.filter { !it.alias.isNullOrBlank() }
             if(aliased.isEmpty()) {

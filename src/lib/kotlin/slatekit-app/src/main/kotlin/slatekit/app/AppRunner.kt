@@ -65,18 +65,23 @@ object AppRunner {
 
         }.then { context ->
 
-            // STEP 3: Validate - Command line args
+            // STEP 3: Transform - Command line args
+            Success(context.copy(arg = ArgsSchema.transform(schema, context.arg)))
+
+        }.then { context ->
+
+            // STEP 4: Validate - Command line args
             validate(context.arg, schema).fold( { Success(context) }, { Failure(Exception(it)) })
 
         }.then { context ->
 
-            // STEP 4: App - Create App using supplied lambda and context
+            // STEP 5: App - Create App using supplied lambda and context
             val app = builder(context)
             Success(app)
 
         }.then { app ->
 
-            // STEP 4: Run - Finally run the application with workflow ( init, exec, end )
+            // STEP 6: Run - Finally run the application with workflow ( init, exec, end )
             run(app)
         }
 
@@ -105,7 +110,7 @@ object AppRunner {
         val finalResult = schema?.let { sch ->
 
             // Validate args against schema
-            val checkResult = sch.validate(args)
+            val checkResult = ArgsSchema.validate(sch, args)
 
             // Invalid args ? error out
             if (!checkResult.success) {
