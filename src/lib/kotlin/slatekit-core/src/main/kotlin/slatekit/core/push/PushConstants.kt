@@ -1,6 +1,6 @@
 package slatekit.core.push
 
-object MessageConsts {
+object PushConstants {
 
     val TYPE_REG = "register"
     val TYPE_CONFIRM = "confirm"

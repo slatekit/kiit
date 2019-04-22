@@ -78,13 +78,13 @@ import slatekit.results.builders.Outcomes
  *  1. https://stackoverflow.com/questions/37711082/how-to-handle-notification-when-app-in-background-in-firebase/44150822#44150822
  *  2. https://stackoverflow.com/questions/37711082/how-to-handle-notification-when-app-in-background-in-firebase/42279260#42279260
  */
-open class MessageServiceGoogle(
+open class PushGoogle(
         _key: String,
         val config: Conf,
         val logs: Logs
-) : Sender<Message> {
+) : Sender<PushMessage> {
 
-    private val settings = MessageSettings("", _key, "")
+    private val settings = PushSettings("", _key, "")
     private val baseUrl = config.getStringOrElse("android.sendUrl", fcmUrl)
     private val sendNotifications = config.getBoolOrElse("android.sendNotifications", true)
     private val logger = logs.getLogger(this.javaClass)
@@ -94,7 +94,7 @@ open class MessageServiceGoogle(
      * Validates the model supplied
      * @param model: The data model to send ( e.g. EmailMessage )
      */
-    override fun validate(model: Message): Outcome<Message> {
+    override fun validate(model: PushMessage): Outcome<PushMessage> {
         return when {
             model.to.isNullOrEmpty() -> Outcomes.invalid("recipient not provided")
             model.payload.isNullOrEmpty() -> Outcomes.invalid("payload not provided")
@@ -113,7 +113,7 @@ open class MessageServiceGoogle(
      * https://stackoverflow.com/questions/37711082/how-to-handle-notification-when-app-in-background-in-firebase/42279260#42279260
      * https://firebase.google.com/docs/cloud-messaging/android/receive
      */
-    override fun build(model: Message):Outcome<Request> {
+    override fun build(model: PushMessage):Outcome<Request> {
 
         // 1. Build "to" field
         // This correctly based on if sending to multiple devices
@@ -130,9 +130,9 @@ open class MessageServiceGoogle(
         // Data messages will be handled in the app.
         // Use both for when an app is closed/backgrounded.
         val content = when (model.messageType) {
-            is MessageTypeData -> "{$to:$recipient, \"data\":${model.payload}}"
-            is MessageTypeAlert -> "{$to:$recipient, \"notification\":$alert}"
-            is MessageTypeBoth -> "{$to:$recipient, \"notification\":$alert, \"data\":${model.payload}}"
+            is PushTypeData -> "{$to:$recipient, \"data\":${model.payload}}"
+            is PushTypeAlert -> "{$to:$recipient, \"notification\":$alert}"
+            is PushTypeBoth -> "{$to:$recipient, \"notification\":$alert, \"data\":${model.payload}}"
             else -> "{$to:$recipient, \"notification\":$alert}"
         }
 

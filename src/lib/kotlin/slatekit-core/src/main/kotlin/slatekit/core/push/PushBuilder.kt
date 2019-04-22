@@ -1,6 +1,6 @@
 package slatekit.core.push
 
-object MessageBuilder {
+object PushBuilder {
 
     fun parsePlatform(platform: String?): Platform {
         return when (platform) {

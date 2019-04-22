@@ -17,13 +17,13 @@ import okhttp3.Request
 import slatekit.core.common.Sender
 import slatekit.results.Outcome
 
-class MessageServiceIOS : Sender<Message> {
+class PushIOS : Sender<PushMessage> {
 
-  override fun validate(model: Message): Outcome<Message> {
+  override fun validate(model: PushMessage): Outcome<PushMessage> {
     TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
   }
 
-  override fun build(model: Message): Outcome<Request> {
+  override fun build(model: PushMessage): Outcome<Request> {
     TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
   }
 }

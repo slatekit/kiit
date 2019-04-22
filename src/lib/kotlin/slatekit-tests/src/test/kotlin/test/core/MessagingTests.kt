@@ -1,14 +1,7 @@
 package test.core
 
-import org.junit.Assert
 import org.junit.Before
 import org.junit.Test
-import slatekit.common.*
-import slatekit.common.conf.Config
-import slatekit.common.io.IO
-import slatekit.common.log.LogsDefault
-import slatekit.core.push.MessageServiceGoogle
-import slatekit.core.push.Notification
 
 
 class MessagingTests {
