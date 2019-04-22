@@ -34,10 +34,10 @@ dependencies {
 	// other libraries
 	
 	// slatekit-results: Result<T,E> to model successes/failures with optional status codes
-    	compile 'com.slatekit:slatekit-results:0.9.24'
+    	compile 'com.slatekit:slatekit-results:1.0.0'
 	
 	// slatekit-common: Utilities for Android or Server
-    	compile 'com.slatekit:slatekit-common:0.9.24'
+    	compile 'com.slatekit:slatekit-common:1.0.0'
 	
 	// Misc architecture components ( all depend on results/common components above )
 	compile 'com.slatekit:slatekit-app:0.9.24'
