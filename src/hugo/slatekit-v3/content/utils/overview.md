@@ -268,6 +268,7 @@ The Slate Kit Utilities source code is fully available from Git.
     gitAlias="slatekit-common"
     url="utils/utils.html"
     uses="slatekit-results"
+    license="Apache 2.0"
     exampleUrl="https://github.com/code-helix/slatekit/tree/master/src/lib/kotlin/slatekit-examples/src/main/kotlin/slatekit/examples"
     exampleFileName="All Examples"
 %}}

@@ -98,7 +98,7 @@
 
 <h1 id="serialization">Serialization</h1>
 
-<table class="table table-striped table-bordered">
+<p><table class="table table-striped table-bordered">
   <tbody>
     <tr>
       <td><strong>desc</strong></td>
@@ -106,11 +106,11 @@
     </tr>
     <tr>
       <td><strong>date</strong></td>
-      <td>2019-03-15</td>
+      <td>2019-03-22</td>
     </tr>
     <tr>
       <td><strong>version</strong></td>
-      <td>0.9.9</td>
+      <td>0.9.17</td>
     </tr>
     <tr>
       <td><strong>jar</strong></td>
@@ -121,8 +121,8 @@
       <td>slatekit.common.serialization</td>
     </tr>
     <tr>
-      <td><strong>source core</strong></td>
-      <td>slatekit.common.serialization.Serializer.kt</td>
+      <td><strong>artifact</strong></td>
+      <td>com.slatekit:slatekit-common</td>
     </tr>
     <tr>
       <td><strong>source folder</strong></td>
@@ -134,14 +134,30 @@
     </tr>
     <tr>
       <td><strong>depends on</strong></td>
-      <td></td>
+      <td> slatekit-results</td>
     </tr>
   </tbody>
 </table>
+<br/><br/></p>
+
+<h2 id="gradle">Gradle</h2>
+
+<p><div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-gradle" data-lang="gradle">    <span style="color:#75715e">// other setup ...
+</span><span style="color:#75715e"></span>    repositories <span style="color:#f92672">{</span>
+        maven <span style="color:#f92672">{</span> url  <span style="color:#e6db74">&#34;https://dl.bintray.com/codehelixinc/slatekit&#34;</span> <span style="color:#f92672">}</span>
+    <span style="color:#f92672">}</span>
+
+    dependencies <span style="color:#f92672">{</span>
+        <span style="color:#75715e">// other libraries
+</span><span style="color:#75715e"></span>
+        <span style="color:#75715e">// slatekit-common: Utilities for Android or Server
+</span><span style="color:#75715e"></span>        compile <span style="color:#e6db74">&#39;com.slatekit:slatekit-common:0.9.17&#39;</span>
+    <span style="color:#f92672">}</span></code></pre></div>
+<br/><br/></p>
 
 <h2 id="import">Import</h2>
 
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-kotlin" data-lang="kotlin"><span style="color:#75715e">// required 
+<p><div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-kotlin" data-lang="kotlin"><span style="color:#75715e">// required 
 </span><span style="color:#75715e"></span><span style="color:#66d9ef">import</span> slatekit.results.Try
 <span style="color:#66d9ef">import</span> slatekit.results.Success
 <span style="color:#66d9ef">import</span> slatekit.common.serialization.*
@@ -150,18 +166,20 @@
 <span style="color:#75715e">// optional 
 </span><span style="color:#75715e"></span><span style="color:#66d9ef">import</span> slatekit.core.cmds.Cmd
 <span style="color:#66d9ef">import</span> slatekit.examples.common.User</code></pre></div>
+<br/><br/></p>
 
 <h2 id="setup">Setup</h2>
 
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-kotlin" data-lang="kotlin">    <span style="color:#75715e">// Setup some sample data to serialize
+<p><div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-kotlin" data-lang="kotlin">    <span style="color:#75715e">// Setup some sample data to serialize
 </span><span style="color:#75715e"></span>    <span style="color:#66d9ef">val</span> user1 = User(<span style="color:#ae81ff">2</span>, <span style="color:#e6db74">&#34;superman@metro.com&#34;</span>, <span style="color:#e6db74">&#34;super&#34;</span>, <span style="color:#e6db74">&#34;man&#34;</span>, <span style="color:#66d9ef">true</span>, <span style="color:#ae81ff">35</span>)
     <span style="color:#66d9ef">val</span> user2 = User(<span style="color:#ae81ff">3</span>, <span style="color:#e6db74">&#34;batman@gotham.com&#34;</span> , <span style="color:#e6db74">&#34;bat&#34;</span>  , <span style="color:#e6db74">&#34;man&#34;</span>, <span style="color:#66d9ef">true</span>, <span style="color:#ae81ff">35</span>)
     <span style="color:#66d9ef">val</span> users = listOf(user1, user2)
     </code></pre></div>
+<br/><br/></p>
 
 <h2 id="usage">Usage</h2>
 
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-kotlin" data-lang="kotlin">    <span style="color:#75715e">// The serializers come in very handy during the serialization of
+<p><div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-kotlin" data-lang="kotlin">    <span style="color:#75715e">// The serializers come in very handy during the serialization of
 </span><span style="color:#75715e"></span>    <span style="color:#75715e">// entities in the ORM and is used in the CLI and HTTP server.
 </span><span style="color:#75715e"></span>    <span style="color:#75715e">// However, they are general purpose and can be used else where.
 </span><span style="color:#75715e"></span>    <span style="color:#75715e">// They are :
@@ -191,6 +209,7 @@
     println(jsonData)
 
     </code></pre></div>
+<br/><br/></p>
 
 <h2 id="output">Output</h2>
 

@@ -98,7 +98,7 @@
 
 <h1 id="logger">Logger</h1>
 
-<table class="table table-striped table-bordered">
+<p><table class="table table-striped table-bordered">
   <tbody>
     <tr>
       <td><strong>desc</strong></td>
@@ -106,11 +106,11 @@
     </tr>
     <tr>
       <td><strong>date</strong></td>
-      <td>2019-03-15</td>
+      <td>2019-03-22</td>
     </tr>
     <tr>
       <td><strong>version</strong></td>
-      <td>0.9.9</td>
+      <td>0.9.17</td>
     </tr>
     <tr>
       <td><strong>jar</strong></td>
@@ -121,8 +121,8 @@
       <td>slatekit.common.log</td>
     </tr>
     <tr>
-      <td><strong>source core</strong></td>
-      <td>slatekit.common.log.Logger.kt</td>
+      <td><strong>artifact</strong></td>
+      <td>com.slatekit:slatekit-common</td>
     </tr>
     <tr>
       <td><strong>source folder</strong></td>
@@ -134,14 +134,30 @@
     </tr>
     <tr>
       <td><strong>depends on</strong></td>
-      <td></td>
+      <td> slatekit-results</td>
     </tr>
   </tbody>
 </table>
+<br/><br/></p>
+
+<h2 id="gradle">Gradle</h2>
+
+<p><div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-gradle" data-lang="gradle">    <span style="color:#75715e">// other setup ...
+</span><span style="color:#75715e"></span>    repositories <span style="color:#f92672">{</span>
+        maven <span style="color:#f92672">{</span> url  <span style="color:#e6db74">&#34;https://dl.bintray.com/codehelixinc/slatekit&#34;</span> <span style="color:#f92672">}</span>
+    <span style="color:#f92672">}</span>
+
+    dependencies <span style="color:#f92672">{</span>
+        <span style="color:#75715e">// other libraries
+</span><span style="color:#75715e"></span>
+        <span style="color:#75715e">// slatekit-common: Utilities for Android or Server
+</span><span style="color:#75715e"></span>        compile <span style="color:#e6db74">&#39;com.slatekit:slatekit-common:0.9.17&#39;</span>
+    <span style="color:#f92672">}</span></code></pre></div>
+<br/><br/></p>
 
 <h2 id="import">Import</h2>
 
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-kotlin" data-lang="kotlin"><span style="color:#75715e">// required 
+<p><div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-kotlin" data-lang="kotlin"><span style="color:#75715e">// required 
 </span><span style="color:#75715e"></span><span style="color:#66d9ef">import</span> slatekit.common.log.*
 
 
@@ -150,10 +166,11 @@
 </span><span style="color:#75715e"></span><span style="color:#66d9ef">import</span> slatekit.core.cmds.Cmd
 <span style="color:#66d9ef">import</span> slatekit.results.Try
 <span style="color:#66d9ef">import</span> slatekit.results.Success</code></pre></div>
+<br/><br/></p>
 
 <h2 id="setup">Setup</h2>
 
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-kotlin" data-lang="kotlin">  <span style="color:#75715e">// NOTE: The logger is very simple and designed to be extended for customization
+<p><div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-kotlin" data-lang="kotlin">  <span style="color:#75715e">// NOTE: The logger is very simple and designed to be extended for customization
 </span><span style="color:#75715e"></span>  <span style="color:#75715e">// especially to use a more robust logging system such as :
 </span><span style="color:#75715e"></span>  <span style="color:#75715e">// 1. log4net
 </span><span style="color:#75715e"></span>  <span style="color:#75715e">// 2. loggly
@@ -176,10 +193,11 @@
 
 
   </code></pre></div>
+<br/><br/></p>
 
 <h2 id="usage">Usage</h2>
 
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-kotlin" data-lang="kotlin">    <span style="color:#75715e">// Sample exception
+<p><div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-kotlin" data-lang="kotlin">    <span style="color:#75715e">// Sample exception
 </span><span style="color:#75715e"></span>    <span style="color:#66d9ef">val</span> ex = IllegalArgumentException(<span style="color:#e6db74">&#34;Example exception&#34;</span>)
 
     <span style="color:#75715e">// CASE 1: Different ways to log with the static logger
@@ -224,6 +242,7 @@
     log.error(<span style="color:#e6db74">&#34;error from trait&#34;</span>)
     log.fatal(<span style="color:#e6db74">&#34;fatal from trait&#34;</span>)
     </code></pre></div>
+<br/><br/></p>
 
               </div>
           </section>

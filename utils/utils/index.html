@@ -98,7 +98,7 @@
 
 <h1 id="utils">Utils</h1>
 
-<table class="table table-striped table-bordered">
+<p><table class="table table-striped table-bordered">
   <tbody>
     <tr>
       <td><strong>desc</strong></td>
@@ -106,11 +106,11 @@
     </tr>
     <tr>
       <td><strong>date</strong></td>
-      <td>2019-03-15</td>
+      <td>2019-03-22</td>
     </tr>
     <tr>
       <td><strong>version</strong></td>
-      <td>0.9.9</td>
+      <td>0.9.17</td>
     </tr>
     <tr>
       <td><strong>jar</strong></td>
@@ -121,8 +121,8 @@
       <td>slatekit.common.utils</td>
     </tr>
     <tr>
-      <td><strong>source core</strong></td>
-      <td>slatekit.common.console.ConsoleWriter.kt</td>
+      <td><strong>artifact</strong></td>
+      <td>com.slatekit:slatekit-common</td>
     </tr>
     <tr>
       <td><strong>source folder</strong></td>
@@ -134,14 +134,30 @@
     </tr>
     <tr>
       <td><strong>depends on</strong></td>
-      <td></td>
+      <td> slatekit-results</td>
     </tr>
   </tbody>
 </table>
+<br/><br/></p>
+
+<h2 id="gradle">Gradle</h2>
+
+<p><div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-gradle" data-lang="gradle">    <span style="color:#75715e">// other setup ...
+</span><span style="color:#75715e"></span>    repositories <span style="color:#f92672">{</span>
+        maven <span style="color:#f92672">{</span> url  <span style="color:#e6db74">&#34;https://dl.bintray.com/codehelixinc/slatekit&#34;</span> <span style="color:#f92672">}</span>
+    <span style="color:#f92672">}</span>
+
+    dependencies <span style="color:#f92672">{</span>
+        <span style="color:#75715e">// other libraries
+</span><span style="color:#75715e"></span>
+        <span style="color:#75715e">// slatekit-common: Utilities for Android or Server
+</span><span style="color:#75715e"></span>        compile <span style="color:#e6db74">&#39;com.slatekit:slatekit-common:0.9.17&#39;</span>
+    <span style="color:#f92672">}</span></code></pre></div>
+<br/><br/></p>
 
 <h2 id="import">Import</h2>
 
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-kotlin" data-lang="kotlin"><span style="color:#75715e">// required 
+<p><div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-kotlin" data-lang="kotlin"><span style="color:#75715e">// required 
 </span><span style="color:#75715e"></span><span style="color:#66d9ef">import</span> slatekit.common.utils.Require.requireOneOf
 <span style="color:#66d9ef">import</span> slatekit.common.utils.Require.requireText
 <span style="color:#66d9ef">import</span> slatekit.common.utils.Require.requireValidIndex
@@ -156,14 +172,16 @@
 <span style="color:#66d9ef">import</span> slatekit.common.info.ApiLogin
 <span style="color:#66d9ef">import</span> slatekit.results.Try
 <span style="color:#66d9ef">import</span> slatekit.results.Success</code></pre></div>
+<br/><br/></p>
 
 <h2 id="setup">Setup</h2>
 
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-kotlin" data-lang="kotlin">n/a</code></pre></div>
+<p><div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-kotlin" data-lang="kotlin">n/a</code></pre></div>
+<br/><br/></p>
 
 <h2 id="usage">Usage</h2>
 
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-kotlin" data-lang="kotlin">    <span style="color:#75715e">// Miscellaneous utilities.
+<p><div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-kotlin" data-lang="kotlin">    <span style="color:#75715e">// Miscellaneous utilities.
 </span><span style="color:#75715e"></span>
     <span style="color:#75715e">// CASE 1: Api Credentials
 </span><span style="color:#75715e"></span>    <span style="color:#75715e">// The ApiCredentials class provides a convenient container for most fields required to
@@ -180,7 +198,7 @@
 </span><span style="color:#75715e"></span>    <span style="color:#75715e">// of functional error handling, however, there are times where
 </span><span style="color:#75715e"></span>    <span style="color:#75715e">// a guard like approach to inputs is preferable
 </span><span style="color:#75715e"></span>    requireText(<span style="color:#e6db74">&#34;slate-kit&#34;</span>, <span style="color:#e6db74">&#34;Name must be supplied&#34;</span> )
-    requireOneOf( <span style="color:#e6db74">&#34;scala&#34;</span>, listOf(<span style="color:#e6db74">&#34;scala&#34;</span>, <span style="color:#e6db74">&#34;go&#34;</span>), <span style="color:#e6db74">&#34;Name not valid&#34;</span>)
+    requireOneOf( <span style="color:#e6db74">&#34;kotlin&#34;</span>, listOf(<span style="color:#e6db74">&#34;kotlin&#34;</span>, <span style="color:#e6db74">&#34;go&#34;</span>), <span style="color:#e6db74">&#34;Name not valid&#34;</span>)
     requireValidIndex( <span style="color:#ae81ff">3</span>, <span style="color:#ae81ff">4</span>, <span style="color:#e6db74">&#34;Index is must be 0 &lt;= index &lt;= 4&#34;</span>)
 
     <span style="color:#75715e">// CASE 4: Db connection
@@ -195,6 +213,7 @@
     println(path1)
 
     </code></pre></div>
+<br/><br/></p>
 
               </div>
           </section>
