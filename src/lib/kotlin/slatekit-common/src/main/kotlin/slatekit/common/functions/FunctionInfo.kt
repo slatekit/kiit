@@ -1,6 +1,7 @@
 package slatekit.common.functions
 
 import slatekit.common.Random
+import slatekit.common.toId
 
 /**
  * @param name     : name of the command e.g "createUser" "admin.users.create"
@@ -20,9 +21,16 @@ data class FunctionInfo(
 ) {
 
     /**
+     * Converts the name to a reasonable id without spaces and toLowercase
+     */
+    val nameId:String = name.toId()
+
+
+    /**
      * Parts of the name. This is if the name has a namespace such as area.group.action
      */
     val parts: List<String> = if (name.contains(".")) name.split(".").toList() else listOf()
+
 
     /**
      * The 1st part of name if name has a namespace.

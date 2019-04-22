@@ -18,13 +18,13 @@ import kotlin.reflect.KFunction
 /**
  * Wraps the java ScheduledExecutorService with diagnostic info
  */
-class Scheduler(val settings: SchedulerSettings,
-                val logs: Logs,
-                val metrics: Metrics,
-                val service: ScheduledExecutorService = Executors.newScheduledThreadPool(2)) {
+class TaskScheduler(val settings: SchedulerSettings,
+                    val logs: Logs,
+                    val metrics: Metrics,
+                    val service: ScheduledExecutorService = Executors.newScheduledThreadPool(2)) {
 
     /**
-     * Logger for this scheduler ( logger name="slatekit.core.scheduler.Scheduler" )
+     * Logger for this scheduler ( logger name="slatekit.core.scheduler.TaskScheduler" )
      */
     val logger = logs.getLogger(this.javaClass)
 
@@ -32,7 +32,7 @@ class Scheduler(val settings: SchedulerSettings,
     /**
      * Diagnostic wrapper
      */
-    val diagnostics = Diagnostics(metrics, logger)
+    val diagnostics = TaskDiagnostics("scheduler", logger, metrics, listOf())
 
 
     /**

@@ -72,6 +72,12 @@ class QueryTests {
     }
 
 
+    @Test fun can_build_with_sql_injection_check() {
+        val filter = Query().where("password", "=", "x' OR '1' = '1").toFilter()
+        Assert.assertEquals("password = 'x'' OR ''1'' = ''1'", filter)
+    }
+
+
     @Test fun can_build_filter_1() {
         Assert.assertTrue(  Query().where("api", "=", "slate kit").toFilter() == "api = 'slate kit'")
     }

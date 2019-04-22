@@ -2,7 +2,7 @@
 *.log
 *.iml
 *.xml
-*.jar
+# *.jar
 *.bin
 *.kotlin_module
 

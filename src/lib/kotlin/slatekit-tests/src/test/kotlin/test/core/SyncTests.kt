@@ -39,10 +39,10 @@ class SyncTests {
         Assert.assertEquals(1, counter)
 
         val state = sync.lastStatus()
-        Assert.assertEquals(0, state.errorCount)
+        Assert.assertEquals(0, state.countFailure())
         Assert.assertEquals(true, state.hasRun)
         Assert.assertEquals(FunctionMode.Called, state.lastMode)
-        Assert.assertEquals(1, state.runCount)
+        Assert.assertEquals(1, state.countAttempt())
 
         val result = sync.lastResult()
         Assert.assertEquals(1, result.count)
@@ -79,10 +79,10 @@ class SyncTests {
         Assert.assertEquals(2, counter)
 
         val state = sync.lastStatus()
-        Assert.assertEquals(0, state.errorCount)
+        Assert.assertEquals(0, state.countFailure())
         Assert.assertEquals(true, state.hasRun)
         Assert.assertEquals(FunctionMode.Forced, state.lastMode)
-        Assert.assertEquals(2, state.runCount)
+        Assert.assertEquals(2, state.countAttempt())
 
         val result = sync.lastResult()
         Assert.assertEquals(3, result.count)

@@ -17,7 +17,7 @@ import slatekit.common.metrics.MetricsLite
 import slatekit.common.CommonContext
 import slatekit.meta.Deserializer
 import slatekit.server.ServerConfig
-import slatekit.server.common.Diagnostics
+import slatekit.server.common.ServerDiagnostics
 
 object SampleSetup {
 
@@ -70,7 +70,7 @@ object SampleSetup {
     // Diagnostics
     val log by lazy { context.logs.getLogger(SampleApi::javaClass.name) }
     val metrics by lazy { MetricsLite.build() }
-    val diagnostics by lazy { Diagnostics(metrics, log) }
+    val diagnostics by lazy { ServerDiagnostics("api.server", log, metrics, listOf()) }
 
 
     // Slate Kit API Container

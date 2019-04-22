@@ -88,9 +88,9 @@ object AppBuilder {
      * 4. Help text can be easily built from this schema.
      */
     fun schema():ArgsSchema = ArgsSchema()
-            .text("env", "the environment to run in", false, "dev", "dev", "dev1|qa1|stg1|pro")
-            .text("config.loc", "location of config files", false, "jar", "jar", "jar|conf")
-            .text("log.level", "the log level for logging", false, "info", "info", "debug|info|warn|error")
+            .text("", "env", "the environment to run in", false, "dev", "dev", "dev1|qa1|stg1|pro")
+            .text("","config.loc", "location of config files", false, "jar", "jar", "jar|conf")
+            .text("", "log.level", "the log level for logging", false, "info", "info", "debug|info|warn|error")
 
 
     /**

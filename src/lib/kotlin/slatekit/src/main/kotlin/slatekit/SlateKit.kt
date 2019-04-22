@@ -36,9 +36,9 @@ class SlateKit(ctx: AppEntContext) : App<AppEntContext>(ctx), SlateKitServices {
         // 3. If any of these are required and not supplied, then an error is display and program exists
         // 4. Help text can be easily built from this schema.
         val schema = ArgsSchema()
-                .text("env", "the environment to run in", false, "dev", "dev", "dev1|qa1|stg1|pro")
-                .text("region", "the region linked to app", false, "us", "us", "us|europe|india|*")
-                .text("log.level", "the log level for logging", false, "info", "info", "debug|info|warn|error")
+                .text("","env", "the environment to run in", false, "dev", "dev", "dev1|qa1|stg1|pro")
+                .text("","region", "the region linked to app", false, "us", "us", "us|europe|india|*")
+                .text("","log.level", "the log level for logging", false, "info", "info", "debug|info|warn|error")
 
 
         /**

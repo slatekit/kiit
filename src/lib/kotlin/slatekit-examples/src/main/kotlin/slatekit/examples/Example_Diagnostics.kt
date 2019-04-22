@@ -17,7 +17,7 @@ package slatekit.examples
 
 //<doc:import_examples>
 import slatekit.common.Context
-import slatekit.common.diagnostics.Diagnostics
+import slatekit.common.Diagnostics
 import slatekit.common.diagnostics.Events
 import slatekit.common.diagnostics.Tracker
 import slatekit.common.log.LoggerConsole
@@ -62,7 +62,7 @@ class Example_Diagnostics : Command("cmd") {
                 prefix = "workers.jobs",
 
                 // Shows up as the log prefix ( e.g. "workers.jobs task1" )
-                nameFetcher = { myRequest ->  myRequest.action },
+                nameFetcher = { myRequest -> myRequest.action },
 
                 // Shows up in the logs as key/value pairs
                 infoFetcher = { "id:${it.id}, name:${it.action}" },

@@ -110,7 +110,7 @@ open class Worker<T>(
     /**
      * Diagnostics for full logs/metric/tracking/events
      */
-    val diagnostics = WorkDiagnostics(metricId, metrics, log)
+    val diagnostics = WorkerDiagnostics(id, log, metrics, listOf())
 
 
     /**
@@ -205,10 +205,6 @@ open class Worker<T>(
     }
 
     fun stats(): WorkerState {
-        val lastRequest  = diagnostics.tracker?.lastRequest?.get()
-        val lastFiltered = diagnostics.tracker?.lastFiltered?.get()
-        val lastSuccess  = diagnostics.tracker?.lastSuccess?.get()
-        val lastErrored  = diagnostics.tracker?.lastFailure?.get()
         return WorkerState(
                 about.id,
                 about.name,
@@ -221,10 +217,10 @@ open class Worker<T>(
                     Pair("totalErrored"  , metrics.total  ("$metricId.total_failed").toLong()),
                     Pair("totalFiltered" , metrics.total ("$metricId.total_filtered").toLong())
                 ),
-                lastRequest = lastRequest,
-                lastFiltered = lastFiltered,
-                lastSuccess = lastSuccess,
-                lastErrored = lastErrored
+                lastRequest  = null,
+                lastFiltered = null,
+                lastSuccess = null,
+                lastErrored = null
         )
     }
 

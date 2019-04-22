@@ -21,6 +21,7 @@ import org.junit.Assert
 import org.junit.Test
 import slatekit.common.args.Args
 import slatekit.common.args.ArgsCheck
+import slatekit.common.args.ArgsSchema
 import slatekit.results.Try
 import slatekit.results.getOrElse
 
@@ -201,6 +202,25 @@ class ArgsTests {
 
         val result = Args.parse("area.api.action", "-", "=", true)
         ensure(result, true, 0, listOf(), null, null, listOf("area", "api", "action"))
+    }
+
+
+    @Test fun can_transform_aliases() {
+        val schema = ArgsSchema()
+                .text("e","env"        , "the environment to run in", true, "dev"  , "dev"  , "dev1|qa1|stg1|pro" )
+                .text("r", "region"     , "the region linked to app" , true, "us"   , "us"   , "us|europe|india|*")
+        val argsResult = Args.parse("area.api.action -e=dev -r=usa", "-", "=", true)
+        Assert.assertTrue(argsResult.success)
+        val args = argsResult.getOrElse { Args.default() }
+        Assert.assertEquals("dev", args.get("e"))
+        Assert.assertEquals("usa", args.get("r"))
+
+        val transformed = ArgsSchema.transform(schema, args)
+        Assert.assertEquals("dev", transformed.get("env"))
+        Assert.assertEquals("usa", transformed.get("region"))
+        Assert.assertFalse(transformed.containsKey("e"))
+        Assert.assertFalse(transformed.containsKey("r"))
+
     }
 
 

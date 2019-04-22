@@ -18,6 +18,7 @@ import slatekit.common.Status
 import slatekit.common.functions.FunctionInfo
 import slatekit.common.functions.FunctionMode
 import slatekit.common.functions.FunctionState
+import slatekit.common.metrics.Metrics
 import slatekit.results.Try
 import slatekit.workers.slatekit.workers.JobResult
 
@@ -51,7 +52,6 @@ data class WorkerState2(
         override val lastRun: DateTime,
         override val lastMode: FunctionMode,
         override val hasRun: Boolean,
-        override val runCount: Long,
-        override val errorCount: Long,
+        override val metrics: Metrics,
         override val lastResult: JobResult
 ) : FunctionState<JobResult>

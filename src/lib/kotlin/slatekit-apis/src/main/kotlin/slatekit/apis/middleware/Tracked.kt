@@ -12,7 +12,7 @@ mantra: Simplicity above all else
  */
 package slatekit.apis.middleware
 
-import slatekit.common.diagnostics.Tracker
+import slatekit.common.Tracker
 import slatekit.common.requests.Request
 import slatekit.common.requests.Response
 

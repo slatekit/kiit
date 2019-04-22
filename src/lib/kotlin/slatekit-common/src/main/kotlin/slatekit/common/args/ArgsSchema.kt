@@ -17,6 +17,7 @@ import slatekit.common.Types
 import slatekit.common.console.SemanticConsole
 import slatekit.results.Failure
 import slatekit.results.Notice
+import slatekit.results.Try
 
 /**
  * stores and builds a list of 1 or more arguments which collectively represent the schema.
@@ -31,6 +32,7 @@ class ArgsSchema(val items: List<Arg> = listOf()) {
     /**
      * Adds a argument of type text to the schema
      *
+     * @param alias : Short hand alias for the name
      * @param name : Name of argument
      * @param desc : Description
      * @param required : Whether this is required or not
@@ -41,6 +43,7 @@ class ArgsSchema(val items: List<Arg> = listOf()) {
      * @return
      */
     fun text(
+            alias: String = "",
             name: String,
             desc: String = "",
             required: Boolean = false,
@@ -49,11 +52,12 @@ class ArgsSchema(val items: List<Arg> = listOf()) {
             exampleMany: String = "",
             group: String = ""
     ): ArgsSchema =
-            add(name, desc, Types.JStringClass, required, defaultVal, example, exampleMany, group)
+            add(alias, name, desc, Types.JStringClass, required, defaultVal, example, exampleMany, group)
 
     /**
      * Adds a argument of type boolean to the schema
      *
+     * @param alias : Short hand alias for the name
      * @param name : Name of argument
      * @param desc : Description
      * @param required : Whether this is required or not
@@ -64,6 +68,7 @@ class ArgsSchema(val items: List<Arg> = listOf()) {
      * @return
      */
     fun flag(
+            alias: String = "",
             name: String,
             desc: String = "",
             required: Boolean = false,
@@ -72,11 +77,12 @@ class ArgsSchema(val items: List<Arg> = listOf()) {
             exampleMany: String = "",
             group: String = ""
     ): ArgsSchema =
-            add(name, desc, Types.JBoolClass, required, defaultVal, example, exampleMany, group)
+            add(alias, name, desc, Types.JBoolClass, required, defaultVal, example, exampleMany, group)
 
     /**
      * Adds a argument of type number to the schema
      *
+     * @param alias : Short hand alias for the name
      * @param name : Name of argument
      * @param desc : Description
      * @param required : Whether this is required or not
@@ -87,6 +93,7 @@ class ArgsSchema(val items: List<Arg> = listOf()) {
      * @return
      */
     fun number(
+            alias: String = "",
             name: String,
             desc: String = "",
             required: Boolean = false,
@@ -95,11 +102,12 @@ class ArgsSchema(val items: List<Arg> = listOf()) {
             exampleMany: String = "",
             group: String = ""
     ): ArgsSchema =
-            add(name, desc, Types.JIntClass, required, defaultVal, example, exampleMany, group)
+            add(alias, name, desc, Types.JIntClass, required, defaultVal, example, exampleMany, group)
 
     /**
      * Adds a argument to the schema
      *
+     * @param alias : Short hand alias for the name
      * @param name : Name of argument
      * @param desc : Description
      * @param dataType : Data type of the argument
@@ -111,6 +119,7 @@ class ArgsSchema(val items: List<Arg> = listOf()) {
      * @return
      */
     fun add(
+            alias: String = "",
             name: String,
             desc: String = "",
             dataType: Class<*>,
@@ -121,19 +130,10 @@ class ArgsSchema(val items: List<Arg> = listOf()) {
             group: String = ""
     ): ArgsSchema {
         val typeName = dataType.simpleName
-        val arg = Arg("", name, desc, typeName
+        val arg = Arg(alias, name, desc, typeName
                 ?: "string", required, false, false, false, group, "", defaultVal, example, exampleMany)
         val newList = items.plus(arg)
         return ArgsSchema(newList)
-    }
-
-    fun validate(args: Args): Notice<Boolean> {
-        val missing = items.filter { arg -> arg.isRequired && !args.containsKey(arg.name) }
-        return if (missing.isNotEmpty()) {
-            Failure("invalid arguments supplied: Missing : " + missing.first().name)
-        } else {
-            slatekit.results.Success(true)
-        }
     }
 
     /**
@@ -164,4 +164,55 @@ class ArgsSchema(val items: List<Arg> = listOf()) {
      * @return
      */
     private fun maxLengthOfName(): Int = if (items.isEmpty()) 0 else items.maxBy { it.name.length }?.name?.length ?: 0
+
+
+    companion object {
+
+        /**
+         * Parses the line against the schema and transforms any aliases into canonical names
+         */
+        @JvmStatic fun parse(schema:ArgsSchema, line:String):Try<Args> {
+            val parsed = Args.parse(line, "-", "=", true)
+            return parsed.map { transform(schema, it)  }
+        }
+
+        /**
+         * Transforms the arguments which may have aliases into their canonical names
+         * @param schema: The argument schema to transform aliases against
+         * @param args  : The parsed arguments
+         */
+        @JvmStatic fun transform(schema: ArgsSchema?, args: Args): Args {
+            if(schema == null) return args
+            val canonical = args.named.toMutableMap()
+            val aliased = schema.items.filter { !it.alias.isNullOrBlank() }
+            if(aliased.isEmpty()) {
+                return args
+            }
+            aliased.forEach { arg ->
+                if(canonical.containsKey(arg.alias)){
+                    val value = canonical.get(arg.alias)
+                    if(value != null){
+                        canonical.remove(arg.alias)
+                        canonical[arg.name] = value
+                    }
+                }
+            }
+            val finalArgs = args.copy(namedArgs = canonical)
+            return finalArgs
+        }
+
+        /**
+         * Validates the arguments against this schema
+         * @param schema: The argument schema to validate against
+         * @param args  : The parsed arguments
+         */
+        @JvmStatic fun validate(schema: ArgsSchema, args: Args): Notice<Boolean> {
+            val missing = schema.items.filter { arg -> arg.isRequired && !args.containsKey(arg.name) }
+            return if (missing.isNotEmpty()) {
+                Failure("invalid arguments supplied: Missing : " + missing.first().name)
+            } else {
+                slatekit.results.Success(true)
+            }
+        }
+    }
 }

@@ -25,17 +25,19 @@ import org.threeten.bp.*
  *
  *  @example usage: app.users.invite -email="john@gmail.com" -role="guest"
  *
- * @param line : the raw line ( if available )
- * @param raw : the raw text that was parsed into arguments.
- * @param action : "app.users.invite"
- * @param parts : ["app", "users", "invite" ]
- * @param prefix : the letter used to prefix each key / name of named parameters e.g. "-"
+ * @param line      : the raw line ( if available ) e.g. app.users.invite -email="john@gmail.com" -role="guest"
+ * @param raw       : the raw text that was parsed into arguments.
+ * @param action    : "app.users.invite"
+ * @param parts     : ["app", "users", "invite" ]
+ * @param prefix    : the letter used to prefix each key / name of named parameters e.g. "-"
  * @param separator : the letter used to separate the key / name with value e.g. ":"
- * @param namedArgs : the map of named arguments ( key / value ) pairs
+ * @param namedArgs : the map of named arguments provided with - symbol
+ * @param metaArgs  : the map of meta  arguments provided with @ symbol ( similar to http headers       )
+ * @param sysArgs   : the map of named arguments provided with $ symobl ( command arguments e.g. format )
  * @param indexArgs : the list of positional arguments ( index based )
  */
 
-class Args(
+data class Args(
         val line: String,
         override val raw: List<String>,
         val action: String,
@@ -220,7 +222,6 @@ class Args(
      * @return
      */
     override fun getString(key: String): String = Strings.decrypt(named[key] ?: "", decryptor)
-
     override fun getBool(key: String): Boolean = Conversions.toBool(named[key] ?: "false")
     override fun getShort(key: String): Short = Conversions.toShort(named[key] ?: "0")
     override fun getInt(key: String): Int = Conversions.toInt(named[key] ?: "0")
