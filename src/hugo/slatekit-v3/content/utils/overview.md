@@ -6,6 +6,9 @@ draft: true
 # Overview
 Slate Kit <strong>Utilities</strong> supplement the existing Kotlin standard library by offering a powerful set of general purpose Kotlin components that can be used for any application. Many of these components are located in the <a class="url-ch" href="#project">SlateKit.Common</a> project. However, there are a few components located in other projects. Refer to each utility component for more info.
 {{% break %}}
+
+## Setup
+You can setup the slatekit.common project with the configuration below.
 {{< highlight kotlin >}}
 
     // other setup ...
@@ -15,15 +18,31 @@ Slate Kit <strong>Utilities</strong> supplement the existing Kotlin standard lib
 
     dependencies {
         // slatekit-common: Utilities for Android or Server
-        compile 'com.slatekit:slatekit-common:0.9.9'
+        compile 'com.slatekit:slatekit-common:1.0.0'
     }
 
 {{< /highlight >}}
 
+{{% break %}}
+
+## Module
+Links to this modules info. Click on any component icon below for example on how to use it.
+{{% sk-module 
+    name="Common"
+    package="slatekit.common"
+    jar="slatekit.common.jar"
+    git="https://github.com/code-helix/slatekit/tree/master/src/lib/kotlin/slatekit-common"
+    gitAlias="slatekit-common"
+    url="utils/utils.html"
+    uses="slatekit-results"
+    license="Apache 2.0"
+    exampleUrl="https://github.com/code-helix/slatekit/tree/master/src/lib/kotlin/slatekit-examples/src/main/kotlin/slatekit/examples"
+    exampleFileName="All Examples"
+%}}
+
 <section id="services" class="services">
   <div class="container">
       <div class="row text-center">
-
               <div class="item col-lg-4 col-md-6 wow fadeInUp">
                         <div class="icon-wrap">
                             <a href="utils/args"><img src="assets/media/img/white/gears.png" width="80" alt=""></a>         

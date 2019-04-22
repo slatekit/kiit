@@ -1,3 +1,6 @@
+hugo server -D 
+hugo -D // build drafts
+
 hugo new core/apis.md
 hugo new core/app.md
 hugo new core/cache.md

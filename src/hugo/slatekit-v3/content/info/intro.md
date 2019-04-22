@@ -124,7 +124,7 @@ Slate Kit is a <strong><a class="url-ch" href="http://www.kotlinlang.org">Kotlin
         <td><strong>4</strong></td>
         <td><strong>Enterprise</strong></td>
         <td><img src="assets/media/img/white/business-bag.png" width="50" alt=""></td>
-        <td>Support services and more offerings coming soon</td>
+        <td>Currently, Slate Kit is ideal for start ups, mobile apps, small business, but we will look into Enterprise offerings as Slate Kit progresses.</td>
     </tr>
 </table>
 {{% section-end mod="info/index" %}}
@@ -215,17 +215,17 @@ Slate Kit is made of 10+ projects, where each project/component is typically a h
         // other libraries
         
         // slatekit-results: Result<T,E> to model successes/failures with optional status codes
-        compile 'com.slatekit:slatekit-results:0.9.9'
+        compile 'com.slatekit:slatekit-results:1.0.0'
         
         // slatekit-common: Utilities for Android or Server
-        compile 'com.slatekit:slatekit-common:0.9.9'
+        compile 'com.slatekit:slatekit-common:1.0.0'
         
         // Misc architecture components ( all depend on results/common components above )
         // You can just use the project/module that you need
-        compile 'com.slatekit:slatekit-app:0.9.9'
-        compile 'com.slatekit:slatekit-cli:0.9.9'
-        compile 'com.slatekit:slatekit-cloud:0.9.9'
-        compile 'com.slatekit:slatekit-jobs:0.9.9'
+        compile 'com.slatekit:slatekit-app:0.9.24'
+        compile 'com.slatekit:slatekit-cli:0.9.24'
+        compile 'com.slatekit:slatekit-cloud:0.9.24'
+        compile 'com.slatekit:slatekit-jobs:0.9.24'
     }
 
 {{< /highlight >}}
@@ -281,7 +281,7 @@ Since Slate Kit is <strong>100% Kotlin</strong> and runs on the JVM, it only mak
         <td><strong>2</strong></td>
         <td><strong>Vert.x</strong></td>
         <td>Vert.x is another comprehensive framework and is also available for many different JVM languages.
-        The main differences between Vert.x and Slate Kit are the same as for Spring
+        The main differences between Vert.x and Slate Kit are similar as for Spring
     </td>
     </tr>
 </table>
@@ -295,21 +295,22 @@ Since Slate Kit is <strong>100% Kotlin</strong> and runs on the JVM, it only mak
         <td><strong>OSS</strong></td>
         <td><img src="assets/media/img/white/flag.png" width="50" alt=""></td>
         <td><strong>Free</strong></td>
-        <td>Open source version is free and all the components are available from bintray</td>
+        <td>Open source version is available under mostly Apache 2.0 licenses for most of the components. A few components are LGPLv3, listed here <a href="https://github.com/code-helix/slatekit" class="url-ch">github/slatekit</a>
+        The components are available from bintray</td>
     </tr>
     <tr>
         <td><strong>2</strong></td>
         <td><strong>PRO</strong></td>
         <td><img src="assets/media/img/white/email.png" width="50" alt=""></td>
-        <td><strong>$900 / year</strong></td>
-        <td>PRO version comes with support, zendesk ticketing, plugins for supporting different databases, and cloud provides ( outside of AWS )</td>
+        <td><strong>Coming soon</strong></td>
+        <td>PRO version comes with support, zendesk ticketing, and enhanced features for some of the components</td>
     </tr>
     <tr>
         <td><strong>3</strong></td>
         <td><strong>Enterprise</strong></td>
         <td><img src="assets/media/img/white/server.png" width="50" alt=""></td>
-        <td><strong>Coming soon</strong></td>
-        <td>There are several architecture components available. You can use as little or as much as you need. Check out all them modules available further below and on the <strong><a class="url-ch" href="core/infra.html">Components</a></strong> page.</td>
+        <td><strong>Coming Later</strong></td>
+        <td>Currently, Slate Kit is ideal for start ups, mobile apps, small business, but we will look into Enterprise offerings as Slate Kit progresses.</a></strong> page.</td>
     </tr>
 </table>
 {{% section-end mod="info/index" %}}
@@ -362,12 +363,11 @@ Slate Kit is built for the <strong>JVM</strong> using <strong>100% Kotlin</stron
             </tr>
             <tr>
               <td><strong>Open Source</strong></td>
-              <td>Hybrid Open-Source. Majority is open-source except for some parts of the <a class="url-ch" href="#project-slate-ext">SlateKit.Ext</a> project 
-                containing the mobile / web <a class="url-ch" href="features.html">features</a></td>
+              <td>Open-Source under Apache 2.0 ( majority of components ) and/or LGPLv3.</td>
             </tr>
             <tr>
               <td><strong>License</strong></td>
-              <td>Apache 2.0 : Please check our <a class="url-ch" href="https://github.com/code-helix/slatekit">git repo</a> for more info</td>
+              <td>Apache 2.0 and LGPLv3: Please check our <a class="url-ch" href="https://github.com/code-helix/slatekit">git repo</a> for more info</td>
             </tr>
             <tr>
               <td><strong>Style</strong></td>
