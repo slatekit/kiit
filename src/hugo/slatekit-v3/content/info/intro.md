@@ -253,7 +253,8 @@ There are many components availables, but the most basic and general purpose for
         <td><strong>4</strong></td>
         <td><strong>Examples</strong></td>
         <td><img src="assets/media/img/white/manual.png" width="50" alt=""></td>
-        <td>Example are available for every utility and module. Click on the corresponsding utilities / components for details documentation.</td>
+        <td>Example are available for every utility and module. Click on the corresponsding utilities / components for details documentation.
+            You can also see the source code for all examples here: <strong><a class="url-ch" href="https://github.com/code-helix/slatekit/tree/master/src/lib/kotlin/slatekit-examples/src/main/kotlin/slatekit/examples">Examples</a></strong></td>
     </tr>
 </table>
 {{% section-end mod="info/index" %}}
