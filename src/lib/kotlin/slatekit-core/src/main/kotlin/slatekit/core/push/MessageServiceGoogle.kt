@@ -172,15 +172,3 @@ open class MessageServiceGoogle(
         val fcmUrl = "https://fcm.googleapis.com/fcm/send"
     }
 }
-
-/*
-byte[] bytes = body.getBytes(UTF8);
-HttpURLConnection conn = getConnection(url);
-conn.setDoOutput(true);
-conn.setUseCaches(false);
-conn.setFixedLengthStreamingMode(bytes.length);
-conn.setRequestMethod("POST");
-conn.setRequestProperty("Content-Type", "application/json");
-conn.setRequestProperty("Authorization", "key=" + key);
-OutputStream out = conn.getOutputStream();
-*/

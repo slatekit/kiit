@@ -17,10 +17,9 @@ import okhttp3.Request
 import slatekit.common.*
 import slatekit.common.info.ApiLogin
 import slatekit.common.templates.Templates
-import slatekit.results.Failure
-import slatekit.results.Notice
-import slatekit.results.Success
-import slatekit.results.then
+import slatekit.core.common.Sender
+import slatekit.results.*
+import slatekit.results.builders.Outcomes
 
 class EmailServiceSendGrid(
     user: String,
@@ -40,7 +39,22 @@ class EmailServiceSendGrid(
     constructor(apiKey: ApiLogin, templates: Templates? = null) :
             this(apiKey.key, apiKey.pass, apiKey.account, templates)
 
-    fun build(msg: EmailMessage): Notice<Request> {
+
+    /**
+     * Validates the model supplied
+     * @param model: The data model to send ( e.g. EmailMessage )
+     */
+    override fun validate(model: EmailMessage): Outcome<EmailMessage> {
+        return if (model.to.isNullOrEmpty()) Outcomes.invalid("to not provided")
+        else if (model.subject.isNullOrEmpty()) Outcomes.invalid("subject not provided")
+        else Outcomes.success(model)
+    }
+
+    /**
+     * Builds the HttpRequest for the model
+     * @param model: The data model to send ( e.g. EmailMessage )
+     */
+    override fun build(msg: EmailMessage): Outcome<Request> {
         // Parameters
         val bodyArg = if (msg.html) "html" else "text"
         val request = HttpRPC().build(
@@ -58,13 +72,5 @@ class EmailServiceSendGrid(
                 )
         ))
         return Success(request)
-    }
-
-    override fun send(msg: EmailMessage): Notice<Boolean> {
-        return build(msg).then {
-            val response = HttpRPC().call(it)
-            val result = response.fold({ Success(true) }, { Failure(it.message ?: "") })
-            result
-        }
     }
 }
