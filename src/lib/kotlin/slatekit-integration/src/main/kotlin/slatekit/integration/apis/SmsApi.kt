@@ -22,6 +22,7 @@ import slatekit.apis.support.ApiWithSupport
 import slatekit.common.Context
 import slatekit.common.Vars
 import slatekit.core.sms.SmsService
+import slatekit.results.Outcome
 import slatekit.results.Try
 
 @Api(area = "cloud", name = "sms", desc = "api to send sms",
@@ -34,8 +35,8 @@ class SmsApi(val svc: SmsService, override val context: Context) : ApiWithSuppor
      * @param phone : destination phone
      */
     @ApiAction(desc = "send an sms")
-    fun send(message: String, countryCode: String, phone: String): Try<Boolean> {
-        return this.svc.send(message, countryCode, phone).toTry()
+    fun send(message: String, countryCode: String, phone: String): Outcome<Boolean> {
+        return this.svc.send(message, countryCode, phone).map { true }
     }
 
     /**
@@ -47,7 +48,7 @@ class SmsApi(val svc: SmsService, override val context: Context) : ApiWithSuppor
      *                      will be automatically added into this collection )
      */
     @ApiAction(desc = "send an sms using a template")
-    fun sendUsingTemplate(name: String, countryCode: String, phone: String, vars: Vars): Try<Boolean> {
-        return this.svc.sendUsingTemplate(name, countryCode, phone, vars).toTry()
+    fun sendUsingTemplate(name: String, countryCode: String, phone: String, vars: Vars): Outcome<Boolean> {
+        return this.svc.sendUsingTemplate(name, countryCode, phone, vars).map { true }
     }
 }

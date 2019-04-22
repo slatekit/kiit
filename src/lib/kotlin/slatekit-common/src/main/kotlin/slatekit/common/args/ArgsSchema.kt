@@ -127,15 +127,6 @@ class ArgsSchema(val items: List<Arg> = listOf()) {
         return ArgsSchema(newList)
     }
 
-    fun validate(args: Args): Notice<Boolean> {
-        val missing = items.filter { arg -> arg.isRequired && !args.containsKey(arg.name) }
-        return if (missing.isNotEmpty()) {
-            Failure("invalid arguments supplied: Missing : " + missing.first().name)
-        } else {
-            slatekit.results.Success(true)
-        }
-    }
-
     /**
      * whether or not the argument supplied is missing
      *
@@ -164,4 +155,47 @@ class ArgsSchema(val items: List<Arg> = listOf()) {
      * @return
      */
     private fun maxLengthOfName(): Int = if (items.isEmpty()) 0 else items.maxBy { it.name.length }?.name?.length ?: 0
+
+
+    companion object {
+
+
+        /**
+         * Transforms the arguments which may have aliases into their canonical names
+         * @param schema: The argument schema to transform aliases against
+         * @param args  : The parsed arguments
+         */
+        @JvmStatic fun transform(schema: ArgsSchema, args: Args): Args {
+            val canonical = args.named.toMutableMap()
+            val aliased = schema.items.filter { !it.alias.isNullOrBlank() }
+            if(aliased.isEmpty()) {
+                return args
+            }
+            aliased.forEach { arg ->
+                if(canonical.containsKey(arg.alias)){
+                    val value = canonical.get(arg.alias)
+                    if(value != null){
+                        canonical.remove(arg.alias)
+                        canonical[arg.name] = value
+                    }
+                }
+            }
+            val finalArgs = args.copy(namedArgs = canonical)
+            return finalArgs
+        }
+
+        /**
+         * Validates the arguments against this schema
+         * @param schema: The argument schema to validate against
+         * @param args  : The parsed arguments
+         */
+        @JvmStatic fun validate(schema: ArgsSchema, args: Args): Notice<Boolean> {
+            val missing = schema.items.filter { arg -> arg.isRequired && !args.containsKey(arg.name) }
+            return if (missing.isNotEmpty()) {
+                Failure("invalid arguments supplied: Missing : " + missing.first().name)
+            } else {
+                slatekit.results.Success(true)
+            }
+        }
+    }
 }
