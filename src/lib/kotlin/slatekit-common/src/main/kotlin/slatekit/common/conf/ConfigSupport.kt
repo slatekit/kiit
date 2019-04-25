@@ -114,23 +114,23 @@ interface ConfigSupport {
             } ?: DbCon.empty
 }
 
-fun <T> ConfigSupport.mapTo(key: String, mapper: (Conf) -> T): T? =
+fun <T> ConfigSupport.mapTo(key: String, mapper: (Conf) -> T): T? {
 
-        // Section not present!
-        if (config().containsKey(key)) {
-            // Location specified ?
-            val locationKey = key + ".location"
-            if (config().containsKey(locationKey)) {
+    // Reference to file location.
+    // e.g. db.location = "user://blend.life/conf/db.conf"
+    val locationKey = "$key.location"
 
-                // 1. "@{resource}/sms.conf"
-                // 2. "@{company.dir}/sms.conf"
-                // 3. "@{app.dir}/sms.conf"
-                // 3. "/conf/sms.conf"
-                val location = config().getString(locationKey)
-                val conf: Conf? = config().loadFrom(location)
-                conf?.let { c -> mapper(c) }
-            } else
-                mapper(config())
-        } else
-            null
+    // Section not present!
+    return if (config().containsKey(locationKey)) {
 
+            // 1. "@{resource}/sms.conf"
+            // 2. "@{company.dir}/sms.conf"
+            // 3. "@{app.dir}/sms.conf"
+            // 3. "/conf/sms.conf"
+            val location = config().getString(locationKey)
+            val conf: Conf? = config().loadFrom(location)
+            conf?.let { c -> mapper(c) }
+        } else {
+        mapper(config())
+    }
+}
