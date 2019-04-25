@@ -13,10 +13,12 @@
 
 package slatekit.meta.models
 
+import slatekit.common.Field
 import slatekit.common.naming.Namer
 import slatekit.meta.KTypes
 import slatekit.meta.Reflector
 import kotlin.reflect.*
+import kotlin.reflect.jvm.jvmErasure
 
 data class ModelField(
         @JvmField val name: String,
@@ -158,6 +160,63 @@ data class ModelField(
                 null -> namer?.rename(name) ?: name
                 else -> destName
             }
+        }
+
+
+
+
+        @JvmStatic
+        fun ofId(prop:KProperty<*>, rawName:String, namer:Namer?):ModelField {
+            val name = if (rawName.isNullOrEmpty()) prop.name else rawName
+            val fieldKType = prop.returnType
+            val fieldType = ModelUtils.fieldType(prop)
+            val fieldCls = fieldKType.jvmErasure
+            val optional = fieldKType.isMarkedNullable
+            val field = ModelField.build(
+                    prop = prop, name = name,
+                    dataType = fieldCls,
+                    dataFieldType = fieldType,
+                    isRequired = !optional,
+                    isIndexed = false,
+                    isUnique = false,
+                    isUpdatable = false,
+                    cat = ModelFieldCategory.Id,
+                    namer = namer
+            )
+            return field
+        }
+
+
+        @JvmStatic
+        fun ofData(prop:KProperty<*>, anno: Field, namer:Namer?, checkForId:Boolean, idFieldName:String?):ModelField {
+            val name = if (anno.name.isNullOrEmpty()) prop.name else anno.name
+            val cat = idFieldName?.let {
+                if(it == name)
+                    ModelFieldCategory.Id
+                else
+                    ModelFieldCategory.Data
+            } ?: ModelFieldCategory.Data
+
+            val required = anno.required
+            val length = anno.length
+            val encrypt = anno.encrypt
+            val fieldKType = prop.returnType
+            val fieldType = ModelUtils.fieldType(prop)
+            val fieldCls = fieldKType.jvmErasure
+            val field = ModelField.build(
+                    prop = prop, name = name,
+                    dataType = fieldCls,
+                    dataFieldType = fieldType,
+                    isRequired = required,
+                    isIndexed = anno.indexed,
+                    isUnique = anno.unique,
+                    isUpdatable = anno.updatable,
+                    maxLength = length,
+                    encrypt = encrypt,
+                    cat = cat,
+                    namer = namer
+            )
+            return field
         }
     }
 }

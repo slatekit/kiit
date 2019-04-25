@@ -95,10 +95,11 @@ class ModelTests {
     }
 
 
-    fun ensureAuthorModel(model: Model):Unit {
+    private fun ensureAuthorModel(model: Model) {
 
         Assert.assertTrue(model.hasId)
         Assert.assertTrue(model.any)
+        Assert.assertTrue(model.idField!!.name == "id")
         ensureField(model, "id"        , true, Long::class     )
         ensureField(model, "createdAt" , true, DateTime::class )
         ensureField(model, "createdBy" , true, Long::class     )
@@ -114,7 +115,7 @@ class ModelTests {
     }
 
 
-    fun loadSchemaSpecification(): Model {
+    private fun loadSchemaSpecification(): Model {
         val model = Model(AuthorR::class)
                 .addId( AuthorR::id, true)
                 .add( AuthorR::createdAt )

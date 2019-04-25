@@ -2,14 +2,15 @@ package test.setup
 
 import slatekit.common.DateTime
 import slatekit.common.Field
+import slatekit.common.Id
 import slatekit.common.Random
 import slatekit.common.ids.UniqueId
 import slatekit.entities.EntityWithId
 import java.util.*
 
 data class AuthorR(
-        @property:Field(required = true)
-        override val id: Long             = 0,
+        @property:Id(generated = true)
+        override val id: Long = 0,
 
         @property:Field(required = true)
         val uuid: String            = Random.uuid(),
