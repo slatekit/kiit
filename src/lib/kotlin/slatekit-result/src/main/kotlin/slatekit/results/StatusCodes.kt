@@ -20,7 +20,7 @@ import slatekit.results.Status.Denied
 import slatekit.results.Status.Invalid
 import slatekit.results.Status.Ignored
 import slatekit.results.Status.Errored
-import slatekit.results.Status.Unhandled
+import slatekit.results.Status.Unexpected
 
 /**
  * Default set of status and error codes available from this library
@@ -40,43 +40,43 @@ import slatekit.results.Status.Unhandled
 object StatusCodes {
 
     // Success: 200000 + range
-    @JvmField val SUCCESS         = Succeeded(200001, "Success")
-    @JvmField val CREATED         = Succeeded(200002, "Created")
-    @JvmField val UPDATED         = Succeeded(200003, "Updated")
-    @JvmField val FETCHED         = Succeeded(200004, "Fetched")
-    @JvmField val PATCHED         = Succeeded(200005, "Patched")         // E.g. Update a small subset of info
-    @JvmField val DELETED         = Succeeded(200006, "Deleted")
-    @JvmField val HANDLED         = Succeeded(200007, "Handled")         // E.g. A silent ok ( similar to http 204 )
-    @JvmField val PENDING         = Pending  (200008, "Pending")
-    @JvmField val QUEUED          = Pending  (200009, "Queued" )
-    @JvmField val CONFIRM         = Pending  (200010, "Confirm")
+    @JvmField val SUCCESS         = Succeeded (200001, "Success")
+    @JvmField val CREATED         = Succeeded (200002, "Created")
+    @JvmField val UPDATED         = Succeeded (200003, "Updated")
+    @JvmField val FETCHED         = Succeeded (200004, "Fetched")
+    @JvmField val PATCHED         = Succeeded (200005, "Patched")         // E.g. Update a small subset of info
+    @JvmField val DELETED         = Succeeded (200006, "Deleted")
+    @JvmField val HANDLED         = Succeeded (200007, "Handled")         // E.g. A silent ok ( similar to http 204 )
+    @JvmField val PENDING         = Pending   (200008, "Pending")
+    @JvmField val QUEUED          = Pending   (200009, "Queued" )
+    @JvmField val CONFIRM         = Pending   (200010, "Confirm")
 
     // Invalid: 400000 + range
-    @JvmField val IGNORED         = Ignored  (400001, "Ignored")         // E.g. Ignored, not exactly an error
-    @JvmField val BAD_REQUEST     = Invalid  (400002, "Bad Request")     // E.g. Invalid JSON
-    @JvmField val INVALID         = Invalid  (400003, "Invalid")         // E.g. Valid   JSON but invalid values
-    @JvmField val DENIED          = Denied   (400004, "Denied")          // Presumes a checked condition
-    @JvmField val UNSUPPORTED     = Denied   (400005, "Not supported")   // Presumes a checked condition
-    @JvmField val UNIMPLEMENTED   = Denied   (400006, "Not implemented") // Presumes a checked condition
-    @JvmField val UNAVAILABLE     = Denied   (400007, "Not available")   // Presumes a checked condition
-    @JvmField val UNAUTHENTICATED = Denied   (400008, "Unauthenticated") // Presumes a checked condition
-    @JvmField val UNAUTHORIZED    = Denied   (400009, "Unauthorized")    // Presumes a checked condition
+    @JvmField val IGNORED         = Ignored   (400001, "Ignored")         // E.g. Ignored, not exactly an error
+    @JvmField val BAD_REQUEST     = Invalid   (400002, "Bad Request")     // E.g. Invalid JSON
+    @JvmField val INVALID         = Invalid   (400003, "Invalid")         // E.g. Valid   JSON but invalid values
+    @JvmField val DENIED          = Denied    (400004, "Denied")          // Presumes a checked condition
+    @JvmField val UNSUPPORTED     = Denied    (400005, "Not supported")   // Presumes a checked condition
+    @JvmField val UNIMPLEMENTED   = Denied    (400006, "Not implemented") // Presumes a checked condition
+    @JvmField val UNAVAILABLE     = Denied    (400007, "Not available")   // Presumes a checked condition
+    @JvmField val UNAUTHENTICATED = Denied    (400008, "Unauthenticated") // Presumes a checked condition
+    @JvmField val UNAUTHORIZED    = Denied    (400009, "Unauthorized")    // Presumes a checked condition
 
     // Errors: 500000 + range
-    @JvmField val NOT_FOUND       = Errored  (500001, "Not found")       // E.g. Resource/End point not found
-    @JvmField val MISSING         = Errored  (500002, "Missing item")    // E.g. Domain model not found
-    @JvmField val FORBIDDEN       = Errored  (500003, "Forbidden")
-    @JvmField val CONFLICT        = Errored  (500004, "Conflict")
-    @JvmField val DEPRECATED      = Errored  (500005, "Deprecated")
-    @JvmField val TIMEOUT         = Errored  (500006, "Timeout")
-    @JvmField val ERRORED         = Errored  (500007, "Errored")         // General purpose use
-    @JvmField val UNEXPECTED      = Unhandled(500008, "Unexpected")
+    @JvmField val NOT_FOUND       = Errored   (500001, "Not found")       // E.g. Resource/End point not found
+    @JvmField val MISSING         = Errored   (500002, "Missing item")    // E.g. Domain model not found
+    @JvmField val FORBIDDEN       = Errored   (500003, "Forbidden")
+    @JvmField val CONFLICT        = Errored   (500004, "Conflict")
+    @JvmField val DEPRECATED      = Errored   (500005, "Deprecated")
+    @JvmField val TIMEOUT         = Errored   (500006, "Timeout")
+    @JvmField val ERRORED         = Errored   (500007, "Errored")         // General purpose use
+    @JvmField val UNEXPECTED      = Unexpected(500008, "Unexpected")
 
     // Success ( Interactive / Metadata )
-    @JvmField val EXIT            = Succeeded(600001, "Exiting")
-    @JvmField val HELP            = Succeeded(600002, "Help")
-    @JvmField val ABOUT           = Succeeded(600003, "About")
-    @JvmField val VERSION         = Succeeded(600004, "Version")
+    @JvmField val EXIT            = Succeeded (600001, "Exiting")
+    @JvmField val HELP            = Succeeded (600002, "Help")
+    @JvmField val ABOUT           = Succeeded (600003, "About")
+    @JvmField val VERSION         = Succeeded (600004, "Version")
 
 
     private val mappings = listOf(
@@ -107,6 +107,7 @@ object StatusCodes {
             // Errors
             Triple(MISSING.code          , MISSING          , 400),
             Triple(NOT_FOUND.code        , NOT_FOUND        , 404),
+            Triple(DENIED.code           , DENIED           , 401),
             Triple(UNAUTHENTICATED.code  , UNAUTHENTICATED  , 401),
             Triple(UNAUTHORIZED.code     , UNAUTHORIZED     , 401),
             Triple(FORBIDDEN.code        , FORBIDDEN        , 403),
@@ -129,7 +130,10 @@ object StatusCodes {
     @JvmStatic fun toHttp(status: Status):Pair<Int, Status> {
         val exists = lookupHttp.containsKey(status.code)
         return when(exists){
-            true -> Pair(lookupHttp[status.code]?.third ?: 400, status)
+            true -> {
+                val httpCode = lookupHttp[status.code]
+                Pair(httpCode?.third ?: 400, status)
+            }
             else -> when(status) {
                 is HttpCode -> Pair((status as HttpCode).toHttpCode(), status as Status)
                 else        -> Pair(status.code, status)

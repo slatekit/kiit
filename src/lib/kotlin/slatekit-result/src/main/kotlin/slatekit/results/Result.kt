@@ -264,16 +264,17 @@ sealed class Result<out T, out E> {
     fun toOutcome(retainStatus: Boolean = true): Outcome<T> = when (this) {
         is Success -> this
         is Failure -> {
-            val newError = Result.error(error)
-            if (retainStatus) {
-                Failure(newError, status)
-            } else {
-                when (newError) {
-                    is Status -> Failure(newError, newError)
-                    else -> Failure(newError, status)
-                }
+            val err =  when (this.error) {
+                null -> Err.of(StatusCodes.UNEXPECTED.msg)
+                is Err -> error
+                is String -> Err.of(error)
+                is Exception -> Err.of(error)
+                else -> ErrorWithObject(error.toString(), error)
             }
-            this as Failure<Err>
+            when(retainStatus){
+                false -> Failure(err)
+                true -> Failure(err, this.status)
+            }
         }
     }
 
@@ -293,9 +294,9 @@ sealed class Result<out T, out E> {
         is Failure -> {
             when (this.error) {
                 is Exception -> this as Try<T>
-                is Err -> Failure(Exception(this.error.toString()), this.status)
-                null -> Failure(Exception(this.status.msg), this.status)
-                else -> Failure(Exception(this.error.toString()), this.status)
+                is Err -> Failure(ExceptionWithErr(this.error.toString(), this.error), this.status)
+                null   -> Failure(Exception(this.status.msg), this.status)
+                else   -> Failure(Exception(this.error.toString()), this.status)
             }
         }
     }
@@ -311,11 +312,48 @@ sealed class Result<out T, out E> {
 
 
         /**
-         * Build a Try<T> ( type alias ) for Result<T,Exception> using the supplied function
+         * Build a Try<T> ( Result<T,Exception> ) using the supplied callback.
+         * This allows for using throw [Exception] to build the Try
+         * by getting the appropriate status code out of the defined exception
          */
         @JvmStatic
-        inline fun <T> attempt(f: () -> T): Try<T> = build(f, { e -> e })
+        inline fun <T> attempt(f: () -> T): Try<T> = attemptWithStatus {
+            val data = f()
+            Success(data)
+        }
 
+        /**
+         * Build a Try<T> ( Result<T,Exception> ) using the supplied callback.
+         * This allows for using throw [Exception] to build the Try
+         * by getting the appropriate status code out of the defined exception
+         */
+        @JvmStatic
+        inline fun <T> attemptWithStatus(f: () -> Success<T>): Try<T> =
+                try {
+                    val data = f()
+                    data
+                } catch (e: DeniedException) {
+                    Failure(e, build(e.msg, e.status, StatusCodes.DENIED))
+                } catch (e: IgnoredException) {
+                    Failure(e, build(e.msg, e.status, StatusCodes.IGNORED))
+                } catch (e: InvalidException) {
+                    Failure(e, build(e.msg, e.status, StatusCodes.INVALID))
+                } catch (e: ErroredException) {
+                    Failure(e, build(e.msg, e.status, StatusCodes.ERRORED))
+                } catch (e: UnexpectedException) {
+                    // Theoretically, anything outside of Denied/Ignored/Invalid/Errored
+                    // is an unexpected expection ( even a normal [Exception].
+                    // However, this is here for completeness ( to have exceptions
+                    // that correspond to the various [Status] groups), and to cover the
+                    // case when someone wants to explicitly use an UnhandledException
+                    // or Status group/code
+                    Failure(e, build(e.message, null, StatusCodes.UNEXPECTED))
+                } catch (e: Exception) {
+                    when(e) {
+                        is StatusException -> Failure(e, build(e.msg, e.status, StatusCodes.UNEXPECTED))
+                        else -> Failure(e, build(e.message, null, StatusCodes.UNEXPECTED))
+                    }
+                }
 
         /**
          * Build a Notice<T> ( type alias ) for Result<T,String> using the supplied function
@@ -357,6 +395,18 @@ sealed class Result<out T, out E> {
             if (code == status.code && msg == null) return status
             if (code == status.code && msg == status.msg) return status
             return status.copyAll(msg ?: status.msg, code ?: status.code)
+        }
+
+
+        @JvmStatic
+        fun build(msg: String?, rawStatus:Status?, status: Status): Status {
+            // NOTE: There is small optimization here to avoid creating a new instance
+            // of [Status] if the msg/code are empty and or they are the same as Success.
+            if(msg == null && rawStatus == null) return status
+            if(msg == null && rawStatus != null) return rawStatus
+            if(msg != null && rawStatus == null) return status.copyMsg(msg)
+            if(msg != null && rawStatus != null) return rawStatus.copyMsg(msg)
+            return status
         }
     }
 }
