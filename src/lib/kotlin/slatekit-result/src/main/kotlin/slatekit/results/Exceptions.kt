@@ -11,8 +11,29 @@ package slatekit.results
  *   data class Errored
  */
 //data class PendingException(val msg:String?, val status:Status? = null, val origin:Throwable? = null) : Exception(msg, origin)
-data class DeniedException (val msg:String?, val status:Status? = null, val origin:Throwable? = null) : Exception(msg, origin)
-data class IgnoredException(val msg:String?, val status:Status? = null, val origin:Throwable? = null) : Exception(msg, origin)
-data class InvalidException(val msg:String?, val status:Status? = null, val origin:Throwable? = null) : Exception(msg, origin)
-data class ErroredException(val msg:String?, val status:Status? = null, val origin:Throwable? = null) : Exception(msg, origin)
-data class UnexpectedException(val msg:String?, val status:Status? = null, val origin:Throwable? = null) : Exception(msg, origin)
+interface StatusException {
+    val msg:String?
+    val status:Status?
+    val origin:Throwable?
+}
+
+
+data class DeniedException (override val msg:String?,
+                            override val status:Status? = null,
+                            override val origin:Throwable? = null) : Exception(msg, origin), StatusException
+
+data class IgnoredException(override val msg:String?,
+                            override val status:Status? = null,
+                            override val origin:Throwable? = null) : Exception(msg, origin), StatusException
+
+data class InvalidException(override val msg:String?,
+                            override val status:Status? = null,
+                            override val origin:Throwable? = null) : Exception(msg, origin), StatusException
+
+data class ErroredException(override val msg:String?,
+                            override val status:Status? = null,
+                            override val origin:Throwable? = null) : Exception(msg, origin), StatusException
+
+data class UnexpectedException(override val msg:String?,
+                               override val status:Status? = null,
+                               override val origin:Throwable? = null) : Exception(msg, origin), StatusException

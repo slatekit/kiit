@@ -264,16 +264,17 @@ sealed class Result<out T, out E> {
     fun toOutcome(retainStatus: Boolean = true): Outcome<T> = when (this) {
         is Success -> this
         is Failure -> {
-            val newError = Result.error(error)
-            if (retainStatus) {
-                Failure(newError, status)
-            } else {
-                when (newError) {
-                    is Status -> Failure(newError, newError)
-                    else -> Failure(newError, status)
-                }
+            val err =  when (this.error) {
+                null -> Err.of(StatusCodes.UNEXPECTED.msg)
+                is Err -> error
+                is String -> Err.of(error)
+                is Exception -> Err.of(error)
+                else -> ErrorWithObject(error.toString(), error)
             }
-            this as Failure<Err>
+            when(retainStatus){
+                false -> Failure(err)
+                true -> Failure(err, this.status)
+            }
         }
     }
 
@@ -293,9 +294,9 @@ sealed class Result<out T, out E> {
         is Failure -> {
             when (this.error) {
                 is Exception -> this as Try<T>
-                is Err -> Failure(Exception(this.error.toString()), this.status)
-                null -> Failure(Exception(this.status.msg), this.status)
-                else -> Failure(Exception(this.error.toString()), this.status)
+                is Err -> Failure(ExceptionWithErr(this.error.toString(), this.error), this.status)
+                null   -> Failure(Exception(this.status.msg), this.status)
+                else   -> Failure(Exception(this.error.toString()), this.status)
             }
         }
     }
@@ -348,7 +349,10 @@ sealed class Result<out T, out E> {
                     // or Status group/code
                     Failure(e, build(e.message, null, StatusCodes.UNEXPECTED))
                 } catch (e: Exception) {
-                    Failure(e, build(e.message, null, StatusCodes.UNEXPECTED))
+                    when(e) {
+                        is StatusException -> Failure(e, build(e.msg, e.status, StatusCodes.UNEXPECTED))
+                        else -> Failure(e, build(e.message, null, StatusCodes.UNEXPECTED))
+                    }
                 }
 
         /**

@@ -107,6 +107,7 @@ object StatusCodes {
             // Errors
             Triple(MISSING.code          , MISSING          , 400),
             Triple(NOT_FOUND.code        , NOT_FOUND        , 404),
+            Triple(DENIED.code           , DENIED           , 401),
             Triple(UNAUTHENTICATED.code  , UNAUTHENTICATED  , 401),
             Triple(UNAUTHORIZED.code     , UNAUTHORIZED     , 401),
             Triple(FORBIDDEN.code        , FORBIDDEN        , 403),
@@ -129,7 +130,10 @@ object StatusCodes {
     @JvmStatic fun toHttp(status: Status):Pair<Int, Status> {
         val exists = lookupHttp.containsKey(status.code)
         return when(exists){
-            true -> Pair(lookupHttp[status.code]?.third ?: 400, status)
+            true -> {
+                val httpCode = lookupHttp[status.code]
+                Pair(httpCode?.third ?: 400, status)
+            }
             else -> when(status) {
                 is HttpCode -> Pair((status as HttpCode).toHttpCode(), status as Status)
                 else        -> Pair(status.code, status)

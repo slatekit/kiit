@@ -6,22 +6,6 @@ import slatekit.results.builders.*
 import java.util.concurrent.atomic.AtomicLong
 
 
-fun main(args: Array<String>) {
-    val svc = UserService(UserRepo())
-    val api = UserApi(svc)
-
-    // Call register
-    val httpResponse1 = api.register("spiderman", "spiderman@marvel.com")
-    println("http response code: ${httpResponse1.code}, content: ${httpResponse1.content}")
-
-    // Call update name
-    val httpResponse2 = api.updateName(1, "ironman")
-    println("http response code: ${httpResponse2.code}, content: ${httpResponse2.content}")
-
-    println("done")
-}
-
-
 // Simple User model and registration status for sample purposes
 enum class UserStatus(val value: Int) {
     Pending(0),
@@ -44,7 +28,7 @@ data class UserError(val msg: String) : Err
 // 1. Kotlin Ktor
 // 2. Java Spark
 // 3. Java Jersey
-data class HttpResponse(val code: Int, val content: Any)
+data class HttpResponse(val code: Int, val msg:String, val value: Any)
 
 
 // Extension method on Result<T,E> to convert to compatible HttpResponse
@@ -57,7 +41,7 @@ fun <T, E> Result<T, E>.toHttpResponse(): HttpResponse {
         is Success -> this.value.toString()
         is Failure -> this.error.toString()
     }
-    return HttpResponse(code, content)
+    return HttpResponse(code, this.status.msg, content)
 }
 
 
@@ -82,8 +66,8 @@ class UserApi(private val service: UserService) {
     }
 
 
-    fun updateName(id: Long, name: String): HttpResponse {
-        return service.updateName(id, name).toHttpResponse()
+    fun activate(id: Long): HttpResponse {
+        return service.activate(id).toHttpResponse()
     }
 }
 
@@ -98,7 +82,9 @@ class UserService(private val repo: UserRepo) {
      * This highlights different ways of building accurate failures
      */
     fun register(user: User): Result<User, Err> {
-        return registerWithErrorType(user)
+        val exResult = registerWithExceptions(user)
+        val erResult = exResult.toOutcome()
+        return erResult
     }
 
 
@@ -231,18 +217,22 @@ class UserService(private val repo: UserRepo) {
     /**
      * Use the Outcome<T> alias for Result<T,Err>
      */
-    fun updateName(id: Long, name: String): Outcome<User> {
+    fun activate(id: Long): Outcome<User> {
 
         val user = repo.getById(id)
         if (user == null)
             return Outcomes.invalid("User with id : $id not found")
+
+        // Ensure currently in pending state
+        if (user.status != UserStatus.Pending)
+            return Outcomes.invalid("Not in pending activation state")
 
         // Sample rule: prevent name update via API if justice league.
         // Could also return errored(StatusCodes.UNAUTHORIZED)
         if (user.email.toLowerCase().contains("@justice-league.com"))
             return Outcomes.denied()
 
-        repo.update(user.copy(userName = name))
+        repo.update(user.copy(status = UserStatus.Active))
         // or success(userWithId) where status code = SUCCESS
         return Outcomes.success(user, StatusCodes.UPDATED)
     }
@@ -269,7 +259,7 @@ class UserRepo {
 
     fun create(user: User): User {
         val id = nextId.incrementAndGet()
-        val userWithId = user.copy(id = id)
+        val userWithId = user.copy(id = id, status = UserStatus.Pending)
         users.add(userWithId)
         return userWithId
     }
