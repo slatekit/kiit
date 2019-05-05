@@ -1,9 +1,6 @@
 package samples
 
 import slatekit.results.*
-import slatekit.results.builders.Results.denied
-import slatekit.results.builders.Results.invalid
-import slatekit.results.builders.Results.success
 import slatekit.results.StatusCodes
 import slatekit.results.builders.*
 import java.util.concurrent.atomic.AtomicLong
@@ -238,16 +235,16 @@ class UserService(private val repo: UserRepo) {
 
         val user = repo.getById(id)
         if (user == null)
-            return invalid("User with id : $id not found")
+            return Outcomes.invalid("User with id : $id not found")
 
         // Sample rule: prevent name update via API if justice league.
         // Could also return errored(StatusCodes.UNAUTHORIZED)
         if (user.email.toLowerCase().contains("@justice-league.com"))
-            return denied()
+            return Outcomes.denied()
 
         repo.update(user.copy(userName = name))
         // or success(userWithId) where status code = SUCCESS
-        return success(user, StatusCodes.UPDATED)
+        return Outcomes.success(user, StatusCodes.UPDATED)
     }
 }
 
