@@ -1,6 +1,7 @@
 package test.setup
 
 import slatekit.common.Field
+import slatekit.common.Id
 import slatekit.common.ids.UniqueId
 import slatekit.entities.EntityWithId
 import java.util.*
@@ -33,7 +34,7 @@ data class Address(
 
 
 data class UserWithAddress(
-        @property:Field(required = true)
+        @property:Id(generated = true)
         override val id: Long             = 0,
 
         @property:Field(required = true)

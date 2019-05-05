@@ -21,6 +21,7 @@ import slatekit.meta.Reflector
 import slatekit.common.Record
 import slatekit.meta.KTypes
 import kotlin.reflect.KClass
+import kotlin.reflect.KProperty
 import kotlin.reflect.jvm.jvmErasure
 
 /**
@@ -119,47 +120,29 @@ open class ModelMapper(
             val modelName = dataType.simpleName ?: ""
             val modelNameFull = dataType.qualifiedName ?: ""
 
+            // Get Id
+            val idFields = Reflector.getAnnotatedProps<Id>(dataType, Id::class)
+            val idField = idFields.firstOrNull()
+
             // Now add all the fields.
             val matchedFields = Reflector.getAnnotatedProps<Field>(dataType, Field::class)
-            // val fields = mutableListOf<ModelField>()
 
             // Loop through each field
-            val catData = ModelFieldCategory.Data
-            val catId = ModelFieldCategory.Id
             val withAnnos = matchedFields.filter { it.second != null }
             val fields = withAnnos.map { matchedField ->
-                val anno = matchedField.second!!
-                val name = if (anno.name.isNullOrEmpty()) matchedField.first.name else anno.name
-                val cat = idFieldName?.let { if(it == name) catId else catData } ?: catData
-                val required = anno.required
-                val length = anno.length
-                val encrypt = anno.encrypt
-                val prop = matchedField.first
-                val fieldKType = matchedField.first.returnType
-                val fieldType = ModelUtils.fieldType(prop)
-                val fieldCls = fieldKType.jvmErasure
-                val modelField = ModelField.build(
-                        prop = prop, name = name,
-                        dataType = fieldCls,
-                        dataFieldType = fieldType,
-                        isRequired = required,
-                        isIndexed = anno.indexed,
-                        isUnique = anno.unique,
-                        isUpdatable = anno.updatable,
-                        maxLength = length,
-                        encrypt = encrypt,
-                        cat = cat,
-                        namer = namer
-                )
-
+                val modelField = ModelField.ofData(matchedField.first, matchedField.second!!,
+                        namer, idField == null, idFieldName)
                 val finalModelField = if (!modelField.isBasicType()) {
                     val model = loadSchema(modelField.dataCls, namer = namer)
                     modelField.copy(model = model)
                 } else modelField
                 finalModelField
             }
-
-            return Model(modelName, modelNameFull, dataType, modelFields = fields, namer = namer, tableName = table ?: "")
+            val allFields = when(idField) {
+                null -> fields
+                else -> mutableListOf(ModelField.ofId(idField.first, "", namer)).plus(fields)
+            }
+            return Model(modelName, modelNameFull, dataType, modelFields = allFields, namer = namer, tableName = table ?: "")
         }
     }
 

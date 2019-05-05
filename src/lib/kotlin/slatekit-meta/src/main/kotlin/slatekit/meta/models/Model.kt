@@ -53,7 +53,7 @@ class Model(
     /**
      * The field that represents the id
      */
-    val idField: ModelField? get() = fields.find { p -> p.category == ModelFieldCategory.Id }
+    val idField: ModelField? = fields.find { p -> p.category == ModelFieldCategory.Id }
 
     /**
      * whether there are any fields in the model

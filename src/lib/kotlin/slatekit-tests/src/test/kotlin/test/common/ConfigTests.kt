@@ -99,6 +99,16 @@ class ConfigTests {
     }
 
 
+//    @Test fun test_model_db_con2() {
+//        val conf  = Config(ConfFuncs.CONFIG_DEFAULT_PROPERTIES)
+//        val con = conf.dbCon("db")
+//        Assert.assertTrue(con.driver == "mysql")
+//        Assert.assertTrue(con.url == "localhost")
+//        Assert.assertTrue(con.user == "root")
+//        Assert.assertTrue(con.password == "12345678")
+//    }
+
+
     @Test fun test_model_movie() {
         val conf  = Config(ConfFuncs.CONFIG_DEFAULT_PROPERTIES)
         val movie = conf.map<Movie>("movie", Movie::class, null)!!
