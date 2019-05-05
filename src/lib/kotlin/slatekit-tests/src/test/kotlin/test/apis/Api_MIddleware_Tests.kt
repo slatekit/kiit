@@ -26,6 +26,7 @@ import slatekit.common.CommonRequest
 import slatekit.results.Failure
 import slatekit.results.StatusCodes
 import slatekit.results.Try
+import slatekit.results.builders.Outcomes
 import slatekit.results.builders.Results
 import slatekit.results.getOrElse
 import test.setup.SampleErrorsApi
@@ -48,7 +49,7 @@ class Api_Middleware_Tests : ApiTestsBase() {
                 request  = CommonRequest.path("app.sampleErrors.parseNumberWithExceptions", "get", mapOf(), mapOf(
                         "text" to number
                 )),
-                response = Results.unexpected<Any>(Exception("unexpected error in api")).toResponse()
+                response = Outcomes.unexpected<Any>(Exception("unexpected error in api")).toResponse()
         )
     }
 
@@ -69,7 +70,7 @@ class Api_Middleware_Tests : ApiTestsBase() {
                 request  = CommonRequest.path("app.sampleErrors.parseNumberWithExceptions", "get", mapOf(), mapOf(
                         "text" to number
                 )),
-                response = Results.unexpected<Any>(Exception("global middleware error handler")).toResponse()
+                response = Outcomes.unexpected<Any>(Exception("global middleware error handler")).toResponse()
         )
     }
 
@@ -83,7 +84,7 @@ class Api_Middleware_Tests : ApiTestsBase() {
                 request  = CommonRequest.path("app.sampleErrors.parseNumberWithExceptions", "get", mapOf(), mapOf(
                         "text" to number
                 )),
-                response = Results.unexpected<Any>(Exception("error executing : app.sampleErrors.parseNumberWithExceptions, check inputs")).toResponse()
+                response = Outcomes.unexpected<Any>(Exception("error executing : app.sampleErrors.parseNumberWithExceptions, check inputs")).toResponse()
         )
     }
 

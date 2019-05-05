@@ -1,9 +1,10 @@
 
 import org.junit.Test
 import slatekit.results.*
-import slatekit.results.builders.ResultBuilder
 import slatekit.results.builders.Results
 import slatekit.results.StatusCodes
+import slatekit.results.builders.OutcomeBuilder
+import slatekit.results.builders.Outcomes
 
 /**
  * These tests the building/construction of the Result model in simple/advance cases
@@ -12,7 +13,7 @@ import slatekit.results.StatusCodes
  * 3. with code
  * 4. with code + message ( TODO )
  */
-class ResultBuilderTests : ResultTestSupport, ResultBuilder {
+class ResultBuilderTests : ResultTestSupport, OutcomeBuilder {
 
     @Test
     fun can_build_successes() {
@@ -79,9 +80,9 @@ class ResultBuilderTests : ResultTestSupport, ResultBuilder {
     @Test
     fun can_build_unexpected() {
         val status = StatusCodes.UNEXPECTED
-        ensureFailure(Results.unexpected<Int>(), status, expectedError = status.msg)
-        ensureFailure(Results.unexpected<Int>("unexpected-x"), status, expectedError = "unexpected-x")
-        ensureFailure(Results.unexpected<Int>(Exception("unexpected-x")), status, expectedError = "unexpected-x")
-        ensureFailure(Results.unexpected<Int>(Err.of("unexpected-x")), status, expectedError = "unexpected-x")
+        ensureFailure(Outcomes.unexpected<Int>(), status, expectedError = status.msg)
+        ensureFailure(Outcomes.unexpected<Int>("unexpected-x"), status, expectedError = "unexpected-x")
+        ensureFailure(Outcomes.unexpected<Int>(Exception("unexpected-x")), status, expectedError = "unexpected-x")
+        ensureFailure(Outcomes.unexpected<Int>(Err.of("unexpected-x")), status, expectedError = "unexpected-x")
     }
 }
