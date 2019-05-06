@@ -5,9 +5,11 @@ import slatekit.common.encrypt.Encryptor
 import slatekit.common.db.DbType.*
 import slatekit.common.naming.Namer
 import slatekit.common.db.DbType
+import slatekit.db.Db
 import slatekit.entities.Entity
 import slatekit.entities.core.EntityBuilder
 import slatekit.entities.EntityRepo
+import slatekit.entities.core.buildTableName
 import slatekit.entities.repos.EntityRepoInMemory
 import slatekit.orm.core.SqlBuilder
 import slatekit.orm.databases.vendors.*
@@ -42,7 +44,7 @@ class OrmBuilder(dbCreator: (DbCon) -> IDb,
 
 
     /**
-     * Builds the database by loading up the connection info for the database key / shard provided.
+     * Builds the mapper by loading up the connection info for the database key / shard provided.
      * @param dbType: The type of the database to create
      * @param db: The Db wrapper for making database calls
      * @param model: The schema of the Entity represented as a Model definition
@@ -61,6 +63,37 @@ class OrmBuilder(dbCreator: (DbCon) -> IDb,
 
 
     /**
+     * Builds the mapper by loading up the connection info for the database key / shard provided.
+     * @param dbType: The type of the database to create
+     * @param entityType   :  Type of the Entity / Domain class ( e.g. User )
+     * @param entityIdType :  Type of the id of the Entity / Domain class ( e.g. Long )
+     * @param tableName    :  Optional name of the database table for entityt ( defaults to class name e.g. "user" )
+     * @param utc: Optional flag to save all datetimes in UTC ( defaults to false )
+     * @param namer: Optional namer to create naming conventions
+     */
+    fun <TId, T> mapper(dbType: DbType, entityIdType: KClass<*>, entityType: KClass<*>,
+                        tableName:String?, utc: Boolean = false, namer: Namer? = null): OrmMapper<TId, T>
+            where TId:Comparable<TId>, T: Entity<TId> {
+        // 1. Table name
+        val table = buildTableName(entityType, tableName, namer)
+
+        // 2. Model ( schema of the entity which maps fields to columns and has other metadata )
+        val model = this.model(entityType, namer, table)
+
+        // 3. Connection info ( using default connection )
+        val con = this.con()
+
+        // 4. Db ( JDBC database call wrapper with connection )
+        val db = this.db( con )
+
+        // 5. Mapper ( maps entities to/from sql using the model/schema )
+        val mapper = this.mapper<TId, T>(dbType, db, entityIdType, model, utc, enc, namer)
+
+        return mapper
+    }
+
+
+    /**
      * Builds the repository associated w/ the database type
      * @param entityType: The class name e.g. "MyApp.User" of the Entity
      * @param dbType: The type of the database to create
@@ -68,6 +101,7 @@ class OrmBuilder(dbCreator: (DbCon) -> IDb,
      * @param tableName: Optional name of the table for the model if different than entity name
      * @param utc: Optional flag to save all datetimes in UTC ( defaults to false )
      * @param enc: Optional encrptor to support encryption of selected columns
+     * @param mapper:  Mapper to conver to/from sql/records
      * @param namer: Optional namer to create naming conventions
      */
     fun <TId, T> repo(
@@ -88,5 +122,33 @@ class OrmBuilder(dbCreator: (DbCon) -> IDb,
             DbTypePGres -> PostGresEntityRepo(db, entityType, entityIdType, mapper, tableName, enc, namer)
             else -> EntityRepoInMemory(entityType, entityIdType, enc, namer)
         }
+    }
+
+
+    /**
+     * Builds the repository associated w/ the database type
+     * @param dbType: The type of the database to create
+     * @param entityType   :  Type of the Entity / Domain class ( e.g. User )
+     * @param entityIdType :  Type of the id of the Entity / Domain class ( e.g. Long )
+     * @param tableName    :  Optional name of the database table for entityt ( defaults to class name e.g. "user" )
+     * @param mapper       :  Mapper to conver to/from sql/records
+     * @param namer: Optional namer to create naming conventions
+     */
+    fun <TId, T> repo(dbType: DbType, entityIdType: KClass<*>, entityType: KClass<*>,
+                      tableName:String?, mapper: OrmMapper<TId, T>, namer: Namer? = null): EntityRepo<TId, T>
+            where TId:Comparable<TId>, T: Entity<TId> {
+        // 1. Table name
+        val table = buildTableName(entityType, tableName, namer)
+
+        // 3. Connection info ( using default connection )
+        val con = this.con()
+
+        // 4. Db ( JDBC database call wrapper with connection )
+        val db = this.db( con )
+
+        // 6. Repo ( provides CRUD using the Mapper)
+        val repo = this.repo(dbType, db, entityType, entityIdType, mapper, table)
+
+        return repo
     }
 }

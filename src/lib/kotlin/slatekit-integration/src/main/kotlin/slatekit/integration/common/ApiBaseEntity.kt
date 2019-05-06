@@ -26,12 +26,15 @@ import kotlin.reflect.KClass
  */
 open class ApiBaseEntity<TId, T, TSvc>(context: AppEntContext,
                                        override val entityIdType: KClass<*>,
-                                       override val entityType: KClass<*>)
-    : ApiBase(context), ApiWithEntitySupport<TId, T, TSvc> where TId:Comparable<TId>, T : Entity<TId>, TSvc : EntityService<TId, T> {
+                                       override val entityType: KClass<*>,
+                                       val service: TSvc)
+    : ApiBase(context), ApiWithEntitySupport<TId, T, TSvc>
+        where TId:Comparable<TId>,
+              T : Entity<TId>,
+              TSvc : EntityService<TId, T> {
 
     override val entities: Entities = context.ent
+    override val entitySvc: EntityService<TId, T> = service
 
-    override val entitySvc: EntityService<TId, T> by lazy { entities.getSvc<TId, T>(entityType) }
-
-    protected val service: TSvc by lazy { entitySvc as TSvc }
+    //protected val service: TSvc by lazy { entitySvc as TSvc }
 }
