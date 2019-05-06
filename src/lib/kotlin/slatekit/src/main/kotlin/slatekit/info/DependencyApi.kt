@@ -13,7 +13,9 @@ import slatekit.results.Outcome
 @Api(area = "slate", name = "components", desc= "new project setup",
         auth = AuthModes.apiKey, roles = "*", verb = Verbs.auto, protocol = Protocols.cli)
 class DependencyApi(context: AppEntContext)
-    : ApiBaseEntity<Long, Dependency, DependencyService>(context, Long::class, Dependency::class) {
+    : ApiBaseEntity<Long, Dependency, DependencyService>(
+        context, Long::class, Dependency::class,
+        context.ent.getSvc<Long, Dependency>(Dependency::class) as DependencyService) {
 
     @ApiAction(desc= "generates the defaults/seed data")
     fun seed(): Outcome<List<String>>{

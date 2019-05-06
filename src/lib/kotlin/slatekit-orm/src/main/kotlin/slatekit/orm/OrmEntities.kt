@@ -19,12 +19,34 @@ import slatekit.db.types.DbSourceMySql
 import slatekit.db.types.DbSourcePostGres
 import slatekit.entities.Entities
 import slatekit.entities.Entity
+import slatekit.entities.EntityService
 import slatekit.entities.core.*
+import slatekit.entities.repos.EntityMapperEmpty
 import slatekit.meta.models.Model
 import slatekit.orm.core.SqlBuilder
 import slatekit.orm.databases.vendors.MySqlTypeMap
 import slatekit.orm.databases.vendors.PostGresMap
 import kotlin.reflect.KClass
+
+
+
+
+/**
+ * Register the entity using just the id type and entity type.
+ * This basically allows for the least information needed to
+ * register a Entity
+ */
+fun <TId, T> Entities.model(
+        dbType:DbType,
+        entityType: KClass<*>,
+        entityIdType: KClass<*>,
+        tableName: String? = null,
+        persistUTC: Boolean = false): EntityContext where TId : Comparable<TId>, T : Entity<TId> {
+
+    return orm<TId, T>(dbType, entityType, entityIdType, tableName,
+            null, null, persistUTC)
+}
+
 
 /**
  * @param dbType       :  Database type see[DbType]
@@ -120,12 +142,21 @@ fun Entities.sqlBuilder(entityFullName:String): SqlBuilder {
  * Gets a registered model ( schema for an entity ) for the entity type
  */
 fun Entities.getModel(entityType: KClass<*>): Model? {
-    val entityKey = builder.key(entityType)
+    return getModel(entityType.qualifiedName ?: "")
+}
+
+
+
+/**
+ * Gets a registered model ( schema for an entity ) for the entity type
+ */
+fun Entities.getModel(fullName:String): Model? {
+    val entityKey = builder.key(fullName)
     val entityCtx = this.getInfoByKey(entityKey)
     return when(entityCtx) {
         null -> {
             logger.error("Model not found for $entityKey")
-            throw IllegalArgumentException("model not found for: " + entityType.qualifiedName)
+            throw IllegalArgumentException("model not found for: $fullName")
         }
         else -> entityCtx.model
     }
