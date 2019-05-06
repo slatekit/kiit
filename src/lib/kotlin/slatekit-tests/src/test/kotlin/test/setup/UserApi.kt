@@ -32,7 +32,8 @@ import slatekit.results.Success
 
 
 @Api(area = "app", name = "users", desc = "api to access and manage users 3", roles= "admin", auth = "app-roles", verb = "*", protocol = "*")
-class UserApi(context: AppEntContext): ApiBaseEntity<Long, User, EntityService<Long, User>>(context, Long::class, User::class)
+class UserApi(context: AppEntContext)
+  : ApiBaseEntity<Long, User, EntityService<Long, User>>(context, Long::class, User::class, context.ent.getSvc(User::class))
 {
 
   @ApiAction(name = "activate", desc = "activates a users account 3", roles= "@parent", verb = "@parent", protocol = "@parent")
