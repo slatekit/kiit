@@ -19,12 +19,34 @@ import slatekit.db.types.DbSourceMySql
 import slatekit.db.types.DbSourcePostGres
 import slatekit.entities.Entities
 import slatekit.entities.Entity
+import slatekit.entities.EntityService
 import slatekit.entities.core.*
+import slatekit.entities.repos.EntityMapperEmpty
 import slatekit.meta.models.Model
 import slatekit.orm.core.SqlBuilder
 import slatekit.orm.databases.vendors.MySqlTypeMap
 import slatekit.orm.databases.vendors.PostGresMap
 import kotlin.reflect.KClass
+
+
+
+
+/**
+ * Register the entity using just the id type and entity type.
+ * This basically allows for the least information needed to
+ * register a Entity
+ */
+fun <TId, T> Entities.model(
+        dbType:DbType,
+        entityType: KClass<*>,
+        entityIdType: KClass<*>,
+        tableName: String? = null,
+        persistUTC: Boolean = false): EntityContext where TId : Comparable<TId>, T : Entity<TId> {
+
+    return orm<TId, T>(dbType, entityType, entityIdType, tableName,
+            null, null, persistUTC)
+}
+
 
 /**
  * @param dbType       :  Database type see[DbType]
