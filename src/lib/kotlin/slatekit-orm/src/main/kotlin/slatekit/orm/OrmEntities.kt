@@ -120,12 +120,21 @@ fun Entities.sqlBuilder(entityFullName:String): SqlBuilder {
  * Gets a registered model ( schema for an entity ) for the entity type
  */
 fun Entities.getModel(entityType: KClass<*>): Model? {
-    val entityKey = builder.key(entityType)
+    return getModel(entityType.qualifiedName ?: "")
+}
+
+
+
+/**
+ * Gets a registered model ( schema for an entity ) for the entity type
+ */
+fun Entities.getModel(fullName:String): Model? {
+    val entityKey = builder.key(fullName)
     val entityCtx = this.getInfoByKey(entityKey)
     return when(entityCtx) {
         null -> {
             logger.error("Model not found for $entityKey")
-            throw IllegalArgumentException("model not found for: " + entityType.qualifiedName)
+            throw IllegalArgumentException("model not found for: $fullName")
         }
         else -> entityCtx.model
     }

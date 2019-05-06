@@ -23,6 +23,7 @@ import slatekit.common.utils.Props
 import slatekit.entities.Entities
 import slatekit.entities.core.EntityContext
 import slatekit.orm.getDbSource
+import slatekit.orm.getModel
 import slatekit.orm.sqlBuilder
 import slatekit.results.Notice
 import slatekit.results.Success
@@ -40,7 +41,7 @@ class MigrationService(
 ) {
 
     fun names(): List<Pair<String, String>> = entities.getEntities().map {
-        Pair(it.entityTypeName, it.entityRepoInstance?.repoName() ?: it.entityTypeName)
+        Pair(it.entityTypeName, it.entityRepoInstance.repoName() )
     }
 
 
@@ -169,9 +170,7 @@ class MigrationService(
     fun generateSql(moduleName: String, version: String = ""): Try<List<String>> {
         val result = try {
             val fullName = moduleName
-            val svc = entities.getSvcByTypeName(fullName)
             val info = entities.getInfoByName(moduleName)
-            val ctx = entities.getInfoByName(fullName)
             val ddl = entities.sqlBuilder(fullName)
             val sqlTable = ddl.createTable(info.model)
             val sqlIndexes = ddl.createIndex(info.model)
@@ -212,7 +211,8 @@ class MigrationService(
     private fun operate(operationName: String, entityName: String, sqlBuilder: (EntityContext, String) -> String): Try<String> {
         val ent = entities.getInfoByName(entityName)
         val svc = entities.getSvcByTypeName(entityName)
-        val table = svc.repo().repoName()
+        val model = entities.getModel(entityName)
+        val table = model?.table ?: throw Exception("Unknown model : $entityName")
         val sql = sqlBuilder(ent, table)
         return try {
             val db = entities.getDb()
