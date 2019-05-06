@@ -52,13 +52,13 @@ open class ApiTestsBase {
 
 
     fun buildCtx(): AppEntContext {
-
+        val cfg = Config()
         val ctx = AppEntContext(
                 arg = Args.default(),
                 env = Env("local", EnvMode.Dev),
-                cfg = Config(),
+                cfg = cfg,
                 logs = LogsDefault,
-                ent = Entities({ con -> Db(con) }, DbLookup(DbConString("", "", "", ""))),
+                ent = Entities({ con -> Db(con) }, DbLookup(cfg.dbCon())),
                 app = About("myapp", "sample app", "product group 1", "slatekit", "ny", "", "", "", "1.1.0", "", ""),
                 sys = Sys.build(),
                 build = Build.empty,
