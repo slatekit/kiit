@@ -81,6 +81,7 @@ class Exec(val ctx: Ctx, val validator: Validation, val logger: Logger) {
             }
 
         // for debugging
+        result.onFailure { logError("exec", it) }
         return result
     }
 
@@ -285,7 +286,6 @@ class Exec(val ctx: Ctx, val validator: Validation, val logger: Logger) {
         logger.debug("""{ "api-pipeline": "${method}", "path" : "${ctx.req.fullName}", """ +
                            """verb" : "${ctx.req.verb}", "success" : ${result.success}, "message" : "${result.msg}"""".trimIndent())
 
-        result.onFailure { logError(method, it) }
         return result
     }
 
