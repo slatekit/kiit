@@ -38,8 +38,8 @@ import kotlin.reflect.KClass
  */
 fun <TId, T> Entities.model(
         dbType:DbType,
-        entityType: KClass<*>,
         entityIdType: KClass<*>,
+        entityType: KClass<*>,
         tableName: String? = null,
         persistUTC: Boolean = false): EntityContext where TId : Comparable<TId>, T : Entity<TId> {
 

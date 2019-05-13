@@ -167,7 +167,7 @@ open class App<C: Context>(val ctx: C,
      * and return a Success/Failure
      *
      */
-    open fun init(): Try<Boolean> {
+    open suspend fun init(): Try<Boolean> {
         return Success(true, msg = "default initialization")
     }
 
@@ -178,7 +178,7 @@ open class App<C: Context>(val ctx: C,
      *
      * @return
      */
-    open fun execute(): Try<Any> {
+    open suspend fun execute(): Try<Any> {
         return Success<Any>("default")
     }
 
@@ -189,7 +189,7 @@ open class App<C: Context>(val ctx: C,
      * and return a Success/Failure
      *
      */
-    open fun end(): Try<Boolean> {
+    open suspend fun end(): Try<Boolean> {
         return Success(true)
     }
 

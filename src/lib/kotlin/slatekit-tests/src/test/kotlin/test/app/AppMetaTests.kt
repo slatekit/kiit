@@ -13,6 +13,7 @@
 
 package slate.test
 
+import kotlinx.coroutines.runBlocking
 import org.junit.Assert
 import org.junit.Test
 import slatekit.common.*
@@ -41,13 +42,15 @@ class AppMetaTests  {
 
 
   fun checkHelp(words:Array<String>, code:Int, msg:String) {
-    for(word in words){
-      val result = AppRunner.run(
-              rawArgs = arrayOf(word),
-              about = About.none,
-              builder = { ctx -> App(ctx) }
-      )
-      Assert.assertEquals(code, result.code)
+    runBlocking {
+      for (word in words) {
+        val result = AppRunner.run(
+                rawArgs = arrayOf(word),
+                about = About.none,
+                builder = { ctx -> App(ctx) }
+        )
+        Assert.assertEquals(code, result.code)
+      }
     }
   }
 }

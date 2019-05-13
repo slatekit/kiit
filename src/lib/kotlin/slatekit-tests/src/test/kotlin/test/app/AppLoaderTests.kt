@@ -13,6 +13,7 @@
 
 package slate.test
 
+import kotlinx.coroutines.runBlocking
 import org.junit.Assert
 import org.junit.Test
 import slatekit.common.Context
@@ -68,23 +69,25 @@ class AppLoaderTests  {
 
 
     private fun run(args:Array<String>, value:ConfigValueTest, status: Status) {
-        val result = AppRunner.run(
-            rawArgs = args,
-            about = About.none,
-            builder = { ctx -> AppConfigTest(ctx) }
-        )
+        runBlocking {
+            val result = AppRunner.run(
+                    rawArgs = args,
+                    about = About.none,
+                    builder = { ctx -> AppConfigTest(ctx) }
+            )
 
-        Assert.assertEquals(true, result.success)
-        Assert.assertEquals(status.code, result.code)
-        Assert.assertEquals(status.msg, result.msg)
-        val actual = result as Success<ConfigValueTest>
-        Assert.assertTrue(value == actual.value)
+            Assert.assertEquals(true, result.success)
+            Assert.assertEquals(status.code, result.code)
+            Assert.assertEquals(status.msg, result.msg)
+            val actual = result as Success<ConfigValueTest>
+            Assert.assertTrue(value == actual.value)
+        }
     }
 
 
     class AppConfigTest(ctx:Context) : App<Context>(ctx) {
 
-        override fun execute(): Try<Any> {
+        override suspend fun execute(): Try<Any> {
             val data = ConfigValueTest(
                     ctx.env.name,
                     ctx.cfg.getString("test_stri"),
