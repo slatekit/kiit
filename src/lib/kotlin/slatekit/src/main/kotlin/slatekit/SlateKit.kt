@@ -1,34 +1,17 @@
 package slatekit
 
-import slatekit.apis.core.Annotated
-import slatekit.apis.core.Api
 import slatekit.apis.svcs.Authenticator
 import slatekit.app.App
 import slatekit.cli.CliSettings
 import slatekit.common.args.ArgsSchema
-import slatekit.common.db.DbType
 import slatekit.common.encrypt.B64Java8
 import slatekit.common.encrypt.Encryptor
 import slatekit.common.info.About
 import slatekit.common.info.ApiKey
-import slatekit.common.info.Credentials
 import slatekit.integration.apis.*
 import slatekit.results.Success
 import slatekit.results.Try
-import slatekit.docs.DocApi
-import slatekit.info.Dependency
-import slatekit.info.DependencyApi
-import slatekit.info.DependencyModule
-import slatekit.info.DependencyService
 import slatekit.integration.common.AppEntContext
-import slatekit.integration.mods.Mod
-import slatekit.integration.mods.ModService
-import slatekit.integration.mods.ModuleContext
-import slatekit.orm.migrations.MigrationService
-import slatekit.orm.migrations.MigrationSettings
-import slatekit.orm.orm
-import slatekit.setup.SetupApi
-import slatekit.setup.SetupService
 
 class SlateKit(ctx: AppEntContext) : App<AppEntContext>(ctx), SlateKitServices {
 
@@ -76,12 +59,8 @@ class SlateKit(ctx: AppEntContext) : App<AppEntContext>(ctx), SlateKitServices {
 
         // System level ( slate kit )
         // This ModServices allow storing/checking for installed modules in the DB
-        ctx.ent.orm<Long, Mod>(DbType.DbTypeMemory, Mod::class, Long::class,null, ModService::class)
-
-
-        // Application level
-        // All application level components should go here.
-        ctx.ent.orm<Long, Dependency>(DbType.DbTypeMemory, Dependency::class, Long::class,null, DependencyService::class)
+        //ctx.ent.orm<Long, Mod>(DbType.DbTypeMemory, Mod::class, Long::class,null, ModService::class)
+        //ctx.ent.orm<Long, Dependency>(DbType.DbTypeMemory, Dependency::class, Long::class,null, DependencyService::class)
         return super.init()
     }
 
@@ -92,84 +71,36 @@ class SlateKit(ctx: AppEntContext) : App<AppEntContext>(ctx), SlateKitServices {
      * @return
      */
     override suspend fun execute(): Try<Any> {
-        // =========================================================================
-        // 4: Register the APIS
-        // =========================================================================
-        // Build up the shell services that handles all the command line features.
-        // And setup the api container to hold all the apis.
-        val keys = listOf(ApiKey("cli", "abc", "dev,qa,ops,admin"))
-        val creds = Credentials("1", "john doe", "jdoe@abc.com", key = keys.first().key)
+        // The APIs ( DocApi, SetupApi are authenticated using an sample API key )
+        val keys = listOf(ApiKey( name ="cli", key = "abc", roles = "dev,qa,ops,admin"))
+
+        // Authenticator using API keys
+        // Production usage should use industry standard Auth components such as OAuth, JWT, etc.
         val auth = Authenticator(keys)
 
-        // Module api
-        val moduleApi = ModuleApi(moduleContext(), ctx)
-        moduleApi.register(DependencyModule(ctx, moduleContext()))
+        // Load all the Slate Kit Universal APIs
+        val apis = apis()
 
-        // APIs
-        val requiredApis = listOf(
-                Api(SetupApi(ctx, SetupService(ctx)), declaredOnly = true, setup = Annotated),
-                Api(DocApi(ctx)                     , declaredOnly = true, setup = Annotated),
-                Api(InfoApi(ctx)                    , declaredOnly = true, setup = Annotated),
-                Api(VersionApi(ctx)                 , declaredOnly = true, setup = Annotated),
-                Api(moduleApi                       , declaredOnly = true, setup = Annotated)
-        )
-        val optionalApis = loadOptionalApis()
-        val allApis = requiredApis.plus(optionalApis)
-
+        // Makes the APIs accessible on the CLI
         val cli = CliApi(
                 ctx = ctx,
                 auth = auth,
                 settings = CliSettings(enableLogging = true, enableOutput = true),
-                apiItems = allApis,
+                apiItems = apis,
                 metaTransform = {
-                    listOf("api-key" to creds.key)
+                    listOf("api-key" to keys.first().key)
                 }
         )
 
-        // =========================================================================
-        // 5: Run the CLI
-        // =========================================================================
+        // Finally, run the CLI to interact w/ the APIs
         cli.run()
+
         return Success(true)
-    }
-
-
-    private fun loadOptionalApis():List<Api>{
-
-        // @param key : "email"
-        fun load(key:String, call:() -> Api ):Api? {
-            val enabled = ctx.cfg.getBoolOrElse(key, false)
-            return if(enabled) call() else null
-        }
-        val apis = listOf(
-            load( "email")  { Api(EmailApi(emails(), ctx) , declaredOnly = true, setup = Annotated) },
-            load( "files")  { Api(FilesApi(files(), ctx)  , declaredOnly = true, setup = Annotated) },
-            load( "queues") { Api(QueueApi(queues(), ctx) , declaredOnly = true, setup = Annotated) },
-            load( "sms")    { Api(SmsApi(sms(), ctx)      , declaredOnly = true, setup = Annotated) },
-            load( "db")     { Api(DependencyApi(ctx)  , declaredOnly = false, setup = Annotated)    }
-        )
-        return apis.filterNotNull()
     }
 
 
     override suspend fun end(): Try<Boolean> {
         println("ending")
         return super.end()
-    }
-
-
-    fun migrations(): MigrationService {
-        // entity migration services ( to install/uninstall )
-        val migrationSettings = MigrationSettings(enableLogging = true, enableOutput = true)
-        val migrationService = MigrationService(ctx.ent, ctx.ent.dbs, migrationSettings, ctx.dirs)
-        return migrationService
-    }
-
-
-    fun moduleContext(): ModuleContext {
-        // Services/depenencies for all modules
-        val moduleService = ctx.ent.getSvc<Long, Mod>(Mod::class) as ModService
-        val moduleContext = ModuleContext(moduleService, migrations())
-        return moduleContext
     }
 }
