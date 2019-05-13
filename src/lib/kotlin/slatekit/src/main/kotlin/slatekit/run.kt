@@ -1,6 +1,7 @@
 package slatekit
 
 
+import kotlinx.coroutines.runBlocking
 import slatekit.app.AppRunner
 import slatekit.docs.DocService
 import slatekit.integration.common.AppEntContext
@@ -11,6 +12,21 @@ import slatekit.providers.logs.logback.LogbackLogs
  * Entry point into the sample console application.
  */
 fun main(args: Array<String>) {
+
+    runBlocking {
+        AppRunner.run(
+                rawArgs = args,
+                about = SlateKit.about,
+                schema = SlateKit.schema,
+                enc = SlateKit.encryptor,
+                logs = LogbackLogs(),
+                builder = { ctx -> SlateKit(AppEntContext.fromContext(ctx)) }
+        )
+    }
+}
+
+
+fun test(){
 
     val root = "/Users/kishorereddy/git/slatekit"
     val svc = DocService(
@@ -28,16 +44,4 @@ fun main(args: Array<String>) {
 
     //println("slatekit command line")
     //run2(args)
-}
-
-
-fun run2(args: Array<String>) {
-    AppRunner.run(
-            rawArgs = args,
-            about = SlateKit.about,
-            schema = SlateKit.schema,
-            enc = SlateKit.encryptor,
-            logs = LogbackLogs(),
-            builder = { ctx -> SlateKit(AppEntContext.fromContext(ctx)) }
-    )
 }

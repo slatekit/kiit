@@ -9,27 +9,13 @@ import slatekit.common.Context
 import slatekit.results.Try
 
 
-@Api(area = "slate", name = "setup", desc= "new project setup",
+@Api(area = "slatekit", name = "setup", desc= "new project setup",
         auth = AuthModes.apiKey, roles = "", verb = Verbs.auto, protocol = Protocols.cli)
-class SetupApi(context: Context) {
-
-    val service = SetupService(context)
+class SetupApi(val context: Context, val service:SetupService) {
 
 
     @ApiAction(desc= "generates a new app project")
-    fun app(root:String, output:String): Try<String> {
-        return service.app(root, output)
-    }
-
-
-    @ApiAction(desc= "generates a new cli project")
-    fun cli(root:String, output:String): Try<String> {
-        return service.cli(root, output)
-    }
-
-
-    @ApiAction(desc= "generates a new server project")
-    fun server(root:String, output:String): Try<String> {
-        return service.server(root, output)
+    fun app(name:String, packageName:String, desc:String, destination:String): Try<String> {
+        return service.app(SetupContext(name, desc, packageName, destination))
     }
 }

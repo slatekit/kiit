@@ -2,6 +2,7 @@ package slatekit
 
 import slatekit.cloud.aws.AwsCloudFiles
 import slatekit.cloud.aws.AwsCloudQueue
+import slatekit.common.Context
 import slatekit.common.queues.QueueStringConverter
 import slatekit.core.cloud.CloudFiles
 import slatekit.core.cloud.CloudQueue
@@ -18,7 +19,7 @@ import slatekit.orm.migrations.MigrationSettings
 
 interface SlateKitServices {
 
-    val ctx: AppEntContext
+    val ctx: Context
 
 
     fun emails():EmailService {
@@ -46,21 +47,5 @@ interface SlateKitServices {
         val apiLogin = ctx.cfg.apiLogin("queues")
         val queue = apiLogin.tag
         return AwsCloudQueue(queue, apiLogin, QueueStringConverter(), 3)
-    }
-
-
-    fun migrations():MigrationService {
-        // entity migration services ( to install/uninstall )
-        val migrationSettings = MigrationSettings(enableLogging = true, enableOutput = true)
-        val migrationService = MigrationService(ctx.ent, ctx.ent.dbs, migrationSettings, ctx.dirs)
-        return migrationService
-    }
-
-
-    fun moduleContext():ModuleContext {
-        // Services/depenencies for all modules
-        val moduleService = ctx.ent.getSvc<Long, Mod>(Mod::class) as ModService
-        val moduleContext = ModuleContext(moduleService, migrations())
-        return moduleContext
     }
 }

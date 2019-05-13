@@ -1,0 +1,23 @@
+package @{app.package}
+
+
+import kotlinx.coroutines.runBlocking
+import slatekit.app.AppRunner
+import slatekit.providers.logs.logback.LogbackLogs
+
+
+/**
+ * Entry point into the sample console application.
+ */
+fun main(args: Array<String>) {
+    runBlocking {
+        AppRunner.run(
+                rawArgs = args,
+                about = App.about,
+                schema = App.schema,
+                enc = App.encryptor,
+                logs = LogbackLogs(),
+                builder = { ctx -> SlateKit(AppEntContext.fromContext(ctx)) }
+        )
+    }
+}

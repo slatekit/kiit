@@ -1,4 +1,4 @@
-package slatekit
+package @{app.package}
 
 import slatekit.app.App
 import slatekit.common.Context
@@ -9,7 +9,8 @@ import slatekit.common.info.About
 import slatekit.results.Success
 import slatekit.results.Try
 
-class SlateKit(ctx: Context) : App<Context>(ctx), SlateKitServices {
+
+class App(ctx: Context) : App<Context>(ctx) {
 
     companion object {
 
@@ -21,7 +22,6 @@ class SlateKit(ctx: Context) : App<Context>(ctx), SlateKitServices {
         // 4. Help text can be easily built from this schema.
         val schema = ArgsSchema()
                 .text("","env", "the environment to run in", false, "dev", "dev", "dev1|qa1|stg1|pro")
-                .text("","region", "the region linked to app", false, "us", "us", "us|europe|india|*")
                 .text("","log.level", "the log level for logging", false, "info", "info", "debug|info|warn|error")
 
 
@@ -30,17 +30,17 @@ class SlateKit(ctx: Context) : App<Context>(ctx), SlateKitServices {
          * This can be overriden in your env.conf file
          */
         val about = About(
-                id = "slatekit",
-                name = "Slate Kit",
-                desc = "Slate Kit CLI for creating projects and access to other tools",
-                company = "codehelix.co",
-                region = "NY",
+                id = "@{app.id}",
+                name = "@{app.name}",
+                desc = "@{app.desc}",
+                company = "@{app.company}",
+                region = "",
                 version = "1.0.0",
-                url = "www.slatekit.life",
-                group = "codehelix",
-                contact = "user@company.co",
-                tags = "sample, template, app",
-                examples = "http://www.slatekit.com"
+                url = "@{app.url}",
+                group = "",
+                contact = "",
+                tags = "app",
+                examples = ""
         )
 
         /**
@@ -57,7 +57,7 @@ class SlateKit(ctx: Context) : App<Context>(ctx), SlateKitServices {
 
 
     override suspend fun execute(): Try<Any> {
-        println("Executing")
+        println("executing")
         return Success(true)
     }
 
