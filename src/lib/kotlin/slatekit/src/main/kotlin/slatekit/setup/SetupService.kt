@@ -43,6 +43,7 @@ class SetupService(val context: Context) {
                 is Dir   -> creator.dir(dest, it)
                 is Conf  -> creator.conf(dest, it)
                 is Build -> creator.build(dest, it)
+                is Code  -> creator.code(dest, it)
                 else     -> println("unknown action : " + it.toString())
             }
         }

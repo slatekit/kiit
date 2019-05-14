@@ -29,8 +29,8 @@ object SetupTemplates {
                 Conf("/src/main/resources/env.pro.conf", "/templates/app/conf/env.pro.conf"),
 
                 // Files
-                Code("/src/main/kotlin/@app.package/Run", "/templates/app/Run.txt"),
-                Code("/src/main/kotlin/@app.package/App", "/templates/app/App.txt")
+                Code("/src/main/kotlin/@app.package/Run.kt", "/templates/app/Run.txt"),
+                Code("/src/main/kotlin/@app.package/App.kt", "/templates/app/App.txt")
         )
     }
 }

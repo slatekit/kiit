@@ -1,4 +1,4 @@
-package @{app.package}
+package ${app.package}
 
 import slatekit.app.App
 import slatekit.common.Context
@@ -30,13 +30,13 @@ class App(ctx: Context) : App<Context>(ctx) {
          * This can be overriden in your env.conf file
          */
         val about = About(
-                id = "@{app.id}",
-                name = "@{app.name}",
-                desc = "@{app.desc}",
-                company = "@{app.company}",
+                id = "${app.id}",
+                name = "${app.name}",
+                desc = "${app.desc}",
+                company = "${app.company}",
                 region = "",
                 version = "1.0.0",
-                url = "@{app.url}",
+                url = "${app.url}",
                 group = "",
                 contact = "",
                 tags = "app",

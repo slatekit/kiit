@@ -4,6 +4,7 @@ import io.ktor.util.combineSafe
 import slatekit.SlateKit
 import slatekit.common.Uris
 import slatekit.common.toId
+import slatekit.common.utils.Props
 import java.io.File
 
 class SetupCreator(val template: SetupTemplate) {
@@ -60,7 +61,7 @@ class SetupCreator(val template: SetupTemplate) {
      * Creates the file from the root directory supplied
      */
     fun build(root: File, action:Build) {
-        log("File: " + action.path)
+        log("Build: " + action.path)
         val content = read(action.source)
         val target = root.combineSafe(action.path)
         createFile(target, content)
@@ -71,7 +72,7 @@ class SetupCreator(val template: SetupTemplate) {
      * Creates the configuration file from the root directory supplied
      */
     fun conf(root: File, action:Conf) {
-        log("File: " + action.path)
+        log("Conf: " + action.path)
         val content = read(action.source)
         val target = root.combineSafe(action.path)
         createFile(target, content)
@@ -81,10 +82,11 @@ class SetupCreator(val template: SetupTemplate) {
     /**
      * Creates the source code from the root directory supplied
      */
-    fun code(root: File, action:Conf) {
-        log("File: " + action.path)
+    fun code(root: File, action:Code) {
+        log("Code: " + action.path)
         val content = read(action.source)
-        val target = root.combineSafe(action.path)
+        val packagePath = ctx.packageName.replace(".", Props.pathSeparator)
+        val target = root.combineSafe(action.path.replace("@app.package", packagePath))
         createFile(target, content)
     }
 
