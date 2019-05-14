@@ -16,7 +16,7 @@ class SetupApi(val context: Context, val service:SetupService) {
 
     // slatekit.setup.app -name="myapp1" -packageName="mycompany.myapp1" -desc="Sample app 1" -destination="~/dev/tests/slatekit/myapp1"
     @ApiAction(desc= "generates a new app project")
-    fun app(name:String, packageName:String, desc:String, destination:String): Try<String> {
-        return service.app(SetupContext(name, desc, packageName, destination))
+    fun app(name:String, packageName:String, company:String, desc:String, destination:String): Try<String> {
+        return service.app(SetupContext(name, desc, packageName, company, destination))
     }
 }

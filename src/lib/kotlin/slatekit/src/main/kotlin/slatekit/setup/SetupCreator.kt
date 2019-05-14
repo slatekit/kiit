@@ -3,6 +3,7 @@ package slatekit.setup
 import io.ktor.util.combineSafe
 import slatekit.SlateKit
 import slatekit.common.Uris
+import slatekit.common.toId
 import java.io.File
 
 class SetupCreator(val template: SetupTemplate) {
@@ -38,10 +39,9 @@ class SetupCreator(val template: SetupTemplate) {
      * Creates the directory
      */
     fun createFile(dest: File, content:String): File {
-        if(!dest.exists()) {
-            log("creating ${dest.absolutePath}")
-            dest.writeText(content)
-        }
+
+        log("creating ${dest.absolutePath}")
+        dest.writeText(content)
         return dest
     }
 
@@ -95,7 +95,23 @@ class SetupCreator(val template: SetupTemplate) {
     fun read(path:String):String {
         val url = SlateKit::class.java.getResource(path)
         val text = File(url.file).readText()
-        return text
+        val converted = replace(text)
+        return converted
+    }
+
+
+    /**
+     * Reads a file from resources
+     */
+    fun replace(content:String):String {
+        val converted = content
+                .replace("\${app.id}", ctx.name.toId())
+                .replace("\${app.name}", ctx.name)
+                .replace("\${app.desc}", ctx.desc)
+                .replace("\${app.package}", ctx.packageName)
+                .replace("\${app.url}", ctx.name)
+                .replace("\${app.company}", ctx.company)
+        return converted
     }
 
 

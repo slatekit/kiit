@@ -82,8 +82,9 @@ fun String.pascalCase(): String {
  * e.g: "abc& $[]123" = "abc&_$[]123"
  */
 fun String.toId(lowerCase: Boolean = true): String {
-    val formatted = this.trim().replace(" ", "_")
-    val converted = if (lowerCase) formatted.toLowerCase() else formatted
+    val trimmed = this.trim()
+    val filtered = trimmed.filter { it.isDigit() || it.isLetter() || it == '-' || it == '_' || it == '.' }
+    val converted = if (lowerCase) filtered.toLowerCase() else filtered
     val finalText = if (converted.isNullOrBlank()) "_" else converted
     return finalText
 }
