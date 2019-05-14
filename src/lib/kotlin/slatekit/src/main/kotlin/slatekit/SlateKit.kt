@@ -4,14 +4,20 @@ import slatekit.apis.svcs.Authenticator
 import slatekit.app.App
 import slatekit.cli.CliSettings
 import slatekit.common.args.ArgsSchema
+import slatekit.common.db.DbType
 import slatekit.common.encrypt.B64Java8
 import slatekit.common.encrypt.Encryptor
 import slatekit.common.info.About
 import slatekit.common.info.ApiKey
+import slatekit.info.Dependency
+import slatekit.info.DependencyService
 import slatekit.integration.apis.*
 import slatekit.results.Success
 import slatekit.results.Try
 import slatekit.integration.common.AppEntContext
+import slatekit.integration.mods.Mod
+import slatekit.integration.mods.ModService
+import slatekit.orm.orm
 
 class SlateKit(ctx: AppEntContext) : App<AppEntContext>(ctx), SlateKitServices {
 
@@ -59,8 +65,8 @@ class SlateKit(ctx: AppEntContext) : App<AppEntContext>(ctx), SlateKitServices {
 
         // System level ( slate kit )
         // This ModServices allow storing/checking for installed modules in the DB
-        //ctx.ent.orm<Long, Mod>(DbType.DbTypeMemory, Mod::class, Long::class,null, ModService::class)
-        //ctx.ent.orm<Long, Dependency>(DbType.DbTypeMemory, Dependency::class, Long::class,null, DependencyService::class)
+        ctx.ent.orm<Long, Mod>(DbType.DbTypeMemory, Mod::class, Long::class,null, ModService::class)
+        ctx.ent.orm<Long, Dependency>(DbType.DbTypeMemory, Dependency::class, Long::class,null, DependencyService::class)
         return super.init()
     }
 

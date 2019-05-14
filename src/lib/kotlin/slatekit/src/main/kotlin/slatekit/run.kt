@@ -3,15 +3,32 @@ package slatekit
 
 import kotlinx.coroutines.runBlocking
 import slatekit.app.AppRunner
+import slatekit.common.CommonContext
 import slatekit.docs.DocService
 import slatekit.integration.common.AppEntContext
 import slatekit.providers.logs.logback.LogbackLogs
+import slatekit.setup.SetupContext
+import slatekit.setup.SetupService
+import java.io.File
 
 
 /**
  * Entry point into the sample console application.
  */
 fun main(args: Array<String>) {
+//    val url = SlateKit::class.java.getResource("/templates/app/build.txt")
+//    val text = File(url.file).readText()
+    val svc = SetupService(CommonContext.simple(""))
+    val ctx = SetupContext("app1", "Test slate kit", "codehelix.app1", "~/dev/tests/slatekit")
+    svc.app(ctx)
+    println("done")
+}
+
+
+fun test2(args:Array<String>) {
+//    val url = SlateKit::class.java.getResource("/templates/app/App.txt")
+//    val text = File(url.file).readText()
+//    println(text)
 
     runBlocking {
         AppRunner.run(
