@@ -11,15 +11,21 @@ object SetupTemplates {
 
     fun app():List<SetupAction> {
         return listOf(
-                // Gradle
-                Build("/build.gradle"   , "/templates/app/build.txt"),
-                Build("/settings.gradle", "/templates/app/settings.txt"),
 
                 // Directories
+                Dir("/gradle"),
+                Dir("/gradle/wrapper"),
                 Dir("/src"),
                 Dir("/src/main"),
                 Dir("/src/main/resources"),
                 Dir("/src/main/kotlin", root = true),
+
+                // Gradle
+                Build("/build.gradle"                            , "/templates/app/build.txt"),
+                Build("/settings.gradle"                         , "/templates/app/settings.txt"),
+                Build("/gradlew"                                 , "/templates/common/gradlew"),
+                Build("/gradlew.bat"                             , "/templates/common/gradlew.bat"),
+                Build("/gradle/wrapper/gradle-wrapper.properties", "/templates/common/gradle-wrapper.properties"),
 
                 // Conf
                 Conf("/src/main/resources/env.conf"    , "/templates/app/conf/env.conf"),

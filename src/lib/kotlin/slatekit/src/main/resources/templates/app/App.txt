@@ -50,19 +50,19 @@ class App(ctx: Context) : App<Context>(ctx) {
     }
 
 
-    override suspend fun init(): Try<Boolean> {
+    override fun init(): Try<Boolean> {
         println("initializing")
         return super.init()
     }
 
 
-    override suspend fun execute(): Try<Any> {
+    override fun execute(): Try<Any> {
         println("executing")
         return Success(true)
     }
 
 
-    override suspend fun end(): Try<Boolean> {
+    override fun end(): Try<Boolean> {
         println("ending")
         return super.end()
     }
