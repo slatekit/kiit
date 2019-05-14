@@ -19,7 +19,7 @@ fun main(args: Array<String>) {
 //    val url = SlateKit::class.java.getResource("/templates/app/build.txt")
 //    val text = File(url.file).readText()
     val svc = SetupService(CommonContext.simple(""))
-    val ctx = SetupContext("app1", "Test slate kit", "codehelix.app1", "codehelix", "~/dev/tests/slatekit")
+    val ctx = SetupContext("app2", "Test slate kit", "codehelix.app2", "codehelix", "/Users/kishore.reddy/dev/tests/slatekit")
     svc.app(ctx)
     println("done")
 }

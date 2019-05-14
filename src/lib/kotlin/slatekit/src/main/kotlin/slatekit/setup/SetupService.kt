@@ -14,8 +14,7 @@ class SetupService(val context: Context) {
         val ctx = setupCtx.normalize()
 
         // Get root directory of destination
-        val rootRaw = Uris.interpret(ctx.destination) ?: ""
-        val root = rootRaw.replace("~", "/Users/kishore.reddy")
+        val root = Uris.interpret(ctx.destination) ?: ""
         val appDir = File(root, ctx.name)
         println(appDir.absolutePath)
         println(appDir.canonicalPath)
