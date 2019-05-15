@@ -21,8 +21,8 @@ import slatekit.integration.mods.ModService
 import slatekit.integration.mods.ModuleContext
 import slatekit.orm.migrations.MigrationService
 import slatekit.orm.migrations.MigrationSettings
-import slatekit.setup.SetupApi
-import slatekit.setup.SetupService
+import slatekit.generator.GeneratorApi
+import slatekit.generator.GeneratorService
 
 interface SlateKitServices {
 
@@ -79,7 +79,7 @@ interface SlateKitServices {
 
         // APIs
         val requiredApis = listOf(
-                Api(SetupApi(ctx, SetupService(ctx)), declaredOnly = true, setup = Annotated),
+                Api(GeneratorApi(ctx, GeneratorService(ctx)), declaredOnly = true, setup = Annotated),
                 Api(DocApi(ctx), declaredOnly = true, setup = Annotated),
                 Api(InfoApi(ctx), declaredOnly = true, setup = Annotated),
                 Api(VersionApi(ctx), declaredOnly = true, setup = Annotated),

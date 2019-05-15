@@ -1,4 +1,4 @@
-package slatekit.setup
+package slatekit.generator
 
 import io.ktor.util.combineSafe
 import slatekit.SlateKit
@@ -7,10 +7,10 @@ import slatekit.common.toId
 import slatekit.common.utils.Props
 import java.io.File
 
-class SetupCreator(val template: SetupTemplate) {
-
-    val ctx:SetupContext = template.context
-
+/**
+ * This processes all the [Action]s supported
+ */
+class Creator(val ctx:GeneratorContext, val template: Template) {
 
     /**
      * Creates the directory after first interpreting the path.
@@ -50,7 +50,7 @@ class SetupCreator(val template: SetupTemplate) {
     /**
      * Creates the directory from the root directory supplied
      */
-    fun dir(root: File, action:Dir) {
+    fun dir(root: File, action: Action.MkDir) {
         log("Dir : " + action.path)
         val target = root.combineSafe(action.path)
         createDir(target)
@@ -60,7 +60,7 @@ class SetupCreator(val template: SetupTemplate) {
     /**
      * Creates the file from the root directory supplied
      */
-    fun build(root: File, action:Build) {
+    fun build(root: File, action: Action.Build) {
         log("Build: " + action.path)
         val content = read(action.source)
         val target = root.combineSafe(action.path)
@@ -71,8 +71,19 @@ class SetupCreator(val template: SetupTemplate) {
     /**
      * Creates the configuration file from the root directory supplied
      */
-    fun conf(root: File, action:Conf) {
+    fun conf(root: File, action: Action.Conf) {
         log("Conf: " + action.path)
+        val content = read(action.source)
+        val target = root.combineSafe(action.path)
+        createFile(target, content)
+    }
+
+
+    /**
+     * Creates the doc file from the root directory supplied
+     */
+    fun doc(root: File, action: Action.Doc) {
+        log("Doc: " + action.path)
         val content = read(action.source)
         val target = root.combineSafe(action.path)
         createFile(target, content)
@@ -82,7 +93,7 @@ class SetupCreator(val template: SetupTemplate) {
     /**
      * Creates the source code from the root directory supplied
      */
-    fun code(root: File, action:Code) {
+    fun code(root: File, action: Action.Code) {
         log("Code: " + action.path)
         val content = read(action.source)
         val packagePath = ctx.packageName.replace(".", Props.pathSeparator)
