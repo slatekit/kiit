@@ -10,7 +10,8 @@ data class GeneratorContext(val name: String,
                             val desc: String,
                             val packageName: String,
                             val company: String,
-                            var destination: String)
+                            val destination: String,
+                            val mode:CredentialMode )
 {
     /**
      * Normalizes the fields to ensure proper names are created.
@@ -19,6 +20,6 @@ data class GeneratorContext(val name: String,
     fun normalize():GeneratorContext {
         val canonicalName = name
         val canonicalPackage = packageName.toId()
-        return GeneratorContext(canonicalName, desc, canonicalPackage, company, destination)
+        return GeneratorContext(canonicalName, desc, canonicalPackage, company, destination, mode)
     }
 }

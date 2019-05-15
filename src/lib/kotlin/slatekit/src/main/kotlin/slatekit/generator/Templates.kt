@@ -41,6 +41,6 @@ object Templates {
                 Action.Code("/src/main/kotlin/@app.package/Run.kt", "/templates/app/Run.txt"),
                 Action.Code("/src/main/kotlin/@app.package/App.kt", "/templates/app/App.txt")
         )
-        return Template("App", actions)
+        return Template("App", TemplateType.App, actions)
     }
 }

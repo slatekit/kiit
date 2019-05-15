@@ -9,7 +9,7 @@ import java.io.File
 
 class GeneratorService(val context: Context) {
 
-    fun app(setupCtx:GeneratorContext): Try<String> {
+    fun generate(setupCtx:GeneratorContext, template: Template): Try<String> {
         // Normalize/Canonical names
         val ctx = setupCtx.normalize()
 
@@ -22,7 +22,6 @@ class GeneratorService(val context: Context) {
         val finalCtx = setupCtx.copy(destination = appDir.toString())
 
         // Build the templates
-        val template = Templates.app()
         val actions = template.actions
         val rootDirAction = actions.first { it is Action.MkDir && it.root } as Action.MkDir
         val packageDirs = buildPackageDirs(ctx, rootDirAction)

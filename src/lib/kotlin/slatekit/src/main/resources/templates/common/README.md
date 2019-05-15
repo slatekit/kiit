@@ -12,7 +12,7 @@ Place holder for some of the tech stack
 
 Type | Version | Note
 ------------ | ------------ | -------------
-Java       | 1.8    | 
+Java       | 1.8.0  | 
 Kotlin     | 1.3.21 | 
 CoRoutines | 1.1.0  | 
 Gradle     | 5.2.1  | 
