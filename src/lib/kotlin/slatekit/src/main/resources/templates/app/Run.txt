@@ -7,7 +7,23 @@ import slatekit.providers.logs.logback.LogbackLogs
 
 
 /**
- * Entry point into the sample console application.
+ * Entry point into the Slate Kit application with support for:
+ *
+ * 1. environments ( local, dev, qat, pro )
+ * 2. command line args
+ * 3. argument validation
+ * 4. about / help / version display
+ * 5. diagnostics ( on startup and end )
+ * 6. logging ( console + logback )
+ * 7. life-cycle events ( init, exec, end )
+ *
+ * java -jar ${app.name}.jar ?
+ * java -jar ${app.name}.jar --about
+ * java -jar ${app.name}.jar --version
+ * java -jar ${app.name}.jar -env=dev
+ * java -jar ${app.name}.jar -env=dev -config.location="jars"
+ * java -jar ${app.name}.jar -env=dev -config.location="conf"
+ * java -jar ${app.name}.jar -env=dev -config.location="file://./${app.name}/conf"
  */
 fun main(args: Array<String>) {
     //runBlocking {

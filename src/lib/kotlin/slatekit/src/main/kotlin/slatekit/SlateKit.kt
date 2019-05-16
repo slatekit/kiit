@@ -2,6 +2,7 @@ package slatekit
 
 import slatekit.apis.svcs.Authenticator
 import slatekit.app.App
+import slatekit.app.AppOptions
 import slatekit.cli.CliSettings
 import slatekit.common.args.ArgsSchema
 import slatekit.common.db.DbType
@@ -19,7 +20,7 @@ import slatekit.integration.mods.Mod
 import slatekit.integration.mods.ModService
 import slatekit.orm.orm
 
-class SlateKit(ctx: AppEntContext) : App<AppEntContext>(ctx), SlateKitServices {
+class SlateKit(ctx: AppEntContext) : App<AppEntContext>(ctx, AppOptions(printSummaryBeforeExec = true)), SlateKitServices {
 
     companion object {
 

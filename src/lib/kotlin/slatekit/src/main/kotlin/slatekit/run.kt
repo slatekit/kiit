@@ -13,7 +13,25 @@ import slatekit.generator.Templates
 
 
 /**
- * Entry point into the sample console application.
+ * Entry point into the sample console application with support for:
+ *
+ * 1. environment ( local, dev, qat, pro )
+ * 2. command line args
+ * 3. argument validation
+ * 4. about / help / version display
+ * 5. diagnostics ( on startup and end )
+ * 6. logging ( console + logback )
+ * 7. life-cycle events ( init, exec, end )
+ *
+ * java -jar ${app.name}.jar ?
+ * java -jar ${app.name}.jar --about
+ * java -jar ${app.name}.jar --version
+ * java -jar ${app.name}.jar -env=dev
+ * java -jar ${app.name}.jar -env=dev -log.level=info -config.location = "jars"
+ * java -jar ${app.name}.jar -env=dev -log.level=info -config.location = "conf"
+ * java -jar ${app.name}.jar -env=dev -log.level=info -config.location = "file://./conf-sample-batch"
+ * java -jar ${app.name}.jar -env=dev -log.level=info -config.location = "file://./conf-sample-shell"
+ * java -jar ${app.name}.jar -env=dev -log.level=info -config.location = "file://./conf-sample-server"
  */
 fun main(args: Array<String>) {
     test2(args)

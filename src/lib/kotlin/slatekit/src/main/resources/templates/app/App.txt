@@ -10,7 +10,7 @@ import slatekit.results.Success
 import slatekit.results.Try
 
 
-class App(ctx: Context) : App<Context>(ctx) {
+class App(ctx: Context) : App<Context>(ctx, AppOptions(printSummaryBeforeExec = true)) {
 
     companion object {
 
