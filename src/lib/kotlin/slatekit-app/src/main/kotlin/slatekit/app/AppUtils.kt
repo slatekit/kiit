@@ -178,10 +178,7 @@ object AppUtils {
 
         // The config is inheritance based.
         // Which means the base env.loc.conf inherits from env.conf.
-        val conf = ConfigMulti(
-                appInputs.confEnv,
-                appInputs.confBase,
-                enc)
+        val conf = appInputs.confEnv
 
         return AppContext(
                 arg = args,

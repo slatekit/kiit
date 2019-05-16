@@ -89,7 +89,7 @@ class Config(
     override fun containsKey(key: String): Boolean = config.containsKey(key)
     override fun size(): Int = config.values.size
 
-    override fun getString(key: String): String = Strings.decrypt(getStringRaw(key), encryptor)
+    override fun getString(key: String): String = interpret(key)
     override fun getBool(key: String): Boolean = Conversions.toBool(getStringRaw(key))
     override fun getShort(key: String): Short = Conversions.toShort(getStringRaw(key))
     override fun getInt(key: String): Int = Conversions.toInt(getStringRaw(key))
@@ -125,7 +125,31 @@ class Config(
      */
     override fun loadFrom(file: String?): Conf? = ConfFuncs.load(file, enc)
 
-    fun getInternal(key: String): Any? {
+
+    /**
+     * Extends the config by supporting decryption via marker tags.
+     * e.g.
+     *  db.connection = "@{decrypt('8r4AbhQyvlzSeWnKsamowA')}"
+     *  db.connection = "@{env('APP1_DB_URL')}"
+     *
+     * @param key : key: The name of the config key
+     * @return
+     */
+    private fun interpret(key: String): String {
+        val raw = getStringRaw(key)
+        val value = if(raw.startsWith("@{env")) {
+            raw.getEnv()
+        }
+        else if(raw.startsWith("@{decrypt")) {
+            raw.decrypt(encryptor)
+        } else {
+            raw
+        }
+        return value
+    }
+
+
+    private fun getInternal(key: String): Any? {
         return if (containsKey(key)) {
             val value = config.getProperty(key)
             if (value != null && value is String) {
@@ -138,6 +162,7 @@ class Config(
         }
     }
 
-    fun getStringRaw(key: String): String = config.getProperty(key)?.trim() ?: ""
+
+    private fun getStringRaw(key: String): String = config.getProperty(key)?.trim() ?: ""
 }
 

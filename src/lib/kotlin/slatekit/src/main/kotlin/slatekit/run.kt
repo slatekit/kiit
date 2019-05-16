@@ -9,18 +9,20 @@ import slatekit.integration.common.AppEntContext
 import slatekit.providers.logs.logback.LogbackLogs
 import slatekit.generator.GeneratorContext
 import slatekit.generator.GeneratorService
+import slatekit.generator.Templates
 
 
 /**
  * Entry point into the sample console application.
  */
 fun main(args: Array<String>) {
+    test2(args)
 //    val url = SlateKit::class.java.getResource("/templates/app/build.txt")
 //    val text = File(url.file).readText()
-    val svc = GeneratorService(CommonContext.simple(""))
-    val ctx = GeneratorContext("app3", "Test slate kit", "codehelix.app2", "codehelix", "/Users/kishore.reddy/dev/tests/slatekit")
-    svc.app(ctx)
-    println("done")
+//    val svc = GeneratorService(CommonContext.simple(""))
+//    val ctx = GeneratorContext("app3", "Test slate kit", "codehelix.app2", "codehelix", "/Users/kishore.reddy/dev/tests/slatekit")
+//    svc.generate(ctx, Templates.app())
+//    println("done")
 }
 
 

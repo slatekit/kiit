@@ -60,6 +60,30 @@ object Strings {
      */
     fun decrypt(value: String, decryptor: ((String) -> String)? = null): String =
             Strings.interpret(value, "decrypt", decryptor)
+
+}
+
+
+/**
+ * Decrypts the text inside the value if value is "@{decrypt('abc')}"
+ * @param value : The value containing an optin @{decrypt function
+ * @param decryptor : The callback to handle the decryption
+ * @return
+ */
+fun String.decrypt( decryptor: ((String) -> String)? = null): String =
+        Strings.interpret(this, "decrypt", decryptor)
+
+
+
+/**
+ * Interprets the text as an environment variable if value is "@{env('abc')}"
+ * @param value : The value containing an optin @{env function
+ * @return
+ */
+fun String.getEnv(): String {
+    return Strings.interpret(this, "env") { name ->
+        System.getenv(name)
+    }
 }
 
 /**
