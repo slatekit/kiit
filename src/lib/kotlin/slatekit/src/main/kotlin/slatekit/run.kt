@@ -5,6 +5,7 @@ import kotlinx.coroutines.runBlocking
 import slatekit.app.AppRunner
 import slatekit.common.CommonContext
 import slatekit.docs.DocService
+import slatekit.generator.CredentialMode
 import slatekit.integration.common.AppEntContext
 import slatekit.providers.logs.logback.LogbackLogs
 import slatekit.generator.GeneratorContext
@@ -27,28 +28,13 @@ import slatekit.generator.Templates
  * java -jar ${app.name}.jar --about
  * java -jar ${app.name}.jar --version
  * java -jar ${app.name}.jar -env=dev
- * java -jar ${app.name}.jar -env=dev -log.level=info -config.location = "jars"
- * java -jar ${app.name}.jar -env=dev -log.level=info -config.location = "conf"
- * java -jar ${app.name}.jar -env=dev -log.level=info -config.location = "file://./conf-sample-batch"
- * java -jar ${app.name}.jar -env=dev -log.level=info -config.location = "file://./conf-sample-shell"
- * java -jar ${app.name}.jar -env=dev -log.level=info -config.location = "file://./conf-sample-server"
+ * java -jar ${app.name}.jar -env=dev -log.level=info -conf.dir = "jars"
+ * java -jar ${app.name}.jar -env=dev -log.level=info -conf.dir = "conf"
+ * java -jar ${app.name}.jar -env=dev -log.level=info -conf.dir = "file://./conf-sample-batch"
+ * java -jar ${app.name}.jar -env=dev -log.level=info -conf.dir = "file://./conf-sample-shell"
+ * java -jar ${app.name}.jar -env=dev -log.level=info -conf.dir = "file://./conf-sample-server"
  */
 fun main(args: Array<String>) {
-    test2(args)
-//    val url = SlateKit::class.java.getResource("/templates/app/build.txt")
-//    val text = File(url.file).readText()
-//    val svc = GeneratorService(CommonContext.simple(""))
-//    val ctx = GeneratorContext("app3", "Test slate kit", "codehelix.app2", "codehelix", "/Users/kishore.reddy/dev/tests/slatekit")
-//    svc.generate(ctx, Templates.app())
-//    println("done")
-}
-
-
-fun test2(args:Array<String>) {
-//    val url = SlateKit::class.java.getResource("/templates/app/App.txt")
-//    val text = File(url.file).readText()
-//    println(text)
-
     runBlocking {
         AppRunner.run(
                 rawArgs = args,
@@ -62,22 +48,31 @@ fun test2(args:Array<String>) {
 }
 
 
-fun test(){
-
-    val root = "/Users/kishorereddy/git/slatekit"
-    val svc = DocService(
-            "$root/slatekit",
-            "$root/slatekit-site/src/hugo/slatekit-v3/content/core",
-            "scripts/doc/doc_template_cloud.md")
-    svc.processItems(listOf(
-            "AWS-S3",
-            "AWS-SQS"
-//            "Ctx",
-//            "Cmd",
-//            "Email",
-//            "Sms"
-    ))
-
-    //println("slatekit command line")
-    //run2(args)
+fun test2(args:Array<String>) {//    val url = SlateKit::class.java.getResource("/templates/app/build.txt")
+    //    val text = File(url.file).readText()
+    val svc = GeneratorService(CommonContext.simple(""))
+    val ctx = GeneratorContext("app5", "Test slate kit", "codehelix.app2", "codehelix", "/Users/kishore.reddy/dev/tests/slatekit", CredentialMode.EnvVars)
+    svc.generate(ctx, Templates.app())
+    //    println("done")
 }
+
+
+//fun test(){
+//
+//    val root = "/Users/kishorereddy/git/slatekit"
+//    val svc = DocService(
+//            "$root/slatekit",
+//            "$root/slatekit-site/src/hugo/slatekit-v3/content/core",
+//            "scripts/doc/doc_template_cloud.md")
+//    svc.processItems(listOf(
+//            "AWS-S3",
+//            "AWS-SQS"
+////            "Ctx",
+////            "Cmd",
+////            "Email",
+////            "Sms"
+//    ))
+//
+//    //println("slatekit command line")
+//    //run2(args)
+//}
