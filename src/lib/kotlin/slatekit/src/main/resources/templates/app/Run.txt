@@ -21,8 +21,9 @@ import slatekit.providers.logs.logback.LogbackLogs
  * java -jar ${app.name}.jar --about
  * java -jar ${app.name}.jar --version
  * java -jar ${app.name}.jar -env=dev
- * java -jar ${app.name}.jar -env=dev -config.location="jars"
- * java -jar ${app.name}.jar -env=dev -config.location="conf"
+ * java -jar ${app.name}.jar -env=dev -conf.dir = "jars"
+ * java -jar ${app.name}.jar -env=dev -conf.dir = "conf"
+ * java -jar ${app.name}.jar -env=dev -conf.dir = "file://./conf-sample-batch"
  * java -jar ${app.name}.jar -env=dev -config.location="file://./${app.name}/conf"
  */
 fun main(args: Array<String>) {

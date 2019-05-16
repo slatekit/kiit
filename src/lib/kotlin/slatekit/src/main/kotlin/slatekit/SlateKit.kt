@@ -61,7 +61,7 @@ class SlateKit(ctx: AppEntContext) : App<AppEntContext>(ctx, AppOptions(printSum
     }
 
 
-    override suspend fun init(): Try<Boolean> {
+    override  fun init(): Try<Boolean> {
         println("initializing")
 
         // System level ( slate kit )
@@ -77,7 +77,7 @@ class SlateKit(ctx: AppEntContext) : App<AppEntContext>(ctx, AppOptions(printSum
      *
      * @return
      */
-    override suspend fun execute(): Try<Any> {
+    override  fun execute(): Try<Any> {
         // The APIs ( DocApi, SetupApi are authenticated using an sample API key )
         val keys = listOf(ApiKey( name ="cli", key = "abc", roles = "dev,qa,ops,admin"))
 
@@ -106,7 +106,7 @@ class SlateKit(ctx: AppEntContext) : App<AppEntContext>(ctx, AppOptions(printSum
     }
 
 
-    override suspend fun end(): Try<Boolean> {
+    override  fun end(): Try<Boolean> {
         println("ending")
         return super.end()
     }

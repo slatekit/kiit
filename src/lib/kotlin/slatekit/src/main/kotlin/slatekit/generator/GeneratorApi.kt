@@ -16,7 +16,7 @@ class GeneratorApi(val context: Context, val service:GeneratorService) {
 
     // slatekit.setup.app -name="myapp1" -packageName="mycompany.myapp1" -desc="Sample app 1" -destination="~/dev/tests/slatekit/myapp1"
     @ApiAction(desc= "generates a new app project")
-    fun app(name:String, packageName:String, company:String, desc:String, destination:String, mode:CredentialMode): Try<String> {
-        return service.generate(GeneratorContext(name, desc, packageName, company, destination, mode), Templates.app())
+    fun app(name:String, packageName:String, company:String, desc:String, destination:String): Try<String> {
+        return service.generate(GeneratorContext(name, desc, packageName, company, destination, CredentialMode.EnvVars), Templates.app())
     }
 }

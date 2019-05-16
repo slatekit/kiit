@@ -81,7 +81,7 @@ dependencies {
     compile 'com.squareup.okhttp3:okhttp:3.9.0'
     compile 'org.threeten:threetenbp:1.3.8'
 
-    /* <slatekit_local>
+    ///* <slatekit_local>
     if( slatekitSetupViaMaven ) {
         compile "com.slatekit:slatekit-results:$slatekit_version"
         compile "com.slatekit:slatekit-common:$slatekit_version"
@@ -118,5 +118,29 @@ dependencies {
         compile project(":slatekit-providers")
         compile project(":slatekit-workers")
         //compile project(":slatekit-support")
-    //</slatekit_local>
+    } //</slatekit_local>
+}
+
+sourceSets.main.resources.srcDirs = [ "src/" ]
+
+jar {
+    manifest {
+        //attributes "Main-Class": "com.baeldung.fatjar.Application"
+        attributes(
+                'Main-Class': 'slatekit.RunKt',
+                "Class-Path": configurations.compile.collect { it.getName() }.join(' ')
+        )
+    }
+
+//    from {
+//        configurations.compile.collect { it.isDirectory() ? it : zipTree(it) }
+//    }
+}
+
+task copyAllJars(type: Copy) {
+    dependsOn build
+
+    //from(subprojects.configurations.compile)
+    into "lib"
+    from configurations.runtime
 }
