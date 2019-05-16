@@ -17,7 +17,9 @@ object Templates {
                 Action.MkDir("/gradle/wrapper"),
                 Action.MkDir("/src"),
                 Action.MkDir("/src/main"),
+                Action.MkDir("/src/test"),
                 Action.MkDir("/src/main/resources"),
+                Action.MkDir("/src/main/java"),
                 Action.MkDir("/src/main/kotlin", root = true),
 
                 Action.Doc  ("/README.md"                       , "/templates/common/README.md"),
@@ -27,6 +29,7 @@ object Templates {
                 Action.Build("/settings.gradle"               , "/templates/app/settings.txt"),
                 Action.Build("/gradlew"                       , "/templates/common/gradlew"),
                 Action.Build("/gradlew.bat"                   , "/templates/common/gradlew.bat"),
+                Action.Build("/gradle.properties"             , "/templates/common/gradle.properties"),
                 Action.Build("/gradle/wrapper/$gradleProps"   , "/templates/common/gradle-wrapper.properties"),
 
                 // Conf
