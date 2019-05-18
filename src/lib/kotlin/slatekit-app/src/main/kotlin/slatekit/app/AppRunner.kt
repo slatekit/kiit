@@ -38,7 +38,7 @@ object AppRunner {
      * @param logs   : Optional logs
      * @return
      */
-    fun <C:Context> run(
+    suspend fun <C:Context> run(
             rawArgs: Array<String>,
             about: About,
             builder: (Context) -> App<C>,
@@ -127,7 +127,7 @@ object AppRunner {
     /**
      * Run the app using the workflow init -> execute -> end
      */
-    fun <C:Context> run(app:App<C>): Try<Any> {
+    suspend fun <C:Context> run(app:App<C>): Try<Any> {
         val execResult = init(app).then { execute(app) }
 
         // Let the end method run
@@ -144,7 +144,7 @@ object AppRunner {
     /**
      * Initialize the app
      */
-    private fun <C:Context> init(app:App<C>):Try<Any> {
+    private suspend fun <C:Context> init(app:App<C>):Try<Any> {
         // Wrap App.init() call for safety
         // This will produce a nested Try<Try<Boolean>>
         val rawResult = Try.attempt { app.init() }
@@ -167,7 +167,7 @@ object AppRunner {
     /**
      * Execute the app
      */
-    private fun <C:Context> execute(app:App<C>):Try<Any> {
+    private suspend fun <C:Context> execute(app:App<C>):Try<Any> {
 
         if (app.options.printSummaryBeforeExec) {
             app.info()
@@ -190,7 +190,7 @@ object AppRunner {
     /**
      * Shutdown / end the app
      */
-    private fun <C:Context> end(execResult:Try<Any>, app:App<C>): Try<Any> {
+    private suspend fun <C:Context> end(execResult:Try<Any>, app:App<C>): Try<Any> {
         // Wrap App.init() call for safety
         // This will produce a nested Try<Try<Boolean>>
         val rawResult = Try.attempt { app.end() }

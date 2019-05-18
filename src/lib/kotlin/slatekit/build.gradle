@@ -17,6 +17,7 @@ buildscript {
 
 apply plugin: 'java'
 apply plugin: 'kotlin'
+apply plugin: 'application'
 
 
 // ==================================================================
@@ -76,11 +77,12 @@ dependencies {
     compile "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
     compile "org.jetbrains.kotlin:kotlin-reflect:$kotlin_version"
     compile "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin_version"
+    compile 'org.jetbrains.kotlinx:kotlinx-coroutines-core:1.1.0'
     compile "mysql:mysql-connector-java:5.1.13"
     compile 'com.squareup.okhttp3:okhttp:3.9.0'
     compile 'org.threeten:threetenbp:1.3.8'
 
-    /* <slatekit_local>
+    ///* <slatekit_local>
     if( slatekitSetupViaMaven ) {
         compile "com.slatekit:slatekit-results:$slatekit_version"
         compile "com.slatekit:slatekit-common:$slatekit_version"
@@ -112,10 +114,30 @@ dependencies {
         compile project(":slatekit-core")
         compile project(":slatekit-apis")
         compile project(":slatekit-integration")
-        compile project(":slatekit-result")
         compile project(":slatekit-server")
         compile project(":slatekit-providers")
         compile project(":slatekit-workers")
         //compile project(":slatekit-support")
-    //</slatekit_local>
+    } //</slatekit_local>
+}
+
+// https://www.anexinet.com/blog/six-ways-to-package-a-java-application-with-gradle/
+// gradle build distZip
+mainClassName = 'slatekit.RunKt'
+
+sourceSets.main.resources.srcDirs = [ "src/" ]
+
+jar {
+    manifest {
+        attributes(
+                'Main-Class': 'slatekit.RunKt',
+                "Class-Path": configurations.compile.collect { it.getName() }.join(' ')
+        )
+    }
+}
+
+task copyAllJars(type: Copy) {
+    dependsOn build
+    into "lib"
+    from configurations.runtime
 }

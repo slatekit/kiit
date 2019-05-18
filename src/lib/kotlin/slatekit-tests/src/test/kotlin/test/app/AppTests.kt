@@ -11,8 +11,9 @@
  * </slate_header>
  */
 
-package slate.test
+package test.app
 
+import kotlinx.coroutines.runBlocking
 import org.junit.Assert
 import org.junit.Test
 import slatekit.app.App
@@ -33,6 +34,18 @@ import slatekit.results.getOrElse
 
 class AppTests {
 
+//    suspend fun s1(a:Int, b:Int): Int {
+//        Thread.sleep(300)
+//        return a + b
+//    }
+//
+//    @Test
+//    fun testSuspend(){
+//        runBlocking {
+//            val result = s1(1, 2)
+//            Assert.assertEquals(3, result)
+//        }
+//    }
 
     fun testScenarios(call: (Array<String>?) -> Try<Any>) {
         call(null)
@@ -46,8 +59,8 @@ class AppTests {
     /**
      * Case: No schema
      */
-    class AppArgsSchemaNull(ctx:Context) : App<Context>(ctx) {
-        override fun execute(): Try<Any> = Success("ok", msg = "schema null")
+    class AppArgsSchemaNull(ctx: Context) : App<Context>(ctx) {
+        override suspend fun execute(): Try<Any> = Success("ok", msg = "schema null")
     }
 
 
@@ -55,12 +68,12 @@ class AppTests {
      * Case: Empty schema
      * @param schema
      */
-    class AppArgsSchemaEmpty(ctx:Context) : App<Context>(ctx) {
-        override fun execute(): Try<Any> = Success("ok", msg = "schema empty")
+    class AppArgsSchemaEmpty(ctx: Context) : App<Context>(ctx) {
+        override suspend fun execute(): Try<Any> = Success("ok", msg = "schema empty")
     }
 
 
-    fun runApp(args:Array<String>?, schema:ArgsSchema?, enc:Encryptor?, appCreator:(Context) -> App<Context>):Try<Any> {
+    suspend fun runApp(args: Array<String>?, schema: ArgsSchema?, enc: Encryptor?, appCreator: (Context) -> App<Context>): Try<Any> {
         return AppRunner.run(
                 rawArgs = args ?: arrayOf(),
                 about = About.simple("test id", "test name", "test desc", "test company", "1.0"),
@@ -74,19 +87,23 @@ class AppTests {
 
     @Test
     fun can_run_process_with_null_args_schema_without_raw_args() {
-        val result = runApp(null, null, null, { ctx -> AppArgsSchemaNull(ctx)})
-        Assert.assertTrue(result.success)
-        Assert.assertEquals("schema null", result.msg )
-        Assert.assertEquals("ok", result.getOrElse { "" } )
+        runBlocking {
+            val result = runApp(null, null, null, { ctx -> AppArgsSchemaNull(ctx) })
+            Assert.assertTrue(result.success)
+            Assert.assertEquals("schema null", result.msg)
+            Assert.assertEquals("ok", result.getOrElse { "" })
+        }
     }
 
 
     @Test
     fun can_run_process_with_empty_args_schema() {
-        val result = runApp(null, ArgsSchema(listOf()), null, {ctx -> AppArgsSchemaEmpty(ctx)})
-        Assert.assertTrue(result.success)
-        Assert.assertEquals("schema empty", result.msg )
-        Assert.assertEquals("ok", result.getOrElse { "" } )
+        runBlocking {
+            val result = runApp(null, ArgsSchema(listOf()), null, { ctx -> AppArgsSchemaEmpty(ctx) })
+            Assert.assertTrue(result.success)
+            Assert.assertEquals("schema empty", result.msg)
+            Assert.assertEquals("ok", result.getOrElse { "" })
+        }
     }
 
 

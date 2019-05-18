@@ -1,0 +1,6 @@
+${creds.ident}.enabled = true
+${creds.ident}.account = @{env('${creds.ident}_ACCOUNT')}
+${creds.ident}.key     = @{env('${creds.ident}_KEY')}
+${creds.ident}.pass    = @{env('${creds.ident}_PASS')}
+${creds.ident}.env     = env
+${creds.ident}.tag     = tag

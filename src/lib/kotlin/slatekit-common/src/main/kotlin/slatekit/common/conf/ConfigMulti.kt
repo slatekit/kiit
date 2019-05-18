@@ -25,31 +25,29 @@ import java.util.*
  * Created by kishorereddy on 6/15/17.
  */
 class ConfigMulti(
-        private val config: Properties,
-        private val configParent: Properties,
+        private val config: Conf,
+        private val configParent: Conf,
         private val path: String,
         private val enc: Encryptor? = null
 ) : Conf({ raw -> enc?.decrypt(raw) ?: raw }) {
 
     constructor(configPath: String, configParentPath: String, enc: Encryptor?) :
-            this(ConfFuncs.loadPropertiesFrom(configPath),
-                    ConfFuncs.loadPropertiesFrom(configParentPath),
+            this(Config(configPath, enc, ConfFuncs.loadPropertiesFrom(configPath)),
+                 Config(configParentPath, enc, ConfFuncs.loadPropertiesFrom(configParentPath)),
                     configPath, enc)
 
     constructor(config: Conf, configParent: Conf, enc: Encryptor?) :
-            this(config.rawConfig as Properties,
-                    configParent.rawConfig as Properties, config.origin(), enc)
+            this(config, configParent, config.origin(), enc)
 
     constructor(configPath: String, configParent: Conf, enc: Encryptor?) :
-            this(ConfFuncs.loadPropertiesFrom(configPath),
-                    configParent.rawConfig as Properties, configPath, enc)
+            this(Config(configPath, enc, ConfFuncs.loadPropertiesFrom(configPath)), configParent, configPath, enc)
 
     override val raw: Any = config
-    override fun get(key: String): Any? = getInternalString(key)
+    override fun get(key: String): Any? = getInternal(key)
     override fun containsKey(key: String): Boolean = containsKeyInternal(key)
-    override fun size(): Int = config.values.size
+    override fun size(): Int = config.size()
 
-    override fun getString(key: String): String = Strings.decrypt(getStringRaw(key), encryptor)
+    override fun getString(key: String): String = getInternalString(key) ?: ""
     override fun getBool(key: String): Boolean = Conversions.toBool(getStringRaw(key))
     override fun getShort(key: String): Short = Conversions.toShort(getStringRaw(key))
     override fun getInt(key: String): Int = Conversions.toInt(getStringRaw(key))
@@ -85,15 +83,15 @@ class ConfigMulti(
      */
     override fun loadFrom(file: String?): Conf? = ConfFuncs.load(file, enc)
 
-    fun containsKeyInternal(key: String): Boolean {
+    private fun containsKeyInternal(key: String): Boolean {
         return config.containsKey(key) || configParent.containsKey(key)
     }
 
-    fun getInternal(key: String): Any? {
+    private fun getInternal(key: String): Any? {
         val value = if (config.containsKey(key)) {
-            config.getProperty(key)
+            config.get(key)
         } else if (configParent.containsKey(key)) {
-            configParent.getProperty(key)
+            configParent.get(key)
         } else {
             null
         }
@@ -104,11 +102,11 @@ class ConfigMulti(
         }
     }
 
-    fun getInternalString(key: String): String? {
+    private fun getInternalString(key: String): String? {
         val value = if (config.containsKey(key)) {
-            config.getProperty(key)
+            config.getString(key)
         } else if (configParent.containsKey(key)) {
-            configParent.getProperty(key)
+            configParent.getString(key)
         } else {
             null
         }
@@ -119,5 +117,5 @@ class ConfigMulti(
         }
     }
 
-    fun getStringRaw(key: String): String = getInternalString(key)?.trim() ?: ""
+    private fun getStringRaw(key: String): String = getInternalString(key)?.trim() ?: ""
 }
