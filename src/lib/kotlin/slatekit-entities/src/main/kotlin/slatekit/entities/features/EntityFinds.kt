@@ -4,6 +4,7 @@ import slatekit.query.IQuery
 import slatekit.query.Query
 import slatekit.entities.Entity
 import slatekit.entities.core.ServiceSupport
+import slatekit.query.Op
 import slatekit.query.QueryEncoder
 import kotlin.reflect.KProperty
 
@@ -28,6 +29,17 @@ interface EntityFinds<TId, T> : ServiceSupport<TId, T> where TId: kotlin.Compara
         // Get column name from model schema ( if available )
         val column = QueryEncoder.ensureField(field)
         return repoT().findBy(column, "=", value)
+    }
+
+    /**
+     * finds items based on the pairs of conditions
+     * @param conditions: The list of name/value pairs
+     * @return
+     */
+    fun findByFields(conditions:List<Pair<String, Any>>): List<T> {
+        // Get column name from model schema ( if available )
+        val pairs = conditions.map { Pair(QueryEncoder.ensureField(it.first), it.second) }
+        return repoT().findByFields(pairs)
     }
 
     /**
@@ -65,6 +77,18 @@ interface EntityFinds<TId, T> : ServiceSupport<TId, T> where TId: kotlin.Compara
         // Get column name from model schema ( if available )
         val column = this.repoT().columnName(prop)
         return repoT().findIn(column, value)
+    }
+
+    /**
+     * finds items based on the field value
+     * @param prop: The property reference
+     * @param value: The value to check for
+     * @return
+     */
+    fun findFirstByField(name:String, value: Any): T? {
+        // Get column name from model schema ( if available )
+        val column = QueryEncoder.ensureField(name)
+        return repoT().findFirstBy(column, "=", value)
     }
 
     /**
