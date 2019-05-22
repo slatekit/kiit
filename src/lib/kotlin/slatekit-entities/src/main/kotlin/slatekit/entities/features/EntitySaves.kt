@@ -2,6 +2,7 @@ package slatekit.entities.features
 
 import slatekit.common.DateTime
 import slatekit.entities.Entity
+import slatekit.entities.core.EntityAction
 import slatekit.entities.core.EntityEvent
 import slatekit.entities.core.ServiceSupport
 
@@ -14,7 +15,7 @@ interface EntitySaves<TId, T> : ServiceSupport<TId, T> where TId: kotlin.Compara
      */
     fun save(entity: T?) {
         entity?.let { item ->
-            val finalEntity = applyFieldData(3, item)
+            val finalEntity = applyFieldData(EntityAction.EntitySave, item)
             repoT().save(finalEntity)
 
             // Event out

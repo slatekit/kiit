@@ -71,15 +71,16 @@ open class EntityRepoInMemoryWithIntId<T>(cls:KClass<T>, idGen:IdGenerator<Int>)
 open class EntityRepoInMemory<TId, T>(
     entityType: KClass<*>,
     entityIdType: KClass<*>,
+    model: Model? = null,
     encryptor: Encryptor? = null,
     namer: Namer? = null,
     idGenerator: IdGenerator<TId>? = null
 )
-    : EntityRepo<TId, T>(entityType, entityIdType, entityType.simpleName ?: "", encryptor = encryptor, namer = namer)
+    : EntityRepo<TId, T>(entityType, entityIdType, entityType.simpleName ?: "", model = model, encryptor = encryptor, namer = namer)
         where TId: kotlin.Comparable<TId>, T: Entity<TId> {
 
-    private val idGenerator = idGenerator ?: LongIdGenerator()
-    private var items = ListMap<TId, T>(listOf())
+    protected val idGenerator = idGenerator ?: LongIdGenerator()
+    protected var items = ListMap<TId, T>(listOf())
 
     /**
      * create the entity in memory
@@ -174,10 +175,9 @@ open class EntityRepoInMemory<TId, T>(
      * @param query
      * @return
      */
-    override fun findBy(field: String, op: String, value: Any): List<T> {
-        val propRaw  = Reflector.findPropertyExtended(entityType, field)
-        //val prop =  if(propRaw != null) propRaw else Reflector.findField(entityType)
-        val prop = propRaw
+    override fun findBy(fieldRaw: String, op: String, value: Any): List<T> {
+        val field = model?.fields?.find { it.storedName.toLowerCase() == fieldRaw.toLowerCase() }
+        val prop  = field?.prop ?: Reflector.findPropertyExtended(entityType, field?.name ?: fieldRaw)
         val matched = prop?.let { property ->
             val cls = KTypes.getClassFromType(property.returnType)
 
