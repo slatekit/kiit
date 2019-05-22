@@ -120,7 +120,7 @@ class OrmBuilder(dbCreator: (DbCon) -> IDb,
         return when (dbType) {
             DbTypeMySql -> MySqlEntityRepo(db, entityType, entityIdType, mapper, tableName, enc, namer)
             DbTypePGres -> PostGresEntityRepo(db, entityType, entityIdType, mapper, tableName, enc, namer)
-            else -> EntityRepoInMemory(entityType, entityIdType, enc, namer)
+            else -> EntityRepoInMemory(entityType, entityIdType, mapper.model(), enc, namer)
         }
     }
 
