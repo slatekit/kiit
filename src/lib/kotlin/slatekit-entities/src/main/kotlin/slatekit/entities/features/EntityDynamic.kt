@@ -14,6 +14,8 @@ import slatekit.results.Try
  * - entities: in-memory repo with protected items
  * - entities: in-memory repo find fix
  * - entities: crud with result ?
+ * - entities: save has no result
+ *
  */
 interface EntityDynamic<TId> where TId:Comparable<TId> {
 

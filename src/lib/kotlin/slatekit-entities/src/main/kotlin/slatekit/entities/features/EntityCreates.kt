@@ -45,15 +45,4 @@ interface EntityCreates<TId, T> : ServiceSupport<TId, T> where TId : kotlin.Comp
     fun createAsTry(entity: T): Try<TId> {
         return Try.attempt { create(entity) }
     }
-
-
-    fun isCreated(id: TId): Boolean {
-        return when (id) {
-            is Int -> id > 0
-            is Long -> id > 0L
-            is String -> !id.isEmpty()
-            is UUID -> !id.toString().trim().isEmpty()
-            else -> false
-        }
-    }
 }
