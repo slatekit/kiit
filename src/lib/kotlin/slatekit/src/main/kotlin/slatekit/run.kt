@@ -1,10 +1,8 @@
 package slatekit
 
-
 import kotlinx.coroutines.runBlocking
 import slatekit.app.AppRunner
 import slatekit.common.CommonContext
-import slatekit.docs.DocService
 import slatekit.generator.CredentialMode
 import slatekit.integration.common.AppEntContext
 import slatekit.providers.logs.logback.LogbackLogs
@@ -37,6 +35,7 @@ import slatekit.generator.Templates
 fun main(args: Array<String>) {
     //cli(args)
     app(args)
+    //app2(args)
 }
 
 
@@ -58,7 +57,7 @@ fun cli(args: Array<String>) {
 fun app(args:Array<String>) {
     //    val text = File(url.file).readText()
     val svc = GeneratorService(CommonContext.simple(""))
-    val ctx = GeneratorContext("app6", "Test slate kit", "codehelix.app2", "codehelix", "/Users/kishore.reddy/dev/tests/slatekit", CredentialMode.EnvVars)
+    val ctx = GeneratorContext("app7", "Test slate kit", "codehelix.app2", "codehelix", "/Users/kishore.reddy/dev/tests/slatekit", CredentialMode.EnvVars)
     svc.generate(ctx, Templates.app())
 }
 
