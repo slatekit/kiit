@@ -36,7 +36,7 @@ class Entity_Services_Tests {
 
     @Before fun setup(){
         entities = Entities({ con -> Db(con) }, DbLookup(DbConString("", "", "", "")))
-        entities.prototype<User5>(User5::class)
+        entities.prototype<User5>(User5::class, loadSchema = true)
         entities.prototype<Member>(Member::class)
         entities.prototype<Group>(Group::class)
     }
@@ -53,9 +53,12 @@ class Entity_Services_Tests {
 
             // 2. Create many
             userSvc.saveAll(listOf(
-                    User5(0, "jdoe2@abc.com", true, 35, 12.34),
-                    User5(0, "jdoe3@abc.com", true, 35, 12.34),
-                    User5(0, "jdoe4@abc.com", true, 35, 12.34)
+                    User5(0, "jdoe2@abc.com", true , 35, 12.34),
+                    User5(0, "jdoe3@abc.com", true , 35, 12.34),
+                    User5(0, "jdoe4@abc.com", true , 35, 12.34),
+                    User5(0, "jdoe5@abc.com", false, 40, 12.34),
+                    User5(0, "jdoe6@abc.com", false, 40, 12.34),
+                    User5(0, "jdoe7@abc.com", false, 42, 12.34)
             ))
 
             // 3. Create many
@@ -97,7 +100,7 @@ class Entity_Services_Tests {
     @Test fun can_check_count() {
         val svc = getUserService(true)
         val count = svc.count()
-        Assert.assertTrue(count == 4L)
+        Assert.assertTrue(count == 7L)
     }
 
 
@@ -111,15 +114,15 @@ class Entity_Services_Tests {
     @Test fun can_get_last() {
         val svc = getUserService(true)
         val last = svc.last()
-        Assert.assertTrue(last?.email == "jdoe4@abc.com")
+        Assert.assertTrue(last?.email == "jdoe7@abc.com")
     }
 
 
     @Test fun can_get_recent() {
         val svc = getUserService(true)
         val recent = svc.recent(2)
-        Assert.assertTrue(recent[0].email == "jdoe4@abc.com")
-        Assert.assertTrue(recent[1].email == "jdoe3@abc.com")
+        Assert.assertTrue(recent[0].email == "jdoe7@abc.com")
+        Assert.assertTrue(recent[1].email == "jdoe6@abc.com")
     }
 
 
@@ -151,10 +154,21 @@ class Entity_Services_Tests {
     }
 
 
+    @Test fun can_find_by_fields() {
+        val svc = getUserService(true)
+        val matches = svc.findByFields(listOf(
+                Pair(User5::isActive.name, false),
+                Pair(User5::age.name, 40)
+        ))
+        Assert.assertTrue(matches.size == 2)
+        Assert.assertTrue(matches[0].email == "jdoe5@abc.com")
+    }
+
+
     @Test fun can_get_all() {
         val svc = getUserService(true)
         val all = svc.getAll()
-        Assert.assertTrue(all.size == 4)
+        Assert.assertTrue(all.size == 7)
     }
 
 

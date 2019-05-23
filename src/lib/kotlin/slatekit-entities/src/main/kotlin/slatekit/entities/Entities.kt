@@ -25,6 +25,7 @@ import slatekit.entities.repos.EntityRepoInMemory
 import slatekit.entities.repos.IdGenerator
 import slatekit.entities.repos.LongIdGenerator
 import slatekit.meta.models.Model
+import slatekit.meta.models.ModelMapper
 import kotlin.reflect.KClass
 
 /**
@@ -131,8 +132,9 @@ open class Entities(
      */
     open fun <T> prototype(entityType: KClass<*>,
                            serviceType:KClass<*>? = null,
-                           serviceCtx:Any? = null): EntityContext where T: Entity<Long> {
-        return this.prototype<Long, T>(entityType, Long::class, LongIdGenerator(), serviceType = serviceType, serviceCtx = serviceCtx)
+                           serviceCtx:Any? = null,
+                           loadSchema:Boolean = false): EntityContext where T: Entity<Long> {
+        return this.prototype<Long, T>(entityType, Long::class, LongIdGenerator(), loadSchema = loadSchema, serviceType = serviceType, serviceCtx = serviceCtx)
     }
 
 
@@ -151,6 +153,7 @@ open class Entities(
             entityType: KClass<*>,
             entityIdType: KClass<*>,
             entityIdGen: IdGenerator<TId>,
+            loadSchema: Boolean,
             tableName: String? = null,
             serviceType: KClass<*>? = null,
             serviceCtx: Any? = null): EntityContext where TId : Comparable<TId>, T : Entity<TId> {
@@ -158,7 +161,7 @@ open class Entities(
         val table = buildTableName(entityType, tableName, namer)
 
         // 1. Model ( schema of the entity which maps fields to columns and has other metadata )
-        val model = Model(entityType, table) // Empty model as this is in-memory
+        val model = if(loadSchema) ModelMapper.loadSchema(entityType) else Model(entityType, table) // Empty model as this is in-memory
 
         // 2. Mapper ( maps entities to/from sql using the model/schema )
         val mapper = EntityMapperEmpty<TId, T>(model) // Empty mapper as this is in-memory

@@ -15,6 +15,7 @@ package test.setup
 import slatekit.common.Random
 import slatekit.common.DateTime
 import slatekit.common.Field
+import slatekit.common.Id
 import slatekit.entities.Entity
 import slatekit.entities.EntityUpdatable
 import slatekit.entities.EntityWithId
@@ -129,7 +130,7 @@ data class User4(
 
 
 data class User5(
-        @property:Field()
+        @property:Id()
         override val id: Long = 0,
 
         @property:Field(required = true)
