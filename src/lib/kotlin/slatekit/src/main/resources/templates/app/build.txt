@@ -1,6 +1,6 @@
 buildscript {
     ext.kotlin_version = '1.3.21'
-    ext.slatekit_version = "0.9.25"
+    ext.slatekit_version = "0.9.26"
 
     repositories {
         jcenter()
@@ -14,6 +14,9 @@ buildscript {
 
 apply plugin: 'java'
 apply plugin: 'kotlin'
+apply plugin:'application'
+mainClassName = "${app.package}.RunKt"
+
 
 sourceCompatibility = 1.8
 

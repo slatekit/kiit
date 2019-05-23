@@ -35,6 +35,13 @@ import slatekit.generator.Templates
  * java -jar ${app.name}.jar -env=dev -log.level=info -conf.dir = "file://./conf-sample-server"
  */
 fun main(args: Array<String>) {
+    //cli(args)
+    app(args)
+}
+
+
+
+fun cli(args: Array<String>) {
     runBlocking {
         AppRunner.run(
                 rawArgs = args,
@@ -48,12 +55,11 @@ fun main(args: Array<String>) {
 }
 
 
-fun test2(args:Array<String>) {//    val url = SlateKit::class.java.getResource("/templates/app/build.txt")
+fun app(args:Array<String>) {
     //    val text = File(url.file).readText()
     val svc = GeneratorService(CommonContext.simple(""))
-    val ctx = GeneratorContext("app5", "Test slate kit", "codehelix.app2", "codehelix", "/Users/kishore.reddy/dev/tests/slatekit", CredentialMode.EnvVars)
+    val ctx = GeneratorContext("app6", "Test slate kit", "codehelix.app2", "codehelix", "/Users/kishore.reddy/dev/tests/slatekit", CredentialMode.EnvVars)
     svc.generate(ctx, Templates.app())
-    //    println("done")
 }
 
 

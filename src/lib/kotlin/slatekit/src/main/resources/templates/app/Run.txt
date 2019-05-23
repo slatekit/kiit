@@ -27,7 +27,7 @@ import slatekit.providers.logs.logback.LogbackLogs
  * java -jar ${app.name}.jar -env=dev -config.location="file://./${app.name}/conf"
  */
 fun main(args: Array<String>) {
-    //runBlocking {
+    runBlocking {
         AppRunner.run(
                 rawArgs = args,
                 about = App.about,
@@ -36,5 +36,5 @@ fun main(args: Array<String>) {
                 logs = LogbackLogs(),
                 builder = { ctx -> App(ctx) }
         )
-    //}
+    }
 }
