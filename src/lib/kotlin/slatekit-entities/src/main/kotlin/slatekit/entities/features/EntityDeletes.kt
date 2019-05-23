@@ -6,6 +6,7 @@ import slatekit.entities.Entity
 import slatekit.entities.core.EntityEvent
 import slatekit.entities.core.ServiceSupport
 import slatekit.query.Op
+import slatekit.results.Try
 import kotlin.reflect.KProperty
 
 interface EntityDeletes<TId, T> : ServiceSupport<TId, T> where TId: kotlin.Comparable<TId>, T: Entity<TId> {
@@ -29,6 +30,17 @@ interface EntityDeletes<TId, T> : ServiceSupport<TId, T> where TId: kotlin.Compa
 
         return success
     }
+
+
+    /**
+     * updates the entity in the data-store with error-handling
+     * @param entity
+     * @return
+     */
+    fun deleteAsTry(entity: T): Try<Boolean> {
+        return Try.attempt { delete(entity) }
+    }
+
 
     /**
      * deletes the entity by its id

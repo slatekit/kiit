@@ -18,11 +18,11 @@ class StringTests {
 
 
     @Test fun can_create_id() {
-        Assert.assertTrue("abc_123_$%^" == "abc 123 $%^".toId())
-        Assert.assertTrue("abc_123_$%^" == "ABC 123 $%^".toId())
-        Assert.assertTrue("ABC_123_$%^" == "ABC 123 $%^".toId(lowerCase = false))
-        Assert.assertTrue("abc_123_$%^" == " ABC 123 $%^ ".toId())
-        Assert.assertTrue("abc_123_$%^_&*-()_" == " ABC 123 $%^ &*-()_ ".toId())
+        Assert.assertTrue("abc_123_" == "abc 123 $%^".toId())
+        Assert.assertTrue("abc_123_" == "ABC 123 $%^".toId())
+        Assert.assertTrue("ABC_123_" == "ABC 123 $%^".toId(lowerCase = false))
+        Assert.assertTrue("abc_123_" == " ABC 123 $%^ ".toId())
+        Assert.assertTrue("abc_123__-_" == " ABC 123 $%^ &*-()_ ".toId())
     }
 
 

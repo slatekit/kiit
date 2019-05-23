@@ -28,9 +28,12 @@ import java.util.*
 //import java.time.*
 import org.threeten.bp.*
 import slatekit.common.Record
+import slatekit.common.ext.tail
 import slatekit.meta.models.Model
 import slatekit.query.Op
+import slatekit.query.Query
 import kotlin.reflect.KClass
+import kotlin.reflect.KProperty
 
 
 open class EntityRepoInMemoryWithLongId<T>(cls:KClass<T>, idGen:IdGenerator<Long>)
@@ -71,15 +74,16 @@ open class EntityRepoInMemoryWithIntId<T>(cls:KClass<T>, idGen:IdGenerator<Int>)
 open class EntityRepoInMemory<TId, T>(
     entityType: KClass<*>,
     entityIdType: KClass<*>,
+    model: Model? = null,
     encryptor: Encryptor? = null,
     namer: Namer? = null,
     idGenerator: IdGenerator<TId>? = null
 )
-    : EntityRepo<TId, T>(entityType, entityIdType, entityType.simpleName ?: "", encryptor = encryptor, namer = namer)
+    : EntityRepo<TId, T>(entityType, entityIdType, entityType.simpleName ?: "", model = model, encryptor = encryptor, namer = namer)
         where TId: kotlin.Comparable<TId>, T: Entity<TId> {
 
-    private val idGenerator = idGenerator ?: LongIdGenerator()
-    private var items = ListMap<TId, T>(listOf())
+    protected val idGenerator = idGenerator ?: LongIdGenerator()
+    protected var items = ListMap<TId, T>(listOf())
 
     /**
      * create the entity in memory
@@ -174,23 +178,20 @@ open class EntityRepoInMemory<TId, T>(
      * @param query
      * @return
      */
-    override fun findBy(field: String, op: String, value: Any): List<T> {
-        val propRaw  = Reflector.findPropertyExtended(entityType, field)
-        //val prop =  if(propRaw != null) propRaw else Reflector.findField(entityType)
-        val prop = propRaw
-        val matched = prop?.let { property ->
-            val cls = KTypes.getClassFromType(property.returnType)
+    override fun findBy(fieldRaw: String, op: String, value: Any): List<T> {
+        return filter(items.all(), fieldRaw, op, value)
+    }
 
-            val finalValue = if (value is UUID) value.toString() else value
-            property.let { p ->
-                items.all().filter { it ->
-                    val actual = Reflector.getFieldValue(it, p)
-                    val expected = finalValue
-                    compare(cls, actual, expected)
-                }
-            }
-        } ?: listOf()
-        return matched
+    /**
+     * finds items based on the conditions
+     */
+    override fun findByFields(conditions:List<Pair<String, Any>>): List<T> {
+        val all = items.all()
+        val filtered = conditions.fold(all) { items, condition ->
+            val matches = filter(items, condition.first, "=", condition.second)
+            matches
+        }
+        return filtered
     }
 
     /**
@@ -272,6 +273,25 @@ open class EntityRepoInMemory<TId, T>(
                 else -> false
             }
         } ?: false
+    }
+
+
+    protected fun filter(all:List<T>, fieldRaw: String, op: String, value: Any): List<T> {
+        val field = model?.fields?.find { it.storedName.toLowerCase() == fieldRaw.toLowerCase() }
+        val prop  = field?.prop ?: Reflector.findPropertyExtended(entityType, field?.name ?: fieldRaw)
+        val matched = prop?.let { property ->
+            val cls = KTypes.getClassFromType(property.returnType)
+
+            val finalValue = if (value is UUID) value.toString() else value
+            property.let { p ->
+                all.filter { it ->
+                    val actual = Reflector.getFieldValue(it, p)
+                    val expected = finalValue
+                    compare(cls, actual, expected)
+                }
+            }
+        } ?: listOf()
+        return matched
     }
 }
 

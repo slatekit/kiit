@@ -103,13 +103,14 @@ fun String.pascalCase(): String {
 
 /**
  * Converts a string to a "soft" id that has "_" instead of spaces.
- * e.g: "abc& $[]123" = "abc&_$[]123"
+ * e.g: "abc& $[]123" = "abc_123"
  */
 fun String.toId(lowerCase: Boolean = true): String {
     val trimmed = this.trim()
-    val filtered = trimmed.filter { it.isDigit() || it.isLetter() || it == '-' || it == '_' || it == '.' }
+    val filtered = trimmed.filter { it.isDigit() || it.isLetter() || it == ' ' || it == '-' || it == '_' || it == '.' }
     val converted = if (lowerCase) filtered.toLowerCase() else filtered
-    val finalText = if (converted.isNullOrBlank()) "_" else converted
+    val replaced = converted.replace(' ', '_')
+    val finalText = if (replaced.isNullOrBlank()) "_" else replaced
     return finalText
 }
 

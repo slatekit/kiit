@@ -252,6 +252,11 @@ abstract class EntityRepo<TId, T>(
     open fun findBy(field: String, op: String, value: Any): List<T> = listOf()
 
     /**
+     * finds items based on the conditions
+     */
+    open fun findByFields(conditions:List<Pair<String, Any>>): List<T> = listOf()
+
+    /**
      * finds items based on the field in the values provided
      * @param field: name of field
      * @param value: values of field to search against

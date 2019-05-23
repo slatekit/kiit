@@ -15,6 +15,7 @@ package slatekit.entities.repos
 
 import slatekit.common.db.IDb
 import slatekit.common.encrypt.Encryptor
+import slatekit.common.ext.tail
 import slatekit.common.naming.Namer
 import slatekit.query.IQuery
 import slatekit.query.Op
@@ -23,6 +24,7 @@ import slatekit.entities.Entity
 import slatekit.entities.EntityMapper
 import slatekit.entities.EntityRepo
 import slatekit.meta.models.Model
+import slatekit.query.where
 import kotlin.reflect.KClass
 
 /**
@@ -191,6 +193,20 @@ abstract class EntityRepoSql<TId, T>(
     override fun findBy(field: String, op: String, value: Any): List<T> {
         return find(Query().where(field, op, value))
     }
+
+    /**
+     * finds items based on the conditions
+     */
+    override fun findByFields(conditions:List<Pair<String, Any>>): List<T> {
+        val first = conditions.first()
+        val tail = conditions.tail()
+        val query = Query().where(first.first, Op.Eq, first.second)
+        tail.forEach {
+            query.and(it.first, Op.Eq, it.second)
+        }
+        return find(query)
+    }
+
 
     /**
      * finds items based on the field in the values provided

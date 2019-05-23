@@ -3,10 +3,12 @@ package slatekit.entities.features
 import slatekit.common.DateTime
 import slatekit.query.IQuery
 import slatekit.entities.Entity
+import slatekit.entities.core.EntityAction
 import slatekit.entities.core.ServiceSupport
 import slatekit.meta.Reflector
 import slatekit.meta.kClass
 import slatekit.entities.core.EntityEvent
+import slatekit.results.Try
 import kotlin.reflect.KProperty
 
 interface EntityUpdates<TId, T> : ServiceSupport<TId, T> where TId: kotlin.Comparable<TId>, T: Entity<TId> {
@@ -18,7 +20,7 @@ interface EntityUpdates<TId, T> : ServiceSupport<TId, T> where TId: kotlin.Compa
      */
     fun update(entity: T): Boolean {
         val original:T? = if (this is EntityHooks ) repoT().get(entity.identity()) else null
-        val finalEntity = applyFieldData(2, entity)
+        val finalEntity = applyFieldData(EntityAction.EntityUpdate, entity)
         val success = repoT().update(finalEntity)
 
         // Event out
@@ -31,6 +33,17 @@ interface EntityUpdates<TId, T> : ServiceSupport<TId, T> where TId: kotlin.Compa
         }
         return success
     }
+
+
+    /**
+     * updates the entity in the data-store with error-handling
+     * @param entity
+     * @return
+     */
+    fun updateAsTry(entity: T): Try<Boolean> {
+        return Try.attempt { update(entity) }
+    }
+
 
     /**
      * updates the entity field in the datastore
