@@ -9,6 +9,7 @@ import slatekit.meta.Reflector
 import slatekit.meta.kClass
 import slatekit.entities.core.EntityEvent
 import slatekit.results.Try
+import slatekit.results.builders.Tries
 import kotlin.reflect.KProperty
 
 interface EntityUpdates<TId, T> : ServiceSupport<TId, T> where TId: kotlin.Comparable<TId>, T: Entity<TId> {
@@ -41,7 +42,7 @@ interface EntityUpdates<TId, T> : ServiceSupport<TId, T> where TId: kotlin.Compa
      * @return
      */
     fun updateAsTry(entity: T): Try<Boolean> {
-        return Try.attempt { update(entity) }
+        return Tries.attempt { update(entity) }
     }
 
 
