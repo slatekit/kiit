@@ -4,7 +4,6 @@ package slatekit
 import kotlinx.coroutines.runBlocking
 import slatekit.app.AppRunner
 import slatekit.common.CommonContext
-import slatekit.docs.DocService
 import slatekit.generator.CredentialMode
 import slatekit.integration.common.AppEntContext
 import slatekit.providers.logs.logback.LogbackLogs
@@ -35,6 +34,12 @@ import slatekit.generator.Templates
  * java -jar ${app.name}.jar -env=dev -log.level=info -conf.dir = "file://./conf-sample-server"
  */
 fun main(args: Array<String>) {
+    app(args)
+    cli(args)
+}
+
+
+fun cli(args:Array<String>) {
     runBlocking {
         AppRunner.run(
                 rawArgs = args,
@@ -48,12 +53,10 @@ fun main(args: Array<String>) {
 }
 
 
-fun test2(args:Array<String>) {//    val url = SlateKit::class.java.getResource("/templates/app/build.txt")
-    //    val text = File(url.file).readText()
-    val svc = GeneratorService(CommonContext.simple(""))
+fun app(args:Array<String>) {//    val url = SlateKit::class.java.getResource("/templates/app/build.txt")
+    val svc = GeneratorService(CommonContext.simple(""), SlateKit::class.java)
     val ctx = GeneratorContext("app5", "Test slate kit", "codehelix.app2", "codehelix", "/Users/kishore.reddy/dev/tests/slatekit", CredentialMode.EnvVars)
     svc.generate(ctx, Templates.app())
-    //    println("done")
 }
 
 
