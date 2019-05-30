@@ -4,12 +4,10 @@ package slatekit
 import kotlinx.coroutines.runBlocking
 import slatekit.app.AppRunner
 import slatekit.common.CommonContext
-import slatekit.generator.CredentialMode
+import slatekit.docs.DocService
+import slatekit.generator.*
 import slatekit.integration.common.AppEntContext
 import slatekit.providers.logs.logback.LogbackLogs
-import slatekit.generator.GeneratorContext
-import slatekit.generator.GeneratorService
-import slatekit.generator.Templates
 
 
 /**
@@ -35,7 +33,8 @@ import slatekit.generator.Templates
  */
 fun main(args: Array<String>) {
     app(args)
-    cli(args)
+    //cli(args)
+    //doc(args)
 }
 
 
@@ -53,29 +52,37 @@ fun cli(args:Array<String>) {
 }
 
 
-fun app(args:Array<String>) {//    val url = SlateKit::class.java.getResource("/templates/app/build.txt")
-    val svc = GeneratorService(CommonContext.simple(""), SlateKit::class.java)
-    val ctx = GeneratorContext("app5", "Test slate kit", "codehelix.app2", "codehelix", "/Users/kishore.reddy/dev/tests/slatekit", CredentialMode.EnvVars)
-    svc.generate(ctx, Templates.app())
+fun app(args:Array<String>) {
+    gen(args, "app8", "Test slate kit", "myapp.app", "codehelix", "/Users/kishore.reddy/dev/tests/slatekit", Templates.app())
 }
 
 
-//fun test(){
-//
-//    val root = "/Users/kishorereddy/git/slatekit"
-//    val svc = DocService(
-//            "$root/slatekit",
-//            "$root/slatekit-site/src/hugo/slatekit-v3/content/core",
-//            "scripts/doc/doc_template_cloud.md")
-//    svc.processItems(listOf(
-//            "AWS-S3",
-//            "AWS-SQS"
-////            "Ctx",
-////            "Cmd",
-////            "Email",
-////            "Sms"
-//    ))
-//
-//    //println("slatekit command line")
-//    //run2(args)
-//}
+fun lib(args:Array<String>) {
+    gen(args,"lib1", "Test slate kit", "myapp.lib", "codehelix", "/Users/kishore.reddy/dev/tests/slatekit", Templates.lib())
+}
+
+
+fun srv(args:Array<String>) {
+    gen(args,"srv1", "Test slate kit", "myapp.srv", "codehelix", "/Users/kishore.reddy/dev/tests/slatekit", Templates.srv())
+}
+
+
+fun gen(args:Array<String>, name:String, desc:String, packageName:String, company:String, dest:String, template: Template) {
+    val svc = GeneratorService(CommonContext.simple(""), SlateKit::class.java)
+    val ctx = GeneratorContext(name, desc, packageName, company, dest, CredentialMode.EnvVars)
+    svc.generate(ctx, template)
+}
+
+
+fun doc(args:Array<String>){
+
+    val root = "/Users/kishorereddy/git/slatekit"
+    val svc = DocService(
+            "$root/slatekit",
+            "$root/slatekit-site/src/hugo/slatekit-v3/content/core",
+            "scripts/doc/doc_template_cloud.md")
+    svc.processItems(listOf(
+            "AWS-S3",
+            "AWS-SQS"
+    ))
+}

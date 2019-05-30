@@ -46,4 +46,72 @@ object Templates {
         )
         return Template("App", TemplateType.App, actions)
     }
+
+
+    /**
+     * Template for generating a Slate Kit Application
+     */
+    fun lib(): Template {
+
+        val actions = listOf(
+                // Directories
+                Action.MkDir("/gradle"),
+                Action.MkDir("/gradle/wrapper"),
+                Action.MkDir("/src"),
+                Action.MkDir("/src/main"),
+                Action.MkDir("/src/test"),
+                Action.MkDir("/src/main/resources"),
+                Action.MkDir("/src/main/java"),
+                Action.MkDir("/src/main/kotlin", root = true),
+
+                Action.Doc("/README.md", "/templates/lib/README.md"),
+
+                // Gradle
+                Action.Build("/build.gradle", "/templates/lib/build.txt"),
+                Action.Build("/settings.gradle", "/templates/lib/settings.txt"),
+                Action.Build("/gradlew", "/templates/common/gradlew"),
+                Action.Build("/gradlew.bat", "/templates/common/gradlew.bat"),
+                Action.Build("/gradle.properties", "/templates/common/gradle.properties"),
+                Action.Build("/gradle/wrapper/$gradleProps", "/templates/common/gradle-wrapper.properties"),
+
+                // Code
+                Action.MkDir("/src/main/kotlin/@app.package/ext"),
+                Action.MkDir("/src/main/kotlin/@app.package/models"),
+                Action.MkDir("/src/main/kotlin/@app.package/services"),
+                Action.MkDir("/src/main/kotlin/@app.package/types"),
+                Action.MkDir("/src/main/kotlin/@app.package/utils"),
+                Action.MkDir("/src/main/kotlin/@app.package/values")
+        )
+        return Template("App", TemplateType.App, actions)
+    }
+
+
+    /**
+     * Template for generating a Slate Kit Application
+     */
+    fun srv(): Template {
+
+        val actions = listOf(
+                // Directories
+                Action.MkDir("/gradle"),
+                Action.MkDir("/gradle/wrapper"),
+                Action.MkDir("/src"),
+                Action.MkDir("/src/main"),
+                Action.MkDir("/src/test"),
+                Action.MkDir("/src/main/resources"),
+                Action.MkDir("/src/main/java"),
+                Action.MkDir("/src/main/kotlin", root = true),
+
+                Action.Doc("/README.md", "/templates/srv/README.md"),
+
+                // Gradle
+                Action.Build("/build.gradle", "/templates/lib/build.txt"),
+                Action.Build("/settings.gradle", "/templates/lib/settings.txt"),
+                Action.Build("/gradlew", "/templates/common/gradlew"),
+                Action.Build("/gradlew.bat", "/templates/common/gradlew.bat"),
+                Action.Build("/gradle.properties", "/templates/common/gradle.properties"),
+                Action.Build("/gradle/wrapper/$gradleProps", "/templates/common/gradle-wrapper.properties")
+        )
+        return Template("App", TemplateType.App, actions)
+    }
 }

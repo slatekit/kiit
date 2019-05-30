@@ -50,7 +50,8 @@ class Creator(val ctx: GeneratorContext, val template: Template, val cls:Class<*
      */
     fun dir(root: File, action: Action.MkDir) {
         log("Dir : " + action.path)
-        val target = File(root, action.path)
+        val packagePath = ctx.packageName.replace(".", Props.pathSeparator)
+        val target = File(root, action.path.replace("@app.package", packagePath))
         createDir(target)
     }
 
