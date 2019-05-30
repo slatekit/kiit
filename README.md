@@ -40,19 +40,19 @@ dependencies {
     	compile 'com.slatekit:slatekit-common:1.0.0'
 	
 	// Misc architecture components ( all depend on results/common components above )
-	compile 'com.slatekit:slatekit-app:0.9.24'
-	compile 'com.slatekit:slatekit-db:0.9.24'
-	compile 'com.slatekit:slatekit-meta:0.9.24'
-	compile 'com.slatekit:slatekit-cloud:0.9.24'
-	compile 'com.slatekit:slatekit-query:0.9.24'
-	compile 'com.slatekit:slatekit-entities:0.9.24'
-	compile 'com.slatekit:slatekit-orm:0.9.24'
-	compile 'com.slatekit:slatekit-core:0.9.24'
-	compile 'com.slatekit:slatekit-apis:0.9.24'
-	compile 'com.slatekit:slatekit-integration:0.9.24'
-	compile 'com.slatekit:slatekit-server:0.9.24'
-	compile 'com.slatekit:slatekit-providers:0.9.24'
-	compile 'com.slatekit:slatekit-workers:0.9.24'
+	compile 'com.slatekit:slatekit-app:0.9.27'
+	compile 'com.slatekit:slatekit-db:0.9.27'
+	compile 'com.slatekit:slatekit-meta:0.9.27'
+	compile 'com.slatekit:slatekit-cloud:0.9.27'
+	compile 'com.slatekit:slatekit-query:0.9.27'
+	compile 'com.slatekit:slatekit-entities:0.9.27'
+	compile 'com.slatekit:slatekit-orm:0.9.27'
+	compile 'com.slatekit:slatekit-core:0.9.27'
+	compile 'com.slatekit:slatekit-apis:0.9.27'
+	compile 'com.slatekit:slatekit-integration:0.9.27'
+	compile 'com.slatekit:slatekit-server:0.9.27'
+	compile 'com.slatekit:slatekit-providers:0.9.27'
+	compile 'com.slatekit:slatekit-workers:0.9.27'
 }
 ```
 
