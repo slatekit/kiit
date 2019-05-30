@@ -18,6 +18,7 @@ import slatekit.common.lex.Lexer
 import slatekit.results.Failure
 import slatekit.results.Success
 import slatekit.results.Try
+import slatekit.results.builders.Tries
 import slatekit.results.then
 
 /**
@@ -93,7 +94,7 @@ object ArgsService {
             metaChar: String,
             sysChar: String
     ): Try<Args> {
-        return Try.attempt {
+        return Tries.attempt {
 
             // if input = "area.api.action -arg1="1" -arg2="2"
             // result = "area.api.action"

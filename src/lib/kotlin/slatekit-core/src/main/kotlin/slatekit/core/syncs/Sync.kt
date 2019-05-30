@@ -12,6 +12,7 @@ import slatekit.results.Notice
 import slatekit.results.Success
 import slatekit.results.Try
 import slatekit.results.builders.Notices
+import slatekit.results.builders.Tries
 import slatekit.results.getOrElse
 import java.util.concurrent.atomic.AtomicReference
 
@@ -71,7 +72,7 @@ open class Sync(
 
 
     override fun execute(args: Array<String>, mode: FunctionMode) {
-        Try.attempt {
+        Tries.attempt {
             val canSync = canExecute().success
             val run = canSync || mode == FunctionMode.Forced
             if (run) {

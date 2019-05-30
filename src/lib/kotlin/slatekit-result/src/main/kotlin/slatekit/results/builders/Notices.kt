@@ -30,4 +30,11 @@ interface NoticeBuilder: Builder<String> {
 /**
  * Builds [Result] with [Failure] error type of [String]
  */
-object Notices: NoticeBuilder
+object Notices: NoticeBuilder {
+    /**
+     * Build a Notice<T> ( type alias ) for Result<T,String> using the supplied function
+     */
+    @JvmStatic
+    inline fun <T> notice(f: () -> T): Notice<T> = Result.build(f, { e -> e.message ?: StatusCodes.ERRORED.msg })
+
+}

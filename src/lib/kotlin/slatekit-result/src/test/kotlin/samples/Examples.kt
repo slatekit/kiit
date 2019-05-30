@@ -3,6 +3,7 @@ package samples
 import slatekit.results.*
 import slatekit.results.StatusCodes
 import slatekit.results.builders.Outcomes
+import slatekit.results.builders.Tries
 
 
 /**
@@ -22,7 +23,7 @@ class Examples {
         val r1 : Result<Int,Err> = Success(1)
         val r2 : Result<Int,Err> = Success(1, msg = "example 1", code = 1000)
         val r3 : Result<Int,Err> = Result.of { "1".toInt() }
-        val r4 : Result<Int,Exception> = Result.attempt { "1".toInt() }
+        val r4 : Result<Int,Exception> = Tries.attempt { "1".toInt() }
 
         // OPERATIONS: Accessing, transforming, handling values:
         // 1. map       | flatMap
@@ -119,7 +120,7 @@ class Examples {
 
         // Case 9: Build using Result.x companion methods
         val of1: Result<Person, Err> = Result.of { Person("superman") }
-        val of2: Result<Person, Exception> = Result.attempt { Person("superman") }
+        val of2: Result<Person, Exception> = Tries.attempt { Person("superman") }
 
         // Case 10: Transform
         val t1: Result<String, Err> = of1.transform( { Success(it.name)}, { Failure(Err.of("Unknown user")) })

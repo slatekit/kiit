@@ -314,41 +314,6 @@ sealed class Result<out T, out E> {
 
 
         /**
-         * Build a Outcome<T> ( type alias ) for Result<T,Err> using the value with a null check
-         */
-        @JvmStatic
-        inline fun <T> of(t:T?): Outcome<T> = when(t) {
-            null -> Outcomes.errored("null")
-            else -> Outcomes.success(t)
-        }
-
-
-        /**
-         * Build a Outcome<T> ( type alias ) for Result<T,Err> using the supplied condition
-         */
-        @JvmStatic
-        inline fun <T> of(condition:Boolean, t:T?): Outcome<T> {
-            return if(!condition)
-                Outcomes.errored()
-            else if(t == null)
-                Outcomes.errored()
-            else
-                Outcomes.success(t)
-        }
-
-
-        /**
-         * Build a Try<T> ( Result<T,Exception> ) using the supplied callback.
-         * This allows for using throw [Exception] to build the Try
-         * by getting the appropriate status code out of the defined exception
-         */
-        @JvmStatic
-        inline fun <T> attempt(f: () -> T): Try<T> = attemptWithStatus {
-            val data = f()
-            Success(data)
-        }
-
-        /**
          * Build a Try<T> ( Result<T,Exception> ) using the supplied callback.
          * This allows for using throw [Exception] to build the Try
          * by getting the appropriate status code out of the defined exception
