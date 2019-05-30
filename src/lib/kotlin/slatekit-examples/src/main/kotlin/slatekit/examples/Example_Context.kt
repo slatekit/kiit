@@ -121,6 +121,7 @@ class Example_Context : Command("cmd") {
         // NOTE: There are additional parameters on the build function ( callbacks )
         // to allow you to get the context and modify it before it is returned.
         val ctx3 = AppUtils.context(
+                    envs   = Env.defaults(),
                     args   = Args.parse("-env=dev -log -log.level=debug").getOrElse { Args.default() },
                     enc    = Encryptor("wejklhviuxywehjk", "3214maslkdf03292", B64Java8),
                     schema = ArgsSchema()
