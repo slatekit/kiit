@@ -32,7 +32,8 @@ import slatekit.providers.logs.logback.LogbackLogs
  * java -jar ${app.name}.jar -env=dev -log.level=info -conf.dir = "file://./conf-sample-server"
  */
 fun main(args: Array<String>) {
-    app(args)
+    //app(args)
+    srv(args)
     //cli(args)
     //doc(args)
 }
