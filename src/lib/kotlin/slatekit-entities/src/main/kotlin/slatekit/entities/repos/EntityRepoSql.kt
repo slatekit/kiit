@@ -24,7 +24,6 @@ import slatekit.entities.Entity
 import slatekit.entities.EntityMapper
 import slatekit.entities.EntityRepo
 import slatekit.meta.models.Model
-import slatekit.query.where
 import kotlin.reflect.KClass
 
 /**
@@ -51,7 +50,7 @@ abstract class EntityRepoSql<TId, T>(
         where TId:Comparable<TId>, T: Entity<TId> {
 
 
-    override fun repoName(): String = "$encodedChar" + super.repoName() + "$encodedChar"
+    override fun name(): String = "$encodedChar" + super.name() + "$encodedChar"
 
 
     /**
@@ -62,7 +61,7 @@ abstract class EntityRepoSql<TId, T>(
     override fun updateByField(field: String, value: Any): Int {
         val query = Query().set(field, value)
         val updateSql = query.toUpdatesText()
-        val sql = "update " + repoName() + updateSql
+        val sql = "update " + name() + updateSql
         return update(sql)
     }
 
@@ -72,7 +71,7 @@ abstract class EntityRepoSql<TId, T>(
      */
     override fun updateByQuery(query: IQuery): Int {
         val updateSql = query.toUpdatesText()
-        val sql = "update " + repoName() + updateSql
+        val sql = "update " + name() + updateSql
         return update(sql)
     }
 
@@ -82,7 +81,7 @@ abstract class EntityRepoSql<TId, T>(
      * @param id
      */
     override fun delete(id: TId): Boolean {
-        val count = update("delete from ${repoName()} where ${idName()} = $id;")
+        val count = update("delete from ${name()} where ${idName()} = $id;")
         return count > 0
     }
 
@@ -93,7 +92,7 @@ abstract class EntityRepoSql<TId, T>(
      */
     override fun delete(ids: List<TId>): Int {
         val delimited = ids.joinToString(",")
-        return update("delete from ${repoName()} where ${idName()} in ($delimited);")
+        return update("delete from ${name()} where ${idName()} in ($delimited);")
     }
 
     /**
@@ -102,7 +101,7 @@ abstract class EntityRepoSql<TId, T>(
      * @return
      */
     override fun deleteAll(): Long {
-        val count = update("delete from ${repoName()};")
+        val count = update("delete from ${name()};")
         return count.toLong()
     }
 
@@ -116,7 +115,7 @@ abstract class EntityRepoSql<TId, T>(
     override fun deleteByField(field: String, op:Op, value: Any): Int {
         val query = Query().where(field, op, value)
         val filter = query.toFilter()
-        val sql = "delete from " + repoName() + " where " + filter
+        val sql = "delete from " + name() + " where " + filter
         return update(sql)
     }
 
@@ -127,7 +126,7 @@ abstract class EntityRepoSql<TId, T>(
      */
     override fun deleteByQuery(query: IQuery): Int {
         val filter = query.toFilter()
-        val sql = "delete from " + repoName() + " where " + filter
+        val sql = "delete from " + name() + " where " + filter
         return update(sql)
     }
 
@@ -135,7 +134,7 @@ abstract class EntityRepoSql<TId, T>(
      * gets the entity associated with the id
      */
     override fun get(id: TId): T? {
-        return sqlMapOne("select * from ${repoName()} where ${idName()} = $id;")
+        return sqlMapOne("select * from ${name()} where ${idName()} = $id;")
     }
 
     /**
@@ -145,22 +144,22 @@ abstract class EntityRepoSql<TId, T>(
      */
     override fun get(ids: List<TId>): List<T> {
         val delimited = ids.joinToString(",")
-        return sqlMapMany("select * from ${repoName()} where ${idName()} in ($delimited);") ?: listOf()
+        return sqlMapMany("select * from ${name()} where ${idName()} in ($delimited);") ?: listOf()
     }
 
     override fun getAll(): List<T> {
-        val result = sqlMapMany("select * from ${repoName()};")
+        val result = sqlMapMany("select * from ${name()};")
         return result ?: listOf<T>()
     }
 
     override fun count(): Long {
-        val count = getScalarLong("select count(*) from ${repoName()};")
+        val count = getScalarLong("select count(*) from ${name()};")
         return count
     }
 
     override fun top(count: Int, desc: Boolean): List<T> {
         val orderBy = if (desc) " order by id desc" else " order by id asc"
-        val sql = "select * from " + repoName() + orderBy + " limit " + count
+        val sql = "select * from " + name() + orderBy + " limit " + count
         val items = sqlMapMany(sql) ?: listOf<T>()
         return items
     }
@@ -171,14 +170,14 @@ abstract class EntityRepoSql<TId, T>(
      */
     override fun count(query: IQuery):Long {
         val filter = query.toFilter()
-        val sql = "select count( * ) from ${repoName()} where " + filter
+        val sql = "select count( * ) from ${name()} where " + filter
         val count = getScalarLong(sql)
         return count
     }
 
     override fun find(query: IQuery): List<T> {
         val filter = query.toFilter()
-        val sql = "select * from ${repoName()} where " + filter
+        val sql = "select * from ${name()} where " + filter
         val results = sqlMapMany(sql)
         return results ?: listOf()
     }
@@ -263,7 +262,7 @@ abstract class EntityRepoSql<TId, T>(
     }
 
     protected open fun getScalarLong(sql:String):Long {
-        return db.getScalarLong("select count(*) from ${repoName()};", null)
+        return db.getScalarLong("select count(*) from ${name()};", null)
     }
 
     protected open fun sqlMapMany(sql: String): List<T>? {

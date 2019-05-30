@@ -47,11 +47,13 @@ abstract class EntityRepo<TId, T>(
 )
     : IEntityRepo where TId:Comparable<TId>, T : Entity<TId> {
 
+    private val _name = namer?.rename(tableName) ?: tableName[0].toLowerCase() + tableName.substring(1)
+
     /**
      * The name of the table in the datastore
      */
-    override fun repoName(): String {
-        return namer?.rename(tableName) ?: tableName[0].toLowerCase() + tableName.substring(1)
+    override fun name(): String {
+        return _name
     }
 
     /**
