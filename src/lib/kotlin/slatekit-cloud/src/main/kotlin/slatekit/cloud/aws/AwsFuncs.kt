@@ -13,7 +13,6 @@
 
 package slatekit.cloud.aws
 
-import slatekit.common.TODO
 import com.amazonaws.auth.AWSCredentials
 import com.amazonaws.auth.BasicAWSCredentials
 import com.amazonaws.auth.profile.ProfileCredentialsProvider
@@ -31,23 +30,23 @@ object AwsFuncs {
      * @param section : Section name in config containing slate kit ApiCredentials
      * @return
      */
-    fun sqs(path: String? = null, section: String? = null): AmazonSQSClient {
+    fun sqs(path: String? = null, section: String? = null, region:String? = null): AmazonSQSClient {
 
         // Get credentials from either default location of specific config
         val credentials = creds(path, section)
-        return sqs(credentials)
+        return sqs(credentials, region)
     }
 
     /**
      * build sqs client from optional conf paths
      * @return
      */
-    fun sqs(credentials: AWSCredentials): AmazonSQSClient {
+    fun sqs(credentials: AWSCredentials, region: String?): AmazonSQSClient {
 
-        TODO.IMPROVE("AWS", "Allow customization of region")
-        val usWest2 = Region.getRegion(Regions.US_WEST_2)
+        val regRaw = region(region ?: "")
+        val reg = Region.getRegion(regRaw)
         val sqs = AmazonSQSClient(credentials)
-        sqs.setRegion(usWest2)
+        sqs.setRegion(reg)
         return sqs
     }
 
@@ -56,10 +55,10 @@ object AwsFuncs {
      * @param path : Path to config ( None => default aws {user_dir}/.aws/credentials file}
      * @param section : Section name in config containing slate kit ApiCredentials
      */
-    fun s3(path: String? = null, section: String? = null): AmazonS3Client {
+    fun s3(path: String? = null, section: String? = null, region:String? = null): AmazonS3Client {
         // Get credentials from either default location of specific config
         val credentials = creds(path, section)
-        return s3(credentials)
+        return s3(credentials, region)
     }
 
     /**
@@ -67,11 +66,12 @@ object AwsFuncs {
      * @param path : Path to config ( None => default aws {user_dir}/.aws/credentials file}
      * @param section : Section name in config containing slate kit ApiCredentials
      */
-    fun s3(credentials: AWSCredentials): AmazonS3Client {
-        TODO.IMPROVE("AWS", "Allow customization of region")
-        val usWest2 = Region.getRegion(Regions.US_WEST_2)
+    fun s3(credentials: AWSCredentials, region: String?): AmazonS3Client {
+
+        val regRaw = region(region ?: "")
+        val reg = Region.getRegion(regRaw)
         val s3 = AmazonS3Client(credentials)
-        s3.setRegion(usWest2)
+        s3.setRegion(reg)
         return s3
     }
 
@@ -91,6 +91,32 @@ object AwsFuncs {
             credsWithKeySecret(apiKey.key, apiKey.pass)
         } ?: creds()
         return credentials
+    }
+
+
+    /**
+     * Gets the region from the name
+     */
+    fun region(name:String):Regions {
+        return when(name){
+            Regions.GovCloud.name       -> Regions.GovCloud
+            Regions.US_EAST_1.name      -> Regions.US_EAST_1
+            Regions.US_EAST_2.name      -> Regions.US_EAST_2
+            Regions.US_WEST_1.name      -> Regions.US_WEST_1
+            Regions.US_WEST_2.name      -> Regions.US_WEST_2
+            Regions.EU_WEST_1.name      -> Regions.EU_WEST_1
+            Regions.EU_WEST_2.name      -> Regions.EU_WEST_2
+            Regions.EU_CENTRAL_1.name   -> Regions.EU_CENTRAL_1
+            Regions.AP_SOUTH_1.name     -> Regions.AP_SOUTH_1
+            Regions.AP_SOUTHEAST_1.name -> Regions.AP_SOUTHEAST_1
+            Regions.AP_SOUTHEAST_2.name -> Regions.AP_SOUTHEAST_2
+            Regions.AP_NORTHEAST_1.name -> Regions.AP_NORTHEAST_1
+            Regions.AP_NORTHEAST_2.name -> Regions.AP_NORTHEAST_2
+            Regions.SA_EAST_1.name      -> Regions.SA_EAST_1
+            Regions.CN_NORTH_1.name     -> Regions.CN_NORTH_1
+            Regions.CA_CENTRAL_1.name   -> Regions.CA_CENTRAL_1
+            else                        -> Regions.US_EAST_1
+        }
     }
 
     /**

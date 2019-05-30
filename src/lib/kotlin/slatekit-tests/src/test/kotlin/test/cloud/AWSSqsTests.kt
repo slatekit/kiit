@@ -19,8 +19,10 @@ class AwsSqsTests {
 
         // Not storing any key/secret in source code for security purposes
         // Setup 1: Use the default aws config file in "{user_dir}/.aws/credentials"
+        val name = "slatekit-unit-tests"
         val queue = AwsCloudQueue<String>(
-                "slatekit-unit-tests",
+                "us-east-1",
+                name,
                 QueueStringConverter(),
                 "user://$SLATEKIT_DIR/conf/aws.conf",
                 "aws")
@@ -46,12 +48,14 @@ class AwsSqsTests {
     }
 
 
-    //@Test
+    @Test
     fun can_test_update() {
         // Not storing any key/secret in source code for security purposes
         // Setup 1: Use the default aws config file in "{user_dir}/.aws/credentials"
+        val name = "slatekit-unit-tests"
         val queue = AwsCloudQueue<String>(
-                "slatekit-unit-tests",
+                "us-east-1",
+                name,
                 QueueStringConverter(),
                 "user://$SLATEKIT_DIR/conf/aws.conf",
                 "aws")

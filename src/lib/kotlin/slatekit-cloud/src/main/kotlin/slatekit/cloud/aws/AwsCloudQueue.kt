@@ -38,6 +38,7 @@ import java.io.IOException
  * 2. https://docs.aws.amazon.com/sdk-for-java/v1/developer-guide/examples-sqs-long-polling.html
  */
 class AwsCloudQueue<T>(
+    region:String,
     queue: String,
     creds: AWSCredentials,
     override val converter: QueueValueConverter<T>,
@@ -45,7 +46,7 @@ class AwsCloudQueue<T>(
 ) : CloudQueue<T>, AwsSupport {
 
     private val queue = queue
-    private val sqs: AmazonSQSClient = AwsFuncs.sqs(creds)
+    private val sqs: AmazonSQSClient = AwsFuncs.sqs(creds, region)
     private val queueUrl = sqs.getQueueUrl(this.queue).queueUrl
     private val SOURCE = "aws:sqs"
     override val name = queue
@@ -54,22 +55,24 @@ class AwsCloudQueue<T>(
      * Initialize with the queue with a Slate Kit [ApiLogin] which
      * will get converted to the Aws credentials
      */
-    constructor(queue: String,
+    constructor(region:String,
+                queue: String,
                 apiKey: ApiLogin,
                 converter: QueueValueConverter<T>,
                 waitTimeInSeconds: Int = 0) :
-            this(queue, AwsFuncs.credsWithKeySecret(apiKey.key, apiKey.pass), converter, waitTimeInSeconds)
+            this(region, queue, AwsFuncs.credsWithKeySecret(apiKey.key, apiKey.pass), converter, waitTimeInSeconds)
 
 
     /**
      * Initialize with queue name and the config path/section for aws credentials
      */
-    constructor(queue: String,
+    constructor(region:String,
+                queue: String,
                 converter: QueueValueConverter<T>,
                 confPath: String? = null,
                 section: String? = null,
                 waitTimeInSeconds: Int = 0) :
-            this (queue, AwsFuncs.creds(confPath, section), converter, waitTimeInSeconds)
+            this (region, queue, AwsFuncs.creds(confPath, section), converter, waitTimeInSeconds)
 
 
 
