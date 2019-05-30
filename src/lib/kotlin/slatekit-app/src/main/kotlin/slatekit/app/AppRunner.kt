@@ -17,10 +17,13 @@ import slatekit.common.*
 import slatekit.common.args.Args
 import slatekit.common.args.ArgsSchema
 import slatekit.common.encrypt.Encryptor
+import slatekit.common.envs.Env
+import slatekit.common.envs.Envs
 import slatekit.common.info.About
 import slatekit.common.log.Logs
 import slatekit.results.*
 import slatekit.results.builders.Notices
+import slatekit.results.builders.Tries
 
 object AppRunner {
 
@@ -45,6 +48,7 @@ object AppRunner {
             schema: ArgsSchema? = null,
             enc: Encryptor? = null,
             logs: Logs? = null,
+            envs: Envs = Env.defaults(),
             errorMode: ErrorMode = ErrorMode.Print
     ): Try<Any> {
 
@@ -60,7 +64,7 @@ object AppRunner {
         }.then { args ->
 
             // STEP 2: Context - Build AppContext using args, about, schema
-            val context = AppUtils.context(args, about, schema ?:AppBuilder.schema(), enc, logs)
+            val context = AppUtils.context(args, envs, about, schema ?:AppBuilder.schema(), enc, logs)
             context.fold( { Success(it) }, { Failure( Exception(it)) })
 
         }.then { context ->
@@ -147,14 +151,14 @@ object AppRunner {
     private suspend fun <C:Context> init(app:App<C>):Try<Any> {
         // Wrap App.init() call for safety
         // This will produce a nested Try<Try<Boolean>>
-        val rawResult = Try.attempt { app.init() }
+        val rawResult = Tries.attempt { app.init() }
 
         // Flatten the nested Try<Try<Boolean>> into a simple Try<Boolean>
         val result = rawResult.inner()
 
         // Finally flatMap it to ensure creation of directories for the app.
         return result.flatMap {
-            Try.attempt {
+            Tries.attempt {
                 app.ctx.dirs?.create()
                 it
             }.onFailure {
@@ -175,7 +179,7 @@ object AppRunner {
 
         // Wrap App.init() call for safety
         // This will produce a nested Try<Try<Boolean>>
-        val rawResult = Try.attempt { app.execute() }
+        val rawResult = Tries.attempt { app.execute() }
 
         // Flatten the nested Try<Try<Boolean>> into a simple Try<Boolean>
         val result = rawResult.inner()
@@ -193,7 +197,7 @@ object AppRunner {
     private suspend fun <C:Context> end(execResult:Try<Any>, app:App<C>): Try<Any> {
         // Wrap App.init() call for safety
         // This will produce a nested Try<Try<Boolean>>
-        val rawResult = Try.attempt { app.end() }
+        val rawResult = Tries.attempt { app.end() }
 
         // Flatten the nested Try<Try<Boolean>> into a simple Try<Boolean>
         val result = rawResult.inner()
