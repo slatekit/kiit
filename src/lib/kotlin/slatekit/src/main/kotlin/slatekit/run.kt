@@ -1,9 +1,9 @@
 package slatekit
 
-
 import kotlinx.coroutines.runBlocking
 import slatekit.app.AppRunner
 import slatekit.common.CommonContext
+import slatekit.generator.CredentialMode
 import slatekit.docs.DocService
 import slatekit.generator.*
 import slatekit.integration.common.AppEntContext
@@ -52,7 +52,6 @@ fun cli(args:Array<String>) {
         )
     }
 }
-
 
 fun srv(args:Array<String>) {
     runBlocking {
