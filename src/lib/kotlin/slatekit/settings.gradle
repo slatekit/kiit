@@ -33,6 +33,9 @@ project(':slatekit-apis').projectDir=new File('../slatekit-apis')
 include ':slatekit-cloud'
 project(':slatekit-cloud').projectDir=new File('../slatekit-cloud')
 
+include ':slatekit-generator'
+project(':slatekit-generator').projectDir=new File('../slatekit-generator')
+
 include ':slatekit-integration'
 project(':slatekit-integration').projectDir=new File('../slatekit-integration')
 

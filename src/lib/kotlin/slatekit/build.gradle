@@ -119,6 +119,8 @@ dependencies {
         compile project(":slatekit-workers")
         //compile project(":slatekit-support")
     } //</slatekit_local>
+
+    implementation project(":slatekit-generator")
 }
 
 // https://www.anexinet.com/blog/six-ways-to-package-a-java-application-with-gradle/
