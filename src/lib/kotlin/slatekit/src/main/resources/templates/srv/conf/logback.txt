@@ -21,7 +21,7 @@
     <appender name="LOGGLY-ASYNC" class="ch.qos.logback.classic.AsyncAppender">
         <appender-ref ref="LOGGLY"/>
     </appender>
-    <logger name="app" level="warn" additivity="false">
+    <logger name="app" level="info" additivity="false">
         <appender-ref ref="STDOUT" />
         <appender-ref ref="FILE" />
         <appender-ref ref="LOGGLY-ASYNC" />

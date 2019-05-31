@@ -1,4 +1,4 @@
-package ${app.package}
+package slatekit.samples.server
 
 
 // Slate Kit - Common Utilities

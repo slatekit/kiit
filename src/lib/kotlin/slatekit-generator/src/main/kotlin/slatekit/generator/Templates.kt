@@ -101,6 +101,9 @@ object Templates {
                 Action.MkDir("/src/main/resources"),
                 Action.MkDir("/src/main/java"),
                 Action.MkDir("/src/main/kotlin", root = true),
+                Action.MkDir("/src/main/kotlin/@app.package/apis"),
+                Action.MkDir("/src/main/kotlin/@app.package/auth"),
+                Action.MkDir("/src/main/kotlin/@app.package/models"),
 
                 Action.Doc("/README.md", "/templates/common/README.md"),
 
@@ -122,7 +125,11 @@ object Templates {
 
                 // Code
                 Action.Code("/src/main/kotlin/@app.package/Run.kt", "/templates/srv/Run.txt"),
-                Action.Code("/src/main/kotlin/@app.package/App.kt", "/templates/srv/App.txt")
+                Action.Code("/src/main/kotlin/@app.package/App.kt", "/templates/srv/App.txt"),
+                Action.Code("/src/main/kotlin/@app.package/apis/SampleAPI.kt", "/templates/srv/SampleAPI.txt"),
+                Action.Code("/src/main/kotlin/@app.package/auth/SampleAuth.kt", "/templates/srv/SampleAuth.txt"),
+                Action.Code("/src/main/kotlin/@app.package/models/SampleModel.kt", "/templates/srv/SampleModel.txt"),
+                Action.Code("/src/main/kotlin/@app.package/Server.kt", "/templates/srv/Server.txt")
         )
         return Template("App", TemplateType.App, actions)
     }

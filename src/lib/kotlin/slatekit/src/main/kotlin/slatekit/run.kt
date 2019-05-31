@@ -32,8 +32,9 @@ import slatekit.providers.logs.logback.LogbackLogs
  * java -jar ${app.name}.jar -env=dev -log.level=info -conf.dir = "file://./conf-sample-server"
  */
 fun main(args: Array<String>) {
+    genSrv(args)
     //app(args)
-    srv(args)
+    //srv(args)
     //cli(args)
     //doc(args)
 }
@@ -53,18 +54,32 @@ fun cli(args:Array<String>) {
 }
 
 
-fun app(args:Array<String>) {
-    gen(args, "app8", "Test slate kit", "myapp.app", "codehelix", "/Users/kishore.reddy/dev/tests/slatekit", Templates.app())
-}
-
-
-fun lib(args:Array<String>) {
-    gen(args,"lib1", "Test slate kit", "myapp.lib", "codehelix", "/Users/kishore.reddy/dev/tests/slatekit", Templates.lib())
-}
-
-
 fun srv(args:Array<String>) {
-    gen(args,"srv1", "Test slate kit", "myapp.srv", "codehelix", "/Users/kishore.reddy/dev/tests/slatekit", Templates.srv())
+    runBlocking {
+        AppRunner.run(
+                rawArgs = args,
+                about = slatekit.samples.server.App.about,
+                schema = slatekit.samples.server.App.schema,
+                enc = slatekit.samples.server.App.encryptor,
+                logs = LogbackLogs(),
+                builder = { ctx -> slatekit.samples.server.App(AppEntContext.fromContext(ctx)) }
+        )
+    }
+}
+
+
+fun genApp(args:Array<String>) {
+    gen(args, "app8", "Test slate kit app", "myapp.app", "codehelix", "/Users/kishore.reddy/dev/tests/slatekit", Templates.app())
+}
+
+
+fun genLib(args:Array<String>) {
+    gen(args,"lib1", "Test slate kit library", "myapp.lib", "codehelix", "/Users/kishore.reddy/dev/tests/slatekit", Templates.lib())
+}
+
+
+fun genSrv(args:Array<String>) {
+    gen(args,"srv2", "Test slate kit server", "myapp.srv", "codehelix", "/Users/kishore.reddy/dev/tests/slatekit", Templates.srv())
 }
 
 
