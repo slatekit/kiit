@@ -1,7 +1,5 @@
 package slatekit.generator
 
-import io.ktor.util.combineSafe
-import slatekit.SlateKit
 import slatekit.common.Uris
 import slatekit.common.toId
 import slatekit.common.utils.Props
@@ -10,7 +8,7 @@ import java.io.File
 /**
  * This processes all the [Action]s supported
  */
-class Creator(val ctx:GeneratorContext, val template: Template) {
+class Creator(val ctx: GeneratorContext, val template: Template, val cls:Class<*>) {
 
     /**
      * Creates the directory after first interpreting the path.
@@ -52,7 +50,8 @@ class Creator(val ctx:GeneratorContext, val template: Template) {
      */
     fun dir(root: File, action: Action.MkDir) {
         log("Dir : " + action.path)
-        val target = root.combineSafe(action.path)
+        val packagePath = ctx.packageName.replace(".", Props.pathSeparator)
+        val target = File(root, action.path.replace("@app.package", packagePath))
         createDir(target)
     }
 
@@ -63,7 +62,7 @@ class Creator(val ctx:GeneratorContext, val template: Template) {
     fun build(root: File, action: Action.Build) {
         log("Build: " + action.path)
         val content = read(action.source)
-        val target = root.combineSafe(action.path)
+        val target = File(root, action.path)
         createFile(target, content)
     }
 
@@ -74,7 +73,7 @@ class Creator(val ctx:GeneratorContext, val template: Template) {
     fun conf(root: File, action: Action.Conf) {
         log("Conf: " + action.path)
         val content = read(action.source)
-        val target = root.combineSafe(action.path)
+        val target = File(root, action.path)
         createFile(target, content)
     }
 
@@ -85,7 +84,7 @@ class Creator(val ctx:GeneratorContext, val template: Template) {
     fun doc(root: File, action: Action.Doc) {
         log("Doc: " + action.path)
         val content = read(action.source)
-        val target = root.combineSafe(action.path)
+        val target = File(root, action.path)
         createFile(target, content)
     }
 
@@ -97,7 +96,7 @@ class Creator(val ctx:GeneratorContext, val template: Template) {
         log("Code: " + action.path)
         val content = read(action.source)
         val packagePath = ctx.packageName.replace(".", Props.pathSeparator)
-        val target = root.combineSafe(action.path.replace("@app.package", packagePath))
+        val target = File(root, action.path.replace("@app.package", packagePath))
         createFile(target, content)
     }
 
@@ -106,7 +105,7 @@ class Creator(val ctx:GeneratorContext, val template: Template) {
      * Reads a file from resources
      */
     fun read(path:String):String {
-        val url = SlateKit::class.java.getResource(path)
+        val url = cls.getResource(path)
         val text = File(url.file).readText()
         val converted = replace(text)
         return converted
