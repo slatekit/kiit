@@ -10,6 +10,7 @@ import slatekit.common.DateTimes
 import slatekit.common.requests.Request
 import slatekit.common.Context
 import slatekit.common.auth.Roles
+import slatekit.common.db.IDb
 import slatekit.common.info.About
 import slatekit.results.Outcome
 import slatekit.results.builders.Outcomes
@@ -18,7 +19,7 @@ import slatekit.samples.server.models.SampleMovie
 
 @Api(area = "samples", name = "types", desc = "sample to test features of Slate Kit APIs",
         roles = Roles.none, auth = "", verb = Verbs.auto, protocol = Protocols.web)
-class SampleApi(context: Context) : ApiBase(context) {
+class SampleApi(context: Context, val db:IDb) : ApiBase(context) {
 
     var inc = 0
 
@@ -26,6 +27,17 @@ class SampleApi(context: Context) : ApiBase(context) {
     @ApiAction(desc = "info about this api")
     fun about(): About {
         return context.app
+    }
+
+    private var opened = false
+    @ApiAction(desc = "info about this api")
+    fun connect(id:Long): String {
+        if(!opened) {
+            db.open()
+            opened = true
+        }
+        val name = db.getScalarString("select name from `test1` where id = $id", null)
+        return name
     }
 
 

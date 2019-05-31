@@ -11,6 +11,7 @@ import slatekit.results.*
 // Slate Kit - App ( provides args, help, life-cycle methods, etc )
 import slatekit.app.App
 import slatekit.app.AppOptions
+import slatekit.db.Db
 
 
 class App(ctx: Context) : App<Context>(ctx, AppOptions(printSummaryBeforeExec = true)) {
@@ -69,7 +70,9 @@ class App(ctx: Context) : App<Context>(ctx, AppOptions(printSummaryBeforeExec = 
      * @return
      */
     override suspend fun execute(): Try<Any> {
-        val server = Server(ctx)
+        val con = ctx.cfg.dbCon()
+        val db = Db(con)
+        val server = Server(ctx, db)
         return server.execute()
     }
 

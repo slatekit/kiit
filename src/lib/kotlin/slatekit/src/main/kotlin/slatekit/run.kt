@@ -32,15 +32,15 @@ import slatekit.providers.logs.logback.LogbackLogs
  * java -jar ${app.name}.jar -env=dev -log.level=info -conf.dir = "file://./conf-sample-server"
  */
 fun main(args: Array<String>) {
-    genSrv(args)
+    //genSrv(args)
     //app(args)
-    //srv(args)
+    srv(args)
     //cli(args)
     //doc(args)
 }
 
 
-fun cli(args:Array<String>) {
+fun app(args:Array<String>) {
     runBlocking {
         AppRunner.run(
                 rawArgs = args,

@@ -25,6 +25,7 @@ import slatekit.results.*
 
 // Slate Kit - App ( provides args, help, life-cycle methods, etc )
 import slatekit.common.auth.Roles
+import slatekit.common.db.IDb
 import slatekit.common.metrics.MetricsLite
 import slatekit.common.requests.Request
 import slatekit.meta.Deserializer
@@ -40,7 +41,7 @@ import slatekit.samples.server.apis.SampleApi
 import slatekit.samples.server.auth.SampleAuth
 
 
-class Server(val ctx: Context)  {
+class Server(val ctx: Context, val db: IDb)  {
 
     /**
      * executes the app
@@ -116,7 +117,7 @@ class Server(val ctx: Context)  {
                         roles = Roles.all,
                         verb = Verbs.auto,
                         protocol = Protocols.all,
-                        singleton = SampleApi(ctx)
+                        singleton = SampleApi(ctx, db)
                 )
         )
     }
