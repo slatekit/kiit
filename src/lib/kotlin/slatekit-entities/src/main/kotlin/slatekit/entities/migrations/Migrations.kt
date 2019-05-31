@@ -6,6 +6,7 @@ import slatekit.common.log.Logger
 import slatekit.results.Outcome
 import slatekit.results.Try
 import slatekit.results.builders.Outcomes
+import slatekit.results.builders.Tries
 
 
 data class SimpleMigration(override val desc: String,
@@ -16,7 +17,7 @@ data class SimpleMigration(override val desc: String,
 
     override fun migrate(db: IDb):Outcome<Int> {
         info("Migration starting for : $id", null)
-        val results = steps.map { Try.attempt { it.run(db) } }
+        val results = steps.map { Tries.attempt { it.run(db) } }
         val success = results.all { it.success }
         val message= if (success) "" else results.first { !it.success }.msg
         return when(success){

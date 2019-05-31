@@ -7,9 +7,9 @@ import slatekit.results.Success
 import slatekit.results.Try
 import java.io.File
 
-class GeneratorService(val context: Context) {
+class GeneratorService(val context: Context, val cls:Class<*>) {
 
-    fun generate(setupCtx:GeneratorContext, template: Template): Try<String> {
+    fun generate(setupCtx: GeneratorContext, template: Template): Try<String> {
         // Normalize/Canonical names
         val ctx = setupCtx.normalize()
 
@@ -38,16 +38,16 @@ class GeneratorService(val context: Context) {
     }
 
 
-    private fun execute(context:GeneratorContext, template:Template, appDir:File) {
-        val creator = Creator(context, template)
+    private fun execute(context: GeneratorContext, template: Template, appDir:File) {
+        val creator = Creator(context, template, cls)
         val dest = creator.create(appDir.toString(), false)
         template.actions.forEach {
             when(it) {
                 is Action.MkDir -> creator.dir(dest, it)
-                is Action.Doc   -> creator.doc(dest, it)
-                is Action.Conf  -> creator.conf(dest, it)
+                is Action.Doc -> creator.doc(dest, it)
+                is Action.Conf -> creator.conf(dest, it)
                 is Action.Build -> creator.build(dest, it)
-                is Action.Code  -> creator.code(dest, it)
+                is Action.Code -> creator.code(dest, it)
             }
         }
     }
@@ -56,7 +56,7 @@ class GeneratorService(val context: Context) {
     /**
      * Build a list of [Action.Dir] actions to create directories based on package name.
      */
-    private fun buildPackageDirs(ctx:GeneratorContext, dir:Action.MkDir):List<Action.MkDir> {
+    private fun buildPackageDirs(ctx: GeneratorContext, dir: Action.MkDir):List<Action.MkDir> {
         val actionsWithPackage = ctx.packageName.split(".")
         val dirs = mutableListOf<Action.MkDir>()
         actionsWithPackage.forEachIndexed { index, s ->

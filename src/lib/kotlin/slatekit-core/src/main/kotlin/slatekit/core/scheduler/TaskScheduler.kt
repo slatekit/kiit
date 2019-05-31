@@ -8,6 +8,7 @@ import slatekit.results.*
 //import java.time.Duration
 import org.threeten.bp.Duration
 import slatekit.common.CommonResponse
+import slatekit.results.builders.Tries
 import java.util.*
 import java.util.concurrent.Executors
 import java.util.concurrent.ScheduledExecutorService
@@ -174,7 +175,7 @@ class TaskScheduler(val settings: SchedulerSettings,
         val oldState = request.task.status()
 
         // This
-        val result = Result.attempt {
+        val result = Tries.attempt {
 
             // Move to running
             request.task.resume()

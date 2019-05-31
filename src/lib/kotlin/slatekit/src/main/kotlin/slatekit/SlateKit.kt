@@ -77,7 +77,7 @@ class SlateKit(ctx: AppEntContext) : App<AppEntContext>(ctx, AppOptions(printSum
      *
      * @return
      */
-    override  suspend fun execute(): Try<Any> {
+    override suspend fun execute(): Try<Any> {
         // The APIs ( DocApi, SetupApi are authenticated using an sample API key )
         val keys = listOf(ApiKey( name ="cli", key = "abc", roles = "dev,qa,ops,admin"))
 

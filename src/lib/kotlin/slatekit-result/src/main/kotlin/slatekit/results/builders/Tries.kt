@@ -29,4 +29,49 @@ interface TryBuilder : Builder<Exception> {
 /**
  * Builds [Result] with [Failure] error type of [Exception]
  */
-object Tries : TryBuilder
+object Tries : TryBuilder {
+
+    /**
+     * Build a Try<T> ( Result<T,Exception> ) using the supplied callback.
+     * This allows for using throw [Exception] to build the Try
+     * by getting the appropriate status code out of the defined exception
+     */
+    @JvmStatic
+    inline fun <T> attempt(f: () -> T): Try<T> = attemptWithStatus {
+        val data = f()
+        Success(data)
+    }
+
+    /**
+     * Build a Try<T> ( Result<T,Exception> ) using the supplied callback.
+     * This allows for using throw [Exception] to build the Try
+     * by getting the appropriate status code out of the defined exception
+     */
+    @JvmStatic
+    inline fun <T> attemptWithStatus(f: () -> Success<T>): Try<T> =
+            try {
+                val data = f()
+                data
+            } catch (e: DeniedException) {
+                Failure(e, Result.build(e.msg, e.status, StatusCodes.DENIED))
+            } catch (e: IgnoredException) {
+                Failure(e, Result.build(e.msg, e.status, StatusCodes.IGNORED))
+            } catch (e: InvalidException) {
+                Failure(e, Result.build(e.msg, e.status, StatusCodes.INVALID))
+            } catch (e: ErroredException) {
+                Failure(e, Result.build(e.msg, e.status, StatusCodes.ERRORED))
+            } catch (e: UnexpectedException) {
+                // Theoretically, anything outside of Denied/Ignored/Invalid/Errored
+                // is an unexpected expection ( even a normal [Exception].
+                // However, this is here for completeness ( to have exceptions
+                // that correspond to the various [Status] groups), and to cover the
+                // case when someone wants to explicitly use an UnhandledException
+                // or Status group/code
+                Failure(e, Result.build(e.message, null, StatusCodes.UNEXPECTED))
+            } catch (e: Exception) {
+                when(e) {
+                    is StatusException -> Failure(e, Result.build(e.msg, e.status, StatusCodes.UNEXPECTED))
+                    else -> Failure(e, Result.build(e.message, null, StatusCodes.UNEXPECTED))
+                }
+            }
+}

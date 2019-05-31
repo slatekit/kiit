@@ -41,7 +41,7 @@ class MigrationService(
 ) {
 
     fun names(): List<Pair<String, String>> = entities.getEntities().map {
-        Pair(it.entityTypeName, it.entityRepoInstance.repoName() )
+        Pair(it.entityTypeName, it.entityRepoInstance.name() )
     }
 
 

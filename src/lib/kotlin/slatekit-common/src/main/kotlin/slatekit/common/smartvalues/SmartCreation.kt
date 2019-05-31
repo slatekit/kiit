@@ -1,6 +1,7 @@
 package slatekit.common.smartvalues
 
 import slatekit.results.*
+import slatekit.results.builders.Tries
 
 abstract class SmartCreation<T : SmartValue> {
 
@@ -44,7 +45,7 @@ abstract class SmartCreation<T : SmartValue> {
      * * Functional version to return an Try<T> = slatekit.results.Result<T, Exception>
      */
     fun attempt(text: String?): Try<T> {
-        return Result.attempt {
+        return Tries.attempt {
             val result = validate(text)
             when (result.first) {
                 true -> create(text ?: "")

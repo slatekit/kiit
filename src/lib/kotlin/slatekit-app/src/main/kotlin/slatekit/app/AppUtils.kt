@@ -120,12 +120,12 @@ object AppUtils {
             cfg ?: finalDefaultValue
     }
 
-    fun context(args: Args, about:About, schema:ArgsSchema, enc: Encryptor?, logs:Logs?): Notice<AppContext> {
-        val inputs = inputs(args, about, schema, enc, logs)
+    fun context(args: Args, envs: Envs, about:About, schema:ArgsSchema, enc: Encryptor?, logs:Logs?): Notice<AppContext> {
+        val inputs = inputs(args, envs, about, schema, enc, logs)
         return inputs.flatMap { Success( buildContext(it, enc, logs)) }
     }
 
-    private fun inputs(args: Args, about:About, schema:ArgsSchema, enc: Encryptor?, logs:Logs?): Notice<AppInputs> {
+    private fun inputs(args: Args, envs: Envs, about:About, schema:ArgsSchema, enc: Encryptor?, logs:Logs?): Notice<AppInputs> {
         // 1. Load the base conf "env.conf" from the directory specified.
         // or specified in the "conf.dirs" config setting in the env.conf file
         // a) -conf="jars"                  = embedded in jar files
@@ -146,7 +146,7 @@ object AppUtils {
 
         // 2. Validate the environment
         // Get all
-        val allEnvs = AppBuilder.envs()
+        val allEnvs = envs.all
         val envCheck = Envs(allEnvs).validate(envSelected)
         val envName = envSelected.name
 

@@ -40,19 +40,19 @@ dependencies {
     	compile 'com.slatekit:slatekit-common:1.0.0'
 	
 	// Misc architecture components ( all depend on results/common components above )
-	compile 'com.slatekit:slatekit-app:0.9.24'
-	compile 'com.slatekit:slatekit-db:0.9.24'
-	compile 'com.slatekit:slatekit-meta:0.9.24'
-	compile 'com.slatekit:slatekit-cloud:0.9.24'
-	compile 'com.slatekit:slatekit-query:0.9.24'
-	compile 'com.slatekit:slatekit-entities:0.9.24'
-	compile 'com.slatekit:slatekit-orm:0.9.24'
-	compile 'com.slatekit:slatekit-core:0.9.24'
-	compile 'com.slatekit:slatekit-apis:0.9.24'
-	compile 'com.slatekit:slatekit-integration:0.9.24'
-	compile 'com.slatekit:slatekit-server:0.9.24'
-	compile 'com.slatekit:slatekit-providers:0.9.24'
-	compile 'com.slatekit:slatekit-workers:0.9.24'
+	compile 'com.slatekit:slatekit-app:0.9.27'
+	compile 'com.slatekit:slatekit-db:0.9.27'
+	compile 'com.slatekit:slatekit-meta:0.9.27'
+	compile 'com.slatekit:slatekit-cloud:0.9.27'
+	compile 'com.slatekit:slatekit-query:0.9.27'
+	compile 'com.slatekit:slatekit-entities:0.9.27'
+	compile 'com.slatekit:slatekit-orm:0.9.27'
+	compile 'com.slatekit:slatekit-core:0.9.27'
+	compile 'com.slatekit:slatekit-apis:0.9.27'
+	compile 'com.slatekit:slatekit-integration:0.9.27'
+	compile 'com.slatekit:slatekit-server:0.9.27'
+	compile 'com.slatekit:slatekit-providers:0.9.27'
+	compile 'com.slatekit:slatekit-workers:0.9.27'
 }
 ```
 
@@ -93,12 +93,12 @@ docs | source | license | desc | download
 [slatekit-core](http://www.slatekit.com/infra.html)                    | [src](src/lib/kotlin/slatekit-core)    | Apache2.0    | architecture components | [ ![Download](https://api.bintray.com/packages/codehelixinc/slatekit/slatekit-core/images/download.svg) ](https://bintray.com/codehelixinc/slatekit/slatekit-core/_latestVersion)
 [slatekit-entities](http://www.slatekit.com/kotlin-core-orm.html)      | [src](src/lib/kotlin/slatekit-entities)  | Apache2.0  | standardized entity service/repository pattern | [ ![Download](https://api.bintray.com/packages/codehelixinc/slatekit/slatekit-entities/images/download.svg) ](https://bintray.com/codehelixinc/slatekit/slatekit-entities/_latestVersion)
 [slatekit-orm](http://www.slatekit.com/kotlin-core-orm.html)      | [src](src/lib/kotlin/slatekit-orm)  | Apache2.0  | database entities/orm | [ ![Download](https://api.bintray.com/packages/codehelixinc/slatekit/slatekit-entities/images/download.svg) ](https://bintray.com/codehelixinc/slatekit/slatekit-entities/_latestVersion)
-[slatekit-apis](http://www.slatekit.com/kotlin-core-apis.html)         | [src](src/lib/kotlin/slatekit-apis)   | LGPLv3     | api container | [ ![Download](https://api.bintray.com/packages/codehelixinc/slatekit/slatekit-apis/images/download.svg) ](https://bintray.com/codehelixinc/slatekit/slatekit-apis/_latestVersion)
-[slatekit-workers](http://www.slatekit.com/kotlin-core-workers.html)    | [src](src/lib/kotlin/slatekit-workers)  | LGPLv3   | background workers for persistant job queues | [ ![Download](https://api.bintray.com/packages/codehelixinc/slatekit/slatekit-workers/images/download.svg) ](https://bintray.com/codehelixinc/slatekit/slatekit-workers/_latestVersion)
 [slatekit-integration](https://www.slatekit.com)                       | [src](src/lib/kotlin/slatekit-integration) | Apache2.0| integration components | [ ![Download](https://api.bintray.com/packages/codehelixinc/slatekit/slatekit-integration/images/download.svg) ](https://bintray.com/codehelixinc/slatekit/slatekit-integration/_latestVersion)
 [slatekit-cloud](http://www.slatekit.com/infra.html)                   | [src](src/lib/kotlin/slatekit-cloud)    | Apache2.0   | clouder services ( AWS ) | [ ![Download](https://api.bintray.com/packages/codehelixinc/slatekit/slatekit-cloud/images/download.svg) ](https://bintray.com/codehelixinc/slatekit/slatekit-cloud/_latestVersion)
-[slatekit-server](http://www.slatekit.com/kotlin-core-server.html)     | [src](src/lib/kotlin/slatekit-server)   | LGPLv3   | http server to run slatekit APIs ( using ktor ) | [ ![Download](https://api.bintray.com/packages/codehelixinc/slatekit/slatekit-server/images/download.svg) ](https://bintray.com/codehelixinc/slatekit/slatekit-server/_latestVersion)
 [slatekit-providers](http://www.slatekit.com/kotlin-core-server.html)     | [src](src/lib/kotlin/slatekit-providers)  | Apache2.0   | 3rd party implementations for Logs/Metrics | [ ![Download](https://api.bintray.com/packages/codehelixinc/slatekit/slatekit-providers/images/download.svg) ](https://bintray.com/codehelixinc/slatekit/slatekit-providers/_latestVersion)
+[slatekit-apis](http://www.slatekit.com/kotlin-core-apis.html)         | [src](src/lib/kotlin/slatekit-apis)   | LGPLv3     | api container | [ ![Download](https://api.bintray.com/packages/codehelixinc/slatekit/slatekit-apis/images/download.svg) ](https://bintray.com/codehelixinc/slatekit/slatekit-apis/_latestVersion)
+[slatekit-workers](http://www.slatekit.com/kotlin-core-workers.html)    | [src](src/lib/kotlin/slatekit-workers)  | LGPLv3   | background workers for persistant job queues | [ ![Download](https://api.bintray.com/packages/codehelixinc/slatekit/slatekit-workers/images/download.svg) ](https://bintray.com/codehelixinc/slatekit/slatekit-workers/_latestVersion)
+[slatekit-server](http://www.slatekit.com/kotlin-core-server.html)     | [src](src/lib/kotlin/slatekit-server)   | LGPLv3   | http server to run slatekit APIs ( using ktor ) | [ ![Download](https://api.bintray.com/packages/codehelixinc/slatekit/slatekit-server/images/download.svg) ](https://bintray.com/codehelixinc/slatekit/slatekit-server/_latestVersion)
 
 
 # Setup

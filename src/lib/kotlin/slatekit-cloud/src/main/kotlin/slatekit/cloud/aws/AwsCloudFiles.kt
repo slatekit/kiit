@@ -33,7 +33,8 @@ import java.io.File
  * @param section : Name of section in conf file for api key. e.g. Some("sqs")
  */
 class AwsCloudFiles(
-    bucket: String,
+        region:String,
+        bucket: String,
     createBucket: Boolean,
     creds: AWSCredentials
 ) : CloudFiles, AwsSupport {
@@ -42,23 +43,25 @@ class AwsCloudFiles(
     override val createDefaultFolder = createBucket
 
     private val SOURCE = "aws:s3"
-    private val s3: AmazonS3Client = AwsFuncs.s3(creds)
+    private val s3: AmazonS3Client = AwsFuncs.s3(creds,region)
 
     constructor(
+        region:String,
         bucket: String,
         createBucket: Boolean,
         apiKey: ApiLogin
     ) : this(
-                bucket, createBucket, AwsFuncs.credsWithKeySecret(apiKey.key, apiKey.pass)
+              region,  bucket, createBucket, AwsFuncs.credsWithKeySecret(apiKey.key, apiKey.pass)
     )
 
     constructor(
-        bucket: String,
+            region:String,
+            bucket: String,
         createBucket: Boolean,
         confPath: String? = null,
         section: String? = null
     ) : this (
-            bucket, createBucket, AwsFuncs.creds(confPath, section)
+            region, bucket, createBucket, AwsFuncs.creds(confPath, section)
     )
 
     /**

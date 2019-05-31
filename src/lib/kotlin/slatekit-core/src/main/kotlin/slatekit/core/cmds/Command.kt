@@ -15,12 +15,12 @@ package slatekit.core.cmds
 
 import slatekit.common.DateTime
 import slatekit.common.args.Args
-import slatekit.common.ext.durationFrom
 import slatekit.common.functions.Function
 import slatekit.common.functions.FunctionTriggers
 import slatekit.common.functions.FunctionInfo
 import slatekit.common.functions.FunctionMode
 import slatekit.results.*
+import slatekit.results.builders.Tries
 import java.util.concurrent.atomic.AtomicReference
 
 /**
@@ -114,7 +114,7 @@ open class Command(
      * @return
      */
     fun execute(args: Args, mode: FunctionMode): Try<CommandResult> {
-        val result = Try.attempt {
+        val result = Tries.attempt {
             Success(args)
                     .map { args -> convert(args) }
                     .map { request -> perform(request, mode) }

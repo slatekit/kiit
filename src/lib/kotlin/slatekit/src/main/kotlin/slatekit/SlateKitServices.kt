@@ -46,14 +46,14 @@ interface SlateKitServices {
     fun files(): CloudFiles {
         val apiLogin = ctx.cfg.apiLogin("files")
         val bucket = apiLogin.tag
-        return AwsCloudFiles(bucket, false, apiLogin)
+        return AwsCloudFiles("us-east-1", bucket, false, apiLogin)
     }
 
 
     fun queues(): CloudQueue<String> {
         val apiLogin = ctx.cfg.apiLogin("queues")
         val queue = apiLogin.tag
-        return AwsCloudQueue(queue, apiLogin, QueueStringConverter(), 3)
+        return AwsCloudQueue("us-east-1", queue, apiLogin, QueueStringConverter(), 3)
     }
 
 
@@ -79,7 +79,7 @@ interface SlateKitServices {
 
         // APIs
         val requiredApis = listOf(
-                Api(GeneratorApi(ctx, GeneratorService(ctx)), declaredOnly = true, setup = Annotated),
+                Api(GeneratorApi(ctx, GeneratorService(ctx, SlateKit::class.java)), declaredOnly = true, setup = Annotated),
                 Api(DocApi(ctx), declaredOnly = true, setup = Annotated),
                 Api(InfoApi(ctx), declaredOnly = true, setup = Annotated),
                 Api(VersionApi(ctx), declaredOnly = true, setup = Annotated),

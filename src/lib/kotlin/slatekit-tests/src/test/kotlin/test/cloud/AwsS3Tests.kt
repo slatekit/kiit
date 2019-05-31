@@ -22,7 +22,8 @@ class AwsS3Tests {
 
         // Not storing any key/secret in source code for security purposes
         // Setup 1: Use the default aws config file in "{user_dir}/.aws/credentials"
-        val files = AwsCloudFiles("slatekit-unit-tests", false, "user://$SLATEKIT_DIR/conf/aws.conf", "aws")
+        val bucket = "slatekit-unit-tests"
+        val files = AwsCloudFiles("us-east-1", bucket, false, "user://$SLATEKIT_DIR/conf/aws.conf", "aws")
 
         files.init()
 
