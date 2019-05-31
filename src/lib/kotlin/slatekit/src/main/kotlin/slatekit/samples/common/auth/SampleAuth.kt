@@ -1,4 +1,4 @@
-package slatekit.samples.server.auth
+package slatekit.samples.common.auth
 
 import slatekit.apis.svcs.Authenticator
 import slatekit.common.info.ApiKey

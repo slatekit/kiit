@@ -1,17 +1,13 @@
-package slatekit.samples.server
+package slatekit.samples.cli
 
-
-// Slate Kit - Common Utilities
-import slatekit.common.*
-import slatekit.common.args.ArgsSchema
-import slatekit.common.encrypt.*
-import slatekit.common.info.*
-import slatekit.results.*
-
-// Slate Kit - App ( provides args, help, life-cycle methods, etc )
 import slatekit.app.App
 import slatekit.app.AppOptions
-import slatekit.db.Db
+import slatekit.common.Context
+import slatekit.common.args.ArgsSchema
+import slatekit.common.encrypt.B64Java8
+import slatekit.common.encrypt.Encryptor
+import slatekit.common.info.About
+import slatekit.results.Try
 
 
 class App(ctx: Context) : App<Context>(ctx, AppOptions(printSummaryBeforeExec = true)) {
@@ -26,7 +22,6 @@ class App(ctx: Context) : App<Context>(ctx, AppOptions(printSummaryBeforeExec = 
         // 4. Help text can be easily built from this schema.
         val schema = ArgsSchema()
                 .text("","env", "the environment to run in", false, "dev", "dev", "dev1|qa1|stg1|pro")
-                .text("","region", "the region linked to app", false, "us", "us", "us|europe|india|*")
                 .text("","log.level", "the log level for logging", false, "info", "info", "debug|info|warn|error")
 
 
@@ -35,45 +30,36 @@ class App(ctx: Context) : App<Context>(ctx, AppOptions(printSummaryBeforeExec = 
          * This can be overriden in your env.conf file
          */
         val about = About(
-                id = "slatekit",
-                name = "Slate Kit",
-                desc = "Slate Kit Server",
-                company = "codehelix.co",
-                region = "NY",
+                id = "myapp.id",
+                name = "myapp.name",
+                desc = "myapp.desc",
+                company = "myapp.company",
+                region = "",
                 version = "1.0.0",
-                url = "www.slatekit.life",
-                group = "codehelix",
-                contact = "user@company.co",
-                tags = "sample, template, app",
-                examples = "http://www.slatekit.com"
+                url = "myapp.url",
+                group = "",
+                contact = "",
+                tags = "app",
+                examples = ""
         )
 
         /**
-         * Encryptor for files
+         * Encryption support
          */
         val encryptor = Encryptor("aksf2409bklja24b", "k3l4lkdfaoi97042", B64Java8)
     }
 
 
-    /**
-     * Initialization Life-Cycle method
-     */
     override suspend fun init(): Try<Boolean> {
         println("initializing")
         return super.init()
     }
 
 
-    /**
-     * executes the app
-     *
-     * @return
-     */
     override suspend fun execute(): Try<Any> {
-        val con = ctx.cfg.dbCon()
-        val db = Db(con)
-        val server = Server(ctx, db)
-        return server.execute()
+        println("executing")
+        val cli = CLI(ctx)
+        return cli.execute()
     }
 
 

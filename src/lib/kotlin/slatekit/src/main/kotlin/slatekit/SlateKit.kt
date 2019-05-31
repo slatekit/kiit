@@ -20,7 +20,7 @@ import slatekit.integration.mods.Mod
 import slatekit.integration.mods.ModService
 import slatekit.orm.orm
 
-class SlateKit(ctx: AppEntContext) : App<AppEntContext>(ctx, AppOptions(printSummaryBeforeExec = true)), SlateKitServices {
+class SlateKit(ctx: AppEntContext, val interactive:Boolean) : App<AppEntContext>(ctx, AppOptions(printSummaryBeforeExec = true)), SlateKitServices {
 
     companion object {
 

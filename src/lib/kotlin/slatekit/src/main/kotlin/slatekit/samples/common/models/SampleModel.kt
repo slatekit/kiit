@@ -1,4 +1,4 @@
-package slatekit.samples.server.models
+package slatekit.samples.common.models
 
 import slatekit.common.DateTime
 import slatekit.common.Field

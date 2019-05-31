@@ -1,4 +1,4 @@
-package slatekit.samples.server
+package slatekit.samples.srv
 
 
 // Ktor
@@ -25,7 +25,6 @@ import slatekit.results.*
 
 // Slate Kit - App ( provides args, help, life-cycle methods, etc )
 import slatekit.common.auth.Roles
-import slatekit.common.db.IDb
 import slatekit.common.metrics.MetricsLite
 import slatekit.common.requests.Request
 import slatekit.meta.Deserializer
@@ -37,11 +36,11 @@ import slatekit.server.ktor.KtorHandler
 import slatekit.server.ktor.KtorResponse
 
 // Sample App
-import slatekit.samples.server.apis.SampleApi
-import slatekit.samples.server.auth.SampleAuth
+import slatekit.samples.common.apis.SampleApi
+import slatekit.samples.common.auth.SampleAuth
 
 
-class Server(val ctx: Context, val db: IDb)  {
+class Server(val ctx: Context)  {
 
     /**
      * executes the app
@@ -117,7 +116,7 @@ class Server(val ctx: Context, val db: IDb)  {
                         roles = Roles.all,
                         verb = Verbs.auto,
                         protocol = Protocols.all,
-                        singleton = SampleApi(ctx, db)
+                        singleton = SampleApi(ctx)
                 )
         )
     }
