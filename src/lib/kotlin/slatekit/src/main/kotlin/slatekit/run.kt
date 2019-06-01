@@ -32,15 +32,20 @@ import slatekit.providers.logs.logback.LogbackLogs
  * java -jar ${app.name}.jar -env=dev -log.level=info -conf.dir = "file://./conf-sample-server"
  */
 fun main(args: Array<String>) {
-    //genSrv(args)
-    //app(args)
-    srv(args)
-    //cli(args)
-    //doc(args)
+//    sampleApp(args)
+//    sampleCli(args)
+//    sampleSrv(args)
+
+//    genApp(args)
+//    genCli(args)
+//    genSrv(args)
 }
 
 
-fun app(args:Array<String>) {
+/**
+ * Runs slatekit cli in interactive mode
+ */
+fun slatekitCLI(args:Array<String>) {
     runBlocking {
         AppRunner.run(
                 rawArgs = args,
@@ -48,20 +53,79 @@ fun app(args:Array<String>) {
                 schema = SlateKit.schema,
                 enc = SlateKit.encryptor,
                 logs = LogbackLogs(),
-                builder = { ctx -> SlateKit(AppEntContext.fromContext(ctx)) }
+                builder = { ctx -> SlateKit(AppEntContext.fromContext(ctx), interactive = true) }
         )
     }
 }
 
-fun srv(args:Array<String>) {
+
+/**
+ * Runs slatekit cli in execution mode ( for code generation from command line )
+ * This is also used by the code generation
+ */
+fun slatekitApp(args:Array<String>) {
     runBlocking {
         AppRunner.run(
                 rawArgs = args,
-                about = slatekit.samples.server.App.about,
-                schema = slatekit.samples.server.App.schema,
-                enc = slatekit.samples.server.App.encryptor,
+                about = SlateKit.about,
+                schema = SlateKit.schema,
+                enc = SlateKit.encryptor,
                 logs = LogbackLogs(),
-                builder = { ctx -> slatekit.samples.server.App(AppEntContext.fromContext(ctx)) }
+                builder = { ctx -> SlateKit(AppEntContext.fromContext(ctx), interactive = false) }
+        )
+    }
+}
+
+
+/**
+ * Runs the sample app
+ * This is also used by the code generation
+ */
+fun sampleApp(args:Array<String>) {
+    runBlocking {
+        AppRunner.run(
+                rawArgs = args,
+                about = slatekit.samples.app.App.about,
+                schema = slatekit.samples.app.App.schema,
+                enc = slatekit.samples.app.App.encryptor,
+                logs = LogbackLogs(),
+                builder = { ctx -> slatekit.samples.app.App(AppEntContext.fromContext(ctx)) }
+        )
+    }
+}
+
+
+/**
+ * Runs the sample cli.
+ * This is also used by the code generation
+ */
+fun sampleCli(args:Array<String>) {
+    runBlocking {
+        AppRunner.run(
+                rawArgs = args,
+                about = slatekit.samples.cli.App.about,
+                schema = slatekit.samples.cli.App.schema,
+                enc = slatekit.samples.cli.App.encryptor,
+                logs = LogbackLogs(),
+                builder = { ctx -> slatekit.samples.cli.App(AppEntContext.fromContext(ctx)) }
+        )
+    }
+}
+
+
+/**
+ * Runs the sample server.
+ * This is also used by the code generation
+ */
+fun sampleSrv(args:Array<String>) {
+    runBlocking {
+        AppRunner.run(
+                rawArgs = args,
+                about = slatekit.samples.srv.App.about,
+                schema = slatekit.samples.srv.App.schema,
+                enc = slatekit.samples.srv.App.encryptor,
+                logs = LogbackLogs(),
+                builder = { ctx -> slatekit.samples.srv.App(AppEntContext.fromContext(ctx)) }
         )
     }
 }
@@ -77,8 +141,13 @@ fun genLib(args:Array<String>) {
 }
 
 
-fun genSrv(args:Array<String>) {
+fun genCli(args:Array<String>) {
     gen(args,"srv2", "Test slate kit server", "myapp.srv", "codehelix", "/Users/kishore.reddy/dev/tests/slatekit", Templates.srv())
+}
+
+
+fun genSrv(args:Array<String>) {
+    gen(args,"cli1", "Test slate kit server", "myapp.cli", "codehelix", "/Users/kishore.reddy/dev/tests/slatekit", Templates.cli())
 }
 
 
