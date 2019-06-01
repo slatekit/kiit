@@ -49,37 +49,6 @@ data class Env(
         @JvmStatic
         val empty = Env("", EnvMode.Dev, "", "")
 
-        /**
-         * The list of defaults environments to choose from.
-         * An environment definition is defined by its name, mode
-         * The key is built up from name and mode as {name}.{mode}
-         * e.g. "qa1.QA"
-         *
-         * Each of these environments should map to an associated env.{name}.conf
-         * config file in the /resources/ directory. But there is no dependency
-         * on this Env component to a Config component
-         *
-         * e.g.
-         * /resources/env.conf     ( common      config )
-         * /resources/env.loc.conf ( local       config )
-         * /resources/env.dev.conf ( development config )
-         * /resources/env.qa1.conf ( qa1         config )
-         * /resources/env.qa2.conf ( qa2         config )
-         * /resources/env.stg.conf ( staging     config )
-         * /resources/env.pro.conf ( production  config )
-         *
-         * @return
-         */
-        @JvmStatic
-        fun defaults(): Envs =
-            Envs(listOf(
-                Env("loc", EnvMode.Dev, desc = "Dev environment (local)"),
-                Env("dev", EnvMode.Dev, desc = "Dev environment (shared)"),
-                Env("qa1", EnvMode.Qat, desc = "QA environment  (current release)"),
-                Env("qa2", EnvMode.Qat, desc = "QA environment  (last release)"),
-                Env("stg", EnvMode.Uat, desc = "STG environment (demo)"),
-                Env("pro", EnvMode.Pro, desc = "LIVE environment")
-            ))
 
         /**
          * parses the environment name e.g. "qa1:qa" = name:mode

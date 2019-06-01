@@ -48,7 +48,7 @@ object AppRunner {
             schema: ArgsSchema? = null,
             enc: Encryptor? = null,
             logs: Logs? = null,
-            envs: Envs = Env.defaults(),
+            envs: Envs = Envs.defaults(),
             errorMode: ErrorMode = ErrorMode.Print
     ): Try<Any> {
 

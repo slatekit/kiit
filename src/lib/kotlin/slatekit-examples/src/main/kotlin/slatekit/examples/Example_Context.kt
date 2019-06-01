@@ -28,6 +28,7 @@ import slatekit.common.envs.EnvMode
 import slatekit.common.info.*
 import slatekit.common.log.LogsDefault
 import slatekit.common.Context
+import slatekit.common.envs.Envs
 import slatekit.entities.Entities
 import slatekit.core.cmds.Command
 import slatekit.core.cmds.CommandRequest
@@ -121,14 +122,14 @@ class Example_Context : Command("cmd") {
         // NOTE: There are additional parameters on the build function ( callbacks )
         // to allow you to get the context and modify it before it is returned.
         val ctx3 = AppUtils.context(
-                    envs   = Env.defaults(),
+                    envs   = Envs.defaults(),
                     args   = Args.parse("-env=dev -log -log.level=debug").getOrElse { Args.default() },
                     enc    = Encryptor("wejklhviuxywehjk", "3214maslkdf03292", B64Java8),
                     schema = ArgsSchema()
-                            .text("env", "the environment to run in", false, "dev", "dev", "dev1|qa1|stg1|pro")
-                            .text("region", "the region linked to app", false, "us", "us", "us|europe|india|*")
-                            .text("config.loc", "location of config files", false, "jar", "jar", "jar|conf")
-                            .text("log.level", "the log level for logging", false, "info", "info", "debug|info|warn|error"),
+                            .text("env", "the environment to run in", "",false, "dev", "dev", "dev1|qa1|stg1|pro")
+                            .text("region", "the region linked to app", "", false, "us", "us", "us|europe|india|*")
+                            .text("config.loc", "location of config files", "",false, "jar", "jar", "jar|conf")
+                            .text("log.level", "the log level for logging", "",false, "info", "info", "debug|info|warn|error"),
                     about  = About("app id", "sample app", "app desc"),
                     logs   = LogsDefault
                 )
