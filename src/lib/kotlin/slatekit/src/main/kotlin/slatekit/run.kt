@@ -34,7 +34,7 @@ import slatekit.providers.logs.logback.LogbackLogs
 fun main(args: Array<String>) {
 //    sampleApp(args)
 //    sampleCli(args)
-    sampleSrv(args)
+//    sampleSrv(args)
 
 //    genApp(args)
 //    genCli(args)
