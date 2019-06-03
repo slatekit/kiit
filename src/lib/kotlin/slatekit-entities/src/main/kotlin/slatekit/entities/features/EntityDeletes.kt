@@ -18,7 +18,7 @@ interface EntityDeletes<TId, T> : ServiceSupport<TId, T> where TId: kotlin.Compa
      * @param entity
      */
     fun delete(entity: T?): Boolean {
-        val success = repoT().delete(entity)
+        val success = repo().delete(entity)
 
         // Event out
         if ( entity != null && this is EntityHooks ) {
@@ -49,7 +49,7 @@ interface EntityDeletes<TId, T> : ServiceSupport<TId, T> where TId: kotlin.Compa
      * @return
      */
     fun deleteById(id: TId): Boolean {
-        return repoT().delete(id)
+        return repo().delete(id)
     }
 
     /**
@@ -61,10 +61,10 @@ interface EntityDeletes<TId, T> : ServiceSupport<TId, T> where TId: kotlin.Compa
 
         // Event out one by one
         return if ( this is EntityHooks ) {
-            val statuses = ids.map { id -> repoT().get(id)?.let { delete(it) } ?: false }
+            val statuses = ids.map { id -> repo().get(id)?.let { delete(it) } ?: false }
             statuses.count { it }
         } else {
-            repoT().delete(ids)
+            repo().delete(ids)
         }
     }
 
@@ -73,7 +73,7 @@ interface EntityDeletes<TId, T> : ServiceSupport<TId, T> where TId: kotlin.Compa
      * @return
      */
     fun deleteAll(): Long {
-        return repoT().deleteAll()
+        return repo().deleteAll()
     }
 
     /**
@@ -83,7 +83,7 @@ interface EntityDeletes<TId, T> : ServiceSupport<TId, T> where TId: kotlin.Compa
      * @return
      */
     fun deleteByField(prop: KProperty<*>, value: Any): Int {
-        return repoT().deleteByField(prop.name, Op.Eq, value)
+        return repo().deleteByField(prop.name, Op.Eq, value)
     }
 
     /**
@@ -93,13 +93,13 @@ interface EntityDeletes<TId, T> : ServiceSupport<TId, T> where TId: kotlin.Compa
      * @return
      */
     fun deleteByField(prop: KProperty<*>, op:Op, value: Any): Int {
-        return repoT().deleteByField(prop.name, op, value)
+        return repo().deleteByField(prop.name, op, value)
     }
 
     /**
      * updates items using the query
      */
     fun deleteByQuery(query: IQuery): Int {
-        return repoT().deleteByQuery(query)
+        return repo().deleteByQuery(query)
     }
 }

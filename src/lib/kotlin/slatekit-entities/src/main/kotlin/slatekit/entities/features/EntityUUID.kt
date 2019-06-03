@@ -19,7 +19,7 @@ interface EntityUUID<TId, T> : ServiceSupport<TId, T> where TId: kotlin.Comparab
      * @return
      */
     fun getByUUID(id: String): T? {
-        return repoT().findFirstBy(EntityWithUUID::uuid.name, "=", id)
+        return repo().findFirstBy(EntityWithUUID::uuid.name, "=", id)
     }
 
     /**
@@ -28,7 +28,7 @@ interface EntityUUID<TId, T> : ServiceSupport<TId, T> where TId: kotlin.Comparab
      * @return
      */
     fun getByUUID(id: UUID): T? {
-        return repoT().findFirstBy(EntityWithUUID::uuid.name, "=", id.toString())
+        return repo().findFirstBy(EntityWithUUID::uuid.name, "=", id.toString())
     }
 
     /**
@@ -37,6 +37,6 @@ interface EntityUUID<TId, T> : ServiceSupport<TId, T> where TId: kotlin.Comparab
      * @return
      */
     fun getByUUIDs(ids: List<String>): List<T>? {
-        return repoT().findBy(EntityWithUUID::uuid.name, "in", ids)
+        return repo().findBy(EntityWithUUID::uuid.name, "in", ids)
     }
 }

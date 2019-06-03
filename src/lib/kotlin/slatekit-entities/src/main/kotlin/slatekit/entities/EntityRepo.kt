@@ -14,67 +14,48 @@
 package slatekit.entities
 
 import slatekit.common.DateTime
-import slatekit.common.naming.Namer
-import slatekit.common.encrypt.Encryptor
-import slatekit.meta.models.Model
 import slatekit.query.IQuery
 import slatekit.query.Query
 import slatekit.entities.Consts.idCol
-import slatekit.entities.core.IEntityRepo
+import slatekit.entities.core.EntityInfo
+import slatekit.entities.core.EntityStore
 import slatekit.query.Op
 import slatekit.query.where
-import kotlin.reflect.KClass
 import kotlin.reflect.KProperty
 
 /**
  * Base Entity repository using generics with support for all the CRUD methods.
  * NOTE: This is basically a GenericRepository implementation
- * @param entityType   : The data type of the entity/model
- * @param entityIdType : The data type of the primary key/identity field
- * @param tableName    : The name of the table ( defaults to entity name )
- * @param encodedChar  : The name of the table ( defaults to entity name )
  * @tparam T
  */
-abstract class EntityRepo<TId, T>(
-    val entityType: KClass<*>,
-    val entityIdType: KClass<*>,
-    val tableName:String,
-    val encodedChar: Char = '`',
-    protected val model:Model? = null,
-    protected val encryptor: Encryptor? = null,
-    protected val namer: Namer? = null,
-    protected val queryBuilder:(() -> Query)? = null
-)
-    : IEntityRepo where TId:Comparable<TId>, T : Entity<TId> {
+interface EntityRepo<TId, T> : EntityStore where TId : Comparable<TId>, T : Entity<TId> {
 
-    private val _name = namer?.rename(tableName) ?: tableName[0].toLowerCase() + tableName.substring(1)
-
-    /**
-     * The name of the table in the datastore
-     */
-    override fun name(): String {
-        return _name
-    }
+    val info: EntityInfo
 
     /**
      * the name of the id field.
      * @return
      */
-    fun idName(): String = model?.idField?.name ?: idCol
+    fun id(): String = info.model?.idField?.name ?: idCol
+
+    /**
+     * The name of the table in the datastore
+     */
+    override fun name(): String = info.name()
 
     /**
      * creates the entity in the data store
      * @param entity
      * @return
      */
-    abstract fun create(entity: T): TId
+    fun create(entity: T): TId
 
     /**
      * updates the entity in the datastore
      * @param entity
      * @return
      */
-    abstract fun update(entity: T): Boolean
+    fun update(entity: T): Boolean
 
     /**
      * updates items based on the field name
@@ -82,38 +63,38 @@ abstract class EntityRepo<TId, T>(
      * @param value: The value to set
      * @return
      */
-    abstract fun updateByField(field: String, value: Any): Int
+    fun updateByField(field: String, value: Any): Int
 
     /**
      * updates items using the proc and args
      */
-    abstract fun updateByProc(name: String, args: List<Any>? = null): Int
+    fun updateByProc(name: String, args: List<Any>? = null): Int
 
     /**
      * updates items using the query
      */
-    abstract fun updateByQuery(query: IQuery): Int
+    fun updateByQuery(query: IQuery): Int
 
     /**
      * deletes the entity by id
      * @param id
      * @return
      */
-    abstract fun delete(id: TId): Boolean
+    fun delete(id: TId): Boolean
 
     /**
      * deletes all entities from the data store using the ids
      * @param ids
      * @return
      */
-    abstract fun delete(ids: List<TId>): Int
+    fun delete(ids: List<TId>): Int
 
     /**
      * deletes all entities from the data store using the ids
      * @param ids
      * @return
      */
-    abstract fun deleteAll(): Long
+    fun deleteAll(): Long
 
     /**
      * deletes the entity in memory
@@ -129,32 +110,37 @@ abstract class EntityRepo<TId, T>(
      * @param value: The value to check for
      * @return
      */
-    abstract fun deleteByField(field: String, op: Op, value: Any): Int
+    fun deleteByField(field: String, op: Op, value: Any): Int
 
     /**
      * deletes items using the query
      */
-    abstract fun deleteByQuery(query: IQuery): Int
+    fun deleteByQuery(query: IQuery): Int
 
     /**
      * gets the entity from the datastore using the id
      * @param id
      * @return
      */
-    abstract fun get(id: TId): T?
+    fun get(id: TId): T?
 
     /**
      * gets the entity from the datastore using the id
      * @param ids
      * @return
      */
-    abstract fun get(ids: List<TId>): List<T>
+    fun get(ids: List<TId>): List<T>
 
     /**
      * gets all the entities from the datastore.
      * @return
      */
-    abstract fun getAll(): List<T>
+    fun getAll(): List<T>
+
+    /**
+     * Gets the total number of records based on the query provided.
+     */
+    fun count(query: IQuery): Long
 
     /**
      * gets the top count entities in the datastore sorted by asc order
@@ -162,20 +148,7 @@ abstract class EntityRepo<TId, T>(
      * @param desc : Whether to sort by descending
      * @return
      */
-    abstract fun top(count: Int, desc: Boolean): List<T>
-
-
-    /**
-     * Gets the total number of records based on the query provided.
-     */
-    abstract fun count(query: IQuery):Long
-
-
-    /**
-     * determines if there are any entities in the datastore
-     * @return
-     */
-    fun any(): Boolean = count() > 0
+    fun top(count: Int, desc: Boolean): List<T>
 
     /**
      * saves an entity by either creating it or updating it based on
@@ -234,7 +207,7 @@ abstract class EntityRepo<TId, T>(
     /**
      * Return a query builder for more complex searches
      */
-    open fun query(): Query = queryBuilder?.invoke() ?: Query()
+    fun query(): Query = info.queryBuilder?.invoke() ?: Query()
 
 
     /**
@@ -242,7 +215,7 @@ abstract class EntityRepo<TId, T>(
      * @param query
      * @return
      */
-    open fun find(query: IQuery): List<T> = listOf()
+    fun find(query: IQuery): List<T> = listOf()
 
     /**
      * finds items based on the field
@@ -251,12 +224,12 @@ abstract class EntityRepo<TId, T>(
      * @param value: value of field to search against
      * @return
      */
-    open fun findBy(field: String, op: String, value: Any): List<T> = listOf()
+    fun findBy(field: String, op: String, value: Any): List<T> = listOf()
 
     /**
      * finds items based on the conditions
      */
-    open fun findByFields(conditions:List<Pair<String, Any>>): List<T> = listOf()
+    fun findByFields(conditions: List<Pair<String, Any>>): List<T> = listOf()
 
     /**
      * finds items based on the field in the values provided
@@ -264,14 +237,14 @@ abstract class EntityRepo<TId, T>(
      * @param value: values of field to search against
      * @return
      */
-    open fun findIn(field: String, value: List<Any>): List<T> = listOf()
+    fun findIn(field: String, value: List<Any>): List<T> = listOf()
 
     /**
      * finds first item based on the query
      * @param query: name of field
      * @return
      */
-    open fun findFirst(query:IQuery): T? = null
+    fun findFirst(query: IQuery): T? = null
 
     /**
      * finds first item based on the field
@@ -280,7 +253,7 @@ abstract class EntityRepo<TId, T>(
      * @param value: value of field to search against
      * @return
      */
-    open fun findFirstBy(field: String, op: String, value: Any): T? = null
+    fun findFirstBy(field: String, op: String, value: Any): T? = null
 
     /**
      * finds items by using the sql
@@ -288,15 +261,16 @@ abstract class EntityRepo<TId, T>(
      * @param args: Arguments to the proc
      * @return
      */
-    open fun findByProc(name: String, args: List<Any>?): List<T>? = listOf()
+    fun findByProc(name: String, args: List<Any>?): List<T>? = listOf()
 
 
     /**
      * Gets the column name for the Kproperty from the model schema if available
      * or defaults to the property name.
      */
-    open fun columnName(prop: KProperty<*>):String {
-        return when(model) {
+    fun columnName(prop: KProperty<*>): String {
+        val model = info.model
+        return when (model) {
             null -> prop.name
             else -> if (model.any) model.fields.first { it.name == prop.name }.storedName else prop.name
         }
@@ -305,7 +279,7 @@ abstract class EntityRepo<TId, T>(
     /**
      * Purges data older than the number of days supplied
      */
-    fun <ETimed> purge(days:Int):Int where ETimed:EntityWithTime {
+    fun <ETimed> purge(days: Int): Int where ETimed : EntityWithTime {
         val since = DateTime.now().plusDays((days * -1).toLong())
         val count = deleteByQuery(Query().where(EntityWithTime::createdAt, "<", since))
         return count

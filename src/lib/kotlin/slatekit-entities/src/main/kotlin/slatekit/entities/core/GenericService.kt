@@ -13,12 +13,10 @@
 
 package slatekit.entities.core
 
+
 /**
- * Non generic based repo
+ * Interface for a service with an EntityStore that does not rely on knowing the id or entity type
  */
-interface IEntityRepo {
-
-    fun name(): String
-
-    fun count(): Long
+interface GenericService {
+    fun store(): EntityStore
 }

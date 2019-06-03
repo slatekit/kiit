@@ -5,10 +5,8 @@ import slatekit.entities.Entity
 import slatekit.entities.core.EntityAction
 import slatekit.entities.core.EntityEvent
 import slatekit.entities.core.ServiceSupport
-import slatekit.results.Outcome
 import slatekit.results.Try
 import slatekit.results.builders.Tries
-import java.util.*
 
 interface EntityCreates<TId, T> : ServiceSupport<TId, T> where TId : kotlin.Comparable<TId>, T : Entity<TId> {
 
@@ -22,7 +20,7 @@ interface EntityCreates<TId, T> : ServiceSupport<TId, T> where TId : kotlin.Comp
         val entityWithData = applyFieldData(EntityAction.EntityCreate, entity)
 
         // Create! get id
-        val id = repoT().create(entityWithData)
+        val id = repo().create(entityWithData)
 
         // Event out
         if (this is EntityHooks) {

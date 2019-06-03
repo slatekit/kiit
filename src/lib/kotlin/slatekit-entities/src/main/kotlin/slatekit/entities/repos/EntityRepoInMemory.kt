@@ -14,54 +14,37 @@
 package slatekit.entities.repos
 
 import slatekit.common.DateTime
-import slatekit.common.encrypt.Encryptor
-import slatekit.common.naming.Namer
 import slatekit.common.utils.ListMap
 import slatekit.query.IQuery
-import slatekit.entities.Entity
-import slatekit.entities.EntityMapper
-import slatekit.entities.EntityRepo
-import slatekit.entities.EntityUpdatable
 import slatekit.meta.KTypes
 import slatekit.meta.Reflector
 import java.util.*
 //import java.time.*
 import org.threeten.bp.*
 import slatekit.common.Record
-import slatekit.common.ext.tail
+import slatekit.entities.*
+import slatekit.entities.core.EntityInfo
 import slatekit.meta.models.Model
 import slatekit.query.Op
-import slatekit.query.Query
 import kotlin.reflect.KClass
-import kotlin.reflect.KProperty
 
 
-open class EntityRepoInMemoryWithLongId<T>(cls:KClass<T>, idGen:IdGenerator<Long>)
-    : EntityRepoInMemory<Long, T>(cls, Long::class, idGenerator = idGen)
-        where T: Entity<Long> {
+open class EntityRepoInMemoryWithLongId<T>(info:EntityInfo, idGen: IdGenerator<Long>)
+    : EntityRepoInMemory<Long, T>(info, idGen)
+        where T : Entity<Long> {
 
-    companion object {
-        @JvmStatic operator fun <T> invoke(cls:KClass<T>):EntityRepoInMemoryWithLongId<T> where T: Entity<Long> {
-            val idGen = LongIdGenerator()
-            return EntityRepoInMemoryWithLongId(cls, idGen)
-        }
-    }
+    constructor(cls: KClass<T>) :
+        this(EntityInfo.memory(Long::class, cls), LongIdGenerator())
 }
 
 
-open class EntityRepoInMemoryWithIntId<T>(cls:KClass<T>, idGen:IdGenerator<Int>)
-    : EntityRepoInMemory<Int, T>(cls, Int::class, idGenerator = idGen )
-        where T: Entity<Int> {
+open class EntityRepoInMemoryWithIntId<T>(info:EntityInfo, idGen: IdGenerator<Int>)
+    : EntityRepoInMemory<Int, T>(info, idGen)
+        where T : Entity<Int> {
 
-    companion object {
-
-        @JvmStatic operator fun <T> invoke(cls:KClass<T>):EntityRepoInMemoryWithIntId<T> where T: Entity<Int> {
-            val idGen = IntIdGenerator()
-            return EntityRepoInMemoryWithIntId(cls, idGen)
-        }
-    }
+    constructor(cls: KClass<T>) :
+            this(EntityInfo.memory(Int::class, cls), IntIdGenerator())
 }
-
 
 
 /**
@@ -72,17 +55,10 @@ open class EntityRepoInMemoryWithIntId<T>(cls:KClass<T>, idGen:IdGenerator<Int>)
  * Should NOT be used outside of prototyping
  */
 open class EntityRepoInMemory<TId, T>(
-    entityType: KClass<*>,
-    entityIdType: KClass<*>,
-    model: Model? = null,
-    encryptor: Encryptor? = null,
-    namer: Namer? = null,
-    idGenerator: IdGenerator<TId>? = null
-)
-    : EntityRepo<TId, T>(entityType, entityIdType, entityType.simpleName ?: "", model = model, encryptor = encryptor, namer = namer)
-        where TId: kotlin.Comparable<TId>, T: Entity<TId> {
-
-    protected val idGenerator = idGenerator ?: LongIdGenerator()
+        info: EntityInfo,
+        val idGenerator: IdGenerator<TId>
+) : EntityRepoBase<TId, T>(info)
+        where TId : kotlin.Comparable<TId>, T : Entity<TId> {
     protected var items = ListMap<TId, T>(listOf())
 
     /**
@@ -185,7 +161,7 @@ open class EntityRepoInMemory<TId, T>(
     /**
      * finds items based on the conditions
      */
-    override fun findByFields(conditions:List<Pair<String, Any>>): List<T> {
+    override fun findByFields(conditions: List<Pair<String, Any>>): List<T> {
         val all = items.all()
         val filtered = conditions.fold(all) { items, condition ->
             val matches = filter(items, condition.first, "=", condition.second)
@@ -276,9 +252,9 @@ open class EntityRepoInMemory<TId, T>(
     }
 
 
-    protected fun filter(all:List<T>, fieldRaw: String, op: String, value: Any): List<T> {
-        val field = model?.fields?.find { it.storedName.toLowerCase() == fieldRaw.toLowerCase() }
-        val prop  = field?.prop ?: Reflector.findPropertyExtended(entityType, field?.name ?: fieldRaw)
+    protected fun filter(all: List<T>, fieldRaw: String, op: String, value: Any): List<T> {
+        val field = info.model?.fields?.find { it.storedName.toLowerCase() == fieldRaw.toLowerCase() }
+        val prop = field?.prop ?: Reflector.findPropertyExtended(info.entityType, field?.name ?: fieldRaw)
         val matched = prop?.let { property ->
             val cls = KTypes.getClassFromType(property.returnType)
 
@@ -296,8 +272,8 @@ open class EntityRepoInMemory<TId, T>(
 }
 
 
-class EntityMapperEmpty<TId, T>(val model:Model?)
-    : EntityMapper<TId, T> where TId:Comparable<TId>, T: Entity<TId> {
+class EntityMapperEmpty<TId, T>(val model: Model?)
+    : EntityMapper<TId, T> where TId : Comparable<TId>, T : Entity<TId> {
 
     override fun schema(): Model? = model
 

@@ -97,6 +97,21 @@ interface EntityWithUUID {
 }
 
 /**
+ * interface for entities that can be updatable
+ * e.g. case class copying which must be implemented in the case class
+ * @tparam T
+ */
+interface EntityWithUUIDUpdatable<TId, T> where TId:Comparable<TId>, T: Entity<TId> {
+
+    /**
+     * sets the uuid on the entity and returns the entity with updated uuid.
+     * @param uuid
+     * @return
+     */
+    fun withUUID(uuid:String):T
+}
+
+/**
  * Entity with support for sorting
  */
 interface EntityWithOrdinal {
