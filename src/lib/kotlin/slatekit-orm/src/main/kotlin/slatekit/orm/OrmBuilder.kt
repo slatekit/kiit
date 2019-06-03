@@ -106,7 +106,14 @@ class OrmBuilder(dbCreator: (DbCon) -> IDb,
         return when (dbType) {
             DbTypeMySql -> MySqlEntityRepo(db, info, mapper)
             DbTypePGres -> PostGresEntityRepo(db, info, mapper)
-            else -> throw Exception("Unsupported type")
+            else -> {
+                val result = when(info.entityIdType){
+                    KTypes.KIntClass  -> EntityRepoInMemory(info, IntIdGenerator()) as EntityRepo<TId, T>
+                    KTypes.KLongClass -> EntityRepoInMemory(info, LongIdGenerator()) as EntityRepo<TId, T>
+                    else -> throw Exception("Unexpected entity id type for Slate Kit repo")
+                }
+                return result
+            }
         }
     }
 

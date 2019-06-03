@@ -29,7 +29,7 @@ class Api_Setup_Tests : ApiTestsBase() {
 
 
     @Test fun can_setup_instance_as_new_with_context() {
-        ctx.ent.orm<Long, Movie>(DbType.DbTypeMemory, Movie::class, Long::class)
+        ctx.ent.orm<Long, Movie>(DbType.DbTypeMemory, Long::class, Movie::class)
         val apis = ApiHost(ctx, apis = listOf(Api(SampleEntityApi::class, "app", "SampleEntity")), allowIO = false)
         val result = apis.getApi("app", "SampleEntity", "patch" )
 
@@ -75,7 +75,7 @@ class Api_Setup_Tests : ApiTestsBase() {
 
 
     @Test fun can_setup_instance_with_compositional_apis_with_annotations() {
-        ctx.ent.orm<Long, Movie>(DbType.DbTypeMemory, Movie::class, Long::class)
+        ctx.ent.orm<Long, Movie>(DbType.DbTypeMemory, Long::class, Movie::class)
         val apis = ApiHost(ctx, apis = listOf(Api(SampleEntity2Api::class, declaredOnly = false, setup = Annotated)),
                 auth = null, allowIO = false)
         Assert.assertTrue( apis.getApi("app"   , "tests", "patch" ).success)

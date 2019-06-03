@@ -17,7 +17,6 @@ import slatekit.common.*
 import slatekit.common.args.Args
 import slatekit.common.args.ArgsSchema
 import slatekit.common.encrypt.Encryptor
-import slatekit.common.envs.Env
 import slatekit.common.envs.Envs
 import slatekit.common.info.About
 import slatekit.common.log.Logs
@@ -179,7 +178,7 @@ object AppRunner {
 
         // Wrap App.init() call for safety
         // This will produce a nested Try<Try<Boolean>>
-        val rawResult = Tries.attempt { app.execute() }
+        val rawResult = Tries.attempt { app.exec() }
 
         // Flatten the nested Try<Try<Boolean>> into a simple Try<Boolean>
         val result = rawResult.inner()

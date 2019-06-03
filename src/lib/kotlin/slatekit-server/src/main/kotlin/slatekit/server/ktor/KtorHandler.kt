@@ -10,33 +10,33 @@ import slatekit.apis.ApiHost
 import slatekit.common.Context
 import slatekit.common.Diagnostics
 import slatekit.common.requests.Request
-import slatekit.server.ServerConfig
+import slatekit.server.ServerSettings
 import slatekit.server.common.RequestHandler
 import slatekit.server.common.ResponseHandler
 
 
 class KtorHandler(
         override val context: Context,
-        val config: ServerConfig,
+        val settings: ServerSettings,
         override val container:ApiHost,
         override val diagnostics: Diagnostics<Request>,
         override val responses: ResponseHandler
 ) : RequestHandler {
 
     override fun register(routes:Routing){
-        routes.get(config.prefix + "/*/*/*") {
+        routes.get(settings.prefix + "/*/*/*") {
             exec(call)
         }
-        routes.post(config.prefix + "/*/*/*") {
+        routes.post(settings.prefix + "/*/*/*") {
             exec(call)
         }
-        routes.put(config.prefix + "/*/*/*") {
+        routes.put(settings.prefix + "/*/*/*") {
             exec(call)
         }
-        routes.patch(config.prefix + "/*/*/*") {
+        routes.patch(settings.prefix + "/*/*/*") {
             exec(call)
         }
-        routes.delete(config.prefix + "/*/*/*") {
+        routes.delete(settings.prefix + "/*/*/*") {
             exec(call)
         }
     }
@@ -57,7 +57,7 @@ class KtorHandler(
         }
 
         // Convert the http request to a SlateKit Request
-        val request = KtorRequest.build(context, body, call, config)
+        val request = KtorRequest.build(context, body, call, settings)
 
         // Execute the API call
         // The SlateKit ApiHost will handle the heavy work of

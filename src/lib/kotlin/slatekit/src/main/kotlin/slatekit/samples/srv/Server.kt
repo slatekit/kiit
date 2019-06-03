@@ -4,8 +4,6 @@ package slatekit.samples.srv
 // Ktor
 import io.ktor.application.ApplicationCall
 import io.ktor.application.call
-import io.ktor.application.install
-import io.ktor.features.CORS
 import io.ktor.routing.get
 import io.ktor.routing.routing
 import io.ktor.server.engine.embeddedServer
@@ -30,7 +28,7 @@ import slatekit.common.requests.Request
 import slatekit.meta.Deserializer
 
 // Slate Kit - Server ( Ktor support )
-import slatekit.server.ServerConfig
+import slatekit.server.ServerSettings
 import slatekit.server.common.ServerDiagnostics
 import slatekit.server.ktor.KtorHandler
 import slatekit.server.ktor.KtorResponse
@@ -50,7 +48,7 @@ class Server(val ctx: Context)  {
     suspend fun execute(): Try<Any> {
 
         // 1. Settings
-        val config = ServerConfig(port = 5000, prefix = "/api/", docs = true, docKey = "abc123")
+        val settings = ServerSettings(port = 5000, prefix = "/api/", docs = true, docKey = "abc123")
 
         // 2. APIs ( these are Slate Kit Universal APIs )
         val apis = apis()
@@ -61,7 +59,7 @@ class Server(val ctx: Context)  {
         // 4. API host
         val apiHost = ApiHost( ctx, false, auth, WebProtocol,
                 apis = apis,
-                docKey = config.docKey,
+                docKey = settings.docKey,
                 docBuilder = { DocWeb() },
                 deserializer = { req: Request, enc:Encryptor? -> Deserializer(req, enc) }
         )
@@ -69,10 +67,10 @@ class Server(val ctx: Context)  {
         // Ktor handler
         val metrics = MetricsLite()
         val diagnostics = ServerDiagnostics("app", ctx.logs.getLogger("app"), metrics, listOf())
-        val handler = KtorHandler(ctx, config, apiHost, diagnostics, KtorResponse)
+        val handler = KtorHandler(ctx, settings, apiHost, diagnostics, KtorResponse)
 
         // Ktor
-        val server = embeddedServer(Netty, config.port) {
+        val server = embeddedServer(Netty, settings.port) {
             routing {
 
                 // Root
@@ -81,7 +79,7 @@ class Server(val ctx: Context)  {
                 }
 
                 // Your own custom path
-                get(config.prefix + "/ping") {
+                get(settings.prefix + "/ping") {
                     ping(call)
                 }
 
@@ -96,9 +94,7 @@ class Server(val ctx: Context)  {
         }
 
         // CORS
-        if (config.cors) {
-            server.application.install(CORS)
-        }
+        // server.application.install(CORS)
 
         // Start server
         server.start(wait = true)

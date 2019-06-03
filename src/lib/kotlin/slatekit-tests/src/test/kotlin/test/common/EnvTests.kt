@@ -41,7 +41,7 @@ class EnvTests {
 
 
     @Test fun default_envs_can_be_created() {
-        val envs = Env.defaults()
+        val envs = Envs.defaults()
         ensureMatch( envs, "loc", EnvMode.Dev , "Dev environment (local)" )
         ensureMatch( envs, "dev", EnvMode.Dev , "Dev environment (shared)" )
         ensureMatch( envs, "qa1", EnvMode.Qat  , "QA environment  (current release)" )
@@ -52,7 +52,7 @@ class EnvTests {
 
 
     @Test fun default_envs_have_default_current_environment() {
-        val envs = Env.defaults()
+        val envs = Envs.defaults()
         Assert.assertTrue( envs.current != null )
         Assert.assertTrue( envs.name == "loc")
         Assert.assertTrue( envs.env == EnvMode.Dev.name )
@@ -61,7 +61,7 @@ class EnvTests {
 
 
     @Test fun default_envs_can_select_environment() {
-        val envAll = Env.defaults()
+        val envAll = Envs.defaults()
         val envs = envAll.select("qa1")
         Assert.assertTrue( envs.current != null )
         Assert.assertTrue( envs.name == "qa1")
@@ -71,7 +71,7 @@ class EnvTests {
 
 
     @Test fun default_envs_can_validate_env_against_defaults() {
-        val envAll = Env.defaults()
+        val envAll = Envs.defaults()
         Assert.assertTrue( envAll.isValid("qa1") )
         Assert.assertTrue( !envAll.isValid("abc") )
     }

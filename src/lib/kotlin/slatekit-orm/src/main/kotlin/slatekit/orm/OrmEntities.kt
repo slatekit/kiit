@@ -59,8 +59,8 @@ fun <TId, T> Entities.model(
  */
 fun <TId, T> Entities.orm(
         dbType:DbType,
-        entityType: KClass<*>,
         entityIdType: KClass<*>,
+        entityType: KClass<*>,
         tableName: String? = null,
         serviceType: KClass<*>? = null,
         serviceCtx: Any? = null,
@@ -77,7 +77,7 @@ fun <TId, T> Entities.orm(
     val table = buildTableName(entityType, tableName, namer)
 
     // 2. Model ( schema of the entity which maps fields to columns and has other metadata )
-    val model = builder.model(entityType, namer, tableName)
+    val model = builder.model(entityType, namer, table)
 
     // 3. Connection info ( using default connection )
     val con = builder.con()

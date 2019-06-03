@@ -49,6 +49,10 @@ open class OrmMapper<TId, T>(
     : ModelMapper(model, encryptor = info.encryptor, namer = info.namer),
         EntityMapper<TId, T> where TId : kotlin.Comparable<TId>, T : Entity<TId> {
 
+    constructor( model: Model, db: IDb, converter: Converter<TId, T>, idType:KClass<*>, clsType:KClass<*>)
+        :this(model, db, converter, EntityInfo(idType, clsType, ""))
+
+
     /**
      * Gets all the column names mapped to the field names
      */

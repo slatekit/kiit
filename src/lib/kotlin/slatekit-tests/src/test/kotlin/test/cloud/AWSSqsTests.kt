@@ -48,7 +48,7 @@ class AwsSqsTests {
     }
 
 
-    @Test
+    //@Test
     fun can_test_update() {
         // Not storing any key/secret in source code for security purposes
         // Setup 1: Use the default aws config file in "{user_dir}/.aws/credentials"

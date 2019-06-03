@@ -80,12 +80,12 @@ class Entity_Database_Tests {
         "test_uniqueId" VARCHAR(50) NOT NULL );
     */
 
-    @Test fun can_use_all_types(): Unit {
+    @Test fun can_use_all_types() {
         val entities = realDb()
         val svc = entities.getSvc<Long, SampleEntity>(SampleEntity::class)
         val inf = entities.getInfoByName(SampleEntity::class.qualifiedName!!)
         val ddl = entities.sqlBuilder(SampleEntity::class.qualifiedName!!)
-        val sql = ddl?.createTable(inf.model)
+        val sql = ddl.createTable(inf.model)
 
         val id = svc.create(SampleEntity(
                 test_string = "create",
@@ -144,7 +144,7 @@ class Entity_Database_Tests {
     private fun realDb(): Entities {
         val dbs = DbLookup.defaultDb(con!!)
         val entities = Entities({ con -> Db(con) }, dbs, MyEncryptor)
-        entities.orm<Long, SampleEntity>(DbType.DbTypeMySql, SampleEntity::class, Long::class, "sample_entity")
+        entities.orm<Long, SampleEntity>(DbType.DbTypeMySql, Long::class, SampleEntity::class, "sample_entity")
         return entities
     }
 
