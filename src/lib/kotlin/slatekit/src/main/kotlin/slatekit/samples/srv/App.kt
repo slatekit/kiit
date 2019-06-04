@@ -69,7 +69,7 @@ class App(ctx: Context) : App<Context>(ctx, AppOptions(printSummaryBeforeExec = 
      *
      * @return
      */
-    override suspend fun execute(): Try<Any> {
+    override suspend fun exec(): Try<Any> {
         val server = Server(ctx)
         return server.execute()
     }

@@ -18,7 +18,7 @@ fun <TId> convertToId(id:String, entityType:KClass<*> ):TId {
 
 
 fun buildTableName(entityType: KClass<*>, tableName:String?, namer: Namer?):String {
-    val rawTableName = tableName ?: entityType.simpleName!! // "user"
-    val table = namer?.rename(rawTableName) ?: rawTableName.toLowerCase()
+    val raw = if(tableName.isNullOrEmpty()) entityType.simpleName!! else tableName
+    val table = namer?.rename(raw) ?: raw.toLowerCase()
     return table
 }

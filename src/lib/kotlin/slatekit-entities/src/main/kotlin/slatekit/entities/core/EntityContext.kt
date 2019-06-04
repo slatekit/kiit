@@ -36,13 +36,13 @@ open class EntityContext(
         val entityType: KClass<*>,
         val entityIdType: KClass<*>,
         val entityServiceType: KClass<*>,
-        val entityRepoInstance: IEntityRepo,
+        val entityRepoInstance: EntityStore,
         val entityMapperInstance: EntityMapper<*, *>,
         val dbType: DbType = DbTypeMySql,
         val model: Model,
         val dbKey: String = "",
         val dbShard: String = "",
-        val entityServiceInstance: IEntityService? = null,
+        val entityServiceInstance: GenericService? = null,
         val entityServiceContext:Any? = null
 ) {
     val entityTypeName = entityType.qualifiedName ?: ""

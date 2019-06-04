@@ -2,6 +2,7 @@ package slatekit.entities.features
 
 import slatekit.entities.Entity
 import slatekit.entities.core.ServiceSupport
+import slatekit.query.IQuery
 
 interface EntityReads<TId, T> : ServiceSupport<TId, T> where TId: kotlin.Comparable<TId>, T: Entity<TId> {
 
@@ -11,7 +12,7 @@ interface EntityReads<TId, T> : ServiceSupport<TId, T> where TId: kotlin.Compara
      * @return
      */
     fun get(id: TId): T? {
-        return repoT().get(id)
+        return repo().get(id)
     }
 
     /**
@@ -20,7 +21,7 @@ interface EntityReads<TId, T> : ServiceSupport<TId, T> where TId: kotlin.Compara
      * @return
      */
     fun get(ids: List<TId>): List<T> {
-        return repoT().get(ids)
+        return repo().get(ids)
     }
 
     /**
@@ -28,7 +29,7 @@ interface EntityReads<TId, T> : ServiceSupport<TId, T> where TId: kotlin.Compara
      * @return
      */
     fun getAll(): List<T> {
-        return repoT().getAll()
+        return repo().getAll()
     }
 
     /**
@@ -38,7 +39,7 @@ interface EntityReads<TId, T> : ServiceSupport<TId, T> where TId: kotlin.Compara
      * @return
      */
     fun top(count: Int, desc: Boolean): List<T> {
-        return repoT().top(count, desc)
+        return repo().top(count, desc)
     }
 
     /**
@@ -46,7 +47,7 @@ interface EntityReads<TId, T> : ServiceSupport<TId, T> where TId: kotlin.Compara
      * @return
      */
     fun first(): T? {
-        return repoT().first()
+        return repo().first()
     }
 
     /**
@@ -54,7 +55,7 @@ interface EntityReads<TId, T> : ServiceSupport<TId, T> where TId: kotlin.Compara
      * @return
      */
     fun last(): T? {
-        return repoT().last()
+        return repo().last()
     }
 
     /**
@@ -63,7 +64,7 @@ interface EntityReads<TId, T> : ServiceSupport<TId, T> where TId: kotlin.Compara
      * @return
      */
     fun recent(count: Int): List<T> {
-        return repoT().recent(count)
+        return repo().recent(count)
     }
 
     /**
@@ -72,6 +73,34 @@ interface EntityReads<TId, T> : ServiceSupport<TId, T> where TId: kotlin.Compara
      * @return
      */
     fun oldest(count: Int): List<T> {
-        return repoT().oldest(count)
+        return repo().oldest(count)
+    }
+
+    /**
+     * gets the total number of entities in the datastore
+     * @return
+     */
+    fun count(): Long {
+        return repo().count()
+    }
+
+    /**
+     * determines if there are any entities in the datastore
+     * @return
+     */
+    fun any(): Boolean {
+        return repo().any()
+    }
+
+    /**
+     * whether this is an empty dataset
+     */
+    fun isEmpty(): Boolean = !any()
+
+    /**
+     * Gets the total number of records satisfying the query
+     */
+    fun count(query: IQuery):Long {
+        return repo().count(query)
     }
 }

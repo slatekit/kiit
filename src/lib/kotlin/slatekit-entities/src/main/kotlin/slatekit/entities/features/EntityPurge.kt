@@ -10,6 +10,6 @@ interface EntityPurge <TId, T> : ServiceSupport<TId, T> where TId: kotlin.Compar
      * Purges data older than the number of days supplied
      */
     fun purge(days:Int):Int {
-        return repoT().purge<T>(days)
+        return repo().purge<T>(days)
     }
 }

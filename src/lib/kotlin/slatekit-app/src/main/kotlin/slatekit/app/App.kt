@@ -178,7 +178,7 @@ open class App<C: Context>(val ctx: C,
      *
      * @return
      */
-    open suspend fun execute(): Try<Any> {
+    open suspend fun exec(): Try<Any> {
         return Success<Any>("default")
     }
 

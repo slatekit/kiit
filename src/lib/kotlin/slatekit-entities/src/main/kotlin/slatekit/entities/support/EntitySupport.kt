@@ -1,10 +1,10 @@
-package slatekit.entities.services
+package slatekit.entities.support
 
 import slatekit.entities.Entities
 import slatekit.entities.Entity
 import slatekit.entities.EntityRepo
-import slatekit.entities.core.IEntityRepo
-import slatekit.entities.core.IEntityService
+import slatekit.entities.core.EntityStore
+import slatekit.entities.core.GenericService
 import slatekit.entities.core.ServiceSupport
 
 
@@ -14,34 +14,31 @@ import slatekit.entities.core.ServiceSupport
  * on the entities for create/update operations
  * @tparam T
  */
-interface EntitySupport<TId, T> : IEntityService,
+interface EntitySupport<TId, T> : GenericService,
         ServiceSupport<TId, T> where TId:Comparable<TId>, T : Entity<TId> {
 
     val entities:Entities
     val repo:EntityRepo<TId, T>
 
+    override fun store(): EntityStore = repo
 
-    //override fun entities(): Entities = entities
-
-    override fun repo(): IEntityRepo = repo
-
-    override fun repoT(): EntityRepo<TId, T> = repo
+    override fun repo(): EntityRepo<TId, T> = repo
 
 
     /**
      * gets the total number of entities in the datastore
      * @return
      */
-    override fun count(): Long {
-        return repoT().count()
+    fun count(): Long {
+        return repo().count()
     }
 
     /**
      * determines if there are any entities in the datastore
      * @return
      */
-    override fun any(): Boolean {
-        return repoT().any()
+    fun any(): Boolean {
+        return repo().any()
     }
 
     /**

@@ -21,12 +21,12 @@ interface EntitySaves<TId, T> : ServiceSupport<TId, T> where TId: kotlin.Compara
                 val saveResult = when (item.isPersisted()) {
                     false -> {
                         val finalEntity = applyFieldData(EntityAction.EntityCreate, item)
-                        val id = repoT().create(finalEntity)
+                        val id = repo().create(finalEntity)
                         if (isCreated(id)) Tries.success(id) else Tries.errored("Error creating item")
                     }
                     true -> {
                         val finalEntity = applyFieldData(EntityAction.EntityUpdate, item)
-                        val updated = repoT().update(finalEntity)
+                        val updated = repo().update(finalEntity)
                         if (updated) Tries.success(finalEntity.identity()) else Tries.errored("Error updating item")
                     }
                 }
@@ -55,7 +55,7 @@ interface EntitySaves<TId, T> : ServiceSupport<TId, T> where TId: kotlin.Compara
         if ( this is EntityHooks) {
             items.forEach { save(it) }
         } else {
-            repoT().saveAll(items)
+            repo().saveAll(items)
         }
     }
 }

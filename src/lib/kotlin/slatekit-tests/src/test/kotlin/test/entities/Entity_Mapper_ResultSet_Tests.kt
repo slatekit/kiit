@@ -36,7 +36,7 @@ class Entity_Mapper_ResultSet_Tests {
     @Test fun can_map_to_immutable_class(){
         val model = ModelMapper.loadSchema(AuthorR::class, AuthorR::id.name)
 
-        val mapper = OrmMapper(model, Db(DbCon.empty), Long::class, MySqlConverter<Long, AuthorR>())
+        val mapper = OrmMapper(model, Db(DbCon.empty), MySqlConverter<Long, AuthorR>(), Long::class, AuthorR::class)
         val data = buildSampleDataForAuthor()
         val source = RecordMap(data)
         val entity = mapper.mapFrom<AuthorR>(source)!!
@@ -56,7 +56,7 @@ class Entity_Mapper_ResultSet_Tests {
     @Test fun can_map_to_writable_class(){
         val model = ModelMapper.loadSchema(AuthorW::class, AuthorW::id.name)
 
-        val mapper = OrmMapper(model, Db(DbCon.empty), Long::class, MySqlConverter<Long, AuthorW>())
+        val mapper = OrmMapper(model, Db(DbCon.empty), MySqlConverter<Long, AuthorW>(), Long::class, AuthorW::class)
         val data = buildSampleDataForAuthor()
         val source = RecordMap(data)
         val entity = mapper.mapFrom<AuthorW>(source)!!
@@ -76,7 +76,7 @@ class Entity_Mapper_ResultSet_Tests {
     @Test fun can_map_to_immutable_class_with_embedded_object(){
         val model = ModelMapper.loadSchema(UserWithAddress::class, UserWithAddress::id.name)
 
-        val mapper = OrmMapper(model, Db(DbCon.empty), Long::class, MySqlConverter<Long, UserWithAddress>())
+        val mapper = OrmMapper(model, Db(DbCon.empty), MySqlConverter<Long, UserWithAddress>(), Long::class, UserWithAddress::class)
         val data = buildSampleDataForEmbeddedObject()
         val source = RecordMap(data)
         val entity = mapper.mapFrom<UserWithAddress>(source)!!

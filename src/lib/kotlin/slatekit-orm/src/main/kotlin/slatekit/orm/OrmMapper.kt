@@ -44,14 +44,14 @@ import kotlin.reflect.KClass
 open class OrmMapper<TId, T>(
         model: Model,
         val db: IDb,
-        val idType: KClass<*>,
         val converter: Converter<TId, T>,
-        val isUtc: Boolean = false,
-        val quoteChar: Char = '`',
-        encryptor: Encryptor? = null,
-        namer: Namer? = null)
-    : ModelMapper(model, encryptor = encryptor, namer = namer),
+        val info:EntityInfo)
+    : ModelMapper(model, encryptor = info.encryptor, namer = info.namer),
         EntityMapper<TId, T> where TId : kotlin.Comparable<TId>, T : Entity<TId> {
+
+    constructor( model: Model, db: IDb, converter: Converter<TId, T>, idType:KClass<*>, clsType:KClass<*>)
+        :this(model, db, converter, EntityInfo(idType, clsType, ""))
+
 
     /**
      * Gets all the column names mapped to the field names
@@ -88,7 +88,7 @@ open class OrmMapper<TId, T>(
     fun insert(entity: T): TId {
         val sql = converter.inserts.sql(entity, metaModel, this)
         val id = db.insertGetId(sql, null)
-        return convertToId(id, idType)
+        return convertToId(id, info.entityIdType)
     }
 
 
@@ -150,7 +150,7 @@ open class OrmMapper<TId, T>(
      */
     open fun columnName(name: String): String {
         val finalName = namer?.rename(name) ?: name
-        return "$quoteChar$finalName$quoteChar"
+        return "${info.encodedChar}$finalName${info.encodedChar}"
     }
 
 
@@ -159,7 +159,7 @@ open class OrmMapper<TId, T>(
      */
     open fun columnName(prefix: String, name: String): String {
         val finalName = namer?.rename(name) ?: name
-        return "$quoteChar${prefix}_$finalName$quoteChar"
+        return "${info.encodedChar}${prefix}_$finalName${info.encodedChar}"
     }
 
 
@@ -204,7 +204,7 @@ open class OrmMapper<TId, T>(
             converter.doubles.toSql(dVal)
         } else if (mapping.dataCls == KTypes.KDateTimeClass) {
             val dtVal = Reflector.getFieldValue(item, mapping.name) as DateTime?
-            converter.dateTimes.toSql(dtVal, isUtc)
+            converter.dateTimes.toSql(dtVal, info.utcTime)
         } else if (mapping.dataCls == KTypes.KLocalDateClass) {
             val raw = Reflector.getFieldValue(item, mapping.name) as LocalDate?
             converter.localDates.toSql(raw)
@@ -216,7 +216,7 @@ open class OrmMapper<TId, T>(
             converter.localDateTimes.toSql(raw)
         } else if (mapping.dataCls == KTypes.KZonedDateTimeClass) {
             val raw = Reflector.getFieldValue(item, mapping.name) as ZonedDateTime?
-            converter.zonedDateTimes.toSql(raw, isUtc)
+            converter.zonedDateTimes.toSql(raw, info.utcTime)
         } else if (mapping.dataCls == KTypes.KInstantClass) {
             val raw = Reflector.getFieldValue(item, mapping.name) as Instant?
             converter.instants.toSql(raw)

@@ -20,9 +20,9 @@ interface EntityUpdates<TId, T> : ServiceSupport<TId, T> where TId: kotlin.Compa
      * @return
      */
     fun update(entity: T): Boolean {
-        val original:T? = if (this is EntityHooks ) repoT().get(entity.identity()) else null
+        val original:T? = if (this is EntityHooks ) repo().get(entity.identity()) else null
         val finalEntity = applyFieldData(EntityAction.EntityUpdate, entity)
-        val success = repoT().update(finalEntity)
+        val success = repo().update(finalEntity)
 
         // Event out
         if ( this is EntityHooks) {
@@ -54,7 +54,7 @@ interface EntityUpdates<TId, T> : ServiceSupport<TId, T> where TId: kotlin.Compa
      * @return
      */
     fun update(id: TId, field: String, value: String) {
-        val item = repoT().get(id)
+        val item = repo().get(id)
         item?.let { entity ->
             Reflector.setFieldValue(entity.kClass, entity, field, value)
             update(entity)
@@ -68,20 +68,20 @@ interface EntityUpdates<TId, T> : ServiceSupport<TId, T> where TId: kotlin.Compa
      * @return
      */
     fun updateByField(prop: KProperty<*>, value: Any): Int {
-        return repoT().updateByField(prop.name, value)
+        return repo().updateByField(prop.name, value)
     }
 
     /**
      * updates items by a stored proc
      */
     fun updateByProc(name: String, args: List<Any>? = null): Int {
-        return repoT().updateByProc(name, args)
+        return repo().updateByProc(name, args)
     }
 
     /**
      * updates items using the query
      */
     fun updateByQuery(query: IQuery): Int {
-        return repoT().updateByQuery(query)
+        return repo().updateByQuery(query)
     }
 }

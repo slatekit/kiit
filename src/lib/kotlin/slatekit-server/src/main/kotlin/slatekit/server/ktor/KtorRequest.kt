@@ -20,7 +20,7 @@ import io.ktor.http.content.streamProvider
 import org.json.simple.JSONObject
 import org.json.simple.parser.JSONParser
 import slatekit.common.*
-import slatekit.server.ServerConfig
+import slatekit.server.ServerSettings
 import io.ktor.request.*
 //import kotlinx.coroutines.experimental.async
 import slatekit.common.content.ContentTypeHtml
@@ -92,10 +92,10 @@ class KtorRequest(val call: ApplicationCall, val req: ApplicationRequest) : Requ
 
     companion object {
 
-        fun build(ctx: Context, body: String, call: ApplicationCall, conf: ServerConfig): Request {
+        fun build(ctx: Context, body: String, call: ApplicationCall, settings: ServerSettings): Request {
             val req = call.request
             val httpUri = req.uri
-            val rawUri = if (httpUri.startsWith(conf.prefix)) httpUri.substring(conf.prefix.length) else httpUri
+            val rawUri = if (httpUri.startsWith(settings.prefix)) httpUri.substring(settings.prefix.length) else httpUri
 
             // app/users/recent?count=20
             // Only get up until "?"

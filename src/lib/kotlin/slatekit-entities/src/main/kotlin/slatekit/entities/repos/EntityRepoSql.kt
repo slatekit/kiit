@@ -14,43 +14,29 @@
 package slatekit.entities.repos
 
 import slatekit.common.db.IDb
-import slatekit.common.encrypt.Encryptor
 import slatekit.common.ext.tail
-import slatekit.common.naming.Namer
 import slatekit.query.IQuery
 import slatekit.query.Op
 import slatekit.query.Query
 import slatekit.entities.Entity
 import slatekit.entities.EntityMapper
-import slatekit.entities.EntityRepo
-import slatekit.meta.models.Model
-import kotlin.reflect.KClass
+import slatekit.entities.core.EntityInfo
 
 /**
  *
- * @param entityType : The data type of the entity/model
- * @param entityIdType : The data type of the primary key/identity field
- * @param entityMapper : The entity mapper that maps to/from entities / records
- * @param nameOfTable : The name of the table ( defaults to entity name )
- * @param db
+ * @param db   : Db wrapper to execute sql
+ * @param info : Holds all info relevant state/members needed to perform repo operations
  * @tparam T
  */
 abstract class EntityRepoSql<TId, T>(
         val db: IDb,
-        entityType: KClass<*>,
-        entityIdType: KClass<*>,
-        val entityMapper: EntityMapper<TId, T>,
-        nameOfTable: String,
-        model: Model? = null,
-        encryptor: Encryptor? = null,
-        namer: Namer? = null,
-        encodedChar: Char = '`',
-        query: (() -> Query)? = null
-) : EntityRepo<TId, T>(entityType, entityIdType, nameOfTable, encodedChar, model, encryptor, namer, query)
+        info:EntityInfo,
+        val mapper: EntityMapper<TId, T>
+) : EntityRepoBase<TId, T>(info)
         where TId:Comparable<TId>, T: Entity<TId> {
 
 
-    override fun name(): String = "$encodedChar" + super.name() + "$encodedChar"
+    override fun name(): String = "${info.encodedChar}" + super.name() + "${info.encodedChar}"
 
 
     /**
@@ -81,7 +67,7 @@ abstract class EntityRepoSql<TId, T>(
      * @param id
      */
     override fun delete(id: TId): Boolean {
-        val count = update("delete from ${name()} where ${idName()} = $id;")
+        val count = update("delete from ${name()} where ${id()} = $id;")
         return count > 0
     }
 
@@ -92,7 +78,7 @@ abstract class EntityRepoSql<TId, T>(
      */
     override fun delete(ids: List<TId>): Int {
         val delimited = ids.joinToString(",")
-        return update("delete from ${name()} where ${idName()} in ($delimited);")
+        return update("delete from ${name()} where ${id()} in ($delimited);")
     }
 
     /**
@@ -134,7 +120,7 @@ abstract class EntityRepoSql<TId, T>(
      * gets the entity associated with the id
      */
     override fun get(id: TId): T? {
-        return sqlMapOne("select * from ${name()} where ${idName()} = $id;")
+        return sqlMapOne("select * from ${name()} where ${id()} = $id;")
     }
 
     /**
@@ -144,7 +130,7 @@ abstract class EntityRepoSql<TId, T>(
      */
     override fun get(ids: List<TId>): List<T> {
         val delimited = ids.joinToString(",")
-        return sqlMapMany("select * from ${name()} where ${idName()} in ($delimited);") ?: listOf()
+        return sqlMapMany("select * from ${name()} where ${id()} in ($delimited);") ?: listOf()
     }
 
     override fun getAll(): List<T> {
@@ -243,7 +229,7 @@ abstract class EntityRepoSql<TId, T>(
      * @return
      */
     override fun findByProc(name: String, args: List<Any>?): List<T>? {
-        return db.callQueryMapped(name, entityMapper, args)
+        return db.callQueryMapped(name, mapper, args)
     }
 
     /**
@@ -266,10 +252,10 @@ abstract class EntityRepoSql<TId, T>(
     }
 
     protected open fun sqlMapMany(sql: String): List<T>? {
-        return db.mapMany(sql, entityMapper)
+        return db.mapMany(sql, mapper)
     }
 
     protected open fun sqlMapOne(sql: String): T? {
-        return db.mapOne<T>(sql, entityMapper)
+        return db.mapOne<T>(sql, mapper)
     }
 }

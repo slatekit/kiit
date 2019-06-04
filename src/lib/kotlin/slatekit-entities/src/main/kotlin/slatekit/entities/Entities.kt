@@ -97,7 +97,7 @@ open class Entities(
             service: EntityService<TId, T>,
             dbType:DbType): EntityContext where TId : Comparable<TId>, T : Entity<TId> {
         val mapper = EntityMapperEmpty<TId, T>(null)
-        val context = EntityContext(entityType, entityIdType, service::class, service.repoT(), mapper, dbType, Model(entityType), "", "", service)
+        val context = EntityContext(entityType, entityIdType, service::class, service.repo(), mapper, dbType, Model(entityType), "", "", service)
         register(context)
         return context
     }
@@ -167,7 +167,8 @@ open class Entities(
         val mapper = EntityMapperEmpty<TId, T>(model) // Empty mapper as this is in-memory
 
         // 3. Repo ( provides CRUD using the Mapper)
-        val repo = EntityRepoInMemory(entityType, entityIdType, model, this.enc, this.namer, entityIdGen)
+        val info = EntityInfo(entityIdType, entityType, "", '`', model, this.enc, this.namer)
+        val repo = EntityRepoInMemory(info, entityIdGen)
 
         // 4. Service ( used to provide validation, placeholder for business functionality )
         val service = builder.service(this, serviceType, repo, serviceCtx)
@@ -249,19 +250,19 @@ open class Entities(
         return getInfoByKey(key)
     }
 
-    fun getSvcByTypeName(entityType: String, dbKey: String = "", dbShard: String = ""): IEntityService {
+    fun getSvcByTypeName(entityType: String, dbKey: String = "", dbShard: String = ""): GenericService {
         val info = getInfoByName(entityType, dbKey, dbShard)
         return info.entityServiceInstance ?: throw Exception("Entity service not available")
     }
 
 
-    fun getSvcByType(entityType: KClass<*>, dbKey: String = "", dbShard: String = ""): IEntityService {
+    fun getSvcByType(entityType: KClass<*>, dbKey: String = "", dbShard: String = ""): GenericService {
         val info = getInfo(entityType, dbKey, dbShard)
         return info.entityServiceInstance ?: throw Exception("Entity service not available")
     }
 
 
-    private fun getRepoByType(tpe: KClass<*>, dbKey: String = "", dbShard: String = ""): IEntityRepo {
+    private fun getRepoByType(tpe: KClass<*>, dbKey: String = "", dbShard: String = ""): EntityStore {
         val info = getInfo(tpe, dbKey, dbShard)
         return info.entityRepoInstance
     }

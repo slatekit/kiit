@@ -175,7 +175,7 @@ class Entity_Services_Tests {
     @Test fun can_get_relation() {
         val userSvc = getUserService(true)
         val memsSvcRaw = entities.getSvc<Long, Member>(Member::class)
-        val memsSvc = EntityServiceRelational<Long, Member>(entities, memsSvcRaw.repoT())
+        val memsSvc = EntityServiceRelational<Long, Member>(entities, memsSvcRaw.repo())
         val user = memsSvc.getRelation<User5>(1, Member::userId, User5::class)
         Assert.assertTrue( user != null)
         Assert.assertTrue( user!!.email == "jdoe1@abc.com")
@@ -185,7 +185,7 @@ class Entity_Services_Tests {
     @Test fun can_get_relation_with_object() {
         val userSvc = getUserService(true)
         val memsSvcRaw = entities.getSvc<Long, Member>(Member::class)
-        val memsSvc = EntityServiceRelational<Long, Member>(entities, memsSvcRaw.repoT())
+        val memsSvc = EntityServiceRelational<Long, Member>(entities, memsSvcRaw.repo())
         val userAndMember = memsSvc.getWithRelation<User5>(2, Member::userId, User5::class)
         Assert.assertTrue( userAndMember != null)
         Assert.assertTrue(userAndMember!!.first?.groupId == 2L)
@@ -197,7 +197,7 @@ class Entity_Services_Tests {
     @Test fun can_get_relations() {
         val userSvc = getUserService(true)
         val grpSvcRaw = entities.getSvc<Long, Group>(Group::class)
-        val grpSvc = EntityServiceRelational<Long, Group>(entities, grpSvcRaw.repoT())
+        val grpSvc = EntityServiceRelational<Long, Group>(entities, grpSvcRaw.repo())
         val results = grpSvc.getWithRelations<Member>(2, Member::class, Member::groupId)
         Assert.assertTrue(results != null)
         Assert.assertTrue(results.first?.name == "group 2")
