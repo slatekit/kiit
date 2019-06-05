@@ -27,7 +27,7 @@ interface EntityCreates<TId, T> : ServiceSupport<TId, T> where TId : kotlin.Comp
      * @param entity : The entity to save
      * @param options: Settings to determine whether to apply metadata, and notify via EntityHooks
      */
-    fun create(entity: T, options:EntityOptions = EntityOptions.empty): Pair<TId, T> {
+    fun create(entity: T, options:EntityOptions): Pair<TId, T> {
         // Massage
         val entityWithMeta = when(options.applyMetadata) {
             true  -> applyFieldData(EntityAction.EntityCreate, entity)

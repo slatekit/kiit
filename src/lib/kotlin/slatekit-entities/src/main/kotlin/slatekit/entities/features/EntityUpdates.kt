@@ -31,7 +31,7 @@ interface EntityUpdates<TId, T> : ServiceSupport<TId, T> where TId: kotlin.Compa
      * @param entity : The entity to save
      * @param options: Settings to determine whether to apply metadata, and notify via EntityHooks
      */
-    fun update(entity: T, options: EntityOptions = EntityOptions.empty): Pair<Boolean, T> {
+    fun update(entity: T, options: EntityOptions): Pair<Boolean, T> {
         val useHooks = options.applyHooks && this is EntityHooks
         val original:T? = if (useHooks) repo().get(entity.identity()) else null
 
