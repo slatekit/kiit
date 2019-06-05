@@ -33,7 +33,8 @@ data class EntityInfo(
     companion object {
 
         fun memory(idType:KClass<*>, entityType:KClass<*>):EntityInfo {
-            val info = EntityInfo( idType, entityType, "" )
+            val tableName = entityType.simpleName!!.toLowerCase()
+            val info = EntityInfo( idType, entityType, tableName )
             return info
         }
     }
