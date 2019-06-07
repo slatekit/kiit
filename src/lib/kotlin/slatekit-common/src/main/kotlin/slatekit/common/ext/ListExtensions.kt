@@ -36,3 +36,4 @@ fun <T> List<T>.removeAt(index: Int): List<T> {
  * Converts the list to an immutable map
  */
 fun <T> List<T>.convertToMap(): Map<T, T> = this.map { value -> Pair(value, value) }.toMap()
+

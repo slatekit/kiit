@@ -86,7 +86,7 @@ fun <TId, T> Entities.orm(
     val db = builder.db( con )
 
     // 5. Mapper ( maps entities to/from sql using the model/schema )
-    val info = EntityInfo(entityIdType, entityType, "", '`', model, this.enc, this.namer)
+    val info = EntityInfo(entityIdType, entityType, table, '`', model, this.enc, this.namer)
     val mapper = builder.mapper<TId, T>(dbType, db, model, info)
 
     // 6. Repo ( provides CRUD using the Mapper)

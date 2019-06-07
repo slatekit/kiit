@@ -167,7 +167,7 @@ open class Entities(
         val mapper = EntityMapperEmpty<TId, T>(model) // Empty mapper as this is in-memory
 
         // 3. Repo ( provides CRUD using the Mapper)
-        val info = EntityInfo(entityIdType, entityType, "", '`', model, this.enc, this.namer)
+        val info = EntityInfo(entityIdType, entityType, table, '`', model, this.enc, this.namer)
         val repo = EntityRepoInMemory(info, entityIdGen)
 
         // 4. Service ( used to provide validation, placeholder for business functionality )
