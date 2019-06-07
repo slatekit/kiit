@@ -29,13 +29,15 @@ abstract class EntityRepoBase<TId, T>(
 )
     : EntityStore, EntityRepo<TId, T> where TId:Comparable<TId>, T : Entity<TId> {
 
-    protected val name:String by lazy { info.tableName }
+    private val _name:String by lazy {
+        info.namer?.rename(info.tableName) ?: info.tableName[0].toLowerCase()+info.tableName.substring(1)
+    }
 
 
     /**
      * The name of the table in the datastore
      */
     override fun name(): String {
-        return name
+        return _name
     }
 }
