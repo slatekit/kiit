@@ -2,6 +2,7 @@ package slatekit.common.ext
 
 import org.threeten.bp.*
 import org.threeten.bp.format.DateTimeFormatter
+import slatekit.common.DateTimes
 import slatekit.common.Random
 
 
@@ -33,7 +34,7 @@ fun ZonedDateTime.hoursFrom(dt: ZonedDateTime): Long = this.durationFrom(dt).toH
 // ********************************************
 // Comparisons
 // ********************************************
-operator fun ZonedDateTime.compareTo(dt: ZonedDateTime): Int = this.compareTo(this)
+operator fun ZonedDateTime.compareTo(dt: ZonedDateTime): Int = this.compareTo(dt)
 operator fun ZonedDateTime.plus(duration: Duration): ZonedDateTime = this.plus(duration)
 operator fun ZonedDateTime.plus(period: Period): ZonedDateTime = this.plus(period)
 operator fun ZonedDateTime.minus(duration: Duration): ZonedDateTime = this.minus(duration)
@@ -61,18 +62,18 @@ fun ZonedDateTime.toStringTime(sep: String = "-"): String = format("HH${sep}mm${
  * Gets the current ZonedDateTime at UTC at the same "instant"
  * This essential converts the time from e.g. New York to UTC ( +4hr )
  */
-fun ZonedDateTime.atUtc(): ZonedDateTime = this.withZoneSameInstant(ZoneId.of("UTC"))
+fun ZonedDateTime.atUtc(): ZonedDateTime = this.withZoneSameInstant(DateTimes.UTC)
 
 /**
  * Gets the current ZonedDateTime at UTC at the same "local" time
  * This essential converts the time from e.g. New York to UTC
  */
-fun ZonedDateTime.atUtcLocal(): ZonedDateTime = this.withZoneSameLocal(ZoneId.of("UTC"))
+fun ZonedDateTime.atUtcLocal(): ZonedDateTime = this.withZoneSameLocal(DateTimes.UTC)
 
 /**
  * Gets the current ZonedDateTime at the local timezone
  */
-fun ZonedDateTime.atLocalInstant(): ZonedDateTime = this.withZoneSameInstant(ZoneId.systemDefault())
+fun ZonedDateTime.atLocal(): ZonedDateTime = this.withZoneSameInstant(ZoneId.systemDefault())
 
 /**
  * Gets the current ZonedDateTime at the same "instant" of timezone supplied.
