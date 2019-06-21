@@ -32,13 +32,31 @@ import slatekit.providers.logs.logback.LogbackLogs
  * java -jar ${app.name}.jar -env=dev -log.level=info -conf.dir = "file://./conf-sample-server"
  */
 fun main(args: Array<String>) {
-//    sampleApp(args)
-//    sampleCli(args)
-//    sampleSrv(args)
 
-//    genApp(args)
-//    genCli(args)
-//    genSrv(args)
+    println("starting slate kit with args:" )
+    println()
+
+    args.forEachIndexed { ndx, value ->
+        println("$ndx : $value")
+    }
+
+    println()
+    println("done")
+
+    // SAMPLES
+    // 1. app
+    //
+    // slatekit create app -name="MyApp1" -package="company1.myapp1" -envs="dev,qat,stg,pro" -dest="some directory" -creds=encrypted -slatekit='0.9.28'
+    // slatekit create cli -name="MyApp1" -package="company1.myapp1" -envs="dev,qat,stg,pro"
+    // slatekit create srv -name="MyApp1" -package="company1.myapp1" -envs="dev,qat,stg,pro"
+
+
+    //sampleApp(args)
+    //sampleCli(args)
+    //sampleSrv(args)
+    //genApp(args)
+    //genCli(args)
+    //genSrv(args)
 }
 
 

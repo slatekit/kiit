@@ -120,8 +120,8 @@ dependencies {
         //compile project(":slatekit-support")
     } //</slatekit_local>
 
-    implementation project(":slatekit-examples")
-    implementation project(":slatekit-tests")
+    //implementation project(":slatekit-examples")
+    //implementation project(":slatekit-tests")
     implementation project(":slatekit-generator")
 }
 
