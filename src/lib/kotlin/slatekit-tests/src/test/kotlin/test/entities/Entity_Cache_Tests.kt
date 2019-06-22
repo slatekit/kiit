@@ -14,24 +14,12 @@
 package test.entities
 
 import org.junit.Assert
-import org.junit.Before
 import org.junit.Test
-import slatekit.common.db.DbConString
-import slatekit.common.db.DbLookup
-import slatekit.db.Db
-import slatekit.entities.Entities
-import slatekit.entities.Entity
-import slatekit.entities.EntityRepo
 import slatekit.entities.EntityService
 import slatekit.entities.core.EntityInfo
-import slatekit.entities.features.EntityRelations
 import slatekit.entities.repos.EntityRepoInMemory
-import slatekit.entities.repos.EntityRepoInMemoryWithLongId
 import slatekit.entities.repos.LongIdGenerator
-import slatekit.entities.support.EntityCache
-import test.setup.Group
-import test.setup.Member
-import test.setup.User
+import slatekit.entities.support.cache.EntityCache
 import test.setup.User5
 
 

@@ -1,4 +1,4 @@
-package slatekit.entities.support
+package slatekit.entities.support.cache
 
 /**
  * Contains the cached items

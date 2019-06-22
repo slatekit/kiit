@@ -32,5 +32,3 @@ data class SimpleMigration(override val desc: String,
         }
     }
 }
-
-

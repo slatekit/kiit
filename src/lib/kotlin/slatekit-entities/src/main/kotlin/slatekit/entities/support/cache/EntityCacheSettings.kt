@@ -1,4 +1,4 @@
-package slatekit.entities.slatekit.entities.support
+package slatekit.entities.support.cache
 
 
 import slatekit.entities.Entity

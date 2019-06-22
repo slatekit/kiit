@@ -1,7 +1,7 @@
-package slatekit.entities.slatekit.entities.support
+package slatekit.entities.support
 
 import slatekit.entities.Entity
-import slatekit.entities.support.CacheContents
+import slatekit.entities.support.cache.CacheContents
 
 
 /**
@@ -10,13 +10,13 @@ import slatekit.entities.support.CacheContents
  * with some level of built in functionality while also NOT wanting to use
  * the supplied EntityCache component
  */
-interface EntityCacheSupport<TId, TKey, T>
+interface Cacheable<TId, TKey, T>
         where TId : Comparable<TId>, T: Entity<TId> {
 
     /**
      * Gets the cache contents
      */
-    fun contents():CacheContents<T>
+    fun contents(): CacheContents<T>
 
 
     /**

@@ -20,14 +20,14 @@ import slatekit.results.Try
 interface EntityDynamic<TId> where TId:Comparable<TId> {
 
 
-    fun createEntity(entity: Entity<TId>): Try<TId>
+    fun createEntity(entity: Entity<TId>): Try<Pair<TId, Entity<TId>>>
 
 
-    fun updateEntity(entity: Entity<TId>): Try<TId>
+    fun updateEntity(entity: Entity<TId>): Try<Pair<TId, Entity<TId>>>
 
 
-    fun fetchEntity(entity: Entity<TId>): Try<TId>
+    fun fetchEntity(entity: Entity<TId>): Try<Entity<TId>>
 
 
-    fun deleteEntity(entity: Entity<TId>): Try<TId>
+    fun deleteEntity(entity: Entity<TId>): Try<Int>
 }
