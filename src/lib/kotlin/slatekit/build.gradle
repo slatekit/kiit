@@ -82,7 +82,7 @@ dependencies {
     compile 'com.squareup.okhttp3:okhttp:3.9.0'
     compile 'org.threeten:threetenbp:1.3.8'
 
-    ///* <slatekit_local>
+    /* <slatekit_local>
     if( slatekitSetupViaMaven ) {
         compile "com.slatekit:slatekit-results:$slatekit_version"
         compile "com.slatekit:slatekit-common:$slatekit_version"
@@ -101,28 +101,28 @@ dependencies {
         compile "com.slatekit:slatekit-workers:$slatekit_version"
     } else {
         // */
-        compile project(":slatekit-result")
-        compile project(":slatekit-common")
-        compile project(":slatekit-app")
-        compile project(":slatekit-cli")
-        compile project(":slatekit-db")
-        compile project(":slatekit-meta")
-        compile project(":slatekit-query")
-        compile project(":slatekit-cloud")
-        compile project(":slatekit-entities")
-        compile project(":slatekit-orm")
-        compile project(":slatekit-core")
-        compile project(":slatekit-apis")
-        compile project(":slatekit-integration")
-        compile project(":slatekit-server")
-        compile project(":slatekit-providers")
-        compile project(":slatekit-workers")
+        implementation project(":slatekit-result")
+        implementation project(":slatekit-common")
+        implementation project(":slatekit-app")
+        implementation project(":slatekit-cli")
+        implementation project(":slatekit-db")
+        implementation project(":slatekit-meta")
+        implementation project(":slatekit-query")
+        implementation project(":slatekit-cloud")
+        implementation project(":slatekit-entities")
+        implementation project(":slatekit-orm")
+        implementation project(":slatekit-core")
+        implementation project(":slatekit-apis")
+        implementation project(":slatekit-integration")
+        implementation project(":slatekit-server")
+        implementation project(":slatekit-providers")
+        implementation project(":slatekit-workers")
+        implementation project(":slatekit-generator")
         //compile project(":slatekit-support")
-    } //</slatekit_local>
+    // } //</slatekit_local>
 
     //implementation project(":slatekit-examples")
     //implementation project(":slatekit-tests")
-    implementation project(":slatekit-generator")
 }
 
 // https://www.anexinet.com/blog/six-ways-to-package-a-java-application-with-gradle/
