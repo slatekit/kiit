@@ -42,7 +42,7 @@ import slatekit.results.Try
  *  2. file     : loads the request from a file  : $file="create-users.json"
  *  3. code gen : generates client code for apis : $codegen=true -lang="kotlin"
  */
-class CliApi(
+open class CliApi(
         val ctx: slatekit.common.Context,
         val auth: slatekit.apis.core.Auth,
         settings: CliSettings = CliSettings(),
@@ -70,7 +70,7 @@ class CliApi(
      * executes a line of text by handing it off to the executor
      * This can be overridden in derived class
      */
-    override fun executeRequest(request:CliRequest) : Try<CliResponse<*>> {
+    override suspend fun executeRequest(request:CliRequest) : Try<CliResponse<*>> {
         val args = request.args
         context.writer.highlight("Executing ${info.about.name} api command " + request.fullName)
 

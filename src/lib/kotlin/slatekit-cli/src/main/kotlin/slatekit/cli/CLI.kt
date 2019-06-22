@@ -13,6 +13,7 @@
 
 package slatekit.cli
 
+import kotlinx.coroutines.runBlocking
 import slatekit.common.args.Args
 import slatekit.common.utils.Loops.doUntil
 import slatekit.common.info.Info
@@ -59,7 +60,7 @@ open class CLI(
     /**
      * runs the shell command line with arguments
      */
-    fun run():Try<Boolean> {
+    suspend fun run():Try<Boolean> {
         // Convert line into a CliRequest
         // Run the life-cycle methods ( before, execute, after )
         val flow =
@@ -87,7 +88,7 @@ open class CLI(
     /**
      * Hook for initialization for derived classes
      */
-    open fun init() : Try<Boolean> {
+    open suspend fun init() : Try<Boolean> {
         // Hooks for before running anything.
         return Tries.success(true)
     }
@@ -96,7 +97,7 @@ open class CLI(
     /**
      * Hook for shutdown for derived classes
      */
-    open fun end(status:Status) : Try<Boolean> {
+    open suspend fun end(status:Status) : Try<Boolean> {
         return Success(true, status)
     }
 
@@ -104,12 +105,16 @@ open class CLI(
     /**
      * runs any start up commands
      */
-    fun startUp() : Try<CliResponse<*>> {
+    suspend fun startUp() : Try<CliResponse<*>> {
         val results = context.commands?.map { command ->
             when(command){
                 null -> Tries.success(CliResponse.empty)
                 ""   -> Tries.success(CliResponse.empty)
-                else -> transform(command) { args -> executeRequest(CliUtils.convert(args)) }
+                else -> transform(command) { args ->
+                    runBlocking {
+                        executeRequest(CliUtils.convert(args))
+                    }
+                }
             }
         } ?: listOf(Tries.success(CliResponse.empty))
 
@@ -126,7 +131,7 @@ open class CLI(
      * Runs the shell continuously until "exit" or "quit" are entered.
      */
     private val lastArgs = AtomicReference<Args>(Args.default())
-    fun repl() : Try<Status> {
+    suspend fun repl() : Try<Status> {
 
         // Keep reading from console until ( exit, quit ) is hit.
         doUntil {
@@ -136,8 +141,8 @@ open class CLI(
 
             // Get line
             val raw = context.reader.run(Unit)
-            val text = raw?.let { it.trim() } ?: ""
-            val result = eval(text)
+            val text = raw?.trim() ?: ""
+            val result = runBlocking { eval(text) }
 
             // Track last line ( to allow for "retry" command )
             result.onSuccess {
@@ -155,13 +160,13 @@ open class CLI(
     /**
      * Evaluates the text read in from user input.
      */
-    fun eval(text:String): Try<Pair<Args, Boolean>> {
+    suspend fun eval(text:String): Try<Pair<Args, Boolean>> {
 
         // Use process for both handling interactive user supplied text
         // and also the startup commands
         return this.transform(text) { args ->
 
-            val evalResult = eval(args)
+            val evalResult = runBlocking{ eval(args) }
             when(evalResult) {
 
                 // Transfer value back upstream with original parsed args
@@ -177,7 +182,7 @@ open class CLI(
     /**
      * Evaluates the arguments read in from user input.
      */
-    fun eval(args:Args): Try<Boolean> {
+    suspend fun eval(args:Args): Try<Boolean> {
 
         // Single command ( e.g. help, quit, about, version )
         // These are typically system level
@@ -203,10 +208,10 @@ open class CLI(
      * executes a line of text by handing it off to the executor
      * This can be overridden in derived class
      */
-    fun executeText(text:String) : Try<CliResponse<*>> {
+    suspend fun executeText(text:String) : Try<CliResponse<*>> {
         // Use process for both handling interactive user supplied text
         // and also the startup commands
-        return this.transform(text) { args -> executeArgs(args)  }
+        return this.transform(text) { args -> runBlocking { executeArgs(args) } }
     }
 
 
@@ -214,7 +219,7 @@ open class CLI(
      * Execute the command by delegating work to the actual executor.
      * Clients can create their own executor to handle middleware / hooks etc
      */
-    fun executeArgs(args:Args): Try<CliResponse<*>> {
+    suspend fun executeArgs(args:Args): Try<CliResponse<*>> {
         val request = CliUtils.convert(args)
         return executeRequest(request)
     }
@@ -224,7 +229,7 @@ open class CLI(
      * Execute the command by delegating work to the actual executor.
      * Clients can create their own executor to handle middleware / hooks etc
      */
-    fun executeRepl(args:Args): Try<Boolean> {
+    suspend fun executeRepl(args:Args): Try<Boolean> {
         return try {
             val result = executeRequest(CliUtils.convert(args))
 
@@ -253,7 +258,7 @@ open class CLI(
      * executes a line of text by handing it off to the executor
      * This can be overridden in derived class
      */
-    open fun executeRequest(request:CliRequest) : Try<CliResponse<*>> {
+    open suspend fun executeRequest(request:CliRequest) : Try<CliResponse<*>> {
         return when(callback) {
             null -> CliExecutor().excecute(this, request)
             else -> Success(callback.invoke(this, request))

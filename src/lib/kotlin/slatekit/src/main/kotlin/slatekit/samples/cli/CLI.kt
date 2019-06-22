@@ -20,7 +20,7 @@ class CLI(val ctx: Context) {
      *
      * @return
      */
-    fun execute(): Try<Any> {
+    suspend fun execute(): Try<Any> {
 
         // 1. The API keys( DocApi, SetupApi are authenticated using an sample API key )
         val keys = listOf(ApiKey( name ="cli", key = "abc", roles = "dev,qa,ops,admin"))
