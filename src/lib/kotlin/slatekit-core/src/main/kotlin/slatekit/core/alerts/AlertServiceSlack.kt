@@ -4,6 +4,7 @@ import okhttp3.Request
 import org.json.simple.JSONArray
 import org.json.simple.JSONObject
 import slatekit.common.HttpRPC
+import slatekit.common.ids.Identity
 import slatekit.results.Outcome
 import slatekit.results.Success
 import slatekit.results.builders.Outcomes
@@ -11,7 +12,8 @@ import slatekit.results.builders.Outcomes
 /**
  * @param settings: The list of slack channels
  */
-class AlertServiceSlack(override val settings: AlertSettings) : AlertService() {
+class AlertServiceSlack(override val identity: Identity,
+                        override val settings: AlertSettings) : AlertService() {
 
     private val baseUrl = "https://hooks.slack.com/services"
 
