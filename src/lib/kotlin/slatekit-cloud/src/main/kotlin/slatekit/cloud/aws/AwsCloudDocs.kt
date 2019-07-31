@@ -11,6 +11,12 @@ import com.amazonaws.services.dynamodbv2.document.Item
 import com.amazonaws.services.dynamodbv2.document.spec.GetItemSpec
 import slatekit.results.Outcome
 import slatekit.results.builders.Outcomes
+import com.sun.xml.internal.fastinfoset.alphabet.BuiltInRestrictedAlphabets.table
+import com.amazonaws.services.dynamodbv2.document.utils.ValueMap
+import com.amazonaws.services.dynamodbv2.document.PrimaryKey
+import com.amazonaws.services.dynamodbv2.document.spec.DeleteItemSpec
+
+
 
 
 open class AwsCloudDoc<TPartition, TCluster>(override val partition:TPartition,
@@ -85,5 +91,19 @@ class AwsCloudDocs<TPartition, TCluster>(
     }
 
     override fun delete(doc: CloudDoc<TPartition, TCluster>) {
+        val deleteItemSpec = DeleteItemSpec()
+                .withPrimaryKey(PrimaryKey(partitionName, doc.partition, clusterName, doc.cluster))
+
+        // Conditional delete (we expect this to fail)
+
+        try {
+            println("Attempting a conditional delete...")
+            table.deleteItem(deleteItemSpec)
+            println("DeleteItem succeeded")
+        } catch (e: Exception) {
+            System.err.println("Unable to delete item: ${doc.partition} ${doc.cluster}")
+            System.err.println(e.message)
+        }
+
     }
 }
