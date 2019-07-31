@@ -4,9 +4,15 @@ import okhttp3.Request
 import okhttp3.Response
 import slatekit.common.HttpRPC
 import slatekit.results.Outcome
+import slatekit.results.builders.Outcomes
 import slatekit.results.then
 
 interface Sender<T> {
+
+    /**
+     * Whether or not sending is enabled
+     */
+    fun isEnabled(model:T):Boolean = true
 
     /**
      * Validates the model supplied
@@ -25,7 +31,11 @@ interface Sender<T> {
      * @param model: The data model to send ( e.g. EmailMessage )
      */
     suspend fun send(model: T): Outcome<String> {
-        return build(model).then { send(it) }.map { it.body()?.string() ?: "" }
+        return if(!isEnabled(model)) {
+            Outcomes.ignored("Not enabled")
+        } else {
+            build(model).then { send(it) }.map { it.body()?.string() ?: "" }
+        }
     }
 
     /**
@@ -41,7 +51,11 @@ interface Sender<T> {
      * @param model: The data model to send ( e.g. EmailMessage )
      */
     fun sendSync(model: T): Outcome<String> {
-        return build(model).then { sendSync(it) }.map { it.body()?.string() ?: "" }
+        return if(!isEnabled(model)) {
+            Outcomes.ignored("Not enabled")
+        } else {
+            build(model).then { sendSync(it) }.map { it.body()?.string() ?: "" }
+        }
     }
 
     /**
