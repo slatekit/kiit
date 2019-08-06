@@ -19,12 +19,13 @@ import slatekit.apis.middleware.Tracked
 import slatekit.common.log.Logger
 import slatekit.common.toResponse
 import slatekit.results.Try
+import slatekit.results.builders.Notices
 import slatekit.results.builders.Tries
 
 /**
  * Executes the API action using a pipeline of steps
  */
-class Exec(val ctx: Ctx, val validator: Validation, val logger: Logger) {
+class Exec(val ctx: Ctx, val validator: Validation, val logger: Logger, val options: ExecOptions?) {
     private val BEFORE = "Before"
     private val AFTER = "After "
 
@@ -130,7 +131,11 @@ class Exec(val ctx: Ctx, val validator: Validation, val logger: Logger) {
     inline fun auth(proceed: () -> Try<Any>): Try<Any> {
         return log("Exec::auth.name") {
 
-            val check = validator.validateAuthorization(ctx.req, ctx.apiRef)
+            val check = if(options != null && !options.auth) {
+                Notices.success(true)
+            } else {
+                validator.validateAuthorization(ctx.req, ctx.apiRef)
+            }
             val result = if (check.success) {
                 proceed()
             } else {
