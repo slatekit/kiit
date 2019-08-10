@@ -1,6 +1,6 @@
 package slatekit.workers
 
-import slatekit.common.utils.Pager
+import slatekit.common.paged.Pager
 import slatekit.common.DateTime
 import slatekit.common.TODO
 import slatekit.common.Status
