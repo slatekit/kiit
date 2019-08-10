@@ -139,6 +139,7 @@ open class ApiHost(
         return callAsResult(req).toResponse()
     }
 
+
     /**
      * calls the api/action associated with the request
      * @param req
@@ -146,7 +147,7 @@ open class ApiHost(
      */
     fun callAsResult(req: Request): Try<Any> {
         val result = try {
-            execute(req)
+            execute(req, null)
         } catch (ex: Exception) {
             logger.error("Unexpected error executing ${req.fullName}", ex)
             errs?.onError(ctx, req, req.path, this, ex, null)?.toTry()
@@ -154,6 +155,26 @@ open class ApiHost(
         }
         return result
     }
+
+
+
+    /**
+     * calls the api/action associated with the request with optional execution options.
+     * This is to allow requests to be sourced from some other source such as a secure storage
+     * @param req
+     * @return
+     */
+    fun callWithOptions(req: Request, options:ExecOptions?): Try<Any> {
+        val result = try {
+            execute(req, options)
+        } catch (ex: Exception) {
+            logger.error("Unexpected error executing ${req.fullName}", ex)
+            errs?.onError(ctx, req, req.path, this, ex, null)?.toTry()
+            Failure(ex)
+        }
+        return result
+    }
+
 
     fun call(
         area: String,
@@ -217,7 +238,7 @@ open class ApiHost(
      * @param cmd
      * @return
      */
-    protected fun execute(raw: Request): Try<Any> {
+    protected fun execute(raw: Request, options:ExecOptions? = null): Try<Any> {
         // Check 1: Check for help / discovery
         val helpCheck = ApiUtils.isHelp(raw)
         if (helpCheck.code == HELP.code) return buildHelp(raw, helpCheck).toTry()
@@ -238,7 +259,7 @@ open class ApiHost(
             val runCtx = Ctx(this, this.ctx, req, apiRef)
 
             // Execute using a pipeline
-            Exec(runCtx, validator, logger).run(this::executeMethod)
+            Exec(runCtx, validator, logger, options).run(this::executeMethod)
         }
         val result = resultRaw.toTry()
 

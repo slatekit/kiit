@@ -6,7 +6,7 @@ branches:
     - /^release.*$/ 
 
 jdk:
-  - oraclejdk8
+  - oraclejdk9
 
 before_script:
 - echo "hello from slatekit"
