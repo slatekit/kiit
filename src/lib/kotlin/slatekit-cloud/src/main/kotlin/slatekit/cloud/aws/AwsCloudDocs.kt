@@ -13,8 +13,21 @@ import slatekit.results.Outcome
 import slatekit.results.builders.Outcomes
 import com.amazonaws.services.dynamodbv2.document.PrimaryKey
 import com.amazonaws.services.dynamodbv2.document.spec.DeleteItemSpec
+import slatekit.results.Failure
+import slatekit.results.Success
+import slatekit.results.Try
 
 
+/**
+ * Conversion to/from no sql
+ * @tparam TPartition
+ * @tparam TCluster
+ */
+interface AwsDocMapper<TEntity, TPartition, TCluster> {
+    fun keys(entity:TEntity):Pair<TPartition, TCluster>
+    fun toDoc(entity:TEntity):Item
+    fun ofDoc(doc:Item, partition:TPartition, cluster:TCluster):TEntity
+}
 
 
 open class AwsCloudDoc<TPartition, TCluster>(override val partition:TPartition,
@@ -29,12 +42,13 @@ open class AwsCloudDoc<TPartition, TCluster>(override val partition:TPartition,
 }
 
 
-class AwsCloudDocs<TPartition, TCluster>(
+class AwsCloudDocs<TEntity, TPartition, TCluster>(
         val region:String,
         val tableName: String,
         val partitionName:String,
         val clusterName:String,
-        creds: AWSCredentials) : CloudDocs<TPartition, TCluster>{
+        val mapper:AwsDocMapper<TEntity, TPartition, TCluster>,
+        creds: AWSCredentials) : CloudDocs<TEntity, TPartition, TCluster>{
 
 
     private val client = AmazonDynamoDBClientBuilder.standard().withCredentials(AWSStaticCredentialsProvider(creds)).build()
@@ -42,27 +56,30 @@ class AwsCloudDocs<TPartition, TCluster>(
     private val table = dynamoDB.getTable(tableName)
 
 
-    override fun create(doc: CloudDoc<TPartition, TCluster>) {
-        try {
-            val item = Item().withPrimaryKey(partitionName, doc.partition, clusterName, doc.cluster)
-            doc.fields.forEach { name, value ->
-                when(value) {
-                    null       -> item.withNull(name)
-                    is Int     -> item.withInt(name, value )
-                    is String  -> item.withString(name, value )
-                    is Boolean -> item.withBoolean(name, value )
-                    else       -> item.withString(name, value.toString())
-                }
-            }
-            val outcome = table.putItem(item)
-            println("PutItem succeeded:\n" + outcome.putItemResult)
-
-        } catch (e: Exception) {
-            System.err.println("Unable to add item: ${doc.partition} ${doc.cluster}")
-            System.err.println(e.message)
+    override fun create(entity:TEntity): Try<TEntity> {
+        return Try.attemptWithStatus {
+            val item = mapper.toDoc(entity)
+            val result = table.putItem(item)
+            entity
+            Success(entity)
         }
-
     }
+
+    override fun update(entity:TEntity): Try<TEntity> {
+        Failure(Exception("DynamoDB.update : Not implemented"))
+    }
+
+
+    override fun delete(entity:TEntity): Try<TEntity> {
+        Try {
+            val keys = mapper.keys(entity)
+            val spec = new DeleteItemSpec().withPrimaryKey(new PrimaryKey(partitionName, keys._1, clusterName, keys._2))
+            val item = table.deleteItem(spec)
+            entity
+        }
+    }
+
+
 
     override fun get(partition: TPartition): Outcome<CloudDoc<TPartition, TCluster>> {
         return Outcomes.invalid()
