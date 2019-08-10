@@ -6,9 +6,6 @@ import java.util.concurrent.atomic.AtomicReference
 
 /**
  * Implementation of a full table scan(reading of all records) via paging using an offset ( e.g. primary key/partition key )
- *
- * @note Implementation is based on :
- * https://github.com/nblair/code-examples/blob/master/datastax-java-driver-examples/src/main/java/examples/datastax/FullTableScan.java
  * @param startOffset: Starting token to begin the paging
  *
  */
