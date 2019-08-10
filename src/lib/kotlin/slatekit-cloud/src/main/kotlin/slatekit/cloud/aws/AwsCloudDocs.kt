@@ -13,9 +13,6 @@ import slatekit.results.Outcome
 import slatekit.results.builders.Outcomes
 import com.amazonaws.services.dynamodbv2.document.PrimaryKey
 import com.amazonaws.services.dynamodbv2.document.spec.DeleteItemSpec
-import slatekit.results.Failure
-import slatekit.results.Success
-import slatekit.results.Try
 
 
 /**
@@ -29,17 +26,6 @@ interface AwsDocMapper<TEntity, TPartition, TCluster> {
     fun ofDoc(doc:Item, partition:TPartition, cluster:TCluster):TEntity
 }
 
-
-open class AwsCloudDoc<TPartition, TCluster>(override val partition:TPartition,
-                                             override val cluster:TCluster,
-                                             override val fields:Map<String, Any?>,
-                                             override val source:Any
-) : CloudDoc<TPartition, TCluster> {
-
-    constructor(partition:TPartition,
-                cluster:TCluster,
-                fields:Map<String, Any?>): this(partition, cluster, fields, fields)
-}
 
 
 class AwsCloudDocs<TEntity, TPartition, TCluster>(
@@ -56,69 +42,53 @@ class AwsCloudDocs<TEntity, TPartition, TCluster>(
     private val table = dynamoDB.getTable(tableName)
 
 
-    override fun create(entity:TEntity): Try<TEntity> {
-        return Try.attemptWithStatus {
+    override fun create(entity:TEntity): Outcome<TEntity> {
+        return Outcomes.of {
             val item = mapper.toDoc(entity)
             val result = table.putItem(item)
             entity
-            Success(entity)
         }
     }
 
-    override fun update(entity:TEntity): Try<TEntity> {
-        Failure(Exception("DynamoDB.update : Not implemented"))
+    override fun update(entity:TEntity): Outcome<TEntity> {
+        return Outcomes.errored(Exception("DynamoDB.update : Not implemented"))
     }
 
 
-    override fun delete(entity:TEntity): Try<TEntity> {
-        Try {
+    override fun delete(entity:TEntity): Outcome<TEntity> {
+        return Outcomes.of {
             val keys = mapper.keys(entity)
-            val spec = new DeleteItemSpec().withPrimaryKey(new PrimaryKey(partitionName, keys._1, clusterName, keys._2))
+            val spec = DeleteItemSpec().withPrimaryKey(PrimaryKey(partitionName, keys.first, clusterName, keys.second))
             val item = table.deleteItem(spec)
             entity
         }
     }
 
 
-
-    override fun get(partition: TPartition): Outcome<CloudDoc<TPartition, TCluster>> {
+    override fun get(partition: TPartition): Outcome<TEntity> {
         return Outcomes.invalid()
     }
 
-    override fun get(partition: TPartition, cluster: TCluster): Outcome<CloudDoc<TPartition, TCluster>> {
-        val spec = GetItemSpec().withPrimaryKey(partitionName, partition, clusterName, cluster)
 
-        return try {
-            println("Attempting to read the item...")
+    override fun get(partition: TPartition, cluster: TCluster): Outcome<TEntity> {
+        return Outcomes.of {
+            val spec = GetItemSpec().withPrimaryKey(partitionName, partition, clusterName, cluster)
             val item = table.getItem(spec)
-            println("GetItem succeeded: $item")
-            val doc = AwsCloudDoc(partition, cluster, item.asMap(), item)
-            Outcomes.success(doc)
-        } catch (ex: Exception) {
-            System.err.println("Unable to read item: $partition $cluster")
-            System.err.println(ex.message)
-            Outcomes.unexpected(ex)
+            val entity = mapper.ofDoc(item, partition, cluster)
+            entity
         }
-    }
-
-    override fun update(doc: CloudDoc<TPartition, TCluster>)  {
-
-    }
-
-    override fun delete(doc: CloudDoc<TPartition, TCluster>) {
-        val deleteItemSpec = DeleteItemSpec()
-                .withPrimaryKey(PrimaryKey(partitionName, doc.partition, clusterName, doc.cluster))
-
-        // Conditional delete (we expect this to fail)
-
-        try {
-            println("Attempting a conditional delete...")
-            table.deleteItem(deleteItemSpec)
-            println("DeleteItem succeeded")
-        } catch (e: Exception) {
-            System.err.println("Unable to delete item: ${doc.partition} ${doc.cluster}")
-            System.err.println(e.message)
-        }
-
     }
 }
+
+/*
+open class AwsCloudDoc<TPartition, TCluster>(override val partition:TPartition,
+                                             override val cluster:TCluster,
+                                             override val fields:Map<String, Any?>,
+                                             override val source:Any
+) : CloudDoc<TPartition, TCluster> {
+
+    constructor(partition:TPartition,
+                cluster:TCluster,
+                fields:Map<String, Any?>): this(partition, cluster, fields, fields)
+}
+ */
