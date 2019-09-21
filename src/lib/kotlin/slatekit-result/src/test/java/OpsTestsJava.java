@@ -73,7 +73,7 @@ public class OpsTestsJava  {
             Result<String,Err>  result1 = errored("name unknown");
             Result<String,Err>  result2 = result1.map( name -> "peter parker : spider-man");
             //result2.onFailure( err -> {
-                Assert.assertEquals(StatusCodes.ERRORED.getCode(), result1.getCode());
+                Assert.assertEquals(Codes.ERRORED.getCode(), result1.getCode());
                 Assert.assertEquals("name unknown", result1.getMsg());
                 //return Unit.INSTANCE;
             //});

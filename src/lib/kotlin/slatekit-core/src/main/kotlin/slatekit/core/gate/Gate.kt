@@ -3,7 +3,7 @@ package slatekit.core.gate
 import slatekit.common.*
 import slatekit.results.Failure
 import slatekit.results.Result
-import slatekit.results.StatusCodes
+import slatekit.results.Codes
 import slatekit.results.Success
 //import java.time.temporal.ChronoUnit
 import org.threeten.bp.temporal.ChronoUnit
@@ -179,7 +179,7 @@ open class Gate(
             Success(result)
         } catch (ex: Exception) {
             errorLimiter.inc(ex)
-            Failure(buildGateEvent(), StatusCodes.UNEXPECTED)
+            Failure(buildGateEvent(), Codes.UNEXPECTED)
         } finally {
             val count = volumeLimiter.inc()
 

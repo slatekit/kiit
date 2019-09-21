@@ -19,7 +19,7 @@ import slatekit.apis.core.Api
 import slatekit.cli.*
 import slatekit.common.requests.InputArgs
 import slatekit.common.info.Info
-import slatekit.results.StatusCodes
+import slatekit.results.Codes
 import slatekit.results.Success
 import slatekit.results.Try
 
@@ -78,7 +78,7 @@ open class CliApi(
         val helpCheck = checkForHelp(request)
         return if(helpCheck.first) {
             showHelpFor(request, helpCheck.second)
-            Success(CliResponse(request, true, StatusCodes.HELP.code, mapOf(), args.line), StatusCodes.HELP)
+            Success(CliResponse(request, true, Codes.HELP.code, mapOf(), args.line), Codes.HELP)
         }
         else {
             // Supply the api-key into each command.

@@ -342,7 +342,7 @@ sealed class StatusGroup : Status {
 ### Default codes
 Specific status codes with numeric values and default descriptions are created. They are associated with their respective logical status group. These are defaulted / available from the implemenation but others can be used.
 ```kotlin
-object StatusCodes {
+object Codes {
 
     // Success: 1000 + range ( partial list ) ...
     val SUCCESS         = Succeeded(1001, "Success")
@@ -373,7 +373,7 @@ This implementation of Result has an **status** field to hold options status cod
 sealed class Result<out T, out E> {
     /**
      * Optional status code is defaulted in the [Success] and [Failure]
-     * branches using the predefined set of codes in [StatusCodes]
+     * branches using the predefined set of codes in [Codes]
      */
     abstract val status: Status
 
@@ -395,7 +395,7 @@ sealed class Result<out T, out E> {
  */
 data class Success<out T>(
     val value: T,
-    override val status: Status = StatusCodes.SUCCESS
+    override val status: Status = Codes.SUCCESS
 ) : Result<T, Nothing>() {
 
     // overloaded constructors
@@ -409,7 +409,7 @@ data class Success<out T>(
  */
 data class Failure<out E>( 
     val error: E, 
-    override val status: Status = StatusCodes.ERRORED
+    override val status: Status = Codes.ERRORED
 ) : Result<Nothing, E>() {
 
     // overloaded constructors
@@ -426,10 +426,10 @@ interface ResultBuilder<out E> {
     fun <T> success(value: T, code: Int): Result<T, E> = Success(value, code)
     fun <T> success(value: T, status: Status): Result<T, E> = Success(value, status)
 
-    fun <T> invalid(): Result<T, E> = Failure(errorFromStr(null, StatusCodes.INVALID), StatusCodes.INVALID)
-    fun <T> invalid(msg: String): Result<T, E> = Failure(errorFromStr(msg, StatusCodes.INVALID), StatusCodes.INVALID)
-    fun <T> invalid(ex: Exception): Result<T, E> = Failure(errorFromEx(ex, StatusCodes.INVALID), StatusCodes.INVALID)
-    fun <T> invalid(err: Err): Result<T, E> = Failure(errorFromErr(err, StatusCodes.INVALID), StatusCodes.INVALID)
+    fun <T> invalid(): Result<T, E> = Failure(errorFromStr(null, Codes.INVALID), Codes.INVALID)
+    fun <T> invalid(msg: String): Result<T, E> = Failure(errorFromStr(msg, Codes.INVALID), Codes.INVALID)
+    fun <T> invalid(ex: Exception): Result<T, E> = Failure(errorFromEx(ex, Codes.INVALID), Codes.INVALID)
+    fun <T> invalid(err: Err): Result<T, E> = Failure(errorFromErr(err, Codes.INVALID), Codes.INVALID)
 
     // other code ...
 }
@@ -458,7 +458,7 @@ class UserService {
 
         // check for duplicate email in system
         else if ( isDuplicate( email ) ) 
-            errored( "duplicate email", StatusCodes.CONFLICT )
+            errored( "duplicate email", Codes.CONFLICT )
         
         // sample rule: prevent well known names for security reasons
         else if ( isReservedUserName( name ) ) 

@@ -3,67 +3,67 @@ public class ResultTestsJava {
 
     @Test
     public void can_build_successful_result() {
-        ensureSuccess(success(1), StatusCodes.SUCCESS, 1, null);
+        ensureSuccess(success(1), Codes.SUCCESS, 1, null);
     }
 
 
     @Test
     public void can_build_successful_result_with_custom_message() {
-        ensureSuccess(success(1, "created user"), StatusCodes.SUCCESS, 1, "created user");
+        ensureSuccess(success(1, "created user"), Codes.SUCCESS, 1, "created user");
     }
 
 
     @Test
     public void can_build_successful_result_with_custom_message_and_code() {
-        ensureSuccess(success(1, "created user"), StatusCodes.SUCCESS, 1, "created user");
+        ensureSuccess(success(1, "created user"), Codes.SUCCESS, 1, "created user");
     }
 
 
     @Test
     public void can_build_filtered_error() {
-        ensureFailure(ignored(), StatusCodes.IGNORED, null);
+        ensureFailure(ignored(), Codes.IGNORED, null);
     }
 
 
     @Test
     public void can_build_filtered_error_with_custom_message() {
-        ensureFailure(ignored("event category filtered out"), StatusCodes.IGNORED, "event category filtered out");
+        ensureFailure(ignored("event category filtered out"), Codes.IGNORED, "event category filtered out");
     }
 
 
     @Test
     public void can_build_invalid_error() {
-        ensureFailure(invalid(), StatusCodes.INVALID, null);
+        ensureFailure(invalid(), Codes.INVALID, null);
     }
 
 
     @Test
     public void can_build_invalid_error_with_custom_message() {
-        ensureFailure(invalid("event category not supplied"), StatusCodes.INVALID, "event category not supplied");
+        ensureFailure(invalid("event category not supplied"), Codes.INVALID, "event category not supplied");
     }
 
 
     @Test
     public void can_build_errored_error() {
-        ensureFailure(errored(), StatusCodes.ERRORED, null);
+        ensureFailure(errored(), Codes.ERRORED, null);
     }
 
 
     @Test
     public void can_build_errored_error_with_custom_message() {
-        ensureFailure(errored("event category unexpected"), StatusCodes.ERRORED, "event category unexpected");
+        ensureFailure(errored("event category unexpected"), Codes.ERRORED, "event category unexpected");
     }
 
 
     @Test
     public void can_build_unexpected_error() {
-        ensureFailure(unexpected(), StatusCodes.UNEXPECTED, null);
+        ensureFailure(unexpected(), Codes.UNEXPECTED, null);
     }
 
 
     @Test
     public void can_build_unexpected_error_with_custom_message() {
-        ensureFailure(unexpected("unable to save"), StatusCodes.UNEXPECTED, "unable to save");
+        ensureFailure(unexpected("unable to save"), Codes.UNEXPECTED, "unable to save");
     }
 
 

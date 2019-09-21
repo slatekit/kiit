@@ -24,7 +24,7 @@ Extension utility method to convert Result<T,E> to a compatible HttpResponse ( u
   // Extension method on Result<T,E> to convert to compatible HttpResponse
   fun <T, E> Result<T, E>.toHttpResponse():HttpResponse {
       // Convert to http code
-      val code:Int = StatusCodes.toHttp(this.status).first
+      val code:Int = Codes.toHttp(this.status).first
   
       // Serialize ( toString for sample app - but use some library like Jackson )
       val content = when(this){
@@ -80,24 +80,24 @@ Model your successes / failures as precisely or generically as your want.
               return Failure(Err.of("already registered"))
   
           // Case 2: Create using builder methods in [Results]
-          // Same as Failure(Err.of("user name not supplied"), StatusCodes.INVALID)
+          // Same as Failure(Err.of("user name not supplied"), Codes.INVALID)
           if(user.userName.isEmpty())
               return invalid("user name not supplied")
   
           // Case 3: Create using builder + explicit status code
           // Many of the builder methods have optional parameters
           if(repo.exists(user.email))
-              return errored("duplicate user name", StatusCodes.CONFLICT)
+              return errored("duplicate user name", Codes.CONFLICT)
   
           // Case 4: Sample rule: prevent registration via API of special emails.
           // This doesn't allocate any new object for [Err] or [Status]
-          // Same as errored(StatusCodes.UNAUTHORIZED, StatusCodes.UNAUTHORIZED)
+          // Same as errored(Codes.UNAUTHORIZED, Codes.UNAUTHORIZED)
           if (user.email.toLowerCase().contains("@justice-league.com"))
               return denied()
   
           val userWithId = repo.create(user)
           // or success(userWithId) where status code = SUCCESS
-          return success(userWithId, StatusCodes.CREATED)
+          return success(userWithId, Codes.CREATED)
       }
   
   
@@ -111,13 +111,13 @@ Model your successes / failures as precisely or generically as your want.
               return invalid("User with id : $id not found")
   
           // Sample rule: prevent name update via API if justice league.
-          // Could also return errored(StatusCodes.UNAUTHORIZED)
+          // Could also return errored(Codes.UNAUTHORIZED)
           if (user.email.toLowerCase().contains("@justice-league.com"))
               return denied()
   
           repo.update(user.copy(userName = name))
           // or success(userWithId) where status code = SUCCESS
-          return success(user, StatusCodes.UPDATED)
+          return success(user, Codes.UPDATED)
       }
   }
 ```

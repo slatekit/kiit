@@ -3,7 +3,7 @@ import org.junit.Assert
 import org.junit.Test
 import slatekit.results.*
 import slatekit.results.Status
-import slatekit.results.StatusCodes
+import slatekit.results.Codes
 
 class StatusTests {
 
@@ -31,38 +31,38 @@ class StatusTests {
     @Test
     fun can_convert_to_http() {
         fun checkHttp(status:Status, code:Int, msg:String) {
-            val result = StatusCodes.toHttp(status)
+            val result = Codes.toHttp(status)
             Assert.assertEquals(result.first, code)
             Assert.assertEquals(result.second.msg, msg)
         }
-        checkHttp(StatusCodes.SUCCESS   , 200, "Success")
-        checkHttp(StatusCodes.CONFIRM   , 200, "Confirm")
-        checkHttp(StatusCodes.INVALID   , 400, "Invalid")
-        checkHttp(StatusCodes.ERRORED   , 500, "Errored")
+        checkHttp(Codes.SUCCESS   , 200, "Success")
+        checkHttp(Codes.CONFIRM   , 200, "Confirm")
+        checkHttp(Codes.INVALID   , 400, "Invalid")
+        checkHttp(Codes.ERRORED   , 500, "Errored")
     }
 
 
     @Test
     fun confirm_codes_values() {
-        checkCode(StatusCodes.SUCCESS   , 200001, "Success")
-        checkCode(StatusCodes.PENDING   , 200008, "Pending")
-        checkCode(StatusCodes.IGNORED   , 400001, "Ignored")
-        checkCode(StatusCodes.INVALID   , 400003, "Invalid")
-        checkCode(StatusCodes.DENIED    , 400004, "Denied" )
-        checkCode(StatusCodes.ERRORED   , 500007, "Errored")
-        checkCode(StatusCodes.UNEXPECTED, 500008, "Unexpected")
+        checkCode(Codes.SUCCESS   , 200001, "Success")
+        checkCode(Codes.PENDING   , 200008, "Pending")
+        checkCode(Codes.IGNORED   , 400001, "Ignored")
+        checkCode(Codes.INVALID   , 400003, "Invalid")
+        checkCode(Codes.DENIED    , 400004, "Denied" )
+        checkCode(Codes.ERRORED   , 500007, "Errored")
+        checkCode(Codes.UNEXPECTED, 500008, "Unexpected")
     }
 
 
     @Test
     fun confirm_group_types() {
-        Assert.assertTrue(StatusCodes.SUCCESS    is Status.Succeeded )
-        Assert.assertTrue(StatusCodes.PENDING    is Status.Pending   )
-        Assert.assertTrue(StatusCodes.IGNORED    is Status.Ignored   )
-        Assert.assertTrue(StatusCodes.INVALID    is Status.Invalid   )
-        Assert.assertTrue(StatusCodes.DENIED     is Status.Denied    )
-        Assert.assertTrue(StatusCodes.ERRORED    is Status.Errored   )
-        Assert.assertTrue(StatusCodes.UNEXPECTED is Status.Unexpected )
+        Assert.assertTrue(Codes.SUCCESS    is Status.Succeeded )
+        Assert.assertTrue(Codes.PENDING    is Status.Pending   )
+        Assert.assertTrue(Codes.IGNORED    is Status.Ignored   )
+        Assert.assertTrue(Codes.INVALID    is Status.Invalid   )
+        Assert.assertTrue(Codes.DENIED     is Status.Denied    )
+        Assert.assertTrue(Codes.ERRORED    is Status.Errored   )
+        Assert.assertTrue(Codes.UNEXPECTED is Status.Unexpected )
     }
 
     @Test
@@ -79,7 +79,7 @@ class StatusTests {
             Assert.assertEquals(code, built.code)
             Assert.assertEquals(msg , built.msg )
         }
-        val status = StatusCodes.SUCCESS
+        val status = Codes.SUCCESS
 
         // Empty values
         check(Result.status(null, null  , status), status.code, status.msg, status,true)

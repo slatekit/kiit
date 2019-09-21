@@ -55,19 +55,19 @@ object AppUtils {
 
         // Case 1: Exit ?
         return if (isExit(raw, 0)) {
-            Success("exit", StatusCodes.EXIT)
+            Success("exit", Codes.EXIT)
         }
         // Case 2a: version ?
         else if (isVersion(raw, 0)) {
-            Success("version", StatusCodes.VERSION)
+            Success("version", Codes.VERSION)
         }
         // Case 2b: about ?
         else if (ArgsCheck.isAbout(raw, 0)) {
-            Success("about", StatusCodes.ABOUT)
+            Success("about", Codes.ABOUT)
         }
         // Case 3a: Help ?
         else if ( ArgsCheck.isHelp(raw, 0)) {
-            Success("help", StatusCodes.HELP)
+            Success("help", Codes.HELP)
         } else {
             Failure("other")
         }

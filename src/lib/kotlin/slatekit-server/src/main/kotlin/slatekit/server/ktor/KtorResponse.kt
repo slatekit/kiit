@@ -24,7 +24,7 @@ import slatekit.common.content.Doc
 import slatekit.common.requests.Response
 import slatekit.meta.Serialization
 import slatekit.results.Status
-import slatekit.results.StatusCodes
+import slatekit.results.Codes
 import slatekit.server.common.ResponseHandler
 
 
@@ -76,7 +76,7 @@ object KtorResponse : ResponseHandler {
 
 
     override fun toHttpStatus(response:Response<Any>): HttpStatusCode {
-        val http = StatusCodes.toHttp(Status.Succeeded(response.code, response.msg ?: ""))
+        val http = Codes.toHttp(Status.Succeeded(response.code, response.msg ?: ""))
         return HttpStatusCode(http.first, http.second.msg)
     }
 }

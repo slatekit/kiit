@@ -34,9 +34,9 @@ class AppMeta(val about:About, val args:ArgsSchema) {
     fun handle( check:Notice<String>) {
         if (check.success) {
             when(check.code) {
-                StatusCodes.HELP.code    -> help()
-                StatusCodes.ABOUT.code   -> about()
-                StatusCodes.VERSION.code -> version()
+                Codes.HELP.code    -> help()
+                Codes.ABOUT.code   -> about()
+                Codes.VERSION.code -> version()
                 else         -> println("Unexpected command: " + check.msg)
             }
         }

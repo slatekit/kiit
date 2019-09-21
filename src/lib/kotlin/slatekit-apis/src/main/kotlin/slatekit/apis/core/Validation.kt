@@ -48,7 +48,7 @@ class Validation(val ctn: ApiHost) {
 
         // 2. Ensure protocol is correct get/post
         else if (!isCliOk && !ApiHelper.isValidMatch(supportedProtocol, ctn.protocol.name)) {
-            Notices.errored<Request>("${req.fullName} not found", StatusCodes.NOT_FOUND)
+            Notices.errored<Request>("${req.fullName} not found", Codes.NOT_FOUND)
         }
         // 3. Good to go
         else
