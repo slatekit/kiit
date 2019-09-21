@@ -65,11 +65,7 @@ class AlertServiceSlack(override val identity: Identity,
         // 1. code 0 = pending = yellow
         // 2. code 1 = success = green
         // 3. code 2 = failure = red
-        val color = when (alert.status) {
-            1 -> "#2ecc71"
-            2 -> "#e74c3c"
-            else -> "#F0E68C"
-        }
+        val color = alert.code.color
 
         // Convert all the fields supplied to a slack field definition
         val json = JSONObject()
