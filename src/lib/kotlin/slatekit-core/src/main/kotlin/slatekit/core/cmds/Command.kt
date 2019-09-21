@@ -149,7 +149,7 @@ open class Command(
             }
             Success(finalValue)
         } catch (ex: Exception) {
-            Failure(buildError(ex), StatusCodes.UNEXPECTED)
+            Failure(buildError(ex), Codes.UNEXPECTED)
         }
         val end = DateTime.now()
         return CommandResult(request, info, mode, result, start, end)

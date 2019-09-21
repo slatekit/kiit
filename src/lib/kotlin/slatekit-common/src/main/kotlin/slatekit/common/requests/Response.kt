@@ -12,7 +12,7 @@ mantra: Simplicity above all else
  */
 package slatekit.common.requests
 
-import slatekit.results.StatusCodes
+import slatekit.results.Codes
 
 
 /**
@@ -35,7 +35,7 @@ interface Response<out T>  {
 }
 
 
-fun <T> Response<T>.isInSuccessRange(): Boolean = this.code in StatusCodes.SUCCESS.code .. StatusCodes.QUEUED.code
-fun <T> Response<T>.isFilteredOut(): Boolean = this.code == StatusCodes.IGNORED.code
-fun <T> Response<T>.isInBadRequestRange(): Boolean = this.code in StatusCodes.BAD_REQUEST.code .. StatusCodes.UNAUTHORIZED.code
-fun <T> Response<T>.isInFailureRange(): Boolean = this.code in StatusCodes.ERRORED.code .. StatusCodes.UNEXPECTED.code
+fun <T> Response<T>.isInSuccessRange(): Boolean = this.code in Codes.SUCCESS.code .. Codes.QUEUED.code
+fun <T> Response<T>.isFilteredOut(): Boolean = this.code == Codes.IGNORED.code
+fun <T> Response<T>.isInBadRequestRange(): Boolean = this.code in Codes.BAD_REQUEST.code .. Codes.UNAUTHORIZED.code
+fun <T> Response<T>.isInFailureRange(): Boolean = this.code in Codes.ERRORED.code .. Codes.UNEXPECTED.code

@@ -1,7 +1,7 @@
 package samples
 
 import slatekit.results.*
-import slatekit.results.StatusCodes
+import slatekit.results.Codes
 import slatekit.results.builders.Outcomes
 import slatekit.results.builders.Tries
 
@@ -81,7 +81,7 @@ class Examples {
         val success1b: Result<Person, String> = Success(Person("Superman"), code = 1)
         val success1c: Result<Person, String> = Success(Person("Superman"), msg = "success")
         val success1d: Result<Person, String> = Success(Person("Superman"), code = 1, msg = "success")
-        val success1e: Result<Person, String> = Success(Person("Superman"), StatusCodes.SUCCESS)
+        val success1e: Result<Person, String> = Success(Person("Superman"), Codes.SUCCESS)
 
         // Case 2: Failure sample
         // NOTE: Examples shown with inferred and explicit type as a Result<Person,String>, Error type is string.
@@ -89,7 +89,7 @@ class Examples {
         val failure1b: Result<Person, String> = Failure("Unable to get person", code = 1)
         val failure1c: Result<Person, String> = Failure("Unable to get person", msg = "User error")
         val failure1d: Result<Person, String> = Failure("Unable to get person", code = 1, msg = "User error")
-        val failure1e: Result<Person, String> = Failure("Unable to get person", StatusCodes.UNAUTHORIZED)
+        val failure1e: Result<Person, String> = Failure("Unable to get person", Codes.UNAUTHORIZED)
 
         // Case 3: Build successes/failures using the Results.x convenience functions
         val result1a: Result<Person, Err> = Outcomes.success(Person("Superman"))
@@ -97,7 +97,7 @@ class Examples {
         val result1c: Result<Person, Err> = Outcomes.invalid(msg = "name not supplied, can not get user")
         val result1d: Result<Person, Err> = Outcomes.errored(msg = "unable to get user ")
         val result1e: Result<Person, Err> = Outcomes.unexpected(msg = "unexpected error while getting user")
-        val result1f: Result<Person, Err> = Outcomes.errored(StatusCodes.UNEXPECTED)
+        val result1f: Result<Person, Err> = Outcomes.errored(Codes.UNEXPECTED)
 
         // Case 4: Operations - map/flatMap, convert Result<T1,E> to Result<T2,E>
         result1a.map { user -> "DC Universe: ${user.name}" }
@@ -124,7 +124,7 @@ class Examples {
 
         // Case 10: Transform
         val t1: Result<String, Err> = of1.transform( { Success(it.name)}, { Failure(Err.of("Unknown user")) })
-        val t2: Result<Person, Err> = of1.withStatus( StatusCodes.SUCCESS, StatusCodes.MISSING )
+        val t2: Result<Person, Err> = of1.withStatus( Codes.SUCCESS, Codes.MISSING )
 
         // Case 11: Converted
         val v1: Result<Int,Err> = 42.toSuccess()

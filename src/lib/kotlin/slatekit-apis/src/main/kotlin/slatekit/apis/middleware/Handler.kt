@@ -16,7 +16,7 @@ package slatekit.apis.middleware
 import slatekit.apis.core.Action
 import slatekit.common.*
 import slatekit.common.requests.Request
-import slatekit.results.StatusCodes
+import slatekit.results.Codes
 import slatekit.results.Try
 import slatekit.results.builders.Tries
 
@@ -39,6 +39,6 @@ interface Handler : Middleware {
      */
     @Ignore
     fun handle(ctx: Context, req: Request, target: Action, source: Any, args: Map<String, Any>?): Try<String> {
-        return Tries.errored(StatusCodes.UNIMPLEMENTED)
+        return Tries.errored(Codes.UNIMPLEMENTED)
     }
 }

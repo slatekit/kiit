@@ -10,7 +10,7 @@ import slatekit.common.metrics.MetricsLite
 import slatekit.common.queues.QueueEntry
 import slatekit.common.queues.QueueSource
 import slatekit.results.Notice
-import slatekit.results.StatusCodes
+import slatekit.results.Codes
 import slatekit.results.Try
 import java.util.concurrent.atomic.AtomicReference
 
@@ -201,7 +201,7 @@ open class Worker<T>(
      * @return
      */
     open fun perform(job: Job): Try<T> {
-        return slatekit.results.Failure(Exception("Not implemented"), StatusCodes.UNIMPLEMENTED)
+        return slatekit.results.Failure(Exception("Not implemented"), Codes.UNIMPLEMENTED)
     }
 
     fun stats(): WorkerState {

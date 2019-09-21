@@ -3,7 +3,7 @@ import org.junit.Test
 
 import slatekit.results.*
 import slatekit.results.Err
-import slatekit.results.StatusCodes
+import slatekit.results.Codes
 
 /**
  * Tests Operations on the Result class which include:
@@ -21,30 +21,30 @@ class ResultCreateTests : ResultTestSupport {
 
     @Test
     fun can_create_success() {
-        val status = StatusCodes.SUCCESS
+        val status = Codes.SUCCESS
         ensureSuccess(Success(42), status, 42)
         ensureSuccess(Success(42, "created"), status, 42, "created")
         ensureSuccess(Success(42, "created", 1), status, 42, "created", 1)
-        ensureSuccess(Success(42, StatusCodes.PENDING), StatusCodes.PENDING, 42)
+        ensureSuccess(Success(42, Codes.PENDING), Codes.PENDING, 42)
     }
 
 
     @Test
     fun can_create_failure() {
-        val status = StatusCodes.ERRORED
+        val status = Codes.ERRORED
         ensureFailure<Int>(Failure("invalid email"), status, expectedError = "invalid email")
         ensureFailure<Int>(Failure("invalid email", "bad data"), status, expectedStatusMsg = "bad data", expectedError = "invalid email")
         ensureFailure<Int>(Failure("invalid email", -1), status, expectedStatusCode = -1, expectedError = "invalid email")
-        ensureFailure<Int>(Failure("invalid email", StatusCodes.BAD_REQUEST), StatusCodes.BAD_REQUEST, expectedError = "invalid email")
+        ensureFailure<Int>(Failure("invalid email", Codes.BAD_REQUEST), Codes.BAD_REQUEST, expectedError = "invalid email")
     }
 
 
     @Test
     fun can_create_failure_as_err() {
-        val status = StatusCodes.ERRORED
+        val status = Codes.ERRORED
         ensureFailure<Int>(Failure(Err.of("invalid email")), status, expectedError = "invalid email")
         ensureFailure<Int>(Failure(Err.of("invalid email"), "bad data"), status, expectedStatusMsg = "bad data", expectedError = "invalid email")
         ensureFailure<Int>(Failure(Err.of("invalid email"), -1), status, expectedStatusCode = -1, expectedError = "invalid email")
-        ensureFailure<Int>(Failure(Err.of("invalid email"), StatusCodes.BAD_REQUEST), StatusCodes.BAD_REQUEST, expectedError = "invalid email")
+        ensureFailure<Int>(Failure(Err.of("invalid email"), Codes.BAD_REQUEST), Codes.BAD_REQUEST, expectedError = "invalid email")
     }
 }

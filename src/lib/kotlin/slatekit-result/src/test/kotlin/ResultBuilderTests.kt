@@ -5,7 +5,7 @@ import samples.UserApi
 import samples.UserRepo
 import samples.UserService
 import slatekit.results.*
-import slatekit.results.StatusCodes
+import slatekit.results.Codes
 import slatekit.results.builders.OutcomeBuilder
 import slatekit.results.builders.Outcomes
 
@@ -28,7 +28,7 @@ class ResultBuilderTests : ResultTestSupport, OutcomeBuilder {
 
     @Test
     fun can_build_successes() {
-        val status = StatusCodes.SUCCESS
+        val status = Codes.SUCCESS
         ensureSuccess(success<Int>(), status, null)
         ensureSuccess(success(42), status, 42)
         ensureSuccess(success(42, "life"), status, 42, "life")
@@ -39,7 +39,7 @@ class ResultBuilderTests : ResultTestSupport, OutcomeBuilder {
 
     @Test
     fun can_build_pending() {
-        val status = StatusCodes.PENDING
+        val status = Codes.PENDING
         ensureSuccess(pending<Int>(), status, null)
         ensureSuccess(pending(42), status, 42)
         ensureSuccess(pending(42, "life"), status, 42, "life")
@@ -50,7 +50,7 @@ class ResultBuilderTests : ResultTestSupport, OutcomeBuilder {
 
     @Test
     fun can_build_ignored() {
-        val status = StatusCodes.IGNORED
+        val status = Codes.IGNORED
         ensureFailure(ignored<Int>(), status, expectedError = status.msg)
         ensureFailure(ignored<Int>("ignored-x"), status, expectedError = "ignored-x")
         ensureFailure(ignored<Int>(Exception("ignored-x")), status, expectedError = "ignored-x")
@@ -60,7 +60,7 @@ class ResultBuilderTests : ResultTestSupport, OutcomeBuilder {
 
     @Test
     fun can_build_invalid() {
-        val status = StatusCodes.INVALID
+        val status = Codes.INVALID
         ensureFailure(invalid<Int>(), status, expectedError = status.msg)
         ensureFailure(invalid<Int>("invalid-x"), status, expectedError = "invalid-x")
         ensureFailure(invalid<Int>(Exception("invalid-x")), status, expectedError = "invalid-x")
@@ -70,7 +70,7 @@ class ResultBuilderTests : ResultTestSupport, OutcomeBuilder {
 
     @Test
     fun can_build_denied() {
-        val status = StatusCodes.DENIED
+        val status = Codes.DENIED
         ensureFailure(denied<Int>(), status, expectedError = status.msg)
         ensureFailure(denied<Int>("denied-x"), status, expectedError = "denied-x")
         ensureFailure(denied<Int>(Exception("denied-x")), status, expectedError = "denied-x")
@@ -80,7 +80,7 @@ class ResultBuilderTests : ResultTestSupport, OutcomeBuilder {
 
     @Test
     fun can_build_error() {
-        val status = StatusCodes.ERRORED
+        val status = Codes.ERRORED
         ensureFailure(errored<Int>(), status, expectedError = status.msg)
         ensureFailure(errored<Int>("error-x"), status, expectedError = "error-x")
         ensureFailure(errored<Int>(Exception("error-x")), status, expectedError = "error-x")
@@ -90,7 +90,7 @@ class ResultBuilderTests : ResultTestSupport, OutcomeBuilder {
 
     @Test
     fun can_build_unexpected() {
-        val status = StatusCodes.UNEXPECTED
+        val status = Codes.UNEXPECTED
         ensureFailure(Outcomes.unexpected<Int>(), status, expectedError = status.msg)
         ensureFailure(Outcomes.unexpected<Int>("unexpected-x"), status, expectedError = "unexpected-x")
         ensureFailure(Outcomes.unexpected<Int>(Exception("unexpected-x")), status, expectedError = "unexpected-x")

@@ -2,7 +2,7 @@ package slatekit.results
 
 
 
-fun Int.isInSuccessRange(): Boolean = this in StatusCodes.SUCCESS.code .. StatusCodes.QUEUED.code
-fun Int.isFilteredOut(): Boolean = this == StatusCodes.IGNORED.code
-fun Int.isInBadRequestRange(): Boolean = this in StatusCodes.BAD_REQUEST.code .. StatusCodes.UNAUTHORIZED.code
-fun Int.isInFailureRange(): Boolean = this in StatusCodes.ERRORED.code .. StatusCodes.UNEXPECTED.code
+fun Int.isInSuccessRange(): Boolean = this in Codes.SUCCESS.code .. Codes.QUEUED.code
+fun Int.isFilteredOut(): Boolean = this == Codes.IGNORED.code
+fun Int.isInBadRequestRange(): Boolean = this in Codes.BAD_REQUEST.code .. Codes.UNAUTHORIZED.code
+fun Int.isInFailureRange(): Boolean = this in Codes.ERRORED.code .. Codes.UNEXPECTED.code

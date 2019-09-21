@@ -150,10 +150,10 @@ open class CLI(
             }
 
             // Only exit when user typed "exit"
-            val keepReading = result.success && result.status != StatusCodes.EXIT
+            val keepReading = result.success && result.status != Codes.EXIT
             keepReading
         }
-        return Tries.success(StatusCodes.EXIT)
+        return Tries.success(Codes.EXIT)
     }
 
 
@@ -188,13 +188,13 @@ open class CLI(
         // These are typically system level
         return if( args.parts.size == 1 ){
             when(args.line) {
-                Command.About  .id -> { context.help.showAbout()  ; Success(true, StatusCodes.ABOUT)   }
-                Command.Help   .id -> { context.help.showHelp()   ; Success(true, StatusCodes.HELP)    }
-                Command.Version.id -> { context.help.showVersion(); Success(true, StatusCodes.VERSION) }
+                Command.About  .id -> { context.help.showAbout()  ; Success(true, Codes.ABOUT)   }
+                Command.Help   .id -> { context.help.showHelp()   ; Success(true, Codes.HELP)    }
+                Command.Version.id -> { context.help.showVersion(); Success(true, Codes.VERSION) }
                 Command.Last   .id -> { context.writer.text(lastArgs.get().line, false); Success(true) }
                 Command.Retry  .id -> { executeRepl(lastArgs.get()) }
-                Command.Exit   .id -> { Success(false, StatusCodes.EXIT) }
-                Command.Quit   .id -> { Success(false, StatusCodes.EXIT) }
+                Command.Exit   .id -> { Success(false, Codes.EXIT) }
+                Command.Quit   .id -> { Success(false, Codes.EXIT) }
                 else               -> executeRepl(args)
             }
         }
@@ -238,7 +238,7 @@ open class CLI(
             // we would end up showing help text at the global / CLI level.
             val finalResult = when(result.status.code) {
                 // Even for failure, let the repl continue processing
-                StatusCodes.HELP.code -> result.withStatus(StatusCodes.SUCCESS, StatusCodes.SUCCESS)
+                Codes.HELP.code -> result.withStatus(Codes.SUCCESS, Codes.SUCCESS)
                 else  -> result
             }
             print(finalResult)

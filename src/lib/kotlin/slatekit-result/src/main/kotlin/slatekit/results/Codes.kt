@@ -37,7 +37,7 @@ import slatekit.results.Status.Unexpected
  * 2. [Status] extends [Status] and is used for default implementations of [Status]
  * 3. [Status] also has logical grouping of errors
  */
-object StatusCodes {
+object Codes {
 
     // Success: 200000 + range
     @JvmField val SUCCESS         = Succeeded (200001, "Success")

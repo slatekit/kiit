@@ -3,7 +3,7 @@ import org.junit.Test
 import slatekit.results.*
 import slatekit.results.builders.Results.errored
 import slatekit.results.builders.Results.success
-import slatekit.results.StatusCodes
+import slatekit.results.Codes
 
 /**
  * Tests Operations on the Result class which include:
@@ -95,9 +95,9 @@ class ResultFunctionalTests {
         val result1 = errored<String>("name unknown")
         val result2 = result1.map { name -> "$name : spider-man" }
         Assert.assertEquals(false, result2.success)
-        Assert.assertEquals(StatusCodes.ERRORED, result2.status)
-        Assert.assertEquals(StatusCodes.ERRORED.code, result2.code)
-        Assert.assertEquals(StatusCodes.ERRORED.msg, result2.msg)
+        Assert.assertEquals(Codes.ERRORED, result2.status)
+        Assert.assertEquals(Codes.ERRORED.code, result2.code)
+        Assert.assertEquals(Codes.ERRORED.msg, result2.msg)
         Assert.assertEquals("??", result2.getOrElse { "??" })
     }
 
@@ -107,9 +107,9 @@ class ResultFunctionalTests {
         val result1 = errored<String>("name unknown")
         val result2 = result1.flatMap { name -> success("$name : spider-man") }
         Assert.assertEquals(false, result2.success)
-        Assert.assertEquals(StatusCodes.ERRORED, result2.status)
-        Assert.assertEquals(StatusCodes.ERRORED.code, result2.code)
-        Assert.assertEquals(StatusCodes.ERRORED.msg, result2.msg)
+        Assert.assertEquals(Codes.ERRORED, result2.status)
+        Assert.assertEquals(Codes.ERRORED.code, result2.code)
+        Assert.assertEquals(Codes.ERRORED.msg, result2.msg)
         Assert.assertEquals("??", result2.getOrElse { "??" })
     }
 
@@ -119,9 +119,9 @@ class ResultFunctionalTests {
         val result1 = errored<String>("name unknown")
         val result2 = result1.map { name -> "$name : spider-man" }
         Assert.assertEquals(false, result2.success)
-        Assert.assertEquals(StatusCodes.ERRORED, result2.status)
-        Assert.assertEquals(StatusCodes.ERRORED.code, result2.code)
-        Assert.assertEquals(StatusCodes.ERRORED.msg, result2.msg)
+        Assert.assertEquals(Codes.ERRORED, result2.status)
+        Assert.assertEquals(Codes.ERRORED.code, result2.code)
+        Assert.assertEquals(Codes.ERRORED.msg, result2.msg)
         Assert.assertEquals("??", result2.getOrElse { "??" })
     }
 
@@ -131,9 +131,9 @@ class ResultFunctionalTests {
         val result1 = errored<String>("name unknown")
         val result2 = result1.mapError { _ -> 0 }
         Assert.assertEquals(false, result2.success)
-        Assert.assertEquals(StatusCodes.ERRORED, result2.status)
-        Assert.assertEquals(StatusCodes.ERRORED.code, result2.code)
-        Assert.assertEquals(StatusCodes.ERRORED.msg, result2.msg)
+        Assert.assertEquals(Codes.ERRORED, result2.status)
+        Assert.assertEquals(Codes.ERRORED.code, result2.code)
+        Assert.assertEquals(Codes.ERRORED.msg, result2.msg)
         result2.onFailure {
             Assert.assertEquals(0, it)
         }
@@ -145,9 +145,9 @@ class ResultFunctionalTests {
         val result1 = errored<String>("name unknown")
         val result2 = result1.flatMapError { it -> Failure(0) }
         Assert.assertEquals(false, result2.success)
-        Assert.assertEquals(StatusCodes.ERRORED, result2.status)
-        Assert.assertEquals(StatusCodes.ERRORED.code, result2.code)
-        Assert.assertEquals(StatusCodes.ERRORED.msg, result2.msg)
+        Assert.assertEquals(Codes.ERRORED, result2.status)
+        Assert.assertEquals(Codes.ERRORED.code, result2.code)
+        Assert.assertEquals(Codes.ERRORED.msg, result2.msg)
         result2.onFailure {
             Assert.assertEquals(0, it)
         }
@@ -165,9 +165,9 @@ class ResultFunctionalTests {
         )
 
         Assert.assertEquals(true, r2.success)
-        Assert.assertEquals(StatusCodes.SUCCESS, r2.status)
-        Assert.assertEquals(StatusCodes.SUCCESS.code, r2.code)
-        Assert.assertEquals(StatusCodes.SUCCESS.msg, r2.msg)
+        Assert.assertEquals(Codes.SUCCESS, r2.status)
+        Assert.assertEquals(Codes.SUCCESS.code, r2.code)
+        Assert.assertEquals(Codes.SUCCESS.msg, r2.msg)
         r2.onSuccess {
             Assert.assertEquals("peter parker : spider-man", it )
         }

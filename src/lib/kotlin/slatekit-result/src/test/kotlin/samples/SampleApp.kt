@@ -1,7 +1,7 @@
 package samples
 
 import slatekit.results.*
-import slatekit.results.StatusCodes
+import slatekit.results.Codes
 import slatekit.results.builders.*
 import java.util.concurrent.atomic.AtomicLong
 
@@ -34,7 +34,7 @@ data class HttpResponse(val code: Int, val msg:String, val value: Any)
 // Extension method on Result<T,E> to convert to compatible HttpResponse
 fun <T, E> Result<T, E>.toHttpResponse(): HttpResponse {
     // Convert to http code
-    val code: Int = StatusCodes.toHttp(this.status).first
+    val code: Int = Codes.toHttp(this.status).first
 
     // Serialize ( toString for sample app - but use some library like Jackson )
     val content = when (this) {
@@ -102,27 +102,27 @@ class UserService(private val repo: UserRepo) {
         // [Err] is an empty marker interface so you can create errors of any type.
         // A convenient Err.of method is supplied to build an [Err] from a string.
         if (user.id > 0)
-            return Failure(UserError("already registered"), StatusCodes.IGNORED)
+            return Failure(UserError("already registered"), Codes.IGNORED)
 
         // Case 3: Create using builder methods in [Results]
-        // Same as Failure(Err.of("user name not supplied"), StatusCodes.INVALID)
+        // Same as Failure(Err.of("user name not supplied"), Codes.INVALID)
         if (user.userName.isEmpty())
-            return Failure(UserError("user name not supplied"), StatusCodes.INVALID)
+            return Failure(UserError("user name not supplied"), Codes.INVALID)
 
         // Case 4: Create using builder + explicit status code
         // Many of the builder methods have optional parameters
         if (repo.exists(user.email))
-            return Failure(UserError("duplicate user name"), StatusCodes.CONFLICT)
+            return Failure(UserError("duplicate user name"), Codes.CONFLICT)
 
         // Case 5: Sample rule: prevent registration via API of special emails.
         // This doesn't allocate any new object for [Err] or [Status]
-        // Same as errored(StatusCodes.UNAUTHORIZED, StatusCodes.UNAUTHORIZED)
+        // Same as errored(Codes.UNAUTHORIZED, Codes.UNAUTHORIZED)
         if (user.email.toLowerCase().contains("@justice-league.com"))
-            return Failure(UserError("requires special registration"), StatusCodes.DENIED)
+            return Failure(UserError("requires special registration"), Codes.DENIED)
 
         val userWithId = repo.create(user)
         // or success(userWithId) where status code = SUCCESS
-        return Success(userWithId, StatusCodes.CREATED)
+        return Success(userWithId, Codes.CREATED)
     }
 
 
@@ -140,7 +140,7 @@ class UserService(private val repo: UserRepo) {
             // [Err] is an empty marker interface so you can create errors of any type.
             // A convenient Err.of method is supplied to build an [Err] from a string.
             if (user.status == UserStatus.Pending)
-                Success(user, "registration pending", StatusCodes.PENDING.code)
+                Success(user, "registration pending", Codes.PENDING.code)
 
             // Case 2: Create using [Failure] branch of Result
             // [Err] is an empty marker interface so you can create errors of any type.
@@ -149,24 +149,24 @@ class UserService(private val repo: UserRepo) {
                 throw IgnoredException("already registered")
 
             // Case 3: Create using builder methods in [Results]
-            // Same as Failure(Err.of("user name not supplied"), StatusCodes.INVALID)
+            // Same as Failure(Err.of("user name not supplied"), Codes.INVALID)
             if (user.userName.isEmpty())
                 throw InvalidException("user name not supplied")
 
             // Case 4: Create using builder + explicit status code
             // Many of the builder methods have optional parameters
             if (repo.exists(user.email))
-                throw ErroredException("duplicate user name", StatusCodes.CONFLICT)
+                throw ErroredException("duplicate user name", Codes.CONFLICT)
 
             // Case 5: Sample rule: prevent registration via API of special emails.
             // This doesn't allocate any new object for [Err] or [Status]
-            // Same as errored(StatusCodes.UNAUTHORIZED, StatusCodes.UNAUTHORIZED)
+            // Same as errored(Codes.UNAUTHORIZED, Codes.UNAUTHORIZED)
             if (user.email.toLowerCase().contains("@justice-league.com"))
                 throw DeniedException("requires special registration")
 
             val userWithId = repo.create(user)
             // or success(userWithId) where status code = SUCCESS
-            Success(userWithId, StatusCodes.CREATED)
+            Success(userWithId, Codes.CREATED)
         }
     }
 
@@ -193,24 +193,24 @@ class UserService(private val repo: UserRepo) {
             return Outcomes.ignored("already registered")
 
         // Case 3: Create using builder methods in [Results]
-        // Same as Failure(Err.of("user name not supplied"), StatusCodes.INVALID)
+        // Same as Failure(Err.of("user name not supplied"), Codes.INVALID)
         if (user.userName.isEmpty())
             return Outcomes.invalid("user name not supplied")
 
         // Case 4: Create using builder + explicit status code
         // Many of the builder methods have optional parameters
         if (repo.exists(user.email))
-            return Outcomes.errored("duplicate user name", StatusCodes.CONFLICT)
+            return Outcomes.errored("duplicate user name", Codes.CONFLICT)
 
         // Case 5: Sample rule: prevent registration via API of special emails.
         // This doesn't allocate any new object for [Err] or [Status]
-        // Same as errored(StatusCodes.UNAUTHORIZED, StatusCodes.UNAUTHORIZED)
+        // Same as errored(Codes.UNAUTHORIZED, Codes.UNAUTHORIZED)
         if (user.email.toLowerCase().contains("@justice-league.com"))
             return Outcomes.denied("requires special registration")
 
         val userWithId = repo.create(user)
         // or success(userWithId) where status code = SUCCESS
-        return Outcomes.success(userWithId, StatusCodes.CREATED)
+        return Outcomes.success(userWithId, Codes.CREATED)
     }
 
 
@@ -228,13 +228,13 @@ class UserService(private val repo: UserRepo) {
             return Outcomes.invalid("Not in pending activation state")
 
         // Sample rule: prevent name update via API if justice league.
-        // Could also return errored(StatusCodes.UNAUTHORIZED)
+        // Could also return errored(Codes.UNAUTHORIZED)
         if (user.email.toLowerCase().contains("@justice-league.com"))
             return Outcomes.denied()
 
         repo.update(user.copy(status = UserStatus.Active))
         // or success(userWithId) where status code = SUCCESS
-        return Outcomes.success(user, StatusCodes.UPDATED)
+        return Outcomes.success(user, Codes.UPDATED)
     }
 }
 
