@@ -28,6 +28,7 @@ interface Err {
 
     val msg:String
     val err:Throwable?
+    val ref:Any?
 
 
     /**
@@ -53,27 +54,36 @@ interface Err {
     companion object {
 
         fun of(msg:String):Err {
-            return ErrorInfo(msg, null)
+            return ErrorInfo(msg)
         }
 
         fun of(code:Int, msg:String):Err {
-            return ErrorInfo(msg, null)
+            return ErrorInfo(msg)
         }
 
         fun of(status:Status):Err {
-            return ErrorInfo(status.msg, null)
+            return ErrorInfo(status.msg)
         }
 
         fun of(ex:Throwable):Err {
             return ErrorInfo(ex.message ?: "", ex)
         }
 
+        fun of(msg:String, ex:Throwable):Err {
+            return ErrorInfo(msg, ex)
+        }
+
         fun ex(ex:Exception):Err {
             return ErrorInfo(ex.message ?: "", ex)
+        }
+
+        fun obj(err:Any):Err {
+            return ErrorInfo(err.toString(), null, err)
         }
     }
 }
 
 
 
-data class ErrorInfo(override val msg:String, override val err:Throwable? = null) : Err
+data class ErrorInfo(override val msg:String, override val err:Throwable? = null, override val ref:Any? = null) : Err
+data class ExceptionErr(val msg: String, val err: Err) : Exception(msg)
