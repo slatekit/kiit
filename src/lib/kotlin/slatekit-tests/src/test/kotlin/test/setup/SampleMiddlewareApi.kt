@@ -35,7 +35,7 @@ open class SampleMiddlewareApi() : ApiWithMiddleware {
      */
     override fun onFilter(ctx: Context, req: Request, source: Any, args: Map<String, Any>?): Try<Any>  {
         return if(req.action.startsWith("hi")) {
-            Failure(Exception("filtered out"), StatusCodes.IGNORED)
+            Failure(Exception("filtered out"), Codes.IGNORED)
         } else {
             Success(true)
         }

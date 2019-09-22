@@ -21,7 +21,7 @@ import slatekit.common.info.Credentials
 import slatekit.common.CommonRequest
 import slatekit.common.requests.Source
 import slatekit.common.toResponse
-import slatekit.results.StatusCodes
+import slatekit.results.Codes
 import slatekit.results.Success
 import slatekit.results.builders.Notices
 import test.setup.UserApi
@@ -86,7 +86,7 @@ class Api_Protocol_Tests : ApiTestsBase() {
                         Pair("code", "1"),
                         Pair("tag", "abc")
                 )) as CommonRequest).copy(source = Source.Web),
-                response = Notices.errored<String>("app.users.protocolWeb not found", StatusCodes.NOT_FOUND).toResponse()
+                response = Notices.errored<String>("app.users.protocolWeb not found", Codes.NOT_FOUND).toResponse()
         )
     }
 }

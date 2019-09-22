@@ -20,24 +20,24 @@ import slatekit.common.*
 import slatekit.common.info.About
 import slatekit.app.App
 import slatekit.app.AppRunner
-import slatekit.results.StatusCodes
+import slatekit.results.Codes
 
 
 class AppMetaTests  {
 
 
   @Test fun can_request_help() {
-    checkHelp(arrayOf("help", "-help", "--help", "/help", "?"), StatusCodes.HELP.code, "help")
+    checkHelp(arrayOf("help", "-help", "--help", "/help", "?"), Codes.HELP.code, "help")
   }
 
 
   @Test fun can_request_about() {
-    checkHelp(arrayOf("about", "-about", "--about", "/about", "info"), StatusCodes.ABOUT.code, "help")
+    checkHelp(arrayOf("about", "-about", "--about", "/about", "info"), Codes.ABOUT.code, "help")
   }
 
 
   @Test fun can_request_version() {
-    checkHelp(arrayOf("version", "-version", "--version", "/version", "ver"), StatusCodes.VERSION.code,  "help")
+    checkHelp(arrayOf("version", "-version", "--version", "/version", "ver"), Codes.VERSION.code,  "help")
   }
 
 

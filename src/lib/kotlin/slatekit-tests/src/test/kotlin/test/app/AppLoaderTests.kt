@@ -21,7 +21,7 @@ import slatekit.common.info.About
 import slatekit.app.App
 import slatekit.app.AppRunner
 import slatekit.results.Status
-import slatekit.results.StatusCodes
+import slatekit.results.Codes
 import slatekit.results.Success
 import slatekit.results.Try
 
@@ -34,7 +34,7 @@ class AppLoaderTests  {
         run(
                 arrayOf("-env='loc'"),
                 ConfigValueTest("loc", "env loc", 1, 20.1),
-                StatusCodes.SUCCESS
+                Codes.SUCCESS
         )
     }
 
@@ -43,7 +43,7 @@ class AppLoaderTests  {
         run(
                 arrayOf("-env='dev'"),
                 ConfigValueTest("dev", "env dev", 2, 20.2),
-                StatusCodes.SUCCESS
+                Codes.SUCCESS
         )
     }
 
@@ -52,7 +52,7 @@ class AppLoaderTests  {
         run(
                 arrayOf("-env='qa1'"),
                 ConfigValueTest("qa1", "env qa1", 3, 20.3),
-                StatusCodes.SUCCESS
+                Codes.SUCCESS
         )
     }
 
@@ -60,7 +60,7 @@ class AppLoaderTests  {
     fun can_select_and_use_env_qa2() {
         run(arrayOf("-env='qa2'"),
                 ConfigValueTest("qa2", "env qa2", 4, 20.4),
-                StatusCodes.SUCCESS
+                Codes.SUCCESS
         )
     }
 
