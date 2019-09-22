@@ -1,6 +1,9 @@
 package slatekit.common.metrics
 
 import slatekit.common.ids.Identity
+import slatekit.results.Failure
+import slatekit.results.Status
+import slatekit.results.Success
 import java.util.concurrent.atomic.AtomicLong
 
 class Counters(val id: Identity, val custom:List<String>? = null) {
@@ -8,7 +11,7 @@ class Counters(val id: Identity, val custom:List<String>? = null) {
     private val uniqueId = "${id.name}-${id.uuid}"
     private val processCounter = AtomicLong(0L)
     private val successCounter = AtomicLong(0L)
-    private val deniedCounter = AtomicLong(0L)
+    private val deniedCounter  = AtomicLong(0L)
     private val invalidCounter = AtomicLong(0L)
     private val ignoredCounter = AtomicLong(0L)
     private val erroredCounter = AtomicLong(0L)
@@ -64,5 +67,62 @@ class Counters(val id: Identity, val custom:List<String>? = null) {
         val updated = current + value
         counter.set(updated)
         return updated
+    }
+
+
+    companion object {
+
+        /**
+         * Track status in the counters
+         */
+        fun count(counters: Counters, status:Status) {
+            counters.processed()
+            when(status) {
+                is Status.Denied     -> counters.denied()
+                is Status.Invalid    -> counters.invalid()
+                is Status.Ignored    -> counters.ignored()
+                is Status.Errored    -> counters.errored()
+                is Status.Unexpected -> counters.unexpected()
+                else                 -> counters.unexpected()
+            }
+        }
+
+
+        /**
+         * Tracks the status of all the results using the counters
+         */
+        fun <S,F> count(counters: Counters, results:List<slatekit.results.Result<S, F>>): Unit {
+            // 1. Track processed, failed, etc
+            results.forEach { result ->
+
+                // Total processed ( regardless of status )
+                counters.processed()
+
+                // Fine grained status counting
+                when(result) {
+                    is Success -> {  counters.succeeded() }
+                    is Failure -> {  Counters.count(counters, result.status) }
+                }
+            }
+        }
+
+        /**
+         * Count the number of processed items
+         * @param counter   :
+         * @param limit
+         * @param operation
+         */
+        fun countOrReset(counter:AtomicLong, enabled:Boolean, limit:Long, size:Int, operation:() -> Unit): Unit {
+            val current = counter.get()
+            if (current >= limit) {
+                if(enabled) {
+                    operation()
+                }
+                counter.set(0L)
+            }
+            else {
+                counter.set(current + size)
+            }
+        }
     }
 }
