@@ -103,7 +103,7 @@ class Exec(val ctx: Ctx, val validator: Validation, val logger: Logger, val opti
             // Hook: After
             if (instance is Tracked) {
                 result.onSuccess { instance.lasts.succeeded(ctx.req, result.toResponse()) }
-                result.onFailure { instance.lasts.failed(ctx.req, it) }
+                result.onFailure { instance.lasts.unexpected(ctx.req, it) }
             }
             result
         }
@@ -194,7 +194,7 @@ class Exec(val ctx: Ctx, val validator: Validation, val logger: Logger, val opti
             // Hook: After
             if (instance is Tracked) {
                 result.onSuccess { instance.lasts.succeeded(ctx.req, result.toResponse()) }
-                result.onFailure { instance.lasts.failed(ctx.req, it) }
+                result.onFailure { instance.lasts.unexpected(ctx.req, it) }
             }
             result
         }
@@ -214,7 +214,7 @@ class Exec(val ctx: Ctx, val validator: Validation, val logger: Logger, val opti
                 } else {
                     logger.warn("API pipeline: filter has filtered out this request : ${filterResult.msg}")
                     if (instance is Tracked) {
-                        instance.lasts.filtered(ctx.req)
+                        instance.lasts.ignored(ctx.req, null)
                     }
                     filterResult
                 }
