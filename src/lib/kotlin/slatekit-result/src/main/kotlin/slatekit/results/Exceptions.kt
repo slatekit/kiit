@@ -22,11 +22,11 @@ data class DeniedException (override val msg:String?,
                             override val status:Status? = null,
                             override val origin:Throwable? = null) : Exception(msg, origin), StatusException
 
-data class IgnoredException(override val msg:String?,
+data class InvalidException(override val msg:String?,
                             override val status:Status? = null,
                             override val origin:Throwable? = null) : Exception(msg, origin), StatusException
 
-data class InvalidException(override val msg:String?,
+data class IgnoredException(override val msg:String?,
                             override val status:Status? = null,
                             override val origin:Throwable? = null) : Exception(msg, origin), StatusException
 
