@@ -39,9 +39,8 @@ interface ResultTestSupport {
         Assert.assertEquals(result.msg , (expectedStatusMsg ?: expectedStatus.msg))
         result.onFailure {
             when (it) {
-                is String             -> Assert.assertEquals(it , expectedError)
-                is ErrorWithMessage   -> Assert.assertEquals(it.msg , expectedError)
-                is ErrorWithException -> Assert.assertEquals(it.msg , expectedError)
+                is String    -> Assert.assertEquals(it , expectedError)
+                is ErrorInfo -> Assert.assertEquals(it.msg , expectedError)
                 else                  -> throw Exception("Unexpected for : $it")
             }
         }

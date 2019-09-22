@@ -269,7 +269,7 @@ sealed class Result<out T, out E> {
                 is Err -> error
                 is String -> Err.of(error)
                 is Exception -> Err.of(error)
-                else -> ErrorWithObject(error.toString(), error)
+                else -> Err.obj(error)
             }
             when(retainStatus){
                 false -> Failure(err)
@@ -294,7 +294,7 @@ sealed class Result<out T, out E> {
         is Failure -> {
             when (this.error) {
                 is Exception -> this as Try<T>
-                is Err -> Failure(ExceptionWithErr(this.error.toString(), this.error), this.status)
+                is Err -> Failure(ExceptionErr(this.error.toString(), this.error), this.status)
                 null   -> Failure(Exception(this.status.msg), this.status)
                 else   -> Failure(Exception(this.error.toString()), this.status)
             }
@@ -371,7 +371,7 @@ sealed class Result<out T, out E> {
                 is Err -> error
                 is String -> Err.of(error)
                 is Exception -> Err.of(error)
-                else -> ErrorWithObject(error.toString(), error)
+                else -> Err.obj(error)
             }
         }
 

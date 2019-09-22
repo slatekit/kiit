@@ -95,15 +95,15 @@ class Exec(val ctx: Ctx, val validator: Validation, val logger: Logger, val opti
 
             // Hook: Before
             if (instance is Tracked) {
-                instance.tracker.requested(ctx.req)
+                instance.lasts.requested(ctx.req)
             }
 
             val result = proceed()
 
             // Hook: After
             if (instance is Tracked) {
-                result.onSuccess { instance.tracker.succeeded(ctx.req, result.toResponse()) }
-                result.onFailure { instance.tracker.failed(ctx.req, it) }
+                result.onSuccess { instance.lasts.succeeded(ctx.req, result.toResponse()) }
+                result.onFailure { instance.lasts.unexpected(ctx.req, it) }
             }
             result
         }
@@ -186,15 +186,15 @@ class Exec(val ctx: Ctx, val validator: Validation, val logger: Logger, val opti
 
             // Hook: Before
             if (instance is Tracked) {
-                instance.tracker.requested(ctx.req)
+                instance.lasts.requested(ctx.req)
             }
 
             val result = proceed()
 
             // Hook: After
             if (instance is Tracked) {
-                result.onSuccess { instance.tracker.succeeded(ctx.req, result.toResponse()) }
-                result.onFailure { instance.tracker.failed(ctx.req, it) }
+                result.onSuccess { instance.lasts.succeeded(ctx.req, result.toResponse()) }
+                result.onFailure { instance.lasts.unexpected(ctx.req, it) }
             }
             result
         }
@@ -214,7 +214,7 @@ class Exec(val ctx: Ctx, val validator: Validation, val logger: Logger, val opti
                 } else {
                     logger.warn("API pipeline: filter has filtered out this request : ${filterResult.msg}")
                     if (instance is Tracked) {
-                        instance.tracker.filtered(ctx.req)
+                        instance.lasts.ignored(ctx.req, null)
                     }
                     filterResult
                 }

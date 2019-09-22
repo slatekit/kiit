@@ -131,7 +131,7 @@ class AppTests {
     @Test
     fun can_run_process_with_args_defined_and_required_and_missing() {
         val res = AppRunner.run(AppArgsSchemaBasic1Required(arrayOf<String>()))
-        assertResultBasic(res, StatusCodes.BAD_REQUEST.code, "invalid arguments supplied: Missing : env")
+        assertResultBasic(res, Codes.BAD_REQUEST.code, "invalid arguments supplied: Missing : env")
     }
 
 

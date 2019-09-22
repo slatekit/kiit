@@ -22,7 +22,7 @@ import slatekit.results.*
 interface TryBuilder : Builder<Exception> {
     override fun errorFromEx(ex: Exception, defaultStatus: Status): Exception = ex
     override fun errorFromStr(msg: String?, defaultStatus: Status): Exception = Exception(msg ?: defaultStatus.msg)
-    override fun errorFromErr(err: Err, defaultStatus: Status): Exception = ExceptionWithErr(defaultStatus.msg, err)
+    override fun errorFromErr(err: Err, defaultStatus: Status): Exception = ExceptionErr(defaultStatus.msg, err)
 }
 
 

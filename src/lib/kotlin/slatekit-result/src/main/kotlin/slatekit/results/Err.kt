@@ -26,6 +26,11 @@ package slatekit.results
  */
 interface Err {
 
+    val msg:String
+    val err:Throwable?
+    val ref:Any?
+
+
     /**
      *   Here are 3 examples of implementing errors:
      *
@@ -48,52 +53,37 @@ interface Err {
 
     companion object {
 
-        /**
-         * Converts a simple String message to a instance of [Err] using default implementation [ErrorWithMessage]
-         */
-        fun of(msg: String, area: String? = null): Err = ErrorWithMessage(msg, area)
+        fun of(msg:String):Err {
+            return ErrorInfo(msg)
+        }
 
+        fun of(code:Int, msg:String):Err {
+            return ErrorInfo(msg)
+        }
 
-        /**
-         * Converts an exception into an [Err] using default implementation [ErrorWithException]
-         */
-        fun of(ex: Exception, area: String? = null): Err = ErrorWithException(ex.message ?: "", ex, area)
+        fun of(status:Status):Err {
+            return ErrorInfo(status.msg)
+        }
+
+        fun of(ex:Throwable):Err {
+            return ErrorInfo(ex.message ?: "", ex)
+        }
+
+        fun of(msg:String, ex:Throwable):Err {
+            return ErrorInfo(msg, ex)
+        }
+
+        fun ex(ex:Exception):Err {
+            return ErrorInfo(ex.message ?: "", ex)
+        }
+
+        fun obj(err:Any):Err {
+            return ErrorInfo(err.toString(), null, err)
+        }
     }
 }
 
 
-/**
- * [Err] implemented as a simple message with optional area ( module associated with error )
- * @param msg : String representing error
- * @param area: Area / Module associated with error e.g. "registration"
- * @sample ErrorWithMessage("Duplicate email found", "registration")
- */
-data class ErrorWithMessage(val msg: String, val area: String? = null) : Err
 
-
-/**
- * [Err] implemented with exception with optional area ( module associated with error )
- * @param msg : String representing error
- * @param ex  : Exception
- * @param area: Area / Module associated with error e.g. "registration"
- */
-data class ErrorWithException(val msg: String, val ex: Exception, val area: String? = null) : Err
-
-
-/**
- * [Err] implemented with exception with optional area ( module associated with error )
- * @param msg : String representing error
- * @param target  : [Exception]
- * @param area: Area / Module associated with error e.g. "registration"
- */
-data class ErrorWithObject(val msg: String, val target: Any? = null, val area: String? = null) : Err
-
-
-/**
- * [Err] implemented with exception with optional area ( module associated with error )
- * @param msg : String representing error
- * @param err : Error as an [Err]
- * @param area: Area / Module associated with error e.g. "registration"
- */
-data class ExceptionWithErr(val msg: String, val err: Err, val area: String? = null) : Exception(msg)
-
+data class ErrorInfo(override val msg:String, override val err:Throwable? = null, override val ref:Any? = null) : Err
+data class ExceptionErr(val msg: String, val err: Err) : Exception(msg)

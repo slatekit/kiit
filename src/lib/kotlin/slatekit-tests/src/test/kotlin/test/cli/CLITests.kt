@@ -13,6 +13,7 @@
 
 package test.cli
 
+import kotlinx.coroutines.runBlocking
 import org.junit.Assert
 import org.junit.Test
 import slatekit.cli.*
@@ -39,7 +40,7 @@ class CLITests {
         var testExec = mutableListOf<String>()
 
 
-        override fun init(): Try<Boolean> {
+        override suspend fun init(): Try<Boolean> {
             testInit = true
             return super.init()
         }
@@ -48,16 +49,16 @@ class CLITests {
         /**
          * executes a line of text by handing it off to the executor
          */
-        override fun executeRequest(request:CliRequest): Try<CliResponse<*>> {
+        override suspend fun executeRequest(request:CliRequest): Try<CliResponse<*>> {
             val args = request.args
             val text = args.line
             testExec.add(text)
             val req = CliRequest.build(Args.default(), text)
-            return Success(CliResponse(req, true, StatusCodes.SUCCESS.code, mapOf(), text))
+            return Success(CliResponse(req, true, Codes.SUCCESS.code, mapOf(), text))
         }
 
 
-        override fun end(status: Status): Try<Boolean> {
+        override suspend fun end(status: Status): Try<Boolean> {
             testEnd = true
             return super.end(status)
         }
@@ -68,7 +69,7 @@ class CLITests {
     fun can_ensure_flow() {
         val exit = { i: Unit -> "exit" }
         val cli = MyCLI(reader = exit)
-        val result = cli.run()
+        val result = runBlocking{ cli.run() }
         Assert.assertEquals(true, result.success)
         Assert.assertEquals("exit", cli.last())
     }
@@ -78,7 +79,7 @@ class CLITests {
     fun can_ensure_execution() {
         val exit = { i: Unit -> "exit" }
         val cli = MyCLI(reader = exit, commands = listOf("c1", "c2"))
-        val result = cli.run()
+        val result = runBlocking { cli.run() }
         Assert.assertEquals(true, result.success)
         Assert.assertEquals("c1", cli.testExec[0])
         Assert.assertEquals("c2", cli.testExec[1])
@@ -96,7 +97,7 @@ class CLITests {
             cmd
         }
         val cli = MyCLI(reader = reader)
-        val result = cli.run()
+        val result = runBlocking { cli.run() }
         Assert.assertEquals(true, result.success)
         Assert.assertEquals("c1", cli.testExec[0])
         Assert.assertEquals("c1", cli.testExec[1])
@@ -119,7 +120,7 @@ class CLITests {
             Unit
         }
         val cli = MyCLI(reader = reader, writer = writer)
-        val result = cli.run()
+        val result = runBlocking { cli.run() }
         Assert.assertEquals(true, result.success)
         Assert.assertEquals("c2", cli.testExec[0])
         Assert.assertEquals(written[9], "c2")
@@ -129,44 +130,44 @@ class CLITests {
     @Test
     fun can_eval_about() {
         val cli = MyCLI()
-        val result = cli.eval(Command.About.id)
+        val result = runBlocking { cli.eval(Command.About.id) }
         Assert.assertEquals(true, result.success)
-        Assert.assertEquals(StatusCodes.ABOUT.code, result.code)
+        Assert.assertEquals(Codes.ABOUT.code, result.code)
     }
 
 
     @Test
     fun can_eval_help() {
         val cli = MyCLI()
-        val result = cli.eval(Command.Help.id)
+        val result = runBlocking { cli.eval(Command.Help.id) }
         Assert.assertEquals(true, result.success)
-        Assert.assertEquals(StatusCodes.HELP.code, result.code)
+        Assert.assertEquals(Codes.HELP.code, result.code)
     }
 
 
     @Test
     fun can_eval_version() {
         val cli = MyCLI()
-        val result = cli.eval(Command.Version.id)
+        val result = runBlocking { cli.eval(Command.Version.id) }
         Assert.assertEquals(true, result.success)
-        Assert.assertEquals(StatusCodes.VERSION.code, result.code)
+        Assert.assertEquals(Codes.VERSION.code, result.code)
     }
 
 
     @Test
     fun can_eval_exit() {
         val cli = MyCLI()
-        val result = cli.eval(Command.Exit.id)
+        val result = runBlocking { cli.eval(Command.Exit.id) }
         Assert.assertEquals(true, result.success)
-        Assert.assertEquals(StatusCodes.EXIT.code, result.code)
+        Assert.assertEquals(Codes.EXIT.code, result.code)
     }
 
 
     @Test
     fun can_eval_quit() {
         val cli = MyCLI()
-        val result = cli.eval(Command.Quit.id)
+        val result = runBlocking { cli.eval(Command.Quit.id) }
         Assert.assertEquals(true, result.success)
-        Assert.assertEquals(StatusCodes.EXIT.code, result.code)
+        Assert.assertEquals(Codes.EXIT.code, result.code)
     }
 }

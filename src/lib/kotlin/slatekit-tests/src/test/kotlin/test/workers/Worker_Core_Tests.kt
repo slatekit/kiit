@@ -3,7 +3,7 @@ package test.workers
 import org.junit.Assert
 import org.junit.Test
 import slatekit.common.Status
-import slatekit.results.StatusCodes
+import slatekit.results.Codes
 import slatekit.results.Success
 import slatekit.results.Try
 import slatekit.results.getOrElse
@@ -89,7 +89,7 @@ class Worker_Core_Tests {
     fun can_work_once() {
         val worker = MyWorker(0)
         val result = worker.perform(Job.empty)
-        assertResult(result, 1, StatusCodes.SUCCESS.code, "odd")
+        assertResult(result, 1, Codes.SUCCESS.code, "odd")
     }
 
 
@@ -99,7 +99,7 @@ class Worker_Core_Tests {
         worker.perform(Job.empty)
         worker.perform(Job.empty)
         val result = worker.perform(Job.empty)
-        assertResult(result, 3, StatusCodes.SUCCESS.code, "odd")
+        assertResult(result, 3, Codes.SUCCESS.code, "odd")
     }
 
 

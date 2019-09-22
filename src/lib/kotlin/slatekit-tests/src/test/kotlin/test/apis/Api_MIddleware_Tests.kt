@@ -24,10 +24,9 @@ import slatekit.common.requests.Request
 import slatekit.common.info.Credentials
 import slatekit.common.CommonRequest
 import slatekit.results.Failure
-import slatekit.results.StatusCodes
+import slatekit.results.Codes
 import slatekit.results.Try
 import slatekit.results.builders.Outcomes
-import slatekit.results.builders.Results
 import slatekit.results.getOrElse
 import test.setup.SampleErrorsApi
 import test.setup.SampleErrorsNoMiddlewareApi
@@ -59,7 +58,7 @@ class Api_Middleware_Tests : ApiTestsBase() {
         val errors = object: slatekit.apis.middleware.Error {
             override fun onError(ctx: Context, req: Request, target:Any, source: Any, ex: Exception?, args: Map<String, Any>?): Try<Any> {
                 val msg = "global middleware error handler"
-                return Failure(Exception(msg), StatusCodes.UNEXPECTED)
+                return Failure(Exception(msg), Codes.UNEXPECTED)
             }
         }
         ensure(
@@ -110,7 +109,7 @@ class Api_Middleware_Tests : ApiTestsBase() {
         val r1 = apis.call("app", "SampleMiddleware", "hi", "get", mapOf(), mapOf())
 
         Assert.assertTrue(!r1.success)
-        Assert.assertTrue(r1.code == StatusCodes.IGNORED.code)
+        Assert.assertTrue(r1.code == Codes.IGNORED.code)
         Assert.assertTrue(r1.msg == "Ignored")
     }
 
@@ -121,7 +120,7 @@ class Api_Middleware_Tests : ApiTestsBase() {
         val r1 = apis.call("app", "SampleMiddleware", "hello", "get", mapOf(), mapOf())
 
         Assert.assertTrue(r1.success)
-        Assert.assertTrue(r1.code == StatusCodes.SUCCESS.code)
+        Assert.assertTrue(r1.code == Codes.SUCCESS.code)
         Assert.assertTrue(r1.getOrElse { ""} == "hello world")
     }
 }

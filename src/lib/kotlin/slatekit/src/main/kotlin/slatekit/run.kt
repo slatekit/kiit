@@ -3,6 +3,7 @@ package slatekit
 import kotlinx.coroutines.runBlocking
 import slatekit.app.AppRunner
 import slatekit.common.CommonContext
+import slatekit.common.smartvalues.PhoneUS
 import slatekit.generator.CredentialMode
 import slatekit.docs.DocService
 import slatekit.generator.*
@@ -32,6 +33,9 @@ import slatekit.providers.logs.logback.LogbackLogs
  * java -jar ${app.name}.jar -env=dev -log.level=info -conf.dir = "file://./conf-sample-server"
  */
 fun main(args: Array<String>) {
+
+    val phone1 = PhoneUS.of("123-456-7890")
+     println(phone1)
 
     println("starting slate kit with args:" )
     println()

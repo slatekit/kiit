@@ -122,7 +122,7 @@ dependencies {
     // } //</slatekit_local>
 
     //implementation project(":slatekit-examples")
-    //implementation project(":slatekit-tests")
+    implementation project(":slatekit-tests")
 }
 
 // https://www.anexinet.com/blog/six-ways-to-package-a-java-application-with-gradle/

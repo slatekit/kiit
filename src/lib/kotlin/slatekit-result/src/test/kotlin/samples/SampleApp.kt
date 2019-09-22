@@ -20,7 +20,7 @@ data class User(val id: Long,
                 val status: UserStatus)
 
 
-data class UserError(val msg: String) : Err
+data class UserError(override val msg:String, override val err:Throwable? = null, override val ref:Any? = null) : Err
 
 
 // Mimic an Http Response for sample purposes

@@ -12,11 +12,11 @@ mantra: Simplicity above all else
  */
 package slatekit.apis.middleware
 
-import slatekit.common.Tracker
+import slatekit.common.metrics.Lasts
 import slatekit.common.requests.Request
 import slatekit.common.requests.Response
 
 interface Tracked : Middleware {
 
-    val tracker: Tracker<Request, Response<*>, Exception>
+    val lasts: Lasts<Request, Response<*>, Exception>
 }
