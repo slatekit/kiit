@@ -12,6 +12,7 @@ import slatekit.common.queues.QueueSource
 import slatekit.results.Notice
 import slatekit.results.Codes
 import slatekit.results.Try
+import slatekit.results.builders.Notices
 import java.util.concurrent.atomic.AtomicReference
 
 /**
@@ -135,22 +136,27 @@ open class Worker<T>(
         return isRunning() || isIdle()
     }
 
+
     /**
      * initialize this task and update current status
      * @return
      */
     fun init(): Notice<Boolean> {
-        transition(Status.Starting)
-        return onInit()
+        return Notices.success(true)
     }
+
 
     /**
      * end this task and update current status
      */
     fun end() {
-        onEnd()
-        transition(Status.Complete)
     }
+
+
+    fun fail(err:Exception?){
+
+    }
+
 
     /**
      * For batching purposes
@@ -174,6 +180,11 @@ open class Worker<T>(
         }
     }
 
+
+    fun work():Try<T> {
+        return perform(Job.empty)
+    }
+
     /**
      * Works on the job while also handling metrics, middleware, events
      * @return
@@ -195,6 +206,7 @@ open class Worker<T>(
         return result
     }
 
+
     /**
      * execute this task and update current status.
      *
@@ -203,6 +215,7 @@ open class Worker<T>(
     open fun perform(job: Job): Try<T> {
         return slatekit.results.Failure(Exception("Not implemented"), Codes.UNIMPLEMENTED)
     }
+
 
     fun stats(): WorkerState {
         return WorkerState(
@@ -230,8 +243,8 @@ open class Worker<T>(
      * @param state
      * @return
      */
-    override fun transition(state: Status): Status {
-        val last = runStatus.get()
+    fun transition(state: Status, trackOptions:List<Track>?): Status {
+        runStatus.get()
         runState.set(state)
         runStatus.set(WorkerStatus(about.id, about.name, DateTime.now(), state))
         diagnostics.logger?.info("$metricId moving to state: " + state.name)
@@ -239,18 +252,17 @@ open class Worker<T>(
     }
 
     /**
-     * provided for subclass task and implementing initialization code in the derived class
-     * @param args
+     * moves the current state to the name supplied and performs a status update
+     *
+     * @param state
      * @return
      */
-    protected open fun onInit(): Notice<Boolean> {
-        return slatekit.results.Success(true)
-    }
-
-    /**
-     * provided for subclass task and implementing end code in the derived class
-     */
-    protected open fun onEnd() {
+    override fun transition(state: Status): Status {
+        runStatus.get()
+        runState.set(state)
+        runStatus.set(WorkerStatus(about.id, about.name, DateTime.now(), state))
+        diagnostics.logger?.info("$metricId moving to state: " + state.name)
+        return state
     }
 
 
@@ -258,7 +270,7 @@ open class Worker<T>(
         TODO.IMPROVE("workers", "make the source type safe or decouple it from the job")
         when(result.success){
             true  -> queue.complete(job.source as QueueEntry<String>)
-            false -> queue.abandon(job.source as QueueEntry<String>)
+            false -> queue.abandon(job.source  as QueueEntry<String>)
         }
     }
 }
