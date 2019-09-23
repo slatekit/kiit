@@ -4,6 +4,7 @@ import slatekit.common.log.LogsDefault
 import slatekit.results.Notice
 import slatekit.results.Success
 import slatekit.results.Try
+import slatekit.results.builders.Notices
 import slatekit.workers.*
 import slatekit.workers.WorkFunction
 
@@ -18,14 +19,13 @@ class MyWorker(
     var isInitialized = false
     var isEnded = false
 
-    override fun onInit(): Notice<Boolean> {
+    override fun init(): Notice<Boolean> {
         isInitialized = true
-        return super.onInit()
+        return Notices.success(true)
     }
 
-    override fun onEnd() {
+    override fun end() {
         isEnded = true
-        super.onEnd()
     }
 
     override fun perform(job: Job): Try<Int> {

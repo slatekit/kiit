@@ -141,7 +141,7 @@ open class Worker<T>(
      * initialize this task and update current status
      * @return
      */
-    fun init(): Notice<Boolean> {
+    open fun init(): Notice<Boolean> {
         return Notices.success(true)
     }
 
@@ -149,11 +149,11 @@ open class Worker<T>(
     /**
      * end this task and update current status
      */
-    fun end() {
+    open fun end() {
     }
 
 
-    fun fail(err:Exception?){
+    open fun fail(err:Exception?){
 
     }
 

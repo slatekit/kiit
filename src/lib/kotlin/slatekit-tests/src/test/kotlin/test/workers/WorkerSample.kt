@@ -25,7 +25,7 @@ class WorkerSample(name:String, group:String, desc:String, val batch:Int = 10)
     private var counter = 0
 
 
-    override fun onInit(): Notice<Boolean> {
+    override fun init(): Notice<Boolean> {
         println("${about.name}: initializing")
         return Success(true)
     }
@@ -40,7 +40,7 @@ class WorkerSample(name:String, group:String, desc:String, val batch:Int = 10)
     }
 
 
-    override fun onEnd() {
+    override fun end() {
         println("${about.name}: ending")
     }
 }
