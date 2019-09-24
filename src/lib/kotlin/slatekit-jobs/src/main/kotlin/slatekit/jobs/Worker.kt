@@ -79,7 +79,7 @@ interface FreeWorker<T> : Workable<T> {
 
 
 /**
- * A worker that works using a supplied Job from Queue
+ * A worker that works using a supplied Task from Queue
  */
 interface TaskWorker<T> : Workable<T> {
     fun work(task:Task):WorkState
