@@ -2,8 +2,9 @@ package slatekit.jobs
 
 import slatekit.common.Status
 import slatekit.common.ids.Identity
+import java.util.concurrent.atomic.AtomicReference
 
-interface Worker<T> {
+interface Workable<T> {
 
     /**
      * Identity of this worker
@@ -53,4 +54,33 @@ interface Worker<T> {
      */
     fun notify(desc:String?, extra:List<Pair<String,String>>?){
     }
+}
+
+
+
+class Worker<T>(override val id:Identity) : Workable<T> {
+
+    private val _status = AtomicReference<Status>(Status.InActive)
+
+
+    override fun status(): Status = _status.get()
+
+}
+
+
+
+/**
+ * A worker with a self managed work source
+ */
+interface FreeWorker<T> : Workable<T> {
+    fun work():WorkState
+}
+
+
+
+/**
+ * A worker that works using a supplied Job from Queue
+ */
+interface TaskWorker<T> : Workable<T> {
+    fun work(task:Task):WorkState
 }
