@@ -48,34 +48,40 @@ data class Job(val id:String, val task:String)
 data class JobMap<T>(val name:String, val channel:Channel<T>, val worker:JobWorker<T>)
 
 class JobManager {
-
+    val requests = Channel<String>()
     val counter = AtomicInteger(0)
+    lateinit var lookup:Map<String, JobMap<Job>>
+
     suspend fun run(workerCount: Int) {
-        val requests = Channel<String>()
         val mappings = (1..workerCount).map {
             val name = it.toString()
             val channel = Channel<Job>(Channel.UNLIMITED)
             val worker = JobWorker<Job>(name) { requests.send(name) }
             JobMap(name, channel, worker)
         }
-        val lookup = mappings.map { it.name to it }.toMap()
+        lookup = mappings.map { it.name to it }.toMap()
 
         // Listen to requests
         GlobalScope.launch {
-            for(req in requests){
-                val name = req
-                val item = lookup[name]
-                item?.let {
-                    process(it)
-                }
-            }
+            listen()
         }
 
         // Send off 1st items
-        mappings.forEachIndexed { index, item ->
-            process(item)
-        }
+        mappings.forEachIndexed { index, item -> process(item) }
         Thread.sleep(30000)
+    }
+
+
+    /**
+     * Listens to incoming requests ( name of worker )
+     */
+    suspend fun listen(){
+        for(name in requests){
+            val item = lookup[name]
+            item?.let {
+                process(it)
+            }
+        }
     }
 
 
