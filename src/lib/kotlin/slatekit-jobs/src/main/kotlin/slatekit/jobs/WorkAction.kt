@@ -9,6 +9,8 @@ sealed class WorkAction(val name:String) {
     object Control : WorkAction( "Control")
     object Process : WorkAction( "Process")
 
+    data class Delay(val seconds:Long) : WorkAction( "Delay" )
+
 
     fun parse(name:String):WorkAction {
         return when(name) {

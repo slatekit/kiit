@@ -32,6 +32,11 @@ class Manager(all: List<FreeWorker<*>>, val scheduler: Scheduler, val logger: Lo
     }
 
 
+    suspend fun requestStart() {
+        channel.send(WorkAction.Start)
+    }
+
+
     suspend fun requestProceed() {
         channel.send(WorkAction.Process)
     }
@@ -48,6 +53,7 @@ class Manager(all: List<FreeWorker<*>>, val scheduler: Scheduler, val logger: Lo
             is WorkAction.NA      -> process(worker)
             is WorkAction.Process -> process(worker)
             is WorkAction.Start   -> start(worker)
+            is WorkAction.Delay   -> delay(worker, action.seconds)
             is WorkAction.Pause   -> pause(worker)
             is WorkAction.Stop    -> stop(worker)
             is WorkAction.Resume  -> resume(worker)
@@ -82,7 +88,12 @@ class Manager(all: List<FreeWorker<*>>, val scheduler: Scheduler, val logger: Lo
                 error(WorkAction.Start, "Unable to start job")
             }
         }
+    }
 
+
+    private suspend fun delay(context: WorkContext, seconds:Long) {
+        info("Starting worker in $seconds second(s)")
+        scheduler.schedule(DateTime.now().plusSeconds(seconds)) { requestStart() }
     }
 
 
