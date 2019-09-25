@@ -3,21 +3,20 @@ package slatekit.jobs
 import kotlinx.coroutines.channels.Channel
 import slatekit.common.DateTime
 import slatekit.common.Status
+import slatekit.common.log.Logger
+import slatekit.results.Err
 import slatekit.results.Failure
 import slatekit.results.Success
 import slatekit.results.Try
 import slatekit.results.builders.Tries
 
 
-class Manager(all: List<FreeWorker<*>>, val scheduler: Scheduler) {
+class Manager(all: List<FreeWorker<*>>, val scheduler: Scheduler, val logger: Logger) {
 
     private val workers = all.map { WorkContext(it, WorkerStats.of(it.id)) }
     private val pauseInSeconds = 30L
 
 
-    /**
-     * For communicating requests on the worker
-     */
     private val channel = Channel<WorkAction>()
 
 
@@ -30,6 +29,16 @@ class Manager(all: List<FreeWorker<*>>, val scheduler: Scheduler) {
             is WorkAction.Resume -> channel.send(WorkAction.Resume)
             else                 -> error(action, "Unexpected action")
         }
+    }
+
+
+    suspend fun requestProceed() {
+        channel.send(WorkAction.Process)
+    }
+
+
+    suspend fun requestResume() {
+        channel.send(WorkAction.Resume)
     }
 
 
@@ -47,16 +56,11 @@ class Manager(all: List<FreeWorker<*>>, val scheduler: Scheduler) {
     }
 
 
-    /**
-     * Similar to resume.
-     * Send message to actor to kick off the "process" flow
-     */
     private suspend fun process(context: WorkContext) {
         val worker = context.worker
         when(worker){
             is FreeWorker<*> -> {
-                val workState = worker.work()
-                loop(worker, workState)
+                track(worker) { w -> w.work() }
             }
             else -> {
                 // TODO: Manage types better
@@ -91,7 +95,7 @@ class Manager(all: List<FreeWorker<*>>, val scheduler: Scheduler) {
                     val pausable = result.value
                     worker.transition(Status.Paused)
                     pausable.pause("Paused")
-                    scheduler.schedule(DateTime.now().plusSeconds(pauseInSeconds)) { resume(context) }
+                    scheduler.schedule(DateTime.now().plusSeconds(pauseInSeconds)) { requestResume() }
                 }
                 is Failure -> {
                     error(WorkAction.Pause, result.msg)
@@ -139,32 +143,16 @@ class Manager(all: List<FreeWorker<*>>, val scheduler: Scheduler) {
     }
 
 
-    /**
-     * Similar to resume.
-     * Send message to actor to kick off the "process" flow
-     */
-    private suspend fun proceed() {
-        channel.send(WorkAction.Process)
-    }
-
-
     private suspend fun info(msg: String) {
-
+        logger.info(msg)
     }
 
 
     private suspend fun error(action: WorkAction, msg:String? = null) {
-
+        logger.error(msg ?: action.name, null)
     }
 
 
-    /**
-     * We keep looping to process the job by sending "JobActions.Process" message
-     * to this actor ( a self sending actor ).
-     * This is done to avoid concurrency / synchronization issues.
-     *
-     * @param jobState : Whether or not there is more data to process
-     */
     suspend fun loop(worker: Workable<*>, state: WorkState) {
         val result = Tries.attempt {
             when (state) {
@@ -174,7 +162,7 @@ class Manager(all: List<FreeWorker<*>>, val scheduler: Scheduler) {
                     worker.done()
                 }
                 is WorkState.More -> {
-                    proceed()
+                    requestProceed()
                 }
             }
             ""
@@ -186,6 +174,20 @@ class Manager(all: List<FreeWorker<*>>, val scheduler: Scheduler) {
             is Failure -> {
                 error(WorkAction.Process, "Error while looping")
             }
+        }
+    }
+
+
+    suspend fun track(worker: FreeWorker<*>, operation: suspend (FreeWorker<*>) -> WorkState){
+        worker.stats.lastRunTime.set(DateTime.now())
+        worker.stats.totalRuns.incrementAndGet()
+        try {
+            val workState = operation(worker)
+            worker.stats.totalRunsPassed.incrementAndGet()
+            loop(worker, workState)
+        } catch (ex:Exception){
+            worker.stats.totalRunsFailed.incrementAndGet()
+            worker.stats.lasts.unexpected(Task.empty, Err.of(ex))
         }
     }
 }

@@ -13,6 +13,12 @@ interface Workable<T> {
 
 
     /**
+     * Stats on this worker
+     */
+    val stats:WorkerStats
+
+
+    /**
      * Current work status of this worker
      */
     fun status(): Status
@@ -64,13 +70,13 @@ interface Workable<T> {
 
 
 
-open class Worker<T>(override val id:Identity) : Workable<T> {
+open class Worker<T>(override val id:Identity,
+                     override val stats: WorkerStats) : Workable<T> {
 
     private val _status = AtomicReference<Status>(Status.InActive)
 
 
     override fun status(): Status = _status.get()
-
 }
 
 
