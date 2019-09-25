@@ -25,7 +25,13 @@ object Workers {
             worker.done()
             Status.Complete
         }
-        handleResult(worker, result)
+        when(result){
+            is Success -> { }
+            is Failure -> {
+                worker.transition(Status.Failed)
+                worker.fail(result.error)
+            }
+        }
         return result
     }
 
@@ -34,7 +40,7 @@ object Workers {
      * Starts this worker with life-cycle hooks and automatic transitioning to proper state
      * However, allows execution to be managed externally as it could be running for a long time
      */
-    fun <T> start(worker: TaskWorker<T>): Try<Status> {
+    fun <T> start(worker: FreeWorker<T>): Try<WorkState> {
         val result = Tries.attempt {
             worker.transition(Status.Starting)
             worker.info().forEach { println(it) }
@@ -42,14 +48,7 @@ object Workers {
 
             worker.transition(Status.Running)
             worker.work()
-            Status.Running
         }
-        handleResult<T>(worker, result)
-        return result
-    }
-
-
-    fun <T> handleResult(worker:Workable<T>, result:Try<Status>){
         when(result){
             is Success -> { }
             is Failure -> {
@@ -57,5 +56,6 @@ object Workers {
                 worker.fail(result.error)
             }
         }
+        return result
     }
 }

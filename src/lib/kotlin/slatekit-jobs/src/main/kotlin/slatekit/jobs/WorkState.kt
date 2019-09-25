@@ -2,9 +2,9 @@ package slatekit.jobs
 
 
 sealed class WorkState(val name:String) {
+    object Unknown    : WorkState( "Unknown" )
     object Done       : WorkState( "Done"    )
     object More       : WorkState( "More"    )
-    object Unknown    : WorkState( "Unknown" )
     data class Next(val offset:Long, val processed:Long, val reference:String) : WorkState( "next"  )
 
 
