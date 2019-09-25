@@ -15,6 +15,7 @@ object Workers {
     fun <T> run(worker: FreeWorker<T>): Try<Status> {
         val result = Tries.attempt {
             worker.transition(Status.Starting)
+            worker.info().forEach { println(it) }
             worker.init()
 
             worker.transition(Status.Running)
@@ -36,6 +37,7 @@ object Workers {
     fun <T> start(worker: TaskWorker<T>): Try<Status> {
         val result = Tries.attempt {
             worker.transition(Status.Starting)
+            worker.info().forEach { println(it) }
             worker.init()
 
             worker.transition(Status.Running)

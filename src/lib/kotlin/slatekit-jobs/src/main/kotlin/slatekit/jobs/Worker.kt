@@ -19,6 +19,13 @@ interface Workable<T> {
 
 
     /**
+     * Get key/value pairs representing information about this worker.
+     * e.g. such as settings
+     */
+    fun info():List<Pair<String, String>> = listOf()
+
+
+    /**
      * Life-cycle hook to allow for initialization
      */
     fun init() {
@@ -29,7 +36,6 @@ interface Workable<T> {
      * Life-cycle hook to allow for completion
      */
     fun done() {
-        notify(Status.Complete.name, null)
     }
 
 
@@ -58,7 +64,7 @@ interface Workable<T> {
 
 
 
-class Worker<T>(override val id:Identity) : Workable<T> {
+open class Worker<T>(override val id:Identity) : Workable<T> {
 
     private val _status = AtomicReference<Status>(Status.InActive)
 
