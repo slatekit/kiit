@@ -9,8 +9,9 @@ import slatekit.results.Try
 import slatekit.results.builders.Tries
 
 
-class Manager(val worker: FreeWorker<*>, val scheduler: Scheduler) {
+class Manager(all: List<FreeWorker<*>>, val scheduler: Scheduler) {
 
+    private val workers = all.map { WorkContext(it, WorkerStats.of(it.id)) }
     private val pauseInSeconds = 30L
 
 
@@ -22,8 +23,7 @@ class Manager(val worker: FreeWorker<*>, val scheduler: Scheduler) {
 
     suspend fun request(action: WorkAction) {
         when (action) {
-            is WorkAction.NA -> {
-            }
+            is WorkAction.NA     -> info("nothing yet")
             is WorkAction.Start  -> channel.send(WorkAction.Start)
             is WorkAction.Pause  -> channel.send(WorkAction.Pause)
             is WorkAction.Stop   -> channel.send(WorkAction.Stop)
@@ -34,13 +34,14 @@ class Manager(val worker: FreeWorker<*>, val scheduler: Scheduler) {
 
 
     private suspend fun receive(action: WorkAction) {
+        val worker = workers.first()
         when (action) {
-            is WorkAction.NA      -> process()
-            is WorkAction.Process -> process()
-            is WorkAction.Start   -> start()
-            is WorkAction.Pause   -> pause()
-            is WorkAction.Stop    -> stop()
-            is WorkAction.Resume  -> resume()
+            is WorkAction.NA      -> process(worker)
+            is WorkAction.Process -> process(worker)
+            is WorkAction.Start   -> start(worker)
+            is WorkAction.Pause   -> pause(worker)
+            is WorkAction.Stop    -> stop(worker)
+            is WorkAction.Resume  -> resume(worker)
             else                  -> error(action)
         }
     }
@@ -50,7 +51,8 @@ class Manager(val worker: FreeWorker<*>, val scheduler: Scheduler) {
      * Similar to resume.
      * Send message to actor to kick off the "process" flow
      */
-    private suspend fun process() {
+    private suspend fun process(context: WorkContext) {
+        val worker = context.worker
         when(worker){
             is FreeWorker<*> -> {
                 val workState = worker.work()
@@ -64,9 +66,10 @@ class Manager(val worker: FreeWorker<*>, val scheduler: Scheduler) {
     }
 
 
-    private suspend fun start() {
+    private suspend fun start(context: WorkContext) {
         info("Starting worker")
-        val result: Try<WorkState> = Workers.start(worker)
+        val worker = context.worker
+        val result: Try<WorkState> = Workers.start(worker as FreeWorker<*>)
         when(result){
             is Success -> {
                 loop(worker, result.value)
@@ -79,15 +82,16 @@ class Manager(val worker: FreeWorker<*>, val scheduler: Scheduler) {
     }
 
 
-    private suspend fun pause() {
+    private suspend fun pause(context: WorkContext) {
         info("Pausing worker")
+        val worker = context.worker
         WorkerUtils.handlePausable(worker) { result ->
             when(result){
                 is Success -> {
                     val pausable = result.value
                     worker.transition(Status.Paused)
                     pausable.pause("Paused")
-                    scheduler.schedule(DateTime.now().plusSeconds(pauseInSeconds)) { resume() }
+                    scheduler.schedule(DateTime.now().plusSeconds(pauseInSeconds)) { resume(context) }
                 }
                 is Failure -> {
                     error(WorkAction.Pause, result.msg)
@@ -98,8 +102,9 @@ class Manager(val worker: FreeWorker<*>, val scheduler: Scheduler) {
     }
 
 
-    private suspend fun resume() {
+    private suspend fun resume(context: WorkContext) {
         info("Resuming worker")
+        val worker = context.worker
         WorkerUtils.handlePausable(worker) { result ->
             when(result){
                 is Success -> {
@@ -116,8 +121,9 @@ class Manager(val worker: FreeWorker<*>, val scheduler: Scheduler) {
     }
 
 
-    private suspend fun stop() {
+    private suspend fun stop(context: WorkContext) {
         info("Stopping worker")
+        val worker = context.worker
         WorkerUtils.handlePausable(worker) { result ->
             when(result){
                 is Success -> {
