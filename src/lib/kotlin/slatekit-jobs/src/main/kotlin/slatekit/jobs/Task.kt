@@ -35,6 +35,19 @@ data class Task(val id: String,
 
         @JvmStatic
         val empty: Task = Task("empty", "empty", "empty", "empty", "empty", "empty", Queue.empty)
+        val owned: Task = Task("owned", "owned", "owned", "owned", "owned", "owned", Queue.empty)
+
+
+        /**
+         * Converts a message from any queue into a Task
+         */
+        fun next(state: WorkState.Next): Task {
+            val id = owned.id
+            val name = owned.name
+            val task = Task(id, state.offset.toString(), name, state.reference, "", "", Queue.empty)
+            return task
+        }
+
 
 
         /**

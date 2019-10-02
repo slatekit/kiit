@@ -4,95 +4,39 @@ import slatekit.common.Status
 import slatekit.common.ids.Identity
 import java.util.concurrent.atomic.AtomicReference
 
-interface Workable<T> {
 
-    /**
-     * Identity of this worker
-     */
-    val id: Identity
+/**
+ * Base class for Workers
+ */
+open class Worker<T>(override val id: Identity,
+                override val stats: WorkerStats = WorkerStats.of(id),
+                val operation: ((Task) -> WorkState)? = null) : Workable<T> {
 
-
-    /**
-     * Stats on this worker
-     */
-    val stats:WorkerStats
-
-
-    /**
-     * Current work status of this worker
-     */
-    fun status(): Status
-
-
-    /**
-     * Get key/value pairs representing information about this worker.
-     * e.g. such as settings
-     */
-    fun info():List<Pair<String, String>> = listOf()
-
-
-    /**
-     * Life-cycle hook to allow for initialization
-     */
-    fun init() {
-    }
-
-
-    /**
-     * Life-cycle hook to allow for completion
-     */
-    fun done() {
-    }
-
-
-    /**
-     * Life-cycle hook to allow for failure
-     */
-    fun fail(err:Throwable?) {
-        notify("Errored: " + err?.message, null)
-    }
+    private val _status = AtomicReference<Status>(Status.InActive)
 
 
     /**
      * Transition current status to the one supplied
      */
-    fun transition(state: Status) {
+    override fun transition(state: Status) {
+        _status.set(state)
         notify(state.name, null)
     }
 
 
-    /**
-     * Send out notifications
-     */
-    fun notify(desc:String?, extra:List<Pair<String,String>>?){
-    }
-}
-
-
-
-open class Worker<T>(override val id:Identity,
-                     override val stats: WorkerStats) : Workable<T> {
-
-    private val _status = AtomicReference<Status>(Status.InActive)
-
-
     override fun status(): Status = _status.get()
-}
 
 
-
-/**
- * A worker with a self managed work source
- */
-interface FreeWorker<T> : Workable<T> {
-    fun work():WorkState
-}
-
-
-
-/**
- * A worker that works using a supplied Task from Queue
- */
-interface TaskWorker<T> : Workable<T> {
-    fun work(task:Task):WorkState
+    /**
+     * Performs the work
+     * @param task: The task to perform.
+     * NOTE: If this worker manages it's own work load/queue/source, then this task is
+     * provided by the work() method and assigned Task.owned
+     */
+    override fun work(task: Task): WorkState {
+        return when (operation) {
+            null -> WorkState.Done
+            else -> operation.invoke(task)
+        }
+    }
 }

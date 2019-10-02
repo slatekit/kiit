@@ -11,7 +11,7 @@ import slatekit.results.Try
 import slatekit.results.builders.Tries
 
 
-class Manager(all: List<FreeWorker<*>>, val scheduler: Scheduler, val logger: Logger) {
+class Manager(all: List<Worker<*>>, val scheduler: Scheduler, val logger: Logger) {
 
     private val workers = all.map { WorkContext(it, WorkerStats.of(it.id)) }
     private val pauseInSeconds = 30L
@@ -65,7 +65,7 @@ class Manager(all: List<FreeWorker<*>>, val scheduler: Scheduler, val logger: Lo
     private suspend fun process(context: WorkContext) {
         val worker = context.worker
         when(worker){
-            is FreeWorker<*> -> {
+            is Worker<*> -> {
                 track(worker) { w -> w.work() }
             }
             else -> {
@@ -79,7 +79,7 @@ class Manager(all: List<FreeWorker<*>>, val scheduler: Scheduler, val logger: Lo
     private suspend fun start(context: WorkContext) {
         info("Starting worker")
         val worker = context.worker
-        val result: Try<WorkState> = Workers.start(worker as FreeWorker<*>)
+        val result: Try<WorkState> = Workers.start(worker as Worker<*>)
         when(result){
             is Success -> {
                 loop(worker, result.value)
@@ -189,7 +189,7 @@ class Manager(all: List<FreeWorker<*>>, val scheduler: Scheduler, val logger: Lo
     }
 
 
-    suspend fun track(worker: FreeWorker<*>, operation: suspend (FreeWorker<*>) -> WorkState){
+    suspend fun track(worker: Worker<*>, operation: suspend (Worker<*>) -> WorkState){
         worker.stats.lastRunTime.set(DateTime.now())
         worker.stats.totalRuns.incrementAndGet()
         try {
