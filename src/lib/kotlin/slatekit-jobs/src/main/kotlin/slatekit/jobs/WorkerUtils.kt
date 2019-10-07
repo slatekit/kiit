@@ -7,7 +7,7 @@ import slatekit.results.builders.Outcomes
 
 object WorkerUtils {
 
-    fun validate(worker: Workable<*>, action: WorkAction): Boolean {
+    fun validate(worker: Workable<*>, action: JobAction): Boolean {
         val nextState = toState(action)
         return when(nextState) {
             null -> false
@@ -15,9 +15,9 @@ object WorkerUtils {
                 val currState = worker.status()
                 val isRunning = currState.value == Status.Running.value
                 when(action) {
-                    is WorkAction.Start   -> !isRunning
-                    is WorkAction.Process -> isRunning
-                    is WorkAction.Control -> isRunning
+                    is JobAction.Start   -> !isRunning
+                    is JobAction.Process -> isRunning
+                    is JobAction.Control -> isRunning
                     else -> {
                         // No reason to:
                         // 1. Pause if already "Paused"
@@ -31,23 +31,23 @@ object WorkerUtils {
     }
 
 
-    fun toState(action: WorkAction): Status? {
+    fun toState(action: JobAction): Status? {
         return when(action) {
-            is WorkAction.Start   -> Status.Running
-            is WorkAction.Stop    -> Status.Stopped
-            is WorkAction.Pause   -> Status.Paused
-            is WorkAction.Resume  -> Status.Running
-            is WorkAction.Process -> Status.Running
-            is WorkAction.Control -> Status.Running
+            is JobAction.Start   -> Status.Running
+            is JobAction.Stop    -> Status.Stopped
+            is JobAction.Pause   -> Status.Paused
+            is JobAction.Resume  -> Status.Running
+            is JobAction.Process -> Status.Running
+            is JobAction.Control -> Status.Running
             else                  -> null
         }
     }
 
 
-    suspend fun handlePausable(worker: Workable<*>, operation: suspend (Outcome<Pausable>) -> Unit ) {
-        when(worker){
-            is Pausable -> operation(Outcomes.success(worker))
-            else        -> operation(Outcomes.errored("Job ${worker.id.name} does not implement Pausable and can not handle a pause/stop/resume action"))
+    suspend fun handlePausable(worker: Workable<*>, operation: suspend (Workable<*>, Outcome<Pausable>) -> Unit ) {
+        when (worker) {
+            is Pausable -> operation(worker, Outcomes.success(worker))
+            else -> operation(worker, Outcomes.errored("Job ${worker.id.name} does not implement Pausable and can not handle a pause/stop/resume action"))
         }
     }
 

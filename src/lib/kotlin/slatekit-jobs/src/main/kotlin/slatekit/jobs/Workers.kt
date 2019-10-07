@@ -1,91 +1,160 @@
 package slatekit.jobs
 
+import kotlinx.coroutines.channels.SendChannel
+import slatekit.common.DateTime
 import slatekit.common.Status
-import slatekit.common.Track
-import slatekit.results.Failure
-import slatekit.results.Success
-import slatekit.results.Try
+import slatekit.common.ids.Identity
+import slatekit.common.log.Logger
+import slatekit.jobs.*
+import slatekit.results.*
+import slatekit.results.builders.Outcomes
 import slatekit.results.builders.Tries
 
-object Workers {
+class Workers(val channel:SendChannel<JobRequest>,
+              val workers:List<Worker<*>>,
+              val logger:Logger,
+              val scheduler: Scheduler,
+              val pauseInSeconds:Long) {
 
-    /**
-     * Runs this worker with life-cycle hooks and automatic transitioning to proper state
-     */
-    fun <T> run(worker: Worker<T>): Try<Status> {
-        val result = Tries.attempt {
-            worker.transition(Status.Starting)
-            worker.info().forEach { println(it) }
-            worker.init()
+    private val lookup = workers.map { it.id.name to it }.toMap()
 
-            worker.transition(Status.Running)
-            worker.work()
 
-            worker.transition(Status.Complete)
-            worker.done()
-            Status.Complete
-        }
-        when(result){
-            is Success -> { }
-            is Failure -> {
-                worker.transition(Status.Failed)
-                worker.fail(result.error)
-            }
-        }
-        return result
+    operator fun get(id:Identity):Worker<*>? = when(lookup.containsKey(id.name)) {
+        true -> lookup[id.name]
+        false -> null
     }
 
 
-    /**
-     * Starts this worker with life-cycle hooks and automatic transitioning to proper state
-     * However, allows execution to be managed externally as it could be running for a long time
-     */
-    fun <T> start(worker: Worker<T>): Try<WorkState> {
-        val result = Tries.attempt {
-            worker.transition(Status.Starting)
-            worker.info().forEach { println(it) }
-            worker.init()
-
-            worker.transition(Status.Running)
-            val state = worker.work()
-            if(state == WorkState.Done) {
-                worker.transition(Status.Complete)
-                worker.done()
-            }
-            state
+    suspend fun track(worker: Worker<*>, operation: suspend (Worker<*>) -> WorkState){
+        worker.stats.lastRunTime.set(DateTime.now())
+        worker.stats.totalRuns.incrementAndGet()
+        try {
+            val workState = operation(worker)
+            worker.stats.totalRunsPassed.incrementAndGet()
+            loop(worker, workState)
+        } catch (ex:Exception){
+            worker.stats.totalRunsFailed.incrementAndGet()
+            worker.stats.lasts.unexpected(Task.empty, Err.of(ex))
         }
-        when(result){
-            is Success -> { }
-            is Failure -> {
-                worker.transition(Status.Failed)
-                worker.fail(result.error)
-            }
-        }
-        return result
     }
 
 
-    /**
-     * Makes the worker work ( this can be used for resuming )
-     */
-    fun <T> work(worker: Worker<T>): Try<WorkState> {
+    suspend fun start(id:Identity) : Outcome<Status> {
+        return perform("Starting", id) { worker ->
+            val result: Try<WorkState> = WorkRunner.start(worker)
+            when (result) {
+                is Success -> {
+                    loop(worker, result.value)
+                    Outcomes.success(worker.status())
+                }
+                is Failure -> {
+                    logger.error("Unable to start worker ${id.fullName}")
+                    Outcomes.errored(result.msg)
+                }
+            }
+        }
+    }
+
+
+    suspend fun process(id:Identity) {
+        perform("Starting", id) { worker ->
+            track(worker) { w -> w.work() }
+            Outcomes.success(Status.Running)
+        }
+    }
+
+
+    suspend fun delay(id:Identity, seconds:Long) {
+        logger.info("Starting worker in $seconds second(s)")
+        scheduler.schedule(DateTime.now().plusSeconds(seconds)) {
+            request(JobRequest.WorkRequest(JobAction.Start, id))
+        }
+    }
+
+
+    suspend fun pause(id:Identity) {
+        performPausableAction("Pausing", id) { worker, pausable ->
+            worker.transition(Status.Paused)
+            pausable.pause("Paused")
+            scheduler.schedule(DateTime.now().plusSeconds(pauseInSeconds)) {
+                request(JobRequest.WorkRequest(JobAction.Resume, worker.id))
+            }
+            Outcomes.success(Status.Paused)
+        }
+    }
+
+
+    suspend fun resume(id:Identity) {
+        performPausableAction("Resuming", id) { worker, pausable ->
+            worker.transition(Status.Running)
+            val workState = pausable.resume("Resuming")
+            loop(worker, workState)
+            Outcomes.success(Status.Running)
+        }
+    }
+
+
+    suspend fun stop(id:Identity) {
+        performPausableAction("Stopping", id) { worker, pausable ->
+            worker.transition(Status.Stopped)
+            pausable.stop("Stopped")
+            Outcomes.success(Status.Stopped)
+        }
+    }
+
+
+    private suspend fun loop(worker: Workable<*>, state: WorkState) {
         val result = Tries.attempt {
-            worker.transition(Status.Running)
-            worker.transition(Status.Running)
-            val state = worker.work()
-            if(state == WorkState.Done) {
-                worker.transition(Status.Complete)
-                worker.done()
+            when (state) {
+                is WorkState.Done -> {
+                    logger.info("Worker ${worker.id.name} complete")
+                    worker.transition(Status.Complete)
+                    worker.done()
+                }
+                is WorkState.More -> {
+                    request(JobRequest.WorkRequest(JobAction.Process, worker.id))
+                }
             }
-            state
+            ""
         }
-        when(result){
-            is Success -> { }
+        when (result) {
+            is Success -> {
+                println("ok")
+            }
             is Failure -> {
-                worker.transition(Status.Failed)
-                worker.fail(result.error)
+                logger.error("Error while looping on : ${worker.id.fullName}")
             }
         }
-        return result
+    }
+
+
+
+    private suspend fun perform(action:String, id:Identity, operation: suspend (Worker<*>) -> Outcome<Status>):Outcome<Status> {
+        logger.info("$action worker")
+        val worker = this[id]
+        return when(worker) {
+            null -> Outcomes.errored("Unable to find worker with id : ${id.name}")
+            else -> operation(worker)
+        }
+    }
+
+
+    private suspend fun performPausableAction(action:String, id:Identity, operation: suspend (Worker<*>, Pausable) -> Outcome<Status>):Outcome<Status> {
+        logger.info("$action worker")
+        val worker = this[id]
+        return when(worker) {
+            null -> Outcomes.errored("Unable to find worker with id : ${id.name}")
+            else -> {
+                when (worker) {
+                    is Pausable -> operation(worker, worker)
+                    else -> Outcomes.errored("${worker.id.name} does not implement Pausable and can not handle a pause/stop/resume action")
+                }
+            }
+        }
+    }
+
+
+    private suspend fun request(request: JobRequest) {
+        channel.send(request)
     }
 }

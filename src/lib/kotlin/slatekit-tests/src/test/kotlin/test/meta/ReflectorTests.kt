@@ -43,7 +43,6 @@ import kotlin.reflect.KClass
 import kotlin.reflect.KParameter
 import kotlin.reflect.full.*
 import kotlin.reflect.jvm.javaType
-import kotlin.test.assertEquals
 
 
 
@@ -234,13 +233,13 @@ class ReflectorTests {
         val starts: DateTime
         */
         val props = Reflector.getProperties(User4::class)
-        assertEquals(6, props.size)
-        assertEquals("email" , props[0].name)
-        assertEquals("id"    , props[1].name)
-        assertEquals("active", props[2].name)
-        assertEquals("age"   , props[3].name)
-        assertEquals("salary", props[4].name)
-        assertEquals("starts", props[5].name)
+        Assert.assertEquals(6, props.size)
+        Assert.assertEquals("email" , props[0].name)
+        Assert.assertEquals("id"    , props[1].name)
+        Assert.assertEquals("active", props[2].name)
+        Assert.assertEquals("age"   , props[3].name)
+        Assert.assertEquals("salary", props[4].name)
+        Assert.assertEquals("starts", props[5].name)
     }
 
 
@@ -255,40 +254,40 @@ class ReflectorTests {
         val starts: DateTime
         */
         val props = Reflector.getProperties(UserNormal1::class)
-        assertEquals(6, props.size)
-        assertEquals("active", props[0].name)
-        assertEquals("age"   , props[1].name)
-        assertEquals("email" , props[2].name)
-        assertEquals("id"    , props[3].name)
-        assertEquals("salary", props[4].name)
-        assertEquals("starts", props[5].name)
+        Assert.assertEquals(6, props.size)
+        Assert.assertEquals("active", props[0].name)
+        Assert.assertEquals("age"   , props[1].name)
+        Assert.assertEquals("email" , props[2].name)
+        Assert.assertEquals("id"    , props[3].name)
+        Assert.assertEquals("salary", props[4].name)
+        Assert.assertEquals("starts", props[5].name)
     }
 
 
     @Test fun can_get_annotation_for_class(){
         val api:Api = Reflector.getAnnotationForClass<Api>(UserApi::class, Api::class)
-        assertEquals( api.area     , "app"      )
-        assertEquals( api.name     , "users"    )
-        assertEquals( api.roles    , "admin"    )
-        assertEquals( api.auth     , "app-roles")
-        assertEquals( api.protocol , "*"        )
-        assertEquals( api.verb     , "*"        )
+        Assert.assertEquals( api.area     , "app"      )
+        Assert.assertEquals( api.name     , "users"    )
+        Assert.assertEquals( api.roles    , "admin"    )
+        Assert.assertEquals( api.auth     , "app-roles")
+        Assert.assertEquals( api.protocol , "*"        )
+        Assert.assertEquals( api.verb     , "*"        )
     }
 
 
     @Test fun can_get_annotation_for_method_declared() {
         val members = Reflector.getAnnotatedMembers<ApiAction>(UserApi::class, ApiAction::class, true)
-        assertEquals(25, members.size )
-        assertEquals("activate", members[0].second.name)
-        assertEquals("", members[1].second.name)
+        Assert.assertEquals(25, members.size )
+        Assert.assertEquals("activate", members[0].second.name)
+        Assert.assertEquals("", members[1].second.name)
     }
 
 
     @Test fun can_get_annotation_for_method_with_inherited() {
         val members = Reflector.getAnnotatedMembers<ApiAction>(UserApi::class, ApiAction::class, false)
-        assertEquals(41, members.size )
-        assertEquals("activate", members[0].second.name)
-        assertEquals("", members[1].second.name)
+        Assert.assertEquals(41, members.size )
+        Assert.assertEquals("activate", members[0].second.name)
+        Assert.assertEquals("", members[1].second.name)
     }
 
 
@@ -300,13 +299,13 @@ class ReflectorTests {
         }
         println("done")
         val props = Reflector.getAnnotatedProps<Field>(User3::class, Field::class)
-        assertEquals(2, props.size)
-        assertEquals(props[0].second?.name, "email")
-        assertEquals(props[0].second?.required, true)
-        assertEquals(props[0].second?.eg, "clark@metro.com")
-        assertEquals(props[1].second?.name, "")
-        assertEquals(props[1].second?.required, false)
-        assertEquals(props[1].second?.eg, "clark kent")
+        Assert.assertEquals(2, props.size)
+        Assert.assertEquals(props[0].second?.name, "email")
+        Assert.assertEquals(props[0].second?.required, true)
+        Assert.assertEquals(props[0].second?.eg, "clark@metro.com")
+        Assert.assertEquals(props[1].second?.name, "")
+        Assert.assertEquals(props[1].second?.required, false)
+        Assert.assertEquals(props[1].second?.eg, "clark kent")
     }
 
     @Test fun can_access_property_values_from_fields() {
