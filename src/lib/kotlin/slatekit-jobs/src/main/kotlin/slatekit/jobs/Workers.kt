@@ -5,7 +5,6 @@ import slatekit.common.DateTime
 import slatekit.common.Status
 import slatekit.common.ids.Identity
 import slatekit.common.log.Logger
-import slatekit.jobs.*
 import slatekit.results.*
 import slatekit.results.builders.Outcomes
 import slatekit.results.builders.Tries
@@ -25,32 +24,22 @@ class Workers(val channel:SendChannel<JobRequest>,
     }
 
 
-    suspend fun record(worker: Worker<*>, operation: suspend (Worker<*>) -> WorkState){
-        worker.stats.lastRunTime.set(DateTime.now())
-        worker.stats.totalRuns.incrementAndGet()
-        try {
-            val workState = operation(worker)
-            worker.stats.totalRunsPassed.incrementAndGet()
-            loop(worker, workState)
-        } catch (ex:Exception){
-            worker.stats.totalRunsFailed.incrementAndGet()
-            worker.stats.lasts.unexpected(Task.empty, Err.of(ex))
-        }
-    }
-
-
-    suspend fun start(id:Identity) : Outcome<Status> {
-        return perform("Starting", id) { worker ->
-            val result: Try<WorkState> = WorkRunner.start(worker)
-            when (result) {
-                is Success -> {
-                    loop(worker, result.value)
-                    Outcomes.success(worker.status())
+    suspend fun start(id:Identity)  {
+        perform("Starting", id) { worker ->
+            WorkRunner.record(worker) {
+                val result: Try<WorkState> = WorkRunner.attemptStart(worker, false)
+                val state = when (result) {
+                    is Success -> {
+                        val state = result.value
+                        loop(worker, state)
+                        worker.status()
+                    }
+                    is Failure -> {
+                        logger.error("Unable to start worker ${id.fullName}")
+                        Status.Failed
+                    }
                 }
-                is Failure -> {
-                    logger.error("Unable to start worker ${id.fullName}")
-                    Outcomes.errored(result.msg)
-                }
+            state
             }
         }
     }
@@ -58,7 +47,10 @@ class Workers(val channel:SendChannel<JobRequest>,
 
     suspend fun process(id:Identity) {
         perform("Processing", id) { worker ->
-            record(worker) { w -> w.work() }
+            WorkRunner.record(worker) {
+                val state = worker.work()
+                loop(worker, state)
+            }
             Outcomes.success(Status.Running)
         }
     }
@@ -85,7 +77,10 @@ class Workers(val channel:SendChannel<JobRequest>,
 
     suspend fun resume(id:Identity, reason:String?) {
         performPausableAction(Status.Running, id) { worker, pausable ->
-            record(worker) { pausable.resume(reason ?: "Resuming") }
+            WorkRunner.record(worker) {
+                val state = pausable.resume(reason ?: "Resuming")
+                loop(worker, state)
+            }
             Outcomes.success(Status.Running)
         }
     }
