@@ -25,7 +25,7 @@ class Workers(val channel:SendChannel<JobRequest>,
     }
 
 
-    suspend fun track(worker: Worker<*>, operation: suspend (Worker<*>) -> WorkState){
+    suspend fun record(worker: Worker<*>, operation: suspend (Worker<*>) -> WorkState){
         worker.stats.lastRunTime.set(DateTime.now())
         worker.stats.totalRuns.incrementAndGet()
         try {
@@ -57,47 +57,43 @@ class Workers(val channel:SendChannel<JobRequest>,
 
 
     suspend fun process(id:Identity) {
-        perform("Starting", id) { worker ->
-            track(worker) { w -> w.work() }
+        perform("Processing", id) { worker ->
+            record(worker) { w -> w.work() }
             Outcomes.success(Status.Running)
         }
     }
 
 
     suspend fun delay(id:Identity, seconds:Long) {
-        logger.info("Starting worker in $seconds second(s)")
+        logger.info("Delaying worker in $seconds second(s)")
         scheduler.schedule(DateTime.now().plusSeconds(seconds)) {
-            request(JobRequest.WorkRequest(JobAction.Start, id))
+            request(JobRequest.WorkRequest(JobAction.Start, id, 0,""))
         }
     }
 
 
-    suspend fun pause(id:Identity) {
-        performPausableAction("Pausing", id) { worker, pausable ->
-            worker.transition(Status.Paused)
-            pausable.pause("Paused")
+    suspend fun pause(id:Identity, reason:String?) {
+        performPausableAction(Status.Paused, id) { worker, pausable ->
+            pausable.pause(reason ?: "Paused")
             scheduler.schedule(DateTime.now().plusSeconds(pauseInSeconds)) {
-                request(JobRequest.WorkRequest(JobAction.Resume, worker.id))
+                request(JobRequest.WorkRequest(JobAction.Resume, worker.id, 0, ""))
             }
             Outcomes.success(Status.Paused)
         }
     }
 
 
-    suspend fun resume(id:Identity) {
-        performPausableAction("Resuming", id) { worker, pausable ->
-            worker.transition(Status.Running)
-            val workState = pausable.resume("Resuming")
-            loop(worker, workState)
+    suspend fun resume(id:Identity, reason:String?) {
+        performPausableAction(Status.Running, id) { worker, pausable ->
+            record(worker) { pausable.resume(reason ?: "Resuming") }
             Outcomes.success(Status.Running)
         }
     }
 
 
-    suspend fun stop(id:Identity) {
-        performPausableAction("Stopping", id) { worker, pausable ->
-            worker.transition(Status.Stopped)
-            pausable.stop("Stopped")
+    suspend fun stop(id:Identity, reason:String?) {
+        performPausableAction(Status.Stopped, id) { worker, pausable ->
+            pausable.stop(reason ?: "Stopped")
             Outcomes.success(Status.Stopped)
         }
     }
@@ -112,7 +108,7 @@ class Workers(val channel:SendChannel<JobRequest>,
                     worker.done()
                 }
                 is WorkState.More -> {
-                    request(JobRequest.WorkRequest(JobAction.Process, worker.id))
+                    request(JobRequest.WorkRequest(JobAction.Process, worker.id, 0, ""))
                 }
             }
             ""
@@ -139,14 +135,17 @@ class Workers(val channel:SendChannel<JobRequest>,
     }
 
 
-    private suspend fun performPausableAction(action:String, id:Identity, operation: suspend (Worker<*>, Pausable) -> Outcome<Status>):Outcome<Status> {
-        logger.info("$action worker")
+    private suspend fun performPausableAction(status: Status, id:Identity, operation: suspend (Worker<*>, Pausable) -> Outcome<Status>):Outcome<Status> {
+        logger.info("Transitioning worker to: $status")
         val worker = this[id]
         return when(worker) {
             null -> Outcomes.errored("Unable to find worker with id : ${id.name}")
             else -> {
                 when (worker) {
-                    is Pausable -> operation(worker, worker)
+                    is Pausable -> {
+                        worker.transition(status)
+                        operation(worker, worker)
+                    }
                     else -> Outcomes.errored("${worker.id.name} does not implement Pausable and can not handle a pause/stop/resume action")
                 }
             }

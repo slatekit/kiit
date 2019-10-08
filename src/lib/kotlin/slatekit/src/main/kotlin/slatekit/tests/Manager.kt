@@ -89,7 +89,7 @@ class JobManager {
     suspend fun process(jobMap:JobMap<Job>){
         val current = counter.get()
         if(current < LIMIT ) {
-            val job = getJob()
+            val job = createJob()
             GlobalScope.launch {
                 send(job, jobMap.channel, jobMap.worker)
                 println("Done sending job to worker ${jobMap.name}")
@@ -107,7 +107,7 @@ class JobManager {
     }
 
 
-    fun getJob():Job {
+    fun createJob():Job {
         val id = counter.incrementAndGet()
         val job = Job(id.toString(), Random.alpha6())
         return job

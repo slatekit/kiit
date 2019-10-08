@@ -2,7 +2,6 @@ package slatekit.jobs
 
 
 sealed class JobAction(val name:String) {
-    object NA      : JobAction( "NA"     )
     object Start   : JobAction( "Start"  )
     object Stop    : JobAction( "Stop"   )
     object Pause   : JobAction( "Pause"  )
