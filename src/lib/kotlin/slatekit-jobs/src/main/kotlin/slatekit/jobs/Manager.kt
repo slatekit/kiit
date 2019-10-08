@@ -1,5 +1,6 @@
 package slatekit.jobs
 
+import slatekit.common.Status
 import slatekit.common.ids.Identity
 
 interface Manager {
@@ -18,4 +19,9 @@ interface Manager {
      * Listens to incoming requests ( name of worker )
      */
     suspend fun manage()
+
+    /**
+     * logs/handle error state/condition
+     */
+    suspend fun error(currentStatus:Status, message:String)
 }

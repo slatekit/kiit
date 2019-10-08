@@ -1,10 +1,11 @@
 package slatekit.jobs
 
 import slatekit.common.Status
+import slatekit.common.StatusCheck
 import slatekit.common.ids.Identity
 import java.util.concurrent.atomic.AtomicReference
 
-interface Workable<T> {
+interface Workable<T> : StatusCheck {
 
     /**
      * Identity of this worker
@@ -16,12 +17,6 @@ interface Workable<T> {
      * Stats on this worker
      */
     val stats:WorkerStats
-
-
-    /**
-     * Current work status of this worker
-     */
-    fun status(): Status
 
 
     /**

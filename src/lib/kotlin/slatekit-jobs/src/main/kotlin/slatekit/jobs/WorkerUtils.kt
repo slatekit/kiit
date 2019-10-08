@@ -7,12 +7,11 @@ import slatekit.results.builders.Outcomes
 
 object WorkerUtils {
 
-    fun validate(worker: Workable<*>, action: JobAction): Boolean {
+    fun validate(action: JobAction, currState: Status): Boolean {
         val nextState = toState(action)
         return when(nextState) {
             null -> false
             else -> {
-                val currState = worker.status()
                 val isRunning = currState.value == Status.Running.value
                 when(action) {
                     is JobAction.Start   -> !isRunning
