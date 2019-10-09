@@ -7,14 +7,17 @@ import slatekit.common.Status
 import slatekit.common.StatusCheck
 import slatekit.common.ids.Identity
 import slatekit.common.log.Logger
+import slatekit.workers.slatekit.jobs.ChannelWorkLoop
 import java.util.concurrent.atomic.AtomicReference
 
 
-class JobManager(all: List<Worker<*>>, val scheduler: Scheduler, val logger: Logger) : Manager, StatusCheck{
-    private val channel = Channel<JobRequest>()
+class JobManager(all: List<Worker<*>>,
+                 val scheduler: Scheduler,
+                 val logger: Logger,
+                 private val channel:Channel<JobRequest> = Channel()) : Manager, StatusCheck{
 
     // TODO: Make settings configurable
-    private val workers = Workers(channel, all, logger, DefaultScheduler(), 30)
+    private val workers = Workers(all, ChannelWorkLoop(logger, channel), logger, DefaultScheduler(), 30)
     override val job = Job.Managed(all)
     private val _status = AtomicReference<Status>(Status.InActive)
 
@@ -29,7 +32,7 @@ class JobManager(all: List<Worker<*>>, val scheduler: Scheduler, val logger: Log
      * Requests an action on the entire job
      */
     override suspend fun request(action: JobAction) {
-        channel.send(JobRequest.TaskRequest(action))
+        request(JobRequest.TaskRequest(action))
     }
 
 
@@ -37,7 +40,15 @@ class JobManager(all: List<Worker<*>>, val scheduler: Scheduler, val logger: Log
      * Requests an action on a specific worker
      */
     override suspend fun request(action: JobAction, workerId: Identity, desc:String?) {
-        channel.send(JobRequest.WorkRequest(action, workerId, 0, desc))
+        request(JobRequest.work(action, workerId, 0L, desc))
+    }
+
+
+    /**
+     * Requests an action on a specific worker
+     */
+    override suspend fun request(request: JobRequest) {
+        channel.send(request)
     }
 
 
@@ -46,13 +57,18 @@ class JobManager(all: List<Worker<*>>, val scheduler: Scheduler, val logger: Log
      */
     override suspend fun manage(){
         for(request in channel){
-            when(request) {
-                // Affects the whole job/queue/workers
-                is JobRequest.TaskRequest -> manageJob(request)
+            manage(request)
+        }
+    }
 
-                // Affects just a specific worker
-                is JobRequest.WorkRequest -> manageWorker(request)
-            }
+
+    suspend fun manage(request: JobRequest){
+        when(request) {
+            // Affects the whole job/queue/workers
+            is JobRequest.TaskRequest -> manageJob(request, true)
+
+            // Affects just a specific worker
+            is JobRequest.WorkRequest -> manageWorker(request, true)
         }
     }
 
@@ -66,15 +82,15 @@ class JobManager(all: List<Worker<*>>, val scheduler: Scheduler, val logger: Log
     }
 
 
-    private suspend fun manageJob(request: JobRequest){
+    suspend fun manageJob(request: JobRequest, launch:Boolean){
         val action = request.action
         when(action) {
-            is JobAction.Start   -> start()
-            is JobAction.Stop    -> stop()
-            is JobAction.Resume  -> resume()
-            is JobAction.Process -> process()
-            is JobAction.Pause   -> pause(30)
-            is JobAction.Delay   -> delayed(30)
+            is JobAction.Start   -> start(launch)
+            is JobAction.Stop    -> stop(launch)
+            is JobAction.Resume  -> resume(launch)
+            is JobAction.Process -> process(launch)
+            is JobAction.Pause   -> pause(launch, 30)
+            is JobAction.Delay   -> delayed(launch, 30)
             else                 -> {
                 logger.info("Unexpected state: ${request.action}")
             }
@@ -82,16 +98,16 @@ class JobManager(all: List<Worker<*>>, val scheduler: Scheduler, val logger: Log
     }
 
 
-    private suspend fun manageWorker(request: JobRequest.WorkRequest){
+    suspend fun manageWorker(request: JobRequest.WorkRequest, launch:Boolean){
         val action = request.action
         val workerId = request.target
         when(action) {
-            is JobAction.Start   -> perform(action) { workers.start(workerId) }
-            is JobAction.Stop    -> perform(action) { workers.stop(workerId, request.desc) }
-            is JobAction.Pause   -> perform(action) { workers.pause(workerId, request.desc) }
-            is JobAction.Resume  -> perform(action) { workers.resume(workerId, request.desc) }
-            is JobAction.Process -> perform(action) { workers.process(workerId) }
-            is JobAction.Delay   -> perform(action) { workers.start(workerId) }
+            is JobAction.Start   -> perform(action, launch) { workers.start(workerId) }
+            is JobAction.Stop    -> perform(action, launch) { workers.stop(workerId, request.desc) }
+            is JobAction.Pause   -> perform(action, launch) { workers.pause(workerId, request.desc) }
+            is JobAction.Resume  -> perform(action, launch) { workers.resume(workerId, request.desc) }
+            is JobAction.Process -> perform(action, launch) { workers.process(workerId) }
+            is JobAction.Delay   -> perform(action, launch) { workers.start(workerId) }
             else                 -> {
                 logger.info("Unexpected state: ${request.action}")
             }
@@ -99,15 +115,15 @@ class JobManager(all: List<Worker<*>>, val scheduler: Scheduler, val logger: Log
     }
 
 
-    private suspend fun start()               = transitionWorkers(JobAction.Start  , Status.Running)
-    private suspend fun stop()                = transitionWorkers(JobAction.Stop   , Status.Stopped)
-    private suspend fun resume()              = transitionWorkers(JobAction.Resume , Status.Running)
-    private suspend fun process()             = transitionWorkers(JobAction.Process, Status.Running)
-    private suspend fun pause(seconds:Long)   = transitionWorkers(JobAction.Resume , Status.Paused, seconds)
-    private suspend fun delayed(seconds:Long) = transitionWorkers(JobAction.Start  , Status.Paused, seconds)
+    private suspend fun start(launch:Boolean)                 = transitionWorkers(JobAction.Start  , Status.Running, launch)
+    private suspend fun stop(launch:Boolean)                  = transitionWorkers(JobAction.Stop   , Status.Stopped, launch)
+    private suspend fun resume(launch:Boolean)                = transitionWorkers(JobAction.Resume , Status.Running, launch)
+    private suspend fun process(launch:Boolean)               = transitionWorkers(JobAction.Process, Status.Running, launch)
+    private suspend fun pause(launch:Boolean, seconds:Long)   = transitionWorkers(JobAction.Resume , Status.Paused, launch, seconds)
+    private suspend fun delayed(launch:Boolean, seconds:Long) = transitionWorkers(JobAction.Start  , Status.Paused, launch, seconds)
 
 
-    private suspend fun perform(action: JobAction, operation:suspend() -> Unit){
+    private suspend fun perform(action: JobAction, launch:Boolean, operation:suspend() -> Unit){
         // Check state transition
         val currState = status()
         if(!WorkerUtils.validate(action, currState)) {
@@ -115,21 +131,27 @@ class JobManager(all: List<Worker<*>>, val scheduler: Scheduler, val logger: Log
             error(currentStatus, "Can not handle work while job is $currentStatus")
         }
         else {
-            GlobalScope.launch {
+            if(launch) {
+                GlobalScope.launch {
+                    operation()
+                }
+            }
+            else {
                 operation()
             }
         }
     }
 
 
-    private suspend fun transitionWorkers(action:JobAction, newStatus:Status, seconds:Long = 0) {
-        perform(action) {
+    private suspend fun transitionWorkers(action:JobAction, newStatus:Status, launch:Boolean, seconds:Long = 0) {
+        perform(action, launch) {
             _status.set(newStatus)
             workers.workers.forEach {
                 if (newStatus == Status.Paused) {
                     workers.delay(it.id, seconds)
                 } else {
-                    channel.send(JobRequest.WorkRequest(action, it.id, seconds, ""))
+                    val req = JobRequest.WorkRequest(action, it.id, seconds, "")
+                    channel.send(req)
                 }
             }
         }

@@ -16,6 +16,11 @@ interface Manager {
     suspend fun request(action: JobAction, workerId: Identity, desc:String?)
 
     /**
+     * Requests an action to manage a job/worker
+     */
+    suspend fun request(request: JobRequest)
+
+    /**
      * Listens to incoming requests ( name of worker )
      */
     suspend fun manage()
