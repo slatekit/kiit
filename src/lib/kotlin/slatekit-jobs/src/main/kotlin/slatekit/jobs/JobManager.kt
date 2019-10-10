@@ -2,6 +2,7 @@ package slatekit.jobs
 
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
 import slatekit.common.Status
 import slatekit.common.StatusCheck
 import slatekit.common.ids.Identity
@@ -15,7 +16,7 @@ class JobManager(all: List<Worker<*>>,
                  val logger: Logger) : Manager, StatusCheck{
 
     // TODO: Make settings configurable
-    private val workers = Workers(all, coordinator, DefaultScheduler(), logger, 30)
+    val workers = Workers(all, coordinator, DefaultScheduler(), logger, 30)
     override val job = Job.Managed(all)
     private val _status = AtomicReference<Status>(Status.InActive)
 
@@ -55,7 +56,11 @@ class JobManager(all: List<Worker<*>>,
      */
     override suspend fun respond() {
         val request = coordinator.respondOne()
-        request?.let { manage(it) }
+        request?.let {
+            runBlocking {
+                manage(request, false)
+            }
+        }
     }
 
 
@@ -64,18 +69,18 @@ class JobManager(all: List<Worker<*>>,
      */
     override suspend fun manage(){
         coordinator.respond { request ->
-            manage(request)
+            manage(request, true)
         }
     }
 
 
-    suspend fun manage(request: JobRequest){
+    suspend fun manage(request: JobRequest, launch:Boolean = true){
         when(request) {
             // Affects the whole job/queue/workers
-            is JobRequest.TaskRequest -> manageJob(request, true)
+            is JobRequest.TaskRequest -> manageJob(request, launch)
 
             // Affects just a specific worker
-            is JobRequest.WorkRequest -> manageWorker(request, true)
+            is JobRequest.WorkRequest -> manageWorker(request, launch)
         }
     }
 
@@ -108,15 +113,23 @@ class JobManager(all: List<Worker<*>>,
     suspend fun manageWorker(request: JobRequest.WorkRequest, launch:Boolean){
         val action = request.action
         val workerId = request.target
-        when(action) {
-            is JobAction.Start   -> perform(action, launch) { workers.start(workerId) }
-            is JobAction.Stop    -> perform(action, launch) { workers.stop(workerId, request.desc) }
-            is JobAction.Pause   -> perform(action, launch) { workers.pause(workerId, request.desc) }
-            is JobAction.Resume  -> perform(action, launch) { workers.resume(workerId, request.desc) }
-            is JobAction.Process -> perform(action, launch) { workers.process(workerId) }
-            is JobAction.Delay   -> perform(action, launch) { workers.start(workerId) }
-            else                 -> {
-                logger.info("Unexpected state: ${request.action}")
+        val context = workers.get(workerId)
+        when(context) {
+            null -> { }
+            else -> {
+                val worker = context.worker
+                val status = worker.status()
+                when(action) {
+                    is JobAction.Start   -> perform(action, status, launch) { workers.start(workerId) }
+                    is JobAction.Stop    -> perform(action, status, launch) { workers.stop(workerId, request.desc) }
+                    is JobAction.Pause   -> perform(action, status, launch) { workers.pause(workerId, request.desc) }
+                    is JobAction.Resume  -> perform(action, status, launch) { workers.resume(workerId, request.desc) }
+                    is JobAction.Process -> perform(action, status, launch) { workers.process(workerId) }
+                    is JobAction.Delay   -> perform(action, status, launch) { workers.start(workerId) }
+                    else                 -> {
+                        logger.info("Unexpected state: ${request.action}")
+                    }
+                }
             }
         }
     }
@@ -130,10 +143,9 @@ class JobManager(all: List<Worker<*>>,
     private suspend fun delayed(launch:Boolean, seconds:Long) = transitionWorkers(JobAction.Start  , Status.Paused, launch, seconds)
 
 
-    private suspend fun perform(action: JobAction, launch:Boolean, operation:suspend() -> Unit){
+    private suspend fun perform(action: JobAction, currentState:Status, launch:Boolean, operation:suspend() -> Unit){
         // Check state transition
-        val currState = status()
-        if(!JobUtils.validate(action, currState)) {
+        if(!JobUtils.validate(action, currentState)) {
             val currentStatus = status()
             error(currentStatus, "Can not handle work while job is $currentStatus")
         }
@@ -151,7 +163,7 @@ class JobManager(all: List<Worker<*>>,
 
 
     private suspend fun transitionWorkers(action:JobAction, newStatus:Status, launch:Boolean, seconds:Long = 0) {
-        perform(action, launch) {
+        perform(action, status(), launch) {
             _status.set(newStatus)
             workers.workers.forEach {
                 if (newStatus == Status.Paused) {
