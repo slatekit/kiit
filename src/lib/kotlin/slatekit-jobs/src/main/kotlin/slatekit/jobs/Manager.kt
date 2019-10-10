@@ -5,6 +5,7 @@ import slatekit.common.ids.Identity
 
 interface Manager {
     val job: Job.Managed
+
     /**
      * Requests an action on the entire job
      */
@@ -21,7 +22,12 @@ interface Manager {
     suspend fun request(request: JobRequest)
 
     /**
-     * Listens to incoming requests ( name of worker )
+     * Listens to and handles 1 request
+     */
+    suspend fun respond()
+
+    /**
+     * Listens to and handles all incoming requests
      */
     suspend fun manage()
 

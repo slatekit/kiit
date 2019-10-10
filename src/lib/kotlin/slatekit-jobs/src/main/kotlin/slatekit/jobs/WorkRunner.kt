@@ -1,8 +1,6 @@
 package slatekit.jobs
 
-import slatekit.common.DateTime
 import slatekit.common.Status
-import slatekit.common.Track
 import slatekit.results.*
 import slatekit.results.builders.Outcomes
 import slatekit.results.builders.Tries
@@ -10,7 +8,7 @@ import slatekit.results.builders.Tries
 object WorkRunner {
 
     /**
-     * Runs this worker with life-cycle hooks and automatic transitioning to proper state
+     * Calls this worker with life-cycle hooks and automatic transitioning to proper state
      */
     fun <T> run(worker: Worker<T>): Try<Status> {
         val result = Tries.attempt {
@@ -103,16 +101,16 @@ object WorkRunner {
 
 
 
-    suspend fun <T> record(worker: Worker<*>, operation: suspend (Worker<*>) -> T):Outcome<T> {
-        worker.stats.lastRunTime.set(DateTime.now())
-        worker.stats.totalRuns.incrementAndGet()
+    suspend fun <T> record(context:WorkerContext, operation: suspend (Worker<*>) -> T):Outcome<T> {
+        val worker:Worker<*> = context.worker
+        val runs = context.runs
+        runs.inc()
         return try {
             val result = operation(worker)
-            worker.stats.totalRunsPassed.incrementAndGet()
+            runs.passed()
             Outcomes.success(result)
         } catch (ex:Exception){
-            worker.stats.totalRunsFailed.incrementAndGet()
-            worker.stats.lasts.unexpected(Task.empty, Err.of(ex))
+            runs.failed(ex)
             Outcomes.errored(ex)
         }
     }

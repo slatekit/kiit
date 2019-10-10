@@ -45,47 +45,6 @@ class Worker_Core_Tests {
 
 
     @Test
-    fun can_ensure_not_started() {
-        assertState( {  }, Status.InActive, false)
-    }
-
-
-    @Test
-    fun can_change_state_to_running_on_start() {
-        assertState( { it.start() }, Status.Running)
-    }
-
-    @Test
-    fun can_change_state_to_started() {
-        assertState( { it.transition(Status.Idle) }, Status.Idle)
-    }
-
-
-    @Test
-    fun can_change_state_to_working() {
-        assertState( { it.transition(Status.Running) }, Status.Running)
-    }
-
-
-    @Test
-    fun can_change_state_to_paused() {
-        assertState( { it.pause() }, Status.Paused)
-    }
-
-
-    @Test
-    fun can_change_state_to_stopped() {
-        assertState( { it.stop() }, Status.Stopped)
-    }
-
-
-    @Test
-    fun can_change_state_to_completed() {
-        assertState( { it.complete() }, Status.Complete)
-    }
-
-
-    @Test
     fun can_work_once() {
         val worker = MyWorker(0)
         val result = worker.perform(Job.empty)
@@ -100,15 +59,6 @@ class Worker_Core_Tests {
         worker.perform(Job.empty)
         val result = worker.perform(Job.empty)
         assertResult(result, 3, Codes.SUCCESS.code, "odd")
-    }
-
-
-    fun assertState(callback:(MyWorker) -> Unit, state: Status, enableNotification:Boolean = true) {
-        // Test
-        val worker = MyWorker()
-        callback(worker)
-        val actual = worker.status()
-        Assert.assertEquals(actual, state)
     }
 
 

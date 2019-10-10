@@ -5,7 +5,7 @@ import slatekit.results.Outcome
 import slatekit.results.builders.Outcomes
 
 
-object WorkerUtils {
+object JobUtils {
 
     fun validate(action: JobAction, currState: Status): Boolean {
         val nextState = toState(action)
@@ -41,13 +41,4 @@ object WorkerUtils {
             else                  -> null
         }
     }
-
-
-    suspend fun handlePausable(worker: Workable<*>, operation: suspend (Workable<*>, Outcome<Pausable>) -> Unit ) {
-        when (worker) {
-            is Pausable -> operation(worker, Outcomes.success(worker))
-            else -> operation(worker, Outcomes.errored("Job ${worker.id.name} does not implement Pausable and can not handle a pause/stop/resume action"))
-        }
-    }
-
 }

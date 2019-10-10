@@ -1,23 +1,21 @@
 package slatekit.jobs
 
 import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.launch
 import slatekit.common.Status
 import slatekit.common.StatusCheck
 import slatekit.common.ids.Identity
 import slatekit.common.log.Logger
-import slatekit.workers.slatekit.jobs.ChannelWorkLoop
 import java.util.concurrent.atomic.AtomicReference
 
 
 class JobManager(all: List<Worker<*>>,
+                 val coordinator: Coordinator,
                  val scheduler: Scheduler,
-                 val logger: Logger,
-                 private val channel:Channel<JobRequest> = Channel()) : Manager, StatusCheck{
+                 val logger: Logger) : Manager, StatusCheck{
 
     // TODO: Make settings configurable
-    private val workers = Workers(all, ChannelWorkLoop(logger, channel), logger, DefaultScheduler(), 30)
+    private val workers = Workers(all, coordinator, DefaultScheduler(), logger, 30)
     override val job = Job.Managed(all)
     private val _status = AtomicReference<Status>(Status.InActive)
 
@@ -48,7 +46,16 @@ class JobManager(all: List<Worker<*>>,
      * Requests an action on a specific worker
      */
     override suspend fun request(request: JobRequest) {
-        channel.send(request)
+        coordinator.request(request)
+    }
+
+
+    /**
+     * Listens to and handles 1 single request
+     */
+    override suspend fun respond() {
+        val request = coordinator.respondOne()
+        request?.let { manage(it) }
     }
 
 
@@ -56,7 +63,7 @@ class JobManager(all: List<Worker<*>>,
      * Listens to incoming requests ( name of worker )
      */
     override suspend fun manage(){
-        for(request in channel){
+        coordinator.respond { request ->
             manage(request)
         }
     }
@@ -126,7 +133,7 @@ class JobManager(all: List<Worker<*>>,
     private suspend fun perform(action: JobAction, launch:Boolean, operation:suspend() -> Unit){
         // Check state transition
         val currState = status()
-        if(!WorkerUtils.validate(action, currState)) {
+        if(!JobUtils.validate(action, currState)) {
             val currentStatus = status()
             error(currentStatus, "Can not handle work while job is $currentStatus")
         }
@@ -151,7 +158,7 @@ class JobManager(all: List<Worker<*>>,
                     workers.delay(it.id, seconds)
                 } else {
                     val req = JobRequest.WorkRequest(action, it.id, seconds, "")
-                    channel.send(req)
+                    coordinator.request(req)
                 }
             }
         }

@@ -3,78 +3,134 @@ package test.jobs
 import kotlinx.coroutines.runBlocking
 import org.junit.Assert
 import org.junit.Test
-import slatekit.jobs.WorkRunner
+import slatekit.common.Status
+import slatekit.common.ids.Identity
+import slatekit.common.log.LoggerConsole
+import slatekit.jobs.JobAction
+import slatekit.jobs.JobRequest
+import slatekit.jobs.WorkerContext
+import slatekit.jobs.Workers
 
 
 class Workers_Tests {
 
     @Test
-    fun can_ensure_no_runs() {
-        val worker = OneTimeWorker(0, 10)
-        Assert.assertEquals(worker.stats.hasRun, false)
-        Assert.assertNull(worker.stats.lastRunTime.get())
-        Assert.assertEquals(worker.stats.totalRuns.get(), 0)
-        Assert.assertEquals(worker.stats.totalRunsPassed.get(), 0)
-        Assert.assertEquals(worker.stats.totalRunsFailed.get(), 0)
+    fun can_start() {
+        val workers = build()
+        val worker = workers.workers.first()
+        runBlocking {
+            workers.start(worker.id)
+            ensure(workers,true, 1, 1, 0, worker.id, Status.Running, 1, JobAction.Process, 0)
+        }
     }
 
 
     @Test
-    fun can_record_single_success() {
-        val worker = OneTimeWorker(0, 10)
+    fun can_pause() {
+        val workers = build()
+        val worker = workers.workers.first()
         runBlocking {
-            WorkRunner.record(worker, { })
+            workers.start(worker.id)
+            ensure(workers,true, 1, 1, 0, worker.id, Status.Running, 1, JobAction.Process, 0)
+            workers.pause(worker.id, "test pause")
+            ensure(workers,true, 1, 1, 0, worker.id, Status.Paused, 2, JobAction.Resume, 0)
         }
-        Assert.assertEquals(worker.stats.hasRun, true)
-        Assert.assertNotNull(worker.stats.lastRunTime.get())
-        Assert.assertEquals(worker.stats.totalRuns.get(), 1)
-        Assert.assertEquals(worker.stats.totalRunsPassed.get(), 1)
-        Assert.assertEquals(worker.stats.totalRunsFailed.get(), 0)
     }
 
 
     @Test
-    fun can_record_single_failure() {
-        val worker = OneTimeWorker(0, 10)
+    fun can_stop() {
+        val workers = build()
+        val worker = workers.workers.first()
         runBlocking {
-            WorkRunner.record(worker, { throw Exception("testing") })
+            workers.start(worker.id)
+            ensure(workers,true, 1, 1, 0, worker.id, Status.Running, 1, JobAction.Process, 0)
+            workers.stop(worker.id, "test stop")
+            ensure(workers,true, 1, 1, 0, worker.id, Status.Stopped, 1,null, 0)
         }
-        Assert.assertEquals(worker.stats.hasRun, true)
-        Assert.assertNotNull(worker.stats.lastRunTime.get())
-        Assert.assertEquals(worker.stats.totalRuns.get(), 1)
-        Assert.assertEquals(worker.stats.totalRunsPassed.get(), 0)
-        Assert.assertEquals(worker.stats.totalRunsFailed.get(), 1)
     }
 
 
     @Test
-    fun can_ensure_multiple_runs() {
-        val worker = OneTimeWorker(0, 10)
-        val count =  3L
+    fun can_resume() {
+        val workers = build()
+        val worker = workers.workers.first()
         runBlocking {
-            (0 until count).forEach {  WorkRunner.record(worker, { }) }
+            workers.start(worker.id)
+            ensure(workers,true, 1, 1, 0, worker.id, Status.Running, 1, JobAction.Process, 0)
+            workers.pause(worker.id, "test pause")
+            ensure(workers,true, 1, 1, 0, worker.id, Status.Paused, 2, JobAction.Resume, 0)
+            workers.resume(worker.id, "test resume")
+            ensure(workers,true, 2, 2, 0, worker.id, Status.Running, 3, JobAction.Process, 0)
         }
-        Assert.assertEquals(worker.stats.hasRun, true)
-        Assert.assertNotNull(worker.stats.lastRunTime.get())
-        Assert.assertEquals(worker.stats.totalRuns.get(), count)
-        Assert.assertEquals(worker.stats.totalRunsPassed.get(), count)
-        Assert.assertEquals(worker.stats.totalRunsFailed.get(), 0)
     }
 
 
     @Test
-    fun can_ensure_multiple_success_failures() {
-        val worker = OneTimeWorker(0, 10)
-        val successes =  3L
-        val failures =  3L
+    fun can_process() {
+        val workers = build()
+        val worker = workers.workers.first()
         runBlocking {
-            (0 until successes).forEach {  WorkRunner.record(worker, { }) }
-            (0 until failures).forEach {  WorkRunner.record(worker, { throw Exception("testing") }) }
+            workers.start(worker.id)
+            ensure(workers,true, 1, 1, 0, worker.id, Status.Running, 1, JobAction.Process, 0)
+            workers.process(worker.id)
+            ensure(workers,true, 2, 2, 0, worker.id, Status.Running, 2, JobAction.Process, 0)
         }
-        Assert.assertEquals(worker.stats.hasRun, true)
-        Assert.assertNotNull(worker.stats.lastRunTime.get())
-        Assert.assertEquals(worker.stats.totalRuns.get(), successes + failures)
-        Assert.assertEquals(worker.stats.totalRunsPassed.get(), successes)
-        Assert.assertEquals(worker.stats.totalRunsFailed.get(), failures)
+    }
+
+
+    @Test
+    fun can_complete() {
+        val workers = build()
+        val worker = workers.workers.first()
+        runBlocking {
+            workers.start(worker.id)
+            ensure(workers,true, 1, 1, 0, worker.id, Status.Running, 1, JobAction.Process, 0)
+            (1 .. 4).forEach {
+                workers.process(worker.id)
+            }
+            ensure(workers, true, 5, 5, 0, worker.id, Status.Complete, 4, JobAction.Process, 0)
+        }
+    }
+
+
+    private fun ensure(workers:Workers, hasRun:Boolean, totalRuns:Long, totalPassed:Long, totalFailed:Long, id: Identity,
+                       status: Status, requestCount:Int, action: JobAction?, seconds:Long){
+        val context:WorkerContext = workers.get(id)!!
+        val runs = context.runs
+        val worker = context.worker
+
+        // Status
+        Assert.assertEquals(worker.status(), status)
+
+        // Calls
+        Assert.assertEquals(runs.hasRun(), hasRun)
+        when(hasRun){
+            true  -> Assert.assertNotNull  (runs.lastTime())
+            false -> Assert.assertNull  (runs.lastTime())
+        }
+        Assert.assertEquals(runs.totalRuns(), totalRuns)
+        Assert.assertEquals(runs.totalPassed(), totalPassed)
+        Assert.assertEquals(runs.totalFailed(), totalFailed)
+
+        // Request count
+        val coordinator = workers.coordinator as MockCoordinator
+        Assert.assertEquals(coordinator.requests.count(), requestCount)
+
+        // Next request
+        if(action != null) {
+            val req = coordinator.requests.last() as JobRequest.WorkRequest
+            Assert.assertEquals(req.target, id)
+            Assert.assertEquals(req.action, action)
+            Assert.assertEquals(req.seconds, seconds)
+        }
+    }
+
+
+    private fun build(): Workers {
+        val worker = PagedWorker(0, 5, 2)
+        val logger = LoggerConsole()
+        val workers = Workers(listOf(worker), MockCoordinator(logger), MockScheduler(), logger,20)
+        return workers
     }
 }

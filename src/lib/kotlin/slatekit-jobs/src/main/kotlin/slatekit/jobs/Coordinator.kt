@@ -1,4 +1,4 @@
-package slatekit.workers.slatekit.jobs
+package slatekit.jobs
 
 import kotlinx.coroutines.channels.Channel
 import slatekit.common.Status
@@ -12,7 +12,7 @@ import slatekit.results.Success
 import slatekit.results.builders.Tries
 
 
-interface WorkLoop {
+interface Coordinator {
     val logger:Logger
 
     suspend fun loop(worker: Workable<*>, state: WorkState) {
@@ -41,13 +41,31 @@ interface WorkLoop {
 
 
     suspend fun request(jobRequest: JobRequest)
+
+
+    suspend fun respondOne():JobRequest?
+
+
+    suspend fun respond(operation:suspend (JobRequest) -> Unit )
 }
 
 
 
-class ChannelWorkLoop(override val logger: Logger, val channel: Channel<JobRequest>) : WorkLoop {
+class ChannelCoordinator(override val logger: Logger, val channel: Channel<JobRequest>) : Coordinator {
 
     override suspend fun request(request: JobRequest){
         channel.send(request)
+    }
+
+
+    override suspend fun respondOne(): JobRequest? {
+        return channel.receive()
+    }
+
+
+    override suspend fun respond(operation:suspend (JobRequest) -> Unit ) {
+        for(request in channel){
+            operation(request)
+        }
     }
 }
