@@ -17,6 +17,7 @@ object JobUtils {
                     is JobAction.Start   -> !isRunning
                     is JobAction.Process -> isRunning
                     is JobAction.Control -> isRunning
+                    is JobAction.Resume  -> true
                     else -> {
                         // No reason to:
                         // 1. Pause if already "Paused"

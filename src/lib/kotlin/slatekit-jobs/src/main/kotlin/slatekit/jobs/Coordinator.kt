@@ -3,10 +3,6 @@ package slatekit.jobs
 import kotlinx.coroutines.channels.Channel
 import slatekit.common.Status
 import slatekit.common.log.Logger
-import slatekit.jobs.JobAction
-import slatekit.jobs.JobRequest
-import slatekit.jobs.WorkState
-import slatekit.jobs.Workable
 import slatekit.results.Failure
 import slatekit.results.Success
 import slatekit.results.builders.Tries
@@ -14,6 +10,7 @@ import slatekit.results.builders.Tries
 
 interface Coordinator {
     val logger:Logger
+    val ids:JobId
 
     suspend fun loop(worker: Workable<*>, state: WorkState) {
         val result = Tries.attempt {
@@ -24,15 +21,15 @@ interface Coordinator {
                     worker.done()
                 }
                 is WorkState.More -> {
-                    request(JobRequest.WorkRequest(JobAction.Process, worker.id, 0, ""))
+                    val id = ids.nextId()
+                    val uuid = ids.nextUUID()
+                    request(JobRequest.WorkRequest(id, uuid.toString(), JobAction.Process, worker.id, 0, ""))
                 }
             }
             ""
         }
         when (result) {
-            is Success -> {
-                println("ok")
-            }
+            is Success -> {  }
             is Failure -> {
                 logger.error("Error while looping on : ${worker.id.fullName}")
             }
@@ -51,7 +48,7 @@ interface Coordinator {
 
 
 
-class ChannelCoordinator(override val logger: Logger, val channel: Channel<JobRequest>) : Coordinator {
+class ChannelCoordinator(override val logger: Logger, override val ids:JobId, val channel: Channel<JobRequest>) : Coordinator {
 
     override suspend fun request(request: JobRequest){
         channel.send(request)

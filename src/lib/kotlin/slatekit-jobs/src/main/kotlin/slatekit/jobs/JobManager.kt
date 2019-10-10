@@ -6,6 +6,7 @@ import kotlinx.coroutines.runBlocking
 import slatekit.common.Status
 import slatekit.common.StatusCheck
 import slatekit.common.ids.Identity
+import slatekit.common.log.Info
 import slatekit.common.log.Logger
 import java.util.concurrent.atomic.AtomicReference
 
@@ -13,10 +14,12 @@ import java.util.concurrent.atomic.AtomicReference
 class JobManager(all: List<Worker<*>>,
                  val coordinator: Coordinator,
                  val scheduler: Scheduler,
-                 val logger: Logger) : Manager, StatusCheck{
+                 val logger: Logger,
+                 val ids:JobId = JobId()) : Manager, StatusCheck{
 
     // TODO: Make settings configurable
-    val workers = Workers(all, coordinator, DefaultScheduler(), logger, 30)
+    val workers = Workers(all, coordinator, DefaultScheduler(), logger, ids, 30)
+    val id = workers.all.first().id
     override val job = Job.Managed(all)
     private val _status = AtomicReference<Status>(Status.InActive)
 
@@ -31,7 +34,10 @@ class JobManager(all: List<Worker<*>>,
      * Requests an action on the entire job
      */
     override suspend fun request(action: JobAction) {
-        request(JobRequest.TaskRequest(action))
+        val id = ids.nextId()
+        val uuid = ids.nextUUID()
+        val req = JobRequest.TaskRequest(id, uuid.toString(), action)
+        request(req)
     }
 
 
@@ -39,7 +45,10 @@ class JobManager(all: List<Worker<*>>,
      * Requests an action on a specific worker
      */
     override suspend fun request(action: JobAction, workerId: Identity, desc:String?) {
-        request(JobRequest.work(action, workerId, 0L, desc))
+        val id = ids.nextId()
+        val uuid = ids.nextUUID()
+        val req = JobRequest.WorkRequest(id, uuid.toString(), action, workerId, 30, desc)
+        request(req)
     }
 
 
@@ -77,10 +86,16 @@ class JobManager(all: List<Worker<*>>,
     suspend fun manage(request: JobRequest, launch:Boolean = true){
         when(request) {
             // Affects the whole job/queue/workers
-            is JobRequest.TaskRequest -> manageJob(request, launch)
+            is JobRequest.TaskRequest -> {
+                logger.log(Info, "Job: request - ", listOf("type" to "job", "id" to request.id.toString(), "uuid" to request.uuid.toString(), "action" to request.action.name), null)
+                manageJob(request, launch)
+            }
 
             // Affects just a specific worker
-            is JobRequest.WorkRequest -> manageWorker(request, launch)
+            is JobRequest.WorkRequest -> {
+                logger.log(Info, "Job: request - ", listOf("type" to "wrk", "id" to request.id.toString(), "uuid" to request.uuid.toString(), "action" to request.action.name), null)
+                manageWorker(request, launch)
+            }
         }
     }
 
@@ -89,7 +104,7 @@ class JobManager(all: List<Worker<*>>,
      * logs/handle error state/condition
      */
     override suspend fun error(currentStatus:Status, message:String) {
-        val id = workers.workers.first()
+        val id = workers.all.first()
         logger.error("Error with job ${id.id.name}: $message")
     }
 
@@ -162,14 +177,20 @@ class JobManager(all: List<Worker<*>>,
     }
 
 
+    private val nameKey = "name" to this.id.name
     private suspend fun transitionWorkers(action:JobAction, newStatus:Status, launch:Boolean, seconds:Long = 0) {
         perform(action, status(), launch) {
+            logger.log(Info, "Job:", listOf(nameKey, "transition" to newStatus.name))
             _status.set(newStatus)
-            workers.workers.forEach {
+
+            workers.all.forEach {
                 if (newStatus == Status.Paused) {
                     workers.delay(it.id, seconds)
                 } else {
-                    val req = JobRequest.WorkRequest(action, it.id, seconds, "")
+                    val id = ids.nextId()
+                    val uuid = ids.nextUUID()
+                    val req = JobRequest.WorkRequest(id, uuid.toString(), action, it.id, seconds, "")
+                    logger.log(Info, "Job:", listOf(nameKey, "target" to req.target.fullName, "action" to req.action.name))
                     coordinator.request(req)
                 }
             }

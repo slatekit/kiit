@@ -135,6 +135,16 @@ interface LogSupport {
         logger?.let { l -> l.log(level, msg, ex) }
     }
 
+    /**
+     * Logs key/value pairs
+     */
+    @Ignore
+    fun log(level: LogLevel, msg: String, pairs:List<Pair<String,String>>, ex:Exception? = null) {
+        val info = pairs.joinToString { it -> it.first + "=" + it.second }
+        logger?.let { l -> l.log(level, msg + " " + info, ex) }
+    }
+
+
     @Ignore
     fun log(level: LogLevel, callback: () -> String, ex: Exception?) {
         logger?.let { l -> l.log(level, callback, ex) }

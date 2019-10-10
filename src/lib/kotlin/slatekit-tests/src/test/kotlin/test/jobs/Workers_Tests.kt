@@ -6,10 +6,7 @@ import org.junit.Test
 import slatekit.common.Status
 import slatekit.common.ids.Identity
 import slatekit.common.log.LoggerConsole
-import slatekit.jobs.JobAction
-import slatekit.jobs.JobRequest
-import slatekit.jobs.WorkerContext
-import slatekit.jobs.Workers
+import slatekit.jobs.*
 
 
 class Workers_Tests {
@@ -17,7 +14,7 @@ class Workers_Tests {
     @Test
     fun can_start() {
         val workers = build()
-        val worker = workers.workers.first()
+        val worker = workers.all.first()
         runBlocking {
             workers.start(worker.id)
             ensure(workers,true, 1, 1, 0, worker.id, Status.Running, 1, JobAction.Process, 0)
@@ -28,7 +25,7 @@ class Workers_Tests {
     @Test
     fun can_pause() {
         val workers = build()
-        val worker = workers.workers.first()
+        val worker = workers.all.first()
         runBlocking {
             workers.start(worker.id)
             ensure(workers,true, 1, 1, 0, worker.id, Status.Running, 1, JobAction.Process, 0)
@@ -41,7 +38,7 @@ class Workers_Tests {
     @Test
     fun can_stop() {
         val workers = build()
-        val worker = workers.workers.first()
+        val worker = workers.all.first()
         runBlocking {
             workers.start(worker.id)
             ensure(workers,true, 1, 1, 0, worker.id, Status.Running, 1, JobAction.Process, 0)
@@ -54,7 +51,7 @@ class Workers_Tests {
     @Test
     fun can_resume() {
         val workers = build()
-        val worker = workers.workers.first()
+        val worker = workers.all.first()
         runBlocking {
             workers.start(worker.id)
             ensure(workers,true, 1, 1, 0, worker.id, Status.Running, 1, JobAction.Process, 0)
@@ -69,7 +66,7 @@ class Workers_Tests {
     @Test
     fun can_process() {
         val workers = build()
-        val worker = workers.workers.first()
+        val worker = workers.all.first()
         runBlocking {
             workers.start(worker.id)
             ensure(workers,true, 1, 1, 0, worker.id, Status.Running, 1, JobAction.Process, 0)
@@ -82,7 +79,7 @@ class Workers_Tests {
     @Test
     fun can_complete() {
         val workers = build()
-        val worker = workers.workers.first()
+        val worker = workers.all.first()
         runBlocking {
             workers.start(worker.id)
             ensure(workers,true, 1, 1, 0, worker.id, Status.Running, 1, JobAction.Process, 0)
@@ -130,7 +127,8 @@ class Workers_Tests {
     private fun build(): Workers {
         val worker = PagedWorker(0, 5, 2)
         val logger = LoggerConsole()
-        val workers = Workers(listOf(worker), MockCoordinator(logger), MockScheduler(), logger,20)
+        val ids = JobId()
+        val workers = Workers(listOf(worker), MockCoordinator(logger, ids), MockScheduler(), logger,ids, 20)
         return workers
     }
 }
