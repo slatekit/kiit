@@ -15,8 +15,10 @@ class Manager_Tests {
     @Test
     fun can_start_job() {
         run(JobAction.Start) {
-            val worker = it.workers.all.first()
-            ensure(it.workers, true, 1, 1, 0, worker.id, Status.Running, 2, JobAction.Process, 0)
+            runBlocking {
+                val worker = it.workers.all.first()
+                ensure(it.workers, false, 0, 0, 0, worker.id, Status.InActive, 2, JobAction.Start, 0)
+            }
         }
     }
 
@@ -25,9 +27,9 @@ class Manager_Tests {
     fun can_process_job() {
         val manager = run(JobAction.Start)
         runBlocking {
-            manager.respond() // Process 2nd time
+            manager.respond() // Start worker
             val worker = manager.workers.all.first()
-            ensure(manager.workers, true, 2, 2, 0, worker.id, Status.Running, 3, JobAction.Process, 0)
+            ensure(manager.workers, true, 1, 1, 0, worker.id, Status.Running, 3, JobAction.Process, 0)
         }
     }
 
@@ -37,30 +39,47 @@ class Manager_Tests {
         val manager = run(JobAction.Start)
         runBlocking {
             manager.request(JobAction.Pause)
+            manager.respond() // Start worker
+            manager.respond() // Job pause
             manager.respond() // Process 2nd time
-            manager.respond() // Request job.pause
-            //manager.respond() // Process worker.pause
+            manager.respond() // Wrk pause
+            (manager.coordinator as MockCoordinatorWithChannel).resume()
             val worker = manager.workers.all.first()
-            ensure(manager.workers, true, 2, 2, 0, worker.id, Status.Paused, 5, JobAction.Resume, 0)
+            ensure(manager.workers, true, 2, 2, 0, worker.id, Status.Paused, 7, JobAction.Resume, 0)
         }
     }
 
 
     @Test
     fun can_stop_job() {
-        run(JobAction.Start)
-        run(JobAction.Pause) {
-            val worker = it.workers.all.first()
-            ensure(it.workers, true, 1, 1, 0, worker.id, Status.Paused, 2, JobAction.Resume, 0)
+        val manager = run(JobAction.Start)
+        runBlocking {
+            manager.request(JobAction.Stop)
+            manager.respond() // Start worker
+            manager.respond() // Job stop
+            manager.respond() // Process 2nd time
+            manager.respond() // Wrk stop
+            (manager.coordinator as MockCoordinatorWithChannel).resume()
+            val worker = manager.workers.all.first()
+            ensure(manager.workers, true, 2, 2, 0, worker.id, Status.Stopped, 6, JobAction.Process, 0)
         }
     }
 
 
     @Test
     fun can_resume_job() {
-        run(JobAction.Start) {
-            val worker = it.workers.all.first()
-            ensure(it.workers, true, 1, 1, 0, worker.id, Status.Running, 2, JobAction.Process, 0)
+        val manager = run(JobAction.Start)
+        runBlocking {
+            manager.request(JobAction.Pause)
+            manager.respond() // Start worker
+            manager.respond() // Job stop
+            manager.respond() // Process 2nd time
+            manager.respond() // Wrk pause
+            (manager.coordinator as MockCoordinatorWithChannel).resume()
+            manager.respond()
+            manager.respond()
+            val worker = manager.workers.all.first()
+            ensure(manager.workers, true, 3, 3, 0, worker.id, Status.Running, 8, JobAction.Process, 0)
         }
     }
 
@@ -96,25 +115,25 @@ class Manager_Tests {
         Assert.assertEquals(status, worker.status())
 
         // Calls
-        Assert.assertEquals(runs.hasRun(), hasRun)
+        Assert.assertEquals(hasRun, runs.hasRun())
         when(hasRun){
             true  -> Assert.assertNotNull  (runs.lastTime())
             false -> Assert.assertNull  (runs.lastTime())
         }
-        Assert.assertEquals(runs.totalRuns(), totalRuns)
-        Assert.assertEquals(runs.totalPassed(), totalPassed)
-        Assert.assertEquals(runs.totalFailed(), totalFailed)
+        Assert.assertEquals(totalRuns  , runs.totalRuns()  )
+        Assert.assertEquals(totalPassed, runs.totalPassed())
+        Assert.assertEquals(totalFailed, runs.totalFailed())
 
         // Request count
         val coordinator = workers.coordinator as MockCoordinator
-        Assert.assertEquals(coordinator.requests.count(), requestCount)
+        Assert.assertEquals(requestCount, coordinator.requests.count())
 
         // Next request
         if(action != null) {
             val req = coordinator.requests.last() as JobRequest.WorkRequest
-            Assert.assertEquals(req.target, id)
-            Assert.assertEquals(req.action, action)
-            Assert.assertEquals(req.seconds, seconds)
+            Assert.assertEquals(id     , req.workerId )
+            Assert.assertEquals(action , req.action )
+            Assert.assertEquals(seconds, req.seconds)
         }
     }
 }

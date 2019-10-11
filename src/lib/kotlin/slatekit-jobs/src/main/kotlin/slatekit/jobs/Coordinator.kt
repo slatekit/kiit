@@ -23,7 +23,7 @@ interface Coordinator {
                 is WorkState.More -> {
                     val id = ids.nextId()
                     val uuid = ids.nextUUID()
-                    request(JobRequest.WorkRequest(id, uuid.toString(), JobAction.Process, worker.id, 0, ""))
+                    request(JobRequest.WorkRequest(id, uuid.toString(), JobAction.Process, worker.id,0, ""))
                 }
             }
             ""

@@ -1,5 +1,6 @@
 package slatekit.jobs
 
+import slatekit.common.Status
 import slatekit.common.ids.Identity
 import java.util.*
 
@@ -7,26 +8,44 @@ sealed class JobRequest {
     abstract val id:Long
     abstract val uuid:String
     abstract val action: JobAction
+    abstract val target: String
+    abstract fun pairs():List<Pair<String, String>>
 
-    data class TaskRequest(override val id:Long,
-                           override val uuid:String,
-                           override val action: JobAction) : JobRequest()
+
+
+    data class ManageRequest(override val id:Long,
+                             override val uuid:String,
+                             override val action: JobAction) : JobRequest() {
+        override val target: String = "job"
+
+        override fun pairs():List<Pair<String, String>> {
+            return listOf(
+                    "target" to target,
+                    "id" to id.toString(),
+                    "uuid" to uuid,
+                    "action" to action.name
+            )
+        }
+    }
+
+
 
     data class WorkRequest(override val id:Long,
                            override val uuid:String,
                            override val action: JobAction,
-                           val target: Identity,
+                           val workerId: Identity,
                            val seconds:Long = 0,
-                           val desc:String?) : JobRequest()
+                           val desc:String?) : JobRequest() {
 
+        override val target: String = "wrk"
 
-    companion object {
-
-        /**
-         * Builds a work request
-         */
-        fun work(action: JobAction, workerId: Identity, seconds: Long, desc:String?):WorkRequest {
-            return JobRequest.WorkRequest(0L, UUID.randomUUID().toString(), action, workerId, seconds, desc)
+        override fun pairs():List<Pair<String, String>> {
+            return listOf(
+                    "target" to target,
+                    "id" to id.toString(),
+                    "uuid" to uuid,
+                    "action" to action.name
+            )
         }
     }
 }

@@ -117,7 +117,7 @@ class Workers_Tests {
         // Next request
         if(action != null) {
             val req = coordinator.requests.last() as JobRequest.WorkRequest
-            Assert.assertEquals(req.target, id)
+            Assert.assertEquals(req.workerId, id)
             Assert.assertEquals(req.action, action)
             Assert.assertEquals(req.seconds, seconds)
         }

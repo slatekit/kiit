@@ -13,7 +13,7 @@ object JobUtils {
             null -> false
             else -> {
                 val isRunning = currState.value == Status.Running.value
-                when(action) {
+                val isValid = when(action) {
                     is JobAction.Start   -> !isRunning
                     is JobAction.Process -> isRunning
                     is JobAction.Control -> isRunning
@@ -22,10 +22,10 @@ object JobUtils {
                         // No reason to:
                         // 1. Pause if already "Paused"
                         // 2. Stop  if already "Stopped"
-                        val isValid = currState != nextState
-                        isValid
+                        currState != nextState
                     }
                 }
+                isValid
             }
         }
     }

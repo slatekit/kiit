@@ -18,7 +18,7 @@ class JobManager(all: List<Worker<*>>,
                  val ids:JobId = JobId()) : Manager, StatusCheck{
 
     // TODO: Make settings configurable
-    val workers = Workers(all, coordinator, DefaultScheduler(), logger, ids, 30)
+    val workers = Workers(all, coordinator, scheduler, logger, ids, 30)
     val id = workers.all.first().id
     override val job = Job.Managed(all)
     private val _status = AtomicReference<Status>(Status.InActive)
@@ -36,7 +36,7 @@ class JobManager(all: List<Worker<*>>,
     override suspend fun request(action: JobAction) {
         val id = ids.nextId()
         val uuid = ids.nextUUID()
-        val req = JobRequest.TaskRequest(id, uuid.toString(), action)
+        val req = JobRequest.ManageRequest(id, uuid.toString(), action)
         request(req)
     }
 
@@ -84,16 +84,15 @@ class JobManager(all: List<Worker<*>>,
 
 
     suspend fun manage(request: JobRequest, launch:Boolean = true){
+        logger.log(Info, "Job: request - ", request.pairs(), null)
         when(request) {
             // Affects the whole job/queue/workers
-            is JobRequest.TaskRequest -> {
-                logger.log(Info, "Job: request - ", listOf("type" to "job", "id" to request.id.toString(), "uuid" to request.uuid.toString(), "action" to request.action.name), null)
+            is JobRequest.ManageRequest -> {
                 manageJob(request, launch)
             }
 
             // Affects just a specific worker
             is JobRequest.WorkRequest -> {
-                logger.log(Info, "Job: request - ", listOf("type" to "wrk", "id" to request.id.toString(), "uuid" to request.uuid.toString(), "action" to request.action.name), null)
                 manageWorker(request, launch)
             }
         }
@@ -127,7 +126,7 @@ class JobManager(all: List<Worker<*>>,
 
     suspend fun manageWorker(request: JobRequest.WorkRequest, launch:Boolean){
         val action = request.action
-        val workerId = request.target
+        val workerId = request.workerId
         val context = workers.get(workerId)
         when(context) {
             null -> { }
@@ -154,7 +153,7 @@ class JobManager(all: List<Worker<*>>,
     private suspend fun stop(launch:Boolean)                  = transitionWorkers(JobAction.Stop   , Status.Stopped, launch)
     private suspend fun resume(launch:Boolean)                = transitionWorkers(JobAction.Resume , Status.Running, launch)
     private suspend fun process(launch:Boolean)               = transitionWorkers(JobAction.Process, Status.Running, launch)
-    private suspend fun pause(launch:Boolean, seconds:Long)   = transitionWorkers(JobAction.Resume , Status.Paused, launch, seconds)
+    private suspend fun pause(launch:Boolean, seconds:Long)   = transitionWorkers(JobAction.Pause  , Status.Paused, launch, seconds)
     private suspend fun delayed(launch:Boolean, seconds:Long) = transitionWorkers(JobAction.Start  , Status.Paused, launch, seconds)
 
 
@@ -180,19 +179,15 @@ class JobManager(all: List<Worker<*>>,
     private val nameKey = "name" to this.id.name
     private suspend fun transitionWorkers(action:JobAction, newStatus:Status, launch:Boolean, seconds:Long = 0) {
         perform(action, status(), launch) {
-            logger.log(Info, "Job:", listOf(nameKey, "transition" to newStatus.name))
+            //logger.log(Info, "Job:", listOf(nameKey, "transition" to newStatus.name))
             _status.set(newStatus)
 
             workers.all.forEach {
-                if (newStatus == Status.Paused) {
-                    workers.delay(it.id, seconds)
-                } else {
-                    val id = ids.nextId()
-                    val uuid = ids.nextUUID()
-                    val req = JobRequest.WorkRequest(id, uuid.toString(), action, it.id, seconds, "")
-                    logger.log(Info, "Job:", listOf(nameKey, "target" to req.target.fullName, "action" to req.action.name))
-                    coordinator.request(req)
-                }
+                val id = ids.nextId()
+                val uuid = ids.nextUUID()
+                val req = JobRequest.WorkRequest(id, uuid.toString(), action, it.id, seconds, "")
+                //logger.log(Info, "Job:", listOf(nameKey, "target" to req.target.fullName, "action" to req.action.name))
+                coordinator.request(req)
             }
         }
     }

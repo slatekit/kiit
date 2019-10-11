@@ -2,6 +2,7 @@ package test.jobs
 
 import kotlinx.coroutines.channels.Channel
 import slatekit.common.DateTime
+import slatekit.common.log.Info
 import slatekit.common.log.Logger
 import slatekit.jobs.*
 
@@ -36,10 +37,20 @@ open class MockCoordinator(override val logger: Logger, override val ids: JobId)
 
 class MockCoordinatorWithChannel(logger: Logger, ids: JobId, val channel: Channel<JobRequest>) : MockCoordinator(logger, ids) {
 
+    private var pauses = mutableListOf<JobRequest>()
+
 
     override suspend fun request(request: JobRequest){
-        channel.send(request)
-        requests.add(request)
+//        logger.log(Info, "Coordinator: Adding", listOf(
+//                "target" to request.target,
+//                "id" to request.id.toString(),
+//                "action" to request.action.name)
+//        )
+        if(request is JobRequest.WorkRequest && request.action == JobAction.Resume) {
+            pauses.add(request)
+        } else {
+            send(request)
+        }
     }
 
 
@@ -52,5 +63,19 @@ class MockCoordinatorWithChannel(logger: Logger, ids: JobId, val channel: Channe
         for(request in channel){
             operation(request)
         }
+    }
+
+
+    suspend fun resume(){
+        if(pauses.isNotEmpty()){
+            val req = pauses.removeAt(pauses.lastIndex)
+            send(req)
+        }
+    }
+
+
+    private suspend fun send(request:JobRequest){
+        channel.send(request)
+        requests.add(request)
     }
 }
