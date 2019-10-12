@@ -16,20 +16,20 @@ class Workers(val all:List<Worker<*>>,
               val ids:JobId,
               val pauseInSeconds:Long) {
 
-    private val lookup = all.map { it.id.name to WorkerContext(it, Calls(it.id)) }.toMap()
+    private val lookup = all.map { it.id.fullName to WorkerContext(it, Calls(it.id)) }.toMap()
 
 
-    operator fun get(id:Identity):WorkerContext? = when(lookup.containsKey(id.name)) {
-        true -> lookup[id.name]
+    operator fun get(id:Identity):WorkerContext? = when(lookup.containsKey(id.fullName)) {
+        true -> lookup[id.fullName]
         false -> null
     }
 
 
-    suspend fun start(id:Identity)  {
+    suspend fun start(id:Identity, task: Task = Task.empty)  {
         perform("Starting", id) { context ->
             val worker = context.worker
             val result = WorkRunner.record(context) {
-                val result: Try<WorkState> = WorkRunner.attemptStart(worker, false)
+                val result: Try<WorkState> = WorkRunner.attemptStart(worker, false, true, task)
                 result.toOutcome()
             }.inner()
 
@@ -49,11 +49,11 @@ class Workers(val all:List<Worker<*>>,
     }
 
 
-    suspend fun process(id:Identity) {
+    suspend fun process(id:Identity, task: Task = Task.empty) {
         perform("Processing", id) { context ->
             val worker = context.worker
             val result = WorkRunner.record(context) {
-                val state = worker.work()
+                val state = worker.work(task)
                 state
             }
             result.map { state -> coordinator.loop(worker, state) }
@@ -62,11 +62,11 @@ class Workers(val all:List<Worker<*>>,
     }
 
 
-    suspend fun resume(id:Identity, reason:String?) {
+    suspend fun resume(id:Identity, reason:String?, task: Task = Task.empty) {
         performPausableAction(Status.Running, id) { context, pausable ->
             val worker = context.worker
             val result = WorkRunner.record(context) {
-                val state = pausable.resume(reason ?: "Resuming")
+                val state = pausable.resume(reason ?: "Resuming", task)
                 state
             }
             result.map { state -> coordinator.loop(worker, state) }

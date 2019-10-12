@@ -12,15 +12,21 @@ import java.util.concurrent.atomic.AtomicReference
 
 
 class JobManager(all: List<Worker<*>>,
+                 val queue: Queue?,
                  val coordinator: Coordinator,
                  val scheduler: Scheduler,
                  val logger: Logger,
-                 val ids:JobId = JobId()) : Manager, StatusCheck{
+                 val ids:JobId = JobId()) : Manager, StatusCheck {
 
     // TODO: Make settings configurable
     val workers = Workers(all, coordinator, scheduler, logger, ids, 30)
     val id = workers.all.first().id
-    override val job = Job.Managed(all)
+    override val job = when(queue) {
+        null -> Job.Managed(all)
+        else -> Job.Queued(queue, workers.all)
+    }
+
+
     private val _status = AtomicReference<Status>(Status.InActive)
 
 
@@ -133,12 +139,13 @@ class JobManager(all: List<Worker<*>>,
             else -> {
                 val worker = context.worker
                 val status = worker.status()
+                val task = nextTask()
                 when(action) {
-                    is JobAction.Start   -> perform(action, status, launch) { workers.start(workerId) }
+                    is JobAction.Start   -> perform(action, status, launch) { workers.start(workerId, task) }
                     is JobAction.Stop    -> perform(action, status, launch) { workers.stop(workerId, request.desc) }
                     is JobAction.Pause   -> perform(action, status, launch) { workers.pause(workerId, request.desc) }
-                    is JobAction.Resume  -> perform(action, status, launch) { workers.resume(workerId, request.desc) }
-                    is JobAction.Process -> perform(action, status, launch) { workers.process(workerId) }
+                    is JobAction.Process -> perform(action, status, launch) { workers.process(workerId, task) }
+                    is JobAction.Resume  -> perform(action, status, launch) { workers.resume(workerId, request.desc, task) }
                     is JobAction.Delay   -> perform(action, status, launch) { workers.start(workerId) }
                     else                 -> {
                         logger.info("Unexpected state: ${request.action}")
@@ -146,6 +153,18 @@ class JobManager(all: List<Worker<*>>,
                 }
             }
         }
+    }
+
+
+    private fun nextTask(): Task {
+        val task = when(queue) {
+            null -> Task.empty
+            else -> {
+                val entry = queue.queue.next()
+                entry?.let { Task(it, queue) } ?: Task.empty
+            }
+        }
+        return task
     }
 
 

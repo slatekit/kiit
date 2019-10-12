@@ -53,8 +53,8 @@ class OneTimeWorker(val start:Int, val end:Int, id: Identity) : Worker<Int>(id),
     }
 
 
-    override fun resume(reason: String?): WorkState {
-        return work()
+    override fun resume(reason: String?, task: Task): WorkState {
+        return work(task)
     }
 
 
@@ -94,8 +94,8 @@ class PagedWorker(start:Int, val maxRuns:Int, val countsPerRun:Int) : Worker<Int
     }
 
 
-    override fun resume(reason: String?): WorkState {
-        return work()
+    override fun resume(reason: String?, task: Task): WorkState {
+        return work(task)
     }
 
 }

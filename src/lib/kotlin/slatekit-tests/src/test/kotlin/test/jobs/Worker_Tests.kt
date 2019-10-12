@@ -61,25 +61,7 @@ class Worker_Tests {
 
 
     @Test
-    fun can_start() {
-        val worker = OneTimeWorker(0, 3)
-        val result = WorkRunner.attemptStart(worker)
-        val flows = worker.currentFlows()
-        Assert.assertTrue(result.success)
-        Assert.assertEquals(worker.currentValue(), 4)
-        Assert.assertEquals(worker.status(), Status.Complete)
-        Assert.assertEquals(flows.size, 3)
-        Assert.assertEquals(flows[0], "init")
-        Assert.assertEquals(flows[1], "work")
-        Assert.assertEquals(flows[2], "done")
-        result.map {
-            Assert.assertEquals(it, WorkState.Done)
-        }
-    }
-
-
-    @Test
-    fun can_start_paged() {
+    fun can_run_paged() {
         val worker = PagedWorker(0, 3, 3)
         val result1 = WorkRunner.attemptStart(worker)
         Assert.assertTrue(result1.success)
@@ -100,6 +82,24 @@ class Worker_Tests {
         Assert.assertEquals(worker.currentValue(), 9)
         Assert.assertEquals(worker.status(), Status.Complete)
         result3.map { Assert.assertEquals(it, WorkState.Done) }
+    }
+
+
+    @Test
+    fun can_start() {
+        val worker = OneTimeWorker(0, 3)
+        val result = WorkRunner.attemptStart(worker)
+        val flows = worker.currentFlows()
+        Assert.assertTrue(result.success)
+        Assert.assertEquals(worker.currentValue(), 4)
+        Assert.assertEquals(worker.status(), Status.Complete)
+        Assert.assertEquals(flows.size, 3)
+        Assert.assertEquals(flows[0], "init")
+        Assert.assertEquals(flows[1], "work")
+        Assert.assertEquals(flows[2], "done")
+        result.map {
+            Assert.assertEquals(it, WorkState.Done)
+        }
     }
 
 

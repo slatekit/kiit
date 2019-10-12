@@ -38,9 +38,9 @@ object WorkRunner {
      * Starts this worker with life-cycle hooks and automatic transitioning to proper state
      * However, allows execution to be managed externally as it could be running for a long time
      */
-    fun <T> attemptStart(worker: Worker<T>, handleDone:Boolean = true, handleFailure:Boolean = true): Try<WorkState> {
+    fun <T> attemptStart(worker: Worker<T>, handleDone:Boolean = true, handleFailure:Boolean = true, task: Task = Task.empty): Try<WorkState> {
         val result = Tries.attempt {
-            start(worker, handleDone)
+            start(worker, handleDone, task)
         }
         if(handleFailure) {
             when (result) {
@@ -60,13 +60,13 @@ object WorkRunner {
      * Starts this worker with life-cycle hooks and automatic transitioning to proper state
      * However, allows execution to be managed externally as it could be running for a long time
      */
-    fun <T> start(worker: Worker<T>, handleDone:Boolean): WorkState {
+    fun <T> start(worker: Worker<T>, handleDone:Boolean, task: Task = Task.empty): WorkState {
         worker.transition(Status.Starting)
         worker.info().forEach { println(it) }
         worker.init()
 
         worker.transition(Status.Running)
-        val state = worker.work()
+        val state = worker.work(task)
         if(state == WorkState.Done && handleDone) {
             worker.transition(Status.Complete)
             worker.done()

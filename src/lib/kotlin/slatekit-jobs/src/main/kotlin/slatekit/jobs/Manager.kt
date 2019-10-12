@@ -4,7 +4,7 @@ import slatekit.common.Status
 import slatekit.common.ids.Identity
 
 interface Manager {
-    val job: Job.Managed
+    val job: Job
 
     /**
      * Requests an action on the entire job
