@@ -102,6 +102,7 @@ dependencies {
         compile project(":slatekit-orm")
         compile project(":slatekit-core")
         compile project(":slatekit-apis")
+        compile project(":slatekit-jobs")
         compile project(":slatekit-workers")
     //</slatekit_local>
 }
