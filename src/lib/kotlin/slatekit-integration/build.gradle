@@ -90,7 +90,7 @@ dependencies {
         compile "com.slatekit:slatekit-orm:$slatekit_version"
         compile "com.slatekit:slatekit-core:$slatekit_version"
         compile "com.slatekit:slatekit-apis:$slatekit_version"
-        compile "com.slatekit:slatekit-workers:$slatekit_version"
+        compile "com.slatekit:slatekit-jobs:$slatekit_version"
     } else {
         // */
         compile project(":slatekit-result")
@@ -103,7 +103,6 @@ dependencies {
         compile project(":slatekit-core")
         compile project(":slatekit-apis")
         compile project(":slatekit-jobs")
-        compile project(":slatekit-workers")
     //</slatekit_local>
 }
 

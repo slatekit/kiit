@@ -9,10 +9,6 @@ import slatekit.common.CommonContext
 import slatekit.common.DateTime
 import slatekit.common.ext.toStringUtc
 //import slatekit.support.alerts.*
-import slatekit.workers.System
-import test.workers.WorkerSample
-import slatekit.workers.Priority
-import slatekit.workers.Queue
 
 
 /**
@@ -27,49 +23,6 @@ fun main(args: Array<String>) {
 //    println("slatekit.tests 1.1")
     //testSlack()
     //testWorkers()
-}
-
-
-fun testWorkers():Unit {
-
-    // 1. Queues
-    val converter = QueueStringConverter()
-    val queues = (1..4).mapIndexed { index, ndx ->
-        QueueSourceInMemory<String>("q" + index.toString(), converter)
-    }
-
-    // Populate each queue
-    queues.forEachIndexed { index, queue ->
-
-        val task = if(index > 0 ) "task2" else "task1"
-        // Add 100 messages to each queue
-        (1..100).forEach { count ->
-
-            // Add with tags needed to convert to a Job
-            queue.send(count.toString(), mapOf(
-                "id" to Random.guid().toString(),
-                "refId" to Random.guid().toString(),
-                "task" to task)
-            )
-        }
-    }
-
-    // 2. Work system.
-    val queueInfos = queues.map { Queue(it.name, Priority.Low, it) }
-    val sys = System(
-        CommonContext.simple("test"),
-        queueInfos,
-            metrics = MetricsLite.build()
-    )
-
-    // 3. Register workers
-    sys.register(WorkerSample("w1", "g1", ""))
-    sys.register(WorkerSample("w2", "g1", ""))
-    sys.register(WorkerSample("w3", "g1", ""))
-
-    // 4. Test
-    sys.exec()
-    Thread.sleep(60000)
 }
 
 /*
