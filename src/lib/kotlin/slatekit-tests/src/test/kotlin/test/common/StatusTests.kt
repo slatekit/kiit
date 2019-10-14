@@ -1,5 +1,6 @@
 package test.common
 
+import kotlinx.coroutines.runBlocking
 import org.junit.Assert
 import org.junit.Test
 import slatekit.common.Status
@@ -12,42 +13,6 @@ class StatusTests {
     @Test
     fun can_ensure_inactive() {
         assertTransition( {  }, Status.InActive, false)
-    }
-
-
-    @Test
-    fun can_transition_to_running_on_start() {
-        assertTransition( { it.start() }, Status.Running)
-    }
-
-
-    @Test
-    fun can_transition_to_idle() {
-        assertTransition( { it.transition(Status.Idle) }, Status.Idle)
-    }
-
-
-    @Test
-    fun can_transition_to_running() {
-        assertTransition( { it.transition(Status.Running) }, Status.Running)
-    }
-
-
-    @Test
-    fun can_transition_to_paused() {
-        assertTransition( { it.pause() }, Status.Paused)
-    }
-
-
-    @Test
-    fun can_transition_to_stopped() {
-        assertTransition( { it.stop() }, Status.Stopped)
-    }
-
-
-    @Test
-    fun can_transition_to_completed() {
-        assertTransition( { it.complete() }, Status.Complete)
     }
 
 
@@ -74,7 +39,7 @@ class StatusTests {
     fun assertCheck(status:Status, check:(MyWorker) -> Boolean ) {
         // Test
         val worker = MyWorker()
-        worker.transition(status)
+        runBlocking {  worker.transition(status) }
         val condition = check(worker)
         Assert.assertTrue(condition)
     }
