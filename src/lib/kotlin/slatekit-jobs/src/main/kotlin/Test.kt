@@ -1,4 +1,4 @@
-package slatekit.workers
+package slatekit.jobs
 
 import slatekit.common.log.LogsDefault
 import slatekit.common.metrics.MetricsLite

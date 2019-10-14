@@ -19,91 +19,98 @@ import slatekit.apis.security.AuthModes
 import slatekit.apis.security.Protocols
 import slatekit.apis.security.Verbs
 import slatekit.apis.support.ApiWithSupport
+import slatekit.common.ids.Identity
 import slatekit.integration.common.AppEntContext
-import slatekit.workers.*
+import slatekit.jobs.JobAction
+import slatekit.jobs.JobManager
+import slatekit.jobs.WorkerStats
 
 @Api(area = "infra", name = "workers", desc = "api to get version information",
         auth = AuthModes.apiKey, roles = "admin", verb = Verbs.auto, protocol = Protocols.all)
-class WorkersApi(override val context: AppEntContext) : ApiWithSupport {
+class JobsApi(override val context: AppEntContext) : ApiWithSupport {
 
-    private var sys: System? = null
+    private lateinit var manager: JobManager
 
-    fun configure(sys:System){
-        this.sys = sys
+    fun configure(manager: JobManager){
+        this.manager = manager
     }
 
     /**
      * starts the system
      */
     @ApiAction(desc = "start the workers system")
-    fun start() = perform { it.start() }
+    suspend fun start() = perform { it.request(JobAction.Start) }
 
     /**
      * pauses the system
      */
     @ApiAction(desc = "pauses the workers system")
-    fun pause() = perform { it.pause() }
+    suspend fun pause() = perform { it.request(JobAction.Pause) }
 
     /**
      * resumes the system
      */
     @ApiAction(desc = "resumes the workers system")
-    fun resume() = perform { it.resume() }
+    suspend fun resume() = perform { it.request(JobAction.Resume) }
 
     /**
      * stops the system
      */
     @ApiAction(desc = "stops the workers system")
-    fun stop() = perform { it.stop() }
-
-    /**
-     * pauses the system
-     */
-    @ApiAction(desc = "shuts down the workers system")
-    fun complete() = perform { it.done() }
+    suspend fun stop() = perform { it.request(JobAction.Stop) }
 
     /**
      * starts the worker in the group supplied
      */
     @ApiAction(desc = "starts the worker")
-    fun startWorker(worker: String) = perform { it.startWorker(worker) }
+    suspend fun startWorker(workerId: String) = requestWork(workerId){
+        manager.request(JobAction.Start, it, "from api")
+    }
 
     /**
      * pauses the worker in the group supplied
      */
     @ApiAction(desc = "pauses the worker")
-    fun pauseWorker(worker: String) = perform { it.pauseWorker(worker) }
+    suspend fun pauseWorker(workerId: String) = requestWork(workerId) {
+        manager.request(JobAction.Pause, it, "from api")
+    }
 
     /**
      * resumes the worker in the group supplied
      */
     @ApiAction(desc = "resumes the worker")
-    fun resumeWorker(worker: String) = perform { it.resumeWorker(worker) }
+    suspend fun resumeWorker(workerId: String) = requestWork(workerId) {
+        manager.request(JobAction.Resume, it, "from api")
+    }
 
     /**
      * stops the worker in the group supplied
      */
     @ApiAction(desc = "stops the worker")
-    fun stopWorker(worker: String) = perform { it.stopWorker(worker) }
+    suspend fun stopWorker(workerId: String) = requestWork(workerId) {
+        manager.request(JobAction.Stop, it, "from api")
+    }
 
     /**
      * Get the worker names
      */
     @ApiAction(desc = "gets the names of all the workers")
-    fun getWorkerNames() = perform { it.getWorkerNames() }
-
-    /**
-     * Get the worker names
-     */
-    @ApiAction(desc = "gets the worker stats")
-    fun getWorkerStats() = perform { it.getWorkerStats() }
+    fun getWorkerNames():List<String> = manager.workers.getIds()
 
 
-    private fun perform(operation:(System) -> Unit) {
-        if(sys == null) {
+    private suspend fun perform(operation: suspend (JobManager) -> Unit) {
+        if(this.manager == null) {
             error("Work System has not been configured")
             return
         }
-        sys?.let { operation(it) }
+        this.manager.let { operation(it) }
+    }
+
+
+    private suspend fun requestWork(workerId:String, operation: suspend (Identity) -> Unit){
+        val worker = manager.workers.get(workerId)
+        worker?.let {
+            operation(worker.worker.id)
+        }
     }
 }

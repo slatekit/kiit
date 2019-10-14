@@ -1,41 +1,33 @@
 package test.setup
 
-import slatekit.common.log.LogsDefault
-import slatekit.results.Notice
-import slatekit.results.Success
-import slatekit.results.Try
-import slatekit.results.builders.Notices
-import slatekit.workers.*
-import slatekit.workers.WorkFunction
+import slatekit.common.ids.SimpleIdentity
+import slatekit.jobs.*
 
 class MyWorker(
-    var acc: Int = 0,
-    callback: WorkFunction<Int>? = null
+    var acc: Int = 0
 ) : Worker<Int>(
-    "myworker", "", "", "",
-    work = callback,
-    logs = LogsDefault
-) {
+    SimpleIdentity("tests", "dev", "myworker")) {
     var isInitialized = false
     var isEnded = false
 
-    override fun init(): Notice<Boolean> {
+    override suspend fun init() {
         isInitialized = true
-        return Notices.success(true)
     }
 
-    override fun end() {
+    override suspend fun done() {
         isEnded = true
     }
 
-    override fun perform(job: Job): Try<Int> {
+    override suspend fun work(task: Task): WorkState {
         acc += 1
 
         // Simulate different results for testing purposes
         return if (acc % 2 == 0)
-            Success(acc, msg = "even")
+            //Success(acc, msg = "even")
+            WorkState.Done
         else
-            Success(acc, msg = "odd")
+            //Success(acc, msg = "odd")
+            WorkState.More
     }
 }
 

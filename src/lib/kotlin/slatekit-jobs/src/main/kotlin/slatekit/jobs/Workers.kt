@@ -25,6 +25,15 @@ class Workers(val all:List<Worker<*>>,
     }
 
 
+    operator fun get(id:String):WorkerContext? = when(lookup.containsKey(id)) {
+        true -> lookup[id]
+        false -> null
+    }
+
+
+    fun getIds():List<String> = all.map { it.id.fullName }
+
+
     suspend fun start(id:Identity, task: Task = Task.empty)  {
         perform("Starting", id) { context ->
             val worker = context.worker

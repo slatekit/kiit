@@ -79,7 +79,7 @@ class Example_Args  : Command("args") {
 
 
     // CASE 8: Build up the schema
-    val schema = ArgsSchema().text("env").flag("log").number("level")
+    val schema = ArgsSchema().text("env", "env").flag("log", "log").number("level", "level")
     print(schema)
 
     //</doc:examples>
