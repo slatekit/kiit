@@ -24,7 +24,6 @@ import slatekit.integration.common.AppEntContext
 import slatekit.jobs.JobAction
 import slatekit.jobs.JobManager
 import slatekit.jobs.WorkerStats
-import slatekit.workers.*
 
 @Api(area = "infra", name = "workers", desc = "api to get version information",
         auth = AuthModes.apiKey, roles = "admin", verb = Verbs.auto, protocol = Protocols.all)
