@@ -1,3 +1,6 @@
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
 import slatekit.examples.*
 import java.nio.file.Paths
 //import java.util.logging.*
@@ -10,6 +13,8 @@ import java.nio.file.Paths
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import slatekit.providers.logs.logback.LogbackLogs
+import kotlinx.coroutines.runBlocking
+import slatekit.common.functions.FunctionMode
 
 /**
 <slate_header>
@@ -30,7 +35,7 @@ mantra: Simplicity above all else
 // https://looksok.wordpress.com/2014/07/12/compile-gradle-project-with-another-project-as-a-dependency/
 fun main(args:Array<String>) {
     val example = Example_Args()
-    example.execute(args)
+    example.execute(args, FunctionMode.Called)
 }
 
 
@@ -129,9 +134,3 @@ class MyFormatter : Formatter() {
     }
 }
 */
-
-
-fun run() {
-    val cmd = Example_SmartStrings()
-    cmd.execute()
-}

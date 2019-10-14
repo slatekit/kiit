@@ -48,6 +48,7 @@ dependencies {
     compile "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
     compile "org.jetbrains.kotlin:kotlin-reflect:$kotlin_version"
     compile "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin_version"
+    compile 'org.jetbrains.kotlinx:kotlinx-coroutines-core:1.1.0'
     compile "com.googlecode.json-simple:json-simple:1.1"
     compile project(":slatekit-result")
     compile project(":slatekit-common")
@@ -57,7 +58,7 @@ dependencies {
     compile project(":slatekit-orm")
     compile project(":slatekit-core")
     compile project(":slatekit-apis")
-    compile project(":slatekit-workers")
+    compile project(":slatekit-jobs")
     compile project(":slatekit-cloud")
     compile project(":slatekit-integration")
     compile project(":slatekit-providers")
