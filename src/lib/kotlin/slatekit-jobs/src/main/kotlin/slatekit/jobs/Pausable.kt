@@ -7,13 +7,13 @@ interface Pausable {
      * @param reason
      * @return
      */
-    fun pause(reason:String?)
+    suspend fun pause(reason:String?)
 
 
     /**
      * Hook for handling stopping of a job
      */
-    fun stop(reason:String?)
+    suspend fun stop(reason:String?)
 
 
     /**
@@ -21,5 +21,5 @@ interface Pausable {
      * @param reason
      * @return
      */
-    fun resume(reason:String?, task: Task): WorkState
+    suspend fun resume(reason:String?, task: Task): WorkState
 }

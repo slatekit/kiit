@@ -10,7 +10,7 @@ object WorkRunner {
     /**
      * Calls this worker with life-cycle hooks and automatic transitioning to proper state
      */
-    fun <T> run(worker: Worker<T>): Try<Status> {
+    suspend fun <T> run(worker: Worker<T>): Try<Status> {
         val result = Tries.attempt {
             worker.transition(Status.Starting)
             worker.info().forEach { println(it) }
@@ -38,7 +38,7 @@ object WorkRunner {
      * Starts this worker with life-cycle hooks and automatic transitioning to proper state
      * However, allows execution to be managed externally as it could be running for a long time
      */
-    fun <T> attemptStart(worker: Worker<T>, handleDone:Boolean = true, handleFailure:Boolean = true, task: Task = Task.empty): Try<WorkState> {
+    suspend fun <T> attemptStart(worker: Worker<T>, handleDone:Boolean = true, handleFailure:Boolean = true, task: Task = Task.empty): Try<WorkState> {
         val result = Tries.attempt {
             start(worker, handleDone, task)
         }
@@ -60,7 +60,7 @@ object WorkRunner {
      * Starts this worker with life-cycle hooks and automatic transitioning to proper state
      * However, allows execution to be managed externally as it could be running for a long time
      */
-    fun <T> start(worker: Worker<T>, handleDone:Boolean, task: Task = Task.empty): WorkState {
+    suspend fun <T> start(worker: Worker<T>, handleDone:Boolean, task: Task = Task.empty): WorkState {
         worker.transition(Status.Starting)
         worker.info().forEach { println(it) }
         worker.init()
@@ -78,7 +78,7 @@ object WorkRunner {
     /**
      * Makes the worker work ( this can be used for resuming )
      */
-    fun <T> work(worker: Worker<T>): Try<WorkState> {
+    suspend fun <T> work(worker: Worker<T>): Try<WorkState> {
         val result = Tries.attempt {
             worker.transition(Status.Running)
             worker.transition(Status.Running)
@@ -98,7 +98,6 @@ object WorkRunner {
         }
         return result
     }
-
 
 
     suspend fun <T> record(context:WorkerContext, operation: suspend (Worker<*>) -> T):Outcome<T> {

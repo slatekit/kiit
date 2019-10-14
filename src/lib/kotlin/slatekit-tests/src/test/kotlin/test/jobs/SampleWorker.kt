@@ -17,7 +17,7 @@ class OneTimeWorker(val start:Int, val end:Int, id: Identity) : Worker<Int>(id),
     private val current = AtomicInteger(start)
     private val flow = mutableListOf<String>()
 
-    override fun init() {
+    override suspend fun init() {
         flow.add("init")
         super.init()
     }
@@ -32,28 +32,28 @@ class OneTimeWorker(val start:Int, val end:Int, id: Identity) : Worker<Int>(id),
     }
 
 
-    override fun work(task: Task): WorkState {
+    override suspend fun work(task: Task): WorkState {
         flow.add("work")
         (start .. end).forEach { current.incrementAndGet()  }
         return WorkState.Done
     }
 
 
-    override fun done() {
+    override suspend fun done() {
         flow.add("done")
         super.done()
     }
 
 
-    override fun pause(reason: String?) {
+    override suspend fun pause(reason: String?) {
     }
 
 
-    override fun stop(reason: String?) {
+    override suspend fun stop(reason: String?) {
     }
 
 
-    override fun resume(reason: String?, task: Task): WorkState {
+    override suspend fun resume(reason: String?, task: Task): WorkState {
         return work(task)
     }
 
@@ -72,7 +72,7 @@ class PagedWorker(start:Int, val maxRuns:Int, val countsPerRun:Int) : Worker<Int
     fun currentValue():Int = counts.get()
 
 
-    override fun work(task: Task): WorkState {
+    override suspend fun work(task: Task): WorkState {
         (0 until countsPerRun).forEach {
             counts.incrementAndGet()
         }
@@ -86,15 +86,15 @@ class PagedWorker(start:Int, val maxRuns:Int, val countsPerRun:Int) : Worker<Int
     }
 
 
-    override fun pause(reason: String?) {
+    override suspend fun pause(reason: String?) {
     }
 
 
-    override fun stop(reason: String?) {
+    override suspend fun stop(reason: String?) {
     }
 
 
-    override fun resume(reason: String?, task: Task): WorkState {
+    override suspend fun resume(reason: String?, task: Task): WorkState {
         return work(task)
     }
 

@@ -29,7 +29,7 @@ interface Workable<T> : StatusCheck {
     /**
      * Life-cycle hook to allow for initialization
      */
-    fun init() {
+    suspend fun init() {
     }
 
 
@@ -37,7 +37,7 @@ interface Workable<T> : StatusCheck {
      * Performs the work
      * This assumes that this work manages it's own work load/queue/source
      */
-    fun work(): WorkState {
+    suspend fun work(): WorkState {
        return work(Task.owned)
     }
 
@@ -48,20 +48,20 @@ interface Workable<T> : StatusCheck {
      * NOTE: If this worker manages it's own work load/queue/source, then this task is
      * provided by the work() method and assigned Task.owned
      */
-    fun work(task:Task): WorkState
+    suspend fun work(task:Task): WorkState
 
 
     /**
      * Life-cycle hook to allow for completion
      */
-    fun done() {
+    suspend fun done() {
     }
 
 
     /**
      * Life-cycle hook to allow for failure
      */
-    fun fail(err:Throwable?) {
+    suspend fun fail(err:Throwable?) {
         notify("Errored: " + err?.message, null)
     }
 
@@ -69,7 +69,7 @@ interface Workable<T> : StatusCheck {
     /**
      * Transition current status to the one supplied
      */
-    fun transition(state: Status) {
+    suspend fun transition(state: Status) {
         notify(state.name, null)
     }
 

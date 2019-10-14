@@ -18,7 +18,7 @@ open class Worker<T>(override val id: Identity,
     /**
      * Transition current status to the one supplied
      */
-    override fun transition(state: Status) {
+    override suspend fun transition(state: Status) {
         _status.set(state)
         notify(state.name, null)
     }
@@ -33,7 +33,7 @@ open class Worker<T>(override val id: Identity,
      * NOTE: If this worker manages it's own work load/queue/source, then this task is
      * provided by the work() method and assigned Task.owned
      */
-    override fun work(task: Task): WorkState {
+    override suspend fun work(task: Task): WorkState {
         return when (operation) {
             null -> WorkState.Done
             else -> operation.invoke(task)
