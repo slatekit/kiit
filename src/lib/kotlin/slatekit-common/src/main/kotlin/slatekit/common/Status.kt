@@ -15,56 +15,13 @@ sealed class Status(val name:String, val value:Int) {
 }
 
 
-interface StatusSupport {
-
+interface StatusCheck {
     /**
      * gets the current status of the application
      *
      * @return
      */
     fun status(): Status
-
-    /**
-     * moves the current state to idle.
-     *
-     * @return
-     */
-    fun start(): Status = transition(Status.Running)
-
-    /**
-     * moves the current state to paused
-     *
-     * @return
-     */
-    fun pause(): Status = transition(Status.Paused)
-
-    /**
-     * moves the current state to stopped.
-     *
-     * @return
-     */
-    fun stop(): Status = transition(Status.Stopped)
-
-    /**
-     * moves the current state to resumed
-     *
-     * @return
-     */
-    fun resume(): Status = transition(Status.Running)
-
-    /**
-     * moves the current state to complete
-     *
-     * @return
-     */
-    fun complete(): Status = transition(Status.Complete)
-
-    /**
-     * moves the current state to failed
-     *
-     * @return
-     */
-    fun fail(): Status = transition(Status.Failed)
 
     /**
      * whether this is executing
@@ -122,6 +79,52 @@ interface StatusSupport {
      * @return
      */
     fun isState(status: Status): Boolean = status() == status
+}
+
+
+interface StatusSupport : StatusCheck {
+
+    /**
+     * moves the current state to idle.
+     *
+     * @return
+     */
+    fun start(): Status = transition(Status.Running)
+
+    /**
+     * moves the current state to paused
+     *
+     * @return
+     */
+    fun pause(): Status = transition(Status.Paused)
+
+    /**
+     * moves the current state to stopped.
+     *
+     * @return
+     */
+    fun stop(): Status = transition(Status.Stopped)
+
+    /**
+     * moves the current state to resumed
+     *
+     * @return
+     */
+    fun resume(): Status = transition(Status.Running)
+
+    /**
+     * moves the current state to complete
+     *
+     * @return
+     */
+    fun complete(): Status = transition(Status.Complete)
+
+    /**
+     * moves the current state to failed
+     *
+     * @return
+     */
+    fun fail(): Status = transition(Status.Failed)
 
     /**
      * moves this state to the one supplied

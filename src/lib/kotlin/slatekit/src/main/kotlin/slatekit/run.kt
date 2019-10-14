@@ -9,6 +9,8 @@ import slatekit.docs.DocService
 import slatekit.generator.*
 import slatekit.integration.common.AppEntContext
 import slatekit.providers.logs.logback.LogbackLogs
+import slatekit.tests.JobManager
+import slatekit.tests.Manager
 
 
 /**
@@ -32,20 +34,22 @@ import slatekit.providers.logs.logback.LogbackLogs
  * java -jar ${app.name}.jar -env=dev -log.level=info -conf.dir = "file://./conf-sample-shell"
  * java -jar ${app.name}.jar -env=dev -log.level=info -conf.dir = "file://./conf-sample-server"
  */
-fun main(args: Array<String>) {
+suspend fun main(args: Array<String>) {
 
-    val phone1 = PhoneUS.of("123-456-7890")
-     println(phone1)
-
-    println("starting slate kit with args:" )
-    println()
-
-    args.forEachIndexed { ndx, value ->
-        println("$ndx : $value")
-    }
-
-    println()
-    println("done")
+    val manager = JobManager()
+    manager.run(3)
+//    val phone1 = PhoneUS.of("123-456-7890")
+//     println(phone1)
+//
+//    println("starting slate kit with args:" )
+//    println()
+//
+//    args.forEachIndexed { ndx, value ->
+//        println("$ndx : $value")
+//    }
+//
+//    println()
+//    println("done")
 
     // SAMPLES
     // 1. app

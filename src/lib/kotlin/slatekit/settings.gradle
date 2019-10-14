@@ -45,6 +45,9 @@ project(':slatekit-result').projectDir=new File('../slatekit-result')
 include ':slatekit-server'
 project(':slatekit-server').projectDir=new File('../slatekit-server')
 
+include ':slatekit-jobs'
+project(':slatekit-jobs').projectDir=new File('../slatekit-jobs')
+
 include ':slatekit-workers'
 project(':slatekit-workers').projectDir=new File('../slatekit-workers')
 

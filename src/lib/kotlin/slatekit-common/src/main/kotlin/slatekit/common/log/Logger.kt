@@ -49,6 +49,21 @@ abstract class Logger(
      * @param ex
      */
     @Ignore
+    override fun log(level: LogLevel, msg: String, pairs:List<Pair<String,String>>, ex: Exception?) {
+        checkLog(level) {
+            val info = pairs.joinToString { it -> it.first + "=" + it.second }
+            performLog(buildLog(level, msg + " " + info, null))
+        }
+    }
+
+    /**
+     * Logs an entry
+     *
+     * @param level
+     * @param msg
+     * @param ex
+     */
+    @Ignore
     override fun log(level: LogLevel, callback: () -> String, ex: Exception?) {
         checkLog(level, {
             val msg = callback()

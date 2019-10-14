@@ -21,9 +21,9 @@ apply plugin: 'kotlin'
 // ==================================================================
 // Slate Kit Component Info
 // ==================================================================
-def slatekitComponentId = 'workers'
-def slatekitComponentName = 'Workers'
-def slatekitComponentDesc = 'SlateKit Workers: Background workers for persistant job queues'
+def slatekitComponentId = 'jobs'
+def slatekitComponentName = 'Jobs'
+def slatekitComponentDesc = 'SlateKit Jobs: Background job/task queue system'
 def slatekitComponentVersion = getCommonVersion()
 
 
