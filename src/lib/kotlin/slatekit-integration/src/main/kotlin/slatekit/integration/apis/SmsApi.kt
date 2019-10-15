@@ -21,7 +21,7 @@ import slatekit.apis.security.Verbs
 import slatekit.apis.support.ApiWithSupport
 import slatekit.common.Context
 import slatekit.common.Vars
-import slatekit.core.sms.SmsService
+import slatekit.notifications.sms.SmsService
 import slatekit.results.Outcome
 import slatekit.results.Try
 
