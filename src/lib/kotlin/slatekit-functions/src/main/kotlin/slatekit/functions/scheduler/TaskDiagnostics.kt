@@ -1,4 +1,4 @@
-package slatekit.core.scheduler
+package slatekit.functions.scheduler
 
 import slatekit.common.Diagnostics
 import slatekit.common.log.Logger

@@ -12,6 +12,7 @@
 package slatekit.examples
 
 //<doc:import_required>
+import kotlinx.coroutines.runBlocking
 import slatekit.common.Context
 import slatekit.app.AppOptions
 import slatekit.app.App
@@ -30,9 +31,8 @@ import slatekit.common.info.Build
 import slatekit.common.info.StartInfo
 import slatekit.common.info.Sys
 import slatekit.common.log.LogsDefault
-import slatekit.core.cmds.Command
-import slatekit.common.CommonContext
-import slatekit.core.cmds.CommandRequest
+import slatekit.functions.cmds.Command
+import slatekit.functions.cmds.CommandRequest
 import slatekit.db.Db
 import slatekit.entities.Entities
 import slatekit.integration.common.AppEntContext
@@ -72,7 +72,7 @@ class SampleApp(ctx: Context) : App<Context>(ctx, AppOptions(
     /**
      * Life-cycle init hook: for your app to perform any initialization
      */
-    override fun init(): Try<Boolean> {
+    override suspend fun init(): Try<Boolean> {
         println("app initialized")
         return Success(true)
     }
@@ -83,7 +83,7 @@ class SampleApp(ctx: Context) : App<Context>(ctx, AppOptions(
      *
      * @return
      */
-    override fun execute(): Try<Any> {
+    override suspend fun exec(): Try<Any> {
         // The AppContext ( ctx ) is required for the AppProcess and will be
         // available for derived classes to access its components.
 
@@ -133,7 +133,7 @@ class SampleApp(ctx: Context) : App<Context>(ctx, AppOptions(
     /**
      * Life-cycle end hook: called when app is shutting down
      */
-    override fun end(): Try<Boolean> {
+    override suspend fun end(): Try<Boolean> {
         info("app shutting down")
         return Success(true)
     }
@@ -194,7 +194,9 @@ class Example_App : Command("app") {
         )
         // Now run the app with context info with
         // the help of the AppRunner which will call the life-cycle events.
-        AppRunner.run(SampleApp(ctx))
+        runBlocking {
+            AppRunner.run(SampleApp(ctx))
+        }
 
 
         // APPROACH 2: Automatically build the AppContext using the AppRunner.build function
@@ -209,14 +211,16 @@ class Example_App : Command("app") {
         // - Env : By default, the first supported environment is used which is local "env.local"
         // - Conf: By default, the config file associated w/ the environment is loaded "env.local.conf"
         // - You can store info about the your app in your config file and that can be loaded.
-        val res = AppRunner.run(
-                rawArgs = request.args.raw.toTypedArray(),
-                schema = ArgsSchema(),
-                enc = Encryptor("wejklhviuxywehjk", "3214maslkdf03292", B64Java8),
-                logs = LogbackLogs(),
-                about = About.none,
-                builder = { ctx -> SampleApp(ctx) }
-        )
+        val res = runBlocking {
+            AppRunner.run(
+                    rawArgs = request.args.raw.toTypedArray(),
+                    schema = ArgsSchema(),
+                    enc = Encryptor("wejklhviuxywehjk", "3214maslkdf03292", B64Java8),
+                    logs = LogbackLogs(),
+                    about = About.none,
+                    builder = { ctx -> SampleApp(ctx) }
+            )
+        }
         return res
         //</doc:examples>
     }

@@ -1,3 +1,3 @@
-package slatekit.core.scheduler
+package slatekit.functions.scheduler
 
 data class SchedulerSettings(val name:String)

@@ -13,15 +13,15 @@
 package slatekit.examples
 
 //<doc:import_required>
-import slatekit.core.cmds.Command
-import slatekit.core.cmds.CommandRequest
+import slatekit.functions.cmds.Command
+import slatekit.functions.cmds.CommandRequest
 
 //</doc:import_required>
 
 //<doc:import_examples>
 import slatekit.results.Try
 import slatekit.results.Success
-import slatekit.core.cmds.Commands
+import slatekit.functions.cmds.Commands
 
 //</doc:import_examples>
 

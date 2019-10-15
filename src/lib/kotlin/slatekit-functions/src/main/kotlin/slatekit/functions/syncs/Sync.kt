@@ -1,4 +1,4 @@
-package slatekit.core.syncs
+package slatekit.functions.syncs
 
 import slatekit.common.DateTime
 import slatekit.common.ext.durationFrom

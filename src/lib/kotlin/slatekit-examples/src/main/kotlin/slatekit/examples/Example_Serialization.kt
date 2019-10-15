@@ -18,8 +18,8 @@ import slatekit.common.serialization.*
 //</doc:import_required>
 
 //<doc:import_examples>
-import slatekit.core.cmds.Command
-import slatekit.core.cmds.CommandRequest
+import slatekit.functions.cmds.Command
+import slatekit.functions.cmds.CommandRequest
 import slatekit.examples.common.User
 
 //</doc:import_examples>

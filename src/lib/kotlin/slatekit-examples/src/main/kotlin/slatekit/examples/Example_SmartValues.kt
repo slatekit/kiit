@@ -18,8 +18,8 @@ import slatekit.results.Success
 //</doc:import_required>
 
 //<doc:import_examples>
-import slatekit.core.cmds.Command
-import slatekit.core.cmds.CommandRequest
+import slatekit.functions.cmds.Command
+import slatekit.functions.cmds.CommandRequest
 import slatekit.results.Outcome
 
 //</doc:import_examples>

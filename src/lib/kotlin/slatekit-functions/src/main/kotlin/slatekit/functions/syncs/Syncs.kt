@@ -1,4 +1,4 @@
-package slatekit.core.syncs
+package slatekit.functions.syncs
 
 import slatekit.common.functions.FunctionInfo
 import slatekit.common.functions.Functions

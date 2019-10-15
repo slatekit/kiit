@@ -7,8 +7,8 @@ import slatekit.cloud.aws.AwsCloudFiles
 //</doc:import_required>
 
 //<doc:import_examples>
-import slatekit.core.cmds.Command
-import slatekit.core.cmds.CommandRequest
+import slatekit.functions.cmds.Command
+import slatekit.functions.cmds.CommandRequest
 import slatekit.results.Success
 import slatekit.results.Try
 

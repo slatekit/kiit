@@ -13,7 +13,7 @@
 
 package slatekit.tutorial
 
-import slatekit.core.cmds.Command
+import slatekit.functions.cmds.Command
 import slatekit.results.Success
 import slatekit.results.Try
 

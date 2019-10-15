@@ -27,8 +27,8 @@ import slatekit.common.requests.InputArgs
 import slatekit.common.requests.Request
 import slatekit.results.Try
 import slatekit.results.Success
-import slatekit.core.cmds.Command
-import slatekit.core.cmds.CommandRequest
+import slatekit.functions.cmds.Command
+import slatekit.functions.cmds.CommandRequest
 import slatekit.results.Status
 import slatekit.results.StatusCodes
 

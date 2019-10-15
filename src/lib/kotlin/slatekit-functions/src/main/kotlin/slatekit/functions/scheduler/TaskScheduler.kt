@@ -1,4 +1,4 @@
-package slatekit.core.scheduler
+package slatekit.functions.scheduler
 
 import slatekit.common.*
 import slatekit.common.log.Logs
@@ -25,7 +25,7 @@ class TaskScheduler(val settings: SchedulerSettings,
                     val service: ScheduledExecutorService = Executors.newScheduledThreadPool(2)) {
 
     /**
-     * Logger for this scheduler ( logger name="slatekit.core.scheduler.TaskScheduler" )
+     * Logger for this scheduler ( logger name="slatekit.functions.scheduler.TaskScheduler" )
      */
     val logger = logs.getLogger(this.javaClass)
 

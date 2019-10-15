@@ -11,7 +11,7 @@
  * </slate_header>
  */
 
-package slatekit.core.syncs
+package slatekit.functions.cmds
 
 import slatekit.common.DateTime
 import slatekit.common.DateTimes
@@ -29,7 +29,7 @@ import slatekit.common.metrics.MetricsLite
  * @param hasRun : Whether command has run at least once
  * @param lastResult : The last result
  */
-data class SyncState(
+data class CommandState(
         override val info: FunctionInfo,
         override val status: Status,
         override val msg: String,
@@ -37,8 +37,8 @@ data class SyncState(
         override val lastMode: FunctionMode,
         override val hasRun: Boolean,
         override val metrics: Metrics,
-        override val lastResult: SyncResult?
-) : FunctionState<SyncResult> {
+        override val lastResult: CommandResult?
+) : FunctionState<CommandResult> {
 
     /**
      * Builds a copy of the this state with bumped up numbers ( run count, error count, etc )
@@ -46,16 +46,15 @@ data class SyncState(
      * @param result
      * @return
      */
-    fun update(result: SyncResult): SyncState {
+    fun update(result: CommandResult): CommandState {
 
         val updated = this.copy(
-                msg = result.message,
-                lastMode = result.mode,
+                msg = result.message ?: "",
                 lastRun = result.started,
+                lastMode = result.mode,
                 hasRun = true,
                 lastResult = result
         )
-
         // Update the metrics based on the slatekit.results.status.code
         // which is standardized across all modules
         updated.increment(result.result.code, null)
@@ -69,13 +68,13 @@ data class SyncState(
          * @param name
          * @return
          */
-        fun empty(info: FunctionInfo): SyncState =
-                SyncState(
+        fun empty(info: FunctionInfo): CommandState =
+                CommandState(
                         info = info,
                         status = Status.InActive,
                         msg = "Not yet run",
-                        lastMode = FunctionMode.Called,
                         lastRun = DateTimes.MIN,
+                        lastMode = FunctionMode.Called,
                         hasRun = false,
                         metrics = MetricsLite(),
                         lastResult = null

@@ -20,8 +20,8 @@ package slatekit.examples
 import slatekit.common.DateTime
 import slatekit.common.Uris
 import slatekit.common.console.*
-import slatekit.core.cmds.Command
-import slatekit.core.cmds.CommandRequest
+import slatekit.functions.cmds.Command
+import slatekit.functions.cmds.CommandRequest
 import slatekit.results.Try
 import slatekit.results.Success
 import java.io.File
