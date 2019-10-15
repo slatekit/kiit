@@ -16,6 +16,8 @@ interface Metrics {
 
     val id:Identity
 
+    val source:String
+
     val settings:MetricsSettings
 
     fun provider():Any
@@ -29,7 +31,5 @@ interface Metrics {
     fun <T> gauge(name: String, value:T) where T: kotlin.Number
 
     fun <T> gauge(name: String, call: () -> T, tags: List<Tag>?) where T: kotlin.Number
-
-    fun toCountable():Countable
 }
 

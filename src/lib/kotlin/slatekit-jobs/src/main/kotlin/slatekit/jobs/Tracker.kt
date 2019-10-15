@@ -2,6 +2,7 @@ package slatekit.jobs
 
 import slatekit.common.ids.Identity
 import slatekit.common.metrics.Calls
+import slatekit.common.metrics.Counters
 import slatekit.common.metrics.Lasts
 import slatekit.results.Err
 
@@ -19,12 +20,13 @@ import slatekit.results.Err
 class Tracker<TRequest, TResponse>(
         val id: Identity,
         val calls: Calls,
+        val counts:Counters,
         val lasts: Lasts<TRequest, TResponse, Err>) {
 
     companion object {
 
         fun <TRequest, TResponse> of(id: Identity): Tracker<TRequest, TResponse> {
-            return Tracker(id, Calls(id), Lasts(id))
+            return Tracker(id, Calls(id), Counters(id), Lasts(id))
         }
     }
 }

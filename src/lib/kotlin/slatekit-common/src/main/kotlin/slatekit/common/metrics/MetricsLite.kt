@@ -21,8 +21,10 @@ import java.util.concurrent.atomic.AtomicReference
 class MetricsLite(
         override val id: Identity,
         val tags:List<Tag> = listOf(),
+        override val source: String = "slatekit",
         override val settings: MetricsSettings = MetricsSettings(true,true, Tags(tags))
 ) : Metrics {
+
     private val counters = mutableMapOf<String, Counter>()
     private val gauges = mutableMapOf<String, Gauge<*>>()
     private val timers = mutableMapOf<String, Timer>()
@@ -74,7 +76,7 @@ class MetricsLite(
     /**
      * Gets the current counters as a first class Countable
      */
-    override fun toCountable():Countable {
+    fun toCountable():Countable {
         return Counters(id, tags, counters.toMap())
     }
 
@@ -121,7 +123,7 @@ class MetricsLite(
 
     companion object {
         fun build(id:Identity, tags:List<Tag> = listOf()): MetricsLite {
-            return MetricsLite(id, tags, MetricsSettings(true,true, Tags(listOf())))
+            return MetricsLite(id, tags, settings = MetricsSettings(true,true, Tags(listOf())))
         }
     }
 }
