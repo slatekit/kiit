@@ -39,6 +39,9 @@ project(':slatekit-generator').projectDir=new File('../slatekit-generator')
 include ':slatekit-integration'
 project(':slatekit-integration').projectDir=new File('../slatekit-integration')
 
+include ':slatekit-notifications'
+project(':slatekit-notifications').projectDir=new File('../slatekit-notifications')
+
 include ':slatekit-result'
 project(':slatekit-result').projectDir=new File('../slatekit-result')
 

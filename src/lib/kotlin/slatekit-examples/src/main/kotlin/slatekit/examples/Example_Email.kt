@@ -14,8 +14,8 @@ package slatekit.examples
 
 //<doc:import_required>
 import slatekit.common.*
-import slatekit.core.email.EmailMessage
-import slatekit.core.email.EmailServiceSendGrid
+import slatekit.notifications.email.EmailMessage
+import slatekit.notifications.email.EmailServiceSendGrid
 import slatekit.common.templates.Template
 import slatekit.common.templates.Templates
 //</doc:import_required>
@@ -68,7 +68,7 @@ class Example_Email  : Command("auth") {
     val result = email2.send("kishore@abc.com", "Welcome to MyApp.com", "showWelcome!", false)
 
     // Use case 2: Send using a constructed message object
-    email2.send(EmailMessage("kishore@abc.com", "Welcome to MyApp.com", "showWelcome!", false))
+    email2.sendSync(EmailMessage("kishore@abc.com", "Welcome to MyApp.com", "showWelcome!", false))
 
     // Use case 3: Send message using one of the setup templates
     email2.sendUsingTemplate("email_welcome", "kishore@abc.com", "Welcome to MyApp.com", true,
