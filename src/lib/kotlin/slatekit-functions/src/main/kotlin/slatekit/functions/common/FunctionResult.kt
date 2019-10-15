@@ -1,4 +1,4 @@
-package slatekit.common.functions
+package slatekit.functions.common
 
 import slatekit.common.DateTime
 import slatekit.common.ext.durationFrom

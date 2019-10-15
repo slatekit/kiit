@@ -15,10 +15,8 @@ package slatekit.functions.cmds
 
 import slatekit.common.DateTime
 import slatekit.common.args.Args
-import slatekit.common.functions.Function
-import slatekit.common.functions.FunctionTriggers
-import slatekit.common.functions.FunctionInfo
-import slatekit.common.functions.FunctionMode
+import slatekit.functions.common.Function
+import slatekit.functions.common.*
 import slatekit.results.*
 import slatekit.results.builders.Tries
 import java.util.concurrent.atomic.AtomicReference

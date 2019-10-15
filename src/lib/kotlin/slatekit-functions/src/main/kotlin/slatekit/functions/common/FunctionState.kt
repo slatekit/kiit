@@ -1,4 +1,4 @@
-package slatekit.common.functions
+package slatekit.functions.common
 
 import slatekit.common.DateTime
 import slatekit.common.Status
@@ -12,7 +12,7 @@ import slatekit.results.isInSuccessRange
 /**
  * Stores the state of the function execution
  */
-interface FunctionState<out T> where T:FunctionResult{
+interface FunctionState<out T> where T: FunctionResult {
     /**
      * Information about the function
      */

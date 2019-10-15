@@ -22,7 +22,7 @@ import slatekit.apis.support.ApiWithSupport
 import slatekit.common.Context
 import slatekit.common.Uris
 import slatekit.common.Vars
-import slatekit.core.email.EmailService
+import slatekit.notifications.email.EmailService
 import slatekit.results.Outcome
 
 @Api(area = "cloud", name = "email", desc = "api to send emails",

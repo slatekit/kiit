@@ -18,9 +18,9 @@ import slatekit.apis.ApiAction
 import slatekit.apis.security.AuthModes
 import slatekit.apis.security.Protocols
 import slatekit.apis.security.Verbs
-import slatekit.core.cmds.CommandResult
-import slatekit.core.cmds.CommandState
-import slatekit.core.cmds.Commands
+import slatekit.functions.cmds.CommandResult
+import slatekit.functions.cmds.CommandState
+import slatekit.functions.cmds.Commands
 import slatekit.common.CommonContext
 import slatekit.results.Try
 
