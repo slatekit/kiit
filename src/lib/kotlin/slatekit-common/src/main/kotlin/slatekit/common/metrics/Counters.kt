@@ -37,13 +37,13 @@ class Counters(val id: Identity,
      * Reset all counterst to 0
      */
     override fun reset() {
-        getInternal("processed")            ?.set(0L)
-        getInternal(Status::Succeeded.name) ?.set(0L)
-        getInternal(Status::Denied.name)    ?.set(0L)
-        getInternal(Status::Invalid.name)   ?.set(0L)
-        getInternal(Status::Ignored.name)   ?.set(0L)
-        getInternal(Status::Errored.name)   ?.set(0L)
-        getInternal(Status::Unexpected.name)?.set(0L)
+        getInternal(Countable.PROCESSED )   ?.set(0L)
+        getInternal(Countable.SUCCEEDED )   ?.set(0L)
+        getInternal(Countable.DENIED    )   ?.set(0L)
+        getInternal(Countable.INVALID   )   ?.set(0L)
+        getInternal(Countable.IGNORED   )   ?.set(0L)
+        getInternal(Countable.ERRORED   )   ?.set(0L)
+        getInternal(Countable.UNEXPECTED)   ?.set(0L)
     }
 
 
@@ -100,13 +100,13 @@ class Counters(val id: Identity,
 
         fun build(lookup:Map<String, Counter>? = null, custom:List<String>? = null):Map<String, Counter> {
             val initial = lookup ?: listOf(
-                    "processed",
-                    Status::Succeeded.name,
-                    Status::Denied.name,
-                    Status::Invalid.name,
-                    Status::Ignored.name,
-                    Status::Errored.name,
-                    Status::Unexpected.name
+                    Countable.PROCESSED ,
+                    Countable.SUCCEEDED ,
+                    Countable.DENIED    ,
+                    Countable.INVALID   ,
+                    Countable.IGNORED   ,
+                    Countable.ERRORED   ,
+                    Countable.UNEXPECTED
             ).map{ it to Counter(listOf()) }.toMap()
             val all = custom?.let {
                 val pairs = it.map { it to Counter(listOf()) }
