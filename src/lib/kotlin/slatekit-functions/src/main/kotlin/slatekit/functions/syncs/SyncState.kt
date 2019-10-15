@@ -16,9 +16,7 @@ package slatekit.functions.syncs
 import slatekit.common.DateTime
 import slatekit.common.DateTimes
 import slatekit.common.Status
-import slatekit.common.functions.FunctionInfo
-import slatekit.common.functions.FunctionMode
-import slatekit.common.functions.FunctionState
+import slatekit.functions.common.*
 import slatekit.common.metrics.Metrics
 import slatekit.common.metrics.MetricsLite
 

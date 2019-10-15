@@ -1,7 +1,7 @@
 package slatekit.functions.syncs
 
-import slatekit.common.functions.FunctionInfo
-import slatekit.common.functions.Functions
+import slatekit.functions.common.FunctionInfo
+import slatekit.functions.common.Functions
 import slatekit.results.builders.Notices
 import slatekit.results.builders.Tries
 import slatekit.results.getOrElse

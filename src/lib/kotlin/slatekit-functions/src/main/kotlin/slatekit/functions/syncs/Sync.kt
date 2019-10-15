@@ -4,13 +4,10 @@ import slatekit.common.DateTime
 import slatekit.common.ext.durationFrom
 import slatekit.common.log.LogSupport
 import slatekit.common.log.Logger
-import slatekit.common.functions.Function
-import slatekit.common.functions.FunctionTriggers
-import slatekit.common.functions.FunctionInfo
-import slatekit.common.functions.FunctionMode
+import slatekit.functions.common.*
+import slatekit.functions.common.Function
 import slatekit.results.Notice
 import slatekit.results.Success
-import slatekit.results.Try
 import slatekit.results.builders.Notices
 import slatekit.results.builders.Tries
 import slatekit.results.getOrElse
