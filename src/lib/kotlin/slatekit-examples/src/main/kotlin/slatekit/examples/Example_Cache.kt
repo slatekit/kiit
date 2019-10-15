@@ -20,8 +20,8 @@ import slatekit.core.cache.CacheSettings
 //</doc:import_required>
 
 //<doc:import_examples>
-import slatekit.core.cmds.Command
-import slatekit.core.cmds.CommandRequest
+import slatekit.functions.cmds.Command
+import slatekit.functions.cmds.CommandRequest
 import slatekit.results.Try
 import slatekit.results.Success
 

@@ -24,8 +24,8 @@ import slatekit.common.log.LoggerConsole
 import slatekit.common.metrics.MetricsLite
 import slatekit.common.requests.Response
 import slatekit.common.CommonResponse
-import slatekit.core.cmds.Command
-import slatekit.core.cmds.CommandRequest
+import slatekit.functions.cmds.Command
+import slatekit.functions.cmds.CommandRequest
 import slatekit.results.Try
 import slatekit.results.Success
 

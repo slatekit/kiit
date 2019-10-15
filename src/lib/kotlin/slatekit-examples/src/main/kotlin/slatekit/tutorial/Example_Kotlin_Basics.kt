@@ -24,7 +24,7 @@ package slatekit.tutorial
 // NOTE: An object is essentially a Singleton class
 // that serves as a "module" containing 1 or more functions
 import slatekit.common.Random.string6
-import slatekit.core.cmds.Command
+import slatekit.functions.cmds.Command
 import slatekit.results.Success
 import slatekit.results.Try
 import java.time.LocalDateTime

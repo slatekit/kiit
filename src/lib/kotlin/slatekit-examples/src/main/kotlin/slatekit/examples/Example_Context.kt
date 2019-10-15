@@ -30,8 +30,8 @@ import slatekit.common.log.LogsDefault
 import slatekit.common.Context
 import slatekit.common.envs.Envs
 import slatekit.entities.Entities
-import slatekit.core.cmds.Command
-import slatekit.core.cmds.CommandRequest
+import slatekit.functions.cmds.Command
+import slatekit.functions.cmds.CommandRequest
 import slatekit.db.Db
 import slatekit.integration.common.AppEntContext
 import slatekit.results.StatusCodes

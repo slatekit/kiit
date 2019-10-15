@@ -17,13 +17,13 @@ import slatekit.meta.models.*
 //</doc:import_required>
 
 //<doc:import_examples>
-import slatekit.core.cmds.Command
+import slatekit.functions.cmds.Command
 import slatekit.common.DateTime
 import slatekit.results.Try
 import slatekit.results.Success
 import slatekit.common.auth.User
 import slatekit.common.info.Host
-import slatekit.core.cmds.CommandRequest
+import slatekit.functions.cmds.CommandRequest
 import slatekit.orm.databases.vendors.MySqlBuilder
 
 //</doc:import_examples>

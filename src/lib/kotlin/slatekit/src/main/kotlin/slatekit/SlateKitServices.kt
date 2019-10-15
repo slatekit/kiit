@@ -7,10 +7,10 @@ import slatekit.cloud.aws.AwsCloudQueue
 import slatekit.common.queues.QueueStringConverter
 import slatekit.core.cloud.CloudFiles
 import slatekit.core.cloud.CloudQueue
-import slatekit.core.email.EmailService
-import slatekit.core.email.EmailServiceSendGrid
-import slatekit.core.sms.SmsService
-import slatekit.core.sms.SmsServiceTwilio
+import slatekit.notifications.email.EmailService
+import slatekit.notifications.email.EmailServiceSendGrid
+import slatekit.notifications.sms.SmsService
+import slatekit.notifications.sms.SmsServiceTwilio
 import slatekit.docs.DocApi
 import slatekit.info.DependencyApi
 import slatekit.info.DependencyModule

@@ -14,7 +14,7 @@
 package slatekit.tutorial
 
 
-import slatekit.core.cmds.Command
+import slatekit.functions.cmds.Command
 import kotlin.reflect.KProperty
 import slatekit.common.ext.*
 import slatekit.results.Success
