@@ -75,13 +75,13 @@ dependencies {
     compile 'com.squareup.okhttp3:okhttp:3.9.0'
     compile 'org.threeten:threetenbp:1.3.8'
 
-    /* <slatekit_local>
+    // /* <slatekit_local>
     if( slatekitSetupViaMaven ) {
         compile "com.slatekit:slatekit-results:$slatekit_version"
     } else {
         // */
         compile project(":slatekit-result")
-    //</slatekit_local>
+    } //</slatekit_local>
 }
 
 // ==================================================================
