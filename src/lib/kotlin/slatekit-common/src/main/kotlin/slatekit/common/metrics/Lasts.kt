@@ -69,6 +69,16 @@ open class Lasts<TRequest, TResponse, TFailure>(val id:Identity,
     fun lastUnexpected():Triple<Any, TRequest, TFailure?> = _lastUnexpected.get()
     fun lastCustom(name:String):Triple<Any, TRequest, TFailure?>? = getCustom(name)?.get()
 
+    fun clear(){
+        _lastRequest.set(null)
+        _lastPending.set(null)
+        _lastSuccess.set(null)
+        _lastDenied.set(null)
+        _lastInvalid.set(null)
+        _lastIgnored.set(null)
+        _lastErrored.set(null)
+        _lastUnexpected.set(null)
+    }
 
     private fun getCustom(name:String):AtomicReference<Triple<Any, TRequest ,TFailure?>>? {
         return if(_customLasts.contains(name)) _customLasts[name] else null

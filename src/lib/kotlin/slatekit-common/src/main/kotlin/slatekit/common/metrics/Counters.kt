@@ -65,7 +65,7 @@ class Counters(val id: Identity,
          * Track status in the counters
          */
         fun count(counters: Counters, status:Status) {
-            counters.count(status)
+            counters.increment(status)
         }
 
 
@@ -74,17 +74,7 @@ class Counters(val id: Identity,
          */
         fun <S,F> count(counters: Counters, results:List<slatekit.results.Result<S, F>>): Unit {
             // 1. Track processed, failed, etc
-            results.forEach { result ->
-
-                // Total processed ( regardless of status )
-                counters.processed()
-
-                // Fine grained status counting
-                when(result) {
-                    is Success -> {  counters.succeeded() }
-                    is Failure -> {  Counters.count(counters, result.status) }
-                }
-            }
+            results.forEach { result -> counters.increment(result.status) }
         }
 
 
