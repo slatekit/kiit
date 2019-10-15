@@ -13,14 +13,12 @@
 
 package slatekit.functions.cmds
 
+import slatekit.common.Status
 import slatekit.common.args.Args
 import slatekit.functions.common.*
-import slatekit.results.Failure
-import slatekit.results.Outcome
-import slatekit.results.Success
+import slatekit.results.*
 import slatekit.results.builders.Outcomes
 import slatekit.results.builders.Tries
-import slatekit.results.getOrElse
 
 /**
  * Command manager to run commands and get back the status of each command
@@ -28,7 +26,7 @@ import slatekit.results.getOrElse
  * @param all
  */
 class Commands(override val all: List<Command>) : Functions<Command> {
-    private val states = all.map { it.name to CommandState.empty(it.info) }.toMap()
+    private val states = all.map { it.name to CommandState.empty(it.info) }.toMap().toMutableMap()
 
     /**
      * Runs the command with the supplied name
@@ -37,17 +35,28 @@ class Commands(override val all: List<Command>) : Functions<Command> {
      */
     fun run(name: String, args: Array<String>? = null): Outcome<CommandResult> {
         val command = getOrNull(name)
-        val result = when(command) {
-            null -> Outcomes.errored<CommandResult>("$name not found")
+        val outcome = when(command) {
+            null -> Outcomes.errored("$name not found")
             else -> {
                 val parseResult = Args.parseArgs(args ?: arrayOf())
-                when (parseResult) {
+                val r = when (parseResult) {
                     is Failure<Exception> -> Outcomes.errored(parseResult.error)
                     is Success<Args> -> command.execute(parseResult.value, FunctionMode.Interacted).toOutcome()
                 }
+                r
             }
         }
-        return result
+        command?.let { cmd ->
+            when (outcome) {
+                is Success -> {
+                    states[name] = CommandState(cmd.info, Status.Running, outcome)
+                }
+                is Failure -> {
+                    states[name] = CommandState(cmd.info, Status.Failed, outcome)
+                }
+            }
+        }
+        return outcome
     }
 
 

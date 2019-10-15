@@ -1,6 +1,7 @@
 package slatekit.functions.common
 
 import slatekit.common.Status
+import slatekit.results.Outcome
 
 /**
  * Stores the state of the function execution
@@ -19,12 +20,12 @@ interface FunctionState<out T> where T: FunctionResult {
     /**
      * The last result of running the function
      */
-    val lastResult: T?
+    val lastResult: Outcome<T>?
 
     /**
      * The last message from the result
      */
-    fun msg(): String = lastResult?.message ?: ""
+    fun msg(): String = lastResult?.msg ?: ""
 
     /**
      * Whether or not the function has been run

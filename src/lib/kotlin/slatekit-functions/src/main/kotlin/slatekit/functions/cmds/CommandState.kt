@@ -15,6 +15,8 @@ package slatekit.functions.cmds
 
 import slatekit.common.Status
 import slatekit.functions.common.*
+import slatekit.results.Outcome
+import slatekit.results.builders.Outcomes
 
 /**
  *
@@ -26,7 +28,7 @@ import slatekit.functions.common.*
 data class CommandState(
         override val info: FunctionInfo,
         override val status: Status,
-        override val lastResult: CommandResult?
+        override val lastResult: Outcome<CommandResult>?
 ) : FunctionState<CommandResult> {
 
     /**
@@ -37,7 +39,7 @@ data class CommandState(
      */
     fun update(result: CommandResult): CommandState {
 
-        val updated = this.copy(lastResult = result)
+        val updated = this.copy(lastResult = Outcomes.of(result))
         return updated
     }
 
