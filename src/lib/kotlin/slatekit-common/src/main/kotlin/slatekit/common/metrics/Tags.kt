@@ -35,7 +35,7 @@ class Tags(val global: List<Tag>) {
         return if (paths.containsKey(path)) {
             paths[path]!!
         } else {
-            val tag = MetricTag("uri", path)
+            val tag = Tagged("uri", path)
             paths[path] = tag
             tag
         }
@@ -48,12 +48,12 @@ class Tags(val global: List<Tag>) {
                   hostName: String,
                   location: String,
                   shardName: String): List<Tag> = listOf(
-                MetricTag("env", envName),
-                MetricTag("app", appName),
-                MetricTag("grp", groupName),
-                MetricTag("host", hostName),
-                MetricTag("loc", location),
-                MetricTag("shard", shardName)
+                Tagged("env", envName),
+                Tagged("app", appName),
+                Tagged("grp", groupName),
+                Tagged("host", hostName),
+                Tagged("loc", location),
+                Tagged("shard", shardName)
         )
     }
 }

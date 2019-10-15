@@ -9,4 +9,4 @@ interface Tag {
 }
 
 
-class MetricTag(override val tagName:String, override val tagVal:String):Tag
+class Tagged(override val tagName:String, override val tagVal:String):Tag

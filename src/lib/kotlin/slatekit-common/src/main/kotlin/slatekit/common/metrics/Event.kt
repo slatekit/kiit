@@ -5,6 +5,14 @@ import slatekit.common.log.Logger
 import slatekit.results.Status
 
 /**
+ * Used for diagnostics / alerts to represent some event that occurred.
+ * This event is considered a "Structured Event" in the sense it has contextual
+ * information about what happened ( see fields below ). This can then be used for:
+ *
+ * 1. structured logging      ( e.g. with specific fields / metadata )
+ * 2. alerting of the event   ( e.g. via slack )
+ * 3. analytics for the event
+ *
  * @param area   : logical group/project this alert is associated with
  * @param agent  : application / service sending this alert
  * @param name   : name of the alert        e.g. "NEW_DEVICE_REGISTRATION"
@@ -29,7 +37,7 @@ import slatekit.results.Status
  *         { 'region' , 'usa'     , '' },
  *         { 'device' , 'android' , '' }
  *     ]
- * }}
+ * }
  */
 data class Event(
         val area: String,
@@ -46,18 +54,25 @@ data class Event(
 
     companion object {
 
-        fun log(logger:Logger, id:Identity, status:Status, event:Event){
+        fun log(logger:Logger, id:Identity, event:Event){
             val extra = event.fields?.fold("") { acc, info -> acc + ", ${info.first}=${info.second}" }
-            when(status) {
-                is Status.Succeeded  -> logger.info ("id=${id.fullName}, area=${event.area}, name=${event.name}, uuid=${event.uuid}, success=true , code=${status.code}, desc=${event.desc} $extra")
-                is Status.Pending    -> logger.info ("id=${id.fullName}, area=${event.area}, name=${event.name}, uuid=${event.uuid}, success=true , code=${status.code}, desc=${event.desc} $extra")
-                is Status.Ignored    -> logger.info ("id=${id.fullName}, area=${event.area}, name=${event.name}, uuid=${event.uuid}, success=false, code=${status.code}, desc=${event.desc} $extra")
-                is Status.Invalid    -> logger.error("id=${id.fullName}, area=${event.area}, name=${event.name}, uuid=${event.uuid}, success=false, code=${status.code}, desc=${event.desc} $extra")
-                is Status.Denied     -> logger.error("id=${id.fullName}, area=${event.area}, name=${event.name}, uuid=${event.uuid}, success=false, code=${status.code}, desc=${event.desc} $extra")
-                is Status.Errored    -> logger.error("id=${id.fullName}, area=${event.area}, name=${event.name}, uuid=${event.uuid}, success=false, code=${status.code}, desc=${event.desc} $extra")
-                is Status.Unexpected -> logger.error("id=${id.fullName}, area=${event.area}, name=${event.name}, uuid=${event.uuid}, success=false, code=${status.code}, desc=${event.desc} $extra")
-                else                 -> logger.error("id=${id.fullName}, area=${event.area}, name=${event.name}, uuid=${event.uuid}, success=false, code=${status.code}, desc=${event.desc} $extra")
+            when(event.status) {
+                is Status.Succeeded  -> logger.info ("id=${id.fullName}, area=${event.area}, name=${event.name}, uuid=${event.uuid}, success=true , code=${event.status.code}, desc=${event.desc} $extra")
+                is Status.Pending    -> logger.info ("id=${id.fullName}, area=${event.area}, name=${event.name}, uuid=${event.uuid}, success=true , code=${event.status.code}, desc=${event.desc} $extra")
+                is Status.Ignored    -> logger.info ("id=${id.fullName}, area=${event.area}, name=${event.name}, uuid=${event.uuid}, success=false, code=${event.status.code}, desc=${event.desc} $extra")
+                is Status.Invalid    -> logger.error("id=${id.fullName}, area=${event.area}, name=${event.name}, uuid=${event.uuid}, success=false, code=${event.status.code}, desc=${event.desc} $extra")
+                is Status.Denied     -> logger.error("id=${id.fullName}, area=${event.area}, name=${event.name}, uuid=${event.uuid}, success=false, code=${event.status.code}, desc=${event.desc} $extra")
+                is Status.Errored    -> logger.error("id=${id.fullName}, area=${event.area}, name=${event.name}, uuid=${event.uuid}, success=false, code=${event.status.code}, desc=${event.desc} $extra")
+                is Status.Unexpected -> logger.error("id=${id.fullName}, area=${event.area}, name=${event.name}, uuid=${event.uuid}, success=false, code=${event.status.code}, desc=${event.desc} $extra")
+                else                 -> logger.error("id=${id.fullName}, area=${event.area}, name=${event.name}, uuid=${event.uuid}, success=false, code=${event.status.code}, desc=${event.desc} $extra")
 
+            }
+        }
+
+
+        fun logger(logger: Logger, id: Identity): (Event) -> Unit {
+            return { event:Event ->
+              Event.log(logger, id, event)
             }
         }
     }

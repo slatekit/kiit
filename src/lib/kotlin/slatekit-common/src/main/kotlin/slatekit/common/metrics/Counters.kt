@@ -6,9 +6,22 @@ import slatekit.results.Status
 import slatekit.results.Success
 import java.util.concurrent.atomic.AtomicLong
 
+
+/**
+ * Used for diagnostics / metrics to track and count various @see[slatekit.results.Status]
+ * representing successes / failures of some operation identified by @param id.
+ * This serves to track the following:
+ *
+ * 1. total requests  ( processed )
+ * 2. total successes  e.g. passed
+ * 3. total denied     e.g. security/auth failure
+ * 4. total invalid    e.g. invalid / bad request
+ * 5. total ignored    e.g. ineligible request
+ * 6. total errored    e.g. expected errors
+ * 7. total unexpected e.g. unexpected errors
+ */
 class Counters(val id: Identity, val custom:List<String>? = null) {
 
-    private val uniqueId = "${id.name}-${id.uuid}"
     private val processCounter = AtomicLong(0L)
     private val successCounter = AtomicLong(0L)
     private val deniedCounter  = AtomicLong(0L)
@@ -105,6 +118,7 @@ class Counters(val id: Identity, val custom:List<String>? = null) {
                 }
             }
         }
+
 
         /**
          * Count the number of processed items
