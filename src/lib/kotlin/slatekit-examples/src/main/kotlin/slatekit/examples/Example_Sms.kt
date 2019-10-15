@@ -25,8 +25,8 @@ import slatekit.common.conf.Config
 import slatekit.common.info.ApiLogin
 import slatekit.common.types.CountryCode
 import slatekit.core.cmds.CommandRequest
-import slatekit.core.sms.SmsMessage
-import slatekit.core.sms.SmsServiceTwilio
+import slatekit.notifications.sms.SmsMessage
+import slatekit.notifications.sms.SmsServiceTwilio
 import slatekit.results.Try
 import slatekit.results.Success
 
@@ -78,7 +78,7 @@ class Example_Sms : Command("sms") {
     sms3.send("Invitation to MyApp.com", "us", "234567890")
 
     // Use case 2: Send using a constructed message object
-    sms3.send(SmsMessage("Invitation to MyApp.com", "us", "234567890"))
+    sms3.sendSync(SmsMessage("Invitation to MyApp.com", "us", "234567890"))
 
     // Use case 3: Send message using one of the setup templates
     sms3.sendUsingTemplate("sms_welcome", "us", "234567890",
