@@ -16,8 +16,9 @@ import slatekit.results.builders.Tries
  * 3. counts: counting the various statuses ( succeeded, denied, ignored, invalid, etc
  * 4. events: calling any custom event handlers
  */
-class Recorder<TRequest, TResponse>(val id: Identity,
+open class Recorder<TRequest, TResponse>(val id: Identity,
                                     val logger: Logger?,
+                                    val calls: Calls?,
                                     val counts: Counters?,
                                     val lasts: Lasts<TRequest, TResponse, Err>?,
                                     val converter: ((TRequest, Outcome<TResponse>) -> Event)?,
@@ -46,13 +47,14 @@ class Recorder<TRequest, TResponse>(val id: Identity,
     companion object {
 
         fun <TRequest, TResponse> of(id:Identity,
+                                     tags:List<Tag>? = null,
                                      logger: Logger? = null,
                                      converter: ((TRequest, Outcome<TResponse>) -> Event)? = null): Recorder<TRequest, TResponse> {
             val events = when(converter) {
                 null -> null
-                else -> Events<TRequest, TResponse, Err>()
+                else -> Events<TRequest, TResponse, Err>(tags ?: listOf())
             }
-            return Recorder(id, logger, Counters(id), Lasts(id), converter, events)
+            return Recorder(id, logger, Calls(id), Counters(id), Lasts(id), converter, events)
         }
     }
 }

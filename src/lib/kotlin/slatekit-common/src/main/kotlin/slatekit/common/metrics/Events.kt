@@ -7,7 +7,7 @@ import slatekit.results.Success
 /**
  * Handles the various success / failures statuses represented in the @see[slatekit.results.Status]
  */
-open class Events<TRequest, TResponse, TFailure> {
+open class Events<TRequest, TResponse, TFailure>(override val tags: List<Tag>) : Tagged {
 
     open fun requested(sender: Any, request: TRequest) {}
 

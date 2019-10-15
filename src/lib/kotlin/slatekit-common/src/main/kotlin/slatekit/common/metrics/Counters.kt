@@ -20,66 +20,42 @@ import java.util.concurrent.atomic.AtomicLong
  * 6. total errored    e.g. expected errors
  * 7. total unexpected e.g. unexpected errors
  */
-class Counters(val id: Identity, val custom:List<String>? = null) {
+class Counters(val id: Identity,
+               override val tags:List<Tag> = listOf(),
+               lookup:Map<String, Counter>? = null,
+               custom:List<String>? = null) : Countable {
 
-    private val processCounter = AtomicLong(0L)
-    private val successCounter = AtomicLong(0L)
-    private val deniedCounter  = AtomicLong(0L)
-    private val invalidCounter = AtomicLong(0L)
-    private val ignoredCounter = AtomicLong(0L)
-    private val erroredCounter = AtomicLong(0L)
-    private val unexpectedCounter = AtomicLong(0L)
-    private val customCounters = custom?.let { c -> c.map{ it to AtomicLong(0L) }.toMap() } ?: mapOf()
+    private val counters = build(lookup, custom)
+
+
+    override fun get(name:String):Long = getInternal(name)?.get() ?: 0L
+    override fun inc(name:String):Long = getInternal(name)?.inc() ?: 0L
+    override fun dec(name:String):Long = getInternal(name)?.dec() ?: 0L
 
 
     /**
-     * Reset all values back to 0
+     * Reset all counterst to 0
      */
-    fun reset() {
-        processCounter.set(0L)
-        successCounter.set(0L)
-        invalidCounter.set(0L)
-        ignoredCounter.set(0L)
-        deniedCounter.set(0L)
-        erroredCounter.set(0L)
-        unexpectedCounter.set(0L)
+    override fun reset() {
+        getInternal("processed")            ?.set(0L)
+        getInternal(Status::Succeeded.name) ?.set(0L)
+        getInternal(Status::Denied.name)    ?.set(0L)
+        getInternal(Status::Invalid.name)   ?.set(0L)
+        getInternal(Status::Ignored.name)   ?.set(0L)
+        getInternal(Status::Errored.name)   ?.set(0L)
+        getInternal(Status::Unexpected.name)?.set(0L)
     }
 
 
     /**
-     * Increment the counters for the different states
-     * @return
+     * Gets the counter for a specific name
      */
-    fun processed():Long  = processCounter.incrementAndGet()
-    fun succeeded():Long  = successCounter.incrementAndGet()
-    fun denied():Long     = deniedCounter.incrementAndGet()
-    fun invalid():Long    = invalidCounter.incrementAndGet()
-    fun ignored():Long    = ignoredCounter.incrementAndGet()
-    fun errored():Long    = erroredCounter.incrementAndGet()
-    fun unexpected():Long = unexpectedCounter.incrementAndGet()
-    fun custom(name:String) = getCustom(name)?.let{ c -> c.incrementAndGet() }
-
-
-    fun totalProcessed ():Long = processCounter.get()
-    fun totalSucceeded ():Long = successCounter.get()
-    fun totalInvalid   ():Long = invalidCounter.get()
-    fun totalIgnored   ():Long = ignoredCounter.get()
-    fun totalDenied    ():Long = deniedCounter.get()
-    fun totalErrored   ():Long = erroredCounter.get()
-    fun totalUnexpected():Long = unexpectedCounter.get()
-    fun totalCustom(name:String):Long = getCustom(name)?.let { c -> c.get() } ?:0L
-
-
-    private fun getCustom(name:String):AtomicLong? {
-        return if(customCounters.contains(name)) customCounters[name] else null
-    }
-
-
-    private fun inc(counter:AtomicLong, value:Int): Long {
-        val current = counter.get()
-        val updated = current + value
-        counter.set(updated)
-        return updated
+    private fun getInternal(name:String):Counter? {
+        return if(counters.containsKey(name)) {
+            counters[name]
+        } else {
+            null
+        }
     }
 
 
@@ -89,15 +65,7 @@ class Counters(val id: Identity, val custom:List<String>? = null) {
          * Track status in the counters
          */
         fun count(counters: Counters, status:Status) {
-            counters.processed()
-            when(status) {
-                is Status.Denied     -> counters.denied()
-                is Status.Invalid    -> counters.invalid()
-                is Status.Ignored    -> counters.ignored()
-                is Status.Errored    -> counters.errored()
-                is Status.Unexpected -> counters.unexpected()
-                else                 -> counters.unexpected()
-            }
+            counters.count(status)
         }
 
 
@@ -126,7 +94,7 @@ class Counters(val id: Identity, val custom:List<String>? = null) {
          * @param limit
          * @param operation
          */
-        fun countOrReset(counter:AtomicLong, enabled:Boolean, limit:Long, size:Int, operation:() -> Unit): Unit {
+        fun countOrReset(counter:AtomicLong, enabled:Boolean, limit:Long, size:Int, operation:() -> Unit) {
             val current = counter.get()
             if (current >= limit) {
                 if(enabled) {
@@ -137,6 +105,24 @@ class Counters(val id: Identity, val custom:List<String>? = null) {
             else {
                 counter.set(current + size)
             }
+        }
+
+
+        fun build(lookup:Map<String, Counter>? = null, custom:List<String>? = null):Map<String, Counter> {
+            val initial = lookup ?: listOf(
+                    "processed",
+                    Status::Succeeded.name,
+                    Status::Denied.name,
+                    Status::Invalid.name,
+                    Status::Ignored.name,
+                    Status::Errored.name,
+                    Status::Unexpected.name
+            ).map{ it to Counter(listOf()) }.toMap()
+            val all = custom?.let {
+                val pairs = it.map { it to Counter(listOf()) }
+                initial.plus(pairs)
+            } ?: initial
+            return all
         }
     }
 }

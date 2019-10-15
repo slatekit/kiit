@@ -33,7 +33,9 @@ import java.util.concurrent.atomic.AtomicReference
  * @param TResponse: Type of the response / output of the operation
  * @param TFailure : Type of the error of the operation
  */
-open class Lasts<TRequest, TResponse, TFailure>(val id:Identity, val custom:List<String>? = null) :Events<TRequest, TResponse, TFailure>() {
+open class Lasts<TRequest, TResponse, TFailure>(val id:Identity,
+                                                tags:List<Tag> = listOf(),
+                                                val custom:List<String>? = null) : Tagged, Events<TRequest, TResponse, TFailure>(tags) {
 
     // Last values
     private val _lastRequest     = AtomicReference<TRequest>(null)

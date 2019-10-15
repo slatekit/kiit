@@ -1,6 +1,6 @@
 package slatekit.common.metrics
 
-import java.lang.Number
+import slatekit.common.ids.Identity
 
 
 /**
@@ -14,9 +14,9 @@ import java.lang.Number
  */
 interface Metrics {
 
-    val settings:MetricsSettings
+    val id:Identity
 
-    val source:String
+    val settings:MetricsSettings
 
     fun provider():Any
 
@@ -29,5 +29,7 @@ interface Metrics {
     fun <T> gauge(name: String, value:T) where T: kotlin.Number
 
     fun <T> gauge(name: String, call: () -> T, tags: List<Tag>?) where T: kotlin.Number
+
+    fun toCountable():Countable
 }
 

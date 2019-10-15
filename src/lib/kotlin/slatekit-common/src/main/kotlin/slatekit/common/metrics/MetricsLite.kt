@@ -3,13 +3,25 @@ package slatekit.common.metrics
 import org.threeten.bp.Instant
 import org.threeten.bp.ZonedDateTime
 import slatekit.common.ext.durationFrom
+import slatekit.common.ids.Identity
 import java.util.concurrent.atomic.AtomicLong
 import java.util.concurrent.atomic.AtomicReference
 
 
+/**
+ * Simple / Light-Weight implementation of the Metric interface for quick/in-memory purposes.
+ *
+ * NOTES:
+ * 1. There is a https://micrometer.io/ implementation available in the slatekit.providers
+ * 2. If you are already using micro-meter, then use the implementation above.
+ * 3. SlateKit has its own ( just a few ) diagnostic level components like Calls/Counters/Events/Lasts
+ *    that are not available in other metrics libraries. These are specifically designed to work with
+ *    the Result<T, E> component in @see[slatekit.results.Result] for counting/tracking successes/failures
+ */
 class MetricsLite(
-        override val settings: MetricsSettings = MetricsSettings(true,true, Tags(listOf())),
-        override val source: String = "slatekit-internal"
+        override val id: Identity,
+        val tags:List<Tag> = listOf(),
+        override val settings: MetricsSettings = MetricsSettings(true,true, Tags(tags))
 ) : Metrics {
     private val counters = mutableMapOf<String, Counter>()
     private val gauges = mutableMapOf<String, Gauge<*>>()
@@ -59,6 +71,14 @@ class MetricsLite(
     }
 
 
+    /**
+     * Gets the current counters as a first class Countable
+     */
+    override fun toCountable():Countable {
+        return Counters(id, tags, counters.toMap())
+    }
+
+
     val emptyGlobals = listOf<Tag>()
     private fun globals(): List<Tag> {
         return if (settings.standardize) settings.tags.global else emptyGlobals
@@ -76,68 +96,10 @@ class MetricsLite(
     }
 
 
-
-    interface Metric {
-        val tags: List<Tag>
-    }
-
-
-
-    /**
-     * Simple counter for a value
-     */
-    data class Counter(override val tags: List<Tag>, val customTags:List<String>? = null) : Metric {
-
-        private val value = AtomicLong(0L)
-
-        fun inc(): Long = value.incrementAndGet()
-        fun dec(): Long = value.decrementAndGet()
-        fun get(): Long = value.get()
-    }
-
-
-    /**
-     * Simple gauge to check a value
-     */
-    data class Gauge<T>(override val tags: List<Tag>,
-                        val fetcher: () -> T,
-                        val customTags:List<Tag>? = null,
-                        val reloadSeconds: Long = 10) : Metric {
-
-        private var value: T? = null
-        private var lastTimeStamp = ZonedDateTime.now()
-
-        fun get(): T? {
-            if(isOld()) {
-                refresh()
-            }
-            return value
-        }
-
-
-        fun refresh(){
-            set(fetcher())
-        }
-
-
-        fun set(newValue:T){
-            value = newValue
-            lastTimeStamp = ZonedDateTime.now()
-        }
-
-
-        fun isOld():Boolean {
-            val now = ZonedDateTime.now()
-            val expires = lastTimeStamp.plusSeconds(reloadSeconds)
-            return now > expires
-        }
-    }
-
-
     /**
      * Simple timer
      */
-    data class Timer(override val tags: List<Tag>, val customTags:List<String>? = null) : Metric {
+    data class Timer(override val tags: List<Tag>, val customTags:List<String>? = null) : Tagged {
 
         private val last = AtomicReference<Record>()
         private val value = AtomicLong(0L)
@@ -158,8 +120,8 @@ class MetricsLite(
 
 
     companion object {
-        fun build(): MetricsLite {
-            return MetricsLite(MetricsSettings(true,true, Tags(listOf())))
+        fun build(id:Identity, tags:List<Tag> = listOf()): MetricsLite {
+            return MetricsLite(id, tags, MetricsSettings(true,true, Tags(listOf())))
         }
     }
 }
