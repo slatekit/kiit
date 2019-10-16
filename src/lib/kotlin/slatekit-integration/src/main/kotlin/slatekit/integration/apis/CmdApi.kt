@@ -22,6 +22,7 @@ import slatekit.functions.cmds.CommandResult
 import slatekit.functions.cmds.CommandState
 import slatekit.functions.cmds.Commands
 import slatekit.common.CommonContext
+import slatekit.results.Outcome
 import slatekit.results.Try
 
 @Api(area = "infra", name = "commands", desc = "api info about the application and host",
@@ -38,8 +39,8 @@ class CmdApi(val cmd: Commands, context: CommonContext) {
     fun exists(name: String): Boolean = cmd.contains(name)
 
     @ApiAction(desc = "runs the command by its name")
-    fun run(name: String): CommandResult = cmd.run(name)
+    fun run(name: String): Outcome<CommandResult> = cmd.run(name)
 
     @ApiAction(desc = "get the current state of the command")
-    fun state(name: String): CommandState = cmd.state(name)
+    fun state(name: String): Outcome<CommandState> = cmd.state(name)
 }

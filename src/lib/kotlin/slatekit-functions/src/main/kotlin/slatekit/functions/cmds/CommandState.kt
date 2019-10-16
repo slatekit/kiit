@@ -13,12 +13,10 @@
 
 package slatekit.functions.cmds
 
-import slatekit.common.DateTime
-import slatekit.common.DateTimes
 import slatekit.common.Status
 import slatekit.functions.common.*
-import slatekit.common.metrics.Metrics
-import slatekit.common.metrics.MetricsLite
+import slatekit.results.Outcome
+import slatekit.results.builders.Outcomes
 
 /**
  *
@@ -30,12 +28,7 @@ import slatekit.common.metrics.MetricsLite
 data class CommandState(
         override val info: FunctionInfo,
         override val status: Status,
-        override val msg: String,
-        override val lastRun: DateTime,
-        override val lastMode: FunctionMode,
-        override val hasRun: Boolean,
-        override val metrics: Metrics,
-        override val lastResult: CommandResult?
+        override val lastResult: Outcome<CommandResult>?
 ) : FunctionState<CommandResult> {
 
     /**
@@ -46,16 +39,7 @@ data class CommandState(
      */
     fun update(result: CommandResult): CommandState {
 
-        val updated = this.copy(
-                msg = result.message ?: "",
-                lastRun = result.started,
-                lastMode = result.mode,
-                hasRun = true,
-                lastResult = result
-        )
-        // Update the metrics based on the slatekit.results.status.code
-        // which is standardized across all modules
-        updated.increment(result.result.code, null)
+        val updated = this.copy(lastResult = Outcomes.of(result))
         return updated
     }
 
@@ -70,11 +54,6 @@ data class CommandState(
                 CommandState(
                         info = info,
                         status = Status.InActive,
-                        msg = "Not yet run",
-                        lastRun = DateTimes.MIN,
-                        lastMode = FunctionMode.Called,
-                        hasRun = false,
-                        metrics = MetricsLite(),
                         lastResult = null
                 )
     }

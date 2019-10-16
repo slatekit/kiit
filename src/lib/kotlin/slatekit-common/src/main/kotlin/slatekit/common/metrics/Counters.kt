@@ -6,67 +6,56 @@ import slatekit.results.Status
 import slatekit.results.Success
 import java.util.concurrent.atomic.AtomicLong
 
-class Counters(val id: Identity, val custom:List<String>? = null) {
 
-    private val uniqueId = "${id.name}-${id.uuid}"
-    private val processCounter = AtomicLong(0L)
-    private val successCounter = AtomicLong(0L)
-    private val deniedCounter  = AtomicLong(0L)
-    private val invalidCounter = AtomicLong(0L)
-    private val ignoredCounter = AtomicLong(0L)
-    private val erroredCounter = AtomicLong(0L)
-    private val unexpectedCounter = AtomicLong(0L)
-    private val customCounters = custom?.let { c -> c.map{ it to AtomicLong(0L) }.toMap() } ?: mapOf()
+/**
+ * Used for diagnostics / metrics to track and count various @see[slatekit.results.Status]
+ * representing successes / failures of some operation identified by @param id.
+ * This serves to track the following:
+ *
+ * 1. total requests  ( processed )
+ * 2. total successes  e.g. passed
+ * 3. total denied     e.g. security/auth failure
+ * 4. total invalid    e.g. invalid / bad request
+ * 5. total ignored    e.g. ineligible request
+ * 6. total errored    e.g. expected errors
+ * 7. total unexpected e.g. unexpected errors
+ */
+class Counters(val id: Identity,
+               override val tags:List<Tag> = listOf(),
+               lookup:Map<String, Counter>? = null,
+               custom:List<String>? = null) : Countable {
+
+    private val counters = build(lookup, custom)
+
+
+    override fun get(name:String):Long = getInternal(name)?.get() ?: 0L
+    override fun inc(name:String):Long = getInternal(name)?.inc() ?: 0L
+    override fun dec(name:String):Long = getInternal(name)?.dec() ?: 0L
 
 
     /**
-     * Reset all values back to 0
+     * Reset all counterst to 0
      */
-    fun reset() {
-        processCounter.set(0L)
-        successCounter.set(0L)
-        invalidCounter.set(0L)
-        ignoredCounter.set(0L)
-        deniedCounter.set(0L)
-        erroredCounter.set(0L)
-        unexpectedCounter.set(0L)
+    override fun reset() {
+        getInternal(Countable.PROCESSED )   ?.set(0L)
+        getInternal(Countable.SUCCEEDED )   ?.set(0L)
+        getInternal(Countable.DENIED    )   ?.set(0L)
+        getInternal(Countable.INVALID   )   ?.set(0L)
+        getInternal(Countable.IGNORED   )   ?.set(0L)
+        getInternal(Countable.ERRORED   )   ?.set(0L)
+        getInternal(Countable.UNEXPECTED)   ?.set(0L)
     }
 
 
     /**
-     * Increment the counters for the different states
-     * @return
+     * Gets the counter for a specific name
      */
-    fun processed():Long  = processCounter.incrementAndGet()
-    fun succeeded():Long  = successCounter.incrementAndGet()
-    fun denied():Long     = deniedCounter.incrementAndGet()
-    fun invalid():Long    = invalidCounter.incrementAndGet()
-    fun ignored():Long    = ignoredCounter.incrementAndGet()
-    fun errored():Long    = erroredCounter.incrementAndGet()
-    fun unexpected():Long = unexpectedCounter.incrementAndGet()
-    fun custom(name:String) = getCustom(name)?.let{ c -> c.incrementAndGet() }
-
-
-    fun totalProcessed ():Long = processCounter.get()
-    fun totalSucceeded ():Long = successCounter.get()
-    fun totalInvalid   ():Long = invalidCounter.get()
-    fun totalIgnored   ():Long = ignoredCounter.get()
-    fun totalDenied    ():Long = deniedCounter.get()
-    fun totalErrored   ():Long = erroredCounter.get()
-    fun totalUnexpected():Long = unexpectedCounter.get()
-    fun totalCustom(name:String):Long = getCustom(name)?.let { c -> c.get() } ?:0L
-
-
-    private fun getCustom(name:String):AtomicLong? {
-        return if(customCounters.contains(name)) customCounters[name] else null
-    }
-
-
-    private fun inc(counter:AtomicLong, value:Int): Long {
-        val current = counter.get()
-        val updated = current + value
-        counter.set(updated)
-        return updated
+    private fun getInternal(name:String):Counter? {
+        return if(counters.containsKey(name)) {
+            counters[name]
+        } else {
+            null
+        }
     }
 
 
@@ -76,15 +65,7 @@ class Counters(val id: Identity, val custom:List<String>? = null) {
          * Track status in the counters
          */
         fun count(counters: Counters, status:Status) {
-            counters.processed()
-            when(status) {
-                is Status.Denied     -> counters.denied()
-                is Status.Invalid    -> counters.invalid()
-                is Status.Ignored    -> counters.ignored()
-                is Status.Errored    -> counters.errored()
-                is Status.Unexpected -> counters.unexpected()
-                else                 -> counters.unexpected()
-            }
+            counters.increment(status)
         }
 
 
@@ -93,18 +74,9 @@ class Counters(val id: Identity, val custom:List<String>? = null) {
          */
         fun <S,F> count(counters: Counters, results:List<slatekit.results.Result<S, F>>): Unit {
             // 1. Track processed, failed, etc
-            results.forEach { result ->
-
-                // Total processed ( regardless of status )
-                counters.processed()
-
-                // Fine grained status counting
-                when(result) {
-                    is Success -> {  counters.succeeded() }
-                    is Failure -> {  Counters.count(counters, result.status) }
-                }
-            }
+            results.forEach { result -> counters.increment(result.status) }
         }
+
 
         /**
          * Count the number of processed items
@@ -112,7 +84,7 @@ class Counters(val id: Identity, val custom:List<String>? = null) {
          * @param limit
          * @param operation
          */
-        fun countOrReset(counter:AtomicLong, enabled:Boolean, limit:Long, size:Int, operation:() -> Unit): Unit {
+        fun countOrReset(counter:AtomicLong, enabled:Boolean, limit:Long, size:Int, operation:() -> Unit) {
             val current = counter.get()
             if (current >= limit) {
                 if(enabled) {
@@ -123,6 +95,24 @@ class Counters(val id: Identity, val custom:List<String>? = null) {
             else {
                 counter.set(current + size)
             }
+        }
+
+
+        fun build(lookup:Map<String, Counter>? = null, custom:List<String>? = null):Map<String, Counter> {
+            val initial = lookup ?: listOf(
+                    Countable.PROCESSED ,
+                    Countable.SUCCEEDED ,
+                    Countable.DENIED    ,
+                    Countable.INVALID   ,
+                    Countable.IGNORED   ,
+                    Countable.ERRORED   ,
+                    Countable.UNEXPECTED
+            ).map{ it to Counter(listOf()) }.toMap()
+            val all = custom?.let {
+                val pairs = it.map { it to Counter(listOf()) }
+                initial.plus(pairs)
+            } ?: initial
+            return all
         }
     }
 }

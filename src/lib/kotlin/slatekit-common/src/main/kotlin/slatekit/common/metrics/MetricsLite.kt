@@ -1,11 +1,32 @@
 package slatekit.common.metrics
 
+import org.threeten.bp.Instant
+import org.threeten.bp.ZonedDateTime
+import slatekit.common.ext.durationFrom
+import slatekit.common.ids.Identity
+import java.util.concurrent.atomic.AtomicLong
+import java.util.concurrent.atomic.AtomicReference
 
 
+/**
+ * Simple / Light-Weight implementation of the Metric interface for quick/in-memory purposes.
+ *
+ * NOTES:
+ * 1. There is a provider/wrapper for https://micrometer.io/ available in the slatekit.providers
+ * 2. If you are already using micro-meter, then use the wrapper above.
+ * 3. SlateKit custom diagnostics components ( Calls, Counters, Events, Lasts ) are orthogonal to metrics
+ * 4. SlateKit has its own ( just a few ) diagnostic level components like Calls/Counters/Events/Lasts
+ *    that are not available in other metrics libraries. These are specifically designed to work with
+ *    the Result<T, E> component in @see[slatekit.results.Result] for counting/tracking successes/failures
+ *
+ */
 class MetricsLite(
-        override val settings: MetricsSettings = MetricsSettings(true,true, Tags(listOf())),
-        override val source: String = "slatekit-internal"
+        override val id: Identity,
+        val tags:List<Tag> = listOf(),
+        override val source: String = "slatekit",
+        override val settings: MetricsSettings = MetricsSettings(true,true, Tags(tags))
 ) : Metrics {
+
     private val counters = mutableMapOf<String, Counter>()
     private val gauges = mutableMapOf<String, Gauge<*>>()
     private val timers = mutableMapOf<String, Timer>()
@@ -54,6 +75,14 @@ class MetricsLite(
     }
 
 
+    /**
+     * Gets the current counters as a first class Countable
+     */
+    fun toCountable():Countable {
+        return Counters(id, tags, counters.toMap())
+    }
+
+
     val emptyGlobals = listOf<Tag>()
     private fun globals(): List<Tag> {
         return if (settings.standardize) settings.tags.global else emptyGlobals
@@ -71,9 +100,32 @@ class MetricsLite(
     }
 
 
+    /**
+     * Simple timer
+     */
+    data class Timer(override val tags: List<Tag>, val customTags:List<String>? = null) : Tagged {
+
+        private val last = AtomicReference<Record>()
+        private val value = AtomicLong(0L)
+
+        fun record(call:() -> Unit ) {
+            val start = ZonedDateTime.now()
+            call()
+            val end = ZonedDateTime.now()
+            val diffMs = end.durationFrom(start).toMillis()
+            last.set(Record(start.toInstant(), end.toInstant(), diffMs))
+            value.incrementAndGet()
+        }
+
+
+
+        data class Record(val start: Instant, val end: Instant, val diffMs:Long)
+    }
+
+
     companion object {
-        fun build(): MetricsLite {
-            return MetricsLite(MetricsSettings(true,true, Tags(listOf())))
+        fun build(id:Identity, tags:List<Tag> = listOf()): MetricsLite {
+            return MetricsLite(id, tags, settings = MetricsSettings(true,true, Tags(listOf())))
         }
     }
 }

@@ -13,12 +13,12 @@
 
 package slatekit.functions.cmds
 
+import slatekit.common.Status
 import slatekit.common.args.Args
 import slatekit.functions.common.*
-import slatekit.results.Failure
-import slatekit.results.Success
+import slatekit.results.*
+import slatekit.results.builders.Outcomes
 import slatekit.results.builders.Tries
-import slatekit.results.getOrElse
 
 /**
  * Command manager to run commands and get back the status of each command
@@ -26,38 +26,51 @@ import slatekit.results.getOrElse
  * @param all
  */
 class Commands(override val all: List<Command>) : Functions<Command> {
+    private val states = all.map { it.name to CommandState.empty(it.info) }.toMap().toMutableMap()
 
     /**
      * Runs the command with the supplied name
      * @param name
      * @return
      */
-    fun run(name: String, args: Array<String>? = null): CommandResult {
+    fun run(name: String, args: Array<String>? = null): Outcome<CommandResult> {
         val command = getOrNull(name)
-        val result = when(command) {
-            null -> Tries.errored<CommandResult>("$name not found")
+        val outcome = when(command) {
+            null -> Outcomes.errored("$name not found")
             else -> {
                 val parseResult = Args.parseArgs(args ?: arrayOf())
-                when (parseResult) {
-                    is Failure<Exception> -> Failure(parseResult.error)
-                    is Success<Args> -> command.execute(parseResult.value, FunctionMode.Interacted)
+                val r = when (parseResult) {
+                    is Failure<Exception> -> Outcomes.errored(parseResult.error)
+                    is Success<Args> -> command.execute(parseResult.value, FunctionMode.Interacted).toOutcome()
+                }
+                r
+            }
+        }
+        command?.let { cmd ->
+            when (outcome) {
+                is Success -> {
+                    states[name] = CommandState(cmd.info, Status.Running, outcome)
+                }
+                is Failure -> {
+                    states[name] = CommandState(cmd.info, Status.Failed, outcome)
                 }
             }
         }
-        return result.getOrElse{ CommandResult.empty(FunctionInfo(name, "$name not found")) }
+        return outcome
     }
+
 
     /**
      * Gets the state of the command with the supplied name
      * @param name
      * @return
      */
-    fun state(name: String): CommandState {
+    fun state(name: String): Outcome<CommandState> {
         val command = getOrNull(name)
         val result = when(command) {
-            null -> Tries.errored("Command $name not found")
-            else -> Tries.success(command.lastStatus())
+            null -> Outcomes.errored<CommandState>("Command $name not found")
+            else -> Outcomes.success(states.get(command.name) ?: CommandState.empty(command.info))
         }
-        return result.getOrElse{ CommandState.empty(FunctionInfo(name, "")) }
+        return result
     }
 }

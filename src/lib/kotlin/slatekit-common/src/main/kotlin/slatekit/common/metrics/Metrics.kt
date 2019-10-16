@@ -1,6 +1,6 @@
 package slatekit.common.metrics
 
-import java.lang.Number
+import slatekit.common.ids.Identity
 
 
 /**
@@ -14,9 +14,11 @@ import java.lang.Number
  */
 interface Metrics {
 
-    val settings:MetricsSettings
+    val id:Identity
 
     val source:String
+
+    val settings:MetricsSettings
 
     fun provider():Any
 

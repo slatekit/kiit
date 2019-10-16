@@ -12,6 +12,7 @@ import slatekit.jobs.WorkRunner
 
 class Worker_Tests {
 
+
     @Test
     fun can_setup() {
         val worker = OneTimeWorker(0, 3)

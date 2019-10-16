@@ -66,31 +66,6 @@ open class Command(
 
 
     /**
-     * Stores the last result
-     */
-    private val lastResult = AtomicReference<CommandResult>(CommandResult.empty(functionInfo))
-
-
-    /**
-     * Stores the last status
-     */
-    private val lastStatus = AtomicReference<CommandState>(CommandState.empty(functionInfo))
-
-
-    /**
-     * Expose the immutable last execution result of this command
-     * @return
-     */
-    fun lastResult(): CommandResult = lastResult.get()
-
-    /**
-     * Expose the last known status of this command
-     * @return
-     */
-    fun lastStatus(): CommandState = lastStatus.get()
-
-
-    /**
      * execute this function with the supplied args
      *
      * @param args
@@ -116,7 +91,6 @@ open class Command(
             Success(args)
                     .map { args -> convert(args) }
                     .map { request -> perform(request, mode) }
-                    .map { result -> track(result) }
                     .map { result -> handle(result) }
         }
         return result.inner()
@@ -150,7 +124,7 @@ open class Command(
             Failure(buildError(ex), Codes.UNEXPECTED)
         }
         val end = DateTime.now()
-        return CommandResult(request, info, mode, result, start, end)
+        return CommandResult(request, mode, result, start, end)
     }
 
 
@@ -172,19 +146,6 @@ open class Command(
      * @return
      */
     protected open fun handle(result: CommandResult): CommandResult {
-        return result
-    }
-
-
-    /**
-     * track the result internally, always storing the last result
-     * @param result
-     * @return
-     */
-    protected open fun track(result: CommandResult): CommandResult {
-        val last = lastStatus()
-        val curr = last.update(result)
-        lastStatus.set(curr)
         return result
     }
 
