@@ -1,7 +1,7 @@
 package slatekit.jobs
 
 import slatekit.common.Status
-import slatekit.common.ids.Identity
+import slatekit.common.Identity
 import java.util.concurrent.atomic.AtomicReference
 
 
@@ -9,8 +9,8 @@ import java.util.concurrent.atomic.AtomicReference
  * Base class for Workers
  */
 open class Worker<T>(override val id: Identity,
-                override val stats: WorkerStats = WorkerStats.of(id),
-                val operation: ((Task) -> WorkState)? = null) : Workable<T> {
+                     override val stats: WorkerStats = WorkerStats.of(id),
+                     val operation: ((Task) -> WorkState)? = null) : Workable<T> {
 
     private val _status = AtomicReference<Status>(Status.InActive)
 

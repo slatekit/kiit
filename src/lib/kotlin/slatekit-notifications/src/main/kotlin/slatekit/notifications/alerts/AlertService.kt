@@ -1,6 +1,6 @@
 package slatekit.notifications.alerts
 
-import slatekit.common.ids.Identity
+import slatekit.common.Identity
 import slatekit.notifications.common.Sender
 
 abstract class AlertService : Sender<Alert> {

@@ -1,6 +1,6 @@
 package slatekit.common.metrics
 
-import slatekit.common.ids.Identity
+import slatekit.common.Identity
 import slatekit.common.log.Logger
 import slatekit.results.Err
 import slatekit.results.Outcome
@@ -17,12 +17,12 @@ import slatekit.results.builders.Tries
  * 4. events: calling any custom event handlers
  */
 open class Recorder<TRequest, TResponse>(val id: Identity,
-                                    val logger: Logger?,
-                                    val calls: Calls?,
-                                    val counts: Counters?,
-                                    val lasts: Lasts<TRequest, TResponse, Err>?,
-                                    val converter: ((TRequest, Outcome<TResponse>) -> Event)?,
-                                    val events: Events<TRequest, TResponse, Err>?) {
+                                         val logger: Logger?,
+                                         val calls: Calls?,
+                                         val counts: Counters?,
+                                         val lasts: Lasts<TRequest, TResponse, Err>?,
+                                         val converter: ((TRequest, Outcome<TResponse>) -> Event)?,
+                                         val events: Events<TRequest, TResponse, Err>?) {
 
     /**
      * Record all relevant diagnostics
@@ -46,7 +46,7 @@ open class Recorder<TRequest, TResponse>(val id: Identity,
 
     companion object {
 
-        fun <TRequest, TResponse> of(id:Identity,
+        fun <TRequest, TResponse> of(id: Identity,
                                      tags:List<Tag>? = null,
                                      logger: Logger? = null,
                                      converter: ((TRequest, Outcome<TResponse>) -> Event)? = null): Recorder<TRequest, TResponse> {

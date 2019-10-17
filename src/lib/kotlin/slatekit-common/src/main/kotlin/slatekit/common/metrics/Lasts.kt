@@ -12,8 +12,7 @@ mantra: Simplicity above all else
  */
 package slatekit.common.metrics
 
-import slatekit.common.ids.Identity
-import slatekit.results.*
+import slatekit.common.Identity
 import java.util.concurrent.atomic.AtomicReference
 
 /**
@@ -33,7 +32,7 @@ import java.util.concurrent.atomic.AtomicReference
  * @param TResponse: Type of the response / output of the operation
  * @param TFailure : Type of the error of the operation
  */
-open class Lasts<TRequest, TResponse, TFailure>(val id:Identity,
+open class Lasts<TRequest, TResponse, TFailure>(val id: Identity,
                                                 tags:List<Tag> = listOf(),
                                                 val custom:List<String>? = null) : Tagged, Events<TRequest, TResponse, TFailure>(tags) {
 

@@ -1,7 +1,7 @@
 package slatekit.jobs
 
 import slatekit.common.Status
-import slatekit.common.ids.Identity
+import slatekit.common.Identity
 
 interface Manager {
     val job: Job

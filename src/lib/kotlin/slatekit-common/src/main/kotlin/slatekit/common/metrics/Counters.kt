@@ -1,9 +1,7 @@
 package slatekit.common.metrics
 
-import slatekit.common.ids.Identity
-import slatekit.results.Failure
+import slatekit.common.Identity
 import slatekit.results.Status
-import slatekit.results.Success
 import java.util.concurrent.atomic.AtomicLong
 
 

@@ -3,7 +3,7 @@ package slatekit.common.metrics
 import org.threeten.bp.Instant
 import org.threeten.bp.ZonedDateTime
 import slatekit.common.ext.durationFrom
-import slatekit.common.ids.Identity
+import slatekit.common.Identity
 import java.util.concurrent.atomic.AtomicLong
 import java.util.concurrent.atomic.AtomicReference
 
@@ -124,7 +124,7 @@ class MetricsLite(
 
 
     companion object {
-        fun build(id:Identity, tags:List<Tag> = listOf()): MetricsLite {
+        fun build(id: Identity, tags:List<Tag> = listOf()): MetricsLite {
             return MetricsLite(id, tags, settings = MetricsSettings(true,true, Tags(listOf())))
         }
     }

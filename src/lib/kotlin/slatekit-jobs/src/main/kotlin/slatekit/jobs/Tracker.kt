@@ -1,6 +1,6 @@
 package slatekit.jobs
 
-import slatekit.common.ids.Identity
+import slatekit.common.Identity
 import slatekit.common.metrics.Calls
 import slatekit.common.metrics.Counters
 import slatekit.common.metrics.Lasts

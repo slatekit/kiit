@@ -19,11 +19,10 @@ import slatekit.apis.security.AuthModes
 import slatekit.apis.security.Protocols
 import slatekit.apis.security.Verbs
 import slatekit.apis.support.ApiWithSupport
-import slatekit.common.ids.Identity
+import slatekit.common.Identity
 import slatekit.integration.common.AppEntContext
 import slatekit.jobs.JobAction
 import slatekit.jobs.JobManager
-import slatekit.jobs.WorkerStats
 
 @Api(area = "infra", name = "workers", desc = "api to get version information",
         auth = AuthModes.apiKey, roles = "admin", verb = Verbs.auto, protocol = Protocols.all)

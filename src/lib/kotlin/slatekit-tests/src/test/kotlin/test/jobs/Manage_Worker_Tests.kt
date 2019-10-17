@@ -1,13 +1,9 @@
 package test.jobs
 
-import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.runBlocking
 import org.junit.Assert
 import org.junit.Test
 import slatekit.common.Status
-import slatekit.common.ids.Identity
-import slatekit.common.log.Info
-import slatekit.common.log.LoggerConsole
 import slatekit.jobs.*
 
 class Manage_Worker_Tests : JobTestSupport {

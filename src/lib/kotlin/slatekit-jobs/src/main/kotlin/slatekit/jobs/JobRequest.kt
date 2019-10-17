@@ -1,6 +1,6 @@
 package slatekit.jobs
 
-import slatekit.common.ids.Identity
+import slatekit.common.Identity
 
 sealed class JobRequest {
     abstract val id:Long
