@@ -6,11 +6,13 @@ import slatekit.common.Identity
 import slatekit.common.log.Info
 import slatekit.common.log.Logger
 import slatekit.common.metrics.Calls
+import slatekit.jobs.support.Coordinator
+import slatekit.jobs.support.Scheduler
 import slatekit.results.*
 import slatekit.results.builders.Outcomes
 
 class Workers(val all:List<Worker<*>>,
-              val coordinator:Coordinator,
+              val coordinator: Coordinator,
               val scheduler: Scheduler,
               val logger:Logger,
               val ids:JobId,

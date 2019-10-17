@@ -2,12 +2,13 @@ package test.jobs
 
 import kotlinx.coroutines.channels.Channel
 import slatekit.common.DateTime
-import slatekit.common.log.Info
 import slatekit.common.log.Logger
 import slatekit.jobs.*
+import slatekit.jobs.support.Coordinator
+import slatekit.jobs.support.Scheduler
 
 
-class MockScheduler : Scheduler{
+class MockScheduler : Scheduler {
     override suspend fun schedule(time: DateTime, op: suspend () -> Unit) {
         op()
     }

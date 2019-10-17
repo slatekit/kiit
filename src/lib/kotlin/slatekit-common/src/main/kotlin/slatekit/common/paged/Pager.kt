@@ -108,6 +108,9 @@ class Pager<T>(
     }
 
 
+    fun clone():Pager<T> = Pager<T>(list, circular, 0)
+
+
     private fun trackLast(){
         indexPrevious = index
         if(!hasMoved){

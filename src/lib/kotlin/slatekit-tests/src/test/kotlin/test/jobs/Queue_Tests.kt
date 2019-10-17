@@ -5,9 +5,9 @@ import org.junit.Test
 
 import slatekit.common.queues.QueueSourceInMemory
 import slatekit.common.queues.QueueStringConverter
-import slatekit.jobs.*
 import slatekit.jobs.Priority
 import slatekit.jobs.Queue
+import slatekit.jobs.support.Queues
 
 class Queue_Tests {
 

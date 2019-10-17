@@ -12,7 +12,7 @@ import slatekit.jobs.*
 interface JobTestSupport {
 
 
-    fun run(numWorkers: Int, queue:Queue?, action:JobAction, operation:((JobManager) -> Unit)? = null ):JobManager{
+    fun run(numWorkers: Int, queue:Queue?, action:JobAction, operation:((Job) -> Unit)? = null ):Job{
         val manager = build(numWorkers, queue)
         runBlocking {
             manager.request(action)
@@ -26,12 +26,12 @@ interface JobTestSupport {
     fun buildWorker():Worker<Int> = PagedWorker(0, 5, 3)
 
 
-    fun build(numWorkers:Int, queue: Queue?): JobManager {
+    fun build(numWorkers:Int, queue: Queue?): Job {
         val workers = (1..numWorkers).map { buildWorker() }
         val logger = LoggerConsole(Info, "manager")
         val ids = JobId()
         val coordinator = MockCoordinatorWithChannel(logger, ids, Channel(Channel.UNLIMITED))
-        val manager = JobManager(workers, queue, coordinator,  MockScheduler(), logger, ids)
+        val manager = Job(workers, queue, coordinator,  MockScheduler(), logger, ids)
         return manager
     }
 
