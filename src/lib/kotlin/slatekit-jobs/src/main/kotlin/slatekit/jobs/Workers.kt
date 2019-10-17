@@ -2,7 +2,7 @@ package slatekit.jobs
 
 import slatekit.common.DateTime
 import slatekit.common.Status
-import slatekit.common.ids.Identity
+import slatekit.common.Identity
 import slatekit.common.log.Info
 import slatekit.common.log.Logger
 import slatekit.common.metrics.Calls
@@ -16,11 +16,11 @@ class Workers(val all:List<Worker<*>>,
               val ids:JobId,
               val pauseInSeconds:Long) {
 
-    private val lookup = all.map { it.id.fullName to WorkerContext(it, Calls(it.id)) }.toMap()
+    private val lookup = all.map { it.id.id to WorkerContext(it, Calls(it.id)) }.toMap()
 
 
-    operator fun get(id:Identity):WorkerContext? = when(lookup.containsKey(id.fullName)) {
-        true -> lookup[id.fullName]
+    operator fun get(id: Identity):WorkerContext? = when(lookup.containsKey(id.id)) {
+        true -> lookup[id.id]
         false -> null
     }
 
@@ -31,10 +31,10 @@ class Workers(val all:List<Worker<*>>,
     }
 
 
-    fun getIds():List<String> = all.map { it.id.fullName }
+    fun getIds():List<String> = all.map { it.id.id }
 
 
-    suspend fun start(id:Identity, task: Task = Task.empty)  {
+    suspend fun start(id: Identity, task: Task = Task.empty)  {
         perform("Starting", id) { context ->
             val worker = context.worker
             val result = WorkRunner.record(context) {
@@ -49,7 +49,7 @@ class Workers(val all:List<Worker<*>>,
                     worker.status()
                 }
                 is Failure -> {
-                    logger.error("Unable to start worker ${id.fullName}")
+                    logger.error("Unable to start worker ${id.id}")
                     Status.Failed
                 }
             }
@@ -58,7 +58,7 @@ class Workers(val all:List<Worker<*>>,
     }
 
 
-    suspend fun process(id:Identity, task: Task = Task.empty) {
+    suspend fun process(id: Identity, task: Task = Task.empty) {
         perform("Processing", id) { context ->
             val worker = context.worker
             val result = WorkRunner.record(context) {
@@ -71,7 +71,7 @@ class Workers(val all:List<Worker<*>>,
     }
 
 
-    suspend fun resume(id:Identity, reason:String?, task: Task = Task.empty) {
+    suspend fun resume(id: Identity, reason:String?, task: Task = Task.empty) {
         performPausableAction(Status.Running, id) { context, pausable ->
             val worker = context.worker
             val result = WorkRunner.record(context) {
@@ -84,7 +84,7 @@ class Workers(val all:List<Worker<*>>,
     }
 
 
-    suspend fun pause(id:Identity, reason:String?) {
+    suspend fun pause(id: Identity, reason:String?) {
         performPausableAction(Status.Paused, id) { context, pausable ->
             val worker = context.worker
             pausable.pause(reason ?: "Paused")
@@ -96,7 +96,7 @@ class Workers(val all:List<Worker<*>>,
     }
 
 
-    suspend fun stop(id:Identity, reason:String?) {
+    suspend fun stop(id: Identity, reason:String?) {
         performPausableAction(Status.Stopped, id) { worker, pausable ->
             pausable.stop(reason ?: "Stopped")
             Outcomes.success(Status.Stopped)
@@ -104,7 +104,7 @@ class Workers(val all:List<Worker<*>>,
     }
 
 
-    suspend fun delay(id:Identity, seconds:Long) {
+    suspend fun delay(id: Identity, seconds:Long) {
         logger.log(Info, "Worker:", listOf("id" to id.name, "action" to "delaying", "seconds" to "$seconds"))
         scheduler.schedule(DateTime.now().plusSeconds(seconds)) {
             coordinator.request(JobRequest.WorkRequest(ids.nextId(), ids.nextUUID().toString(), JobAction.Start, id, 0,""))
@@ -113,7 +113,7 @@ class Workers(val all:List<Worker<*>>,
 
 
 
-    private suspend fun perform(action:String, id:Identity, operation: suspend (WorkerContext) -> Outcome<Status>):Outcome<Status> {
+    private suspend fun perform(action:String, id: Identity, operation: suspend (WorkerContext) -> Outcome<Status>):Outcome<Status> {
         logger.log(Info, "Worker:", listOf("id" to id.name, "action" to action))
         val worker = this[id]
         return when(worker) {
@@ -123,7 +123,7 @@ class Workers(val all:List<Worker<*>>,
     }
 
 
-    private suspend fun performPausableAction(status: Status, id:Identity, operation: suspend (WorkerContext, Pausable) -> Outcome<Status>):Outcome<Status> {
+    private suspend fun performPausableAction(status: Status, id: Identity, operation: suspend (WorkerContext, Pausable) -> Outcome<Status>):Outcome<Status> {
         logger.log(Info, "Worker:", listOf("id" to id.name, "transition" to status.name))
         val context = this[id]
         return when(context) {

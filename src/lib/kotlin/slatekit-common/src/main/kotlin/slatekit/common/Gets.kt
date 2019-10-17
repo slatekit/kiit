@@ -21,7 +21,7 @@ interface Gets {
     fun getZonedDateTime(key: String): ZonedDateTime
     fun getZonedDateTimeUtc(key: String): ZonedDateTime
     fun getUUID(key: String): java.util.UUID = UUID.fromString(getString(key))
-    fun getUniqueId(key: String): UniqueId = UniqueId.fromString(getString(key))
+    fun getUniqueId(key: String): UniqueId = UniqueId.parse(getString(key))
 
     // Get values as Option[T]
     fun getStringOrNull(key: String): String?

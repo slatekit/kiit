@@ -47,5 +47,5 @@ class AuthorW : EntityWithId<Long> {
     var uid: UUID = UUID.fromString(UUIDs.sampleUUID1)
 
     @property:Field(required = true)
-    var shardId: UniqueId = UniqueId.fromString(UUIDs.sampleUUID2)
+    var shardId: UniqueId = UniqueId.parse(UUIDs.sampleUUID2)
 }

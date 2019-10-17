@@ -34,7 +34,7 @@ class Entity_Mapper_Sql_Tests {
 
     val sampleDate = DateTimes.of(2018, 11, 1, 8, 30, 0)
     val sampleUser = AuthorR(0, sampleUUID1, sampleDate, 0, sampleDate, 0, "k@abc.com",
-            true, 35, StatusEnum.Active, 123.45, sampleUUID1.toUUId(), UniqueId.fromString("us:" + sampleUUID1) )
+            true, 35, StatusEnum.Active, 123.45, sampleUUID1.toUUId(), UniqueId.parse("us:" + sampleUUID1) )
 
 
     @Test fun can_map_sql_insert(){

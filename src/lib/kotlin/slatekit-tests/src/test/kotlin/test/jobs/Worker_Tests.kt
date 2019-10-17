@@ -4,7 +4,7 @@ import kotlinx.coroutines.runBlocking
 import org.junit.Assert
 import org.junit.Test
 import slatekit.common.Status
-import slatekit.common.ids.SimpleIdentity
+import slatekit.common.Identity
 import slatekit.jobs.WorkState
 import slatekit.jobs.Worker
 import slatekit.jobs.WorkRunner
@@ -20,7 +20,7 @@ class Worker_Tests {
         // Id
         Assert.assertEquals(worker.id.area , "samples")
         Assert.assertEquals(worker.id.env  , "dev")
-        Assert.assertEquals(worker.id.agent, "tests")
+        Assert.assertEquals(worker.id.service, "tests")
         Assert.assertEquals(worker.id.name , "samples.dev.tests")
 
         // Status
@@ -107,7 +107,7 @@ class Worker_Tests {
 
     @Test
     fun can_fail() {
-        val worker = Worker<Int>(SimpleIdentity("samples", "dev", "tests"), operation = { task -> throw Exception("test fail") })
+        val worker = Worker<Int>(Identity.test("worker1"), operation = { task -> throw Exception("test fail") })
         val result = runBlocking { WorkRunner.run(worker) }
         Assert.assertFalse(result.success)
         Assert.assertEquals(worker.status(), Status.Failed)

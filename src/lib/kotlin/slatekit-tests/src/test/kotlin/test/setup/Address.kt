@@ -56,7 +56,7 @@ data class UserWithAddress(
         val uid: UUID = UUID.fromString(UUIDs.sampleUUID1),
 
         @property:Field(required = true)
-        val shardId: UniqueId = UniqueId.fromString(UUIDs.sampleUUID2)
+        val shardId: UniqueId = UniqueId.parse(UUIDs.sampleUUID2)
 ) : EntityWithId<Long> {
         override fun isPersisted(): Boolean = id > 0
 }
