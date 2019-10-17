@@ -44,6 +44,7 @@ class AppMeta(val about:About, val args:ArgsSchema) {
 
 
     private fun help() {
+        println("app.area         " + about.area)
         println("app.name         " + about.name)
         println("app.desc         " + about.desc)
         println("app.version      " + about.version)
@@ -52,11 +53,11 @@ class AppMeta(val about:About, val args:ArgsSchema) {
 
 
     private fun about() {
+        println("app.area         " + about.area)
         println("app.name         " + about.name)
         println("app.desc         " + about.desc)
         println("app.version      " + about.version)
         println("app.tags         " + about.tags)
-        println("app.group        " + about.group)
         println("app.region       " + about.region)
         println("app.contact      " + about.contact)
         println("app.url          " + about.url)

@@ -5,7 +5,7 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import slatekit.common.Status
 import slatekit.common.StatusCheck
-import slatekit.common.ids.Identity
+import slatekit.common.Identity
 import slatekit.common.log.Info
 import slatekit.common.log.Logger
 import java.util.concurrent.atomic.AtomicReference
@@ -205,7 +205,7 @@ class JobManager(all: List<Worker<*>>,
                 val id = ids.nextId()
                 val uuid = ids.nextUUID()
                 val req = JobRequest.WorkRequest(id, uuid.toString(), action, it.id, seconds, "")
-                //logger.log(Info, "Job:", listOf(nameKey, "target" to req.target.fullName, "action" to req.action.name))
+                //logger.log(Info, "Job:", listOf(nameKey, "target" to req.target.id, "action" to req.action.name))
                 coordinator.request(req)
             }
         }

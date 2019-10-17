@@ -102,7 +102,7 @@ class Entity_Database_Tests {
                 test_localdatetime = LocalDateTime.of(2017, 7, 6, 10,30,0),
                 //test_timestamp = Instant.now(),
                 test_uuid = UUID.fromString(sampleUUID1),
-                test_uniqueId = UniqueId.fromString(sampleUUID2)
+                test_uniqueId = UniqueId.parse(sampleUUID2)
         ))
         val created = svc.get(id)
         val update = created!!.copy(
@@ -120,7 +120,7 @@ class Entity_Database_Tests {
                 test_localdatetime = LocalDateTime.of(2017, 7, 7, 12,30,0),
                 //test_timestamp = Instant.now(),
                 test_uuid = UUID.fromString(sampleUUID1),
-                test_uniqueId = UniqueId.fromString("abc:" + sampleUUID2)
+                test_uniqueId = UniqueId.parse("abc:" + sampleUUID2)
         )
         svc.update(update)
         val updated = svc.get(id)!!
@@ -223,7 +223,7 @@ class Entity_Database_Tests {
             val test_uuid: UUID = UUID.randomUUID(),
 
             @property:Field(length = 50)
-            val test_uniqueId: UniqueId = UniqueId.newId("usa")
+            val test_uniqueId: UniqueId = UniqueId.create("usa")
 
     ) : EntityWithId<Long>, EntityUpdatable<Long, SampleEntity> {
         override fun isPersisted(): Boolean = id > 0

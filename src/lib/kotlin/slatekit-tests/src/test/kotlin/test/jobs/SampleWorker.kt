@@ -1,7 +1,6 @@
 package test.jobs
 
-import slatekit.common.ids.Identity
-import slatekit.common.ids.SimpleIdentity
+import slatekit.common.Identity
 import slatekit.jobs.Pausable
 import slatekit.jobs.Task
 import slatekit.jobs.WorkState
@@ -11,7 +10,7 @@ import java.util.concurrent.atomic.AtomicInteger
 class OneTimeWorker(val start:Int, val end:Int, id: Identity) : Worker<Int>(id), Pausable {
 
 
-    constructor(start:Int, end:Int):this(start, end, SimpleIdentity("samples", "dev", "tests"))
+    constructor(start:Int, end:Int):this(start, end, Identity.test(OneTimeWorker::class.simpleName!!))
 
 
     private val current = AtomicInteger(start)
@@ -63,7 +62,7 @@ class OneTimeWorker(val start:Int, val end:Int, id: Identity) : Worker<Int>(id),
 }
 
 
-class PagedWorker(start:Int, val maxRuns:Int, val countsPerRun:Int) : Worker<Int>(SimpleIdentity("samples", "dev", "tests")), Pausable {
+class PagedWorker(start:Int, val maxRuns:Int, val countsPerRun:Int) : Worker<Int>(Identity.test(PagedWorker::class.simpleName!!)), Pausable {
 
     private val runs = AtomicInteger(0)
     private val counts = AtomicInteger(start)

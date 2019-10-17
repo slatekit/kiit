@@ -2,8 +2,7 @@ package slatekit.jobs
 
 import slatekit.common.Status
 import slatekit.common.StatusCheck
-import slatekit.common.ids.Identity
-import java.util.concurrent.atomic.AtomicReference
+import slatekit.common.Identity
 
 interface Workable<T> : StatusCheck {
 

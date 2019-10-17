@@ -58,7 +58,7 @@ interface Inputs : Gets {
     override fun getZonedDateTimeOrNull(key: String): ZonedDateTime? = getOrNull(key) { k: String -> getZonedDateTime(k) }
     override fun getZonedDateTimeUtcOrNull(key: String): ZonedDateTime? = getOrNull(key) { k: String -> getZonedDateTimeUtc(k) }
     override fun getUUIDOrNull(key: String): UUID? = getOrNull(key) { k: String -> UUID.fromString(getString(k)) }
-    override fun getUniqueIdOrNull(key: String): UniqueId? = getOrNull(key) { k: String -> UniqueId.fromString(getString(k)) }
+    override fun getUniqueIdOrNull(key: String): UniqueId? = getOrNull(key) { k: String -> UniqueId.parse(getString(k)) }
 
     // Get value or default
     fun getStringOrElse(key: String, default: String): String = getOrElse(key, { k: String -> getString(k) }, default)
@@ -76,7 +76,7 @@ interface Inputs : Gets {
     fun getZonedDateTimeOrElse(key: String, default: ZonedDateTime): ZonedDateTime = getOrElse(key, { k: String -> getZonedDateTime(k) }, default)
     fun getZonedDateTimeUtcOrElse(key: String, default: ZonedDateTime): ZonedDateTime = getOrElse(key, { k: String -> getZonedDateTimeUtc(k) }, default)
     fun getUUIDOrElse(key: String, default:UUID): UUID = getOrElse(key, { k: String -> UUID.fromString(getString(k)) }, default)
-    fun getUniqueIdOrElse(key: String, default:UniqueId): UniqueId = getOrElse(key, { k: String -> UniqueId.fromString(getString(k)) }, default)
+    fun getUniqueIdOrElse(key: String, default:UniqueId): UniqueId = getOrElse(key, { k: String -> UniqueId.parse(getString(k)) }, default)
 
     // Get list and maps
     /**

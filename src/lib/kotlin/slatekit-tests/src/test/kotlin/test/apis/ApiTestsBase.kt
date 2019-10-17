@@ -59,7 +59,7 @@ open class ApiTestsBase {
                 cfg = cfg,
                 logs = LogsDefault,
                 ent = Entities({ con -> Db(con) }, DbLookup(cfg.dbCon())),
-                app = About("myapp", "sample app", "product group 1", "slatekit", "ny", "", "", "", "1.1.0", "", ""),
+                app = About("tests", "myapp", "sample app", "slatekit", "ny", "", "", "1.1.0", ""),
                 sys = Sys.build(),
                 build = Build.empty,
                 start = StartInfo.none,

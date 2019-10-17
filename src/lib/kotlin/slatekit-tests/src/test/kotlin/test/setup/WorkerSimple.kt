@@ -1,12 +1,12 @@
 package test.setup
 
-import slatekit.common.ids.SimpleIdentity
+import slatekit.common.Identity
 import slatekit.jobs.*
 
 class MyWorker(
     var acc: Int = 0
 ) : Worker<Int>(
-    SimpleIdentity("tests", "dev", "myworker")) {
+    Identity.test("myworker")) {
     var isInitialized = false
     var isEnded = false
 

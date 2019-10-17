@@ -47,7 +47,7 @@ class Example_Folders : Command("folders") {
         val folders = Folders(
                 home = System.getProperty("user.dir"),
                 root = "company-1",
-                group = "department-1",
+                area = "department-1",
                 app = "app-1",
                 cache = "cache",
                 inputs = "input",

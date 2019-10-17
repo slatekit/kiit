@@ -31,7 +31,7 @@ interface Coordinator {
         when (result) {
             is Success -> {  }
             is Failure -> {
-                logger.error("Error while looping on : ${worker.id.fullName}")
+                logger.error("Error while looping on : ${worker.id.id}")
             }
         }
     }

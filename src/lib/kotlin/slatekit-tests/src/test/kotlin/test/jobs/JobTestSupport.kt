@@ -4,7 +4,7 @@ import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.runBlocking
 import org.junit.Assert
 import slatekit.common.Status
-import slatekit.common.ids.Identity
+import slatekit.common.Identity
 import slatekit.common.log.Info
 import slatekit.common.log.LoggerConsole
 import slatekit.jobs.*
@@ -37,7 +37,7 @@ interface JobTestSupport {
 
 
     fun ensure(workers: Workers, hasRun:Boolean, totalRuns:Long, totalPassed:Long, totalFailed:Long, id: Identity,
-                       status: Status, requestCount:Int, action: JobAction?, seconds:Long){
+               status: Status, requestCount:Int, action: JobAction?, seconds:Long){
         val context: WorkerContext = workers.get(id)!!
         val runs = context.runs
         val worker = context.worker

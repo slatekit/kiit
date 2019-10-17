@@ -1,6 +1,6 @@
 package slatekit.common.metrics
 
-import slatekit.common.ids.Identity
+import slatekit.common.Identity
 import slatekit.common.log.Logger
 import slatekit.results.Status
 
@@ -54,17 +54,17 @@ data class Event(
 
     companion object {
 
-        fun log(logger:Logger, id:Identity, event:Event){
+        fun log(logger:Logger, id: Identity, event:Event){
             val extra = event.fields?.fold("") { acc, info -> acc + ", ${info.first}=${info.second}" }
             when(event.status) {
-                is Status.Succeeded  -> logger.info ("id=${id.fullName}, area=${event.area}, name=${event.name}, uuid=${event.uuid}, success=true , code=${event.status.code}, desc=${event.desc} $extra")
-                is Status.Pending    -> logger.info ("id=${id.fullName}, area=${event.area}, name=${event.name}, uuid=${event.uuid}, success=true , code=${event.status.code}, desc=${event.desc} $extra")
-                is Status.Ignored    -> logger.info ("id=${id.fullName}, area=${event.area}, name=${event.name}, uuid=${event.uuid}, success=false, code=${event.status.code}, desc=${event.desc} $extra")
-                is Status.Invalid    -> logger.error("id=${id.fullName}, area=${event.area}, name=${event.name}, uuid=${event.uuid}, success=false, code=${event.status.code}, desc=${event.desc} $extra")
-                is Status.Denied     -> logger.error("id=${id.fullName}, area=${event.area}, name=${event.name}, uuid=${event.uuid}, success=false, code=${event.status.code}, desc=${event.desc} $extra")
-                is Status.Errored    -> logger.error("id=${id.fullName}, area=${event.area}, name=${event.name}, uuid=${event.uuid}, success=false, code=${event.status.code}, desc=${event.desc} $extra")
-                is Status.Unexpected -> logger.error("id=${id.fullName}, area=${event.area}, name=${event.name}, uuid=${event.uuid}, success=false, code=${event.status.code}, desc=${event.desc} $extra")
-                else                 -> logger.error("id=${id.fullName}, area=${event.area}, name=${event.name}, uuid=${event.uuid}, success=false, code=${event.status.code}, desc=${event.desc} $extra")
+                is Status.Succeeded  -> logger.info ("id=${id.id}, area=${event.area}, name=${event.name}, uuid=${event.uuid}, success=true , code=${event.status.code}, desc=${event.desc} $extra")
+                is Status.Pending    -> logger.info ("id=${id.id}, area=${event.area}, name=${event.name}, uuid=${event.uuid}, success=true , code=${event.status.code}, desc=${event.desc} $extra")
+                is Status.Ignored    -> logger.info ("id=${id.id}, area=${event.area}, name=${event.name}, uuid=${event.uuid}, success=false, code=${event.status.code}, desc=${event.desc} $extra")
+                is Status.Invalid    -> logger.error("id=${id.id}, area=${event.area}, name=${event.name}, uuid=${event.uuid}, success=false, code=${event.status.code}, desc=${event.desc} $extra")
+                is Status.Denied     -> logger.error("id=${id.id}, area=${event.area}, name=${event.name}, uuid=${event.uuid}, success=false, code=${event.status.code}, desc=${event.desc} $extra")
+                is Status.Errored    -> logger.error("id=${id.id}, area=${event.area}, name=${event.name}, uuid=${event.uuid}, success=false, code=${event.status.code}, desc=${event.desc} $extra")
+                is Status.Unexpected -> logger.error("id=${id.id}, area=${event.area}, name=${event.name}, uuid=${event.uuid}, success=false, code=${event.status.code}, desc=${event.desc} $extra")
+                else                 -> logger.error("id=${id.id}, area=${event.area}, name=${event.name}, uuid=${event.uuid}, success=false, code=${event.status.code}, desc=${event.desc} $extra")
 
             }
         }

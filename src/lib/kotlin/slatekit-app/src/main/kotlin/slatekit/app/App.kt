@@ -53,14 +53,13 @@ open class App<C: Context>(val ctx: C,
     fun about(): About {
         val conf = ctx.cfg
         return About(
-                id = conf.getStringOrElse("app.id", ctx.app.id),
+                area = conf.getStringOrElse("app.area", ctx.app.area),
                 name = conf.getStringOrElse("app.name", ctx.app.name),
                 desc = conf.getStringOrElse("app.desc", ctx.app.desc),
                 company = conf.getStringOrElse("app.company", ctx.app.company),
                 region = conf.getStringOrElse("app.region", ctx.app.region),
                 version = conf.getStringOrElse("app.version", ctx.app.version),
                 url = conf.getStringOrElse("app.url", ctx.app.url),
-                group = conf.getStringOrElse("app.group", ctx.app.group),
                 contact = conf.getStringOrElse("app.contact", ctx.app.contact),
                 tags = conf.getStringOrElse("app.tags", ctx.app.tags),
                 examples = conf.getStringOrElse("app.examples", ctx.app.examples)
@@ -118,11 +117,11 @@ open class App<C: Context>(val ctx: C,
      */
     open fun info() {
         val maxLen = Math.max(0, "lang.versionNum  ".length)
+        logger.info("app.area         ".padEnd(maxLen) + ctx.app.area)
         logger.info("app.name         ".padEnd(maxLen) + ctx.app.name)
         logger.info("app.desc         ".padEnd(maxLen) + ctx.app.desc)
         logger.info("app.version      ".padEnd(maxLen) + ctx.app.version)
         logger.info("app.tags         ".padEnd(maxLen) + ctx.app.tags)
-        logger.info("app.group        ".padEnd(maxLen) + ctx.app.group)
         logger.info("app.region       ".padEnd(maxLen) + ctx.app.region)
         logger.info("app.contact      ".padEnd(maxLen) + ctx.app.contact)
         logger.info("app.url          ".padEnd(maxLen) + ctx.app.url)

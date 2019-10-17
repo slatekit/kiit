@@ -49,7 +49,7 @@ class Entity_Mapper_ResultSet_Tests {
         Assert.assertTrue( entity.salary == 400.5 )
         Assert.assertTrue( entity.status == StatusEnum.Active )
         Assert.assertTrue( entity.uid == UUID.fromString(sampleUUID1) )
-        Assert.assertTrue( entity.shardId == UniqueId.fromString(sampleUUID2) )
+        Assert.assertTrue( entity.shardId == UniqueId.parse(sampleUUID2) )
     }
 
 
@@ -69,7 +69,7 @@ class Entity_Mapper_ResultSet_Tests {
         Assert.assertTrue( entity.status == StatusEnum.Active )
         Assert.assertTrue( entity.salary == 400.5 )
         Assert.assertTrue( entity.uid == UUID.fromString(sampleUUID1) )
-        Assert.assertTrue( entity.shardId == UniqueId.fromString(sampleUUID2) )
+        Assert.assertTrue( entity.shardId == UniqueId.parse(sampleUUID2) )
     }
 
 
@@ -88,7 +88,7 @@ class Entity_Mapper_ResultSet_Tests {
         Assert.assertTrue( entity.salary == 400.5 )
         Assert.assertTrue( entity.addr == Address("street 1", "city 1", "state 1", 1,"12345", true))
         Assert.assertTrue( entity.uid == UUID.fromString(sampleUUID1) )
-        Assert.assertTrue( entity.shardId == UniqueId.fromString(sampleUUID2) )
+        Assert.assertTrue( entity.shardId == UniqueId.parse(sampleUUID2) )
     }
 
 
@@ -108,7 +108,7 @@ class Entity_Mapper_ResultSet_Tests {
                 Pair("status", StatusEnum.Active.value),
                 Pair("salary", 400.5),
                 Pair("uid", UUID.fromString(sampleUUID1)),
-                Pair("shardId", UniqueId.fromString(sampleUUID2))
+                Pair("shardId", UniqueId.parse(sampleUUID2))
             )
         )
         return data
@@ -131,7 +131,7 @@ class Entity_Mapper_ResultSet_Tests {
                 Pair("addr_zip", "12345"),
                 Pair("addr_isPOBox", true),
                 Pair("uid", UUID.fromString(sampleUUID1)),
-                Pair("shardId", UniqueId.fromString(sampleUUID2))
+                Pair("shardId", UniqueId.parse(sampleUUID2))
             )
         )
         return data

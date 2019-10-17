@@ -37,14 +37,13 @@ object AppBuilder {
      * @return
      */
     fun about(conf: Conf): About = About(
-            id = conf.getStringOrElse("app.id", "app id"),
+            area = conf.getStringOrElse("app.area", "products-dept"),
             name = conf.getStringOrElse("app.name", "app name"),
             desc = conf.getStringOrElse("app.desc", "app desc"),
             company = conf.getStringOrElse("app.company", "company"),
             region = conf.getStringOrElse("app.region", "ny"),
-            version = conf.getStringOrElse("app.version", "0.9.1"),
+            version = conf.getStringOrElse("app.version", "1.0.0"),
             url = conf.getStringOrElse("app.url", "https://www.slatekit.com"),
-            group = conf.getStringOrElse("app.group", "products-dept"),
             contact = conf.getStringOrElse("app.contact", "kishore@abc.co"),
             tags = conf.getStringOrElse("app.tags", "slate,shell,cli"),
             examples = conf.getStringOrElse("app.examples", "")
@@ -89,8 +88,8 @@ object AppBuilder {
         // e..g app.dir = user://company/dept/app
         return Folders.userDir(
                 root = conf.getStringOrElse("app.dir", abt.company.toId()),
-                group = abt.group.toId(),
-                app = abt.id
+                area = abt.area.toId(),
+                app = abt.name
         )
     }
 
@@ -109,12 +108,12 @@ object AppBuilder {
                 Pair("company.name", { _ -> abt.company }),
                 Pair("company.dir", { _ -> "@{user.home}/@{company.id}" }),
                 Pair("root.dir", { _ -> "@{company.dir}" }),
-                Pair("group.id", { _ -> abt.group.toId() }),
-                Pair("group.name", { _ -> abt.group }),
-                Pair("group.dir", { _ -> "@{root.dir}/@{group.id}" }),
+                Pair("area.id", { _ -> abt.area.toId() }),
+                Pair("area.name", { _ -> abt.area }),
+                Pair("area.dir", { _ -> "@{root.dir}/@{area.id}" }),
                 Pair("app.id", { _ -> abt.id }),
                 Pair("app.name", { _ -> abt.name }),
-                Pair("app.dir", { _ -> "@{root.dir}/@{group.id}/@{app.id}" })
+                Pair("app.dir", { _ -> "@{root.dir}/@{area.id}/@{app.id}" })
         ))
     }
 

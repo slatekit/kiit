@@ -44,8 +44,14 @@ interface EnumLike {
  */
 abstract class EnumSupport {
 
-    open fun parse(t: String): EnumLike {
-        val member = all().find { it.name == t }
+    open fun parse(t: String, caseSensitive:Boolean = true): EnumLike {
+        val member = all().find {
+            if(caseSensitive) {
+                it.name == t
+            } else {
+                it.name.toLowerCase() == t.toLowerCase()
+            }
+        }
         val first = member ?: if (isUnknownSupported()) {
             throw Exception("Unexpected value for Enum : $t")
         } else {

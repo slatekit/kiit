@@ -1,9 +1,8 @@
 package slatekit.common.metrics
 
 import slatekit.common.DateTime
-import slatekit.common.ids.Identity
+import slatekit.common.Identity
 import slatekit.results.Err
-import java.util.concurrent.atomic.AtomicLong
 import java.util.concurrent.atomic.AtomicReference
 
 /**
@@ -16,7 +15,7 @@ import java.util.concurrent.atomic.AtomicReference
  * 4. last error
  * 5. last time of call
  */
-class Calls(val id:Identity) {
+class Calls(val id: Identity) {
     private val counters = Counters(id)
     private val lastErr = AtomicReference<Err>()
     private val lastRunTime = AtomicReference<DateTime>()

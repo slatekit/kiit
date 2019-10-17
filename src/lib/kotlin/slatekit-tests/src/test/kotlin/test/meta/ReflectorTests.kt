@@ -56,7 +56,7 @@ class ReflectorTests {
             cfg  = Config(),
             logs = LogsDefault,
             ent  = Entities({ con -> Db(con) }),
-            app  = About("myapp", "sample app", "product group 1", "slatekit", "ny", "", "", "", "1.1.0", "", ""),
+            app  = About("tests", "myapp", "sample app", "slatekit", "ny", "", "", "1.1.0", ""),
             sys = Sys.build(),
             build = Build.empty,
             start = StartInfo.none,

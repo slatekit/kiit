@@ -18,11 +18,10 @@ import slatekit.common.nonEmptyOrDefault
 
 /**
  * represent meta-data about an application
- * @param id : id of app
+ * @param area : group owning the app
  * @param name : name of app
  * @param desc : desc of app
  * @param company : company the app is associated with
- * @param group : group owning the app
  * @param region : region associated with app
  * @param url : url for more information
  * @param contact : contact person(s) for app
@@ -32,7 +31,7 @@ import slatekit.common.nonEmptyOrDefault
 data class About(
 
     @JvmField
-    val id: String,
+    val area: String = "",
 
     @JvmField
     val name: String,
@@ -42,9 +41,6 @@ data class About(
 
     @JvmField
     val company: String = "",
-
-    @JvmField
-    val group: String = "",
 
     @JvmField
     val region: String = "",
@@ -65,11 +61,15 @@ data class About(
     val examples: String = ""
 ) {
 
+    @JvmField
+    val id:String = "$area.$name"
+
+
     fun log(callback: (String, String) -> Unit) {
 
+        callback("area    ", area)
         callback("name    ", name)
         callback("desc    ", desc)
-        callback("group   ", group)
         callback("region  ", region)
         callback("url     ", url)
         callback("contact ", contact)
@@ -80,9 +80,9 @@ data class About(
 
     fun toStringProps(): String {
         val text = "" +
+                "area     : " + area + newline +
                 "name     : " + name + newline +
                 "desc     : " + desc + newline +
-                "group    : " + group + newline +
                 "region   : " + region + newline +
                 "url      : " + url + newline +
                 "contact  : " + contact + newline +
@@ -97,11 +97,10 @@ data class About(
     companion object {
         @JvmStatic
         val none = About(
-                id = "",
+                area = "",
                 name = "",
                 desc = "",
                 company = "",
-                group = "",
                 region = "",
                 url = "",
                 contact = "",
@@ -120,7 +119,7 @@ data class About(
          * @return
          */
         @JvmStatic
-        fun simple(id: String, name: String, desc: String, company: String, version: String): About =
-                About(id, name, desc, company, "", "", "", "", version, "", "")
+        fun simple(area:String, name: String, desc: String, company: String, version: String): About =
+                About(area, name, desc, company, "", "", "", version, "", "")
     }
 }

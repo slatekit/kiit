@@ -3,7 +3,7 @@ package slatekit.integration.jobs
 import slatekit.apis.ApiConstants
 import slatekit.apis.ApiHost
 import slatekit.apis.core.Requests
-import slatekit.common.ids.SimpleIdentity
+import slatekit.common.Identity
 import slatekit.jobs.*
 import slatekit.results.Failure
 import slatekit.results.Success
@@ -11,9 +11,10 @@ import slatekit.results.Try
 
 open class APIWorker(
         val container: ApiHost,
-        settings: WorkerSettings
+        val settings: WorkerSettings,
+        identity: Identity
 )
-    : Worker<Any>( SimpleIdentity("worker", container.ctx.env.name, "apis")) {
+    : Worker<Any>( identity ) {
 
     /**
      * Process an message from the queue represented as an API request.
