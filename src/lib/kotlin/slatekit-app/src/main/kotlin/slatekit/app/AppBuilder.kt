@@ -88,7 +88,7 @@ object AppBuilder {
         // e..g app.dir = user://company/dept/app
         return Folders.userDir(
                 root = conf.getStringOrElse("app.dir", abt.company.toId()),
-                group = abt.area.toId(),
+                area = abt.area.toId(),
                 app = abt.name
         )
     }
