@@ -18,10 +18,10 @@ class Worker_Tests {
         val worker = OneTimeWorker(0, 3)
         val context =
         // Id
-        Assert.assertEquals(worker.id.area , "samples")
+        Assert.assertEquals(worker.id.area , "tests")
+        Assert.assertEquals(worker.id.service, "OneTimeWorker")
         Assert.assertEquals(worker.id.env  , "dev")
-        Assert.assertEquals(worker.id.service, "tests")
-        Assert.assertEquals(worker.id.name , "samples.dev.tests")
+        Assert.assertEquals(worker.id.name , "tests.OneTimeWorker.test.dev")
 
         // Status
         Assert.assertEquals(worker.status(), Status.InActive)
@@ -37,7 +37,7 @@ class Worker_Tests {
 
         // Info
         val info = worker.info()
-        Assert.assertEquals(info[0], "id.name" to "samples.dev.tests")
+        Assert.assertEquals(info[0], "id.name" to "tests.OneTimeWorker.test.dev")
         Assert.assertEquals(info[1], "app.attemptStart" to "0")
         Assert.assertEquals(info[2], "app.end" to "3")
     }

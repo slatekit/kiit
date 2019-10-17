@@ -26,11 +26,11 @@ data class Info(
      */
     fun each(callback: (String, String) -> Unit, maxLenField: Int = 0) {
         val maxLen = Math.max(maxLenField, "lang.versionNum  ".length)
+        callback("app.area         ".padEnd(maxLen), about.area)
         callback("app.name         ".padEnd(maxLen), about.name)
         callback("app.desc         ".padEnd(maxLen), about.desc)
         callback("app.version      ".padEnd(maxLen), about.version)
         callback("app.tags         ".padEnd(maxLen), about.tags)
-        callback("app.group        ".padEnd(maxLen), about.group)
         callback("app.region       ".padEnd(maxLen), about.region)
         callback("app.contact      ".padEnd(maxLen), about.contact)
         callback("app.url          ".padEnd(maxLen), about.url)

@@ -36,7 +36,7 @@ import java.io.File
  *
  * @param home: location of where the folders reside ( local (to app) | programs | user.home )
  * @param root : optional name of root folder or company name
- * @param group : optional name of group folder that holds all apps
+ * @param area : optional name of group folder that holds all apps
  * @param app : name of the application folder for this app
  * @param cache : name of cache folder for the application
  * @param inputs : name of input folder for the application
@@ -46,40 +46,40 @@ import java.io.File
 
 data class Folders(
 
-    @JvmField
+        @JvmField
     val home: String,
 
-    @JvmField
-    val root: String?,
+        @JvmField
+    val root: String,
 
-    @JvmField
-    val group: String?,
+        @JvmField
+    val area: String,
 
-    @JvmField
+        @JvmField
     val app: String,
 
-    @JvmField
+        @JvmField
     val cache: String,
 
-    @JvmField
+        @JvmField
     val inputs: String,
 
-    @JvmField
+        @JvmField
     val logs: String,
 
-    @JvmField
+        @JvmField
     val outputs: String,
 
-    @JvmField
+        @JvmField
     val temp: String,
 
-    @JvmField
+        @JvmField
     val conf: String
 ) : Meta {
 
     override fun props():List<Pair<String,String>> = listOf(
-        "root"    to  (root ?: ""),
-        "group"   to  (group?: ""),
+        "root"    to  root,
+        "area"    to  area,
         "app"     to  app,
         "cache"   to  cache,
         "inputs"  to  app,
@@ -99,7 +99,7 @@ data class Folders(
         val userHome = System.getProperty("user.home")
         val path = userHome + File.separator +
                 root + File.separator +
-                group + File.separator +
+                area + File.separator +
                 part.replace(" ", "")
         return path
     }
@@ -115,14 +115,14 @@ data class Folders(
         val sep = File.separator
         val homePath = home
         val rootPath = root?.let { folder -> homePath + sep + folder } ?: homePath
-        val groupPath = group?.let { folder -> rootPath + sep + folder } ?: rootPath
+        val groupPath = area?.let { folder -> rootPath + sep + folder } ?: rootPath
         val finalPath = groupPath + sep + app
         return finalPath
     }
 
     fun create() {
         val rootPath = Files.mkDir(home, root ?: "")
-        val groupPath = Files.mkDir(rootPath, group ?: "")
+        val groupPath = Files.mkDir(rootPath, area ?: "")
         val appPath = Files.mkDir(groupPath, app)
         Files.mkDir(appPath, cache)
         Files.mkDir(appPath, conf)
@@ -137,8 +137,8 @@ data class Folders(
         @JvmStatic
         val none = Folders(
                 home = System.getProperty("user.dir"),
-                root = null,
-                group = null,
+                root = "slatekit",
+                area = "samples",
                 app = "app",
                 cache = "cache",
                 inputs = "input",
@@ -152,7 +152,7 @@ data class Folders(
         val default = Folders(
                 home = System.getProperty("user.dir"),
                 root = "slatekit",
-                group = "samples",
+                area = "samples",
                 app = "app",
                 cache = "cache",
                 inputs = "input",
@@ -163,11 +163,11 @@ data class Folders(
         )
 
         @JvmStatic
-        fun userDir(root: String, group: String, app: String) =
+        fun userDir(root: String, area: String, app: String) =
                 Folders(
                         System.getProperty("user.home"),
                         root = root,
-                        group = group,
+                        area = area,
                         app = app,
                         cache = "cache",
                         inputs = "input",

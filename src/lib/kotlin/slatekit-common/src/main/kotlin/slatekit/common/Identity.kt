@@ -14,7 +14,7 @@ interface Identity {
 
     companion object {
         fun test(name:String): Identity {
-            return SimpleIdentity("tests", name, EnvMode.Dev.name, Agent.Test)
+            return SimpleIdentity("tests", name, Agent.Test, EnvMode.Dev.name)
         }
     }
 }
@@ -33,15 +33,15 @@ interface Identity {
 data class SimpleIdentity(
         override val area:String,
         override val service:String,
-        override val env:String,
         override val agent: Agent,
+        override val env:String,
         override val instance:String = UUID.randomUUID().toString()) : Identity {
 
     /**
      * Enforced naming convention for an application's identity
      * @sample: signup.alerts.job.qat
      */
-    override val name = "$area.$service.${agent.name.toLowerCase()}.$env"
+    override val name = "$area.$service.${agent.name.toLowerCase()}.${env.toLowerCase()}"
 
 
     /**
