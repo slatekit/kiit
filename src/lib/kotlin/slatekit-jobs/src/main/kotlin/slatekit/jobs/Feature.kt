@@ -4,7 +4,7 @@ import slatekit.results.Outcome
 import slatekit.results.getOrElse
 
 
-interface Strategy {
+interface Feature {
 
     suspend fun check(context: JobContext, worker: Workable<*>, task: Task, state:Outcome<WorkState>):Boolean
 
@@ -24,7 +24,7 @@ interface Strategy {
 
 
 
-class Strategies(val all:List<Strategy>): Strategy {
+class Features(val all:List<Feature>): Feature {
 
     override suspend fun check(context: JobContext, worker: Workable<*>, task: Task, state:Outcome<WorkState>):Boolean {
         val first = all.firstOrNull { !it.check(context, worker, task, state)  }

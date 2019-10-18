@@ -7,9 +7,9 @@ import slatekit.results.Outcome
 import slatekit.results.Success
 
 /**
- * Rule to control the backoff/rescheduling strategy of the worker
+ * Feature to control the backoff/rescheduling strategy of the worker
  */
-class Backoffs(val backoffs: Pager<Int>) : Strategy {
+class Backoffs(val backoffs: Pager<Int>) : Feature {
 
     private val _lookups = mutableMapOf<String, Pager<Int>>()
 

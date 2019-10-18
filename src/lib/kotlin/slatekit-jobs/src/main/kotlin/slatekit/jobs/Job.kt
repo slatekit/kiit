@@ -20,7 +20,7 @@ class Job(all: List<Worker<*>>,
           val scheduler: Scheduler,
           val logger: Logger,
           val ids:JobId = JobId(),
-          val rules: Strategies?) : Manager, StatusCheck {
+          val rules: Features? = null) : Manager, StatusCheck {
 
     // TODO: Make settings configurable
     val workers = Workers(all, coordinator, scheduler, logger, ids, 30)

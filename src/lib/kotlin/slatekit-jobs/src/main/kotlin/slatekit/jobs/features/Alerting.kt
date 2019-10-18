@@ -9,10 +9,10 @@ import java.util.concurrent.atomic.AtomicLong
 
 
 /**
- * Rule to control a worker based on a number of counts of Status X
+ * Feature to control a worker based on a number of counts of Status X
  * E.g. Limit the run if counts.totalErrored >= limit supplied
  */
-open class Alerting(val desc:String, val target:String, val interval: Long, val started:DateTime, val alerter:suspend(Event)-> Unit ) : Strategy {
+open class Alerting(val desc:String, val target:String, val interval: Long, val started:DateTime, val alerter:suspend(Event)-> Unit ) : Feature {
     private val count = AtomicLong(0L)
 
     override suspend fun check(context: JobContext, worker: Workable<*>, task: Task, state: Outcome<WorkState>): Boolean {
@@ -20,6 +20,7 @@ open class Alerting(val desc:String, val target:String, val interval: Long, val 
         if (curr >= interval) {
             val event = JobUtils.toEvent(started, desc, target, context, worker, task, state)
             alerter(event)
+            count.set(0L)
         }
         return true
     }

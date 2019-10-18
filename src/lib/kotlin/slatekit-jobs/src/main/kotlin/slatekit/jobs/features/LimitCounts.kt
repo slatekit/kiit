@@ -5,10 +5,10 @@ import slatekit.results.Outcome
 import slatekit.results.Status
 
 /**
- * Rule to control a worker based on a number of counts of Status X
+ * Feature to control a worker based on a number of counts of Status X
  * E.g. Limit the run if counts.totalErrored >= limit supplied
  */
-class LimitCounts(val limit: Long, val status: Status?) : Strategy {
+class LimitCounts(val limit: Long, val status: Status?) : Feature {
 
     override suspend fun check(context: JobContext, worker: Workable<*>, task: Task, state: Outcome<WorkState>): Boolean {
         val counts = worker.stats.counts

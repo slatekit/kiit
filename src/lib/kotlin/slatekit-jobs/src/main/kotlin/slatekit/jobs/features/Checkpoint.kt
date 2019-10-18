@@ -5,7 +5,7 @@ import slatekit.jobs.features.Interval
 
 
 /**
- * Rule to control a worker based on a number of counts of Status X
+ * Feature to control a worker based on a number of counts of Status X
  * E.g. Limit the run if counts.totalErrored >= limit supplied
  */
 class Checkpoint(interval: Long, val checkpointer:suspend(WorkState.Next, Workable<*>)-> Unit ) : Interval(interval, { state, worker, task ->

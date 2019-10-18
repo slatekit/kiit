@@ -5,10 +5,10 @@ import slatekit.results.Outcome
 import slatekit.results.Status
 
 /**
- * Rule to control a worker based on a percentage / threshold of counts of Status X compared to totalRequests.
+ * Feature to control a worker based on a percentage / threshold of counts of Status X compared to totalRequests.
  * E.g. Limit the run if counts.totalErrored is 10% of counts.totalProcessed
  */
-class Threshold(val limit: Double, val status: Status) : Strategy {
+class Threshold(val limit: Double, val status: Status) : Feature {
 
     override suspend fun check(context: JobContext, worker: Workable<*>, task: Task, state: Outcome<WorkState>): Boolean {
         val counts = worker.stats.counts
