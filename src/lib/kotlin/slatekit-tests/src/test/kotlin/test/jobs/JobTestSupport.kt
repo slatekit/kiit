@@ -61,7 +61,7 @@ interface JobTestSupport {
 
         // Next request
         if(action != null) {
-            val req = coordinator.requests.last() as JobRequest.WorkRequest
+            val req = coordinator.requests.last() as JobCommand.ManageWorker
             Assert.assertEquals(id     , req.workerId )
             Assert.assertEquals(action , req.action )
             Assert.assertEquals(seconds, req.seconds)

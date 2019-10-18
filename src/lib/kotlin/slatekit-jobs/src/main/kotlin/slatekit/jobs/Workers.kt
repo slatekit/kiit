@@ -91,7 +91,7 @@ class Workers(val all:List<Worker<*>>,
             val worker = context.worker
             pausable.pause(reason ?: "Paused")
             scheduler.schedule(DateTime.now().plusSeconds(pauseInSeconds)) {
-                coordinator.request(JobRequest.WorkRequest(ids.nextId(), ids.nextUUID().toString(), JobAction.Resume, worker.id, 0, ""))
+                coordinator.request(JobCommand.ManageWorker(ids.nextId(), ids.nextUUID().toString(), JobAction.Resume, worker.id, 0, ""))
             }
             Outcomes.success(Status.Paused)
         }
@@ -109,7 +109,7 @@ class Workers(val all:List<Worker<*>>,
     suspend fun delay(id: Identity, seconds:Long) {
         logger.log(Info, "Worker:", listOf("id" to id.name, "action" to "delaying", "seconds" to "$seconds"))
         scheduler.schedule(DateTime.now().plusSeconds(seconds)) {
-            coordinator.request(JobRequest.WorkRequest(ids.nextId(), ids.nextUUID().toString(), JobAction.Start, id, 0,""))
+            coordinator.request(JobCommand.ManageWorker(ids.nextId(), ids.nextUUID().toString(), JobAction.Start, id, 0,""))
         }
     }
 

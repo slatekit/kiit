@@ -53,7 +53,7 @@ interface Manager {
     /**
      * Requests an action to manage a job/worker
      */
-    suspend fun request(request: JobRequest)
+    suspend fun request(request: JobCommand)
 
 
     /**
