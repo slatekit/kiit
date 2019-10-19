@@ -10,8 +10,8 @@ import slatekit.jobs.Worker
 import slatekit.jobs.WorkRunner
 
 
-class Worker_Tests {
-
+@Test
+fun testC(){
 
     @Test
     fun can_setup() {
