@@ -31,13 +31,13 @@ class Job(all: List<Worker<*>>,
     private val _status = AtomicReference<Status>(Status.InActive)
 
 
-    override suspend fun onChange(op: suspend (Job) -> Unit) {
-        events.onChange(op)
+    override suspend fun subscribe(op: suspend (Job) -> Unit) {
+        events.subscribe(op)
     }
 
 
-    override suspend fun onStatus(status: Status, op: suspend (Job) -> Unit) {
-        events.onStatus(status, op)
+    override suspend fun subscribe(status: Status, op: suspend (Job) -> Unit) {
+        events.subscribe(status, op)
     }
 
 
@@ -211,6 +211,11 @@ class Job(all: List<Worker<*>>,
         perform(action, status(), launch) {
             //logger.log(Info, "Job:", listOf(nameKey, "transition" to newStatus.name))
             _status.set(newStatus)
+            val job = this
+
+            GlobalScope.launch {
+                (job.events as JobEvents).notify(job)
+            }
 
             workers.all.forEach {
                 val id = ids.nextId()

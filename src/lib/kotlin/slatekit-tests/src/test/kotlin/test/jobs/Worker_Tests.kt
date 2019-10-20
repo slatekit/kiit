@@ -5,9 +5,9 @@ import org.junit.Assert
 import org.junit.Test
 import slatekit.common.Status
 import slatekit.common.Identity
-import slatekit.jobs.WorkState
+import slatekit.jobs.WorkResult
 import slatekit.jobs.Worker
-import slatekit.jobs.WorkRunner
+import slatekit.jobs.support.WorkRunner
 
 
 @Test
@@ -69,21 +69,21 @@ fun testC(){
         Assert.assertTrue(result1.success)
         Assert.assertEquals(worker.currentValue(), 3)
         Assert.assertEquals(worker.status(), Status.Running)
-        result1.map { Assert.assertEquals(it, WorkState.More) }
+        result1.map { Assert.assertEquals(it, WorkResult.More) }
 
         // Work more
         val result2 = runBlocking { WorkRunner.work(worker) }
         Assert.assertTrue(result2.success)
         Assert.assertEquals(worker.currentValue(), 6)
         Assert.assertEquals(worker.status(), Status.Running)
-        result2.map { Assert.assertEquals(it, WorkState.More) }
+        result2.map { Assert.assertEquals(it, WorkResult.More) }
 
         // Work last time ( limit 9 )
         val result3 = runBlocking {  WorkRunner.work(worker) }
         Assert.assertTrue(result3.success)
         Assert.assertEquals(worker.currentValue(), 9)
         Assert.assertEquals(worker.status(), Status.Complete)
-        result3.map { Assert.assertEquals(it, WorkState.Done) }
+        result3.map { Assert.assertEquals(it, WorkResult.Done) }
     }
 
 
@@ -100,7 +100,7 @@ fun testC(){
         Assert.assertEquals(flows[1], "work")
         Assert.assertEquals(flows[2], "done")
         result.map {
-            Assert.assertEquals(it, WorkState.Done)
+            Assert.assertEquals(it, WorkResult.Done)
         }
     }
 

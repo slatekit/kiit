@@ -21,5 +21,5 @@ interface Pausable {
      * @param reason
      * @return
      */
-    suspend fun resume(reason:String?, task: Task): WorkState
+    suspend fun resume(reason:String?, task: Task): WorkResult
 }

@@ -1,5 +1,7 @@
 package slatekit.jobs
 
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
 import slatekit.common.DateTime
 import slatekit.common.Status
 import slatekit.common.Identity
@@ -7,10 +9,12 @@ import slatekit.common.log.Info
 import slatekit.common.log.Logger
 import slatekit.common.metrics.Recorder
 import slatekit.jobs.events.Events
+import slatekit.jobs.events.JobEvents
 import slatekit.jobs.events.WorkerEvents
 import slatekit.jobs.support.Coordinator
 import slatekit.jobs.support.JobId
 import slatekit.jobs.support.Scheduler
+import slatekit.jobs.support.WorkRunner
 import slatekit.results.*
 import slatekit.results.builders.Outcomes
 
@@ -25,13 +29,13 @@ class Workers(val all:List<Worker<*>>,
     private val lookup = all.map { it.id.id to WorkerContext(it.id, it, Recorder.of(it.id)) }.toMap()
 
 
-    override suspend fun onChange(op: suspend (Worker<*>) -> Unit) {
-        events.onChange(op)
+    override suspend fun subscribe(op: suspend (Worker<*>) -> Unit) {
+        events.subscribe(op)
     }
 
 
-    override suspend fun onStatus(status: Status, op: suspend (Worker<*>) -> Unit) {
-        events.onStatus(status, op)
+    override suspend fun subscribe(status: Status, op: suspend (Worker<*>) -> Unit) {
+        events.subscribe(status, op)
     }
 
 
@@ -54,7 +58,7 @@ class Workers(val all:List<Worker<*>>,
         perform("Starting", id) { context ->
             val worker = context.worker
             val result = WorkRunner.record(context) {
-                val result: Try<WorkState> = WorkRunner.attemptStart(worker, false, true, task)
+                val result: Try<WorkResult> = WorkRunner.attemptStart(worker, false, true, task)
                 result.toOutcome()
             }.inner()
 
@@ -131,10 +135,13 @@ class Workers(val all:List<Worker<*>>,
 
     private suspend fun perform(action:String, id: Identity, operation: suspend (WorkerContext) -> Outcome<Status>):Outcome<Status> {
         logger.log(Info, "Worker:", listOf("id" to id.name, "action" to action))
-        val worker = this[id]
-        return when(worker) {
+        val context = this[id]
+        return when(context) {
             null -> Outcomes.errored("Unable to find worker with id : ${id.name}")
-            else -> operation(worker)
+            else -> {
+                val result = operation(context)
+                result
+            }
         }
     }
 
@@ -148,6 +155,9 @@ class Workers(val all:List<Worker<*>>,
                 when (context.worker) {
                     is Pausable -> {
                         context.worker.transition(status)
+                        GlobalScope.launch {
+                            (events as WorkerEvents).notify(context.worker)
+                        }
                         operation(context, context.worker)
                     }
                     else -> Outcomes.errored("${context.worker.id.name} does not implement Pausable and can not handle a pause/stop/resume action")

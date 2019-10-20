@@ -3,7 +3,7 @@ package test.jobs
 import slatekit.common.Identity
 import slatekit.jobs.Pausable
 import slatekit.jobs.Task
-import slatekit.jobs.WorkState
+import slatekit.jobs.WorkResult
 import slatekit.jobs.Worker
 import java.util.concurrent.atomic.AtomicInteger
 
@@ -31,10 +31,10 @@ class OneTimeWorker(val start:Int, val end:Int, id: Identity) : Worker<Int>(id),
     }
 
 
-    override suspend fun work(task: Task): WorkState {
+    override suspend fun work(task: Task): WorkResult {
         flow.add("work")
         (start .. end).forEach { current.incrementAndGet()  }
-        return WorkState.Done
+        return WorkResult.Done
     }
 
 
@@ -52,7 +52,7 @@ class OneTimeWorker(val start:Int, val end:Int, id: Identity) : Worker<Int>(id),
     }
 
 
-    override suspend fun resume(reason: String?, task: Task): WorkState {
+    override suspend fun resume(reason: String?, task: Task): WorkResult {
         return work(task)
     }
 
@@ -71,16 +71,16 @@ class PagedWorker(start:Int, val maxRuns:Int, val countsPerRun:Int) : Worker<Int
     fun currentValue():Int = counts.get()
 
 
-    override suspend fun work(task: Task): WorkState {
+    override suspend fun work(task: Task): WorkResult {
         (0 until countsPerRun).forEach {
             counts.incrementAndGet()
         }
         val run = runs.incrementAndGet()
         return if(run < maxRuns) {
-            WorkState.More
+            WorkResult.More
         }
         else {
-            WorkState.Done
+            WorkResult.Done
         }
     }
 
@@ -93,7 +93,7 @@ class PagedWorker(start:Int, val maxRuns:Int, val countsPerRun:Int) : Worker<Int
     }
 
 
-    override suspend fun resume(reason: String?, task: Task): WorkState {
+    override suspend fun resume(reason: String?, task: Task): WorkResult {
         return work(task)
     }
 

@@ -48,7 +48,7 @@ object JobUtils {
     }
 
 
-    fun toEvent(started:DateTime, desc:String, target:String, context: JobContext, worker: Workable<*>, task: Task, state: Outcome<WorkState>): Event {
+    fun toEvent(started:DateTime, desc:String, target:String, context: JobContext, worker: Workable<*>, task: Task, state: Outcome<WorkResult>): Event {
         // Convert the worker info / state / stats into a generalized event
         val id = worker.id
         val status = worker.status()

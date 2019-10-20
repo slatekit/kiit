@@ -12,15 +12,15 @@ interface Coordinator {
     val logger:Logger
     val ids: JobId
 
-    suspend fun loop(worker: Workable<*>, state: WorkState) {
+    suspend fun loop(worker: Workable<*>, state: WorkResult) {
         val result = Tries.attempt {
             when (state) {
-                is WorkState.Done -> {
+                is WorkResult.Done -> {
                     logger.info("Worker ${worker.id.name} complete")
                     worker.transition(Status.Complete)
                     worker.done()
                 }
-                is WorkState.More -> {
+                is WorkResult.More -> {
                     val id = ids.nextId()
                     val uuid = ids.nextUUID()
                     request(JobCommand.ManageWorker(id, uuid.toString(), JobAction.Process, worker.id, 0, ""))

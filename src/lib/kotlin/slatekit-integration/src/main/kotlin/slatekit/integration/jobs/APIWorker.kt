@@ -21,7 +21,7 @@ open class APIWorker(
      * This converts the json message body to the Request and delegates the call
      * to the container which will call the corresponding API method.
      */
-    override suspend fun work(task: Task): WorkState {
+    override suspend fun work(task: Task): WorkResult {
 
         // content ( json body )
         val rawBody = task.data
@@ -37,6 +37,6 @@ open class APIWorker(
             is Failure -> slatekit.results.Failure(result.error)
         }
         slatekit.common.TODO.IMPLEMENT("jobs", "Success/Failure handling")
-        return WorkState.More
+        return WorkResult.More
     }
 }

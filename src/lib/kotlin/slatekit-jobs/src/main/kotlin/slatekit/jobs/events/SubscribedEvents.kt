@@ -7,12 +7,12 @@ abstract class SubscribedEvents<T> : Events<T> {
     private val _statusSubscribers = mutableMapOf<String, MutableList<suspend (T) -> Unit>>()
 
 
-    override suspend fun onChange(op: suspend (T) -> Unit) {
+    override suspend fun subscribe(op: suspend (T) -> Unit) {
         _changedSubscribers.add(op)
     }
 
 
-    override suspend fun onStatus(status: Status, op: suspend (T) -> Unit) {
+    override suspend fun subscribe(status: Status, op: suspend (T) -> Unit) {
         val subs = if(_statusSubscribers.containsKey(status.name)) {
             _statusSubscribers[status.name] ?: mutableListOf()
         } else {
