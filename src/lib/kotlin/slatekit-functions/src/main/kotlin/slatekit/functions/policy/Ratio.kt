@@ -22,18 +22,24 @@ class Ratio<I, O>(val limit: Double, val status: Status, val stats: (I) -> Count
         val result = operation(i)
         val counts = stats(i)
         val isMatch = when (status) {
-            is Status.Succeeded  -> counts.totalSucceeded()  / counts.totalProcessed() >= limit
-            is Status.Denied     -> counts.totalDenied()     / counts.totalProcessed() >= limit
-            is Status.Invalid    -> counts.totalInvalid()    / counts.totalProcessed() >= limit
-            is Status.Ignored    -> counts.totalIgnored()    / counts.totalProcessed() >= limit
-            is Status.Errored    -> counts.totalErrored()    / counts.totalProcessed() >= limit
-            is Status.Unexpected -> counts.totalUnexpected() / counts.totalProcessed() >= limit
-            else -> counts.totalUnexpected() / counts.totalProcessed() >= limit
+            is Status.Succeeded  -> isAtThreshold(counts.totalSucceeded()  , counts.totalProcessed() )
+            is Status.Denied     -> isAtThreshold(counts.totalDenied()     , counts.totalProcessed() )
+            is Status.Invalid    -> isAtThreshold(counts.totalInvalid()    , counts.totalProcessed() )
+            is Status.Ignored    -> isAtThreshold(counts.totalIgnored()    , counts.totalProcessed() )
+            is Status.Errored    -> isAtThreshold(counts.totalErrored()    , counts.totalProcessed() )
+            is Status.Unexpected -> isAtThreshold(counts.totalUnexpected() , counts.totalProcessed() )
+            else -> isAtThreshold(counts.totalUnexpected(),  counts.totalProcessed())
         }
         return if(isMatch) {
             Outcomes.errored(Codes.LIMITED)
         } else {
             result
         }
+    }
+
+
+    private fun isAtThreshold(count:Long, total:Long):Boolean {
+        val rate:Double = if(total <= 0 ) 0.0 else count / total.toDouble()
+        return rate >= limit
     }
 }

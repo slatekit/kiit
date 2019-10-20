@@ -9,9 +9,10 @@ import slatekit.results.Outcome
  * @param I : Input type
  * @param O : Output type
  */
-class Exec<I, O> : Policy<I, O> {
+class Exec<I, O>(val op:suspend(I) -> Unit) : Policy<I, O> {
 
     override suspend fun run(i: I, operation: suspend (I) -> Outcome<O>): Outcome<O> {
+        op(i)
         return operation(i)
     }
 }
