@@ -1,10 +1,7 @@
 package slatekit.jobs.events
 
 import slatekit.functions.policy.Policy
-import slatekit.jobs.WorkRequest
-import slatekit.jobs.WorkResult
-import slatekit.jobs.Worker
-import slatekit.jobs.Workers
+import slatekit.jobs.*
 
 class WorkerEvents(val workers: Workers) : SubscribedEvents<Worker<*>>(), WorkEvents {
     val policies = mutableListOf<Policy<WorkRequest, WorkResult>>()
