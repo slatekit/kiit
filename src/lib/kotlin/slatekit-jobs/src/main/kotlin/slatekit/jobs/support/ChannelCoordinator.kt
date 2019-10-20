@@ -3,7 +3,6 @@ package slatekit.jobs.support
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.yield
 import slatekit.common.log.Logger
-import slatekit.jobs.JobId
 import slatekit.jobs.JobCommand
 
 class ChannelCoordinator(override val logger: Logger, override val ids: JobId, val channel: Channel<JobCommand>) : Coordinator {

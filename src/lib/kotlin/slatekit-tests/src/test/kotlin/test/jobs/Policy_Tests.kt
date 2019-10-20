@@ -125,6 +125,26 @@ class Policy_Tests {
 
 
     @Test
+    fun test_compose() {
+        val id = Identity.test("policy")
+        val calls = Calls(id)
+        val counts = Counters(id)
+        val p1 = Limit<String, Int>(4) { i -> counts }
+        val p2 = Calls<String, Int>(3) { i -> calls  }
+
+        val exec = Policies.compose(p2) { i -> calls.inc(); counts.incProcessed(); Outcomes.of(i.toInt() )}
+        val call = Policies.compose(p1, exec)
+        val result = runBlocking { call("1"); call("2"); }
+        Assert.assertTrue(result.success)
+        Assert.assertTrue(result.status is Status.Succeeded)
+        Assert.assertEquals(result.code, Codes.SUCCESS.code)
+        Assert.assertEquals(2, result.getOrElse { -1 })
+        Assert.assertEquals(2, calls.totalRuns())
+        Assert.assertEquals(2, counts.totalProcessed())
+    }
+
+
+    @Test
     fun test_chaining() {
         val id = Identity.test("policy")
         val calls = Calls(id)

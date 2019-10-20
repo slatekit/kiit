@@ -5,8 +5,9 @@ import slatekit.common.Status
 import slatekit.common.Identity
 import slatekit.common.log.Info
 import slatekit.common.log.Logger
-import slatekit.common.metrics.Calls
+import slatekit.common.metrics.Recorder
 import slatekit.jobs.support.Coordinator
+import slatekit.jobs.support.JobId
 import slatekit.jobs.support.Scheduler
 import slatekit.results.*
 import slatekit.results.builders.Outcomes
@@ -15,10 +16,21 @@ class Workers(val all:List<Worker<*>>,
               val coordinator: Coordinator,
               val scheduler: Scheduler,
               val logger:Logger,
-              val ids:JobId,
-              val pauseInSeconds:Long) {
+              val ids: JobId,
+              val pauseInSeconds:Long) : Events<Worker<*>> {
 
-    private val lookup = all.map { it.id.id to WorkerContext(it, Calls(it.id)) }.toMap()
+    private val events:Events<Worker<*>> = WorkerEvents(this)
+    private val lookup = all.map { it.id.id to WorkerContext(it.id, it, Recorder.of(it.id)) }.toMap()
+
+
+    override suspend fun onChange(op: suspend (Worker<*>) -> Unit) {
+        events.onChange(op)
+    }
+
+
+    override suspend fun onStatus(status: Status, op: suspend (Worker<*>) -> Unit) {
+        events.onStatus(status, op)
+    }
 
 
     operator fun get(id: Identity):WorkerContext? = when(lookup.containsKey(id.id)) {

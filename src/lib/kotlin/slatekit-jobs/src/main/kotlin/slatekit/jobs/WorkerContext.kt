@@ -1,5 +1,6 @@
 package slatekit.jobs
 
-import slatekit.common.metrics.Calls
+import slatekit.common.Identity
+import slatekit.common.metrics.Recorder
 
-data class WorkerContext(val worker: Worker<*>, val runs: Calls)
+data class WorkerContext(val jobId: Identity, val worker: Worker<*>, val stats:Recorder<Task, WorkResult>)

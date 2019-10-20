@@ -8,6 +8,7 @@ import slatekit.common.Identity
 import slatekit.common.log.Info
 import slatekit.common.log.LoggerConsole
 import slatekit.jobs.*
+import slatekit.jobs.support.JobId
 
 interface JobTestSupport {
 

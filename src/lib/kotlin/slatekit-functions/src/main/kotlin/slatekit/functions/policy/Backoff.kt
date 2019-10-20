@@ -1,10 +1,15 @@
-package slatekit.jobs.features
+package slatekit.functions.policy
 
 import slatekit.common.paged.Pager
-import slatekit.jobs.*
-import slatekit.results.Failure
 import slatekit.results.Outcome
-import slatekit.results.Success
+
+class Backoff<I,O>(val times: Pager<Int>) : Policy<I, O> {
+    override suspend fun run(i: I, operation: suspend (I) -> Outcome<O>): Outcome<O> {
+        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    }
+
+}
+
 
 /**
  * Feature to control the backoff/rescheduling strategy of the worker

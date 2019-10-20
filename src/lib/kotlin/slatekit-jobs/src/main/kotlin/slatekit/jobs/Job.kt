@@ -9,6 +9,7 @@ import slatekit.common.Identity
 import slatekit.common.log.Info
 import slatekit.common.log.Logger
 import slatekit.jobs.support.Coordinator
+import slatekit.jobs.support.JobId
 import slatekit.jobs.support.JobUtils
 import slatekit.jobs.support.Scheduler
 import java.util.concurrent.atomic.AtomicReference
@@ -19,15 +20,24 @@ class Job(all: List<Worker<*>>,
           val coordinator: Coordinator,
           val scheduler: Scheduler,
           val logger: Logger,
-          val ids:JobId = JobId(),
-          val rules: Features? = null) : Manager, StatusCheck {
+          val ids: JobId = JobId()) : Manager, StatusCheck, Events<Job> {
+
 
     // TODO: Make settings configurable
     val workers = Workers(all, coordinator, scheduler, logger, ids, 30)
     val id = workers.all.first().id
-
-
+    private val events:Events<Job> = JobEvents()
     private val _status = AtomicReference<Status>(Status.InActive)
+
+
+    override suspend fun onChange(op: suspend (Job) -> Unit) {
+        events.onChange(op)
+    }
+
+
+    override suspend fun onStatus(status: Status, op: suspend (Job) -> Unit) {
+        events.onStatus(status, op)
+    }
 
 
     /**
@@ -42,7 +52,7 @@ class Job(all: List<Worker<*>>,
     override suspend fun request(action: JobAction) {
         val id = ids.nextId()
         val uuid = ids.nextUUID()
-        val req = JobRequest.ManageRequest(id, uuid.toString(), action)
+        val req = JobCommand.ManageJob(id, uuid.toString(), action)
         request(req)
     }
 
@@ -53,7 +63,7 @@ class Job(all: List<Worker<*>>,
     override suspend fun request(action: JobAction, workerId: Identity, desc:String?) {
         val id = ids.nextId()
         val uuid = ids.nextUUID()
-        val req = JobRequest.WorkRequest(id, uuid.toString(), action, workerId, 30, desc)
+        val req = JobCommand.ManageWorker(id, uuid.toString(), action, workerId, 30, desc)
         request(req)
     }
 
@@ -61,7 +71,7 @@ class Job(all: List<Worker<*>>,
     /**
      * Requests an action on a specific worker
      */
-    override suspend fun request(request: JobRequest) {
+    override suspend fun request(request: JobCommand) {
         coordinator.request(request)
     }
 
@@ -89,16 +99,16 @@ class Job(all: List<Worker<*>>,
     }
 
 
-    suspend fun manage(request: JobRequest, launch:Boolean = true){
+    suspend fun manage(request: JobCommand, launch:Boolean = true){
         logger.log(Info, "Job: request - ", request.pairs(), null)
         when(request) {
             // Affects the whole job/queue/workers
-            is JobRequest.ManageRequest -> {
+            is JobCommand.ManageJob -> {
                 manageJob(request, launch)
             }
 
             // Affects just a specific worker
-            is JobRequest.WorkRequest -> {
+            is JobCommand.ManageWorker -> {
                 manageWorker(request, launch)
             }
         }
@@ -114,7 +124,7 @@ class Job(all: List<Worker<*>>,
     }
 
 
-    suspend fun manageJob(request: JobRequest, launch:Boolean){
+    suspend fun manageJob(request: JobCommand, launch:Boolean){
         val action = request.action
         when(action) {
             is JobAction.Start   -> onStart(launch)
@@ -130,7 +140,7 @@ class Job(all: List<Worker<*>>,
     }
 
 
-    suspend fun manageWorker(request: JobRequest.WorkRequest, launch:Boolean){
+    suspend fun manageWorker(request: JobCommand.ManageWorker, launch:Boolean){
         val action = request.action
         val workerId = request.workerId
         val context = workers.get(workerId)
@@ -204,7 +214,7 @@ class Job(all: List<Worker<*>>,
             workers.all.forEach {
                 val id = ids.nextId()
                 val uuid = ids.nextUUID()
-                val req = JobRequest.WorkRequest(id, uuid.toString(), action, it.id, seconds, "")
+                val req = JobCommand.ManageWorker(id, uuid.toString(), action, it.id, seconds, "")
                 //logger.log(Info, "Job:", listOf(nameKey, "target" to req.target.id, "action" to req.action.name))
                 coordinator.request(req)
             }

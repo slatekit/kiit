@@ -7,6 +7,7 @@ import slatekit.common.Status
 import slatekit.common.Identity
 import slatekit.common.log.LoggerConsole
 import slatekit.jobs.*
+import slatekit.jobs.support.JobId
 
 
 class Workers_Tests {
