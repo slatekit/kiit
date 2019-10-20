@@ -6,7 +6,7 @@ import slatekit.common.Status
 
 fun main(args:Array<String>){
 
-    val job = slatekit.jobs.Job()
+    lateinit var job:Job  // = slatekit.jobs.Job()
     runBlocking {
 
         // Subscribe

@@ -8,6 +8,8 @@ import slatekit.common.StatusCheck
 import slatekit.common.Identity
 import slatekit.common.log.Info
 import slatekit.common.log.Logger
+import slatekit.jobs.events.Events
+import slatekit.jobs.events.JobEvents
 import slatekit.jobs.support.Coordinator
 import slatekit.jobs.support.JobId
 import slatekit.jobs.support.JobUtils
@@ -23,10 +25,9 @@ class Job(all: List<Worker<*>>,
           val ids: JobId = JobId()) : Manager, StatusCheck, Events<Job> {
 
 
-    // TODO: Make settings configurable
     val workers = Workers(all, coordinator, scheduler, logger, ids, 30)
     val id = workers.all.first().id
-    private val events:Events<Job> = JobEvents()
+    private val events: Events<Job> = JobEvents()
     private val _status = AtomicReference<Status>(Status.InActive)
 
 

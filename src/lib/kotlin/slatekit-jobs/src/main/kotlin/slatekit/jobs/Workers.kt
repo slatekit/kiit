@@ -6,6 +6,8 @@ import slatekit.common.Identity
 import slatekit.common.log.Info
 import slatekit.common.log.Logger
 import slatekit.common.metrics.Recorder
+import slatekit.jobs.events.Events
+import slatekit.jobs.events.WorkerEvents
 import slatekit.jobs.support.Coordinator
 import slatekit.jobs.support.JobId
 import slatekit.jobs.support.Scheduler
@@ -19,7 +21,7 @@ class Workers(val all:List<Worker<*>>,
               val ids: JobId,
               val pauseInSeconds:Long) : Events<Worker<*>> {
 
-    private val events:Events<Worker<*>> = WorkerEvents(this)
+    private val events: Events<Worker<*>> = WorkerEvents(this)
     private val lookup = all.map { it.id.id to WorkerContext(it.id, it, Recorder.of(it.id)) }.toMap()
 
 
