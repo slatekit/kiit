@@ -36,7 +36,7 @@ interface Workable<T> : StatusCheck {
      * Performs the work
      * This assumes that this work manages it's own work load/queue/source
      */
-    suspend fun work(): WorkState {
+    suspend fun work(): WorkResult {
        return work(Task.owned)
     }
 
@@ -47,7 +47,7 @@ interface Workable<T> : StatusCheck {
      * NOTE: If this worker manages it's own work load/queue/source, then this task is
      * provided by the work() method and assigned Task.owned
      */
-    suspend fun work(task:Task): WorkState
+    suspend fun work(task:Task): WorkResult
 
 
     /**

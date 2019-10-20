@@ -2,7 +2,7 @@ package slatekit.jobs
 
 import slatekit.common.Identity
 
-sealed class JobRequest {
+sealed class JobCommand {
     abstract val id:Long
     abstract val uuid:String
     abstract val action: JobAction
@@ -11,9 +11,9 @@ sealed class JobRequest {
 
 
 
-    data class ManageRequest(override val id:Long,
-                             override val uuid:String,
-                             override val action: JobAction) : JobRequest() {
+    data class ManageJob(override val id:Long,
+                         override val uuid:String,
+                         override val action: JobAction) : JobCommand() {
         override val target: String = "job"
 
         override fun pairs():List<Pair<String, String>> {
@@ -28,12 +28,12 @@ sealed class JobRequest {
 
 
 
-    data class WorkRequest(override val id:Long,
-                           override val uuid:String,
-                           override val action: JobAction,
-                           val workerId: Identity,
-                           val seconds:Long = 0,
-                           val desc:String?) : JobRequest() {
+    data class ManageWorker(override val id:Long,
+                            override val uuid:String,
+                            override val action: JobAction,
+                            val workerId: Identity,
+                            val seconds:Long = 0,
+                            val desc:String?) : JobCommand() {
 
         override val target: String = "wrk"
 

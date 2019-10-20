@@ -1,3 +1,5 @@
 package slatekit.jobs
 
-typealias WorkerStats = Tracker<Task, WorkState>
+import slatekit.common.metrics.Recorder
+
+typealias WorkerStats = Recorder<Task, WorkResult>

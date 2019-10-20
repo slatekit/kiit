@@ -26,8 +26,8 @@ import slatekit.results.Status
  *
  * event : {
  *     area: 'registration',
- *     agent:'reg-service-prod',
  *     name: 'NEW_ANDROID_REGISTRATION',
+ *     agent:'job',
  *     uuid: 'abc-123-xyz',
  *     desc: 'User registration via mobile',
  *     status: Codes.SUCCESS,
@@ -41,8 +41,8 @@ import slatekit.results.Status
  */
 data class Event(
         val area: String,
-        val agent: String,
         val name: String,
+        val agent: String,
         val env : String,
         val uuid: String,
         val desc: String,

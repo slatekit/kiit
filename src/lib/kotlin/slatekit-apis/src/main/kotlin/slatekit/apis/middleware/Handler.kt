@@ -21,10 +21,7 @@ import slatekit.results.Try
 import slatekit.results.builders.Tries
 
 /**
- * A "Hooks" based middle-ware that allows only handling before/after events
- * of an API call, without any modification to the life-cycle/flow.
- *
- * NOTE: The hooks are applied right before and after the call to the action
+ * A middle-ware that handles the request
  *
  */
 interface Handler : Middleware {

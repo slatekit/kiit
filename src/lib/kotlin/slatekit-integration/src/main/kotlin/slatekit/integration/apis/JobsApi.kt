@@ -22,15 +22,15 @@ import slatekit.apis.support.ApiWithSupport
 import slatekit.common.Identity
 import slatekit.integration.common.AppEntContext
 import slatekit.jobs.JobAction
-import slatekit.jobs.JobManager
+import slatekit.jobs.Job
 
 @Api(area = "infra", name = "workers", desc = "api to get version information",
         auth = AuthModes.apiKey, roles = "admin", verb = Verbs.auto, protocol = Protocols.all)
 class JobsApi(override val context: AppEntContext) : ApiWithSupport {
 
-    private lateinit var manager: JobManager
+    private lateinit var manager: Job
 
-    fun configure(manager: JobManager){
+    fun configure(manager: Job){
         this.manager = manager
     }
 
@@ -97,7 +97,7 @@ class JobsApi(override val context: AppEntContext) : ApiWithSupport {
     fun getWorkerNames():List<String> = manager.workers.getIds()
 
 
-    private suspend fun perform(operation: suspend (JobManager) -> Unit) {
+    private suspend fun perform(operation: suspend (Job) -> Unit) {
         if(this.manager == null) {
             error("Work System has not been configured")
             return

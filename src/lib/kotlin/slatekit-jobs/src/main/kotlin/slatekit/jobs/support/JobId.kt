@@ -1,4 +1,4 @@
-package slatekit.jobs
+package slatekit.jobs.support
 
 import java.util.*
 import java.util.concurrent.atomic.AtomicLong

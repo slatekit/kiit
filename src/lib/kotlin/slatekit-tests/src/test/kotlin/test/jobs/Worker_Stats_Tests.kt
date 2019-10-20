@@ -4,7 +4,7 @@ import kotlinx.coroutines.runBlocking
 import org.junit.Assert
 import org.junit.Test
 import slatekit.common.metrics.Calls
-import slatekit.jobs.WorkRunner
+import slatekit.jobs.support.WorkRunner
 import slatekit.jobs.WorkerContext
 
 

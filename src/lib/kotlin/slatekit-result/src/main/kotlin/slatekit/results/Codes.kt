@@ -51,6 +51,7 @@ object Codes {
     @JvmField val QUEUED          = Pending   (200009, "Queued" )
     @JvmField val CONFIRM         = Pending   (200010, "Confirm")
 
+
     // Invalid: 400000 + range
     @JvmField val IGNORED         = Ignored   (400001, "Ignored")         // E.g. Ignored, not exactly an error
     @JvmField val BAD_REQUEST     = Invalid   (400002, "Bad Request")     // E.g. Invalid JSON
@@ -71,12 +72,13 @@ object Codes {
     @JvmField val TIMEOUT         = Errored   (500006, "Timeout")
     @JvmField val ERRORED         = Errored   (500007, "Errored")         // General purpose use
     @JvmField val UNEXPECTED      = Unexpected(500008, "Unexpected")
+    @JvmField val LIMITED         = Errored   (500009, "Limited")
 
     // Success ( Interactive / Metadata )
-    @JvmField val EXIT            = Succeeded (600001, "Exiting")
-    @JvmField val HELP            = Succeeded (600002, "Help")
-    @JvmField val ABOUT           = Succeeded (600003, "About")
-    @JvmField val VERSION         = Succeeded (600004, "Version")
+    @JvmField val EXIT            = Succeeded (600002, "Exiting")
+    @JvmField val HELP            = Succeeded (600003, "Help")
+    @JvmField val ABOUT           = Succeeded (600004, "About")
+    @JvmField val VERSION         = Succeeded (600005, "Version")
 
 
     private val mappings = listOf(

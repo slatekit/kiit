@@ -18,16 +18,16 @@ class MyWorker(
         isEnded = true
     }
 
-    override suspend fun work(task: Task): WorkState {
+    override suspend fun work(task: Task): WorkResult {
         acc += 1
 
         // Simulate different results for testing purposes
         return if (acc % 2 == 0)
             //Success(acc, msg = "even")
-            WorkState.Done
+            WorkResult.Done
         else
             //Success(acc, msg = "odd")
-            WorkState.More
+            WorkResult.More
     }
 }
 

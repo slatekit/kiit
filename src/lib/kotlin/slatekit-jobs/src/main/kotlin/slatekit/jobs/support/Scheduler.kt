@@ -1,4 +1,4 @@
-package slatekit.jobs
+package slatekit.jobs.support
 
 import slatekit.common.DateTime
 import java.util.concurrent.Executors

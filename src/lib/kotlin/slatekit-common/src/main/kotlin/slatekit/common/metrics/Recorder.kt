@@ -2,6 +2,7 @@ package slatekit.common.metrics
 
 import slatekit.common.Identity
 import slatekit.common.log.Logger
+import slatekit.common.log.LoggerConsole
 import slatekit.results.Err
 import slatekit.results.Outcome
 import slatekit.results.builders.Tries
@@ -17,9 +18,9 @@ import slatekit.results.builders.Tries
  * 4. events: calling any custom event handlers
  */
 open class Recorder<TRequest, TResponse>(val id: Identity,
-                                         val logger: Logger?,
-                                         val calls: Calls?,
-                                         val counts: Counters?,
+                                         val logger: Logger,
+                                         val calls: Calls,
+                                         val counts: Counters,
                                          val lasts: Lasts<TRequest, TResponse, Err>?,
                                          val converter: ((TRequest, Outcome<TResponse>) -> Event)?,
                                          val events: Events<TRequest, TResponse, Err>?) {
@@ -48,7 +49,7 @@ open class Recorder<TRequest, TResponse>(val id: Identity,
 
         fun <TRequest, TResponse> of(id: Identity,
                                      tags:List<Tag>? = null,
-                                     logger: Logger? = null,
+                                     logger: Logger = LoggerConsole(),
                                      converter: ((TRequest, Outcome<TResponse>) -> Event)? = null): Recorder<TRequest, TResponse> {
             val events = when(converter) {
                 null -> null
