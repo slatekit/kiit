@@ -23,6 +23,7 @@ import slatekit.common.queues.QueueSourceInMemory
 import slatekit.cmds.Command
 import slatekit.cmds.CommandRequest
 import slatekit.jobs.*
+import slatekit.jobs.Job.Companion.worker
 import slatekit.results.Try
 import slatekit.results.Success
 import java.util.concurrent.atomic.AtomicInteger
@@ -70,8 +71,9 @@ class Example_Jobs : Command("utils") {
             return WorkResult.next(offset.get() + batchSize.toLong(), users.size.toLong(), "users")
         }
 
+
         // Option 1: Use a function for a job that runs to completion
-        suspend fun sendNewsLetter(task:Task):WorkResult {
+        suspend fun sendNewsLetter():WorkResult {
             allUsers.forEach { user -> send(NEWS_LETTER_MESSAGE, user) }
             return WorkResult(WorkState.Done)
         }
@@ -79,7 +81,7 @@ class Example_Jobs : Command("utils") {
 
         // Option 2: Use a function for a job that pages through work
         val offset1 = AtomicInteger(0)
-        suspend fun sendNewsLetterWithPaging(task:Task):WorkResult {
+        suspend fun sendNewsLetterWithPaging():WorkResult {
             return sendNewsLetterBatch(offset1, 4)
         }
 
@@ -145,11 +147,11 @@ class Example_Jobs : Command("utils") {
             job1.run()
 
             // Sample 2: JOB constructor with list of 2 functions which will create 2 workers
-            val job2 = slatekit.jobs.Job(id, listOf(::sendNewsLetter, ::sendNewsLetter))
+            val job2 = slatekit.jobs.Job(id, listOf(worker(::sendNewsLetter), worker(::sendNewsLetter)))
             job2.start()
 
             // Sample 3: JOB ( Paged ) + event subscriptions
-            val job3 = slatekit.jobs.Job(id, listOf(::sendNewsLetterWithPaging))
+            val job3 = slatekit.jobs.Job(id, listOf(worker(::sendNewsLetterWithPaging)))
             job3.subscribe { println("Job ${it.id.name} status changed to : ${it.status()}")}
             job3.subscribe(Status.Complete) { println("Job ${it.id.name} completed")}
             job3.start()

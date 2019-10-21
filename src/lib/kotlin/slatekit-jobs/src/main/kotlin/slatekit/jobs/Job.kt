@@ -62,12 +62,17 @@ class Job(val id:Identity,
           val ids: JobId = JobId(),
           val coordinator: Coordinator = coordinator(ids, logger),
           val scheduler: Scheduler = DefaultScheduler()) : Management, StatusCheck, Events<Job> {
+    /**
+     * Initialize with just a function that will handle the work
+     */
+    constructor(id:Identity, lambda: suspend () -> WorkResult, queue: Queue? = null) : this(id, listOf(worker(lambda)), queue)
 
 
     /**
      * Initialize with just a function that will handle the work
      */
     constructor(id:Identity, lambda: suspend (Task) -> WorkResult, queue: Queue? = null) : this(id, listOf(lambda), queue)
+
 
     /**
      * Initialize with a list of functions to excecute work
@@ -239,6 +244,12 @@ class Job(val id:Identity,
 
 
     companion object {
+
+        fun worker(call:suspend() -> WorkResult) : suspend(Task) -> WorkResult {
+            return { t ->
+                call()
+            }
+        }
 
         fun workers(id:Identity, lamdas:List<suspend(Task) -> WorkResult>) :List<Worker<*>>{
             return lamdas.map {
