@@ -11,7 +11,7 @@
  * </slate_header>
  */
 
-package slatekit.functions.cmds
+package slatekit.cmds
 
 import slatekit.common.DateTime
 import slatekit.common.args.Args
@@ -19,7 +19,6 @@ import slatekit.functions.common.Function
 import slatekit.functions.common.*
 import slatekit.results.*
 import slatekit.results.builders.Tries
-import java.util.concurrent.atomic.AtomicReference
 
 /**
  * Light-weight implementation of a command-like pattern that can execute some code

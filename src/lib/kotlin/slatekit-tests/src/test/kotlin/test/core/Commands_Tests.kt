@@ -16,9 +16,9 @@ package test
 import org.junit.Assert
 import org.junit.Test
 import slatekit.common.*
-import slatekit.functions.cmds.Command
-import slatekit.functions.cmds.CommandRequest
-import slatekit.functions.cmds.Commands
+import slatekit.cmds.Command
+import slatekit.cmds.CommandRequest
+import slatekit.cmds.Commands
 import slatekit.results.Success
 import slatekit.results.Try
 

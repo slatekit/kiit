@@ -11,14 +11,13 @@
  * </slate_header>
  */
 
-package slatekit.functions.cmds
+package slatekit.cmds
 
 import slatekit.common.Status
 import slatekit.common.args.Args
 import slatekit.functions.common.*
 import slatekit.results.*
 import slatekit.results.builders.Outcomes
-import slatekit.results.builders.Tries
 
 /**
  * Command manager to run commands and get back the status of each command

@@ -40,7 +40,7 @@ interface JobTestSupport {
     fun ensure(workers: Workers, hasRun:Boolean, totalRuns:Long, totalPassed:Long, totalFailed:Long, id: Identity,
                status: Status, requestCount:Int, action: JobAction?, seconds:Long){
         val context: WorkerContext = workers.get(id)!!
-        val runs = context.runs
+        val runs = context.stats.calls
         val worker = context.worker
 
         // Status
