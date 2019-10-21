@@ -7,6 +7,10 @@ import slatekit.jobs.events.JobEvents
 import slatekit.jobs.support.Command
 import slatekit.jobs.support.JobUtils
 
+
+/**
+ * Dispatches requests
+ */
 class JobDispatch(val job:Job, val workers: Workers, val events:JobEvents) {
 
     suspend fun start(launch:Boolean)                 = transition(JobAction.Start  , Status.Running, launch)
@@ -17,27 +21,11 @@ class JobDispatch(val job:Job, val workers: Workers, val events:JobEvents) {
     suspend fun delayed(launch:Boolean, seconds:Long) = transition(JobAction.Start  , Status.Paused, launch, seconds)
 
 
-    suspend fun perform(action: JobAction, currentState: Status, launch:Boolean, operation:suspend() -> Unit){
-        // Check state transition
-        if(!JobUtils.validate(action, currentState)) {
-            val currentStatus = job.status()
-            job.error(currentStatus, "Can not handle work while job is $currentStatus")
-        }
-        else {
-            if(launch) {
-                GlobalScope.launch {
-                    operation()
-                }
-            }
-            else {
-                operation()
-            }
-        }
-    }
-
-
+    /**
+     * Transitions all workers to the new status supplied
+     */
     private suspend fun transition(action: JobAction, newStatus: Status, launch:Boolean, seconds:Long = 0) {
-        perform(action, job.status(), launch) {
+        JobUtils.perform(job, action, job.status(), launch) {
             //logger.log(Info, "Job:", listOf(nameKey, "transition" to newStatus.name))
             job.setStatus(newStatus)
 

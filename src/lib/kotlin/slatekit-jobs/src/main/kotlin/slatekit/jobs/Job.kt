@@ -1,5 +1,7 @@
 package slatekit.jobs
 
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import slatekit.common.Status
 import slatekit.common.StatusCheck
@@ -91,6 +93,7 @@ class Job(all: List<Worker<*>>,
      * Requests this job to perform the supplied command
      */
     override suspend fun request(command: Command) {
+        // Coordinator handles requests via kotlin channels
         coordinator.request(command)
     }
 
@@ -99,6 +102,7 @@ class Job(all: List<Worker<*>>,
      * Listens to and handles 1 single request
      */
     override suspend fun respond() {
+        // Coordinator takes 1 request off the channel
         val request = coordinator.respondOne()
         request?.let {
             runBlocking {
@@ -181,12 +185,12 @@ class Job(all: List<Worker<*>>,
                 val status = worker.status()
                 val task = nextTask()
                 when(action) {
-                    is JobAction.Start   -> dispatch.perform(action, status, launch) { workers.start(workerId, task) }
-                    is JobAction.Stop    -> dispatch.perform(action, status, launch) { workers.stop(workerId, request.desc) }
-                    is JobAction.Pause   -> dispatch.perform(action, status, launch) { workers.pause(workerId, request.desc) }
-                    is JobAction.Process -> dispatch.perform(action, status, launch) { workers.process(workerId, task) }
-                    is JobAction.Resume  -> dispatch.perform(action, status, launch) { workers.resume(workerId, request.desc, task) }
-                    is JobAction.Delay   -> dispatch.perform(action, status, launch) { workers.start(workerId) }
+                    is JobAction.Start   -> JobUtils.perform(this, action, status, launch) { workers.start(workerId, task) }
+                    is JobAction.Stop    -> JobUtils.perform(this, action, status, launch) { workers.stop(workerId, request.desc) }
+                    is JobAction.Pause   -> JobUtils.perform(this, action, status, launch) { workers.pause(workerId, request.desc) }
+                    is JobAction.Process -> JobUtils.perform(this, action, status, launch) { workers.process(workerId, task) }
+                    is JobAction.Resume  -> JobUtils.perform(this, action, status, launch) { workers.resume(workerId, request.desc, task) }
+                    is JobAction.Delay   -> JobUtils.perform(this, action, status, launch) { workers.start(workerId) }
                     else                 -> {
                         logger.info("Unexpected state: ${request.action}")
                     }

@@ -1,10 +1,7 @@
 package slatekit.jobs.support
 
 import slatekit.common.Status
-import slatekit.jobs.Task
-import slatekit.jobs.WorkResult
-import slatekit.jobs.Worker
-import slatekit.jobs.WorkerContext
+import slatekit.jobs.*
 import slatekit.results.*
 import slatekit.results.builders.Outcomes
 import slatekit.results.builders.Tries
@@ -70,12 +67,12 @@ object WorkRunner {
         worker.init()
 
         worker.transition(Status.Running)
-        val state = worker.work(task)
-        if(state == WorkResult.Done && handleDone) {
+        val result = worker.work(task)
+        if(result.state == WorkState.Done && handleDone) {
             worker.transition(Status.Complete)
             worker.done()
         }
-        return state
+        return result
     }
 
 
@@ -86,12 +83,12 @@ object WorkRunner {
         val result = Tries.attempt {
             worker.transition(Status.Running)
             worker.transition(Status.Running)
-            val state = worker.work()
-            if(state == WorkResult.Done) {
+            val workResult = worker.work()
+            if(workResult.state == WorkState.Done) {
                 worker.transition(Status.Complete)
                 worker.done()
             }
-            state
+            workResult
         }
         when(result){
             is Success -> { }

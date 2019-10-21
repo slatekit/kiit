@@ -95,4 +95,26 @@ object JobUtils {
         return ev
     }
 
+
+    /**
+     * Performs the operation if the action supplied is correct with regard to the current state.
+     */
+    suspend fun perform(job: Job, action: JobAction, currentState: Status, launch:Boolean, operation:suspend() -> Unit){
+        // Check state transition
+        if(!JobUtils.validate(action, currentState)) {
+            val currentStatus = job.status()
+            job.error(currentStatus, "Can not handle work while job is $currentStatus")
+        }
+        else {
+            if(launch) {
+                GlobalScope.launch {
+                    operation()
+                }
+            }
+            else {
+                operation()
+            }
+        }
+    }
+
 }

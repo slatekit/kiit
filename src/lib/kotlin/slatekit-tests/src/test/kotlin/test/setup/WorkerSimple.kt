@@ -24,10 +24,10 @@ class MyWorker(
         // Simulate different results for testing purposes
         return if (acc % 2 == 0)
             //Success(acc, msg = "even")
-            WorkResult.Done
+            WorkResult(WorkState.Done)
         else
             //Success(acc, msg = "odd")
-            WorkResult.More
+            WorkResult(WorkState.More)
     }
 }
 

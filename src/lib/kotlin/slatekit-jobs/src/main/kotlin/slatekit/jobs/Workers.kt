@@ -13,6 +13,7 @@ import slatekit.jobs.events.WorkerEvents
 import slatekit.jobs.support.*
 import slatekit.results.*
 import slatekit.results.builders.Outcomes
+import slatekit.results.builders.Tries
 
 /**
  * Represents a cluster of Workers that are affiliated with 1 job.
@@ -82,8 +83,8 @@ class Workers(val all:List<Worker<*>>,
 
             when (result) {
                 is Success -> {
-                    val state = result.value
-                    coordinator.loop(worker, state)
+                    val res = result.value
+                    loop(worker, res)
                     worker.status()
                 }
                 is Failure -> {
@@ -100,10 +101,9 @@ class Workers(val all:List<Worker<*>>,
         perform("Processing", id) { context ->
             val worker = context.worker
             val result = WorkRunner.record(context) {
-                val state = worker.work(task)
-                state
+                worker.work(task)
             }
-            result.map { state -> coordinator.loop(worker, state) }
+            result.map { res -> loop(worker, res) }
             Outcomes.success(Status.Running)
         }
     }
@@ -113,10 +113,9 @@ class Workers(val all:List<Worker<*>>,
         performPausableAction(Status.Running, id) { context, pausable ->
             val worker = context.worker
             val result = WorkRunner.record(context) {
-                val state = pausable.resume(reason ?: "Resuming", task)
-                state
+                pausable.resume(reason ?: "Resuming", task)
             }
-            result.map { state -> coordinator.loop(worker, state) }
+            result.map { res -> loop(worker, res) }
             Outcomes.success(Status.Running)
         }
     }
@@ -180,6 +179,31 @@ class Workers(val all:List<Worker<*>>,
                     }
                     else -> Outcomes.errored("${context.worker.id.name} does not implement Pausable and can not handle a pause/stop/resume action")
                 }
+            }
+        }
+    }
+
+
+    private suspend fun loop(worker: Workable<*>, workResult: WorkResult) {
+        val result = Tries.attempt {
+            when (workResult.state) {
+                is WorkState.Done -> {
+                    logger.info("Worker ${worker.id.name} complete")
+                    worker.transition(Status.Complete)
+                    worker.done()
+                }
+                is WorkState.More -> {
+                    val id = ids.nextId()
+                    val uuid = ids.nextUUID()
+                    coordinator.request(Command.WorkerCommand(id, uuid.toString(), JobAction.Process, worker.id, 0, ""))
+                }
+            }
+            ""
+        }
+        when (result) {
+            is Success -> {  }
+            is Failure -> {
+                logger.error("Error while looping on : ${worker.id.id}")
             }
         }
     }

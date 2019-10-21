@@ -37,6 +37,6 @@ open class APIWorker(
             is Failure -> slatekit.results.Failure(result.error)
         }
         slatekit.common.TODO.IMPLEMENT("jobs", "Success/Failure handling")
-        return WorkResult.More
+        return WorkResult(WorkState.More)
     }
 }

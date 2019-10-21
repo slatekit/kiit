@@ -18,7 +18,5 @@ sealed class JobAction(val name:String) {
     object Resume   : JobAction( "Resume" )
     object Control  : JobAction( "Control")
     object Process  : JobAction( "Process")
-    object Slow     : JobAction( "Slow"   )
-    object Fast     : JobAction( "Fast"   )
     object Delay    : JobAction( "Delay" )
 }

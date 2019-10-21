@@ -1,10 +1,7 @@
 package test.jobs
 
 import slatekit.common.Identity
-import slatekit.jobs.Pausable
-import slatekit.jobs.Task
-import slatekit.jobs.WorkResult
-import slatekit.jobs.Worker
+import slatekit.jobs.*
 import java.util.concurrent.atomic.AtomicInteger
 
 class OneTimeWorker(val start:Int, val end:Int, id: Identity) : Worker<Int>(id), Pausable {
@@ -34,7 +31,7 @@ class OneTimeWorker(val start:Int, val end:Int, id: Identity) : Worker<Int>(id),
     override suspend fun work(task: Task): WorkResult {
         flow.add("work")
         (start .. end).forEach { current.incrementAndGet()  }
-        return WorkResult.Done
+        return WorkResult(WorkState.Done)
     }
 
 
@@ -77,10 +74,10 @@ class PagedWorker(start:Int, val maxRuns:Int, val countsPerRun:Int) : Worker<Int
         }
         val run = runs.incrementAndGet()
         return if(run < maxRuns) {
-            WorkResult.More
+            WorkResult(WorkState.More)
         }
         else {
-            WorkResult.Done
+            WorkResult(WorkState.Done)
         }
     }
 

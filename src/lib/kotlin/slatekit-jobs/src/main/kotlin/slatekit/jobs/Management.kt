@@ -37,16 +37,6 @@ interface Management {
     suspend fun process() = request(JobAction.Process)
 
     /**
-     * Requests processing to slow down
-     */
-    suspend fun slow() = request(JobAction.Slow)
-
-    /**
-     * Requests processing to speed up
-     */
-    suspend fun fast () = request(JobAction.Fast)
-
-    /**
      * Requests an action on the entire job
      */
     suspend fun request(action: JobAction) {

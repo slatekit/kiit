@@ -41,7 +41,7 @@ data class Task(val id: String,
         /**
          * Converts a message from any queue into a Task
          */
-        fun next(state: WorkResult.Next): Task {
+        fun next(state: WorkState.Next): Task {
             val id = owned.id
             val name = owned.name
             val task = Task(id, state.offset.toString(), name, state.reference, "", "", Queue.empty)
