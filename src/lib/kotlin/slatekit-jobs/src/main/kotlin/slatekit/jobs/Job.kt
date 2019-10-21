@@ -35,7 +35,7 @@ import java.util.concurrent.atomic.AtomicReference
  * INSPIRED BY:
  * 1. Inspired by Ruby Rails SideKiq, NodesJS Bull, Python Celery
  * 2. Kotlin Structured Concurrency via Channels ( misc blog posts by Kotlin Team )
- * 3. DataDog / Micrometer: with regard to an emphasis towards diagnostics / stats
+ * 3. Actor model from other languages
  *
  *
  * LIMITS:
