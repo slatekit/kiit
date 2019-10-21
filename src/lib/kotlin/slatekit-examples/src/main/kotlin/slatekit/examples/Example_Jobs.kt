@@ -154,8 +154,12 @@ class Example_Jobs : Command("utils") {
             println(job1.status())
 
             // Sample 2: JOB constructor with list of 2 functions which will create 2 workers
-            val job2 = slatekit.jobs.Job(id, listOf(worker(::sendNewsLetter), worker(::sendNewsLetter)))
+            val job2 = slatekit.jobs.Job(id, listOf(worker(::sendNewsLetter), worker(::sendNewsLetterWithPaging)))
             job2.start()
+            job2.respond() // Work dispatch
+            job2.respond() // Work start/finish
+            job2.respond() // Work start/finish
+            job2.respond() // Work start/finish
 
             // Sample 3: JOB ( Paged )
             val job3 = slatekit.jobs.Job(id, listOf(worker(::sendNewsLetterWithPaging)))

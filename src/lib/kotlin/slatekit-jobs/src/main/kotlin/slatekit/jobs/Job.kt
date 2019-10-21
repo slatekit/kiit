@@ -5,6 +5,7 @@ import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import slatekit.common.Identity
+import slatekit.common.SimpleIdentity
 import slatekit.common.Status
 import slatekit.common.StatusCheck
 import slatekit.common.log.Info
@@ -261,8 +262,12 @@ class Job(val id:Identity,
         }
 
         fun workers(id:Identity, lamdas:List<suspend(Task) -> WorkResult>) :List<Worker<*>>{
+            val idInfo = when(id) {
+                is SimpleIdentity -> id
+                else -> SimpleIdentity(id.area, id.service, id.agent, id.env, id.instance)
+            }
             return lamdas.map {
-                Worker<String>(id, operation = it )
+                Worker<String>(idInfo.newInstance(), operation = it )
             }
         }
 
