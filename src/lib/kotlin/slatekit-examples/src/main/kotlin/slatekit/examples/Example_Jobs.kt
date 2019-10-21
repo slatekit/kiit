@@ -162,6 +162,12 @@ class Example_Jobs : Command("utils") {
             val job4 = slatekit.jobs.Job(id, listOf(NewsLetterWorker()), queue2)
             job4.start()
 
+            // Kick off the jobs by
+            job1.respond()
+            job2.respond()
+            job3.respond()
+            job4.respond()
+
             // Delay for 30 seconds
             delay(30000)
         }
