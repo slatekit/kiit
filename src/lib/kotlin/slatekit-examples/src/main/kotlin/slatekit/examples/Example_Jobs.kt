@@ -140,33 +140,38 @@ class Example_Jobs : Command("utils") {
 
         //<doc:examples>
         runBlocking {
-            // JOB 1: Run to completion
-            val job1 = slatekit.jobs.Job(id, listOf(::sendNewsLetter))
+            // Sample 1: JOB that runs to completion
+            val job1 = slatekit.jobs.Job(id, ::sendNewsLetter)
             job1.start()
 
-            // JOB 2: Paged Job with event subscriptions
-            val job2 = slatekit.jobs.Job(id, listOf(::sendNewsLetterWithPaging))
-            job2.subscribe { println("Job ${it.id.name} status changed to : ${it.status()}")}
-            job2.subscribe(Status.Complete) { println("Job ${it.id.name} completed")}
+            // Sample 2: JOB constructor with list of 2 functions which will create 2 workers
+            val job2 = slatekit.jobs.Job(id, listOf(::sendNewsLetter, ::sendNewsLetter))
             job2.start()
 
-            // JOB 3: Queued + Subscribe to worker status changes
-            val queue1 = Queue("sample_queue", Priority.Mid, QueueSourceInMemory.stringQueue(5))
-            val job3 = slatekit.jobs.Job(id, listOf(::sendNewsLetterFromQueue), queue1)
-            job3.workers.subscribe { it ->  println("Worker ${it.id.name}")}
-            job3.workers.subscribe { it ->  println("Worker ${it.id.name} completed")}
+            // Sample 3: JOB ( Paged ) + event subscriptions
+            val job3 = slatekit.jobs.Job(id, listOf(::sendNewsLetterWithPaging))
+            job3.subscribe { println("Job ${it.id.name} status changed to : ${it.status()}")}
+            job3.subscribe(Status.Complete) { println("Job ${it.id.name} completed")}
             job3.start()
 
-            // JOB 4: Worker implementation with queue
-            val queue2 = Queue("sample_queue", Priority.Mid, QueueSourceInMemory.stringQueue(5))
-            val job4 = slatekit.jobs.Job(id, listOf(NewsLetterWorker()), queue2)
+            // Sample 4: JOB ( Queued ) + Subscribe to worker status changes
+            val queue1 = Queue("sample_queue", Priority.Mid, QueueSourceInMemory.stringQueue(5))
+            val job4 = slatekit.jobs.Job(id, listOf(::sendNewsLetterFromQueue), queue1)
+            job4.workers.subscribe { it ->  println("Worker ${it.id.name}")}
+            job4.workers.subscribe { it ->  println("Worker ${it.id.name} completed")}
             job4.start()
+
+            // Sample 5: JOB ( Worker ) implementation with queue
+            val queue2 = Queue("sample_queue", Priority.Mid, QueueSourceInMemory.stringQueue(5))
+            val job5 = slatekit.jobs.Job(id, listOf(NewsLetterWorker()), queue2)
+            job5.start()
 
             // Kick off the jobs by
             job1.respond()
             job2.respond()
             job3.respond()
             job4.respond()
+            job5.respond()
 
             // Delay for 30 seconds
             delay(30000)
