@@ -1,9 +1,7 @@
 package slatekit.jobs
 
-import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.*
 import kotlinx.coroutines.channels.Channel
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.runBlocking
 import slatekit.common.Identity
 import slatekit.common.SimpleIdentity
 import slatekit.common.Status
@@ -63,7 +61,8 @@ class Job(val id:Identity,
           val logger: Logger = LoggerConsole(),
           val ids: JobId = JobId(),
           val coordinator: Coordinator = coordinator(ids, logger),
-          val scheduler: Scheduler = DefaultScheduler()) : Management, StatusCheck, Events<Job> {
+          val scheduler: Scheduler = DefaultScheduler(),
+          val scope:CoroutineScope = GlobalScope) : Management, StatusCheck, Events<Job> {
     /**
      * Initialize with just a function that will handle the work
      */
@@ -84,7 +83,7 @@ class Job(val id:Identity,
 
     val workers = Workers(id, all, coordinator, scheduler, logger, ids, 30)
     private val events: Events<Job> = JobEvents()
-    private val dispatch = JobDispatch(this, workers, events as JobEvents)
+    private val dispatch = JobDispatch(this, workers, events as JobEvents, scope)
     private val _status = AtomicReference<Status>(Status.InActive)
 
 
@@ -123,10 +122,7 @@ class Job(val id:Identity,
      */
     override suspend fun run() {
         start()
-        // TODO: Use a different scope
-        GlobalScope.launch {
-            manage()
-        }
+        manage()
     }
 
 
@@ -158,7 +154,7 @@ class Job(val id:Identity,
      */
     override suspend fun manage(){
         coordinator.respond { request ->
-            manage(request, true)
+            manage(request, false)
         }
     }
 
@@ -226,12 +222,12 @@ class Job(val id:Identity,
                 val status = worker.status()
                 val task = nextTask()
                 when(action) {
-                    is JobAction.Start   -> JobUtils.perform(this, action, status, launch) { workers.start(workerId, task) }
-                    is JobAction.Stop    -> JobUtils.perform(this, action, status, launch) { workers.stop(workerId, request.desc) }
-                    is JobAction.Pause   -> JobUtils.perform(this, action, status, launch) { workers.pause(workerId, request.desc) }
-                    is JobAction.Process -> JobUtils.perform(this, action, status, launch) { workers.process(workerId, task) }
-                    is JobAction.Resume  -> JobUtils.perform(this, action, status, launch) { workers.resume(workerId, request.desc, task) }
-                    is JobAction.Delay   -> JobUtils.perform(this, action, status, launch) { workers.start(workerId) }
+                    is JobAction.Start   -> JobUtils.perform(this, action, status, launch, scope) { workers.start(workerId, task) }
+                    is JobAction.Stop    -> JobUtils.perform(this, action, status, launch, scope) { workers.stop(workerId, request.desc) }
+                    is JobAction.Pause   -> JobUtils.perform(this, action, status, launch, scope) { workers.pause(workerId, request.desc) }
+                    is JobAction.Process -> JobUtils.perform(this, action, status, launch, scope) { workers.process(workerId, task) }
+                    is JobAction.Resume  -> JobUtils.perform(this, action, status, launch, scope) { workers.resume(workerId, request.desc, task) }
+                    is JobAction.Delay   -> JobUtils.perform(this, action, status, launch, scope) { workers.start(workerId) }
                     else                 -> {
                         logger.info("Unexpected state: ${request.action}")
                     }

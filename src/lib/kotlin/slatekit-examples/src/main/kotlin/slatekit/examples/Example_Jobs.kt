@@ -14,6 +14,7 @@ package slatekit.examples
 
 //<doc:import_required>
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import slatekit.common.*
 //</doc:import_required>
@@ -147,21 +148,21 @@ class Example_Jobs : Command("utils") {
         //<doc:examples>
         runBlocking {
             // Sample 1: JOB that runs to completion
-            val job1 = slatekit.jobs.Job(id, ::sendNewsLetter)
+            val job1 = slatekit.jobs.Job(id.copy(service = "job1"), ::sendNewsLetter)
             job1.start()   // Job dispatch
             job1.respond() // Work dispatch
             job1.respond() // Work start/finish
             println(job1.status())
 
             // Sample 2: JOB ( 2 Workers ) constructor with list of 2 functions which will create 2 workers
-            val job2 = slatekit.jobs.Job(id, listOf(worker(::sendNewsLetter), worker(::sendNewsLetterWithPaging)))
+            val job2 = slatekit.jobs.Job(id.copy(service = "job2"), listOf(worker(::sendNewsLetter), worker(::sendNewsLetterWithPaging)))
             job2.start()
             job2.respond() // Work dispatch
             job2.respond() // Work start/finish
             job2.respond() // Work start/finish
 
             // Sample 3: JOB ( Paged )
-            val job3 = slatekit.jobs.Job(id, listOf(worker(::sendNewsLetterWithPaging)))
+            val job3 = slatekit.jobs.Job(id.copy(service = "job3"), listOf(worker(::sendNewsLetterWithPaging)))
             job3.start()   // Job dispatch
             job3.respond() // Work dispatch
             job3.respond() // Work start/finish
@@ -169,7 +170,7 @@ class Example_Jobs : Command("utils") {
             println(job1.status())
 
             // Sample 4: JOB ( Events ) + Subscribe to worker status changes
-            val job4 = slatekit.jobs.Job(id, listOf(worker(::sendNewsLetterWithPaging)))
+            val job4 = slatekit.jobs.Job(id.copy(service = "job4"), listOf(worker(::sendNewsLetterWithPaging)))
             job4.subscribe { println("Job ${it.id.name} status changed to : ${it.status()}")}
             job4.subscribe(Status.Complete) { println("Job ${it.id.name} completed")}
             job4.workers.subscribe { it ->  println("Worker ${it.id.name}")}
@@ -182,7 +183,7 @@ class Example_Jobs : Command("utils") {
             // Sample 4: JOB ( Queued ) + Subscribe to worker status changes
             val queue1 = Queue("sample_queue", Priority.Mid, QueueSourceInMemory.stringQueue(5))
             queue1.queue.send("3", mapOf("id" to "3", "name" to "newsletter", "data" to "3"))
-            val job5 = slatekit.jobs.Job(id, listOf(::sendNewsLetterFromQueue), queue1)
+            val job5 = slatekit.jobs.Job(id.copy(service = "job5"), listOf(::sendNewsLetterFromQueue), queue1)
             job5.start()   // Job dispatch
             job5.respond() // Work dispatch
             job5.respond() // Work start/finish
@@ -193,7 +194,7 @@ class Example_Jobs : Command("utils") {
             // 1. a callback for every 10 items processed
             // 2. a limit to processing at most 12 items ( to support running a job in "waves" )
             // 3. a threshold / error limit of .1 ( 10% )
-            val job6 = slatekit.jobs.Job(id, listOf(worker(::sendNewsLetterWithPaging)))
+            val job6 = slatekit.jobs.Job(id.copy(service = "job6"), listOf(worker(::sendNewsLetterWithPaging)))
             job6.workers.policy(Every(10) { req, res -> println(req.task.id + ":" + res.msg) })
             job6.workers.policy(Limit(12) { req -> req.context.stats.counts } )
             job6.workers.policy(Ratio(.1, slatekit.results.Status.Errored(0, "")) { req -> req.context.stats.counts } )
@@ -201,7 +202,7 @@ class Example_Jobs : Command("utils") {
 
             // Sample 7: JOB ( Worker ) implementation with queue
             val queue2 = Queue("sample_queue", Priority.Mid, QueueSourceInMemory.stringQueue(5))
-            val job7 = slatekit.jobs.Job(id, listOf(NewsLetterWorker()), queue2)
+            val job7 = slatekit.jobs.Job(id.copy(service = "job7"), listOf(NewsLetterWorker()), queue2)
             job7.start()
 
             // Kick off the jobs by

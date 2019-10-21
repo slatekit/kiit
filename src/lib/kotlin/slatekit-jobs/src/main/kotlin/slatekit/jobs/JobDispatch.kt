@@ -1,5 +1,6 @@
 package slatekit.jobs
 
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import slatekit.common.Status
@@ -11,7 +12,7 @@ import slatekit.jobs.support.JobUtils
 /**
  * Dispatches control and management requests on all the workers
  */
-class JobDispatch(val job:Job, val workers: Workers, val events:JobEvents) {
+class JobDispatch(val job:Job, val workers: Workers, val events:JobEvents, val scope:CoroutineScope) {
 
     suspend fun start(launch:Boolean)                 = transition(JobAction.Start  , Status.Running, launch)
     suspend fun stop(launch:Boolean)                  = transition(JobAction.Stop   , Status.Stopped, launch)
@@ -25,11 +26,11 @@ class JobDispatch(val job:Job, val workers: Workers, val events:JobEvents) {
      * Transitions all workers to the new status supplied
      */
     private suspend fun transition(action: JobAction, newStatus: Status, launch:Boolean, seconds:Long = 0) {
-        JobUtils.perform(job, action, job.status(), launch) {
+        JobUtils.perform(job, action, job.status(), launch, scope) {
             //logger.log(Info, "Job:", listOf(nameKey, "transition" to newStatus.name))
             job.setStatus(newStatus)
 
-            GlobalScope.launch {
+            scope.launch {
                 events.notify(job)
             }
 

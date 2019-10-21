@@ -1,5 +1,6 @@
 package slatekit.jobs.support
 
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import org.threeten.bp.Duration
@@ -99,7 +100,7 @@ object JobUtils {
     /**
      * Performs the operation if the action supplied is correct with regard to the current state.
      */
-    suspend fun perform(job: Job, action: JobAction, currentState: Status, launch:Boolean, operation:suspend() -> Unit){
+    suspend fun perform(job: Job, action: JobAction, currentState: Status, launch:Boolean, scope: CoroutineScope, operation:suspend() -> Unit){
         // Check state transition
         if(!JobUtils.validate(action, currentState)) {
             val currentStatus = job.status()
@@ -107,7 +108,7 @@ object JobUtils {
         }
         else {
             if(launch) {
-                GlobalScope.launch {
+                scope.launch {
                     operation()
                 }
             }
