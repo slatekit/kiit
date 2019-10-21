@@ -6,7 +6,7 @@ import slatekit.results.*
 import slatekit.results.builders.Outcomes
 import slatekit.results.builders.Tries
 
-object WorkRunner {
+object Runner {
 
     /**
      * Calls this worker with life-cycle hooks and automatic transitioning to proper state

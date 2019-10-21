@@ -86,8 +86,8 @@ class Workers(val jobId:Identity,
     suspend fun start(id: Identity, task: Task = Task.empty)  {
         perform("Starting", id) { context ->
             val worker = context.worker
-            val result = WorkRunner.record(context) {
-                val result: Try<WorkResult> = WorkRunner.attemptStart(worker, false, true, task)
+            val result = Runner.record(context) {
+                val result: Try<WorkResult> = Runner.attemptStart(worker, false, true, task)
                 result.toOutcome()
             }.inner()
 
@@ -110,7 +110,7 @@ class Workers(val jobId:Identity,
     suspend fun process(id: Identity, task: Task = Task.empty) {
         perform("Processing", id) { context ->
             val worker = context.worker
-            val result = WorkRunner.record(context) {
+            val result = Runner.record(context) {
                 worker.work(task)
             }
             result.map { res -> loop(worker, res) }
@@ -122,7 +122,7 @@ class Workers(val jobId:Identity,
     suspend fun resume(id: Identity, reason:String?, task: Task = Task.empty) {
         performPausableAction(Status.Running, id) { context, pausable ->
             val worker = context.worker
-            val result = WorkRunner.record(context) {
+            val result = Runner.record(context) {
                 pausable.resume(reason ?: "Resuming", task)
             }
             result.map { res -> loop(worker, res) }
