@@ -10,6 +10,7 @@ import slatekit.common.StatusCheck
 import slatekit.common.log.Info
 import slatekit.common.log.Logger
 import slatekit.common.log.LoggerConsole
+import slatekit.functions.policy.Policy
 import slatekit.jobs.events.Events
 import slatekit.jobs.events.JobEvents
 import slatekit.jobs.support.*
@@ -84,6 +85,14 @@ class Job(val id:Identity,
     private val events: Events<Job> = JobEvents()
     private val dispatch = JobDispatch(this, workers, events as JobEvents)
     private val _status = AtomicReference<Status>(Status.InActive)
+
+
+    /**
+     * adds a policy to the job
+     */
+    fun policy(policy: Policy<WorkRequest, WorkResult>) {
+
+    }
 
 
     /**

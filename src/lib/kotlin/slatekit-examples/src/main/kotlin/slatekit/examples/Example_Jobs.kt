@@ -22,6 +22,9 @@ import slatekit.common.*
 import slatekit.common.queues.QueueSourceInMemory
 import slatekit.cmds.Command
 import slatekit.cmds.CommandRequest
+import slatekit.functions.policy.Every
+import slatekit.functions.policy.Limit
+import slatekit.functions.policy.Ratio
 import slatekit.jobs.*
 import slatekit.jobs.Job.Companion.worker
 import slatekit.results.Try
@@ -163,10 +166,20 @@ class Example_Jobs : Command("utils") {
             job4.workers.subscribe { it ->  println("Worker ${it.id.name} completed")}
             job4.start()
 
-            // Sample 5: JOB ( Worker ) implementation with queue
-            val queue2 = Queue("sample_queue", Priority.Mid, QueueSourceInMemory.stringQueue(5))
-            val job5 = slatekit.jobs.Job(id, listOf(NewsLetterWorker()), queue2)
+            // Sample 5: JOB ( Policies ) with policies to add behavior / strategies to worker, this adds:
+            // 1. a callback for every 10 items processed
+            // 2. a limit to processing at most 12 items ( to support running a job in "waves" )
+            // 3. a threshold / error limit of .1 ( 10% )
+            val job5 = slatekit.jobs.Job(id, listOf(worker(::sendNewsLetterWithPaging)))
+            job5.workers.policy(Every(10) { req, res -> println(req.task.id + ":" + res.msg) })
+            job5.workers.policy(Limit(12) { req -> req.context.stats.counts } )
+            job5.workers.policy(Ratio(.1, slatekit.results.Status.Errored(0, "")) { req -> req.context.stats.counts } )
             job5.start()
+
+            // Sample 6: JOB ( Worker ) implementation with queue
+            val queue2 = Queue("sample_queue", Priority.Mid, QueueSourceInMemory.stringQueue(5))
+            val job6 = slatekit.jobs.Job(id, listOf(NewsLetterWorker()), queue2)
+            job6.start()
 
             // Kick off the jobs by
             job1.respond()
@@ -174,6 +187,7 @@ class Example_Jobs : Command("utils") {
             job3.respond()
             job4.respond()
             job5.respond()
+            job6.respond()
 
             // Delay for 30 seconds
             delay(30000)

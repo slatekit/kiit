@@ -8,6 +8,7 @@ import slatekit.common.Identity
 import slatekit.common.log.Info
 import slatekit.common.log.Logger
 import slatekit.common.metrics.Recorder
+import slatekit.functions.policy.Policy
 import slatekit.jobs.events.Events
 import slatekit.jobs.events.WorkerEvents
 import slatekit.jobs.support.*
@@ -28,6 +29,14 @@ class Workers(val jobId:Identity,
 
     private val events: Events<Worker<*>> = WorkerEvents(this)
     private val lookup = all.map { it.id.id to WorkerContext(jobId, it, Recorder.of(it.id)) }.toMap()
+
+
+    /**
+     * adds a policy to the job
+     */
+    fun policy(policy: Policy<WorkRequest, WorkResult>) {
+
+    }
 
 
     /**
