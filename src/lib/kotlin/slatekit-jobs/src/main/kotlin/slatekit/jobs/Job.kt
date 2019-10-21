@@ -104,6 +104,18 @@ class Job(val id:Identity,
 
 
     /**
+     * Run the job by starting it first and then managing it by listening for requests
+     */
+    override suspend fun run() {
+        start()
+        // TODO: Use a different scope
+        GlobalScope.launch {
+            manage()
+        }
+    }
+
+
+    /**
      * Requests this job to perform the supplied command
      */
     override suspend fun request(command: Command) {

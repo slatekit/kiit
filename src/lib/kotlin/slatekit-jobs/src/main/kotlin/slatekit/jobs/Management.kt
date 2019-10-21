@@ -12,6 +12,11 @@ import java.util.*
 interface Management {
 
     /**
+     * Run the job by starting it first and then managing it by listening for requests
+     */
+    suspend fun run()
+
+    /**
      * Requests starting of the job
      */
     suspend fun start() = request(JobAction.Start)

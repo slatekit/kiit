@@ -142,7 +142,7 @@ class Example_Jobs : Command("utils") {
         runBlocking {
             // Sample 1: JOB that runs to completion
             val job1 = slatekit.jobs.Job(id, ::sendNewsLetter)
-            job1.start()
+            job1.run()
 
             // Sample 2: JOB constructor with list of 2 functions which will create 2 workers
             val job2 = slatekit.jobs.Job(id, listOf(::sendNewsLetter, ::sendNewsLetter))
