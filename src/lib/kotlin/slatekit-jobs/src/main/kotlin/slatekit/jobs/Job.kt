@@ -1,6 +1,7 @@
 package slatekit.jobs
 
 import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import slatekit.common.Identity
@@ -8,6 +9,7 @@ import slatekit.common.Status
 import slatekit.common.StatusCheck
 import slatekit.common.log.Info
 import slatekit.common.log.Logger
+import slatekit.common.log.LoggerConsole
 import slatekit.jobs.events.Events
 import slatekit.jobs.events.JobEvents
 import slatekit.jobs.support.*
@@ -55,11 +57,13 @@ import java.util.concurrent.atomic.AtomicReference
  */
 class Job(val id:Identity,
           all: List<Worker<*>>,
-          val queue: Queue?,
-          val coordinator: Coordinator,
-          val scheduler: Scheduler,
-          val logger: Logger,
-          val ids: JobId = JobId()) : Management, StatusCheck, Events<Job> {
+          val queue: Queue? = null,
+          val logger: Logger = LoggerConsole(),
+          val ids: JobId = JobId(),
+          val coordinator: Coordinator = coordinator(ids, logger),
+          val scheduler: Scheduler = DefaultScheduler()) : Management, StatusCheck, Events<Job> {
+
+    constructor(id:Identity, lambdas: List<suspend (Task) -> WorkResult>, queue: Queue? = null) : this(id, workers(id, lambdas), queue)
 
 
     val workers = Workers(id, all, coordinator, scheduler, logger, ids, 30)
@@ -210,5 +214,20 @@ class Job(val id:Identity,
             }
         }
         return task
+    }
+
+
+    companion object {
+
+        fun workers(id:Identity, lamdas:List<suspend(Task) -> WorkResult>) :List<Worker<*>>{
+            return lamdas.map {
+                Worker<String>(id, operation = it )
+            }
+        }
+
+
+        fun coordinator(ids:JobId, logger: Logger):Coordinator {
+            return ChannelCoordinator(logger, ids, Channel())
+        }
     }
 }

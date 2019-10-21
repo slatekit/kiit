@@ -22,10 +22,7 @@ import slatekit.common.queues.QueueSourceInMemory
 import slatekit.common.queues.QueueValueConverter
 import slatekit.cmds.Command
 import slatekit.cmds.CommandRequest
-import slatekit.jobs.Task
-import slatekit.jobs.WorkResult
-import slatekit.jobs.WorkState
-import slatekit.jobs.Worker
+import slatekit.jobs.*
 import slatekit.results.Try
 import slatekit.results.Success
 import java.util.concurrent.atomic.AtomicInteger
@@ -52,15 +49,7 @@ class Example_Jobs : Command("utils") {
             runBlocking { println("Sent $msg to ${user.email}") }
         }
 
-        // Option 1: Use a function to represent a job
-        suspend fun sendNewsLetter():WorkResult {
-            allUsers.forEach { user -> send(NEWS_LETTER_MESSAGE, user) }
-            return WorkResult(WorkState.Done)
-        }
-
-
-        // Option 2: User a function to page through work
-        // NOTE: This is a helper method used for the real example below and other examples
+        // NOTE: This is a helper method used for the real example(s) below
         suspend fun sendNewsLetterBatch(offset:AtomicInteger, batchSize:Int):WorkResult {
             val users = allUsers.subList(offset.get(), batchSize)
 
@@ -81,9 +70,16 @@ class Example_Jobs : Command("utils") {
             return WorkResult.next(offset.get() + batchSize.toLong(), users.size.toLong(), "users")
         }
 
+        // Option 1: Use a function to represent a job
+        suspend fun sendNewsLetter(task:Task):WorkResult {
+            allUsers.forEach { user -> send(NEWS_LETTER_MESSAGE, user) }
+            return WorkResult(WorkState.Done)
+        }
 
+
+        // Option 2: User a function to page through work
         val offset1 = AtomicInteger(0)
-        suspend fun sendNewsLetterWithPaging():WorkResult {
+        suspend fun sendNewsLetterWithPaging(task:Task):WorkResult {
             return sendNewsLetterBatch(offset1, 4)
         }
 
@@ -103,7 +99,8 @@ class Example_Jobs : Command("utils") {
 
 
         // Option 4: Extend from worker
-        class NewsLetterWorker : Worker<String>(Identity.test("newsletter")) {
+        val id = SimpleIdentity("samples", "newsletter", Agent.Job, "dev")
+        class NewsLetterWorker : Worker<String>(id) {
             private val offset = AtomicInteger(0)
 
             // Initialization hook ( for setup / logs / alerts )
@@ -139,12 +136,32 @@ class Example_Jobs : Command("utils") {
                 println(desc + detail)
             }
         }
-
-
         //</doc:setup>
 
         //<doc:examples>
+        runBlocking {
+            // JOB 1: Run to completion
+            val job1 = slatekit.jobs.Job(id, listOf(::sendNewsLetter))
+            job1.start()
 
+            // JOB 2: Paged Job with event subscriptions
+            val job2 = slatekit.jobs.Job(id, listOf(::sendNewsLetterWithPaging))
+            job2.subscribe { println("Job ${it.id.name} status changed to : ${it.status()}")}
+            job2.subscribe(Status.Complete) { println("Job ${it.id.name} completed")}
+            job2.start()
+
+            // JOB 3: Queued + Subscribe to worker status changes
+            val queue1 = Queue("sample_queue", Priority.Mid, QueueSourceInMemory.stringQueue(5))
+            val job3 = slatekit.jobs.Job(id, listOf(::sendNewsLetterFromQueue), queue1)
+            job3.workers.subscribe { it ->  println("Worker ${it.id.name}")}
+            job3.workers.subscribe { it ->  println("Worker ${it.id.name} completed")}
+            job3.start()
+
+            // JOB 4: Worker implementation with queue
+            val queue2 = Queue("sample_queue", Priority.Mid, QueueSourceInMemory.stringQueue(5))
+            val job4 = slatekit.jobs.Job(id, listOf(NewsLetterWorker()))
+            job4.start()
+        }
         //</doc:examples>
         return Success("")
     }
