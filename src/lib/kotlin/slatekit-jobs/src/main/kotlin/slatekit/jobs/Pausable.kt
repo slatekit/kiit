@@ -1,5 +1,6 @@
 package slatekit.jobs
 
+
 interface Pausable {
 
     /**

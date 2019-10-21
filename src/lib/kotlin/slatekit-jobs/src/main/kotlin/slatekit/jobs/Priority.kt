@@ -16,7 +16,9 @@ import slatekit.common.EnumLike
 import slatekit.common.EnumSupport
 
 /**
- * Allows for setting a priority on the queues
+ * General purpose priority Enum to be used for Queue to indicate
+ * that 1 queue has a higher/lower priority that another queue and
+ * therefore will be processed more often.
  */
 enum class Priority(override val value: Int) : EnumLike {
     Low(1),

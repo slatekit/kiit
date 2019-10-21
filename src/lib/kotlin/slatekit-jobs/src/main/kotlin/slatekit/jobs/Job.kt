@@ -22,7 +22,7 @@ class Job(all: List<Worker<*>>,
           val coordinator: Coordinator,
           val scheduler: Scheduler,
           val logger: Logger,
-          val ids: JobId = JobId()) : Manager, StatusCheck, Events<Job> {
+          val ids: JobId = JobId()) : Management, StatusCheck, Events<Job> {
 
 
     val workers = Workers(all, coordinator, scheduler, logger, ids, 30)

@@ -3,7 +3,11 @@ package slatekit.jobs
 import slatekit.common.Status
 import slatekit.common.Identity
 
-interface Manager {
+
+/**
+ * Represents all operations to control / manage a job
+ */
+interface Management {
 
     /**
      * Requests starting of the job

@@ -2,6 +2,13 @@ package slatekit.jobs
 
 import slatekit.common.Identity
 
+
+/**
+ * Represents commands that can be sent to a Job to initiate an action.
+ * All start | stop | pause | resume | etc operations on either the
+ * job/queue/worker are communicated to the job by sending it an command
+ * via a channel. These classes represent these commands.
+ */
 sealed class JobCommand {
     abstract val id:Long
     abstract val uuid:String
