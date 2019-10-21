@@ -105,13 +105,14 @@ object WorkRunner {
         val worker: Worker<*> = context.worker
         val calls = context.stats.calls
         calls.inc()
-        return try {
+        val result =  try {
             val result = operation(worker)
             calls.passed()
             Outcomes.success(result)
         } catch (ex:Exception){
             calls.failed(ex)
-            Outcomes.errored(ex)
+            Outcomes.errored<T>(ex)
         }
+        return result
     }
 }

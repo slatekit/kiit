@@ -190,7 +190,7 @@ class Job(val id:Identity,
     /**
      * Gets the next pair of ids
      */
-    override fun nextIds():Pair<Long, UUID> = Pair(ids.nextId(), ids.nextUUID())
+    override fun nextIds():Pair<Long, UUID> = ids.next()
 
 
     internal fun setStatus(newStatus:Status){
@@ -268,7 +268,7 @@ class Job(val id:Identity,
 
 
         fun coordinator(ids:JobId, logger: Logger):Coordinator {
-            return ChannelCoordinator(logger, ids, Channel())
+            return ChannelCoordinator(logger, ids, Channel(Channel.UNLIMITED))
         }
     }
 }

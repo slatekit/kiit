@@ -202,9 +202,12 @@ class Workers(val jobId:Identity,
                     worker.transition(Status.Complete)
                     worker.done()
                 }
+                is WorkState.Next -> {
+                    val (id, uuid) = ids.next()
+                    coordinator.request(Command.WorkerCommand(id, uuid.toString(), JobAction.Process, worker.id, 0, ""))
+                }
                 is WorkState.More -> {
-                    val id = ids.nextId()
-                    val uuid = ids.nextUUID()
+                    val (id, uuid) = ids.next()
                     coordinator.request(Command.WorkerCommand(id, uuid.toString(), JobAction.Process, worker.id, 0, ""))
                 }
             }

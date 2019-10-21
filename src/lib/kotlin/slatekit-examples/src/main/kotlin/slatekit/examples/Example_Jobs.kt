@@ -55,7 +55,8 @@ class Example_Jobs : Command("utils") {
 
         // NOTE: This is a helper method used for the real example(s) below
         suspend fun sendNewsLetterBatch(offset:AtomicInteger, batchSize:Int):WorkResult {
-            val users = allUsers.subList(offset.get(), batchSize)
+            val start = offset.get()
+            val users = allUsers.subList(start, start + batchSize)
 
             // No more records so indicate done
             if(users.isEmpty())
@@ -147,7 +148,10 @@ class Example_Jobs : Command("utils") {
         runBlocking {
             // Sample 1: JOB that runs to completion
             val job1 = slatekit.jobs.Job(id, ::sendNewsLetter)
-            job1.run()
+            job1.start()   // Job dispatch
+            job1.respond() // Work dispatch
+            job1.respond() // Work start/finish
+            println(job1.status())
 
             // Sample 2: JOB constructor with list of 2 functions which will create 2 workers
             val job2 = slatekit.jobs.Job(id, listOf(worker(::sendNewsLetter), worker(::sendNewsLetter)))
@@ -157,7 +161,11 @@ class Example_Jobs : Command("utils") {
             val job3 = slatekit.jobs.Job(id, listOf(worker(::sendNewsLetterWithPaging)))
             job3.subscribe { println("Job ${it.id.name} status changed to : ${it.status()}")}
             job3.subscribe(Status.Complete) { println("Job ${it.id.name} completed")}
-            job3.start()
+            job3.start()   // Job dispatch
+            job3.respond() // Work dispatch
+            job3.respond() // Work start/finish
+            job3.respond() // Work start/finish
+            println(job1.status())
 
             // Sample 4: JOB ( Queued ) + Subscribe to worker status changes
             val queue1 = Queue("sample_queue", Priority.Mid, QueueSourceInMemory.stringQueue(5))
