@@ -157,37 +157,49 @@ class Example_Jobs : Command("utils") {
             val job2 = slatekit.jobs.Job(id, listOf(worker(::sendNewsLetter), worker(::sendNewsLetter)))
             job2.start()
 
-            // Sample 3: JOB ( Paged ) + event subscriptions
+            // Sample 3: JOB ( Paged )
             val job3 = slatekit.jobs.Job(id, listOf(worker(::sendNewsLetterWithPaging)))
-            job3.subscribe { println("Job ${it.id.name} status changed to : ${it.status()}")}
-            job3.subscribe(Status.Complete) { println("Job ${it.id.name} completed")}
             job3.start()   // Job dispatch
             job3.respond() // Work dispatch
             job3.respond() // Work start/finish
             job3.respond() // Work start/finish
             println(job1.status())
 
-            // Sample 4: JOB ( Queued ) + Subscribe to worker status changes
-            val queue1 = Queue("sample_queue", Priority.Mid, QueueSourceInMemory.stringQueue(5))
-            val job4 = slatekit.jobs.Job(id, listOf(::sendNewsLetterFromQueue), queue1)
+            // Sample 4: JOB ( Events ) + Subscribe to worker status changes
+            val job4 = slatekit.jobs.Job(id, listOf(worker(::sendNewsLetterWithPaging)))
+            job4.subscribe { println("Job ${it.id.name} status changed to : ${it.status()}")}
+            job4.subscribe(Status.Complete) { println("Job ${it.id.name} completed")}
             job4.workers.subscribe { it ->  println("Worker ${it.id.name}")}
             job4.workers.subscribe { it ->  println("Worker ${it.id.name} completed")}
-            job4.start()
+            job4.start()   // Job dispatch
+            job4.respond() // Work dispatch
+            job4.respond() // Work start/finish
+            job4.respond() // Work start/finish
+
+            // Sample 4: JOB ( Queued ) + Subscribe to worker status changes
+            val queue1 = Queue("sample_queue", Priority.Mid, QueueSourceInMemory.stringQueue(5))
+            queue1.queue.send("3", mapOf("id" to "3", "name" to "newsletter", "data" to "3"))
+            val job5 = slatekit.jobs.Job(id, listOf(::sendNewsLetterFromQueue), queue1)
+            job5.start()   // Job dispatch
+            job5.respond() // Work dispatch
+            job5.respond() // Work start/finish
+            job5.respond() // Work start/finish
+            println(job1.status())
 
             // Sample 5: JOB ( Policies ) with policies to add behavior / strategies to worker, this adds:
             // 1. a callback for every 10 items processed
             // 2. a limit to processing at most 12 items ( to support running a job in "waves" )
             // 3. a threshold / error limit of .1 ( 10% )
-            val job5 = slatekit.jobs.Job(id, listOf(worker(::sendNewsLetterWithPaging)))
-            job5.workers.policy(Every(10) { req, res -> println(req.task.id + ":" + res.msg) })
-            job5.workers.policy(Limit(12) { req -> req.context.stats.counts } )
-            job5.workers.policy(Ratio(.1, slatekit.results.Status.Errored(0, "")) { req -> req.context.stats.counts } )
-            job5.start()
-
-            // Sample 6: JOB ( Worker ) implementation with queue
-            val queue2 = Queue("sample_queue", Priority.Mid, QueueSourceInMemory.stringQueue(5))
-            val job6 = slatekit.jobs.Job(id, listOf(NewsLetterWorker()), queue2)
+            val job6 = slatekit.jobs.Job(id, listOf(worker(::sendNewsLetterWithPaging)))
+            job6.workers.policy(Every(10) { req, res -> println(req.task.id + ":" + res.msg) })
+            job6.workers.policy(Limit(12) { req -> req.context.stats.counts } )
+            job6.workers.policy(Ratio(.1, slatekit.results.Status.Errored(0, "")) { req -> req.context.stats.counts } )
             job6.start()
+
+            // Sample 7: JOB ( Worker ) implementation with queue
+            val queue2 = Queue("sample_queue", Priority.Mid, QueueSourceInMemory.stringQueue(5))
+            val job7 = slatekit.jobs.Job(id, listOf(NewsLetterWorker()), queue2)
+            job7.start()
 
             // Kick off the jobs by
             job1.respond()
