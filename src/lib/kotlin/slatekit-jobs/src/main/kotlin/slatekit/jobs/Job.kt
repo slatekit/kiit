@@ -3,6 +3,7 @@ package slatekit.jobs
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
+import slatekit.common.Identity
 import slatekit.common.Status
 import slatekit.common.StatusCheck
 import slatekit.common.log.Info
@@ -52,7 +53,8 @@ import java.util.concurrent.atomic.AtomicReference
  * 3. Integration with Kotlin Flow ( e.g. a job could feed data into a Flow )
  *
  */
-class Job(all: List<Worker<*>>,
+class Job(val id:Identity,
+          all: List<Worker<*>>,
           val queue: Queue?,
           val coordinator: Coordinator,
           val scheduler: Scheduler,
@@ -60,8 +62,7 @@ class Job(all: List<Worker<*>>,
           val ids: JobId = JobId()) : Management, StatusCheck, Events<Job> {
 
 
-    val workers = Workers(all, coordinator, scheduler, logger, ids, 30)
-    val id = workers.all.first().id
+    val workers = Workers(id, all, coordinator, scheduler, logger, ids, 30)
     private val events: Events<Job> = JobEvents()
     private val dispatch = JobDispatch(this, workers, events as JobEvents)
     private val _status = AtomicReference<Status>(Status.InActive)

@@ -18,7 +18,8 @@ import slatekit.results.builders.Tries
 /**
  * Represents a cluster of Workers that are affiliated with 1 job.
  */
-class Workers(val all:List<Worker<*>>,
+class Workers(val jobId:Identity,
+              val all:List<Worker<*>>,
               val coordinator: Coordinator,
               val scheduler: Scheduler,
               val logger:Logger,
@@ -26,7 +27,7 @@ class Workers(val all:List<Worker<*>>,
               val pauseInSeconds:Long) : Events<Worker<*>> {
 
     private val events: Events<Worker<*>> = WorkerEvents(this)
-    private val lookup = all.map { it.id.id to WorkerContext(it.id, it, Recorder.of(it.id)) }.toMap()
+    private val lookup = all.map { it.id.id to WorkerContext(jobId, it, Recorder.of(it.id)) }.toMap()
 
 
     /**

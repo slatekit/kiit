@@ -9,7 +9,7 @@ import slatekit.jobs.support.JobUtils
 
 
 /**
- * Dispatches requests
+ * Dispatches control and management requests on all the workers
  */
 class JobDispatch(val job:Job, val workers: Workers, val events:JobEvents) {
 

@@ -31,7 +31,7 @@ open class Recorder<TRequest, TResponse>(val id: Identity,
     fun record(sender: Any, request: TRequest, result: Outcome<TResponse>) {
         Tries.attempt {
             // Structured logging ( convert the request/result into an Event
-            logger?.let { converter?.let { c -> Event.log(logger, id, c(request, result)) } }
+            converter?.let { c -> Event.log(logger, id, c(request, result)) }
 
             // Track the last response
             lasts?.let { lasts.handle(sender, request, result) }
@@ -42,6 +42,30 @@ open class Recorder<TRequest, TResponse>(val id: Identity,
             // Notify event listeners
             events?.let { events.handle(sender, request, result) }
         }
+    }
+
+
+    fun log(sender: Any, request: TRequest, result: Outcome<TResponse>){
+        // Structured logging ( convert the request/result into an Event
+        converter?.let { c -> Event.log(logger, id, c(request, result)) }
+    }
+
+
+    fun last(sender: Any, request: TRequest, result: Outcome<TResponse>){
+        // Track the last response
+        lasts?.let { lasts.handle(sender, request, result) }
+    }
+
+
+    fun count(sender: Any, request: TRequest, result: Outcome<TResponse>){
+        // Update metrics
+        counts?.let { Counters.count(counts, result.status) }
+    }
+
+
+    fun event(sender: Any, request: TRequest, result: Outcome<TResponse>){
+        // Notify event listeners
+        events?.let { events.handle(sender, request, result) }
     }
 
 

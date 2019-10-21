@@ -1,6 +1,7 @@
 package slatekit.jobs
 
 import slatekit.common.queues.QueueEntry
+import slatekit.common.queues.QueueSourceInMemory
 
 /**
  * Represents a unit-of work ( a work-item that is handled by a Worker ).
@@ -29,13 +30,30 @@ data class Task(val id: String,
                 val data: String,
                 val xid : String,
                 val tag : String,
+                val entry:QueueEntry<String>?,
                 val source: Queue) {
+
+    /**
+     *  Acknowledges this task with the Queue to complete it
+     */
+    fun done() {
+        this.entry?.let { this.source.queue.complete(it) }
+    }
+
+
+    /**
+     * Fails
+     */
+    fun fail(){
+        this.entry?.let { this.source.queue.abandon(it) }
+    }
+
 
     companion object {
 
         @JvmStatic
-        val empty: Task = Task("empty", "empty", "empty", "empty", "empty", "empty", Queue.empty)
-        val owned: Task = Task("owned", "owned", "owned", "owned", "owned", "owned", Queue.empty)
+        val empty: Task = Task("empty", "empty", "empty", "empty", "empty", "empty", null, Queue.empty)
+        val owned: Task = Task("owned", "owned", "owned", "owned", "owned", "owned", null, Queue.empty)
 
 
         /**
@@ -44,7 +62,7 @@ data class Task(val id: String,
         fun next(state: WorkState.Next): Task {
             val id = owned.id
             val name = owned.name
-            val task = Task(id, state.offset.toString(), name, state.reference, "", "", Queue.empty)
+            val task = Task(id, state.offset.toString(), name, state.reference, "", "", owned.entry, Queue.empty)
             return task
         }
 
@@ -59,7 +77,7 @@ data class Task(val id: String,
             val data = entry.getValue()?.toString() ?: ""
             val xid = entry.getTag("xid") ?: ""
             val tag = entry.getTag("tag") ?: ""
-            val task = Task(id, queue.name, name, data, xid, tag, queue)
+            val task = Task(id, queue.name, name, data, xid, tag, entry, queue)
             return task
         }
     }

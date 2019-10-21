@@ -22,13 +22,13 @@ import slatekit.common.EnumSupport
  */
 enum class Priority(override val value: Int) : EnumLike {
     Low(1),
-    Medium(2),
+    Mid(2),
     High(3);
 
     companion object : EnumSupport() {
 
         override fun all(): Array<EnumLike> {
-            return arrayOf(Low, Medium, High)
+            return arrayOf(Low, Mid, High)
         }
     }
 }
