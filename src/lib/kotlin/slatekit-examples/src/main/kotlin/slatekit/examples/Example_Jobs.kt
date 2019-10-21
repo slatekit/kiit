@@ -13,13 +13,13 @@ usage: Please refer to license on github for more info.
 package slatekit.examples
 
 //<doc:import_required>
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.runBlocking
 import slatekit.common.*
 //</doc:import_required>
 
 //<doc:import_examples>
 import slatekit.common.queues.QueueSourceInMemory
-import slatekit.common.queues.QueueValueConverter
 import slatekit.cmds.Command
 import slatekit.cmds.CommandRequest
 import slatekit.jobs.*
@@ -70,21 +70,21 @@ class Example_Jobs : Command("utils") {
             return WorkResult.next(offset.get() + batchSize.toLong(), users.size.toLong(), "users")
         }
 
-        // Option 1: Use a function to represent a job
+        // Option 1: Use a function for a job that runs to completion
         suspend fun sendNewsLetter(task:Task):WorkResult {
             allUsers.forEach { user -> send(NEWS_LETTER_MESSAGE, user) }
             return WorkResult(WorkState.Done)
         }
 
 
-        // Option 2: User a function to page through work
+        // Option 2: Use a function for a job that pages through work
         val offset1 = AtomicInteger(0)
         suspend fun sendNewsLetterWithPaging(task:Task):WorkResult {
             return sendNewsLetterBatch(offset1, 4)
         }
 
 
-        // Option 3: Using a Task from a Queue
+        // Option 3: Use a function for a job that processes a task from a queue
         suspend fun sendNewsLetterFromQueue(task: Task):WorkResult {
             val userId = task.data.toInt()
             val user = allUsers.first { it.id == userId }
@@ -98,7 +98,7 @@ class Example_Jobs : Command("utils") {
         }
 
 
-        // Option 4: Extend from worker
+        // Option 4: Extend from a worker to have more control over the life-cycle
         val id = SimpleIdentity("samples", "newsletter", Agent.Job, "dev")
         class NewsLetterWorker : Worker<String>(id) {
             private val offset = AtomicInteger(0)
@@ -159,15 +159,13 @@ class Example_Jobs : Command("utils") {
 
             // JOB 4: Worker implementation with queue
             val queue2 = Queue("sample_queue", Priority.Mid, QueueSourceInMemory.stringQueue(5))
-            val job4 = slatekit.jobs.Job(id, listOf(NewsLetterWorker()))
+            val job4 = slatekit.jobs.Job(id, listOf(NewsLetterWorker()), queue2)
             job4.start()
+
+            // Delay for 30 seconds
+            delay(30000)
         }
         //</doc:examples>
         return Success("")
     }
 }
-
-
-
-
-

@@ -19,8 +19,8 @@ import slatekit.common.info.Folders
 //<doc:import_examples>
 import slatekit.results.Try
 import slatekit.results.Success
-import slatekit.functions.cmds.Command
-import slatekit.functions.cmds.CommandRequest
+import slatekit.cmds.Command
+import slatekit.cmds.CommandRequest
 
 //</doc:import_examples>
 
@@ -61,7 +61,7 @@ class Example_Folders : Command("folders") {
         // Same as Case 1 above but using a short-hand approach
         val folders2 = Folders.userDir(
                 root = "company-1",
-                group = "department-1",
+                area = "department-1",
                 app = "app-1"
         )
 

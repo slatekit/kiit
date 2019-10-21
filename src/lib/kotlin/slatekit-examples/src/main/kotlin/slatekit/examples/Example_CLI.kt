@@ -13,6 +13,7 @@ usage: Please refer to license on github for more info.
 package slatekit.examples
 
 //<doc:import_required>
+import kotlinx.coroutines.runBlocking
 import slatekit.cli.CLI
 import slatekit.cli.CliRequest
 import slatekit.cli.CliSettings
@@ -25,12 +26,9 @@ import slatekit.common.info.Info
 import slatekit.common.info.Folders
 import slatekit.common.requests.InputArgs
 import slatekit.common.requests.Request
-import slatekit.results.Try
-import slatekit.results.Success
-import slatekit.functions.cmds.Command
-import slatekit.functions.cmds.CommandRequest
-import slatekit.results.Status
-import slatekit.results.StatusCodes
+import slatekit.cmds.Command
+import slatekit.cmds.CommandRequest
+import slatekit.results.*
 
 //</doc:import_examples>
 
@@ -43,7 +41,7 @@ class Example_CLI : Command("auth") {
         /**
          * Use case 3a : ( OPTIONAL ) do some stuff before running any commands
          */
-        override fun init(): Try<Boolean> {
+        override suspend fun init(): Try<Boolean> {
             // You don't need to override this as the base method displays help info
             context.help.showHelp()
             context.writer.highlight("\thook: onShellStart - starting myapp command line interface")
@@ -54,7 +52,7 @@ class Example_CLI : Command("auth") {
         /**
          * Use case 3b : ( OPTIONAL ) do some stuff before ending the shell this is called
          */
-        override fun end(status: Status): Try<Boolean> {
+        override suspend fun end(status: Status): Try<Boolean> {
             context.writer.highlight("\thook: onShellEnd - ending myapp command line interface")
             return Success(true)
         }
@@ -63,7 +61,7 @@ class Example_CLI : Command("auth") {
         /**
          * Handle execution of the CLI Request
          */
-        override fun executeRequest(request: CliRequest): Try<CliResponse<*>> {
+        override suspend fun executeRequest(request: CliRequest): Try<CliResponse<*>> {
 
             // 1. Here is where you can put in your code to handle the command.
             context.writer.highlight("\thook: onCommandExecuteInternal handling : " + request.fullName)
@@ -108,7 +106,7 @@ class Example_CLI : Command("auth") {
                     CliResponse(
                             request = request,
                             success = true,
-                            code = StatusCodes.SUCCESS.code,
+                            code = Codes.SUCCESS.code,
                             meta = mapOf(),
                             value = "Sample Response",
                             msg = "Processed",
@@ -148,7 +146,9 @@ class Example_CLI : Command("auth") {
 
         // CASE 4: Example command line ( simulating user entered text )
         // NOTE: the action "app.users.invite" is translated to "area.api.action"
-        shell.executeText("app.users.invite -email='johndoe@company.com' -phone='123456798' -promoCode='abc'")
+        runBlocking {
+            shell.executeText("app.users.invite -email='johndoe@company.com' -phone='123456798' -promoCode='abc'")
+        }
 
 
         // CASE 5: exit
@@ -166,7 +166,9 @@ class Example_CLI : Command("auth") {
 
 
         // CASE 8: supply command line args ( e.g. from main )
-        shell.run()
+        runBlocking {
+            shell.run()
+        }
         //</doc:examples>
         return Success("")
     }

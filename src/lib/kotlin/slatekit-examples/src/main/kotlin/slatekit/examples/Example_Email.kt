@@ -22,10 +22,10 @@ import slatekit.common.templates.Templates
 
 //<doc:import_examples>
 import slatekit.results.Try
-import slatekit.functions.cmds.Command
+import slatekit.cmds.Command
 import slatekit.common.conf.Config
 import slatekit.common.info.ApiLogin
-import slatekit.functions.cmds.CommandRequest
+import slatekit.cmds.CommandRequest
 
 //</doc:import_examples>
 

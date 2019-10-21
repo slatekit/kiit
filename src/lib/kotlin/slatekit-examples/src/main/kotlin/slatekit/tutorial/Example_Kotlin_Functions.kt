@@ -15,7 +15,8 @@ package slatekit.tutorial
 
 
 import slatekit.common.TODO
-import slatekit.functions.cmds.Command
+import slatekit.cmds.Command
+import slatekit.cmds.CommandRequest
 import slatekit.results.Success
 import slatekit.results.Try
 
@@ -24,7 +25,7 @@ import slatekit.results.Try
  */
 class Example_Kotlin_Functions : Command("types") {
 
-    override fun execute(request:CommandRequest): Try<Any> {
+    override fun execute(request: CommandRequest): Try<Any> {
         testFuncs()
         hof_pass_func()
         hof_return_func()

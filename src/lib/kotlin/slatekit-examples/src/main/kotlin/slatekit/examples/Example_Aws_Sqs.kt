@@ -20,8 +20,8 @@ import slatekit.common.queues.QueueStringConverter
 //</doc:import_required>
 
 //<doc:import_examples>
-import slatekit.functions.cmds.Command
-import slatekit.functions.cmds.CommandRequest
+import slatekit.cmds.Command
+import slatekit.cmds.CommandRequest
 import slatekit.results.Success
 import slatekit.results.Try
 
@@ -36,15 +36,15 @@ class Example_Aws_Sqs  : Command("sqs") {
     val converter = QueueStringConverter()
     // Not storing any key/secret in source code for security purposes
     // Setup 1: Use the default aws config file in "{user_dir}/.aws/credentials"
-    val queue1 = AwsCloudQueue<String>("app1-queue-1", converter)
+    val queue1 = AwsCloudQueue<String>("app1-queue-1", "queue1", converter)
 
     // Setup 2: Use the type safe config in "{user_id}/myapp/conf/queue.conf"
     // Reads from the section "sqs" by default
-    val queue2 = AwsCloudQueue<String>("app1-queue-1", converter,"user://myapp/conf/queue.conf")
+    val queue2 = AwsCloudQueue<String>("app1-queue-1", "queue1", converter,"user://myapp/conf/queue.conf")
 
     // Setup 3: Use the type safe config in "{user_id}/myapp/conf/queue.conf"
     // Reads from the section supplied "sqs-3" ( if you have multiple sqs configurations )
-    val queue3 = AwsCloudQueue<String>("app1-queue-1",  converter, "user://myapp/conf/queue.conf", "sqs-1")
+    val queue3 = AwsCloudQueue<String>("app1-queue-1",  "queue1", converter, "user://myapp/conf/queue.conf", "sqs-1")
 
     //</doc:setup>
 

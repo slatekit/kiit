@@ -25,8 +25,8 @@ import slatekit.common.db.DbConString
 import slatekit.common.db.DbLookup
 import slatekit.common.db.DbLookup.Companion.defaultDb
 import slatekit.common.db.DbLookup.Companion.namedDbs
-import slatekit.functions.cmds.Command
-import slatekit.functions.cmds.CommandRequest
+import slatekit.cmds.Command
+import slatekit.cmds.CommandRequest
 
 //</doc:import_examples>
 

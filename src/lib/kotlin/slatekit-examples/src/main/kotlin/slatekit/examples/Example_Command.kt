@@ -13,15 +13,15 @@
 package slatekit.examples
 
 //<doc:import_required>
-import slatekit.functions.cmds.Command
-import slatekit.functions.cmds.CommandRequest
+import slatekit.cmds.Command
+import slatekit.cmds.CommandRequest
 
 //</doc:import_required>
 
 //<doc:import_examples>
 import slatekit.results.Try
 import slatekit.results.Success
-import slatekit.functions.cmds.Commands
+import slatekit.cmds.Commands
 
 //</doc:import_examples>
 
@@ -83,7 +83,6 @@ class Example_Command : Command("auth") {
     // - ended  : end time of the command
     // - result : the result of the command
     result.onSuccess {
-      println(it.info.name)
       println(it.success)
       println(it.message)
       println(it.started)
@@ -103,12 +102,7 @@ class Example_Command : Command("auth") {
     // - errorCount  : the number or errors
     // - lastResult  : the result of the last run ( see above )
     state.onSuccess { it ->
-      println(it.name)
-      println(it.msg)
-      println(it.hasRun)
-      println(it.runCount)
-      println(it.lastRuntime)
-      println(it.errorCount)
+      println(it.hasRun())
       println(it.lastResult)
     }
     //</doc:examples>

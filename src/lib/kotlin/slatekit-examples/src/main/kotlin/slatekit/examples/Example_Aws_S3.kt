@@ -7,8 +7,8 @@ import slatekit.cloud.aws.AwsCloudFiles
 //</doc:import_required>
 
 //<doc:import_examples>
-import slatekit.functions.cmds.Command
-import slatekit.functions.cmds.CommandRequest
+import slatekit.cmds.Command
+import slatekit.cmds.CommandRequest
 import slatekit.results.Success
 import slatekit.results.Try
 
@@ -21,15 +21,15 @@ class Example_Aws_S3  : Command("s3") {
     //<doc:setup>
     // Not storing any key/secret in source code for security purposes
     // Setup 1: Use the default aws config file in "{user_dir}/.aws/credentials"
-    val files1 = AwsCloudFiles("app1-files-1", false)
+    val files1 = AwsCloudFiles("app1-files-1", "slatekit", false)
 
     // Setup 2: Use the type safe config in "{user_id}/myapp/conf/files.conf"
     // Specify the api key section as "sqs"
-    val files2 = AwsCloudFiles("app1-files-1", false, "user://myapp/conf/files.conf", "s3")
+    val files2 = AwsCloudFiles("app1-files-1", "slatekit",false, "user://myapp/conf/files.conf", "s3")
 
     // Setup 2: Use the type safe config in "{user_id}/myapp/conf/files.conf"
     // Specify the api key section as "sqs"
-    val files3 = AwsCloudFiles("app1-queue-1", false, "user://myapp/conf/files.conf", "s3-1")
+    val files3 = AwsCloudFiles("app1-queue-1", "slatekit",false, "user://myapp/conf/files.conf", "s3-1")
 
     //</doc:setup>
 

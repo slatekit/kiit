@@ -19,11 +19,11 @@ import slatekit.common.info.StartInfo
 //</doc:import_required>
 
 //<doc:import_examples>
-import slatekit.functions.cmds.Command
+import slatekit.cmds.Command
 import slatekit.results.Try
 import slatekit.results.Success
 import slatekit.common.envs.EnvMode
-import slatekit.functions.cmds.CommandRequest
+import slatekit.cmds.CommandRequest
 
 //</doc:import_examples>
 
@@ -53,14 +53,13 @@ class Example_Info  : Command("info") {
 
     // CASE 4: Set up info about your application.
     val app = About(
-      id = "slatekit.examples",
+      area = "product1",
       name = "My sample app",
       desc = "Sample app using Slate Kit",
       company = "slatekit",
       region = "usa.ny",
       version = "1.0.1.3",
       tags = "api,slate,app",
-      group = "product division",
       url = "http://products.myapp.com",
       contact = "kishore@codehelix.co",
       examples = "myapp.exe -env=dev -level=info"

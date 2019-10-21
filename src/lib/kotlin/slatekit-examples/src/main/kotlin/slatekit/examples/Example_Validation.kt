@@ -19,7 +19,7 @@ import slatekit.common.validations.ValidationResults
 //</doc:import_required>
 
 //<doc:import_examples>
-import slatekit.functions.cmds.Command
+import slatekit.cmds.Command
 import slatekit.results.Try
 import slatekit.results.Success
 import slatekit.common.validations.ValidationFuncs.isEmpty
@@ -42,7 +42,7 @@ import slatekit.common.validations.ValidationFuncs.isNumeric
 import slatekit.common.validations.ValidationFuncs.isPhoneUS
 import slatekit.common.validations.ValidationFuncs.isUrl
 import slatekit.common.validations.ValidationFuncs.isZipCodeUS
-import slatekit.functions.cmds.CommandRequest
+import slatekit.cmds.CommandRequest
 
 //</doc:import_examples>
 

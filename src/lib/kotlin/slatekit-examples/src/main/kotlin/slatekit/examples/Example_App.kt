@@ -31,8 +31,8 @@ import slatekit.common.info.Build
 import slatekit.common.info.StartInfo
 import slatekit.common.info.Sys
 import slatekit.common.log.LogsDefault
-import slatekit.functions.cmds.Command
-import slatekit.functions.cmds.CommandRequest
+import slatekit.cmds.Command
+import slatekit.cmds.CommandRequest
 import slatekit.db.Db
 import slatekit.entities.Entities
 import slatekit.integration.common.AppEntContext
@@ -176,14 +176,13 @@ class Example_App : Command("app") {
                 ent = Entities({ con -> Db(con) }),
                 enc = Encryptor("wejklhviuxywehjk", "3214maslkdf03292", B64Java8),
                 app = About(
-                        id = "slatekit.examples",
-                        name = "Slate Sample App",
+                        area = "slatekit",
+                        name = "sample-app",
                         desc = "Sample to show the base application with manually built context",
                         company = "slatekit",
                         version = "0.9.1",
                         contact = "kishore@abc.co",
                         region = "",
-                        group = "",
                         url = "",
                         tags = "",
                         examples = ""

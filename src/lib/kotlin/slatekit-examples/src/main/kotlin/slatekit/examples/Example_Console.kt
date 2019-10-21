@@ -18,9 +18,9 @@ import slatekit.common.console.*
 //</doc:import_required>
 
 //<doc:import_examples>
-import slatekit.functions.cmds.Command
+import slatekit.cmds.Command
 import slatekit.common.DateTime
-import slatekit.functions.cmds.CommandRequest
+import slatekit.cmds.CommandRequest
 import slatekit.results.Try
 import slatekit.results.Success
 //</doc:import_examples>

@@ -30,7 +30,7 @@ import slatekit.results.Try
 
 @Api(area = "app", name = "users", desc = "api to access and manage users 3",
         auth = AuthModes.token, roles = Roles.all, verb = Verbs.auto, protocol = Protocols.all)
-class UserApi(ctx: AppEntContext) : ApiBaseEntity<Long, User, UserService>(ctx, Long::class, User::class) {
+class UserApi(ctx: AppEntContext) : ApiBaseEntity<Long, User, UserService>(ctx, Long::class, User::class, UserService(ctx.ent, ctx.ent.getRepo(User::class))) {
 
   @ApiAction(name = "", desc = "activates a users account 3", roles= "@parent")
   fun activate(phone:String, code:Int, isPremiumUser:Boolean, date: DateTime): Try<String> {

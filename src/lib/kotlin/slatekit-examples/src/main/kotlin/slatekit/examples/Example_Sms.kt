@@ -17,14 +17,14 @@ import slatekit.common.*
 //</doc:import_required>
 
 //<doc:import_examples>
-import slatekit.functions.cmds.Command
+import slatekit.cmds.Command
 import slatekit.common.templates.Template
 import slatekit.common.templates.TemplatePart
 import slatekit.common.templates.Templates
 import slatekit.common.conf.Config
 import slatekit.common.info.ApiLogin
 import slatekit.common.types.CountryCode
-import slatekit.functions.cmds.CommandRequest
+import slatekit.cmds.CommandRequest
 import slatekit.notifications.sms.SmsMessage
 import slatekit.notifications.sms.SmsServiceTwilio
 import slatekit.results.Try
