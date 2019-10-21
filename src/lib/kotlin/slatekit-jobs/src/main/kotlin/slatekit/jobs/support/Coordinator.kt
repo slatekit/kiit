@@ -23,7 +23,7 @@ interface Coordinator {
                 is WorkResult.More -> {
                     val id = ids.nextId()
                     val uuid = ids.nextUUID()
-                    request(JobCommand.ManageWorker(id, uuid.toString(), JobAction.Process, worker.id, 0, ""))
+                    request(Command.WorkerCommand(id, uuid.toString(), JobAction.Process, worker.id, 0, ""))
                 }
             }
             ""
@@ -37,13 +37,13 @@ interface Coordinator {
     }
 
 
-    suspend fun request(jobRequest: JobCommand)
+    suspend fun request(jobRequest: Command)
 
 
-    suspend fun respondOne(): JobCommand?
+    suspend fun respondOne(): Command?
 
 
-    suspend fun respond(operation:suspend (JobCommand) -> Unit )
+    suspend fun respond(operation:suspend (Command) -> Unit )
 }
 
 

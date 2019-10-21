@@ -8,6 +8,7 @@ import slatekit.common.Identity
 import slatekit.common.log.Info
 import slatekit.common.log.LoggerConsole
 import slatekit.jobs.*
+import slatekit.jobs.support.Command
 import slatekit.jobs.support.JobId
 
 interface JobTestSupport {
@@ -62,7 +63,7 @@ interface JobTestSupport {
 
         // Next request
         if(action != null) {
-            val req = coordinator.requests.last() as JobCommand.ManageWorker
+            val req = coordinator.requests.last() as Command.WorkerCommand
             Assert.assertEquals(id     , req.workerId )
             Assert.assertEquals(action , req.action )
             Assert.assertEquals(seconds, req.seconds)

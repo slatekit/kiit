@@ -22,5 +22,3 @@ sealed class JobAction(val name:String) {
     object Fast     : JobAction( "Fast"   )
     object Delay    : JobAction( "Delay" )
 }
-
-

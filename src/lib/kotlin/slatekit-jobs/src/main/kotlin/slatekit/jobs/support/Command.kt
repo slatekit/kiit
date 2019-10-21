@@ -1,6 +1,7 @@
-package slatekit.jobs
+package slatekit.jobs.support
 
 import slatekit.common.Identity
+import slatekit.jobs.JobAction
 
 
 /**
@@ -9,7 +10,7 @@ import slatekit.common.Identity
  * job/queue/worker are communicated to the job by sending it an command
  * via a channel. These classes represent these commands.
  */
-sealed class JobCommand {
+sealed class Command {
     abstract val id:Long
     abstract val uuid:String
     abstract val action: JobAction
@@ -18,9 +19,9 @@ sealed class JobCommand {
 
 
 
-    data class ManageJob(override val id:Long,
-                         override val uuid:String,
-                         override val action: JobAction) : JobCommand() {
+    data class JobCommand(override val id:Long,
+                          override val uuid:String,
+                          override val action: JobAction) : Command() {
         override val target: String = "job"
 
         override fun pairs():List<Pair<String, String>> {
@@ -35,12 +36,12 @@ sealed class JobCommand {
 
 
 
-    data class ManageWorker(override val id:Long,
-                            override val uuid:String,
-                            override val action: JobAction,
-                            val workerId: Identity,
-                            val seconds:Long = 0,
-                            val desc:String?) : JobCommand() {
+    data class WorkerCommand(override val id:Long,
+                             override val uuid:String,
+                             override val action: JobAction,
+                             val workerId: Identity,
+                             val seconds:Long = 0,
+                             val desc:String?) : Command() {
 
         override val target: String = "wrk"
 

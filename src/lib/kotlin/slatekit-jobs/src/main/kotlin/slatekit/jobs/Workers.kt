@@ -9,15 +9,14 @@ import slatekit.common.log.Info
 import slatekit.common.log.Logger
 import slatekit.common.metrics.Recorder
 import slatekit.jobs.events.Events
-import slatekit.jobs.events.JobEvents
 import slatekit.jobs.events.WorkerEvents
-import slatekit.jobs.support.Coordinator
-import slatekit.jobs.support.JobId
-import slatekit.jobs.support.Scheduler
-import slatekit.jobs.support.WorkRunner
+import slatekit.jobs.support.*
 import slatekit.results.*
 import slatekit.results.builders.Outcomes
 
+/**
+ * Represents a cluster of Workers that are affiliated with 1 job.
+ */
 class Workers(val all:List<Worker<*>>,
               val coordinator: Coordinator,
               val scheduler: Scheduler,
@@ -29,31 +28,50 @@ class Workers(val all:List<Worker<*>>,
     private val lookup = all.map { it.id.id to WorkerContext(it.id, it, Recorder.of(it.id)) }.toMap()
 
 
+    /**
+     * Subscribe to status being changed for any worker
+     */
     override suspend fun subscribe(op: suspend (Worker<*>) -> Unit) {
         events.subscribe(op)
     }
 
 
+    /**
+     * Subscribe to status beging changed to the one supplied for any worker
+     */
     override suspend fun subscribe(status: Status, op: suspend (Worker<*>) -> Unit) {
         events.subscribe(status, op)
     }
 
 
+    /**
+     * Gets the WorkContext for the worker with the supplied identity.
+     * This is to allow for looking up the job/stats metadata for a worker.
+     */
     operator fun get(id: Identity):WorkerContext? = when(lookup.containsKey(id.id)) {
         true -> lookup[id.id]
         false -> null
     }
 
 
+    /**
+     * Gets the WorkContext for the worker with the supplied identity.
+     * This is to allow for looking up the job/stats metadata for a worker.
+     */
     operator fun get(id:String):WorkerContext? = when(lookup.containsKey(id)) {
         true -> lookup[id]
         false -> null
     }
 
-
+    /**
+     * Gets all the worker ids
+     */
     fun getIds():List<String> = all.map { it.id.id }
 
 
+    /**
+     * Starts the worker associated with the identity and makes it work using the supplied Task
+     */
     suspend fun start(id: Identity, task: Task = Task.empty)  {
         perform("Starting", id) { context ->
             val worker = context.worker
@@ -109,7 +127,7 @@ class Workers(val all:List<Worker<*>>,
             val worker = context.worker
             pausable.pause(reason ?: "Paused")
             scheduler.schedule(DateTime.now().plusSeconds(pauseInSeconds)) {
-                coordinator.request(JobCommand.ManageWorker(ids.nextId(), ids.nextUUID().toString(), JobAction.Resume, worker.id, 0, ""))
+                coordinator.request(Command.WorkerCommand(ids.nextId(), ids.nextUUID().toString(), JobAction.Resume, worker.id, 0, ""))
             }
             Outcomes.success(Status.Paused)
         }
@@ -127,7 +145,7 @@ class Workers(val all:List<Worker<*>>,
     suspend fun delay(id: Identity, seconds:Long) {
         logger.log(Info, "Worker:", listOf("id" to id.name, "action" to "delaying", "seconds" to "$seconds"))
         scheduler.schedule(DateTime.now().plusSeconds(seconds)) {
-            coordinator.request(JobCommand.ManageWorker(ids.nextId(), ids.nextUUID().toString(), JobAction.Start, id, 0,""))
+            coordinator.request(Command.WorkerCommand(ids.nextId(), ids.nextUUID().toString(), JobAction.Start, id, 0,""))
         }
     }
 

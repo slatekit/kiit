@@ -3,21 +3,20 @@ package slatekit.jobs.support
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.yield
 import slatekit.common.log.Logger
-import slatekit.jobs.JobCommand
 
-class ChannelCoordinator(override val logger: Logger, override val ids: JobId, val channel: Channel<JobCommand>) : Coordinator {
+class ChannelCoordinator(override val logger: Logger, override val ids: JobId, val channel: Channel<Command>) : Coordinator {
 
-    override suspend fun request(request: JobCommand){
+    override suspend fun request(request: Command){
         channel.send(request)
     }
 
 
-    override suspend fun respondOne(): JobCommand? {
+    override suspend fun respondOne(): Command? {
         return channel.receive()
     }
 
 
-    override suspend fun respond(operation:suspend (JobCommand) -> Unit ) {
+    override suspend fun respond(operation:suspend (Command) -> Unit ) {
         for(request in channel){
             operation(request)
             yield()

@@ -2,6 +2,8 @@ package slatekit.jobs
 
 import slatekit.common.Status
 import slatekit.common.Identity
+import slatekit.jobs.support.Command
+import java.util.*
 
 
 /**
@@ -47,17 +49,25 @@ interface Management {
     /**
      * Requests an action on the entire job
      */
-    suspend fun request(action: JobAction)
+    suspend fun request(action: JobAction) {
+        val (id, uuid) = nextIds()
+        val req = Command.JobCommand(id, uuid.toString(), action)
+        request(req)
+    }
 
     /**
      * Requests an action on a specific worker
      */
-    suspend fun request(action: JobAction, workerId: Identity, desc:String?)
+    suspend fun request(action: JobAction, workerId: Identity, desc:String?) {
+        val (id, uuid) = nextIds()
+        val req = Command.WorkerCommand(id, uuid.toString(), action, workerId, 30, desc)
+        request(req)
+    }
 
     /**
      * Requests an action to manage a job/worker
      */
-    suspend fun request(request: JobCommand)
+    suspend fun request(command: Command)
 
 
     /**
@@ -75,4 +85,9 @@ interface Management {
      */
     suspend fun error(currentStatus:Status, message:String)
 
+
+    /**
+     * Gets the next id for uniquely representing requests
+     */
+    fun nextIds():Pair<Long, UUID>
 }
