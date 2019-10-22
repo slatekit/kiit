@@ -13,7 +13,7 @@ class Manage_Queue_Tests : JobTestSupport {
 
     fun sampleQueue():Queue{
         val source = QueueSourceInMemory<String>("q1", QueueStringConverter())
-        val queue = Queue(source.name, Priority.Medium, source)
+        val queue = Queue(source.name, Priority.Mid, source)
         return queue
     }
 

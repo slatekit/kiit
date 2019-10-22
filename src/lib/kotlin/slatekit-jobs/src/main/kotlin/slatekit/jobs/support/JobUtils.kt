@@ -1,10 +1,14 @@
 package slatekit.jobs.support
 
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
 import org.threeten.bp.Duration
 import slatekit.common.DateTime
 import slatekit.common.Status
 import slatekit.common.metrics.Event
 import slatekit.jobs.*
+import slatekit.jobs.events.JobEvents
 import slatekit.results.Codes
 import slatekit.results.Outcome
 
@@ -48,7 +52,7 @@ object JobUtils {
     }
 
 
-    fun toEvent(started:DateTime, desc:String, target:String, context: JobContext, worker: Workable<*>, task: Task, state: Outcome<WorkResult>): Event {
+    fun toEvent(started:DateTime, desc:String, target:String, worker: Workable<*>): Event {
         // Convert the worker info / state / stats into a generalized event
         val id = worker.id
         val status = worker.status()
@@ -80,16 +84,38 @@ object JobUtils {
                         Triple("started   ", started.toString(), ""),
                         Triple("duration  ", "$duration secs", ""),
                         Triple("status    ", status.name, ""),
-                        Triple("called    ", calls?.totalRuns().toString(), ""),
-                        Triple("processed ", counts?.totalProcessed().toString(), ""),
-                        Triple("succeeded ", counts?.totalSucceeded().toString(), ""),
-                        Triple("invalid   ", counts?.totalInvalid().toString(), ""),
-                        Triple("ignored   ", counts?.totalIgnored().toString(), ""),
-                        Triple("errored   ", counts?.totalErrored().toString(), ""),
-                        Triple("unexpected", counts?.totalUnexpected().toString(), "")
+                        Triple("called    ", calls.totalRuns().toString(), ""),
+                        Triple("processed ", counts.totalProcessed().toString(), ""),
+                        Triple("succeeded ", counts.totalSucceeded().toString(), ""),
+                        Triple("invalid   ", counts.totalInvalid().toString(), ""),
+                        Triple("ignored   ", counts.totalIgnored().toString(), ""),
+                        Triple("errored   ", counts.totalErrored().toString(), ""),
+                        Triple("unexpected", counts.totalUnexpected().toString(), "")
                 )
         )
         return ev
+    }
+
+
+    /**
+     * Performs the operation if the action supplied is correct with regard to the current state.
+     */
+    suspend fun perform(job: Job, action: JobAction, currentState: Status, launch:Boolean, scope: CoroutineScope, operation:suspend() -> Unit){
+        // Check state transition
+        if(!JobUtils.validate(action, currentState)) {
+            val currentStatus = job.status()
+            job.error(currentStatus, "Can not handle work while job is $currentStatus")
+        }
+        else {
+            if(launch) {
+                scope.launch {
+                    operation()
+                }
+            }
+            else {
+                operation()
+            }
+        }
     }
 
 }

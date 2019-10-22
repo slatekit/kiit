@@ -8,17 +8,19 @@ import slatekit.common.Identity
 import slatekit.common.log.Info
 import slatekit.common.log.Logger
 import slatekit.common.metrics.Recorder
+import slatekit.functions.policy.Policy
 import slatekit.jobs.events.Events
-import slatekit.jobs.events.JobEvents
 import slatekit.jobs.events.WorkerEvents
-import slatekit.jobs.support.Coordinator
-import slatekit.jobs.support.JobId
-import slatekit.jobs.support.Scheduler
-import slatekit.jobs.support.WorkRunner
+import slatekit.jobs.support.*
 import slatekit.results.*
 import slatekit.results.builders.Outcomes
+import slatekit.results.builders.Tries
 
-class Workers(val all:List<Worker<*>>,
+/**
+ * Represents a cluster of Workers that are affiliated with 1 job.
+ */
+class Workers(val jobId:Identity,
+              val all:List<Worker<*>>,
               val coordinator: Coordinator,
               val scheduler: Scheduler,
               val logger:Logger,
@@ -26,46 +28,73 @@ class Workers(val all:List<Worker<*>>,
               val pauseInSeconds:Long) : Events<Worker<*>> {
 
     private val events: Events<Worker<*>> = WorkerEvents(this)
-    private val lookup = all.map { it.id.id to WorkerContext(it.id, it, Recorder.of(it.id)) }.toMap()
+    private val lookup = all.map { it.id.id to WorkerContext(jobId, it, Recorder.of(it.id)) }.toMap()
 
 
+    /**
+     * adds a policy to the job
+     */
+    fun policy(policy: Policy<WorkRequest, WorkResult>) {
+
+    }
+
+
+    /**
+     * Subscribe to status being changed for any worker
+     */
     override suspend fun subscribe(op: suspend (Worker<*>) -> Unit) {
         events.subscribe(op)
     }
 
 
+    /**
+     * Subscribe to status beging changed to the one supplied for any worker
+     */
     override suspend fun subscribe(status: Status, op: suspend (Worker<*>) -> Unit) {
         events.subscribe(status, op)
     }
 
 
+    /**
+     * Gets the WorkContext for the worker with the supplied identity.
+     * This is to allow for looking up the job/stats metadata for a worker.
+     */
     operator fun get(id: Identity):WorkerContext? = when(lookup.containsKey(id.id)) {
         true -> lookup[id.id]
         false -> null
     }
 
 
+    /**
+     * Gets the WorkContext for the worker with the supplied identity.
+     * This is to allow for looking up the job/stats metadata for a worker.
+     */
     operator fun get(id:String):WorkerContext? = when(lookup.containsKey(id)) {
         true -> lookup[id]
         false -> null
     }
 
-
+    /**
+     * Gets all the worker ids
+     */
     fun getIds():List<String> = all.map { it.id.id }
 
 
+    /**
+     * Starts the worker associated with the identity and makes it work using the supplied Task
+     */
     suspend fun start(id: Identity, task: Task = Task.empty)  {
         perform("Starting", id) { context ->
             val worker = context.worker
-            val result = WorkRunner.record(context) {
-                val result: Try<WorkResult> = WorkRunner.attemptStart(worker, false, true, task)
+            val result = Runner.record(context) {
+                val result: Try<WorkResult> = Runner.attemptStart(worker, false, true, task)
                 result.toOutcome()
             }.inner()
 
             when (result) {
                 is Success -> {
-                    val state = result.value
-                    coordinator.loop(worker, state)
+                    val res = result.value
+                    loop(worker, res)
                     worker.status()
                 }
                 is Failure -> {
@@ -81,11 +110,10 @@ class Workers(val all:List<Worker<*>>,
     suspend fun process(id: Identity, task: Task = Task.empty) {
         perform("Processing", id) { context ->
             val worker = context.worker
-            val result = WorkRunner.record(context) {
-                val state = worker.work(task)
-                state
+            val result = Runner.record(context) {
+                worker.work(task)
             }
-            result.map { state -> coordinator.loop(worker, state) }
+            result.map { res -> loop(worker, res) }
             Outcomes.success(Status.Running)
         }
     }
@@ -94,11 +122,10 @@ class Workers(val all:List<Worker<*>>,
     suspend fun resume(id: Identity, reason:String?, task: Task = Task.empty) {
         performPausableAction(Status.Running, id) { context, pausable ->
             val worker = context.worker
-            val result = WorkRunner.record(context) {
-                val state = pausable.resume(reason ?: "Resuming", task)
-                state
+            val result = Runner.record(context) {
+                pausable.resume(reason ?: "Resuming", task)
             }
-            result.map { state -> coordinator.loop(worker, state) }
+            result.map { res -> loop(worker, res) }
             Outcomes.success(Status.Running)
         }
     }
@@ -109,7 +136,7 @@ class Workers(val all:List<Worker<*>>,
             val worker = context.worker
             pausable.pause(reason ?: "Paused")
             scheduler.schedule(DateTime.now().plusSeconds(pauseInSeconds)) {
-                coordinator.request(JobCommand.ManageWorker(ids.nextId(), ids.nextUUID().toString(), JobAction.Resume, worker.id, 0, ""))
+                coordinator.request(Command.WorkerCommand(ids.nextId(), ids.nextUUID().toString(), JobAction.Resume, worker.id, 0, ""))
             }
             Outcomes.success(Status.Paused)
         }
@@ -127,7 +154,7 @@ class Workers(val all:List<Worker<*>>,
     suspend fun delay(id: Identity, seconds:Long) {
         logger.log(Info, "Worker:", listOf("id" to id.name, "action" to "delaying", "seconds" to "$seconds"))
         scheduler.schedule(DateTime.now().plusSeconds(seconds)) {
-            coordinator.request(JobCommand.ManageWorker(ids.nextId(), ids.nextUUID().toString(), JobAction.Start, id, 0,""))
+            coordinator.request(Command.WorkerCommand(ids.nextId(), ids.nextUUID().toString(), JobAction.Start, id, 0,""))
         }
     }
 
@@ -162,6 +189,34 @@ class Workers(val all:List<Worker<*>>,
                     }
                     else -> Outcomes.errored("${context.worker.id.name} does not implement Pausable and can not handle a pause/stop/resume action")
                 }
+            }
+        }
+    }
+
+
+    private suspend fun loop(worker: Workable<*>, workResult: WorkResult) {
+        val result = Tries.attempt {
+            when (workResult.state) {
+                is WorkState.Done -> {
+                    logger.info("Worker ${worker.id.name} complete")
+                    worker.transition(Status.Complete)
+                    worker.done()
+                }
+                is WorkState.Next -> {
+                    val (id, uuid) = ids.next()
+                    coordinator.request(Command.WorkerCommand(id, uuid.toString(), JobAction.Process, worker.id, 0, ""))
+                }
+                is WorkState.More -> {
+                    val (id, uuid) = ids.next()
+                    coordinator.request(Command.WorkerCommand(id, uuid.toString(), JobAction.Process, worker.id, 0, ""))
+                }
+            }
+            ""
+        }
+        when (result) {
+            is Success -> {  }
+            is Failure -> {
+                logger.error("Error while looping on : ${worker.id.id}")
             }
         }
     }

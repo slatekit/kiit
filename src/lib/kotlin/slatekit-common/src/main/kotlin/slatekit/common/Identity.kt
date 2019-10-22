@@ -50,6 +50,8 @@ data class SimpleIdentity(
      *
      */
     override val id:String = "$$name.$instance"
+
+    fun newInstance():SimpleIdentity = this.copy(instance = UUID.randomUUID().toString())
 }
 
 

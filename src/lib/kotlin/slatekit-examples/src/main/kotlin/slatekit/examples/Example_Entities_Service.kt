@@ -22,9 +22,10 @@ import slatekit.results.Try
 import slatekit.results.Success
 import slatekit.db.Db
 import slatekit.common.db.DbConString
-import slatekit.functions.cmds.Command
-import slatekit.functions.cmds.CommandRequest
+import slatekit.cmds.Command
+import slatekit.cmds.CommandRequest
 import slatekit.entities.*
+import slatekit.entities.core.EntityInfo
 import slatekit.entities.repos.EntityRepoInMemoryWithLongId
 import slatekit.meta.models.ModelMapper
 import slatekit.orm.OrmMapper
@@ -78,7 +79,8 @@ class Example_Entities_Service : Command("service") {
     // First setup the database
     val db = Db(DbConString("com.mysql.jdbc.Driver", "jdbc:mysql://localhost/user_db", "root", "abcdefghi"))
     val model = ModelMapper.loadSchema(User::class)
-    val mapper = OrmMapper<Long, User>(model, db, Long::class, MySqlConverter())
+    val entityInfo = EntityInfo(Long::class, User::class, "users")
+    val mapper = OrmMapper<Long, User>(model, db, MySqlConverter(), entityInfo)
 
     // CASE 1: In-memory ( non-persisted ) repository has limited functionality
     // but is very useful for rapid prototyping of a data model when you are trying to
@@ -92,7 +94,7 @@ class Example_Entities_Service : Command("service") {
     // More examples of database setup/entity registration available in Setup/Registration docs.
 
     // Now create the repo with database and mapper
-    val repoMySql = MySqlEntityRepo<Long, User>(db, User::class, Long::class, mapper)
+    val repoMySql = MySqlEntityRepo<Long, User>(db, entityInfo, mapper)
 
     // CASE 3: You can also extend from EntityRepositoryMySql
     class UserService(repo: EntityRepo<Long, User>) : EntityService<Long, User>(repo)

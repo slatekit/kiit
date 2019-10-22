@@ -10,7 +10,7 @@ import java.util.concurrent.atomic.AtomicReference
  */
 open class Worker<T>(override val id: Identity,
                      override val stats: WorkerStats = WorkerStats.of(id),
-                     val operation: ((Task) -> WorkResult)? = null) : Workable<T> {
+                     val operation: (suspend (Task) -> WorkResult)? = null) : Workable<T> {
 
     private val _status = AtomicReference<Status>(Status.InActive)
 
@@ -35,7 +35,7 @@ open class Worker<T>(override val id: Identity,
      */
     override suspend fun work(task: Task): WorkResult {
         return when (operation) {
-            null -> WorkResult.Done
+            null -> WorkResult(WorkState.Done)
             else -> operation.invoke(task)
         }
     }

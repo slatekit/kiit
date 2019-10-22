@@ -13,14 +13,15 @@
 
 package slatekit.tutorial
 
-import slatekit.functions.cmds.Command
+import slatekit.cmds.Command
+import slatekit.cmds.CommandRequest
 import slatekit.results.Success
 import slatekit.results.Try
 
 
 class Example_Kotlin_Classes : Command("types") {
 
-    override fun execute(request:CommandRequest): Try<Any> {
+    override fun execute(request: CommandRequest): Try<Any> {
 
         return Success("")
     }

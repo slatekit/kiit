@@ -16,10 +16,11 @@ package slatekit.examples
 import slatekit.common.*
 import slatekit.common.db.DbCon
 import slatekit.meta.models.Model
-import slatekit.functions.cmds.Command
-import slatekit.functions.cmds.CommandRequest
+import slatekit.cmds.Command
+import slatekit.cmds.CommandRequest
 import slatekit.db.Db
 import slatekit.entities.EntityWithId
+import slatekit.entities.core.EntityInfo
 import slatekit.examples.common.User
 import slatekit.meta.models.ModelMapper
 import slatekit.orm.OrmMapper
@@ -152,7 +153,7 @@ class Example_Mapper : Command("mapper") {
 
 
         // CASE 4: Now with a schema of the entity, you create a mapper
-        val mapper = OrmMapper<Long, User>(schema1, Db(DbCon.empty), Long::class, MySqlConverter())
+        val mapper = OrmMapper<Long, User>(schema1, Db(DbCon.empty), MySqlConverter(), EntityInfo(Long::class, User::class, "users"))
 
         // Create sample instance to demo the mapper
         val movie = Movie(

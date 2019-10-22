@@ -17,17 +17,17 @@ package slatekit.examples
 
 //<doc:import_examples>
 import slatekit.common.Context
-import slatekit.common.Diagnostics
-import slatekit.common.diagnostics.Events
-import slatekit.common.diagnostics.Tracker
 import slatekit.common.log.LoggerConsole
 import slatekit.common.metrics.MetricsLite
 import slatekit.common.requests.Response
 import slatekit.common.CommonResponse
-import slatekit.functions.cmds.Command
-import slatekit.functions.cmds.CommandRequest
+import slatekit.cmds.Command
+import slatekit.cmds.CommandRequest
+import slatekit.common.Identity
+import slatekit.common.metrics.Recorder
 import slatekit.results.Try
 import slatekit.results.Success
+import slatekit.results.builders.Outcomes
 
 //</doc:import_examples>
 
@@ -46,6 +46,7 @@ class Example_Diagnostics : Command("cmd") {
         // 3.  tracker: the config settings
         // 4.  events : the global logger
         data class MyJob(val source:String, val id:String, val action:String, val data:String)
+        val id = Identity.test("sample")
 
         // Logger: Simple console logger, however, you can use the LogBackLogger
         // in the slatekit.providers project.
@@ -55,37 +56,9 @@ class Example_Diagnostics : Command("cmd") {
 
         // Metrics : In-Memory metrics, however, you can use Data-Dog metrics provider
         // in the slatekit.providers project
-        val metrics = MetricsLite.build()
+        val metrics = MetricsLite.build(id)
 
-        val diagnostics = Diagnostics<MyJob>(
-                // Shows up as a prefix in the logs message
-                prefix = "workers.jobs",
-
-                // Shows up as the log prefix ( e.g. "workers.jobs task1" )
-                nameFetcher = { myRequest -> myRequest.action },
-
-                // Shows up in the logs as key/value pairs
-                infoFetcher = { "id:${it.id}, name:${it.action}" },
-
-                // Used as the prefix of the metric sent to capture all metrics.
-                // workers.apis.( total_requests | total_successes | total_failed )
-                metricFetcher = { "workers." + it.source },
-
-                // Used as the tags for associating metrics. e.g. env
-                tagsFetcher = { listOf() },
-
-                // The logger that the diagnostics will log to
-                logger = logger,
-
-                // The metrics the diagnostics will log to
-                metrics = metrics,
-
-                // The events the diagnostics will event out to
-                events = Events(),
-
-                // The tracker the diagnostics will use for last request/response/etc
-                tracker = Tracker("workers.jobs", "all")
-        )
+        val recorder = Recorder.of<MyJob, Response<String>>(id, logger = logger)
 
         // Create sample request
         // NOTE: The request can be any data type you want
@@ -93,26 +66,26 @@ class Example_Diagnostics : Command("cmd") {
 
         // Sample response ( assume you've done processing on your sample request )
         // NOTE: The response has to be an instance of the slatekit.common.requests.Response interface
-        val response1:Response<String> = CommonResponse(true, 1000, mapOf(), "processed")
+        val result1:Response<String> = CommonResponse(true, 1000, mapOf(), "processed")
 
         // CASE 1: Record all diagnostics  :
         // 1. log   : log the response to the logger
         // 2. track : track the last request so you can access the last one
         // 3. metric: send metrics to the metric component
         // 4. event : send events to the eventing component
-        diagnostics.record( sender = this, request = request1, response = response1 )
+        recorder.record( sender = this, request = request1, result = Outcomes.of(result1) )
 
         // CASE 2: Log only ( the logger initialized with )
-        diagnostics.log( sender = this, request = request1, response = response1 )
+        recorder.log( sender = this, request = request1, result = Outcomes.of(result1) )
 
-        // CASE 3: Meter only ( metrics - e.g. Data Dog )
-        diagnostics.meter( sender = this, request = request1, response = response1 )
+        // CASE 3: Count only ( metrics - e.g. Data Dog )
+        recorder.count( sender = this, request = request1, result = Outcomes.of(result1) )
 
         // CASE 4: Notify only ( events )
-        diagnostics.notify( sender = this, request = request1, response = response1 )
+        recorder.event( sender = this, request = request1, result = Outcomes.of(result1) )
 
         // CASE 5: Track only ( store last request/response )
-        diagnostics.track( sender = this, request = request1, response = response1 )
+        recorder.last( sender = this, request = request1, result = Outcomes.of(result1) )
 
         //</doc:examples>
         return Success("")

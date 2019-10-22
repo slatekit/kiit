@@ -5,8 +5,8 @@ import slatekit.apis.core.Api
 import slatekit.common.conf.Config
 import slatekit.results.Try
 import slatekit.results.Success
-import slatekit.functions.cmds.Command
-import slatekit.functions.cmds.CommandRequest
+import slatekit.cmds.Command
+import slatekit.cmds.CommandRequest
 import slatekit.examples.common.*
 import slatekit.integration.common.AppEntContext
 

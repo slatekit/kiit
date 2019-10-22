@@ -5,9 +5,11 @@ import kotlinx.coroutines.runBlocking
 import org.junit.Assert
 import slatekit.common.Status
 import slatekit.common.Identity
+import slatekit.common.SimpleIdentity
 import slatekit.common.log.Info
 import slatekit.common.log.LoggerConsole
 import slatekit.jobs.*
+import slatekit.jobs.support.Command
 import slatekit.jobs.support.JobId
 
 interface JobTestSupport {
@@ -32,7 +34,9 @@ interface JobTestSupport {
         val logger = LoggerConsole(Info, "manager")
         val ids = JobId()
         val coordinator = MockCoordinatorWithChannel(logger, ids, Channel(Channel.UNLIMITED))
-        val manager = Job(workers, queue, coordinator,  MockScheduler(), logger, ids)
+        val id = (workers.first().id as SimpleIdentity)
+        val jobId = id.copy(service = id.service + "-job")
+        val manager = Job(jobId,workers, queue, coordinator,  MockScheduler(), logger, ids)
         return manager
     }
 
@@ -62,7 +66,7 @@ interface JobTestSupport {
 
         // Next request
         if(action != null) {
-            val req = coordinator.requests.last() as JobCommand.ManageWorker
+            val req = coordinator.requests.last() as Command.WorkerCommand
             Assert.assertEquals(id     , req.workerId )
             Assert.assertEquals(action , req.action )
             Assert.assertEquals(seconds, req.seconds)

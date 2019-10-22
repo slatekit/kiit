@@ -16,8 +16,8 @@ package slatekit.examples
 //</doc:import_required>
 
 //<doc:import_examples>
-import slatekit.functions.cmds.Command
-import slatekit.functions.cmds.CommandRequest
+import slatekit.cmds.Command
+import slatekit.cmds.CommandRequest
 import slatekit.results.*
 import slatekit.results.Try
 import slatekit.results.Success
@@ -54,14 +54,14 @@ class Example_Results : Command("results") , OutcomeBuilder {
         // Explicitly build result using the Success "branch" of Result
         val result1:Result<String,Exception> = Success(
                 value = "userId:1234567890",
-                code = StatusCodes.SUCCESS.code,
+                code = Codes.SUCCESS.code,
                 msg = "user created"
         )
 
         // Explicitly build a result using the Failure "branch" of Result
         val result2:Result<String,Exception> = Failure<Exception>(
                 error = IllegalArgumentException("user id"),
-                code = StatusCodes.BAD_REQUEST.code,
+                code = Codes.BAD_REQUEST.code,
                 msg = "user id not supplied"
         )
 
@@ -104,17 +104,17 @@ class Example_Results : Command("results") , OutcomeBuilder {
 
 
         // CASE 6: Conflict ( 409 )
-        val res5 = errored<String>(StatusCodes.CONFLICT)
+        val res5 = errored<String>(Codes.CONFLICT)
         printResult(res5)
 
 
         // CASE 7: Not found
-        val res6 = errored<String>(StatusCodes.NOT_FOUND)
+        val res6 = errored<String>(Codes.NOT_FOUND)
         printResult(res6)
 
 
         // CASE 8: Not available
-        val res7 = errored<String>(StatusCodes.UNAVAILABLE)
+        val res7 = errored<String>(Codes.UNAVAILABLE)
         printResult(res7)
 
 

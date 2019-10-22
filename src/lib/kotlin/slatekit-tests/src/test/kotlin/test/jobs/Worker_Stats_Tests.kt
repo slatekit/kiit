@@ -3,9 +3,8 @@ package test.jobs
 import kotlinx.coroutines.runBlocking
 import org.junit.Assert
 import org.junit.Test
-import slatekit.common.metrics.Calls
 import slatekit.common.metrics.Recorder
-import slatekit.jobs.support.WorkRunner
+import slatekit.jobs.support.Runner
 import slatekit.jobs.WorkerContext
 
 
@@ -30,7 +29,7 @@ class Worker_Stats_Tests {
         val context = WorkerContext(worker.id, worker, Recorder.of(worker.id))
         val runs = context.stats.calls
         runBlocking {
-            WorkRunner.record(context, { })
+            Runner.record(context, { })
         }
         Assert.assertEquals (runs.hasRun(), true)
         Assert.assertNotNull(runs.lastTime())
@@ -46,7 +45,7 @@ class Worker_Stats_Tests {
         val context = WorkerContext(worker.id, worker, Recorder.of(worker.id))
         val runs = context.stats.calls
         runBlocking {
-            WorkRunner.record(context, { throw Exception("testing") })
+            Runner.record(context, { throw Exception("testing") })
         }
         Assert.assertEquals (runs.hasRun(), true)
         Assert.assertNotNull(runs.lastTime())
@@ -63,7 +62,7 @@ class Worker_Stats_Tests {
         val runs = context.stats.calls
         val count =  3L
         runBlocking {
-            (0 until count).forEach {  WorkRunner.record(context, { }) }
+            (0 until count).forEach {  Runner.record(context, { }) }
         }
         Assert.assertEquals (runs.hasRun(), true)
         Assert.assertNotNull(runs.lastTime())
@@ -81,8 +80,8 @@ class Worker_Stats_Tests {
         val successes =  3L
         val failures =  3L
         runBlocking {
-            (0 until successes).forEach {  WorkRunner.record(context, { }) }
-            (0 until failures).forEach {  WorkRunner.record(context, { throw Exception("testing") }) }
+            (0 until successes).forEach {  Runner.record(context, { }) }
+            (0 until failures).forEach {  Runner.record(context, { throw Exception("testing") }) }
         }
         Assert.assertEquals (runs.hasRun(), true)
         Assert.assertNotNull(runs.lastTime())

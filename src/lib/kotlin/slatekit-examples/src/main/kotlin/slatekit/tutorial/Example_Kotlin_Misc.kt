@@ -14,7 +14,8 @@
 package slatekit.tutorial
 
 
-import slatekit.functions.cmds.Command
+import slatekit.cmds.Command
+import slatekit.cmds.CommandRequest
 import kotlin.reflect.KProperty
 import slatekit.common.ext.*
 import slatekit.results.Success
@@ -25,7 +26,7 @@ import slatekit.results.Try
  */
 class Example_Kotlin_Misc : Command("types") {
 
-    override fun execute(request:CommandRequest): Try<Any> {
+    override fun execute(request: CommandRequest): Try<Any> {
         testExtensions()
         testOperator()
         return Success("")

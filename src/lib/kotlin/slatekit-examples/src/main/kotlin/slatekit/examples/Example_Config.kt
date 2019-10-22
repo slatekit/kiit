@@ -22,8 +22,8 @@ import slatekit.common.conf.Config
 import slatekit.common.db.DbCon
 import slatekit.common.encrypt.B64Java8
 import slatekit.common.encrypt.Encryptor
-import slatekit.functions.cmds.Command
-import slatekit.functions.cmds.CommandRequest
+import slatekit.cmds.Command
+import slatekit.cmds.CommandRequest
 
 //</doc:import_examples>
 

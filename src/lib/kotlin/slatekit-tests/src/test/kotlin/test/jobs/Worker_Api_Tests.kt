@@ -16,7 +16,6 @@ import slatekit.common.requests.InputArgs
 import slatekit.common.requests.Source
 import slatekit.integration.jobs.APIWorker
 import slatekit.jobs.*
-import slatekit.results.getOrElse
 import test.setup.SampleTypes2Api
 
 class Worker_Api_Tests {
@@ -95,7 +94,7 @@ class Worker_Api_Tests {
         queue.send(json1, mapOf("id" to "123", "refId" to "abc", "task" to "samples.types2.loadBasicTypes"))
         val entry = queue.next()!!
 
-        val queueInfo = Queue("tests", Priority.Medium, queue)
+        val queueInfo = Queue("tests", Priority.Mid, queue)
         val job = Task(entry, queueInfo)
         val result = runBlocking {
             worker.work(job)

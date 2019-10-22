@@ -4,6 +4,7 @@ import kotlinx.coroutines.channels.Channel
 import slatekit.common.DateTime
 import slatekit.common.log.Logger
 import slatekit.jobs.*
+import slatekit.jobs.support.Command
 import slatekit.jobs.support.Coordinator
 import slatekit.jobs.support.JobId
 import slatekit.jobs.support.Scheduler
@@ -18,18 +19,18 @@ class MockScheduler : Scheduler {
 
 open class MockCoordinator(override val logger: Logger, override val ids: JobId) : Coordinator {
 
-    val requests = mutableListOf<JobCommand>()
+    val requests = mutableListOf<Command>()
 
-    override suspend fun request(jobRequest: JobCommand) {
+    override suspend fun request(jobRequest: Command) {
         requests.add(jobRequest)
     }
 
-    override suspend fun respondOne(): JobCommand? {
+    override suspend fun respondOne(): Command? {
         return requests.firstOrNull()
     }
 
 
-    override suspend fun respond(operation:suspend (JobCommand) -> Unit ) {
+    override suspend fun respond(operation:suspend (Command) -> Unit ) {
         for(request in requests){
             operation(request)
         }
@@ -37,18 +38,18 @@ open class MockCoordinator(override val logger: Logger, override val ids: JobId)
 }
 
 
-class MockCoordinatorWithChannel(logger: Logger, ids: JobId, val channel: Channel<JobCommand>) : MockCoordinator(logger, ids) {
+class MockCoordinatorWithChannel(logger: Logger, ids: JobId, val channel: Channel<Command>) : MockCoordinator(logger, ids) {
 
-    private var pauses = mutableListOf<JobCommand>()
+    private var pauses = mutableListOf<Command>()
 
 
-    override suspend fun request(request: JobCommand){
+    override suspend fun request(request: Command){
 //        logger.log(Info, "Coordinator: Adding", listOf(
 //                "target" to request.target,
 //                "id" to request.id.toString(),
 //                "action" to request.action.name)
 //        )
-        if(request is JobCommand.ManageWorker && request.action == JobAction.Resume) {
+        if(request is Command.WorkerCommand && request.action == JobAction.Resume) {
             pauses.add(request)
         } else {
             send(request)
@@ -56,12 +57,12 @@ class MockCoordinatorWithChannel(logger: Logger, ids: JobId, val channel: Channe
     }
 
 
-    override suspend fun respondOne(): JobCommand? {
+    override suspend fun respondOne(): Command? {
         return channel.receive()
     }
 
 
-    override suspend fun respond(operation:suspend (JobCommand) -> Unit ) {
+    override suspend fun respond(operation:suspend (Command) -> Unit ) {
         for(request in channel){
             operation(request)
         }
@@ -76,7 +77,7 @@ class MockCoordinatorWithChannel(logger: Logger, ids: JobId, val channel: Channe
     }
 
 
-    private suspend fun send(request:JobCommand){
+    private suspend fun send(request: Command){
         channel.send(request)
         requests.add(request)
     }

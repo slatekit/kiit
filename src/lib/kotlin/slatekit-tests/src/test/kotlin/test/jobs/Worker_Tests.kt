@@ -5,9 +5,9 @@ import org.junit.Assert
 import org.junit.Test
 import slatekit.common.Status
 import slatekit.common.Identity
-import slatekit.jobs.WorkResult
+import slatekit.jobs.WorkState
 import slatekit.jobs.Worker
-import slatekit.jobs.support.WorkRunner
+import slatekit.jobs.support.Runner
 
 
 @Test
@@ -46,7 +46,7 @@ fun testC(){
     @Test
     fun can_run() {
         val worker = OneTimeWorker(0, 3)
-        val result = runBlocking { WorkRunner.run(worker) }
+        val result = runBlocking { Runner.run(worker) }
         val flows = worker.currentFlows()
 
         Assert.assertTrue(result.success)
@@ -65,32 +65,32 @@ fun testC(){
     @Test
     fun can_run_paged() {
         val worker = PagedWorker(0, 3, 3)
-        val result1 = runBlocking { WorkRunner.attemptStart(worker) }
+        val result1 = runBlocking { Runner.attemptStart(worker) }
         Assert.assertTrue(result1.success)
         Assert.assertEquals(worker.currentValue(), 3)
         Assert.assertEquals(worker.status(), Status.Running)
-        result1.map { Assert.assertEquals(it, WorkResult.More) }
+        result1.map { Assert.assertEquals(it, WorkState.More) }
 
         // Work more
-        val result2 = runBlocking { WorkRunner.work(worker) }
+        val result2 = runBlocking { Runner.work(worker) }
         Assert.assertTrue(result2.success)
         Assert.assertEquals(worker.currentValue(), 6)
         Assert.assertEquals(worker.status(), Status.Running)
-        result2.map { Assert.assertEquals(it, WorkResult.More) }
+        result2.map { Assert.assertEquals(it, WorkState.More) }
 
         // Work last time ( limit 9 )
-        val result3 = runBlocking {  WorkRunner.work(worker) }
+        val result3 = runBlocking {  Runner.work(worker) }
         Assert.assertTrue(result3.success)
         Assert.assertEquals(worker.currentValue(), 9)
         Assert.assertEquals(worker.status(), Status.Complete)
-        result3.map { Assert.assertEquals(it, WorkResult.Done) }
+        result3.map { Assert.assertEquals(it, WorkState.Done) }
     }
 
 
     @Test
     fun can_start() {
         val worker = OneTimeWorker(0, 3)
-        val result = runBlocking { WorkRunner.attemptStart(worker) }
+        val result = runBlocking { Runner.attemptStart(worker) }
         val flows = worker.currentFlows()
         Assert.assertTrue(result.success)
         Assert.assertEquals(worker.currentValue(), 4)
@@ -100,7 +100,7 @@ fun testC(){
         Assert.assertEquals(flows[1], "work")
         Assert.assertEquals(flows[2], "done")
         result.map {
-            Assert.assertEquals(it, WorkResult.Done)
+            Assert.assertEquals(it, WorkState.Done)
         }
     }
 
@@ -108,7 +108,7 @@ fun testC(){
     @Test
     fun can_fail() {
         val worker = Worker<Int>(Identity.test("worker1"), operation = { task -> throw Exception("test fail") })
-        val result = runBlocking { WorkRunner.run(worker) }
+        val result = runBlocking { Runner.run(worker) }
         Assert.assertFalse(result.success)
         Assert.assertEquals(worker.status(), Status.Failed)
         result.onFailure {

@@ -14,7 +14,7 @@ import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import slatekit.providers.logs.logback.LogbackLogs
 import kotlinx.coroutines.runBlocking
-import slatekit.common.functions.FunctionMode
+import slatekit.functions.common.FunctionMode
 
 /**
 <slate_header>
@@ -34,7 +34,7 @@ mantra: Simplicity above all else
 
 // https://looksok.wordpress.com/2014/07/12/compile-gradle-project-with-another-project-as-a-dependency/
 fun main(args:Array<String>) {
-    val example = Example_Args()
+    val example = Example_Jobs()
     example.execute(args, FunctionMode.Called)
 }
 

@@ -30,14 +30,11 @@ import slatekit.common.log.LogsDefault
 import slatekit.common.Context
 import slatekit.common.envs.Envs
 import slatekit.entities.Entities
-import slatekit.functions.cmds.Command
-import slatekit.functions.cmds.CommandRequest
+import slatekit.cmds.Command
+import slatekit.cmds.CommandRequest
 import slatekit.db.Db
 import slatekit.integration.common.AppEntContext
-import slatekit.results.StatusCodes
-import slatekit.results.Try
-import slatekit.results.Success
-import slatekit.results.getOrElse
+import slatekit.results.*
 
 //</doc:import_examples>
 
@@ -91,11 +88,10 @@ class Example_Context : Command("cmd") {
                 build = Build.empty,
                 start = StartInfo.none,
                 app = About(
-                        id = "sample-app-1",
-                        name = "Sample App-1",
+                        area = "department1",
+                        name = "sample-app-1",
                         desc = "Sample application 1",
                         company = "Company 1",
-                        group = "Department 1",
                         region = "New York",
                         url = "http://company1.com/dep1/sampleapp-1",
                         contact = "dept1@company1.com",
@@ -138,7 +134,7 @@ class Example_Context : Command("cmd") {
         }
 
         // CASE 4: You can also build an error context representing an invalid context
-        val ctx4 = CommonContext.err(StatusCodes.BAD_REQUEST.code, "Bad context, invalid inputs supplied")
+        val ctx4 = CommonContext.err(Codes.BAD_REQUEST.code, "Bad context, invalid inputs supplied")
         showContext(ctx4)
 
         //</doc:examples>

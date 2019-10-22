@@ -1,15 +1,12 @@
 package slatekit.jobs.support
 
 import slatekit.common.Status
-import slatekit.jobs.Task
-import slatekit.jobs.WorkResult
-import slatekit.jobs.Worker
-import slatekit.jobs.WorkerContext
+import slatekit.jobs.*
 import slatekit.results.*
 import slatekit.results.builders.Outcomes
 import slatekit.results.builders.Tries
 
-object WorkRunner {
+object Runner {
 
     /**
      * Calls this worker with life-cycle hooks and automatic transitioning to proper state
@@ -70,12 +67,12 @@ object WorkRunner {
         worker.init()
 
         worker.transition(Status.Running)
-        val state = worker.work(task)
-        if(state == WorkResult.Done && handleDone) {
+        val result = worker.work(task)
+        if(result.state == WorkState.Done && handleDone) {
             worker.transition(Status.Complete)
             worker.done()
         }
-        return state
+        return result
     }
 
 
@@ -86,12 +83,12 @@ object WorkRunner {
         val result = Tries.attempt {
             worker.transition(Status.Running)
             worker.transition(Status.Running)
-            val state = worker.work()
-            if(state == WorkResult.Done) {
+            val workResult = worker.work()
+            if(workResult.state == WorkState.Done) {
                 worker.transition(Status.Complete)
                 worker.done()
             }
-            state
+            workResult
         }
         when(result){
             is Success -> { }
@@ -108,13 +105,14 @@ object WorkRunner {
         val worker: Worker<*> = context.worker
         val calls = context.stats.calls
         calls.inc()
-        return try {
+        val result =  try {
             val result = operation(worker)
             calls.passed()
             Outcomes.success(result)
         } catch (ex:Exception){
             calls.failed(ex)
-            Outcomes.errored(ex)
+            Outcomes.errored<T>(ex)
         }
+        return result
     }
 }

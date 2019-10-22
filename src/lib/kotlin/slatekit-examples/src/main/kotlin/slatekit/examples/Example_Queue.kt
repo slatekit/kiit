@@ -17,12 +17,12 @@ package slatekit.examples
 //</doc:import_required>
 
 //<doc:import_examples>
-import slatekit.functions.cmds.Command
+import slatekit.cmds.Command
 import slatekit.results.Try
 import slatekit.results.Success
 import slatekit.common.queues.QueueSourceInMemory
 import slatekit.common.queues.QueueStringConverter
-import slatekit.functions.cmds.CommandRequest
+import slatekit.cmds.CommandRequest
 
 //</doc:import_examples>
 
