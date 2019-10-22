@@ -55,7 +55,9 @@ class Example_Jobs : Command("utils"), CoroutineScope by MainScope() {
         // NOTE: This is a helper method used for the real example(s) below
         suspend fun sendNewsLetterBatch(offset:AtomicInteger, batchSize:Int):WorkResult {
             val start = offset.get()
-            val users = allUsers.subList(start, start + batchSize)
+            val users = if(start < 0 || start >= allUsers.size) listOf()
+            else allUsers.subList(start, start + batchSize)
+
 
             // No more records so indicate done
             if(users.isEmpty())
@@ -145,37 +147,42 @@ class Example_Jobs : Command("utils"), CoroutineScope by MainScope() {
 
         //<doc:examples>
         runBlocking {
-//            // Sample 1: JOB that runs to completion
-//            val job1 = slatekit.jobs.Job(id.copy(service = "job1"), ::sendNewsLetter, scope = this)
-//            job1.start()   // Job dispatch
-//            job1.respond() // Work dispatch
-//            job1.respond() // Work start/finish
-//            println(job1.status())
-//
-//            // Sample 2: JOB ( 2 Workers ) constructor with list of 2 functions which will create 2 workers
-//            val job2 = slatekit.jobs.Job(id.copy(service = "job2"), listOf(worker(::sendNewsLetter), worker(::sendNewsLetterWithPaging)), scope = this)
-//            job2.start()
-//            job2.respond() // Work dispatch
-//            job2.respond() // Work start/finish
-//            job2.respond() // Work start/finish
+            // Sample 1: JOB that runs to completion
+            val job1 = slatekit.jobs.Job(id.copy(service = "job1"), ::sendNewsLetter, scope = this)
+            job1.start()   // Job dispatch
+            job1.respond() // Work dispatch
+            job1.respond() // Work start/finish
+            println(job1.status())
+
+            // Sample 2: JOB ( 2 Workers ) constructor with list of 2 functions which will create 2 workers
+            val job2 = slatekit.jobs.Job(id.copy(service = "job2"), listOf(worker(::sendNewsLetter), worker(::sendNewsLetterWithPaging)), scope = this)
+            job2.start()
+            job2.respond() // Work dispatch
+            job2.respond() // Work start/finish
+            job2.respond() // Work start/finish
 
             // Sample 3: JOB ( Paged )
 
             val jscope = JobScope()
             val job3 = slatekit.jobs.Job(id.copy(service = "job3"), listOf(worker(::sendNewsLetterWithPaging)), scope = jscope.scope)
-            val j = jscope.perform(job3)
-            j.join()
+            //val j = jscope.perform(job3)
+            //j.join()
             //Thread.sleep(10000)
             println(job3.status())
 
             // Sample 4: JOB ( Events ) + Subscribe to worker status changes
             val job4 = slatekit.jobs.Job(id.copy(service = "job4"), listOf(worker(::sendNewsLetterWithPaging)))
-            job4.subscribe { println("Job ${it.id.name} status changed to : ${it.status()}")}
+            job4.subscribe { println("Job ${it.id.name} status changed to : ${it.status().name}")}
             job4.subscribe(Status.Complete) { println("Job ${it.id.name} completed")}
-            job4.workers.subscribe { it ->  println("Worker ${it.id.name}")}
-            job4.workers.subscribe { it ->  println("Worker ${it.id.name} completed")}
+            job4.workers.subscribe { it ->  println("Worker ${it.id.name}: status = ${it.status().name}")}
+            job4.workers.subscribe(Status.Complete) { it ->  println("Worker ${it.id.name} completed")}
             job4.start()   // Job dispatch
             job4.respond() // Work dispatch
+            job4.respond() // Work start/finish
+            job4.respond() // Work start/finish
+            job4.respond() // Work start/finish
+            job4.respond() // Work start/finish
+            job4.respond() // Work start/finish
             job4.respond() // Work start/finish
             job4.respond() // Work start/finish
 

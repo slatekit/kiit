@@ -39,9 +39,13 @@ object Runner {
      * Starts this worker with life-cycle hooks and automatic transitioning to proper state
      * However, allows execution to be managed externally as it could be running for a long time
      */
-    suspend fun <T> attemptStart(worker: Worker<T>, handleDone:Boolean = true, handleFailure:Boolean = true, task: Task = Task.empty): Try<WorkResult> {
+    suspend fun <T> attemptStart(worker: Worker<T>,
+                                 handleDone:Boolean = true,
+                                 handleFailure:Boolean = true,
+                                 task: Task = Task.empty,
+                                 statusChanged:(suspend (Worker<T>) -> Unit )? = null): Try<WorkResult> {
         val result = Tries.attempt {
-            start(worker, handleDone, task)
+            start(worker, handleDone, task, statusChanged)
         }
         if(handleFailure) {
             when (result) {
@@ -49,6 +53,10 @@ object Runner {
                 }
                 is Failure -> {
                     worker.transition(Status.Failed)
+
+                    // notify
+                    statusChanged?.invoke(worker)
+
                     worker.fail(result.error)
                 }
             }
@@ -61,15 +69,24 @@ object Runner {
      * Starts this worker with life-cycle hooks and automatic transitioning to proper state
      * However, allows execution to be managed externally as it could be running for a long time
      */
-    suspend fun <T> start(worker: Worker<T>, handleDone:Boolean, task: Task = Task.empty): WorkResult {
+    suspend fun <T> start(worker: Worker<T>,
+                          handleDone:Boolean,
+                          task: Task = Task.empty,
+                          statusChanged:(suspend (Worker<T>) -> Unit )? = null): WorkResult {
+
         worker.transition(Status.Starting)
+        statusChanged?.invoke(worker)
+
         worker.info().forEach { println(it) }
         worker.init()
 
         worker.transition(Status.Running)
+        statusChanged?.invoke(worker)
+
         val result = worker.work(task)
         if(result.state == WorkState.Done && handleDone) {
             worker.transition(Status.Complete)
+            statusChanged?.invoke(worker)
             worker.done()
         }
         return result

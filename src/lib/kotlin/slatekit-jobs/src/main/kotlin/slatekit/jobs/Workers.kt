@@ -87,14 +87,16 @@ class Workers(val jobId:Identity,
         perform("Starting", id) { context ->
             val worker = context.worker
             val result = Runner.record(context) {
-                val result: Try<WorkResult> = Runner.attemptStart(worker, false, true, task)
+                val result: Try<WorkResult> = Runner.attemptStart(worker, false, true, task) {
+                    notify(context)
+                }
                 result.toOutcome()
             }.inner()
 
             when (result) {
                 is Success -> {
                     val res = result.value
-                    loop(worker, res)
+                    loop(context, res)
                     worker.status()
                 }
                 is Failure -> {
@@ -113,7 +115,7 @@ class Workers(val jobId:Identity,
             val result = Runner.record(context) {
                 worker.work(task)
             }
-            result.map { res -> loop(worker, res) }
+            result.map { res -> loop(context, res) }
             Outcomes.success(Status.Running)
         }
     }
@@ -125,7 +127,7 @@ class Workers(val jobId:Identity,
             val result = Runner.record(context) {
                 pausable.resume(reason ?: "Resuming", task)
             }
-            result.map { res -> loop(worker, res) }
+            result.map { res -> loop(context, res) }
             Outcomes.success(Status.Running)
         }
     }
@@ -136,7 +138,7 @@ class Workers(val jobId:Identity,
             val worker = context.worker
             pausable.pause(reason ?: "Paused")
             scheduler.schedule(DateTime.now().plusSeconds(pauseInSeconds)) {
-                coordinator.request(Command.WorkerCommand(ids.nextId(), ids.nextUUID().toString(), JobAction.Resume, worker.id, 0, ""))
+                coordinator.send(Command.WorkerCommand(ids.nextId(), ids.nextUUID().toString(), JobAction.Resume, worker.id, 0, ""))
             }
             Outcomes.success(Status.Paused)
         }
@@ -154,7 +156,7 @@ class Workers(val jobId:Identity,
     suspend fun delay(id: Identity, seconds:Long) {
         logger.log(Info, "Worker:", listOf("id" to id.name, "action" to "delaying", "seconds" to "$seconds"))
         scheduler.schedule(DateTime.now().plusSeconds(seconds)) {
-            coordinator.request(Command.WorkerCommand(ids.nextId(), ids.nextUUID().toString(), JobAction.Start, id, 0,""))
+            coordinator.send(Command.WorkerCommand(ids.nextId(), ids.nextUUID().toString(), JobAction.Start, id, 0,""))
         }
     }
 
@@ -182,9 +184,7 @@ class Workers(val jobId:Identity,
                 when (context.worker) {
                     is Pausable -> {
                         context.worker.transition(status)
-                        GlobalScope.launch {
-                            (events as WorkerEvents).notify(context.worker)
-                        }
+                        notify(context)
                         operation(context, context.worker)
                     }
                     else -> Outcomes.errored("${context.worker.id.name} does not implement Pausable and can not handle a pause/stop/resume action")
@@ -194,21 +194,23 @@ class Workers(val jobId:Identity,
     }
 
 
-    private suspend fun loop(worker: Workable<*>, workResult: WorkResult) {
+    private suspend fun loop(context:WorkerContext, workResult: WorkResult) {
+        val worker: Workable<*> = context.worker
         val result = Tries.attempt {
             when (workResult.state) {
                 is WorkState.Done -> {
                     logger.info("Worker ${worker.id.name} complete")
                     worker.transition(Status.Complete)
                     worker.done()
+                    notify(context)
                 }
                 is WorkState.Next -> {
                     val (id, uuid) = ids.next()
-                    coordinator.request(Command.WorkerCommand(id, uuid.toString(), JobAction.Process, worker.id, 0, ""))
+                    coordinator.send(Command.WorkerCommand(id, uuid.toString(), JobAction.Process, worker.id, 0, ""))
                 }
                 is WorkState.More -> {
                     val (id, uuid) = ids.next()
-                    coordinator.request(Command.WorkerCommand(id, uuid.toString(), JobAction.Process, worker.id, 0, ""))
+                    coordinator.send(Command.WorkerCommand(id, uuid.toString(), JobAction.Process, worker.id, 0, ""))
                 }
             }
             ""
@@ -219,5 +221,10 @@ class Workers(val jobId:Identity,
                 logger.error("Error while looping on : ${worker.id.id}")
             }
         }
+    }
+
+
+    private suspend fun notify(context:WorkerContext){
+        (events as WorkerEvents).notify(context.worker)
     }
 }

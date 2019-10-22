@@ -51,7 +51,9 @@ abstract class SubscribedEvents<T> : Events<T> {
         val subs = if(_statusSubscribers.containsKey(status.name)) {
             _statusSubscribers[status.name] ?: mutableListOf()
         } else {
-            mutableListOf()
+            val items = mutableListOf<suspend (T) -> Unit>()
+            _statusSubscribers[status.name] = items
+            items
         }
         subs.add(op)
     }

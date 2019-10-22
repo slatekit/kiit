@@ -27,7 +27,7 @@ import slatekit.results.Success
 //</doc:import_examples>
 
 
-class Example_Request : Command("request") {
+class Example_Request : Command("send") {
 
     override fun execute(request: CommandRequest): Try<Any> {
         //<doc:examples>
@@ -70,7 +70,7 @@ class Example_Request : Command("request") {
                 verb = "post",
                 meta = InputArgs(mapOf("api-key" to "ABC-123")),
                 data = InputArgs(mapOf("userId" to 5001)),
-                raw = "the raw HTTP SparkJava request or CLI ShellCommand",
+                raw = "the raw HTTP SparkJava send or CLI ShellCommand",
                 tag = Random.uuid()
         )
 

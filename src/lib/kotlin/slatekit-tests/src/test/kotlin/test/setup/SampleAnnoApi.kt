@@ -20,15 +20,15 @@ import slatekit.results.Success
 @Api(area = "app", name = "tests", desc = "sample to test features of Slate Kit APIs", auth = AuthModes.token, roles= "admin", verb = Verbs.auto, protocol = Protocols.all)
 class SampleAnnoApi(val context: AppEntContext) {
 
-    @ApiAction(desc = "accepts supplied basic data types from request", roles = "@parent", verb = "@parent", protocol = "@parent")
+    @ApiAction(desc = "accepts supplied basic data types from send", roles = "@parent", verb = "@parent", protocol = "@parent")
     fun inputBasicTypes(string1: String, bool1: Boolean, numShort: Short, numInt: Int, numLong: Long, numFloat: Float, numDouble: Double, date: DateTime): String {
         return "$string1, $bool1, $numShort $numInt, $numLong, $numFloat, $numDouble, $date"
     }
 
 
-    @ApiAction(desc = "access the request model directly instead of auto-conversion", roles= "*", verb = "post", protocol = "@parent")
+    @ApiAction(desc = "access the send model directly instead of auto-conversion", roles= "*", verb = "post", protocol = "@parent")
     fun inputRequest(req: Request): Notice<String> {
-        return Success("ok", msg = "raw request id: " + req.data!!.getInt("id"))
+        return Success("ok", msg = "raw send id: " + req.data!!.getInt("id"))
     }
 
 
@@ -44,19 +44,19 @@ class SampleAnnoApi(val context: AppEntContext) {
     }
 
 
-    @ApiAction(desc = "accepts a list of strings from request", roles= "*", verb = "post", protocol = "@parent")
+    @ApiAction(desc = "accepts a list of strings from send", roles= "*", verb = "post", protocol = "@parent")
     fun inputListString(items:List<String>): Notice<String> {
         return Success("ok", msg = items.fold("", { acc, curr -> acc + "," + curr } ))
     }
 
 
-    @ApiAction(desc = "accepts a list of integers from request", roles= "*", verb = "post", protocol = "@parent")
+    @ApiAction(desc = "accepts a list of integers from send", roles= "*", verb = "post", protocol = "@parent")
     fun inputListInt(items:List<Int>): Notice<String> {
         return Success("ok", msg = items.fold("", { acc, curr -> acc + "," + curr.toString() } ))
     }
 
 
-    @ApiAction(desc = "accepts a map of string/ints from request", roles= "*", verb = "post", protocol = "@parent")
+    @ApiAction(desc = "accepts a map of string/ints from send", roles= "*", verb = "post", protocol = "@parent")
     fun inputMapInt(items:Map<String,Int>): Notice<String> {
         val sortedPairs = items.keys.toList().sortedBy{ k:String -> k }.map{ key -> Pair(key, items[key]) }
         val delimited = sortedPairs.fold("", { acc, curr -> acc + "," + curr.first + "=" + curr.second } )

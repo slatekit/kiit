@@ -134,7 +134,7 @@ class Job(val id:Identity,
      */
     override suspend fun request(command: Command) {
         // Coordinator handles requests via kotlin channels
-        coordinator.request(command)
+        coordinator.send(command)
     }
 
 
@@ -143,7 +143,7 @@ class Job(val id:Identity,
      */
     override suspend fun respond() {
         // Coordinator takes 1 request off the channel
-        val request = coordinator.respondOne()
+        val request = coordinator.poll()
         request?.let {
             runBlocking {
                 manage(request, false)
@@ -157,17 +157,19 @@ class Job(val id:Identity,
      */
     override suspend fun manage()  {
     //{
-        val j = scope.launch {
-            coordinator.respond { request ->
-                manage(request, false)
+        //val j = scope.launch {
+            coordinator.consume { request ->
+                scope.launch {
+                    manage(request, false)
+                }
             }
-        }
-        j.join()
+        //}
+        //j.join()
     }
 
 
     suspend fun manage(request: Command, launch:Boolean = true){
-        logger.log(Info, "Job: request - ", request.pairs(), null)
+        logger.log(Info, "Job: send - ", request.pairs(), null)
         when(request) {
             // Affects the whole job/queue/workers
             is Command.JobCommand -> {
@@ -239,6 +241,12 @@ class Job(val id:Identity,
                         logger.info("Unexpected state: ${request.action}")
                     }
                 }
+                // Check for completion of all workers
+                val completed = workers.all.all { it.isComplete() }
+                if(completed) {
+                    this.setStatus(Status.Complete)
+                    (this.events as JobEvents).notify(this)
+                }
             }
         }
     }
@@ -291,6 +299,9 @@ class JobScope{
     val scope = Job.scope()
 
     suspend fun perform(job:slatekit.jobs.Job):kotlinx.coroutines.Job  {
+        scope.run {
+
+        }
         val j = scope.launch {
             job.start()
             job.manage()
