@@ -76,7 +76,8 @@ class Workers(val jobId:Identity,
      * Starts the worker associated with the identity and makes it work using the supplied Task
      */
     suspend fun start(id: Identity, task: Task = Task.empty)  {
-        perform("Starting", id) { context ->
+        perform("Starting", id) { executor ->
+            val context = executor.context
             val worker = context.worker
             val result = Runner.record(context) {
                 val result: Try<WorkResult> = Runner.attemptStart(worker, false, true, task) {
@@ -102,8 +103,10 @@ class Workers(val jobId:Identity,
 
 
     suspend fun process(id: Identity, task: Task = Task.empty) {
-        perform("Processing", id) { context ->
+        perform("Processing", id) { executor ->
+            val context = executor.context
             val worker = context.worker
+            //val result = executor.execute(task)
             val result = Runner.record(context) {
                 worker.work(task)
             }
@@ -114,7 +117,9 @@ class Workers(val jobId:Identity,
 
 
     suspend fun resume(id: Identity, reason:String?, task: Task = Task.empty) {
-        performPausableAction(Status.Running, id) { context, pausable ->
+        performPausableAction(Status.Running, id) { executor, pausable ->
+            val context = executor.context
+            //val result = executor.resume(reason ?: "Resuming", task)
             val result = Runner.record(context) {
                 pausable.resume(reason ?: "Resuming", task)
             }
@@ -125,7 +130,8 @@ class Workers(val jobId:Identity,
 
 
     suspend fun pause(id: Identity, reason:String?) {
-        performPausableAction(Status.Paused, id) { context, pausable ->
+        performPausableAction(Status.Paused, id) { executor, pausable ->
+            val context = executor.context
             val worker = context.worker
             pausable.pause(reason ?: "Paused")
             scheduler.schedule(DateTime.now().plusSeconds(pauseInSeconds)) {
@@ -153,30 +159,31 @@ class Workers(val jobId:Identity,
 
 
 
-    private suspend fun perform(action:String, id: Identity, operation: suspend (WorkerContext) -> Outcome<Status>):Outcome<Status> {
+    private suspend fun perform(action:String, id: Identity, operation: suspend (WorkExecutor) -> Outcome<Status>):Outcome<Status> {
         logger.log(Info, "Worker:", listOf("id" to id.name, "action" to action))
-        val context = this[id]
-        return when(context) {
+        val executor = this.lookup[id.id]
+        return when(executor) {
             null -> Outcomes.errored("Unable to find worker with id : ${id.name}")
             else -> {
-                val result = operation(context)
+                val result = operation(executor)
                 result
             }
         }
     }
 
 
-    private suspend fun performPausableAction(status: Status, id: Identity, operation: suspend (WorkerContext, Pausable) -> Outcome<Status>):Outcome<Status> {
+    private suspend fun performPausableAction(status: Status, id: Identity, operation: suspend (WorkExecutor, Pausable) -> Outcome<Status>):Outcome<Status> {
         logger.log(Info, "Worker:", listOf("id" to id.name, "move" to status.name))
-        val context = this[id]
-        return when(context) {
+        val executor = this.lookup[id.id]
+        return when(executor) {
             null -> Outcomes.errored("Unable to find worker with id : ${id.name}")
             else -> {
+                val context = executor.context
                 when (context.worker) {
                     is Pausable -> {
                         context.worker.move(status)
                         notify(context)
-                        operation(context, context.worker)
+                        operation(executor, context.worker)
                     }
                     else -> Outcomes.errored("${context.worker.id.name} does not implement Pausable and can not handle a pause/stop/resume action")
                 }

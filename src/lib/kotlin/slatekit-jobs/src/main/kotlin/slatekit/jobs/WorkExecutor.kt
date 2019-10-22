@@ -10,9 +10,11 @@ import slatekit.results.builders.Outcomes
  * 1. impose  : execute with policies imposed ( middle ware   ) associated w/ worker
  * 2. record  : execute with recording ( metrics, task )
  * 3. direct  : execute directly
+ * 4. resume  : execute the resume method on a pauseable
  */
 class WorkExecutor(val context: WorkerContext,
-                   val executor: suspend (Task) -> Outcome<WorkResult>) {
+                   val workWithPolicies: suspend (Task) -> Outcome<WorkResult>,
+                   val resumeWithPolicies: suspend (Task) -> Outcome<WorkResult>) {
 
 
     /**
@@ -20,7 +22,7 @@ class WorkExecutor(val context: WorkerContext,
      */
     suspend fun execute(task:Task):Outcome<WorkResult> {
         return when(context.policies.isEmpty()) {
-            true  -> record(task)
+            true  -> direct(task)
             false -> impose(task)
         }
     }
@@ -50,7 +52,15 @@ class WorkExecutor(val context: WorkerContext,
      * Executes the worker with policies ( which may impose limits/restrictions/etc )
      */
     suspend fun impose(task:Task):Outcome<WorkResult> {
-        return executor(task)
+        return workWithPolicies(task)
+    }
+
+
+    /**
+     * Executes the worker with recorded Calls
+     */
+    suspend fun resume(reason:String, task:Task):Outcome<WorkResult> {
+        return resumeWithPolicies(task)
     }
 
 
@@ -62,16 +72,27 @@ class WorkExecutor(val context: WorkerContext,
          * 2. final call to worker.work
          */
         fun of(context: WorkerContext): WorkExecutor {
-            val last: suspend (Task) -> Outcome<WorkResult> = { task ->
+            val rawWork: suspend (Task) -> Outcome<WorkResult> = { task ->
                 Runner.record(context) {
                     it.work(task)
                 }
             }
-            val executor = when (context.policies.isEmpty()) {
-                true -> last
-                false -> Policies.chain(context.policies, last)
+            val rawResume: suspend (Task) -> Outcome<WorkResult> = { task ->
+                Runner.record(context) {
+                    (it as Pausable).resume("", task)
+                }
             }
-            return WorkExecutor(context, executor)
+
+            return when (context.policies.isEmpty()) {
+                true  -> {
+                    WorkExecutor(context, rawWork, rawResume)
+                }
+                false -> {
+                    val work = Policies.chain(context.policies, rawWork)
+                    val resume = Policies.chain(context.policies, rawResume)
+                    WorkExecutor(context, work, resume)
+                }
+            }
         }
     }
 }
