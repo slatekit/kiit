@@ -95,7 +95,7 @@ class Worker_Api_Tests {
         val entry = queue.next()!!
 
         val queueInfo = Queue("tests", Priority.Mid, queue)
-        val job = Task(entry, queueInfo)
+        val job = Task(Identity.test("samples"), entry, queueInfo)
         val result = runBlocking {
             worker.work(job)
         }

@@ -44,7 +44,7 @@ class Example_Jobs : Command("utils"), CoroutineScope by MainScope() {
 
         val NEWS_LETTER_MESSAGE = "New version coming out soon!"
 
-        // Sample list of users
+        // Sample list of 20 users
         val allUsers = (1..20).map { User(it, "user$it@company1.com")}
 
         // Sends the message ( newsletter ) to the user

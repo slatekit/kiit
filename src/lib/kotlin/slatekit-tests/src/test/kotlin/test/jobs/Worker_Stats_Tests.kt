@@ -14,7 +14,7 @@ class Worker_Stats_Tests {
     @Test
     fun can_ensure_no_runs() {
         val worker = OneTimeWorker(0, 10)
-        val context = WorkerContext(worker.id, worker, Recorder.of(worker.id), Task.owned)
+        val context = WorkerContext(worker.id, worker, Recorder.of(worker.id), listOf(), Task.owned)
         val runs = context.stats.calls
         Assert.assertEquals(runs.hasRun(), false)
         Assert.assertNull  (runs.lastTime())
@@ -27,7 +27,7 @@ class Worker_Stats_Tests {
     @Test
     fun can_record_single_success() {
         val worker = OneTimeWorker(0, 10)
-        val context = WorkerContext(worker.id, worker, Recorder.of(worker.id), Task.owned)
+        val context = WorkerContext(worker.id, worker, Recorder.of(worker.id), listOf(), Task.owned)
         val runs = context.stats.calls
         runBlocking {
             Runner.record(context, { })
@@ -43,7 +43,7 @@ class Worker_Stats_Tests {
     @Test
     fun can_record_single_failure() {
         val worker = OneTimeWorker(0, 10)
-        val context = WorkerContext(worker.id, worker, Recorder.of(worker.id), Task.owned)
+        val context = WorkerContext(worker.id, worker, Recorder.of(worker.id), listOf(), Task.owned)
         val runs = context.stats.calls
         runBlocking {
             Runner.record(context, { throw Exception("testing") })
@@ -59,7 +59,7 @@ class Worker_Stats_Tests {
     @Test
     fun can_ensure_multiple_runs() {
         val worker = OneTimeWorker(0, 10)
-        val context = WorkerContext(worker.id, worker, Recorder.of(worker.id), Task.owned)
+        val context = WorkerContext(worker.id, worker, Recorder.of(worker.id), listOf(), Task.owned)
         val runs = context.stats.calls
         val count =  3L
         runBlocking {
@@ -76,7 +76,7 @@ class Worker_Stats_Tests {
     @Test
     fun can_ensure_multiple_success_failures() {
         val worker = OneTimeWorker(0, 10)
-        val context = WorkerContext(worker.id, worker, Recorder.of(worker.id), Task.owned)
+        val context = WorkerContext(worker.id, worker, Recorder.of(worker.id), listOf(), Task.owned)
         val runs = context.stats.calls
         val successes =  3L
         val failures =  3L

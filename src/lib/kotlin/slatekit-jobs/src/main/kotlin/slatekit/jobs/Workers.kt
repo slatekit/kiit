@@ -24,10 +24,11 @@ class Workers(val jobId:Identity,
               val logger:Logger,
               val ids: JobId,
               val pauseInSeconds:Long,
-              val policies: List<Policy<WorkRequest, WorkResult>> = listOf()) : Events<Worker<*>> {
+              val policies: List<Policy<Task, WorkResult>> = listOf()) : Events<Worker<*>> {
 
     private val events: Events<Worker<*>> = WorkerEvents(this)
-    private val lookup = all.map { it.id.id to WorkerContext(jobId, it, Recorder.of(it.id), policies) }.toMap()
+    private val lookup:Map<String, WorkExecutor> = all.map { it.id.id to WorkerContext(jobId, it, Recorder.of(it.id), policies) }
+            .map { it.first to WorkExecutor.of(it.second) }.toMap()
 
 
     /**
@@ -51,7 +52,7 @@ class Workers(val jobId:Identity,
      * This is to allow for looking up the job/stats metadata for a worker.
      */
     operator fun get(id: Identity):WorkerContext? = when(lookup.containsKey(id.id)) {
-        true -> lookup[id.id]
+        true -> lookup[id.id]?.context
         false -> null
     }
 
@@ -61,7 +62,7 @@ class Workers(val jobId:Identity,
      * This is to allow for looking up the job/stats metadata for a worker.
      */
     operator fun get(id:String):WorkerContext? = when(lookup.containsKey(id)) {
-        true -> lookup[id]
+        true -> lookup[id]?.context
         false -> null
     }
 
@@ -211,11 +212,6 @@ class Workers(val jobId:Identity,
                 logger.error("Error while looping on : ${worker.id.id}")
             }
         }
-    }
-
-
-    private suspend fun execute(context: WorkerContext){
-
     }
 
 

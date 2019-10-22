@@ -30,7 +30,7 @@ open class MockCoordinator(override val logger: Logger, override val ids: JobId)
     }
 
 
-    override suspend fun consume(operation:(Command) -> Unit ) {
+    override suspend fun consume(operation:suspend (Command) -> Unit ) {
         for(request in requests){
             operation(request)
         }
@@ -62,7 +62,7 @@ class MockCoordinatorWithChannel(logger: Logger, ids: JobId, val channel: Channe
     }
 
 
-    override suspend fun consume(operation:(Command) -> Unit ) {
+    override suspend fun consume(operation:suspend (Command) -> Unit ) {
         for(request in channel){
             operation(request)
         }
