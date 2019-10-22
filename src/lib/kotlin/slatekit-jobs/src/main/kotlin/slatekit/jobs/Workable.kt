@@ -15,7 +15,7 @@ interface Workable<T> : StatusCheck {
     /**
      * Stats on this worker
      */
-    val stats:WorkerStats
+    val stats:Recorder
 
 
     /**

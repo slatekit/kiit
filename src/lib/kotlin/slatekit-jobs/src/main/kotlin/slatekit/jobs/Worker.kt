@@ -9,7 +9,7 @@ import java.util.concurrent.atomic.AtomicReference
  * Base class for Workers
  */
 open class Worker<T>(override val id: Identity,
-                     override val stats: WorkerStats = WorkerStats.of(id),
+                     override val stats: Recorder = Recorder.of(id),
                      val operation: (suspend (Task) -> WorkResult)? = null) : Workable<T> {
 
     private val _status = AtomicReference<Status>(Status.InActive)
