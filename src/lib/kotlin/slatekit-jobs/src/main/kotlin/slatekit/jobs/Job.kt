@@ -63,14 +63,14 @@ class Job(val id:Identity,
           val coordinator: Coordinator = coordinator(ids, logger),
           val scheduler: Scheduler = DefaultScheduler(),
           val scope:CoroutineScope = Jobs.scope,
-          policies: List<Policy<Task, WorkResult>>? = null) : Management, StatusCheck, Events<Job> {
+          policies: List<Policy<WorkRequest, WorkResult>>? = null) : Management, StatusCheck, Events<Job> {
     /**
      * Initialize with just a function that will handle the work
      */
     constructor(id:Identity, lambda: suspend () -> WorkResult,
                 queue: Queue? = null,
                 scope: CoroutineScope? = null,
-                policies: List<Policy<Task, WorkResult>>? = null)
+                policies: List<Policy<WorkRequest, WorkResult>>? = null)
             : this(id, listOf(worker(lambda)), queue, scope, policies)
 
 
@@ -80,7 +80,7 @@ class Job(val id:Identity,
     constructor(id:Identity, lambda: suspend (Task) -> WorkResult,
                 queue: Queue? = null,
                 scope: CoroutineScope? = null,
-                policies: List<Policy<Task, WorkResult>>? = null)
+                policies: List<Policy<WorkRequest, WorkResult>>? = null)
             : this(id, listOf(lambda), queue, scope, policies)
 
 
@@ -90,7 +90,7 @@ class Job(val id:Identity,
     constructor(id:Identity, lambdas: List<suspend (Task) -> WorkResult>,
                 queue: Queue? = null,
                 scope: CoroutineScope? = null,
-                policies: List<Policy<Task, WorkResult>>? = null)
+                policies: List<Policy<WorkRequest, WorkResult>>? = null)
             : this(id, workers(id, lambdas), queue, scope = scope ?: Jobs.scope, policies = policies)
 
 

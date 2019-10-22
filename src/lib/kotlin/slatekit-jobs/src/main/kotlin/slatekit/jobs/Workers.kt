@@ -24,7 +24,7 @@ class Workers(val jobId:Identity,
               val logger:Logger,
               val ids: JobId,
               val pauseInSeconds:Long,
-              val policies: List<Policy<Task, WorkResult>> = listOf()) : Events<Worker<*>> {
+              val policies: List<Policy<WorkRequest, WorkResult>> = listOf()) : Events<Worker<*>> {
 
     private val events: Events<Worker<*>> = WorkerEvents(this)
     private val lookup:Map<String, WorkExecutor> = all.map { it.id.id to WorkerContext(jobId, it, Recorder.of(it.id), policies) }

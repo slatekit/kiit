@@ -1,5 +1,6 @@
 package slatekit.functions.policy
 
+import slatekit.common.log.Logger
 import slatekit.common.metrics.Counters
 import slatekit.results.Codes
 import slatekit.results.Outcome
@@ -15,7 +16,7 @@ import slatekit.results.builders.Outcomes
  * @param I : Input type
  * @param O : Output type
  */
-class Ratio<I, O>(val limit: Double, val status: Status, val stats: (I) -> Counters) : Policy<I, O> {
+class Ratio<I, O>(val limit: Double, val status: Status, val stats: (I) -> Counters, val logger: Logger? = null) : Policy<I, O> {
 
     override suspend fun run(i: I, operation: suspend (I) -> Outcome<O>): Outcome<O> {
         // NOTE: It is up to the caller to keep track of the counts
@@ -30,6 +31,7 @@ class Ratio<I, O>(val limit: Double, val status: Status, val stats: (I) -> Count
             is Status.Unexpected -> isAtThreshold(counts.totalUnexpected() , counts.totalProcessed() )
             else -> isAtThreshold(counts.totalUnexpected(),  counts.totalProcessed())
         }
+        logger?.info("RATIO: status = ${result.status.msg}")
         return if(isMatch) {
             Outcomes.errored(Codes.LIMITED)
         } else {

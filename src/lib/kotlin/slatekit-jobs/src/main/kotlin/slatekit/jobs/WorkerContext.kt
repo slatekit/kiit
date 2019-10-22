@@ -17,5 +17,5 @@ import slatekit.functions.policy.Policy
 data class WorkerContext(val id: Identity,
                          val worker: Worker<*>,
                          val stats:Recorder<Task, WorkState>,
-                         val policies:List<Policy<Task, WorkResult>> = listOf(),
+                         val policies:List<Policy<WorkRequest, WorkResult>> = listOf(),
                          val task:Task = Task.empty.copy(job = id.id))

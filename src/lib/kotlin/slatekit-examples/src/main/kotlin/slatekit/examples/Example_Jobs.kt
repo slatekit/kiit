@@ -165,7 +165,7 @@ class Example_Jobs : Command("utils"), CoroutineScope by MainScope() {
                             slatekit.jobs.Job(id.copy(service = "job6"), listOf(NewsLetterWorker()), queue2),
 
                             slatekit.jobs.Job(id.copy(service = "job7"), listOf(::sendNewsLetterWithPaging), policies = listOf(
-                                    Every(10) { req, res -> println(req.task.id + ":" + res.msg) },
+                                    Every(10) { req, res -> println("Paged : " + req.task.id + ":" + res.msg) },
                                     Limit(12) { req -> req.context.stats.counts },
                                     Ratio(.1, slatekit.results.Status.Errored(0, "")) { req -> req.context.stats.counts }
                                 )
@@ -173,9 +173,9 @@ class Example_Jobs : Command("utils"), CoroutineScope by MainScope() {
                     )
             )
 
-            jobs.run("samples.job1")
-            jobs.run("samples.job2")
-            delay(5000)
+            jobs.run("samples.job7")
+            //jobs.run("samples.job2")
+            delay(50000)
         }
         //</doc:examples>
         return Success("")

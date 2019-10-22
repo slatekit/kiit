@@ -13,8 +13,8 @@ import slatekit.results.builders.Outcomes
  * 4. resume  : execute the resume method on a pauseable
  */
 class WorkExecutor(val context: WorkerContext,
-                   val workWithPolicies: suspend (Task) -> Outcome<WorkResult>,
-                   val resumeWithPolicies: suspend (Task) -> Outcome<WorkResult>) {
+                   val workWithPolicies: suspend (WorkRequest) -> Outcome<WorkResult>,
+                   val resumeWithPolicies: suspend (WorkRequest) -> Outcome<WorkResult>) {
 
 
     /**
@@ -52,7 +52,8 @@ class WorkExecutor(val context: WorkerContext,
      * Executes the worker with policies ( which may impose limits/restrictions/etc )
      */
     suspend fun impose(task:Task):Outcome<WorkResult> {
-        return workWithPolicies(task)
+        val request = WorkRequest(context, task)
+        return workWithPolicies(request)
     }
 
 
@@ -60,7 +61,8 @@ class WorkExecutor(val context: WorkerContext,
      * Executes the worker with recorded Calls
      */
     suspend fun resume(reason:String, task:Task):Outcome<WorkResult> {
-        return resumeWithPolicies(task)
+        val request = WorkRequest(context, task)
+        return resumeWithPolicies(request)
     }
 
 
@@ -72,14 +74,14 @@ class WorkExecutor(val context: WorkerContext,
          * 2. final call to worker.work
          */
         fun of(context: WorkerContext): WorkExecutor {
-            val rawWork: suspend (Task) -> Outcome<WorkResult> = { task ->
+            val rawWork: suspend (WorkRequest) -> Outcome<WorkResult> = { req ->
                 Runner.record(context) {
-                    it.work(task)
+                    it.work(req.task)
                 }
             }
-            val rawResume: suspend (Task) -> Outcome<WorkResult> = { task ->
+            val rawResume: suspend (WorkRequest) -> Outcome<WorkResult> = { req ->
                 Runner.record(context) {
-                    (it as Pausable).resume("", task)
+                    (it as Pausable).resume("", req.task)
                 }
             }
 
