@@ -23,18 +23,11 @@ class Workers(val jobId:Identity,
               val scheduler: Scheduler,
               val logger:Logger,
               val ids: JobId,
-              val pauseInSeconds:Long) : Events<Worker<*>> {
+              val pauseInSeconds:Long,
+              val policies: List<Policy<WorkRequest, WorkResult>> = listOf()) : Events<Worker<*>> {
 
     private val events: Events<Worker<*>> = WorkerEvents(this)
-    private val lookup = all.map { it.id.id to WorkerContext(jobId, it, Recorder.of(it.id), Task.owned.copy(job = jobId.id)) }.toMap()
-
-
-    /**
-     * adds a policy to the job
-     */
-    fun policy(policy: Policy<WorkRequest, WorkResult>) {
-
-    }
+    private val lookup = all.map { it.id.id to WorkerContext(jobId, it, Recorder.of(it.id), policies) }.toMap()
 
 
     /**
@@ -218,6 +211,11 @@ class Workers(val jobId:Identity,
                 logger.error("Error while looping on : ${worker.id.id}")
             }
         }
+    }
+
+
+    private suspend fun execute(context: WorkerContext){
+
     }
 
 

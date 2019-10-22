@@ -62,40 +62,42 @@ class Job(val id:Identity,
           val ids: JobId = JobId(),
           val coordinator: Coordinator = coordinator(ids, logger),
           val scheduler: Scheduler = DefaultScheduler(),
-          val scope:CoroutineScope = Jobs.scope) : Management, StatusCheck, Events<Job> {
+          val scope:CoroutineScope = Jobs.scope,
+          policies: List<Policy<WorkRequest, WorkResult>>? = null) : Management, StatusCheck, Events<Job> {
     /**
      * Initialize with just a function that will handle the work
      */
-    constructor(id:Identity, lambda: suspend () -> WorkResult, queue: Queue? = null, scope: CoroutineScope? = null)
-            : this(id, listOf(worker(lambda)), queue, scope = scope)
+    constructor(id:Identity, lambda: suspend () -> WorkResult,
+                queue: Queue? = null,
+                scope: CoroutineScope? = null,
+                policies: List<Policy<WorkRequest, WorkResult>>? = null)
+            : this(id, listOf(worker(lambda)), queue, scope, policies)
 
 
     /**
      * Initialize with just a function that will handle the work
      */
-    constructor(id:Identity, lambda: suspend (Task) -> WorkResult, queue: Queue? = null, scope: CoroutineScope? = null)
-            : this(id, listOf(lambda), queue, scope)
+    constructor(id:Identity, lambda: suspend (Task) -> WorkResult,
+                queue: Queue? = null,
+                scope: CoroutineScope? = null,
+                policies: List<Policy<WorkRequest, WorkResult>>? = null)
+            : this(id, listOf(lambda), queue, scope, policies)
 
 
     /**
      * Initialize with a list of functions to excecute work
      */
-    constructor(id:Identity, lambdas: List<suspend (Task) -> WorkResult>, queue: Queue? = null, scope: CoroutineScope? = null)
-            : this(id, workers(id, lambdas), queue, scope = scope ?: Jobs.scope)
+    constructor(id:Identity, lambdas: List<suspend (Task) -> WorkResult>,
+                queue: Queue? = null,
+                scope: CoroutineScope? = null,
+                policies: List<Policy<WorkRequest, WorkResult>>? = null)
+            : this(id, workers(id, lambdas), queue, scope = scope ?: Jobs.scope, policies = policies)
 
 
-    val workers = Workers(id, all, coordinator, scheduler, logger, ids, 30)
+    val workers = Workers(id, all, coordinator, scheduler, logger, ids, 30, policies ?: listOf())
     private val events: Events<Job> = JobEvents()
     private val dispatch = JobDispatch(this, workers, events as JobEvents, scope)
     private val _status = AtomicReference<Status>(Status.InActive)
-
-
-    /**
-     * adds a policy to the job
-     */
-    fun policy(policy: Policy<WorkRequest, WorkResult>) {
-
-    }
 
 
     /**

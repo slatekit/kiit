@@ -23,6 +23,7 @@ import slatekit.cmds.Command
 import slatekit.cmds.CommandRequest
 import slatekit.functions.policy.Every
 import slatekit.functions.policy.Limit
+import slatekit.functions.policy.Policy
 import slatekit.functions.policy.Ratio
 import slatekit.jobs.*
 import slatekit.jobs.Job.Companion.worker
@@ -161,13 +162,20 @@ class Example_Jobs : Command("utils"), CoroutineScope by MainScope() {
                             slatekit.jobs.Job(id.copy(service = "job3"), listOf(::sendNewsLetterWithPaging)),
                             slatekit.jobs.Job(id.copy(service = "job4"), listOf(::sendNewsLetterWithPaging)),
                             slatekit.jobs.Job(id.copy(service = "job5"), listOf(::sendNewsLetterFromQueue), queue1),
-                            slatekit.jobs.Job(id.copy(service = "job6"), listOf(::sendNewsLetterWithPaging)),
-                            slatekit.jobs.Job(id.copy(service = "job7"), listOf(NewsLetterWorker()), queue2)
+                            slatekit.jobs.Job(id.copy(service = "job6"), listOf(NewsLetterWorker()), queue2),
+
+                            slatekit.jobs.Job(id.copy(service = "job7"), listOf(::sendNewsLetterWithPaging), policies = listOf(
+                                    Every(10) { req, res -> println(req.task.id + ":" + res.msg) },
+                                    Limit(12) { req -> req.context.stats.counts },
+                                    Ratio(.1, slatekit.results.Status.Errored(0, "")) { req -> req.context.stats.counts }
+                                )
+                            )
                     )
             )
 
             jobs.run("samples.job1")
             jobs.run("samples.job2")
+            delay(5000)
         }
         //</doc:examples>
         return Success("")
@@ -197,18 +205,13 @@ class Example_Jobs : Command("utils"), CoroutineScope by MainScope() {
         // Sample 5: JOB ( Queued ) + Subscribe to worker status changes
         jobs.respond("samples.job5", 3, start = true)
 
-        // Sample 5: JOB ( Policies ) with policies to add behavior / strategies to worker, this adds:
+        // Sample 6: JOB ( Worker ) implementation with queue
+        jobs.start("samples.job6")
+
+        // Sample 7: JOB ( Policies ) with policies to add behavior / strategies to worker, this adds:
         // 1. a callback for every 10 items processed
         // 2. a limit to processing at most 12 items ( to support running a job in "waves" )
         // 3. a threshold / error limit of .1 ( 10% )
-        jobs["samples.job6"]?.let { job ->
-            job.workers.policy(Every(10) { req, res -> println(req.task.id + ":" + res.msg) })
-            job.workers.policy(Limit(12) { req -> req.context.stats.counts })
-            job.workers.policy(Ratio(.1, slatekit.results.Status.Errored(0, "")) { req -> req.context.stats.counts })
-        }
-        jobs.start("samples.job6")
-
-        // Sample 7: JOB ( Worker ) implementation with queue
-        jobs.start("samples.job7")
+        jobs.respond("samples.job7", 4)
     }
 }
