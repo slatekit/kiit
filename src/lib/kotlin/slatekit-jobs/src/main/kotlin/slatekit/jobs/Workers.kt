@@ -166,14 +166,14 @@ class Workers(val jobId:Identity,
 
 
     private suspend fun performPausableAction(status: Status, id: Identity, operation: suspend (WorkerContext, Pausable) -> Outcome<Status>):Outcome<Status> {
-        logger.log(Info, "Worker:", listOf("id" to id.name, "transition" to status.name))
+        logger.log(Info, "Worker:", listOf("id" to id.name, "move" to status.name))
         val context = this[id]
         return when(context) {
             null -> Outcomes.errored("Unable to find worker with id : ${id.name}")
             else -> {
                 when (context.worker) {
                     is Pausable -> {
-                        context.worker.transition(status)
+                        context.worker.move(status)
                         notify(context)
                         operation(context, context.worker)
                     }
@@ -190,7 +190,7 @@ class Workers(val jobId:Identity,
             when (workResult.state) {
                 is WorkState.Done -> {
                     logger.info("Worker ${worker.id.name} complete")
-                    worker.transition(Status.Complete)
+                    worker.move(Status.Complete)
                     worker.done()
                     notify(context)
                 }

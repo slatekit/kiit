@@ -68,7 +68,7 @@ interface Workable<T> : StatusCheck {
     /**
      * Transition current status to the one supplied
      */
-    suspend fun transition(state: Status) {
+    suspend fun move(state: Status) {
         notify(state.name, null)
     }
 

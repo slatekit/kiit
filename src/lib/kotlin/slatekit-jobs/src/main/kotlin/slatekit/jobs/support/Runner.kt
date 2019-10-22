@@ -13,21 +13,21 @@ object Runner {
      */
     suspend fun <T> run(worker: Worker<T>): Try<Status> {
         val result = Tries.attempt {
-            worker.transition(Status.Starting)
+            worker.move(Status.Starting)
             worker.info().forEach { println(it) }
             worker.init()
 
-            worker.transition(Status.Running)
+            worker.move(Status.Running)
             worker.work()
 
-            worker.transition(Status.Complete)
+            worker.move(Status.Complete)
             worker.done()
             Status.Complete
         }
         when(result){
             is Success -> { }
             is Failure -> {
-                worker.transition(Status.Failed)
+                worker.move(Status.Failed)
                 worker.fail(result.error)
             }
         }
@@ -52,7 +52,7 @@ object Runner {
                 is Success -> {
                 }
                 is Failure -> {
-                    worker.transition(Status.Failed)
+                    worker.move(Status.Failed)
 
                     // notify
                     statusChanged?.invoke(worker)
@@ -74,18 +74,18 @@ object Runner {
                           task: Task = Task.empty,
                           statusChanged:(suspend (Worker<T>) -> Unit )? = null): WorkResult {
 
-        worker.transition(Status.Starting)
+        worker.move(Status.Starting)
         statusChanged?.invoke(worker)
 
         worker.info().forEach { println(it) }
         worker.init()
 
-        worker.transition(Status.Running)
+        worker.move(Status.Running)
         statusChanged?.invoke(worker)
 
         val result = worker.work(task)
         if(result.state == WorkState.Done && handleDone) {
-            worker.transition(Status.Complete)
+            worker.move(Status.Complete)
             statusChanged?.invoke(worker)
             worker.done()
         }
@@ -98,11 +98,11 @@ object Runner {
      */
     suspend fun <T> work(worker: Worker<T>): Try<WorkResult> {
         val result = Tries.attempt {
-            worker.transition(Status.Running)
-            worker.transition(Status.Running)
+            worker.move(Status.Running)
+            worker.move(Status.Running)
             val workResult = worker.work()
             if(workResult.state == WorkState.Done) {
-                worker.transition(Status.Complete)
+                worker.move(Status.Complete)
                 worker.done()
             }
             workResult
@@ -110,7 +110,7 @@ object Runner {
         when(result){
             is Success -> { }
             is Failure -> {
-                worker.transition(Status.Failed)
+                worker.move(Status.Failed)
                 worker.fail(result.error)
             }
         }

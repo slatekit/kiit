@@ -27,7 +27,7 @@ class JobDispatch(val job:Job, val workers: Workers, val events:JobEvents, val s
      */
     private suspend fun transition(action: JobAction, newStatus: Status, launch:Boolean, seconds:Long = 0) {
         JobUtils.perform(job, action, job.status(), launch, scope) {
-            //logger.log(Info, "Job:", listOf(nameKey, "transition" to newStatus.name))
+            //logger.log(Info, "Job:", listOf(nameKey, "move" to newStatus.name))
             job.setStatus(newStatus)
 
             scope.launch {

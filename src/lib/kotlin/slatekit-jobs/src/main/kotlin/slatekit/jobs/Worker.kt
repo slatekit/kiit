@@ -18,7 +18,7 @@ open class Worker<T>(override val id: Identity,
     /**
      * Transition current status to the one supplied
      */
-    override suspend fun transition(state: Status) {
+    override suspend fun move(state: Status) {
         _status.set(state)
         notify(state.name, null)
     }

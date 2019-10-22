@@ -123,8 +123,8 @@ class Example_Jobs : Command("utils"), CoroutineScope by MainScope() {
             }
 
             // Transition hook for when the status is changed ( e.g. from Status.Running -> Status.Paused )
-            override suspend fun transition(state: Status) {
-                notify("transition", listOf("status" to state.name))
+            override suspend fun move(state: Status) {
+                notify("move", listOf("status" to state.name))
             }
 
             // Completion hook ( for logic / logs / alerts )
