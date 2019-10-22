@@ -26,17 +26,6 @@ interface Events<T> {
 
 
 
-interface WorkEvents : Events<Worker<*>> {
-
-    /**
-     * Applies the policy to these workers
-     * Policies add behaviour to workers such as retries, limits, error ratios, etc
-     */
-    fun apply(policy: Policy<WorkRequest, WorkState>)
-}
-
-
-
 abstract class SubscribedEvents<T> : Events<T> {
     private val _changedSubscribers = mutableListOf<suspend (T) -> Unit>()
     private val _statusSubscribers = mutableMapOf<String, MutableList<suspend (T) -> Unit>>()
