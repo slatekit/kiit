@@ -62,7 +62,7 @@ class Job(val id:Identity,
           val ids: JobId = JobId(),
           val coordinator: Coordinator = coordinator(ids, logger),
           val scheduler: Scheduler = DefaultScheduler(),
-          val scope:CoroutineScope = scope()) : Management, StatusCheck, Events<Job> {
+          val scope:CoroutineScope = Jobs.scope) : Management, StatusCheck, Events<Job> {
     /**
      * Initialize with just a function that will handle the work
      */
@@ -81,7 +81,7 @@ class Job(val id:Identity,
      * Initialize with a list of functions to excecute work
      */
     constructor(id:Identity, lambdas: List<suspend (Task) -> WorkResult>, queue: Queue? = null, scope: CoroutineScope? = null)
-            : this(id, workers(id, lambdas), queue, scope = scope ?: scope())
+            : this(id, workers(id, lambdas), queue, scope = scope ?: Jobs.scope)
 
 
     val workers = Workers(id, all, coordinator, scheduler, logger, ids, 30)
@@ -156,15 +156,9 @@ class Job(val id:Identity,
      * Listens to incoming requests ( name of worker )
      */
     override suspend fun manage()  {
-    //{
-        //val j = scope.launch {
-            coordinator.consume { request ->
-                scope.launch {
-                    manage(request, false)
-                }
-            }
-        //}
-        //j.join()
+        coordinator.consume { request ->
+            manage(request, false)
+        }
     }
 
 
@@ -229,7 +223,7 @@ class Job(val id:Identity,
             else -> {
                 val worker = context.worker
                 val status = worker.status()
-                val task = nextTask()
+                val task = nextTask(context.id, context.task)
                 when(action) {
                     is JobAction.Start   -> JobUtils.perform(this, action, status, launch, scope) { workers.start(workerId, task) }
                     is JobAction.Stop    -> JobUtils.perform(this, action, status, launch, scope) { workers.stop(workerId, request.desc) }
@@ -252,12 +246,12 @@ class Job(val id:Identity,
     }
 
 
-    private fun nextTask(): Task {
+    private fun nextTask(id:Identity, empty:Task): Task {
         val task = when(queue) {
-            null -> Task.empty
+            null -> empty
             else -> {
                 val entry = queue.queue.next()
-                entry?.let { Task(it, queue) } ?: Task.empty
+                entry?.let { Task(id, it, queue) } ?: Task.empty
             }
         }
         return task
@@ -265,11 +259,6 @@ class Job(val id:Identity,
 
 
     companion object {
-
-        fun scope():CoroutineScope {
-            val scope = CoroutineScope(SupervisorJob() + Dispatchers.IO)
-            return scope
-        }
 
         fun worker(call:suspend() -> WorkResult) : suspend(Task) -> WorkResult {
             return { t ->
@@ -291,21 +280,5 @@ class Job(val id:Identity,
         fun coordinator(ids:JobId, logger: Logger):Coordinator {
             return ChannelCoordinator(logger, ids, Channel(Channel.UNLIMITED))
         }
-    }
-}
-
-
-class JobScope{
-    val scope = Job.scope()
-
-    suspend fun perform(job:slatekit.jobs.Job):kotlinx.coroutines.Job  {
-        scope.run {
-
-        }
-        val j = scope.launch {
-            job.start()
-            job.manage()
-        }
-        return j
     }
 }

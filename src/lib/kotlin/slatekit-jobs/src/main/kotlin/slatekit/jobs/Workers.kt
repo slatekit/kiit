@@ -1,7 +1,5 @@
 package slatekit.jobs
 
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.launch
 import slatekit.common.DateTime
 import slatekit.common.Status
 import slatekit.common.Identity
@@ -28,7 +26,7 @@ class Workers(val jobId:Identity,
               val pauseInSeconds:Long) : Events<Worker<*>> {
 
     private val events: Events<Worker<*>> = WorkerEvents(this)
-    private val lookup = all.map { it.id.id to WorkerContext(jobId, it, Recorder.of(it.id)) }.toMap()
+    private val lookup = all.map { it.id.id to WorkerContext(jobId, it, Recorder.of(it.id), Task.owned.copy(job = jobId.id)) }.toMap()
 
 
     /**
@@ -123,7 +121,6 @@ class Workers(val jobId:Identity,
 
     suspend fun resume(id: Identity, reason:String?, task: Task = Task.empty) {
         performPausableAction(Status.Running, id) { context, pausable ->
-            val worker = context.worker
             val result = Runner.record(context) {
                 pausable.resume(reason ?: "Resuming", task)
             }

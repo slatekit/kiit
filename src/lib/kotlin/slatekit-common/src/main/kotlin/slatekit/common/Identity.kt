@@ -41,7 +41,7 @@ data class SimpleIdentity(
      * Enforced naming convention for an application's identity
      * @sample: signup.alerts.job.qat
      */
-    override val name = "$area.$service.${agent.name.toLowerCase()}.${env.toLowerCase()}"
+    override val name = "$area.$service"
 
 
     /**
@@ -49,7 +49,7 @@ data class SimpleIdentity(
      * @sample: signup.alerts.job.qat.4a3b300b-d0ac-4776-8a9c-31aa75e412b3
      *
      */
-    override val id:String = "$$name.$instance"
+    override val id:String = "$$name.${agent.name.toLowerCase()}.${env.toLowerCase()}.$instance"
 
     fun newInstance():SimpleIdentity = this.copy(instance = UUID.randomUUID().toString())
 }

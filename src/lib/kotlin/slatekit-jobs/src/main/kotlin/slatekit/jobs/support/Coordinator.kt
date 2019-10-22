@@ -34,7 +34,7 @@ interface Coordinator {
     /**
      * Attempts to respond/handle to a command for a job/worker
      */
-    suspend fun consume(operation:(Command) -> Unit )
+    suspend fun consume(operation:suspend (Command) -> Unit )
 }
 
 
@@ -51,7 +51,7 @@ class ChannelCoordinator(override val logger: Logger, override val ids: JobId, v
     }
 
 
-    override suspend fun consume(operation:(Command) -> Unit ) {
+    override suspend fun consume(operation:suspend (Command) -> Unit ) {
         for (cmd in channel) {
             operation(cmd)
             yield()
