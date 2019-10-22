@@ -22,7 +22,7 @@ class WorkExecutor(val context: WorkerContext,
      */
     suspend fun execute(task:Task):Outcome<WorkResult> {
         return when(context.policies.isEmpty()) {
-            true  -> direct(task)
+            true  -> record(task)
             false -> impose(task)
         }
     }
