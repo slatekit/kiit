@@ -13,9 +13,7 @@ usage: Please refer to license on github for more info.
 package slatekit.examples
 
 //<doc:import_required>
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.*
 import slatekit.common.*
 //</doc:import_required>
 
@@ -35,7 +33,7 @@ import java.util.concurrent.atomic.AtomicInteger
 //</doc:import_examples>
 
 
-class Example_Jobs : Command("utils") {
+class Example_Jobs : Command("utils"), CoroutineScope by MainScope() {
 
     override fun execute(request: CommandRequest): Try<Any> {
         //<doc:setup>
@@ -147,27 +145,28 @@ class Example_Jobs : Command("utils") {
 
         //<doc:examples>
         runBlocking {
-            // Sample 1: JOB that runs to completion
-            val job1 = slatekit.jobs.Job(id.copy(service = "job1"), ::sendNewsLetter)
-            job1.start()   // Job dispatch
-            job1.respond() // Work dispatch
-            job1.respond() // Work start/finish
-            println(job1.status())
-
-            // Sample 2: JOB ( 2 Workers ) constructor with list of 2 functions which will create 2 workers
-            val job2 = slatekit.jobs.Job(id.copy(service = "job2"), listOf(worker(::sendNewsLetter), worker(::sendNewsLetterWithPaging)))
-            job2.start()
-            job2.respond() // Work dispatch
-            job2.respond() // Work start/finish
-            job2.respond() // Work start/finish
+//            // Sample 1: JOB that runs to completion
+//            val job1 = slatekit.jobs.Job(id.copy(service = "job1"), ::sendNewsLetter, scope = this)
+//            job1.start()   // Job dispatch
+//            job1.respond() // Work dispatch
+//            job1.respond() // Work start/finish
+//            println(job1.status())
+//
+//            // Sample 2: JOB ( 2 Workers ) constructor with list of 2 functions which will create 2 workers
+//            val job2 = slatekit.jobs.Job(id.copy(service = "job2"), listOf(worker(::sendNewsLetter), worker(::sendNewsLetterWithPaging)), scope = this)
+//            job2.start()
+//            job2.respond() // Work dispatch
+//            job2.respond() // Work start/finish
+//            job2.respond() // Work start/finish
 
             // Sample 3: JOB ( Paged )
-            val job3 = slatekit.jobs.Job(id.copy(service = "job3"), listOf(worker(::sendNewsLetterWithPaging)))
-            job3.start()   // Job dispatch
-            job3.respond() // Work dispatch
-            job3.respond() // Work start/finish
-            job3.respond() // Work start/finish
-            println(job1.status())
+
+            val jscope = JobScope()
+            val job3 = slatekit.jobs.Job(id.copy(service = "job3"), listOf(worker(::sendNewsLetterWithPaging)), scope = jscope.scope)
+            val j = jscope.perform(job3)
+            j.join()
+            //Thread.sleep(10000)
+            println(job3.status())
 
             // Sample 4: JOB ( Events ) + Subscribe to worker status changes
             val job4 = slatekit.jobs.Job(id.copy(service = "job4"), listOf(worker(::sendNewsLetterWithPaging)))
@@ -188,7 +187,7 @@ class Example_Jobs : Command("utils") {
             job5.respond() // Work dispatch
             job5.respond() // Work start/finish
             job5.respond() // Work start/finish
-            println(job1.status())
+            println(job5.status())
 
             // Sample 5: JOB ( Policies ) with policies to add behavior / strategies to worker, this adds:
             // 1. a callback for every 10 items processed
@@ -206,9 +205,7 @@ class Example_Jobs : Command("utils") {
             job7.start()
 
             // Kick off the jobs by
-            job1.respond()
-            job2.respond()
-            job3.respond()
+            //job3.respond()
             job4.respond()
             job5.respond()
             job6.respond()
