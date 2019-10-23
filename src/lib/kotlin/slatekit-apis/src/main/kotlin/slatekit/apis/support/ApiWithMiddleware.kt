@@ -13,12 +13,14 @@
 
 package slatekit.apis.support
 
-import slatekit.apis.middleware.Filter
-import slatekit.apis.middleware.Hook
-
-typealias Error = slatekit.apis.middleware.Error
+import slatekit.apis.ApiRequest
+import slatekit.functions.middleware.Filter
+import slatekit.functions.middleware.Hooks
 
 /**
  * Base class for an Api with all the middleware ( hooks, filters, errors )
  */
-interface ApiWithMiddleware : Api, Hook, Filter, Error
+interface ApiWithMiddleware : Api,
+        Hooks<ApiRequest, Any?>,
+        Filter<ApiRequest>,
+        slatekit.functions.middleware.Error<ApiRequest, Any?>
