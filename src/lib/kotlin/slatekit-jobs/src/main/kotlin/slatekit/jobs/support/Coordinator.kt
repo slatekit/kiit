@@ -1,6 +1,7 @@
 package slatekit.jobs.support
 
 import kotlinx.coroutines.channels.Channel
+import kotlinx.coroutines.channels.consumeEach
 import kotlinx.coroutines.yield
 import slatekit.common.Status
 import slatekit.common.log.Logger
@@ -21,37 +22,38 @@ interface Coordinator {
     /**
      * Sends a command to manage the job/worker
      */
-    suspend fun request(cmd: Command)
+    suspend fun send(cmd: Command)
 
 
     /**
      * Attempts to respond/handle to a command for a job/worker
      */
-    suspend fun respondOne(): Command?
+    suspend fun poll(): Command?
 
 
     /**
      * Attempts to respond/handle to a command for a job/worker
      */
-    suspend fun respond(operation:suspend (Command) -> Unit )
+    suspend fun consume(operation:suspend (Command) -> Unit )
 }
+
 
 
 class ChannelCoordinator(override val logger: Logger, override val ids: JobId, val channel: Channel<Command>) : Coordinator {
 
-    override suspend fun request(request: Command){
+    override suspend fun send(request: Command){
         channel.send(request)
     }
 
 
-    override suspend fun respondOne(): Command? {
-        return channel.receive()
+    override suspend fun poll(): Command? {
+        return channel.poll()
     }
 
 
-    override suspend fun respond(operation:suspend (Command) -> Unit ) {
-        for(request in channel){
-            operation(request)
+    override suspend fun consume(operation:suspend (Command) -> Unit ) {
+        for (cmd in channel) {
+            operation(cmd)
             yield()
         }
     }

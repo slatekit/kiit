@@ -64,7 +64,6 @@ interface Management {
      */
     suspend fun request(command: Command)
 
-
     /**
      * Listens to and handles 1 request
      */

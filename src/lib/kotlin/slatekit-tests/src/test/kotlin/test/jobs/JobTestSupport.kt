@@ -36,7 +36,7 @@ interface JobTestSupport {
         val coordinator = MockCoordinatorWithChannel(logger, ids, Channel(Channel.UNLIMITED))
         val id = (workers.first().id as SimpleIdentity)
         val jobId = id.copy(service = id.service + "-job")
-        val manager = Job(jobId,workers, queue, coordinator,  MockScheduler(), logger, ids)
+        val manager = slatekit.jobs.Job(jobId,workers, queue, logger, ids, coordinator,  MockScheduler())
         return manager
     }
 

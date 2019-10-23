@@ -21,16 +21,16 @@ open class MockCoordinator(override val logger: Logger, override val ids: JobId)
 
     val requests = mutableListOf<Command>()
 
-    override suspend fun request(jobRequest: Command) {
+    override suspend fun send(jobRequest: Command) {
         requests.add(jobRequest)
     }
 
-    override suspend fun respondOne(): Command? {
+    override suspend fun poll(): Command? {
         return requests.firstOrNull()
     }
 
 
-    override suspend fun respond(operation:suspend (Command) -> Unit ) {
+    override suspend fun consume(operation:suspend (Command) -> Unit ) {
         for(request in requests){
             operation(request)
         }
@@ -43,7 +43,7 @@ class MockCoordinatorWithChannel(logger: Logger, ids: JobId, val channel: Channe
     private var pauses = mutableListOf<Command>()
 
 
-    override suspend fun request(request: Command){
+    override suspend fun send(request: Command){
 //        logger.log(Info, "Coordinator: Adding", listOf(
 //                "target" to request.target,
 //                "id" to request.id.toString(),
@@ -52,17 +52,17 @@ class MockCoordinatorWithChannel(logger: Logger, ids: JobId, val channel: Channe
         if(request is Command.WorkerCommand && request.action == JobAction.Resume) {
             pauses.add(request)
         } else {
-            send(request)
+            sendInternal(request)
         }
     }
 
 
-    override suspend fun respondOne(): Command? {
+    override suspend fun poll(): Command? {
         return channel.receive()
     }
 
 
-    override suspend fun respond(operation:suspend (Command) -> Unit ) {
+    override suspend fun consume(operation:suspend (Command) -> Unit ) {
         for(request in channel){
             operation(request)
         }
@@ -72,12 +72,12 @@ class MockCoordinatorWithChannel(logger: Logger, ids: JobId, val channel: Channe
     suspend fun resume(){
         if(pauses.isNotEmpty()){
             val req = pauses.removeAt(pauses.lastIndex)
-            send(req)
+            sendInternal(req)
         }
     }
 
 
-    private suspend fun send(request: Command){
+    private suspend fun sendInternal(request: Command){
         channel.send(request)
         requests.add(request)
     }

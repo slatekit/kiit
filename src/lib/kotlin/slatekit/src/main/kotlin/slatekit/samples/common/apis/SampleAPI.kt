@@ -29,7 +29,7 @@ class SampleApi(context: Context) : ApiBase(context) {
     }
 
 
-    @ApiAction(desc = "accepts supplied basic data types from request")
+    @ApiAction(desc = "accepts supplied basic data types from send")
     fun hello(greeting: String): String {
         return "$greeting back"
     }
@@ -78,7 +78,7 @@ class SampleApi(context: Context) : ApiBase(context) {
     }
 
 
-    @ApiAction(desc = "test access to request")
+    @ApiAction(desc = "test access to send")
     fun request(request: Request, greeting: String): String {
         val greetFromBody = request.data.getString("greeting")
         return "auto mapped: $greeting, manual get from body: $greetFromBody"
@@ -122,7 +122,7 @@ class SampleApi(context: Context) : ApiBase(context) {
     }
 
 
-    @ApiAction(desc = "accepts supplied basic data types from request")
+    @ApiAction(desc = "accepts supplied basic data types from send")
     fun inputBasicTypes(string1: String, bool1: Boolean, numShort: Short, numInt: Int, numLong: Long, numFloat: Float, numDouble: Double, date: DateTime): String {
         return "$string1, $bool1, $numShort $numInt, $numLong, $numFloat, $numDouble, $date"
     }

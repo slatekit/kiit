@@ -130,7 +130,7 @@ class Workers_Tests {
         val worker = PagedWorker(0, 5, 2)
         val logger = LoggerConsole()
         val ids = JobId()
-        val workers = Workers(listOf(worker), MockCoordinator(logger, ids), MockScheduler(), logger,ids, 20)
+        val workers = Workers(worker.id, listOf(worker), MockCoordinator(logger, ids), MockScheduler(), logger,ids, 20)
         return workers
     }
 }

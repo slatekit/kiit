@@ -15,7 +15,7 @@ interface Workable<T> : StatusCheck {
     /**
      * Stats on this worker
      */
-    val stats:WorkerStats
+    val stats:Recorder
 
 
     /**
@@ -68,7 +68,7 @@ interface Workable<T> : StatusCheck {
     /**
      * Transition current status to the one supplied
      */
-    suspend fun transition(state: Status) {
+    suspend fun move(state: Status) {
         notify(state.name, null)
     }
 

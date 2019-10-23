@@ -54,7 +54,7 @@ class Api_Core_Tests : ApiTestsBase() {
             request  = CommonRequest.path("app.users.argTypeRequest", "get", mapOf(), mapOf(
                 Pair("id", "2")
             )),
-            response = Success("ok", msg = "raw request id: 2").toResponse()
+            response = Success("ok", msg = "raw send id: 2").toResponse()
         )
     }
 

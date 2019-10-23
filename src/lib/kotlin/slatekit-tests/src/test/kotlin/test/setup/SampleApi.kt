@@ -12,7 +12,7 @@ import slatekit.integration.common.AppEntContext
     auth = AuthModes.token, roles= "admin", verb = Verbs.auto, protocol = Protocols.all)
 class SampleApi(context: AppEntContext): ApiBase(context) {
 
-    @ApiAction(desc = "accepts supplied basic data types from request")
+    @ApiAction(desc = "accepts supplied basic data types from send")
     fun defaultAnnotationValues(string1: String): String {
         return "$string1"
     }

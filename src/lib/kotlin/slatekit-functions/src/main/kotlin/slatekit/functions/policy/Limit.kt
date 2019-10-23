@@ -1,5 +1,6 @@
 package slatekit.functions.policy
 
+import slatekit.common.log.Logger
 import slatekit.common.metrics.Counters
 import slatekit.results.Codes
 import slatekit.results.Outcome
@@ -10,11 +11,13 @@ import slatekit.results.builders.Outcomes
  * @param I : Input type
  * @param O : Output type
  */
-class Limit<I, O>(val limit: Long, val stats: (I) -> Counters) : Policy<I, O> {
+class Limit<I, O>(val limit: Long, val stats: (I) -> Counters, val logger: Logger? = null) : Policy<I, O> {
 
     override suspend fun run(i: I, operation: suspend (I) -> Outcome<O>): Outcome<O> {
         val counts = stats(i)
-        val pastLimit = counts.totalProcessed() >= limit
+        val processed = counts.totalProcessed()
+        val pastLimit = processed >= limit
+        logger?.info("LIMIT: processed = $processed")
         return if (pastLimit) {
             Outcomes.errored(Codes.LIMITED)
         } else {

@@ -1,4 +1,4 @@
-package test.jobs
+package test.functions
 
 import kotlinx.coroutines.runBlocking
 import org.junit.Assert

@@ -39,7 +39,7 @@ class StatusTests {
     fun assertCheck(status:Status, check:(MyWorker) -> Boolean ) {
         // Test
         val worker = MyWorker()
-        runBlocking {  worker.transition(status) }
+        runBlocking {  worker.move(status) }
         val condition = check(worker)
         Assert.assertTrue(condition)
     }

@@ -157,7 +157,7 @@ class UserApi(context: AppEntContext)
 
   @ApiAction(desc = "", roles= "*", verb = "post", protocol = "@parent")
   fun argTypeRequest(req: Request): Notice<String> {
-    return Success("ok", msg ="raw request id: " + req.data!!.getInt("id"))
+    return Success("ok", msg ="raw send id: " + req.data!!.getInt("id"))
   }
 
 

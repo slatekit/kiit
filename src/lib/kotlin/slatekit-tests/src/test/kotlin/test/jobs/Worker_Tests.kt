@@ -5,13 +5,12 @@ import org.junit.Assert
 import org.junit.Test
 import slatekit.common.Status
 import slatekit.common.Identity
+import slatekit.jobs.WorkResult
 import slatekit.jobs.WorkState
 import slatekit.jobs.Worker
 import slatekit.jobs.support.Runner
 
-
-@Test
-fun testC(){
+class Worker_Tests {
 
     @Test
     fun can_setup() {
@@ -21,7 +20,7 @@ fun testC(){
         Assert.assertEquals(worker.id.area , "tests")
         Assert.assertEquals(worker.id.service, "OneTimeWorker")
         Assert.assertEquals(worker.id.env  , "dev")
-        Assert.assertEquals(worker.id.name , "tests.OneTimeWorker.test.dev")
+        Assert.assertEquals(worker.id.name , "tests.OneTimeWorker")
 
         // Status
         Assert.assertEquals(worker.status(), Status.InActive)
@@ -37,7 +36,7 @@ fun testC(){
 
         // Info
         val info = worker.info()
-        Assert.assertEquals(info[0], "id.name" to "tests.OneTimeWorker.test.dev")
+        Assert.assertEquals(info[0], "id.name" to "tests.OneTimeWorker")
         Assert.assertEquals(info[1], "app.attemptStart" to "0")
         Assert.assertEquals(info[2], "app.end" to "3")
     }
@@ -69,21 +68,21 @@ fun testC(){
         Assert.assertTrue(result1.success)
         Assert.assertEquals(worker.currentValue(), 3)
         Assert.assertEquals(worker.status(), Status.Running)
-        result1.map { Assert.assertEquals(it, WorkState.More) }
+        result1.map { Assert.assertEquals(it, WorkResult(WorkState.More)) }
 
         // Work more
         val result2 = runBlocking { Runner.work(worker) }
         Assert.assertTrue(result2.success)
         Assert.assertEquals(worker.currentValue(), 6)
         Assert.assertEquals(worker.status(), Status.Running)
-        result2.map { Assert.assertEquals(it, WorkState.More) }
+        result2.map { Assert.assertEquals(it, WorkResult(WorkState.More)) }
 
         // Work last time ( limit 9 )
         val result3 = runBlocking {  Runner.work(worker) }
         Assert.assertTrue(result3.success)
         Assert.assertEquals(worker.currentValue(), 9)
         Assert.assertEquals(worker.status(), Status.Complete)
-        result3.map { Assert.assertEquals(it, WorkState.Done) }
+        result3.map { Assert.assertEquals(it, WorkResult(WorkState.Done)) }
     }
 
 
@@ -100,7 +99,7 @@ fun testC(){
         Assert.assertEquals(flows[1], "work")
         Assert.assertEquals(flows[2], "done")
         result.map {
-            Assert.assertEquals(it, WorkState.Done)
+            Assert.assertEquals(it, WorkResult(WorkState.Done))
         }
     }
 

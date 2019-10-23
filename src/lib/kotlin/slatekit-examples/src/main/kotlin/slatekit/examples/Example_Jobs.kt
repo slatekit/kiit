@@ -23,6 +23,7 @@ import slatekit.cmds.Command
 import slatekit.cmds.CommandRequest
 import slatekit.functions.policy.Every
 import slatekit.functions.policy.Limit
+import slatekit.functions.policy.Policy
 import slatekit.functions.policy.Ratio
 import slatekit.jobs.*
 import slatekit.jobs.Job.Companion.worker
@@ -43,26 +44,28 @@ class Example_Jobs : Command("utils"), CoroutineScope by MainScope() {
 
         val NEWS_LETTER_MESSAGE = "New version coming out soon!"
 
-        // Sample list of users
+        // Sample list of 20 users
         val allUsers = (1..20).map { User(it, "user$it@company1.com")}
 
         // Sends the message ( newsletter ) to the user
-        suspend fun send(msg:String, user:User) {
+        suspend fun send(sender:String, msg:String, user:User) {
             // Simulate sending message to user
-            runBlocking { println("Sent $msg to ${user.email}") }
+            runBlocking { println("Source: ${sender}: Sent $msg to ${user.email}") }
         }
 
         // NOTE: This is a helper method used for the real example(s) below
-        suspend fun sendNewsLetterBatch(offset:AtomicInteger, batchSize:Int):WorkResult {
+        suspend fun sendNewsLetterBatch(sender:String, offset:AtomicInteger, batchSize:Int):WorkResult {
             val start = offset.get()
-            val users = allUsers.subList(start, start + batchSize)
+            val users = if(start < 0 || start >= allUsers.size) listOf()
+            else allUsers.subList(start, start + batchSize)
+
 
             // No more records so indicate done
             if(users.isEmpty())
                 return WorkResult(WorkState.Done)
 
             // Get next page of records
-            users.forEach { user -> send("New version coming out soon!", user) }
+            users.forEach { user -> send(sender,"New version coming out soon!", user) }
 
             // Update offset and totals
             offset.addAndGet(users.size)
@@ -76,16 +79,16 @@ class Example_Jobs : Command("utils"), CoroutineScope by MainScope() {
 
 
         // Option 1: Use a function for a job that runs to completion
-        suspend fun sendNewsLetter():WorkResult {
-            allUsers.forEach { user -> send(NEWS_LETTER_MESSAGE, user) }
+        suspend fun sendNewsLetter(task: Task):WorkResult {
+            allUsers.forEach { user -> send(task.job, NEWS_LETTER_MESSAGE, user) }
             return WorkResult(WorkState.Done)
         }
 
 
         // Option 2: Use a function for a job that pages through work
         val offset1 = AtomicInteger(0)
-        suspend fun sendNewsLetterWithPaging():WorkResult {
-            return sendNewsLetterBatch(offset1, 4)
+        suspend fun sendNewsLetterWithPaging(task: Task):WorkResult {
+            return sendNewsLetterBatch(task.job, offset1, 4)
         }
 
 
@@ -93,7 +96,7 @@ class Example_Jobs : Command("utils"), CoroutineScope by MainScope() {
         suspend fun sendNewsLetterFromQueue(task: Task):WorkResult {
             val userId = task.data.toInt()
             val user = allUsers.first { it.id == userId }
-            send(NEWS_LETTER_MESSAGE, user)
+            send(task.job, NEWS_LETTER_MESSAGE, user)
 
             // Acknowledge the task or abandon task.fail()
             task.done()
@@ -116,12 +119,12 @@ class Example_Jobs : Command("utils"), CoroutineScope by MainScope() {
             // Implement your work here.
             // NOTE: If you are not using a queue, this task will be empty e.g. Task.empty
             override suspend fun work(task:Task): WorkResult {
-                return sendNewsLetterBatch(offset, 4)
+                return sendNewsLetterBatch(task.job, offset, 4)
             }
 
             // Transition hook for when the status is changed ( e.g. from Status.Running -> Status.Paused )
-            override suspend fun transition(state: Status) {
-                notify("transition", listOf("status" to state.name))
+            override suspend fun move(state: Status) {
+                notify("move", listOf("status" to state.name))
             }
 
             // Completion hook ( for logic / logs / alerts )
@@ -145,75 +148,70 @@ class Example_Jobs : Command("utils"), CoroutineScope by MainScope() {
 
         //<doc:examples>
         runBlocking {
-//            // Sample 1: JOB that runs to completion
-//            val job1 = slatekit.jobs.Job(id.copy(service = "job1"), ::sendNewsLetter, scope = this)
-//            job1.start()   // Job dispatch
-//            job1.respond() // Work dispatch
-//            job1.respond() // Work start/finish
-//            println(job1.status())
-//
-//            // Sample 2: JOB ( 2 Workers ) constructor with list of 2 functions which will create 2 workers
-//            val job2 = slatekit.jobs.Job(id.copy(service = "job2"), listOf(worker(::sendNewsLetter), worker(::sendNewsLetterWithPaging)), scope = this)
-//            job2.start()
-//            job2.respond() // Work dispatch
-//            job2.respond() // Work start/finish
-//            job2.respond() // Work start/finish
 
-            // Sample 3: JOB ( Paged )
+            // Queues
+            val queue1 = Queue("queue1", Priority.Mid, QueueSourceInMemory.stringQueue(5))
+            val queue2 = Queue("queue2", Priority.Mid, QueueSourceInMemory.stringQueue(5))
 
-            val jscope = JobScope()
-            val job3 = slatekit.jobs.Job(id.copy(service = "job3"), listOf(worker(::sendNewsLetterWithPaging)), scope = jscope.scope)
-            val j = jscope.perform(job3)
-            j.join()
-            //Thread.sleep(10000)
-            println(job3.status())
+            // Registry
+            val jobs = Jobs(
+                    listOf(queue1, queue2),
+                    listOf(
+                            slatekit.jobs.Job(id.copy(service = "job1"), ::sendNewsLetter),
+                            slatekit.jobs.Job(id.copy(service = "job2"), listOf(::sendNewsLetter, ::sendNewsLetterWithPaging)),
+                            slatekit.jobs.Job(id.copy(service = "job3"), listOf(::sendNewsLetterWithPaging)),
+                            slatekit.jobs.Job(id.copy(service = "job4"), listOf(::sendNewsLetterWithPaging)),
+                            slatekit.jobs.Job(id.copy(service = "job5"), listOf(::sendNewsLetterFromQueue), queue1),
+                            slatekit.jobs.Job(id.copy(service = "job6"), listOf(NewsLetterWorker()), queue2),
 
-            // Sample 4: JOB ( Events ) + Subscribe to worker status changes
-            val job4 = slatekit.jobs.Job(id.copy(service = "job4"), listOf(worker(::sendNewsLetterWithPaging)))
-            job4.subscribe { println("Job ${it.id.name} status changed to : ${it.status()}")}
-            job4.subscribe(Status.Complete) { println("Job ${it.id.name} completed")}
-            job4.workers.subscribe { it ->  println("Worker ${it.id.name}")}
-            job4.workers.subscribe { it ->  println("Worker ${it.id.name} completed")}
-            job4.start()   // Job dispatch
-            job4.respond() // Work dispatch
-            job4.respond() // Work start/finish
-            job4.respond() // Work start/finish
+                            slatekit.jobs.Job(id.copy(service = "job7"), listOf(::sendNewsLetterWithPaging), policies = listOf(
+                                    Every(10) { req, res -> println("Paged : " + req.task.id + ":" + res.msg) },
+                                    Limit(12) { req -> req.context.stats.counts },
+                                    Ratio(.1, slatekit.results.Status.Errored(0, "")) { req -> req.context.stats.counts }
+                                )
+                            )
+                    )
+            )
 
-            // Sample 4: JOB ( Queued ) + Subscribe to worker status changes
-            val queue1 = Queue("sample_queue", Priority.Mid, QueueSourceInMemory.stringQueue(5))
-            queue1.queue.send("3", mapOf("id" to "3", "name" to "newsletter", "data" to "3"))
-            val job5 = slatekit.jobs.Job(id.copy(service = "job5"), listOf(::sendNewsLetterFromQueue), queue1)
-            job5.start()   // Job dispatch
-            job5.respond() // Work dispatch
-            job5.respond() // Work start/finish
-            job5.respond() // Work start/finish
-            println(job5.status())
-
-            // Sample 5: JOB ( Policies ) with policies to add behavior / strategies to worker, this adds:
-            // 1. a callback for every 10 items processed
-            // 2. a limit to processing at most 12 items ( to support running a job in "waves" )
-            // 3. a threshold / error limit of .1 ( 10% )
-            val job6 = slatekit.jobs.Job(id.copy(service = "job6"), listOf(worker(::sendNewsLetterWithPaging)))
-            job6.workers.policy(Every(10) { req, res -> println(req.task.id + ":" + res.msg) })
-            job6.workers.policy(Limit(12) { req -> req.context.stats.counts } )
-            job6.workers.policy(Ratio(.1, slatekit.results.Status.Errored(0, "")) { req -> req.context.stats.counts } )
-            job6.start()
-
-            // Sample 7: JOB ( Worker ) implementation with queue
-            val queue2 = Queue("sample_queue", Priority.Mid, QueueSourceInMemory.stringQueue(5))
-            val job7 = slatekit.jobs.Job(id.copy(service = "job7"), listOf(NewsLetterWorker()), queue2)
-            job7.start()
-
-            // Kick off the jobs by
-            //job3.respond()
-            job4.respond()
-            job5.respond()
-            job6.respond()
-
-            // Delay for 30 seconds
-            delay(30000)
+            jobs.run("samples.job7")
+            //jobs.run("samples.job2")
+            delay(50000)
         }
         //</doc:examples>
         return Success("")
+    }
+
+
+    private suspend fun runSamples(jobs:Jobs){
+
+        // Sample 1: JOB that runs to completion
+        jobs.respond("samples.job1", 2, start = true)
+
+        // Sample 2: JOB ( 2 Workers ) constructor with list of 2 functions which will create 2 workers
+        jobs.respond("samples.job2", 3, start = true)
+
+        // Sample 3: JOB ( Paged )
+        jobs.run("samples.job3")
+
+        // Sample 4: JOB ( Events ) + Subscribe to worker status changes
+        jobs["samples.job4"]?.let { job ->
+            job.subscribe { println("Job ${it.id.name} status changed to : ${it.status().name}") }
+            job.subscribe(Status.Complete) { println("Job ${it.id.name} completed") }
+            job.workers.subscribe { it -> println("Worker ${it.id.name}: status = ${it.status().name}") }
+            job.workers.subscribe(Status.Complete) { it -> println("Worker ${it.id.name} completed") }
+        }
+        jobs.respond("samples.job4", 7, start = true)
+
+        // Sample 5: JOB ( Queued ) + Subscribe to worker status changes
+        jobs.respond("samples.job5", 3, start = true)
+
+        // Sample 6: JOB ( Worker ) implementation with queue
+        jobs.start("samples.job6")
+
+        // Sample 7: JOB ( Policies ) with policies to add behavior / strategies to worker, this adds:
+        // 1. a callback for every 10 items processed
+        // 2. a limit to processing at most 12 items ( to support running a job in "waves" )
+        // 3. a threshold / error limit of .1 ( 10% )
+        jobs.respond("samples.job7", 4)
     }
 }
