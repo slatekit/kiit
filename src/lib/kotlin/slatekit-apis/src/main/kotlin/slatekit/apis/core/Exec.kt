@@ -12,10 +12,6 @@ mantra: Simplicity above all else
  */
 package slatekit.apis.core
 
-import slatekit.apis.middleware.Filter
-import slatekit.apis.middleware.Handler
-import slatekit.apis.middleware.Hook
-import slatekit.apis.middleware.Tracked
 import slatekit.common.log.Logger
 import slatekit.common.toResponse
 import slatekit.results.Try

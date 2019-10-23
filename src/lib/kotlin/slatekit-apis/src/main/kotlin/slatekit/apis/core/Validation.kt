@@ -17,7 +17,6 @@ import slatekit.apis.*
 import slatekit.apis.helpers.ApiHelper
 import slatekit.apis.helpers.ApiUtils
 import slatekit.apis.helpers.ApiValidator
-import slatekit.apis.middleware.Filter
 import slatekit.apis.security.WebProtocol
 import slatekit.common.requests.Request
 import slatekit.results.*
