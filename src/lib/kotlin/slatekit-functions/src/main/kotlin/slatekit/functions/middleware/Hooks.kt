@@ -20,4 +20,4 @@ package slatekit.functions.middleware
  * NOTE: The hooks are applied right before and after the call to the action
  *
  */
-interface Hook<TReq, TRes> : Middleware, Before<TReq>, After<TReq, TRes>
+interface Hooks<TReq, TRes> : Middleware, Before<TReq>, After<TReq, TRes>

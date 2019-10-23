@@ -18,5 +18,5 @@ interface Error<TReq, TRes> : Middleware {
      * @sample: slatekit.results.Success("")
      */
     @Ignore
-    suspend fun onError(req: TReq, res:Outcome<TRes>): Outcome<TRes>
+    suspend fun onError(req: TReq, res:Outcome<TRes>)
 }
