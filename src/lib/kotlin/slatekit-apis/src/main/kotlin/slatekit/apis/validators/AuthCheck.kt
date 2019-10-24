@@ -17,8 +17,8 @@ class AuthCheck {
         val auth = request.host.auth
         val target = request.target!!
         val noAuth = auth == null // || target.api.auth.isNullOrEmpty()
-        val isActionNotAuthed = ApiHelper.isActionNotAuthed(target.action.roles)
-        val isApiNotAuthed = ApiHelper.isApiNotAuthed(target.action.roles, target.api.roles)
+        val isActionNotAuthed = ApiHelper.isActionNotAuthed(target.action.roles.all.first())
+        val isApiNotAuthed = ApiHelper.isApiNotAuthed(target.action.roles.all.first(), target.api.roles.all.first())
 
         // CASE 1: No auth for action
         val result = if (noAuth && isActionNotAuthed) {
@@ -33,8 +33,8 @@ class AuthCheck {
             Outcomes.denied("Unable to authorize, authorization provider not set")
         } else {
             // auth-mode, action roles, api roles
-            val authResult = auth?.isAuthorized(request.request, target.api.auth, target.action.roles, target.api.roles)
-                    ?: Notices.denied("Unable to authorize, authorization provider not set")
+            val authResult = auth?.check(request.request, target.api.auth, target.action.roles, target.api.roles)
+                    ?: Outcomes.denied("Unable to authorize, authorization provider not set")
             authResult.transform( { Outcomes.success(request) }, { e -> Outcomes.errored(e) } )
         }
 

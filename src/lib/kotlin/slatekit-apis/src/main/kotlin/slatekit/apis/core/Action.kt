@@ -13,6 +13,8 @@
 
 package slatekit.apis.core
 
+import slatekit.apis.security.Protocols
+import slatekit.apis.security.Roles
 import slatekit.apis.setup.Access
 import slatekit.apis.setup.AuthMode
 import slatekit.apis.setup.Protocol
@@ -37,14 +39,14 @@ data class Action(
         val member: KCallable<*>,
         val name: String = "",
         val desc: String = "",
-        val roles: List<String> = listOf(),
+        val roles: Roles = Roles.empty,
         val auth: AuthMode = AuthMode.Token,
         val access: Access = Access.Public,
-        val protocols: List<Protocol> = listOf(Protocol.All),
+        val protocols: Protocols = Protocols.all,
         val verb: Verb = Verb.Auto,
         val tags: List<String> = listOf()
 ) {
-    val protocol = protocols.first()
+    val protocol = protocols.all.first()
 
     /**
      * All the parameters of the function, this includes:

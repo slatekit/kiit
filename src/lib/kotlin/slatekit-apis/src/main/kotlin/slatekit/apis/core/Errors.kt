@@ -16,43 +16,37 @@ import slatekit.apis.ApiRequest
 import slatekit.common.Context
 import slatekit.common.requests.Request
 import slatekit.common.log.Logger
+import slatekit.results.Outcome
 import slatekit.results.Try
 import slatekit.results.builders.Outcomes
 import slatekit.results.builders.Tries
 
-class Errors(val logger: Logger) {
+open class Errors(val logger: Logger, val errs: slatekit.functions.middleware.Error<ApiRequest, Any?>?) {
 
-    open fun handleError(
-            ctx: Context,
-            errs: slatekit.functions.middleware.Error<ApiRequest, Any?>?,
-            api: slatekit.apis.core.Api?,
-            apiRef: Target?,
-            req: Request,
-            ex: Exception
-    ): Try<Any> {
-        // OPTION 1: Api level
-        return if (apiRef != null && apiRef.instance is slatekit.functions.middleware.Error<*,*>) {
-            logger.debug("Handling error at api level")
-            val apiReq = ApiRequest(ctx, req, apiRef, this, null)
-            val middleware = apiRef.instance as slatekit.functions.middleware.Error<ApiRequest,Any?>
-            val error = Outcomes.errored<ApiRequest>(ex)
-            //middleware.onError(apiReq, error)
-            error.toTry()
-        }
-        // OPTION 2: GLOBAL Level custom handler
-        else if (errs != null) {
-            logger.debug("Handling error at global middleware")
-            val apiReq = ApiRequest(ctx, req, apiRef, this, null)
-            val error = Outcomes.errored<ApiRequest>(ex)
-            //errs.onError(apiReq, error)
-            error.toTry()
-        }
-        // OPTION 3: GLOBAL Level default handler
-        else {
-            logger.debug("Handling error at global container")
-            handleErrorInternally(req, ex)
+    suspend open fun handleError(req:ApiRequest, ex: Exception): Outcome<Any> {
+        val target = req.target
+        return when {
+            target == null -> {
+                // OPTION 1: GLOBAL Level default handler
+                // logger.debug("Handling error at global container")
+                handleErrorInternally(req.request, ex)
+            }
+            target.instance is slatekit.functions.middleware.Error<*,*> -> {
+                logger.info("Handling error at api level")
+                val error = Outcomes.errored<ApiRequest>(ex)
+                val errors = target.instance as slatekit.functions.middleware.Error<ApiRequest,Any?>
+                errors.onError(req, error)
+                error
+            }
+            else -> {
+                logger.debug("Handling error at global middleware")
+                val error = Outcomes.errored<ApiRequest>(ex)
+                errs?.onError(req, error)
+                error
+            }
         }
     }
+
 
     /**
      * global handler for an unexpected error ( for derived classes to override )
@@ -62,8 +56,8 @@ class Errors(val logger: Logger) {
      * @param ex : the exception
      * @return
      */
-    fun handleErrorInternally(req: Request, ex: Exception): Try<Any> {
+    fun handleErrorInternally(req: Request, ex: Exception): Outcome<Any> {
         val msg = "error executing : " + req.path + ", check inputs"
-        return Tries.unexpected(Exception(msg, ex))
+        return Outcomes.unexpected(Exception(msg, ex))
     }
 }

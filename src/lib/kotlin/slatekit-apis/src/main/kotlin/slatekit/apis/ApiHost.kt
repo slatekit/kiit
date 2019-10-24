@@ -7,7 +7,8 @@ import slatekit.apis.helpers.*
 import slatekit.apis.middleware.Format
 import slatekit.apis.validators.RouteCheck
 import slatekit.apis.setup.Protocol
-import slatekit.apis.security.WebProtocol
+import slatekit.apis.support.ApiExecSupport
+import slatekit.apis.validators.TargetCheck
 import slatekit.common.*
 import slatekit.common.content.Content
 import slatekit.common.encrypt.Encryptor
@@ -50,7 +51,7 @@ open class ApiHost(
         val serializer: ((String, Any?) -> String)? = null,
         val docKey: String? = null,
         val docBuilder: () -> slatekit.apis.doc.Doc = ::DocConsole
-) {
+) : ApiExecSupport {
 
     /**
      * Load all the routes from the APIs supplied.
@@ -83,13 +84,17 @@ open class ApiHost(
 
     private val logger: Logger = ctx.logs.getLogger("api")
 
-    val errorHandler: Errors = Errors(logger)
+    val errorHandler: Errors = Errors(logger, errs)
 
     fun rename(text: String): String = namer?.rename(text) ?: text
 
     fun setApiContainerHost() {
         routes.visitApis{ _, api -> ApiHost.setApiHost(api.singleton, this) }
     }
+
+
+    override fun host(): ApiHost = this
+
 
     /**
      * validates the request by checking for the api/action, and ensuring inputs are valid.
@@ -132,37 +137,6 @@ open class ApiHost(
      * @param req
      * @return
      */
-    suspend fun callAsync(req: Request): Response<Any> {
-        return callAsResult(req).toResponse()
-    }
-
-
-    /**
-     * calls the api/action associated with the request
-     * @param req
-     * @return
-     */
-    suspend fun callAsResultAsync(req: Request): Try<Any> {
-        return callAsResult(req)
-    }
-
-
-    suspend fun callAsync(
-            area: String,
-            api: String,
-            action: String,
-            verb: String,
-            opts: Map<String, Any>,
-            args: Map<String, Any>
-    ): Try<Any> {
-        return call(area, api, action, verb, opts, args)
-    }
-
-    /**
-     * calls the api/action associated with the request
-     * @param req
-     * @return
-     */
     fun call(req: Request): Response<Any> {
         return callAsResult(req).toResponse()
     }
@@ -181,7 +155,6 @@ open class ApiHost(
         }
         return result
     }
-
 
 
     /**
@@ -271,26 +244,25 @@ open class ApiHost(
         val rewrittenReq = results.convert(raw)
 
         // Formats ( e.g. recentMovies.csv => recentMovies -format=csv
-        val req = formatter.rewrite(ctx, rewrittenReq, this, emptyArgs)
+        val apiReqRaw = ApiRequest(this, ctx, raw, null, raw.source, emptyArgs)
+        val req = formatter.rewrite(apiReqRaw)
 
         // Api exists ?
-        val apiCheck = RouteCheck().check(req)
+        val apiCheck = TargetCheck().check(apiReqRaw)
 
         // Execute the API using
-        val resultRaw = apiCheck.flatMap { target ->
+        val resultRaw = apiCheck.flatMap { apiReq ->
 
             // Run context to store all relevant info
-            val runCtx = Ctx(this, this.ctx, req, target)
+            val runCtx = Ctx(this, this.ctx, raw, apiReq.target!!)
 
-            // Execute using a pipeline
-            val apiReq = ApiRequest(ctx, req, apiRef, this, null)
             Exec(runCtx, apiReq, logger, options).run(this::executeMethod)
         }
         val result = resultRaw.toTry()
 
         // Finally: If the format of the content specified ( json | csv | props )
         // Then serialize it here and return the content
-        return results.convert(req, result)
+        return results.convert(req.request, result)
     }
 
     @Suppress("UNCHECKED_CAST")
@@ -349,9 +321,8 @@ open class ApiHost(
     }
 
 
-    private fun handleError(req:Request, ex:Exception) : Try<Any> {
+    private fun handleError(req:ApiRequest, ex:Exception) : Try<Any> {
         logger.error("Unexpected error executing ${req.fullName}", ex)
-        val req = ApiRequest(this.ctx, req, null, this, null)
         val res = Outcomes.unexpected<Any>(ex)
         TODO.IMPLEMENT("apis", "suspend")
         //errs?.onError(req, res)?.toTry()

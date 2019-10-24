@@ -24,9 +24,9 @@ class DocWeb : Doc() {
             keyValue("route", "${api.area}/${api.name}", false)
             keyValue("area", api.area, false)
             keyValue("name", api.name, false)
-            keyValue("verb", api.verb, false)
-            keyValue("roles", api.roles, false)
-            keyValue("proto", api.protocol, false)
+            keyValue("verb", api.verb.name, false)
+            keyValue("roles", api.roles.joinToString(","), false)
+            keyValue("proto", api.protocols.joinToString(","), false)
             line()
             line()
         }
@@ -37,9 +37,9 @@ class DocWeb : Doc() {
             tab(1)
             subTitle(getFormattedText(name, (options?.maxLength ?: 0) + 3), endLine = false)
             keyValue("desc", action.desc, false)
-            keyValue("verb", action.verb, false)
-            keyValue("roles", action.roles, false)
-            keyValue("proto", action.protocol, false)
+            keyValue("verb", action.verb.name, false)
+            keyValue("roles", action.roles.joinToString(","), false)
+            keyValue("proto", action.protocols.joinToString(","), false)
         }
     }
 }
