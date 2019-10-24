@@ -18,15 +18,15 @@ import slatekit.apis.Action
 import slatekit.apis.setup.AuthModes
 import slatekit.apis.setup.Protocols
 import slatekit.apis.setup.Verbs
-import slatekit.apis.support.ApiWithSupport
+import slatekit.apis.support.ApiFileSupport
 import slatekit.common.Context
 import slatekit.common.content.Doc
 import slatekit.common.queues.QueueSource
 import slatekit.results.Try
 
 @Api(area = "cloud", name = "queues", desc = "api info about the application and host",
-        auth = AuthModes.keyed, roles = "admin", verb = Verbs.auto, protocol = Protocols.all)
-class QueueApi(val queue: QueueSource<String>, override val context: Context) : ApiWithSupport {
+        auth = AuthModes.keyed, roles = "admin", verb = Verbs.Auto, protocol = Protocols.All)
+class QueueApi(val queue: QueueSource<String>, override val context: Context) : ApiFileSupport {
 
     @Action(desc = "close the queue")
     fun close() {

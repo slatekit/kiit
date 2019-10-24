@@ -16,8 +16,11 @@ package slatekit.apis.support
 import slatekit.common.*
 
 interface Api
+
+
+
 /**
  * Base class for any Api, provides lookup functionality to check for exposed api actions.
  * @param context : The context of the application ( logger, config, encryptor, etc )
  */
-abstract class ApiBase(override val context: Context) : ApiWithSupport, ApiWithMiddleware
+abstract class ApiBase(override val context: Context) : ApiFileSupport, ApiHooksSupport

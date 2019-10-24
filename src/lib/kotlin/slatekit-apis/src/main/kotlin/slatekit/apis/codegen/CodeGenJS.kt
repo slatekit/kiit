@@ -58,7 +58,7 @@ class CodeGenJS(settings: CodeGenSettings) : CodeGenBase(settings) {
      * e.g. queryParams.put("id", id);
      */
     override fun buildQueryParams(reg: Action): String {
-        return if (reg.verb == Verbs.get) {
+        return if (reg.verb == Verbs.Read) {
             reg.paramsUser.foldIndexed("", { ndx: Int, acc: String, param: KParameter ->
                 acc + (if (ndx > 0) "\t\t" else "") + "queryParams.put(\"" + param.name + "\", String.valueOf(" + param.name + "));" + newline
             })
@@ -72,7 +72,7 @@ class CodeGenJS(settings: CodeGenSettings) : CodeGenBase(settings) {
      * e..g dataParams.put('id", id);
      */
     override fun buildDataParams(reg: Action): String {
-        return if (reg.verb != Verbs.get) {
+        return if (reg.verb != Verbs.Read) {
             reg.paramsUser.foldIndexed("", { ndx: Int, acc: String, param: KParameter ->
                 acc + (if (ndx > 0) "\t\t" else "") + "postData.put(\"" + param.name + "\", " + param.name + ");" + newline
             })

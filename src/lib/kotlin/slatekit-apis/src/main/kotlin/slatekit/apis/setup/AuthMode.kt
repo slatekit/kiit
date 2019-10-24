@@ -15,29 +15,44 @@ package slatekit.apis.setup
 
 
 object AuthModes {
+    /**
+     * Reference to a parent value
+     * e.g. If set on Action, this refers to its parent API
+     */
+    const val Parent = "@parent"
+
 
     /**
      * To represent a token based authentication where there is a unique token per user
      */
-    const val token = "token"
+    const val Token = "token"
+
 
 
     /**
      * To represent an api-key based authentication where many clients/users can share an api key
      */
-    const val keyed = "keyed"
+    const val Keyed = "keyed"
 
 
     /**
      * For custom setup / e.g. basic auth, what ever
      */
-    const val custom = "custom"
+    const val Custom = "custom"
+
+
+    /**
+     * For no authentication, e.g. public access ( like health check/version )
+     */
+    const val None = "none"
 }
 
 
 
 sealed class AuthMode(val name:String) {
-    object Token  : AuthMode(AuthModes.token)
-    object Keyed  : AuthMode(AuthModes.keyed)
-    object Custom : AuthMode(AuthModes.custom)
+    object None   : AuthMode(AuthModes.None)
+    object Parent : AuthMode(AuthModes.Parent)
+    object Token  : AuthMode(AuthModes.Token)
+    object Keyed  : AuthMode(AuthModes.Keyed)
+    object Custom : AuthMode(AuthModes.Custom)
 }

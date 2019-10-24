@@ -156,8 +156,8 @@ object ApiLoader {
 
         // Determine the actual verb
         val actionVerb = when (rawVerb) {
-            Verbs.auto -> if (actionNameRaw.startsWith(Verbs.get)) Verbs.get else Verbs.post
-            Verbs.auto -> determineVerb(actionNameRaw)
+            Verbs.Auto -> if (actionNameRaw.startsWith(Verbs.Read)) Verbs.Read else Verbs.Post
+            Verbs.Auto -> determineVerb(actionNameRaw)
             else -> rawVerb
         }
         return Action(
@@ -174,12 +174,12 @@ object ApiLoader {
     private fun determineVerb(name: String): String {
         val nameToCheck = name.toLowerCase()
         val verb = when {
-            nameToCheck.startsWith(Verbs.get) -> Verbs.get
-            nameToCheck.startsWith(Verbs.delete) -> Verbs.delete
-            nameToCheck.startsWith(Verbs.patch) -> Verbs.patch
-            nameToCheck.startsWith("create") -> Verbs.post
-            nameToCheck.startsWith("update") -> Verbs.put
-            else -> Verbs.post
+            nameToCheck.startsWith(Verbs.Read) -> Verbs.Read
+            nameToCheck.startsWith(Verbs.Delete) -> Verbs.Delete
+            nameToCheck.startsWith(Verbs.Patch) -> Verbs.Patch
+            nameToCheck.startsWith("create") -> Verbs.Post
+            nameToCheck.startsWith("update") -> Verbs.Put
+            else -> Verbs.Post
         }
         return verb
     }

@@ -18,15 +18,15 @@ import slatekit.apis.Action
 import slatekit.apis.setup.AuthModes
 import slatekit.apis.setup.Protocols
 import slatekit.apis.setup.Verbs
-import slatekit.apis.support.ApiWithSupport
+import slatekit.apis.support.ApiFileSupport
 import slatekit.common.Identity
 import slatekit.integration.common.AppEntContext
 import slatekit.jobs.JobAction
 import slatekit.jobs.Job
 
 @Api(area = "infra", name = "workers", desc = "api to get version information",
-        auth = AuthModes.keyed, roles = "admin", verb = Verbs.auto, protocol = Protocols.all)
-class JobsApi(override val context: AppEntContext) : ApiWithSupport {
+        auth = AuthModes.keyed, roles = "admin", verb = Verbs.Auto, protocol = Protocols.All)
+class JobsApi(override val context: AppEntContext) : ApiFileSupport {
 
     private lateinit var manager: Job
 

@@ -13,7 +13,7 @@
 
 package slatekit.apis.doc
 
-import slatekit.apis.Arg
+import slatekit.apis.Input
 import slatekit.apis.core.Api
 import slatekit.apis.core.Action
 import slatekit.common.console.SemanticConsoleSettings
@@ -82,7 +82,7 @@ abstract class Doc : ApiVisit {
         writer.line()
     }
 
-    override fun onArgEnd(arg: Arg) {
+    override fun onArgEnd(arg: Input) {
         writer.line()
     }
 
@@ -181,7 +181,7 @@ abstract class Doc : ApiVisit {
         writer.text("Inputs : ", true)
     }
 
-    override fun onArgBegin(arg: Arg, options: ApiVisitOptions?) {
+    override fun onArgBegin(arg: Input, options: ApiVisitOptions?) {
         onArgBegin(arg.name, arg.desc, arg.required, arg.name, arg.defaultVal, arg.eg, options)
     }
 

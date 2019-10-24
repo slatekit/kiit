@@ -13,7 +13,7 @@
 
 package slatekit.apis.doc
 
-import slatekit.apis.Arg
+import slatekit.apis.Input
 import slatekit.apis.core.Api
 import slatekit.apis.core.Action
 import kotlin.reflect.KParameter
@@ -22,41 +22,41 @@ interface ApiVisit {
 
     val docSettings: DocSettings
 
-    fun onApiError(msg: String): Unit
+    fun onApiError(msg: String)
 
-    fun onVisitSeparator(): Unit
+    fun onVisitSeparator()
 
-    fun onAreasBegin(): Unit
+    fun onAreasBegin()
 
-    fun onAreaBegin(area: String): Unit
+    fun onAreaBegin(area: String)
 
-    fun onAreaEnd(area: String): Unit
+    fun onAreaEnd(area: String)
 
-    fun onAreasEnd(): Unit
+    fun onAreasEnd()
 
-    fun onApisBegin(area: String): Unit
+    fun onApisBegin(area: String)
 
-    fun onApiBegin(api: Api, options: ApiVisitOptions? = null): Unit
+    fun onApiBegin(api: Api, options: ApiVisitOptions? = null)
 
-    fun onApiBeginDetail(api: Api, options: ApiVisitOptions? = null): Unit
+    fun onApiBeginDetail(api: Api, options: ApiVisitOptions? = null)
 
-    fun onApiEnd(api: Api): Unit
+    fun onApiEnd(api: Api)
 
-    fun onApiActionSyntax(action: Action?): Unit
+    fun onApiActionSyntax(action: Action?)
 
-    fun onApisEnd(area: String, exampleApi: String?): Unit
+    fun onApisEnd(area: String, exampleApi: String?)
 
-    fun onApiActionBegin(api: Api, action: Action, name: String, options: ApiVisitOptions? = null): Unit
+    fun onApiActionBegin(api: Api, action: Action, name: String, options: ApiVisitOptions? = null)
 
-    fun onApiActionBeginDetail(api: Api, action: Action, name: String, options: ApiVisitOptions? = null): Unit
+    fun onApiActionBeginDetail(api: Api, action: Action, name: String, options: ApiVisitOptions? = null)
 
-    fun onApiActionEnd(action: Action, name: String): Unit
+    fun onApiActionEnd(action: Action, name: String)
 
-    fun onApiActionExample(api: Api, actionName: String, action: Action, args: List<KParameter>): Unit
+    fun onApiActionExample(api: Api, actionName: String, action: Action, args: List<KParameter>)
 
-    fun onArgsBegin(action: Action): Unit
+    fun onArgsBegin(action: Action)
 
-    fun onArgBegin(arg: Arg, options: ApiVisitOptions? = null): Unit
+    fun onArgBegin(arg: Input, options: ApiVisitOptions? = null)
 
     fun onArgBegin(
         name: String = "",
@@ -68,5 +68,5 @@ interface ApiVisit {
         options: ApiVisitOptions? = null
     )
 
-    fun onArgEnd(arg: Arg): Unit
+    fun onArgEnd(arg: Input)
 }

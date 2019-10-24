@@ -110,8 +110,8 @@ class Server(val ctx: Context)  {
                         declaredOnly = true,
                         auth = AuthModes.keyed,
                         roles = Roles.all,
-                        verb = Verbs.auto,
-                        protocol = Protocols.all,
+                        verb = Verbs.Auto,
+                        protocol = Protocols.All,
                         singleton = SampleApi(ctx)
                 )
         )

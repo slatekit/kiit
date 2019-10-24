@@ -18,19 +18,22 @@ package slatekit.apis
  * Annotation to describe a parameter to an api action.
  * NOT CURRENTLY USED - Will be in upcoming versions.
  *
- * @param name : name of the argument
- * @param desc : description of argument
- * @param required : whether its required or not
- * @param defaultVal: 
- * @param eg
+ * @param name      : name of the argument
+ * @param desc      : description of argument
+ * @param length    : max length of value e.g. 200
+ * @param format    : format of the value e.g.
+ * @param examples  : list of example values
  */
 @Target(AnnotationTarget.FUNCTION)
 @Retention(AnnotationRetention.SOURCE)
 @Repeatable
-annotation class Arg(
-    val name: String = "",
-    val desc: String = "",
-    val required: Boolean = true,
-    val defaultVal: String = "",
-    val eg: String = ""
+annotation class Input(
+    val name     : String = "",
+    val desc     : String = "",
+    val length   : String = "",
+    val format   : String = "",
+    val examples : Array<String> = []
 )
+
+
+

@@ -13,9 +13,7 @@
 
 package slatekit.apis.core
 
-import slatekit.apis.setup.Access
-import slatekit.apis.setup.Protocol
-import slatekit.apis.setup.Verb
+import slatekit.apis.setup.*
 import slatekit.meta.kClass
 import kotlin.reflect.KClass
 
@@ -40,26 +38,30 @@ data class Api(
         val area: String = "",
         val name: String = "",
         val desc: String = "",
-        val roles: String = "",
-        val auth: String = "",
-        val verb: Verb = Verb.Auto,
-        val protocol: Protocol = Protocol.All,
+        val roles: List<String> = listOf(),
+        val auth: AuthMode = AuthMode.Token,
         val access: Access = Access.Public,
+        val protocols: List<Protocol> = listOf(Protocol.All),
+        val verb: Verb = Verb.Auto,
         val declaredOnly: Boolean = true,
         val singleton: Any? = null,
         val setup: Setup = PublicMethods,
         val actions: Lookup<Action> = Lookup(listOf(), { t -> t.name })
 ) {
+
+    val protocol = protocols.first()
+
     constructor(
         instance: Any,
         area: String = "",
         name: String = "",
         desc: String = "",
-        roles: String = "",
-        auth: String = "",
-        verb: String = "*",
-        protocol: String = "",
+        roles:List<String> = listOf(),
+        auth: AuthMode = AuthMode.Token,
+        access: Access = Access.Public,
+        protocol: List<Protocol> = listOf(Protocol.All),
+        verb: Verb = Verb.Auto,
         declaredOnly: Boolean = true,
         setup: Setup = PublicMethods
-    ) : this(instance.kClass, area, name, desc, roles, auth, verb, protocol, declaredOnly, instance, setup)
+    ) : this(instance.kClass, area, name, desc, roles, auth, access, protocol, verb, declaredOnly, instance, setup)
 }

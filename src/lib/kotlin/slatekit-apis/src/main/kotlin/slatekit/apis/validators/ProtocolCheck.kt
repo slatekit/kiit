@@ -26,7 +26,7 @@ class ProtocolCheck {
         val isWeb = request.host.protocol == Protocol.Web
 
         // 1. Ensure verb is correct
-        return if (isWeb && req.verb == ApiConstants.SourceQueue) {
+        return if (isWeb && req.verb == Protocol.Queue.name) {
             Outcomes.success(request)
         } else if (isWeb && !ApiHelper.isValidMatch(actualVerb, req.verb)) {
             Outcomes.errored("expected verb $actualVerb, but got ${req.verb}")

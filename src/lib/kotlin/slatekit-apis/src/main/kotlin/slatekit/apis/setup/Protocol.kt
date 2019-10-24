@@ -3,18 +3,49 @@ package slatekit.apis.setup
 
 
 object Protocols {
-    const val all = "*"
-    const val cli = "cli"
-    const val web = "web"
-    const val file = "file"
-    const val queue = "queue"
+    /**
+     * Reference to a parent value
+     * e.g. If set on Action, this refers to its parent API
+     */
+    const val Parent = "@parent"
+
+
+    /**
+     * Enables all protocols
+     */
+    const val All = "*"
+
+
+    /**
+     * CLI : Command Line Interactive
+     */
+    const val CLI = "cli"
+
+
+    /**
+     * Web : HTTP for standard web/rest requests
+     */
+    const val Web = "web"
+
+
+    /**
+     * File based : Requests processed from a file, e.g. for automation
+     */
+    const val File = "file"
+
+
+    /**
+     * Queue based : requests saved and processed from a queue
+     */
+    const val Queue = "queue"
 }
 
 
 sealed class Protocol(val name:String) {
-    object All   : Protocol(Protocols.all)
-    object CLI   : Protocol(Protocols.cli)
-    object Web   : Protocol(Protocols.web)
-    object File  : Protocol(Protocols.web)
-    object Queue : Protocol(Protocols.queue)
+    object Parent : Protocol(Protocols.Parent)
+    object All    : Protocol(Protocols.All)
+    object CLI    : Protocol(Protocols.CLI)
+    object Web    : Protocol(Protocols.Web)
+    object File   : Protocol(Protocols.Web)
+    object Queue  : Protocol(Protocols.Queue)
 }

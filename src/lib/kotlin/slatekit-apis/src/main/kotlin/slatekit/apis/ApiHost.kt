@@ -42,7 +42,7 @@ open class ApiHost(
         val ctx: Context,
         val allowIO: Boolean,
         val auth: Auth? = null,
-        val protocol: Protocol = WebProtocol,
+        val protocol: Protocol = Protocol.Web,
         val apis: List<slatekit.apis.core.Api> = listOf(),
         val namer: Namer? = null,
         val middleware: List<Middleware>? = null,
@@ -124,6 +124,38 @@ open class ApiHost(
 
         path.writeText(sample)
         return Success("sample call written to : ${path.absolutePath}")
+    }
+
+
+    /**
+     * calls the api/action associated with the request
+     * @param req
+     * @return
+     */
+    suspend fun callAsync(req: Request): Response<Any> {
+        return callAsResult(req).toResponse()
+    }
+
+
+    /**
+     * calls the api/action associated with the request
+     * @param req
+     * @return
+     */
+    suspend fun callAsResultAsync(req: Request): Try<Any> {
+        return callAsResult(req)
+    }
+
+
+    suspend fun callAsync(
+            area: String,
+            api: String,
+            action: String,
+            verb: String,
+            opts: Map<String, Any>,
+            args: Map<String, Any>
+    ): Try<Any> {
+        return call(area, api, action, verb, opts, args)
     }
 
     /**

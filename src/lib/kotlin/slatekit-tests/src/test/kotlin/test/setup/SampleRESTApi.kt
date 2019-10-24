@@ -68,7 +68,7 @@ class SampleRESTApi {
 
 
 @Api(area = "samples", name = "restVerbAuto", desc = "sample api for testing verb mode with auto",
-        auth = AuthModes.token, roles = Roles.all, verb = Verbs.auto, protocol = Protocols.all)
+        auth = AuthModes.token, roles = Roles.all, verb = Verbs.Auto, protocol = Protocols.All)
 class SampleRESTVerbModeAutoApi {
 
     @Action()
@@ -106,7 +106,7 @@ class SampleRESTVerbModeAutoApi {
 
 
 @Api(area = "samples", name = "restVerbRest", desc = "sample api for testing verb mode with auto",
-        auth = AuthModes.token, roles = Roles.all, verb = Verbs.auto, protocol = Protocols.all)
+        auth = AuthModes.token, roles = Roles.all, verb = Verbs.Auto, protocol = Protocols.All)
 class SampleRESTVerbModeRestApi {
 
     @Action()

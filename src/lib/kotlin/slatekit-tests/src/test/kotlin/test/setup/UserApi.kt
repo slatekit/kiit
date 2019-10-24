@@ -15,7 +15,7 @@ package test.setup
 
 import slatekit.apis.Api
 import slatekit.apis.Action
-import slatekit.apis.Arg
+import slatekit.apis.Input
 import slatekit.common.*
 import slatekit.common.auth.Roles
 import slatekit.common.content.Doc
@@ -37,15 +37,15 @@ class UserApi(context: AppEntContext)
 {
 
   @Action(name = "activate", desc = "activates a users account 3", roles= "@parent", verb = "@parent", protocol = "@parent")
-  @Arg(name = "phone", desc = "phone number", eg = "123-456-789")
-  @Arg(name = "code", desc = "activation code", defaultVal = "0", eg = "1234")
+  @Input(name = "phone", desc = "phone number", eg = "123-456-789")
+  @Input(name = "code", desc = "activation code", defaultVal = "0", eg = "1234")
   fun activate(phone:String, code:Int, isPremiumUser:Boolean, date: DateTime): Notice<String> =
     Success("ok", msg ="activated $phone, $code, $isPremiumUser, $date")
 
 
   @Action(desc = "activates a users account 3", roles= "@parent", verb = "@parent", protocol = "@parent")
-  @Arg(name = "phone", desc = "phone number", eg = "123-456-789")
-  @Arg(name = "code", desc = "activation code", defaultVal = "0", eg = "1234")
+  @Input(name = "phone", desc = "phone number", eg = "123-456-789")
+  @Input(name = "code", desc = "activation code", defaultVal = "0", eg = "1234")
   fun testTypes(phone:String, current:Boolean, code:Short, zip:Int, id:Long, rating:Float, value:Double, date: DateTime): Notice<String> =
           Success("ok", msg = "$phone, $current, $code, $zip, $id, $rating, $value, $date")
 

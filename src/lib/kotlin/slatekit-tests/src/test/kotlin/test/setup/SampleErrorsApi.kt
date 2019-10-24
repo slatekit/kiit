@@ -1,6 +1,6 @@
 package test.setup
 
-import slatekit.apis.support.ApiWithMiddleware
+import slatekit.apis.support.ApiHooksSupport
 import slatekit.common.*
 import slatekit.common.requests.Request
 import slatekit.common.validations.ValidationFuncs
@@ -10,7 +10,7 @@ import slatekit.results.builders.Notices
 import slatekit.results.builders.Tries
 
 
-open class SampleErrorsApi : ApiWithMiddleware {
+open class SampleErrorsApi : ApiHooksSupport {
 
 
     /**

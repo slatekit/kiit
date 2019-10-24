@@ -12,6 +12,7 @@ interface ApiQueueSupport {
 
     fun queues(): List<QueueSource<String>>
 
+
     /**
      * Creates a request from the parameters and api info and serializes that as json
      * and submits it to a random queue.
@@ -28,6 +29,7 @@ interface ApiQueueSupport {
         ))
     }
 
+
     /**
      * Converts a request for an action that is queued, to an actual queue
      */
@@ -39,6 +41,7 @@ interface ApiQueueSupport {
             slatekit.results.Failure("Continue processing")
         }
     }
+
 
     /**
      * This can be overridden to support custom call-modes

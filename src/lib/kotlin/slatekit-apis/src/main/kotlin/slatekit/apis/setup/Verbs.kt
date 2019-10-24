@@ -1,13 +1,7 @@
 package slatekit.apis.setup
 
 object Verbs {
-    const val get = "get"
-    const val post = "post"
-    const val put = "put"
-    const val patch = "patch"
-    const val delete = "delete"
-    const val create = "create"
-    const val update = "update"
+
 
     /**
      * This allows for automatically determining the verb based on the method name
@@ -18,15 +12,35 @@ object Verbs {
      * 4. deleteXX = "delete"
      * 5. patchXX  = "patch"
      */
-    const val auto = "auto"
+    const val Auto = "auto"
+
+
+    /**
+     * Core operations supported
+     */
+    const val Read = "read"
+    const val Create = "create"
+    const val Update = "update"
+    const val Delete = "delete"
+
+
+    /**
+     * Here for compatibility with HTTP/REST
+     */
+    const val Post  = "post"
+    const val Put   = "put"
+    const val Patch = "patch"
 }
 
 
 
 sealed class Verb(val name:String) {
-    object Auto   : Verb(Verbs.auto)
-    object Read   : Verb(Verbs.get)
-    object Create : Verb(Verbs.create)
-    object Update : Verb(Verbs.update)
-    object Delete : Verb(Verbs.delete)
+    object Auto   : Verb(Verbs.Auto)
+    object Read   : Verb(Verbs.Read)
+    object Create : Verb(Verbs.Create)
+    object Update : Verb(Verbs.Update)
+    object Put    : Verb(Verbs.Put)
+    object Post   : Verb(Verbs.Post)
+    object Patch  : Verb(Verbs.Patch)
+    object Delete : Verb(Verbs.Delete)
 }

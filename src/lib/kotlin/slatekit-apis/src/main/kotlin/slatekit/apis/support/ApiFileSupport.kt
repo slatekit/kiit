@@ -22,14 +22,11 @@ import slatekit.common.log.Logger
 import slatekit.common.subStringPair
 import java.io.File
 
-interface ApiWithSupport : Api, EncryptSupport, LogSupport {
+interface ApiFileSupport : Api, EncryptSupport, LogSupport {
 
     val context: Context
 
-    override val logger: Logger? get() = context.logs.getLogger()
-
-    override val encryptor: Encryptor? get() = context.enc
-
+    
     @Ignore
     fun interpretUri(path: String): String? {
         val pathParts = path.subStringPair("://")

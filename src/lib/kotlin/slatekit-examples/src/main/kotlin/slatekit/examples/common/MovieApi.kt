@@ -33,7 +33,7 @@ import slatekit.integration.common.AppEntContext
  * See docs / guides / examples for more info.
  */
 @Api(area = "app", name = "movies", desc = "api for users",
-        auth = AuthModes.token, roles = Roles.all, verb = Verbs.auto, protocol = Protocols.all)
+        auth = AuthModes.token, roles = Roles.all, verb = Verbs.Auto, protocol = Protocols.All)
 class MovieApi( ctx: AppEntContext) : ApiBaseEntity<Long, Movie, MovieService>(ctx, Long::class, Movie::class, MovieService(ctx as CommonContext, ctx.ent, ctx.ent.getRepo(Movie::class)))
 {
     /**

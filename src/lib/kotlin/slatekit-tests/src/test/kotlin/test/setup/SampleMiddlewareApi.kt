@@ -1,13 +1,13 @@
 package test.setup
 
 import slatekit.apis.core.Action
-import slatekit.apis.support.ApiWithMiddleware
+import slatekit.apis.support.ApiHooksSupport
 import slatekit.common.*
 import slatekit.common.requests.Request
 import slatekit.results.*
 
 
-open class SampleMiddlewareApi() : ApiWithMiddleware {
+open class SampleMiddlewareApi() : ApiHooksSupport {
 
     // Used for demo/testing purposes
     var onBeforeHookCount = mutableListOf<Request>()

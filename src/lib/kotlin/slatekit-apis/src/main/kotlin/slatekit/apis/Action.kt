@@ -36,9 +36,10 @@ import slatekit.apis.setup.Verbs
 annotation class Action(
         val name: String = "",
         val desc: String = "",
-        val roles: String = "",
-        val verb: String = Verbs.auto,
-        val protocol: String = Protocols.all,
+        val roles: Array<String> = [""],
+        val verb: String = Verbs.Auto,
         val access: String = AccessLevel.Public,
+        val protocol: Array<String> = [Protocols.All],
+        val version: String = "1",
         val tags: Array<String> = []
 )

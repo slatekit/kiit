@@ -10,7 +10,7 @@ about: A Kotlin utility library, tool-kit and server backend.
 mantra: Simplicity above all else
 </slate_header>
  */
-package slatekit.apis.support
+package slatekit.apis
 
 import slatekit.apis.core.Api
 

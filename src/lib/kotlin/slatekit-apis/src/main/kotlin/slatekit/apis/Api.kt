@@ -14,6 +14,7 @@
 package slatekit.apis
 
 import slatekit.apis.setup.AccessLevel
+import slatekit.apis.setup.AuthModes
 import slatekit.apis.setup.Protocols
 import slatekit.apis.setup.Verbs
 
@@ -39,9 +40,11 @@ annotation class Api(
         val area: String = "",
         val name: String = "",
         val desc: String = "",
-        val roles: String = "",
-        val auth: String = "app-key",
-        val verb: String = Verbs.auto,
-        val protocol: String = Protocols.all,
-        val access: String = AccessLevel.Public
-)
+        val roles: Array<String> = [""],
+        val auth: String = AuthModes.Keyed,
+        val verb: String = Verbs.Auto,
+        val access: String = AccessLevel.Public,
+        val protocol: Array<String> = [Protocols.All],
+        val version: String = "1",
+        val tags: Array<String> = []
+        )

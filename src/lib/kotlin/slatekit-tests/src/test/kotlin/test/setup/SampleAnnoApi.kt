@@ -17,7 +17,7 @@ import slatekit.results.Notice
 import slatekit.results.Success
 
 
-@Api(area = "app", name = "tests", desc = "sample to test features of Slate Kit APIs", auth = AuthModes.token, roles= "admin", verb = Verbs.auto, protocol = Protocols.all)
+@Api(area = "app", name = "tests", desc = "sample to test features of Slate Kit APIs", auth = AuthModes.token, roles= "admin", verb = Verbs.Auto, protocol = Protocols.All)
 class SampleAnnoApi(val context: AppEntContext) {
 
     @Action(desc = "accepts supplied basic data types from send", roles = "@parent", verb = "@parent", protocol = "@parent")

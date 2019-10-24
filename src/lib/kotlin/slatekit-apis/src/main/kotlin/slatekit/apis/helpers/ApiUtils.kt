@@ -45,7 +45,7 @@ object ApiUtils {
     }
 
     fun isCliAllowed(supportedProtocol: String): Boolean =
-            supportedProtocol == Protocols.all || supportedProtocol == Protocols.cli
+            supportedProtocol == Protocols.All || supportedProtocol == Protocols.CLI
 
 
     fun getReferencedValue(primaryValue: String, parentValue: String): String {
