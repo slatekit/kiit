@@ -2,14 +2,14 @@ package slatekit.docs
 
 import slatekit.apis.Api
 import slatekit.apis.Action
-import slatekit.apis.setup.AuthModes
-import slatekit.apis.setup.Protocols
-import slatekit.apis.setup.Verbs
+import slatekit.apis.AuthModes
+import slatekit.apis.Protocols
+import slatekit.apis.Verbs
 import slatekit.integration.common.AppEntContext
 import slatekit.results.Try
 
 @Api(area = "slate", name = "docs", desc= "help doc generator",
-        auth = AuthModes.keyed, roles = "admin", verb = Verbs.Auto, protocol = Protocols.All)
+        auth = AuthModes.keyed, roles = "admin", verb = Verbs.Auto, protocols = Protocols.All)
 class DocApi(val context: AppEntContext) {
 
     /**

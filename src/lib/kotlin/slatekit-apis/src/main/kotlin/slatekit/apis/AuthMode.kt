@@ -10,8 +10,9 @@ about: A Kotlin utility library, tool-kit and server backend.
 mantra: Simplicity above all else
 </slate_header>
  */
-package slatekit.apis.setup
+package slatekit.apis
 
+import slatekit.apis.setup.Parentable
 
 
 object AuthModes {
@@ -19,7 +20,7 @@ object AuthModes {
      * Reference to a parent value
      * e.g. If set on Action, this refers to its parent API
      */
-    const val Parent = "@parent"
+    const val Parent = ApiConstants.parent
 
 
     /**
@@ -49,10 +50,25 @@ object AuthModes {
 
 
 
-sealed class AuthMode(val name:String) {
+sealed class AuthMode(override val name:String)  : Parentable<AuthMode> {
     object None   : AuthMode(AuthModes.None)
     object Parent : AuthMode(AuthModes.Parent)
     object Token  : AuthMode(AuthModes.Token)
     object Keyed  : AuthMode(AuthModes.Keyed)
     object Custom : AuthMode(AuthModes.Custom)
+
+
+
+    companion object  {
+
+        fun parse(name:String): AuthMode {
+            return when(name) {
+                AuthModes.None   -> AuthMode.None
+                AuthModes.Parent -> AuthMode.Parent
+                AuthModes.Token  -> AuthMode.Token
+                AuthModes.Keyed  -> AuthMode.Keyed
+                else             -> AuthMode.Custom
+            }
+        }
+    }
 }

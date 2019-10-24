@@ -2,16 +2,16 @@ package slatekit.info
 
 import slatekit.apis.Api
 import slatekit.apis.Action
-import slatekit.apis.setup.AuthModes
-import slatekit.apis.setup.Protocols
-import slatekit.apis.setup.Verbs
+import slatekit.apis.AuthModes
+import slatekit.apis.Protocols
+import slatekit.apis.Verbs
 import slatekit.integration.common.ApiBaseEntity
 import slatekit.integration.common.AppEntContext
 import slatekit.results.Outcome
 
 
 @Api(area = "slate", name = "components", desc= "new project setup",
-        auth = AuthModes.keyed, roles = "*", verb = Verbs.Auto, protocol = Protocols.CLI)
+        auth = AuthModes.keyed, roles = "*", verb = Verbs.Auto, protocols = Protocols.CLI)
 class DependencyApi(context: AppEntContext)
     : ApiBaseEntity<Long, Dependency, DependencyService>(
         context, Long::class, Dependency::class,

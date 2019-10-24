@@ -1,7 +1,7 @@
 package slatekit.info
 
 import slatekit.apis.core.Api
-import slatekit.apis.ApiModule
+import slatekit.apis.setup.ApiModule
 import slatekit.integration.common.AppEntContext
 import slatekit.integration.mods.Module
 import slatekit.integration.mods.ModuleContext

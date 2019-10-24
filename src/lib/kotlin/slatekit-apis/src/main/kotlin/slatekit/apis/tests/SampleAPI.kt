@@ -1,7 +1,6 @@
-package slatekit.apis.tools
+package slatekit.apis.tests
 
 import slatekit.apis.*
-import slatekit.apis.setup.*
 import slatekit.common.Context
 
 
@@ -18,7 +17,7 @@ class SampleApi1(val context: Context) {
 
 
 @Api(area = "app", name = "tests", desc = "sample to test features of Slate Kit APIs", roles= ["admin"],
-        auth = AuthModes.Token, verb = Verbs.Auto, access = AccessLevel.Public, protocol = [Protocols.All])
+        auth = AuthModes.Token, verb = Verbs.Auto, access = AccessLevel.Public, protocols = [Protocols.All])
 class SampleApi2(val context: Context) {
 
     @Action(desc = "test simple action with inputs")

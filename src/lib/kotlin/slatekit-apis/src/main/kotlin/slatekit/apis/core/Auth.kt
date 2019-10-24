@@ -13,7 +13,7 @@
 
 package slatekit.apis.core
 
-import slatekit.apis.setup.AuthMode
+import slatekit.apis.AuthMode
 import slatekit.apis.support.RolesSupport
 import slatekit.common.requests.Request
 import slatekit.results.Notice

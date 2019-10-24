@@ -4,7 +4,7 @@ import slatekit.apis.Api
 import slatekit.apis.Action
 
 
-@Api(area = "samples", name = "rolesapp", desc = "sample to test security", roles= "admin", auth = "app-roles", verb = "*", protocol = "*")
+@Api(area = "samples", name = "rolesapp", desc = "sample to test security", roles= "admin", auth = "app-roles", verb = "*", protocols = "*")
 class SampleRolesByApp {
 
     @Action(desc = "no roles allows access by anyone", roles= "")

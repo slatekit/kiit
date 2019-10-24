@@ -15,15 +15,15 @@ package slatekit.integration.apis
 
 import slatekit.apis.Api
 import slatekit.apis.Action
-import slatekit.apis.setup.AuthModes
-import slatekit.apis.setup.Protocols
-import slatekit.apis.setup.Verbs
+import slatekit.apis.AuthModes
+import slatekit.apis.Protocols
+import slatekit.apis.Verbs
 import slatekit.common.Context
 import slatekit.common.requests.Request
 import slatekit.common.info.*
 
 @Api(area = "app", name = "info", desc = "api info about the application and host",
-        auth = AuthModes.keyed, roles = "admin", verb = Verbs.Auto, protocol = Protocols.All)
+        auth = AuthModes.keyed, roles = "admin", verb = Verbs.Auto, protocols = Protocols.All)
 class InfoApi(val context: Context)  {
 
     @Action(desc = "gets info about this build")

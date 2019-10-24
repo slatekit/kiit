@@ -11,7 +11,7 @@
  * </slate_header>
  */
 
-package slatekit.apis.setup
+package slatekit.apis
 
 
 /**

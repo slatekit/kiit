@@ -1,4 +1,6 @@
-package slatekit.apis.setup
+package slatekit.apis
+
+import slatekit.apis.setup.Parentable
 
 object Verbs {
 
@@ -30,11 +32,12 @@ object Verbs {
     const val Post  = "post"
     const val Put   = "put"
     const val Patch = "patch"
+    const val Parent = ApiConstants.parent
 }
 
 
 
-sealed class Verb(val name:String) {
+sealed class Verb(override val name:String)  : Parentable<Verb> {
     object Auto   : Verb(Verbs.Auto)
     object Read   : Verb(Verbs.Read)
     object Create : Verb(Verbs.Create)
@@ -43,4 +46,21 @@ sealed class Verb(val name:String) {
     object Post   : Verb(Verbs.Post)
     object Patch  : Verb(Verbs.Patch)
     object Delete : Verb(Verbs.Delete)
+
+    companion object {
+
+        fun parse(name:String): Verb {
+            return when(name) {
+                Verbs.Auto   -> Verb.Auto
+                Verbs.Read   -> Verb.Read
+                Verbs.Create -> Verb.Create
+                Verbs.Update -> Verb.Update
+                Verbs.Put    -> Verb.Put
+                Verbs.Post   -> Verb.Post
+                Verbs.Patch  -> Verb.Patch
+                Verbs.Delete -> Verb.Delete
+                else         -> Verb.Auto
+            }
+        }
+    }
 }

@@ -46,7 +46,7 @@ class SampleEntityApi(ctx: AppEntContext)
 }
 
 
-@Api(area = "app", name = "tests", desc = "sample to test compositional apis with annotations", roles= "admin", auth = "app-roles", verb = "*", protocol = "*")
+@Api(area = "app", name = "tests", desc = "sample to test compositional apis with annotations", roles= "admin", auth = "app-roles", verb = "*", protocols = "*")
 class SampleEntity2Api(ctx: AppEntContext)
     : ApiBaseEntity<Long, Movie, EntityService<Long, Movie>>(ctx, Long::class, Movie::class, ctx.ent.getSvc(Movie::class)) {
 

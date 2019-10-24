@@ -15,10 +15,10 @@ package slatekit.examples.common
 
 import slatekit.apis.Api
 import slatekit.apis.Action
-import slatekit.apis.setup.Input
-import slatekit.apis.setup.AuthModes
-import slatekit.apis.setup.Protocols
-import slatekit.apis.setup.Verbs
+import slatekit.apis.Input
+import slatekit.apis.AuthModes
+import slatekit.apis.Protocols
+import slatekit.apis.Verbs
 import slatekit.common.*
 import slatekit.common.auth.Roles
 import slatekit.integration.common.ApiBaseEntity
@@ -29,7 +29,7 @@ import slatekit.results.Try
 
 
 @Api(area = "app", name = "users", desc = "api to access and manage users 3",
-        auth = AuthModes.token, roles = Roles.all, verb = Verbs.Auto, protocol = Protocols.All)
+        auth = AuthModes.token, roles = Roles.all, verb = Verbs.Auto, protocols = Protocols.All)
 class UserApi(ctx: AppEntContext) : ApiBaseEntity<Long, User, UserService>(ctx, Long::class, User::class, UserService(ctx.ent, ctx.ent.getRepo(User::class))) {
 
   @Action(name = "", desc = "activates a users account 3", roles= "@parent")

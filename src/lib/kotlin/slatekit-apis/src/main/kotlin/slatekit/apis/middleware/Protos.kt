@@ -4,7 +4,7 @@ import slatekit.apis.ApiConstants
 import slatekit.apis.ApiRequest
 import slatekit.apis.core.Protocols
 import slatekit.apis.helpers.ApiHelper
-import slatekit.apis.setup.Protocol
+import slatekit.apis.Protocol
 import slatekit.common.Ignore
 import slatekit.functions.Input
 import slatekit.results.Codes

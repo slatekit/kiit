@@ -2,8 +2,8 @@ package slatekit.apis.support
 
 import slatekit.apis.core.Auth
 import slatekit.apis.core.Roles
-import slatekit.apis.setup.AuthMode
-import slatekit.apis.setup.AuthModes
+import slatekit.apis.AuthMode
+import slatekit.apis.AuthModes
 import slatekit.common.*
 import slatekit.common.auth.AuthFuncs
 import slatekit.common.requests.Request

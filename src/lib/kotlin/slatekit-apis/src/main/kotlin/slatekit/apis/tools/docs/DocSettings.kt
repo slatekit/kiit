@@ -11,7 +11,7 @@
  * </slate_header>
  */
 
-package slatekit.apis.tools.doc
+package slatekit.apis.tools.docs
 
 data class DocSettings(
     val maxLengthApi: Int = 0,

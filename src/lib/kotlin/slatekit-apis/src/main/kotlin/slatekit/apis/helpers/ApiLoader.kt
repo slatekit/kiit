@@ -1,9 +1,11 @@
 package slatekit.apis.helpers
 
+import slatekit.apis.*
 import slatekit.apis.core.*
-import slatekit.apis.setup.Annotated
 import slatekit.apis.setup.Setup
-import slatekit.apis.setup.Verbs
+import slatekit.apis.core.Action
+import slatekit.apis.core.Api
+import slatekit.apis.core.Protocols
 import slatekit.common.Ignore
 import slatekit.common.naming.Namer
 import slatekit.common.nonEmptyOrDefault
@@ -51,12 +53,13 @@ object ApiLoader {
                 annotation.area,
                 annotation.name,
                 annotation.desc,
-                annotation.roles,
-                annotation.auth,
-                annotation.verb,
-                annotation.protocol,
+                annotation.roles.toList(),
+                Access.parse(annotation.access),
+                AuthMode.parse(annotation.auth),
+                annotation.protocols.toList().map { Protocol.parse(it) },
+                Verb.parse(annotation.verb),
                 false,
-                null
+                Setup.Annotated
         )
 
         // Get all the actions using the @ApiAction
@@ -82,17 +85,18 @@ object ApiLoader {
         name: String,
         desc: String?,
         local: Boolean = true,
-        roles: String = "",
-        auth: String = "",
-        verb: String = "",
-        protocol: String = "*",
+        roles: Roles = Roles.empty,
+        access: Access = Access.Public,
+        auth: AuthMode = AuthMode.Keyed,
+        verb: Verb = Verb.Auto,
+        protocol: Protocols = Protocols.all,
         singleton: Boolean = false,
         namer: Namer? = null
     ): Api {
 
         // Create initial temporary api
         // with all settings that can be used for override values
-        val api = Api(cls, area, name, desc ?: "", roles, auth, verb, protocol, local, singleton)
+        val api = Api(cls, area, name, desc ?: "", roles, access, auth, protocol, verb, local, singleton)
         return loadWithMeta(api, namer)
     }
 
@@ -151,14 +155,13 @@ object ApiLoader {
         val actionTags = apiAction?.tags?.toList() ?: listOf()
 
         // Default these from api if empty
-        val actionRoles = apiAction?.roles.orElse(api.roles)
-        val rawVerb = apiAction?.verb.orElse(api.verb)
-        val actionProtocol = apiAction?.protocol.orElse(api.protocol)
+        val actionRoles = apiAction?.roles?.orElse(api.roles) ?: Roles.empty
+        val actionProtocol = apiAction?.protocols?.orElse(api.protocols) ?: Protocols(listOf(Protocol.All))
+        val rawVerb = apiAction?.verb?.orElse(api.verb) ?: Verb.Auto
 
         // Determine the actual verb
         val actionVerb = when (rawVerb) {
-            Verbs.Auto -> if (actionNameRaw.startsWith(Verbs.Read)) Verbs.Read else Verbs.Post
-            Verbs.Auto -> determineVerb(actionNameRaw)
+            is Verb.Auto -> determineVerb(actionNameRaw)
             else -> rawVerb
         }
         return Action(
@@ -166,21 +169,23 @@ object ApiLoader {
                 actionName,
                 actionDesc,
                 actionRoles,
-                actionVerb,
+                api.access,
+                api.auth,
                 actionProtocol,
+                actionVerb,
                 actionTags
         )
     }
 
-    private fun determineVerb(name: String): String {
+    private fun determineVerb(name: String): Verb {
         val nameToCheck = name.toLowerCase()
         val verb = when {
-            nameToCheck.startsWith(Verbs.Read) -> Verbs.Read
-            nameToCheck.startsWith(Verbs.Delete) -> Verbs.Delete
-            nameToCheck.startsWith(Verbs.Patch) -> Verbs.Patch
-            nameToCheck.startsWith("create") -> Verbs.Post
-            nameToCheck.startsWith("update") -> Verbs.Put
-            else -> Verbs.Post
+            nameToCheck.startsWith(Verbs.Read) -> Verb.Read
+            nameToCheck.startsWith(Verbs.Delete) -> Verb.Delete
+            nameToCheck.startsWith(Verbs.Patch) -> Verb.Patch
+            nameToCheck.startsWith("create") -> Verb.Post
+            nameToCheck.startsWith("update") -> Verb.Put
+            else -> Verb.Post
         }
         return verb
     }

@@ -15,9 +15,9 @@ package slatekit.integration.apis
 
 import slatekit.apis.Api
 import slatekit.apis.Action
-import slatekit.apis.setup.AuthModes
-import slatekit.apis.setup.Protocols
-import slatekit.apis.setup.Verbs
+import slatekit.apis.AuthModes
+import slatekit.apis.Protocols
+import slatekit.apis.Verbs
 import slatekit.apis.support.FileSupport
 import slatekit.common.Context
 import slatekit.common.Uris
@@ -26,7 +26,7 @@ import slatekit.notifications.email.EmailService
 import slatekit.results.Outcome
 
 @Api(area = "cloud", name = "email", desc = "api to send emails",
-        auth = AuthModes.keyed, roles = "ops", verb = Verbs.Auto, protocol = Protocols.All)
+        auth = AuthModes.keyed, roles = "ops", verb = Verbs.Auto, protocols = Protocols.All)
 class EmailApi(val svc: EmailService, override val context: Context) : FileSupport {
 
     /**

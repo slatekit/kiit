@@ -2,12 +2,11 @@ package slatekit.apis
 
 import slatekit.apis.core.*
 import slatekit.apis.core.Target
-import slatekit.apis.tools.doc.DocConsole
+import slatekit.apis.tools.docs.DocConsole
 import slatekit.apis.helpers.*
-import slatekit.apis.middleware.Errors
-import slatekit.apis.setup.Protocol
 import slatekit.apis.support.ExecSupport
 import slatekit.apis.middleware.Targets
+import slatekit.apis.setup.HostAware
 import slatekit.common.*
 import slatekit.common.content.Content
 import slatekit.common.encrypt.Encryptor
@@ -20,6 +19,7 @@ import slatekit.results.*
 import slatekit.results.Status
 import slatekit.results.builders.Notices
 import slatekit.results.builders.Outcomes
+import slatekit.results.builders.Tries
 import java.io.File
 import kotlin.reflect.KCallable
 import kotlin.reflect.KClass
@@ -47,7 +47,7 @@ open class ApiHost(
         val deserializer: ((Request, Encryptor?) -> Deserializer)? = null,
         val serializer: ((String, Any?) -> String)? = null,
         val docKey: String? = null,
-        val docBuilder: () -> slatekit.apis.tools.doc.Doc = ::DocConsole
+        val docBuilder: () -> slatekit.apis.tools.docs.Doc = ::DocConsole
 ) : ExecSupport {
 
     /**
@@ -88,7 +88,7 @@ open class ApiHost(
      * @param req
      * @return
      */
-    fun check(request: Request): Notice<Target> {
+    fun check(request: ApiRequest): Notice<Target> {
         return ApiValidator.validateCall(request, { req -> get(req) })
     }
 
@@ -125,10 +125,11 @@ open class ApiHost(
      * @return
      */
     suspend fun call(req: Request, options:ExecOptions?): Try<Any> {
-        val result = try {
+        val result = Tries.attempt {
             execute(req, options)
-        } catch (ex: Exception) {
-            handleError(req, ex)
+        }
+        result.onFailure {
+            handleError(req, it)
         }
         return result
     }
@@ -191,14 +192,14 @@ open class ApiHost(
         if (helpCheck.code == HELP.code) return buildHelp(raw, helpCheck).toTry()
 
         // Rewrites ( e.g. restify get /movies => get /movies/getAll )
-        val rewrittenReq = results.convert(raw)
+        //val rewrittenReq = results.convert(raw)
 
         // Formats ( e.g. recentMovies.csv => recentMovies -format=csv
         val apiReqRaw = ApiRequest(this, ctx, raw, null, raw.source, emptyArgs)
-        val req = formatter.rewrite(apiReqRaw)
+        val req = settings.inputters.first().process(Outcomes.success(apiReqRaw))
 
         // Api exists ?
-        val apiCheck = Targets().check(apiReqRaw)
+        val apiCheck = Targets().process(req)
 
         // Execute the API using
         val resultRaw = apiCheck.flatMap { apiReq ->
@@ -212,7 +213,7 @@ open class ApiHost(
 
         // Finally: If the format of the content specified ( json | csv | props )
         // Then serialize it here and return the content
-        return results.convert(req.request, result)
+        return results.convert(apiReqRaw.request, result)
     }
 
     @Suppress("UNCHECKED_CAST")
@@ -271,10 +272,9 @@ open class ApiHost(
     }
 
 
-    private suspend fun handleError(req:Request, ex:Exception) : Try<Any> {
+    private suspend fun handleError(req:Request, ex:Exception)  {
         val apiReq = ApiRequest(this, ctx, req, null, this, null)
         logger.error("Unexpected error executing ${req.fullName}", ex)
-        return errorHandler.handleError(apiReq, ex).toTry()
     }
 
 
@@ -282,7 +282,7 @@ open class ApiHost(
 
         @JvmStatic
         fun setApiHost(item: Any?, host: ApiHost) {
-            if (item is ApiHostAware) {
+            if (item is HostAware) {
                 item.setApiHost(host)
             }
         }

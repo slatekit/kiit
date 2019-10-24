@@ -1,4 +1,4 @@
-package slatekit.apis.tools.codegen
+package slatekit.apis.tools.code
 
 import slatekit.common.log.Logger
 import java.io.File

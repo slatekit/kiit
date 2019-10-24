@@ -11,9 +11,9 @@
  * </slate_header>
  */
 
-package slatekit.apis.tools.doc
+package slatekit.apis.tools.docs
 
-import slatekit.apis.setup.Input
+import slatekit.apis.Input
 import slatekit.apis.core.Api
 import slatekit.apis.core.Action
 import kotlin.reflect.KParameter

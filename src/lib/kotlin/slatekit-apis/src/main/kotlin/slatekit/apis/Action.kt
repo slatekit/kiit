@@ -13,10 +13,6 @@
 
 package slatekit.apis
 
-import slatekit.apis.setup.AccessLevel
-import slatekit.apis.setup.Protocols
-import slatekit.apis.setup.Verbs
-
 
 /**
  * Annotation used in conjunction with the Api annotation, to designate your method

@@ -10,10 +10,10 @@ import io.ktor.server.engine.embeddedServer
 import io.ktor.server.netty.Netty
 import slatekit.apis.ApiHost
 import slatekit.apis.setup.Annotated
-import slatekit.apis.tools.doc.DocWeb
-import slatekit.apis.setup.AuthModes
-import slatekit.apis.setup.Protocols
-import slatekit.apis.setup.Verbs
+import slatekit.apis.tools.docs.DocWeb
+import slatekit.apis.AuthModes
+import slatekit.apis.Protocols
+import slatekit.apis.Verbs
 import slatekit.apis.security.WebProtocol
 
 // Slate Kit - Common Utilities

@@ -5,7 +5,7 @@ import slatekit.common.InputsUpdateable
 
 interface RewriteSupport {
 
-    fun rewriteAction(request: ApiRequest, newAction: String, format: String? = null): ApiRequest {
+    fun rewrite(request: ApiRequest, newAction: String, format: String? = null): ApiRequest {
         val req = request.request
         // Get the first and second part
         val first = req.parts[0]
@@ -26,7 +26,7 @@ interface RewriteSupport {
         return request.copy(request = updated)
     }
 
-    fun rewriteActionWithParam(request: ApiRequest, newAction: String, key: String, value: String): ApiRequest {
+    fun rewriteWithParam(request: ApiRequest, newAction: String, key: String, value: String): ApiRequest {
         val req = request.request
         // Get the first and second part
         val first = req.parts[0]

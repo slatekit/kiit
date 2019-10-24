@@ -25,9 +25,9 @@ class Formats : Input<ApiRequest>, RewriteSupport {
             val suffix = if (indexPeriod > 0) rawAction.substring(indexPeriod + 1).toLowerCase() else ""
 
             val result = when (suffix) {
-                ContentTypeCsv.ext ->  Outcome.of { rewriteAction (it, action, ContentTypeCsv.ext) }
-                ContentTypeJson.ext -> Outcome.of { rewriteAction(it, action, ContentTypeJson.ext) }
-                ContentTypeProp.ext -> Outcome.of { rewriteAction(it, action, ContentTypeProp.ext) }
+                ContentTypeCsv.ext ->  Outcome.of { rewrite (it, action, ContentTypeCsv.ext) }
+                ContentTypeJson.ext -> Outcome.of { rewrite(it, action, ContentTypeJson.ext) }
+                ContentTypeProp.ext -> Outcome.of { rewrite(it, action, ContentTypeProp.ext) }
                 else -> req
             }
             result

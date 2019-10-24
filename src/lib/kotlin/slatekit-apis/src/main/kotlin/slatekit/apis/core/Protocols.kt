@@ -1,12 +1,20 @@
 package slatekit.apis.core
 
-import slatekit.apis.setup.Protocol
+import slatekit.apis.Protocol
 
 data class Protocols(val all:List<Protocol>) {
 
     fun hasCLI(): Boolean {
         return all.any {  isCLI(it.name) }
     }
+
+
+    fun hasWeb(): Boolean {
+        return all.any {  isWeb(it.name) }
+    }
+
+
+    fun orElse(other:Protocols):Protocols = if(this.all.isEmpty()) other else this
 
 
     companion object {
@@ -16,6 +24,11 @@ data class Protocols(val all:List<Protocol>) {
 
         fun isCLI(name:String): Boolean {
             return (name == Protocol.All.name || name == Protocol.CLI.name)
+        }
+
+
+        fun isWeb(name:String): Boolean {
+            return (name == Protocol.All.name || name == Protocol.Web.name)
         }
     }
 }

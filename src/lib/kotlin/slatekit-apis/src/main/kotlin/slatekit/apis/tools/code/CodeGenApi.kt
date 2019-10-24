@@ -1,9 +1,10 @@
-package slatekit.apis.tools.codegen
+package slatekit.apis.tools.code
 
 import slatekit.apis.*
-import slatekit.apis.setup.AuthModes
-import slatekit.apis.setup.Protocols
-import slatekit.apis.setup.Verbs
+import slatekit.apis.AuthModes
+import slatekit.apis.Protocols
+import slatekit.apis.Verbs
+import slatekit.apis.setup.HostAware
 import slatekit.common.*
 import slatekit.common.auth.Roles
 import slatekit.common.requests.Request
@@ -16,8 +17,8 @@ import slatekit.results.Notice
  * slate.codegen.toJava   -templatesFolder="user://git/slatekit/scripts/templates/codegen/java"       -outputFolder="user://dev/temp/codegen/java"  -packageName="blendlife" -classFile="" -methodFile="" -modelFile=""
  */
 @Api(area = "slate", name = "codegen", desc = "client code generator",
-        auth = AuthModes.Keyed, roles = Roles.all, verb = Verbs.Auto, protocol = Protocols.All)
-class CodeGenApi : ApiHostAware {
+        auth = AuthModes.Keyed, roles = [Roles.all], verb = Verbs.Auto, protocols = [Protocols.All])
+class CodeGenApi : HostAware {
 
     private var host: ApiHost? = null
 
@@ -26,7 +27,7 @@ class CodeGenApi : ApiHostAware {
         this.host = host
     }
 
-    @Action(name = "", desc = "generates client code in Kotlin", roles = "@parent", verb = "post", protocol = "*")
+    @Action(name = "", desc = "generates client code in Kotlin")
     fun toKotlin(
             req: Request,
             templatesFolder: String,
@@ -39,7 +40,7 @@ class CodeGenApi : ApiHostAware {
         return generate(req, templatesFolder, outputFolder, packageName, classFile, methodFile, modelFile, "kotlin", "kt")
     }
 
-    @Action(name = "", desc = "generates client code in Swift", roles = "@parent", verb = "post", protocol = "*")
+    @Action(name = "", desc = "generates client code in Swift")
     fun toSwift(
             req: Request,
             templatesFolder: String,
@@ -52,7 +53,7 @@ class CodeGenApi : ApiHostAware {
         return generate(req, templatesFolder, outputFolder, packageName, classFile, methodFile, modelFile, "swift", "swift")
     }
 
-    @Action(name = "", desc = "generates client code in Java", roles = "@parent", verb = "post", protocol = "*")
+    @Action(name = "", desc = "generates client code in Java")
     fun toJava(
             req: Request,
             templatesFolder: String,
@@ -65,7 +66,7 @@ class CodeGenApi : ApiHostAware {
         return generate(req, templatesFolder, outputFolder, packageName, classFile, methodFile, modelFile, "java", "java")
     }
 
-    @Action(name = "", desc = "generates client code in javascript", roles = "@parent", verb = "post", protocol = "*")
+    @Action(name = "", desc = "generates client code in javascript")
     fun toJS(
             req: Request,
             templatesFolder: String,

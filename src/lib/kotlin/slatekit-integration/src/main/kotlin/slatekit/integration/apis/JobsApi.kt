@@ -15,9 +15,9 @@ package slatekit.integration.apis
 
 import slatekit.apis.Api
 import slatekit.apis.Action
-import slatekit.apis.setup.AuthModes
-import slatekit.apis.setup.Protocols
-import slatekit.apis.setup.Verbs
+import slatekit.apis.AuthModes
+import slatekit.apis.Protocols
+import slatekit.apis.Verbs
 import slatekit.apis.support.FileSupport
 import slatekit.common.Identity
 import slatekit.integration.common.AppEntContext
@@ -25,7 +25,7 @@ import slatekit.jobs.JobAction
 import slatekit.jobs.Job
 
 @Api(area = "infra", name = "workers", desc = "api to get version information",
-        auth = AuthModes.keyed, roles = "admin", verb = Verbs.Auto, protocol = Protocols.All)
+        auth = AuthModes.keyed, roles = "admin", verb = Verbs.Auto, protocols = Protocols.All)
 class JobsApi(override val context: AppEntContext) : FileSupport {
 
     private lateinit var manager: Job

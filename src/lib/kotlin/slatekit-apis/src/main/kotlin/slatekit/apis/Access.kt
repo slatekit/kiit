@@ -1,4 +1,8 @@
-package slatekit.apis.setup
+package slatekit.apis
+
+import slatekit.apis.setup.Parentable
+import slatekit.common.EnumLike
+import slatekit.common.EnumSupport
 
 
 object AccessLevel {
@@ -6,7 +10,7 @@ object AccessLevel {
       * Reference to a parent value
       * e.g. If set on Action, this refers to its parent API
      */
-    const val Parent = "@parent"
+    const val Parent = ApiConstants.parent
 
 
     /**
@@ -39,9 +43,23 @@ object AccessLevel {
 
 
 
-sealed class Access(val name:String) {
+sealed class Access(override val name:String)  : Parentable<Access> {
     object Parent   : Access(AccessLevel.Parent)
     object Public   : Access(AccessLevel.Private)
     object Internal : Access(AccessLevel.Internal)
     object Private  : Access(AccessLevel.Private)
+
+
+    companion object  {
+
+        fun parse(name:String): Access {
+            return when(name) {
+                AccessLevel.Internal -> Access.Internal
+                AccessLevel.Parent   -> Access.Parent
+                AccessLevel.Private  -> Access.Private
+                AccessLevel.Public   -> Access.Public
+                else                 -> Access.Private
+            }
+        }
+    }
 }

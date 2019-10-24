@@ -15,9 +15,9 @@ package slatekit.integration.apis
 
 import slatekit.apis.Api
 import slatekit.apis.Action
-import slatekit.apis.setup.AuthModes
-import slatekit.apis.setup.Protocols
-import slatekit.apis.setup.Verbs
+import slatekit.apis.AuthModes
+import slatekit.apis.Protocols
+import slatekit.apis.Verbs
 import slatekit.common.content.Doc
 import slatekit.results.Failure
 import slatekit.results.Success
@@ -25,7 +25,7 @@ import slatekit.results.Try
 import slatekit.results.getOrElse
 
 @Api(area = "cloud", name = "files", desc = "api info about the application and host",
-        auth = AuthModes.keyed, roles = "admin", verb = Verbs.Auto, protocol = Protocols.All)
+        auth = AuthModes.keyed, roles = "admin", verb = Verbs.Auto, protocols = Protocols.All)
 class FilesApi(val files: slatekit.core.cloud.CloudFiles, override val context: slatekit.common.Context) : slatekit.apis.support.FileSupport {
 
     @Action(desc = "creates the root folder/bucket")

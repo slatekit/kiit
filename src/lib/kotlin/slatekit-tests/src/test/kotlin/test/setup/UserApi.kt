@@ -15,7 +15,7 @@ package test.setup
 
 import slatekit.apis.Api
 import slatekit.apis.Action
-import slatekit.apis.setup.Input
+import slatekit.apis.Input
 import slatekit.common.*
 import slatekit.common.auth.Roles
 import slatekit.common.content.Doc
@@ -31,7 +31,7 @@ import slatekit.results.Notice
 import slatekit.results.Success
 
 
-@Api(area = "app", name = "users", desc = "api to access and manage users 3", roles= "admin", auth = "app-roles", verb = "*", protocol = "*")
+@Api(area = "app", name = "users", desc = "api to access and manage users 3", roles= "admin", auth = "app-roles", verb = "*", protocols = "*")
 class UserApi(context: AppEntContext)
   : ApiBaseEntity<Long, User, EntityService<Long, User>>(context, Long::class, User::class, context.ent.getSvc(User::class))
 {

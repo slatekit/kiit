@@ -1,7 +1,8 @@
-package slatekit.apis.tools.codegen
+package slatekit.apis.tools.code
 
+import slatekit.apis.Verb
 import slatekit.apis.core.Action
-import slatekit.apis.setup.Verbs
+import slatekit.apis.Verbs
 import slatekit.common.newline
 import slatekit.meta.KTypes
 import slatekit.meta.Reflector
@@ -59,7 +60,7 @@ class CodeGenKotlin(settings: CodeGenSettings) : CodeGenBase(settings) {
      * e.g. queryParams.put("id", id);
      */
     override fun buildQueryParams(reg: Action): String {
-        return if (reg.verb == Verbs.Read) {
+        return if (reg.verb == Verb.Read) {
             reg.paramsUser.foldIndexed("", { ndx: Int, acc: String, param: KParameter ->
                 acc + (if (ndx > 0) "\t\t" else "") + "queryParams.put(\"" + param.name + "\", String.valueOf(" + param.name + "));" + newline
             })
@@ -73,7 +74,7 @@ class CodeGenKotlin(settings: CodeGenSettings) : CodeGenBase(settings) {
      * e..g dataParams.put('id", id);
      */
     override fun buildDataParams(reg: Action): String {
-        return if (reg.verb != Verbs.Read) {
+        return if (reg.verb != Verb.Read) {
             reg.paramsUser.foldIndexed("", { ndx: Int, acc: String, param: KParameter ->
                 acc + (if (ndx > 0) "\t\t" else "") + "postData.put(\"" + param.name + "\", " + param.name + ");" + newline
             })

@@ -16,7 +16,7 @@ import org.junit.Assert
 import org.junit.Test
 import slatekit.apis.*
 import slatekit.apis.core.Api
-import slatekit.apis.setup.AuthModes
+import slatekit.apis.AuthModes
 import slatekit.apis.security.CliProtocol
 import slatekit.common.*
 import slatekit.common.auth.Roles

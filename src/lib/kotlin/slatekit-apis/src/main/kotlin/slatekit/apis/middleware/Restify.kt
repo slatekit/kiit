@@ -28,19 +28,19 @@ class Restify : Input<ApiRequest>, RewriteSupport {
             val container = it.host
 
             val result = if (verb == verbGet && req.parts[2] == "") {
-                Outcome.of { rewriteAction(it, container.rename("getAll")) }
+                Outcome.of { rewrite(it, container.rename("getAll")) }
             } else if (verb == verbGet && ValidationFuncs.isNumeric(req.parts[2])) {
-                Outcome.of {rewriteActionWithParam(it, container.rename("getById"), "id", req.parts[2]) }
+                Outcome.of {rewriteWithParam(it, container.rename("getById"), "id", req.parts[2]) }
             } else if (verb == verbPost && req.parts[2] == "") {
-                    Outcome.of { rewriteAction(it, container.rename("create")) }
+                    Outcome.of { rewrite(it, container.rename("create")) }
             } else if (verb == verbPut && req.parts[2] == "") {
-                    Outcome.of { rewriteAction(it, container.rename("update")) }
+                    Outcome.of { rewrite(it, container.rename("update")) }
             } else if (verb == verbPatch && ValidationFuncs.isNumeric(req.parts[2])) {
-                    Outcome.of { rewriteActionWithParam(it, container.rename("patch"), "id", req.parts[2]) }
+                    Outcome.of { rewriteWithParam(it, container.rename("patch"), "id", req.parts[2]) }
             } else if (verb == verbDelete && req.parts[2] == "") {
-                    Outcome.of { rewriteAction(it, container.rename(verbDelete)) }
+                    Outcome.of { rewrite(it, container.rename(verbDelete)) }
             } else if (verb == verbDelete && ValidationFuncs.isNumeric(req.parts[2])) {
-                    Outcome.of { rewriteActionWithParam(it, container.rename("deleteById"), "id", req.parts[2]) }
+                    Outcome.of { rewriteWithParam(it, container.rename("deleteById"), "id", req.parts[2]) }
             } else {
                 request
             }

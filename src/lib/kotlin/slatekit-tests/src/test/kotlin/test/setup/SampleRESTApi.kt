@@ -2,9 +2,9 @@ package test.setup
 
 import slatekit.apis.Api
 import slatekit.apis.Action
-import slatekit.apis.setup.AuthModes
-import slatekit.apis.setup.Protocols
-import slatekit.apis.setup.Verbs
+import slatekit.apis.AuthModes
+import slatekit.apis.Protocols
+import slatekit.apis.Verbs
 import slatekit.common.auth.Roles
 
 /**
@@ -68,7 +68,7 @@ class SampleRESTApi {
 
 
 @Api(area = "samples", name = "restVerbAuto", desc = "sample api for testing verb mode with auto",
-        auth = AuthModes.token, roles = Roles.all, verb = Verbs.Auto, protocol = Protocols.All)
+        auth = AuthModes.token, roles = Roles.all, verb = Verbs.Auto, protocols = Protocols.All)
 class SampleRESTVerbModeAutoApi {
 
     @Action()
@@ -106,7 +106,7 @@ class SampleRESTVerbModeAutoApi {
 
 
 @Api(area = "samples", name = "restVerbRest", desc = "sample api for testing verb mode with auto",
-        auth = AuthModes.token, roles = Roles.all, verb = Verbs.Auto, protocol = Protocols.All)
+        auth = AuthModes.token, roles = Roles.all, verb = Verbs.Auto, protocols = Protocols.All)
 class SampleRESTVerbModeRestApi {
 
     @Action()

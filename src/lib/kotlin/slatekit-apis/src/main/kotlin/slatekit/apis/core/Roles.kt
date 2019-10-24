@@ -10,6 +10,8 @@ data class Roles(val all:List<String>) {
 
     val isAuthed = !isEmpty && !allowGuest
 
+    fun orElse(other:Roles):Roles = if(this.isEmpty) other else this
+
 
     companion object {
         val empty = Roles(listOf())

@@ -11,7 +11,7 @@
  * </slate_header>
  */
 
-package slatekit.apis.tools.doc
+package slatekit.apis.tools.docs
 
 import slatekit.apis.core.*
 import slatekit.meta.KTypes

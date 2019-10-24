@@ -1,5 +1,6 @@
-package slatekit.apis.setup
+package slatekit.apis
 
+import slatekit.apis.setup.Parentable
 
 
 object Protocols {
@@ -7,7 +8,7 @@ object Protocols {
      * Reference to a parent value
      * e.g. If set on Action, this refers to its parent API
      */
-    const val Parent = "@parent"
+    const val Parent = ApiConstants.parent
 
 
     /**
@@ -41,11 +42,26 @@ object Protocols {
 }
 
 
-sealed class Protocol(val name:String) {
+sealed class Protocol(override val name:String) : Parentable<Protocol>  {
     object Parent : Protocol(Protocols.Parent)
     object All    : Protocol(Protocols.All)
     object CLI    : Protocol(Protocols.CLI)
     object Web    : Protocol(Protocols.Web)
     object File   : Protocol(Protocols.Web)
     object Queue  : Protocol(Protocols.Queue)
+
+
+    companion object {
+
+        fun parse(name: String): Protocol {
+            return when (name) {
+                Protocols.Parent -> Protocol.Parent
+                Protocols.All -> Protocol.All
+                Protocols.CLI -> Protocol.CLI
+                Protocols.Web -> Protocol.Web
+                Protocols.File -> Protocol.File
+                else -> Protocol.Web
+            }
+        }
+    }
 }

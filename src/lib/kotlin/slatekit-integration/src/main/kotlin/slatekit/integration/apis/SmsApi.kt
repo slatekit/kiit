@@ -15,9 +15,9 @@ package slatekit.integration.apis
 
 import slatekit.apis.Api
 import slatekit.apis.Action
-import slatekit.apis.setup.AuthModes
-import slatekit.apis.setup.Protocols
-import slatekit.apis.setup.Verbs
+import slatekit.apis.AuthModes
+import slatekit.apis.Protocols
+import slatekit.apis.Verbs
 import slatekit.apis.support.FileSupport
 import slatekit.common.Context
 import slatekit.common.Vars
@@ -25,7 +25,7 @@ import slatekit.notifications.sms.SmsService
 import slatekit.results.Outcome
 
 @Api(area = "cloud", name = "sms", desc = "api to send sms",
-        auth = AuthModes.keyed, roles = "ops", verb = Verbs.Auto, protocol = Protocols.All)
+        auth = AuthModes.keyed, roles = "ops", verb = Verbs.Auto, protocols = Protocols.All)
 class SmsApi(val svc: SmsService, override val context: Context) : FileSupport {
     /**
      * sends a message

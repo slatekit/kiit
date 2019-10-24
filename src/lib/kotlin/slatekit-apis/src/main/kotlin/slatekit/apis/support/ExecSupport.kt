@@ -1,7 +1,7 @@
 package slatekit.apis.support
 
 import slatekit.apis.ApiHost
-import slatekit.apis.setup.Verb
+import slatekit.apis.Verb
 import slatekit.common.CommonRequest
 import slatekit.common.requests.Request
 import slatekit.common.requests.Response

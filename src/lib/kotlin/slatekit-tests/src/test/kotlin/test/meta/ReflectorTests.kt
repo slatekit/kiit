@@ -270,7 +270,7 @@ class ReflectorTests {
         Assert.assertEquals( api.name     , "users"    )
         Assert.assertEquals( api.roles    , "admin"    )
         Assert.assertEquals( api.auth     , "app-roles")
-        Assert.assertEquals( api.protocol , "*"        )
+        Assert.assertEquals( api.protocols , "*"        )
         Assert.assertEquals( api.verb     , "*"        )
     }
 

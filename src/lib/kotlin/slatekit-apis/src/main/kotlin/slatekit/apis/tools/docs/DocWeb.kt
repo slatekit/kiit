@@ -1,4 +1,4 @@
-package slatekit.apis.tools.doc
+package slatekit.apis.tools.docs
 
 import slatekit.apis.core.Api
 import slatekit.apis.core.Action

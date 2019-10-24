@@ -13,9 +13,9 @@
 
 package slatekit.apis.core
 
-import slatekit.apis.setup.Access
-import slatekit.apis.setup.AuthMode
-import slatekit.apis.setup.Verb
+import slatekit.apis.Access
+import slatekit.apis.AuthMode
+import slatekit.apis.Verb
 import slatekit.common.Metadata
 import slatekit.common.requests.Request
 import slatekit.common.ext.tail
@@ -37,13 +37,14 @@ data class Action(
         val name: String = "",
         val desc: String = "",
         val roles: Roles = Roles.empty,
-        val auth: AuthMode = AuthMode.Token,
         val access: Access = Access.Public,
+        val auth: AuthMode = AuthMode.Token,
         val protocols: Protocols = Protocols.all,
         val verb: Verb = Verb.Auto,
         val tags: List<String> = listOf()
 ) {
     val protocol = protocols.all.first()
+
 
     /**
      * All the parameters of the function, this includes:

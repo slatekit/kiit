@@ -15,7 +15,7 @@ package slatekit.apis.core
 import org.json.simple.JSONObject
 import org.json.simple.parser.JSONParser
 import slatekit.apis.ApiConstants
-import slatekit.apis.setup.Protocol
+import slatekit.apis.Protocol
 import slatekit.apis.support.JsonSupport
 import slatekit.common.DateTime
 import slatekit.common.Inputs

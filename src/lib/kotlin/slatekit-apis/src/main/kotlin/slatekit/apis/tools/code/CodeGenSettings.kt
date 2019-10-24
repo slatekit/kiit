@@ -1,4 +1,4 @@
-package slatekit.apis.tools.codegen
+package slatekit.apis.tools.code
 
 import slatekit.apis.ApiHost
 import slatekit.common.requests.Request

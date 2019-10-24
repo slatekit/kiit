@@ -2,7 +2,7 @@ package test.setup
 
 import slatekit.apis.Api
 import slatekit.apis.Action
-import slatekit.apis.setup.AuthModes
+import slatekit.apis.AuthModes
 import slatekit.common.auth.Roles
 import slatekit.common.encrypt.EncDouble
 import slatekit.common.encrypt.EncInt

@@ -1,9 +1,7 @@
-package slatekit.apis.setup
+package slatekit.apis
 
 /**
- * Annotation to describe a parameter to an api action.
- * NOT CURRENTLY USED - Will be in upcoming versions.
- *
+ * Annotation to reference external documentation API specs
  * @param path : optional path to identity the source of documentation
  * @param key  : optional key to identity area within document
  */

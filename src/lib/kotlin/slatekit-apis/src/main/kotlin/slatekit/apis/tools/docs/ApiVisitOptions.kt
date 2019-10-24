@@ -11,9 +11,9 @@
  * </slate_header>
  */
 
-package slatekit.apis.tools.doc
+package slatekit.apis.tools.docs
 
 /**
- * Generates help docs on the console.
+ * Created by kishorereddy on 6/8/17.
  */
-class DocConsole : Doc()
+data class ApiVisitOptions(val maxLength: Int = 10, val endApiWithLine: Boolean = false)

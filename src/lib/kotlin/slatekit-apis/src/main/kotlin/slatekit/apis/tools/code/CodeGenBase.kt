@@ -1,9 +1,10 @@
-package slatekit.apis.tools.codegen
+package slatekit.apis.tools.code
 
+import slatekit.apis.Protocol
 import slatekit.apis.core.Api
 import slatekit.apis.core.Action
 import slatekit.apis.helpers.ApiHelper
-import slatekit.apis.setup.Verbs
+import slatekit.apis.Verbs
 import slatekit.common.*
 import slatekit.common.io.Files
 import slatekit.common.requests.Request
@@ -62,7 +63,7 @@ abstract class CodeGenBase(val settings: CodeGenSettings) {
         this.settings.host.routes.visitApis { _, api ->
 
             try {
-                if (ApiHelper.isWebProtocol(api.protocol, "")) {
+                if (api.protocol == Protocol.Web) {
                     println("API: " + api.area + "." + api.name)
 
                     // Get only the declared members in the api/class
@@ -163,15 +164,15 @@ abstract class CodeGenBase(val settings: CodeGenSettings) {
         val verb = action.verb
         return mapOf(
                 "route" to api.area + "/" + api.name + "/" + action.name,
-                "verb" to verb,
+                "verb" to verb.name,
                 "methodName" to action.name,
                 "methodDesc" to action.desc,
                 "methodParams" to buildArgs(action),
                 "methodReturnType" to typeInfo.targetReturnType,
                 "queryParams" to buildQueryParams(action),
-                "postDataDecl" to if (verb == Verbs.Read) "" else "HashMap<String, Object> postData = new HashMap<>();",
+                "postDataDecl" to if (verb.name == Verbs.Read) "" else "HashMap<String, Object> postData = new HashMap<>();",
                 "postDataVars" to buildDataParams(action),
-                "postDataParam" to if (verb == Verbs.Read) "" else "postData,",
+                "postDataParam" to if (verb.name == Verbs.Read) "" else "postData,",
                 "converterTypes" to typeInfo.conversionType,
                 "converterClass" to getConverterTypeName(typeInfo)
         )
@@ -268,7 +269,7 @@ abstract class CodeGenBase(val settings: CodeGenSettings) {
     open fun canGenerate(apiReg: Api, apiRegAction: Action, declaredMemberLookup: Map<String, Boolean>): Boolean {
         // Only include declared items
         val isDeclared = declaredMemberLookup.containsKey(apiRegAction.name)
-        val isWebProtocol = ApiHelper.isWebProtocol(apiRegAction.protocol, apiReg.protocol)
+        val isWebProtocol = apiRegAction.protocols.hasWeb()
         return (!this.settings.declaredMethodsOnly || isDeclared) && isWebProtocol
     }
 

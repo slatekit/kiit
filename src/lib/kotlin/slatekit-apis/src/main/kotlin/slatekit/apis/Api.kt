@@ -13,11 +13,6 @@
 
 package slatekit.apis
 
-import slatekit.apis.setup.AccessLevel
-import slatekit.apis.setup.AuthModes
-import slatekit.apis.setup.Protocols
-import slatekit.apis.setup.Verbs
-
 
 /**
   * Annotation to designate a class as an API
@@ -33,7 +28,7 @@ import slatekit.apis.setup.Verbs
   *                 in the event, the auth mode is "api-key", this is the name of the api-key
   * @param auth : the authorization mode ( "app-key" | "app-roles", "key-roles" )
   * @param verb : the verb ( "get", "post", "cli", "*" )
-  * @param protocol : the platforms this is accessible to ( "web" | "cli" | "*" )
+  * @param protocols : the platforms this is accessible to ( "web" | "cli" | "*" )
   */
 @Target(AnnotationTarget.CLASS)
 annotation class Api(
@@ -44,7 +39,7 @@ annotation class Api(
         val auth: String = AuthModes.Keyed,
         val verb: String = Verbs.Auto,
         val access: String = AccessLevel.Public,
-        val protocol: Array<String> = [Protocols.All],
+        val protocols: Array<String> = [Protocols.All],
         val version: String = "1",
         val tags: Array<String> = []
         )

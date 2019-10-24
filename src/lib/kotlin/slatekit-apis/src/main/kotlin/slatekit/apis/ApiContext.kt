@@ -2,7 +2,6 @@ package slatekit.apis
 
 import slatekit.apis.core.Help
 import slatekit.apis.core.Routes
-import slatekit.apis.setup.Protocol
 import slatekit.common.naming.Namer
 
 typealias API = slatekit.apis.core.Api

@@ -20,12 +20,6 @@ class ApiResults(val ctx: Context,
     private val emptyArgs = mapOf<String, Any>()
 
 
-//    fun convert(req: Request): Request {
-//        val finalRequest = rewrites.fold(req, { acc, rewriter -> rewriter.rewrite(ctx, acc, host, emptyArgs) })
-//        return finalRequest
-//    }
-
-
     /**
      * Finally: If the format of the content specified ( json | csv | props )
      * Then serialize it here and return the content
