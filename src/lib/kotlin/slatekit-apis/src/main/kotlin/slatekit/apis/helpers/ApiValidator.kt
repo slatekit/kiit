@@ -21,6 +21,7 @@ import slatekit.common.*
 import slatekit.common.requests.Request
 import slatekit.results.Failure
 import slatekit.results.Notice
+import slatekit.results.Outcome
 import slatekit.results.Success
 import slatekit.results.builders.Notices
 import slatekit.results.builders.Outcomes
@@ -34,43 +35,44 @@ object ApiValidator {
      * @param req : the command input
      * @return
      */
-    fun validateCall(
+    suspend fun validateCall(
             request: ApiRequest,
             fetcher: (Request) -> Notice<Target>,
             allowSingleDefaultParam: Boolean = false
-    ): Notice<Target> {
+    ): Outcome<Target> {
         val req = request.request
         val fullName = req.fullName
         val args = req.data
         val apiRefCheck = Targets().process(Outcomes.of(request))
 
         return when (apiRefCheck) {
-            is Failure -> Notices.invalid("bad request : $fullName: inputs not supplied")
+            is Failure -> Outcomes.invalid("bad request : $fullName: inputs not supplied")
             is Success -> {
                 val apiRef = apiRefCheck.value
-                val action = apiRef.action
+                val target = apiRef.target!!
+                val action = target.action
 
                 // 1 param with default argument.
                 if (allowSingleDefaultParam && action.isSingleDefaultedArg() && args.size() == 0) {
-                    Success(apiRef)
+                    Outcomes.success(target)
                 }
                 // Param: Raw ApiCmd itself!
                 else if (action.isSingleArg() && action.paramsUser.isEmpty()) {
-                    Success(apiRef)
+                    Outcomes.success(target)
                 }
                 // Params - check args needed
                 else if (!allowSingleDefaultParam && action.hasArgs && args.size() == 0)
-                    Notices.invalid<Target>("bad request : $fullName: inputs not supplied")
+                    Outcomes.invalid("bad request : $fullName: inputs not supplied")
 
                 // Params - ensure matching args
                 else if (action.hasArgs) {
                     val argCheck = validateArgs(action, args)
                     if (argCheck.success) {
-                        Success(apiRef)
+                        Outcomes.success(target)
                     } else
-                        Notices.invalid<Target>("bad request : $fullName: inputs not supplied")
+                        Outcomes.invalid("bad request : $fullName: inputs not supplied")
                 } else
-                    Success(apiRef)
+                    Outcomes.success(target)
             }
         }
     }

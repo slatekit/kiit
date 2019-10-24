@@ -88,7 +88,7 @@ open class ApiHost(
      * @param req
      * @return
      */
-    fun check(request: ApiRequest): Notice<Target> {
+    suspend fun check(request: ApiRequest): Outcome<Target> {
         return ApiValidator.validateCall(request, { req -> get(req) })
     }
 

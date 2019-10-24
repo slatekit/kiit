@@ -30,10 +30,11 @@ package slatekit.apis
 annotation class Input(
     val name     : String = "",
     val desc     : String = "",
+    val required : Boolean = true,
     val length   : String = "",
+    val defaults : String = "",
     val format   : String = "",
     val examples : Array<String> = []
 )
-
 
 

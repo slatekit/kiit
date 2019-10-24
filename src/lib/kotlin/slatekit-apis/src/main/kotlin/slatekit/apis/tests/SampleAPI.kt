@@ -21,8 +21,8 @@ class SampleApi1(val context: Context) {
 class SampleApi2(val context: Context) {
 
     @Action(desc = "test simple action with inputs")
-    @Input(name = "word" , desc = "word to return back", examples = ["hello"])
-    @Input(name = "count", desc = "number of times to repeat", examples = ["3"])
+    @Input(name = "word" , desc = "word to return back", required = true, examples = ["hello"])
+    @Input(name = "count", desc = "number of times to repeat", required = true, examples = ["3"])
     fun repeat(word: String, count:Int): String {
         return (0 until count).map { word }.joinToString(" ")
     }

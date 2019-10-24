@@ -16,18 +16,13 @@ package slatekit.apis.helpers
 import slatekit.apis.*
 import slatekit.apis.core.Target
 import slatekit.apis.core.Api
-import slatekit.apis.core.Auth
+import slatekit.apis.core.Roles
 import slatekit.common.*
-import slatekit.common.auth.AuthFuncs
-import slatekit.common.auth.Roles
 import slatekit.common.requests.InputArgs
 import slatekit.common.requests.Request
 import slatekit.common.CommonRequest
 import slatekit.common.requests.Source
 import slatekit.meta.Deserializer
-import slatekit.results.Notice
-import slatekit.results.Success
-import slatekit.results.builders.Notices
 
 object ApiHelper {
 
@@ -106,17 +101,15 @@ object ApiHelper {
      */
     fun buildApiInfo(ano: Api, reg: Api): Api {
 
-        val finalRoles = reg.roles.nonEmptyOrDefault(ano.roles)
-        val finalAuth = reg.auth.nonEmptyOrDefault(ano.auth)
-        val finalProtocol = reg.protocol.nonEmptyOrDefault(ano.protocol)
         return reg.copy(
                 area = ano.area,
                 name = ano.name,
                 desc = ano.desc,
-                roles = finalRoles,
-                auth = finalAuth,
-                verb = ano.verb,
-                protocol = finalProtocol
+                roles = reg.roles.orElse(ano.roles),
+                access = reg.access.orElse(ano.access),
+                auth = reg.auth.orElse(ano.auth),
+                protocols = slatekit.apis.core.Protocols(listOf(reg.protocol.orElse(ano.protocol))),
+                verb = reg.verb.orElse(ano.verb)
         )
     }
 
@@ -134,17 +127,19 @@ object ApiHelper {
         val name = reg.cls.simpleName!!.removeSuffix("Controller").removeSuffix("Api").removeSuffix("API")
         val finalArea = reg.area.nonEmptyOrDefault("")
         val finalName = reg.name.nonEmptyOrDefault(name)
-        val finalRoles = reg.roles.nonEmptyOrDefault("?")
-        val finalAuth = reg.auth.nonEmptyOrDefault(ApiConstants.AuthModeAppKey)
-        val finalProtocol = reg.protocol.nonEmptyOrDefault("*")
-        val finalVerb = reg.verb.nonEmptyOrDefault("*")
+        val finalAccess = reg.access.orElse(Access.Public)
+        val finalRoles = reg.roles.orElse(Roles.empty)
+        val finalAuth = reg.auth.orElse(AuthMode.Keyed)
+        val finalProtocol = reg.protocol.orElse(Protocol.All)
+        val finalVerb = reg.verb.orElse(Verb.Auto)
         return reg.copy(
                 area = finalArea,
                 name = finalName,
                 roles = finalRoles,
+                access = finalAccess,
                 auth = finalAuth,
-                verb = finalVerb,
-                protocol = finalProtocol
+                protocols = slatekit.apis.core.Protocols(listOf(finalProtocol)),
+                verb = finalVerb
         )
     }
 }

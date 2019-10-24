@@ -182,7 +182,9 @@ abstract class Doc : ApiVisit {
     }
 
     override fun onArgBegin(arg: Input, options: ApiVisitOptions?) {
-        onArgBegin(arg.name, arg.desc, arg.required, arg.name, arg.defaultVal, arg.eg, options)
+
+        val example = if(arg.examples.size > 0) arg.examples[0] else ""
+        onArgBegin(arg.name, arg.desc, arg.required, arg.name, arg.defaults, example, options)
     }
 
     override fun onArgBegin(
