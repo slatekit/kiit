@@ -13,6 +13,11 @@
 
 package slatekit.apis
 
+import slatekit.apis.setup.AccessLevel
+import slatekit.apis.setup.Protocols
+import slatekit.apis.setup.Verbs
+
+
 /**
  * Annotation used in conjunction with the Api annotation, to designate your method
  * as an api action that is exposed for use.
@@ -28,11 +33,12 @@ package slatekit.apis
  * @param protocol : the protocol ( "web, "cli", "*" ) required to access this action
  */
 @Target(AnnotationTarget.FUNCTION)
-annotation class ApiAction(
-    val name: String = "",
-    val desc: String = "",
-    val roles: String = "",
-    val verb: String = "",
-    val protocol: String = "*",
-    val tags: Array<String> = []
+annotation class Action(
+        val name: String = "",
+        val desc: String = "",
+        val roles: String = "",
+        val verb: String = Verbs.auto,
+        val protocol: String = Protocols.all,
+        val access: String = AccessLevel.Public,
+        val tags: Array<String> = []
 )

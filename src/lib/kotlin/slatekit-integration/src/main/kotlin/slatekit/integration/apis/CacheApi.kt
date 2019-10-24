@@ -14,10 +14,10 @@
 package slatekit.integration.apis
 
 import slatekit.apis.Api
-import slatekit.apis.ApiAction
-import slatekit.apis.security.AuthModes
-import slatekit.apis.security.Protocols
-import slatekit.apis.security.Verbs
+import slatekit.apis.Action
+import slatekit.apis.setup.AuthModes
+import slatekit.apis.setup.Protocols
+import slatekit.apis.setup.Verbs
 import slatekit.apis.support.ApiWithSupport
 import slatekit.common.CommonContext
 import slatekit.common.Strings
@@ -26,22 +26,22 @@ import slatekit.core.cache.CacheItem
 import slatekit.core.cache.CacheSettings
 
 @Api(area = "infra", name = "cache", desc = "api info about the application and host",
-        auth = AuthModes.apiKey, roles = "admin", verb = Verbs.auto, protocol = Protocols.all)
+        auth = AuthModes.keyed, roles = "admin", verb = Verbs.auto, protocol = Protocols.all)
 class CacheApi(override val context: CommonContext) : ApiWithSupport {
 
     val cache: Cache = Cache(CacheSettings(50))
 
-    @ApiAction(desc = "gets the names of keys in the cache")
+    @Action(desc = "gets the names of keys in the cache")
     fun keys(): List<String> {
         return cache.keys()
     }
 
-    @ApiAction(desc = "gets the size of the cache")
+    @Action(desc = "gets the size of the cache")
     fun size(): Int {
         return cache.size()
     }
 
-    @ApiAction(desc = "gets the details of a single cache item")
+    @Action(desc = "gets the details of a single cache item")
     fun get(key: String): CacheItem? {
         val item = cache.getEntry(key)
         val text = item?.text ?: ""
@@ -50,12 +50,12 @@ class CacheApi(override val context: CommonContext) : ApiWithSupport {
         return copy
     }
 
-    @ApiAction(desc = "invalidates a single cache item")
+    @Action(desc = "invalidates a single cache item")
     fun invalidate(key: String) {
         return cache.invalidate(key)
     }
 
-    @ApiAction(desc = "invalidates the entire cache")
+    @Action(desc = "invalidates the entire cache")
     fun invalidateAll() {
         return cache.invalidateAll()
     }

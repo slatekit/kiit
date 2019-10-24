@@ -14,6 +14,7 @@
 package slatekit.apis.helpers
 
 import slatekit.apis.*
+import slatekit.apis.core.Target
 import slatekit.apis.core.Api
 import slatekit.apis.core.Auth
 import slatekit.common.*
@@ -78,33 +79,6 @@ object ApiHelper {
         return apiCmd
     }
 
-    /**
-     *  Checks the action and api to ensure the current request (cmd) is authorizated to
-     *  make the call
-     */
-    fun isAuthorizedForCall(cmd: Request, apiRef: ApiRef, auth: Auth?): Notice<Boolean> {
-        val noAuth = auth == null // || apiRef.api.auth.isNullOrEmpty()
-        val isActionNotAuthed = isActionNotAuthed(apiRef.action.roles)
-        val isApiNotAuthed = isApiNotAuthed(apiRef.action.roles, apiRef.api.roles)
-
-        // CASE 1: No auth for action
-        return if (noAuth && isActionNotAuthed) {
-            Success(true)
-        }
-        // CASE 2: No auth for parent
-        else if (noAuth && isApiNotAuthed) {
-            Success(true)
-        }
-        // CASE 3: No auth and action requires roles!
-        else if (noAuth) {
-            Notices.denied("Unable to authorize, authorization provider not set")
-        } else {
-            // auth-mode, action roles, api roles
-            auth?.isAuthorized(cmd, apiRef.api.auth, apiRef.action.roles, apiRef.api.roles)
-                    ?: Notices.denied("Unable to authorize, authorization provider not set")
-        }
-    }
-
     fun isActionNotAuthed(actionRoles: String): Boolean {
         val isUnknown = actionRoles == Roles.guest
         val isEmpty = actionRoles.isNullOrEmpty() || actionRoles == Roles.none
@@ -127,7 +101,7 @@ object ApiHelper {
         }
     }
 
-    fun fillArgs(deserializer: Deserializer, apiRef: ApiRef, cmd: Request): Array<Any?> {
+    fun fillArgs(deserializer: Deserializer, apiRef: Target, cmd: Request): Array<Any?> {
         val action = apiRef.action
         // Check 1: No args ?
         return if (!action.hasArgs)

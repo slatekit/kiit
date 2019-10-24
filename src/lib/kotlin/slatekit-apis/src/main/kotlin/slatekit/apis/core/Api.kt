@@ -13,6 +13,9 @@
 
 package slatekit.apis.core
 
+import slatekit.apis.setup.Access
+import slatekit.apis.setup.Protocol
+import slatekit.apis.setup.Verb
 import slatekit.meta.kClass
 import kotlin.reflect.KClass
 
@@ -33,18 +36,19 @@ import kotlin.reflect.KClass
  * @param actions : the collection of actions / methods on this API.
  */
 data class Api(
-    val cls: KClass<*>,
-    val area: String = "",
-    val name: String = "",
-    val desc: String = "",
-    val roles: String = "",
-    val auth: String = "",
-    val verb: String = "*",
-    val protocol: String = "*",
-    val declaredOnly: Boolean = true,
-    val singleton: Any? = null,
-    val setup: Setup = PublicMethods,
-    val actions: Lookup<Action> = Lookup(listOf(), { t -> t.name })
+        val cls: KClass<*>,
+        val area: String = "",
+        val name: String = "",
+        val desc: String = "",
+        val roles: String = "",
+        val auth: String = "",
+        val verb: Verb = Verb.Auto,
+        val protocol: Protocol = Protocol.All,
+        val access: Access = Access.Public,
+        val declaredOnly: Boolean = true,
+        val singleton: Any? = null,
+        val setup: Setup = PublicMethods,
+        val actions: Lookup<Action> = Lookup(listOf(), { t -> t.name })
 ) {
     constructor(
         instance: Any,

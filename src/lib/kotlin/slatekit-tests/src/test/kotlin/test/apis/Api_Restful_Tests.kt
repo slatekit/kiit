@@ -17,7 +17,7 @@ import org.junit.Assert
 import org.junit.Test
 import slatekit.apis.*
 import slatekit.apis.core.Api
-import slatekit.apis.svcs.Restify
+import slatekit.apis.middleware.Restify
 import slatekit.common.*
 import slatekit.common.ext.toStringYYYYMMDD
 import slatekit.common.naming.LowerHyphenNamer

@@ -1,9 +1,9 @@
 package test.setup
 
 import slatekit.apis.*
-import slatekit.apis.security.AuthModes
-import slatekit.apis.security.Protocols
-import slatekit.apis.security.Verbs
+import slatekit.apis.setup.AuthModes
+import slatekit.apis.setup.Protocols
+import slatekit.apis.setup.Verbs
 import slatekit.apis.support.ApiBase
 import slatekit.integration.common.AppEntContext
 
@@ -12,7 +12,7 @@ import slatekit.integration.common.AppEntContext
     auth = AuthModes.token, roles= "admin", verb = Verbs.auto, protocol = Protocols.all)
 class SampleApi(context: AppEntContext): ApiBase(context) {
 
-    @ApiAction(desc = "accepts supplied basic data types from send")
+    @Action(desc = "accepts supplied basic data types from send")
     fun defaultAnnotationValues(string1: String): String {
         return "$string1"
     }

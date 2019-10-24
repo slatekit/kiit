@@ -1,7 +1,7 @@
 package slatekit.apis.helpers
 
 import slatekit.apis.ApiHost
-import slatekit.apis.middleware.Rewriter
+import slatekit.apis.core.Rewriter
 import slatekit.common.*
 import slatekit.common.content.Content
 import slatekit.common.content.ContentTypeCsv

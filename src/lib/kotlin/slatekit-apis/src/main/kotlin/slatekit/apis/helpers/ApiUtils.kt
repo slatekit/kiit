@@ -1,7 +1,7 @@
 package slatekit.apis.helpers
 
 import slatekit.apis.ApiConstants
-import slatekit.apis.security.Protocols
+import slatekit.apis.setup.Protocols
 import slatekit.common.requests.Request
 import slatekit.common.args.ArgsCheck
 import slatekit.results.Failure
@@ -47,4 +47,20 @@ object ApiUtils {
     fun isCliAllowed(supportedProtocol: String): Boolean =
             supportedProtocol == Protocols.all || supportedProtocol == Protocols.cli
 
+
+    fun getReferencedValue(primaryValue: String, parentValue: String): String {
+
+        // Role!
+        return if (!primaryValue.isNullOrEmpty()) {
+            if (primaryValue == ApiConstants.parent) {
+                parentValue
+            } else
+                primaryValue
+        }
+        // Parent!
+        else if (!parentValue.isNullOrEmpty()) {
+            parentValue
+        } else
+            ""
+    }
 }

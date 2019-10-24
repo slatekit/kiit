@@ -14,10 +14,10 @@
 package slatekit.integration.apis
 
 import slatekit.apis.Api
-import slatekit.apis.ApiAction
-import slatekit.apis.security.AuthModes
-import slatekit.apis.security.Protocols
-import slatekit.apis.security.Verbs
+import slatekit.apis.Action
+import slatekit.apis.setup.AuthModes
+import slatekit.apis.setup.Protocols
+import slatekit.apis.setup.Verbs
 import slatekit.apis.support.ApiWithSupport
 import slatekit.common.Context
 import slatekit.common.content.Doc
@@ -25,20 +25,20 @@ import slatekit.common.queues.QueueSource
 import slatekit.results.Try
 
 @Api(area = "cloud", name = "queues", desc = "api info about the application and host",
-        auth = AuthModes.apiKey, roles = "admin", verb = Verbs.auto, protocol = Protocols.all)
+        auth = AuthModes.keyed, roles = "admin", verb = Verbs.auto, protocol = Protocols.all)
 class QueueApi(val queue: QueueSource<String>, override val context: Context) : ApiWithSupport {
 
-    @ApiAction(desc = "close the queue")
+    @Action(desc = "close the queue")
     fun close() {
         return queue.close()
     }
 
-    @ApiAction(desc = "get the total items in the queue")
+    @Action(desc = "get the total items in the queue")
     fun count(): Int {
         return queue.count()
     }
 
-    @ApiAction(desc = "get the next item in the queue")
+    @Action(desc = "get the next item in the queue")
     fun next(complete: Boolean): Any? {
         val item = queue.next()
         if (complete) {
@@ -47,7 +47,7 @@ class QueueApi(val queue: QueueSource<String>, override val context: Context) : 
         return item
     }
 
-    @ApiAction(desc = "get the next set of items in the queue")
+    @Action(desc = "get the next set of items in the queue")
     fun nextBatch(size: Int = 10, complete: Boolean): List<Any> {
         val items = queue.next(size)
         items?.let { all ->
@@ -60,7 +60,7 @@ class QueueApi(val queue: QueueSource<String>, override val context: Context) : 
         return items ?: listOf()
     }
 
-    @ApiAction(desc = "gets next item and saves it to file")
+    @Action(desc = "gets next item and saves it to file")
     fun nextToFile(complete: Boolean, fileNameLocal: String): Any? {
         val item = queue.next()
         if (complete) {
@@ -69,7 +69,7 @@ class QueueApi(val queue: QueueSource<String>, override val context: Context) : 
         return writeToFile(item, fileNameLocal, 0) { m -> item?.getValue() ?: "" }
     }
 
-    @ApiAction(desc = "gets next set of items and saves them to files")
+    @Action(desc = "gets next set of items and saves them to files")
     fun nextBatchToFiles(size: Int = 10, complete: Boolean, fileNameLocal: String): List<String?> {
         val items = queue.next(size)
         val result = items?.let { all ->
@@ -83,17 +83,17 @@ class QueueApi(val queue: QueueSource<String>, override val context: Context) : 
         return result
     }
 
-    @ApiAction(desc = "sends a message to the queue")
+    @Action(desc = "sends a message to the queue")
     fun send(msg: String, tagName: String = "", tagValue: String = ""): Try<String> {
         return queue.send(msg, tagName, tagValue)
     }
 
-    @ApiAction(desc = "sends a message to queue using content from file")
+    @Action(desc = "sends a message to queue using content from file")
     fun sendFromFile(uri: String, tagName: String = "", tagValue: String = ""): Try<String> {
         return queue.sendFromFile(uri, tagName, tagValue)
     }
 
-    @ApiAction(desc = "sends a message to queue using content from file")
+    @Action(desc = "sends a message to queue using content from file")
     fun sendFromDoc(doc: Doc, tagName: String = "", tagValue: String = ""): Try<String> {
         return queue.send(doc.content, tagName, tagValue)
     }

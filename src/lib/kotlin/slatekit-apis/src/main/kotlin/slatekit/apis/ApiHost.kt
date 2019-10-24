@@ -1,13 +1,13 @@
 package slatekit.apis
 
 import slatekit.apis.core.*
+import slatekit.apis.core.Target
 import slatekit.apis.doc.DocConsole
 import slatekit.apis.helpers.*
-import slatekit.apis.svcs.Format
-import slatekit.apis.middleware.*
-import slatekit.apis.security.Protocol
+import slatekit.apis.middleware.Format
+import slatekit.apis.validators.RouteCheck
+import slatekit.apis.setup.Protocol
 import slatekit.apis.security.WebProtocol
-import slatekit.apis.support.Error
 import slatekit.common.*
 import slatekit.common.content.Content
 import slatekit.common.encrypt.Encryptor
@@ -16,10 +16,12 @@ import slatekit.common.naming.Namer
 import slatekit.common.requests.Request
 import slatekit.common.requests.Response
 import slatekit.common.CommonRequest
+import slatekit.functions.middleware.Middleware
 import slatekit.meta.*
 import slatekit.results.*
 import slatekit.results.Status
 import slatekit.results.builders.Notices
+import slatekit.results.builders.Outcomes
 import java.io.File
 import kotlin.reflect.KCallable
 import kotlin.reflect.KClass
@@ -60,9 +62,8 @@ open class ApiHost(
      * Load all global middleware components: Rewriters, Filters, Trackers, Error handlers
      */
     val rewrites = middleware?.filter { it is Rewriter }?.map { it as Rewriter } ?: listOf()
-    val filters = middleware?.filter { it is Filter }?.map { it as Filter } ?: listOf()
-    val tracker = middleware?.filter { it is Tracked }?.map { it as Tracked }?.firstOrNull()
-    val errs = middleware?.filter { it is Error }?.map { it as Error }?.firstOrNull()
+    val filters = middleware?.filter { it is slatekit.functions.middleware.Filter<*> }?.map { it as Filter } ?: listOf()
+    val errs = middleware?.filter { it is slatekit.functions.middleware.Error<*,*> }?.map { it as Error }?.firstOrNull()
 
     val results by lazy { ApiResults(ctx, this, rewrites, serializer) }
 
@@ -75,11 +76,6 @@ open class ApiHost(
      * The help class to handle help on an area, api, or action
      */
     val help: Help by lazy { Help(this, routes, docBuilder) }
-
-    /**
-     * The validator for requests, checking protocol, parameter validation, etc
-     */
-    private val validator by lazy { Validation(this) }
 
     private val formatter = Format()
 
@@ -101,7 +97,7 @@ open class ApiHost(
      * @param req
      * @return
      */
-    fun check(request: Request): Notice<ApiRef> {
+    fun check(request: Request): Notice<Target> {
         return ApiValidator.validateCall(request, { req -> get(req) })
     }
 
@@ -110,7 +106,7 @@ open class ApiHost(
      * @param cmd
      * @return
      */
-    fun get(cmd: Request): Notice<ApiRef> {
+    fun get(cmd: Request): Notice<Target> {
         return getApi(cmd.area, cmd.name, cmd.action)
     }
 
@@ -149,9 +145,7 @@ open class ApiHost(
         val result = try {
             execute(req, null)
         } catch (ex: Exception) {
-            logger.error("Unexpected error executing ${req.fullName}", ex)
-            errs?.onError(ctx, req, req.path, this, ex, null)?.toTry()
-            Failure(ex)
+            handleError(req, ex)
         }
         return result
     }
@@ -168,9 +162,7 @@ open class ApiHost(
         val result = try {
             execute(req, options)
         } catch (ex: Exception) {
-            logger.error("Unexpected error executing ${req.fullName}", ex)
-            errs?.onError(ctx, req, req.path, this, ex, null)?.toTry()
-            Failure(ex)
+            handleError(req, ex)
         }
         return result
     }
@@ -195,7 +187,7 @@ open class ApiHost(
      * @param action
      * @return
      */
-    fun getApi(area: String, name: String, action: String): Notice<ApiRef> {
+    fun getApi(area: String, name: String, action: String): Notice<Target> {
         return routes.api(area, name, action, ctx)
     }
 
@@ -206,13 +198,13 @@ open class ApiHost(
      * @param action
      * @return
      */
-    fun getApi(clsType: KClass<*>, member: KCallable<*>): Notice<ApiRef> {
+    fun getApi(clsType: KClass<*>, member: KCallable<*>): Notice<Target> {
         val apiAnno = Reflector.getAnnotationForClassOpt<Api>(clsType, Api::class)
         val result = apiAnno?.let { anno ->
 
             val area = anno.area
             val api = anno.name
-            val actionAnno = Reflector.getAnnotationForMember<ApiAction>(member, ApiAction::class)
+            val actionAnno = Reflector.getAnnotationForMember<Action>(member, Action::class)
             val action = actionAnno?.let { act ->
                 val action = if (act.name.isBlank()) member.name else act.name
                 action
@@ -250,16 +242,17 @@ open class ApiHost(
         val req = formatter.rewrite(ctx, rewrittenReq, this, emptyArgs)
 
         // Api exists ?
-        val apiCheck = validator.validateApi(req)
+        val apiCheck = RouteCheck().check(req)
 
         // Execute the API using
-        val resultRaw = apiCheck.flatMap { apiRef ->
+        val resultRaw = apiCheck.flatMap { target ->
 
             // Run context to store all relevant info
-            val runCtx = Ctx(this, this.ctx, req, apiRef)
+            val runCtx = Ctx(this, this.ctx, req, target)
 
             // Execute using a pipeline
-            Exec(runCtx, validator, logger, options).run(this::executeMethod)
+            val apiReq = ApiRequest(ctx, req, apiRef, this, null)
+            Exec(runCtx, apiReq, logger, options).run(this::executeMethod)
         }
         val result = resultRaw.toTry()
 
@@ -272,11 +265,11 @@ open class ApiHost(
     protected open fun executeMethod(runCtx: Ctx): Try<Any> {
         // Finally make call.
         val req = runCtx.req
-        val apiRef = runCtx.apiRef
+        val target = runCtx.target
         val converter = deserializer?.invoke(req, ctx.enc) ?: Deserializer(req, ctx.enc)
-        val inputs = ApiHelper.fillArgs(converter, apiRef, req)
+        val inputs = ApiHelper.fillArgs(converter, target, req)
 
-        val returnVal = Reflector.callMethod(apiRef.api.cls, apiRef.instance, apiRef.action.member.name, inputs)
+        val returnVal = Reflector.callMethod(target.api.cls, target.instance, target.action.member.name, inputs)
 
         return returnVal?.let { res ->
             if (res is Result<*, *>) {
@@ -321,6 +314,16 @@ open class ApiHost(
             }
             Success(Content.html(content))
         }
+    }
+
+
+    private fun handleError(req:Request, ex:Exception) : Try<Any> {
+        logger.error("Unexpected error executing ${req.fullName}", ex)
+        val req = ApiRequest(this.ctx, req, null, this, null)
+        val res = Outcomes.unexpected<Any>(ex)
+        TODO.IMPLEMENT("apis", "suspend")
+        //errs?.onError(req, res)?.toTry()
+        return res.toTry()
     }
 
 

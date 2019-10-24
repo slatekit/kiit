@@ -1,10 +1,10 @@
-package slatekit.apis.middleware
+package slatekit.apis.core
 
+import slatekit.apis.ApiRequest
 import slatekit.common.Context
-import slatekit.common.Inputs
 import slatekit.common.InputsUpdateable
 import slatekit.common.requests.Request
-import slatekit.common.requests.Source
+import slatekit.functions.middleware.Middleware
 
 /**
  * A "Rewriter" based middle-ware allows allows for rewriting the API path/call
@@ -12,22 +12,17 @@ import slatekit.common.requests.Source
  */
 open class Rewriter : Middleware {
 
-    /**
-     * Rewrites the calls and returns a new request
-     * @param ctx : The application context
-     * @param req : The request
-     * @param source: The originating source for this hook ( e.g. ApiHost )
-     * @param args : Additional arguments supplied by the source
-     */
-    open fun rewrite(ctx: Context, req: Request, source: Any, args: Map<String, Any>): Request {
+    open fun rewrite(req:ApiRequest): ApiRequest {
         return req
     }
 
-    fun rewriteAction(req: Request, newAction: String, format: String? = null): Request {
+
+    fun rewriteAction(request: ApiRequest, newAction: String, format: String? = null): ApiRequest {
+        val req = request.request
         // Get the first and second part
         val first = req.parts[0]
         val second = req.parts[1]
-        return req.clone(
+        val updated = req.clone(
                 "$first/$second/$newAction",
                 listOf(first, second, newAction),
                 req.source,
@@ -40,13 +35,15 @@ open class Rewriter : Middleware {
                 req.version,
                 req.timestamp
         )
+        return request.copy(request = updated)
     }
 
-    fun rewriteActionWithParam(req: Request, newAction: String, key: String, value: String): Request {
+    fun rewriteActionWithParam(request: ApiRequest, newAction: String, key: String, value: String): ApiRequest {
+        val req = request.request
         // Get the first and second part
         val first = req.parts[0]
         val second = req.parts[1]
-        return req.clone(
+        val updated = req.clone(
                 "$first/$second/$newAction",
                 listOf(first, second, newAction),
                 req.source,
@@ -59,5 +56,6 @@ open class Rewriter : Middleware {
                 req.version,
                 req.timestamp
         )
+        return request.copy(request = updated)
     }
 }

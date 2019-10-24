@@ -18,7 +18,7 @@ import org.junit.Assert
 import org.junit.Test
 import slatekit.apis.core.Annotated
 import slatekit.apis.core.Api
-import slatekit.apis.svcs.Authenticator
+import slatekit.apis.security.Authenticator
 import slatekit.cli.CliRequest
 import slatekit.cli.CliResponse
 import slatekit.common.info.ApiKey

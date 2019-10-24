@@ -13,7 +13,7 @@
 
 package slatekit.apis.doc
 
-import slatekit.apis.ApiArg
+import slatekit.apis.Arg
 import slatekit.apis.core.Api
 import slatekit.apis.core.Action
 import kotlin.reflect.KParameter
@@ -56,7 +56,7 @@ interface ApiVisit {
 
     fun onArgsBegin(action: Action): Unit
 
-    fun onArgBegin(arg: ApiArg, options: ApiVisitOptions? = null): Unit
+    fun onArgBegin(arg: Arg, options: ApiVisitOptions? = null): Unit
 
     fun onArgBegin(
         name: String = "",
@@ -68,5 +68,5 @@ interface ApiVisit {
         options: ApiVisitOptions? = null
     )
 
-    fun onArgEnd(arg: ApiArg): Unit
+    fun onArgEnd(arg: Arg): Unit
 }

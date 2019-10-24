@@ -1,7 +1,7 @@
 package slatekit.apis.codegen
 
 import slatekit.apis.core.Action
-import slatekit.apis.security.Verbs
+import slatekit.apis.setup.Verbs
 import slatekit.common.newline
 import slatekit.meta.KTypes
 import slatekit.meta.Reflector

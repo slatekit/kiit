@@ -1,6 +1,6 @@
 package slatekit
 
-import slatekit.apis.svcs.Authenticator
+import slatekit.apis.security.Authenticator
 import slatekit.app.App
 import slatekit.app.AppOptions
 import slatekit.cli.CliSettings

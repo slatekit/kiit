@@ -11,9 +11,9 @@ import io.ktor.server.netty.Netty
 import slatekit.apis.ApiHost
 import slatekit.apis.core.Annotated
 import slatekit.apis.doc.DocWeb
-import slatekit.apis.security.AuthModes
-import slatekit.apis.security.Protocols
-import slatekit.apis.security.Verbs
+import slatekit.apis.setup.AuthModes
+import slatekit.apis.setup.Protocols
+import slatekit.apis.setup.Verbs
 import slatekit.apis.security.WebProtocol
 
 // Slate Kit - Common Utilities
@@ -108,7 +108,7 @@ class Server(val ctx: Context)  {
                         cls = SampleApi::class,
                         setup = Annotated,
                         declaredOnly = true,
-                        auth = AuthModes.apiKey,
+                        auth = AuthModes.keyed,
                         roles = Roles.all,
                         verb = Verbs.auto,
                         protocol = Protocols.all,

@@ -14,10 +14,10 @@
 package slatekit.integration.apis
 
 import slatekit.apis.Api
-import slatekit.apis.ApiAction
-import slatekit.apis.security.AuthModes
-import slatekit.apis.security.Protocols
-import slatekit.apis.security.Verbs
+import slatekit.apis.Action
+import slatekit.apis.setup.AuthModes
+import slatekit.apis.setup.Protocols
+import slatekit.apis.setup.Verbs
 import slatekit.apis.support.ApiBase
 import slatekit.common.Context
 
@@ -25,25 +25,25 @@ import slatekit.common.Context
  * Created by kreddy on 3/23/2016.
  */
 @Api(area = "infra", name = "encryption", desc = "api to encryption and decryption",
-        auth = AuthModes.apiKey, roles = "admin", verb = Verbs.auto, protocol = Protocols.cli)
+        auth = AuthModes.keyed, roles = "admin", verb = Verbs.auto, protocol = Protocols.cli)
 class EncryptApi(context: Context) : ApiBase(context) {
 
-    @ApiAction(desc = "encryptes the text")
+    @Action(desc = "encryptes the text")
     override fun encrypt(text: String): String {
         return context.enc?.encrypt(text) ?: text
     }
 
-    @ApiAction(desc = "decrypts the text")
+    @Action(desc = "decrypts the text")
     override fun decrypt(text: String): String {
         return context.enc?.decrypt(text) ?: text
     }
 
-    @ApiAction(desc = "encrypts all delimited tokens supplied")
+    @Action(desc = "encrypts all delimited tokens supplied")
     fun encryptKeyValue(key: String, value: String): String {
         return key + ": " + (context.enc?.encrypt(value) ?: value)
     }
 
-    @ApiAction(desc = "encrypts all delimited tokens supplied")
+    @Action(desc = "encrypts all delimited tokens supplied")
     fun decryptKeyValue(key: String, value: String): String {
         return key + ": " + (context.enc?.decrypt(value) ?: value)
     }

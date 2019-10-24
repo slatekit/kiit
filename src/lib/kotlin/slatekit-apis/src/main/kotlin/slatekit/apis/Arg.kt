@@ -13,6 +13,7 @@
 
 package slatekit.apis
 
+
 /**
  * Annotation to describe a parameter to an api action.
  * NOT CURRENTLY USED - Will be in upcoming versions.
@@ -26,7 +27,7 @@ package slatekit.apis
 @Target(AnnotationTarget.FUNCTION)
 @Retention(AnnotationRetention.SOURCE)
 @Repeatable
-annotation class ApiArg(
+annotation class Arg(
     val name: String = "",
     val desc: String = "",
     val required: Boolean = true,

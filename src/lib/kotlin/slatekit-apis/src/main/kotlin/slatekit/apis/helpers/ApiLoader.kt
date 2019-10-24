@@ -1,8 +1,7 @@
 package slatekit.apis.helpers
 
-import slatekit.apis.ApiAction
 import slatekit.apis.core.*
-import slatekit.apis.security.Verbs
+import slatekit.apis.setup.Verbs
 import slatekit.common.Ignore
 import slatekit.common.naming.Namer
 import slatekit.common.nonEmptyOrDefault
@@ -117,7 +116,7 @@ object ApiLoader {
     private fun loadActionsFromAnnotations(api: slatekit.apis.core.Api, namer: Namer?): List<Action> {
 
         // 1. get all the methods with the apiAction annotation
-        val rawMatches = Reflector.getAnnotatedMembers<ApiAction>(api.cls, ApiAction::class, api.declaredOnly)
+        val rawMatches = Reflector.getAnnotatedMembers<Action>(api.cls, Action::class, api.declaredOnly)
         val rawIgnores = Reflector.getAnnotatedMembers<Ignore>(api.cls, Ignore::class, api.declaredOnly)
         val rawIgnoresLookup = rawIgnores.map { it -> Pair(it.first.name, true) }.toMap()
 
@@ -142,7 +141,7 @@ object ApiLoader {
         return actions.filterNotNull()
     }
 
-    private fun buildAction(member: KCallable<*>, api: slatekit.apis.core.Api, apiAction: ApiAction?, namer: Namer?): Action {
+    private fun buildAction(member: KCallable<*>, api: slatekit.apis.core.Api, apiAction: Action?, namer: Namer?): Action {
 
         val methodName = member.name
         val actionNameRaw = apiAction?.name.nonEmptyOrDefault(methodName)
@@ -158,7 +157,7 @@ object ApiLoader {
         // Determine the actual verb
         val actionVerb = when (rawVerb) {
             Verbs.auto -> if (actionNameRaw.startsWith(Verbs.get)) Verbs.get else Verbs.post
-            Verbs.rest -> determineVerb(actionNameRaw)
+            Verbs.auto -> determineVerb(actionNameRaw)
             else -> rawVerb
         }
         return Action(

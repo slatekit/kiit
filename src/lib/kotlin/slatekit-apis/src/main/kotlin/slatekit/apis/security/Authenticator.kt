@@ -1,7 +1,7 @@
-package slatekit.apis.svcs
+package slatekit.apis.security
 
 import slatekit.apis.core.Auth
-import slatekit.apis.security.AuthModes
+import slatekit.apis.setup.AuthModes
 import slatekit.common.*
 import slatekit.common.auth.AuthFuncs
 import slatekit.common.requests.Request
@@ -52,7 +52,7 @@ open class Authenticator(
 
         // 3. Now determine roles based on api-key or role
         return when (authMode) {
-            AuthModes.apiKey -> validateApiKey(req, role)
+            AuthModes.keyed -> validateApiKey(req, role)
             AuthModes.token -> validateToken(req, role)
             else -> Notices.denied()
         }

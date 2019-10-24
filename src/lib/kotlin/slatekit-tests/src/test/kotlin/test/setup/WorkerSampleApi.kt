@@ -21,7 +21,7 @@ class WorkerSampleApi(val ctx: CommonContext, val queues:List<QueueSource<String
     override fun queues(): List<QueueSource<String>> = queues
 
 
-    @ApiAction(desc = "", roles= "", verb = "post", protocol = "@parent", tags = ["queued"])
+    @Action(desc = "", roles= "", verb = "post", protocol = "@parent", tags = ["queued"])
     fun test1(s: String, b: Boolean, i: Int): String {
         _lastResult = "$s, $b, $i"
         return _lastResult

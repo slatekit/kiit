@@ -18,9 +18,9 @@ import slatekit.apis.security.CliProtocol
 import slatekit.apis.core.Api
 import slatekit.apis.core.Routes
 import slatekit.apis.helpers.ApiLoader
-import slatekit.apis.security.AuthModes
-import slatekit.apis.security.Protocols
-import slatekit.apis.security.Verbs
+import slatekit.apis.setup.AuthModes
+import slatekit.apis.setup.Protocols
+import slatekit.apis.setup.Verbs
 import slatekit.common.auth.Roles
 import test.setup.*
 
@@ -100,7 +100,7 @@ class Api_Loader_Tests : ApiTestsBase() {
         Assert.assertTrue(api.desc == "sample api for testing verb mode with auto")
         Assert.assertTrue(api.roles == Roles.all)
         Assert.assertTrue(api.auth == AuthModes.token)
-        Assert.assertTrue(api.verb == Verbs.rest)
+        Assert.assertTrue(api.verb == Verbs.auto)
         Assert.assertTrue(api.protocol == Protocols.all)
 
         val actions = api.actions.items.map { Pair(it.name, it) }.toMap()

@@ -20,7 +20,7 @@ import slatekit.apis.core.Auth
 import slatekit.apis.helpers.ApiHelper
 import slatekit.apis.middleware.Middleware
 import slatekit.apis.security.CliProtocol
-import slatekit.apis.security.Protocol
+import slatekit.apis.setup.Protocol
 import slatekit.common.args.Args
 import slatekit.common.conf.Config
 import slatekit.common.db.DbConString

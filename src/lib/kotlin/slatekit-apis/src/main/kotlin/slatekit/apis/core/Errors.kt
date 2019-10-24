@@ -12,7 +12,6 @@ mantra: Simplicity above all else
  */
 package slatekit.apis.core
 
-import slatekit.apis.ApiRef
 import slatekit.apis.ApiRequest
 import slatekit.common.Context
 import slatekit.common.requests.Request
@@ -27,7 +26,7 @@ class Errors(val logger: Logger) {
             ctx: Context,
             errs: slatekit.functions.middleware.Error<ApiRequest, Any?>?,
             api: slatekit.apis.core.Api?,
-            apiRef: ApiRef?,
+            apiRef: Target?,
             req: Request,
             ex: Exception
     ): Try<Any> {

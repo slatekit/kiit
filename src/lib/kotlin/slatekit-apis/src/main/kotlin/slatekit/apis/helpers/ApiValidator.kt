@@ -13,7 +13,7 @@
 
 package slatekit.apis.helpers
 
-import slatekit.apis.ApiRef
+import slatekit.apis.core.Target
 import slatekit.apis.core.Action
 import slatekit.common.*
 import slatekit.common.requests.Request
@@ -27,7 +27,7 @@ object ApiValidator {
     /**
      * Checks the "route" ( area.api.action ) is valid.
      */
-    fun check(req: Request, fetcher: (Request) -> Notice<ApiRef>): Notice<ApiRef> {
+    fun check(req: Request, fetcher: (Request) -> Notice<Target>): Notice<Target> {
         // e.g. "users.invite" = [ "users", "invite" ]
         // Check 1: at least 2 parts
         val totalParts = req.parts.size
@@ -49,9 +49,9 @@ object ApiValidator {
      */
     fun validateCall(
             req: Request,
-            fetcher: (Request) -> Notice<ApiRef>,
+            fetcher: (Request) -> Notice<Target>,
             allowSingleDefaultParam: Boolean = false
-    ): Notice<ApiRef> {
+    ): Notice<Target> {
         val fullName = req.fullName
         val args = req.data
         val apiRefCheck = check(req, fetcher)
@@ -72,7 +72,7 @@ object ApiValidator {
                 }
                 // Params - check args needed
                 else if (!allowSingleDefaultParam && action.hasArgs && args.size() == 0)
-                    Notices.invalid<ApiRef>("bad request : $fullName: inputs not supplied")
+                    Notices.invalid<Target>("bad request : $fullName: inputs not supplied")
 
                 // Params - ensure matching args
                 else if (action.hasArgs) {
@@ -80,7 +80,7 @@ object ApiValidator {
                     if (argCheck.success) {
                         Success(apiRef)
                     } else
-                        Notices.invalid<ApiRef>("bad request : $fullName: inputs not supplied")
+                        Notices.invalid<Target>("bad request : $fullName: inputs not supplied")
                 } else
                     Success(apiRef)
             }

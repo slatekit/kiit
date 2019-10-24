@@ -1,6 +1,6 @@
 package slatekit.samples.common.auth
 
-import slatekit.apis.svcs.Authenticator
+import slatekit.apis.security.Authenticator
 import slatekit.common.info.ApiKey
 import slatekit.common.requests.Request
 import slatekit.results.Notice

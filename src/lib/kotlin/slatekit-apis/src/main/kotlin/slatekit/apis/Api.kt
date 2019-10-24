@@ -13,6 +13,11 @@
 
 package slatekit.apis
 
+import slatekit.apis.setup.AccessLevel
+import slatekit.apis.setup.Protocols
+import slatekit.apis.setup.Verbs
+
+
 /**
   * Annotation to designate a class as an API
   *
@@ -31,11 +36,12 @@ package slatekit.apis
   */
 @Target(AnnotationTarget.CLASS)
 annotation class Api(
-    val area: String = "",
-    val name: String = "",
-    val desc: String = "",
-    val roles: String = "",
-    val auth: String = "app-key",
-    val verb: String = "get",
-    val protocol: String = "*"
+        val area: String = "",
+        val name: String = "",
+        val desc: String = "",
+        val roles: String = "",
+        val auth: String = "app-key",
+        val verb: String = Verbs.auto,
+        val protocol: String = Protocols.all,
+        val access: String = AccessLevel.Public
 )

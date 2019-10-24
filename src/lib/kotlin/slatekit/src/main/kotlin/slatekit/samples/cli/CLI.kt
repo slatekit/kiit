@@ -1,10 +1,10 @@
 package slatekit.samples.cli
 
 import slatekit.apis.core.Annotated
-import slatekit.apis.security.AuthModes
-import slatekit.apis.security.Protocols
-import slatekit.apis.security.Verbs
-import slatekit.apis.svcs.Authenticator
+import slatekit.apis.setup.AuthModes
+import slatekit.apis.setup.Protocols
+import slatekit.apis.setup.Verbs
+import slatekit.apis.security.Authenticator
 import slatekit.cli.CliSettings
 import slatekit.common.Context
 import slatekit.common.auth.Roles
@@ -53,7 +53,7 @@ class CLI(val ctx: Context) {
                         cls = SampleApi::class,
                         setup = Annotated,
                         declaredOnly = true,
-                        auth = AuthModes.apiKey,
+                        auth = AuthModes.keyed,
                         roles = Roles.all,
                         verb = Verbs.auto,
                         protocol = Protocols.all,

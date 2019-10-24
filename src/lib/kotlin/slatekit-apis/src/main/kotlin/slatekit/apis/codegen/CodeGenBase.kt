@@ -3,7 +3,7 @@ package slatekit.apis.codegen
 import slatekit.apis.core.Api
 import slatekit.apis.core.Action
 import slatekit.apis.helpers.ApiHelper
-import slatekit.apis.security.Verbs
+import slatekit.apis.setup.Verbs
 import slatekit.common.*
 import slatekit.common.io.Files
 import slatekit.common.requests.Request

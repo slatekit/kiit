@@ -13,6 +13,9 @@
 
 package slatekit.apis.core
 
+import slatekit.apis.setup.Access
+import slatekit.apis.setup.Protocol
+import slatekit.apis.setup.Verb
 import slatekit.common.Metadata
 import slatekit.common.requests.Request
 import slatekit.common.ext.tail
@@ -30,13 +33,14 @@ import kotlin.reflect.full.createType
  * @param protocol : Protocol associated with the action.
  */
 data class Action(
-    val member: KCallable<*>,
-    val name: String = "",
-    val desc: String = "",
-    val roles: String = "",
-    val verb: String = "*",
-    val protocol: String = "*",
-    val tags: List<String> = listOf()
+        val member: KCallable<*>,
+        val name: String = "",
+        val desc: String = "",
+        val roles: String = "",
+        val verb: Verb = Verb.Auto,
+        val protocol: Protocol = Protocol.All,
+        val access: Access = Access.Public,
+        val tags: List<String> = listOf()
 ) {
     /**
      * All the parameters of the function, this includes:
