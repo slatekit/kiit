@@ -1,6 +1,5 @@
-package slatekit.apis.tests
+package slatekit.apis
 
-import slatekit.apis.*
 import slatekit.common.Context
 
 
