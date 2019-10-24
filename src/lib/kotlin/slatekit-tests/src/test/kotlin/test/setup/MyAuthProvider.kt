@@ -12,7 +12,7 @@
  */
 package test.setup
 
-import slatekit.apis.security.Authenticator
+import slatekit.apis.support.Authenticator
 import slatekit.common.info.ApiKey
 import slatekit.common.requests.Request
 

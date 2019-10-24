@@ -14,8 +14,8 @@
 package slatekit.apis.core
 
 import slatekit.apis.setup.AuthMode
+import slatekit.apis.support.RolesSupport
 import slatekit.common.requests.Request
-import slatekit.common.auth.Roles
 import slatekit.results.Notice
 import slatekit.results.Outcome
 
@@ -27,7 +27,7 @@ import slatekit.results.Outcome
  *
  * Need to initialize with api-keys
  */
-interface Auth {
+interface Auth : RolesSupport {
 
     /**
      * whether or not the authorization is valid for the auth mode and roles supplied.
@@ -49,7 +49,7 @@ interface Auth {
      * @param rolesOnApi : The values of the "roles" attribute on the annotation of the Api ( class )
      * @return
      */
-    fun check(req: Request, authMode: AuthMode, rolesOnAction: slatekit.apis.security.Roles, rolesOnApi: slatekit.apis.security.Roles): Outcome<Boolean>
+    fun check(req: Request, authMode: AuthMode, rolesOnAction: slatekit.apis.core.Roles, rolesOnApi: slatekit.apis.core.Roles): Outcome<Boolean>
 
 
     /**
@@ -58,41 +58,8 @@ interface Auth {
      */
     fun getUserRoles(req: Request): String = ""
 
-    /**
-     * Whether the role supplied is a guest role via "?"
-     */
-    fun isRoleGuest(role: String): Boolean = role == Roles.guest
 
-    /**
-     * Whether the role supplied is any role via "*"
-     */
-    fun isRoleAny(role: String): Boolean = role == Roles.all
-
-    /**
-     * Whether the role supplied is a referent to the parent role via "@parent"
-     */
-    fun isRoleParent(role: String): Boolean = role == Roles.parent
-
-    /**
-     * Whether the role supplied is an empty role indicating public access.
-     */
-    fun isRoleEmpty(role: String): Boolean = role == Roles.none
-
-    /**
-     * Whether the role is empty "" or a guest role "?"
-     */
-    fun isRoleEmptyOrGuest(role: String): Boolean = isRoleEmpty(role) || isRoleGuest(role)
-
-    /**
-     * gets the primary value supplied unless it references the parent value via "@parent"
-     * @param primary
-     * @param parent
-     * @return
-     */
-    fun determineRole(primary: String?, parent: String): String {
-        return if (primary != null && !primary.isNullOrEmpty() && primary != Roles.parent)
-            primary
-        else
-            parent
-    }
 }
+
+
+

@@ -1,5 +1,5 @@
 package slatekit.apis
 
 interface ApiHostAware {
-    fun setApiHost(host: ApiHost): Unit
+    fun setApiHost(host: ApiHost)
 }

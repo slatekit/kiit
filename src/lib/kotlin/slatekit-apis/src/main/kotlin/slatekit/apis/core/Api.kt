@@ -13,8 +13,6 @@
 
 package slatekit.apis.core
 
-import slatekit.apis.security.Protocols
-import slatekit.apis.security.Roles
 import slatekit.apis.setup.*
 import slatekit.meta.kClass
 import kotlin.reflect.KClass
@@ -47,7 +45,7 @@ data class Api(
         val verb: Verb = Verb.Auto,
         val declaredOnly: Boolean = true,
         val singleton: Any? = null,
-        val setup: Setup = PublicMethods,
+        val setup: Setup = Setup.Methods,
         val actions: Lookup<Action> = Lookup(listOf(), { t -> t.name })
 ) {
 
@@ -64,6 +62,6 @@ data class Api(
         protocol: List<Protocol> = listOf(Protocol.All),
         verb: Verb = Verb.Auto,
         declaredOnly: Boolean = true,
-        setup: Setup = PublicMethods
+        setup: Setup = Setup.Methods
     ) : this(instance.kClass, area, name, desc, Roles(roles), auth, access, Protocols(protocol), verb, declaredOnly, instance, setup)
 }

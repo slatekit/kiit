@@ -15,7 +15,7 @@ package test.apis
 import org.junit.Assert
 import org.junit.Test
 import slatekit.apis.*
-import slatekit.apis.core.Annotated
+import slatekit.apis.setup.Annotated
 import slatekit.apis.core.Api
 import slatekit.results.getOrElse
 import test.setup.SampleTypes3Api

@@ -26,7 +26,7 @@ import slatekit.results.getOrElse
 
 @Api(area = "cloud", name = "files", desc = "api info about the application and host",
         auth = AuthModes.keyed, roles = "admin", verb = Verbs.Auto, protocol = Protocols.All)
-class FilesApi(val files: slatekit.core.cloud.CloudFiles, override val context: slatekit.common.Context) : slatekit.apis.support.ApiFileSupport {
+class FilesApi(val files: slatekit.core.cloud.CloudFiles, override val context: slatekit.common.Context) : slatekit.apis.support.FileSupport {
 
     @Action(desc = "creates the root folder/bucket")
     fun createRootFolder(rootFolder: String) {

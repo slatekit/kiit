@@ -1,6 +1,6 @@
 package slatekit.server
 
-import slatekit.apis.security.Authenticator
+import slatekit.apis.support.Authenticator
 import slatekit.common.Diagnostics
 import slatekit.common.encrypt.Encryptor
 import slatekit.common.log.Logger

@@ -15,6 +15,7 @@ package slatekit.apis.core
 import org.json.simple.JSONObject
 import org.json.simple.parser.JSONParser
 import slatekit.apis.ApiConstants
+import slatekit.apis.setup.Protocol
 import slatekit.apis.support.JsonSupport
 import slatekit.common.DateTime
 import slatekit.common.Inputs
@@ -41,7 +42,7 @@ object Requests {
 
         // Parse json
         val content = File(filePath).readText()
-        val req = fromJson(content, ApiConstants.SourceFile, ApiConstants.SourceFile, route, rawPath, enc)
+        val req = fromJson(content, Protocol.File.name, Protocol.File.name, route, rawPath, enc)
         val jsonObj = req.meta.raw as JSONObject
         keys?.forEach { pair ->
             jsonObj.put(pair.key, pair.value)
@@ -81,7 +82,7 @@ object Requests {
 
         // Core fields
         val hasVersion = jsonRoot.containsKey("version")
-        val version = if (hasVersion)jsonRoot.get("version") as String else ApiConstants.Version
+        val version = if (hasVersion)jsonRoot.get("version") as String else ApiConstants.version
         val path = route ?: jsonRoot.get("path") as String
         val tag = jsonRoot.get("tag") as String
         val source = jsonRoot.get("source") as String
@@ -103,7 +104,7 @@ object Requests {
                 source = Source.parse(sourceOverride ?: source),
                 verb = verbOverride ?: verb,
                 meta = Meta(rawSource ?: "json", jsonMeta, enc),
-                data = Params(rawSource ?: "json", ApiConstants.SourceFile, true, enc, jsonData),
+                data = Params(rawSource ?: "json", Protocol.File.name, true, enc, jsonData),
                 raw = rawSource,
                 tag = tag,
                 timestamp = time
@@ -181,7 +182,7 @@ object Requests {
      * Converts the request to JSON designated as a request from a Queue ( source = queue )
      */
     fun toJsonAsQueued(req: Request): String {
-        return toJsonString(req, null, ApiConstants.SourceQueue, ApiConstants.SourceQueue)
+        return toJsonString(req, null, Protocol.Queue.name, Protocol.Queue.name)
     }
 
 

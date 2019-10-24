@@ -6,7 +6,7 @@ import org.junit.Test
 import org.threeten.bp.ZoneId
 
 import slatekit.apis.ApiHost
-import slatekit.apis.core.Annotated
+import slatekit.apis.setup.Annotated
 import slatekit.apis.core.Api
 import slatekit.apis.core.Requests
 import slatekit.common.*

@@ -16,9 +16,9 @@ package slate.test
 import kotlinx.coroutines.runBlocking
 import org.junit.Assert
 import org.junit.Test
-import slatekit.apis.core.Annotated
+import slatekit.apis.setup.Annotated
 import slatekit.apis.core.Api
-import slatekit.apis.security.Authenticator
+import slatekit.apis.support.Authenticator
 import slatekit.cli.CliRequest
 import slatekit.cli.CliResponse
 import slatekit.common.info.ApiKey

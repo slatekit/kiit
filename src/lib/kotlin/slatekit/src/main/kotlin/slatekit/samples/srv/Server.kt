@@ -9,8 +9,8 @@ import io.ktor.routing.routing
 import io.ktor.server.engine.embeddedServer
 import io.ktor.server.netty.Netty
 import slatekit.apis.ApiHost
-import slatekit.apis.core.Annotated
-import slatekit.apis.doc.DocWeb
+import slatekit.apis.setup.Annotated
+import slatekit.apis.tools.doc.DocWeb
 import slatekit.apis.setup.AuthModes
 import slatekit.apis.setup.Protocols
 import slatekit.apis.setup.Verbs

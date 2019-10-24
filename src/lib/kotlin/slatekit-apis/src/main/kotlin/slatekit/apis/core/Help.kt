@@ -14,9 +14,9 @@
 package slatekit.apis.core
 
 import slatekit.apis.ApiHost
-import slatekit.apis.doc.ApiVisitOptions
-import slatekit.apis.doc.ApiVisitor
-import slatekit.apis.doc.Doc
+import slatekit.apis.tools.doc.ApiVisitOptions
+import slatekit.apis.tools.doc.ApiVisitor
+import slatekit.apis.tools.doc.Doc
 
 class Help(val host: ApiHost, val routes: Routes, val docBuilder: () -> Doc) {
 

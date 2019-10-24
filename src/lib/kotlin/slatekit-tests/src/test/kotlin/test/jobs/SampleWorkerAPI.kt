@@ -3,7 +3,7 @@ package test.jobs
 import slatekit.apis.*
 import slatekit.apis.core.Action
 import slatekit.apis.core.Requests
-import slatekit.apis.support.ApiQueueSupport
+import slatekit.apis.support.QueueSupport
 import slatekit.common.*
 import slatekit.common.queues.QueueSource
 import slatekit.common.requests.Request
@@ -14,7 +14,7 @@ import slatekit.results.*
 
 @Api(area = "samples", name = "workerqueue", desc = "sample api to integrating workers, queues, apis")
 class SampleWorkerAPI(val ctx: CommonContext, val queues:List<QueueSource<String>> = listOf())
-    : ApiQueueSupport, slatekit.apis.middleware.Handler {
+    : QueueSupport, slatekit.apis.middleware.Handler {
 
     var _lastResult = ""
 
@@ -36,7 +36,7 @@ class SampleWorkerAPI(val ctx: CommonContext, val queues:List<QueueSource<String
         return if(req.source != Source.Queue && target.tags.contains("queued")){
             // Convert from web request to Queued request
             val queuedReq = Requests.toJsonAsQueued(req)
-            sendToQueue(queuedReq, Random.guid().toString(), req.tag, "api-queue")
+            enueue(queuedReq, Random.guid().toString(), req.tag, "api-queue")
             Success("Request processed as queue")
         }
         else {

@@ -75,31 +75,10 @@ object ApiHelper {
         val args = buildArgs(inputs)
         val opts = buildArgs(headers)
         val apiCmd = CommonRequest(path, tokens, Source.CLI, "get", args, opts,
-                null, "", "", ApiConstants.Version, DateTime.now())
+                null, "", "", ApiConstants.version, DateTime.now())
         return apiCmd
     }
 
-    fun isActionNotAuthed(actionRoles: String): Boolean {
-        val isUnknown = actionRoles == Roles.guest
-        val isEmpty = actionRoles.isNullOrEmpty() || actionRoles == Roles.none
-        return isUnknown || isEmpty
-    }
-
-    fun isApiNotAuthed(actionRoles: String, apiRoles: String): Boolean {
-        val isParent = actionRoles == Roles.parent
-        val isUnknown = apiRoles == Roles.guest
-        val isNone = apiRoles.isNullOrEmpty() || apiRoles == Roles.none
-        return isParent && (isUnknown || isNone)
-    }
-
-    fun isWebProtocol(primaryValue: String, parentValue: String): Boolean {
-        val finalValue = AuthFuncs.getReferencedValue(primaryValue, parentValue)
-        return when (finalValue) {
-            ApiConstants.SourceAny -> true
-            ApiConstants.SourceWeb -> true
-            else -> false
-        }
-    }
 
     fun fillArgs(deserializer: Deserializer, apiRef: Target, cmd: Request): Array<Any?> {
         val action = apiRef.action

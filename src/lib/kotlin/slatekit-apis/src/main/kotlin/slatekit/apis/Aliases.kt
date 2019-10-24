@@ -1,7 +1,6 @@
 package slatekit.apis
 
 
-
 /**
  * Returned from the call to a method ( could be anything )
  */
@@ -41,7 +40,7 @@ typealias Hooks = slatekit.functions.middleware.Hooks<ApiRequest, ApiResult>
 /**
  * Middleware to handle a request
  */
-typealias Handler = slatekit.functions.middleware.Handler<ApiRequest, ApiResult>
+typealias Handler = slatekit.functions.Process<ApiRequest, ApiResult>
 
 
 

@@ -13,11 +13,8 @@
 
 package slatekit.apis.core
 
-import slatekit.apis.security.Protocols
-import slatekit.apis.security.Roles
 import slatekit.apis.setup.Access
 import slatekit.apis.setup.AuthMode
-import slatekit.apis.setup.Protocol
 import slatekit.apis.setup.Verb
 import slatekit.common.Metadata
 import slatekit.common.requests.Request

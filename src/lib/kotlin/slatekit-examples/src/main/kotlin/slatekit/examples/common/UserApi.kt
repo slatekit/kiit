@@ -15,7 +15,7 @@ package slatekit.examples.common
 
 import slatekit.apis.Api
 import slatekit.apis.Action
-import slatekit.apis.Input
+import slatekit.apis.setup.Input
 import slatekit.apis.setup.AuthModes
 import slatekit.apis.setup.Protocols
 import slatekit.apis.setup.Verbs

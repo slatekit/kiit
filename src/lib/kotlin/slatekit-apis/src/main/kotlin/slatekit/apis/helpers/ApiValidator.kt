@@ -13,32 +13,19 @@
 
 package slatekit.apis.helpers
 
+import slatekit.apis.ApiRequest
 import slatekit.apis.core.Target
 import slatekit.apis.core.Action
+import slatekit.apis.middleware.Targets
 import slatekit.common.*
 import slatekit.common.requests.Request
 import slatekit.results.Failure
 import slatekit.results.Notice
 import slatekit.results.Success
 import slatekit.results.builders.Notices
+import slatekit.results.builders.Outcomes
 
 object ApiValidator {
-
-    /**
-     * Checks the "route" ( area.api.action ) is valid.
-     */
-    fun check(req: Request, fetcher: (Request) -> Notice<Target>): Notice<Target> {
-        // e.g. "users.invite" = [ "users", "invite" ]
-        // Check 1: at least 2 parts
-        val totalParts = req.parts.size
-        return if (totalParts < 2) {
-           Notices.invalid(req.action + ": invalid call")
-        } else {
-            // Check 2: Not found ?
-            val check = fetcher(req)
-            check
-        }
-    }
 
     /**
      * whether or not the api call represented by the area.api.action exists. e.g. "app.users.invite"
@@ -48,13 +35,14 @@ object ApiValidator {
      * @return
      */
     fun validateCall(
-            req: Request,
+            request: ApiRequest,
             fetcher: (Request) -> Notice<Target>,
             allowSingleDefaultParam: Boolean = false
     ): Notice<Target> {
+        val req = request.request
         val fullName = req.fullName
         val args = req.data
-        val apiRefCheck = check(req, fetcher)
+        val apiRefCheck = Targets().process(Outcomes.of(request))
 
         return when (apiRefCheck) {
             is Failure -> Notices.invalid("bad request : $fullName: inputs not supplied")

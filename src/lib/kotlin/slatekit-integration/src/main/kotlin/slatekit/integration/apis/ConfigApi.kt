@@ -18,7 +18,7 @@ import slatekit.apis.Action
 import slatekit.apis.setup.AuthModes
 import slatekit.apis.setup.Protocols
 import slatekit.apis.setup.Verbs
-import slatekit.apis.support.ApiFileSupport
+import slatekit.apis.support.FileSupport
 import slatekit.common.info.ApiKey
 import slatekit.common.info.ApiLogin
 import slatekit.common.info.Credentials
@@ -30,7 +30,7 @@ import slatekit.common.db.DbType.DbTypeMySql
 
 @Api(area = "infra", name = "configs", desc = "api info about the application and host",
         auth = AuthModes.keyed, roles = "admin", verb = Verbs.Auto, protocol = Protocols.CLI)
-class ConfigApi(override val context: slatekit.common.Context) : ApiFileSupport {
+class ConfigApi(override val context: slatekit.common.Context) : FileSupport {
 
     @Action(desc = "creates an api key in the directory")
     fun createApiKey(rootDir: String, name: String, key: String, roles: String): ApiKey {

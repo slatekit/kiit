@@ -12,17 +12,11 @@ mantra: Simplicity above all else
  */
 package test.apis
 
-import org.junit.Assert
 import org.junit.Test
-import slatekit.apis.*
-import slatekit.apis.core.Annotated
-import slatekit.apis.core.Api
-import slatekit.entities.repos.LongIdGenerator
 //import slatekit.integration.errors.ErrorHandler
 //import slatekit.integration.errors.ErrorItem
 //import slatekit.integration.errors.ErrorItemQueue
 //import slatekit.integration.errors.ErrorItemService
-import test.setup.*
 
 
 class Api_Error_Tests : ApiTestsBase() {

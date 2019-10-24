@@ -1,11 +1,12 @@
 package slatekit.apis.helpers
 
 import slatekit.apis.core.*
+import slatekit.apis.setup.Annotated
+import slatekit.apis.setup.Setup
 import slatekit.apis.setup.Verbs
 import slatekit.common.Ignore
 import slatekit.common.naming.Namer
 import slatekit.common.nonEmptyOrDefault
-import slatekit.common.orElse
 import slatekit.meta.Reflector
 import kotlin.reflect.KCallable
 import kotlin.reflect.KClass
@@ -190,7 +191,7 @@ object ApiLoader {
         // during setup, so we have to load the api methods
         // from either annotations or from public methods
         return if (api.actions.size == 0) {
-            if (api.setup == Annotated) {
+            if (api.setup == Setup.Annotated) {
                 val apiAnnotated = loadAnnotated(api.cls, namer)
                 val area = name(apiAnnotated.area, namer)
                 val name = name(apiAnnotated.name, namer)

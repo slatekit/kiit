@@ -13,11 +13,32 @@
 
 package slatekit.apis
 
+import slatekit.functions.Input
+import slatekit.functions.Output
+
+
 /**
  * Created by kreddy on 3/25/2016.
  */
 data class ApiSettings(
-    val enableFileInputs: Boolean = false,
-    val enableLogging: Boolean = false,
-    val enableOutput: Boolean = false
+
+        /**
+         * Middleware to convert the input/incoming request
+         * e.g. (Outcome<ApiRequest>) -> Outcome<ApiRequest>
+         */
+        val inputters: List<Input<ApiRequest>> = listOf(),
+
+
+        /**
+         * To validate, transform the API requests
+         * e.g (ApiRequest, (ApiRequest) -> Outcome<ApiResult>) -> Outcome<ApiResult>
+         */
+        val middleware: List<Handler> = listOf(),
+
+
+        /**
+         * Middleware to convert the output/outgoing result
+         * * e.g. (ApiRequest, Outcome<ApiResult>) -> Outcome<ApiResult>
+         */
+        val outputter: List<Output<ApiRequest, ApiResult>> = listOf()
 )

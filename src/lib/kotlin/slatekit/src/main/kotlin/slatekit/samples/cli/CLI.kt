@@ -1,10 +1,10 @@
 package slatekit.samples.cli
 
-import slatekit.apis.core.Annotated
+import slatekit.apis.setup.Annotated
 import slatekit.apis.setup.AuthModes
 import slatekit.apis.setup.Protocols
 import slatekit.apis.setup.Verbs
-import slatekit.apis.security.Authenticator
+import slatekit.apis.support.Authenticator
 import slatekit.cli.CliSettings
 import slatekit.common.Context
 import slatekit.common.auth.Roles

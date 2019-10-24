@@ -14,7 +14,7 @@ package test.apis
 
 import org.junit.Assert
 import slatekit.apis.*
-import slatekit.apis.core.Annotated
+import slatekit.apis.setup.Annotated
 import slatekit.apis.core.Api
 import slatekit.apis.core.Auth
 import slatekit.apis.helpers.ApiHelper

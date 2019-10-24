@@ -3,13 +3,12 @@ package test.apis
 import org.junit.Assert
 import org.junit.Test
 import slatekit.apis.ApiHost
-import slatekit.apis.core.Annotated
+import slatekit.apis.setup.Annotated
 import slatekit.apis.core.Api
 import slatekit.common.CommonContext
 import slatekit.common.db.DbType
 import slatekit.integration.apis.InfoApi
 import slatekit.integration.apis.VersionApi
-import slatekit.orm.model
 import slatekit.orm.orm
 import slatekit.results.getOrElse
 import test.setup.*

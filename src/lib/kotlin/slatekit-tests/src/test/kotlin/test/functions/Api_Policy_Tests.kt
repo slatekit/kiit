@@ -5,7 +5,7 @@ import org.junit.Test
 import slatekit.functions.middleware.After
 import slatekit.functions.middleware.Before
 import slatekit.functions.middleware.Filter
-import slatekit.functions.middleware.Handler
+import slatekit.functions.middleware.Handle
 import slatekit.meta.kClass
 import slatekit.results.Outcome
 import slatekit.results.builders.Outcomes
@@ -80,7 +80,7 @@ open class MyAPI1 : Api, Filter<ApiRequest>, Before<ApiRequest>, After<ApiReques
 
 }
 
-class MyAPI2 : MyAPI1(), Filter<ApiRequest>, Before<ApiRequest>, After<ApiRequest, ApiResult>, slatekit.functions.middleware.Error<ApiRequest, ApiResult>, Handler<ApiRequest, ApiResult> {
+class MyAPI2 : MyAPI1(), Filter<ApiRequest>, Before<ApiRequest>, After<ApiRequest, ApiResult>, slatekit.functions.middleware.Error<ApiRequest, ApiResult>, Handle<ApiRequest, ApiResult> {
 
     override val api: String = "myapi2"
 
@@ -139,8 +139,8 @@ class ApiHost(val apis: List<Api>) {
 
         // Exec
         val result: Outcome<Any?> = filter.flatMap {
-            if(api is Handler<*, *>) {
-                (api as Handler<ApiRequest, Any?>).handle(req) {
+            if(api is Handle<*, *>) {
+                (api as Handle<ApiRequest, Any?>).handle(req) {
                     op(call)
                 }
             } else {

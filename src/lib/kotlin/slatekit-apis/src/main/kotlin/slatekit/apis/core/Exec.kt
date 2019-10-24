@@ -29,7 +29,7 @@ class Exec(val ctx: Ctx, val req:ApiRequest, val logger: Logger, val options: Ex
     /**
      * Executes the final API action after going through all the middleware first.
      */
-    fun run(execute: (Ctx) -> Try<Any>): Try<Any> {
+    suspend fun run(execute: suspend (Ctx) -> Try<Any>): Try<Any> {
         // attempt | track | protocol | auth | middleware | params | diagnostics | filter | hook | handle | exec
         val result = execute(this.ctx)
 
