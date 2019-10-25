@@ -14,13 +14,14 @@ package test.apis
 
 import org.junit.Assert
 import slatekit.apis.*
-import slatekit.apis.setup.Annotated
+import slatekit.apis.setup.Setup.Setup.Annotated
 import slatekit.apis.core.Api
 import slatekit.apis.core.Auth
 import slatekit.apis.helpers.ApiHelper
-import slatekit.apis.middleware.Middleware
-import slatekit.apis.security.CliProtocol
+import slatekit.apis.hooks.Middleware
+import slatekit.apis.security.Protocol.CLI
 import slatekit.apis.Protocol
+import slatekit.apis.setup.Setup
 import slatekit.common.args.Args
 import slatekit.common.conf.Config
 import slatekit.common.db.DbConString
@@ -34,6 +35,7 @@ import slatekit.common.requests.Request
 import slatekit.common.requests.Response
 import slatekit.db.Db
 import slatekit.entities.Entities
+import slatekit.functions.middleware.Middleware
 import slatekit.integration.common.AppEntContext
 import slatekit.results.Try
 import test.setup.MyAuthProvider
@@ -106,10 +108,10 @@ open class ApiTestsBase {
         val apis = if (user != null) {
             val keys = buildKeys()
             val auth = MyAuthProvider(user.first, user.second, keys)
-            val apis = getApis(CliProtocol, auth, apis)
+            val apis = getApis(Protocol.CLI, auth, apis)
             apis
         } else {
-            val apis = getApis(CliProtocol, apis = apis)
+            val apis = getApis(Protocol.CLI, apis = apis)
             apis
         }
         val cmd = ApiHelper.buildCliRequest(path, inputs, opts)
@@ -122,7 +124,7 @@ open class ApiTestsBase {
 
 
     fun buildUserApiRegSingleton(ctx: AppEntContext): Api {
-        return Api(UserApi(ctx), setup = Annotated)
+        return Api(UserApi(ctx), setup = Setup.Setup.Annotated)
     }
 
 

@@ -1,4 +1,4 @@
-package slatekit.apis.middleware
+package slatekit.apis.hooks
 
 import slatekit.apis.ApiRequest
 import slatekit.common.Ignore

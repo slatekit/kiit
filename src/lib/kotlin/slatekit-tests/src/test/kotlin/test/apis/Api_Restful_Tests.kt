@@ -17,7 +17,7 @@ import org.junit.Assert
 import org.junit.Test
 import slatekit.apis.*
 import slatekit.apis.core.Api
-import slatekit.apis.middleware.Restify
+import slatekit.apis.hooks.Restify
 import slatekit.common.*
 import slatekit.common.ext.toStringYYYYMMDD
 import slatekit.common.naming.LowerHyphenNamer
@@ -60,7 +60,7 @@ class Api_Restful_Tests : ApiTestsBase() {
     @Test fun can_get_by_id() {
 
         val apis = ApiHost(ctx, apis = listOf(Api(SampleRESTApi::class, "app", "SampleREST")), auth = null, allowIO = false, middleware = listOf(Restify()))
-        val r1 = apis.call("app", "SampleREST", "1", "get", mapOf(), mapOf())
+        val r1 = apis.call("app", "SampleREST", "1", Verb.Read, mapOf(), mapOf())
 
         Assert.assertTrue(r1.success)
         Assert.assertTrue(r1.code == Codes.SUCCESS.code)
@@ -73,7 +73,7 @@ class Api_Restful_Tests : ApiTestsBase() {
     @Test fun can_patch() {
 
         val apis = ApiHost(ctx, apis = listOf(Api(SampleRESTApi::class, "app", "SampleREST")), auth = null, allowIO = false, middleware = listOf(Restify()))
-        val r1 = apis.call("app", "SampleREST", "1", "patch", mapOf(),
+        val r1 = apis.call("app", "SampleREST", "1", Verb.Patch, mapOf(),
                 mapOf("title" to "Indiana Jones Original"))
 
         Assert.assertTrue(r1.success)
@@ -85,7 +85,7 @@ class Api_Restful_Tests : ApiTestsBase() {
     @Test fun can_delete_by_id() {
 
         val apis = ApiHost(ctx, apis = listOf(Api(SampleRESTApi::class, "app", "SampleREST")), auth = null, allowIO = false, middleware = listOf(Restify()))
-        val r1 = apis.call("app", "SampleREST", "1", "delete", mapOf(), mapOf())
+        val r1 = apis.call("app", "SampleREST", "1", Verb.Delete, mapOf(), mapOf())
 
         Assert.assertTrue(r1.success)
         Assert.assertTrue(r1.code == Codes.SUCCESS.code)
@@ -96,7 +96,7 @@ class Api_Restful_Tests : ApiTestsBase() {
     @Test fun can_activate_by_id() {
 
         val apis = ApiHost(ctx, apis = listOf(Api(SampleRESTApi::class, "app", "SampleREST")), auth = null, allowIO = false, middleware = listOf(Restify()))
-        val r1 = apis.call("app", "SampleREST", "activateById", "post", mapOf(), mapOf("id" to 1))
+        val r1 = apis.call("app", "SampleREST", "activateById", Verb.Post, mapOf(), mapOf("id" to 1))
 
         Assert.assertTrue(r1.success)
         Assert.assertTrue(r1.code == Codes.SUCCESS.code)
@@ -153,7 +153,7 @@ class Api_Restful_Tests : ApiTestsBase() {
         val data = mapOf( "item" to json )
         val apis = ApiHost(ctx, apis = listOf(Api(SampleRESTApi::class, "app", "SampleREST")), auth = null, allowIO = false,  middleware = listOf(Restify()))
         val r1 = apis.call(
-                "app", "SampleREST", "", "put",
+                "app", "SampleREST", "", Verb.Put,
                 mapOf("api-key" to "3E35584A8DE0460BB28D6E0D32FB4CFD"),
                 data
         )
@@ -164,7 +164,7 @@ class Api_Restful_Tests : ApiTestsBase() {
     }
 
 
-    fun ensure(action:String, verb:String, args:Map<String,Any>, namer: Namer?, callback:(Result<*, *>) -> Unit): Unit {
+    fun ensure(action:String, verb:Verb, args:Map<String,Any>, namer: Namer?, callback:(Result<*, *>) -> Unit): Unit {
 
         val apis = ApiHost(ctx, apis = listOf(Api(SampleRESTApi::class, "app", "SampleREST")), auth = null, allowIO = false,  middleware = listOf(Restify()))
         val r1 = apis.call("app", "SampleREST", action, verb, mapOf(), args)

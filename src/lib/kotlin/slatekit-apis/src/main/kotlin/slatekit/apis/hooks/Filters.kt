@@ -1,4 +1,4 @@
-package slatekit.apis.middleware
+package slatekit.apis.hooks
 
 import kotlinx.coroutines.runBlocking
 import slatekit.apis.ApiRequest

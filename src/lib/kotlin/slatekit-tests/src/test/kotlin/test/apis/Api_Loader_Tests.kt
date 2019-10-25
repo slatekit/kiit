@@ -14,13 +14,11 @@ package test.apis
 
 import org.junit.Assert
 import org.junit.Test
+import slatekit.apis.*
 import slatekit.apis.security.CliProtocol
 import slatekit.apis.core.Api
 import slatekit.apis.core.Routes
 import slatekit.apis.helpers.ApiLoader
-import slatekit.apis.AuthModes
-import slatekit.apis.Protocols
-import slatekit.apis.Verbs
 import slatekit.common.auth.Roles
 import test.setup.*
 
@@ -38,10 +36,10 @@ class Api_Loader_Tests : ApiTestsBase() {
         Assert.assertTrue(api.area == "app")
         Assert.assertTrue(api.name == "tests")
         Assert.assertTrue(api.desc == "sample to test features of Slate Kit APIs")
-        Assert.assertTrue(api.roles == "admin")
-        Assert.assertTrue(api.auth == AuthModes.token)
-        Assert.assertTrue(api.verb == Verbs.Auto)
-        Assert.assertTrue(api.protocol == Protocols.All)
+        Assert.assertTrue(api.roles.contains("admin"))
+        Assert.assertTrue(api.auth == AuthMode.Token)
+        Assert.assertTrue(api.verb == Verb.Auto)
+        Assert.assertTrue(api.protocol == Protocol.All)
         Assert.assertTrue(api.actions.items[0].name == "inputBasicTypes")
         Assert.assertTrue(api.actions.items[0].params.size == 8)
         Assert.assertTrue(api.actions.items[0].paramsUser.size == 8)
@@ -54,15 +52,15 @@ class Api_Loader_Tests : ApiTestsBase() {
         Assert.assertTrue(api.area == "app")
         Assert.assertTrue(api.name == "tests")
         Assert.assertTrue(api.desc == "sample to test features of Slate Kit APIs")
-        Assert.assertTrue(api.roles == "admin")
-        Assert.assertTrue(api.auth == AuthModes.token)
-        Assert.assertTrue(api.verb == Verbs.Auto)
-        Assert.assertTrue(api.protocol == Protocols.All)
+        Assert.assertTrue(api.roles.contains("admin"))
+        Assert.assertTrue(api.auth == AuthMode.Token)
+        Assert.assertTrue(api.verb == Verb.Auto)
+        Assert.assertTrue(api.protocol == Protocol.All)
 
         val action = api.actions.items[0]
         Assert.assertTrue(action.name == "defaultAnnotationValues")
         Assert.assertTrue(action.protocol == api.protocol)
-        Assert.assertTrue(action.verb == Verbs.Post)
+        Assert.assertTrue(action.verb == Verb.Post)
         Assert.assertTrue(action.roles == api.roles)
         Assert.assertTrue(action.params.size == 1)
         Assert.assertTrue(action.paramsUser.size == 1)
@@ -75,10 +73,10 @@ class Api_Loader_Tests : ApiTestsBase() {
         Assert.assertTrue(api.area == "samples")
         Assert.assertTrue(api.name == "restVerbAuto")
         Assert.assertTrue(api.desc == "sample api for testing verb mode with auto")
-        Assert.assertTrue(api.roles == Roles.all)
-        Assert.assertTrue(api.auth == AuthModes.token)
-        Assert.assertTrue(api.verb == Verbs.Auto)
-        Assert.assertTrue(api.protocol == Protocols.All)
+        Assert.assertTrue(api.roles.contains(Roles.all))
+        Assert.assertTrue(api.auth == AuthMode.Token)
+        Assert.assertTrue(api.verb == Verb.Auto)
+        Assert.assertTrue(api.protocol == Protocol.All)
 
         val actions = api.actions.items.map { Pair(it.name, it) }.toMap()
         Assert.assertEquals(Verbs.Read , actions[SampleRESTVerbModeAutoApi::getAll.name]!!.verb)
@@ -98,10 +96,10 @@ class Api_Loader_Tests : ApiTestsBase() {
         Assert.assertTrue(api.area == "samples")
         Assert.assertTrue(api.name == "restVerbRest")
         Assert.assertTrue(api.desc == "sample api for testing verb mode with auto")
-        Assert.assertTrue(api.roles == Roles.all)
-        Assert.assertTrue(api.auth == AuthModes.token)
-        Assert.assertTrue(api.verb == Verbs.Auto)
-        Assert.assertTrue(api.protocol == Protocols.All)
+        Assert.assertTrue(api.roles.contains(Roles.all))
+        Assert.assertTrue(api.auth == AuthMode.Token)
+        Assert.assertTrue(api.verb == Verb.Auto)
+        Assert.assertTrue(api.protocol == Protocol.All)
 
         val actions = api.actions.items.map { Pair(it.name, it) }.toMap()
         Assert.assertEquals(Verbs.Read    , actions[SampleRESTVerbModeAutoApi::getAll.name]!!.verb)
@@ -123,16 +121,16 @@ class Api_Loader_Tests : ApiTestsBase() {
         val api = ApiLoader.loadPublic(SampleExtendedApi::class,
             "app", "sampleExtended", "sample using plain kotlin class",
             true, "users", "app-roles", "*",
-            CliProtocol.name, true, null)
+                Protocol.CLI, true, null)
 
         Assert.assertTrue(api.actions.size == 2)
         Assert.assertTrue(api.area == "app")
         Assert.assertTrue(api.name == "sampleExtended")
         Assert.assertTrue(api.desc == "sample using plain kotlin class")
-        Assert.assertTrue(api.roles == "users")
-        Assert.assertTrue(api.auth == "app-roles")
-        Assert.assertTrue(api.verb == "*")
-        Assert.assertTrue(api.protocol == CliProtocol.name)
+        Assert.assertTrue(api.roles.contains("users"))
+        Assert.assertTrue(api.auth == AuthMode.Token)
+        Assert.assertTrue(api.verb == Verb.Auto)
+        Assert.assertTrue(api.protocol ==  Protocol.CLI)
     }
 
 
@@ -144,16 +142,16 @@ class Api_Loader_Tests : ApiTestsBase() {
         val api = ApiLoader.loadPublic(SampleExtendedApi::class,
             "app", "sampleExtended", "sample using plain kotlin class",
             false, "users", "app-roles", "*",
-            CliProtocol.name, true, null)
+            Protocol.CLI, true, null)
 
         Assert.assertTrue(api.actions.size == 8)
         Assert.assertTrue(api.area == "app")
         Assert.assertTrue(api.name == "sampleExtended")
         Assert.assertTrue(api.desc == "sample using plain kotlin class")
-        Assert.assertTrue(api.roles == "users")
-        Assert.assertTrue(api.auth == "app-roles")
-        Assert.assertTrue(api.verb == "*")
-        Assert.assertTrue(api.protocol == CliProtocol.name)
+        Assert.assertTrue(api.roles.contains("users"))
+        Assert.assertTrue(api.auth == AuthMode.Token)
+        Assert.assertTrue(api.verb == Verb.Auto)
+        Assert.assertTrue(api.protocol ==  Protocol.CLI)
     }
 
 
@@ -165,16 +163,16 @@ class Api_Loader_Tests : ApiTestsBase() {
             Api(SampleExtendedApi::class,
             "app", "sampleExtended", "sample using plain kotlin class",
             "users", "app-roles", "*",
-            CliProtocol.name, true, null), null)
+            Protocol.CLI, true, null), null)
 
         Assert.assertTrue(api.actions.size == 2)
         Assert.assertTrue(api.area == "app")
         Assert.assertTrue(api.name == "sampleExtended")
         Assert.assertTrue(api.desc == "sample using plain kotlin class")
-        Assert.assertTrue(api.roles == "users")
-        Assert.assertTrue(api.auth == "app-roles")
-        Assert.assertTrue(api.verb == "*")
-        Assert.assertTrue(api.protocol == CliProtocol.name)
+        Assert.assertTrue(api.roles.contains("users"))
+        Assert.assertTrue(api.auth == AuthMode.Token)
+        Assert.assertTrue(api.verb == Verb.Auto)
+        Assert.assertTrue(api.protocol == Protocol.CLI)
     }
 
 
@@ -187,17 +185,17 @@ class Api_Loader_Tests : ApiTestsBase() {
             Api(SampleRolesByApp::class,
                 "app", "sampleExtended", "sample roles by application auth",
                 "users", "app-roles", "*",
-                CliProtocol.name, true, null),
+                    Protocol.CLI, true, null),
 
             Api(SampleRolesByKey::class,
                 "app", "sampleExtended", "sample roles by api-key",
                 "users", "key-roles", "*",
-                CliProtocol.name, true, null),
+                    Protocol.CLI, true, null),
 
             Api(SampleExtendedApi::class,
                 "tests", "sampleExtended", "sample using plain kotlin class",
                 "users", "app-roles", "*",
-                CliProtocol.name, true, null)
+                    Protocol.CLI, true, null)
         ))
 
         Assert.assertTrue(areas.size == 2)
@@ -214,17 +212,17 @@ class Api_Loader_Tests : ApiTestsBase() {
             Api(SampleRolesByApp::class,
                 "app", "sampleRolesByApp", "sample roles by application auth",
                 "users", "app-roles", "*",
-                CliProtocol.name, true, null),
+                Protocol.CLI, true, null),
 
             Api(SampleRolesByKey::class,
                 "app", "sampleRolesByKey", "sample roles by api-key",
                 "users", "key-roles", "*",
-                CliProtocol.name, true, null),
+                Protocol.CLI, true, null),
 
             Api(SampleExtendedApi::class,
                 "tests", "sampleExtended", "sample using plain kotlin class",
                 "users", "app-roles", "*",
-                CliProtocol.name, false, null)
+                Protocol.CLI, false, null)
         ))
 
         val routes = Routes(areas, null)

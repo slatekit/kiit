@@ -15,7 +15,7 @@ package test.apis
 import org.junit.Assert
 import org.junit.Test
 import slatekit.apis.helpers.ApiHelper
-import slatekit.common.auth.Roles
+import slatekit.apis.core.Roles
 
 /**
  * Created by kishorereddy on 6/12/17.
