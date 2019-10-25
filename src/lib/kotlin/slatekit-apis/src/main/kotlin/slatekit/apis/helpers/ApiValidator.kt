@@ -16,7 +16,7 @@ package slatekit.apis.helpers
 import slatekit.apis.ApiRequest
 import slatekit.apis.core.Target
 import slatekit.apis.core.Action
-import slatekit.apis.middleware.Targets
+import slatekit.apis.hooks.Targets
 import slatekit.common.*
 import slatekit.common.requests.Request
 import slatekit.results.Failure

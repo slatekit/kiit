@@ -5,7 +5,7 @@ import slatekit.apis.core.Target
 import slatekit.apis.tools.docs.DocConsole
 import slatekit.apis.helpers.*
 import slatekit.apis.support.ExecSupport
-import slatekit.apis.middleware.Targets
+import slatekit.apis.hooks.Targets
 import slatekit.apis.setup.HostAware
 import slatekit.common.*
 import slatekit.common.content.Content
