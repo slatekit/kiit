@@ -47,7 +47,7 @@ interface ExecSupport {
     /**
      * Call with inputs instead of the request
      */
-    suspend fun command(
+    suspend fun call(
             area: String, api: String, action: String,
             verb: Verb,
             opts: Map<String, Any>,

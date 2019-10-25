@@ -5,10 +5,11 @@ import slatekit.apis.support.RewriteSupport
 import slatekit.common.Ignore
 import slatekit.common.validations.ValidationFuncs
 import slatekit.functions.Input
+import slatekit.functions.middleware.Middleware
 import slatekit.results.Outcome
 import slatekit.results.flatMap
 
-class Restify : Input<ApiRequest>, RewriteSupport {
+class Restify : Input<ApiRequest>, RewriteSupport, Middleware {
 
     private val verbGet = "get"
     private val verbPost = "post"
