@@ -1,5 +1,6 @@
 package test.apis
 
+import kotlinx.coroutines.runBlocking
 import org.junit.Assert
 import org.junit.Test
 import slatekit.apis.core.Api
@@ -29,7 +30,9 @@ class Api_Naming_Tests : ApiTestsBase() {
         Assert.assertTrue(!apis.getApi("app"   , "sample-poko", "get-email"   ).success)
         Assert.assertTrue(!apis.getApi("app"   , "sample-poko", "get-ssn"     ).success)
 
-        val result = apis.call("app", "sample-poko", "get-counter", Verb.Auto, mapOf(), mapOf())
+        val result = runBlocking {
+            apis.call("app", "sample-poko", "get-counter", Verb.Auto, mapOf(), mapOf())
+        }
         Assert.assertTrue(result.success)
         Assert.assertTrue(result.getOrElse { 0 } == 1)
     }
@@ -49,7 +52,9 @@ class Api_Naming_Tests : ApiTestsBase() {
         Assert.assertTrue(!apis.getApi("app"   , "sample_extended", "get_email"   ).success)
         Assert.assertTrue(!apis.getApi("app"   , "sample_extended", "get_ssn"     ).success)
 
-        val result = apis.call("app", "sample_extended", "get_seconds", Verb.Auto, mapOf(), mapOf())
+        val result = runBlocking {
+            apis.call("app", "sample_extended", "get_seconds", Verb.Auto, mapOf(), mapOf())
+        }
         Assert.assertTrue(result.success)
         Assert.assertTrue(result.getOrElse { 0 } in 0..59)
     }

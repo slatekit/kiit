@@ -18,6 +18,7 @@ import org.junit.Assert
 import org.junit.Test
 import slatekit.apis.setup.Setup.Annotated
 import slatekit.apis.core.Api
+import slatekit.apis.setup.Setup
 import slatekit.apis.support.Authenticator
 import slatekit.cli.CliRequest
 import slatekit.cli.CliResponse
@@ -109,8 +110,8 @@ class ShellTests  {
 
     // 2. Register the apis using default textType ( uses permissions in annotations on class )
     val apis = listOf(
-            Api(InfoApi(ctx)    , setup = Setup.Annotated, declaredOnly = true, roles = "qa", protocol = "*"),
-            Api(VersionApi(ctx), setup = Setup.Annotated, declaredOnly = true, roles = "qa", protocol = "*")
+            Api(InfoApi(ctx)    , setup = Setup.Annotated, declaredOnly = true, roles = listOf("qa")),
+            Api(VersionApi(ctx), setup = Setup.Annotated, declaredOnly = true, roles = listOf("qa"))
     )
 
     // 3. Build up the cli services that handles all the command line features.

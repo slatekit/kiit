@@ -35,7 +35,7 @@ annotation class Api(
         val area: String = "",
         val name: String = "",
         val desc: String = "",
-        val roles: Array<String> = [""],
+        val roles: Array<String> = [],
         val auth: String = AuthModes.Keyed,
         val verb: String = Verbs.Auto,
         val access: String = AccessLevel.Public,

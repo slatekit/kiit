@@ -20,11 +20,17 @@ import slatekit.apis.Protocols
 import slatekit.apis.Verbs
 import slatekit.apis.support.FileSupport
 import slatekit.common.Context
+import slatekit.common.encrypt.Encryptor
 import slatekit.common.info.Host
+import slatekit.common.log.Logger
 
 @Api(area = "app", name = "version", desc = "api to get version information",
-        auth = AuthModes.keyed, roles = "admin", verb = Verbs.Auto, protocols = Protocols.All)
+        auth = AuthModes.Keyed, roles = ["admin"], verb = Verbs.Auto, protocols = [Protocols.All])
 class VersionApi(override val context: Context) : FileSupport {
+
+    override val encryptor: Encryptor? = context.enc
+    override val logger: Logger? = context.logs.getLogger()
+
 
     @Action(desc = "gets info about the host")
     fun host(): Host = context.sys.host

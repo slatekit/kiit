@@ -29,7 +29,7 @@ import slatekit.results.Notice
 import slatekit.results.Try
 
 @Api(area = "infra", name = "entities", desc = "api to access and manage data models",
-        auth = AuthModes.keyed, roles = "admin", verb = Verbs.Auto, protocols = Protocols.All)
+        auth = AuthModes.Keyed, roles = ["admin"], verb = Verbs.Auto, protocols = [Protocols.All])
 class EntitiesApi(context: AppEntContext) : ApiBase(context) {
     val appContext = context
 

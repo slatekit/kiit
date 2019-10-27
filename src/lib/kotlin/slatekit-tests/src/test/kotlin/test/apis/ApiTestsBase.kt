@@ -12,14 +12,12 @@ mantra: Simplicity above all else
  */
 package test.apis
 
+import kotlinx.coroutines.runBlocking
 import org.junit.Assert
 import slatekit.apis.*
-import slatekit.apis.setup.Setup.Setup.Annotated
 import slatekit.apis.core.Api
 import slatekit.apis.core.Auth
 import slatekit.apis.helpers.ApiHelper
-import slatekit.apis.hooks.Middleware
-import slatekit.apis.security.Protocol.CLI
 import slatekit.apis.Protocol
 import slatekit.apis.setup.Setup
 import slatekit.common.args.Args
@@ -115,7 +113,9 @@ open class ApiTestsBase {
             apis
         }
         val cmd = ApiHelper.buildCliRequest(path, inputs, opts)
-        val actual = apis.call(cmd)
+        val actual = runBlocking {
+            apis.call(cmd, null)
+        }
 
         Assert.assertTrue(actual.code == expected.code)
         Assert.assertTrue(actual.success == expected.success)
@@ -124,7 +124,7 @@ open class ApiTestsBase {
 
 
     fun buildUserApiRegSingleton(ctx: AppEntContext): Api {
-        return Api(UserApi(ctx), setup = Setup.Setup.Annotated)
+        return Api(UserApi(ctx), setup = Setup.Annotated)
     }
 
 
@@ -148,7 +148,9 @@ open class ApiTestsBase {
                 protocol = protocol)
 
         // Get result
-        val actual = host.call(request)
+        val actual = runBlocking {
+            host.call(request, null)
+        }
 
         // Compare here.
         Assert.assertTrue(actual.code == response.code)

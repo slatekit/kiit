@@ -46,10 +46,10 @@ class SampleEntityApi(ctx: AppEntContext)
 }
 
 
-@Api(area = "app", name = "tests", desc = "sample to test compositional apis with annotations", roles= "admin", auth = "app-roles", verb = "*", protocols = "*")
+@Api(area = "app", name = "tests", desc = "sample to test compositional apis with annotations", roles= ["admin"])
 class SampleEntity2Api(ctx: AppEntContext)
     : ApiBaseEntity<Long, Movie, EntityService<Long, Movie>>(ctx, Long::class, Movie::class, ctx.ent.getSvc(Movie::class)) {
 
-    @Action(name = "", desc = "gets the total number of users", roles = "@parent", verb = "post", protocol = "@parent")
+    @Action(name = "", desc = "gets the total number of users")
     fun patch(id:Long, title:String): String = "patched $id with $title"
 }

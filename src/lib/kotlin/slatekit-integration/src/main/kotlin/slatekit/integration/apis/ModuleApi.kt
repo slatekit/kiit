@@ -19,6 +19,8 @@ import slatekit.apis.AuthModes
 import slatekit.apis.Protocols
 import slatekit.apis.Verbs
 import slatekit.common.*
+import slatekit.common.encrypt.Encryptor
+import slatekit.common.log.Logger
 import slatekit.common.utils.ListMap
 import slatekit.integration.mods.Mod
 import slatekit.query.Query
@@ -28,8 +30,11 @@ import slatekit.results.Success
 import slatekit.results.Try
 
 @Api(area = "setup", name = "modules", desc = "management of system modules",
-        auth = AuthModes.keyed, roles = "admin", verb = Verbs.Auto, protocols = Protocols.All)
+        auth = AuthModes.Keyed, roles = ["admin"], verb = Verbs.Auto, protocols = [Protocols.All])
 class ModuleApi(val ctx: slatekit.integration.mods.ModuleContext, override val context: slatekit.common.Context) : slatekit.apis.support.FileSupport {
+
+    override val encryptor: Encryptor? = context.enc
+    override val logger: Logger? = context.logs.getLogger()
 
     private var _items = ListMap<String, Module>()
 

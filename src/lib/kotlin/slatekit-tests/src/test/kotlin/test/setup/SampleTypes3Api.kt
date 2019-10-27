@@ -12,7 +12,7 @@ import slatekit.common.smartvalues.Email
 import slatekit.common.smartvalues.PhoneUS
 
 
-@Api(area = "samples", name = "types3", desc = "sample api to test other features", auth = AuthModes.keyed, roles = Roles.none)
+@Api(area = "samples", name = "types3", desc = "sample api to test other features", auth = AuthModes.Keyed, roles = [Roles.none])
 class SampleTypes3Api {
 
     @Action(desc = "accepts an encrypted int that will be decrypted")

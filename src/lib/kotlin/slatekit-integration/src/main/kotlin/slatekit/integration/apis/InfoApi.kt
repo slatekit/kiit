@@ -23,7 +23,7 @@ import slatekit.common.requests.Request
 import slatekit.common.info.*
 
 @Api(area = "app", name = "info", desc = "api info about the application and host",
-        auth = AuthModes.keyed, roles = "admin", verb = Verbs.Auto, protocols = Protocols.All)
+        auth = AuthModes.Keyed, roles = ["admin"], verb = Verbs.Auto, protocols = [Protocols.All])
 class InfoApi(val context: Context)  {
 
     @Action(desc = "gets info about this build")

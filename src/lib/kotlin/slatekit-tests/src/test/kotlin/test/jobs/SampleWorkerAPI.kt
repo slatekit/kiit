@@ -1,12 +1,10 @@
 package test.jobs
 
 import slatekit.apis.*
-import slatekit.apis.core.Action
 import slatekit.apis.core.Requests
 import slatekit.apis.support.QueueSupport
 import slatekit.common.*
 import slatekit.common.queues.QueueSource
-import slatekit.common.requests.Request
 import slatekit.common.requests.Source
 import slatekit.common.CommonContext
 import slatekit.results.*
@@ -14,14 +12,14 @@ import slatekit.results.*
 
 @Api(area = "samples", name = "workerqueue", desc = "sample api to integrating workers, queues, apis")
 class SampleWorkerAPI(val ctx: CommonContext, val queues:List<QueueSource<String>> = listOf())
-    : QueueSupport, slatekit.apis.hooks.Handler {
+    : QueueSupport, slatekit.apis.Handler {
 
     var _lastResult = ""
 
     override fun queues(): List<QueueSource<String>> = queues
 
 
-    @Action(desc = "", roles= "", verb = "post", protocol = "@parent", tags = ["queued"])
+    @Action(tags = ["queued"])
     fun test1(s: String, b: Boolean, i: Int): String {
         _lastResult = "$s, $b, $i"
         return _lastResult
@@ -31,16 +29,16 @@ class SampleWorkerAPI(val ctx: CommonContext, val queues:List<QueueSource<String
     /**
      * Converts a request for an action that is queued, to an actual queue
      */
-    override fun handle(ctx: Context, req: Request, target: Action, source: Any, args: Map<String, Any>?) : Try<String>  {
+    override suspend fun process(req:ApiRequest, next:suspend(ApiRequest) -> Outcome<ApiResult>): Outcome<ApiResult>  {
         // Coming in as http request ? and mode is queued ?
-        return if(req.source != Source.Queue && target.tags.contains("queued")){
+        return if(req.source != Source.Queue && req.target?.action?.tags?.contains("queued") == true){
             // Convert from web request to Queued request
-            val queuedReq = Requests.toJsonAsQueued(req)
-            enueue(queuedReq, Random.guid().toString(), req.tag, "api-queue")
+            val queuedReq = Requests.toJsonAsQueued(req.request)
+            enueue(queuedReq, Random.guid().toString(), req.request.tag, "api-queue")
             Success("Request processed as queue")
         }
         else {
-            Failure(Exception("Continue processing"))
+            next(req)
         }
     }
 }

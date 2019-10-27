@@ -22,12 +22,17 @@ import slatekit.apis.support.FileSupport
 import slatekit.common.Context
 import slatekit.common.Uris
 import slatekit.common.Vars
+import slatekit.common.encrypt.Encryptor
+import slatekit.common.log.Logger
 import slatekit.notifications.email.EmailService
 import slatekit.results.Outcome
 
 @Api(area = "cloud", name = "email", desc = "api to send emails",
-        auth = AuthModes.keyed, roles = "ops", verb = Verbs.Auto, protocols = Protocols.All)
+        auth = AuthModes.Keyed, roles = ["ops"], verb = Verbs.Auto, protocols = [Protocols.All])
 class EmailApi(val svc: EmailService, override val context: Context) : FileSupport {
+
+    override val encryptor: Encryptor? = context.enc
+    override val logger: Logger? = context.logs.getLogger()
 
     /**
      * Sends the email message

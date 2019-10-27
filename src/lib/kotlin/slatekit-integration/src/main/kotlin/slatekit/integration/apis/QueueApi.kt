@@ -21,12 +21,18 @@ import slatekit.apis.Verbs
 import slatekit.apis.support.FileSupport
 import slatekit.common.Context
 import slatekit.common.content.Doc
+import slatekit.common.encrypt.Encryptor
+import slatekit.common.log.Logger
 import slatekit.common.queues.QueueSource
 import slatekit.results.Try
 
 @Api(area = "cloud", name = "queues", desc = "api info about the application and host",
-        auth = AuthModes.keyed, roles = "admin", verb = Verbs.Auto, protocols = Protocols.All)
+        auth = AuthModes.Keyed, roles = ["admin"], verb = Verbs.Auto, protocols = [Protocols.All])
 class QueueApi(val queue: QueueSource<String>, override val context: Context) : FileSupport {
+
+    override val encryptor: Encryptor? = context.enc
+    override val logger: Logger? = context.logs.getLogger()
+
 
     @Action(desc = "close the queue")
     fun close() {

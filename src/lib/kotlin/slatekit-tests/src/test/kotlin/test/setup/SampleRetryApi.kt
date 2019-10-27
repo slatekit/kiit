@@ -10,7 +10,7 @@ import slatekit.results.Outcome
 import slatekit.results.Success
 
 
-@Api(area = "app", name = "retry", desc = "sample to test features of Slate Kit APIs", roles= "", auth = "app-roles", verb = "*", protocols = "*")
+@Api(area = "app", name = "retry", desc = "sample to test features of Slate Kit APIs")
 open class SampleRetryApi(val err:slatekit.apis.Error) : slatekit.apis.Error {
 
 
@@ -21,7 +21,7 @@ open class SampleRetryApi(val err:slatekit.apis.Error) : slatekit.apis.Error {
      * Error-handling using the Result<T> object to model
      * successes and failures for all scenarios
      */
-    @Action(desc = "tests a retry attempt with the error queue", roles = "@parent", verb = "@parent", protocol = "@parent")
+    @Action(desc = "tests a retry attempt with the error queue")
     fun test(text:String): Notice<Int> {
         counter += 1
         if(counter % 2 == 0){

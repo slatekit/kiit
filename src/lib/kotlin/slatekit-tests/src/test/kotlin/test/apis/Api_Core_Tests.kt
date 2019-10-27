@@ -35,7 +35,7 @@ class Api_Core_Tests : ApiTestsBase() {
 
         ensure(
             protocol = Protocol.CLI,
-            apis     = listOf(Api(UserApi(ctx), setup = Setup.Setup.Annotated)),
+            apis     = listOf(Api(UserApi(ctx), setup = Setup.Annotated)),
             user     = null,
             request  = CommonRequest.path("app.users.rolesNone", "get", mapOf(), mapOf(
                     Pair("code", "1"),
@@ -49,7 +49,7 @@ class Api_Core_Tests : ApiTestsBase() {
     @Test fun can_execute_with_type_raw_request() {
         ensure(
             protocol = Protocol.CLI,
-            apis     = listOf(Api(UserApi(ctx), setup = Setup.Setup.Annotated)),
+            apis     = listOf(Api(UserApi(ctx), setup = Setup.Annotated)),
             user     = Credentials(name = "kishore", roles = "dev"),
             request  = CommonRequest.path("app.users.argTypeRequest", "get", mapOf(), mapOf(
                 Pair("id", "2")
@@ -62,7 +62,7 @@ class Api_Core_Tests : ApiTestsBase() {
     @Test fun can_execute_with_type_raw_meta() {
         ensure(
                 protocol = Protocol.CLI,
-                apis     = listOf(Api(UserApi(ctx), setup = Setup.Setup.Annotated)),
+                apis     = listOf(Api(UserApi(ctx), setup = Setup.Annotated)),
                 user     = Credentials(name = "kishore", roles = "dev"),
                 request  = CommonRequest.path("app.users.argTypeMeta", "get", mapOf(
                         Pair("token", "abc")

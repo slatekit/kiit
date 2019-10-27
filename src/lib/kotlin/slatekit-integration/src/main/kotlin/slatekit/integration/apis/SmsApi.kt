@@ -21,12 +21,18 @@ import slatekit.apis.Verbs
 import slatekit.apis.support.FileSupport
 import slatekit.common.Context
 import slatekit.common.Vars
+import slatekit.common.encrypt.Encryptor
+import slatekit.common.log.Logger
 import slatekit.notifications.sms.SmsService
 import slatekit.results.Outcome
 
 @Api(area = "cloud", name = "sms", desc = "api to send sms",
-        auth = AuthModes.keyed, roles = "ops", verb = Verbs.Auto, protocols = Protocols.All)
+        auth = AuthModes.Keyed, roles = ["ops"], verb = Verbs.Auto, protocols = [Protocols.All])
 class SmsApi(val svc: SmsService, override val context: Context) : FileSupport {
+
+    override val encryptor: Encryptor? = context.enc
+    override val logger: Logger? = context.logs.getLogger()
+
     /**
      * sends a message
      * @param message : message to send

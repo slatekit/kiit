@@ -37,7 +37,7 @@ class Api_Protocol_Tests : ApiTestsBase() {
     @Test fun should_work_when_setup_as_protocol_all_request_is_CLI() {
         ensure(
                 protocol = Protocol.CLI,
-                apis     = listOf(Api(UserApi(ctx), setup = Setup.Setup.Annotated)),
+                apis     = listOf(Api(UserApi(ctx), setup = Setup.Annotated)),
                 user     = Credentials(name = "kishore", roles = "admin"),
                 request  = CommonRequest.path("app.users.protocolAny", "get", mapOf(), mapOf(
                         Pair("code", "1"),
@@ -51,7 +51,7 @@ class Api_Protocol_Tests : ApiTestsBase() {
     @Test fun should_work_when_setup_as_protocol_CLI_and_request_is_CLI() {
         ensure(
                 protocol = Protocol.All,
-                apis     = listOf(Api(UserApi(ctx), setup = Setup.Setup.Annotated)),
+                apis     = listOf(Api(UserApi(ctx), setup = Setup.Annotated)),
                 user     = Credentials(name = "kishore", roles = "admin"),
                 request  = CommonRequest.cli("app.users.protocolCLI",  listOf(), listOf(
                         Pair("code", "1"),
@@ -65,7 +65,7 @@ class Api_Protocol_Tests : ApiTestsBase() {
     @Test fun should_work_when_setup_as_parent_protocol_CLI_and_request_is_CLI() {
         ensure(
                 protocol = Protocol.All,
-                apis     = listOf(Api(UserApi(ctx), setup = Setup.Setup.Annotated)),
+                apis     = listOf(Api(UserApi(ctx), setup = Setup.Annotated)),
                 user     = Credentials(name = "kishore", roles = "admin"),
                 request  = CommonRequest.cli("app.users.protocolParent",  listOf(), listOf(
                         Pair("code", "1"),
@@ -79,7 +79,7 @@ class Api_Protocol_Tests : ApiTestsBase() {
     @Test fun should_FAIL_when_setup_as_protocol_WEB_and_request_is_CLI() {
         ensure(
                 protocol = Protocol.CLI,
-                apis     = listOf(Api(UserApi(ctx), setup = Setup.Setup.Annotated)),
+                apis     = listOf(Api(UserApi(ctx), setup = Setup.Annotated)),
                 user     = Credentials(name = "kishore", roles = "admin"),
                 request  = (CommonRequest.cli("app.users.protocolWeb",  listOf(), listOf(
                         Pair("code", "1"),

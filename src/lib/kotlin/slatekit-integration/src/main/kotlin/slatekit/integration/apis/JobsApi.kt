@@ -20,13 +20,18 @@ import slatekit.apis.Protocols
 import slatekit.apis.Verbs
 import slatekit.apis.support.FileSupport
 import slatekit.common.Identity
+import slatekit.common.encrypt.Encryptor
+import slatekit.common.log.Logger
 import slatekit.integration.common.AppEntContext
 import slatekit.jobs.JobAction
 import slatekit.jobs.Job
 
 @Api(area = "infra", name = "workers", desc = "api to get version information",
-        auth = AuthModes.keyed, roles = "admin", verb = Verbs.Auto, protocols = Protocols.All)
+        auth = AuthModes.Keyed, roles = ["admin"], verb = Verbs.Auto, protocols = [Protocols.All])
 class JobsApi(override val context: AppEntContext) : FileSupport {
+
+    override val encryptor: Encryptor? = context.enc
+    override val logger: Logger? = context.logs.getLogger()
 
     private lateinit var manager: Job
 

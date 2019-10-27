@@ -25,7 +25,7 @@ import slatekit.common.Context
  * Created by kreddy on 3/23/2016.
  */
 @Api(area = "infra", name = "encryption", desc = "api to encryption and decryption",
-        auth = AuthModes.keyed, roles = "admin", verb = Verbs.Auto, protocols = Protocols.CLI)
+        auth = AuthModes.Keyed, roles = ["admin"], verb = Verbs.Auto, protocols = [Protocols.CLI])
 class EncryptApi(context: Context) : ApiBase(context) {
 
     @Action(desc = "encryptes the text")

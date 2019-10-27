@@ -9,7 +9,7 @@ import slatekit.integration.common.AppEntContext
 import slatekit.results.Try
 
 @Api(area = "slate", name = "docs", desc= "help doc generator",
-        auth = AuthModes.keyed, roles = "admin", verb = Verbs.Auto, protocols = Protocols.All)
+        auth = AuthModes.Keyed, roles = "admin", verb = Verbs.Auto, protocols = Protocols.All)
 class DocApi(val context: AppEntContext) {
 
     /**

@@ -27,10 +27,15 @@ import slatekit.common.conf.Config
 import slatekit.common.db.DbCon
 import slatekit.common.db.DbConString
 import slatekit.common.db.DbType.DbTypeMySql
+import slatekit.common.encrypt.Encryptor
+import slatekit.common.log.Logger
 
 @Api(area = "infra", name = "configs", desc = "api info about the application and host",
-        auth = AuthModes.keyed, roles = "admin", verb = Verbs.Auto, protocols = Protocols.CLI)
+        auth = AuthModes.Keyed, roles = ["admin"], verb = Verbs.Auto, protocols = [Protocols.CLI])
 class ConfigApi(override val context: slatekit.common.Context) : FileSupport {
+
+    override val encryptor: Encryptor? = context.enc
+    override val logger: Logger? = context.logs.getLogger()
 
     @Action(desc = "creates an api key in the directory")
     fun createApiKey(rootDir: String, name: String, key: String, roles: String): ApiKey {

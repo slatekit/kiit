@@ -14,9 +14,7 @@ package test.apis
 
 import org.junit.Test
 import slatekit.apis.Protocol
-import slatekit.apis.setup.Setup.Annotated
 import slatekit.apis.core.Api
-import slatekit.apis.security.Protocol.All
 import slatekit.apis.setup.Setup
 import slatekit.common.info.Credentials
 import slatekit.common.CommonRequest

@@ -32,7 +32,7 @@ package slatekit.apis
 annotation class Action(
         val name: String = "",
         val desc: String = "",
-        val roles: Array<String> = [""],
+        val roles: Array<String> = [],
         val verb: String = Verbs.Auto,
         val access: String = AccessLevel.Public,
         val protocol: Array<String> = [Protocols.All],

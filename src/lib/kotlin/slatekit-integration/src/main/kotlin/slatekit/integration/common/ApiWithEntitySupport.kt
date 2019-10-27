@@ -30,20 +30,20 @@ interface ApiWithEntitySupport<TId, T, TSvc> where TId:Comparable<TId>, T : Enti
     val entities: Entities
     val entitySvc: EntityService<TId, T>
 
-    @Action(name = "", desc = "gets the total number of users", roles = "@parent", verb = "get", protocol = "@parent")
+    @Action(name = "", desc = "gets the total number of users")
     fun total(): Long {
         return entitySvc.count()
     }
 
-    @Action(name = "", desc = "whether or not this dataset is empty", roles = "@parent", verb = "get", protocol = "@parent")
+    @Action(name = "", desc = "whether or not this dataset is empty")
     fun isEmpty(): Boolean = total() == 0L
 
-    @Action(name = "", desc = "gets the first item", roles = "@parent", verb = "get", protocol = "@parent")
+    @Action(name = "", desc = "gets the first item")
     fun getById(id: TId): T? {
         return entitySvc.get(id)
     }
 
-    @Action(name = "", desc = "gets the first item", roles = "@parent", verb = "get", protocol = "@parent")
+    @Action(name = "", desc = "gets the first item")
     fun copy(id: TId): T? {
         val item = entitySvc.get(id)
         return item?.let { model ->
@@ -54,62 +54,62 @@ interface ApiWithEntitySupport<TId, T, TSvc> where TId:Comparable<TId>, T : Enti
         }
     }
 
-    @Action(name = "", desc = "gets all items", roles = "@parent", verb = "get", protocol = "@parent")
+    @Action(name = "", desc = "gets all items")
     fun getAll(): List<T> {
         return entitySvc.getAll()
     }
 
-    @Action(name = "", desc = "creates an item", roles = "@parent", verb = "post", protocol = "@parent")
+    @Action(name = "", desc = "creates an item")
     fun create(item: T): TId {
         return entitySvc.create(item)
     }
 
-    @Action(name = "", desc = "updates an item", roles = "@parent", verb = "put", protocol = "@parent")
+    @Action(name = "", desc = "updates an item")
     fun update(item: T) {
         entitySvc.update(item)
     }
 
-    @Action(name = "", desc = "gets the first item", roles = "@parent", verb = "get", protocol = "@parent")
+    @Action(name = "", desc = "gets the first item")
     fun first(): T? {
         return entitySvc.first()
     }
 
-    @Action(name = "", desc = "gets the last item", roles = "@parent", verb = "get", protocol = "@parent")
+    @Action(name = "", desc = "gets the last item")
     fun last(): T? {
         return entitySvc.last()
     }
 
-    @Action(name = "", desc = "gets recent items in the system", roles = "@parent", verb = "get", protocol = "@parent")
+    @Action(name = "", desc = "gets recent items in the system")
     fun recent(count: Int = 5): List<T> {
         return entitySvc.recent(count)
     }
 
-    @Action(name = "", desc = "gets oldest items in the system", roles = "@parent", verb = "get", protocol = "@parent")
+    @Action(name = "", desc = "gets oldest items in the system")
     fun oldest(count: Int = 5): List<T> {
         return entitySvc.oldest(count)
     }
 
-    @Action(name = "", desc = "gets distinct items based on the field", roles = "@parent", verb = "get", protocol = "@parent")
+    @Action(name = "", desc = "gets distinct items based on the field")
     fun distinct(field: String): List<Any> {
         return listOf<Any>()
     }
 
-    @Action(name = "", desc = "finds items by field name and value", roles = "@parent", verb = "get", protocol = "@parent")
+    @Action(name = "", desc = "finds items by field name and value")
     fun findBy(field: String, value: String): List<T> {
         return entitySvc.find(Query().where(field, "=", value))
     }
 
-    @Action(name = "", desc = "finds items by field name and value", roles = "@parent", verb = "post", protocol = "@parent")
+    @Action(name = "", desc = "finds items by field name and value")
     fun updateField(id: TId, field: String, value: String) {
         entitySvc.update(id, field, value)
     }
 
-    @Action(name = "", desc = "deletes an item by its id", roles = "@parent", verb = "delete", protocol = "@parent")
+    @Action(name = "", desc = "deletes an item by its id")
     fun delete(item: T): Boolean {
         return entitySvc.deleteById(item.identity())
     }
 
-    @Action(name = "", desc = "deletes an item by its id", roles = "@parent", verb = "delete", protocol = "@parent")
+    @Action(name = "", desc = "deletes an item by its id")
     fun deleteById(id: TId): Boolean {
         return entitySvc.deleteById(id)
     }
