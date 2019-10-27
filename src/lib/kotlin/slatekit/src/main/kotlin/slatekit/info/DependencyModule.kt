@@ -50,7 +50,7 @@ class DependencyModule(
      */
     override fun getApis(): List<Api> {
         return listOf()
-        //return listOf( (Api(DependencyApi(appEntCtx), declaredOnly = false, setup = Annotated)))
+        //return listOf( (Api(DependencyApi(appEntCtx), declaredOnly = false, setup = Setup.Annotated)))
     }
 
 

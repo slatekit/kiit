@@ -1,6 +1,6 @@
 package slatekit
 
-import slatekit.apis.setup.Annotated
+import slatekit.apis.setup.Setup.Annotated
 import slatekit.apis.core.Api
 import slatekit.cloud.aws.AwsCloudFiles
 import slatekit.cloud.aws.AwsCloudQueue
@@ -79,11 +79,11 @@ interface SlateKitServices {
 
         // APIs
         val requiredApis = listOf(
-                Api(GeneratorApi(ctx, GeneratorService(ctx, SlateKit::class.java)), declaredOnly = true, setup = Annotated),
-                Api(DocApi(ctx), declaredOnly = true, setup = Annotated),
-                Api(InfoApi(ctx), declaredOnly = true, setup = Annotated),
-                Api(VersionApi(ctx), declaredOnly = true, setup = Annotated),
-                Api(moduleApi, declaredOnly = true, setup = Annotated)
+                Api(GeneratorApi(ctx, GeneratorService(ctx, SlateKit::class.java)), declaredOnly = true, setup = Setup.Annotated),
+                Api(DocApi(ctx), declaredOnly = true, setup = Setup.Annotated),
+                Api(InfoApi(ctx), declaredOnly = true, setup = Setup.Annotated),
+                Api(VersionApi(ctx), declaredOnly = true, setup = Setup.Annotated),
+                Api(moduleApi, declaredOnly = true, setup = Setup.Annotated)
         )
         val optionalApis = optionalApis()
         val allApis = requiredApis.plus(optionalApis)
@@ -99,11 +99,11 @@ interface SlateKitServices {
         }
 
         val apis = listOf(
-                load("email") { Api(EmailApi(emails(), ctx), declaredOnly = true, setup = Annotated) },
-                load("files") { Api(FilesApi(files(), ctx), declaredOnly = true, setup = Annotated) },
-                load("queues") { Api(QueueApi(queues(), ctx), declaredOnly = true, setup = Annotated) },
-                load("sms") { Api(SmsApi(sms(), ctx), declaredOnly = true, setup = Annotated) },
-                load("db") { Api(DependencyApi(ctx), declaredOnly = false, setup = Annotated) }
+                load("email") { Api(EmailApi(emails(), ctx), declaredOnly = true, setup = Setup.Annotated) },
+                load("files") { Api(FilesApi(files(), ctx), declaredOnly = true, setup = Setup.Annotated) },
+                load("queues") { Api(QueueApi(queues(), ctx), declaredOnly = true, setup = Setup.Annotated) },
+                load("sms") { Api(SmsApi(sms(), ctx), declaredOnly = true, setup = Setup.Annotated) },
+                load("db") { Api(DependencyApi(ctx), declaredOnly = false, setup = Setup.Annotated) }
         )
         return apis.filterNotNull()
     }

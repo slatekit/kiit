@@ -9,7 +9,7 @@ import io.ktor.routing.routing
 import io.ktor.server.engine.embeddedServer
 import io.ktor.server.netty.Netty
 import slatekit.apis.ApiHost
-import slatekit.apis.setup.Annotated
+import slatekit.apis.setup.Setup.Annotated
 import slatekit.apis.tools.docs.DocWeb
 import slatekit.apis.AuthModes
 import slatekit.apis.Protocols
@@ -106,9 +106,9 @@ class Server(val ctx: Context)  {
         return listOf(
                 slatekit.apis.core.Api(
                         cls = SampleApi::class,
-                        setup = Annotated,
+                        setup = Setup.Annotated,
                         declaredOnly = true,
-                        auth = AuthModes.keyed,
+                        auth = AuthModes.Keyed,
                         roles = Roles.all,
                         verb = Verbs.Auto,
                         protocol = Protocols.All,

@@ -1,6 +1,6 @@
 package slatekit.samples.cli
 
-import slatekit.apis.setup.Annotated
+import slatekit.apis.setup.Setup.Annotated
 import slatekit.apis.AuthModes
 import slatekit.apis.Protocols
 import slatekit.apis.Verbs
@@ -51,9 +51,9 @@ class CLI(val ctx: Context) {
         return listOf(
                 slatekit.apis.core.Api(
                         cls = SampleApi::class,
-                        setup = Annotated,
+                        setup = Setup.Annotated,
                         declaredOnly = true,
-                        auth = AuthModes.keyed,
+                        auth = AuthModes.Keyed,
                         roles = Roles.all,
                         verb = Verbs.Auto,
                         protocol = Protocols.All,
