@@ -24,7 +24,7 @@ class Worker_Api_Tests {
     fun buildContainer(): ApiServer {
         val ctx = CommonContext.simple("queues")
         val api = SampleTypes2Api()
-        val apis = ApiServer(ctx, apis = listOf(Api(api, area = "samples", name = "types2")), auth = null, allowIO = false)
+        val apis = ApiServer(ctx, apis = listOf(Api(api, area = "samples", name = "types2")))
         return apis
     }
 
@@ -41,7 +41,7 @@ class Worker_Api_Tests {
         val api = SampleWorkerAPI(ctx, queues)
 
         // 4. container
-        val apis = ApiServer(ctx, apis = listOf(Api(api, setup = Setup.Annotated)), auth = null, allowIO = false )
+        val apis = ApiServer(ctx, apis = listOf(Api(api, setup = Setup.Annotated)) )
 
         // 5. send method call to queue
         val result = runBlocking {

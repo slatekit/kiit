@@ -1,8 +1,10 @@
 package slatekit.apis.hooks
 
 import slatekit.apis.ApiRequest
+import slatekit.apis.core.Auth
 import slatekit.common.Ignore
 import slatekit.functions.Input
+import slatekit.functions.middleware.Middleware
 import slatekit.results.Outcome
 import slatekit.results.builders.Outcomes
 import slatekit.results.flatMap
@@ -10,12 +12,11 @@ import slatekit.results.flatMap
 /**
  * Checks Authorization of the request
  */
-class Authorize : Input<ApiRequest> {
+class Authorize(val auth:Auth?) : Input<ApiRequest>, Middleware {
 
     @Ignore
     override suspend fun process(request: Outcome<ApiRequest>):Outcome<ApiRequest> {
         return request.flatMap {
-            val auth = it.host.auth
             val target = it.target!!
             val noAuth = auth == null // || target.api.auth.isNullOrEmpty()
             val isActionNotAuthed = target.action.roles.isAuthed

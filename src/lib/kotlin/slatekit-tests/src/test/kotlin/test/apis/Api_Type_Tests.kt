@@ -35,7 +35,7 @@ class Api_Type_Tests : ApiTestsBase() {
     @Test fun can_decrypt_int() {
         val encryptedText = MyEncryptor.encrypt("123")
         val api = SampleTypes3Api()
-        val apis = ApiServer(ctx, apis = listOf(Api(api, setup = Setup.Annotated)), auth = null, allowIO = false )
+        val apis = ApiServer(ctx, apis = listOf(Api(api, setup = Setup.Annotated)) )
         val r1 = runBlocking {
             apis.call("samples", "types3", "getDecInt", Verb.Read, mapOf(), mapOf("id" to encryptedText))
         }
@@ -47,7 +47,7 @@ class Api_Type_Tests : ApiTestsBase() {
     @Test fun can_decrypt_long() {
         val encryptedText = MyEncryptor.encrypt("123456")
         val api = SampleTypes3Api()
-        val apis = ApiServer(ctx, apis = listOf(Api(api, setup = Setup.Annotated)), auth = null, allowIO = false )
+        val apis = ApiServer(ctx, apis = listOf(Api(api, setup = Setup.Annotated)))
         val r1 = runBlocking {
             apis.call("samples", "types3", "getDecLong", Verb.Read, mapOf(), mapOf("id" to encryptedText))
         }
@@ -59,7 +59,7 @@ class Api_Type_Tests : ApiTestsBase() {
     @Test fun can_decrypt_double() {
         val encryptedText = MyEncryptor.encrypt("123.456")
         val api = SampleTypes3Api()
-        val apis = ApiServer(ctx, apis = listOf(Api(api, setup = Setup.Annotated)), auth = null, allowIO = false )
+        val apis = ApiServer(ctx, apis = listOf(Api(api, setup = Setup.Annotated))  )
         val r1 = runBlocking {
             apis.call("samples", "types3", "getDecDouble", Verb.Read, mapOf(), mapOf("id" to encryptedText))
         }
@@ -71,7 +71,7 @@ class Api_Type_Tests : ApiTestsBase() {
     @Test fun can_decrypt_string() {
         val encryptedText = MyEncryptor.encrypt("slate-kit")
         val api = SampleTypes3Api()
-        val apis = ApiServer(ctx, apis = listOf(Api(api, setup = Setup.Annotated)), auth = null, allowIO = false )
+        val apis = ApiServer(ctx, apis = listOf(Api(api, setup = Setup.Annotated)) )
         val r1 = runBlocking {
             apis.call("samples", "types3", "getDecString", Verb.Read, mapOf(), mapOf("id" to encryptedText))
         }
@@ -100,7 +100,7 @@ class Api_Type_Tests : ApiTestsBase() {
 
     @Test fun can_use_enum_by_name() {
         val api = SampleTypes3Api()
-        val apis = ApiServer(ctx, apis = listOf(Api(api, setup = Setup.Annotated)),allowIO = false,  auth = null )
+        val apis = ApiServer(ctx, apis = listOf(Api(api, setup = Setup.Annotated)) )
         val r1 = runBlocking {
             apis.call("samples", "types3", "getEnum", Verb.Read, mapOf(), mapOf(Pair("status", StatusEnum.Active.name)))
         }
@@ -111,7 +111,7 @@ class Api_Type_Tests : ApiTestsBase() {
 
     @Test fun can_use_enum_by_number() {
         val api = SampleTypes3Api()
-        val apis = ApiServer(ctx, apis = listOf(Api(api, setup = Setup.Annotated)),allowIO = false,  auth = null )
+        val apis = ApiServer(ctx, apis = listOf(Api(api, setup = Setup.Annotated)))
         val r1 = runBlocking {
             apis.call("samples", "types3", "getEnum", Verb.Read, mapOf(), mapOf(Pair("status", StatusEnum.Active.value)))
         }
@@ -122,7 +122,7 @@ class Api_Type_Tests : ApiTestsBase() {
 
     @Test fun can_use_enum_value() {
         val api = SampleTypes3Api()
-        val apis = ApiServer(ctx, apis = listOf(Api(api, setup = Setup.Annotated)),allowIO = false,  auth = null )
+        val apis = ApiServer(ctx, apis = listOf(Api(api, setup = Setup.Annotated)))
         val r1 = runBlocking {
             apis.call("samples", "types3", "getEnumValue", Verb.Read, mapOf(), mapOf(Pair("status", StatusEnum.Pending.value)))
         }
@@ -137,7 +137,7 @@ class Api_Type_Tests : ApiTestsBase() {
 
     fun ensureSmartString(method:String, text:String, success:Boolean, expected:String) {
         val api = SampleTypes3Api()
-        val apis = ApiServer(ctx, apis = listOf(Api(api, setup = Setup.Annotated)),allowIO = false,  auth = null )
+        val apis = ApiServer(ctx, apis = listOf(Api(api, setup = Setup.Annotated)))
         val r1 = runBlocking {
             apis.call("samples", "types3", method, Verb.Read, mapOf(), mapOf("text" to text))
         }

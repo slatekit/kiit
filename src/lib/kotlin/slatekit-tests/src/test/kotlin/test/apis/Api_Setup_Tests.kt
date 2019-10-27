@@ -20,7 +20,7 @@ class Api_Setup_Tests : ApiTestsBase() {
 
 
     @Test fun can_setup_instance_as_new() {
-        val apis = ApiServer(ctx, apis = listOf(Api(SamplePOKOApi::class, "app", "SamplePOKO")), allowIO = false)
+        val apis = ApiServer(ctx, apis = listOf(Api(SamplePOKOApi::class, "app", "SamplePOKO")))
         val result = apis.getApi("app", "SamplePOKO", "getTime" )
 
         val apiRef = result.getOrElse { null }
@@ -31,7 +31,7 @@ class Api_Setup_Tests : ApiTestsBase() {
 
     @Test fun can_setup_instance_as_new_with_context() {
         ctx.ent.orm<Long, Movie>(DbType.DbTypeMemory, Long::class, Movie::class)
-        val apis = ApiServer(ctx, apis = listOf(Api(SampleEntityApi::class, "app", "SampleEntity")), allowIO = false)
+        val apis = ApiServer(ctx, apis = listOf(Api(SampleEntityApi::class, "app", "SampleEntity")))
         val result = apis.getApi("app", "SampleEntity", "patch" )
 
         val apiRef = result.getOrElse { null }
@@ -42,7 +42,7 @@ class Api_Setup_Tests : ApiTestsBase() {
     @Test fun can_setup_instance_as_singleton() {
         val inst = SamplePOKOApi()
         inst.count = 1001
-        val apis = ApiServer(ctx, apis = listOf(Api(inst, "app", "SamplePOKO")), allowIO = false)
+        val apis = ApiServer(ctx, apis = listOf(Api(inst, "app", "SamplePOKO")))
         val result = apis.getApi("app", "SamplePOKO", "getTime" )
         val apiRef = result.getOrElse { null }
         Assert.assertTrue(result.success && apiRef?.instance is SamplePOKOApi)
@@ -51,7 +51,7 @@ class Api_Setup_Tests : ApiTestsBase() {
 
 
     @Test fun can_setup_instance_with_declared_members_only() {
-        val apis = ApiServer(ctx, apis = listOf(Api(SamplePOKOApi::class, "app", "SamplePOKO")), auth = null, allowIO = false)
+        val apis = ApiServer(ctx, apis = listOf(Api(SamplePOKOApi::class, "app", "SamplePOKO")))
         Assert.assertTrue( apis.getApi("app"   , "SamplePOKO", "getTime"    ).success)
         Assert.assertTrue( apis.getApi("app"   , "SamplePOKO", "getCounter" ).success)
         Assert.assertTrue( apis.getApi("app"   , "SamplePOKO", "hello"      ).success)
@@ -63,7 +63,7 @@ class Api_Setup_Tests : ApiTestsBase() {
 
 
     @Test fun can_setup_instance_with_inheritance() {
-        val apis = ApiServer(ctx, apis = listOf(Api(SampleExtendedApi::class, "app", "SampleExtended", declaredOnly = false)), auth = null, allowIO = false)
+        val apis = ApiServer(ctx, apis = listOf(Api(SampleExtendedApi::class, "app", "SampleExtended", declaredOnly = false)))
         Assert.assertTrue( apis.getApi("app"   , "SampleExtended", "getSeconds" ).success)
         Assert.assertTrue( apis.getApi("app"   , "SampleExtended", "getTime"    ).success)
         Assert.assertTrue( apis.getApi("app"   , "SampleExtended", "getCounter" ).success)
@@ -77,8 +77,7 @@ class Api_Setup_Tests : ApiTestsBase() {
 
     @Test fun can_setup_instance_with_compositional_apis_with_annotations() {
         ctx.ent.orm<Long, Movie>(DbType.DbTypeMemory, Long::class, Movie::class)
-        val apis = ApiServer(ctx, apis = listOf(Api(SampleEntity2Api::class, declaredOnly = false, setup = Setup.Annotated)),
-                auth = null, allowIO = false)
+        val apis = ApiServer(ctx, apis = listOf(Api(SampleEntity2Api::class, declaredOnly = false, setup = Setup.Annotated)))
         Assert.assertTrue( apis.getApi("app"   , "tests", "patch" ).success)
         Assert.assertTrue( apis.getApi("app"   , "tests", "recent" ).success)
         Assert.assertTrue( apis.getApi("app"   , "tests", "deleteById" ).success)
@@ -90,7 +89,7 @@ class Api_Setup_Tests : ApiTestsBase() {
                 Api(SamplePOKOApi::class, "app", "SamplePOKO"),
                 Api(InfoApi(ctx), setup = Setup.Annotated),
                 Api(VersionApi(ctx), setup = Setup.Annotated)
-        ), auth = null, allowIO = false)
+        ))
 
         Assert.assertTrue(!apis.routes.contains("app.SamplePOKO.fakeMethod"))
         Assert.assertTrue(!apis.routes.contains("sys.app.host2"))
@@ -102,7 +101,7 @@ class Api_Setup_Tests : ApiTestsBase() {
                 Api(SamplePOKOApi::class, "app", "SamplePOKO"),
                 Api(InfoApi(ctx), setup = Setup.Annotated),
                 Api(VersionApi(ctx), setup = Setup.Annotated)
-        ), auth = null, allowIO = false)
+        ))
 
         Assert.assertTrue(apis.routes.check("app.SamplePOKO.getCounter"))
         Assert.assertTrue(apis.routes.check("app.info.about"))
@@ -110,7 +109,7 @@ class Api_Setup_Tests : ApiTestsBase() {
 
 
     @Test fun can_call_action_without_area() {
-        val apis = ApiServer(ctx, apis = listOf(Api(SamplePOKOApi::class, "app", "SamplePOKO")), auth = null, allowIO = false)
+        val apis = ApiServer(ctx, apis = listOf(Api(SamplePOKOApi::class, "app", "SamplePOKO")))
         val result = runBlocking {  apis.call("app", "SamplePOKO", "getCounter", Verb.Auto, mapOf(), mapOf()) }
         Assert.assertTrue(result.success)
         Assert.assertTrue(result.getOrElse { 0 } == 1)
@@ -118,7 +117,7 @@ class Api_Setup_Tests : ApiTestsBase() {
 
 
     @Test fun can_call_action_in_derived_class() {
-        val apis = ApiServer(ctx, apis = listOf(Api(SampleExtendedApi::class, "app", "SampleExtended")), auth = null, allowIO = false)
+        val apis = ApiServer(ctx, apis = listOf(Api(SampleExtendedApi::class, "app", "SampleExtended")))
         val result = runBlocking { apis.call("app", "SampleExtended", "getSeconds", Verb.Auto, mapOf(), mapOf()) }
         Assert.assertTrue(result.success)
         Assert.assertTrue(result.getOrElse { -1 } in 0..59)
@@ -126,7 +125,7 @@ class Api_Setup_Tests : ApiTestsBase() {
 
 
     @Test fun can_call_action_in_base_class() {
-        val apis = ApiServer(ctx, apis = listOf(Api(SampleExtendedApi::class, "app", "SampleExtended", declaredOnly = false)), auth = null, allowIO = false)
+        val apis = ApiServer(ctx, apis = listOf(Api(SampleExtendedApi::class, "app", "SampleExtended", declaredOnly = false)))
         val result = runBlocking { apis.call("app", "SampleExtended", "getCounter", Verb.Auto, mapOf(), mapOf()) }
         Assert.assertTrue(result.success)
         Assert.assertTrue(result.getOrElse { 0 } == 1)
@@ -137,7 +136,7 @@ class Api_Setup_Tests : ApiTestsBase() {
     fun can_get_api_info_from_method() {
         val ctx = CommonContext.simple("queues")
         val api = WorkerSampleApi(ctx)
-        val apis = ApiServer(ctx, apis = listOf(Api(api, setup = Setup.Annotated)), auth = null , allowIO = false)
+        val apis = ApiServer(ctx, apis = listOf(Api(api, setup = Setup.Annotated)) )
         val apiRef = apis.getApi(WorkerSampleApi::class, WorkerSampleApi::test1)
         Assert.assertTrue( apiRef.getOrElse { null }?.api?.area == "samples")
         Assert.assertTrue( apiRef.getOrElse { null }?.api?.name == "workerqueue")

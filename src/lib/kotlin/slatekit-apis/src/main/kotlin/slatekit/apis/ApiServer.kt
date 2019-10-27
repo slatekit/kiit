@@ -31,8 +31,8 @@ import kotlin.reflect.KClass
 open class ApiServer(
         val ctx: Context,
         val apis: List<slatekit.apis.core.Api>,
-        val hooks: ApiHooks,
-        val settings: ApiSettings
+        val hooks: ApiHooks = ApiHooks(),
+        val settings: ApiSettings = ApiSettings()
 ) : ExecSupport {
 
 
@@ -253,6 +253,15 @@ open class ApiServer(
 
     companion object {
 
+
+        @JvmStatic
+        fun of(ctx:Context, apis:List<slatekit.apis.core.Api>, auth: Auth?, protocol: Protocol?):ApiServer {
+            val hooks = ApiHooks(inputters = listOf(Authorize(auth)))
+            val server = ApiServer(ctx, apis, hooks, ApiSettings(protocol ?: Protocol.Web))
+            return server
+        }
+
+
         @JvmStatic
         fun setApiHost(item: Any?, host: ApiServer) {
             if (item is HostAware) {
@@ -268,7 +277,6 @@ open class ApiServer(
         fun defaultHooks():List<Input<ApiRequest>> {
             return listOf(
                 Protos(),
-                Authorize(),
                 Routing(),
                 Targets(),
                 Filters(),

@@ -19,6 +19,7 @@ import slatekit.apis.core.Api
 import slatekit.apis.core.Auth
 import slatekit.apis.helpers.ApiHelper
 import slatekit.apis.Protocol
+import slatekit.apis.hooks.Authorize
 import slatekit.apis.setup.Setup
 import slatekit.common.args.Args
 import slatekit.common.conf.Config
@@ -89,7 +90,7 @@ open class ApiTestsBase {
                 apis: List<Api> = listOf()): ApiServer {
 
         // 2. apis
-        val container = ApiServer(ctx, false, auth, apis = apis, protocol = protocol)
+        val container = ApiServer.of(ctx, apis, auth, protocol)
         return container
     }
 
@@ -138,14 +139,13 @@ open class ApiTestsBase {
 
         // Optional auth
         val auth = user?.let { u -> MyAuthProvider(u.name, u.roles, buildKeys()) }
+        val hooks = middleware.plus(Authorize(auth))
 
         // Host
         val host = ApiServer(ctx,
-                allowIO = false,
-                auth = auth,
                 apis = apis,
-                middleware = middleware,
-                protocol = protocol)
+                hooks = ApiHooks.of(hooks),
+                settings = ApiSettings(protocol))
 
         // Get result
         val actual = runBlocking {

@@ -56,7 +56,7 @@ open class CliApi(
     val metaNameForApiKey = "api-key"
 
     // api container holding all the apis.
-    val apis = ApiServer(ctx, true, auth, apis = apiItems, protocol = Protocol.CLI)
+    val apis = ApiServer.of(ctx, apiItems, auth, Protocol.CLI)
 
     enum class ApiHelpType {
         Listing,

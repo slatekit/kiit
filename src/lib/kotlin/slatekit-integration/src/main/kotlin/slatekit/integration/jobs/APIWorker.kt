@@ -34,7 +34,7 @@ open class APIWorker(
         val result = container.execute(req)
         val resultFinal:Try<Any> = when(result) {
             is Success -> slatekit.results.Success(result.value)
-            is Failure -> slatekit.results.Failure(result.error)
+            is Failure -> result.toTry()
         }
         slatekit.common.TODO.IMPLEMENT("jobs", "Success/Failure handling")
         return WorkResult(WorkState.More)

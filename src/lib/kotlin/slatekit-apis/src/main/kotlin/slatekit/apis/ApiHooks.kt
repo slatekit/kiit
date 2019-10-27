@@ -2,6 +2,8 @@ package slatekit.apis
 
 import slatekit.functions.Input
 import slatekit.functions.Output
+import slatekit.functions.Process
+import slatekit.functions.middleware.Middleware
 
 
 /**
@@ -34,4 +36,16 @@ data class ApiHooks(
          * * e.g. (ApiRequest, Outcome<ApiResult>) -> Outcome<ApiResult>
          */
         val outputter: List<Output<ApiRequest, ApiResult>> = listOf()
-)
+) {
+
+        companion object {
+
+            fun of(middleware: List<Middleware>):ApiHooks {
+                return ApiHooks(
+                        inputters = middleware.filter { it is Input<*> }.map { it as Input<ApiRequest> },
+                        middleware = middleware.filter { it is Process<*,*> }.map { it as Handler },
+                        outputter = middleware.filter { it is Output<*, *> }.map { it as Output<ApiRequest, ApiResult> }
+                )
+            }
+        }
+}
