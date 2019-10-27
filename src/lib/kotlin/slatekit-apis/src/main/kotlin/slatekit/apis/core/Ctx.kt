@@ -12,8 +12,8 @@ mantra: Simplicity above all else
  */
 package slatekit.apis.core
 
-import slatekit.apis.ApiHost
+import slatekit.apis.ApiServer
 import slatekit.common.Context
 import slatekit.common.requests.Request
 
-data class Ctx(val host: ApiHost, val context: Context, val req: Request, val target: Target)
+data class Ctx(val host: ApiServer, val context: Context, val req: Request, val target: Target)

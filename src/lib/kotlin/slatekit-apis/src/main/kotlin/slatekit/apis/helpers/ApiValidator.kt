@@ -60,11 +60,11 @@ object ApiValidator {
                 else if (action.isSingleArg() && action.paramsUser.isEmpty()) {
                     Outcomes.success(target)
                 }
-                // Params - check args needed
+                // Data - check args needed
                 else if (!allowSingleDefaultParam && action.hasArgs && args.size() == 0)
                     Outcomes.invalid("bad request : $fullName: inputs not supplied")
 
-                // Params - ensure matching args
+                // Data - ensure matching args
                 else if (action.hasArgs) {
                     val argCheck = validateArgs(action, args)
                     if (argCheck.success) {

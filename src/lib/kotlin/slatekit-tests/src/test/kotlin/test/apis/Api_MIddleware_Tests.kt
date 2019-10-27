@@ -86,22 +86,22 @@ class Api_Middleware_Tests : ApiTestsBase() {
 
     @Test fun can_handle_hooks() {
         val api = SampleMiddlewareApi()
-        val apis = ApiHost(ctx, apis = listOf(Api(api, "app", "SampleMiddleware")), allowIO = false)
+        val apis = ApiServer(ctx, apis = listOf(Api(api, "app", "SampleMiddleware")), allowIO = false)
         val r1 = runBlocking { apis.call("app", "SampleMiddleware", "hello", Verb.Read, mapOf(), mapOf()) }
         val r2 = runBlocking { apis.call("app", "SampleMiddleware", "hello", Verb.Read, mapOf(), mapOf()) }
 
         Assert.assertTrue(api.onBeforeHookCount.size == 2)
         Assert.assertTrue(api.onAfterHookCount.size == 2)
-        Assert.assertTrue(api.onBeforeHookCount[0].path == "app.SampleMiddleware.hello")
-        Assert.assertTrue(api.onBeforeHookCount[1].path == "app.SampleMiddleware.hello")
-        Assert.assertTrue(api.onAfterHookCount[0].path  == "app.SampleMiddleware.hello")
-        Assert.assertTrue(api.onAfterHookCount[1].path  == "app.SampleMiddleware.hello")
+        Assert.assertTrue(api.onBeforeHookCount[0].request.path == "app.SampleMiddleware.hello")
+        Assert.assertTrue(api.onBeforeHookCount[1].request.path == "app.SampleMiddleware.hello")
+        Assert.assertTrue(api.onAfterHookCount[0].request.path  == "app.SampleMiddleware.hello")
+        Assert.assertTrue(api.onAfterHookCount[1].request.path  == "app.SampleMiddleware.hello")
     }
 
 
     @Test fun can_handle_filters_request_filtered_out() {
         val api = SampleMiddlewareApi()
-        val apis = ApiHost(ctx, apis = listOf(Api(api, "app", "SampleMiddleware")), allowIO = false)
+        val apis = ApiServer(ctx, apis = listOf(Api(api, "app", "SampleMiddleware")), allowIO = false)
         val r1 = runBlocking { apis.call("app", "SampleMiddleware", "hi", Verb.Read, mapOf(), mapOf()) }
 
         Assert.assertTrue(!r1.success)
@@ -112,7 +112,7 @@ class Api_Middleware_Tests : ApiTestsBase() {
 
     @Test fun can_handle_filters_request_ok() {
         val api = SampleMiddlewareApi()
-        val apis = ApiHost(ctx, apis = listOf(Api(api, "app", "SampleMiddleware")), allowIO = false)
+        val apis = ApiServer(ctx, apis = listOf(Api(api, "app", "SampleMiddleware")), allowIO = false)
         val r1 = runBlocking { apis.call("app", "SampleMiddleware", "hello", Verb.Read, mapOf(), mapOf()) }
 
         Assert.assertTrue(r1.success)

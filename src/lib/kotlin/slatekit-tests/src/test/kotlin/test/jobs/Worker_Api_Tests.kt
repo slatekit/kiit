@@ -5,7 +5,7 @@ import org.junit.Assert
 import org.junit.Test
 import org.threeten.bp.ZoneId
 
-import slatekit.apis.ApiHost
+import slatekit.apis.ApiServer
 import slatekit.apis.Verb
 import slatekit.apis.core.Api
 import slatekit.apis.core.Requests
@@ -21,10 +21,10 @@ import test.setup.SampleTypes2Api
 
 class Worker_Api_Tests {
 
-    fun buildContainer(): ApiHost {
+    fun buildContainer(): ApiServer {
         val ctx = CommonContext.simple("queues")
         val api = SampleTypes2Api()
-        val apis = ApiHost(ctx, apis = listOf(Api(api, area = "samples", name = "types2")), auth = null, allowIO = false)
+        val apis = ApiServer(ctx, apis = listOf(Api(api, area = "samples", name = "types2")), auth = null, allowIO = false)
         return apis
     }
 
@@ -41,7 +41,7 @@ class Worker_Api_Tests {
         val api = SampleWorkerAPI(ctx, queues)
 
         // 4. container
-        val apis = ApiHost(ctx, apis = listOf(Api(api, setup = Setup.Annotated)), auth = null, allowIO = false )
+        val apis = ApiServer(ctx, apis = listOf(Api(api, setup = Setup.Annotated)), auth = null, allowIO = false )
 
         // 5. send method call to queue
         val result = runBlocking {

@@ -2,18 +2,15 @@ package slatekit.apis
 
 import slatekit.apis.core.*
 import slatekit.apis.core.Target
-import slatekit.apis.tools.docs.DocConsole
 import slatekit.apis.helpers.*
+import slatekit.apis.hooks.*
 import slatekit.apis.support.ExecSupport
-import slatekit.apis.hooks.Targets
 import slatekit.apis.setup.HostAware
 import slatekit.common.*
-import slatekit.common.content.Content
-import slatekit.common.encrypt.Encryptor
 import slatekit.common.log.Logger
-import slatekit.common.naming.Namer
 import slatekit.common.requests.Request
-import slatekit.functions.middleware.Middleware
+import slatekit.functions.Input
+import slatekit.functions.Processor
 import slatekit.meta.*
 import slatekit.results.*
 import slatekit.results.Status
@@ -26,60 +23,61 @@ import kotlin.reflect.KClass
 
 /**
  * This is the core container hosting, managing and executing the protocol independent apis.
- * @param ctx: 
- * @param allowIO: 
- * @param auth: 
- * @param protocol: 
- * @param apis: 
- * @param errors: 
- * @param hooks: 
- * @param filters: 
- * @param controls: 
+ * @param ctx      : Context of the environment @see[slatekti.common.Context]
+ * @param apis     : APIs to host/serve
+ * @param hooks    : Hooks and middleware for filters, conversions, execution
+ * @param settings : Settings for the server
  */
-open class ApiHost(
+open class ApiServer(
         val ctx: Context,
-        val allowIO: Boolean,
-        val auth: Auth? = null,
-        val protocol: Protocol = Protocol.Web,
-        val apis: List<slatekit.apis.core.Api> = listOf(),
-        val namer: Namer? = null,
-        val middleware: List<Middleware>? = null,
-        val deserializer: ((Request, Encryptor?) -> Deserializer)? = null,
-        val serializer: ((String, Any?) -> String)? = null,
-        val docKey: String? = null,
-        val docBuilder: () -> slatekit.apis.tools.docs.Doc = ::DocConsole
+        val apis: List<slatekit.apis.core.Api>,
+        val hooks: ApiHooks,
+        val settings: ApiSettings
 ) : ExecSupport {
+
 
     /**
      * Load all the routes from the APIs supplied.
      * The API setup can be either annotation based or public methods on the Class
      */
-    val routes = Routes(ApiLoader.loadAll(apis, namer), namer)
+    val routes = Routes(ApiLoader.loadAll(apis, settings.naming), settings.naming)
 
-    val results by lazy { ApiResults(ctx, this, serializer) }
-
-    /**
-     * The settings for the api ( limited for now )
-     */
-    val settings: ApiSettings by lazy { ApiSettings() }
 
     /**
      * The help class to handle help on an area, api, or action
      */
-    val help: Help by lazy { Help(this, routes, docBuilder) }
+    val help: Help by lazy { Help(this, routes, settings.docKey) { settings.docGen } }
 
-    private val emptyArgs = mapOf<String, Any>()
 
+    /**
+     * Logger for this server
+     */
     private val logger: Logger = ctx.logs.getLogger("api")
 
-    fun rename(text: String): String = namer?.rename(text) ?: text
+
+    /**
+     * Helps run the hooks/middleware
+     */
+    private val processor = Processor<ApiRequest, ApiResult>()
+
+
+    /**
+     * Request pre-processors ( filters, converters )
+     */
+    private val preProcessors:List<Input<ApiRequest>> = defaultHooks()
+
+    /**
+     * Provides access to naming conventions used for actions
+     */
+    fun rename(text: String): String = settings.naming?.rename(text) ?: text
+
 
     fun setApiContainerHost() {
-        routes.visitApis{ _, api -> ApiHost.setApiHost(api.singleton, this) }
+        routes.visitApis{ _, api -> ApiServer.setApiHost(api.singleton, this) }
     }
 
 
-    override fun host(): ApiHost = this
+    override fun host(): ApiServer = this
 
 
     /**
@@ -186,89 +184,64 @@ open class ApiHost(
      * @param cmd
      * @return
      */
-    suspend fun execute(raw: Request, options:ExecOptions? = null): Try<Any> {
-        // Check 1: Check for help / discovery
-        val helpCheck = raw.isHelp()
-        if (helpCheck.code == HELP.code) return buildHelp(raw, helpCheck).toTry()
-
-        // Rewrites ( e.g. restify get /movies => get /movies/getAll )
-        //val rewrittenReq = results.convert(raw)
-
-        // Formats ( e.g. recentMovies.csv => recentMovies -format=csv
-        val apiReqRaw = ApiRequest(this, ctx, raw, null, raw.source, emptyArgs)
-        val req = settings.inputters.first().process(Outcomes.success(apiReqRaw))
-
-        // Api exists ?
-        val apiCheck = Targets().process(req)
-
-        // Execute the API using
-        val resultRaw = apiCheck.flatMap { apiReq ->
-
-            // Run context to store all relevant info
-            val runCtx = Ctx(this, this.ctx, raw, apiReq.target!!)
-
-            Exec(runCtx, apiReq, logger, options).run(this::executeMethod)
+    suspend fun execute(raw: Request, options:ExecOptions? = null): Outcome<Any> {
+        // Step 1: Check for help / discovery
+        val helpCheck = help.process(raw)
+        if(helpCheck.success) {
+            return helpCheck
         }
-        val result = resultRaw.toTry()
 
-        // Finally: If the format of the content specified ( json | csv | props )
-        // Then serialize it here and return the content
-        return results.convert(apiReqRaw.request, result)
+        // Step 2: Build ApiRequest from the raw request ( this is used for middleware )
+        val rawRequest = ApiRequest(this, ctx, raw, null, raw.source, null)
+
+        // Step 3: Now run the request through middleware ( formatters / validators )
+        val startInput = Outcomes.success(rawRequest)
+        val processed = startInput
+                .operate { processor.input(hooks.formatters, it ) }
+                .operate { processor.input(preProcessors , it ) }
+                .operate { processor.input(hooks.inputters , it ) }
+
+        // Step 4: Exit on failures or begin real execution
+        val executed = when(processed){
+            is Failure -> processed
+            is Success -> {
+
+                // Now begin real execution
+                val request = processed.value
+                val context = Ctx(this, this.ctx, raw, processed.value.target!!)
+                val result  = executeMethod(context, request)
+                result
+            }
+        }
+        // Step 5: Perform post-execution processing
+        // E.g.: If the format of the content specified ( json | csv | props )
+        executed.then {
+            when(processed) {
+                is Failure -> executed
+                is Success -> executed.operate { processor.output(processed.value, executed, hooks.outputter) }
+            }
+        }
+        return executed
     }
 
+
     @Suppress("UNCHECKED_CAST")
-    protected open suspend fun executeMethod(runCtx: Ctx): Try<Any> {
+    protected open suspend fun executeMethod(context: Ctx, request:ApiRequest): Outcome<ApiResult> {
         // Finally make call.
-        val req = runCtx.req
-        val target = runCtx.target
-        val converter = deserializer?.invoke(req, ctx.enc) ?: Deserializer(req, ctx.enc)
+        val req = context.req
+        val target = context.target
+        val converter = settings.decoder?.invoke(req, ctx.enc) ?: Deserializer(req, ctx.enc)
         val inputs = ApiHelper.fillArgs(converter, target, req)
 
         val returnVal = Reflector.callMethod(target.api.cls, target.instance, target.action.member.name, inputs)
 
         return returnVal?.let { res ->
             if (res is Result<*, *>) {
-                (res as Result<Any, Any>).toTry()
+                (res as Result<ApiResult, Err>)
             } else {
-                Success(res)
+                Outcomes.of(res!!)
             }
-        } ?: Failure(Exception("Received null"))
-    }
-
-    /**
-     * Handles help request on any part of the api request. Api requests are typically in
-     * the format "area.api.action" so you can type help on each part / region.
-     * e.g.
-     * 1. area ?
-     * 2. area.api ?
-     * 3. area.api.action ?
-     * @param cmd
-     * @param mode
-     */
-    open fun buildHelp(req: Request, result: Outcome<String>): Outcome<Content> {
-        return if (!req.hasDocKey(docKey ?: "")) {
-            Outcomes.errored("Unauthorized access to API docs")
-        } else {
-            val content = when (result.msg) {
-                // 1: {area} ? = help on area
-                "?" -> {
-                    help.help()
-                }
-                // 2: {area} ? = help on area
-                "area ?" -> {
-                    help.area(req.parts[0])
-                }
-                // 3. {area}.{api} = help on api
-                "area.api ?" -> {
-                    help.api(req.parts[0], req.parts[1])
-                }
-                // 3. {area}.{api}.{action} = help on api action
-                else -> {
-                    help.action(req.parts[0], req.parts[1], req.parts[2])
-                }
-            }
-            Outcomes.success(Content.html(content))
-        }
+        } ?: Outcomes.of(Exception("Received null"))
     }
 
 
@@ -281,10 +254,26 @@ open class ApiHost(
     companion object {
 
         @JvmStatic
-        fun setApiHost(item: Any?, host: ApiHost) {
+        fun setApiHost(item: Any?, host: ApiServer) {
             if (item is HostAware) {
                 item.setApiHost(host)
             }
+        }
+
+
+        /**
+         * Default list of API Request input validators
+         */
+        @JvmStatic
+        fun defaultHooks():List<Input<ApiRequest>> {
+            return listOf(
+                Protos(),
+                Authorize(),
+                Routing(),
+                Targets(),
+                Filters(),
+                Validate()
+            )
         }
     }
 

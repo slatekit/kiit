@@ -4,7 +4,7 @@ import kotlinx.coroutines.runBlocking
 import org.junit.Assert
 import org.junit.Test
 import slatekit.apis.core.Api
-import slatekit.apis.ApiHost
+import slatekit.apis.ApiServer
 import slatekit.apis.Verb
 import slatekit.common.naming.LowerHyphenNamer
 import slatekit.common.naming.LowerUnderscoreNamer
@@ -17,7 +17,7 @@ class Api_Naming_Tests : ApiTestsBase() {
 
 
     @Test fun can_use_naming_convention_lowerHyphen() {
-        val apis = ApiHost(ctx, apis = listOf(Api(SamplePOKOApi::class,
+        val apis = ApiServer(ctx, apis = listOf(Api(SamplePOKOApi::class,
                 "app", "SamplePOKO"))
                 , auth = null, allowIO = false, namer = LowerHyphenNamer()
         )
@@ -39,7 +39,7 @@ class Api_Naming_Tests : ApiTestsBase() {
 
 
     @Test fun can_use_naming_convention_lowerUnderscore() {
-        val apis = ApiHost(ctx, apis = listOf(Api(SampleExtendedApi::class,
+        val apis = ApiServer(ctx, apis = listOf(Api(SampleExtendedApi::class,
                 "app", "SampleExtended", declaredOnly = false)),
                 auth = null, allowIO = false, namer = LowerUnderscoreNamer()
         )

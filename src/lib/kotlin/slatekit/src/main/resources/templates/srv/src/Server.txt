@@ -10,7 +10,7 @@ import io.ktor.routing.get
 import io.ktor.routing.routing
 import io.ktor.server.engine.embeddedServer
 import io.ktor.server.netty.Netty
-import slatekit.apis.ApiHost
+import slatekit.apis.ApiServer
 import slatekit.apis.setup.Annotated
 import slatekit.apis.doc.DocWeb
 import slatekit.apis.AuthModes

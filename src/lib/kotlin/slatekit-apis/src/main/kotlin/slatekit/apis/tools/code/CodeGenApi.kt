@@ -20,10 +20,10 @@ import slatekit.results.Notice
         auth = AuthModes.Keyed, roles = [Roles.all], verb = Verbs.Auto, protocols = [Protocols.All])
 class CodeGenApi : HostAware {
 
-    private var host: ApiHost? = null
+    private var host: ApiServer? = null
 
     @Ignore
-    override fun setApiHost(host: ApiHost) {
+    override fun setApiHost(host: ApiServer) {
         this.host = host
     }
 

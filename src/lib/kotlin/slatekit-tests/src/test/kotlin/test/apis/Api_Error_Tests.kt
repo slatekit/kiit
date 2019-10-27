@@ -38,7 +38,7 @@ class Api_Error_Tests : ApiTestsBase() {
 //
 //        // Api
 //        val api = SampleRetryApi(handler)
-//        val apis = ApiHost(ctx, apis = listOf(Api(api, setup = Setup.Annotated)), auth = null, allowIO = false )
+//        val apis = ApiServer(ctx, apis = listOf(Api(api, setup = Setup.Annotated)), auth = null, allowIO = false )
 //        svc.setApiHost(apis)
 //        val t1 = apis.call("app", "retry", "test", "get", mapOf("token" to "abc"), mapOf("text" to "123"))
 //        Assert.assertFalse(t1.success)

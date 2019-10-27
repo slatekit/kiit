@@ -1,7 +1,7 @@
 package slatekit.apis.setup
 
-import slatekit.apis.ApiHost
+import slatekit.apis.ApiServer
 
 interface HostAware {
-    fun setApiHost(host: ApiHost)
+    fun setApiHost(host: ApiServer)
 }

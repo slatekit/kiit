@@ -12,7 +12,7 @@ import slatekit.common.requests.Request
  * @param source : Source of the call
  * @param args   : Additional arguments supplied by the source
  */
-data class ApiRequest(val host: ApiHost,
+data class ApiRequest(val host: ApiServer,
                       val context: Context,
                       val request: Request,
                       val target: Target?,

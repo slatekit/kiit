@@ -86,10 +86,10 @@ open class ApiTestsBase {
 
     fun getApis(protocol: Protocol,
                 auth: Auth? = null,
-                apis: List<Api> = listOf()): ApiHost {
+                apis: List<Api> = listOf()): ApiServer {
 
         // 2. apis
-        val container = ApiHost(ctx, false, auth, apis = apis, protocol = protocol)
+        val container = ApiServer(ctx, false, auth, apis = apis, protocol = protocol)
         return container
     }
 
@@ -140,7 +140,7 @@ open class ApiTestsBase {
         val auth = user?.let { u -> MyAuthProvider(u.name, u.roles, buildKeys()) }
 
         // Host
-        val host = ApiHost(ctx,
+        val host = ApiServer(ctx,
                 allowIO = false,
                 auth = auth,
                 apis = apis,

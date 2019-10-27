@@ -1,7 +1,6 @@
 package slatekit.integration.jobs
 
-import slatekit.apis.ApiConstants
-import slatekit.apis.ApiHost
+import slatekit.apis.ApiServer
 import slatekit.apis.Protocol
 import slatekit.apis.core.Requests
 import slatekit.common.Identity
@@ -11,7 +10,7 @@ import slatekit.results.Success
 import slatekit.results.Try
 
 open class APIWorker(
-        val container: ApiHost,
+        val container: ApiServer,
         val settings: WorkerSettings,
         identity: Identity
 )

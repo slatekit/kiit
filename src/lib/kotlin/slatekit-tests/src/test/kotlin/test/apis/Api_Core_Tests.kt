@@ -14,6 +14,7 @@ package test.apis
 
 import org.junit.Test
 import slatekit.apis.Protocol
+import slatekit.apis.Verbs
 import slatekit.apis.core.Api
 import slatekit.apis.setup.Setup
 import slatekit.common.auth.Roles
@@ -22,6 +23,7 @@ import slatekit.common.CommonRequest
 import slatekit.common.toResponse
 import slatekit.results.Failure
 import slatekit.results.Success
+import test.apis.samples.Sample_API_1_Core
 import test.setup.*
 
 /**
@@ -30,6 +32,9 @@ import test.setup.*
 
 class Api_Core_Tests : ApiTestsBase() {
 
+    val AREA = "samples"
+    val NAME = "core"
+
 
     @Test fun can_execute_public_action() {
 
@@ -37,11 +42,11 @@ class Api_Core_Tests : ApiTestsBase() {
             protocol = Protocol.CLI,
             apis     = listOf(Api(UserApi(ctx), setup = Setup.Annotated)),
             user     = null,
-            request  = CommonRequest.path("app.users.rolesNone", "get", mapOf(), mapOf(
+            request  = CommonRequest.path("$AREA.$NAME.${Sample_API_1_Core::processEmpty.name}", Verbs.Read, mapOf(), mapOf(
                     Pair("code", "1"),
                     Pair("tag", "abc")
             )),
-            response = Success("rolesNone", msg = "1 abc").toResponse()
+            response = Success("ok", msg = "no inputs").toResponse()
         )
     }
 
@@ -51,7 +56,7 @@ class Api_Core_Tests : ApiTestsBase() {
             protocol = Protocol.CLI,
             apis     = listOf(Api(UserApi(ctx), setup = Setup.Annotated)),
             user     = Credentials(name = "kishore", roles = "dev"),
-            request  = CommonRequest.path("app.users.argTypeRequest", "get", mapOf(), mapOf(
+            request  = CommonRequest.path("$AREA.$NAME.argTypeRequest", Verbs.Read, mapOf(), mapOf(
                 Pair("id", "2")
             )),
             response = Success("ok", msg = "raw send id: 2").toResponse()
@@ -64,7 +69,7 @@ class Api_Core_Tests : ApiTestsBase() {
                 protocol = Protocol.CLI,
                 apis     = listOf(Api(UserApi(ctx), setup = Setup.Annotated)),
                 user     = Credentials(name = "kishore", roles = "dev"),
-                request  = CommonRequest.path("app.users.argTypeMeta", "get", mapOf(
+                request  = CommonRequest.path("$AREA.$NAME.argTypeMeta", Verbs.Read, mapOf(
                         Pair("token", "abc")
                 ), mapOf(
                         Pair("id", "2")
@@ -80,7 +85,7 @@ class Api_Core_Tests : ApiTestsBase() {
                 protocol = Protocol.CLI,
                 apis     = listOf(Api(SampleErrorsApi(), "app", "sampleErrors", roles = listOf(Roles.none), declaredOnly = false)),
                 user     = null,
-                request  = CommonRequest.path("app.sampleErrors.parseNumberWithResults", "get", mapOf(), mapOf(
+                request  = CommonRequest.path("app.sampleErrors.parseNumberWithResults", Verbs.Read, mapOf(), mapOf(
                         "text" to number
                 )),
                 response = Failure( "$number is not a valid number").toResponse()
@@ -93,7 +98,7 @@ class Api_Core_Tests : ApiTestsBase() {
             protocol = Protocol.CLI,
             apis     = listOf(Api(UserApi(ctx), setup = Setup.Annotated)),
             user     = Credentials(name = "kishore", roles = "dev"),
-            request  = CommonRequest.path("app.users.argTypeListInt", "get", mapOf(), mapOf(
+            request  = CommonRequest.path("$AREA.$NAME.argTypeListInt", Verbs.Read, mapOf(), mapOf(
                 Pair("items", listOf(1,2,3) )
             )),
             response = Success("ok", msg = ",1,2,3").toResponse()
@@ -106,7 +111,7 @@ class Api_Core_Tests : ApiTestsBase() {
             protocol = Protocol.CLI,
             apis     = listOf(Api(UserApi(ctx), setup = Setup.Annotated)),
             user     = Credentials(name = "kishore", roles = "dev"),
-            request  = CommonRequest.path("app.users.argTypeListInt", "get", mapOf(), mapOf(
+            request  = CommonRequest.path("$AREA.$NAME.argTypeListInt", Verbs.Read, mapOf(), mapOf(
                 Pair("items", "1,2,3")
             )),
             response = Success("ok", msg = ",1,2,3").toResponse()
@@ -119,7 +124,7 @@ class Api_Core_Tests : ApiTestsBase() {
             protocol = Protocol.CLI,
             apis     = listOf(Api(UserApi(ctx), setup = Setup.Annotated)),
             user     = Credentials(name = "kishore", roles = "dev"),
-            request  = CommonRequest.path("app.users.argTypeMapInt", "get", mapOf(), mapOf(
+            request  = CommonRequest.path("$AREA.$NAME.argTypeMapInt", Verbs.Read, mapOf(), mapOf(
                 Pair("items", mapOf("a" to 1, "b" to 2))
             )),
             response = Success("ok", msg = ",a=1,b=2").toResponse()
@@ -132,7 +137,7 @@ class Api_Core_Tests : ApiTestsBase() {
             protocol = Protocol.CLI,
             apis     = listOf(Api(UserApi(ctx), setup = Setup.Annotated)),
             user     = Credentials(name = "kishore", roles = "dev"),
-            request  = CommonRequest.path("app.users.argTypeMapInt", "get", mapOf(), mapOf(
+            request  = CommonRequest.path("$AREA.$NAME.argTypeMapInt", Verbs.Read, mapOf(), mapOf(
                 Pair("items", "a=1,b=2")
             )),
             response = Success("ok", msg = ",a=1,b=2").toResponse()

@@ -13,12 +13,62 @@
 
 package slatekit.apis.core
 
-import slatekit.apis.ApiHost
+import slatekit.apis.ApiServer
+import slatekit.apis.helpers.hasDocKey
+import slatekit.apis.helpers.isHelp
 import slatekit.apis.tools.docs.ApiVisitOptions
 import slatekit.apis.tools.docs.ApiVisitor
 import slatekit.apis.tools.docs.Doc
+import slatekit.common.content.Content
+import slatekit.common.requests.Request
+import slatekit.results.*
+import slatekit.results.builders.Outcomes
 
-class Help(val host: ApiHost, val routes: Routes, val docBuilder: () -> Doc) {
+class Help(val host: ApiServer, val routes: Routes, val docKey:String?, val docBuilder: () -> Doc) {
+
+    fun process(req: Request):Outcome<Content> {
+        val result =  req.isHelp()
+        return when(result) {
+            is Success -> build(req, result)
+            is Failure -> result
+        }
+    }
+
+
+    /**
+     * Handles help request on any part of the api request. Api requests are typically in
+     * the format "area.api.action" so you can type help on each part / region.
+     * e.g.
+     * 1. area ?
+     * 2. area.api ?
+     * 3. area.api.action ?
+     */
+    fun build(req: Request, check:Outcome<String>): Outcome<Content> {
+        return if (!req.hasDocKey(docKey ?: "")) {
+            Outcomes.denied("Unauthorized access to API docs")
+        } else {
+            val content = when (check.msg) {
+                // 1: {area} ? = help on area
+                "?" -> {
+                    help()
+                }
+                // 2: {area} ? = help on area
+                "area ?" -> {
+                    area(req.parts[0])
+                }
+                // 3. {area}.{api} = help on api
+                "area.api ?" -> {
+                    api(req.parts[0], req.parts[1])
+                }
+                // 3. {area}.{api}.{action} = help on api action
+                else -> {
+                    action(req.parts[0], req.parts[1], req.parts[2])
+                }
+            }
+            Outcomes.success(Content.html(content))
+        }
+    }
+
 
     /**
      * handles help request for all the areas supported

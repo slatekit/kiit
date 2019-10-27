@@ -29,7 +29,7 @@ import org.threeten.bp.*
  *                     These are useful for the middleware rewrite module
  *                     which can rewrite routes add parameters
  */
-data class Params(
+data class Data(
     val rawSource: Any,
     val method: String,
     val hasBody: Boolean,

@@ -8,8 +8,7 @@ import io.ktor.routing.get
 import io.ktor.routing.routing
 import io.ktor.server.engine.embeddedServer
 import io.ktor.server.netty.Netty
-import slatekit.apis.ApiHost
-import slatekit.apis.setup.Setup.Annotated
+import slatekit.apis.ApiServer
 import slatekit.apis.tools.docs.DocWeb
 import slatekit.apis.AuthModes
 import slatekit.apis.Protocols
@@ -57,7 +56,7 @@ class Server(val ctx: Context)  {
         val auth = SampleAuth()
 
         // 4. API host
-        val apiHost = ApiHost( ctx, false, auth, WebProtocol,
+        val apiHost = ApiServer( ctx, false, auth, WebProtocol,
                 apis = apis,
                 docKey = settings.docKey,
                 docBuilder = { DocWeb() },

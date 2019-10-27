@@ -104,7 +104,7 @@ object Requests {
                 source = Source.parse(sourceOverride ?: source),
                 verb = verbOverride ?: verb,
                 meta = Meta(rawSource ?: "json", jsonMeta, enc),
-                data = Params(rawSource ?: "json", Protocol.File.name, true, enc, jsonData),
+                data = Data(rawSource ?: "json", Protocol.File.name, true, enc, jsonData),
                 raw = rawSource,
                 tag = tag,
                 timestamp = time

@@ -2,12 +2,6 @@ package slatekit.apis
 
 
 /**
- * Returned from the call to a method ( could be anything )
- */
-typealias ApiResult = Any?
-
-
-/**
  * Middleware to handle a request before it is executed
  */
 typealias Before = slatekit.functions.middleware.Before<ApiRequest>

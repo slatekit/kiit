@@ -1,6 +1,6 @@
 package slatekit.apis.support
 
-import slatekit.apis.ApiHost
+import slatekit.apis.ApiServer
 import slatekit.apis.Verb
 import slatekit.common.CommonRequest
 import slatekit.common.requests.Request
@@ -11,7 +11,7 @@ import slatekit.results.Try
 
 interface ExecSupport {
 
-    fun host(): ApiHost
+    fun host(): ApiServer
 
 
     /**

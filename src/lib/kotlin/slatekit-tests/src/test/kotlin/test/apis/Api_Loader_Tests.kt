@@ -18,6 +18,7 @@ import slatekit.apis.*
 import slatekit.apis.core.Api
 import slatekit.apis.core.Routes
 import slatekit.apis.helpers.ApiLoader
+import slatekit.apis.loader.AnnoLoader
 import slatekit.common.auth.Roles
 import test.setup.*
 
@@ -30,7 +31,7 @@ class Api_Loader_Tests : ApiTestsBase() {
 
 
     @Test fun can_load_api_from_annotations() {
-        val api = ApiLoader.loadAnnotated(SampleAnnoApi::class, null)
+        val api = AnnoLoader(SampleAnnoApi::class).loadApi(null)
         Assert.assertTrue(api.actions.size == 13)
         Assert.assertTrue(api.area == "app")
         Assert.assertTrue(api.name == "tests")
@@ -46,7 +47,7 @@ class Api_Loader_Tests : ApiTestsBase() {
 
 
     @Test fun can_load_api_from_annotations_with_defaults() {
-        val api = ApiLoader.loadAnnotated(SampleApi::class, null)
+        val api = AnnoLoader(SampleAnnoApi::class).loadApi(null)
         Assert.assertTrue(api.actions.size == 1)
         Assert.assertTrue(api.area == "app")
         Assert.assertTrue(api.name == "tests")
@@ -67,7 +68,7 @@ class Api_Loader_Tests : ApiTestsBase() {
 
 
     @Test fun can_load_api_from_annotations_verb_mode_auto() {
-        val api = ApiLoader.loadAnnotated(SampleRESTVerbModeAutoApi::class, null)
+        val api = AnnoLoader(SampleAnnoApi::class).loadApi(null)
         Assert.assertTrue(api.actions.size == 8)
         Assert.assertTrue(api.area == "samples")
         Assert.assertTrue(api.name == "restVerbAuto")
@@ -90,7 +91,7 @@ class Api_Loader_Tests : ApiTestsBase() {
 
 
     @Test fun can_load_api_from_annotations_verb_mode_rest() {
-        val api = ApiLoader.loadAnnotated(SampleRESTVerbModeRestApi::class, null)
+        val api = AnnoLoader(SampleAnnoApi::class).loadApi(null)
         Assert.assertTrue(api.actions.size == 8)
         Assert.assertTrue(api.area == "samples")
         Assert.assertTrue(api.name == "restVerbRest")

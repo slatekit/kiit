@@ -2,14 +2,14 @@ package slatekit.server.common
 
 import io.ktor.application.ApplicationCall
 import io.ktor.routing.Routing
-import slatekit.apis.ApiHost
+import slatekit.apis.ApiServer
 import slatekit.common.Context
 import slatekit.common.Diagnostics
 import slatekit.common.requests.Request
 
 interface RequestHandler {
     val context: Context
-    val container: ApiHost
+    val container: ApiServer
     val diagnostics: Diagnostics<Request>
     val responses: ResponseHandler
 

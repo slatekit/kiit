@@ -1,6 +1,5 @@
 package slatekit.apis.core
 
-import com.sun.org.apache.xpath.internal.operations.Bool
 
 data class Roles(val all:List<String>) {
 
