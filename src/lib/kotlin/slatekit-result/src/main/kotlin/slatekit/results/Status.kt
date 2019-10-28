@@ -13,7 +13,6 @@ philosophy: Simplicity above all else
 
 package slatekit.results
 
-
 /**
  * Interface to represent a Status Code with both an integer and descriptive message
  * Default implementations are available in [Status]
@@ -27,9 +26,8 @@ sealed class Status {
     abstract val code: Int
     abstract val msg: String
 
-
-    fun copyAll(msg:String, code:Int): Status {
-        return when(this){
+    fun copyAll(msg: String, code: Int): Status {
+        return when (this) {
             is Succeeded -> this.copy(code = code, msg = msg)
             is Pending -> this.copy(code = code, msg = msg)
             is Denied -> this.copy(code = code, msg = msg)
@@ -40,8 +38,8 @@ sealed class Status {
         }
     }
 
-    fun copyMsg(msg:String): Status {
-        return when(this){
+    fun copyMsg(msg: String): Status {
+        return when (this) {
             is Succeeded -> this.copy(msg = msg)
             is Pending -> this.copy(msg = msg)
             is Denied -> this.copy(msg = msg)
@@ -51,7 +49,6 @@ sealed class Status {
             is Unexpected -> this.copy(msg = msg)
         }
     }
-
 
     /**
      * Default implementations of status codes with logical groups of [Status]
@@ -64,11 +61,11 @@ sealed class Status {
      * 5. [Errored]   : Err group to represent any error/failure scenarios known at compile time
      * 6. [Unexpected] : Err group to represent any unhandled exceptions
      */
-    data class Succeeded  (override val code: Int, override val msg:String) :  Status()
-    data class Pending    (override val code: Int, override val msg:String) :  Status()
-    data class Denied     (override val code: Int, override val msg:String) :  Status()
-    data class Ignored    (override val code: Int, override val msg:String) :  Status()
-    data class Invalid    (override val code: Int, override val msg:String) :  Status()
-    data class Errored    (override val code: Int, override val msg:String) :  Status()
-    data class Unexpected  (override val code: Int, override val msg:String) :  Status()
+    data class Succeeded(override val code: Int, override val msg: String) : Status()
+    data class Pending(override val code: Int, override val msg: String) : Status()
+    data class Denied(override val code: Int, override val msg: String) : Status()
+    data class Ignored(override val code: Int, override val msg: String) : Status()
+    data class Invalid(override val code: Int, override val msg: String) : Status()
+    data class Errored(override val code: Int, override val msg: String) : Status()
+    data class Unexpected(override val code: Int, override val msg: String) : Status()
 }
