@@ -1,6 +1,5 @@
 package slatekit.results
 
-
 /**
  * Alias for Result<T,E> defaulting the E error type ( [Failure] branch ) to [Exception]
  *
@@ -10,7 +9,6 @@ package slatekit.results
  * 3. similarity to Try type available in other languages like Scala
  */
 typealias Try<T> = Result<T, Exception>
-
 
 /**
  * Alias for Result<T,E> defaulting the E error type ( [Failure] branch ) to [Err] interface
@@ -22,7 +20,6 @@ typealias Try<T> = Result<T, Exception>
  */
 typealias Outcome<T> = Result<T, Err>
 
-
 /**
  * Alias for Result<T,E> defaulting the E error type ( [Failure] branch ) to [String]
  *
@@ -32,5 +29,3 @@ typealias Outcome<T> = Result<T, Err>
  * 3. use a simple [String] for failures without having to build [Err] or [Exception]
  */
 typealias Notice<T> = Result<T, String>
-
-

@@ -1,9 +1,5 @@
-
-import org.junit.Assert
+package test.results
 import org.junit.Test
-import samples.UserApi
-import samples.UserRepo
-import samples.UserService
 import slatekit.results.*
 import slatekit.results.Codes
 import slatekit.results.builders.OutcomeBuilder
@@ -18,13 +14,6 @@ import slatekit.results.builders.Outcomes
  */
 class ResultBuilderTests : ResultTestSupport, OutcomeBuilder {
 
-    @Test
-    fun test_exceptions(){
-        val api = UserApi(UserService(UserRepo()))
-        val response = api.register("flash", "flash@justice-league.com")
-        Assert.assertEquals(response.code, 401)
-        Assert.assertTrue(response.msg.contains( "requires special registration"))
-    }
 
     @Test
     fun can_build_successes() {

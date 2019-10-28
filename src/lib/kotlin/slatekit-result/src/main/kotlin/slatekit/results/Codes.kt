@@ -10,7 +10,7 @@
  * philosophy: Simplicity above all else
  * </slate_header>
  */
-
+/* ktlint-disable */
 package slatekit.results
 
 

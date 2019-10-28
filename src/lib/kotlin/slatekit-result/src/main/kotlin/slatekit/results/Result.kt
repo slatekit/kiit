@@ -13,7 +13,6 @@
 
 package slatekit.results
 
-
 /**
  * Container for a Success/Failure value of type T with additional values to represent
  * a string message, code, error and more.
@@ -28,14 +27,12 @@ sealed class Result<out T, out E> {
      */
     abstract val status: Status
 
-
     /**
      * These are here for convenience both internally and externally
      */
     val success: Boolean get() = this is Success
     val code: Int get() = status.code
     val msg: String get() = status.msg
-
 
     /**
      * Applies supplied function `f` if this is a [Success]
@@ -53,7 +50,6 @@ sealed class Result<out T, out E> {
         is Failure -> this
     }
 
-
     /**
      * Applies supplied function `f` if this is a [Failure] to transform the error type
      *
@@ -69,7 +65,6 @@ sealed class Result<out T, out E> {
         is Success -> this
         is Failure -> Failure(f(this.error), this.status)
     }
-
 
     /**
      * Applies `onSuccess` if this is a [Success] or `onError` if this a [Failure]
@@ -93,7 +88,6 @@ sealed class Result<out T, out E> {
         }
     }
 
-
     /**
      * Returns the result of supplied function `f` if this is a [Success], or false otherwise
      *
@@ -111,7 +105,6 @@ sealed class Result<out T, out E> {
             is Failure -> false
         }
 
-
     /**
      * Returns the value from this [Success] or null if this is a [Failure]
      *
@@ -126,7 +119,6 @@ sealed class Result<out T, out E> {
         is Success -> this.value
         is Failure -> null
     }
-
 
     /**
      *
@@ -148,7 +140,6 @@ sealed class Result<out T, out E> {
         is Failure -> this
     }
 
-
     /**
      *
      * Applies the supplied function if this is a [Failure]
@@ -169,7 +160,6 @@ sealed class Result<out T, out E> {
         }
     }
 
-
     /**
      *
      * Applies the supplied functions to transform this Result
@@ -187,7 +177,6 @@ sealed class Result<out T, out E> {
             is Success -> onSuccess(this.value)
             is Failure -> onFailure(this.error)
         }
-
 
     /**
      *
@@ -208,7 +197,6 @@ sealed class Result<out T, out E> {
             is Failure -> this.copy(status = failureCode)
         }
 
-
     /**
      *
      * Applies the supplied message to this result
@@ -227,7 +215,6 @@ sealed class Result<out T, out E> {
                 is Success -> this.copy(status = status.copyMsg(successMessage))
                 is Failure -> this.copy(status = status.copyMsg(failureMessage))
             }
-
 
     /**
      * Transform this to a Notice (type alias ) with error type of [String]
@@ -250,7 +237,6 @@ sealed class Result<out T, out E> {
         }
     }
 
-
     /**
      * Transform this to an Outcome (type alias ) with error type of [Err]
      *
@@ -264,20 +250,19 @@ sealed class Result<out T, out E> {
     fun toOutcome(retainStatus: Boolean = true): Outcome<T> = when (this) {
         is Success -> this
         is Failure -> {
-            val err =  when (this.error) {
+            val err = when (this.error) {
                 null -> Err.of(Codes.UNEXPECTED.msg)
                 is Err -> error
                 is String -> Err.of(error)
                 is Exception -> Err.of(error)
                 else -> Err.obj(error)
             }
-            when(retainStatus){
+            when (retainStatus) {
                 false -> Failure(err)
                 true -> Failure(err, this.status)
             }
         }
     }
-
 
     /**
      * Transform this to a Try (type alias ) with error type of [Exception]
@@ -295,12 +280,11 @@ sealed class Result<out T, out E> {
             when (this.error) {
                 is Exception -> this as Try<T>
                 is Err -> Failure(ExceptionErr(this.error.toString(), this.error), this.status)
-                null   -> Failure(Exception(this.status.msg), this.status)
-                else   -> Failure(Exception(this.error.toString()), this.status)
+                null -> Failure(Exception(this.status.msg), this.status)
+                else -> Failure(Exception(this.error.toString()), this.status)
             }
         }
     }
-
 
     companion object {
 
@@ -309,7 +293,6 @@ sealed class Result<out T, out E> {
          */
         @JvmStatic
         inline fun <T> of(f: () -> T): Outcome<T> = build(f, { ex -> Err.of(ex) })
-
 
         /**
          * Build a Try<T> ( Result<T,Exception> ) using the supplied callback.
@@ -338,7 +321,7 @@ sealed class Result<out T, out E> {
                     // or Status group/code
                     Failure(e, build(e.message, null, Codes.UNEXPECTED))
                 } catch (e: Exception) {
-                    when(e) {
+                    when (e) {
                         is StatusException -> Failure(e, build(e.msg, e.status, Codes.UNEXPECTED))
                         else -> Failure(e, build(e.message, null, Codes.UNEXPECTED))
                     }
@@ -349,7 +332,6 @@ sealed class Result<out T, out E> {
          */
         @JvmStatic
         inline fun <T> notice(f: () -> T): Notice<T> = build(f, { e -> e.message ?: Codes.ERRORED.msg })
-
 
         /**
          * Build a Result<T,E> using the supplied callback and error handler
@@ -363,7 +345,6 @@ sealed class Result<out T, out E> {
                 Failure(onError(e))
             }
 
-
         @JvmStatic
         fun error(error: Any?): Err {
             return when (error) {
@@ -375,7 +356,6 @@ sealed class Result<out T, out E> {
             }
         }
 
-
         @JvmStatic
         fun status(msg: String?, code: Int?, status: Status): Status {
             // NOTE: There is small optimization here to avoid creating a new instance
@@ -386,25 +366,23 @@ sealed class Result<out T, out E> {
             return status.copyAll(msg ?: status.msg, code ?: status.code)
         }
 
-
         @JvmStatic
-        fun build(msg: String?, rawStatus:Status?, status: Status): Status {
+        fun build(msg: String?, rawStatus: Status?, status: Status): Status {
             // NOTE: There is small optimization here to avoid creating a new instance
             // of [Status] if the msg/code are empty and or they are the same as Success.
-            if(msg == null && rawStatus == null) return status
-            if(msg == null && rawStatus != null) return rawStatus
-            if(msg != null && rawStatus == null) return status.copyMsg(msg)
-            if(msg != null && rawStatus != null) return rawStatus.copyMsg(msg)
+            if (msg == null && rawStatus == null) return status
+            if (msg == null && rawStatus != null) return rawStatus
+            if (msg != null && rawStatus == null) return status.copyMsg(msg)
+            if (msg != null && rawStatus != null) return rawStatus.copyMsg(msg)
             return status
         }
     }
 }
 
-
 /**
  * Success branch of the Result
  *
- * @param value  : Value representing the success
+ * @param value : Value representing the success
  * @param status : Optional status code as [Status]
  */
 data class Success<out T>(
@@ -416,43 +394,42 @@ data class Success<out T>(
     /**
      * Initialize using explicitly supplied message
      * @param value : Value representing the success
-     * @param msg   : Optional message for the status
+     * @param msg : Optional message for the status
      *
      * NOTE: There is small optimization here to avoid creating a new instance
      * of [Status] if the msg/code are empty and or they are the same as [Codes.SUCCESS].
      */
-    constructor(value: T, msg: String)
-            : this(value, Result.status(msg, null, Codes.SUCCESS))
+    constructor(value: T, msg: String) :
+            this(value, Result.status(msg, null, Codes.SUCCESS))
 
     /**
      * Initialize using explicitly supplied code
      * @param value : Value representing the success
-     * @param code  : Optional code for the status
+     * @param code : Optional code for the status
      *
      * NOTE: There is small optimization here to avoid creating a new instance
      * of [Status] if the msg/code are empty and or they are the same as [Codes.SUCCESS].
      */
-    constructor(value: T, code: Int)
-            : this(value, Result.status(null, code, Codes.SUCCESS))
+    constructor(value: T, code: Int) :
+            this(value, Result.status(null, code, Codes.SUCCESS))
 
     /**
      * Initialize using explicitly supplied message and code
      * @param value : Value representing the success
-     * @param msg   : Optional message for the status
-     * @param code  : Optional code for the status
+     * @param msg : Optional message for the status
+     * @param code : Optional code for the status
      *
      * NOTE: There is small optimization here to avoid creating a new instance
      * of [Status] if the msg/code are empty and or they are the same as [Codes.SUCCESS].
      */
-    constructor(value: T, msg: String? = null, code: Int? = null)
-            : this(value, Result.status(msg, code, Codes.SUCCESS))
+    constructor(value: T, msg: String? = null, code: Int? = null) :
+            this(value, Result.status(msg, code, Codes.SUCCESS))
 }
-
 
 /**
  * Failure branch of the result
  *
- * @param error  : Error representing the failure
+ * @param error : Error representing the failure
  * @param status : Optional status code as [Status]
  */
 data class Failure<out E>(
@@ -464,38 +441,37 @@ data class Failure<out E>(
     /**
      * Initialize using explicitly supplied message
      * @param error : Error representing the failure
-     * @param msg   : Optional message for the status
+     * @param msg : Optional message for the status
      *
      * NOTE: There is small optimization here to avoid creating a new instance
      * of [Status] if the msg/code are empty and or they are the same as [Codes.ERRORED].
      */
-    constructor(error: E, msg: String)
-            : this(error, Result.status(msg, null, Codes.ERRORED))
+    constructor(error: E, msg: String) :
+            this(error, Result.status(msg, null, Codes.ERRORED))
 
     /**
      * Initialize using explicitly supplied code
      * @param error : Error representing the failure
-     * @param code  : Optional code for the status
+     * @param code : Optional code for the status
      *
      * NOTE: There is small optimization here to avoid creating a new instance
      * of [Status] if the msg/code are empty and or they are the same as [Codes.ERRORED].
      */
-    constructor(error: E, code: Int)
-            : this(error, Result.status(null, code, Codes.ERRORED))
+    constructor(error: E, code: Int) :
+            this(error, Result.status(null, code, Codes.ERRORED))
 
     /**
      * Initialize using explicitly supplied message and code
      * @param error : Error representing the failure
-     * @param msg   : Optional message for the status
-     * @param code  : Optional code for the status
+     * @param msg : Optional message for the status
+     * @param code : Optional code for the status
      *
      * NOTE: There is small optimization here to avoid creating a new instance
      * of [Status] if the msg/code are empty and or they are the same as [Codes.ERRORED].
      */
-    constructor(error: E, msg: String? = null, code: Int? = null)
-            : this(error, Result.status(msg, code, Codes.ERRORED))
+    constructor(error: E, msg: String? = null, code: Int? = null) :
+            this(error, Result.status(msg, code, Codes.ERRORED))
 }
-
 
 /**
  * Applies supplied function `f` if this is a [Success]
@@ -509,7 +485,6 @@ data class Failure<out E>(
  * ```
  */
 inline fun <T1, T2, E> Result<T1, E>.flatMap(f: (T1) -> Result<T2, E>): Result<T2, E> = this.then(f)
-
 
 /**
  * Applies supplied function `f` if this is a [Success]
@@ -528,7 +503,6 @@ inline fun <T1, T2, E> Result<T1, E>.then(f: (T1) -> Result<T2, E>): Result<T2, 
         is Failure -> this
     }
 
-
 /**
  * Applies supplied function `op` if this is a [Success]. The difference to flatMap / then is that the whole
  * Result is provided as an input
@@ -544,13 +518,12 @@ inline fun <T1, T2, E> Result<T1, E>.then(f: (T1) -> Result<T2, E>): Result<T2, 
  * )
  * ```
  */
-inline fun <T1, T2, E> Result<T1, E>.operate(op: (Result<T1,E>) -> Result<T2,E>): Result<T2,E> {
+inline fun <T1, T2, E> Result<T1, E>.operate(op: (Result<T1, E>) -> Result<T2, E>): Result<T2, E> {
     return when (this) {
         is Success -> op(this)
         is Failure -> this
     }
 }
-
 
 /**
  * Applies supplied function `f` if this is a [Failure] to transform the error type
@@ -568,7 +541,6 @@ inline fun <T, E, E2> Result<T, E>.flatMapError(f: (E) -> Result<T, E2>): Result
     is Failure -> f(this.error)
 }
 
-
 /**
  * Returns the value from this [Success] or the default value supplied if [Failure]
  *
@@ -584,7 +556,6 @@ inline fun <T, E> Result<T, E>.getOrElse(f: () -> T): T =
         is Failure -> f()
     }
 
-
 /**
  * Gets the inner value in a nested Result
  *
@@ -594,8 +565,7 @@ inline fun <T, E> Result<T, E>.getOrElse(f: () -> T): T =
  * ```
  */
 @Suppress("NOTHING_TO_INLINE")
-inline fun <T,E> Result<Result<T, E>,E>.inner(): Result<T,E> = this.fold( { it }, { Failure(it) } )
-
+inline fun <T, E> Result<Result<T, E>, E>.inner(): Result<T, E> = this.fold({ it }, { Failure(it) })
 
 /**
  * Returns true if this is a [Success] with the value supplied, or false otherwise
@@ -614,7 +584,6 @@ inline fun <T, E> Result<T, E>.contains(i: T): Boolean =
         is Failure -> false
     }
 
-
 /**
  * Builds a Result as a [Success] with the value supplied
  *
@@ -625,7 +594,6 @@ inline fun <T, E> Result<T, E>.contains(i: T): Boolean =
  */
 fun <T> T.toSuccess(): Result<T, Nothing> = Success(this)
 
-
 /**
  * Builds a Result as a [Failure] with the value supplied
  *
@@ -635,4 +603,3 @@ fun <T> T.toSuccess(): Result<T, Nothing> = Success(this)
  * ```
  */
 fun <E> E.toFailure(): Result<Nothing, E> = Failure(this)
-

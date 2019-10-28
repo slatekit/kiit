@@ -20,18 +20,17 @@ sealed class Platform(
     override val value: Int
 ) : EnumLike {
 
-    object PlatformIOS     : Platform("ios", 0)
-    object PlatformAnd     : Platform("android", 1)
-    object PlatformWeb     : Platform("web", 2)
-    object PlatformSrv     : Platform("server", 3)
-    object PlatformNone    : Platform("none", 4)
-    data class PlatformUnknown(val text:String) : Platform("unknown", 5)
+    object IOS     : Platform("ios", 0)
+    object And     : Platform("android", 1)
+    object Web     : Platform("web", 2)
+    object None    : Platform("none", 3)
+    data class Unknown(val text:String) : Platform("unknown", 5)
 
 
     companion object : EnumSupport() {
 
         override fun all(): Array<EnumLike> {
-            return arrayOf(PlatformIOS, PlatformAnd, PlatformWeb, PlatformWeb, PlatformSrv, PlatformNone)
+            return arrayOf(IOS, And, Web, None)
         }
 
         override fun isUnknownSupported(): Boolean {
@@ -39,11 +38,11 @@ sealed class Platform(
         }
 
         override fun unknown(name: String): EnumLike {
-            return PlatformUnknown(name)
+            return Unknown(name)
         }
 
         override fun unknown(value: Int): EnumLike {
-            return PlatformUnknown("unknown")
+            return Unknown("unknown")
         }
     }
 }

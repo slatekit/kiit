@@ -13,8 +13,20 @@
 
 package slatekit.results.builders
 
-import slatekit.results.*
-
+import slatekit.results.Codes
+import slatekit.results.DeniedException
+import slatekit.results.Err
+import slatekit.results.ErroredException
+import slatekit.results.ExceptionErr
+import slatekit.results.Failure
+import slatekit.results.IgnoredException
+import slatekit.results.InvalidException
+import slatekit.results.Result
+import slatekit.results.Success
+import slatekit.results.Status
+import slatekit.results.StatusException
+import slatekit.results.Try
+import slatekit.results.UnexpectedException
 
 /**
  * Builds [Result] with [Failure] error type of [Exception]
@@ -24,7 +36,6 @@ interface TryBuilder : Builder<Exception> {
     override fun errorFromStr(msg: String?, defaultStatus: Status): Exception = Exception(msg ?: defaultStatus.msg)
     override fun errorFromErr(err: Err, defaultStatus: Status): Exception = ExceptionErr(defaultStatus.msg, err)
 }
-
 
 /**
  * Builds [Result] with [Failure] error type of [Exception]
@@ -49,29 +60,29 @@ object Tries : TryBuilder {
      */
     @JvmStatic
     inline fun <T> attemptWithStatus(f: () -> Success<T>): Try<T> =
-            try {
-                val data = f()
-                data
-            } catch (e: DeniedException) {
-                Failure(e, Result.build(e.msg, e.status, Codes.DENIED))
-            } catch (e: IgnoredException) {
-                Failure(e, Result.build(e.msg, e.status, Codes.IGNORED))
-            } catch (e: InvalidException) {
-                Failure(e, Result.build(e.msg, e.status, Codes.INVALID))
-            } catch (e: ErroredException) {
-                Failure(e, Result.build(e.msg, e.status, Codes.ERRORED))
-            } catch (e: UnexpectedException) {
-                // Theoretically, anything outside of Denied/Ignored/Invalid/Errored
-                // is an unexpected expection ( even a normal [Exception].
-                // However, this is here for completeness ( to have exceptions
-                // that correspond to the various [Status] groups), and to cover the
-                // case when someone wants to explicitly use an UnhandledException
-                // or Status group/code
-                Failure(e, Result.build(e.message, null, Codes.UNEXPECTED))
-            } catch (e: Exception) {
-                when(e) {
-                    is StatusException -> Failure(e, Result.build(e.msg, e.status, Codes.UNEXPECTED))
-                    else -> Failure(e, Result.build(e.message, null, Codes.UNEXPECTED))
-                }
+        try {
+            val data = f()
+            data
+        } catch (e: DeniedException) {
+            Failure(e, Result.build(e.msg, e.status, Codes.DENIED))
+        } catch (e: IgnoredException) {
+            Failure(e, Result.build(e.msg, e.status, Codes.IGNORED))
+        } catch (e: InvalidException) {
+            Failure(e, Result.build(e.msg, e.status, Codes.INVALID))
+        } catch (e: ErroredException) {
+            Failure(e, Result.build(e.msg, e.status, Codes.ERRORED))
+        } catch (e: UnexpectedException) {
+            // Theoretically, anything outside of Denied/Ignored/Invalid/Errored
+            // is an unexpected expection ( even a normal [Exception].
+            // However, this is here for completeness ( to have exceptions
+            // that correspond to the various [Status] groups), and to cover the
+            // case when someone wants to explicitly use an UnhandledException
+            // or Status group/code
+            Failure(e, Result.build(e.message, null, Codes.UNEXPECTED))
+        } catch (e: Exception) {
+            when (e) {
+                is StatusException -> Failure(e, Result.build(e.msg, e.status, Codes.UNEXPECTED))
+                else -> Failure(e, Result.build(e.message, null, Codes.UNEXPECTED))
             }
+        }
 }

@@ -1,4 +1,4 @@
-
+package test.results
 import org.junit.Assert
 import slatekit.results.*
 import slatekit.results.Status
