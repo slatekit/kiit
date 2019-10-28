@@ -121,7 +121,7 @@ open class ApiServer(
      * @param req
      * @return
      */
-    suspend fun call(req: Request, options:ExecOptions?): Try<Any> {
+    suspend fun call(req: Request, options:Flags?): Try<Any> {
         val result = try {
             execute(req, options)
         }
@@ -184,7 +184,7 @@ open class ApiServer(
      * @param cmd
      * @return
      */
-    suspend fun execute(raw: Request, options:ExecOptions? = null): Outcome<Any> {
+    suspend fun execute(raw: Request, options:Flags? = null): Outcome<Any> {
         // Step 1: Check for help / discovery
         val helpCheck = help.process(raw)
         if(helpCheck.success) {
