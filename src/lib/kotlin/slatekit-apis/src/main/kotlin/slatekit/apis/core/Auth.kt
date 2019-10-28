@@ -51,15 +51,9 @@ interface Auth : RolesSupport {
      */
     fun check(req: Request, authMode: AuthMode, rolesOnAction: slatekit.apis.core.Roles, rolesOnApi: slatekit.apis.core.Roles): Outcome<Boolean>
 
-
     /**
      * Gets the user roles that are applicable for the supplied request.
      * This can be implemented any way, e.g. Auth tokens/OAuth etc.
      */
     fun getUserRoles(req: Request): String = ""
-
-
 }
-
-
-

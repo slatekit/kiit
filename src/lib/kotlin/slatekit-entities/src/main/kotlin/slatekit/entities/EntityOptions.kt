@@ -1,7 +1,9 @@
 package slatekit.entities.slatekit.entities
 
-data class EntityOptions(val applyMetadata: Boolean,
-                         val applyHooks:Boolean) {
+data class EntityOptions(
+    val applyMetadata: Boolean,
+    val applyHooks: Boolean
+) {
 
     companion object {
 

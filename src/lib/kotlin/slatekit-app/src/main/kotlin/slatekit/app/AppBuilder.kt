@@ -3,9 +3,8 @@ package slatekit.app
 import slatekit.common.args.ArgsSchema
 import slatekit.common.conf.Conf
 import slatekit.common.db.DbLookup
-import slatekit.common.envs.Env
-import slatekit.common.envs.EnvMode
-import slatekit.common.info.*
+import slatekit.common.info.About
+import slatekit.common.info.Folders
 import slatekit.common.templates.Subs
 import slatekit.common.toId
 
@@ -26,7 +25,6 @@ object AppBuilder {
      * @return
      */
     fun dbs(conf: Conf): DbLookup = DbLookup.defaultDb(conf.dbCon("db"))
-
 
     /**
      * builds all the info for this application including its
@@ -49,7 +47,6 @@ object AppBuilder {
             examples = conf.getStringOrElse("app.examples", "")
     )
 
-
     /**
      * setup the command line arguments.
      * NOTE:
@@ -58,11 +55,10 @@ object AppBuilder {
      * 3. If any of these are required and not supplied, then an error is display and program exits
      * 4. Help text can be easily built from this schema.
      */
-    fun schema():ArgsSchema = ArgsSchema()
+    fun schema(): ArgsSchema = ArgsSchema()
             .text("", "env", "the environment to run in", false, "dev", "dev", "dev1|qa1|stg1|pro")
-            .text("","config.loc", "location of config files", false, "jar", "jar", "jar|conf")
+            .text("", "config.loc", "location of config files", false, "jar", "jar", "jar|conf")
             .text("", "log.level", "the log level for logging", false, "info", "info", "debug|info|warn|error")
-
 
     /**
      * builds a list of directories used by the application for logs/output ( NOT BINARIES ).
@@ -101,7 +97,7 @@ object AppBuilder {
      *
      * @return
      */
-    fun vars(abt:About): Subs {
+    fun vars(abt: About): Subs {
         return Subs(listOf(
                 Pair("user.home", { _ -> System.getProperty("user.home") }),
                 Pair("company.id", { _ -> abt.company.toId() }),
@@ -116,5 +112,4 @@ object AppBuilder {
                 Pair("app.dir", { _ -> "@{root.dir}/@{area.id}/@{app.id}" })
         ))
     }
-
 }

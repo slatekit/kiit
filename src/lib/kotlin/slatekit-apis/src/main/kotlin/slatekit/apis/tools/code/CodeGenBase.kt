@@ -1,21 +1,20 @@
 package slatekit.apis.tools.code
 
+import java.io.File
+import kotlin.reflect.KClass
+import kotlin.reflect.KParameter
+import kotlin.reflect.KType
+import kotlin.reflect.full.declaredMemberFunctions
 import slatekit.apis.Protocol
-import slatekit.apis.core.Api
-import slatekit.apis.core.Action
-import slatekit.apis.helpers.ApiHelper
 import slatekit.apis.Verbs
+import slatekit.apis.core.Action
+import slatekit.apis.core.Api
 import slatekit.common.*
 import slatekit.common.io.Files
 import slatekit.common.requests.Request
 import slatekit.common.utils.Props
 import slatekit.meta.KTypes
 import slatekit.meta.Reflector
-import java.io.File
-import kotlin.reflect.KClass
-import kotlin.reflect.KParameter
-import kotlin.reflect.KType
-import kotlin.reflect.full.declaredMemberFunctions
 
 abstract class CodeGenBase(val settings: CodeGenSettings) {
 
@@ -203,7 +202,7 @@ abstract class CodeGenBase(val settings: CodeGenSettings) {
             val cls = tpe.classifier as KClass<*>
             if (Reflector.isSlateKitEnum(cls)) {
                 buildTypeName(KTypes.KIntType)
-            } else if (cls == slatekit.results.Result::class ) {
+            } else if (cls == slatekit.results.Result::class) {
                 val genType = tpe.arguments[0].type!!
                 val finalType = buildTypeName(genType)
                 finalType

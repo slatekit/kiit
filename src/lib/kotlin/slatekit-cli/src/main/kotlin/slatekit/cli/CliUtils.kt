@@ -14,8 +14,8 @@
 package slatekit.cli
 
 import slatekit.common.args.Args
-import slatekit.common.io.Files
 import slatekit.common.info.Folders
+import slatekit.common.io.Files
 import slatekit.results.*
 
 object CliUtils {
@@ -28,15 +28,13 @@ object CliUtils {
         Files.writeFileForDateAsTimeStamp(folders.pathToLogs, content)
     }
 
-
-    fun convert(line: String, prefix:String, separator:String): Try<CliRequest> {
+    fun convert(line: String, prefix: String, separator: String): Try<CliRequest> {
         // 1st step, parse the command line into arguments
         val argsResult = Args.parse(line, prefix, separator, true)
         return Success(CliRequest.build((argsResult as Success<Args>).value, line))
     }
 
-
-    fun convert(args:Args): CliRequest {
+    fun convert(args: Args): CliRequest {
         // 1st step, parse the command line into arguments
         return CliRequest.build(args, args.line)
     }

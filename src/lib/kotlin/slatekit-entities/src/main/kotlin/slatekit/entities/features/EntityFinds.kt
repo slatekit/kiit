@@ -1,13 +1,13 @@
 package slatekit.entities.features
 
-import slatekit.query.IQuery
-import slatekit.query.Query
+import kotlin.reflect.KProperty
 import slatekit.entities.Entity
 import slatekit.entities.core.ServiceSupport
+import slatekit.query.IQuery
+import slatekit.query.Query
 import slatekit.query.QueryEncoder
-import kotlin.reflect.KProperty
 
-interface EntityFinds<TId, T> : ServiceSupport<TId, T> where TId: kotlin.Comparable<TId>, T: Entity<TId> {
+interface EntityFinds<TId, T> : ServiceSupport<TId, T> where TId : kotlin.Comparable<TId>, T : Entity<TId> {
 
     /**
      * finds items based on the query
@@ -24,7 +24,7 @@ interface EntityFinds<TId, T> : ServiceSupport<TId, T> where TId: kotlin.Compara
      * @param value: The value to check for
      * @return
      */
-    fun findByField(field:String, value: Any): List<T> {
+    fun findByField(field: String, value: Any): List<T> {
         // Get column name from model schema ( if available )
         val column = QueryEncoder.ensureField(field)
         return repo().findBy(column, "=", value)
@@ -35,7 +35,7 @@ interface EntityFinds<TId, T> : ServiceSupport<TId, T> where TId: kotlin.Compara
      * @param conditions: The list of name/value pairs
      * @return
      */
-    fun findByFields(conditions:List<Pair<String, Any>>): List<T> {
+    fun findByFields(conditions: List<Pair<String, Any>>): List<T> {
         // Get column name from model schema ( if available )
         val pairs = conditions.map { Pair(QueryEncoder.ensureField(it.first), it.second) }
         return repo().findByFields(pairs)
@@ -59,7 +59,7 @@ interface EntityFinds<TId, T> : ServiceSupport<TId, T> where TId: kotlin.Compara
      * @param value: The value to check for
      * @return
      */
-    fun findByField(prop: KProperty<*>, value: Any, limit:Int): List<T> {
+    fun findByField(prop: KProperty<*>, value: Any, limit: Int): List<T> {
         // Get column name from model schema ( if available )
         val column = this.repo().columnName(prop)
         val query = Query().where(column, "=", value).limit(limit)
@@ -84,7 +84,7 @@ interface EntityFinds<TId, T> : ServiceSupport<TId, T> where TId: kotlin.Compara
      * @param value: The value to check for
      * @return
      */
-    fun findFirstByField(name:String, value: Any): T? {
+    fun findFirstByField(name: String, value: Any): T? {
         // Get column name from model schema ( if available )
         val column = QueryEncoder.ensureField(name)
         return repo().findFirstBy(column, "=", value)

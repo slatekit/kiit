@@ -13,17 +13,17 @@
 
 package slatekit.apis.tools.docs
 
+import java.lang.Math.abs
+import kotlin.reflect.KParameter
 import slatekit.apis.Input
-import slatekit.apis.core.Api
 import slatekit.apis.core.Action
-import slatekit.common.console.SemanticConsoleSettings
+import slatekit.apis.core.Api
 import slatekit.common.console.SemanticConsole
+import slatekit.common.console.SemanticConsoleSettings
 import slatekit.common.console.SemanticWrites
 import slatekit.common.nonEmptyOrDefault
 import slatekit.meta.KTypes
 import slatekit.meta.Serialization
-import java.lang.Math.abs
-import kotlin.reflect.KParameter
 
 abstract class Doc : ApiVisit {
 
@@ -183,7 +183,7 @@ abstract class Doc : ApiVisit {
 
     override fun onArgBegin(arg: Input, options: ApiVisitOptions?) {
 
-        val example = if(arg.examples.size > 0) arg.examples[0] else ""
+        val example = if (arg.examples.size > 0) arg.examples[0] else ""
         onArgBegin(arg.name, arg.desc, arg.required, arg.name, arg.defaults, example, options)
     }
 

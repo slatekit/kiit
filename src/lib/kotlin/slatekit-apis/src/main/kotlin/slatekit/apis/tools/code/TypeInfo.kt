@@ -14,17 +14,17 @@ import kotlin.reflect.KClass
  * @param conversionType : The Kotlin
  */
 data class TypeInfo(
-        val isBasicType: Boolean,
-        val isCollection: Boolean,
-        val targetParameterType: String,
-        val targetReturnType: String,
-        val containerType: KClass<*>,
-        val dataType: KClass<*>,
-        val conversionType: String,
-        val keyType: KClass<*>? = null
+    val isBasicType: Boolean,
+    val isCollection: Boolean,
+    val targetParameterType: String,
+    val targetReturnType: String,
+    val containerType: KClass<*>,
+    val dataType: KClass<*>,
+    val conversionType: String,
+    val keyType: KClass<*>? = null
 ) {
-    fun isList()  : Boolean = containerType == List::class
-    fun isMap()   : Boolean = containerType == Map::class
+    fun isList(): Boolean = containerType == List::class
+    fun isMap(): Boolean = containerType == Map::class
     fun isObject(): Boolean = !isBasicType && !isCollection
     fun isPair(): Boolean = isObject() && dataType.simpleName?.startsWith("Pair") ?: false
 }

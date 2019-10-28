@@ -21,7 +21,7 @@ class Restify : Input<ApiRequest>, RewriteSupport, Middleware {
      * Rewrites restful routes and maps them to SlateKit API routes
      */
     @Ignore
-    override suspend fun process(request:Outcome<ApiRequest>):Outcome<ApiRequest> {
+    override suspend fun process(request: Outcome<ApiRequest>): Outcome<ApiRequest> {
         return request.flatMap {
             // Get the first and second part
             val req = it.request
@@ -31,7 +31,7 @@ class Restify : Input<ApiRequest>, RewriteSupport, Middleware {
             val result = if (verb == verbGet && req.parts[2] == "") {
                 Outcome.of { rewrite(it, container.rename("getAll")) }
             } else if (verb == verbGet && ValidationFuncs.isNumeric(req.parts[2])) {
-                Outcome.of {rewriteWithParam(it, container.rename("getById"), "id", req.parts[2]) }
+                Outcome.of { rewriteWithParam(it, container.rename("getById"), "id", req.parts[2]) }
             } else if (verb == verbPost && req.parts[2] == "") {
                     Outcome.of { rewrite(it, container.rename("create")) }
             } else if (verb == verbPut && req.parts[2] == "") {

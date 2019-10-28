@@ -12,16 +12,16 @@ mantra: Simplicity above all else
  */
 package slatekit.jobs.support
 
-import slatekit.jobs.Queue
 import java.util.*
+import slatekit.jobs.Queue
 
 /**
  * Contains the collection of all the available queues and provides
  * functionality to lookup, and get the next queue while factoring in queue priority
  */
-class Queues(val queues: List<Queue>, applyPrioritization:Boolean = true) {
+class Queues(val queues: List<Queue>, applyPrioritization: Boolean = true) {
 
-    val prioritizedQueues: List<Queue> = if(applyPrioritization) prioritize(queues) else queues
+    val prioritizedQueues: List<Queue> = if (applyPrioritization) prioritize(queues) else queues
     val lookup: Map<String, Queue> = prioritizedQueues.map { it -> it.name to it }.toMap()
     val random = Random()
 

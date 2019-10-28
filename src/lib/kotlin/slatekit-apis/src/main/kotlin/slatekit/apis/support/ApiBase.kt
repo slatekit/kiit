@@ -13,7 +13,6 @@
 
 package slatekit.apis.support
 
-import slatekit.apis.Action
 import slatekit.apis.ApiRequest
 import slatekit.apis.ApiResult
 import slatekit.common.*
@@ -23,8 +22,6 @@ import slatekit.results.Outcome
 import slatekit.results.builders.Outcomes
 
 interface Api
-
-
 
 /**
  * Base class for any Api, provides lookup functionality to check for exposed api actions.

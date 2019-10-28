@@ -27,5 +27,5 @@ interface Handle<TReq, TRes> : Middleware {
      * @param req : The request
      */
     @Ignore
-    suspend fun handle(req: TReq, op:(TReq) -> Outcome<TRes>): Outcome<TRes>
+    suspend fun handle(req: TReq, op: (TReq) -> Outcome<TRes>): Outcome<TRes>
 }

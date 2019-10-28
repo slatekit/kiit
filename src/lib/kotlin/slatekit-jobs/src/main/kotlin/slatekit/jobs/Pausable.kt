@@ -1,6 +1,5 @@
 package slatekit.jobs
 
-
 interface Pausable {
 
     /**
@@ -8,19 +7,17 @@ interface Pausable {
      * @param reason
      * @return
      */
-    suspend fun pause(reason:String?)
-
+    suspend fun pause(reason: String?)
 
     /**
      * Hook for handling stopping of a job
      */
-    suspend fun stop(reason:String?)
-
+    suspend fun stop(reason: String?)
 
     /**
      * Hook for handling resuming of a job
      * @param reason
      * @return
      */
-    suspend fun resume(reason:String?, task: Task): WorkResult
+    suspend fun resume(reason: String?, task: Task): WorkResult
 }

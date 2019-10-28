@@ -27,14 +27,14 @@ import slatekit.common.requests.Response
  * @param tag : Tag used as a correlation field
  */
 data class CliResponse<out T>(
-        val request:CliRequest,
-        override val success: Boolean,
-        override val code: Int,
-        override val meta: Map<String, String>?,
-        override val value: T?,
-        override val msg: String? = null,
-        override val err: Exception? = null,
-        override val tag: String? = null
+    val request: CliRequest,
+    override val success: Boolean,
+    override val code: Int,
+    override val meta: Map<String, String>?,
+    override val value: T?,
+    override val msg: String? = null,
+    override val err: Exception? = null,
+    override val tag: String? = null
 ) : Response<T> {
 
     /**
@@ -45,7 +45,6 @@ data class CliResponse<out T>(
             copy(meta = it.plus(meta))
         } ?: copy(meta = meta.toMap())
     }
-
 
     companion object {
         val empty = CliResponse(

@@ -16,7 +16,7 @@ package slatekit.db
 import slatekit.common.DateTime
 import slatekit.common.Record
 import java.sql.ResultSet
-//import java.time.*
+// import java.time.*
 import org.threeten.bp.*
 import slatekit.common.DateTimes
 import slatekit.common.ext.atZone
@@ -29,10 +29,10 @@ class RecordSet(private val rs: ResultSet) : Record {
     override val raw: Any = rs
     override fun size(): Int = 0
     override fun get(key: String): Any? = rs.getString(key)
-    override fun getPos(name:String):Int = rs.findColumn(name)
-    override fun getName(pos:Int):String = rs.metaData.getColumnName(pos)
-    override fun contains(name:String):Boolean = rs.findColumn(name) > -1
-    override fun containsKey(key:String):Boolean = rs.findColumn(key) > -1
+    override fun getPos(name: String): Int = rs.findColumn(name)
+    override fun getName(pos: Int): String = rs.metaData.getColumnName(pos)
+    override fun contains(name: String): Boolean = rs.findColumn(name) > -1
+    override fun containsKey(key: String): Boolean = rs.findColumn(key) > -1
 
     override fun getString(key: String): String = rs.getString(key)
     override fun getBool(key: String): Boolean = rs.getBoolean(key)

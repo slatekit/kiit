@@ -12,10 +12,10 @@ import slatekit.results.flatMap
 /**
  * Checks Authorization of the request
  */
-class Authorize(val auth:Auth?) : Input<ApiRequest>, Middleware {
+class Authorize(val auth: Auth?) : Input<ApiRequest>, Middleware {
 
     @Ignore
-    override suspend fun process(request: Outcome<ApiRequest>):Outcome<ApiRequest> {
+    override suspend fun process(request: Outcome<ApiRequest>): Outcome<ApiRequest> {
         return request.flatMap {
             val target = it.target!!
             val noAuth = auth == null // || target.api.auth.isNullOrEmpty()
@@ -43,5 +43,3 @@ class Authorize(val auth:Auth?) : Input<ApiRequest>, Middleware {
         }
     }
 }
-
-

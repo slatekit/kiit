@@ -14,7 +14,7 @@ package slatekit.apis
 
 import slatekit.apis.setup.Parentable
 
-
+/* ktlint-disable */
 object AuthModes {
     /**
      * Reference to a parent value
@@ -72,3 +72,4 @@ sealed class AuthMode(override val name:String)  : Parentable<AuthMode> {
         }
     }
 }
+/* ktlint-enable */

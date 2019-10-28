@@ -15,15 +15,13 @@ package slatekit.entities
 
 import slatekit.entities.core.EntityStore
 
-
-
 /**
  * Entity service with generics to support all CRUD operations.
  * Delegates calls to the entity repository, and also manages the timestamps
  * on the entities for create/update operations
  * @tparam T
  */
-open class EntityService<TId,T>(protected val repo: EntityRepo<TId, T>) : EntityServices<TId, T>
+open class EntityService<TId, T>(protected val repo: EntityRepo<TId, T>) : EntityServices<TId, T>
         where TId : kotlin.Comparable<TId>, T : Entity<TId> {
 
     override fun store(): EntityStore = repo

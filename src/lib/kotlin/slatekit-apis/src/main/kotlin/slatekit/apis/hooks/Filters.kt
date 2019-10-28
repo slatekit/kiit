@@ -14,7 +14,7 @@ import slatekit.results.flatMap
 class Filters : Input<ApiRequest> {
 
     @Ignore
-    override suspend fun process(req: Outcome<ApiRequest>):Outcome<ApiRequest> {
+    override suspend fun process(req: Outcome<ApiRequest>): Outcome<ApiRequest> {
         return req.flatMap { apiReq ->
             val filters = apiReq.host.hooks.inputters
             val failed = filters.firstOrNull { !it.process(req).success }

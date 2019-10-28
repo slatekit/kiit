@@ -4,15 +4,15 @@ import org.json.simple.JSONObject
 import slatekit.apis.support.JsonSupport
 import slatekit.common.*
 import slatekit.common.encrypt.Encryptor
-//import java.time.*
+// import java.time.*
 import org.threeten.bp.*
 
 /**
  * Used to represent a request that originates from a json file.
  * This is useful for automation purposes and replaying an api action from a file source.
  * @param rawSource : Raw source
- * @param json      : JSON object
- * @param enc       : Encryptor
+ * @param json : JSON object
+ * @param enc : Encryptor
  */
 data class Meta(
     val rawSource: Any,
@@ -29,7 +29,7 @@ data class Meta(
 
     override fun size(): Int = json.size
     override fun get(key: String): Any? = getStringRaw(key)
-    //override fun getObject(key: String): Any? = getStringRaw(key)
+    // override fun getObject(key: String): Any? = getStringRaw(key)
     override fun containsKey(key: String): Boolean = json.containsKey(key)
 
     override fun getString(key: String): String = Strings.decrypt(getStringRaw(key).trim()) { it -> enc?.decrypt(it) ?: it }
@@ -46,7 +46,6 @@ data class Meta(
     override fun getLocalDateTime(key: String): LocalDateTime = Conversions.toLocalDateTime(getStringRaw(key))
     override fun getZonedDateTime(key: String): ZonedDateTime = Conversions.toZonedDateTime(getStringRaw(key))
     override fun getZonedDateTimeUtc(key: String): ZonedDateTime = Conversions.toZonedDateTimeUtc(getStringRaw(key))
-
 
     private fun getInternalString(key: String): String {
         return if (containsKey(key)) {

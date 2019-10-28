@@ -12,19 +12,20 @@ import slatekit.results.builders.Outcomes
 /**
  * @param settings: The list of slack channels
  */
-class AlertServiceSlack(override val identity: Identity,
-                        override val settings: AlertSettings) : AlertService() {
+class AlertServiceSlack(
+    override val identity: Identity,
+    override val settings: AlertSettings
+) : AlertService() {
 
     private val baseUrl = "https://hooks.slack.com/services"
 
     /**
      * Whether or not sending is enabled
      */
-    override fun isEnabled(model:Alert):Boolean {
+    override fun isEnabled(model: Alert): Boolean {
         val target = this.settings.targets.firstOrNull { it.target == model.target }
         return target?.enabled ?: false
     }
-
 
     /**
      * Validates the model supplied
@@ -34,12 +35,11 @@ class AlertServiceSlack(override val identity: Identity,
         val target = this.settings.targets.firstOrNull { it.target == model.target }
         return when {
             model.target.isNullOrEmpty() -> Outcomes.invalid("target not provided")
-            model.name.isNullOrEmpty()   -> Outcomes.invalid("name not provided")
-            target == null               -> Outcomes.invalid("target invalid")
+            model.name.isNullOrEmpty() -> Outcomes.invalid("name not provided")
+            target == null -> Outcomes.invalid("target invalid")
             else -> Outcomes.success(model)
         }
     }
-
 
     /**
      * Builds the HttpRequest for the model
@@ -55,12 +55,11 @@ class AlertServiceSlack(override val identity: Identity,
                 method = HttpRPC.Method.Post,
                 urlRaw = url,
                 headerParams = mapOf("Content-type" to "application/json"),
-                body  = HttpRPC.Body.JsonContent(jsonString))
+                body = HttpRPC.Body.JsonContent(jsonString))
         return Success(request)
     }
 
-
-    fun build(alert: Alert, target: AlertTarget):JSONObject {
+    fun build(alert: Alert, target: AlertTarget): JSONObject {
         // Convert the code to a color
         // 1. code 0 = pending = yellow
         // 2. code 1 = success = green
@@ -97,7 +96,6 @@ class AlertServiceSlack(override val identity: Identity,
         }
         return json
     }
-
 
 //    /**
 //     *

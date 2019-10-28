@@ -13,10 +13,10 @@
 
 package slatekit.apis.tools.docs
 
-import slatekit.apis.Input
-import slatekit.apis.core.Api
-import slatekit.apis.core.Action
 import kotlin.reflect.KParameter
+import slatekit.apis.Input
+import slatekit.apis.core.Action
+import slatekit.apis.core.Api
 
 interface ApiVisit {
 

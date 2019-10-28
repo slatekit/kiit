@@ -1,16 +1,13 @@
 package slatekit.functions.common
 
-
 interface FunctionTriggers<out Result> {
-
 
     /**
      * execute this function in normal mode with empty args
      */
-    fun call(){
+    fun call() {
         this.execute(arrayOf(), FunctionMode.Called)
     }
-
 
     /**
      * execute this function indicating triggered or forced mode
@@ -22,7 +19,6 @@ interface FunctionTriggers<out Result> {
         execute(arrayOf(), FunctionMode.Forced)
     }
 
-
     /**
      * execute this function indicating scheduled mode
      *
@@ -33,7 +29,6 @@ interface FunctionTriggers<out Result> {
         execute(arrayOf(), FunctionMode.Scheduled)
     }
 
-
     /**
      * execute this function indicating interactive mode with the supplied args as a line
      *
@@ -43,7 +38,6 @@ interface FunctionTriggers<out Result> {
     fun interact(line: String, mode: FunctionMode) {
         execute(arrayOf(line), FunctionMode.Interacted)
     }
-
 
     /**
      * execute this function with the supplied args

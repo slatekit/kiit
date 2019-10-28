@@ -4,14 +4,14 @@ import slatekit.results.Failure
 import slatekit.results.Outcome
 import slatekit.results.Success
 
-class Processor<I,O> {
+class Processor<I, O> {
 
-    suspend fun input(items:List<Input<I>>, start: Outcome<I>): Outcome<I> {
-        return when(start) {
+    suspend fun input(items: List<Input<I>>, start: Outcome<I>): Outcome<I> {
+        return when (start) {
             is Failure -> start
             is Success -> {
-                when(items.isEmpty()) {
-                    true  -> start
+                when (items.isEmpty()) {
+                    true -> start
                     false -> process(0, items.size - 1, start) { ndx, v ->
                         val processor = items[ndx]
                                 processor.process(v)
@@ -21,13 +21,12 @@ class Processor<I,O> {
         }
     }
 
-
-    suspend fun output(input:I, output: Outcome<O>, items:List<Output<I, O>>): Outcome<O> {
-        return when(output) {
+    suspend fun output(input: I, output: Outcome<O>, items: List<Output<I, O>>): Outcome<O> {
+        return when (output) {
             is Failure -> output
             is Success -> {
-                when(items.isEmpty()) {
-                    true  -> output
+                when (items.isEmpty()) {
+                    true -> output
                     false -> process(0, items.size - 1, output) { ndx, v ->
                         val processor = items[ndx]
                                 processor.process(input, v)
@@ -36,7 +35,6 @@ class Processor<I,O> {
             }
         }
     }
-
 
     /**
      * "takeWhile" iteration alternative.
@@ -50,7 +48,7 @@ class Processor<I,O> {
         val result = condition(ndx, startValue)
         return if (!result.success)
             result
-        else if(ndx >= end)
+        else if (ndx >= end)
             result
         else
             process(ndx + 1, end, result, condition)

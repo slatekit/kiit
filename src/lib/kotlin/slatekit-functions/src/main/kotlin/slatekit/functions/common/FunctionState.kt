@@ -6,7 +6,7 @@ import slatekit.results.Outcome
 /**
  * Stores the state of the function execution
  */
-interface FunctionState<out T> where T: FunctionResult {
+interface FunctionState<out T> where T : FunctionResult {
     /**
      * Information about the function
      */

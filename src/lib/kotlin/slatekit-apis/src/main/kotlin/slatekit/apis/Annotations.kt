@@ -1,7 +1,5 @@
 package slatekit.apis
 
-
-
 /**
  * Annotation to designate a class as an API
  *
@@ -20,19 +18,17 @@ package slatekit.apis
  */
 @Target(AnnotationTarget.CLASS)
 annotation class Api(
-        val area: String = "",
-        val name: String = "",
-        val desc: String = "",
-        val roles: Array<String> = [],
-        val auth: String = AuthModes.Keyed,
-        val verb: String = Verbs.Auto,
-        val access: String = AccessLevel.Public,
-        val protocols: Array<String> = [Protocols.All],
-        val version: String = "1",
-        val tags: Array<String> = []
+    val area: String = "",
+    val name: String = "",
+    val desc: String = "",
+    val roles: Array<String> = [],
+    val auth: String = AuthModes.Keyed,
+    val verb: String = Verbs.Auto,
+    val access: String = AccessLevel.Public,
+    val protocols: Array<String> = [Protocols.All],
+    val version: String = "1",
+    val tags: Array<String> = []
 )
-
-
 
 /**
  * Annotation used in conjunction with the Api annotation, to designate your method
@@ -50,48 +46,44 @@ annotation class Api(
  */
 @Target(AnnotationTarget.FUNCTION)
 annotation class Action(
-        val name: String = "",
-        val desc: String = "",
-        val roles: Array<String> = [],
-        val verb: String = Verbs.Auto,
-        val access: String = AccessLevel.Public,
-        val protocols: Array<String> = [Protocols.All],
-        val version: String = "1",
-        val tags: Array<String> = []
+    val name: String = "",
+    val desc: String = "",
+    val roles: Array<String> = [],
+    val verb: String = Verbs.Auto,
+    val access: String = AccessLevel.Public,
+    val protocols: Array<String> = [Protocols.All],
+    val version: String = "1",
+    val tags: Array<String> = []
 )
-
-
 
 /**
  * Annotation to describe a parameter to an api action.
  * NOT CURRENTLY USED - Will be in upcoming versions.
  *
- * @param name      : name of the argument
- * @param desc      : description of argument
- * @param length    : max length of value e.g. 200
- * @param format    : format of the value e.g.
- * @param examples  : list of example values
+ * @param name : name of the argument
+ * @param desc : description of argument
+ * @param length : max length of value e.g. 200
+ * @param format : format of the value e.g.
+ * @param examples : list of example values
  */
 @Target(AnnotationTarget.FUNCTION)
 @Retention(AnnotationRetention.SOURCE)
 @Repeatable
 annotation class Input(
-        val name     : String = "",
-        val desc     : String = "",
-        val required : Boolean = true,
-        val length   : String = "",
-        val defaults : String = "",
-        val format   : String = "",
-        val examples : Array<String> = []
+    val name: String = "",
+    val desc: String = "",
+    val required: Boolean = true,
+    val length: String = "",
+    val defaults: String = "",
+    val format: String = "",
+    val examples: Array<String> = []
 )
-
-
 
 /**
  * Annotation to reference external documentation API specs
  * @param path : optional path to identity the source of documentation
- * @param key  : optional key to identity area within document
+ * @param key : optional key to identity area within document
  */
 @Target(AnnotationTarget.FUNCTION)
 @Retention(AnnotationRetention.SOURCE)
-annotation class Documented(val path:String = "", val key:String = "")
+annotation class Documented(val path: String = "", val key: String = "")

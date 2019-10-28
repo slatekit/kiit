@@ -7,7 +7,7 @@ import slatekit.results.Outcome
  * @param I : Input type
  * @param O : Output type
  */
-class Rewrite<I, O>(val rewrite:suspend (I) -> (I)) : Policy<I, O> {
+class Rewrite<I, O>(val rewrite: suspend (I) -> (I)) : Policy<I, O> {
 
     override suspend fun run(i: I, operation: suspend (I) -> Outcome<O>): Outcome<O> {
         val r = rewrite(i)

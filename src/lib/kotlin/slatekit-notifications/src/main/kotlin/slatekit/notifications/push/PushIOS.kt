@@ -19,11 +19,11 @@ import slatekit.results.Outcome
 
 class PushIOS : Sender<PushMessage> {
 
-  override fun validate(model: PushMessage): Outcome<PushMessage> {
-    TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
-  }
+    override fun validate(model: PushMessage): Outcome<PushMessage> {
+        TODO("not implemented") // To change body of created functions use File | Settings | File Templates.
+    }
 
-  override fun build(model: PushMessage): Outcome<Request> {
-    TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
-  }
+    override fun build(model: PushMessage): Outcome<Request> {
+        TODO("not implemented") // To change body of created functions use File | Settings | File Templates.
+    }
 }

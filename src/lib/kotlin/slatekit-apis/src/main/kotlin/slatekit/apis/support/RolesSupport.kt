@@ -40,5 +40,4 @@ interface RolesSupport {
         else
             parent
     }
-
 }

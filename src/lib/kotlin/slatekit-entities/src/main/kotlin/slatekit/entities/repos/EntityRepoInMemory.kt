@@ -19,7 +19,7 @@ import slatekit.query.IQuery
 import slatekit.meta.KTypes
 import slatekit.meta.Reflector
 import java.util.*
-//import java.time.*
+// import java.time.*
 import org.threeten.bp.*
 import slatekit.common.Record
 import slatekit.entities.*
@@ -28,24 +28,21 @@ import slatekit.meta.models.Model
 import slatekit.query.Op
 import kotlin.reflect.KClass
 
-
-open class EntityRepoInMemoryWithLongId<T>(info:EntityInfo, idGen: IdGenerator<Long>)
-    : EntityRepoInMemory<Long, T>(info, idGen)
+open class EntityRepoInMemoryWithLongId<T>(info: EntityInfo, idGen: IdGenerator<Long>) :
+    EntityRepoInMemory<Long, T>(info, idGen)
         where T : Entity<Long> {
 
     constructor(cls: KClass<T>) :
         this(EntityInfo.memory(Long::class, cls), LongIdGenerator())
 }
 
-
-open class EntityRepoInMemoryWithIntId<T>(info:EntityInfo, idGen: IdGenerator<Int>)
-    : EntityRepoInMemory<Int, T>(info, idGen)
+open class EntityRepoInMemoryWithIntId<T>(info: EntityInfo, idGen: IdGenerator<Int>) :
+    EntityRepoInMemory<Int, T>(info, idGen)
         where T : Entity<Int> {
 
     constructor(cls: KClass<T>) :
             this(EntityInfo.memory(Int::class, cls), IntIdGenerator())
 }
-
 
 /**
  * An In-Memory repository to store entities.
@@ -55,8 +52,8 @@ open class EntityRepoInMemoryWithIntId<T>(info:EntityInfo, idGen: IdGenerator<In
  * Should NOT be used outside of prototyping
  */
 open class EntityRepoInMemory<TId, T>(
-        info: EntityInfo,
-        val idGenerator: IdGenerator<TId>
+    info: EntityInfo,
+    val idGenerator: IdGenerator<TId>
 ) : EntityRepoBase<TId, T>(info)
         where TId : kotlin.Comparable<TId>, T : Entity<TId> {
     protected var items = ListMap<TId, T>(listOf())
@@ -220,7 +217,6 @@ open class EntityRepoInMemory<TId, T>(
         TODO("not implemented") // To change body of created functions use File | Settings | File Templates.
     }
 
-
     override fun count(query: IQuery): Long {
         TODO("not implemented") // To change body of created functions use File | Settings | File Templates.
     }
@@ -251,7 +247,6 @@ open class EntityRepoInMemory<TId, T>(
         } ?: false
     }
 
-
     protected fun filter(all: List<T>, fieldRaw: String, op: String, value: Any): List<T> {
         val field = info.model?.fields?.find { it.storedName.toLowerCase() == fieldRaw.toLowerCase() }
         val prop = field?.prop ?: Reflector.findPropertyExtended(info.entityType, field?.name ?: fieldRaw)
@@ -271,9 +266,8 @@ open class EntityRepoInMemory<TId, T>(
     }
 }
 
-
-class EntityMapperEmpty<TId, T>(val model: Model?)
-    : EntityMapper<TId, T> where TId : Comparable<TId>, T : Entity<TId> {
+class EntityMapperEmpty<TId, T>(val model: Model?) :
+    EntityMapper<TId, T> where TId : Comparable<TId>, T : Entity<TId> {
 
     override fun schema(): Model? = model
 

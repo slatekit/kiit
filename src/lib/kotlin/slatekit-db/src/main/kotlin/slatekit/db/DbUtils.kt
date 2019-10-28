@@ -17,7 +17,7 @@ import slatekit.common.DateTime
 import slatekit.common.Types
 import slatekit.common.db.DbCon
 import java.sql.*
-//import java.time.*
+// import java.time.*
 import org.threeten.bp.*
 import slatekit.common.DateTimes
 import slatekit.common.db.DbFieldType
@@ -65,9 +65,9 @@ object DbUtils {
      * @param error : The callback to call for when an error occurrs
      */
     fun executeStmt(
-            con: DbCon,
-            callback: (Connection, Statement) -> Unit,
-            error: (Exception) -> Unit
+        con: DbCon,
+        callback: (Connection, Statement) -> Unit,
+        error: (Exception) -> Unit
     ) {
 
         val conn = connect(con)
@@ -92,10 +92,10 @@ object DbUtils {
      * @param error : The callback to call for when an error occurrs
      */
     fun <T> executePrepAs(
-            con: DbCon,
-            sql: String,
-            callback: (Connection, PreparedStatement) -> T?,
-            error: (Exception) -> Unit
+        con: DbCon,
+        sql: String,
+        callback: (Connection, PreparedStatement) -> T?,
+        error: (Exception) -> Unit
     ): T? {
 
         val conn = connect(con)
@@ -133,7 +133,7 @@ object DbUtils {
                 Types.JLongAnyClass -> stmt.setLong(pos, arg as Long)
                 Types.JFloatAnyClass -> stmt.setFloat(pos, arg as Float)
                 Types.JDoubleAnyClass -> stmt.setDouble(pos, arg as Double)
-                //Types.JDecimalClass -> stmt.setBigDecimal(pos, arg as BigDecimal)
+                // Types.JDecimalClass -> stmt.setBigDecimal(pos, arg as BigDecimal)
                 Types.JLocalDateAnyClass -> stmt.setDate(pos, java.sql.Date.valueOf((arg as LocalDate).toJava8LocalDate()))
                 Types.JLocalTimeAnyClass -> stmt.setTime(pos, java.sql.Time.valueOf((arg as LocalTime).toJava8LocalTime()))
                 Types.JLocalDateTimeAnyClass -> stmt.setTimestamp(pos, java.sql.Timestamp.valueOf((arg as LocalDateTime).toJava8LocalDateTime()))
@@ -155,7 +155,7 @@ object DbUtils {
         else if (typ == Types.JLongClass) rs.getLong(pos) as T
         else if (typ == Types.JFloatClass) rs.getFloat(pos) as T
         else if (typ == Types.JDoubleClass) rs.getDouble(pos) as T
-        //else if (typ == Types.JDecimalClass) rs.getBigDecimal(pos) as T
+        // else if (typ == Types.JDecimalClass) rs.getBigDecimal(pos) as T
         else if (typ == Types.JLocalDateClass) rs.getDate(pos).toLocalDate() as T
         else if (typ == Types.JLocalTimeClass) rs.getTime(pos).toLocalTime() as T
         else if (typ == Types.JLocalDateTimeClass) rs.getTimestamp(pos).toLocalDateTime() as T
@@ -173,7 +173,7 @@ object DbUtils {
             else if (dataType == Types.JLongClass) DbFieldType.DbLong
             else if (dataType == Types.JFloatClass) DbFieldType.DbFloat
             else if (dataType == Types.JDoubleClass) DbFieldType.DbDouble
-            //else if (dataType == Types.JDecimalClass) DbFieldType.DbDecimal
+            // else if (dataType == Types.JDecimalClass) DbFieldType.DbDecimal
             else if (dataType == Types.JLocalDateClass) DbFieldType.DbLocalDate
             else if (dataType == Types.JLocalTimeClass) DbFieldType.DbLocalTime
             else if (dataType == Types.JLocalDateTimeClass) DbFieldType.DbLocalDateTime
@@ -189,30 +189,25 @@ object DbUtils {
                 text.trim().filter { c -> c.isDigit() || c.isLetter() || c == '_' }
             }
 
-
-    fun org.threeten.bp.LocalDate.toJava8LocalDate():java.time.LocalDate {
+    fun org.threeten.bp.LocalDate.toJava8LocalDate(): java.time.LocalDate {
         return java.time.LocalDate.of(this.year, this.month.value, this.dayOfMonth)
     }
 
-
-    fun org.threeten.bp.LocalTime.toJava8LocalTime():java.time.LocalTime {
+    fun org.threeten.bp.LocalTime.toJava8LocalTime(): java.time.LocalTime {
         return java.time.LocalTime.of(this.hour, this.minute, this.second, this.nano)
     }
 
-
-    fun org.threeten.bp.LocalDateTime.toJava8LocalDateTime():java.time.LocalDateTime {
+    fun org.threeten.bp.LocalDateTime.toJava8LocalDateTime(): java.time.LocalDateTime {
         return java.time.LocalDateTime.of(this.year, this.month.value, this.dayOfMonth,
             this.hour, this.minute, this.second, this.nano)
     }
 
-
-    fun org.threeten.bp.ZonedDateTime.toJava8ZonedDateTime():java.time.ZonedDateTime {
+    fun org.threeten.bp.ZonedDateTime.toJava8ZonedDateTime(): java.time.ZonedDateTime {
         return java.time.ZonedDateTime.of(this.year, this.month.value, this.dayOfMonth,
             this.hour, this.minute, this.second, this.nano, java.time.ZoneId.of(this.zone.id))
     }
 
-
-    fun org.threeten.bp.Instant.toJava8Instant():java.time.Instant {
+    fun org.threeten.bp.Instant.toJava8Instant(): java.time.Instant {
         return java.time.Instant.ofEpochMilli(this.toEpochMilli())
     }
 }

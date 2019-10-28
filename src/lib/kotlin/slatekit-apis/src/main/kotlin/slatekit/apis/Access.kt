@@ -1,10 +1,8 @@
 package slatekit.apis
 
 import slatekit.apis.setup.Parentable
-import slatekit.common.EnumLike
-import slatekit.common.EnumSupport
 
-
+/* ktlint-disable */
 object AccessLevel {
      /**
       * Reference to a parent value
@@ -63,3 +61,4 @@ sealed class Access(override val name:String)  : Parentable<Access> {
         }
     }
 }
+/* ktlint-enable */

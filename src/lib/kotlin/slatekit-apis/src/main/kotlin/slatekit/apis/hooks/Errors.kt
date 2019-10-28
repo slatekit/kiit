@@ -22,18 +22,17 @@ import slatekit.results.builders.Outcomes
 
 open class Errors(val logger: Logger) : Output<ApiRequest, ApiResult> {
 
-    override suspend fun process(request: ApiRequest, result:Outcome<ApiResult>): Outcome<ApiResult> {
+    override suspend fun process(request: ApiRequest, result: Outcome<ApiResult>): Outcome<ApiResult> {
         result.onFailure { handle(request, result, it) }
         return result
     }
 
-
-    private suspend fun handle(request: ApiRequest, result:Outcome<ApiResult>, err:Err) {
+    private suspend fun handle(request: ApiRequest, result: Outcome<ApiResult>, err: Err) {
         when {
-            request.target != null && request.target.instance is slatekit.functions.middleware.Error<*,*> -> {
+            request.target != null && request.target.instance is slatekit.functions.middleware.Error<*, *> -> {
                 logger.info("Handling error at api level")
                 val error = Outcomes.errored<ApiRequest>(err)
-                val errors = request.target.instance as slatekit.functions.middleware.Error<ApiRequest,Any?>
+                val errors = request.target.instance as slatekit.functions.middleware.Error<ApiRequest, Any?>
                 errors.onError(request, result)
             }
             else -> {

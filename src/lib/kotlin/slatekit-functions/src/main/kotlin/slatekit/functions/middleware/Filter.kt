@@ -2,7 +2,6 @@ package slatekit.functions.middleware
 
 import slatekit.common.Ignore
 import slatekit.results.Outcome
-import slatekit.results.Try
 
 /**
  * A "Filter" based middle-ware that either allows/disallows an API call to proceed

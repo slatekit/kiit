@@ -13,15 +13,15 @@
 
 package slatekit.apis.core
 
+import kotlin.reflect.KCallable
+import kotlin.reflect.KParameter
+import kotlin.reflect.full.createType
 import slatekit.apis.Access
 import slatekit.apis.AuthMode
 import slatekit.apis.Verb
 import slatekit.common.Metadata
-import slatekit.common.requests.Request
 import slatekit.common.ext.tail
-import kotlin.reflect.KCallable
-import kotlin.reflect.KParameter
-import kotlin.reflect.full.createType
+import slatekit.common.requests.Request
 
 /**
  * @param api : Reference to the API associated w/ the action
@@ -33,18 +33,17 @@ import kotlin.reflect.full.createType
  * @param protocol : Protocol associated with the action.
  */
 data class Action(
-        val member: KCallable<*>,
-        val name: String = "",
-        val desc: String = "",
-        val roles: Roles = Roles.empty,
-        val access: Access = Access.Public,
-        val auth: AuthMode = AuthMode.Token,
-        val protocols: Protocols = Protocols.all,
-        val verb: Verb = Verb.Auto,
-        val tags: List<String> = listOf()
+    val member: KCallable<*>,
+    val name: String = "",
+    val desc: String = "",
+    val roles: Roles = Roles.empty,
+    val access: Access = Access.Public,
+    val auth: AuthMode = AuthMode.Token,
+    val protocols: Protocols = Protocols.all,
+    val verb: Verb = Verb.Auto,
+    val tags: List<String> = listOf()
 ) {
     val protocol = protocols.all.first()
-
 
     /**
      * All the parameters of the function, this includes:

@@ -15,7 +15,7 @@ package slatekit.entities
 
 import slatekit.common.DateTime
 
-interface Entity<TId:Comparable<TId>> {
+interface Entity<TId : Comparable<TId>> {
 
     /**
      * gets the id
@@ -40,14 +40,14 @@ interface Entity<TId:Comparable<TId>> {
  * Base entity interface that must define if it is persisted or not
  * This is the recommended approach.
  */
-interface EntityWithId<TId:Comparable<TId>> : Entity<TId> {
+interface EntityWithId<TId : Comparable<TId>> : Entity<TId> {
 
     /**
      * currently standardized to id of type long ( primary key, auto-inc )
      */
     val id: TId
 
-    override fun identity():TId = id
+    override fun identity(): TId = id
 }
 
 /**
@@ -55,7 +55,7 @@ interface EntityWithId<TId:Comparable<TId>> : Entity<TId> {
  * e.g. case class copying which must be implemented in the case class
  * @tparam T
  */
-interface EntityUpdatable<TId, T> where TId:Comparable<TId>, T: Entity<TId> {
+interface EntityUpdatable<TId, T> where TId : Comparable<TId>, T : Entity<TId> {
 
     /**
      * sets the id on the entity and returns the entity with updated id.
@@ -101,14 +101,14 @@ interface EntityWithUUID {
  * e.g. case class copying which must be implemented in the case class
  * @tparam T
  */
-interface EntityWithUUIDUpdatable<TId, T> where TId:Comparable<TId>, T: Entity<TId> {
+interface EntityWithUUIDUpdatable<TId, T> where TId : Comparable<TId>, T : Entity<TId> {
 
     /**
      * sets the uuid on the entity and returns the entity with updated uuid.
      * @param uuid
      * @return
      */
-    fun withUUID(uuid:String):T
+    fun withUUID(uuid: String): T
 }
 
 /**
@@ -123,7 +123,7 @@ interface EntityWithOrdinal {
  */
 interface EntityWithShard {
     val shard: String
-    val tag  : String
+    val tag: String
 }
 
 /**
@@ -147,9 +147,8 @@ interface EntityWithTags {
     val tags: String
 }
 
-
 /**
  * Entity with support for both create/update timestamps and create/update user id
  */
-interface EntityWithMeta
-    : EntityWithTime, EntityWithUser, EntityWithUUID
+interface EntityWithMeta :
+    EntityWithTime, EntityWithUser, EntityWithUUID

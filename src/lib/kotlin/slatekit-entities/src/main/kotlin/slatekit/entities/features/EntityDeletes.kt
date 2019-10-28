@@ -1,16 +1,16 @@
 package slatekit.entities.features
 
+import kotlin.reflect.KProperty
 import slatekit.common.DateTime
-import slatekit.query.IQuery
 import slatekit.entities.Entity
 import slatekit.entities.core.EntityEvent
 import slatekit.entities.core.ServiceSupport
+import slatekit.query.IQuery
 import slatekit.query.Op
 import slatekit.results.Try
 import slatekit.results.builders.Tries
-import kotlin.reflect.KProperty
 
-interface EntityDeletes<TId, T> : ServiceSupport<TId, T> where TId: kotlin.Comparable<TId>, T: Entity<TId> {
+interface EntityDeletes<TId, T> : ServiceSupport<TId, T> where TId : kotlin.Comparable<TId>, T : Entity<TId> {
 
     /**
      * deletes the entity
@@ -21,8 +21,8 @@ interface EntityDeletes<TId, T> : ServiceSupport<TId, T> where TId: kotlin.Compa
         val success = repo().delete(entity)
 
         // Event out
-        if ( entity != null && this is EntityHooks ) {
-            when(success) {
+        if (entity != null && this is EntityHooks) {
+            when (success) {
                 true -> this.onEntityEvent(EntityEvent.EntityDeleted(entity, DateTime.now()))
                 else -> this.onEntityEvent(EntityEvent.EntityErrored(entity,
                         Exception("unable to delete: " + entity.toString()), DateTime.now()))
@@ -32,7 +32,6 @@ interface EntityDeletes<TId, T> : ServiceSupport<TId, T> where TId: kotlin.Compa
         return success
     }
 
-
     /**
      * updates the entity in the data-store with error-handling
      * @param entity
@@ -41,7 +40,6 @@ interface EntityDeletes<TId, T> : ServiceSupport<TId, T> where TId: kotlin.Compa
     fun deleteAsTry(entity: T): Try<Boolean> {
         return Tries.attempt { delete(entity) }
     }
-
 
     /**
      * deletes the entity by its id
@@ -60,7 +58,7 @@ interface EntityDeletes<TId, T> : ServiceSupport<TId, T> where TId: kotlin.Compa
     fun deleteByIds(ids: List<TId>): Int {
 
         // Event out one by one
-        return if ( this is EntityHooks ) {
+        return if (this is EntityHooks) {
             val statuses = ids.map { id -> repo().get(id)?.let { delete(it) } ?: false }
             statuses.count { it }
         } else {
@@ -92,7 +90,7 @@ interface EntityDeletes<TId, T> : ServiceSupport<TId, T> where TId: kotlin.Compa
      * @param value: The value to check for
      * @return
      */
-    fun deleteByField(prop: KProperty<*>, op:Op, value: Any): Int {
+    fun deleteByField(prop: KProperty<*>, op: Op, value: Any): Int {
         return repo().deleteByField(prop.name, op, value)
     }
 

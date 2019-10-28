@@ -14,5 +14,4 @@ interface EntityServices<TId, T> : GenericService,
         EntityWrites<TId, T>,
         EntityReads<TId, T>,
         EntityFinds<TId, T>
-        where TId : kotlin.Comparable<TId>, T : Entity<TId> {
-}
+        where TId : kotlin.Comparable<TId>, T : Entity<TId>

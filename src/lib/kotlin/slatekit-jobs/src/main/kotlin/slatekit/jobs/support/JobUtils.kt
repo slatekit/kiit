@@ -1,27 +1,23 @@
 package slatekit.jobs.support
 
 import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import org.threeten.bp.Duration
 import slatekit.common.DateTime
 import slatekit.common.Status
 import slatekit.common.metrics.Event
 import slatekit.jobs.*
-import slatekit.jobs.events.JobEvents
 import slatekit.results.Codes
-import slatekit.results.Outcome
-
 
 object JobUtils {
 
     fun validate(action: JobAction, currState: Status): Boolean {
         val nextState = toState(action)
-        return when(nextState) {
+        return when (nextState) {
             null -> false
             else -> {
                 val isRunning = currState.value == Status.Running.value
-                val isValid = when(action) {
+                val isValid = when (action) {
                     is JobAction.Start -> !isRunning
                     is JobAction.Process -> isRunning
                     is JobAction.Control -> isRunning
@@ -38,21 +34,19 @@ object JobUtils {
         }
     }
 
-
     fun toState(action: JobAction): Status? {
-        return when(action) {
+        return when (action) {
             is JobAction.Start -> Status.Running
             is JobAction.Stop -> Status.Stopped
             is JobAction.Pause -> Status.Paused
             is JobAction.Resume -> Status.Running
             is JobAction.Process -> Status.Running
             is JobAction.Control -> Status.Running
-            else                  -> null
+            else -> null
         }
     }
 
-
-    fun toEvent(started:DateTime, desc:String, target:String, worker: Workable<*>): Event {
+    fun toEvent(started: DateTime, desc: String, target: String, worker: Workable<*>): Event {
         // Convert the worker info / state / stats into a generalized event
         val id = worker.id
         val status = worker.status()
@@ -96,26 +90,22 @@ object JobUtils {
         return ev
     }
 
-
     /**
      * Performs the operation if the action supplied is correct with regard to the current state.
      */
-    suspend fun perform(job: Job, action: JobAction, currentState: Status, launch:Boolean, scope: CoroutineScope, operation:suspend() -> Unit){
+    suspend fun perform(job: Job, action: JobAction, currentState: Status, launch: Boolean, scope: CoroutineScope, operation: suspend() -> Unit) {
         // Check state move
-        if(!JobUtils.validate(action, currentState)) {
+        if (!JobUtils.validate(action, currentState)) {
             val currentStatus = job.status()
             job.error(currentStatus, "Can not handle work while job is $currentStatus")
-        }
-        else {
-            if(launch) {
+        } else {
+            if (launch) {
                 scope.launch {
                     operation()
                 }
-            }
-            else {
+            } else {
                 operation()
             }
         }
     }
-
 }

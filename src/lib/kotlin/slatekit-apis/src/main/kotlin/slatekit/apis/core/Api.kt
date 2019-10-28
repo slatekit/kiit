@@ -13,10 +13,10 @@
 
 package slatekit.apis.core
 
+import kotlin.reflect.KClass
 import slatekit.apis.*
 import slatekit.apis.Setup
 import slatekit.meta.kClass
-import kotlin.reflect.KClass
 
 /**
  * Represents an API in Slate Kit which is a reference to a regular Class
@@ -35,35 +35,34 @@ import kotlin.reflect.KClass
  * @param actions : the collection of actions / methods on this API.
  */
 data class Api(
-        val cls: KClass<*>,
-        val area: String = "",
-        val name: String = "",
-        val desc: String = "",
-        val roles: Roles = Roles.empty,
-        val access: Access = Access.Public,
-        val auth: AuthMode = AuthMode.Token,
-        val protocols: Protocols = Protocols.all,
-        val verb: Verb = Verb.Auto,
-        val declaredOnly: Boolean = true,
-        val singleton: Any? = null,
-        val setup: Setup = Setup.Methods,
-        val actions: Lookup<Action> = Lookup(listOf(), { t -> t.name })
+    val cls: KClass<*>,
+    val area: String = "",
+    val name: String = "",
+    val desc: String = "",
+    val roles: Roles = Roles.empty,
+    val access: Access = Access.Public,
+    val auth: AuthMode = AuthMode.Token,
+    val protocols: Protocols = Protocols.all,
+    val verb: Verb = Verb.Auto,
+    val declaredOnly: Boolean = true,
+    val singleton: Any? = null,
+    val setup: Setup = Setup.Methods,
+    val actions: Lookup<Action> = Lookup(listOf(), { t -> t.name })
 ) {
 
     val protocol = protocols.all.first()
 
-
     constructor(
-            instance: Any,
-            area: String = "",
-            name: String = "",
-            desc: String = "",
-            roles:List<String> = listOf(),
-            access: Access = Access.Public,
-            auth: AuthMode = AuthMode.Token,
-            protocol: List<Protocol> = listOf(Protocol.All),
-            verb: Verb = Verb.Auto,
-            declaredOnly: Boolean = true,
-            setup: Setup = Setup.Methods
+        instance: Any,
+        area: String = "",
+        name: String = "",
+        desc: String = "",
+        roles: List<String> = listOf(),
+        access: Access = Access.Public,
+        auth: AuthMode = AuthMode.Token,
+        protocol: List<Protocol> = listOf(Protocol.All),
+        verb: Verb = Verb.Auto,
+        declaredOnly: Boolean = true,
+        setup: Setup = Setup.Methods
     ) : this(instance.kClass, area, name, desc, Roles(roles), access, auth, Protocols(protocol), verb, declaredOnly, instance, setup)
 }

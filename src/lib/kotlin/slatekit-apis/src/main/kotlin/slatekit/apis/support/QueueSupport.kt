@@ -1,11 +1,9 @@
 package slatekit.apis.support
 
 import slatekit.apis.ApiRequest
-import slatekit.apis.core.Action
 import slatekit.apis.core.Requests
 import slatekit.common.*
 import slatekit.common.queues.QueueSource
-import slatekit.common.requests.Request
 import slatekit.common.requests.Source
 import slatekit.results.Notice
 
@@ -13,18 +11,16 @@ interface QueueSupport {
 
     fun queues(): List<QueueSource<String>>
 
-
     /**
      * This can be overridden to support custom call-modes
      */
-    fun enueue(request:ApiRequest): Notice<String> {
+    fun enueue(request: ApiRequest): Notice<String> {
         // Convert from web request to Queued request
         val req = request.request
         val payload = Requests.toJsonAsQueued(req)
         enueue(payload, Random.uuid(), req.tag, req.path)
         return slatekit.results.Success("Request processed as queue")
     }
-
 
     /**
      * Converts a request for an action that is queued, to an actual queue
@@ -38,7 +34,6 @@ interface QueueSupport {
             slatekit.results.Failure("Continue processing")
         }
     }
-
 
     /**
      * Creates a request from the parameters and api info and serializes that as json

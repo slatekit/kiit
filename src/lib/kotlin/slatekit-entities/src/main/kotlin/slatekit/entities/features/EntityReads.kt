@@ -4,7 +4,7 @@ import slatekit.entities.Entity
 import slatekit.entities.core.ServiceSupport
 import slatekit.query.IQuery
 
-interface EntityReads<TId, T> : ServiceSupport<TId, T> where TId: kotlin.Comparable<TId>, T: Entity<TId> {
+interface EntityReads<TId, T> : ServiceSupport<TId, T> where TId : kotlin.Comparable<TId>, T : Entity<TId> {
 
     /**
      * gets the entity from the datastore using the id
@@ -100,7 +100,7 @@ interface EntityReads<TId, T> : ServiceSupport<TId, T> where TId: kotlin.Compara
     /**
      * Gets the total number of records satisfying the query
      */
-    fun count(query: IQuery):Long {
+    fun count(query: IQuery): Long {
         return repo().count(query)
     }
 }

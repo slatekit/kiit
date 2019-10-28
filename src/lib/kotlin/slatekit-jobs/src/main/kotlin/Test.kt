@@ -3,10 +3,9 @@ package slatekit.jobs
 import kotlinx.coroutines.runBlocking
 import slatekit.common.Status
 
+fun main(args: Array<String>) {
 
-fun main(args:Array<String>){
-
-    lateinit var job:Job  // = slatekit.jobs.Job()
+    lateinit var job: Job // = slatekit.jobs.Job()
     runBlocking {
 
         // Subscribe to any status change

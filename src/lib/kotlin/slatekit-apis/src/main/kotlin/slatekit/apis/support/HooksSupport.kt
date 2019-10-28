@@ -13,7 +13,6 @@
 
 package slatekit.apis.support
 
-
 /**
  * Base class for an Api with all the middleware ( hooks, filters, errors )
  */

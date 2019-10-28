@@ -11,9 +11,7 @@ import slatekit.common.io.IO
  */
 class CliWriter(val io: ((CliOutput) -> Unit)? = null) : IO<CliOutput, Unit>, SemanticWrites {
 
-
     private val consoleWriter = SemanticConsole()
-
 
     override fun run(i: CliOutput) = when (io) {
         null -> consoleWriter.write(i.type, i.text ?: "", i.newline)

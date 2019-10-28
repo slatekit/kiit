@@ -13,15 +13,15 @@
 
 package slatekit.entities
 
+import kotlin.reflect.KProperty
 import slatekit.common.DateTime
-import slatekit.query.IQuery
-import slatekit.query.Query
 import slatekit.entities.Consts.idCol
 import slatekit.entities.core.EntityInfo
 import slatekit.entities.core.EntityStore
+import slatekit.query.IQuery
 import slatekit.query.Op
+import slatekit.query.Query
 import slatekit.query.where
-import kotlin.reflect.KProperty
 
 /**
  * Base Entity repository using generics with support for all the CRUD methods.
@@ -209,7 +209,6 @@ interface EntityRepo<TId, T> : EntityStore where TId : Comparable<TId>, T : Enti
      */
     fun query(): Query = info.queryBuilder?.invoke() ?: Query()
 
-
     /**
      * finds items based on the query
      * @param query
@@ -262,7 +261,6 @@ interface EntityRepo<TId, T> : EntityStore where TId : Comparable<TId>, T : Enti
      * @return
      */
     fun findByProc(name: String, args: List<Any>?): List<T>? = listOf()
-
 
     /**
      * Gets the column name for the Kproperty from the model schema if available

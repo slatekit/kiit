@@ -12,7 +12,7 @@ import slatekit.results.builders.Outcomes
  */
 class Calls<I, O>(val limit: Long, val stats: (I) -> Calls) : Policy<I, O> {
 
-    override suspend fun run(i: I, operation:suspend(I) -> Outcome<O>): Outcome<O> {
+    override suspend fun run(i: I, operation: suspend(I) -> Outcome<O>): Outcome<O> {
         val calls = stats(i)
         val pastLimit = calls.totalRuns() >= limit
         return if (pastLimit) {

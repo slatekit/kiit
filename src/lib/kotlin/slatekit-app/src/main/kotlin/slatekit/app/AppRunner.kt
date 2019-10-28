@@ -13,16 +13,22 @@
 
 package slatekit.app
 
-import slatekit.common.*
 import slatekit.common.args.Args
 import slatekit.common.args.ArgsSchema
+import slatekit.common.Context
 import slatekit.common.encrypt.Encryptor
 import slatekit.common.envs.Envs
 import slatekit.common.info.About
 import slatekit.common.log.Logs
-import slatekit.results.*
 import slatekit.results.builders.Notices
 import slatekit.results.builders.Tries
+import slatekit.results.flatMap
+import slatekit.results.inner
+import slatekit.results.then
+import slatekit.results.Failure
+import slatekit.results.Notice
+import slatekit.results.Success
+import slatekit.results.Try
 
 object AppRunner {
 
@@ -36,19 +42,19 @@ object AppRunner {
      *
      * @param rawArgs : The raw arguments from command line
      * @param schema : The schema of the command line arguments
-     * @param enc    : Optional encryptor
-     * @param logs   : Optional logs
+     * @param enc : Optional encryptor
+     * @param logs : Optional logs
      * @return
      */
-    suspend fun <C:Context> run(
-            rawArgs: Array<String>,
-            about: About,
-            builder: (Context) -> App<C>,
-            schema: ArgsSchema? = null,
-            enc: Encryptor? = null,
-            logs: Logs? = null,
-            envs: Envs = Envs.defaults(),
-            errorMode: ErrorMode = ErrorMode.Print
+    suspend fun <C : Context> run(
+        rawArgs: Array<String>,
+        about: About,
+        builder: (Context) -> App<C>,
+        schema: ArgsSchema? = null,
+        enc: Encryptor? = null,
+        logs: Logs? = null,
+        envs: Envs = Envs.defaults(),
+        errorMode: ErrorMode = ErrorMode.Print
     ): Try<Any> {
 
         // Parse raw args to structured args with lookup ability e.g. args["env"] etc.
@@ -59,29 +65,24 @@ object AppRunner {
 
             // STEP 1: Help - Handle for help | version | about
             AppMeta.process(rawArgs.toList(), args, about, schema)
-
         }.then { args ->
 
             // STEP 2: Context - Build AppContext using args, about, schema
-            val context = AppUtils.context(args, envs, about, schema ?:AppBuilder.schema(), enc, logs)
-            context.fold( { Success(it) }, { Failure( Exception(it)) })
-
+            val context = AppUtils.context(args, envs, about, schema ?: AppBuilder.schema(), enc, logs)
+            context.fold({ Success(it) }, { Failure(Exception(it)) })
         }.then { context ->
 
             // STEP 3: Transform - Command line args
             Success(context.copy(arg = ArgsSchema.transform(schema, context.arg)))
-
         }.then { context ->
 
             // STEP 4: Validate - Command line args
-            validate(context.arg, schema).fold( { Success(context) }, { Failure(Exception(it)) })
-
+            validate(context.arg, schema).fold({ Success(context) }, { Failure(Exception(it)) })
         }.then { context ->
 
             // STEP 5: App - Create App using supplied lambda and context
             val app = builder(context)
             Success(app)
-
         }.then { app ->
 
             // STEP 6: Run - Finally run the application with workflow ( init, exec, end )
@@ -89,16 +90,15 @@ object AppRunner {
         }
 
         result.onFailure {
-            when(errorMode) {
+            when (errorMode) {
                 ErrorMode.Rethrow -> throw it
-                ErrorMode.Print   -> showError(result, it)
-                else              -> {}
+                ErrorMode.Print -> showError(result, it)
+                else -> {}
             }
         }
 
         return result
     }
-
 
     /**
      * validate the arguments against the schema.
@@ -126,15 +126,14 @@ object AppRunner {
         return finalResult
     }
 
-
     /**
      * Run the app using the workflow init -> execute -> end
      */
-    suspend fun <C:Context> run(app:App<C>): Try<Any> {
+    suspend fun <C : Context> run(app: App<C>): Try<Any> {
         val execResult = init(app).then { execute(app) }
 
         // Let the end method run
-        execResult.onSuccess { end(execResult, app)  }
+        execResult.onSuccess { end(execResult, app) }
 
         // always return the exec result for now.
         // Not sure if failure of the "end" method should
@@ -143,11 +142,10 @@ object AppRunner {
         return execResult
     }
 
-
     /**
      * Initialize the app
      */
-    private suspend fun <C:Context> init(app:App<C>):Try<Any> {
+    private suspend fun <C : Context> init(app: App<C>): Try<Any> {
         // Wrap App.init() call for safety
         // This will produce a nested Try<Try<Boolean>>
         val rawResult = Tries.attempt { app.init() }
@@ -166,11 +164,10 @@ object AppRunner {
         }
     }
 
-
     /**
      * Execute the app
      */
-    private suspend fun <C:Context> execute(app:App<C>):Try<Any> {
+    private suspend fun <C : Context> execute(app: App<C>): Try<Any> {
 
         if (app.options.printSummaryBeforeExec) {
             app.info()
@@ -189,11 +186,10 @@ object AppRunner {
         }
     }
 
-
     /**
      * Shutdown / end the app
      */
-    private suspend fun <C:Context> end(execResult:Try<Any>, app:App<C>): Try<Any> {
+    private suspend fun <C : Context> end(execResult: Try<Any>, app: App<C>): Try<Any> {
         // Wrap App.init() call for safety
         // This will produce a nested Try<Try<Boolean>>
         val rawResult = Tries.attempt { app.end() }
@@ -207,8 +203,7 @@ object AppRunner {
         }
     }
 
-
-    private fun showError(result:Try<Any>, ex:Exception){
+    private fun showError(result: Try<Any>, ex: Exception) {
         println("success: " + result.success)
         println("code   : " + result.code)
         println("message: " + result.msg)

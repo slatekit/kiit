@@ -13,23 +13,21 @@
 
 package slatekit.db
 
+import java.sql.Connection
+import java.sql.PreparedStatement
+import java.sql.ResultSet
+import java.sql.Statement
+import kotlin.io.*
 import slatekit.common.db.DbCon
 import slatekit.common.db.IDb
 import slatekit.common.db.Mapper
+import slatekit.common.repeatWith
 import slatekit.db.DbUtils.executeCon
 import slatekit.db.DbUtils.executePrepAs
 import slatekit.db.DbUtils.executeStmt
 import slatekit.db.DbUtils.fillArgs
 import slatekit.db.types.DbSource
 import slatekit.db.types.DbSourceMySql
-import slatekit.common.repeatWith
-import java.sql.Connection
-import java.sql.PreparedStatement
-import java.sql.ResultSet
-import java.sql.Statement
-import kotlin.io.*
-
-
 
 /**
  * Light-weight database wrapper.
@@ -40,9 +38,9 @@ import kotlin.io.*
  * password=<password>;encrypt=true;hostNameInCertificate=*.database.windows.net;loginTimeout=30;"
  */
 class Db(
-        private val dbCon: DbCon,
-        val source: DbSource = DbSourceMySql(),
-        errorCallback: ((Exception) -> Unit)? = null
+    private val dbCon: DbCon,
+    val source: DbSource = DbSourceMySql(),
+    errorCallback: ((Exception) -> Unit)? = null
 ) : IDb {
 
     override val onError = errorCallback ?: this::errorHandler
@@ -60,7 +58,6 @@ class Db(
     override fun execute(sql: String) {
         executeStmt(dbCon, { con, stmt -> stmt.execute(sql) }, onError)
     }
-
 
     /**
      * gets a scalar string value using the sql provided
@@ -276,9 +273,9 @@ class Db(
      * @param inputs : The parameters for the stored proc. The types will be auto-converted my-sql types.
      */
     override fun <T> callQueryMapped(
-            procName: String,
-            mapper: Mapper,
-            inputs: List<Any>?
+        procName: String,
+        mapper: Mapper,
+        inputs: List<Any>?
     ): List<T>? {
 
         // {call create_author(?, ?)}

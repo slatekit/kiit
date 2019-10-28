@@ -3,12 +3,16 @@ package slatekit.app
 import slatekit.common.args.Args
 import slatekit.common.args.ArgsSchema
 import slatekit.common.info.About
-import slatekit.results.*
+import slatekit.results.Codes
+import slatekit.results.Failure
+import slatekit.results.Notice
+import slatekit.results.Success
+import slatekit.results.Try
 
-class AppMeta(val about:About, val args:ArgsSchema) {
+class AppMeta(val about: About, val args: ArgsSchema) {
 
     companion object {
-        fun process(rawArgs:List<String>, args:Args, about: About, schema:ArgsSchema?):Try<Args> {
+        fun process(rawArgs: List<String>, args: Args, about: About, schema: ArgsSchema?): Try<Args> {
             val isHelp = AppUtils.isMetaCommand(rawArgs.toList())
             return if (isHelp.success) {
                 // Delegate help to the AppMeta component for (help | version | about )
@@ -23,7 +27,6 @@ class AppMeta(val about:About, val args:ArgsSchema) {
         }
     }
 
-
     /**
      * Checks the command line arguments for help, exit, or invalid arguments based on schema.
      *
@@ -31,17 +34,16 @@ class AppMeta(val about:About, val args:ArgsSchema) {
      * @param schema : the argument schema that defines what arguments are supported.
      * @return
      */
-    fun handle( check:Notice<String>) {
+    fun handle(check: Notice<String>) {
         if (check.success) {
-            when(check.code) {
-                Codes.HELP.code    -> help()
-                Codes.ABOUT.code   -> about()
+            when (check.code) {
+                Codes.HELP.code -> help()
+                Codes.ABOUT.code -> about()
                 Codes.VERSION.code -> version()
-                else         -> println("Unexpected command: " + check.msg)
+                else -> println("Unexpected command: " + check.msg)
             }
         }
     }
-
 
     private fun help() {
         println("app.area         " + about.area)
@@ -50,7 +52,6 @@ class AppMeta(val about:About, val args:ArgsSchema) {
         println("app.version      " + about.version)
         println(args.buildHelp())
     }
-
 
     private fun about() {
         println("app.area         " + about.area)
@@ -63,7 +64,6 @@ class AppMeta(val about:About, val args:ArgsSchema) {
         println("app.url          " + about.url)
         println(args.buildHelp())
     }
-
 
     private fun version() {
         println(about.version)

@@ -1,27 +1,26 @@
 package slatekit.apis.setup
 
+import kotlin.reflect.KCallable
+import kotlin.reflect.KClass
 import slatekit.apis.*
+import slatekit.apis.Setup
 import slatekit.apis.core.*
 import slatekit.apis.core.Action
 import slatekit.apis.core.Api
 import slatekit.apis.core.Protocols
-import slatekit.apis.Setup
 import slatekit.common.naming.Namer
 import slatekit.common.nonEmptyOrDefault
 import slatekit.meta.Reflector
-import kotlin.reflect.KCallable
-import kotlin.reflect.KClass
-
 
 fun toVerb(name: String?): Verb {
-    return when(name) {
+    return when (name) {
         null -> Verb.Auto
         else -> {
             val nameToCheck = name.toLowerCase()
             val verb = when {
-                nameToCheck.startsWith(Verbs.Read)   -> Verb.Read
+                nameToCheck.startsWith(Verbs.Read) -> Verb.Read
                 nameToCheck.startsWith(Verbs.Delete) -> Verb.Delete
-                nameToCheck.startsWith(Verbs.Patch)  -> Verb.Patch
+                nameToCheck.startsWith(Verbs.Patch) -> Verb.Patch
                 nameToCheck.startsWith(Verbs.Create) -> Verb.Post
                 nameToCheck.startsWith(Verbs.Update) -> Verb.Put
                 else -> Verb.Post
@@ -31,7 +30,6 @@ fun toVerb(name: String?): Verb {
     }
 }
 
-
 /**
  * Loads an api using class and method annotations e.g. @Api on class and @ApiAction on members.
  * NOTE: This allows all the API setup to be in 1 place ( in the class/memebers )
@@ -39,7 +37,7 @@ fun toVerb(name: String?): Verb {
  * @param cls : The class representing the API
  * @param namer: The naming convention
  */
-fun toApi(cls: KClass<*>, instance:Any?, namer: Namer?): slatekit.apis.core.Api {
+fun toApi(cls: KClass<*>, instance: Any?, namer: Namer?): slatekit.apis.core.Api {
 
     // get the @Api annotation on the class
     val anno = Reflector.getAnnotationForClassOpt<slatekit.apis.Api>(cls, slatekit.apis.Api::class)!!
@@ -60,27 +58,25 @@ fun toApi(cls: KClass<*>, instance:Any?, namer: Namer?): slatekit.apis.core.Api 
     return api
 }
 
-
-
-fun toApi(cls: KClass<*>,
-          area: String,
-          name: String,
-          desc: String?,
-          local: Boolean = true,
-          roles: Roles = Roles.empty,
-          access: Access = Access.Public,
-          auth: AuthMode = AuthMode.Keyed,
-          verb: Verb = Verb.Auto,
-          protocol: Protocols = Protocols.all,
-          singleton: Boolean = false ) : slatekit.apis.core.Api {
+fun toApi(
+    cls: KClass<*>,
+    area: String,
+    name: String,
+    desc: String?,
+    local: Boolean = true,
+    roles: Roles = Roles.empty,
+    access: Access = Access.Public,
+    auth: AuthMode = AuthMode.Keyed,
+    verb: Verb = Verb.Auto,
+    protocol: Protocols = Protocols.all,
+    singleton: Boolean = false
+): slatekit.apis.core.Api {
     // Create initial temporary api
     // with all settings that can be used for override values
     val api = slatekit.apis.core.Api(cls, area, name, desc
             ?: "", roles, access, auth, protocol, verb, local, singleton)
     return api
 }
-
-
 
 fun toAction(member: KCallable<*>, api: slatekit.apis.core.Api, apiAction: slatekit.apis.Action?, namer: Namer?): Action {
 
@@ -113,7 +109,6 @@ fun toAction(member: KCallable<*>, api: slatekit.apis.core.Api, apiAction: slate
     )
 }
 
-
 fun toLookup(rawApis: List<slatekit.apis.core.Api>, namer: Namer? = null): Lookup<Area> {
 
     // Get the apis with actions loaded from either
@@ -136,11 +131,9 @@ fun toLookup(rawApis: List<slatekit.apis.core.Api>, namer: Namer? = null): Looku
     return Lookup(areas, { area -> area.name })
 }
 
-
 fun loadAll(rawApis: List<slatekit.apis.core.Api>, namer: Namer? = null): Lookup<Area> {
     return toLookup(rawApis, namer)
 }
-
 
 fun loadApiFromSetup(api: Api, namer: Namer?): Api {
 
@@ -161,7 +154,6 @@ fun loadApiFromSetup(api: Api, namer: Namer?): Api {
         }
     } else api
 }
-
 
 fun rename(text: String, namer: Namer?): String {
     // Rename the area if namer is supplied

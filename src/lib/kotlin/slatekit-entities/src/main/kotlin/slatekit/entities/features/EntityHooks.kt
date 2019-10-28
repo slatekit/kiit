@@ -4,5 +4,5 @@ import slatekit.entities.core.EntityEvent
 
 interface EntityHooks {
 
-    fun onEntityEvent(event:EntityEvent)
+    fun onEntityEvent(event: EntityEvent)
 }

@@ -1,16 +1,15 @@
 package slatekit.functions.common
 
-
 /**
  * Command manager to run commands and get back the status of each command
  * and their last results.
  */
-interface Functions<out T: Function> {
+interface Functions<out T : Function> {
 
     /**
      * All the functions
      */
-    val all:List<T>
+    val all: List<T>
 
     /**
      * names of the functions
@@ -32,7 +31,7 @@ interface Functions<out T: Function> {
     /**
      * Get the first function with a matching name
      */
-    fun getOrNull(name:String): T? {
+    fun getOrNull(name: String): T? {
         return all.firstOrNull { it.name == name }
     }
 }

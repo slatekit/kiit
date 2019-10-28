@@ -7,14 +7,13 @@ import slatekit.results.Outcome
 import slatekit.results.builders.Outcomes
 import slatekit.results.flatMap
 
-
 /**
  * Checks that the route/path is valid in that it has an area/api
  */
 class Routing : Input<ApiRequest> {
 
     @Ignore
-    override suspend fun process(request: Outcome<ApiRequest>):Outcome<ApiRequest> {
+    override suspend fun process(request: Outcome<ApiRequest>): Outcome<ApiRequest> {
         return request.flatMap {
             val req = it.request
             // e.g. "users.invite" = [ "users", "invite" ]
@@ -28,5 +27,3 @@ class Routing : Input<ApiRequest> {
         }
     }
 }
-
-

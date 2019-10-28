@@ -13,7 +13,6 @@ import slatekit.results.Outcome
 import slatekit.results.Success
 import slatekit.results.getOrElse
 
-
 class Serialize(val serializer: ((String, Any?) -> String)? = null) : Output<ApiRequest, ApiResult> {
 
     @Ignore
@@ -26,7 +25,6 @@ class Serialize(val serializer: ((String, Any?) -> String)? = null) : Output<Api
             result
         }
     }
-
 
     /**
      * Explicitly supplied content

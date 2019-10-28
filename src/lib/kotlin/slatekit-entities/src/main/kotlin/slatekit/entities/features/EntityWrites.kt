@@ -6,14 +6,13 @@ import slatekit.entities.slatekit.entities.EntityOptions
 import slatekit.results.Try
 import slatekit.results.builders.Tries
 
-
 interface EntityWrites<TId, T> : ServiceSupport<TId, T>,
         EntityCreates<TId, T>,
         EntityUpdates<TId, T>,
         EntityDeletes<TId, T>,
         EntitySaves<TId, T>
 
-        where TId: kotlin.Comparable<TId>, T: Entity<TId> {
+        where TId : kotlin.Comparable<TId>, T : Entity<TId> {
 
     /**
      * saves an entity by either creating it or updating it based on
@@ -38,7 +37,7 @@ interface EntityWrites<TId, T> : ServiceSupport<TId, T>,
                 }
                 saveResult
             } ?: Tries.errored("Entity not provided")
-        } catch(ex:Exception) {
+        } catch (ex: Exception) {
             Tries.errored<Pair<TId, T>>(ex)
         }
         return result

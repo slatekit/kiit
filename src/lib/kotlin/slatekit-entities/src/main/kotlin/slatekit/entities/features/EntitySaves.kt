@@ -8,7 +8,7 @@ import slatekit.entities.core.ServiceSupport
 import slatekit.results.Try
 import slatekit.results.builders.Tries
 
-interface EntitySaves<TId, T> : ServiceSupport<TId, T> where TId: kotlin.Comparable<TId>, T: Entity<TId> {
+interface EntitySaves<TId, T> : ServiceSupport<TId, T> where TId : kotlin.Comparable<TId>, T : Entity<TId> {
 
     /**
      * saves an entity by either creating it or updating it based on
@@ -38,12 +38,11 @@ interface EntitySaves<TId, T> : ServiceSupport<TId, T> where TId: kotlin.Compara
                 }
                 saveResult
             } ?: Tries.errored("Entity not provided")
-        } catch(ex:Exception) {
+        } catch (ex: Exception) {
             Tries.errored<TId>(ex)
         }
         return result
     }
-
 
     /**
      * saves all the entities
@@ -52,7 +51,7 @@ interface EntitySaves<TId, T> : ServiceSupport<TId, T> where TId: kotlin.Compara
      */
     fun saveAll(items: List<T>) {
         // Event out
-        if ( this is EntityHooks) {
+        if (this is EntityHooks) {
             items.forEach { save(it) }
         } else {
             repo().saveAll(items)

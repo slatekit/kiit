@@ -15,7 +15,7 @@ import slatekit.results.flatMap
 class Targets : Input<ApiRequest> {
 
     @Ignore
-    override suspend fun process(request:Outcome<ApiRequest>):Outcome<ApiRequest> {
+    override suspend fun process(request: Outcome<ApiRequest>): Outcome<ApiRequest> {
         return request.flatMap {
             val req = it.request
             val result = it.host.getApi(req.area, req.name, req.action)

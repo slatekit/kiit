@@ -14,7 +14,7 @@ import slatekit.results.flatMap
 class Validate : Input<ApiRequest> {
 
     @Ignore
-    override suspend fun process(request:Outcome<ApiRequest>):Outcome<ApiRequest> {
+    override suspend fun process(request: Outcome<ApiRequest>): Outcome<ApiRequest> {
         return request.flatMap {
             val checkResult = Calls.validateCall(it, { r -> it.host.get(r) }, true)
             if (!checkResult.success) {

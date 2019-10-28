@@ -21,8 +21,8 @@ import java.util.concurrent.atomic.AtomicInteger
 open class Query : IQuery {
 
     class QueryData(
-            val conditions: MutableList<ICondition>,
-            val updates: MutableList<FieldValue>
+        val conditions: MutableList<ICondition>,
+        val updates: MutableList<FieldValue>
     )
 
     protected val limit = AtomicInteger(0)
@@ -30,10 +30,9 @@ open class Query : IQuery {
     protected val joins = mutableListOf<Triple<String, String, String>>()
     protected val orders = mutableListOf<Pair<String, String>>()
 
+    override fun hasOrderBy(): Boolean = !orders.isEmpty()
 
-    override fun hasOrderBy():Boolean = !orders.isEmpty()
-
-    override fun getOrderBy():String = orders.joinToString(",") { it.first + it.second }
+    override fun getOrderBy(): String = orders.joinToString(",") { it.first + it.second }
 
     override fun toUpdates(): List<FieldValue> = data.updates.toList()
 
@@ -115,14 +114,13 @@ open class Query : IQuery {
      * @param pairs: vararg of Pair representing the field names and values to set
      * @return
      */
-    override fun set(vararg pairs:Pair<String, Any>): IQuery {
+    override fun set(vararg pairs: Pair<String, Any>): IQuery {
         pairs.forEach {
             val col = QueryEncoder.ensureField(it.first)
             data.updates.add(FieldValue(col, it.second))
         }
         return this
     }
-
 
     /**
      * builds up a where clause with the supplied arguments
