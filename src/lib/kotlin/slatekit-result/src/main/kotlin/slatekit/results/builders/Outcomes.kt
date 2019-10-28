@@ -42,6 +42,7 @@ object Outcomes : OutcomeBuilder {
     /**
      * Build a Outcome<T> ( type alias ) for Result<T,Err> using the value with a null check
      */
+    @Suppress("NOTHING_TO_INLINE")
     @JvmStatic
     inline fun <T> of(t: T?): Outcome<T> = when (t) {
         null -> Outcomes.errored("null")
@@ -51,6 +52,7 @@ object Outcomes : OutcomeBuilder {
     /**
      * Build a Outcome<T> ( type alias ) for Result<T,Err> using the supplied condition
      */
+    @Suppress("NOTHING_TO_INLINE")
     @JvmStatic
     inline fun <T> of(condition: Boolean, t: T?): Outcome<T> {
         return if (!condition)
