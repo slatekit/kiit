@@ -6,7 +6,7 @@ import org.junit.Test
 import slatekit.apis.ApiServer
 import slatekit.apis.Verb
 import slatekit.apis.core.Api
-import slatekit.apis.setup.Setup
+import slatekit.apis.Setup
 import slatekit.common.CommonContext
 import slatekit.common.db.DbType
 import slatekit.integration.apis.InfoApi

@@ -1,4 +1,4 @@
-package slatekit.apis.setup
+package slatekit.apis
 
 
 sealed class Setup {

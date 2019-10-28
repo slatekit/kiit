@@ -1,6 +1,5 @@
 package slatekit.samples.cli
 
-import slatekit.apis.setup.Setup.Annotated
 import slatekit.apis.AuthModes
 import slatekit.apis.Protocols
 import slatekit.apis.Verbs

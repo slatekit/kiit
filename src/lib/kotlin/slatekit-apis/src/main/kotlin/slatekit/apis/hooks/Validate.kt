@@ -1,7 +1,7 @@
 package slatekit.apis.hooks
 
 import slatekit.apis.ApiRequest
-import slatekit.apis.helpers.ApiValidator
+import slatekit.apis.core.Calls
 import slatekit.common.Ignore
 import slatekit.functions.Input
 import slatekit.results.Outcome
@@ -16,7 +16,7 @@ class Validate : Input<ApiRequest> {
     @Ignore
     override suspend fun process(request:Outcome<ApiRequest>):Outcome<ApiRequest> {
         return request.flatMap {
-            val checkResult = ApiValidator.validateCall(it, { r -> it.host.get(r) }, true)
+            val checkResult = Calls.validateCall(it, { r -> it.host.get(r) }, true)
             if (!checkResult.success) {
                 // Don't return the result from internal ( as it contains too much info )
                 Outcomes.invalid(checkResult.msg)

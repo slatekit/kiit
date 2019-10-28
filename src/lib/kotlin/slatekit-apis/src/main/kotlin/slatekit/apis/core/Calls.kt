@@ -11,11 +11,9 @@
  * </slate_header>
  */
 
-package slatekit.apis.helpers
+package slatekit.apis.core
 
 import slatekit.apis.ApiRequest
-import slatekit.apis.core.Target
-import slatekit.apis.core.Action
 import slatekit.apis.hooks.Targets
 import slatekit.common.*
 import slatekit.common.requests.Request
@@ -26,7 +24,7 @@ import slatekit.results.Success
 import slatekit.results.builders.Notices
 import slatekit.results.builders.Outcomes
 
-object ApiValidator {
+object Calls {
 
     /**
      * whether or not the api call represented by the area.api.action exists. e.g. "app.users.invite"

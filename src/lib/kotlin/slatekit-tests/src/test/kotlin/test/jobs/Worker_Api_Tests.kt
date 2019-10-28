@@ -9,7 +9,7 @@ import slatekit.apis.ApiServer
 import slatekit.apis.Verb
 import slatekit.apis.core.Api
 import slatekit.apis.core.Requests
-import slatekit.apis.setup.Setup
+import slatekit.apis.Setup
 import slatekit.common.*
 import slatekit.common.queues.QueueSourceInMemory
 import slatekit.common.CommonContext

@@ -17,7 +17,7 @@ import org.junit.Assert
 import org.junit.Test
 import slatekit.apis.*
 import slatekit.apis.core.Api
-import slatekit.apis.setup.Setup
+import slatekit.apis.Setup
 import slatekit.results.getOrElse
 import test.setup.SampleTypes3Api
 import test.setup.MyEncryptor

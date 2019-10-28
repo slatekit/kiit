@@ -1,4 +1,4 @@
-package slatekit.apis.loader
+package slatekit.apis.setup
 
 import slatekit.apis.core.*
 import slatekit.common.naming.Namer

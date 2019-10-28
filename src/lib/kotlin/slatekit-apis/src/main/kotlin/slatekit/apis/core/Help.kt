@@ -15,10 +15,10 @@ package slatekit.apis.core
 
 import slatekit.apis.ApiServer
 import slatekit.apis.helpers.hasDocKey
-import slatekit.apis.helpers.isHelp
 import slatekit.apis.tools.docs.ApiVisitOptions
 import slatekit.apis.tools.docs.ApiVisitor
 import slatekit.apis.tools.docs.Doc
+import slatekit.apis.tools.docs.DocUtils
 import slatekit.common.content.Content
 import slatekit.common.requests.Request
 import slatekit.results.*
@@ -27,7 +27,7 @@ import slatekit.results.builders.Outcomes
 class Help(val host: ApiServer, val routes: Routes, val docKey:String?, val docBuilder: () -> Doc) {
 
     fun process(req: Request):Outcome<Content> {
-        val result =  req.isHelp()
+        val result =  DocUtils.isHelp(req)
         return when(result) {
             is Success -> build(req, result)
             is Failure -> result
@@ -44,7 +44,7 @@ class Help(val host: ApiServer, val routes: Routes, val docKey:String?, val docB
      * 3. area.api.action ?
      */
     fun build(req: Request, check:Outcome<String>): Outcome<Content> {
-        return if (!req.hasDocKey(docKey ?: "")) {
+        return if (!DocUtils.hasDocKey(req,docKey ?: "")) {
             Outcomes.denied("Unauthorized access to API docs")
         } else {
             val content = when (check.msg) {

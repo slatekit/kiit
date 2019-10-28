@@ -1,6 +1,5 @@
 package slatekit
 
-import slatekit.apis.setup.Setup.Annotated
 import slatekit.apis.core.Api
 import slatekit.cloud.aws.AwsCloudFiles
 import slatekit.cloud.aws.AwsCloudQueue

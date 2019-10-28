@@ -2,8 +2,8 @@ package slatekit.apis
 
 import slatekit.apis.core.*
 import slatekit.apis.core.Target
-import slatekit.apis.helpers.*
 import slatekit.apis.hooks.*
+import slatekit.apis.setup.loadAll
 import slatekit.apis.support.ExecSupport
 import slatekit.apis.setup.HostAware
 import slatekit.common.*
@@ -16,7 +16,6 @@ import slatekit.results.*
 import slatekit.results.Status
 import slatekit.results.builders.Notices
 import slatekit.results.builders.Outcomes
-import slatekit.results.builders.Tries
 import java.io.File
 import kotlin.reflect.KCallable
 import kotlin.reflect.KClass
@@ -40,7 +39,7 @@ open class ApiServer(
      * Load all the routes from the APIs supplied.
      * The API setup can be either annotation based or public methods on the Class
      */
-    val routes = Routes(ApiLoader.loadAll(apis, settings.naming), settings.naming)
+    val routes = Routes(loadAll(apis, settings.naming), settings.naming)
 
 
     /**
@@ -87,7 +86,7 @@ open class ApiServer(
      * @return
      */
     suspend fun check(request: ApiRequest): Outcome<Target> {
-        return ApiValidator.validateCall(request, { req -> get(req) })
+        return Calls.validateCall(request, { req -> get(req) })
     }
 
     /**
@@ -232,7 +231,7 @@ open class ApiServer(
         val req = context.req
         val target = context.target
         val converter = settings.decoder?.invoke(req, ctx.enc) ?: Deserializer(req, ctx.enc)
-        val inputs = ApiHelper.fillArgs(converter, target, req)
+        val inputs = fillArgs(converter, target, req)
 
         val returnVal = Reflector.callMethod(target.api.cls, target.instance, target.action.member.name, inputs)
 
@@ -243,6 +242,32 @@ open class ApiServer(
                 Outcomes.of(res!!)
             }
         } ?: Outcomes.of(Exception("Received null"))
+    }
+
+
+    private val typeDefaults = mapOf(
+            "String" to "",
+            "Boolean" to false,
+            "Int" to 0,
+            "Long" to 0L,
+            "Double" to 0.0,
+            "DateTime" to DateTime.now()
+    )
+
+
+    private fun fillArgs(deserializer: Deserializer, apiRef: Target, cmd: Request): Array<Any?> {
+        val action = apiRef.action
+        // Check 1: No args ?
+        return if (!action.hasArgs)
+            arrayOf()
+        // Check 2: 1 param with default and no args
+        else if (action.isSingleDefaultedArg() && cmd.data.size() == 0) {
+            val argType = action.paramsUser[0].type.toString()
+            val defaultVal = if (typeDefaults.contains(argType)) typeDefaults[argType] else null
+            arrayOf<Any?>(defaultVal ?: "")
+        } else {
+            deserializer.deserialize(action.params)
+        }
     }
 
 

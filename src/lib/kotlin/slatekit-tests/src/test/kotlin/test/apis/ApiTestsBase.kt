@@ -20,7 +20,8 @@ import slatekit.apis.core.Auth
 import slatekit.apis.helpers.ApiHelper
 import slatekit.apis.Protocol
 import slatekit.apis.hooks.Authorize
-import slatekit.apis.setup.Setup
+import slatekit.apis.Setup
+import slatekit.common.CommonRequest
 import slatekit.common.args.Args
 import slatekit.common.conf.Config
 import slatekit.common.db.DbConString
@@ -113,7 +114,7 @@ open class ApiTestsBase {
             val apis = getApis(Protocol.CLI, apis = apis)
             apis
         }
-        val cmd = ApiHelper.buildCliRequest(path, inputs, opts)
+        val cmd = CommonRequest.cli(path, inputs, opts)
         val actual = runBlocking {
             apis.call(cmd, null)
         }

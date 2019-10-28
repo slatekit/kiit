@@ -1,4 +1,4 @@
-package slatekit.apis.loader
+package slatekit.apis.setup
 
 import slatekit.apis.core.Action
 import slatekit.apis.core.Api

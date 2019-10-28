@@ -16,7 +16,7 @@ import org.junit.Test
 import slatekit.apis.Protocol
 import slatekit.apis.Verbs
 import slatekit.apis.core.Api
-import slatekit.apis.setup.Setup
+import slatekit.apis.Setup
 import slatekit.common.auth.Roles
 import slatekit.common.info.Credentials
 import slatekit.common.CommonRequest

@@ -61,6 +61,19 @@ object Strings {
     fun decrypt(value: String, decryptor: ((String) -> String)? = null): String =
             Strings.interpret(value, "decrypt", decryptor)
 
+
+
+
+    /**
+     * String match factoring in the wildcard "*"
+     */
+    fun isMatchOrWildCard(actual: String, expected: String, wildcard:String = "*"): Boolean {
+        return if (actual.isNullOrEmpty() || actual == wildcard)
+            true
+        else
+            actual == expected
+    }
+
 }
 
 

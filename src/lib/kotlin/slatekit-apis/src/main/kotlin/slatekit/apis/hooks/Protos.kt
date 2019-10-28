@@ -6,6 +6,7 @@ import slatekit.apis.core.Protocols
 import slatekit.apis.helpers.ApiHelper
 import slatekit.apis.Protocol
 import slatekit.common.Ignore
+import slatekit.common.Strings
 import slatekit.functions.Input
 import slatekit.results.Codes
 import slatekit.results.Outcome
@@ -32,11 +33,11 @@ class Protos: Input<ApiRequest> {
             // 1. Ensure verb is correct
             return if (isWeb && req.verb == Protocol.Queue.name) {
                 request
-            } else if (isWeb && !ApiHelper.isValidMatch(actualVerb, req.verb)) {
+            } else if (isWeb && !Strings.isMatchOrWildCard(actualVerb, req.verb)) {
                 Outcomes.errored("expected verb $actualVerb, but got ${req.verb}")
             }
             // 2. Ensure protocol is correct get/post
-            else if (!isCliOk && !ApiHelper.isValidMatch(actualProtocol, it.host.settings.protocol.name)) {
+            else if (!isCliOk && !Strings.isMatchOrWildCard(actualProtocol, it.host.settings.protocol.name)) {
                 Outcomes.errored("${req.fullName} not found", Codes.NOT_FOUND)
             }
             // 3. Good to go
