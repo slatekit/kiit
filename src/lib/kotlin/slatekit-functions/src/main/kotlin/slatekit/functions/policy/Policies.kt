@@ -15,7 +15,6 @@ object Policies {
         }
     }
 
-
     fun <I, O> compose(p: Policy<I, O>, op: suspend (I) -> Outcome<O>): suspend (I) -> Outcome<O> {
         return { i ->
             p.run(i, op)

@@ -2,7 +2,7 @@ package slatekit.functions.common
 
 import slatekit.common.EnumLike
 
-
+/* ktlint-disable */
 /**
  * Represents a logical category of function types
  */
@@ -15,3 +15,4 @@ sealed class FunctionType(override val value:Int, override val name:String) : En
     object Job      : FunctionType(5, "Job"     ) // Background job
     class  Other(name:String): FunctionType(6, name)
 }
+/* ktlint-enable */

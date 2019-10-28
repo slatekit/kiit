@@ -2,7 +2,6 @@ package slatekit.functions.middleware
 
 import slatekit.common.Ignore
 
-
 /**
  * A "Hooks" based middle-ware that allows only handling before/after events
  * of a call, without any modification to the life-cycle/flow.
