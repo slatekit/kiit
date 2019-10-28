@@ -23,13 +23,13 @@ interface IQuery {
 
     fun toFilter(): String
 
-    fun hasOrderBy():Boolean
+    fun hasOrderBy(): Boolean
 
-    fun getOrderBy():String
+    fun getOrderBy(): String
 
     fun set(field: String, fieldValue: Any?): IQuery
 
-    fun set(vararg pairs:Pair<String, Any>): IQuery
+    fun set(vararg pairs: Pair<String, Any>): IQuery
 
     fun where(field: String, compare: String, fieldValue: Any?): IQuery
 

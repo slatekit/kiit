@@ -14,7 +14,7 @@
 package slatekit.query
 
 import slatekit.common.ext.toStringMySql
-//import java.time.*
+// import java.time.*
 import org.threeten.bp.*
 import slatekit.common.ext.toNumeric
 import java.util.*
@@ -23,9 +23,10 @@ object QueryEncoder {
 
     @JvmStatic
     fun convertVal(value: Any?): String {
+        /* ktlint-disable */
         return when (value) {
-            Query.Null -> "null"
-            null -> "null"
+            Query.Null       -> "null"
+            null             -> "null"
             is String        -> toString(value)
             is Int           -> value.toString()
             is Long          -> value.toString()
@@ -39,8 +40,9 @@ object QueryEncoder {
             is List<*>       -> "(" + value.joinToString(",", transform = { it -> convertVal(it) }) + ")"
             is Array<*>      -> "(" + value.joinToString(",", transform = { it -> convertVal(it) }) + ")"
             is Enum<*>       -> value.ordinal.toString()
-            else -> value.toString()
+            else             -> value.toString()
         }
+        /* ktlint-enable */
     }
 
     /**

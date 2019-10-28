@@ -13,9 +13,11 @@
 
 package slatekit.query
 
-class Condition(@JvmField val field: Any,
-                @JvmField val comparison: String,
-                @JvmField val fieldValue: Any) : ICondition {
+class Condition(
+    @JvmField val field: Any,
+    @JvmField val comparison: String,
+    @JvmField val fieldValue: Any
+) : ICondition {
 
     /**
      * string represention of condition
