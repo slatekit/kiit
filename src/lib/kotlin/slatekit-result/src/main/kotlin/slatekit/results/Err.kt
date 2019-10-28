@@ -55,10 +55,6 @@ interface Err {
             return ErrorInfo(msg)
         }
 
-        fun of(code: Int, msg: String): Err {
-            return ErrorInfo(msg)
-        }
-
         fun of(status: Status): Err {
             return ErrorInfo(status.msg)
         }
