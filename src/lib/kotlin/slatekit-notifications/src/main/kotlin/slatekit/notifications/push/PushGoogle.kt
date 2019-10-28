@@ -129,10 +129,10 @@ open class PushGoogle(
         // Notifications only showup in the notification area on android.
         // Data messages will be handled in the app.
         // Use both for when an app is closed/backgrounded.
-        val content = when (model.messageType) {
-            is PushTypeData -> "{$to:$recipient, \"data\":${model.payload}}"
-            is PushTypeAlert -> "{$to:$recipient, \"notification\":$alert}"
-            is PushTypeBoth -> "{$to:$recipient, \"notification\":$alert, \"data\":${model.payload}}"
+        val content = when (model.pushType) {
+            is PushType.Data -> "{$to:$recipient, \"data\":${model.payload}}"
+            is PushType.Alert -> "{$to:$recipient, \"notification\":$alert}"
+            is PushType.Both -> "{$to:$recipient, \"notification\":$alert, \"data\":${model.payload}}"
             else -> "{$to:$recipient, \"notification\":$alert}"
         }
 

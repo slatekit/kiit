@@ -12,11 +12,11 @@ mantra: Simplicity above all else
  */
 package slatekit.notifications.push
 
-interface PushType {
-    val name: String
-}
 
-object PushTypeAlert : PushType { override val name: String = "alert" }
-object PushTypeData : PushType { override val name: String = "data" }
-object PushTypeBoth : PushType { override val name: String = "both" }
-data class PushTypeOther(override val name: String) : PushType
+sealed class PushType {
+    abstract val name:String
+    object Alert : PushType() { override val name: String = "alert" }
+    object Data  : PushType() { override val name: String = "data" }
+    object Both  : PushType() { override val name: String = "both" }
+    data class Other( override val name: String) : PushType()
+}
