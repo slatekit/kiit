@@ -24,7 +24,7 @@ object Runner {
             worker.done()
             Status.Complete
         }
-        when(result){
+        when (result) {
             is Success -> { }
             is Failure -> {
                 worker.move(Status.Failed)
@@ -34,20 +34,21 @@ object Runner {
         return result
     }
 
-
     /**
      * Starts this worker with life-cycle hooks and automatic transitioning to proper state
      * However, allows execution to be managed externally as it could be running for a long time
      */
-    suspend fun <T> attemptStart(worker: Worker<T>,
-                                 handleDone:Boolean = true,
-                                 handleFailure:Boolean = true,
-                                 task: Task = Task.empty,
-                                 statusChanged:(suspend (Worker<T>) -> Unit )? = null): Try<WorkResult> {
+    suspend fun <T> attemptStart(
+        worker: Worker<T>,
+        handleDone: Boolean = true,
+        handleFailure: Boolean = true,
+        task: Task = Task.empty,
+        statusChanged: (suspend (Worker<T>) -> Unit)? = null
+    ): Try<WorkResult> {
         val result = Tries.attempt {
             start(worker, handleDone, task, statusChanged)
         }
-        if(handleFailure) {
+        if (handleFailure) {
             when (result) {
                 is Success -> {
                 }
@@ -64,15 +65,16 @@ object Runner {
         return result
     }
 
-
     /**
      * Starts this worker with life-cycle hooks and automatic transitioning to proper state
      * However, allows execution to be managed externally as it could be running for a long time
      */
-    suspend fun <T> start(worker: Worker<T>,
-                          handleDone:Boolean,
-                          task: Task = Task.empty,
-                          statusChanged:(suspend (Worker<T>) -> Unit )? = null): WorkResult {
+    suspend fun <T> start(
+        worker: Worker<T>,
+        handleDone: Boolean,
+        task: Task = Task.empty,
+        statusChanged: (suspend (Worker<T>) -> Unit)? = null
+    ): WorkResult {
 
         worker.move(Status.Starting)
         statusChanged?.invoke(worker)
@@ -84,14 +86,13 @@ object Runner {
         statusChanged?.invoke(worker)
 
         val result = worker.work(task)
-        if(result.state == WorkState.Done && handleDone) {
+        if (result.state == WorkState.Done && handleDone) {
             worker.move(Status.Complete)
             statusChanged?.invoke(worker)
             worker.done()
         }
         return result
     }
-
 
     /**
      * Makes the worker work ( this can be used for resuming )
@@ -101,13 +102,13 @@ object Runner {
             worker.move(Status.Running)
             worker.move(Status.Running)
             val workResult = worker.work()
-            if(workResult.state == WorkState.Done) {
+            if (workResult.state == WorkState.Done) {
                 worker.move(Status.Complete)
                 worker.done()
             }
             workResult
         }
-        when(result){
+        when (result) {
             is Success -> { }
             is Failure -> {
                 worker.move(Status.Failed)
@@ -117,16 +118,15 @@ object Runner {
         return result
     }
 
-
-    suspend fun <T> record(context: WorkerContext, operation: suspend (Worker<*>) -> T):Outcome<T> {
+    suspend fun <T> record(context: WorkerContext, operation: suspend (Worker<*>) -> T): Outcome<T> {
         val worker: Worker<*> = context.worker
         val calls = context.stats.calls
         calls.inc()
-        val result =  try {
+        val result = try {
             val result = operation(worker)
             calls.passed()
             Outcomes.success(result)
-        } catch (ex:Exception){
+        } catch (ex: Exception) {
             calls.failed(ex)
             Outcomes.errored<T>(ex)
         }

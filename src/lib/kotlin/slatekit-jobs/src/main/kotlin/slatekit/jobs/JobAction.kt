@@ -1,6 +1,5 @@
 package slatekit.jobs
 
-
 /**
  * Represents the actions that can be performed on either a Job or worker.
  * NOTE: Either a Job or Worker can be
@@ -11,7 +10,8 @@ package slatekit.jobs
  * 5. Processed ( 1 time )
  * 6. Delayed ( delayed start )
  */
-sealed class JobAction(val name:String) {
+sealed class JobAction(val name: String) {
+    /* ktlint-disable */
     object Start    : JobAction( "Start"  )
     object Stop     : JobAction( "Stop"   )
     object Pause    : JobAction( "Pause"  )
@@ -19,4 +19,5 @@ sealed class JobAction(val name:String) {
     object Control  : JobAction( "Control")
     object Process  : JobAction( "Process")
     object Delay    : JobAction( "Delay" )
+    /* ktlint-enable */
 }

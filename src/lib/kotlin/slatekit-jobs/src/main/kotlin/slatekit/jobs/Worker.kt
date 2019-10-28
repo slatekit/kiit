@@ -1,19 +1,19 @@
 package slatekit.jobs
 
-import slatekit.common.Status
-import slatekit.common.Identity
 import java.util.concurrent.atomic.AtomicReference
-
+import slatekit.common.Identity
+import slatekit.common.Status
 
 /**
  * Base class for Workers
  */
-open class Worker<T>(override val id: Identity,
-                     override val stats: Recorder = Recorder.of(id),
-                     val operation: (suspend (Task) -> WorkResult)? = null) : Workable<T> {
+open class Worker<T>(
+    override val id: Identity,
+    override val stats: Recorder = Recorder.of(id),
+    val operation: (suspend (Task) -> WorkResult)? = null
+) : Workable<T> {
 
     private val _status = AtomicReference<Status>(Status.InActive)
-
 
     /**
      * Transition current status to the one supplied
@@ -23,9 +23,7 @@ open class Worker<T>(override val id: Identity,
         notify(state.name, null)
     }
 
-
     override fun status(): Status = _status.get()
-
 
     /**
      * Performs the work

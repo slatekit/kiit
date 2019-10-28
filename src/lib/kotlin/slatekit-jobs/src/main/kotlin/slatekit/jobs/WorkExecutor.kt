@@ -12,59 +12,55 @@ import slatekit.results.builders.Outcomes
  * 3. direct  : execute directly
  * 4. resume  : execute the resume method on a pauseable
  */
-class WorkExecutor(val context: WorkerContext,
-                   val workWithPolicies: suspend (WorkRequest) -> Outcome<WorkResult>,
-                   val resumeWithPolicies: suspend (WorkRequest) -> Outcome<WorkResult>) {
-
+class WorkExecutor(
+    val context: WorkerContext,
+    val workWithPolicies: suspend (WorkRequest) -> Outcome<WorkResult>,
+    val resumeWithPolicies: suspend (WorkRequest) -> Outcome<WorkResult>
+) {
 
     /**
      * Executes the worker with policies if available, recorded otherwise
      */
-    suspend fun execute(task:Task):Outcome<WorkResult> {
-        return when(context.policies.isEmpty()) {
-            true  -> record(task)
+    suspend fun execute(task: Task): Outcome<WorkResult> {
+        return when (context.policies.isEmpty()) {
+            true -> record(task)
             false -> impose(task)
         }
     }
 
-
     /**
      * Excecutes the worker directly without any metrics/policies
      */
-    suspend fun direct(task:Task):Outcome<WorkResult> {
+    suspend fun direct(task: Task): Outcome<WorkResult> {
         return Outcomes.of {
             context.worker.work(task)
         }
     }
 
-
     /**
      * Executes the worker with recorded Calls
      */
-    suspend fun record(task:Task):Outcome<WorkResult> {
+    suspend fun record(task: Task): Outcome<WorkResult> {
         return Runner.record(context) {
             it.work(task)
         }
     }
 
-
     /**
      * Executes the worker with policies ( which may impose limits/restrictions/etc )
      */
-    suspend fun impose(task:Task):Outcome<WorkResult> {
+    suspend fun impose(task: Task): Outcome<WorkResult> {
         val request = WorkRequest(context, task)
         return workWithPolicies(request)
     }
 
-
     /**
      * Executes the worker with recorded Calls
      */
-    suspend fun resume(reason:String, task:Task):Outcome<WorkResult> {
+    suspend fun resume(reason: String, task: Task): Outcome<WorkResult> {
         val request = WorkRequest(context, task)
         return resumeWithPolicies(request)
     }
-
 
     companion object {
 
@@ -86,7 +82,7 @@ class WorkExecutor(val context: WorkerContext,
             }
 
             return when (context.policies.isEmpty()) {
-                true  -> {
+                true -> {
                     WorkExecutor(context, rawWork, rawResume)
                 }
                 false -> {
