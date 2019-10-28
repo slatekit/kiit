@@ -16,7 +16,6 @@ mantra: Simplicity above all else
 
 package slatekit.db
 
-
 object Consts {
     val version = "0.9.9.db"
 }

@@ -13,11 +13,11 @@
 
 package slatekit.db.types
 
-import slatekit.common.Types
-import slatekit.db.DbUtils.ensureField
-import slatekit.common.newline
-import slatekit.common.db.DbFieldType
 import java.rmi.UnexpectedException
+import slatekit.common.Types
+import slatekit.common.db.DbFieldType
+import slatekit.common.newline
+import slatekit.db.DbUtils.ensureField
 
 /**
  * Builds up database tables, indexes and other database components
@@ -28,49 +28,48 @@ open class DbSourceMySql : DbSource {
      * Mapping of normalized types ot postgres type names
      */
     val dataToColumnTypes = mapOf(
-        DbFieldType.DbString to  "NVARCHAR",
-        DbFieldType.DbBool to  "BIT",
-        DbFieldType.DbShort to  "TINYINT",
-        DbFieldType.DbNumber to  "INTEGER",
-        DbFieldType.DbLong to  "BIGINT",
-        DbFieldType.DbFloat to  "FLOAT",
-        DbFieldType.DbDouble to  "DOUBLE",
-        DbFieldType.DbDecimal to  "DECIMAL",
-        DbFieldType.DbLocalDate to  "DATE",
-        DbFieldType.DbLocalTime to  "TIME",
-        DbFieldType.DbLocalDateTime to  "DATETIME",
-        DbFieldType.DbZonedDateTime to  "DATETIME",
-        DbFieldType.DbInstant to  "INSTANT",
-        DbFieldType.DbDateTime to  "DATETIME"
+        DbFieldType.DbString to "NVARCHAR",
+        DbFieldType.DbBool to "BIT",
+        DbFieldType.DbShort to "TINYINT",
+        DbFieldType.DbNumber to "INTEGER",
+        DbFieldType.DbLong to "BIGINT",
+        DbFieldType.DbFloat to "FLOAT",
+        DbFieldType.DbDouble to "DOUBLE",
+        DbFieldType.DbDecimal to "DECIMAL",
+        DbFieldType.DbLocalDate to "DATE",
+        DbFieldType.DbLocalTime to "TIME",
+        DbFieldType.DbLocalDateTime to "DATETIME",
+        DbFieldType.DbZonedDateTime to "DATETIME",
+        DbFieldType.DbInstant to "INSTANT",
+        DbFieldType.DbDateTime to "DATETIME"
     )
 
-
     val langToDataTypes = mapOf(
-        Types.JBoolClass to  DbFieldType.DbBool,
-        Types.JStringClass to  DbFieldType.DbString,
-        Types.JShortClass to  DbFieldType.DbShort,
-        Types.JIntClass to  DbFieldType.DbNumber,
-        Types.JLongClass to  DbFieldType.DbLong,
-        Types.JFloatClass to  DbFieldType.DbFloat,
-        Types.JDoubleClass to  DbFieldType.DbDouble,
-        //Types.JDecimalClass to  DbFieldType.DbDecimal,
-        Types.JLocalDateClass to  DbFieldType.DbLocalDate,
-        Types.JLocalTimeClass to  DbFieldType.DbLocalTime,
-        Types.JLocalDateTimeClass to  DbFieldType.DbLocalDateTime,
-        Types.JZonedDateTimeClass to  DbFieldType.DbZonedDateTime,
-        Types.JInstantClass to  DbFieldType.DbInstant,
-        Types.JDateTimeClass to  DbFieldType.DbDateTime
+        Types.JBoolClass to DbFieldType.DbBool,
+        Types.JStringClass to DbFieldType.DbString,
+        Types.JShortClass to DbFieldType.DbShort,
+        Types.JIntClass to DbFieldType.DbNumber,
+        Types.JLongClass to DbFieldType.DbLong,
+        Types.JFloatClass to DbFieldType.DbFloat,
+        Types.JDoubleClass to DbFieldType.DbDouble,
+        // Types.JDecimalClass to  DbFieldType.DbDecimal,
+        Types.JLocalDateClass to DbFieldType.DbLocalDate,
+        Types.JLocalTimeClass to DbFieldType.DbLocalTime,
+        Types.JLocalDateTimeClass to DbFieldType.DbLocalDateTime,
+        Types.JZonedDateTimeClass to DbFieldType.DbZonedDateTime,
+        Types.JInstantClass to DbFieldType.DbInstant,
+        Types.JDateTimeClass to DbFieldType.DbDateTime
     )
 
     /**
      * Builds the drop table DDL for the name supplied.
      */
-    override fun buildDropTable(name: String): String = build(name,"DROP TABLE IF EXISTS")
+    override fun buildDropTable(name: String): String = build(name, "DROP TABLE IF EXISTS")
 
     /**
      * Builds a delete statement to delete all rows
      */
-    override fun buildDeleteAll(name: String): String = build(name,"DELETE FROM")
+    override fun buildDeleteAll(name: String): String = build(name, "DELETE FROM")
 
     /**
      * Builds an add column DDL sql statement
@@ -101,15 +100,14 @@ open class DbSourceMySql : DbSource {
             getColTypeName(colType)
     }
 
-
-    private fun build(name:String, prefix:String): String {
+    private fun build(name: String, prefix: String): String {
         val tableName = ensureField(name)
         val sql = "$prefix `$tableName`;"
         return sql
     }
 
     private fun getColTypeName(sqlType: DbFieldType): String {
-        return if(dataToColumnTypes.containsKey(sqlType))
+        return if (dataToColumnTypes.containsKey(sqlType))
             dataToColumnTypes[sqlType] ?: ""
         else
             throw UnexpectedException("Unexpected db type : $sqlType")

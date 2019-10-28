@@ -13,11 +13,11 @@
 
 package slatekit.db.types
 
-import slatekit.common.Types
-import slatekit.db.DbUtils.ensureField
-import slatekit.common.newline
-import slatekit.common.db.DbFieldType
 import java.rmi.UnexpectedException
+import slatekit.common.Types
+import slatekit.common.db.DbFieldType
+import slatekit.common.newline
+import slatekit.db.DbUtils.ensureField
 
 /**
  * Builds up database tables, indexes and other database components
@@ -50,12 +50,12 @@ open class DbSourcePostGres : DbSource {
     /**
      * Builds the drop table DDL for the name supplied.
      */
-    override fun buildDropTable(name: String): String = build(name,"DROP TABLE IF EXISTS")
+    override fun buildDropTable(name: String): String = build(name, "DROP TABLE IF EXISTS")
 
     /**
      * Builds a delete statement to delete all rows
      */
-    override fun buildDeleteAll(name: String): String = build(name,"DELETE FROM")
+    override fun buildDeleteAll(name: String): String = build(name, "DELETE FROM")
 
     /**
      * Builds an add column DDL sql statement
@@ -86,15 +86,14 @@ open class DbSourcePostGres : DbSource {
             getColTypeName(colType)
     }
 
-
-    private fun build(name:String, prefix:String): String {
+    private fun build(name: String, prefix: String): String {
         val tableName = ensureField(name)
         val sql = "$prefix `$tableName`;"
         return sql
     }
 
     private fun getColTypeName(sqlType: DbFieldType): String {
-        return if(dataToColumnTypes.containsKey(sqlType))
+        return if (dataToColumnTypes.containsKey(sqlType))
             dataToColumnTypes[sqlType] ?: ""
         else
             throw UnexpectedException("Unexpected db type : $sqlType")
