@@ -13,26 +13,39 @@
 
 package slatekit.app
 
-import slatekit.common.*
+import slatekit.common.orElse
 import slatekit.common.args.Args
 import slatekit.common.args.ArgsCheck
 import slatekit.common.args.ArgsCheck.isExit
 import slatekit.common.args.ArgsCheck.isVersion
 import slatekit.common.args.ArgsSchema
-import slatekit.common.conf.*
+import slatekit.common.conf.Conf
+import slatekit.common.conf.Config
+import slatekit.common.conf.ConfigMulti
 import slatekit.common.conf.ConfFuncs.CONFIG_DEFAULT_PROPERTIES
 import slatekit.common.conf.ConfFuncs.CONFIG_DEFAULT_SUFFIX
 import slatekit.common.encrypt.Encryptor
-import slatekit.common.envs.*
-import slatekit.common.info.*
-import slatekit.common.log.*
-import slatekit.results.*
+import slatekit.common.envs.Env
+import slatekit.common.envs.Envs
+import slatekit.common.info.About
+import slatekit.common.info.Build
+import slatekit.common.info.Sys
+import slatekit.common.info.StartInfo
+import slatekit.common.log.Logs
+import slatekit.common.log.LogsDefault
+import slatekit.common.log.LogHelper
+import slatekit.common.log.LogLevel
+import slatekit.results.flatMap
+import slatekit.results.Codes
+import slatekit.results.Notice
+import slatekit.results.Failure
+import slatekit.results.Success
 
 object AppUtils {
 
     fun getConfPath(args: Args, file: String, conf: Conf?): String {
         val pathFromArgs = args.getStringOrElse("conf.dir", "")
-        val location = pathFromArgs.orElse( conf?.getStringOrElse("conf.dir", "") ?: "")
+        val location = pathFromArgs.orElse(conf?.getStringOrElse("conf.dir", "") ?: "")
         val prefix = when (location) {
             "jars" -> ""
             "conf" -> "file://./conf/"
@@ -66,7 +79,7 @@ object AppUtils {
             Success("about", Codes.ABOUT)
         }
         // Case 3a: Help ?
-        else if ( ArgsCheck.isHelp(raw, 0)) {
+        else if (ArgsCheck.isHelp(raw, 0)) {
             Success("help", Codes.HELP)
         } else {
             Failure("other")
@@ -120,12 +133,12 @@ object AppUtils {
             cfg ?: finalDefaultValue
     }
 
-    fun context(args: Args, envs: Envs, about:About, schema:ArgsSchema, enc: Encryptor?, logs:Logs?): Notice<AppContext> {
+    fun context(args: Args, envs: Envs, about: About, schema: ArgsSchema, enc: Encryptor?, logs: Logs?): Notice<AppContext> {
         val inputs = inputs(args, envs, about, schema, enc, logs)
-        return inputs.flatMap { Success( buildContext(it, enc, logs)) }
+        return inputs.flatMap { Success(buildContext(it, enc, logs)) }
     }
 
-    private fun inputs(args: Args, envs: Envs, about:About, schema:ArgsSchema, enc: Encryptor?, logs:Logs?): Notice<AppInputs> {
+    private fun inputs(args: Args, envs: Envs, about: About, schema: ArgsSchema, enc: Encryptor?, logs: Logs?): Notice<AppInputs> {
         // 1. Load the base conf "env.conf" from the directory specified.
         // or specified in the "conf.dirs" config setting in the env.conf file
         // a) -conf="jars"                  = embedded in jar files
@@ -161,7 +174,6 @@ object AppUtils {
         } ?: Failure("Unknown environment name : $envName supplied")
     }
 
-
     private fun buildContext(appInputs: AppInputs, enc: Encryptor?, logs: Logs?): AppContext {
 
         val buildInfoExists = resourceExists("build.conf")
@@ -194,19 +206,15 @@ object AppUtils {
         )
     }
 
-
-
     fun resourceExists(path: String): Boolean {
         val res = this.javaClass.getResource("/$path")
         return res != null
     }
 
-
-
     data class AppInputs(
-            val args: Args,
-            val env: Env,
-            val confBase: Conf,
-            val confEnv: Conf
+        val args: Args,
+        val env: Env,
+        val confBase: Conf,
+        val confEnv: Conf
     )
 }

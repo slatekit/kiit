@@ -28,9 +28,11 @@ import slatekit.results.Try
  * checking, app metadata, life-cycle template methods and more. This allows derived classes
  * to be very thin and focus on simply executing main logic of the app.
  */
-open class App<C: Context>(val ctx: C,
-                           val options:AppOptions = AppOptions(),
-                           val schema:ArgsSchema? = AppBuilder.schema()) : LogSupport, EncryptSupport {
+open class App<C : Context>(
+    val ctx: C,
+    val options: AppOptions = AppOptions(),
+    val schema: ArgsSchema? = AppBuilder.schema()
+) : LogSupport, EncryptSupport {
 
     /**
      * Provides logger support by supplying debug info, warn, error
@@ -38,13 +40,11 @@ open class App<C: Context>(val ctx: C,
      */
     override val logger = ctx.logs.getLogger("app")
 
-
     /**
      * Provides encryption support by supply encrypt/decrypt
      * methods from EncryptionSupport
      */
     override val encryptor = ctx.enc
-
 
     /**
      * Builds info about the app. You can optionally place and load this from the
@@ -66,12 +66,11 @@ open class App<C: Context>(val ctx: C,
         )
     }
 
-
     /**
      * Shows the help text
      */
     open fun help(code: Int) {
-        if(schema == null) {
+        if (schema == null) {
             println("\n")
             println("=================================================")
             println("ABOUT: " + this.ctx.app.name)
@@ -84,10 +83,9 @@ open class App<C: Context>(val ctx: C,
             println("=================================================")
             return
         } else {
-            println( schema.buildHelp())
+            println(schema.buildHelp())
         }
     }
-
 
     /**
      * Shows the welcome content
@@ -110,7 +108,6 @@ open class App<C: Context>(val ctx: C,
             logger.info("app:config  :${ctx.start.config}")
         }
     }
-
 
     /**
      * Displays diagnostic info about the app and process
@@ -144,7 +141,6 @@ open class App<C: Context>(val ctx: C,
         logger.info("lang.home        ".padEnd(maxLen) + ctx.sys.lang.home)
     }
 
-
     /**
      * prints the summary at the end of the application run
      */
@@ -158,7 +154,6 @@ open class App<C: Context>(val ctx: C,
         results().forEach { info(it.first + " = " + it.second) }
         info("===============================================================")
     }
-
 
     /**
      * Initialization life cycle event
@@ -181,7 +176,6 @@ open class App<C: Context>(val ctx: C,
         return Success<Any>("default")
     }
 
-
     /**
      * Shuts down life-cycle event
      * NOTE: Derived apps should override this to implement shut-down code
@@ -191,7 +185,6 @@ open class App<C: Context>(val ctx: C,
     open suspend fun end(): Try<Boolean> {
         return Success(true)
     }
-
 
     /**
      * Collection of results executing this application which can be used to display

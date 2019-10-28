@@ -13,17 +13,22 @@
 
 package slatekit.app
 
-import slatekit.common.*
+import slatekit.common.Context
 import slatekit.common.args.Args
-import slatekit.common.conf.Config
 import slatekit.common.conf.Conf
+import slatekit.common.conf.Config
 import slatekit.common.encrypt.B64Java8
 import slatekit.common.encrypt.Encryptor
 import slatekit.common.envs.Env
 import slatekit.common.envs.EnvMode
-import slatekit.common.info.*
+import slatekit.common.info.About
+import slatekit.common.info.Build
+import slatekit.common.info.Folders
+import slatekit.common.info.StartInfo
+import slatekit.common.info.Sys
 import slatekit.common.log.Logs
 import slatekit.common.log.LogsDefault
+import slatekit.common.toIdent
 import slatekit.results.Codes
 
 /**
@@ -44,33 +49,33 @@ import slatekit.results.Codes
   * @param tnt : tenant info ( if running in multi-tenant mode - not officially supported )
   */
 data class AppContext(
-        override val arg: Args,
-        override val env: Env,
-        override val cfg: Conf,
-        override val logs: Logs,
-        override val app: About,
-        override val sys: Sys,
-        override val build: Build,
-        override val start: StartInfo,
-        override val enc: Encryptor? = null,
-        override val dirs: Folders? = null,
+    override val arg: Args,
+    override val env: Env,
+    override val cfg: Conf,
+    override val logs: Logs,
+    override val app: About,
+    override val sys: Sys,
+    override val build: Build,
+    override val start: StartInfo,
+    override val enc: Encryptor? = null,
+    override val dirs: Folders? = null,
 
         // NOTE: Fix this non-strongly typed Entities object.
         // By using Any for the entities property, we avoid
         // slatekit.core having a dependency on slatekit.entities!
-        val ent: Any? = null
+    val ent: Any? = null
 ) : Context {
 
     companion object {
 
         @JvmStatic
-        fun help(conf:Config): AppContext = err(conf, Codes.HELP.code)
+        fun help(conf: Config): AppContext = err(conf, Codes.HELP.code)
 
         @JvmStatic
-        fun exit(conf:Config): AppContext = err(conf, Codes.EXIT.code)
+        fun exit(conf: Config): AppContext = err(conf, Codes.EXIT.code)
 
         @JvmStatic
-        fun err(conf:Config, code: Int, msg: String? = null): AppContext {
+        fun err(conf: Config, code: Int, msg: String? = null): AppContext {
             val args = Args.default()
             val env = Env("local", EnvMode.Dev)
             return AppContext(
