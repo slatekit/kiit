@@ -21,16 +21,15 @@ interface EntityCreates<TId, T> : ServiceSupport<TId, T> where TId : kotlin.Comp
         return repo().create(entity)
     }
 
-
     /**
      * creates the entity in the data store with additional processing based on the options supplied
      * @param entity : The entity to save
      * @param options: Settings to determine whether to apply metadata, and notify via EntityHooks
      */
-    fun create(entity: T, options:EntityOptions): Pair<TId, T> {
+    fun create(entity: T, options: EntityOptions): Pair<TId, T> {
         // Massage
-        val entityWithMeta = when(options.applyMetadata) {
-            true  -> applyFieldData(EntityAction.EntityCreate, entity)
+        val entityWithMeta = when (options.applyMetadata) {
+            true -> applyFieldData(EntityAction.EntityCreate, entity)
             false -> entity
         }
 
@@ -38,8 +37,8 @@ interface EntityCreates<TId, T> : ServiceSupport<TId, T> where TId : kotlin.Comp
         val id = insert(entityWithMeta)
 
         // Update id
-        val entityFinal = when(entityWithMeta is EntityUpdatable<*, *>){
-            true  -> entityWithMeta.withIdAny(id) as T
+        val entityFinal = when (entityWithMeta is EntityUpdatable<*, *>) {
+            true -> entityWithMeta.withIdAny(id) as T
             false -> entityWithMeta
         }
 
@@ -54,7 +53,6 @@ interface EntityCreates<TId, T> : ServiceSupport<TId, T> where TId : kotlin.Comp
         }
         return Pair(id, entityFinal)
     }
-
 
     /**
      * creates the entity in the data store and sends an event if there is support for EntityHooks
@@ -80,7 +78,6 @@ interface EntityCreates<TId, T> : ServiceSupport<TId, T> where TId : kotlin.Comp
 
         return id
     }
-
 
     /**
      * creates the entity in the data-store with error-handling

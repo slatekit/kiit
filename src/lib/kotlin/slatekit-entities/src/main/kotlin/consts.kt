@@ -16,7 +16,7 @@ mantra: Simplicity above all else
 
 package slatekit.entities
 
-//import java.time.format.DateTimeFormatter
+// import java.time.format.DateTimeFormatter
 import org.threeten.bp.format.*
 
 object Consts {

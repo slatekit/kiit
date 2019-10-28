@@ -1,28 +1,22 @@
 package slatekit.entities.support
 
-
 import slatekit.common.utils.Export
-
 import slatekit.entities.Entity
 import slatekit.entities.EntityServices
+import slatekit.meta.kClass
 import slatekit.meta.models.Model
 import slatekit.results.Try
 import slatekit.results.builders.Tries
-import slatekit.meta.kClass
-
-
-
 
 /**
  * Created by kishorereddy on 6/3/18.
  */
 
-interface Exportable<TId, T> where TId: Comparable<TId>, T: Entity<TId> {
+interface Exportable<TId, T> where TId : Comparable<TId>, T : Entity<TId> {
 
-    val schema:Int
+    val schema: Int
     val model: Model
     val service: EntityServices<TId, T>
-
 
     /**
      * Exports all items
@@ -34,7 +28,6 @@ interface Exportable<TId, T> where TId: Comparable<TId>, T: Entity<TId> {
         return exportItems(version, service.getAll())
     }
 
-
     /**
      * Exports the first one
      *
@@ -45,7 +38,6 @@ interface Exportable<TId, T> where TId: Comparable<TId>, T: Entity<TId> {
         return exportItem(version, service.first())
     }
 
-
     /**
      * Exports the first one
      *
@@ -55,7 +47,6 @@ interface Exportable<TId, T> where TId: Comparable<TId>, T: Entity<TId> {
     fun exportLast(version: String): Try<Export<T>> {
         return exportItem(version, service.last())
     }
-
 
     /**
      * Exports a single item ( returned as an array ) using the id.
@@ -69,7 +60,6 @@ interface Exportable<TId, T> where TId: Comparable<TId>, T: Entity<TId> {
         return exportItem(version, service.get(id))
     }
 
-
     /**
      * Exports a single item as an array
      *
@@ -78,7 +68,7 @@ interface Exportable<TId, T> where TId: Comparable<TId>, T: Entity<TId> {
      * @return
      */
     fun exportItem(version: String, item: T?): Try<Export<T>> {
-        if(item == null) {
+        if (item == null) {
             return Tries.invalid("Not supplied")
         }
 
@@ -93,7 +83,6 @@ interface Exportable<TId, T> where TId: Comparable<TId>, T: Entity<TId> {
         }
         return result
     }
-
 
     /**
      * Exports all the items supplied.
@@ -120,7 +109,6 @@ interface Exportable<TId, T> where TId: Comparable<TId>, T: Entity<TId> {
         }
         return result
     }
-
 
     /** Loads items using the string content supplied.
      * Needs to implemented in derived repository classes.

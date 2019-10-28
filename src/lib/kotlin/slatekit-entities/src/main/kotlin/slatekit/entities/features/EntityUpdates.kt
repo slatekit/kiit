@@ -1,20 +1,19 @@
 package slatekit.entities.features
 
+import kotlin.reflect.KProperty
 import slatekit.common.DateTime
-import slatekit.query.IQuery
 import slatekit.entities.Entity
-import slatekit.entities.EntityUpdatable
 import slatekit.entities.core.EntityAction
+import slatekit.entities.core.EntityEvent
 import slatekit.entities.core.ServiceSupport
+import slatekit.entities.slatekit.entities.EntityOptions
 import slatekit.meta.Reflector
 import slatekit.meta.kClass
-import slatekit.entities.core.EntityEvent
-import slatekit.entities.slatekit.entities.EntityOptions
+import slatekit.query.IQuery
 import slatekit.results.Try
 import slatekit.results.builders.Tries
-import kotlin.reflect.KProperty
 
-interface EntityUpdates<TId, T> : ServiceSupport<TId, T> where TId: kotlin.Comparable<TId>, T: Entity<TId> {
+interface EntityUpdates<TId, T> : ServiceSupport<TId, T> where TId : kotlin.Comparable<TId>, T : Entity<TId> {
 
     /**
      * directly modifies an entity without any additional processing/hooks/etc
@@ -25,7 +24,6 @@ interface EntityUpdates<TId, T> : ServiceSupport<TId, T> where TId: kotlin.Compa
         return repo().update(entity)
     }
 
-
     /**
      * creates the entity in the data store with additional processing based on the options supplied
      * @param entity : The entity to save
@@ -33,11 +31,11 @@ interface EntityUpdates<TId, T> : ServiceSupport<TId, T> where TId: kotlin.Compa
      */
     fun update(entity: T, options: EntityOptions): Pair<Boolean, T> {
         val useHooks = options.applyHooks && this is EntityHooks
-        val original:T? = if (useHooks) repo().get(entity.identity()) else null
+        val original: T? = if (useHooks) repo().get(entity.identity()) else null
 
         // Massage
-        val entityFinal = when(options.applyMetadata) {
-            true  -> applyFieldData(EntityAction.EntityUpdate, entity)
+        val entityFinal = when (options.applyMetadata) {
+            true -> applyFieldData(EntityAction.EntityUpdate, entity)
             false -> entity
         }
 
@@ -45,8 +43,8 @@ interface EntityUpdates<TId, T> : ServiceSupport<TId, T> where TId: kotlin.Compa
         val success = modify(entityFinal)
 
         // Event out
-        if ( this is EntityHooks) {
-            when(success) {
+        if (this is EntityHooks) {
+            when (success) {
                 true -> this.onEntityEvent(EntityEvent.EntityUpdated(original ?: entity, entityFinal, DateTime.now()))
                 else -> this.onEntityEvent(EntityEvent.EntityErrored(entity,
                         Exception("unable to update: " + entity.toString()), DateTime.now()))
@@ -55,20 +53,19 @@ interface EntityUpdates<TId, T> : ServiceSupport<TId, T> where TId: kotlin.Compa
         return Pair(success, entityFinal)
     }
 
-
     /**
      * updates the entity in the data store and sends an event if there is support for EntityHooks
      * @param entity
      * @return
      */
     fun update(entity: T): Boolean {
-        val original:T? = if (this is EntityHooks ) repo().get(entity.identity()) else null
+        val original: T? = if (this is EntityHooks) repo().get(entity.identity()) else null
         val finalEntity = applyFieldData(EntityAction.EntityUpdate, entity)
         val success = repo().update(finalEntity)
 
         // Event out
-        if ( this is EntityHooks) {
-            when(success) {
+        if (this is EntityHooks) {
+            when (success) {
                 true -> this.onEntityEvent(EntityEvent.EntityUpdated(original ?: entity, entity, DateTime.now()))
                 else -> this.onEntityEvent(EntityEvent.EntityErrored(entity,
                         Exception("unable to update: " + entity.toString()), DateTime.now()))
@@ -76,7 +73,6 @@ interface EntityUpdates<TId, T> : ServiceSupport<TId, T> where TId: kotlin.Compa
         }
         return success
     }
-
 
     /**
      * updates the entity in the data-store with error-handling
@@ -86,7 +82,6 @@ interface EntityUpdates<TId, T> : ServiceSupport<TId, T> where TId: kotlin.Compa
     fun updateAsTry(entity: T): Try<Boolean> {
         return Tries.attempt { update(entity) }
     }
-
 
     /**
      * updates the entity field in the datastore

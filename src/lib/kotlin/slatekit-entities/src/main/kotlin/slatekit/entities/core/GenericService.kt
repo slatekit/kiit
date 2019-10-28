@@ -13,7 +13,6 @@
 
 package slatekit.entities.core
 
-
 /**
  * Interface for a service with an EntityStore that does not rely on knowing the id or entity type
  */

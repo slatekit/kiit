@@ -4,9 +4,7 @@ import slatekit.common.db.IDb
 import slatekit.results.Outcome
 
 interface MigrationStep {
-    val type:MigrationType
+    val type: MigrationType
 
-    fun run(db: IDb):Outcome<String>
+    fun run(db: IDb): Outcome<String>
 }
-
-

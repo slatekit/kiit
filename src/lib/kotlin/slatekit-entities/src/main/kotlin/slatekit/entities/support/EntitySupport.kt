@@ -7,7 +7,6 @@ import slatekit.entities.core.EntityStore
 import slatekit.entities.core.GenericService
 import slatekit.entities.core.ServiceSupport
 
-
 /**
  * Base entity service with generics to support all CRUD operations.
  * Delegates calls to the entity repository, and also manages the timestamps
@@ -15,15 +14,14 @@ import slatekit.entities.core.ServiceSupport
  * @tparam T
  */
 interface EntitySupport<TId, T> : GenericService,
-        ServiceSupport<TId, T> where TId:Comparable<TId>, T : Entity<TId> {
+        ServiceSupport<TId, T> where TId : Comparable<TId>, T : Entity<TId> {
 
-    val entities:Entities
-    val repo:EntityRepo<TId, T>
+    val entities: Entities
+    val repo: EntityRepo<TId, T>
 
     override fun store(): EntityStore = repo
 
     override fun repo(): EntityRepo<TId, T> = repo
-
 
     /**
      * gets the total number of entities in the datastore

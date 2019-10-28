@@ -2,24 +2,20 @@ package slatekit.entities.slatekit.entities.support
 
 import slatekit.entities.Entity
 
-
 /**
  * Supports copy operations
  */
-interface Copyable<TId, out T> where TId : Comparable<TId>, T: Entity<TId> {
-
+interface Copyable<TId, out T> where TId : Comparable<TId>, T : Entity<TId> {
 
     /**
      * Creates a new instance of this entity
      */
     fun create(): T
 
-
     /**
      * Gets a reference to self
      */
-    fun self():T
-
+    fun self(): T
 
     /**
      * Creates a copy of this entity
@@ -30,12 +26,10 @@ interface Copyable<TId, out T> where TId : Comparable<TId>, T: Entity<TId> {
         return other
     }
 
-
     /**
      * Copies the data from the source to the destination
      */
-    fun copy(source:Entity<TId>, destination:Entity<TId>)
-
+    fun copy(source: Entity<TId>, destination: Entity<TId>)
 
     /**
      * Copies this data to the [other] entity
@@ -43,7 +37,6 @@ interface Copyable<TId, out T> where TId : Comparable<TId>, T: Entity<TId> {
     fun copyTo(other: Entity<TId>?) {
         other?.let { copy(self(), other) }
     }
-
 
     /**
      * Copies the data from the [other] entity to this entity

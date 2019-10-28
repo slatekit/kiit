@@ -11,13 +11,11 @@
  * </slate_header>
  */
 
-
 package slatekit.entities
 
+import kotlin.reflect.KProperty
 import slatekit.common.db.Mapper
 import slatekit.meta.models.Model
-import kotlin.reflect.KProperty
-
 
 /**
  * Handles mapping an entity to/from a Record.
@@ -34,7 +32,7 @@ import kotlin.reflect.KProperty
  * to control how this is done. This also allows for potentially hooking
  * into some other mapping library to handle the heavy / tedious work.
  */
-interface EntityMapper<TId, T> : Mapper where TId:Comparable<TId>, T: Entity<TId> {
+interface EntityMapper<TId, T> : Mapper where TId : Comparable<TId>, T : Entity<TId> {
 
     /**
      * Gets the optional Model schema which stores field/properties
@@ -42,14 +40,13 @@ interface EntityMapper<TId, T> : Mapper where TId:Comparable<TId>, T: Entity<TId
      */
     fun schema(): Model? = null
 
-
     /**
      * Gets the column name for the Kproperty from the model schema if available
      * or defaults to the property name.
      */
-    fun columnName(prop: KProperty<*>):String {
-        val model:Model? = schema()
-        return when(model) {
+    fun columnName(prop: KProperty<*>): String {
+        val model: Model? = schema()
+        return when (model) {
             null -> prop.name
             else -> if (model.any) model.fields.first { it.name == prop.name }.storedName else prop.name
         }

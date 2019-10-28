@@ -4,17 +4,15 @@ import slatekit.entities.Entity
 import slatekit.meta.models.Model
 import slatekit.results.Try
 
-
 /**
  * Encoder for encoding/decoding to a String ( E.g. JSON )
  */
-interface Encodable<TId, out T> where TId : Comparable<TId>, T: Entity<TId> {
+interface Encodable<TId, out T> where TId : Comparable<TId>, T : Entity<TId> {
 
     /**
      * Encodes the Entity to a String
      */
     fun <TId> encode(model: Model, instance: Entity<TId>): Try<String> where TId : Comparable<TId>
-
 
     /**
      * Decodes the string to an Entity

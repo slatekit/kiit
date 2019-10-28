@@ -15,29 +15,27 @@ package slatekit.entities.repos
 
 import slatekit.common.db.IDb
 import slatekit.common.ext.tail
-import slatekit.query.IQuery
-import slatekit.query.Op
-import slatekit.query.Query
 import slatekit.entities.Entity
 import slatekit.entities.EntityMapper
 import slatekit.entities.core.EntityInfo
+import slatekit.query.IQuery
+import slatekit.query.Op
+import slatekit.query.Query
 
 /**
  *
- * @param db   : Db wrapper to execute sql
+ * @param db : Db wrapper to execute sql
  * @param info : Holds all info relevant state/members needed to perform repo operations
  * @tparam T
  */
 abstract class EntityRepoSql<TId, T>(
-        val db: IDb,
-        info:EntityInfo,
-        val mapper: EntityMapper<TId, T>
+    val db: IDb,
+    info: EntityInfo,
+    val mapper: EntityMapper<TId, T>
 ) : EntityRepoBase<TId, T>(info)
-        where TId:Comparable<TId>, T: Entity<TId> {
-
+        where TId : Comparable<TId>, T : Entity<TId> {
 
     override fun name(): String = "${info.encodedChar}" + super.name() + "${info.encodedChar}"
-
 
     /**
      * updates the table field using the value supplied
@@ -98,7 +96,7 @@ abstract class EntityRepoSql<TId, T>(
      * @param value: The value to check for
      * @return
      */
-    override fun deleteByField(field: String, op:Op, value: Any): Int {
+    override fun deleteByField(field: String, op: Op, value: Any): Int {
         val query = Query().where(field, op, value)
         val filter = query.toFilter()
         val sql = "delete from " + name() + " where " + filter
@@ -150,11 +148,10 @@ abstract class EntityRepoSql<TId, T>(
         return items
     }
 
-
     /**
      * Gets the total number of records based on the query provided.
      */
-    override fun count(query: IQuery):Long {
+    override fun count(query: IQuery): Long {
         val filter = query.toFilter()
         val sql = "select count( * ) from ${name()} where " + filter
         val count = getScalarLong(sql)
@@ -182,7 +179,7 @@ abstract class EntityRepoSql<TId, T>(
     /**
      * finds items based on the conditions
      */
-    override fun findByFields(conditions:List<Pair<String, Any>>): List<T> {
+    override fun findByFields(conditions: List<Pair<String, Any>>): List<T> {
         val first = conditions.first()
         val tail = conditions.tail()
         val query = Query().where(first.first, Op.Eq, first.second)
@@ -191,7 +188,6 @@ abstract class EntityRepoSql<TId, T>(
         }
         return find(query)
     }
-
 
     /**
      * finds items based on the field in the values provided
@@ -219,7 +215,7 @@ abstract class EntityRepoSql<TId, T>(
      * @param query: name of field
      * @return
      */
-    override fun findFirst(query:IQuery): T? {
+    override fun findFirst(query: IQuery): T? {
         return find(query.limit(1)).firstOrNull()
     }
 
@@ -247,7 +243,7 @@ abstract class EntityRepoSql<TId, T>(
         return db.callUpdate(name, args)
     }
 
-    protected open fun getScalarLong(sql:String):Long {
+    protected open fun getScalarLong(sql: String): Long {
         return db.getScalarLong("select count(*) from ${name()};", null)
     }
 
