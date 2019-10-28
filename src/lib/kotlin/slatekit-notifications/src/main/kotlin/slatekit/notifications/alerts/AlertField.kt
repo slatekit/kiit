@@ -6,6 +6,8 @@ package slatekit.notifications.alerts
  * @param value: Value of the field e.g. "dev"'
  * @param tags : Optional tags associated w/ the data
  */
-data class AlertField(val name:String,
-                      val value:Any?,
-                      val tags:List<String>? = null)
+data class AlertField(
+    val name: String,
+    val value: Any?,
+    val tags: List<String>? = null
+)

@@ -20,15 +20,15 @@ package slatekit.notifications.push
  * @param alert : The "alert" part of the message. in android the "notification" section
  */
 data class PushMessage(
-        val to: List<String>,
-        val pushType: PushType = PushType.Alert,
-        val payload: String = "",
-        val alert: Notification? = null
+    val to: List<String>,
+    val pushType: PushType = PushType.Alert,
+    val payload: String = "",
+    val alert: Notification? = null
 ) {
 
     val isMultiDelivery: Boolean = to.size > 1
     fun isAlert(): Boolean = pushType == PushType.Alert
-    fun isData() : Boolean  = pushType == PushType.Data
-    fun isBoth() : Boolean  = pushType == PushType.Both
-    fun isOther(): Boolean  = !isAlert() && !isData() && !isBoth()
+    fun isData(): Boolean = pushType == PushType.Data
+    fun isBoth(): Boolean = pushType == PushType.Both
+    fun isOther(): Boolean = !isAlert() && !isData() && !isBoth()
 }

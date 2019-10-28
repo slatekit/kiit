@@ -79,16 +79,15 @@ import slatekit.results.builders.Outcomes
  *  2. https://stackoverflow.com/questions/37711082/how-to-handle-notification-when-app-in-background-in-firebase/42279260#42279260
  */
 open class PushGoogle(
-        _key: String,
-        val config: Conf,
-        val logs: Logs
+    _key: String,
+    val config: Conf,
+    val logs: Logs
 ) : Sender<PushMessage> {
 
     private val settings = PushSettings("", _key, "")
     private val baseUrl = config.getStringOrElse("android.sendUrl", fcmUrl)
     private val sendNotifications = config.getBoolOrElse("android.sendNotifications", true)
     private val logger = logs.getLogger(this.javaClass)
-
 
     /**
      * Validates the model supplied
@@ -102,7 +101,6 @@ open class PushGoogle(
         }
     }
 
-
     /**
      * Builds the Message to send as Push notification as an immutable HTTP Request
      * when the app is either in the background/killed, it must
@@ -113,7 +111,7 @@ open class PushGoogle(
      * https://stackoverflow.com/questions/37711082/how-to-handle-notification-when-app-in-background-in-firebase/42279260#42279260
      * https://firebase.google.com/docs/cloud-messaging/android/receive
      */
-    override fun build(model: PushMessage):Outcome<Request> {
+    override fun build(model: PushMessage): Outcome<Request> {
 
         // 1. Build "to" field
         // This correctly based on if sending to multiple devices
@@ -148,7 +146,6 @@ open class PushGoogle(
         )
         return Success(request)
     }
-
 
     private fun buildAlert(alert: Notification): String {
         return """{

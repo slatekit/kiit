@@ -20,12 +20,11 @@ sealed class Platform(
     override val value: Int
 ) : EnumLike {
 
-    object IOS     : Platform("ios", 0)
-    object And     : Platform("android", 1)
-    object Web     : Platform("web", 2)
-    object None    : Platform("none", 3)
-    data class Unknown(val text:String) : Platform("unknown", 5)
-
+    object IOS : Platform("ios", 0)
+    object And : Platform("android", 1)
+    object Web : Platform("web", 2)
+    object None : Platform("none", 3)
+    data class Unknown(val text: String) : Platform("unknown", 5)
 
     companion object : EnumSupport() {
 

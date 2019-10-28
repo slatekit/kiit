@@ -12,26 +12,26 @@ interface Sender<T> {
     /**
      * Whether or not sending is enabled
      */
-    fun isEnabled(model:T):Boolean = true
+    fun isEnabled(model: T): Boolean = true
 
     /**
      * Validates the model supplied
      * @param model: The data model to send ( e.g. EmailMessage )
      */
-    fun validate(model:T):Outcome<T>
+    fun validate(model: T): Outcome<T>
 
     /**
      * Builds the HttpRequest for the model
      * @param model: The data model to send ( e.g. EmailMessage )
      */
-    fun build(model:T):Outcome<Request>
+    fun build(model: T): Outcome<Request>
 
     /**
      * Sends the model asynchronously using OkHttp
      * @param model: The data model to send ( e.g. EmailMessage )
      */
     suspend fun send(model: T): Outcome<String> {
-        return if(!isEnabled(model)) {
+        return if (!isEnabled(model)) {
             Outcomes.ignored("Not enabled")
         } else {
             build(model).then { send(it) }.map { it.body()?.string() ?: "" }
@@ -43,7 +43,7 @@ interface Sender<T> {
      * @param request: A prebuilt http request representing the send
      */
     suspend fun send(request: Request): Outcome<Response> {
-        return awaitHttpOutcome {  HttpRPC().sendAsync(request, it) }
+        return awaitHttpOutcome { HttpRPC().sendAsync(request, it) }
     }
 
     /**
@@ -51,7 +51,7 @@ interface Sender<T> {
      * @param model: The data model to send ( e.g. EmailMessage )
      */
     fun sendSync(model: T): Outcome<String> {
-        return if(!isEnabled(model)) {
+        return if (!isEnabled(model)) {
             Outcomes.ignored("Not enabled")
         } else {
             build(model).then { sendSync(it) }.map { it.body()?.string() ?: "" }

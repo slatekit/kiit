@@ -1,5 +1,8 @@
 package slatekit.notifications.common
 
+import kotlin.coroutines.resume
+import kotlin.coroutines.resumeWithException
+import kotlin.coroutines.suspendCoroutine
 import okhttp3.Response
 import slatekit.common.HttpRPC
 import slatekit.results.Notice
@@ -8,13 +11,8 @@ import slatekit.results.Try
 import slatekit.results.builders.Notices
 import slatekit.results.builders.Outcomes
 import slatekit.results.builders.Tries
-import kotlin.coroutines.resume
-import kotlin.coroutines.resumeWithException
-import kotlin.coroutines.suspendCoroutine
 
-
-
-suspend fun awaitHttp(callback: (HttpRPC.HttpRPCResult) -> Unit ) : Response {
+suspend fun awaitHttp(callback: (HttpRPC.HttpRPCResult) -> Unit): Response {
     return suspendCoroutine { cont ->
         callback(object : HttpRPC.HttpRPCResult {
             override fun onSuccess(result: Response) = cont.resume(result)
@@ -25,8 +23,7 @@ suspend fun awaitHttp(callback: (HttpRPC.HttpRPCResult) -> Unit ) : Response {
     }
 }
 
-
-suspend fun awaitHttpTry(callback: (HttpRPC.HttpRPCResult) -> Unit ) : Try<Response> {
+suspend fun awaitHttpTry(callback: (HttpRPC.HttpRPCResult) -> Unit): Try<Response> {
     return suspendCoroutine { cont ->
         callback(object : HttpRPC.HttpRPCResult {
             override fun onSuccess(result: Response) = cont.resume(Tries.success(result))
@@ -37,8 +34,7 @@ suspend fun awaitHttpTry(callback: (HttpRPC.HttpRPCResult) -> Unit ) : Try<Respo
     }
 }
 
-
-suspend fun awaitHttpOutcome(callback: (HttpRPC.HttpRPCResult) -> Unit ) : Outcome<Response> {
+suspend fun awaitHttpOutcome(callback: (HttpRPC.HttpRPCResult) -> Unit): Outcome<Response> {
     return suspendCoroutine { cont ->
         callback(object : HttpRPC.HttpRPCResult {
             override fun onSuccess(result: Response) = cont.resume(Outcomes.success(result))
@@ -49,8 +45,7 @@ suspend fun awaitHttpOutcome(callback: (HttpRPC.HttpRPCResult) -> Unit ) : Outco
     }
 }
 
-
-suspend fun awaitHttpNotice(callback: (HttpRPC.HttpRPCResult) -> Unit ) : Notice<Response> {
+suspend fun awaitHttpNotice(callback: (HttpRPC.HttpRPCResult) -> Unit): Notice<Response> {
     return suspendCoroutine { cont ->
         callback(object : HttpRPC.HttpRPCResult {
             override fun onSuccess(result: Response) = cont.resume(Notices.success(result))

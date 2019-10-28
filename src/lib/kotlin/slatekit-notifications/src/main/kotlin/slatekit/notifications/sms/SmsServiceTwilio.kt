@@ -18,7 +18,6 @@ import slatekit.common.*
 import slatekit.common.info.ApiLogin
 import slatekit.common.templates.Templates
 import slatekit.common.types.CountryCode
-import slatekit.notifications.common.Sender
 import slatekit.results.*
 import slatekit.results.builders.Outcomes
 
@@ -45,8 +44,8 @@ class SmsServiceTwilio(
     phone: String,
     templates: Templates? = null,
     countries: List<CountryCode>? = null
-)
-    : SmsService(templates, countries) {
+) :
+    SmsService(templates, countries) {
     private val settings = SmsSettings(key, password, phone)
     private val baseUrl = "https://api.twilio.com/2010-04-01/Accounts/$key/Messages.json"
 
@@ -55,9 +54,8 @@ class SmsServiceTwilio(
      *
      * @param apiKey
      */
-    constructor(apiKey: ApiLogin, templates: Templates? = null, countries:List<CountryCode>? = null) :
+    constructor(apiKey: ApiLogin, templates: Templates? = null, countries: List<CountryCode>? = null) :
             this(apiKey.key, apiKey.pass, apiKey.account, templates, countries)
-
 
     /**
      * Validates the model supplied
@@ -80,7 +78,7 @@ class SmsServiceTwilio(
     override fun build(model: SmsMessage): Outcome<Request> {
 
         val phoneResult = massagePhone(model.countryCode, model.phone)
-        return when(phoneResult) {
+        return when (phoneResult) {
             is Success -> {
                 val phone = phoneResult.value
                 val request = HttpRPC().build(

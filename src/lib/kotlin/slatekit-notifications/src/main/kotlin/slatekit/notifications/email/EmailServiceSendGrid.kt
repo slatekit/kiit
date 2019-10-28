@@ -17,7 +17,6 @@ import okhttp3.Request
 import slatekit.common.*
 import slatekit.common.info.ApiLogin
 import slatekit.common.templates.Templates
-import slatekit.notifications.common.Sender
 import slatekit.results.*
 import slatekit.results.builders.Outcomes
 
@@ -26,8 +25,8 @@ class EmailServiceSendGrid(
     key: String,
     phone: String,
     templates: Templates? = null
-)
-    : EmailService(templates) {
+) :
+    EmailService(templates) {
 
     val settings = EmailSettings(user, key, phone)
     private val baseUrl = "https://api.sendgrid.com/api/mail.send.json"
@@ -38,7 +37,6 @@ class EmailServiceSendGrid(
      */
     constructor(apiKey: ApiLogin, templates: Templates? = null) :
             this(apiKey.key, apiKey.pass, apiKey.account, templates)
-
 
     /**
      * Validates the model supplied
