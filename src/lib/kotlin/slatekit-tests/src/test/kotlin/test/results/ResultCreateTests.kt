@@ -1,4 +1,4 @@
-
+package test.results
 import org.junit.Test
 
 import slatekit.results.*
