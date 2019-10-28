@@ -46,6 +46,7 @@ sealed class Verb(override val name:String)  : Parentable<Verb> {
     object Post   : Verb(Verbs.Post)
     object Patch  : Verb(Verbs.Patch)
     object Delete : Verb(Verbs.Delete)
+    object Parent : Verb(Verbs.Parent)
 
     companion object {
 
@@ -59,6 +60,7 @@ sealed class Verb(override val name:String)  : Parentable<Verb> {
                 Verbs.Post   -> Verb.Post
                 Verbs.Patch  -> Verb.Patch
                 Verbs.Delete -> Verb.Delete
+                Verbs.Parent -> Verb.Parent
                 else         -> Verb.Auto
             }
         }

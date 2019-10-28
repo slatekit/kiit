@@ -26,7 +26,7 @@ package slatekit.apis
  * @param desc : the description of the action
  * @param roles : the roles allowed ( use @parent to refer to parent Api anntoation roles )
  * @param verb : the verb ( "get", "post", "cli", "*" ) allowed.
- * @param protocol : the protocol ( "web, "cli", "*" ) required to access this action
+ * @param protocols : the protocol ( "web, "cli", "*" ) required to access this action
  */
 @Target(AnnotationTarget.FUNCTION)
 annotation class Action(
@@ -35,7 +35,7 @@ annotation class Action(
         val roles: Array<String> = [],
         val verb: String = Verbs.Auto,
         val access: String = AccessLevel.Public,
-        val protocol: Array<String> = [Protocols.All],
+        val protocols: Array<String> = [Protocols.All],
         val version: String = "1",
         val tags: Array<String> = []
 )

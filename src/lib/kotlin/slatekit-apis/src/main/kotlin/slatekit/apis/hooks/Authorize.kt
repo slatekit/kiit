@@ -32,7 +32,7 @@ class Authorize(val auth:Auth?) : Input<ApiRequest>, Middleware {
             }
             // CASE 3: No auth and action requires roles!
             else if (noAuth) {
-                Outcomes.denied("Unable to authorize, authorization provider not set")
+                request
             } else {
                 // auth-mode, action roles, api roles
                 val authResult = auth?.check(it.request, target.api.auth, target.action.roles, target.api.roles)

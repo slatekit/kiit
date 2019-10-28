@@ -34,7 +34,7 @@ class UserApi(context: AppEntContext)
   : ApiBaseEntity<Long, User, EntityService<Long, User>>(context, Long::class, User::class, context.ent.getSvc(User::class))
 {
 
-  @Action(name = "activate", desc = "activates a users account 3", roles= [Roles.parent], protocol = [Protocols.Parent])
+  @Action(name = "activate", desc = "activates a users account 3", roles= [Roles.parent], protocols = [Protocols.Parent])
   @Input(name = "phone", desc = "phone number", examples = ["123-456-789"])
   @Input(name = "code", desc = "activation code", defaults = "0", examples = ["1234"])
   fun activate(phone:String, code:Int, isPremiumUser:Boolean, date: DateTime): Notice<String> =
@@ -54,19 +54,19 @@ class UserApi(context: AppEntContext)
   }
 
   
-  @Action(protocol = [Protocols.CLI])
+  @Action(protocols = [Protocols.CLI])
   fun protocolCLI(code:Int, tag:String): Notice<String> {
     return Success("protocolCLI", msg ="${code} ${tag}")
   }
 
 
-  @Action(protocol = [Protocols.Web])
+  @Action(protocols = [Protocols.Web])
   fun protocolWeb(code:Int, tag:String): Notice<String> {
     return Success("protocolWeb", msg ="${code} ${tag}")
   }
 
 
-  @Action(protocol = [Protocols.All])
+  @Action(protocols = [Protocols.All])
   fun protocolAny(code:Int, tag:String): Notice<String> {
     return Success("protocolAny", msg ="${code} ${tag}")
   }

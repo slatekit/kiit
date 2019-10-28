@@ -123,13 +123,14 @@ open class ApiServer(
      * @return
      */
     suspend fun call(req: Request, options:ExecOptions?): Try<Any> {
-        val result = Tries.attempt {
+        val result = try {
             execute(req, options)
         }
-        result.onFailure {
-            handleError(req, it)
+        catch(ex:Exception) {
+            handleError(req, ex)
+            Outcomes.errored<ApiResult>(ex)
         }
-        return result
+        return result.toTry()
     }
 
 
@@ -276,11 +277,11 @@ open class ApiServer(
         @JvmStatic
         fun defaultHooks():List<Input<ApiRequest>> {
             return listOf(
-                Protos(),
-                Routing(),
-                Targets(),
-                Filters(),
-                Validate()
+                    Routing(),
+                    Targets(),
+                    Protos(),
+                     Filters(),
+                    Validate()
             )
         }
     }

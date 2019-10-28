@@ -40,7 +40,7 @@ class Api_Core_Tests : ApiTestsBase() {
 
         ensure(
             protocol = Protocol.CLI,
-            apis     = listOf(Api(UserApi(ctx), setup = Setup.Annotated)),
+            apis     = listOf(Api(Sample_API_1_Core(ctx), setup = Setup.Annotated)),
             user     = null,
             request  = CommonRequest.path("$AREA.$NAME.${Sample_API_1_Core::processEmpty.name}", Verbs.Read, mapOf(), mapOf(
                     Pair("code", "1"),

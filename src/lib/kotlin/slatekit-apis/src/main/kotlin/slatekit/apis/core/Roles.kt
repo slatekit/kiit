@@ -18,5 +18,10 @@ data class Roles(val all:List<String>) {
 
     companion object {
         val empty = Roles(listOf())
+
+        fun of(items:Array<String>):Roles {
+            return if(items.isEmpty()) empty
+            else Roles(items.toList() )
+        }
     }
 }

@@ -20,7 +20,7 @@ class Targets : Input<ApiRequest> {
             val req = it.request
             val result = it.host.getApi(req.area, req.name, req.action)
             when (result) {
-                is Success -> request
+                is Success -> request.map { it.copy(target = result.value) }
                 is Failure -> Outcomes.errored(result.error)
             }
         }

@@ -64,14 +64,14 @@ object ApiLoader {
     }
 
 
-    private fun loadApiFromSetup(api: Api, namer: Namer?): Api {
+    fun loadApiFromSetup(api: Api, namer: Namer?): Api {
 
         // If no actions, that means it was the raw input
         // during setup, so we have to load the api methods
         // from either annotations or from public methods
         return if (api.actions.size == 0) {
             if (api.setup == Setup.Annotated) {
-                val apiAnnotated = AnnoLoader(api.cls).loadApi(namer)
+                val apiAnnotated = AnnoLoader(api.cls, api).loadApi(namer)
                 val area = name(apiAnnotated.area, namer)
                 val name = name(apiAnnotated.name, namer)
                 apiAnnotated.copy(area = area, name = name, singleton = api.singleton)

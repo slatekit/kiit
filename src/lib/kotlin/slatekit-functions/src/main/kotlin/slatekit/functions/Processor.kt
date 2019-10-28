@@ -13,7 +13,8 @@ class Processor<I,O> {
                 when(items.isEmpty()) {
                     true  -> start
                     false -> process(0, items.size - 1, start) { ndx, v ->
-                        items[ndx].process(v)
+                        val processor = items[ndx]
+                                processor.process(v)
                     }
                 }
             }
@@ -28,7 +29,8 @@ class Processor<I,O> {
                 when(items.isEmpty()) {
                     true  -> output
                     false -> process(0, items.size - 1, output) { ndx, v ->
-                        items[ndx].process(input, v)
+                        val processor = items[ndx]
+                                processor.process(input, v)
                     }
                 }
             }
@@ -47,6 +49,8 @@ class Processor<I,O> {
     private tailrec suspend fun <T> process(ndx: Int, end: Int, startValue: Outcome<T>, condition: suspend (Int, Outcome<T>) -> Outcome<T>): Outcome<T> {
         val result = condition(ndx, startValue)
         return if (!result.success)
+            result
+        else if(ndx >= end)
             result
         else
             process(ndx + 1, end, result, condition)

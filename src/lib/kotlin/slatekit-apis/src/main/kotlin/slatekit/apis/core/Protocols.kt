@@ -22,6 +22,12 @@ data class Protocols(val all:List<Protocol>) {
         val all = Protocols(listOf(Protocol.All))
 
 
+        fun of(items:Array<String>):Protocols {
+            return if(items.isEmpty()) all
+            else Protocols(items.toList().map { Protocol.parse(it) })
+        }
+
+
         fun isCLI(name:String): Boolean {
             return (name == Protocol.All.name || name == Protocol.CLI.name)
         }

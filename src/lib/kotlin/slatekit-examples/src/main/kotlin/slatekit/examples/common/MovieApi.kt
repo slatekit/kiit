@@ -41,7 +41,7 @@ class MovieApi( ctx: AppEntContext) : ApiBaseEntity<Long, Movie, MovieService>(c
      * NOTE: This example show a simple example using different data-types
      * e.g string, boolean, int, double, DateTime
      */
-    @Action(roles = "", verb = "@parent", protocol = "*")
+    @Action(roles = "", verb = "@parent", protocols = "*")
     fun createSample(title:String, category:String, playing:Boolean, cost:Int, rating:Double, released: DateTime):Long {
         return service.create(Movie(title    = title,
               category = category,
@@ -57,7 +57,7 @@ class MovieApi( ctx: AppEntContext) : ApiBaseEntity<Long, Movie, MovieService>(c
      * Example of handling the raw request instead of having the system
      * auto-convert the request to the parameters ( see last example )
      */
-    @Action(roles = "", verb = "@parent", protocol = "*")
+    @Action(roles = "", verb = "@parent", protocols = "*")
     fun createUsingRawRequest(req: Request): Long  {
         // Handle the raw request youself
 

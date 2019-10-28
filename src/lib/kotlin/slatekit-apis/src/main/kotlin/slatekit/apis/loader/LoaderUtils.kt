@@ -13,17 +13,22 @@ import kotlin.reflect.KCallable
 import kotlin.reflect.KClass
 
 
-fun toVerb(name: String): Verb {
-    val nameToCheck = name.toLowerCase()
-    val verb = when {
-        nameToCheck.startsWith(Verbs.Read)   -> Verb.Read
-        nameToCheck.startsWith(Verbs.Delete) -> Verb.Delete
-        nameToCheck.startsWith(Verbs.Patch)  -> Verb.Patch
-        nameToCheck.startsWith(Verbs.Create) -> Verb.Post
-        nameToCheck.startsWith(Verbs.Update) -> Verb.Put
-        else -> Verb.Post
+fun toVerb(name: String?): Verb {
+    return when(name) {
+        null -> Verb.Auto
+        else -> {
+            val nameToCheck = name.toLowerCase()
+            val verb = when {
+                nameToCheck.startsWith(Verbs.Read)   -> Verb.Read
+                nameToCheck.startsWith(Verbs.Delete) -> Verb.Delete
+                nameToCheck.startsWith(Verbs.Patch)  -> Verb.Patch
+                nameToCheck.startsWith(Verbs.Create) -> Verb.Post
+                nameToCheck.startsWith(Verbs.Update) -> Verb.Put
+                else -> Verb.Post
+            }
+            verb
+        }
     }
-    return verb
 }
 
 
@@ -34,21 +39,22 @@ fun toVerb(name: String): Verb {
  * @param cls : The class representing the API
  * @param namer: The naming convention
  */
-fun toApi(cls: KClass<*>, namer: Namer?): slatekit.apis.core.Api {
+fun toApi(cls: KClass<*>, instance:Any?, namer: Namer?): slatekit.apis.core.Api {
 
     // get the @Api annotation on the class
-    val annotation = Reflector.getAnnotationForClassOpt<slatekit.apis.Api>(cls, slatekit.apis.Api::class)!!
+    val anno = Reflector.getAnnotationForClassOpt<slatekit.apis.Api>(cls, slatekit.apis.Api::class)!!
     val api = slatekit.apis.core.Api(
             cls,
-            annotation.area,
-            annotation.name,
-            annotation.desc,
-            annotation.roles.toList(),
-            Access.parse(annotation.access),
-            AuthMode.parse(annotation.auth),
-            annotation.protocols.toList().map { Protocol.parse(it) },
-            Verb.parse(annotation.verb),
+            anno.area,
+            anno.name,
+            anno.desc,
+            Roles(anno.roles.toList()),
+            Access.parse(anno.access),
+            AuthMode.parse(anno.auth),
+            Protocols(anno.protocols.toList().map { Protocol.parse(it) }),
+            Verb.parse(anno.verb),
             false,
+            instance,
             Setup.Annotated
     )
     return api
@@ -76,7 +82,7 @@ fun toApi(cls: KClass<*>,
 
 
 
-fun toAction(member: KCallable<*>, api: slatekit.apis.core.Api, apiAction: Action?, namer: Namer?): Action {
+fun toAction(member: KCallable<*>, api: slatekit.apis.core.Api, apiAction: slatekit.apis.Action?, namer: Namer?): Action {
 
     val methodName = member.name
     val actionNameRaw = apiAction?.name.nonEmptyOrDefault(methodName)
@@ -85,9 +91,9 @@ fun toAction(member: KCallable<*>, api: slatekit.apis.core.Api, apiAction: Actio
     val actionTags = apiAction?.tags?.toList() ?: listOf()
 
     // Default these from api if empty
-    val actionRoles = apiAction?.roles?.orElse(api.roles) ?: Roles.empty
-    val actionProtocol = apiAction?.protocols?.orElse(api.protocols) ?: Protocols(listOf(Protocol.All))
-    val rawVerb = apiAction?.verb?.orElse(api.verb) ?: Verb.Auto
+    val actionRoles = Roles.of(apiAction?.roles ?: arrayOf()).orElse(api.roles)
+    val actionProtocol = Protocols.of(apiAction?.protocols ?: arrayOf()).orElse(api.protocols)
+    val rawVerb = toVerb(apiAction?.verb).orElse(api.verb)
 
     // Determine the actual verb
     val actionVerb = when (rawVerb) {
@@ -112,7 +118,7 @@ fun toLookup(rawApis: List<slatekit.apis.core.Api>, namer: Namer? = null): Looku
 
     // Get the apis with actions loaded from either
     // annotations or from public methods.
-    val apis = rawApis.map { it -> MethodLoader(it).loadApi(namer) }
+    val apis = rawApis.map { it -> ApiLoader.loadApiFromSetup(it, namer) }
 
     // Routes: area.api.action
     // Get unique areas
