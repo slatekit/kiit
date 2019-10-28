@@ -13,8 +13,6 @@
 
 package slatekit.cli
 
-import slatekit.common.args.Args
-import slatekit.common.info.Folders
 import slatekit.results.*
 
 /**
@@ -27,7 +25,7 @@ open class CliExecutor {
     /**
      * Executes the line and returns a CliResponse
      */
-    open fun excecute(cli:CLI, request:CliRequest): Try<CliResponse<*>> {
+    open fun excecute(cli: CLI, request: CliRequest): Try<CliResponse<*>> {
 
         // Convert line into a CliRequest
         // Run the life-cycle methods ( before, execute, after )
@@ -45,26 +43,23 @@ open class CliExecutor {
         }
     }
 
-
     /**
      * hook for command before it is executed
      *
      * @param request
      * @return
      */
-    protected fun before(cli:CLI, request: CliRequest): Try<CliRequest> = Success(request)
-
-
-    /**
-     * Hook to
-     */
-    protected fun after(cli:CLI, response: CliResponse<*>): Try<CliResponse<*>> = Success(response)
-
+    protected fun before(cli: CLI, request: CliRequest): Try<CliRequest> = Success(request)
 
     /**
      * Hook to
      */
-    protected fun process(cli:CLI, request: CliRequest): Try<CliResponse<*>> = Success(
+    protected fun after(cli: CLI, response: CliResponse<*>): Try<CliResponse<*>> = Success(response)
+
+    /**
+     * Hook to
+     */
+    protected fun process(cli: CLI, request: CliRequest): Try<CliResponse<*>> = Success(
             CliResponse(
                     request,
                     true,

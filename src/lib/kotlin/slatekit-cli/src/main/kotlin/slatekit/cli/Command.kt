@@ -2,6 +2,7 @@ package slatekit.cli
 
 sealed class Command(val id: String) {
 
+    /* ktlint-disable */
     object Exit        : Command("exit")
     object Quit        : Command("quit")
     object Version     : Command("version")
@@ -24,4 +25,5 @@ sealed class Command(val id: String) {
             else       -> Normal(name)
         }
     }
+    /* ktlint-enable */
 }

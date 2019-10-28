@@ -1,5 +1,6 @@
 package slatekit.cli
 
+import java.io.InputStream
 import slatekit.common.DateTime
 import slatekit.common.Inputs
 import slatekit.common.Metadata
@@ -7,10 +8,9 @@ import slatekit.common.Uris
 import slatekit.common.args.Args
 import slatekit.common.content.Doc
 import slatekit.common.requests.InputArgs
-import slatekit.common.requests.RequestSupport
 import slatekit.common.requests.Request
+import slatekit.common.requests.RequestSupport
 import slatekit.common.requests.Source
-import java.io.InputStream
 
 /**
  * Represents an abstraction of a Web Api Request and also a CLI ( Command Line ) request
@@ -25,15 +25,15 @@ import java.io.InputStream
  * @param tag : Optional tag for tracking individual requests and for error logging.
  */
 data class CliRequest(
-        val args: Args,
-        override val path: String,
-        override val data: Inputs,
-        override val meta: Metadata,
-        override val raw: Any? = null,
-        override val output: String? = "",
-        override val tag: String = "",
-        override val version: String = "1.0",
-        override val timestamp: DateTime = DateTime.now()
+    val args: Args,
+    override val path: String,
+    override val data: Inputs,
+    override val meta: Metadata,
+    override val raw: Any? = null,
+    override val output: String? = "",
+    override val tag: String = "",
+    override val version: String = "1.0",
+    override val timestamp: DateTime = DateTime.now()
 
 ) : Request, RequestSupport {
 
@@ -82,25 +82,26 @@ data class CliRequest(
      * To transform / rewrite the request
      */
     override fun clone(
-            otherPath: String,
-            otherParts: List<String>,
-            otherSource: Source,
-            otherVerb: String,
-            otherData: Inputs,
-            otherMeta: slatekit.common.Metadata,
-            otherRaw: Any?,
-            otherOutput: String?,
-            otherTag: String,
-            otherVersion: String,
-            otherTimestamp:DateTime) : Request {
+        otherPath: String,
+        otherParts: List<String>,
+        otherSource: Source,
+        otherVerb: String,
+        otherData: Inputs,
+        otherMeta: slatekit.common.Metadata,
+        otherRaw: Any?,
+        otherOutput: String?,
+        otherTag: String,
+        otherVersion: String,
+        otherTimestamp: DateTime
+    ): Request {
         return this.copy(
-                path      = otherPath,
-                data      = otherData,
-                meta      = otherMeta,
-                raw       = otherRaw,
-                output    = otherOutput,
-                tag       = otherTag,
-                version   = otherVersion,
+                path = otherPath,
+                data = otherData,
+                meta = otherMeta,
+                raw = otherRaw,
+                output = otherOutput,
+                tag = otherTag,
+                version = otherVersion,
                 timestamp = otherTimestamp
         )
     }
@@ -109,29 +110,28 @@ data class CliRequest(
      * To transform / rewrite the request
      */
     fun clone(
-            otherArgs: Args,
-            otherPath: String,
-            otherData: Inputs,
-            otherMeta: slatekit.common.Metadata,
-            otherRaw: Any?,
-            otherOutput: String?,
-            otherTag: String,
-            otherVersion: String,
-            otherTimestamp:DateTime) : Request {
+        otherArgs: Args,
+        otherPath: String,
+        otherData: Inputs,
+        otherMeta: slatekit.common.Metadata,
+        otherRaw: Any?,
+        otherOutput: String?,
+        otherTag: String,
+        otherVersion: String,
+        otherTimestamp: DateTime
+    ): Request {
         return this.copy(
-                args      = otherArgs,
-                path      = otherPath,
-                data      = otherData,
-                meta      = otherMeta,
-                raw       = otherRaw,
-                output    = otherOutput,
-                tag       = otherTag,
-                version   = otherVersion,
+                args = otherArgs,
+                path = otherPath,
+                data = otherData,
+                meta = otherMeta,
+                raw = otherRaw,
+                output = otherOutput,
+                tag = otherTag,
+                version = otherVersion,
                 timestamp = otherTimestamp
         )
     }
-
-
 
     companion object {
 

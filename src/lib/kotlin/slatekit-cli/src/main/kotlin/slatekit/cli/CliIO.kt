@@ -13,19 +13,16 @@
 
 package slatekit.cli
 
-import slatekit.common.io.Files
-import slatekit.common.console.SemanticWrites
+import java.io.File
 import slatekit.common.console.SemanticText
+import slatekit.common.console.SemanticWrites
+import slatekit.common.io.Files
 import slatekit.common.io.IO
 import slatekit.common.serialization.Serializer
-import slatekit.common.serialization.SerializerCsv
-import slatekit.common.serialization.SerializerJson
-import slatekit.common.serialization.SerializerProps
 import slatekit.meta.Serialization
 import slatekit.results.Failure
 import slatekit.results.Success
 import slatekit.results.Try
-import java.io.File
 
 open class CliIO(private val io: IO<CliOutput, Unit>) : SemanticWrites {
 
@@ -40,20 +37,18 @@ open class CliIO(private val io: IO<CliOutput, Unit>) : SemanticWrites {
         io.run(CliOutput(mode, text, endLine))
     }
 
-
     /**
      * Different types of serializers
      */
-    //private val serializerCsv  by lazy { SerializerCsv(this::serialize, true) }
-    //private val serializerJson by lazy { SerializerJson(this::serialize, true) }
-    //private val serializerProp by lazy { SerializerProps(false, this::serialize, true) }
-
+    // private val serializerCsv  by lazy { SerializerCsv(this::serialize, true) }
+    // private val serializerJson by lazy { SerializerJson(this::serialize, true) }
+    // private val serializerProp by lazy { SerializerProps(false, this::serialize, true) }
 
     /**
      * Output the results of the response
      */
-    fun output(result:Try<CliResponse<*>>, outputDir: String) {
-        when(result) {
+    fun output(result: Try<CliResponse<*>>, outputDir: String) {
+        when (result) {
             is Failure -> {
                 write(SemanticText.Failure, "error : " + result.error.toString())
             }
@@ -93,14 +88,14 @@ open class CliIO(private val io: IO<CliOutput, Unit>) : SemanticWrites {
      *
      * @param obj
      */
-    private fun write(request:CliRequest, cmd: CliResponse<*>, obj: Any?, outputDir: String) {
+    private fun write(request: CliRequest, cmd: CliResponse<*>, obj: Any?, outputDir: String) {
         val format = request.args.getStringOrElse(SysParam.Format.id, "prop")
         text("===============================")
         val text = when (format) {
-            "csv"  -> Serialization.csv().serialize(obj)
+            "csv" -> Serialization.csv().serialize(obj)
             "json" -> Serialization.json().serialize(obj)
             "prop" -> Serialization.props().serialize(obj)
-            else   -> Serialization.props().serialize(obj)
+            else -> Serialization.props().serialize(obj)
         }
         text(text)
         text("===============================")

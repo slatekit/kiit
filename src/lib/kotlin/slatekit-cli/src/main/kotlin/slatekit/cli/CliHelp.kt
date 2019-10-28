@@ -13,12 +13,12 @@
 
 package slatekit.cli
 
-import slatekit.common.info.Info
-import slatekit.common.console.SemanticWrites
 import slatekit.common.console.SemanticText
+import slatekit.common.console.SemanticWrites
+import slatekit.common.info.Info
 import slatekit.common.io.IO
 
-open class CliHelp( private val info: Info, private val io: IO<CliOutput, Unit>) : SemanticWrites {
+open class CliHelp(private val info: Info, private val io: IO<CliOutput, Unit>) : SemanticWrites {
 
     /**
      * Writes the text using the TextType
@@ -30,7 +30,6 @@ open class CliHelp( private val info: Info, private val io: IO<CliOutput, Unit>)
     override fun write(mode: SemanticText, text: String, endLine: Boolean) {
         io.run(CliOutput(mode, text, endLine))
     }
-
 
     /**
      * Shows general help info
@@ -157,6 +156,5 @@ open class CliHelp( private val info: Info, private val io: IO<CliOutput, Unit>)
      * Shows extra help - useful for derived classes to show more help info
      */
     protected fun showHelpExtended() {
-
     }
 }
