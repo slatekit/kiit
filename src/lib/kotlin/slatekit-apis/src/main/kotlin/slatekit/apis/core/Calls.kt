@@ -34,9 +34,9 @@ object Calls {
      * @return
      */
     suspend fun validateCall(
-            request: ApiRequest,
-            fetcher: (Request) -> Notice<Target>,
-            allowSingleDefaultParam: Boolean = false
+        request: ApiRequest,
+        fetcher: (Request) -> Notice<Target>,
+        allowSingleDefaultParam: Boolean = false
     ): Outcome<Target> {
         val req = request.request
         val fullName = req.fullName

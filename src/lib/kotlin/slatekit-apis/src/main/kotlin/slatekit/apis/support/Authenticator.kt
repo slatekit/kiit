@@ -1,13 +1,13 @@
 package slatekit.apis.support
 
-import slatekit.apis.core.Auth
-import slatekit.apis.core.Roles
 import slatekit.apis.AuthMode
 import slatekit.apis.AuthModes
+import slatekit.apis.core.Auth
+import slatekit.apis.core.Roles
 import slatekit.common.*
 import slatekit.common.auth.AuthFuncs
-import slatekit.common.requests.Request
 import slatekit.common.info.ApiKey
+import slatekit.common.requests.Request
 import slatekit.results.Notice
 import slatekit.results.Outcome
 import slatekit.results.builders.Notices
@@ -24,15 +24,13 @@ import slatekit.results.builders.Notices
  * @param callback : Callback used for handing the actual logic for validating an action
  */
 open class Authenticator(
-        protected val keys: List<ApiKey>,
-        private val headerKey: String = "api-key"
+    protected val keys: List<ApiKey>,
+    private val headerKey: String = "api-key"
 ) : Auth {
-
 
     override fun check(req: Request, authMode: AuthMode, rolesOnAction: Roles, rolesOnApi: Roles): Outcome<Boolean> {
         return isAuthorized(req, authMode.name, rolesOnAction.all.first(), rolesOnApi.all.first()).toOutcome()
     }
-
 
     private val keyLookup = AuthFuncs.convertKeys(keys)
 
@@ -46,10 +44,10 @@ open class Authenticator(
      * @return
      */
     override fun isAuthorized(
-            req: Request,
-            authMode: String,
-            rolesOnAction: String,
-            rolesOnApi: String
+        req: Request,
+        authMode: String,
+        rolesOnAction: String,
+        rolesOnApi: String
     ): Notice<Boolean> {
 
         // 1. No roles or guest ?
@@ -66,7 +64,6 @@ open class Authenticator(
             else -> Notices.denied()
         }
     }
-
 
     /**
      * Determines whether the request is authorized based on an api-key based role.
@@ -87,7 +84,6 @@ open class Authenticator(
         // otherwise use built-in key check
         return AuthFuncs.isKeyValid(req.meta, keyLookup, headerKey, role)
     }
-
 
     /**
      * Determines whether the request is authorized based on a token.

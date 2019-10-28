@@ -1,7 +1,7 @@
 package slatekit.apis.tools.docs
 
-import slatekit.apis.core.Api
 import slatekit.apis.core.Action
+import slatekit.apis.core.Api
 import slatekit.common.console.SemanticWrites
 import slatekit.common.console.WebWriter
 

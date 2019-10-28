@@ -1,11 +1,14 @@
 package slatekit.apis
 
+import java.io.File
+import kotlin.reflect.KCallable
+import kotlin.reflect.KClass
 import slatekit.apis.core.*
 import slatekit.apis.core.Target
 import slatekit.apis.hooks.*
+import slatekit.apis.setup.HostAware
 import slatekit.apis.setup.loadAll
 import slatekit.apis.support.ExecSupport
-import slatekit.apis.setup.HostAware
 import slatekit.common.*
 import slatekit.common.log.Logger
 import slatekit.common.requests.Request
@@ -16,24 +19,20 @@ import slatekit.results.*
 import slatekit.results.Status
 import slatekit.results.builders.Notices
 import slatekit.results.builders.Outcomes
-import java.io.File
-import kotlin.reflect.KCallable
-import kotlin.reflect.KClass
 
 /**
  * This is the core container hosting, managing and executing the protocol independent apis.
- * @param ctx      : Context of the environment @see[slatekti.common.Context]
- * @param apis     : APIs to host/serve
- * @param hooks    : Hooks and middleware for filters, conversions, execution
+ * @param ctx : Context of the environment @see[slatekti.common.Context]
+ * @param apis : APIs to host/serve
+ * @param hooks : Hooks and middleware for filters, conversions, execution
  * @param settings : Settings for the server
  */
 open class ApiServer(
-        val ctx: Context,
-        val apis: List<slatekit.apis.core.Api>,
-        val hooks: ApiHooks = ApiHooks(),
-        val settings: ApiSettings = ApiSettings()
+    val ctx: Context,
+    val apis: List<slatekit.apis.core.Api>,
+    val hooks: ApiHooks = ApiHooks(),
+    val settings: ApiSettings = ApiSettings()
 ) : ExecSupport {
-
 
     /**
      * Load all the routes from the APIs supplied.
@@ -41,43 +40,36 @@ open class ApiServer(
      */
     val routes = Routes(loadAll(apis, settings.naming), settings.naming)
 
-
     /**
      * The help class to handle help on an area, api, or action
      */
     val help: Help by lazy { Help(this, routes, settings.docKey) { settings.docGen } }
-
 
     /**
      * Logger for this server
      */
     private val logger: Logger = ctx.logs.getLogger("api")
 
-
     /**
      * Helps run the hooks/middleware
      */
     private val processor = Processor<ApiRequest, ApiResult>()
 
-
     /**
      * Request pre-processors ( filters, converters )
      */
-    private val preProcessors:List<Input<ApiRequest>> = defaultHooks()
+    private val preProcessors: List<Input<ApiRequest>> = defaultHooks()
 
     /**
      * Provides access to naming conventions used for actions
      */
     fun rename(text: String): String = settings.naming?.rename(text) ?: text
 
-
     fun setApiContainerHost() {
-        routes.visitApis{ _, api -> ApiServer.setApiHost(api.singleton, this) }
+        routes.visitApis { _, api -> ApiServer.setApiHost(api.singleton, this) }
     }
 
-
     override fun host(): ApiServer = this
-
 
     /**
      * validates the request by checking for the api/action, and ensuring inputs are valid.
@@ -114,24 +106,21 @@ open class ApiServer(
         return Success("sample call written to : ${path.absolutePath}")
     }
 
-
     /**
      * calls the api/action associated with the request with optional execution options.
      * This is to allow requests to be sourced from some other source such as a secure storage
      * @param req
      * @return
      */
-    suspend fun call(req: Request, options:Flags?): Try<Any> {
+    suspend fun call(req: Request, options: Flags?): Try<Any> {
         val result = try {
             execute(req, options)
-        }
-        catch(ex:Exception) {
+        } catch (ex: Exception) {
             handleError(req, ex)
             Outcomes.errored<ApiResult>(ex)
         }
         return result.toTry()
     }
-
 
     /**
      * gets the mapped method associated with the api action.
@@ -143,7 +132,6 @@ open class ApiServer(
     fun getApi(area: String, name: String, action: String): Notice<Target> {
         return routes.api(area, name, action, ctx)
     }
-
 
     /**
      * gets the mapped method associated with the api action.
@@ -184,10 +172,10 @@ open class ApiServer(
      * @param cmd
      * @return
      */
-    suspend fun execute(raw: Request, options:Flags? = null): Outcome<Any> {
+    suspend fun execute(raw: Request, options: Flags? = null): Outcome<Any> {
         // Step 1: Check for help / discovery
         val helpCheck = help.process(raw)
-        if(helpCheck.success) {
+        if (helpCheck.success) {
             return helpCheck
         }
 
@@ -197,26 +185,26 @@ open class ApiServer(
         // Step 3: Now run the request through middleware ( formatters / validators )
         val startInput = Outcomes.success(rawRequest)
         val processed = startInput
-                .operate { processor.input(hooks.formatters, it ) }
-                .operate { processor.input(preProcessors , it ) }
-                .operate { processor.input(hooks.inputters , it ) }
+                .operate { processor.input(hooks.formatters, it) }
+                .operate { processor.input(preProcessors, it) }
+                .operate { processor.input(hooks.inputters, it) }
 
         // Step 4: Exit on failures or begin real execution
-        val executed = when(processed){
+        val executed = when (processed) {
             is Failure -> processed
             is Success -> {
 
                 // Now begin real execution
                 val request = processed.value
                 val context = Ctx(this, this.ctx, raw, processed.value.target!!)
-                val result  = executeMethod(context, request)
+                val result = executeMethod(context, request)
                 result
             }
         }
         // Step 5: Perform post-execution processing
         // E.g.: If the format of the content specified ( json | csv | props )
         executed.then {
-            when(processed) {
+            when (processed) {
                 is Failure -> executed
                 is Success -> executed.operate { processor.output(processed.value, executed, hooks.outputter) }
             }
@@ -224,9 +212,8 @@ open class ApiServer(
         return executed
     }
 
-
     @Suppress("UNCHECKED_CAST")
-    protected open suspend fun executeMethod(context: Ctx, request:ApiRequest): Outcome<ApiResult> {
+    protected open suspend fun executeMethod(context: Ctx, request: ApiRequest): Outcome<ApiResult> {
         // Finally make call.
         val req = context.req
         val target = context.target
@@ -244,7 +231,6 @@ open class ApiServer(
         } ?: Outcomes.of(Exception("Received null"))
     }
 
-
     private val typeDefaults = mapOf(
             "String" to "",
             "Boolean" to false,
@@ -253,7 +239,6 @@ open class ApiServer(
             "Double" to 0.0,
             "DateTime" to DateTime.now()
     )
-
 
     private fun fillArgs(deserializer: Deserializer, apiRef: Target, cmd: Request): Array<Any?> {
         val action = apiRef.action
@@ -270,23 +255,19 @@ open class ApiServer(
         }
     }
 
-
-    private suspend fun handleError(req:Request, ex:Exception)  {
+    private suspend fun handleError(req: Request, ex: Exception) {
         val apiReq = ApiRequest(this, ctx, req, null, this, null)
         logger.error("Unexpected error executing ${req.fullName}", ex)
     }
 
-
     companion object {
 
-
         @JvmStatic
-        fun of(ctx:Context, apis:List<slatekit.apis.core.Api>, auth: Auth?, protocol: Protocol?):ApiServer {
+        fun of(ctx: Context, apis: List<slatekit.apis.core.Api>, auth: Auth?, protocol: Protocol?): ApiServer {
             val hooks = ApiHooks(inputters = listOf(Authorize(auth)))
             val server = ApiServer(ctx, apis, hooks, ApiSettings(protocol ?: Protocol.Web))
             return server
         }
-
 
         @JvmStatic
         fun setApiHost(item: Any?, host: ApiServer) {
@@ -295,12 +276,11 @@ open class ApiServer(
             }
         }
 
-
         /**
          * Default list of API Request input validators
          */
         @JvmStatic
-        fun defaultHooks():List<Input<ApiRequest>> {
+        fun defaultHooks(): List<Input<ApiRequest>> {
             return listOf(
                     Routing(),
                     Targets(),
@@ -310,7 +290,6 @@ open class ApiServer(
             )
         }
     }
-
 
     val HELP = Status.Errored(10000, "help")
 }

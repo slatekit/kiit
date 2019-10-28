@@ -29,66 +29,66 @@ class CodeGenApi : HostAware {
 
     @Action(name = "", desc = "generates client code in Kotlin")
     fun toKotlin(
-            req: Request,
-            templatesFolder: String,
-            outputFolder: String,
-            packageName: String,
-            classFile: String = "",
-            methodFile: String = "",
-            modelFile: String = ""
+        req: Request,
+        templatesFolder: String,
+        outputFolder: String,
+        packageName: String,
+        classFile: String = "",
+        methodFile: String = "",
+        modelFile: String = ""
     ): Notice<String> {
         return generate(req, templatesFolder, outputFolder, packageName, classFile, methodFile, modelFile, "kotlin", "kt")
     }
 
     @Action(name = "", desc = "generates client code in Swift")
     fun toSwift(
-            req: Request,
-            templatesFolder: String,
-            outputFolder: String,
-            packageName: String,
-            classFile: String = "",
-            methodFile: String = "",
-            modelFile: String = ""
+        req: Request,
+        templatesFolder: String,
+        outputFolder: String,
+        packageName: String,
+        classFile: String = "",
+        methodFile: String = "",
+        modelFile: String = ""
     ): Notice<String> {
         return generate(req, templatesFolder, outputFolder, packageName, classFile, methodFile, modelFile, "swift", "swift")
     }
 
     @Action(name = "", desc = "generates client code in Java")
     fun toJava(
-            req: Request,
-            templatesFolder: String,
-            outputFolder: String,
-            packageName: String,
-            classFile: String = "",
-            methodFile: String = "",
-            modelFile: String = ""
+        req: Request,
+        templatesFolder: String,
+        outputFolder: String,
+        packageName: String,
+        classFile: String = "",
+        methodFile: String = "",
+        modelFile: String = ""
     ): Notice<String> {
         return generate(req, templatesFolder, outputFolder, packageName, classFile, methodFile, modelFile, "java", "java")
     }
 
     @Action(name = "", desc = "generates client code in javascript")
     fun toJS(
-            req: Request,
-            templatesFolder: String,
-            outputFolder: String,
-            packageName: String,
-            classFile: String = "",
-            methodFile: String = "",
-            modelFile: String = ""
+        req: Request,
+        templatesFolder: String,
+        outputFolder: String,
+        packageName: String,
+        classFile: String = "",
+        methodFile: String = "",
+        modelFile: String = ""
     ): Notice<String> {
         return generate(req, templatesFolder, outputFolder, packageName, classFile, methodFile, modelFile, "js", "js")
     }
 
     private fun generate(
-            req: Request,
-            templatesFolder: String,
-            outputFolder: String,
-            packageName: String,
-            classFile: String = "",
-            methodFile: String = "",
-            modelFile: String = "",
-            lang: String,
-            extension: String
+        req: Request,
+        templatesFolder: String,
+        outputFolder: String,
+        packageName: String,
+        classFile: String = "",
+        methodFile: String = "",
+        modelFile: String = "",
+        lang: String,
+        extension: String
     ): Notice<String> {
 
         val result = this.host?.let { host ->

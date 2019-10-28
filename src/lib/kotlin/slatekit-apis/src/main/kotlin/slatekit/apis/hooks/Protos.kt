@@ -2,9 +2,8 @@ package slatekit.apis.hooks
 
 import slatekit.apis.ApiConstants
 import slatekit.apis.ApiRequest
-import slatekit.apis.core.Protocols
-import slatekit.apis.helpers.ApiHelper
 import slatekit.apis.Protocol
+import slatekit.apis.core.Protocols
 import slatekit.common.Ignore
 import slatekit.common.Strings
 import slatekit.functions.Input
@@ -13,14 +12,13 @@ import slatekit.results.Outcome
 import slatekit.results.builders.Outcomes
 import slatekit.results.flatMap
 
-
 /**
  * Checks the protocol of the request matches the allowed protocols on the action/api
  */
-class Protos: Input<ApiRequest> {
+class Protos : Input<ApiRequest> {
 
     @Ignore
-    override suspend fun process(request: Outcome<ApiRequest>):Outcome<ApiRequest> {
+    override suspend fun process(request: Outcome<ApiRequest>): Outcome<ApiRequest> {
         return request.flatMap {
             // Ensure verb is correct get/post
             val req = it.request

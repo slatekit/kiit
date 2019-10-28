@@ -1,20 +1,20 @@
 package slatekit.apis.tools.code
 
-import slatekit.common.log.Logger
 import java.io.File
 import java.io.FileNotFoundException
+import slatekit.common.log.Logger
 
 data class CodeGenDirs(
-        val outputFolderPath:String,
-        val dateFolderName:String,
-        val outputFolder:File = File(outputFolderPath),
-        val targetFolder:File = File(outputFolder, dateFolderName),
-        val apiFolder   :File = File(targetFolder, "api"),
-        val modelFolder :File = File(targetFolder, "dto")
+    val outputFolderPath: String,
+    val dateFolderName: String,
+    val outputFolder: File = File(outputFolderPath),
+    val targetFolder: File = File(outputFolder, dateFolderName),
+    val apiFolder: File = File(targetFolder, "api"),
+    val modelFolder: File = File(targetFolder, "dto")
 ) {
 
-    fun create(log:Logger){
-        if(!outputFolder.exists()){
+    fun create(log: Logger) {
+        if (!outputFolder.exists()) {
             log.error("Output folder: ${outputFolder.absolutePath} does NOT exist!!")
             throw FileNotFoundException(outputFolder.absolutePath)
         }
@@ -24,8 +24,7 @@ data class CodeGenDirs(
         modelFolder.mkdir()
     }
 
-
-    fun log(log:Logger){
+    fun log(log: Logger) {
         log.info("Output folder: " + outputFolder.absolutePath)
         log.info("Target folder: " + targetFolder.absolutePath)
         log.info("API    folder: " + apiFolder.absolutePath)

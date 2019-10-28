@@ -17,7 +17,7 @@ import org.json.simple.JSONObject
 import slatekit.apis.support.JsonSupport
 import slatekit.common.*
 import slatekit.common.encrypt.Encryptor
-//import java.time.*
+// import java.time.*
 import org.threeten.bp.*
 
 /**
@@ -40,7 +40,7 @@ data class Data(
 ) : Inputs, InputsUpdateable, JsonSupport {
 
     override fun get(key: String): Any? = getInternal(key)
-    //override fun getObject(key: String): Any? = getInternal(key)
+    // override fun getObject(key: String): Any? = getInternal(key)
     override fun size(): Int = json.size
     override fun toJson(): JSONObject = json
 

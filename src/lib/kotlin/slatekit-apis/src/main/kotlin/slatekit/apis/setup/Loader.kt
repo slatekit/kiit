@@ -11,12 +11,8 @@ interface Loader {
      */
     fun loadApi(namer: Namer?): Api
 
-
     /**
      * Loads all the actions on the API
      */
     fun loadActions(api: Api, local: Boolean, namer: Namer?): List<Action>
 }
-
-
-

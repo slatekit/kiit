@@ -13,7 +13,7 @@ import slatekit.results.flatMap
 class Formats : Input<ApiRequest>, RewriteSupport {
 
     @Ignore
-    override suspend fun process(req:Outcome<ApiRequest>):Outcome<ApiRequest> {
+    override suspend fun process(req: Outcome<ApiRequest>): Outcome<ApiRequest> {
         return req.flatMap {
             // Update request if formats are supplied
             // 1. movies.json
@@ -25,7 +25,7 @@ class Formats : Input<ApiRequest>, RewriteSupport {
             val suffix = if (indexPeriod > 0) rawAction.substring(indexPeriod + 1).toLowerCase() else ""
 
             val result = when (suffix) {
-                ContentTypeCsv.ext ->  Outcome.of { rewrite (it, action, ContentTypeCsv.ext) }
+                ContentTypeCsv.ext -> Outcome.of { rewrite(it, action, ContentTypeCsv.ext) }
                 ContentTypeJson.ext -> Outcome.of { rewrite(it, action, ContentTypeJson.ext) }
                 ContentTypeProp.ext -> Outcome.of { rewrite(it, action, ContentTypeProp.ext) }
                 else -> req

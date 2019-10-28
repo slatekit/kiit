@@ -24,16 +24,15 @@ import slatekit.common.requests.Request
 import slatekit.results.*
 import slatekit.results.builders.Outcomes
 
-class Help(val host: ApiServer, val routes: Routes, val docKey:String?, val docBuilder: () -> Doc) {
+class Help(val host: ApiServer, val routes: Routes, val docKey: String?, val docBuilder: () -> Doc) {
 
-    fun process(req: Request):Outcome<Content> {
-        val result =  DocUtils.isHelp(req)
-        return when(result) {
+    fun process(req: Request): Outcome<Content> {
+        val result = DocUtils.isHelp(req)
+        return when (result) {
             is Success -> build(req, result)
             is Failure -> result
         }
     }
-
 
     /**
      * Handles help request on any part of the api request. Api requests are typically in
@@ -43,8 +42,8 @@ class Help(val host: ApiServer, val routes: Routes, val docKey:String?, val docB
      * 2. area.api ?
      * 3. area.api.action ?
      */
-    fun build(req: Request, check:Outcome<String>): Outcome<Content> {
-        return if (!DocUtils.hasDocKey(req,docKey ?: "")) {
+    fun build(req: Request, check: Outcome<String>): Outcome<Content> {
+        return if (!DocUtils.hasDocKey(req, docKey ?: "")) {
             Outcomes.denied("Unauthorized access to API docs")
         } else {
             val content = when (check.msg) {
@@ -68,7 +67,6 @@ class Help(val host: ApiServer, val routes: Routes, val docKey:String?, val docB
             Outcomes.success(Content.html(content))
         }
     }
-
 
     /**
      * handles help request for all the areas supported

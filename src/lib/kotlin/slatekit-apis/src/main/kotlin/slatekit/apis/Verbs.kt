@@ -2,8 +2,8 @@ package slatekit.apis
 
 import slatekit.apis.setup.Parentable
 
+/* ktlint-disable */
 object Verbs {
-
 
     /**
      * This allows for automatically determining the verb based on the method name
@@ -35,9 +35,7 @@ object Verbs {
     const val Parent = ApiConstants.parent
 }
 
-
-
-sealed class Verb(override val name:String)  : Parentable<Verb> {
+sealed class Verb(override val name: String)  : Parentable<Verb> {
     object Auto   : Verb(Verbs.Auto)
     object Read   : Verb(Verbs.Read)
     object Create : Verb(Verbs.Create)
@@ -66,3 +64,4 @@ sealed class Verb(override val name:String)  : Parentable<Verb> {
         }
     }
 }
+/* ktlint-enable */

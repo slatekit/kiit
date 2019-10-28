@@ -13,20 +13,17 @@
 
 package slatekit.apis.support
 
+import java.io.File
 import slatekit.common.Context
 import slatekit.common.Ignore
 import slatekit.common.encrypt.EncryptSupport
-import slatekit.common.encrypt.Encryptor
 import slatekit.common.log.LogSupport
-import slatekit.common.log.Logger
 import slatekit.common.subStringPair
-import java.io.File
 
 interface FileSupport : Api, EncryptSupport, LogSupport {
 
     val context: Context
 
-    
     @Ignore
     fun interpretUri(path: String): String? {
         val pathParts = path.subStringPair("://")

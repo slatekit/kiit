@@ -2,7 +2,7 @@ package slatekit.apis
 
 import slatekit.apis.setup.Parentable
 
-
+/* ktlint-disable */
 object Protocols {
     /**
      * Reference to a parent value
@@ -10,30 +10,25 @@ object Protocols {
      */
     const val Parent = ApiConstants.parent
 
-
     /**
      * Enables all protocols
      */
     const val All = "*"
-
 
     /**
      * CLI : Command Line Interactive
      */
     const val CLI = "cli"
 
-
     /**
      * Web : HTTP for standard web/rest requests
      */
     const val Web = "web"
 
-
     /**
      * File based : Requests processed from a file, e.g. for automation
      */
     const val File = "file"
-
 
     /**
      * Queue based : requests saved and processed from a queue
@@ -65,3 +60,4 @@ sealed class Protocol(override val name:String) : Parentable<Protocol>  {
         }
     }
 }
+/* ktlint-enable */

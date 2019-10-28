@@ -30,7 +30,6 @@ object DocUtils {
         }
     }
 
-
     fun hasDocKey(request: Request, docKey: String): Boolean {
         // Ensure that docs are only available w/ help key
         val docKeyValue = if (request.meta.containsKey(ApiConstants.docKeyName)) {
