@@ -1,11 +1,10 @@
 package test.setup
 
 import slatekit.apis.Api
-import slatekit.apis.ApiAction
-import slatekit.apis.security.AuthMode
-import slatekit.apis.security.AuthModes
-import slatekit.apis.security.Protocols
-import slatekit.apis.security.Verbs
+import slatekit.apis.Action
+import slatekit.apis.AuthModes
+import slatekit.apis.Protocols
+import slatekit.apis.Verbs
 import slatekit.common.auth.Roles
 
 /**
@@ -68,76 +67,74 @@ class SampleRESTApi {
 }
 
 
-@Api(area = "samples", name = "restVerbAuto", desc = "sample api for testing verb mode with auto",
-        auth = AuthModes.token, roles = Roles.all, verb = Verbs.auto, protocol = Protocols.all)
+@Api(area = "samples", name = "restVerbAuto", desc = "sample api for testing verb mode with auto", auth = AuthModes.Token, roles = [Roles.all])
 class SampleRESTVerbModeAutoApi {
 
-    @ApiAction()
+    @Action()
     fun getAll(): List<Movie> = Movie.samples()
 
 
-    @ApiAction()
+    @Action()
     fun getById(id:Long): Movie = Movie.samples().first { it.id == id }
 
 
-    @ApiAction()
+    @Action()
     fun create(item: Movie): Long = item.copy(id = Movie.samples().last().id + 1).id
 
 
-    @ApiAction()
+    @Action()
     fun update(item: Movie): String = "updated ${item.id}"
 
 
-    @ApiAction()
+    @Action()
     fun patch(id:Long, title:String): String = "patched $id with $title"
 
 
-    @ApiAction()
+    @Action()
     fun delete(item: Movie): String = "deleted ${item.id}"
 
 
-    @ApiAction()
+    @Action()
     fun deleteById(id:Long): String = "deleteById $id"
 
 
-    @ApiAction()
+    @Action()
     fun activateById(id:Long): String = "activateById $id"
 }
 
 
 
-@Api(area = "samples", name = "restVerbRest", desc = "sample api for testing verb mode with auto",
-        auth = AuthModes.token, roles = Roles.all, verb = Verbs.rest, protocol = Protocols.all)
+@Api(area = "samples", name = "restVerbRest", desc = "sample api for testing verb mode with auto", auth = AuthModes.Token, roles = [Roles.all])
 class SampleRESTVerbModeRestApi {
 
-    @ApiAction()
+    @Action()
     fun getAll(): List<Movie> = Movie.samples()
 
 
-    @ApiAction()
+    @Action()
     fun getById(id:Long): Movie = Movie.samples().first { it.id == id }
 
 
-    @ApiAction()
+    @Action()
     fun create(item: Movie): Long = item.copy(id = Movie.samples().last().id + 1).id
 
 
-    @ApiAction()
+    @Action()
     fun update(item: Movie): String = "updated ${item.id}"
 
 
-    @ApiAction()
+    @Action()
     fun patch(id:Long, title:String): String = "patched $id with $title"
 
 
-    @ApiAction()
+    @Action()
     fun delete(item: Movie): String = "deleted ${item.id}"
 
 
-    @ApiAction()
+    @Action()
     fun deleteById(id:Long): String = "deleteById $id"
 
 
-    @ApiAction()
+    @Action()
     fun activateById(id:Long): String = "activateById $id"
 }

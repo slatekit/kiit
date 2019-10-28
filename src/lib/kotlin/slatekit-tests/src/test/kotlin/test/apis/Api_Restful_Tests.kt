@@ -12,12 +12,13 @@ mantra: Simplicity above all else
  */
 package test.apis
 
+import kotlinx.coroutines.runBlocking
 import org.json.simple.JSONObject
 import org.junit.Assert
 import org.junit.Test
 import slatekit.apis.*
 import slatekit.apis.core.Api
-import slatekit.apis.svcs.Restify
+import slatekit.apis.hooks.Restify
 import slatekit.common.*
 import slatekit.common.ext.toStringYYYYMMDD
 import slatekit.common.naming.LowerHyphenNamer
@@ -46,7 +47,7 @@ class Api_Restful_Tests : ApiTestsBase() {
 */
     @Test fun can_get_all() {
 
-       ensure("", "get", mapOf(), namer = LowerHyphenNamer(), callback ={ r1 ->
+       ensure("", Verb.Read, mapOf(), namer = LowerHyphenNamer(), callback ={ r1 ->
 
             Assert.assertTrue(r1.success)
             Assert.assertTrue(r1.code == Codes.SUCCESS.code)
@@ -59,9 +60,10 @@ class Api_Restful_Tests : ApiTestsBase() {
 
     @Test fun can_get_by_id() {
 
-        val apis = ApiHost(ctx, apis = listOf(Api(SampleRESTApi::class, "app", "SampleREST")), auth = null, allowIO = false, middleware = listOf(Restify()))
-        val r1 = apis.call("app", "SampleREST", "1", "get", mapOf(), mapOf())
-
+        val apis = ApiServer(ctx, apis = listOf(Api(SampleRESTApi::class, "app", "SampleREST")), hooks = ApiHooks(inputters = listOf(Restify())))
+        val r1 = runBlocking {
+            apis.call("app", "SampleREST", "1", Verb.Read, mapOf(), mapOf())
+        }
         Assert.assertTrue(r1.success)
         Assert.assertTrue(r1.code == Codes.SUCCESS.code)
 
@@ -72,9 +74,11 @@ class Api_Restful_Tests : ApiTestsBase() {
 
     @Test fun can_patch() {
 
-        val apis = ApiHost(ctx, apis = listOf(Api(SampleRESTApi::class, "app", "SampleREST")), auth = null, allowIO = false, middleware = listOf(Restify()))
-        val r1 = apis.call("app", "SampleREST", "1", "patch", mapOf(),
-                mapOf("title" to "Indiana Jones Original"))
+        val apis = ApiServer(ctx, apis = listOf(Api(SampleRESTApi::class, "app", "SampleREST")), hooks = ApiHooks(inputters = listOf(Restify())))
+        val r1 = runBlocking {
+            apis.call("app", "SampleREST", "1", Verb.Patch, mapOf(),
+                    mapOf("title" to "Indiana Jones Original"))
+        }
 
         Assert.assertTrue(r1.success)
         Assert.assertTrue(r1.code == Codes.SUCCESS.code)
@@ -84,8 +88,10 @@ class Api_Restful_Tests : ApiTestsBase() {
 
     @Test fun can_delete_by_id() {
 
-        val apis = ApiHost(ctx, apis = listOf(Api(SampleRESTApi::class, "app", "SampleREST")), auth = null, allowIO = false, middleware = listOf(Restify()))
-        val r1 = apis.call("app", "SampleREST", "1", "delete", mapOf(), mapOf())
+        val apis = ApiServer(ctx, apis = listOf(Api(SampleRESTApi::class, "app", "SampleREST")), hooks = ApiHooks(inputters = listOf(Restify())))
+        val r1 = runBlocking {
+            apis.call("app", "SampleREST", "1", Verb.Delete, mapOf(), mapOf())
+        }
 
         Assert.assertTrue(r1.success)
         Assert.assertTrue(r1.code == Codes.SUCCESS.code)
@@ -95,8 +101,10 @@ class Api_Restful_Tests : ApiTestsBase() {
 
     @Test fun can_activate_by_id() {
 
-        val apis = ApiHost(ctx, apis = listOf(Api(SampleRESTApi::class, "app", "SampleREST")), auth = null, allowIO = false, middleware = listOf(Restify()))
-        val r1 = apis.call("app", "SampleREST", "activateById", "post", mapOf(), mapOf("id" to 1))
+        val apis = ApiServer(ctx, apis = listOf(Api(SampleRESTApi::class, "app", "SampleREST")), hooks = ApiHooks(inputters = listOf(Restify())))
+        val r1 = runBlocking {
+            apis.call("app", "SampleREST", "activateById", Verb.Post, mapOf(), mapOf("id" to 1))
+        }
 
         Assert.assertTrue(r1.success)
         Assert.assertTrue(r1.code == Codes.SUCCESS.code)
@@ -119,15 +127,16 @@ class Api_Restful_Tests : ApiTestsBase() {
         json.put("updatedAt" , DateTimes.of(2017, 7, 17).toStringYYYYMMDD(""))
         json.put("updatedBy" , "0")
         val data = mapOf( "item" to json )
-        val apis = ApiHost(ctx,
+        val apis = ApiServer(ctx,
                 apis = listOf(Api(SampleRESTApi::class, "app", "SampleREST")),
-                auth = null, allowIO = false,
-                middleware = listOf(Restify()))
-        val r1 = apis.call(
-                "app", "SampleREST", "", "post",
-                mapOf("api-key" to "3E35584A8DE0460BB28D6E0D32FB4CFD"),
-                data
-        )
+                hooks = ApiHooks(inputters = listOf(Restify())))
+        val r1 = runBlocking {
+            apis.call(
+                    "app", "SampleREST", "", Verb.Post,
+                    mapOf("api-key" to "3E35584A8DE0460BB28D6E0D32FB4CFD"),
+                    data
+            )
+        }
 
         Assert.assertTrue(r1.success)
         Assert.assertTrue(r1.code == Codes.SUCCESS.code)
@@ -151,12 +160,14 @@ class Api_Restful_Tests : ApiTestsBase() {
         json.put("updatedAt" , DateTimes.of(2017, 7, 17).toStringYYYYMMDD(""))
         json.put("updatedBy" , "0")
         val data = mapOf( "item" to json )
-        val apis = ApiHost(ctx, apis = listOf(Api(SampleRESTApi::class, "app", "SampleREST")), auth = null, allowIO = false,  middleware = listOf(Restify()))
-        val r1 = apis.call(
-                "app", "SampleREST", "", "put",
-                mapOf("api-key" to "3E35584A8DE0460BB28D6E0D32FB4CFD"),
-                data
-        )
+        val apis = ApiServer(ctx, apis = listOf(Api(SampleRESTApi::class, "app", "SampleREST")),  hooks = ApiHooks(inputters = listOf(Restify())))
+        val r1 = runBlocking {
+            apis.call(
+                    "app", "SampleREST", "", Verb.Put,
+                    mapOf("api-key" to "3E35584A8DE0460BB28D6E0D32FB4CFD"),
+                    data
+            )
+        }
 
         Assert.assertTrue(r1.success)
         Assert.assertTrue(r1.code == Codes.SUCCESS.code)
@@ -164,16 +175,20 @@ class Api_Restful_Tests : ApiTestsBase() {
     }
 
 
-    fun ensure(action:String, verb:String, args:Map<String,Any>, namer: Namer?, callback:(Result<*, *>) -> Unit): Unit {
+    fun ensure(action:String, verb:Verb, args:Map<String,Any>, namer: Namer?, callback:(Result<*, *>) -> Unit): Unit {
 
-        val apis = ApiHost(ctx, apis = listOf(Api(SampleRESTApi::class, "app", "SampleREST")), auth = null, allowIO = false,  middleware = listOf(Restify()))
-        val r1 = apis.call("app", "SampleREST", action, verb, mapOf(), args)
+        val apis = ApiServer(ctx, apis = listOf(Api(SampleRESTApi::class, "app", "SampleREST")),  hooks = ApiHooks(inputters = listOf(Restify())))
+        val r1 = runBlocking {
+            apis.call("app", "SampleREST", action, verb, mapOf(), args)
+        }
         callback(r1)
 
-        val api2 = ApiHost(ctx, apis = listOf(Api(SampleRESTApi::class, "app", "SampleREST")), auth = null, allowIO = false, middleware = listOf(Restify()), namer = namer)
+        val api2 = ApiServer(ctx, apis = listOf(Api(SampleRESTApi::class, "app", "SampleREST")), hooks = ApiHooks(inputters = listOf(Restify())), settings = ApiSettings(naming = namer))
         val name = namer?.rename("SampleREST")  ?: "SampleREST"
         val act  = namer?.rename(action) ?: action
-        val r2 = api2.call("app", name, act, verb, mapOf(), args)
+        val r2 = runBlocking {
+            api2.call("app", name, act, verb, mapOf(), args)
+        }
         callback(r2)
     }
 }

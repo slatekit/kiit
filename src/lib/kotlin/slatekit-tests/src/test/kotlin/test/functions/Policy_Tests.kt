@@ -97,7 +97,7 @@ class Policy_Tests {
     @Test
     fun test_ratio_success(){
         val counts = Counters(Identity.test("policy"))
-        val policy:Policy<String,Int> = Ratio(.4, Status.Denied(0, "")) { counts }
+        val policy:Policy<String,Int> = Ratio(.4, Status.Denied(0, ""), { counts })
         val result = runBlocking {
             policy.run("1") { counts.incProcessed(); counts.incSucceeded(); Outcomes.of(it.toInt()) }
             policy.run("2") { counts.incProcessed(); counts.incDenied(); Outcomes.of(it.toInt()) }
@@ -112,7 +112,7 @@ class Policy_Tests {
     @Test
     fun test_ratio_failure(){
         val counts = Counters(Identity.test("policy"))
-        val policy:Policy<String,Int> = Ratio(.5, Status.Denied(0, "")) { counts }
+        val policy:Policy<String,Int> = Ratio(.5, Status.Denied(0, ""), { counts })
         val result = runBlocking {
             policy.run("1") { counts.incProcessed(); counts.incSucceeded(); Outcomes.of(it.toInt()) }
             policy.run("2") { counts.incProcessed(); counts.incDenied(); Outcomes.of(it.toInt()) }
@@ -129,8 +129,8 @@ class Policy_Tests {
         val id = Identity.test("policy")
         val calls = Calls(id)
         val counts = Counters(id)
-        val p1 = Limit<String, Int>(4) { i -> counts }
-        val p2 = Calls<String, Int>(3) { i -> calls  }
+        val p1 = Limit<String, Int>(4, { i -> counts })
+        val p2 = Calls<String, Int>(3, { i -> calls  })
 
         val exec = Policies.compose(p2) { i -> calls.inc(); counts.incProcessed(); Outcomes.of(i.toInt() )}
         val call = Policies.compose(p1, exec)
@@ -151,12 +151,12 @@ class Policy_Tests {
         val counts = Counters(id)
         var everyValue = 0
         val policies = listOf<Policy<String, Int>>(
-                Limit(4) { i -> counts },
-                Calls(3) { i -> calls  },
-                Every(2 ) { i, res ->
+                Limit(4, { i -> counts }),
+                Calls(3, { i -> calls  }),
+                Every(2, { i, res ->
                     everyValue = res.getOrElse { -1 }
                     println(everyValue)
-                },
+                }),
                 Exec { i -> calls.inc(); counts.incProcessed() }
         )
 

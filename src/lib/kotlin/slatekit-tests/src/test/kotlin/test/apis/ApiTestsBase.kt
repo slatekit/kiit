@@ -12,15 +12,16 @@ mantra: Simplicity above all else
  */
 package test.apis
 
+import kotlinx.coroutines.runBlocking
 import org.junit.Assert
 import slatekit.apis.*
-import slatekit.apis.core.Annotated
 import slatekit.apis.core.Api
 import slatekit.apis.core.Auth
 import slatekit.apis.helpers.ApiHelper
-import slatekit.apis.middleware.Middleware
-import slatekit.apis.security.CliProtocol
-import slatekit.apis.security.Protocol
+import slatekit.apis.Protocol
+import slatekit.apis.hooks.Authorize
+import slatekit.apis.Setup
+import slatekit.common.CommonRequest
 import slatekit.common.args.Args
 import slatekit.common.conf.Config
 import slatekit.common.db.DbConString
@@ -34,6 +35,7 @@ import slatekit.common.requests.Request
 import slatekit.common.requests.Response
 import slatekit.db.Db
 import slatekit.entities.Entities
+import slatekit.functions.middleware.Middleware
 import slatekit.integration.common.AppEntContext
 import slatekit.results.Try
 import test.setup.MyAuthProvider
@@ -86,10 +88,10 @@ open class ApiTestsBase {
 
     fun getApis(protocol: Protocol,
                 auth: Auth? = null,
-                apis: List<Api> = listOf()): ApiHost {
+                apis: List<Api> = listOf()): ApiServer {
 
         // 2. apis
-        val container = ApiHost(ctx, false, auth, apis = apis, protocol = protocol)
+        val container = ApiServer.of(ctx, apis, auth, protocol)
         return container
     }
 
@@ -106,14 +108,16 @@ open class ApiTestsBase {
         val apis = if (user != null) {
             val keys = buildKeys()
             val auth = MyAuthProvider(user.first, user.second, keys)
-            val apis = getApis(CliProtocol, auth, apis)
+            val apis = getApis(Protocol.CLI, auth, apis)
             apis
         } else {
-            val apis = getApis(CliProtocol, apis = apis)
+            val apis = getApis(Protocol.CLI, apis = apis)
             apis
         }
-        val cmd = ApiHelper.buildCliRequest(path, inputs, opts)
-        val actual = apis.call(cmd)
+        val cmd = CommonRequest.cli(path, inputs, opts)
+        val actual = runBlocking {
+            apis.call(cmd, null)
+        }
 
         Assert.assertTrue(actual.code == expected.code)
         Assert.assertTrue(actual.success == expected.success)
@@ -122,7 +126,7 @@ open class ApiTestsBase {
 
 
     fun buildUserApiRegSingleton(ctx: AppEntContext): Api {
-        return Api(UserApi(ctx), setup = Annotated)
+        return Api(UserApi(ctx), setup = Setup.Annotated)
     }
 
 
@@ -136,17 +140,18 @@ open class ApiTestsBase {
 
         // Optional auth
         val auth = user?.let { u -> MyAuthProvider(u.name, u.roles, buildKeys()) }
+        val hooks = middleware.plus(Authorize(auth))
 
         // Host
-        val host = ApiHost(ctx,
-                allowIO = false,
-                auth = auth,
+        val host = ApiServer(ctx,
                 apis = apis,
-                middleware = middleware,
-                protocol = protocol)
+                hooks = ApiHooks.of(hooks),
+                settings = ApiSettings(protocol))
 
         // Get result
-        val actual = host.call(request)
+        val actual = runBlocking {
+            host.call(request, null)
+        }
 
         // Compare here.
         Assert.assertTrue(actual.code == response.code)

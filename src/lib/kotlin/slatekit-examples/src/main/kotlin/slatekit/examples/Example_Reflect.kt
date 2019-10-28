@@ -14,7 +14,7 @@ package slatekit.examples
 
 //<doc:import_required>
 import slatekit.apis.Api
-import slatekit.apis.ApiAction
+import slatekit.apis.Action
 import slatekit.common.Field
 import slatekit.common.conf.Config
 import slatekit.meta.Reflector
@@ -89,7 +89,7 @@ class Example_Reflect : Command("reflect") {
 
     // CASE 6: Get a method level annotations
     // NOTE: The annotation must be created with all parameters
-    val annoMems = Reflector.getAnnotatedMembers<ApiAction>(UserApi::class, ApiAction::class)
+    val annoMems = Reflector.getAnnotatedMembers<Action>(UserApi::class, Action::class)
     println(annoMems)
 
 

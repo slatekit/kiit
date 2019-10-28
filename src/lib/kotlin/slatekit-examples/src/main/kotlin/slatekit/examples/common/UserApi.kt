@@ -14,11 +14,11 @@
 package slatekit.examples.common
 
 import slatekit.apis.Api
-import slatekit.apis.ApiAction
-import slatekit.apis.ApiArg
-import slatekit.apis.security.AuthModes
-import slatekit.apis.security.Protocols
-import slatekit.apis.security.Verbs
+import slatekit.apis.Action
+import slatekit.apis.Input
+import slatekit.apis.AuthModes
+import slatekit.apis.Protocols
+import slatekit.apis.Verbs
 import slatekit.common.*
 import slatekit.common.auth.Roles
 import slatekit.integration.common.ApiBaseEntity
@@ -29,10 +29,10 @@ import slatekit.results.Try
 
 
 @Api(area = "app", name = "users", desc = "api to access and manage users 3",
-        auth = AuthModes.token, roles = Roles.all, verb = Verbs.auto, protocol = Protocols.all)
+        auth = AuthModes.token, roles = Roles.all, verb = Verbs.Auto, protocols = Protocols.All)
 class UserApi(ctx: AppEntContext) : ApiBaseEntity<Long, User, UserService>(ctx, Long::class, User::class, UserService(ctx.ent, ctx.ent.getRepo(User::class))) {
 
-  @ApiAction(name = "", desc = "activates a users account 3", roles= "@parent")
+  @Action(name = "", desc = "activates a users account 3", roles= "@parent")
   fun activate(phone:String, code:Int, isPremiumUser:Boolean, date: DateTime): Try<String> {
     return Success("activated $phone, $code, $isPremiumUser, $date")
   }
@@ -43,39 +43,39 @@ class UserApi(ctx: AppEntContext) : ApiBaseEntity<Long, User, UserService>(ctx, 
   /**
    * The api action is used to tell the slatekit system to make this method
    * available as an api action.
-   * NOTE: The ApiArg annotation is OPTIONAL
+   * NOTE: The Input annotation is OPTIONAL
    */
-  @ApiAction(name = "", desc = "activates a users account 3", roles= "@parent")
-  @ApiArg("phone", "the phone number", true, "1-234-567-8901")
+  @Action(name = "", desc = "activates a users account 3", roles= "@parent")
+  @Input("phone", "the phone number", true, "1-234-567-8901")
   fun info(format:String = "json"): Notice<Boolean> {
     return Success(true,"info")
   }
 
 
-  @ApiAction(name = "", desc = "invites a new user", roles= "@parent")
-  @ApiArg(name = "email"    , desc = "the email of invitee", required = true, eg = "johndoe@gmail.com")
-  @ApiArg(name = "phone"    , desc = "the phone of invitee", required = true, eg = "12345678901")
-  @ApiArg(name = "promoCode", desc = "promotion code"      , required = true, eg = "abc")
+  @Action(name = "", desc = "invites a new user", roles= "@parent")
+  @Input(name = "email"    , desc = "the email of invitee", required = true, eg = "johndoe@gmail.com")
+  @Input(name = "phone"    , desc = "the phone of invitee", required = true, eg = "12345678901")
+  @Input(name = "promoCode", desc = "promotion code"      , required = true, eg = "abc")
   fun invite(email:String, phone:String, promoCode:String): Notice<Boolean> {
     return Success(true,"sent invitation to $email, $phone, $promoCode")
   }
 
 
-  @ApiAction(name = "", desc = "invites a new user", roles= "@parent")
-  @ApiArg(name = "email"    , desc = "the email of invitee", required = true, eg = "johndoe@gmail.com")
-  @ApiArg(name = "phone"    , desc = "the phone of invitee", required = true, eg = "12345678901")
-  @ApiArg(name = "promoCode", desc = "promotion code"      , required = true, eg = "abc")
+  @Action(name = "", desc = "invites a new user", roles= "@parent")
+  @Input(name = "email"    , desc = "the email of invitee", required = true, eg = "johndoe@gmail.com")
+  @Input(name = "phone"    , desc = "the phone of invitee", required = true, eg = "12345678901")
+  @Input(name = "promoCode", desc = "promotion code"      , required = true, eg = "abc")
   fun register(user:User): Notice<Boolean> {
     return Success(true, "object user")
   }
 
 
-  @ApiAction(name = "", desc= "creates a new user", roles= "@parent" )
-  @ApiArg(name = "email" , desc = "the email of invitee", required = true, eg = "johndoe@gmail.com" )
-  @ApiArg(name = "first" , desc = "the first api"      , required = true, eg = "john"              )
-  @ApiArg(name = "last"  , desc = "the last api"       , required = true, eg = "doe"               )
-  @ApiArg(name = "isMale", desc = "whether user is male", required = true, eg = "true|false"        )
-  @ApiArg(name = "age"   , desc = "age of the user"     , required = true, eg = "35"                )
+  @Action(name = "", desc= "creates a new user", roles= "@parent" )
+  @Input(name = "email" , desc = "the email of invitee", required = true, eg = "johndoe@gmail.com" )
+  @Input(name = "first" , desc = "the first api"      , required = true, eg = "john"              )
+  @Input(name = "last"  , desc = "the last api"       , required = true, eg = "doe"               )
+  @Input(name = "isMale", desc = "whether user is male", required = true, eg = "true|false"        )
+  @Input(name = "age"   , desc = "age of the user"     , required = true, eg = "35"                )
   fun create(email:String, first:String, last:String, isMale:Boolean, age:Int): User {
 
     _user = _user.copy(email = email,

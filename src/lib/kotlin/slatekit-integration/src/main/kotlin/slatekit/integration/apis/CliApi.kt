@@ -13,8 +13,8 @@
 
 package slatekit.integration.apis
 
-import slatekit.apis.ApiHost
-import slatekit.apis.security.CliProtocol
+import slatekit.apis.ApiServer
+import slatekit.apis.Protocol
 import slatekit.apis.core.Api
 import slatekit.cli.*
 import slatekit.common.requests.InputArgs
@@ -56,7 +56,7 @@ open class CliApi(
     val metaNameForApiKey = "api-key"
 
     // api container holding all the apis.
-    val apis = ApiHost(ctx, true, auth, apis = apiItems, protocol = CliProtocol)
+    val apis = ApiServer.of(ctx, apiItems, auth, Protocol.CLI)
 
     enum class ApiHelpType {
         Listing,
@@ -86,7 +86,7 @@ open class CliApi(
             val transformedMeta = metaTransform?.invoke(existingMeta)?.toMap() ?: existingMeta
             val metaUpdated = InputArgs(transformedMeta)
             val requestWithMeta = request.copy(meta = metaUpdated)
-            val response = apis.call(requestWithMeta)
+            val response = apis.respond(requestWithMeta)
             val cliResponse = CliResponse(
                     requestWithMeta,
                     response.success,

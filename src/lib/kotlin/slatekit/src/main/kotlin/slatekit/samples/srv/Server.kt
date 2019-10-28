@@ -8,12 +8,11 @@ import io.ktor.routing.get
 import io.ktor.routing.routing
 import io.ktor.server.engine.embeddedServer
 import io.ktor.server.netty.Netty
-import slatekit.apis.ApiHost
-import slatekit.apis.core.Annotated
-import slatekit.apis.doc.DocWeb
-import slatekit.apis.security.AuthModes
-import slatekit.apis.security.Protocols
-import slatekit.apis.security.Verbs
+import slatekit.apis.ApiServer
+import slatekit.apis.tools.docs.DocWeb
+import slatekit.apis.AuthModes
+import slatekit.apis.Protocols
+import slatekit.apis.Verbs
 import slatekit.apis.security.WebProtocol
 
 // Slate Kit - Common Utilities
@@ -57,7 +56,7 @@ class Server(val ctx: Context)  {
         val auth = SampleAuth()
 
         // 4. API host
-        val apiHost = ApiHost( ctx, false, auth, WebProtocol,
+        val apiHost = ApiServer( ctx, false, auth, WebProtocol,
                 apis = apis,
                 docKey = settings.docKey,
                 docBuilder = { DocWeb() },
@@ -106,12 +105,12 @@ class Server(val ctx: Context)  {
         return listOf(
                 slatekit.apis.core.Api(
                         cls = SampleApi::class,
-                        setup = Annotated,
+                        setup = Setup.Annotated,
                         declaredOnly = true,
-                        auth = AuthModes.apiKey,
+                        auth = AuthModes.Keyed,
                         roles = Roles.all,
-                        verb = Verbs.auto,
-                        protocol = Protocols.all,
+                        verb = Verbs.Auto,
+                        protocol = Protocols.All,
                         singleton = SampleApi(ctx)
                 )
         )

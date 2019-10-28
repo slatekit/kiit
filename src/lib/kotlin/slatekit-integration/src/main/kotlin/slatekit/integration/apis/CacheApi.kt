@@ -14,34 +14,39 @@
 package slatekit.integration.apis
 
 import slatekit.apis.Api
-import slatekit.apis.ApiAction
-import slatekit.apis.security.AuthModes
-import slatekit.apis.security.Protocols
-import slatekit.apis.security.Verbs
-import slatekit.apis.support.ApiWithSupport
+import slatekit.apis.Action
+import slatekit.apis.AuthModes
+import slatekit.apis.Protocols
+import slatekit.apis.Verbs
+import slatekit.apis.support.FileSupport
 import slatekit.common.CommonContext
 import slatekit.common.Strings
+import slatekit.common.encrypt.Encryptor
+import slatekit.common.log.Logger
 import slatekit.core.cache.Cache
 import slatekit.core.cache.CacheItem
 import slatekit.core.cache.CacheSettings
 
 @Api(area = "infra", name = "cache", desc = "api info about the application and host",
-        auth = AuthModes.apiKey, roles = "admin", verb = Verbs.auto, protocol = Protocols.all)
-class CacheApi(override val context: CommonContext) : ApiWithSupport {
+        auth = AuthModes.Keyed, roles = ["admin"], verb = Verbs.Auto, protocols = [Protocols.All])
+class CacheApi(override val context: CommonContext) : FileSupport {
+
+    override val encryptor: Encryptor? = context.enc
+    override val logger: Logger? = context.logs.getLogger()
 
     val cache: Cache = Cache(CacheSettings(50))
 
-    @ApiAction(desc = "gets the names of keys in the cache")
+    @Action(desc = "gets the names of keys in the cache")
     fun keys(): List<String> {
         return cache.keys()
     }
 
-    @ApiAction(desc = "gets the size of the cache")
+    @Action(desc = "gets the size of the cache")
     fun size(): Int {
         return cache.size()
     }
 
-    @ApiAction(desc = "gets the details of a single cache item")
+    @Action(desc = "gets the details of a single cache item")
     fun get(key: String): CacheItem? {
         val item = cache.getEntry(key)
         val text = item?.text ?: ""
@@ -50,12 +55,12 @@ class CacheApi(override val context: CommonContext) : ApiWithSupport {
         return copy
     }
 
-    @ApiAction(desc = "invalidates a single cache item")
+    @Action(desc = "invalidates a single cache item")
     fun invalidate(key: String) {
         return cache.invalidate(key)
     }
 
-    @ApiAction(desc = "invalidates the entire cache")
+    @Action(desc = "invalidates the entire cache")
     fun invalidateAll() {
         return cache.invalidateAll()
     }

@@ -12,11 +12,12 @@ mantra: Simplicity above all else
  */
 package test.apis
 
+import kotlinx.coroutines.runBlocking
 import org.junit.Assert
 import org.junit.Test
 import slatekit.apis.*
-import slatekit.apis.core.Annotated
 import slatekit.apis.core.Api
+import slatekit.apis.Setup
 import slatekit.results.getOrElse
 import test.setup.SampleTypes3Api
 import test.setup.MyEncryptor
@@ -34,8 +35,10 @@ class Api_Type_Tests : ApiTestsBase() {
     @Test fun can_decrypt_int() {
         val encryptedText = MyEncryptor.encrypt("123")
         val api = SampleTypes3Api()
-        val apis = ApiHost(ctx, apis = listOf(Api(api, setup = Annotated)), auth = null, allowIO = false )
-        val r1 = apis.call("samples", "types3", "getDecInt", "get", mapOf(), mapOf("id" to encryptedText))
+        val apis = ApiServer(ctx, apis = listOf(Api(api, setup = Setup.Annotated)) )
+        val r1 = runBlocking {
+            apis.call("samples", "types3", "getDecInt", Verb.Read, mapOf(), mapOf("id" to encryptedText))
+        }
         Assert.assertTrue(r1.success)
         Assert.assertTrue(r1.getOrElse { "" } == "decrypted int : 123")
     }
@@ -44,8 +47,10 @@ class Api_Type_Tests : ApiTestsBase() {
     @Test fun can_decrypt_long() {
         val encryptedText = MyEncryptor.encrypt("123456")
         val api = SampleTypes3Api()
-        val apis = ApiHost(ctx, apis = listOf(Api(api, setup = Annotated)), auth = null, allowIO = false )
-        val r1 = apis.call("samples", "types3", "getDecLong", "get", mapOf(), mapOf("id" to encryptedText))
+        val apis = ApiServer(ctx, apis = listOf(Api(api, setup = Setup.Annotated)))
+        val r1 = runBlocking {
+            apis.call("samples", "types3", "getDecLong", Verb.Read, mapOf(), mapOf("id" to encryptedText))
+        }
         Assert.assertTrue(r1.success)
         Assert.assertTrue(r1.getOrElse { "" } == "decrypted long : 123456")
     }
@@ -54,8 +59,10 @@ class Api_Type_Tests : ApiTestsBase() {
     @Test fun can_decrypt_double() {
         val encryptedText = MyEncryptor.encrypt("123.456")
         val api = SampleTypes3Api()
-        val apis = ApiHost(ctx, apis = listOf(Api(api, setup = Annotated)), auth = null, allowIO = false )
-        val r1 = apis.call("samples", "types3", "getDecDouble", "get", mapOf(), mapOf("id" to encryptedText))
+        val apis = ApiServer(ctx, apis = listOf(Api(api, setup = Setup.Annotated))  )
+        val r1 = runBlocking {
+            apis.call("samples", "types3", "getDecDouble", Verb.Read, mapOf(), mapOf("id" to encryptedText))
+        }
         Assert.assertTrue(r1.success)
         Assert.assertTrue(r1.getOrElse { "" } == "decrypted double : 123.456")
     }
@@ -64,8 +71,10 @@ class Api_Type_Tests : ApiTestsBase() {
     @Test fun can_decrypt_string() {
         val encryptedText = MyEncryptor.encrypt("slate-kit")
         val api = SampleTypes3Api()
-        val apis = ApiHost(ctx, apis = listOf(Api(api, setup = Annotated)), auth = null, allowIO = false )
-        val r1 = apis.call("samples", "types3", "getDecString", "get", mapOf(), mapOf("id" to encryptedText))
+        val apis = ApiServer(ctx, apis = listOf(Api(api, setup = Setup.Annotated)) )
+        val r1 = runBlocking {
+            apis.call("samples", "types3", "getDecString", Verb.Read, mapOf(), mapOf("id" to encryptedText))
+        }
         Assert.assertTrue(r1.success)
         Assert.assertTrue(r1.getOrElse { "" } == "decrypted string : slate-kit")
     }
@@ -91,8 +100,10 @@ class Api_Type_Tests : ApiTestsBase() {
 
     @Test fun can_use_enum_by_name() {
         val api = SampleTypes3Api()
-        val apis = ApiHost(ctx, apis = listOf(Api(api, setup = Annotated)),allowIO = false,  auth = null )
-        val r1 = apis.call("samples", "types3", "getEnum", "get", mapOf(), mapOf(Pair("status", StatusEnum.Active.name)))
+        val apis = ApiServer(ctx, apis = listOf(Api(api, setup = Setup.Annotated)) )
+        val r1 = runBlocking {
+            apis.call("samples", "types3", "getEnum", Verb.Read, mapOf(), mapOf(Pair("status", StatusEnum.Active.name)))
+        }
         Assert.assertTrue(r1.success)
         Assert.assertTrue(r1.getOrElse { "" } == "${StatusEnum.Active.name}:${StatusEnum.Active.value}")
     }
@@ -100,8 +111,10 @@ class Api_Type_Tests : ApiTestsBase() {
 
     @Test fun can_use_enum_by_number() {
         val api = SampleTypes3Api()
-        val apis = ApiHost(ctx, apis = listOf(Api(api, setup = Annotated)),allowIO = false,  auth = null )
-        val r1 = apis.call("samples", "types3", "getEnum", "get", mapOf(), mapOf(Pair("status", StatusEnum.Active.value)))
+        val apis = ApiServer(ctx, apis = listOf(Api(api, setup = Setup.Annotated)))
+        val r1 = runBlocking {
+            apis.call("samples", "types3", "getEnum", Verb.Read, mapOf(), mapOf(Pair("status", StatusEnum.Active.value)))
+        }
         Assert.assertTrue(r1.success)
         Assert.assertTrue(r1.getOrElse { "" } == "${StatusEnum.Active.name}:${StatusEnum.Active.value}")
     }
@@ -109,8 +122,10 @@ class Api_Type_Tests : ApiTestsBase() {
 
     @Test fun can_use_enum_value() {
         val api = SampleTypes3Api()
-        val apis = ApiHost(ctx, apis = listOf(Api(api, setup = Annotated)),allowIO = false,  auth = null )
-        val r1 = apis.call("samples", "types3", "getEnumValue", "get", mapOf(), mapOf(Pair("status", StatusEnum.Pending.value)))
+        val apis = ApiServer(ctx, apis = listOf(Api(api, setup = Setup.Annotated)))
+        val r1 = runBlocking {
+            apis.call("samples", "types3", "getEnumValue", Verb.Read, mapOf(), mapOf(Pair("status", StatusEnum.Pending.value)))
+        }
         Assert.assertTrue(r1.success)
         r1.onSuccess { it ->
             val actual = it as StatusEnum
@@ -122,8 +137,10 @@ class Api_Type_Tests : ApiTestsBase() {
 
     fun ensureSmartString(method:String, text:String, success:Boolean, expected:String) {
         val api = SampleTypes3Api()
-        val apis = ApiHost(ctx, apis = listOf(Api(api, setup = Annotated)),allowIO = false,  auth = null )
-        val r1 = apis.call("samples", "types3", method, "get", mapOf(), mapOf("text" to text))
+        val apis = ApiServer(ctx, apis = listOf(Api(api, setup = Setup.Annotated)))
+        val r1 = runBlocking {
+            apis.call("samples", "types3", method, Verb.Read, mapOf(), mapOf("text" to text))
+        }
 
         Assert.assertEquals(success, r1.success)
         if(success) {

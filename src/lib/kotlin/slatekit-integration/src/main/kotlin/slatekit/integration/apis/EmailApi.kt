@@ -14,20 +14,25 @@
 package slatekit.integration.apis
 
 import slatekit.apis.Api
-import slatekit.apis.ApiAction
-import slatekit.apis.security.AuthModes
-import slatekit.apis.security.Protocols
-import slatekit.apis.security.Verbs
-import slatekit.apis.support.ApiWithSupport
+import slatekit.apis.Action
+import slatekit.apis.AuthModes
+import slatekit.apis.Protocols
+import slatekit.apis.Verbs
+import slatekit.apis.support.FileSupport
 import slatekit.common.Context
 import slatekit.common.Uris
 import slatekit.common.Vars
+import slatekit.common.encrypt.Encryptor
+import slatekit.common.log.Logger
 import slatekit.notifications.email.EmailService
 import slatekit.results.Outcome
 
 @Api(area = "cloud", name = "email", desc = "api to send emails",
-        auth = AuthModes.apiKey, roles = "ops", verb = Verbs.auto, protocol = Protocols.all)
-class EmailApi(val svc: EmailService, override val context: Context) : ApiWithSupport {
+        auth = AuthModes.Keyed, roles = ["ops"], verb = Verbs.Auto, protocols = [Protocols.All])
+class EmailApi(val svc: EmailService, override val context: Context) : FileSupport {
+
+    override val encryptor: Encryptor? = context.enc
+    override val logger: Logger? = context.logs.getLogger()
 
     /**
      * Sends the email message
@@ -37,7 +42,7 @@ class EmailApi(val svc: EmailService, override val context: Context) : ApiWithSu
      * @param html : Whether or not the email is html formatted
      * @return
      */
-    @ApiAction(desc = "send an email")
+    @Action(desc = "send an email")
     fun send(to: String, subject: String, body: String, html: Boolean): Outcome<Boolean> {
         return this.svc.send(to, subject, body, html).map { true }
     }
@@ -50,7 +55,7 @@ class EmailApi(val svc: EmailService, override val context: Context) : ApiWithSu
      * @param html : Whether or not the email is html formatted
      * @return
      */
-    @ApiAction(desc = "send an email")
+    @Action(desc = "send an email")
     fun sendFile(to: String, subject: String, filePath: String, html: Boolean): Outcome<Boolean> {
         val content = Uris.readText(filePath)
         return this.svc.send(to, subject, content ?: "", html).map { true }
@@ -65,7 +70,7 @@ class EmailApi(val svc: EmailService, override val context: Context) : ApiWithSu
      * @param vars : values to replace the variables in template ( extra args on command line
      *                      will be automatically added into this collection )
      */
-    @ApiAction(desc = "send an email using a template")
+    @Action(desc = "send an email using a template")
     fun sendUsingTemplate(name: String, to: String, subject: String, html: Boolean, vars: Vars): Outcome<Boolean> {
         return this.svc.sendUsingTemplate(name, to, subject, html, vars).map { true }
     }

@@ -12,17 +12,11 @@ mantra: Simplicity above all else
  */
 package test.apis
 
-import org.junit.Assert
 import org.junit.Test
-import slatekit.apis.*
-import slatekit.apis.core.Annotated
-import slatekit.apis.core.Api
-import slatekit.entities.repos.LongIdGenerator
 //import slatekit.integration.errors.ErrorHandler
 //import slatekit.integration.errors.ErrorItem
 //import slatekit.integration.errors.ErrorItemQueue
 //import slatekit.integration.errors.ErrorItemService
-import test.setup.*
 
 
 class Api_Error_Tests : ApiTestsBase() {
@@ -44,7 +38,7 @@ class Api_Error_Tests : ApiTestsBase() {
 //
 //        // Api
 //        val api = SampleRetryApi(handler)
-//        val apis = ApiHost(ctx, apis = listOf(Api(api, setup = Annotated)), auth = null, allowIO = false )
+//        val apis = ApiServer(ctx, apis = listOf(Api(api, setup = Setup.Annotated)), auth = null, allowIO = false )
 //        svc.setApiHost(apis)
 //        val t1 = apis.call("app", "retry", "test", "get", mapOf("token" to "abc"), mapOf("text" to "123"))
 //        Assert.assertFalse(t1.success)

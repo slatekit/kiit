@@ -1,7 +1,7 @@
 package slatekit.integration.jobs
 
-import slatekit.apis.ApiConstants
-import slatekit.apis.ApiHost
+import slatekit.apis.ApiServer
+import slatekit.apis.Protocol
 import slatekit.apis.core.Requests
 import slatekit.common.Identity
 import slatekit.jobs.*
@@ -10,7 +10,7 @@ import slatekit.results.Success
 import slatekit.results.Try
 
 open class APIWorker(
-        val container: ApiHost,
+        val container: ApiServer,
         val settings: WorkerSettings,
         identity: Identity
 )
@@ -27,14 +27,14 @@ open class APIWorker(
         val rawBody = task.data
 
         // Convert json to request format.
-        val req = Requests.fromJson(rawBody, ApiConstants.SourceQueue, ApiConstants.SourceQueue, null, task, container.ctx.enc)
+        val req = Requests.fromJson(rawBody, Protocol.Queue.name, Protocol.Queue.name, null, task, container.ctx.enc)
 
         // let the container execute the request
         // this will follow the same pipeline/flow as the http requests now.
-        val result = container.callAsResult(req)
+        val result = container.execute(req)
         val resultFinal:Try<Any> = when(result) {
             is Success -> slatekit.results.Success(result.value)
-            is Failure -> slatekit.results.Failure(result.error)
+            is Failure -> result.toTry()
         }
         slatekit.common.TODO.IMPLEMENT("jobs", "Success/Failure handling")
         return WorkResult(WorkState.More)

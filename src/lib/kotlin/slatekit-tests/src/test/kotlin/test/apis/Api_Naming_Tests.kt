@@ -1,9 +1,12 @@
 package test.apis
 
+import kotlinx.coroutines.runBlocking
 import org.junit.Assert
 import org.junit.Test
 import slatekit.apis.core.Api
-import slatekit.apis.ApiHost
+import slatekit.apis.ApiServer
+import slatekit.apis.ApiSettings
+import slatekit.apis.Verb
 import slatekit.common.naming.LowerHyphenNamer
 import slatekit.common.naming.LowerUnderscoreNamer
 import slatekit.results.getOrElse
@@ -15,9 +18,8 @@ class Api_Naming_Tests : ApiTestsBase() {
 
 
     @Test fun can_use_naming_convention_lowerHyphen() {
-        val apis = ApiHost(ctx, apis = listOf(Api(SamplePOKOApi::class,
-                "app", "SamplePOKO"))
-                , auth = null, allowIO = false, namer = LowerHyphenNamer()
+        val apis = ApiServer(ctx, apis = listOf(Api(SamplePOKOApi::class,
+                "app", "SamplePOKO")), settings = ApiSettings(naming = LowerHyphenNamer())
         )
         Assert.assertTrue( apis.getApi("app"   , "sample-poko", "get-time"    ).success)
         Assert.assertTrue(!apis.getApi("app"   , "SamplePOKO" , "getTime"      ).success)
@@ -28,16 +30,18 @@ class Api_Naming_Tests : ApiTestsBase() {
         Assert.assertTrue(!apis.getApi("app"   , "sample-poko", "get-email"   ).success)
         Assert.assertTrue(!apis.getApi("app"   , "sample-poko", "get-ssn"     ).success)
 
-        val result = apis.call("app", "sample-poko", "get-counter", "", mapOf(), mapOf())
+        val result = runBlocking {
+            apis.call("app", "sample-poko", "get-counter", Verb.Auto, mapOf(), mapOf())
+        }
         Assert.assertTrue(result.success)
         Assert.assertTrue(result.getOrElse { 0 } == 1)
     }
 
 
     @Test fun can_use_naming_convention_lowerUnderscore() {
-        val apis = ApiHost(ctx, apis = listOf(Api(SampleExtendedApi::class,
+        val apis = ApiServer(ctx, apis = listOf(Api(SampleExtendedApi::class,
                 "app", "SampleExtended", declaredOnly = false)),
-                auth = null, allowIO = false, namer = LowerUnderscoreNamer()
+                settings = ApiSettings(naming = LowerUnderscoreNamer())
         )
         Assert.assertTrue( apis.getApi("app"   , "sample_extended", "get_seconds" ).success)
         Assert.assertTrue( apis.getApi("app"   , "sample_extended", "get_time"    ).success)
@@ -48,7 +52,9 @@ class Api_Naming_Tests : ApiTestsBase() {
         Assert.assertTrue(!apis.getApi("app"   , "sample_extended", "get_email"   ).success)
         Assert.assertTrue(!apis.getApi("app"   , "sample_extended", "get_ssn"     ).success)
 
-        val result = apis.call("app", "sample_extended", "get_seconds", "", mapOf(), mapOf())
+        val result = runBlocking {
+            apis.call("app", "sample_extended", "get_seconds", Verb.Auto, mapOf(), mapOf())
+        }
         Assert.assertTrue(result.success)
         Assert.assertTrue(result.getOrElse { 0 } in 0..59)
     }

@@ -13,7 +13,7 @@
 
 package slatekit.integration.common
 
-import slatekit.apis.ApiAction
+import slatekit.apis.Action
 import slatekit.common.Ignore
 import slatekit.query.Query
 import slatekit.entities.Entities
@@ -30,20 +30,20 @@ interface ApiWithEntitySupport<TId, T, TSvc> where TId:Comparable<TId>, T : Enti
     val entities: Entities
     val entitySvc: EntityService<TId, T>
 
-    @ApiAction(name = "", desc = "gets the total number of users", roles = "@parent", verb = "get", protocol = "@parent")
+    @Action(name = "", desc = "gets the total number of users")
     fun total(): Long {
         return entitySvc.count()
     }
 
-    @ApiAction(name = "", desc = "whether or not this dataset is empty", roles = "@parent", verb = "get", protocol = "@parent")
+    @Action(name = "", desc = "whether or not this dataset is empty")
     fun isEmpty(): Boolean = total() == 0L
 
-    @ApiAction(name = "", desc = "gets the first item", roles = "@parent", verb = "get", protocol = "@parent")
+    @Action(name = "", desc = "gets the first item")
     fun getById(id: TId): T? {
         return entitySvc.get(id)
     }
 
-    @ApiAction(name = "", desc = "gets the first item", roles = "@parent", verb = "get", protocol = "@parent")
+    @Action(name = "", desc = "gets the first item")
     fun copy(id: TId): T? {
         val item = entitySvc.get(id)
         return item?.let { model ->
@@ -54,62 +54,62 @@ interface ApiWithEntitySupport<TId, T, TSvc> where TId:Comparable<TId>, T : Enti
         }
     }
 
-    @ApiAction(name = "", desc = "gets all items", roles = "@parent", verb = "get", protocol = "@parent")
+    @Action(name = "", desc = "gets all items")
     fun getAll(): List<T> {
         return entitySvc.getAll()
     }
 
-    @ApiAction(name = "", desc = "creates an item", roles = "@parent", verb = "post", protocol = "@parent")
+    @Action(name = "", desc = "creates an item")
     fun create(item: T): TId {
         return entitySvc.create(item)
     }
 
-    @ApiAction(name = "", desc = "updates an item", roles = "@parent", verb = "put", protocol = "@parent")
+    @Action(name = "", desc = "updates an item")
     fun update(item: T) {
         entitySvc.update(item)
     }
 
-    @ApiAction(name = "", desc = "gets the first item", roles = "@parent", verb = "get", protocol = "@parent")
+    @Action(name = "", desc = "gets the first item")
     fun first(): T? {
         return entitySvc.first()
     }
 
-    @ApiAction(name = "", desc = "gets the last item", roles = "@parent", verb = "get", protocol = "@parent")
+    @Action(name = "", desc = "gets the last item")
     fun last(): T? {
         return entitySvc.last()
     }
 
-    @ApiAction(name = "", desc = "gets recent items in the system", roles = "@parent", verb = "get", protocol = "@parent")
+    @Action(name = "", desc = "gets recent items in the system")
     fun recent(count: Int = 5): List<T> {
         return entitySvc.recent(count)
     }
 
-    @ApiAction(name = "", desc = "gets oldest items in the system", roles = "@parent", verb = "get", protocol = "@parent")
+    @Action(name = "", desc = "gets oldest items in the system")
     fun oldest(count: Int = 5): List<T> {
         return entitySvc.oldest(count)
     }
 
-    @ApiAction(name = "", desc = "gets distinct items based on the field", roles = "@parent", verb = "get", protocol = "@parent")
+    @Action(name = "", desc = "gets distinct items based on the field")
     fun distinct(field: String): List<Any> {
         return listOf<Any>()
     }
 
-    @ApiAction(name = "", desc = "finds items by field name and value", roles = "@parent", verb = "get", protocol = "@parent")
+    @Action(name = "", desc = "finds items by field name and value")
     fun findBy(field: String, value: String): List<T> {
         return entitySvc.find(Query().where(field, "=", value))
     }
 
-    @ApiAction(name = "", desc = "finds items by field name and value", roles = "@parent", verb = "post", protocol = "@parent")
+    @Action(name = "", desc = "finds items by field name and value")
     fun updateField(id: TId, field: String, value: String) {
         entitySvc.update(id, field, value)
     }
 
-    @ApiAction(name = "", desc = "deletes an item by its id", roles = "@parent", verb = "delete", protocol = "@parent")
+    @Action(name = "", desc = "deletes an item by its id")
     fun delete(item: T): Boolean {
         return entitySvc.deleteById(item.identity())
     }
 
-    @ApiAction(name = "", desc = "deletes an item by its id", roles = "@parent", verb = "delete", protocol = "@parent")
+    @Action(name = "", desc = "deletes an item by its id")
     fun deleteById(id: TId): Boolean {
         return entitySvc.deleteById(id)
     }

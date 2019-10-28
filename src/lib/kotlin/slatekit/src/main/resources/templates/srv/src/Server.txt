@@ -10,12 +10,12 @@ import io.ktor.routing.get
 import io.ktor.routing.routing
 import io.ktor.server.engine.embeddedServer
 import io.ktor.server.netty.Netty
-import slatekit.apis.ApiHost
-import slatekit.apis.core.Annotated
+import slatekit.apis.ApiServer
+import slatekit.apis.setup.Annotated
 import slatekit.apis.doc.DocWeb
-import slatekit.apis.security.AuthModes
-import slatekit.apis.security.Protocols
-import slatekit.apis.security.Verbs
+import slatekit.apis.AuthModes
+import slatekit.apis.Protocols
+import slatekit.apis.Verbs
 import slatekit.apis.security.WebProtocol
 
 // Slate Kit - Common Utilities

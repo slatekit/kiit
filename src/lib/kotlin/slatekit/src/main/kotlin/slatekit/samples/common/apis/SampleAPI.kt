@@ -1,9 +1,9 @@
 package slatekit.samples.common.apis
 
 import slatekit.apis.Api
-import slatekit.apis.ApiAction
-import slatekit.apis.security.Protocols
-import slatekit.apis.security.Verbs
+import slatekit.apis.Action
+import slatekit.apis.Protocols
+import slatekit.apis.Verbs
 import slatekit.apis.support.ApiBase
 import slatekit.common.DateTime
 import slatekit.common.DateTimes
@@ -17,75 +17,75 @@ import slatekit.samples.common.models.SampleMovie
 
 
 @Api(area = "samples", name = "types", desc = "sample to test features of Slate Kit APIs",
-        roles = Roles.none, auth = "", verb = Verbs.auto, protocol = Protocols.web)
+        roles = Roles.none, auth = "", verb = Verbs.Auto, protocols = Protocols.Web)
 class SampleApi(context: Context) : ApiBase(context) {
 
     var inc = 0
 
 
-    @ApiAction(desc = "info about this api")
+    @Action(desc = "info about this api")
     fun about(): About {
         return context.app
     }
 
 
-    @ApiAction(desc = "accepts supplied basic data types from send")
+    @Action(desc = "accepts supplied basic data types from send")
     fun hello(greeting: String): String {
         return "$greeting back"
     }
 
 
-    @ApiAction(desc = "increments a simple counter")
+    @Action(desc = "increments a simple counter")
     fun increment(): Int {
         inc += 1
         return inc
     }
 
 
-    @ApiAction(desc = "get current value of counter")
+    @Action(desc = "get current value of counter")
     fun getCounter(): Int {
         return inc
     }
 
 
-    @ApiAction(desc = "test post")
+    @Action(desc = "test post")
     fun create1(greeting: String): String {
         return "$greeting back"
     }
 
 
-    @ApiAction(desc = "test put")
+    @Action(desc = "test put")
     fun update1(greeting: String): String {
         return "$greeting back"
     }
 
 
-    @ApiAction(desc = "test post")
+    @Action(desc = "test post")
     fun process1(greeting: String): String {
         return "$greeting back"
     }
 
 
-    @ApiAction(desc = "test delete")
+    @Action(desc = "test delete")
     fun delete1(greeting: String): String {
         return "$greeting back"
     }
 
 
-    @ApiAction(desc = "test patch")
+    @Action(desc = "test patch")
     fun patch(greeting: String): String {
         return "$greeting back"
     }
 
 
-    @ApiAction(desc = "test access to send")
+    @Action(desc = "test access to send")
     fun request(request: Request, greeting: String): String {
         val greetFromBody = request.data.getString("greeting")
         return "auto mapped: $greeting, manual get from body: $greetFromBody"
     }
 
 
-    @ApiAction(desc = "test wrapped result")
+    @Action(desc = "test wrapped result")
     fun response(request: Request, category: String): Outcome<SampleMovie> {
         return Outcomes.success(
                 SampleMovie(
@@ -99,7 +99,7 @@ class SampleApi(context: Context) : ApiBase(context) {
     }
 
 
-    @ApiAction(desc = "test movie list")
+    @Action(desc = "test movie list")
     fun movies(category: String): List<SampleMovie> {
         return listOf(
                 SampleMovie(
@@ -122,7 +122,7 @@ class SampleApi(context: Context) : ApiBase(context) {
     }
 
 
-    @ApiAction(desc = "accepts supplied basic data types from send")
+    @Action(desc = "accepts supplied basic data types from send")
     fun inputBasicTypes(string1: String, bool1: Boolean, numShort: Short, numInt: Int, numLong: Long, numFloat: Float, numDouble: Double, date: DateTime): String {
         return "$string1, $bool1, $numShort $numInt, $numLong, $numFloat, $numDouble, $date"
     }

@@ -1,7 +1,7 @@
 package test.setup
 
 import slatekit.apis.Api
-import slatekit.apis.ApiAction
+import slatekit.apis.Action
 import slatekit.entities.EntityService
 import slatekit.integration.common.ApiBaseEntity
 import slatekit.integration.common.AppEntContext
@@ -46,10 +46,10 @@ class SampleEntityApi(ctx: AppEntContext)
 }
 
 
-@Api(area = "app", name = "tests", desc = "sample to test compositional apis with annotations", roles= "admin", auth = "app-roles", verb = "*", protocol = "*")
+@Api(area = "app", name = "tests", desc = "sample to test compositional apis with annotations", roles= ["admin"])
 class SampleEntity2Api(ctx: AppEntContext)
     : ApiBaseEntity<Long, Movie, EntityService<Long, Movie>>(ctx, Long::class, Movie::class, ctx.ent.getSvc(Movie::class)) {
 
-    @ApiAction(name = "", desc = "gets the total number of users", roles = "@parent", verb = "post", protocol = "@parent")
+    @Action(name = "", desc = "gets the total number of users")
     fun patch(id:Long, title:String): String = "patched $id with $title"
 }

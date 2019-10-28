@@ -1,6 +1,5 @@
 package slatekit.apis.core
 
-import slatekit.apis.ApiRef
 import slatekit.common.Context
 import slatekit.common.naming.Namer
 import slatekit.meta.Reflector
@@ -101,7 +100,7 @@ data class Routes(
      * @param action
      * @return
      */
-    fun api(area: String, name: String, action: String, ctx:Context): Notice<ApiRef> {
+    fun api(area: String, name: String, action: String, ctx:Context): Notice<Target> {
         if (area.isEmpty()) return Notices.invalid("area not supplied")
         if (name.isEmpty()) return Notices.invalid("api not supplied")
         if (action.isEmpty()) return Notices.invalid("action not supplied")
@@ -111,7 +110,7 @@ data class Routes(
         val act = api.actions[action]!!
         val instance = instance(area, name, ctx)
         return instance?.let { inst ->
-            Success(ApiRef(api, act, inst))
+            Success(Target(api, act, inst))
         } ?: Notices.invalid("api route $area $name $action not found")
     }
 

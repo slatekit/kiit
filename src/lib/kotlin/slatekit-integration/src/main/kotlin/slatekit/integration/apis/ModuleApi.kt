@@ -14,11 +14,13 @@ package slatekit.integration.apis
 
 import slatekit.integration.mods.Module
 import slatekit.apis.Api
-import slatekit.apis.ApiAction
-import slatekit.apis.security.AuthModes
-import slatekit.apis.security.Protocols
-import slatekit.apis.security.Verbs
+import slatekit.apis.Action
+import slatekit.apis.AuthModes
+import slatekit.apis.Protocols
+import slatekit.apis.Verbs
 import slatekit.common.*
+import slatekit.common.encrypt.Encryptor
+import slatekit.common.log.Logger
 import slatekit.common.utils.ListMap
 import slatekit.integration.mods.Mod
 import slatekit.query.Query
@@ -28,34 +30,37 @@ import slatekit.results.Success
 import slatekit.results.Try
 
 @Api(area = "setup", name = "modules", desc = "management of system modules",
-        auth = AuthModes.apiKey, roles = "admin", verb = Verbs.auto, protocol = Protocols.all)
-class ModuleApi(val ctx: slatekit.integration.mods.ModuleContext, override val context: slatekit.common.Context) : slatekit.apis.support.ApiWithSupport {
+        auth = AuthModes.Keyed, roles = ["admin"], verb = Verbs.Auto, protocols = [Protocols.All])
+class ModuleApi(val ctx: slatekit.integration.mods.ModuleContext, override val context: slatekit.common.Context) : slatekit.apis.support.FileSupport {
+
+    override val encryptor: Encryptor? = context.enc
+    override val logger: Logger? = context.logs.getLogger()
 
     private var _items = ListMap<String, Module>()
 
-    @ApiAction(desc = "sets up the db to support modules")
+    @Action(desc = "sets up the db to support modules")
     fun setupDb(): Try<Any> {
         return ctx.setup.install(slatekit.integration.mods.Mod::class.qualifiedName!!, "1", "", "")
     }
 
-    @ApiAction(desc = "gets all installed modules")
+    @Action(desc = "gets all installed modules")
     fun installed(): List<slatekit.integration.mods.Mod> {
         return ctx.service.getAll()
     }
 
-    @ApiAction(desc = "creates a new invitee")
+    @Action(desc = "creates a new invitee")
     fun enabled(): List<slatekit.integration.mods.Mod> {
         return ctx.service.find(Query().where("isEnabled", "=", true))
     }
 
-    @ApiAction(desc = "installs all modules from initial setup")
+    @Action(desc = "installs all modules from initial setup")
     fun install(): Notice<Any> {
         val res = _items.all().map { module -> installUpdate(module, false) }
         val finalResult = res.reduce({ acc, item -> if (!acc.success) acc else item })
         return finalResult
     }
 
-    @ApiAction(desc = "generates sql scripts for all models")
+    @Action(desc = "generates sql scripts for all models")
     fun script(): List<String> {
         val scripts = _items.all().map { module ->
             val sqlScript = module.script()
@@ -64,22 +69,22 @@ class ModuleApi(val ctx: slatekit.integration.mods.ModuleContext, override val c
         return scripts.flatten()
     }
 
-    @ApiAction(desc = "installs a specific module")
+    @Action(desc = "installs a specific module")
     fun installByName(name: String): Notice<Any> {
         return _items[name]?.let { installUpdate(it, false) } ?: Failure("Unknown module : $name")
     }
 
-    @ApiAction(desc = "forces the install of a specific module or updates it. updates the mod entry and creates table")
+    @Action(desc = "forces the install of a specific module or updates it. updates the mod entry and creates table")
     fun forceInstallByName(name: String): Notice<Any> {
         return _items[name]?.let { installUpdate(it, true) } ?: Failure("Unknown module : $name")
     }
 
-    @ApiAction(desc = "gets the names of the modules")
+    @Action(desc = "gets the names of the modules")
     fun names(): List<String> {
         return _items.all().map { "${it.info.name} ver: ${it.info.version}" }
     }
 
-    @ApiAction(desc = "gets the names of the modules")
+    @Action(desc = "gets the names of the modules")
     fun uninstallAll(): Try<String> {
         val all = _items.all().map { it.info.name }
         val results = all.map { name -> uninstall(name) }
@@ -89,7 +94,7 @@ class ModuleApi(val ctx: slatekit.integration.mods.ModuleContext, override val c
         return result
     }
 
-    @ApiAction(desc = "gets the names of the modules")
+    @Action(desc = "gets the names of the modules")
     fun uninstall(name: String): Try<String> {
         val tablesResult = _items[name]?.let { it.uninstall() } ?: Failure("Unknown module : $name").toTry()
         val moduleResult = tablesResult.map { ctx.service.deleteByField(Mod::name, name) }
@@ -111,14 +116,14 @@ class ModuleApi(val ctx: slatekit.integration.mods.ModuleContext, override val c
         mod.register()
     }
 
-    @ApiAction(desc = "seeds all the modules")
+    @Action(desc = "seeds all the modules")
     fun seed(): Notice<Any> {
         val res = _items.all().map { module -> seedMod(module) }
         val finalResult = res.reduce({ acc, item -> if (!acc.success) acc else item })
         return finalResult
     }
 
-    @ApiAction(desc = "seeds all the modules")
+    @Action(desc = "seeds all the modules")
     fun seedModule(name: String): Notice<Any> {
         return _items[name]?.let { seedMod(it) } ?: Failure("Unknown module : $name")
     }

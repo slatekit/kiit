@@ -13,6 +13,8 @@
 
 package slatekit.apis.core
 
+import slatekit.apis.*
+import slatekit.apis.Setup
 import slatekit.meta.kClass
 import kotlin.reflect.KClass
 
@@ -33,29 +35,35 @@ import kotlin.reflect.KClass
  * @param actions : the collection of actions / methods on this API.
  */
 data class Api(
-    val cls: KClass<*>,
-    val area: String = "",
-    val name: String = "",
-    val desc: String = "",
-    val roles: String = "",
-    val auth: String = "",
-    val verb: String = "*",
-    val protocol: String = "*",
-    val declaredOnly: Boolean = true,
-    val singleton: Any? = null,
-    val setup: Setup = PublicMethods,
-    val actions: Lookup<Action> = Lookup(listOf(), { t -> t.name })
+        val cls: KClass<*>,
+        val area: String = "",
+        val name: String = "",
+        val desc: String = "",
+        val roles: Roles = Roles.empty,
+        val access: Access = Access.Public,
+        val auth: AuthMode = AuthMode.Token,
+        val protocols: Protocols = Protocols.all,
+        val verb: Verb = Verb.Auto,
+        val declaredOnly: Boolean = true,
+        val singleton: Any? = null,
+        val setup: Setup = Setup.Methods,
+        val actions: Lookup<Action> = Lookup(listOf(), { t -> t.name })
 ) {
+
+    val protocol = protocols.all.first()
+
+
     constructor(
-        instance: Any,
-        area: String = "",
-        name: String = "",
-        desc: String = "",
-        roles: String = "",
-        auth: String = "",
-        verb: String = "*",
-        protocol: String = "",
-        declaredOnly: Boolean = true,
-        setup: Setup = PublicMethods
-    ) : this(instance.kClass, area, name, desc, roles, auth, verb, protocol, declaredOnly, instance, setup)
+            instance: Any,
+            area: String = "",
+            name: String = "",
+            desc: String = "",
+            roles:List<String> = listOf(),
+            access: Access = Access.Public,
+            auth: AuthMode = AuthMode.Token,
+            protocol: List<Protocol> = listOf(Protocol.All),
+            verb: Verb = Verb.Auto,
+            declaredOnly: Boolean = true,
+            setup: Setup = Setup.Methods
+    ) : this(instance.kClass, area, name, desc, Roles(roles), access, auth, Protocols(protocol), verb, declaredOnly, instance, setup)
 }

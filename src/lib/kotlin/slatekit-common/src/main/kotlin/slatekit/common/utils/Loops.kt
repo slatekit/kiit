@@ -13,6 +13,8 @@
 
 package slatekit.common.utils
 
+import slatekit.results.Outcome
+
 /**
  * alternatives to using do while loops and iterations where you want to stop
  */
@@ -67,6 +69,7 @@ object Loops {
         else
             repeatWithIndex(nextIndex, end, condition)
     }
+
 
     /**
      * "takeWhile" iteration alternative.

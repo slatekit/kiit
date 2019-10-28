@@ -5,10 +5,11 @@ import org.junit.Assert
 import org.junit.Test
 import org.threeten.bp.ZoneId
 
-import slatekit.apis.ApiHost
-import slatekit.apis.core.Annotated
+import slatekit.apis.ApiServer
+import slatekit.apis.Verb
 import slatekit.apis.core.Api
 import slatekit.apis.core.Requests
+import slatekit.apis.Setup
 import slatekit.common.*
 import slatekit.common.queues.QueueSourceInMemory
 import slatekit.common.CommonContext
@@ -20,10 +21,10 @@ import test.setup.SampleTypes2Api
 
 class Worker_Api_Tests {
 
-    fun buildContainer(): ApiHost {
+    fun buildContainer(): ApiServer {
         val ctx = CommonContext.simple("queues")
         val api = SampleTypes2Api()
-        val apis = ApiHost(ctx, apis = listOf(Api(api, area = "samples", name = "types2")), auth = null, allowIO = false)
+        val apis = ApiServer(ctx, apis = listOf(Api(api, area = "samples", name = "types2")))
         return apis
     }
 
@@ -40,15 +41,17 @@ class Worker_Api_Tests {
         val api = SampleWorkerAPI(ctx, queues)
 
         // 4. container
-        val apis = ApiHost(ctx, apis = listOf(Api(api, setup = Annotated)), auth = null, allowIO = false )
+        val apis = ApiServer(ctx, apis = listOf(Api(api, setup = Setup.Annotated)) )
 
         // 5. send method call to queue
-        val result = apis.call("samples", "workerqueue", "test1", "post", mapOf(), mapOf(
-            "s" to "user1@abc.com",
-            "b" to true,
-            "i" to 123,
-            "d" to DateTimes.of(2018, 1, 27, 14, 30, 45)
-        ))
+        val result = runBlocking {
+            apis.call("samples", "workerqueue", "test1", Verb.Post, mapOf(), mapOf(
+                    "s" to "user1@abc.com",
+                    "b" to true,
+                    "i" to 123,
+                    "d" to DateTimes.of(2018, 1, 27, 14, 30, 45)
+            ))
+        }
 
         // 6. Ensure item is in queue
         Assert.assertEquals(1, queues[0].count())

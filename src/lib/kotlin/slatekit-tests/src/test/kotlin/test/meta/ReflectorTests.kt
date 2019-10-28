@@ -16,7 +16,7 @@ package slate.test
 import org.junit.Assert
 import org.junit.Test
 import slatekit.apis.Api
-import slatekit.apis.ApiAction
+import slatekit.apis.Action
 import slatekit.common.*
 import slatekit.common.args.Args
 import slatekit.common.conf.Config
@@ -270,13 +270,13 @@ class ReflectorTests {
         Assert.assertEquals( api.name     , "users"    )
         Assert.assertEquals( api.roles    , "admin"    )
         Assert.assertEquals( api.auth     , "app-roles")
-        Assert.assertEquals( api.protocol , "*"        )
+        Assert.assertEquals( api.protocols , "*"        )
         Assert.assertEquals( api.verb     , "*"        )
     }
 
 
     @Test fun can_get_annotation_for_method_declared() {
-        val members = Reflector.getAnnotatedMembers<ApiAction>(UserApi::class, ApiAction::class, true)
+        val members = Reflector.getAnnotatedMembers<Action>(UserApi::class, Action::class, true)
         Assert.assertEquals(25, members.size )
         Assert.assertEquals("activate", members[0].second.name)
         Assert.assertEquals("", members[1].second.name)
@@ -284,7 +284,7 @@ class ReflectorTests {
 
 
     @Test fun can_get_annotation_for_method_with_inherited() {
-        val members = Reflector.getAnnotatedMembers<ApiAction>(UserApi::class, ApiAction::class, false)
+        val members = Reflector.getAnnotatedMembers<Action>(UserApi::class, Action::class, false)
         Assert.assertEquals(41, members.size )
         Assert.assertEquals("activate", members[0].second.name)
         Assert.assertEquals("", members[1].second.name)

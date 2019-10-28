@@ -14,71 +14,76 @@
 package slatekit.integration.apis
 
 import slatekit.apis.Api
-import slatekit.apis.ApiAction
-import slatekit.apis.security.AuthModes
-import slatekit.apis.security.Protocols
-import slatekit.apis.security.Verbs
+import slatekit.apis.Action
+import slatekit.apis.AuthModes
+import slatekit.apis.Protocols
+import slatekit.apis.Verbs
 import slatekit.common.content.Doc
+import slatekit.common.encrypt.Encryptor
+import slatekit.common.log.Logger
 import slatekit.results.Failure
 import slatekit.results.Success
 import slatekit.results.Try
 import slatekit.results.getOrElse
 
 @Api(area = "cloud", name = "files", desc = "api info about the application and host",
-        auth = AuthModes.apiKey, roles = "admin", verb = Verbs.auto, protocol = Protocols.all)
-class FilesApi(val files: slatekit.core.cloud.CloudFiles, override val context: slatekit.common.Context) : slatekit.apis.support.ApiWithSupport {
+        auth = AuthModes.Keyed, roles = ["admin"], verb = Verbs.Auto, protocols = [Protocols.All])
+class FilesApi(val files: slatekit.core.cloud.CloudFiles, override val context: slatekit.common.Context) : slatekit.apis.support.FileSupport {
 
-    @ApiAction(desc = "creates the root folder/bucket")
+    override val encryptor: Encryptor? = context.enc
+    override val logger: Logger? = context.logs.getLogger()
+
+    @Action(desc = "creates the root folder/bucket")
     fun createRootFolder(rootFolder: String) {
         return files.createRootFolder(rootFolder)
     }
 
-    @ApiAction(desc = "creates a file with the supplied folder name, file name, and content")
+    @Action(desc = "creates a file with the supplied folder name, file name, and content")
     fun create(folder: String, name: String, content: String) {
         files.create(folder, name, content)
     }
 
-    @ApiAction(desc = "creates a file with the supplied folder name, file name, and content from file path")
+    @Action(desc = "creates a file with the supplied folder name, file name, and content from file path")
     fun createFromPath(folder: String, name: String, filePath: String): Try<String> {
         return files.createFromPath(folder, name, slatekit.common.Uris.interpret(filePath) ?: filePath)
     }
 
-    @ApiAction(desc = "creates a file with the supplied folder name, file name, and content from doc")
+    @Action(desc = "creates a file with the supplied folder name, file name, and content from doc")
     fun createFromDoc(folder: String, name: String, doc: Doc): Try<String> {
         return files.create(folder, name, doc.content)
     }
 
-    @ApiAction(desc = "updates a file with the supplied folder name, file name, and content")
+    @Action(desc = "updates a file with the supplied folder name, file name, and content")
     fun update(folder: String, name: String, content: String): Try<String> {
         return files.update(folder, name, content)
     }
 
-    @ApiAction(desc = "updates a file with the supplied folder name, file name, and content from file path")
+    @Action(desc = "updates a file with the supplied folder name, file name, and content from file path")
     fun updateFromPath(folder: String, name: String, filePath: String): Try<String> {
         return files.updateFromPath(folder, name, interpretUri(filePath) ?: filePath)
     }
 
-    @ApiAction(desc = "updates a file with the supplied folder name, file name, and content from doc")
+    @Action(desc = "updates a file with the supplied folder name, file name, and content from doc")
     fun updateFromDoc(folder: String, name: String, doc: Doc): Try<String> {
         return files.updateFromPath(folder, name, doc.content)
     }
 
-    @ApiAction(desc = "deletes a file with the supplied folder name, file name")
+    @Action(desc = "deletes a file with the supplied folder name, file name")
     fun delete(folder: String, name: String): Try<String> {
         return files.delete(folder, name)
     }
 
-    @ApiAction(desc = "get file as text")
+    @Action(desc = "get file as text")
     fun getAsText(folder: String, name: String):Try<String> {
         return files.getAsText(folder, name)
     }
 
-    @ApiAction(desc = "downloads the file specified by folder and name to the local folder specified.")
+    @Action(desc = "downloads the file specified by folder and name to the local folder specified.")
     fun download(folder: String, name: String, localFolder: String, display: Boolean): Try<String> {
         return show(files.download(folder, name, interpretUri(localFolder) ?: localFolder), display)
     }
 
-    @ApiAction(desc = "downloads the file specified by folder and name, as text content to file supplied")
+    @Action(desc = "downloads the file specified by folder and name, as text content to file supplied")
     fun downloadToFile(folder: String, name: String, filePath: String, display: Boolean): Try<String> {
         return show(files.downloadToFile(folder, name, slatekit.common.Uris.interpret(filePath) ?: filePath), display)
     }

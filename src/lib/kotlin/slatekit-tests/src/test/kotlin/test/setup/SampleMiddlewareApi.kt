@@ -1,23 +1,23 @@
 package test.setup
 
-import slatekit.apis.core.Action
-import slatekit.apis.support.ApiWithMiddleware
-import slatekit.common.*
-import slatekit.common.requests.Request
+import slatekit.apis.ApiRequest
+import slatekit.apis.ApiResult
+import slatekit.apis.support.HooksSupport
 import slatekit.results.*
+import slatekit.results.builders.Outcomes
 
 
-open class SampleMiddlewareApi() : ApiWithMiddleware {
+open class SampleMiddlewareApi() : HooksSupport {
 
     // Used for demo/testing purposes
-    var onBeforeHookCount = mutableListOf<Request>()
-    var onAfterHookCount = mutableListOf<Request>()
+    var onBeforeHookCount = mutableListOf<ApiRequest>()
+    var onAfterHookCount = mutableListOf<ApiRequest>()
 
 
     /**
      * Hook for before this api handles any request
      */
-    override fun onBefore(ctx: Context, req: Request, target: Action, source: Any, args: Map<String, Any>?) {
+    override suspend fun onBefore(req:ApiRequest) {
         onBeforeHookCount.add(req)
     }
 
@@ -25,7 +25,7 @@ open class SampleMiddlewareApi() : ApiWithMiddleware {
     /**
      * Hook for after this api handles any request
      */
-    override fun onAfter(ctx: Context, req: Request, target: Action, source: Any, args: Map<String, Any>?) {
+    override suspend fun onAfter(req:ApiRequest, res:Outcome<ApiResult>) {
         onAfterHookCount.add(req)
     }
 
@@ -33,17 +33,17 @@ open class SampleMiddlewareApi() : ApiWithMiddleware {
     /**
      * Hook to first filter a request before it is handled by this api.
      */
-    override fun onFilter(ctx: Context, req: Request, source: Any, args: Map<String, Any>?): Try<Any>  {
-        return if(req.action.startsWith("hi")) {
-            Failure(Exception("filtered out"), Codes.IGNORED)
+    override suspend fun onFilter(req:ApiRequest): Outcome<Boolean>  {
+        return if(req.request.action.startsWith("hi")) {
+            Outcomes.errored(Exception("filtered out"), Codes.IGNORED)
         } else {
-            Success(true)
+            Outcomes.success(true)
         }
     }
 
 
-    override fun onError(ctx: Context, req: Request, target:Any, source: Any, ex: Exception?, args: Map<String, Any>?): Try<Any> {
-        return Success("")
+    override suspend fun onError(req: ApiRequest, res:Outcome<ApiResult>) {
+
     }
 
 

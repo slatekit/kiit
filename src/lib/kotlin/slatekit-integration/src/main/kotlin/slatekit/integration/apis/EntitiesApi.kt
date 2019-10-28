@@ -14,10 +14,10 @@
 package slatekit.integration.apis
 
 import slatekit.apis.Api
-import slatekit.apis.ApiAction
-import slatekit.apis.security.AuthModes
-import slatekit.apis.security.Protocols
-import slatekit.apis.security.Verbs
+import slatekit.apis.Action
+import slatekit.apis.AuthModes
+import slatekit.apis.Protocols
+import slatekit.apis.Verbs
 import slatekit.apis.support.ApiBase
 import slatekit.common.db.DbCon
 import slatekit.common.newline
@@ -29,77 +29,77 @@ import slatekit.results.Notice
 import slatekit.results.Try
 
 @Api(area = "infra", name = "entities", desc = "api to access and manage data models",
-        auth = AuthModes.apiKey, roles = "admin", verb = Verbs.auto, protocol = Protocols.all)
+        auth = AuthModes.Keyed, roles = ["admin"], verb = Verbs.Auto, protocols = [Protocols.All])
 class EntitiesApi(context: AppEntContext) : ApiBase(context) {
     val appContext = context
 
-    @ApiAction(desc = "installs the model to the database shard")
+    @Action(desc = "installs the model to the database shard")
     fun install(name: String, version: String = "", dbKey: String = "", dbShard: String = ""): Try<String> {
         return service().install(name, version, dbKey, dbShard)
     }
 
-    @ApiAction(desc = "installs all the models in the default database")
+    @Action(desc = "installs all the models in the default database")
     fun installAll(): Try<List<String>> {
         return service().installAll()
     }
 
-    @ApiAction(desc = "deletes data in the table supplied")
+    @Action(desc = "deletes data in the table supplied")
     fun delete(name: String): Try<String> {
         return service().delete(name)
     }
 
-    @ApiAction(desc = "deletes data in all the tables")
+    @Action(desc = "deletes data in all the tables")
     fun deleteAll(): Try<List<String>> {
         return service().deleteAll()
     }
 
-    @ApiAction(desc = "drops the table supplied")
+    @Action(desc = "drops the table supplied")
     fun drop(name: String): Try<String> {
         return service().drop(name)
     }
 
-    @ApiAction(desc = "dropss the table")
+    @Action(desc = "dropss the table")
     fun dropAll(): Try<List<String>> {
         return service().dropAll()
     }
 
-    @ApiAction(desc = "installs all the models in the default database")
+    @Action(desc = "installs all the models in the default database")
     fun names(): List<Pair<String, String>> {
         return service().names()
     }
 
-    @ApiAction(desc = "installs all the models in the default database")
+    @Action(desc = "installs all the models in the default database")
     fun counts(): List<Pair<String, Long>> {
         //return service().counts()
         return listOf()
     }
 
-    @ApiAction(desc = "generates sql install files for the model")
+    @Action(desc = "generates sql install files for the model")
     fun generateSql(name: String, version: String = ""): Try<String> {
         return service().generateSql(name, version).map { it.joinToString(newline) }
     }
 
-    @ApiAction(desc = "generates sql install files for all models")
+    @Action(desc = "generates sql install files for all models")
     fun generateSqlFiles(): Try<List<String>> {
         return service().generateSqlFiles()
     }
 
-    @ApiAction(desc = "generates a single sql install file for all models")
+    @Action(desc = "generates a single sql install file for all models")
     fun generateSqlAllInstall(): Try<String> {
         return service().generateSqlAllInstall()
     }
 
-    @ApiAction(desc = "generates a single sql install file for all models")
+    @Action(desc = "generates a single sql install file for all models")
     fun generateSqlAllUninstall(): Try<String> {
         return service().generateSqlAllUninstall()
     }
 
-    @ApiAction(desc = "gets the default db connection")
+    @Action(desc = "gets the default db connection")
     fun connection(): Notice<DbCon> {
         return service().connection()
     }
 
-    @ApiAction(desc = "gets the default db connection")
+    @Action(desc = "gets the default db connection")
     fun connectionByName(name: String): Notice<DbCon> {
         return service().connectionByName(name)
     }

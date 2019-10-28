@@ -1,17 +1,20 @@
 package test.setup
 
-import slatekit.apis.support.ApiWithMiddleware
+import slatekit.apis.ApiRequest
+import slatekit.apis.ApiResult
+import slatekit.apis.support.HooksSupport
 import slatekit.common.*
 import slatekit.common.requests.Request
 import slatekit.common.validations.ValidationFuncs
 import slatekit.results.Notice
+import slatekit.results.Outcome
 import slatekit.results.Try
 import slatekit.results.builders.Notices
+import slatekit.results.builders.Outcomes
 import slatekit.results.builders.Tries
 
 
-open class SampleErrorsApi : ApiWithMiddleware {
-
+open class SampleErrorsApi : HooksSupport {
 
     /**
      * Error-handling using the Result<T> object to model
@@ -45,9 +48,21 @@ open class SampleErrorsApi : ApiWithMiddleware {
     }
 
 
-    override fun onError(ctx: Context, req: Request, target:Any, source: Any, ex: Exception?, args: Map<String, Any>?): Try<Any>{
-        return Tries.unexpected(Exception("unexpected error in api", ex))
+    override suspend fun onBefore(req: ApiRequest) {
+
     }
+
+    override suspend fun onAfter(req: ApiRequest, res: Outcome<ApiResult>) {
+
+    }
+
+    override suspend fun onFilter(req: ApiRequest): Outcome<Boolean> {
+        return Outcomes.success(true)
+    }
+
+    override suspend fun onError(req: ApiRequest, res: Outcome<ApiResult>) {
+    }
+
 }
 
 

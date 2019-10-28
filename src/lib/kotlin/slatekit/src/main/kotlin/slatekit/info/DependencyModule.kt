@@ -1,7 +1,7 @@
 package slatekit.info
 
 import slatekit.apis.core.Api
-import slatekit.apis.support.ApiModule
+import slatekit.apis.setup.ApiModule
 import slatekit.integration.common.AppEntContext
 import slatekit.integration.mods.Module
 import slatekit.integration.mods.ModuleContext
@@ -50,7 +50,7 @@ class DependencyModule(
      */
     override fun getApis(): List<Api> {
         return listOf()
-        //return listOf( (Api(DependencyApi(appEntCtx), declaredOnly = false, setup = Annotated)))
+        //return listOf( (Api(DependencyApi(appEntCtx), declaredOnly = false, setup = Setup.Annotated)))
     }
 
 
