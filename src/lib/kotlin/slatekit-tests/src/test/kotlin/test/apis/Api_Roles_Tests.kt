@@ -14,7 +14,6 @@ package test.apis
 
 import org.junit.Assert
 import org.junit.Test
-import slatekit.apis.helpers.ApiHelper
 import slatekit.apis.core.Roles
 
 /**

@@ -17,7 +17,6 @@ import org.junit.Assert
 import slatekit.apis.*
 import slatekit.apis.core.Api
 import slatekit.apis.core.Auth
-import slatekit.apis.helpers.ApiHelper
 import slatekit.apis.Protocol
 import slatekit.apis.hooks.Authorize
 import slatekit.apis.Setup

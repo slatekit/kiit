@@ -224,13 +224,8 @@ class DateTimes {
 
         @JvmStatic
         fun parse(value: String): DateTime {
-            return if (value.contains("Z")) {
-                DateTime.parse(value, DateTimeFormatter.ISO_OFFSET_DATE_TIME)
-            } else if (value.contains("T")) {
-                DateTime.parse(value, DateTimeFormatter.ISO_LOCAL_DATE_TIME)
-            } else {
-                parseNumeric(value)
-            }
+            val dt = DateTime.parse(value)
+            return dt
         }
 
         @JvmStatic
