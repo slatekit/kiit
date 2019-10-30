@@ -82,8 +82,8 @@ class Api_Loader_Tests : ApiTestsBase() {
         Assert.assertTrue(api.protocol == Protocol.All)
 
         val actions = api.actions.items.map { Pair(it.name, it) }.toMap()
-        Assert.assertEquals(Verb.Read  , actions[SampleRESTVerbModeAutoApi::getAll.name]!!.verb)
-        Assert.assertEquals(Verb.Read  , actions[SampleRESTVerbModeAutoApi::getById.name]!!.verb)
+        Assert.assertEquals(Verb.Get  , actions[SampleRESTVerbModeAutoApi::getAll.name]!!.verb)
+        Assert.assertEquals(Verb.Get  , actions[SampleRESTVerbModeAutoApi::getById.name]!!.verb)
         Assert.assertEquals(Verb.Post  , actions[SampleRESTVerbModeAutoApi::create.name]!!.verb)
         Assert.assertEquals(Verb.Put   , actions[SampleRESTVerbModeAutoApi::update.name]!!.verb)
         Assert.assertEquals(Verb.Patch , actions[SampleRESTVerbModeAutoApi::patch.name]!!.verb)

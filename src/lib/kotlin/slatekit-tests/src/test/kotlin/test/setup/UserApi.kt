@@ -48,7 +48,7 @@ class UserApi(context: AppEntContext)
           Success("ok", msg = "$phone, $current, $code, $zip, $id, $rating, $value, $date")
 
 
-  @Action(name = "", desc = "activates a users account 3", roles= [""], verb = Verbs.Read)
+  @Action(name = "", desc = "activates a users account 3", roles= [""], verb = Verbs.Get)
   fun info(format:String = "json"): Notice<String> {
     return Success("ok", msg ="info")
   }

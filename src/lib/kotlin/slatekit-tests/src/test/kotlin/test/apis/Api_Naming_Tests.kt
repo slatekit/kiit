@@ -31,7 +31,7 @@ class Api_Naming_Tests : ApiTestsBase() {
         Assert.assertTrue(!apis.getApi("app"   , "sample-poko", "get-ssn"     ).success)
 
         val result = runBlocking {
-            apis.call("app", "sample-poko", "get-counter", Verb.Read, mapOf(), mapOf())
+            apis.call("app", "sample-poko", "get-counter", Verb.Get, mapOf(), mapOf())
         }
         Assert.assertTrue(result.success)
         Assert.assertTrue(result.getOrElse { 0 } == 1)
@@ -53,7 +53,7 @@ class Api_Naming_Tests : ApiTestsBase() {
         Assert.assertTrue(!apis.getApi("app"   , "sample_extended", "get_ssn"     ).success)
 
         val result = runBlocking {
-            apis.call("app", "sample_extended", "get_seconds", Verb.Read, mapOf(), mapOf())
+            apis.call("app", "sample_extended", "get_seconds", Verb.Get, mapOf(), mapOf())
         }
         Assert.assertTrue(result.success)
         Assert.assertTrue(result.getOrElse { 0 } in 0..59)

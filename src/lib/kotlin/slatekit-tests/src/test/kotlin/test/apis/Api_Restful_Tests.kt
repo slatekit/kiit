@@ -47,7 +47,7 @@ class Api_Restful_Tests : ApiTestsBase() {
 */
     @Test fun can_get_all() {
 
-       ensure("", Verb.Read, mapOf(), namer = LowerHyphenNamer(), callback ={ r1 ->
+       ensure("", Verb.Get, mapOf(), namer = LowerHyphenNamer(), callback ={ r1 ->
 
             Assert.assertTrue(r1.success)
             Assert.assertTrue(r1.code == Codes.SUCCESS.code)
@@ -60,9 +60,9 @@ class Api_Restful_Tests : ApiTestsBase() {
 
     @Test fun can_get_by_id() {
 
-        val apis = ApiServer(ctx, apis = listOf(Api(SampleRESTApi::class, "app", "SampleREST")), hooks = ApiHooks(inputters = listOf(Restify())))
+        val apis = ApiServer(ctx, apis = listOf(Api(SampleRESTApi::class, "app", "SampleREST")), hooks = ApiHooks(formatters = listOf(Restify())))
         val r1 = runBlocking {
-            apis.call("app", "SampleREST", "1", Verb.Read, mapOf(), mapOf())
+            apis.call("app", "SampleREST", "1", Verb.Get, mapOf(), mapOf())
         }
         Assert.assertTrue(r1.success)
         Assert.assertTrue(r1.code == Codes.SUCCESS.code)
@@ -74,7 +74,7 @@ class Api_Restful_Tests : ApiTestsBase() {
 
     @Test fun can_patch() {
 
-        val apis = ApiServer(ctx, apis = listOf(Api(SampleRESTApi::class, "app", "SampleREST")), hooks = ApiHooks(inputters = listOf(Restify())))
+        val apis = ApiServer(ctx, apis = listOf(Api(SampleRESTApi::class, "app", "SampleREST")), hooks = ApiHooks(formatters = listOf(Restify())))
         val r1 = runBlocking {
             apis.call("app", "SampleREST", "1", Verb.Patch, mapOf(),
                     mapOf("title" to "Indiana Jones Original"))
@@ -88,7 +88,7 @@ class Api_Restful_Tests : ApiTestsBase() {
 
     @Test fun can_delete_by_id() {
 
-        val apis = ApiServer(ctx, apis = listOf(Api(SampleRESTApi::class, "app", "SampleREST")), hooks = ApiHooks(inputters = listOf(Restify())))
+        val apis = ApiServer(ctx, apis = listOf(Api(SampleRESTApi::class, "app", "SampleREST")), hooks = ApiHooks(formatters = listOf(Restify())))
         val r1 = runBlocking {
             apis.call("app", "SampleREST", "1", Verb.Delete, mapOf(), mapOf())
         }
@@ -101,7 +101,7 @@ class Api_Restful_Tests : ApiTestsBase() {
 
     @Test fun can_activate_by_id() {
 
-        val apis = ApiServer(ctx, apis = listOf(Api(SampleRESTApi::class, "app", "SampleREST")), hooks = ApiHooks(inputters = listOf(Restify())))
+        val apis = ApiServer(ctx, apis = listOf(Api(SampleRESTApi::class, "app", "SampleREST")), hooks = ApiHooks(formatters = listOf(Restify())))
         val r1 = runBlocking {
             apis.call("app", "SampleREST", "activateById", Verb.Post, mapOf(), mapOf("id" to 1))
         }
@@ -121,15 +121,15 @@ class Api_Restful_Tests : ApiTestsBase() {
         json.put("playing"   , "false")
         json.put("cost"      , "30")
         json.put("rating"    , "4.8")
-        json.put("released"  , "19810612")
-        json.put("createdAt" , DateTimes.of(2017, 7, 17).toStringYYYYMMDD(""))
+        json.put("released"  , DateTimes.of(1981, 6, 12).toString())
+        json.put("createdAt" , DateTimes.of(2017, 7, 17).toString())
         json.put("createdBy" , "0")
-        json.put("updatedAt" , DateTimes.of(2017, 7, 17).toStringYYYYMMDD(""))
+        json.put("updatedAt" , DateTimes.of(2017, 7, 17).toString())
         json.put("updatedBy" , "0")
         val data = mapOf( "item" to json )
         val apis = ApiServer(ctx,
                 apis = listOf(Api(SampleRESTApi::class, "app", "SampleREST")),
-                hooks = ApiHooks(inputters = listOf(Restify())))
+                hooks = ApiHooks(formatters = listOf(Restify())))
         val r1 = runBlocking {
             apis.call(
                     "app", "SampleREST", "", Verb.Post,
@@ -154,13 +154,13 @@ class Api_Restful_Tests : ApiTestsBase() {
         json.put("playing"   , "false")
         json.put("cost"      , "30")
         json.put("rating"    , "4.8")
-        json.put("released"  , "19810612")
-        json.put("createdAt" , DateTimes.of(2017, 7, 17).toStringYYYYMMDD(""))
+        json.put("released"  , DateTimes.of(1981, 6, 12).toString())
+        json.put("createdAt" , DateTimes.of(2017, 7, 17).toString())
         json.put("createdBy" , "0")
-        json.put("updatedAt" , DateTimes.of(2017, 7, 17).toStringYYYYMMDD(""))
+        json.put("updatedAt" , DateTimes.of(2017, 7, 17).toString())
         json.put("updatedBy" , "0")
         val data = mapOf( "item" to json )
-        val apis = ApiServer(ctx, apis = listOf(Api(SampleRESTApi::class, "app", "SampleREST")),  hooks = ApiHooks(inputters = listOf(Restify())))
+        val apis = ApiServer(ctx, apis = listOf(Api(SampleRESTApi::class, "app", "SampleREST")),  hooks = ApiHooks(formatters = listOf(Restify())))
         val r1 = runBlocking {
             apis.call(
                     "app", "SampleREST", "", Verb.Put,
@@ -177,13 +177,13 @@ class Api_Restful_Tests : ApiTestsBase() {
 
     fun ensure(action:String, verb:Verb, args:Map<String,Any>, namer: Namer?, callback:(Result<*, *>) -> Unit): Unit {
 
-        val apis = ApiServer(ctx, apis = listOf(Api(SampleRESTApi::class, "app", "SampleREST")),  hooks = ApiHooks(inputters = listOf(Restify())))
+        val apis = ApiServer(ctx, apis = listOf(Api(SampleRESTApi::class, "app", "SampleREST")),  hooks = ApiHooks(formatters = listOf(Restify())))
         val r1 = runBlocking {
             apis.call("app", "SampleREST", action, verb, mapOf(), args)
         }
         callback(r1)
 
-        val api2 = ApiServer(ctx, apis = listOf(Api(SampleRESTApi::class, "app", "SampleREST")), hooks = ApiHooks(inputters = listOf(Restify())), settings = ApiSettings(naming = namer))
+        val api2 = ApiServer(ctx, apis = listOf(Api(SampleRESTApi::class, "app", "SampleREST")), hooks = ApiHooks(formatters = listOf(Restify())), settings = ApiSettings(naming = namer))
         val name = namer?.rename("SampleREST")  ?: "SampleREST"
         val act  = namer?.rename(action) ?: action
         val r2 = runBlocking {

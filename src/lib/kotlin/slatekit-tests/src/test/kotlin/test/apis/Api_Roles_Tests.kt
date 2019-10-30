@@ -43,7 +43,7 @@ class Api_Roles_Tests : ApiTestsBase() {
 
     @Test
     fun allow_all() {
-        Assert.assertEquals(true, Roles(listOf(slatekit.common.auth.Roles.all)).allowGuest)
+        Assert.assertEquals(false, Roles(listOf(slatekit.common.auth.Roles.all)).allowGuest)
     }
 
 

@@ -57,7 +57,7 @@ class CodeGenSwift(settings: CodeGenSettings) : CodeGenBase(settings) {
      * e.g. queryParams.put("id", id);
      */
     override fun buildQueryParams(reg: Action): String {
-        return if (reg.verb == Verb.Read) {
+        return if (reg.verb == Verb.Get) {
             reg.paramsUser.foldIndexed("", { ndx: Int, acc: String, param: KParameter ->
                 acc + (if (ndx > 0) "\t\t" else "") + "queryParams.put(\"" + param.name + "\", String.valueOf(" + param.name + "));" + newline
             })
@@ -71,7 +71,7 @@ class CodeGenSwift(settings: CodeGenSettings) : CodeGenBase(settings) {
      * e..g dataParams.put('id", id);
      */
     override fun buildDataParams(reg: Action): String {
-        return if (reg.verb != Verb.Read) {
+        return if (reg.verb != Verb.Get) {
             reg.paramsUser.foldIndexed("", { ndx: Int, acc: String, param: KParameter ->
                 acc + (if (ndx > 0) "\t\t" else "") + "postData.put(\"" + param.name + "\", " + param.name + ");" + newline
             })
