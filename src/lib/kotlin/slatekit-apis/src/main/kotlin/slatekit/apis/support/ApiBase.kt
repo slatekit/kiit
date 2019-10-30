@@ -28,20 +28,16 @@ interface Api
  * @param context : The context of the application ( logger, config, encryptor, etc )
  */
 abstract class ApiBase(override val context: Context) : FileSupport, HooksSupport {
-
     override val encryptor: Encryptor? = context.enc
     override val logger: Logger? = context.logs.getLogger()
 
     override suspend fun onBefore(req: ApiRequest) {
     }
 
-    override suspend fun onAfter(req: ApiRequest, res: Outcome<ApiResult>) {
+    override suspend fun onFilter(req: ApiRequest): Outcome<ApiRequest> {
+        return Outcomes.success(req)
     }
 
-    override suspend fun onFilter(req: ApiRequest): Outcome<Boolean> {
-        return Outcomes.success(true)
-    }
-
-    override suspend fun onError(req: ApiRequest, res: Outcome<ApiResult>) {
+    override suspend fun onAfter(raw: ApiRequest, req: Outcome<ApiRequest>, res: Outcome<ApiResult>) {
     }
 }

@@ -40,7 +40,6 @@ class Api_Core_Tests : ApiTestsBase() {
 
     @Test
     fun can_execute_public_action() {
-
         ensure(
                 protocol = Protocol.CLI,
                 apis = listOf(Api(Sample_API_1_Core(ctx), setup = Setup.Annotated)),
@@ -52,8 +51,20 @@ class Api_Core_Tests : ApiTestsBase() {
 
 
     @Test
-    fun can_execute_with_explicit_name() {
+    fun can_prevent_private_method_execution() {
+        ensure(
+                protocol = Protocol.CLI,
+                apis = listOf(Api(Sample_API_1_Core(ctx), setup = Setup.Annotated)),
+                user = null,
+                request = CommonRequest.path("$AREA.$NAME.privateMethod", Verbs.Read, mapOf(), mapOf(Pair("code", "1"), Pair("tag", "abc"))),
+                response = Failure("api route samples core privateMethod not found", msg = "Errored").toResponse(),
+                checkFailMsg = true
+        )
+    }
 
+
+    @Test
+    fun can_execute_with_explicit_name() {
         ensure(
                 protocol = Protocol.CLI,
                 apis = listOf(Api(Sample_API_1_Core(ctx), setup = Setup.Annotated)),
@@ -77,7 +88,7 @@ class Api_Core_Tests : ApiTestsBase() {
                         Pair("isOn" , true),
                         Pair("date" , DateTimes.of(2019, 10, 30, 8, 30, 45, 0, zone).toString())
                 )),
-                response = Success("ok", msg = "hi 123 ok").toResponse()
+                response = Success("ok", msg = "inputs p1, 2, true, 2019-10-30T08:30:45-05:00[EST]").toResponse()
         )
     }
 
@@ -111,9 +122,9 @@ class Api_Core_Tests : ApiTestsBase() {
         val number = "abc"
         ensure(
                 protocol = Protocol.CLI,
-                apis = listOf(Api(SampleErrorsApi(), "app", "sampleErrors", roles = listOf(Roles.none), declaredOnly = false)),
+                apis = listOf(Api(Sample_API_1_Core(ctx), setup = Setup.Annotated)),
                 user = null,
-                request = CommonRequest.path("app.sampleErrors.parseNumberWithResults", Verbs.Read, mapOf(), mapOf("text" to number)),
+                request = CommonRequest.path("$AREA.$NAME.${Sample_API_1_Core::processError.name}", Verbs.Read, mapOf(), mapOf("text" to number)),
                 response = Failure("$number is not a valid number").toResponse()
         )
     }
@@ -123,9 +134,9 @@ class Api_Core_Tests : ApiTestsBase() {
     fun can_get_list() {
         ensure(
                 protocol = Protocol.CLI,
-                apis = listOf(Api(UserApi(ctx), setup = Setup.Annotated)),
-                user = Credentials(name = "kishore", roles = "dev"),
-                request = CommonRequest.path("$AREA.$NAME.argTypeListInt", Verbs.Read, mapOf(), mapOf(Pair("items", listOf(1, 2, 3)))),
+                apis = listOf(Api(Sample_API_1_Core(ctx), setup = Setup.Annotated)),
+                user = null,
+                request = CommonRequest.path("$AREA.$NAME.${Sample_API_1_Core::processInputListInt.name}", Verbs.Read, mapOf(), mapOf(Pair("items", listOf(1, 2, 3)))),
                 response = Success("ok", msg = ",1,2,3").toResponse()
         )
     }
@@ -135,9 +146,9 @@ class Api_Core_Tests : ApiTestsBase() {
     fun can_get_list_via_conversion() {
         ensure(
                 protocol = Protocol.CLI,
-                apis = listOf(Api(UserApi(ctx), setup = Setup.Annotated)),
-                user = Credentials(name = "kishore", roles = "dev"),
-                request = CommonRequest.path("$AREA.$NAME.argTypeListInt", Verbs.Read, mapOf(), mapOf(Pair("items", "1,2,3"))),
+                apis = listOf(Api(Sample_API_1_Core(ctx), setup = Setup.Annotated)),
+                user = null,
+                request = CommonRequest.path("$AREA.$NAME.${Sample_API_1_Core::processInputListString.name}", Verbs.Read, mapOf(), mapOf(Pair("items", "1,2,3"))),
                 response = Success("ok", msg = ",1,2,3").toResponse()
         )
     }
@@ -147,9 +158,9 @@ class Api_Core_Tests : ApiTestsBase() {
     fun can_get_map() {
         ensure(
                 protocol = Protocol.CLI,
-                apis = listOf(Api(UserApi(ctx), setup = Setup.Annotated)),
-                user = Credentials(name = "kishore", roles = "dev"),
-                request = CommonRequest.path("$AREA.$NAME.argTypeMapInt", Verbs.Read, mapOf(), mapOf(Pair("items", mapOf("a" to 1, "b" to 2)))),
+                apis = listOf(Api(Sample_API_1_Core(ctx), setup = Setup.Annotated)),
+                user = null,
+                request = CommonRequest.path("$AREA.$NAME.${Sample_API_1_Core::processInputMap.name}", Verbs.Read, mapOf(), mapOf(Pair("items", mapOf("a" to 1, "b" to 2)))),
                 response = Success("ok", msg = ",a=1,b=2").toResponse()
         )
     }
@@ -159,9 +170,9 @@ class Api_Core_Tests : ApiTestsBase() {
     fun can_get_map_via_conversion() {
         ensure(
                 protocol = Protocol.CLI,
-                apis = listOf(Api(UserApi(ctx), setup = Setup.Annotated)),
-                user = Credentials(name = "kishore", roles = "dev"),
-                request = CommonRequest.path("$AREA.$NAME.argTypeMapInt", Verbs.Read, mapOf(), mapOf(Pair("items", "a=1,b=2"))),
+                apis = listOf(Api(Sample_API_1_Core(ctx), setup = Setup.Annotated)),
+                user = null,
+                request = CommonRequest.path("$AREA.$NAME.${Sample_API_1_Core::processInputMap.name}", Verbs.Read, mapOf(), mapOf(Pair("items", "a=1,b=2"))),
                 response = Success("ok", msg = ",a=1,b=2").toResponse()
         )
     }

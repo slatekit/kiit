@@ -18,6 +18,8 @@ fun toVerb(name: String?): Verb {
         else -> {
             val nameToCheck = name.toLowerCase()
             val verb = when {
+                nameToCheck.startsWith(Verbs.Auto) -> Verb.Auto
+                nameToCheck.startsWith(Verbs.Get)  -> Verb.Read
                 nameToCheck.startsWith(Verbs.Read) -> Verb.Read
                 nameToCheck.startsWith(Verbs.Delete) -> Verb.Delete
                 nameToCheck.startsWith(Verbs.Patch) -> Verb.Patch

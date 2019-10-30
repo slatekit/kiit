@@ -20,6 +20,7 @@ object Verbs {
     /**
      * Core operations supported
      */
+    const val Get = "get"
     const val Read = "read"
     const val Create = "create"
     const val Update = "update"

@@ -21,7 +21,7 @@ class Processor<I, O> {
         }
     }
 
-    suspend fun output(input: I, output: Outcome<O>, items: List<Output<I, O>>): Outcome<O> {
+    suspend fun output(raw:I, input: Outcome<I>, output: Outcome<O>, items: List<Output<I, O>>): Outcome<O> {
         return when (output) {
             is Failure -> output
             is Success -> {
@@ -29,7 +29,7 @@ class Processor<I, O> {
                     true -> output
                     false -> process(0, items.size - 1, output) { ndx, v ->
                         val processor = items[ndx]
-                                processor.process(input, v)
+                                processor.process(raw, input, v)
                     }
                 }
             }

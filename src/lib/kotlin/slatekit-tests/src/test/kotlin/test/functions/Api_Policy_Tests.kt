@@ -46,7 +46,6 @@ typealias  ApiResult = Any?
 
 
 open class MyAPI1 : Api, Filter<ApiRequest>, Before<ApiRequest>, After<ApiRequest, ApiResult>, slatekit.functions.middleware.Error<ApiRequest, ApiResult> {
-
     override val api: String = "myapi1"
 
 
@@ -55,25 +54,17 @@ open class MyAPI1 : Api, Filter<ApiRequest>, Before<ApiRequest>, After<ApiReques
     }
 
 
-    override suspend fun onFilter(req: ApiRequest): Outcome<Boolean> {
+    override suspend fun onFilter(req: ApiRequest): Outcome<ApiRequest> {
         println("filter: ${req.api}.${req.action} args=${req.args.size}")
         return if(req.args.size > 1) {
             Outcomes.invalid("Invalid number of inputs, expected 1 input, got ${req.args.size}")
         } else {
-            Outcomes.success(true)
+            Outcomes.success(req)
         }
     }
 
-
-    override suspend fun onAfter(req: ApiRequest, res: Outcome<ApiResult>) {
-        println("after : success=${res.success}, code=${res.code}")
+    override suspend fun onAfter(raw: ApiRequest, req: Outcome<ApiRequest>, res: Outcome<ApiResult>) {
     }
-
-
-    override suspend fun onError(req: ApiRequest, res: Outcome<ApiResult>) {
-        println("error : success=${res.success}, code=${res.code}")
-    }
-
 
 
     fun add(curr: Int): Int = curr + 1
@@ -132,9 +123,9 @@ class ApiHost(val apis: List<Api>) {
         }
 
         // Filter
-        val filter:Outcome<Boolean> = when(api) {
-            is Filter<*> -> (api as Filter<Any>).onFilter(req)
-            else         -> Outcomes.success(true)
+        val filter:Outcome<ApiRequest> = when(api) {
+            is Filter<*> -> (api as Filter<ApiRequest>).onFilter(req)
+            else         -> Outcomes.success(req)
         }
 
         // Exec
@@ -150,12 +141,12 @@ class ApiHost(val apis: List<Api>) {
 
         // Hook: After
         if (api is After<*, *>) {
-            (api as After<ApiRequest, Any?>).onAfter(req, result)
+            (api as After<ApiRequest, Any?>).onAfter(req, filter, result)
         }
 
         // Hook: Error
         if(!result.success && api is slatekit.functions.middleware.Error<*, *>){
-            (api as slatekit.functions.middleware.Error<ApiResult, Any?>).onError(req, result)
+            (api as slatekit.functions.middleware.Error<ApiResult, Any?>).onDone(req, filter, result)
         }
         return result
     }

@@ -35,60 +35,11 @@ import test.setup.SampleMiddlewareApi
 
 class Api_Middleware_Tests : ApiTestsBase() {
 
-    @Test fun can_handle_error_at_api_level() {
-        val number = "abc"
-        ensure(
-                protocol = Protocol.CLI,
-                apis     = listOf(Api(SampleErrorsApi(), "app", "sampleErrors", auth = AuthMode.Token, roles = listOf(Roles.all), declaredOnly = false)),
-                user     = Credentials(name = "kishore", roles = "dev"),
-                request  = CommonRequest.path("app.sampleErrors.parseNumberWithExceptions", "get", mapOf(), mapOf(
-                        "text" to number
-                )),
-                response = Outcomes.unexpected<Any>(Exception("unexpected error in api")).toResponse()
-        )
-    }
-
-
-//    @Test fun can_handle_error_at_global_middleware_level() {
-//        val number = "abc"
-//        val errors = object: slatekit.apis.hooks.Errors(LoggerConsole()) {
-//            override fun onError(ctx: Context, req: Request, target:Any, source: Any, ex: Exception?, args: Map<String, Any>?): Try<Any> {
-//                val msg = "global middleware error handler"
-//                return Failure(Exception(msg), Codes.UNEXPECTED)
-//            }
-//        }
-//        ensure(
-//                middleware = listOf(errors),
-//                protocol = Protocol.CLI,
-//                apis     = listOf(Api(SampleErrorsNoMiddlewareApi(), "app", "sampleErrors", auth = AuthMode.Token, roles = listOf(Roles.all), declaredOnly = false)),
-//                user     = Credentials(name = "kishore", roles = "dev"),
-//                request  = CommonRequest.path("app.sampleErrors.parseNumberWithExceptions", Verb.Read.name, mapOf(), mapOf(
-//                        "text" to number
-//                )),
-//                response = Outcomes.unexpected<Any>(Exception("global middleware error handler")).toResponse()
-//        )
-//    }
-
-
-    @Test fun can_handle_error_at_container_level() {
-        val number = "abc"
-        ensure(
-                protocol = Protocol.CLI,
-                apis     = listOf(Api(SampleErrorsNoMiddlewareApi(), "app", "sampleErrors", auth = AuthMode.Token, roles = listOf(Roles.all), declaredOnly = false)),
-                user     = Credentials(name = "kishore", roles = "dev"),
-                request  = CommonRequest.path("app.sampleErrors.parseNumberWithExceptions", Verb.Read.name, mapOf(), mapOf(
-                        "text" to number
-                )),
-                response = Outcomes.unexpected<Any>(Exception("error executing : app.sampleErrors.parseNumberWithExceptions, check inputs")).toResponse()
-        )
-    }
-
-
     @Test fun can_handle_hooks() {
         val api = SampleMiddlewareApi()
         val apis = ApiServer(ctx, apis = listOf(Api(api, "app", "SampleMiddleware")))
-        val r1 = runBlocking { apis.call("app", "SampleMiddleware", "hello", Verb.Read, mapOf(), mapOf()) }
-        val r2 = runBlocking { apis.call("app", "SampleMiddleware", "hello", Verb.Read, mapOf(), mapOf()) }
+        val r1 = runBlocking { apis.call("app", "SampleMiddleware", "hello", Verb.Post, mapOf(), mapOf()) }
+        val r2 = runBlocking { apis.call("app", "SampleMiddleware", "hello", Verb.Post, mapOf(), mapOf()) }
 
         Assert.assertTrue(api.onBeforeHookCount.size == 2)
         Assert.assertTrue(api.onAfterHookCount.size == 2)
@@ -99,10 +50,21 @@ class Api_Middleware_Tests : ApiTestsBase() {
     }
 
 
-    @Test fun can_handle_filters_request_filtered_out() {
+    @Test fun can_handle_filters_request_pass() {
         val api = SampleMiddlewareApi()
         val apis = ApiServer(ctx, apis = listOf(Api(api, "app", "SampleMiddleware")))
-        val r1 = runBlocking { apis.call("app", "SampleMiddleware", "hi", Verb.Read, mapOf(), mapOf()) }
+        val r1 = runBlocking { apis.call("app", "SampleMiddleware", "hello", Verb.Post, mapOf(), mapOf()) }
+
+        Assert.assertTrue(r1.success)
+        Assert.assertTrue(r1.code == Codes.SUCCESS.code)
+        Assert.assertTrue(r1.getOrElse { ""} == "hello world")
+    }
+
+
+    @Test fun can_handle_filters_request_fail() {
+        val api = SampleMiddlewareApi()
+        val apis = ApiServer(ctx, apis = listOf(Api(api, "app", "SampleMiddleware")))
+        val r1 = runBlocking { apis.call("app", "SampleMiddleware", "hi", Verb.Post, mapOf(), mapOf()) }
 
         Assert.assertTrue(!r1.success)
         Assert.assertTrue(r1.code == Codes.IGNORED.code)
@@ -110,13 +72,14 @@ class Api_Middleware_Tests : ApiTestsBase() {
     }
 
 
-    @Test fun can_handle_filters_request_ok() {
+    @Test fun can_handle_error_at_api_level() {
         val api = SampleMiddlewareApi()
         val apis = ApiServer(ctx, apis = listOf(Api(api, "app", "SampleMiddleware")))
-        val r1 = runBlocking { apis.call("app", "SampleMiddleware", "hello", Verb.Read, mapOf(), mapOf()) }
+        val r1 = runBlocking { apis.call("app", "SampleMiddleware", "hi", Verb.Post, mapOf(), mapOf()) }
 
-        Assert.assertTrue(r1.success)
-        Assert.assertTrue(r1.code == Codes.SUCCESS.code)
-        Assert.assertTrue(r1.getOrElse { ""} == "hello world")
+        Assert.assertTrue(!r1.success)
+        Assert.assertTrue(r1.code == Codes.IGNORED.code)
+        Assert.assertTrue(r1.msg == "Ignored")
+        Assert.assertTrue(api.onErrorHookCount.size == 1)
     }
 }

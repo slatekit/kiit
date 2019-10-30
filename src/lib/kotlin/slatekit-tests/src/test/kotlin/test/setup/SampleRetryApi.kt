@@ -32,8 +32,8 @@ open class SampleRetryApi(val err:slatekit.apis.Error) : slatekit.apis.Error {
 
 
     @Ignore
-    override suspend fun onError(req: ApiRequest, res: Outcome<ApiResult>) {
-        return err.onError(req, res)
+    override suspend fun onDone(raw:ApiRequest, req: Outcome<ApiRequest>, res: Outcome<ApiResult>) {
+        return err.onDone(raw, req, res)
     }
 }
 

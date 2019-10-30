@@ -36,11 +36,13 @@ import slatekit.db.Db
 import slatekit.entities.Entities
 import slatekit.functions.middleware.Middleware
 import slatekit.integration.common.AppEntContext
+import slatekit.results.Err
 import slatekit.results.Try
 import test.setup.MyAuthProvider
 import test.setup.UserApi
 import test.setup.MyEncryptor
 import test.setup.User
+import kotlin.math.exp
 
 /**
  * Created by kishorereddy on 6/12/17.
@@ -135,7 +137,8 @@ open class ApiTestsBase {
             apis: List<Api>,
             user: Credentials?,
             request: Request,
-            response: Response<*>) {
+            response: Response<*>,
+            checkFailMsg:Boolean = false) {
 
         // Optional auth
         val auth = user?.let { u -> MyAuthProvider(u.name, u.roles, buildKeys()) }
@@ -156,5 +159,15 @@ open class ApiTestsBase {
         Assert.assertTrue(actual.code == response.code)
         Assert.assertTrue(actual.success == response.success)
         Assert.assertTrue(actual.msg == response.msg)
+        actual.onSuccess {
+            Assert.assertTrue(it == response.value)
+        }
+        if(!response.success && checkFailMsg){
+            actual.onFailure {
+                val expected = response.err?.message ?: ""
+                val message = it.message ?: ""
+                Assert.assertTrue(message.contains(expected))
+            }
+        }
     }
 }

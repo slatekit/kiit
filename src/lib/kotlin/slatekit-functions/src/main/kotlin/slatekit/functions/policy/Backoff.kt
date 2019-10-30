@@ -21,7 +21,7 @@ class Backoff<I, O>(val times: Pager<Int>) : Policy<I, O> {
 //            is Failure -> true
 //            is Success -> {
 //                when (state.value) {
-//                    is WorkState.Done -> true
+//                    is WorkState.Complete -> true
 //                    is WorkState.More -> false
 //                    is WorkState.Next -> {
 //                        val id = worker.id

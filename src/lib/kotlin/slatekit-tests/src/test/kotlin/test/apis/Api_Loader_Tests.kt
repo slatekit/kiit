@@ -50,7 +50,7 @@ class Api_Loader_Tests : ApiTestsBase() {
 
 
     @Test fun can_load_api_from_annotations_with_defaults() {
-        val api = AnnoLoader(SampleAnnoApi::class).loadApi(null)
+        val api = AnnoLoader(SampleApi::class).loadApi(null)
         Assert.assertTrue(api.actions.size == 1)
         Assert.assertTrue(api.area == "app")
         Assert.assertTrue(api.name == "tests")
@@ -71,7 +71,7 @@ class Api_Loader_Tests : ApiTestsBase() {
 
 
     @Test fun can_load_api_from_annotations_verb_mode_auto() {
-        val api = AnnoLoader(SampleAnnoApi::class).loadApi(null)
+        val api = AnnoLoader(SampleRESTVerbModeAutoApi::class).loadApi(null)
         Assert.assertTrue(api.actions.size == 8)
         Assert.assertTrue(api.area == "samples")
         Assert.assertTrue(api.name == "restVerbAuto")
@@ -82,37 +82,14 @@ class Api_Loader_Tests : ApiTestsBase() {
         Assert.assertTrue(api.protocol == Protocol.All)
 
         val actions = api.actions.items.map { Pair(it.name, it) }.toMap()
-        Assert.assertEquals(Verbs.Read , actions[SampleRESTVerbModeAutoApi::getAll.name]!!.verb)
-        Assert.assertEquals(Verbs.Read , actions[SampleRESTVerbModeAutoApi::getById.name]!!.verb)
-        Assert.assertEquals(Verbs.Post, actions[SampleRESTVerbModeAutoApi::create.name]!!.verb)
-        Assert.assertEquals(Verbs.Post, actions[SampleRESTVerbModeAutoApi::update.name]!!.verb)
-        Assert.assertEquals(Verbs.Post, actions[SampleRESTVerbModeAutoApi::patch.name]!!.verb)
-        Assert.assertEquals(Verbs.Post, actions[SampleRESTVerbModeAutoApi::delete.name]!!.verb)
-        Assert.assertEquals(Verbs.Post, actions[SampleRESTVerbModeAutoApi::deleteById.name]!!.verb)
-        Assert.assertEquals(Verbs.Post, actions[SampleRESTVerbModeAutoApi::activateById.name]!!.verb)
-    }
-
-
-    @Test fun can_load_api_from_annotations_verb_mode_rest() {
-        val api = AnnoLoader(SampleAnnoApi::class).loadApi(null)
-        Assert.assertTrue(api.actions.size == 8)
-        Assert.assertTrue(api.area == "samples")
-        Assert.assertTrue(api.name == "restVerbRest")
-        Assert.assertTrue(api.desc == "sample api for testing verb mode with auto")
-        Assert.assertTrue(api.roles.contains(Roles.all))
-        Assert.assertTrue(api.auth == AuthMode.Token)
-        Assert.assertTrue(api.verb == Verb.Auto)
-        Assert.assertTrue(api.protocol == Protocol.All)
-
-        val actions = api.actions.items.map { Pair(it.name, it) }.toMap()
-        Assert.assertEquals(Verbs.Read    , actions[SampleRESTVerbModeAutoApi::getAll.name]!!.verb)
-        Assert.assertEquals(Verbs.Read    , actions[SampleRESTVerbModeAutoApi::getById.name]!!.verb)
-        Assert.assertEquals(Verbs.Post   , actions[SampleRESTVerbModeAutoApi::create.name]!!.verb)
-        Assert.assertEquals(Verbs.Put    , actions[SampleRESTVerbModeAutoApi::update.name]!!.verb)
-        Assert.assertEquals(Verbs.Patch  , actions[SampleRESTVerbModeAutoApi::patch.name]!!.verb)
-        Assert.assertEquals(Verbs.Delete , actions[SampleRESTVerbModeAutoApi::delete.name]!!.verb)
-        Assert.assertEquals(Verbs.Delete , actions[SampleRESTVerbModeAutoApi::deleteById.name]!!.verb)
-        Assert.assertEquals(Verbs.Post   , actions[SampleRESTVerbModeAutoApi::activateById.name]!!.verb)
+        Assert.assertEquals(Verb.Read  , actions[SampleRESTVerbModeAutoApi::getAll.name]!!.verb)
+        Assert.assertEquals(Verb.Read  , actions[SampleRESTVerbModeAutoApi::getById.name]!!.verb)
+        Assert.assertEquals(Verb.Post  , actions[SampleRESTVerbModeAutoApi::create.name]!!.verb)
+        Assert.assertEquals(Verb.Put   , actions[SampleRESTVerbModeAutoApi::update.name]!!.verb)
+        Assert.assertEquals(Verb.Patch , actions[SampleRESTVerbModeAutoApi::patch.name]!!.verb)
+        Assert.assertEquals(Verb.Delete, actions[SampleRESTVerbModeAutoApi::delete.name]!!.verb)
+        Assert.assertEquals(Verb.Delete, actions[SampleRESTVerbModeAutoApi::deleteById.name]!!.verb)
+        Assert.assertEquals(Verb.Post  , actions[SampleRESTVerbModeAutoApi::activateById.name]!!.verb)
     }
 
 
@@ -123,7 +100,7 @@ class Api_Loader_Tests : ApiTestsBase() {
     @Test fun can_load_api_from_public_methods() {
         val api = MethodLoader(toApi(SampleExtendedApi::class,
                 "app", "sampleExtended", "sample using plain kotlin class",
-                roles = slatekit.apis.core.Roles(listOf("users")), auth = AuthMode.Token, protocol = Protocols(listOf(Protocol.All)))).loadApi(null)
+                roles = slatekit.apis.core.Roles(listOf("users")), local = true, auth = AuthMode.Token, protocol = Protocols(listOf(Protocol.All)))).loadApi(null)
 
         Assert.assertTrue(api.actions.size == 2)
         Assert.assertTrue(api.area == "app")
@@ -132,7 +109,7 @@ class Api_Loader_Tests : ApiTestsBase() {
         Assert.assertTrue(api.roles.contains("users"))
         Assert.assertTrue(api.auth == AuthMode.Token)
         Assert.assertTrue(api.verb == Verb.Auto)
-        Assert.assertTrue(api.protocol ==  Protocol.CLI)
+        Assert.assertTrue(api.protocol ==  Protocol.All)
     }
 
 
@@ -143,7 +120,7 @@ class Api_Loader_Tests : ApiTestsBase() {
     @Test fun can_load_api_from_public_methods_inherited() {
         val api = MethodLoader(toApi(SampleExtendedApi::class,
                 "app", "sampleExtended", "sample using plain kotlin class",
-                roles = slatekit.apis.core.Roles(listOf("users")), auth = AuthMode.Token, protocol = Protocols(listOf(Protocol.All)))).loadApi(null)
+                roles = slatekit.apis.core.Roles(listOf("users")), local = false, auth = AuthMode.Token, protocol = Protocols(listOf(Protocol.All)))).loadApi(null)
 
         Assert.assertTrue(api.actions.size == 8)
         Assert.assertTrue(api.area == "app")
@@ -152,7 +129,7 @@ class Api_Loader_Tests : ApiTestsBase() {
         Assert.assertTrue(api.roles.contains("users"))
         Assert.assertTrue(api.auth == AuthMode.Token)
         Assert.assertTrue(api.verb == Verb.Auto)
-        Assert.assertTrue(api.protocol ==  Protocol.CLI)
+        Assert.assertTrue(api.protocol ==  Protocol.All)
     }
 
 

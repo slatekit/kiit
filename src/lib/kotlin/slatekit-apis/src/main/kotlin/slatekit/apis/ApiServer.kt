@@ -13,6 +13,7 @@ import slatekit.common.*
 import slatekit.common.log.Logger
 import slatekit.common.requests.Request
 import slatekit.functions.Input
+import slatekit.functions.Output
 import slatekit.functions.Processor
 import slatekit.meta.*
 import slatekit.results.*
@@ -58,7 +59,15 @@ open class ApiServer(
     /**
      * Request pre-processors ( filters, converters )
      */
-    private val preProcessors: List<Input<ApiRequest>> = defaultHooks()
+    private val preProcessBuiltIns: List<Input<ApiRequest>> = defaultPreHooks()
+    private val preProcessAPIHooks = listOf(Befores())
+
+
+    /**
+     * Request pre-processors ( filters, converters )
+     */
+    private val postProcessAPIHooks: List<Output<ApiRequest, ApiResult>> = listOf(Afters())
+    private val postProcessBuiltIns: List<Output<ApiRequest, ApiResult>> = listOf()
 
     /**
      * Provides access to naming conventions used for actions
@@ -162,13 +171,15 @@ open class ApiServer(
      * NOTE: This is effectively the core processing method of API Container.
      * The flow is as follows:
      *
-     * 1. middleware        : rewrite request
-     * 2. validate api      : validate api actually exists
-     * 3. validate protocol : validate the request came from a valid protocol ( cli | web | etc )
-     * 4. validate auth     : validate the authorization using auth trait
-     * 5. validate params   : validate the request against the api/method parameters ( just that they exist )
-     * 6. execute           : finally execute the api action with middleware ( with filter / hooks )
-     *                        currently the filter/hooks middleware must be implemented in the api itself.
+     * 1. before:
+     *      - BEFORE : formatters   : pre-request formatters
+     *      - BEFORE : pre-process  : built in validators
+     *      - BEFORE : before hooks : API overrides
+     *      - BEFORE : inputters    : pre-request processors
+     *      - EXECUTE:
+     *      - AFTER  : outputters
+     *      - AFTER  : after hooks  : API overrides
+     *      - AFTER  : outputters   : post process
      * @param cmd
      * @return
      */
@@ -182,34 +193,30 @@ open class ApiServer(
         // Step 2: Build ApiRequest from the raw request ( this is used for middleware )
         val rawRequest = ApiRequest(this, ctx, raw, null, raw.source, null)
 
-        // Step 3: Now run the request through middleware ( formatters / validators )
+        // Step 3: Hooks: Pre-Processing Stage 1 : rewrite request, and ensure system validations
         val startInput = Outcomes.success(rawRequest)
-        val processed = startInput
-                .operate { processor.input(hooks.formatters, it) }
-                .operate { processor.input(preProcessors, it) }
-                .operate { processor.input(hooks.inputters, it) }
+        val validated = startInput
+            .operate {  processor.input(hooks.formatters  , it) }
+            .operate {  processor.input(preProcessBuiltIns, it) }
 
-        // Step 4: Exit on failures or begin real execution
-        val executed = when (processed) {
-            is Failure -> processed
-            is Success -> {
+        // Step 4: Hooks: Pre-Processing Stage 2: run through more hooks ( API level & supplied )
+        val requested = validated
+            .operate { processor.input(preProcessAPIHooks, it) }
+            .operate { processor.input(hooks.inputters, it)    }
 
-                // Now begin real execution
-                val request = processed.value
-                val context = Ctx(this, this.ctx, raw, processed.value.target!!)
-                val result = executeMethod(context, request)
-                result
-            }
-        }
-        // Step 5: Perform post-execution processing
-        // E.g.: If the format of the content specified ( json | csv | props )
-        executed.then {
-            when (processed) {
-                is Failure -> executed
-                is Success -> executed.operate { processor.output(processed.value, executed, hooks.outputter) }
-            }
-        }
-        return executed
+        // Step 5: Execute request
+        val executed = requested.flatMap { request -> executeMethod(Ctx.of(this, this.ctx, request), request) }
+
+        // Step 6: Hooks: Post-Processing Stage 1: errors hooks on API ( only if we mapped to a class.method )
+        validated.onSuccess { Errors.applyError(rawRequest, it, requested, executed) }
+
+        // Step 7: Hooks: Post-Processing Stage 2: remaining hooks ( afters, built-ins, outputters )
+        val result = executed
+            .operate { processor.output(rawRequest, requested, it, postProcessAPIHooks) }
+            .operate { processor.output(rawRequest, requested, it, postProcessBuiltIns) }
+            .operate { processor.output(rawRequest, requested, it, hooks.outputter)     }
+
+        return result
     }
 
     @Suppress("UNCHECKED_CAST")
@@ -222,22 +229,23 @@ open class ApiServer(
 
         val returnVal = Reflector.callMethod(target.api.cls, target.instance, target.action.member.name, inputs)
 
-        return returnVal?.let { res ->
+        val wrapped = returnVal?.let { res ->
             if (res is Result<*, *>) {
                 (res as Result<ApiResult, Err>)
             } else {
                 Outcomes.of(res!!)
             }
         } ?: Outcomes.of(Exception("Received null"))
+        return wrapped
     }
 
     private val typeDefaults = mapOf(
-            "String" to "",
-            "Boolean" to false,
-            "Int" to 0,
-            "Long" to 0L,
-            "Double" to 0.0,
-            "DateTime" to DateTime.now()
+        "String" to "",
+        "Boolean" to false,
+        "Int" to 0,
+        "Long" to 0L,
+        "Double" to 0.0,
+        "DateTime" to DateTime.now()
     )
 
     private fun fillArgs(deserializer: Deserializer, apiRef: Target, cmd: Request): Array<Any?> {
@@ -280,13 +288,12 @@ open class ApiServer(
          * Default list of API Request input validators
          */
         @JvmStatic
-        fun defaultHooks(): List<Input<ApiRequest>> {
+        fun defaultPreHooks(): List<Input<ApiRequest>> {
             return listOf(
-                    Routing(),
-                    Targets(),
-                    Protos(),
-                     Filters(),
-                    Validate()
+                Routing(),
+                Targets(),
+                Protos(),
+                Validate()
             )
         }
     }

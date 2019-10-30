@@ -14,5 +14,5 @@ interface After<TReq, TRes> {
      * @param res : The result of the call
      */
     @Ignore
-    suspend fun onAfter(req: TReq, res: Outcome<TRes>)
+    suspend fun onAfter(raw:TReq, req: Outcome<TReq>, res: Outcome<TRes>)
 }

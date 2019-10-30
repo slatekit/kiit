@@ -16,6 +16,7 @@ import org.junit.Test
 import slatekit.apis.Protocol
 import slatekit.apis.core.Api
 import slatekit.apis.Setup
+import slatekit.apis.Verbs
 import slatekit.common.info.Credentials
 import slatekit.common.CommonRequest
 import slatekit.common.requests.Source
@@ -38,8 +39,8 @@ class Api_Protocol_Tests : ApiTestsBase() {
         ensure(
                 protocol = Protocol.CLI,
                 apis     = listOf(Api(UserApi(ctx), setup = Setup.Annotated)),
-                user     = Credentials(name = "kishore", roles = "admin"),
-                request  = CommonRequest.path("app.users.protocolAny", "get", mapOf(), mapOf(
+                user     = null,
+                request  = CommonRequest.path("app.users.protocolAny", Verbs.Read, mapOf(), mapOf(
                         Pair("code", "1"),
                         Pair("tag", "abc")
                 )),
@@ -52,7 +53,7 @@ class Api_Protocol_Tests : ApiTestsBase() {
         ensure(
                 protocol = Protocol.All,
                 apis     = listOf(Api(UserApi(ctx), setup = Setup.Annotated)),
-                user     = Credentials(name = "kishore", roles = "admin"),
+                user     = null,
                 request  = CommonRequest.cli("app.users.protocolCLI",  listOf(), listOf(
                         Pair("code", "1"),
                         Pair("tag", "abc")
@@ -66,7 +67,7 @@ class Api_Protocol_Tests : ApiTestsBase() {
         ensure(
                 protocol = Protocol.All,
                 apis     = listOf(Api(UserApi(ctx), setup = Setup.Annotated)),
-                user     = Credentials(name = "kishore", roles = "admin"),
+                user     = null,
                 request  = CommonRequest.cli("app.users.protocolParent",  listOf(), listOf(
                         Pair("code", "1"),
                         Pair("tag", "abc")
@@ -80,7 +81,7 @@ class Api_Protocol_Tests : ApiTestsBase() {
         ensure(
                 protocol = Protocol.CLI,
                 apis     = listOf(Api(UserApi(ctx), setup = Setup.Annotated)),
-                user     = Credentials(name = "kishore", roles = "admin"),
+                user     = null,
                 request  = (CommonRequest.cli("app.users.protocolWeb",  listOf(), listOf(
                         Pair("code", "1"),
                         Pair("tag", "abc")
