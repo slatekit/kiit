@@ -15,8 +15,7 @@ package slate.test
 
 import org.junit.Assert
 import org.junit.Test
-import slatekit.apis.Api
-import slatekit.apis.Action
+import slatekit.apis.*
 import slatekit.common.*
 import slatekit.common.args.Args
 import slatekit.common.conf.Config
@@ -266,12 +265,14 @@ class ReflectorTests {
 
     @Test fun can_get_annotation_for_class(){
         val api:Api = Reflector.getAnnotationForClass<Api>(UserApi::class, Api::class)
-        Assert.assertEquals( api.area     , "app"      )
-        Assert.assertEquals( api.name     , "users"    )
-        Assert.assertEquals( api.roles    , "admin"    )
-        Assert.assertEquals( api.auth     , "app-roles")
-        Assert.assertEquals( api.protocols , "*"        )
-        Assert.assertEquals( api.verb     , "*"        )
+        Assert.assertEquals( "app"      , api.area     )
+        Assert.assertEquals( "users"    , api.name     )
+        Assert.assertEquals( "admin"    , api.roles[0] )
+        Assert.assertEquals( 1          , api.roles.size )
+        Assert.assertEquals( AuthMode.Token.name , api.auth     )
+        Assert.assertEquals(  Protocols.All       , api.protocols[0])
+        Assert.assertEquals(  1         , api.protocols.size)
+        Assert.assertEquals( Verbs.Auto          , api.verb     )
     }
 
 

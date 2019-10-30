@@ -16,6 +16,7 @@ import org.junit.Test
 import slatekit.apis.Protocol
 import slatekit.apis.core.Api
 import slatekit.apis.Setup
+import slatekit.apis.Verbs
 import slatekit.common.info.Credentials
 import slatekit.common.CommonRequest
 import slatekit.common.toResponse
@@ -37,7 +38,7 @@ class Api_Security_TestsTests : ApiTestsBase() {
                 protocol = Protocol.All,
                 apis     = listOf(Api(UserApi(ctx), setup = Setup.Annotated)),
                 user     = Credentials(name = "kishore", roles = "dev"),
-                request  = CommonRequest.path("app.users.rolesAny", "get", mapOf(), mapOf(
+                request  = CommonRequest.path("app.users.rolesAny", Verbs.Get, mapOf(), mapOf(
                         Pair("code", "1"),
                         Pair("tag", "abc")
                 )),
@@ -48,7 +49,7 @@ class Api_Security_TestsTests : ApiTestsBase() {
                 protocol = Protocol.All,
                 apis     = listOf(Api(UserApi(ctx), setup = Setup.Annotated)),
                 user     = Credentials(name = "kishore", roles = "qa"),
-                request  = CommonRequest.path("app.users.rolesAny", "get", mapOf(), mapOf(
+                request  = CommonRequest.path("app.users.rolesAny", Verbs.Get, mapOf(), mapOf(
                         Pair("code", "1"),
                         Pair("tag", "abc")
                 )),
@@ -59,7 +60,7 @@ class Api_Security_TestsTests : ApiTestsBase() {
                 protocol = Protocol.All,
                 apis     = listOf(Api(UserApi(ctx), setup = Setup.Annotated)),
                 user     = Credentials(name = "kishore", roles = ""),
-                request  = CommonRequest.path("app.users.rolesAny", "get", mapOf(), mapOf(
+                request  = CommonRequest.path("app.users.rolesAny", Verbs.Get, mapOf(), mapOf(
                         Pair("code", "1"),
                         Pair("tag", "abc")
                 )),
@@ -73,7 +74,7 @@ class Api_Security_TestsTests : ApiTestsBase() {
                 protocol = Protocol.All,
                 apis     = listOf(Api(UserApi(ctx), setup = Setup.Annotated)),
                 user     = null,
-                request  = CommonRequest.path("app.users.rolesAny", "get", mapOf(), mapOf(
+                request  = CommonRequest.path("app.users.rolesAny", Verbs.Get, mapOf(), mapOf(
                         Pair("code", "1"),
                         Pair("tag", "abc")
                 )),
@@ -87,7 +88,7 @@ class Api_Security_TestsTests : ApiTestsBase() {
                 protocol = Protocol.All,
                 apis     = listOf(Api(UserApi(ctx), setup = Setup.Annotated)),
                 user     = Credentials(name = "kishore", roles = "dev"),
-                request  = CommonRequest.path("app.users.rolesSpecific", "get", mapOf(), mapOf(
+                request  = CommonRequest.path("app.users.rolesSpecific", Verbs.Get, mapOf(), mapOf(
                         Pair("code", "1"),
                         Pair("tag", "abc")
                 )),
@@ -101,7 +102,7 @@ class Api_Security_TestsTests : ApiTestsBase() {
                 protocol = Protocol.All,
                 apis     = listOf(Api(UserApi(ctx), setup = Setup.Annotated)),
                 user     = Credentials(name = "kishore", roles = "ops"),
-                request  = CommonRequest.path("app.users.rolesSpecific", "get", mapOf(), mapOf(
+                request  = CommonRequest.path("app.users.rolesSpecific", Verbs.Get, mapOf(), mapOf(
                         Pair("code", "1"),
                         Pair("tag", "abc")
                 )),
@@ -115,7 +116,7 @@ class Api_Security_TestsTests : ApiTestsBase() {
                 protocol = Protocol.All,
                 apis     = listOf(Api(UserApi(ctx), setup = Setup.Annotated)),
                 user     = Credentials(name = "kishore", roles = "admin"),
-                request  = CommonRequest.path("app.users.rolesParent", "get", mapOf(), mapOf(
+                request  = CommonRequest.path("app.users.rolesParent", Verbs.Get, mapOf(), mapOf(
                         Pair("code", "1"),
                         Pair("tag", "abc")
                 )),
@@ -129,7 +130,7 @@ class Api_Security_TestsTests : ApiTestsBase() {
                 protocol = Protocol.All,
                 apis     = listOf(Api(UserApi(ctx), setup = Setup.Annotated)),
                 user     = Credentials(name = "kishore", roles = "dev"),
-                request  = CommonRequest.path("app.users.rolesParent", "get", mapOf(), mapOf(
+                request  = CommonRequest.path("app.users.rolesParent", Verbs.Get, mapOf(), mapOf(
                         Pair("code", "1"),
                         Pair("tag", "abc")
                 )),
@@ -144,7 +145,7 @@ class Api_Security_TestsTests : ApiTestsBase() {
                 protocol = Protocol.All,
                 apis     = listOf(Api(UserApi(ctx), setup = Setup.Annotated)),
                 user     = Credentials(name = "kishore", roles = "dev"),
-                request  = CommonRequest.path("app.users.rolesAny", "get", mapOf(
+                request  = CommonRequest.path("app.users.rolesAny", Verbs.Get, mapOf(
                         Pair("api-key", "3E35584A8DE0460BB28D6E0D32FB4CFD")
                 ), mapOf(
                         Pair("code", "1"),
@@ -160,7 +161,7 @@ class Api_Security_TestsTests : ApiTestsBase() {
                 protocol = Protocol.All,
                 apis     = listOf(Api(UserApi(ctx), setup = Setup.Annotated)),
                 user     = null,
-                request  = CommonRequest.path("app.users.rolesAny", "get", mapOf(), mapOf(
+                request  = CommonRequest.path("app.users.rolesAny", Verbs.Get, mapOf(), mapOf(
                         Pair("code", "1"),
                         Pair("tag", "abc")
                 )),
@@ -174,7 +175,7 @@ class Api_Security_TestsTests : ApiTestsBase() {
                 protocol = Protocol.All,
                 apis     = listOf(Api(UserApi(ctx), setup = Setup.Annotated)),
                 user     = Credentials(name = "kishore", roles = "dev"),
-                request  = CommonRequest.path("app.users.rolesSpecific", "get", mapOf(
+                request  = CommonRequest.path("app.users.rolesSpecific", Verbs.Get, mapOf(
                         Pair("api-key", "3E35584A8DE0460BB28D6E0D32FB4CFD")
                 ), mapOf(
                         Pair("code", "1"),
@@ -190,7 +191,7 @@ class Api_Security_TestsTests : ApiTestsBase() {
                 protocol = Protocol.All,
                 apis     = listOf(Api(UserApi(ctx), setup = Setup.Annotated)),
                 user     = Credentials(name = "kishore", roles = "qa"),
-                request  = CommonRequest.path("app.users.rolesSpecific", "get", mapOf(
+                request  = CommonRequest.path("app.users.rolesSpecific", Verbs.Get, mapOf(
                         Pair("api-key", "EB7EB37764AD4411A1763E6A593992BD")
                 ), mapOf(
                         Pair("code", "1"),
@@ -206,7 +207,7 @@ class Api_Security_TestsTests : ApiTestsBase() {
                 protocol = Protocol.All,
                 apis     = listOf(Api(UserApi(ctx), setup = Setup.Annotated)),
                 user     = Credentials(name = "kishore", roles = "admin"),
-                request  = CommonRequest.path("app.users.rolesParent", "get", mapOf(
+                request  = CommonRequest.path("app.users.rolesParent", Verbs.Get, mapOf(
                         Pair("api-key", "54B1817194C1450B886404C6BEA81673")
                 ), mapOf(
                         Pair("code", "1"),
@@ -222,7 +223,7 @@ class Api_Security_TestsTests : ApiTestsBase() {
                 protocol = Protocol.All,
                 apis     = listOf(Api(UserApi(ctx), setup = Setup.Annotated)),
                 user     = Credentials(name = "kishore", roles = "dev"),
-                request  = CommonRequest.path("app.users.rolesParent", "get", mapOf(
+                request  = CommonRequest.path("app.users.rolesParent", Verbs.Get, mapOf(
                         Pair("api-key", "3E35584A8DE0460BB28D6E0D32FB4CFD")
                 ), mapOf(
                         Pair("code", "1"),
