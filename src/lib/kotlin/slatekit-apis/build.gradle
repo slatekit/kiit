@@ -83,11 +83,13 @@ dependencies {
         compile "com.slatekit:slatekit-results:$slatekit_version"
         compile "com.slatekit:slatekit-common:$slatekit_version"
         compile "com.slatekit:slatekit-meta:$slatekit_version"
+        compile "com.slatekit:slatekit-functions:$slatekit_version"
     } else {
         // */
         compile project(":slatekit-result")
         compile project(":slatekit-common")
         compile project(":slatekit-meta")
+        compile project(":slatekit-functions")
     } //</slatekit_local>
 }
 

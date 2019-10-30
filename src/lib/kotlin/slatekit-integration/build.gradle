@@ -92,6 +92,7 @@ dependencies {
         compile "com.slatekit:slatekit-apis:$slatekit_version"
         compile "com.slatekit:slatekit-jobs:$slatekit_version"
         compile "com.slatekit:slatekit-functions:$slatekit_version"
+        compile "com.slatekit:slatekit-cmds:$slatekit_version"
         compile "com.slatekit:slatekit-notifications:$slatekit_version"
     } else {
         // */
@@ -104,6 +105,7 @@ dependencies {
         compile project(":slatekit-orm")
         compile project(":slatekit-core")
         compile project(":slatekit-functions")
+        compile project(":slatekit-cmds")
         compile project(":slatekit-apis")
         compile project(":slatekit-jobs")
         compile project(":slatekit-notifications")

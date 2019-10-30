@@ -85,6 +85,7 @@ dependencies {
         // */
         compile project(":slatekit-result")
         compile project(":slatekit-common")
+        compile project(":slatekit-functions")
     } //</slatekit_local>
 }
 
