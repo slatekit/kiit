@@ -16,6 +16,7 @@ package slatekit.common
 //import java.time.*
 import org.threeten.bp.*
 import org.threeten.bp.format.DateTimeFormatter
+import slatekit.common.validations.ValidationFuncs
 //import java.time.format.DateTimeFormatter
 import java.util.*
 
@@ -224,13 +225,11 @@ class DateTimes {
 
         @JvmStatic
         fun parse(value: String): DateTime {
-            return if (value.contains("Z")) {
-                DateTime.parse(value, DateTimeFormatter.ISO_OFFSET_DATE_TIME)
-            } else if (value.contains("T")) {
-                DateTime.parse(value, DateTimeFormatter.ISO_LOCAL_DATE_TIME)
-            } else {
-                parseNumeric(value)
+            if((value.length == 8 || value.length == 12 ) && ValidationFuncs.isNumeric(value)){
+                return parseNumeric(value)
             }
+            val dt = DateTime.parse(value)
+            return dt
         }
 
         @JvmStatic

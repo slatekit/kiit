@@ -30,6 +30,9 @@ project(':slatekit-core').projectDir=new File('../slatekit-core')
 include ':slatekit-functions'
 project(':slatekit-functions').projectDir=new File('../slatekit-functions')
 
+include ':slatekit-cmds'
+project(':slatekit-cmds').projectDir=new File('../slatekit-cmds')
+
 include ':slatekit-apis'
 project(':slatekit-apis').projectDir=new File('../slatekit-apis')
 

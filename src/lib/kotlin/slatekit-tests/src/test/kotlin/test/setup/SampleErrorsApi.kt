@@ -52,15 +52,15 @@ open class SampleErrorsApi : HooksSupport {
 
     }
 
-    override suspend fun onAfter(req: ApiRequest, res: Outcome<ApiResult>) {
+    override suspend fun onAfter(raw:ApiRequest, req: Outcome<ApiRequest>, res: Outcome<ApiResult>) {
 
     }
 
-    override suspend fun onFilter(req: ApiRequest): Outcome<Boolean> {
-        return Outcomes.success(true)
+    override suspend fun onFilter(req: ApiRequest): Outcome<ApiRequest> {
+        return Outcomes.success(req)
     }
 
-    override suspend fun onError(req: ApiRequest, res: Outcome<ApiResult>) {
+    override suspend fun onDone(raw:ApiRequest, req: Outcome<ApiRequest>, res: Outcome<ApiResult>) {
     }
 
 }

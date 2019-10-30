@@ -22,16 +22,16 @@ class Api_Naming_Tests : ApiTestsBase() {
                 "app", "SamplePOKO")), settings = ApiSettings(naming = LowerHyphenNamer())
         )
         Assert.assertTrue( apis.getApi("app"   , "sample-poko", "get-time"    ).success)
-        Assert.assertTrue(!apis.getApi("app"   , "SamplePOKO" , "getTime"      ).success)
+        Assert.assertTrue(!apis.getApi("app"   , "SamplePOKO" , "getTime"     ).success)
         Assert.assertTrue( apis.getApi("app"   , "sample-poko", "get-counter" ).success)
         Assert.assertTrue( apis.getApi("app"   , "sample-poko", "hello"       ).success)
-        Assert.assertTrue( apis.getApi("app"   , "sample-poko", "send"     ).success)
+        Assert.assertTrue( apis.getApi("app"   , "sample-poko", "request"     ).success)
         Assert.assertTrue( apis.getApi("app"   , "sample-poko", "response"    ).success)
         Assert.assertTrue(!apis.getApi("app"   , "sample-poko", "get-email"   ).success)
         Assert.assertTrue(!apis.getApi("app"   , "sample-poko", "get-ssn"     ).success)
 
         val result = runBlocking {
-            apis.call("app", "sample-poko", "get-counter", Verb.Auto, mapOf(), mapOf())
+            apis.call("app", "sample-poko", "get-counter", Verb.Get, mapOf(), mapOf())
         }
         Assert.assertTrue(result.success)
         Assert.assertTrue(result.getOrElse { 0 } == 1)
@@ -47,13 +47,13 @@ class Api_Naming_Tests : ApiTestsBase() {
         Assert.assertTrue( apis.getApi("app"   , "sample_extended", "get_time"    ).success)
         Assert.assertTrue( apis.getApi("app"   , "sample_extended", "get_counter" ).success)
         Assert.assertTrue( apis.getApi("app"   , "sample_extended", "hello"       ).success)
-        Assert.assertTrue( apis.getApi("app"   , "sample_extended", "send"     ).success)
+        Assert.assertTrue( apis.getApi("app"   , "sample_extended", "request"     ).success)
         Assert.assertTrue( apis.getApi("app"   , "sample_extended", "response"    ).success)
         Assert.assertTrue(!apis.getApi("app"   , "sample_extended", "get_email"   ).success)
         Assert.assertTrue(!apis.getApi("app"   , "sample_extended", "get_ssn"     ).success)
 
         val result = runBlocking {
-            apis.call("app", "sample_extended", "get_seconds", Verb.Auto, mapOf(), mapOf())
+            apis.call("app", "sample_extended", "get_seconds", Verb.Get, mapOf(), mapOf())
         }
         Assert.assertTrue(result.success)
         Assert.assertTrue(result.getOrElse { 0 } in 0..59)

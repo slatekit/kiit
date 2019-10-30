@@ -1,6 +1,7 @@
 package slatekit.functions.common
 
+import slatekit.common.Identity
+
 interface Function {
-    val info: FunctionInfo
-    val name: String get() { return info.name }
+    val id: Identity
 }

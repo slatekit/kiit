@@ -1,5 +1,7 @@
 package slatekit.apis.core
 
+import slatekit.apis.ApiConstants
+
 data class Roles(val all: List<String>) {
 
     val isEmpty = all.isEmpty() || all.size == 1 && all.first() == slatekit.common.auth.Roles.none
@@ -10,9 +12,13 @@ data class Roles(val all: List<String>) {
 
     val isAuthed = !isEmpty && !allowGuest
 
+    val isParentReference = !isEmpty && all.size == 1 && all.first() == ApiConstants.parent
+
+    val delimited = all.joinToString()
+
     fun contains(name: String): Boolean = all.contains(name)
 
-    fun orElse(other: Roles): Roles = if (this.isEmpty) other else this
+    fun orElse(other: Roles): Roles = if (this.isEmpty || this.isParentReference) other else this
 
     companion object {
         val empty = Roles(listOf())

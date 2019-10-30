@@ -33,6 +33,11 @@ class Sample_API_1_Core(context: AppEntContext) {
     }
 
 
+    private fun processPrivate(): Outcome<String> {
+        return Success("ok", msg = "this is private")
+    }
+
+
     @Action(name = "checkName", desc = "processes action with name different than method")
     fun processExplicitName(name:String): Outcome<String> {
         return Success("ok", msg = "$name ok")
@@ -40,8 +45,8 @@ class Sample_API_1_Core(context: AppEntContext) {
 
 
     @Action(desc = "activates a users account 3")
-    fun processInputs(phone:String, code:Int, isPremiumUser:Boolean, date: DateTime): Outcome<String> {
-        return Success("ok", msg = "activated $phone, $code, $isPremiumUser, $date")
+    fun processInputs(phone:String, code:Int, isOn:Boolean, date: DateTime): Outcome<String> {
+        return Success("ok", msg = "inputs $phone, $code, $isOn, $date")
     }
 
 

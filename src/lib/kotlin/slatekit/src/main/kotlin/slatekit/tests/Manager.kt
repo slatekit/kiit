@@ -92,11 +92,11 @@ class JobManager {
             val job = createJob()
             GlobalScope.launch {
                 send(job, jobMap.channel, jobMap.worker)
-                println("Done sending job to worker ${jobMap.name}")
+                println("Complete sending job to worker ${jobMap.name}")
             }
             GlobalScope.launch {
                 jobMap.worker.process(job)
-                println("Done worker request ${jobMap.name}")
+                println("Complete worker request ${jobMap.name}")
             }
         }
     }

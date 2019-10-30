@@ -14,7 +14,6 @@
 package slatekit.apis.core
 
 import slatekit.apis.ApiServer
-import slatekit.apis.helpers.hasDocKey
 import slatekit.apis.tools.docs.ApiVisitOptions
 import slatekit.apis.tools.docs.ApiVisitor
 import slatekit.apis.tools.docs.Doc

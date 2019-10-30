@@ -7,11 +7,12 @@ import slatekit.results.*
 import slatekit.results.builders.Outcomes
 
 
-open class SampleMiddlewareApi() : HooksSupport {
+open class SampleMiddlewareApi : HooksSupport {
 
     // Used for demo/testing purposes
     var onBeforeHookCount = mutableListOf<ApiRequest>()
     var onAfterHookCount = mutableListOf<ApiRequest>()
+    var onErrorHookCount = mutableListOf<Outcome<ApiRequest>>()
 
 
     /**
@@ -23,27 +24,27 @@ open class SampleMiddlewareApi() : HooksSupport {
 
 
     /**
-     * Hook for after this api handles any request
-     */
-    override suspend fun onAfter(req:ApiRequest, res:Outcome<ApiResult>) {
-        onAfterHookCount.add(req)
-    }
-
-
-    /**
      * Hook to first filter a request before it is handled by this api.
      */
-    override suspend fun onFilter(req:ApiRequest): Outcome<Boolean>  {
+    override suspend fun onFilter(req:ApiRequest): Outcome<ApiRequest>  {
         return if(req.request.action.startsWith("hi")) {
             Outcomes.errored(Exception("filtered out"), Codes.IGNORED)
         } else {
-            Outcomes.success(true)
+            Outcomes.success(req)
         }
     }
 
 
-    override suspend fun onError(req: ApiRequest, res:Outcome<ApiResult>) {
+    /**
+     * Hook for after this api handles any request
+     */
+    override suspend fun onAfter(raw:ApiRequest, req: Outcome<ApiRequest>, res:Outcome<ApiResult>) {
+        onAfterHookCount.add(raw)
+    }
 
+
+    override suspend fun onDone(raw:ApiRequest, req: Outcome<ApiRequest>, res:Outcome<ApiResult>) {
+        onErrorHookCount.add(req)
     }
 
 

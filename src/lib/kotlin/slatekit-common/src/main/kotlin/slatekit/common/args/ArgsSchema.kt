@@ -168,6 +168,8 @@ class ArgsSchema(val items: List<Arg> = listOf()) {
 
     companion object {
 
+        @JvmStatic val empty:ArgsSchema = ArgsSchema()
+
         /**
          * Parses the line against the schema and transforms any aliases into canonical names
          */

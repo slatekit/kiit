@@ -1,5 +1,6 @@
 package slatekit.functions.common
 
+import slatekit.common.Identity
 import slatekit.common.Status
 import slatekit.results.Outcome
 
@@ -10,7 +11,7 @@ interface FunctionState<out T> where T : FunctionResult {
     /**
      * Information about the function
      */
-    val info: FunctionInfo
+    val id: Identity
 
     /**
      * Function [slatekit.common.Status]

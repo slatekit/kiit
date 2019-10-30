@@ -1,13 +1,12 @@
 package slatekit.apis.hooks
 
-import slatekit.apis.ApiConstants
 import slatekit.apis.ApiRequest
 import slatekit.apis.Protocol
+import slatekit.apis.Verb
 import slatekit.apis.core.Protocols
 import slatekit.common.Ignore
-import slatekit.common.Strings
+import slatekit.common.requests.Request
 import slatekit.functions.Input
-import slatekit.results.Codes
 import slatekit.results.Outcome
 import slatekit.results.builders.Outcomes
 import slatekit.results.flatMap
@@ -20,43 +19,44 @@ class Protos : Input<ApiRequest> {
     @Ignore
     override suspend fun process(request: Outcome<ApiRequest>): Outcome<ApiRequest> {
         return request.flatMap {
-            // Ensure verb is correct get/post
-            val req = it.request
-            val target = it.target!!
-            val actualVerb = getReferencedValue(target.action.verb.name, target.api.verb.name)
-            val actualProtocol = getReferencedValue(target.action.protocol.name, target.api.protocol.name)
-            val isCliOk = Protocols.isCLI(actualProtocol)
-            val isWeb = it.host.settings.protocol == Protocol.Web
+        // Ensure verb is correct get/post
+        val req = it.request
+        val target = it.target!!
+        val actionVerb = target.action.verb.orElse(target.api.verb)
+        val actionProtocols = target.action.protocols.orElse(target.api.protocols)
+        val isCli = actionProtocols.hasCLI()
+        val isWeb = actionProtocols.hasWeb()
 
-            // 1. Ensure verb is correct
-            return if (isWeb && req.verb == Protocol.Queue.name) {
-                request
-            } else if (isWeb && !Strings.isMatchOrWildCard(actualVerb, req.verb)) {
-                Outcomes.errored("expected verb $actualVerb, but got ${req.verb}")
-            }
-            // 2. Ensure protocol is correct get/post
-            else if (!isCliOk && !Strings.isMatchOrWildCard(actualProtocol, it.host.settings.protocol.name)) {
-                Outcomes.errored("${req.fullName} not found", Codes.NOT_FOUND)
-            }
-            // 3. Good to go
-            else
-                request
+        val verbResult = validateVerb(isWeb, isCli, actionVerb, req, request)
+        val finalResult = verbResult.flatMap { validateProto(actionProtocols, req, request) }
+        finalResult
         }
     }
 
-    fun getReferencedValue(primaryValue: String, parentValue: String): String {
+    private fun validateVerb(isWeb:Boolean, isCLI:Boolean, actionVerb: Verb, req: Request, request:Outcome<ApiRequest>):Outcome<ApiRequest> {
+        return when {
+            // Case 1: Queued request, being processed
+            req.verb == Protocol.Queue.name -> request
 
-        // Role!
-        return if (!primaryValue.isNullOrEmpty()) {
-            if (primaryValue == ApiConstants.parent) {
-                parentValue
-            } else
-                primaryValue
+            // Case 2: Web, ensure verb match
+            isWeb && actionVerb.isMatch(req.verb) -> request
+
+            // Case 3: CLI, doesn't matter
+            isCLI -> request
+
+            // Case 4: invalid
+            else -> Outcomes.errored("expected verb $actionVerb, but got ${req.verb}")
         }
-        // Parent!
-        else if (!parentValue.isNullOrEmpty()) {
-            parentValue
-        } else
-            ""
+    }
+
+    private fun validateProto(actionProtocols: Protocols, req: Request, request:Outcome<ApiRequest>):Outcome<ApiRequest> {
+        val requestProtocol = Protocol.parse(req.source)
+        return when {
+            actionProtocols.isMatchOrAll(requestProtocol) -> request
+            else -> {
+                val oneOf = actionProtocols.all.joinToString { it.name }
+                Outcomes.errored("expected protocol $oneOf, but got ${req.source.id}")
+            }
+        }
     }
 }

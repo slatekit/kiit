@@ -17,5 +17,5 @@ interface Filter<TReq> : Middleware {
      * @sample: slatekit.results.Success("")
      */
     @Ignore
-    suspend fun onFilter(req: TReq): Outcome<Boolean>
+    suspend fun onFilter(req: TReq): Outcome<TReq>
 }

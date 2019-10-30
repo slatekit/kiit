@@ -14,10 +14,14 @@
 package slatekit.cmds
 
 import slatekit.common.DateTime
+import slatekit.common.Identity
 import slatekit.common.args.Args
+import slatekit.common.args.ArgsSchema
+import slatekit.common.envs.EnvMode
 import slatekit.functions.common.Function
 import slatekit.functions.common.*
 import slatekit.results.*
+import slatekit.results.builders.Outcomes
 import slatekit.results.builders.Tries
 
 /**
@@ -42,26 +46,16 @@ import slatekit.results.builders.Tries
  * a command was run.
  * @param name
  */
-open class Command(
-        functionInfo: FunctionInfo,
-        val call: ((CommandRequest) -> Any?)? = null
-) : Function, FunctionTriggers<CommandResult> {
+open class Command(override val id: Identity,
+                   val desc: String,
+                   val call: ((CommandRequest) -> Any?)? = null,
+                   val schema: ArgsSchema = ArgsSchema.empty) : Function {
 
     /**
      * Initialize the command info with just name and optional description
      */
-    constructor(name: String, desc: String? = null) : this(FunctionInfo(name, desc
-            ?: ""))
-
-
-    /**
-     * Initialize the command info with just name and optional description
-     */
-    constructor(name: String, desc: String?, call: ((CommandRequest) -> Any?)? = null) : this(FunctionInfo(name, desc
-            ?: ""), call)
-
-
-    override val info = functionInfo
+    constructor(name: String, desc: String? = null, env: EnvMode = EnvMode.Dev, call: ((CommandRequest) -> Any?)? = null)
+            : this(Identity.cmd(name, env), desc ?: "", call)
 
 
     /**
@@ -70,7 +64,7 @@ open class Command(
      * @param args
      * @return
      */
-    override fun execute(args: Array<String>, mode: FunctionMode) {
+    fun execute(args: Array<String>, mode: FunctionMode) {
         val parseResult = Args.parseArgs(args)
         when (parseResult) {
             is Failure<Exception> -> Failure(parseResult.error)
@@ -112,15 +106,15 @@ open class Command(
      */
     fun perform(request: CommandRequest, mode: FunctionMode): CommandResult {
         val start = DateTime.now()
-        val result = try {
+        val result:Outcome<Any?> = try {
             val rawValue = call?.invoke(request) ?: execute(request)
             val finalValue = when (rawValue) {
                 is Success<*> -> rawValue.value
                 else -> rawValue
             }
-            Success(finalValue)
+            Outcomes.success(finalValue)
         } catch (ex: Exception) {
-            Failure(buildError(ex), Codes.UNEXPECTED)
+            Outcomes.errored(ex)
         }
         val end = DateTime.now()
         return CommandResult(request, mode, result, start, end)
@@ -146,10 +140,5 @@ open class Command(
      */
     protected open fun handle(result: CommandResult): CommandResult {
         return result
-    }
-
-
-    private fun buildError(ex: Exception): Exception {
-        return Exception("Error while executing : ${info.name}. ${ex.message}", ex)
     }
 }

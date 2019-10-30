@@ -20,7 +20,7 @@ object Verbs {
     /**
      * Core operations supported
      */
-    const val Read = "read"
+    const val Get = "get"
     const val Create = "create"
     const val Update = "update"
     const val Delete = "delete"
@@ -37,7 +37,7 @@ object Verbs {
 
 sealed class Verb(override val name: String)  : Parentable<Verb> {
     object Auto   : Verb(Verbs.Auto)
-    object Read   : Verb(Verbs.Read)
+    object Get    : Verb(Verbs.Get)
     object Create : Verb(Verbs.Create)
     object Update : Verb(Verbs.Update)
     object Put    : Verb(Verbs.Put)
@@ -46,12 +46,15 @@ sealed class Verb(override val name: String)  : Parentable<Verb> {
     object Delete : Verb(Verbs.Delete)
     object Parent : Verb(Verbs.Parent)
 
+
+    fun isMatch(other:String):Boolean = this.name == other
+
     companion object {
 
         fun parse(name:String): Verb {
             return when(name) {
                 Verbs.Auto   -> Verb.Auto
-                Verbs.Read   -> Verb.Read
+                Verbs.Get    -> Verb.Get
                 Verbs.Create -> Verb.Create
                 Verbs.Update -> Verb.Update
                 Verbs.Put    -> Verb.Put

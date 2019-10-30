@@ -1,5 +1,6 @@
 package slatekit.functions.common
 
+import org.threeten.bp.Duration
 import slatekit.common.DateTime
 import slatekit.common.ext.durationFrom
 import slatekit.results.*
@@ -14,14 +15,15 @@ import slatekit.results.*
  */
 interface FunctionResult {
     val mode: FunctionMode
-    val result: Result<*, *>
+    val result: Outcome<*>
     val started: DateTime
     val ended: DateTime
 
     val success: Boolean get() { return result.success }
     val message: String get() { return result.msg }
     val value: Any? get() { return result.getOrNull() }
-    val totalMs: Long get() { return ended.durationFrom(started).seconds }
+
+    fun duration(): Duration { return ended.durationFrom(started) }
 
     fun error(): Throwable? {
         val r = result
