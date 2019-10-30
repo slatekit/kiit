@@ -1,6 +1,7 @@
 package slatekit.apis
 
 import slatekit.apis.setup.Parentable
+import slatekit.common.requests.Source
 
 /* ktlint-disable */
 object Protocols {
@@ -56,6 +57,21 @@ sealed class Protocol(override val name:String) : Parentable<Protocol>  {
                 Protocols.Web -> Protocol.Web
                 Protocols.File -> Protocol.File
                 else -> Protocol.Web
+            }
+        }
+
+
+        fun parse(name: Source): Protocol {
+            return when (name) {
+                is Source.API   -> Protocol.Web
+                is Source.Auto  -> Protocol.All
+                is Source.Chat  -> Protocol.Web
+                is Source.CLI   -> Protocol.CLI
+                is Source.Cmd   -> Protocol.CLI
+                is Source.File  -> Protocol.File
+                is Source.Queue -> Protocol.Queue
+                is Source.Web   -> Protocol.Web
+                else            -> Protocol.Web
             }
         }
     }

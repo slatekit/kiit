@@ -47,6 +47,9 @@ sealed class Verb(override val name: String)  : Parentable<Verb> {
     object Delete : Verb(Verbs.Delete)
     object Parent : Verb(Verbs.Parent)
 
+
+    fun isMatch(other:String):Boolean = this.name == other
+
     companion object {
 
         fun parse(name:String): Verb {

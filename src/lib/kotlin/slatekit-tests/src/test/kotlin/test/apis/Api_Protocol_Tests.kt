@@ -47,7 +47,7 @@ class Api_Protocol_Tests : ApiTestsBase() {
                 protocol = Protocol.CLI,
                 apis = listOf(Api(Sample_API_1_Protocol(), setup = Setup.Annotated)),
                 user = null,
-                request = CommonRequest.path("$AREA.$NAME.${Sample_API_1_Protocol::processParent.name}", Verbs.Read, mapOf(), mapOf(Pair("name", "abc"))),
+                request = CommonRequest.path("$AREA.$NAME.${Sample_API_1_Protocol::processParent.name}", Verbs.Post, mapOf(), mapOf(Pair("name", "abc"))),
                 response = Success("ok", msg = "via parent:abc").toResponse()
         )
     }
@@ -59,32 +59,20 @@ class Api_Protocol_Tests : ApiTestsBase() {
                 protocol = Protocol.CLI,
                 apis = listOf(Api(Sample_API_1_Protocol(), setup = Setup.Annotated)),
                 user = null,
-                request = CommonRequest.path("$AREA.$NAME.${Sample_API_1_Protocol::processCLI.name}", Verbs.Read, mapOf(), mapOf(Pair("name", "abc"))),
+                request = CommonRequest.path("$AREA.$NAME.${Sample_API_1_Protocol::processCLI.name}", Verbs.Post, mapOf(), mapOf(Pair("name", "abc"))),
                 response = Success("ok", msg = "via cli:abc").toResponse()
         )
     }
 
 
     @Test
-    fun should_work_when_setup_as_protocol_all_request_is_CLI_via_parent() {
+    fun should_work_when_setup_as_protocol_all_request_is_ALL_via_parent() {
         ensure(
                 protocol = Protocol.All,
                 apis = listOf(Api(Sample_API_1_Protocol(), setup = Setup.Annotated)),
                 user = null,
-                request = CommonRequest.path("$AREA.$NAME.${Sample_API_1_Protocol::processParent.name}", Verbs.Read, mapOf(), mapOf(Pair("name", "abc"))),
+                request = CommonRequest.path("$AREA.$NAME.${Sample_API_1_Protocol::processParent.name}", Verbs.Post, mapOf(), mapOf(Pair("name", "abc"))),
                 response = Success("ok", msg = "via parent:abc").toResponse()
-        )
-    }
-
-
-    @Test
-    fun should_work_when_setup_as_protocol_all_request_is_CLI_explicit() {
-        ensure(
-                protocol = Protocol.All,
-                apis = listOf(Api(Sample_API_1_Protocol(), setup = Setup.Annotated)),
-                user = null,
-                request = CommonRequest.path("$AREA.$NAME.${Sample_API_1_Protocol::processCLI.name}", Verbs.Read, mapOf(), mapOf(Pair("name", "abc"))),
-                response = Success("ok", msg = "via cli:abc").toResponse()
         )
     }
 
@@ -103,13 +91,14 @@ class Api_Protocol_Tests : ApiTestsBase() {
     }
 
 
-    @Test fun should_FAIL_when_setup_as_protocol_WEB_and_request_is_CLI() {
+    @Test
+    fun should_fail_when_setup_as_protocol_web_request_is_CLI_explicit() {
         ensure(
-                protocol = Protocol.Web,
+                protocol = Protocol.All,
                 apis = listOf(Api(Sample_API_1_Protocol(), setup = Setup.Annotated)),
                 user = null,
-                request = CommonRequest.path("$AREA.$NAME.${Sample_API_1_Protocol::processWeb.name}", Verbs.Post, mapOf(), mapOf(Pair("name", "abc"))),
-                response = Failure(Err.of("ErrorInfo(msg=api route samples core Sample_API_1_Protocol::processCLI.name not found, err=null, ref=null)"), msg = "Errored").toResponse(),
+                request = CommonRequest.web("$AREA", "$NAME", "${Sample_API_1_Protocol::processCLI.name}", Verbs.Post, mapOf(), mapOf(Pair("name", "abc"))),
+                response = Failure(Err.of("expected protocol cli, but got web"), msg = "Errored").toResponse(),
                 checkFailMsg = true
         )
     }
