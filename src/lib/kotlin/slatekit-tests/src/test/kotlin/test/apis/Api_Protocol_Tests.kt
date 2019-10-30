@@ -22,8 +22,12 @@ import slatekit.common.CommonRequest
 import slatekit.common.requests.Source
 import slatekit.common.toResponse
 import slatekit.results.Codes
+import slatekit.results.Err
+import slatekit.results.Failure
 import slatekit.results.Success
 import slatekit.results.builders.Notices
+import test.apis.samples.Sample_API_1_Core
+import test.apis.samples.Sample_API_1_Protocol
 import test.setup.UserApi
 
 /**
@@ -33,32 +37,54 @@ import test.setup.UserApi
 
 class Api_Protocol_Tests : ApiTestsBase() {
 
-    // ===================================================================
-    //describe( "API Container Type CLI" ) {
-    @Test fun should_work_when_setup_as_protocol_all_request_is_CLI() {
+    val AREA = "samples"
+    val NAME = "core"
+
+
+    @Test
+    fun should_work_when_setup_as_protocol_CLI_request_is_CLI_via_parent() {
         ensure(
                 protocol = Protocol.CLI,
-                apis     = listOf(Api(UserApi(ctx), setup = Setup.Annotated)),
-                user     = null,
-                request  = CommonRequest.path("app.users.protocolAny", Verbs.Read, mapOf(), mapOf(
-                        Pair("code", "1"),
-                        Pair("tag", "abc")
-                )),
-                response = Success("protocolAny", msg="1 abc").toResponse()
+                apis = listOf(Api(Sample_API_1_Protocol(), setup = Setup.Annotated)),
+                user = null,
+                request = CommonRequest.path("$AREA.$NAME.${Sample_API_1_Protocol::processParent.name}", Verbs.Read, mapOf(), mapOf(Pair("name", "abc"))),
+                response = Success("ok", msg = "via parent:abc").toResponse()
         )
     }
 
 
-    @Test fun should_work_when_setup_as_protocol_CLI_and_request_is_CLI() {
+    @Test
+    fun should_work_when_setup_as_protocol_CLI_request_is_CLI_explicit() {
+        ensure(
+                protocol = Protocol.CLI,
+                apis = listOf(Api(Sample_API_1_Protocol(), setup = Setup.Annotated)),
+                user = null,
+                request = CommonRequest.path("$AREA.$NAME.${Sample_API_1_Protocol::processCLI.name}", Verbs.Read, mapOf(), mapOf(Pair("name", "abc"))),
+                response = Success("ok", msg = "via cli:abc").toResponse()
+        )
+    }
+
+
+    @Test
+    fun should_work_when_setup_as_protocol_all_request_is_CLI_via_parent() {
         ensure(
                 protocol = Protocol.All,
-                apis     = listOf(Api(UserApi(ctx), setup = Setup.Annotated)),
-                user     = null,
-                request  = CommonRequest.cli("app.users.protocolCLI",  listOf(), listOf(
-                        Pair("code", "1"),
-                        Pair("tag", "abc")
-                )),
-                response = Success("protocolCLI", msg="1 abc").toResponse()
+                apis = listOf(Api(Sample_API_1_Protocol(), setup = Setup.Annotated)),
+                user = null,
+                request = CommonRequest.path("$AREA.$NAME.${Sample_API_1_Protocol::processParent.name}", Verbs.Read, mapOf(), mapOf(Pair("name", "abc"))),
+                response = Success("ok", msg = "via parent:abc").toResponse()
+        )
+    }
+
+
+    @Test
+    fun should_work_when_setup_as_protocol_all_request_is_CLI_explicit() {
+        ensure(
+                protocol = Protocol.All,
+                apis = listOf(Api(Sample_API_1_Protocol(), setup = Setup.Annotated)),
+                user = null,
+                request = CommonRequest.path("$AREA.$NAME.${Sample_API_1_Protocol::processCLI.name}", Verbs.Read, mapOf(), mapOf(Pair("name", "abc"))),
+                response = Success("ok", msg = "via cli:abc").toResponse()
         )
     }
 
@@ -79,14 +105,12 @@ class Api_Protocol_Tests : ApiTestsBase() {
 
     @Test fun should_FAIL_when_setup_as_protocol_WEB_and_request_is_CLI() {
         ensure(
-                protocol = Protocol.CLI,
-                apis     = listOf(Api(UserApi(ctx), setup = Setup.Annotated)),
-                user     = null,
-                request  = (CommonRequest.cli("app.users.protocolWeb",  listOf(), listOf(
-                        Pair("code", "1"),
-                        Pair("tag", "abc")
-                )) as CommonRequest).copy(source = Source.Web),
-                response = Notices.errored<String>("app.users.protocolWeb not found", Codes.NOT_FOUND).toResponse()
+                protocol = Protocol.Web,
+                apis = listOf(Api(Sample_API_1_Protocol(), setup = Setup.Annotated)),
+                user = null,
+                request = CommonRequest.path("$AREA.$NAME.${Sample_API_1_Protocol::processWeb.name}", Verbs.Post, mapOf(), mapOf(Pair("name", "abc"))),
+                response = Failure(Err.of("ErrorInfo(msg=api route samples core Sample_API_1_Protocol::processCLI.name not found, err=null, ref=null)"), msg = "Errored").toResponse(),
+                checkFailMsg = true
         )
     }
 }
