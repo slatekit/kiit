@@ -14,7 +14,7 @@ interface Functions<out T : Function> {
     /**
      * names of the functions
      */
-    val names: List<String> get() { return all.map { f -> f.name } }
+    val names: List<String> get() { return all.map { f -> f.id.name } }
 
     /**
      * number of functions
@@ -26,12 +26,12 @@ interface Functions<out T : Function> {
      * @param name
      * @return
      */
-    fun contains(name: String): Boolean = all.count { it.name == name } > 0
+    fun contains(name: String): Boolean = all.count { it.id.name == name } > 0
 
     /**
      * Get the first function with a matching name
      */
     fun getOrNull(name: String): T? {
-        return all.firstOrNull { it.name == name }
+        return all.firstOrNull { it.id.name == name }
     }
 }

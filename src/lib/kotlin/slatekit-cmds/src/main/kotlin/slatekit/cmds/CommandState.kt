@@ -13,6 +13,7 @@
 
 package slatekit.cmds
 
+import slatekit.common.Identity
 import slatekit.common.Status
 import slatekit.functions.common.*
 import slatekit.results.Outcome
@@ -26,7 +27,7 @@ import slatekit.results.builders.Outcomes
  * @param lastResult : The last result
  */
 data class CommandState(
-        override val info: FunctionInfo,
+        override val id: Identity,
         override val status: Status,
         override val lastResult: Outcome<CommandResult>?
 ) : FunctionState<CommandResult> {
@@ -50,9 +51,9 @@ data class CommandState(
          * @param name
          * @return
          */
-        fun empty(info: FunctionInfo): CommandState =
+        fun empty(id: Identity): CommandState =
                 CommandState(
-                        info = info,
+                        id = id,
                         status = Status.InActive,
                         lastResult = null
                 )

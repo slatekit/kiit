@@ -19,6 +19,8 @@ import slatekit.common.*
 import slatekit.cmds.Command
 import slatekit.cmds.CommandRequest
 import slatekit.cmds.Commands
+import slatekit.common.envs.Env
+import slatekit.common.envs.EnvMode
 import slatekit.results.Success
 import slatekit.results.Try
 
@@ -28,12 +30,12 @@ class Commands_Tests {
     val inc = { userCount += 1; userCount }
 
 
-    class CmdCreateUser(var count: Int = 0) : Command("create user", "", { a: CommandRequest ->
+    class CmdCreateUser(var count: Int = 0) : Command("create.user", "", EnvMode.Dev, { a: CommandRequest ->
         "user_" + count
     })
 
 
-    class CmdCreateAdmin(var count: Int = 0) : Command("create admin") {
+    class CmdCreateAdmin(var count: Int = 0) : Command("create.admin") {
 
         override fun execute(request: CommandRequest): Try<Any> {
             count += 1
@@ -42,7 +44,7 @@ class Commands_Tests {
     }
 
 
-    class CmdError(var count: Int = 0) : Command("create error") {
+    class CmdError(var count: Int = 0) : Command("create.error") {
 
         override fun execute(request: CommandRequest): Try<Any> {
             count += 1
@@ -53,23 +55,11 @@ class Commands_Tests {
 
     @Test
     fun can_create_command() {
-        val cmd = Command("syncData", "sync data from server")
-        Assert.assertEquals(cmd.info.name, "syncData")
-        Assert.assertEquals(cmd.info.desc, "sync data from server")
-        Assert.assertEquals(cmd.info.area, "")
-        Assert.assertEquals(cmd.info.group, "")
-        Assert.assertEquals(cmd.info.action, "")
-    }
-
-
-    @Test
-    fun can_create_command_with_namespace() {
-        val cmd = Command("app.users.syncData", "sync data from server")
-        Assert.assertEquals(cmd.info.name, "app.users.syncData")
-        Assert.assertEquals(cmd.info.desc, "sync data from server")
-        Assert.assertEquals(cmd.info.area, "app")
-        Assert.assertEquals(cmd.info.group, "users")
-        Assert.assertEquals(cmd.info.action, "syncData")
+        val cmd = Command("sync.data", "sync data from server", EnvMode.Dev)
+        Assert.assertEquals(cmd.id.area , "sync")
+        Assert.assertEquals(cmd.id.service, "data")
+        Assert.assertEquals(cmd.id.env  , EnvMode.Dev.name)
+        Assert.assertEquals(cmd.id.fullname , "sync.data.cmd.dev.1_0")
     }
 
 
@@ -82,8 +72,8 @@ class Commands_Tests {
                 )
         )
         Assert.assertTrue(cmds.size == 2)
-        Assert.assertTrue(cmds.contains("create user"))
-        Assert.assertTrue(cmds.contains("create admin"))
+        Assert.assertTrue(cmds.contains("create.user"))
+        Assert.assertTrue(cmds.contains("create.admin"))
     }
 
 
@@ -108,7 +98,7 @@ class Commands_Tests {
                         CmdCreateAdmin()
                 )
         )
-        val result = cmds.run("create user")
+        val result = cmds.run("create.user")
         Assert.assertTrue(result.success)
         result.onSuccess {
             Assert.assertTrue(it.ended > DateTimes.MIN)
@@ -127,7 +117,7 @@ class Commands_Tests {
                         CmdCreateAdmin()
                 )
         )
-        val result = cmds.run("create admin")
+        val result = cmds.run("create.admin")
         Assert.assertTrue(result.success)
         result.onSuccess {
             Assert.assertTrue(it.ended > DateTimes.MIN)
@@ -146,14 +136,14 @@ class Commands_Tests {
                         CmdCreateAdmin()
                 )
         )
-        cmds.run("create user")
+        cmds.run("create.user")
         val state = cmds.state("create user")
         state.onSuccess {
             Assert.assertTrue(it.hasRun())
 //            Assert.assertTrue(it.countFailure() == 0L)
 //            Assert.assertTrue(it.countAttempt() == 1L)
             Assert.assertTrue(it.lastResult?.getOrNull()?.value == "user_0")
-            Assert.assertTrue(it.info.name == "create user")
+            Assert.assertTrue(it.id.name == "create.user")
         }
     }
 
@@ -166,8 +156,8 @@ class Commands_Tests {
                         CmdCreateAdmin()
                 )
         )
-        cmds.run("create admin")
-        cmds.run("create admin")
+        cmds.run("create.admin")
+        cmds.run("create.admin")
         val state = cmds.state("create admin")
 
         state.onSuccess {
@@ -175,7 +165,7 @@ class Commands_Tests {
 //            Assert.assertTrue(it.countFailure() == 0L)
 //            Assert.assertTrue(it.countAttempt() == 2L)
             Assert.assertTrue(it.lastResult?.getOrNull()?.value == "admin_2")
-            Assert.assertTrue(it.info.name == "create admin")
+            Assert.assertTrue(it.id.name == "create.admin")
         }
     }
 
@@ -215,7 +205,7 @@ class Commands_Tests {
 //            Assert.assertTrue(it.countAttempt() == 1L)
             Assert.assertTrue(it.lastResult?.msg == "Unexpected")
             //Assert.assertTrue(it.lastResult?.error()!!.message == "Error while executing : create error. error_1")
-            Assert.assertTrue(it.info.name == "create error")
+            Assert.assertTrue(it.id.name == "create.error")
         }
     }
 
@@ -235,7 +225,7 @@ class Commands_Tests {
 //            Assert.assertTrue(it.countFailure() == 2L)
 //            Assert.assertTrue(it.countAttempt() == 2L)
            // Assert.assertTrue(it.lastResult!!.error()!!.message == "Error while executing : create error. error_2")
-            Assert.assertTrue(it.info.name == "create error")
+            Assert.assertTrue(it.id.name == "create.error")
         }
     }
 }

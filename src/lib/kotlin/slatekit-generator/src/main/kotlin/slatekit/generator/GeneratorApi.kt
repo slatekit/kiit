@@ -11,7 +11,7 @@ import slatekit.results.Try
 
 
 @Api(area = "slatekit", name = "setup", desc= "new project setup",
-        auth = AuthModes.Keyed, roles = Roles.none, verb = Verbs.Auto, protocols = Protocols.CLI)
+        auth = AuthModes.Keyed, roles = [Roles.none], verb = Verbs.Auto, protocols = [Protocols.CLI])
 class GeneratorApi(val context: Context, val service: GeneratorService) {
 
     // slatekit.setup.app -name="myapp1" -packageName="mycompany.myapp1" -desc="Sample app 1" -destination="~/dev/tests/slatekit/myapp1"

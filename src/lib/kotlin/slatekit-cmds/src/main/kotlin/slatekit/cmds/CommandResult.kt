@@ -15,7 +15,9 @@ package slatekit.cmds
 
 import slatekit.common.DateTime
 import slatekit.functions.common.*
+import slatekit.results.Outcome
 import slatekit.results.Result
+import slatekit.results.builders.Outcomes
 import slatekit.results.builders.Tries
 
 /**
@@ -29,7 +31,7 @@ import slatekit.results.builders.Tries
 data class CommandResult(
         val request: CommandRequest,
         override val mode: FunctionMode,
-        override val result: Result<*, *>,
+        override val result: Outcome<*>,
         override val started: DateTime,
         override val ended: DateTime
 ) : FunctionResult {
@@ -37,7 +39,7 @@ data class CommandResult(
 
     companion object {
         fun empty(): CommandResult {
-            val result = Tries.errored<Any>("Not started")
+            val result = Outcomes.errored<Any>("Not started")
             val request = CommandRequest.empty()
             val start = DateTime.now()
             return CommandResult(request, FunctionMode.Called, result, start, start)
