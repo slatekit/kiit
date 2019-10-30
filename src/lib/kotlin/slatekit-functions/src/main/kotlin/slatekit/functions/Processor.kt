@@ -14,7 +14,8 @@ class Processor<I, O> {
                     true -> start
                     false -> process(0, items.size - 1, start) { ndx, v ->
                         val processor = items[ndx]
-                                processor.process(v)
+                        val result = processor.process(v)
+                        result
                     }
                 }
             }
@@ -29,7 +30,8 @@ class Processor<I, O> {
                     true -> output
                     false -> process(0, items.size - 1, output) { ndx, v ->
                         val processor = items[ndx]
-                                processor.process(raw, input, v)
+                        val result = processor.process(raw, input, v)
+                        result
                     }
                 }
             }
@@ -52,5 +54,20 @@ class Processor<I, O> {
             result
         else
             process(ndx + 1, end, result, condition)
+    }
+
+
+    companion object {
+        fun <I, O> chain(all: List<Process<I, O>>, last: suspend (I) -> Outcome<O>): suspend (I) -> Outcome<O> {
+            return all.foldRight(last) { acc, call ->
+                compose(acc, call)
+            }
+        }
+
+        fun <I, O> compose(p: Process<I, O>, op: suspend (I) -> Outcome<O>): suspend (I) -> Outcome<O> {
+            return { i ->
+                p.process(i, op)
+            }
+        }
     }
 }

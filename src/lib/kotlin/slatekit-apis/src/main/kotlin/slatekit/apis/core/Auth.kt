@@ -34,22 +34,20 @@ interface Auth : RolesSupport {
      * NOTE: This can be implemented any way, e.g.g Auth tokens/OAuth etc.
      *
      * @param authMode : The mode of the authoriation as specified by annotation Api and attribute: auth
-     * @param rolesOnAction : The values of the "roles" attribute on the annotation of the ApiAction ( method )
-     * @param rolesOnApi : The values of the "roles" attribute on the annotation of the Api ( class )
+     * @param roles : The values of the "roles" attribute on the annotation of the Action ( class )
      * @return
      */
-    fun isAuthorized(req: Request, authMode: String, rolesOnAction: String, rolesOnApi: String): Notice<Boolean>
+    fun isAuthorized(req: Request, authMode: AuthMode, roles:Roles): Outcome<Boolean>
 
     /**
      * whether or not the authorization is valid for the auth mode and roles supplied.
      * NOTE: This can be implemented any way, e.g.g Auth tokens/OAuth etc.
      *
      * @param authMode : The mode of the authoriation as specified by annotation Api and attribute: auth
-     * @param rolesOnAction : The values of the "roles" attribute on the annotation of the ApiAction ( method )
-     * @param rolesOnApi : The values of the "roles" attribute on the annotation of the Api ( class )
+     * @param roles : The values of the "roles" attribute on the annotation of the Action ( class )
      * @return
      */
-    fun check(req: Request, authMode: AuthMode, rolesOnAction: slatekit.apis.core.Roles, rolesOnApi: slatekit.apis.core.Roles): Outcome<Boolean>
+    fun check(req: Request, authMode: AuthMode, roles: slatekit.apis.core.Roles): Outcome<Boolean>
 
     /**
      * Gets the user roles that are applicable for the supplied request.

@@ -19,25 +19,22 @@ class Authorize(val auth: Auth?) : Input<ApiRequest>, Middleware {
         return request.flatMap {
             val target = it.target!!
             val noAuth = auth == null // || target.api.auth.isNullOrEmpty()
-            val isActionNotAuthed = target.action.roles.isAuthed
-            val isApiNotAuthed = target.api.roles.isAuthed
+            val actionRoles = target.action.roles.orElse(target.api.roles)
+            val isAuthed = actionRoles.isAuthed
 
             // CASE 1: No auth for action
-            val result = if (noAuth && isActionNotAuthed) {
+            val result = if (noAuth && !isAuthed) {
                 request
             }
-            // CASE 2: No auth for parent
-            else if (noAuth && isApiNotAuthed) {
-                request
-            }
-            // CASE 3: No auth and action requires roles!
+            // CASE 2: No auth and action requires roles!
             else if (noAuth) {
-                request
-            } else {
-                // auth-mode, action roles, api roles
-                val authResult = auth?.check(it.request, target.api.auth, target.action.roles, target.api.roles)
+                Outcomes.denied("Unable to authorize, authorization provider not set")
+            }
+            // CASE 3: Proceed to authorize
+            else {
+                val authResult = auth?.check(it.request, target.api.auth, actionRoles)
                         ?: Outcomes.denied("Unable to authorize, authorization provider not set")
-                authResult.transform({ request }, { e -> Outcomes.errored(e) })
+                authResult.flatMap { request }
             }
             result
         }

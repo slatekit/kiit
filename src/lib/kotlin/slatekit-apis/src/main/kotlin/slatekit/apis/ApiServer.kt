@@ -183,6 +183,10 @@ open class ApiServer(
      * @param cmd
      * @return
      */
+    private val hasChainedExecution = hooks.middleware.isNotEmpty()
+    private val chainedExecutor = slatekit.functions.Processor.chain(hooks.middleware) { request ->
+        executeMethod(Ctx.of(this, this.ctx, request), request)
+    }
     suspend fun execute(raw: Request, options: Flags? = null): Outcome<Any> {
         // Step 1: Check for help / discovery
         val helpCheck = help.process(raw)
@@ -196,8 +200,12 @@ open class ApiServer(
         // Step 3: Hooks: Pre-Processing Stage 1 : rewrite request, and ensure system validations
         val startInput = Outcomes.success(rawRequest)
         val validated = startInput
-            .operate {  processor.input(hooks.formatters  , it) }
-            .operate {  processor.input(preProcessBuiltIns, it) }
+            .operate {
+                processor.input(hooks.formatters  , it)
+            }
+            .operate {
+                processor.input(preProcessBuiltIns, it)
+            }
 
         // Step 4: Hooks: Pre-Processing Stage 2: run through more hooks ( API level & supplied )
         val requested = validated
@@ -205,7 +213,23 @@ open class ApiServer(
             .operate { processor.input(hooks.inputters, it)    }
 
         // Step 5: Execute request
-        val executed = requested.flatMap { request -> executeMethod(Ctx.of(this, this.ctx, request), request) }
+        val executed = requested.flatMap { request ->
+            if(hasChainedExecution) {
+                chainedExecutor(request)
+            } else {
+                request.target?.let {
+                    if(it.instance is slatekit.functions.Process<*,*>){
+                        val processor = it.instance as slatekit.functions.Process<ApiRequest, ApiResult>
+                        processor.process(request) {
+                            executeMethod(Ctx.of(this, this.ctx, request), request)
+                        }
+                    }
+                    else {
+                        executeMethod(Ctx.of(this, this.ctx, request), request)
+                    }
+                } ?:executeMethod(Ctx.of(this, this.ctx, request), request)
+            }
+        }
 
         // Step 6: Hooks: Post-Processing Stage 1: errors hooks on API ( only if we mapped to a class.method )
         validated.onSuccess { Errors.applyError(rawRequest, it, requested, executed) }

@@ -1,16 +1,14 @@
 package slatekit.apis.support
 
 import slatekit.apis.AuthMode
-import slatekit.apis.AuthModes
 import slatekit.apis.core.Auth
 import slatekit.apis.core.Roles
 import slatekit.common.*
 import slatekit.common.auth.AuthFuncs
 import slatekit.common.info.ApiKey
 import slatekit.common.requests.Request
-import slatekit.results.Notice
 import slatekit.results.Outcome
-import slatekit.results.builders.Notices
+import slatekit.results.builders.Outcomes
 
 /**
  * Class used to authenticate an api with support for 3 modes:
@@ -28,8 +26,8 @@ open class Authenticator(
     private val headerKey: String = "api-key"
 ) : Auth {
 
-    override fun check(req: Request, authMode: AuthMode, rolesOnAction: Roles, rolesOnApi: Roles): Outcome<Boolean> {
-        return isAuthorized(req, authMode.name, rolesOnAction.all.first(), rolesOnApi.all.first()).toOutcome()
+    override fun check(req: Request, authMode: AuthMode, roles: Roles): Outcome<Boolean> {
+        return isAuthorized(req, authMode, roles).toOutcome()
     }
 
     private val keyLookup = AuthFuncs.convertKeys(keys)
@@ -45,23 +43,14 @@ open class Authenticator(
      */
     override fun isAuthorized(
         req: Request,
-        authMode: String,
-        rolesOnAction: String,
-        rolesOnApi: String
-    ): Notice<Boolean> {
-
-        // 1. No roles or guest ?
-        if (isRoleEmptyOrGuest(rolesOnAction))
-            return Notices.success(true)
-
-        // 2. Get the actual role if the action references the parent via @parent
-        val role = determineRole(rolesOnAction, rolesOnApi)
-
-        // 3. Now determine roles based on api-key or role
-        return when (authMode) {
-            AuthModes.Keyed -> validateApiKey(req, role)
-            AuthModes.Token -> validateToken(req, role)
-            else -> Notices.denied()
+        authMode: AuthMode,
+        roles:Roles
+    ): Outcome<Boolean> {
+        return when {
+            roles.isEmpty || roles.allowGuest -> Outcomes.success(true)
+            authMode == AuthMode.Keyed        -> validateApiKey(req, roles)
+            authMode == AuthMode.Token        -> validateToken(req, roles)
+            else                              -> Outcomes.denied("Not authorized")
         }
     }
 
@@ -78,11 +67,11 @@ open class Authenticator(
      * 3. The api key "abc123" maps internally to one of key in @see: keys
      * 4. The matched key has associated roles
      */
-    open fun validateApiKey(req: Request, role: String): Notice<Boolean> {
+    open fun validateApiKey(req: Request, roles: Roles): Outcome<Boolean> {
 
         // Validate using the callback if supplied,
         // otherwise use built-in key check
-        return AuthFuncs.isKeyValid(req.meta, keyLookup, headerKey, role)
+        return AuthFuncs.isKeyValid(req.meta, keyLookup, headerKey, roles.delimited).toOutcome()
     }
 
     /**
@@ -95,13 +84,13 @@ open class Authenticator(
      * 3. The token "abc123" maps internally to a user
      * 4. We look up the user identified by the token and get their roles
      */
-    open fun validateToken(req: Request, role: String): Notice<Boolean> {
+    open fun validateToken(req: Request, roles: Roles): Outcome<Boolean> {
 
         // Get the user roles
         val actualRole = getUserRoles(req)
         val actualRoles = actualRole.splitToMapWithPairs(',')
 
         // Now match.
-        return AuthFuncs.matchRoles(role, actualRoles)
+        return AuthFuncs.matchRoles(roles.delimited, actualRoles).toOutcome()
     }
 }

@@ -49,7 +49,7 @@ class Worker_Api_Tests {
                     "s" to "user1@abc.com",
                     "b" to true,
                     "i" to 123,
-                    "d" to DateTimes.of(2018, 1, 27, 14, 30, 45)
+                    "d" to DateTimes.of(2018, 1, 27, 14, 30, 45).toString()
             ))
         }
 

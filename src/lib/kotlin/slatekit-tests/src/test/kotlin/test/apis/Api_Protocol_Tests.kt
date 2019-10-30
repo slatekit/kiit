@@ -80,13 +80,10 @@ class Api_Protocol_Tests : ApiTestsBase() {
     @Test fun should_work_when_setup_as_parent_protocol_CLI_and_request_is_CLI() {
         ensure(
                 protocol = Protocol.All,
-                apis     = listOf(Api(UserApi(ctx), setup = Setup.Annotated)),
+                apis     = listOf(Api(Sample_API_1_Protocol(), setup = Setup.Annotated)),
                 user     = null,
-                request  = CommonRequest.cli("app.users.protocolParent",  listOf(), listOf(
-                        Pair("code", "1"),
-                        Pair("tag", "abc")
-                )),
-                response = Success("protocolParent", msg="1 abc").toResponse()
+                request  = CommonRequest.path("$AREA.$NAME.${Sample_API_1_Protocol::processCLI.name}",  Verbs.Post, mapOf(), mapOf(Pair("name", "abc"))),
+                response = Success("ok", msg = "via cli:abc").toResponse()
         )
     }
 

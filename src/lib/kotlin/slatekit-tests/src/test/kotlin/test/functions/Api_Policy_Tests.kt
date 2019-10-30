@@ -75,7 +75,7 @@ class MyAPI2 : MyAPI1(), Filter<ApiRequest>, Before<ApiRequest>, After<ApiReques
 
     override val api: String = "myapi2"
 
-    override suspend fun handle(req: ApiRequest, op: (ApiRequest) -> Outcome<ApiResult>): Outcome<ApiResult> {
+    override suspend fun handle(req: ApiRequest, op: suspend (ApiRequest) -> Outcome<ApiResult>): Outcome<ApiResult> {
         println("handle: ${req.api}.${req.action}")
         return op(req)
     }
