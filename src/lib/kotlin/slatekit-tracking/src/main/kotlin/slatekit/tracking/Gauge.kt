@@ -1,4 +1,4 @@
-package slatekit.common.metrics
+package slatekit.tracking
 
 import org.threeten.bp.ZonedDateTime
 

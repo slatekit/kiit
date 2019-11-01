@@ -1,4 +1,4 @@
-package slatekit.common.metrics
+package slatekit.tracking
 
 import slatekit.common.Identity
 import slatekit.common.log.Logger
@@ -54,7 +54,7 @@ data class Event(
 
     companion object {
 
-        fun log(logger:Logger, id: Identity, event:Event){
+        fun log(logger:Logger, id: Identity, event: Event){
             val extra = event.fields?.fold("") { acc, info -> acc + ", ${info.first}=${info.second}" }
             when(event.status) {
                 is Status.Succeeded  -> logger.info ("id=${id.id}, area=${event.area}, name=${event.name}, uuid=${event.uuid}, success=true , code=${event.status.code}, desc=${event.desc} $extra")
@@ -71,8 +71,8 @@ data class Event(
 
 
         fun logger(logger: Logger, id: Identity): (Event) -> Unit {
-            return { event:Event ->
-              Event.log(logger, id, event)
+            return { event: Event ->
+                log(logger, id, event)
             }
         }
     }

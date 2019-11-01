@@ -1,4 +1,4 @@
-package slatekit.common.metrics
+package slatekit.tracking
 
 import slatekit.common.DateTime
 import slatekit.common.Identity

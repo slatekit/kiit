@@ -1,7 +1,7 @@
 package slatekit.functions.policy
 
 import slatekit.common.log.Logger
-import slatekit.common.metrics.Counters
+import slatekit.tracking.Counters
 import slatekit.results.Codes
 import slatekit.results.Outcome
 import slatekit.results.Status

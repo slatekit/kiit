@@ -1,4 +1,4 @@
-package slatekit.common.metrics
+package slatekit.tracking
 
 import slatekit.results.Status
 
@@ -21,13 +21,13 @@ interface Countable : Tagged {
      * Increment the counters for the different states
      * @return
      */
-    fun incProcessed():Long    = inc(Countable.PROCESSED )
-    fun incSucceeded():Long    = inc(Countable.SUCCEEDED )
-    fun incDenied():Long       = inc(Countable.DENIED    )
-    fun incInvalid():Long      = inc(Countable.INVALID   )
-    fun incIgnored():Long      = inc(Countable.IGNORED   )
-    fun incErrored():Long      = inc(Countable.ERRORED   )
-    fun incUnexpected():Long   = inc(Countable.UNEXPECTED)
+    fun incProcessed():Long    = inc(PROCESSED)
+    fun incSucceeded():Long    = inc(SUCCEEDED)
+    fun incDenied():Long       = inc(DENIED)
+    fun incInvalid():Long      = inc(INVALID)
+    fun incIgnored():Long      = inc(IGNORED)
+    fun incErrored():Long      = inc(ERRORED)
+    fun incUnexpected():Long   = inc(UNEXPECTED)
     fun incCustom(name:String) = inc(name)
 
 
@@ -35,26 +35,26 @@ interface Countable : Tagged {
      * Decrement the counters for the different states
      * @return
      */
-    fun decProcessed():Long    = dec(Countable.PROCESSED )
-    fun decSucceeded():Long    = dec(Countable.SUCCEEDED )
-    fun decDenied():Long       = dec(Countable.DENIED    )
-    fun decInvalid():Long      = dec(Countable.INVALID   )
-    fun decIgnored():Long      = dec(Countable.IGNORED   )
-    fun decErrored():Long      = dec(Countable.ERRORED   )
-    fun decUnexpected():Long   = dec(Countable.UNEXPECTED)
+    fun decProcessed():Long    = dec(PROCESSED)
+    fun decSucceeded():Long    = dec(SUCCEEDED)
+    fun decDenied():Long       = dec(DENIED)
+    fun decInvalid():Long      = dec(INVALID)
+    fun decIgnored():Long      = dec(IGNORED)
+    fun decErrored():Long      = dec(ERRORED)
+    fun decUnexpected():Long   = dec(UNEXPECTED)
     fun decCustom(name:String) = dec(name)
 
 
     /**
      * Gets the current values for the different counters
      */
-    fun totalProcessed ():Long = get(Countable.PROCESSED )
-    fun totalSucceeded ():Long = get(Countable.SUCCEEDED )
-    fun totalDenied    ():Long = get(Countable.DENIED    )
-    fun totalInvalid   ():Long = get(Countable.INVALID   )
-    fun totalIgnored   ():Long = get(Countable.IGNORED   )
-    fun totalErrored   ():Long = get(Countable.ERRORED   )
-    fun totalUnexpected():Long = get(Countable.UNEXPECTED)
+    fun totalProcessed ():Long = get(PROCESSED)
+    fun totalSucceeded ():Long = get(SUCCEEDED)
+    fun totalDenied    ():Long = get(DENIED)
+    fun totalInvalid   ():Long = get(INVALID)
+    fun totalIgnored   ():Long = get(IGNORED)
+    fun totalErrored   ():Long = get(ERRORED)
+    fun totalUnexpected():Long = get(UNEXPECTED)
     fun totalCustom(name:String):Long = get(name)
 
 

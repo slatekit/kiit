@@ -1,4 +1,4 @@
-package slatekit.common.metrics
+package slatekit.tracking
 
 import slatekit.common.Identity
 import slatekit.results.Status
@@ -35,12 +35,12 @@ class Counters(val id: Identity,
      * Reset all counterst to 0
      */
     override fun reset() {
-        getInternal(Countable.PROCESSED )   ?.set(0L)
-        getInternal(Countable.SUCCEEDED )   ?.set(0L)
-        getInternal(Countable.DENIED    )   ?.set(0L)
-        getInternal(Countable.INVALID   )   ?.set(0L)
-        getInternal(Countable.IGNORED   )   ?.set(0L)
-        getInternal(Countable.ERRORED   )   ?.set(0L)
+        getInternal(Countable.PROCESSED)   ?.set(0L)
+        getInternal(Countable.SUCCEEDED)   ?.set(0L)
+        getInternal(Countable.DENIED)   ?.set(0L)
+        getInternal(Countable.INVALID)   ?.set(0L)
+        getInternal(Countable.IGNORED)   ?.set(0L)
+        getInternal(Countable.ERRORED)   ?.set(0L)
         getInternal(Countable.UNEXPECTED)   ?.set(0L)
     }
 
@@ -48,7 +48,7 @@ class Counters(val id: Identity,
     /**
      * Gets the counter for a specific name
      */
-    private fun getInternal(name:String):Counter? {
+    private fun getInternal(name:String): Counter? {
         return if(counters.containsKey(name)) {
             counters[name]
         } else {
@@ -98,12 +98,12 @@ class Counters(val id: Identity,
 
         fun build(lookup:Map<String, Counter>? = null, custom:List<String>? = null):Map<String, Counter> {
             val initial = lookup ?: listOf(
-                    Countable.PROCESSED ,
-                    Countable.SUCCEEDED ,
-                    Countable.DENIED    ,
-                    Countable.INVALID   ,
-                    Countable.IGNORED   ,
-                    Countable.ERRORED   ,
+                    Countable.PROCESSED,
+                    Countable.SUCCEEDED,
+                    Countable.DENIED,
+                    Countable.INVALID,
+                    Countable.IGNORED,
+                    Countable.ERRORED,
                     Countable.UNEXPECTED
             ).map{ it to Counter(listOf()) }.toMap()
             val all = custom?.let {
