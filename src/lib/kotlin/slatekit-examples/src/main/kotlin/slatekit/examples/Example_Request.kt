@@ -90,19 +90,19 @@ class Example_Request : Command("send") {
         println( request.action )
 
         // CASE 4a: Get a header named "api-key"
-        println( request.meta?.getString("api-key") )
+        println( request.meta.getString("api-key") )
 
         // CASE 4b: Get a header named "sample-id" as integer
         // IF its not there, this will return a 0 as getInt
         // returns a non-nullable value
-        println( request.meta?.getInt("sample-id") )
+        println( request.meta.getInt("sample-id") )
 
         // CASE 4c: Get a header named "sample-id" as nullable integer
-        println( request.meta?.getIntOrNull("sample-id") )
+        println( request.meta.getIntOrNull("sample-id") )
 
         // CASE 4d: Get a header named "sample-id" as integer with default
         // value if its not there
-        println( request.meta?.getIntOrElse("sample-id", -1) )
+        println( request.meta.getIntOrElse("sample-id", -1) )
 
         // CASE 5a: Get a parameter named "userId" as integer
         // IF its not there, this will return a 0 as getInt
@@ -111,14 +111,14 @@ class Example_Request : Command("send") {
         // otherwise, if the request is a post, the value is
         // first checked in the body ( json data ) before checking
         // the query params
-        println( request.meta?.getInt("userId") )
+        println( request.meta.getInt("userId") )
 
         // CASE 5b: Get a parameter named "userId" as nullable integer
-        println( request.meta?.getIntOrNull("userId") )
+        println( request.meta.getIntOrNull("userId") )
 
         // CASE 5c: Get a parameter named "userId" as integer with default
         // value if its not there
-        println( request.meta?.getIntOrElse("userId", -1) )
+        println( request.meta.getIntOrElse("userId", -1) )
 
         // CASE 6: Get the verb ( only applicable to HTTP requests )
         // For the CLI - the verb will be "cli"
