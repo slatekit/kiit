@@ -1,0 +1,54 @@
+
+table tr td  {
+	font-family: 'Open Sans', sans-serif;
+	font-size: 15px;
+	font-weight: 400;
+	line-height: 27px;
+	color: #797c8f;
+	opacity: .85;
+	margin-bottom: 0;
+}
+
+a .app-btn-red {
+	background: #ff5777;
+	border-radius: 35px;
+	padding: 10px 40px;
+    color: #ffffff;
+	font-weight: 600;
+	font-size: 16px;
+	transition: all .3s ease-in-out;
+	text-decoration: none;
+	border: 1px solid #ff5777;
+	display: inline-block;
+}
+
+
+.features span {
+	font-family: 'Open Sans', sans-serif;
+	font-size: 16px;
+	font-weight: 400;
+	line-height: 27px;
+	color: #797c8f;
+	opacity: .85;
+	margin-bottom: 0;
+	display: inline-block;
+	margin-bottom: 10px;
+}
+
+.features h2 {
+	font-size: 30px;
+	font-weight: 600;
+	color: #5a5e74;
+	margin: 0;
+	margin-bottom: 15px;
+}
+
+.features p {
+	font-family: 'Open Sans', sans-serif;
+	font-size: 15px;
+	font-weight: 400;
+	line-height: 27px;
+	color: #797c8f;
+	opacity: .85;
+	margin-bottom: 0;
+}

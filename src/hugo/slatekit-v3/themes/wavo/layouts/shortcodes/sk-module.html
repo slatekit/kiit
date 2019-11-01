@@ -1,0 +1,31 @@
+
+<table class="table table-bordered table-striped">
+  <tr>
+    <td><strong>package</strong></td>
+    <td>{{.Get "package" }}</td>
+  </tr>
+  <tr>
+    <td><strong>jar</strong></td>
+    <td>{{.Get "jar" }}</td>
+  </tr>
+  <tr>
+    <td><strong>git</strong></td>
+    <td><a class="url-ch" href="{{.Get "git" }}">{{.Get "gitAlias" }}</a></td>
+  </tr>
+  <tr>
+    <td><strong>docs</strong></td>
+    <td><a class="url-ch" href="{{.Get "url" }}">{{.Get "name" }}</a></td>
+  </tr>
+  <tr>
+    <td><strong>uses</strong></td>
+    <td>{{.Get "uses" }}</td>
+  </tr>
+  <tr>
+    <td><strong>license</strong></td>
+    <td>{{.Get "license" }}</td>
+  </tr>
+  <tr>
+      <td><strong>example</strong></td>
+      <td><a class="url-ch" href="{{.Get "exampleUrl" }}">{{.Get "exampleFileName" }}</a></td>
+  </tr>
+</table>

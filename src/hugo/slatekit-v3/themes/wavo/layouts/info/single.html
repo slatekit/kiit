@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+
+    <!--<base href="{{ .Site.BaseURL }}">-->
+
+    <base href="../../">
+    {{ partial "header.html" . }}
+    <link rel="stylesheet" href="assets/theme/css/about-1.css">
+    {{ partial "header-app.html" . }}
+    <title>Slate Kit: Info</title>
+</head>
+
+<body>
+
+    <!-- Page Loading -->
+    <div class="se-pre-con"></div>
+
+    <!-- ========== Start Navbar ========== -->
+        <!-- header start -->
+        <div class="header-classic fixed-top navbar-light wow fadeInDown">
+            <!-- navigation start -->
+            <div class="container">
+                <div class="row">
+                    <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
+                        <nav class="navbar navbar-expand-lg navbar-classic">
+                            <a class="navbar-brand" href="#0">
+                                <img src="assets/img/saas-1/logo.png" alt=""></a>
+                            <button
+                                class="navbar-toggler collapsed"
+                                type="button"
+                                data-toggle="collapse"
+                                data-target="#navbar-classic"
+                                aria-controls="navbar-classic"
+                                aria-expanded="false"
+                                aria-label="Toggle navigation">
+                                <span class="icon-bar top-bar mt-0"></span>
+                                <span class="icon-bar middle-bar"></span>
+                                <span class="icon-bar bottom-bar"></span>
+                            </button>
+                            <div class="collapse navbar-collapse" id="navbar-classic">
+                                {{ partial "nav.html" . }}
+                            </div>
+                        </nav>
+                    </div>
+                </div>
+            </div>
+            <!-- navigation close -->
+        </div>
+        <!-- header close -->
+        <!-- ========== End Navbar ========== -->
+    <!-- ========== Start Header ========== -->
+    <section class="header wow fadeInUp">
+        <div class="container text-center">
+            <h2>{{ .Params.section_header }}</h2>
+        </div>
+    </section>
+    
+    <section class="creative">
+      <div class="container">
+        {{ .Content }}
+      </div>
+    </section>  
+    
+
+    <!-- ========== Start links ========== -->
+    <section class="links">
+        <div class="container text-center">
+            <a href="#0">Twitter</a>
+            <a href="#0">Github</a>
+            <a href="#0">About</a>
+            <a href="#0">Contact</a>
+        </div>
+    </section>
+    <!-- ========== End links ========== -->
+
+    <!-- ========== Start Footer ========== -->
+    <footer class="footer">
+        <div class="container text-center">
+            <p>Made with love | Brex-Theme</p>
+        </div>
+    </footer>
+    <!-- ========== End Footer ========== -->
+
+    <!-- ============= Java Script =============-->
+    {{ partial "footer.html" . }}
+
+    <script src="assets/theme/js/sass-1.js"></script>
+</body>
+
+</html>
