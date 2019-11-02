@@ -61,7 +61,7 @@
 {{% break %}}
 
 ## Import
-{{< highlight kotlin >}}
+{{< highlight kotlin "linenos=table">}}
 
 
 // required 
@@ -82,7 +82,7 @@ import slatekit.results.getOrElse
 {{% break %}}
 
 ## Setup
-{{< highlight kotlin >}}
+{{< highlight kotlin "linenos=table">}}
 
 
 n/a
@@ -92,7 +92,7 @@ n/a
 {{% break %}}
 
 ## Usage
-{{< highlight kotlin >}}
+{{< highlight kotlin "linenos=table">}}
 
 
     // Example:
