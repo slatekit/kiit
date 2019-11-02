@@ -6,4 +6,4 @@ section_header: Standards
 
 
 # Standards
-Some content here. Some content here. Some content here. Some content here. Some content here. Some content here. Some content here. Some content here. Some content here. Some content here. Some content here. Some content here. Some content here. Some content here. Some content here. Some content here. Some content here. Some content here. Some content here. Some content here. Some content here. Some content here. Some content here. Some content here. Some content here. Some content here. Some content here. Some content here. Some content here. Some content here. Some content here. 
+Under construction... coming soon.

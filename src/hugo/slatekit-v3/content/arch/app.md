@@ -7,5 +7,4 @@ section_header: Arch
 
 
 # Component
-Coming soon.
-Documentation updates in progress. Documentation updates in progress. Documentation updates in progress. Documentation updates in progress. Documentation updates in progress. Documentation updates in progress. Documentation updates in progress. Documentation updates in progress. Documentation updates in progress. Documentation updates in progress. Documentation updates in progress. Documentation updates in progress. Documentation updates in progress. Documentation updates in progress. Documentation updates in progress. Documentation updates in progress. Documentation updates in progress. Documentation updates in progress. Documentation updates in progress. 
+Under construction... coming soon.

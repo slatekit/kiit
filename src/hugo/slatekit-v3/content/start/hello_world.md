@@ -6,7 +6,8 @@ section_header: Quick Start
 
 
 # Quick Start
-Some content here. Some content here. Some content here. Some content here. Some content here. Some content here. Some content here. Some content here. Some content here. Some content here. Some content here. Some content here. Some content here. Some content here. Some content here. Some content here. Some content here. Some content here. Some content here. Some content here. Some content here. Some content here. Some content here. Some content here. Some content here. Some content here. Some content here. Some content here. Some content here. Some content here. Some content here. 
+Under construction... coming soon.
+
 
 {{< highlight kotlin "linenos=table">}}
 
