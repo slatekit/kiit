@@ -1,4 +1,4 @@
-package slatekit.common.metrics
+package slatekit.tracking
 
 import org.threeten.bp.Instant
 import org.threeten.bp.ZonedDateTime
@@ -24,7 +24,7 @@ class MetricsLite(
         override val id: Identity,
         val tags:List<Tag> = listOf(),
         override val source: String = "slatekit",
-        override val settings: MetricsSettings = MetricsSettings(true,true, Tags(tags))
+        override val settings: MetricsSettings = MetricsSettings(true, true, Tags(tags))
 ) : Metrics {
 
     private val counters = mutableMapOf<String, Counter>()
@@ -71,14 +71,14 @@ class MetricsLite(
      * Times an event
      */
     override fun time(name: String, tags: List<String>?, call:() -> Unit ) {
-        getOrCreate(name, timers, { Timer( globals(), tags) }).record(call)
+        getOrCreate(name, timers, { Timer(globals(), tags) }).record(call)
     }
 
 
     /**
      * Gets the current counters as a first class Countable
      */
-    fun toCountable():Countable {
+    fun toCountable(): Countable {
         return Counters(id, tags, counters.toMap())
     }
 
@@ -125,7 +125,7 @@ class MetricsLite(
 
     companion object {
         fun build(id: Identity, tags:List<Tag> = listOf()): MetricsLite {
-            return MetricsLite(id, tags, settings = MetricsSettings(true,true, Tags(listOf())))
+            return MetricsLite(id, tags, settings = MetricsSettings(true, true, Tags(listOf())))
         }
     }
 }

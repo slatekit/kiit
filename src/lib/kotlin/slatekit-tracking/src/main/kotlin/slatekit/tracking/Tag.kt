@@ -1,4 +1,4 @@
-package slatekit.common.metrics
+package slatekit.tracking
 
 /**
  * Represents a single tag ( name/value pair ) to associate metrics with
@@ -16,7 +16,7 @@ interface Tagged {
 
 
 
-class SimpleTag(override val tagName:String, override val tagVal:String):Tag
+class SimpleTag(override val tagName:String, override val tagVal:String): Tag
 
 
 

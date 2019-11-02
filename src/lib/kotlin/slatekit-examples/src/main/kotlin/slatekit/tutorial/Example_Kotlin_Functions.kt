@@ -14,7 +14,7 @@
 package slatekit.tutorial
 
 
-import slatekit.common.TODO
+import slatekit.common.NOTE
 import slatekit.cmds.Command
 import slatekit.cmds.CommandRequest
 import slatekit.results.Success
@@ -57,23 +57,23 @@ class Example_Kotlin_Functions : Command("types") {
 
     fun testLambda():Unit {
 
-        TODO.REFACTOR("ACCOUNTS", "Improve error handling", {
+        NOTE.REFACTOR("ACCOUNTS", "Improve error handling", {
             // Some code to cleanup here.
         })
 
 
         // With parameters inside (...) first followed by code block { }
-        TODO.REFACTOR("ACCOUNTS", "Improve error handling") {
+        NOTE.REFACTOR("ACCOUNTS", "Improve error handling") {
             // Some code to cleanup here
         }
 
         // With default params e.g. "" empty string and code block { }
-        TODO.REFACTOR {
+        NOTE.REFACTOR {
             // Some code to cleanup here
         }
 
         // With defaults and no code block
-        TODO.REFACTOR()
+        NOTE.REFACTOR()
     }
 
 

@@ -3,7 +3,7 @@ package test.jobs
 import kotlinx.coroutines.runBlocking
 import org.junit.Assert
 import org.junit.Test
-import slatekit.common.metrics.Recorder
+import slatekit.tracking.Recorder
 import slatekit.jobs.Task
 import slatekit.jobs.support.Runner
 import slatekit.jobs.WorkerContext

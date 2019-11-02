@@ -2,7 +2,7 @@
 package test
 
 import slatekit.common.Random
-import slatekit.common.metrics.MetricsLite
+import slatekit.tracking.MetricsLite
 import slatekit.common.queues.QueueSourceInMemory
 import slatekit.common.queues.QueueStringConverter
 import slatekit.common.CommonContext

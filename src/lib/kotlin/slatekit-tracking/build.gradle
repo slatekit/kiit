@@ -21,9 +21,9 @@ apply plugin: 'kotlin'
 // ==================================================================
 // Slate Kit Component Info
 // ==================================================================
-def slatekitComponentId = 'functions'
-def slatekitComponentName = 'Functions'
-def slatekitComponentDesc = 'SlateKit Functions: Commands, Syncs, Scheduled Tasks'
+def slatekitComponentId = 'tracking'
+def slatekitComponentName = 'Tracking'
+def slatekitComponentDesc = 'SlateKit Tracking: Diagnostics, Metrics'
 def slatekitComponentVersion = getCommonVersion()
 
 
@@ -81,12 +81,10 @@ dependencies {
     if( slatekitSetupViaMaven ) {
         compile "com.slatekit:slatekit-results:$slatekit_version"
         compile "com.slatekit:slatekit-common:$slatekit_version"
-        compile "com.slatekit:slatekit-tracking:$slatekit_version"
     } else {
         // */
         compile project(":slatekit-result")
         compile project(":slatekit-common")
-        compile project(":slatekit-tracking")
     } //</slatekit_local>
 }
 

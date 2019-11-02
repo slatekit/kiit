@@ -1,6 +1,6 @@
 package slatekit.functions.policy
 
-import slatekit.common.metrics.Calls
+import slatekit.tracking.Calls
 import slatekit.results.Codes
 import slatekit.results.Outcome
 import slatekit.results.builders.Outcomes

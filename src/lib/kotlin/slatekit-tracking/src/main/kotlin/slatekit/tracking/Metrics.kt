@@ -1,4 +1,4 @@
-package slatekit.common.metrics
+package slatekit.tracking
 
 import slatekit.common.Identity
 
@@ -18,7 +18,7 @@ interface Metrics {
 
     val source:String
 
-    val settings:MetricsSettings
+    val settings: MetricsSettings
 
     fun provider():Any
 

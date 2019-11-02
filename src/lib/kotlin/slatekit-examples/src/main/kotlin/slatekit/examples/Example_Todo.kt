@@ -13,7 +13,7 @@
 package slatekit.examples
 
 //<doc:import_required>
-import slatekit.common.TODO
+import slatekit.common.NOTE
 
 //</doc:import_required>
 
@@ -36,18 +36,18 @@ class Example_Todo  : Command("todo") {
     // to track code usages
 
     // Use case 1: Implement
-    TODO.IMPLEMENT("Component 1", "This code needs further error handling" )
+    NOTE.IMPLEMENT("Component 1", "This code needs further error handling" )
 
     // Use case 2: Supply a block of code to refactor
-    TODO.REFACTOR("Feature 2", "Refactor logic to handle empty values") {
+    NOTE.REFACTOR("Feature 2", "Refactor logic to handle empty values") {
       // Your code to refactor goes here
     }
 
     // Use case 3: Mark a bug
-    TODO.BUG("Component 3", "invalid data, bug fix needed", "JIRA:12434" )
+    NOTE.BUG("Component 3", "invalid data, bug fix needed", "JIRA:12434" )
 
     // Use case 4: Code removal tag
-    TODO.REMOVE("Story 123", "@kishore, this code no longer needed") {
+    NOTE.REMOVE("Story 123", "@kishore, this code no longer needed") {
       // Your code to remove here.
     }
     //</doc:examples>

@@ -10,7 +10,7 @@ about: A Kotlin utility library, tool-kit and server backend.
 mantra: Simplicity above all else
 </slate_header>
  */
-package slatekit.common.metrics
+package slatekit.tracking
 
 import slatekit.common.Identity
 import java.util.concurrent.atomic.AtomicReference

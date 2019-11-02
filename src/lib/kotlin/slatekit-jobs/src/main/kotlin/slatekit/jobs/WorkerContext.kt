@@ -1,7 +1,7 @@
 package slatekit.jobs
 
 import slatekit.common.Identity
-import slatekit.common.metrics.Recorder
+import slatekit.tracking.Recorder
 import slatekit.functions.policy.Policy
 
 /**

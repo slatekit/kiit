@@ -1,6 +1,6 @@
 package slatekit.server.common
 
-import slatekit.common.Diagnostics
+import slatekit.tracking.Diagnostics
 import slatekit.common.log.Logger
 import slatekit.common.metrics.Metrics
 import slatekit.common.requests.*
@@ -18,7 +18,7 @@ import slatekit.common.requests.*
 class ServerDiagnostics(override val source: String,
                         override val logger: Logger?,
                         override val metrics: Metrics?,
-                        val tags:List<String>) : Diagnostics<Request>{
+                        val tags:List<String>) : Diagnostics<Request> {
     /**
      * Record all relevant diagnostics
      */

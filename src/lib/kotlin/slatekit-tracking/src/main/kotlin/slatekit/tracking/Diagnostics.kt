@@ -1,7 +1,6 @@
-package slatekit.common
+package slatekit.tracking
 
 import slatekit.common.log.Logger
-import slatekit.common.metrics.Metrics
 import slatekit.common.requests.*
 
 /**
