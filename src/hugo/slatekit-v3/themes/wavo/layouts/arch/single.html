@@ -10,10 +10,10 @@
 
     <base href="../../">
     {{ partial "header.html" . }}
-
     <link rel="stylesheet" href="assets/theme/css/about-1.css">
-    <link rel="stylesheet" href="assets/app/syntax.css">
-    <title>Slate Kit: Utilities</title>
+    <link rel="stylesheet" href="assets/app/slatekit.css">
+    {{ partial "header-app.html" . }}
+    <title>Slate Kit: Info</title>
 </head>
 
 <body>
@@ -57,7 +57,7 @@
     <!-- ========== Start Header ========== -->
     <section class="header wow fadeInUp">
         <div class="container text-center">
-            <h2>Utilities: {{ .Params.section_header }}</h2>
+            <h2>{{ .Params.section_header }}</h2>
         </div>
     </section>
     
