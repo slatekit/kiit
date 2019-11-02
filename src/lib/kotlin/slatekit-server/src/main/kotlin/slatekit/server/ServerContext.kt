@@ -4,7 +4,7 @@ import slatekit.apis.support.Authenticator
 import slatekit.tracking.Diagnostics
 import slatekit.common.encrypt.Encryptor
 import slatekit.common.log.Logger
-import slatekit.common.metrics.MetricsLite
+import slatekit.tracking.MetricsLite
 import slatekit.common.requests.Request
 import slatekit.meta.Deserializer
 

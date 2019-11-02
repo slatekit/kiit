@@ -2,7 +2,7 @@ package slatekit.server.common
 
 import slatekit.tracking.Diagnostics
 import slatekit.common.log.Logger
-import slatekit.common.metrics.Metrics
+import slatekit.tracking.Metrics
 import slatekit.common.requests.*
 
 /**

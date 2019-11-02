@@ -10,6 +10,7 @@ import slatekit.apis.ApiServer
 import slatekit.common.Context
 import slatekit.tracking.Diagnostics
 import slatekit.common.requests.Request
+import slatekit.common.toResponse
 import slatekit.server.ServerSettings
 import slatekit.server.common.RequestHandler
 import slatekit.server.common.ResponseHandler
@@ -66,13 +67,14 @@ class KtorHandler(
         // 3. Decoding request to method parameters
         // 4. Executing the method
         // 5. Handling errors
-        val result = container.call(request)
+        val result = container.call(request, null)
+        val response = result.toResponse()
 
         // Record all diagnostics
         // e.g. logs, track, metrics, event
-        diagnostics.record(container, request, result)
+        diagnostics.record(container, request, response, null)
 
         // Finally convert the result back to a HttpResult
-        responses.result(call, result)
+        responses.result(call, response)
     }
 }
