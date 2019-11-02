@@ -1,4 +1,42 @@
 
+.sk-color-1 {
+	color: #558ee9 !important;
+}
+
+.sk-color-2 {
+	color: #f8a13e !important;
+}
+
+.sk-btn-white {
+	border-radius: 35px;
+	border: solid 1px #ffffff;
+	background: #ffffff;
+	color: #6a6f89;
+	text-decoration: none;
+	padding: 12px 40px;
+	font-family: 'Open Sans', sans-serif;
+	font-size: 14px;
+	font-weight: 400;
+	text-transform: uppercase;
+	display: inline-block;
+	margin-top: 10px;
+	opacity: .9;
+	transition: all .4s ease-in-out;
+}
+
+.sk-btn-white:hover {
+	background: #ffff;
+	color: #6a6f89;
+}
+
+.slider {
+	background: #585CE9;
+}
+
+.header-classic {
+	background: #585CE9;
+}
+
 table tr td  {
 	font-family: 'Open Sans', sans-serif;
 	font-size: 15px;
@@ -8,7 +46,7 @@ table tr td  {
 	opacity: .85;
 	margin-bottom: 0;
 }
-
+/*
 a .app-btn-red {
 	background: #ff5777;
 	border-radius: 35px;
@@ -52,3 +90,4 @@ a .app-btn-red {
 	opacity: .85;
 	margin-bottom: 0;
 }
+*/
