@@ -1,0 +1,228 @@
+
+/*--------------------------------------------------
+[3. Start Remember]
+--------------------------------------------------*/
+.app-section {
+    padding: 120px 0;
+}
+.app-section .text h2 {
+	font-size: 30px;
+	font-weight: 600;
+	color: #5a5e74;
+	margin: 0;
+	margin-bottom: 20px;
+}
+.app-section .text p {
+	font-family: 'Open Sans', sans-serif;
+	font-size: 15px;
+	font-weight: 400;
+	line-height: 27px;
+	color: #797c8f;
+	opacity: .85;
+	margin-bottom: 0;
+}
+
+.app-section-alt {
+	background: #f8f9f9;
+}
+
+/*--------------------------------------------------
+[5. Start Easy]
+--------------------------------------------------*/
+.easy {
+    padding: 120px 0;
+}
+.easy .text {
+    margin-bottom: 50px;
+}
+.easy .text h2 {
+    font-size: 30px;
+	font-weight: 600;
+	color: #5a5e74;
+	margin: 0;
+	margin-bottom: 20px;
+}
+.easy .text p {
+    font-family: 'Open Sans', sans-serif;
+	font-size: 15px;
+	font-weight: 400;
+	line-height: 27px;
+	color: #797c8f;
+	opacity: .85;
+	margin-bottom: 0;
+}
+.easy span {
+    font-size: 40px;
+    display: inline-block;
+    margin-bottom: 20px;
+}
+.easy h3 {
+    font-size: 20px;
+	font-weight: 600;
+	color: #5a5e74;
+    margin: 0;
+    margin-bottom: 10px;
+}
+.easy p {
+    font-family: 'Open Sans', sans-serif;
+	font-size: 15px;
+	font-weight: 400;
+	line-height: 27px;
+	color: #797c8f;
+	opacity: .85;
+	margin-bottom: 0;
+}
+.easy .color {
+    color: #585CE9;
+}
+
+/*--------------------------------------------------
+[6. Start Evaluate]
+--------------------------------------------------*/
+.evaluate {
+    padding: 120px 0;
+    background: #f8f9f9;
+}
+.evaluate .text {
+    margin-bottom: 40px;
+}
+.evaluate .text h2 {
+    font-size: 30px;
+	font-weight: 600;
+	color: #5a5e74;
+	margin: 0;
+	margin-bottom: 15px;
+}
+.evaluate .text p {
+    font-family: 'Open Sans', sans-serif;
+	font-size: 15px;
+	font-weight: 400;
+	line-height: 27px;
+	color: #797c8f;
+	opacity: .85;
+	margin-bottom: 0;
+}
+.evaluate .item {
+    margin-top: 30px;
+}
+.evaluate .item .icon {
+    margin-right: 15px;
+}
+.evaluate .item .icon span {
+    font-size: 40px;
+}
+.evaluate .item h3 {
+    font-size: 20px;
+	font-weight: 600;
+	color: #5a5e74;
+    margin: 0;
+    margin-bottom: 10px;
+}
+.evaluate .item p {
+    font-family: 'Open Sans', sans-serif;
+	font-size: 15px;
+	font-weight: 400;
+	line-height: 27px;
+	color: #797c8f;
+	opacity: .85;
+	margin-bottom: 0;
+}
+.evaluate .item .color-1 {
+    color: #ff5777;
+}
+.evaluate .item .color-2 {
+    color: #feac0f;
+}
+
+/*--------------------------------------------------
+[7. Start Testimonals]
+--------------------------------------------------*/
+.testimonials {
+    padding: 90px 0;
+}
+.testimonials .box {
+    box-shadow: 0px 0px 20px 0px rgba(0,0,0,0.06);
+    padding: 40px ;
+    margin: 20px;
+    border-radius: 5px;
+    text-align: center;
+}
+.testimonials .box .stars i {
+    font-size: 13px;
+    color: #fcc651;
+}
+.testimonials .box p {
+    font-family: 'Open Sans', sans-serif;
+	font-size: 15px;
+	font-weight: 400;
+	line-height: 27px;
+	color: #797c8f;
+	opacity: .85;
+    margin-bottom: 0;
+    margin-top: 10px;
+    margin-bottom: 15px;
+}
+.testimonials .box h2 {
+    font-size: 18px;
+	font-weight: 500;
+	color: #5a5e74;
+    margin: 0;
+}
+.testimonials .box span {
+    display: inline-block;
+    font-family: 'Open Sans', sans-serif;
+	font-size: 13px;
+	font-weight: 400;
+	line-height: 27px;
+	color: #9295a5;
+	opacity: .85;
+    margin-bottom: 0;
+}
+
+/*--------------------------------------------------
+[9. Start Features]
+--------------------------------------------------*/
+.features2 {
+	padding: 120px 0 90px 0;
+}
+.features2 .heading {
+	margin-bottom: 50px;
+}
+.features2 .heading h2 {
+	font-size: 30px;
+	font-weight: 600;
+	color: #5a5e74;
+	margin: 0;
+	margin-bottom: 10px;
+}
+.features2 .heading p {
+	font-family: 'Open Sans', sans-serif;
+	font-size: 15px;
+	font-weight: 400;
+	line-height: 27px;
+	color: #797c8f;
+	opacity: .85;
+	margin-bottom: 0;
+}
+.features2 .box {
+	background: #ffffff;
+	border: 1px solid #f1f2f3;
+	padding: 40px;
+	margin-bottom: 30px;
+	transition: all .4s ease-in-out;
+}
+.features2 .box:hover {
+	box-shadow: 0px 10px 15px 0px rgba(0,0,0,0.06);
+}
+.features2 .box span {
+	font-size: 40px;
+	color: #9a999c;
+	display: inline-block;
+}
+.features2 .box h3 {
+	font-size: 18px;
+	color: #797c8f;
+	margin: 0;
+	margin-top: 15px;
+}
+

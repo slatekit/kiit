@@ -1,0 +1,374 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+      
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      
+      <meta http-equiv="X-UA-Compatible" content="IE=edge">
+      
+      <meta name="description" content="Kotlin Tool-Kit">
+      
+      <meta name="author" content="CodeHelix">
+
+      
+      <title>Slate Kit Utils</title>
+    <base href="../../">
+            
+      <link rel="shortcut icon" href="assets/theme/img/favicon.ico">
+      
+      <link rel="stylesheet" href="assets/theme/css/font-awesome.css">
+      
+      <link rel="stylesheet" href="assets/theme/css/bootstrap.css">
+      
+      <link rel="stylesheet" href="assets/theme/css/device-mockups.min.css">
+      
+      <link rel="stylesheet" href="assets/theme/css/owl.carousel.min.css">
+      
+      <link rel="stylesheet" href="assets/theme/css/animate.css">
+      
+      <link rel="stylesheet" href="assets/theme/css/preloader.css">
+      
+      <link rel="stylesheet" href="assets/theme/css/style.default2.css">
+
+      <link rel="stylesheet" href="assets/app/app.css">
+    
+    
+    
+    
+  </head>
+
+  <body>
+    
+
+
+      <div class="page-header">
+          
+          <nav class="navbar fixed-top navbar-toggleable-md">
+              <div class="container">
+
+                  <div class="navbar-header">
+                      
+                      <a href="#" class="navbar-brand">
+                          <strong class="brand-text">Slate Kit</strong>
+                      </a>
+
+                    
+                      <button type="button" class="navbar-toggler navbar-toggler-right" data-toggle="collapse" data-target="#navbarcollapse" aria-controls="navbarcollapse" aria-expanded="false" aria-label="Toggle navigation">
+                          MENU
+                      </button>
+                  </div>
+
+                  <div class="collapse navbar-collapse" id="navbarcollapse">
+                      
+                      <ul id="navigation" class="navbar-nav ml-auto">
+                          
+                      </ul>
+                  </div>
+
+              </div>
+          </nav>
+
+
+          
+          <section id="sparator" class="separator no-padding-bottom padding-top-small has-background-text has-gradient" data-text="Slate Kit">
+              <div class="container">
+
+                  <div class="row">
+                      
+                      <div class="image col-md-6 hidden-sm-down">
+                          
+                      </div>
+                     
+                      
+                      <div class="text text-right col-md-6 col-sm-12">
+                          <h2 class="h1 has-text-shadow">Utilities <br/> </h2>
+                      </div>
+                  </div>
+
+              </div>
+          </section>
+          
+
+
+          
+          <section id="about" class="about no-padding-bottom">
+              <div class="container">
+                  
+
+<h1 id="data">Data</h1>
+
+<p><table class="table table-striped table-bordered">
+  <tbody>
+    <tr>
+      <td><strong>desc</strong></td>
+      <td>Database access utilty to query and manage data using JDBC for MySql. Other database support coming later.</td>
+    </tr>
+    <tr>
+      <td><strong>date</strong></td>
+      <td>2019-03-22</td>
+    </tr>
+    <tr>
+      <td><strong>version</strong></td>
+      <td>0.9.17</td>
+    </tr>
+    <tr>
+      <td><strong>jar</strong></td>
+      <td>slatekit.common.jar</td>
+    </tr>
+    <tr>
+      <td><strong>namespace</strong></td>
+      <td>slatekit.common.db</td>
+    </tr>
+    <tr>
+      <td><strong>artifact</strong></td>
+      <td>com.slatekit:slatekit-common</td>
+    </tr>
+    <tr>
+      <td><strong>source folder</strong></td>
+      <td><a href="https://github.com/code-helix/slatekit/tree/master/src/lib/kotlin/slatekit-common/src/main/kotlin/slatekit/common/db" class="url-ch">src/lib/kotlin/slatekit-common/src/main/kotlin/slatekit/common/db</a></td>
+    </tr>
+    <tr>
+      <td><strong>example</strong></td>
+      <td><a href="https://github.com/code-helix/slatekit/tree/master/src/lib/kotlin/slatekit-examples/src/main/kotlin/slatekit/examples/Example_Database.kt" class="url-ch">src/lib/kotlin/slate-examples/src/main/kotlin/slatekit/examples/Example_Database.kt</a></td>
+    </tr>
+    <tr>
+      <td><strong>depends on</strong></td>
+      <td> slatekit-results</td>
+    </tr>
+  </tbody>
+</table>
+<br/><br/></p>
+
+<h2 id="gradle">Gradle</h2>
+
+<p><div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-gradle" data-lang="gradle">    <span style="color:#75715e">// other setup ...
+</span><span style="color:#75715e"></span>    repositories <span style="color:#f92672">{</span>
+        maven <span style="color:#f92672">{</span> url  <span style="color:#e6db74">&#34;https://dl.bintray.com/codehelixinc/slatekit&#34;</span> <span style="color:#f92672">}</span>
+    <span style="color:#f92672">}</span>
+
+    dependencies <span style="color:#f92672">{</span>
+        <span style="color:#75715e">// other libraries
+</span><span style="color:#75715e"></span>
+        <span style="color:#75715e">// slatekit-common: Utilities for Android or Server
+</span><span style="color:#75715e"></span>        compile <span style="color:#e6db74">&#39;com.slatekit:slatekit-common:0.9.17&#39;</span>
+    <span style="color:#f92672">}</span></code></pre></div>
+<br/><br/></p>
+
+<h2 id="import">Import</h2>
+
+<p><div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-kotlin" data-lang="kotlin"><span style="color:#75715e">// required 
+</span><span style="color:#75715e"></span><span style="color:#66d9ef">import</span> slatekit.db.Db
+<span style="color:#66d9ef">import</span> slatekit.common.db.DbConString
+
+
+<span style="color:#75715e">// optional 
+</span><span style="color:#75715e"></span><span style="color:#66d9ef">import</span> slatekit.results.Try
+<span style="color:#66d9ef">import</span> slatekit.results.Success
+<span style="color:#66d9ef">import</span> slatekit.core.cmds.Cmd
+<span style="color:#66d9ef">import</span> slatekit.entities.core.EntityMapper
+<span style="color:#66d9ef">import</span> slatekit.examples.common.User
+<span style="color:#66d9ef">import</span> slatekit.meta.models.ModelMapper
+<span style="color:#66d9ef">import</span> slatekit.orm.core.OrmMapper
+<span style="color:#66d9ef">import</span> slatekit.orm.databases.vendors.MySqlConverter</code></pre></div>
+<br/><br/></p>
+
+<h2 id="setup">Setup</h2>
+
+<p><div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-kotlin" data-lang="kotlin">n/a</code></pre></div>
+<br/><br/></p>
+
+<h2 id="usage">Usage</h2>
+
+<p><div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-kotlin" data-lang="kotlin">        <span style="color:#75715e">// NOTES:
+</span><span style="color:#75715e"></span>        <span style="color:#75715e">// 1. The Db.kt simply uses JDBC
+</span><span style="color:#75715e"></span>        <span style="color:#75715e">// 2. There is a separate DbLookup.kt component that
+</span><span style="color:#75715e"></span>        <span style="color:#75715e">//    loads, stores, and manages named database connections.
+</span><span style="color:#75715e"></span>        <span style="color:#75715e">//    Refer to that example for more info.
+</span><span style="color:#75715e"></span>
+        <span style="color:#75715e">// CASE 1: Create DB connection.
+</span><span style="color:#75715e"></span>        <span style="color:#66d9ef">val</span> con = DbConString(
+            <span style="color:#e6db74">&#34;com.mysql.jdbc.Driver&#34;</span>,
+            <span style="color:#e6db74">&#34;jdbc:mysql://localhost/default&#34;</span>,
+            <span style="color:#e6db74">&#34;root&#34;</span>,
+            <span style="color:#e6db74">&#34;abcdefghi&#34;</span>
+        )
+
+        <span style="color:#75715e">// CASE 2. Initialize the DB with the connection string.
+</span><span style="color:#75715e"></span>        <span style="color:#75715e">// NOTE: This defaults the db to mysql. The first line is same
+</span><span style="color:#75715e"></span>        <span style="color:#75715e">// as db = Db(con, source: DbSourceMySql())
+</span><span style="color:#75715e"></span>        <span style="color:#75715e">// In the future, we can more easily support mutliple databases
+</span><span style="color:#75715e"></span>        <span style="color:#75715e">// using this approach.
+</span><span style="color:#75715e"></span>        <span style="color:#66d9ef">val</span> db = Db(con)
+
+        <span style="color:#75715e">// CASE 3: Open the database
+</span><span style="color:#75715e"></span>        db.<span style="color:#66d9ef">open</span>()
+
+        <span style="color:#75715e">// CASE 4: Get scalar values
+</span><span style="color:#75715e"></span>        <span style="color:#66d9ef">val</span> total1 = db.getScalarString       (<span style="color:#e6db74">&#34;select test_string from db_tests where id = 1&#34;</span>, <span style="color:#66d9ef">null</span>)
+        <span style="color:#66d9ef">val</span> total2 = db.getScalarBool         (<span style="color:#e6db74">&#34;select test_bool   from db_tests where id = 1&#34;</span>, <span style="color:#66d9ef">null</span>)
+        <span style="color:#66d9ef">val</span> total3 = db.getScalarShort        (<span style="color:#e6db74">&#34;select test_short  from db_tests where id = 1&#34;</span>, <span style="color:#66d9ef">null</span>)
+        <span style="color:#66d9ef">val</span> total4 = db.getScalarInt          (<span style="color:#e6db74">&#34;select test_int    from db_tests where id = 1&#34;</span>, <span style="color:#66d9ef">null</span>)
+        <span style="color:#66d9ef">val</span> total5 = db.getScalarLong         (<span style="color:#e6db74">&#34;select test_long   from db_tests where id = 1&#34;</span>, <span style="color:#66d9ef">null</span>)
+        <span style="color:#66d9ef">val</span> total6 = db.getScalarDouble       (<span style="color:#e6db74">&#34;select test_double from db_tests where id = 1&#34;</span>, <span style="color:#66d9ef">null</span>)
+        <span style="color:#66d9ef">val</span> total7 = db.getScalarLocalDate    (<span style="color:#e6db74">&#34;select test_ldate  from db_tests where id = 1&#34;</span>, <span style="color:#66d9ef">null</span>)
+        <span style="color:#66d9ef">val</span> total8 = db.getScalarLocalTime    (<span style="color:#e6db74">&#34;select test_ltime  from db_tests where id = 1&#34;</span>, <span style="color:#66d9ef">null</span>)
+        <span style="color:#66d9ef">val</span> total9 = db.getScalarLocalDateTime(<span style="color:#e6db74">&#34;select test_ldtime from db_tests where id = 1&#34;</span>, <span style="color:#66d9ef">null</span>)
+
+        <span style="color:#75715e">// CASE 5: Execute a sql insert
+</span><span style="color:#75715e"></span>        <span style="color:#66d9ef">val</span> id1 = db.insert(<span style="color:#e6db74">&#34;insert into `city`(`name`) values( &#39;ny&#39; )&#34;</span>)
+
+        <span style="color:#75715e">// CASE 6: Execute a sql insert using parameters
+</span><span style="color:#75715e"></span>        <span style="color:#66d9ef">val</span> id2 = db.insert(<span style="color:#e6db74">&#34;insert into `city`(`name`) values( ? )&#34;</span>, listOf(<span style="color:#e6db74">&#34;ny&#34;</span>))
+
+        <span style="color:#75715e">// CASE 7: Execute a sql update
+</span><span style="color:#75715e"></span>        <span style="color:#66d9ef">val</span> count7 = db.update(<span style="color:#e6db74">&#34;update `city` set `alias` = &#39;nyc&#39; where id = 2&#34;</span>)
+
+        <span style="color:#75715e">// CASE 8: Execute a sql udpate using parameters
+</span><span style="color:#75715e"></span>        <span style="color:#66d9ef">val</span> count8 = db.update(<span style="color:#e6db74">&#34;update `city` set `alias` = &#39;nyc&#39; where id = ?&#34;</span>, listOf(id2))
+
+        <span style="color:#75715e">// CASE 9: Deletes are same as updates
+</span><span style="color:#75715e"></span>        <span style="color:#66d9ef">val</span> count9a = db.update(<span style="color:#e6db74">&#34;delete from `city` where id = 2&#34;</span>)
+        <span style="color:#66d9ef">val</span> count9b = db.update(<span style="color:#e6db74">&#34;delete from `city` where id = ?&#34;</span>, listOf(<span style="color:#ae81ff">2</span>))
+
+
+        <span style="color:#75715e">// ===============================================================
+</span><span style="color:#75715e"></span>        <span style="color:#75715e">// STORED PROCS
+</span><span style="color:#75715e"></span>        <span style="color:#75715e">// ===============================================================
+</span><span style="color:#75715e"></span>        <span style="color:#75715e">// CASE 10: Call a stored proc that updates data
+</span><span style="color:#75715e"></span>        <span style="color:#66d9ef">val</span> count10 = db.callUpdate(<span style="color:#e6db74">&#34;dbtests_activate_by_id&#34;</span>, listOf(id2))
+
+        <span style="color:#75715e">// CASE 11: Call a stored proc that fetches data
+</span><span style="color:#75715e"></span>        <span style="color:#66d9ef">val</span> count11 = db.callQuery(<span style="color:#e6db74">&#34;dbtests_max_by_id&#34;</span>,
+                callback = { rs -&gt; rs.getString(<span style="color:#ae81ff">0</span>) }, inputs = listOf(id2))
+
+        <span style="color:#75715e">// ===============================================================
+</span><span style="color:#75715e"></span>        <span style="color:#75715e">// MODELS / MAPPERS
+</span><span style="color:#75715e"></span>        <span style="color:#75715e">// ===============================================================
+</span><span style="color:#75715e"></span>        <span style="color:#75715e">// CASE 12: Map a record to an model using the mapper component
+</span><span style="color:#75715e"></span>        <span style="color:#75715e">// The mapper will load a schema from the User class by checking
+</span><span style="color:#75715e"></span>        <span style="color:#75715e">// for &#34;Field&#34; annotations
+</span><span style="color:#75715e"></span>        <span style="color:#66d9ef">val</span> userModelSchema = ModelMapper.loadSchema(User<span style="color:#f92672">::</span><span style="color:#66d9ef">class</span>)
+        <span style="color:#66d9ef">val</span> mapper = OrmMapper&lt;Long,User&gt;(userModelSchema, db, Long<span style="color:#f92672">::</span><span style="color:#66d9ef">class</span>, MySqlConverter())
+        <span style="color:#66d9ef">val</span> item1 = db.mapOne&lt;User&gt;(<span style="color:#e6db74">&#34;select * from `user` where id = 1&#34;</span>, mapper)
+        println(item1)
+
+        <span style="color:#75715e">// CASE 13: Map multiple records
+</span><span style="color:#75715e"></span>        <span style="color:#66d9ef">val</span> items = db.mapMany&lt;User&gt;(<span style="color:#e6db74">&#34;select * from `user` where id &lt; 5&#34;</span>, mapper)
+        println(items)
+
+        <span style="color:#75715e">// CASE 14: Create the table using the model
+</span><span style="color:#75715e"></span>        <span style="color:#75715e">// Be careful with this, ensure you are using a connection string
+</span><span style="color:#75715e"></span>        <span style="color:#75715e">// with limited permissions
+</span><span style="color:#75715e"></span>        <span style="color:#75715e">//createTable(db, userModelSchema)
+</span><span style="color:#75715e"></span>
+        <span style="color:#75715e">// CASE 15: Drop a table
+</span><span style="color:#75715e"></span>        <span style="color:#75715e">// Be careful with this, ensure you are using a connection string
+</span><span style="color:#75715e"></span>        <span style="color:#75715e">// with limited permissions.
+</span><span style="color:#75715e"></span>        </code></pre></div>
+<br/><br/></p>
+
+              </div>
+          </section>
+          
+
+          
+<footer id="main-footer" class="main-footer">
+   <div class="container text-center">
+
+       
+       <div class="logo">
+           <strong class="brand-text">Slate Kit</strong>
+       </div>
+       
+       <p class="description">Connect with us on our various channels and reach out for more info.</p>
+
+       
+       <ul class="social list-inline">
+           <li class="list-inline-item">
+               <a href="#" title="Facebook" target="_blank"><i class="fa fa-facebook"></i></a>
+           </li>
+           <li class="list-inline-item">
+               <a href="#" title="Twitter" target="_blank"><i class="fa fa-twitter"></i></a>
+           </li>
+           <li class="list-inline-item">
+               <a href="#" title="Google Plus" target="_blank"><i class="fa fa-google-plus"></i></a>
+           </li>
+           <li class="list-inline-item">
+               <a href="#" title="Instagram" target="_blank"><i class="fa fa-instagram"></i></a>
+           </li>
+       </ul>
+   </div>
+
+  
+   <div class="copyrights">
+       <div class="container">
+           <div class="row">
+               <div class="col-md-6">
+                   <p>&copy; 2017 <span class="text-primary">Perfo.com</span> All Rights Reserved.</p>
+               </div>
+               <div class="col-md-6 text-right">
+                   <ul class="list-inline">
+                       <li class="list-inline-item"><a href="#">FAQ</a></li>
+                       <li class="list-inline-item"><a href="#">Terms Of Services</a></li>
+                       <li class="list-inline-item"><a href="#">Policy &amp; Privacy</a></li>
+                   </ul>
+               </div>
+           </div>
+       </div>
+   </div> 
+</footer>
+           
+
+
+           
+           <div class="preloader d-flex align-items-center justify-content-center flex-column">
+                <div class="la-square-jelly-box la-2x">
+                    <div></div>
+                    <div></div>
+                </div>
+                <div class="text">Slate Kit</div>
+           </div>
+           
+
+
+           
+           <div id="scrollTop">
+               <div class="d-flex align-items-center justify-content-end">
+                   <i class="fa fa-long-arrow-up"></i>
+                   <span>To Top</span>
+               </div>
+           </div>
+           
+      </div>
+    
+                
+        <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+        
+        <script src="https://npmcdn.com/tether@1.2.4/dist/js/tether.min.js"></script>
+        
+        <script src="assets/theme/js/bootstrap.min.js"></script>
+        
+        <script src="assets/theme/js/owl.carousel.min.js"></script>
+        
+        <script src="assets/theme/js/easyscroll.min.js"></script>
+        
+        <script src="assets/theme/js/wow.min.js"></script>
+        
+        <script src="assets/theme/js/script.js"></script>
+
+        <script type="text/javascript">
+          var _codehelixAppPage = "infra";
+        </script>
+          <script type="text/javascript" src="assets/app/app.js"></script>
+        <script>
+          (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+          (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+          m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+          })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+
+          ga('create', 'UA-84704317-1', 'auto');
+          ga('send', 'pageview');
+        </script>
+  </body>
+</html>

@@ -1,0 +1,381 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+      
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      
+      <meta http-equiv="X-UA-Compatible" content="IE=edge">
+      
+      <meta name="description" content="Kotlin Tool-Kit">
+      
+      <meta name="author" content="CodeHelix">
+
+      
+      <title>Slate Kit Utils</title>
+    <base href="../../">
+            
+      <link rel="shortcut icon" href="assets/theme/img/favicon.ico">
+      
+      <link rel="stylesheet" href="assets/theme/css/font-awesome.css">
+      
+      <link rel="stylesheet" href="assets/theme/css/bootstrap.css">
+      
+      <link rel="stylesheet" href="assets/theme/css/device-mockups.min.css">
+      
+      <link rel="stylesheet" href="assets/theme/css/owl.carousel.min.css">
+      
+      <link rel="stylesheet" href="assets/theme/css/animate.css">
+      
+      <link rel="stylesheet" href="assets/theme/css/preloader.css">
+      
+      <link rel="stylesheet" href="assets/theme/css/style.default2.css">
+
+      <link rel="stylesheet" href="assets/app/app.css">
+    
+    
+    
+    
+  </head>
+
+  <body>
+    
+
+
+      <div class="page-header">
+          
+          <nav class="navbar fixed-top navbar-toggleable-md">
+              <div class="container">
+
+                  <div class="navbar-header">
+                      
+                      <a href="#" class="navbar-brand">
+                          <strong class="brand-text">Slate Kit</strong>
+                      </a>
+
+                    
+                      <button type="button" class="navbar-toggler navbar-toggler-right" data-toggle="collapse" data-target="#navbarcollapse" aria-controls="navbarcollapse" aria-expanded="false" aria-label="Toggle navigation">
+                          MENU
+                      </button>
+                  </div>
+
+                  <div class="collapse navbar-collapse" id="navbarcollapse">
+                      
+                      <ul id="navigation" class="navbar-nav ml-auto">
+                          
+                      </ul>
+                  </div>
+
+              </div>
+          </nav>
+
+
+          
+          <section id="sparator" class="separator no-padding-bottom padding-top-small has-background-text has-gradient" data-text="Slate Kit">
+              <div class="container">
+
+                  <div class="row">
+                      
+                      <div class="image col-md-6 hidden-sm-down">
+                          
+                      </div>
+                     
+                      
+                      <div class="text text-right col-md-6 col-sm-12">
+                          <h2 class="h1 has-text-shadow">Utilities <br/> </h2>
+                      </div>
+                  </div>
+
+              </div>
+          </section>
+          
+
+
+          
+          <section id="about" class="about no-padding-bottom">
+              <div class="container">
+                  
+
+<h1 id="datetime">DateTime</h1>
+
+<p><table class="table table-striped table-bordered">
+  <tbody>
+    <tr>
+      <td><strong>desc</strong></td>
+      <td>DataTime wrapper around Java 8 LocalDateTime providing a simplified interface, some convenience, extra features.</td>
+    </tr>
+    <tr>
+      <td><strong>date</strong></td>
+      <td>2019-03-22</td>
+    </tr>
+    <tr>
+      <td><strong>version</strong></td>
+      <td>0.9.17</td>
+    </tr>
+    <tr>
+      <td><strong>jar</strong></td>
+      <td>slatekit.common.jar</td>
+    </tr>
+    <tr>
+      <td><strong>namespace</strong></td>
+      <td>slatekit.common</td>
+    </tr>
+    <tr>
+      <td><strong>artifact</strong></td>
+      <td>com.slatekit:slatekit-common</td>
+    </tr>
+    <tr>
+      <td><strong>source folder</strong></td>
+      <td><a href="https://github.com/code-helix/slatekit/tree/master/src/lib/kotlin/slatekit-common/src/main/kotlin/slatekit/common" class="url-ch">src/lib/kotlin/slatekit-common/src/main/kotlin/slatekit/common</a></td>
+    </tr>
+    <tr>
+      <td><strong>example</strong></td>
+      <td><a href="https://github.com/code-helix/slatekit/tree/master/src/lib/kotlin/slatekit-examples/src/main/kotlin/slatekit/examples/Example_DateTime.kt" class="url-ch">src/lib/kotlin/slate-examples/src/main/kotlin/slatekit/examples/Example_DateTime.kt</a></td>
+    </tr>
+    <tr>
+      <td><strong>depends on</strong></td>
+      <td> slatekit-results</td>
+    </tr>
+  </tbody>
+</table>
+<br/><br/></p>
+
+<h2 id="gradle">Gradle</h2>
+
+<p><div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-gradle" data-lang="gradle">    <span style="color:#75715e">// other setup ...
+</span><span style="color:#75715e"></span>    repositories <span style="color:#f92672">{</span>
+        maven <span style="color:#f92672">{</span> url  <span style="color:#e6db74">&#34;https://dl.bintray.com/codehelixinc/slatekit&#34;</span> <span style="color:#f92672">}</span>
+    <span style="color:#f92672">}</span>
+
+    dependencies <span style="color:#f92672">{</span>
+        <span style="color:#75715e">// other libraries
+</span><span style="color:#75715e"></span>
+        <span style="color:#75715e">// slatekit-common: Utilities for Android or Server
+</span><span style="color:#75715e"></span>        compile <span style="color:#e6db74">&#39;com.slatekit:slatekit-common:0.9.17&#39;</span>
+    <span style="color:#f92672">}</span></code></pre></div>
+<br/><br/></p>
+
+<h2 id="import">Import</h2>
+
+<p><div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-kotlin" data-lang="kotlin"><span style="color:#75715e">// required 
+</span><span style="color:#75715e"></span><span style="color:#66d9ef">import</span> slatekit.common.DateTime
+<span style="color:#66d9ef">import</span> slatekit.common.DateTimes
+
+
+
+<span style="color:#75715e">// optional 
+</span><span style="color:#75715e"></span><span style="color:#66d9ef">import</span> slatekit.core.cmds.Cmd
+<span style="color:#66d9ef">import</span> slatekit.results.Try
+<span style="color:#66d9ef">import</span> slatekit.results.Success
+<span style="color:#75715e">//import java.time.ZoneId
+</span><span style="color:#75715e"></span><span style="color:#66d9ef">import</span> org.threeten.bp.*
+<span style="color:#66d9ef">import</span> slatekit.common.ext.*</code></pre></div>
+<br/><br/></p>
+
+<h2 id="setup">Setup</h2>
+
+<p><div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-kotlin" data-lang="kotlin">n/a</code></pre></div>
+<br/><br/></p>
+
+<h2 id="usage">Usage</h2>
+
+<p><div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-kotlin" data-lang="kotlin">    <span style="color:#75715e">//
+</span><span style="color:#75715e"></span>    <span style="color:#75715e">// NOTE:
+</span><span style="color:#75715e"></span>    <span style="color:#75715e">// When working with new Java 8 Date/Time, which is a significant
+</span><span style="color:#75715e"></span>    <span style="color:#75715e">// improvement over the older mutable Java Date/Time models,
+</span><span style="color:#75715e"></span>    <span style="color:#75715e">// there is still some &#34;cognitive overhead&#34; ( IMHO ) in mentally
+</span><span style="color:#75715e"></span>    <span style="color:#75715e">// managing the different LocalDateTime, ZonedDateTime and conversion
+</span><span style="color:#75715e"></span>    <span style="color:#75715e">// to and from local/zoned functionality
+</span><span style="color:#75715e"></span>    <span style="color:#75715e">//
+</span><span style="color:#75715e"></span>    <span style="color:#75715e">// DESIGN:
+</span><span style="color:#75715e"></span>    <span style="color:#75715e">// This DateTime is a unified DateTime for both LocalDateTime and ZonedDateime
+</span><span style="color:#75715e"></span>    <span style="color:#75715e">// that wraps uses a ZonedDateTime internally ( defaulted to local timezone )
+</span><span style="color:#75715e"></span>    <span style="color:#75715e">// and is used for representing a DateTime for either Local and/or other Zones.
+</span><span style="color:#75715e"></span>    <span style="color:#75715e">// This makes the Java 8 datetime/zones a bit simpler &amp; concise while
+</span><span style="color:#75715e"></span>    <span style="color:#75715e">// essentially adding syntactic sugar using Kotlin operators and extension methods
+</span><span style="color:#75715e"></span>    <span style="color:#75715e">//
+</span><span style="color:#75715e"></span>    <span style="color:#75715e">// IMPORTANT:
+</span><span style="color:#75715e"></span>    <span style="color:#75715e">// This does NOT change the functionality of the Java 8 classes at all.
+</span><span style="color:#75715e"></span>    <span style="color:#75715e">// It is simply &#34;syntactic sugar&#34; for using the classes.
+</span><span style="color:#75715e"></span>
+    <span style="color:#75715e">// Case 1. Get datetime now, either locally, at utc and other zones
+</span><span style="color:#75715e"></span>    <span style="color:#75715e">// These will return a DateTime that wraps a ZonedDateTime.
+</span><span style="color:#75715e"></span>    println( DateTime.now() )
+    println( DateTimes.nowUtc() )
+    println( DateTimes.nowAt(<span style="color:#e6db74">&#34;America/New_York&#34;</span>))
+    println( DateTimes.nowAt(<span style="color:#e6db74">&#34;Europe/Athens&#34;</span>))
+    println( DateTimes.nowAt(ZoneId.of(<span style="color:#e6db74">&#34;Europe/Athens&#34;</span>)))
+
+
+    <span style="color:#75715e">// Case 2: Build datetime explicitly
+</span><span style="color:#75715e"></span>    println( DateTimes.of(<span style="color:#ae81ff">2017</span>, <span style="color:#ae81ff">7</span>, <span style="color:#ae81ff">10</span>))
+    println( DateTimes.of(<span style="color:#ae81ff">2017</span>, <span style="color:#ae81ff">7</span>, <span style="color:#ae81ff">10</span>, <span style="color:#ae81ff">11</span>, <span style="color:#ae81ff">30</span>, <span style="color:#ae81ff">0</span>))
+    println( DateTimes.of(<span style="color:#ae81ff">2017</span>, <span style="color:#ae81ff">7</span>, <span style="color:#ae81ff">10</span>, <span style="color:#ae81ff">11</span>, <span style="color:#ae81ff">30</span>, <span style="color:#ae81ff">0</span>, <span style="color:#ae81ff">0</span>))
+    println( DateTime.of(<span style="color:#ae81ff">2017</span>, <span style="color:#ae81ff">7</span>, <span style="color:#ae81ff">10</span>, <span style="color:#ae81ff">11</span>, <span style="color:#ae81ff">30</span>, <span style="color:#ae81ff">0</span>, <span style="color:#ae81ff">0</span>, ZoneId.of(<span style="color:#e6db74">&#34;America/New_York&#34;</span>)))
+
+
+    <span style="color:#75715e">// Case 3. Get datetime fields
+</span><span style="color:#75715e"></span>    <span style="color:#66d9ef">val</span> dt = DateTime.now()
+    println( <span style="color:#e6db74">&#34;year  : &#34;</span> + dt.year      )
+    println( <span style="color:#e6db74">&#34;month : &#34;</span> + dt.month     )
+    println( <span style="color:#e6db74">&#34;day   : &#34;</span> + dt.dayOfMonth)
+    println( <span style="color:#e6db74">&#34;hour  : &#34;</span> + dt.hour      )
+    println( <span style="color:#e6db74">&#34;mins  : &#34;</span> + dt.minute    )
+    println( <span style="color:#e6db74">&#34;secs  : &#34;</span> + dt.second    )
+    println( <span style="color:#e6db74">&#34;nano  : &#34;</span> + dt.nano      )
+    println( <span style="color:#e6db74">&#34;zone  : &#34;</span> + dt.zone.id )
+
+
+    <span style="color:#75715e">// Case 4: Conversion from now( local ) to utc, specific zone,
+</span><span style="color:#75715e"></span>    <span style="color:#75715e">// LocalDate, LocalTime, and LocalDateTime
+</span><span style="color:#75715e"></span>    <span style="color:#66d9ef">val</span> now      = DateTime.now()
+    println( now.date()  )
+    println( now.time()  )
+    println( now.local() )
+    println( now.atUtc() )
+    println( now.atUtcLocal() )
+    println( now.atZone(<span style="color:#e6db74">&#34;Europe/Athens&#34;</span>) )
+
+
+    <span style="color:#75715e">// Case 5: Idiomatic use of Kotlin operators and extension methods
+</span><span style="color:#75715e"></span>    <span style="color:#75715e">// This uses the extensions from slatekit.common.ext.IntExtensions
+</span><span style="color:#75715e"></span>    <span style="color:#66d9ef">val</span> later = DateTime.now() + <span style="color:#ae81ff">3.</span>minutes
+    println(    DateTime.now() + <span style="color:#ae81ff">3.</span>days            )
+    println(    DateTime.now() - <span style="color:#ae81ff">3.</span>minutes         )
+    println(    DateTime.now() - <span style="color:#ae81ff">3.</span>months          )
+
+
+    <span style="color:#75715e">// Case 6. Add time ( just like Java 8 )
+</span><span style="color:#75715e"></span>    <span style="color:#66d9ef">val</span> dt1 = DateTime.now()
+    println( dt1.plusYears  (<span style="color:#ae81ff">1</span>).toString() )
+    println( dt1.plusMonths (<span style="color:#ae81ff">1</span>).toString() )
+    println( dt1.plusDays   (<span style="color:#ae81ff">1</span>).toString() )
+    println( dt1.plusHours  (<span style="color:#ae81ff">1</span>).toString() )
+    println( dt1.plusMinutes(<span style="color:#ae81ff">1</span>).toString() )
+    println( dt1.plusSeconds(<span style="color:#ae81ff">1</span>).toString() )
+
+
+    <span style="color:#75715e">// Case 7. Compare
+</span><span style="color:#75715e"></span>    println( dt1 &gt;   dt1.plusYears  (<span style="color:#ae81ff">1</span>) )
+    println( dt1 &gt;=  dt1.plusMonths (<span style="color:#ae81ff">1</span>) )
+    println( dt1 &gt;=  dt1.plusDays   (<span style="color:#ae81ff">1</span>) )
+    println( dt1 &lt;   dt1.plusHours  (<span style="color:#ae81ff">1</span>) )
+    println( dt1 &lt;=  dt1.plusMinutes(<span style="color:#ae81ff">1</span>) )
+    println( dt1 &lt;=  dt1.plusSeconds(<span style="color:#ae81ff">1</span>) )
+
+
+    <span style="color:#75715e">// Case 8. Get duration (hours,mins,seconds) or period(days,months,years)
+</span><span style="color:#75715e"></span>    println( dt1.plusSeconds(<span style="color:#ae81ff">2</span>).durationFrom( dt1 ) )
+    println( dt1.plusMinutes(<span style="color:#ae81ff">2</span>).durationFrom( dt1 ) )
+    println( dt1.plusHours(<span style="color:#ae81ff">2</span>).durationFrom( dt1 ) )
+    println( dt1.plusDays(<span style="color:#ae81ff">2</span>).periodFrom( dt1 ) )
+    println( dt1.plusMonths(<span style="color:#ae81ff">2</span>).periodFrom( dt1 ) )
+    println( dt1.plusYears(<span style="color:#ae81ff">2</span>).periodFrom( dt1 ) )
+
+    </code></pre></div>
+<br/><br/></p>
+
+              </div>
+          </section>
+          
+
+          
+<footer id="main-footer" class="main-footer">
+   <div class="container text-center">
+
+       
+       <div class="logo">
+           <strong class="brand-text">Slate Kit</strong>
+       </div>
+       
+       <p class="description">Connect with us on our various channels and reach out for more info.</p>
+
+       
+       <ul class="social list-inline">
+           <li class="list-inline-item">
+               <a href="#" title="Facebook" target="_blank"><i class="fa fa-facebook"></i></a>
+           </li>
+           <li class="list-inline-item">
+               <a href="#" title="Twitter" target="_blank"><i class="fa fa-twitter"></i></a>
+           </li>
+           <li class="list-inline-item">
+               <a href="#" title="Google Plus" target="_blank"><i class="fa fa-google-plus"></i></a>
+           </li>
+           <li class="list-inline-item">
+               <a href="#" title="Instagram" target="_blank"><i class="fa fa-instagram"></i></a>
+           </li>
+       </ul>
+   </div>
+
+  
+   <div class="copyrights">
+       <div class="container">
+           <div class="row">
+               <div class="col-md-6">
+                   <p>&copy; 2017 <span class="text-primary">Perfo.com</span> All Rights Reserved.</p>
+               </div>
+               <div class="col-md-6 text-right">
+                   <ul class="list-inline">
+                       <li class="list-inline-item"><a href="#">FAQ</a></li>
+                       <li class="list-inline-item"><a href="#">Terms Of Services</a></li>
+                       <li class="list-inline-item"><a href="#">Policy &amp; Privacy</a></li>
+                   </ul>
+               </div>
+           </div>
+       </div>
+   </div> 
+</footer>
+           
+
+
+           
+           <div class="preloader d-flex align-items-center justify-content-center flex-column">
+                <div class="la-square-jelly-box la-2x">
+                    <div></div>
+                    <div></div>
+                </div>
+                <div class="text">Slate Kit</div>
+           </div>
+           
+
+
+           
+           <div id="scrollTop">
+               <div class="d-flex align-items-center justify-content-end">
+                   <i class="fa fa-long-arrow-up"></i>
+                   <span>To Top</span>
+               </div>
+           </div>
+           
+      </div>
+    
+                
+        <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+        
+        <script src="https://npmcdn.com/tether@1.2.4/dist/js/tether.min.js"></script>
+        
+        <script src="assets/theme/js/bootstrap.min.js"></script>
+        
+        <script src="assets/theme/js/owl.carousel.min.js"></script>
+        
+        <script src="assets/theme/js/easyscroll.min.js"></script>
+        
+        <script src="assets/theme/js/wow.min.js"></script>
+        
+        <script src="assets/theme/js/script.js"></script>
+
+        <script type="text/javascript">
+          var _codehelixAppPage = "infra";
+        </script>
+          <script type="text/javascript" src="assets/app/app.js"></script>
+        <script>
+          (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+          (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+          m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+          })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+
+          ga('create', 'UA-84704317-1', 'auto');
+          ga('send', 'pageview');
+        </script>
+  </body>
+</html>
