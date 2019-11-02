@@ -1,5 +1,9 @@
 baseURL = ""
 languageCode = "en-us"
 title = "My New Hugo Site"
-theme = "perfo"
+theme = "wavo"
 theme1 = "ananke"
+pygmentsCodefences = true
+pygmentsCodefencesGuessSyntax = true
+pygmentsUseClasses            = true 
+pygmentsStyle = "monokai"
