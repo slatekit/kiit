@@ -4,7 +4,7 @@ import io.ktor.application.ApplicationCall
 import io.ktor.routing.Routing
 import slatekit.apis.ApiServer
 import slatekit.common.Context
-import slatekit.common.Diagnostics
+import slatekit.tracking.Diagnostics
 import slatekit.common.requests.Request
 
 interface RequestHandler {

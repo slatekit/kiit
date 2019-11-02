@@ -4,8 +4,8 @@ import kotlinx.coroutines.runBlocking
 import org.junit.Assert
 import org.junit.Test
 import slatekit.common.Identity
-import slatekit.common.metrics.Calls
-import slatekit.common.metrics.Counters
+import slatekit.tracking.Calls
+import slatekit.tracking.Counters
 import slatekit.functions.policy.*
 import slatekit.results.Codes
 import slatekit.results.Outcome

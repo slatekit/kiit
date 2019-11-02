@@ -4,6 +4,7 @@ import java.util.concurrent.atomic.AtomicReference
 import slatekit.common.Identity
 import slatekit.common.Status
 
+
 /**
  * Base class for Workers
  */

@@ -5,7 +5,7 @@ import kotlinx.coroutines.launch
 import org.threeten.bp.Duration
 import slatekit.common.DateTime
 import slatekit.common.Status
-import slatekit.common.metrics.Event
+import slatekit.tracking.Event
 import slatekit.jobs.*
 import slatekit.results.Codes
 
