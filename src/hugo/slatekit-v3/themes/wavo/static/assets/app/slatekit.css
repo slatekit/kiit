@@ -37,6 +37,63 @@
 	background: #585CE9;
 }
 
+/*--------------------------------------------------
+[4. Start Integration]
+--------------------------------------------------*/
+.integration {
+    background: #fbfafa;
+    padding: 120px 0 90px 0;
+}
+.integration .heading {
+	margin-bottom: 50px;
+}
+.integration .heading h2 {
+	font-size: 30px;
+	font-weight: 600;
+	color: #5a5e74;
+	margin: 0;
+	margin-bottom: 10px;
+}
+.integration .heading p {
+	font-family: 'Open Sans', sans-serif;
+	font-size: 15px;
+	font-weight: 400;
+	line-height: 27px;
+	color: #797c8f;
+	opacity: .85;
+	margin-bottom: 0;
+}
+.integration .box {
+    background: #ffffff;
+    padding: 50px 40px;
+	box-shadow: 0px 10px 20px 0px rgba(0,0,0,0.06);
+	margin-bottom: 30px;
+}
+.integration .box img {
+    width: 90px;
+}
+.integration .box h3 {
+    font-size: 20px;
+    font-weight: 600;
+    color: #5a5e74;
+    margin: 0;
+    margin-top: 25px;
+    margin-bottom: 15px;
+}
+.integration .box p {
+    font-family: 'Open Sans', sans-serif;
+	font-size: 15px;
+	font-weight: 400;
+	line-height: 27px;
+	color: #797c8f;
+	opacity: .85;
+	margin-bottom: 0;
+}
+p {
+	font-family: 'Open Sans', sans-serif;
+	color: #797c8f;
+}
+/*
 table tr td  {
 	font-family: 'Open Sans', sans-serif;
 	font-size: 15px;
@@ -46,7 +103,7 @@ table tr td  {
 	opacity: .85;
 	margin-bottom: 0;
 }
-/*
+
 a .app-btn-red {
 	background: #ff5777;
 	border-radius: 35px;
