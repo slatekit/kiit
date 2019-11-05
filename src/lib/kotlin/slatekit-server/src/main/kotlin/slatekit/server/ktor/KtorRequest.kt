@@ -29,7 +29,7 @@ import slatekit.common.content.Doc
 import slatekit.common.requests.Request
 import slatekit.common.requests.RequestSupport
 import slatekit.common.CommonRequest
-import slatekit.common.requests.Source
+import slatekit.common.Source
 import java.io.*
 
 class KtorRequest(val call: ApplicationCall, val req: ApplicationRequest) : RequestSupport {

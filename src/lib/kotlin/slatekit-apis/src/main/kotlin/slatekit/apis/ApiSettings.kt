@@ -16,6 +16,7 @@ package slatekit.apis
 import slatekit.apis.tools.docs.Doc
 import slatekit.apis.tools.docs.DocConsole
 import slatekit.apis.tools.docs.DocWeb
+import slatekit.common.Source
 import slatekit.common.encrypt.Encryptor
 import slatekit.common.naming.Namer
 import slatekit.common.requests.Request
@@ -31,7 +32,7 @@ import slatekit.meta.Deserializer
  * @param docGen : Documentation generator
  */
 data class ApiSettings(
-    val protocol: Protocol = Protocol.Web,
+    val protocol: Source = Source.Web,
     val naming: Namer? = null,
     val decoder: ((Request, Encryptor?) -> Deserializer)? = null,
     val encoder: ((String, Any?) -> String)? = null,
@@ -39,9 +40,9 @@ data class ApiSettings(
     val docGen: Doc = doc(protocol)
 ) {
     companion object {
-        fun doc(protocol: Protocol): Doc {
+        fun doc(protocol: Source): Doc {
             return when (protocol) {
-                is Protocol.Web -> DocWeb()
+                is Source.Web -> DocWeb()
                 else -> DocConsole()
             }
         }

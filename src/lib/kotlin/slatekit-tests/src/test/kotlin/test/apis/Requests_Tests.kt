@@ -7,7 +7,7 @@ import slatekit.apis.core.Requests
 import slatekit.common.CommonRequest
 import slatekit.common.DateTime
 import slatekit.common.requests.InputArgs
-import slatekit.common.requests.Source
+import slatekit.common.Source
 
 class Requests_Tests {
 

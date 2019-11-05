@@ -15,10 +15,10 @@ package slatekit.examples.common
 import slatekit.apis.Api
 import slatekit.apis.Action
 import slatekit.apis.AuthModes
-import slatekit.apis.Protocols
 import slatekit.apis.Verbs
 import slatekit.common.CommonContext
 import slatekit.common.DateTime
+import slatekit.common.Sources
 import slatekit.common.requests.Request
 import slatekit.common.auth.Roles
 import slatekit.integration.common.ApiBaseEntity
@@ -33,7 +33,7 @@ import slatekit.integration.common.AppEntContext
  * See docs / guides / examples for more info.
  */
 @Api(area = "app", name = "movies", desc = "api for users",
-        auth = AuthModes.token, roles = Roles.all, verb = Verbs.Auto, protocols = Protocols.All)
+        auth = AuthModes.Token, roles = [Roles.all], verb = Verbs.Auto, protocols = [Sources.All])
 class MovieApi( ctx: AppEntContext) : ApiBaseEntity<Long, Movie, MovieService>(ctx, Long::class, Movie::class, MovieService(ctx as CommonContext, ctx.ent, ctx.ent.getRepo(Movie::class)))
 {
     /**
@@ -41,7 +41,7 @@ class MovieApi( ctx: AppEntContext) : ApiBaseEntity<Long, Movie, MovieService>(c
      * NOTE: This example show a simple example using different data-types
      * e.g string, boolean, int, double, DateTime
      */
-    @Action(roles = "", verb = "@parent", protocols = "*")
+    @Action()
     fun createSample(title:String, category:String, playing:Boolean, cost:Int, rating:Double, released: DateTime):Long {
         return service.create(Movie(title    = title,
               category = category,
@@ -57,7 +57,7 @@ class MovieApi( ctx: AppEntContext) : ApiBaseEntity<Long, Movie, MovieService>(c
      * Example of handling the raw request instead of having the system
      * auto-convert the request to the parameters ( see last example )
      */
-    @Action(roles = "", verb = "@parent", protocols = "*")
+    @Action()
     fun createUsingRawRequest(req: Request): Long  {
         // Handle the raw request youself
 

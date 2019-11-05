@@ -2,13 +2,13 @@ package slatekit.samples.common.apis
 
 import slatekit.apis.Api
 import slatekit.apis.Action
-import slatekit.apis.Protocols
 import slatekit.apis.Verbs
 import slatekit.apis.support.ApiBase
 import slatekit.common.DateTime
 import slatekit.common.DateTimes
 import slatekit.common.requests.Request
 import slatekit.common.Context
+import slatekit.common.Sources
 import slatekit.common.auth.Roles
 import slatekit.common.info.About
 import slatekit.results.Outcome
@@ -16,8 +16,7 @@ import slatekit.results.builders.Outcomes
 import slatekit.samples.common.models.SampleMovie
 
 
-@Api(area = "samples", name = "types", desc = "sample to test features of Slate Kit APIs",
-        roles = Roles.none, auth = "", verb = Verbs.Auto, protocols = Protocols.Web)
+@Api(area = "samples", name = "types", desc = "sample to test features of Slate Kit APIs", auth = "", verb = Verbs.Auto, protocols = [Sources.Web])
 class SampleApi(context: Context) : ApiBase(context) {
 
     var inc = 0

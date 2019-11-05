@@ -8,24 +8,15 @@ import io.ktor.routing.get
 import io.ktor.routing.routing
 import io.ktor.server.engine.embeddedServer
 import io.ktor.server.netty.Netty
-import slatekit.apis.ApiServer
-import slatekit.apis.tools.docs.DocWeb
-import slatekit.apis.AuthModes
-import slatekit.apis.Protocols
-import slatekit.apis.Verbs
-import slatekit.apis.security.WebProtocol
+import slatekit.apis.*
 
 // Slate Kit - Common Utilities
 import slatekit.common.*
-import slatekit.common.encrypt.*
 import slatekit.results.*
 
 // Slate Kit - App ( provides args, help, life-cycle methods, etc )
 import slatekit.common.auth.Roles
 import slatekit.common.ext.toResponse
-import slatekit.common.metrics.MetricsLite
-import slatekit.common.requests.Request
-import slatekit.meta.Deserializer
 
 // Slate Kit - Server ( Ktor support )
 import slatekit.server.ServerSettings
@@ -36,6 +27,7 @@ import slatekit.server.ktor.KtorResponse
 // Sample App
 import slatekit.samples.common.apis.SampleApi
 import slatekit.samples.common.auth.SampleAuth
+import slatekit.tracking.MetricsLite
 
 
 class Server(val ctx: Context)  {
@@ -57,15 +49,10 @@ class Server(val ctx: Context)  {
         val auth = SampleAuth()
 
         // 4. API host
-        val apiHost = ApiServer( ctx, false, auth, WebProtocol,
-                apis = apis,
-                docKey = settings.docKey,
-                docBuilder = { DocWeb() },
-                deserializer = { req: Request, enc:Encryptor? -> Deserializer(req, enc) }
-        )
+        val apiHost = ApiServer.of( ctx, apis, auth, Source.Web)
 
         // Ktor handler
-        val metrics = MetricsLite()
+        val metrics = MetricsLite(ctx.app.toId())
         val diagnostics = ServerDiagnostics("app", ctx.logs.getLogger("app"), metrics, listOf())
         val handler = KtorHandler(ctx, settings, apiHost, diagnostics, KtorResponse)
 
@@ -108,10 +95,9 @@ class Server(val ctx: Context)  {
                         cls = SampleApi::class,
                         setup = Setup.Annotated,
                         declaredOnly = true,
-                        auth = AuthModes.Keyed,
-                        roles = Roles.all,
-                        verb = Verbs.Auto,
-                        protocol = Protocols.All,
+                        auth = AuthMode.Keyed,
+                        roles = slatekit.apis.core.Roles.empty,
+                        verb = Verb.Auto,
                         singleton = SampleApi(ctx)
                 )
         )

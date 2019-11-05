@@ -13,8 +13,8 @@
 
 package slatekit.common.info
 
-import slatekit.common.newline
-import slatekit.common.nonEmptyOrDefault
+import slatekit.common.*
+import slatekit.common.envs.EnvMode
 
 /**
  * represent meta-data about an application
@@ -93,6 +93,9 @@ data class About(
     }
 
     fun dir(): String = company.nonEmptyOrDefault(name).replace(" ", "-")
+
+
+    fun toId(): Identity = SimpleIdentity(area, name, Agent.App, EnvMode.Dev.name)
 
     companion object {
         @JvmStatic

@@ -1,33 +1,33 @@
 package slatekit.apis.core
 
-import slatekit.apis.Protocol
+import slatekit.common.Source
 
-data class Protocols(val all: List<Protocol>) {
+data class Protocols(val all: List<Source>) {
 
     val isEmpty:Boolean = all.isEmpty()
 
     val isParentReference = all.size == 1 && all.first().isParentReference()
 
     fun hasCLI(): Boolean {
-        return all.any { it == Protocol.CLI || it == Protocol.All }
+        return all.any { it == Source.CLI || it == Source.All }
     }
 
     fun hasWeb(): Boolean {
-        return all.any { it == Protocol.Web || it == Protocol.All }
+        return all.any { it == Source.Web || it == Source.All }
     }
 
-    fun isMatchExact(expected:Protocol):Boolean {
+    fun isMatchExact(expected:Source):Boolean {
         return when {
             all.contains(expected)     -> true
             else -> false
         }
     }
 
-    fun isMatchOrAll(expected:Protocol):Boolean {
-        return isMatchOrElse(expected, Protocol.All)
+    fun isMatchOrAll(expected:Source):Boolean {
+        return isMatchOrElse(expected, Source.All)
     }
 
-    fun isMatchOrElse(expected:Protocol, other:Protocol):Boolean {
+    fun isMatchOrElse(expected:Source, other:Source):Boolean {
         return when {
             all.contains(expected)     -> true
             all.contains(other) -> true
@@ -39,11 +39,11 @@ data class Protocols(val all: List<Protocol>) {
 
     companion object {
         val empty = Protocols(listOf())
-        val all = Protocols(listOf(Protocol.All))
+        val all = Protocols(listOf(Source.All))
 
         fun of(items: Array<String>): Protocols {
             return if (items.isEmpty()) all
-            else Protocols(items.toList().map { Protocol.parse(it) })
+            else Protocols(items.toList().map { Source.parse(it) })
         }
     }
 }

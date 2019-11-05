@@ -16,16 +16,16 @@ package slatekit.integration.apis
 import slatekit.apis.Api
 import slatekit.apis.Action
 import slatekit.apis.AuthModes
-import slatekit.apis.Protocols
 import slatekit.apis.Verbs
 import slatekit.apis.support.FileSupport
 import slatekit.common.Context
+import slatekit.common.Sources
 import slatekit.common.encrypt.Encryptor
 import slatekit.common.info.Host
 import slatekit.common.log.Logger
 
 @Api(area = "app", name = "version", desc = "api to get version information",
-        auth = AuthModes.Keyed, roles = ["admin"], verb = Verbs.Auto, protocols = [Protocols.All])
+        auth = AuthModes.Keyed, roles = ["admin"], verb = Verbs.Auto, protocols = [Sources.All])
 class VersionApi(override val context: Context) : FileSupport {
 
     override val encryptor: Encryptor? = context.enc

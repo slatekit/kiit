@@ -14,9 +14,9 @@
 package slatekit.integration.apis
 
 import slatekit.apis.ApiServer
-import slatekit.apis.Protocol
 import slatekit.apis.core.Api
 import slatekit.cli.*
+import slatekit.common.Source
 import slatekit.common.requests.InputArgs
 import slatekit.common.info.Info
 import slatekit.results.Codes
@@ -56,7 +56,7 @@ open class CliApi(
     val metaNameForApiKey = "api-key"
 
     // api container holding all the apis.
-    val apis = ApiServer.of(ctx, apiItems, auth, Protocol.CLI)
+    val apis = ApiServer.of(ctx, apiItems, auth, Source.CLI)
 
     enum class ApiHelpType {
         Listing,

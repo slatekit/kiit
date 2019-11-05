@@ -16,17 +16,11 @@ import java.io.File
 import org.json.simple.JSONObject
 import org.json.simple.parser.JSONParser
 import slatekit.apis.ApiConstants
-import slatekit.apis.Protocol
 import slatekit.apis.support.JsonSupport
-import slatekit.common.CommonRequest
-import slatekit.common.DateTime
-import slatekit.common.Inputs
-import slatekit.common.Metadata
-import slatekit.common.Uris
+import slatekit.common.*
 import slatekit.common.encrypt.Encryptor
 import slatekit.common.ext.toStringUtc
 import slatekit.common.requests.Request
-import slatekit.common.requests.Source
 import slatekit.meta.Serialization
 
 object Requests {
@@ -42,7 +36,7 @@ object Requests {
 
         // Parse json
         val content = File(filePath).readText()
-        val req = fromJson(content, Protocol.File.name, Protocol.File.name, route, rawPath, enc)
+        val req = fromJson(content, Source.File.id, Source.File.id, route, rawPath, enc)
         val jsonObj = req.meta.raw as JSONObject
         keys?.forEach { pair ->
             jsonObj.put(pair.key, pair.value)
@@ -104,7 +98,7 @@ object Requests {
                 source = Source.parse(sourceOverride ?: source),
                 verb = verbOverride ?: verb,
                 meta = Meta(rawSource ?: "json", jsonMeta, enc),
-                data = Data(rawSource ?: "json", Protocol.File.name, true, enc, jsonData),
+                data = Data(rawSource ?: "json", Sources.File, true, enc, jsonData),
                 raw = rawSource,
                 tag = tag,
                 timestamp = time
@@ -179,7 +173,7 @@ object Requests {
      * Converts the request to JSON designated as a request from a Queue ( source = queue )
      */
     fun toJsonAsQueued(req: Request): String {
-        return toJsonString(req, null, Protocol.Queue.name, Protocol.Queue.name)
+        return toJsonString(req, null, Source.Queue.id, Source.Queue.id)
     }
 
     private fun convertMetaToJson(source: Inputs, rawData: Any): String {

@@ -1,5 +1,7 @@
 package slatekit.apis
 
+import slatekit.common.Sources
+
 /**
  * Annotation to designate a class as an API
  *
@@ -25,7 +27,7 @@ annotation class Api(
     val auth: String = AuthModes.Keyed,
     val verb: String = Verbs.Auto,
     val access: String = AccessLevel.Public,
-    val protocols: Array<String> = [Protocols.All],
+    val protocols: Array<String> = [Sources.All],
     val version: String = "1",
     val tags: Array<String> = []
 )
@@ -51,7 +53,7 @@ annotation class Action(
     val roles: Array<String> = [],
     val verb: String = Verbs.Auto,
     val access: String = AccessLevel.Public,
-    val protocols: Array<String> = [Protocols.All],
+    val protocols: Array<String> = [Sources.All],
     val version: String = "1",
     val tags: Array<String> = []
 )

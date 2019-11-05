@@ -5,7 +5,7 @@ import slatekit.apis.core.Requests
 import slatekit.apis.support.QueueSupport
 import slatekit.common.*
 import slatekit.common.queues.QueueSource
-import slatekit.common.requests.Source
+import slatekit.common.Source
 import slatekit.common.CommonContext
 import slatekit.results.*
 

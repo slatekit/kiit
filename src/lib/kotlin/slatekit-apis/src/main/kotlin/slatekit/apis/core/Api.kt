@@ -16,6 +16,7 @@ package slatekit.apis.core
 import kotlin.reflect.KClass
 import slatekit.apis.*
 import slatekit.apis.Setup
+import slatekit.common.Source
 import slatekit.meta.kClass
 
 /**
@@ -60,7 +61,7 @@ data class Api(
         roles: List<String> = listOf(),
         access: Access = Access.Public,
         auth: AuthMode = AuthMode.Token,
-        protocol: List<Protocol> = listOf(Protocol.All),
+        protocol: List<Source> = listOf(Source.All),
         verb: Verb = Verb.Auto,
         declaredOnly: Boolean = true,
         setup: Setup = Setup.Methods

@@ -16,9 +16,9 @@ package slatekit.integration.apis
 import slatekit.apis.Api
 import slatekit.apis.Action
 import slatekit.apis.AuthModes
-import slatekit.apis.Protocols
 import slatekit.apis.Verbs
 import slatekit.apis.support.ApiBase
+import slatekit.common.Sources
 import slatekit.common.db.DbCon
 import slatekit.common.newline
 import slatekit.common.db.DbLookup
@@ -29,7 +29,7 @@ import slatekit.results.Notice
 import slatekit.results.Try
 
 @Api(area = "infra", name = "entities", desc = "api to access and manage data models",
-        auth = AuthModes.Keyed, roles = ["admin"], verb = Verbs.Auto, protocols = [Protocols.All])
+        auth = AuthModes.Keyed, roles = ["admin"], verb = Verbs.Auto, protocols = [Sources.All])
 class EntitiesApi(context: AppEntContext) : ApiBase(context) {
     val appContext = context
 
