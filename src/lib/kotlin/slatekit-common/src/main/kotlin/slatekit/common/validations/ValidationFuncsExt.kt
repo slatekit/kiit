@@ -40,52 +40,53 @@ import slatekit.common.validations.ValidationConsts.Error_Is_Url
 import slatekit.common.validations.ValidationConsts.Error_Is_ZipCodeUS
 import slatekit.common.validations.ValidationConsts.Error_Is_ZipCodeUSWithFour
 import slatekit.common.validations.ValidationConsts.Error_StartsWith
+import slatekit.results.*
 
 object ValidationFuncsExt {
 
   // Empty / Non-Empty
-  @JvmStatic fun isEmpty(text: String, ref: Reference? = null, error: String = Error_Is_Empty): ValidationResult = buildResult(text.isNullOrEmpty(), ref, error)
-  @JvmStatic fun isNotEmpty(text: String, ref: Reference? = null, error: String = Error_Is_NotEmpty): ValidationResult = buildResult(!text.isNullOrEmpty(), ref, error)
-  @JvmStatic fun isOneOf(text: String, items: List<String>, ref: Reference?, error: String = Error_Is_OneOf): ValidationResult = buildResult(items.contains(text), ref, error)
+  @JvmStatic fun isEmpty(text: String, error: String = Error_Is_Empty): Validated<String> = buildResult(text, text.isNullOrEmpty(), error)
+  @JvmStatic fun isNotEmpty(text: String, error: String = Error_Is_NotEmpty): Validated<String> = buildResult(text, !text.isNullOrEmpty(), error)
+  @JvmStatic fun isOneOf(text: String, items: List<String>, error: String = Error_Is_OneOf): Validated<String> = buildResult(text, items.contains(text), error)
 
   // Length functions
-  @JvmStatic fun isLength(text: String, len: Int, ref: Reference? = null, error: String = Error_Is_Length): ValidationResult = buildResult(ValidationFuncs.isLength(text, len), ref, error)
-  @JvmStatic fun isMinLength(text: String, min: Int, ref: Reference? = null, error: String = Error_Is_MinLength): ValidationResult = buildResult(ValidationFuncs.isMinLength(text, min), ref, error)
-  @JvmStatic fun isMaxLength(text: String, max: Int, ref: Reference? = null, error: String = Error_Is_MaxLength): ValidationResult = buildResult(ValidationFuncs.isMaxLength(text, max), ref, error)
+  @JvmStatic fun isLength(text: String, len: Int, error: String = Error_Is_Length): Validated<String> = buildResult(text, ValidationFuncs.isLength(text, len), error)
+  @JvmStatic fun isMinLength(text: String, min: Int, error: String = Error_Is_MinLength): Validated<String> = buildResult(text, ValidationFuncs.isMinLength(text, min), error)
+  @JvmStatic fun isMaxLength(text: String, max: Int, error: String = Error_Is_MaxLength): Validated<String> = buildResult(text, ValidationFuncs.isMaxLength(text, max), error)
 
   // Numeric checks
-  @JvmStatic fun isMinValue(value: Int, min: Int, ref: Reference? = null, error: String = Error_Is_MinValue): ValidationResult = buildResult(ValidationFuncs.isMinValue(value, min), ref, error)
-  @JvmStatic fun isMaxValue(value: Int, max: Int, ref: Reference? = null, error: String = Error_Is_MaxValue): ValidationResult = buildResult(ValidationFuncs.isMaxValue(value, max), ref, error)
-  @JvmStatic fun isBetween(value: Int, min: Int, max: Int, ref: Reference?, error: String = Error_Is_Between): ValidationResult = buildResult(ValidationFuncs.isBetween(value, min, max), ref, error)
+  @JvmStatic fun isMinValue(value: Int, min: Int, error: String = Error_Is_MinValue): Validated<Int> = buildResult(value, ValidationFuncs.isMinValue(value, min), error)
+  @JvmStatic fun isMaxValue(value: Int, max: Int, error: String = Error_Is_MaxValue): Validated<Int> = buildResult(value, ValidationFuncs.isMaxValue(value, max), error)
+  @JvmStatic fun isBetween(value: Int, min: Int, max: Int, error: String = Error_Is_Between): Validated<Int> = buildResult(value, ValidationFuncs.isBetween(value, min, max), error)
 
   // Char checks
-  @JvmStatic fun hasDigits(text: String, count: Int, ref: Reference? = null, error: String = Error_Has_Digits): ValidationResult = buildResult(ValidationFuncs.hasDigits(text, count), ref, error)
-  @JvmStatic fun hasSymbols(text: String, count: Int, ref: Reference? = null, error: String = Error_Has_Symbols): ValidationResult = buildResult(ValidationFuncs.hasSymbols(text, count), ref, error)
-  @JvmStatic fun hasCharsLCase(text: String, count: Int, ref: Reference? = null, error: String = Error_Has_CharsLCase): ValidationResult = buildResult(ValidationFuncs.hasCharsLCase(text, count), ref, error)
-  @JvmStatic fun hasCharsUCase(text: String, count: Int, ref: Reference? = null, error: String = Error_Has_CharsUCase): ValidationResult = buildResult(ValidationFuncs.hasCharsUCase(text, count), ref, error)
+  @JvmStatic fun hasDigits(text: String, count: Int, error: String = Error_Has_Digits): Validated<String> = buildResult(text, ValidationFuncs.hasDigits(text, count), error)
+  @JvmStatic fun hasSymbols(text: String, count: Int, error: String = Error_Has_Symbols): Validated<String> = buildResult(text, ValidationFuncs.hasSymbols(text, count), error)
+  @JvmStatic fun hasCharsLCase(text: String, count: Int, error: String = Error_Has_CharsLCase): Validated<String> = buildResult(text, ValidationFuncs.hasCharsLCase(text, count), error)
+  @JvmStatic fun hasCharsUCase(text: String, count: Int, error: String = Error_Has_CharsUCase): Validated<String> = buildResult(text, ValidationFuncs.hasCharsUCase(text, count), error)
 
   // Content checks
-  @JvmStatic fun startsWith(text: String, expected: String, ref: Reference? = null, error: String = Error_StartsWith): ValidationResult = buildResult(ValidationFuncs.startsWith(text, expected), ref, error)
-  @JvmStatic fun endsWith(text: String, expected: String, ref: Reference? = null, error: String = Error_EndsWith): ValidationResult = buildResult(ValidationFuncs.endsWith(text, expected), ref, error)
-  @JvmStatic fun contains(text: String, expected: String, ref: Reference? = null, error: String = Error_Contains): ValidationResult = buildResult(ValidationFuncs.contains(text, expected), ref, error)
+  @JvmStatic fun startsWith(text: String, expected: String, error: String = Error_StartsWith): Validated<String> = buildResult(text, ValidationFuncs.startsWith(text, expected), error)
+  @JvmStatic fun endsWith(text: String, expected: String, error: String = Error_EndsWith): Validated<String> = buildResult(text, ValidationFuncs.endsWith(text, expected), error)
+  @JvmStatic fun contains(text: String, expected: String, error: String = Error_Contains): Validated<String> = buildResult(text, ValidationFuncs.contains(text, expected), error)
 
   // Format checks
-  @JvmStatic fun isEmail(text: String, ref: Reference? = null, error: String = Error_Is_Email): ValidationResult = buildResult(ValidationFuncs.isEmail(text), ref, error)
-  @JvmStatic fun isAlpha(text: String, ref: Reference? = null, error: String = Error_Is_Alpha): ValidationResult = buildResult(ValidationFuncs.isAlpha(text), ref, error)
-  @JvmStatic fun isAlphaUpperCase(text: String, ref: Reference? = null, error: String = Error_Is_AlphaUpperCase): ValidationResult = buildResult(ValidationFuncs.isAlphaUpperCase(text), ref, error)
-  @JvmStatic fun isAlphaLowerCase(text: String, ref: Reference? = null, error: String = Error_Is_AlphaLowerCase): ValidationResult = buildResult(ValidationFuncs.isAlphaLowerCase(text), ref, error)
-  @JvmStatic fun isAlphaNumeric(text: String, ref: Reference? = null, error: String = Error_Is_AlphaNumeric): ValidationResult = buildResult(ValidationFuncs.isAlphaNumeric(text), ref, error)
-  @JvmStatic fun isNumeric(text: String, ref: Reference? = null, error: String = Error_Is_Numeric): ValidationResult = buildResult(ValidationFuncs.isNumeric(text), ref, error)
-  @JvmStatic fun isSocialSecurity(text: String, ref: Reference? = null, error: String = Error_Is_SocialSecurity): ValidationResult = buildResult(ValidationFuncs.isSocialSecurity(text), ref, error)
-  @JvmStatic fun isUrl(text: String, ref: Reference? = null, error: String = Error_Is_Url): ValidationResult = buildResult(ValidationFuncs.isUrl(text), ref, error)
-  @JvmStatic fun isZipCodeUS(text: String, ref: Reference? = null, error: String = Error_Is_ZipCodeUS): ValidationResult = buildResult(ValidationFuncs.isZipCodeUS(text), ref, error)
-  @JvmStatic fun isZipCodeUSWithFour(text: String, ref: Reference? = null, error: String = Error_Is_ZipCodeUSWithFour): ValidationResult = buildResult(ValidationFuncs.isZipCodeUSWithFour(text), ref, error)
-  @JvmStatic fun isPhoneUS(text: String, ref: Reference? = null, error: String = Error_Is_PhoneUS): ValidationResult = buildResult(ValidationFuncs.isPhoneUS(text), ref, error)
+  @JvmStatic fun isEmail(text: String, error: String = Error_Is_Email): Validated<String> = buildResult(text, ValidationFuncs.isEmail(text), error)
+  @JvmStatic fun isAlpha(text: String, error: String = Error_Is_Alpha): Validated<String> = buildResult(text, ValidationFuncs.isAlpha(text), error)
+  @JvmStatic fun isAlphaUpperCase(text: String, error: String = Error_Is_AlphaUpperCase): Validated<String> = buildResult(text, ValidationFuncs.isAlphaUpperCase(text), error)
+  @JvmStatic fun isAlphaLowerCase(text: String, error: String = Error_Is_AlphaLowerCase): Validated<String> = buildResult(text, ValidationFuncs.isAlphaLowerCase(text), error)
+  @JvmStatic fun isAlphaNumeric(text: String, error: String = Error_Is_AlphaNumeric): Validated<String> = buildResult(text, ValidationFuncs.isAlphaNumeric(text), error)
+  @JvmStatic fun isNumeric(text: String, error: String = Error_Is_Numeric): Validated<String> = buildResult(text, ValidationFuncs.isNumeric(text), error)
+  @JvmStatic fun isSocialSecurity(text: String, error: String = Error_Is_SocialSecurity): Validated<String> = buildResult(text, ValidationFuncs.isSocialSecurity(text), error)
+  @JvmStatic fun isUrl(text: String, error: String = Error_Is_Url): Validated<String> = buildResult(text, ValidationFuncs.isUrl(text), error)
+  @JvmStatic fun isZipCodeUS(text: String, error: String = Error_Is_ZipCodeUS): Validated<String> = buildResult(text, ValidationFuncs.isZipCodeUS(text), error)
+  @JvmStatic fun isZipCodeUSWithFour(text: String, error: String = Error_Is_ZipCodeUSWithFour): Validated<String> = buildResult(text, ValidationFuncs.isZipCodeUSWithFour(text), error)
+  @JvmStatic fun isPhoneUS(text: String, error: String = Error_Is_PhoneUS): Validated<String> = buildResult(text, ValidationFuncs.isPhoneUS(text), error)
 
-  @JvmStatic fun buildResult(isValid: Boolean, ref: Reference?, error: String): ValidationResult =
+  @JvmStatic fun <T> buildResult(input:T, isValid: Boolean, error: String): Validated<T> =
     if (isValid) {
-      ValidationResult(true, error, ref, 1)
+      Success(input)
     } else {
-      ValidationResult(false, error, ref, 0)
+      Failure(Err.list(listOf(error), null))
     }
 }

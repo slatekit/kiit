@@ -18,15 +18,12 @@ import slatekit.apis.Protocol
 import slatekit.apis.Verbs
 import slatekit.apis.core.Api
 import slatekit.apis.Setup
-import slatekit.common.auth.Roles
-import slatekit.common.info.Credentials
 import slatekit.common.CommonRequest
 import slatekit.common.DateTimes
-import slatekit.common.toResponse
+import slatekit.common.ext.toResponse
 import slatekit.results.Failure
 import slatekit.results.Success
 import test.apis.samples.Sample_API_1_Core
-import test.setup.*
 
 /**
  * Created by kishorereddy on 6/12/17.

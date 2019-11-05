@@ -22,6 +22,7 @@ import slatekit.results.*
 
 // Slate Kit - App ( provides args, help, life-cycle methods, etc )
 import slatekit.common.auth.Roles
+import slatekit.common.ext.toResponse
 import slatekit.common.metrics.MetricsLite
 import slatekit.common.requests.Request
 import slatekit.meta.Deserializer

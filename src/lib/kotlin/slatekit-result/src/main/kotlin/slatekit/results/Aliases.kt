@@ -29,3 +29,13 @@ typealias Outcome<T> = Result<T, Err>
  * 3. use a simple [String] for failures without having to build [Err] or [Exception]
  */
 typealias Notice<T> = Result<T, String>
+
+
+/**
+ * Alias for Result<T,E> defaulting the E error type ( [Failure] branch ) to [ErrorList]
+ *
+ * This allows for :
+ * 1. Is to be used for validation purposes
+ * 2. Collecting multiple errors
+ */
+typealias Validated<T> = Result<T, ErrorList>

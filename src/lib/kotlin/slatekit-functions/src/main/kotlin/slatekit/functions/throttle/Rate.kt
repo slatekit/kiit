@@ -1,4 +1,4 @@
-package slatekit.common.throttle
+package slatekit.functions.throttle
 
 
 sealed class Rate {

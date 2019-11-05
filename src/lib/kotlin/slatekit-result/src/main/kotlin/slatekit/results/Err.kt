@@ -74,6 +74,10 @@ interface Err {
             return ErrorList(errors.map { ErrorInfo(it) }, msg ?: "Error occurred")
         }
 
+        fun list(errors:List<String>, msg:String?):ErrorList {
+            return ErrorList(errors.map { ErrorInfo(it) }, msg ?: "Error occurred")
+        }
+
         fun ex(ex: Exception): Err {
             return ErrorInfo(ex.message ?: "", ex)
         }

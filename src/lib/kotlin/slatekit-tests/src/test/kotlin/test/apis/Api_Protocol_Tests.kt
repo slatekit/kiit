@@ -17,18 +17,12 @@ import slatekit.apis.Protocol
 import slatekit.apis.core.Api
 import slatekit.apis.Setup
 import slatekit.apis.Verbs
-import slatekit.common.info.Credentials
 import slatekit.common.CommonRequest
-import slatekit.common.requests.Source
-import slatekit.common.toResponse
-import slatekit.results.Codes
+import slatekit.common.ext.toResponse
 import slatekit.results.Err
 import slatekit.results.Failure
 import slatekit.results.Success
-import slatekit.results.builders.Notices
-import test.apis.samples.Sample_API_1_Core
 import test.apis.samples.Sample_API_1_Protocol
-import test.setup.UserApi
 
 /**
  * Created by kishorereddy on 6/12/17.

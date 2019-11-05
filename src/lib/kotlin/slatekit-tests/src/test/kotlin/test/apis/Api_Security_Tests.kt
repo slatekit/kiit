@@ -19,12 +19,11 @@ import slatekit.apis.Setup
 import slatekit.apis.Verbs
 import slatekit.common.info.Credentials
 import slatekit.common.CommonRequest
-import slatekit.common.toResponse
+import slatekit.common.ext.toResponse
 import slatekit.results.Success
 import slatekit.results.builders.Notices
 import slatekit.results.builders.Outcomes
 import test.apis.samples.Sample_API_2_Roles
-import test.setup.UserApi
 
 /**
  * Created by kishorereddy on 6/12/17.
