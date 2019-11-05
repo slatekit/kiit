@@ -47,45 +47,45 @@ import java.io.File
 data class Folders(
 
         @JvmField
-    val home: String,
+        val home: String,
 
         @JvmField
-    val root: String,
+        val root: String,
 
         @JvmField
-    val area: String,
+        val area: String,
 
         @JvmField
-    val app: String,
+        val app: String,
 
         @JvmField
-    val cache: String,
+        val cache: String,
 
         @JvmField
-    val inputs: String,
+        val inputs: String,
 
         @JvmField
-    val logs: String,
+        val logs: String,
 
         @JvmField
-    val outputs: String,
+        val outputs: String,
 
         @JvmField
-    val temp: String,
+        val temp: String,
 
         @JvmField
-    val conf: String
+        val conf: String
 ) : Meta {
 
-    override fun props():List<Pair<String,String>> = listOf(
-        "root"    to  root,
-        "area"    to  area,
-        "app"     to  app,
-        "cache"   to  cache,
-        "inputs"  to  app,
-        "log"     to  logs,
-        "outputs" to  outputs,
-        "temp"    to  temp
+    override fun props(): List<Pair<String, String>> = listOf(
+            "root" to root,
+            "area" to area,
+            "app" to app,
+            "cache" to cache,
+            "inputs" to app,
+            "log" to logs,
+            "outputs" to outputs,
+            "temp" to temp
     )
 
     val pathToConf: String get() = this.pathToApp + File.separator + conf
@@ -111,14 +111,15 @@ data class Folders(
     fun getLogsFilePath(fileName: String): String = pathToLogs + File.separator + fileName
     fun getTempFilePath(fileName: String): String = pathToTemp + File.separator + fileName
 
-    val pathToApp: String get() {
-        val sep = File.separator
-        val homePath = home
-        val rootPath = root?.let { folder -> homePath + sep + folder } ?: homePath
-        val groupPath = area?.let { folder -> rootPath + sep + folder } ?: rootPath
-        val finalPath = groupPath + sep + app
-        return finalPath
-    }
+    val pathToApp: String
+        get() {
+            val sep = File.separator
+            val homePath = home
+            val rootPath = root?.let { folder -> homePath + sep + folder } ?: homePath
+            val groupPath = area?.let { folder -> rootPath + sep + folder } ?: rootPath
+            val finalPath = groupPath + sep + app
+            return finalPath
+        }
 
     fun create() {
         val rootPath = Files.mkDir(home, root ?: "")
