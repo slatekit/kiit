@@ -14,7 +14,7 @@ import slatekit.common.*
 import slatekit.common.queues.QueueSourceInMemory
 import slatekit.common.CommonContext
 import slatekit.common.requests.InputArgs
-import slatekit.common.requests.Source
+import slatekit.common.Source
 import slatekit.integration.jobs.APIWorker
 import slatekit.jobs.*
 import test.setup.SampleTypes2Api

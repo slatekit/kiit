@@ -14,9 +14,8 @@ import slatekit.apis.ApiServer
 import slatekit.apis.setup.Annotated
 import slatekit.apis.doc.DocWeb
 import slatekit.apis.AuthModes
-import slatekit.apis.Protocols
+import slatekit.common.Sources
 import slatekit.apis.Verbs
-import slatekit.apis.security.WebProtocol
 
 // Slate Kit - Common Utilities
 import slatekit.common.*
@@ -115,7 +114,7 @@ class Server(val ctx: Context)  {
                         auth = AuthModes.apiKey,
                         roles = Roles.all,
                         verb = Verbs.auto,
-                        protocol = Protocols.all,
+                        protocol = Sources.all,
                         singleton = SampleApi(ctx)
                 )
         )

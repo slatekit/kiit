@@ -1,4 +1,4 @@
-package slatekit.common.throttle
+package slatekit.functions.throttle
 
 
 /**
@@ -8,7 +8,7 @@ package slatekit.common.throttle
  * @param rate     : Rate description              e.g. Low
  * @param settings : Additional throttle settings  e.g. derived classes to implement
  */
-data class Throttle(val name:String, val span: Span, val rate: Rate, val settings:ThrottleSettings)
+data class Throttle(val name:String, val span: Span, val rate: Rate, val settings: ThrottleSettings)
 
 
 interface ThrottleSettings

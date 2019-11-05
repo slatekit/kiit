@@ -17,10 +17,10 @@ import org.junit.Assert
 import slatekit.apis.*
 import slatekit.apis.core.Api
 import slatekit.apis.core.Auth
-import slatekit.apis.Protocol
 import slatekit.apis.hooks.Authorize
 import slatekit.apis.Setup
 import slatekit.common.CommonRequest
+import slatekit.common.Source
 import slatekit.common.args.Args
 import slatekit.common.conf.Config
 import slatekit.common.db.DbConString
@@ -36,13 +36,11 @@ import slatekit.db.Db
 import slatekit.entities.Entities
 import slatekit.functions.middleware.Middleware
 import slatekit.integration.common.AppEntContext
-import slatekit.results.Err
 import slatekit.results.Try
 import test.setup.MyAuthProvider
 import test.setup.UserApi
 import test.setup.MyEncryptor
 import test.setup.User
-import kotlin.math.exp
 
 /**
  * Created by kishorereddy on 6/12/17.
@@ -87,12 +85,12 @@ open class ApiTestsBase {
     }
 
 
-    fun getApis(protocol: Protocol,
+    fun getApis(source: Source,
                 auth: Auth? = null,
                 apis: List<Api> = listOf()): ApiServer {
 
         // 2. apis
-        val container = ApiServer.of(ctx, apis, auth, protocol)
+        val container = ApiServer.of(ctx, apis, auth, source)
         return container
     }
 
@@ -109,10 +107,10 @@ open class ApiTestsBase {
         val apis = if (user != null) {
             val keys = buildKeys()
             val auth = MyAuthProvider(user.first, user.second, keys)
-            val apis = getApis(Protocol.CLI, auth, apis)
+            val apis = getApis(Source.CLI, auth, apis)
             apis
         } else {
-            val apis = getApis(Protocol.CLI, apis = apis)
+            val apis = getApis(Source.CLI, apis = apis)
             apis
         }
         val cmd = CommonRequest.cli(path, inputs, opts)
@@ -132,7 +130,7 @@ open class ApiTestsBase {
 
 
     fun ensure(
-            protocol: Protocol,
+            protocol: Source,
             middleware: List<Middleware> = listOf(),
             apis: List<Api>,
             user: Credentials?,

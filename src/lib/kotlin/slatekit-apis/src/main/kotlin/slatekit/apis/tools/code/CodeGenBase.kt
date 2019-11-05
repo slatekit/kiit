@@ -5,7 +5,6 @@ import kotlin.reflect.KClass
 import kotlin.reflect.KParameter
 import kotlin.reflect.KType
 import kotlin.reflect.full.declaredMemberFunctions
-import slatekit.apis.Protocol
 import slatekit.apis.Verbs
 import slatekit.apis.core.Action
 import slatekit.apis.core.Api
@@ -62,7 +61,7 @@ abstract class CodeGenBase(val settings: CodeGenSettings) {
         this.settings.host.routes.visitApis { _, api ->
 
             try {
-                if (api.protocol == Protocol.Web) {
+                if (api.protocol == Source.Web) {
                     println("API: " + api.area + "." + api.name)
 
                     // Get only the declared members in the api/class

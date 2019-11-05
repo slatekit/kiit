@@ -13,22 +13,16 @@ mantra: Simplicity above all else
 package test.apis
 
 import org.junit.Test
-import slatekit.apis.Protocol
 import slatekit.apis.core.Api
 import slatekit.apis.Setup
 import slatekit.apis.Verbs
-import slatekit.common.info.Credentials
 import slatekit.common.CommonRequest
-import slatekit.common.requests.Source
-import slatekit.common.toResponse
-import slatekit.results.Codes
+import slatekit.common.Source
+import slatekit.common.ext.toResponse
 import slatekit.results.Err
 import slatekit.results.Failure
 import slatekit.results.Success
-import slatekit.results.builders.Notices
-import test.apis.samples.Sample_API_1_Core
 import test.apis.samples.Sample_API_1_Protocol
-import test.setup.UserApi
 
 /**
  * Created by kishorereddy on 6/12/17.
@@ -44,7 +38,7 @@ class Api_Protocol_Tests : ApiTestsBase() {
     @Test
     fun should_work_when_setup_as_protocol_CLI_request_is_CLI_via_parent() {
         ensure(
-                protocol = Protocol.CLI,
+                protocol = Source.CLI,
                 apis = listOf(Api(Sample_API_1_Protocol(), setup = Setup.Annotated)),
                 user = null,
                 request = CommonRequest.path("$AREA.$NAME.${Sample_API_1_Protocol::processParent.name}", Verbs.Post, mapOf(), mapOf(Pair("name", "abc"))),
@@ -56,7 +50,7 @@ class Api_Protocol_Tests : ApiTestsBase() {
     @Test
     fun should_work_when_setup_as_protocol_CLI_request_is_CLI_explicit() {
         ensure(
-                protocol = Protocol.CLI,
+                protocol = Source.CLI,
                 apis = listOf(Api(Sample_API_1_Protocol(), setup = Setup.Annotated)),
                 user = null,
                 request = CommonRequest.path("$AREA.$NAME.${Sample_API_1_Protocol::processCLI.name}", Verbs.Post, mapOf(), mapOf(Pair("name", "abc"))),
@@ -68,7 +62,7 @@ class Api_Protocol_Tests : ApiTestsBase() {
     @Test
     fun should_work_when_setup_as_protocol_all_request_is_ALL_via_parent() {
         ensure(
-                protocol = Protocol.All,
+                protocol = Source.All,
                 apis = listOf(Api(Sample_API_1_Protocol(), setup = Setup.Annotated)),
                 user = null,
                 request = CommonRequest.path("$AREA.$NAME.${Sample_API_1_Protocol::processParent.name}", Verbs.Post, mapOf(), mapOf(Pair("name", "abc"))),
@@ -79,7 +73,7 @@ class Api_Protocol_Tests : ApiTestsBase() {
 
     @Test fun should_work_when_setup_as_parent_protocol_CLI_and_request_is_CLI() {
         ensure(
-                protocol = Protocol.All,
+                protocol = Source.All,
                 apis     = listOf(Api(Sample_API_1_Protocol(), setup = Setup.Annotated)),
                 user     = null,
                 request  = CommonRequest.path("$AREA.$NAME.${Sample_API_1_Protocol::processCLI.name}",  Verbs.Post, mapOf(), mapOf(Pair("name", "abc"))),
@@ -91,7 +85,7 @@ class Api_Protocol_Tests : ApiTestsBase() {
     @Test
     fun should_fail_when_setup_as_protocol_web_request_is_CLI_explicit() {
         ensure(
-                protocol = Protocol.All,
+                protocol = Source.All,
                 apis = listOf(Api(Sample_API_1_Protocol(), setup = Setup.Annotated)),
                 user = null,
                 request = CommonRequest.web("$AREA", "$NAME", "${Sample_API_1_Protocol::processCLI.name}", Verbs.Post, mapOf(), mapOf(Pair("name", "abc"))),

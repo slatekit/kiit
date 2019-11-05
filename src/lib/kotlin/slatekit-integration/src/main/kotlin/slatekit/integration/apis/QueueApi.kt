@@ -16,10 +16,10 @@ package slatekit.integration.apis
 import slatekit.apis.Api
 import slatekit.apis.Action
 import slatekit.apis.AuthModes
-import slatekit.apis.Protocols
 import slatekit.apis.Verbs
 import slatekit.apis.support.FileSupport
 import slatekit.common.Context
+import slatekit.common.Sources
 import slatekit.common.content.Doc
 import slatekit.common.encrypt.Encryptor
 import slatekit.common.log.Logger
@@ -27,7 +27,7 @@ import slatekit.common.queues.QueueSource
 import slatekit.results.Try
 
 @Api(area = "cloud", name = "queues", desc = "api info about the application and host",
-        auth = AuthModes.Keyed, roles = ["admin"], verb = Verbs.Auto, protocols = [Protocols.All])
+        auth = AuthModes.Keyed, roles = ["admin"], verb = Verbs.Auto, protocols = [Sources.All])
 class QueueApi(val queue: QueueSource<String>, override val context: Context) : FileSupport {
 
     override val encryptor: Encryptor? = context.enc

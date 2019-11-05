@@ -4,7 +4,7 @@ import slatekit.apis.ApiRequest
 import slatekit.apis.core.Requests
 import slatekit.common.*
 import slatekit.common.queues.QueueSource
-import slatekit.common.requests.Source
+import slatekit.common.Source
 import slatekit.results.Notice
 
 interface QueueSupport {

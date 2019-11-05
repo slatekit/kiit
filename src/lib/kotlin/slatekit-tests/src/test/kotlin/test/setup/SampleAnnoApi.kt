@@ -2,8 +2,6 @@ package test.setup
 
 import slatekit.apis.*
 import slatekit.apis.AuthModes
-import slatekit.apis.Protocols
-import slatekit.apis.Verbs
 import slatekit.common.*
 import slatekit.common.auth.Roles
 import slatekit.common.encrypt.EncDouble

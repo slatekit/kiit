@@ -16,16 +16,16 @@ package slatekit.integration.apis
 import slatekit.apis.Api
 import slatekit.apis.Action
 import slatekit.apis.AuthModes
-import slatekit.apis.Protocols
 import slatekit.apis.Verbs
 import slatekit.apis.support.ApiBase
 import slatekit.common.Context
+import slatekit.common.Sources
 
 /**
  * Created by kreddy on 3/23/2016.
  */
 @Api(area = "infra", name = "encryption", desc = "api to encryption and decryption",
-        auth = AuthModes.Keyed, roles = ["admin"], verb = Verbs.Auto, protocols = [Protocols.CLI])
+        auth = AuthModes.Keyed, roles = ["admin"], verb = Verbs.Auto, protocols = [Sources.CLI])
 class EncryptApi(context: Context) : ApiBase(context) {
 
     @Action(desc = "encryptes the text")

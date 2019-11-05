@@ -16,19 +16,19 @@ package slatekit.integration.apis
 import slatekit.apis.Api
 import slatekit.apis.Action
 import slatekit.apis.AuthModes
-import slatekit.apis.Protocols
 import slatekit.apis.Verbs
 import slatekit.apis.support.FileSupport
 import slatekit.common.CommonContext
 import slatekit.common.Strings
 import slatekit.common.encrypt.Encryptor
 import slatekit.common.log.Logger
+import slatekit.common.Sources
 import slatekit.core.cache.Cache
 import slatekit.core.cache.CacheItem
 import slatekit.core.cache.CacheSettings
 
 @Api(area = "infra", name = "cache", desc = "api info about the application and host",
-        auth = AuthModes.Keyed, roles = ["admin"], verb = Verbs.Auto, protocols = [Protocols.All])
+        auth = AuthModes.Keyed, roles = ["admin"], verb = Verbs.Auto, protocols = [Sources.All])
 class CacheApi(override val context: CommonContext) : FileSupport {
 
     override val encryptor: Encryptor? = context.enc

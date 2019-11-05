@@ -10,7 +10,7 @@ import slatekit.apis.ApiServer
 import slatekit.common.Context
 import slatekit.tracking.Diagnostics
 import slatekit.common.requests.Request
-import slatekit.common.toResponse
+import slatekit.common.ext.toResponse
 import slatekit.server.ServerSettings
 import slatekit.server.common.RequestHandler
 import slatekit.server.common.ResponseHandler

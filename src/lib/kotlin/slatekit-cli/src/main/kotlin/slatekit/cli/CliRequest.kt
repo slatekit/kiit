@@ -10,7 +10,7 @@ import slatekit.common.content.Doc
 import slatekit.common.requests.InputArgs
 import slatekit.common.requests.Request
 import slatekit.common.requests.RequestSupport
-import slatekit.common.requests.Source
+import slatekit.common.Source
 
 /**
  * Represents an abstraction of a Web Api Request and also a CLI ( Command Line ) request

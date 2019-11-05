@@ -6,7 +6,7 @@ import slatekit.common.Metadata
 import slatekit.common.args.Args
 import slatekit.common.requests.InputArgs
 import slatekit.common.requests.Request
-import slatekit.common.requests.Source
+import slatekit.common.Source
 
 /**
  * Represents the request to the command

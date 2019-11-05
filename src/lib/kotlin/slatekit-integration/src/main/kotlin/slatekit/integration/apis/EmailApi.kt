@@ -16,10 +16,10 @@ package slatekit.integration.apis
 import slatekit.apis.Api
 import slatekit.apis.Action
 import slatekit.apis.AuthModes
-import slatekit.apis.Protocols
 import slatekit.apis.Verbs
 import slatekit.apis.support.FileSupport
 import slatekit.common.Context
+import slatekit.common.Sources
 import slatekit.common.Uris
 import slatekit.common.Vars
 import slatekit.common.encrypt.Encryptor
@@ -28,7 +28,7 @@ import slatekit.notifications.email.EmailService
 import slatekit.results.Outcome
 
 @Api(area = "cloud", name = "email", desc = "api to send emails",
-        auth = AuthModes.Keyed, roles = ["ops"], verb = Verbs.Auto, protocols = [Protocols.All])
+        auth = AuthModes.Keyed, roles = ["ops"], verb = Verbs.Auto, protocols = [Sources.All])
 class EmailApi(val svc: EmailService, override val context: Context) : FileSupport {
 
     override val encryptor: Encryptor? = context.enc

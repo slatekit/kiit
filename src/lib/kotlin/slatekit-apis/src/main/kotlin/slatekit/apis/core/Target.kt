@@ -1,7 +1,7 @@
 package slatekit.apis.core
 
-import slatekit.apis.Protocol
 import slatekit.apis.Verb
+import slatekit.common.Source
 
 data class Target(val api: Api, val action: Action, val instance: Any) {
 
@@ -27,7 +27,7 @@ data class Target(val api: Api, val action: Action, val instance: Any) {
      * 3. *          -> via annotation, indicating any protocol
      * 4. some value -> indicating exact requirement
      */
-    fun isMatchingProtocol(expected: Protocol):Boolean {
+    fun isMatchingProtocol(expected: Source):Boolean {
         // E.g. action could be reference to parent e.g. "@parent"
         val actualProtocols = when {
             // 1.

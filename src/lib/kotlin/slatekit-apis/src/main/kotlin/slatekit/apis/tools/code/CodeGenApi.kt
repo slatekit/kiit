@@ -2,7 +2,6 @@ package slatekit.apis.tools.code
 
 import slatekit.apis.*
 import slatekit.apis.AuthModes
-import slatekit.apis.Protocols
 import slatekit.apis.Verbs
 import slatekit.apis.setup.HostAware
 import slatekit.common.*
@@ -17,7 +16,7 @@ import slatekit.results.Notice
  * slate.codegen.toJava   -templatesFolder="user://git/slatekit/scripts/templates/codegen/java"       -outputFolder="user://dev/temp/codegen/java"  -packageName="blendlife" -classFile="" -methodFile="" -modelFile=""
  */
 @Api(area = "slate", name = "codegen", desc = "client code generator",
-        auth = AuthModes.Keyed, roles = [Roles.all], verb = Verbs.Auto, protocols = [Protocols.All])
+        auth = AuthModes.Keyed, roles = [Roles.all], verb = Verbs.Auto, protocols = [Sources.All])
 class CodeGenApi : HostAware {
 
     private var host: ApiServer? = null

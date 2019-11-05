@@ -30,7 +30,7 @@ import slatekit.results.Outcome
 import slatekit.results.Success
 
 
-@Api(area = "app", name = "rolesTest", desc = "api to access and manage users 3", roles= ["admin"], auth = AuthModes.Token, verb = Verbs.Auto, protocols = [Protocols.All])
+@Api(area = "app", name = "rolesTest", desc = "api to access and manage users 3", roles= ["admin"], auth = AuthModes.Token, verb = Verbs.Auto, protocols = [Sources.All])
 class Sample_API_2_Roles {
 
   @Action(desc = "", roles= [Roles.none])

@@ -295,9 +295,9 @@ open class ApiServer(
     companion object {
 
         @JvmStatic
-        fun of(ctx: Context, apis: List<slatekit.apis.core.Api>, auth: Auth?, protocol: Protocol?): ApiServer {
+        fun of(ctx: Context, apis: List<slatekit.apis.core.Api>, auth: Auth?, source: Source?): ApiServer {
             val hooks = ApiHooks(inputters = listOf(Authorize(auth)))
-            val server = ApiServer(ctx, apis, hooks, ApiSettings(protocol ?: Protocol.Web))
+            val server = ApiServer(ctx, apis, hooks, ApiSettings(source ?: Source.Web))
             return server
         }
 

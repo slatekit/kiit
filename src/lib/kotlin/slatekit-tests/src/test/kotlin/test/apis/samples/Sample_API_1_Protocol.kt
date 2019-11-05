@@ -23,7 +23,7 @@ import slatekit.results.Outcome
 import slatekit.results.Success
 import slatekit.results.builders.Outcomes
 
-@Api(area = "samples", name = "core", desc = "api to access and manage users 3", auth = AuthModes.None, protocols = [Protocols.All])
+@Api(area = "samples", name = "core", desc = "api to access and manage users 3", auth = AuthModes.None, protocols = [Sources.All])
 class Sample_API_1_Protocol {
 
 
@@ -33,13 +33,13 @@ class Sample_API_1_Protocol {
     }
 
 
-    @Action( protocols = [Protocols.CLI])
+    @Action( protocols = [Sources.CLI])
     fun processCLI(name:String): Outcome<String> {
         return Success("ok", msg = "via cli:$name")
     }
 
 
-    @Action( protocols = [Protocols.Web])
+    @Action( protocols = [Sources.Web])
     fun processWeb(name:String): Outcome<String> {
         return Success("ok", msg = "via web:$name")
     }

@@ -1,10 +1,10 @@
 package slatekit.apis.hooks
 
 import slatekit.apis.ApiRequest
-import slatekit.apis.Protocol
 import slatekit.apis.Verb
 import slatekit.apis.core.Protocols
 import slatekit.common.Ignore
+import slatekit.common.Sources
 import slatekit.common.requests.Request
 import slatekit.functions.Input
 import slatekit.results.Outcome
@@ -36,7 +36,7 @@ class Protos : Input<ApiRequest> {
     private fun validateVerb(isWeb:Boolean, isCLI:Boolean, actionVerb: Verb, req: Request, request:Outcome<ApiRequest>):Outcome<ApiRequest> {
         return when {
             // Case 1: Queued request, being processed
-            req.verb == Protocol.Queue.name -> request
+            req.verb == Sources.Queue -> request
 
             // Case 2: Web, ensure verb match
             isWeb && actionVerb.isMatch(req.verb) -> request
@@ -50,11 +50,11 @@ class Protos : Input<ApiRequest> {
     }
 
     private fun validateProto(actionProtocols: Protocols, req: Request, request:Outcome<ApiRequest>):Outcome<ApiRequest> {
-        val requestProtocol = Protocol.parse(req.source)
+        val requestProtocol = req.source
         return when {
             actionProtocols.isMatchOrAll(requestProtocol) -> request
             else -> {
-                val oneOf = actionProtocols.all.joinToString { it.name }
+                val oneOf = actionProtocols.all.joinToString { it.id }
                 Outcomes.errored("expected protocol $oneOf, but got ${req.source.id}")
             }
         }

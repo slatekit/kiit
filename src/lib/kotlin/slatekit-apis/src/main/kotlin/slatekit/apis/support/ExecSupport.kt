@@ -5,7 +5,7 @@ import slatekit.apis.Verb
 import slatekit.common.CommonRequest
 import slatekit.common.requests.Request
 import slatekit.common.requests.Response
-import slatekit.common.toResponse
+import slatekit.common.ext.toResponse
 import slatekit.results.Outcome
 import slatekit.results.Try
 

@@ -3,8 +3,6 @@ package test.setup
 import slatekit.apis.Api
 import slatekit.apis.Action
 import slatekit.apis.AuthModes
-import slatekit.apis.Protocols
-import slatekit.apis.Verbs
 import slatekit.common.auth.Roles
 
 /**

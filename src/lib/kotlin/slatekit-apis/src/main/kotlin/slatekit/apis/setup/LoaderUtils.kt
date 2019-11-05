@@ -8,6 +8,7 @@ import slatekit.apis.core.*
 import slatekit.apis.core.Action
 import slatekit.apis.core.Api
 import slatekit.apis.core.Protocols
+import slatekit.common.Source
 import slatekit.common.naming.Namer
 import slatekit.common.nonEmptyOrDefault
 import slatekit.meta.Reflector
@@ -50,7 +51,7 @@ fun toApi(cls: KClass<*>, instance: Any?, namer: Namer?): slatekit.apis.core.Api
             Roles(anno.roles.toList()),
             Access.parse(anno.access),
             AuthMode.parse(anno.auth),
-            Protocols(anno.protocols.toList().map { Protocol.parse(it) }),
+            Protocols(anno.protocols.toList().map { Source.parse(it) }),
             Verb.parse(anno.verb),
             false,
             instance,

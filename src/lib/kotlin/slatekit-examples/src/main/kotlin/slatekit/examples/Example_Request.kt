@@ -16,7 +16,7 @@ import slatekit.common.*
 import slatekit.common.requests.InputArgs
 import slatekit.common.requests.Request
 import slatekit.common.CommonRequest
-import slatekit.common.requests.Source
+import slatekit.common.Source
 //</doc:import_required>
 
 //<doc:import_examples>
