@@ -22,7 +22,6 @@ import slatekit.common.utils.Props
  * @param origin : origin of the language, e.g. for kotlin -reference to jre
  * @param versionNum : version of the language
  * @param version : addition info about architechture for lang ( e.g. 64 bit )
- * @param ext1 : additional information about the language
  */
 data class Lang(
 
@@ -39,10 +38,7 @@ data class Lang(
     val vendor: String,
 
     @JvmField
-    val origin: String,
-
-    @JvmField
-    val ext1: String
+    val origin: String
 ) : Meta {
 
     override fun props():List<Pair<String,String>> = listOf(
@@ -50,8 +46,7 @@ data class Lang(
             "home"    to home,
             "vendor"  to vendor,
             "version" to version,
-            "origin"  to origin,
-            "ext1"    to ext1
+            "origin"  to origin
     )
 
     companion object {
@@ -61,8 +56,7 @@ data class Lang(
             home = "-",
             vendor = "",
             version = "-",
-            origin = "local",
-            ext1 = "-"
+            origin = "local"
         )
 
         @JvmStatic
@@ -72,8 +66,7 @@ data class Lang(
                 home = Props.javaHome.replace("\\", "/"),
                 version = Props.javaVersion,
                 vendor = Props.javaVendor,
-                origin = "local",
-                ext1 = ""
+                origin = "local"
             )
     }
 }

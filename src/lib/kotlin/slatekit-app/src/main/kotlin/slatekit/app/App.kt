@@ -18,7 +18,6 @@ import slatekit.common.args.ArgsSchema
 import slatekit.common.console.SemanticConsole
 import slatekit.common.encrypt.EncryptSupport
 import slatekit.common.info.About
-import slatekit.common.info.Status
 import slatekit.common.log.LogSupport
 import slatekit.results.Success
 import slatekit.results.Try
@@ -144,7 +143,7 @@ open class App<C : Context>(
     /**
      * prints the summary at the end of the application run
      */
-    open fun summary(status: Status) {
+    open fun summary() {
         info("===============================================================")
         info("SUMMARY : ")
         info("===============================================================")
