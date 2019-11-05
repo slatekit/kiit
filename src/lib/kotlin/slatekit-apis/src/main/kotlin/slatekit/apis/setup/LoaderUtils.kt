@@ -7,7 +7,7 @@ import slatekit.apis.Setup
 import slatekit.apis.core.*
 import slatekit.apis.core.Action
 import slatekit.apis.core.Api
-import slatekit.apis.core.Protocols
+import slatekit.apis.core.Sources
 import slatekit.common.Source
 import slatekit.common.naming.Namer
 import slatekit.common.nonEmptyOrDefault
@@ -51,7 +51,7 @@ fun toApi(cls: KClass<*>, instance: Any?, namer: Namer?): slatekit.apis.core.Api
             Roles(anno.roles.toList()),
             Access.parse(anno.access),
             AuthMode.parse(anno.auth),
-            Protocols(anno.protocols.toList().map { Source.parse(it) }),
+            Sources(anno.sources.toList().map { Source.parse(it) }),
             Verb.parse(anno.verb),
             false,
             instance,
@@ -70,7 +70,7 @@ fun toApi(
     access: Access = Access.Public,
     auth: AuthMode = AuthMode.Keyed,
     verb: Verb = Verb.Auto,
-    protocol: Protocols = Protocols.all,
+    protocol: Sources = Sources.all,
     singleton: Boolean = false
 ): slatekit.apis.core.Api {
     // Create initial temporary api
@@ -90,7 +90,7 @@ fun toAction(member: KCallable<*>, api: slatekit.apis.core.Api, apiAction: slate
 
     // Default these from api if empty
     val actionRoles = Roles.of(apiAction?.roles ?: arrayOf()).orElse(api.roles)
-    val actionProtocol = Protocols.of(apiAction?.protocols ?: arrayOf()).orElse(api.protocols)
+    val actionProtocol = Sources.of(apiAction?.sources ?: arrayOf()).orElse(api.sources)
     val rawVerb = toVerb(apiAction?.verb).orElse(api.verb)
 
     // Determine the actual verb

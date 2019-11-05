@@ -35,7 +35,7 @@ class Example_Request : Command("send") {
         // HTTP Request and a CLI ( command line interface ) request.
         // This Request class along with its complementary Result class
         // provide the basis for much of the API support in Slate Kit.
-        // APIs in Slate are protocol independent which basically means
+        // APIs in Slate are source independent which basically means
         // that the APIs can be accessed as HTTP Endpoints or on the CLI
         //
         // ROUTING:

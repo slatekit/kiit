@@ -27,7 +27,7 @@ import slatekit.results.Try
 import slatekit.results.getOrElse
 
 @Api(area = "cloud", name = "files", desc = "api info about the application and host",
-        auth = AuthModes.Keyed, roles = ["admin"], verb = Verbs.Auto, protocols = [Sources.All])
+        auth = AuthModes.Keyed, roles = ["admin"], verb = Verbs.Auto, sources = [Sources.All])
 class FilesApi(val files: slatekit.core.cloud.CloudFiles, override val context: slatekit.common.Context) : slatekit.apis.support.FileSupport {
 
     override val encryptor: Encryptor? = context.enc

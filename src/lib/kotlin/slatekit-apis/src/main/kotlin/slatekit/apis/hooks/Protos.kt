@@ -2,9 +2,8 @@ package slatekit.apis.hooks
 
 import slatekit.apis.ApiRequest
 import slatekit.apis.Verb
-import slatekit.apis.core.Protocols
 import slatekit.common.Ignore
-import slatekit.common.Sources
+import slatekit.common.Source
 import slatekit.common.requests.Request
 import slatekit.functions.Input
 import slatekit.results.Outcome
@@ -12,7 +11,7 @@ import slatekit.results.builders.Outcomes
 import slatekit.results.flatMap
 
 /**
- * Checks the protocol of the request matches the allowed protocols on the action/api
+ * Checks the source of the request matches the allowed sources on the action/api
  */
 class Protos : Input<ApiRequest> {
 
@@ -23,7 +22,7 @@ class Protos : Input<ApiRequest> {
         val req = it.request
         val target = it.target!!
         val actionVerb = target.action.verb.orElse(target.api.verb)
-        val actionProtocols = target.action.protocols.orElse(target.api.protocols)
+        val actionProtocols = target.action.sources.orElse(target.api.sources)
         val isCli = actionProtocols.hasCLI()
         val isWeb = actionProtocols.hasWeb()
 
@@ -36,7 +35,7 @@ class Protos : Input<ApiRequest> {
     private fun validateVerb(isWeb:Boolean, isCLI:Boolean, actionVerb: Verb, req: Request, request:Outcome<ApiRequest>):Outcome<ApiRequest> {
         return when {
             // Case 1: Queued request, being processed
-            req.verb == Sources.Queue -> request
+            req.verb == Source.Queue.id -> request
 
             // Case 2: Web, ensure verb match
             isWeb && actionVerb.isMatch(req.verb) -> request
@@ -49,13 +48,13 @@ class Protos : Input<ApiRequest> {
         }
     }
 
-    private fun validateProto(actionProtocols: Protocols, req: Request, request:Outcome<ApiRequest>):Outcome<ApiRequest> {
+    private fun validateProto(actionProtocols: slatekit.apis.core.Sources, req: Request, request:Outcome<ApiRequest>):Outcome<ApiRequest> {
         val requestProtocol = req.source
         return when {
             actionProtocols.isMatchOrAll(requestProtocol) -> request
             else -> {
                 val oneOf = actionProtocols.all.joinToString { it.id }
-                Outcomes.errored("expected protocol $oneOf, but got ${req.source.id}")
+                Outcomes.errored("expected source $oneOf, but got ${req.source.id}")
             }
         }
     }

@@ -29,8 +29,8 @@ import slatekit.common.requests.Request
  * @param name : Name of action which may have a different name than method due to conventions
  * @param desc : Description of the action
  * @param roles : Roles allowed to call this action
- * @param verb : Get/Post verb for Http enabled protocol
- * @param protocol : Protocol associated with the action.
+ * @param verb : Get/Post verb for Http enabled source
+ * @param source : Protocol associated with the action.
  */
 data class Action(
     val member: KCallable<*>,
@@ -39,11 +39,11 @@ data class Action(
     val roles: Roles = Roles.empty,
     val access: Access = Access.Public,
     val auth: AuthMode = AuthMode.Token,
-    val protocols: Protocols = Protocols.all,
+    val sources: Sources = Sources.all,
     val verb: Verb = Verb.Auto,
     val tags: List<String> = listOf()
 ) {
-    val protocol = protocols.all.first()
+    val protocol = sources.all.first()
 
     /**
      * All the parameters of the function, this includes:

@@ -98,7 +98,7 @@ object Requests {
                 source = Source.parse(sourceOverride ?: source),
                 verb = verbOverride ?: verb,
                 meta = Meta(rawSource ?: "json", jsonMeta, enc),
-                data = Data(rawSource ?: "json", Sources.File, true, enc, jsonData),
+                data = Data(rawSource ?: "json", Source.File.id, true, enc, jsonData),
                 raw = rawSource,
                 tag = tag,
                 timestamp = time

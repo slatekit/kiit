@@ -26,7 +26,7 @@ class DocWeb : Doc() {
             keyValue("name", api.name, false)
             keyValue("verb", api.verb.name, false)
             keyValue("roles", api.roles.all.joinToString(","), false)
-            keyValue("proto", api.protocols.all.joinToString(","), false)
+            keyValue("proto", api.sources.all.joinToString(","), false)
             line()
             line()
         }
@@ -39,7 +39,7 @@ class DocWeb : Doc() {
             keyValue("desc", action.desc, false)
             keyValue("verb", action.verb.name, false)
             keyValue("roles", action.roles.all.joinToString(","), false)
-            keyValue("proto", action.protocols.all.joinToString(","), false)
+            keyValue("proto", action.sources.all.joinToString(","), false)
         }
     }
 }

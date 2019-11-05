@@ -5,9 +5,6 @@ import slatekit.apis.support.Authenticator
 import slatekit.cli.CliSettings
 import slatekit.common.Context
 import slatekit.common.Source
-import slatekit.common.Sources
-import slatekit.common.auth.Role
-import slatekit.common.auth.Roles
 import slatekit.common.info.ApiKey
 import slatekit.integration.apis.CliApi
 import slatekit.results.Try
@@ -56,7 +53,7 @@ class CLI(val ctx: Context) {
                         auth = AuthMode.Keyed,
                         roles = slatekit.apis.core.Roles(listOf("*")),
                         verb = Verb.Auto,
-                        protocols = slatekit.apis.core.Protocols(listOf(Source.All)),
+                        sources = slatekit.apis.core.Sources(listOf(Source.All)),
                         singleton = SampleApi(ctx)
                 )
         )

@@ -15,15 +15,10 @@ package test.apis.samples
 
 import slatekit.apis.*
 import slatekit.common.*
-import slatekit.common.content.Doc
-import slatekit.common.requests.Request
-import slatekit.common.validations.ValidationFuncs
-import slatekit.integration.common.AppEntContext
 import slatekit.results.Outcome
 import slatekit.results.Success
-import slatekit.results.builders.Outcomes
 
-@Api(area = "samples", name = "core", desc = "api to access and manage users 3", auth = AuthModes.None, protocols = [Sources.All])
+@Api(area = "samples", name = "core", desc = "api to access and manage users 3", auth = AuthModes.None, sources = [Sources.All])
 class Sample_API_1_Protocol {
 
 
@@ -33,13 +28,13 @@ class Sample_API_1_Protocol {
     }
 
 
-    @Action( protocols = [Sources.CLI])
+    @Action( sources = [Sources.CLI])
     fun processCLI(name:String): Outcome<String> {
         return Success("ok", msg = "via cli:$name")
     }
 
 
-    @Action( protocols = [Sources.Web])
+    @Action( sources = [Sources.Web])
     fun processWeb(name:String): Outcome<String> {
         return Success("ok", msg = "via web:$name")
     }

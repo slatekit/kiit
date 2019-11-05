@@ -32,7 +32,7 @@ import slatekit.meta.kClass
  * @param roles : the roles allowed to access this api ( "admin", "ops" )
  * @param auth : the authorization mode ( "app-key" | "app-roles", "key-roles" )
  * @param verb : the verb ( "get", "post", "cli", "*" )
- * @param protocol : the platforms this is accessible to ( "web" | "cli" | "*" )
+ * @param source : the platforms this is accessible to ( "web" | "cli" | "*" )
  * @param actions : the collection of actions / methods on this API.
  */
 data class Api(
@@ -43,7 +43,7 @@ data class Api(
     val roles: Roles = Roles.empty,
     val access: Access = Access.Public,
     val auth: AuthMode = AuthMode.Token,
-    val protocols: Protocols = Protocols.all,
+    val sources: Sources = Sources.all,
     val verb: Verb = Verb.Auto,
     val declaredOnly: Boolean = true,
     val singleton: Any? = null,
@@ -51,7 +51,7 @@ data class Api(
     val actions: Lookup<Action> = Lookup(listOf(), { t -> t.name })
 ) {
 
-    val protocol = protocols.all.first()
+    val protocol = sources.all.first()
 
     constructor(
         instance: Any,
@@ -65,5 +65,5 @@ data class Api(
         verb: Verb = Verb.Auto,
         declaredOnly: Boolean = true,
         setup: Setup = Setup.Methods
-    ) : this(instance.kClass, area, name, desc, Roles(roles), access, auth, Protocols(protocol), verb, declaredOnly, instance, setup)
+    ) : this(instance.kClass, area, name, desc, Roles(roles), access, auth, Sources(protocol), verb, declaredOnly, instance, setup)
 }

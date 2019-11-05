@@ -22,7 +22,7 @@ import slatekit.results.builders.Notices
 import slatekit.results.builders.Outcomes
 
 /**
- * This is the core container hosting, managing and executing the protocol independent apis.
+ * This is the core container hosting, managing and executing the source independent apis.
  * @param ctx : Context of the environment @see[slatekti.common.Context]
  * @param apis : APIs to host/serve
  * @param hooks : Hooks and middleware for filters, conversions, execution

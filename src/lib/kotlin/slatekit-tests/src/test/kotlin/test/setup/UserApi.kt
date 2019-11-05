@@ -29,12 +29,12 @@ import slatekit.results.Notice
 import slatekit.results.Success
 
 
-@Api(area = "app", name = "users", desc = "api to access and manage users 3", roles= ["admin"], auth = AuthModes.Token, verb = Verbs.Auto, protocols = [Sources.All])
+@Api(area = "app", name = "users", desc = "api to access and manage users 3", roles= ["admin"], auth = AuthModes.Token, verb = Verbs.Auto, sources = [Sources.All])
 class UserApi(context: AppEntContext)
   : ApiBaseEntity<Long, User, EntityService<Long, User>>(context, Long::class, User::class, context.ent.getSvc(User::class))
 {
 
-  @Action(name = "activate", desc = "activates a users account 3", roles= [Roles.parent], protocols = [Sources.Parent])
+  @Action(name = "activate", desc = "activates a users account 3", roles= [Roles.parent], sources = [Sources.Parent])
   @Input(name = "phone", desc = "phone number", examples = ["123-456-789"])
   @Input(name = "code", desc = "activation code", defaults = "0", examples = ["1234"])
   fun activate(phone:String, code:Int, isPremiumUser:Boolean, date: DateTime): Notice<String> =
@@ -54,19 +54,19 @@ class UserApi(context: AppEntContext)
   }
 
   
-  @Action(protocols = [Sources.CLI])
+  @Action(sources = [Sources.CLI])
   fun protocolCLI(code:Int, tag:String): Notice<String> {
     return Success("protocolCLI", msg ="${code} ${tag}")
   }
 
 
-  @Action(protocols = [Sources.Web])
+  @Action(sources = [Sources.Web])
   fun protocolWeb(code:Int, tag:String): Notice<String> {
     return Success("protocolWeb", msg ="${code} ${tag}")
   }
 
 
-  @Action(protocols = [Sources.All])
+  @Action(sources = [Sources.All])
   fun protocolAny(code:Int, tag:String): Notice<String> {
     return Success("protocolAny", msg ="${code} ${tag}")
   }

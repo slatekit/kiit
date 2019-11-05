@@ -28,7 +28,7 @@ open class SampleMiddlewareApi : HooksSupport {
      */
     override suspend fun onFilter(req:ApiRequest): Outcome<ApiRequest>  {
         return if(req.request.action.startsWith("hi")) {
-            Outcomes.errored(Exception("filtered out"), Codes.IGNORED)
+            Outcomes.errored(Exception("filtered out"))
         } else {
             Outcomes.success(req)
         }
