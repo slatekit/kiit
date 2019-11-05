@@ -270,8 +270,8 @@ class ReflectorTests {
         Assert.assertEquals( "admin"    , api.roles[0] )
         Assert.assertEquals( 1          , api.roles.size )
         Assert.assertEquals( AuthMode.Token.name , api.auth     )
-        Assert.assertEquals(  Sources.All       , api.protocols[0])
-        Assert.assertEquals(  1         , api.protocols.size)
+        Assert.assertEquals(  Sources.All       , api.sources[0])
+        Assert.assertEquals(  1         , api.sources.size)
         Assert.assertEquals( Verbs.Auto          , api.verb     )
     }
 

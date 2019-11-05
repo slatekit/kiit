@@ -29,7 +29,7 @@ import slatekit.results.Success
 import slatekit.results.Try
 
 @Api(area = "setup", name = "modules", desc = "management of system modules",
-        auth = AuthModes.Keyed, roles = ["admin"], verb = Verbs.Auto, protocols = [Sources.All])
+        auth = AuthModes.Keyed, roles = ["admin"], verb = Verbs.Auto, sources = [Sources.All])
 class ModuleApi(val ctx: slatekit.integration.mods.ModuleContext, override val context: slatekit.common.Context) : slatekit.apis.support.FileSupport {
 
     override val encryptor: Encryptor? = context.enc

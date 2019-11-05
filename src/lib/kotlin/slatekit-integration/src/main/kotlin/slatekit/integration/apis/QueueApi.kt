@@ -27,7 +27,7 @@ import slatekit.common.queues.QueueSource
 import slatekit.results.Try
 
 @Api(area = "cloud", name = "queues", desc = "api info about the application and host",
-        auth = AuthModes.Keyed, roles = ["admin"], verb = Verbs.Auto, protocols = [Sources.All])
+        auth = AuthModes.Keyed, roles = ["admin"], verb = Verbs.Auto, sources = [Sources.All])
 class QueueApi(val queue: QueueSource<String>, override val context: Context) : FileSupport {
 
     override val encryptor: Encryptor? = context.enc

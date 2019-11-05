@@ -21,20 +21,20 @@ data class Target(val api: Api, val action: Action, val instance: Any) {
 
     /**
      * Determines if the action matches the expected Protocol ( e.g. Protocol.CLI / Web )
-     * NOTES: The action.protocol could be:
+     * NOTES: The action.source could be:
      * 1. empty      -> so get its parent
      * 2. @parent    -> indicating reference to its parent
-     * 3. *          -> via annotation, indicating any protocol
+     * 3. *          -> via annotation, indicating any source
      * 4. some value -> indicating exact requirement
      */
-    fun isMatchingProtocol(expected: Source):Boolean {
+    fun isMatchingSource(expected: Source):Boolean {
         // E.g. action could be reference to parent e.g. "@parent"
-        val actualProtocols = when {
+        val actualSources = when {
             // 1.
-            action.protocols.isEmpty -> api.protocols
-            action.protocols.isParentReference -> api.protocols
-            else -> action.protocols
+            action.sources.isEmpty -> api.sources
+            action.sources.isParentReference -> api.sources
+            else -> action.sources
         }
-        return actualProtocols.isMatchOrAll(expected)
+        return actualSources.isMatchOrAll(expected)
     }
 }

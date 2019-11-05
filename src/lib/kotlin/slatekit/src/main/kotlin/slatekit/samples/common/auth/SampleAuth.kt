@@ -10,7 +10,7 @@ class SampleAuth : Authenticator(listOf()) {
 
     /**
      * Override and implement this method if you want to completely handle authorization your self.
-     * @param cmd         : The protocol independent API request. e.g. http://abc.com/api/myapp/users/activate
+     * @param cmd         : The source independent API request. e.g. http://abc.com/api/myapp/users/activate
      * @param mode        : The auth-mode of the api ( refer to auth-mode for protocolo independent APIs )
      * @param actionRoles : The role setup on the API action
      * @param apiRoles    : The role setup on the API itself

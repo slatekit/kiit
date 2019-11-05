@@ -16,7 +16,7 @@ import org.junit.Assert
 import org.junit.Test
 import slatekit.apis.*
 import slatekit.apis.core.Api
-import slatekit.apis.core.Protocols
+import slatekit.apis.core.Sources
 import slatekit.apis.core.Routes
 import slatekit.apis.setup.AnnoLoader
 import slatekit.apis.setup.MethodLoader
@@ -101,7 +101,7 @@ class Api_Loader_Tests : ApiTestsBase() {
     @Test fun can_load_api_from_public_methods() {
         val api = MethodLoader(toApi(SampleExtendedApi::class,
                 "app", "sampleExtended", "sample using plain kotlin class",
-                roles = slatekit.apis.core.Roles(listOf("users")), local = true, auth = AuthMode.Token, protocol = Protocols(listOf(Source.All)))).loadApi(null)
+                roles = slatekit.apis.core.Roles(listOf("users")), local = true, auth = AuthMode.Token, protocol = Sources(listOf(Source.All)))).loadApi(null)
 
         Assert.assertTrue(api.actions.size == 2)
         Assert.assertTrue(api.area == "app")
@@ -121,7 +121,7 @@ class Api_Loader_Tests : ApiTestsBase() {
     @Test fun can_load_api_from_public_methods_inherited() {
         val api = MethodLoader(toApi(SampleExtendedApi::class,
                 "app", "sampleExtended", "sample using plain kotlin class",
-                roles = slatekit.apis.core.Roles(listOf("users")), local = false, auth = AuthMode.Token, protocol = Protocols(listOf(Source.All)))).loadApi(null)
+                roles = slatekit.apis.core.Roles(listOf("users")), local = false, auth = AuthMode.Token, protocol = Sources(listOf(Source.All)))).loadApi(null)
 
         Assert.assertTrue(api.actions.size == 8)
         Assert.assertTrue(api.area == "app")
@@ -140,9 +140,9 @@ class Api_Loader_Tests : ApiTestsBase() {
     @Test fun can_load_areas() {
 
         val areas = loadAll(listOf(
-                Api(SampleRolesByApp::class, "app", "sampleRolesByApp", "sample roles by application auth", roles = slatekit.apis.core.Roles(listOf("users")), auth = AuthMode.Token, protocols = Protocols(listOf(Source.CLI)), declaredOnly = true),
-                Api(SampleRolesByKey::class, "app", "sampleRolesByKey", "sample roles by api-key", roles = slatekit.apis.core.Roles(listOf("users")), auth = AuthMode.Keyed, protocols = Protocols(listOf(Source.CLI)), declaredOnly = true),
-                Api(SampleExtendedApi::class, "tests", "sampleExtended", "sample plain kotlin class", roles = slatekit.apis.core.Roles(listOf("users")), auth = AuthMode.Token, protocols = Protocols(listOf(Source.CLI)), declaredOnly = false)
+                Api(SampleRolesByApp::class, "app", "sampleRolesByApp", "sample roles by application auth", roles = slatekit.apis.core.Roles(listOf("users")), auth = AuthMode.Token, sources = Sources(listOf(Source.CLI)), declaredOnly = true),
+                Api(SampleRolesByKey::class, "app", "sampleRolesByKey", "sample roles by api-key", roles = slatekit.apis.core.Roles(listOf("users")), auth = AuthMode.Keyed, sources = Sources(listOf(Source.CLI)), declaredOnly = true),
+                Api(SampleExtendedApi::class, "tests", "sampleExtended", "sample plain kotlin class", roles = slatekit.apis.core.Roles(listOf("users")), auth = AuthMode.Token, sources = Sources(listOf(Source.CLI)), declaredOnly = false)
         ))
         Assert.assertTrue(areas.size == 2)
         Assert.assertTrue(areas.contains("app"))
@@ -155,9 +155,9 @@ class Api_Loader_Tests : ApiTestsBase() {
 
     @Test fun can_load_routes() {
         val areas = loadAll(listOf(
-                Api(SampleRolesByApp::class, "app", "sampleRolesByApp", "sample roles by application auth", roles = slatekit.apis.core.Roles(listOf("users")), auth = AuthMode.Token, protocols = Protocols(listOf(Source.CLI)), declaredOnly = true),
-                Api(SampleRolesByKey::class, "app", "sampleRolesByKey", "sample roles by api-key", roles = slatekit.apis.core.Roles(listOf("users")), auth = AuthMode.Keyed, protocols = Protocols(listOf(Source.CLI)), declaredOnly = true),
-                Api(SampleExtendedApi::class, "tests", "sampleExtended", "sample plain kotlin class", roles = slatekit.apis.core.Roles(listOf("users")), auth = AuthMode.Token, protocols = Protocols(listOf(Source.CLI)), declaredOnly = false)
+                Api(SampleRolesByApp::class, "app", "sampleRolesByApp", "sample roles by application auth", roles = slatekit.apis.core.Roles(listOf("users")), auth = AuthMode.Token, sources = Sources(listOf(Source.CLI)), declaredOnly = true),
+                Api(SampleRolesByKey::class, "app", "sampleRolesByKey", "sample roles by api-key", roles = slatekit.apis.core.Roles(listOf("users")), auth = AuthMode.Keyed, sources = Sources(listOf(Source.CLI)), declaredOnly = true),
+                Api(SampleExtendedApi::class, "tests", "sampleExtended", "sample plain kotlin class", roles = slatekit.apis.core.Roles(listOf("users")), auth = AuthMode.Token, sources = Sources(listOf(Source.CLI)), declaredOnly = false)
         ))
 
         val routes = Routes(areas, null)

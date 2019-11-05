@@ -67,8 +67,8 @@ class Api_Middleware_Tests : ApiTestsBase() {
         val r1 = runBlocking { apis.call("app", "SampleMiddleware", "hi", Verb.Post, mapOf(), mapOf()) }
 
         Assert.assertTrue(!r1.success)
-        Assert.assertTrue(r1.code == Codes.IGNORED.code)
-        Assert.assertTrue(r1.msg == "Ignored")
+        Assert.assertTrue(r1.code == Codes.ERRORED.code)
+        Assert.assertTrue(r1.msg == Codes.ERRORED.msg)
     }
 
 
@@ -78,8 +78,8 @@ class Api_Middleware_Tests : ApiTestsBase() {
         val r1 = runBlocking { apis.call("app", "SampleMiddleware", "hi", Verb.Post, mapOf(), mapOf()) }
 
         Assert.assertTrue(!r1.success)
-        Assert.assertTrue(r1.code == Codes.IGNORED.code)
-        Assert.assertTrue(r1.msg == "Ignored")
+        Assert.assertTrue(r1.code == Codes.ERRORED.code)
+        Assert.assertTrue(r1.msg == Codes.ERRORED.msg)
         Assert.assertTrue(api.onErrorHookCount.size == 1)
     }
 }

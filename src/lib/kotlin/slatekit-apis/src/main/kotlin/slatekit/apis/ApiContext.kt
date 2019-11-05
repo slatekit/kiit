@@ -8,7 +8,7 @@ import slatekit.common.naming.Namer
 typealias API = slatekit.apis.core.Api
 
 data class ApiContext(
-    val protocol: Source,
+    val source: Source,
     val apis: List<API>,
     val routes: Routes,
     val namer: Namer?,

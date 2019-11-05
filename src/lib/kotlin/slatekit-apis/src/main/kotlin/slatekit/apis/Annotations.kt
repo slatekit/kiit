@@ -16,7 +16,7 @@ import slatekit.common.Sources
  *                 in the event, the auth mode is "api-key", this is the name of the api-key
  * @param auth : the authorization mode ( "app-key" | "app-roles", "key-roles" )
  * @param verb : the verb ( "get", "post", "cli", "*" )
- * @param protocols : the platforms this is accessible to ( "web" | "cli" | "*" )
+ * @param sources : the platforms this is accessible to ( "web" | "cli" | "*" )
  */
 @Target(AnnotationTarget.CLASS)
 annotation class Api(
@@ -27,7 +27,7 @@ annotation class Api(
     val auth: String = AuthModes.Keyed,
     val verb: String = Verbs.Auto,
     val access: String = AccessLevel.Public,
-    val protocols: Array<String> = [Sources.All],
+    val sources: Array<String> = [Sources.All],
     val version: String = "1",
     val tags: Array<String> = []
 )
@@ -44,7 +44,7 @@ annotation class Api(
  * @param desc : the description of the action
  * @param roles : the roles allowed ( use @parent to refer to parent Api anntoation roles )
  * @param verb : the verb ( "get", "post", "cli", "*" ) allowed.
- * @param protocols : the protocol ( "web, "cli", "*" ) required to access this action
+ * @param sources : the source ( "web, "cli", "*" ) required to access this action
  */
 @Target(AnnotationTarget.FUNCTION)
 annotation class Action(
@@ -53,7 +53,7 @@ annotation class Action(
     val roles: Array<String> = [],
     val verb: String = Verbs.Auto,
     val access: String = AccessLevel.Public,
-    val protocols: Array<String> = [Sources.All],
+    val sources: Array<String> = [Sources.All],
     val version: String = "1",
     val tags: Array<String> = []
 )

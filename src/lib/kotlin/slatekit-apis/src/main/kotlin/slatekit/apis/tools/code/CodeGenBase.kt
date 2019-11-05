@@ -267,7 +267,7 @@ abstract class CodeGenBase(val settings: CodeGenSettings) {
     open fun canGenerate(apiReg: Api, apiRegAction: Action, declaredMemberLookup: Map<String, Boolean>): Boolean {
         // Only include declared items
         val isDeclared = declaredMemberLookup.containsKey(apiRegAction.name)
-        val isWebProtocol = apiRegAction.protocols.hasWeb()
+        val isWebProtocol = apiRegAction.sources.hasWeb()
         return (!this.settings.declaredMethodsOnly || isDeclared) && isWebProtocol
     }
 

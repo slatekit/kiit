@@ -25,7 +25,7 @@ import slatekit.common.info.Host
 import slatekit.common.log.Logger
 
 @Api(area = "app", name = "version", desc = "api to get version information",
-        auth = AuthModes.Keyed, roles = ["admin"], verb = Verbs.Auto, protocols = [Sources.All])
+        auth = AuthModes.Keyed, roles = ["admin"], verb = Verbs.Auto, sources = [Sources.All])
 class VersionApi(override val context: Context) : FileSupport {
 
     override val encryptor: Encryptor? = context.enc

@@ -10,7 +10,7 @@ import slatekit.integration.common.AppEntContext
 
 
 @Api(area = "app", name = "tests", desc = "sample to test features of Slate Kit APIs",
-    auth = AuthModes.Token, roles= ["admin"], verb = Verbs.Auto, protocols = [Sources.All])
+    auth = AuthModes.Token, roles= ["admin"], verb = Verbs.Auto, sources = [Sources.All])
 class SampleApi(context: AppEntContext): ApiBase(context) {
 
     @Action(desc = "accepts supplied basic data types from send")
@@ -34,7 +34,7 @@ class SampleApi1(val context: Context) {
 
 
 @Api(area = "app", name = "tests", desc = "sample to test features of Slate Kit APIs", roles= ["admin"],
-        auth = AuthModes.Token, verb = Verbs.Auto, access = AccessLevel.Public, protocols = [Sources.All])
+        auth = AuthModes.Token, verb = Verbs.Auto, access = AccessLevel.Public, sources = [Sources.All])
 class SampleApi2(val context: Context) {
 
     @Action(desc = "test simple action with inputs")

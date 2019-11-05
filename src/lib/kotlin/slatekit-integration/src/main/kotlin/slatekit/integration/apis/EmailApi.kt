@@ -28,7 +28,7 @@ import slatekit.notifications.email.EmailService
 import slatekit.results.Outcome
 
 @Api(area = "cloud", name = "email", desc = "api to send emails",
-        auth = AuthModes.Keyed, roles = ["ops"], verb = Verbs.Auto, protocols = [Sources.All])
+        auth = AuthModes.Keyed, roles = ["ops"], verb = Verbs.Auto, sources = [Sources.All])
 class EmailApi(val svc: EmailService, override val context: Context) : FileSupport {
 
     override val encryptor: Encryptor? = context.enc

@@ -16,21 +16,11 @@ package test.apis.samples
 import slatekit.apis.*
 import slatekit.common.*
 import slatekit.common.auth.Roles
-import slatekit.common.content.Doc
-import slatekit.common.encrypt.EncDouble
-import slatekit.common.encrypt.EncString
-import slatekit.common.encrypt.EncInt
-import slatekit.common.encrypt.EncLong
-import slatekit.common.requests.Request
-import slatekit.integration.common.ApiBaseEntity
-import slatekit.entities.EntityService
-import slatekit.integration.common.AppEntContext
-import slatekit.results.Notice
 import slatekit.results.Outcome
 import slatekit.results.Success
 
 
-@Api(area = "app", name = "rolesTest", desc = "api to access and manage users 3", roles= ["admin"], auth = AuthModes.Token, verb = Verbs.Auto, protocols = [Sources.All])
+@Api(area = "app", name = "rolesTest", desc = "api to access and manage users 3", roles= ["admin"], auth = AuthModes.Token, verb = Verbs.Auto, sources = [Sources.All])
 class Sample_API_2_Roles {
 
   @Action(desc = "", roles= [Roles.none])

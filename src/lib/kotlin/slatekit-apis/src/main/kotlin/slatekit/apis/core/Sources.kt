@@ -2,7 +2,7 @@ package slatekit.apis.core
 
 import slatekit.common.Source
 
-data class Protocols(val all: List<Source>) {
+data class Sources(val all: List<Source>) {
 
     val isEmpty:Boolean = all.isEmpty()
 
@@ -35,15 +35,15 @@ data class Protocols(val all: List<Source>) {
         }
     }
 
-    fun orElse(other: Protocols): Protocols = if (this.all.isEmpty()) other else this
+    fun orElse(other: Sources): Sources = if (this.all.isEmpty()) other else this
 
     companion object {
-        val empty = Protocols(listOf())
-        val all = Protocols(listOf(Source.All))
+        val empty = Sources(listOf())
+        val all = Sources(listOf(Source.All))
 
-        fun of(items: Array<String>): Protocols {
+        fun of(items: Array<String>): Sources {
             return if (items.isEmpty()) all
-            else Protocols(items.toList().map { Source.parse(it) })
+            else Sources(items.toList().map { Source.parse(it) })
         }
     }
 }

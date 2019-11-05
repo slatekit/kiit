@@ -11,7 +11,7 @@ import slatekit.results.Outcome
 
 
 @Api(area = "slate", name = "components", desc= "new project setup",
-        auth = AuthModes.Keyed, roles = ["*"], verb = Verbs.Auto, protocols = [Sources.CLI])
+        auth = AuthModes.Keyed, roles = ["*"], verb = Verbs.Auto, sources = [Sources.CLI])
 class DependencyApi(context: AppEntContext)
     : ApiBaseEntity<Long, Dependency, DependencyService>(
         context, Long::class, Dependency::class,
