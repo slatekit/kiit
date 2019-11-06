@@ -19,6 +19,7 @@ section_header: Overview
     <tr><td><strong>SMB</strong></td><td>For small to medium sized businesses, build backend applications with pre-built application/service templates/components</td></tr>
     <tr><td><strong>Mobile</strong></td><td> Set up the back-end for your mobile apps. Use Kotlin code for both Android and the Server</td></tr>
     <tr><td><strong>Personal</strong></td><td>Learn Kotlin, functional programming, for self-improvement or side projects</td></tr>
+    <tr><td><strong>Enterprise</strong></td><td>There are several components in Slate Kit that can currently be used in the Enterprise, such as the App, Utilities, CLI. However, some of the components, namely APIs, ORMs are better suited for the groups listed above. For more comprehensive support for the enterprise, look into Spring Boot and Vertx.io</td></tr>
 </table>
 {{% section-end mod="start/overview" %}}
 
@@ -68,10 +69,16 @@ section_header: Overview
     <td>A command line interface shell that you can extend to host your "Protocol Independent APIs" and/or hook into to handle and execute any user commands in a shell.</td>
   </tr>
   <tr>
+    <td class="text-center"><img src="assets/media/img/white/gears.png" width="50" alt=""></td>
+    <td><strong><a class="url-ch" href="arch/jobs">Jobs</a></strong></td>
+    <td>Background Jobs</td>
+    <td>Backgrounds Jobs / Task Queue library to process one-time, paged, and queue based jobs.</td>
+  </tr>
+  <tr>
     <td class="text-center"><img src="assets/media/img/white/layers.png" width="50" alt=""></td>
-    <td><strong><a class="url-ch" href="kotlin-core-orm.html">ORM</a></strong></td>
+    <td><strong><a class="url-ch" href="arch/orm">ORM</a></strong></td>
     <td>Domain-Driven ORM</td>
-    <td>A simple, light-weight, Domain-Driven ORM to map your entities to and from database tables. MySql is currently supported with support for MS Sql Server coming soon.</td>
+    <td>A simple, light-weight, Domain-Driven ORM to map your entities to and from database tables. MySql is currently supported with support for PostGres coming soon.</td>
   </tr>
   <tr>
     <td class="text-center"><img src="assets/media/img/white/server.png" width="50" alt=""></td>
@@ -102,57 +109,5 @@ section_header: Overview
 
 
 ## Philosophy
-<p>
-Philosophy, design goals, approaches and standards
-</p>
-<table class="table table-bordered table-striped">
-    <tbody><tr>
-      <td ><strong>Tech</strong></td>
-      <td>Built for the JVM, with Cloud Integration, and designed to be deployed and hosted anywhere.</td>
-    </tr>
-    <tr>
-      <td><strong>Design</strong></td>
-      <td>Library based approach instead of a "Framework". Use as little or as much as you need.
-      </td>
-    </tr>
-    <tr>
-      <td><strong>Standards</strong></td>
-      <td>Check our <a class="url-ch" href="kotlin-standards.html">coding standards</a></td>
-    </tr>
-    <tr>
-      <td><strong>Approach</strong></td>
-      <td><strong>Simplicity</strong> and <strong>Practicality</strong> above all else</td>
-    </tr>
-    <tr>
-      <td><strong>Components</strong></td>
-      <td>Composable, single-purpose components as building blocks. Organized into various projects.
-      </td>
-    </tr>
-    <tr>
-      <td><strong>Portable</strong></td>
-      <td>Designed for low vendor lock-in via a "library" based approach. Easy to get out of this tool-kit</td>
-    </tr>
-    <tr>
-      <td><strong>Minimal</strong></td>
-      <td>Dependencies on external, 3rd-party libraries are kept to a minimum</td>
-    </tr>
-    <tr>
-      <td><strong>Open Source</strong></td>
-      <td>Hybrid Open-Source. Majority is open-source except for some parts of the <a class="url-ch" href="#project-slate-ext">SlateKit.Ext</a> project 
-        containing the mobile / web <a class="url-ch" href="features.html">features</a></td>
-    </tr>
-    <tr>
-      <td><strong>License</strong></td>
-      <td>Apache 2.0 : Please check our <a class="url-ch" href="https://github.com/code-helix/slatekit">git repo</a> for more info</td>
-    </tr>
-    <tr>
-      <td><strong>Style</strong></td>
-      <td>Emphasis on <strong>immutability</strong> 
-        and <strong>functional programming</strong> as much as possible.
-        <br>However, this is <strong>NOT</strong> a 100% purely functional code base.
-        <br>We also carefully avoid certain language features in specific times/places in favour of simple, understandable, maintainable code.<br>
-        </td>
-    </tr>
-  </tbody>
-</table>
+{{% sk-philosophy %}}
 {{% section-end mod="start/overview" %}}
