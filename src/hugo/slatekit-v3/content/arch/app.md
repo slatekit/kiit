@@ -3,7 +3,7 @@ title: "App"
 date: 2019-03-17T14:30:51-04:00
 section_header: App
 ---
-
+<br/>
 # Overview
 The Slate App is base application and template to build console, batch, cli and server applications.
 It has pre-built support for common features such as <strong>command line args</strong>, <strong>environment selection</strong>, 
@@ -22,61 +22,51 @@ Table of contents for this page
     </tr>
     <tr>
         <td><strong>1</strong></td>
-        <td><strong><a class="url-ch" href="core/cli#status">Status</a></strong></td>
+        <td><strong><a class="url-ch" href="arch/app#status">Status</a></strong></td>
         <td>Current status of this component</td>
     </tr>
     <tr>
         <td><strong>2</strong></td>
-        <td><strong><a class="url-ch" href="core/cli#install">Install</a></strong></td>
+        <td><strong><a class="url-ch" href="arch/app#install">Install</a></strong></td>
         <td>Installation instructions and references to sources</td>
     </tr>
     <tr>
         <td><strong>3</strong></td>
-        <td><strong><a class="url-ch" href="core/cli#requires">Requires</a></strong></td>
+        <td><strong><a class="url-ch" href="arch/app#requires">Requires</a></strong></td>
         <td>Lists all the Slate Kit and third-party dependencies</td>
     </tr>
     <tr>
         <td><strong>4</strong></td>
-        <td><strong><a class="url-ch" href="core/cli#sample">Sample</a></strong></td>
+        <td><strong><a class="url-ch" href="arch/app#sample">Sample</a></strong></td>
         <td>Quick sample to show usage of the component</td>
     </tr>
     <tr>
         <td><strong>5</strong></td>
-        <td><strong><a class="url-ch" href="core/cli#goals">Goals</a></strong></td>
+        <td><strong><a class="url-ch" href="arch/app#goals">Goals</a></strong></td>
         <td>Goals of this component and the problems it attempts to solve</td>
     </tr>
     <tr>
         <td><strong>6</strong></td>
-        <td><strong><a class="url-ch" href="core/cli#concepts">Concepts</a></strong></td>
+        <td><strong><a class="url-ch" href="arch/app#concepts">Concepts</a></strong></td>
         <td>Core concepts to understand in this component</td>
     </tr>
     <tr>
         <td><strong>7</strong></td>
-        <td><strong><a class="url-ch" href="core/cli#features">Features</a></strong></td>
-        <td>List all the features supported</td>
-    </tr>
-    <tr>
-        <td><strong>8</strong></td>
-        <td><strong><a class="url-ch" href="core/cli#setup">Setup</a></strong></td>
-        <td>Set up and configure this component for use</td>
-    </tr>
-    <tr>
-        <td><strong>9</strong></td>
-        <td><strong><a class="url-ch" href="core/cli#details">Details</a></strong></td>
+        <td><strong><a class="url-ch" href="arch/app#details">Features</a></strong></td>
         <td>In-depth examples of the supported features</td>
     </tr>
     <tr>
-        <td><strong>10</strong></td>
-        <td><strong><a class="url-ch" href="core/cli#details">How to</a></strong></td>
+        <td><strong>8</strong></td>
+        <td><strong><a class="url-ch" href="arch/app#details">How to</a></strong></td>
         <td>How to implement certain tasks, recipes, etc.</td>
     </tr>
 </table>
-{{% section-end mod="core/cli" %}}
+{{% section-end mod="arch/app" %}}
 
 # Status
 This component is currently stable and there is a project generator for it ( see below ). <br/>
 There are currently no planned changes or enhancements.
-{{% section-end mod="core/cli" %}}
+{{% section-end mod="arch/app" %}}
 
 # Install
 Use the following settings in gradle for installing this component.
@@ -105,7 +95,7 @@ Use the following settings in gradle for installing this component.
     exampleUrl=""
     exampleFileName="Example_App.kt"
 %}}
-{{% section-end mod="core/cli" %}}
+{{% section-end mod="arch/app" %}}
 
 # Requires
 This component uses the following other <strong>Slate Kit</strong> and/or third-party components.
@@ -123,7 +113,7 @@ This component uses the following other <strong>Slate Kit</strong> and/or third-
         <td>Common utilities for both android + server</td>
     </tr>
 </table>
-{{% section-end mod="core/cli" %}}
+{{% section-end mod="arch/app" %}}
 
 # Sample
 You can generate a sample app using the slatekit executable. 
@@ -133,7 +123,7 @@ Also refer to the {{% sk-link href="Example_App.html" text="Example_App.kt" %}}
     :> slatekit new app -name="MyApp1" -package="company1.myapp1"
 
 {{< /highlight >}}
-{{% section-end mod="core/cli" %}}
+{{% section-end mod="arch/app" %}}
 
 # Goals
 We often have to create a new application which requires typically much boiler-plate code.
@@ -160,7 +150,7 @@ This component quickly gets a new application set up with all these features rea
         </td>                       
     </tr>
 </table>    
-{{% section-end mod="core/cli" %}}
+{{% section-end mod="arch/app" %}}
 
 # Concepts
 coming soon
@@ -190,115 +180,66 @@ coming soon
         <td>Support for app information, version, and command line args, is made available through config files and/or code</td>
     </tr>
 </table>
-{{% section-end mod="core/cli" %}}
+{{% section-end mod="arch/app" %}}
+
 
 # Features
-These are all the features supported by this component
+List of all features available and how to use them.
 <table class="table table-bordered table-striped">
     <tr>
-        <td><strong>Feature</strong></td>
-        <td><strong>Description</strong></td>
-        <td><strong>Example</strong></td>
-    </tr>
-    <tr> 
-        <td><strong>1. Args</strong></td>
-        <td><a class="url-ch" href="kotlin-mod-args.html">Arguments</a> from command line ( which can override some config settings )
-        </td>
-        <td>-env=dev -log.level=info -region=ny</td>
-    </tr>
-    <tr> 
-        <td><strong>2. Envs</strong></td>
-        <td><a class="url-ch" href="kotlin-mod-env.html">Environment</a> selection and validation support</td>
-        <td>local, dev, qa, stg, pro</td>
-    </tr>
-    <tr> 
-        <td><strong>3. Logs</strong></td>
-        <td><a class="url-ch" href="kotlin-mod-logger.html">Logging</a> and error handling ( any log provider can be easily added )</td>
-        <td>console / file logger, custom logger</td>
-    </tr>
-    <tr> 
-        <td><strong>4. Config</strong></td>
-        <td><a class="url-ch" href="kotlin-mod-config.html">Configuration</a> files for each environment ( with support for config inheritance )</td>
-        <td>env.conf, env.local.conf, env.qa.conf</td>
-    </tr>
-    <tr> 
-        <td><strong>5. Settings</strong></td>
-        <td>Settings can be in config, encrypted, or a file in user folder ( for added security )</td>
-        <td>${user}/mycompany/myapp/database.conf</td>
-    </tr>
-    <tr> 
-        <td><strong>6. Encryption</strong></td>
-        <td><a class="url-ch" href="kotlin-mod-encrypt.html">Encryption</a>  and decryption support</td>
-        <td>Using AES</td>
-    </tr>
-    <tr> 
-        <td><strong>7. Life-cycle</strong></td>
-        <td>Application life-cycle events</td>
-        <td>check(), init(), accept(), execute(), shutdown()</td>
-    </tr>
-    <tr> 
-        <td><strong>8. Context</strong></td>
-        <td><a class="url-ch" href="kotlin-mod-ctx.html">Application Context</a> to contain and provide access to many services</td>
-        <td>encryptor, logger, settings, environment, etc</td>
-    </tr>
-    <tr> 
-        <td><strong>9. Help</strong></td>
-        <td><a class="url-ch" href="kotlin-mod-info.html">App Info</a>, version, and command line args can be displayed</td>
-        <td>on command line type {app} ? | help | about </td>
-    </tr>
-    <tr> 
-        <td><strong>10. Output</strong></td>
-        <td>Full display of app info and diagnostics can be shown at beginning or end of app</td>
-        <td>info, version, start time/end time, etc</td>
-    </tr>
-</table>
-{{% section-end mod="core/cli" %}}
-
-# Setup
-coming soon
-{{< highlight kotlin >}}
-
-    fun setup() {
-        
-    }
-
-{{< /highlight >}}
-{{% section-end mod="core/cli" %}}
-
-
-# Details
-Details on using the features here.
-coming soon
-
-<table class="table table-bordered table-striped">
-    <tr>
-        <td><strong>Section</strong></td>
         <td><strong>Name</strong></td>
         <td><strong>Description</strong></td>
         <td><strong>More</strong></td>
     </tr>
     <tr>
-        <td><strong>1</strong></td>
-        <td><strong>Feature 1</strong></td>
-        <td>Brief description of feature 1</td>
-        <td><a href="core/cli#feature1" class="more"><span class="btn btn-primary">more</span></a></td>
+        <td><strong>Args</strong></td>
+        <td>Command line arguments ( -env=dev )</td>
+        <td><a href="arch/app/#Args" class="more"><span class="btn btn-primary">more</span></a></td>
     </tr>
     <tr>
-        <td><strong>2</strong></td>
-        <td><strong>Feature 2</strong></td>
-        <td>Brief description of feature 2</td>
-        <td><a href="core/cli#feature2" class="more"><span class="btn btn-primary">more</span></a></td>
+        <td><strong>Envs</strong></td>
+        <td>Environment selection ( dev | qat | stg | pro )</td>
+        <td><a href="arch/app#Envs" class="more"><span class="btn btn-primary">more</span></a></td>
     </tr>
     <tr>
-        <td><strong>3</strong></td>
-        <td><strong>Feature 3</strong></td>
-        <td>Brief description of feature 3</td>
-        <td><a href="core/cli#feature3" class="more"><span class="btn btn-primary">more</span></a></td>
+        <td><strong>Logs</strong></td>
+        <td>Logging and error handling ( console / file logger )</td>
+        <td><a href="arch/app#Logs" class="more"><span class="btn btn-primary">more</span></a></td>
+    </tr>
+    <tr>
+        <td><strong>Conf</strong></td>
+        <td>Config settings ( env.conf, env.local.conf, env.qat.conf )</td>
+        <td><a href="arch/app#Conf" class="more"><span class="btn btn-primary">more</span></a></td>
+    </tr>
+    <tr>
+        <td><strong>Encrypt</strong></td>
+        <td>Encryption support for settings</td>
+        <td><a href="arch/app#Encrypt" class="more"><span class="btn btn-primary">more</span></a></td>
+    </tr>
+    <tr>
+        <td><strong>Context</strong></td>
+        <td>Application context ( for env, logs, configs, etc )</td>
+        <td><a href="arch/app#Context" class="more"><span class="btn btn-primary">more</span></a></td>
+    </tr>
+    <tr>
+        <td><strong>Cycle</strong></td>
+        <td>Life-Cycle events ( init, exec, done )</td>
+        <td><a href="arch/app#Cycle" class="more"><span class="btn btn-primary">more</span></a></td>
+    </tr>
+    <tr>
+        <td><strong>Help</strong></td>
+        <td>Help support for command line args ( help | version )</td>
+        <td><a href="arch/app#Help" class="more"><span class="btn btn-primary">more</span></a></td>
+    </tr>
+    <tr>
+        <td><strong>Info</strong></td>
+        <td>Startup info and diagnostics</td>
+        <td><a href="arch/app#Info" class="more"><span class="btn btn-primary">more</span></a></td>
     </tr>
 </table>
 <br/>
 
-## Feature 1 {#feature1}
+## Args {#Args}
 coming soon
 {{< highlight kotlin >}}
 
@@ -307,9 +248,9 @@ coming soon
     }
 
 {{< /highlight >}}
-{{% feature-end mod="core/cli" %}}
+{{% feature-end mod="arch/app" %}}
 
-## Feature 2 {#feature2}
+## Envs {#Envs}
 coming soon
 {{< highlight kotlin >}}
 
@@ -318,9 +259,9 @@ coming soon
     }
 
 {{< /highlight >}}
-{{% feature-end mod="core/cli" %}}
+{{% feature-end mod="arch/app" %}}
 
-## Feature 3 {#feature3}
+## Logs {#Logs}
 coming soon
 {{< highlight kotlin >}}
 
@@ -329,10 +270,10 @@ coming soon
     }
 
 {{< /highlight >}}
-{{% feature-end mod="core/cli" %}}
+{{% feature-end mod="arch/app" %}}
 
 
 # How to's
 Coming soon.
-{{% section-end mod="core/cli" %}}
+{{% section-end mod="arch/app" %}}
 

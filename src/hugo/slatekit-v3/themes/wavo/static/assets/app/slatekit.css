@@ -139,6 +139,32 @@ table tr td  {
 .sk-creative {
 	background: #ffffff;
 }
+
+/*--------------------------------------------------
+[3. Start Creative]
+--------------------------------------------------*/
+.sk-creative {
+	padding: 120px 0;
+	background: #ffffff;
+}
+
+.sk-creative .text h2 {
+	font-size: 30px;
+	font-weight: 600;
+	color: #5a5e74;
+	margin: 0;
+	margin-bottom: 20px;
+}
+
+.sk-creative .text p {
+	font-family: 'Open Sans', sans-serif;
+	font-size: 15px;
+	font-weight: 400;
+	line-height: 27px;
+	color: #797c8f;
+	opacity: .85;
+	margin-bottom: 0;
+}
 /*
 table tr td  {
 	font-family: 'Open Sans', sans-serif;
