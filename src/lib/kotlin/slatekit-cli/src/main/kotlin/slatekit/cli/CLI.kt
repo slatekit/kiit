@@ -17,6 +17,8 @@ import java.nio.file.Paths
 import java.util.concurrent.atomic.AtomicReference
 import kotlinx.coroutines.runBlocking
 import slatekit.common.args.Args
+import slatekit.common.content.Content
+import slatekit.common.content.ContentType
 import slatekit.common.info.Folders
 import slatekit.common.info.Info
 import slatekit.common.utils.Loops.doUntil
@@ -43,7 +45,8 @@ open class CLI(
     val callback: ((CLI, CliRequest) -> CliResponse<*>)? = null,
     commands: List<String?>? = listOf(),
     ioReader: ((Unit) -> String?)? = null,
-    ioWriter: ((CliOutput) -> Unit)? = null
+    ioWriter: ((CliOutput) -> Unit)? = null,
+    val serializer:(Any?, ContentType) -> Content
 ) {
 
     /**
@@ -54,7 +57,7 @@ open class CLI(
     /**
      * Context to hold the reader, writer, help, io services
      */
-    val context = CliContext(info, commands, ioReader, ioWriter)
+    val context = CliContext(info, commands, ioReader, ioWriter, serializer)
 
     /**
      * runs the shell command line with arguments

@@ -36,19 +36,6 @@ data class Content(val text: String, val tpe: ContentType) {
     companion object {
 
         @JvmStatic
-        fun from(format: String): ContentType {
-            return when (format.toLowerCase()) {
-                ContentTypeCsv.ext  -> ContentTypeCsv
-                ContentTypeHtml.ext -> ContentTypeHtml
-                ContentTypeJson.ext -> ContentTypeJson
-                ContentTypeProp.ext -> ContentTypeProp
-                ContentTypeText.ext -> ContentTypeText
-                ContentTypeXml.ext  -> ContentTypeXml
-                else -> ContentTypeJson
-            }
-        }
-
-        @JvmStatic
         fun csv(text: String): Content = Content(text, ContentTypeCsv)
 
         @JvmStatic

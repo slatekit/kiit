@@ -1,5 +1,7 @@
 package slatekit.cli
 
+import slatekit.common.content.Content
+import slatekit.common.content.ContentType
 import slatekit.common.info.Info
 import slatekit.common.io.IO
 import slatekit.common.io.Readln
@@ -8,7 +10,8 @@ class CliContext(
     val info: Info,
     val commands: List<String?>? = listOf(),
     ioReader: ((Unit) -> String?)? = null,
-    ioWriter: ((CliOutput) -> Unit)? = null
+    ioWriter: ((CliOutput) -> Unit)? = null,
+    serializer:(Any?, ContentType) -> Content
 ) {
 
     /**
@@ -31,5 +34,5 @@ class CliContext(
     /**
      * Handles output of command results
      */
-    val output = CliIO(writer)
+    val output = CliIO(writer, serializer)
 }

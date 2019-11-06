@@ -16,15 +16,17 @@ package slatekit.cli
 import java.io.File
 import slatekit.common.console.SemanticText
 import slatekit.common.console.SemanticWrites
+import slatekit.common.content.Content
+import slatekit.common.content.ContentType
 import slatekit.common.io.Files
 import slatekit.common.io.IO
 import slatekit.common.serialization.Serializer
-import slatekit.meta.Serialization
 import slatekit.results.Failure
 import slatekit.results.Success
 import slatekit.results.Try
 
-open class CliIO(private val io: IO<CliOutput, Unit>) : SemanticWrites {
+open class CliIO(private val io: IO<CliOutput, Unit>,
+                 private val serializer:(Any?, ContentType) -> Content) : SemanticWrites {
 
     /**
      * Writes the text using the TextType
@@ -91,12 +93,9 @@ open class CliIO(private val io: IO<CliOutput, Unit>) : SemanticWrites {
     private fun write(request: CliRequest, cmd: CliResponse<*>, obj: Any?, outputDir: String) {
         val format = request.args.getStringOrElse(SysParam.Format.id, "prop")
         text("===============================")
-        val text = when (format) {
-            "csv" -> Serialization.csv().serialize(obj)
-            "json" -> Serialization.json().serialize(obj)
-            "prop" -> Serialization.props().serialize(obj)
-            else -> Serialization.props().serialize(obj)
-        }
+        val contentType = ContentType.parse(format)
+        val content = serializer(obj, contentType)
+        val text = content.text
         text(text)
         text("===============================")
 
