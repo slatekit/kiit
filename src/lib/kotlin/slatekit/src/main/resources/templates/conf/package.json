@@ -12,7 +12,7 @@
     { "type": "copy", "doc": "Conf", "source": "/templates/app/conf/env.dev.conf", "target": "/src/main/resources/env.dev.conf" },
     { "type": "copy", "doc": "Conf", "source": "/templates/app/conf/env.qat.conf", "target": "/src/main/resources/env.qat.conf" },
     { "type": "copy", "doc": "Conf", "source": "/templates/app/conf/env.pro.conf", "target": "/src/main/resources/env.pro.conf" },
-    { "type": "copy", "doc": "Conf", "source": "/templates/app/conf/logback.txt" , "target": "/src/main/resources/logback.xml"  },
+    { "type": "copy", "doc": "Conf", "source": "/templates/app/conf/logback.txt" , "target": "/src/main/resources/logback.xml"  }
   ],
   "dependencies": {
   }
