@@ -44,10 +44,7 @@ class GeneratorService(val context: Context, val cls:Class<*>) {
         template.actions.forEach {
             when(it) {
                 is Action.MkDir -> creator.dir(dest, it)
-                is Action.Doc -> creator.doc(dest, it)
-                is Action.Conf -> creator.conf(dest, it)
-                is Action.Build -> creator.build(dest, it)
-                is Action.Code -> creator.code(dest, it)
+                is Action.Copy -> creator.copy(dest, it)
             }
         }
     }

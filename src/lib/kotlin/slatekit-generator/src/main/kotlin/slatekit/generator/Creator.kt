@@ -59,30 +59,19 @@ class Creator(val ctx: GeneratorContext, val template: Template, val cls:Class<*
     /**
      * Creates the file from the root directory supplied
      */
-    fun build(root: File, action: Action.Build) {
-        log("Build: " + action.path)
-        val content = read(action.source)
-        val target = File(root, action.path)
-        createFile(target, content)
+    fun copy(root: File, action: Action.Copy) {
+        when(action.fileType){
+            is FileType.Code -> code(root, action)
+            else -> file(root, action)
+        }
     }
 
 
     /**
-     * Creates the configuration file from the root directory supplied
+     * Creates the file from the root directory supplied
      */
-    fun conf(root: File, action: Action.Conf) {
-        log("Conf: " + action.path)
-        val content = read(action.source)
-        val target = File(root, action.path)
-        createFile(target, content)
-    }
-
-
-    /**
-     * Creates the doc file from the root directory supplied
-     */
-    fun doc(root: File, action: Action.Doc) {
-        log("Doc: " + action.path)
+    fun file(root: File, action: Action.Copy) {
+        log("${action.fileType}: " + action.path)
         val content = read(action.source)
         val target = File(root, action.path)
         createFile(target, content)
@@ -92,7 +81,7 @@ class Creator(val ctx: GeneratorContext, val template: Template, val cls:Class<*
     /**
      * Creates the source code from the root directory supplied
      */
-    fun code(root: File, action: Action.Code) {
+    fun code(root: File, action: Action.Copy) {
         log("Code: " + action.path)
         val content = read(action.source)
         val packagePath = ctx.packageName.replace(".", Props.pathSeparator)

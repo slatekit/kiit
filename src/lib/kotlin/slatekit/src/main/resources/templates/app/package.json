@@ -1,0 +1,41 @@
+{
+  "name": "app",
+  "description": "Generates a slatekit.app console application",
+  "version": "1.0.0",
+  "url": "https://www.slatekit.com",
+  "contact": "https://www.slatekit.com",
+  "keywords": ["slatekit", "app"],
+  "type": "application",
+  "actions": [
+    { "type": "mkdir", "path": "/gradle" },
+    { "type": "mkdir", "path": "/gradle/wrapper" },
+    { "type": "mkdir", "path": "/src" },
+    { "type": "mkdir", "path": "/src/main" },
+    { "type": "mkdir", "path": "/src/test" },
+    { "type": "mkdir", "path": "/src/main/resources" },
+    { "type": "mkdir", "path": "/src/main/java" },
+    { "type": "mkdir", "path": "/src/main/kotlin", "root": true },
+
+    { "type": "copy", "doc" : "Doc", "source": "/templates/common/README.md", "target": "/README.md" },
+
+    { "type": "copy", "doc": "Build", "source": "/templates/app/build.txt"                   , "target": "/build.gradle"                },
+    { "type": "copy", "doc": "Build", "source": "/templates/app/settings.txt"                , "target": "/settings.gradle"             },
+    { "type": "copy", "doc": "Build", "source": "/templates/common/gradlew"                  , "target": "/gradlew"                     },
+    { "type": "copy", "doc": "Build", "source": "/templates/common/gradlew.bat"              , "target": "/gradlew.bat"                 },
+    { "type": "copy", "doc": "Build", "source": "/templates/common/gradle.properties"        , "target": "/gradle.properties"           },
+    { "type": "copy", "doc": "Build", "source": "/templates/common/gradle-wrapper.properties", "target": "/gradle/wrapper/$gradleProps" },
+
+    { "type": "copy", "doc": "Conf", "source": "/templates/app/conf/env.conf"    , "target": "/src/main/resources/env.conf"     },
+    { "type": "copy", "doc": "Conf", "source": "/templates/app/conf/env.loc.conf", "target": "/src/main/resources/env.loc.conf" },
+    { "type": "copy", "doc": "Conf", "source": "/templates/app/conf/env.dev.conf", "target": "/src/main/resources/env.dev.conf" },
+    { "type": "copy", "doc": "Conf", "source": "/templates/app/conf/env.qat.conf", "target": "/src/main/resources/env.qat.conf" },
+    { "type": "copy", "doc": "Conf", "source": "/templates/app/conf/env.pro.conf", "target": "/src/main/resources/env.pro.conf" },
+    { "type": "copy", "doc": "Conf", "source": "/templates/app/conf/logback.txt" , "target": "/src/main/resources/logback.xml"  },
+
+    { "type": "copy", "doc": "Code", "source": "/templates/app/Run.txt", "target": "/src/main/kotlin/@app.package/Run.kt" },
+    { "type": "copy", "doc": "Code", "source": "/templates/app/App.txt", "target": "/src/main/kotlin/@app.package/App.kt" }
+  ],
+  "dependencies": {
+    "slatekit": "^1.0.0"
+  }
+}
