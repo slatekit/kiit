@@ -1,0 +1,30 @@
+{
+  "name": "common",
+  "description": "Runs common generation code for slatekit projects",
+  "version": "1.0.0",
+  "url": "https://www.slatekit.com",
+  "contact": "https://www.slatekit.com",
+  "keywords": ["slatekit", "app"],
+  "type": "common",
+  "actions": [
+    { "type": "mkdir", "path": "/gradle" },
+    { "type": "mkdir", "path": "/gradle/wrapper" },
+    { "type": "mkdir", "path": "/src" },
+    { "type": "mkdir", "path": "/src/main" },
+    { "type": "mkdir", "path": "/src/test" },
+    { "type": "mkdir", "path": "/src/main/resources" },
+    { "type": "mkdir", "path": "/src/main/java" },
+    { "type": "mkdir", "path": "/src/main/kotlin", "root": true },
+
+    { "type": "copy", "doc" : "Doc", "source": "/templates/common/README.md", "target": "/README.md" },
+
+    { "type": "copy", "doc": "Build", "source": "/templates/app/build.txt"                   , "target": "/build.gradle"                },
+    { "type": "copy", "doc": "Build", "source": "/templates/app/settings.txt"                , "target": "/settings.gradle"             },
+    { "type": "copy", "doc": "Build", "source": "/templates/common/gradlew"                  , "target": "/gradlew"                     },
+    { "type": "copy", "doc": "Build", "source": "/templates/common/gradlew.bat"              , "target": "/gradlew.bat"                 },
+    { "type": "copy", "doc": "Build", "source": "/templates/common/gradle.properties"        , "target": "/gradle.properties"           },
+    { "type": "copy", "doc": "Build", "source": "/templates/common/gradle-wrapper.properties", "target": "/gradle/wrapper/$gradleProps" },
+  ],
+  "dependencies": {
+  }
+}
