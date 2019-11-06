@@ -17,6 +17,8 @@ import slatekit.apis.ApiServer
 import slatekit.apis.core.Api
 import slatekit.cli.*
 import slatekit.common.Source
+import slatekit.common.content.Content
+import slatekit.common.content.ContentType
 import slatekit.common.requests.InputArgs
 import slatekit.common.info.Info
 import slatekit.results.Codes
@@ -47,10 +49,10 @@ open class CliApi(
         val auth: slatekit.apis.core.Auth,
         settings: CliSettings = CliSettings(),
         apiItems: List<Api> = listOf(),
+        serializer:(Any?, ContentType) -> Content,
         val metaTransform: ((Map<String,Any>) -> List<Pair<String,String>>)? = null
-        //val cliMeta: CliMeta? = null
 )
-    : CLI(settings, Info(ctx.app, ctx.build, ctx.start, ctx.sys), ctx.dirs)
+    : CLI(settings, Info(ctx.app, ctx.build, ctx.start, ctx.sys), ctx.dirs, serializer = serializer)
 {
 
     val metaNameForApiKey = "api-key"
