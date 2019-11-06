@@ -37,6 +37,46 @@
 	background: #585CE9;
 }
 
+.sk-back-to-top {
+	background: #5e72e4;
+	border: 1px solid #5e72e4;
+	padding: 12px 40px;
+	font-size: 15px;
+	font-weight: 400;
+	border-radius: 35px;
+	font-family: 'Open Sans', sans-serif;
+	color: #ffffff;
+	text-decoration: none;
+	display: inline-block;
+	margin-top: 30px;
+	transition: all .3s ease-in-out;
+}
+
+.sk-back-to-top:hover {
+	color: #5e72e4;
+	background: transparent;
+	border: 1px solid #5e72e4;
+}
+
+.sk-back-to-details {
+	background: #0acf8b;
+	border-radius: 35px;
+	padding: 10px 40px;
+	margin-right: 20px;
+    color: #ffffff;
+	font-weight: 600;
+	font-size: 16px;
+	transition: all .3s ease-in-out;
+	text-decoration: none;
+	border: 1px solid #0acf8b;
+	display: inline-block;
+}
+.sk-back-to-details:hover {
+	background: transparent;
+	border: 1px solid #0acf8b;
+	color: #0acf8b;
+}
+
 /*--------------------------------------------------
 [4. Start Integration]
 --------------------------------------------------*/
@@ -92,6 +132,38 @@
 p {
 	font-family: 'Open Sans', sans-serif;
 	color: #797c8f;
+}
+table tr td  {
+	font-family: 'Open Sans', sans-serif;
+}
+.sk-creative {
+	background: #ffffff;
+}
+
+/*--------------------------------------------------
+[3. Start Creative]
+--------------------------------------------------*/
+.sk-creative {
+	padding: 120px 0;
+	background: #ffffff;
+}
+
+.sk-creative .text h2 {
+	font-size: 30px;
+	font-weight: 600;
+	color: #5a5e74;
+	margin: 0;
+	margin-bottom: 20px;
+}
+
+.sk-creative .text p {
+	font-family: 'Open Sans', sans-serif;
+	font-size: 15px;
+	font-weight: 400;
+	line-height: 27px;
+	color: #797c8f;
+	opacity: .85;
+	margin-bottom: 0;
 }
 /*
 table tr td  {
