@@ -11,7 +11,6 @@ import slatekit.results.*
 // Slate Kit - App ( provides args, help, life-cycle methods, etc )
 import slatekit.app.App
 import slatekit.app.AppOptions
-import slatekit.db.Db
 
 
 class App(ctx: Context) : App<Context>(ctx, AppOptions(printSummaryBeforeExec = true)) {
@@ -35,14 +34,13 @@ class App(ctx: Context) : App<Context>(ctx, AppOptions(printSummaryBeforeExec = 
          * This can be overriden in your env.conf file
          */
         val about = About(
-                id = "slatekit",
+                area = "sample",
                 name = "Slate Kit",
                 desc = "Slate Kit Server",
                 company = "codehelix.co",
                 region = "NY",
                 version = "1.0.0",
-                url = "www.slatekit.life",
-                group = "codehelix",
+                url = "www.slatekit.com",
                 contact = "user@company.co",
                 tags = "sample, template, app",
                 examples = "http://www.slatekit.com"
