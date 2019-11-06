@@ -5,11 +5,18 @@ section_header: App
 ---
 <br/>
 # Overview
-The Slate App is base application and template to build console, batch, cli and server applications.
+The Slate App is a base application and template to build console, batch, cli and server applications.
 It has pre-built support for common features such as <strong>command line args</strong>, <strong>environment selection</strong>, 
 <strong>configs per environment</strong>, <strong>logging</strong>, <strong>life-cycle events</strong>, <strong>diagnostics</strong> and much more.
 This is accomplished by integrating some of the components and utilities available in the 
-{{% sk-link href="utils.html" text="Slate Kit Common" %}} project.
+{{% sk-link href="utils.html" text="Slate Kit Common" %}} project. 
+You can create a app quickly using the Slate Kit command line executable with the following inputs.
+Also refer to the {{% sk-link href="Example_App.html" text="Example_App.kt" %}}.
+{{< highlight bash >}}
+    
+    slatekit new app -name="Sample1" -package="mycompany.apps"
+    
+{{< /highlight >}}
 {{% break %}}
 
 # Index
@@ -65,7 +72,7 @@ Table of contents for this page
 
 # Status
 This component is currently stable and there is a project generator for it ( see below ). <br/>
-There are currently no planned changes or enhancements.
+A small future enhancement will optionally add support for Docker and gradle Docker configuration.
 {{% section-end mod="arch/app" %}}
 
 # Install
@@ -121,7 +128,7 @@ Also refer to the {{% sk-link href="Example_App.html" text="Example_App.kt" %}}
 {{< highlight bash >}}
     
     :> slatekit new app -name="MyApp1" -package="company1.myapp1"
-
+    
 {{< /highlight >}}
 {{% section-end mod="arch/app" %}}
 
@@ -153,7 +160,6 @@ This component quickly gets a new application set up with all these features rea
 {{% section-end mod="arch/app" %}}
 
 # Concepts
-coming soon
 <table class="table table-bordered table-striped">
     <tr>
         <td><strong>Concept</strong></td>
@@ -161,7 +167,7 @@ coming soon
     </tr>
     <tr>
         <td><strong>1. Life-cycle</strong></td>
-        <td>The app component is a base class, with support for life-cycle events ( check, init, accept, execute, shutdown )</td>
+        <td>The app component is a base class, with support for life-cycle events ( init, exec, done )</td>
     </tr>
     <tr>
         <td><strong>2. Envs</strong></td>
@@ -212,11 +218,6 @@ List of all features available and how to use them.
         <td><a href="arch/app#Conf" class="more"><span class="btn btn-primary">more</span></a></td>
     </tr>
     <tr>
-        <td><strong>Encrypt</strong></td>
-        <td>Encryption support for settings</td>
-        <td><a href="arch/app#Encrypt" class="more"><span class="btn btn-primary">more</span></a></td>
-    </tr>
-    <tr>
         <td><strong>Context</strong></td>
         <td>Application context ( for env, logs, configs, etc )</td>
         <td><a href="arch/app#Context" class="more"><span class="btn btn-primary">more</span></a></td>
@@ -240,40 +241,264 @@ List of all features available and how to use them.
 <br/>
 
 ## Args {#Args}
-coming soon
+Command line arguments are parsed and supplied to your app. You can specify what the arguments are supported by specifying the schema.
+This leverages the {{% sk-link-util name="args" %}} component.
 {{< highlight kotlin >}}
-
-    fun setup() {
-        
-    }
-
+  // Example of supplying arguments.
+  myapp -env=dev -log.level=info -region=ny
+    
+  // setup the command line arguments.
+  // NOTE:
+  // 1. These values can can be setup in the env.conf file
+  // 2. If supplied on command line, they override the values in .conf file
+  // 3. If any of these are required and not supplied, then an error is display and program exists
+  // 4. Help text can be easily built from this schema.
+  val schema = ArgsSchema()
+        .text("","env", "the environment to run in", false, "dev", "dev", "dev1|qa1|stg1|pro")
+        .text("","region", "the region linked to app", false, "us", "us", "us|europe|india|*")
+        .text("","log.level", "the log level for logging", false, "info", "info", "debug|info|warn|error")
+    
 {{< /highlight >}}
 {{% feature-end mod="arch/app" %}}
 
 ## Envs {#Envs}
-coming soon
-{{< highlight kotlin >}}
-
-    fun setup() {
-        
-    }
-
-{{< /highlight >}}
+Default environments and configs per environment are setup for applications and associated together.
+Refer to example app and or a generated application for more info.
+This leverages the {{% sk-link-util name="env" %}} and {{% sk-link-util name="conf" %}} components
+<table class="table table-bordered table-striped">
+    <tr>
+        <td><strong>Env</strong></td>
+        <td><strong>Name</strong></td>
+        <td><strong>Mode</strong></td>
+        <td><strong>Conf</strong></td>
+    </tr>
+    <tr>
+        <td>Shared conf for all envs</td>
+        <td>-</td>
+        <td>-</td>
+        <td>resources/env.conf </td>
+    </tr>
+    <tr>
+        <td><strong>Development ( local )</strong></td>
+        <td>loc</td>
+        <td>Dev</td>
+        <td>resources/env.local.conf</td>
+    </tr>
+    <tr>
+        <td><strong>Development ( Shared )</strong></td>
+        <td>dev</td>
+        <td>Dev</td>
+        <td>resources/env.dev.conf</td>
+    </tr>
+    <tr>
+        <td><strong>Quality Assurance</strong></td>
+        <td>qat</td>
+        <td>Qat</td>
+        <td>resources/env.qat.conf</td>
+    </tr>
+    <tr>
+        <td><strong>Staging</strong></td>
+        <td>stg</td>
+        <td>Uat</td>
+        <td>resources/env.uat.conf</td>
+    </tr>
+    <tr>
+        <td><strong>Production</strong></td>
+        <td>pro</td>
+        <td>Pro</td>
+        <td>resources/env.pro.conf</td>
+    </tr>
+</table>
 {{% feature-end mod="arch/app" %}}
 
 ## Logs {#Logs}
-coming soon
-{{< highlight kotlin >}}
+Logback logging is setup for the application in <strong>/resources/logback.xml</strong>
+This leverages the {{% sk-link-util name="logs" %}} component.
+{{< highlight xml >}}
 
-    fun setup() {
-        
-    }
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+    ...
+    <logger name="app" level="info" additivity="false">
+        <appender-ref ref="STDOUT" />
+        <appender-ref ref="FILE" />
+        <appender-ref ref="LOGGLY-ASYNC" />
+    </logger>
+    <root level="debug">
+        <appender-ref ref="STDOUT" />
+        <appender-ref ref="FILE" />
+    </root>
+    ...
+</configuration>
 
 {{< /highlight >}}
 {{% feature-end mod="arch/app" %}}
 
 
+## Conf {#Conf}
+Configuration settings are supported via normal Java Properties files stored in the <strong>resources</strong> folder.
+Configuration settings existing based on the names of the environments setup ( see above ). 
+This leverages the {{% sk-link-util name="conf" %}} component.
+
+#### env.conf
+This is the common config file inherited by all other configs. 
+You can specify the environment to load by setting <strong>env = name</strong>
+{{< highlight yaml >}}
+# environment selection
+# this can be overriden on the commandline via -env=qa
+env = loc
+{{< /highlight >}}
+
+#### env.qat.conf
+You have config files per environment. You can override settings in the environment specific config.
+{{< highlight yaml >}}
+# environment selection
+# this can be overriden on the commandline via -env=qa
+env = loc
+{{< /highlight >}}
+{{% feature-end mod="arch/app" %}}
+
+## Help {#Help}
+The application supports typing  <strong>-version</strong>,  <strong>-about</strong> and <strong>-help</strong> after your apps executable/jar.
+This will display info about the app and usage of command line args.
+This leverages the {{% sk-link-util name="args" %}} component.
+{{< highlight bash >}}
+
+myapp -help
+
+ ==============================================
+ ABOUT
+ area     :  Department 1
+ name     :  Sample App
+ desc     :  Sample console application to show the base application features
+ url      :  http://sampleapp.slatekit.com
+ contact  :  kishore@company1.co
+ version  :  1.0.0
+ tags     :  slate,shell,cli
+ examples :  sampleapp -env=dev -log.level=debug -region='ny' -enc=false
+ ==============================================
+
+ ARGS
+ -env     :  the environment to run in
+             ! required  [String]  e.g. dev
+ -log     :  the log level for logging
+             ? optional  [String]  e.g. info
+ -enc     :  whether encryption is on
+             ? optional  [String]  e.g. false
+ -region  :  the region linked to app
+             ? optional  [String]  e.g. us
+    
+{{< /highlight >}}
+{{% feature-end mod="arch/app" %}}
+
+## Context {#Context}
+The is an application context that stores all relevant info about the application such as the command line args,
+config, logs, encryptor, info about the app and more. You have access to this with in your app. 
+This can be either built up automatically by the application or you can supply it explicitly.
+This leverages the {{% sk-link-arch name="context" %}} component. Here is an example of an explictly built context.
+{{< highlight kotlin >}}
+    // Build explicitly
+    val ctx1 = AppEntContext(
+            arg = Args.default(),
+            env = Env("dev", EnvMode.Dev, "ny", "dev environment"),
+            cfg = Config(),
+            logs = LogsDefault,
+            ent = Entities({ con -> Db(con) }),
+            sys = Sys.build(),
+            build = Build.empty,
+            start = StartInfo.none,
+            app = About(
+                area = "department1",
+                name = "sample-app-1",
+                desc = "Sample application 1",
+                company = "Company 1",
+                region = "New York",
+                url = "http://company1.com/dep1/sampleapp-1",
+                contact = "dept1@company1.com",
+                version = "1.0.1",
+                tags = "sample app slatekit",
+                examples = ""
+            )
+    )
+       
+{{< /highlight >}}
+{{% feature-end mod="arch/app" %}}
+
+## Cycle {#Cycle}
+The application support 3 life-cycle events, <strong>init, exec, and done</strong>. 
+You can use these template methods to insert your pre execution, execution, and post execution logic.
+{{< highlight kotlin >}}
+    
+    import slatekit.app.App
+    import slatekit.results.Success
+    import slatekit.results.Try
+    import slatekit.common.CommonContext
+
+    class SlateKit(ctx: CommonContext) : App<CommonContext>(ctx) {
+
+        override suspend fun init(): Try<Boolean> {
+            println("starting")
+            return super.init()
+        }
+
+        override suspend fun exec(): Try<Any> {
+            println("executing")
+            return Success(true)
+        }
+
+        override suspend fun end(): Try<Boolean> {
+            println("complete")
+            return super.end()
+        }
+    }
+    
+{{< /highlight >}}
+{{% feature-end mod="arch/app" %}}
+
+## Info {#Info}
+The component can print diagnostic info during the start and end of your application life-cycle.
+This leverages the all the existing {{% sk-link-util name="args" %}}, {{% sk-link-util name="env" %}}, {{% sk-link-util name="conf" %}} 
+components list earlier.
+{{< highlight bash >}}
+
+ Info  : app executing now
+ Info  : app completed
+ Info  : app shutting down
+ Info  : ===============================================================
+ Info  : SUMMARY :
+ Info  : ===============================================================
+ Info  : area              = Samples
+ Info  : name              = App1
+ Info  : desc              = Sample to show the base application
+ Info  : version           = 1.0.0
+ Info  : tags              = sample
+ Info  : contact           = kishore@abc.co
+ Info  : url               =
+ Info  : args              = -region=usa
+ Info  : env               = dev
+ Info  : config            = env.conf
+ Info  : log               = local:dev
+ Info  : started           = 2017-07-11T11:54:13.132-04:00[America/New_York]
+ Info  : ended             = 2017-07-11T11:54:18.408-04:00[America/New_York]
+ Info  : duration          = PT5.276S
+ Info  : status            = ended
+ Info  : host.name         = KRPC1
+ Info  : host.ip           =
+ Info  : host.origin       = mac
+ Info  : host.version      = 10.0
+ Info  : lang.name         = kotlin
+ Info  : lang.version      = 1.8.0_91
+ Info  : lang.vendor       = Oracle Corporation
+ Info  : lang.java         = local
+ Info  : App1              =  extra summary data1
+ Info  : App1              =  extra summary data2
+ Info  : ===============================================================
+
+    
+{{< /highlight >}}
+{{% feature-end mod="arch/app" %}}
+
 # How to's
-Coming soon.
+{{% sk-contact-us pretext="Coming later, but you can reach us at" linktext="git" %}}
 {{% section-end mod="arch/app" %}}
 
