@@ -7,7 +7,7 @@ section_header: Contact
 
 
 # Contact
-Slate Kit is built and maintained by a small group of engineers. It has been in production for a few years and is actively maintained. Much of the usage of Slate Kit has been for prior internal and current projects. Prioritization and work on issues is based on our availablility, although we are considering premium/paid support ( see below ). Feel free to contact us using all the various channels below! 
+Slate Kit is built and maintained by a small group of engineers. It has been in production for a few years and is actively maintained. Much of the usage of Slate Kit has been for prior internal and current projects. Prioritization and work on issues is based on our availablility. Releases of Slate Kit occurr roughly every 2 weeks to 1 month for planned releases. We are considering offering premium support ( see below ). Feel free to contact us using all the various channels below! 
 {{% break %}}
 
 <section id="services" class="integration">

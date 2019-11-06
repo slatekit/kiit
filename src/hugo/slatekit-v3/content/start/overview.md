@@ -26,23 +26,87 @@ section_header: Overview
 
 # Tech
 <p>
-  Slate Kit is built for the <strong>JVM</strong> using <strong>100% Kotlin</strong>. Here are some of the other tools/libraries/integrations 
-  available with Slate Kit.
+  Slate Kit is built for the <strong>JVM</strong> using <strong>100% Kotlin</strong>. There are thin abstractions over some infrastructure services such as Files, queues, docs. Currently, only AWS implementations are available for the infrastructure abstractions. However, in the future, support for Google and Azure cloud services may be implemented. Other services are using directly.
 </p>
 <table class="table table-bordered table-striped">
-        <tr><td>Libs</td><td><strong>Kotlin</strong></td><td> All Slate Kit projects/components are in Kotlin</td></tr>
-        <tr><td>HTTP</td><td><strong>Ktor</strong></td><td>  Used as the Http server for Kotlin </td></tr>
-        <tr><td>DB</td><td><strong>MySql</strong></td><td>The Slate Kit ORM ( Entity Services ) integrates with MySql ( PostGres coming later ) </td></tr>
-        <tr><td>Cloud</td><td><strong>AWS</strong></td><td>Integrates with S3, SQS for file storage and queues. </td></tr>
-        <tr><td>SMS</td><td><strong>Twilio</strong></td><td>Used for SMS / Text messages </td></tr>
-        <tr><td>Email</td><td><strong>SendGrid</strong></td><td>Used for sending email </td></tr>
-        <tr><td>Push</td><td><strong>Push</strong></td><td>Integrates with Google Cloud Messaging for Android </td></tr>
+    <tr>
+        <td><strong>Item</strong></td>
+        <td><strong>Infrastructure</strong></td>
+        <td><strong>Usage</strong></td>
+        <td>Provider</td>
+    </tr>
+    <tr>
+        <td><strong>1</strong></td>
+        <td><strong>Files</strong></td>
+        <td><strong>Abstracted</strong></td>
+        <td>AWS S3 ( see {{% sk-link-arch name="files" %}} )</td>
+    </tr>
+    <tr>
+        <td><strong>2</strong></td>
+        <td><strong>Queues</strong></td>
+        <td><strong>Abstracted</strong></td>
+        <td>AWS SQS ( see {{% sk-link-arch name="queues" %}} )</td>
+    </tr>
+    <tr>
+        <td><strong>3</strong></td>
+        <td><strong>Documents</strong></td>
+        <td><strong>Abstracted</strong></td>
+        <td>AWS Dynamo ( see {{% sk-link-arch name="docs" %}} )</td>
+    </tr>
+    <tr>
+        <td><strong>4</strong></td>
+        <td><strong>Entities</strong></td>
+        <td><strong>Abstracted</strong></td>
+        <td>Support for MySql ( see {{% sk-link-arch name="orm" %}} )</td>
+    </tr>
+    <tr>
+        <td><strong>5</strong></td>
+        <td><strong>Http Server</strong></td>
+        <td><strong>Direct Usage</strong></td>
+        <td>Ktor ( from JetBrains ) - used as the API server</td>
+    </tr>
+    <tr>
+        <td><strong>6</strong></td>
+        <td><strong>Http Client </strong></td>
+        <td><strong>Partially Abstracted</strong></td>
+        <td>OkHttp ( see {{% sk-link-arch name="HttpRPC" %}} )</td>
+    </tr>
+    <tr>
+        <td><strong>7</strong></td>
+        <td><strong>Metrics</strong></td>
+        <td><strong>Partially Abstracted</strong></td>
+        <td>Micrometer.io ( see {{% sk-link-arch name="tracking" %}} )</td>
+    </tr>
+    <tr>
+        <td><strong>8</strong></td>
+        <td><strong>Logs</strong></td>
+        <td><strong>Abstracted</strong></td>
+        <td>Logback ( see {{% sk-link-util name="logs" %}} )</td>
+    </tr>
+    <tr>
+        <td><strong>9</strong></td>
+        <td><strong>SMS</strong></td>
+        <td><strong>Abstracted</strong></td>
+        <td>Twilio ( see {{% sk-link-arch name="sms" %}} )</td>
+    </tr>
+    <tr>
+        <td><strong>10</strong></td>
+        <td><strong>Email</strong></td>
+        <td><strong>Abstracted</strong></td>
+        <td>SendGrid ( see {{% sk-link-arch name="email" %}} )</td>
+    </tr>
+    <tr>
+        <td><strong>11</strong></td>
+        <td><strong>Alerts</strong></td>
+        <td><strong>Abstracted</strong></td>
+        <td>Slack Web Hooks ( see {{% sk-link-arch name="alerts" %}} )</td>
+    </tr>
 </table>
 {{% section-end mod="start/overview" %}}
 
 
 # Components
-        
+These are some of the main architecture components available in Slate Kit.
 <table class="table table-bordered table-striped">
   <tr>
     <td ><strong>Component</strong></td>
