@@ -37,6 +37,45 @@
 	background: #585CE9;
 }
 
+.sk-back-to-top {
+	background: #5e72e4;
+	border: 1px solid #5e72e4;
+	padding: 12px 40px;
+	font-size: 15px;
+	font-weight: 400;
+	border-radius: 35px;
+	font-family: 'Open Sans', sans-serif;
+	color: #ffffff;
+	text-decoration: none;
+	display: inline-block;
+	margin-top: 30px;
+	transition: all .3s ease-in-out;
+}
+
+.sk-back-to-top:hover {
+	color: #5e72e4;
+	background: transparent;
+	border: 1px solid #5e72e4;
+}
+
+.sk-back-to-details {
+	background: #ff5777;
+	border-radius: 35px;
+	padding: 10px 40px;
+    color: #ffffff;
+	font-weight: 600;
+	font-size: 16px;
+	transition: all .3s ease-in-out;
+	text-decoration: none;
+	border: 1px solid #ff5777;
+	display: inline-block;
+}
+.sk-back-to-details:hover {
+	background: transparent;
+	border: 1px solid #ff5777;
+	color: #ff5777;
+}
+
 /*--------------------------------------------------
 [4. Start Integration]
 --------------------------------------------------*/
@@ -92,6 +131,12 @@
 p {
 	font-family: 'Open Sans', sans-serif;
 	color: #797c8f;
+}
+table tr td  {
+	font-family: 'Open Sans', sans-serif;
+}
+.sk-creative {
+	background: #ffffff;
 }
 /*
 table tr td  {
