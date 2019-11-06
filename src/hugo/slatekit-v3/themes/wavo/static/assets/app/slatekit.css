@@ -59,21 +59,22 @@
 }
 
 .sk-back-to-details {
-	background: #ff5777;
+	background: #0acf8b;
 	border-radius: 35px;
 	padding: 10px 40px;
+	margin-right: 20px;
     color: #ffffff;
 	font-weight: 600;
 	font-size: 16px;
 	transition: all .3s ease-in-out;
 	text-decoration: none;
-	border: 1px solid #ff5777;
+	border: 1px solid #0acf8b;
 	display: inline-block;
 }
 .sk-back-to-details:hover {
 	background: transparent;
-	border: 1px solid #ff5777;
-	color: #ff5777;
+	border: 1px solid #0acf8b;
+	color: #0acf8b;
 }
 
 /*--------------------------------------------------
