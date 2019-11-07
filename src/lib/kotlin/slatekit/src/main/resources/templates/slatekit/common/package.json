@@ -14,7 +14,7 @@
     { "type": "mkdir", "path": "/src/test" },
     { "type": "mkdir", "path": "/src/main/resources" },
     { "type": "mkdir", "path": "/src/main/java" },
-    { "type": "mkdir", "path": "/src/main/kotlin", "root": true },
+    { "type": "mkdir", "path": "/src/main/kotlin"},
 
     { "type": "copy", "doc": "Doc"  , "source": "/README.md"                , "target": "/README.md"                   },
     { "type": "copy", "doc": "Build", "source": "/gradlew"                  , "target": "/gradlew"                     },
