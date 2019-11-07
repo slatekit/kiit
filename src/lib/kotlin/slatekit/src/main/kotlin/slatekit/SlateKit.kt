@@ -5,6 +5,9 @@ import slatekit.app.App
 import slatekit.app.AppOptions
 import slatekit.cli.CliSettings
 import slatekit.common.args.ArgsSchema
+import slatekit.common.content.Content
+import slatekit.common.content.ContentType
+import slatekit.common.content.ContentTypeCsv
 import slatekit.common.db.DbType
 import slatekit.common.encrypt.B64Java8
 import slatekit.common.encrypt.Encryptor
@@ -18,6 +21,7 @@ import slatekit.results.Try
 import slatekit.integration.common.AppEntContext
 import slatekit.integration.mods.Mod
 import slatekit.integration.mods.ModService
+import slatekit.meta.Serialization
 import slatekit.orm.orm
 
 class SlateKit(ctx: AppEntContext, val interactive:Boolean) : App<AppEntContext>(ctx, AppOptions(printSummaryBeforeExec = true)), SlateKitServices {
@@ -41,14 +45,13 @@ class SlateKit(ctx: AppEntContext, val interactive:Boolean) : App<AppEntContext>
          * This can be overriden in your env.conf file
          */
         val about = About(
-                id = "slatekit",
+                area = "slatekit",
                 name = "Slate Kit",
                 desc = "Slate Kit CLI for creating projects and access to other tools",
                 company = "codehelix.co",
                 region = "NY",
                 version = "1.0.0",
                 url = "www.slatekit.life",
-                group = "codehelix",
                 contact = "user@company.co",
                 tags = "sample, template, app",
                 examples = "http://www.slatekit.com"
@@ -96,7 +99,8 @@ class SlateKit(ctx: AppEntContext, val interactive:Boolean) : App<AppEntContext>
                 apiItems = apis,
                 metaTransform = {
                     listOf("api-key" to keys.first().key)
-                }
+                },
+                serializer = {item, type -> Content.csv(Serialization.csv().serialize(item)) }
         )
 
         // Finally, run the CLI to interact w/ the APIs

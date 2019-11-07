@@ -3,11 +3,21 @@ package slatekit.generator
 import org.json.simple.JSONArray
 import org.json.simple.JSONObject
 import org.json.simple.parser.JSONParser
+import java.io.File
 
 
 object Templates {
 
     val gradleProps = "gradle-wrapper.properties"
+
+
+    fun load( templateDirPath:String, templateName:String):Template {
+        val templateDir = File(templateDirPath, templateName)
+        val templateJson = File(templateDir, "package.json").readText()
+        val template = Templates.load(templateJson)
+        return template
+    }
+
 
     /**
      * Converts a JSON action into a typed action:

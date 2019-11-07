@@ -102,9 +102,7 @@ class GeneratorApi(val context: Context, val service: GeneratorService) {
      */
     private fun generate(templateName: String, name: String, packageName: String, area: String, destination: String): Try<String> {
         val templateDirPath = context.cfg.getString("templates.dir")
-        val templateDir = File(templateDirPath, templateName)
-        val templateJson = File(templateDir, "package.json").readText()
-        val template = Templates.load(templateJson)
+        val template = Templates.load(templateDirPath, templateName)
         return service.generate(GeneratorContext(name, "", packageName, area, destination, CredentialMode.EnvVars), template)
     }
 }
