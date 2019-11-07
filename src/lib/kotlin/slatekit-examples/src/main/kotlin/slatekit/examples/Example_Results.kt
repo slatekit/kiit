@@ -114,7 +114,7 @@ class Example_Results : Command("results") , OutcomeBuilder {
 
 
         // CASE 8: Not available
-        val res7 = errored<String>(Codes.UNAVAILABLE)
+        val res7 = errored<String>(Codes.TIMEOUT)
         printResult(res7)
 
 

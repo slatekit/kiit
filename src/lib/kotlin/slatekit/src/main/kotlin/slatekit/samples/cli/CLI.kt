@@ -5,6 +5,7 @@ import slatekit.apis.support.Authenticator
 import slatekit.cli.CliSettings
 import slatekit.common.Context
 import slatekit.common.Source
+import slatekit.common.content.Content
 import slatekit.common.info.ApiKey
 import slatekit.integration.apis.CliApi
 import slatekit.results.Try
@@ -36,7 +37,8 @@ class CLI(val ctx: Context) {
                 apiItems = apis,
                 metaTransform = {
                     listOf("api-key" to keys.first().key)
-                }
+                },
+                serializer = {item, type -> Content.csv(slatekit.meta.Serialization.csv().serialize(item))}
         )
 
         // 5. Run interactive mode

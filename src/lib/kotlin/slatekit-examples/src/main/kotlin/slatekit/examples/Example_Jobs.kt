@@ -21,6 +21,7 @@ import slatekit.common.*
 import slatekit.common.queues.QueueSourceInMemory
 import slatekit.cmds.Command
 import slatekit.cmds.CommandRequest
+import slatekit.common.log.LoggerConsole
 import slatekit.functions.policy.Every
 import slatekit.functions.policy.Limit
 import slatekit.functions.policy.Policy
@@ -154,6 +155,7 @@ class Example_Jobs : Command("utils"), CoroutineScope by MainScope() {
             val queue2 = Queue("queue2", Priority.Mid, QueueSourceInMemory.stringQueue(5))
 
             // Registry
+            val logger = LoggerConsole()
             val jobs = Jobs(
                     listOf(queue1, queue2),
                     listOf(
@@ -165,9 +167,9 @@ class Example_Jobs : Command("utils"), CoroutineScope by MainScope() {
                             slatekit.jobs.Job(id.copy(service = "job6"), listOf(NewsLetterWorker()), queue2),
 
                             slatekit.jobs.Job(id.copy(service = "job7"), listOf(::sendNewsLetterWithPaging), policies = listOf(
-                                    Every(10) { req, res -> println("Paged : " + req.task.id + ":" + res.msg) },
-                                    Limit(12) { req -> req.context.stats.counts },
-                                    Ratio(.1, slatekit.results.Status.Errored(0, "")) { req -> req.context.stats.counts }
+                                    Every(10, { req, res -> println("Paged : " + req.task.id + ":" + res.msg) }),
+                                    Limit(12, { req -> req.context.stats.counts }),
+                                    Ratio(.1, slatekit.results.Status.Errored(0, ""), { req -> req.context.stats.counts })
                                 )
                             )
                     )

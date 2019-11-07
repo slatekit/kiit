@@ -38,7 +38,6 @@ class Creator(val ctx: GeneratorContext, val template: Template, val cls:Class<*
      * Creates the directory
      */
     fun createFile(dest: File, content:String): File {
-
         log("creating ${dest.absolutePath}")
         dest.writeText(content)
         return dest
@@ -71,9 +70,9 @@ class Creator(val ctx: GeneratorContext, val template: Template, val cls:Class<*
      * Creates the file from the root directory supplied
      */
     fun file(root: File, action: Action.Copy) {
-        log("${action.fileType}: " + action.path)
+        log("${action.fileType}: " + action.target)
         val content = read(action.source)
-        val target = File(root, action.path)
+        val target = File(root, action.target)
         createFile(target, content)
     }
 
@@ -82,10 +81,10 @@ class Creator(val ctx: GeneratorContext, val template: Template, val cls:Class<*
      * Creates the source code from the root directory supplied
      */
     fun code(root: File, action: Action.Copy) {
-        log("Code: " + action.path)
+        log("Code: " + action.target)
         val content = read(action.source)
         val packagePath = ctx.packageName.replace(".", Props.pathSeparator)
-        val target = File(root, action.path.replace("@app.package", packagePath))
+        val target = File(root, action.target.replace("@app.package", packagePath))
         createFile(target, content)
     }
 

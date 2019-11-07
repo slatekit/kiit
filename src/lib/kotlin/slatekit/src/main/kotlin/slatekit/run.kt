@@ -36,6 +36,9 @@ import slatekit.tests.Manager
  */
  fun main(args: Array<String>) {
 
+    val dir = "/Users/kishore.reddy/dev/tmp/slatekit/slatekit/src/lib/kotlin/slatekit/src/main/resources/templates"
+    val template = Templates.load(dir, "slatekit/app")
+    println(template)
 
     // SAMPLES
     // 1. app
@@ -47,7 +50,7 @@ import slatekit.tests.Manager
     //sampleApp(args)
     //sampleCli(args)
     //sampleSrv(args)
-    genApp(args)
+    //genApp(args)
     //genCli(args)
     //genSrv(args)
 }

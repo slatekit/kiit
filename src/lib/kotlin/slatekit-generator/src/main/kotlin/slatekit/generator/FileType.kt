@@ -8,7 +8,7 @@ sealed class FileType {
 
     companion object {
         fun parse(name:String): FileType {
-            return when(name) {
+            return when(name.toLowerCase()) {
                 "build" -> Build
                 "doc"   -> Doc
                 "conf"  -> Conf

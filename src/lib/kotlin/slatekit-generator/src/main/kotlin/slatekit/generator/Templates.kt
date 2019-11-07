@@ -3,29 +3,64 @@ package slatekit.generator
 import org.json.simple.JSONArray
 import org.json.simple.JSONObject
 import org.json.simple.parser.JSONParser
+import slatekit.common.Uris
 import java.io.File
 
 
 object Templates {
 
-    val gradleProps = "gradle-wrapper.properties"
+    /**
+     * Loads a template from and its dependencies
+     * Assuming this is the structure of the templates folder:
+     * ~ slate-kit
+     *      - templates
+     *          - slatekit-prebuilt
+     *              - app
+     *              - api
+     *              - cli
+     *              - job
+     *
+     *          - my-company
+     *              - app
+     *              - api
+     *              - job
+     * @param templateRootPath: Path to the template root directory  e.g. "~/slate-kit/templates"
+     * @param templatePath: Path the specific named template         e.g. "my-company/app"
+     */
+    fun load( templateRootPath:String, templatePath:String):Template {
+        val canonical = Uris.interpret(templateRootPath) ?: templateRootPath
+        val root = File(canonical)
+        val paths = templatePath.split("/")
+        val parentDir = File(root, paths[0])
+        val templateName = paths[1]
+        return load(root, parentDir, templateName)
+    }
 
 
-    fun load( templateDirPath:String, templateName:String):Template {
-        val templateDir = File(templateDirPath, templateName)
+    /**
+     * Loads a template from the root/parent/name provided
+     * @param root        : File representing the template root directory      e.g. "~/slate-kit/templates"
+     * @param parentDir   : File representing the company directory under root e.g. "my-company"
+     * @param templateName: Name of the template                               e.g. "app"
+     */
+    fun load( root:File, parentDir:File, templateName:String):Template {
+        val templateDir = File(parentDir, templateName)
         val templateJson = File(templateDir, "package.json").readText()
-        val template = Templates.load(templateJson)
+        val template = load(root, parentDir, templateName, templateJson)
         return template
     }
 
 
     /**
      * Converts a JSON action into a typed action:
+     * @param root    : File representing the template root directory      e.g. "~/slate-kit/templates"
+     * @param parent  : File representing the company directory under root e.g. "my-company"
+     * @param name    : Name of the template                               e.g. "app"
      *
      *   { "type": "copy", "doc": "Build", "source": "/templates/app/build.txt"   , "target": "/build.gradle"    },
      *   { "type": "copy", "doc": "Build", "source": "/templates/app/settings.txt", "target": "/settings.gradle" },
      */
-    fun load(jsonRaw: String): Template {
+    fun load(root:File, parent:File, name:String, jsonRaw: String): Template {
         val parser = JSONParser()
         val doc = parser.parse(jsonRaw)
         val jsonRoot = doc as JSONObject
@@ -34,21 +69,48 @@ object Templates {
         val desc = jsonRoot.get("desc") as String? ?: ""
         val type = jsonRoot.get("type") as String? ?: ""
         val jsonActions = jsonRoot.get("actions") as JSONArray
-        val actions = (0..jsonActions.size).map { ndx ->
-            val jsonObj = jsonActions.get(ndx) as JSONObject
-            val type = jsonObj.get("type") as String?
-            val action = when (type) {
-                "mkdir" -> Action.MkDir(jsonObj.get("path") as String? ?: "")
-                "copy" -> Action.Copy(
-                        FileType.parse(jsonObj.get("doc") as String? ?: ""),
-                        jsonObj.get("source") as String? ?: "",
-                        jsonObj.get("target") as String? ?: ""
-                        )
-                else   -> throw Exception("Unexpected action type: $type")
-            }
-            action
+        val actions = iterateList(jsonActions, ::toAction)
+        val jsonDependencies = jsonRoot.get("dependencies") as JSONObject
+        val dependencies = iterateMap(jsonDependencies) { _, key, jsonDep ->
+            val template = load(root, parent, key)
+            template
         }
-        val template = Template(name, version, desc, type, actions)
+        val template = Template(name, version, desc, type, actions, dependencies)
         return template
+    }
+
+
+    private fun toAction(ndx:Int, jsonAction:JSONObject):Action {
+        val type = jsonAction.get("type") as String?
+        val action = when (type) {
+            "mkdir" -> Action.MkDir(jsonAction.get("path") as String? ?: "")
+            "copy" -> Action.Copy(
+                    FileType.parse(jsonAction.get("doc") as String? ?: ""),
+                    jsonAction.get("source") as String? ?: "",
+                    jsonAction.get("target") as String? ?: ""
+            )
+            else   -> throw Exception("Unexpected action type: $type")
+        }
+        return action
+    }
+
+
+    private fun <T> iterateList(jsonArray: JSONArray, op:(Int, JSONObject) -> T):List<T> {
+        val converted = (0 until jsonArray.size).map { ndx ->
+            val jsonObj = jsonArray.get(ndx) as JSONObject
+            val result = op(ndx, jsonObj)
+            result
+        }
+        return converted
+    }
+
+
+    private fun <T> iterateMap(jsonObj: JSONObject, op:(Int, String, Any?) -> T):List<T> {
+        val keys = jsonObj.keys.map { it?.toString() }.filterNotNull()
+        val converted = keys.mapIndexed { ndx, key ->
+            val obj = jsonObj.get(key)
+            op(ndx, key, obj)
+        }
+        return converted
     }
 }

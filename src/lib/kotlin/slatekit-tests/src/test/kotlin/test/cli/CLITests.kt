@@ -18,6 +18,7 @@ import org.junit.Assert
 import org.junit.Test
 import slatekit.cli.*
 import slatekit.common.args.Args
+import slatekit.common.content.Content
 import slatekit.common.info.Folders
 import slatekit.common.info.Info
 import slatekit.results.*
@@ -33,7 +34,9 @@ class CLITests {
             Info.none.copy(about = Info.none.about.copy(version = version)),
             Folders.default,
             null,
-            commands,reader,writer) {
+            commands,reader,writer,
+            { item, type -> Content.csv(slatekit.meta.Serialization.csv().serialize(item) )}
+            ) {
 
         var testInit = false
         var testEnd = false

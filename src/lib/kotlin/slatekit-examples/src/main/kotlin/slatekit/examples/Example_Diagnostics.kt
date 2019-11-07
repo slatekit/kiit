@@ -18,13 +18,13 @@ package slatekit.examples
 //<doc:import_examples>
 import slatekit.common.Context
 import slatekit.common.log.LoggerConsole
-import slatekit.common.metrics.MetricsLite
+import slatekit.tracking.MetricsLite
 import slatekit.common.requests.Response
 import slatekit.common.CommonResponse
 import slatekit.cmds.Command
 import slatekit.cmds.CommandRequest
 import slatekit.common.Identity
-import slatekit.common.metrics.Recorder
+import slatekit.tracking.Recorder
 import slatekit.results.Try
 import slatekit.results.Success
 import slatekit.results.builders.Outcomes
