@@ -2,12 +2,14 @@ package slatekit.generator
 
 import slatekit.common.Context
 import slatekit.common.Uris
-import slatekit.common.utils.Props
 import slatekit.results.Success
 import slatekit.results.Try
 import java.io.File
 
 class GeneratorService(val context: Context, val cls:Class<*>) {
+
+    val logger = context.logs.getLogger()
+
 
     fun generate(setupCtx: GeneratorContext, template: Template): Try<String> {
         // Normalize/Canonical names
@@ -15,36 +17,43 @@ class GeneratorService(val context: Context, val cls:Class<*>) {
 
         // Get root directory of destination
         val root = Uris.interpret(ctx.destination) ?: ""
-        val appDir = File(root, ctx.name)
-        log(appDir)
+        val targetDir = File(root, ctx.name)
+        log(targetDir)
 
         // Rewrite the context
-        val finalCtx = setupCtx.copy(destination = appDir.toString())
+        val finalCtx = setupCtx.copy(destination = targetDir.toString())
 
-        // Build the templates
-        val actions = template.actions
-        val rootDirAction = actions.first { it is Action.MkDir && it.root } as Action.MkDir
-        val packageDirs = buildPackageDirs(ctx, rootDirAction)
-        val indexRoot = actions.indexOf(rootDirAction) + 1
-        val before = actions.subList(0, indexRoot)
-        val after = actions.subList(indexRoot, actions.size)
-        val allActions = before.plus(packageDirs).plus(after)
-        val finalTemplate = template.copy(actions = allActions)
+        // Execute the dependencies first
+        template.requires.forEach { execute(finalCtx, it, targetDir) }
 
         // Execute the template actions
-        execute(finalCtx, finalTemplate, appDir)
+        execute(finalCtx, template, targetDir)
 
         return Success("")
     }
 
 
-    private fun execute(context: GeneratorContext, template: Template, appDir:File) {
-        val creator = Creator(context, template, cls)
-        val dest = creator.create(appDir.toString(), false)
+    private fun execute(ctx: GeneratorContext, template: Template, rootDir:File) {
+        val templateRootDirAction = template.actions.firstOrNull { it is Action.MkDir && it.root } as Action.MkDir?
+        val targetDir = when(templateRootDirAction) {
+            null -> rootDir
+            else -> File(rootDir, templateRootDirAction.path)
+        }
+        val creator = Creator(context, ctx, template, cls)
+        logger.info("Template")
+        logger.info("name: ${template.name}")
+        logger.info("path: ${template.dir.absolutePath}")
+
         template.actions.forEach {
             when(it) {
-                is Action.MkDir -> creator.dir(dest, it)
-                is Action.Copy -> creator.copy(dest, it)
+                is Action.MkDir -> {
+                    logger.info("Action: type=MkDir, path=${it.path}")
+                    creator.dir(targetDir, it)
+                }
+                is Action.Copy -> {
+                    logger.info("Action: type=Copy, source=${it.source}, target=${it.target}")
+                    creator.copy(targetDir, it)
+                }
             }
         }
     }
@@ -53,24 +62,21 @@ class GeneratorService(val context: Context, val cls:Class<*>) {
     /**
      * Build a list of [Action.Dir] actions to create directories based on package name.
      */
-    private fun buildPackageDirs(ctx: GeneratorContext, dir: Action.MkDir):List<Action.MkDir> {
-        val actionsWithPackage = ctx.packageName.split(".")
-        val dirs = mutableListOf<Action.MkDir>()
-        actionsWithPackage.forEachIndexed { index, s ->
-            if(index == 0) {
-                dirs.add(Action.MkDir(dir.path + Props.pathSeparator + s))
-            } else {
-                val fullPath = actionsWithPackage.joinToString(Props.pathSeparator, limit = index + 1)
-                dirs.add(Action.MkDir(dir.path + Props.pathSeparator + fullPath))
-            }
+    private fun makeDirs(targetDir:File, dir: Action.MkDir):File {
+        val parts = dir.path.split("/")
+        val finalPath = parts.reduce { acc, curr ->
+            File(targetDir, curr).mkdir()
+            "$acc/$curr"
         }
-        return dirs.toList()
+        val finalDir = File(finalPath)
+        finalDir.mkdir()
+        return finalDir
     }
 
 
     private fun log(appDir:File) {
-        println(appDir.absolutePath)
-        println(appDir.canonicalPath)
-        println(appDir.toString())
+        logger.info(appDir.absolutePath)
+        logger.info(appDir.canonicalPath)
+        logger.info(appDir.toString())
     }
 }

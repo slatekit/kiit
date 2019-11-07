@@ -20,7 +20,7 @@
     { "type": "copy", "doc": "Build", "source": "/gradlew"                  , "target": "/gradlew"                     },
     { "type": "copy", "doc": "Build", "source": "/gradlew.bat"              , "target": "/gradlew.bat"                 },
     { "type": "copy", "doc": "Build", "source": "/gradle.properties"        , "target": "/gradle.properties"           },
-    { "type": "copy", "doc": "Build", "source": "/gradle-wrapper.properties", "target": "/gradle/wrapper/$gradleProps" }
+    { "type": "copy", "doc": "Build", "source": "/gradle-wrapper.properties", "target": "/gradle/wrapper/gradle-wrapper.properties" }
   ],
   "dependencies": {
   }

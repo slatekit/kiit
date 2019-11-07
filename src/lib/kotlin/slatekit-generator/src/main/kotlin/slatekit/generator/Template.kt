@@ -1,5 +1,7 @@
 package slatekit.generator
 
+import java.io.File
+
 /**
  * Template for the generation
  * @param name    : Name of this template e.g. "app"
@@ -9,7 +11,10 @@ package slatekit.generator
  * @param actions : List of [Action] to execute to generate this template
  * @param requires: List of required dependent templates
  */
-data class Template(val name:String,
+data class Template(val root:File,
+                    val parent:File,
+                    val dir: File,
+                    val name:String,
                     val version:String,
                     val desc:String,
                     val type: String,
