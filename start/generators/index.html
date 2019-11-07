@@ -104,7 +104,7 @@
             Architecture Components
         </a>
         <ul class="dropdown-menu" aria-labelledby="menu-1">
-            <li><a class="dropdown-item" href="core/overview">Overview</a></li>
+            <li><a class="dropdown-item" href="arch/overview">Overview</a></li>
             <li><a class="dropdown-item" href="arch/results">Results</a></li>
             <li><a class="dropdown-item" href="arch/context">Context</a></li>
             <li><a class="dropdown-item" href="arch/app">App</a></li>
@@ -152,13 +152,252 @@
         </div>
     </section>
     
-    <section class="creative">
+    <section class="sk-creative">
       <div class="container">
         
 
 <h1 id="overview">Overview</h1>
 
-<p>Under construction&hellip; coming soon.</p>
+<p>Slate Kit comes with a command line executable to serve as a project generator.
+This is simply a Kotlin executable jar packaged as a Java Application via gradle that can be executed on the command line with bash/batch scripts.
+A quick example is below:
+<div class="highlight"><pre class="chroma"><code class="language-bash" data-lang="bash">    
+    slatekit new app -name<span class="o">=</span><span class="s2">&#34;Sample1&#34;</span> -package<span class="o">=</span><span class="s2">&#34;mycompany.apps&#34;</span>
+    </code></pre></div>
+<br/><br/></p>
+
+<h1 id="index">Index</h1>
+
+<p>Table of contents for this page
+<table class="table table-bordered table-striped">
+    <tr>
+        <td><strong>Section</strong></td>
+        <td><strong>Component</strong></td>
+        <td><strong>Description</strong></td>
+    </tr>
+    <tr>
+        <td><strong>1</strong></td>
+        <td><strong><a class="url-ch" href="start/generators#status">Status</a></strong></td>
+        <td>Current status of this component</td>
+    </tr>
+    <tr>
+        <td><strong>2</strong></td>
+        <td><strong><a class="url-ch" href="start/generators#install">Install</a></strong></td>
+        <td>Installation instructions and references to sources</td>
+    </tr>
+    <tr>
+        <td><strong>3</strong></td>
+        <td><strong><a class="url-ch" href="start/generators#requires">Requires</a></strong></td>
+        <td>Lists all the Slate Kit and third-party dependencies</td>
+    </tr>
+    <tr>
+        <td><strong>4</strong></td>
+        <td><strong><a class="url-ch" href="start/generators#app">APP</a></strong></td>
+        <td>Generate a new console application</td>
+    </tr>
+    <tr>
+        <td><strong>5</strong></td>
+        <td><strong><a class="url-ch" href="start/generators#api">API</a></strong></td>
+        <td>Generate a new HTTP API</td>
+    </tr>
+    <tr>
+        <td><strong>6</strong></td>
+        <td><strong><a class="url-ch" href="start/generators#cli">CLI</a></strong></td>
+        <td>Generate a new console CLI (command line interface) application</td>
+    </tr>
+    <tr>
+        <td><strong>7</strong></td>
+        <td><strong><a class="url-ch" href="start/generators#job">JOB</a></strong></td>
+        <td>Generate a new backgroun job</td>
+    </tr>
+    <tr>
+        <td><strong>8</strong></td>
+        <td><strong><a class="url-ch" href="start/generators#lib">LIB</a></strong></td>
+        <td>Generate a new reusable library</td>
+    </tr>
+    <tr>
+        <td><strong>9</strong></td>
+        <td><strong><a class="url-ch" href="start/generators#orm">ORM</a></strong></td>
+        <td>Generate a new Domain Driven Database/Entites/ORM project</td>
+    </tr>
+    <tr>
+        <td><strong>10</strong></td>
+        <td><strong><a class="url-ch" href="start/generators#orm">Custom</a></strong></td>
+        <td>Create custom templates</td>
+    </tr>
+    <tr>
+        <td><strong>11</strong></td>
+        <td><strong><a class="url-ch" href="start/generators#orm">Help</a></strong></td>
+        <td>More info and help on the generators</td>
+    </tr>
+</table>
+<br/><br/></p>
+
+<h1 id="status">Status</h1>
+
+<p>This component is currently stable and there is a project generator for it ( see below ). <br/>
+A small future enhancement will optionally add support for Docker and gradle Docker configuration.
+<br/>
+
+<a href="start/generators#overview" class="sk-back-to-top">Back to top </a>
+<br/><br/><br/><br/></p>
+
+<h1 id="install">Install</h1>
+
+<p>You can install the slatekit application/command line tool from <a href="slatekit" >slatekit</a>
+<div class="highlight"><pre class="chroma"><code class="language-groovy" data-lang="groovy">    <span class="c1">// For mac,nix
+</span><span class="c1"></span>    <span class="n">slatekit</span>
+    
+    <span class="c1">// For windows
+</span><span class="c1"></span>    <span class="n">slatekit</span><span class="o">.</span><span class="na">bat</span> 
+
+    <span class="n">slatekit</span> <span class="o">-</span><span class="n">version</span>
+    <span class="n">slatekit</span> <span class="o">-</span><span class="n">help</span></code></pre></div>
+<br/>
+
+<a href="start/generators#overview" class="sk-back-to-top">Back to top </a>
+<br/><br/><br/><br/></p>
+
+<h1 id="app">APP</h1>
+
+<p><p>
+The Slate App is a base application and template to build console, batch, cli and server applications.
+It has pre-built support for common features such as <strong>command line args</strong>, <strong>environment selection</strong>, 
+<strong>configs per environment</strong>, <strong>logging</strong>, <strong>life-cycle events</strong>, <strong>diagnostics</strong> and much more.
+
+You can create a app quickly using the Slate Kit command line executable with the following inputs.
+Also refer to the <a href="Example_App.html" >Example_App.kt</a>.
+</p>
+<div class="highlight"><pre class="chroma"><code class="language-bash" data-lang="bash">    
+    slatekit new app -name<span class="o">=</span><span class="s2">&#34;Sample1&#34;</span> -package<span class="o">=</span><span class="s2">&#34;mycompany.apps&#34;</span>
+    </code></pre></div>
+<br/>
+
+<a href="start/generators#overview" class="sk-back-to-top">Back to top </a>
+<br/><br/><br/><br/></p>
+
+<h1 id="api">API</h1>
+
+<p><p>
+The Slate App is a base application and template to build console, batch, cli and server applications.
+It has pre-built support for common features such as <strong>command line args</strong>, <strong>environment selection</strong>, 
+<strong>configs per environment</strong>, <strong>logging</strong>, <strong>life-cycle events</strong>, <strong>diagnostics</strong> and much more.
+
+You can create a app quickly using the Slate Kit command line executable with the following inputs.
+Also refer to the <a href="Example_App.html" >Example_App.kt</a>.
+</p>
+<div class="highlight"><pre class="chroma"><code class="language-bash" data-lang="bash">    
+    slatekit new api -name<span class="o">=</span><span class="s2">&#34;Sample1&#34;</span> -package<span class="o">=</span><span class="s2">&#34;mycompany.apps&#34;</span>
+    </code></pre></div>
+<br/>
+
+<a href="start/generators#overview" class="sk-back-to-top">Back to top </a>
+<br/><br/><br/><br/></p>
+
+<h1 id="cli">CLI</h1>
+
+<p><p>
+The Slate App is a base application and template to build console, batch, cli and server applications.
+It has pre-built support for common features such as <strong>command line args</strong>, <strong>environment selection</strong>, 
+<strong>configs per environment</strong>, <strong>logging</strong>, <strong>life-cycle events</strong>, <strong>diagnostics</strong> and much more.
+
+You can create a app quickly using the Slate Kit command line executable with the following inputs.
+Also refer to the <a href="Example_App.html" >Example_App.kt</a>.
+</p>
+<div class="highlight"><pre class="chroma"><code class="language-bash" data-lang="bash">    
+    slatekit new cli -name<span class="o">=</span><span class="s2">&#34;Sample1&#34;</span> -package<span class="o">=</span><span class="s2">&#34;mycompany.apps&#34;</span>
+    </code></pre></div>
+<br/>
+
+<a href="start/generators#overview" class="sk-back-to-top">Back to top </a>
+<br/><br/><br/><br/></p>
+
+<h1 id="job">JOB</h1>
+
+<p><p>
+The Slate App is a base application and template to build console, batch, cli and server applications.
+It has pre-built support for common features such as <strong>command line args</strong>, <strong>environment selection</strong>, 
+<strong>configs per environment</strong>, <strong>logging</strong>, <strong>life-cycle events</strong>, <strong>diagnostics</strong> and much more.
+
+You can create a app quickly using the Slate Kit command line executable with the following inputs.
+Also refer to the <a href="Example_App.html" >Example_App.kt</a>.
+</p>
+<div class="highlight"><pre class="chroma"><code class="language-bash" data-lang="bash">    
+    slatekit new job -name<span class="o">=</span><span class="s2">&#34;Sample1&#34;</span> -package<span class="o">=</span><span class="s2">&#34;mycompany.apps&#34;</span>
+    </code></pre></div>
+<br/>
+
+<a href="start/generators#overview" class="sk-back-to-top">Back to top </a>
+<br/><br/><br/><br/></p>
+
+<h1 id="lib">LIB</h1>
+
+<p><p>
+The Slate App is a base application and template to build console, batch, cli and server applications.
+It has pre-built support for common features such as <strong>command line args</strong>, <strong>environment selection</strong>, 
+<strong>configs per environment</strong>, <strong>logging</strong>, <strong>life-cycle events</strong>, <strong>diagnostics</strong> and much more.
+
+You can create a app quickly using the Slate Kit command line executable with the following inputs.
+Also refer to the <a href="Example_App.html" >Example_App.kt</a>.
+</p>
+<div class="highlight"><pre class="chroma"><code class="language-bash" data-lang="bash">    
+    slatekit new job -name<span class="o">=</span><span class="s2">&#34;Sample1&#34;</span> -package<span class="o">=</span><span class="s2">&#34;mycompany.apps&#34;</span>
+    </code></pre></div>
+<br/>
+
+<a href="start/generators#overview" class="sk-back-to-top">Back to top </a>
+<br/><br/><br/><br/></p>
+
+<h1 id="orm">ORM</h1>
+
+<p><p>
+The Slate App is a base application and template to build console, batch, cli and server applications.
+It has pre-built support for common features such as <strong>command line args</strong>, <strong>environment selection</strong>, 
+<strong>configs per environment</strong>, <strong>logging</strong>, <strong>life-cycle events</strong>, <strong>diagnostics</strong> and much more.
+
+You can create a app quickly using the Slate Kit command line executable with the following inputs.
+Also refer to the <a href="Example_App.html" >Example_App.kt</a>.
+</p>
+<div class="highlight"><pre class="chroma"><code class="language-bash" data-lang="bash">    
+    slatekit new orm -name<span class="o">=</span><span class="s2">&#34;Sample1&#34;</span> -package<span class="o">=</span><span class="s2">&#34;mycompany.apps&#34;</span>
+    </code></pre></div>
+<br/>
+
+<a href="start/generators#overview" class="sk-back-to-top">Back to top </a>
+<br/><br/><br/><br/></p>
+
+<h1 id="custom">Custom</h1>
+
+<p><p>
+The command line generator can be extended with custom templates.
+You have to create various configuration files and instructions similar to the existing ones.
+Refer to a sample configuration for the <strong>App</strong> for more info
+</p>
+<div class="highlight"><pre class="chroma"><code class="language-bash" data-lang="bash">    
+    slatekit new my_service_template -name<span class="o">=</span><span class="s2">&#34;Service1&#34;</span> -package<span class="o">=</span><span class="s2">&#34;mycompany.services&#34;</span>
+    </code></pre></div>
+<br/>
+
+<a href="start/generators#overview" class="sk-back-to-top">Back to top </a>
+<br/><br/><br/><br/></p>
+
+<h1 id="help">Help</h1>
+
+<p><p>
+You can also get help on the command for each project type. Run the following commands
+</p>
+<div class="highlight"><pre class="chroma"><code class="language-bash" data-lang="bash">    
+    slatekit new app -help
+    slatekit new api -help
+    slatekit new cli -help
+    slatekit new job -help
+    slatekit new lib -help
+    slatekit new orm -help
+    </code></pre></div>
+<br/>
+
+<a href="start/generators#overview" class="sk-back-to-top">Back to top </a>
+<br/><br/><br/><br/></p>
 
       </div>
     </section>  

@@ -104,7 +104,7 @@
             Architecture Components
         </a>
         <ul class="dropdown-menu" aria-labelledby="menu-1">
-            <li><a class="dropdown-item" href="core/overview">Overview</a></li>
+            <li><a class="dropdown-item" href="arch/overview">Overview</a></li>
             <li><a class="dropdown-item" href="arch/results">Results</a></li>
             <li><a class="dropdown-item" href="arch/context">Context</a></li>
             <li><a class="dropdown-item" href="arch/app">App</a></li>
@@ -152,28 +152,64 @@
         </div>
     </section>
     
-    <section class="creative">
+    <section class="sk-creative">
       <div class="container">
         
 
-<h1 id="quick-start">Quick Start</h1>
+<h1 id="overview">Overview</h1>
 
-<p>Under construction&hellip; coming soon.</p>
+<p>There are a few ways to quickly get started with using Slate Kit.
+Slate Kit comes with an executable jar that serves as a project generator.
+You can use this command line tool to create a new applications.
+You can also take a look at the sample apps and examples available.
+<div class="highlight"><pre class="chroma"><code class="language-bash" data-lang="bash">    
+    slatekit new app -name<span class="o">=</span><span class="s2">&#34;Sample1&#34;</span> -package<span class="o">=</span><span class="s2">&#34;mycompany.apps&#34;</span>
+    </code></pre></div>
+<br/><br/></p>
 
-<div class="highlight"><div class="chroma">
-<table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code class="language-kotlin" data-lang="kotlin"><span class="lnt">1
-</span><span class="lnt">2
-</span><span class="lnt">3
-</span><span class="lnt">4
-</span></code></pre></td>
-<td class="lntd">
-<pre class="chroma"><code class="language-kotlin" data-lang="kotlin">    <span class="c1">// Example:
-</span><span class="c1"></span>    <span class="c1">// Given on the the command line:
-</span><span class="c1"></span>    <span class="c1">// -log.level=info -env=dev -text=&#39;hello world&#39;
-</span><span class="c1"></span>    <span class="n">showResults</span><span class="p">(</span> <span class="n">Args</span><span class="p">.</span><span class="n">parse</span><span class="p">(</span> <span class="s">&#34;-log.level=info -env=dev -text=&#39;hello world&#39;&#34;</span><span class="p">,</span> <span class="n">sep</span><span class="p">=</span><span class="s">&#34;=&#34;</span><span class="p">,</span> <span class="n">hasAction</span> <span class="p">=</span> <span class="k">true</span> <span class="p">)</span> <span class="p">)</span></code></pre></td></tr></table>
-</div>
-</div>
+<h1 id="hello-world">Hello World</h1>
+
+<p><p>
+The Slate App is a base application and template to build console, batch, cli and server applications.
+It has pre-built support for common features such as <strong>command line args</strong>, <strong>environment selection</strong>, 
+<strong>configs per environment</strong>, <strong>logging</strong>, <strong>life-cycle events</strong>, <strong>diagnostics</strong> and much more.
+
+You can create a app quickly using the Slate Kit command line executable with the following inputs.
+Also refer to the <a href="Example_App.html" >Example_App.kt</a>.
+</p>
+<div class="highlight"><pre class="chroma"><code class="language-bash" data-lang="bash">    
+    slatekit new app -name<span class="o">=</span><span class="s2">&#34;Sample1&#34;</span> -package<span class="o">=</span><span class="s2">&#34;mycompany.apps&#34;</span>
+    </code></pre></div>
+<br/><br/></p>
+
+<h1 id="sample-app">Sample App</h1>
+
+<p><p>
+You can also get help on the command for each project type. Run the following commands
+</p>
+<div class="highlight"><pre class="chroma"><code class="language-bash" data-lang="bash">    
+    slatekit new app -help
+    slatekit new api -help
+    slatekit new cli -help
+    slatekit new job -help
+    slatekit new lib -help
+    slatekit new orm -help
+    </code></pre></div>
+<br/><br/></p>
+
+<h1 id="examples">Examples</h1>
+
+<p><p>
+You can also get help on the command for each project type. Run the following commands
+</p>
+<div class="highlight"><pre class="chroma"><code class="language-bash" data-lang="bash">    
+    slatekit new app -help
+    slatekit new api -help
+    slatekit new cli -help
+    slatekit new job -help
+    slatekit new lib -help
+    slatekit new orm -help
+    </code></pre></div></p>
 
       </div>
     </section>  

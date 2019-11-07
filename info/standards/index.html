@@ -103,7 +103,7 @@
             Architecture Components
         </a>
         <ul class="dropdown-menu" aria-labelledby="menu-1">
-            <li><a class="dropdown-item" href="core/overview">Overview</a></li>
+            <li><a class="dropdown-item" href="arch/overview">Overview</a></li>
             <li><a class="dropdown-item" href="arch/results">Results</a></li>
             <li><a class="dropdown-item" href="arch/context">Context</a></li>
             <li><a class="dropdown-item" href="arch/app">App</a></li>
@@ -151,13 +151,135 @@
         </div>
     </section>
     
-    <section class="creative">
+    <section class="sk-creative">
       <div class="container">
         
 
+<h1 id="overview">Overview</h1>
+
+<p>The overarching design in Slate Kit involves an emphasis on simplicity, reasonably light-weight and modular components that can be used both on the Server Side, and on the Client ( Android ). This is also designed to be much more of a collection of libraries than a full-fledged framework, in order to keep components decoupled and support using as little or as much of the code as possible. With regard to programming style, there is also a strong preference towards <strong>pragmatic functional programming</strong>, immutability, and use of higher-order functions.
+<br/><br/></p>
+
 <h1 id="standards">Standards</h1>
 
-<p>Under construction&hellip; coming soon.</p>
+<p>Standard Kotlin endorsed coding standards are applied via IntelliJ, Ktlint, and editorconfigs.
+<table class="table table-bordered table-striped">
+    <tr>
+        <td><strong>1</strong></td>
+        <td><strong>Git</strong></td>
+        <td><strong>One flow</strong> is used as the branching model</td>
+    </tr>
+    <tr>
+        <td><strong>2</strong></td>
+        <td><strong>Lint</strong></td>
+        <td><strong>Ktlint</strong> is currently used to format the code in projects.
+However, this is not currently automated and/or part of gradle.
+The linting process is done manually periodically as of now, but will later be aautomated.</td>
+    </tr>
+    <tr>
+        <td><strong>3</strong></td>
+        <td><strong>Settings</strong></td>
+        <td>An <strong>.editorconfig</strong> is placed in all projects to enforce certain settings.</td>
+    </tr>
+</table>
+<br/><br/></p>
+
+<h1 id="philosophy">Philosophy</h1>
+
+<p><p>
+Philosophy, design goals, approaches and standards
+</p>
+<table class="table table-bordered table-striped">
+    <tbody><tr>
+      <td ><strong>Tech</strong></td>
+      <td>Built in Kotlin, for the JVM ( multi-platform coming later), and designed to be reusable for both Client ( Android ) and Server (Backend/APIs/Services).</td>
+    </tr>
+    <tr>
+      <td><strong>Design</strong></td>
+      <td>Library based approach instead of a "Framework". Broken into several modules so you can pick as little or as much as you want.
+      </td>
+    </tr>
+    <tr>
+      <td><strong>Standards</strong></td>
+      <td>Check our <a class="url-ch" href="more/standards">coding standards</a></td>
+    </tr>
+    <tr>
+      <td><strong>Approach</strong></td>
+      <td><strong>Simplicity</strong> and <strong>Practicality</strong> above all else</td>
+    </tr>
+    <tr>
+      <td><strong>Components</strong></td>
+      <td>Composable, single-purpose components as building blocks. Organized into various projects.
+      </td>
+    </tr>
+    <tr>
+      <td><strong>Portable</strong></td>
+      <td>Designed for reasonably low vendor lock-in via a "library" based approach.</td>
+    </tr>
+    <tr>
+      <td><strong>Minimal</strong></td>
+      <td>Dependencies on external, 3rd-party libraries are kept to a minimum. Json Simple, OkHttp( for Http client ), Logback( Optional ), Micrometer ( Optional )</td>
+    </tr>
+    <tr>
+      <td><strong>License</strong></td>
+      <td>Apache 2.0 for most components. The <strong>API, Jobs</strong> component will have a dual Apache 2.0 / AGPL license.</td>
+    </tr>
+    <tr>
+      <td><strong>Style</strong></td>
+      <td>Emphasis on <strong>immutability</strong> 
+        and <strong>pragmatic functional programming</strong> as much as possible.
+        <br>However, this is <strong>NOT</strong> a 100% purely functional code base, and there is <strong>NO</strong> category theory.
+        </td>
+    </tr>
+  </tbody>
+</table>
+<br/><br/></p>
+
+<h1 id="infrastucture">Infrastucture</h1>
+
+<p>There are thin abstractions over some infrastructure services such as Files, queues, docs. Currently, only AWS implementations are available for the infrastructure abstractions. However, in the future, support for Google and Azure cloud services may be implemented. Other services are using directly.
+Refer to <a href="start/overview#tech" >infrastructure</a>
+<br/><br/></p>
+
+<h1 id="code">Code</h1>
+
+<p>There is an emphasis towards <strong>pragmatic</strong> functional programming, without going towards a <strong>pure</strong> functional programming style. A heavy emphasis towards simplicity and readability over conciseness and cleverness. Generally speaking the following approaches are followed:</p>
+
+<p><table class="table table-bordered table-striped">
+    <tr>
+        <td><strong>1</strong></td>
+        <td><strong>Immutablity</strong></td>
+        <td>Use <strong>val</strong> over <strong>var</strong></td>
+    </tr>
+    <tr>
+        <td><strong>2</strong></td>
+        <td><strong>Nulls</strong></td>
+        <td>Avoid using <strong>!!</strong> on nullable types</td>
+    </tr>
+    <tr>
+        <td><strong>3</strong></td>
+        <td><strong>Errors</strong></td>
+        <td>Prefer functional error-handling via the
+            <a href="http://www.slatekit.com/arch/results" >results</a> type and its aliases <strong>Outcome, Try, Notice, Validated</strong> over exceptions.
+        </td>
+    </tr>
+    <tr>
+        <td><strong>4</strong></td>
+        <td><strong>Types</strong></td>
+        <td>Prefer strong types/enums over &ldquo;string&rdquo; types</td>
+    </tr>
+    <tr>
+        <td><strong>5</strong></td>
+        <td><strong>ADT</strong></td>
+        <td>Use Algebraic Data Types by leveraging <strong>sealed classes</strong> in conjuction with pattern-matching</td>
+    </tr>
+    <tr>
+        <td><strong>6</strong></td>
+        <td><strong>Concurrency</strong></td>
+        <td>Use Kotlin Coroutines where applicable</td>
+    </tr>
+</table>
+<br/><br/></p>
 
       </div>
     </section>  

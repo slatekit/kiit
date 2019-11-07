@@ -104,7 +104,7 @@
             Architecture Components
         </a>
         <ul class="dropdown-menu" aria-labelledby="menu-1">
-            <li><a class="dropdown-item" href="core/overview">Overview</a></li>
+            <li><a class="dropdown-item" href="arch/overview">Overview</a></li>
             <li><a class="dropdown-item" href="arch/results">Results</a></li>
             <li><a class="dropdown-item" href="arch/context">Context</a></li>
             <li><a class="dropdown-item" href="arch/app">App</a></li>
@@ -152,13 +152,241 @@
         </div>
     </section>
     
-    <section class="creative">
+    <section class="sk-creative">
       <div class="container">
         
 
-<h1 id="overview">Overview</h1>
+<h1 id="overiew">Overiew</h1>
 
-<p>Under construction&hellip; coming soon.</p>
+<p><p>
+      Slate Kit is a <strong><a class="url-ch" href="http://www.kotlinlang.org">Kotlin</a></strong> based open-source set of libraries. It is comprised of several projects and modular components that collectively provide pre-built architecture that can be used to build any type of application on the JVM. Slate Kit can also be used as an open-source alternative to FireBase/Parse Beta* as the server-side backend for your mobile / web applications.
+  </p>
+<br/><br/></p>
+
+<h1 id="uses">Uses</h1>
+
+<p><p>
+  Slate Kit can be used to quickly build well structured and scalable architecture and applications for different target groups.
+</p>
+<table class="table table-bordered table-striped">
+    <tr><td><strong>Startups</strong></td><td> Start with a strong base architecture to quickly build high-quality MVPs that can scale</td></tr>
+    <tr><td><strong>SMB</strong></td><td>For small to medium sized businesses, build backend applications with pre-built application/service templates/components</td></tr>
+    <tr><td><strong>Mobile</strong></td><td> Set up the back-end for your mobile apps. Use Kotlin code for both Android and the Server</td></tr>
+    <tr><td><strong>Personal</strong></td><td>Learn Kotlin, functional programming, for self-improvement or side projects</td></tr>
+    <tr><td><strong>Enterprise</strong></td><td>There are several components in Slate Kit that can currently be used in the Enterprise, such as the App, Utilities, CLI. However, some of the components, namely APIs, ORMs are better suited for the groups listed above. For more comprehensive support for the enterprise, look into Spring Boot and Vertx.io</td></tr>
+</table>
+<br/>
+
+<a href="start/overview#overview" class="sk-back-to-top">Back to top </a>
+<br/><br/><br/><br/></p>
+
+<h1 id="tech">Tech</h1>
+
+<p><p>
+  Slate Kit is built for the <strong>JVM</strong> using <strong>100% Kotlin</strong>. There are thin abstractions over some infrastructure services such as Files, queues, docs. Currently, only AWS implementations are available for the infrastructure abstractions. However, in the future, support for Google and Azure cloud services may be implemented. Other services are using directly.
+</p>
+<table class="table table-bordered table-striped">
+    <tr>
+        <td><strong>Item</strong></td>
+        <td><strong>Infrastructure</strong></td>
+        <td><strong>Usage</strong></td>
+        <td>Provider</td>
+    </tr>
+    <tr>
+        <td><strong>1</strong></td>
+        <td><strong>Files</strong></td>
+        <td><strong>Abstracted</strong></td>
+        <td>AWS S3 ( see <a href="http://www.slatekit.com/arch/files" >files</a> )</td>
+    </tr>
+    <tr>
+        <td><strong>2</strong></td>
+        <td><strong>Queues</strong></td>
+        <td><strong>Abstracted</strong></td>
+        <td>AWS SQS ( see <a href="http://www.slatekit.com/arch/queues" >queues</a> )</td>
+    </tr>
+    <tr>
+        <td><strong>3</strong></td>
+        <td><strong>Documents</strong></td>
+        <td><strong>Abstracted</strong></td>
+        <td>AWS Dynamo ( see <a href="http://www.slatekit.com/arch/docs" >docs</a> )</td>
+    </tr>
+    <tr>
+        <td><strong>4</strong></td>
+        <td><strong>Entities</strong></td>
+        <td><strong>Abstracted</strong></td>
+        <td>Support for MySql ( see <a href="http://www.slatekit.com/arch/orm" >orm</a> )</td>
+    </tr>
+    <tr>
+        <td><strong>5</strong></td>
+        <td><strong>Http Server</strong></td>
+        <td><strong>Direct Usage</strong></td>
+        <td>Ktor ( from JetBrains ) - used as the API server</td>
+    </tr>
+    <tr>
+        <td><strong>6</strong></td>
+        <td><strong>Http Client </strong></td>
+        <td><strong>Partially Abstracted</strong></td>
+        <td>OkHttp ( see <a href="http://www.slatekit.com/arch/HttpRPC" >HttpRPC</a> )</td>
+    </tr>
+    <tr>
+        <td><strong>7</strong></td>
+        <td><strong>Metrics</strong></td>
+        <td><strong>Partially Abstracted</strong></td>
+        <td>Micrometer.io ( see <a href="http://www.slatekit.com/arch/tracking" >tracking</a> )</td>
+    </tr>
+    <tr>
+        <td><strong>8</strong></td>
+        <td><strong>Logs</strong></td>
+        <td><strong>Abstracted</strong></td>
+        <td>Logback ( see <a href="http://www.slatekit.com/utils/logs" >logs</a> )</td>
+    </tr>
+    <tr>
+        <td><strong>9</strong></td>
+        <td><strong>SMS</strong></td>
+        <td><strong>Abstracted</strong></td>
+        <td>Twilio ( see <a href="http://www.slatekit.com/arch/sms" >sms</a> )</td>
+    </tr>
+    <tr>
+        <td><strong>10</strong></td>
+        <td><strong>Email</strong></td>
+        <td><strong>Abstracted</strong></td>
+        <td>SendGrid ( see <a href="http://www.slatekit.com/arch/email" >email</a> )</td>
+    </tr>
+    <tr>
+        <td><strong>11</strong></td>
+        <td><strong>Alerts</strong></td>
+        <td><strong>Abstracted</strong></td>
+        <td>Slack Web Hooks ( see <a href="http://www.slatekit.com/arch/alerts" >alerts</a> )</td>
+    </tr>
+</table>
+<br/>
+
+<a href="start/overview#overview" class="sk-back-to-top">Back to top </a>
+<br/><br/><br/><br/></p>
+
+<h1 id="components">Components</h1>
+
+<p>These are some of the main architecture components available in Slate Kit.
+<table class="table table-bordered table-striped">
+  <tr>
+    <td ><strong>Component</strong></td>
+    <td ><strong>Visit</strong></td>
+    <td ><strong>About</strong></td>
+    <td ><strong>Description</strong></td>
+  </tr>
+  <tr>
+    <td class="text-center"><img src="assets/media/img/white/desktop.png" width="50" alt=""></td>
+    <td><strong><a class="url-ch" href="kotlin-core-app.html">App</a></strong></td>
+    <td>Base Application</td>
+    <td>A powerful base app with support for command line args, environment selection, configs per environment, logging, life-cycle events, encryption, diagnostics and more</td>
+  </tr>
+  <tr>
+    <td class="text-center"><img src="assets/media/img/white/webapi.png" width="50" alt=""></td>
+    <td><strong><a class="url-ch" href="kotlin-core-apis.html">API</a></strong></td>
+    <td>Protocol Independent APIs</td>
+    <td>Easily build protocol independent APIs using simple classes/methods with annotations, that can be hosted / run on both Slate Command Line Shell and/or as Web APIs in the Slate Server </td>
+  </tr>
+  <tr>
+    <td class="text-center"><img src="assets/media/img/white/terminal.png" width="50" alt=""></td>
+    <td><strong><a class="url-ch" href="kotlin-mod-shell.html">CLI</a></strong></td>
+    <td>Command Line Interface</td>
+    <td>A command line interface shell that you can extend to host your &ldquo;Protocol Independent APIs&rdquo; and/or hook into to handle and execute any user commands in a shell.</td>
+  </tr>
+  <tr>
+    <td class="text-center"><img src="assets/media/img/white/gears.png" width="50" alt=""></td>
+    <td><strong><a class="url-ch" href="arch/jobs">Jobs</a></strong></td>
+    <td>Background Jobs</td>
+    <td>Backgrounds Jobs / Task Queue library to process one-time, paged, and queue based jobs.</td>
+  </tr>
+  <tr>
+    <td class="text-center"><img src="assets/media/img/white/layers.png" width="50" alt=""></td>
+    <td><strong><a class="url-ch" href="arch/orm">ORM</a></strong></td>
+    <td>Domain-Driven ORM</td>
+    <td>A simple, light-weight, Domain-Driven ORM to map your entities to and from database tables. MySql is currently supported with support for PostGres coming soon.</td>
+  </tr>
+  <tr>
+    <td class="text-center"><img src="assets/media/img/white/server.png" width="50" alt=""></td>
+    <td><strong><a class="url-ch" href="kotlin-core-server.html">Server</a></strong></td>
+    <td>Web API Server</td>
+    <td>A Web API server built using Akka Http that can host your &ldquo;Protocol Independent APIs&rdquo;. You can extend this server and register your own APIs.</td>
+  </tr>
+  <tr>
+    <td class="text-center"><img src="assets/media/img/white/build.png" width="50" alt=""></td>
+    <td><strong><a class="url-ch" href="infra.html">Architecture</a></strong></td>
+    <td>Architecture Components</td>
+    <td>Architectural abstractions and implementations for Files, Queues, Tasks and more. Files and Queues are abstracted with default implementations for AWS S3, SQS.</td>
+  </tr>
+  <tr>
+    <td class="text-center"><img src="assets/media/img/white/multitool.png" width="50" alt=""></td>
+    <td><strong><a class="url-ch" href="utils.html">Utilities</a></strong></td>
+    <td>Utility Components</td>
+    <td>Many useful utility components and code that can be used for any application. All these are located in the Slate.Common project and independent and modular.</td>
+  </tr>
+  <tr>
+    <td class="text-center"><img src="assets/media/img/white/mobile.png" width="50" alt=""></td>
+    <td><strong><a class="url-ch" href="features.html">Mobile</strong></td>
+    <td>Mobile / Web Features</td>
+    <td>Mobile and web features for most applications, such as Users, Devices, Registration, Invites, Settings and more.</td>
+  </tr>
+</table>
+<br/>
+
+<a href="start/overview#overview" class="sk-back-to-top">Back to top </a>
+<br/><br/><br/><br/></p>
+
+<h2 id="philosophy">Philosophy</h2>
+
+<p><p>
+Philosophy, design goals, approaches and standards
+</p>
+<table class="table table-bordered table-striped">
+    <tbody><tr>
+      <td ><strong>Tech</strong></td>
+      <td>Built in Kotlin, for the JVM ( multi-platform coming later), and designed to be reusable for both Client ( Android ) and Server (Backend/APIs/Services).</td>
+    </tr>
+    <tr>
+      <td><strong>Design</strong></td>
+      <td>Library based approach instead of a "Framework". Broken into several modules so you can pick as little or as much as you want.
+      </td>
+    </tr>
+    <tr>
+      <td><strong>Standards</strong></td>
+      <td>Check our <a class="url-ch" href="more/standards">coding standards</a></td>
+    </tr>
+    <tr>
+      <td><strong>Approach</strong></td>
+      <td><strong>Simplicity</strong> and <strong>Practicality</strong> above all else</td>
+    </tr>
+    <tr>
+      <td><strong>Components</strong></td>
+      <td>Composable, single-purpose components as building blocks. Organized into various projects.
+      </td>
+    </tr>
+    <tr>
+      <td><strong>Portable</strong></td>
+      <td>Designed for reasonably low vendor lock-in via a "library" based approach.</td>
+    </tr>
+    <tr>
+      <td><strong>Minimal</strong></td>
+      <td>Dependencies on external, 3rd-party libraries are kept to a minimum. Json Simple, OkHttp( for Http client ), Logback( Optional ), Micrometer ( Optional )</td>
+    </tr>
+    <tr>
+      <td><strong>License</strong></td>
+      <td>Apache 2.0 for most components. The <strong>API, Jobs</strong> component will have a dual Apache 2.0 / AGPL license.</td>
+    </tr>
+    <tr>
+      <td><strong>Style</strong></td>
+      <td>Emphasis on <strong>immutability</strong> 
+        and <strong>pragmatic functional programming</strong> as much as possible.
+        <br>However, this is <strong>NOT</strong> a 100% purely functional code base, and there is <strong>NO</strong> category theory.
+        </td>
+    </tr>
+  </tbody>
+</table>
+<br/>
+
+<a href="start/overview#overview" class="sk-back-to-top">Back to top </a>
+<br/><br/><br/><br/></p>
 
       </div>
     </section>  
