@@ -24,7 +24,7 @@ class GeneratorApi(val context: Context, val service: GeneratorService) {
      */
     @Action(desc = "generates a new app project")
     fun app(name: String, packageName: String, area: String, destination: String): Try<String> {
-        return generate("_slatekit/app", name, packageName, area, destination)
+        return generate("slatekit/app", name, packageName, area, destination)
     }
 
 
@@ -37,7 +37,7 @@ class GeneratorApi(val context: Context, val service: GeneratorService) {
      */
     @Action(desc = "generates a new api project")
     fun api(name: String, packageName: String, area: String, destination: String): Try<String> {
-        return generate("_slatekit/api", name, packageName, area, destination)
+        return generate("slatekit/api", name, packageName, area, destination)
     }
 
 
@@ -50,7 +50,7 @@ class GeneratorApi(val context: Context, val service: GeneratorService) {
      */
     @Action(desc = "generates a new cli project")
     fun cli(name: String, packageName: String, area: String, destination: String): Try<String> {
-        return generate("_slatekit/cli", name, packageName, area, destination)
+        return generate("slatekit/cli", name, packageName, area, destination)
     }
 
 
@@ -63,7 +63,7 @@ class GeneratorApi(val context: Context, val service: GeneratorService) {
      */
     @Action(desc = "generates a new background job project")
     fun job(name: String, packageName: String, area: String, destination: String): Try<String> {
-        return generate("_slatekit/job", name, packageName, area, destination)
+        return generate("slatekit/job", name, packageName, area, destination)
     }
 
 
@@ -76,7 +76,7 @@ class GeneratorApi(val context: Context, val service: GeneratorService) {
      */
     @Action(desc= "generates a new library project")
     fun lib(name:String, packageName:String, area:String, destination:String): Try<String> {
-        return generate("_slatekit/lib", name, packageName, area, destination)
+        return generate("slatekit/lib", name, packageName, area, destination)
     }
 
 
@@ -89,7 +89,7 @@ class GeneratorApi(val context: Context, val service: GeneratorService) {
      */
     @Action(desc= "generates a new orm ( domain driven entities ) project")
     fun orm(name:String, packageName:String, area:String, destination:String): Try<String> {
-        return generate("_slatekit/orm", name, packageName, area, destination)
+        return generate("slatekit/orm", name, packageName, area, destination)
     }
 
 
@@ -103,6 +103,9 @@ class GeneratorApi(val context: Context, val service: GeneratorService) {
     private fun generate(templateName: String, name: String, packageName: String, area: String, destination: String): Try<String> {
         val templateDirPath = context.cfg.getString("templates.dir")
         val template = Templates.load(templateDirPath, templateName)
-        return service.generate(GeneratorContext(name, "", packageName, area, destination, CredentialMode.EnvVars), template)
+        //val parentDir = File(templateDirPath, templateName.split("/")[0])
+        val rootDir = File(templateDirPath)
+        val ctx = GeneratorContext(rootDir, name, "", packageName, area, destination, CredentialMode.EnvVars)
+        return service.generate(ctx, template)
     }
 }

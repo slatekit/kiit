@@ -9,8 +9,8 @@
   "actions": [
     { "type": "copy", "doc": "Build", "source": "/build.txt"   , "target": "/build.gradle"                },
     { "type": "copy", "doc": "Build", "source": "/settings.txt", "target": "/settings.gradle"             },
-    { "type": "copy", "doc": "Code" , "source": "/src/Run.txt" , "target": "/src/main/kotlin/@app.package/Run.kt" },
-    { "type": "copy", "doc": "Code" , "source": "/src/App.txt" , "target": "/src/main/kotlin/@app.package/App.kt" }
+    { "type": "copy", "doc": "Code" , "source": "/src/Run.txt" , "target": "/src/main/kotlin/${app.packagePath}/Run.kt" },
+    { "type": "copy", "doc": "Code" , "source": "/src/App.txt" , "target": "/src/main/kotlin/${app.packagePath}/App.kt" }
   ],
   "dependencies": {
     "common": "1.0.0",

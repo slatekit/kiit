@@ -17,11 +17,14 @@ class GeneratorService(val context: Context, val cls:Class<*>) {
 
         // Get root directory of destination
         val root = Uris.interpret(ctx.destination) ?: ""
-        val targetDir = File(root, ctx.name)
+        val targetDir = File(root)
         log(targetDir)
 
         // Rewrite the context
         val finalCtx = setupCtx.copy(destination = targetDir.toString())
+
+        // Create target dir
+        targetDir.mkdir()
 
         // Execute the dependencies first
         template.requires.forEach { execute(finalCtx, it, targetDir) }
@@ -33,16 +36,18 @@ class GeneratorService(val context: Context, val cls:Class<*>) {
     }
 
 
-    private fun execute(ctx: GeneratorContext, template: Template, rootDir:File) {
+    private fun execute(ctx: GeneratorContext, template: Template, targetDir:File) {
         val templateRootDirAction = template.actions.firstOrNull { it is Action.MkDir && it.root } as Action.MkDir?
-        val targetDir = when(templateRootDirAction) {
-            null -> rootDir
-            else -> File(rootDir, templateRootDirAction.path)
+        val finalTargetDir = when(templateRootDirAction) {
+            null -> targetDir
+            else -> File(targetDir, templateRootDirAction.path)
         }
         val creator = Creator(context, ctx, template, cls)
-        logger.info("Template")
-        logger.info("name: ${template.name}")
-        logger.info("path: ${template.dir.absolutePath}")
+        logger.info("")
+        logger.info("EXECUTING ===============================")
+        logger.info("target.dir: ${finalTargetDir.absolutePath}")
+        logger.info("template.name: ${template.name}")
+        logger.info("template.path: ${template.dir.absolutePath}")
 
         template.actions.forEach {
             when(it) {
@@ -52,25 +57,20 @@ class GeneratorService(val context: Context, val cls:Class<*>) {
                 }
                 is Action.Copy -> {
                     logger.info("Action: type=Copy, source=${it.source}, target=${it.target}")
-                    creator.copy(targetDir, it)
+                    val copy = it
+                    val action = if(it.fileType == FileType.Code) {
+                        val copyFinalTargetPath = creator.replace(copy.target)
+                        val finalAction = copy.copy(target = copyFinalTargetPath)
+                        creator.makeDirs(finalTargetDir, finalAction.target, { it.dropLast(1)})
+                        finalAction
+                    }
+                    else {
+                        it
+                    }
+                    creator.copy(finalTargetDir, action)
                 }
             }
         }
-    }
-
-
-    /**
-     * Build a list of [Action.Dir] actions to create directories based on package name.
-     */
-    private fun makeDirs(targetDir:File, dir: Action.MkDir):File {
-        val parts = dir.path.split("/")
-        val finalPath = parts.reduce { acc, curr ->
-            File(targetDir, curr).mkdir()
-            "$acc/$curr"
-        }
-        val finalDir = File(finalPath)
-        finalDir.mkdir()
-        return finalDir
     }
 
 

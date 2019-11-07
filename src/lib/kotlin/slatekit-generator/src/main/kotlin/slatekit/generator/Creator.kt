@@ -97,8 +97,9 @@ class Creator(val context: Context, val ctx: GeneratorContext, val template: Tem
      * Reads a file from resources
      */
     fun read(path:String):String {
-        val url = cls.getResource(path)
-        val text = File(url.file).readText()
+        //val url = cls.getResource(path)
+        val finalPath = "files" + File.separatorChar + path
+        val text = File(template.dir, finalPath).readText()
         val converted = replace(text)
         return converted
     }
@@ -113,6 +114,7 @@ class Creator(val context: Context, val ctx: GeneratorContext, val template: Tem
                 .replace("\${app.name}", ctx.name)
                 .replace("\${app.desc}", ctx.desc)
                 .replace("\${app.package}", ctx.packageName)
+                .replace("\${app.packagePath}", ctx.packageName.replace(".", "/"))
                 .replace("\${app.url}", ctx.name)
                 .replace("\${app.company}", ctx.company)
         return converted
@@ -121,5 +123,24 @@ class Creator(val context: Context, val ctx: GeneratorContext, val template: Tem
 
     private fun log(msg:String){
         logger.info(msg )
+    }
+
+
+    /**
+     * Build a list of [Action.Dir] actions to create directories based on package name.
+     */
+    fun makeDirs(targetDir:File, path:String, partsFilter: (List<String>) -> List<String>):File {
+        val partsRaw = path.split("/").filter { !it.isNullOrEmpty() }
+        val parts = partsFilter(partsRaw)
+        val finalPath = parts.reduce { acc, curr ->
+            val file = File(targetDir, acc)
+            if(!file.exists()) {
+                file.mkdir()
+            }
+            "$acc/$curr"
+        }
+        val finalDir = File(targetDir, finalPath)
+        finalDir.mkdir()
+        return finalDir
     }
 }
