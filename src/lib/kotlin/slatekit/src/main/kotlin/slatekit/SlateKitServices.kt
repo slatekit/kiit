@@ -73,19 +73,19 @@ interface SlateKitServices {
     }
 
     fun apis(): List<Api> {
-        // Module api
-        val moduleApi = ModuleApi(moduleContext(), ctx)
-        moduleApi.register(DependencyModule(ctx, moduleContext()))
+//        // Module api
+//        val moduleApi = ModuleApi(moduleContext(), ctx)
+//        moduleApi.register(DependencyModule(ctx, moduleContext()))
 
         // APIs
         val requiredApis = listOf(
                 Api(GeneratorApi(ctx, GeneratorService(ctx, SlateKit::class.java)), declaredOnly = true, setup = Setup.Annotated),
                 Api(DocApi(ctx), declaredOnly = true, setup = Setup.Annotated),
                 Api(InfoApi(ctx), declaredOnly = true, setup = Setup.Annotated),
-                Api(VersionApi(ctx), declaredOnly = true, setup = Setup.Annotated),
-                Api(moduleApi, declaredOnly = true, setup = Setup.Annotated)
+                Api(VersionApi(ctx), declaredOnly = true, setup = Setup.Annotated)
+                //Api(moduleApi, declaredOnly = true, setup = Setup.Annotated)
         )
-        val optionalApis = optionalApis()
+        val optionalApis = listOf<Api>() //optionalApis()
         val allApis = requiredApis.plus(optionalApis)
         return allApis
     }

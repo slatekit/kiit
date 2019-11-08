@@ -66,11 +66,6 @@ class SlateKit(ctx: AppEntContext, val interactive:Boolean) : App<AppEntContext>
 
     override suspend fun init(): Try<Boolean> {
         println("initializing")
-
-        // System level ( slate kit )
-        // This ModServices allow storing/checking for installed modules in the DB
-        ctx.ent.orm<Long, Mod>(DbType.DbTypeMemory, Mod::class, Long::class,null, ModService::class)
-        ctx.ent.orm<Long, Dependency>(DbType.DbTypeMemory, Dependency::class, Long::class,null, DependencyService::class)
         return super.init()
     }
 
@@ -100,7 +95,7 @@ class SlateKit(ctx: AppEntContext, val interactive:Boolean) : App<AppEntContext>
                 metaTransform = {
                     listOf("api-key" to keys.first().key)
                 },
-                serializer = {item, type -> Content.csv(Serialization.csv().serialize(item)) }
+                serializer = {item, type -> Content.prop(Serialization.csv().serialize(item)) }
         )
 
         // Finally, run the CLI to interact w/ the APIs

@@ -35,18 +35,16 @@ import slatekit.tests.Manager
  * java -jar ${app.name}.jar -env=dev -log.level=info -conf.dir = "file://./conf-sample-server"
  */
  fun main(args: Array<String>) {
-
-    val dir = "/Users/kishore.reddy/dev/tmp/slatekit/slatekit/src/lib/kotlin/slatekit/src/main/resources/templates"
-    //val template = Templates.load(dir, "slatekit/app")
-    //println(template)
-
-    // SAMPLES
-    // 1. app
-    //
     // slatekit create app -name="MyApp1" -package="company1.myapp1" -envs="dev,qat,stg,pro" -dest="some directory" -creds=encrypted -slatekit='0.9.28'
     // slatekit create cli -name="MyApp1" -package="company1.myapp1" -envs="dev,qat,stg,pro"
     // slatekit create srv -name="MyApp1" -package="company1.myapp1" -envs="dev,qat,stg,pro"
+    slatekitCLI(args)
+}
 
+
+fun temp(args:Array<String>){
+    val dir = "/Users/kishore.reddy/dev/tmp/slatekit/slatekit/src/lib/kotlin/slatekit/src/main/resources/templates"
+    //val template = Templates.load(dir, "slatekit/app")
     //sampleApp(args)
     //sampleCli(args)
     //sampleSrv(args)
