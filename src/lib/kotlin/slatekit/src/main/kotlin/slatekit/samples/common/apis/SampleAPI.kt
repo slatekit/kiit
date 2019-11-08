@@ -15,7 +15,7 @@ import slatekit.results.builders.Outcomes
 import slatekit.samples.common.models.SampleMovie
 
 
-@Api(area = "samples", name = "types", desc = "sample to test features of Slate Kit APIs", auth = "", verb = Verbs.Auto, sources = [Sources.Web])
+@Api(area = "samples", name = "types", desc = "sample to test features of Slate Kit APIs", verb = Verbs.Auto, sources = [Sources.Web])
 class SampleApi(context: Context) : ApiBase(context) {
 
     var inc = 0

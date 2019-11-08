@@ -23,8 +23,9 @@ class GeneratorApi(val context: Context, val service: GeneratorService) {
      * @param destination: The destination folder to generate this
      */
     @Action(desc = "generates a new app project")
-    fun app(name: String, packageName: String, area: String, destination: String): Try<String> {
-        return generate("slatekit/app", name, packageName, area, destination)
+    fun app(name: String, packageName: String): Try<String> {
+        val dir = System.getProperty("user.dir")
+        return generate("slatekit/app", name, packageName, "company", dir)
     }
 
 

@@ -54,11 +54,12 @@ object AppRunner {
         enc: Encryptor? = null,
         logs: Logs? = null,
         envs: Envs = Envs.defaults(),
-        errorMode: ErrorMode = ErrorMode.Print
+        errorMode: ErrorMode = ErrorMode.Print,
+        hasAction:Boolean = false
     ): Try<Any> {
 
         // Parse raw args to structured args with lookup ability e.g. args["env"] etc.
-        val argsResult = Args.parseArgs(rawArgs, "-", "=", false)
+        val argsResult = Args.parseArgs(rawArgs, "-", "=", hasAction)
 
         // Begin the processing pipeline
         val result = argsResult.then { args ->

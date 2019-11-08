@@ -4,6 +4,7 @@ import slatekit.apis.support.Authenticator
 import slatekit.app.App
 import slatekit.app.AppOptions
 import slatekit.cli.CliSettings
+import slatekit.common.args.Args
 import slatekit.common.args.ArgsSchema
 import slatekit.common.content.Content
 import slatekit.common.content.ContentType
@@ -11,6 +12,7 @@ import slatekit.common.content.ContentTypeCsv
 import slatekit.common.db.DbType
 import slatekit.common.encrypt.B64Java8
 import slatekit.common.encrypt.Encryptor
+import slatekit.common.ext.insertAt
 import slatekit.common.info.About
 import slatekit.common.info.ApiKey
 import slatekit.info.Dependency
@@ -23,8 +25,9 @@ import slatekit.integration.mods.Mod
 import slatekit.integration.mods.ModService
 import slatekit.meta.Serialization
 import slatekit.orm.orm
+import slatekit.results.Failure
 
-class SlateKit(ctx: AppEntContext, val interactive:Boolean) : App<AppEntContext>(ctx, AppOptions(printSummaryBeforeExec = true)), SlateKitServices {
+class SlateKit(ctx: AppEntContext, val interactive: Boolean) : App<AppEntContext>(ctx, AppOptions(printSummaryBeforeExec = true)), SlateKitServices {
 
     companion object {
 
@@ -35,9 +38,9 @@ class SlateKit(ctx: AppEntContext, val interactive:Boolean) : App<AppEntContext>
         // 3. If any of these are required and not supplied, then an error is display and program exists
         // 4. Help text can be easily built from this schema.
         val schema = ArgsSchema()
-                .text("","env", "the environment to run in", false, "dev", "dev", "dev1|qa1|stg1|pro")
-                .text("","region", "the region linked to app", false, "us", "us", "us|europe|india|*")
-                .text("","log.level", "the log level for logging", false, "info", "info", "debug|info|warn|error")
+                .text("", "env", "the environment to run in", false, "dev", "dev", "dev1|qa1|stg1|pro")
+                .text("", "region", "the region linked to app", false, "us", "us", "us|europe|india|*")
+                .text("", "log.level", "the log level for logging", false, "info", "info", "debug|info|warn|error")
 
 
         /**
@@ -76,8 +79,60 @@ class SlateKit(ctx: AppEntContext, val interactive:Boolean) : App<AppEntContext>
      * @return
      */
     override suspend fun exec(): Try<Any> {
+        // Create the CLI
+        // All commands are dispatched to it as it handles the
+        // integration between CLI inputs -> API requests
+        val cli = build()
+
+        // Determine if running in CLI interactive mode or executing a project generator
+        val args = ctx.arg
+        when (args.parts.isEmpty()) {
+            true -> run(cli)
+            false -> gen(cli)
+        }
+        return Success(true)
+    }
+
+
+    override suspend fun end(): Try<Boolean> {
+        println("ending")
+        return super.end()
+    }
+
+
+    /**
+     * Generate the project
+     */
+    private suspend fun gen(cli: CliApi) {
+        // slatekit new api -name="MyApp1" -package="company1.apps"
+        //
+        // NOTES:
+        // 1. Slate Kit is the actual bash/batch script generated with gradle application plugin
+        // 2. APIs in slate kit have a 3 part routing convention AREA API ACTION
+        // 3. The GeneratorAPI is annotated with "area" = "slatekit" for discovery
+        // 4. So we append the "slatekit" to the parts field parsed from the Args
+        // The parts are ["slatekit", "new", "app"]
+        val args = ctx.arg
+        val copy = args.withPrefix("slatekit")
+        val result = cli.executeArgs(copy)
+        when(result) {
+            is Failure -> println("Failure: " + result.error)
+            is Success -> println("Success: " + result.value.msg)
+        }
+    }
+
+
+    /**
+     * Begin interactive mode
+     */
+    private suspend fun run(cli: CliApi) {
+        cli.run()
+    }
+
+
+    private fun build(): CliApi {
         // The APIs ( DocApi, SetupApi are authenticated using an sample API key )
-        val keys = listOf(ApiKey( name ="cli", key = "abc", roles = "dev,qa,ops,admin"))
+        val keys = listOf(ApiKey(name = "cli", key = "abc", roles = "dev,qa,ops,admin"))
 
         // Authenticator using API keys
         // Production usage should use industry standard Auth components such as OAuth, JWT, etc.
@@ -95,18 +150,8 @@ class SlateKit(ctx: AppEntContext, val interactive:Boolean) : App<AppEntContext>
                 metaTransform = {
                     listOf("api-key" to keys.first().key)
                 },
-                serializer = {item, type -> Content.prop(Serialization.csv().serialize(item)) }
+                serializer = { item, type -> Content.prop(Serialization.csv().serialize(item)) }
         )
-
-        // Finally, run the CLI to interact w/ the APIs
-        cli.run()
-
-        return Success(true)
-    }
-
-
-    override suspend fun end(): Try<Boolean> {
-        println("ending")
-        return super.end()
+        return cli
     }
 }
