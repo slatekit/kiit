@@ -24,8 +24,8 @@ class GeneratorApi(val context: Context, val service: GeneratorService) {
      */
     @Action(desc = "generates a new app project")
     fun app(name: String, packageName: String): Try<String> {
-        val dir = System.getProperty("user.dir")
-        return generate("slatekit/app", name, packageName, "company", dir)
+        val dir = targetDir()
+        return generate("slatekit/app", name, packageName, "company", dir.absolutePath)
     }
 
 
@@ -108,5 +108,12 @@ class GeneratorApi(val context: Context, val service: GeneratorService) {
         val rootDir = File(templateDirPath)
         val ctx = GeneratorContext(rootDir, name, "", packageName, area, destination, CredentialMode.EnvVars)
         return service.generate(ctx, template)
+    }
+
+
+    private fun targetDir():File {
+        val curr = System.getProperty("user.dir")
+        val gen = File(curr, "gen")
+        return gen
     }
 }
