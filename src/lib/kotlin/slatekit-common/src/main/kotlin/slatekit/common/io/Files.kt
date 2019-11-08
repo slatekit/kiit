@@ -20,6 +20,18 @@ import java.io.File
 
 object Files {
 
+    fun createAtUserDir(dirs:List<String>):File {
+        val curr = System.getProperty("user.dir")
+        val appDir = dirs.fold(File(curr)) { file, subDirName ->
+            val child = File(file, subDirName)
+            if(!child.exists()){
+                child.mkdir()
+            }
+            child
+        }
+        return appDir
+    }
+
     /**
      * builds a folder name based on the date.
      * e.g. YYYYMMDD - 201705030
