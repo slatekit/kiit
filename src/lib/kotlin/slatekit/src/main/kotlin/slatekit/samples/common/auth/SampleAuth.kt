@@ -1,9 +1,12 @@
 package slatekit.samples.common.auth
 
+import slatekit.apis.AuthMode
+import slatekit.apis.core.Roles
 import slatekit.apis.support.Authenticator
 import slatekit.common.info.ApiKey
 import slatekit.common.requests.Request
 import slatekit.results.Notice
+import slatekit.results.Outcome
 import slatekit.results.Success
 
 class SampleAuth : Authenticator(listOf()) {
@@ -24,7 +27,7 @@ class SampleAuth : Authenticator(listOf()) {
      * 3. the base class properly delegates handling the auth modes.
      * @return
      */
-    override fun isAuthorized(cmd: Request, mode: String, actionRoles: String, apiRoles: String) : Notice<Boolean> {
+    override fun check(req: Request, authMode: AuthMode, roles: Roles): Outcome<Boolean> {
         return Success(true)
     }
 

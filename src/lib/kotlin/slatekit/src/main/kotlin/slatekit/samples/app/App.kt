@@ -31,14 +31,13 @@ class App(ctx: Context) : App<Context>(ctx, AppOptions(printSummaryBeforeExec = 
          * This can be overriden in your env.conf file
          */
         val about = About(
-                id = "myapp.id",
+                area = "samples",
                 name = "myapp.name",
                 desc = "myapp.desc",
                 company = "myapp.company",
                 region = "",
                 version = "1.0.0",
                 url = "myapp.url",
-                group = "",
                 contact = "",
                 tags = "app",
                 examples = ""

@@ -1,12 +1,14 @@
 package slatekit.generator
 
 import slatekit.common.toId
+import java.io.File
 
 /**
  * @param name        :
  * @param packageName :
  */
-data class GeneratorContext(val name: String,
+data class GeneratorContext(val rootDir: File,
+                            val name: String,
                             val desc: String,
                             val packageName: String,
                             val company: String,
@@ -20,6 +22,6 @@ data class GeneratorContext(val name: String,
     fun normalize(): GeneratorContext {
         val canonicalName = name
         val canonicalPackage = packageName.toId()
-        return GeneratorContext(canonicalName, desc, canonicalPackage, company, destination, mode)
+        return GeneratorContext(rootDir, canonicalName, desc, canonicalPackage, company, destination, mode)
     }
 }

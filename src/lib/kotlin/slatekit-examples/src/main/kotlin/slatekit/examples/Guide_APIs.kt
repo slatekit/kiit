@@ -1,6 +1,8 @@
 package slatekit.examples
 
+import kotlinx.coroutines.runBlocking
 import slatekit.apis.ApiServer
+import slatekit.apis.Verb
 import slatekit.apis.core.Api
 import slatekit.common.conf.Config
 import slatekit.results.Try
@@ -27,16 +29,16 @@ class Guide_APIs : Command("types") {
         val ctx = AppEntContext.sample(Config(), "myapp", "myapp", "App1", "Company1")
         val container = ApiServer(
                 ctx  = ctx,
-                auth = null,
                 apis = listOf(
                         Api(MovieApi(ctx), declaredOnly = false)
-                ),
-                allowIO = false
+                )
         )
-        container.call("app", "movies", "createSample", "post",
-                opts = mapOf(),
-                args = mapOf()
-        )
+        runBlocking {
+            container.call("app", "movies", "createSample", Verb.Post,
+                    opts = mapOf(),
+                    args = mapOf()
+            )
+        }
     }
 
 

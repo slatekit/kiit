@@ -34,35 +34,22 @@ import slatekit.tests.Manager
  * java -jar ${app.name}.jar -env=dev -log.level=info -conf.dir = "file://./conf-sample-shell"
  * java -jar ${app.name}.jar -env=dev -log.level=info -conf.dir = "file://./conf-sample-server"
  */
-suspend fun main(args: Array<String>) {
-
-    val manager = JobManager()
-    manager.run(3)
-//    val phone1 = PhoneUS.of("123-456-7890")
-//     println(phone1)
-//
-//    println("starting slate kit with args:" )
-//    println()
-//
-//    args.forEachIndexed { ndx, value ->
-//        println("$ndx : $value")
-//    }
-//
-//    println()
-//    println("done")
-
-    // SAMPLES
-    // 1. app
-    //
+ fun main(args: Array<String>) {
     // slatekit create app -name="MyApp1" -package="company1.myapp1" -envs="dev,qat,stg,pro" -dest="some directory" -creds=encrypted -slatekit='0.9.28'
     // slatekit create cli -name="MyApp1" -package="company1.myapp1" -envs="dev,qat,stg,pro"
     // slatekit create srv -name="MyApp1" -package="company1.myapp1" -envs="dev,qat,stg,pro"
+    slatekitCLI(args)
+}
 
 
+fun temp(args:Array<String>){
+    val dir = "/Users/kishore.reddy/dev/tmp/slatekit/slatekit/src/lib/kotlin/slatekit/src/main/resources/templates"
+    //val template = Templates.load(dir, "slatekit/app")
     //sampleApp(args)
     //sampleCli(args)
     //sampleSrv(args)
-    //genApp(args)
+    val dest = "/Users/kishore.reddy/dev/tmp/slatekit/slatekit/test/generator/app/myapp1"
+    genApp(args, dest, "MyApp1")
     //genCli(args)
     //genSrv(args)
 }
@@ -157,30 +144,39 @@ fun sampleSrv(args:Array<String>) {
 }
 
 
-fun genApp(args:Array<String>) {
-    gen(args, "app8", "Test slate kit app", "myapp.app", "codehelix", "/Users/kishore.reddy/dev/tests/slatekit", Templates.app())
+fun genApp(args:Array<String>, dest:String, name:String) {
+    gen(args) {
+        it.app(name, "myapp.app", "codehelix", dest )
+    }
 }
 
 
-fun genLib(args:Array<String>) {
-    gen(args,"lib1", "Test slate kit library", "myapp.lib", "codehelix", "/Users/kishore.reddy/dev/tests/slatekit", Templates.lib())
+fun genLib(args:Array<String>, dest:String, name:String) {
+    gen(args) {
+        it.lib(name, "myapp.libs", "codehelix", dest )
+    }
 }
 
 
-fun genCli(args:Array<String>) {
-    gen(args,"srv2", "Test slate kit server", "myapp.srv", "codehelix", "/Users/kishore.reddy/dev/tests/slatekit", Templates.srv())
+fun genCli(args:Array<String>, dest:String, name:String) {
+    gen(args) {
+        it.cli(name, "myapp.cli", "codehelix", dest )
+    }
 }
 
 
-fun genSrv(args:Array<String>) {
-    gen(args,"cli1", "Test slate kit server", "myapp.cli", "codehelix", "/Users/kishore.reddy/dev/tests/slatekit", Templates.cli())
+fun genSrv(args:Array<String>, dest:String, name:String) {
+    gen(args) {
+        it.api(name, "myapp.apis", "codehelix", dest )
+    }
 }
 
 
-fun gen(args:Array<String>, name:String, desc:String, packageName:String, company:String, dest:String, template: Template) {
-    val svc = GeneratorService(CommonContext.simple(""), SlateKit::class.java)
-    val ctx = GeneratorContext(name, desc, packageName, company, dest, CredentialMode.EnvVars)
-    svc.generate(ctx, template)
+fun gen(args:Array<String>, op: (GeneratorApi) -> Unit ) {
+    val ctx = CommonContext.simple("slatekit.generator")
+    val svc = GeneratorService(ctx, SlateKit::class.java)
+    val api = GeneratorApi(ctx, svc)
+    op(api)
 }
 
 

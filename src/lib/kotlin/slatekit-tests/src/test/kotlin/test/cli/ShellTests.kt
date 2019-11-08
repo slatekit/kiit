@@ -25,6 +25,7 @@ import slatekit.common.info.ApiKey
 import slatekit.common.info.Credentials
 import slatekit.common.args.Args
 import slatekit.common.conf.Config
+import slatekit.common.content.Content
 import slatekit.common.info.Host
 import slatekit.integration.apis.InfoApi
 import slatekit.integration.apis.CliApi
@@ -115,7 +116,9 @@ class ShellTests  {
 
     // 3. Build up the cli services that handles all the command line features.
     // And setup the api container to hold all the apis.
-    val cli = CliApi(ctx.toAppContext(), Authenticator(apiKeys), apiItems = apis) { meta ->
+    val cli = CliApi(ctx.toAppContext(), Authenticator(apiKeys), apiItems = apis,
+            serializer = { item, type -> Content.csv(slatekit.meta.Serialization.csv().serialize(item) )}
+    ) { meta ->
       listOf("api-key" to creds.key)
     }
     return cli

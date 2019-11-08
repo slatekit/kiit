@@ -1,0 +1,19 @@
+{
+  "name": "conf",
+  "description": "Runs common config code for slatekit projects",
+  "version": "1.0.0",
+  "url": "https://www.slatekit.com",
+  "contact": "https://www.slatekit.com",
+  "keywords": ["slatekit", "app"],
+  "type": "config",
+  "actions": [
+    { "type": "copy", "doc": "Conf", "source": "/env.conf"    , "target": "/src/main/resources/env.conf"     },
+    { "type": "copy", "doc": "Conf", "source": "/env.loc.conf", "target": "/src/main/resources/env.loc.conf" },
+    { "type": "copy", "doc": "Conf", "source": "/env.dev.conf", "target": "/src/main/resources/env.dev.conf" },
+    { "type": "copy", "doc": "Conf", "source": "/env.qat.conf", "target": "/src/main/resources/env.qat.conf" },
+    { "type": "copy", "doc": "Conf", "source": "/env.pro.conf", "target": "/src/main/resources/env.pro.conf" },
+    { "type": "copy", "doc": "Conf", "source": "/logback.txt" , "target": "/src/main/resources/logback.xml"  }
+  ],
+  "dependencies": {
+  }
+}

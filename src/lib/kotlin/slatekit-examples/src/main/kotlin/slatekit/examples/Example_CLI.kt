@@ -28,6 +28,8 @@ import slatekit.common.requests.InputArgs
 import slatekit.common.requests.Request
 import slatekit.cmds.Command
 import slatekit.cmds.CommandRequest
+import slatekit.common.content.Content
+import slatekit.common.content.ContentType
 import slatekit.results.*
 
 //</doc:import_examples>
@@ -36,7 +38,7 @@ import slatekit.results.*
 class Example_CLI : Command("auth") {
 
     //<doc:setup>
-    class AppCLI(info: Info, folders: Folders, settings: CliSettings) : CLI(settings, info, folders) {
+    class AppCLI(info: Info, folders: Folders, settings: CliSettings, serializer:(Any?, ContentType) -> Content) : CLI(settings, info, folders, serializer = serializer) {
 
         /**
          * Use case 3a : ( OPTIONAL ) do some stuff before running any commands
@@ -124,7 +126,8 @@ class Example_CLI : Command("auth") {
 
         //<doc:examples>
         // CASE 1: Create your own shell by extending the ShellService
-        val shell = AppCLI(Info.none, Folders.default, CliSettings())
+        val serializer = { item:Any?, type:ContentType -> Content.csv(slatekit.meta.Serialization.csv().serialize(item) )}
+        val shell = AppCLI(Info.none, Folders.default, CliSettings(), serializer)
 
 
         // CASE 2: (Optional) configure a startup command

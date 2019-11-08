@@ -52,6 +52,7 @@ dependencies {
     compile "com.googlecode.json-simple:json-simple:1.1"
     compile project(":slatekit-result")
     compile project(":slatekit-common")
+    compile project(":slatekit-tracking")
     compile project(":slatekit-app")
     compile project(":slatekit-meta")
     compile project(":slatekit-entities")

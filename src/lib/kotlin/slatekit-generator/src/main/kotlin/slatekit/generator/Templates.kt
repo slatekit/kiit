@@ -1,178 +1,116 @@
 package slatekit.generator
 
+import org.json.simple.JSONArray
+import org.json.simple.JSONObject
+import org.json.simple.parser.JSONParser
+import slatekit.common.Uris
+import java.io.File
+
 
 object Templates {
 
-    val gradleProps = "gradle-wrapper.properties"
-
-
     /**
-     * Template for generating a Slate Kit Application
+     * Loads a template from and its dependencies
+     * Assuming this is the structure of the templates folder:
+     * ~ slate-kit
+     *      - templates
+     *          - slatekit-prebuilt
+     *              - app
+     *              - api
+     *              - cli
+     *              - job
+     *
+     *          - my-company
+     *              - app
+     *              - api
+     *              - job
+     * @param templateRootPath: Path to the template root directory  e.g. "~/slate-kit/templates"
+     * @param templatePath: Path the specific named template         e.g. "my-company/app"
      */
-    fun app(): Template {
-
-        val actions = listOf(
-                // Directories
-                Action.MkDir("/gradle"),
-                Action.MkDir("/gradle/wrapper"),
-                Action.MkDir("/src"),
-                Action.MkDir("/src/main"),
-                Action.MkDir("/src/test"),
-                Action.MkDir("/src/main/resources"),
-                Action.MkDir("/src/main/java"),
-                Action.MkDir("/src/main/kotlin", root = true),
-
-                Action.Doc("/README.md", "/templates/common/README.md"),
-
-                // Gradle
-                Action.Build("/build.gradle", "/templates/app/build.txt"),
-                Action.Build("/settings.gradle", "/templates/app/settings.txt"),
-                Action.Build("/gradlew", "/templates/common/gradlew"),
-                Action.Build("/gradlew.bat", "/templates/common/gradlew.bat"),
-                Action.Build("/gradle.properties", "/templates/common/gradle.properties"),
-                Action.Build("/gradle/wrapper/$gradleProps", "/templates/common/gradle-wrapper.properties"),
-
-                // Conf
-                Action.Conf("/src/main/resources/env.conf", "/templates/app/conf/env.conf"),
-                Action.Conf("/src/main/resources/env.loc.conf", "/templates/app/conf/env.loc.conf"),
-                Action.Conf("/src/main/resources/env.dev.conf", "/templates/app/conf/env.dev.conf"),
-                Action.Conf("/src/main/resources/env.qat.conf", "/templates/app/conf/env.qat.conf"),
-                Action.Conf("/src/main/resources/env.pro.conf", "/templates/app/conf/env.pro.conf"),
-                Action.Conf("/src/main/resources/logback.xml", "/templates/app/conf/logback.txt"),
-
-                // Code
-                Action.Code("/src/main/kotlin/@app.package/Run.kt", "/templates/app/Run.txt"),
-                Action.Code("/src/main/kotlin/@app.package/App.kt", "/templates/app/App.txt")
-        )
-        return Template("App", TemplateType.App, actions)
+    fun load( templateRootPath:String, templatePath:String):Template {
+        val canonical = Uris.interpret(templateRootPath) ?: templateRootPath
+        val root = File(canonical)
+        val paths = templatePath.split("/")
+        val parentDir = File(root, paths[0])
+        val templateName = paths[1]
+        return load(root, parentDir, templateName)
     }
 
 
     /**
-     * Template for generating a Slate Kit Application
+     * Loads a template from the root/parent/name provided
+     * @param root        : File representing the template root directory      e.g. "~/slate-kit/templates"
+     * @param parentDir   : File representing the company directory under root e.g. "my-company"
+     * @param templateName: Name of the template                               e.g. "app"
      */
-    fun cli(): Template {
-
-        val actions = listOf(
-                // Directories
-                Action.MkDir("/gradle"),
-                Action.MkDir("/gradle/wrapper"),
-                Action.MkDir("/src"),
-                Action.MkDir("/src/main"),
-                Action.MkDir("/src/test"),
-                Action.MkDir("/src/main/resources"),
-                Action.MkDir("/src/main/java"),
-                Action.MkDir("/src/main/kotlin", root = true),
-
-                Action.Doc("/README.md", "/templates/common/README.md"),
-
-                // Gradle
-                Action.Build("/build.gradle", "/templates/app/build.txt"),
-                Action.Build("/settings.gradle", "/templates/app/settings.txt"),
-                Action.Build("/gradlew", "/templates/common/gradlew"),
-                Action.Build("/gradlew.bat", "/templates/common/gradlew.bat"),
-                Action.Build("/gradle.properties", "/templates/common/gradle.properties"),
-                Action.Build("/gradle/wrapper/$gradleProps", "/templates/common/gradle-wrapper.properties"),
-
-                // Conf
-                Action.Conf("/src/main/resources/env.conf", "/templates/app/conf/env.conf"),
-                Action.Conf("/src/main/resources/env.loc.conf", "/templates/app/conf/env.loc.conf"),
-                Action.Conf("/src/main/resources/env.dev.conf", "/templates/app/conf/env.dev.conf"),
-                Action.Conf("/src/main/resources/env.qat.conf", "/templates/app/conf/env.qat.conf"),
-                Action.Conf("/src/main/resources/env.pro.conf", "/templates/app/conf/env.pro.conf"),
-                Action.Conf("/src/main/resources/logback.xml", "/templates/app/conf/logback.txt"),
-
-                // Code
-                Action.Code("/src/main/kotlin/@app.package/Run.kt", "/templates/app/Run.txt"),
-                Action.Code("/src/main/kotlin/@app.package/App.kt", "/templates/app/App.txt")
-        )
-        return Template("App", TemplateType.App, actions)
+    fun load( root:File, parentDir:File, templateName:String):Template {
+        val templateDir = File(parentDir, templateName)
+        val templateJson = File(templateDir, "package.json").readText()
+        val template = load(root, parentDir, templateDir, templateName, templateJson)
+        return template
     }
 
 
     /**
-     * Template for generating a Slate Kit Application
+     * Converts a JSON action into a typed action:
+     * @param root    : File representing the template root directory      e.g. "~/slate-kit/templates"
+     * @param parent  : File representing the company directory under root e.g. "my-company"
+     * @param name    : Name of the template                               e.g. "app"
+     *
+     *   { "type": "copy", "doc": "Build", "source": "/templates/app/build.txt"   , "target": "/build.gradle"    },
+     *   { "type": "copy", "doc": "Build", "source": "/templates/app/settings.txt", "target": "/settings.gradle" },
      */
-    fun lib(): Template {
-
-        val actions = listOf(
-                // Directories
-                Action.MkDir("/gradle"),
-                Action.MkDir("/gradle/wrapper"),
-                Action.MkDir("/src"),
-                Action.MkDir("/src/main"),
-                Action.MkDir("/src/test"),
-                Action.MkDir("/src/main/resources"),
-                Action.MkDir("/src/main/java"),
-                Action.MkDir("/src/main/kotlin", root = true),
-
-                Action.Doc("/README.md", "/templates/lib/README.md"),
-
-                // Gradle
-                Action.Build("/build.gradle", "/templates/lib/build.txt"),
-                Action.Build("/settings.gradle", "/templates/lib/settings.txt"),
-                Action.Build("/gradlew", "/templates/common/gradlew"),
-                Action.Build("/gradlew.bat", "/templates/common/gradlew.bat"),
-                Action.Build("/gradle.properties", "/templates/common/gradle.properties"),
-                Action.Build("/gradle/wrapper/$gradleProps", "/templates/common/gradle-wrapper.properties"),
-
-                // Code
-                Action.MkDir("/src/main/kotlin/@app.package/ext"),
-                Action.MkDir("/src/main/kotlin/@app.package/models"),
-                Action.MkDir("/src/main/kotlin/@app.package/services"),
-                Action.MkDir("/src/main/kotlin/@app.package/types"),
-                Action.MkDir("/src/main/kotlin/@app.package/utils"),
-                Action.MkDir("/src/main/kotlin/@app.package/values")
-        )
-        return Template("App", TemplateType.App, actions)
+    fun load(root:File, parent:File, dir:File, name:String, jsonRaw: String): Template {
+        val parser = JSONParser()
+        val doc = parser.parse(jsonRaw)
+        val jsonRoot = doc as JSONObject
+        val name = jsonRoot.get("name") as String? ?: ""
+        val version = jsonRoot.get("version") as String? ?: ""
+        val desc = jsonRoot.get("desc") as String? ?: ""
+        val type = jsonRoot.get("type") as String? ?: ""
+        val jsonActions = jsonRoot.get("actions") as JSONArray
+        val actions = iterateList(jsonActions, ::toAction)
+        val jsonDependencies = jsonRoot.get("dependencies") as JSONObject
+        val dependencies = iterateMap(jsonDependencies) { _, key, jsonDep ->
+            val template = load(root, parent, key)
+            template
+        }
+        val template = Template(root, parent, dir, name, version, desc, type, actions, dependencies)
+        return template
     }
 
 
-    /**
-     * Template for generating a Slate Kit Application
-     */
-    fun srv(): Template {
+    private fun toAction(ndx:Int, jsonAction:JSONObject):Action {
+        val type = jsonAction.get("type") as String?
+        val action = when (type) {
+            "mkdir" -> Action.MkDir(jsonAction.get("path") as String? ?: "")
+            "copy" -> Action.Copy(
+                    FileType.parse(jsonAction.get("doc") as String? ?: ""),
+                    jsonAction.get("source") as String? ?: "",
+                    jsonAction.get("target") as String? ?: ""
+            )
+            else   -> throw Exception("Unexpected action type: $type")
+        }
+        return action
+    }
 
-        val actions = listOf(
-                // Directories
-                Action.MkDir("/gradle"),
-                Action.MkDir("/gradle/wrapper"),
-                Action.MkDir("/src"),
-                Action.MkDir("/src/main"),
-                Action.MkDir("/src/test"),
-                Action.MkDir("/src/main/resources"),
-                Action.MkDir("/src/main/java"),
-                Action.MkDir("/src/main/kotlin", root = true),
-                Action.MkDir("/src/main/kotlin/@app.package/apis"),
-                Action.MkDir("/src/main/kotlin/@app.package/auth"),
-                Action.MkDir("/src/main/kotlin/@app.package/models"),
 
-                Action.Doc("/README.md", "/templates/common/README.md"),
+    private fun <T> iterateList(jsonArray: JSONArray, op:(Int, JSONObject) -> T):List<T> {
+        val converted = (0 until jsonArray.size).map { ndx ->
+            val jsonObj = jsonArray.get(ndx) as JSONObject
+            val result = op(ndx, jsonObj)
+            result
+        }
+        return converted
+    }
 
-                // Gradle
-                Action.Build("/build.gradle", "/templates/srv/build.txt"),
-                Action.Build("/settings.gradle", "/templates/srv/settings.txt"),
-                Action.Build("/gradlew", "/templates/common/gradlew"),
-                Action.Build("/gradlew.bat", "/templates/common/gradlew.bat"),
-                Action.Build("/gradle.properties", "/templates/common/gradle.properties"),
-                Action.Build("/gradle/wrapper/$gradleProps", "/templates/common/gradle-wrapper.properties"),
 
-                // Conf
-                Action.Conf("/src/main/resources/env.conf", "/templates/srv/conf/env.conf"),
-                Action.Conf("/src/main/resources/env.loc.conf", "/templates/srv/conf/env.loc.conf"),
-                Action.Conf("/src/main/resources/env.dev.conf", "/templates/srv/conf/env.dev.conf"),
-                Action.Conf("/src/main/resources/env.qat.conf", "/templates/srv/conf/env.qat.conf"),
-                Action.Conf("/src/main/resources/env.pro.conf", "/templates/srv/conf/env.pro.conf"),
-                Action.Conf("/src/main/resources/logback.xml", "/templates/srv/conf/logback.txt"),
-
-                // Code
-                Action.Code("/src/main/kotlin/@app.package/Run.kt", "/templates/srv/Run.txt"),
-                Action.Code("/src/main/kotlin/@app.package/App.kt", "/templates/srv/App.txt"),
-                Action.Code("/src/main/kotlin/@app.package/apis/SampleAPI.kt", "/templates/srv/SampleAPI.txt"),
-                Action.Code("/src/main/kotlin/@app.package/auth/SampleAuth.kt", "/templates/srv/SampleAuth.txt"),
-                Action.Code("/src/main/kotlin/@app.package/models/SampleModel.kt", "/templates/srv/SampleModel.txt"),
-                Action.Code("/src/main/kotlin/@app.package/Server.kt", "/templates/srv/Server.txt")
-        )
-        return Template("App", TemplateType.App, actions)
+    private fun <T> iterateMap(jsonObj: JSONObject, op:(Int, String, Any?) -> T):List<T> {
+        val keys = jsonObj.keys.map { it?.toString() }.filterNotNull()
+        val converted = keys.mapIndexed { ndx, key ->
+            val obj = jsonObj.get(key)
+            op(ndx, key, obj)
+        }
+        return converted
     }
 }
