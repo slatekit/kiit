@@ -19,9 +19,9 @@ import slatekit.common.args.ArgsCheck.isExit
 import slatekit.common.args.ArgsCheck.isVersion
 import slatekit.common.args.ArgsSchema
 import slatekit.common.conf.Conf
+import slatekit.common.conf.ConfFuncs.CONFIG_DEFAULT_SUFFIX
 import slatekit.common.conf.Config
 import slatekit.common.conf.ConfigMulti
-import slatekit.common.conf.ConfFuncs.CONFIG_DEFAULT_SUFFIX
 import slatekit.common.conf.Props
 import slatekit.common.encrypt.Encryptor
 import slatekit.common.envs.Env
@@ -30,8 +30,9 @@ import slatekit.common.info.About
 import slatekit.common.info.Build
 import slatekit.common.info.Sys
 import slatekit.common.info.StartInfo
-import slatekit.common.io.File
 import slatekit.common.io.Scheme
+import slatekit.common.io.Uri
+import slatekit.common.io.Uris
 import slatekit.common.log.Logs
 import slatekit.common.log.LogsDefault
 import slatekit.common.log.LogHelper
@@ -45,9 +46,9 @@ object AppUtils {
         return dirFromArgs?.let{ Scheme.parse(it) } ?: default
     }
 
-    fun getDir(args: Args, default:Scheme): File {
+    fun getDir(args: Args, default:Scheme): Uri {
         val dirFromArgs = args.getStringOrNull("conf.dir")
-        return dirFromArgs?.let{ Scheme.parse(it) } ?: default
+        return Uris.parse(dirFromArgs ?: Scheme.Jar.name)
     }
 
     /**
@@ -160,7 +161,8 @@ object AppUtils {
             // 4. We now have the environment to use ( e.g. "dev" )
             // Now load the final environment specific override
             // for directory reference provide: "file://./conf/"
-            val overrideConfPath = getConfPath(args, "env.${env.name}" + CONFIG_DEFAULT_SUFFIX, confBase)
+            val overrideConfName = "env.${env.name}" + CONFIG_DEFAULT_SUFFIX
+            val overrideConfPath = source.combine(overrideConfName).toFile().absolutePath
             val confEnv = ConfigMulti(overrideConfPath, confBase, enc)
 
             Success(AppInputs(args, envCheck, confBase, confEnv))
@@ -171,7 +173,9 @@ object AppUtils {
 
         val buildInfoExists = resourceExists("build.conf")
         val build = if (buildInfoExists) {
-            val stamp = Config(getConfPath(appInputs.args, "build.conf", null), enc)
+            val source = getDir(appInputs.args, Scheme.Jar).combine("build.conf")
+            val props = Props.loadFrom(source)
+            val stamp = Config(source.raw, enc, props)
             val info = stamp.buildStamp("build")
             info
         } else {

@@ -2,6 +2,7 @@ package slatekit.common.conf
 
 import slatekit.common.io.Scheme
 import slatekit.common.io.Uri
+import slatekit.common.io.Uris
 import java.io.FileInputStream
 import java.util.*
 
@@ -27,15 +28,19 @@ object Props {
         return when(fileName) {
             null, "" -> Props.loadFromJar(ConfFuncs.CONFIG_DEFAULT_PROPERTIES)
             else -> {
-                val uri = Uri.parse(fileName)
-                val props = when(uri.scheme) {
-                    null            -> Props.loadFromJar(uri.path ?: ConfFuncs.CONFIG_DEFAULT_PROPERTIES)
-                    is Scheme.Other -> Props.loadFromJar(uri.path ?: ConfFuncs.CONFIG_DEFAULT_PROPERTIES)
-                    else -> Props.loadFromPath(uri.toFile().absolutePath)
-                }
-                props
+                val uri = Uris.parse(fileName)
+                return loadFrom(uri)
             }
         }
+    }
+
+    fun loadFrom(uri: Uri):Properties {
+        val props = when(uri.scheme) {
+            null            -> Props.loadFromJar(uri.path ?: ConfFuncs.CONFIG_DEFAULT_PROPERTIES)
+            is Scheme.Other -> Props.loadFromJar(uri.path ?: ConfFuncs.CONFIG_DEFAULT_PROPERTIES)
+            else -> Props.loadFromPath(uri.toFile().absolutePath)
+        }
+        return props
     }
 
     private fun loadFromJar(path: String): Properties {
