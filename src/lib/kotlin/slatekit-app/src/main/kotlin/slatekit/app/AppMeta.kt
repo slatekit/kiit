@@ -3,11 +3,7 @@ package slatekit.app
 import slatekit.common.args.Args
 import slatekit.common.args.ArgsSchema
 import slatekit.common.info.About
-import slatekit.results.Codes
-import slatekit.results.Failure
-import slatekit.results.Notice
-import slatekit.results.Success
-import slatekit.results.Try
+import slatekit.results.*
 
 class AppMeta(val about: About, val args: ArgsSchema) {
 
@@ -34,7 +30,7 @@ class AppMeta(val about: About, val args: ArgsSchema) {
      * @param schema : the argument schema that defines what arguments are supported.
      * @return
      */
-    fun handle(check: Notice<String>) {
+    fun handle(check: Outcome<String>) {
         if (check.success) {
             when (check.code) {
                 Codes.HELP.code -> help()

@@ -4,7 +4,7 @@ import java.io.InputStream
 import slatekit.common.DateTime
 import slatekit.common.Inputs
 import slatekit.common.Metadata
-import slatekit.common.Uris
+import slatekit.common.io.Uris
 import slatekit.common.args.Args
 import slatekit.common.content.Doc
 import slatekit.common.requests.InputArgs

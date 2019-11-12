@@ -20,6 +20,7 @@ import slatekit.apis.support.JsonSupport
 import slatekit.common.*
 import slatekit.common.encrypt.Encryptor
 import slatekit.common.ext.toStringUtc
+import slatekit.common.io.Uris
 import slatekit.common.requests.Request
 import slatekit.meta.Serialization
 

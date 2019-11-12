@@ -18,7 +18,7 @@ package slatekit.examples
 
 //<doc:import_examples>
 import slatekit.common.DateTime
-import slatekit.common.Uris
+import slatekit.common.io.Uris
 import slatekit.common.console.*
 import slatekit.cmds.Command
 import slatekit.cmds.CommandRequest

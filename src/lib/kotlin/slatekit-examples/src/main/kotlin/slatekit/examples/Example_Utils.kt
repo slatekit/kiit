@@ -16,7 +16,6 @@ package slatekit.examples
 import slatekit.common.utils.Require.requireOneOf
 import slatekit.common.utils.Require.requireText
 import slatekit.common.utils.Require.requireValidIndex
-import slatekit.common.*
 
 //</doc:import_required>
 
@@ -26,6 +25,7 @@ import slatekit.common.db.DbConString
 import slatekit.common.info.ApiKey
 import slatekit.common.info.ApiLogin
 import slatekit.cmds.CommandRequest
+import slatekit.common.io.Uris
 import slatekit.results.Try
 import slatekit.results.Success
 

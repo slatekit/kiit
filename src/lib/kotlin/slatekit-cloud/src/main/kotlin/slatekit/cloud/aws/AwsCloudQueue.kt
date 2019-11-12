@@ -19,7 +19,7 @@ import com.amazonaws.services.sqs.model.*
 import slatekit.common.DateTime
 import slatekit.common.Random
 import slatekit.common.info.ApiLogin
-import slatekit.common.Uris
+import slatekit.common.io.Uris
 import slatekit.common.ext.toStringUtc
 import slatekit.common.queues.QueueEntry
 import slatekit.common.queues.QueueValueConverter

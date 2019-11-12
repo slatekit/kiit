@@ -16,6 +16,7 @@ package slatekit.common
 import slatekit.common.content.Doc
 //import java.time.*
 import org.threeten.bp.*
+import slatekit.common.io.Uris
 
 /**
  * Conversions from text to types

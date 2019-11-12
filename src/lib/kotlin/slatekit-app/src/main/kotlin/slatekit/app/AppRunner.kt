@@ -19,6 +19,7 @@ import slatekit.common.Context
 import slatekit.common.encrypt.Encryptor
 import slatekit.common.envs.Envs
 import slatekit.common.info.About
+import slatekit.common.io.Scheme
 import slatekit.common.log.Logs
 import slatekit.results.builders.Notices
 import slatekit.results.builders.Tries
@@ -40,10 +41,14 @@ object AppRunner {
      * 4. creating an App using supplied lambda
      * 5. executing the life-cycle steps ( init, execute, end )
      *
-     * @param rawArgs : The raw arguments from command line
-     * @param schema : The schema of the command line arguments
-     * @param enc : Optional encryptor
-     * @param logs : Optional logs
+     * @param rawArgs    : The raw arguments from command line
+     * @param schema     : The schema of the command line arguments
+     * @param enc        : Optional encryptor
+     * @param logs       : Optional logs
+     * @param envs       : The supported environments
+     * @param errorMode  : Indicates what to do when there is an error
+     * @param confSource : The source of the configs ( e.g. jars | conf sub-directory )
+     * @param hasAction  : Whether or not the command line args have an action as a prefix before parameters e.g. "service.action"
      * @return
      */
     suspend fun <C : Context> run(
@@ -55,6 +60,7 @@ object AppRunner {
         logs: Logs? = null,
         envs: Envs = Envs.defaults(),
         errorMode: ErrorMode = ErrorMode.Print,
+        confSource:Scheme = Scheme.Jar,
         hasAction:Boolean = false
     ): Try<Any> {
 
@@ -69,7 +75,7 @@ object AppRunner {
         }.then { args ->
 
             // STEP 2: Context - Build AppContext using args, about, schema
-            val context = AppUtils.context(args, envs, about, schema ?: AppBuilder.schema(), enc, logs)
+            val context = AppUtils.context(args, envs, about, schema ?: AppBuilder.schema(), enc, logs, confSource)
             context.fold({ Success(it) }, { Failure(Exception(it)) })
         }.then { context ->
 
@@ -92,7 +98,7 @@ object AppRunner {
 
         result.onFailure {
             when (errorMode) {
-                ErrorMode.Rethrow -> throw it
+                ErrorMode.Throw -> throw it
                 ErrorMode.Print -> showError(result, it)
                 else -> {}
             }

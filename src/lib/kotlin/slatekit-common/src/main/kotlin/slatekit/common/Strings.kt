@@ -153,6 +153,13 @@ fun String.toIdent(lowerCase: Boolean = true): String {
     return cleaned.replace(' ', '_')
 }
 
+
+/**
+ * Indicates if the string has a scheme portion ( e.g. like in a URI ) such as http is the scheme in "http://google.com
+ * This checks for the existance of "://"
+ */
+fun String.hasScheme():Boolean = this.contains("://")
+
 /**
  * Splits the string to a map using the converters supplied
  * "a,b"     = map( "a" to "a", "b" to "b" )

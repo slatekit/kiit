@@ -20,7 +20,7 @@ import slatekit.apis.Verbs
 import slatekit.apis.support.FileSupport
 import slatekit.common.Context
 import slatekit.common.Sources
-import slatekit.common.Uris
+import slatekit.common.io.Uris
 import slatekit.common.Vars
 import slatekit.common.encrypt.Encryptor
 import slatekit.common.log.Logger

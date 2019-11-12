@@ -21,6 +21,7 @@ import slatekit.common.encrypt.Encryptor
 import slatekit.common.info.ApiKey
 import slatekit.common.info.ApiLogin
 import slatekit.common.info.Credentials
+import slatekit.common.io.Scheme
 import java.io.File
 import java.io.FileInputStream
 import java.util.*
@@ -101,15 +102,15 @@ object ConfFuncs {
      * @return
      */
     fun createApiKey(rootDir: String, name: String, creds: ApiKey, enc: Encryptor?): String =
-            createFile(rootDir, name + CONFIG_DEFAULT_SUFFIX, {
-                createSection(name, {
+            createFile(rootDir, name + CONFIG_DEFAULT_SUFFIX) {
+                createSection(name) {
                     listOf(
                             key("account", creds.key, enc),
                             key("key", creds.name, enc),
                             key("pass", creds.roles, enc)
                     )
-                })
-            })
+                }
+            }
 
     /**
      * creates a api credentials file in the app directory of the user home path
@@ -119,8 +120,8 @@ object ConfFuncs {
      * @return
      */
     fun createApiLogin(rootDir: String, name: String, creds: ApiLogin, enc: Encryptor?): String =
-            createFile(rootDir, name + CONFIG_DEFAULT_SUFFIX, {
-                createSection(name, {
+            createFile(rootDir, name + CONFIG_DEFAULT_SUFFIX) {
+                createSection(name) {
                     listOf(
                             key("account", creds.account, enc),
                             key("key", creds.key, enc),
@@ -128,8 +129,8 @@ object ConfFuncs {
                             key("env", creds.env, enc),
                             key("tag", creds.tag, enc)
                     )
-                })
-            })
+                }
+            }
 
     /**
      * creates a login file in the app directory of the user home path
@@ -139,8 +140,8 @@ object ConfFuncs {
      * @return
      */
     fun createLogin(rootDir: String, name: String, creds: Credentials, enc: Encryptor?): String =
-            createFile(rootDir, name + CONFIG_DEFAULT_SUFFIX, {
-                createSection(name, {
+            createFile(rootDir, name + CONFIG_DEFAULT_SUFFIX) {
+                createSection(name) {
                     listOf(
                             key("id", creds.id, enc),
                             key("name", creds.name, enc),
@@ -149,21 +150,21 @@ object ConfFuncs {
                             key("key", creds.key, enc),
                             key("env", creds.env, enc)
                     )
-                })
-            })
+                }
+            }
 
     fun createDbCon(rootDir: String, name: String, con: DbConString, enc: Encryptor?): String =
 
-            createFile(rootDir, name + CONFIG_DEFAULT_SUFFIX, {
-                createSection(name, {
+            createFile(rootDir, name + CONFIG_DEFAULT_SUFFIX) {
+                createSection(name) {
                     listOf(
                             key("driver", con.driver, null),
                             key("url", con.url, enc),
                             key("user", con.user, enc),
                             key("pswd", con.password, enc)
                     )
-                })
-            })
+                }
+            }
 
     /**
      * loads the config with primary and the parent
@@ -197,41 +198,7 @@ object ConfFuncs {
      * @return
      */
     fun loadPropertiesFrom(fileName: String?): Properties {
-
-        // No name supplied ( default to application.conf )
-        val config = fileName?.let { name ->
-
-            // Check for uri : ( "jar://" | "user://" | "file://" )
-            val parts = name.subStringPair("://")
-
-            parts?.let { (uri, path) ->
-                when (uri) {
-                    Uris.URI_PREFIX_JARS -> loadPropertiesFromResources(path)
-                    Uris.URI_PREFIX_USER -> loadProperties(File(System.getProperty("user.home"), path).absolutePath)
-                    Uris.URI_PREFIX_CONF -> loadProperties(File("conf", path).absolutePath)
-                    Uris.URI_PREFIX_FILE -> loadProperties(File(path).absolutePath)
-                    else -> loadPropertiesFromResources(name)
-                }
-            } ?: loadPropertiesFromResources(name)
-        } ?: loadPropertiesFromResources(CONFIG_DEFAULT_PROPERTIES)
-        return config
-    }
-
-    fun loadPropertiesFromResources(path: String): Properties {
-        // This is here to debug loading app conf
-        val file = this.javaClass.getResource("/" + path).file
-        val input = FileInputStream(file)
-        val conf = Properties()
-        conf.load(input)
-        return conf
-    }
-
-    fun loadProperties(path: String): Properties {
-        // This is here to debug loading app conf
-        val input = FileInputStream(path)
-        val conf = Properties()
-        conf.load(input)
-        return conf
+        return Props.loadFrom(fileName)
     }
 
     /**
