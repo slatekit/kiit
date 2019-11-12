@@ -13,7 +13,7 @@ package slatekit.common.io
  * @param path  : The path to file     e.g. "user://company/app1/conf/env.conf
  */
 data class Uri internal constructor(val raw:String,
-                                    val scheme: Scheme,
+                                    val scheme: Alias,
                                     val path:String?) {
 
     fun isEmpty():Boolean = path.isNullOrEmpty()
@@ -27,13 +27,13 @@ data class Uri internal constructor(val raw:String,
 
     fun toFile(): java.io.File {
         return when (scheme) {
-            is Scheme.Abs -> java.io.File(scheme.value, path)
-            is Scheme.Cur -> java.io.File(scheme.value, path)
-            is Scheme.Rel -> java.io.File(scheme.value, path)
-            is Scheme.Cfg -> java.io.File(scheme.value, path)
-            is Scheme.Usr -> java.io.File(System.getProperty("user.home"), path)
-            is Scheme.Tmp -> java.io.File(System.getProperty("java.io.tmpdir"), path)
-            is Scheme.Jar -> java.io.File(this.javaClass.getResource("/$path").file)
+            is Alias.Abs -> java.io.File(scheme.value, path)
+            is Alias.Cur -> java.io.File(Files.currDir(), path)
+            is Alias.Rel -> java.io.File(scheme.value, path)
+            is Alias.Cfg -> java.io.File(java.io.File(Files.currDir(), "conf"), path)
+            is Alias.Usr -> java.io.File(System.getProperty("user.home"), path)
+            is Alias.Tmp -> java.io.File(System.getProperty("java.io.tmpdir"), path)
+            is Alias.Jar -> java.io.File(this.javaClass.getResource("/$path").file)
             else -> java.io.File(path)
         }
     }

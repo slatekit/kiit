@@ -19,7 +19,7 @@ import slatekit.common.Context
 import slatekit.common.encrypt.Encryptor
 import slatekit.common.envs.Envs
 import slatekit.common.info.About
-import slatekit.common.io.Scheme
+import slatekit.common.io.Alias
 import slatekit.common.log.Logs
 import slatekit.results.builders.Notices
 import slatekit.results.builders.Tries
@@ -60,7 +60,7 @@ object AppRunner {
         logs: Logs? = null,
         envs: Envs = Envs.defaults(),
         errorMode: ErrorMode = ErrorMode.Print,
-        confSource:Scheme = Scheme.Jar,
+        confSource:Alias = Alias.Jar,
         hasAction:Boolean = false
     ): Try<Any> {
 

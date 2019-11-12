@@ -1,6 +1,6 @@
 package slatekit.common.conf
 
-import slatekit.common.io.Scheme
+import slatekit.common.io.Alias
 import slatekit.common.io.Uri
 import slatekit.common.io.Uris
 import java.io.FileInputStream
@@ -37,7 +37,7 @@ object Props {
     fun loadFrom(uri: Uri):Properties {
         val props = when(uri.scheme) {
             null            -> Props.loadFromJar(uri.path ?: ConfFuncs.CONFIG_DEFAULT_PROPERTIES)
-            is Scheme.Other -> Props.loadFromJar(uri.path ?: ConfFuncs.CONFIG_DEFAULT_PROPERTIES)
+            is Alias.Other -> Props.loadFromJar(uri.path ?: ConfFuncs.CONFIG_DEFAULT_PROPERTIES)
             else -> Props.loadFromPath(uri.toFile().absolutePath)
         }
         return props

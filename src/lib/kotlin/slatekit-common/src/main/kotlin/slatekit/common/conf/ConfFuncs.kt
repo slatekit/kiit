@@ -21,9 +21,7 @@ import slatekit.common.encrypt.Encryptor
 import slatekit.common.info.ApiKey
 import slatekit.common.info.ApiLogin
 import slatekit.common.info.Credentials
-import slatekit.common.io.Scheme
 import java.io.File
-import java.io.FileInputStream
 import java.util.*
 
 /**

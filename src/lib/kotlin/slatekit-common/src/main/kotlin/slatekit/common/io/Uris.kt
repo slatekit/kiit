@@ -28,31 +28,30 @@ object Uris {
      * 7. jar/  -> jar resources/
      */
     fun parse(raw:String):Uri {
-        val increment = 3
         return when {
             // Using directory scheme/alias e.g. ~/ ./ ../
-            raw.startsWith(Scheme.Abs.value) -> Uri(raw, Scheme.Abs, substringOrNull(raw, Scheme.Abs.value.length))
-            raw.startsWith(Scheme.Usr.value) -> Uri(raw, Scheme.Usr, substringOrNull(raw, Scheme.Usr.value.length))
-            raw.startsWith(Scheme.Cur.value) -> Uri(raw, Scheme.Cur, substringOrNull(raw, Scheme.Cur.value.length))
-            raw.startsWith(Scheme.Rel.value) -> Uri(raw, Scheme.Rel, substringOrNull(raw, Scheme.Rel.value.length))
-            raw.startsWith(Scheme.Cfg.value) -> Uri(raw, Scheme.Cfg, substringOrNull(raw, Scheme.Cfg.value.length))
-            raw.startsWith(Scheme.Jar.value) -> Uri(raw, Scheme.Jar, substringOrNull(raw, Scheme.Jar.value.length))
-            raw.startsWith(Scheme.Tmp.value) -> Uri(raw, Scheme.Tmp, substringOrNull(raw, Scheme.Tmp.value.length))
+            raw.startsWith(Alias.Abs.value) -> Uri(raw, Alias.Abs, substringOrNull(raw, Alias.Abs.value.length))
+            raw.startsWith(Alias.Usr.value) -> Uri(raw, Alias.Usr, substringOrNull(raw, Alias.Usr.value.length))
+            raw.startsWith(Alias.Cur.value) -> Uri(raw, Alias.Cur, substringOrNull(raw, Alias.Cur.value.length))
+            raw.startsWith(Alias.Rel.value) -> Uri(raw, Alias.Rel, substringOrNull(raw, Alias.Rel.value.length))
+            raw.startsWith(Alias.Cfg.value) -> Uri(raw, Alias.Cfg, substringOrNull(raw, Alias.Cfg.value.length))
+            raw.startsWith(Alias.Jar.value) -> Uri(raw, Alias.Jar, substringOrNull(raw, Alias.Jar.value.length))
+            raw.startsWith(Alias.Tmp.value) -> Uri(raw, Alias.Tmp, substringOrNull(raw, Alias.Tmp.value.length))
 
             // Using uri based approach : e.g. abs:// usr://
-            raw.startsWith(Scheme.Abs.name + "://") -> Uri(raw, Scheme.Abs, substringOrNull(raw,Scheme.Abs.name.length + increment))
-            raw.startsWith(Scheme.Usr.name + "://") -> Uri(raw, Scheme.Usr, substringOrNull(raw,Scheme.Usr.name.length + increment))
-            raw.startsWith(Scheme.Cur.name + "://") -> Uri(raw, Scheme.Cur, substringOrNull(raw,Scheme.Cur.name.length + increment))
-            raw.startsWith(Scheme.Rel.name + "://") -> Uri(raw, Scheme.Rel, substringOrNull(raw,Scheme.Rel.name.length + increment))
-            raw.startsWith(Scheme.Cfg.name + "://") -> Uri(raw, Scheme.Cfg, substringOrNull(raw,Scheme.Cfg.name.length + increment))
-            raw.startsWith(Scheme.Jar.name + "://") -> Uri(raw, Scheme.Jar, substringOrNull(raw,Scheme.Jar.name.length + increment))
-            raw.startsWith(Scheme.Tmp.name + "://") -> Uri(raw, Scheme.Tmp, substringOrNull(raw,Scheme.Tmp.name.length + increment))
+            raw.startsWith(Alias.Abs.name) -> parse(Alias.Abs, raw)
+            raw.startsWith(Alias.Usr.name) -> parse(Alias.Usr, raw)
+            raw.startsWith(Alias.Cur.name) -> parse(Alias.Cur, raw)
+            raw.startsWith(Alias.Rel.name) -> parse(Alias.Rel, raw)
+            raw.startsWith(Alias.Cfg.name) -> parse(Alias.Cfg, raw)
+            raw.startsWith(Alias.Jar.name) -> parse(Alias.Jar, raw)
+            raw.startsWith(Alias.Tmp.name) -> parse(Alias.Tmp, raw)
             else -> {
                 val ndx = raw.indexOf("/")
                 if(ndx == -1){
-                    Uri(raw, Scheme.Other(""), raw)
+                    Uri(raw, Alias.Other(""), raw)
                 } else {
-                    Uri(raw, Scheme.Other(raw.substring(0, ndx)), raw.substring(ndx + 1))
+                    Uri(raw, Alias.Other(raw.substring(0, ndx)), raw.substring(ndx + 1))
                 }
             }
         }
@@ -92,5 +91,15 @@ object Uris {
 
     private fun substringOrNull(text:String, start:Int):String? {
         return if(start >= text.length) null else text.substring(start)
+    }
+
+    private fun parse(alias: Alias, raw:String):Uri {
+
+        val path = if(raw.contains("://")) {
+            substringOrNull(raw, alias.name.length + 3)
+        } else {
+            substringOrNull(raw, alias.name.length)
+        }
+        return Uri(raw, alias, path)
     }
 }

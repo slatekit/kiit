@@ -20,6 +20,9 @@ import java.io.File
 
 object Files {
 
+    fun currDir():File = File(System.getProperty("user.dir"))
+
+
     fun createAtUserDir(dirs:List<String>):File {
         val curr = System.getProperty("user.dir")
         val appDir = dirs.fold(File(curr)) { file, subDirName ->

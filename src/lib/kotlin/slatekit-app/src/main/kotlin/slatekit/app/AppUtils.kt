@@ -18,11 +18,8 @@ import slatekit.common.args.ArgsCheck
 import slatekit.common.args.ArgsCheck.isExit
 import slatekit.common.args.ArgsCheck.isVersion
 import slatekit.common.args.ArgsSchema
-import slatekit.common.conf.Conf
+import slatekit.common.conf.*
 import slatekit.common.conf.ConfFuncs.CONFIG_DEFAULT_SUFFIX
-import slatekit.common.conf.Config
-import slatekit.common.conf.ConfigMulti
-import slatekit.common.conf.Props
 import slatekit.common.encrypt.Encryptor
 import slatekit.common.envs.Env
 import slatekit.common.envs.Envs
@@ -30,7 +27,7 @@ import slatekit.common.info.About
 import slatekit.common.info.Build
 import slatekit.common.info.Sys
 import slatekit.common.info.StartInfo
-import slatekit.common.io.Scheme
+import slatekit.common.io.Alias
 import slatekit.common.io.Uri
 import slatekit.common.io.Uris
 import slatekit.common.log.Logs
@@ -41,14 +38,14 @@ import slatekit.results.*
 
 object AppUtils {
 
-    fun getScheme(args: Args, default:Scheme): Scheme {
+    fun getScheme(args: Args, default:Alias): Alias {
         val dirFromArgs = args.getStringOrNull("conf.dir")
-        return dirFromArgs?.let{ Scheme.parse(it) } ?: default
+        return dirFromArgs?.let{ Alias.parse(it) } ?: default
     }
 
-    fun getDir(args: Args, default:Scheme): Uri {
+    fun getDir(args: Args, default:Alias): Uri {
         val dirFromArgs = args.getStringOrNull("conf.dir")
-        return Uris.parse(dirFromArgs ?: Scheme.Jar.name)
+        return Uris.parse(dirFromArgs ?: default.name)
     }
 
     /**
@@ -126,12 +123,12 @@ object AppUtils {
             cfg ?: finalDefaultValue
     }
 
-    fun context(args: Args, envs: Envs, about: About, schema: ArgsSchema, enc: Encryptor?, logs: Logs?, confSource:Scheme = Scheme.Jar): Notice<AppContext> {
+    fun context(args: Args, envs: Envs, about: About, schema: ArgsSchema, enc: Encryptor?, logs: Logs?, confSource:Alias = Alias.Jar): Notice<AppContext> {
         val inputs = inputs(args, envs, about, schema, enc, logs, confSource)
         return inputs.flatMap { Success(buildContext(it, enc, logs)) }
     }
 
-    private fun inputs(args: Args, envs: Envs, about: About, schema: ArgsSchema, enc: Encryptor?, logs: Logs?, confSource:Scheme = Scheme.Jar): Notice<AppInputs> {
+    private fun inputs(args: Args, envs: Envs, about: About, schema: ArgsSchema, enc: Encryptor?, logs: Logs?, confSource:Alias = Alias.Jar): Notice<AppInputs> {
         // We need to determine where the "env.conf" is loaded from.
         // The location is defaulted to load from jars but can be explicitly supplied in args
         // or specified in the "conf.dirs" config setting in the env.conf file
@@ -142,7 +139,8 @@ object AppUtils {
         // 5. conf dir: conf.dir=conf:/app1  -> ./conf
         // 6. jars dir: conf.dir=jars:/app1  -> app.jar/resources
         val source = getDir(args, confSource)
-        val props = Props.loadFrom(source)
+        val envRootName = ConfFuncs.CONFIG_DEFAULT_PROPERTIES
+        val props = Props.loadFrom(source.combine(envRootName))
         val confBase = Config(source.raw, enc, props)
 
         // 2. The environment can be selected in the following order:
@@ -173,7 +171,7 @@ object AppUtils {
 
         val buildInfoExists = resourceExists("build.conf")
         val build = if (buildInfoExists) {
-            val source = getDir(appInputs.args, Scheme.Jar).combine("build.conf")
+            val source = getDir(appInputs.args, Alias.Jar).combine("build.conf")
             val props = Props.loadFrom(source)
             val stamp = Config(source.raw, enc, props)
             val info = stamp.buildStamp("build")
