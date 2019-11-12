@@ -1,96 +1,66 @@
 package slatekit.common.io
 
-import java.io.File
-
 
 /**
- * Represents the "scheme" portion of a URI e.g. "http" as in "http://google.com"
- * However, this ADT is intended to indicate the source directory/location of a file reference.
+ * Represents an alias for a Uri representing a directory or file on a machine
  */
-sealed class Scheme(val name: String) {
-
-    /**
-     * Indicates file from user directory e.g. ~/ | "user"
-     */
-    object Usr : Scheme("user")
-
-    /**
-     * Indicates file from temp directory
-     */
-    object Tmp : Scheme("temp")
-
-    /**
-     * Indicates file from Java resources in jar file
-     */
-    object Jar : Scheme("jars")
-
-    /**
-     * Indicates file from a "conf" sub-directory
-     * in the same location as current working directory
-     */
-    object Cfg : Scheme("conf")
-
-    /**
-     * Indicates file from current directory
-     */
-    object Curr : Scheme("curr")
+sealed class Scheme(val name: String, val value:String) {
 
     /**
      * Indicates file from a specified path
      */
-    object Path : Scheme("path")
+    object Abs : Scheme("abs", "/")
 
     /**
-     * Indicates file from the http
+     * Indicates file from user directory e.g. ~/ | "user"
      */
-    object Http : Scheme("http")
+    object Usr : Scheme("usr", "~/")
 
     /**
-     * Indicates file from the https
+     * Indicates file from current directory
      */
-    object Https : Scheme("https")
+    object Cur : Scheme("cur", "./")
+
+    /**
+     * Indicates file from a specified path
+     */
+    object Rel : Scheme("rel", "../")
+
+    /**
+     * Indicates file from a specified path
+     */
+    object Cfg : Scheme("cfg", "./conf")
+
+    /**
+     * Indicates file from temp directory
+     */
+    object Tmp : Scheme("tmp", "\$temp")
+
+    /**
+     * Indicates file from Java resources in jar file
+     */
+    object Jar : Scheme("jar", "jar")
 
     /**
      * Indicates a file from some other source
      * @param m
      */
-    class Other(m: String) : Scheme(m)
+    class Other(m: String) : Scheme(m, m)
 
     companion object {
-
-        @JvmStatic
-        fun file(parts:Pair<Scheme?, String>):File {
-            val (scheme, path) = parts
-            return file(scheme, path)
-        }
-
-        @JvmStatic
-        fun file(scheme: Scheme?, path:String):File {
-            return when (scheme) {
-                null           -> File(path)
-                is Scheme.Usr  -> File(System.getProperty("user.home"), path)
-                is Scheme.Curr -> File(".", path)
-                is Scheme.Path -> File("/", path)
-                is Scheme.Tmp  -> File(System.getProperty("java.io.tmpdir"), path)
-                is Scheme.Jar  -> File(this.javaClass.getResource("/$path").file)
-                is Scheme.Cfg  -> File("./conf", path)
-                else -> File(path)
-            }
-        }
 
         /**
          * Parse the text for a matching Scheme type
          */
         @JvmStatic
         fun parse(text: String): Scheme = when (text.trim().toLowerCase()) {
-            "~", Scheme.Usr.name  -> Scheme.Usr
-            ".", Scheme.Curr.name -> Scheme.Curr
-            "/", Scheme.Path.name -> Scheme.Path
-            Scheme.Tmp.name -> Scheme.Tmp
-            Scheme.Jar.name -> Scheme.Jar
+            Scheme.Abs.name -> Scheme.Abs
+            Scheme.Usr.name -> Scheme.Usr
+            Scheme.Cur.name -> Scheme.Cur
+            Scheme.Rel.name -> Scheme.Rel
             Scheme.Cfg.name -> Scheme.Cfg
-            Scheme.Http.name -> Scheme.Http
-            Scheme.Https.name -> Scheme.Https
+            Scheme.Jar.name -> Scheme.Jar
+            Scheme.Tmp.name -> Scheme.Tmp
             else -> Scheme.Other(text)
         }
     }

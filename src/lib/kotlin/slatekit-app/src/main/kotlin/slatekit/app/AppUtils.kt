@@ -21,8 +21,8 @@ import slatekit.common.args.ArgsSchema
 import slatekit.common.conf.Conf
 import slatekit.common.conf.Config
 import slatekit.common.conf.ConfigMulti
-import slatekit.common.conf.ConfFuncs.CONFIG_DEFAULT_PROPERTIES
 import slatekit.common.conf.ConfFuncs.CONFIG_DEFAULT_SUFFIX
+import slatekit.common.conf.Props
 import slatekit.common.encrypt.Encryptor
 import slatekit.common.envs.Env
 import slatekit.common.envs.Envs
@@ -30,6 +30,7 @@ import slatekit.common.info.About
 import slatekit.common.info.Build
 import slatekit.common.info.Sys
 import slatekit.common.info.StartInfo
+import slatekit.common.io.File
 import slatekit.common.io.Scheme
 import slatekit.common.log.Logs
 import slatekit.common.log.LogsDefault
@@ -40,6 +41,11 @@ import slatekit.results.*
 object AppUtils {
 
     fun getScheme(args: Args, default:Scheme): Scheme {
+        val dirFromArgs = args.getStringOrNull("conf.dir")
+        return dirFromArgs?.let{ Scheme.parse(it) } ?: default
+    }
+
+    fun getDir(args: Args, default:Scheme): File {
         val dirFromArgs = args.getStringOrNull("conf.dir")
         return dirFromArgs?.let{ Scheme.parse(it) } ?: default
     }
@@ -134,8 +140,9 @@ object AppUtils {
         // 4. temp dir: conf.dir=temp:/app1  -> $TMPDIR/app1
         // 5. conf dir: conf.dir=conf:/app1  -> ./conf
         // 6. jars dir: conf.dir=jars:/app1  -> app.jar/resources
-        val source = getScheme(args, confSource)
-        val confBase = Config(getConfPath(args, CONFIG_DEFAULT_PROPERTIES, null), enc)
+        val source = getDir(args, confSource)
+        val props = Props.loadFrom(source)
+        val confBase = Config(source.raw, enc, props)
 
         // 2. The environment can be selected in the following order:
         // - command line ( via "-env=dev"   )
