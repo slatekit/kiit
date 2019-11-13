@@ -6,7 +6,7 @@ import org.junit.Assert
 import slatekit.common.Status
 import slatekit.common.Identity
 import slatekit.common.SimpleIdentity
-import slatekit.common.log.Info
+import slatekit.common.log.LogLevel
 import slatekit.common.log.LoggerConsole
 import slatekit.jobs.*
 import slatekit.jobs.support.Command
@@ -31,7 +31,7 @@ interface JobTestSupport {
 
     fun build(numWorkers:Int, queue: Queue?): Job {
         val workers = (1..numWorkers).map { buildWorker() }
-        val logger = LoggerConsole(Info, "manager")
+        val logger = LoggerConsole(LogLevel.Info, "manager")
         val ids = JobId()
         val coordinator = MockCoordinatorWithChannel(logger, ids, Channel(Channel.UNLIMITED))
         val id = (workers.first().id as SimpleIdentity)
