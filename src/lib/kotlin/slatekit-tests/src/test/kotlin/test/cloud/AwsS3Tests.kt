@@ -5,7 +5,7 @@ import org.junit.Ignore
 import org.junit.Test
 import slatekit.cloud.aws.AwsCloudFiles
 import slatekit.common.DateTime
-import slatekit.common.Uris
+import slatekit.common.io.Uris
 import slatekit.common.ext.toStringNumeric
 import slatekit.core.cloud.CloudFiles
 import slatekit.results.getOrElse

@@ -25,6 +25,7 @@ import slatekit.common.conf.Config
 import slatekit.common.info.ApiLogin
 import slatekit.common.types.CountryCode
 import slatekit.cmds.CommandRequest
+import slatekit.common.io.Uris
 import slatekit.notifications.sms.SmsMessage
 import slatekit.notifications.sms.SmsServiceTwilio
 import slatekit.results.Try

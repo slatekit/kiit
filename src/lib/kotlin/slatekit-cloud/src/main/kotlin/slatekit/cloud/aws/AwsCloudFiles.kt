@@ -17,8 +17,8 @@ import com.amazonaws.auth.AWSCredentials
 import com.amazonaws.services.s3.AmazonS3Client
 import com.amazonaws.services.s3.model.GetObjectRequest
 import com.amazonaws.services.s3.model.ObjectMetadata
-import slatekit.common.*
 import slatekit.common.info.ApiLogin
+import slatekit.common.io.Uris
 import slatekit.core.cloud.CloudFiles
 import slatekit.core.cloud.CloudUtils
 import slatekit.results.Try

@@ -17,6 +17,7 @@ import slatekit.common.*
 import slatekit.results.Try
 //import java.time.*
 import org.threeten.bp.*
+import slatekit.common.ext.insertAt
 
 /**
  * Container for parsed command line arguments that are either named or positional.
@@ -241,6 +242,27 @@ data class Args(
     override fun containsKey(key: String): Boolean = namedArgs?.contains(key) ?: false
 
     fun hasMetaArgs(): Boolean = metaArgs?.isNotEmpty() ?: false
+
+
+    /**
+     * Appends a prefix to the beginning of the args, its parts and other relevant fields.
+     * This is a convenience feature for CLI related apps.
+     */
+    fun withPrefix(name:String):Args {
+        return Args(
+            line      = "$name $line".trim(),
+            raw       = if(raw.isEmpty()) listOf(name) else raw.insertAt(0, name),
+            action    = "$name.$action".trim(),
+            parts     = if(parts.isEmpty()) listOf(name) else parts.insertAt(0, name),
+            prefix    = prefix   ,
+            separator = separator,
+            namedArgs = namedArgs,
+            metaArgs  = metaArgs ,
+            sysArgs   = sysArgs  ,
+            indexArgs = indexArgs,
+            decryptor = decryptor
+        )
+    }
 
     companion object {
 

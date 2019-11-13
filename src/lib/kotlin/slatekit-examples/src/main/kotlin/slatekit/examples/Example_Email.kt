@@ -26,6 +26,7 @@ import slatekit.cmds.Command
 import slatekit.common.conf.Config
 import slatekit.common.info.ApiLogin
 import slatekit.cmds.CommandRequest
+import slatekit.common.io.Uris
 
 //</doc:import_examples>
 

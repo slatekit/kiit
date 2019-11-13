@@ -20,6 +20,7 @@ import slatekit.apis.Verbs
 import slatekit.common.Sources
 import slatekit.common.content.Doc
 import slatekit.common.encrypt.Encryptor
+import slatekit.common.io.Uris
 import slatekit.common.log.Logger
 import slatekit.results.Failure
 import slatekit.results.Success
@@ -45,7 +46,7 @@ class FilesApi(val files: slatekit.core.cloud.CloudFiles, override val context: 
 
     @Action(desc = "creates a file with the supplied folder name, file name, and content from file path")
     fun createFromPath(folder: String, name: String, filePath: String): Try<String> {
-        return files.createFromPath(folder, name, slatekit.common.Uris.interpret(filePath) ?: filePath)
+        return files.createFromPath(folder, name, Uris.interpret(filePath) ?: filePath)
     }
 
     @Action(desc = "creates a file with the supplied folder name, file name, and content from doc")
@@ -85,7 +86,7 @@ class FilesApi(val files: slatekit.core.cloud.CloudFiles, override val context: 
 
     @Action(desc = "downloads the file specified by folder and name, as text content to file supplied")
     fun downloadToFile(folder: String, name: String, filePath: String, display: Boolean): Try<String> {
-        return show(files.downloadToFile(folder, name, slatekit.common.Uris.interpret(filePath) ?: filePath), display)
+        return show(files.downloadToFile(folder, name, Uris.interpret(filePath) ?: filePath), display)
     }
 
     private fun show(result: Try<String>, display: Boolean): Try<String> {

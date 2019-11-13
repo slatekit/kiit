@@ -1,7 +1,7 @@
 package slatekit.generator
 
 import slatekit.common.Context
-import slatekit.common.Uris
+import slatekit.common.io.Uris
 import slatekit.results.Success
 import slatekit.results.Try
 import java.io.File

@@ -139,7 +139,7 @@ class Entity_Database_Tests {
         Assert.assertTrue(updated.test_uniqueId == update.test_uniqueId)
     }
 
-    val con = ConfFuncs.readDbCon("user://.slatekit/conf/db.conf")
+    val con = ConfFuncs.readDbCon("usr://.slatekit/conf/db.conf")
 
     private fun realDb(): Entities {
         val dbs = DbLookup.defaultDb(con!!)

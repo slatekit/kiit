@@ -142,20 +142,20 @@ class ConfigTests {
 
 
     @Test fun test_read_api_from() {
-        val key = ConfFuncs.readApiKey("user://.slatekit/conf/env.conf", sectionName = "aws-sqs")
+        val key = ConfFuncs.readApiKey("usr://.slatekit/conf/env.conf", sectionName = "aws-sqs")
         matchkey(key!!, ApiLogin("mycompany1.dev", "key1", "pass1", "env1", "tag1"))
     }
 
 
     @Test fun test_loading_from_dir_user() {
-        val conf  = Config("user://.slatekit/conf/env.conf")
+        val conf  = Config("usr://.slatekit/conf/env.conf")
         val key = conf.apiLogin("aws-sqs")
         matchkey(key, ApiLogin("mycompany1.dev", "key1", "pass1", "env1", "tag1"))
     }
 
 
     @Test fun test_loading_from_dir_explicit() {
-        val conf  = Config("file:///Users/kishore.reddy/.slatekit/conf/env.conf")
+        val conf  = Config("abs:///Users/kishore.reddy/.slatekit/conf/env.conf")
         val key = conf.apiLogin("aws-sqs")
         matchkey(key, ApiLogin("mycompany1.dev", "key1", "pass1", "env1", "tag1"))
     }
@@ -172,7 +172,7 @@ class ConfigTests {
 
 
     @Test fun test_inheritance() {
-        val conf = ConfFuncs.loadWithFallbackConfig("jars://env.dev.conf", "jars://env.conf", null)
+        val conf = ConfFuncs.loadWithFallbackConfig("jar://env.dev.conf", "jar://env.conf", null)
         Assert.assertTrue(conf.getString("env.name") == "dev")
         Assert.assertTrue(conf.getString("root_name") == "parent env config")
     }
