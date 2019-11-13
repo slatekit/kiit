@@ -25,7 +25,7 @@ import slatekit.common.info.ApiKey
 import slatekit.common.info.Credentials
 import slatekit.common.args.Args
 import slatekit.common.conf.Config
-import slatekit.common.content.Content
+import slatekit.common.types.Content
 import slatekit.common.info.Host
 import slatekit.integration.apis.InfoApi
 import slatekit.integration.apis.CliApi

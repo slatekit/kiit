@@ -1,6 +1,6 @@
 package slatekit.common.io
 
-import slatekit.common.content.Doc
+import slatekit.common.types.Doc
 import java.io.File
 
 

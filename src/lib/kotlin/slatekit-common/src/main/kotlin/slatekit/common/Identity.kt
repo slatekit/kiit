@@ -3,6 +3,11 @@ package slatekit.common
 import slatekit.common.envs.EnvMode
 import java.util.*
 
+/**
+ * Used to identity services / components
+ * name = signup.alerts.job.qat
+ * full = signup.alerts.job.qat.4a3b300b-d0ac-4776-8a9c-31aa75e412b3
+ */
 interface Identity {
     val env :String
     val area:String
@@ -30,7 +35,7 @@ interface Identity {
 
 
 /**
- * Simple Identity used to identity sources / components
+ * Simple Identity used to identity services / components
  * @param area    : area  | dept | org  - logical group 
  * @param service : user1 | job  | svc  - to distinguish multiple agents/users
  * @param agent   : api   | app  | job  - environment

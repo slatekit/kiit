@@ -17,7 +17,7 @@ import com.amazonaws.auth.AWSCredentials
 import com.amazonaws.services.sqs.AmazonSQSClient
 import com.amazonaws.services.sqs.model.*
 import slatekit.common.DateTime
-import slatekit.common.Random
+import slatekit.common.utils.Random
 import slatekit.common.info.ApiLogin
 import slatekit.common.io.Uris
 import slatekit.common.ext.toStringUtc

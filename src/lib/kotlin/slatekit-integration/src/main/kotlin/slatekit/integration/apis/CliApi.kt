@@ -17,8 +17,8 @@ import slatekit.apis.ApiServer
 import slatekit.apis.core.Api
 import slatekit.cli.*
 import slatekit.common.Source
-import slatekit.common.content.Content
-import slatekit.common.content.ContentType
+import slatekit.common.types.Content
+import slatekit.common.types.ContentType
 import slatekit.common.requests.InputArgs
 import slatekit.common.info.Info
 import slatekit.results.Codes

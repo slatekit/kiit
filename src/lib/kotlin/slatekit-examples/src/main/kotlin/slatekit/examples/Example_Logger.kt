@@ -38,13 +38,13 @@ class Example_Logger  : Command("logger"), LogSupport {
 
 
   // Setup a custom logger
-  class MyCustomLogger : Logger(Warn)  {
+  class MyCustomLogger : Logger(LogLevel.Warn)  {
 
 
     override val logger:Logger? = LoggerConsole()
 
 
-    override fun performLog(entry: LogEntry): Unit
+    override fun performLog(entry: LogEntry)
     {
       println("custom logger : " + entry.level + " : " + entry.msg)
     }
@@ -63,7 +63,7 @@ class Example_Logger  : Command("logger"), LogSupport {
     // 1. message only
     // 2. message + exception
     // 3. message + exception + tag
-    val logger = LoggerConsole(Debug)
+    val logger = LoggerConsole(LogLevel.Debug)
     logger.debug("debug with message only")
     logger.info("info with message and exception", ex)
     logger.warn("debug with message, exception, and tag", ex)
@@ -79,7 +79,7 @@ class Example_Logger  : Command("logger"), LogSupport {
 
 
     // CASE 3: Log explicitly using log method.
-    logger.log(Error, "error", ex)
+    logger.log(LogLevel.Error, "error", ex)
 
 
     // CASE 4: You can extend a class with the LogSupportIn trait

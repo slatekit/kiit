@@ -12,7 +12,7 @@ mantra: Simplicity above all else
  */
 package test.setup
 
-import slatekit.common.Random
+import slatekit.common.utils.Random
 import slatekit.common.DateTime
 import slatekit.common.Field
 import slatekit.common.Id

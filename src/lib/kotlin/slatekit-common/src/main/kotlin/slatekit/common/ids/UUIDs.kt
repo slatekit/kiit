@@ -1,6 +1,6 @@
 package slatekit.common.ids
 
-import slatekit.common.Random
+import slatekit.common.utils.Random
 import java.util.*
 
 

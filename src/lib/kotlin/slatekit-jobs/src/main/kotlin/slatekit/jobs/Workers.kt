@@ -3,7 +3,7 @@ package slatekit.jobs
 import slatekit.common.DateTime
 import slatekit.common.Identity
 import slatekit.common.Status
-import slatekit.common.log.Info
+import slatekit.common.log.LogLevel
 import slatekit.common.log.Logger
 import slatekit.tracking.Recorder
 import slatekit.functions.policy.Policy
@@ -136,14 +136,14 @@ class Workers(
     }
 
     suspend fun delay(id: Identity, seconds: Long) {
-        logger.log(Info, "Worker:", listOf("id" to id.name, "action" to "delaying", "seconds" to "$seconds"))
+        logger.log(LogLevel.Info, "Worker:", listOf("id" to id.name, "action" to "delaying", "seconds" to "$seconds"))
         scheduler.schedule(DateTime.now().plusSeconds(seconds)) {
             coordinator.send(Command.WorkerCommand(ids.nextId(), ids.nextUUID().toString(), JobAction.Start, id, 0, ""))
         }
     }
 
     private suspend fun perform(action: String, id: Identity, operation: suspend (WorkExecutor) -> Outcome<Status>): Outcome<Status> {
-        logger.log(Info, "Worker:", listOf("id" to id.name, "action" to action))
+        logger.log(LogLevel.Info, "Worker:", listOf("id" to id.name, "action" to action))
         val executor = this.lookup[id.id]
         return when (executor) {
             null -> Outcomes.errored("Unable to find worker with id : ${id.name}")
@@ -155,7 +155,7 @@ class Workers(
     }
 
     private suspend fun performPausableAction(status: Status, id: Identity, operation: suspend (WorkExecutor, Pausable) -> Outcome<Status>): Outcome<Status> {
-        logger.log(Info, "Worker:", listOf("id" to id.name, "move" to status.name))
+        logger.log(LogLevel.Info, "Worker:", listOf("id" to id.name, "move" to status.name))
         val executor = this.lookup[id.id]
         return when (executor) {
             null -> Outcomes.errored("Unable to find worker with id : ${id.name}")

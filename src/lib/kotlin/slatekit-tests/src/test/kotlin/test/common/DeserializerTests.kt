@@ -4,7 +4,7 @@ import org.junit.Assert
 import org.junit.Test
 import slatekit.common.DateTime
 import slatekit.common.requests.InputArgs
-import slatekit.common.Random
+import slatekit.common.utils.Random
 import slatekit.common.encrypt.EncDouble
 import slatekit.common.encrypt.EncInt
 import slatekit.common.encrypt.EncLong

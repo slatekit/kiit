@@ -13,14 +13,13 @@
 
 package slatekit.common
 
-import slatekit.common.content.Doc
+import slatekit.common.types.Doc
 import slatekit.common.encrypt.EncDouble
 import slatekit.common.encrypt.EncInt
 import slatekit.common.encrypt.EncLong
 import slatekit.common.encrypt.EncString
 //import java.time.*
 import org.threeten.bp.*
-import slatekit.common.smartvalues.SmartValue
 
 object Types {
 

@@ -14,23 +14,22 @@ class LogbackLogger(private val instance: org.slf4j.Logger) : Logger(parseLevel(
      * @param entry: 
      */
     override fun performLog(entry: LogEntry) {
-        when (entry.level) {
-            Debug -> instance.debug(entry.msg, entry.ex)
-            Info -> instance.info(entry.msg, entry.ex)
-            Warn -> instance.warn(entry.msg, entry.ex)
-            Error -> instance.error(entry.msg, entry.ex)
-            Fatal -> instance.error(entry.msg, entry.ex)
-            else -> instance.debug(entry.msg, entry.ex)
+        when (level) {
+            LogLevel.Debug -> instance.debug(entry.msg, entry.ex)
+            LogLevel.Info  -> instance.info (entry.msg, entry.ex)
+            LogLevel.Warn  -> instance.warn (entry.msg, entry.ex)
+            LogLevel.Error -> instance.error(entry.msg, entry.ex)
+            LogLevel.Fatal -> instance.error(entry.msg, entry.ex)
         }
     }
 
     companion object {
         fun parseLevel(instance: org.slf4j.Logger): LogLevel {
-            return if (instance.isDebugEnabled) Debug
-            else if (instance.isInfoEnabled) Info
-            else if (instance.isWarnEnabled) Warn
-            else if (instance.isErrorEnabled) Error
-            else Info
+            return if (instance.isDebugEnabled) LogLevel.Debug
+            else if (instance.isInfoEnabled)    LogLevel.Info
+            else if (instance.isWarnEnabled)    LogLevel.Warn
+            else if (instance.isErrorEnabled)   LogLevel.Error
+            else LogLevel.Info
         }
     }
 }

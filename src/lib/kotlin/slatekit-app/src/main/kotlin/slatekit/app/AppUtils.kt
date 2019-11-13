@@ -32,7 +32,6 @@ import slatekit.common.io.Uri
 import slatekit.common.io.Uris
 import slatekit.common.log.Logs
 import slatekit.common.log.LogsDefault
-import slatekit.common.log.LogHelper
 import slatekit.common.log.LogLevel
 import slatekit.results.*
 
@@ -93,7 +92,7 @@ object AppUtils {
      */
     fun getLogLevel(args: Args, conf: Conf): LogLevel {
         val level = getConfOverride(args, conf, "log.level", "info")
-        return LogHelper.parseLevel(level)
+        return LogLevel.parse(level)
     }
 
     /**

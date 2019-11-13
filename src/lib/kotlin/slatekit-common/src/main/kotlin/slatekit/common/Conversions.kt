@@ -13,7 +13,7 @@
 
 package slatekit.common
 
-import slatekit.common.content.Doc
+import slatekit.common.types.Doc
 //import java.time.*
 import org.threeten.bp.*
 import slatekit.common.io.Uris

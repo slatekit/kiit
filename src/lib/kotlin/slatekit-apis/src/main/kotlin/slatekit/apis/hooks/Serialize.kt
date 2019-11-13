@@ -3,10 +3,10 @@ package slatekit.apis.hooks
 import slatekit.apis.ApiRequest
 import slatekit.apis.ApiResult
 import slatekit.common.Ignore
-import slatekit.common.content.Content
-import slatekit.common.content.ContentTypeCsv
-import slatekit.common.content.ContentTypeJson
-import slatekit.common.content.ContentTypeProp
+import slatekit.common.types.Content
+import slatekit.common.types.ContentTypeCsv
+import slatekit.common.types.ContentTypeJson
+import slatekit.common.types.ContentTypeProp
 import slatekit.functions.Output
 import slatekit.meta.Serialization
 import slatekit.results.Failure

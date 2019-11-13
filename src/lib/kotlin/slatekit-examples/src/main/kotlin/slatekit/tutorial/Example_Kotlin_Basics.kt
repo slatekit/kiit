@@ -23,7 +23,7 @@ package slatekit.tutorial
 // 4. Import 1 method ( string6 ) from an Object ( Random )
 // NOTE: An object is essentially a Singleton class
 // that serves as a "module" containing 1 or more functions
-import slatekit.common.Random.string6
+import slatekit.common.utils.Random.string6
 import slatekit.cmds.Command
 import slatekit.cmds.CommandRequest
 import slatekit.results.Success

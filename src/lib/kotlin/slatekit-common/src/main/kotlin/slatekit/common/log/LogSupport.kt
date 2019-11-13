@@ -29,7 +29,7 @@ interface LogSupport {
      */
     @Ignore
     fun debug(msg: String, ex: Exception? = null) {
-        log(Debug, msg, ex)
+        log(LogLevel.Debug, msg, ex)
     }
 
     /**
@@ -39,7 +39,7 @@ interface LogSupport {
      */
     @Ignore
     fun info(msg: String, ex: Exception? = null) {
-        log(Info, msg, ex)
+        log(LogLevel.Info, msg, ex)
     }
 
     /**
@@ -49,7 +49,7 @@ interface LogSupport {
      */
     @Ignore
     fun warn(msg: String, ex: Exception? = null) {
-        log(Warn, msg, ex)
+        log(LogLevel.Warn, msg, ex)
     }
 
     /**
@@ -59,7 +59,7 @@ interface LogSupport {
      */
     @Ignore
     fun error(msg: String, ex: Exception? = null) {
-        log(Error, msg, ex)
+        log(LogLevel.Error, msg, ex)
     }
 
     /**
@@ -70,7 +70,7 @@ interface LogSupport {
      */
     @Ignore
     fun fatal(msg: String, ex: Exception? = null) {
-        log(Fatal, msg, ex)
+        log(LogLevel.Fatal, msg, ex)
     }
 
     /**
@@ -80,7 +80,7 @@ interface LogSupport {
      */
     @Ignore
     fun debug(callback: () -> String, ex: Exception? = null) {
-        log(Debug, callback, ex)
+        log(LogLevel.Debug, callback, ex)
     }
 
     /**
@@ -90,7 +90,7 @@ interface LogSupport {
      */
     @Ignore
     fun info(callback: () -> String, ex: Exception? = null) {
-        log(Info, callback, ex)
+        log(LogLevel.Info, callback, ex)
     }
 
     /**
@@ -100,7 +100,7 @@ interface LogSupport {
      */
     @Ignore
     fun warn(callback: () -> String, ex: Exception? = null) {
-        log(Warn, callback, ex)
+        log(LogLevel.Warn, callback, ex)
     }
 
     /**
@@ -110,7 +110,7 @@ interface LogSupport {
      */
     @Ignore
     fun error(callback: () -> String, ex: Exception? = null) {
-        log(Error, callback, ex)
+        log(LogLevel.Error, callback, ex)
     }
 
     /**
@@ -121,7 +121,7 @@ interface LogSupport {
      */
     @Ignore
     fun fatal(callback: () -> String, ex: Exception? = null) {
-        log(Fatal, callback, ex)
+        log(LogLevel.Fatal, callback, ex)
     }
 
     /**

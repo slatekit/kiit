@@ -14,10 +14,10 @@ package test.common
 
 import org.junit.Assert
 import org.junit.Test
-import slatekit.common.*
 import slatekit.common.templates.TemplateConstants.TypeSub
 import slatekit.common.templates.*
 import slatekit.common.templates.TemplateConstants.TypeText
+import slatekit.common.utils.Random
 import slatekit.results.Success
 import slatekit.results.Try
 

@@ -11,19 +11,19 @@
 package slatekit.examples
 
 //<doc:import_required>
-import slatekit.common.Random.alpha3
-import slatekit.common.Random.alpha6
-import slatekit.common.Random.alphaN
-import slatekit.common.Random.alphaSym3
-import slatekit.common.Random.alphaSym6
-import slatekit.common.Random.alphaSymN
-import slatekit.common.Random.digits3
-import slatekit.common.Random.digits6
-import slatekit.common.Random.digitsN
-import slatekit.common.Random.string3
-import slatekit.common.Random.string6
-import slatekit.common.Random.uuid
-import slatekit.common.Random.stringN
+import slatekit.common.utils.Random.alpha3
+import slatekit.common.utils.Random.alpha6
+import slatekit.common.utils.Random.alphaN
+import slatekit.common.utils.Random.alphaSym3
+import slatekit.common.utils.Random.alphaSym6
+import slatekit.common.utils.Random.alphaSymN
+import slatekit.common.utils.Random.digits3
+import slatekit.common.utils.Random.digits6
+import slatekit.common.utils.Random.digitsN
+import slatekit.common.utils.Random.string3
+import slatekit.common.utils.Random.string6
+import slatekit.common.utils.Random.uuid
+import slatekit.common.utils.Random.stringN
 
 //</doc:import_required>
 

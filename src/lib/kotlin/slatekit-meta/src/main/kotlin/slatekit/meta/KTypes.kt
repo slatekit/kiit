@@ -6,8 +6,8 @@ import slatekit.common.encrypt.EncInt
 import slatekit.common.encrypt.EncLong
 import slatekit.common.encrypt.EncString
 import slatekit.common.ids.UniqueId
-import slatekit.common.content.Content
-import slatekit.common.content.Doc
+import slatekit.common.types.Content
+import slatekit.common.types.Doc
 //import java.time.*
 import org.threeten.bp.*
 import slatekit.common.ext.toStringNumeric

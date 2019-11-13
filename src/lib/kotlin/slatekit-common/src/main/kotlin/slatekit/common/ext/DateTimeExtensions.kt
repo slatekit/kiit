@@ -3,7 +3,7 @@ package slatekit.common.ext
 import org.threeten.bp.*
 import org.threeten.bp.format.DateTimeFormatter
 import slatekit.common.DateTimes
-import slatekit.common.Random
+import slatekit.common.utils.Random
 
 
 // ********************************************

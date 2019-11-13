@@ -14,8 +14,9 @@
 package slatekit.common.queues
 
 import slatekit.common.*
-import slatekit.common.Random.uuid
+import slatekit.common.utils.Random.uuid
 import slatekit.common.io.Uris
+import slatekit.common.utils.Random
 import slatekit.results.Failure
 import slatekit.results.Success
 import slatekit.results.Try

@@ -1,5 +1,8 @@
 package slatekit.common
 
+/**
+ * Used to represent the source / origin of a request/item being processed
+ */
 object Sources {
     /**
      * Reference to a parent value
@@ -53,7 +56,9 @@ object Sources {
     const val Web = "web"
 }
 
-
+/**
+ * Used to represent the source / origin of a request/item being processed
+ */
 sealed class Source(val id: String) {
 
     object All   : Source(Sources.All)   // reference to all/any

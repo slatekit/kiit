@@ -1,4 +1,4 @@
-package slatekit.common.encrypt
+package slatekit.common.utils
 
 import java.util.*
 
@@ -18,5 +18,4 @@ object B64Java8 : B64 {
     override fun encode(bytes: ByteArray): String {
         return Base64.getEncoder().withoutPadding().encodeToString(bytes)
     }
-
 }

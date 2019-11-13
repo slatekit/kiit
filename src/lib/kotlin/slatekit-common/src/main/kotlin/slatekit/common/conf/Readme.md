@@ -74,7 +74,7 @@ import slatekit.results.Success
 import slatekit.common.conf.ConfFuncs
 import slatekit.common.conf.Config
 import slatekit.common.db.DbCon
-import slatekit.common.encrypt.B64Java8
+import slatekit.common.utils.B64Java8
 import slatekit.common.encrypt.Encryptor
 import slatekit.core.cmds.Cmd
 

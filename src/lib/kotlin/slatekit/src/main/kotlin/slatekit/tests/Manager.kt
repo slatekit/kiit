@@ -7,7 +7,7 @@ import kotlinx.coroutines.channels.ReceiveChannel
 import kotlinx.coroutines.channels.SendChannel
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
-import slatekit.common.Random
+import slatekit.common.utils.Random
 import java.util.concurrent.atomic.AtomicInteger
 
 class Manager {
