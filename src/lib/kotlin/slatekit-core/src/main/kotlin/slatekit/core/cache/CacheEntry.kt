@@ -65,7 +65,7 @@ data class CacheEntry(
      * increments the last account time and access counts
      * @return
      */
-    fun increment(): Long {
+    fun inc(): Long {
 
         // This is built for heavy reads ( not writes ), so we don't
         // really care if the another thread updated it because
