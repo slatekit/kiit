@@ -8,7 +8,7 @@ import slatekit.common.Identity
 import slatekit.common.SimpleIdentity
 import slatekit.common.Status
 import slatekit.common.StatusCheck
-import slatekit.common.log.Info
+import slatekit.common.log.LogLevel
 import slatekit.common.log.Logger
 import slatekit.common.log.LoggerConsole
 import slatekit.functions.policy.Policy
@@ -165,7 +165,7 @@ class Job(
     }
 
     suspend fun manage(request: Command, launch: Boolean = true) {
-        logger.log(Info, "Job: send - ", request.pairs(), null)
+        logger.log(LogLevel.Info, "Job: send - ", request.pairs(), null)
         when (request) {
             // Affects the whole job/queue/workers
             is Command.JobCommand -> {
