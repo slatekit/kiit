@@ -16,8 +16,8 @@ package slatekit.cli
 import java.io.File
 import slatekit.common.console.SemanticText
 import slatekit.common.console.SemanticWrites
-import slatekit.common.content.Content
-import slatekit.common.content.ContentType
+import slatekit.common.types.Content
+import slatekit.common.types.ContentType
 import slatekit.common.io.Files
 import slatekit.common.io.IO
 import slatekit.common.serialization.Serializer

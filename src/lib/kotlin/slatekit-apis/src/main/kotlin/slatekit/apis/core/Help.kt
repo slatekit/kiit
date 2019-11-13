@@ -18,7 +18,7 @@ import slatekit.apis.tools.docs.ApiVisitOptions
 import slatekit.apis.tools.docs.ApiVisitor
 import slatekit.apis.tools.docs.Doc
 import slatekit.apis.tools.docs.DocUtils
-import slatekit.common.content.Content
+import slatekit.common.types.Content
 import slatekit.common.requests.Request
 import slatekit.results.*
 import slatekit.results.builders.Outcomes

@@ -18,7 +18,7 @@ import org.junit.Assert
 import org.junit.Test
 import slatekit.cli.*
 import slatekit.common.args.Args
-import slatekit.common.content.Content
+import slatekit.common.types.Content
 import slatekit.common.info.Folders
 import slatekit.common.info.Info
 import slatekit.results.*

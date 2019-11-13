@@ -13,11 +13,10 @@
 
 package slatekit.common.log
 
-import slatekit.common.DateTime
 import slatekit.common.Ignore
 
 abstract class Logger(
-    val level: LogLevel = Warn,
+    val level: LogLevel = LogLevel.Warn,
     val name: String = "",
     val logType: Class<*>? = null
 ) : LogSupport {
@@ -36,9 +35,9 @@ abstract class Logger(
      */
     @Ignore
     override fun log(level: LogLevel, msg: String, ex: Exception?) {
-        checkLog(level, {
-            performLog(buildLog(level, msg, ex))
-        })
+        checkLog(level) {
+            performLog(LogEntry(name, level, msg, ex))
+        }
     }
 
     /**
@@ -52,7 +51,7 @@ abstract class Logger(
     override fun log(level: LogLevel, msg: String, pairs:List<Pair<String,String>>, ex: Exception?) {
         checkLog(level) {
             val info = pairs.joinToString { it -> it.first + "=" + it.second }
-            performLog(buildLog(level, msg + " " + info, null))
+            performLog(LogEntry(name, level, "$msg $info", null))
         }
     }
 
@@ -60,35 +59,14 @@ abstract class Logger(
      * Logs an entry
      *
      * @param level
-     * @param msg
      * @param ex
      */
     @Ignore
     override fun log(level: LogLevel, callback: () -> String, ex: Exception?) {
-        checkLog(level, {
+        checkLog(level) {
             val msg = callback()
-            performLog(buildLog(level, msg, ex))
-        })
-    }
-
-    /**
-     * Logs an entry
-     */
-    fun log(entry: LogEntry) {
-        checkLog(level, {
-            performLog(entry)
-        })
-    }
-
-    /**
-     * Logs an entry
-     *
-     * @param level
-     * @param msg
-     * @param ex
-     */
-    private fun buildLog(level: LogLevel, msg: String, ex: Exception? = null): LogEntry {
-        return LogEntry(name, level, msg, DateTime.now(), ex)
+            performLog(LogEntry(name, level, msg, ex))
+        }
     }
 
     private fun checkLog(level: LogLevel, callback: () -> Unit) {

@@ -12,7 +12,6 @@ usage: Please refer to license on github for more info.
 package slatekit.examples
 
 //<doc:import_required>
-import slatekit.common.*
 import slatekit.common.requests.InputArgs
 import slatekit.common.requests.Request
 import slatekit.common.CommonRequest
@@ -22,6 +21,7 @@ import slatekit.common.Source
 //<doc:import_examples>
 import slatekit.cmds.Command
 import slatekit.cmds.CommandRequest
+import slatekit.common.utils.Random
 import slatekit.results.Try
 import slatekit.results.Success
 //</doc:import_examples>

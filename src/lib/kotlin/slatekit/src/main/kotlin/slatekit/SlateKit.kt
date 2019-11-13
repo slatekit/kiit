@@ -4,27 +4,17 @@ import slatekit.apis.support.Authenticator
 import slatekit.app.App
 import slatekit.app.AppOptions
 import slatekit.cli.CliSettings
-import slatekit.common.args.Args
 import slatekit.common.args.ArgsSchema
-import slatekit.common.content.Content
-import slatekit.common.content.ContentType
-import slatekit.common.content.ContentTypeCsv
-import slatekit.common.db.DbType
+import slatekit.common.types.Content
 import slatekit.common.encrypt.B64Java8
 import slatekit.common.encrypt.Encryptor
-import slatekit.common.ext.insertAt
 import slatekit.common.info.About
 import slatekit.common.info.ApiKey
-import slatekit.info.Dependency
-import slatekit.info.DependencyService
 import slatekit.integration.apis.*
 import slatekit.results.Success
 import slatekit.results.Try
 import slatekit.integration.common.AppEntContext
-import slatekit.integration.mods.Mod
-import slatekit.integration.mods.ModService
 import slatekit.meta.Serialization
-import slatekit.orm.orm
 import slatekit.results.Failure
 
 class SlateKit(ctx: AppEntContext, val interactive: Boolean) : App<AppEntContext>(ctx, AppOptions(printSummaryBeforeExec = true)), SlateKitServices {

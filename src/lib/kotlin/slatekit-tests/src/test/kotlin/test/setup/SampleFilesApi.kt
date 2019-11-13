@@ -2,7 +2,8 @@ package test.setup
 
 import slatekit.apis.Api
 import slatekit.apis.Action
-import slatekit.common.content.*
+import slatekit.common.types.Content
+import slatekit.common.types.Doc
 
 
 @Api(area = "samples", name = "files", desc = "sample api to test other features")

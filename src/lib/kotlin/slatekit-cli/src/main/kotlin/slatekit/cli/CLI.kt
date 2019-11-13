@@ -17,8 +17,8 @@ import java.nio.file.Paths
 import java.util.concurrent.atomic.AtomicReference
 import kotlinx.coroutines.runBlocking
 import slatekit.common.args.Args
-import slatekit.common.content.Content
-import slatekit.common.content.ContentType
+import slatekit.common.types.Content
+import slatekit.common.types.ContentType
 import slatekit.common.info.Folders
 import slatekit.common.info.Info
 import slatekit.common.utils.Loops.doUntil

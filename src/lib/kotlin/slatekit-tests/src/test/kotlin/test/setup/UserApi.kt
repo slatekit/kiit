@@ -16,7 +16,7 @@ package test.setup
 import slatekit.apis.*
 import slatekit.common.*
 import slatekit.common.auth.Roles
-import slatekit.common.content.Doc
+import slatekit.common.types.Doc
 import slatekit.common.encrypt.EncDouble
 import slatekit.common.encrypt.EncString
 import slatekit.common.encrypt.EncInt

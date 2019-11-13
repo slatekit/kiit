@@ -13,6 +13,8 @@
 
 package slatekit.common.log
 
+import slatekit.common.DateTime
+
 /**
  * Lightweight logger that prints to the console
  * using the ConsoleWriter in slate kit which has support
@@ -21,7 +23,7 @@ package slatekit.common.log
  * You should be using the slatekit.providers module with support for logback
  */
 class LoggerConsole(
-    level: LogLevel = Debug,
+    level: LogLevel = LogLevel.Debug,
     name: String = "console",
     logType: Class<*>? = null
 ) : Logger(level, name, logType) {
@@ -32,14 +34,13 @@ class LoggerConsole(
      * @param entry: 
      */
     override fun performLog(entry: LogEntry) {
-        val prefix = "${entry.time} [$name] ${entry.level.name}"
+        val prefix = "${entry.time} [$name] ${level.name}"
         when (entry.level) {
-            Debug -> println(prefix + " : " + entry.msg)
-            Info  -> println(prefix + " : " + entry.msg)
-            Warn  -> println(prefix + " : " + entry.msg)
-            Error -> println(prefix + " : " + entry.msg)
-            Fatal -> println(prefix + " : " + entry.msg)
-            else  -> println(prefix + " : " + entry.msg)
+            LogLevel.Debug -> println("$prefix + : + ${entry.msg}")
+            LogLevel.Info  -> println("$prefix + : + ${entry.msg}")
+            LogLevel.Warn  -> println("$prefix + : + ${entry.msg}")
+            LogLevel.Error -> println("$prefix + : + ${entry.msg}")
+            LogLevel.Fatal -> println("$prefix + : + ${entry.msg}")
         }
     }
 }

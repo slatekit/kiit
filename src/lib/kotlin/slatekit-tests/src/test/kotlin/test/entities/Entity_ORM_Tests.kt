@@ -18,7 +18,7 @@ import org.junit.Before
 import org.junit.Test
 import slatekit.common.DateTime
 import slatekit.common.Field
-import slatekit.common.Random
+import slatekit.common.utils.Random
 import slatekit.common.db.DbConString
 import slatekit.common.db.DbLookup
 import slatekit.db.Db

@@ -11,7 +11,7 @@
  * </slate_header>
  */
 
-package slatekit.common.content
+package slatekit.common.types
 
 /**
  * Represents string content type/format information.

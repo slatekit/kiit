@@ -1,6 +1,6 @@
 package test
 
-import slatekit.common.Random
+import slatekit.common.utils.Random
 import slatekit.notifications.sms.SmsService
 
 /**

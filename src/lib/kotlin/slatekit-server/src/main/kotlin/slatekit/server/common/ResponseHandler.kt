@@ -2,8 +2,8 @@ package slatekit.server.common
 
 import io.ktor.application.ApplicationCall
 import io.ktor.http.HttpStatusCode
-import slatekit.common.content.Content
-import slatekit.common.content.Doc
+import slatekit.common.types.Content
+import slatekit.common.types.Doc
 import slatekit.common.requests.Response
 
 interface ResponseHandler {

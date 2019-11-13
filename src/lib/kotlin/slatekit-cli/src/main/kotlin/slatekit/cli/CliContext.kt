@@ -1,7 +1,7 @@
 package slatekit.cli
 
-import slatekit.common.content.Content
-import slatekit.common.content.ContentType
+import slatekit.common.types.Content
+import slatekit.common.types.ContentType
 import slatekit.common.info.Info
 import slatekit.common.io.IO
 import slatekit.common.io.Readln

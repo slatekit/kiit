@@ -17,9 +17,9 @@ import slatekit.common.DateTime
 
 data class LogEntry(
     val name: String = "",
-    val level: LogLevel = Info,
+    val level: LogLevel = LogLevel.Info,
     val msg: String = "",
-    val time: DateTime = DateTime.now(),
     val ex: Exception? = null,
-    val tag: String? = null
+    val tag: String? = null,
+    val time: DateTime = DateTime.now()
 )

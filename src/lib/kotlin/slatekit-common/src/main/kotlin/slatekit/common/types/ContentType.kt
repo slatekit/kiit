@@ -1,4 +1,4 @@
-package slatekit.common.content
+package slatekit.common.types
 
 open class ContentType(
     val http: String,

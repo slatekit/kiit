@@ -3,7 +3,7 @@ package test.setup
 import slatekit.common.DateTime
 import slatekit.common.Field
 import slatekit.common.Id
-import slatekit.common.Random
+import slatekit.common.utils.Random
 import slatekit.common.ids.UniqueId
 import slatekit.entities.EntityWithId
 import java.util.*
