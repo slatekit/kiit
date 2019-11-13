@@ -11,6 +11,7 @@ import slatekit.results.*
 // Slate Kit - App ( provides args, help, life-cycle methods, etc )
 import slatekit.app.App
 import slatekit.app.AppOptions
+import slatekit.common.utils.B64Java8
 
 
 class App(ctx: Context) : App<Context>(ctx, AppOptions(printSummaryBeforeExec = true)) {

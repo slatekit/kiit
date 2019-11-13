@@ -18,7 +18,7 @@ import slatekit.common.args.Args
 import slatekit.common.conf.Config
 import slatekit.common.conf.Conf
 import slatekit.common.db.DbLookup
-import slatekit.common.encrypt.B64Java8
+import slatekit.common.utils.B64Java8
 import slatekit.common.encrypt.Encryptor
 import slatekit.common.envs.Env
 import slatekit.common.envs.EnvMode

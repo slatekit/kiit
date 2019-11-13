@@ -6,7 +6,7 @@ import slatekit.app.AppOptions
 import slatekit.cli.CliSettings
 import slatekit.common.args.ArgsSchema
 import slatekit.common.types.Content
-import slatekit.common.encrypt.B64Java8
+import slatekit.common.utils.B64Java8
 import slatekit.common.encrypt.Encryptor
 import slatekit.common.info.About
 import slatekit.common.info.ApiKey

@@ -1,19 +1,13 @@
-package slatekit.common.encrypt
+package slatekit.common.utils
 
 import java.util.*
 
-/**
- * Not really encryption, but leaving in this package for now.
- */
 interface B64 {
     fun encode(bytes:ByteArray):String
     fun decode(text:String):ByteArray
 }
 
 
-/**
- * Not really encryption, but leaving in this package for now.
- */
 object B64Java8 : B64 {
 
     override fun decode(text: String): ByteArray {

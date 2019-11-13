@@ -13,6 +13,7 @@
 
 package slatekit.common.encrypt
 
+import slatekit.common.utils.B64
 import javax.crypto.Cipher
 import javax.crypto.spec.IvParameterSpec
 import javax.crypto.spec.SecretKeySpec
@@ -22,7 +23,7 @@ import javax.crypto.spec.SecretKeySpec
  */
 object EncryptorAES {
 
-    fun encrypt(key: String, iv: String, text: String, b64:B64): String {
+    fun encrypt(key: String, iv: String, text: String, b64: B64): String {
         val ivSpec = IvParameterSpec(iv.toByteArray())
         val keySpec = SecretKeySpec(key.toByteArray(), "AES")
         val cipher = Cipher.getInstance("AES/CBC/PKCS5PADDING")
@@ -31,7 +32,7 @@ object EncryptorAES {
         return b64.encode(encrypted.toTypedArray().toByteArray())
     }
 
-    fun decrypt(key: String, iv: String, text: String, b64:B64): String {
+    fun decrypt(key: String, iv: String, text: String, b64: B64): String {
         val ivSpec = IvParameterSpec(iv.toByteArray())
         val keySpec = SecretKeySpec(key.toByteArray(), "AES")
         val cipher = Cipher.getInstance("AES/CBC/PKCS5PADDING")

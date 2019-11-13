@@ -66,7 +66,7 @@
 
 // required 
 import slatekit.common.encrypt.Encryptor
-import slatekit.common.encrypt.B64Java8
+import slatekit.common.utils.B64Java8
 
 
 // optional 

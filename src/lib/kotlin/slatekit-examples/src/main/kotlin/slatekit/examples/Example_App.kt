@@ -24,7 +24,7 @@ import slatekit.app.AppRunner
 import slatekit.common.args.Args
 import slatekit.common.args.ArgsSchema
 import slatekit.common.conf.Config
-import slatekit.common.encrypt.B64Java8
+import slatekit.common.utils.B64Java8
 import slatekit.common.info.About
 import slatekit.common.encrypt.Encryptor
 import slatekit.common.info.Build
