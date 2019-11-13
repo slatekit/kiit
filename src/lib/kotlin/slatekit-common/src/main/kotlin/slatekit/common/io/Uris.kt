@@ -35,7 +35,6 @@ object Uris {
             raw.startsWith(Alias.Cur.value) -> Uri(raw, Alias.Cur, substringOrNull(raw, Alias.Cur.value.length))
             raw.startsWith(Alias.Rel.value) -> Uri(raw, Alias.Rel, substringOrNull(raw, Alias.Rel.value.length))
             raw.startsWith(Alias.Cfg.value) -> Uri(raw, Alias.Cfg, substringOrNull(raw, Alias.Cfg.value.length))
-            raw.startsWith(Alias.Jar.value) -> Uri(raw, Alias.Jar, substringOrNull(raw, Alias.Jar.value.length))
             raw.startsWith(Alias.Tmp.value) -> Uri(raw, Alias.Tmp, substringOrNull(raw, Alias.Tmp.value.length))
 
             // Using uri based approach : e.g. abs:// usr://
