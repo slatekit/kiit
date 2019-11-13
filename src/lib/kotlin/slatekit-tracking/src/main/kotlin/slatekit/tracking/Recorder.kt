@@ -22,8 +22,8 @@ open class Recorder<TRequest, TResponse>(val id: Identity,
                                          val calls: Calls,
                                          val counts: Counters,
                                          val lasts: Lasts<TRequest, TResponse, Err>?,
-                                         val converter: ((TRequest, Outcome<TResponse>) -> Event)?,
-                                         val events: Events<TRequest, TResponse, Err>?) {
+                                         val events: Events<TRequest, TResponse, Err>?,
+                                         val converter: ((TRequest, Outcome<TResponse>) -> Event)? = null) {
 
     /**
      * Record all relevant diagnostics

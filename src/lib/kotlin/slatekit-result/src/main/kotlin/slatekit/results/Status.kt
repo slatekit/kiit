@@ -62,10 +62,10 @@ sealed class Status {
      * 6. [Unexpected] : Err group to represent any unhandled exceptions
      */
     data class Succeeded(override val code: Int, override val msg: String) : Status()
-    data class Pending(override val code: Int, override val msg: String) : Status()
-    data class Denied(override val code: Int, override val msg: String) : Status()
-    data class Ignored(override val code: Int, override val msg: String) : Status()
-    data class Invalid(override val code: Int, override val msg: String) : Status()
-    data class Errored(override val code: Int, override val msg: String) : Status()
+    data class Pending  (override val code: Int, override val msg: String) : Status()
+    data class Denied   (override val code: Int, override val msg: String) : Status()
+    data class Ignored  (override val code: Int, override val msg: String) : Status()
+    data class Invalid  (override val code: Int, override val msg: String) : Status()
+    data class Errored  (override val code: Int, override val msg: String) : Status()
     data class Unexpected(override val code: Int, override val msg: String) : Status()
 }
