@@ -2,15 +2,9 @@ package slatekit
 
 import kotlinx.coroutines.runBlocking
 import slatekit.app.AppRunner
-import slatekit.common.CommonContext
-import slatekit.common.smartvalues.PhoneUS
-import slatekit.generator.CredentialMode
-import slatekit.docs.DocService
-import slatekit.generator.*
+import slatekit.common.io.Alias
 import slatekit.integration.common.AppEntContext
 import slatekit.providers.logs.logback.LogbackLogs
-import slatekit.tests.JobManager
-import slatekit.tests.Manager
 
 
 /**
@@ -49,8 +43,39 @@ import slatekit.tests.Manager
                 enc = SlateKit.encryptor,
                 logs = LogbackLogs(),
                 hasAction = true,
+                confSource = Alias.Cfg,
                 builder = { ctx -> SlateKit(AppEntContext.fromContext(ctx), interactive = true) }
         )
     }
-    Thread.sleep(50000)
 }
+
+/*
+val samples = listOf(
+            "",
+            "jar",
+            "http://www.slatekit.com:81/apps/app1/env",
+            "usr://dev/tmp",
+            "tmp://slatekit/apps/app1/env.conf",
+            "cfg://slatekit/apps/app1/env.conf",
+            "jar://slatekit/apps/app1/env.conf",
+            "abs://slatekit/apps/app1/env.conf",
+            "http://slatekit.com/apps/app1/env",
+            "http://slatekit.com:81/apps/app1/env",
+            "http://localhost:9000/apps/app1/env"
+            )
+    samples.map { slatekit.common.io.Uris.parse(it) }.forEach {
+        println("\n")
+        println("toString : " + it)
+        println("scheme   : " + it.scheme.name)
+        println("path     : " + it.path)
+        if(!it.isEmpty()) {
+            println("tofile   : " + it.toFile().absolutePath)
+        }
+//        println("scheme   : " + it.scheme   )
+//        println("host     : " + it.host     )
+//        println("authority: " + it.authority)
+//        println("fragment : " + it.fragment )
+//        println("path     : " + it.path     )
+//        println("port     : " + it.port     )
+    }
+ */

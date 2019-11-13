@@ -108,21 +108,21 @@ fun genApp(args:Array<String>, dest:String, name:String) {
 
 fun genLib(args:Array<String>, dest:String, name:String) {
     gen(args) {
-        it.lib(name, "myapp.libs", "codehelix", dest )
+        it.lib(name, "myapp.libs" )
     }
 }
 
 
 fun genCli(args:Array<String>, dest:String, name:String) {
     gen(args) {
-        it.cli(name, "myapp.cli", "codehelix", dest )
+        it.cli(name, "myapp.cli")
     }
 }
 
 
 fun genSrv(args:Array<String>, dest:String, name:String) {
     gen(args) {
-        it.api(name, "myapp.apis", "codehelix", dest )
+        it.api(name, "myapp.apis")
     }
 }
 
@@ -157,7 +157,7 @@ fun temp(args:Array<String>){
     //sampleApp(args)
     //sampleCli(args)
     //sampleSrv(args)
-    val dest = "/Users/kishore.reddy/dev/tmp/slatekit/slatekit/test/generator/app/myapp1"
+    val dest = "/Users/kishore.reddy/dev/tmp/slatekit/slatekit/test/generator/app"
     genApp(args, dest, "MyApp1")
     //genCli(args)
     //genSrv(args)
