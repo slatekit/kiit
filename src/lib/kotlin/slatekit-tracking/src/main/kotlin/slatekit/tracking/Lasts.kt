@@ -13,6 +13,7 @@ mantra: Simplicity above all else
 package slatekit.tracking
 
 import slatekit.common.Identity
+import slatekit.results.Failure
 import java.util.concurrent.atomic.AtomicReference
 
 /**
@@ -40,33 +41,32 @@ open class Lasts<TRequest, TResponse, TFailure>(val id: Identity,
     private val _lastRequest     = AtomicReference<TRequest>(null)
     private val _lastPending     = AtomicReference<TRequest>(null)
     private val _lastSuccess     = AtomicReference<Triple<Any, TRequest, TResponse>>(null)
-    private val _lastDenied      = AtomicReference<Triple<Any, TRequest ,TFailure?>>(null)
-    private val _lastInvalid     = AtomicReference<Triple<Any, TRequest, TFailure?>>(null)
-    private val _lastIgnored     = AtomicReference<Triple<Any, TRequest, TFailure?>>(null)
-    private val _lastErrored     = AtomicReference<Triple<Any, TRequest, TFailure?>>(null)
-    private val _lastUnexpected  = AtomicReference<Triple<Any, TRequest, TFailure?>>(null)
-    private val _customLasts = custom?.let {  c -> c.map {  it to AtomicReference<Triple<Any, TRequest, TFailure?>>() }.toMap() } ?: mapOf()
+    private val _lastDenied      = AtomicReference<Triple<Any, TRequest ,Failure<TFailure>>>(null)
+    private val _lastInvalid     = AtomicReference<Triple<Any, TRequest, Failure<TFailure>>>(null)
+    private val _lastIgnored     = AtomicReference<Triple<Any, TRequest, Failure<TFailure>>>(null)
+    private val _lastErrored     = AtomicReference<Triple<Any, TRequest, Failure<TFailure>>>(null)
+    private val _lastUnexpected  = AtomicReference<Triple<Any, TRequest, Failure<TFailure>>>(null)
+    private val _customLasts = custom?.let {  c -> c.map {  it to AtomicReference<Triple<Any, TRequest, Failure<TFailure>>>() }.toMap() } ?: mapOf()
 
-    override fun requested (sender:Any, req: TRequest)                      = _lastRequest.set(req)
-    override fun succeeded (sender:Any, req: TRequest, res: TResponse)      = _lastSuccess.set(Triple(sender, req, res))
-    override fun denied    (sender:Any, req: TRequest, failure: TFailure?)  = _lastDenied.set (Triple(sender, req, failure))
-    override fun invalid   (sender:Any, req: TRequest, failure: TFailure?)  = _lastInvalid.set(Triple(sender, req, failure))
-    override fun ignored   (sender:Any, req: TRequest, failure: TFailure?)  = _lastIgnored.set(Triple(sender, req, failure))
-    override fun errored   (sender:Any, req: TRequest, failure: TFailure?)  = _lastErrored.set(Triple(sender, req, failure))
-    override fun unexpected(sender:Any, req: TRequest, failure: TFailure?)  = _lastUnexpected.set(Triple(sender, req, failure))
-    override fun custom    (sender:Any, name:String, req: TRequest, failure: TFailure?) {
-        getCustom(name)?.let { c -> c.set(Triple(sender, req, failure)) }
+    override fun requested (sender:Any, request: TRequest)                           = _lastRequest.set(request)
+    override fun succeeded (sender:Any, request: TRequest, res: TResponse)           = _lastSuccess.set(Triple(sender, request, res))
+    override fun denied    (sender:Any, request: TRequest, error:Failure<TFailure>)  = _lastDenied.set (Triple(sender, request, error))
+    override fun invalid   (sender:Any, request: TRequest, error:Failure<TFailure>)  = _lastInvalid.set(Triple(sender, request, error))
+    override fun ignored   (sender:Any, request: TRequest, error:Failure<TFailure>)  = _lastIgnored.set(Triple(sender, request, error))
+    override fun errored   (sender:Any, request: TRequest, error:Failure<TFailure>)  = _lastErrored.set(Triple(sender, request, error))
+    override fun unexpected(sender:Any, request: TRequest, error:Failure<TFailure>)  = _lastUnexpected.set(Triple(sender, request, error))
+    override fun custom    (sender:Any, name:String, req: TRequest, error:Failure<TFailure>) {
+        getCustom(name)?.let { c -> c.set(Triple(sender, req, error)) }
     }
-
 
     fun lastProcessed ():TRequest                  = _lastRequest.get()
     fun lastSuccess   ():Triple<Any, TRequest, TResponse> = _lastSuccess.get()
-    fun lastInvalid   ():Triple<Any, TRequest, TFailure?> = _lastInvalid.get()
-    fun lastIgnored   ():Triple<Any, TRequest, TFailure?> = _lastIgnored.get()
-    fun lastDenied    ():Triple<Any, TRequest, TFailure?> = _lastDenied.get()
-    fun lastErrored   ():Triple<Any, TRequest, TFailure?> = _lastErrored.get()
-    fun lastUnexpected():Triple<Any, TRequest, TFailure?> = _lastUnexpected.get()
-    fun lastCustom(name:String):Triple<Any, TRequest, TFailure?>? = getCustom(name)?.get()
+    fun lastInvalid   ():Triple<Any, TRequest, Failure<TFailure>> = _lastInvalid.get()
+    fun lastIgnored   ():Triple<Any, TRequest, Failure<TFailure>> = _lastIgnored.get()
+    fun lastDenied    ():Triple<Any, TRequest, Failure<TFailure>> = _lastDenied.get()
+    fun lastErrored   ():Triple<Any, TRequest, Failure<TFailure>> = _lastErrored.get()
+    fun lastUnexpected():Triple<Any, TRequest, Failure<TFailure>> = _lastUnexpected.get()
+    fun lastCustom(name:String):Triple<Any, TRequest, Failure<TFailure>>? = getCustom(name)?.get()
 
     fun clear(){
         _lastRequest.set(null)
@@ -79,7 +79,7 @@ open class Lasts<TRequest, TResponse, TFailure>(val id: Identity,
         _lastUnexpected.set(null)
     }
 
-    private fun getCustom(name:String):AtomicReference<Triple<Any, TRequest ,TFailure?>>? {
+    private fun getCustom(name:String):AtomicReference<Triple<Any, TRequest , Failure<TFailure>>>? {
         return if(_customLasts.contains(name)) _customLasts[name] else null
     }
 }

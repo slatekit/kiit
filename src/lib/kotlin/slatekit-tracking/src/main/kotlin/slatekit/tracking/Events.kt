@@ -50,6 +50,13 @@ open class Events<TRequest, TResponse, TFailure>(
     open fun custom(sender: Any, name:String, request: TRequest, error:Failure<TFailure>) {}
 
 
+    fun denied    (sender:Any, request: TRequest, error:TFailure)  = denied    (sender, request, Failure(error))
+    fun invalid   (sender:Any, request: TRequest, error:TFailure)  = invalid   (sender, request, Failure(error))
+    fun ignored   (sender:Any, request: TRequest, error:TFailure)  = ignored   (sender, request, Failure(error))
+    fun errored   (sender:Any, request: TRequest, error:TFailure)  = errored   (sender, request, Failure(error))
+    fun unexpected(sender:Any, request: TRequest, error:TFailure)  = unexpected(sender, request, Failure(error))
+
+
     protected fun handleSuccess(sender:Any, request: TRequest, response:TResponse){
         successConverter?.let { converter ->
             eventHandler?.let { handler ->

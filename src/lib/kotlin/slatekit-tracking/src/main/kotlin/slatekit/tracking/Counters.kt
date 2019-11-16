@@ -18,7 +18,7 @@ import java.util.concurrent.atomic.AtomicLong
  * 6. total errored    e.g. expected errors
  * 7. total unexpected e.g. unexpected errors
  */
-class Counters(val id: Identity,
+class Counters(val id: Identity = Identity.empty,
                override val tags:List<Tag> = listOf(),
                lookup:Map<String, Counter>? = null,
                custom:List<String>? = null) : Countable {

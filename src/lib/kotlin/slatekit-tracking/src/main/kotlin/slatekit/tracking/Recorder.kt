@@ -79,7 +79,7 @@ open class Recorder<TRequest, TResponse>(val id: Identity,
                 null -> null
                 else -> Events<TRequest, TResponse, Err>(tags ?: listOf())
             }
-            return Recorder(id, logger, Calls(id), Counters(id), Lasts(id), converter, events)
+            return Recorder(id, logger, Calls(id), Counters(id), Lasts(id), events, converter)
         }
     }
 }

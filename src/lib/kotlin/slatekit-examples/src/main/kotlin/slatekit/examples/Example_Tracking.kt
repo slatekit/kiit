@@ -122,11 +122,11 @@ class Example_Tracking : Command("auth") {
          */
         // Use case 3.1: Track various states
         val lasts = Lasts<UserRequest, UserResult, Err>(Identity.test("job1"))
-        lasts.succeeded(this, sampleRequest, sampleResult)
-        lasts.denied (this, sampleRequest, Err.of("Not authorized"))
-        lasts.invalid(this, sampleRequest, Err.of("Not a beta user"))
-        lasts.ignored(this, sampleRequest, Err.of("In active user"))
-        lasts.errored(this, sampleRequest, Err.of("Unable to determine user type"))
+        lasts.succeeded (this, sampleRequest, sampleResult)
+        lasts.denied    (this, sampleRequest, Err.of("Not authorized"))
+        lasts.invalid   (this, sampleRequest, Err.of("Not a beta user"))
+        lasts.ignored   (this, sampleRequest, Err.of("In active user"))
+        lasts.errored   (this, sampleRequest, Err.of("Unable to determine user type"))
         lasts.unexpected(this, sampleRequest, Err.of("Unexpected error while handling analytics"))
 
         // Use case 3.2: Get info

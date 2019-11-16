@@ -26,7 +26,7 @@ import slatekit.results.Try
 //</doc:import_examples>
 
 
-class Example_Todo  : Command("todo") {
+class Example_Note  : Command("todo") {
 
   override fun execute(request: CommandRequest) : Try<Any>
   {
