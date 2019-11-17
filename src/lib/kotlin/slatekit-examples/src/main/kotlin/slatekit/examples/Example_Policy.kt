@@ -57,9 +57,7 @@ class Example_Policy : Command("todo") {
                 val curr = pager.current(moveNext = true)
                 println("Limit test: curr=$curr")
             }
-            limitOperation()
-            limitOperation()
-            limitOperation()
+            repeat(4) { limitOperation() }
 
             // Case 3: Every
             println("============================")
@@ -67,10 +65,7 @@ class Example_Policy : Command("todo") {
                 val curr = pager.current(moveNext = true)
                 Outcomes.success(curr)
             }
-            everyOperation()
-            everyOperation()
-            everyOperation()
-            everyOperation()
+            repeat(4) { everyOperation() }
 
             // Case 4: Ratio
             println("============================")
