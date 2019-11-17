@@ -13,23 +13,21 @@ usage: Please refer to license on github for more info.
 package slatekit.examples
 
 //<doc:import_required>
-import kotlinx.coroutines.runBlocking
-import org.joda.time.DateTime
+import slatekit.functions.limit
+import slatekit.functions.retry
+import slatekit.functions.every
 //</doc:import_required>
 
 //<doc:import_examples>
 import slatekit.cmds.Command
 import slatekit.cmds.CommandRequest
-import slatekit.common.Identity
 import slatekit.common.paged.Pager
-import slatekit.functions.limit
-import slatekit.functions.retry
-import slatekit.functions.every
 import slatekit.results.Success
 import slatekit.results.Try
 import slatekit.results.builders.Outcomes
-import slatekit.tracking.Counters
-import java.util.concurrent.atomic.AtomicInteger
+import kotlinx.coroutines.runBlocking
+import slatekit.functions.ratio
+import slatekit.results.Status
 
 //</doc:import_examples>
 
@@ -41,25 +39,26 @@ class Example_Policy : Command("todo") {
 
         runBlocking {
 
+            // Simple circular pager to test the operations.
+            // This simply cycles through each item in the list
+            val pager = Pager<Int>(listOf(1, 2, 3, 4), false)
+
             // Case 1: Retry
-            println("=".repeat(20))
-            val pager1 = Pager<Int>(listOf(1, 2, 3, 4), false)
-            retry(3, 200) {
-                val curr = pager1.current()
-                pager1.next()
+            println("============================")
+            val retryOperation = retry(3, 200) {
+                val curr = pager.current(moveNext = true)
                 if (curr < 2) {
                     throw Exception("Testing retry at value: $curr")
                 }
                 println("Retry test: curr=$curr")
                 curr
             }
+            retryOperation()
 
             // Case 2: Limit
-            println("=".repeat(20))
-            val pager2 = Pager<String>(listOf("a", "b", "c", "d"), false)
+            println("============================")
             val limitOperation = limit(2) {
-                val curr = pager2.current()
-                pager2.next()
+                val curr = pager.current(moveNext = true)
                 println("Limit test: curr=$curr")
             }
             limitOperation()
@@ -67,11 +66,9 @@ class Example_Policy : Command("todo") {
             limitOperation()
 
             // Case 3: Every
-            println("=".repeat(20))
-            val pager3 = Pager<String>(listOf("a", "b", "c", "d"), false)
+            println("============================")
             val everyOperation = every(2L, {res -> println("Every test: curr=${res.getOrNull()}") }) {
-                val curr = pager3.current()
-                pager3.next()
+                val curr = pager.current(moveNext = true)
                 Outcomes.success(curr)
             }
             everyOperation()
@@ -79,6 +76,16 @@ class Example_Policy : Command("todo") {
             everyOperation()
             everyOperation()
 
+            // Case 4: Ratio
+            println("============================")
+            // NOTE: The exact code/msg does not matter, only the type of the Status
+            val ratioOperation = ratio(.3, Status.Denied(100, "")) {
+                val curr = pager.current(moveNext = true)
+                if(curr == 2) Outcomes.denied("test") else Outcomes.success(curr)
+            }
+            repeat(6){ ratioOperation() }
+
+            println("Done")
         }
 
         println("done")
