@@ -46,6 +46,14 @@ class Pager<T>(
 
     fun canMoveBack(): Boolean = !isAtStart() || circular
 
+    fun current(moveNext:Boolean): T {
+        val curr = current()
+        if(moveNext) {
+            next()
+        }
+        return curr
+    }
+
     fun reset(): Int {
         index = 0
         return index

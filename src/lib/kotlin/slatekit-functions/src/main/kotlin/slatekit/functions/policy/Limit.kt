@@ -1,5 +1,6 @@
 package slatekit.functions.policy
 
+import slatekit.common.Identity
 import slatekit.common.log.Logger
 import slatekit.tracking.Counters
 import slatekit.results.Codes
@@ -11,7 +12,7 @@ import slatekit.results.builders.Outcomes
  * @param I : Input type
  * @param O : Output type
  */
-class Limit<I, O>(val limit: Long, val stats: (I) -> Counters, val logger: Logger? = null) : Policy<I, O> {
+class Limit<I, O>(val limit: Long, val autoProcess:Boolean, val stats: (I) -> Counters, val logger: Logger? = null) : Policy<I, O> {
 
     override suspend fun run(i: I, operation: suspend (I) -> Outcome<O>): Outcome<O> {
         val counts = stats(i)
@@ -21,7 +22,11 @@ class Limit<I, O>(val limit: Long, val stats: (I) -> Counters, val logger: Logge
         return if (pastLimit) {
             Outcomes.errored(Codes.LIMITED)
         } else {
-            operation(i)
+            val res = operation(i)
+            if(autoProcess){
+                counts.incProcessed()
+            }
+            res
         }
     }
 }
