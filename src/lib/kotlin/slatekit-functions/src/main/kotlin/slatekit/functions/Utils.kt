@@ -1,10 +1,7 @@
 package slatekit.functions
 
 import slatekit.common.Identity
-import slatekit.functions.policy.Every
-import slatekit.functions.policy.Limit
-import slatekit.functions.policy.Ratio
-import slatekit.functions.policy.Retry
+import slatekit.functions.policy.*
 import slatekit.results.Outcome
 import slatekit.results.Status
 import slatekit.results.Try
@@ -14,11 +11,9 @@ import slatekit.tracking.Counters
 /**
  * Retryable operation
  */
-suspend fun <O> retry(retries: Int, delayMillis: Long, operation: suspend () -> O): suspend() -> Try<O> {
+suspend fun <O> retry(retries: Int, delayMillis: Long, operation: suspend () -> O): Try<O> {
     val policy = Retry<Unit, O>(retries, delayMillis)
-    return {
-        policy.run(Unit) { Outcomes.of { operation() } }.toTry()
-    }
+    return policy.run(Unit) { Outcomes.success(operation()) }.toTry()
 }
 
 
@@ -52,5 +47,16 @@ fun <O> ratio(limit: Double, status:Status, counters: Counters = Counters(Identi
     val policy = Ratio<Unit, O>(limit, status, { counters } , null)
     return {
         policy.run(Unit) { call() }
+    }
+}
+
+
+/**
+ * Rewrites the raw request
+ */
+fun <I, O> rewrite(rewriter:suspend (I) -> I, call: suspend (I) -> Outcome<O>): suspend (I) -> Outcome<O> {
+    val policy = Rewrite<I, O>(rewriter)
+    return { input ->
+        policy.run(input){ i -> call(i) }
     }
 }

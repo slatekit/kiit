@@ -13,9 +13,8 @@ usage: Please refer to license on github for more info.
 package slatekit.examples
 
 //<doc:import_required>
-import slatekit.functions.limit
-import slatekit.functions.retry
-import slatekit.functions.every
+import slatekit.functions.*
+import slatekit.results.*
 //</doc:import_required>
 
 //<doc:import_examples>
@@ -23,10 +22,8 @@ import slatekit.cmds.Command
 import slatekit.cmds.CommandRequest
 import slatekit.common.paged.Pager
 import slatekit.results.Success
-import slatekit.results.Try
 import slatekit.results.builders.Outcomes
 import kotlinx.coroutines.runBlocking
-import slatekit.functions.ratio
 import slatekit.results.Status
 
 //</doc:import_examples>
@@ -41,11 +38,11 @@ class Example_Policy : Command("todo") {
 
             // Simple circular pager to test the operations.
             // This simply cycles through each item in the list
-            val pager = Pager<Int>(listOf(1, 2, 3, 4), false)
+            val pager = Pager<Int>(listOf(1, 2, 3, 4), true)
 
             // Case 1: Retry
             println("============================")
-            val retryOperation = retry(3, 200) {
+            retry(3, 200) {
                 val curr = pager.current(moveNext = true)
                 if (curr < 2) {
                     throw Exception("Testing retry at value: $curr")
@@ -53,7 +50,6 @@ class Example_Policy : Command("todo") {
                 println("Retry test: curr=$curr")
                 curr
             }
-            retryOperation()
 
             // Case 2: Limit
             println("============================")
@@ -85,10 +81,17 @@ class Example_Policy : Command("todo") {
             }
             repeat(6){ ratioOperation() }
 
+            // Case 5: Rewrite
+            println("============================")
+            // NOTE: The exact code/msg does not matter, only the type of the Status
+            val rewriteOperation = rewrite<String, String>( {input -> "CLI.$input" } ) { input ->
+                println("Rewritten to: $input")
+                Outcomes.success("Rewritten to : $input")
+            }
+            rewriteOperation("history.first")
+
             println("Done")
         }
-
-        println("done")
 
         //</doc:examples>
         return Success("")
