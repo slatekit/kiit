@@ -1,7 +1,7 @@
 ---
-title: "Cli"
+title: "Commands"
 date: 2019-11-17T23:55:41-05:00
-section_header: Cli
+section_header: Commands
 ---
 
 # Overview
