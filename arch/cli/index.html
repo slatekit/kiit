@@ -34,6 +34,7 @@
 
     <link rel="stylesheet" href="assets/theme/css/about-1.css">
     <link rel="stylesheet" href="assets/app/slatekit.css">
+    <link rel="stylesheet" href="assets/app/syntax.css">
           
    
     
@@ -103,11 +104,12 @@
             Architecture Components
         </a>
         <ul class="dropdown-menu" aria-labelledby="menu-1">
-            <li><a class="dropdown-item" href="core/overview">Overview</a></li>
+            <li><a class="dropdown-item" href="arch/overview">Overview</a></li>
             <li><a class="dropdown-item" href="arch/results">Results</a></li>
             <li><a class="dropdown-item" href="arch/context">Context</a></li>
             <li><a class="dropdown-item" href="arch/app">App</a></li>
             <li><a class="dropdown-item" href="arch/apis">APIs</a></li>
+            <li><a class="dropdown-item" href="arch/cli">CLI</a></li>
             <li><a class="dropdown-item" href="arch/jobs">Jobs</a></li>
         </ul>
     </li>
@@ -147,17 +149,297 @@
     
     <section class="header wow fadeInUp">
         <div class="container text-center">
-            <h2>Arch</h2>
+            <h2>Cli</h2>
         </div>
     </section>
     
-    <section class="creative">
+    <section class="sk-creative">
       <div class="container">
         
 
-<h1 id="component">Component</h1>
+<h1 id="overview">Overview</h1>
 
-<p>Under construction&hellip; coming soon.</p>
+<p>Describe this {COMPONENT_NAME} concisely in 2-3 sentences.
+<br/><br/></p>
+
+<h1 id="index">Index</h1>
+
+<p>Table of contents for this page
+<table class="table table-bordered table-striped">
+    <tr>
+        <td><strong>Section</strong></td>
+        <td><strong>Component</strong></td>
+        <td><strong>Description</strong></td>
+    </tr>
+    <tr>
+        <td><strong>1</strong></td>
+        <td><strong><a class="url-ch" href="core/cli#status">Status</a></strong></td>
+        <td>Current status of this component</td>
+    </tr>
+    <tr>
+        <td><strong>2</strong></td>
+        <td><strong><a class="url-ch" href="core/cli#install">Install</a></strong></td>
+        <td>Installation instructions and references to sources</td>
+    </tr>
+    <tr>
+        <td><strong>3</strong></td>
+        <td><strong><a class="url-ch" href="core/cli#requires">Requires</a></strong></td>
+        <td>Lists all the Slate Kit and third-party dependencies</td>
+    </tr>
+    <tr>
+        <td><strong>4</strong></td>
+        <td><strong><a class="url-ch" href="core/cli#sample">Sample</a></strong></td>
+        <td>Quick sample to show usage of the component</td>
+    </tr>
+    <tr>
+        <td><strong>5</strong></td>
+        <td><strong><a class="url-ch" href="core/cli#goals">Goals</a></strong></td>
+        <td>Goals of this component and the problems it attempts to solve</td>
+    </tr>
+    <tr>
+        <td><strong>6</strong></td>
+        <td><strong><a class="url-ch" href="core/cli#concepts">Concepts</a></strong></td>
+        <td>Core concepts to understand in this component</td>
+    </tr>
+    <tr>
+        <td><strong>7</strong></td>
+        <td><strong><a class="url-ch" href="core/cli#features">Features</a></strong></td>
+        <td>List all the features supported</td>
+    </tr>
+    <tr>
+        <td><strong>8</strong></td>
+        <td><strong><a class="url-ch" href="core/cli#setup">Setup</a></strong></td>
+        <td>Set up and configure this component for use</td>
+    </tr>
+    <tr>
+        <td><strong>9</strong></td>
+        <td><strong><a class="url-ch" href="core/cli#details">Details</a></strong></td>
+        <td>In-depth examples of the supported features</td>
+    </tr>
+</table>
+<br/>
+
+<a href="core/cli#overview" class="sk-back-to-top">Back to top </a>
+<br/><br/><br/><br/></p>
+
+<h1 id="status">Status</h1>
+
+<p>coming soon
+<br/>
+
+<a href="core/cli#overview" class="sk-back-to-top">Back to top </a>
+<br/><br/><br/><br/></p>
+
+<h1 id="install">Install</h1>
+
+<p>coming soon
+<div class="highlight"><pre class="chroma"><code class="language-groovy" data-lang="groovy">    <span class="n">repositories</span> <span class="o">{</span>
+        <span class="c1">// other repositories
+</span><span class="c1"></span>        <span class="n">maven</span> <span class="o">{</span> <span class="n">url</span>  <span class="s2">&#34;http://dl.bintray.com/codehelixinc/slatekit&#34;</span> <span class="o">}</span>
+    <span class="o">}</span>
+
+    <span class="n">dependencies</span> <span class="o">{</span>
+        <span class="c1">// other dependencies ...
+</span><span class="c1"></span>
+        <span class="n">compile</span> <span class="s1">&#39;com.slatekit:slatekit-{COMPONENT_ID}:0.9.9&#39;</span>
+    <span class="o">}</span></code></pre></div>
+
+<table class="table table-bordered table-striped">
+  <tr>
+    <td><strong>package</strong></td>
+    <td>slatekit.app</td>
+  </tr>
+  <tr>
+    <td><strong>jar</strong></td>
+    <td>slatekit.app.jar</td>
+  </tr>
+  <tr>
+    <td><strong>git</strong></td>
+    <td><a class="url-ch" href="https://github.com/code-helix/slatekit/tree/master/src/lib/kotlin/slatekit-app">slatekit/src/lib/kotlin/slatekit-app</a></td>
+  </tr>
+  <tr>
+    <td><strong>docs</strong></td>
+    <td><a class="url-ch" href="core/app">App</a></td>
+  </tr>
+  <tr>
+    <td><strong>uses</strong></td>
+    <td>slatekit.results, slatekit.common</td>
+  </tr>
+  <tr>
+    <td><strong>license</strong></td>
+    <td>Apache 2.0</td>
+  </tr>
+  <tr>
+      <td><strong>example</strong></td>
+      <td><a class="url-ch" href="">Example_App.kt</a></td>
+  </tr>
+</table>
+<br/>
+
+<a href="core/cli#overview" class="sk-back-to-top">Back to top </a>
+<br/><br/><br/><br/></p>
+
+<h1 id="requires">Requires</h1>
+
+<p>This component uses the following other <strong>Slate Kit</strong> and/or third-party components.
+<table class="table table-bordered table-striped">
+    <tr>
+        <td><strong>Component</strong></td>
+        <td><strong>Description</strong></td>
+    </tr>
+    <tr>
+        <td><a class="url-ch" href="core/results">Slate Kit - Results</a></td>
+        <td>To model successes and failures with optional status codes</td>
+    </tr>
+    <tr>
+        <td><a class="url-ch" href="utils/utils.html">Slate Kit - Common</a></td>
+        <td>Common utilities for both android + server</td>
+    </tr>
+</table>
+<br/>
+
+<a href="core/cli#overview" class="sk-back-to-top">Back to top </a>
+<br/><br/><br/><br/></p>
+
+<h1 id="sample">Sample</h1>
+
+<p>coming soon
+<div class="highlight"><pre class="chroma"><code class="language-kotlin" data-lang="kotlin">    <span class="k">fun</span> <span class="nf">quick_sample</span><span class="p">()</span> <span class="p">{</span>
+        
+    <span class="p">}</span></code></pre></div>
+<br/>
+
+<a href="core/cli#overview" class="sk-back-to-top">Back to top </a>
+<br/><br/><br/><br/></p>
+
+<h1 id="goals">Goals</h1>
+
+<p>coming soon
+<table class="table table-bordered table-striped">
+    <tr>
+        <td><strong>Goal</strong></td>
+        <td><strong>Description</strong></td>
+    </tr>
+    <tr>
+        <td><strong>1. Goal A</strong></td>
+        <td>Description of goal</td>
+    </tr>
+    <tr>
+        <td><strong>2. Goal B</strong> </td>
+        <td>Description of goal</td><br />
+    </tr>
+    <tr>
+        <td><strong>3. Goal C</strong></td>
+        <td>Description of goal</td>
+    </tr>
+</table>
+<br/>
+
+<a href="core/cli#overview" class="sk-back-to-top">Back to top </a>
+<br/><br/><br/><br/></p>
+
+<h1 id="concepts">Concepts</h1>
+
+<p>coming soon
+<table class="table table-bordered table-striped">
+    <tr>
+        <td><strong>Concept</strong></td>
+        <td><strong>Description</strong></td>
+    </tr>
+    <tr>
+        <td><strong>1. Concept A</strong></td>
+        <td>Description of concept</td>
+    </tr>
+    <tr>
+        <td><strong>2. Concept B</strong> </td>
+        <td>Description of concept</td><br />
+    </tr>
+    <tr>
+        <td><strong>3. Concept C</strong></td>
+        <td>Description of concept</td>
+    </tr>
+</table>
+<br/>
+
+<a href="core/cli#overview" class="sk-back-to-top">Back to top </a>
+<br/><br/><br/><br/></p>
+
+<h1 id="features">Features</h1>
+
+<p>coming soon
+<table class="table table-bordered table-striped">
+    <tr>
+        <td><strong>Name</strong></td>
+        <td><strong>Description</strong></td>
+        <td><strong>More</strong></td>
+    </tr>
+    <tr>
+        <td><strong>1. Feature A</strong></td>
+        <td>Description of feature</td>
+        <td><a href="arch/app/#feature1" class="more"><span class="btn btn-primary">more</span></a></td>
+    </tr>
+    <tr>
+        <td><strong>2. Feature B</strong> </td>
+        <td>Description of feature</td>
+        <td><a href="arch/app/#feature2" class="more"><span class="btn btn-primary">more</span></a></td><br />
+    </tr>
+    <tr>
+        <td><strong>3. Feature C</strong></td>
+        <td>Description of feature</td>
+        <td><a href="arch/app/#feature3" class="more"><span class="btn btn-primary">more</span></a></td>
+    </tr>
+</table>
+<br/>
+
+<a href="core/cli#overview" class="sk-back-to-top">Back to top </a>
+<br/><br/><br/><br/></p>
+
+<h2 id="feature1">Feature 1</h2>
+
+<p>coming soon
+<div class="highlight"><pre class="chroma"><code class="language-kotlin" data-lang="kotlin">    <span class="k">fun</span> <span class="nf">setup</span><span class="p">()</span> <span class="p">{</span>
+        
+    <span class="p">}</span></code></pre></div>
+
+
+
+<a href="core/cli#features" class="sk-back-to-details">Back to features</a>
+<a href="core/cli#overview" class="sk-back-to-top">Back to top </a>
+
+<br/><br/><br/></p>
+
+<h2 id="feature2">Feature 2</h2>
+
+<p>coming soon
+<div class="highlight"><pre class="chroma"><code class="language-kotlin" data-lang="kotlin">    <span class="k">fun</span> <span class="nf">setup</span><span class="p">()</span> <span class="p">{</span>
+        
+    <span class="p">}</span></code></pre></div>
+
+
+
+<a href="core/cli#features" class="sk-back-to-details">Back to features</a>
+<a href="core/cli#overview" class="sk-back-to-top">Back to top </a>
+
+<br/><br/><br/></p>
+
+<h2 id="feature3">Feature 3</h2>
+
+<p>coming soon
+<div class="highlight"><pre class="chroma"><code class="language-kotlin" data-lang="kotlin">    <span class="k">fun</span> <span class="nf">setup</span><span class="p">()</span> <span class="p">{</span>
+        
+    <span class="p">}</span></code></pre></div>
+
+
+
+<a href="core/cli#features" class="sk-back-to-details">Back to features</a>
+<a href="core/cli#overview" class="sk-back-to-top">Back to top </a>
+
+<br/><br/><br/></p>
+
+<br/>
+
+<a href="core/cli#overview" class="sk-back-to-top">Back to top </a>
+<br/><br/><br/><br/>
 
       </div>
     </section>  
