@@ -37,7 +37,7 @@ open class Recorder<TRequest, TResponse>(val id: Identity,
             lasts?.let { lasts.handle(sender, request, result) }
 
             // Update metrics
-            counts?.let { Counters.count(counts, result.status) }
+            counts.let { Counters.count(counts, result.status) }
 
             // Notify event listeners
             events?.let { events.handle(sender, request, result) }
@@ -59,7 +59,7 @@ open class Recorder<TRequest, TResponse>(val id: Identity,
 
     fun count(sender: Any, request: TRequest, result: Outcome<TResponse>){
         // Update metrics
-        counts?.let { Counters.count(counts, result.status) }
+        counts.let { Counters.count(counts, result.status) }
     }
 
 

@@ -12,10 +12,6 @@
  */
 package test
 
-import org.junit.Test
-import slatekit.core.cache.Cache
-import slatekit.core.cache.CacheSettings
-
 
 class CacheTests {
 

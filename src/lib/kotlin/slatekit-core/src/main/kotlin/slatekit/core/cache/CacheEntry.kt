@@ -14,6 +14,7 @@
 package slatekit.core.cache
 
 import slatekit.common.DateTime
+import slatekit.tracking.Tracked
 import java.util.concurrent.atomic.AtomicLong
 import java.util.concurrent.atomic.AtomicReference
 
@@ -34,7 +35,7 @@ data class CacheEntry(
     val desc: String,
     val text: String?,
     val seconds: Int,
-    val fetcher: () -> Any?
+    val fetcher: suspend () -> Any?
 ) {
     /**
      * The last time this was accessed.
@@ -58,7 +59,7 @@ data class CacheEntry(
      * The actual cache item which is updatd only when its refreshed.
      */
     val item = AtomicReference<CacheItem>(
-            CacheItem(key, null, text, null, seconds, DateTime.now().plusSeconds(seconds.toLong()), null, 0, null, null)
+            CacheItem(key, null, seconds, DateTime.now().plusSeconds(seconds.toLong()), Tracked(), Tracked(), Tracked())
     )
 
     /**
@@ -81,33 +82,21 @@ data class CacheEntry(
      * This can only be called during a failed refresh.
      */
     fun error(ex: Throwable) {
-        val original = item.get()
-
-        // Bump up errors.
-        val updated = original.copy(
-                errorCount = original.errorCount + 1,
-                error = ex
-        )
-
-        // Update to  value
-        item.set(updated)
+        item.get().errored.set(ex)
     }
 
     /**
      * This is called on successful refresh of the cache
      * @param result
      */
-    fun success(result: Any?) {
+    fun success(result: Any?, text:String? = null) {
         val original = item.get()
-
         val timestamp = DateTime.now()
-
+        original.accessed.set(Unit)
+        original.value.set(result)
         val updated = original.copy(
-                value = result,
-                updated = timestamp,
-                expires = timestamp.plusSeconds(original.seconds.toLong()),
-                accessed = timestamp,
-                accessCount = accessCount.get() + 1
+                text = text ?: original.text,
+                expires = timestamp.plusSeconds(original.expiryInSeconds.toLong())
         )
 
         // Update to  value
@@ -125,13 +114,17 @@ data class CacheEntry(
     /**
      * Refreshes this cache item
      */
-    fun refresh() {
+    suspend fun refresh() {
         try {
             val result = fetcher()
             success(result)
         } catch (ex: Exception) {
             error(ex)
         }
+    }
+
+    fun set(value:Any?, text: String?){
+        success(value, text)
     }
 
     /**
