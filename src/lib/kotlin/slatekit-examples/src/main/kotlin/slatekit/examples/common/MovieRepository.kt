@@ -1,6 +1,6 @@
 package slatekit.examples.common
 
-import slatekit.entities.repos.EntityRepoInMemoryWithLongId
+import slatekit.entities.repos.InMemoryRepoWithLongId
 
 
-class MovieRepository : EntityRepoInMemoryWithLongId<Movie>(Movie::class)
+class MovieRepository : InMemoryRepoWithLongId<Movie>(Movie::class)

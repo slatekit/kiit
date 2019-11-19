@@ -24,7 +24,7 @@ import slatekit.entities.core.EntityStore
  * @param info : Holds all info relevant state/members needed to perform repo operations
  * @tparam T
  */
-abstract class EntityRepoBase<TId, T>(
+abstract class BaseRepo<TId, T>(
     override val info: EntityInfo
 ) :
     EntityStore, EntityRepo<TId, T> where TId : Comparable<TId>, T : Entity<TId> {

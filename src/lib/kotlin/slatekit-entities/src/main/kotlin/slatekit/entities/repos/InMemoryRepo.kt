@@ -28,16 +28,16 @@ import slatekit.meta.models.Model
 import slatekit.query.Op
 import kotlin.reflect.KClass
 
-open class EntityRepoInMemoryWithLongId<T>(info: EntityInfo, idGen: IdGenerator<Long>) :
-    EntityRepoInMemory<Long, T>(info, idGen)
+open class InMemoryRepoWithLongId<T>(info: EntityInfo, idGen: IdGenerator<Long>) :
+    InMemoryRepo<Long, T>(info, idGen)
         where T : Entity<Long> {
 
     constructor(cls: KClass<T>) :
         this(EntityInfo.memory(Long::class, cls), LongIdGenerator())
 }
 
-open class EntityRepoInMemoryWithIntId<T>(info: EntityInfo, idGen: IdGenerator<Int>) :
-    EntityRepoInMemory<Int, T>(info, idGen)
+open class InMemoryRepoWithIntId<T>(info: EntityInfo, idGen: IdGenerator<Int>) :
+    InMemoryRepo<Int, T>(info, idGen)
         where T : Entity<Int> {
 
     constructor(cls: KClass<T>) :
@@ -51,10 +51,10 @@ open class EntityRepoInMemoryWithIntId<T>(info: EntityInfo, idGen: IdGenerator<I
  * WARNING!!!!!!
  * Should NOT be used outside of prototyping
  */
-open class EntityRepoInMemory<TId, T>(
+open class InMemoryRepo<TId, T>(
     info: EntityInfo,
     val idGenerator: IdGenerator<TId>
-) : EntityRepoBase<TId, T>(info)
+) : BaseRepo<TId, T>(info)
         where TId : kotlin.Comparable<TId>, T : Entity<TId> {
     protected var items = ListMap<TId, T>(listOf())
 

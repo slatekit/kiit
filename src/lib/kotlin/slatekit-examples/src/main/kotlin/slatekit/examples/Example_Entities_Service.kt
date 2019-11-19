@@ -26,7 +26,7 @@ import slatekit.cmds.Command
 import slatekit.cmds.CommandRequest
 import slatekit.entities.*
 import slatekit.entities.core.EntityInfo
-import slatekit.entities.repos.EntityRepoInMemoryWithLongId
+import slatekit.entities.repos.InMemoryRepoWithLongId
 import slatekit.meta.models.ModelMapper
 import slatekit.orm.OrmMapper
 import slatekit.orm.databases.vendors.MySqlConverter
@@ -85,10 +85,10 @@ class Example_Entities_Service : Command("service") {
     // CASE 1: In-memory ( non-persisted ) repository has limited functionality
     // but is very useful for rapid prototyping of a data model when you are trying to
     // figure out what fields/properties should exist on the model
-    val repo = EntityRepoInMemoryWithLongId<User>(User::class)
+    val repo = InMemoryRepoWithLongId<User>(User::class)
 
     // CASE 1A: Explicitly setup the type of id ( long ) and mapper to use
-    val repoSetup2 = EntityRepoInMemoryWithLongId<User>(User::class)
+    val repoSetup2 = InMemoryRepoWithLongId<User>(User::class)
 
     // CASE 2: My-sql ( persisted ) repository can be easily setup
     // More examples of database setup/entity registration available in Setup/Registration docs.

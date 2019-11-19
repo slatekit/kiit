@@ -22,7 +22,7 @@ import slatekit.common.naming.Namer
 import slatekit.common.utils.ListMap
 import slatekit.entities.core.*
 import slatekit.entities.repos.EntityMapperEmpty
-import slatekit.entities.repos.EntityRepoInMemory
+import slatekit.entities.repos.InMemoryRepo
 import slatekit.entities.repos.IdGenerator
 import slatekit.entities.repos.LongIdGenerator
 import slatekit.meta.models.Model
@@ -168,7 +168,7 @@ open class Entities(
 
         // 3. Repo ( provides CRUD using the Mapper)
         val info = EntityInfo(entityIdType, entityType, table, '`', model, this.enc, this.namer)
-        val repo = EntityRepoInMemory(info, entityIdGen)
+        val repo = InMemoryRepo(info, entityIdGen)
 
         // 4. Service ( used to provide validation, placeholder for business functionality )
         val service = builder.service(this, serviceType, repo, serviceCtx)

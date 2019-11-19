@@ -28,11 +28,11 @@ import slatekit.query.Query
  * @param info : Holds all info relevant state/members needed to perform repo operations
  * @tparam T
  */
-abstract class EntityRepoSql<TId, T>(
+abstract class SqlRepo<TId, T>(
     val db: IDb,
     info: EntityInfo,
     val mapper: EntityMapper<TId, T>
-) : EntityRepoBase<TId, T>(info)
+) : BaseRepo<TId, T>(info)
         where TId : Comparable<TId>, T : Entity<TId> {
 
     override fun name(): String = "${info.encodedChar}" + super.name() + "${info.encodedChar}"

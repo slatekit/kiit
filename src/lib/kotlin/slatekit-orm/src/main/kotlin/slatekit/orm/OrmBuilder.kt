@@ -5,7 +5,6 @@ import slatekit.common.encrypt.Encryptor
 import slatekit.common.db.DbType.*
 import slatekit.common.naming.Namer
 import slatekit.common.db.DbType
-import slatekit.db.Db
 import slatekit.entities.Entity
 import slatekit.entities.core.EntityBuilder
 import slatekit.entities.EntityRepo
@@ -16,7 +15,6 @@ import slatekit.meta.KTypes
 import slatekit.orm.core.SqlBuilder
 import slatekit.orm.databases.vendors.*
 import slatekit.meta.models.Model
-import kotlin.reflect.KClass
 
 /**
  * Responsible for building individual components of this Micro-ORM.
@@ -108,8 +106,8 @@ class OrmBuilder(dbCreator: (DbCon) -> IDb,
             DbTypePGres -> PostGresEntityRepo(db, info, mapper)
             else -> {
                 val result = when(info.entityIdType){
-                    KTypes.KIntClass  -> EntityRepoInMemory(info, IntIdGenerator()) as EntityRepo<TId, T>
-                    KTypes.KLongClass -> EntityRepoInMemory(info, LongIdGenerator()) as EntityRepo<TId, T>
+                    KTypes.KIntClass  -> InMemoryRepo(info, IntIdGenerator()) as EntityRepo<TId, T>
+                    KTypes.KLongClass -> InMemoryRepo(info, LongIdGenerator()) as EntityRepo<TId, T>
                     else -> throw Exception("Unexpected entity id type for Slate Kit repo")
                 }
                 return result
