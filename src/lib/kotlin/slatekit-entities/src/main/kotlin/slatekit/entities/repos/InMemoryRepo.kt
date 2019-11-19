@@ -99,7 +99,7 @@ open class InMemoryRepo<TId, T>(
      *
      * @param id
      */
-    override fun delete(id: TId): Boolean {
+    override fun deleteById(id: TId): Boolean {
         return if (!items.contains(id))
             false
         else {
@@ -113,8 +113,8 @@ open class InMemoryRepo<TId, T>(
      * @param ids
      * @return
      */
-    override fun delete(ids: List<TId>): Int {
-        return ids.map({ delete(it) }).count { it }
+    override fun deleteByIds(ids: List<TId>): Int {
+        return ids.map({ deleteById(it) }).count { it }
     }
 
     /**

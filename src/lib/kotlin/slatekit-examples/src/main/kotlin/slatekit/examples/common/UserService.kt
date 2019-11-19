@@ -13,7 +13,7 @@
 
 package slatekit.examples.common
 
-import slatekit.entities.EntityRepo
+import slatekit.entities.Repo
 import slatekit.entities.EntityService
 import slatekit.entities.Entities
 
@@ -22,7 +22,7 @@ import slatekit.entities.Entities
 // 2. this wraps the repo for purpose of adding optional business logic
 //    before and/or after any crud operations
 // 3. can also add additional methods specific to user here.
-class UserService(entities: Entities, repo: EntityRepo<Long, User>) : EntityService<Long, User>(repo)
+class UserService(entities: Entities, repo: Repo<Long, User>) : EntityService<Long, User>(repo)
 {
   // validate for login
   fun validate(email:String, pass:String) : Boolean {

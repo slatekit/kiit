@@ -28,7 +28,7 @@ import slatekit.query.where
  * NOTE: This is basically a GenericRepository implementation
  * @tparam T
  */
-interface EntityRepo<TId, T> : EntityStore where TId : Comparable<TId>, T : Entity<TId> {
+interface Repo<TId, T> : EntityStore where TId : Comparable<TId>, T : Entity<TId> {
 
     val info: EntityInfo
 
@@ -49,6 +49,12 @@ interface EntityRepo<TId, T> : EntityStore where TId : Comparable<TId>, T : Enti
      * @return
      */
     fun create(entity: T): TId
+
+    /**
+     * ======================================================================================================
+     * UPDATES: All update methods
+     * ======================================================================================================
+     */
 
     /**
      * updates the entity in the datastore
@@ -76,25 +82,10 @@ interface EntityRepo<TId, T> : EntityStore where TId : Comparable<TId>, T : Enti
     fun updateByQuery(query: IQuery): Int
 
     /**
-     * deletes the entity by id
-     * @param id
-     * @return
+     * ======================================================================================================
+     * DELETES: All delete methods
+     * ======================================================================================================
      */
-    fun delete(id: TId): Boolean
-
-    /**
-     * deletes all entities from the data store using the ids
-     * @param ids
-     * @return
-     */
-    fun delete(ids: List<TId>): Int
-
-    /**
-     * deletes all entities from the data store using the ids
-     * @param ids
-     * @return
-     */
-    fun deleteAll(): Long
 
     /**
      * deletes the entity in memory
@@ -102,7 +93,28 @@ interface EntityRepo<TId, T> : EntityStore where TId : Comparable<TId>, T : Enti
      * @param entity
      */
     fun delete(entity: T?): Boolean =
-            entity?.let { item -> delete(item.identity()) } ?: false
+        entity?.let { item -> deleteById(item.identity()) } ?: false
+
+    /**
+     * deletes the entity by id
+     * @param id
+     * @return
+     */
+    fun deleteById(id: TId): Boolean
+
+    /**
+     * deletes all entities from the data store using the ids
+     * @param ids
+     * @return
+     */
+    fun deleteByIds(ids: List<TId>): Int
+
+    /**
+     * deletes all entities from the data store using the ids
+     * @param ids
+     * @return
+     */
+    fun deleteAll(): Long
 
     /**
      * deletes items based on the field name and value
@@ -118,18 +130,40 @@ interface EntityRepo<TId, T> : EntityStore where TId : Comparable<TId>, T : Enti
     fun deleteByQuery(query: IQuery): Int
 
     /**
+     * ======================================================================================================
+     * GETS: All get methods
+     * ======================================================================================================
+     */
+
+    /**
      * gets the entity from the datastore using the id
      * @param id
      * @return
      */
-    fun get(id: TId): T?
+    @Deprecated("Replaced with getById", replaceWith = ReplaceWith("getById"))
+    fun get(id: TId): T? = getById(id)
+
+    /**
+     * gets the entity from the datastore using the id
+     * @param id
+     * @return
+     */
+    fun getById(id: TId): T?
 
     /**
      * gets the entity from the datastore using the id
      * @param ids
      * @return
      */
-    fun get(ids: List<TId>): List<T>
+    @Deprecated("Replaced with getByIds", replaceWith = ReplaceWith("getByIds"))
+    fun get(ids: List<TId>): List<T> = getByIds(ids)
+
+    /**
+     * gets the entity from the datastore using the id
+     * @param ids
+     * @return
+     */
+    fun getByIds(ids: List<TId>): List<T>
 
     /**
      * gets all the entities from the datastore.
@@ -138,17 +172,10 @@ interface EntityRepo<TId, T> : EntityStore where TId : Comparable<TId>, T : Enti
     fun getAll(): List<T>
 
     /**
-     * Gets the total number of records based on the query provided.
+     * ======================================================================================================
+     * SAVES: All save methods
+     * ======================================================================================================
      */
-    fun count(query: IQuery): Long
-
-    /**
-     * gets the top count entities in the datastore sorted by asc order
-     * @param count: Top / Limit count of entities
-     * @param desc : Whether to sort by descending
-     * @return
-     */
-    fun top(count: Int, desc: Boolean): List<T>
 
     /**
      * saves an entity by either creating it or updating it based on
@@ -172,42 +199,10 @@ interface EntityRepo<TId, T> : EntityStore where TId : Comparable<TId>, T : Enti
     fun saveAll(items: List<T>) = items.forEach { item -> save(item) }
 
     /**
-     * Gets the first/oldest item
-     * @return
+     * ======================================================================================================
+     * FIND: All find methods
+     * ======================================================================================================
      */
-    fun first(): T? = takeFirst { oldest(1) }
-
-    /**
-     * Gets the last/recent item
-     * @return
-     */
-    fun last(): T? = takeFirst { recent(1) }
-
-    /**
-     * Gets the most recent n items represented by count
-     * @param count
-     * @return
-     */
-    fun recent(count: Int): List<T> = top(count, true)
-
-    /**
-     * Gets the most oldest n items represented by count
-     * @param count
-     * @return
-     */
-    fun oldest(count: Int): List<T> = top(count, false)
-
-    /**
-     * takes the
-     * @param call
-     * @return
-     */
-    fun takeFirst(call: () -> List<T>): T? = call().firstOrNull()
-
-    /**
-     * Return a query builder for more complex searches
-     */
-    fun query(): Query = info.queryBuilder?.invoke() ?: Query()
 
     /**
      * finds items based on the query
@@ -261,6 +256,63 @@ interface EntityRepo<TId, T> : EntityStore where TId : Comparable<TId>, T : Enti
      * @return
      */
     fun findByProc(name: String, args: List<Any>?): List<T>? = listOf()
+
+    /**
+     * ======================================================================================================
+     * LOOKUP: All "lookup" methods e.g. first, last, recent, oldess, count, etc
+     * ======================================================================================================
+     */
+
+    /**
+     * Gets the total number of records based on the query provided.
+     */
+    fun count(query: IQuery): Long
+
+    /**
+     * gets the top count entities in the datastore sorted by asc order
+     * @param count: Top / Limit count of entities
+     * @param desc : Whether to sort by descending
+     * @return
+     */
+    fun top(count: Int, desc: Boolean): List<T>
+
+    /**
+     * Gets the first/oldest item
+     * @return
+     */
+    fun first(): T? = takeFirst { oldest(1) }
+
+    /**
+     * Gets the last/recent item
+     * @return
+     */
+    fun last(): T? = takeFirst { recent(1) }
+
+    /**
+     * Gets the most recent n items represented by count
+     * @param count
+     * @return
+     */
+    fun recent(count: Int): List<T> = top(count, true)
+
+    /**
+     * Gets the most oldest n items represented by count
+     * @param count
+     * @return
+     */
+    fun oldest(count: Int): List<T> = top(count, false)
+
+    /**
+     * takes the
+     * @param call
+     * @return
+     */
+    fun takeFirst(call: () -> List<T>): T? = call().firstOrNull()
+
+    /**
+     * Return a query builder for more complex searches
+     */
+    fun query(): Query = info.queryBuilder?.invoke() ?: Query()
 
     /**
      * Gets the column name for the Kproperty from the model schema if available

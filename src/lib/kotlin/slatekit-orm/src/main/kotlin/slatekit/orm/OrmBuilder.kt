@@ -7,7 +7,7 @@ import slatekit.common.naming.Namer
 import slatekit.common.db.DbType
 import slatekit.entities.Entity
 import slatekit.entities.core.EntityBuilder
-import slatekit.entities.EntityRepo
+import slatekit.entities.Repo
 import slatekit.entities.core.EntityInfo
 import slatekit.entities.core.buildTableName
 import slatekit.entities.repos.*
@@ -98,7 +98,7 @@ class OrmBuilder(dbCreator: (DbCon) -> IDb,
             db:IDb,
             info:EntityInfo,
             mapper: OrmMapper<TId, T>
-    ): EntityRepo<TId, T> where TId:Comparable<TId>, T : Entity<TId> {
+    ): Repo<TId, T> where TId:Comparable<TId>, T : Entity<TId> {
 
         // Repo: Handles all the CRUD / lookup functionality
         return when (dbType) {
@@ -106,8 +106,8 @@ class OrmBuilder(dbCreator: (DbCon) -> IDb,
             DbTypePGres -> PostGresEntityRepo(db, info, mapper)
             else -> {
                 val result = when(info.entityIdType){
-                    KTypes.KIntClass  -> InMemoryRepo(info, IntIdGenerator()) as EntityRepo<TId, T>
-                    KTypes.KLongClass -> InMemoryRepo(info, LongIdGenerator()) as EntityRepo<TId, T>
+                    KTypes.KIntClass  -> InMemoryRepo(info, IntIdGenerator()) as Repo<TId, T>
+                    KTypes.KLongClass -> InMemoryRepo(info, LongIdGenerator()) as Repo<TId, T>
                     else -> throw Exception("Unexpected entity id type for Slate Kit repo")
                 }
                 return result
@@ -121,7 +121,7 @@ class OrmBuilder(dbCreator: (DbCon) -> IDb,
      * @param dbType: The type of the database to create
      * @param mapper       :  Mapper to conver to/from sql/records
      */
-    fun <TId, T> repo(dbType: DbType, info:EntityInfo, mapper: OrmMapper<TId, T>): EntityRepo<TId, T>
+    fun <TId, T> repo(dbType: DbType, info:EntityInfo, mapper: OrmMapper<TId, T>): Repo<TId, T>
             where TId:Comparable<TId>, T: Entity<TId> {
 
         // 1. Connection info ( using default connection )

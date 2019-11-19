@@ -110,10 +110,10 @@ class Example_Entities_Repo : Command("entities") {
         repo.create(User(firstName ="jane", lastName = "doe-04"))
 
         // CASE 2: Get by id
-        printOne("2", repo.get(2))
+        printOne("2", repo.getById(2))
 
         // CASE 3: Update
-        val item2 = repo.get(2)
+        val item2 = repo.getById(2)
         item2?.let { item ->
             val updated = item.copy(firstName = "user_two")
             repo.update(updated)
@@ -136,7 +136,7 @@ class Example_Entities_Repo : Command("entities") {
         printOne("last", repo.last())
 
         // CASE 9: Delete by id
-        repo.delete(4)
+        repo.deleteById(4)
 
         // CASE 10: Get total ( 4 )
         println(repo.count())

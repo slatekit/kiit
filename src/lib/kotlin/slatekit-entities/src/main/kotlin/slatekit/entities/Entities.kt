@@ -110,7 +110,7 @@ open class Entities(
         entityType: KClass<*>,
         entityIdType: KClass<*>,
         serviceType: KClass<*>,
-        repo: EntityRepo<TId, T>,
+        repo: Repo<TId, T>,
         mapper: EntityMapper<TId, T>?,
         dbType: DbType,
         serviceCtx: Any? = null
@@ -220,8 +220,8 @@ open class Entities(
      * Get a registered repository for the entity type
      */
     @Suppress("UNCHECKED_CAST")
-    fun <TId, T> getRepo(tpe: KClass<*>, dbKey: String = "", dbShard: String = ""): EntityRepo<TId, T> where TId : Comparable<TId>, T : Entity<TId> =
-            getRepoByType(tpe, dbKey, dbShard) as EntityRepo<TId, T>
+    fun <TId, T> getRepo(tpe: KClass<*>, dbKey: String = "", dbShard: String = ""): Repo<TId, T> where TId : Comparable<TId>, T : Entity<TId> =
+            getRepoByType(tpe, dbKey, dbShard) as Repo<TId, T>
 
     /**
      * Get a registered service for the entity type

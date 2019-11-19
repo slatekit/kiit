@@ -97,7 +97,7 @@ class Example_Entities_Service : Command("service") {
     val repoMySql = MySqlEntityRepo<Long, User>(db, entityInfo, mapper)
 
     // CASE 3: You can also extend from EntityRepositoryMySql
-    class UserService(repo: EntityRepo<Long, User>) : EntityService<Long, User>(repo)
+    class UserService(repo: Repo<Long, User>) : EntityService<Long, User>(repo)
     //</doc:setup>
 
 

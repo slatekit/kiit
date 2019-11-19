@@ -47,7 +47,7 @@ interface Deletes<TId, T> : ServiceSupport<TId, T> where TId : kotlin.Comparable
      * @return
      */
     fun deleteById(id: TId): Boolean {
-        return repo().delete(id)
+        return repo().deleteById(id)
     }
 
     /**
@@ -59,10 +59,10 @@ interface Deletes<TId, T> : ServiceSupport<TId, T> where TId : kotlin.Comparable
 
         // Event out one by one
         return if (this is Hooks) {
-            val statuses = ids.map { id -> repo().get(id)?.let { delete(it) } ?: false }
+            val statuses = ids.map { id -> repo().getById(id)?.let { delete(it) } ?: false }
             statuses.count { it }
         } else {
-            repo().delete(ids)
+            repo().deleteByIds(ids)
         }
     }
 

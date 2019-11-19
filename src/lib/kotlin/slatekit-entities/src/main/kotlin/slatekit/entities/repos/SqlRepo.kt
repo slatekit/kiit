@@ -64,7 +64,7 @@ abstract class SqlRepo<TId, T>(
      *
      * @param id
      */
-    override fun delete(id: TId): Boolean {
+    override fun deleteById(id: TId): Boolean {
         val count = update("delete from ${name()} where ${id()} = $id;")
         return count > 0
     }
@@ -74,7 +74,7 @@ abstract class SqlRepo<TId, T>(
      * @param ids
      * @return
      */
-    override fun delete(ids: List<TId>): Int {
+    override fun deleteByIds(ids: List<TId>): Int {
         val delimited = ids.joinToString(",")
         return update("delete from ${name()} where ${id()} in ($delimited);")
     }
@@ -117,7 +117,7 @@ abstract class SqlRepo<TId, T>(
     /**
      * gets the entity associated with the id
      */
-    override fun get(id: TId): T? {
+    override fun getById(id: TId): T? {
         return sqlMapOne("select * from ${name()} where ${id()} = $id;")
     }
 
@@ -126,7 +126,7 @@ abstract class SqlRepo<TId, T>(
      * @param ids
      * @return
      */
-    override fun get(ids: List<TId>): List<T> {
+    override fun getByIds(ids: List<TId>): List<T> {
         val delimited = ids.joinToString(",")
         return sqlMapMany("select * from ${name()} where ${id()} in ($delimited);") ?: listOf()
     }

@@ -95,13 +95,13 @@ open class EntityBuilder(
      * Dynamically builds an EntityService using the type and repo supplied.
      * @param entities: The top level Entities object to get instances of various types
      * @param serviceType: The KClass of the EntityService implementation to create
-     * @param repo: The underlying EntityRepo that handle persistence
+     * @param repo: The underlying Repo that handle persistence
      * @param args: Additional arguments to constructor of service during creation
      */
     fun <TId, T> service(
         entities: Entities,
         serviceType: KClass<*>?,
-        repo: EntityRepo<TId, T>,
+        repo: Repo<TId, T>,
         args: Any?
     ): GenericService where TId : Comparable<TId>, T : Entity<TId> {
         return serviceType?.let {

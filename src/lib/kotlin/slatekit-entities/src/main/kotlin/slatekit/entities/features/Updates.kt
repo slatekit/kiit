@@ -31,7 +31,7 @@ interface Updates<TId, T> : ServiceSupport<TId, T> where TId : kotlin.Comparable
      */
     fun update(entity: T, options: EntityOptions): Pair<Boolean, T> {
         val useHooks = options.applyHooks && this is Hooks
-        val original: T? = if (useHooks) repo().get(entity.identity()) else null
+        val original: T? = if (useHooks) repo().getById(entity.identity()) else null
 
         // Massage
         val entityFinal = when (options.applyMetadata) {
@@ -59,7 +59,7 @@ interface Updates<TId, T> : ServiceSupport<TId, T> where TId : kotlin.Comparable
      * @return
      */
     fun update(entity: T): Boolean {
-        val original: T? = if (this is Hooks) repo().get(entity.identity()) else null
+        val original: T? = if (this is Hooks) repo().getById(entity.identity()) else null
         val finalEntity = applyFieldData(EntityAction.EntityUpdate, entity)
         val success = repo().update(finalEntity)
 
@@ -91,7 +91,7 @@ interface Updates<TId, T> : ServiceSupport<TId, T> where TId : kotlin.Comparable
      * @return
      */
     fun update(id: TId, field: String, value: String) {
-        val item = repo().get(id)
+        val item = repo().getById(id)
         item?.let { entity ->
             Reflector.setFieldValue(entity.kClass, entity, field, value)
             update(entity)

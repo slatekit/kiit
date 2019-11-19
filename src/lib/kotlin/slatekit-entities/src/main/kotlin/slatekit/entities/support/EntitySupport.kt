@@ -2,7 +2,7 @@ package slatekit.entities.support
 
 import slatekit.entities.Entities
 import slatekit.entities.Entity
-import slatekit.entities.EntityRepo
+import slatekit.entities.Repo
 import slatekit.entities.core.EntityStore
 import slatekit.entities.core.GenericService
 import slatekit.entities.core.ServiceSupport
@@ -17,11 +17,11 @@ interface EntitySupport<TId, T> : GenericService,
         ServiceSupport<TId, T> where TId : Comparable<TId>, T : Entity<TId> {
 
     val entities: Entities
-    val repo: EntityRepo<TId, T>
+    val repo: Repo<TId, T>
 
     override fun store(): EntityStore = repo
 
-    override fun repo(): EntityRepo<TId, T> = repo
+    override fun repo(): Repo<TId, T> = repo
 
     /**
      * gets the total number of entities in the datastore

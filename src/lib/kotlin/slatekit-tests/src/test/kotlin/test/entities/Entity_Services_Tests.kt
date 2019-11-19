@@ -21,7 +21,7 @@ import slatekit.common.db.DbLookup
 import slatekit.db.Db
 import slatekit.entities.Entities
 import slatekit.entities.Entity
-import slatekit.entities.EntityRepo
+import slatekit.entities.Repo
 import slatekit.entities.EntityService
 import slatekit.entities.features.Relations
 import test.setup.Group
@@ -207,7 +207,7 @@ class Entity_Services_Tests {
     }
 
 
-    class EntityServiceRelational<TId, T>(val entities:Entities, repo: EntityRepo<TId, T>)
+    class EntityServiceRelational<TId, T>(val entities:Entities, repo: Repo<TId, T>)
         : EntityService<TId, T>(repo), Relations<TId, T>
             where TId:Comparable<TId>, T: Entity<TId> {
 
