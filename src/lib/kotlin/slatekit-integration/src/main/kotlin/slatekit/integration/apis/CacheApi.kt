@@ -23,7 +23,7 @@ import slatekit.common.Strings
 import slatekit.common.encrypt.Encryptor
 import slatekit.common.log.Logger
 import slatekit.common.Sources
-import slatekit.core.cache.Cache
+import slatekit.core.cache.SimpleCache
 import slatekit.core.cache.CacheItem
 import slatekit.core.cache.CacheSettings
 
@@ -34,7 +34,7 @@ class CacheApi(override val context: CommonContext) : FileSupport {
     override val encryptor: Encryptor? = context.enc
     override val logger: Logger? = context.logs.getLogger()
 
-    val cache: Cache = Cache(CacheSettings(50))
+    val cache: SimpleCache = SimpleCache(CacheSettings(50))
 
     @Action(desc = "gets the names of keys in the cache")
     fun keys(): List<String> {

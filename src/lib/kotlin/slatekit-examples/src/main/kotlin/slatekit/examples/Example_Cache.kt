@@ -13,7 +13,7 @@
 package slatekit.examples
 
 //<doc:import_required>
-import slatekit.core.cache.Cache
+import slatekit.core.cache.SimpleCache
 import slatekit.core.cache.CacheSettings
 
 
@@ -33,7 +33,7 @@ class Example_Cache  : Command("auth") {
   //<doc:setup>
   data class Movie(val title:String)
 
-  val cache = Cache(CacheSettings(10) )
+  val cache = SimpleCache(CacheSettings(10) )
   //</doc:setup>
 
   override fun execute(request: CommandRequest) : Try<Any>

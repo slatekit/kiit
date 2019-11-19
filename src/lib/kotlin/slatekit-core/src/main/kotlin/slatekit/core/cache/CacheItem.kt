@@ -14,34 +14,29 @@
 package slatekit.core.cache
 
 import slatekit.common.DateTime
+import slatekit.tracking.Tracked
 
 /**
  * Represents a single cache item
  * @param key : The name of the cache key
- * @param value : The last known value of the cache
  * @param text : The last known text value
- * @param updated : The last time it was updated
- * @param seconds : The time in seconds of its expiry
+ * @param expiryInSeconds : The time in seconds of its expiry
  * @param expires : The time it will expire
- * @param error : The last error when fetching
- * @param errorCount : The total number of errors when fetching
+ * @param value : The last known value of the cache
+ * @param errored : The last error when fetching
  * @param accessed : The last time it was accessed
- * @param accessCount: The amount of times it was accessed
  */
 data class CacheItem(
-    val key: String,
-    val value: Any?,
-    val text: String?,
-    val updated: DateTime?,
-    val seconds: Int,
-    val expires: DateTime,
-    val error: Throwable?,
-    val errorCount: Int,
-    val accessed: DateTime?,
-    val accessCount: Long?
+        val key: String,
+        val text: String?,
+        val expiryInSeconds: Int,
+        val expires: DateTime,
+        val value: Tracked<Any>,
+        val errored: Tracked<Throwable>,
+        val accessed: Tracked<Unit>
 ) {
 
-  fun isExpired(): Boolean = if (seconds <= 0) false else expires < DateTime.now()
+  fun isExpired(): Boolean = if (expiryInSeconds <= 0) false else expires < DateTime.now()
 
   /**
    * whether or not this entry is still alive in terms of its expiration date
