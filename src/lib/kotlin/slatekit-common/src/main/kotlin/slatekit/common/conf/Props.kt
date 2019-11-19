@@ -24,6 +24,16 @@ object Props {
      * @param fileName : name of file e.g. email.conf
      * @return
      */
+    fun load(fileName: String?): Pair<Uri, Properties> {
+        return when(fileName) {
+            null, "" -> Pair(Uris.parse(""), Props.loadFromJar(ConfFuncs.CONFIG_DEFAULT_PROPERTIES))
+            else -> {
+                val uri = Uris.parse(fileName)
+                return Pair(uri, loadFrom(uri))
+            }
+        }
+    }
+
     fun loadFrom(fileName: String?): Properties {
         return when(fileName) {
             null, "" -> Props.loadFromJar(ConfFuncs.CONFIG_DEFAULT_PROPERTIES)

@@ -15,6 +15,7 @@ package slatekit.common.conf
 
 import slatekit.common.Inputs
 import slatekit.common.Strings
+import slatekit.common.io.Uri
 
 /**
  * Base class to get config settings with support for :
@@ -24,19 +25,13 @@ import slatekit.common.Strings
  *
  * @param encryptor: Optional encryptor for decrypting encrypted config settings.
  */
-abstract class Conf(val encryptor: ((String) -> String)?) : Inputs, ConfigSupport {
-
-    /**
-     * access to raw config object. e.g. could be a type-safe config.
-     * @return
-     */
-    abstract val rawConfig: Any
+abstract class Conf(val uri:Uri, val encryptor: ((String) -> String)?) : Inputs, ConfigSupport {
 
     /**
      * The origin of the config ( e.g. file name for now )
      * @return
      */
-    open fun origin(): String = ""
+    open fun origin(): String = uri.toString()
 
     /**
      * Extends the config by supporting decryption via marker tags.

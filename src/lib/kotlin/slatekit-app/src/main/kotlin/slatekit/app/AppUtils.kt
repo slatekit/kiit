@@ -25,8 +25,8 @@ import slatekit.common.envs.Env
 import slatekit.common.envs.Envs
 import slatekit.common.info.About
 import slatekit.common.info.Build
+import slatekit.common.info.Info
 import slatekit.common.info.Sys
-import slatekit.common.info.StartInfo
 import slatekit.common.io.Alias
 import slatekit.common.io.Uri
 import slatekit.common.io.Uris
@@ -140,7 +140,7 @@ object AppUtils {
         val source = getDir(args, confSource)
         val envRootName = ConfFuncs.CONFIG_DEFAULT_PROPERTIES
         val props = Props.loadFrom(source.combine(envRootName))
-        val confBase = Config(source.raw, enc, props)
+        val confBase = Config(source, props, enc)
 
         // 2. The environment can be selected in the following order:
         // - command line ( via "-env=dev"   )
@@ -160,9 +160,9 @@ object AppUtils {
             // for directory reference provide: "file://./conf/"
             val overrideConfName = "env.${env.name}" + CONFIG_DEFAULT_SUFFIX
             val overrideConfPath = source.combine(overrideConfName).toFile().absolutePath
-            val confEnv = ConfigMulti(overrideConfPath, confBase, enc)
+            val confEnv = Config.of(overrideConfPath, confBase, enc)
 
-            Success(AppInputs(args, envCheck, confBase, confEnv))
+            Success(AppInputs(args, Envs(allEnvs).select(env.name), confBase, confEnv))
         } ?: Failure("Unknown environment name : $envName supplied")
     }
 
@@ -172,7 +172,7 @@ object AppUtils {
         val build = if (buildInfoExists) {
             val source = getDir(appInputs.args, Alias.Jar).combine("build.conf")
             val props = Props.loadFrom(source)
-            val stamp = Config(source.raw, enc, props)
+            val stamp = Config(source,props, enc)
             val info = stamp.buildStamp("build")
             info
         } else {
@@ -180,22 +180,19 @@ object AppUtils {
         }
 
         val args = appInputs.args
-        val env = appInputs.env
+        val env = appInputs.envs
 
         // The config is inheritance based.
         // Which means the base env.loc.conf inherits from env.conf.
         val conf = appInputs.confEnv
 
         return AppContext(
-                arg = args,
-                env = env,
-                cfg = conf,
+                args = args,
+                envs = env,
+                conf = conf,
                 enc = enc,
                 logs = logs ?: LogsDefault,
-                app = AppBuilder.about(conf),
-                sys = Sys.build(),
-                build = build,
-                start = StartInfo(args.line, env.key, conf.origin(), env.key),
+                info = Info(AppBuilder.about(conf), build, Sys.build()),
                 dirs = AppBuilder.folders(conf)
         )
     }
@@ -207,7 +204,7 @@ object AppUtils {
 
     data class AppInputs(
         val args: Args,
-        val env: Env,
+        val envs: Envs,
         val confBase: Conf,
         val confEnv: Conf
     )

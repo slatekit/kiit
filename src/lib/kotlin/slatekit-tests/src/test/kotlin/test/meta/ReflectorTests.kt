@@ -21,11 +21,10 @@ import slatekit.common.args.Args
 import slatekit.common.conf.Config
 import slatekit.common.db.DbConString
 import slatekit.common.db.DbLookup
-import slatekit.common.envs.Env
-import slatekit.common.envs.EnvMode
+import slatekit.common.envs.Envs
 import slatekit.common.info.About
 import slatekit.common.info.Build
-import slatekit.common.info.StartInfo
+import slatekit.common.info.Info
 import slatekit.common.info.Sys
 import slatekit.common.log.LogsDefault
 import slatekit.common.smartvalues.PhoneUS
@@ -50,15 +49,16 @@ class ReflectorTests {
 
 
     val ctx: AppEntContext = AppEntContext (
-            arg  = Args.default(),
-            env  = Env("local", EnvMode.Dev),
-            cfg  = Config(),
+            args  = Args.default(),
+            envs  = Envs.defaults().select("loc"),
+            conf  = Config(),
             logs = LogsDefault,
             ent  = Entities({ con -> Db(con) }),
-            app  = About("tests", "myapp", "sample app", "slatekit", "ny", "", "", "1.1.0", ""),
-            sys = Sys.build(),
-            build = Build.empty,
-            start = StartInfo.none,
+            info = Info(
+                    About("tests", "myapp", "sample app", "slatekit", "ny", "", "", "1.1.0", ""),
+                    Build.empty,
+                    Sys.build()
+            ),
             dbs  = DbLookup.defaultDb(DbConString("com.mysql.jdbc.Driver", "jdbc:mysql://localhost/World_shard2", "root", "abcdefghi")),
             enc  = MyEncryptor
     )

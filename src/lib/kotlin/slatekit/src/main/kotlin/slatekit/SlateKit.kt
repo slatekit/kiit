@@ -75,7 +75,7 @@ class SlateKit(ctx: AppEntContext, val interactive: Boolean) : App<AppEntContext
         val cli = build()
 
         // Determine if running in CLI interactive mode or executing a project generator
-        val args = ctx.arg
+        val args = ctx.args
         when (args.parts.isEmpty()) {
             true -> run(cli)
             false -> gen(cli)
@@ -102,7 +102,7 @@ class SlateKit(ctx: AppEntContext, val interactive: Boolean) : App<AppEntContext
         // 3. The GeneratorAPI is annotated with "area" = "slatekit" for discovery
         // 4. So we append the "slatekit" to the parts field parsed from the Args
         // The parts are ["slatekit", "new", "app"]
-        val args = ctx.arg
+        val args = ctx.args
         val copy = args.withPrefix("slatekit")
         val result = cli.executeArgs(copy)
         when(result) {

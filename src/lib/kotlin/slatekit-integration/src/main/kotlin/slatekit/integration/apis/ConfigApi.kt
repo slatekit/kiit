@@ -76,41 +76,41 @@ class ConfigApi(override val context: slatekit.common.Context) : FileSupport {
 
     @Action(desc = "loads and shows the database info from config")
     fun showDbDefault(): DbCon? {
-        return context.cfg.dbCon()
+        return context.conf.dbCon()
     }
 
     @Action(desc = "loads and shows the database info from config with supplied name")
     fun showDbNamed(name: String): DbCon? {
-        return context.cfg.dbCon(name)
+        return context.conf.dbCon(name)
     }
 
     @Action(desc = "loads and shows the database info from config with supplied name")
     fun showDbFromUri(path: String, name: String): DbCon? {
-        val conf = Config(path)
+        val conf = Config.of(path)
         val dbCon = conf.dbCon(name)
         return dbCon
     }
 
     @Action(desc = "loads and shows an api login info from config")
     fun showApiLogin(name: String): ApiLogin {
-        return context.cfg.apiLogin(name)
+        return context.conf.apiLogin(name)
     }
 
     @Action(desc = "loads and shows an api key from config")
     fun showApiLoginFromUri(path: String, name: String): ApiLogin {
-        val conf = Config(path)
+        val conf = Config.of(path)
         val apiInfo = conf.apiLogin(name)
         return apiInfo
     }
 
     @Action(desc = "loads and shows an api key from config")
     fun showApiKey(name: String): ApiLogin {
-        return context.cfg.apiLogin(name)
+        return context.conf.apiLogin(name)
     }
 
     @Action(desc = "loads and shows an api key from config")
     fun showApiKeyFromUri(path: String, name: String): ApiLogin {
-        val conf = Config(path)
+        val conf = Config.of(path)
         val apiInfo = conf.apiLogin(name)
         return apiInfo
     }

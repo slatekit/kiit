@@ -28,11 +28,12 @@ import slatekit.common.utils.B64Java8
 import slatekit.common.info.About
 import slatekit.common.encrypt.Encryptor
 import slatekit.common.info.Build
-import slatekit.common.info.StartInfo
 import slatekit.common.info.Sys
 import slatekit.common.log.LogsDefault
 import slatekit.cmds.Command
 import slatekit.cmds.CommandRequest
+import slatekit.common.envs.Envs
+import slatekit.common.info.Info
 import slatekit.db.Db
 import slatekit.entities.Entities
 import slatekit.integration.common.AppEntContext
@@ -88,32 +89,32 @@ class SampleApp(ctx: Context) : App<Context>(ctx, AppOptions(
         // available for derived classes to access its components.
 
         // 1. Get the selected environment name/mode ( local.dev )
-        println(ctx.env.name)
-        println(ctx.env.mode)
-        println(ctx.env.toString())
+        println(ctx.envs.name)
+        println(ctx.envs.mode)
+        println(ctx.envs.toString())
 
         // 2. Get the command line args and show the raw inputs supplied
-        println(ctx.arg.raw)
+        println(ctx.args.raw)
 
         // 3. Get the setting from base config ( common config that all other configs inherit from )
-        println(ctx.cfg.getString("app.api"))
+        println(ctx.conf.getString("app.api"))
 
         // 4. Get value from inherited config ( env.qa.conf ) that inherits
         // from the common config ( env.conf )
-        println(ctx.cfg.getString("app.api"))
-        println(ctx.cfg.dbCon())
+        println(ctx.conf.getString("app.api"))
+        println(ctx.conf.dbCon())
 
         // 5. Get and use logger
         ctx.logs.getLogger().info("default logger ")
 
         // 6. Get app info ( showing just 1 property )
-        println(ctx.app.name)
+        println(ctx.info.about.name)
 
         // 7. Get the host computer info
-        println(ctx.sys.host)
+        println(ctx.info.system.host)
 
         // 8. Get the java runtime info
-        println(ctx.sys.lang)
+        println(ctx.info.system.lang)
 
         // 9. Get the encryptor to encrypt/decrypt
         println(ctx.enc?.let { enc -> enc.encrypt("hello world") })
@@ -167,29 +168,30 @@ class Example_App : Command("app") {
 
         // APPROACH 1: Manually / Explicitly build up the AppContext
         // Load the config "env.conf" from resources
-        val conf = Config("env.conf")
+        val conf = Config.of("env.conf")
         val ctx = AppEntContext(
-                arg = Args.default(),
-                env = conf.env(),
-                cfg = conf,
+                args = Args.default(),
+                envs = Envs.defaults().select(conf.env().name),
+                conf = conf,
                 logs = LogsDefault,
                 ent = Entities({ con -> Db(con) }),
                 enc = Encryptor("wejklhviuxywehjk", "3214maslkdf03292", B64Java8),
-                app = About(
-                        area = "slatekit",
-                        name = "sample-app",
-                        desc = "Sample to show the base application with manually built context",
-                        company = "slatekit",
-                        version = "0.9.1",
-                        contact = "kishore@abc.co",
-                        region = "",
-                        url = "",
-                        tags = "",
-                        examples = ""
-                ),
-                build = Build.empty,
-                start = StartInfo.none,
-                sys = Sys.build()
+                info = Info(
+                        About(
+                                area = "slatekit",
+                                name = "sample-app",
+                                desc = "Sample to show the base application with manually built context",
+                                company = "slatekit",
+                                version = "0.9.1",
+                                contact = "kishore@abc.co",
+                                region = "",
+                                url = "",
+                                tags = "",
+                                examples = ""
+                        ),
+                        Build.empty,
+                        Sys.build()
+                )
         )
         // Now run the app with context info with
         // the help of the AppRunner which will call the life-cycle events.

@@ -17,6 +17,7 @@ import slatekit.common.*
 import slatekit.common.encrypt.Encryptor
 //import java.time.*
 import org.threeten.bp.*
+import slatekit.common.io.Uri
 import java.util.*
 
 /**
@@ -72,20 +73,18 @@ Examples:
  * @param props
  */
 class Config(
-        private val fileName: String? = null,
-        private val enc: Encryptor? = null,
-        props: Properties? = null
+        uri:Uri,
+        val config: Properties,
+        val enc: Encryptor? = null
 )
-    : Conf({ raw -> enc?.decrypt(raw) ?: raw }) {
+    : Conf(uri, { raw -> enc?.decrypt(raw) ?: raw }) {
 
 
     /**
      * Get or load the config object
      */
-    private val config: Properties = props ?: ConfFuncs.loadPropertiesFrom(fileName)
     override val raw: Any = config
     override fun get(key: String): Any? = getInternal(key)
-    //override fun getObject(key: String): Any? = getInternal(key)
     override fun containsKey(key: String): Boolean = config.containsKey(key)
     override fun size(): Int = config.values.size
 
@@ -103,19 +102,6 @@ class Config(
     override fun getLocalDateTime(key: String): LocalDateTime = Conversions.toLocalDateTime(getStringRaw(key))
     override fun getZonedDateTime(key: String): ZonedDateTime = Conversions.toZonedDateTime(getStringRaw(key))
     override fun getZonedDateTimeUtc(key: String): ZonedDateTime = Conversions.toZonedDateTimeUtc(getStringRaw(key))
-
-    /**
-     * The reference to the raw underlying config
-     *
-     * @return
-     */
-    override val rawConfig: Any = config
-
-    /**
-     * The origin file path of the config
-     * @return
-     */
-    override fun origin(): String = fileName ?: ""
 
     /**
      * Loads config from the file path supplied
@@ -164,5 +150,40 @@ class Config(
 
 
     private fun getStringRaw(key: String): String = config.getProperty(key)?.trim() ?: ""
+
+    companion object {
+
+        operator fun invoke():Config {
+            val info = Props.load("")
+            return Config(info.first, info.second)
+        }
+
+
+        fun of(configPath: String, enc: Encryptor? = null):Config {
+            val info = Props.load(configPath)
+            val conf = Config(info.first, info.second, enc)
+            return conf
+        }
+
+
+        fun of(configPath: String, configParentPath: String, enc: Encryptor?):ConfigMulti {
+            val parentInfo = Props.load(configParentPath)
+            val parentConf = Config(parentInfo.first, parentInfo.second, enc)
+
+            val inheritInfo = Props.load(configPath)
+            val inheritConf = Config(inheritInfo.first, inheritInfo.second, enc)
+
+            val conf = ConfigMulti(inheritConf, parentConf, inheritInfo.first, enc)
+            return conf
+        }
+
+
+        fun of(configPath: String, configParent: Conf, enc: Encryptor?) :ConfigMulti {
+            val inheritInfo = Props.load(configPath)
+            val inheritConf = Config(inheritInfo.first, inheritInfo.second, enc)
+            val conf = ConfigMulti(inheritConf, configParent, inheritInfo.first, enc)
+            return conf
+        }
+    }
 }
 

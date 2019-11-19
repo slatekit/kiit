@@ -80,11 +80,11 @@ object AppRunner {
         }.then { context ->
 
             // STEP 3: Transform - Command line args
-            Success(context.copy(arg = ArgsSchema.transform(schema, context.arg)))
+            Success(context.copy(args = ArgsSchema.transform(schema, context.args)))
         }.then { context ->
 
             // STEP 4: Validate - Command line args
-            validate(context.arg, schema).fold({ Success(context) }, { Failure(Exception(it)) })
+            validate(context.args, schema).fold({ Success(context) }, { Failure(Exception(it)) })
         }.then { context ->
 
             // STEP 5: App - Create App using supplied lambda and context

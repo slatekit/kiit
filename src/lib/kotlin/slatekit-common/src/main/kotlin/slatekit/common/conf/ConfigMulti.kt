@@ -15,32 +15,21 @@ package slatekit.common.conf
 
 import slatekit.common.Conversions
 import slatekit.common.DateTime
-import slatekit.common.Strings
 import slatekit.common.encrypt.Encryptor
 //import java.time.*
 import org.threeten.bp.*
-import java.util.*
+import slatekit.common.io.Uri
 
 /**
  * Created by kishorereddy on 6/15/17.
  */
 class ConfigMulti(
         private val config: Conf,
-        private val configParent: Conf,
-        private val path: String,
+        private val parent: Conf,
+        uri: Uri,
         private val enc: Encryptor? = null
-) : Conf({ raw -> enc?.decrypt(raw) ?: raw }) {
+) : Conf(uri, { raw -> enc?.decrypt(raw) ?: raw }) {
 
-    constructor(configPath: String, configParentPath: String, enc: Encryptor?) :
-            this(Config(configPath, enc, ConfFuncs.loadPropertiesFrom(configPath)),
-                 Config(configParentPath, enc, ConfFuncs.loadPropertiesFrom(configParentPath)),
-                    configPath, enc)
-
-    constructor(config: Conf, configParent: Conf, enc: Encryptor?) :
-            this(config, configParent, config.origin(), enc)
-
-    constructor(configPath: String, configParent: Conf, enc: Encryptor?) :
-            this(Config(configPath, enc, ConfFuncs.loadPropertiesFrom(configPath)), configParent, configPath, enc)
 
     override val raw: Any = config
     override fun get(key: String): Any? = getInternal(key)
@@ -63,19 +52,6 @@ class ConfigMulti(
     override fun getZonedDateTimeUtc(key: String): ZonedDateTime = Conversions.toZonedDateTimeUtc(getStringRaw(key))
 
     /**
-     * The reference to the raw underlying config
-     *
-     * @return
-     */
-    override val rawConfig: Any = config
-
-    /**
-     * The origin file path of the config
-     * @return
-     */
-    override fun origin(): String = this.path
-
-    /**
      * Loads config from the file path supplied
      *
      * @param file
@@ -84,14 +60,14 @@ class ConfigMulti(
     override fun loadFrom(file: String?): Conf? = ConfFuncs.load(file, enc)
 
     private fun containsKeyInternal(key: String): Boolean {
-        return config.containsKey(key) || configParent.containsKey(key)
+        return config.containsKey(key) || parent.containsKey(key)
     }
 
     private fun getInternal(key: String): Any? {
         val value = if (config.containsKey(key)) {
             config.get(key)
-        } else if (configParent.containsKey(key)) {
-            configParent.get(key)
+        } else if (parent.containsKey(key)) {
+            parent.get(key)
         } else {
             null
         }
@@ -105,8 +81,8 @@ class ConfigMulti(
     private fun getInternalString(key: String): String? {
         val value = if (config.containsKey(key)) {
             config.getString(key)
-        } else if (configParent.containsKey(key)) {
-            configParent.getString(key)
+        } else if (parent.containsKey(key)) {
+            parent.getString(key)
         } else {
             null
         }

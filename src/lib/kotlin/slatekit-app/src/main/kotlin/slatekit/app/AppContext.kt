@@ -19,13 +19,8 @@ import slatekit.common.conf.Conf
 import slatekit.common.conf.Config
 import slatekit.common.utils.B64Java8
 import slatekit.common.encrypt.Encryptor
-import slatekit.common.envs.Env
-import slatekit.common.envs.EnvMode
-import slatekit.common.info.About
-import slatekit.common.info.Build
-import slatekit.common.info.Folders
-import slatekit.common.info.StartInfo
-import slatekit.common.info.Sys
+import slatekit.common.envs.Envs
+import slatekit.common.info.*
 import slatekit.common.log.Logs
 import slatekit.common.log.LogsDefault
 import slatekit.common.toIdent
@@ -33,9 +28,9 @@ import slatekit.results.Codes
 
 /**
   *
-  * @param arg : command line arguments
-  * @param env : environment selection ( dev, qa, staging, prod )
-  * @param cfg : config settings
+  * @param args : command line arguments
+  * @param envs : environment selection ( dev, qa, staging, prod )
+  * @param conf : config settings
   * @param log : logger
   * @param ent : entity/orm registration server to get entity services/repositories
   * @param inf : info only about the currently running application
@@ -49,14 +44,11 @@ import slatekit.results.Codes
   * @param tnt : tenant info ( if running in multi-tenant mode - not officially supported )
   */
 data class AppContext(
-    override val arg: Args,
-    override val env: Env,
-    override val cfg: Conf,
+    override val args: Args,
+    override val envs: Envs,
+    override val conf: Conf,
     override val logs: Logs,
-    override val app: About,
-    override val sys: Sys,
-    override val build: Build,
-    override val start: StartInfo,
+    override val info: Info,
     override val enc: Encryptor? = null,
     override val dirs: Folders? = null,
 
@@ -77,33 +69,27 @@ data class AppContext(
         @JvmStatic
         fun err(conf: Config, code: Int, msg: String? = null): AppContext {
             val args = Args.default()
-            val env = Env("local", EnvMode.Dev)
+            val envs = Envs.defaults().select("loc")
             return AppContext(
-                    arg = args,
-                    env = env,
-                    cfg = conf,
+                    args = args,
+                    envs = envs,
+                    conf = conf,
                     logs = LogsDefault,
-                    app = About.none,
-                    sys = Sys.build(),
-                    build = Build.empty,
-                    start = StartInfo(args.line, env.key, conf.origin(), env.key)
+                    info = Info.none
             )
         }
 
         @JvmStatic
         fun simple(name: String): AppContext {
             val args = Args.default()
-            val env = Env("local", EnvMode.Dev)
+            val envs = Envs.defaults().select("loc")
             val conf = Config()
             return AppContext(
-                    arg = args,
-                    env = env,
-                    cfg = conf,
+                    args = args,
+                    envs = envs,
+                    conf = conf,
                     logs = LogsDefault,
-                    app = About.none,
-                    sys = Sys.build(),
-                    build = Build.empty,
-                    start = StartInfo(args.line, env.key, conf.origin(), env.key),
+                    info = Info.none,
                     dirs = Folders.userDir("slatekit", name.toIdent(), name.toIdent())
             )
         }
@@ -111,17 +97,14 @@ data class AppContext(
         @JvmStatic
         fun sample(id: String, name: String, about: String, company: String): AppContext {
             val args = Args.default()
-            val env = Env("local", EnvMode.Dev)
+            val envs = Envs.defaults().select("loc")
             val conf = Config()
             return AppContext(
-                    arg = args,
-                    env = env,
-                    cfg = conf,
+                    args = args,
+                    envs = envs,
+                    conf = conf,
                     logs = LogsDefault,
-                    app = About(id, name, about, company),
-                    sys = Sys.build(),
-                    build = Build.empty,
-                    start = StartInfo(args.line, env.key, conf.origin(), env.key),
+                    info = Info(About(id, name, about, company), Build.empty, Sys.build()),
                     enc = Encryptor("wejklhviuxywehjk", "3214maslkdf03292", B64Java8),
                     dirs = Folders.userDir("slatekit", "samples", "sample1")
             )

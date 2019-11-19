@@ -21,6 +21,8 @@ import slatekit.common.encrypt.Encryptor
 import slatekit.common.info.ApiKey
 import slatekit.common.info.ApiLogin
 import slatekit.common.info.Credentials
+import slatekit.common.io.Uri
+import slatekit.common.io.Uris
 import java.io.File
 import java.util.*
 
@@ -89,8 +91,10 @@ object ConfFuncs {
      * @param enc : the encryptor for decrypting config settings.
      * @return
      */
-    fun load(fileName: String? = null, enc: Encryptor? = null): Conf =
-            Config(fileName, enc)
+    fun load(fileName: String? = null, enc: Encryptor? = null): Conf {
+        val info = Props.load(fileName)
+        return Config(info.first, info.second, enc)
+    }
 
     /**
      * creates a api credentials file in the app directory of the user home path
@@ -175,7 +179,7 @@ object ConfFuncs {
         enc: Encryptor? = null
     ): Conf {
 
-        val conf = ConfigMulti(fileName, parentFilePath, enc)
+        val conf = Config.of(fileName, parentFilePath, enc)
         return conf
     }
 
