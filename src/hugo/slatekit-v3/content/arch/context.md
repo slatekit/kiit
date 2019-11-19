@@ -88,7 +88,7 @@ Table of contents for this page
 {{% section-end mod="core/cli" %}}
 
 # Status
-This component is currently stable and has default implementations.
+This component is currently stable, has default implementations, and can be used for both **Android and Server**
 {{% section-end mod="core/cli" %}}
 
 # Install
@@ -112,11 +112,11 @@ coming soon
     package="slatekit.common"
     jar="slatekit.common.jar"
     git="https://github.com/code-helix/slatekit/tree/master/src/lib/kotlin/slatekit-app"
-    gitAlias="slatekit/src/lib/kotlin/slatekit-app"
+    gitAlias="slatekit/src/lib/kotlin/slatekit-common"
     url="core/app"
     uses="slatekit.results, slatekit.common"
-    exampleUrl=""
-    exampleFileName="Example_App.kt"
+    exampleUrl="Example_Context.kt"
+    exampleFileName="Example_Context.kt"
 %}}
 {{% section-end mod="core/cli" %}}
 
