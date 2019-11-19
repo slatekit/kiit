@@ -10,10 +10,10 @@ import slatekit.entities.slatekit.entities.EntityOptions
 import slatekit.results.Try
 import slatekit.results.builders.Tries
 
-interface EntityCreates<TId, T> : ServiceSupport<TId, T> where TId : kotlin.Comparable<TId>, T : Entity<TId> {
+interface Creates<TId, T> : ServiceSupport<TId, T> where TId : kotlin.Comparable<TId>, T : Entity<TId> {
 
     /**
-     * creates an entity in the data store without applying field data and sending events via EntityHooks
+     * creates an entity in the data store without applying field data and sending events via Hooks
      * @param entity
      * @return
      */
@@ -24,7 +24,7 @@ interface EntityCreates<TId, T> : ServiceSupport<TId, T> where TId : kotlin.Comp
     /**
      * creates the entity in the data store with additional processing based on the options supplied
      * @param entity : The entity to save
-     * @param options: Settings to determine whether to apply metadata, and notify via EntityHooks
+     * @param options: Settings to determine whether to apply metadata, and notify via Hooks
      */
     fun create(entity: T, options: EntityOptions): Pair<TId, T> {
         // Massage
@@ -43,7 +43,7 @@ interface EntityCreates<TId, T> : ServiceSupport<TId, T> where TId : kotlin.Comp
         }
 
         // Event out
-        if (options.applyHooks && this is EntityHooks) {
+        if (options.applyHooks && this is Hooks) {
             val success = isCreated(id)
             when (success) {
                 true -> this.onEntityEvent(EntityEvent.EntityCreated(id, entity, DateTime.now()))
@@ -55,7 +55,7 @@ interface EntityCreates<TId, T> : ServiceSupport<TId, T> where TId : kotlin.Comp
     }
 
     /**
-     * creates the entity in the data store and sends an event if there is support for EntityHooks
+     * creates the entity in the data store and sends an event if there is support for Hooks
      * @param entity
      * @return
      */
@@ -67,7 +67,7 @@ interface EntityCreates<TId, T> : ServiceSupport<TId, T> where TId : kotlin.Comp
         val id = repo().create(entityWithData)
 
         // Event out
-        if (this is EntityHooks) {
+        if (this is Hooks) {
             val success = isCreated(id)
             when (success) {
                 true -> this.onEntityEvent(EntityEvent.EntityCreated(id, entity, DateTime.now()))

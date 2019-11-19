@@ -7,7 +7,7 @@ import slatekit.query.IQuery
 import slatekit.query.Query
 import slatekit.query.QueryEncoder
 
-interface EntityFinds<TId, T> : ServiceSupport<TId, T> where TId : kotlin.Comparable<TId>, T : Entity<TId> {
+interface Finds<TId, T> : ServiceSupport<TId, T> where TId : kotlin.Comparable<TId>, T : Entity<TId> {
 
     /**
      * finds items based on the query

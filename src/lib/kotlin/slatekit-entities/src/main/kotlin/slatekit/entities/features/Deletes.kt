@@ -10,7 +10,7 @@ import slatekit.query.Op
 import slatekit.results.Try
 import slatekit.results.builders.Tries
 
-interface EntityDeletes<TId, T> : ServiceSupport<TId, T> where TId : kotlin.Comparable<TId>, T : Entity<TId> {
+interface Deletes<TId, T> : ServiceSupport<TId, T> where TId : kotlin.Comparable<TId>, T : Entity<TId> {
 
     /**
      * deletes the entity
@@ -21,7 +21,7 @@ interface EntityDeletes<TId, T> : ServiceSupport<TId, T> where TId : kotlin.Comp
         val success = repo().delete(entity)
 
         // Event out
-        if (entity != null && this is EntityHooks) {
+        if (entity != null && this is Hooks) {
             when (success) {
                 true -> this.onEntityEvent(EntityEvent.EntityDeleted(entity, DateTime.now()))
                 else -> this.onEntityEvent(EntityEvent.EntityErrored(entity,
@@ -58,7 +58,7 @@ interface EntityDeletes<TId, T> : ServiceSupport<TId, T> where TId : kotlin.Comp
     fun deleteByIds(ids: List<TId>): Int {
 
         // Event out one by one
-        return if (this is EntityHooks) {
+        return if (this is Hooks) {
             val statuses = ids.map { id -> repo().get(id)?.let { delete(it) } ?: false }
             statuses.count { it }
         } else {

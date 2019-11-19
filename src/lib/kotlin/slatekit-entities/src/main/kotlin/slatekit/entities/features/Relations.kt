@@ -7,7 +7,7 @@ import slatekit.entities.Entities
 import slatekit.entities.Entity
 import slatekit.entities.core.ServiceSupport
 
-interface EntityRelations<TId, T> : ServiceSupport<TId, T> where TId : kotlin.Comparable<TId>, T : Entity<TId> {
+interface Relations<TId, T> : ServiceSupport<TId, T> where TId : kotlin.Comparable<TId>, T : Entity<TId> {
 
     fun entities(): Entities
 
