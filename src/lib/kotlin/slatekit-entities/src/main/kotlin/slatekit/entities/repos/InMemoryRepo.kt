@@ -29,19 +29,10 @@ import slatekit.query.Op
 import kotlin.reflect.KClass
 
 open class InMemoryRepoWithLongId<T>(info: EntityInfo, idGen: IdGenerator<Long>) :
-    InMemoryRepo<Long, T>(info, idGen)
-        where T : Entity<Long> {
+    InMemoryRepo<Long, T>(info, idGen) where T: Any {
 
     constructor(cls: KClass<T>) :
         this(EntityInfo.memory(Long::class, cls), LongIdGenerator())
-}
-
-open class InMemoryRepoWithIntId<T>(info: EntityInfo, idGen: IdGenerator<Int>) :
-    InMemoryRepo<Int, T>(info, idGen)
-        where T : Entity<Int> {
-
-    constructor(cls: KClass<T>) :
-            this(EntityInfo.memory(Int::class, cls), IntIdGenerator())
 }
 
 /**
@@ -55,7 +46,7 @@ open class InMemoryRepo<TId, T>(
     info: EntityInfo,
     val idGenerator: IdGenerator<TId>
 ) : BaseRepo<TId, T>(info)
-        where TId : kotlin.Comparable<TId>, T : Entity<TId> {
+        where TId : kotlin.Comparable<TId>, T: Any {
     protected var items = ListMap<TId, T>(listOf())
 
     /**
@@ -65,7 +56,7 @@ open class InMemoryRepo<TId, T>(
      */
     override fun create(entity: T): TId {
         // Check 1: already persisted ?
-        return if (!entity.isPersisted()) {
+        return if (!isPersisted(entity)) {
             // get next id
             val id = getNextId()
             val en = when (entity) {
@@ -77,7 +68,7 @@ open class InMemoryRepo<TId, T>(
             items = items.add(id, en as T)
             id
         } else
-            entity.identity()
+            identity(entity)
     }
 
     /**
@@ -87,9 +78,9 @@ open class InMemoryRepo<TId, T>(
      */
     override fun update(entity: T): Boolean {
         // Check 1: already persisted ?
-        if (entity.isPersisted() && items.contains(entity.identity())) {
-            items = items.minus(entity.identity())
-            items = items.add(entity.identity(), entity)
+        if (isPersisted(entity) && items.contains(identity(entity))) {
+            items = items.minus(identity(entity))
+            items = items.add(identity(entity), entity)
         }
         return true
     }
@@ -133,7 +124,7 @@ open class InMemoryRepo<TId, T>(
      *
      * @param id
      */
-    override fun get(id: TId): T? {
+    override fun getById(id: TId): T? {
         return items[id]
     }
 
@@ -142,8 +133,12 @@ open class InMemoryRepo<TId, T>(
      * @param ids
      * @return
      */
-    override fun get(ids: List<TId>): List<T> {
-        return ids.mapNotNull { items[it] }
+    override fun getByIds(ids: List<TId>): List<T> {
+        val items = ids.map {
+            val item = items[it]
+            item
+        }
+        return items.filterNotNull()
     }
 
     /**
@@ -191,7 +186,7 @@ open class InMemoryRepo<TId, T>(
         return if (items.size == 0) {
             listOf()
         } else {
-            val items = items.all().sortedBy { item -> item.identity() }
+            val items = items.all().sortedBy { item -> identity(item) }
             val sorted = if (desc) items.reversed() else items
             sorted.take(count)
         }
@@ -256,7 +251,7 @@ open class InMemoryRepo<TId, T>(
             val finalValue = if (value is UUID) value.toString() else value
             property.let { p ->
                 all.filter { it ->
-                    val actual = Reflector.getFieldValue(it, p)
+                    val actual = Reflector.getFieldValue(it as Any, p)
                     val expected = finalValue
                     compare(cls, actual, expected)
                 }

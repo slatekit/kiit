@@ -33,7 +33,7 @@ abstract class SqlRepo<TId, T>(
     info: EntityInfo,
     val mapper: EntityMapper<TId, T>
 ) : BaseRepo<TId, T>(info)
-        where TId : Comparable<TId>, T : Entity<TId> {
+        where TId : Comparable<TId> {
 
     override fun name(): String = "${info.encodedChar}" + super.name() + "${info.encodedChar}"
 

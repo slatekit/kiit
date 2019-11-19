@@ -28,7 +28,7 @@ import slatekit.query.where
  * NOTE: This is basically a GenericRepository implementation
  * @tparam T
  */
-interface Repo<TId, T> : EntityStore where TId : Comparable<TId>, T : Entity<TId> {
+interface Repo<TId, T> : EntityStore where TId : Comparable<TId> {
 
     val info: EntityInfo
 
@@ -93,7 +93,7 @@ interface Repo<TId, T> : EntityStore where TId : Comparable<TId>, T : Entity<TId
      * @param entity
      */
     fun delete(entity: T?): Boolean =
-        entity?.let { item -> deleteById(item.identity()) } ?: false
+        entity?.let { item -> deleteById(identity(item)) } ?: false
 
     /**
      * deletes the entity by id
@@ -184,7 +184,7 @@ interface Repo<TId, T> : EntityStore where TId : Comparable<TId>, T : Entity<TId
      */
     fun save(entity: T?) {
         entity?.let { item ->
-            if (item.isPersisted())
+            if (isPersisted(item))
                 update(item)
             else
                 create(item)
@@ -333,5 +333,13 @@ interface Repo<TId, T> : EntityStore where TId : Comparable<TId>, T : Entity<TId
         val since = DateTime.now().plusDays((days * -1).toLong())
         val count = deleteByQuery(Query().where(EntityWithTime::createdAt, "<", since))
         return count
+    }
+
+    fun isPersisted(entity:T):Boolean {
+        return info.idInfo.isPersisted(entity)
+    }
+
+    fun identity(entity:T):TId {
+        return info.idInfo.identity(entity)
     }
 }

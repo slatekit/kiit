@@ -32,7 +32,7 @@ import slatekit.meta.models.Model
  * to control how this is done. This also allows for potentially hooking
  * into some other mapping library to handle the heavy / tedious work.
  */
-interface EntityMapper<TId, T> : Mapper where TId : Comparable<TId>, T : Entity<TId> {
+interface EntityMapper<TId, T> : Mapper where TId : Comparable<TId> {
 
     /**
      * Gets the optional Model schema which stores field/properties

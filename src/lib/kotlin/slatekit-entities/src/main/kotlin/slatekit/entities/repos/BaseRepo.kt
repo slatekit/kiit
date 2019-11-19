@@ -27,7 +27,7 @@ import slatekit.entities.core.EntityStore
 abstract class BaseRepo<TId, T>(
     override val info: EntityInfo
 ) :
-    EntityStore, Repo<TId, T> where TId : Comparable<TId>, T : Entity<TId> {
+    EntityStore, Repo<TId, T> where TId : Comparable<TId> {
 
     private val _name: String by lazy {
         info.namer?.rename(info.tableName) ?: info.tableName[0].toLowerCase() + info.tableName.substring(1)
