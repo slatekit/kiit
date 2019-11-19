@@ -303,10 +303,10 @@ class ReflectorTests {
         Assert.assertEquals(2, props.size)
         Assert.assertEquals(props[0].second?.name, "email")
         Assert.assertEquals(props[0].second?.required, true)
-        Assert.assertEquals(props[0].second?.eg, "clark@metro.com")
+        Assert.assertEquals(props[0].second?.example, "clark@metro.com")
         Assert.assertEquals(props[1].second?.name, "")
         Assert.assertEquals(props[1].second?.required, false)
-        Assert.assertEquals(props[1].second?.eg, "clark kent")
+        Assert.assertEquals(props[1].second?.example, "clark kent")
     }
 
     @Test fun can_access_property_values_from_fields() {

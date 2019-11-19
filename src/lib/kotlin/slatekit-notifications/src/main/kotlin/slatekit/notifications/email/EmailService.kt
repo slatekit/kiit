@@ -13,8 +13,8 @@
 
 package slatekit.notifications.email
 
-import slatekit.common.*
 import slatekit.common.templates.Templates
+import slatekit.common.Vars
 import slatekit.notifications.common.Sender
 import slatekit.results.*
 import slatekit.results.builders.Outcomes

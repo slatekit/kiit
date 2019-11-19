@@ -15,7 +15,6 @@ sealed class Agent(override val value:Int, override val name:String) : EnumLike 
     object Cmd      : Agent(6, "Cmd" ) // Function/Command/Task
     object Svc      : Agent(7, "Svc" ) // Generic Service ( e.g. for anything else )
     object Test     : Agent(8, "Test") // Unit/Integration/System tests
-    class  Other(name:String): Agent(9, name) // Other type of agent
 
 
     companion object : EnumSupport() {
@@ -25,15 +24,7 @@ sealed class Agent(override val value:Int, override val name:String) : EnumLike 
         }
 
         override fun isUnknownSupported(): Boolean {
-            return true
-        }
-
-        override fun unknown(name: String): EnumLike {
-            return Other(name)
-        }
-
-        override fun unknown(value: Int): EnumLike {
-            return Other("unknown")
+            return false
         }
     }
 }

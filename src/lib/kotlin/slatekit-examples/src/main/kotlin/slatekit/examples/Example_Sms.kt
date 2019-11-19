@@ -12,7 +12,6 @@
 package slatekit.examples
 
 //<doc:import_required>
-import slatekit.common.*
 
 //</doc:import_required>
 
@@ -26,6 +25,7 @@ import slatekit.common.info.ApiLogin
 import slatekit.common.types.CountryCode
 import slatekit.cmds.CommandRequest
 import slatekit.common.io.Uris
+import slatekit.common.Vars
 import slatekit.notifications.sms.SmsMessage
 import slatekit.notifications.sms.SmsServiceTwilio
 import slatekit.results.Try
@@ -83,11 +83,11 @@ class Example_Sms : Command("sms") {
 
     // Use case 3: Send message using one of the setup templates
     sms3.sendUsingTemplate("sms_welcome", "us", "234567890",
-       Vars(listOf(
-        Pair("greeting" , "hello"),
-        Pair("user.api", "kishore"),
-        Pair("app.code" , "ABC123")
-      )))
+            Vars(listOf(
+                    Pair("greeting", "hello"),
+                    Pair("user.api", "kishore"),
+                    Pair("app.code", "ABC123")
+            )))
     //</doc:examples>
 
     return Success("")

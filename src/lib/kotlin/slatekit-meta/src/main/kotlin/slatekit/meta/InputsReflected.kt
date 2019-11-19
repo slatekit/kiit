@@ -23,7 +23,6 @@ data class InputsReflected(
     private val lookup = cls.memberProperties.map { Pair(it.name, it) }.toMap()
 
     override fun get(key: String): Any? = getInternal(key)
-    //override fun getObject(key: String): Any? = getInternal(key)
     override fun size(): Int = cls.declaredMemberProperties.size
 
     override val raw: Any = source

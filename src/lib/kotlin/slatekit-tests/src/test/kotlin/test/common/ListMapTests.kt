@@ -103,8 +103,8 @@ class ListMapTests {
 
     @Test fun can_use_vars() {
         val vars = Vars(listOf(
-                Pair("user.name" , "john.doe"),
-                Pair("app.name"  , "mobile.app1"),
+                Pair("user.name", "john.doe"),
+                Pair("app.name", "mobile.app1"),
                 Pair("app.confirmUrl", "http://myapp1.com/api/confirm?id=123"),
                 Pair("user.email", "john.doe@gmail.com")
         ))

@@ -13,7 +13,6 @@ package slatekit.examples
 
 
 //<doc:import_required>
-import slatekit.common.*
 import slatekit.notifications.email.EmailMessage
 import slatekit.notifications.email.EmailServiceSendGrid
 import slatekit.common.templates.Template
@@ -27,6 +26,7 @@ import slatekit.common.conf.Config
 import slatekit.common.info.ApiLogin
 import slatekit.cmds.CommandRequest
 import slatekit.common.io.Uris
+import slatekit.common.Vars
 
 //</doc:import_examples>
 
@@ -73,11 +73,11 @@ class Example_Email  : Command("auth") {
 
     // Use case 3: Send message using one of the setup templates
     email2.sendUsingTemplate("email_welcome", "kishore@abc.com", "Welcome to MyApp.com", true,
-       Vars(listOf(
-        Pair("greeting" , "hello"),
-        Pair("user.api", "kishore"),
-        Pair("app.code" , "ABC123")
-      )))
+            Vars(listOf(
+                    Pair("greeting", "hello"),
+                    Pair("user.api", "kishore"),
+                    Pair("app.code", "ABC123")
+            )))
     //</doc:examples>
 
     return result.toTry()

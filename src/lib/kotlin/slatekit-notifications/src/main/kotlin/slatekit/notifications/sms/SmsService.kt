@@ -13,10 +13,10 @@
 
 package slatekit.notifications.sms
 
-import slatekit.common.*
 import slatekit.common.templates.Templates
 import slatekit.common.types.Countries
 import slatekit.common.types.CountryCode
+import slatekit.common.Vars
 import slatekit.notifications.common.Sender
 import slatekit.results.*
 import slatekit.results.builders.Outcomes

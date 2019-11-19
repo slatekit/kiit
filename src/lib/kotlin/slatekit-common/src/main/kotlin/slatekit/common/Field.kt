@@ -37,5 +37,5 @@ annotation class Field(
     val length: Int = 0,
     val defaultVal: String = "",
     val encrypt: Boolean = false,
-    val eg: String = ""
+    val example: String = ""
 )

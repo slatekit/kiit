@@ -40,7 +40,6 @@ data class Data(
 ) : Inputs, InputsUpdateable, JsonSupport {
 
     override fun get(key: String): Any? = getInternal(key)
-    // override fun getObject(key: String): Any? = getInternal(key)
     override fun size(): Int = json.size
     override fun toJson(): JSONObject = json
 
