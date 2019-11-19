@@ -13,7 +13,6 @@ import slatekit.notifications.sms.SmsService
 import slatekit.notifications.sms.SmsServiceTwilio
 import slatekit.docs.DocApi
 import slatekit.info.DependencyApi
-import slatekit.info.DependencyModule
 import slatekit.integration.apis.*
 import slatekit.integration.common.AppEntContext
 import slatekit.integration.mods.Mod
@@ -30,28 +29,28 @@ interface SlateKitServices {
 
 
     fun emails(): EmailService {
-        val cfg = ctx.cfg
+        val cfg = ctx.conf
         val apiLogin = cfg.apiLogin("email")
         return EmailServiceSendGrid(apiLogin)
     }
 
 
     fun sms(): SmsService {
-        val cfg = ctx.cfg
+        val cfg = ctx.conf
         val apiLogin = cfg.apiLogin("sms")
         return SmsServiceTwilio(apiLogin)
     }
 
 
     fun files(): CloudFiles {
-        val apiLogin = ctx.cfg.apiLogin("files")
+        val apiLogin = ctx.conf.apiLogin("files")
         val bucket = apiLogin.tag
         return AwsCloudFiles("us-east-1", bucket, false, apiLogin)
     }
 
 
     fun queues(): CloudQueue<String> {
-        val apiLogin = ctx.cfg.apiLogin("queues")
+        val apiLogin = ctx.conf.apiLogin("queues")
         val queue = apiLogin.tag
         return AwsCloudQueue("us-east-1", queue, apiLogin, QueueStringConverter(), 3)
     }
@@ -94,7 +93,7 @@ interface SlateKitServices {
     fun optionalApis(): List<Api> {
         // @param key : "email"
         fun load(key: String, call: () -> Api): Api? {
-            val enabled = ctx.cfg.getBoolOrElse(key, false)
+            val enabled = ctx.conf.getBoolOrElse(key, false)
             return if (enabled) call() else null
         }
 

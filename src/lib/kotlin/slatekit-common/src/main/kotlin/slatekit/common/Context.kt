@@ -24,9 +24,9 @@ import slatekit.common.log.Logs
 interface Context {
     val args: Args
     val envs: Envs
-    val cfg: Conf
+    val conf: Conf
     val logs: Logs
-    val app: About
+    val about: About
     val sys: Sys
     val build: Build
     val enc: Encryptor?

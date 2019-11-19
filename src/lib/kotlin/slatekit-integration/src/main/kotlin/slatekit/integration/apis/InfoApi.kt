@@ -31,11 +31,11 @@ class InfoApi(val context: Context)  {
 
 
     @Action(desc = "get info about the application")
-    fun about(): About = context.app
+    fun about(): About = context.about
 
 
     @Action(desc = "get info about the application")
-    fun cmd(cmd: Request): About = context.app
+    fun cmd(cmd: Request): About = context.about
 
 
     @Action(desc = "gets info about the language")

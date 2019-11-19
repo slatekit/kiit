@@ -37,7 +37,7 @@ class VersionApi(override val context: Context) : FileSupport {
 
 
     @Action(desc = "get the version of the application")
-    fun app(): String = context.app.version
+    fun app(): String = context.about.version
 
 
     @Action(desc = "gets the version of java")

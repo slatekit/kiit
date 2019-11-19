@@ -188,10 +188,10 @@ object AppUtils {
         return AppContext(
                 args = args,
                 envs = env,
-                cfg = conf,
+                conf = conf,
                 enc = enc,
                 logs = logs ?: LogsDefault,
-                app = AppBuilder.about(conf),
+                about = AppBuilder.about(conf),
                 sys = Sys.build(),
                 build = build,
                 dirs = AppBuilder.folders(conf)

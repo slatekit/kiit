@@ -23,7 +23,7 @@ class SampleApi(context: Context) : ApiBase(context) {
 
     @Action(desc = "info about this api")
     fun about(): About {
-        return context.app
+        return context.about
     }
 
 

@@ -23,8 +23,6 @@ import slatekit.common.args.ArgsSchema
 import slatekit.common.conf.Config
 import slatekit.common.utils.B64Java8
 import slatekit.common.encrypt.Encryptor
-import slatekit.common.envs.Env
-import slatekit.common.envs.EnvMode
 import slatekit.common.info.*
 import slatekit.common.log.LogsDefault
 import slatekit.common.Context
@@ -83,12 +81,12 @@ class Example_Context : Command("cmd") {
         val ctx2 = AppEntContext(
                 args = Args.default(),
                 envs = Envs.defaults(),
-                cfg = Config(),
+                conf = Config(),
                 logs = LogsDefault,
                 ent = Entities({ con -> Db(con) }),
                 sys = Sys.build(),
                 build = Build.empty,
-                app = About(
+                about = About(
                         area = "department1",
                         name = "sample-app-1",
                         desc = "Sample application 1",
@@ -150,9 +148,9 @@ class Example_Context : Command("cmd") {
     fun showContext(ctx: Context) {
         println("args: " + ctx.args)
         println("env : " + ctx.envs)
-        println("conf: " + ctx.cfg)
+        println("conf: " + ctx.conf)
         println("logs: " + ctx.logs)
-        println("app : " + ctx.app)
+        println("app : " + ctx.about)
         println("dirs: " + ctx.dirs)
         println("host: " + ctx.sys.host)
     }

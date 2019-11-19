@@ -20,8 +20,6 @@ import slatekit.common.conf.Conf
 import slatekit.common.db.DbLookup
 import slatekit.common.utils.B64Java8
 import slatekit.common.encrypt.Encryptor
-import slatekit.common.envs.Env
-import slatekit.common.envs.EnvMode
 import slatekit.common.info.*
 import slatekit.common.log.Logs
 import slatekit.common.log.LogsDefault
@@ -35,7 +33,7 @@ import slatekit.entities.Entities
   *
   * @param args : command line arguments
   * @param envs : environment selection ( dev, qa, staging, prod )
-  * @param cfg : config settings
+  * @param conf : config settings
   * @param log : logger
   * @param ent : entity/orm registration server to get entity services/repositories
   * @param inf : info only about the currently running application
@@ -51,9 +49,9 @@ import slatekit.entities.Entities
 data class AppEntContext(
         override val args: Args,
         override val envs: Envs,
-        override val cfg: Conf,
+        override val conf: Conf,
         override val logs: Logs,
-        override val app: About,
+        override val about: About,
         override val sys: Sys,
         override val build: Build,
         val ent: Entities,
@@ -66,7 +64,7 @@ data class AppEntContext(
      * the same context without the Entities
      */
     fun toAppContext(): CommonContext {
-        return CommonContext(args, envs, cfg, logs, app, sys, build, enc, dirs)
+        return CommonContext(args, envs, conf, logs, about, sys, build, enc, dirs)
     }
 
     companion object {
@@ -76,9 +74,9 @@ data class AppEntContext(
          * the same context without the Entities
          */
         fun fromContext(ctx: Context, namer: Namer? = null): AppEntContext {
-            val dbCons = DbLookup.fromConfig(ctx.cfg)
+            val dbCons = DbLookup.fromConfig(ctx.conf)
             return AppEntContext(
-                    ctx.args, ctx.envs, ctx.cfg, ctx.logs, ctx.app, ctx.sys, ctx.build, Entities({ con -> Db(con) }, dbCons, ctx.enc, namer = namer), dbCons, ctx.enc, ctx.dirs
+                    ctx.args, ctx.envs, ctx.conf, ctx.logs, ctx.about, ctx.sys, ctx.build, Entities({ con -> Db(con) }, dbCons, ctx.enc, namer = namer), dbCons, ctx.enc, ctx.dirs
             )
 
         }
@@ -88,9 +86,9 @@ data class AppEntContext(
          * the same context without the Entities
          */
         fun fromAppContext(ctx: CommonContext, namer: Namer? = null): AppEntContext {
-            val dbCons = DbLookup.fromConfig(ctx.cfg)
+            val dbCons = DbLookup.fromConfig(ctx.conf)
             return AppEntContext(
-                    ctx.args, ctx.envs, ctx.cfg, ctx.logs, ctx.app, ctx.sys, ctx.build, Entities({ con -> Db(con) }, dbCons, ctx.enc, namer = namer), dbCons, ctx.enc, ctx.dirs
+                    ctx.args, ctx.envs, ctx.conf, ctx.logs, ctx.about, ctx.sys, ctx.build, Entities({ con -> Db(con) }, dbCons, ctx.enc, namer = namer), dbCons, ctx.enc, ctx.dirs
             )
 
         }
@@ -102,9 +100,9 @@ data class AppEntContext(
             return AppEntContext(
                     args = args,
                     envs = envs,
-                    cfg = conf,
+                    conf = conf,
                     logs = LogsDefault,
-                    app = About(id, name, about, company),
+                    about = About(id, name, about, company),
                     sys = Sys.build(),
                     build = Build.empty,
                     ent = Entities({ con -> Db(con) }),

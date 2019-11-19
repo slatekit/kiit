@@ -15,7 +15,6 @@ import slatekit.common.*
 import slatekit.results.*
 
 // Slate Kit - App ( provides args, help, life-cycle methods, etc )
-import slatekit.common.auth.Roles
 import slatekit.common.ext.toResponse
 
 // Slate Kit - Server ( Ktor support )
@@ -52,7 +51,7 @@ class Server(val ctx: Context)  {
         val apiHost = ApiServer.of( ctx, apis, auth, Source.Web)
 
         // Ktor handler
-        val metrics = MetricsLite(ctx.app.toId())
+        val metrics = MetricsLite(ctx.about.toId())
         val diagnostics = ServerDiagnostics("app", ctx.logs.getLogger("app"), metrics, listOf())
         val handler = KtorHandler(ctx, settings, apiHost, diagnostics, KtorResponse)
 
@@ -109,7 +108,7 @@ class Server(val ctx: Context)  {
      * Used for quickly checking a deployment.
      */
     suspend fun ping(call: ApplicationCall) {
-        val result = "Version ${ctx.app.version} : " + DateTime.now()
+        val result = "Version ${ctx.about.version} : " + DateTime.now()
         KtorResponse.json(call, Success(result).toResponse())
     }
 }

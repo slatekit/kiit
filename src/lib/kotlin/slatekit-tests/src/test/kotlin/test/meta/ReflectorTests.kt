@@ -50,10 +50,10 @@ class ReflectorTests {
     val ctx: AppEntContext = AppEntContext (
             args  = Args.default(),
             envs  = Envs.defaults().select("loc"),
-            cfg  = Config(),
+            conf  = Config(),
             logs = LogsDefault,
             ent  = Entities({ con -> Db(con) }),
-            app  = About("tests", "myapp", "sample app", "slatekit", "ny", "", "", "1.1.0", ""),
+            about  = About("tests", "myapp", "sample app", "slatekit", "ny", "", "", "1.1.0", ""),
             sys = Sys.build(),
             build = Build.empty,
             dbs  = DbLookup.defaultDb(DbConString("com.mysql.jdbc.Driver", "jdbc:mysql://localhost/World_shard2", "root", "abcdefghi")),

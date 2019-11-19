@@ -33,7 +33,7 @@ import slatekit.results.Codes
   *
   * @param args : command line arguments
   * @param envs : environment selection ( dev, qa, staging, prod )
-  * @param cfg : config settings
+  * @param conf : config settings
   * @param log : logger
   * @param ent : entity/orm registration server to get entity services/repositories
   * @param inf : info only about the currently running application
@@ -49,9 +49,9 @@ import slatekit.results.Codes
 data class AppContext(
     override val args: Args,
     override val envs: Envs,
-    override val cfg: Conf,
+    override val conf: Conf,
     override val logs: Logs,
-    override val app: About,
+    override val about: About,
     override val sys: Sys,
     override val build: Build,
     override val enc: Encryptor? = null,
@@ -78,9 +78,9 @@ data class AppContext(
             return AppContext(
                     args = args,
                     envs = envs,
-                    cfg = conf,
+                    conf = conf,
                     logs = LogsDefault,
-                    app = About.none,
+                    about = About.none,
                     sys = Sys.build(),
                     build = Build.empty
             )
@@ -94,9 +94,9 @@ data class AppContext(
             return AppContext(
                     args = args,
                     envs = envs,
-                    cfg = conf,
+                    conf = conf,
                     logs = LogsDefault,
-                    app = About.none,
+                    about = About.none,
                     sys = Sys.build(),
                     build = Build.empty,
                     dirs = Folders.userDir("slatekit", name.toIdent(), name.toIdent())
@@ -111,9 +111,9 @@ data class AppContext(
             return AppContext(
                     args = args,
                     envs = envs,
-                    cfg = conf,
+                    conf = conf,
                     logs = LogsDefault,
-                    app = About(id, name, about, company),
+                    about = About(id, name, about, company),
                     sys = Sys.build(),
                     build = Build.empty,
                     enc = Encryptor("wejklhviuxywehjk", "3214maslkdf03292", B64Java8),

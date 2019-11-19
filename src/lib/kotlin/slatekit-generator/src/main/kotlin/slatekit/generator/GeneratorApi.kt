@@ -88,7 +88,7 @@ class GeneratorApi(val context: Context, val service: GeneratorService) {
      */
     private fun generate(templateName: String, name: String, packageName: String): Try<String> {
         val targetPath = slatekit.common.io.Files.createAtUserDir(listOf("gen", name))
-        val templateDirPath = context.cfg.getString("templates.dir")
+        val templateDirPath = context.conf.getString("templates.dir")
         val template = Templates.load(templateDirPath, templateName)
         //val parentDir = File(templateDirPath, templateName.split("/")[0])
         val rootDir = File(templateDirPath)

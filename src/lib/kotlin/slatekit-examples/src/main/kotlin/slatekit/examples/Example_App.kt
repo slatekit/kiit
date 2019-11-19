@@ -96,18 +96,18 @@ class SampleApp(ctx: Context) : App<Context>(ctx, AppOptions(
         println(ctx.args.raw)
 
         // 3. Get the setting from base config ( common config that all other configs inherit from )
-        println(ctx.cfg.getString("app.api"))
+        println(ctx.conf.getString("app.api"))
 
         // 4. Get value from inherited config ( env.qa.conf ) that inherits
         // from the common config ( env.conf )
-        println(ctx.cfg.getString("app.api"))
-        println(ctx.cfg.dbCon())
+        println(ctx.conf.getString("app.api"))
+        println(ctx.conf.dbCon())
 
         // 5. Get and use logger
         ctx.logs.getLogger().info("default logger ")
 
         // 6. Get app info ( showing just 1 property )
-        println(ctx.app.name)
+        println(ctx.about.name)
 
         // 7. Get the host computer info
         println(ctx.sys.host)
@@ -171,11 +171,11 @@ class Example_App : Command("app") {
         val ctx = AppEntContext(
                 args = Args.default(),
                 envs = Envs.defaults().select(conf.env().name),
-                cfg = conf,
+                conf = conf,
                 logs = LogsDefault,
                 ent = Entities({ con -> Db(con) }),
                 enc = Encryptor("wejklhviuxywehjk", "3214maslkdf03292", B64Java8),
-                app = About(
+                about = About(
                         area = "slatekit",
                         name = "sample-app",
                         desc = "Sample to show the base application with manually built context",

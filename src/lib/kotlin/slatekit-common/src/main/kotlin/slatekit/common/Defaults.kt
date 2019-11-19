@@ -5,8 +5,6 @@ import slatekit.common.conf.Conf
 import slatekit.common.conf.Config
 import slatekit.common.utils.B64Java8
 import slatekit.common.encrypt.Encryptor
-import slatekit.common.envs.Env
-import slatekit.common.envs.EnvMode
 import slatekit.common.envs.Envs
 import slatekit.common.info.*
 import slatekit.common.log.Logs
@@ -64,9 +62,9 @@ data class CommonResponse<out T>(
  *
  * @param args   : command line arguments
  * @param envs   : environment selection ( dev, qa, staging, prod )
- * @param cfg   : config settings
+ * @param conf   : config settings
  * @param logs  : factory to create logs
- * @param app   : info about the running application
+ * @param about   : info about the running application
  * @param sys   : info about system ( host / language )
  * @param build : info about the build
  * @param enc   : encryption/decryption service
@@ -75,9 +73,9 @@ data class CommonResponse<out T>(
 data class CommonContext(
         override val args: Args,
         override val envs: Envs,
-        override val cfg: Conf,
+        override val conf: Conf,
         override val logs: Logs,
-        override val app: About,
+        override val about: About,
         override val sys: Sys,
         override val build: Build,
         override val enc: Encryptor? = null,
@@ -94,9 +92,9 @@ data class CommonContext(
             return CommonContext(
                     args = args,
                     envs = envs,
-                    cfg = conf,
+                    conf = conf,
                     logs = LogsDefault,
-                    app = About.none,
+                    about = About.none,
                     sys = Sys.build(),
                     build = Build.empty
             )
@@ -110,9 +108,9 @@ data class CommonContext(
             return CommonContext(
                     args = args,
                     envs = envs,
-                    cfg = conf,
+                    conf = conf,
                     logs = LogsDefault,
-                    app = About.none,
+                    about = About.none,
                     sys = Sys.build(),
                     build = Build.empty,
                     dirs = Folders.userDir("slatekit", name.toIdent(), name.toIdent())
@@ -127,9 +125,9 @@ data class CommonContext(
             return CommonContext(
                     args = args,
                     envs = envs,
-                    cfg = conf,
+                    conf = conf,
                     logs = LogsDefault,
-                    app = About(id, name, about, company),
+                    about = About(id, name, about, company),
                     sys = Sys.build(),
                     build = Build.empty,
                     enc = Encryptor("wejklhviuxywehjk", "3214maslkdf03292", B64Java8),
