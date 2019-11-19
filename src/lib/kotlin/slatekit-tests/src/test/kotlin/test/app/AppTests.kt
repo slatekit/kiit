@@ -17,15 +17,11 @@ import kotlinx.coroutines.runBlocking
 import org.junit.Assert
 import org.junit.Test
 import slatekit.app.App
-import slatekit.app.AppContext
 import slatekit.app.AppRunner
 import slatekit.common.Context
-import slatekit.common.args.Arg
-import slatekit.common.args.Args
 import slatekit.common.args.ArgsSchema
 import slatekit.common.encrypt.Encryptor
 import slatekit.common.info.About
-import slatekit.integration.common.AppEntContext
 import slatekit.providers.logs.logback.LogbackLogs
 import slatekit.results.Success
 import slatekit.results.Try

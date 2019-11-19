@@ -13,10 +13,17 @@
 
 package slatekit.common.io
 
+import slatekit.results.Outcome
+import slatekit.results.Try
+import slatekit.results.builders.Outcomes
+import slatekit.results.builders.Tries
+
 
 interface IO<in I, out O> {
 
     fun run(i: I): O
+    fun attempt(i:I): Try<O> = Tries.attempt { run(i) }
+    fun outcome(i:I): Outcome<O> = Outcomes.of { run(i) }
 }
 
 
