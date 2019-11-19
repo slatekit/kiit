@@ -19,10 +19,9 @@ class Policy_Tests {
     @Test
     fun test_limit_success(){
         val counters = Counters(Identity.test("policy"))
-        val policy:Policy<String,Int> = Limit(2, { counters } )
+        val policy:Policy<String,Int> = Limit(2, true, { counters } )
         val result = runBlocking {
             policy.run("1") {
-                counters.incProcessed()
                 Outcomes.of(it.toInt())
             }
         }
@@ -35,11 +34,11 @@ class Policy_Tests {
     @Test
     fun test_limit_failure(){
         val counters = Counters(Identity.test("policy"))
-        val policy:Policy<String,Int> = Limit(2, { counters } )
+        val policy:Policy<String,Int> = Limit(2, true, { counters } )
         val result = runBlocking {
-            policy.run("1") { counters.incProcessed(); Outcomes.of(it.toInt()) }
-            policy.run("2") { counters.incProcessed(); Outcomes.of(it.toInt()) }
-            policy.run("3") { counters.incProcessed(); Outcomes.of(it.toInt()) }
+            policy.run("1") { Outcomes.of(it.toInt()) }
+            policy.run("2") { Outcomes.of(it.toInt()) }
+            policy.run("3") { Outcomes.of(it.toInt()) }
         }
         Assert.assertFalse(result.success)
         Assert.assertTrue(result.status is Status.Errored)
@@ -129,10 +128,10 @@ class Policy_Tests {
         val id = Identity.test("policy")
         val calls = Calls(id)
         val counts = Counters(id)
-        val p1 = Limit<String, Int>(4, { i -> counts })
+        val p1 = Limit<String, Int>(4, true, { i -> counts })
         val p2 = Calls<String, Int>(3, { i -> calls  })
 
-        val exec = Policies.compose(p2) { i -> calls.inc(); counts.incProcessed(); Outcomes.of(i.toInt() )}
+        val exec = Policies.compose(p2) { i -> calls.inc(); Outcomes.of(i.toInt() )}
         val call = Policies.compose(p1, exec)
         val result = runBlocking { call("1"); call("2"); }
         Assert.assertTrue(result.success)
@@ -151,13 +150,13 @@ class Policy_Tests {
         val counts = Counters(id)
         var everyValue = 0
         val policies = listOf<Policy<String, Int>>(
-                Limit(4, { i -> counts }),
+                Limit(4, true, { i -> counts }),
                 Calls(3, { i -> calls  }),
                 Every(2, { i, res ->
                     everyValue = res.getOrElse { -1 }
                     println(everyValue)
                 }),
-                Exec { i -> calls.inc(); counts.incProcessed() }
+                Exec { i -> calls.inc(); }
         )
 
         val last: suspend (String) -> Outcome<Int> = { i -> Outcomes.of(i.toInt()) }

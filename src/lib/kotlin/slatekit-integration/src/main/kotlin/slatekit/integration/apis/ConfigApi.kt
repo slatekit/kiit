@@ -86,7 +86,7 @@ class ConfigApi(override val context: slatekit.common.Context) : FileSupport {
 
     @Action(desc = "loads and shows the database info from config with supplied name")
     fun showDbFromUri(path: String, name: String): DbCon? {
-        val conf = Config(path)
+        val conf = Config.of(path)
         val dbCon = conf.dbCon(name)
         return dbCon
     }
@@ -98,7 +98,7 @@ class ConfigApi(override val context: slatekit.common.Context) : FileSupport {
 
     @Action(desc = "loads and shows an api key from config")
     fun showApiLoginFromUri(path: String, name: String): ApiLogin {
-        val conf = Config(path)
+        val conf = Config.of(path)
         val apiInfo = conf.apiLogin(name)
         return apiInfo
     }
@@ -110,7 +110,7 @@ class ConfigApi(override val context: slatekit.common.Context) : FileSupport {
 
     @Action(desc = "loads and shows an api key from config")
     fun showApiKeyFromUri(path: String, name: String): ApiLogin {
-        val conf = Config(path)
+        val conf = Config.of(path)
         val apiInfo = conf.apiLogin(name)
         return apiInfo
     }

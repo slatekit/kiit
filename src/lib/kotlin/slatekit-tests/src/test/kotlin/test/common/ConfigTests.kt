@@ -50,7 +50,7 @@ class ConfigTests {
 
 
     @Test fun test_basic() {
-        val conf = Config(ConfFuncs.CONFIG_DEFAULT_PROPERTIES)
+        val conf = Config.of(ConfFuncs.CONFIG_DEFAULT_PROPERTIES)
         Assert.assertTrue(conf.getInt("test_int") == 1)
         Assert.assertTrue(conf.getBool("test_bool"))
         Assert.assertTrue(conf.getString("test_text") == "abc")
@@ -60,7 +60,7 @@ class ConfigTests {
 
 
     @Test fun test_list() {
-        val conf = Config(ConfFuncs.CONFIG_DEFAULT_PROPERTIES)
+        val conf = Config.of(ConfFuncs.CONFIG_DEFAULT_PROPERTIES)
         val items = conf.getList("test_ints", Int::class.java)
 
         Assert.assertTrue(items[0] == 1)
@@ -71,7 +71,7 @@ class ConfigTests {
 
 
     @Test fun test_map() {
-        val conf = Config(ConfFuncs.CONFIG_DEFAULT_PROPERTIES)
+        val conf = Config.of(ConfFuncs.CONFIG_DEFAULT_PROPERTIES)
         val items = conf.getMap("test_maps", String::class.java, Int::class.java)
 
         Assert.assertTrue(items["a"] == 1)
@@ -82,7 +82,7 @@ class ConfigTests {
 
 
     @Test fun test_model_env() {
-        val conf  = Config(ConfFuncs.CONFIG_DEFAULT_PROPERTIES)
+        val conf  = Config.of(ConfFuncs.CONFIG_DEFAULT_PROPERTIES)
         val env = conf.env()
         Assert.assertTrue(env.name == "local")
         Assert.assertTrue(env.mode == EnvMode.Dev)
@@ -90,7 +90,7 @@ class ConfigTests {
 
 
     @Test fun test_model_db_con() {
-        val conf  = Config(ConfFuncs.CONFIG_DEFAULT_PROPERTIES)
+        val conf  = Config.of(ConfFuncs.CONFIG_DEFAULT_PROPERTIES)
         val con = conf.dbCon("db1")
         Assert.assertTrue(con.driver == "mysql")
         Assert.assertTrue(con.url == "localhost")
@@ -110,7 +110,7 @@ class ConfigTests {
 
 
     @Test fun test_model_movie() {
-        val conf  = Config(ConfFuncs.CONFIG_DEFAULT_PROPERTIES)
+        val conf  = Config.of(ConfFuncs.CONFIG_DEFAULT_PROPERTIES)
         val movie = conf.map<Movie>("movie", Movie::class, null)!!
         Assert.assertTrue(movie.id == 0L )
         Assert.assertTrue(movie.title == "Indiana Jones")
@@ -123,7 +123,7 @@ class ConfigTests {
 
 
     @Test fun test_model_creds() {
-        val conf  = Config(ConfFuncs.CONFIG_DEFAULT_PROPERTIES)
+        val conf  = Config.of(ConfFuncs.CONFIG_DEFAULT_PROPERTIES)
         val login = conf.login("login")
         Assert.assertTrue(login.id     == "user1")
         Assert.assertTrue(login.name   == "user one")
@@ -135,7 +135,7 @@ class ConfigTests {
 
 
     @Test fun test_model_api_key() {
-        val conf  = Config(ConfFuncs.CONFIG_DEFAULT_PROPERTIES)
+        val conf  = Config.of(ConfFuncs.CONFIG_DEFAULT_PROPERTIES)
         val key = conf.apiLogin("aws-sqs")
         matchkey(key, ApiLogin("mycompany1.dev", "key1", "pass1", "env1", "tag1"))
     }
@@ -148,21 +148,21 @@ class ConfigTests {
 
 
     @Test fun test_loading_from_dir_user() {
-        val conf  = Config("usr://.slatekit/conf/env.conf")
+        val conf  = Config.of("usr://.slatekit/conf/env.conf")
         val key = conf.apiLogin("aws-sqs")
         matchkey(key, ApiLogin("mycompany1.dev", "key1", "pass1", "env1", "tag1"))
     }
 
 
     @Test fun test_loading_from_dir_explicit() {
-        val conf  = Config("abs:///Users/kishore.reddy/.slatekit/conf/env.conf")
+        val conf  = Config.of("abs:///Users/kishore.reddy/.slatekit/conf/env.conf")
         val key = conf.apiLogin("aws-sqs")
         matchkey(key, ApiLogin("mycompany1.dev", "key1", "pass1", "env1", "tag1"))
     }
 
 
     @Test fun test_enc() {
-        val conf  = Config(ConfFuncs.CONFIG_DEFAULT_PROPERTIES, MyEncryptor)
+        val conf  = Config.of(ConfFuncs.CONFIG_DEFAULT_PROPERTIES, MyEncryptor)
         val raw = "StarTrek2100"
         var enc = MyEncryptor.encrypt(raw)
 
