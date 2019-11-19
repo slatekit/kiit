@@ -28,6 +28,7 @@ import slatekit.common.db.DbLookup
 import slatekit.common.db.DbLookup.Companion.defaultDb
 import slatekit.common.envs.Env
 import slatekit.common.envs.EnvMode
+import slatekit.common.envs.Envs
 import slatekit.common.info.*
 import slatekit.common.log.LogsDefault
 import slatekit.common.requests.Request
@@ -55,15 +56,14 @@ open class ApiTestsBase {
     fun buildCtx(): AppEntContext {
         val cfg = Config()
         val ctx = AppEntContext(
-                arg = Args.default(),
-                env = Env("local", EnvMode.Dev),
+                args = Args.default(),
+                envs = Envs.defaults().select("loc"),
                 cfg = cfg,
                 logs = LogsDefault,
                 ent = Entities({ con -> Db(con) }, DbLookup(cfg.dbCon())),
                 app = About("tests", "myapp", "sample app", "slatekit", "ny", "", "", "1.1.0", ""),
                 sys = Sys.build(),
                 build = Build.empty,
-                start = StartInfo.none,
                 dbs = defaultDb(DbConString("com.mysql.jdbc.Driver", "jdbc:mysql://localhost/World_shard2", "root", "abcdefghi")),
                 enc = MyEncryptor
         )

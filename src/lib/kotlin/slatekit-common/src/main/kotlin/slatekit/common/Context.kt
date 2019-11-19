@@ -4,6 +4,7 @@ import slatekit.common.args.Args
 import slatekit.common.conf.Conf
 import slatekit.common.encrypt.Encryptor
 import slatekit.common.envs.Env
+import slatekit.common.envs.Envs
 import slatekit.common.info.*
 import slatekit.common.log.Logs
 
@@ -21,14 +22,13 @@ import slatekit.common.log.Logs
  * dirs : directories used for the app
  */
 interface Context {
-    val arg: Args
-    val env: Env
+    val args: Args
+    val envs: Envs
     val cfg: Conf
     val logs: Logs
     val app: About
     val sys: Sys
     val build: Build
-    val start: StartInfo
     val enc: Encryptor?
     val dirs: Folders?
 }

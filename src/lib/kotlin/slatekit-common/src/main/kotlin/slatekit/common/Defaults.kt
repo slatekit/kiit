@@ -7,6 +7,7 @@ import slatekit.common.utils.B64Java8
 import slatekit.common.encrypt.Encryptor
 import slatekit.common.envs.Env
 import slatekit.common.envs.EnvMode
+import slatekit.common.envs.Envs
 import slatekit.common.info.*
 import slatekit.common.log.Logs
 import slatekit.common.log.LogsDefault
@@ -61,8 +62,8 @@ data class CommonResponse<out T>(
 
 /**
  *
- * @param arg   : command line arguments
- * @param env   : environment selection ( dev, qa, staging, prod )
+ * @param args   : command line arguments
+ * @param envs   : environment selection ( dev, qa, staging, prod )
  * @param cfg   : config settings
  * @param logs  : factory to create logs
  * @param app   : info about the running application
@@ -72,14 +73,13 @@ data class CommonResponse<out T>(
  * @param dirs  : directories used for the app
  */
 data class CommonContext(
-        override val arg: Args,
-        override val env: Env,
+        override val args: Args,
+        override val envs: Envs,
         override val cfg: Conf,
         override val logs: Logs,
         override val app: About,
         override val sys: Sys,
         override val build: Build,
-        override val start: StartInfo,
         override val enc: Encryptor? = null,
         override val dirs: Folders? = null
 ) : Context {
@@ -89,34 +89,32 @@ data class CommonContext(
         @JvmStatic
         fun err(code: Int, msg: String? = null): CommonContext {
             val args = Args.default()
-            val env = Env("local", EnvMode.Dev)
+            val envs = Envs.defaults()
             val conf = Config()
             return CommonContext(
-                    arg = args,
-                    env = env,
+                    args = args,
+                    envs = envs,
                     cfg = conf,
                     logs = LogsDefault,
                     app = About.none,
                     sys = Sys.build(),
-                    build = Build.empty,
-                    start = StartInfo(args.line, env.key, conf.origin(), env.key)
+                    build = Build.empty
             )
         }
 
         @JvmStatic
         fun simple(name: String): CommonContext {
             val args = Args.default()
-            val env = Env("local", EnvMode.Dev)
+            val envs = Envs.defaults()
             val conf = Config()
             return CommonContext(
-                    arg = args,
-                    env = env,
+                    args = args,
+                    envs = envs,
                     cfg = conf,
                     logs = LogsDefault,
                     app = About.none,
                     sys = Sys.build(),
                     build = Build.empty,
-                    start = StartInfo(args.line, env.key, conf.origin(), env.key),
                     dirs = Folders.userDir("slatekit", name.toIdent(), name.toIdent())
             )
         }
@@ -124,17 +122,16 @@ data class CommonContext(
         @JvmStatic
         fun sample(id: String, name: String, about: String, company: String): CommonContext {
             val args = Args.default()
-            val env = Env("local", EnvMode.Dev)
+            val envs = Envs.defaults()
             val conf = Config()
             return CommonContext(
-                    arg = args,
-                    env = env,
+                    args = args,
+                    envs = envs,
                     cfg = conf,
                     logs = LogsDefault,
                     app = About(id, name, about, company),
                     sys = Sys.build(),
                     build = Build.empty,
-                    start = StartInfo(args.line, env.key, conf.origin(), env.key),
                     enc = Encryptor("wejklhviuxywehjk", "3214maslkdf03292", B64Java8),
                     dirs = Folders.userDir("slatekit", "samples", "sample1")
             )

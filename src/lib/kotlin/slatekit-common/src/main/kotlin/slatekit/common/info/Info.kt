@@ -16,7 +16,6 @@ package slatekit.common.info
 data class Info(
     @JvmField val about: About,
     @JvmField val build: Build,
-    @JvmField val start: StartInfo,
     @JvmField val system: Sys
 ) {
 
@@ -34,13 +33,6 @@ data class Info(
         callback("app.region       ".padEnd(maxLen), about.region)
         callback("app.contact      ".padEnd(maxLen), about.contact)
         callback("app.url          ".padEnd(maxLen), about.url)
-
-        // Start up
-        callback("args             ".padEnd(maxLen), start.args)
-        callback("env              ".padEnd(maxLen), start.env)
-        callback("config           ".padEnd(maxLen), start.config)
-        callback("log              ".padEnd(maxLen), start.logFile)
-        callback("started          ".padEnd(maxLen), start.started.toString())
 
         // Commit info
         callback("build.version    ", build.version)
@@ -64,6 +56,6 @@ data class Info(
 
     companion object {
         @JvmStatic
-        val none = Info(About.none, Build.empty, StartInfo.none, Sys.build())
+        val none = Info(About.none, Build.empty, Sys.build())
     }
 }

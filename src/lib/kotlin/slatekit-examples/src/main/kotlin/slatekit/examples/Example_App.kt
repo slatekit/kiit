@@ -28,11 +28,11 @@ import slatekit.common.utils.B64Java8
 import slatekit.common.info.About
 import slatekit.common.encrypt.Encryptor
 import slatekit.common.info.Build
-import slatekit.common.info.StartInfo
 import slatekit.common.info.Sys
 import slatekit.common.log.LogsDefault
 import slatekit.cmds.Command
 import slatekit.cmds.CommandRequest
+import slatekit.common.envs.Envs
 import slatekit.db.Db
 import slatekit.entities.Entities
 import slatekit.integration.common.AppEntContext
@@ -88,12 +88,12 @@ class SampleApp(ctx: Context) : App<Context>(ctx, AppOptions(
         // available for derived classes to access its components.
 
         // 1. Get the selected environment name/mode ( local.dev )
-        println(ctx.env.name)
-        println(ctx.env.mode)
-        println(ctx.env.toString())
+        println(ctx.envs.name)
+        println(ctx.envs.mode)
+        println(ctx.envs.toString())
 
         // 2. Get the command line args and show the raw inputs supplied
-        println(ctx.arg.raw)
+        println(ctx.args.raw)
 
         // 3. Get the setting from base config ( common config that all other configs inherit from )
         println(ctx.cfg.getString("app.api"))
@@ -169,8 +169,8 @@ class Example_App : Command("app") {
         // Load the config "env.conf" from resources
         val conf = Config("env.conf")
         val ctx = AppEntContext(
-                arg = Args.default(),
-                env = conf.env(),
+                args = Args.default(),
+                envs = Envs.defaults().select(conf.env().name),
                 cfg = conf,
                 logs = LogsDefault,
                 ent = Entities({ con -> Db(con) }),
@@ -188,7 +188,6 @@ class Example_App : Command("app") {
                         examples = ""
                 ),
                 build = Build.empty,
-                start = StartInfo.none,
                 sys = Sys.build()
         )
         // Now run the app with context info with

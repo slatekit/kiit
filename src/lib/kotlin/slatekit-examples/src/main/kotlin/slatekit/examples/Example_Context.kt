@@ -71,22 +71,23 @@ class Example_Context : Command("cmd") {
         // 5. To customize the context for different components, you
         //    either extend the Context, and/or copy the AppContext
         //    with modifications
-
         // CASE 1: Build a simple context with minimal info that includes:
+        val ctx1 = CommonContext.simple("demoapp")
+
+        // CASE 2: Build a simple context with minimal info that includes:
         // - default arguments ( command line )
         // - dev environment
         // - Config() representing conf settings from "env.conf"
         // - default logger ( console )
         // - entities ( registrations for orm )
-        val ctx1 = AppEntContext(
-                arg = Args.default(),
-                env = Env("dev", EnvMode.Dev, "ny", "dev environment"),
+        val ctx2 = AppEntContext(
+                args = Args.default(),
+                envs = Envs.defaults(),
                 cfg = Config(),
                 logs = LogsDefault,
                 ent = Entities({ con -> Db(con) }),
                 sys = Sys.build(),
                 build = Build.empty,
-                start = StartInfo.none,
                 app = About(
                         area = "department1",
                         name = "sample-app-1",
@@ -101,7 +102,7 @@ class Example_Context : Command("cmd") {
                 )
         )
 
-        // CASE 2: Typically your application will want to derive the
+        // CASE 3: Typically your application will want to derive the
         // context from either the command line args and or the config
         // There is a builder method takes command line arguments and
         // other inputs and constructs the context. This example shows
@@ -113,7 +114,7 @@ class Example_Context : Command("cmd") {
         // 1. "env.dev.conf" ( environment specific )
         // 2. "env.conf"     ( common / base line   )
 
-        // CASE 2 : This example shows providing the args schema for parsing the args
+        // CASE 4 : This example shows providing the args schema for parsing the args
         // refer to Args in utils for more info.
         // NOTE: There are additional parameters on the build function ( callbacks )
         // to allow you to get the context and modify it before it is returned.
@@ -133,7 +134,11 @@ class Example_Context : Command("cmd") {
             showContext(it)
         }
 
-        // CASE 4: You can also build an error context representing an invalid context
+
+        // CASE 4: Access common info
+
+
+        // CASE 5: You can also build an error context representing an invalid context
         val ctx4 = CommonContext.err(Codes.BAD_REQUEST.code, "Bad context, invalid inputs supplied")
         showContext(ctx4)
 
@@ -143,8 +148,8 @@ class Example_Context : Command("cmd") {
 
 
     fun showContext(ctx: Context) {
-        println("args: " + ctx.arg)
-        println("env : " + ctx.env)
+        println("args: " + ctx.args)
+        println("env : " + ctx.envs)
         println("conf: " + ctx.cfg)
         println("logs: " + ctx.logs)
         println("app : " + ctx.app)

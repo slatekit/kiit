@@ -93,8 +93,8 @@ class Example_Diagnostics : Command("cmd") {
 
 
     fun showContext(ctx: Context) {
-        println("args: " + ctx.arg)
-        println("env : " + ctx.env)
+        println("args: " + ctx.args)
+        println("env : " + ctx.envs)
         println("conf: " + ctx.cfg)
         println("logs: " + ctx.logs)
         println("app : " + ctx.app)

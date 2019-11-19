@@ -96,15 +96,12 @@ open class App<C : Context>(
         writer.title("Welcome to ${ctx.app.name}")
         writer.text("************************************")
         writer.line()
-        writer.text("starting in environment: " + this.ctx.env.key)
+        writer.text("starting in environment: " + this.ctx.envs.key)
 
         // Show basic environment info if not printing the start info
         if (!options.printSummaryBeforeExec) {
             logger.info("starting ${ctx.app.name}")
             logger.info("app:version :${ctx.app.version}")
-            logger.info("app:args    :${ctx.start.args}")
-            logger.info("app:env     :${ctx.start.env}")
-            logger.info("app:config  :${ctx.start.config}")
         }
     }
 
@@ -121,11 +118,6 @@ open class App<C : Context>(
         logger.info("app.region       ".padEnd(maxLen) + ctx.app.region)
         logger.info("app.contact      ".padEnd(maxLen) + ctx.app.contact)
         logger.info("app.url          ".padEnd(maxLen) + ctx.app.url)
-        logger.info("args             ".padEnd(maxLen) + ctx.start.args)
-        logger.info("env              ".padEnd(maxLen) + ctx.start.env)
-        logger.info("config           ".padEnd(maxLen) + ctx.start.config)
-        logger.info("log              ".padEnd(maxLen) + ctx.start.logFile)
-        logger.info("started          ".padEnd(maxLen) + ctx.start.started.toString())
         logger.info("build.version    ".padEnd(maxLen) + ctx.build.version)
         logger.info("build.commit     ".padEnd(maxLen) + ctx.build.commit)
         logger.info("build.date       ".padEnd(maxLen) + ctx.build.date)

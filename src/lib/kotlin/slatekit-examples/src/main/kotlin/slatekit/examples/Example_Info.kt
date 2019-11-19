@@ -15,14 +15,12 @@ package slatekit.examples
 import slatekit.common.info.About
 import slatekit.common.info.Host
 import slatekit.common.info.Lang
-import slatekit.common.info.StartInfo
 //</doc:import_required>
 
 //<doc:import_examples>
 import slatekit.cmds.Command
 import slatekit.results.Try
 import slatekit.results.Success
-import slatekit.common.envs.EnvMode
 import slatekit.cmds.CommandRequest
 
 //</doc:import_examples>
@@ -44,14 +42,7 @@ class Example_Info  : Command("info") {
     lang.each { name, value -> println( "$name : $value" ) }
     println()
 
-
-    // CASE 3: Set startup info ( env, config, log, args)
-    val startup = StartInfo("-level=error", "{@app}-{@env}-{@date}.log", "{@app}.config", EnvMode.Qat.name)
-    startup.each { name, value -> println( "$name : $value" ) }
-    println()
-
-
-    // CASE 4: Set up info about your application.
+    // CASE 3: Set up info about your application.
     val app = About(
       area = "product1",
       name = "My sample app",

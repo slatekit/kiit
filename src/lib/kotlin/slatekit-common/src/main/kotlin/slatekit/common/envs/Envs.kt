@@ -37,6 +37,12 @@ data class Envs(val all: List<Env>, val current: Env) : EnvSupport {
     val env: String get() = current.mode.name
 
     /**
+     * Env Mode of the currently selected ( dev, qa, uat, pro )
+     * @return
+     */
+    val mode: EnvMode get() = current.mode
+
+    /**
      * The fully qualified name of the currently selected environment ( combines the name + key )
      * @return
      */
@@ -115,14 +121,16 @@ data class Envs(val all: List<Env>, val current: Env) : EnvSupport {
          * @return
          */
         @JvmStatic
-        fun defaults(): Envs =
-                Envs(listOf(
-                        Env("loc", EnvMode.Dev, desc = "Dev environment (local)"),
-                        Env("dev", EnvMode.Dev, desc = "Dev environment (shared)"),
-                        Env("qa1", EnvMode.Qat, desc = "QA environment  (current release)"),
-                        Env("qa2", EnvMode.Qat, desc = "QA environment  (last release)"),
-                        Env("stg", EnvMode.Uat, desc = "STG environment (demo)"),
-                        Env("pro", EnvMode.Pro, desc = "LIVE environment")
-                ))
+        fun defaults(selected:String? = null): Envs {
+            val envs = Envs(listOf(
+                    Env("loc", EnvMode.Dev, desc = "Dev environment (local)"),
+                    Env("dev", EnvMode.Dev, desc = "Dev environment (shared)"),
+                    Env("qa1", EnvMode.Qat, desc = "QA environment  (current release)"),
+                    Env("qa2", EnvMode.Qat, desc = "QA environment  (last release)"),
+                    Env("stg", EnvMode.Uat, desc = "STG environment (demo)"),
+                    Env("pro", EnvMode.Pro, desc = "LIVE environment")
+            ))
+            return selected?.let { envs.select(it) } ?: envs
+        }
     }
 }

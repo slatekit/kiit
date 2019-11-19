@@ -45,8 +45,4 @@ class InfoApi(val context: Context)  {
     @Action(desc = "gets info about the folders")
     fun dirs(): Folders = context.dirs ?: Folders.none
 
-
-    @Action(desc = "gets info about the start up time")
-    fun start(): StartInfo = context.start
-
 }

@@ -89,7 +89,7 @@ class AppLoaderTests  {
 
         override suspend fun exec(): Try<Any> {
             val data = ConfigValueTest(
-                    ctx.env.name,
+                    ctx.envs.name,
                     ctx.cfg.getString("test_stri"),
                     ctx.cfg.getInt("test_int"),
                     ctx.cfg.getDouble("test_doub")
