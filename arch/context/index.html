@@ -159,8 +159,29 @@
 
 <h1 id="overview">Overview</h1>
 
-<p>Describe this {COMPONENT_NAME} concisely in 2-3 sentences.
-<br/><br/></p>
+<p>The Context is a container for common application dependencies such as the parsed command line <strong>args</strong>, selected <strong>environment</strong>, <strong>config</strong> properties, <strong>logs</strong>, <strong>encryptor</strong>, <strong>app, build, host</strong> info and more. This is created and must be available for any runnable application such as a <strong>Console App, CLI, or Server</strong>.</p>
+
+<div class="highlight"><pre class="chroma"><code class="language-kotlin" data-lang="kotlin">    <span class="cm">/**
+</span><span class="cm">     - Represents context of a running application and contains information used for most components
+</span><span class="cm">     - args : command line arguments
+</span><span class="cm">     - envs : environment selection ( dev, qa, staging, prod )
+</span><span class="cm">     - conf : config settings
+</span><span class="cm">     - logs : logger
+</span><span class="cm">     - info : info about the application
+</span><span class="cm">     - enc  : encryption/decryption service
+</span><span class="cm">     - dirs : directories used for the app
+</span><span class="cm">     */</span>
+    <span class="k">interface</span> <span class="nc">Context</span> <span class="p">{</span>
+        <span class="k">val</span> <span class="py">arg</span><span class="p">:</span> <span class="n">Args</span>
+        <span class="k">val</span> <span class="py">env</span><span class="p">:</span> <span class="n">Env</span>
+        <span class="k">val</span> <span class="py">cfg</span><span class="p">:</span> <span class="n">Conf</span>
+        <span class="k">val</span> <span class="py">logs</span><span class="p">:</span> <span class="n">Logs</span>
+        <span class="k">val</span> <span class="py">info</span><span class="p">:</span> <span class="n">Info</span>
+        <span class="k">val</span> <span class="py">enc</span><span class="p">:</span> <span class="n">Encryptor</span><span class="p">?</span>
+        <span class="k">val</span> <span class="py">dirs</span><span class="p">:</span> <span class="n">Folders</span><span class="p">?</span>
+    <span class="p">}</span></code></pre></div>
+
+<br/><br/>
 
 <h1 id="index">Index</h1>
 
@@ -224,7 +245,7 @@
 
 <h1 id="status">Status</h1>
 
-<p>coming soon
+<p>This component is currently stable, has default implementations, and can be used for both <strong>Android and Server</strong>
 <br/>
 
 <a href="core/cli#overview" class="sk-back-to-top">Back to top </a>
@@ -241,21 +262,21 @@
     <span class="n">dependencies</span> <span class="o">{</span>
         <span class="c1">// other dependencies ...
 </span><span class="c1"></span>
-        <span class="n">compile</span> <span class="s1">&#39;com.slatekit:slatekit-{COMPONENT_ID}:0.9.9&#39;</span>
+        <span class="n">compile</span> <span class="s1">&#39;com.slatekit:slatekit-common:1.0.0&#39;</span>
     <span class="o">}</span></code></pre></div>
 
 <table class="table table-bordered table-striped">
   <tr>
     <td><strong>package</strong></td>
-    <td>slatekit.app</td>
+    <td>slatekit.common</td>
   </tr>
   <tr>
     <td><strong>jar</strong></td>
-    <td>slatekit.app.jar</td>
+    <td>slatekit.common.jar</td>
   </tr>
   <tr>
     <td><strong>git</strong></td>
-    <td><a class="url-ch" href="https://github.com/code-helix/slatekit/tree/master/src/lib/kotlin/slatekit-app">slatekit/src/lib/kotlin/slatekit-app</a></td>
+    <td><a class="url-ch" href="https://github.com/code-helix/slatekit/tree/master/src/lib/kotlin/slatekit-app">slatekit/src/lib/kotlin/slatekit-common</a></td>
   </tr>
   <tr>
     <td><strong>docs</strong></td>
@@ -271,7 +292,7 @@
   </tr>
   <tr>
       <td><strong>example</strong></td>
-      <td><a class="url-ch" href="">Example_App.kt</a></td>
+      <td><a class="url-ch" href="https://github.com/code-helix/slatekit/tree/master/src/lib/kotlin/slatekit-examples/src/main/kotlin/slatekit/examples/Example_Context.kt">Example_Context.kt</a></td>
   </tr>
 </table>
 <br/>
@@ -303,70 +324,137 @@
 
 <h1 id="sample">Sample</h1>
 
-<p>coming soon
-<div class="highlight"><pre class="chroma"><code class="language-kotlin" data-lang="kotlin">    <span class="k">fun</span> <span class="nf">quick_sample</span><span class="p">()</span> <span class="p">{</span>
-        
-    <span class="p">}</span></code></pre></div>
+<p>The context can be constructed manually or using convenience methods that build the context from the command line args, and configs.
+<div class="highlight"><pre class="chroma"><code class="language-kotlin" data-lang="kotlin">    
+    <span class="k">import</span> <span class="nn">slatekit.common.CommonContext</span>
+
+    <span class="c1">// Create simple context
+</span><span class="c1"></span>    <span class="k">val</span> <span class="py">ctx1</span> <span class="p">=</span> <span class="n">CommonContext</span><span class="p">.</span><span class="n">simple</span><span class="p">(</span><span class="s">&#34;demoapp&#34;</span><span class="p">)</span></code></pre></div></p>
+
 <br/>
 
-<a href="core/cli#overview" class="sk-back-to-top">Back to top </a>
-<br/><br/><br/><br/></p>
+<a href="arch/context#overview" class="sk-back-to-top">Back to top </a>
+<br/><br/><br/><br/>
 
 <h1 id="goals">Goals</h1>
 
-<p>coming soon
 <table class="table table-bordered table-striped">
     <tr>
         <td><strong>Goal</strong></td>
         <td><strong>Description</strong></td>
     </tr>
     <tr>
-        <td><strong>1. Goal A</strong></td>
-        <td>Description of goal</td>
+        <td><strong>1. Defaults</strong></td>
+        <td>Provide sensible defaults to common dependencies like args, env, conf, logs and more for runnable apps</td>
     </tr>
     <tr>
-        <td><strong>2. Goal B</strong> </td>
-        <td>Description of goal</td><br />
+        <td><strong>2. Awareness</strong> </td>
+        <td>Provides access to application environment, configs, build, host info to serve as an identity for the app.</td>
     </tr>
     <tr>
-        <td><strong>3. Goal C</strong></td>
-        <td>Description of goal</td>
+        <td><strong>3. Extensible</strong></td>
+        <td>Can be extended so that you can build your own context and/or load addition components.</td>
     </tr>
 </table>
 <br/>
 
-<a href="core/cli#overview" class="sk-back-to-top">Back to top </a>
-<br/><br/><br/><br/></p>
+<a href="arch/context#overview" class="sk-back-to-top">Back to top </a>
+<br/><br/><br/><br/>
 
-<h1 id="concepts">Concepts</h1>
-
-<p>coming soon
+# Setup 
+Some examples of setting up the context
 <table class="table table-bordered table-striped">
     <tr>
-        <td><strong>Concept</strong></td>
+        <td><strong>Example</strong></td>
         <td><strong>Description</strong></td>
+        <td><strong>More</strong></td>
     </tr>
     <tr>
-        <td><strong>1. Concept A</strong></td>
-        <td>Description of concept</td>
+        <td><strong>1. Simple</strong></td>
+        <td>Build a simple context using convenience methods</td>
+        <td><a href="arch/context/#simple-setup" class="more"><span class="btn btn-primary">more</span></a></td>                    
     </tr>
     <tr>
-        <td><strong>2. Concept B</strong> </td>
-        <td>Description of concept</td><br />
+        <td><strong>2. Manual</strong> </td>
+        <td>Manually build the context with explicit values</td>
+        <td><a href="arch/context/#manual-setup" class="more"><span class="btn btn-primary">more</span></a></td>                                         
     </tr>
     <tr>
-        <td><strong>3. Concept C</strong></td>
-        <td>Description of concept</td>
+        <td><strong>3. Derived</strong></td>
+        <td>Allow the context to the built by the Application Runner</td>
+        <td><a href="arch/context/#derived-setup" class="more"><span class="btn btn-primary">more</span></a></td>                    
     </tr>
 </table>
+
 <br/>
 
-<a href="core/cli#overview" class="sk-back-to-top">Back to top </a>
-<br/><br/><br/><br/></p>
+<a href="arc/context#overview" class="sk-back-to-top">Back to top </a>
+<br/><br/><br/><br/>
+
+<h2 id="simple-setup">Simple</h2>
+
+<p>The context can be constructed using convenience methods that build the context using empty/default data.
+<div class="highlight"><pre class="chroma"><code class="language-kotlin" data-lang="kotlin">    
+    <span class="k">import</span> <span class="nn">slatekit.common.CommonContext</span>
+
+    <span class="c1">// Create simple context
+</span><span class="c1"></span>    <span class="k">val</span> <span class="py">ctx1</span> <span class="p">=</span> <span class="n">CommonContext</span><span class="p">.</span><span class="n">simple</span><span class="p">(</span><span class="s">&#34;demoapp&#34;</span><span class="p">)</span></code></pre></div></p>
+
+<h2 id="manual-setup">Manual</h2>
+
+<p>The context can be constructed explicitly by supplying all the inputs
+<div class="highlight"><pre class="chroma"><code class="language-kotlin" data-lang="kotlin">    
+    <span class="k">import</span> <span class="nn">slatekit.common.CommonContext</span>
+
+    <span class="c1">// Create simple context
+</span><span class="c1"></span>    <span class="k">val</span> <span class="py">ctx2</span> <span class="p">=</span> <span class="n">CommonContext</span><span class="p">(</span>
+            <span class="n">args</span> <span class="p">=</span> <span class="n">Args</span><span class="p">.</span><span class="n">default</span><span class="p">(),</span>
+            <span class="n">envs</span> <span class="p">=</span> <span class="n">Envs</span><span class="p">.</span><span class="n">defaults</span><span class="p">(),</span>
+            <span class="n">conf</span> <span class="p">=</span> <span class="n">Config</span><span class="p">(),</span>        <span class="c1">// Loads resources/env.conf
+</span><span class="c1"></span>            <span class="n">logs</span> <span class="p">=</span> <span class="n">LogsDefault</span><span class="p">,</span>
+            <span class="n">info</span> <span class="p">=</span> <span class="n">Info</span><span class="p">(</span>
+                    <span class="n">About</span><span class="p">(</span>
+                        <span class="n">area</span> <span class="p">=</span> <span class="s">&#34;department1&#34;</span><span class="p">,</span>
+                        <span class="n">name</span> <span class="p">=</span> <span class="s">&#34;sample-app-1&#34;</span><span class="p">,</span>
+                        <span class="n">desc</span> <span class="p">=</span> <span class="s">&#34;Sample application 1&#34;</span><span class="p">,</span>
+                        <span class="n">company</span> <span class="p">=</span> <span class="s">&#34;Company 1&#34;</span><span class="p">,</span>
+                        <span class="n">region</span> <span class="p">=</span> <span class="s">&#34;New York&#34;</span><span class="p">,</span>
+                        <span class="n">url</span> <span class="p">=</span> <span class="s">&#34;http://company1.com/dep1/sampleapp-1&#34;</span><span class="p">,</span>
+                        <span class="n">contact</span> <span class="p">=</span> <span class="s">&#34;dept1@company1.com&#34;</span><span class="p">,</span>
+                        <span class="n">version</span> <span class="p">=</span> <span class="s">&#34;1.0.1&#34;</span><span class="p">,</span>
+                        <span class="n">tags</span> <span class="p">=</span> <span class="s">&#34;sample app slatekit&#34;</span><span class="p">,</span>
+                        <span class="n">examples</span> <span class="p">=</span> <span class="s">&#34;&#34;</span>
+                    <span class="p">),</span>
+                    <span class="n">Build</span><span class="p">.</span><span class="n">empty</span><span class="p">,</span>
+                    <span class="n">Sys</span><span class="p">.</span><span class="n">build</span><span class="p">()</span>
+            <span class="p">)</span>
+    <span class="p">)</span></code></pre></div></p>
+
+<h2 id="derived-setup">Derived</h2>
+
+<p>The context is automatically created when using the <a href="http://www.slatekit.com/arch/app" >app</a>.
+In this case, the AppRunner inspects the command line args, config settings from <strong>env.conf</strong> and then builds up the context. You also supply the builder function that supplies an instance of your Application using the auto-created context. You can modify/copy the context here before it is finally passed to the Application constructor.
+<div class="highlight"><pre class="chroma"><code class="language-kotlin" data-lang="kotlin">    
+    <span class="k">import</span> <span class="nn">slatekit.common.CommonContext</span>
+
+    <span class="c1">// Create simple context
+</span><span class="c1"></span>    <span class="n">AppRunner</span><span class="p">.</span><span class="n">run</span><span class="p">(</span>
+            <span class="n">rawArgs</span> <span class="p">=</span> <span class="n">request</span><span class="p">.</span><span class="n">args</span><span class="p">.</span><span class="n">raw</span><span class="p">.</span><span class="n">toTypedArray</span><span class="p">(),</span>
+            <span class="n">schema</span> <span class="p">=</span> <span class="n">ArgsSchema</span><span class="p">(),</span>
+            <span class="n">enc</span> <span class="p">=</span> <span class="n">Encryptor</span><span class="p">(</span><span class="s">&#34;wejklhviuxywehjk&#34;</span><span class="p">,</span> <span class="s">&#34;3214maslkdf03292&#34;</span><span class="p">,</span> <span class="n">B64Java8</span><span class="p">),</span>
+            <span class="n">logs</span> <span class="p">=</span> <span class="n">LogbackLogs</span><span class="p">(),</span>
+            <span class="n">about</span> <span class="p">=</span> <span class="n">About</span><span class="p">.</span><span class="n">none</span><span class="p">,</span>
+            <span class="n">builder</span> <span class="p">=</span> <span class="p">{</span> <span class="n">ctx</span> <span class="p">-&gt;</span> <span class="n">SampleApp</span><span class="p">(</span><span class="n">ctx</span><span class="p">)</span> <span class="p">}</span>
+    <span class="p">)</span></code></pre></div></p>
+
+<br/>
+
+<a href="arch/context#overview" class="sk-back-to-top">Back to top </a>
+<br/><br/><br/><br/>
 
 <h1 id="features">Features</h1>
 
-<p>coming soon
+<p>Most applications ( whether they are console, cli, jobs, server ) require basic boiler plate setup and access to services. This Context fills that need by providing these core services.
 <table class="table table-bordered table-striped">
     <tr>
         <td><strong>Name</strong></td>
@@ -374,19 +462,39 @@
         <td><strong>More</strong></td>
     </tr>
     <tr>
-        <td><strong>1. Feature A</strong></td>
-        <td>Description of feature</td>
-        <td><a href="arch/app/#feature1" class="more"><span class="btn btn-primary">more</span></a></td>
+        <td><strong>1. Args</strong></td>
+        <td>Access to parsed command line arguments</td>
+        <td><a href="arch/context/#args" class="more"><span class="btn btn-primary">more</span></a></td>
     </tr>
     <tr>
-        <td><strong>2. Feature B</strong> </td>
-        <td>Description of feature</td>
-        <td><a href="arch/app/#feature2" class="more"><span class="btn btn-primary">more</span></a></td><br />
+        <td><strong>2. Env</strong> </td>
+        <td>Access to selected environment</td>
+        <td><a href="arch/context/#env" class="more"><span class="btn btn-primary">more</span></a></td><br />
     </tr>
     <tr>
-        <td><strong>3. Feature C</strong></td>
-        <td>Description of feature</td>
-        <td><a href="arch/app/#feature3" class="more"><span class="btn btn-primary">more</span></a></td>
+        <td><strong>3. Conf</strong></td>
+        <td>Access to current config properties</td>
+        <td><a href="arch/context/#conf" class="more"><span class="btn btn-primary">more</span></a></td>
+    </tr>
+    <tr>
+        <td><strong>4. Logs</strong></td>
+        <td>Access to Log factory</td>
+        <td><a href="arch/context/#logs" class="more"><span class="btn btn-primary">more</span></a></td>
+    </tr>
+    <tr>
+        <td><strong>5. Enc</strong></td>
+        <td>Access to encryptor</td>
+        <td><a href="arch/context/#encrypt" class="more"><span class="btn btn-primary">more</span></a></td>
+    </tr>
+    <tr>
+        <td><strong>6. Build</strong></td>
+        <td>Access to current build information</td>
+        <td><a href="arch/context/#build" class="more"><span class="btn btn-primary">more</span></a></td>
+    </tr>
+    <tr>
+        <td><strong>7. About</strong></td>
+        <td>Access to current application information</td>
+        <td><a href="arch/context/#about" class="more"><span class="btn btn-primary">more</span></a></td>
     </tr>
 </table>
 <br/>
@@ -394,51 +502,99 @@
 <a href="core/cli#overview" class="sk-back-to-top">Back to top </a>
 <br/><br/><br/><br/></p>
 
-<h2 id="feature1">Feature 1</h2>
+<h2 id="args">Args</h2>
 
-<p>coming soon
-<div class="highlight"><pre class="chroma"><code class="language-kotlin" data-lang="kotlin">    <span class="k">fun</span> <span class="nf">setup</span><span class="p">()</span> <span class="p">{</span>
-        
-    <span class="p">}</span></code></pre></div>
-
-
-
-<a href="core/cli#features" class="sk-back-to-details">Back to features</a>
-<a href="core/cli#overview" class="sk-back-to-top">Back to top </a>
-
-<br/><br/><br/></p>
-
-<h2 id="feature2">Feature 2</h2>
-
-<p>coming soon
-<div class="highlight"><pre class="chroma"><code class="language-kotlin" data-lang="kotlin">    <span class="k">fun</span> <span class="nf">setup</span><span class="p">()</span> <span class="p">{</span>
-        
-    <span class="p">}</span></code></pre></div>
+<p>You can access the parsed command line args
+<div class="highlight"><pre class="chroma"><code class="language-kotlin" data-lang="kotlin">      
+    <span class="n">ctx</span><span class="p">.</span><span class="n">args</span><span class="p">.</span><span class="n">line</span>       
+    <span class="n">ctx</span><span class="p">.</span><span class="n">args</span><span class="p">.</span><span class="n">action</span>      <span class="c1">// e.g. &#34;action&#34; if using &#34;service.action -key=1&#34;
+</span><span class="c1"></span>    <span class="n">ctx</span><span class="p">.</span><span class="n">args</span><span class="p">.</span><span class="k">get</span><span class="p">(</span><span class="s">&#34;env&#34;</span><span class="p">)</span> 
+    <span class="n">ctx</span><span class="p">.</span><span class="n">args</span><span class="p">.</span><span class="n">getStringOrNull</span><span class="p">(</span><span class="s">&#34;log.level&#34;</span><span class="p">)</span>
+    <span class="n">ctx</span><span class="p">.</span><span class="n">args</span><span class="p">.</span><span class="n">getStringOrElse</span><span class="p">(</span><span class="s">&#34;log.level&#34;</span><span class="p">,</span> <span class="s">&#34;warn&#34;</span><span class="p">)</span>
+    </code></pre></div>
 
 
 
-<a href="core/cli#features" class="sk-back-to-details">Back to features</a>
-<a href="core/cli#overview" class="sk-back-to-top">Back to top </a>
+<a href="arch/context#features" class="sk-back-to-details">Back to features</a>
+<a href="arch/context#overview" class="sk-back-to-top">Back to top </a>
 
 <br/><br/><br/></p>
 
-<h2 id="feature3">Feature 3</h2>
+<h2 id="env">Envs</h2>
 
-<p>coming soon
-<div class="highlight"><pre class="chroma"><code class="language-kotlin" data-lang="kotlin">    <span class="k">fun</span> <span class="nf">setup</span><span class="p">()</span> <span class="p">{</span>
-        
-    <span class="p">}</span></code></pre></div>
+<p>You have access to the environments and currently selected environment
+<div class="highlight"><pre class="chroma"><code class="language-kotlin" data-lang="kotlin">      
+    <span class="n">ctx</span><span class="p">.</span><span class="n">envs</span><span class="p">.</span><span class="n">name</span>    <span class="c1">// &#34;loc&#34; ( representing local )
+</span><span class="c1"></span>    <span class="n">ctx</span><span class="p">.</span><span class="n">envs</span><span class="p">.</span><span class="n">env</span>     <span class="c1">// &#34;dev&#34; EnvMode: ( Dev | Qat | Uat | Pro )
+</span><span class="c1"></span>    <span class="n">ctx</span><span class="p">.</span><span class="n">envs</span><span class="p">.</span><span class="n">key</span>     <span class="c1">// &#34;loc:dev&#34;  {name}:{env}
+</span><span class="c1"></span>    <span class="n">ctx</span><span class="p">.</span><span class="n">envs</span><span class="p">.</span><span class="n">current</span> <span class="c1">// current Env object
+</span><span class="c1"></span>    <span class="n">ctx</span><span class="p">.</span><span class="n">envs</span><span class="p">.</span><span class="n">all</span>     <span class="c1">// list of all Env environments
+</span><span class="c1"></span>     </code></pre></div>
 
 
 
-<a href="core/cli#features" class="sk-back-to-details">Back to features</a>
-<a href="core/cli#overview" class="sk-back-to-top">Back to top </a>
+<a href="arch/context#features" class="sk-back-to-details">Back to features</a>
+<a href="arch/context#overview" class="sk-back-to-top">Back to top </a>
+
+<br/><br/><br/></p>
+
+<h2 id="conf">Conf</h2>
+
+<p>You have access to the currently loaded configuration settings
+<div class="highlight"><pre class="chroma"><code class="language-kotlin" data-lang="kotlin">     
+    <span class="n">ctx</span><span class="p">.</span><span class="n">conf</span><span class="p">.</span><span class="n">getInt</span><span class="p">(</span><span class="s">&#34;paging.batchSize&#34;</span><span class="p">)</span>
+    <span class="n">ctx</span><span class="p">.</span><span class="n">conf</span><span class="p">.</span><span class="n">getIntOrNull</span><span class="p">(</span><span class="s">&#34;paging.batchSize&#34;</span><span class="p">)</span>
+    <span class="n">ctx</span><span class="p">.</span><span class="n">conf</span><span class="p">.</span><span class="n">getIntOrElse</span><span class="p">(</span><span class="s">&#34;paging.batchSize&#34;</span><span class="p">,</span> <span class="m">4</span><span class="p">)</span>
+    </code></pre></div>
+
+
+
+<a href="arch/context#features" class="sk-back-to-details">Back to features</a>
+<a href="arch/context#overview" class="sk-back-to-top">Back to top </a>
+
+<br/><br/><br/></p>
+
+<h2 id="logs">Logs</h2>
+
+<p>You have have to the logs/factory to create loggers
+<div class="highlight"><pre class="chroma"><code class="language-kotlin" data-lang="kotlin">     
+    <span class="k">val</span> <span class="py">logger1</span> <span class="p">=</span> <span class="n">ctx</span><span class="p">.</span><span class="n">logs</span><span class="p">.</span><span class="n">getLogger</span><span class="p">()</span>
+    <span class="k">val</span> <span class="py">logger2</span> <span class="p">=</span> <span class="n">ctx</span><span class="p">.</span><span class="n">logs</span><span class="p">.</span><span class="n">getLogger</span><span class="p">(</span><span class="n">name</span> <span class="p">=</span> <span class="s">&#34;service1&#34;</span><span class="p">)</span>
+    <span class="k">val</span> <span class="py">logger3</span> <span class="p">=</span> <span class="n">ctx</span><span class="p">.</span><span class="n">logs</span><span class="p">.</span><span class="n">getLogger</span><span class="p">(</span><span class="n">Example_Jobs</span><span class="o">::</span><span class="k">class</span><span class="p">.</span><span class="n">java</span><span class="p">)</span>
+    <span class="n">logger1</span><span class="p">.</span><span class="n">level</span>
+    <span class="n">logger1</span><span class="p">.</span><span class="n">name</span>
+    <span class="n">logger1</span><span class="p">.</span><span class="n">debug</span><span class="p">(</span><span class="s">&#34;Debug message&#34;</span><span class="p">)</span>
+    <span class="n">logger1</span><span class="p">.</span><span class="n">info</span> <span class="p">(</span><span class="s">&#34;Info message&#34;</span><span class="p">)</span>
+    <span class="n">logger1</span><span class="p">.</span><span class="n">warn</span> <span class="p">(</span><span class="s">&#34;Warn message&#34;</span><span class="p">)</span>
+    <span class="n">logger1</span><span class="p">.</span><span class="n">error</span><span class="p">(</span><span class="s">&#34;Error message&#34;</span><span class="p">)</span>
+    <span class="n">logger1</span><span class="p">.</span><span class="n">fatal</span><span class="p">(</span><span class="s">&#34;Fatal message&#34;</span><span class="p">)</span>
+    </code></pre></div>
+
+
+
+<a href="arch/context#features" class="sk-back-to-details">Back to features</a>
+<a href="arch/context#overview" class="sk-back-to-top">Back to top </a>
+
+<br/><br/><br/></p>
+
+<h2 id="enc">Enc</h2>
+
+<p>You can access the optional encryptor to encrypt/decrypt data
+<div class="highlight"><pre class="chroma"><code class="language-kotlin" data-lang="kotlin">      
+    <span class="n">ctx</span><span class="p">.</span><span class="n">enc</span><span class="o">?.</span><span class="n">encrypt</span><span class="p">(</span><span class="s">&#34;raw text&#34;</span><span class="p">)</span>
+    <span class="n">ctx</span><span class="p">.</span><span class="n">enc</span><span class="o">?.</span><span class="n">decrypt</span><span class="p">(</span><span class="s">&#34;&#34;</span><span class="p">)</span>
+     </code></pre></div>
+
+
+
+<a href="arch/context#features" class="sk-back-to-details">Back to features</a>
+<a href="arch/context#overview" class="sk-back-to-top">Back to top </a>
 
 <br/><br/><br/></p>
 
 <br/>
 
-<a href="core/cli#overview" class="sk-back-to-top">Back to top </a>
+<a href="arch/context#overview" class="sk-back-to-top">Back to top </a>
 <br/><br/><br/><br/>
 
       </div>
