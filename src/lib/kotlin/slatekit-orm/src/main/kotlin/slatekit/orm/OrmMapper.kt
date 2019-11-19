@@ -47,7 +47,7 @@ open class OrmMapper<TId, T>(
         val converter: Converter<TId, T>,
         val info:EntityInfo)
     : ModelMapper(model, encryptor = info.encryptor, namer = info.namer),
-        EntityMapper<TId, T> where TId : kotlin.Comparable<TId>, T : Entity<TId> {
+        EntityMapper<TId, T> where TId : kotlin.Comparable<TId>, T:Any  {
 
     constructor( model: Model, db: IDb, converter: Converter<TId, T>, idType:KClass<*>, clsType:KClass<*>)
         :this(model, db, converter, EntityInfo(idType, clsType, ""))

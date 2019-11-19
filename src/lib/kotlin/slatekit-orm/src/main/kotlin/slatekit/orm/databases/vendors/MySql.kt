@@ -23,7 +23,7 @@ object MySqlTypeMap : TypeMap()
  * Contains all the converters for each type
  * Only customizations form the common one go here
  */
-class MySqlConverter<TId, T> : Converter<TId, T>() where TId : kotlin.Comparable<TId>, T : Entity<TId>
+class MySqlConverter<TId, T> : Converter<TId, T>() where TId : kotlin.Comparable<TId>, T : Any
 
 
 class MySqlBuilder(namer: Namer?) : SqlBuilder(MySqlTypeMap, namer)
@@ -38,7 +38,7 @@ class MySqlQuery : Query()
  * @tparam T
  */
 open class MySqlEntityRepo<TId, T>(db: IDb, info:EntityInfo, mapper: OrmMapper<TId, T>)
-    : SqlRepo<TId, T>(db, info, mapper) where TId : Comparable<TId>, T : Entity<TId> {
+    : SqlRepo<TId, T>(db, info, mapper) where TId : Comparable<TId>, T : Any {
 
     private val ormMapper = mapper
 

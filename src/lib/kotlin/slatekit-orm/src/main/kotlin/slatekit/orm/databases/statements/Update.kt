@@ -1,14 +1,13 @@
 package slatekit.orm.databases.statements
 
-import slatekit.entities.Entity
 import slatekit.entities.EntityWithId
 import slatekit.orm.OrmMapper
 import slatekit.meta.Reflector
 import slatekit.meta.models.Model
 
-class Update<TId, T> : Statement<TId, T> where TId: kotlin.Comparable<TId>, T: Entity<TId> {
+class Update<TId, T> : Statement<TId, T> where TId: kotlin.Comparable<TId>, T:Any {
 
-    override fun sql(item: Entity<TId>, model: Model, mapper: OrmMapper<TId, T>): String {
+    override fun sql(item: T, model: Model, mapper: OrmMapper<TId, T>): String {
         slatekit.common.NOTE.IMPLEMENT("orm", "Have to support entity with other name for id")
         val id = Reflector.getFieldValue(item, EntityWithId<*>::id.name)
         val table = mapper.tableName()

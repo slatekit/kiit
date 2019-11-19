@@ -106,8 +106,8 @@ class OrmBuilder(dbCreator: (DbCon) -> IDb,
             DbTypePGres -> PostGresEntityRepo(db, info, mapper)
             else -> {
                 val result = when(info.entityIdType){
-                    KTypes.KIntClass  -> InMemoryRepo(info, IntIdGenerator()) as Repo<TId, T>
-                    KTypes.KLongClass -> InMemoryRepo(info, LongIdGenerator()) as Repo<TId, T>
+                    KTypes.KIntClass  -> InMemoryRepo<TId, T>(info, IntIdGenerator() as IdGenerator<TId>)
+                    KTypes.KLongClass -> InMemoryRepo<TId, T>(info, LongIdGenerator() as IdGenerator<TId>)
                     else -> throw Exception("Unexpected entity id type for Slate Kit repo")
                 }
                 return result
