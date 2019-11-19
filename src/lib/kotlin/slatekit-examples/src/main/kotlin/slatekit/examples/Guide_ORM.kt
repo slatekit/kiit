@@ -137,7 +137,7 @@ class Guide_ORM : Cmd("types") {
         //
         val ctx = AppContext.simple("sampleapp1")
         val ent = Entities()
-        val service = MovieService(ctx, ent, EntityRepoInMemory<Movie>(Movie::class))
+        val service = MovieService(ctx, ent, InMemoryRepo<Movie>(Movie::class))
 
         // CASE 1: Create 3-4 users for showing use-cases
         service.create(Movie(0L, "Batman Begins"     , "action", false, 50, 4.2, DateTime.of(2005,1,1)))
@@ -191,7 +191,7 @@ class Guide_ORM : Cmd("types") {
         // CASE 1: In-memory ( non-persisted ) repository has limited functionality
         // but is very useful for rapid prototyping of a data model when you are trying to
         // figure out what fields/properties should exist on the model
-        val repo = EntityRepoInMemory<Movie>(Movie::class)
+        val repo = InMemoryRepo<Movie>(Movie::class)
 
 
         // CASE 2: My-sql ( persisted ) repository can be easily setup
@@ -213,7 +213,7 @@ class Guide_ORM : Cmd("types") {
 
     fun repo_usage():Unit {
 
-        val repo = EntityRepoInMemory<Movie>(Movie::class)
+        val repo = InMemoryRepo<Movie>(Movie::class)
 
         // CASE 1: Create 3-4 users for showing use-cases
         repo.create(Movie(0L, "Batman Begins"     , "action", false, 50, 4.2, DateTime.of(2005,1,1)))

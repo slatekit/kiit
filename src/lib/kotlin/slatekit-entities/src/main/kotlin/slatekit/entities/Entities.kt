@@ -22,7 +22,7 @@ import slatekit.common.naming.Namer
 import slatekit.common.utils.ListMap
 import slatekit.entities.core.*
 import slatekit.entities.repos.EntityMapperEmpty
-import slatekit.entities.repos.EntityRepoInMemory
+import slatekit.entities.repos.InMemoryRepo
 import slatekit.entities.repos.IdGenerator
 import slatekit.entities.repos.LongIdGenerator
 import slatekit.meta.models.Model
@@ -110,7 +110,7 @@ open class Entities(
         entityType: KClass<*>,
         entityIdType: KClass<*>,
         serviceType: KClass<*>,
-        repo: EntityRepo<TId, T>,
+        repo: Repo<TId, T>,
         mapper: EntityMapper<TId, T>?,
         dbType: DbType,
         serviceCtx: Any? = null
@@ -168,7 +168,7 @@ open class Entities(
 
         // 3. Repo ( provides CRUD using the Mapper)
         val info = EntityInfo(entityIdType, entityType, table, '`', model, this.enc, this.namer)
-        val repo = EntityRepoInMemory(info, entityIdGen)
+        val repo = InMemoryRepo<TId, T>(info, entityIdGen)
 
         // 4. Service ( used to provide validation, placeholder for business functionality )
         val service = builder.service(this, serviceType, repo, serviceCtx)
@@ -220,8 +220,8 @@ open class Entities(
      * Get a registered repository for the entity type
      */
     @Suppress("UNCHECKED_CAST")
-    fun <TId, T> getRepo(tpe: KClass<*>, dbKey: String = "", dbShard: String = ""): EntityRepo<TId, T> where TId : Comparable<TId>, T : Entity<TId> =
-            getRepoByType(tpe, dbKey, dbShard) as EntityRepo<TId, T>
+    fun <TId, T> getRepo(tpe: KClass<*>, dbKey: String = "", dbShard: String = ""): Repo<TId, T> where TId : Comparable<TId>, T : Entity<TId> =
+            getRepoByType(tpe, dbKey, dbShard) as Repo<TId, T>
 
     /**
      * Get a registered service for the entity type

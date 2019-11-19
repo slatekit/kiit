@@ -3,6 +3,8 @@ package slatekit.entities.core
 import kotlin.reflect.KClass
 import slatekit.common.encrypt.Encryptor
 import slatekit.common.naming.Namer
+import slatekit.entities.EntityIdInfo
+import slatekit.entities.IdInfo
 import slatekit.meta.models.Model
 import slatekit.query.Query
 
@@ -24,7 +26,8 @@ data class EntityInfo(
     val encryptor: Encryptor? = null,
     val namer: Namer? = null,
     val queryBuilder: (() -> Query)? = null,
-    val utcTime: Boolean = false
+    val utcTime: Boolean = false,
+    val idInfo: IdInfo = EntityIdInfo()
 ) {
 
     fun name(): String = ""

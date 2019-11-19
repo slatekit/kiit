@@ -11,7 +11,7 @@ import slatekit.entities.core.ServiceSupport
  * supply another type constraint on T to be EntityWithUUID to provide compile time safety.
  *
  */
-interface EntityUUID<TId, T> : ServiceSupport<TId, T> where TId : kotlin.Comparable<TId>, T : Entity<TId> {
+interface UniqueIds<TId, T> : ServiceSupport<TId, T> where TId : kotlin.Comparable<TId>, T : Entity<TId> {
 
     /**
      * gets the entity from the datastore using the uuid as a string

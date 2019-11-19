@@ -2,16 +2,16 @@ package slatekit.entities
 
 import slatekit.entities.core.GenericService
 import slatekit.entities.core.ServiceSupport
-import slatekit.entities.features.EntityFinds
-import slatekit.entities.features.EntityReads
-import slatekit.entities.features.EntityWrites
+import slatekit.entities.features.Finds
+import slatekit.entities.features.Reads
+import slatekit.entities.features.Writes
 
 /**
  * Service with generics to support all CRUD operations.
  */
 interface EntityServices<TId, T> : GenericService,
         ServiceSupport<TId, T>,
-        EntityWrites<TId, T>,
-        EntityReads<TId, T>,
-        EntityFinds<TId, T>
+        Writes<TId, T>,
+        Reads<TId, T>,
+        Finds<TId, T>
         where TId : kotlin.Comparable<TId>, T : Entity<TId>

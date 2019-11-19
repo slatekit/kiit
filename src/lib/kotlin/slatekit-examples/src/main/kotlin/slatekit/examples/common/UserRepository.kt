@@ -16,4 +16,4 @@ package slatekit.examples.common
 import slatekit.entities.repos.*
 
 
-class UserRepository : EntityRepoInMemoryWithLongId<User>(User::class)
+class UserRepository : InMemoryRepoWithLongId<User>(User::class)

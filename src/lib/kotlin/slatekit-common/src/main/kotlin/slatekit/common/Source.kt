@@ -51,6 +51,11 @@ object Sources {
     const val Queue = "queue"
 
     /**
+     * Stream based : requests saved and processed from a queue
+     */
+    const val Stream = "stream"
+
+    /**
      * Web : HTTP for standard web/rest requests
      */
     const val Web = "web"
@@ -70,6 +75,7 @@ sealed class Source(val id: String) {
     object Cmd   : Source(Sources.Cmd)   // commands / functions
     object File  : Source(Sources.File)  // files / scripts
     object Queue : Source(Sources.Queue) // queues
+    object Stream: Source(Sources.Stream)// queues
     object Web   : Source(Sources.Web)   // Web
     data class Other(val name: String) : Source("other")
 
@@ -87,16 +93,16 @@ sealed class Source(val id: String) {
         fun parse(name:String): Source {
             return when(name) {
                 Parent.id -> Parent
-                All.id -> All
-                API.id -> API
-                API.id -> API
-                Auto.id -> Auto
-                Bot.id -> Bot
-                CLI.id -> CLI
-                Cmd.id -> Cmd
-                File.id -> File
-                Queue.id -> Queue
-                Web.id -> Web
+                All.id    -> All
+                API.id    -> API
+                Auto.id   -> Auto
+                Bot.id    -> Bot
+                CLI.id    -> CLI
+                Cmd.id    -> Cmd
+                File.id   -> File
+                Queue.id  -> Queue
+                Stream.id -> Stream
+                Web.id    -> Web
                 else      -> Other(name)
             }
         }

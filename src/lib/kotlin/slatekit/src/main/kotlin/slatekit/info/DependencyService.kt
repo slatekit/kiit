@@ -1,12 +1,12 @@
 package slatekit.info
 
 import slatekit.entities.Entities
-import slatekit.entities.EntityRepo
+import slatekit.entities.Repo
 import slatekit.entities.EntityService
 import slatekit.results.Outcome
 import slatekit.results.Success
 
-class DependencyService(entities: Entities, repo: EntityRepo<Long, Dependency>)
+class DependencyService(entities: Entities, repo: Repo<Long, Dependency>)
     : EntityService<Long, Dependency>(repo) {
 
 

@@ -7,7 +7,7 @@ import slatekit.entities.Entities
 import slatekit.entities.Entity
 import slatekit.entities.core.ServiceSupport
 
-interface EntityRelations<TId, T> : ServiceSupport<TId, T> where TId : kotlin.Comparable<TId>, T : Entity<TId> {
+interface Relations<TId, T> : ServiceSupport<TId, T> where TId : kotlin.Comparable<TId>, T : Entity<TId> {
 
     fun entities(): Entities
 
@@ -22,11 +22,11 @@ interface EntityRelations<TId, T> : ServiceSupport<TId, T> where TId : kotlin.Co
     fun <R> getRelation(id: TId, prop: KProperty<*>, model: KClass<*>): R? where R : Entity<TId> {
 
         NOTE.IMPROVE("entities", "This should ideally be in 1 database call")
-        val entity = repo().get(id)
+        val entity = repo().getById(id)
         return entity?.let { ent ->
             val id = prop.getter.call(entity) as TId
             val relRepo = entities().getRepo<TId, R>(model)
-            val rel = relRepo.get(id)
+            val rel = relRepo.getById(id)
             rel
         }
     }
@@ -42,11 +42,11 @@ interface EntityRelations<TId, T> : ServiceSupport<TId, T> where TId : kotlin.Co
     fun <R> getWithRelation(id: TId, prop: KProperty<*>, model: KClass<*>): Pair<T?, R?> where R : Entity<TId> {
 
         NOTE.IMPROVE("entities", "This should ideally be in 1 database call")
-        val entity = repo().get(id)
+        val entity = repo().getById(id)
         return entity?.let { ent ->
             val id = prop.getter.call(entity) as TId
             val relRepo = entities().getRepo<TId, R>(model)
-            val rel = relRepo.get(id)
+            val rel = relRepo.getById(id)
             Pair(entity, rel)
         } ?: Pair(null, null)
     }
@@ -62,7 +62,7 @@ interface EntityRelations<TId, T> : ServiceSupport<TId, T> where TId : kotlin.Co
     fun <R> getWithRelations(id: TId, model: KClass<*>, prop: KProperty<*>): Pair<T?, List<R>> where R : Entity<TId> {
 
         NOTE.IMPROVE("entities", "This should ideally be in 1 database call")
-        val entity = repo().get(id)
+        val entity = repo().getById(id)
         return entity?.let { ent ->
             val relRepo = entities().getRepo<TId, R>(model)
             val relations = relRepo.findBy(prop.name, "=", id)

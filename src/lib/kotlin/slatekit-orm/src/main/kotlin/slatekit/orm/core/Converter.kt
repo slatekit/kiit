@@ -8,7 +8,7 @@ import slatekit.orm.databases.statements.Select
 import slatekit.orm.databases.statements.Update
 
 
-open class Converter<TId, T> where TId: kotlin.Comparable<TId>, T: Entity<TId> {
+open class Converter<TId, T> where TId: kotlin.Comparable<TId>, T:Any {
     open val bools              = BoolConverter
     open val strings            = StringConverter
     open val shorts             = ShortConverter

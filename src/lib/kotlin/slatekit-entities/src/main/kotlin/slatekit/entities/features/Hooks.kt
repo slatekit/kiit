@@ -2,7 +2,7 @@ package slatekit.entities.features
 
 import slatekit.entities.core.EntityEvent
 
-interface EntityHooks {
+interface Hooks {
 
     fun onEntityEvent(event: EntityEvent)
 }

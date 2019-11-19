@@ -6,11 +6,11 @@ import slatekit.entities.slatekit.entities.EntityOptions
 import slatekit.results.Try
 import slatekit.results.builders.Tries
 
-interface EntityWrites<TId, T> : ServiceSupport<TId, T>,
-        EntityCreates<TId, T>,
-        EntityUpdates<TId, T>,
-        EntityDeletes<TId, T>,
-        EntitySaves<TId, T>
+interface Writes<TId, T> : ServiceSupport<TId, T>,
+        Creates<TId, T>,
+        Updates<TId, T>,
+        Deletes<TId, T>,
+        Saves<TId, T>
 
         where TId : kotlin.Comparable<TId>, T : Entity<TId> {
 

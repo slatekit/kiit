@@ -99,10 +99,10 @@ class UserNormal2(var email: String, var name: String) {
 
 data class User3(
 
-        @property:Field(name = "email", desc = "email address", required = true, eg = "clark@metro.com")
+        @property:Field(name = "email", desc = "email address", required = true, example = "clark@metro.com")
         val email: String,
 
-        @property:Field(desc = "full api", required = false, eg = "clark kent")
+        @property:Field(desc = "full api", required = false, example = "clark kent")
         val name: String
 ) {
 

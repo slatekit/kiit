@@ -17,7 +17,7 @@ import slatekit.results.Try
  * - entities: save has no result
  *
  */
-interface EntityDynamic<TId> where TId : Comparable<TId> {
+interface Dynamic<TId> where TId : Comparable<TId> {
 
     fun createEntity(entity: Entity<TId>): Try<Pair<TId, Entity<TId>>>
 
@@ -27,3 +27,5 @@ interface EntityDynamic<TId> where TId : Comparable<TId> {
 
     fun deleteEntity(entity: Entity<TId>): Try<Int>
 }
+
+

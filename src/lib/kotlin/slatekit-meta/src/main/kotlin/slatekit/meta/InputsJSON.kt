@@ -18,7 +18,6 @@ data class InputsJSON(
 ) : Inputs {
 
     override fun get(key: String): Any? = getInternal(key)
-    //override fun getObject(key: String): Any? = getInternal(key)
     override fun size(): Int = json.size
 
     override val raw: Any = json

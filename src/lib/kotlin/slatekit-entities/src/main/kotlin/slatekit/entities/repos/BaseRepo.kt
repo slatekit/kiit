@@ -14,7 +14,7 @@
 package slatekit.entities.repos
 
 import slatekit.entities.Entity
-import slatekit.entities.EntityRepo
+import slatekit.entities.Repo
 import slatekit.entities.core.EntityInfo
 import slatekit.entities.core.EntityStore
 
@@ -24,10 +24,10 @@ import slatekit.entities.core.EntityStore
  * @param info : Holds all info relevant state/members needed to perform repo operations
  * @tparam T
  */
-abstract class EntityRepoBase<TId, T>(
+abstract class BaseRepo<TId, T>(
     override val info: EntityInfo
 ) :
-    EntityStore, EntityRepo<TId, T> where TId : Comparable<TId>, T : Entity<TId> {
+    EntityStore, Repo<TId, T> where TId : Comparable<TId> {
 
     private val _name: String by lazy {
         info.namer?.rename(info.tableName) ?: info.tableName[0].toLowerCase() + info.tableName.substring(1)

@@ -20,7 +20,7 @@ import slatekit.common.log.LogSupport
 import slatekit.common.log.Logger
 import slatekit.entities.Entities
 import slatekit.entities.Entity
-import slatekit.entities.EntityRepo
+import slatekit.entities.Repo
 import slatekit.entities.EntityService
 import slatekit.results.Notice
 
@@ -33,7 +33,7 @@ import slatekit.results.Notice
 open class EntityServiceWithSupport<TId, T>(
     val context: Context,
     val entities: Entities,
-    repo: EntityRepo<TId, T>
+    repo: Repo<TId, T>
 ) :
     EntityService<TId, T>(repo), EncryptSupport, LogSupport where TId : Comparable<TId>, T : Entity<TId> {
 

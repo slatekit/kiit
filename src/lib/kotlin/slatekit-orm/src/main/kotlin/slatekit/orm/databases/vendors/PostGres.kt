@@ -1,19 +1,16 @@
 package slatekit.orm.databases.vendors
 
 import slatekit.common.db.IDb
-import slatekit.common.encrypt.Encryptor
 import slatekit.common.naming.Namer
 import slatekit.query.Query
 import slatekit.meta.models.Model
 import slatekit.entities.Entity
 import slatekit.entities.core.EntityInfo
-import slatekit.entities.core.buildTableName
-import slatekit.entities.repos.EntityRepoSql
+import slatekit.entities.repos.SqlRepo
 import slatekit.orm.core.Converter
 import slatekit.orm.core.SqlBuilder
 import slatekit.orm.core.TypeMap
 import slatekit.orm.OrmMapper
-import kotlin.reflect.KClass
 
 /**
  * MySql to Java types
@@ -41,7 +38,7 @@ class PostGresQuery : Query()
  * @tparam T
  */
 open class PostGresEntityRepo<TId, T>(db: IDb, info: EntityInfo, mapper: OrmMapper<TId, T>)
-    : EntityRepoSql<TId, T>(db, info, mapper) where TId : Comparable<TId>, T : Entity<TId> {
+    : SqlRepo<TId, T>(db, info, mapper) where TId : Comparable<TId>, T : Entity<TId> {
 
     private val ormMapper = mapper
 

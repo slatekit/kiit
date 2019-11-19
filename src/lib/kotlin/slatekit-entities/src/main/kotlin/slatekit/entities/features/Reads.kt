@@ -4,7 +4,7 @@ import slatekit.entities.Entity
 import slatekit.entities.core.ServiceSupport
 import slatekit.query.IQuery
 
-interface EntityReads<TId, T> : ServiceSupport<TId, T> where TId : kotlin.Comparable<TId>, T : Entity<TId> {
+interface Reads<TId, T> : ServiceSupport<TId, T> where TId : kotlin.Comparable<TId>, T : Entity<TId> {
 
     /**
      * gets the entity from the datastore using the id
@@ -12,7 +12,7 @@ interface EntityReads<TId, T> : ServiceSupport<TId, T> where TId : kotlin.Compar
      * @return
      */
     fun get(id: TId): T? {
-        return repo().get(id)
+        return repo().getById(id)
     }
 
     /**
@@ -21,7 +21,7 @@ interface EntityReads<TId, T> : ServiceSupport<TId, T> where TId : kotlin.Compar
      * @return
      */
     fun get(ids: List<TId>): List<T> {
-        return repo().get(ids)
+        return repo().getByIds(ids)
     }
 
     /**

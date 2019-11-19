@@ -1,19 +1,16 @@
 package slatekit.orm.databases.vendors
 
 import slatekit.common.db.IDb
-import slatekit.common.encrypt.Encryptor
 import slatekit.common.naming.Namer
-import slatekit.entities.repos.EntityRepoSql
+import slatekit.entities.repos.SqlRepo
 import slatekit.query.Query
 import slatekit.entities.Entity
 import slatekit.entities.core.EntityInfo
-import slatekit.entities.core.buildTableName
 import slatekit.orm.core.Converter
 import slatekit.orm.core.SqlBuilder
 import slatekit.orm.core.TypeMap
 import slatekit.meta.models.Model
 import slatekit.orm.OrmMapper
-import kotlin.reflect.KClass
 
 /**
  * MySql to Java types
@@ -26,7 +23,7 @@ object MySqlTypeMap : TypeMap()
  * Contains all the converters for each type
  * Only customizations form the common one go here
  */
-class MySqlConverter<TId, T> : Converter<TId, T>() where TId : kotlin.Comparable<TId>, T : Entity<TId>
+class MySqlConverter<TId, T> : Converter<TId, T>() where TId : kotlin.Comparable<TId>, T : Any
 
 
 class MySqlBuilder(namer: Namer?) : SqlBuilder(MySqlTypeMap, namer)
@@ -41,7 +38,7 @@ class MySqlQuery : Query()
  * @tparam T
  */
 open class MySqlEntityRepo<TId, T>(db: IDb, info:EntityInfo, mapper: OrmMapper<TId, T>)
-    : EntityRepoSql<TId, T>(db, info, mapper) where TId : Comparable<TId>, T : Entity<TId> {
+    : SqlRepo<TId, T>(db, info, mapper) where TId : Comparable<TId>, T : Any {
 
     private val ormMapper = mapper
 
