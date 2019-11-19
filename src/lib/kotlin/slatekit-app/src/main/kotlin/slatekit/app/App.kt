@@ -52,16 +52,16 @@ open class App<C : Context>(
     fun about(): About {
         val conf = ctx.conf
         return About(
-                area = conf.getStringOrElse("app.area", ctx.about.area),
-                name = conf.getStringOrElse("app.name", ctx.about.name),
-                desc = conf.getStringOrElse("app.desc", ctx.about.desc),
-                company = conf.getStringOrElse("app.company", ctx.about.company),
-                region = conf.getStringOrElse("app.region", ctx.about.region),
-                version = conf.getStringOrElse("app.version", ctx.about.version),
-                url = conf.getStringOrElse("app.url", ctx.about.url),
-                contact = conf.getStringOrElse("app.contact", ctx.about.contact),
-                tags = conf.getStringOrElse("app.tags", ctx.about.tags),
-                examples = conf.getStringOrElse("app.examples", ctx.about.examples)
+                area = conf.getStringOrElse("app.area", ctx.info.about.area),
+                name = conf.getStringOrElse("app.name", ctx.info.about.name),
+                desc = conf.getStringOrElse("app.desc", ctx.info.about.desc),
+                company = conf.getStringOrElse("app.company", ctx.info.about.company),
+                region = conf.getStringOrElse("app.region", ctx.info.about.region),
+                version = conf.getStringOrElse("app.version", ctx.info.about.version),
+                url = conf.getStringOrElse("app.url", ctx.info.about.url),
+                contact = conf.getStringOrElse("app.contact", ctx.info.about.contact),
+                tags = conf.getStringOrElse("app.tags", ctx.info.about.tags),
+                examples = conf.getStringOrElse("app.examples", ctx.info.about.examples)
         )
     }
 
@@ -72,7 +72,7 @@ open class App<C : Context>(
         if (schema == null) {
             println("\n")
             println("=================================================")
-            println("ABOUT: " + this.ctx.about.name)
+            println("ABOUT: " + this.ctx.info.about.name)
             println("ARGS : ")
             println("  -env       : environment to run in ")
             println("               string, required. dev | qat | pro ")
@@ -93,15 +93,15 @@ open class App<C : Context>(
         // Basic welcome
         val writer = SemanticConsole()
         writer.text("************************************")
-        writer.title("Welcome to ${ctx.about.name}")
+        writer.title("Welcome to ${ctx.info.about.name}")
         writer.text("************************************")
         writer.line()
         writer.text("starting in environment: " + this.ctx.envs.key)
 
         // Show basic environment info if not printing the start info
         if (!options.printSummaryBeforeExec) {
-            logger.info("starting ${ctx.about.name}")
-            logger.info("app:version :${ctx.about.version}")
+            logger.info("starting ${ctx.info.about.name}")
+            logger.info("app:version :${ctx.info.about.version}")
         }
     }
 
@@ -110,26 +110,26 @@ open class App<C : Context>(
      */
     open fun info() {
         val maxLen = Math.max(0, "lang.versionNum  ".length)
-        logger.info("app.area         ".padEnd(maxLen) + ctx.about.area)
-        logger.info("app.name         ".padEnd(maxLen) + ctx.about.name)
-        logger.info("app.desc         ".padEnd(maxLen) + ctx.about.desc)
-        logger.info("app.version      ".padEnd(maxLen) + ctx.about.version)
-        logger.info("app.tags         ".padEnd(maxLen) + ctx.about.tags)
-        logger.info("app.region       ".padEnd(maxLen) + ctx.about.region)
-        logger.info("app.contact      ".padEnd(maxLen) + ctx.about.contact)
-        logger.info("app.url          ".padEnd(maxLen) + ctx.about.url)
-        logger.info("build.version    ".padEnd(maxLen) + ctx.build.version)
-        logger.info("build.commit     ".padEnd(maxLen) + ctx.build.commit)
-        logger.info("build.date       ".padEnd(maxLen) + ctx.build.date)
-        logger.info("host.name        ".padEnd(maxLen) + ctx.sys.host.name)
-        logger.info("host.ip          ".padEnd(maxLen) + ctx.sys.host.ip)
-        logger.info("host.origin      ".padEnd(maxLen) + ctx.sys.host.origin)
-        logger.info("host.version     ".padEnd(maxLen) + ctx.sys.host.version)
-        logger.info("lang.name        ".padEnd(maxLen) + ctx.sys.lang.name)
-        logger.info("lang.version     ".padEnd(maxLen) + ctx.sys.lang.version)
-        logger.info("lang.versionNum  ".padEnd(maxLen) + ctx.sys.lang.vendor)
-        logger.info("lang.java        ".padEnd(maxLen) + ctx.sys.lang.origin)
-        logger.info("lang.home        ".padEnd(maxLen) + ctx.sys.lang.home)
+        logger.info("app.area         ".padEnd(maxLen) + ctx.info.about.area)
+        logger.info("app.name         ".padEnd(maxLen) + ctx.info.about.name)
+        logger.info("app.desc         ".padEnd(maxLen) + ctx.info.about.desc)
+        logger.info("app.version      ".padEnd(maxLen) + ctx.info.about.version)
+        logger.info("app.tags         ".padEnd(maxLen) + ctx.info.about.tags)
+        logger.info("app.region       ".padEnd(maxLen) + ctx.info.about.region)
+        logger.info("app.contact      ".padEnd(maxLen) + ctx.info.about.contact)
+        logger.info("app.url          ".padEnd(maxLen) + ctx.info.about.url)
+        logger.info("build.version    ".padEnd(maxLen) + ctx.info.build.version)
+        logger.info("build.commit     ".padEnd(maxLen) + ctx.info.build.commit)
+        logger.info("build.date       ".padEnd(maxLen) + ctx.info.build.date)
+        logger.info("host.name        ".padEnd(maxLen) + ctx.info.system.host.name)
+        logger.info("host.ip          ".padEnd(maxLen) + ctx.info.system.host.ip)
+        logger.info("host.origin      ".padEnd(maxLen) + ctx.info.system.host.origin)
+        logger.info("host.version     ".padEnd(maxLen) + ctx.info.system.host.version)
+        logger.info("lang.name        ".padEnd(maxLen) + ctx.info.system.lang.name)
+        logger.info("lang.version     ".padEnd(maxLen) + ctx.info.system.lang.version)
+        logger.info("lang.versionNum  ".padEnd(maxLen) + ctx.info.system.lang.vendor)
+        logger.info("lang.java        ".padEnd(maxLen) + ctx.info.system.lang.origin)
+        logger.info("lang.home        ".padEnd(maxLen) + ctx.info.system.lang.home)
     }
 
     /**

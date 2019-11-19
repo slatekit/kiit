@@ -51,9 +51,7 @@ data class AppEntContext(
         override val envs: Envs,
         override val conf: Conf,
         override val logs: Logs,
-        override val about: About,
-        override val sys: Sys,
-        override val build: Build,
+        override val info: Info,
         val ent: Entities,
         val dbs: DbLookup? = null,
         override val enc: Encryptor? = null,
@@ -64,7 +62,7 @@ data class AppEntContext(
      * the same context without the Entities
      */
     fun toAppContext(): CommonContext {
-        return CommonContext(args, envs, conf, logs, about, sys, build, enc, dirs)
+        return CommonContext(args, envs, conf, logs, info, enc, dirs)
     }
 
     companion object {
@@ -76,7 +74,7 @@ data class AppEntContext(
         fun fromContext(ctx: Context, namer: Namer? = null): AppEntContext {
             val dbCons = DbLookup.fromConfig(ctx.conf)
             return AppEntContext(
-                    ctx.args, ctx.envs, ctx.conf, ctx.logs, ctx.about, ctx.sys, ctx.build, Entities({ con -> Db(con) }, dbCons, ctx.enc, namer = namer), dbCons, ctx.enc, ctx.dirs
+                    ctx.args, ctx.envs, ctx.conf, ctx.logs, ctx.info, Entities({ con -> Db(con) }, dbCons, ctx.enc, namer = namer), dbCons, ctx.enc, ctx.dirs
             )
 
         }
@@ -88,7 +86,7 @@ data class AppEntContext(
         fun fromAppContext(ctx: CommonContext, namer: Namer? = null): AppEntContext {
             val dbCons = DbLookup.fromConfig(ctx.conf)
             return AppEntContext(
-                    ctx.args, ctx.envs, ctx.conf, ctx.logs, ctx.about, ctx.sys, ctx.build, Entities({ con -> Db(con) }, dbCons, ctx.enc, namer = namer), dbCons, ctx.enc, ctx.dirs
+                    ctx.args, ctx.envs, ctx.conf, ctx.logs, ctx.info, Entities({ con -> Db(con) }, dbCons, ctx.enc, namer = namer), dbCons, ctx.enc, ctx.dirs
             )
 
         }
@@ -102,9 +100,11 @@ data class AppEntContext(
                     envs = envs,
                     conf = conf,
                     logs = LogsDefault,
-                    about = About(id, name, about, company),
-                    sys = Sys.build(),
-                    build = Build.empty,
+                    info = Info(
+                            About(id, name, about, company),
+                            Build.empty,
+                            Sys.build()
+                    ),
                     ent = Entities({ con -> Db(con) }),
                     enc = Encryptor("wejklhviuxywehjk", "3214maslkdf03292", B64Java8),
                     dirs = Folders.userDir("slatekit", "samples", "sample1")

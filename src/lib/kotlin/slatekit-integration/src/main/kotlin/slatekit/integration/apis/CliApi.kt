@@ -52,7 +52,7 @@ open class CliApi(
         serializer:(Any?, ContentType) -> Content,
         val metaTransform: ((Map<String,Any>) -> List<Pair<String,String>>)? = null
 )
-    : CLI(settings, Info(ctx.about, ctx.build, ctx.sys), ctx.dirs, serializer = serializer)
+    : CLI(settings, Info(ctx.info.about, ctx.info.build, ctx.info.system), ctx.dirs, serializer = serializer)
 {
 
     val metaNameForApiKey = "api-key"

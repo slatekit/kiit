@@ -27,19 +27,19 @@ import slatekit.common.info.*
 class InfoApi(val context: Context)  {
 
     @Action(desc = "gets info about this build")
-    fun build(): Build = context.build
+    fun build(): Build = context.info.build
 
 
     @Action(desc = "get info about the application")
-    fun about(): About = context.about
+    fun about(): About = context.info.about
 
 
     @Action(desc = "get info about the application")
-    fun cmd(cmd: Request): About = context.about
+    fun cmd(cmd: Request): About = context.info.about
 
 
     @Action(desc = "gets info about the language")
-    fun lang(): Lang = context.sys.lang
+    fun lang(): Lang = context.info.system.lang
 
 
     @Action(desc = "gets info about the folders")

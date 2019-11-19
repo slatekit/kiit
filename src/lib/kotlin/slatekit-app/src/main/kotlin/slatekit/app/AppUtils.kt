@@ -25,6 +25,7 @@ import slatekit.common.envs.Env
 import slatekit.common.envs.Envs
 import slatekit.common.info.About
 import slatekit.common.info.Build
+import slatekit.common.info.Info
 import slatekit.common.info.Sys
 import slatekit.common.io.Alias
 import slatekit.common.io.Uri
@@ -191,9 +192,7 @@ object AppUtils {
                 conf = conf,
                 enc = enc,
                 logs = logs ?: LogsDefault,
-                about = AppBuilder.about(conf),
-                sys = Sys.build(),
-                build = build,
+                info = Info(AppBuilder.about(conf), build, Sys.build()),
                 dirs = AppBuilder.folders(conf)
         )
     }

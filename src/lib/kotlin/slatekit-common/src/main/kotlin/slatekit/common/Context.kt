@@ -26,9 +26,7 @@ interface Context {
     val envs: Envs
     val conf: Conf
     val logs: Logs
-    val about: About
-    val sys: Sys
-    val build: Build
+    val info: Info
     val enc: Encryptor?
     val dirs: Folders?
 }

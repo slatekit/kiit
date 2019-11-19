@@ -33,6 +33,7 @@ import slatekit.common.log.LogsDefault
 import slatekit.cmds.Command
 import slatekit.cmds.CommandRequest
 import slatekit.common.envs.Envs
+import slatekit.common.info.Info
 import slatekit.db.Db
 import slatekit.entities.Entities
 import slatekit.integration.common.AppEntContext
@@ -107,13 +108,13 @@ class SampleApp(ctx: Context) : App<Context>(ctx, AppOptions(
         ctx.logs.getLogger().info("default logger ")
 
         // 6. Get app info ( showing just 1 property )
-        println(ctx.about.name)
+        println(ctx.info.about.name)
 
         // 7. Get the host computer info
-        println(ctx.sys.host)
+        println(ctx.info.system.host)
 
         // 8. Get the java runtime info
-        println(ctx.sys.lang)
+        println(ctx.info.system.lang)
 
         // 9. Get the encryptor to encrypt/decrypt
         println(ctx.enc?.let { enc -> enc.encrypt("hello world") })
@@ -167,7 +168,7 @@ class Example_App : Command("app") {
 
         // APPROACH 1: Manually / Explicitly build up the AppContext
         // Load the config "env.conf" from resources
-        val conf = Config("env.conf")
+        val conf = Config.of("env.conf")
         val ctx = AppEntContext(
                 args = Args.default(),
                 envs = Envs.defaults().select(conf.env().name),
@@ -175,20 +176,22 @@ class Example_App : Command("app") {
                 logs = LogsDefault,
                 ent = Entities({ con -> Db(con) }),
                 enc = Encryptor("wejklhviuxywehjk", "3214maslkdf03292", B64Java8),
-                about = About(
-                        area = "slatekit",
-                        name = "sample-app",
-                        desc = "Sample to show the base application with manually built context",
-                        company = "slatekit",
-                        version = "0.9.1",
-                        contact = "kishore@abc.co",
-                        region = "",
-                        url = "",
-                        tags = "",
-                        examples = ""
-                ),
-                build = Build.empty,
-                sys = Sys.build()
+                info = Info(
+                        About(
+                                area = "slatekit",
+                                name = "sample-app",
+                                desc = "Sample to show the base application with manually built context",
+                                company = "slatekit",
+                                version = "0.9.1",
+                                contact = "kishore@abc.co",
+                                region = "",
+                                url = "",
+                                tags = "",
+                                examples = ""
+                        ),
+                        Build.empty,
+                        Sys.build()
+                )
         )
         // Now run the app with context info with
         // the help of the AppRunner which will call the life-cycle events.

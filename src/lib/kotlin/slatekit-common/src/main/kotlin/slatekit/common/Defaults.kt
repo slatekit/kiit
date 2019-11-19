@@ -75,9 +75,7 @@ data class CommonContext(
         override val envs: Envs,
         override val conf: Conf,
         override val logs: Logs,
-        override val about: About,
-        override val sys: Sys,
-        override val build: Build,
+        override val info: Info,
         override val enc: Encryptor? = null,
         override val dirs: Folders? = null
 ) : Context {
@@ -94,9 +92,7 @@ data class CommonContext(
                     envs = envs,
                     conf = conf,
                     logs = LogsDefault,
-                    about = About.none,
-                    sys = Sys.build(),
-                    build = Build.empty
+                    info = Info.none
             )
         }
 
@@ -110,9 +106,7 @@ data class CommonContext(
                     envs = envs,
                     conf = conf,
                     logs = LogsDefault,
-                    about = About.none,
-                    sys = Sys.build(),
-                    build = Build.empty,
+                    info = Info.none,
                     dirs = Folders.userDir("slatekit", name.toIdent(), name.toIdent())
             )
         }
@@ -127,9 +121,11 @@ data class CommonContext(
                     envs = envs,
                     conf = conf,
                     logs = LogsDefault,
-                    about = About(id, name, about, company),
-                    sys = Sys.build(),
-                    build = Build.empty,
+                    info = Info(
+                            About(id, name, about, company),
+                            Build.empty,
+                            Sys.build()
+                    ),
                     enc = Encryptor("wejklhviuxywehjk", "3214maslkdf03292", B64Java8),
                     dirs = Folders.userDir("slatekit", "samples", "sample1")
             )
