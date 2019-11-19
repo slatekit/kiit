@@ -30,7 +30,7 @@ import slatekit.entities.repos.InMemoryRepoWithLongId
 import slatekit.meta.models.ModelMapper
 import slatekit.orm.OrmMapper
 import slatekit.orm.databases.vendors.MySqlConverter
-import slatekit.orm.databases.vendors.MySqlEntityRepo
+import slatekit.orm.databases.vendors.MySqlRepo
 
 //</doc:import_examples>
 
@@ -94,7 +94,7 @@ class Example_Entities_Service : Command("service") {
     // More examples of database setup/entity registration available in Setup/Registration docs.
 
     // Now create the repo with database and mapper
-    val repoMySql = MySqlEntityRepo<Long, User>(db, entityInfo, mapper)
+    val repoMySql = MySqlRepo<Long, User>(db, entityInfo, mapper)
 
     // CASE 3: You can also extend from EntityRepositoryMySql
     class UserService(repo: Repo<Long, User>) : EntityService<Long, User>(repo)

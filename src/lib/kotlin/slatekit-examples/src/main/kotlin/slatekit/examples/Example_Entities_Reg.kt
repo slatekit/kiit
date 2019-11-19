@@ -33,8 +33,8 @@ import slatekit.examples.common.UserRepository
 import slatekit.examples.common.UserService
 import slatekit.meta.models.ModelMapper
 import slatekit.orm.orm
-import slatekit.orm.databases.vendors.MySqlEntityMapper
-import slatekit.orm.databases.vendors.MySqlEntityRepo
+import slatekit.orm.databases.vendors.MySqlMapper
+import slatekit.orm.databases.vendors.MySqlRepo
 
 //</doc:import_examples>
 
@@ -90,8 +90,8 @@ class Example_Entities_Reg : Command("types") {
         val con = DbConString("com.mysql.jdbc.Driver", "jdbc:mysql://localhost/mydb", "user", "password")
         val db = Db(con)
         val model = ModelMapper.loadSchema(User::class)
-        val mapper = MySqlEntityMapper<Long, User>(model, db, EntityInfo(Long::class, User::class, "users"))
-        val repo = MySqlEntityRepo<Long, User>(db, EntityInfo(Long::class, User::class, "users"), mapper)
+        val mapper = MySqlMapper<Long, User>(model, db, EntityInfo(Long::class, User::class, "users"))
+        val repo = MySqlRepo<Long, User>(db, EntityInfo(Long::class, User::class, "users"), mapper)
         val service = UserService(entities, repo)
         showResults("Case 3", entities.register(User::class, Long::class, service, DbType.DbTypeMemory))
 
