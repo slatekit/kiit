@@ -41,7 +41,7 @@
     <link rel="stylesheet" href="assets/app/app.css">
 
 
-    <title>Slate Kit: Info</title>
+    <title>Slate Kit: Queues</title>
 </head>
 
 <body>
@@ -105,12 +105,16 @@
         </a>
         <ul class="dropdown-menu" aria-labelledby="menu-1">
             <li><a class="dropdown-item" href="arch/overview">Overview</a></li>
+            <li><a class="dropdown-item" href="">-------------------</a></li>
             <li><a class="dropdown-item" href="arch/results">Results</a></li>
             <li><a class="dropdown-item" href="arch/context">Context</a></li>
+            <li><a class="dropdown-item" href="">-------------------</a></li>
             <li><a class="dropdown-item" href="arch/app">App</a></li>
-            <li><a class="dropdown-item" href="arch/apis">APIs</a></li>
+            <li><a class="dropdown-item" href="arch/apis">API</a></li>
             <li><a class="dropdown-item" href="arch/cli">CLI</a></li>
             <li><a class="dropdown-item" href="arch/jobs">Jobs</a></li>
+            <li><a class="dropdown-item" href="">-------------------</a></li>
+            <li><a class="dropdown-item" href="arch/overview">More...</a></li>
         </ul>
     </li>
     <li class="nav-item">
@@ -159,13 +163,11 @@
 
 <h1 id="overview">Overview</h1>
 
-<p>Describe this {COMPONENT_NAME} concisely in 2-3 sentences.
-<br/><br/></p>
+<p>The Files component is an abstraction of persistent queues with a default implementation using <strong>AWS SQS</strong>. This also provides a much simplified API while making the underlying implementation swappable.</p>
 
 <h1 id="index">Index</h1>
 
-<p>Table of contents for this page
-<table class="table table-bordered table-striped">
+<p><table class="table table-bordered table-striped">
     <tr>
         <td><strong>Section</strong></td>
         <td><strong>Component</strong></td>
@@ -173,67 +175,51 @@
     </tr>
     <tr>
         <td><strong>1</strong></td>
-        <td><strong><a class="url-ch" href="core/cli#status">Status</a></strong></td>
+        <td><strong><a class="url-ch" href="arch/queues#status">Status</a></strong></td>
         <td>Current status of this component</td>
     </tr>
     <tr>
         <td><strong>2</strong></td>
-        <td><strong><a class="url-ch" href="core/cli#install">Install</a></strong></td>
+        <td><strong><a class="url-ch" href="arch/queues#install">Install</a></strong></td>
         <td>Installation instructions and references to sources</td>
     </tr>
     <tr>
         <td><strong>3</strong></td>
-        <td><strong><a class="url-ch" href="core/cli#requires">Requires</a></strong></td>
+        <td><strong><a class="url-ch" href="arch/queues#requires">Requires</a></strong></td>
         <td>Lists all the Slate Kit and third-party dependencies</td>
     </tr>
     <tr>
         <td><strong>4</strong></td>
-        <td><strong><a class="url-ch" href="core/cli#sample">Sample</a></strong></td>
-        <td>Quick sample to show usage of the component</td>
+        <td><strong><a class="url-ch" href="arch/queues#sample">Import</a></strong></td>
+        <td>Packages to import</td>
     </tr>
     <tr>
         <td><strong>5</strong></td>
-        <td><strong><a class="url-ch" href="core/cli#goals">Goals</a></strong></td>
-        <td>Goals of this component and the problems it attempts to solve</td>
+        <td><strong><a class="url-ch" href="arch/queues#goals">Setup</a></strong></td>
+        <td>Set up of credentials, and configuration</td>
     </tr>
     <tr>
         <td><strong>6</strong></td>
-        <td><strong><a class="url-ch" href="core/cli#concepts">Concepts</a></strong></td>
-        <td>Core concepts to understand in this component</td>
-    </tr>
-    <tr>
-        <td><strong>7</strong></td>
-        <td><strong><a class="url-ch" href="core/cli#features">Features</a></strong></td>
-        <td>List all the features supported</td>
-    </tr>
-    <tr>
-        <td><strong>8</strong></td>
-        <td><strong><a class="url-ch" href="core/cli#setup">Setup</a></strong></td>
-        <td>Set up and configure this component for use</td>
-    </tr>
-    <tr>
-        <td><strong>9</strong></td>
-        <td><strong><a class="url-ch" href="core/cli#details">Details</a></strong></td>
-        <td>In-depth examples of the supported features</td>
+        <td><strong><a class="url-ch" href="arch/queues#concepts">Usage</a></strong></td>
+        <td>Usage and examples</td>
     </tr>
 </table>
 <br/>
 
-<a href="core/cli#overview" class="sk-back-to-top">Back to top </a>
+<a href="arch/queues#overview" class="sk-back-to-top">Back to top </a>
 <br/><br/><br/><br/></p>
 
 <h1 id="status">Status</h1>
 
-<p>coming soon
+<p>This component is currently stable. However it is currently using the AWS 1.0 sdk that is synchonous. A future version will involve using AWS 2.0 sdk that is <strong>Async</strong> and incorporate Coroutines.
 <br/>
 
-<a href="core/cli#overview" class="sk-back-to-top">Back to top </a>
+<a href="arch/queues#overview" class="sk-back-to-top">Back to top </a>
 <br/><br/><br/><br/></p>
 
 <h1 id="install">Install</h1>
 
-<p>coming soon
-<div class="highlight"><pre class="chroma"><code class="language-groovy" data-lang="groovy">    <span class="n">repositories</span> <span class="o">{</span>
+<p><div class="highlight"><pre class="chroma"><code class="language-groovy" data-lang="groovy">    <span class="n">repositories</span> <span class="o">{</span>
         <span class="c1">// other repositories
 </span><span class="c1"></span>        <span class="n">maven</span> <span class="o">{</span> <span class="n">url</span>  <span class="s2">&#34;http://dl.bintray.com/codehelixinc/slatekit&#34;</span> <span class="o">}</span>
     <span class="o">}</span>
@@ -241,29 +227,29 @@
     <span class="n">dependencies</span> <span class="o">{</span>
         <span class="c1">// other dependencies ...
 </span><span class="c1"></span>
-        <span class="n">compile</span> <span class="s1">&#39;com.slatekit:slatekit-{COMPONENT_ID}:0.9.9&#39;</span>
+        <span class="n">compile</span> <span class="s1">&#39;com.slatekit:slatekit-cloud:1.0.0&#39;</span>
     <span class="o">}</span></code></pre></div>
 
 <table class="table table-bordered table-striped">
   <tr>
     <td><strong>package</strong></td>
-    <td>slatekit.app</td>
+    <td>slatekit.cloud</td>
   </tr>
   <tr>
     <td><strong>jar</strong></td>
-    <td>slatekit.app.jar</td>
+    <td>slatekit.cloud.jar</td>
   </tr>
   <tr>
     <td><strong>git</strong></td>
-    <td><a class="url-ch" href="https://github.com/code-helix/slatekit/tree/master/src/lib/kotlin/slatekit-app">slatekit/src/lib/kotlin/slatekit-app</a></td>
+    <td><a class="url-ch" href="https://github.com/code-helix/slatekit/tree/master/src/lib/kotlin/slatekit-cloud">slatekit/src/lib/kotlin/slatekit-cloud</a></td>
   </tr>
   <tr>
     <td><strong>docs</strong></td>
-    <td><a class="url-ch" href="core/app">App</a></td>
+    <td><a class="url-ch" href="arch/queues">Files</a></td>
   </tr>
   <tr>
     <td><strong>uses</strong></td>
-    <td>slatekit.results, slatekit.common</td>
+    <td>slatekit.results, slatekit.core, slatekit.cloud</td>
   </tr>
   <tr>
     <td><strong>license</strong></td>
@@ -271,12 +257,12 @@
   </tr>
   <tr>
       <td><strong>example</strong></td>
-      <td><a class="url-ch" href="">Example_App.kt</a></td>
+      <td><a class="url-ch" href="https://github.com/code-helix/slatekit/tree/master/src/lib/kotlin/slatekit-examples/src/main/kotlin/slatekit/examples/">Example_Files.kt</a></td>
   </tr>
 </table>
 <br/>
 
-<a href="core/cli#overview" class="sk-back-to-top">Back to top </a>
+<a href="arch/queues#overview" class="sk-back-to-top">Back to top </a>
 <br/><br/><br/><br/></p>
 
 <h1 id="requires">Requires</h1>
@@ -288,158 +274,93 @@
         <td><strong>Description</strong></td>
     </tr>
     <tr>
-        <td><a class="url-ch" href="core/results">Slate Kit - Results</a></td>
+        <td><a href="http://www.slatekit.com/arch/results" >Results</a></td>
         <td>To model successes and failures with optional status codes</td>
     </tr>
     <tr>
-        <td><a class="url-ch" href="utils/utils.html">Slate Kit - Common</a></td>
+        <td><a href="http://www.slatekit.com/utils/overview" >Utils</a></td>
         <td>Common utilities for both android + server</td>
     </tr>
 </table>
 <br/>
 
-<a href="core/cli#overview" class="sk-back-to-top">Back to top </a>
+<a href="arch/queues#overview" class="sk-back-to-top">Back to top </a>
 <br/><br/><br/><br/></p>
 
-<h1 id="sample">Sample</h1>
+<h1 id="imports">Imports</h1>
 
-<p>coming soon
-<div class="highlight"><pre class="chroma"><code class="language-kotlin" data-lang="kotlin">    <span class="k">fun</span> <span class="nf">quick_sample</span><span class="p">()</span> <span class="p">{</span>
-        
-    <span class="p">}</span></code></pre></div>
-<br/>
-
-<a href="core/cli#overview" class="sk-back-to-top">Back to top </a>
-<br/><br/><br/><br/></p>
-
-<h1 id="goals">Goals</h1>
-
-<p>coming soon
-<table class="table table-bordered table-striped">
-    <tr>
-        <td><strong>Goal</strong></td>
-        <td><strong>Description</strong></td>
-    </tr>
-    <tr>
-        <td><strong>1. Goal A</strong></td>
-        <td>Description of goal</td>
-    </tr>
-    <tr>
-        <td><strong>2. Goal B</strong> </td>
-        <td>Description of goal</td><br />
-    </tr>
-    <tr>
-        <td><strong>3. Goal C</strong></td>
-        <td>Description of goal</td>
-    </tr>
-</table>
-<br/>
-
-<a href="core/cli#overview" class="sk-back-to-top">Back to top </a>
-<br/><br/><br/><br/></p>
-
-<h1 id="concepts">Concepts</h1>
-
-<p>coming soon
-<table class="table table-bordered table-striped">
-    <tr>
-        <td><strong>Concept</strong></td>
-        <td><strong>Description</strong></td>
-    </tr>
-    <tr>
-        <td><strong>1. Concept A</strong></td>
-        <td>Description of concept</td>
-    </tr>
-    <tr>
-        <td><strong>2. Concept B</strong> </td>
-        <td>Description of concept</td><br />
-    </tr>
-    <tr>
-        <td><strong>3. Concept C</strong></td>
-        <td>Description of concept</td>
-    </tr>
-</table>
-<br/>
-
-<a href="core/cli#overview" class="sk-back-to-top">Back to top </a>
-<br/><br/><br/><br/></p>
-
-<h1 id="features">Features</h1>
-
-<p>coming soon
-<table class="table table-bordered table-striped">
-    <tr>
-        <td><strong>Name</strong></td>
-        <td><strong>Description</strong></td>
-        <td><strong>More</strong></td>
-    </tr>
-    <tr>
-        <td><strong>1. Feature A</strong></td>
-        <td>Description of feature</td>
-        <td><a href="arch/app/#feature1" class="more"><span class="btn btn-primary">more</span></a></td>
-    </tr>
-    <tr>
-        <td><strong>2. Feature B</strong> </td>
-        <td>Description of feature</td>
-        <td><a href="arch/app/#feature2" class="more"><span class="btn btn-primary">more</span></a></td><br />
-    </tr>
-    <tr>
-        <td><strong>3. Feature C</strong></td>
-        <td>Description of feature</td>
-        <td><a href="arch/app/#feature3" class="more"><span class="btn btn-primary">more</span></a></td>
-    </tr>
-</table>
-<br/>
-
-<a href="core/cli#overview" class="sk-back-to-top">Back to top </a>
-<br/><br/><br/><br/></p>
-
-<h2 id="feature1">Feature 1</h2>
-
-<p>coming soon
-<div class="highlight"><pre class="chroma"><code class="language-kotlin" data-lang="kotlin">    <span class="k">fun</span> <span class="nf">setup</span><span class="p">()</span> <span class="p">{</span>
-        
-    <span class="p">}</span></code></pre></div>
-
-
-
-<a href="core/cli#features" class="sk-back-to-details">Back to features</a>
-<a href="core/cli#overview" class="sk-back-to-top">Back to top </a>
-
-<br/><br/><br/></p>
-
-<h2 id="feature2">Feature 2</h2>
-
-<p>coming soon
-<div class="highlight"><pre class="chroma"><code class="language-kotlin" data-lang="kotlin">    <span class="k">fun</span> <span class="nf">setup</span><span class="p">()</span> <span class="p">{</span>
-        
-    <span class="p">}</span></code></pre></div>
-
-
-
-<a href="core/cli#features" class="sk-back-to-details">Back to features</a>
-<a href="core/cli#overview" class="sk-back-to-top">Back to top </a>
-
-<br/><br/><br/></p>
-
-<h2 id="feature3">Feature 3</h2>
-
-<p>coming soon
-<div class="highlight"><pre class="chroma"><code class="language-kotlin" data-lang="kotlin">    <span class="k">fun</span> <span class="nf">setup</span><span class="p">()</span> <span class="p">{</span>
-        
-    <span class="p">}</span></code></pre></div>
-
-
-
-<a href="core/cli#features" class="sk-back-to-details">Back to features</a>
-<a href="core/cli#overview" class="sk-back-to-top">Back to top </a>
-
-<br/><br/><br/></p>
+<div class="highlight"><pre class="chroma"><code class="language-kotlin" data-lang="kotlin">         
+    <span class="k">import</span> <span class="nn">slatekit.cloud.aws.AwsCloudQueue</span>
+    <span class="k">import</span> <span class="nn">slatekit.common.queues.QueueStringConverter</span>
+     </code></pre></div>
 
 <br/>
 
-<a href="core/cli#overview" class="sk-back-to-top">Back to top </a>
+<a href="arch/queues#overview" class="sk-back-to-top">Back to top </a>
 <br/><br/><br/><br/>
+
+<h1 id="setup">Setup</h1>
+
+<div class="highlight"><pre class="chroma"><code class="language-kotlin" data-lang="kotlin">        
+    <span class="k">val</span> <span class="py">converter</span> <span class="p">=</span> <span class="n">QueueStringConverter</span><span class="p">()</span>
+    <span class="c1">// Not storing any key/secret in source code for security purposes
+</span><span class="c1"></span>    <span class="c1">// Setup 1: Use the default aws config file in &#34;{user_dir}/.aws/credentials&#34;
+</span><span class="c1"></span>    <span class="k">val</span> <span class="py">queue1</span> <span class="p">=</span> <span class="n">AwsCloudQueue</span><span class="p">&lt;</span><span class="n">String</span><span class="p">&gt;(</span><span class="s">&#34;app1-queue-1&#34;</span><span class="p">,</span> <span class="s">&#34;queue1&#34;</span><span class="p">,</span> <span class="n">converter</span><span class="p">)</span>
+
+    <span class="c1">// Setup 2: Use the type safe config in &#34;{user_id}/myapp/conf/queue.conf&#34;
+</span><span class="c1"></span>    <span class="c1">// Reads from the section &#34;sqs&#34; by default
+</span><span class="c1"></span>    <span class="k">val</span> <span class="py">queue2</span> <span class="p">=</span> <span class="n">AwsCloudQueue</span><span class="p">&lt;</span><span class="n">String</span><span class="p">&gt;(</span><span class="s">&#34;app1-queue-1&#34;</span><span class="p">,</span> <span class="s">&#34;queue1&#34;</span><span class="p">,</span> <span class="n">converter</span><span class="p">,</span><span class="s">&#34;user://myapp/conf/queue.conf&#34;</span><span class="p">)</span>
+
+    <span class="c1">// Setup 3: Use the type safe config in &#34;{user_id}/myapp/conf/queue.conf&#34;
+</span><span class="c1"></span>    <span class="c1">// Reads from the section supplied &#34;sqs-3&#34; ( if you have multiple sqs configurations )
+</span><span class="c1"></span>    <span class="k">val</span> <span class="py">queue3</span> <span class="p">=</span> <span class="n">AwsCloudQueue</span><span class="p">&lt;</span><span class="n">String</span><span class="p">&gt;(</span><span class="s">&#34;app1-queue-1&#34;</span><span class="p">,</span>  <span class="s">&#34;queue1&#34;</span><span class="p">,</span> <span class="n">converter</span><span class="p">,</span> <span class="s">&#34;user://myapp/conf/queue.conf&#34;</span><span class="p">,</span> <span class="s">&#34;sqs-1&#34;</span><span class="p">)</span>
+     </code></pre></div>
+
+<br/>
+
+<a href="arch/queues#overview" class="sk-back-to-top">Back to top </a>
+<br/><br/><br/><br/>
+
+<h1 id="usage">Usage</h1>
+
+<p><div class="highlight"><pre class="chroma"><code class="language-kotlin" data-lang="kotlin">        
+    <span class="c1">// Use case 1: init()
+</span><span class="c1"></span>    <span class="n">queue2</span><span class="p">.</span><span class="n">init</span><span class="p">()</span>
+
+    <span class="c1">// Use case 2: send 1 message
+</span><span class="c1"></span>    <span class="n">queue2</span><span class="p">.</span><span class="n">send</span><span class="p">(</span><span class="s">&#34;test 1&#34;</span><span class="p">)</span>
+
+    <span class="c1">// Use case 3: send multiple messages
+</span><span class="c1"></span>    <span class="n">queue2</span><span class="p">.</span><span class="n">send</span><span class="p">(</span><span class="s">&#34;test 2&#34;</span><span class="p">)</span>
+
+    <span class="c1">// Use case 4: send message with tags
+</span><span class="c1"></span>    <span class="n">queue2</span><span class="p">.</span><span class="n">send</span><span class="p">(</span><span class="s">&#34;user=kishore&#34;</span><span class="p">,</span> <span class="n">tagName</span><span class="p">=</span><span class="s">&#34;type&#34;</span><span class="p">,</span> <span class="n">tagValue</span><span class="p">=</span><span class="s">&#34;reg&#34;</span><span class="p">)</span>
+
+    <span class="c1">// Use case 5: receive 1 message
+</span><span class="c1"></span>    <span class="k">val</span> <span class="py">item1</span> <span class="p">=</span> <span class="n">queue2</span><span class="p">.</span><span class="n">next</span><span class="p">()</span>
+    <span class="n">println</span><span class="p">(</span><span class="n">item1</span><span class="o">?.</span><span class="n">getValue</span><span class="p">())</span>
+    <span class="n">println</span><span class="p">(</span><span class="n">item1</span><span class="o">?.</span><span class="n">getTag</span><span class="p">(</span><span class="s">&#34;type&#34;</span><span class="p">))</span>
+
+    <span class="c1">// Use case 6: recieve 2 messages
+</span><span class="c1"></span>    <span class="k">val</span> <span class="py">items</span> <span class="p">=</span> <span class="n">queue2</span><span class="p">.</span><span class="n">next</span><span class="p">(</span><span class="m">2</span><span class="p">)</span>
+
+    <span class="c1">// Use case 7: delete a message
+</span><span class="c1"></span>    <span class="n">queue2</span><span class="p">.</span><span class="n">complete</span><span class="p">(</span><span class="n">item1</span><span class="p">)</span>
+
+    <span class="c1">// Use case 8: delete many
+</span><span class="c1"></span>    <span class="n">queue2</span><span class="p">.</span><span class="n">completeAll</span><span class="p">(</span><span class="n">items</span><span class="p">)</span>
+
+    <span class="c1">// Use case 9: abandon a message
+</span><span class="c1"></span>    <span class="n">queue2</span><span class="p">.</span><span class="n">abandon</span><span class="p">(</span><span class="n">queue2</span><span class="p">.</span><span class="n">next</span><span class="p">())</span>
+
+    <span class="c1">// Use case 10: get count ( approximation )
+</span><span class="c1"></span>    <span class="k">val</span> <span class="py">count</span> <span class="p">=</span> <span class="n">queue2</span><span class="p">.</span><span class="n">count</span><span class="p">()</span>
+    <span class="n">println</span><span class="p">(</span><span class="n">count</span><span class="p">)</span>
+      </code></pre></div>
+<br/>
+
+<a href="arch/queues#overview" class="sk-back-to-top">Back to top </a>
+<br/><br/><br/><br/></p>
 
       </div>
     </section>  
