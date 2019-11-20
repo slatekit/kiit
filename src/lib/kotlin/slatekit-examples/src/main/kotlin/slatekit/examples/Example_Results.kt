@@ -22,13 +22,172 @@ import slatekit.results.*
 import slatekit.results.Try
 import slatekit.results.Success
 import slatekit.results.Failure
+import slatekit.results.builders.Notices
 import slatekit.results.builders.OutcomeBuilder
+import slatekit.results.builders.Outcomes
 import slatekit.results.builders.Tries
+import java.util.*
 
 //</doc:import_examples>
 
 
-class Example_Results : Command("results") , OutcomeBuilder {
+class Example_Results : Command("results"), OutcomeBuilder {
+
+    //<doc:examples>
+    fun usage() {
+
+        // Create success explicitly
+        val start: Result<Int, Err> = Success(10)
+
+        // Properties
+        println(start.success)     // true
+        println(start.status.code) // Codes.SUCCESS.code
+        println(start.status.msg)  // Codes.SUCCESS.msg
+
+        // Safely operate on values with map/flatMap
+        val addResult = start.map { it + 1 }
+        val subResult = start.flatMap { Success(it - 1) }
+
+        // Check values
+        println(addResult.contains(11))
+        println(addResult.exists { it == 11 })
+
+        // Get values
+        println(addResult.getOrNull())
+        println(addResult.getOrElse { 0 })
+
+        // On conditions
+        subResult.onSuccess { println(it) } // 9
+        subResult.onFailure { println(it) } // N/A
+
+        // Pattern match on branches ( Success / Failure )
+        when (addResult) {
+            is Success -> println("Value is : ${addResult.value}") // 11
+            is Failure -> println("Error is : ${addResult.error}") // N/A
+        }
+
+        // Pattern match on status
+        when (addResult.status) {
+            is Status.Succeeded -> println(addResult.msg)
+            is Status.Pending -> println(addResult.msg)
+            is Status.Denied -> println(addResult.msg)
+            is Status.Invalid -> println(addResult.msg)
+            is Status.Ignored -> println(addResult.msg)
+            is Status.Errored -> println(addResult.msg)
+            is Status.Unexpected -> println(addResult.msg)
+        }
+    }
+
+
+    fun creation() {
+        // Success: Straight-forward
+        val result = Success(42)
+
+        // Success referenced as base type Result<Int, Err>
+        val result1a: Result<Int, Err> = Success(42)
+
+        // Success created with status codes / messages
+        val result1b: Result<Int, Err> = Success(42, status = Codes.SUCCESS)
+        val result1c: Result<Int, Err> = Success(42, msg = "Successfully processed")
+        val result1d: Result<Int, Err> = Success(42, msg = "Successfully processed", code = 200)
+
+        // Failure
+        val result1e = Failure(Err.of("Invalid email"))
+
+        // Failure referenced as base type Result<Int, Err>
+        val result1f: Result<Int, Err> = Failure(Err.of("Invalid email"))
+
+        // Failure created with status codes / messages
+        val result1g: Result<Int, Err> = Failure(Err.of("Invalid email"), status = Codes.INVALID)
+        val result1h: Result<Int, Err> = Failure(Err.of("Invalid email"), msg = "Invalid inputs")
+        val result1i: Result<Int, Err> = Failure(Err.of("Invalid email"), msg = "Invalid inputs", code = Codes.INVALID.code)
+    }
+
+
+    fun errors() {
+
+        // Simple string
+        val err1 = Err.of("Invalid email")
+
+        // Exception
+        val err2 = Err.of(Exception("Invalid email"))
+
+        // Field: name / value
+        val err3 = Err.of("email", "abc123 is not a valid email", "Invalid email")
+
+        // String message from status code
+        val err4 = Err.of(Codes.INVALID)
+
+        // List of error strings
+        val err5 = Err.of(listOf(
+                "username must be at least 8 chars",
+                "username must have 1 UPPERCASE letter"
+        ), "Username is invalid")
+
+        // List of Err types
+        val err6 = ErrorList(listOf(
+                Err.of("email", "abc123 is not a valid email", "Invalid email"),
+                Err.of("phone", "123-456-789 is not a valid U.S. phone", "Invalid phone")
+        ), "Please correct the errors")
+
+        // Create the Failure branch from the errors
+        val result:Result<UUID, Err> = Failure(err6)
+    }
+
+
+    fun aliases(){
+        // Try<T> = Result<T, Exception>
+        val res1:Try<Int> = Tries.attempt { "1".toInt() }
+
+        // Outcome<T> = Result<T, Err>
+        val res2:Outcome<Int> = Outcomes.of { "1".toInt() }
+
+        // Notice<T> = Result<T, String>
+        val res3:Notice<Int> = Notices.notice { "1".toInt() }
+
+        // Validated<T> = Result<T, ErrorList>
+        val res4:Validated<String> = Failure(ErrorList(listOf(
+                Err.of("email", "abc123 is not a valid email", "Invalid email"),
+                Err.of("phone", "123-456-789 is not a valid U.S. phone", "Invalid phone")
+        ), "Please correct the errors"))
+
+    }
+
+
+    fun builders(){
+        val res1:Outcome<Long> = Outcomes.success(1, "Created User with id 1")
+        val res2:Outcome<Long> = Outcomes.denied ("Not authorized to send alerts")
+        val res3:Outcome<Long> = Outcomes.ignored("Not a beta tester")
+        val res4:Outcome<Long> = Outcomes.invalid("Email is invalid")
+        val res5:Outcome<Long> = Outcomes.conflict("Duplicate email found")
+        val res6:Outcome<Long> = Outcomes.errored("Phone is invalid")
+        val res7:Outcome<Long> = Outcomes.unexpected("Unable to send confirmation code")
+    }
+
+
+    fun tries(){
+        // Try<Long> = Result<Long, Exception>
+        val converted1:Try<Long> = Tries.attempt { "1".toLong() }
+
+        // DeniedException will checked and converted to Status.Denied
+        val converted2:Try<Long> = Tries.attemptWithStatus<Long> {
+            throw DeniedException("Token invalid")
+        }
+    }
+
+
+    fun http(){
+        // Simulate a denied exception ( Security related )
+        val denied:Outcome<Long> = Outcomes.denied("Access token has expired")
+
+        // Convert it to HTTP
+        // This returns back the HTTP code + original Status
+        val code:Pair<Int, Status> = Codes.toHttp(denied.status)
+        println(code.first) // 401
+    }
+
+    //</doc:examples>
+
 
     override fun execute(request: CommandRequest): Try<Any> {
         //<doc:examples>
@@ -51,15 +210,88 @@ class Example_Results : Command("results") , OutcomeBuilder {
         // - HTTP status are fairly general purpose and can be used outside of an http context.
         //   However, you can supply and use your own status codes if needed.
 
-        // Explicitly build result using the Success "branch" of Result
-        val result1:Result<String,Exception> = Success(
-                value = "userId:1234567890",
-                code = Codes.SUCCESS.code,
-                msg = "user created"
-        )
+        // Create success explicity
+        val result: Result<Int, Err> = Success(1)
+
+        // Properties
+        println(result.success)     // true
+        println(result.status.code) // Codes.SUCCESS.code
+        println(result.status.msg)  // Codes.SUCCESS.msg
+
+        // Get value or default to null
+        val value1: Int? = result.getOrNull()
+
+        // Get value or default with value provided
+        val value2: Int = result.getOrElse { 0 }
+
+        // Map over the value
+        val op1: Result<Int, Err> = result.map { it + 1 }
+
+        // Flat Map over the value
+        val op2: Result<Int, Err> = result.flatMap { Success(it + 1) }
+
+        // Fold to transform both the success / failure into something else ( e.g. string here )
+        val value3: String = result.fold({ "Succeeded : $it" }, { err -> "Failed : ${err.msg}" })
+
+        // Check if the value matches the criteria
+        result.exists { it == 1 } // true
+
+        // Check if the value matches the one provided
+        result.contains(2)        // false
+
+        // Get value if success
+        result.onSuccess { println("Number = $it") }
+
+        // Get error if failure
+        result.onFailure { println("Error is ${it.msg}") }
+
+        // Pattern match
+        when (result) {
+            is Success -> println(result.value)  // 1
+            is Failure -> println(result.error)  // Err
+        }
+
+        val result1b = Success(42, Codes.SUCCESS)
+        val result1c = Success(42, msg = "Successfully processed")
+        val result1d = Success(42, msg = "Successfully processed", code = 200)
+
+        // Create failure explicitly
+        val result1e: Result<Int, Err> = Failure(Err.of("Invalid email"))
+        val result1f = Failure(Err.of("Invalid email"), Codes.INVALID)
+        val result1g = Failure(Err.of("Invalid email"), msg = "Invalid inputs")
+        val result1h = Failure(Err.of("Invalid email"), msg = "Invalid inputs", code = Codes.INVALID.code)
+
+        // PATTERN MATCH
+        when (result) {
+            is Success -> println(result.value)  // 1
+            is Failure -> println(result.error)  // Err
+        }
+
+        // PATTERN MATCH 2: On status ( logical categories of statuses )
+        // NOTE: The status property is available on both the Success/Failure branches
+        when (result.status) {
+            is Status.Succeeded -> println(result.msg)
+            is Status.Pending -> println(result.msg)
+            is Status.Denied -> println(result.msg)
+            is Status.Invalid -> println(result.msg)
+            is Status.Ignored -> println(result.msg)
+            is Status.Errored -> println(result.msg)
+            is Status.Unexpected -> println(result.msg)
+        }
+
+        // PATTERN MATCH 3: On code
+        when (result.status.code) {
+            Codes.SUCCESS.code -> "OK"
+            Codes.QUEUED.code -> "Pending"
+            Codes.UPDATED.code -> "User updated"
+            Codes.DENIED.code -> "Log in again"
+            Codes.DEPRECATED.code -> "No longer supported"
+            Codes.CONFLICT.code -> "Email already exists"
+            else -> "Other!!"
+        }
 
         // Explicitly build a result using the Failure "branch" of Result
-        val result2:Result<String,Exception> = Failure<Exception>(
+        val result2: Result<String, Exception> = Failure<Exception>(
                 error = IllegalArgumentException("user id"),
                 code = Codes.BAD_REQUEST.code,
                 msg = "user id not supplied"
@@ -79,7 +311,7 @@ class Example_Results : Command("results") , OutcomeBuilder {
         //    representing the error type as a simple string.
         // 2. There is Try ( also a type alias ) for Result<S, Exception>
         //    representing the error type as an Exception
-        val res1:Notice<Int> = Success(123456, msg = "user created")
+        val res1: Notice<Int> = Success(123456, msg = "user created")
         printResult(res1)
 
 
