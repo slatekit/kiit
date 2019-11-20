@@ -5,11 +5,54 @@ section_header: Results
 ---
 
 # Overview
-**Result[T, E]** is a foundational component in **SlateKit** for modeling successes and failures across all modules using a functional approach to error handling. It is similar to Kotlin Result, Swift Result, Rust Result. However, it differs mostly with the **flexibility of the error type** and the addition of a **Status Code**.
+**Result[T, E]** is a foundational component in **Slate Kit** for accurately modeling successes and failures using a functional approach to error handling. Result is not a brand new concept, it currently exists in variations in other languages ( see below). In fact, the Result type in Slate Kit has been inspired by these and also by Google's GRPC codes ( See below ). The implementation here differs with the **flexibility of the Error type** and the addition of an optional **Status Code**, and support **logical grouping of errors**. 
+<table class="table table-bordered table-striped">
+    <tr>
+        <td><strong>#</strong></td>
+        <td><strong>Language</strong></td>
+        <td><strong>Name</strong></td>
+        <td><strong>Notes</strong></td>
+    </tr>
+    <tr>
+        <td><strong>1</strong></td>
+        <td><strong>Kotlin</td>
+        <td><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-result/index.html">Result</a></td>
+        <td>Error type is Exception and currently for internal use</td>
+    </tr>
+    <tr>
+        <td><strong>2</strong></td>
+        <td><strong>Swift</td>
+        <td><a href="https://developer.apple.com/documentation/swift/result">Result</a></td>
+        <td>Very similar conceptually</td>
+    </tr>
+    <tr>
+        <td><strong>3</strong></td>
+        <td><strong>Rust</td>
+        <td><a href="https://doc.rust-lang.org/std/result/">Result</a></td>
+        <td>Branches are Ok / Err rather than Success / Failure</td>
+    </tr>
+    <tr>
+        <td><strong>4</strong></td>
+        <td><strong>Scala</td>
+        <td><a href="https://www.scala-lang.org/api/2.12.4/scala/util/Either.html">Either</a></td>
+        <td>General purpose use to represent A or B, branches are Left / Right</td>
+    </tr>
+    <tr>
+        <td><strong>5</strong></td>
+        <td><strong>Scala</td>
+        <td><a href="https://www.scala-lang.org/api/2.12.4/scala/util/Try.html">Try</a></td>
+        <td>Models successes and failures with exceptions</td>
+    </tr>
+    <tr>
+        <td><strong>6</strong></td>
+        <td><strong>Go</td>
+        <td><a href="https://github.com/grpc/grpc/blob/master/doc/statuscodes.md">GRPC Codes</a></td>
+        <td>Status codes in Slate Kit are inspired by these</td>
+    </tr>
+</table>
 {{% break %}}
 
 # Index
-Table of contents for this page
 <table class="table table-bordered table-striped">
     <tr>
         <td><strong>Section</strong></td>
@@ -102,7 +145,7 @@ This component has **0 dependencies** and does **NOT** use any other Slate Kit c
 {{% section-end mod="core/cli" %}}
 
 # Sample
-Various samples of creating the Success/Failures and pattern matching.
+Here are some examples showing the usage of Result by creating, checking, and pattern matching the values.
 Refer to the {{% sk-link-code component="examples" filepath="examples/Example_Results.kt" name="Example_Result.kt" %}} 
 {{< highlight kotlin >}}
        
@@ -153,58 +196,74 @@ Refer to the {{% sk-link-code component="examples" filepath="examples/Example_Re
 {{% section-end mod="core/cli" %}}
 
 # Goals
-coming soon
+The design of this Result type invovles achieving these specific goals.
 <table class="table table-bordered table-striped">
     <tr>
         <td><strong>Goal</strong></td>
         <td><strong>Description</strong></td>
     </tr>
     <tr>
-        <td><strong>1. Model successes and failures</strong></td>
-        <td>Accurate, functional error-handling with pattern matching</td>
+        <td><strong>1. Accuracy of models</strong></td>
+        <td>Accurate successes / failures, and functional error-handling with various ways to pattern match</td>
     </tr>
     <tr>
         <td><strong>2. Flexible error type</strong> </td>
-        <td>Error type on the Failure branch can be anything, Exception, Err, String. You can still use exceptions</td>                     
+        <td>Error type on the Failure branch can be anything, Exception, Err, String. Use exceptions or default types</td>                     
     </tr>
     <tr>
-        <td><strong>3. Addition of Status Codes</strong></td>
-        <td>Logical groups of status that can also be converted / compatible with Http codes</td>
+        <td><strong>3. Support for Status Codes</strong></td>
+        <td>Logical groups of status to categories errors, these can also be converted to Http codes</td>
     </tr>
 </table>
 {{% section-end mod="core/cli" %}}
 
 # Concepts
+These are the main concepts / terms to know for using this component. All of these are explained further below in the details section. You can find links to the source code here.
 <table class="table table-bordered table-striped">
     <tr>
         <td><strong>Concept</strong></td>
+        <td><strong>Usage</strong></td>
         <td><strong>Description</strong></td>
-        <td><strong>More</strong></td>
     </tr>
     <tr>
-        <td><strong>1. Branches</strong></td>
-        <td>The 2 branches for Result - Success, Failure for modeling and pattern matching</td>
-        <td><a href="arch/results/#branches" class="more"><span class="btn btn-primary">more</span></a></td>
+        <td>{{% sk-link-code component="result" filepath="results/Result.kt" name="Result" %}} </td>
+        <td><strong>required</strong></td>
+        <td>Main type for modeling successes and failures.</td>
     </tr>
     <tr>
-        <td><strong>2. Error types</strong> </td>
-        <td>Flexible representation of errors. E.g. You can use the **Err** interface or **Exceptions**</td>
-        <td><a href="arch/results/#erorr-types" class="more"><span class="btn btn-primary">more</span></a></td>                     
+        <td>{{% sk-link-code component="result" filepath="results/Result.kt" name="Success" %}} </td>
+        <td><strong>required</strong></td>
+        <td>Success branch/sub-class of Result storing the value with optional status code</td>
     </tr>
     <tr>
-        <td><strong>3. Status</strong></td>
+        <td>{{% sk-link-code component="result" filepath="results/Result.kt" name="Failure" %}} </td>
+        <td><strong>required</strong></td>
+        <td>Failure branch/sub-class of Result storing the error with optional status code.</td>
+    </tr>
+    <tr>
+        <td>{{% sk-link-code component="result" filepath="results/Err.kt" name="Err" %}}</td>   
+        <td>Optional</td>
+        <td>Flexible representation of errors. E.g. You can use the **Err** interface, default implementations or **Exceptions**</td>
+    </tr>
+    <tr>
+        <td>{{% sk-link-code component="result" filepath="results/Status.kt" name="Status" %}}</td>
+        <td>Optional</td>
         <td>Logical error groups to reduce boiler plate and offer HTTP compatibility. E.g. **Succeeded, Denied, Invalid, etc**</td>
-        <td><a href="arch/results/#status" class="more"><span class="btn btn-primary">more</span></a></td>
     </tr>
     <tr>
-        <td><strong>4. Aliases</strong></td>
+        <td>{{% sk-link-code component="result" filepath="results/Codes.kt" name="Codes" %}}</td>
+        <td>Optional</td>
+        <td>Default implementations of general purpose status codes</td>
+    </tr>
+    <tr>
+        <td>{{% sk-link-code component="result" filepath="results/Aliases.kt" name="Aliases" %}}</td>
+        <td>Optional</td>
         <td>Type aliases to simplify the Result from 2 type parameters to 1. E.g. **Outcome, Try, Notice, Validated**</td>
-        <td><a href="arch/results/#aliases" class="more"><span class="btn btn-primary">more</span></a></td>
     </tr>
     <tr>
-        <td><strong>5. Builders</strong></td>
+        <td>{{% sk-link-code component="result" filepath="results/builders/Builder.kt" name="Builders" %}}</td>
+        <td>Optional</td>
         <td>Convenient methods to build errors such as **Outcomes.denied**</td>
-        <td><a href="arch/results/#builders" class="more"><span class="btn btn-primary">more</span></a></td>
     </tr>
 </table>
 {{% section-end mod="core/cli" %}}
@@ -218,17 +277,17 @@ coming soon
     </tr>
     <tr>
         <td><strong>1. Create</strong></td>
-        <td>Create successes, failures in various ways and check results</td>
+        <td>Create successes, failures in various ways</td>
         <td><a href="arch/results/#creation" class="more"><span class="btn btn-primary">more</span></a></td>
     </tr>
     <tr>
         <td><strong>2. Get</strong></td>
-        <td>Create successes, failures in various ways and check results</td>
+        <td>Get values safely using available operations</td>
         <td><a href="arch/results/#creation" class="more"><span class="btn btn-primary">more</span></a></td>
     </tr>
     <tr>
         <td><strong>3. Check</strong></td>
-        <td>Create successes, failures in various ways and check results</td>
+        <td>Check for values or use pattern matching</td>
         <td><a href="arch/results/#creation" class="more"><span class="btn btn-primary">more</span></a></td>
     </tr>
     <tr>
@@ -238,12 +297,12 @@ coming soon
     </tr>
     <tr>
         <td><strong>5. Status</strong></td>
-        <td>Define your error types or use pre-built ones</td>
+        <td>Use status codes for logical grouping</td>
         <td><a href="arch/results/#errors" class="more"><span class="btn btn-primary">more</span></a></td>
     </tr>
     <tr>
         <td><strong>6. Aliases</strong></td>
-        <td>Define your error types or use pre-built ones</td>
+        <td>Type aliases to default the error type</td>
         <td><a href="arch/results/#errors" class="more"><span class="btn btn-primary">more</span></a></td>
     </tr>
     <tr>
@@ -276,27 +335,27 @@ There various ways to create successes / failures, and these will be similar to 
       
     import slatekit.results.*
     
-    // Success: Just with success value
+    // Success: Straight-forward
     val result = Success(42)
-    
+
     // Success referenced as base type Result<Int, Err>
-    val result1a:Result<Int, Err> = Success(42)
+    val result1a: Result<Int, Err> = Success(42)
 
     // Success created with status codes / messages
-    val result1b:Result<Int, Err> = Success(42, status = Codes.SUCCESS)
-    val result1c:Result<Int, Err> = Success(42, msg = "Successfully processed")
-    val result1d:Result<Int, Err> = Success(42, msg = "Successfully processed", code = 200)
+    val result1b = Success(42, status = Codes.SUCCESS)
+    val result1c = Success(42, msg = "Successfully processed")
+    val result1d = Success(42, msg = "Successfully processed", code = 200)
 
-    // Failure: Just with error value
+    // Failure
     val result1e = Failure(Err.of("Invalid email"))
-    
+
     // Failure referenced as base type Result<Int, Err>
-    val result1f:Result<Int,Err> = Failure(Err.of("Invalid email"))
-    
+    val result1f: Result<Int, Err> = Failure(Err.of("Invalid email"))
+
     // Failure created with status codes / messages
-    val result1g:Result<Int, Err> = Failure(Err.of("Invalid email"), status = Codes.INVALID)
-    val result1h:Result<Int, Err> = Failure(Err.of("Invalid email"), msg = "Invalid inputs")
-    val result1i:Result<Int, Err> = Failure(Err.of("Invalid email"), msg = "Invalid inputs", code = Codes.INVALID.code)
+    val result1g = Failure(Err.of("Invalid email"), status = Codes.INVALID)
+    val result1h = Failure(Err.of("Invalid email"), msg = "Invalid inputs")
+    val result1i = Failure(Err.of("Invalid email"), msg = "Invalid inputs", code = Codes.INVALID.code)
      
 {{< /highlight >}}
 {{% feature-end mod="arch/results" %}}
@@ -308,26 +367,26 @@ Result offers the typical functional ways to safely get the value
     import slatekit.results.*
 
     // Create
-    val result = Success(42)
-    
+    val result:Result<Int, Err> = Success(42)
+
     // Get value or default to null
     val value1:Int? = result.getOrNull()
-    
+
     // Get value or default with value provided
     val value2:Int = result.getOrElse { 0 }
 
     // Map over the value
-    val op1:Result<Int, Err> = result.map { it + 1 }
-    
+    val op1 = result.map { it + 1 }
+
     // Flat Map over the value
-    val op2:Result<Int, Err> = result.flatMap { Success(it + 1 ) }
-    
+    val op2 = result.flatMap { Success(it + 1 ) }
+
     // Fold to transform both the success / failure into something else ( e.g. string here )
     val value3:String = result.fold({ "Succeeded : $it" }, {err -> "Failed : ${err.msg}" })
-    
+
     // Get value if success
     result.onSuccess { println("Number = $it") }
-    
+
     // Get error if failure
     result.onFailure { println("Error is ${it.msg}") }
 
@@ -472,13 +531,13 @@ There are a few type {{% sk-link-code component="result" filepath="results/Alias
     import slatekit.results.builders.Tries
     
     // Try<T> = Result<T, Exception>
-    val res1:Try<Int> = Tries.attempt { "1".toInt() }
+    val res1 = Tries.attempt { "1".toInt() }
 
     // Outcome<T> = Result<T, Err>
-    val res2:Outcome<Int> = Outcomes.of { "1".toInt() }
+    val res2 = Outcomes.of { "1".toInt() }
 
     // Notice<T> = Result<T, String>
-    val res3:Notice<Int> = Notices.notice { "1".toInt() }
+    val res3 = Notices.notice { "1".toInt() }
 
     // Validated<T> = Result<T, ErrorList>
     val res4:Validated<String> = Failure(ErrorList(listOf(
@@ -521,14 +580,15 @@ The **Outcome** is simply a type alias for **Result[T, Err]** and allows you to 
     import slatekit.results.* 
     import slatekit.results.builders.Outcomes
 
-    val res1:Outcome<Long> = Outcomes.success(1, "Created User with id 1")
-    val res2:Outcome<Long> = Outcomes.denied ("Not authorized to send alerts")
-    val res3:Outcome<Long> = Outcomes.ignored("Not a beta tester")
-    val res4:Outcome<Long> = Outcomes.invalid("Email is invalid")
-    val res5:Outcome<Long> = Outcomes.conflict("Duplicate email found")
-    val res6:Outcome<Long> = Outcomes.errored("Phone is invalid")
-    val res7:Outcome<Long> = Outcomes.unexpected("Unable to send confirmation code")
-     
+    // Outcome<Int> = Result<Int, Err>
+    val res1 = Outcomes.success(1, "Created User with id 1")
+    val res2 = Outcomes.denied<Int>("Not authorized to send alerts")
+    val res3 = Outcomes.ignored<Int>("Not a beta tester")
+    val res4 = Outcomes.invalid<Int>("Email is invalid")
+    val res5 = Outcomes.conflict<Int>("Duplicate email found")
+    val res6 = Outcomes.errored<Int>("Phone is invalid")
+    val res7 = Outcomes.unexpected<Int>("Unable to send confirmation code")
+    
 {{< /highlight >}}
 {{% feature-end mod="arch/results" %}}
 

@@ -5,11 +5,9 @@ section_header: Files
 ---
 
 # Overview
-Describe this {COMPONENT_NAME} concisely in 2-3 sentences.
-{{% break %}}
+The Files component is an abstraction of file storage with a default implementation using **AWS S3**. This also provides a much simplified API while making the underlying implementation swappable.
 
 # Index
-Table of contents for this page
 <table class="table table-bordered table-striped">
     <tr>
         <td><strong>Section</strong></td>
@@ -18,58 +16,42 @@ Table of contents for this page
     </tr>
     <tr>
         <td><strong>1</strong></td>
-        <td><strong><a class="url-ch" href="core/cli#status">Status</a></strong></td>
+        <td><strong><a class="url-ch" href="arch/files#status">Status</a></strong></td>
         <td>Current status of this component</td>
     </tr>
     <tr>
         <td><strong>2</strong></td>
-        <td><strong><a class="url-ch" href="core/cli#install">Install</a></strong></td>
+        <td><strong><a class="url-ch" href="arch/files#install">Install</a></strong></td>
         <td>Installation instructions and references to sources</td>
     </tr>
     <tr>
         <td><strong>3</strong></td>
-        <td><strong><a class="url-ch" href="core/cli#requires">Requires</a></strong></td>
+        <td><strong><a class="url-ch" href="arch/files#requires">Requires</a></strong></td>
         <td>Lists all the Slate Kit and third-party dependencies</td>
     </tr>
     <tr>
         <td><strong>4</strong></td>
-        <td><strong><a class="url-ch" href="core/cli#sample">Sample</a></strong></td>
-        <td>Quick sample to show usage of the component</td>
+        <td><strong><a class="url-ch" href="arch/files#sample">Import</a></strong></td>
+        <td>Packages to import</td>
     </tr>
     <tr>
         <td><strong>5</strong></td>
-        <td><strong><a class="url-ch" href="core/cli#goals">Goals</a></strong></td>
-        <td>Goals of this component and the problems it attempts to solve</td>
+        <td><strong><a class="url-ch" href="arch/files#goals">Setup</a></strong></td>
+        <td>Set up of credentials, and configuration</td>
     </tr>
     <tr>
         <td><strong>6</strong></td>
-        <td><strong><a class="url-ch" href="core/cli#concepts">Concepts</a></strong></td>
-        <td>Core concepts to understand in this component</td>
-    </tr>
-    <tr>
-        <td><strong>7</strong></td>
-        <td><strong><a class="url-ch" href="core/cli#features">Features</a></strong></td>
-        <td>List all the features supported</td>
-    </tr>
-    <tr>
-        <td><strong>8</strong></td>
-        <td><strong><a class="url-ch" href="core/cli#setup">Setup</a></strong></td>
-        <td>Set up and configure this component for use</td>
-    </tr>
-    <tr>
-        <td><strong>9</strong></td>
-        <td><strong><a class="url-ch" href="core/cli#details">Details</a></strong></td>
-        <td>In-depth examples of the supported features</td>
+        <td><strong><a class="url-ch" href="arch/files#concepts">Usage</a></strong></td>
+        <td>Usage and examples</td>
     </tr>
 </table>
-{{% section-end mod="core/cli" %}}
+{{% section-end mod="arch/files" %}}
 
 # Status
-coming soon
-{{% section-end mod="core/cli" %}}
+This component is currently stable. However it is currently using the AWS 1.0 sdk that is synchonous. A future version will involve using AWS 2.0 sdk that is **Async** and incorporate Coroutines.
+{{% section-end mod="arch/files" %}}
 
 # Install
-coming soon
 {{< highlight groovy >}}
 
     repositories {
@@ -80,22 +62,22 @@ coming soon
     dependencies {
         // other dependencies ...
 
-        compile 'com.slatekit:slatekit-{COMPONENT_ID}:0.9.9'
+        compile 'com.slatekit:slatekit-cloud:1.0.0'
     }
 
 {{< /highlight >}}
 {{% sk-module 
-    name="App"
-    package="slatekit.app"
-    jar="slatekit.app.jar"
-    git="https://github.com/code-helix/slatekit/tree/master/src/lib/kotlin/slatekit-app"
-    gitAlias="slatekit/src/lib/kotlin/slatekit-app"
-    url="core/app"
-    uses="slatekit.results, slatekit.common"
+    name="Files"
+    package="slatekit.cloud"
+    jar="slatekit.cloud.jar"
+    git="https://github.com/code-helix/slatekit/tree/master/src/lib/kotlin/slatekit-cloud"
+    gitAlias="slatekit/src/lib/kotlin/slatekit-cloud"
+    url="arch/files"
+    uses="slatekit.results, slatekit.core, slatekit.cloud"
     exampleUrl=""
-    exampleFileName="Example_App.kt"
+    exampleFileName="Example_Files.kt"
 %}}
-{{% section-end mod="core/cli" %}}
+{{% section-end mod="arch/files" %}}
 
 # Requires
 This component uses the following other <strong>Slate Kit</strong> and/or third-party components.
@@ -105,130 +87,81 @@ This component uses the following other <strong>Slate Kit</strong> and/or third-
         <td><strong>Description</strong></td>
     </tr>
     <tr>
-        <td><a class="url-ch" href="core/results">Slate Kit - Results</a></td>
+        <td>{{% sk-link-arch page="results" name="Results" %}}</td>
         <td>To model successes and failures with optional status codes</td>
     </tr>
     <tr>
-        <td><a class="url-ch" href="utils/utils.html">Slate Kit - Common</a></td>
+        <td>{{% sk-link-util page="overview" name="Utils" %}}</td>
         <td>Common utilities for both android + server</td>
     </tr>
 </table>
-{{% section-end mod="core/cli" %}}
+{{% section-end mod="arch/files" %}}
 
-# Sample
-coming soon
+# Imports
 {{< highlight kotlin >}}
-
-    fun quick_sample() {
         
-    }
+    import slatekit.cloud.aws.AwsCloudFiles
+    
+{{< /highlight >}}
+
+{{% section-end mod="arch/files" %}}
+
+# Setup
+{{< highlight kotlin >}}
+        
+    // Not storing any key/secret in source code for security purposes
+    // Setup 1: Use the default aws config file in "{user_dir}/.aws/credentials"
+    val files1 = AwsCloudFiles("app1-files-1", "slatekit", false)
+
+    // Setup 2: Use the type safe config in "{user_id}/myapp/conf/files.conf"
+    // Specify the api key section as "sqs"
+    val files2 = AwsCloudFiles("app1-files-1", "slatekit",false, "user://myapp/conf/files.conf", "s3")
+
+    // Setup 2: Use the type safe config in "{user_id}/myapp/conf/files.conf"
+    // Specify the api key section as "sqs"
+    val files3 = AwsCloudFiles("app1-queue-1", "slatekit",false, "user://myapp/conf/files.conf", "s3-1")
 
 {{< /highlight >}}
-{{% section-end mod="core/cli" %}}
 
-# Goals
-coming soon
-<table class="table table-bordered table-striped">
-    <tr>
-        <td><strong>Goal</strong></td>
-        <td><strong>Description</strong></td>
-    </tr>
-    <tr>
-        <td><strong>1. Goal A</strong></td>
-        <td>Description of goal</td>
-    </tr>
-    <tr>
-        <td><strong>2. Goal B</strong> </td>
-        <td>Description of goal</td>                     
-    </tr>
-    <tr>
-        <td><strong>3. Goal C</strong></td>
-        <td>Description of goal</td>
-    </tr>
-</table>
-{{% section-end mod="core/cli" %}}
+{{% section-end mod="arch/files" %}}
 
-# Concepts
-coming soon
-<table class="table table-bordered table-striped">
-    <tr>
-        <td><strong>Concept</strong></td>
-        <td><strong>Description</strong></td>
-    </tr>
-    <tr>
-        <td><strong>1. Concept A</strong></td>
-        <td>Description of concept</td>
-    </tr>
-    <tr>
-        <td><strong>2. Concept B</strong> </td>
-        <td>Description of concept</td>                     
-    </tr>
-    <tr>
-        <td><strong>3. Concept C</strong></td>
-        <td>Description of concept</td>
-    </tr>
-</table>
-{{% section-end mod="core/cli" %}}
-
-# Features
-coming soon
-<table class="table table-bordered table-striped">
-    <tr>
-        <td><strong>Name</strong></td>
-        <td><strong>Description</strong></td>
-        <td><strong>More</strong></td>
-    </tr>
-    <tr>
-        <td><strong>1. Feature A</strong></td>
-        <td>Description of feature</td>
-        <td><a href="arch/app/#feature1" class="more"><span class="btn btn-primary">more</span></a></td>
-    </tr>
-    <tr>
-        <td><strong>2. Feature B</strong> </td>
-        <td>Description of feature</td> 
-        <td><a href="arch/app/#feature2" class="more"><span class="btn btn-primary">more</span></a></td>                    
-    </tr>
-    <tr>
-        <td><strong>3. Feature C</strong></td>
-        <td>Description of feature</td>
-        <td><a href="arch/app/#feature3" class="more"><span class="btn btn-primary">more</span></a></td>
-    </tr>
-</table>
-{{% section-end mod="core/cli" %}}
-
-
-## Feature 1 {#feature1}
-coming soon
+# Usage
 {{< highlight kotlin >}}
-
-    fun setup() {
         
-    }
+    // Use case 1: Connect using parameters
+    files1.init()
+
+    // Use case 2: create using just name and content
+    files1.create("2016_nba_v3", "version 1")
+
+    // Use case 3: update using just name and content
+    files1.update("2016_nba_v3", "version 2")
+
+    // Use case 4: create using folder and file name
+    files1.create("2016_nba_v3", "chi", "version 1")
+
+    // Use case 5: update using folder and file name
+    files1.update("2016_nba_v3", "chi", "version 2")
+
+    // Use case 6: get file as a text using just name
+    files1.getAsText("2016_nba_v3")
+
+    // Use case 7: get file using folder and file name
+    files1.getAsText("2016_nba_v3", "chi")
+
+    // Use case 8: download file to local folder
+    files1.download("2016_nba_v3", "~/dev/temp/")
+
+    // Use case 9: download using folder and file name to local folder
+    files1.download("2016_nba_v3", "chi", "~/dev/temp")
+
+    // Use case 10: delete file by just the name
+    files1.delete("2016_nba_v3")
+
+    // Use case 11: delete using folder and name
+    files1.delete("2016_nba_v3", "chi")
+      
 
 {{< /highlight >}}
-{{% feature-end mod="core/cli" %}}
-
-## Feature 2 {#feature2}
-coming soon
-{{< highlight kotlin >}}
-
-    fun setup() {
-        
-    }
-
-{{< /highlight >}}
-{{% feature-end mod="core/cli" %}}
-
-## Feature 3 {#feature3}
-coming soon
-{{< highlight kotlin >}}
-
-    fun setup() {
-        
-    }
-
-{{< /highlight >}}
-{{% feature-end mod="core/cli" %}}
-
-{{% section-end mod="core/cli" %}}
+{{% section-end mod="arch/files" %}}
 
