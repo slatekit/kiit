@@ -19,12 +19,12 @@ fun toVerb(name: String?): Verb {
         else -> {
             val nameToCheck = name.toLowerCase()
             val verb = when {
-                nameToCheck.startsWith(Verbs.Auto) -> Verb.Auto
-                nameToCheck.startsWith(Verbs.Get)  -> Verb.Get
+                nameToCheck.startsWith(Verbs.AUTO) -> Verb.Auto
+                nameToCheck.startsWith(Verbs.GET)  -> Verb.Get
                 nameToCheck.startsWith(Verbs.Delete) -> Verb.Delete
-                nameToCheck.startsWith(Verbs.Patch) -> Verb.Patch
-                nameToCheck.startsWith(Verbs.Create) -> Verb.Post
-                nameToCheck.startsWith(Verbs.Update) -> Verb.Put
+                nameToCheck.startsWith(Verbs.PATCH) -> Verb.Patch
+                nameToCheck.startsWith(Verbs.CREATE) -> Verb.Post
+                nameToCheck.startsWith(Verbs.UPDATE) -> Verb.Put
                 else -> Verb.Post
             }
             verb

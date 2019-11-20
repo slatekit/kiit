@@ -14,37 +14,38 @@ object Verbs {
      * 4. deleteXX = "delete"
      * 5. patchXX  = "patch"
      */
-    const val Auto = "auto"
+    const val AUTO = "auto"
 
 
     /**
      * Core operations supported
      */
-    const val Get = "get"
-    const val Create = "create"
-    const val Update = "update"
+    const val GET = "get"
+    const val CREATE = "create"
+    const val UPDATE = "update"
     const val Delete = "delete"
 
 
     /**
      * Here for compatibility with HTTP/REST
      */
-    const val Post  = "post"
-    const val Put   = "put"
-    const val Patch = "patch"
-    const val Parent = ApiConstants.parent
+    const val POST  = "post"
+    const val PUT   = "put"
+    const val PATCH = "patch"
+    const val PARENT = ApiConstants.parent
 }
 
+
 sealed class Verb(override val name: String)  : Parentable<Verb> {
-    object Auto   : Verb(Verbs.Auto)
-    object Get    : Verb(Verbs.Get)
-    object Create : Verb(Verbs.Create)
-    object Update : Verb(Verbs.Update)
-    object Put    : Verb(Verbs.Put)
-    object Post   : Verb(Verbs.Post)
-    object Patch  : Verb(Verbs.Patch)
+    object Auto   : Verb(Verbs.AUTO)
+    object Get    : Verb(Verbs.GET)
+    object Create : Verb(Verbs.CREATE)
+    object Update : Verb(Verbs.UPDATE)
+    object Put    : Verb(Verbs.PUT)
+    object Post   : Verb(Verbs.POST)
+    object Patch  : Verb(Verbs.PATCH)
     object Delete : Verb(Verbs.Delete)
-    object Parent : Verb(Verbs.Parent)
+    object Parent : Verb(Verbs.PARENT)
 
 
     fun isMatch(other:String):Boolean = this.name == other
@@ -53,15 +54,15 @@ sealed class Verb(override val name: String)  : Parentable<Verb> {
 
         fun parse(name:String): Verb {
             return when(name) {
-                Verbs.Auto   -> Verb.Auto
-                Verbs.Get    -> Verb.Get
-                Verbs.Create -> Verb.Create
-                Verbs.Update -> Verb.Update
-                Verbs.Put    -> Verb.Put
-                Verbs.Post   -> Verb.Post
-                Verbs.Patch  -> Verb.Patch
+                Verbs.AUTO   -> Verb.Auto
+                Verbs.GET    -> Verb.Get
+                Verbs.CREATE -> Verb.Create
+                Verbs.UPDATE -> Verb.Update
+                Verbs.PUT    -> Verb.Put
+                Verbs.POST   -> Verb.Post
+                Verbs.PATCH  -> Verb.Patch
                 Verbs.Delete -> Verb.Delete
-                Verbs.Parent -> Verb.Parent
+                Verbs.PARENT -> Verb.Parent
                 else         -> Verb.Auto
             }
         }

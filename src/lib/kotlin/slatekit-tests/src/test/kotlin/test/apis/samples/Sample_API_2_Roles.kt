@@ -20,16 +20,16 @@ import slatekit.results.Outcome
 import slatekit.results.Success
 
 
-@Api(area = "app", name = "rolesTest", desc = "api to access and manage users 3", roles= ["admin"], auth = AuthModes.Token, verb = Verbs.Auto, sources = [Sources.All])
+@Api(area = "app", name = "rolesTest", desc = "api to access and manage users 3", roles= ["admin"], auth = AuthModes.TOKEN, verb = Verbs.AUTO, sources = [Sources.ALL])
 class Sample_API_2_Roles {
 
-  @Action(desc = "", roles= [Roles.none])
+  @Action(desc = "", roles= [Roles.NONE])
   fun rolesNone(code:Int, tag:String): Outcome<String> {
     return Success("rolesNone", msg ="${code} ${tag}")
   }
 
 
-  @Action(desc = "", roles=[Roles.all])
+  @Action(desc = "", roles=[Roles.ALL])
   fun rolesAny(code:Int, tag:String): Outcome<String> {
     return Success("rolesAny", msg ="${code} ${tag}")
   }
@@ -41,7 +41,7 @@ class Sample_API_2_Roles {
   }
 
 
-  @Action(desc = "", roles= [Roles.parent])
+  @Action(desc = "", roles= [Roles.PARENT])
   fun rolesParent(code:Int, tag:String): Outcome<String> {
     return Success("rolesParent", msg ="${code} ${tag}")
   }

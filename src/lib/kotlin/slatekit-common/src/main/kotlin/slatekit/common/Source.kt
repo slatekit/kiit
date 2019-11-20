@@ -8,27 +8,27 @@ object Sources {
      * Reference to a parent value
      * e.g. If set on Action, this refers to its parent API
      */
-    const val Parent = "@parent"
+    const val PARENT = "@parent"
 
     /**
      * Enables all protocols
      */
-    const val All = "*"
+    const val ALL = "*"
 
     /**
      * API : HTTP for standard web/rest requests
      */
-    const val Api = "api"
+    const val API = "api"
 
     /**
      * Auto : Automation requests
      */
-    const val Auto = "auto"
+    const val AUTO = "auto"
 
     /**
      * Bot : Bots/Chat
      */
-    const val Bot = "bot"
+    const val BOT = "bot"
 
     /**
      * CLI : Command Line Interactive
@@ -38,27 +38,27 @@ object Sources {
     /**
      * Commands
      */
-    const val Cmd = "cmd"
+    const val CMD = "cmd"
 
     /**
      * File based : Requests processed from a file, e.g. for automation
      */
-    const val File = "file"
+    const val FILE = "file"
 
     /**
      * Queue based : requests saved and processed from a queue
      */
-    const val Queue = "queue"
+    const val QUEUE = "queue"
 
     /**
      * Stream based : requests saved and processed from a queue
      */
-    const val Stream = "stream"
+    const val STREAM = "stream"
 
     /**
      * Web : HTTP for standard web/rest requests
      */
-    const val Web = "web"
+    const val WEB = "web"
 }
 
 /**
@@ -66,21 +66,21 @@ object Sources {
  */
 sealed class Source(val id: String) {
 
-    object All   : Source(Sources.All)   // reference to all/any
-    object Parent: Source(Sources.Parent)// reference to parent source
-    object API   : Source(Sources.Api)   // generic api usage
-    object Auto  : Source(Sources.Auto)  // automation
-    object Bot   : Source(Sources.Bot)   // chat / bots
+    object All   : Source(Sources.ALL)   // reference to all/any
+    object Parent: Source(Sources.PARENT)// reference to parent source
+    object API   : Source(Sources.API)   // generic api usage
+    object Auto  : Source(Sources.AUTO)  // automation
+    object Bot   : Source(Sources.BOT)   // chat / bots
     object CLI   : Source(Sources.CLI)   // command line interaction
-    object Cmd   : Source(Sources.Cmd)   // commands / functions
-    object File  : Source(Sources.File)  // files / scripts
-    object Queue : Source(Sources.Queue) // queues
-    object Stream: Source(Sources.Stream)// queues
-    object Web   : Source(Sources.Web)   // Web
+    object Cmd   : Source(Sources.CMD)   // commands / functions
+    object File  : Source(Sources.FILE)  // files / scripts
+    object Queue : Source(Sources.QUEUE) // queues
+    object Stream: Source(Sources.STREAM)// queues
+    object Web   : Source(Sources.WEB)   // Web
     data class Other(val name: String) : Source("other")
 
     fun isParentReference():Boolean {
-        return this.id == Sources.Parent
+        return this.id == Sources.PARENT
     }
 
 

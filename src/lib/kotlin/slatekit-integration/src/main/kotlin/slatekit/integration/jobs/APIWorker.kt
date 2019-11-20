@@ -3,7 +3,6 @@ package slatekit.integration.jobs
 import slatekit.apis.ApiServer
 import slatekit.apis.core.Requests
 import slatekit.common.Identity
-import slatekit.common.Source
 import slatekit.common.Sources
 import slatekit.jobs.*
 import slatekit.results.Failure
@@ -28,7 +27,7 @@ open class APIWorker(
         val rawBody = task.data
 
         // Convert json to request format.
-        val req = Requests.fromJson(rawBody, Sources.Queue, Sources.Queue, null, task, container.ctx.enc)
+        val req = Requests.fromJson(rawBody, Sources.QUEUE, Sources.QUEUE, null, task, container.ctx.enc)
 
         // let the container execute the request
         // this will follow the same pipeline/flow as the http requests now.

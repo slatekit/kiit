@@ -169,9 +169,9 @@ abstract class CodeGenBase(val settings: CodeGenSettings) {
                 "methodParams" to buildArgs(action),
                 "methodReturnType" to typeInfo.targetReturnType,
                 "queryParams" to buildQueryParams(action),
-                "postDataDecl" to if (verb.name == Verbs.Get) "" else "HashMap<String, Object> postData = new HashMap<>();",
+                "postDataDecl" to if (verb.name == Verbs.GET) "" else "HashMap<String, Object> postData = new HashMap<>();",
                 "postDataVars" to buildDataParams(action),
-                "postDataParam" to if (verb.name == Verbs.Get) "" else "postData,",
+                "postDataParam" to if (verb.name == Verbs.GET) "" else "postData,",
                 "converterTypes" to typeInfo.conversionType,
                 "converterClass" to getConverterTypeName(typeInfo)
         )

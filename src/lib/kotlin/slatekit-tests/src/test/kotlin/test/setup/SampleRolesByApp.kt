@@ -6,7 +6,7 @@ import slatekit.apis.AuthModes
 import slatekit.common.auth.Roles
 
 
-@Api(area = "samples", name = "rolesapp", desc = "sample to test security", roles= ["admin"], auth = AuthModes.Token)
+@Api(area = "samples", name = "rolesapp", desc = "sample to test security", roles= ["admin"], auth = AuthModes.TOKEN)
 class SampleRolesByApp {
 
     @Action(desc = "no roles allows access by anyone")
@@ -15,7 +15,7 @@ class SampleRolesByApp {
     }
 
 
-    @Action(desc = "* roles allows access by any authenticated in user", roles= [ Roles.all])
+    @Action(desc = "* roles allows access by any authenticated in user", roles= [ Roles.ALL])
     fun rolesAny(code:Int, tag:String): String {
         return "rolesAny $code $tag"
     }
@@ -27,7 +27,7 @@ class SampleRolesByApp {
     }
 
 
-    @Action(desc = "@parent refers to its parent role", roles= [Roles.parent])
+    @Action(desc = "@parent refers to its parent role", roles= [Roles.PARENT])
     fun rolesParent(code:Int, tag:String): String {
         return "rolesParent $code $tag"
     }

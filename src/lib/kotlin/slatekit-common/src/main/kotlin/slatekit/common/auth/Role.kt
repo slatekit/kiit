@@ -21,28 +21,28 @@ interface Role {
  * No roles
  */
 object RoleNone : Role {
-    override val name = Roles.none
+    override val name = Roles.NONE
 }
 
 /**
  * Represents any authenticated user
  */
 object RoleAny : Role {
-    override val name = Roles.all
+    override val name = Roles.ALL
 }
 
 /**
  * Represents an guest user
  */
 object RoleGuest : Role {
-    override val name = Roles.guest
+    override val name = Roles.GUEST
 }
 
 /**
  * Represents a reference to a parent role
  */
 object RoleParent : Role {
-    override val name = Roles.parent
+    override val name = Roles.PARENT
 }
 
 /**

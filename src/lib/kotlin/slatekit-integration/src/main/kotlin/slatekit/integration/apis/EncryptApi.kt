@@ -25,7 +25,7 @@ import slatekit.common.Sources
  * Created by kreddy on 3/23/2016.
  */
 @Api(area = "infra", name = "encryption", desc = "api to encryption and decryption",
-        auth = AuthModes.Keyed, roles = ["admin"], verb = Verbs.Auto, sources = [Sources.CLI])
+        auth = AuthModes.KEYED, roles = ["admin"], verb = Verbs.AUTO, sources = [Sources.CLI])
 class EncryptApi(context: Context) : ApiBase(context) {
 
     @Action(desc = "encryptes the text")

@@ -16,7 +16,7 @@ import slatekit.results.Notice
  * slate.codegen.toJava   -templatesFolder="user://git/slatekit/scripts/templates/codegen/java"       -outputFolder="user://dev/temp/codegen/java"  -packageName="blendlife" -classFile="" -methodFile="" -modelFile=""
  */
 @Api(area = "slate", name = "codegen", desc = "client code generator",
-        auth = AuthModes.Keyed, roles = [Roles.all], verb = Verbs.Auto, sources = [Sources.All])
+        auth = AuthModes.KEYED, roles = [Roles.ALL], verb = Verbs.AUTO, sources = [Sources.ALL])
 class CodeGenApi : HostAware {
 
     private var host: ApiServer? = null

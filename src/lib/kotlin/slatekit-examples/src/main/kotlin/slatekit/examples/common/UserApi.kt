@@ -28,7 +28,7 @@ import slatekit.results.Try
 
 
 @Api(area = "app", name = "users", desc = "api to access and manage users 3",
-        auth = AuthModes.Token, roles = [Roles.all], verb = Verbs.Auto, sources = [Sources.All])
+        auth = AuthModes.TOKEN, roles = [Roles.ALL], verb = Verbs.AUTO, sources = [Sources.ALL])
 class UserApi(ctx: AppEntContext) : ApiBaseEntity<Long, User, UserService>(ctx, Long::class, User::class, UserService(ctx.ent, ctx.ent.getRepo(User::class))) {
 
   @Action(desc = "activates a users account 3")
