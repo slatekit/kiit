@@ -27,7 +27,7 @@ import slatekit.notifications.sms.SmsService
 import slatekit.results.Outcome
 
 @Api(area = "cloud", name = "sms", desc = "api to send sms",
-        auth = AuthModes.Keyed, roles = ["ops"], verb = Verbs.Auto, sources = [Sources.All])
+        auth = AuthModes.KEYED, roles = ["ops"], verb = Verbs.AUTO, sources = [Sources.ALL])
 class SmsApi(val svc: SmsService, override val context: Context) : FileSupport {
 
     override val encryptor: Encryptor? = context.enc

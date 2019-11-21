@@ -20,42 +20,42 @@ object AuthModes {
      * Reference to a parent value
      * e.g. If set on Action, this refers to its parent API
      */
-    const val Parent = ApiConstants.parent
+    const val PARENT = ApiConstants.parent
 
 
     /**
      * To represent a token based authentication where there is a unique token per user
      */
-    const val Token = "token"
+    const val TOKEN = "token"
 
 
 
     /**
      * To represent an api-key based authentication where many clients/users can share an api key
      */
-    const val Keyed = "keyed"
+    const val KEYED = "keyed"
 
 
     /**
      * For custom setup / e.g. basic auth, what ever
      */
-    const val Custom = "custom"
+    const val CUSTOM = "custom"
 
 
     /**
      * For no authentication, e.g. public access ( like health check/version )
      */
-    const val None = "none"
+    const val NONE = "none"
 }
 
 
 
 sealed class AuthMode(override val name:String)  : Parentable<AuthMode> {
-    object None   : AuthMode(AuthModes.None)
-    object Parent : AuthMode(AuthModes.Parent)
-    object Token  : AuthMode(AuthModes.Token)
-    object Keyed  : AuthMode(AuthModes.Keyed)
-    object Custom : AuthMode(AuthModes.Custom)
+    object None   : AuthMode(AuthModes.NONE)
+    object Parent : AuthMode(AuthModes.PARENT)
+    object Token  : AuthMode(AuthModes.TOKEN)
+    object Keyed  : AuthMode(AuthModes.KEYED)
+    object Custom : AuthMode(AuthModes.CUSTOM)
 
 
 
@@ -63,10 +63,10 @@ sealed class AuthMode(override val name:String)  : Parentable<AuthMode> {
 
         fun parse(name:String): AuthMode {
             return when(name) {
-                AuthModes.None   -> AuthMode.None
-                AuthModes.Parent -> AuthMode.Parent
-                AuthModes.Token  -> AuthMode.Token
-                AuthModes.Keyed  -> AuthMode.Keyed
+                AuthModes.NONE   -> AuthMode.None
+                AuthModes.PARENT -> AuthMode.Parent
+                AuthModes.TOKEN  -> AuthMode.Token
+                AuthModes.KEYED  -> AuthMode.Keyed
                 else             -> AuthMode.Custom
             }
         }

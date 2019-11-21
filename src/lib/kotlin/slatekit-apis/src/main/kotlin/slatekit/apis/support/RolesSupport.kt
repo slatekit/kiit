@@ -6,22 +6,22 @@ interface RolesSupport {
     /**
      * Whether the role supplied is a guest role via "?"
      */
-    fun isRoleGuest(role: String): Boolean = role == Roles.guest
+    fun isRoleGuest(role: String): Boolean = role == Roles.GUEST
 
     /**
      * Whether the role supplied is any role via "*"
      */
-    fun isRoleAny(role: String): Boolean = role == Roles.all
+    fun isRoleAny(role: String): Boolean = role == Roles.ALL
 
     /**
      * Whether the role supplied is a referent to the parent role via "@parent"
      */
-    fun isRoleParent(role: String): Boolean = role == Roles.parent
+    fun isRoleParent(role: String): Boolean = role == Roles.PARENT
 
     /**
      * Whether the role supplied is an empty role indicating public access.
      */
-    fun isRoleEmpty(role: String): Boolean = role == Roles.none
+    fun isRoleEmpty(role: String): Boolean = role == Roles.NONE
 
     /**
      * Whether the role is empty "" or a guest role "?"
@@ -35,7 +35,7 @@ interface RolesSupport {
      * @return
      */
     fun determineRole(primary: String?, parent: String): String {
-        return if (primary != null && !primary.isNullOrEmpty() && primary != Roles.parent)
+        return if (primary != null && !primary.isNullOrEmpty() && primary != Roles.PARENT)
             primary
         else
             parent

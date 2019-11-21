@@ -72,7 +72,7 @@ object AuthFuncs {
             Notices.denied()
         }
         // 2. Any role "*"
-        else if (expectedRole == Roles.all) {
+        else if (expectedRole == Roles.ALL) {
             if (actualRoles.isNotEmpty()) Notices.success(true) else Notices.denied()
         } else {
             // 3. Get all roles "dev,moderator,admin"
@@ -95,7 +95,7 @@ object AuthFuncs {
      */
     fun getReferencedValue(primaryValue: String, parentValue: String): String =
             if (!primaryValue.isNullOrEmpty()) {
-                if (primaryValue == Roles.parent) {
+                if (primaryValue == Roles.PARENT) {
                     parentValue
                 } else
                     primaryValue

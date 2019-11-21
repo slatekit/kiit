@@ -4,11 +4,11 @@ import slatekit.apis.ApiConstants
 
 data class Roles(val all: List<String>) {
 
-    val isEmpty = all.isEmpty() || all.size == 1 && all.first() == slatekit.common.auth.Roles.none
+    val isEmpty = all.isEmpty() || all.size == 1 && all.first() == slatekit.common.auth.Roles.NONE
 
-    val allowGuest = all.any { it == slatekit.common.auth.Roles.guest }
+    val allowGuest = all.any { it == slatekit.common.auth.Roles.GUEST }
 
-    val allowAll = all.any { it == slatekit.common.auth.Roles.all }
+    val allowAll = all.any { it == slatekit.common.auth.Roles.ALL }
 
     val isAuthed = !isEmpty && !allowGuest
 

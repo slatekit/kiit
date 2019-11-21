@@ -40,7 +40,7 @@ class Example_Email  : Command("auth") {
     // Load the config file from slatekit directory in user_home directory
     // e.g. {user_home}/slatekit/conf/sms.conf
     // NOTE: It is safer/more secure to store config files there.
-    val conf =  Config("user://slatekit/conf/email.conf")
+    val conf =  Config.of("user://slatekit/conf/email.conf")
 
     // Setup 2: Get the api key either through conf or explicitly
     val apiKey1 = conf.apiLogin("email")

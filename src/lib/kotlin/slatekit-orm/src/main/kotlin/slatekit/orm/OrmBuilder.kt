@@ -53,8 +53,8 @@ class OrmBuilder(dbCreator: (DbCon) -> IDb,
     fun <TId, T> mapper(dbType: DbType, db:IDb, model:Model, info:EntityInfo)
             : OrmMapper<TId, T> where TId:Comparable<TId>, T: Entity<TId> {
         return when (dbType) {
-            DbTypeMySql -> MySqlEntityMapper(model, db, info)
-            DbTypePGres -> PostGresEntityMapper(model, db, info)
+            DbTypeMySql -> MySqlMapper(model, db, info)
+            DbTypePGres -> PostGresMapper(model, db, info)
             else        -> OrmMapper(model, db, MySqlConverter(), info)
         }
     }
@@ -102,8 +102,8 @@ class OrmBuilder(dbCreator: (DbCon) -> IDb,
 
         // Repo: Handles all the CRUD / lookup functionality
         return when (dbType) {
-            DbTypeMySql -> MySqlEntityRepo(db, info, mapper)
-            DbTypePGres -> PostGresEntityRepo(db, info, mapper)
+            DbTypeMySql -> MySqlRepo(db, info, mapper)
+            DbTypePGres -> PostGresRepo(db, info, mapper)
             else -> {
                 val result = when(info.entityIdType){
                     KTypes.KIntClass  -> InMemoryRepo<TId, T>(info, IntIdGenerator() as IdGenerator<TId>)

@@ -65,7 +65,7 @@ class SampleRESTApi {
 }
 
 
-@Api(area = "samples", name = "restVerbAuto", desc = "sample api for testing verb mode with auto", auth = AuthModes.Token, roles = [Roles.all])
+@Api(area = "samples", name = "restVerbAuto", desc = "sample api for testing verb mode with auto", auth = AuthModes.TOKEN, roles = [Roles.ALL])
 class SampleRESTVerbModeAutoApi {
 
     @Action()

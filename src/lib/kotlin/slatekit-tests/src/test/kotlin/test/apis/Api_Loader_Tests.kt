@@ -77,7 +77,7 @@ class Api_Loader_Tests : ApiTestsBase() {
         Assert.assertTrue(api.area == "samples")
         Assert.assertTrue(api.name == "restVerbAuto")
         Assert.assertTrue(api.desc == "sample api for testing verb mode with auto")
-        Assert.assertTrue(api.roles.contains(Roles.all))
+        Assert.assertTrue(api.roles.contains(Roles.ALL))
         Assert.assertTrue(api.auth == AuthMode.Token)
         Assert.assertTrue(api.verb == Verb.Auto)
         Assert.assertTrue(api.protocol == Source.All)

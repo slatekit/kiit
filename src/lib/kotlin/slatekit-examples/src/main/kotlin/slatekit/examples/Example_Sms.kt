@@ -12,7 +12,8 @@
 package slatekit.examples
 
 //<doc:import_required>
-
+import slatekit.notifications.sms.SmsMessage
+import slatekit.notifications.sms.SmsServiceTwilio
 //</doc:import_required>
 
 //<doc:import_examples>
@@ -26,8 +27,6 @@ import slatekit.common.types.CountryCode
 import slatekit.cmds.CommandRequest
 import slatekit.common.io.Uris
 import slatekit.common.Vars
-import slatekit.notifications.sms.SmsMessage
-import slatekit.notifications.sms.SmsServiceTwilio
 import slatekit.results.Try
 import slatekit.results.Success
 
@@ -44,7 +43,7 @@ class Example_Sms : Command("sms") {
     // Load the config file from slatekit directory in user_home directory
     // e.g. {user_home}/slatekit/conf/sms.conf
     // NOTE: It is safer/more secure to store config files there.
-    val conf =  Config("user://slatekit/conf/sms.conf")
+    val conf =  Config.of("user://slatekit/conf/sms.conf")
 
     // Setup 2: Get the api key either through conf or explicitly
     val apiKey1 = conf.apiLogin("sms")

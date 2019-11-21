@@ -37,7 +37,7 @@ class PostGresQuery : Query()
  * @param db
  * @tparam T
  */
-open class PostGresEntityRepo<TId, T>(db: IDb, info: EntityInfo, mapper: OrmMapper<TId, T>)
+open class PostGresRepo<TId, T>(db: IDb, info: EntityInfo, mapper: OrmMapper<TId, T>)
     : SqlRepo<TId, T>(db, info, mapper) where TId : Comparable<TId>, T : Entity<TId> {
 
     private val ormMapper = mapper
@@ -58,7 +58,7 @@ open class PostGresEntityRepo<TId, T>(db: IDb, info: EntityInfo, mapper: OrmMapp
  *
  * @param model
  */
-open class PostGresEntityMapper<TId, T>(
+open class PostGresMapper<TId, T>(
         model: Model,
         db:IDb,
         info:EntityInfo)

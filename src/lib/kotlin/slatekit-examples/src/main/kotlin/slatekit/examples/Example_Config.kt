@@ -33,7 +33,7 @@ class Example_Config : Command("config") {
     override fun execute(request: CommandRequest): Try<Any> {
         //<doc:examples>
         // CASE 1: Load up config from resources directory
-        val conf = Config("env.dev.conf")
+        val conf = Config.of("env.dev.conf")
 
         // CASE 2: Get typed value: non-nullable
         // NOTE: default value for typed returned if unavailable

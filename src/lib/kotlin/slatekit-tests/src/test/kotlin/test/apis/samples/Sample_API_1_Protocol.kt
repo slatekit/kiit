@@ -18,7 +18,7 @@ import slatekit.common.*
 import slatekit.results.Outcome
 import slatekit.results.Success
 
-@Api(area = "samples", name = "core", desc = "api to access and manage users 3", auth = AuthModes.None, sources = [Sources.All])
+@Api(area = "samples", name = "core", desc = "api to access and manage users 3", auth = AuthModes.NONE, sources = [Sources.ALL])
 class Sample_API_1_Protocol {
 
 
@@ -34,7 +34,7 @@ class Sample_API_1_Protocol {
     }
 
 
-    @Action( sources = [Sources.Web])
+    @Action( sources = [Sources.WEB])
     fun processWeb(name:String): Outcome<String> {
         return Success("ok", msg = "via web:$name")
     }

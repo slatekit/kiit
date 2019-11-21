@@ -70,7 +70,7 @@ class Example_Context : Command("cmd") {
         //    either extend the Context, and/or copy the AppContext
         //    with modifications
         // CASE 1: Build a simple context with minimal info that includes:
-        val ctx1 = CommonContext.simple("demoapp")
+        val ctx = CommonContext.simple("demoapp")
 
         // CASE 2: Build a simple context with minimal info that includes:
         // - default arguments ( command line )
@@ -78,12 +78,11 @@ class Example_Context : Command("cmd") {
         // - Config() representing conf settings from "env.conf"
         // - default logger ( console )
         // - entities ( registrations for orm )
-        val ctx2 = AppEntContext(
+        val ctx2 = CommonContext(
                 args = Args.default(),
                 envs = Envs.defaults(),
                 conf = Config(),
                 logs = LogsDefault,
-                ent = Entities({ con -> Db(con) }),
                 info = Info(
                         About(
                                 area = "department1",
@@ -136,7 +135,47 @@ class Example_Context : Command("cmd") {
 
 
         // CASE 4: Access common info
+        println(ctx.args.line       )
+        println(ctx.args.action     ) // e.g. "action" if using "service.action -key=1"
+        println(ctx.args.get("env") )
+        println(ctx.args.getStringOrNull("log.level") )
+        println(ctx.args.getStringOrElse("log.level", "warn") )
 
+
+        println("name:" + ctx.envs.name   ) // "loc" ( representing local )
+        println("env :" + ctx.envs.env    ) // "dev" EnvMode: ( Dev | Qat | Uat | Pro )
+        println("key :" + ctx.envs.key    ) // "loc:dev"  {name}:{env}
+        println("curr:" + ctx.envs.current) // current Env object
+        println("all :" + ctx.envs.all    ) // list of all Env environments
+
+        //ctx.conf.getInt("paging.batchSize")
+        //ctx.conf.getIntOrNull("paging.batchSize")
+        //ctx.conf.getIntOrElse("paging.batchSize", 4)
+
+        val logger1 = ctx.logs.getLogger()
+        val logger2 = ctx.logs.getLogger(name = "service1")
+        val logger3 = ctx.logs.getLogger(Example_Jobs::class.java)
+        logger1.level
+        logger1.name
+        logger1.debug("Debug message")
+        logger1.info ("Info message")
+        logger1.warn ("Warn message")
+        logger1.error("Error message")
+        logger1.fatal("Fatal message")
+
+        println(ctx.enc?.encrypt("raw text"))
+        println(ctx.enc?.decrypt(""))
+
+        ctx.info.about.area
+        ctx.info.about.name
+        ctx.info.about.desc
+        ctx.info.about.company
+        ctx.info.about.version
+
+        ctx.info.build.date
+        ctx.info.build.branch
+        ctx.info.build.commit
+        ctx.info.build.version
 
         // CASE 5: You can also build an error context representing an invalid context
         val ctx4 = CommonContext.err(Codes.BAD_REQUEST.code, "Bad context, invalid inputs supplied")

@@ -97,9 +97,9 @@ class Example_Diagnostics : Command("cmd") {
         println("env : " + ctx.envs)
         println("conf: " + ctx.conf)
         println("logs: " + ctx.logs)
-        println("app : " + ctx.about)
         println("dirs: " + ctx.dirs)
-        println("host: " + ctx.sys.host)
+        println("app : " + ctx.info.about)
+        println("host: " + ctx.info.system.host)
     }
 
 }

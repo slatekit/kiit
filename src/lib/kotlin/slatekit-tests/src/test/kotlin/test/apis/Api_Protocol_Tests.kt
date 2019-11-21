@@ -41,7 +41,7 @@ class Api_Protocol_Tests : ApiTestsBase() {
                 protocol = Source.CLI,
                 apis = listOf(Api(Sample_API_1_Protocol(), setup = Setup.Annotated)),
                 user = null,
-                request = CommonRequest.path("$AREA.$NAME.${Sample_API_1_Protocol::processParent.name}", Verbs.Post, mapOf(), mapOf(Pair("name", "abc"))),
+                request = CommonRequest.path("$AREA.$NAME.${Sample_API_1_Protocol::processParent.name}", Verbs.POST, mapOf(), mapOf(Pair("name", "abc"))),
                 response = Success("ok", msg = "via parent:abc").toResponse()
         )
     }
@@ -53,7 +53,7 @@ class Api_Protocol_Tests : ApiTestsBase() {
                 protocol = Source.CLI,
                 apis = listOf(Api(Sample_API_1_Protocol(), setup = Setup.Annotated)),
                 user = null,
-                request = CommonRequest.path("$AREA.$NAME.${Sample_API_1_Protocol::processCLI.name}", Verbs.Post, mapOf(), mapOf(Pair("name", "abc"))),
+                request = CommonRequest.path("$AREA.$NAME.${Sample_API_1_Protocol::processCLI.name}", Verbs.POST, mapOf(), mapOf(Pair("name", "abc"))),
                 response = Success("ok", msg = "via cli:abc").toResponse()
         )
     }
@@ -65,7 +65,7 @@ class Api_Protocol_Tests : ApiTestsBase() {
                 protocol = Source.All,
                 apis = listOf(Api(Sample_API_1_Protocol(), setup = Setup.Annotated)),
                 user = null,
-                request = CommonRequest.path("$AREA.$NAME.${Sample_API_1_Protocol::processParent.name}", Verbs.Post, mapOf(), mapOf(Pair("name", "abc"))),
+                request = CommonRequest.path("$AREA.$NAME.${Sample_API_1_Protocol::processParent.name}", Verbs.POST, mapOf(), mapOf(Pair("name", "abc"))),
                 response = Success("ok", msg = "via parent:abc").toResponse()
         )
     }
@@ -76,7 +76,7 @@ class Api_Protocol_Tests : ApiTestsBase() {
                 protocol = Source.All,
                 apis     = listOf(Api(Sample_API_1_Protocol(), setup = Setup.Annotated)),
                 user     = null,
-                request  = CommonRequest.path("$AREA.$NAME.${Sample_API_1_Protocol::processCLI.name}",  Verbs.Post, mapOf(), mapOf(Pair("name", "abc"))),
+                request  = CommonRequest.path("$AREA.$NAME.${Sample_API_1_Protocol::processCLI.name}",  Verbs.POST, mapOf(), mapOf(Pair("name", "abc"))),
                 response = Success("ok", msg = "via cli:abc").toResponse()
         )
     }
@@ -88,7 +88,7 @@ class Api_Protocol_Tests : ApiTestsBase() {
                 protocol = Source.All,
                 apis = listOf(Api(Sample_API_1_Protocol(), setup = Setup.Annotated)),
                 user = null,
-                request = CommonRequest.web("$AREA", "$NAME", "${Sample_API_1_Protocol::processCLI.name}", Verbs.Post, mapOf(), mapOf(Pair("name", "abc"))),
+                request = CommonRequest.web("$AREA", "$NAME", "${Sample_API_1_Protocol::processCLI.name}", Verbs.POST, mapOf(), mapOf(Pair("name", "abc"))),
                 response = Failure(Err.of("expected source cli, but got web"), msg = "Errored").toResponse(),
                 checkFailMsg = true
         )

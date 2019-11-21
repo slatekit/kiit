@@ -31,7 +31,7 @@ import slatekit.common.encrypt.Encryptor
 import slatekit.common.log.Logger
 
 @Api(area = "infra", name = "configs", desc = "api info about the application and host",
-        auth = AuthModes.Keyed, roles = ["admin"], verb = Verbs.Auto, sources = [Sources.CLI])
+        auth = AuthModes.KEYED, roles = ["admin"], verb = Verbs.AUTO, sources = [Sources.CLI])
 class ConfigApi(override val context: slatekit.common.Context) : FileSupport {
 
     override val encryptor: Encryptor? = context.enc

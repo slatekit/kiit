@@ -26,6 +26,26 @@ sealed class Status {
     abstract val code: Int
     abstract val msg: String
 
+    /**
+     * Default implementations of status codes with logical groups of [Status]
+     *
+     * 1. [Succeeded] : Used for any successful codes/scenarios
+     * 2. [Pending]   : Success group for pending/queued results
+     * 2. [Invalid]   : Err group to represent a bad request / inputs
+     * 4. [Ignored]   : Err group to represent ignored / filtered cases
+     * 3. [Denied]    : Err group to represent denied requests
+     * 5. [Errored]   : Err group to represent any error/failure scenarios known at compile time
+     * 6. [Unexpected] : Err group to represent any unhandled exceptions
+     */
+    data class Succeeded(override val code: Int, override val msg: String) : Status()
+    data class Pending  (override val code: Int, override val msg: String) : Status()
+    data class Denied   (override val code: Int, override val msg: String) : Status()
+    data class Ignored  (override val code: Int, override val msg: String) : Status()
+    data class Invalid  (override val code: Int, override val msg: String) : Status()
+    data class Errored  (override val code: Int, override val msg: String) : Status()
+    data class Unexpected(override val code: Int, override val msg: String) : Status()
+
+
     fun copyAll(msg: String, code: Int): Status {
         return when (this) {
             is Succeeded -> this.copy(code = code, msg = msg)
@@ -50,22 +70,4 @@ sealed class Status {
         }
     }
 
-    /**
-     * Default implementations of status codes with logical groups of [Status]
-     *
-     * 1. [Succeeded] : Used for any successful codes/scenarios
-     * 2. [Pending]   : Success group for pending/queued results
-     * 2. [Invalid]   : Err group to represent a bad request / inputs
-     * 4. [Ignored]   : Err group to represent ignored / filtered cases
-     * 3. [Denied]    : Err group to represent denied requests
-     * 5. [Errored]   : Err group to represent any error/failure scenarios known at compile time
-     * 6. [Unexpected] : Err group to represent any unhandled exceptions
-     */
-    data class Succeeded(override val code: Int, override val msg: String) : Status()
-    data class Pending  (override val code: Int, override val msg: String) : Status()
-    data class Denied   (override val code: Int, override val msg: String) : Status()
-    data class Ignored  (override val code: Int, override val msg: String) : Status()
-    data class Invalid  (override val code: Int, override val msg: String) : Status()
-    data class Errored  (override val code: Int, override val msg: String) : Status()
-    data class Unexpected(override val code: Int, override val msg: String) : Status()
 }

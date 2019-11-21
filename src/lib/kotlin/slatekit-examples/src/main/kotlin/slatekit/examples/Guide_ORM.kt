@@ -207,7 +207,7 @@ class Guide_ORM : Cmd("types") {
         val mapper = EntityMapper(model, MySqlConverter)
 
         // 2.3: Now create the repo with database and mapper
-        val repoMySql = MySqlEntityRepo<Movie>(db, Movie::class, null, mapper)
+        val repoMySql = MySqlRepo<Movie>(db, Movie::class, null, mapper)
     }
 
 

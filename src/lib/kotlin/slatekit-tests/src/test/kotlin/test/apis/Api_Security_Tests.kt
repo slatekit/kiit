@@ -39,7 +39,7 @@ class Api_Security_TestsTests : ApiTestsBase() {
                 protocol = Source.All,
                 apis     = listOf(Api(Sample_API_2_Roles(), setup = Setup.Annotated)),
                 user     = Credentials(name = "kishore", roles = "dev"),
-                request  = CommonRequest.path("app.rolesTest.rolesAny", Verbs.Get, mapOf(), mapOf(
+                request  = CommonRequest.path("app.rolesTest.rolesAny", Verbs.GET, mapOf(), mapOf(
                         Pair("code", "1"),
                         Pair("tag", "abc")
                 )),
@@ -50,7 +50,7 @@ class Api_Security_TestsTests : ApiTestsBase() {
                 protocol = Source.All,
                 apis     = listOf(Api(Sample_API_2_Roles(), setup = Setup.Annotated)),
                 user     = Credentials(name = "kishore", roles = "qa"),
-                request  = CommonRequest.path("app.rolesTest.rolesAny", Verbs.Get, mapOf(), mapOf(
+                request  = CommonRequest.path("app.rolesTest.rolesAny", Verbs.GET, mapOf(), mapOf(
                         Pair("code", "1"),
                         Pair("tag", "abc")
                 )),
@@ -61,7 +61,7 @@ class Api_Security_TestsTests : ApiTestsBase() {
                 protocol = Source.All,
                 apis     = listOf(Api(Sample_API_2_Roles(), setup = Setup.Annotated)),
                 user     = Credentials(name = "kishore", roles = ""),
-                request  = CommonRequest.path("app.rolesTest.rolesAny", Verbs.Get, mapOf(), mapOf(
+                request  = CommonRequest.path("app.rolesTest.rolesAny", Verbs.GET, mapOf(), mapOf(
                         Pair("code", "1"),
                         Pair("tag", "abc")
                 )),
@@ -75,7 +75,7 @@ class Api_Security_TestsTests : ApiTestsBase() {
                 protocol = Source.All,
                 apis     = listOf(Api(Sample_API_2_Roles(), setup = Setup.Annotated)),
                 user     = null,
-                request  = CommonRequest.path("app.rolesTest.rolesAny", Verbs.Get, mapOf(), mapOf(
+                request  = CommonRequest.path("app.rolesTest.rolesAny", Verbs.GET, mapOf(), mapOf(
                         Pair("code", "1"),
                         Pair("tag", "abc")
                 )),
@@ -89,7 +89,7 @@ class Api_Security_TestsTests : ApiTestsBase() {
                 protocol = Source.All,
                 apis     = listOf(Api(Sample_API_2_Roles(), setup = Setup.Annotated)),
                 user     = Credentials(name = "kishore", roles = "dev"),
-                request  = CommonRequest.path("app.rolesTest.rolesSpecific", Verbs.Get, mapOf(), mapOf(
+                request  = CommonRequest.path("app.rolesTest.rolesSpecific", Verbs.GET, mapOf(), mapOf(
                         Pair("code", "1"),
                         Pair("tag", "abc")
                 )),
@@ -103,7 +103,7 @@ class Api_Security_TestsTests : ApiTestsBase() {
                 protocol = Source.All,
                 apis     = listOf(Api(Sample_API_2_Roles(), setup = Setup.Annotated)),
                 user     = Credentials(name = "kishore", roles = "ops"),
-                request  = CommonRequest.path("app.rolesTest.rolesSpecific", Verbs.Get, mapOf(), mapOf(
+                request  = CommonRequest.path("app.rolesTest.rolesSpecific", Verbs.GET, mapOf(), mapOf(
                         Pair("code", "1"),
                         Pair("tag", "abc")
                 )),
@@ -117,7 +117,7 @@ class Api_Security_TestsTests : ApiTestsBase() {
                 protocol = Source.All,
                 apis     = listOf(Api(Sample_API_2_Roles(), setup = Setup.Annotated)),
                 user     = Credentials(name = "kishore", roles = "admin"),
-                request  = CommonRequest.path("app.rolesTest.rolesParent", Verbs.Get, mapOf(), mapOf(
+                request  = CommonRequest.path("app.rolesTest.rolesParent", Verbs.GET, mapOf(), mapOf(
                         Pair("code", "1"),
                         Pair("tag", "abc")
                 )),
@@ -131,7 +131,7 @@ class Api_Security_TestsTests : ApiTestsBase() {
                 protocol = Source.All,
                 apis     = listOf(Api(Sample_API_2_Roles(), setup = Setup.Annotated)),
                 user     = Credentials(name = "kishore", roles = "dev"),
-                request  = CommonRequest.path("app.rolesTest.rolesParent", Verbs.Get, mapOf(), mapOf(
+                request  = CommonRequest.path("app.rolesTest.rolesParent", Verbs.GET, mapOf(), mapOf(
                         Pair("code", "1"),
                         Pair("tag", "abc")
                 )),
@@ -146,7 +146,7 @@ class Api_Security_TestsTests : ApiTestsBase() {
                 protocol = Source.All,
                 apis     = listOf(Api(Sample_API_2_Roles(), setup = Setup.Annotated)),
                 user     = Credentials(name = "kishore", roles = "dev"),
-                request  = CommonRequest.path("app.rolesTest.rolesAny", Verbs.Get, mapOf(
+                request  = CommonRequest.path("app.rolesTest.rolesAny", Verbs.GET, mapOf(
                         Pair("api-key", "3E35584A8DE0460BB28D6E0D32FB4CFD")
                 ), mapOf(
                         Pair("code", "1"),
@@ -162,7 +162,7 @@ class Api_Security_TestsTests : ApiTestsBase() {
                 protocol = Source.All,
                 apis     = listOf(Api(Sample_API_2_Roles(), setup = Setup.Annotated)),
                 user     = null,
-                request  = CommonRequest.path("app.rolesTest.rolesAny", Verbs.Get, mapOf(), mapOf(
+                request  = CommonRequest.path("app.rolesTest.rolesAny", Verbs.GET, mapOf(), mapOf(
                         Pair("code", "1"),
                         Pair("tag", "abc")
                 )),
@@ -176,7 +176,7 @@ class Api_Security_TestsTests : ApiTestsBase() {
                 protocol = Source.All,
                 apis     = listOf(Api(Sample_API_2_Roles(), setup = Setup.Annotated)),
                 user     = Credentials(name = "kishore", roles = "dev"),
-                request  = CommonRequest.path("app.rolesTest.rolesSpecific", Verbs.Get, mapOf(
+                request  = CommonRequest.path("app.rolesTest.rolesSpecific", Verbs.GET, mapOf(
                         Pair("api-key", "3E35584A8DE0460BB28D6E0D32FB4CFD")
                 ), mapOf(
                         Pair("code", "1"),
@@ -192,7 +192,7 @@ class Api_Security_TestsTests : ApiTestsBase() {
                 protocol = Source.All,
                 apis     = listOf(Api(Sample_API_2_Roles(), setup = Setup.Annotated)),
                 user     = Credentials(name = "kishore", roles = "qa"),
-                request  = CommonRequest.path("app.rolesTest.rolesSpecific", Verbs.Get, mapOf(
+                request  = CommonRequest.path("app.rolesTest.rolesSpecific", Verbs.GET, mapOf(
                         Pair("api-key", "EB7EB37764AD4411A1763E6A593992BD")
                 ), mapOf(
                         Pair("code", "1"),
@@ -208,7 +208,7 @@ class Api_Security_TestsTests : ApiTestsBase() {
                 protocol = Source.All,
                 apis     = listOf(Api(Sample_API_2_Roles(), setup = Setup.Annotated)),
                 user     = Credentials(name = "kishore", roles = "admin"),
-                request  = CommonRequest.path("app.rolesTest.rolesParent", Verbs.Get, mapOf(
+                request  = CommonRequest.path("app.rolesTest.rolesParent", Verbs.GET, mapOf(
                         Pair("api-key", "54B1817194C1450B886404C6BEA81673")
                 ), mapOf(
                         Pair("code", "1"),
@@ -224,7 +224,7 @@ class Api_Security_TestsTests : ApiTestsBase() {
                 protocol = Source.All,
                 apis     = listOf(Api(Sample_API_2_Roles(), setup = Setup.Annotated)),
                 user     = Credentials(name = "kishore", roles = "dev"),
-                request  = CommonRequest.path("app.rolesTest.rolesParent", Verbs.Get, mapOf(
+                request  = CommonRequest.path("app.rolesTest.rolesParent", Verbs.GET, mapOf(
                         Pair("api-key", "3E35584A8DE0460BB28D6E0D32FB4CFD")
                 ), mapOf(
                         Pair("code", "1"),

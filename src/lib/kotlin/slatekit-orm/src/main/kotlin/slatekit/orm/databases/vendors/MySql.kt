@@ -37,7 +37,7 @@ class MySqlQuery : Query()
  * @param db
  * @tparam T
  */
-open class MySqlEntityRepo<TId, T>(db: IDb, info:EntityInfo, mapper: OrmMapper<TId, T>)
+open class MySqlRepo<TId, T>(db: IDb, info:EntityInfo, mapper: OrmMapper<TId, T>)
     : SqlRepo<TId, T>(db, info, mapper) where TId : Comparable<TId>, T : Any {
 
     private val ormMapper = mapper
@@ -57,7 +57,7 @@ open class MySqlEntityRepo<TId, T>(db: IDb, info:EntityInfo, mapper: OrmMapper<T
  *
  * @param model
  */
-open class MySqlEntityMapper<TId, T>(
+open class MySqlMapper<TId, T>(
         model: Model,
         db:IDb,
         info:EntityInfo)

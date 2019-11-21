@@ -28,7 +28,7 @@ import slatekit.core.cache.CacheItem
 import slatekit.core.cache.CacheSettings
 
 @Api(area = "infra", name = "cache", desc = "api info about the application and host",
-        auth = AuthModes.Keyed, roles = ["admin"], verb = Verbs.Auto, sources = [Sources.All])
+        auth = AuthModes.KEYED, roles = ["admin"], verb = Verbs.AUTO, sources = [Sources.ALL])
 class CacheApi(override val context: CommonContext) : FileSupport {
 
     override val encryptor: Encryptor? = context.enc

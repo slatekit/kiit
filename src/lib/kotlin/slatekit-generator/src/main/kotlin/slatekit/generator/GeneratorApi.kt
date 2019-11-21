@@ -12,7 +12,7 @@ import java.io.File
 
 
 @Api(area = "slatekit", name = "new", desc = "generator for new projects",
-        auth = AuthModes.Keyed, roles = [Roles.none], verb = Verbs.Auto, sources = [Sources.CLI])
+        auth = AuthModes.KEYED, roles = [Roles.NONE], verb = Verbs.AUTO, sources = [Sources.CLI])
 class GeneratorApi(val context: Context, val service: GeneratorService) {
 
     /**
