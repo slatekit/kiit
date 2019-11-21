@@ -56,10 +56,10 @@ class Example_Aws_S3  : Command("s3") {
     files1.getAsText("2016_nba_v3", "chi")
 
     // Use case 8: download file to local folder
-    files1.download("2016_nba_v3", "c:/dev/temp/")
+    files1.download("2016_nba_v3", "~/dev/temp/")
 
     // Use case 9: download using folder and file name to local folder
-    files1.download("2016_nba_v3", "chi", "c:/dev/temp")
+    files1.download("2016_nba_v3", "chi", "~/dev/temp")
 
     // Use case 10: delete file by just the name
     files1.delete("2016_nba_v3")

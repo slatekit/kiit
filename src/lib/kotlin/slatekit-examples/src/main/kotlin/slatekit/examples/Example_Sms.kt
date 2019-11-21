@@ -12,7 +12,8 @@
 package slatekit.examples
 
 //<doc:import_required>
-
+import slatekit.notifications.sms.SmsMessage
+import slatekit.notifications.sms.SmsServiceTwilio
 //</doc:import_required>
 
 //<doc:import_examples>
@@ -26,8 +27,6 @@ import slatekit.common.types.CountryCode
 import slatekit.cmds.CommandRequest
 import slatekit.common.io.Uris
 import slatekit.common.Vars
-import slatekit.notifications.sms.SmsMessage
-import slatekit.notifications.sms.SmsServiceTwilio
 import slatekit.results.Try
 import slatekit.results.Success
 

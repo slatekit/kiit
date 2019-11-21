@@ -87,9 +87,9 @@ class Example_Results : Command("results"), OutcomeBuilder {
         val result1a: Result<Int, Err> = Success(42)
 
         // Success created with status codes / messages
-        val result1b: Result<Int, Err> = Success(42, status = Codes.SUCCESS)
-        val result1c: Result<Int, Err> = Success(42, msg = "Successfully processed")
-        val result1d: Result<Int, Err> = Success(42, msg = "Successfully processed", code = 200)
+        val result1b = Success(42, status = Codes.SUCCESS)
+        val result1c = Success(42, msg = "Successfully processed")
+        val result1d = Success(42, msg = "Successfully processed", code = 200)
 
         // Failure
         val result1e = Failure(Err.of("Invalid email"))
@@ -98,9 +98,82 @@ class Example_Results : Command("results"), OutcomeBuilder {
         val result1f: Result<Int, Err> = Failure(Err.of("Invalid email"))
 
         // Failure created with status codes / messages
-        val result1g: Result<Int, Err> = Failure(Err.of("Invalid email"), status = Codes.INVALID)
-        val result1h: Result<Int, Err> = Failure(Err.of("Invalid email"), msg = "Invalid inputs")
-        val result1i: Result<Int, Err> = Failure(Err.of("Invalid email"), msg = "Invalid inputs", code = Codes.INVALID.code)
+        val result1g = Failure(Err.of("Invalid email"), status = Codes.INVALID)
+        val result1h = Failure(Err.of("Invalid email"), msg = "Invalid inputs")
+        val result1i = Failure(Err.of("Invalid email"), msg = "Invalid inputs", code = Codes.INVALID.code)
+    }
+
+
+    fun get() {
+        // Create
+        val result:Result<Int, Err> = Success(42)
+
+        // Get value or default to null
+        val value1:Int? = result.getOrNull()
+
+        // Get value or default with value provided
+        val value2:Int = result.getOrElse { 0 }
+
+        // Map over the value
+        val op1 = result.map { it + 1 }
+
+        // Flat Map over the value
+        val op2 = result.flatMap { Success(it + 1 ) }
+
+        // Fold to transform both the success / failure into something else ( e.g. string here )
+        val value3:String = result.fold({ "Succeeded : $it" }, {err -> "Failed : ${err.msg}" })
+
+        // Get value if success
+        result.onSuccess { println("Number = $it") }
+
+        // Get error if failure
+        result.onFailure { println("Error is ${it.msg}") }
+
+        // Pattern match
+        when(result) {
+            is Success -> println(result.value)  // 42
+            is Failure -> println(result.error)  // Err
+        }
+    }
+
+
+    fun check(){
+        val result:Result<Int,Err> = Success(42)
+
+        // Check if the value matches the criteria
+        result.exists { it == 42 } // true
+
+        // Check if the value matches the one provided
+        result.contains(2)        // false
+
+        // Pattern match scenario 1: "Top-Level" on Success/Failure (Binary true / false )
+        when(result) {
+            is Success -> println(result.value)  // 42
+            is Failure -> println(result.error)  // Err
+        }
+
+        // Pattern match scenario 2: "Mid-level" on Status ( 7 logical groups )
+        // NOTE: The status property is available on both the Success/Failure branches
+        when(result.status) {
+            is Status.Succeeded  -> println(result.msg) // Success!
+            is Status.Pending    -> println(result.msg) // Success, but in progress
+            is Status.Denied     -> println(result.msg) // Security related
+            is Status.Invalid    -> println(result.msg) // Bad inputs / data
+            is Status.Ignored    -> println(result.msg) // Ignored for processing
+            is Status.Errored    -> println(result.msg) // Expected errors
+            is Status.Unexpected -> println(result.msg) // Unexpected errors
+        }
+
+        // Pattern match scenario 3: "Low-Level" on numeric code
+        when(result.status.code) {
+            Codes.SUCCESS.code    -> "OK"
+            Codes.QUEUED.code     -> "Pending"
+            Codes.UPDATED.code    -> "User updated"
+            Codes.DENIED.code     -> "Log in again"
+            Codes.DEPRECATED.code -> "No longer supported"
+            Codes.CONFLICT.code   -> "Email already exists"
+            else                  -> "Other!!"
+        }
     }
 
 
@@ -137,13 +210,13 @@ class Example_Results : Command("results"), OutcomeBuilder {
 
     fun aliases(){
         // Try<T> = Result<T, Exception>
-        val res1:Try<Int> = Tries.attempt { "1".toInt() }
+        val res1 = Tries.attempt { "1".toInt() }
 
         // Outcome<T> = Result<T, Err>
-        val res2:Outcome<Int> = Outcomes.of { "1".toInt() }
+        val res2 = Outcomes.of { "1".toInt() }
 
         // Notice<T> = Result<T, String>
-        val res3:Notice<Int> = Notices.notice { "1".toInt() }
+        val res3 = Notices.notice { "1".toInt() }
 
         // Validated<T> = Result<T, ErrorList>
         val res4:Validated<String> = Failure(ErrorList(listOf(
@@ -155,13 +228,14 @@ class Example_Results : Command("results"), OutcomeBuilder {
 
 
     fun builders(){
-        val res1:Outcome<Long> = Outcomes.success(1, "Created User with id 1")
-        val res2:Outcome<Long> = Outcomes.denied ("Not authorized to send alerts")
-        val res3:Outcome<Long> = Outcomes.ignored("Not a beta tester")
-        val res4:Outcome<Long> = Outcomes.invalid("Email is invalid")
-        val res5:Outcome<Long> = Outcomes.conflict("Duplicate email found")
-        val res6:Outcome<Long> = Outcomes.errored("Phone is invalid")
-        val res7:Outcome<Long> = Outcomes.unexpected("Unable to send confirmation code")
+        // Outcome<Int> = Result<Int, Err>
+        val res1 = Outcomes.success(1, "Created User with id 1")
+        val res2 = Outcomes.denied<Int>("Not authorized to send alerts")
+        val res3 = Outcomes.ignored<Int>("Not a beta tester")
+        val res4 = Outcomes.invalid<Int>("Email is invalid")
+        val res5 = Outcomes.conflict<Int>("Duplicate email found")
+        val res6 = Outcomes.errored<Int>("Phone is invalid")
+        val res7 = Outcomes.unexpected<Int>("Unable to send confirmation code")
     }
 
 
