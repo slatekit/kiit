@@ -23,8 +23,28 @@ import slatekit.results.Outcome
 import slatekit.results.Success
 import slatekit.results.builders.Notices
 import slatekit.results.builders.Outcomes
+import kotlin.reflect.KClass
+import kotlin.reflect.full.callSuspend
 
 object Calls {
+
+    /**
+     * https://stackoverflow.com/questions/47654537/how-to-run-suspend-method-via-reflection
+     */
+    suspend fun callMethod(cls: KClass<*>, inst: Any, name: String, args: Array<Any?>): Any? {
+        val mem = cls.members.find { m -> m.name == name }
+        val params = arrayOf(inst, *args)
+        val result = mem?.let {
+            if(it.isSuspend) {
+                kotlin.coroutines.intrinsics.suspendCoroutineUninterceptedOrReturn { cont ->
+                    it.call(*params, cont)
+                }
+            } else {
+                it.call(*params)
+            }
+        }
+        return result
+    }
 
     /**
      * whether or not the api call represented by the area.api.action exists. e.g. "app.users.invite"
