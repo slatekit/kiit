@@ -5,7 +5,7 @@ section_header: Results
 ---
 
 # Overview
-**Result[T, E]** is a foundational component in **Slate Kit** for accurately modeling successes and failures using a functional approach to error handling. Result is not a brand new concept, it currently exists in variations in other languages ( see below). In fact, the Result type in Slate Kit has been inspired by these and also by Google's GRPC codes ( See below ). The implementation here differs with the **flexibility of the Error type** and the addition of an optional **Status Code**, and support **logical grouping of errors**. 
+**Result[T, E]** is a foundational component in **Slate Kit** for accurately modeling successes and failures using a functional approach to error handling. Result is not a brand new concept, it currently exists in various forms in other languages ( see below). In fact, the Result type in Slate Kit has been inspired by these and also by Google's GRPC codes ( See below ). The implementation here differs with the **flexibility of the Error type**, the addition of an optional **Status Code**, and support for **logical grouping of errors**. 
 <table class="table table-bordered table-striped">
     <tr>
         <td><strong>#</strong></td>
@@ -61,55 +61,55 @@ section_header: Results
     </tr>
     <tr>
         <td><strong>1</strong></td>
-        <td><strong><a class="url-ch" href="core/cli#status">Status</a></strong></td>
+        <td><strong><a class="url-ch" href="arch/results#status">Status</a></strong></td>
         <td>Current status of this component</td>
     </tr>
     <tr>
         <td><strong>2</strong></td>
-        <td><strong><a class="url-ch" href="core/cli#install">Install</a></strong></td>
+        <td><strong><a class="url-ch" href="arch/results#install">Install</a></strong></td>
         <td>Installation instructions and references to sources</td>
     </tr>
     <tr>
         <td><strong>3</strong></td>
-        <td><strong><a class="url-ch" href="core/cli#requires">Requires</a></strong></td>
+        <td><strong><a class="url-ch" href="arch/results#requires">Requires</a></strong></td>
         <td>Lists all the Slate Kit and third-party dependencies</td>
     </tr>
     <tr>
         <td><strong>4</strong></td>
-        <td><strong><a class="url-ch" href="core/cli#sample">Sample</a></strong></td>
+        <td><strong><a class="url-ch" href="arch/results#sample">Sample</a></strong></td>
         <td>Quick sample to show usage of the component</td>
     </tr>
     <tr>
         <td><strong>5</strong></td>
-        <td><strong><a class="url-ch" href="core/cli#goals">Goals</a></strong></td>
+        <td><strong><a class="url-ch" href="arch/results#goals">Goals</a></strong></td>
         <td>Goals of this component and the problems it attempts to solve</td>
     </tr>
     <tr>
         <td><strong>6</strong></td>
-        <td><strong><a class="url-ch" href="core/cli#concepts">Concepts</a></strong></td>
+        <td><strong><a class="url-ch" href="arch/results#concepts">Concepts</a></strong></td>
         <td>Core concepts to understand in this component</td>
     </tr>
     <tr>
         <td><strong>7</strong></td>
-        <td><strong><a class="url-ch" href="core/cli#features">Features</a></strong></td>
+        <td><strong><a class="url-ch" href="arch/results#features">Features</a></strong></td>
         <td>List all the features supported</td>
     </tr>
     <tr>
         <td><strong>8</strong></td>
-        <td><strong><a class="url-ch" href="core/cli#setup">Setup</a></strong></td>
+        <td><strong><a class="url-ch" href="arch/results#setup">Setup</a></strong></td>
         <td>Set up and configure this component for use</td>
     </tr>
     <tr>
         <td><strong>9</strong></td>
-        <td><strong><a class="url-ch" href="core/cli#details">Details</a></strong></td>
+        <td><strong><a class="url-ch" href="arch/results#details">Details</a></strong></td>
         <td>In-depth examples of the supported features</td>
     </tr>
 </table>
-{{% section-end mod="core/cli" %}}
+{{% section-end mod="arch/results" %}}
 
 # Status
 This component is currently stable, has 0 dependencies and can be used for both **Android and Server**
-{{% section-end mod="core/cli" %}}
+{{% section-end mod="arch/results" %}}
 
 # Install
 Use the following settings in gradle for installing this component.
@@ -131,9 +131,9 @@ Use the following settings in gradle for installing this component.
     name="App"
     package="slatekit.result"
     jar="slatekit.result.jar"
-    git="https://github.com/code-helix/slatekit/tree/master/src/lib/kotlin/slatekit-app"
+    git="https://github.com/code-helix/slatekit/tree/master/src/lib/kotlin/slatekit-result/src/main/kotlin/slatekit/results"
     gitAlias="slatekit/src/lib/kotlin/slatekit-result"
-    url="core/app"
+    url="arch/results"
     uses="n/a"
     exampleUrl="Example_Results.kt"
     exampleFileName="Example_Results.kt"
@@ -142,7 +142,7 @@ Use the following settings in gradle for installing this component.
 
 # Requires
 This component has **0 dependencies** and does **NOT** use any other Slate Kit components.
-{{% section-end mod="core/cli" %}}
+{{% section-end mod="arch/results" %}}
 
 # Sample
 Here are some examples showing the usage of Result by creating, checking, and pattern matching the values.
@@ -193,7 +193,7 @@ Refer to the {{% sk-link-code component="examples" filepath="examples/Example_Re
     }
         
 {{< /highlight >}}
-{{% section-end mod="core/cli" %}}
+{{% section-end mod="arch/results" %}}
 
 # Goals
 The design of this Result type invovles achieving these specific goals.
@@ -215,7 +215,7 @@ The design of this Result type invovles achieving these specific goals.
         <td>Logical groups of status to categories errors, these can also be converted to Http codes</td>
     </tr>
 </table>
-{{% section-end mod="core/cli" %}}
+{{% section-end mod="arch/results" %}}
 
 # Concepts
 These are the main concepts / terms to know for using this component. All of these are explained further below in the details section. You can find links to the source code here.
@@ -266,7 +266,7 @@ These are the main concepts / terms to know for using this component. All of the
         <td>Convenient methods to build errors such as **Outcomes.denied**</td>
     </tr>
 </table>
-{{% section-end mod="core/cli" %}}
+{{% section-end mod="arch/results" %}}
 
 # Features
 <table class="table table-bordered table-striped">
@@ -326,7 +326,7 @@ These are the main concepts / terms to know for using this component. All of the
         <td><a href="arch/results/#http" class="more"><span class="btn btn-primary">more</span></a></td>
     </tr>
 </table>
-{{% section-end mod="core/cli" %}}
+{{% section-end mod="arch/results" %}}
 
 
 ## Creation {#creation}
@@ -626,5 +626,5 @@ Status codes not only serve to logically categories successes/failures but becom
 {{< /highlight >}}
 {{% feature-end mod="arch/results" %}}
 
-{{% section-end mod="core/cli" %}}
+{{% section-end mod="arch/results" %}}
 

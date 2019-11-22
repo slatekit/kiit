@@ -16,40 +16,62 @@ The Email component is an abstraction of an Email Service with support for simpl
     </tr>
     <tr>
         <td><strong>1</strong></td>
-        <td><strong><a class="url-ch" href="arch/sms#status">Status</a></strong></td>
+        <td><strong><a class="url-ch" href="arch/email#status">Status</a></strong></td>
         <td>Current status of this component</td>
     </tr>
     <tr>
         <td><strong>2</strong></td>
-        <td><strong><a class="url-ch" href="arch/sms#install">Install</a></strong></td>
+        <td><strong><a class="url-ch" href="arch/email#install">Install</a></strong></td>
         <td>Installation instructions and references to sources</td>
     </tr>
     <tr>
         <td><strong>3</strong></td>
-        <td><strong><a class="url-ch" href="arch/sms#requires">Requires</a></strong></td>
+        <td><strong><a class="url-ch" href="arch/email#requires">Requires</a></strong></td>
         <td>Lists all the Slate Kit and third-party dependencies</td>
     </tr>
     <tr>
         <td><strong>4</strong></td>
-        <td><strong><a class="url-ch" href="arch/sms#sample">Import</a></strong></td>
+        <td><strong><a class="url-ch" href="arch/email#sample">Import</a></strong></td>
         <td>Packages to import</td>
     </tr>
     <tr>
         <td><strong>5</strong></td>
-        <td><strong><a class="url-ch" href="arch/sms#goals">Setup</a></strong></td>
+        <td><strong><a class="url-ch" href="arch/email#goals">Setup</a></strong></td>
         <td>Set up of credentials, and configuration</td>
     </tr>
     <tr>
         <td><strong>6</strong></td>
-        <td><strong><a class="url-ch" href="arch/sms#concepts">Usage</a></strong></td>
+        <td><strong><a class="url-ch" href="arch/email#concepts">Usage</a></strong></td>
         <td>Usage and examples</td>
     </tr>
 </table>
-{{% section-end mod="arch/sms" %}}
+{{% section-end mod="arch/email" %}}
 
 # Status
-This component is currently stable with a default implementation for **AWS S3**. However it is currently using the AWS 1.0 sdk that is synchonous. A future version will involve using AWS 2.0 sdk that is **Async** and incorporate Coroutines.
-{{% section-end mod="arch/sms" %}}
+This component is currently **stable**. Following limitations, current work, planned features apply.
+<table class="table table-bordered table-striped">
+    <tr>
+        <td><strong>Feature</strong></td>
+        <td><strong>Status</strong></td>
+        <td><strong>Description</strong></td>
+    </tr>
+    <tr>
+        <td>**Templates**</td>
+        <td>Upcoming</td>
+        <td>Enhanced templating, possibly leveraging existing open-source templating systems.</td>
+    </tr>
+    <tr>
+        <td>**Attachments**</td>
+        <td>Upcoming</td>
+        <td>Support for adding attachments</td>
+    </tr>
+    <tr>
+        <td>**HTML**</td>
+        <td>Upcoming</td>
+        <td>Improved HTML support</td>
+    </tr>
+</table>
+{{% section-end mod="arch/email" %}}
 
 # Install
 {{< highlight groovy >}}
@@ -72,12 +94,12 @@ This component is currently stable with a default implementation for **AWS S3**.
     jar="slatekit.cloud.jar"
     git="https://github.com/code-helix/slatekit/tree/master/src/lib/kotlin/slatekit-cloud"
     gitAlias="slatekit/src/lib/kotlin/slatekit-cloud"
-    url="arch/sms"
+    url="arch/email"
     uses="slatekit.results, slatekit.core, slatekit.cloud"
     exampleUrl=""
     exampleFileName="Example_Files.kt"
 %}}
-{{% section-end mod="arch/sms" %}}
+{{% section-end mod="arch/email" %}}
 
 # Requires
 This component uses the following other <strong>Slate Kit</strong> and/or third-party components.
@@ -95,7 +117,7 @@ This component uses the following other <strong>Slate Kit</strong> and/or third-
         <td>Common utilities for both android + server</td>
     </tr>
 </table>
-{{% section-end mod="arch/sms" %}}
+{{% section-end mod="arch/email" %}}
 
 # Imports
 {{< highlight kotlin >}}
@@ -107,7 +129,7 @@ This component uses the following other <strong>Slate Kit</strong> and/or third-
      
 {{< /highlight >}}
 
-{{% section-end mod="arch/sms" %}}
+{{% section-end mod="arch/email" %}}
 
 # Setup
 {{< highlight kotlin >}}
@@ -124,7 +146,7 @@ This component uses the following other <strong>Slate Kit</strong> and/or third-
     val apiKey  = apiKey1 ?: apiKey2
 
     // Setup 3a: Setup the email service ( basic ) with api key
-    val email1 =  EmailServiceSendGrid(apiKey.key, apiKey.pass, apiKey.account)
+    val emailService1 =  EmailServiceSendGrid(apiKey.key, apiKey.pass, apiKey.account)
 
     // Setup 3b: Setup the sms service with support for templates
     val templates = Templates.build(
@@ -137,23 +159,23 @@ This component uses the following other <strong>Slate Kit</strong> and/or third-
         Pair("app.api"     , { s -> "SlateKit.Sample"  })
       )
     )
-    val email2 =  EmailServiceSendGrid(apiKey.key, apiKey.pass, apiKey.account, templates)
+    val emailService2 =  EmailServiceSendGrid(apiKey.key, apiKey.pass, apiKey.account, templates)
 
 {{< /highlight >}}
 
-{{% section-end mod="arch/sms" %}}
+{{% section-end mod="arch/email" %}}
 
 # Usage
 {{< highlight kotlin >}}
         
     // Use case 1: Send a confirmation code to the U.S. to verify a users phone number.
-    val result = email2.send("kishore@abc.com", "Welcome to MyApp.com", "showWelcome!", false)
+    val result = emailService2.send("kishore@abc.com", "Welcome to MyApp.com", "showWelcome!", false)
 
     // Use case 2: Send using a constructed message object
-    email2.sendSync(EmailMessage("kishore@abc.com", "Welcome to MyApp.com", "showWelcome!", false))
+    emailService2.sendSync(EmailMessage("kishore@abc.com", "Welcome to MyApp.com", "showWelcome!", false))
 
     // Use case 3: Send message using one of the setup templates
-    email2.sendUsingTemplate("email_welcome", "kishore@abc.com", "Welcome to MyApp.com", true,
+    emailService2.sendUsingTemplate("email_welcome", "kishore@abc.com", "Welcome to MyApp.com", true,
             Vars(listOf(
                     Pair("greeting", "hello"),
                     Pair("user.api", "kishore"),
@@ -162,5 +184,5 @@ This component uses the following other <strong>Slate Kit</strong> and/or third-
       
 
 {{< /highlight >}}
-{{% section-end mod="arch/sms" %}}
+{{% section-end mod="arch/email" %}}
 

@@ -48,7 +48,34 @@ The Files component is an abstraction of file storage with a default implementat
 {{% section-end mod="arch/files" %}}
 
 # Status
-This component is currently stable. However it is currently using the AWS 1.0 sdk that is synchonous. A future version will involve using AWS 2.0 sdk that is **Async** and incorporate Coroutines.
+This component is currently **stable**. Following limitations, current work, planned features apply.
+<table class="table table-bordered table-striped">
+    <tr>
+        <td><strong>Feature</strong></td>
+        <td><strong>Status</strong></td>
+        <td><strong>Description</strong></td>
+    </tr>
+    <tr>
+        <td>**Binary**</td>
+        <td>In-Progress</td>
+        <td>Ability to store/retrieve binary files. ( you can still use the underlying AWS provider to so )</td>
+    </tr>
+    <tr>
+        <td>**Names**</td>
+        <td>Upcoming</td>
+        <td>Ability to enforce a naming convention on the file names</td>
+    </tr>
+    <tr>
+        <td>**Async**</td>
+        <td>Upcoming</td>
+        <td>Async support via Kotlin suspend/coroutines and Java AWS 2.0 SDK</td>
+    </tr>
+    <tr>
+        <td>**URI**</td>
+        <td>Upcoming</td>
+        <td>Ability to use Slate Kit Uri for explicit references to file paths</td>
+    </tr>
+</table>
 {{% section-end mod="arch/files" %}}
 
 # Install
@@ -119,7 +146,7 @@ This component uses the following other <strong>Slate Kit</strong> and/or third-
 
     // Setup 2: Use the type safe config in "{user_id}/myapp/conf/files.conf"
     // Specify the api key section as "sqs"
-    val files3 = AwsCloudFiles("app1-queue-1", "slatekit",false, "user://myapp/conf/files.conf", "s3-1")
+    val files3 = AwsCloudFiles("app1-files-1", "slatekit",false, "user://myapp/conf/files.conf", "s3-1")
 
 {{< /highlight >}}
 
@@ -132,34 +159,34 @@ This component uses the following other <strong>Slate Kit</strong> and/or third-
     files1.init()
 
     // Use case 2: create using just name and content
-    files1.create("2016_nba_v3", "version 1")
+    files1.create("file-1", "content 1")
 
     // Use case 3: update using just name and content
-    files1.update("2016_nba_v3", "version 2")
+    files1.update("file-1", "content 2")
 
     // Use case 4: create using folder and file name
-    files1.create("2016_nba_v3", "chi", "version 1")
+    files1.create("folder-1", "file-1", "content 1")
 
     // Use case 5: update using folder and file name
-    files1.update("2016_nba_v3", "chi", "version 2")
+    files1.update("folder-1", "file-1", "content 2")
 
     // Use case 6: get file as a text using just name
-    files1.getAsText("2016_nba_v3")
+    files1.getAsText("file-1")
 
     // Use case 7: get file using folder and file name
-    files1.getAsText("2016_nba_v3", "chi")
+    files1.getAsText("folder-1", "file-1")
 
     // Use case 8: download file to local folder
-    files1.download("2016_nba_v3", "~/dev/temp/")
+    files1.download("file-1", "~/dev/temp/")
 
     // Use case 9: download using folder and file name to local folder
-    files1.download("2016_nba_v3", "chi", "~/dev/temp")
+    files1.download("folder-1", "file-1", "~/dev/temp")
 
     // Use case 10: delete file by just the name
-    files1.delete("2016_nba_v3")
+    files1.delete("file-1")
 
     // Use case 11: delete using folder and name
-    files1.delete("2016_nba_v3", "chi")
+    files1.delete("folder-1", "file-1")
       
 
 {{< /highlight >}}

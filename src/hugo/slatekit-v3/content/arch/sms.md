@@ -48,7 +48,19 @@ The SMS component is an abstraction of Text messaging/sending with a default imp
 {{% section-end mod="arch/sms" %}}
 
 # Status
-This component is currently stable with future versions planned that include enhanced support for templates.
+This component is currently **stable**. Following limitations, current work, planned features apply.
+<table class="table table-bordered table-striped">
+    <tr>
+        <td><strong>Feature</strong></td>
+        <td><strong>Status</strong></td>
+        <td><strong>Description</strong></td>
+    </tr>
+    <tr>
+        <td>**Templates**</td>
+        <td>Upcoming</td>
+        <td>Enhanced templating, possibly leveraging existing open-source templating systems.</td>
+    </tr>
+</table>
 {{% section-end mod="arch/sms" %}}
 
 # Install

@@ -5,9 +5,10 @@ section_header: Context
 ---
 
 # Overview
-The Context is a container for common application dependencies such as the parsed command line **args**, selected **environment**, **config** properties, **logs**, **encryptor**, **app, build, host** info and more. This is created and must be available for any runnable application such as a **Console App, CLI, or Server**.
+The Context is a container for common application dependencies such as the parsed command line **args**, selected **environment**, **config** properties, **logs**, **encryptor**, **app, build, host** info and more. This is created and must be available for any runnable application such as a **Console App, CLI, or Server**. It is simply an interface with the following components, and there are default implementations, and builders available for convenience.
 
 {{< highlight kotlin >}}
+
     /**
      - Represents context of a running application and contains information used for most components
      - args : command line arguments
@@ -27,12 +28,12 @@ The Context is a container for common application dependencies such as the parse
         val enc: Encryptor?
         val dirs: Folders?
     }
+
 {{< /highlight  >}}
 
 {{% break %}}
 
 # Index
-Table of contents for this page
 <table class="table table-bordered table-striped">
     <tr>
         <td><strong>Section</strong></td>
@@ -41,58 +42,59 @@ Table of contents for this page
     </tr>
     <tr>
         <td><strong>1</strong></td>
-        <td><strong><a class="url-ch" href="core/cli#status">Status</a></strong></td>
+        <td><strong><a class="url-ch" href="arch/context#status">Status</a></strong></td>
         <td>Current status of this component</td>
     </tr>
     <tr>
         <td><strong>2</strong></td>
-        <td><strong><a class="url-ch" href="core/cli#install">Install</a></strong></td>
+        <td><strong><a class="url-ch" href="arch/context#install">Install</a></strong></td>
         <td>Installation instructions and references to sources</td>
     </tr>
     <tr>
         <td><strong>3</strong></td>
-        <td><strong><a class="url-ch" href="core/cli#requires">Requires</a></strong></td>
+        <td><strong><a class="url-ch" href="arch/context#requires">Requires</a></strong></td>
         <td>Lists all the Slate Kit and third-party dependencies</td>
     </tr>
     <tr>
         <td><strong>4</strong></td>
-        <td><strong><a class="url-ch" href="core/cli#sample">Sample</a></strong></td>
+        <td><strong><a class="url-ch" href="arch/context#sample">Sample</a></strong></td>
         <td>Quick sample to show usage of the component</td>
     </tr>
     <tr>
         <td><strong>5</strong></td>
-        <td><strong><a class="url-ch" href="core/cli#goals">Goals</a></strong></td>
+        <td><strong><a class="url-ch" href="arch/context#goals">Goals</a></strong></td>
         <td>Goals of this component and the problems it attempts to solve</td>
     </tr>
     <tr>
         <td><strong>6</strong></td>
-        <td><strong><a class="url-ch" href="core/cli#concepts">Concepts</a></strong></td>
+        <td><strong><a class="url-ch" href="arch/context#concepts">Concepts</a></strong></td>
         <td>Core concepts to understand in this component</td>
     </tr>
     <tr>
         <td><strong>7</strong></td>
-        <td><strong><a class="url-ch" href="core/cli#features">Features</a></strong></td>
+        <td><strong><a class="url-ch" href="arch/context#features">Features</a></strong></td>
         <td>List all the features supported</td>
     </tr>
     <tr>
         <td><strong>8</strong></td>
-        <td><strong><a class="url-ch" href="core/cli#setup">Setup</a></strong></td>
+        <td><strong><a class="url-ch" href="arch/context#setup">Setup</a></strong></td>
         <td>Set up and configure this component for use</td>
     </tr>
     <tr>
         <td><strong>9</strong></td>
-        <td><strong><a class="url-ch" href="core/cli#details">Details</a></strong></td>
+        <td><strong><a class="url-ch" href="arch/context#details">Details</a></strong></td>
         <td>In-depth examples of the supported features</td>
     </tr>
 </table>
-{{% section-end mod="core/cli" %}}
+
+{{% section-end mod="arch/context" %}}
 
 # Status
 This component is currently stable, has default implementations, and can be used for both **Android and Server**
-{{% section-end mod="core/cli" %}}
+
+{{% section-end mod="arch/context" %}}
 
 # Install
-coming soon
 {{< highlight groovy >}}
 
     repositories {
@@ -107,36 +109,51 @@ coming soon
     }
 
 {{< /highlight >}}
+
 {{% sk-module 
     name="App"
     package="slatekit.common"
     jar="slatekit.common.jar"
-    git="https://github.com/code-helix/slatekit/tree/master/src/lib/kotlin/slatekit-app"
+    git="https://github.com/code-helix/slatekit/tree/master/src/lib/kotlin/slatekit-common/src/main/kotlin/slatekit/common/Context.kt"
     gitAlias="slatekit/src/lib/kotlin/slatekit-common"
     url="core/app"
     uses="slatekit.results, slatekit.common"
     exampleUrl="Example_Context.kt"
     exampleFileName="Example_Context.kt"
 %}}
-{{% section-end mod="core/cli" %}}
+
+{{% section-end mod="arch/context" %}}
 
 # Requires
-This component uses the following other <strong>Slate Kit</strong> and/or third-party components.
+This component uses several components from the Slate Kit Utilities.
 <table class="table table-bordered table-striped">
     <tr>
         <td><strong>Component</strong></td>
         <td><strong>Description</strong></td>
     </tr>
     <tr>
-        <td><a class="url-ch" href="core/results">Slate Kit - Results</a></td>
-        <td>To model successes and failures with optional status codes</td>
-    </tr>
-    <tr>
-        <td><a class="url-ch" href="utils/utils.html">Slate Kit - Common</a></td>
+        <td><a class="url-ch" href="utils/overview">Slate Kit - Common</a></td>
         <td>Common utilities for both android + server</td>
     </tr>
+    <tr>
+        <td><a class="url-ch" href="utils/args">Args</a></td>
+        <td>Command line arguments parser</td>
+    </tr>
+    <tr>
+        <td><a class="url-ch" href="utils/env">Env</a></td>
+        <td>Environment setup and selector</td>
+    </tr>
+    <tr>
+        <td><a class="url-ch" href="utils/config">Conf</a></td>
+        <td>Config settings with inheritance</td>
+    </tr>
+    <tr>
+        <td><a class="url-ch" href="utils/logger">Logs</a></td>
+        <td>Logger and logging support</td>
+    </tr>
 </table>
-{{% section-end mod="core/cli" %}}
+
+{{% section-end mod="arch/context" %}}
 
 # Sample
 The context can be constructed manually or using convenience methods that build the context from the command line args, and configs.
@@ -170,6 +187,7 @@ The context can be constructed manually or using convenience methods that build 
         <td>Can be extended so that you can build your own context and/or load addition components.</td>
     </tr>
 </table>
+
 {{% section-end mod="arch/context" %}}
 
 # Setup 
@@ -308,11 +326,12 @@ Most applications ( whether they are console, cli, jobs, server ) require basic 
         <td><a href="arch/context/#about" class="more"><span class="btn btn-primary">more</span></a></td>
     </tr>
 </table>
-{{% section-end mod="core/cli" %}}
+{{% section-end mod="arch/context" %}}
 
 
 ## Args {#args}
-You can access the parsed command line args
+You can access the parsed command line args. 
+See {{% sk-link-util page="args" name="Args" %}} for more info.
 {{< highlight kotlin >}}
       
     ctx.args.line       
@@ -325,7 +344,8 @@ You can access the parsed command line args
 {{% feature-end mod="arch/context" %}}
 
 ## Envs {#env}
-You have access to the environments and currently selected environment
+You have access to the environments and currently selected environment.
+See {{% sk-link-util page="env" name="Env" %}} for more info.
 {{< highlight kotlin >}}
       
     ctx.envs.name    // "loc" ( representing local )
@@ -339,7 +359,8 @@ You have access to the environments and currently selected environment
 {{% feature-end mod="arch/context" %}}
 
 ## Conf {#conf}
-You have access to the currently loaded configuration settings
+You have access to the currently loaded configuration settings.
+See {{% sk-link-util page="config" name="Conf" %}} for more info.
 {{< highlight kotlin >}}
      
     ctx.conf.getInt("paging.batchSize")
@@ -350,7 +371,8 @@ You have access to the currently loaded configuration settings
 {{% feature-end mod="arch/context" %}}
 
 ## Logs {#logs}
-You have have to the logs/factory to create loggers
+You have have to the logs/factory to create loggers.
+See {{% sk-link-util page="logger" name="Logs" %}} for more info.
 {{< highlight kotlin >}}
      
     val logger1 = ctx.logs.getLogger()
@@ -368,7 +390,8 @@ You have have to the logs/factory to create loggers
 {{% feature-end mod="arch/context" %}}
 
 ## Enc {#enc}
-You can access the optional encryptor to encrypt/decrypt data
+You can access the optional encryptor to encrypt/decrypt data.
+See {{% sk-link-util page="encrypt" name="Encryptor" %}} for more info.
 {{< highlight kotlin >}}
       
     ctx.enc?.encrypt("raw text")

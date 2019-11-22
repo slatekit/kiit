@@ -48,7 +48,39 @@ The Files component is an abstraction of persistent queues with a default implem
 {{% section-end mod="arch/queues" %}}
 
 # Status
-This component is currently stable. However it is currently using the AWS 1.0 sdk that is synchonous. A future version will involve using AWS 2.0 sdk that is **Async** and incorporate Coroutines.
+This component is currently **stable**. Following limitations, current work, planned features apply.
+<table class="table table-bordered table-striped">
+    <tr>
+        <td><strong>Feature</strong></td>
+        <td><strong>Status</strong></td>
+        <td><strong>Description</strong></td>
+    </tr>
+    <tr>
+        <td>**Meta**</td>
+        <td>Upcoming</td>
+        <td>Ability to easily default / inject meta data for every entry.</td>
+    </tr>
+    <tr>
+        <td>**Async**</td>
+        <td>Upcoming</td>
+        <td>Async support via Kotlin suspend/coroutines and Java AWS 2.0 SDK</td>
+    </tr>
+    <tr>
+        <td>**URI**</td>
+        <td>Upcoming</td>
+        <td>Ability to use Slate Kit Uri for explicit references to file paths</td>
+    </tr>
+    <tr>
+        <td>**Errors**</td>
+        <td>Upcoming</td>
+        <td>Ability to use a dead-letter queue for failed items.</td>
+    </tr>
+    <tr>
+        <td>**Batch**</td>
+        <td>Upcoming</td>
+        <td>Ability to perform batch insert operations</td>
+    </tr>
+</table>
 {{% section-end mod="arch/queues" %}}
 
 # Install
@@ -134,10 +166,10 @@ This component uses the following other <strong>Slate Kit</strong> and/or third-
     queue2.init()
 
     // Use case 2: send 1 message
-    queue2.send("test 1")
+    queue2.send("item 1")
 
     // Use case 3: send multiple messages
-    queue2.send("test 2")
+    queue2.send("item 2")
 
     // Use case 4: send message with tags
     queue2.send("user=kishore", tagName="type", tagValue="reg")

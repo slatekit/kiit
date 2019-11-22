@@ -32,8 +32,8 @@ Many of these modules have their own project. See the guides for each respective
       <div class="row text-center">
           <div class="col-md-4 wow fadeInUp">
             <div class="box text-center">
-              <a href="core/kotlin-result.html"><img src="assets/media/img/white/target.png" alt="" class="img-fluid"></a>
-              <div><a href="core/kotlin-apis.html"><h3>Results</h3></a></div>
+              <a href="arch/results"><img src="assets/media/img/white/target.png" alt="" class="img-fluid"></a>
+              <div><a href="arch/results"><h3>Results</h3></a></div>
               <p>Models <strong>successes and failures</strong> accurately with <strong>optional</strong> status codes. Works with exceptions, validations.
                  See {{% sk-link-arch page="results" name="Results" %}} 
               </p>
@@ -41,32 +41,32 @@ Many of these modules have their own project. See the guides for each respective
           </div>
           <div class="col-md-4 wow fadeInUp">
             <div class="box text-center">
-              <a href="core/kotlin-apis.html"><img src="assets/media/img/white/webapi.png" alt="" class="img-fluid"></a>
-              <div><a href="core/kotlin-apis.html"><h3>APIs</h3></a></div>
+              <a href="arch/apis"><img src="assets/media/img/white/webapi.png" alt="" class="img-fluid"></a>
+              <div><a href="arch/apis"><h3>APIs</h3></a></div>
               <p>A simple, intuitive, <strong>protocol independent</strong> approach to building APIs in Slate so they run as Web APIs or on the CLI. See {{% sk-link-arch page="apis" name="APIs" %}} 
               </p>
             </div>
           </div>
           <div class="col-md-4 wow fadeInUp">
             <div class="box text-center">
-              <a href="core/kotlin-app.html"><img src="assets/media/img/white/desktop.png" alt="" class="img-fluid"></a>
-              <div><a href="core/kotlin-app.html"><h3>App</h3></a></div>
+              <a href="arch/app"><img src="assets/media/img/white/desktop.png" alt="" class="img-fluid"></a>
+              <div><a href="arch/app"><h3>App</h3></a></div>
               <p>An general purpose <strong>App template</strong> with support for environments, logging, configs, diagnostics, help usage and more. See {{% sk-link-arch page="app" name="App" %}} 
               </p>
             </div>
           </div>
           <div class="col-md-4 wow fadeInUp">
             <div class="box text-center">
-              <a href="core/kotlin-cli.html"><img src="assets/media/img/white/terminal.png" alt="" class="img-fluid"></a>
-              <div><a href="core/kotlin-cli.html"><h3>CLI</h3></a></div>
+              <a href="cli"><img src="assets/media/img/white/terminal.png" alt="" class="img-fluid"></a>
+              <div><a href="arch/cli"><h3>CLI</h3></a></div>
               <p>Command line interface to handle actions in an interactive way. Has customization and formatting features. See {{% sk-link-arch page="cli" name="CLI" %}} </a>.
               </p>
             </div>
           </div>
           <div class="col-md-4 wow fadeInUp">
             <div class="box text-center">
-              <a href="core/kotlin-cache.html"><img src="assets/media/img/white/lightning.png" alt="" class="img-fluid"></a>
-              <div><a href="core/kotlin-cache.html"><h3>Cache</h3></a></div>
+              <a href="arch/cache"><img src="assets/media/img/white/lightning.png" alt="" class="img-fluid"></a>
+              <div><a href="arch/cache"><h3>Cache</h3></a></div>
               <p>Light-weight cache with support for detailed metrics, time-stamps, and a synchronous or async public APIs. See {{% sk-link-arch page="cache" name="Cache" %}} 
               </p>
             </div>
@@ -85,8 +85,8 @@ Many of these modules have their own project. See the guides for each respective
         -->
           <div class="col-md-4 wow fadeInUp">
             <div class="box text-center">
-              <a href="core/kotlin-ctx.html"><img src="assets/media/img/white/connected.png" alt="" class="img-fluid"></a>
-              <div><a href="core/kotlin-ctx.html"><h3>Context</h3></a></div>
+              <a href="arch/context"><img src="assets/media/img/white/connected.png" alt="" class="img-fluid"></a>
+              <div><a href="arch/context"><h3>Context</h3></a></div>
               <p>An application context to hold common dependencies like command line args, envs, configs, logger, encryptor, etc, 
                  See {{% sk-link-arch page="context" name="Context" %}} 
               </p>
@@ -121,8 +121,8 @@ Many of these modules have their own project. See the guides for each respective
         -->
           <div class="col-md-4 wow fadeInUp">
             <div class="box text-center">
-              <a href="core/kotlin-orm.html"><img src="assets/media/img/white/layers.png" alt="" class="img-fluid"></a>
-              <div><a href="core/kotlin-orm.html"><h3>ORM</h3></a></div>
+              <a href="arch/orm"><img src="assets/media/img/white/layers.png" alt="" class="img-fluid"></a>
+              <div><a href="arch/orm"><h3>ORM</h3></a></div>
               <p>Light-weight, domain-driven entity framework with optional ORM. You can use the Entity Interfaces and code without the ORM. See {{% sk-link-arch page="orm" name="ORM" %}} 
               </p>
             </div>
@@ -130,7 +130,7 @@ Many of these modules have their own project. See the guides for each respective
           <div class="col-md-4 wow fadeInUp">
             <div class="box text-center">
               <a href="arch/queues"><img src="assets/media/img/white/queue.png" alt="" class="img-fluid"></a>
-              <div><a href="carch/queues"><h3>Queues</h3></a></div>
+              <div><a href="arch/queues"><h3>Queues</h3></a></div>
               <p>A simplified interface and abstraction for persistent queues. 
                 Support for <strong>AWS SQS</strong> and in-memory queue. See {{% sk-link-arch page="queues" name="Queues" %}} 
               </p>
@@ -160,8 +160,8 @@ Many of these modules have their own project. See the guides for each respective
           </div>
           <div class="col-md-4 wow fadeInUp">
             <div class="box text-center">
-              <a href="core/kotlin-workers.html"><img src="assets/media/img/white/gears.png" alt="" class="img-fluid"></a>
-              <div><a href="core/kotlin-workers.html"><h3>Jobs</h3></a></div>
+              <a href="arch/jobs"><img src="assets/media/img/white/gears.png" alt="" class="img-fluid"></a>
+              <div><a href="arch/jobs"><h3>Jobs</h3></a></div>
               <p>Background Jobs/Task queue system for one-off, paged, and queued jobs with middleware support and diagnostics.
                 See {{% sk-link-arch page="jobs" name="Jobs" %}} 
               </p>

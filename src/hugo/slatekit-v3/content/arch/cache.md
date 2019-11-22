@@ -5,11 +5,16 @@ section_header: Cache
 ---
 
 # Overview
-Describe this {COMPONENT_NAME} concisely in 2-3 sentences.
+The Slate CLI is a Command Line Interface application that provides 
+pre-built functionality for you to integrate your own commands in an interactie manner. This CLI offers 2 distinct approaches to integration. The first approach allows you to handle the raw text supplied in the CLI yourself and is the most flexible. The second approach provides a more connected, automatic by exposing, validating, and executing inputs against Slate Kit Universal APIs. You can create a CLI app quickly using the Slate Kit command line executable with command.
+{{< highlight bash >}}
+    
+    slatekit new cli -name="Sample1" -package="mycompany.apps"
+    
+{{< /highlight >}}
 {{% break %}}
 
 # Index
-Table of contents for this page
 <table class="table table-bordered table-striped">
     <tr>
         <td><strong>Section</strong></td>
@@ -18,58 +23,58 @@ Table of contents for this page
     </tr>
     <tr>
         <td><strong>1</strong></td>
-        <td><strong><a class="url-ch" href="core/cli#status">Status</a></strong></td>
+        <td><strong><a class="url-ch" href="arch/cache#status">Status</a></strong></td>
         <td>Current status of this component</td>
     </tr>
     <tr>
         <td><strong>2</strong></td>
-        <td><strong><a class="url-ch" href="core/cli#install">Install</a></strong></td>
+        <td><strong><a class="url-ch" href="arch/cache#install">Install</a></strong></td>
         <td>Installation instructions and references to sources</td>
     </tr>
     <tr>
         <td><strong>3</strong></td>
-        <td><strong><a class="url-ch" href="core/cli#requires">Requires</a></strong></td>
+        <td><strong><a class="url-ch" href="arch/cache#requires">Requires</a></strong></td>
         <td>Lists all the Slate Kit and third-party dependencies</td>
     </tr>
     <tr>
         <td><strong>4</strong></td>
-        <td><strong><a class="url-ch" href="core/cli#sample">Sample</a></strong></td>
+        <td><strong><a class="url-ch" href="arch/cache#sample">Sample</a></strong></td>
         <td>Quick sample to show usage of the component</td>
     </tr>
     <tr>
         <td><strong>5</strong></td>
-        <td><strong><a class="url-ch" href="core/cli#goals">Goals</a></strong></td>
+        <td><strong><a class="url-ch" href="arch/cache#goals">Goals</a></strong></td>
         <td>Goals of this component and the problems it attempts to solve</td>
     </tr>
     <tr>
         <td><strong>6</strong></td>
-        <td><strong><a class="url-ch" href="core/cli#concepts">Concepts</a></strong></td>
+        <td><strong><a class="url-ch" href="arch/cache#concepts">Concepts</a></strong></td>
         <td>Core concepts to understand in this component</td>
     </tr>
     <tr>
         <td><strong>7</strong></td>
-        <td><strong><a class="url-ch" href="core/cli#features">Features</a></strong></td>
+        <td><strong><a class="url-ch" href="arch/cache#features">Features</a></strong></td>
         <td>List all the features supported</td>
     </tr>
     <tr>
         <td><strong>8</strong></td>
-        <td><strong><a class="url-ch" href="core/cli#setup">Setup</a></strong></td>
+        <td><strong><a class="url-ch" href="arch/cache#setup">Setup</a></strong></td>
         <td>Set up and configure this component for use</td>
     </tr>
     <tr>
         <td><strong>9</strong></td>
-        <td><strong><a class="url-ch" href="core/cli#details">Details</a></strong></td>
+        <td><strong><a class="url-ch" href="arch/cache#details">Details</a></strong></td>
         <td>In-depth examples of the supported features</td>
     </tr>
 </table>
-{{% section-end mod="core/cli" %}}
+{{% section-end mod="arch/cache" %}}
 
 # Status
-coming soon
-{{% section-end mod="core/cli" %}}
+This component is currently stable and there is a project generator for it ( see below ). <br/>
+A small future enhancement will add support for question and answer flow.
+{{% section-end mod="arch/cache" %}}
 
 # Install
-coming soon
 {{< highlight groovy >}}
 
     repositories {
@@ -80,7 +85,7 @@ coming soon
     dependencies {
         // other dependencies ...
 
-        compile 'com.slatekit:slatekit-{COMPONENT_ID}:0.9.9'
+        compile 'com.slatekit:slatekit-cli:1.0.0'
     }
 
 {{< /highlight >}}
@@ -89,13 +94,13 @@ coming soon
     package="slatekit.app"
     jar="slatekit.app.jar"
     git="https://github.com/code-helix/slatekit/tree/master/src/lib/kotlin/slatekit-app"
-    gitAlias="slatekit/src/lib/kotlin/slatekit-app"
+    gitAlias="slatekit/src/lib/kotlin/slatekit-cli"
     url="core/app"
     uses="slatekit.results, slatekit.common"
     exampleUrl=""
-    exampleFileName="Example_App.kt"
+    exampleFileName="Example_CLI.kt"
 %}}
-{{% section-end mod="core/cli" %}}
+{{% section-end mod="arch/cache" %}}
 
 # Requires
 This component uses the following other <strong>Slate Kit</strong> and/or third-party components.
@@ -113,7 +118,7 @@ This component uses the following other <strong>Slate Kit</strong> and/or third-
         <td>Common utilities for both android + server</td>
     </tr>
 </table>
-{{% section-end mod="core/cli" %}}
+{{% section-end mod="arch/cache" %}}
 
 # Sample
 coming soon
@@ -124,54 +129,75 @@ coming soon
     }
 
 {{< /highlight >}}
-{{% section-end mod="core/cli" %}}
+{{% section-end mod="arch/cache" %}}
 
 # Goals
-coming soon
 <table class="table table-bordered table-striped">
     <tr>
         <td><strong>Goal</strong></td>
         <td><strong>Description</strong></td>
     </tr>
     <tr>
-        <td><strong>1. Goal A</strong></td>
-        <td>Description of goal</td>
+        <td><strong>1. Pre-Built CLI</strong></td>
+        <td>Support for raw text, parsing, looping, formats, param types</td>
     </tr>
     <tr>
-        <td><strong>2. Goal B</strong> </td>
-        <td>Description of goal</td>                     
+        <td><strong>2. Flexible Use</strong> </td>
+        <td>Handle raw requests or leverage existing integration</td>                     
     </tr>
     <tr>
-        <td><strong>3. Goal C</strong></td>
-        <td>Description of goal</td>
+        <td><strong>3. API Support</strong></td>
+        <td>Slate Kit APIs are accessible on Web or CLI</td>
     </tr>
 </table>
-{{% section-end mod="core/cli" %}}
+{{% section-end mod="arch/cache" %}}
 
 # Concepts
-coming soon
 <table class="table table-bordered table-striped">
     <tr>
-        <td><strong>Concept</strong></td>
+        <td><strong>Component</strong></td>
         <td><strong>Description</strong></td>
     </tr>
     <tr>
-        <td><strong>1. Concept A</strong></td>
-        <td>Description of concept</td>
+        <td><strong>{{% sk-link-code component="cli" filepath="cli/CLI.kt" name="CLI" %}}</strong></td>
+        <td>The main component managing the interaction</td>
     </tr>
     <tr>
-        <td><strong>2. Concept B</strong> </td>
-        <td>Description of concept</td>                     
+        <td><strong>{{% sk-link-code component="cli" filepath="cli/CliRequest.kt" name="CliRequest" %}}</strong> </td>
+        <td>Represents the command entered</td>                     
     </tr>
     <tr>
-        <td><strong>3. Concept C</strong></td>
-        <td>Description of concept</td>
+        <td><strong>{{% sk-link-code component="cli" filepath="cli/CliResponse.kt" name="CliResponse" %}}</strong></td>
+        <td>Represents the output of the operation</td>
+    </tr>
+    <tr>
+        <td><strong>{{% sk-link-code component="integration" filepath="integration/apis/CliApi.kt" name="CliApi" %}}</strong></td>
+        <td>Extends the CLI by integrating it with Slate Kit APIs</td>
+    </tr>
+    <tr>
+        <td><strong>{{% sk-link-code component="cli" filepath="cli/Command.kt" name="Command" %}}</strong></td>
+        <td>Reserved commands like **about, version, help, quit, exit**, etc</td>
+    </tr>
+    <tr>
+        <td><strong>{{% sk-link-code component="common" filepath="common/args/Args.kt" name="Input Param" %}}</strong></td>
+        <td>Parameter starting with **-** representing data for a command</td>
+    </tr>
+    <tr>
+        <td><strong>{{% sk-link-code component="common" filepath="common/args/Args.kt" name="Meta Param" %}}</strong></td>
+        <td>Parameter starting with **@** representing metadata for a command </td>
+    </tr>
+    <tr>
+        <td><strong>{{% sk-link-code component="cli" filepath="cli/SysParam.kt" name="System Param" %}}</strong></td>
+        <td>Parameter starting with **$** representing an instruction for the CLI</td>
+    </tr>
+    <tr>
+        <td><strong>9. Reference</strong></td>
+        <td>Reference to command originating from a file</td>
     </tr>
 </table>
-{{% section-end mod="core/cli" %}}
+{{% section-end mod="arch/cache" %}}
 
 # Features
-coming soon
 <table class="table table-bordered table-striped">
     <tr>
         <td><strong>Name</strong></td>
@@ -179,25 +205,60 @@ coming soon
         <td><strong>More</strong></td>
     </tr>
     <tr>
-        <td><strong>1. Feature A</strong></td>
+        <td><strong>1. Input</strong></td>
         <td>Description of feature</td>
-        <td><a href="arch/app/#feature1" class="more"><span class="btn btn-primary">more</span></a></td>
+        <td><a href="arch/cache/#inputs" class="more"><span class="btn btn-primary">more</span></a></td>
     </tr>
     <tr>
-        <td><strong>2. Feature B</strong> </td>
-        <td>Description of feature</td> 
-        <td><a href="arch/app/#feature2" class="more"><span class="btn btn-primary">more</span></a></td>                    
+        <td><strong>2. Reserved</strong> </td>
+        <td>List of reserved commands</td> 
+        <td><a href="arch/cache/#reserved" class="more"><span class="btn btn-primary">more</span></a></td>                    
     </tr>
     <tr>
-        <td><strong>3. Feature C</strong></td>
-        <td>Description of feature</td>
-        <td><a href="arch/app/#feature3" class="more"><span class="btn btn-primary">more</span></a></td>
+        <td><strong>3. Args</strong></td>
+        <td>How to convert raw text into parsed parameters</td>
+        <td><a href="arch/cache/#args" class="more"><span class="btn btn-primary">more</span></a></td>
+    </tr>
+    <tr>
+        <td><strong>4. Requests</strong></td>
+        <td>Working with parsed commands as CLI Requests</td>
+        <td><a href="arch/cache/#requests" class="more"><span class="btn btn-primary">more</span></a></td>
+    </tr>
+    <tr>
+        <td><strong>5. Execute</strong></td>
+        <td>How to execute a request</td>
+        <td><a href="arch/cache/#execute" class="more"><span class="btn btn-primary">more</span></a></td>
+    </tr>
+    <tr>
+        <td><strong>6. Responses</strong></td>
+        <td>Working with parsed commands as CLI Requests</td>
+        <td><a href="arch/cache/#responses" class="more"><span class="btn btn-primary">more</span></a></td>
+    </tr>
+    <tr>
+        <td><strong>7. Startup</strong></td>
+        <td>Load a command at start up</td>
+        <td><a href="arch/cache/#startup" class="more"><span class="btn btn-primary">more</span></a></td>
+    </tr>
+    <tr>
+        <td><strong>8. From file</strong></td>
+        <td>Load a command from a file</td>
+        <td><a href="arch/cache/#from-file" class="more"><span class="btn btn-primary">more</span></a></td>
+    </tr>
+    <tr>
+        <td><strong>9. API</strong></td>
+        <td>How to access APIs on the command line</td>
+        <td><a href="arch/cache/#apis" class="more"><span class="btn btn-primary">more</span></a></td>
+    </tr>
+    <tr>
+        <td><strong>10. Scripts</strong></td>
+        <td>Run a series of commands in batch mode</td>
+        <td><a href="arch/cache/#scripts" class="more"><span class="btn btn-primary">more</span></a></td>
     </tr>
 </table>
-{{% section-end mod="core/cli" %}}
+{{% section-end mod="arch/cache" %}}
 
 
-## Feature 1 {#feature1}
+## Inputs {#inputs}
 coming soon
 {{< highlight kotlin >}}
 
@@ -206,9 +267,9 @@ coming soon
     }
 
 {{< /highlight >}}
-{{% feature-end mod="core/cli" %}}
+{{% feature-end mod="arch/cache" %}}
 
-## Feature 2 {#feature2}
+## Reserved {#reserved}
 coming soon
 {{< highlight kotlin >}}
 
@@ -217,9 +278,9 @@ coming soon
     }
 
 {{< /highlight >}}
-{{% feature-end mod="core/cli" %}}
+{{% feature-end mod="arch/cache" %}}
 
-## Feature 3 {#feature3}
+## Args {#args}
 coming soon
 {{< highlight kotlin >}}
 
@@ -228,7 +289,84 @@ coming soon
     }
 
 {{< /highlight >}}
-{{% feature-end mod="core/cli" %}}
+{{% feature-end mod="arch/cache" %}}
 
-{{% section-end mod="core/cli" %}}
+## Requests {#requests}
+coming soon
+{{< highlight kotlin >}}
+
+    fun setup() {
+        
+    }
+
+{{< /highlight >}}
+{{% feature-end mod="arch/cache" %}}
+
+## Execute {#execute}
+coming soon
+{{< highlight kotlin >}}
+
+    fun setup() {
+        
+    }
+
+{{< /highlight >}}
+{{% feature-end mod="arch/cache" %}}
+
+## Responses {#responses}
+coming soon
+{{< highlight kotlin >}}
+
+    fun setup() {
+        
+    }
+
+{{< /highlight >}}
+{{% feature-end mod="arch/cache" %}}
+
+## Startup {#startup}
+coming soon
+{{< highlight kotlin >}}
+
+    fun setup() {
+        
+    }
+
+{{< /highlight >}}
+{{% feature-end mod="arch/cache" %}}
+
+## From file {#from-file}
+coming soon
+{{< highlight kotlin >}}
+
+    fun setup() {
+        
+    }
+
+{{< /highlight >}}
+{{% feature-end mod="arch/cache" %}}
+
+## API {#apis}
+coming soon
+{{< highlight kotlin >}}
+
+    fun setup() {
+        
+    }
+
+{{< /highlight >}}
+{{% feature-end mod="arch/cache" %}}
+
+## Scripts {#scripts}
+coming soon
+{{< highlight kotlin >}}
+
+    fun setup() {
+        
+    }
+
+{{< /highlight >}}
+{{% feature-end mod="arch/cache" %}}
+
+{{% section-end mod="arch/cache" %}}
 
