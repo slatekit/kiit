@@ -184,13 +184,13 @@ open class CLI(
         // These are typically system level
         return if (args.parts.size == 1) {
             when (args.line) {
-                Command.About.id -> { context.help.showAbout() ; Success(true, Codes.ABOUT) }
-                Command.Help.id -> { context.help.showHelp() ; Success(true, Codes.HELP) }
-                Command.Version.id -> { context.help.showVersion(); Success(true, Codes.VERSION) }
-                Command.Last.id -> { context.writer.text(lastArgs.get().line, false); Success(true) }
-                Command.Retry.id -> { executeRepl(lastArgs.get()) }
-                Command.Exit.id -> { Success(false, Codes.EXIT) }
-                Command.Quit.id -> { Success(false, Codes.EXIT) }
+                Reserved.About.id -> { context.help.showAbout() ; Success(true, Codes.ABOUT) }
+                Reserved.Help.id -> { context.help.showHelp() ; Success(true, Codes.HELP) }
+                Reserved.Version.id -> { context.help.showVersion(); Success(true, Codes.VERSION) }
+                Reserved.Last.id -> { context.writer.text(lastArgs.get().line, false); Success(true) }
+                Reserved.Retry.id -> { executeRepl(lastArgs.get()) }
+                Reserved.Exit.id -> { Success(false, Codes.EXIT) }
+                Reserved.Quit.id -> { Success(false, Codes.EXIT) }
                 else -> executeRepl(args)
             }
         } else {
