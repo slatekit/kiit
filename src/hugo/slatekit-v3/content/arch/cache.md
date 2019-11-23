@@ -5,13 +5,28 @@ section_header: Cache
 ---
 
 # Overview
-The Slate CLI is a Command Line Interface application that provides 
-pre-built functionality for you to integrate your own commands in an interactie manner. This CLI offers 2 distinct approaches to integration. The first approach allows you to handle the raw text supplied in the CLI yourself and is the most flexible. The second approach provides a more connected, automatic by exposing, validating, and executing inputs against Slate Kit Universal APIs. You can create a CLI app quickly using the Slate Kit command line executable with command.
-{{< highlight bash >}}
-    
-    slatekit new cli -name="Sample1" -package="mycompany.apps"
-    
-{{< /highlight >}}
+The Slate Cache is a light-weight Cache for both Android and Server.
+{{% break %}}
+
+# Goals
+<table class="table table-bordered table-striped">
+    <tr>
+        <td><strong>Goal</strong></td>
+        <td><strong>Description</strong></td>
+    </tr>
+    <tr>
+        <td><strong>1. Light-Weight</strong></td>
+        <td>Simple, light-weight with default implementations for sync and async based Caches.</td>
+    </tr>
+    <tr>
+        <td><strong>2. Diagnostics </strong> </td>
+        <td>Provides a reasonable level of diagnostics and cache metrics</td>                     
+    </tr>
+    <tr>
+        <td><strong>3. Channels</strong></td>
+        <td>Async based cache leverages Channels for write operations</td>
+    </tr>
+</table>
 {{% break %}}
 
 # Index
@@ -42,11 +57,6 @@ pre-built functionality for you to integrate your own commands in an interactie 
         <td>Quick sample to show usage of the component</td>
     </tr>
     <tr>
-        <td><strong>5</strong></td>
-        <td><strong><a class="url-ch" href="arch/cache#goals">Goals</a></strong></td>
-        <td>Goals of this component and the problems it attempts to solve</td>
-    </tr>
-    <tr>
         <td><strong>6</strong></td>
         <td><strong><a class="url-ch" href="arch/cache#concepts">Concepts</a></strong></td>
         <td>Core concepts to understand in this component</td>
@@ -70,9 +80,8 @@ pre-built functionality for you to integrate your own commands in an interactie 
 {{% section-end mod="arch/cache" %}}
 
 # Status
-This component is currently stable and there is a project generator for it ( see below ). <br/>
-A small future enhancement will add support for question and answer flow.
-{{% section-end mod="arch/cache" %}}
+This component is **NOT** currently ready. Also, the Docs are being worked on.
+{{% break %}}
 
 # Install
 {{< highlight groovy >}}
@@ -85,20 +94,20 @@ A small future enhancement will add support for question and answer flow.
     dependencies {
         // other dependencies ...
 
-        compile 'com.slatekit:slatekit-cli:1.0.0'
+        compile 'com.slatekit:slatekit-cache:1.0.0'
     }
 
 {{< /highlight >}}
 {{% sk-module 
-    name="App"
-    package="slatekit.app"
-    jar="slatekit.app.jar"
-    git="https://github.com/code-helix/slatekit/tree/master/src/lib/kotlin/slatekit-app"
-    gitAlias="slatekit/src/lib/kotlin/slatekit-cli"
-    url="core/app"
+    name="Cache"
+    package="slatekit.cache"
+    jar="slatekit.cache.jar"
+    git="https://github.com/code-helix/slatekit/tree/master/src/lib/kotlin/slatekit-cache"
+    gitAlias="slatekit/src/lib/kotlin/slatekit-cache"
+    url="arch/cache"
     uses="slatekit.results, slatekit.common"
     exampleUrl=""
-    exampleFileName="Example_CLI.kt"
+    exampleFileName="Example_Cache.kt"
 %}}
 {{% section-end mod="arch/cache" %}}
 
@@ -131,71 +140,6 @@ coming soon
 {{< /highlight >}}
 {{% section-end mod="arch/cache" %}}
 
-# Goals
-<table class="table table-bordered table-striped">
-    <tr>
-        <td><strong>Goal</strong></td>
-        <td><strong>Description</strong></td>
-    </tr>
-    <tr>
-        <td><strong>1. Pre-Built CLI</strong></td>
-        <td>Support for raw text, parsing, looping, formats, param types</td>
-    </tr>
-    <tr>
-        <td><strong>2. Flexible Use</strong> </td>
-        <td>Handle raw requests or leverage existing integration</td>                     
-    </tr>
-    <tr>
-        <td><strong>3. API Support</strong></td>
-        <td>Slate Kit APIs are accessible on Web or CLI</td>
-    </tr>
-</table>
-{{% section-end mod="arch/cache" %}}
-
-# Concepts
-<table class="table table-bordered table-striped">
-    <tr>
-        <td><strong>Component</strong></td>
-        <td><strong>Description</strong></td>
-    </tr>
-    <tr>
-        <td><strong>{{% sk-link-code component="cli" filepath="cli/CLI.kt" name="CLI" %}}</strong></td>
-        <td>The main component managing the interaction</td>
-    </tr>
-    <tr>
-        <td><strong>{{% sk-link-code component="cli" filepath="cli/CliRequest.kt" name="CliRequest" %}}</strong> </td>
-        <td>Represents the command entered</td>                     
-    </tr>
-    <tr>
-        <td><strong>{{% sk-link-code component="cli" filepath="cli/CliResponse.kt" name="CliResponse" %}}</strong></td>
-        <td>Represents the output of the operation</td>
-    </tr>
-    <tr>
-        <td><strong>{{% sk-link-code component="integration" filepath="integration/apis/CliApi.kt" name="CliApi" %}}</strong></td>
-        <td>Extends the CLI by integrating it with Slate Kit APIs</td>
-    </tr>
-    <tr>
-        <td><strong>{{% sk-link-code component="cli" filepath="cli/Command.kt" name="Command" %}}</strong></td>
-        <td>Reserved commands like **about, version, help, quit, exit**, etc</td>
-    </tr>
-    <tr>
-        <td><strong>{{% sk-link-code component="common" filepath="common/args/Args.kt" name="Input Param" %}}</strong></td>
-        <td>Parameter starting with **-** representing data for a command</td>
-    </tr>
-    <tr>
-        <td><strong>{{% sk-link-code component="common" filepath="common/args/Args.kt" name="Meta Param" %}}</strong></td>
-        <td>Parameter starting with **@** representing metadata for a command </td>
-    </tr>
-    <tr>
-        <td><strong>{{% sk-link-code component="cli" filepath="cli/SysParam.kt" name="System Param" %}}</strong></td>
-        <td>Parameter starting with **$** representing an instruction for the CLI</td>
-    </tr>
-    <tr>
-        <td><strong>9. Reference</strong></td>
-        <td>Reference to command originating from a file</td>
-    </tr>
-</table>
-{{% section-end mod="arch/cache" %}}
 
 # Features
 <table class="table table-bordered table-striped">
@@ -205,61 +149,31 @@ coming soon
         <td><strong>More</strong></td>
     </tr>
     <tr>
-        <td><strong>1. Input</strong></td>
-        <td>Description of feature</td>
-        <td><a href="arch/cache/#inputs" class="more"><span class="btn btn-primary">more</span></a></td>
+        <td><strong>1. Usage</strong></td>
+        <td>Usage of the features</td>
+        <td><a href="arch/cache/#usage" class="more"><span class="btn btn-primary">more</span></a></td>
     </tr>
     <tr>
-        <td><strong>2. Reserved</strong> </td>
-        <td>List of reserved commands</td> 
-        <td><a href="arch/cache/#reserved" class="more"><span class="btn btn-primary">more</span></a></td>                    
+        <td><strong>2. Stats</strong> </td>
+        <td>Gettign stats and cache diagnostics</td> 
+        <td><a href="arch/cache/#stats" class="more"><span class="btn btn-primary">more</span></a></td>                    
     </tr>
     <tr>
-        <td><strong>3. Args</strong></td>
+        <td><strong>3. Sync</strong></td>
         <td>How to convert raw text into parsed parameters</td>
-        <td><a href="arch/cache/#args" class="more"><span class="btn btn-primary">more</span></a></td>
+        <td><a href="arch/cache/#sync" class="more"><span class="btn btn-primary">more</span></a></td>
     </tr>
     <tr>
-        <td><strong>4. Requests</strong></td>
+        <td><strong>4. Async</strong></td>
         <td>Working with parsed commands as CLI Requests</td>
-        <td><a href="arch/cache/#requests" class="more"><span class="btn btn-primary">more</span></a></td>
-    </tr>
-    <tr>
-        <td><strong>5. Execute</strong></td>
-        <td>How to execute a request</td>
-        <td><a href="arch/cache/#execute" class="more"><span class="btn btn-primary">more</span></a></td>
-    </tr>
-    <tr>
-        <td><strong>6. Responses</strong></td>
-        <td>Working with parsed commands as CLI Requests</td>
-        <td><a href="arch/cache/#responses" class="more"><span class="btn btn-primary">more</span></a></td>
-    </tr>
-    <tr>
-        <td><strong>7. Startup</strong></td>
-        <td>Load a command at start up</td>
-        <td><a href="arch/cache/#startup" class="more"><span class="btn btn-primary">more</span></a></td>
-    </tr>
-    <tr>
-        <td><strong>8. From file</strong></td>
-        <td>Load a command from a file</td>
-        <td><a href="arch/cache/#from-file" class="more"><span class="btn btn-primary">more</span></a></td>
-    </tr>
-    <tr>
-        <td><strong>9. API</strong></td>
-        <td>How to access APIs on the command line</td>
-        <td><a href="arch/cache/#apis" class="more"><span class="btn btn-primary">more</span></a></td>
-    </tr>
-    <tr>
-        <td><strong>10. Scripts</strong></td>
-        <td>Run a series of commands in batch mode</td>
-        <td><a href="arch/cache/#scripts" class="more"><span class="btn btn-primary">more</span></a></td>
+        <td><a href="arch/cache/#asyc" class="more"><span class="btn btn-primary">more</span></a></td>
     </tr>
 </table>
 {{% section-end mod="arch/cache" %}}
 
 
-## Inputs {#inputs}
-coming soon
+## Usage {#usage}
+COMIN SOON.
 {{< highlight kotlin >}}
 
     fun setup() {
@@ -269,8 +183,8 @@ coming soon
 {{< /highlight >}}
 {{% feature-end mod="arch/cache" %}}
 
-## Reserved {#reserved}
-coming soon
+## Stats {#stats}
+COMIN SOON.
 {{< highlight kotlin >}}
 
     fun setup() {
@@ -280,8 +194,8 @@ coming soon
 {{< /highlight >}}
 {{% feature-end mod="arch/cache" %}}
 
-## Args {#args}
-coming soon
+## Sync {#sync}
+COMIN SOON.
 {{< highlight kotlin >}}
 
     fun setup() {
@@ -291,74 +205,9 @@ coming soon
 {{< /highlight >}}
 {{% feature-end mod="arch/cache" %}}
 
-## Requests {#requests}
-coming soon
-{{< highlight kotlin >}}
-
-    fun setup() {
-        
-    }
-
-{{< /highlight >}}
-{{% feature-end mod="arch/cache" %}}
-
-## Execute {#execute}
-coming soon
-{{< highlight kotlin >}}
-
-    fun setup() {
-        
-    }
-
-{{< /highlight >}}
-{{% feature-end mod="arch/cache" %}}
-
-## Responses {#responses}
-coming soon
-{{< highlight kotlin >}}
-
-    fun setup() {
-        
-    }
-
-{{< /highlight >}}
-{{% feature-end mod="arch/cache" %}}
-
-## Startup {#startup}
-coming soon
-{{< highlight kotlin >}}
-
-    fun setup() {
-        
-    }
-
-{{< /highlight >}}
-{{% feature-end mod="arch/cache" %}}
-
-## From file {#from-file}
-coming soon
-{{< highlight kotlin >}}
-
-    fun setup() {
-        
-    }
-
-{{< /highlight >}}
-{{% feature-end mod="arch/cache" %}}
-
-## API {#apis}
-coming soon
-{{< highlight kotlin >}}
-
-    fun setup() {
-        
-    }
-
-{{< /highlight >}}
-{{% feature-end mod="arch/cache" %}}
-
-## Scripts {#scripts}
-coming soon
+## Async {#async}
+Async flow is based on using CoRoutines and Channels for writes.
+COMIN SOON.
 {{< highlight kotlin >}}
 
     fun setup() {
