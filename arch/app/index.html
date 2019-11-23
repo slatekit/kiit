@@ -41,7 +41,7 @@
     <link rel="stylesheet" href="assets/app/app.css">
 
 
-    <title>Slate Kit: Info</title>
+    <title>Slate Kit: App</title>
 </head>
 
 <body>
@@ -105,11 +105,16 @@
         </a>
         <ul class="dropdown-menu" aria-labelledby="menu-1">
             <li><a class="dropdown-item" href="arch/overview">Overview</a></li>
+            <li><a class="dropdown-item" href="">-------------------</a></li>
             <li><a class="dropdown-item" href="arch/results">Results</a></li>
             <li><a class="dropdown-item" href="arch/context">Context</a></li>
+            <li><a class="dropdown-item" href="">-------------------</a></li>
             <li><a class="dropdown-item" href="arch/app">App</a></li>
-            <li><a class="dropdown-item" href="arch/apis">APIs</a></li>
+            <li><a class="dropdown-item" href="arch/apis">API</a></li>
+            <li><a class="dropdown-item" href="arch/cli">CLI</a></li>
             <li><a class="dropdown-item" href="arch/jobs">Jobs</a></li>
+            <li><a class="dropdown-item" href="">-------------------</a></li>
+            <li><a class="dropdown-item" href="arch/overview">More...</a></li>
         </ul>
     </li>
     <li class="nav-item">
@@ -161,21 +166,27 @@
 <h1 id="overview">Overview</h1>
 
 <p>The Slate App is a base application and template to build console, batch, cli and server applications.
-It has pre-built support for common features such as <strong>command line args</strong>, <strong>environment selection</strong>,
-<strong>configs per environment</strong>, <strong>logging</strong>, <strong>life-cycle events</strong>, <strong>diagnostics</strong> and much more.
+It has pre-built support for common features such as <strong>command line args, environment selection, configs per environment, logging, life-cycle events, help text, diagnostics</strong> and much more.
 This is accomplished by integrating some of the components and utilities available in the
 <a href="utils.html" >Slate Kit Common</a> project.
 You can create a app quickly using the Slate Kit command line executable with the following inputs.
-Also refer to the <a href="Example_App.html" >Example_App.kt</a>.
-<div class="highlight"><pre class="chroma"><code class="language-bash" data-lang="bash">    
-    slatekit new app -name<span class="o">=</span><span class="s2">&#34;Sample1&#34;</span> -package<span class="o">=</span><span class="s2">&#34;mycompany.apps&#34;</span>
+Also refer to the <a href="https://github.com/code-helix/slatekit/blob/master/src/lib/kotlin/slatekit-examples/src/main/kotlin/slatekit/examples/Example_App.kt" >Example_App.kt</a>.
+<br/><br/></p>
+
+<h1 id="create">Create</h1>
+
+<p><div class="highlight"><pre class="chroma"><code class="language-bash" data-lang="bash">    
+    slatekit new app -name<span class="o">=</span><span class="s2">&#34;SampleApp&#34;</span> -package<span class="o">=</span><span class="s2">&#34;mycompany.apps&#34;</span>
     </code></pre></div>
+<div class="alert alert-warning" role="alert">
+  You can download the Slate Kit CLI tools 
+  <a href="https://github.com/code-helix/slatekit/tree/master/src/tools/cli" >here</a>
+</div>
 <br/><br/></p>
 
 <h1 id="index">Index</h1>
 
-<p>Table of contents for this page
-<table class="table table-bordered table-striped">
+<p><table class="table table-bordered table-striped">
     <tr>
         <td><strong>Section</strong></td>
         <td><strong>Component</strong></td>
@@ -222,19 +233,19 @@ Also refer to the <a href="Example_App.html" >Example_App.kt</a>.
         <td>How to implement certain tasks, recipes, etc.</td>
     </tr>
 </table>
-<br/><br/><br/>
+<br/>
 
 <a href="arch/app#overview" class="sk-back-to-top">Back to top </a>
-<br/><br/></p>
+<br/><br/><br/><br/></p>
 
 <h1 id="status">Status</h1>
 
-<p>This component is currently stable and there is a project generator for it ( see below ). <br/>
+<p>This component is currently stable and there is a project generator for it.
 A small future enhancement will optionally add support for Docker and gradle Docker configuration.
-<br/><br/><br/>
+<br/>
 
 <a href="arch/app#overview" class="sk-back-to-top">Back to top </a>
-<br/><br/></p>
+<br/><br/><br/><br/></p>
 
 <h1 id="install">Install</h1>
 
@@ -261,11 +272,11 @@ A small future enhancement will optionally add support for Docker and gradle Doc
   </tr>
   <tr>
     <td><strong>git</strong></td>
-    <td><a class="url-ch" href="https://github.com/code-helix/slatekit/tree/master/src/lib/kotlin/slatekit-app">slatekit/src/lib/kotlin/slatekit-app</a></td>
+    <td><a class="url-ch" href="https://github.com/code-helix/slatekit/tree/master/src/lib/kotlin/slatekit-app/src/main/kotlin/slatekit/app">slatekit/src/lib/kotlin/slatekit-app</a></td>
   </tr>
   <tr>
     <td><strong>docs</strong></td>
-    <td><a class="url-ch" href="core/app">App</a></td>
+    <td><a class="url-ch" href="arch/app">App</a></td>
   </tr>
   <tr>
     <td><strong>uses</strong></td>
@@ -277,13 +288,13 @@ A small future enhancement will optionally add support for Docker and gradle Doc
   </tr>
   <tr>
       <td><strong>example</strong></td>
-      <td><a class="url-ch" href="">Example_App.kt</a></td>
+      <td><a class="url-ch" href="https://github.com/code-helix/slatekit/tree/master/src/lib/kotlin/slatekit-examples/src/main/kotlin/slatekit/examples/Example_App.kt">Example_App.kt</a></td>
   </tr>
 </table>
-<br/><br/><br/>
+<br/>
 
 <a href="arch/app#overview" class="sk-back-to-top">Back to top </a>
-<br/><br/></p>
+<br/><br/><br/><br/></p>
 
 <h1 id="requires">Requires</h1>
 
@@ -302,22 +313,22 @@ A small future enhancement will optionally add support for Docker and gradle Doc
         <td>Common utilities for both android + server</td>
     </tr>
 </table>
-<br/><br/><br/>
+<br/>
 
 <a href="arch/app#overview" class="sk-back-to-top">Back to top </a>
-<br/><br/></p>
+<br/><br/><br/><br/></p>
 
 <h1 id="sample">Sample</h1>
 
 <p>You can generate a sample app using the slatekit executable.
-Also refer to the <a href="Example_App.html" >Example_App.kt</a>
+Also refer to the <a href="https://github.com/code-helix/slatekit/blob/master/src/lib/kotlin/slatekit-examples/src/main/kotlin/slatekit/examples/Example_App.kt" >Example_App.kt</a>
 <div class="highlight"><pre class="chroma"><code class="language-bash" data-lang="bash">    
     :&gt; slatekit new app -name<span class="o">=</span><span class="s2">&#34;MyApp1&#34;</span> -package<span class="o">=</span><span class="s2">&#34;company1.myapp1&#34;</span>
     </code></pre></div>
-<br/><br/><br/>
+<br/>
 
 <a href="arch/app#overview" class="sk-back-to-top">Back to top </a>
-<br/><br/></p>
+<br/><br/><br/><br/></p>
 
 <h1 id="goals">Goals</h1>
 
@@ -345,10 +356,10 @@ This component quickly gets a new application set up with all these features rea
         </td><br />
     </tr>
 </table><br />
-<br/><br/><br/>
+<br/>
 
 <a href="arch/app#overview" class="sk-back-to-top">Back to top </a>
-<br/><br/></p>
+<br/><br/><br/><br/></p>
 
 <h1 id="concepts">Concepts</h1>
 
@@ -378,10 +389,10 @@ This component quickly gets a new application set up with all these features rea
         <td>Support for app information, version, and command line args, is made available through config files and/or code</td>
     </tr>
 </table>
-<br/><br/><br/>
+<br/>
 
 <a href="arch/app#overview" class="sk-back-to-top">Back to top </a>
-<br/><br/></p>
+<br/><br/><br/><br/></p>
 
 <h1 id="features">Features</h1>
 
@@ -438,7 +449,7 @@ This component quickly gets a new application set up with all these features rea
 <h2 id="Args">Args</h2>
 
 <p>Command line arguments are parsed and supplied to your app. You can specify what the arguments are supported by specifying the schema.
-This leverages the <a href="http://www.slatekit.com/utils/args" >args</a> component.
+This leverages the <a href="http://www.slatekit.com/utils/args" >Args</a> component.
 <div class="highlight"><pre class="chroma"><code class="language-kotlin" data-lang="kotlin">  <span class="c1">// Example of supplying arguments.
 </span><span class="c1"></span>  <span class="n">myapp</span> <span class="p">-</span><span class="n">env</span><span class="p">=</span><span class="n">dev</span> <span class="p">-</span><span class="n">log</span><span class="p">.</span><span class="n">level</span><span class="p">=</span><span class="n">info</span> <span class="p">-</span><span class="n">region</span><span class="p">=</span><span class="n">ny</span>
     
@@ -465,7 +476,7 @@ This leverages the <a href="http://www.slatekit.com/utils/args" >args</a> compon
 
 <p>Default environments and configs per environment are setup for applications and associated together.
 Refer to example app and or a generated application for more info.
-This leverages the <a href="http://www.slatekit.com/utils/env" >env</a> and <a href="http://www.slatekit.com/utils/conf" >conf</a> components
+This leverages the <a href="http://www.slatekit.com/utils/env" >Envs</a> and <a href="http://www.slatekit.com/utils/config" >Config</a> components
 <table class="table table-bordered table-striped">
     <tr>
         <td><strong>Env</strong></td>
@@ -521,7 +532,7 @@ This leverages the <a href="http://www.slatekit.com/utils/env" >env</a> and <a h
 <h2 id="Logs">Logs</h2>
 
 <p>Logback logging is setup for the application in <strong>/resources/logback.xml</strong>
-This leverages the <a href="http://www.slatekit.com/utils/logs" >logs</a> component.
+This leverages the <a href="http://www.slatekit.com/utils/logger" >Logs</a> component.
 <div class="highlight"><pre class="chroma"><code class="language-xml" data-lang="xml"><span class="cp">&lt;?xml version=&#34;1.0&#34; encoding=&#34;UTF-8&#34;?&gt;</span>
 <span class="nt">&lt;configuration&gt;</span>
     ...
@@ -548,7 +559,7 @@ This leverages the <a href="http://www.slatekit.com/utils/logs" >logs</a> compon
 
 <p>Configuration settings are supported via normal Java Properties files stored in the <strong>resources</strong> folder.
 Configuration settings existing based on the names of the environments setup ( see above ).
-This leverages the <a href="http://www.slatekit.com/utils/conf" >conf</a> component.</p>
+This leverages the <a href="http://www.slatekit.com/utils/config" >Config</a> component.</p>
 
 <h4 id="env-conf">env.conf</h4>
 
@@ -576,7 +587,7 @@ You can specify the environment to load by setting <strong>env = name</strong>
 
 <p>The application supports typing  <strong>-version</strong>,  <strong>-about</strong> and <strong>-help</strong> after your apps executable/jar.
 This will display info about the app and usage of command line args.
-This leverages the <a href="http://www.slatekit.com/utils/args" >args</a> component.
+This leverages the <a href="http://www.slatekit.com/utils/args" >Args</a> component.
 <div class="highlight"><pre class="chroma"><code class="language-bash" data-lang="bash">myapp -help
 
  <span class="o">==============================================</span>
@@ -614,7 +625,7 @@ This leverages the <a href="http://www.slatekit.com/utils/args" >args</a> compon
 <p>The is an application context that stores all relevant info about the application such as the command line args,
 config, logs, encryptor, info about the app and more. You have access to this with in your app.
 This can be either built up automatically by the application or you can supply it explicitly.
-This leverages the <a href="http://www.slatekit.com/arch/context" >context</a> component. Here is an example of an explictly built context.
+This leverages the <a href="arch/context" >Context</a> component. Here is an example of an explictly built context.
 <div class="highlight"><pre class="chroma"><code class="language-kotlin" data-lang="kotlin">    <span class="c1">// Build explicitly
 </span><span class="c1"></span>    <span class="k">val</span> <span class="py">ctx1</span> <span class="p">=</span> <span class="n">AppEntContext</span><span class="p">(</span>
             <span class="n">arg</span> <span class="p">=</span> <span class="n">Args</span><span class="p">.</span><span class="n">default</span><span class="p">(),</span>
@@ -686,7 +697,7 @@ You can use these template methods to insert your pre execution, execution, and 
 <h2 id="Info">Info</h2>
 
 <p>The component can print diagnostic info during the start and end of your application life-cycle.
-This leverages the all the existing <a href="http://www.slatekit.com/utils/args" >args</a>, <a href="http://www.slatekit.com/utils/env" >env</a>, <a href="http://www.slatekit.com/utils/conf" >conf</a>
+This leverages the all the existing <a href="http://www.slatekit.com/utils/args" >Args</a>, <a href="http://www.slatekit.com/utils/env" >Env</a>, <a href="http://www.slatekit.com/utils/config" >Config</a>
 components list earlier.
 <div class="highlight"><pre class="chroma"><code class="language-bash" data-lang="bash"> Info  : app executing now
  Info  : app completed
@@ -730,13 +741,13 @@ components list earlier.
 
 <br/><br/><br/></p>
 
-<h1 id="how-to-s">How to&rsquo;s</h1>
+<h1 id="more">More</h1>
 
-<p>Coming later, but you can reach us at <a href="https://github.com/code-helix/slatekit" >git</a>
-<br/><br/><br/>
+<p>More docs coming later, but you can reach us at <a href="https://github.com/code-helix/slatekit" >git</a>
+<br/>
 
 <a href="arch/app#overview" class="sk-back-to-top">Back to top </a>
-<br/><br/></p>
+<br/><br/><br/><br/></p>
 
       </div>
     </section>  

@@ -41,7 +41,7 @@
     <link rel="stylesheet" href="assets/app/app.css">
 
 
-    <title>Slate Kit: Info</title>
+    <title>Slate Kit: Apis</title>
 </head>
 
 <body>
@@ -105,12 +105,16 @@
         </a>
         <ul class="dropdown-menu" aria-labelledby="menu-1">
             <li><a class="dropdown-item" href="arch/overview">Overview</a></li>
+            <li><a class="dropdown-item" href="">-------------------</a></li>
             <li><a class="dropdown-item" href="arch/results">Results</a></li>
             <li><a class="dropdown-item" href="arch/context">Context</a></li>
+            <li><a class="dropdown-item" href="">-------------------</a></li>
             <li><a class="dropdown-item" href="arch/app">App</a></li>
-            <li><a class="dropdown-item" href="arch/apis">APIs</a></li>
+            <li><a class="dropdown-item" href="arch/apis">API</a></li>
             <li><a class="dropdown-item" href="arch/cli">CLI</a></li>
             <li><a class="dropdown-item" href="arch/jobs">Jobs</a></li>
+            <li><a class="dropdown-item" href="">-------------------</a></li>
+            <li><a class="dropdown-item" href="arch/overview">More...</a></li>
         </ul>
     </li>
     <li class="nav-item">
@@ -159,12 +163,46 @@
 
 <h1 id="overview">Overview</h1>
 
-<p>Describe this {COMPONENT_NAME} concisely in 2-3 sentences.
+<p>Slate Kit uses a somewhat new, yet familiar paradigm to building out APIs by enriching normal Kotlin methods and making them easily discoverable and accessible across as range of hosts. This will resemble an <strong>RPC</strong> type approach, but contains some support ad concepts from <strong>REST</strong>. More specifically, APIs in Slate Kit can be hosted and made available as Web/HTTP APIs, on the CLI, or called from requests from queues or files for automation purposes. Under the hood, Slate Kit simply leverages existing HTTP servers ( currently <strong>Ktor</strong> ), to host, discover, manage, and access Slate Kit APIs. Our <a href="arch/cli" >CLI</a> also supports the ability to host Slate Kit APIs. This specific approach to API development in Slate Kit is referred to as <strong>Universal APIs</strong>.
 <br/><br/></p>
+
+<h1 id="create">Create</h1>
+
+<div class="highlight"><pre class="chroma"><code class="language-bash" data-lang="bash">    
+    slatekit new api -name<span class="o">=</span><span class="s2">&#34;SampleAPI&#34;</span> -package<span class="o">=</span><span class="s2">&#34;mycompany.apps&#34;</span>
+    </code></pre></div>
+
+<p><div class="alert alert-warning" role="alert">
+  You can download the Slate Kit CLI tools 
+  <a href="https://github.com/code-helix/slatekit/tree/master/src/tools/cli" >here</a>
+</div>
+<br/><br/></p>
+
+<h1 id="goals">Goals</h1>
+
+<table class="table table-bordered table-striped">
+    <tr>
+        <td><strong>Goal</strong></td>
+        <td><strong>Description</strong></td>
+    </tr>
+    <tr>
+        <td><strong>1. Accessable</strong></td>
+        <td><strong>Write once</strong> and have APIs hosted and/or run anywhere ( e.g. <strong>Web, CLI, File/Queue</strong> sources )</td>
+    </tr>
+    <tr>
+        <td><strong>2. Discoverable</strong> </td>
+        <td>Folder like heirarchical and drill-down discovery of APIS using a <strong>3 part routing format { area / api / action }</strong></td>                     
+    </tr>
+    <tr>
+        <td><strong>3. Natural</strong></td>
+        <td>Allow <strong>normal methods</strong> to be easily turned to API actions with <strong>strong types</strong> and <strong>automatic docs</strong> and accurate <a href="arch/results" >Results</a></td>
+    </tr>
+</table>
+
+<br/><br/>
 
 <h1 id="index">Index</h1>
 
-<p>Table of contents for this page
 <table class="table table-bordered table-striped">
     <tr>
         <td><strong>Section</strong></td>
@@ -173,66 +211,88 @@
     </tr>
     <tr>
         <td><strong>1</strong></td>
-        <td><strong><a class="url-ch" href="core/cli#status">Status</a></strong></td>
+        <td><strong><a class="url-ch" href="arch/apis#status">Status</a></strong></td>
         <td>Current status of this component</td>
     </tr>
     <tr>
         <td><strong>2</strong></td>
-        <td><strong><a class="url-ch" href="core/cli#install">Install</a></strong></td>
+        <td><strong><a class="url-ch" href="arch/apis#install">Install</a></strong></td>
         <td>Installation instructions and references to sources</td>
     </tr>
     <tr>
         <td><strong>3</strong></td>
-        <td><strong><a class="url-ch" href="core/cli#requires">Requires</a></strong></td>
+        <td><strong><a class="url-ch" href="arch/apis#requires">Requires</a></strong></td>
         <td>Lists all the Slate Kit and third-party dependencies</td>
     </tr>
     <tr>
         <td><strong>4</strong></td>
-        <td><strong><a class="url-ch" href="core/cli#sample">Sample</a></strong></td>
+        <td><strong><a class="url-ch" href="arch/apis#sample">Sample</a></strong></td>
         <td>Quick sample to show usage of the component</td>
     </tr>
     <tr>
         <td><strong>5</strong></td>
-        <td><strong><a class="url-ch" href="core/cli#goals">Goals</a></strong></td>
+        <td><strong><a class="url-ch" href="arch/apis#goals">Goals</a></strong></td>
         <td>Goals of this component and the problems it attempts to solve</td>
     </tr>
     <tr>
         <td><strong>6</strong></td>
-        <td><strong><a class="url-ch" href="core/cli#concepts">Concepts</a></strong></td>
+        <td><strong><a class="url-ch" href="arch/apis#concepts">Concepts</a></strong></td>
         <td>Core concepts to understand in this component</td>
     </tr>
     <tr>
         <td><strong>7</strong></td>
-        <td><strong><a class="url-ch" href="core/cli#features">Features</a></strong></td>
+        <td><strong><a class="url-ch" href="arch/apis#features">Features</a></strong></td>
         <td>List all the features supported</td>
     </tr>
     <tr>
         <td><strong>8</strong></td>
-        <td><strong><a class="url-ch" href="core/cli#setup">Setup</a></strong></td>
+        <td><strong><a class="url-ch" href="arch/apis#setup">Setup</a></strong></td>
         <td>Set up and configure this component for use</td>
     </tr>
     <tr>
         <td><strong>9</strong></td>
-        <td><strong><a class="url-ch" href="core/cli#details">Details</a></strong></td>
+        <td><strong><a class="url-ch" href="arch/apis#details">Details</a></strong></td>
         <td>In-depth examples of the supported features</td>
+    </tr>
+</table>
+
+<br/>
+
+<a href="arch/apis#overview" class="sk-back-to-top">Back to top </a>
+<br/><br/><br/><br/>
+
+<h1 id="status">Status</h1>
+
+<p>This component is currently stable and uses JetBrains <strong>Ktor</strong> as the underlying HTTP server for hosting Slate Kit APIs as Web/HTTP APIs.
+<table class="table table-bordered table-striped">
+    <tr>
+        <td><strong>Feature</strong></td>
+        <td><strong>Status</strong></td>
+        <td><strong>Description</strong></td>
+    </tr>
+    <tr>
+        <td><strong>Open-API</strong></td>
+        <td>Upcoming</td>
+        <td>Auto-generate Open-APIs docs from Actions</td>
+    </tr>
+    <tr>
+        <td><strong>Postman</strong></td>
+        <td>Upcoming</td>
+        <td>Auto-generate Postman scripts from Actions</td>
+    </tr>
+    <tr>
+        <td><strong>Streaming</strong></td>
+        <td>Upcoming</td>
+        <td>Support for streaming</td>
     </tr>
 </table>
 <br/>
 
-<a href="core/cli#overview" class="sk-back-to-top">Back to top </a>
-<br/><br/><br/><br/></p>
-
-<h1 id="status">Status</h1>
-
-<p>coming soon
-<br/>
-
-<a href="core/cli#overview" class="sk-back-to-top">Back to top </a>
+<a href="arch/apis#overview" class="sk-back-to-top">Back to top </a>
 <br/><br/><br/><br/></p>
 
 <h1 id="install">Install</h1>
 
-<p>coming soon
 <div class="highlight"><pre class="chroma"><code class="language-groovy" data-lang="groovy">    <span class="n">repositories</span> <span class="o">{</span>
         <span class="c1">// other repositories
 </span><span class="c1"></span>        <span class="n">maven</span> <span class="o">{</span> <span class="n">url</span>  <span class="s2">&#34;http://dl.bintray.com/codehelixinc/slatekit&#34;</span> <span class="o">}</span>
@@ -241,25 +301,26 @@
     <span class="n">dependencies</span> <span class="o">{</span>
         <span class="c1">// other dependencies ...
 </span><span class="c1"></span>
-        <span class="n">compile</span> <span class="s1">&#39;com.slatekit:slatekit-{COMPONENT_ID}:0.9.9&#39;</span>
+        <span class="n">compile</span> <span class="s1">&#39;com.slatekit:slatekit-apis:1.0.0&#39;</span>
     <span class="o">}</span></code></pre></div>
+
 
 <table class="table table-bordered table-striped">
   <tr>
     <td><strong>package</strong></td>
-    <td>slatekit.app</td>
+    <td>slatekit.apis</td>
   </tr>
   <tr>
     <td><strong>jar</strong></td>
-    <td>slatekit.app.jar</td>
+    <td>slatekit.apis.jar</td>
   </tr>
   <tr>
     <td><strong>git</strong></td>
-    <td><a class="url-ch" href="https://github.com/code-helix/slatekit/tree/master/src/lib/kotlin/slatekit-app">slatekit/src/lib/kotlin/slatekit-app</a></td>
+    <td><a class="url-ch" href="https://github.com/code-helix/slatekit/tree/master/src/lib/kotlin/slatekit-apis/src/main/kotlin/slatekit/apis">slatekit/src/lib/kotlin/slatekit-apis</a></td>
   </tr>
   <tr>
     <td><strong>docs</strong></td>
-    <td><a class="url-ch" href="core/app">App</a></td>
+    <td><a class="url-ch" href="arch/apis">APIs</a></td>
   </tr>
   <tr>
     <td><strong>uses</strong></td>
@@ -271,13 +332,14 @@
   </tr>
   <tr>
       <td><strong>example</strong></td>
-      <td><a class="url-ch" href="">Example_App.kt</a></td>
+      <td><a class="url-ch" href="https://github.com/code-helix/slatekit/tree/master/src/lib/kotlin/slatekit-examples/src/main/kotlin/slatekit/examples/Example_APIs.kt">Example_APIs.kt</a></td>
   </tr>
 </table>
+
 <br/>
 
-<a href="core/cli#overview" class="sk-back-to-top">Back to top </a>
-<br/><br/><br/><br/></p>
+<a href="arch/apis#overview" class="sk-back-to-top">Back to top </a>
+<br/><br/><br/><br/>
 
 <h1 id="requires">Requires</h1>
 
@@ -295,78 +357,87 @@
         <td><a class="url-ch" href="utils/utils.html">Slate Kit - Common</a></td>
         <td>Common utilities for both android + server</td>
     </tr>
-</table>
+</table></p>
+
 <br/>
 
-<a href="core/cli#overview" class="sk-back-to-top">Back to top </a>
-<br/><br/><br/><br/></p>
+<a href="arch/apis#overview" class="sk-back-to-top">Back to top </a>
+<br/><br/><br/><br/>
 
 <h1 id="sample">Sample</h1>
 
-<p>coming soon
-<div class="highlight"><pre class="chroma"><code class="language-kotlin" data-lang="kotlin">    <span class="k">fun</span> <span class="nf">quick_sample</span><span class="p">()</span> <span class="p">{</span>
-        
-    <span class="p">}</span></code></pre></div>
+<p>This is a quick and simple example of creating an API using the Slate Kit <strong>Universal API paradigm</strong>.
+<div class="alert alert-warning" role="alert">
+  TIP: Slate Kit APIs have a 3 part routing convention: {AREA} / {API} / {ACTION}
+</div>
+<div class="highlight"><pre class="chroma"><code class="language-kotlin" data-lang="kotlin">      
+    <span class="k">import</span> <span class="nn">slatekit.apis.*</span>
+    <span class="k">import</span> <span class="nn">slatekit.common.DateTime</span>
+    <span class="k">import</span> <span class="nn">slatekit.common.Request</span>
+
+    <span class="n">@Api</span><span class="p">(</span><span class="n">area</span> <span class="p">=</span> <span class="s">&#34;app&#34;</span><span class="p">,</span> <span class="n">name</span> <span class="p">=</span> <span class="s">&#34;movies&#34;</span><span class="p">,</span> <span class="n">desc</span> <span class="p">=</span> <span class="s">&#34;Create and manage movies&#34;</span><span class="p">,</span> <span class="n">auth</span> <span class="p">=</span> <span class="n">AuthModes</span><span class="p">.</span><span class="n">NONE</span><span class="p">)</span>
+    <span class="k">class</span> <span class="nc">MovieApi</span> <span class="p">{</span>
+        <span class="c1">// Using explicit fields
+</span><span class="c1"></span>        <span class="n">@Action</span><span class="p">()</span>
+        <span class="k">fun</span> <span class="nf">createSample</span><span class="p">(</span><span class="n">title</span><span class="p">:</span><span class="n">String</span><span class="p">,</span> <span class="n">playing</span><span class="p">:</span><span class="n">Boolean</span><span class="p">,</span> <span class="n">cost</span><span class="p">:</span><span class="n">Int</span><span class="p">,</span> <span class="n">released</span><span class="p">:</span> <span class="n">DateTime</span><span class="p">):</span><span class="n">Movie</span> <span class="p">{</span>
+            <span class="k">return</span> <span class="n">Movie</span><span class="p">.</span><span class="n">of</span><span class="p">(</span><span class="n">title</span><span class="p">,</span> <span class="n">playing</span><span class="p">,</span> <span class="n">cost</span><span class="p">,</span> <span class="n">released</span><span class="p">)</span>
+        <span class="p">}</span>
+
+        <span class="c1">// Using request object
+</span><span class="c1"></span>        <span class="n">@Action</span><span class="p">()</span>
+        <span class="k">fun</span> <span class="nf">createWithRequest</span><span class="p">(</span><span class="n">req</span><span class="p">:</span><span class="n">Request</span><span class="p">):</span><span class="n">Movie</span> <span class="p">{</span>
+            <span class="k">return</span> <span class="n">Movie</span><span class="p">.</span><span class="n">of</span><span class="p">(</span><span class="n">req</span><span class="p">.</span><span class="n">getString</span><span class="p">(</span><span class="s">&#34;title&#34;</span><span class="p">),</span> <span class="n">req</span><span class="p">.</span><span class="n">getBool</span><span class="p">(</span><span class="s">&#34;playing&#34;</span><span class="p">),</span> <span class="n">req</span><span class="p">.</span><span class="n">getInt</span><span class="p">(</span><span class="s">&#34;cost&#34;</span><span class="p">),</span> <span class="n">req</span><span class="p">.</span><span class="n">getDateTime</span><span class="p">(</span><span class="s">&#34;released&#34;</span><span class="p">))</span>
+        <span class="p">}</span>
+    <span class="p">}</span></code></pre></div></p>
+
+<h3 id="web">Web</h3>
+
+<p>You can then access this API on the Web with a request like this:
+<div class="highlight"><pre class="chroma"><code class="language-kotlin" data-lang="kotlin">     
+     <span class="c1">// Similar to JSON RPC
+</span><span class="c1"></span>     <span class="n">POST</span> <span class="n">localhost</span><span class="p">:</span><span class="m">5000</span><span class="p">/</span><span class="n">app</span><span class="p">/</span><span class="n">movies</span><span class="p">/</span><span class="n">createSample</span> 
+     <span class="p">{</span>
+        <span class="s">&#34;title&#34;</span><span class="p">:</span> <span class="s">&#34;Dark Knight&#34;</span><span class="p">,</span>
+        <span class="s">&#34;playing&#34;</span><span class="p">:</span> <span class="k">true</span><span class="p">,</span>
+        <span class="s">&#34;cost&#34;</span> <span class="p">:</span> <span class="m">12.50</span><span class="p">,</span>
+        <span class="s">&#34;released&#34;</span><span class="p">:</span> <span class="s">&#34;2018-07-18T00:00:00Z&#34;</span>
+     <span class="p">}</span></code></pre></div></p>
+
+<h3 id="cli">CLI</h3>
+
+<p>You can then access this API on the CLI by hosting it in the Slate Kit CLI component.
+The request would like this:
+<div class="highlight"><pre class="chroma"><code class="language-kotlin" data-lang="kotlin">     
+     <span class="p">:&gt;</span> <span class="n">app</span><span class="p">.</span><span class="n">movies</span><span class="p">.</span><span class="n">createSample</span> <span class="p">-</span><span class="n">title</span><span class="p">=</span><span class="s">&#34;Dark Knight&#34;</span> <span class="p">-</span><span class="n">playing</span><span class="p">=</span><span class="k">true</span> <span class="p">-</span><span class="n">cost</span><span class="p">=</span><span class="m">12.50</span> <span class="p">-</span><span class="n">released</span><span class="p">=</span><span class="s">&#34;2018-07-18T00:00:00Z&#34;</span>
+      </code></pre></div></p>
+
+<h3 id="file">File</h3>
+
+<p>You can then access this API on the Web with a request like this:
+<div class="highlight"><pre class="chroma"><code class="language-kotlin" data-lang="kotlin">     <span class="c1">// Assume file is ~/dev/slatekit/samples/apis/file-sample.json
+</span><span class="c1"></span>     <span class="p">{</span>
+        <span class="s">&#34;path&#34;</span><span class="p">:</span> <span class="s">&#34;/app/movies/createSample&#34;</span><span class="p">,</span>
+        <span class="s">&#34;source&#34;</span><span class="p">:</span> <span class="s">&#34;file&#34;</span><span class="p">,</span>
+        <span class="s">&#34;version&#34;</span><span class="p">:</span> <span class="s">&#34;1.0&#34;</span><span class="p">,</span>
+        <span class="s">&#34;tag&#34;</span> <span class="p">:</span> <span class="s">&#34;&#34;</span><span class="p">,</span>
+        <span class="s">&#34;timestamp&#34;</span><span class="p">:</span> <span class="k">null</span><span class="p">,</span>
+        <span class="s">&#34;meta&#34;</span><span class="p">:</span> <span class="p">{</span> <span class="p">}</span>
+        <span class="s">&#34;data&#34;</span><span class="p">:</span> <span class="p">{</span>
+            <span class="s">&#34;title&#34;</span><span class="p">:</span> <span class="s">&#34;Dark Knight&#34;</span><span class="p">,</span>
+            <span class="s">&#34;playing&#34;</span><span class="p">:</span> <span class="k">true</span><span class="p">,</span>
+            <span class="s">&#34;cost&#34;</span> <span class="p">:</span> <span class="m">12.50</span><span class="p">,</span>
+            <span class="s">&#34;released&#34;</span><span class="p">:</span> <span class="s">&#34;2018-07-18T00:00:00Z&#34;</span>
+         <span class="p">}</span>
+     <span class="p">}</span>
+      </code></pre></div></p>
+
 <br/>
 
-<a href="core/cli#overview" class="sk-back-to-top">Back to top </a>
-<br/><br/><br/><br/></p>
-
-<h1 id="goals">Goals</h1>
-
-<p>coming soon
-<table class="table table-bordered table-striped">
-    <tr>
-        <td><strong>Goal</strong></td>
-        <td><strong>Description</strong></td>
-    </tr>
-    <tr>
-        <td><strong>1. Goal A</strong></td>
-        <td>Description of goal</td>
-    </tr>
-    <tr>
-        <td><strong>2. Goal B</strong> </td>
-        <td>Description of goal</td><br />
-    </tr>
-    <tr>
-        <td><strong>3. Goal C</strong></td>
-        <td>Description of goal</td>
-    </tr>
-</table>
-<br/>
-
-<a href="core/cli#overview" class="sk-back-to-top">Back to top </a>
-<br/><br/><br/><br/></p>
-
-<h1 id="concepts">Concepts</h1>
-
-<p>coming soon
-<table class="table table-bordered table-striped">
-    <tr>
-        <td><strong>Concept</strong></td>
-        <td><strong>Description</strong></td>
-    </tr>
-    <tr>
-        <td><strong>1. Concept A</strong></td>
-        <td>Description of concept</td>
-    </tr>
-    <tr>
-        <td><strong>2. Concept B</strong> </td>
-        <td>Description of concept</td><br />
-    </tr>
-    <tr>
-        <td><strong>3. Concept C</strong></td>
-        <td>Description of concept</td>
-    </tr>
-</table>
-<br/>
-
-<a href="core/cli#overview" class="sk-back-to-top">Back to top </a>
-<br/><br/><br/><br/></p>
+<a href="arch/apis#overview" class="sk-back-to-top">Back to top </a>
+<br/><br/><br/><br/>
 
 <h1 id="features">Features</h1>
 
-<p>coming soon
 <table class="table table-bordered table-striped">
     <tr>
         <td><strong>Name</strong></td>
@@ -374,71 +445,498 @@
         <td><strong>More</strong></td>
     </tr>
     <tr>
-        <td><strong>1. Feature A</strong></td>
+        <td><strong>1. Setup</strong></td>
         <td>Description of feature</td>
-        <td><a href="arch/app/#feature1" class="more"><span class="btn btn-primary">more</span></a></td>
+        <td><a href="arch/apis/#setup" class="more"><span class="btn btn-primary">more</span></a></td>
     </tr>
     <tr>
-        <td><strong>2. Feature B</strong> </td>
-        <td>Description of feature</td>
-        <td><a href="arch/app/#feature2" class="more"><span class="btn btn-primary">more</span></a></td><br />
+        <td><strong>2. Routes</strong> </td>
+        <td>How routes work actions are called</td> 
+        <td><a href="arch/apis/#routes" class="more"><span class="btn btn-primary">more</span></a></td>                    
     </tr>
     <tr>
-        <td><strong>3. Feature C</strong></td>
-        <td>Description of feature</td>
-        <td><a href="arch/app/#feature3" class="more"><span class="btn btn-primary">more</span></a></td>
+        <td><strong>3. Config</strong></td>
+        <td>Configuration options including auth, verbs, sources and more </td>
+        <td><a href="arch/apis/#config" class="more"><span class="btn btn-primary">more</span></a></td>
+    </tr>
+    <tr>
+        <td><strong>4. Requests</strong></td>
+        <td>How to handle requests and parameters</td>
+        <td><a href="arch/apis/#requests" class="more"><span class="btn btn-primary">more</span></a></td>
+    </tr>
+    <tr>
+        <td><strong>5. Responses</strong></td>
+        <td>How to return responses</td>
+        <td><a href="arch/apis/#responses" class="more"><span class="btn btn-primary">more</span></a></td>
+    </tr>
+    <tr>
+        <td><strong>6. Errors</strong></td>
+        <td>Modeling of successes, failures and dealing with status codes</td>
+        <td><a href="arch/apis/#errors" class="more"><span class="btn btn-primary">more</span></a></td>
+    </tr>
+    <tr>
+        <td><strong>7. Middleware</strong></td>
+        <td>Incorporate middle ware globally or per API</td>
+        <td><a href="arch/apis/#middleware" class="more"><span class="btn btn-primary">more</span></a></td>
+    </tr>
+    <tr>
+        <td><strong>8. Web</strong></td>
+        <td>How to make APIs hosted in a Web Server (Ktor)</td>
+        <td><a href="arch/apis/#web" class="more"><span class="btn btn-primary">more</span></a></td>
+    </tr>
+    <tr>
+        <td><strong>9. CLI</strong></td>
+        <td>How to make APIs hosted in a CLI ( Slate Kit CLI )</td>
+        <td><a href="arch/apis/#cli" class="more"><span class="btn btn-primary">more</span></a></td>
+    </tr>
+    <tr>
+        <td><strong>10. Files</strong></td>
+        <td>How to handle requests from Files</td>
+        <td><a href="arch/apis/#files" class="more"><span class="btn btn-primary">more</span></a></td>
+    </tr>
+    <tr>
+        <td><strong>11. REST</strong></td>
+        <td>How to set up partial REST compatible actions</td>
+        <td><a href="arch/apis/#rest" class="more"><span class="btn btn-primary">more</span></a></td>
     </tr>
 </table>
-<br/>
-
-<a href="core/cli#overview" class="sk-back-to-top">Back to top </a>
-<br/><br/><br/><br/></p>
-
-<h2 id="feature1">Feature 1</h2>
-
-<p>coming soon
-<div class="highlight"><pre class="chroma"><code class="language-kotlin" data-lang="kotlin">    <span class="k">fun</span> <span class="nf">setup</span><span class="p">()</span> <span class="p">{</span>
-        
-    <span class="p">}</span></code></pre></div>
-
-
-
-<a href="core/cli#features" class="sk-back-to-details">Back to features</a>
-<a href="core/cli#overview" class="sk-back-to-top">Back to top </a>
-
-<br/><br/><br/></p>
-
-<h2 id="feature2">Feature 2</h2>
-
-<p>coming soon
-<div class="highlight"><pre class="chroma"><code class="language-kotlin" data-lang="kotlin">    <span class="k">fun</span> <span class="nf">setup</span><span class="p">()</span> <span class="p">{</span>
-        
-    <span class="p">}</span></code></pre></div>
-
-
-
-<a href="core/cli#features" class="sk-back-to-details">Back to features</a>
-<a href="core/cli#overview" class="sk-back-to-top">Back to top </a>
-
-<br/><br/><br/></p>
-
-<h2 id="feature3">Feature 3</h2>
-
-<p>coming soon
-<div class="highlight"><pre class="chroma"><code class="language-kotlin" data-lang="kotlin">    <span class="k">fun</span> <span class="nf">setup</span><span class="p">()</span> <span class="p">{</span>
-        
-    <span class="p">}</span></code></pre></div>
-
-
-
-<a href="core/cli#features" class="sk-back-to-details">Back to features</a>
-<a href="core/cli#overview" class="sk-back-to-top">Back to top </a>
-
-<br/><br/><br/></p>
 
 <br/>
 
-<a href="core/cli#overview" class="sk-back-to-top">Back to top </a>
+<a href="arch/apis#overview" class="sk-back-to-top">Back to top </a>
+<br/><br/><br/><br/>
+
+<h2 id="setup">Setup</h2>
+
+<p>APIs are developed as normal Kotlin methods. The only difference is that they are enriched with annotations ( <strong>optional</strong> ) to provided metadata to the API Server indicated how they should be accessed and managed.
+<div class="alert alert-warning" role="alert">
+  TIP: Annotations can be avoided and instead the configurations can be explicitly supplied during registration of the APIs into the API server ( see web/cli sections below for setting up the server)
+</div>
+<div class="highlight"><pre class="chroma"><code class="language-kotlin" data-lang="kotlin">      
+    <span class="k">import</span> <span class="nn">slatekit.apis.*</span>
+    <span class="k">import</span> <span class="nn">slatekit.common.DateTime</span>
+    <span class="k">import</span> <span class="nn">slatekit.common.Request</span>
+
+    <span class="n">@Api</span><span class="p">(</span><span class="n">area</span> <span class="p">=</span> <span class="s">&#34;manage&#34;</span><span class="p">,</span> <span class="n">name</span> <span class="p">=</span> <span class="s">&#34;movies&#34;</span><span class="p">,</span> <span class="n">desc</span> <span class="p">=</span> <span class="s">&#34;Create and manage movies&#34;</span><span class="p">,</span> <span class="n">auth</span> <span class="p">=</span> <span class="n">AuthModes</span><span class="p">.</span><span class="n">NONE</span><span class="p">)</span>
+    <span class="k">class</span> <span class="nc">MovieApi</span> <span class="p">{</span>
+        <span class="c1">// Using explicit fields
+</span><span class="c1"></span>        <span class="n">@Action</span><span class="p">()</span>
+        <span class="k">fun</span> <span class="nf">createSample</span><span class="p">(</span><span class="n">title</span><span class="p">:</span><span class="n">String</span><span class="p">,</span> <span class="n">playing</span><span class="p">:</span><span class="n">Boolean</span><span class="p">,</span> <span class="n">cost</span><span class="p">:</span><span class="n">Int</span><span class="p">,</span> <span class="n">released</span><span class="p">:</span> <span class="n">DateTime</span><span class="p">):</span><span class="n">Movie</span> <span class="p">{</span>
+            <span class="k">return</span> <span class="n">Movie</span><span class="p">.</span><span class="n">of</span><span class="p">(</span><span class="n">title</span><span class="p">,</span> <span class="n">playing</span><span class="p">,</span> <span class="n">cost</span><span class="p">,</span> <span class="n">released</span><span class="p">)</span>
+        <span class="p">}</span>
+
+        <span class="c1">// Using request object
+</span><span class="c1"></span>        <span class="n">@Action</span><span class="p">()</span>
+        <span class="k">fun</span> <span class="nf">createWithRequest</span><span class="p">(</span><span class="n">req</span><span class="p">:</span><span class="n">Request</span><span class="p">):</span><span class="n">Movie</span> <span class="p">{</span>
+            <span class="k">return</span> <span class="n">Movie</span><span class="p">.</span><span class="n">of</span><span class="p">(</span><span class="n">req</span><span class="p">.</span><span class="n">getString</span><span class="p">(</span><span class="s">&#34;title&#34;</span><span class="p">),</span> <span class="n">req</span><span class="p">.</span><span class="n">getBool</span><span class="p">(</span><span class="s">&#34;playing&#34;</span><span class="p">),</span> <span class="n">req</span><span class="p">.</span><span class="n">getInt</span><span class="p">(</span><span class="s">&#34;cost&#34;</span><span class="p">),</span> <span class="n">req</span><span class="p">.</span><span class="n">getDateTime</span><span class="p">(</span><span class="s">&#34;released&#34;</span><span class="p">))</span>
+        <span class="p">}</span>
+    <span class="p">}</span></code></pre></div>
+
+
+
+<a href="arch/apis#features" class="sk-back-to-details">Back to features</a>
+<a href="arch/apis#overview" class="sk-back-to-top">Back to top </a>
+
+<br/><br/><br/></p>
+
+<h2 id="routes">Routes</h2>
+
+<p>API routes consist of a <strong>3 part ( {AREA} / {API} / {ACTION} ) routing convention</strong> to enfore standards and simply the discovery of the routes.
+<div class="alert alert-warning" role="alert">
+  TIP: Sample: /manage/movies/createSample
+</div>
+<table class="table table-bordered table-striped">
+    <tr>
+        <td><strong>Part</strong></td>
+        <td><strong>Example</strong></td>
+        <td><strong>Note</strong></td>
+    </tr>
+    <tr>
+        <td><strong>AREA</strong></td>
+        <td>manage</td>
+        <td>Represents a logical grouping of 1 or more APIs</td>
+    </tr>
+    <tr>
+        <td><strong>API</strong></td>
+        <td>movies</td>
+        <td>Represents an actual API associated with a Kotlin class</td>
+    </tr>
+    <tr>
+        <td><strong>ACTION</strong></td>
+        <td>createSample</td>
+        <td>Represents an action/endpoint on an API, and maps to a Kotlin method</td>
+    </tr>
+</table>
+<div class="highlight"><pre class="chroma"><code class="language-kotlin" data-lang="kotlin">     
+     <span class="n">POST</span> <span class="n">localhost</span><span class="p">:</span><span class="m">5000</span><span class="p">/</span><span class="n">manage</span><span class="p">/</span><span class="n">movies</span><span class="p">/</span><span class="n">createSample</span> 
+     <span class="p">{</span>
+        <span class="s">&#34;title&#34;</span><span class="p">:</span> <span class="s">&#34;Dark Knight&#34;</span><span class="p">,</span>
+        <span class="s">&#34;playing&#34;</span><span class="p">:</span> <span class="k">true</span><span class="p">,</span>
+        <span class="s">&#34;cost&#34;</span> <span class="p">:</span> <span class="m">12.50</span><span class="p">,</span>
+        <span class="s">&#34;released&#34;</span><span class="p">:</span> <span class="s">&#34;2018-07-18T00:00:00Z&#34;</span>
+     <span class="p">}</span></code></pre></div>
+
+
+
+<a href="arch/apis#features" class="sk-back-to-details">Back to features</a>
+<a href="arch/apis#overview" class="sk-back-to-top">Back to top </a>
+
+<br/><br/><br/></p>
+
+<h2 id="config">Config</h2>
+
+<p>There are several annotation properties available to configure APIs and Actions.</p>
+
+<h3 id="api">API</h3>
+
+<p>These are all the properties for the <strong>@Api</strong> annotation to put on a class to indicate it should be accessable as an Api.
+<table class="table table-bordered table-striped">
+    <tr>
+        <td><strong>Type</strong></td>
+        <td><strong>Name</strong></td>
+        <td><strong>Required</strong></td>
+        <td><strong>Purpose</strong></td>
+        <td><strong>Example</strong></td>
+    </tr>
+    <tr>
+        <td><strong>@Api</strong></td>
+        <td><strong>area</strong></td>
+        <td><strong>Required</strong></td>
+        <td>Represents the logical area of the API</td>
+        <td>manage</td>
+    </tr>
+    <tr>
+        <td><strong>-</strong></td>
+        <td><strong>name<strong></td>
+        <td><strong>Required</strong></td>
+        <td>Represents the name of this API</td>
+        <td>movies</td>
+    </tr>
+    <tr>
+        <td><strong>-</strong></td>
+        <td><strong>desc</strong></td>
+        <td>Optional</td>
+        <td>Description of the API</td>
+        <td>Manages movies</td>
+    </tr>
+    <tr>
+        <td><strong>-</strong></td>
+        <td><strong>auth</strong></td>
+        <td>Optional</td>
+        <td>Specifies how the authentication should work</td>
+        <td><a href="https://github.com/code-helix/slatekit/tree/master/src/lib/kotlin/slatekit-apis/src/main/kotlin/slatekit/apis/AuthMode.kt" >AuthMode.kt</a></td>
+    </tr>
+    <tr>
+        <td><strong>-</strong></td>
+        <td><strong>roles</strong></td>
+        <td>Optional</td>
+        <td>List of roles allowed to access this API</td>
+        <td><a href="https://github.com/code-helix/slatekit/tree/master/src/lib/kotlin/slatekit-common/src/main/kotlin/slatekit/common/auth/Roles.kt" >Roles.kt</a></td>
+    </tr>
+    <tr>
+        <td><strong>-</strong></td>
+        <td><strong>access</strong></td>
+        <td>Optional</td>
+        <td>Desribes visibility of the API</td>
+        <td><a href="https://github.com/code-helix/slatekit/tree/master/src/lib/kotlin/slatekit-apis/src/main/kotlin/slatekit/apis/Access.kt" >Access.kt</a></td>
+    </tr>
+    <tr>
+        <td><strong>-</strong></td>
+        <td><strong>verb</strong></td>
+        <td>Optional</td>
+        <td>Desribes how the Verbs should be handled </td>
+        <td><a href="https://github.com/code-helix/slatekit/tree/master/src/lib/kotlin/slatekit-apis/src/main/kotlin/slatekit/apis/Verbs.kt" >Verbs.kt</a></td>
+    </tr>
+    <tr>
+        <td><strong>-</strong></td>
+        <td><strong>sources</strong></td>
+        <td>Optional</td>
+        <td>Indicates where this API can handle requests from</td>
+        <td><a href="https://github.com/code-helix/slatekit/tree/master/src/lib/kotlin/slatekit-common/src/main/kotlin/slatekit/common/Sources.kt" >Sources.kt</a></td>
+    </tr>
+</table></p>
+
+<h3 id="action">Action</h3>
+
+<p>These are all the properties for the <strong>@Action</strong> annotation to be put on methods to indicate it should be available as an action/endpoint
+<table class="table table-bordered table-striped">
+    <tr>
+        <td><strong>@Action</strong></td>
+        <td><strong>area<strong></td>
+        <td><strong>Required</strong></td>
+        <td>Represents the logical area of the API</td>
+        <td>manage</td>
+    </tr>
+    <tr>
+        <td><strong>-</strong></td>
+        <td><strong>name</strong></td>
+        <td><strong>Required</strong></td>
+        <td>Represents the name of this Action</td>
+        <td>movies</td>
+    </tr>
+    <tr>
+        <td><strong>-</strong></td>
+        <td><strong>desc</strong></td>
+        <td>Optional</td>
+        <td>Description of the Action</td>
+        <td>Manages movies</td>
+    </tr>
+    <tr>
+        <td><strong>-</strong></td>
+        <td><strong>roles</strong></td>
+        <td>Optional</td>
+        <td>List of roles allowed to access this API</td>
+        <td><a href="https://github.com/code-helix/slatekit/tree/master/src/lib/kotlin/slatekit-common/src/main/kotlin/slatekit/common/auth/Roles.kt" >Roles.kt</a></td>
+    </tr>
+    <tr>
+        <td><strong>-</strong></td>
+        <td><strong>access</strong></td>
+        <td>Optional</td>
+        <td>Desribes visibility of the API</td>
+        <td><a href="https://github.com/code-helix/slatekit/tree/master/src/lib/kotlin/slatekit-apis/src/main/kotlin/slatekit/apis/Access.kt" >Access.kt</a></td>
+    </tr>
+    <tr>
+        <td><strong>-</strong></td>
+        <td><strong>verb</strong></td>
+        <td>Optional</td>
+        <td>Desribes how the Verbs should be handled </td>
+        <td><a href="https://github.com/code-helix/slatekit/tree/master/src/lib/kotlin/slatekit-apis/src/main/kotlin/slatekit/apis/Verbs.kt" >Verbs.kt</a></td>
+    </tr>
+    <tr>
+        <td><strong>-</strong></td>
+        <td><strong>sources</strong></td>
+        <td>Optional</td>
+        <td>Indicates where this API can handle requests from</td>
+        <td><a href="https://github.com/code-helix/slatekit/tree/master/src/lib/kotlin/slatekit-common/src/main/kotlin/slatekit/common/Sources.kt" >Sources.kt</a></td>
+    </tr>
+</table></p>
+
+
+
+
+<a href="arch/apis#features" class="sk-back-to-details">Back to features</a>
+<a href="arch/apis#overview" class="sk-back-to-top">Back to top </a>
+
+<br/><br/><br/>
+
+<h2 id="requests">Requests</h2>
+
+<p>Requests in Slate Kit are abstracted out as <a href="https://github.com/code-helix/slatekit/tree/master/src/lib/kotlin/slatekit-common/src/main/kotlin/slatekit/common/requests/Request.kt" >Request.kt</a>. They are implementations for a Web Request and CLI request.
+<div class="highlight"><pre class="chroma"><code class="language-kotlin" data-lang="kotlin">     
+    <span class="k">val</span> <span class="py">request</span><span class="p">:</span><span class="n">Request</span> <span class="p">=</span> <span class="n">CommonRequest</span><span class="p">(</span>
+                <span class="n">path</span> <span class="p">=</span> <span class="s">&#34;app.users.activate&#34;</span><span class="p">,</span>
+                <span class="n">parts</span> <span class="p">=</span> <span class="n">listOf</span><span class="p">(</span><span class="s">&#34;app&#34;</span><span class="p">,</span> <span class="s">&#34;users&#34;</span><span class="p">,</span> <span class="s">&#34;activate&#34;</span><span class="p">),</span>
+                <span class="n">source</span> <span class="p">=</span> <span class="n">Source</span><span class="p">.</span><span class="n">CLI</span><span class="p">,</span>
+                <span class="n">verb</span> <span class="p">=</span> <span class="n">Verbs</span><span class="p">.</span><span class="n">POST</span><span class="p">,</span>
+                <span class="n">meta</span> <span class="p">=</span> <span class="n">InputArgs</span><span class="p">(</span><span class="n">mapOf</span><span class="p">(</span><span class="s">&#34;api-key&#34;</span> <span class="n">to</span> <span class="s">&#34;ABC-123&#34;</span><span class="p">)),</span>
+                <span class="k">data</span> <span class="p">=</span> <span class="n">InputArgs</span><span class="p">(</span><span class="n">mapOf</span><span class="p">(</span><span class="s">&#34;userId&#34;</span> <span class="n">to</span> <span class="m">5001</span><span class="p">)),</span>
+                <span class="n">raw</span> <span class="p">=</span> <span class="s">&#34;the raw HTTP SparkJava send or CLI ShellCommand&#34;</span><span class="p">,</span>
+                <span class="n">tag</span> <span class="p">=</span> <span class="n">Random</span><span class="p">.</span><span class="n">uuid</span><span class="p">()</span>
+        <span class="p">)</span>
+
+        <span class="c1">// NOTES: ResultSupport trait builds results that simulate Http Status codes
+</span><span class="c1"></span>        <span class="c1">// This allows easy construction of results/status from a server layer
+</span><span class="c1"></span>        <span class="c1">// instead of a controller/api layer
+</span><span class="c1"></span>
+        <span class="c1">// CASE 1: Get path of the request, parts, and associated 3 part routes
+</span><span class="c1"></span>        <span class="n">println</span><span class="p">(</span> <span class="n">request</span><span class="p">.</span><span class="n">path</span> <span class="p">)</span>
+        <span class="n">println</span><span class="p">(</span> <span class="n">request</span><span class="p">.</span><span class="n">parts</span> <span class="p">)</span>
+        <span class="n">println</span><span class="p">(</span> <span class="n">request</span><span class="p">.</span><span class="n">area</span>   <span class="p">)</span>
+        <span class="n">println</span><span class="p">(</span> <span class="n">request</span><span class="p">.</span><span class="n">name</span>   <span class="p">)</span>
+        <span class="n">println</span><span class="p">(</span> <span class="n">request</span><span class="p">.</span><span class="n">action</span> <span class="p">)</span>
+
+        <span class="c1">// CASE 2: Get the verb (For the CLI - the verb will be &#34;cli&#34;)
+</span><span class="c1"></span>        <span class="n">println</span><span class="p">(</span> <span class="n">request</span><span class="p">.</span><span class="n">verb</span> <span class="p">)</span>
+
+        <span class="c1">// CASE 3: Get the tag
+</span><span class="c1"></span>        <span class="c1">// The request is immutable and the tag field is populated with
+</span><span class="c1"></span>        <span class="c1">// a random guid, so if an error occurs this tag links the request to the error.
+</span><span class="c1"></span>        <span class="n">println</span><span class="p">(</span> <span class="n">request</span><span class="p">.</span><span class="n">tag</span> <span class="p">)</span>
+
+        <span class="c1">// CASE 4: Get metadata named &#34;api-key&#34;
+</span><span class="c1"></span>        <span class="n">println</span><span class="p">(</span> <span class="n">request</span><span class="p">.</span><span class="n">meta</span><span class="p">.</span><span class="n">getString</span><span class="p">(</span><span class="s">&#34;api-key&#34;</span><span class="p">)</span> <span class="p">)</span>
+        <span class="n">println</span><span class="p">(</span> <span class="n">request</span><span class="p">.</span><span class="n">meta</span><span class="p">.</span><span class="n">getInt</span><span class="p">(</span><span class="s">&#34;sample-id&#34;</span><span class="p">)</span> <span class="p">)</span>
+        <span class="n">println</span><span class="p">(</span> <span class="n">request</span><span class="p">.</span><span class="n">meta</span><span class="p">.</span><span class="n">getIntOrNull</span><span class="p">(</span><span class="s">&#34;sample-id&#34;</span><span class="p">)</span> <span class="p">)</span>
+        <span class="n">println</span><span class="p">(</span> <span class="n">request</span><span class="p">.</span><span class="n">meta</span><span class="p">.</span><span class="n">getIntOrElse</span><span class="p">(</span><span class="s">&#34;sample-id&#34;</span><span class="p">,</span> <span class="p">-</span><span class="m">1</span><span class="p">)</span> <span class="p">)</span>
+
+        <span class="c1">// CASE 5: Get a parameter named &#34;userId&#34; as integer
+</span><span class="c1"></span>        <span class="c1">// IF its not there, this will return a 0 as getInt
+</span><span class="c1"></span>        <span class="c1">// returns a non-nullable value.  
+</span><span class="c1"></span>        <span class="c1">// The value is obtained from query string if get, otherwise, 
+</span><span class="c1"></span>        <span class="c1">// if the request is a post, the value is
+</span><span class="c1"></span>        <span class="c1">// first checked in the body ( json data ) before checking
+</span><span class="c1"></span>        <span class="c1">// the query params
+</span><span class="c1"></span>        <span class="n">println</span><span class="p">(</span> <span class="n">request</span><span class="p">.</span><span class="k">data</span><span class="p">.</span><span class="n">getInt</span><span class="p">(</span><span class="s">&#34;userId&#34;</span><span class="p">)</span> <span class="p">)</span>
+        <span class="n">println</span><span class="p">(</span> <span class="n">request</span><span class="p">.</span><span class="k">data</span><span class="p">.</span><span class="n">getIntOrNull</span><span class="p">(</span><span class="s">&#34;userId&#34;</span><span class="p">)</span> <span class="p">)</span>
+        <span class="n">println</span><span class="p">(</span> <span class="n">request</span><span class="p">.</span><span class="k">data</span><span class="p">.</span><span class="n">getIntOrElse</span><span class="p">(</span><span class="s">&#34;userId&#34;</span><span class="p">,</span> <span class="p">-</span><span class="m">1</span><span class="p">)</span> <span class="p">)</span>
+     </code></pre></div>
+
+
+
+<a href="arch/apis#features" class="sk-back-to-details">Back to features</a>
+<a href="arch/apis#overview" class="sk-back-to-top">Back to top </a>
+
+<br/><br/><br/></p>
+
+<h2 id="responses">Responses</h2>
+
+<p>There are 2 ways to returns responses/values from methods. The first is to simply return the exact value. The second is to wrap the value into a Slate Kit <a href="arch/results" >Result</a>.
+<div class="highlight"><pre class="chroma"><code class="language-kotlin" data-lang="kotlin">      
+    <span class="c1">// Case 1: Return explicit value
+</span><span class="c1"></span>    <span class="k">return</span> <span class="n">Movie</span><span class="p">.</span><span class="n">of</span><span class="p">(</span><span class="n">title</span><span class="p">,</span> <span class="n">playing</span><span class="p">,</span> <span class="n">cost</span><span class="p">,</span> <span class="n">released</span><span class="p">)</span>
+
+    <span class="c1">// Case 2. Return value wrapped as Outcome&lt;Movie&gt; = Result&lt;Movie, Err&gt;
+</span><span class="c1"></span>    <span class="k">val</span> <span class="py">movie</span> <span class="p">=</span> <span class="n">Movie</span><span class="p">.</span><span class="n">of</span><span class="p">(</span><span class="n">title</span><span class="p">,</span> <span class="n">playing</span><span class="p">,</span> <span class="n">cost</span><span class="p">,</span> <span class="n">released</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">Outcomes</span><span class="p">.</span><span class="n">success</span><span class="p">(</span><span class="n">movie</span><span class="p">)</span>
+      </code></pre></div>
+
+
+
+<a href="arch/apis#features" class="sk-back-to-details">Back to features</a>
+<a href="arch/apis#overview" class="sk-back-to-top">Back to top </a>
+
+<br/><br/><br/></p>
+
+<h2 id="errors">Errors</h2>
+
+<p>You can accurately model successes and failures using <a href="arch/results" >Result</a>.
+<div class="highlight"><pre class="chroma"><code class="language-kotlin" data-lang="kotlin">     
+    <span class="n">@Action</span><span class="p">()</span>
+    <span class="k">fun</span> <span class="nf">createSampleOutcome</span><span class="p">(</span><span class="n">req</span><span class="p">:</span><span class="n">Request</span><span class="p">,</span> <span class="n">title</span><span class="p">:</span><span class="n">String</span><span class="p">,</span> <span class="n">playing</span><span class="p">:</span><span class="n">Boolean</span><span class="p">,</span> <span class="n">cost</span><span class="p">:</span><span class="n">Int</span><span class="p">,</span> <span class="n">released</span><span class="p">:</span> <span class="n">DateTime</span><span class="p">):</span><span class="n">Outcome</span><span class="p">&lt;</span><span class="n">Movie</span><span class="p">&gt;</span> <span class="p">{</span>
+        <span class="k">val</span> <span class="py">result</span><span class="p">:</span><span class="n">Outcome</span><span class="p">&lt;</span><span class="n">Movie</span><span class="p">&gt;</span> <span class="p">=</span> <span class="k">when</span> <span class="p">{</span>
+            <span class="p">!</span><span class="n">canCreate</span><span class="p">(</span><span class="n">req</span><span class="p">)</span>       <span class="p">-&gt;</span> <span class="n">Outcomes</span><span class="p">.</span><span class="n">denied</span> <span class="p">(</span><span class="s">&#34;Not allowed to create&#34;</span><span class="p">)</span>
+            <span class="n">title</span><span class="p">.</span><span class="n">isNullOrEmpty</span><span class="p">()</span> <span class="p">-&gt;</span> <span class="n">Outcomes</span><span class="p">.</span><span class="n">invalid</span><span class="p">(</span><span class="s">&#34;Title missing&#34;</span><span class="p">)</span>
+            <span class="p">!</span><span class="n">playing</span>              <span class="p">-&gt;</span> <span class="n">Outcomes</span><span class="p">.</span><span class="n">ignored</span><span class="p">(</span><span class="s">&#34;Movies must be playing&#34;</span><span class="p">)</span>
+            <span class="n">cost</span> <span class="p">&gt;</span> <span class="m">20</span>             <span class="p">-&gt;</span> <span class="n">Outcomes</span><span class="p">.</span><span class="n">errored</span><span class="p">(</span><span class="s">&#34;Prices must be reasonable&#34;</span><span class="p">)</span>
+            <span class="k">else</span>                  <span class="p">-&gt;</span> <span class="p">{</span>
+                <span class="c1">// Simple simulation of creation
+</span><span class="c1"></span>                <span class="n">Outcomes</span><span class="p">.</span><span class="n">success</span><span class="p">(</span> <span class="n">Movie</span><span class="p">.</span><span class="n">of</span><span class="p">(</span><span class="n">title</span><span class="p">,</span> <span class="n">playing</span><span class="p">,</span> <span class="n">cost</span><span class="p">,</span> <span class="n">released</span><span class="p">)</span> <span class="p">)</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+        <span class="k">return</span> <span class="n">result</span> 
+    <span class="p">}</span>
+     </code></pre></div>
+
+
+
+<a href="arch/apis#features" class="sk-back-to-details">Back to features</a>
+<a href="arch/apis#overview" class="sk-back-to-top">Back to top </a>
+
+<br/><br/><br/></p>
+
+<h2 id="middleware">Middleware</h2>
+
+<p><div class="alert alert-warning" role="alert">
+  TIP: Functionality is available but docs are not yet ready.
+</div>
+
+
+
+<a href="arch/apis#features" class="sk-back-to-details">Back to features</a>
+<a href="arch/apis#overview" class="sk-back-to-top">Back to top </a>
+
+<br/><br/><br/></p>
+
+<h2 id="web-1">Web</h2>
+
+<p>You can host Slate Kit APIs as Web APIs using the default Http Engine which is <strong>Ktor</strong>.
+<div class="highlight"><pre class="chroma"><code class="language-kotlin" data-lang="kotlin">     
+    <span class="k">fun</span> <span class="nf">runServer</span><span class="p">()</span> <span class="p">{</span>
+        <span class="c1">// ====================================
+</span><span class="c1"></span>        <span class="c1">// Slate Kit Setup
+</span><span class="c1"></span>        <span class="c1">// 1. Settings ( defaults: port = 5000, prefix = /api/)
+</span><span class="c1"></span>        <span class="k">val</span> <span class="py">settings</span> <span class="p">=</span> <span class="n">ServerSettings</span><span class="p">(</span><span class="n">docs</span> <span class="p">=</span> <span class="k">true</span><span class="p">,</span> <span class="n">docKey</span> <span class="p">=</span> <span class="s">&#34;abc123&#34;</span><span class="p">)</span>
+
+        <span class="c1">// 2. APIs ( defaults applied )
+</span><span class="c1"></span>        <span class="k">val</span> <span class="py">apis</span> <span class="p">=</span> <span class="n">listOf</span><span class="p">(</span>
+                <span class="n">slatekit</span><span class="p">.</span><span class="n">apis</span><span class="p">.</span><span class="n">core</span><span class="p">.</span><span class="n">Api</span><span class="p">(</span>
+                    <span class="n">klass</span> <span class="p">=</span> <span class="n">SampleApi</span><span class="o">::</span><span class="k">class</span><span class="p">,</span> 
+                    <span class="n">singleton</span> <span class="p">=</span> <span class="n">SampleApi</span><span class="p">(</span><span class="n">ctx</span><span class="p">)</span>
+                <span class="p">)</span>
+        <span class="p">)</span>
+
+        <span class="c1">// 3. API host
+</span><span class="c1"></span>        <span class="k">val</span> <span class="py">apiHost</span> <span class="p">=</span> <span class="n">ApiServer</span><span class="p">.</span><span class="n">of</span><span class="p">(</span> <span class="n">ctx</span><span class="p">,</span> <span class="n">apis</span><span class="p">,</span> <span class="n">auth</span> <span class="p">=</span> <span class="k">null</span><span class="p">)</span>
+
+        <span class="c1">// 4. Ktor handler: Delegates Ktor requests to Slate Kit
+</span><span class="c1"></span>        <span class="k">val</span> <span class="py">handler</span> <span class="p">=</span> <span class="n">KtorHandler</span><span class="p">(</span><span class="n">ctx</span><span class="p">,</span> <span class="n">settings</span><span class="p">,</span> <span class="n">apiHost</span><span class="p">)</span>
+
+        <span class="c1">// ====================================
+</span><span class="c1"></span>        <span class="c1">// Jet Brains Ktor setup
+</span><span class="c1"></span>        <span class="k">val</span> <span class="py">server</span> <span class="p">=</span> <span class="n">embeddedServer</span><span class="p">(</span><span class="n">Netty</span><span class="p">,</span> <span class="n">settings</span><span class="p">.</span><span class="n">port</span><span class="p">)</span> <span class="p">{</span>
+            <span class="n">routing</span> <span class="p">{</span>
+
+                <span class="c1">// Root
+</span><span class="c1"></span>                <span class="k">get</span><span class="p">(</span><span class="s">&#34;/&#34;</span><span class="p">)</span> <span class="p">{</span> <span class="n">ping</span><span class="p">(</span><span class="n">call</span><span class="p">)</span> <span class="p">}</span>
+
+                <span class="c1">// Your own custom path
+</span><span class="c1"></span>                <span class="k">get</span><span class="p">(</span><span class="n">settings</span><span class="p">.</span><span class="n">prefix</span> <span class="p">+</span> <span class="s">&#34;/ping&#34;</span><span class="p">)</span> <span class="p">{</span> <span class="n">ping</span><span class="p">(</span><span class="n">call</span><span class="p">)</span> <span class="p">}</span>
+
+                <span class="c1">// Your own multi-path route
+</span><span class="c1"></span>                <span class="k">get</span><span class="p">(</span><span class="s">&#34;module1/feature1/action1&#34;</span><span class="p">)</span> <span class="p">{</span>
+                    <span class="n">KtorResponse</span><span class="p">.</span><span class="n">json</span><span class="p">(</span><span class="n">call</span><span class="p">,</span> <span class="n">Success</span><span class="p">(</span><span class="s">&#34;action 1 : &#34;</span> <span class="p">+</span> <span class="n">DateTime</span><span class="p">.</span><span class="n">now</span><span class="p">().</span><span class="n">toString</span><span class="p">()).</span><span class="n">toResponse</span><span class="p">())</span>
+                <span class="p">}</span>
+
+                <span class="c1">// Remaining outes beginning with /api/ to be handled by Slate Kit API Server
+</span><span class="c1"></span>                <span class="n">handler</span><span class="p">.</span><span class="n">register</span><span class="p">(</span><span class="k">this</span><span class="p">)</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+
+        <span class="c1">// Start Ktor server
+</span><span class="c1"></span>        <span class="n">server</span><span class="p">.</span><span class="n">start</span><span class="p">(</span><span class="n">wait</span> <span class="p">=</span> <span class="k">true</span><span class="p">)</span>
+    <span class="p">}</span></code></pre></div>
+
+
+
+<a href="arch/apis#features" class="sk-back-to-details">Back to features</a>
+<a href="arch/apis#overview" class="sk-back-to-top">Back to top </a>
+
+<br/><br/><br/></p>
+
+<h2 id="cli-1">CLI</h2>
+
+<p>You can host Slate Kit <strong>Universal APIs</strong> on the CLI using the Slate Kit <a href="arch/cli" >CLI</a>
+<div class="highlight"><pre class="chroma"><code class="language-kotlin" data-lang="kotlin">      
+    <span class="c1">// 1. The API keys( DocApi, SetupApi are authenticated using an sample API key )
+</span><span class="c1"></span>    <span class="k">val</span> <span class="py">keys</span> <span class="p">=</span> <span class="n">listOf</span><span class="p">(</span><span class="n">ApiKey</span><span class="p">(</span> <span class="n">name</span> <span class="p">=</span><span class="s">&#34;cli&#34;</span><span class="p">,</span> <span class="n">key</span> <span class="p">=</span> <span class="s">&#34;abc&#34;</span><span class="p">,</span> <span class="n">roles</span> <span class="p">=</span> <span class="s">&#34;dev,qa,ops,admin&#34;</span><span class="p">))</span>
+
+    <span class="c1">// 2. Authentication
+</span><span class="c1"></span>    <span class="k">val</span> <span class="py">auth</span> <span class="p">=</span> <span class="n">Authenticator</span><span class="p">(</span><span class="n">keys</span><span class="p">)</span>
+
+    <span class="c1">// 3. Load all the Slate Kit Universal APIs
+</span><span class="c1"></span>    <span class="k">val</span> <span class="py">apis</span> <span class="p">=</span> <span class="n">listOf</span><span class="p">(</span>
+            <span class="n">slatekit</span><span class="p">.</span><span class="n">apis</span><span class="p">.</span><span class="n">core</span><span class="p">.</span><span class="n">Api</span><span class="p">(</span>
+                <span class="n">klass</span> <span class="p">=</span> <span class="n">SampleApi</span><span class="o">::</span><span class="k">class</span><span class="p">,</span> 
+                <span class="n">singleton</span> <span class="p">=</span> <span class="n">SampleApi</span><span class="p">(</span><span class="n">ctx</span><span class="p">)</span>
+            <span class="p">)</span>
+    <span class="p">)</span>
+
+    <span class="c1">// 4. Makes the APIs accessible on the CLI runner
+</span><span class="c1"></span>    <span class="k">val</span> <span class="py">cli</span> <span class="p">=</span> <span class="n">CliApi</span><span class="p">(</span>
+            <span class="n">ctx</span> <span class="p">=</span> <span class="n">ctx</span><span class="p">,</span>
+            <span class="n">auth</span> <span class="p">=</span> <span class="n">auth</span><span class="p">,</span>
+            <span class="n">settings</span> <span class="p">=</span> <span class="n">CliSettings</span><span class="p">(</span><span class="n">enableLogging</span> <span class="p">=</span> <span class="k">true</span><span class="p">,</span> <span class="n">enableOutput</span> <span class="p">=</span> <span class="k">true</span><span class="p">),</span>
+            <span class="n">apiItems</span> <span class="p">=</span> <span class="n">apis</span><span class="p">,</span>
+            <span class="n">metaTransform</span> <span class="p">=</span> <span class="p">{</span>
+                <span class="n">listOf</span><span class="p">(</span><span class="s">&#34;api-key&#34;</span> <span class="n">to</span> <span class="n">keys</span><span class="p">.</span><span class="n">first</span><span class="p">().</span><span class="n">key</span><span class="p">)</span>
+            <span class="p">},</span>
+            <span class="n">serializer</span> <span class="p">=</span> <span class="p">{</span><span class="n">item</span><span class="p">,</span> <span class="n">type</span> <span class="p">-&gt;</span> <span class="n">Content</span><span class="p">.</span><span class="n">csv</span><span class="p">(</span><span class="n">slatekit</span><span class="p">.</span><span class="n">meta</span><span class="p">.</span><span class="n">Serialization</span><span class="p">.</span><span class="n">csv</span><span class="p">().</span><span class="n">serialize</span><span class="p">(</span><span class="n">item</span><span class="p">))}</span>
+    <span class="p">)</span>
+
+    <span class="c1">// 5. Run interactive mode
+</span><span class="c1"></span>    <span class="k">return</span> <span class="n">cli</span><span class="p">.</span><span class="n">run</span><span class="p">()</span>
+       </code></pre></div>
+
+
+
+<a href="arch/apis#features" class="sk-back-to-details">Back to features</a>
+<a href="arch/apis#overview" class="sk-back-to-top">Back to top </a>
+
+<br/><br/><br/></p>
+
+<br/>
+
+<a href="arch/apis#overview" class="sk-back-to-top">Back to top </a>
 <br/><br/><br/><br/>
 
       </div>

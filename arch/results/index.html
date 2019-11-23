@@ -163,7 +163,7 @@
 
 <h1 id="overview">Overview</h1>
 
-<p><strong>Result[T, E]</strong> is a foundational component in <strong>Slate Kit</strong> for accurately modeling successes and failures using a functional approach to error handling. Result is not a brand new concept, it currently exists in variations in other languages ( see below). In fact, the Result type in Slate Kit has been inspired by these and also by Google&rsquo;s GRPC codes ( See below ). The implementation here differs with the <strong>flexibility of the Error type</strong> and the addition of an optional <strong>Status Code</strong>, and support <strong>logical grouping of errors</strong>.
+<p><strong>Result[T, E]</strong> is a foundational component in <strong>Slate Kit</strong> for accurately modeling successes and failures using a functional approach to error handling. Result is not a brand new concept, it currently exists in various forms in other languages ( see below). In fact, the Result type in Slate Kit has been inspired by these and also by Google&rsquo;s GRPC codes ( See below ). The implementation here differs with the <strong>flexibility of the Error type</strong>, the addition of an optional <strong>Status Code</strong>, and support for <strong>logical grouping of errors</strong>.
 <table class="table table-bordered table-striped">
     <tr>
         <td><strong>#</strong></td>
@@ -220,53 +220,53 @@
     </tr>
     <tr>
         <td><strong>1</strong></td>
-        <td><strong><a class="url-ch" href="core/cli#status">Status</a></strong></td>
+        <td><strong><a class="url-ch" href="arch/results#status">Status</a></strong></td>
         <td>Current status of this component</td>
     </tr>
     <tr>
         <td><strong>2</strong></td>
-        <td><strong><a class="url-ch" href="core/cli#install">Install</a></strong></td>
+        <td><strong><a class="url-ch" href="arch/results#install">Install</a></strong></td>
         <td>Installation instructions and references to sources</td>
     </tr>
     <tr>
         <td><strong>3</strong></td>
-        <td><strong><a class="url-ch" href="core/cli#requires">Requires</a></strong></td>
+        <td><strong><a class="url-ch" href="arch/results#requires">Requires</a></strong></td>
         <td>Lists all the Slate Kit and third-party dependencies</td>
     </tr>
     <tr>
         <td><strong>4</strong></td>
-        <td><strong><a class="url-ch" href="core/cli#sample">Sample</a></strong></td>
+        <td><strong><a class="url-ch" href="arch/results#sample">Sample</a></strong></td>
         <td>Quick sample to show usage of the component</td>
     </tr>
     <tr>
         <td><strong>5</strong></td>
-        <td><strong><a class="url-ch" href="core/cli#goals">Goals</a></strong></td>
+        <td><strong><a class="url-ch" href="arch/results#goals">Goals</a></strong></td>
         <td>Goals of this component and the problems it attempts to solve</td>
     </tr>
     <tr>
         <td><strong>6</strong></td>
-        <td><strong><a class="url-ch" href="core/cli#concepts">Concepts</a></strong></td>
+        <td><strong><a class="url-ch" href="arch/results#concepts">Concepts</a></strong></td>
         <td>Core concepts to understand in this component</td>
     </tr>
     <tr>
         <td><strong>7</strong></td>
-        <td><strong><a class="url-ch" href="core/cli#features">Features</a></strong></td>
+        <td><strong><a class="url-ch" href="arch/results#features">Features</a></strong></td>
         <td>List all the features supported</td>
     </tr>
     <tr>
         <td><strong>8</strong></td>
-        <td><strong><a class="url-ch" href="core/cli#setup">Setup</a></strong></td>
+        <td><strong><a class="url-ch" href="arch/results#setup">Setup</a></strong></td>
         <td>Set up and configure this component for use</td>
     </tr>
     <tr>
         <td><strong>9</strong></td>
-        <td><strong><a class="url-ch" href="core/cli#details">Details</a></strong></td>
+        <td><strong><a class="url-ch" href="arch/results#details">Details</a></strong></td>
         <td>In-depth examples of the supported features</td>
     </tr>
 </table>
 <br/>
 
-<a href="core/cli#overview" class="sk-back-to-top">Back to top </a>
+<a href="arch/results#overview" class="sk-back-to-top">Back to top </a>
 <br/><br/><br/><br/></p>
 
 <h1 id="status">Status</h1>
@@ -274,7 +274,7 @@
 <p>This component is currently stable, has 0 dependencies and can be used for both <strong>Android and Server</strong>
 <br/>
 
-<a href="core/cli#overview" class="sk-back-to-top">Back to top </a>
+<a href="arch/results#overview" class="sk-back-to-top">Back to top </a>
 <br/><br/><br/><br/></p>
 
 <h1 id="install">Install</h1>
@@ -302,11 +302,11 @@
   </tr>
   <tr>
     <td><strong>git</strong></td>
-    <td><a class="url-ch" href="https://github.com/code-helix/slatekit/tree/master/src/lib/kotlin/slatekit-app">slatekit/src/lib/kotlin/slatekit-result</a></td>
+    <td><a class="url-ch" href="https://github.com/code-helix/slatekit/tree/master/src/lib/kotlin/slatekit-result/src/main/kotlin/slatekit/results">slatekit/src/lib/kotlin/slatekit-result</a></td>
   </tr>
   <tr>
     <td><strong>docs</strong></td>
-    <td><a class="url-ch" href="core/app">App</a></td>
+    <td><a class="url-ch" href="arch/results">App</a></td>
   </tr>
   <tr>
     <td><strong>uses</strong></td>
@@ -331,7 +331,7 @@
 <p>This component has <strong>0 dependencies</strong> and does <strong>NOT</strong> use any other Slate Kit components.
 <br/>
 
-<a href="core/cli#overview" class="sk-back-to-top">Back to top </a>
+<a href="arch/results#overview" class="sk-back-to-top">Back to top </a>
 <br/><br/><br/><br/></p>
 
 <h1 id="sample">Sample</h1>
@@ -384,7 +384,7 @@ Refer to the <a href="https://github.com/code-helix/slatekit/tree/master/src/lib
         </code></pre></div>
 <br/>
 
-<a href="core/cli#overview" class="sk-back-to-top">Back to top </a>
+<a href="arch/results#overview" class="sk-back-to-top">Back to top </a>
 <br/><br/><br/><br/></p>
 
 <h1 id="goals">Goals</h1>
@@ -410,7 +410,7 @@ Refer to the <a href="https://github.com/code-helix/slatekit/tree/master/src/lib
 </table>
 <br/>
 
-<a href="core/cli#overview" class="sk-back-to-top">Back to top </a>
+<a href="arch/results#overview" class="sk-back-to-top">Back to top </a>
 <br/><br/><br/><br/></p>
 
 <h1 id="concepts">Concepts</h1>
@@ -465,7 +465,7 @@ Refer to the <a href="https://github.com/code-helix/slatekit/tree/master/src/lib
 </table>
 <br/>
 
-<a href="core/cli#overview" class="sk-back-to-top">Back to top </a>
+<a href="arch/results#overview" class="sk-back-to-top">Back to top </a>
 <br/><br/><br/><br/></p>
 
 <h1 id="features">Features</h1>
@@ -529,7 +529,7 @@ Refer to the <a href="https://github.com/code-helix/slatekit/tree/master/src/lib
 </table>
 <br/>
 
-<a href="core/cli#overview" class="sk-back-to-top">Back to top </a>
+<a href="arch/results#overview" class="sk-back-to-top">Back to top </a>
 <br/><br/><br/><br/></p>
 
 <h2 id="creation">Creation</h2>
@@ -873,7 +873,7 @@ Refer to the <a href="https://github.com/code-helix/slatekit/tree/master/src/lib
 
 <br/>
 
-<a href="core/cli#overview" class="sk-back-to-top">Back to top </a>
+<a href="arch/results#overview" class="sk-back-to-top">Back to top </a>
 <br/><br/><br/><br/>
 
       </div>

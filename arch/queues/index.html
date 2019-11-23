@@ -211,7 +211,39 @@
 
 <h1 id="status">Status</h1>
 
-<p>This component is currently stable. However it is currently using the AWS 1.0 sdk that is synchonous. A future version will involve using AWS 2.0 sdk that is <strong>Async</strong> and incorporate Coroutines.
+<p>This component is currently <strong>stable</strong>. Following limitations, current work, planned features apply.
+<table class="table table-bordered table-striped">
+    <tr>
+        <td><strong>Feature</strong></td>
+        <td><strong>Status</strong></td>
+        <td><strong>Description</strong></td>
+    </tr>
+    <tr>
+        <td><strong>Meta</strong></td>
+        <td>Upcoming</td>
+        <td>Ability to easily default / inject meta data for every entry.</td>
+    </tr>
+    <tr>
+        <td><strong>Async</strong></td>
+        <td>Upcoming</td>
+        <td>Async support via Kotlin suspend/coroutines and Java AWS 2.0 SDK</td>
+    </tr>
+    <tr>
+        <td><strong>URI</strong></td>
+        <td>Upcoming</td>
+        <td>Ability to use Slate Kit Uri for explicit references to file paths</td>
+    </tr>
+    <tr>
+        <td><strong>Errors</strong></td>
+        <td>Upcoming</td>
+        <td>Ability to use a dead-letter queue for failed items.</td>
+    </tr>
+    <tr>
+        <td><strong>Batch</strong></td>
+        <td>Upcoming</td>
+        <td>Ability to perform batch insert operations</td>
+    </tr>
+</table>
 <br/>
 
 <a href="arch/queues#overview" class="sk-back-to-top">Back to top </a>
@@ -274,7 +306,7 @@
         <td><strong>Description</strong></td>
     </tr>
     <tr>
-        <td><a href="http://www.slatekit.com/arch/results" >Results</a></td>
+        <td><a href="arch/results" >Results</a></td>
         <td>To model successes and failures with optional status codes</td>
     </tr>
     <tr>
@@ -328,10 +360,10 @@
 </span><span class="c1"></span>    <span class="n">queue2</span><span class="p">.</span><span class="n">init</span><span class="p">()</span>
 
     <span class="c1">// Use case 2: send 1 message
-</span><span class="c1"></span>    <span class="n">queue2</span><span class="p">.</span><span class="n">send</span><span class="p">(</span><span class="s">&#34;test 1&#34;</span><span class="p">)</span>
+</span><span class="c1"></span>    <span class="n">queue2</span><span class="p">.</span><span class="n">send</span><span class="p">(</span><span class="s">&#34;item 1&#34;</span><span class="p">)</span>
 
     <span class="c1">// Use case 3: send multiple messages
-</span><span class="c1"></span>    <span class="n">queue2</span><span class="p">.</span><span class="n">send</span><span class="p">(</span><span class="s">&#34;test 2&#34;</span><span class="p">)</span>
+</span><span class="c1"></span>    <span class="n">queue2</span><span class="p">.</span><span class="n">send</span><span class="p">(</span><span class="s">&#34;item 2&#34;</span><span class="p">)</span>
 
     <span class="c1">// Use case 4: send message with tags
 </span><span class="c1"></span>    <span class="n">queue2</span><span class="p">.</span><span class="n">send</span><span class="p">(</span><span class="s">&#34;user=kishore&#34;</span><span class="p">,</span> <span class="n">tagName</span><span class="p">=</span><span class="s">&#34;type&#34;</span><span class="p">,</span> <span class="n">tagValue</span><span class="p">=</span><span class="s">&#34;reg&#34;</span><span class="p">)</span>

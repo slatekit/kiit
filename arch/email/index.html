@@ -175,46 +175,68 @@
     </tr>
     <tr>
         <td><strong>1</strong></td>
-        <td><strong><a class="url-ch" href="arch/sms#status">Status</a></strong></td>
+        <td><strong><a class="url-ch" href="arch/email#status">Status</a></strong></td>
         <td>Current status of this component</td>
     </tr>
     <tr>
         <td><strong>2</strong></td>
-        <td><strong><a class="url-ch" href="arch/sms#install">Install</a></strong></td>
+        <td><strong><a class="url-ch" href="arch/email#install">Install</a></strong></td>
         <td>Installation instructions and references to sources</td>
     </tr>
     <tr>
         <td><strong>3</strong></td>
-        <td><strong><a class="url-ch" href="arch/sms#requires">Requires</a></strong></td>
+        <td><strong><a class="url-ch" href="arch/email#requires">Requires</a></strong></td>
         <td>Lists all the Slate Kit and third-party dependencies</td>
     </tr>
     <tr>
         <td><strong>4</strong></td>
-        <td><strong><a class="url-ch" href="arch/sms#sample">Import</a></strong></td>
+        <td><strong><a class="url-ch" href="arch/email#sample">Import</a></strong></td>
         <td>Packages to import</td>
     </tr>
     <tr>
         <td><strong>5</strong></td>
-        <td><strong><a class="url-ch" href="arch/sms#goals">Setup</a></strong></td>
+        <td><strong><a class="url-ch" href="arch/email#goals">Setup</a></strong></td>
         <td>Set up of credentials, and configuration</td>
     </tr>
     <tr>
         <td><strong>6</strong></td>
-        <td><strong><a class="url-ch" href="arch/sms#concepts">Usage</a></strong></td>
+        <td><strong><a class="url-ch" href="arch/email#concepts">Usage</a></strong></td>
         <td>Usage and examples</td>
     </tr>
 </table>
 <br/>
 
-<a href="arch/sms#overview" class="sk-back-to-top">Back to top </a>
+<a href="arch/email#overview" class="sk-back-to-top">Back to top </a>
 <br/><br/><br/><br/></p>
 
 <h1 id="status">Status</h1>
 
-<p>This component is currently stable with a default implementation for <strong>AWS S3</strong>. However it is currently using the AWS 1.0 sdk that is synchonous. A future version will involve using AWS 2.0 sdk that is <strong>Async</strong> and incorporate Coroutines.
+<p>This component is currently <strong>stable</strong>. Following limitations, current work, planned features apply.
+<table class="table table-bordered table-striped">
+    <tr>
+        <td><strong>Feature</strong></td>
+        <td><strong>Status</strong></td>
+        <td><strong>Description</strong></td>
+    </tr>
+    <tr>
+        <td><strong>Templates</strong></td>
+        <td>Upcoming</td>
+        <td>Enhanced templating, possibly leveraging existing open-source templating systems.</td>
+    </tr>
+    <tr>
+        <td><strong>Attachments</strong></td>
+        <td>Upcoming</td>
+        <td>Support for adding attachments</td>
+    </tr>
+    <tr>
+        <td><strong>HTML</strong></td>
+        <td>Upcoming</td>
+        <td>Improved HTML support</td>
+    </tr>
+</table>
 <br/>
 
-<a href="arch/sms#overview" class="sk-back-to-top">Back to top </a>
+<a href="arch/email#overview" class="sk-back-to-top">Back to top </a>
 <br/><br/><br/><br/></p>
 
 <h1 id="install">Install</h1>
@@ -245,7 +267,7 @@
   </tr>
   <tr>
     <td><strong>docs</strong></td>
-    <td><a class="url-ch" href="arch/sms">Files</a></td>
+    <td><a class="url-ch" href="arch/email">Files</a></td>
   </tr>
   <tr>
     <td><strong>uses</strong></td>
@@ -262,7 +284,7 @@
 </table>
 <br/>
 
-<a href="arch/sms#overview" class="sk-back-to-top">Back to top </a>
+<a href="arch/email#overview" class="sk-back-to-top">Back to top </a>
 <br/><br/><br/><br/></p>
 
 <h1 id="requires">Requires</h1>
@@ -274,7 +296,7 @@
         <td><strong>Description</strong></td>
     </tr>
     <tr>
-        <td><a href="http://www.slatekit.com/arch/results" >Results</a></td>
+        <td><a href="arch/results" >Results</a></td>
         <td>To model successes and failures with optional status codes</td>
     </tr>
     <tr>
@@ -284,7 +306,7 @@
 </table>
 <br/>
 
-<a href="arch/sms#overview" class="sk-back-to-top">Back to top </a>
+<a href="arch/email#overview" class="sk-back-to-top">Back to top </a>
 <br/><br/><br/><br/></p>
 
 <h1 id="imports">Imports</h1>
@@ -298,7 +320,7 @@
 
 <br/>
 
-<a href="arch/sms#overview" class="sk-back-to-top">Back to top </a>
+<a href="arch/email#overview" class="sk-back-to-top">Back to top </a>
 <br/><br/><br/><br/>
 
 <h1 id="setup">Setup</h1>
@@ -316,7 +338,7 @@
     <span class="k">val</span> <span class="py">apiKey</span>  <span class="p">=</span> <span class="n">apiKey1</span> <span class="o">?:</span> <span class="n">apiKey2</span>
 
     <span class="c1">// Setup 3a: Setup the email service ( basic ) with api key
-</span><span class="c1"></span>    <span class="k">val</span> <span class="py">email1</span> <span class="p">=</span>  <span class="n">EmailServiceSendGrid</span><span class="p">(</span><span class="n">apiKey</span><span class="p">.</span><span class="n">key</span><span class="p">,</span> <span class="n">apiKey</span><span class="p">.</span><span class="n">pass</span><span class="p">,</span> <span class="n">apiKey</span><span class="p">.</span><span class="n">account</span><span class="p">)</span>
+</span><span class="c1"></span>    <span class="k">val</span> <span class="py">emailService1</span> <span class="p">=</span>  <span class="n">EmailServiceSendGrid</span><span class="p">(</span><span class="n">apiKey</span><span class="p">.</span><span class="n">key</span><span class="p">,</span> <span class="n">apiKey</span><span class="p">.</span><span class="n">pass</span><span class="p">,</span> <span class="n">apiKey</span><span class="p">.</span><span class="n">account</span><span class="p">)</span>
 
     <span class="c1">// Setup 3b: Setup the sms service with support for templates
 </span><span class="c1"></span>    <span class="k">val</span> <span class="py">templates</span> <span class="p">=</span> <span class="n">Templates</span><span class="p">.</span><span class="n">build</span><span class="p">(</span>
@@ -329,24 +351,24 @@
         <span class="n">Pair</span><span class="p">(</span><span class="s">&#34;app.api&#34;</span>     <span class="p">,</span> <span class="p">{</span> <span class="n">s</span> <span class="p">-&gt;</span> <span class="s">&#34;SlateKit.Sample&#34;</span>  <span class="p">})</span>
       <span class="p">)</span>
     <span class="p">)</span>
-    <span class="k">val</span> <span class="py">email2</span> <span class="p">=</span>  <span class="n">EmailServiceSendGrid</span><span class="p">(</span><span class="n">apiKey</span><span class="p">.</span><span class="n">key</span><span class="p">,</span> <span class="n">apiKey</span><span class="p">.</span><span class="n">pass</span><span class="p">,</span> <span class="n">apiKey</span><span class="p">.</span><span class="n">account</span><span class="p">,</span> <span class="n">templates</span><span class="p">)</span></code></pre></div>
+    <span class="k">val</span> <span class="py">emailService2</span> <span class="p">=</span>  <span class="n">EmailServiceSendGrid</span><span class="p">(</span><span class="n">apiKey</span><span class="p">.</span><span class="n">key</span><span class="p">,</span> <span class="n">apiKey</span><span class="p">.</span><span class="n">pass</span><span class="p">,</span> <span class="n">apiKey</span><span class="p">.</span><span class="n">account</span><span class="p">,</span> <span class="n">templates</span><span class="p">)</span></code></pre></div>
 
 <br/>
 
-<a href="arch/sms#overview" class="sk-back-to-top">Back to top </a>
+<a href="arch/email#overview" class="sk-back-to-top">Back to top </a>
 <br/><br/><br/><br/>
 
 <h1 id="usage">Usage</h1>
 
 <p><div class="highlight"><pre class="chroma"><code class="language-kotlin" data-lang="kotlin">        
     <span class="c1">// Use case 1: Send a confirmation code to the U.S. to verify a users phone number.
-</span><span class="c1"></span>    <span class="k">val</span> <span class="py">result</span> <span class="p">=</span> <span class="n">email2</span><span class="p">.</span><span class="n">send</span><span class="p">(</span><span class="s">&#34;kishore@abc.com&#34;</span><span class="p">,</span> <span class="s">&#34;Welcome to MyApp.com&#34;</span><span class="p">,</span> <span class="s">&#34;showWelcome!&#34;</span><span class="p">,</span> <span class="k">false</span><span class="p">)</span>
+</span><span class="c1"></span>    <span class="k">val</span> <span class="py">result</span> <span class="p">=</span> <span class="n">emailService2</span><span class="p">.</span><span class="n">send</span><span class="p">(</span><span class="s">&#34;kishore@abc.com&#34;</span><span class="p">,</span> <span class="s">&#34;Welcome to MyApp.com&#34;</span><span class="p">,</span> <span class="s">&#34;showWelcome!&#34;</span><span class="p">,</span> <span class="k">false</span><span class="p">)</span>
 
     <span class="c1">// Use case 2: Send using a constructed message object
-</span><span class="c1"></span>    <span class="n">email2</span><span class="p">.</span><span class="n">sendSync</span><span class="p">(</span><span class="n">EmailMessage</span><span class="p">(</span><span class="s">&#34;kishore@abc.com&#34;</span><span class="p">,</span> <span class="s">&#34;Welcome to MyApp.com&#34;</span><span class="p">,</span> <span class="s">&#34;showWelcome!&#34;</span><span class="p">,</span> <span class="k">false</span><span class="p">))</span>
+</span><span class="c1"></span>    <span class="n">emailService2</span><span class="p">.</span><span class="n">sendSync</span><span class="p">(</span><span class="n">EmailMessage</span><span class="p">(</span><span class="s">&#34;kishore@abc.com&#34;</span><span class="p">,</span> <span class="s">&#34;Welcome to MyApp.com&#34;</span><span class="p">,</span> <span class="s">&#34;showWelcome!&#34;</span><span class="p">,</span> <span class="k">false</span><span class="p">))</span>
 
     <span class="c1">// Use case 3: Send message using one of the setup templates
-</span><span class="c1"></span>    <span class="n">email2</span><span class="p">.</span><span class="n">sendUsingTemplate</span><span class="p">(</span><span class="s">&#34;email_welcome&#34;</span><span class="p">,</span> <span class="s">&#34;kishore@abc.com&#34;</span><span class="p">,</span> <span class="s">&#34;Welcome to MyApp.com&#34;</span><span class="p">,</span> <span class="k">true</span><span class="p">,</span>
+</span><span class="c1"></span>    <span class="n">emailService2</span><span class="p">.</span><span class="n">sendUsingTemplate</span><span class="p">(</span><span class="s">&#34;email_welcome&#34;</span><span class="p">,</span> <span class="s">&#34;kishore@abc.com&#34;</span><span class="p">,</span> <span class="s">&#34;Welcome to MyApp.com&#34;</span><span class="p">,</span> <span class="k">true</span><span class="p">,</span>
             <span class="n">Vars</span><span class="p">(</span><span class="n">listOf</span><span class="p">(</span>
                     <span class="n">Pair</span><span class="p">(</span><span class="s">&#34;greeting&#34;</span><span class="p">,</span> <span class="s">&#34;hello&#34;</span><span class="p">),</span>
                     <span class="n">Pair</span><span class="p">(</span><span class="s">&#34;user.api&#34;</span><span class="p">,</span> <span class="s">&#34;kishore&#34;</span><span class="p">),</span>
@@ -355,7 +377,7 @@
       </code></pre></div>
 <br/>
 
-<a href="arch/sms#overview" class="sk-back-to-top">Back to top </a>
+<a href="arch/email#overview" class="sk-back-to-top">Back to top </a>
 <br/><br/><br/><br/></p>
 
       </div>

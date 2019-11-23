@@ -41,7 +41,7 @@
     <link rel="stylesheet" href="assets/app/app.css">
 
 
-    <title>Slate Kit: Info</title>
+    <title>Slate Kit: Context</title>
 </head>
 
 <body>
@@ -105,12 +105,16 @@
         </a>
         <ul class="dropdown-menu" aria-labelledby="menu-1">
             <li><a class="dropdown-item" href="arch/overview">Overview</a></li>
+            <li><a class="dropdown-item" href="">-------------------</a></li>
             <li><a class="dropdown-item" href="arch/results">Results</a></li>
             <li><a class="dropdown-item" href="arch/context">Context</a></li>
+            <li><a class="dropdown-item" href="">-------------------</a></li>
             <li><a class="dropdown-item" href="arch/app">App</a></li>
-            <li><a class="dropdown-item" href="arch/apis">APIs</a></li>
+            <li><a class="dropdown-item" href="arch/apis">API</a></li>
             <li><a class="dropdown-item" href="arch/cli">CLI</a></li>
             <li><a class="dropdown-item" href="arch/jobs">Jobs</a></li>
+            <li><a class="dropdown-item" href="">-------------------</a></li>
+            <li><a class="dropdown-item" href="arch/overview">More...</a></li>
         </ul>
     </li>
     <li class="nav-item">
@@ -159,7 +163,7 @@
 
 <h1 id="overview">Overview</h1>
 
-<p>The Context is a container for common application dependencies such as the parsed command line <strong>args</strong>, selected <strong>environment</strong>, <strong>config</strong> properties, <strong>logs</strong>, <strong>encryptor</strong>, <strong>app, build, host</strong> info and more. This is created and must be available for any runnable application such as a <strong>Console App, CLI, or Server</strong>.</p>
+<p>The Context is a container for common application dependencies such as the parsed command line <strong>args</strong>, selected <strong>environment</strong>, <strong>config</strong> properties, <strong>logs</strong>, <strong>encryptor</strong>, <strong>app, build, host</strong> info and more. This is created and must be available for any runnable application such as a <strong>Console App, CLI, or Server</strong>. It is simply an interface with the following components, and there are default implementations, and builders available for convenience.</p>
 
 <div class="highlight"><pre class="chroma"><code class="language-kotlin" data-lang="kotlin">    <span class="cm">/**
 </span><span class="cm">     - Represents context of a running application and contains information used for most components
@@ -185,7 +189,6 @@
 
 <h1 id="index">Index</h1>
 
-<p>Table of contents for this page
 <table class="table table-bordered table-striped">
     <tr>
         <td><strong>Section</strong></td>
@@ -194,66 +197,67 @@
     </tr>
     <tr>
         <td><strong>1</strong></td>
-        <td><strong><a class="url-ch" href="core/cli#status">Status</a></strong></td>
+        <td><strong><a class="url-ch" href="arch/context#status">Status</a></strong></td>
         <td>Current status of this component</td>
     </tr>
     <tr>
         <td><strong>2</strong></td>
-        <td><strong><a class="url-ch" href="core/cli#install">Install</a></strong></td>
+        <td><strong><a class="url-ch" href="arch/context#install">Install</a></strong></td>
         <td>Installation instructions and references to sources</td>
     </tr>
     <tr>
         <td><strong>3</strong></td>
-        <td><strong><a class="url-ch" href="core/cli#requires">Requires</a></strong></td>
+        <td><strong><a class="url-ch" href="arch/context#requires">Requires</a></strong></td>
         <td>Lists all the Slate Kit and third-party dependencies</td>
     </tr>
     <tr>
         <td><strong>4</strong></td>
-        <td><strong><a class="url-ch" href="core/cli#sample">Sample</a></strong></td>
+        <td><strong><a class="url-ch" href="arch/context#sample">Sample</a></strong></td>
         <td>Quick sample to show usage of the component</td>
     </tr>
     <tr>
         <td><strong>5</strong></td>
-        <td><strong><a class="url-ch" href="core/cli#goals">Goals</a></strong></td>
+        <td><strong><a class="url-ch" href="arch/context#goals">Goals</a></strong></td>
         <td>Goals of this component and the problems it attempts to solve</td>
     </tr>
     <tr>
         <td><strong>6</strong></td>
-        <td><strong><a class="url-ch" href="core/cli#concepts">Concepts</a></strong></td>
+        <td><strong><a class="url-ch" href="arch/context#concepts">Concepts</a></strong></td>
         <td>Core concepts to understand in this component</td>
     </tr>
     <tr>
         <td><strong>7</strong></td>
-        <td><strong><a class="url-ch" href="core/cli#features">Features</a></strong></td>
+        <td><strong><a class="url-ch" href="arch/context#features">Features</a></strong></td>
         <td>List all the features supported</td>
     </tr>
     <tr>
         <td><strong>8</strong></td>
-        <td><strong><a class="url-ch" href="core/cli#setup">Setup</a></strong></td>
+        <td><strong><a class="url-ch" href="arch/context#setup">Setup</a></strong></td>
         <td>Set up and configure this component for use</td>
     </tr>
     <tr>
         <td><strong>9</strong></td>
-        <td><strong><a class="url-ch" href="core/cli#details">Details</a></strong></td>
+        <td><strong><a class="url-ch" href="arch/context#details">Details</a></strong></td>
         <td>In-depth examples of the supported features</td>
     </tr>
 </table>
+
 <br/>
 
-<a href="core/cli#overview" class="sk-back-to-top">Back to top </a>
-<br/><br/><br/><br/></p>
+<a href="arch/context#overview" class="sk-back-to-top">Back to top </a>
+<br/><br/><br/><br/>
 
 <h1 id="status">Status</h1>
 
-<p>This component is currently stable, has default implementations, and can be used for both <strong>Android and Server</strong>
+<p>This component is currently stable, has default implementations, and can be used for both <strong>Android and Server</strong></p>
+
 <br/>
 
-<a href="core/cli#overview" class="sk-back-to-top">Back to top </a>
-<br/><br/><br/><br/></p>
+<a href="arch/context#overview" class="sk-back-to-top">Back to top </a>
+<br/><br/><br/><br/>
 
 <h1 id="install">Install</h1>
 
-<p>coming soon
 <div class="highlight"><pre class="chroma"><code class="language-groovy" data-lang="groovy">    <span class="n">repositories</span> <span class="o">{</span>
         <span class="c1">// other repositories
 </span><span class="c1"></span>        <span class="n">maven</span> <span class="o">{</span> <span class="n">url</span>  <span class="s2">&#34;http://dl.bintray.com/codehelixinc/slatekit&#34;</span> <span class="o">}</span>
@@ -264,6 +268,7 @@
 </span><span class="c1"></span>
         <span class="n">compile</span> <span class="s1">&#39;com.slatekit:slatekit-common:1.0.0&#39;</span>
     <span class="o">}</span></code></pre></div>
+
 
 <table class="table table-bordered table-striped">
   <tr>
@@ -276,7 +281,7 @@
   </tr>
   <tr>
     <td><strong>git</strong></td>
-    <td><a class="url-ch" href="https://github.com/code-helix/slatekit/tree/master/src/lib/kotlin/slatekit-app">slatekit/src/lib/kotlin/slatekit-common</a></td>
+    <td><a class="url-ch" href="https://github.com/code-helix/slatekit/tree/master/src/lib/kotlin/slatekit-common/src/main/kotlin/slatekit/common/Context.kt">slatekit/src/lib/kotlin/slatekit-common</a></td>
   </tr>
   <tr>
     <td><strong>docs</strong></td>
@@ -295,32 +300,46 @@
       <td><a class="url-ch" href="https://github.com/code-helix/slatekit/tree/master/src/lib/kotlin/slatekit-examples/src/main/kotlin/slatekit/examples/Example_Context.kt">Example_Context.kt</a></td>
   </tr>
 </table>
+
 <br/>
 
-<a href="core/cli#overview" class="sk-back-to-top">Back to top </a>
-<br/><br/><br/><br/></p>
+<a href="arch/context#overview" class="sk-back-to-top">Back to top </a>
+<br/><br/><br/><br/>
 
 <h1 id="requires">Requires</h1>
 
-<p>This component uses the following other <strong>Slate Kit</strong> and/or third-party components.
+<p>This component uses several components from the Slate Kit Utilities.
 <table class="table table-bordered table-striped">
     <tr>
         <td><strong>Component</strong></td>
         <td><strong>Description</strong></td>
     </tr>
     <tr>
-        <td><a class="url-ch" href="core/results">Slate Kit - Results</a></td>
-        <td>To model successes and failures with optional status codes</td>
-    </tr>
-    <tr>
-        <td><a class="url-ch" href="utils/utils.html">Slate Kit - Common</a></td>
+        <td><a class="url-ch" href="utils/overview">Slate Kit - Common</a></td>
         <td>Common utilities for both android + server</td>
     </tr>
-</table>
+    <tr>
+        <td><a class="url-ch" href="utils/args">Args</a></td>
+        <td>Command line arguments parser</td>
+    </tr>
+    <tr>
+        <td><a class="url-ch" href="utils/env">Env</a></td>
+        <td>Environment setup and selector</td>
+    </tr>
+    <tr>
+        <td><a class="url-ch" href="utils/config">Conf</a></td>
+        <td>Config settings with inheritance</td>
+    </tr>
+    <tr>
+        <td><a class="url-ch" href="utils/logger">Logs</a></td>
+        <td>Logger and logging support</td>
+    </tr>
+</table></p>
+
 <br/>
 
-<a href="core/cli#overview" class="sk-back-to-top">Back to top </a>
-<br/><br/><br/><br/></p>
+<a href="arch/context#overview" class="sk-back-to-top">Back to top </a>
+<br/><br/><br/><br/>
 
 <h1 id="sample">Sample</h1>
 
@@ -356,13 +375,15 @@
         <td>Can be extended so that you can build your own context and/or load addition components.</td>
     </tr>
 </table>
+
 <br/>
 
 <a href="arch/context#overview" class="sk-back-to-top">Back to top </a>
 <br/><br/><br/><br/>
 
-# Setup 
-Some examples of setting up the context
+<h1 id="setup">Setup</h1>
+
+<p>Some examples of setting up the context
 <table class="table table-bordered table-striped">
     <tr>
         <td><strong>Example</strong></td>
@@ -372,19 +393,19 @@ Some examples of setting up the context
     <tr>
         <td><strong>1. Simple</strong></td>
         <td>Build a simple context using convenience methods</td>
-        <td><a href="arch/context/#simple-setup" class="more"><span class="btn btn-primary">more</span></a></td>                    
+        <td><a href="arch/context/#simple-setup" class="more"><span class="btn btn-primary">more</span></a></td><br />
     </tr>
     <tr>
         <td><strong>2. Manual</strong> </td>
         <td>Manually build the context with explicit values</td>
-        <td><a href="arch/context/#manual-setup" class="more"><span class="btn btn-primary">more</span></a></td>                                         
+        <td><a href="arch/context/#manual-setup" class="more"><span class="btn btn-primary">more</span></a></td><br />
     </tr>
     <tr>
         <td><strong>3. Derived</strong></td>
         <td>Allow the context to the built by the Application Runner</td>
-        <td><a href="arch/context/#derived-setup" class="more"><span class="btn btn-primary">more</span></a></td>                    
+        <td><a href="arch/context/#derived-setup" class="more"><span class="btn btn-primary">more</span></a></td><br />
     </tr>
-</table>
+</table></p>
 
 <br/>
 
@@ -432,7 +453,7 @@ Some examples of setting up the context
 
 <h2 id="derived-setup">Derived</h2>
 
-<p>The context is automatically created when using the <a href="http://www.slatekit.com/arch/app" >app</a>.
+<p>The context is automatically created when using the <a href="arch/" >app</a>.
 In this case, the AppRunner inspects the command line args, config settings from <strong>env.conf</strong> and then builds up the context. You also supply the builder function that supplies an instance of your Application using the auto-created context. You can modify/copy the context here before it is finally passed to the Application constructor.
 <div class="highlight"><pre class="chroma"><code class="language-kotlin" data-lang="kotlin">    
     <span class="k">import</span> <span class="nn">slatekit.common.CommonContext</span>
@@ -499,12 +520,13 @@ In this case, the AppRunner inspects the command line args, config settings from
 </table>
 <br/>
 
-<a href="core/cli#overview" class="sk-back-to-top">Back to top </a>
+<a href="arch/context#overview" class="sk-back-to-top">Back to top </a>
 <br/><br/><br/><br/></p>
 
 <h2 id="args">Args</h2>
 
-<p>You can access the parsed command line args
+<p>You can access the parsed command line args.
+See <a href="http://www.slatekit.com/utils/args" >Args</a> for more info.
 <div class="highlight"><pre class="chroma"><code class="language-kotlin" data-lang="kotlin">      
     <span class="n">ctx</span><span class="p">.</span><span class="n">args</span><span class="p">.</span><span class="n">line</span>       
     <span class="n">ctx</span><span class="p">.</span><span class="n">args</span><span class="p">.</span><span class="n">action</span>      <span class="c1">// e.g. &#34;action&#34; if using &#34;service.action -key=1&#34;
@@ -522,7 +544,8 @@ In this case, the AppRunner inspects the command line args, config settings from
 
 <h2 id="env">Envs</h2>
 
-<p>You have access to the environments and currently selected environment
+<p>You have access to the environments and currently selected environment.
+See <a href="http://www.slatekit.com/utils/env" >Env</a> for more info.
 <div class="highlight"><pre class="chroma"><code class="language-kotlin" data-lang="kotlin">      
     <span class="n">ctx</span><span class="p">.</span><span class="n">envs</span><span class="p">.</span><span class="n">name</span>    <span class="c1">// &#34;loc&#34; ( representing local )
 </span><span class="c1"></span>    <span class="n">ctx</span><span class="p">.</span><span class="n">envs</span><span class="p">.</span><span class="n">env</span>     <span class="c1">// &#34;dev&#34; EnvMode: ( Dev | Qat | Uat | Pro )
@@ -540,7 +563,8 @@ In this case, the AppRunner inspects the command line args, config settings from
 
 <h2 id="conf">Conf</h2>
 
-<p>You have access to the currently loaded configuration settings
+<p>You have access to the currently loaded configuration settings.
+See <a href="http://www.slatekit.com/utils/config" >Conf</a> for more info.
 <div class="highlight"><pre class="chroma"><code class="language-kotlin" data-lang="kotlin">     
     <span class="n">ctx</span><span class="p">.</span><span class="n">conf</span><span class="p">.</span><span class="n">getInt</span><span class="p">(</span><span class="s">&#34;paging.batchSize&#34;</span><span class="p">)</span>
     <span class="n">ctx</span><span class="p">.</span><span class="n">conf</span><span class="p">.</span><span class="n">getIntOrNull</span><span class="p">(</span><span class="s">&#34;paging.batchSize&#34;</span><span class="p">)</span>
@@ -556,7 +580,8 @@ In this case, the AppRunner inspects the command line args, config settings from
 
 <h2 id="logs">Logs</h2>
 
-<p>You have have to the logs/factory to create loggers
+<p>You have have to the logs/factory to create loggers.
+See <a href="http://www.slatekit.com/utils/logger" >Logs</a> for more info.
 <div class="highlight"><pre class="chroma"><code class="language-kotlin" data-lang="kotlin">     
     <span class="k">val</span> <span class="py">logger1</span> <span class="p">=</span> <span class="n">ctx</span><span class="p">.</span><span class="n">logs</span><span class="p">.</span><span class="n">getLogger</span><span class="p">()</span>
     <span class="k">val</span> <span class="py">logger2</span> <span class="p">=</span> <span class="n">ctx</span><span class="p">.</span><span class="n">logs</span><span class="p">.</span><span class="n">getLogger</span><span class="p">(</span><span class="n">name</span> <span class="p">=</span> <span class="s">&#34;service1&#34;</span><span class="p">)</span>
@@ -579,7 +604,8 @@ In this case, the AppRunner inspects the command line args, config settings from
 
 <h2 id="enc">Enc</h2>
 
-<p>You can access the optional encryptor to encrypt/decrypt data
+<p>You can access the optional encryptor to encrypt/decrypt data.
+See <a href="http://www.slatekit.com/utils/encrypt" >Encryptor</a> for more info.
 <div class="highlight"><pre class="chroma"><code class="language-kotlin" data-lang="kotlin">      
     <span class="n">ctx</span><span class="p">.</span><span class="n">enc</span><span class="o">?.</span><span class="n">encrypt</span><span class="p">(</span><span class="s">&#34;raw text&#34;</span><span class="p">)</span>
     <span class="n">ctx</span><span class="p">.</span><span class="n">enc</span><span class="o">?.</span><span class="n">decrypt</span><span class="p">(</span><span class="s">&#34;&#34;</span><span class="p">)</span>

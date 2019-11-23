@@ -211,7 +211,34 @@
 
 <h1 id="status">Status</h1>
 
-<p>This component is currently stable. However it is currently using the AWS 1.0 sdk that is synchonous. A future version will involve using AWS 2.0 sdk that is <strong>Async</strong> and incorporate Coroutines.
+<p>This component is currently <strong>stable</strong>. Following limitations, current work, planned features apply.
+<table class="table table-bordered table-striped">
+    <tr>
+        <td><strong>Feature</strong></td>
+        <td><strong>Status</strong></td>
+        <td><strong>Description</strong></td>
+    </tr>
+    <tr>
+        <td><strong>Binary</strong></td>
+        <td>In-Progress</td>
+        <td>Ability to store/retrieve binary files. ( you can still use the underlying AWS provider to so )</td>
+    </tr>
+    <tr>
+        <td><strong>Names</strong></td>
+        <td>Upcoming</td>
+        <td>Ability to enforce a naming convention on the file names</td>
+    </tr>
+    <tr>
+        <td><strong>Async</strong></td>
+        <td>Upcoming</td>
+        <td>Async support via Kotlin suspend/coroutines and Java AWS 2.0 SDK</td>
+    </tr>
+    <tr>
+        <td><strong>URI</strong></td>
+        <td>Upcoming</td>
+        <td>Ability to use Slate Kit Uri for explicit references to file paths</td>
+    </tr>
+</table>
 <br/>
 
 <a href="arch/files#overview" class="sk-back-to-top">Back to top </a>
@@ -274,7 +301,7 @@
         <td><strong>Description</strong></td>
     </tr>
     <tr>
-        <td><a href="http://www.slatekit.com/arch/results" >Results</a></td>
+        <td><a href="arch/results" >Results</a></td>
         <td>To model successes and failures with optional status codes</td>
     </tr>
     <tr>
@@ -311,7 +338,7 @@
 
     <span class="c1">// Setup 2: Use the type safe config in &#34;{user_id}/myapp/conf/files.conf&#34;
 </span><span class="c1"></span>    <span class="c1">// Specify the api key section as &#34;sqs&#34;
-</span><span class="c1"></span>    <span class="k">val</span> <span class="py">files3</span> <span class="p">=</span> <span class="n">AwsCloudFiles</span><span class="p">(</span><span class="s">&#34;app1-queue-1&#34;</span><span class="p">,</span> <span class="s">&#34;slatekit&#34;</span><span class="p">,</span><span class="k">false</span><span class="p">,</span> <span class="s">&#34;user://myapp/conf/files.conf&#34;</span><span class="p">,</span> <span class="s">&#34;s3-1&#34;</span><span class="p">)</span></code></pre></div>
+</span><span class="c1"></span>    <span class="k">val</span> <span class="py">files3</span> <span class="p">=</span> <span class="n">AwsCloudFiles</span><span class="p">(</span><span class="s">&#34;app1-files-1&#34;</span><span class="p">,</span> <span class="s">&#34;slatekit&#34;</span><span class="p">,</span><span class="k">false</span><span class="p">,</span> <span class="s">&#34;user://myapp/conf/files.conf&#34;</span><span class="p">,</span> <span class="s">&#34;s3-1&#34;</span><span class="p">)</span></code></pre></div>
 
 <br/>
 
@@ -325,34 +352,34 @@
 </span><span class="c1"></span>    <span class="n">files1</span><span class="p">.</span><span class="n">init</span><span class="p">()</span>
 
     <span class="c1">// Use case 2: create using just name and content
-</span><span class="c1"></span>    <span class="n">files1</span><span class="p">.</span><span class="n">create</span><span class="p">(</span><span class="s">&#34;2016_nba_v3&#34;</span><span class="p">,</span> <span class="s">&#34;version 1&#34;</span><span class="p">)</span>
+</span><span class="c1"></span>    <span class="n">files1</span><span class="p">.</span><span class="n">create</span><span class="p">(</span><span class="s">&#34;file-1&#34;</span><span class="p">,</span> <span class="s">&#34;content 1&#34;</span><span class="p">)</span>
 
     <span class="c1">// Use case 3: update using just name and content
-</span><span class="c1"></span>    <span class="n">files1</span><span class="p">.</span><span class="n">update</span><span class="p">(</span><span class="s">&#34;2016_nba_v3&#34;</span><span class="p">,</span> <span class="s">&#34;version 2&#34;</span><span class="p">)</span>
+</span><span class="c1"></span>    <span class="n">files1</span><span class="p">.</span><span class="n">update</span><span class="p">(</span><span class="s">&#34;file-1&#34;</span><span class="p">,</span> <span class="s">&#34;content 2&#34;</span><span class="p">)</span>
 
     <span class="c1">// Use case 4: create using folder and file name
-</span><span class="c1"></span>    <span class="n">files1</span><span class="p">.</span><span class="n">create</span><span class="p">(</span><span class="s">&#34;2016_nba_v3&#34;</span><span class="p">,</span> <span class="s">&#34;chi&#34;</span><span class="p">,</span> <span class="s">&#34;version 1&#34;</span><span class="p">)</span>
+</span><span class="c1"></span>    <span class="n">files1</span><span class="p">.</span><span class="n">create</span><span class="p">(</span><span class="s">&#34;folder-1&#34;</span><span class="p">,</span> <span class="s">&#34;file-1&#34;</span><span class="p">,</span> <span class="s">&#34;content 1&#34;</span><span class="p">)</span>
 
     <span class="c1">// Use case 5: update using folder and file name
-</span><span class="c1"></span>    <span class="n">files1</span><span class="p">.</span><span class="n">update</span><span class="p">(</span><span class="s">&#34;2016_nba_v3&#34;</span><span class="p">,</span> <span class="s">&#34;chi&#34;</span><span class="p">,</span> <span class="s">&#34;version 2&#34;</span><span class="p">)</span>
+</span><span class="c1"></span>    <span class="n">files1</span><span class="p">.</span><span class="n">update</span><span class="p">(</span><span class="s">&#34;folder-1&#34;</span><span class="p">,</span> <span class="s">&#34;file-1&#34;</span><span class="p">,</span> <span class="s">&#34;content 2&#34;</span><span class="p">)</span>
 
     <span class="c1">// Use case 6: get file as a text using just name
-</span><span class="c1"></span>    <span class="n">files1</span><span class="p">.</span><span class="n">getAsText</span><span class="p">(</span><span class="s">&#34;2016_nba_v3&#34;</span><span class="p">)</span>
+</span><span class="c1"></span>    <span class="n">files1</span><span class="p">.</span><span class="n">getAsText</span><span class="p">(</span><span class="s">&#34;file-1&#34;</span><span class="p">)</span>
 
     <span class="c1">// Use case 7: get file using folder and file name
-</span><span class="c1"></span>    <span class="n">files1</span><span class="p">.</span><span class="n">getAsText</span><span class="p">(</span><span class="s">&#34;2016_nba_v3&#34;</span><span class="p">,</span> <span class="s">&#34;chi&#34;</span><span class="p">)</span>
+</span><span class="c1"></span>    <span class="n">files1</span><span class="p">.</span><span class="n">getAsText</span><span class="p">(</span><span class="s">&#34;folder-1&#34;</span><span class="p">,</span> <span class="s">&#34;file-1&#34;</span><span class="p">)</span>
 
     <span class="c1">// Use case 8: download file to local folder
-</span><span class="c1"></span>    <span class="n">files1</span><span class="p">.</span><span class="n">download</span><span class="p">(</span><span class="s">&#34;2016_nba_v3&#34;</span><span class="p">,</span> <span class="s">&#34;~/dev/temp/&#34;</span><span class="p">)</span>
+</span><span class="c1"></span>    <span class="n">files1</span><span class="p">.</span><span class="n">download</span><span class="p">(</span><span class="s">&#34;file-1&#34;</span><span class="p">,</span> <span class="s">&#34;~/dev/temp/&#34;</span><span class="p">)</span>
 
     <span class="c1">// Use case 9: download using folder and file name to local folder
-</span><span class="c1"></span>    <span class="n">files1</span><span class="p">.</span><span class="n">download</span><span class="p">(</span><span class="s">&#34;2016_nba_v3&#34;</span><span class="p">,</span> <span class="s">&#34;chi&#34;</span><span class="p">,</span> <span class="s">&#34;~/dev/temp&#34;</span><span class="p">)</span>
+</span><span class="c1"></span>    <span class="n">files1</span><span class="p">.</span><span class="n">download</span><span class="p">(</span><span class="s">&#34;folder-1&#34;</span><span class="p">,</span> <span class="s">&#34;file-1&#34;</span><span class="p">,</span> <span class="s">&#34;~/dev/temp&#34;</span><span class="p">)</span>
 
     <span class="c1">// Use case 10: delete file by just the name
-</span><span class="c1"></span>    <span class="n">files1</span><span class="p">.</span><span class="n">delete</span><span class="p">(</span><span class="s">&#34;2016_nba_v3&#34;</span><span class="p">)</span>
+</span><span class="c1"></span>    <span class="n">files1</span><span class="p">.</span><span class="n">delete</span><span class="p">(</span><span class="s">&#34;file-1&#34;</span><span class="p">)</span>
 
     <span class="c1">// Use case 11: delete using folder and name
-</span><span class="c1"></span>    <span class="n">files1</span><span class="p">.</span><span class="n">delete</span><span class="p">(</span><span class="s">&#34;2016_nba_v3&#34;</span><span class="p">,</span> <span class="s">&#34;chi&#34;</span><span class="p">)</span>
+</span><span class="c1"></span>    <span class="n">files1</span><span class="p">.</span><span class="n">delete</span><span class="p">(</span><span class="s">&#34;folder-1&#34;</span><span class="p">,</span> <span class="s">&#34;file-1&#34;</span><span class="p">)</span>
       </code></pre></div>
 <br/>
 
