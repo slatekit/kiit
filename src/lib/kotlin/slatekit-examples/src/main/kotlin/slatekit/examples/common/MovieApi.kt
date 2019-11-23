@@ -12,10 +12,7 @@
  */
 package slatekit.examples.common
 
-import slatekit.apis.Api
-import slatekit.apis.Action
-import slatekit.apis.AuthModes
-import slatekit.apis.Verbs
+import slatekit.apis.*
 import slatekit.common.CommonContext
 import slatekit.common.DateTime
 import slatekit.common.Sources
@@ -53,6 +50,12 @@ class MovieApi( ctx: AppEntContext) : ApiBaseEntity<Long, Movie, MovieService>(c
               rating   = rating,
               released = released
         ))
+    }
+
+    // Using all Action parameters
+    @Action(name="sample", desc="sample2", roles=[Roles.PARENT], access=AccessLevel.PARENT, sources = [Sources.ALL])
+    fun createSample2(title:String, playing:Boolean, cost:Int, released: DateTime):Movie {
+        return Movie.of(title, playing, cost, released)
     }
 
     /**

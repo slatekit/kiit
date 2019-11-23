@@ -8,7 +8,7 @@ object AccessLevel {
       * Reference to a parent value
       * e.g. If set on Action, this refers to its parent API
      */
-    const val Parent = ApiConstants.parent
+    const val PARENT = ApiConstants.parent
 
 
     /**
@@ -17,7 +17,7 @@ object AccessLevel {
      * 1. Client SDK enabled
      * 2. API Discovery enabled
      */
-    const val Public = "public"
+    const val PUBLIC = "public"
 
 
     /**
@@ -26,36 +26,36 @@ object AccessLevel {
      * 1. Client SDK disabled
      * 2. API Discovery enabled
      */
-    const val Internal = "internal"
+    const val INTERNAL = "internal"
 
 
     /**
-     * Private : No docs will be generated, discovery is prevented
+     * PRIVATE : No docs will be generated, discovery is prevented
      * NOTES:
      * 1. Client SDK disabled
      * 2. API Discovery disabled
      * 3. Additional API key required
      */
-    const val Private = "private"
+    const val PRIVATE = "private"
 }
 
 
 
 sealed class Access(override val name:String)  : Parentable<Access> {
-    object Parent   : Access(AccessLevel.Parent)
-    object Public   : Access(AccessLevel.Private)
-    object Internal : Access(AccessLevel.Internal)
-    object Private  : Access(AccessLevel.Private)
+    object Parent   : Access(AccessLevel.PARENT)
+    object Public   : Access(AccessLevel.PRIVATE)
+    object Internal : Access(AccessLevel.INTERNAL)
+    object Private  : Access(AccessLevel.PRIVATE)
 
 
     companion object  {
 
         fun parse(name:String): Access {
             return when(name) {
-                AccessLevel.Internal -> Access.Internal
-                AccessLevel.Parent   -> Access.Parent
-                AccessLevel.Private  -> Access.Private
-                AccessLevel.Public   -> Access.Public
+                AccessLevel.INTERNAL -> Access.Internal
+                AccessLevel.PARENT   -> Access.Parent
+                AccessLevel.PRIVATE  -> Access.Private
+                AccessLevel.PUBLIC   -> Access.Public
                 else                 -> Access.Private
             }
         }

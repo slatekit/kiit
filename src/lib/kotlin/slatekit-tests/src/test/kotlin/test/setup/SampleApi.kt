@@ -34,7 +34,7 @@ class SampleApi1(val context: Context) {
 
 
 @Api(area = "app", name = "tests", desc = "sample to test features of Slate Kit APIs", roles= ["admin"],
-        auth = AuthModes.TOKEN, verb = Verbs.AUTO, access = AccessLevel.Public, sources = [Sources.ALL])
+        auth = AuthModes.TOKEN, verb = Verbs.AUTO, access = AccessLevel.PUBLIC, sources = [Sources.ALL])
 class SampleApi2(val context: Context) {
 
     @Action(desc = "test simple action with inputs")
