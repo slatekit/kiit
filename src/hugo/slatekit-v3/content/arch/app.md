@@ -22,6 +22,34 @@ Also refer to the {{% sk-link-example file="Example_App.kt" name="Example_App.kt
 {{% sk-link-cli %}}
 {{% break %}}
 
+# Goals
+We often have to create a new application which requires typically much boiler-plate code.
+These include environments, config files, argument parsing, logging setup, and application life-cycle events.
+This component quickly gets a new application set up with all these features ready.
+<table class="table table-bordered table-striped">
+    <tr>
+        <td><strong>Goal</strong></td>
+        <td><strong>Description</strong></td>
+    </tr>
+    <tr>
+        <td><strong>1. Template</strong></td>
+        <td>Provide template for any application 
+        ( Console, Batch, CLI, Server )</td>
+    </tr>
+    <tr>
+        <td><strong>2. Features</strong> </td>
+        <td>Provide pre-built support commandline args, 
+        config, logging, and more.</td>                     
+    </tr>
+    <tr>
+        <td><strong>3. Standardized</strong></td>
+        <td>Provide standardized setup, functionality and diagnostics</td>
+        </td>                       
+    </tr>
+</table> 
+
+{{% break %}}   
+
 # Index
 <table class="table table-bordered table-striped">
     <tr>
@@ -134,32 +162,6 @@ Also refer to the {{% sk-link-example file="Example_App.kt" name="Example_App.kt
 {{< /highlight >}}
 {{% section-end mod="arch/app" %}}
 
-# Goals
-We often have to create a new application which requires typically much boiler-plate code.
-These include environments, config files, argument parsing, logging setup, and application life-cycle events.
-This component quickly gets a new application set up with all these features ready.
-<table class="table table-bordered table-striped">
-    <tr>
-        <td><strong>Goal</strong></td>
-        <td><strong>Description</strong></td>
-    </tr>
-    <tr>
-        <td><strong>1. Template</strong></td>
-        <td>Provide template for any application 
-        ( Console, Batch, CLI, Server )</td>
-    </tr>
-    <tr>
-        <td><strong>2. Features</strong> </td>
-        <td>Provide pre-built support commandline args, 
-        config, logging, and more.</td>                     
-    </tr>
-    <tr>
-        <td><strong>3. Standardized</strong></td>
-        <td>Provide standardized setup, functionality and diagnostics</td>
-        </td>                       
-    </tr>
-</table>    
-{{% section-end mod="arch/app" %}}
 
 # Concepts
 <table class="table table-bordered table-striped">
@@ -192,7 +194,6 @@ This component quickly gets a new application set up with all these features rea
 
 
 # Features
-List of all features available and how to use them.
 <table class="table table-bordered table-striped">
     <tr>
         <td><strong>Name</strong></td>
