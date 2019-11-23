@@ -11,11 +11,15 @@ This is accomplished by integrating some of the components and utilities availab
 {{% sk-link href="utils.html" text="Slate Kit Common" %}} project. 
 You can create a app quickly using the Slate Kit command line executable with the following inputs.
 Also refer to the {{% sk-link-example file="Example_App.kt" name="Example_App.kt" %}}.
+{{% break %}}
+
+# Create
 {{< highlight bash >}}
     
-    slatekit new app -name="Sample1" -package="mycompany.apps"
+    slatekit new app -name="SampleApp" -package="mycompany.apps"
     
 {{< /highlight >}}
+{{% sk-link-cli %}}
 {{% break %}}
 
 # Index

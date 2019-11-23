@@ -7,11 +7,15 @@ section_header: Jobs
 # Overview
 The Slate CLI is a Command Line Interface application that provides 
 pre-built functionality for you to integrate your own commands in an interactie manner. This CLI offers 2 distinct approaches to integration. The first approach allows you to handle the raw text supplied in the CLI yourself and is the most flexible. The second approach provides a more connected, automatic by exposing, validating, and executing inputs against Slate Kit Universal APIs. You can create a CLI app quickly using the Slate Kit command line executable with command.
+{{% break %}}
+
+# Create
 {{< highlight bash >}}
     
-    slatekit new cli -name="Sample1" -package="mycompany.apps"
+    slatekit new job -name="SampleAPI" -package="mycompany.apps"
     
 {{< /highlight >}}
+{{% sk-link-cli %}}
 {{% break %}}
 
 # Index

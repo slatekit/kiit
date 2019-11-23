@@ -1,4 +1,13 @@
 
+.alert {
+	font-family: 'Open Sans', sans-serif;
+	font-size: 15px;
+	font-weight: 400;
+	line-height: 27px;
+	color: #797c8f;
+}
+
+
 .sk-color-1 {
 	color: #558ee9 !important;
 }
