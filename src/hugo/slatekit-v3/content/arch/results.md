@@ -5,7 +5,32 @@ section_header: Results
 ---
 
 # Overview
-**Result[T, E]** is a foundational component in **Slate Kit** for accurately modeling successes and failures using a functional approach to error handling. Result is not a brand new concept, it currently exists in various forms in other languages ( see below). In fact, the Result type in Slate Kit has been inspired by these and also by Google's GRPC codes ( See below ). The implementation here differs with the **flexibility of the Error type**, the addition of an optional **Status Code**, and support for **logical grouping of errors**. 
+**Result** is a foundational component in Slate Kit for **accurately modeling successes and failures** using a functional approach to error handling. Result is **not a new concept** as it currently exists in various forms in other languages ( see below). In fact, the Result type in Slate Kit has been inspired by these and also by Google's GRPC codes ( See below ). The implementation here differs maily with the design/goals listed 
+{{% break %}}
+
+# Goals
+The design of this Result component reasonably differs from other implementations.
+<table class="table table-bordered table-striped">
+    <tr>
+        <td><strong>Design</strong></td>
+        <td><strong>Description</strong></td>
+    </tr>
+    <tr>
+        <td><strong>1. Flexible error</strong> </td>
+        <td>Error type on the Failure branch can be anything, Exception, Err, String. </td>                     
+    </tr>
+    <tr>
+        <td><strong>2. Status Codes</strong></td>
+        <td>Logical groups of status codes to categories errors, which can be converted to Http</td>
+    </tr>
+    <tr>
+        <td><strong>3. Sensible defaults</strong></td>
+        <td>Default Error types, and builders are provided to reduce custom errors / boiler-plate</td>
+    </tr>
+</table>
+{{% break %}}
+
+# Compare
 <table class="table table-bordered table-striped">
     <tr>
         <td><strong>#</strong></td>
@@ -195,27 +220,6 @@ Refer to the {{% sk-link-code component="examples" filepath="examples/Example_Re
 {{< /highlight >}}
 {{% section-end mod="arch/results" %}}
 
-# Goals
-The design of this Result type invovles achieving these specific goals.
-<table class="table table-bordered table-striped">
-    <tr>
-        <td><strong>Goal</strong></td>
-        <td><strong>Description</strong></td>
-    </tr>
-    <tr>
-        <td><strong>1. Accuracy of models</strong></td>
-        <td>Accurate successes / failures, and functional error-handling with various ways to pattern match</td>
-    </tr>
-    <tr>
-        <td><strong>2. Flexible error type</strong> </td>
-        <td>Error type on the Failure branch can be anything, Exception, Err, String. Use exceptions or default types</td>                     
-    </tr>
-    <tr>
-        <td><strong>3. Support for Status Codes</strong></td>
-        <td>Logical groups of status to categories errors, these can also be converted to Http codes</td>
-    </tr>
-</table>
-{{% section-end mod="arch/results" %}}
 
 # Concepts
 These are the main concepts / terms to know for using this component. All of these are explained further below in the details section. You can find links to the source code here.
@@ -452,20 +456,21 @@ Unlike Kotlin / Swift Result error types, the {{% sk-link-code component="result
     import slatekit.results.Err
     import slatekit.results.ErrorList
 
+    // Build Err using convenience methods
     // Simple string
     val err1 = Err.of("Invalid email")
 
     // Exception
-    val err2 = Err.of(Exception("Invalid email"))
+    val err2 = Err.ex(Exception("Invalid email"))
 
     // Field: name / value
-    val err3 = Err.of("email", "abc123@", "Invalid email")
+    val err3 = Err.on("email", "abc123@", "Invalid email")
 
     // String message from status code
-    val err4 = Err.of(Codes.INVALID)
+    val err4 = Err.code(Codes.INVALID)
 
     // List of error strings
-    val err5 = Err.of(listOf(
+    val err5 = Err.list(listOf(
         "username must be at least 8 chars", 
         "username must have 1 UPPERCASE letter"), 
     "Username is invalid")

@@ -26,7 +26,7 @@ Slate Kit uses a somewhat new, yet familiar paradigm to building out APIs by enr
     </tr>
     <tr>
         <td><strong>1. Accessable</strong></td>
-        <td><strong>Write once</strong> and have APIs hosted and/or run anywhere ( e.g. <strong>Web, CLI, File/Queue</strong> sources )</td>
+        <td><strong>Write once</strong> and have APIs hosted and/or run anywhere ( e.g. <strong>Web, CLI, from File/Queue</strong> sources )</td>
     </tr>
     <tr>
         <td><strong>2. Discoverable</strong> </td>
@@ -34,7 +34,7 @@ Slate Kit uses a somewhat new, yet familiar paradigm to building out APIs by enr
     </tr>
     <tr>
         <td><strong>3. Natural</strong></td>
-        <td>Allow <strong>normal methods</strong> to be easily turned to API actions with <strong>strong types</strong> and <strong>automatic docs</strong> and accurate {{% sk-link-arch page="results" name="Results" %}}</td>
+        <td>Allow <strong>normal methods</strong> to be easily turned to API actions with <strong>strong types</strong>, <strong>automatic docs</strong> and accurate {{% sk-link-arch page="results" name="Results" %}}</td>
     </tr>
 </table>
 
@@ -178,7 +178,7 @@ This component uses the following other <strong>Slate Kit</strong> and/or third-
 {{% section-end mod="arch/apis" %}}
 
 # Sample
-This is a quick and simple example of creating an API using the Slate Kit **Universal API paradigm**. 
+This is a quick and simple example of creating an API using the Slate Kit **Universal API paradigm**. This API is then accessible on the CLI and Web
 {{% sk-tip-generic text="Slate Kit APIs have a 3 part routing convention: {AREA} / {API} / {ACTION}" %}}
 {{< highlight kotlin >}}
       
@@ -201,52 +201,6 @@ This is a quick and simple example of creating an API using the Slate Kit **Univ
         }
     }
 
-{{< /highlight >}}
-
-### Web
-You can then access this API on the Web with a request like this:
-{{< highlight kotlin >}}
-     
-     // Similar to JSON RPC
-     POST localhost:5000/app/movies/createSample 
-     {
-        "title": "Dark Knight",
-        "playing": true,
-        "cost" : 12.50,
-        "released": "2018-07-18T00:00:00Z"
-     }
-
-{{< /highlight >}}
-
-### CLI
-You can then access this API on the CLI by hosting it in the Slate Kit CLI component.
-The request would like this:
-{{< highlight kotlin >}}
-     
-     :> app.movies.createSample -title="Dark Knight" -playing=true -cost=12.50 -released="2018-07-18T00:00:00Z"
-      
-{{< /highlight >}}
-
-### File
-You can then access this API on the Web with a request like this:
-{{< highlight kotlin >}}
-
-     // Assume file is ~/dev/slatekit/samples/apis/file-sample.json
-     {
-        "path": "/app/movies/createSample",
-        "source": "file",
-        "version": "1.0",
-        "tag" : "",
-        "timestamp": null,
-        "meta": { }
-        "data": {
-            "title": "Dark Knight",
-            "playing": true,
-            "cost" : 12.50,
-            "released": "2018-07-18T00:00:00Z"
-         }
-     }
-      
 {{< /highlight >}}
 
 {{% section-end mod="arch/apis" %}}
@@ -320,8 +274,11 @@ You can then access this API on the Web with a request like this:
 
 
 ## Setup {#setup}
-APIs are developed as normal Kotlin methods. The only difference is that they are enriched with annotations ( **optional** ) to provided metadata to the API Server indicated how they should be accessed and managed. 
+APIs are developed as normal Kotlin methods. The only difference is that they are enriched with annotations and/or configuration during registration, to provided metadata to the Slate Kit API Server indicated how they should be accessed and managed. 
 {{% sk-tip-generic text="Annotations can be avoided and instead the configurations can be explicitly supplied during registration of the APIs into the API server ( see web/cli sections below for setting up the server)" %}}
+
+### 1: Annotations
+This approach is convenient and puts all relevant metadata at the source.
 {{< highlight kotlin >}}
       
     import slatekit.apis.*
@@ -344,11 +301,44 @@ APIs are developed as normal Kotlin methods. The only difference is that they ar
     }
 
 {{< /highlight >}}
+
+### 2: Registration
+This approach reduces the dependency on Slate Kit, and requires that the metadata be supplied during registration of the API, and all the actions assume that the annotation values are inherited from the parent Api metadata.
+{{< highlight kotlin >}}
+      
+    import slatekit.apis.*
+    import slatekit.common.DateTime
+    import slatekit.common.Request
+
+    class MovieApi {
+        // Using explicit fields
+        fun createSample(title:String, playing:Boolean, cost:Int, released: DateTime):Movie {
+            return Movie.of(title, playing, cost, released)
+        }
+
+        // Using request object
+        fun createWithRequest(req:Request):Movie {
+            return Movie.of(req.getString("title"), req.getBool("playing"), req.getInt("cost"), req.getDateTime("released"))
+        }
+    }
+
+    // ... Registration code ( see other sections for more details )
+    val api = slatekit.apis.core.Api(
+                    instance = MovieApi(ctx), 
+                    area = "manage", 
+                    name = "movies", 
+                    auth = AuthMode.None
+                )
+
+{{< /highlight >}}
+
 {{% feature-end mod="arch/apis" %}}
 
 ## Routes {#routes}
-API routes consist of a **3 part ( {AREA} / {API} / {ACTION} ) routing convention** to enfore standards and simply the discovery of the routes. 
+API routes consist of a **3 part ( {AREA} / {API} / {ACTION} ) routing convention** to enfore standards and simplify the discovery of the routes. 
 {{% sk-tip-generic text="Sample: /manage/movies/createSample" %}}
+
+### 1. Parts
 <table class="table table-bordered table-striped">
     <tr>
         <td><strong>Part</strong></td>
@@ -371,6 +361,10 @@ API routes consist of a **3 part ( {AREA} / {API} / {ACTION} ) routing conventio
         <td>Represents an action/endpoint on an API, and maps to a Kotlin method</td>
     </tr>
 </table>
+
+{{% break %}}
+
+### 2. Example
 {{< highlight kotlin >}}
      
      POST localhost:5000/manage/movies/createSample 
@@ -382,12 +376,57 @@ API routes consist of a **3 part ( {AREA} / {API} / {ACTION} ) routing conventio
      }
 
 {{< /highlight >}}
+{{% break %}}
+
+### 3. Discovery
+Because the routes are standardized on a 3 part heirarchical format, this makes discovery of all **Areas, APIS, Actions, Inputs(for actions)** incredibly straight-forward for both Web and CLI hosted APIs. You can drill down from areas into actions using an approach that resembles navigating a folder and showing the items.
+<table class="table table-bordered table-striped">
+    <tr>
+        <td><strong>Discover</strong></td>
+        <td><strong>CLI</strong></td>
+        <td><strong>Web</strong></td>
+        <td><strong>Note</strong></td>
+    </tr>
+    <tr>
+        <td><strong>Areas</strong></td>
+        <td>?</td>
+        <td>/help</td>
+        <td>Lists <strong>Areas</strong> available. <br/>
+            E.g. manage, discover
+        </td>
+    </tr>
+    <tr>
+        <td><strong>APIs in Area</strong></td>
+        <td>manage?</td>
+        <td>/manage/help</td>
+        <td>Lists <strong>APIs</strong> available in the <strong>manage</strong> area<br/>
+            E.g. movies, concerts
+        </td>
+    </tr>
+    <tr>
+        <td><strong>Actions on API</strong></td>
+        <td>manage.movies?</td>
+        <td>/manage/movies/help</td>
+        <td>Lists <strong>Actions</strong> available in <strong>manage/movies</strong> API<br/>
+            E.g. create, update, delete, disable
+        </td>
+    </tr>
+    <tr>
+        <td><strong>Inputs on Action</strong></td>
+        <td>manage.movies.createSample?</td>
+        <td>/manage/movies/createSample/help</td>
+        <td>Lists <strong>Inputs</strong> for <strong>manage / movies /createSample</strong> Action<br/>
+            E.g. title=string, cost=double
+        </td>
+    </tr>
+</table>
+
 {{% feature-end mod="arch/apis" %}}
 
 ## Config {#config}
 There are several annotation properties available to configure APIs and Actions. 
 
-### API
+### 1. API
 These are all the properties for the **@Api** annotation to put on a class to indicate it should be accessable as an Api.
 <table class="table table-bordered table-striped">
     <tr>
@@ -464,7 +503,7 @@ These are all the properties for the **@Api** annotation to put on a class to in
     </tr>
 </table>
 
-### Action
+### 2. Action
 These are all the properties for the **@Action** annotation to be put on methods to indicate it should be available as an action/endpoint
 
 <div class="alert alert-warning" role="alert">
@@ -589,9 +628,11 @@ Requests in Slate Kit are abstracted out as {{% sk-link-code component="common" 
 
 ## Responses {#responses}
 There are 2 ways to returns responses/values from methods. The first is to simply return the exact value. The second is to wrap the value into a Slate Kit {{% sk-link-arch page="results" name="Result" %}}.
+
+### 1. Result model
 {{< highlight kotlin >}}
       
-    // Case 1: Return explicit value
+    // Case 1: Return explicit value( will return an HTTP 200)
     return Movie.of(title, playing, cost, released)
 
     // Case 2. Return value wrapped as Outcome<Movie> = Result<Movie, Err>
@@ -599,10 +640,29 @@ There are 2 ways to returns responses/values from methods. The first is to simpl
     return Outcomes.success(movie)
       
 {{< /highlight >}}
+
+### 2. Response JSON
+JSON Responses from APIs always the following fields. The **value** field will represent the payload returned from your method. The **success, code, msg, err** fields are representing by the {{% sk-link-arch page="results" name="Result" %}} component for modeling successes/failures.
+{{< highlight json >}}
+
+    {
+        "success": true,
+        "code": 200001,
+        "meta": null,
+        "value": {
+            "version": "1.0.0",
+            "date": "2019-08-10"
+        },
+        "msg": "Success",
+        "err": null,
+        "tag": null
+    }
+
+{{< /highlight >}}
 {{% feature-end mod="arch/apis" %}}
 
 ## Errors {#errors}
-You can accurately model successes and failures using {{% sk-link-arch page="results" name="Result" %}}.
+You can accurately model successes and failures using {{% sk-link-arch page="results" name="Result" %}}. Result ( and the Outcome typealias ) help to model errors accurately which can then be easily converted to Http status codes and responses.
 {{< highlight kotlin >}}
      
     @Action()
@@ -630,6 +690,10 @@ You can accurately model successes and failures using {{% sk-link-arch page="res
 
 ## Web {#web}
 You can host Slate Kit APIs as Web APIs using the default Http Engine which is **Ktor**.
+<div class="alert alert-warning" role="alert">
+  Use the generator to create Slate Kit APIs
+</div>
+
 {{< highlight kotlin >}}
      
     fun runServer() {
@@ -682,6 +746,8 @@ You can host Slate Kit APIs as Web APIs using the default Http Engine which is *
 
 ## CLI {#cli}
 You can host Slate Kit **Universal APIs** on the CLI using the Slate Kit {{% sk-link-arch page="cli" name="CLI" %}}
+
+### CLI Setup
 {{< highlight kotlin >}}
       
     // 1. The API keys( DocApi, SetupApi are authenticated using an sample API key )
@@ -714,7 +780,38 @@ You can host Slate Kit **Universal APIs** on the CLI using the Slate Kit {{% sk-
     return cli.run()
        
 {{< /highlight >}}
+
+### CLI Example
+You can then access this API on the CLI by hosting it in the Slate Kit CLI component.
+The request would like this:
+{{< highlight kotlin >}}
+     
+     :> app.movies.createSample -title="Dark Knight" -playing=true -cost=12.50 -released="2018-07-18T00:00:00Z"
+      
+{{< /highlight >}}
 {{% feature-end mod="arch/apis" %}}
 
+## File
+You can then call this API from a request saved to a file
+{{% sk-tip-generic text="Functionality is available but docs are not yet ready." %}}
+{{< highlight kotlin >}}
+
+     // Assume file is ~/dev/slatekit/samples/apis/file-sample.json
+     {
+        "path": "/app/movies/createSample",
+        "source": "file",
+        "version": "1.0",
+        "tag" : "",
+        "timestamp": null,
+        "meta": { }
+        "data": {
+            "title": "Dark Knight",
+            "playing": true,
+            "cost" : 12.50,
+            "released": "2018-07-18T00:00:00Z"
+         }
+     }
+      
+{{< /highlight >}}
 {{% section-end mod="arch/apis" %}}
 
