@@ -47,7 +47,7 @@ data class Api(
     val verb: Verb = Verb.Auto,
     val declaredOnly: Boolean = true,
     val singleton: Any? = null,
-    val setup: Setup = Setup.Annotated,
+    val setup: Setup = Setup.Methods,
     val actions: Lookup<Action> = Lookup(listOf(), { t -> t.name })
 ) {
 
