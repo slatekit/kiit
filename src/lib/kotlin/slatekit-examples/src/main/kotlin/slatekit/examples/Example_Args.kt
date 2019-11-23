@@ -34,25 +34,23 @@ class Example_Args  : Command("args") {
     // Example:
     // Given on the the command line:
     // -log.level=info -env=dev -text='hello world'
-    showResults( Args.parse( "-log.level=info -env=dev -text='hello world'", sep="=", hasAction = true ) )
+    showResults( Args.parse( "-log.level=info -env=dev -text='hello world'") )
 
-    // CASE 1: Parse using defaults. E.g. the key/value prefix = "-", separator = ":"
-    showResults( Args.parse( "-env:dev -text:'hello world' -batch:10" ) )
+    // CASE 1: Parse using an action prefixed to the arguments
+    showResults( Args.parse( "service.action -log.level=info -env=dev -text='hello world'", hasAction = true) )
 
 
-    // CASE 2: Custom prefix and sep e.g. "!" and separator "="
-    showResults( Args.parse( "!env=dev !text='hello word' !batch=10 ", prefix = "!", sep = "=" ) )
+    // CASE 2: Custom prefix and sep e.g. "!" and separator ":"
+    showResults( Args.parse( "!env=dev !text='hello word' !batch:10 ", prefix = "!", sep = ":") )
 
 
     // CASE 3a: Check for action/method call in the beginning
-    showResults( Args.parse( "area.service.method -env=dev -text='hello word' -batch=10", prefix = "-",
-                 sep = "=", hasAction = true ) )
-
-
-    // CASE 3b: Check for method call in the beginning
-    showResults( Args.parse( "service.method -env=dev -text='hello word' -batch=10", prefix = "-",
-                 sep = "=", hasAction = true ) )
-
+    val args = Args.parse( "manage.movies.createSample -title='Dark Knight' -date='2013-07-18'", hasAction = true )
+    showResults( args )
+    args.onSuccess { args ->
+      args.getString("title")
+      args.getLocalDate("date")
+    }
 
     // CASE 3c: Check for only action name in the beginning.
     showResults( Args.parse( "method", prefix = "-", sep = "=", hasAction = true ) )

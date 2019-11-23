@@ -186,21 +186,21 @@ class Example_Results : Command("results"), OutcomeBuilder {
         val err2 = Err.of(Exception("Invalid email"))
 
         // Field: name / value
-        val err3 = Err.of("email", "abc123 is not a valid email", "Invalid email")
+        val err3 = Err.on("email", "abc123 is not a valid email", "Invalid email")
 
         // String message from status code
-        val err4 = Err.of(Codes.INVALID)
+        val err4 = Err.code(Codes.INVALID)
 
         // List of error strings
-        val err5 = Err.of(listOf(
+        val err5 = Err.list(listOf(
                 "username must be at least 8 chars",
                 "username must have 1 UPPERCASE letter"
         ), "Username is invalid")
 
         // List of Err types
         val err6 = ErrorList(listOf(
-                Err.of("email", "abc123 is not a valid email", "Invalid email"),
-                Err.of("phone", "123-456-789 is not a valid U.S. phone", "Invalid phone")
+                Err.on("email", "abc123 is not a valid email", "Invalid email"),
+                Err.on("phone", "123-456-789 is not a valid U.S. phone", "Invalid phone")
         ), "Please correct the errors")
 
         // Create the Failure branch from the errors
@@ -220,8 +220,8 @@ class Example_Results : Command("results"), OutcomeBuilder {
 
         // Validated<T> = Result<T, ErrorList>
         val res4:Validated<String> = Failure(ErrorList(listOf(
-                Err.of("email", "abc123 is not a valid email", "Invalid email"),
-                Err.of("phone", "123-456-789 is not a valid U.S. phone", "Invalid phone")
+                Err.on("email", "abc123 is not a valid email", "Invalid email"),
+                Err.on("phone", "123-456-789 is not a valid U.S. phone", "Invalid phone")
         ), "Please correct the errors"))
 
     }

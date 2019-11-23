@@ -50,32 +50,16 @@ interface Err {
      **/
     companion object {
 
-        fun of(msg: String): Err {
-            return ErrorInfo(msg)
-        }
-
-        fun of(status: Status): Err {
-            return ErrorInfo(status.msg)
+        fun of(msg: String, ex: Throwable? = null): Err {
+            return ErrorInfo(msg, ex)
         }
 
         fun of(ex: Throwable): Err {
             return ErrorInfo(ex.message ?: "", ex)
         }
 
-        fun of(msg: String, ex: Throwable): Err {
-            return ErrorInfo(msg, ex)
-        }
-
-        fun of(field:String, value:String, msg:String):Err {
+        fun on(field:String, value:String, msg:String):Err {
             return ErrorField(field, value, msg)
-        }
-
-        fun of(errors:List<String>, msg:String?):Err {
-            return ErrorList(errors.map { ErrorInfo(it) }, msg ?: "Error occurred")
-        }
-
-        fun list(errors:List<String>, msg:String?):ErrorList {
-            return ErrorList(errors.map { ErrorInfo(it) }, msg ?: "Error occurred")
         }
 
         fun ex(ex: Exception): Err {
@@ -84,6 +68,14 @@ interface Err {
 
         fun obj(err: Any): Err {
             return ErrorInfo(err.toString(), null, err)
+        }
+
+        fun code(status: Status): Err {
+            return ErrorInfo(status.msg)
+        }
+
+        fun list(errors:List<String>, msg:String?):ErrorList {
+            return ErrorList(errors.map { ErrorInfo(it) }, msg ?: "Error occurred")
         }
     }
 }

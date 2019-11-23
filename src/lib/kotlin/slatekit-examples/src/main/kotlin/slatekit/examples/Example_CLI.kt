@@ -14,14 +14,14 @@ package slatekit.examples
 
 //<doc:import_required>
 import kotlinx.coroutines.runBlocking
+import slatekit.results.*
 import slatekit.cli.CLI
 import slatekit.cli.CliRequest
 import slatekit.cli.CliSettings
-
+import slatekit.cli.CliResponse
 //</doc:import_required>
 
 //<doc:import_examples>
-import slatekit.cli.CliResponse
 import slatekit.common.info.Info
 import slatekit.common.info.Folders
 import slatekit.common.requests.InputArgs
@@ -30,7 +30,6 @@ import slatekit.cmds.Command
 import slatekit.cmds.CommandRequest
 import slatekit.common.types.Content
 import slatekit.common.types.ContentType
-import slatekit.results.*
 
 //</doc:import_examples>
 
@@ -72,11 +71,19 @@ class Example_CLI : Command("auth") {
             // NOTE: The command is parsed into a [slatekit.common.args.Args] component.
             // The Args component is then put inside a [slatekit.cli.CliRequest] component
              */
+            // This gets you the raw text/line
             println("line   : " + request.args.line)
+
+            // This returns the list of action names before arguments. e.g. ["manage", "movies", "createSample"]
+            println("parts  : " + request.parts)
             println("path   : " + request.fullName)
+
+            // This is useful if leveraging the 3 part routing system for Slate Kit APIs
             println("area   : " + request.area)
             println("api    : " + request.name)
             println("action : " + request.action)
+
+            // Access the arguments
             println("arg #  : " + request.args.size())
             println("arg 1  : " + request.args.getString("email"))
 

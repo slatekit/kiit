@@ -6,7 +6,7 @@ import slatekit.core.slatekit.core.common.Coordinator
  * Provides coordinated ( default approach = Channel ) access to cache operations
  * Read operations can be either optimistic and or callback based.
  */
-class Cacher(val cache:Cache, private val coordinator: Coordinator<CacheCommand>) : Management {
+class AsyncCache(val cache:Cache, private val coordinator: Coordinator<CacheCommand>) : Management {
 
 
     override suspend fun request(command: CacheCommand) {

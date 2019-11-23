@@ -2,6 +2,7 @@ package slatekit.examples
 
 import kotlinx.coroutines.runBlocking
 import slatekit.apis.ApiServer
+import slatekit.apis.AuthMode
 import slatekit.apis.Verb
 import slatekit.apis.core.Api
 import slatekit.common.conf.Config
@@ -24,9 +25,10 @@ class Guide_APIs : Command("types") {
     }
 
 
-    fun setup():Unit {
+    fun setup() {
 
         val ctx = AppEntContext.sample(Config(), "myapp", "myapp", "App1", "Company1")
+        val api = Api(MovieApi(ctx), "manage", "movies", "", auth = AuthMode.None)
         val container = ApiServer(
                 ctx  = ctx,
                 apis = listOf(
