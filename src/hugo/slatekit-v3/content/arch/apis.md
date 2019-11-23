@@ -116,6 +116,11 @@ This component is currently stable and uses JetBrains **Ktor** as the underlying
         <td>Auto-generate Postman scripts from Actions</td>
     </tr>
     <tr>
+        <td>**Serialization**</td>
+        <td>Upcoming</td>
+        <td>Replace internal serializer with Jackson, Moshi, or kotlinx.serialization</td>
+    </tr>
+    <tr>
         <td>**Streaming**</td>
         <td>Upcoming</td>
         <td>Support for streaming</td>
@@ -389,6 +394,7 @@ These are all the properties for the **@Api** annotation to put on a class to in
         <td><strong>Type</strong></td>
         <td><strong>Name</strong></td>
         <td><strong>Required</strong></td>
+        <td><strong>Default</strong></td>
         <td><strong>Purpose</strong></td>
         <td><strong>Example</strong></td>
     </tr>
@@ -396,6 +402,7 @@ These are all the properties for the **@Api** annotation to put on a class to in
         <td><strong>@Api</strong></td>
         <td><strong>area</strong></td>
         <td><strong>Required</strong></td>
+        <td>n/a</td>
         <td>Represents the logical area of the API</td>
         <td>manage</td>
     </tr>
@@ -403,6 +410,7 @@ These are all the properties for the **@Api** annotation to put on a class to in
         <td><strong>-</strong></td>
         <td><strong>name<strong></td>
         <td><strong>Required</strong></td>
+        <td>n/a</td>
         <td>Represents the name of this API</td>
         <td>movies</td>
     </tr>
@@ -410,6 +418,7 @@ These are all the properties for the **@Api** annotation to put on a class to in
         <td><strong>-</strong></td>
         <td><strong>desc</strong></td>
         <td>Optional</td>
+        <td>Empty</td>
         <td>Description of the API</td>
         <td>Manages movies</td>
     </tr>
@@ -417,6 +426,7 @@ These are all the properties for the **@Api** annotation to put on a class to in
         <td><strong>-</strong></td>
         <td><strong>auth</strong></td>
         <td>Optional</td>
+        <td>None</td>
         <td>Specifies how the authentication should work</td>
         <td>{{% sk-link-code component="apis" filepath="apis/AuthMode.kt" name="AuthMode.kt" %}}</td>
     </tr>
@@ -424,6 +434,7 @@ These are all the properties for the **@Api** annotation to put on a class to in
         <td><strong>-</strong></td>
         <td><strong>roles</strong></td>
         <td>Optional</td>
+        <td>Empty</td>
         <td>List of roles allowed to access this API</td>
         <td>{{% sk-link-code component="common" filepath="common/auth/Roles.kt" name="Roles.kt" %}}</td>
     </tr>
@@ -431,6 +442,7 @@ These are all the properties for the **@Api** annotation to put on a class to in
         <td><strong>-</strong></td>
         <td><strong>access</strong></td>
         <td>Optional</td>
+        <td>Public</td>
         <td>Desribes visibility of the API</td>
         <td>{{% sk-link-code component="apis" filepath="apis/Access.kt" name="Access.kt" %}}</td>
     </tr>
@@ -438,6 +450,7 @@ These are all the properties for the **@Api** annotation to put on a class to in
         <td><strong>-</strong></td>
         <td><strong>verb</strong></td>
         <td>Optional</td>
+        <td>Auto</td>
         <td>Desribes how the Verbs should be handled </td>
         <td>{{% sk-link-code component="apis" filepath="apis/Verbs.kt" name="Verbs.kt" %}}</td>
     </tr>
@@ -445,6 +458,7 @@ These are all the properties for the **@Api** annotation to put on a class to in
         <td><strong>-</strong></td>
         <td><strong>sources</strong></td>
         <td>Optional</td>
+        <td>All</td>
         <td>Indicates where this API can handle requests from</td>
         <td>{{% sk-link-code component="common" filepath="common/Sources.kt" name="Sources.kt" %}}</td>
     </tr>
@@ -452,32 +466,42 @@ These are all the properties for the **@Api** annotation to put on a class to in
 
 ### Action
 These are all the properties for the **@Action** annotation to be put on methods to indicate it should be available as an action/endpoint
+
+<div class="alert alert-warning" role="alert">
+  1. Several @Action properties can reference the @Api properties via <strong>@parent</strong><br/>
+  2. Many of the @Action properties are defaulted
+</div>
+
 <table class="table table-bordered table-striped">
     <tr>
         <td><strong>@Action</strong></td>
         <td><strong>area<strong></td>
         <td><strong>Required</strong></td>
+        <td><strong>Default</strong></td>
         <td>Represents the logical area of the API</td>
-        <td>manage</td>
+        <td>Example</td>
     </tr>
     <tr>
         <td><strong>-</strong></td>
         <td><strong>name</strong></td>
-        <td><strong>Required</strong></td>
+        <td>Optional</td>
+        <td>method name</td>
         <td>Represents the name of this Action</td>
-        <td>movies</td>
+        <td>createSample</td>
     </tr>
     <tr>
         <td><strong>-</strong></td>
         <td><strong>desc</strong></td>
         <td>Optional</td>
+        <td>Empty</td>
         <td>Description of the Action</td>
-        <td>Manages movies</td>
+        <td>Create sample movie</td>
     </tr>
     <tr>
         <td><strong>-</strong></td>
         <td><strong>roles</strong></td>
         <td>Optional</td>
+        <td>Empty</td>
         <td>List of roles allowed to access this API</td>
         <td>{{% sk-link-code component="common" filepath="common/auth/Roles.kt" name="Roles.kt" %}}</td>
     </tr>
@@ -485,6 +509,7 @@ These are all the properties for the **@Action** annotation to be put on methods
         <td><strong>-</strong></td>
         <td><strong>access</strong></td>
         <td>Optional</td>
+        <td>Public</td>
         <td>Desribes visibility of the API</td>
         <td>{{% sk-link-code component="apis" filepath="apis/Access.kt" name="Access.kt" %}}</td>
     </tr>
@@ -492,6 +517,7 @@ These are all the properties for the **@Action** annotation to be put on methods
         <td><strong>-</strong></td>
         <td><strong>verb</strong></td>
         <td>Optional</td>
+        <td>Auto</td>
         <td>Desribes how the Verbs should be handled </td>
         <td>{{% sk-link-code component="apis" filepath="apis/Verbs.kt" name="Verbs.kt" %}}</td>
     </tr>
@@ -499,6 +525,7 @@ These are all the properties for the **@Action** annotation to be put on methods
         <td><strong>-</strong></td>
         <td><strong>sources</strong></td>
         <td>Optional</td>
+        <td>All</td>
         <td>Indicates where this API can handle requests from</td>
         <td>{{% sk-link-code component="common" filepath="common/Sources.kt" name="Sources.kt" %}}</td>
     </tr>
