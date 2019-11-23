@@ -120,10 +120,10 @@ data class Routes(
     fun instance(area: String, name: String, ctx: Context): Any? {
         val api = api(area, name)
         val instance = api?.let { info ->
-            info.singleton ?: if (info.cls.primaryConstructor!!.parameters.isEmpty()) {
-                Reflector.create<Any>(info.cls)
+            info.singleton ?: if (info.klass.primaryConstructor!!.parameters.isEmpty()) {
+                Reflector.create<Any>(info.klass)
             } else {
-                Reflector.createWithArgs<Any>(info.cls, arrayOf(ctx))
+                Reflector.createWithArgs<Any>(info.klass, arrayOf(ctx))
             }
         }
         onInstanceCreated?.invoke(instance)

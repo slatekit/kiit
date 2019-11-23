@@ -133,7 +133,7 @@ class CLITests {
     @Test
     fun can_eval_about() {
         val cli = MyCLI()
-        val result = runBlocking { cli.eval(Command.About.id) }
+        val result = runBlocking { cli.eval(Reserved.About.id) }
         Assert.assertEquals(true, result.success)
         Assert.assertEquals(Codes.ABOUT.code, result.code)
     }
@@ -142,7 +142,7 @@ class CLITests {
     @Test
     fun can_eval_help() {
         val cli = MyCLI()
-        val result = runBlocking { cli.eval(Command.Help.id) }
+        val result = runBlocking { cli.eval(Reserved.Help.id) }
         Assert.assertEquals(true, result.success)
         Assert.assertEquals(Codes.HELP.code, result.code)
     }
@@ -151,7 +151,7 @@ class CLITests {
     @Test
     fun can_eval_version() {
         val cli = MyCLI()
-        val result = runBlocking { cli.eval(Command.Version.id) }
+        val result = runBlocking { cli.eval(Reserved.Version.id) }
         Assert.assertEquals(true, result.success)
         Assert.assertEquals(Codes.VERSION.code, result.code)
     }
@@ -160,7 +160,7 @@ class CLITests {
     @Test
     fun can_eval_exit() {
         val cli = MyCLI()
-        val result = runBlocking { cli.eval(Command.Exit.id) }
+        val result = runBlocking { cli.eval(Reserved.Exit.id) }
         Assert.assertEquals(true, result.success)
         Assert.assertEquals(Codes.EXIT.code, result.code)
     }
@@ -169,7 +169,7 @@ class CLITests {
     @Test
     fun can_eval_quit() {
         val cli = MyCLI()
-        val result = runBlocking { cli.eval(Command.Quit.id) }
+        val result = runBlocking { cli.eval(Reserved.Quit.id) }
         Assert.assertEquals(true, result.success)
         Assert.assertEquals(Codes.EXIT.code, result.code)
     }

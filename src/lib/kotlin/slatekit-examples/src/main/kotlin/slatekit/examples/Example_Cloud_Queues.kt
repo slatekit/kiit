@@ -28,7 +28,7 @@ import slatekit.results.Try
 //</doc:import_examples>
 
 
-class Example_Aws_Sqs  : Command("sqs") {
+class Example_Cloud_Queues  : Command("sqs") {
 
   override fun execute(request: CommandRequest) : Try<Any>
   {
@@ -53,10 +53,10 @@ class Example_Aws_Sqs  : Command("sqs") {
     queue2.init()
 
     // Use case 2: send 1 message
-    queue2.send("test 1")
+    queue2.send("item 1")
 
     // Use case 3: send multiple messages
-    queue2.send("test 2")
+    queue2.send("item 2")
 
     // Use case 4: send message with tags
     queue2.send("user=kishore", tagName="type", tagValue="reg")

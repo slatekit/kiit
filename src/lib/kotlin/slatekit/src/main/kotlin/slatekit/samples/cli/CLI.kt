@@ -49,7 +49,7 @@ class CLI(val ctx: Context) {
     fun apis(): List<slatekit.apis.core.Api> {
         return listOf(
                 slatekit.apis.core.Api(
-                        cls = SampleApi::class,
+                        klass = SampleApi::class,
                         setup = Setup.Annotated,
                         declaredOnly = true,
                         auth = AuthMode.Keyed,

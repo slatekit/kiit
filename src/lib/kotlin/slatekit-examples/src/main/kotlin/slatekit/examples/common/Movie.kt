@@ -66,6 +66,11 @@ data class Movie(
     override fun isPersisted(): Boolean = id > 0
 
     companion object {
+
+        fun of(title:String, playing:Boolean, cost:Int, released: DateTime):Movie {
+            return Movie(title = title, playing = playing, cost =  cost, rating = 0.0, released = released)
+        }
+
         fun samples():List<Movie> = listOf(
                 Movie(
                         title = "Indiana Jones: Raiders of the Lost Ark",

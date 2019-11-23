@@ -12,6 +12,7 @@ usage: Please refer to license on github for more info.
 package slatekit.examples
 
 //<doc:import_required>
+import slatekit.apis.Verbs
 import slatekit.common.requests.InputArgs
 import slatekit.common.requests.Request
 import slatekit.common.CommonRequest
@@ -67,7 +68,7 @@ class Example_Request : Command("send") {
                 path = "app.users.activate",
                 parts = listOf("app", "users", "activate"),
                 source = Source.CLI,
-                verb = "post",
+                verb = Verbs.POST,
                 meta = InputArgs(mapOf("api-key" to "ABC-123")),
                 data = InputArgs(mapOf("userId" to 5001)),
                 raw = "the raw HTTP SparkJava send or CLI ShellCommand",
@@ -89,7 +90,7 @@ class Example_Request : Command("send") {
         println( request.name   )
         println( request.action )
 
-        // CASE 4a: Get a header named "api-key"
+        // CASE 4a: Get metadata named "api-key"
         println( request.meta.getString("api-key") )
 
         // CASE 4b: Get a header named "sample-id" as integer
@@ -111,14 +112,14 @@ class Example_Request : Command("send") {
         // otherwise, if the request is a post, the value is
         // first checked in the body ( json data ) before checking
         // the query params
-        println( request.meta.getInt("userId") )
+        println( request.data.getInt("userId") )
 
         // CASE 5b: Get a parameter named "userId" as nullable integer
-        println( request.meta.getIntOrNull("userId") )
+        println( request.data.getIntOrNull("userId") )
 
         // CASE 5c: Get a parameter named "userId" as integer with default
         // value if its not there
-        println( request.meta.getIntOrElse("userId", -1) )
+        println( request.data.getIntOrElse("userId", -1) )
 
         // CASE 6: Get the verb ( only applicable to HTTP requests )
         // For the CLI - the verb will be "cli"

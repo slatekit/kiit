@@ -14,14 +14,16 @@ import slatekit.common.ext.toResponse
 import slatekit.server.ServerSettings
 import slatekit.server.common.RequestHandler
 import slatekit.server.common.ResponseHandler
+import slatekit.server.common.ServerDiagnostics
+import slatekit.tracking.MetricsLite
 
 
 class KtorHandler(
         override val context: Context,
         val settings: ServerSettings,
         override val container:ApiServer,
-        override val diagnostics: Diagnostics<Request>,
-        override val responses: ResponseHandler
+        override val diagnostics: Diagnostics<Request> = diagnostics(context),
+        override val responses: ResponseHandler = KtorResponse
 ) : RequestHandler {
 
     override fun register(routes:Routing){
@@ -76,5 +78,14 @@ class KtorHandler(
 
         // Finally convert the result back to a HttpResult
         responses.result(call, response)
+    }
+
+
+    companion object {
+        fun diagnostics(ctx:Context):Diagnostics<Request> {
+            val metrics = MetricsLite(ctx.info.about.toId())
+            val diagnostics = ServerDiagnostics("app", ctx.logs.getLogger("app"), metrics, listOf())
+            return diagnostics
+        }
     }
 }

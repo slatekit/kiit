@@ -23,6 +23,8 @@ import slatekit.common.requests.Request
 import slatekit.common.auth.Roles
 import slatekit.integration.common.ApiBaseEntity
 import slatekit.integration.common.AppEntContext
+import slatekit.results.Outcome
+import slatekit.results.builders.Outcomes
 
 
 /**
@@ -43,6 +45,7 @@ class MovieApi( ctx: AppEntContext) : ApiBaseEntity<Long, Movie, MovieService>(c
      */
     @Action()
     fun createSample(title:String, category:String, playing:Boolean, cost:Int, rating:Double, released: DateTime):Long {
+
         return service.create(Movie(title    = title,
               category = category,
               playing  = playing,
@@ -50,6 +53,26 @@ class MovieApi( ctx: AppEntContext) : ApiBaseEntity<Long, Movie, MovieService>(c
               rating   = rating,
               released = released
         ))
+    }
+
+    /**
+     * Create a sample movie using the fields.
+     * NOTE: This example show a simple example using different data-types
+     * e.g string, boolean, int, double, DateTime
+     */
+    @Action()
+    fun createSampleOutcome(req:Request, title:String, playing:Boolean, cost:Int, released: DateTime):Outcome<Movie> {
+        val result:Outcome<Movie> = when {
+            !canCreate(req)       -> Outcomes.denied("Not allowed to create")
+            title.isNullOrEmpty() -> Outcomes.invalid("Title missing")
+            !playing              -> Outcomes.ignored("Movies must be playing")
+            cost > 20             -> Outcomes.errored("Prices must be reasonable")
+            else                  -> {
+                // Simple simulation of creation
+                Outcomes.success(Movie.of(title, playing, cost, released))
+            }
+        }
+        return result
     }
 
 
@@ -93,5 +116,10 @@ class MovieApi( ctx: AppEntContext) : ApiBaseEntity<Long, Movie, MovieService>(c
             )
             service.create(movie)
         } ?: 0L
+    }
+
+
+    private fun canCreate(req:Request):Boolean {
+        return true
     }
 }
