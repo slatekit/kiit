@@ -20,7 +20,7 @@ class MethodLoader(val api: Api) : Loader {
     }
 
     override fun loadActions(api: slatekit.apis.core.Api, local: Boolean, namer: Namer?): List<Action> {
-        val members = Reflector.getMembers(api.cls, local, true, KVisibility.PUBLIC)
+        val members = Reflector.getMembers(api.klass, local, true, KVisibility.PUBLIC)
         val actions: List<Action> = members.map { member -> toAction(member, api, null, namer) }
         return actions
     }

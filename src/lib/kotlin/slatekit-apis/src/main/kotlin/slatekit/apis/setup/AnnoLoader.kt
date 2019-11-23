@@ -27,8 +27,8 @@ class AnnoLoader(val cls: KClass<*>, val raw: Api? = null) : Loader {
     override fun loadActions(api: Api, local: Boolean, namer: Namer?): List<Action> {
 
         // 1. get all the methods with the apiAction annotation
-        val rawMatches = Reflector.getAnnotatedMembers<slatekit.apis.Action>(api.cls, slatekit.apis.Action::class, api.declaredOnly)
-        val rawIgnores = Reflector.getAnnotatedMembers<Ignore>(api.cls, Ignore::class, api.declaredOnly)
+        val rawMatches = Reflector.getAnnotatedMembers<slatekit.apis.Action>(api.klass, slatekit.apis.Action::class, api.declaredOnly)
+        val rawIgnores = Reflector.getAnnotatedMembers<Ignore>(api.klass, Ignore::class, api.declaredOnly)
         val rawIgnoresLookup = rawIgnores.map { it -> Pair(it.first.name, true) }.toMap()
 
         // 2. Filter out builtin methods

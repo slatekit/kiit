@@ -13,7 +13,7 @@ interface Case {
 }
 
 fun convertToCase(text: String, upper: Boolean, replacements: Set<Char>, replacement: Char): String {
-    return text.foldIndexed("", { ndx, acc, c ->
+    return text.foldIndexed("") { ndx, acc, c ->
         val currentCharIsUpper = c.isLetter() && c.toUpperCase() == c
         val ch: String = if (replacements.contains(c)) {
             replacement.toString()
@@ -23,11 +23,11 @@ fun convertToCase(text: String, upper: Boolean, replacements: Set<Char>, replace
             if (upper) c.toUpperCase().toString() else c.toLowerCase().toString()
         }
         acc + ch
-    })
+    }
 }
 
 fun convertToCamel(text: String, upper: Boolean, replacements: Set<Char>): String {
-    return text.foldIndexed("", { ndx, acc, c ->
+    return text.foldIndexed("") { ndx, acc, c ->
         val isUpper = c.toUpperCase() == c
         val ch = if (replacements.contains(c)) {
             Char.MIN_SURROGATE
@@ -42,7 +42,6 @@ fun convertToCamel(text: String, upper: Boolean, replacements: Set<Char>): Strin
         } else {
             c
         }
-
         if (ch == Char.MIN_SURROGATE) acc else acc + ch
-    })
+    }
 }

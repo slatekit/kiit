@@ -20,7 +20,6 @@ import slatekit.results.*
 import slatekit.results.Status
 import slatekit.results.builders.Notices
 import slatekit.results.builders.Outcomes
-import java.lang.reflect.Method
 
 /**
  * This is the core container hosting, managing and executing the source independent apis.
@@ -252,7 +251,7 @@ open class ApiServer(
         val converter = settings.decoder?.invoke(req, ctx.enc) ?: Deserializer(req, ctx.enc)
         val inputs = fillArgs(converter, target, req)
 
-        val returnVal = Calls.callMethod(target.api.cls, target.instance, target.action.member.name, inputs)
+        val returnVal = Calls.callMethod(target.api.klass, target.instance, target.action.member.name, inputs)
 
         val wrapped = returnVal?.let { res ->
             if (res is Result<*, *>) {
@@ -297,7 +296,7 @@ open class ApiServer(
     companion object {
 
         @JvmStatic
-        fun of(ctx: Context, apis: List<slatekit.apis.core.Api>, auth: Auth?, source: Source?): ApiServer {
+        fun of(ctx: Context, apis: List<slatekit.apis.core.Api>, auth: Auth? = null, source: Source? = null): ApiServer {
             val hooks = ApiHooks(inputters = listOf(Authorize(auth)))
             val server = ApiServer(ctx, apis, hooks, ApiSettings(source ?: Source.Web))
             return server

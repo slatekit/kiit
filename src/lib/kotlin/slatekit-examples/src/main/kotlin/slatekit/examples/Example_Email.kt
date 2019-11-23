@@ -48,7 +48,7 @@ class Example_Email  : Command("auth") {
     val apiKey  = apiKey1 ?: apiKey2
 
     // Setup 3a: Setup the email service ( basic ) with api key
-    val email1 =  EmailServiceSendGrid(apiKey.key, apiKey.pass, apiKey.account)
+    val emailService1 =  EmailServiceSendGrid(apiKey.key, apiKey.pass, apiKey.account)
 
     // Setup 3b: Setup the sms service with support for templates
     val templates = Templates.build(
@@ -61,18 +61,18 @@ class Example_Email  : Command("auth") {
         Pair("app.api"     , { s -> "SlateKit.Sample"  })
       )
     )
-    val email2 =  EmailServiceSendGrid(apiKey.key, apiKey.pass, apiKey.account, templates)
+    val emailService2 =  EmailServiceSendGrid(apiKey.key, apiKey.pass, apiKey.account, templates)
     //</doc:setup>
 
     //<doc:examples>
     // Use case 1: Send a confirmation code to the U.S. to verify a users phone number.
-    val result = email2.send("kishore@abc.com", "Welcome to MyApp.com", "showWelcome!", false)
+    val result = emailService2.send("kishore@abc.com", "Welcome to MyApp.com", "showWelcome!", false)
 
     // Use case 2: Send using a constructed message object
-    email2.sendSync(EmailMessage("kishore@abc.com", "Welcome to MyApp.com", "showWelcome!", false))
+    emailService2.sendSync(EmailMessage("kishore@abc.com", "Welcome to MyApp.com", "showWelcome!", false))
 
     // Use case 3: Send message using one of the setup templates
-    email2.sendUsingTemplate("email_welcome", "kishore@abc.com", "Welcome to MyApp.com", true,
+    emailService2.sendUsingTemplate("email_welcome", "kishore@abc.com", "Welcome to MyApp.com", true,
             Vars(listOf(
                     Pair("greeting", "hello"),
                     Pair("user.api", "kishore"),

@@ -36,18 +36,18 @@ import slatekit.meta.kClass
  * @param actions : the collection of actions / methods on this API.
  */
 data class Api(
-    val cls: KClass<*>,
+    val klass: KClass<*>,
     val area: String = "",
     val name: String = "",
     val desc: String = "",
     val roles: Roles = Roles.empty,
     val access: Access = Access.Public,
-    val auth: AuthMode = AuthMode.Token,
+    val auth: AuthMode = AuthMode.None,
     val sources: Sources = Sources.all,
     val verb: Verb = Verb.Auto,
     val declaredOnly: Boolean = true,
     val singleton: Any? = null,
-    val setup: Setup = Setup.Methods,
+    val setup: Setup = Setup.Annotated,
     val actions: Lookup<Action> = Lookup(listOf(), { t -> t.name })
 ) {
 
@@ -66,4 +66,5 @@ data class Api(
         declaredOnly: Boolean = true,
         setup: Setup = Setup.Methods
     ) : this(instance.kClass, area, name, desc, Roles(roles), access, auth, Sources(protocol), verb, declaredOnly, instance, setup)
+
 }

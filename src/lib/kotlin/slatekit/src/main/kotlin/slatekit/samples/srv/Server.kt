@@ -48,12 +48,10 @@ class Server(val ctx: Context)  {
         val auth = SampleAuth()
 
         // 4. API host
-        val apiHost = ApiServer.of( ctx, apis, auth, Source.Web)
+        val apiHost = ApiServer.of( ctx, apis, auth = null)
 
         // Ktor handler
-        val metrics = MetricsLite(ctx.about.toId())
-        val diagnostics = ServerDiagnostics("app", ctx.logs.getLogger("app"), metrics, listOf())
-        val handler = KtorHandler(ctx, settings, apiHost, diagnostics, KtorResponse)
+        val handler = KtorHandler(ctx, settings, apiHost)
 
         // Ktor
         val server = embeddedServer(Netty, settings.port) {
@@ -90,15 +88,7 @@ class Server(val ctx: Context)  {
 
     fun apis(): List<slatekit.apis.core.Api> {
         return listOf(
-                slatekit.apis.core.Api(
-                        cls = SampleApi::class,
-                        setup = Setup.Annotated,
-                        declaredOnly = true,
-                        auth = AuthMode.Keyed,
-                        roles = slatekit.apis.core.Roles.empty,
-                        verb = Verb.Auto,
-                        singleton = SampleApi(ctx)
-                )
+                slatekit.apis.core.Api(klass = SampleApi::class, singleton = SampleApi(ctx))
         )
     }
 
@@ -108,7 +98,7 @@ class Server(val ctx: Context)  {
      * Used for quickly checking a deployment.
      */
     suspend fun ping(call: ApplicationCall) {
-        val result = "Version ${ctx.about.version} : " + DateTime.now()
+        val result = "Version ${ctx.info.about.version} : " + DateTime.now()
         KtorResponse.json(call, Success(result).toResponse())
     }
 }

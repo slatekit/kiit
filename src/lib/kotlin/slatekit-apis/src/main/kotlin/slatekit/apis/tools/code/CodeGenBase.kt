@@ -66,7 +66,7 @@ abstract class CodeGenBase(val settings: CodeGenSettings) {
                     println("API: " + api.area + "." + api.name)
 
                     // Get only the declared members in the api/class
-                    val declaredMembers = api.cls.declaredMemberFunctions
+                    val declaredMembers = api.klass.declaredMemberFunctions
                     val declaredMemberLookup = declaredMembers.map { func -> (func.name to true) }.toMap()
 
                     // Get all the actions on the api

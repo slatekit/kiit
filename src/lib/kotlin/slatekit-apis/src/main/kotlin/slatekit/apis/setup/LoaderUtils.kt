@@ -144,7 +144,7 @@ fun loadApiFromSetup(api: Api, namer: Namer?): Api {
     // from either annotations or from public methods
     return if (api.actions.size == 0) {
         if (api.setup == Setup.Annotated) {
-            val apiAnnotated = AnnoLoader(api.cls, api).loadApi(namer)
+            val apiAnnotated = AnnoLoader(api.klass, api).loadApi(namer)
             val area = rename(apiAnnotated.area, namer)
             val name = rename(apiAnnotated.name, namer)
             apiAnnotated.copy(area = area, name = name, singleton = api.singleton)
