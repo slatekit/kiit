@@ -1,8 +1,8 @@
-package slatekit.core.slatekit.core.cache
+package slatekit.core.slatekit.cache
 
-import slatekit.core.cache.Cache
-import slatekit.core.cache.CacheItem
-import slatekit.core.cache.CacheSettings
+import slatekit.cache.Cache
+import slatekit.cache.CacheItem
+import slatekit.cache.CacheSettings
 
 class SyncCache(val cache: Cache) : Cache {
     override val settings: CacheSettings = cache.settings

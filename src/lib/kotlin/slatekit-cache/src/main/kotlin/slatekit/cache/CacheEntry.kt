@@ -11,7 +11,7 @@
  * </slate_header>
  */
 
-package slatekit.core.cache
+package slatekit.cache
 
 import slatekit.common.DateTime
 import slatekit.tracking.Tracked

@@ -1,4 +1,4 @@
-package slatekit.core.cache
+package slatekit.cache
 
 /**
  * Core management operations on the cache.

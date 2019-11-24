@@ -11,7 +11,7 @@
  * </slate_header>
  */
 
-package slatekit.core.cache
+package slatekit.cache
 
 import java.util.concurrent.ConcurrentHashMap
 

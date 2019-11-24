@@ -23,9 +23,9 @@ import slatekit.common.Strings
 import slatekit.common.encrypt.Encryptor
 import slatekit.common.log.Logger
 import slatekit.common.Sources
-import slatekit.core.cache.SimpleCache
-import slatekit.core.cache.CacheItem
-import slatekit.core.cache.CacheSettings
+import slatekit.cache.SimpleCache
+import slatekit.cache.CacheItem
+import slatekit.cache.CacheSettings
 
 @Api(area = "infra", name = "cache", desc = "api info about the application and host",
         auth = AuthModes.KEYED, roles = ["admin"], verb = Verbs.AUTO, sources = [Sources.ALL])

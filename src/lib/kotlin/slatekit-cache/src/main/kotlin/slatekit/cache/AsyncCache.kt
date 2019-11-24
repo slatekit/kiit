@@ -1,6 +1,6 @@
-package slatekit.core.cache
+package slatekit.cache
 
-import slatekit.core.slatekit.core.common.Coordinator
+import slatekit.core.common.Coordinator
 
 /**
  * Provides coordinated ( default approach = Channel ) access to cache operations

@@ -4,7 +4,6 @@ import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.yield
 import slatekit.common.ids.Paired
 import slatekit.common.log.Logger
-import slatekit.core.slatekit.core.common.Coordinator
 
 class ChannelCoordinator<C>(override val logger: Logger, override val ids: Paired, val channel: Channel<C>) : Coordinator<C> {
 

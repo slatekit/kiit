@@ -1,4 +1,4 @@
-package slatekit.core.cache
+package slatekit.cache
 
 sealed class CacheCommand {
     abstract val action: CacheAction
