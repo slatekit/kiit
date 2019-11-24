@@ -32,7 +32,7 @@ class Fetches(private val timeStampUpdateCount:Int) {
             counts.set(0L)
         }
         val curr = interval.incrementAndGet()
-        if(curr >= timeStampUpdateCount) {
+        if(curr >= timeStampUpdateCount || timeStampUpdateCount == 0) {
             stamped.set(DateTime.now())
             interval.set(0)
         } else {
