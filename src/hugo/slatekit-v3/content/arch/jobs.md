@@ -207,6 +207,10 @@ This is a simple example of a Queued worker ( which takes it work from a Task wh
         <td>Responsible for coordinating requests on Workers ( by default using Channels )</td>
     </tr>
     <tr>
+        <td><strong>{{% sk-link-code component="jobs" filepath="jobs/Workers.kt" name="Workers" %}}</strong> </td>
+        <td>A collection of 1 or more workers ( linked to job )</td>
+    </tr>
+    <tr>
         <td><strong>{{% sk-link-code component="jobs" filepath="jobs/Worker.kt" name="Worker" %}}</strong> </td>
         <td>Performs the actual work (on a possible Task)</td>
     </tr>
@@ -262,24 +266,34 @@ This is a simple example of a Queued worker ( which takes it work from a Task wh
         <td><a href="arch/jobs/#register" class="more"><span class="btn btn-primary">more</span></a></td>
     </tr>
     <tr>
-        <td><strong>3. Cycle</strong></td>
+        <td><strong>3. Usage</strong> </td>
+        <td>How to start, stop, pause resume jobs and check status.</td> 
+        <td><a href="arch/jobs/#usage" class="more"><span class="btn btn-primary">more</span></a></td>                    
+    </tr>
+    <tr>
+        <td><strong>4. Cycle</strong></td>
         <td>The life-cycle of a worker</td>
         <td><a href="arch/jobs/#cycle" class="more"><span class="btn btn-primary">more</span></a></td>
     </tr>
     <tr>
-        <td><strong>4. Types</strong> </td>
+        <td><strong>5. Types</strong> </td>
         <td>OneTime, Paged, Queued Job types</td> 
         <td><a href="arch/jobs/#types" class="more"><span class="btn btn-primary">more</span></a></td>                    
     </tr>
     <tr>
-        <td><strong>5. Actions</strong> </td>
-        <td>Starting, Stopping, Pausing, Resuming jobs</td> 
-        <td><a href="arch/jobs/#types" class="more"><span class="btn btn-primary">more</span></a></td>                    
+        <td><strong>6. Events</strong> </td>
+        <td>Subscribe to job events</td> 
+        <td><a href="arch/jobs/#events" class="more"><span class="btn btn-primary">more</span></a></td>                    
     </tr>
     <tr>
-        <td><strong>6. Stats</strong> </td>
+        <td><strong>7. Workers</strong> </td>
+        <td>Access to the jobs workers</td> 
+        <td><a href="arch/jobs/#workers" class="more"><span class="btn btn-primary">more</span></a></td>                    
+    </tr>
+    <tr>
+        <td><strong>8. Stats</strong> </td>
         <td>Capturing job and worker statistics</td> 
-        <td><a href="arch/jobs/#types" class="more"><span class="btn btn-primary">more</span></a></td>                    
+        <td><a href="arch/jobs/#stats" class="more"><span class="btn btn-primary">more</span></a></td>                    
     </tr>
 </table>
 
@@ -291,7 +305,18 @@ Every job must be set up with an {{% sk-link-code component="common" filepath="c
 {{< highlight kotlin >}}
       
     // slatekit.common.Identity is used to identify the job.  
-    val id = SimpleIdentity("samples", "newsletter", Agent.Job, "dev")
+    val id = SimpleIdentity("demo", "newsletter", Agent.Job, "dev")
+
+    // id.id   : {AREA}.{SERVICE}.{AGENT}.{ENV}.{INSTANCE}
+    // id.id   : demo.newsletter.job.dev.09cd7588-24cb-425b-8cec-2494c4460387
+    // id.name : demo.newsletter
+    // id.full : demo.newsletter.job.dev
+    // id.area : demo
+    // id.svc  : newsletter
+    // id.agent: Job
+    // id.env  : dev
+    // id.inst : 09cd7588-24cb-425b-8cec-2494c4460387
+    // id.tags : []
 
 {{< /highlight >}}
 {{% break %}}
@@ -415,6 +440,102 @@ Once you have a work function, you can register it as a new Job.
 
 {{% feature-end mod="arch/jobs" %}}
 
+## Usage {#actions}
+There are various operations on the job from checking the status, to management actions such as starting, stopping, etc. 
+
+### 1. Actions
+Jobs that are **paged** or **queued** can be **gracefully** started, stopped, paused, resumed. This is accomplished by sending Job Requests to the Job. These requests impact the status of the job and all its workers. These are methods available on the **Job** component itself. 
+{{% sk-tip-generic text="You can also issues individual actions/requests on 1 worker in the job by building up a JobRequest" %}}
+<table class="table table-bordered table-striped">
+    <tr>
+        <td><strong>Name</strong></td>
+        <td><strong>Status</strong></td>
+        <td><strong>Purpose</strong></td>
+    </tr>
+    <tr>
+        <td><strong>start</strong></td>
+        <td>Starting</td>
+        <td>Starts the job and its associated workers</td>
+    </tr>
+    <tr>
+        <td><strong>stop</strong></td>
+        <td>Stopped</td>
+        <td>Stops the job and its associated workers</td>
+    </tr>
+    <tr>
+        <td><strong>pause</strong></td>
+        <td>Paused</td>
+        <td>Pauses the job and its associated workers</td>
+    </tr>
+    <tr>
+        <td><strong>resume</strong></td>
+        <td>Running</td>
+        <td>Resumes the jobs and its associated workers</td>
+    </tr>
+    <tr>
+        <td><strong>process</strong></td>
+        <td>Running</td>
+        <td>Issues a single process / work request </td>
+    </tr>
+</table>
+
+{{< highlight kotlin >}}
+        
+    // Assume jobs are registered in the Jobs component.
+    // ....
+    // See registration section
+
+    // Get a job by its name
+    val job = jobs.get("samples.job1")
+
+    // Perform operations
+    job?.let { job ->
+
+        // NOTES: 
+        // 1. This does not immediately perform the action.
+        // 2. A Job request is sent to the Job Channel 
+        // 3. A Job then delegates the respective action to its workers
+        job.start()
+        job.stop()
+        job.pause()
+        job.resume()
+        job.process()
+    }
+     
+{{< /highlight >}}
+{{% break %}}
+
+### 2. Status
+You can check the status of the job. The Status range are available in {{% sk-link-code component="common" filepath="common/Status.kt" name="Status" %}}
+
+{{< highlight kotlin >}}
+        
+    // Get a job by its name
+    val job = jobs.get("samples.job1")
+
+    // Check status
+    job?.let { job ->
+        // Get current status
+        val status = job.status()
+
+        // Check status
+        job.isIdle()
+        job.isRunning()
+        job.isPaused()
+        job.isStopped()
+        job.isComplete()
+        job.isFailed()
+        job.isStoppedOrPaused()
+
+        // Check for specific status
+        job.isState(Status.Running)
+        ""
+    }
+     
+{{< /highlight >}}
+
+{{% feature-end mod="arch/jobs" %}}
+
 ## Cycle {#cycle}
 Workers have several life-cycle event methods. They are called in order and the status of the worker changes after the event.
 
@@ -515,46 +636,24 @@ A queued worker runs work via {{% sk-link-code component="jobs" filepath="jobs/T
 
 {{% feature-end mod="arch/jobs" %}}
 
-## Actions {#actions}
-Jobs that are **paged** or **queued** can be **gracefully** started, stopped, paused, resumed. This is accomplished by sending Job Requests to the Job. These requests impact the status of the job and all its workers. These are methods available on the **Job** component itself. 
-{{% sk-tip-generic text="You can also issues individual actions/requests on 1 worker in the job by building up a JobRequest" %}}
-<table class="table table-bordered table-striped">
-    <tr>
-        <td><strong>Name</strong></td>
-        <td><strong>Status</strong></td>
-        <td><strong>Purpose</strong></td>
-    </tr>
-    <tr>
-        <td><strong>start</strong></td>
-        <td>Starting</td>
-        <td>Starts the job and its associated workers</td>
-    </tr>
-    <tr>
-        <td><strong>stop</strong></td>
-        <td>Stopped</td>
-        <td>Stops the job and its associated workers</td>
-    </tr>
-    <tr>
-        <td><strong>pause</strong></td>
-        <td>Paused</td>
-        <td>Pauses the job and its associated workers</td>
-    </tr>
-    <tr>
-        <td><strong>resume</strong></td>
-        <td>Running</td>
-        <td>Resumes the jobs and its associated workers</td>
-    </tr>
-    <tr>
-        <td><strong>process</strong></td>
-        <td>Running</td>
-        <td>Issues a single process / work request </td>
-    </tr>
-</table>
+## Events
+You can subscribe to various job events such as any Status changes or for a specific Status change.
+
+{{< highlight kotlin >}}
+    
+    // Subscribe to changes in status
+    job.subscribe { println("Job: ${it.id} status changed to ${it.status().name}") }
+
+    // Subscribe to change to Stopped status
+    job.subscribe(Status.Stopped) { println("Job: ${it.id} stopped!")  }
+     
+{{< /highlight >}}
 
 {{% feature-end mod="arch/jobs" %}}
 
 ## Policies
 You can set up custom policies which essentially represent middleware functions to execute at various times and/or conditions of workers and jobs.
+Policies are available in the {{% sk-link-code component="functions" filepath="functions/policy" name="slatekit-functions" %}} project ( not yet documented).
 {{< highlight kotlin >}}
     
     // There are 3 policies setup for this job:
@@ -573,8 +672,90 @@ You can set up custom policies which essentially represent middleware functions 
 
 {{% feature-end mod="arch/jobs" %}}
 
+## Workers
+A job internally holds a collection of workers via {{% sk-link-code component="jobs" filepath="jobs/Workers.kt" name="Workers" %}}. Each worker has an identity (based off the job's identity ) in order to uniquely identify it. You can get the ids of all the workers and get the worker context which holds various components like polices ( middleware ) and diagnostics/stats.
+{{< highlight kotlin >}}
+    
+    // Get the workers collection ( Workers )
+    val workers = job.workers
+
+    // Get all worker ids ( List<Identity> )
+    val workerIds = workers.getIds()
+
+    // Get the context for a specific worker ( WorkContext )
+    val workerContext = job.workers.get(workerIds.first())
+
+    // The worker performing work on tasks
+    workerContext?.let { ctx ->
+
+        // Identity of the worker parent ( Job.id )
+        println(ctx.id)
+
+        // Worker itself
+        ctx.worker
+
+        // Worker middleware applied
+        ctx.policies
+
+        // Worker statistics
+        ctx.stats
+    }
+     
+{{< /highlight >}}
+
+{{% feature-end mod="arch/jobs" %}}
+
 ## Stats
-{{% sk-tip-generic text="Functionality is available but docs are not ready" %}}
+Statistics are recorded at the worker level. There is ( currently ) no way aggregate statistics across all workers. But this can be done and/or integrated with a 3rd-party metrics library like **Micrometer**. 
+
+{{< highlight kotlin >}}
+    
+    // Get the workers collection ( Workers )
+    val workers = job.workers
+
+    // Get all worker ids ( List<Identity> )
+    val workerIds = workers.getIds()
+
+    // Get the context for a specific worker ( WorkContext )
+    val workerContext = job.workers.get(workerIds.first())
+
+    // The worker performing work on tasks
+    workerContext?.let { ctx ->
+
+        // Worker statistics
+        val stats = ctx.stats
+
+        // Worker statistics
+        // Calls: Simple counters to count calls to a worker
+        println("calls.totalRuns: " + ctx.stats.calls.totalRuns())
+        println("calls.totalPassed: " + ctx.stats.calls.totalPassed())
+        println("calls.totalFailed: " + ctx.stats.calls.totalFailed())
+        
+        // Counts: Counts the result success/failure categories
+        // See slatekit.results.Status.kt for more info
+        println("counts.totalProcessed : " + ctx.stats.counts.totalProcessed())
+        println("counts.totalSucceeded : " + ctx.stats.counts.totalSucceeded())
+        println("counts.totalDenied    : " + ctx.stats.counts.totalDenied())
+        println("counts.totalInvalid   : " + ctx.stats.counts.totalInvalid())
+        println("counts.totalIgnored   : " + ctx.stats.counts.totalIgnored())
+        println("counts.totalErrored   : " + ctx.stats.counts.totalErrored())
+        println("counts.totalUnexpected: " + ctx.stats.counts.totalUnexpected())
+
+        // Lasts: Stores the last request/result of an call to work
+        println("lasts.totalProcessed : " + ctx.stats.lasts?.lastProcessed())
+        println("lasts.totalSucceeded : " + ctx.stats.lasts?.lastSuccess())
+        println("lasts.totalDenied    : " + ctx.stats.lasts?.lastDenied())
+        println("lasts.totalInvalid   : " + ctx.stats.lasts?.lastInvalid())
+        println("lasts.totalIgnored   : " + ctx.stats.lasts?.lastIgnored())
+        println("lasts.totalErrored   : " + ctx.stats.lasts?.lastErrored())
+        println("lasts.totalUnexpected: " + ctx.stats.lasts?.lastUnexpected())
+        
+        // You can also hook up loggers and events
+        ctx.stats.logger
+        ctx.stats.events
+    }
+     
+{{< /highlight >}}
 
 {{% section-end mod="arch/jobs" %}}
 
