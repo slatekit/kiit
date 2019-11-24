@@ -39,11 +39,11 @@ object ArgsService {
      */
     fun parse(
             text: String,
-            prefix: String = "-",
-            sep: String = "=",
+            prefix: String = Args.PREFIX,
+            sep: String = Args.SEPARATOR,
             hasAction: Boolean = false,
-            metaChar: String = "@",
-            sysChar: String = "$"
+            metaChar: String = Args.META_CHAR,
+            sysChar: String = Args.SYS_CHAR
     ): Try<Args> {
 
          return cleanse(text)

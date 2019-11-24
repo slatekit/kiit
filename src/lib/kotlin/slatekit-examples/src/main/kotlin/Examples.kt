@@ -34,7 +34,7 @@ mantra: Simplicity above all else
 
 // https://looksok.wordpress.com/2014/07/12/compile-gradle-project-with-another-project-as-a-dependency/
 fun main(args:Array<String>) {
-    val example = Example_Context()
+    val example = Guide_Cache()
     example.execute(args, FunctionMode.Called)
 }
 

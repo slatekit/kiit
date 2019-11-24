@@ -1,4 +1,4 @@
-package slatekit.core.slatekit.core.common
+package slatekit.core.common
 
 import slatekit.common.ids.Paired
 import slatekit.common.log.Logger

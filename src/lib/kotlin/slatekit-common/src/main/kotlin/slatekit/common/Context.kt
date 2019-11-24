@@ -10,14 +10,11 @@ import slatekit.common.log.Logs
 
 /**
  * Represents context of a running application and contains information used for most components
- * arg  : command line arguments
- * env  : environment selection ( dev, qa, staging, prod )
- * cfg  : config settings
- * log  : logger
- * app  : info about the application
- * build: build information ( version, commit id, date )
- * sys  : system level info ( host, lang )
- * start: start info
+ * args  : command line arguments
+ * envs  : environment selection ( dev, qa, staging, prod )
+ * conf  : config settings
+ * logs  : logger
+ * info  : info about the application
  * enc  : encryption/decryption service
  * dirs : directories used for the app
  */

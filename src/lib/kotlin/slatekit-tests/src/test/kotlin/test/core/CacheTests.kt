@@ -12,12 +12,23 @@
  */
 package test
 
+import org.junit.Assert
+import org.junit.Test
+import slatekit.cache.Cache
+import slatekit.cache.CacheSettings
+import slatekit.cache.SimpleCache
+
 
 class CacheTests {
 
-/*
-    @Test fun can_put_item() {
-      val cache = Cache(CacheSettings(10))
+    /*
+    fun getCache(settings: CacheSettings): Cache {
+        return SimpleCache(settings)
+    }
+
+    @Test
+    fun can_put_item() {
+      val cache = SimpleCache(CacheSettings(10))
       cache.put("countries", "countries supported for mobile app", 60, { ->
         listOf("us", "ca")
       })
@@ -32,7 +43,7 @@ class CacheTests {
 
 
     @Test fun can_get_or_load_item() {
-      val cache = Cache(CacheSettings(10))
+      val cache = SimpleCache(CacheSettings(10))
       cache.put("countries", "countries supported for mobile app", 30, { ->
         listOf("us", "ca")
       })
@@ -46,7 +57,7 @@ class CacheTests {
 
 
     @Test fun can_refresh_item() {
-      val cache = Cache(CacheSettings(10))
+      val cache = SimpleCache(CacheSettings(10))
       cache.put("countries", "countries supported for mobile app", 30, { ->
         listOf("us", "ca")
       })
@@ -84,5 +95,5 @@ class CacheTests {
 
       Thread.sleep(300)
     }
-    */
+*/
 }

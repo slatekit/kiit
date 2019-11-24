@@ -11,6 +11,6 @@
  * </slate_header>
  */
 
-package slatekit.core.cache
+package slatekit.cache
 
 data class CacheSettings(val size: Int)

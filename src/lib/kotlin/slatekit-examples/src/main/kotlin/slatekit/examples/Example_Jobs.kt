@@ -89,6 +89,14 @@ class Example_Jobs : Command("utils"), CoroutineScope by MainScope() {
         // Option 2: Use a function for a job that pages through work
         val offset1 = AtomicInteger(0)
         suspend fun sendNewsLetterWithPaging(task: Task):WorkResult {
+            println(task.id)    // abc123
+            println(task.from)  // queue://notification
+            println(task.job)   // job1
+            println(task.name)  // users.sendNewsletter
+            println(task.data)  // { ... } json payload
+            println(task.xid)   // 12345   correlation id
+
+            // WorkResult.next(offset.get() + batchSize.toLong(), users.size.toLong(), "users")
             return sendNewsLetterBatch(task.job, offset1, 4)
         }
 

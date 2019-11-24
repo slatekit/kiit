@@ -43,8 +43,8 @@ data class Args(
         override val raw: List<String>,
         val action: String,
         val parts: List<String>,
-        val prefix: String = "-",
-        val separator: String = "=",
+        val prefix: String = PREFIX,
+        val separator: String = SEPARATOR,
         private val namedArgs: Map<String, String>? = null,
         private val metaArgs: Map<String, String>? = null,
         private val sysArgs: Map<String, String>? = null,
@@ -266,6 +266,14 @@ data class Args(
 
     companion object {
 
+        const val PREFIX = "-"
+
+        const val SEPARATOR = "="
+
+        const val META_CHAR = "@"
+
+        const val SYS_CHAR = "$"
+
         @JvmStatic
         fun default(): Args = Args("", listOf(), "", listOf(), decryptor = null)
 
@@ -284,11 +292,11 @@ data class Args(
         @JvmStatic
         fun parse(
                 line: String,
-                prefix: String = "-",
-                sep: String = ":",
+                prefix: String = PREFIX,
+                sep: String = SEPARATOR,
                 hasAction: Boolean = false,
-                metaChar: String = "@",
-                sysChar: String = "$"
+                metaChar: String = META_CHAR,
+                sysChar: String = SYS_CHAR
         ): Try<Args> {
             return ArgsService.parse(line, prefix, sep, hasAction, metaChar, sysChar)
         }
@@ -308,11 +316,11 @@ data class Args(
         @JvmStatic
         fun parseArgs(
                 args: Array<String>,
-                prefix: String = "-",
-                sep: String = ":",
+                prefix: String = PREFIX,
+                sep: String = SEPARATOR,
                 hasAction: Boolean = false,
-                metaChar: String = "@",
-                sysChar: String = "$"
+                metaChar: String = META_CHAR,
+                sysChar: String = SYS_CHAR
         ): Try<Args> {
             // build a single line from args
             val line = if (args.isNotEmpty()) {

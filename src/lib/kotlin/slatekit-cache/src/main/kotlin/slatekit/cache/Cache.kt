@@ -11,7 +11,7 @@
  * </slate_header>
  */
 
-package slatekit.core.cache
+package slatekit.cache
 
 interface Cache {
 
@@ -52,7 +52,7 @@ interface Cache {
      * @tparam T
      * @return
      */
-    suspend fun <T> get(key: String): T?
+    fun <T> get(key: String): T?
 
     /**
      * gets an item from the cache as a future
@@ -67,7 +67,7 @@ interface Cache {
      * in order to get the item
      * @param key
      */
-    suspend fun <T> getFresh(key: String): T?
+    fun <T> getFresh(key: String): T?
 
     /**
      * puts an item in the cache and loads it immediately
@@ -77,12 +77,12 @@ interface Cache {
      * @param fetcher
      * @tparam T
      */
-    suspend fun <T> put(key: String, desc: String, seconds: Int, fetcher: suspend () -> T?)
+    fun <T> put(key: String, desc: String, seconds: Int, fetcher: suspend () -> T?)
 
     /**
      * Sets an explict value for the entry
      */
-    fun <T> set(key: String, seconds: Int, value:T?)
+    fun <T> set(key: String, value:T?)
 
     /**
      * removes a item from the cache
@@ -100,7 +100,7 @@ interface Cache {
      * manual / explicit refresh of a cache item
      * @param key
      */
-    suspend fun refresh(key: String)
+    fun refresh(key: String)
 
     /**
      * invalidates a single cache item by its key

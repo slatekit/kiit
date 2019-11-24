@@ -89,6 +89,7 @@ dependencies {
         compile "com.slatekit:slatekit-app:$slatekit_version"
         compile "com.slatekit:slatekit-db:$slatekit_version"
         compile "com.slatekit:slatekit-tracking:$slatekit_version"
+        compile "com.slatekit:slatekit-cache:$slatekit_version"
         compile "com.slatekit:slatekit-functions:$slatekit_version"
         compile "com.slatekit:slatekit-cmds:$slatekit_version"
         compile "com.slatekit:slatekit-meta:$slatekit_version"
@@ -109,6 +110,7 @@ dependencies {
         implementation project(":slatekit-app")
         implementation project(":slatekit-cli")
         implementation project(":slatekit-tracking")
+        implementation project(":slatekit-cache")
         implementation project(":slatekit-functions")
         implementation project(":slatekit-cmds")
         implementation project(":slatekit-db")
