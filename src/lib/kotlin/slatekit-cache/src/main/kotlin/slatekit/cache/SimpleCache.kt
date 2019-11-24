@@ -13,6 +13,7 @@
 
 package slatekit.cache
 
+import kotlinx.coroutines.runBlocking
 import java.util.concurrent.ConcurrentHashMap
 
 /**
@@ -97,16 +98,8 @@ class SimpleCache(opts: CacheSettings) : Cache {
      * @tparam T
      * @return
      */
-    override suspend fun <T> get(key: String): T? {
-        val result = lookup.get(key)?.let { c ->
-            if (c.isAlive()) {
-                c.item.get().value
-            } else {
-                // Expired so kick off a refresh
-                c.refresh()
-            }
-        }
-        return result?.let { r -> r as T }
+    override fun <T> get(key: String): T? {
+        return getInternal(key, false)
     }
 
     /**
@@ -117,10 +110,32 @@ class SimpleCache(opts: CacheSettings) : Cache {
      * @return
      */
     override fun <T> getOrLoad(key: String): T? {
-        val item = getEntry(key)
-        item?.let { i ->
+        return getInternal(key, true)
+    }
+
+    /**
+     * gets a cache item or loads it if not available, via a future
+     *
+     * @param key
+     * @tparam T
+     * @return
+     */
+    fun <T> getInternal(key: String, load:Boolean): T? {
+        val result = lookup.get(key)?.let { c ->
+            val value = if (c.isAlive()) {
+                val tracked = c.item.get().value
+                tracked.get().third
+            } else if(load){
+                c.refresh()
+                val tracked = c.item.get().value
+                tracked.get().third
+            } else {
+                null
+            }
+            value
         }
-        return null
+        @Suppress("UNCHECKED_CAST")
+        return result?.let { r -> r as T }
     }
 
     /**
@@ -129,10 +144,12 @@ class SimpleCache(opts: CacheSettings) : Cache {
      *
      * @param key
      */
-    override suspend fun <T> getFresh(key: String): T? {
+    override fun <T> getFresh(key: String): T? {
         val item = lookup.get(key)
         item?.let { it ->
-            it.refresh()
+            runBlocking {
+                it.refresh()
+            }
         }
         return null
     }
@@ -143,7 +160,7 @@ class SimpleCache(opts: CacheSettings) : Cache {
      * @param key
      * @return
      */
-    override suspend fun refresh(key: String) {
+    override fun refresh(key: String) {
         lookup.get(key)?.refresh()
     }
 
@@ -155,21 +172,18 @@ class SimpleCache(opts: CacheSettings) : Cache {
      * @param fetcher : The function to fetch the data ( will be wrapped in a Future )
      * @tparam T
      */
-    override suspend fun <T> put(key: String, desc: String, seconds: Int, fetcher: suspend () -> T?) {
-        val cacheValue = fetcher()
-        val content = cacheValue?.toString() ?: ""
-        insert(key, desc, content, seconds, { fetcher() })
+    override fun <T> put(key: String, desc: String, seconds: Int, fetcher: suspend () -> T?) {
+        insert(key, desc, seconds, fetcher)
     }
 
     /**
      * creates a cache item
      *
      * @param key : The name of the cache key
-     * @param seconds : The expiration time in seconds
      * @param fetcher : The function to fetch the data ( will be wrapped in a Future )
      * @tparam T
      */
-    override fun <T> set(key: String, seconds: Int, value:T?) {
+    override fun <T> set(key: String, value:T?) {
         val cacheValue = value
         val content = cacheValue?.toString() ?: ""
         val entry = lookup[key]
@@ -179,14 +193,13 @@ class SimpleCache(opts: CacheSettings) : Cache {
     }
 
 
-    private suspend fun insert(
+    private fun insert(
         key: String,
         desc: String,
-        text: String?,
         seconds: Int,
         fetcher: suspend () -> Any?
     ) {
-        val entry = CacheEntry(key, desc, text, seconds, fetcher)
+        val entry = CacheEntry(key, desc, "", seconds, fetcher)
         lookup[key] = entry
         entry.refresh()
     }

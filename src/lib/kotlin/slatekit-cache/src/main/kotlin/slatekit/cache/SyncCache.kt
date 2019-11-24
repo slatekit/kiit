@@ -1,10 +1,7 @@
-package slatekit.core.slatekit.cache
+package slatekit.cache
 
-import slatekit.cache.Cache
-import slatekit.cache.CacheItem
-import slatekit.cache.CacheSettings
 
-class SyncCache(val cache: Cache) : Cache {
+class SyncCache(private val cache: Cache) : Cache {
     override val settings: CacheSettings = cache.settings
 
     @Synchronized
@@ -20,19 +17,19 @@ class SyncCache(val cache: Cache) : Cache {
     override fun getEntry(key: String): CacheItem? = cache.getEntry(key)
 
     @Synchronized
-    override suspend fun <T> get(key: String): T? = cache.get(key)
+    override fun <T> get(key: String): T? = cache.get(key)
 
     @Synchronized
     override fun <T> getOrLoad(key: String): T? = cache.getOrLoad(key)
 
     @Synchronized
-    override suspend fun <T> getFresh(key: String): T? = cache.getFresh(key)
+    override fun <T> getFresh(key: String): T? = cache.getFresh(key)
 
     @Synchronized
-    override suspend fun <T> put(key: String, desc: String, seconds: Int, fetcher: suspend () -> T?) = cache.put(key, desc, seconds, fetcher)
+    override fun <T> put(key: String, desc: String, seconds: Int, fetcher: suspend () -> T?) = cache.put(key, desc, seconds, fetcher)
 
     @Synchronized
-    override fun <T> set(key: String, seconds: Int, value: T?) = cache.set(key, seconds, value)
+    override fun <T> set(key: String, value: T?) = cache.set(key, value)
 
     @Synchronized
     override fun remove(key: String): Boolean = cache.remove(key)
@@ -41,7 +38,7 @@ class SyncCache(val cache: Cache) : Cache {
     override fun clear(): Boolean = cache.clear()
 
     @Synchronized
-    override suspend fun refresh(key: String) = cache.refresh(key)
+    override fun refresh(key: String) = cache.refresh(key)
 
     @Synchronized
     override fun invalidate(key: String) = cache.invalidate(key)

@@ -27,7 +27,7 @@ sealed class CacheCommand {
         override val action = CacheAction.Create
     }
 
-    class Set(val key: String, val expiryInSeconds: Int, val value: Any?) : CacheCommand() {
+    class Set(val key: String, val value: Any?) : CacheCommand() {
         override val action = CacheAction.Update
     }
 

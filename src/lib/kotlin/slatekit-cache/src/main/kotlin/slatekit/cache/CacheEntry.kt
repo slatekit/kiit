@@ -13,6 +13,7 @@
 
 package slatekit.cache
 
+import kotlinx.coroutines.runBlocking
 import slatekit.common.DateTime
 import slatekit.tracking.Tracked
 import java.util.concurrent.atomic.AtomicLong
@@ -95,7 +96,7 @@ data class CacheEntry(
         original.accessed.set(Unit)
         original.value.set(result)
         val updated = original.copy(
-                text = text ?: original.text,
+                text = text ?: "",
                 expires = timestamp.plusSeconds(original.expiryInSeconds.toLong())
         )
 
@@ -114,10 +115,13 @@ data class CacheEntry(
     /**
      * Refreshes this cache item
      */
-    suspend fun refresh() {
+    fun refresh() {
         try {
-            val result = fetcher()
-            success(result)
+            val result = runBlocking {
+                fetcher()
+            }
+            val content = result?.toString() ?: ""
+            success(result, content)
         } catch (ex: Exception) {
             error(ex)
         }

@@ -39,7 +39,7 @@ interface Management {
     /**
      * Requests explicitly setting a cache entry value
      */
-    suspend fun set(key:String, expiryInSeconds:Int, value:Any?) = request(CacheCommand.Set(key, expiryInSeconds, value))
+    suspend fun set(key:String, value:Any?) = request(CacheCommand.Set(key, value))
 
     /**
      * Requests fetching of a cache entry

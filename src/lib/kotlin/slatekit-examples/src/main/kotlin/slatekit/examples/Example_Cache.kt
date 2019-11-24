@@ -14,8 +14,8 @@ package slatekit.examples
 
 //<doc:import_required>
 import kotlinx.coroutines.runBlocking
-import slatekit.core.cache.SimpleCache
-import slatekit.core.cache.CacheSettings
+import slatekit.cache.SimpleCache
+import slatekit.cache.CacheSettings
 
 
 //</doc:import_required>
