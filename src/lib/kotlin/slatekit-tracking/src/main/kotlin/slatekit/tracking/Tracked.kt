@@ -3,10 +3,10 @@ package slatekit.tracking
 import java.util.concurrent.atomic.AtomicReference
 
 class Tracked<T> {
-    private val stamped = AtomicReference<LifeTime<T>>(null)
+    private val stamped = AtomicReference<Updates<T>>(Updates<T>())
 
 
-    fun get(): LifeTime<T> {
+    fun get(): Updates<T> {
         return stamped.get()
     }
 

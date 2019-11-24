@@ -58,6 +58,15 @@ class SimpleCache(opts: CacheSettings) : Cache {
     override fun contains(key: String): Boolean = lookup.contains(key)
 
     /**
+     * Gets stats on all entries.
+     */
+    override fun stats():List<CacheStats> {
+        val stats = this.lookup.values.map { it.stats() }
+        return stats
+    }
+
+
+    /**
      * invalidates all the entries in this cache by maxing out their expiration times
      */
     override fun invalidateAll(): Unit = lookup.keys.toList().forEach { key -> invalidate(key) }
@@ -66,7 +75,7 @@ class SimpleCache(opts: CacheSettings) : Cache {
      * invalidates a specific cache item with the key
      */
     override fun invalidate(key: String) {
-        lookup.get(key)?.let { c -> c.invalidate() }
+        lookup.get(key)?.let { c -> c.expire() }
     }
 
     /**
@@ -89,7 +98,7 @@ class SimpleCache(opts: CacheSettings) : Cache {
      * @param key
      * @return
      */
-    override fun getEntry(key: String): CacheItem? = lookup.get(key)?.item?.get()
+    override fun getEntry(key: String): CacheValue? = lookup.get(key)?.item?.get()
 
     /**
      * gets a cache item associated with the key
@@ -123,12 +132,16 @@ class SimpleCache(opts: CacheSettings) : Cache {
     fun <T> getInternal(key: String, load:Boolean): T? {
         val result = lookup.get(key)?.let { c ->
             val value = if (c.isAlive()) {
-                val tracked = c.item.get().value
-                tracked.get().third
+                val entry = c.item.get()
+                entry.reads.inc()
+                val tracked = entry.value
+                tracked.get().current
             } else if(load){
                 c.refresh()
-                val tracked = c.item.get().value
-                tracked.get().third
+                val entry = c.item.get()
+                entry.reads.inc()
+                val tracked = entry.value
+                tracked.get().current
             } else {
                 null
             }
@@ -199,7 +212,7 @@ class SimpleCache(opts: CacheSettings) : Cache {
         seconds: Int,
         fetcher: suspend () -> Any?
     ) {
-        val entry = CacheEntry(key, desc, "", seconds, fetcher)
+        val entry = CacheEntry(key, desc, seconds, fetcher)
         lookup[key] = entry
         entry.refresh()
     }
