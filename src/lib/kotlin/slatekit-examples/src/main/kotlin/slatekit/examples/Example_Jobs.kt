@@ -183,7 +183,105 @@ class Example_Jobs : Command("utils"), CoroutineScope by MainScope() {
                     )
             )
 
-            jobs.run("samples.job7")
+            //jobs.run("samples.job7")
+            val job = jobs.get("samples.job7")
+            job?.let { job ->
+
+                // Ids
+                println("id   : " + job.id.id)
+                println("name : " + job.id.name)
+                println("full : " + job.id.fullname)
+                println("area : " + job.id.area)
+                println("svc  : " + job.id.service)
+                println("agent: " + job.id.agent.name)
+                println("env  : " + job.id.env)
+                println("inst : " + job.id.instance)
+                println("tags : " + job.id.tags)
+
+//                // Actions
+//                job.start()
+//                job.stop()
+//                job.pause()
+//                job.resume()
+//                job.process()
+//
+//                // Status: slatekit.common.Status
+//                val status = job.status()
+//                println(status.name)
+//
+//                // Checks
+//                job.isIdle()
+//                job.isRunning()
+//                job.isPaused()
+//                job.isStopped()
+//                job.isComplete()
+//                job.isFailed()
+//                job.isStoppedOrPaused()
+//                job.isState(slatekit.common.Status.Starting)
+//
+//                // Subscribe to changes in status
+//                job.subscribe { println("Job: ${it.id} status changed to ${it.status().name}") }
+//
+//                // Subscribe to change to Stopped status
+//                job.subscribe(Status.Stopped) { println("Job: ${it.id} stopped!")  }
+
+                // Get the workers collection
+                val workers = job.workers
+
+                // Get all worker ids
+                val workerIds = workers.getIds()
+
+                // Get the context for a specific worker
+                val workerContext = job.workers.get(workerIds.first())
+
+                // The worker performing work on tasks
+                workerContext?.let { ctx ->
+
+                    // Identity of the worker parent ( Job.id )
+                    println(ctx.id)
+
+                    // Worker itself
+                    ctx.worker
+
+                    // Worker middleware applied
+                    ctx.policies
+
+                    // Worker statistics
+                    // Calls: Simple counters to count calls to a worker
+                    println("calls.totalRuns: " + ctx.stats.calls.totalRuns())
+                    println("calls.totalPassed: " + ctx.stats.calls.totalPassed())
+                    println("calls.totalFailed: " + ctx.stats.calls.totalFailed())
+
+                    // Counts: Counts the result success/failure categories
+                    // See slatekit.results.Status.kt for more info
+                    println("counts.totalProcessed : " + ctx.stats.counts.totalProcessed())
+                    println("counts.totalSucceeded : " + ctx.stats.counts.totalSucceeded())
+                    println("counts.totalDenied    : " + ctx.stats.counts.totalDenied())
+                    println("counts.totalInvalid   : " + ctx.stats.counts.totalInvalid())
+                    println("counts.totalIgnored   : " + ctx.stats.counts.totalIgnored())
+                    println("counts.totalErrored   : " + ctx.stats.counts.totalErrored())
+                    println("counts.totalUnexpected: " + ctx.stats.counts.totalUnexpected())
+
+                    // Lasts: Stores the last request/result of an call to work
+                    println("lasts.totalProcessed : " + ctx.stats.lasts?.lastProcessed())
+                    println("lasts.totalSucceeded : " + ctx.stats.lasts?.lastSuccess())
+                    println("lasts.totalDenied    : " + ctx.stats.lasts?.lastDenied())
+                    println("lasts.totalInvalid   : " + ctx.stats.lasts?.lastInvalid())
+                    println("lasts.totalIgnored   : " + ctx.stats.lasts?.lastIgnored())
+                    println("lasts.totalErrored   : " + ctx.stats.lasts?.lastErrored())
+                    println("lasts.totalUnexpected: " + ctx.stats.lasts?.lastUnexpected())
+
+                    // You can also hook up loggers and events
+                    ctx.stats.logger
+                    ctx.stats.events
+
+                    println(id.id)
+                }
+
+
+                println("")
+                ""
+            }
             //jobs.run("samples.job2")
             delay(50000)
         }

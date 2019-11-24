@@ -9,14 +9,18 @@ import java.util.*
  * full = signup.alerts.job.qat.4a3b300b-d0ac-4776-8a9c-31aa75e412b3
  */
 interface Identity {
-    val env :String
-    val area:String
-    val service:String
-    val instance:String
-    val agent: Agent
+
+    val id:String
     val name:String
     val fullname:String
-    val id:String
+    val idWithTags:String
+
+    val area:String
+    val service:String
+    val agent: Agent
+    val env :String
+    val instance:String
+    val tags:List<String>
 
     companion object {
 
@@ -53,7 +57,9 @@ data class SimpleIdentity(
         override val service:String,
         override val agent: Agent,
         override val env:String,
-        override val instance:String = UUID.randomUUID().toString()) : Identity {
+        override val instance:String = UUID.randomUUID().toString(),
+        override val tags:List<String> = listOf()) : Identity {
+    private val tagged = tags.joinToString()
 
     /**
      * Enforced naming convention for an application's name ( simple name )
@@ -73,6 +79,13 @@ data class SimpleIdentity(
      */
     override val id:String = "$fullname.$instance"
 
+    /**
+     * The id contains the instance name
+     * @sample: signup.alerts.job.qat.4a3b300b-d0ac-4776-8a9c-31aa75e412b3.a1,b2,c3
+     *
+     */
+    override val idWithTags:String = "$fullname.$instance" + if (tagged.isNullOrEmpty()) "" else ".$tagged"
+
     fun newInstance():SimpleIdentity = this.copy(instance = UUID.randomUUID().toString())
 }
 
@@ -83,9 +96,12 @@ data class DetailIdentity(
         override val agent: Agent,
         override val env:String,
         override val instance:String = UUID.randomUUID().toString(),
+        override val tags:List<String> = listOf(),
         val desc: String = "",
         val alias: String = "",
         val version: String = "1_0") : Identity {
+
+    val tagged = tags.joinToString()
 
     /**
      * Enforced naming convention for an application's name ( simple name )
@@ -103,7 +119,13 @@ data class DetailIdentity(
      * @sample: signup.alerts.job.qat.4a3b300b-d0ac-4776-8a9c-31aa75e412b3
      *
      */
-    override val id:String = "$fullname.$instance"
+    override val id:String = "$fullname.$instance"/**
+
+     * The id contains the instance name
+     * @sample: signup.alerts.job.qat.4a3b300b-d0ac-4776-8a9c-31aa75e412b3.a1,b2,c3
+     *
+     */
+    override val idWithTags:String = "$fullname.$instance" + if (tagged.isNullOrEmpty()) "" else ".$tagged"
 
     fun newInstance():DetailIdentity = this.copy(instance = UUID.randomUUID().toString())
 }
