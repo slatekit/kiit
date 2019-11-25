@@ -21,7 +21,7 @@ import slatekit.apis.core.Api
 import slatekit.common.console.SemanticConsole
 import slatekit.common.console.SemanticConsoleSettings
 import slatekit.common.console.SemanticWrites
-import slatekit.common.nonEmptyOrDefault
+import slatekit.common.ext.orElse
 import slatekit.meta.KTypes
 import slatekit.meta.Serialization
 
@@ -203,7 +203,7 @@ abstract class Doc : ApiVisit {
         // e.g. email  : ""
         writer.highlight(getFormattedText(name, (options?.maxLength ?: 10) + 3), endLine = false)
         writer.text(":", endLine = false)
-        writer.text(desc.nonEmptyOrDefault("\"\""), endLine = true)
+        writer.text(desc.orElse("\"\""), endLine = true)
 
         // 2. required/optional
         writer.tab(2)

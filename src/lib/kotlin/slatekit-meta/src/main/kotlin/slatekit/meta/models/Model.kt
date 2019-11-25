@@ -15,11 +15,11 @@ package slatekit.meta.models
 
 import slatekit.common.DateTime
 import slatekit.common.naming.Namer
-import slatekit.common.nonEmptyOrDefault
 import slatekit.meta.KTypes
 //import java.time.*
 import org.threeten.bp.*
 import slatekit.common.DateTimes
+import slatekit.common.ext.orElse
 import java.util.*
 import kotlin.reflect.KClass
 import kotlin.reflect.KProperty
@@ -42,7 +42,7 @@ class Model(
     /**
      * The name of the table
      */
-    val table = tableName.nonEmptyOrDefault(name)
+    val table = tableName.orElse(name)
 
     /**
      * gets the list of fields in this model or returns an emptylist if none

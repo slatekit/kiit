@@ -13,8 +13,6 @@
 
 package slatekit.common
 
-import java.util.*
-
 /**
  * NOTE: Using object here due to STRANGE compile issues
  * /w extension functions ( from library modules )
@@ -26,12 +24,11 @@ object Strings {
      * returns a new string that truncates the string supplied by the count of chars.
      */
     fun truncate(text: String, count: Int): String {
-        return if (text.isNullOrEmpty())
-            text
-        else if (text.length <= count)
-            text
-        else
-            text.substring(0, count)
+        return when {
+            text.isNullOrEmpty() -> text
+            text.length <= count -> text
+            else -> text.substring(0, count)
+        }
     }
 
 
@@ -78,28 +75,6 @@ object Strings {
 
 
 /**
- * Decrypts the text inside the value if value is "@{decrypt('abc')}"
- * @param value : The value containing an optin @{decrypt function
- * @param decryptor : The callback to handle the decryption
- * @return
- */
-fun String.decrypt( decryptor: ((String) -> String)? = null): String =
-        Strings.interpret(this, "decrypt", decryptor)
-
-
-
-/**
- * Interprets the text as an environment variable if value is "@{env('abc')}"
- * @param value : The value containing an optin @{env function
- * @return
- */
-fun String.getEnv(): String {
-    return Strings.interpret(this, "env") { name ->
-        System.getenv(name)
-    }
-}
-
-/**
  * Repeats the text using a delimiter.
  * e.g. ?.repateWith(",", 3) = "?,?,?"
  */
@@ -113,52 +88,6 @@ fun String.repeatWith(delimiter: String, count: Int): String {
 fun String.pascalCase(): String {
     return this[0].toUpperCase() + this.substring(1)
 }
-
-/**
- * Converts a string to a "soft" id that has "_" instead of spaces.
- * e.g: "abc& $[]123" = "abc_123"
- */
-fun String.toId(lowerCase: Boolean = true): String {
-    val trimmed = this.trim()
-    val filtered = trimmed.filter { it.isDigit() || it.isLetter() || it == ' ' || it == '-' || it == '_' || it == '.' }
-    val converted = if (lowerCase) filtered.toLowerCase() else filtered
-    val replaced = converted.replace(' ', '_')
-    val finalText = if (replaced.isNullOrBlank()) "_" else replaced
-    return finalText
-}
-
-/**
- * Converts a string to a UUID
- */
-fun String.toUUId(): UUID {
-    return UUID.fromString(this)
-}
-
-/**
- * Converts a string to a "soft" id that has "_" instead of spaces.
- * e.g: "abc& $[]123" = "abc&_$[]123"
- */
-fun String.toUUIdOrCreate(): UUID {
-    return if(this.trim().isEmpty()) UUID.randomUUID() else UUID.fromString(this)
-}
-
-/**
- * Converts a string to an identifier with only numbers, letters, '-' and '_'
- * e.g: "abc& $[]123" = "abc"
- */
-fun String.toIdent(lowerCase: Boolean = true): String {
-    val trimmed = if (lowerCase) this.trim().toLowerCase() else this.trim()
-    val filtered = trimmed.filter { it.isDigit() || it.isLetter() || it == '-' || it == '_' || it == ' ' }
-    val cleaned = if (filtered.isNullOrBlank()) "_" else filtered
-    return cleaned.replace(' ', '_')
-}
-
-
-/**
- * Indicates if the string has a scheme portion ( e.g. like in a URI ) such as http is the scheme in "http://google.com
- * This checks for the existance of "://"
- */
-fun String.hasScheme():Boolean = this.contains("://")
 
 /**
  * Splits the string to a map using the converters supplied
@@ -219,28 +148,6 @@ fun String.splitToMapWithPairs(delimiterPairs: Char = ',', delimiterKeyValue: Ch
 }
 
 /**
- * Gets the value if non-null AND non-empty otherwise default value.
- */
-fun String?.nonEmptyOrDefault(defaultVal: String): String {
-    return when (this) {
-        null -> defaultVal
-        "" -> defaultVal
-        else -> if (this.isEmpty()) defaultVal else this
-    }
-}
-
-/**
- * Gets the value if non-null AND non-empty otherwise default value.
- */
-fun String?.orElse(defaultVal: String): String {
-    return when (this) {
-        null -> defaultVal
-        "" -> defaultVal
-        else -> if (this.isEmpty()) defaultVal else this
-    }
-}
-
-/**
  * Gets a substring as a single Pair.
  * @example:
  * "user://appdir/log.txt".subString("://") -> Pair("user", "appdir/log.txt")
@@ -266,19 +173,4 @@ val String.toCharMap: Map<Char, Boolean> get() = this.toCharArray().map { c -> c
  */
 val newline: String get() = System.lineSeparator()
 
-fun String.escapeHtml(): String {
-    val escapedTxt = StringBuilder()
-    for (i in 0..this.length - 1) {
-        val tmp = this[i]
-        when (tmp) {
-            '<' -> escapedTxt.append("&lt;")
-            '>' -> escapedTxt.append("&gt;")
-            '&' -> escapedTxt.append("&amp;")
-            '"' -> escapedTxt.append("&quot;")
-            '\'' -> escapedTxt.append("&#x27;")
-            '/' -> escapedTxt.append("&#x2F;")
-            else -> escapedTxt.append(tmp)
-        }
-    }
-    return escapedTxt.toString()
-}
+

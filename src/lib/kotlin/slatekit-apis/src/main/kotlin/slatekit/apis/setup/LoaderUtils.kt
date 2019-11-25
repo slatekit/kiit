@@ -9,8 +9,8 @@ import slatekit.apis.core.Action
 import slatekit.apis.core.Api
 import slatekit.apis.core.Sources
 import slatekit.common.Source
+import slatekit.common.ext.orElse
 import slatekit.common.naming.Namer
-import slatekit.common.nonEmptyOrDefault
 import slatekit.meta.Reflector
 
 fun toVerb(name: String?): Verb {
@@ -83,7 +83,7 @@ fun toApi(
 fun toAction(member: KCallable<*>, api: slatekit.apis.core.Api, apiAction: slatekit.apis.Action?, namer: Namer?): Action {
 
     val methodName = member.name
-    val actionNameRaw = apiAction?.name.nonEmptyOrDefault(methodName)
+    val actionNameRaw = apiAction?.name.orElse(methodName)
     val actionName = namer?.rename(actionNameRaw) ?: actionNameRaw
     val actionDesc = apiAction?.desc ?: ""
     val actionTags = apiAction?.tags?.toList() ?: listOf()

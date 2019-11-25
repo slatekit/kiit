@@ -2,16 +2,16 @@ package slatekit.orm.databases.converters
 
 import slatekit.orm.core.SqlConverter
 import slatekit.common.encrypt.Encryptor
-import slatekit.common.nonEmptyOrDefault
 import slatekit.query.QueryEncoder
 import slatekit.common.Record
+import slatekit.common.ext.orElse
 import slatekit.orm.Consts
 
 object StringConverter : SqlConverter<String> {
 
     override fun toSql(value: String?): String {
         return value?.let {
-            val sValFinal = value.nonEmptyOrDefault("")
+            val sValFinal = value.orElse("")
             "'" + QueryEncoder.ensureValue(sValFinal) + "'"
         } ?: Consts.NULL
     }
@@ -20,7 +20,7 @@ object StringConverter : SqlConverter<String> {
         return value?.let {
             // Only encrypt on create
             val sValEnc = if (encrypt) encryptor?.encrypt(value) ?: value else value
-            val sValFinal = sValEnc.nonEmptyOrDefault("")
+            val sValFinal = sValEnc.orElse("")
             "'" + QueryEncoder.ensureValue(sValFinal) + "'"
         } ?: Consts.NULL
     }

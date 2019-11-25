@@ -6,6 +6,7 @@ import slatekit.apis.Verbs
 import slatekit.apis.setup.HostAware
 import slatekit.common.*
 import slatekit.common.auth.Roles
+import slatekit.common.ext.orElse
 import slatekit.common.requests.Request
 import slatekit.results.Notice
 
