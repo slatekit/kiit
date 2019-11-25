@@ -17,7 +17,7 @@ import slatekit.results.Failure
 import java.util.concurrent.atomic.AtomicReference
 
 /**
- * Used for diagnostics / metrics to track the last results of calling some function/target identified by @param id
+ * Used to track the last request  and results of calling some function/target identified by @param id
  * NOTE: This is particularly helpful for functions/operations such as scheduled tasks, syncs, one-off commands.
  * This serves to track the following:
  *

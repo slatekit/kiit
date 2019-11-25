@@ -6,7 +6,8 @@ import java.util.concurrent.atomic.AtomicLong
 import java.util.concurrent.atomic.AtomicReference
 
 
-data class Fetched(val count:Long, val timestamp:DateTime?)
+data class Fetched(@JvmField val count:Long,
+                   @JvmField val timestamp:DateTime?)
 
 /**
  * This track the number of times something was read/accessed

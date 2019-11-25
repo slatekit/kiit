@@ -40,16 +40,16 @@ import slatekit.results.Status
  * }
  */
 data class Event(
-        val area: String,
-        val name: String,
-        val agent: String,
-        val env : String,
-        val uuid: String,
-        val desc: String,
-        val status: Status,
-        val target: String,
-        val tag: String,
-        val fields: List<Triple<String, String, String>>?
+        @JvmField val area: String,
+        @JvmField val name: String,
+        @JvmField val agent: String,
+        @JvmField val env : String,
+        @JvmField val uuid: String,
+        @JvmField val desc: String,
+        @JvmField val status: Status,
+        @JvmField val target: String,
+        @JvmField val tag: String,
+        @JvmField val fields: List<Triple<String, String, String>>?
 ) {
 
     companion object {

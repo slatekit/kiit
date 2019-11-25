@@ -3,7 +3,10 @@ package slatekit.tracking
 import slatekit.common.DateTime
 
 
-data class Updated<T>(val value:T?, val count:Long, val created:DateTime?, val updated: DateTime?)
+data class Updated<T>(@JvmField val value:T?,
+                      @JvmField val count:Long,
+                      @JvmField val created:DateTime?,
+                      @JvmField val updated: DateTime?)
 
 
 /**
