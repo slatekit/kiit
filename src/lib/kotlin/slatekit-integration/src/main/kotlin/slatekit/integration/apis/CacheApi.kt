@@ -26,6 +26,7 @@ import slatekit.common.Sources
 import slatekit.cache.SimpleCache
 import slatekit.cache.CacheValue
 import slatekit.cache.CacheSettings
+import slatekit.common.ext.trim
 
 @Api(area = "infra", name = "cache", desc = "api info about the application and host",
         auth = AuthModes.KEYED, roles = ["admin"], verb = Verbs.AUTO, sources = [Sources.ALL])
@@ -51,7 +52,7 @@ class CacheApi(override val context: CommonContext) : FileSupport {
         val item = cache.getEntry(key)
         val text = item?.text ?: ""
         val len = text.length
-        val copy = if (len <= 1000) item else item?.copy(text = Strings.truncate(item?.text ?: "", 1000))
+        val copy = if (len <= 1000) item else item?.copy(text = item.text?.trim(1000) ?: "")
         return copy
     }
 

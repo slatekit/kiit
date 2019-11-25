@@ -6,7 +6,7 @@ import slatekit.common.db.DbLookup
 import slatekit.common.info.About
 import slatekit.common.info.Folders
 import slatekit.common.templates.Subs
-import slatekit.common.toId
+import slatekit.common.ext.toId
 
 /**
  * Builds default application components:

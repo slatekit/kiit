@@ -6,6 +6,7 @@ import slatekit.common.conf.Config
 import slatekit.common.utils.B64Java8
 import slatekit.common.encrypt.Encryptor
 import slatekit.common.envs.Envs
+import slatekit.common.ext.toIdent
 import slatekit.common.info.*
 import slatekit.common.log.Logs
 import slatekit.common.log.LogsDefault

@@ -18,7 +18,7 @@ import slatekit.common.Context
 import slatekit.common.Ignore
 import slatekit.common.encrypt.EncryptSupport
 import slatekit.common.log.LogSupport
-import slatekit.common.subStringPair
+import slatekit.common.ext.subStringPair
 
 interface FileSupport : Api, EncryptSupport, LogSupport {
 

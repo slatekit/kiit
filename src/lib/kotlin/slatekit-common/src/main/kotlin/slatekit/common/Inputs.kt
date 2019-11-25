@@ -13,6 +13,8 @@
 
 package slatekit.common
 
+import slatekit.common.ext.splitToMapOfType
+
 
 interface InputsUpdateable {
     // Immutable add

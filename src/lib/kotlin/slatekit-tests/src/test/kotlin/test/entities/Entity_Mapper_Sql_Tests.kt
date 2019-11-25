@@ -16,8 +16,8 @@ import org.junit.Assert
 import org.junit.Test
 import slatekit.common.DateTimes
 import slatekit.common.db.DbCon
+import slatekit.common.ext.toUUId
 import slatekit.common.ids.UniqueId
-import slatekit.common.toUUId
 import slatekit.db.Db
 import slatekit.meta.models.ModelMapper
 import slatekit.orm.OrmMapper

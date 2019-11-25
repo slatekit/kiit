@@ -2,7 +2,7 @@ package slatekit.generator
 
 import slatekit.common.Context
 import slatekit.common.io.Uris
-import slatekit.common.toId
+import slatekit.common.ext.toId
 import slatekit.common.utils.Props
 import java.io.File
 
