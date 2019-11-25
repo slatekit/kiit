@@ -13,6 +13,6 @@ class Tracked<T> {
 
     fun set(newValue: T?) {
         val curr = get()
-        stamped.set(curr.update(newValue))
+        stamped.set(curr.set(newValue))
     }
 }

@@ -22,7 +22,7 @@ data class Updates<T>(val created: DateTime? = null,
                       val applied: Long = 0,
                       val current: T? = null) {
 
-    fun update(newValue:T?):Updates<T> {
+    fun set(newValue:T?):Updates<T> {
         return this.copy(
             created = created ?: DateTime.now(),
             updated = DateTime.now(),
@@ -30,8 +30,20 @@ data class Updates<T>(val created: DateTime? = null,
             current = newValue)
     }
 
+    fun map(op:(T) -> T):Updates<T> {
+        return when(current) {
+            null -> this
+            else -> set(op(current))
+        }
+    }
 
     fun get(): Updated<T> {
         return Updated(current, applied, created, updated)
+    }
+
+    companion object {
+        fun <T> of(item:T):Updates<T> {
+            return Updates<T>(DateTime.now(), null, 0, item)
+        }
     }
 }
