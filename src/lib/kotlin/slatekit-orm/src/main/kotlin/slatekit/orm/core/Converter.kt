@@ -1,6 +1,5 @@
 package slatekit.orm.core
 
-import slatekit.entities.Entity
 import slatekit.orm.databases.converters.*
 import slatekit.orm.databases.statements.Delete
 import slatekit.orm.databases.statements.Insert
@@ -9,22 +8,22 @@ import slatekit.orm.databases.statements.Update
 
 
 open class Converter<TId, T> where TId: kotlin.Comparable<TId>, T:Any {
-    open val bools              = BoolConverter
-    open val strings            = StringConverter
-    open val shorts             = ShortConverter
-    open val ints               = IntConverter
-    open val longs              = LongConverter
-    open val floats             = FloatConverter
-    open val doubles            = DoubleConverter
-    open val localDates         = LocalDateConverter
-    open val localTimes         = LocalTimeConverter
-    open val localDateTimes     = LocalDateTimeConverter
-    open val zonedDateTimes     = ZonedDateTimeConverter
-    open val dateTimes          = DateTimeConverter
-    open val instants           = InstantConverter
-    open val uuids              = UUIDConverter
-    open val uniqueIds          = UniqueIdConverter
-    open val enums              = EnumConverter
+    open val bools              = BoolEncoder
+    open val strings            = StringEncoder
+    open val shorts             = ShortEncoder
+    open val ints               = IntEncoder
+    open val longs              = LongEncoder
+    open val floats             = FloatEncoder
+    open val doubles            = DoubleEncoder
+    open val localDates         = LocalDateEncoder
+    open val localTimes         = LocalTimeEncoder
+    open val localDateTimes     = LocalDateTimeEncoder
+    open val zonedDateTimes     = ZonedDateTimeEncoder
+    open val dateTimes          = DateTimeEncoder
+    open val instants           = InstantEncoder
+    open val uuids              = UUIDEncoder
+    open val uniqueIds          = UniqueIdEncoder
+    open val enums              = EnumEncoder
 
     open val inserts = Insert<TId, T>()
     open val updates = Update<TId, T>()

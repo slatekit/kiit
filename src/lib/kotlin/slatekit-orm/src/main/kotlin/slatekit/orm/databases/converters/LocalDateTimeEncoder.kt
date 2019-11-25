@@ -1,6 +1,6 @@
 package slatekit.orm.databases.converters
 
-import slatekit.orm.core.SqlConverter
+import slatekit.orm.core.SqlEncoder
 import slatekit.common.Record
 import slatekit.orm.Consts
 //import java.time.*
@@ -9,9 +9,9 @@ import slatekit.common.DateTimes
 import slatekit.common.ext.atUtc
 import slatekit.common.ext.local
 
-object LocalDateTimeConverter : SqlConverter<LocalDateTime> {
+object LocalDateTimeEncoder : SqlEncoder<LocalDateTime> {
 
-    override fun toSql(value: LocalDateTime?): String {
+    override fun encode(value: LocalDateTime?): String {
         return toSql(value, false)
     }
 
@@ -23,7 +23,7 @@ object LocalDateTimeConverter : SqlConverter<LocalDateTime> {
         } ?: Consts.NULL
     }
 
-    override fun toItem(record: Record, name: String): LocalDateTime? {
+    override fun decode(record: Record, name: String): LocalDateTime? {
         return toItem(record, name, false)
     }
 

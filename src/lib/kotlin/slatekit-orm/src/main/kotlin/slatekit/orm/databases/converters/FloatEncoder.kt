@@ -1,16 +1,16 @@
 package slatekit.orm.databases.converters
 
-import slatekit.orm.core.SqlConverter
+import slatekit.orm.core.SqlEncoder
 import slatekit.common.Record
 import slatekit.orm.Consts
 
-object FloatConverter : SqlConverter<Float> {
+object FloatEncoder : SqlEncoder<Float> {
 
-    override fun toSql(value: Float?): String {
+    override fun encode(value: Float?): String {
         return value?.toString() ?: Consts.NULL
     }
 
-    override fun toItem(record: Record, name: String): Float? {
+    override fun decode(record: Record, name: String): Float? {
         return record.getFloat(name)
     }
 }

@@ -29,26 +29,6 @@ interface Exportable<TId, T> where TId : Comparable<TId>, T : Entity<TId> {
     }
 
     /**
-     * Exports the first one
-     *
-     * @param version
-     * @return
-     */
-    fun exportFirst(version: String): Try<Export<T>> {
-        return exportItem(version, service.first())
-    }
-
-    /**
-     * Exports the first one
-     *
-     * @param version
-     * @return
-     */
-    fun exportLast(version: String): Try<Export<T>> {
-        return exportItem(version, service.last())
-    }
-
-    /**
      * Exports a single item ( returned as an array ) using the id.
      *
      * @param version

@@ -1,7 +1,7 @@
 package slatekit.orm.databases.converters
 
 import slatekit.common.DateTime
-import slatekit.orm.core.SqlConverter
+import slatekit.orm.core.SqlEncoder
 import slatekit.common.Record
 import slatekit.orm.Consts
 //import java.time.format.DateTimeFormatter
@@ -9,10 +9,10 @@ import org.threeten.bp.format.*
 import slatekit.common.ext.atUtc
 import slatekit.common.ext.atUtcLocal
 
-object DateTimeConverter : SqlConverter<DateTime> {
+object DateTimeEncoder : SqlEncoder<DateTime> {
     private val dateTimeFormat: DateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")
 
-    override fun toSql(value: DateTime?): String {
+    override fun encode(value: DateTime?): String {
         return toSql(value, false)
     }
 
@@ -23,7 +23,7 @@ object DateTimeConverter : SqlConverter<DateTime> {
         } ?: Consts.NULL
     }
 
-    override fun toItem(record: Record, name: String): DateTime? {
+    override fun decode(record: Record, name: String): DateTime? {
         return toItem(record, name, false)
     }
 

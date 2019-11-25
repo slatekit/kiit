@@ -25,9 +25,7 @@ object MySqlTypeMap : TypeMap()
  */
 class MySqlConverter<TId, T> : Converter<TId, T>() where TId : kotlin.Comparable<TId>, T : Any
 
-
 class MySqlBuilder(namer: Namer?) : SqlBuilder(MySqlTypeMap, namer)
-
 
 class MySqlQuery : Query()
 
@@ -50,7 +48,6 @@ open class MySqlRepo<TId, T>(db: IDb, info:EntityInfo, mapper: OrmMapper<TId, T>
         return ormMapper.update(entity)
     }
 }
-
 
 /**
  * Maps an entity to sql and from sql records.

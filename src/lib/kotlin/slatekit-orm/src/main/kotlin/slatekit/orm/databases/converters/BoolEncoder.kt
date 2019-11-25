@@ -1,16 +1,16 @@
 package slatekit.orm.databases.converters
 
-import slatekit.orm.core.SqlConverter
+import slatekit.orm.core.SqlEncoder
 import slatekit.common.Record
 import slatekit.orm.Consts
 
-object BoolConverter : SqlConverter<Boolean> {
+object BoolEncoder : SqlEncoder<Boolean> {
 
-    override fun toSql(value: Boolean?): String {
+    override fun encode(value: Boolean?): String {
         return value?.let { if (value) "1" else "0" } ?: Consts.NULL
     }
 
-    override fun toItem(record: Record, name: String): Boolean? {
+    override fun decode(record: Record, name: String): Boolean? {
         return record.getBool(name)
     }
 }

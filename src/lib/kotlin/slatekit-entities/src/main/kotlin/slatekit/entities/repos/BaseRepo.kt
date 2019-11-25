@@ -13,7 +13,6 @@
 
 package slatekit.entities.repos
 
-import slatekit.entities.Entity
 import slatekit.entities.Repo
 import slatekit.entities.core.EntityInfo
 import slatekit.entities.core.EntityStore

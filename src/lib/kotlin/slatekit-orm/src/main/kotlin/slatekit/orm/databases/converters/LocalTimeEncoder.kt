@@ -1,18 +1,18 @@
 package slatekit.orm.databases.converters
 
-import slatekit.orm.core.SqlConverter
+import slatekit.orm.core.SqlEncoder
 import slatekit.common.Record
 import slatekit.orm.Consts
 //import java.time.*
 import org.threeten.bp.*
 
-object LocalTimeConverter : SqlConverter<LocalTime> {
+object LocalTimeEncoder : SqlEncoder<LocalTime> {
 
-    override fun toSql(value: LocalTime?): String {
+    override fun encode(value: LocalTime?): String {
         return value?.let { "'" + value.format(Consts.timeFormat) + "'" } ?: Consts.NULL
     }
 
-    override fun toItem(record: Record, name: String): LocalTime? {
+    override fun decode(record: Record, name: String): LocalTime? {
         return record.getLocalTime(name)
     }
 }

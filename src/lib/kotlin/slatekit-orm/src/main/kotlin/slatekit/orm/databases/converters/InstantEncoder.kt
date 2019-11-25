@@ -1,20 +1,20 @@
 package slatekit.orm.databases.converters
 
-import slatekit.orm.core.SqlConverter
+import slatekit.orm.core.SqlEncoder
 import slatekit.common.Record
 import slatekit.orm.Consts
 //import java.time.*
 import org.threeten.bp.*
 
-object InstantConverter : SqlConverter<Instant> {
+object InstantEncoder : SqlEncoder<Instant> {
 
-    override fun toSql(value: Instant?): String {
+    override fun encode(value: Instant?): String {
         return value?.let {
             "'" + LocalDateTime.ofInstant(value, ZoneId.systemDefault()).format(Consts.dateTimeFormat) + "'"
         } ?: Consts.NULL
     }
 
-    override fun toItem(record: Record, name: String): Instant? {
+    override fun decode(record: Record, name: String): Instant? {
         return record.getInstant(name)
     }
 }

@@ -3,6 +3,7 @@ package slatekit.entities.core
 import java.util.*
 import slatekit.entities.Entity
 import slatekit.entities.Repo
+import slatekit.entities.events.EntityAction
 
 interface ServiceSupport<TId, T> where TId : Comparable<TId>, T : Entity<TId> {
 

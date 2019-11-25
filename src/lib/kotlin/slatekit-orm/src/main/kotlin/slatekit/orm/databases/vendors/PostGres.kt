@@ -25,9 +25,7 @@ object PostGresMap : TypeMap()
  */
 class PostGresConverter<TId, T> : Converter<TId, T>() where TId : kotlin.Comparable<TId>, T : Entity<TId>
 
-
 class PostGresBuilder(namer: Namer?) : SqlBuilder(PostGresMap, namer)
-
 
 class PostGresQuery : Query()
 

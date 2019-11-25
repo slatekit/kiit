@@ -1,17 +1,17 @@
 package slatekit.orm.databases.converters
 
-import slatekit.orm.core.SqlConverter
+import slatekit.orm.core.SqlEncoder
 import slatekit.common.ids.UniqueId
 import slatekit.common.Record
 import slatekit.orm.Consts
 
-object UniqueIdConverter : SqlConverter<UniqueId> {
+object UniqueIdEncoder : SqlEncoder<UniqueId> {
 
-    override fun toSql(value: UniqueId?): String {
+    override fun encode(value: UniqueId?): String {
         return value?.let { "'" + value.toString() + "'" } ?: Consts.NULL
     }
 
-    override fun toItem(record: Record, name: String): UniqueId? {
+    override fun decode(record: Record, name: String): UniqueId? {
         return record.getUniqueId(name)
     }
 }

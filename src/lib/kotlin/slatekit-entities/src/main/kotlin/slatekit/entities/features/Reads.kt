@@ -33,6 +33,34 @@ interface Reads<TId, T> : ServiceSupport<TId, T> where TId : kotlin.Comparable<T
     }
 
     /**
+     * gets the total number of entities in the datastore
+     * @return
+     */
+    fun count(): Long {
+        return repo().count()
+    }
+
+    /**
+     * determines if there are any entities in the datastore
+     * @return
+     */
+    fun any(): Boolean {
+        return repo().any()
+    }
+
+    /**
+     * whether this is an empty dataset
+     */
+    fun isEmpty(): Boolean = !any()
+
+    /**
+     * Gets the total number of records satisfying the query
+     */
+    fun count(query: IQuery): Long {
+        return repo().count(query)
+    }
+
+    /**
      * gets the top count entities in the datastore sorted by asc order
      * @param count: Top / Limit count of entities
      * @param desc : Whether to sort by descending
@@ -74,33 +102,5 @@ interface Reads<TId, T> : ServiceSupport<TId, T> where TId : kotlin.Comparable<T
      */
     fun oldest(count: Int): List<T> {
         return repo().oldest(count)
-    }
-
-    /**
-     * gets the total number of entities in the datastore
-     * @return
-     */
-    fun count(): Long {
-        return repo().count()
-    }
-
-    /**
-     * determines if there are any entities in the datastore
-     * @return
-     */
-    fun any(): Boolean {
-        return repo().any()
-    }
-
-    /**
-     * whether this is an empty dataset
-     */
-    fun isEmpty(): Boolean = !any()
-
-    /**
-     * Gets the total number of records satisfying the query
-     */
-    fun count(query: IQuery): Long {
-        return repo().count(query)
     }
 }

@@ -1,16 +1,16 @@
 package slatekit.orm.databases.converters
 
-import slatekit.orm.core.SqlConverter
+import slatekit.orm.core.SqlEncoder
 import slatekit.common.Record
 import slatekit.orm.Consts
 
-object ShortConverter : SqlConverter<Short> {
+object ShortEncoder : SqlEncoder<Short> {
 
-    override fun toSql(value: Short?): String {
+    override fun encode(value: Short?): String {
         return value?.toString() ?: Consts.NULL
     }
 
-    override fun toItem(record: Record, name: String): Short? {
+    override fun decode(record: Record, name: String): Short? {
         return record.getShort(name)
     }
 }

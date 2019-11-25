@@ -1,15 +1,15 @@
 package slatekit.orm.databases.converters
 
-import slatekit.orm.core.SqlConverter
+import slatekit.orm.core.SqlEncoder
 import slatekit.common.Record
 import slatekit.orm.Consts
 //import java.time.*
 import org.threeten.bp.*
 import slatekit.common.ext.atUtc
 
-object ZonedDateTimeConverter : SqlConverter<ZonedDateTime> {
+object ZonedDateTimeEncoder : SqlEncoder<ZonedDateTime> {
 
-    override fun toSql(value: ZonedDateTime?): String {
+    override fun encode(value: ZonedDateTime?): String {
         return toSql(value, false)
     }
 
@@ -20,7 +20,7 @@ object ZonedDateTimeConverter : SqlConverter<ZonedDateTime> {
         } ?: Consts.NULL
     }
 
-    override fun toItem(record: Record, name: String): ZonedDateTime? {
+    override fun decode(record: Record, name: String): ZonedDateTime? {
         return toItem(record, name, false)
     }
 

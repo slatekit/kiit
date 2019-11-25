@@ -11,7 +11,7 @@ interface SeqRepo<TId, T> where TId : Comparable<TId>, TId: Number {
      * @param desc : Whether to sort by descending
      * @return
      */
-    fun top(count: Int, desc: Boolean): List<T>
+    fun seq(count: Int, desc: Boolean): List<T>
 
     /**
      * Gets the first/oldest item
@@ -30,14 +30,14 @@ interface SeqRepo<TId, T> where TId : Comparable<TId>, TId: Number {
      * @param count
      * @return
      */
-    fun recent(count: Int): List<T> = top(count, true)
+    fun recent(count: Int): List<T> = seq(count, true)
 
     /**
      * Gets the most oldest n items represented by count
      * @param count
      * @return
      */
-    fun oldest(count: Int): List<T> = top(count, false)
+    fun oldest(count: Int): List<T> = seq(count, false)
 
     /**
      * takes the

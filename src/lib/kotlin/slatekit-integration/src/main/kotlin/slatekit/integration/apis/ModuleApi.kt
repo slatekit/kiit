@@ -49,7 +49,7 @@ class ModuleApi(val ctx: slatekit.integration.mods.ModuleContext, override val c
 
     @Action(desc = "creates a new invitee")
     fun enabled(): List<slatekit.integration.mods.Mod> {
-        return ctx.service.find(Query().where("isEnabled", "=", true))
+        return ctx.service.findByQuery(Query().where("isEnabled", "=", true))
     }
 
     @Action(desc = "installs all modules from initial setup")
@@ -146,7 +146,7 @@ class ModuleApi(val ctx: slatekit.integration.mods.ModuleContext, override val c
 
     fun installUpdate(mod: slatekit.integration.mods.Module, updateIfPresent: Boolean = false): Notice<Any> {
 
-        val checkResult = ctx.service.findFirst(Query().where("name", "=", mod.info.name))
+        val checkResult = ctx.service.findFirstByQuery(Query().where("name", "=", mod.info.name))
         if (checkResult == null) {
 
             if (mod.info.isEnabled) {

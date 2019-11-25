@@ -3,13 +3,16 @@ package slatekit.entities.features
 import slatekit.entities.Entity
 import slatekit.entities.core.ServiceSupport
 import slatekit.entities.slatekit.entities.EntityOptions
+import slatekit.entities.slatekit.entities.features.Ordered
 import slatekit.results.Try
 import slatekit.results.builders.Tries
 
-interface Writes<TId, T> : ServiceSupport<TId, T>,
+interface CRUD<TId, T> : ServiceSupport<TId, T>,
         Creates<TId, T>,
+        Reads<TId, T>,
         Updates<TId, T>,
         Deletes<TId, T>,
+        Finds<TId, T>,
         Saves<TId, T>
 
         where TId : kotlin.Comparable<TId>, T : Entity<TId> {

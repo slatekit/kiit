@@ -96,7 +96,7 @@ interface ApiWithEntitySupport<TId, T, TSvc> where TId:Comparable<TId>, T : Enti
 
     @Action(name = "", desc = "finds items by field name and value")
     fun findBy(field: String, value: String): List<T> {
-        return entitySvc.find(Query().where(field, "=", value))
+        return entitySvc.findByQuery(Query().where(field, "=", value))
     }
 
     @Action(name = "", desc = "finds items by field name and value")

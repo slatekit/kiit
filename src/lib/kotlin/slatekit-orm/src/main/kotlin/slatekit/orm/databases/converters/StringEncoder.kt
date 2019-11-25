@@ -1,15 +1,15 @@
 package slatekit.orm.databases.converters
 
-import slatekit.orm.core.SqlConverter
+import slatekit.orm.core.SqlEncoder
 import slatekit.common.encrypt.Encryptor
 import slatekit.query.QueryEncoder
 import slatekit.common.Record
 import slatekit.common.ext.orElse
 import slatekit.orm.Consts
 
-object StringConverter : SqlConverter<String> {
+object StringEncoder : SqlEncoder<String> {
 
-    override fun toSql(value: String?): String {
+    override fun encode(value: String?): String {
         return value?.let {
             val sValFinal = value.orElse("")
             "'" + QueryEncoder.ensureValue(sValFinal) + "'"
@@ -25,7 +25,7 @@ object StringConverter : SqlConverter<String> {
         } ?: Consts.NULL
     }
 
-    override fun toItem(record: Record, name: String): String? {
+    override fun decode(record: Record, name: String): String? {
         return record.getString(name)
     }
 }

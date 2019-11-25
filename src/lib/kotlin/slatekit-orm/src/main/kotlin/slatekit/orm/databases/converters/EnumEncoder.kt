@@ -4,17 +4,17 @@ import slatekit.common.*
 import slatekit.common.Record
 import slatekit.meta.Reflector
 import slatekit.orm.Consts.NULL
-import slatekit.orm.core.SqlConverter
+import slatekit.orm.core.SqlEncoder
 import kotlin.reflect.KClass
 
 
-object EnumConverter : SqlConverter<EnumLike> {
+object EnumEncoder : SqlEncoder<EnumLike> {
 
-    override fun toSql(value: EnumLike?): String {
+    override fun encode(value: EnumLike?): String {
         return value?.let { value.value.toString() } ?: NULL
     }
 
-    override fun toItem(record: Record, name: String): EnumLike? {
+    override fun decode(record: Record, name: String): EnumLike? {
         return null
     }
 
