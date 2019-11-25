@@ -1,10 +1,10 @@
-package slatekit.core.cloud
+package slatekit.core.common
 
 import java.io.ByteArrayInputStream
 import java.io.File
 import java.io.InputStream
 
-object CloudUtils {
+object FileUtils {
 
      fun loadFromFile(filePath: String): String {
         return File(filePath).readText()

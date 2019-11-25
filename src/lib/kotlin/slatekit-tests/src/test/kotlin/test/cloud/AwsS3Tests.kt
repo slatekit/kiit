@@ -7,7 +7,7 @@ import slatekit.cloud.aws.AwsCloudFiles
 import slatekit.common.DateTime
 import slatekit.common.io.Uris
 import slatekit.common.ext.toStringNumeric
-import slatekit.core.cloud.CloudFiles
+import slatekit.core.files.CloudFiles
 import slatekit.results.getOrElse
 import java.io.File
 

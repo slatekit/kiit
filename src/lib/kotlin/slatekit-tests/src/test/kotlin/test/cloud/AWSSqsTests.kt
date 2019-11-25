@@ -1,13 +1,11 @@
 package test.cloud
 
 import org.junit.Assert
-import org.junit.Test
 import slatekit.cloud.aws.AwsCloudQueue
 import slatekit.common.DateTime
 import slatekit.common.ext.toStringNumeric
 import slatekit.common.queues.QueueStringConverter
-import slatekit.core.cloud.CloudQueue
-import java.io.File
+import slatekit.core.queues.CloudQueue
 
 
 class AwsSqsTests {

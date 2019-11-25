@@ -23,7 +23,7 @@ import slatekit.common.io.Uris
 import slatekit.common.ext.toStringUtc
 import slatekit.common.queues.QueueEntry
 import slatekit.common.queues.QueueValueConverter
-import slatekit.core.cloud.CloudQueue
+import slatekit.core.queues.CloudQueue
 import slatekit.results.Try
 import java.io.File
 import java.io.IOException

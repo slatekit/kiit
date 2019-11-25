@@ -1,16 +1,6 @@
-package slatekit.core.slatekit.core.cloud
+package slatekit.core.docs
 
 import slatekit.results.Outcome
-
-interface CloudDoc<TEntity, TPartition, TCluster> {
-    val partition:TPartition
-
-    val cluster:TCluster
-
-    val fields:Map<String, Any?>
-
-    val source:Any
-}
 
 
 interface CloudDocs<TEntity, TPartition, TCluster> {

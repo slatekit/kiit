@@ -11,8 +11,10 @@
  * </slate_header>
  */
 
-package slatekit.core.cloud
+package slatekit.core.files
 
+import slatekit.core.cloud.CloudSupport
+import slatekit.core.common.FileUtils
 import slatekit.results.Try
 
 /**
@@ -36,13 +38,13 @@ interface CloudFiles : CloudSupport {
 
     fun createFromPath(name: String, filePath: String) {
 
-        val content = CloudUtils.loadFromFile(filePath)
+        val content = FileUtils.loadFromFile(filePath)
         create(defaultFolder, name, content)
     }
 
     fun createFromPath(folder: String, name: String, filePath: String): Try<String> {
         // val content = "simulating from file : " + filePath
-        val content = CloudUtils.loadFromFile(filePath)
+        val content = FileUtils.loadFromFile(filePath)
         return create(folder, name, content)
     }
 
@@ -70,7 +72,7 @@ interface CloudFiles : CloudSupport {
     }
 
     fun updateFromPath(folder: String, name: String, filePath: String): Try<String> {
-        val content = CloudUtils.loadFromFile(filePath)
+        val content = FileUtils.loadFromFile(filePath)
         return update(folder, name, content)
     }
 

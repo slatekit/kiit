@@ -2,8 +2,7 @@ package slatekit.cloud.aws
 
 import com.amazonaws.auth.AWSCredentials
 import com.amazonaws.auth.AWSStaticCredentialsProvider
-import slatekit.core.slatekit.core.cloud.CloudDoc
-import slatekit.core.slatekit.core.cloud.CloudDocs
+import slatekit.core.docs.CloudDocs
 
 import com.amazonaws.services.dynamodbv2.AmazonDynamoDBClientBuilder
 import com.amazonaws.services.dynamodbv2.document.DynamoDB
