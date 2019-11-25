@@ -30,10 +30,10 @@ import java.util.concurrent.ConcurrentHashMap
  *
  * @param settings
  */
-class SimpleCache(opts: CacheSettings) : Cache {
+open class SimpleCache(opts: CacheSettings) : Cache {
 
     override val settings = opts
-    private val lookup = ConcurrentHashMap<String, CacheEntry>()
+    protected val lookup = ConcurrentHashMap<String, CacheEntry>()
 
     /**
      * size of the cache
@@ -123,35 +123,6 @@ class SimpleCache(opts: CacheSettings) : Cache {
     }
 
     /**
-     * gets a cache item or loads it if not available, via a future
-     *
-     * @param key
-     * @tparam T
-     * @return
-     */
-    fun <T> getInternal(key: String, load:Boolean): T? {
-        val result = lookup.get(key)?.let { c ->
-            val value = if (c.isAlive()) {
-                val entry = c.item.get()
-                entry.reads.inc()
-                val tracked = entry.value
-                tracked.get().current
-            } else if(load){
-                c.refresh()
-                val entry = c.item.get()
-                entry.reads.inc()
-                val tracked = entry.value
-                tracked.get().current
-            } else {
-                null
-            }
-            value
-        }
-        @Suppress("UNCHECKED_CAST")
-        return result?.let { r -> r as T }
-    }
-
-    /**
      * manual / explicit refresh of a cache item with a future result
      * in order to get the item
      *
@@ -205,8 +176,37 @@ class SimpleCache(opts: CacheSettings) : Cache {
         }
     }
 
+    /**
+     * gets a cache item or loads it if not available, via a future
+     *
+     * @param key
+     * @tparam T
+     * @return
+     */
+    protected fun <T> getInternal(key: String, load:Boolean): T? {
+        val result = lookup.get(key)?.let { c ->
+            val value = if (c.isAlive()) {
+                val entry = c.item.get()
+                entry.reads.inc()
+                val tracked = entry.value
+                tracked.get().current
+            } else if(load){
+                c.refresh()
+                val entry = c.item.get()
+                entry.reads.inc()
+                val tracked = entry.value
+                tracked.get().current
+            } else {
+                null
+            }
+            value
+        }
+        @Suppress("UNCHECKED_CAST")
+        return result?.let { r -> r as T }
+    }
 
-    private fun insert(
+
+    protected fun insert(
         key: String,
         desc: String,
         seconds: Int,
