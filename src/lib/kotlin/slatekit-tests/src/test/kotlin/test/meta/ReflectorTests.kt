@@ -49,7 +49,7 @@ class ReflectorTests {
 
 
     val ctx: AppEntContext = AppEntContext (
-            args  = Args.default(),
+            args  = Args.empty(),
             envs  = Envs.defaults().select("loc"),
             conf  = Config(),
             logs = LogsDefault,

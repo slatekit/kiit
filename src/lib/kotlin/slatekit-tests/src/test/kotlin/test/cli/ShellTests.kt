@@ -43,7 +43,7 @@ class ShellTests  {
       val result = runBlocking { cli.executeText("app.version.host") }
 
       val res = result.getOrElse {
-        CliResponse( CliRequest.build(Args.default(), ""),true, 1, mapOf(), "" )
+        CliResponse( CliRequest.build(Args.empty(), ""),true, 1, mapOf(), "" )
       }
       val req = res.request
       Assert.assertTrue( req.area == "app" )

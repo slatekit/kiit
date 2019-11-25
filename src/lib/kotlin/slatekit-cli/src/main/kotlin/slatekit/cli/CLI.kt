@@ -128,7 +128,7 @@ open class CLI(
     /**
      * Runs the shell continuously until "exit" or "quit" are entered.
      */
-    private val lastArgs = AtomicReference<Args>(Args.default())
+    private val lastArgs = AtomicReference<Args>(Args.empty())
     suspend fun repl(): Try<Status> {
 
         // Keep reading from console until ( exit, quit ) is hit.

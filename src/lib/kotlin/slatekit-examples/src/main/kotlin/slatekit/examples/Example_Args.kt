@@ -94,7 +94,7 @@ class Example_Args  : Command("args") {
       println("Error parsing args : " + result.msg)
       return
     }
-    val args = result.getOrElse { Args.default() }
+    val args = result.getOrElse { Args.empty() }
     println("action   : " + args.action)
     if(!args.parts.isEmpty()) {
       print("parts    : ")

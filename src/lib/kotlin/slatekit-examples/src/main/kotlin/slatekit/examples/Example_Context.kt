@@ -27,11 +27,8 @@ import slatekit.common.info.*
 import slatekit.common.log.LogsDefault
 import slatekit.common.Context
 import slatekit.common.envs.Envs
-import slatekit.entities.Entities
 import slatekit.cmds.Command
 import slatekit.cmds.CommandRequest
-import slatekit.db.Db
-import slatekit.integration.common.AppEntContext
 import slatekit.results.*
 
 //</doc:import_examples>
@@ -79,7 +76,7 @@ class Example_Context : Command("cmd") {
         // - default logger ( console )
         // - entities ( registrations for orm )
         val ctx2 = CommonContext(
-                args = Args.default(),
+                args = Args.empty(),
                 envs = Envs.defaults(),
                 conf = Config(),
                 logs = LogsDefault,
@@ -119,7 +116,7 @@ class Example_Context : Command("cmd") {
         // to allow you to get the context and modify it before it is returned.
         val ctx3 = AppUtils.context(
                 envs = Envs.defaults(),
-                args = Args.parse("-env=dev -log -log.level=debug").getOrElse { Args.default() },
+                args = Args.parse("-env=dev -log -log.level=debug").getOrElse { Args.empty() },
                 enc = Encryptor("wejklhviuxywehjk", "3214maslkdf03292", B64Java8),
                 schema = ArgsSchema()
                         .text("env", "the environment to run in", "", false, "dev", "dev", "dev1|qa1|stg1|pro")
