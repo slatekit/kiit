@@ -17,9 +17,6 @@ class SyncCache(private val cache: Cache) : Cache {
     override fun stats(): List<CacheStats> = cache.stats()
 
     @Synchronized
-    override fun getEntry(key: String): CacheValue? = cache.getEntry(key)
-
-    @Synchronized
     override fun <T> get(key: String): T? = cache.get(key)
 
     @Synchronized

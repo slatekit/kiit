@@ -1,13 +1,37 @@
 package slatekit.examples
 
+import slatekit.cmds.Command
+import slatekit.cmds.CommandRequest
+import slatekit.common.DateTime
+import slatekit.common.DateTimes
+import slatekit.common.conf.ConfFuncs
+import slatekit.common.db.DbConString
+import slatekit.common.db.DbLookup.Companion.defaultDb
+import slatekit.common.db.DbLookup.Companion.namedDbs
+import slatekit.common.db.DbType
+import slatekit.db.Db
+import slatekit.entities.Entities
+import slatekit.entities.EntityMapper
+import slatekit.entities.core.EntityContext
+import slatekit.entities.repos.InMemoryRepo
+import slatekit.examples.common.Movie
+import slatekit.examples.common.MovieRepository
+import slatekit.examples.common.MovieService
+import slatekit.meta.models.Model
+import slatekit.meta.models.ModelMapper
+import slatekit.orm.databases.vendors.MySqlConverter
+import slatekit.query.Query
+import slatekit.results.Success
+import slatekit.results.Try
+
 
 /**
  * Created by kreddy on 3/15/2016.
  */
 /*
-class Guide_ORM : Cmd("types") {
+class Guide_ORM : Command("types") {
 
-    override fun execute(request:CommandRequest): Try<Any> {
+    override fun execute(request: CommandRequest): Try<Any> {
         //<doc:setup>
         // The entities are dependent on the database connections setup.
         // See Example_Database.kt for more info
@@ -48,77 +72,6 @@ class Guide_ORM : Cmd("types") {
                 )
         ))
 
-        // =================================================================================
-        // The entities can be registered and set up in multiple ways.
-        // They can be registered to :
-        //
-        // - use in-memory repository or a sql ( mysql ) repository
-        // - use the default EntityService[T] or a custom EntityService
-        // - use a singleton instance or new instance
-        // - use a certain type of database ( mysql only for now )
-        // - use the default EntityRepository ( mysql ) or a custom repository
-        // - use a supplied EntityMapper or a custom mapper
-        val entities = Entities({ con -> Db(con)}, dbLookup1)
-
-        // Case 1: In-memory
-        showResults("Case 1", entities.prototype<Movie>(Movie::class))
-
-        // Case 2: In-memory + with custom service
-        showResults("Case 2", entities.prototype<Movie>(entityType = Movie::class,
-                serviceType = MovieService::class))
-
-        // Case 3: Sql-repo = EntityRepository[T] - mysql, default service ( EntityService[T] )
-        // Note: this uses the default database connection above
-        showResults("Case 3", entities.prototype<Movie>(entityType = Movie::class,
-                dbType = DbTypeMySql))
-
-        // Case 4: Sql-repo + with custom service = default sql repo ( EntityRepository[T] - mysql )
-        // Note: this uses the default database connection above
-        showResults("Case 4", entities.prototype<Movie>(entityType = Movie::class,
-                serviceType = MovieService::class, dbType = DbTypeMySql))
-
-        // Case 5: Custom repository
-        // Note: this uses the default database connection above
-        showResults("Case 5", entities.prototype<Movie>(entityType = Movie::class,
-                repository = MovieRepository(), dbType = DbTypeMySql))
-
-        // Case 6: Custom service type, custom repository, database type
-        showResults("Case 6", entities.prototype<Movie>(entityType = Movie::class,
-                serviceType = MovieService::class, repository = MovieRepository(), dbType = DbTypeMySql))
-
-        // Case 7: Custom service type, custom repository, database specified
-        // Note: this uses the named database connection above called "Movie_db"
-        showResults("Case 7", entities.prototype<Movie>(entityType = Movie::class,
-                serviceType = MovieService::class, repository = MovieRepository(),
-                dbType = DbTypeMySql, dbKey = "Movie_db"))
-
-        // Case 8: Custom service type, custom repository, database specified, mapper specified
-        // Each registration will simply overwrite an existing registration for the same entity type
-        showResults("Case 8", entities.prototype<Movie>(entityType = Movie::class,
-                serviceType = MovieService::class, repository = MovieRepository(),
-                dbType = DbTypeMySql))
-
-        // Case 9: Provide a database db key ( e.g. for multiple database connections )
-        showResults("Case 9", entities.prototype<Movie>(entityType = Movie::class,
-                serviceType = MovieService::class, repository = MovieRepository(),
-                dbType = DbTypeMySql, dbKey = "Movie_db"))
-
-        // Case 9: Provide a database db key ( e.g. for multiple database connections )
-        showResults("Case 10", entities.prototype<Movie>(entityType = Movie::class,
-                serviceType = MovieService::class, repository = MovieRepository(),
-                dbType = DbTypeMySql, dbKey = "group1", dbShard = "shard1"))
-
-        // Use case 1: Get repository
-        val repo = entities.getRepo<Movie>(Movie::class)
-
-        // Use case 2: Get the service
-        val svc = entities.getSvc<Movie>(Movie::class)
-
-        // Use case 3: Get the entity mapper
-        val mapper = entities.getMapper(Movie::class)
-
-        // Use case 4: Get the repo for a specific shard
-        val repoShar = entities.getRepo<Movie>(Movie::class)
 
         return Success("")
     }
@@ -140,9 +93,9 @@ class Guide_ORM : Cmd("types") {
         val service = MovieService(ctx, ent, InMemoryRepo<Movie>(Movie::class))
 
         // CASE 1: Create 3-4 users for showing use-cases
-        service.create(Movie(0L, "Batman Begins"     , "action", false, 50, 4.2, DateTime.of(2005,1,1)))
-        service.create(Movie(0L, "Dark Knight"      , "action", false, 100,4.5, DateTime.of(2012,1,1)))
-        service.create(Movie(0L, "Dark Knight Rises", "action", false, 120,4.2, DateTime.of(2012,1,1)))
+        service.create(Movie(0L, "Batman Begins"     , "action", false, 50, 4.2, DateTimes.of(2005,1,1)))
+        service.create(Movie(0L, "Dark Knight"      , "action", false, 100,4.5, DateTimes.of(2012,1,1)))
+        service.create(Movie(0L, "Dark Knight Rises", "action", false, 120,4.2, DateTimes.of(2012,1,1)))
 
         // CASE 2: Get by id
         printOne("2", service.get(2))
@@ -179,7 +132,7 @@ class Guide_ORM : Cmd("types") {
         println(service.findByField(Movie::playing, true))
 
         // CASE 12: Query
-        println(service.find(Query().where("playing", "=", true)))
+        println(service.findByQuery(Query().where("playing", "=", true)))
 
 
         // More docs coming soon.
@@ -321,14 +274,14 @@ class Guide_ORM : Cmd("types") {
 
 
 
-    fun showResults(desc: String, regInfo: EntityContext): Unit {
+    fun showResults(desc: String, regInfo: EntityContext) {
         println(desc)
         println(regInfo.toStringDetail())
         println()
     }
 
 
-    fun printAll(tag: String, models: List<Movie>): Unit {
+    fun printAll(tag: String, models: List<Movie>) {
         println()
         println(tag.toUpperCase())
         for (model in models)
@@ -336,7 +289,7 @@ class Guide_ORM : Cmd("types") {
     }
 
 
-    fun printOne(tag: String?, model: Movie?): Unit {
+    fun printOne(tag: String?, model: Movie?) {
         tag?.let { t ->
             println()
             println(t.toUpperCase())
@@ -347,5 +300,4 @@ class Guide_ORM : Cmd("types") {
         }
     }
 }
-
 */

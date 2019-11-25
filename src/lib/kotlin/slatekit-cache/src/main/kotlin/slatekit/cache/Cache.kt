@@ -44,14 +44,6 @@ interface Cache {
     fun stats():List<CacheStats>
 
     /**
-     * gets the cache entry itself.
-     * NOTE: This is exposed
-     * @param key
-     * @return
-     */
-    fun getEntry(key: String): CacheValue?
-
-    /**
      * gets an item from the cache if it exists and is alive
      * @param key
      * @tparam T

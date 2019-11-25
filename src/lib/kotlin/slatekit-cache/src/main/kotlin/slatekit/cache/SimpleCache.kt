@@ -55,7 +55,7 @@ open class SimpleCache(opts: CacheSettings) : Cache {
      * @param key
      * @return
      */
-    override fun contains(key: String): Boolean = lookup.contains(key)
+    override fun contains(key: String): Boolean = lookup.containsKey(key)
 
     /**
      * Gets stats on all entries.
@@ -83,7 +83,9 @@ open class SimpleCache(opts: CacheSettings) : Cache {
      *
      * @param key
      */
-    override fun clear(): Boolean = lookup.keys.toList().map { key -> remove(key) }.reduceRight({ r, a -> a })
+    override fun clear(): Boolean {
+        return lookup.keys.toList().map { key -> remove(key) }.reduceRight({ r, a -> a })
+    }
 
     /**
      * remove a single cache item with the key
@@ -98,7 +100,7 @@ open class SimpleCache(opts: CacheSettings) : Cache {
      * @param key
      * @return
      */
-    override fun getEntry(key: String): CacheValue? = lookup.get(key)?.item?.get()
+    fun getEntry(key: String): CacheValue? = lookup.get(key)?.item?.get()
 
     /**
      * gets a cache item associated with the key
@@ -129,13 +131,8 @@ open class SimpleCache(opts: CacheSettings) : Cache {
      * @param key
      */
     override fun <T> getFresh(key: String): T? {
-        val item = lookup.get(key)
-        item?.let { it ->
-            runBlocking {
-                it.refresh()
-            }
-        }
-        return null
+        refresh(key)
+        return get(key)
     }
 
     /**
