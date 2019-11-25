@@ -99,7 +99,7 @@ class JobsApi(override val context: AppEntContext) : FileSupport {
      * Get the worker names
      */
     @Action(desc = "gets the names of all the workers")
-    fun getWorkerNames():List<String> = manager.workers.getIds()
+    fun getWorkerIds():List<String> = manager.workers.getIds().map { it.id }
 
 
     private suspend fun perform(operation: suspend (Job) -> Unit) {

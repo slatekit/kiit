@@ -15,8 +15,9 @@ package slatekit.cache
 
 import kotlinx.coroutines.runBlocking
 import slatekit.common.DateTime
+import slatekit.tracking.Expiry
+import slatekit.tracking.Fetches
 import slatekit.tracking.Tracked
-import java.util.concurrent.atomic.AtomicLong
 import java.util.concurrent.atomic.AtomicReference
 
 /**
@@ -34,56 +35,27 @@ import java.util.concurrent.atomic.AtomicReference
 data class CacheEntry(
     val key: String,
     val desc: String,
-    val text: String?,
     val seconds: Int,
     val fetcher: suspend () -> Any?
 ) {
     /**
-     * The last time this was accessed.
-     *
-     * NOTE: This is separated from the data of the cache item itself ( CacheItem )
-     * because this is designed for heavy reads, the access count/date is more frequently
-     * updated while the item is updated only when its refreshed
-     */
-    val accessed = AtomicReference<DateTime>(DateTime.now())
-
-    /**
-     * The total number of times accessed
-     *
-     * NOTE: This is separated from the data of the cache item itself ( CacheItem )
-     * because, this is designed for heavy reads, the access count/date is more frequently
-     * updated while the item is updated only when its refreshed.
-     */
-    val accessCount = AtomicLong(0)
-
-    /**
      * The actual cache item which is updatd only when its refreshed.
      */
-    val item = AtomicReference<CacheItem>(
-            CacheItem(key, null, seconds, DateTime.now().plusSeconds(seconds.toLong()), Tracked(), Tracked(), Tracked())
+    val item = AtomicReference<CacheValue>(
+            CacheValue(
+                text = null,
+                expiry = Expiry(seconds.toLong()),
+                reads = Fetches(20),
+                value = Tracked(),
+                error = Tracked())
     )
 
-    /**
-     * increments the last account time and access counts
-     * @return
-     */
-    fun inc(): Long {
-
-        // This is built for heavy reads ( not writes ), so we don't
-        // really care if the another thread updated it because
-        // this provides an REASONABLE summary of the last access time/counts
-        accessed.set(DateTime.now())
-        val count = accessCount.incrementAndGet()
-        if (count > Long.MAX_VALUE - 10000)
-            accessCount.set(0L)
-        return accessCount.get()
-    }
 
     /**
      * This can only be called during a failed refresh.
      */
-    fun error(ex: Throwable) {
-        item.get().errored.set(ex)
+    fun failure(ex: Throwable) {
+        item.get().error.set(ex)
     }
 
     /**
@@ -91,25 +63,17 @@ data class CacheEntry(
      * @param result
      */
     fun success(result: Any?, text:String? = null) {
-        val original = item.get()
-        val timestamp = DateTime.now()
-        original.accessed.set(Unit)
-        original.value.set(result)
-        val updated = original.copy(
-                text = text ?: "",
-                expires = timestamp.plusSeconds(original.expiryInSeconds.toLong())
-        )
-
-        // Update to  value
-        item.set(updated)
+        val curr = item.get()
+        val next = curr.update(result, text)
+        item.set(next)
     }
 
     /**
      * invalidates the current item by setting its expiry to to current time
      */
-    fun invalidate() {
-        val copy = item.get().copy(expires = DateTime.now())
-        return item.set(copy)
+    fun expire() {
+        val expired = item.get().expire()
+        return item.set(expired)
     }
 
     /**
@@ -123,8 +87,18 @@ data class CacheEntry(
             val content = result?.toString() ?: ""
             success(result, content)
         } catch (ex: Exception) {
-            error(ex)
+            failure(ex)
         }
+    }
+
+    fun stats():CacheStats {
+        val item = item.get()
+        return CacheStats(
+            key = key,
+            expiry = item.expiry,
+            reads = item.reads.get(),
+            value = item.value.get().get(),
+            error = item.error.get().get())
     }
 
     fun set(value:Any?, text: String?){
@@ -132,14 +106,8 @@ data class CacheEntry(
     }
 
     /**
-     * whether or not this cache item has expired
-     * @return
-     */
-    fun isExpired(): Boolean = item.get().isExpired()
-
-    /**
      * whether or not this entry is still alive in terms of its expiration date
      * @return
      */
-    fun isAlive(): Boolean = !isExpired()
+    fun isAlive(): Boolean = item.get().expiry.isAlive()
 }

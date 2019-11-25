@@ -30,10 +30,10 @@ import java.util.concurrent.ConcurrentHashMap
  *
  * @param settings
  */
-class SimpleCache(opts: CacheSettings) : Cache {
+open class SimpleCache(opts: CacheSettings) : Cache {
 
     override val settings = opts
-    private val lookup = ConcurrentHashMap<String, CacheEntry>()
+    protected val lookup = ConcurrentHashMap<String, CacheEntry>()
 
     /**
      * size of the cache
@@ -58,6 +58,15 @@ class SimpleCache(opts: CacheSettings) : Cache {
     override fun contains(key: String): Boolean = lookup.contains(key)
 
     /**
+     * Gets stats on all entries.
+     */
+    override fun stats():List<CacheStats> {
+        val stats = this.lookup.values.map { it.stats() }
+        return stats
+    }
+
+
+    /**
      * invalidates all the entries in this cache by maxing out their expiration times
      */
     override fun invalidateAll(): Unit = lookup.keys.toList().forEach { key -> invalidate(key) }
@@ -66,7 +75,7 @@ class SimpleCache(opts: CacheSettings) : Cache {
      * invalidates a specific cache item with the key
      */
     override fun invalidate(key: String) {
-        lookup.get(key)?.let { c -> c.invalidate() }
+        lookup.get(key)?.let { c -> c.expire() }
     }
 
     /**
@@ -89,7 +98,7 @@ class SimpleCache(opts: CacheSettings) : Cache {
      * @param key
      * @return
      */
-    override fun getEntry(key: String): CacheItem? = lookup.get(key)?.item?.get()
+    override fun getEntry(key: String): CacheValue? = lookup.get(key)?.item?.get()
 
     /**
      * gets a cache item associated with the key
@@ -111,31 +120,6 @@ class SimpleCache(opts: CacheSettings) : Cache {
      */
     override fun <T> getOrLoad(key: String): T? {
         return getInternal(key, true)
-    }
-
-    /**
-     * gets a cache item or loads it if not available, via a future
-     *
-     * @param key
-     * @tparam T
-     * @return
-     */
-    fun <T> getInternal(key: String, load:Boolean): T? {
-        val result = lookup.get(key)?.let { c ->
-            val value = if (c.isAlive()) {
-                val tracked = c.item.get().value
-                tracked.get().third
-            } else if(load){
-                c.refresh()
-                val tracked = c.item.get().value
-                tracked.get().third
-            } else {
-                null
-            }
-            value
-        }
-        @Suppress("UNCHECKED_CAST")
-        return result?.let { r -> r as T }
     }
 
     /**
@@ -192,14 +176,43 @@ class SimpleCache(opts: CacheSettings) : Cache {
         }
     }
 
+    /**
+     * gets a cache item or loads it if not available, via a future
+     *
+     * @param key
+     * @tparam T
+     * @return
+     */
+    protected fun <T> getInternal(key: String, load:Boolean): T? {
+        val result = lookup.get(key)?.let { c ->
+            val value = if (c.isAlive()) {
+                val entry = c.item.get()
+                entry.reads.inc()
+                val tracked = entry.value
+                tracked.get().current
+            } else if(load){
+                c.refresh()
+                val entry = c.item.get()
+                entry.reads.inc()
+                val tracked = entry.value
+                tracked.get().current
+            } else {
+                null
+            }
+            value
+        }
+        @Suppress("UNCHECKED_CAST")
+        return result?.let { r -> r as T }
+    }
 
-    private fun insert(
+
+    protected fun insert(
         key: String,
         desc: String,
         seconds: Int,
         fetcher: suspend () -> Any?
     ) {
-        val entry = CacheEntry(key, desc, "", seconds, fetcher)
+        val entry = CacheEntry(key, desc, seconds, fetcher)
         lookup[key] = entry
         entry.refresh()
     }

@@ -6,6 +6,8 @@ import slatekit.results.Success
 import slatekit.cmds.Command
 import slatekit.cmds.CommandRequest
 import slatekit.cache.*
+import slatekit.common.ext.toNumeric
+import slatekit.common.ext.toStringUtc
 import slatekit.common.types.Countries
 import slatekit.common.types.Country
 
@@ -44,6 +46,14 @@ class Guide_Cache : Command("types") {
         println(c1)
         println(c2)
 
+        cache.stats().forEach {
+            println("key    : " + it.key)
+            println("expiry : " + "started=" + it.expiry.started.toStringUtc() + ", seconds=" + it.expiry.seconds + ", expires=" + it.expiry.expires.toStringUtc())
+            println("reads  : " + "count=" + it.reads.count + ", timestamp=" + it.reads.timestamp?.toStringUtc() )
+            println("value  : " + "created=" + it.value.created?.toStringUtc() + ", updated=" + it.value.updated?.toStringUtc() + ", count=" + it.value.count)
+            println("error  : " + "created=" + it.error.created?.toStringUtc() + ", updated=" + it.error.updated?.toStringUtc() + ", count=" + it.error.count)
+            println("\n")
+        }
         // Allows for override
         cache.set("promos", listOf("p1", "p2"))
         val c2b = cache.get<List<String>>("promos")

@@ -105,10 +105,8 @@ class Example_Cache  : Command("auth") {
       // - error       : last exception when refreshing
       // - errorCount  : total number of exceptions
       // NOTE: just using ".get" here for example purposes
-      println(recentEntry?.key)
       println(recentEntry?.text)
-      println(recentEntry?.expires)
-      println(recentEntry?.accessed)
+      println(recentEntry?.expiry)
       println(recent)
     }
     //</doc:examples>

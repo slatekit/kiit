@@ -67,7 +67,7 @@ class Workers(
     /**
      * Gets all the worker ids
      */
-    fun getIds(): List<String> = all.map { it.id.id }
+    fun getIds(): List<Identity> = all.map { it.id }
 
     /**
      * Starts the worker associated with the identity and makes it work using the supplied Task

@@ -24,7 +24,7 @@ import slatekit.common.encrypt.Encryptor
 import slatekit.common.log.Logger
 import slatekit.common.Sources
 import slatekit.cache.SimpleCache
-import slatekit.cache.CacheItem
+import slatekit.cache.CacheValue
 import slatekit.cache.CacheSettings
 
 @Api(area = "infra", name = "cache", desc = "api info about the application and host",
@@ -47,7 +47,7 @@ class CacheApi(override val context: CommonContext) : FileSupport {
     }
 
     @Action(desc = "gets the details of a single cache item")
-    fun get(key: String): CacheItem? {
+    fun get(key: String): CacheValue? {
         val item = cache.getEntry(key)
         val text = item?.text ?: ""
         val len = text.length

@@ -28,12 +28,14 @@ class AsyncCache(val cache:Cache, private val coordinator: Coordinator<CacheComm
         when(cmd) {
             is CacheCommand.ClearAll -> { cache.clear() }
             is CacheCommand.Clear    -> { cache.remove(cmd.key) }
-            is CacheCommand.Check    -> { cache.clear() }
             is CacheCommand.Del      -> { cache.remove(cmd.key) }
             is CacheCommand.Refresh  -> { cache.refresh(cmd.key) }
             is CacheCommand.Put      -> { cache.put(cmd.key, cmd.desc, cmd.expiryInSeconds, cmd.fetcher) }
             is CacheCommand.Set      -> { cache.set(cmd.key, cmd.value) }
             is CacheCommand.Get      -> { cmd.onReady(cache.get(cmd.key)) }
+            else -> {
+                TODO("WIP")
+            }
         }
     }
 }

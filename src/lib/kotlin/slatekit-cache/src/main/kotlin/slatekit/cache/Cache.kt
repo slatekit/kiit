@@ -39,12 +39,17 @@ interface Cache {
     fun contains(key: String): Boolean
 
     /**
+     * Gets stats on all entries
+     */
+    fun stats():List<CacheStats>
+
+    /**
      * gets the cache entry itself.
      * NOTE: This is exposed
      * @param key
      * @return
      */
-    fun getEntry(key: String): CacheItem?
+    fun getEntry(key: String): CacheValue?
 
     /**
      * gets an item from the cache if it exists and is alive

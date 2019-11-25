@@ -263,8 +263,8 @@ class Job(
 
         fun workers(id: Identity, lamdas: List<suspend(Task) -> WorkResult>): List<Worker<*>> {
             val idInfo = when (id) {
-                is SimpleIdentity -> id
-                else -> SimpleIdentity(id.area, id.service, id.agent, id.env, id.instance)
+                is SimpleIdentity -> id.copy(tags = listOf("worker"))
+                else -> SimpleIdentity(id.area, id.service, id.agent, id.env, id.instance, listOf("worker"))
             }
             return lamdas.map {
                 Worker<String>(idInfo.newInstance(), operation = it)

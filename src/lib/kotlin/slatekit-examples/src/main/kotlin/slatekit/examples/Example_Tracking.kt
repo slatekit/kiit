@@ -38,7 +38,8 @@ class Example_Tracking : Command("auth") {
          * The calls component with an Identity ( could be name of a function, job, etc )
          * is just a simple counter for calls/operation and only stores a few states ( passed / failed / total )
          * */
-        val calls = Calls(Identity.test("calls"))
+        val id = SimpleIdentity("beta", "setup", Agent.Job, "dev")
+        val calls = Calls(id)
 
         // Use case 1.1: Increment attempt
         calls.inc()
@@ -78,7 +79,7 @@ class Example_Tracking : Command("auth") {
          * 7. Unexpected  -> Unexpected errors
          * This counters component keeps track of various categories
          */
-        val counts = Counters(Identity.test("job1"), custom = listOf("deferred"))
+        val counts = Counters(id, custom = listOf("deferred"))
 
         // Use case 2.1: Increment total processed
         counts.incProcessed()
@@ -192,6 +193,21 @@ class Example_Tracking : Command("auth") {
         recorder.record(this, sampleRequest, Outcomes.ignored(Err.of("In active user")))
         recorder.record(this, sampleRequest, Outcomes.errored(Err.of("Unable to determine user type")))
         recorder.record(this, sampleRequest, Outcomes.unexpected(Err.of("Unexpected error while handling analytics")))
+
+        // Initial settings
+        data class UserSettings(val userId:String, val isBetaTester:Boolean)
+        val settings = UserSettings("user1", false)
+
+        // Track as updates
+        val updates = Updates.of(settings)
+        val update1 = updates.set(settings)
+        val update2 = update1.map { it.copy(isBetaTester = true) }
+
+        println(update2.created) // initial creation time
+        println(update2.updated) // last update time
+        println(update2.applied) // total times changed
+        println(update2.current) // current value
+
         //</doc:examples>
 
         return Success("Ok")
