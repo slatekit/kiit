@@ -23,6 +23,10 @@ sealed class CacheCommand {
         override val action = CacheAction.Refresh
     }
 
+    class Invalidate(val key: String) : CacheCommand() {
+        override val action = CacheAction.Invalid
+    }
+
     class Put(val key: String, val desc: String, val expiryInSeconds: Int, val fetcher: suspend () -> Any?) : CacheCommand() {
         override val action = CacheAction.Create
     }

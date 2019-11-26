@@ -14,5 +14,6 @@ sealed class CacheAction(val name: String) {
     object Clear    : CacheAction( "Clear"  )
     object Check    : CacheAction( "Check"  )
     object Refresh  : CacheAction( "Refresh")
+    object Invalid  : CacheAction( "Invalid")
     /* ktlint-enable */
 }
