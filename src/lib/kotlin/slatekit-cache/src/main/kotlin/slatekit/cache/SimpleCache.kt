@@ -108,7 +108,7 @@ open class SimpleCache(override val settings: CacheSettings) : Cache {
      * @tparam T
      * @return
      */
-    override fun <T> get(key: String): T? {
+    fun <T> get(key: String): T? {
         return getInternal(key, false)
     }
 
@@ -119,7 +119,7 @@ open class SimpleCache(override val settings: CacheSettings) : Cache {
      * @tparam T
      * @return
      */
-    override fun <T> getOrLoad(key: String): T? {
+    fun <T> getOrLoad(key: String): T? {
         return getInternal(key, true)
     }
 
@@ -129,7 +129,7 @@ open class SimpleCache(override val settings: CacheSettings) : Cache {
      *
      * @param key
      */
-    override fun <T> getFresh(key: String): T? {
+    fun <T> getFresh(key: String): T? {
         refresh(key)
         return get(key)
     }

@@ -9,7 +9,18 @@ import slatekit.core.common.Coordinator
  * Write are queued (via channels )
  * Reads are optimistic/dirty ( depending on method get | getOrLoad | getFresh )
  */
-class ChannelCache(private val cache:Cache, val coordinator: Coordinator<CacheCommand>) : Cache {
+class SimpleAsyncCache(private val cache:CacheTypeSync, val coordinator: Coordinator<CacheCommand>) : CacheTypeAsync {
+    val logger = coordinator.logger
+
+    override fun <T> get(key: String): Deferred<T?> = getInternal(key, false)
+
+    override fun <T> getOrLoad(key: String): Deferred<T?> = getInternal(key, true)
+
+    override fun <T> getFresh(key: String): Deferred<T?> {
+        val deferred = CompletableDeferred<Any?>()
+        request(CacheCommand.GetFresh(key, deferred))
+        return deferred as Deferred<T?>
+    }
 
     override val settings: CacheSettings = cache.settings
 
@@ -20,20 +31,6 @@ class ChannelCache(private val cache:Cache, val coordinator: Coordinator<CacheCo
     override fun contains(key: String): Boolean = cache.contains(key)
 
     override fun stats(): List<CacheStats> = cache.stats()
-
-    override fun <T> get(key: String): T? = cache.get(key)
-
-    fun <T> getAsync(key: String): Deferred<T?> {
-        val deferred = CompletableDeferred<Any?>()
-        request(CacheCommand.Get(key, deferred))
-        return deferred as Deferred<T?>
-    }
-
-    @Synchronized
-    override fun <T> getOrLoad(key: String): T? = cache.getOrLoad(key)
-
-    @Synchronized
-    override fun <T> getFresh(key: String): T? = cache.getFresh(key)
 
     override fun <T> put(key: String, desc: String, seconds: Int, fetcher: suspend () -> T?) = request(CacheCommand.Put(key, "", seconds, fetcher))
 
@@ -60,7 +57,7 @@ class ChannelCache(private val cache:Cache, val coordinator: Coordinator<CacheCo
      */
     suspend fun manage() {
         coordinator.consume { request ->
-            manage(request, false)
+            manage(request)
         }
     }
 
@@ -72,13 +69,21 @@ class ChannelCache(private val cache:Cache, val coordinator: Coordinator<CacheCo
         val request = coordinator.poll()
         request?.let {
             runBlocking {
-                manage(request, false)
+                manage(request)
             }
         }
     }
 
 
-    private suspend fun manage(cmd:CacheCommand, launch:Boolean) {
+
+    private fun <T> getInternal(key: String, load:Boolean): Deferred<T?> {
+        val deferred = CompletableDeferred<Any?>()
+        request(CacheCommand.Get(key, deferred, load))
+        return deferred as Deferred<T?>
+    }
+
+
+    private suspend fun manage(cmd:CacheCommand) {
         when(cmd) {
             is CacheCommand.ClearAll   -> { cache.clear() }
             is CacheCommand.Clear      -> { cache.remove(cmd.key) }
@@ -87,12 +92,17 @@ class ChannelCache(private val cache:Cache, val coordinator: Coordinator<CacheCo
             is CacheCommand.Put        -> { cache.put(cmd.key, cmd.desc, cmd.expiryInSeconds, cmd.fetcher) }
             is CacheCommand.Set        -> { cache.set(cmd.key, cmd.value) }
             is CacheCommand.Get        -> {
-                val item = cache.get<Any>(cmd.key)
+                val item = if(cmd.load) cache.getOrLoad<Any>(cmd.key) else cache.get<Any>(cmd.key)
+                cmd.deferred.complete(item)
+            }
+            is CacheCommand.GetFresh   -> {
+                val item = cache.getFresh<Any>(cmd.key)
                 cmd.deferred.complete(item)
             }
             is CacheCommand.Invalidate -> { cache.invalidate(cmd.key) }
             else -> {
-                TODO("WIP")
+                // How to handle error here?
+                logger.error("Unexpected command : ${cmd.action}")
             }
         }
     }

@@ -37,7 +37,11 @@ sealed class CacheCommand {
         override val action = CacheAction.Update
     }
 
-    class Get(val key: String, val deferred: CompletableDeferred<Any?>) : CacheCommand() {
+    class GetFresh(val key: String, val deferred: CompletableDeferred<Any?>) : CacheCommand() {
+        override val action = CacheAction.Fetch
+    }
+
+    class Get(val key: String, val deferred: CompletableDeferred<Any?>, val load:Boolean = false) : CacheCommand() {
         override val action = CacheAction.Fetch
     }
 }
