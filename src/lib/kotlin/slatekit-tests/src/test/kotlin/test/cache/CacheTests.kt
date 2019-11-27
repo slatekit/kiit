@@ -20,7 +20,6 @@ import slatekit.common.DateTime
 
 class CacheTests {
 
-
     fun getCache(initialize:Boolean = true, synced:Boolean = true, settings: CacheSettings = CacheSettings(10)): Cache {
         val raw =  SimpleCache(settings)
         val cache = if(synced) SyncCache(raw) else raw
@@ -280,39 +279,5 @@ class CacheTests {
         Assert.assertEquals(2, stats2.reads.count)
         Assert.assertNotNull(stats2.reads.timestamp)
         Assert.assertTrue(stats2.reads.timestamp!! >= timestamp1)
-    }
-
-
-    private fun ensureStats(timestamp:DateTime, expected:CacheStats, actual:CacheStats) {
-
-        Assert.assertEquals(expected.key, actual.key)
-
-        // Errors
-        Assert.assertEquals(expected.error.value  , actual.error.value  )
-        Assert.assertEquals(expected.error.created, actual.error.created)
-        Assert.assertEquals(expected.error.updated, actual.error.updated)
-        Assert.assertEquals(expected.error.count  , actual.error.count  )
-
-        // Values
-        Assert.assertEquals(expected.value.value  , actual.value.value  )
-        Assert.assertEquals(expected.value.created, actual.value.created)
-        Assert.assertEquals(expected.value.updated, actual.value.updated)
-        Assert.assertEquals(expected.value.count  , actual.value.count  )
-
-        // Reads
-        Assert.assertEquals(expected.error.value  , actual.error.value  )
-        Assert.assertEquals(expected.error.created, actual.error.created)
-        Assert.assertEquals(expected.error.updated, actual.error.updated)
-        Assert.assertEquals(expected.error.count  , actual.error.count  )
-
-        // Reads
-        Assert.assertEquals(expected.reads.count, actual.reads.count)
-        Assert.assertTrue(actual.reads.timestamp!! > timestamp)
-
-        // Expiry
-        Assert.assertEquals(expected.expiry.seconds, actual.expiry.seconds)
-        Assert.assertEquals(expected.expiry.isAlive(), actual.expiry.isAlive())
-        Assert.assertTrue(timestamp < actual.expiry.started )
-        Assert.assertTrue(actual.expiry.expires > actual.expiry.started)
     }
 }

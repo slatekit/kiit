@@ -11,6 +11,8 @@ import java.nio.file.Paths
 
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
+import slatekit.cache.CacheSettings
+import slatekit.cache.SimpleCache
 import slatekit.common.DateTime
 import slatekit.common.ext.toStringUtc
 import slatekit.providers.logs.logback.LogbackLogs
@@ -35,8 +37,25 @@ mantra: Simplicity above all else
 
 // https://looksok.wordpress.com/2014/07/12/compile-gradle-project-with-another-project-as-a-dependency/
 fun main(args:Array<String>) {
-    val example = Guide_Cache()
-    example.execute(args, FunctionMode.Called)
+    testLRU()
+    //val example = Guide_Cache()
+    //example.execute(args, FunctionMode.Called)
+}
+
+
+fun testLRU() {
+    val cache = SimpleCache(CacheSettings(3))
+    cache.put("a", "desc a", 500) { 1 }
+    cache.put("b", "desc a", 500) { 2 }
+    cache.put("c", "desc a", 500) { 3 }
+    cache.put("d", "desc a", 500) { 4 }
+    cache.put("e", "desc a", 500) { 5 }
+
+    println(cache.get<String>("e"))
+    println(cache.get<String>("d"))
+    println(cache.get<String>("c"))
+    println(cache.get<String>("a"))
+    println(cache.get<String>("b"))
 }
 
 

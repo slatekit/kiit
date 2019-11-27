@@ -13,8 +13,6 @@
 
 package slatekit.cache
 
-import java.util.concurrent.ConcurrentHashMap
-
 /**
  * This light-weight implementation of a Cache ( LRU - Least recently used )
  * contains the following design approaches:
@@ -29,10 +27,12 @@ import java.util.concurrent.ConcurrentHashMap
  *
  * @param settings
  */
-open class SimpleCache(opts: CacheSettings) : Cache {
+open class SimpleCache(override val settings: CacheSettings) : Cache {
 
-    override val settings = opts
-    protected val lookup = ConcurrentHashMap<String, CacheEntry>()
+    /**
+     * The LinkedHashMap already LRU(Least Recently Used) behaviour out of the box.
+     */
+    protected val lookup = LRUMap<String, CacheEntry>(settings.size)
 
     /**
      * size of the cache
@@ -46,7 +46,7 @@ open class SimpleCache(opts: CacheSettings) : Cache {
      *
      * @return
      */
-    override fun keys(): List<String> = lookup.keys().toList()
+    override fun keys(): List<String> = lookup.keys.map { it }
 
     /**
      * whether this cache contains the entry with the supplied key
