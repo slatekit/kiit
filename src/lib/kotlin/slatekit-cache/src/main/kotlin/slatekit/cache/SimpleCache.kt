@@ -27,12 +27,45 @@ package slatekit.cache
  *
  * @param settings
  */
-open class SimpleCache(override val settings: CacheSettings) : Cache {
+open class SimpleCache(override val settings: CacheSettings) : Cache, CacheTypeSync {
 
     /**
      * The LinkedHashMap already LRU(Least Recently Used) behaviour out of the box.
      */
     protected val lookup = LRUMap<String, CacheEntry>(settings.size)
+
+    /**
+     * gets a cache item associated with the key
+     *
+     * @param key
+     * @tparam T
+     * @return
+     */
+    override fun <T> get(key: String): T? {
+        return getInternal(key, false)
+    }
+
+    /**
+     * gets a cache item or loads it if not available, via a future
+     *
+     * @param key
+     * @tparam T
+     * @return
+     */
+    override fun <T> getOrLoad(key: String): T? {
+        return getInternal(key, true)
+    }
+
+    /**
+     * manual / explicit refresh of a cache item with a future result
+     * in order to get the item
+     *
+     * @param key
+     */
+    override fun <T> getFresh(key: String): T? {
+        refresh(key)
+        return get(key)
+    }
 
     /**
      * size of the cache
@@ -101,38 +134,6 @@ open class SimpleCache(override val settings: CacheSettings) : Cache {
      */
     fun getEntry(key: String): CacheValue? = lookup.get(key)?.item?.get()
 
-    /**
-     * gets a cache item associated with the key
-     *
-     * @param key
-     * @tparam T
-     * @return
-     */
-    fun <T> get(key: String): T? {
-        return getInternal(key, false)
-    }
-
-    /**
-     * gets a cache item or loads it if not available, via a future
-     *
-     * @param key
-     * @tparam T
-     * @return
-     */
-    fun <T> getOrLoad(key: String): T? {
-        return getInternal(key, true)
-    }
-
-    /**
-     * manual / explicit refresh of a cache item with a future result
-     * in order to get the item
-     *
-     * @param key
-     */
-    fun <T> getFresh(key: String): T? {
-        refresh(key)
-        return get(key)
-    }
 
     /**
      * gets a cache item associated with the key

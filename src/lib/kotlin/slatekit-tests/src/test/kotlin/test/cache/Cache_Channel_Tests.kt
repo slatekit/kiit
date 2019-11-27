@@ -49,12 +49,16 @@ class Cache_Channel_Tests {
     fun can_put() {
         val timestamp = DateTime.now()
         val cache = getCache()
-        val countries = cache.get<List<String>>("countries")
+        val countries1Deferred = cache.get<List<String>>("countries")
+        val countries1 = runBlocking {
+            cache.respond()
+            countries1Deferred.await()
+        }
 
         // Check values
-        Assert.assertTrue(countries!!.size == 2)
-        Assert.assertTrue(countries[0] == "us")
-        Assert.assertTrue(countries[1] == "ca")
+        Assert.assertTrue(countries1!!.size == 2)
+        Assert.assertTrue(countries1[0] == "us")
+        Assert.assertTrue(countries1[1] == "ca")
 
         // Check stats
         val stats = cache.stats()
@@ -92,10 +96,10 @@ class Cache_Channel_Tests {
         val cache = getCache()
 
         // Get 1
-        val countries1Future = cache.getAsync<List<String>>("countries")
+        val countries1Deferred = cache.get<List<String>>("countries")
         val countries1 = runBlocking {
             cache.respond()
-            countries1Future.await()
+            countries1Deferred.await()
         }
 
         // Check values
@@ -111,7 +115,7 @@ class Cache_Channel_Tests {
 
         // Get 2
         val timestamp2 = DateTime.now()
-        val countries2Deferred = cache.getAsync<List<String>>("countries")
+        val countries2Deferred = cache.get<List<String>>("countries")
         val countries2 = runBlocking {
             cache.respond()
             countries2Deferred.await()
@@ -181,8 +185,11 @@ class Cache_Channel_Tests {
     fun can_set() {
         val timestamp = DateTime.now()
         val cache = getCache()
-        val countries1 = cache.get<List<String>>("countries")
-
+        val countries1Future = cache.get<List<String>>("countries")
+        val countries1 = runBlocking {
+            cache.respond()
+            countries1Future.await()
+        }
         // Check values
         Assert.assertTrue(countries1!!.size == 2)
         Assert.assertTrue(countries1[0] == "us")
@@ -201,7 +208,11 @@ class Cache_Channel_Tests {
 
         cache.set("countries", listOf("us", "ca", "uk"))
         runBlocking {  cache.respond() }
-        val countries2 = cache.get<List<String>>("countries")
+        val countries2Deferred = cache.get<List<String>>("countries")
+        val countries2 = runBlocking {
+            cache.respond()
+            countries2Deferred.await()
+        }
 
         // Check values
         Assert.assertTrue(countries2!!.size == 3)
@@ -236,7 +247,11 @@ class Cache_Channel_Tests {
             }
         }
         runBlocking {  cache.respond() }
-        val countries1 = cache.get<List<String>>("countries")
+        val countries1Deferred = cache.get<List<String>>("countries")
+        val countries1 = runBlocking {
+            cache.respond()
+            countries1Deferred.await()
+        }
 
         // Check values
         Assert.assertTrue(countries1!!.size == 2)
@@ -244,7 +259,12 @@ class Cache_Channel_Tests {
         Assert.assertTrue(countries1[1] == "ca")
 
         // Check values after update
-        val countries2 = cache.getFresh<List<String>>("countries")
+        val countries2Deferred = cache.getFresh<List<String>>("countries")
+        val countries2 = runBlocking {
+            cache.respond()
+            countries2Deferred.await()
+        }
+
         Assert.assertTrue(countries2!!.size == 3)
         Assert.assertTrue(countries2[0] == "us")
         Assert.assertTrue(countries2[1] == "ca")
@@ -270,7 +290,11 @@ class Cache_Channel_Tests {
         runBlocking {  cache.respond() }
 
         // Get 1
-        val countries1 = cache.get<List<String>>("countries")
+        val countries1Deferred = cache.get<List<String>>("countries")
+        val countries1 = runBlocking {
+            cache.respond()
+            countries1Deferred.await()
+        }
 
         // Check values
         Assert.assertTrue(countries1!!.size == 2)
@@ -287,7 +311,11 @@ class Cache_Channel_Tests {
         runBlocking {  cache.respond() }
 
         // Get 2
-        val countries2 = cache.getOrLoad<List<String>>("countries")
+        val countries2Deferred = cache.getOrLoad<List<String>>("countries")
+        val countries2 = runBlocking {
+            cache.respond()
+            countries2Deferred.await()
+        }
         val stats2 = cache.stats().first { it.key == "countries" }
 
         // Check values

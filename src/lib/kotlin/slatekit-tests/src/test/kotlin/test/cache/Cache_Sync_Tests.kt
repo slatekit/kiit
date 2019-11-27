@@ -20,7 +20,7 @@ import slatekit.common.DateTime
 
 class Cache_Sync_Tests {
 
-    fun getCache(initialize:Boolean = true, synced:Boolean = true, settings: CacheSettings = CacheSettings(10)): Cache {
+    fun getCache(initialize:Boolean = true, synced:Boolean = true, settings: CacheSettings = CacheSettings(10)): CacheTypeSync {
         val raw =  SimpleCache(settings)
         val cache = if(synced) SimpleSyncCache(raw) else raw
         if(initialize) {
