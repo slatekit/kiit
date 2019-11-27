@@ -12,19 +12,26 @@
  */
 package test
 
+import kotlinx.coroutines.runBlocking
 import org.junit.Assert
 import org.junit.Test
 import slatekit.cache.*
 import slatekit.common.DateTime
+import slatekit.common.ids.Paired
+import slatekit.common.log.LoggerConsole
+import test.cache.MockCacheCoordinator
 
 
-class CacheTests {
+class Cache_Channel_Tests {
 
-    fun getCache(initialize:Boolean = true, synced:Boolean = true, settings: CacheSettings = CacheSettings(10)): Cache {
+    fun getCache(initialize:Boolean = true, settings: CacheSettings = CacheSettings(10)): ChannelCache {
         val raw =  SimpleCache(settings)
-        val cache = if(synced) SyncCache(raw) else raw
+        val cache = ChannelCache(raw, MockCacheCoordinator(LoggerConsole(), Paired()))
         if(initialize) {
             cache.put("countries", "countries supported for mobile app", 60) { listOf("us", "ca") }
+            runBlocking {
+                cache.respond()
+            }
         }
         return cache
     }
@@ -85,7 +92,11 @@ class CacheTests {
         val cache = getCache()
 
         // Get 1
-        val countries1 = cache.get<List<String>>("countries")
+        val countries1Future = cache.getAsync<List<String>>("countries")
+        val countries1 = runBlocking {
+            cache.respond()
+            countries1Future.await()
+        }
 
         // Check values
         Assert.assertTrue(countries1!!.size == 2)
@@ -100,7 +111,11 @@ class CacheTests {
 
         // Get 2
         val timestamp2 = DateTime.now()
-        val countries2 = cache.get<List<String>>("countries")
+        val countries2Deferred = cache.getAsync<List<String>>("countries")
+        val countries2 = runBlocking {
+            cache.respond()
+            countries2Deferred.await()
+        }
 
         // Check values
         Assert.assertTrue(countries2!!.size == 2)
@@ -127,6 +142,7 @@ class CacheTests {
     fun can_key() {
         val cache = getCache()
         cache.put("promocode", "promotion code", 60) { "promo-123" }
+        runBlocking {  cache.respond() }
 
         // Keys
         val keys = cache.keys()
@@ -144,10 +160,17 @@ class CacheTests {
         val cache = getCache()
         cache.put("promocode", "promotion code", 60) { "promo-123" }
 
+        runBlocking {
+            cache.respond()
+        }
+
         Assert.assertEquals(2, cache.keys().size)
         Assert.assertEquals(2, cache.size())
 
         cache.clear()
+        runBlocking {
+            cache.respond()
+        }
 
         Assert.assertEquals(0, cache.keys().size)
         Assert.assertEquals(0, cache.size())
@@ -177,6 +200,7 @@ class CacheTests {
         Assert.assertEquals(stats1[0].value.count, 1)
 
         cache.set("countries", listOf("us", "ca", "uk"))
+        runBlocking {  cache.respond() }
         val countries2 = cache.get<List<String>>("countries")
 
         // Check values
@@ -211,7 +235,7 @@ class CacheTests {
                 listOf("us", "ca", "uk")
             }
         }
-
+        runBlocking {  cache.respond() }
         val countries1 = cache.get<List<String>>("countries")
 
         // Check values
@@ -241,7 +265,9 @@ class CacheTests {
                 listOf("us", "ca", "uk")
             }
         }
+        runBlocking {  cache.respond() }
         cache.put("promocode", "promotion code", 300) { "promo-123" }
+        runBlocking {  cache.respond() }
 
         // Get 1
         val countries1 = cache.get<List<String>>("countries")
@@ -258,6 +284,7 @@ class CacheTests {
         Assert.assertTrue(stats1.reads.timestamp!! >= timestamp1)
 
         cache.invalidate("countries")
+        runBlocking {  cache.respond() }
 
         // Get 2
         val countries2 = cache.getOrLoad<List<String>>("countries")

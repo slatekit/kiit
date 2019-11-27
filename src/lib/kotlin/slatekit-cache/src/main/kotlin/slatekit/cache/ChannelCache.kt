@@ -1,12 +1,15 @@
 package slatekit.cache
 
+import kotlinx.coroutines.CompletableDeferred
+import kotlinx.coroutines.Deferred
+import kotlinx.coroutines.runBlocking
 import slatekit.core.common.Coordinator
 
 /**
  * Write are queued (via channels )
  * Reads are optimistic/dirty ( depending on method get | getOrLoad | getFresh )
  */
-class ChannelCache(private val cache:Cache, private val coordinator: Coordinator<CacheCommand>) : Cache {
+class ChannelCache(private val cache:Cache, val coordinator: Coordinator<CacheCommand>) : Cache {
 
     override val settings: CacheSettings = cache.settings
 
@@ -20,13 +23,17 @@ class ChannelCache(private val cache:Cache, private val coordinator: Coordinator
 
     override fun <T> get(key: String): T? = cache.get(key)
 
+    fun <T> getAsync(key: String): Deferred<T?> {
+        val deferred = CompletableDeferred<Any?>()
+        request(CacheCommand.Get(key, deferred))
+        return deferred as Deferred<T?>
+    }
+
     @Synchronized
     override fun <T> getOrLoad(key: String): T? = cache.getOrLoad(key)
 
     @Synchronized
     override fun <T> getFresh(key: String): T? = cache.getFresh(key)
-
-    fun get(key:String, onReady:suspend(Any?) -> Unit ) = request(CacheCommand.Get(key, onReady))
 
     override fun <T> put(key: String, desc: String, seconds: Int, fetcher: suspend () -> T?) = request(CacheCommand.Put(key, "", seconds, fetcher))
 
@@ -57,16 +64,33 @@ class ChannelCache(private val cache:Cache, private val coordinator: Coordinator
         }
     }
 
+    /**
+     * Listens to and handles 1 single request
+     */
+    suspend fun respond() {
+        // Coordinator takes 1 request off the channel
+        val request = coordinator.poll()
+        request?.let {
+            runBlocking {
+                manage(request, false)
+            }
+        }
+    }
+
 
     private suspend fun manage(cmd:CacheCommand, launch:Boolean) {
         when(cmd) {
-            is CacheCommand.ClearAll -> { cache.clear() }
-            is CacheCommand.Clear    -> { cache.remove(cmd.key) }
-            is CacheCommand.Del      -> { cache.remove(cmd.key) }
-            is CacheCommand.Refresh  -> { cache.refresh(cmd.key) }
-            is CacheCommand.Put      -> { cache.put(cmd.key, cmd.desc, cmd.expiryInSeconds, cmd.fetcher) }
-            is CacheCommand.Set      -> { cache.set(cmd.key, cmd.value) }
-            is CacheCommand.Get      -> { cmd.onReady(cache.get(cmd.key)) }
+            is CacheCommand.ClearAll   -> { cache.clear() }
+            is CacheCommand.Clear      -> { cache.remove(cmd.key) }
+            is CacheCommand.Del        -> { cache.remove(cmd.key) }
+            is CacheCommand.Refresh    -> { cache.refresh(cmd.key) }
+            is CacheCommand.Put        -> { cache.put(cmd.key, cmd.desc, cmd.expiryInSeconds, cmd.fetcher) }
+            is CacheCommand.Set        -> { cache.set(cmd.key, cmd.value) }
+            is CacheCommand.Get        -> {
+                val item = cache.get<Any>(cmd.key)
+                cmd.deferred.complete(item)
+            }
+            is CacheCommand.Invalidate -> { cache.invalidate(cmd.key) }
             else -> {
                 TODO("WIP")
             }
