@@ -1,9 +1,9 @@
 package slatekit.entities.core
 
+import slatekit.common.ext.toUUId
 import java.util.*
 import kotlin.reflect.KClass
 import slatekit.common.naming.Namer
-import slatekit.common.toUUId
 
 @Suppress("UNCHECKED_CAST")
 fun <TId> convertToId(id: String, entityType: KClass<*>): TId {

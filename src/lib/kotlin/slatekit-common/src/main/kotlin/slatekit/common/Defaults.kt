@@ -6,6 +6,7 @@ import slatekit.common.conf.Config
 import slatekit.common.utils.B64Java8
 import slatekit.common.encrypt.Encryptor
 import slatekit.common.envs.Envs
+import slatekit.common.ext.toIdent
 import slatekit.common.info.*
 import slatekit.common.log.Logs
 import slatekit.common.log.LogsDefault
@@ -84,7 +85,7 @@ data class CommonContext(
 
         @JvmStatic
         fun err(code: Int, msg: String? = null): CommonContext {
-            val args = Args.default()
+            val args = Args.empty()
             val envs = Envs.defaults()
             val conf = Config()
             return CommonContext(
@@ -98,7 +99,7 @@ data class CommonContext(
 
         @JvmStatic
         fun simple(name: String): CommonContext {
-            val args = Args.default()
+            val args = Args.empty()
             val envs = Envs.defaults()
             val conf = Config()
             return CommonContext(
@@ -113,7 +114,7 @@ data class CommonContext(
 
         @JvmStatic
         fun sample(id: String, name: String, about: String, company: String): CommonContext {
-            val args = Args.default()
+            val args = Args.empty()
             val envs = Envs.defaults()
             val conf = Config()
             return CommonContext(

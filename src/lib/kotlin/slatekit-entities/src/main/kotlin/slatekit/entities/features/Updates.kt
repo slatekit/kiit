@@ -3,9 +3,10 @@ package slatekit.entities.features
 import kotlin.reflect.KProperty
 import slatekit.common.DateTime
 import slatekit.entities.Entity
-import slatekit.entities.core.EntityAction
-import slatekit.entities.core.EntityEvent
+import slatekit.entities.events.EntityAction
+import slatekit.entities.events.EntityEvent
 import slatekit.entities.core.ServiceSupport
+import slatekit.entities.events.EntityHooks
 import slatekit.entities.slatekit.entities.EntityOptions
 import slatekit.meta.Reflector
 import slatekit.meta.kClass
@@ -30,12 +31,12 @@ interface Updates<TId, T> : ServiceSupport<TId, T> where TId : kotlin.Comparable
      * @param options: Settings to determine whether to apply metadata, and notify via Hooks
      */
     fun update(entity: T, options: EntityOptions): Pair<Boolean, T> {
-        val useHooks = options.applyHooks && this is Hooks
+        val useHooks = options.applyHooks && this is EntityHooks
         val original: T? = if (useHooks) repo().getById(entity.identity()) else null
 
         // Massage
         val entityFinal = when (options.applyMetadata) {
-            true -> applyFieldData(EntityAction.EntityUpdate, entity)
+            true -> applyFieldData(EntityAction.Update, entity)
             false -> entity
         }
 
@@ -43,7 +44,7 @@ interface Updates<TId, T> : ServiceSupport<TId, T> where TId : kotlin.Comparable
         val success = modify(entityFinal)
 
         // Event out
-        if (this is Hooks) {
+        if (this is EntityHooks) {
             when (success) {
                 true -> this.onEntityEvent(EntityEvent.EntityUpdated(original ?: entity, entityFinal, DateTime.now()))
                 else -> this.onEntityEvent(EntityEvent.EntityErrored(entity,
@@ -59,12 +60,12 @@ interface Updates<TId, T> : ServiceSupport<TId, T> where TId : kotlin.Comparable
      * @return
      */
     fun update(entity: T): Boolean {
-        val original: T? = if (this is Hooks) repo().getById(entity.identity()) else null
-        val finalEntity = applyFieldData(EntityAction.EntityUpdate, entity)
+        val original: T? = if (this is EntityHooks) repo().getById(entity.identity()) else null
+        val finalEntity = applyFieldData(EntityAction.Update, entity)
         val success = repo().update(finalEntity)
 
         // Event out
-        if (this is Hooks) {
+        if (this is EntityHooks) {
             when (success) {
                 true -> this.onEntityEvent(EntityEvent.EntityUpdated(original ?: entity, entity, DateTime.now()))
                 else -> this.onEntityEvent(EntityEvent.EntityErrored(entity,

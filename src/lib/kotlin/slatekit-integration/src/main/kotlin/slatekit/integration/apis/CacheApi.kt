@@ -18,23 +18,20 @@ import slatekit.apis.Action
 import slatekit.apis.AuthModes
 import slatekit.apis.Verbs
 import slatekit.apis.support.FileSupport
+import slatekit.cache.*
 import slatekit.common.CommonContext
 import slatekit.common.Strings
 import slatekit.common.encrypt.Encryptor
 import slatekit.common.log.Logger
 import slatekit.common.Sources
-import slatekit.cache.SimpleCache
-import slatekit.cache.CacheValue
-import slatekit.cache.CacheSettings
+import slatekit.common.ext.trim
 
 @Api(area = "infra", name = "cache", desc = "api info about the application and host",
         auth = AuthModes.KEYED, roles = ["admin"], verb = Verbs.AUTO, sources = [Sources.ALL])
-class CacheApi(override val context: CommonContext) : FileSupport {
+class CacheApi(override val context: CommonContext, val cache: CacheTypeSync) : FileSupport {
 
     override val encryptor: Encryptor? = context.enc
     override val logger: Logger? = context.logs.getLogger()
-
-    val cache: SimpleCache = SimpleCache(CacheSettings(50))
 
     @Action(desc = "gets the names of keys in the cache")
     fun keys(): List<String> {
@@ -47,12 +44,8 @@ class CacheApi(override val context: CommonContext) : FileSupport {
     }
 
     @Action(desc = "gets the details of a single cache item")
-    fun get(key: String): CacheValue? {
-        val item = cache.getEntry(key)
-        val text = item?.text ?: ""
-        val len = text.length
-        val copy = if (len <= 1000) item else item?.copy(text = Strings.truncate(item?.text ?: "", 1000))
-        return copy
+    fun get(key: String): Any? {
+        return cache.get(key)
     }
 
     @Action(desc = "invalidates a single cache item")

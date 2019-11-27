@@ -10,6 +10,8 @@ interface Coordinator<C> {
     val logger: Logger
     val ids: Paired
 
+    fun sendSync(cmd:C)
+
     /**
      * Sends a command to manage the job/worker
      */

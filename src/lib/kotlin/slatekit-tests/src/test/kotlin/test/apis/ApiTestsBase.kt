@@ -54,7 +54,7 @@ open class ApiTestsBase {
     fun buildCtx(): AppEntContext {
         val cfg = Config()
         val ctx = AppEntContext(
-                args = Args.default(),
+                args = Args.empty(),
                 envs = Envs.defaults().select("loc"),
                 conf = cfg,
                 logs = LogsDefault,

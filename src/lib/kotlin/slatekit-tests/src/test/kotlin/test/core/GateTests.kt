@@ -2,9 +2,9 @@ package test.core
 
 import org.junit.Assert
 import org.junit.Test
-import slatekit.core.gate.*
+//import slatekit.core.gate.*
 
-
+/*
 class GateTests {
 
     fun settings():GateSettings = GateSettings(
@@ -151,3 +151,5 @@ class GateTests {
         Assert.assertEquals(metrics2.reason, NotApplicable)
     }
 }
+
+*/

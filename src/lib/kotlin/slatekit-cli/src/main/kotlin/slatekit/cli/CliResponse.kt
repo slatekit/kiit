@@ -48,7 +48,7 @@ data class CliResponse<out T>(
 
     companion object {
         val empty = CliResponse(
-                CliRequest.build(Args.default(), ""),
+                CliRequest.build(Args.empty(), ""),
                 true,
                 1,
                 mapOf(),

@@ -15,6 +15,7 @@ package slatekit.common.info
 
 import slatekit.common.*
 import slatekit.common.envs.EnvMode
+import slatekit.common.ext.orElse
 
 /**
  * represent meta-data about an application
@@ -92,7 +93,7 @@ data class About(
         return text
     }
 
-    fun dir(): String = company.nonEmptyOrDefault(name).replace(" ", "-")
+    fun dir(): String = company.orElse(name).replace(" ", "-")
 
 
     fun toId(): Identity = SimpleIdentity(area, name, Agent.App, EnvMode.Dev.name)

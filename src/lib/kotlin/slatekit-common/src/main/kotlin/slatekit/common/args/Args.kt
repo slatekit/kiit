@@ -275,7 +275,7 @@ data class Args(
         const val SYS_CHAR = "$"
 
         @JvmStatic
-        fun default(): Args = Args("", listOf(), "", listOf(), decryptor = null)
+        fun empty(): Args = Args("", listOf(), "", listOf(), decryptor = null)
 
         /**
          * Parses the arguments using the supplied prefix and separator for the args.

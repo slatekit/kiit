@@ -14,7 +14,7 @@ interface Finds<TId, T> : ServiceSupport<TId, T> where TId : kotlin.Comparable<T
      * @param query
      * @return
      */
-    fun find(query: IQuery): List<T> {
+    fun findByQuery(query: IQuery): List<T> {
         return repo().find(query)
     }
 
@@ -103,18 +103,18 @@ interface Finds<TId, T> : ServiceSupport<TId, T> where TId : kotlin.Comparable<T
     }
 
     /**
+     * finds the first item by the query
+     */
+    fun findFirstByQuery(query: IQuery): T? {
+        val results = findByQuery(query.limit(1))
+        return results.firstOrNull()
+    }
+
+    /**
      * finds items by a stored proc
      */
     fun findByProc(name: String, args: List<Any>? = null): List<T>? {
         return repo().findByProc(name, args)
-    }
-
-    /**
-     * finds the first item by the query
-     */
-    fun findFirst(query: IQuery): T? {
-        val results = find(query.limit(1))
-        return results.firstOrNull()
     }
 
     fun where(prop: KProperty<*>, op: String, value: Any?): IQuery {

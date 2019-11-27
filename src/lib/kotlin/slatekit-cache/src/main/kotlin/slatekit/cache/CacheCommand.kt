@@ -1,5 +1,7 @@
 package slatekit.cache
 
+import kotlinx.coroutines.CompletableDeferred
+
 sealed class CacheCommand {
     abstract val action: CacheAction
 
@@ -23,6 +25,10 @@ sealed class CacheCommand {
         override val action = CacheAction.Refresh
     }
 
+    class Invalidate(val key: String) : CacheCommand() {
+        override val action = CacheAction.Invalid
+    }
+
     class Put(val key: String, val desc: String, val expiryInSeconds: Int, val fetcher: suspend () -> Any?) : CacheCommand() {
         override val action = CacheAction.Create
     }
@@ -31,7 +37,11 @@ sealed class CacheCommand {
         override val action = CacheAction.Update
     }
 
-    class Get(val key: String, val onReady: suspend (Any?) -> Unit) : CacheCommand() {
+    class GetFresh(val key: String, val deferred: CompletableDeferred<Any?>) : CacheCommand() {
+        override val action = CacheAction.Fetch
+    }
+
+    class Get(val key: String, val deferred: CompletableDeferred<Any?>, val load:Boolean = false) : CacheCommand() {
         override val action = CacheAction.Fetch
     }
 }

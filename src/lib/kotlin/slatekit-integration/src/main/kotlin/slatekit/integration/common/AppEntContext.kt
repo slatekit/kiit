@@ -93,7 +93,7 @@ data class AppEntContext(
 
         @JvmStatic
         fun sample(conf:Config, id: String, name: String, about: String, company: String): AppEntContext {
-            val args = Args.default()
+            val args = Args.empty()
             val envs = Envs.defaults().select("loc")
             return AppEntContext(
                     args = args,

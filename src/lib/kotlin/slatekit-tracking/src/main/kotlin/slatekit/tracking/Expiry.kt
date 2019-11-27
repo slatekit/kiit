@@ -10,7 +10,7 @@ data class Expiry(val seconds:Long,
         return if (seconds <= 0)
             false
         else
-            expires < DateTime.now()
+            expires <= DateTime.now()
     }
 
 

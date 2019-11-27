@@ -76,7 +76,7 @@ data class CommandRequest(
     companion object {
 
         fun empty(): CommandRequest {
-            return build(Args.default())
+            return build(Args.empty())
         }
 
 

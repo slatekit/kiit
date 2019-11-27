@@ -211,7 +211,7 @@ class ArgsTests {
                 .text("r", "region"     , "the region linked to app" , true, "us"   , "us"   , "us|europe|india|*")
         val argsResult = Args.parse("area.api.action -e=dev -r=usa", "-", "=", true)
         Assert.assertTrue(argsResult.success)
-        val args = argsResult.getOrElse { Args.default() }
+        val args = argsResult.getOrElse { Args.empty() }
         Assert.assertEquals("dev", args.get("e"))
         Assert.assertEquals("usa", args.get("r"))
 
@@ -253,7 +253,7 @@ class ArgsTests {
         // success / fail
         Assert.assertTrue( result.success == success )
 
-        val args = result.getOrElse { Args.default() }
+        val args = result.getOrElse { Args.empty() }
 
         // size
         Assert.assertTrue( args.size() == size)

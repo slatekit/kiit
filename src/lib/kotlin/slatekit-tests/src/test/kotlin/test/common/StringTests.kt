@@ -3,8 +3,8 @@ package test.common
 import org.junit.Assert
 import org.junit.Test
 import slatekit.common.repeatWith
-import slatekit.common.toId
-import slatekit.common.toIdent
+import slatekit.common.ext.toId
+import slatekit.common.ext.toIdent
 
 
 class StringTests {

@@ -23,6 +23,8 @@ import slatekit.cache.CacheSettings
 //<doc:import_examples>
 import slatekit.cmds.Command
 import slatekit.cmds.CommandRequest
+import slatekit.common.DateTime
+import slatekit.examples.common.Movie
 import slatekit.results.Try
 import slatekit.results.Success
 
@@ -32,7 +34,6 @@ import slatekit.results.Success
 class Example_Cache  : Command("auth") {
 
   //<doc:setup>
-  data class Movie(val title:String)
 
   val cache = SimpleCache(CacheSettings(10) )
   //</doc:setup>
@@ -44,17 +45,20 @@ class Example_Cache  : Command("auth") {
       // CASE 1: Put a non-expiring item in the cache
       // NOTE: This loads the data into the cache using the function ( fetchers param )
       // supplied. The loading is done asynchronously in a future.
-      cache.put("recent-movies", "recent movies", 300) { ->
-        listOf(Movie("Arrival"), Movie("Lego Batman"))
+      cache.put("recent-movies", "recent movies", 300) {
+        listOf(
+                Movie.of("Arrival", false, 10, DateTime.now().minusYears(10)),
+                Movie.of("Lego Batman", false, 10, DateTime.now().minusYears(2)))
       }
 
       // CASE 2: Put an item that expires in 300 seconds ( 5 minutes )
-      cache.put("top", "top movies", 300, { ->
-        listOf(Movie("Indiana Jones"), Movie("Batman"))
-      })
-      cache.put("trending", "trending movies", 300, { ->
-        listOf(Movie("Dr. Strange"))
-      })
+      cache.put("top", "top movies", 300) {
+        listOf(Movie.of("Indiana Jones", false, 10, DateTime.now().minusYears(30)),
+                Movie.of("Batman", false, 10, DateTime.now().minusYears(30)))
+      }
+      cache.put("trending", "trending movies", 300) {
+        listOf(Movie.of("Dr. Strange", false, 12, DateTime.now().minusYears(2)))
+      }
 
       // CASE 3: Get the total number of items in cache
       println(cache.size())

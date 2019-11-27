@@ -170,7 +170,7 @@ class Example_App : Command("app") {
         // Load the config "env.conf" from resources
         val conf = Config.of("env.conf")
         val ctx = AppEntContext(
-                args = Args.default(),
+                args = Args.empty(),
                 envs = Envs.defaults().select(conf.env().name),
                 conf = conf,
                 logs = LogsDefault,

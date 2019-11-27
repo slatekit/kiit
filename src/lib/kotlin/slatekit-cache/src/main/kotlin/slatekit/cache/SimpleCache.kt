@@ -13,9 +13,6 @@
 
 package slatekit.cache
 
-import kotlinx.coroutines.runBlocking
-import java.util.concurrent.ConcurrentHashMap
-
 /**
  * This light-weight implementation of a Cache ( LRU - Least recently used )
  * contains the following design approaches:
@@ -30,75 +27,12 @@ import java.util.concurrent.ConcurrentHashMap
  *
  * @param settings
  */
-open class SimpleCache(opts: CacheSettings) : Cache {
-
-    override val settings = opts
-    protected val lookup = ConcurrentHashMap<String, CacheEntry>()
+open class SimpleCache(override val settings: CacheSettings) : Cache, CacheTypeSync {
 
     /**
-     * size of the cache
-     *
-     * @return
+     * The LinkedHashMap already LRU(Least Recently Used) behaviour out of the box.
      */
-    override fun size(): Int = lookup.size
-
-    /**
-     * size of the cache
-     *
-     * @return
-     */
-    override fun keys(): List<String> = lookup.keys().toList()
-
-    /**
-     * whether this cache contains the entry with the supplied key
-     *
-     * @param key
-     * @return
-     */
-    override fun contains(key: String): Boolean = lookup.contains(key)
-
-    /**
-     * Gets stats on all entries.
-     */
-    override fun stats():List<CacheStats> {
-        val stats = this.lookup.values.map { it.stats() }
-        return stats
-    }
-
-
-    /**
-     * invalidates all the entries in this cache by maxing out their expiration times
-     */
-    override fun invalidateAll(): Unit = lookup.keys.toList().forEach { key -> invalidate(key) }
-
-    /**
-     * invalidates a specific cache item with the key
-     */
-    override fun invalidate(key: String) {
-        lookup.get(key)?.let { c -> c.expire() }
-    }
-
-    /**
-     * remove all items from cache
-     *
-     * @param key
-     */
-    override fun clear(): Boolean = lookup.keys.toList().map { key -> remove(key) }.reduceRight({ r, a -> a })
-
-    /**
-     * remove a single cache item with the key
-     *
-     * @param key
-     */
-    override fun remove(key: String): Boolean = lookup.remove(key)?.let { k -> true } ?: false
-
-    /**
-     * gets a cache item associated with the key
-     *
-     * @param key
-     * @return
-     */
-    override fun getEntry(key: String): CacheValue? = lookup.get(key)?.item?.get()
+    protected val lookup = LRUMap<String, CacheEntry>(settings.size)
 
     /**
      * gets a cache item associated with the key
@@ -129,14 +63,77 @@ open class SimpleCache(opts: CacheSettings) : Cache {
      * @param key
      */
     override fun <T> getFresh(key: String): T? {
-        val item = lookup.get(key)
-        item?.let { it ->
-            runBlocking {
-                it.refresh()
-            }
-        }
-        return null
+        refresh(key)
+        return get(key)
     }
+
+    /**
+     * size of the cache
+     *
+     * @return
+     */
+    override fun size(): Int = lookup.size
+
+    /**
+     * size of the cache
+     *
+     * @return
+     */
+    override fun keys(): List<String> = lookup.keys.map { it }
+
+    /**
+     * whether this cache contains the entry with the supplied key
+     *
+     * @param key
+     * @return
+     */
+    override fun contains(key: String): Boolean = lookup.containsKey(key)
+
+    /**
+     * Gets stats on all entries.
+     */
+    override fun stats():List<CacheStats> {
+        val stats = this.lookup.values.map { it.stats() }
+        return stats
+    }
+
+
+    /**
+     * invalidates all the entries in this cache by maxing out their expiration times
+     */
+    override fun invalidateAll(): Unit = lookup.keys.toList().forEach { key -> invalidate(key) }
+
+    /**
+     * invalidates a specific cache item with the key
+     */
+    override fun invalidate(key: String) {
+        lookup.get(key)?.let { c -> c.expire() }
+    }
+
+    /**
+     * remove all items from cache
+     *
+     * @param key
+     */
+    override fun clear(): Boolean {
+        return lookup.keys.toList().map { key -> remove(key) }.reduceRight({ r, a -> a })
+    }
+
+    /**
+     * remove a single cache item with the key
+     *
+     * @param key
+     */
+    override fun remove(key: String): Boolean = lookup.remove(key)?.let { k -> true } ?: false
+
+    /**
+     * gets a cache item associated with the key
+     *
+     * @param key
+     * @return
+     */
+    fun getEntry(key: String): CacheValue? = lookup.get(key)?.item?.get()
+
 
     /**
      * gets a cache item associated with the key

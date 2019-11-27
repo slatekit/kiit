@@ -3,8 +3,8 @@ package slatekit.apis.support
 import slatekit.apis.AuthMode
 import slatekit.apis.core.Auth
 import slatekit.apis.core.Roles
-import slatekit.common.*
 import slatekit.common.auth.AuthFuncs
+import slatekit.common.ext.splitToMapWithPairs
 import slatekit.common.info.ApiKey
 import slatekit.common.requests.Request
 import slatekit.results.Outcome

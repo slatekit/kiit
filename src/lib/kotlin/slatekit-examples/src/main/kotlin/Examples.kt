@@ -1,6 +1,5 @@
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.runBlocking
+import com.sun.org.apache.xerces.internal.dom.DeferredCommentImpl
+import kotlinx.coroutines.*
 import slatekit.examples.*
 import java.nio.file.Paths
 //import java.util.logging.*
@@ -12,9 +11,13 @@ import java.nio.file.Paths
 
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
+import slatekit.cache.CacheSettings
+import slatekit.cache.SimpleCache
+import slatekit.common.DateTime
+import slatekit.common.ext.toStringUtc
 import slatekit.providers.logs.logback.LogbackLogs
-import kotlinx.coroutines.runBlocking
 import slatekit.functions.common.FunctionMode
+import java.util.*
 
 /**
 <slate_header>
@@ -34,9 +37,52 @@ mantra: Simplicity above all else
 
 // https://looksok.wordpress.com/2014/07/12/compile-gradle-project-with-another-project-as-a-dependency/
 fun main(args:Array<String>) {
-    val example = Guide_Cache()
-    example.execute(args, FunctionMode.Called)
+    testLRU()
+    //val example = Guide_Cache()
+    //example.execute(args, FunctionMode.Called)
 }
+
+
+fun testLRU() {
+    val cache = SimpleCache(CacheSettings(3))
+    cache.put("a", "desc a", 500) { 1 }
+    cache.put("b", "desc a", 500) { 2 }
+    cache.put("c", "desc a", 500) { 3 }
+    cache.put("d", "desc a", 500) { 4 }
+    cache.put("e", "desc a", 500) { 5 }
+
+    println(cache.get<String>("e"))
+    println(cache.get<String>("d"))
+    println(cache.get<String>("c"))
+    println(cache.get<String>("a"))
+    println(cache.get<String>("b"))
+}
+
+
+suspend fun testDefer(){
+    val deferred = testRequest()
+    val result = deferred.await()
+    println(result)
+}
+
+data class Req(val id:String, val deferred:CompletableDeferred<String>)
+
+
+suspend fun testRequest():Deferred<String> {
+    println(DateTime.now().toStringUtc())
+    val req = Req(UUID.randomUUID().toString(), CompletableDeferred<String>())
+    testProcess(req)
+    return req.deferred
+}
+
+
+suspend fun testProcess(req:Req) {
+    delay(5000)
+    req.deferred.complete("value 123")
+}
+
+
+
 
 
 fun testLogs() {

@@ -16,8 +16,6 @@
 package slatekit.orm
 
 import slatekit.common.*
-import slatekit.common.encrypt.Encryptor
-import slatekit.common.naming.Namer
 import slatekit.query.QueryEncoder
 import slatekit.common.ids.UniqueId
 import slatekit.orm.Consts.idCol
@@ -29,7 +27,6 @@ import slatekit.meta.models.ModelField
 //import java.time.*
 import org.threeten.bp.*
 import slatekit.common.db.IDb
-import slatekit.entities.Entity
 import slatekit.entities.EntityMapper
 import slatekit.entities.EntityUpdatable
 import slatekit.entities.core.*
@@ -186,49 +183,49 @@ open class OrmMapper<TId, T>(
             converter.strings.toSql(sVal, mapping.encrypt, encryptor)
         } else if (mapping.dataCls == KTypes.KBoolClass) {
             val bVal = Reflector.getFieldValue(item, mapping.name) as Boolean?
-            converter.bools.toSql(bVal)
+            converter.bools.encode(bVal)
         } else if (mapping.dataCls == KTypes.KShortClass) {
             val sVal = Reflector.getFieldValue(item, mapping.name) as Short?
-            converter.shorts.toSql(sVal)
+            converter.shorts.encode(sVal)
         } else if (mapping.dataCls == KTypes.KIntClass) {
             val iVal = Reflector.getFieldValue(item, mapping.name) as Int?
-            converter.ints.toSql(iVal)
+            converter.ints.encode(iVal)
         } else if (mapping.dataCls == KTypes.KLongClass) {
             val lVal = Reflector.getFieldValue(item, mapping.name) as Long?
-            converter.longs.toSql(lVal)
+            converter.longs.encode(lVal)
         } else if (mapping.dataCls == KTypes.KFloatClass) {
             val fVal = Reflector.getFieldValue(item, mapping.name) as Float?
-            converter.floats.toSql(fVal)
+            converter.floats.encode(fVal)
         } else if (mapping.dataCls == KTypes.KDoubleClass) {
             val dVal = Reflector.getFieldValue(item, mapping.name) as Double?
-            converter.doubles.toSql(dVal)
+            converter.doubles.encode(dVal)
         } else if (mapping.dataCls == KTypes.KDateTimeClass) {
             val dtVal = Reflector.getFieldValue(item, mapping.name) as DateTime?
             converter.dateTimes.toSql(dtVal, info.utcTime)
         } else if (mapping.dataCls == KTypes.KLocalDateClass) {
             val raw = Reflector.getFieldValue(item, mapping.name) as LocalDate?
-            converter.localDates.toSql(raw)
+            converter.localDates.encode(raw)
         } else if (mapping.dataCls == KTypes.KLocalTimeClass) {
             val raw = Reflector.getFieldValue(item, mapping.name) as LocalTime?
-            converter.localTimes.toSql(raw)
+            converter.localTimes.encode(raw)
         } else if (mapping.dataCls == KTypes.KLocalDateTimeClass) {
             val raw = Reflector.getFieldValue(item, mapping.name) as LocalDateTime?
-            converter.localDateTimes.toSql(raw)
+            converter.localDateTimes.encode(raw)
         } else if (mapping.dataCls == KTypes.KZonedDateTimeClass) {
             val raw = Reflector.getFieldValue(item, mapping.name) as ZonedDateTime?
             converter.zonedDateTimes.toSql(raw, info.utcTime)
         } else if (mapping.dataCls == KTypes.KInstantClass) {
             val raw = Reflector.getFieldValue(item, mapping.name) as Instant?
-            converter.instants.toSql(raw)
+            converter.instants.encode(raw)
         } else if (mapping.dataCls == KTypes.KUUIDClass) {
             val raw = Reflector.getFieldValue(item, mapping.name) as java.util.UUID?
-            converter.uuids.toSql(raw)
+            converter.uuids.encode(raw)
         } else if (mapping.dataCls == KTypes.KUniqueIdClass) {
             val raw = Reflector.getFieldValue(item, mapping.name) as UniqueId?
-            converter.uniqueIds.toSql(raw)
+            converter.uniqueIds.encode(raw)
         } else if (mapping.isEnum) {
             val raw = Reflector.getFieldValue(item, mapping.name) as EnumLike
-            converter.enums.toSql(raw)
+            converter.enums.encode(raw)
         } else if (mapping.model != null) {
             val subObject = Reflector.getFieldValue(item, mapping.name)
             subObject?.let { mapFields(mapping.name, subObject, mapping.model!!, useKeyValue, false) } ?: Consts.NULL

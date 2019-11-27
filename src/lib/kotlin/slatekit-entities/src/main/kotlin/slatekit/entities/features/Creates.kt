@@ -3,9 +3,10 @@ package slatekit.entities.features
 import slatekit.common.DateTime
 import slatekit.entities.Entity
 import slatekit.entities.EntityUpdatable
-import slatekit.entities.core.EntityAction
-import slatekit.entities.core.EntityEvent
+import slatekit.entities.events.EntityAction
+import slatekit.entities.events.EntityEvent
 import slatekit.entities.core.ServiceSupport
+import slatekit.entities.events.EntityHooks
 import slatekit.entities.slatekit.entities.EntityOptions
 import slatekit.results.Try
 import slatekit.results.builders.Tries
@@ -29,7 +30,7 @@ interface Creates<TId, T> : ServiceSupport<TId, T> where TId : kotlin.Comparable
     fun create(entity: T, options: EntityOptions): Pair<TId, T> {
         // Massage
         val entityWithMeta = when (options.applyMetadata) {
-            true -> applyFieldData(EntityAction.EntityCreate, entity)
+            true -> applyFieldData(EntityAction.Create, entity)
             false -> entity
         }
 
@@ -43,7 +44,7 @@ interface Creates<TId, T> : ServiceSupport<TId, T> where TId : kotlin.Comparable
         }
 
         // Event out
-        if (options.applyHooks && this is Hooks) {
+        if (options.applyHooks && this is EntityHooks) {
             val success = isCreated(id)
             when (success) {
                 true -> this.onEntityEvent(EntityEvent.EntityCreated(id, entity, DateTime.now()))
@@ -61,13 +62,13 @@ interface Creates<TId, T> : ServiceSupport<TId, T> where TId : kotlin.Comparable
      */
     fun create(entity: T): TId {
         // Massage with timestamps
-        val entityWithData = applyFieldData(EntityAction.EntityCreate, entity)
+        val entityWithData = applyFieldData(EntityAction.Create, entity)
 
         // Create! get id
         val id = repo().create(entityWithData)
 
         // Event out
-        if (this is Hooks) {
+        if (this is EntityHooks) {
             val success = isCreated(id)
             when (success) {
                 true -> this.onEntityEvent(EntityEvent.EntityCreated(id, entity, DateTime.now()))

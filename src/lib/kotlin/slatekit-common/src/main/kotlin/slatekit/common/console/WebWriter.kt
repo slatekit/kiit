@@ -13,7 +13,7 @@
 
 package slatekit.common.console
 
-import slatekit.common.escapeHtml
+import slatekit.common.ext.escapeHtml
 
 /**
  * Generates help docs on the console.

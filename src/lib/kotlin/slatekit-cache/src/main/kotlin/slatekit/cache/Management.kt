@@ -42,11 +42,6 @@ interface Management {
     suspend fun set(key:String, value:Any?) = request(CacheCommand.Set(key, value))
 
     /**
-     * Requests fetching of a cache entry
-     */
-    suspend fun get(key:String, onReady:suspend(Any?) -> Unit ) = request(CacheCommand.Get(key, onReady))
-
-    /**
      * Requests a cache operation
      */
     suspend fun request(command: CacheCommand)

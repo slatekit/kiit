@@ -19,8 +19,8 @@ import com.amazonaws.services.s3.model.GetObjectRequest
 import com.amazonaws.services.s3.model.ObjectMetadata
 import slatekit.common.info.ApiLogin
 import slatekit.common.io.Uris
-import slatekit.core.cloud.CloudFiles
-import slatekit.core.cloud.CloudUtils
+import slatekit.core.files.CloudFiles
+import slatekit.core.common.FileUtils
 import slatekit.results.Try
 import slatekit.results.getOrElse
 import java.io.File
@@ -132,7 +132,7 @@ class AwsCloudFiles(
         return executeResult(SOURCE, "getAsText", data = fullName, call = {
 
             val obj = s3.getObject(GetObjectRequest(defaultFolder, fullName))
-            val content = CloudUtils.toString(obj.getObjectContent())
+            val content = FileUtils.toString(obj.getObjectContent())
             // val content = "simulating download of " + fullName
             content
         })
@@ -191,7 +191,7 @@ class AwsCloudFiles(
 
         return executeResult(SOURCE, action, data = fullName, call = {
 
-            s3.putObject(defaultFolder, fullName, CloudUtils.toInputStream(content), ObjectMetadata())
+            s3.putObject(defaultFolder, fullName, FileUtils.toInputStream(content), ObjectMetadata())
             fullName
         })
     }

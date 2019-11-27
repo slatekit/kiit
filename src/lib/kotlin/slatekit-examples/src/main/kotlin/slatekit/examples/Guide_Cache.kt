@@ -1,12 +1,10 @@
 package slatekit.examples
 
-import kotlinx.coroutines.runBlocking
 import slatekit.results.Try
 import slatekit.results.Success
 import slatekit.cmds.Command
 import slatekit.cmds.CommandRequest
 import slatekit.cache.*
-import slatekit.common.ext.toNumeric
 import slatekit.common.ext.toStringUtc
 import slatekit.common.types.Countries
 import slatekit.common.types.Country
@@ -28,7 +26,7 @@ class Guide_Cache : Command("types") {
 
         //<doc:section name="sync">
         val raw = SimpleCache(CacheSettings(10))
-        val cache = SyncCache(raw)
+        val cache = SimpleSyncCache(raw)
         //</doc:setup>
 
         // Write
