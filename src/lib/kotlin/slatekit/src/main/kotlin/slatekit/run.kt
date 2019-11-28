@@ -66,12 +66,12 @@ val samples = listOf(
     samples.map { slatekit.common.io.Uris.parse(it) }.forEach {
         println("\n")
         println("toString : " + it)
-        println("scheme   : " + it.scheme.name)
+        println("root   : " + it.root.name)
         println("path     : " + it.path)
         if(!it.isEmpty()) {
             println("tofile   : " + it.toFile().absolutePath)
         }
-//        println("scheme   : " + it.scheme   )
+//        println("root   : " + it.root   )
 //        println("host     : " + it.host     )
 //        println("authority: " + it.authority)
 //        println("fragment : " + it.fragment )

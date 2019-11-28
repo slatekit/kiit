@@ -88,8 +88,8 @@ object AppRunner {
         }.then { context ->
 
             // STEP 5: App - Create App using supplied lambda and context
-            val app = builder(context)
-            Success(app)
+            val app = Success(builder(context))
+            app
         }.then { app ->
 
             // STEP 6: Run - Finally run the application with workflow ( init, exec, end )

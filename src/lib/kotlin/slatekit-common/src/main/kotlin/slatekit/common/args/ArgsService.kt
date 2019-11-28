@@ -46,6 +46,7 @@ object ArgsService {
             sysChar: String = Args.SYS_CHAR
     ): Try<Args> {
 
+         // NOTE: .then = flatMap
          return cleanse(text)
         .then { line:String         -> tokenize(line) }
         .then { result:LexResult    -> convert(result) }

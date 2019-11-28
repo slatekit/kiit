@@ -46,7 +46,7 @@ object AppUtils {
 
     fun getDir(args: Args, default:Alias): Uri {
         val dirFromArgs = args.getStringOrNull("conf.dir")
-        return Uris.parse(dirFromArgs ?: default.name)
+        return dirFromArgs?.let { Uris.parse(it) } ?: Uri.jar("")
     }
 
     /**
