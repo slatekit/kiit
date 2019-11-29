@@ -18,16 +18,14 @@ import slatekit.common.*
 //</doc:import_required>
 
 //<doc:import_examples>
-import slatekit.common.queues.QueueSourceInMemory
+import slatekit.core.queues.InMemoryQueue
 import slatekit.cmds.Command
 import slatekit.cmds.CommandRequest
 import slatekit.common.log.LoggerConsole
 import slatekit.functions.policy.Every
 import slatekit.functions.policy.Limit
-import slatekit.functions.policy.Policy
 import slatekit.functions.policy.Ratio
 import slatekit.jobs.*
-import slatekit.jobs.Job.Companion.worker
 import slatekit.results.Try
 import slatekit.results.Success
 import java.util.concurrent.atomic.AtomicInteger
@@ -159,8 +157,8 @@ class Example_Jobs : Command("utils"), CoroutineScope by MainScope() {
         runBlocking {
 
             // Queues
-            val queue1 = Queue("queue1", Priority.Mid, QueueSourceInMemory.stringQueue(5))
-            val queue2 = Queue("queue2", Priority.Mid, QueueSourceInMemory.stringQueue(5))
+            val queue1 = Queue("queue1", Priority.Mid, InMemoryQueue.stringQueue(5))
+            val queue2 = Queue("queue2", Priority.Mid, InMemoryQueue.stringQueue(5))
 
             // Registry
             val logger = LoggerConsole()

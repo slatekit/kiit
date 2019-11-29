@@ -11,7 +11,7 @@
  * </slate_header>
  */
 
-package slatekit.common.queues
+package slatekit.core.queues
 
 import slatekit.common.*
 import slatekit.common.utils.Random.uuid
@@ -33,14 +33,26 @@ import java.util.concurrent.LinkedBlockingQueue
  *
  * For production usage, use the [slatekit.cloud.aws.AwsCloudQueue]
  */
-class QueueSourceInMemory<T>(
-    override val name: String = "",
-    override val converter: QueueValueConverter<T>,
-    val size: Int = -1
-) : QueueSource<T> {
+class InMemoryQueue<T>(
+        override val name: String = "",
+        override val converter: QueueValueConverter<T>,
+        val size: Int = -1
+) : Queue<T> {
 
     private val list = if (size <= 0) LinkedBlockingQueue<QueueEntry<T>>() else LinkedBlockingQueue(size)
     private val obj = Object()
+
+    /**
+     * Initialization hook
+     */
+    override fun init() {}
+
+
+    /**
+     * Close the queue
+     */
+    override fun close() {}
+
 
     /**
      * Count of items in the queue
@@ -95,7 +107,7 @@ class QueueSourceInMemory<T>(
     /**
      * Sends the item to the queue with additional message tags/attributes
      */
-    override fun send(value: T, attributes: Map<String, Any>): Try<String> {
+    override fun send(value: T, attributes: Map<String, Any>?): Try<String> {
         val entry = QueueEntrySimple(value, attributes, uuid())
         list += entry
         return Success(entry.id)
@@ -105,7 +117,7 @@ class QueueSourceInMemory<T>(
     /**
      * Completes the item ( removing it from the queue )
      */
-    override fun complete(entry: QueueEntry<T>?) {
+    override fun done(entry: QueueEntry<T>?) {
         entry?.let { discard(it) }
     }
 
@@ -113,7 +125,7 @@ class QueueSourceInMemory<T>(
     /**
      * Completes all the items ( removing them from the queue )
      */
-    override fun completeAll(entries: List<QueueEntry<T>>?) {
+    override fun done(entries: List<QueueEntry<T>>?) {
         entries?.forEach { discard(it) }
     }
 
@@ -134,7 +146,7 @@ class QueueSourceInMemory<T>(
 
         return path?.let { pathLocal ->
             val content = File(pathLocal).readText()
-            val value = converter.convertFromString(content)
+            val value = converter.decode(content)
             value?.let {
                 send(it, tagName, tagValue)
             } ?: slatekit.results.Failure(Exception("Invalid file path: $fileNameLocal"))
@@ -184,8 +196,8 @@ class QueueSourceInMemory<T>(
 
     companion object {
 
-        fun stringQueue(size:Int = -1):QueueSource<String> {
-            return QueueSourceInMemory<String>("", QueueStringConverter(), size)
+        fun stringQueue(size:Int = -1): Queue<String> {
+            return InMemoryQueue<String>("", QueueStringConverter(), size)
         }
     }
 }

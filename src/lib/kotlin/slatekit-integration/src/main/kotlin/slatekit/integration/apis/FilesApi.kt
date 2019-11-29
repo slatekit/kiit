@@ -36,57 +36,57 @@ class FilesApi(val files: CloudFiles, override val context: slatekit.common.Cont
     override val logger: Logger? = context.logs.getLogger()
 
     @Action(desc = "creates the root folder/bucket")
-    fun createRootFolder(rootFolder: String) {
+    suspend fun createRootFolder(rootFolder: String) {
         return files.createRootFolder(rootFolder)
     }
 
     @Action(desc = "creates a file with the supplied folder name, file name, and content")
-    fun create(folder: String, name: String, content: String) {
+    suspend fun create(folder: String, name: String, content: String) {
         files.create(folder, name, content)
     }
 
     @Action(desc = "creates a file with the supplied folder name, file name, and content from file path")
-    fun createFromPath(folder: String, name: String, filePath: String): Try<String> {
+    suspend fun createFromPath(folder: String, name: String, filePath: String): Try<String> {
         return files.createFromPath(folder, name, Uris.interpret(filePath) ?: filePath)
     }
 
     @Action(desc = "creates a file with the supplied folder name, file name, and content from doc")
-    fun createFromDoc(folder: String, name: String, doc: Doc): Try<String> {
+    suspend fun createFromDoc(folder: String, name: String, doc: Doc): Try<String> {
         return files.create(folder, name, doc.content)
     }
 
     @Action(desc = "updates a file with the supplied folder name, file name, and content")
-    fun update(folder: String, name: String, content: String): Try<String> {
+    suspend fun update(folder: String, name: String, content: String): Try<String> {
         return files.update(folder, name, content)
     }
 
     @Action(desc = "updates a file with the supplied folder name, file name, and content from file path")
-    fun updateFromPath(folder: String, name: String, filePath: String): Try<String> {
+    suspend fun updateFromPath(folder: String, name: String, filePath: String): Try<String> {
         return files.updateFromPath(folder, name, interpretUri(filePath) ?: filePath)
     }
 
     @Action(desc = "updates a file with the supplied folder name, file name, and content from doc")
-    fun updateFromDoc(folder: String, name: String, doc: Doc): Try<String> {
+    suspend fun updateFromDoc(folder: String, name: String, doc: Doc): Try<String> {
         return files.updateFromPath(folder, name, doc.content)
     }
 
     @Action(desc = "deletes a file with the supplied folder name, file name")
-    fun delete(folder: String, name: String): Try<String> {
+    suspend fun delete(folder: String, name: String): Try<String> {
         return files.delete(folder, name)
     }
 
     @Action(desc = "get file as text")
-    fun getAsText(folder: String, name: String):Try<String> {
+    suspend fun getAsText(folder: String, name: String):Try<String> {
         return files.getAsText(folder, name)
     }
 
     @Action(desc = "downloads the file specified by folder and name to the local folder specified.")
-    fun download(folder: String, name: String, localFolder: String, display: Boolean): Try<String> {
+    suspend fun download(folder: String, name: String, localFolder: String, display: Boolean): Try<String> {
         return show(files.download(folder, name, interpretUri(localFolder) ?: localFolder), display)
     }
 
     @Action(desc = "downloads the file specified by folder and name, as text content to file supplied")
-    fun downloadToFile(folder: String, name: String, filePath: String, display: Boolean): Try<String> {
+    suspend fun downloadToFile(folder: String, name: String, filePath: String, display: Boolean): Try<String> {
         return show(files.downloadToFile(folder, name, Uris.interpret(filePath) ?: filePath), display)
     }
 

@@ -1,7 +1,7 @@
 package slatekit.jobs
 
 import slatekit.common.Identity
-import slatekit.common.queues.QueueEntry
+import slatekit.core.queues.QueueEntry
 
 /**
  * Represents a unit-of work ( a work-item that is handled by a Worker ).
@@ -41,14 +41,14 @@ data class Task(
     /**
      *  Acknowledges this task with the Queue to complete it
      */
-    fun done() {
-        this.entry?.let { this.source.queue.complete(it) }
+    suspend fun done() {
+        this.entry?.let { this.source.queue.done(it) }
     }
 
     /**
      * Fails
      */
-    fun fail() {
+    suspend fun fail() {
         this.entry?.let { this.source.queue.abandon(it) }
     }
 

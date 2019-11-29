@@ -9,7 +9,7 @@ package slatekit.jobs
  * 3. Next : indicates a worker can completed this page/iteration of work and can proceed to the next page/iteration
  * 4. Complete : indicates a worker is done and should be transitioned to @see[slatekit.common.Status.Complete].
  *           this is particularly useful in the case where a worker does NOT work from tasks from a
- *           a @see[slatekit.common.queues.QueueSource], but is self managed
+ *           a @see[slatekit.common.queues.Queue], but is self managed
  * 5. Each worker needs to return this result so that its next state can be determined
  */
 sealed class WorkState(val name: String) {

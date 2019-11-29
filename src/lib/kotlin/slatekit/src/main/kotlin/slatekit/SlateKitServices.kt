@@ -4,7 +4,7 @@ import slatekit.apis.Setup
 import slatekit.apis.core.Api
 import slatekit.cloud.aws.AwsCloudFiles
 import slatekit.cloud.aws.AwsCloudQueue
-import slatekit.common.queues.QueueStringConverter
+import slatekit.core.queues.QueueStringConverter
 import slatekit.core.files.CloudFiles
 import slatekit.core.queues.CloudQueue
 import slatekit.notifications.email.EmailService

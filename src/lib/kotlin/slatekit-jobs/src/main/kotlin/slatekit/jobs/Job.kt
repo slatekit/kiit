@@ -242,7 +242,7 @@ class Job(
         }
     }
 
-    private fun nextTask(id: Identity, empty: Task): Task {
+    private suspend fun nextTask(id: Identity, empty: Task): Task {
         val task = when (queue) {
             null -> empty
             else -> {

@@ -14,8 +14,9 @@ package slatekit.examples
 
 
 //<doc:import_required>
+import kotlinx.coroutines.runBlocking
 import slatekit.cloud.aws.AwsCloudQueue
-import slatekit.common.queues.QueueStringConverter
+import slatekit.core.queues.QueueStringConverter
 
 //</doc:import_required>
 
@@ -49,38 +50,40 @@ class Example_Cloud_Queues  : Command("sqs") {
     //</doc:setup>
 
     //<doc:examples>
-    // Use case 1: init()
-    queue2.init()
+    runBlocking {
+      // Use case 1: init()
+      queue2.init()
 
-    // Use case 2: send 1 message
-    queue2.send("item 1")
+      // Use case 2: send 1 message
+      queue2.send("item 1")
 
-    // Use case 3: send multiple messages
-    queue2.send("item 2")
+      // Use case 3: send multiple messages
+      queue2.send("item 2")
 
-    // Use case 4: send message with tags
-    queue2.send("user=kishore", tagName="type", tagValue="reg")
+      // Use case 4: send message with tags
+      queue2.send("user=kishore", tagName = "type", tagValue = "reg")
 
-    // Use case 5: receive 1 message
-    val item1 = queue2.next()
-    println(item1?.getValue())
-    println(item1?.getTag("type"))
+      // Use case 5: receive 1 message
+      val item1 = queue2.next()
+      println(item1?.getValue())
+      println(item1?.getTag("type"))
 
-    // Use case 6: recieve 2 messages
-    val items = queue2.next(2)
+      // Use case 6: recieve 2 messages
+      val items = queue2.next(2)
 
-    // Use case 7: delete a message
-    queue2.complete(item1)
+      // Use case 7: delete a message
+      queue2.done(item1)
 
-    // Use case 8: delete many
-    queue2.completeAll(items)
+      // Use case 8: delete many
+      queue2.done(items)
 
-    // Use case 9: abandon a message
-    queue2.abandon(queue2.next())
+      // Use case 9: abandon a message
+      queue2.abandon(queue2.next())
 
-    // Use case 10: get count ( approximation )
-    val count = queue2.count()
-    println(count)
+      // Use case 10: get count ( approximation )
+      val count = queue2.count()
+      println(count)
+    }
     //</doc:examples>
 
     return Success("")
