@@ -18,7 +18,7 @@ interface QueueSupport {
         // Convert from web request to Queued request
         val req = request.request
         val payload = Requests.toJsonAsQueued(req)
-        enueue(payload, Random.uuid(), req.tag, req.path)
+        enueue(Random.uuid(), req.path, payload, req.tag)
         return slatekit.results.Success("Request processed as queue")
     }
 
@@ -38,16 +38,21 @@ interface QueueSupport {
     /**
      * Creates a request from the parameters and api info and serializes that as json
      * and submits it to a random queue.
+     * This is designed to work with slatekit.jobs
+     *  @param id       = "ABC123",
+     *  @param name     = "users.sendWelcomeEmail",
+     *  @param data     = "JSON data...",
+     *  @param xid      = "abc123"
      */
-    fun enueue(payload: String, id: String, refId: String, task: String) {
+    fun enueue(id: String, name: String, data: String, xid: String) {
         val queues = this.queues()
         val rand = java.util.Random()
         val pos = rand.nextInt(queues.size)
         val queue = queues[pos]
-        queue.send(payload, mapOf(
+        queue.send(data, mapOf(
             "id" to id,
-            "refId" to refId,
-            "task" to task
+            "name" to name,
+            "xid" to xid
         ))
     }
 }

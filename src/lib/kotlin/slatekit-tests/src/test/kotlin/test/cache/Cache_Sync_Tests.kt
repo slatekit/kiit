@@ -58,18 +58,18 @@ class Cache_Sync_Tests {
         Assert.assertNull(stats[0].error.value)
         Assert.assertNull(stats[0].error.created)
         Assert.assertNull(stats[0].error.updated)
-        Assert.assertEquals(stats[0].error.count, 0)
+        Assert.assertEquals(stats[0].error.applied, 0)
 
         // Value
         Assert.assertNotNull(stats[0].value.value)
         Assert.assertNotNull(stats[0].value.created)
         Assert.assertNotNull(stats[0].value.updated)
-        Assert.assertEquals(stats[0].value.count, 1)
+        Assert.assertEquals(stats[0].value.applied, 1)
 
         // Reads
-        Assert.assertEquals(1, stats[0].reads.count)
-        Assert.assertNotNull(stats[0].reads.timestamp)
-        Assert.assertTrue(stats[0].reads.timestamp!! >= timestamp)
+        Assert.assertEquals(1, stats[0].hits.count)
+        Assert.assertNotNull(stats[0].hits.timestamp)
+        Assert.assertTrue(stats[0].hits.timestamp!! >= timestamp)
 
         // Expiry
         Assert.assertEquals(60, stats[0].expiry.seconds)
@@ -94,9 +94,9 @@ class Cache_Sync_Tests {
 
         // Reads
         val stats1 = cache.stats()
-        Assert.assertEquals(1, stats1[0].reads.count)
-        Assert.assertNotNull(stats1[0].reads.timestamp)
-        Assert.assertTrue(stats1[0].reads.timestamp!! >= timestamp1)
+        Assert.assertEquals(1, stats1[0].hits.count)
+        Assert.assertNotNull(stats1[0].hits.timestamp)
+        Assert.assertTrue(stats1[0].hits.timestamp!! >= timestamp1)
 
         // Get 2
         val timestamp2 = DateTime.now()
@@ -109,9 +109,9 @@ class Cache_Sync_Tests {
 
         // Reads
         val stats2 = cache.stats()
-        Assert.assertEquals(2, stats2[0].reads.count)
-        Assert.assertNotNull(stats2[0].reads.timestamp)
-        Assert.assertTrue(stats2[0].reads.timestamp!! >= timestamp1)
+        Assert.assertEquals(2, stats2[0].hits.count)
+        Assert.assertNotNull(stats2[0].hits.timestamp)
+        Assert.assertTrue(stats2[0].hits.timestamp!! >= timestamp1)
     }
 
 
@@ -174,7 +174,7 @@ class Cache_Sync_Tests {
         Assert.assertNotNull(stats1[0].value.value)
         Assert.assertNotNull(stats1[0].value.created)
         Assert.assertNotNull(stats1[0].value.updated)
-        Assert.assertEquals(stats1[0].value.count, 1)
+        Assert.assertEquals(stats1[0].value.applied, 1)
 
         cache.set("countries", listOf("us", "ca", "uk"))
         val countries2 = cache.get<List<String>>("countries")
@@ -194,7 +194,7 @@ class Cache_Sync_Tests {
         Assert.assertNotNull(stats2[0].value.value)
         Assert.assertNotNull(stats2[0].value.created)
         Assert.assertNotNull(stats2[0].value.updated)
-        Assert.assertEquals(stats2[0].value.count, 2)
+        Assert.assertEquals(stats2[0].value.applied, 2)
     }
 
 
@@ -253,9 +253,9 @@ class Cache_Sync_Tests {
 
         // Reads
         val stats1 = cache.stats().first { it.key == "countries" }
-        Assert.assertEquals(1, stats1.reads.count)
-        Assert.assertNotNull(stats1.reads.timestamp)
-        Assert.assertTrue(stats1.reads.timestamp!! >= timestamp1)
+        Assert.assertEquals(1, stats1.hits.count)
+        Assert.assertNotNull(stats1.hits.timestamp)
+        Assert.assertTrue(stats1.hits.timestamp!! >= timestamp1)
 
         cache.invalidate("countries")
 
@@ -273,11 +273,11 @@ class Cache_Sync_Tests {
         Assert.assertNotNull(stats2.value.value)
         Assert.assertNotNull(stats2.value.created)
         Assert.assertNotNull(stats2.value.updated)
-        Assert.assertEquals(stats2.value.count, 2)
+        Assert.assertEquals(stats2.value.applied, 2)
 
         // Reads
-        Assert.assertEquals(2, stats2.reads.count)
-        Assert.assertNotNull(stats2.reads.timestamp)
-        Assert.assertTrue(stats2.reads.timestamp!! >= timestamp1)
+        Assert.assertEquals(2, stats2.hits.count)
+        Assert.assertNotNull(stats2.hits.timestamp)
+        Assert.assertTrue(stats2.hits.timestamp!! >= timestamp1)
     }
 }

@@ -9,6 +9,8 @@ import slatekit.tracking.Updated
  */
 data class CacheStats(val key:String,
                       val expiry: Expiry,
-                      val reads: Fetched,
-                      val value: Updated<Any>,
-                      val error: Updated<Throwable>)
+                      val hits  : Fetched,
+                      val reads : Fetched?,
+                      val misses: Fetched?,
+                      val value : Updated<Any>,
+                      val error : Updated<Throwable>)

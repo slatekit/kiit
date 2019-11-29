@@ -22,13 +22,13 @@ import slatekit.tracking.Tracked
  * @param text : The last known text value
  * @param seconds : The time in seconds this is valid for
  * @param expiry : The time it will expire
- * @param reads : Tracks total number of reads and last read time
+ * @param hits : Tracks total number of hits and last read time
  * @param value : Tracks current value, total updates and last update time
  */
 data class CacheValue(
     val text: String?,
     val expiry: Expiry,
-    val reads: Fetches,
+    val hits: Fetches,
     val value: Tracked<Any>,
     val error: Tracked<Throwable>
 ) {

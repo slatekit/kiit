@@ -13,4 +13,5 @@
 
 package slatekit.cache
 
-data class CacheSettings(val size: Int)
+data class CacheSettings(val size: Int,
+                         val updateCount:Int = 20)
