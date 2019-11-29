@@ -81,7 +81,7 @@ class AwsCloudQueue<T>(
      * @return
      */
     override fun count(): Int {
-        val count = execute(SOURCE, "count", rethrow = true, data = null, call = {
+        val count = executeSync(SOURCE, "count", rethrow = true, data = null, call = {
 
             val request = GetQueueAttributesRequest(queueUrl).withAttributeNames("All")
             val atts = sqs.getQueueAttributes(request).attributes
@@ -112,7 +112,7 @@ class AwsCloudQueue<T>(
      * @return : A list of message object from the underlying queue provider
      */
     override fun next(size: Int): List<QueueEntry<T>> {
-        val results = execute(SOURCE, "nextbatch", data = size, call = { ->
+        val results = executeSync(SOURCE, "nextbatch", data = size, call = { ->
             val reqRaw = ReceiveMessageRequest(queueUrl)
                 .withMaxNumberOfMessages(size)
             val req1 = if (waitTimeInSeconds > 0) reqRaw.withWaitTimeSeconds(waitTimeInSeconds) else reqRaw
@@ -146,7 +146,7 @@ class AwsCloudQueue<T>(
     override fun send(value: T, attributes: Map<String, Any>): Try<String> {
         // Send the message, any message that fails will get caught
         // and the onError method is called for that message
-        return executeResult<String>(SOURCE, "send", data = value, call = {
+        return executeResultSync<String>(SOURCE, "send", data = value, call = {
             val message = converter.convertToString(value) ?: ""
             val req = SendMessageRequest(queueUrl, message)
 
@@ -211,7 +211,7 @@ class AwsCloudQueue<T>(
     private fun discard(item: QueueEntry<T>, action: String) {
         when (item.raw) {
             is Message -> {
-                execute(SOURCE, action, data = item, call = {
+                executeSync(SOURCE, action, data = item, call = {
                     val message = item.raw as Message
                     val msgHandle = message.receiptHandle
 

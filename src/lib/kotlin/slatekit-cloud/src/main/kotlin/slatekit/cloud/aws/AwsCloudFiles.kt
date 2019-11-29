@@ -67,7 +67,7 @@ class AwsCloudFiles(
     /**
      * hook for any initialization
      */
-    override fun init() {
+    override suspend fun init() {
         if (createDefaultFolder) {
             s3.createBucket(defaultFolder)
         }
@@ -78,7 +78,7 @@ class AwsCloudFiles(
      *
      * @param rootFolder
      */
-    override fun createRootFolder(rootFolder: String) {
+    override suspend fun createRootFolder(rootFolder: String) {
         if (!rootFolder.isNullOrEmpty() && rootFolder != defaultFolder) {
             s3.createBucket(rootFolder)
         }
@@ -91,7 +91,7 @@ class AwsCloudFiles(
      * @param name
      * @param content
      */
-    override fun create(folder: String, name: String, content: String): Try<String> {
+    override suspend fun create(folder: String, name: String, content: String): Try<String> {
         return put("create", folder, name, content)
     }
 
@@ -102,7 +102,7 @@ class AwsCloudFiles(
      * @param name
      * @param content
      */
-    override fun update(folder: String, name: String, content: String): Try<String> {
+    override suspend fun update(folder: String, name: String, content: String): Try<String> {
         return put("update", folder, name, content)
     }
 
@@ -112,7 +112,7 @@ class AwsCloudFiles(
      * @param folder
      * @param name
      */
-    override fun delete(folder: String, name: String): Try<String> {
+    override suspend fun delete(folder: String, name: String): Try<String> {
         val fullName = getName(folder, name)
         return executeResult(SOURCE, "delete", data = fullName, call = {
             s3.deleteObject(defaultFolder, fullName)
@@ -127,7 +127,7 @@ class AwsCloudFiles(
      * @param name
      * @return
      */
-    override fun getAsText(folder: String, name: String): Try<String> {
+    override suspend fun getAsText(folder: String, name: String): Try<String> {
         val fullName = getName(folder, name)
         return executeResult(SOURCE, "getAsText", data = fullName, call = {
 
@@ -146,7 +146,7 @@ class AwsCloudFiles(
      * @param localFolder
      * @return
      */
-    override fun download(folder: String, name: String, localFolder: String): Try<String> {
+    override suspend fun download(folder: String, name: String, localFolder: String): Try<String> {
         val fullName = getName(folder, name)
         return executeResult<String>(SOURCE, "download", data = fullName, call = {
             val content = getAsText(folder, name)
@@ -166,7 +166,7 @@ class AwsCloudFiles(
      * @param filePath
      * @return
      */
-    override fun downloadToFile(folder: String, name: String, filePath: String): Try<String> {
+    override suspend fun downloadToFile(folder: String, name: String, filePath: String): Try<String> {
         val fullName = getName(folder, name)
         return executeResult(SOURCE, "download", data = fullName, call = {
             val content = getAsText(folder, name)
@@ -185,7 +185,7 @@ class AwsCloudFiles(
      * @param content
      * @return
      */
-    fun put(action: String, folder: String, name: String, content: String): Try<String> {
+    suspend fun put(action: String, folder: String, name: String, content: String): Try<String> {
         // full name of the file is folder + name
         val fullName = getName(folder, name)
 

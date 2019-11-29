@@ -18,7 +18,12 @@ import slatekit.core.common.FileUtils
 import slatekit.results.Try
 
 /**
- * Abstraction for cloud base file storage and retrieval.
+ * Abstraction for cloud based file storage and retrieval.
+ * NOTES:
+ * 1. This supports an async model via Coroutines
+ * 2. Cloud files implementation in Slate Kit ( AWS S3 ) is Java SDK 1.0 ( synchronous )
+ * 3. This is to "future proof" this public API to make it Async
+ * 4. The AWS S3 component in slatekit.cloud will be migrated to Java SDK 2.0 ( async ) version in the future
  */
 interface CloudFiles : CloudSupport {
 
@@ -29,65 +34,66 @@ interface CloudFiles : CloudSupport {
     /**
      * hook for any initialization
      */
-    fun init() {
+    suspend fun init() {
     }
 
-    fun create(name: String, content: String) {
+
+    suspend fun create(name: String, content: String) {
         create(defaultFolder, name, content)
     }
 
-    fun createFromPath(name: String, filePath: String) {
+    suspend fun createFromPath(name: String, filePath: String) {
 
         val content = FileUtils.loadFromFile(filePath)
         create(defaultFolder, name, content)
     }
 
-    fun createFromPath(folder: String, name: String, filePath: String): Try<String> {
+    suspend fun createFromPath(folder: String, name: String, filePath: String): Try<String> {
         // val content = "simulating from file : " + filePath
         val content = FileUtils.loadFromFile(filePath)
         return create(folder, name, content)
     }
 
-    fun delete(name: String) {
+    suspend fun delete(name: String) {
         delete(defaultFolder, name)
     }
 
-    fun getAsText(name: String): Try<String> = getAsText(defaultFolder, name)
+    suspend fun getAsText(name: String): Try<String> = getAsText(defaultFolder, name)
 
-    fun download(name: String, localFolder: String): Try<String> {
+    suspend fun download(name: String, localFolder: String): Try<String> {
         return download(defaultFolder, name, localFolder)
     }
 
-    fun downloadToFile(name: String, localFilePath: String): Try<String> {
+    suspend fun downloadToFile(name: String, localFilePath: String): Try<String> {
         return downloadToFile(defaultFolder, name, localFilePath)
     }
 
-    fun update(name: String, content: String) {
+    suspend fun update(name: String, content: String) {
         update(defaultFolder, name, content)
     }
 
-    fun updateFromPath(name: String, filePath: String): Try<String> {
+    suspend fun updateFromPath(name: String, filePath: String): Try<String> {
         val content = "simulating from file : " + filePath; // loadFromFile(filePath)
         return update(defaultFolder, name, content)
     }
 
-    fun updateFromPath(folder: String, name: String, filePath: String): Try<String> {
+    suspend fun updateFromPath(folder: String, name: String, filePath: String): Try<String> {
         val content = FileUtils.loadFromFile(filePath)
         return update(folder, name, content)
     }
 
-    fun createRootFolder(rootFolder: String): Unit
+    suspend fun createRootFolder(rootFolder: String): Unit
 
-    fun create(folder: String, name: String, content: String): Try<String>
+    suspend fun create(folder: String, name: String, content: String): Try<String>
 
-    fun update(folder: String, name: String, content: String): Try<String>
+    suspend fun update(folder: String, name: String, content: String): Try<String>
 
-    fun delete(folder: String, name: String): Try<String>
+    suspend fun delete(folder: String, name: String): Try<String>
 
-    fun getAsText(folder: String, name: String): Try<String>
+    suspend fun getAsText(folder: String, name: String): Try<String>
 
-    fun download(folder: String, name: String, localFolder: String): Try<String>
+    suspend fun download(folder: String, name: String, localFolder: String): Try<String>
 
-    fun downloadToFile(folder: String, name: String, filePath: String): Try<String>
+    suspend fun downloadToFile(folder: String, name: String, filePath: String): Try<String>
 
 }

@@ -17,14 +17,14 @@ import slatekit.results.Try
 
 interface CloudSupport {
 
-    fun <T> execute(
+    suspend fun <T> execute(
         source: String,
         action: String,
         tag: String = "",
         audit: Boolean = false,
         rethrow: Boolean = false,
         data: Any?,
-        call: () -> T
+        call: suspend () -> T
     ): T? {
         val result: T? = try {
             call()
@@ -35,13 +35,49 @@ interface CloudSupport {
         return result
     }
 
-    fun <T> executeResult(
+    suspend fun <T> executeResult(
         source: String,
         action: String,
         tag: String = "",
         audit: Boolean = false,
         data: Any?,
-        call: () -> T
+        call: suspend () -> T
+    ): Try<T> {
+        val result = try {
+            val resultValue = call()
+            slatekit.results.Success(resultValue)
+        } catch (ex: Exception) {
+            onError(source, action, tag, data, ex)
+            slatekit.results.Failure(ex, msg = "Error performing action $action on $source with tag $tag. $ex")
+        }
+        return result
+    }
+
+    fun <T> executeSync(
+            source: String,
+            action: String,
+            tag: String = "",
+            audit: Boolean = false,
+            rethrow: Boolean = false,
+            data: Any?,
+            call: () -> T
+    ): T? {
+        val result: T? = try {
+            call()
+        } catch (ex: Exception) {
+            onError(source, action, tag, data, ex)
+            null
+        }
+        return result
+    }
+
+    fun <T> executeResultSync(
+            source: String,
+            action: String,
+            tag: String = "",
+            audit: Boolean = false,
+            data: Any?,
+            call: () -> T
     ): Try<T> {
         val result = try {
             val resultValue = call()

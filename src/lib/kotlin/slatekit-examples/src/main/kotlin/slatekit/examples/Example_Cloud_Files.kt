@@ -2,6 +2,7 @@ package slatekit.examples
 
 
 //<doc:import_required>
+import kotlinx.coroutines.runBlocking
 import slatekit.cloud.aws.AwsCloudFiles
 
 //</doc:import_required>
@@ -34,38 +35,40 @@ class Example_Cloud_Files  : Command("s3") {
     //</doc:setup>
 
     //<doc:examples>
-    // Use case 1: Connect using parameters
-    files1.init()
+    runBlocking {
+      // Use case 1: Connect using parameters
+      files1.init()
 
-    // Use case 2: create using just name and content
-    files1.create("file-1", "content 1")
+      // Use case 2: create using just name and content
+      files1.create("file-1", "content 1")
 
-    // Use case 3: update using just name and content
-    files1.update("file-1", "content 2")
+      // Use case 3: update using just name and content
+      files1.update("file-1", "content 2")
 
-    // Use case 4: create using folder and file name
-    files1.create("folder-1", "file-1", "content 1")
+      // Use case 4: create using folder and file name
+      files1.create("folder-1", "file-1", "content 1")
 
-    // Use case 5: update using folder and file name
-    files1.update("folder-1", "file-1", "content 2")
+      // Use case 5: update using folder and file name
+      files1.update("folder-1", "file-1", "content 2")
 
-    // Use case 6: get file as a text using just name
-    files1.getAsText("file-1")
+      // Use case 6: get file as a text using just name
+      files1.getAsText("file-1")
 
-    // Use case 7: get file using folder and file name
-    files1.getAsText("folder-1", "file-1")
+      // Use case 7: get file using folder and file name
+      files1.getAsText("folder-1", "file-1")
 
-    // Use case 8: download file to local folder
-    files1.download("file-1", "~/dev/temp/")
+      // Use case 8: download file to local folder
+      files1.download("file-1", "~/dev/temp/")
 
-    // Use case 9: download using folder and file name to local folder
-    files1.download("folder-1", "file-1", "~/dev/temp")
+      // Use case 9: download using folder and file name to local folder
+      files1.download("folder-1", "file-1", "~/dev/temp")
 
-    // Use case 10: delete file by just the name
-    files1.delete("file-1")
+      // Use case 10: delete file by just the name
+      files1.delete("file-1")
 
-    // Use case 11: delete using folder and name
-    files1.delete("folder-1", "file-1")
+      // Use case 11: delete using folder and name
+      files1.delete("folder-1", "file-1")
+    }
     //</doc:examples>
 
     return Success("")
