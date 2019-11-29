@@ -36,13 +36,13 @@ interface Queue<T> {
     /**
      * Initialization hook
      */
-    fun init() {}
+    fun init()
 
 
     /**
      * Close the queue
      */
-    fun close() {}
+    fun close()
 
 
     /**
@@ -67,20 +67,20 @@ interface Queue<T> {
      * Completes the item ( essentially removing it from the queue )
      * Basically an ack ( acknowledgement )
      */
-    fun done(entry: QueueEntry<T>?) {}
+    fun done(entry: QueueEntry<T>?)
 
 
     /**
      * Completes the items ( essentially removing it from the queue )
      * Basically an ack ( acknowledgement )
      */
-    fun done(entries: List<QueueEntry<T>>?) {}
+    fun done(entries: List<QueueEntry<T>>?)
 
 
     /**
      * Removes the item from the queue
      */
-    fun abandon(entry: QueueEntry<T>?) {}
+    fun abandon(entry: QueueEntry<T>?)
 
 
     /**
@@ -92,7 +92,7 @@ interface Queue<T> {
     /**
      * Sends the item as a message to the queue
      */
-    fun send(value: T, attributes: Map<String, Any>): Try<String>
+    fun send(value: T, attributes: Map<String, Any>?): Try<String>
 
 
     /**

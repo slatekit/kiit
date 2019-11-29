@@ -1,8 +1,6 @@
 package slatekit.jobs
 
-import slatekit.core.queues.Queue
-import slatekit.core.queues.InMemoryQueue
-import slatekit.core.queues.QueueStringConverter
+import slatekit.core.queues.*
 
 /**
  * Wraps the underlying queue holding the messages with other metadata ( name, priority )
@@ -12,10 +10,10 @@ import slatekit.core.queues.QueueStringConverter
  * @param priority : Priority of the queue ( low, medium, high ) for weighted selection
  * @param queue : The actual queue source / implementation
  */
-data class Queue(val name: String, val priority: Priority, val queue: Queue<String>) {
+data class Queue(val name: String, val priority: Priority, val queue: AsyncQueue<String>) {
 
     companion object {
         val source = InMemoryQueue<String>("", QueueStringConverter())
-        val empty = Queue("empty", Priority.Low, source)
+        val empty = Queue("empty", Priority.Low, WrappedAsyncQueue(source))
     }
 }

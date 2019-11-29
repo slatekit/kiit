@@ -5,6 +5,7 @@ import org.junit.Test
 
 import slatekit.core.queues.InMemoryQueue
 import slatekit.core.queues.QueueStringConverter
+import slatekit.core.queues.WrappedAsyncQueue
 import slatekit.jobs.Priority
 import slatekit.jobs.Queue
 import slatekit.jobs.support.Queues
@@ -15,7 +16,7 @@ class Queue_Tests {
     fun can_load_queues_basic() {
 
         val queue = InMemoryQueue<String>(converter = QueueStringConverter())
-        val infos = (0..2).map { it -> Queue(it.toString(), Priority.Low, queue) }
+        val infos = (0..2).map { it -> Queue(it.toString(), Priority.Low, WrappedAsyncQueue(queue)) }
         val queues = Queues(infos)
         Assert.assertEquals(3, queues.size())
         Assert.assertEquals(queues[0]?.name, "0")
@@ -31,7 +32,7 @@ class Queue_Tests {
 
         val queue = InMemoryQueue<String>(converter = QueueStringConverter())
         val infos =
-            (0..2).map { it -> Queue(it.toString(), Priority.convert(it + 1) as Priority, queue) }
+            (0..2).map { it -> Queue(it.toString(), Priority.convert(it + 1) as Priority, WrappedAsyncQueue(queue)) }
         val queues = Queues(infos)
         Assert.assertEquals(3, queues.size())
         Assert.assertEquals(6, queues.prioritizedQueues.size)

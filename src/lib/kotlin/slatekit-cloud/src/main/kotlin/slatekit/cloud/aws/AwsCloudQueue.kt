@@ -45,6 +45,7 @@ class AwsCloudQueue<T>(
         val waitTimeInSeconds: Int = 0
 ) : CloudQueue<T>, AwsSupport {
 
+
     private val queue = queue
     private val sqs: AmazonSQSClient = AwsFuncs.sqs(creds, region)
     private val queueUrl = sqs.getQueueUrl(this.queue).queueUrl
@@ -62,6 +63,13 @@ class AwsCloudQueue<T>(
                 waitTimeInSeconds: Int = 0) :
             this(region, queue, AwsFuncs.credsWithKeySecret(apiKey.key, apiKey.pass), converter, waitTimeInSeconds)
 
+    override suspend fun init() {
+
+    }
+
+    override suspend fun close() {
+
+    }
 
     /**
      * Initialize with queue name and the config path/section for aws credentials
@@ -80,7 +88,7 @@ class AwsCloudQueue<T>(
      *
      * @return
      */
-    override fun count(): Int {
+    override suspend fun count(): Int {
         val count = executeSync(SOURCE, "count", rethrow = true, data = null, call = {
 
             val request = GetQueueAttributesRequest(queueUrl).withAttributeNames("All")
@@ -100,7 +108,7 @@ class AwsCloudQueue<T>(
      *
      * @return : An message object from the underlying queue provider
      */
-    override fun next(): QueueEntry<T>? {
+    override suspend fun next(): QueueEntry<T>? {
         val result = next(1)
         return result.firstOrNull()
     }
@@ -111,7 +119,7 @@ class AwsCloudQueue<T>(
      * @param size : The number of items to get at once
      * @return : A list of message object from the underlying queue provider
      */
-    override fun next(size: Int): List<QueueEntry<T>> {
+    override suspend fun next(size: Int): List<QueueEntry<T>> {
         val results = executeSync(SOURCE, "nextbatch", data = size, call = { ->
             val reqRaw = ReceiveMessageRequest(queueUrl)
                 .withMaxNumberOfMessages(size)
@@ -130,7 +138,7 @@ class AwsCloudQueue<T>(
      *
      * @param msg: String message, or map containing the fields "message", and "atts"
      */
-    override fun send(value: T, tagName: String, tagValue: String): Try<String> {
+    override suspend fun send(value: T, tagName: String, tagValue: String): Try<String> {
         return when(tagName){
             null, "" -> send(value, mapOf("id" to Random.uuid(), "createdAt" to DateTime.now().toStringUtc()))
             else     -> send(value, mapOf(tagName to tagValue, "id" to Random.uuid(), "createdAt" to DateTime.now().toStringUtc()))
@@ -143,7 +151,7 @@ class AwsCloudQueue<T>(
      * @param value : The message to send
      * @param attributes : Additional attributes to put into the message
      */
-    override fun send(value: T, attributes: Map<String, Any>): Try<String> {
+    override suspend fun send(value: T, attributes: Map<String, Any>?): Try<String> {
         // Send the message, any message that fails will get caught
         // and the onError method is called for that message
         return executeResultSync<String>(SOURCE, "send", data = value, call = {
@@ -151,9 +159,11 @@ class AwsCloudQueue<T>(
             val req = SendMessageRequest(queueUrl, message)
 
             // Add the attributes
-            req.withMessageAttributes(attributes.map { it ->
-                Pair(it.key, MessageAttributeValue().withDataType("String").withStringValue(it.value.toString()))
-            }.toMap())
+            attributes?.let {
+                req.withMessageAttributes(it.map { pair ->
+                    Pair(pair.key, MessageAttributeValue().withDataType("String").withStringValue(pair.value.toString()))
+                }.toMap())
+            }
 
             val result = sqs.sendMessage(req)
             result.messageId
@@ -161,7 +171,7 @@ class AwsCloudQueue<T>(
     }
 
 
-    override fun sendFromFile(fileNameLocal: String, tagName: String, tagValue: String): Try<String> {
+    override suspend fun sendFromFile(fileNameLocal: String, tagName: String, tagValue: String): Try<String> {
         val path = Uris.interpret(fileNameLocal)
         return path?.let { pathLocal ->
             val content = File(pathLocal).readText()
@@ -178,7 +188,7 @@ class AwsCloudQueue<T>(
      *
      * @param entry : The message to abandon/delete
      */
-    override fun abandon(entry: QueueEntry<T>?) {
+    override suspend fun abandon(entry: QueueEntry<T>?) {
         entry?.let { discard(it, "abandon") }
     }
 
@@ -187,7 +197,7 @@ class AwsCloudQueue<T>(
      *
      * @param entry : The message to complete
      */
-    override fun done(entry: QueueEntry<T>?) {
+    override suspend fun done(entry: QueueEntry<T>?) {
         entry?.let { discard(it, "complete") }
     }
 
@@ -196,7 +206,7 @@ class AwsCloudQueue<T>(
      *
      * @param entries : The messages to complete
      */
-    override fun done(entries: List<QueueEntry<T>>?) {
+    override suspend fun done(entries: List<QueueEntry<T>>?) {
         entries?.forEach { discard(it, "completeAll") }
     }
 

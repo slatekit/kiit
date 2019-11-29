@@ -43,6 +43,18 @@ class InMemoryQueue<T>(
     private val obj = Object()
 
     /**
+     * Initialization hook
+     */
+    override fun init() {}
+
+
+    /**
+     * Close the queue
+     */
+    override fun close() {}
+
+
+    /**
      * Count of items in the queue
      */
     override fun count(): Int = list.size
@@ -95,7 +107,7 @@ class InMemoryQueue<T>(
     /**
      * Sends the item to the queue with additional message tags/attributes
      */
-    override fun send(value: T, attributes: Map<String, Any>): Try<String> {
+    override fun send(value: T, attributes: Map<String, Any>?): Try<String> {
         val entry = QueueEntrySimple(value, attributes, uuid())
         list += entry
         return Success(entry.id)

@@ -41,14 +41,14 @@ data class Task(
     /**
      *  Acknowledges this task with the Queue to complete it
      */
-    fun done() {
+    suspend fun done() {
         this.entry?.let { this.source.queue.done(it) }
     }
 
     /**
      * Fails
      */
-    fun fail() {
+    suspend fun fail() {
         this.entry?.let { this.source.queue.abandon(it) }
     }
 
