@@ -14,7 +14,6 @@
 package slatekit.cache
 
 import kotlinx.coroutines.runBlocking
-import slatekit.common.DateTime
 import slatekit.tracking.Expiry
 import slatekit.tracking.Fetches
 import slatekit.tracking.Tracked
@@ -36,7 +35,8 @@ data class CacheEntry(
     val key: String,
     val desc: String,
     val seconds: Int,
-    val fetcher: suspend () -> Any?
+    val fetcher: suspend () -> Any?,
+    val updateCount:Int = 20
 ) {
     /**
      * The actual cache item which is updatd only when its refreshed.
@@ -45,7 +45,7 @@ data class CacheEntry(
             CacheValue(
                 text = null,
                 expiry = Expiry(seconds.toLong()),
-                reads = Fetches(20),
+                hits = Fetches(updateCount),
                 value = Tracked(),
                 error = Tracked())
     )
@@ -91,12 +91,14 @@ data class CacheEntry(
         }
     }
 
-    fun stats():CacheStats {
+    fun stats(accesses:Fetches?, misses:Fetches?):CacheStats {
         val item = item.get()
         return CacheStats(
             key = key,
             expiry = item.expiry,
-            reads = item.reads.get(),
+            hits = item.hits.get(),
+            reads = accesses?.get(),
+            misses = misses?.get(),
             value = item.value.get().get(),
             error = item.error.get().get())
     }

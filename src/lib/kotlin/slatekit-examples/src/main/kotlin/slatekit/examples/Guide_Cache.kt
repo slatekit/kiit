@@ -47,9 +47,9 @@ class Guide_Cache : Command("types") {
         cache.stats().forEach {
             println("key    : " + it.key)
             println("expiry : " + "started=" + it.expiry.started.toStringUtc() + ", seconds=" + it.expiry.seconds + ", expires=" + it.expiry.expires.toStringUtc())
-            println("reads  : " + "count=" + it.reads.count + ", timestamp=" + it.reads.timestamp?.toStringUtc() )
-            println("value  : " + "created=" + it.value.created?.toStringUtc() + ", updated=" + it.value.updated?.toStringUtc() + ", count=" + it.value.count)
-            println("error  : " + "created=" + it.error.created?.toStringUtc() + ", updated=" + it.error.updated?.toStringUtc() + ", count=" + it.error.count)
+            println("hits  : " + "count=" + it.reads.count + ", timestamp=" + it.reads.timestamp?.toStringUtc() )
+            println("value  : " + "created=" + it.value.created?.toStringUtc() + ", updated=" + it.value.updated?.toStringUtc() + ", count=" + it.value.applied)
+            println("error  : " + "created=" + it.error.created?.toStringUtc() + ", updated=" + it.error.updated?.toStringUtc() + ", count=" + it.error.applied)
             println("\n")
         }
         // Allows for override

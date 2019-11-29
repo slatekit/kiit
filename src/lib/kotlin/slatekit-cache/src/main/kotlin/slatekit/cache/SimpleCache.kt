@@ -13,6 +13,8 @@
 
 package slatekit.cache
 
+import slatekit.tracking.Fetches
+
 /**
  * This light-weight implementation of a Cache ( LRU - Least recently used )
  * contains the following design approaches:
@@ -33,6 +35,13 @@ open class SimpleCache(override val settings: CacheSettings) : Cache, CacheTypeS
      * The LinkedHashMap already LRU(Least Recently Used) behaviour out of the box.
      */
     protected val lookup = LRUMap<String, CacheEntry>(settings.size)
+
+    /**
+     * Stats to record cache accesses and cache misses.
+     * CacheEntry only records hits as it only exist if there is an entry for the key
+     */
+    protected val accesses  = LRUMap<String, Pair<Fetches, Fetches>>(settings.size)
+
 
     /**
      * gets a cache item associated with the key
@@ -93,8 +102,14 @@ open class SimpleCache(override val settings: CacheSettings) : Cache, CacheTypeS
      * Gets stats on all entries.
      */
     override fun stats():List<CacheStats> {
-        val stats = this.lookup.values.map { it.stats() }
-        return stats
+
+        val allStats = this.lookup.values.map {
+            val stats = accesses.get(it.key)
+            val accesses = stats?.first
+            val misses = stats?.second
+            it.stats(accesses, misses)
+        }
+        return allStats
     }
 
 
@@ -181,22 +196,41 @@ open class SimpleCache(override val settings: CacheSettings) : Cache, CacheTypeS
      * @return
      */
     protected fun <T> getInternal(key: String, load:Boolean): T? {
-        val result = lookup.get(key)?.let { c ->
-            val value = if (c.isAlive()) {
-                val entry = c.item.get()
-                entry.reads.inc()
-                val tracked = entry.value
-                tracked.get().current
-            } else if(load){
-                c.refresh()
-                val entry = c.item.get()
-                entry.reads.inc()
-                val tracked = entry.value
-                tracked.get().current
-            } else {
+
+        // Stats: Update ACCESS count
+        accesses[key]?.let { it.first.inc() }
+
+        val entry = lookup.get(key)
+        val result = when(entry) {
+            null -> {
+                // Stats: Update MISS count
+                accesses[key]?.let { it.second.inc() }
                 null
             }
-            value
+            else -> {
+                val value = if (entry.isAlive()) {
+                    val value = entry.item.get()
+
+                    // Stats: Update HITS count
+                    value.hits.inc()
+
+                    val tracked = value.value
+                    tracked.get().current
+                } else if(load){
+
+                    entry.refresh()
+                    val value = entry.item.get()
+
+                    // Stats: Update HITS count
+                    value.hits.inc()
+
+                    val tracked = value.value
+                    tracked.get().current
+                } else {
+                    null
+                }
+                value
+            }
         }
         @Suppress("UNCHECKED_CAST")
         return result?.let { r -> r as T }
@@ -209,6 +243,10 @@ open class SimpleCache(override val settings: CacheSettings) : Cache, CacheTypeS
         seconds: Int,
         fetcher: suspend () -> Any?
     ) {
+
+        val stats = Pair(Fetches(settings.updateCount), Fetches(settings.updateCount))
+        accesses[key] = stats
+
         val entry = CacheEntry(key, desc, seconds, fetcher)
         lookup[key] = entry
         entry.refresh()

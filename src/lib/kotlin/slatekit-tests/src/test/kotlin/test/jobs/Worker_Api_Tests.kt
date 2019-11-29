@@ -59,8 +59,8 @@ class Worker_Api_Tests {
         Assert.assertNotNull(entry)
         entry?.let {
             Assert.assertNotNull(it.getTag("id"))
-            Assert.assertNotNull(it.getTag("refId"))
-            Assert.assertEquals("api-queue", it.getTag("task"))
+            Assert.assertNotNull(it.getTag("name"))
+            Assert.assertEquals("api-queue", it.getTag("xid"))
         }
     }
 
