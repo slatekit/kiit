@@ -67,7 +67,7 @@ Many of these modules have their own project. See the guides for each respective
             <div class="box text-center">
               <a href="arch/cache"><img src="assets/media/img/white/lightning.png" alt="" class="img-fluid"></a>
               <div><a href="arch/cache"><h3>Cache</h3></a></div>
-              <p>Light-weight cache with support for detailed metrics, time-stamps, and a synchronous or async public APIs. See {{% sk-link-arch page="cache" name="Cache" %}} 
+              <p>Light-weight cache with an emphasis towards diagnostics, and a synchronous or async Channel based APIs. See {{% sk-link-arch page="cache" name="Cache" %}} 
               </p>
             </div>
           </div>
@@ -106,6 +106,15 @@ Many of these modules have their own project. See the guides for each respective
               <a href="arch/files"><img src="assets/media/img/white/folders.png" alt="" class="img-fluid"></a>
               <div><a href="arch/files"><h3>Files</h3></a></div>
               <p>A simplified interface and abstraction for persistent file storage. Default implementation available in <strong>AWS S3</strong> See {{% sk-link-arch page="files" name="Files" %}} 
+              </p>
+            </div>
+          </div>
+          <div class="col-md-4 wow fadeInUp">
+            <div class="box text-center">
+              <a href="arch/jobs"><img src="assets/media/img/white/gears.png" alt="" class="img-fluid"></a>
+              <div><a href="arch/jobs"><h3>Jobs</h3></a></div>
+              <p>Background Jobs/Task queue system for one-off, paged, and queued jobs with middleware support and diagnostics.
+                See {{% sk-link-arch page="jobs" name="Jobs" %}} 
               </p>
             </div>
           </div>
@@ -160,10 +169,9 @@ Many of these modules have their own project. See the guides for each respective
           </div>
           <div class="col-md-4 wow fadeInUp">
             <div class="box text-center">
-              <a href="arch/jobs"><img src="assets/media/img/white/gears.png" alt="" class="img-fluid"></a>
-              <div><a href="arch/jobs"><h3>Jobs</h3></a></div>
-              <p>Background Jobs/Task queue system for one-off, paged, and queued jobs with middleware support and diagnostics.
-                See {{% sk-link-arch page="jobs" name="Jobs" %}} 
+              <a href="arch/tracking"><img src="assets/media/img/white/diagnostic.png" style="width:50px;" alt="" class="img-fluid"></a>
+              <div><a href="arch/tracking"><h3>Tracking</h3></a></div>
+              <p>Support for diagnostics and tracking of values and recording of events. See {{% sk-link-arch page="tracking" name="Tracking" %}} 
               </p>
             </div>
           </div>

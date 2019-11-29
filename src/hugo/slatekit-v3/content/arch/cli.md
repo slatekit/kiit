@@ -135,7 +135,7 @@ This component uses the following other <strong>Slate Kit</strong> and/or third-
         <td><strong>Description</strong></td>
     </tr>
     <tr>
-        <td><a class="url-ch" href="core/results">Slate Kit - Results</a></td>
+        <td><a class="url-ch" href="arch/results">Slate Kit - Results</a></td>
         <td>To model successes and failures with optional status codes</td>
     </tr>
     <tr>
