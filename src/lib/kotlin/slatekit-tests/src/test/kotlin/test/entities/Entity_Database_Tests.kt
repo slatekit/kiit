@@ -20,7 +20,7 @@ import org.threeten.bp.*
 import slatekit.common.Field
 import slatekit.common.ids.UniqueId
 import slatekit.common.conf.ConfFuncs
-import slatekit.common.db.DbLookup
+import slatekit.common.db.Connections
 import slatekit.common.db.Vendor
 import slatekit.db.Db
 import slatekit.entities.Entities
@@ -142,7 +142,7 @@ class Entity_Database_Tests {
     val con = ConfFuncs.readDbCon("usr://.slatekit/conf/db.conf")
 
     private fun realDb(): Entities {
-        val dbs = DbLookup.defaultDb(con!!)
+        val dbs = Connections.of(con!!)
         val entities = Entities({ con -> Db(con) }, dbs, MyEncryptor)
         entities.orm<Long, SampleEntity>(Vendor.MySql, Long::class, SampleEntity::class, "sample_entity")
         return entities

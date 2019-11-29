@@ -16,9 +16,9 @@ import org.junit.Assert
 import org.junit.Test
 import slatekit.common.db.DbCon
 import slatekit.common.db.DbConString
-import slatekit.common.db.DbLookup
-import slatekit.common.db.DbLookup.Companion.defaultDb
-import slatekit.common.db.DbLookup.Companion.namedDbs
+import slatekit.common.db.Connections
+import slatekit.common.db.Connections.Companion.of
+import slatekit.common.db.Connections.Companion.named
 
 /**
  * Created by kishorereddy on 6/4/17.
@@ -34,7 +34,7 @@ class DbLookupTests {
 
     @Test
     fun can_create_dblookup_with_no_connections() {
-        val dbs = DbLookup()
+        val dbs = Connections()
         Assert.assertTrue(dbs.default() == null)
         Assert.assertTrue(dbs.named("") == null)
         Assert.assertTrue(dbs.group("", "") == null)
@@ -43,7 +43,7 @@ class DbLookupTests {
 
     @Test
     fun can_create_dblookup_with_default_db() {
-        val dbs = defaultDb(buildDefaultConnection())
+        val dbs = of(buildDefaultConnection())
         ensureDb(dbs, buildDefaultConnection())
         Assert.assertTrue(dbs.named("") == null)
         Assert.assertTrue(dbs.group("", "") == null)
@@ -52,7 +52,7 @@ class DbLookupTests {
 
     @Test
     fun can_create_dblookup_with_named_connections() {
-        val dbs = namedDbs(
+        val dbs = named(
             listOf(
                 Pair("users", buildDefaultConnection("u1")),
                 Pair("files", buildDefaultConnection("f1"))
@@ -85,7 +85,7 @@ class DbLookupTests {
 //    }
 
 
-    fun ensureDb(dbs: DbLookup, con: DbConString): Unit {
+    fun ensureDb(dbs: Connections, con: DbConString): Unit {
         Assert.assertTrue(dbs.default() != null)
         ensureDb(dbs.default()!!, con)
     }
@@ -93,18 +93,18 @@ class DbLookupTests {
 
     fun ensureDb(expected: DbCon, actual: DbConString): Unit {
         Assert.assertTrue(expected.driver == actual.driver)
-        Assert.assertTrue(expected.password == actual.password)
+        Assert.assertTrue(expected.pswd == actual.pswd)
         Assert.assertTrue(expected.url == actual.url)
         Assert.assertTrue(expected.user == actual.user)
     }
 
 
-    fun ensureNamedDb(dbs: DbLookup, name: String, con: DbConString): Unit {
+    fun ensureNamedDb(dbs: Connections, name: String, con: DbConString): Unit {
         ensureDb(dbs.named(name)!!, con)
     }
 
 
-    fun ensureGroupedDb(dbs: DbLookup, group: String, name: String, con: DbConString): Unit {
+    fun ensureGroupedDb(dbs: Connections, group: String, name: String, con: DbConString): Unit {
         ensureDb(dbs.group(group, name)!!, con)
     }
 }

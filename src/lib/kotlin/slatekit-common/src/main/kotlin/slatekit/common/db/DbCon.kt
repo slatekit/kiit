@@ -17,7 +17,7 @@ interface DbCon {
   val driver: String
   val url: String
   val user: String
-  val password: String
+  val pswd: String
 
   companion object {
 
@@ -25,17 +25,18 @@ interface DbCon {
   }
 }
 
+
 /**
   * Connection string for a database
   * @param driver : jdbc driver
   * @param url : url
   * @param user : username
-  * @param password : password
+  * @param pswd : password
   */
 data class DbConString(
     override val driver: String,
     override val url: String,
     override val user: String,
-    override val password: String
+    override val pswd: String
 ) : DbCon
 

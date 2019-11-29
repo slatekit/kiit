@@ -62,7 +62,7 @@ import slatekit.meta.models.ModelMapper
  */
 open class Entities(
     dbCreator: (DbCon) -> IDb,
-    val dbs: DbLookup = DbLookup.defaultDb(DbCon.empty),
+    val dbs: Connections = Connections.of(DbCon.empty),
     val enc: Encryptor? = null,
     val logs: Logs = LogsDefault,
     val namer: Namer? = null

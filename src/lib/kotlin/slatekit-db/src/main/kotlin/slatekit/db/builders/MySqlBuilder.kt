@@ -15,7 +15,7 @@ package slatekit.db.builders
 
 import java.rmi.UnexpectedException
 import slatekit.common.Types
-import slatekit.common.db.DbFieldType
+import slatekit.common.db.DbType
 import slatekit.common.newline
 import slatekit.db.DbUtils.ensureField
 
@@ -28,37 +28,37 @@ open class MySqlBuilder : DbBuilder {
      * Mapping of normalized types ot postgres type names
      */
     val dataToColumnTypes = mapOf(
-        DbFieldType.DbString to "NVARCHAR",
-        DbFieldType.DbBool to "BIT",
-        DbFieldType.DbShort to "TINYINT",
-        DbFieldType.DbNumber to "INTEGER",
-        DbFieldType.DbLong to "BIGINT",
-        DbFieldType.DbFloat to "FLOAT",
-        DbFieldType.DbDouble to "DOUBLE",
-        DbFieldType.DbDecimal to "DECIMAL",
-        DbFieldType.DbLocalDate to "DATE",
-        DbFieldType.DbLocalTime to "TIME",
-        DbFieldType.DbLocalDateTime to "DATETIME",
-        DbFieldType.DbZonedDateTime to "DATETIME",
-        DbFieldType.DbInstant to "INSTANT",
-        DbFieldType.DbDateTime to "DATETIME"
+        DbType.DbString to "NVARCHAR",
+        DbType.DbBool to "BIT",
+        DbType.DbShort to "TINYINT",
+        DbType.DbNumber to "INTEGER",
+        DbType.DbLong to "BIGINT",
+        DbType.DbFloat to "FLOAT",
+        DbType.DbDouble to "DOUBLE",
+        DbType.DbDecimal to "DECIMAL",
+        DbType.DbLocalDate to "DATE",
+        DbType.DbLocalTime to "TIME",
+        DbType.DbLocalDateTime to "DATETIME",
+        DbType.DbZonedDateTime to "DATETIME",
+        DbType.DbInstant to "INSTANT",
+        DbType.DbDateTime to "DATETIME"
     )
 
     val langToDataTypes = mapOf(
-        Types.JBoolClass to DbFieldType.DbBool,
-        Types.JStringClass to DbFieldType.DbString,
-        Types.JShortClass to DbFieldType.DbShort,
-        Types.JIntClass to DbFieldType.DbNumber,
-        Types.JLongClass to DbFieldType.DbLong,
-        Types.JFloatClass to DbFieldType.DbFloat,
-        Types.JDoubleClass to DbFieldType.DbDouble,
-        // Types.JDecimalClass to  DbFieldType.DbDecimal,
-        Types.JLocalDateClass to DbFieldType.DbLocalDate,
-        Types.JLocalTimeClass to DbFieldType.DbLocalTime,
-        Types.JLocalDateTimeClass to DbFieldType.DbLocalDateTime,
-        Types.JZonedDateTimeClass to DbFieldType.DbZonedDateTime,
-        Types.JInstantClass to DbFieldType.DbInstant,
-        Types.JDateTimeClass to DbFieldType.DbDateTime
+        Types.JBoolClass to DbType.DbBool,
+        Types.JStringClass to DbType.DbString,
+        Types.JShortClass to DbType.DbShort,
+        Types.JIntClass to DbType.DbNumber,
+        Types.JLongClass to DbType.DbLong,
+        Types.JFloatClass to DbType.DbFloat,
+        Types.JDoubleClass to DbType.DbDouble,
+        // Types.JDecimalClass to  DbType.DbDecimal,
+        Types.JLocalDateClass to DbType.DbLocalDate,
+        Types.JLocalTimeClass to DbType.DbLocalTime,
+        Types.JLocalDateTimeClass to DbType.DbLocalDateTime,
+        Types.JZonedDateTimeClass to DbType.DbZonedDateTime,
+        Types.JInstantClass to DbType.DbInstant,
+        Types.JDateTimeClass to DbType.DbDateTime
     )
 
     /**
@@ -74,7 +74,7 @@ open class MySqlBuilder : DbBuilder {
     /**
      * Builds an add column DDL sql statement
      */
-    override fun addCol(name: String, dataType: DbFieldType, required: Boolean, maxLen: Int): String {
+    override fun addCol(name: String, dataType: DbType, required: Boolean, maxLen: Int): String {
         val nullText = if (required) "NOT NULL" else ""
         val colType = colType(dataType, maxLen)
         val colName = colName(name)
@@ -91,10 +91,10 @@ open class MySqlBuilder : DbBuilder {
     /**
      * Builds a valid column type
      */
-    override fun colType(colType: DbFieldType, maxLen: Int): String {
-        return if (colType == DbFieldType.DbString && maxLen == -1)
+    override fun colType(colType: DbType, maxLen: Int): String {
+        return if (colType == DbType.DbString && maxLen == -1)
             "longtext"
-        else if (colType == DbFieldType.DbString)
+        else if (colType == DbType.DbString)
             "VARCHAR($maxLen)"
         else
             getColTypeName(colType)
@@ -106,7 +106,7 @@ open class MySqlBuilder : DbBuilder {
         return sql
     }
 
-    private fun getColTypeName(sqlType: DbFieldType): String {
+    private fun getColTypeName(sqlType: DbType): String {
         return if (dataToColumnTypes.containsKey(sqlType))
             dataToColumnTypes[sqlType] ?: ""
         else

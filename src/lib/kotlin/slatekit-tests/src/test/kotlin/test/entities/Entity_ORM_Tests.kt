@@ -20,7 +20,7 @@ import slatekit.common.DateTime
 import slatekit.common.Field
 import slatekit.common.utils.Random
 import slatekit.common.db.DbConString
-import slatekit.common.db.DbLookup
+import slatekit.common.db.Connections
 import slatekit.db.Db
 import slatekit.entities.Entities
 import slatekit.entities.EntityUpdatable
@@ -33,7 +33,7 @@ class Entity_ORM_Tests {
 
 
     @Before fun setup(){
-        entities = Entities({ con -> Db(con) }, DbLookup(DbConString("", "", "", "")))
+        entities = Entities({ con -> Db(con) }, Connections(DbConString("", "", "", "")))
         entities.prototype<ORMUser>(ORMUser::class)
     }
 

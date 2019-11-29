@@ -15,8 +15,8 @@ package slatekit.db.builders
 
 import java.rmi.UnexpectedException
 import slatekit.common.Types
-import slatekit.common.db.DbFieldType
-import slatekit.common.db.DbTypeInfo
+import slatekit.common.db.DbType
+import slatekit.common.db.DbTypeMap
 import slatekit.common.newline
 import slatekit.db.DbUtils.ensureField
 
@@ -26,20 +26,20 @@ import slatekit.db.DbUtils.ensureField
 open class PostGresBuilder : DbBuilder {
 
     val types = listOf(
-        DbTypeInfo(DbFieldType.DbString, "NVARCHAR", Types.JStringClass),
-        DbTypeInfo(DbFieldType.DbBool, "BIT", Types.JBoolClass),
-        DbTypeInfo(DbFieldType.DbShort, "TINYINT", Types.JStringClass),
-        DbTypeInfo(DbFieldType.DbNumber, "INTEGER", Types.JStringClass),
-        DbTypeInfo(DbFieldType.DbLong, "BIGINT", Types.JStringClass),
-        DbTypeInfo(DbFieldType.DbFloat, "FLOAT", Types.JStringClass),
-        DbTypeInfo(DbFieldType.DbDouble, "DOUBLE", Types.JStringClass),
-        DbTypeInfo(DbFieldType.DbDecimal, "DECIMAL", Types.JStringClass),
-        DbTypeInfo(DbFieldType.DbLocalDate, "DATE", Types.JStringClass),
-        DbTypeInfo(DbFieldType.DbLocalTime, "TIME", Types.JStringClass),
-        DbTypeInfo(DbFieldType.DbLocalDateTime, "DATETIME", Types.JStringClass),
-        DbTypeInfo(DbFieldType.DbZonedDateTime, "DATETIME", Types.JStringClass),
-        DbTypeInfo(DbFieldType.DbInstant, "INSTANT", Types.JStringClass),
-        DbTypeInfo(DbFieldType.DbDateTime, "DATETIME", Types.JStringClass)
+        DbTypeMap(DbType.DbString, "NVARCHAR", Types.JStringClass),
+        DbTypeMap(DbType.DbBool, "BIT", Types.JBoolClass),
+        DbTypeMap(DbType.DbShort, "TINYINT", Types.JStringClass),
+        DbTypeMap(DbType.DbNumber, "INTEGER", Types.JStringClass),
+        DbTypeMap(DbType.DbLong, "BIGINT", Types.JStringClass),
+        DbTypeMap(DbType.DbFloat, "FLOAT", Types.JStringClass),
+        DbTypeMap(DbType.DbDouble, "DOUBLE", Types.JStringClass),
+        DbTypeMap(DbType.DbDecimal, "DECIMAL", Types.JStringClass),
+        DbTypeMap(DbType.DbLocalDate, "DATE", Types.JStringClass),
+        DbTypeMap(DbType.DbLocalTime, "TIME", Types.JStringClass),
+        DbTypeMap(DbType.DbLocalDateTime, "DATETIME", Types.JStringClass),
+        DbTypeMap(DbType.DbZonedDateTime, "DATETIME", Types.JStringClass),
+        DbTypeMap(DbType.DbInstant, "INSTANT", Types.JStringClass),
+        DbTypeMap(DbType.DbDateTime, "DATETIME", Types.JStringClass)
     )
 
     /**
@@ -61,7 +61,7 @@ open class PostGresBuilder : DbBuilder {
     /**
      * Builds an add column DDL sql statement
      */
-    override fun addCol(name: String, dataType: DbFieldType, required: Boolean, maxLen: Int): String {
+    override fun addCol(name: String, dataType: DbType, required: Boolean, maxLen: Int): String {
         val nullText = if (required) "NOT NULL" else ""
         val colType = colType(dataType, maxLen)
         val colName = colName(name)
@@ -78,10 +78,10 @@ open class PostGresBuilder : DbBuilder {
     /**
      * Builds a valid column type
      */
-    override fun colType(colType: DbFieldType, maxLen: Int): String {
-        return if (colType == DbFieldType.DbString && maxLen == -1)
+    override fun colType(colType: DbType, maxLen: Int): String {
+        return if (colType == DbType.DbString && maxLen == -1)
             "longtext"
-        else if (colType == DbFieldType.DbString)
+        else if (colType == DbType.DbString)
             "VARCHAR($maxLen)"
         else
             getColTypeName(colType)
@@ -93,7 +93,7 @@ open class PostGresBuilder : DbBuilder {
         return sql
     }
 
-    private fun getColTypeName(sqlType: DbFieldType): String {
+    private fun getColTypeName(sqlType: DbType): String {
         return if (dataToColumnTypes.containsKey(sqlType))
             dataToColumnTypes[sqlType] ?: ""
         else

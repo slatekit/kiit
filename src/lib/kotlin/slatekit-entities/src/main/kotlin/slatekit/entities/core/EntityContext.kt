@@ -28,9 +28,9 @@ import slatekit.meta.models.Model
  * @param entityMapperInstance : an instance of the mapper  ( singleton usage )
  * @param vendor : the database provider type
  * @param dbKey : a key identifying the database connection
- *                               ( see DbLookup / Example_Database.kt )
+ *                               ( see Connections / Example_Database.kt )
  * @param dbShard : a key identifying the database shard
- *                               ( see DbLookup / Example_Database.kt )
+ *                               ( see Connections / Example_Database.kt )
  */
 open class EntityContext(
     val entityType: KClass<*>,

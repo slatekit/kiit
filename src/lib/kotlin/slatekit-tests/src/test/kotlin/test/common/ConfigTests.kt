@@ -15,7 +15,6 @@ package test.common
 import org.junit.Assert
 import org.junit.Test
 import slatekit.common.info.ApiLogin
-import slatekit.common.DateTime
 import slatekit.common.DateTimes
 import slatekit.common.conf.ConfFuncs
 import slatekit.common.conf.Config
@@ -95,7 +94,7 @@ class ConfigTests {
         Assert.assertTrue(con.driver == "mysql")
         Assert.assertTrue(con.url == "localhost")
         Assert.assertTrue(con.user == "root")
-        Assert.assertTrue(con.password == "12345678")
+        Assert.assertTrue(con.pswd == "12345678")
     }
 
 

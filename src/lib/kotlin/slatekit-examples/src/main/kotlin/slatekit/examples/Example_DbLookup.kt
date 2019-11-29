@@ -22,9 +22,9 @@ import slatekit.results.Success
 import slatekit.common.conf.ConfFuncs
 import slatekit.common.db.DbCon
 import slatekit.common.db.DbConString
-import slatekit.common.db.DbLookup
-import slatekit.common.db.DbLookup.Companion.defaultDb
-import slatekit.common.db.DbLookup.Companion.namedDbs
+import slatekit.common.db.Connections
+import slatekit.common.db.Connections.Companion.of
+import slatekit.common.db.Connections.Companion.named
 import slatekit.cmds.Command
 import slatekit.cmds.CommandRequest
 
@@ -38,16 +38,16 @@ class Example_DbLookup : Command("db") {
         // There is separate Db component in slatekit.common.db.Db
         // that handles db functions: query, insert, update, delete, scalar
 
-        // CASE 1: The DbLookup component holds all the database
+        // CASE 1: The Connections component holds all the database
         // connections associated with a name. You can also set
         // the default database. In this case, no db connections
         // have been registered, so it will be empty.
-        val dbs1 = DbLookup()
+        val dbs1 = Connections()
         showResult(dbs1.default())
 
 
-        // CASE 2: Create the DbLookup using just 1 explicit connection
-        val dbs3: DbLookup = defaultDb(
+        // CASE 2: Create the Connections using just 1 explicit connection
+        val dbs3: Connections = of(
                 DbConString(
                         "com.mysql.jdbc.Driver",
                         "jdbc:mysql://localhost/default",
@@ -58,7 +58,7 @@ class Example_DbLookup : Command("db") {
         showResult(dbs3.default())
 
 
-        // CASE 3: Create the DbLookup using just 1 connection from a file in the user directory
+        // CASE 3: Create the Connections using just 1 connection from a file in the user directory
         // e.g. on windows: C:\Users\kv\slatekit\conf\db.txt
         //
         // NOTES:
@@ -69,18 +69,18 @@ class Example_DbLookup : Command("db") {
         // url:jdbc:mysql://localhost/World
         // user:root
         // password:123abc
-        val dbs2: DbLookup = defaultDb(ConfFuncs.readDbCon("user://.slatekit/conf/db.txt")!!)
+        val dbs2: Connections = of(ConfFuncs.readDbCon("user://.slatekit/conf/db.txt")!!)
         showResult(dbs2.default())
 
 
         // CASE 4: Register connection and link to a key "user_db" using credentials from user folder
-        val dbs4: DbLookup = namedDbs(
+        val dbs4: Connections = named(
             listOf(Pair("users", ConfFuncs.readDbCon("user://.slatekit/conf/db_default.txt")!!))
         )
         showResult(dbs4.named("users"))
 
         // CASE 5: Register multiple connections by api ( "users", "files" )
-        val dbs5 = namedDbs(listOf(
+        val dbs5 = named(listOf(
             Pair(
                 "users", DbConString(
                     "com.mysql.jdbc.Driver",

@@ -26,7 +26,7 @@ import slatekit.meta.models.Model
  * 6. Service : Service implementation ( depends on Repo above )
  */
 class OrmBuilder(dbCreator: (DbCon) -> IDb,
-                 dbs: DbLookup,
+                 dbs: Connections,
                  enc: Encryptor? = null) : EntityBuilder(dbCreator, dbs, enc) {
 
     /**

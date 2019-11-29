@@ -21,7 +21,7 @@ import slatekit.apis.support.ApiBase
 import slatekit.common.Sources
 import slatekit.common.db.DbCon
 import slatekit.common.newline
-import slatekit.common.db.DbLookup
+import slatekit.common.db.Connections
 import slatekit.integration.common.AppEntContext
 import slatekit.orm.migrations.MigrationService
 import slatekit.orm.migrations.MigrationSettings
@@ -104,7 +104,7 @@ class EntitiesApi(context: AppEntContext) : ApiBase(context) {
         return service().connectionByName(name)
     }
 
-    private val dbLookup by lazy { DbLookup.fromConfig(context.conf) }
+    private val dbLookup by lazy { Connections.from(context.conf) }
 
     private fun service(): MigrationService {
         return MigrationService(appContext.ent, dbLookup, MigrationSettings(), context.dirs)

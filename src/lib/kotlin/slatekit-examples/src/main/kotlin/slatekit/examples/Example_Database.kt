@@ -35,7 +35,7 @@ class Example_Database : Command("db") {
         //<doc:examples>
         // NOTES:
         // 1. The Db.kt simply uses JDBC
-        // 2. There is a separate DbLookup.kt component that
+        // 2. There is a separate Connectionsons.kt component that
         //    loads, stores, and manages named database connections.
         //    Refer to that example for more info.
 

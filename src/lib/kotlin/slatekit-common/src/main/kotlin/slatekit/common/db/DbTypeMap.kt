@@ -1,8 +1,8 @@
 package slatekit.common.db
 
 
-data class DbTypeInfo(
-    val metaType: DbFieldType,
+data class DbTypeMap(
+    val metaType: DbType,
     val dbType: String,
     val langType: Class<*>
 )

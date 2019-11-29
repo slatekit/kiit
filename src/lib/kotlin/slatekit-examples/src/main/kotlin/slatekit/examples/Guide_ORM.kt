@@ -12,14 +12,14 @@ class Guide_ORM : Command("types") {
         // The entities are dependent on the database connections setup.
         // See Example_Database.kt for more info
 
-        // 1. Create DbLookup using a connection from a file
+        // 1. Create Connections using a connection from a file
         // NOTE: This is safer and more secure as it loads
         // the connection string from the user directory in folder ./slate
-        val dbLookup1 = defaultDb(ConfFuncs.readDbCon("user://.slate/db_default.txt")!!)
+        val dbLookup1 = default(ConfFuncs.readDbCon("user://.slate/db_default.txt")!!)
 
-        // 2. Create a DbLookup using an explicit connection string
+        // 2. Create a Connections using an explicit connection string
         // NOTE: Avoid using explicit connection strings in code.
-        val dbLookup2 = defaultDb(
+        val dbLookup2 = default(
                 DbConString(
                         "com.mysql.jdbc.Driver",
                         "jdbc:mysql://localhost/default",
@@ -28,8 +28,8 @@ class Guide_ORM : Command("types") {
                 )
         )
 
-        // 3. Create a DbLookup using multiple named databases.
-        val dbLookup3 = namedDbs(listOf(
+        // 3. Create a Connections using multiple named databases.
+        val dbLookup3 = named(listOf(
                 Pair(
                         "movies", DbConString(
                         "com.mysql.jdbc.Driver",
