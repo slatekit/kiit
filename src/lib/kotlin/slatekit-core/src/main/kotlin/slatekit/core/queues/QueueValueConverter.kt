@@ -1,4 +1,4 @@
-package slatekit.common.queues
+package slatekit.core.queues
 
 
 /**

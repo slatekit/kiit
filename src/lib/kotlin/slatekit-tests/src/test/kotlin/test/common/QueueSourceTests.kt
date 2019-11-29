@@ -2,7 +2,7 @@ package test.common
 
 import org.junit.Assert
 import org.junit.Test
-import slatekit.common.queues.QueueSourceInMemory
+import slatekit.core.queues.QueueSourceInMemory
 
 class QueueSourceTests {
 

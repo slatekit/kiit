@@ -18,16 +18,14 @@ import slatekit.common.*
 //</doc:import_required>
 
 //<doc:import_examples>
-import slatekit.common.queues.QueueSourceInMemory
+import slatekit.core.queues.QueueSourceInMemory
 import slatekit.cmds.Command
 import slatekit.cmds.CommandRequest
 import slatekit.common.log.LoggerConsole
 import slatekit.functions.policy.Every
 import slatekit.functions.policy.Limit
-import slatekit.functions.policy.Policy
 import slatekit.functions.policy.Ratio
 import slatekit.jobs.*
-import slatekit.jobs.Job.Companion.worker
 import slatekit.results.Try
 import slatekit.results.Success
 import java.util.concurrent.atomic.AtomicInteger

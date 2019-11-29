@@ -1,8 +1,8 @@
 package slatekit.jobs
 
-import slatekit.common.queues.QueueSource
-import slatekit.common.queues.QueueSourceInMemory
-import slatekit.common.queues.QueueStringConverter
+import slatekit.core.queues.QueueSource
+import slatekit.core.queues.QueueSourceInMemory
+import slatekit.core.queues.QueueStringConverter
 
 /**
  * Wraps the underlying queue holding the messages with other metadata ( name, priority )

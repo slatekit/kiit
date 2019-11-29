@@ -11,7 +11,7 @@
  * </slate_header>
  */
 
-package slatekit.common.queues
+package slatekit.core.queues
 
 import slatekit.common.*
 import slatekit.common.utils.Random.uuid
@@ -34,9 +34,9 @@ import java.util.concurrent.LinkedBlockingQueue
  * For production usage, use the [slatekit.cloud.aws.AwsCloudQueue]
  */
 class QueueSourceInMemory<T>(
-    override val name: String = "",
-    override val converter: QueueValueConverter<T>,
-    val size: Int = -1
+        override val name: String = "",
+        override val converter: QueueValueConverter<T>,
+        val size: Int = -1
 ) : QueueSource<T> {
 
     private val list = if (size <= 0) LinkedBlockingQueue<QueueEntry<T>>() else LinkedBlockingQueue(size)
@@ -184,7 +184,7 @@ class QueueSourceInMemory<T>(
 
     companion object {
 
-        fun stringQueue(size:Int = -1):QueueSource<String> {
+        fun stringQueue(size:Int = -1): QueueSource<String> {
             return QueueSourceInMemory<String>("", QueueStringConverter(), size)
         }
     }

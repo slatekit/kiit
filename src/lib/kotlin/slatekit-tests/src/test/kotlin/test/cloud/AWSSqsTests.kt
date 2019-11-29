@@ -4,7 +4,7 @@ import org.junit.Assert
 import slatekit.cloud.aws.AwsCloudQueue
 import slatekit.common.DateTime
 import slatekit.common.ext.toStringNumeric
-import slatekit.common.queues.QueueStringConverter
+import slatekit.core.queues.QueueStringConverter
 import slatekit.core.queues.CloudQueue
 
 

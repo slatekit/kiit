@@ -11,7 +11,7 @@
  * </slate_header>
  */
 
-package slatekit.common.queues
+package slatekit.core.queues
 
 import slatekit.results.Try
 
@@ -30,7 +30,7 @@ interface QueueSource<T> {
     /**
      * Handles conversion to / from String to the type
      */
-    val converter:QueueValueConverter<T>
+    val converter: QueueValueConverter<T>
 
 
     /**

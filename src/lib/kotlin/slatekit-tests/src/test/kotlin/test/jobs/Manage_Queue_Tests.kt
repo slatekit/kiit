@@ -4,8 +4,8 @@ import kotlinx.coroutines.runBlocking
 import org.junit.Assert
 import org.junit.Test
 import slatekit.common.Status
-import slatekit.common.queues.QueueSourceInMemory
-import slatekit.common.queues.QueueStringConverter
+import slatekit.core.queues.QueueSourceInMemory
+import slatekit.core.queues.QueueStringConverter
 import slatekit.jobs.*
 
 

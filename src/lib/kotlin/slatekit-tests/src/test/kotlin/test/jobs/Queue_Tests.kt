@@ -3,8 +3,8 @@ package test.jobs
 import org.junit.Assert
 import org.junit.Test
 
-import slatekit.common.queues.QueueSourceInMemory
-import slatekit.common.queues.QueueStringConverter
+import slatekit.core.queues.QueueSourceInMemory
+import slatekit.core.queues.QueueStringConverter
 import slatekit.jobs.Priority
 import slatekit.jobs.Queue
 import slatekit.jobs.support.Queues

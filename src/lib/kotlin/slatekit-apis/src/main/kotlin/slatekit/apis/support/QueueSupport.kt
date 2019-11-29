@@ -2,14 +2,12 @@ package slatekit.apis.support
 
 import slatekit.apis.ApiRequest
 import slatekit.apis.core.Requests
-import slatekit.common.queues.QueueSource
 import slatekit.common.Source
 import slatekit.common.utils.Random
 import slatekit.results.Notice
 
 interface QueueSupport {
 
-    fun queues(): List<QueueSource<String>>
 
     /**
      * This can be overridden to support custom call-modes
@@ -44,15 +42,5 @@ interface QueueSupport {
      *  @param data     = "JSON data...",
      *  @param xid      = "abc123"
      */
-    fun enueue(id: String, name: String, data: String, xid: String) {
-        val queues = this.queues()
-        val rand = java.util.Random()
-        val pos = rand.nextInt(queues.size)
-        val queue = queues[pos]
-        queue.send(data, mapOf(
-            "id" to id,
-            "name" to name,
-            "xid" to xid
-        ))
-    }
+    fun enueue(id: String, name: String, data: String, xid: String)
 }

@@ -11,7 +11,7 @@
  * </slate_header>
  */
 
-package slatekit.common.queues
+package slatekit.core.queues
 
 import slatekit.common.DateTime
 

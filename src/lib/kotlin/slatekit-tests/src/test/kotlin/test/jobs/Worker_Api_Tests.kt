@@ -11,7 +11,7 @@ import slatekit.apis.core.Api
 import slatekit.apis.core.Requests
 import slatekit.apis.Setup
 import slatekit.common.*
-import slatekit.common.queues.QueueSourceInMemory
+import slatekit.core.queues.QueueSourceInMemory
 import slatekit.common.CommonContext
 import slatekit.common.requests.InputArgs
 import slatekit.common.Source

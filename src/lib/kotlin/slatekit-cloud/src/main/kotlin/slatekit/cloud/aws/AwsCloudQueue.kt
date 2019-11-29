@@ -21,8 +21,8 @@ import slatekit.common.utils.Random
 import slatekit.common.info.ApiLogin
 import slatekit.common.io.Uris
 import slatekit.common.ext.toStringUtc
-import slatekit.common.queues.QueueEntry
-import slatekit.common.queues.QueueValueConverter
+import slatekit.core.queues.QueueEntry
+import slatekit.core.queues.QueueValueConverter
 import slatekit.core.queues.CloudQueue
 import slatekit.results.Try
 import java.io.File
@@ -38,11 +38,11 @@ import java.io.IOException
  * 2. https://docs.aws.amazon.com/sdk-for-java/v1/developer-guide/examples-sqs-long-polling.html
  */
 class AwsCloudQueue<T>(
-    region:String,
-    queue: String,
-    creds: AWSCredentials,
-    override val converter: QueueValueConverter<T>,
-    val waitTimeInSeconds: Int = 0
+        region:String,
+        queue: String,
+        creds: AWSCredentials,
+        override val converter: QueueValueConverter<T>,
+        val waitTimeInSeconds: Int = 0
 ) : CloudQueue<T>, AwsSupport {
 
     private val queue = queue
@@ -225,7 +225,7 @@ class AwsCloudQueue<T>(
     }
 
 
-    private fun createEntry(msg:Message):QueueEntry<T> {
+    private fun createEntry(msg:Message): QueueEntry<T> {
         val bodyAsString = msg.body
         val item = converter.convertFromString(bodyAsString)
         val id = AwsQueueEntry.getMessageTag(msg, "id")

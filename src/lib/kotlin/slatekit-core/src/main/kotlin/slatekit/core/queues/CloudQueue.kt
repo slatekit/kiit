@@ -13,7 +13,6 @@
 
 package slatekit.core.queues
 
-import slatekit.common.queues.QueueSource
 import slatekit.core.cloud.CloudSupport
 
 /**

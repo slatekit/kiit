@@ -1,7 +1,7 @@
 package slatekit.jobs
 
 import slatekit.common.Identity
-import slatekit.common.queues.QueueEntry
+import slatekit.core.queues.QueueEntry
 
 /**
  * Represents a unit-of work ( a work-item that is handled by a Worker ).

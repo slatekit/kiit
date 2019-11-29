@@ -15,7 +15,7 @@ package slatekit.examples
 
 //<doc:import_required>
 import slatekit.cloud.aws.AwsCloudQueue
-import slatekit.common.queues.QueueStringConverter
+import slatekit.core.queues.QueueStringConverter
 
 //</doc:import_required>
 
