@@ -1,7 +1,7 @@
 package slatekit.cache
 
 
-class SimpleSyncCache(private val cache: CacheTypeSync) : CacheTypeSync {
+class SimpleSyncCache(private val cache: SyncCache) : SyncCache {
     override val settings: CacheSettings = cache.settings
 
     @Synchronized

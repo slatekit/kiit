@@ -3,13 +3,14 @@ package slatekit.cache
 import kotlinx.coroutines.CompletableDeferred
 import kotlinx.coroutines.Deferred
 import kotlinx.coroutines.runBlocking
+import slatekit.core.common.ChannelCoordinator
 import slatekit.core.common.Coordinator
 
 /**
  * Write are queued (via channels )
  * Reads are optimistic/dirty ( depending on method get | getOrLoad | getFresh )
  */
-class SimpleAsyncCache(private val cache:CacheTypeSync, val coordinator: Coordinator<CacheCommand>) : CacheTypeAsync {
+class SimpleAsyncCache(private val cache:SyncCache, val coordinator: Coordinator<CacheCommand>) : AsyncCache {
     val logger = coordinator.logger
 
     override fun <T> get(key: String): Deferred<T?> = getInternal(key, false)
