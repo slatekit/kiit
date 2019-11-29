@@ -26,8 +26,8 @@ import slatekit.db.DbUtils.executeCon
 import slatekit.db.DbUtils.executePrepAs
 import slatekit.db.DbUtils.executeStmt
 import slatekit.db.DbUtils.fillArgs
-import slatekit.db.types.DbSource
-import slatekit.db.types.DbSourceMySql
+import slatekit.db.builders.DbBuilder
+import slatekit.db.builders.MySqlBuilder
 
 /**
  * Light-weight database wrapper.
@@ -39,7 +39,7 @@ import slatekit.db.types.DbSourceMySql
  */
 class Db(
     private val dbCon: DbCon,
-    val source: DbSource = DbSourceMySql(),
+    val source: DbBuilder = MySqlBuilder(),
     errorCallback: ((Exception) -> Unit)? = null
 ) : IDb {
 
@@ -65,7 +65,7 @@ class Db(
      * @param sql : The sql text
      * @return
      */
-    override fun <T> getScalarOpt(sql: String, typ: Class<*>, inputs: List<Any>?): T? {
+    override fun <T> getScalarOrNull(sql: String, typ: Class<*>, inputs: List<Any>?): T? {
 
         return executePrepAs<T>(dbCon, sql, { _, stmt ->
 
@@ -210,12 +210,12 @@ class Db(
      * @return
      */
     @Suppress("UNCHECKED_CAST")
-    override fun <T> mapOne(sql: String, mapper: Mapper, inputs: List<Any>?): T? {
+    override fun <T> mapOne(sql: String, mapper: Mapper<T>, inputs: List<Any>?): T? {
         val res = query(sql, { rs ->
 
             val rec = RecordSet(rs)
             if (rs.next())
-                mapper.mapFrom<T>(rec)
+                mapper.invoke(rec)
             else
                 null
         }, false, inputs)
@@ -231,13 +231,13 @@ class Db(
      * @return
      */
     @Suppress("UNCHECKED_CAST")
-    override fun <T> mapMany(sql: String, mapper: Mapper, inputs: List<Any>?): List<T>? {
+    override fun <T> mapAll(sql: String, mapper: Mapper<T>, inputs: List<Any>?): List<T>? {
         val res = query(sql, { rs ->
 
             val rec = RecordSet(rs)
             val buf = mutableListOf<T>()
             while (rs.next()) {
-                val item = mapper.mapFrom<T>(rec)
+                val item = mapper.invoke(rec)
                 buf.add(item as T)
             }
             buf.toList()
@@ -274,14 +274,13 @@ class Db(
      */
     override fun <T> callQueryMapped(
         procName: String,
-        mapper: Mapper,
+        mapper: Mapper<T>,
         inputs: List<Any>?
     ): List<T>? {
-
         // {call create_author(?, ?)}
         val holders = inputs?.let { all -> "?".repeatWith(",", all.size) } ?: ""
         val sql = "{call $procName($holders)}"
-        return mapMany(sql, mapper, inputs)
+        return mapAll(sql, mapper, inputs)
     }
 
     /**

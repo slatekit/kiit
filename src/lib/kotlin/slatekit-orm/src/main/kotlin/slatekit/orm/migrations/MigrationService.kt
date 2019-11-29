@@ -91,11 +91,11 @@ class MigrationService(
     }
 
     fun delete(name: String): Try<String> {
-        return operate("Delete", name, { info, tableName -> entities.getDbSource().buildDeleteAll(tableName) })
+        return operate("Delete", name, { info, tableName -> entities.getDbSource().truncate(tableName) })
     }
 
     fun drop(name: String): Try<String> {
-        return operate("Drop", name, { info, tableName -> entities.getDbSource().buildDropTable(tableName) })
+        return operate("Drop", name, { info, tableName -> entities.getDbSource().dropTable(tableName) })
     }
 
     fun installAll(): Try<List<String>> {
@@ -135,7 +135,7 @@ class MigrationService(
         val fileName = "sql-all-uninstall-" + DateTime.now().toStringNumeric()
         val results = entities.getEntities().map { entity ->
             val ormEntityInfo = entity
-            val dropTable = entities.getDbSource().buildDropTable(ormEntityInfo.model.table)
+            val dropTable = entities.getDbSource().dropTable(ormEntityInfo.model.table)
 
             Success(dropTable, msg = "Dropping table for model : " + entity.model.name)
         }

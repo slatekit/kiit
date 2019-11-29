@@ -16,7 +16,7 @@ class SqliteDb : IDb {
         TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
 
-    override fun <T> getScalarOpt(sql: String, typ: Class<*>, inputs: List<Any>?): T? {
+    override fun <T> getScalarOrNull(sql: String, typ: Class<*>, inputs: List<Any>?): T? {
         TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
 
@@ -36,11 +36,11 @@ class SqliteDb : IDb {
         TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
 
-    override fun <T> mapOne(sql: String, mapper: Mapper, inputs: List<Any>?): T? {
+    override fun <T> mapOne(sql: String, mapper: Mapper<T>, inputs: List<Any>?): T? {
         TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
 
-    override fun <T> mapMany(sql: String, mapper: Mapper, inputs: List<Any>?): List<T>? {
+    override fun <T> mapAll(sql: String, mapper: Mapper<T>, inputs: List<Any>?): List<T>? {
         TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
 
@@ -48,7 +48,7 @@ class SqliteDb : IDb {
         TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
 
-    override fun <T> callQueryMapped(procName: String, mapper: Mapper, inputs: List<Any>?): List<T>? {
+    override fun <T> callQueryMapped(procName: String, mapper: Mapper<T>, inputs: List<Any>?): List<T>? {
         TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
 

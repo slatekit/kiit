@@ -1,29 +1,5 @@
 package slatekit.examples
 
-import slatekit.cmds.Command
-import slatekit.cmds.CommandRequest
-import slatekit.common.DateTime
-import slatekit.common.DateTimes
-import slatekit.common.conf.ConfFuncs
-import slatekit.common.db.DbConString
-import slatekit.common.db.DbLookup.Companion.defaultDb
-import slatekit.common.db.DbLookup.Companion.namedDbs
-import slatekit.common.db.DbType
-import slatekit.db.Db
-import slatekit.entities.Entities
-import slatekit.entities.EntityMapper
-import slatekit.entities.core.EntityContext
-import slatekit.entities.repos.InMemoryRepo
-import slatekit.examples.common.Movie
-import slatekit.examples.common.MovieRepository
-import slatekit.examples.common.MovieService
-import slatekit.meta.models.Model
-import slatekit.meta.models.ModelMapper
-import slatekit.orm.databases.vendors.MySqlConverter
-import slatekit.query.Query
-import slatekit.results.Success
-import slatekit.results.Try
-
 
 /**
  * Created by kreddy on 3/15/2016.
@@ -269,7 +245,7 @@ class Guide_ORM : Command("types") {
         println(sqlForUpdate)
 
         // CASE 4: Generate the table schema for mysql from the model
-        //println("table sql : " + buildAddTable(DbSourceMySql(), schema))
+        //println("table sql : " + buildAddTable(MySqlBuilder(), schema))
     }
 
 

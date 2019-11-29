@@ -17,7 +17,7 @@ import org.junit.Assert
 import org.junit.Test
 import slatekit.common.db.DbConString
 import slatekit.common.db.DbLookup
-import slatekit.common.db.DbType.DbTypeMemory
+import slatekit.common.db.Vendor.Memory
 import slatekit.db.Db
 import slatekit.entities.Entities
 import slatekit.entities.EntityMapper
@@ -43,7 +43,7 @@ class Entity_Reg_Tests {
         val ents = ent.getEntities()
 
         Assert.assertTrue(ents.size == 2)
-        Assert.assertTrue(ent.getEntities()[0].dbType == DbTypeMemory)
+        Assert.assertTrue(ent.getEntities()[0].vendor == Memory)
         Assert.assertTrue(ent.getEntities()[0].entityType == User5::class)
         Assert.assertTrue(ent.getEntities()[0].entityTypeName == User5::class.qualifiedName)
     }

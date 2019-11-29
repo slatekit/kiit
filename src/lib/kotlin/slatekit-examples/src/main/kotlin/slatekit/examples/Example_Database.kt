@@ -49,7 +49,7 @@ class Example_Database : Command("db") {
 
         // CASE 2. Initialize the DB with the connection string.
         // NOTE: This defaults the db to mysql. The first line is same
-        // as db = Db(con, source: DbSourceMySql())
+        // as db = Db(con, source: MySqlBuilder())
         // In the future, we can more easily support mutliple databases
         // using this approach.
         val db = Db(con)
@@ -107,7 +107,7 @@ class Example_Database : Command("db") {
         println(item1)
 
         // CASE 13: Map multiple records
-        val items = db.mapMany<User>("select * from `user` where id < 5", mapper)
+        val items = db.mapAll<User>("select * from `user` where id < 5", mapper)
         println(items)
 
         // CASE 14: Create the table using the model

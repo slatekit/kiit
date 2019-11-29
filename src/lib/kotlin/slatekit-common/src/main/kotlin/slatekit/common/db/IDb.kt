@@ -67,7 +67,7 @@ interface IDb : ScalarSupport, ProcSupport {
      * @return
      */
     @Suppress("UNCHECKED_CAST")
-    fun <T> mapOne(sql: String, mapper: Mapper, inputs: List<Any>? = null): T?
+    fun <T> mapOne(sql: String, mapper: Mapper<T>, inputs: List<Any>? = null): T?
 
     /**
      * maps multiple items using the sql supplied
@@ -78,7 +78,7 @@ interface IDb : ScalarSupport, ProcSupport {
      * @return
      */
     @Suppress("UNCHECKED_CAST")
-    fun <T> mapMany(sql: String, mapper: Mapper, inputs: List<Any>? = null): List<T>?
+    fun <T> mapAll(sql: String, mapper: Mapper<T>, inputs: List<Any>? = null): List<T>?
 
 
     fun errorHandler(ex: Exception)

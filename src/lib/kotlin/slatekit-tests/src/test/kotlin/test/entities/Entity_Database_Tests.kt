@@ -21,7 +21,7 @@ import slatekit.common.Field
 import slatekit.common.ids.UniqueId
 import slatekit.common.conf.ConfFuncs
 import slatekit.common.db.DbLookup
-import slatekit.common.db.DbType
+import slatekit.common.db.Vendor
 import slatekit.db.Db
 import slatekit.entities.Entities
 import slatekit.entities.EntityUpdatable
@@ -144,7 +144,7 @@ class Entity_Database_Tests {
     private fun realDb(): Entities {
         val dbs = DbLookup.defaultDb(con!!)
         val entities = Entities({ con -> Db(con) }, dbs, MyEncryptor)
-        entities.orm<Long, SampleEntity>(DbType.DbTypeMySql, Long::class, SampleEntity::class, "sample_entity")
+        entities.orm<Long, SampleEntity>(Vendor.MySql, Long::class, SampleEntity::class, "sample_entity")
         return entities
     }
 

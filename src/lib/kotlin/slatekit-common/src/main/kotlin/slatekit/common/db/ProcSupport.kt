@@ -27,7 +27,7 @@ interface ProcSupport {
      */
     fun <T> callQueryMapped(
             procName: String,
-            mapper: Mapper,
+            mapper: Mapper<T>,
             inputs: List<Any>? = null
     ): List<T>?
 

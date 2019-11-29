@@ -15,7 +15,6 @@ package slatekit.entities.repos
 
 import slatekit.common.db.IDb
 import slatekit.common.ext.tail
-import slatekit.entities.Entity
 import slatekit.entities.EntityMapper
 import slatekit.entities.core.EntityInfo
 import slatekit.query.IQuery
@@ -225,7 +224,7 @@ abstract class SqlRepo<TId, T>(
      * @return
      */
     override fun findByProc(name: String, args: List<Any>?): List<T>? {
-        return db.callQueryMapped(name, mapper, args)
+        return db.callQueryMapped(name, mapper::mapFrom, args)
     }
 
     /**
@@ -248,10 +247,10 @@ abstract class SqlRepo<TId, T>(
     }
 
     protected open fun sqlMapMany(sql: String): List<T>? {
-        return db.mapMany(sql, mapper)
+        return db.mapAll(sql, mapper::mapFrom)
     }
 
     protected open fun sqlMapOne(sql: String): T? {
-        return db.mapOne<T>(sql, mapper)
+        return db.mapOne<T>(sql, mapper::mapFrom)
     }
 }

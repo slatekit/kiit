@@ -14,15 +14,12 @@
 package slatekit.meta.models
 
 import slatekit.common.*
-import slatekit.common.db.Mapper
 import slatekit.common.encrypt.Encryptor
 import slatekit.common.naming.Namer
 import slatekit.meta.Reflector
 import slatekit.common.Record
 import slatekit.meta.KTypes
 import kotlin.reflect.KClass
-import kotlin.reflect.KProperty
-import kotlin.reflect.jvm.jvmErasure
 
 /**
  * A mapper that can create a model from a source reader ( which can be a JDBC record set )
@@ -36,7 +33,7 @@ open class ModelMapper(
         protected val settings: ModelMapperSettings = ModelMapperSettings(),
         protected val encryptor: Encryptor? = null,
         protected val namer: Namer? = null
-) : Mapper {
+) {
 
     /**
      * The model associated with this mapper.
@@ -68,7 +65,7 @@ open class ModelMapper(
      * @param record
      * @return
      */
-    override fun <T> mapFrom(record: Record): T? {
+    open fun <T> mapFrom(record: Record): T? {
         return if (metaModel.any && metaModel.dataType != null) {
             metaModel.dataType.let { tpe ->
                 if (Reflector.isDataClass(tpe)) {

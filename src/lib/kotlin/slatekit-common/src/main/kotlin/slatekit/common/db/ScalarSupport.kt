@@ -14,8 +14,17 @@ interface ScalarSupport {
      * @param sql : The sql text
      * @return
      */
-    fun <T> getScalar(sql: String, typ: Class<*>, inputs: List<Any>?): T? =
-            getScalarOpt<T>(sql, typ, inputs)
+    fun <T> getScalar(sql: String, typ: Class<*>, inputs: List<Any>?): T =
+            getScalarOrNull<T>(sql, typ, inputs)!!
+
+    /**
+     * gets a scalar string value using the sql provided
+     *
+     * @param sql : The sql text
+     * @return
+     */
+    fun <T> getScalarOrNull(sql: String, typ: Class<*>, inputs: List<Any>?): T?
+
 
     /**
      * gets a scalar string value using the sql provided
@@ -24,7 +33,7 @@ interface ScalarSupport {
      * @return
      */
     fun getScalarString(sql: String, inputs: List<Any>?): String =
-            getScalar<String>(sql, slatekit.common.Types.JStringClass, inputs) ?: ""
+            getScalarOrNull<String>(sql, slatekit.common.Types.JStringClass, inputs) ?: ""
 
     /**
      * gets a scalar int value using the sql provided
@@ -33,7 +42,7 @@ interface ScalarSupport {
      * @return
      */
     fun getScalarShort(sql: String, inputs: List<Any>?): Short =
-            getScalar(sql, slatekit.common.Types.JShortClass, inputs) ?: 0.toShort()
+            getScalarOrNull(sql, slatekit.common.Types.JShortClass, inputs) ?: 0.toShort()
 
     /**
      * gets a scalar int value using the sql provided
@@ -42,7 +51,7 @@ interface ScalarSupport {
      * @return
      */
     fun getScalarInt(sql: String, inputs: List<Any>?): Int =
-            getScalar(sql, slatekit.common.Types.JIntClass, inputs) ?: 0
+            getScalarOrNull(sql, slatekit.common.Types.JIntClass, inputs) ?: 0
 
     /**
      * gets a scalar long value using the sql provided
@@ -51,7 +60,7 @@ interface ScalarSupport {
      * @return
      */
     fun getScalarLong(sql: String, inputs: List<Any>?): Long =
-            getScalar(sql, slatekit.common.Types.JLongClass, inputs) ?: 0L
+            getScalarOrNull(sql, slatekit.common.Types.JLongClass, inputs) ?: 0L
 
     /**
      * gets a scalar double value using the sql provided
@@ -60,7 +69,7 @@ interface ScalarSupport {
      * @return
      */
     fun getScalarFloat(sql: String, inputs: List<Any>?): Float =
-            getScalar(sql, slatekit.common.Types.JFloatClass, inputs) ?: 0.0f
+            getScalarOrNull(sql, slatekit.common.Types.JFloatClass, inputs) ?: 0.0f
 
     /**
      * gets a scalar double value using the sql provided
@@ -69,7 +78,7 @@ interface ScalarSupport {
      * @return
      */
     fun getScalarDouble(sql: String, inputs: List<Any>?): Double =
-            getScalar(sql, slatekit.common.Types.JDoubleClass, inputs) ?: 0.0
+            getScalarOrNull(sql, slatekit.common.Types.JDoubleClass, inputs) ?: 0.0
 
     /**
      * gets a scalar bool value using the sql provided
@@ -78,7 +87,7 @@ interface ScalarSupport {
      * @return
      */
     fun getScalarBool(sql: String, inputs: List<Any>?): Boolean =
-            getScalar(sql, slatekit.common.Types.JBoolClass, inputs) ?: false
+            getScalarOrNull(sql, slatekit.common.Types.JBoolClass, inputs) ?: false
 
     /**
      * gets a scalar local date value using the sql provided
@@ -87,7 +96,7 @@ interface ScalarSupport {
      * @return
      */
     fun getScalarLocalDate(sql: String, inputs: List<Any>?): LocalDate =
-            getScalar(sql, slatekit.common.Types.JLocalDateClass, inputs) ?: LocalDate.MIN
+            getScalarOrNull(sql, slatekit.common.Types.JLocalDateClass, inputs) ?: LocalDate.MIN
 
     /**
      * gets a scalar local time value using the sql provided
@@ -96,7 +105,7 @@ interface ScalarSupport {
      * @return
      */
     fun getScalarLocalTime(sql: String, inputs: List<Any>?): LocalTime =
-            getScalar(sql, slatekit.common.Types.JLocalTimeClass, inputs) ?: LocalTime.MIN
+            getScalarOrNull(sql, slatekit.common.Types.JLocalTimeClass, inputs) ?: LocalTime.MIN
 
     /**
      * gets a scalar local datetime value using the sql provided
@@ -105,7 +114,7 @@ interface ScalarSupport {
      * @return
      */
     fun getScalarLocalDateTime(sql: String, inputs: List<Any>?): LocalDateTime =
-            getScalar(sql, slatekit.common.Types.JLocalDateTimeClass, inputs) ?: LocalDateTime.MIN
+            getScalarOrNull(sql, slatekit.common.Types.JLocalDateTimeClass, inputs) ?: LocalDateTime.MIN
 
     /**
      * gets a scalar local datetime value using the sql provided
@@ -114,13 +123,5 @@ interface ScalarSupport {
      * @return
      */
     fun getScalarDate(sql: String, inputs: List<Any>?): DateTime =
-            getScalar(sql, slatekit.common.Types.JDateTimeClass, inputs) ?: DateTimes.MIN
-
-    /**
-     * gets a scalar string value using the sql provided
-     *
-     * @param sql : The sql text
-     * @return
-     */
-    fun <T> getScalarOpt(sql: String, typ: Class<*>, inputs: List<Any>?): T?
+            getScalarOrNull(sql, slatekit.common.Types.JDateTimeClass, inputs) ?: DateTimes.MIN
 }

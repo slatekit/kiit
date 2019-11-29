@@ -49,15 +49,15 @@ import slatekit.meta.models.ModelMapper
  *
  *   // Case 6: Custom repo with provider type specified
  *   Entities.register[Invitation](sqlRepo: true, repo: InvitationRepository(),
- *     dbType: "mysql");
+ *     vendor: "mysql");
  *
  *   // Case 7: Full customization
  *   Entities.register[Invitation](sqlRepo: true, serviceType: typeof(InvitationService),
- *     repo: InvitationRepository(), dbType: "mysql");
+ *     repo: InvitationRepository(), vendor: "mysql");
  *
  *   // Case 8: Full customization
  *   Entities.register[Invitation](sqlRepo: true, serviceType: typeof(InvitationService),
- *     repo: InvitationRepository(), mapper: null, dbType: "mysql");
+ *     repo: InvitationRepository(), mapper: null, vendor: "mysql");
  *
  */
 open class Entities(
@@ -93,10 +93,10 @@ open class Entities(
         entityType: KClass<*>,
         entityIdType: KClass<*>,
         service: EntityService<TId, T>,
-        dbType: DbType
+        vendor: Vendor
     ): EntityContext where TId : Comparable<TId>, T : Entity<TId> {
         val mapper = EntityMapperEmpty<TId, T>(null)
-        val context = EntityContext(entityType, entityIdType, service::class, service.repo(), mapper, dbType, Model(entityType), "", "", service)
+        val context = EntityContext(entityType, entityIdType, service::class, service.repo(), mapper, vendor, Model(entityType), "", "", service)
         register(context)
         return context
     }
@@ -112,12 +112,12 @@ open class Entities(
         serviceType: KClass<*>,
         repo: Repo<TId, T>,
         mapper: EntityMapper<TId, T>?,
-        dbType: DbType,
+        vendor: Vendor,
         serviceCtx: Any? = null
     ): EntityContext where TId : Comparable<TId>, T : Entity<TId> {
         val service = builder.service(this, serviceType, repo, serviceCtx)
         val finalMapper = mapper ?: EntityMapperEmpty(null)
-        val context = EntityContext(entityType, entityIdType, serviceType, repo, finalMapper, dbType, Model(entityType), "", "", service, serviceCtx)
+        val context = EntityContext(entityType, entityIdType, serviceType, repo, finalMapper, vendor, Model(entityType), "", "", service, serviceCtx)
         register(context)
         return context
     }
@@ -177,7 +177,7 @@ open class Entities(
         val svcType = service::class
 
         // 6. Entity context captures all relevant info about a mapped Entity( id type, entity type, etc. )
-        val context = EntityContext(entityType, entityIdType, svcType, repo, mapper, DbType.DbTypeMemory, model, "", "",
+        val context = EntityContext(entityType, entityIdType, svcType, repo, mapper, Vendor.Memory, model, "", "",
                 service, serviceCtx)
 
         // 7. Finally Register

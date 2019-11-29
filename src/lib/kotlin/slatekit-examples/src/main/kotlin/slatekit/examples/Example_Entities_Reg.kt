@@ -23,7 +23,7 @@ import slatekit.results.Success
 import slatekit.common.conf.ConfFuncs
 import slatekit.common.db.DbConString
 import slatekit.common.db.DbLookup
-import slatekit.common.db.DbType
+import slatekit.common.db.Vendor
 import slatekit.cmds.Command
 import slatekit.cmds.CommandRequest
 import slatekit.db.Db
@@ -80,11 +80,11 @@ class Example_Entities_Reg : Command("types") {
         // Case 3: EntityService<TId, T>
         // NOTE: This is the Entities approach ( you handle the Repo/ Mapper implementation )
         showResults("Case 3", entities.register(
-                User::class, Long::class, UserService(entities, UserRepository()), DbType.DbTypeMemory))
+                User::class, Long::class, UserService(entities, UserRepository()), Vendor.Memory))
 
         // Case 4: ORM : EntityService<TId, T> with supplied MySqlRepo, OrmMapper
         showResults("Case 3", entities.orm<Long, User>(
-                DbType.DbTypeMySql, User::class, Long::class, "users", UserService::class))
+                Vendor.MySql, User::class, Long::class, "users", UserService::class))
 
         // Case 5: Manual setup
         val con = DbConString("com.mysql.jdbc.Driver", "jdbc:mysql://localhost/mydb", "user", "password")
@@ -93,7 +93,7 @@ class Example_Entities_Reg : Command("types") {
         val mapper = MySqlMapper<Long, User>(model, db, EntityInfo(Long::class, User::class, "users"))
         val repo = MySqlRepo<Long, User>(db, EntityInfo(Long::class, User::class, "users"), mapper)
         val service = UserService(entities, repo)
-        showResults("Case 3", entities.register(User::class, Long::class, service, DbType.DbTypeMemory))
+        showResults("Case 3", entities.register(User::class, Long::class, service, Vendor.Memory))
 
         //</doc:setup>
 
