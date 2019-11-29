@@ -18,4 +18,4 @@ import slatekit.core.cloud.CloudSupport
 /**
  * Abstraction for cloud based message queue storage and retrieval
  */
-interface CloudQueue<T> : QueueSource<T>, CloudSupport
+interface CloudQueue<T> : Queue<T>, CloudSupport

@@ -70,10 +70,10 @@ class Example_Cloud_Queues  : Command("sqs") {
     val items = queue2.next(2)
 
     // Use case 7: delete a message
-    queue2.complete(item1)
+    queue2.done(item1)
 
     // Use case 8: delete many
-    queue2.completeAll(items)
+    queue2.done(items)
 
     // Use case 9: abandon a message
     queue2.abandon(queue2.next())

@@ -19,7 +19,7 @@ import slatekit.results.Try
 /**
  * Interface for a general purpose persistent queue ( AWS, etc )
  */
-interface QueueSource<T> {
+interface Queue<T> {
 
     /**
      * Name of the queue
@@ -67,14 +67,14 @@ interface QueueSource<T> {
      * Completes the item ( essentially removing it from the queue )
      * Basically an ack ( acknowledgement )
      */
-    fun complete(entry: QueueEntry<T>?) {}
+    fun done(entry: QueueEntry<T>?) {}
 
 
     /**
      * Completes the items ( essentially removing it from the queue )
      * Basically an ack ( acknowledgement )
      */
-    fun completeAll(entries: List<QueueEntry<T>>?) {}
+    fun done(entries: List<QueueEntry<T>>?) {}
 
 
     /**
@@ -102,6 +102,6 @@ interface QueueSource<T> {
 
 
     fun toString(item: T?): String {
-        return converter.convertToString(item) ?: ""
+        return converter.encode(item) ?: ""
     }
 }

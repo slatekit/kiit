@@ -11,7 +11,7 @@ import slatekit.apis.core.Api
 import slatekit.apis.core.Requests
 import slatekit.apis.Setup
 import slatekit.common.*
-import slatekit.core.queues.QueueSourceInMemory
+import slatekit.core.queues.InMemoryQueue
 import slatekit.common.CommonContext
 import slatekit.common.requests.InputArgs
 import slatekit.common.Source
@@ -35,7 +35,7 @@ class Worker_Api_Tests {
         val ctx = CommonContext.simple("queues")
 
         // 2. queues
-        val queues = listOf(QueueSourceInMemory.stringQueue())
+        val queues = listOf(InMemoryQueue.stringQueue())
 
         // 3. apis
         val api = SampleWorkerAPI(ctx, queues)
@@ -68,7 +68,7 @@ class Worker_Api_Tests {
     @Test
     fun can_run_from_queue() {
         val container = buildContainer()
-        val queues = listOf(QueueSourceInMemory.stringQueue())
+        val queues = listOf(InMemoryQueue.stringQueue())
         val worker = APIWorker(container, WorkerSettings(), Identity.test("api-worker"))
         val sampleDate = DateTime.of(2018, 1, 27, 9, 30, 45, 0, ZoneId.of("UTC"))
         val sampleRequest = CommonRequest(

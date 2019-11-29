@@ -4,7 +4,7 @@ import kotlinx.coroutines.runBlocking
 import org.junit.Assert
 import org.junit.Test
 import slatekit.common.Status
-import slatekit.core.queues.QueueSourceInMemory
+import slatekit.core.queues.InMemoryQueue
 import slatekit.core.queues.QueueStringConverter
 import slatekit.jobs.*
 
@@ -12,7 +12,7 @@ import slatekit.jobs.*
 class Manage_Queue_Tests : JobTestSupport {
 
     fun sampleQueue():Queue{
-        val source = QueueSourceInMemory<String>("q1", QueueStringConverter())
+        val source = InMemoryQueue<String>("q1", QueueStringConverter())
         val queue = Queue(source.name, Priority.Mid, source)
         return queue
     }

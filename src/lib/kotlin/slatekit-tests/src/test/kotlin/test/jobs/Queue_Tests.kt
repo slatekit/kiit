@@ -3,7 +3,7 @@ package test.jobs
 import org.junit.Assert
 import org.junit.Test
 
-import slatekit.core.queues.QueueSourceInMemory
+import slatekit.core.queues.InMemoryQueue
 import slatekit.core.queues.QueueStringConverter
 import slatekit.jobs.Priority
 import slatekit.jobs.Queue
@@ -14,7 +14,7 @@ class Queue_Tests {
     @Test
     fun can_load_queues_basic() {
 
-        val queue = QueueSourceInMemory<String>(converter = QueueStringConverter())
+        val queue = InMemoryQueue<String>(converter = QueueStringConverter())
         val infos = (0..2).map { it -> Queue(it.toString(), Priority.Low, queue) }
         val queues = Queues(infos)
         Assert.assertEquals(3, queues.size())
@@ -29,7 +29,7 @@ class Queue_Tests {
     @Test
     fun can_load_queues_prioritized() {
 
-        val queue = QueueSourceInMemory<String>(converter = QueueStringConverter())
+        val queue = InMemoryQueue<String>(converter = QueueStringConverter())
         val infos =
             (0..2).map { it -> Queue(it.toString(), Priority.convert(it + 1) as Priority, queue) }
         val queues = Queues(infos)

@@ -20,7 +20,7 @@ package slatekit.examples
 import slatekit.cmds.Command
 import slatekit.results.Try
 import slatekit.results.Success
-import slatekit.core.queues.QueueSourceInMemory
+import slatekit.core.queues.InMemoryQueue
 import slatekit.core.queues.QueueStringConverter
 import slatekit.cmds.CommandRequest
 
@@ -42,7 +42,7 @@ class Example_Queue : Command("queue") {
     //
     // as the in memory queue remove the items from calls to next/nextBatch.
 
-    val queue = QueueSourceInMemory<String>(converter = QueueStringConverter())
+    val queue = InMemoryQueue<String>(converter = QueueStringConverter())
     //</doc:setup>
 
     //<doc:examples>

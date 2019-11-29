@@ -13,12 +13,12 @@ package slatekit.core.queues
  * below.
  */
 interface QueueValueConverter<T> {
-    fun convertToString(item:T?):String?
-    fun convertFromString(content:String?):T?
+    fun encode(item:T?):String?
+    fun decode(content:String?):T?
 }
 
 
 class QueueStringConverter() : QueueValueConverter<String> {
-    override fun convertFromString(content:String?):String? = content
-    override fun convertToString(item:String?):String? = item
+    override fun decode(content:String?):String? = content
+    override fun encode(item:String?):String? = item
 }

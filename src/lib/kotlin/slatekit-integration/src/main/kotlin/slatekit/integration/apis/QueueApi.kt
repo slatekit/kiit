@@ -23,12 +23,12 @@ import slatekit.common.Sources
 import slatekit.common.types.Doc
 import slatekit.common.encrypt.Encryptor
 import slatekit.common.log.Logger
-import slatekit.core.queues.QueueSource
+import slatekit.core.queues.Queue
 import slatekit.results.Try
 
 @Api(area = "cloud", name = "queues", desc = "api info about the application and host",
         auth = AuthModes.KEYED, roles = ["admin"], verb = Verbs.AUTO, sources = [Sources.ALL])
-class QueueApi(val queue: QueueSource<String>, override val context: Context) : FileSupport {
+class QueueApi(val queue: Queue<String>, override val context: Context) : FileSupport {
 
     override val encryptor: Encryptor? = context.enc
     override val logger: Logger? = context.logs.getLogger()
@@ -48,7 +48,7 @@ class QueueApi(val queue: QueueSource<String>, override val context: Context) : 
     fun next(complete: Boolean): Any? {
         val item = queue.next()
         if (complete) {
-            queue.complete(item)
+            queue.done(item)
         }
         return item
     }
@@ -59,7 +59,7 @@ class QueueApi(val queue: QueueSource<String>, override val context: Context) : 
         items?.let { all ->
             for (item in items) {
                 if (complete) {
-                    queue.complete(item)
+                    queue.done(item)
                 }
             }
         }
@@ -70,7 +70,7 @@ class QueueApi(val queue: QueueSource<String>, override val context: Context) : 
     fun nextToFile(complete: Boolean, fileNameLocal: String): Any? {
         val item = queue.next()
         if (complete) {
-            queue.complete(item)
+            queue.done(item)
         }
         return writeToFile(item, fileNameLocal, 0) { m -> item?.getValue() ?: "" }
     }

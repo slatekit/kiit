@@ -2,13 +2,13 @@ package test.common
 
 import org.junit.Assert
 import org.junit.Test
-import slatekit.core.queues.QueueSourceInMemory
+import slatekit.core.queues.InMemoryQueue
 
-class QueueSourceTests {
+class QueueTests {
 
     @Test
     fun can_add() {
-        val queue = QueueSourceInMemory.stringQueue()
+        val queue = InMemoryQueue.stringQueue()
         queue.send("1")
         queue.send("2")
         Assert.assertTrue( queue.count() == 2)
@@ -17,7 +17,7 @@ class QueueSourceTests {
 
     @Test
     fun can_take() {
-        val queue = QueueSourceInMemory.stringQueue()
+        val queue = InMemoryQueue.stringQueue()
         queue.send("1")
         queue.send("2")
         queue.send("3")
@@ -34,7 +34,7 @@ class QueueSourceTests {
 
     @Test
     fun can_take_many() {
-        val queue = QueueSourceInMemory.stringQueue()
+        val queue = InMemoryQueue.stringQueue()
         queue.send("1")
         queue.send("2")
         queue.send("3")
@@ -52,7 +52,7 @@ class QueueSourceTests {
 
     @Test
     fun can_have_limit() {
-        val queue = QueueSourceInMemory.stringQueue(3)
+        val queue = InMemoryQueue.stringQueue(3)
         queue.send("1")
         queue.send("2")
         val result3 = queue.send("3")

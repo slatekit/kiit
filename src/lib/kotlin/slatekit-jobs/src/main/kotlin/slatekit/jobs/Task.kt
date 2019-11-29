@@ -42,7 +42,7 @@ data class Task(
      *  Acknowledges this task with the Queue to complete it
      */
     fun done() {
-        this.entry?.let { this.source.queue.complete(it) }
+        this.entry?.let { this.source.queue.done(it) }
     }
 
     /**

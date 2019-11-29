@@ -1,12 +1,12 @@
 package test.setup
 
 import slatekit.apis.support.QueueSupport
-import slatekit.core.queues.QueueSource
+import slatekit.core.queues.Queue
 
 interface QueueSupportImpl : QueueSupport {
 
 
-    fun queues(): List<QueueSource<String>>
+    fun queues(): List<Queue<String>>
 
     /**
      * Creates a request from the parameters and api info and serializes that as json

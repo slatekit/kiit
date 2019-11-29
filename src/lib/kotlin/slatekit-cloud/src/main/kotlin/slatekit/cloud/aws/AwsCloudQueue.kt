@@ -147,7 +147,7 @@ class AwsCloudQueue<T>(
         // Send the message, any message that fails will get caught
         // and the onError method is called for that message
         return executeResultSync<String>(SOURCE, "send", data = value, call = {
-            val message = converter.convertToString(value) ?: ""
+            val message = converter.encode(value) ?: ""
             val req = SendMessageRequest(queueUrl, message)
 
             // Add the attributes
@@ -165,7 +165,7 @@ class AwsCloudQueue<T>(
         val path = Uris.interpret(fileNameLocal)
         return path?.let { pathLocal ->
             val content = File(pathLocal).readText()
-            val value = converter.convertFromString(content)
+            val value = converter.decode(content)
             value?.let {
                 send(value, tagName, tagValue)
             } ?: slatekit.results.Failure(IOException("Invalid file path: $fileNameLocal"))
@@ -187,7 +187,7 @@ class AwsCloudQueue<T>(
      *
      * @param entry : The message to complete
      */
-    override fun complete(entry: QueueEntry<T>?) {
+    override fun done(entry: QueueEntry<T>?) {
         entry?.let { discard(it, "complete") }
     }
 
@@ -196,7 +196,7 @@ class AwsCloudQueue<T>(
      *
      * @param entries : The messages to complete
      */
-    override fun completeAll(entries: List<QueueEntry<T>>?) {
+    override fun done(entries: List<QueueEntry<T>>?) {
         entries?.forEach { discard(it, "completeAll") }
     }
 
@@ -227,7 +227,7 @@ class AwsCloudQueue<T>(
 
     private fun createEntry(msg:Message): QueueEntry<T> {
         val bodyAsString = msg.body
-        val item = converter.convertFromString(bodyAsString)
+        val item = converter.decode(bodyAsString)
         val id = AwsQueueEntry.getMessageTag(msg, "id")
         val timestamp = AwsQueueEntry.getMessageTag(msg, "createdAt")
         val createdAt = if(timestamp.isNullOrEmpty()) DateTime.now() else DateTime.parse(timestamp)

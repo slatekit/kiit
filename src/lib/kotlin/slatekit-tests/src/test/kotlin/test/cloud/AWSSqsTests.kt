@@ -78,12 +78,12 @@ class AwsSqsTests {
         val item1 = results[0]?.getValue()
         Assert.assertTrue(item1 != null)
         Assert.assertTrue(item1 == contentBatch1)
-        queue.complete(results[0])
+        queue.done(results[0])
 
         val item2 = results[1]?.getValue()
         Assert.assertTrue(item2 != null)
         Assert.assertTrue(item2 == contentBatch2)
-        queue.complete(results[1])
+        queue.done(results[1])
     }
 
 
@@ -95,7 +95,7 @@ class AwsSqsTests {
         Assert.assertTrue(item != null)
         //Assert.assertTrue(item == expectedContent)
         if(complete) {
-            queue.complete(result1)
+            queue.done(result1)
         }
     }
 }
