@@ -270,7 +270,7 @@ coming soon
 {{< /highlight >}}
 {{% feature-end mod="arch/data" %}}
 
-## Execute {#execute}
+## Services {#services}
 coming soon
 {{< highlight kotlin >}}
 
@@ -281,7 +281,7 @@ coming soon
 {{< /highlight >}}
 {{% feature-end mod="arch/data" %}}
 
-## Responses {#responses}
+## Events {#events}
 coming soon
 {{< highlight kotlin >}}
 
@@ -292,7 +292,7 @@ coming soon
 {{< /highlight >}}
 {{% feature-end mod="arch/data" %}}
 
-## Startup {#startup}
+## Migrations {#migrations}
 coming soon
 {{< highlight kotlin >}}
 
@@ -303,29 +303,7 @@ coming soon
 {{< /highlight >}}
 {{% feature-end mod="arch/data" %}}
 
-## From file {#from-file}
-coming soon
-{{< highlight kotlin >}}
-
-    fun setup() {
-        
-    }
-
-{{< /highlight >}}
-{{% feature-end mod="arch/data" %}}
-
-## API {#apis}
-coming soon
-{{< highlight kotlin >}}
-
-    fun setup() {
-        
-    }
-
-{{< /highlight >}}
-{{% feature-end mod="arch/data" %}}
-
-## Scripts {#scripts}
+## ORM {#orm}
 coming soon
 {{< highlight kotlin >}}
 
