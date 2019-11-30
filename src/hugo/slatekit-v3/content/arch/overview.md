@@ -94,6 +94,14 @@ Many of these modules have their own project. See the guides for each respective
           </div>
           <div class="col-md-4 wow fadeInUp">
             <div class="box text-center">
+              <a href="arch/orm"><img src="assets/media/img/white/layers.png" alt="" class="img-fluid"></a>
+              <div><a href="arch/orm"><h3>Data</h3></a></div>
+              <p>Light-weight, domain-driven entity framework with optional ORM. You can use the Entity Interfaces and code without the ORM. See {{% sk-link-arch page="orm" name="ORM" %}} 
+              </p>
+            </div>
+          </div>
+          <div class="col-md-4 wow fadeInUp">
+            <div class="box text-center">
               <a href="arch/email"><img src="assets/media/img/white/email.png" alt="" class="img-fluid"></a>
               <div><a href="arch/email"><h3>Email</h3></a></div>
               <p>Send emails with optional templates, with a default implementation for SendGrid.
@@ -128,14 +136,6 @@ Many of these modules have their own project. See the guides for each respective
             </div>
           </div>
         -->
-          <div class="col-md-4 wow fadeInUp">
-            <div class="box text-center">
-              <a href="arch/orm"><img src="assets/media/img/white/layers.png" alt="" class="img-fluid"></a>
-              <div><a href="arch/orm"><h3>ORM</h3></a></div>
-              <p>Light-weight, domain-driven entity framework with optional ORM. You can use the Entity Interfaces and code without the ORM. See {{% sk-link-arch page="orm" name="ORM" %}} 
-              </p>
-            </div>
-          </div>
           <div class="col-md-4 wow fadeInUp">
             <div class="box text-center">
               <a href="arch/queues"><img src="assets/media/img/white/queue.png" alt="" class="img-fluid"></a>
