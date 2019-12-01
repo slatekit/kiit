@@ -8,6 +8,7 @@ import slatekit.common.db.DbConString
 import slatekit.common.db.Vendor
 import slatekit.db.Db
 import slatekit.entities.repos.InMemoryRepo
+import slatekit.examples.common.User
 import slatekit.query.Op
 import slatekit.results.Success
 import slatekit.results.Try
@@ -21,6 +22,7 @@ class Guide_ORM : Command("types") {
 
     override fun execute(request: CommandRequest): Try<Any> {
         //<doc:setup>
+        h2()
         // The entities are dependent on the database connections setup.
         // See Example_Database.kt for more info
 
@@ -104,7 +106,13 @@ class Guide_ORM : Command("types") {
 
     fun h2(){
         val conh2 = DbConString(Vendor.H2.driver, "jdbc:h2:mem:test;DB_CLOSE_DELAY=-1", "", "")
-        
+        val db = Db(conh2)
+        db.execute("CREATE TABLE PERSON(id int primary key, name varchar(255))")
+        db.insert("INSERT INTO PERSON" + "(id, name) values" + "(?,?)", listOf(1,"batman@gotham.com"))
+        val users = db.mapAll( "select * from PERSON", null) {
+            User(it.getInt("id").toLong(),it.getString("name"))
+        }
+        println(users)
     }
 
 
