@@ -8,7 +8,6 @@ import slatekit.cmds.Command
 import slatekit.cmds.CommandRequest
 import slatekit.cache.*
 import slatekit.common.ext.toStringUtc
-import slatekit.common.ids.Ids
 import slatekit.common.ids.Paired
 import slatekit.common.log.LoggerConsole
 import slatekit.common.types.Country

@@ -1,10 +1,22 @@
 package slatekit.examples
 
+import slatekit.cmds.Command
+import slatekit.cmds.CommandRequest
+import slatekit.common.conf.Config
+import slatekit.common.db.Connections
+import slatekit.common.db.DbConString
+import slatekit.common.db.Vendor
+import slatekit.db.Db
+import slatekit.entities.repos.InMemoryRepo
+import slatekit.query.Op
+import slatekit.results.Success
+import slatekit.results.Try
+
 
 /**
  * Created by kreddy on 3/15/2016.
  */
-/*
+
 class Guide_ORM : Command("types") {
 
     override fun execute(request: CommandRequest): Try<Any> {
@@ -12,47 +24,175 @@ class Guide_ORM : Command("types") {
         // The entities are dependent on the database connections setup.
         // See Example_Database.kt for more info
 
-        // 1. Create Connections using a connection from a file
-        // NOTE: This is safer and more secure as it loads
-        // the connection string from the user directory in folder ./slate
-        val dbLookup1 = default(ConfFuncs.readDbCon("user://.slate/db_default.txt")!!)
-
-        // 2. Create a Connections using an explicit connection string
-        // NOTE: Avoid using explicit connection strings in code.
-        val dbLookup2 = default(
-                DbConString(
-                        "com.mysql.jdbc.Driver",
-                        "jdbc:mysql://localhost/default",
-                        "root",
-                        "abcdefghi"
-                )
-        )
-
-        // 3. Create a Connections using multiple named databases.
-        val dbLookup3 = named(listOf(
-                Pair(
-                        "movies", DbConString(
-                        "com.mysql.jdbc.Driver",
-                        "jdbc:mysql://localhost/movies",
-                        "root",
-                        "abcdefghi"
-                )
-                ),
-                Pair(
-                        "files", DbConString(
-                        "com.mysql.jdbc.Driver",
-                        "jdbc:mysql://localhost/files",
-                        "root",
-                        "abcdefghi"
-                )
-                )
-        ))
-
 
         return Success("")
     }
 
+    // Sample model
+    data class City(val id:Long, val name:String, val alias:String)
 
+
+    fun con() {
+
+        // Connection
+        // 1. Explicit creation
+        val con1 = DbConString(Vendor.MySql.driver, "jdbc:mysql://localhost/default", "user1", "pswd3210")
+
+        // 2. From config
+        val cfg = Config.of("env.dev.conf")
+        val con2 = cfg.dbCon("db")
+
+        // Connections ( collection of multiple connections )
+        // 1. From single connection
+        val cons1 = Connections.of(con1)
+
+        // 2. From config: Shortcut for Connections.of(conf.dbCon("db"))
+        val cons2 = Connections.from(cfg)
+
+        // 3. From multiple named connections
+        val cons3 = Connections.named(
+                listOf(
+                        Pair("db1", con1),
+                        Pair("db2", con2)
+                ))
+    }
+
+
+    fun db() {
+        val con1 = DbConString(Vendor.MySql.driver, "jdbc:mysql://localhost/default", "user1", "pswd3210")
+        val db = Db(con1)
+
+        // Inserts
+        val id1 = db.insert("insert into `city`(`name`) values( 'ny' )")
+        val id2 = db.insert("insert into `city`(`name`) values( ? )", listOf("ny"))
+        val id3 = db.insertGetId("insert into `city`(`name`) values( ? )", listOf("ny")).toLong()
+
+        // Updates
+        val updated1 = db.update("update `city` set `alias` = 'nyc' where id = 2")
+        val updated2 = db.update("update `city` set `alias` = 'nyc' where id = ?", listOf(id2))
+
+        // Deletes
+        val deleted1 = db.update("delete from `city` where id = 2")
+        val deleted2 = db.update("delete from `city` where id = ?", listOf(2))
+
+        // Procs
+        val procUpdate1 = db.callUpdate("dbtests_activate_by_id", listOf(2))
+        val procQuery1 = db.callQuery("dbtests_max_by_id",
+                callback = { rs -> rs.getString(0) }, inputs = listOf(id2))
+
+        // Queries ( mapOne, mapMany )
+        val city1 = db.mapOne<City>("select * from `city` where id = ?", listOf(1)) { rs ->
+            City(rs.getLong("id"), rs.getString("name"), rs.getString("alias"))
+        }
+        val city2 = db.mapAll<City>("select * from `city` where id < ?", listOf(2)) { rs ->
+            City(rs.getLong("id"), rs.getString("name"), rs.getString("alias"))
+        }
+
+        // Scalar calls
+        val total1 = db.getScalarBool("select isActive from users where userid = ?", listOf(1))
+        val total2 = db.getScalarInt("select age from users where userid = ?", listOf(1))
+        val total3 = db.getScalarLong("select account from users where userid = ?", listOf(1))
+        val total4 = db.getScalarFloat("select salary from users where userid = ?", listOf(1))
+        val total5 = db.getScalarDouble("select total from users where userid = ?", listOf(1))
+        val total6 = db.getScalarString("select email from users where userid = ?", listOf(1))
+        val total7 = db.getScalarLocalDate("select startDate from users where userid = ?", listOf(1))
+        val total8 = db.getScalarLocalTime("select startHour from users where userid = ?", listOf(1))
+        val total9 = db.getScalarLocalDateTime("select registered from users where userid = ?", listOf(1))
+        val total10 = db.getScalarZonedDateTime("select activated from users where userid = ?", listOf(1))
+    }
+
+
+    fun h2(){
+        val conh2 = DbConString(Vendor.H2.driver, "jdbc:h2:mem:test;DB_CLOSE_DELAY=-1", "", "")
+        
+    }
+
+
+    fun repo() {
+        val repo = InMemoryRepo.of<Long, City>()
+
+        // CRUD
+        val city = City(0, "Brooklyn", "bk")
+
+        // Create
+        val id = repo.create(city)
+        repo.save(City(0, "New York", "NYC"))
+
+        // Checks
+        repo.any()
+        repo.count()
+
+        // Gets
+        repo.getAll()
+        repo.getById(1)
+        repo.getByIds(listOf(1, 2))
+        repo.first()
+        repo.last()
+        repo.recent(10)
+        repo.oldest(10)
+
+        // Finds
+        val item1 = repo.findOneByField("name", "=", "Brooklyn")
+        val items2 = repo.findByField("name", "=", "Brooklyn")
+        val items3 = repo.findByFields(listOf(Pair("name", "Brooklyn")))
+        val items4= repo.findIn("name", listOf("Queens", "Brooklyn"))
+        repo.find(repo.query())
+
+        // Updates
+        val updated = city.copy(id = id, name = "Queens")
+        repo.update(updated)
+        repo.patch(id, listOf(Pair("name", "Queens City"), Pair("alias", "QCity")))
+        repo.updateByField("name", "Queens", "Queens City")
+        repo.updateField("tag", "test")
+        repo.updateByProc("update_alias", listOf(1, "QCity"))
+
+        // Deletes
+        repo.deleteAll()
+        repo.delete(city)
+        repo.deleteById(2)
+        repo.deleteByIds(listOf(1, 2))
+        repo.deleteByField(City::id.name, Op.Eq, 1)
+        repo.deleteByQuery(repo.query().where(City::id.name, Op.Eq, 1))
+    }
+
+
+//        val con2 = default(ConfFuncs.readDbCon("user://.slate/db_default.txt")!!)
+//
+//        // 2. Create a Connections using an explicit connection string
+//        // NOTE: Avoid using explicit connection strings in code.
+//        val dbLookup2 = default(
+//                DbConString(
+//                        "com.mysql.jdbc.Driver",
+//                        "jdbc:mysql://localhost/default",
+//                        "root",
+//                        "abcdefghi"
+//                )
+//        )
+//
+//        // 3. Create a Connections using multiple named databases.
+//        val dbLookup3 = named(listOf(
+//                Pair(
+//                        "movies", DbConString(
+//                        "com.mysql.jdbc.Driver",
+//                        "jdbc:mysql://localhost/movies",
+//                        "root",
+//                        "abcdefghi"
+//                )
+//                ),
+//                Pair(
+//                        "files", DbConString(
+//                        "com.mysql.jdbc.Driver",
+//                        "jdbc:mysql://localhost/files",
+//                        "root",
+//                        "abcdefghi"
+//                )
+//                )
+//        ))
+//
+//    }
+
+
+    /*
     fun service() {
 
         // =================================================================================
@@ -275,5 +415,6 @@ class Guide_ORM : Command("types") {
             println("User: " + m.id + ", " + m.title + ", " + m.category)
         }
     }
+
+    */
 }
-*/

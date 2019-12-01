@@ -68,10 +68,10 @@ class OrmBuilder(dbCreator: (DbCon) -> IDb,
     fun <TId, T> mapper(vendor: Vendor, info:EntityInfo): OrmMapper<TId, T>
             where TId:Comparable<TId>, T: Entity<TId> {
         // 1. Table name
-        val table = buildTableName(info.entityType, info.tableName, info.namer)
+        val table = buildTableName(info.modelType, info.tableName, info.namer)
 
         // 2. Model ( schema of the entity which maps fields to columns and has other metadata )
-        val model = this.model(info.entityType, info.namer, table)
+        val model = this.model(info.modelType, info.namer, table)
 
         // 3. Connection info ( using default connection )
         val con = this.con()
@@ -105,7 +105,7 @@ class OrmBuilder(dbCreator: (DbCon) -> IDb,
             MySql -> MySqlRepo(db, info, mapper)
             PGres -> PostGresRepo(db, info, mapper)
             else -> {
-                val result = when(info.entityIdType){
+                val result = when(info.idType){
                     KTypes.KIntClass  -> InMemoryRepo<TId, T>(info, IntIdGenerator() as IdGenerator<TId>)
                     KTypes.KLongClass -> InMemoryRepo<TId, T>(info, LongIdGenerator() as IdGenerator<TId>)
                     else -> throw Exception("Unexpected entity id type for Slate Kit repo")

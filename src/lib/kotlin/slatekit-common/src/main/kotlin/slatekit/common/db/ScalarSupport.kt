@@ -122,6 +122,6 @@ interface ScalarSupport {
      * @param sql : The sql text
      * @return
      */
-    fun getScalarDate(sql: String, inputs: List<Any>?): DateTime =
+    fun getScalarZonedDateTime(sql: String, inputs: List<Any>?): DateTime =
             getScalarOrNull(sql, slatekit.common.Types.JDateTimeClass, inputs) ?: DateTimes.MIN
 }

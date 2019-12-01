@@ -36,11 +36,11 @@ class SqliteDb : IDb {
         TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
 
-    override fun <T> mapOne(sql: String, mapper: Mapper<T>, inputs: List<Any>?): T? {
+    override fun <T> mapOne(sql: String, inputs: List<Any>?, mapper: Mapper<T>): T? {
         TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
 
-    override fun <T> mapAll(sql: String, mapper: Mapper<T>, inputs: List<Any>?): List<T>? {
+    override fun <T> mapAll(sql: String, inputs: List<Any>?, mapper: Mapper<T>): List<T>? {
         TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
 

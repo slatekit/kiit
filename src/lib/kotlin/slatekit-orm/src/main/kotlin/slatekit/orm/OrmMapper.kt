@@ -85,7 +85,7 @@ open class OrmMapper<TId, T>(
     fun insert(entity: T): TId {
         val sql = converter.inserts.sql(entity, metaModel, this)
         val id = db.insertGetId(sql, null)
-        return convertToId(id, info.entityIdType)
+        return convertToId(id, info.idType)
     }
 
 

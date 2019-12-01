@@ -64,12 +64,22 @@ interface Repo<TId, T> : EntityStore where TId : Comparable<TId> {
     fun update(entity: T): Boolean
 
     /**
+     * Updates fields/columns
+     */
+    fun patch(id:TId, values:List<Pair<String,Any?>>): Int
+
+    /**
      * updates items based on the field name
      * @param field: The property reference
      * @param value: The value to set
      * @return
      */
-    fun updateByField(field: String, value: Any): Int
+    fun updateField(field: String, value: Any): Int
+
+    /**
+     * Updates items by their old field
+     */
+    fun updateByField(field: String, oldValue: Any?, newValue:Any?): Int
 
     /**
      * updates items using the proc and args
@@ -218,7 +228,7 @@ interface Repo<TId, T> : EntityStore where TId : Comparable<TId> {
      * @param value: value of field to search against
      * @return
      */
-    fun findBy(field: String, op: String, value: Any): List<T> = listOf()
+    fun findByField(field: String, op: String, value: Any): List<T> = listOf()
 
     /**
      * finds items based on the conditions
@@ -247,7 +257,7 @@ interface Repo<TId, T> : EntityStore where TId : Comparable<TId> {
      * @param value: value of field to search against
      * @return
      */
-    fun findFirstBy(field: String, op: String, value: Any): T? = null
+    fun findOneByField(field: String, op: String, value: Any): T? = null
 
     /**
      * finds items by using the sql

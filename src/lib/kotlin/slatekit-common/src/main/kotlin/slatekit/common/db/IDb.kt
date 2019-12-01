@@ -2,6 +2,13 @@ package slatekit.common.db
 
 import java.sql.ResultSet
 
+/**
+ * Interface to abstract away JDBC.
+ * This is used for 2 purposes:
+ * 1. Facilitate Unit Testing
+ * 2. Facilitate support for the Entities / ORM ( SqlFramework ) project
+ *    to abstract away JDBC for Android
+ */
 interface IDb : ScalarSupport, ProcSupport {
     val onError: (Exception) -> Unit
 
@@ -67,7 +74,7 @@ interface IDb : ScalarSupport, ProcSupport {
      * @return
      */
     @Suppress("UNCHECKED_CAST")
-    fun <T> mapOne(sql: String, mapper: Mapper<T>, inputs: List<Any>? = null): T?
+    fun <T> mapOne(sql: String, inputs: List<Any>?, mapper: Mapper<T>): T?
 
     /**
      * maps multiple items using the sql supplied
@@ -78,7 +85,7 @@ interface IDb : ScalarSupport, ProcSupport {
      * @return
      */
     @Suppress("UNCHECKED_CAST")
-    fun <T> mapAll(sql: String, mapper: Mapper<T>, inputs: List<Any>? = null): List<T>?
+    fun <T> mapAll(sql: String, inputs: List<Any>?, mapper: Mapper<T>): List<T>?
 
 
     fun errorHandler(ex: Exception)

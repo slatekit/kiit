@@ -30,16 +30,18 @@ import slatekit.db.builders.DbBuilder
 import slatekit.db.builders.MySqlBuilder
 
 /**
- * Light-weight database wrapper.
- * @param dbCon: DbConfig.loadFromUserFolder(".slate", "db.txt")
- *   although tested using mysql, sql-server should be
+ * Light-weight JDBC based database access wrapper
+ * This is used for 2 purposes:
+ * 1. Facilitate Unit Testing
+ * 2. Facilitate support for the Entities / ORM ( SqlFramework ) project
+ *    to abstract away JDBC for Android
+ *
  * 1. sql-server: driver = "com.microsoft.sqlserver.jdbc.SQLServerDriver"
  * 2. sql-server: url = "jdbc:sqlserver://<server_name>:<port>;database=<database>;user=<user>;
  * password=<password>;encrypt=true;hostNameInCertificate=*.database.windows.net;loginTimeout=30;"
  */
 class Db(
     private val dbCon: DbCon,
-    val source: DbBuilder = MySqlBuilder(),
     errorCallback: ((Exception) -> Unit)? = null
 ) : IDb {
 
@@ -210,7 +212,7 @@ class Db(
      * @return
      */
     @Suppress("UNCHECKED_CAST")
-    override fun <T> mapOne(sql: String, mapper: Mapper<T>, inputs: List<Any>?): T? {
+    override fun <T> mapOne(sql: String, inputs: List<Any>?, mapper: Mapper<T>): T? {
         val res = query(sql, { rs ->
 
             val rec = RecordSet(rs)
@@ -231,7 +233,7 @@ class Db(
      * @return
      */
     @Suppress("UNCHECKED_CAST")
-    override fun <T> mapAll(sql: String, mapper: Mapper<T>, inputs: List<Any>?): List<T>? {
+    override fun <T> mapAll(sql: String, inputs: List<Any>?, mapper: Mapper<T>): List<T>? {
         val res = query(sql, { rs ->
 
             val rec = RecordSet(rs)
@@ -280,7 +282,7 @@ class Db(
         // {call create_author(?, ?)}
         val holders = inputs?.let { all -> "?".repeatWith(",", all.size) } ?: ""
         val sql = "{call $procName($holders)}"
-        return mapAll(sql, mapper, inputs)
+        return mapAll(sql, inputs, mapper)
     }
 
     /**
