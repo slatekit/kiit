@@ -14,6 +14,7 @@ package slatekit.examples
 
 //<doc:import_required>
 import kotlinx.coroutines.*
+import slatekit.cache.*
 import slatekit.common.*
 //</doc:import_required>
 
@@ -21,7 +22,11 @@ import slatekit.common.*
 import slatekit.core.queues.InMemoryQueue
 import slatekit.cmds.Command
 import slatekit.cmds.CommandRequest
+import slatekit.common.ids.Paired
 import slatekit.common.log.LoggerConsole
+import slatekit.core.queues.AsyncQueue
+import slatekit.core.queues.WrappedAsyncQueue
+import slatekit.examples.common.MockCacheCoordinator
 import slatekit.functions.policy.Every
 import slatekit.functions.policy.Limit
 import slatekit.functions.policy.Ratio
@@ -156,9 +161,14 @@ class Example_Jobs : Command("utils"), CoroutineScope by MainScope() {
         //<doc:examples>
         runBlocking {
 
-            // Queues
-            val queue1 = Queue("queue1", Priority.Mid, InMemoryQueue.stringQueue(5))
-            val queue2 = Queue("queue2", Priority.Mid, InMemoryQueue.stringQueue(5))
+            fun <T> asyncQueue(queue:slatekit.core.queues.Queue<T>):AsyncQueue<T> {
+                // Queues
+                val queue = WrappedAsyncQueue<T>(queue)
+                return queue
+            }
+
+            val queue1 = Queue("queue1", Priority.Mid, asyncQueue(InMemoryQueue.stringQueue(5)))
+            val queue2 = Queue("queue2", Priority.Mid, asyncQueue(InMemoryQueue.stringQueue(5)))
 
             // Registry
             val logger = LoggerConsole()

@@ -53,6 +53,7 @@ dependencies {
     implementation project(":slatekit-app")
     implementation project(":slatekit-cli")
     implementation project(":slatekit-db")
+    implementation project(":slatekit-cache")
     implementation project(":slatekit-query")
     implementation project(":slatekit-meta")
     implementation project(":slatekit-entities")

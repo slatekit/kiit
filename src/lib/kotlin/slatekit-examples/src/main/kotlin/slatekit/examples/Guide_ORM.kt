@@ -106,7 +106,7 @@ class Guide_ORM : Command("types") {
 
     fun h2(){
         val conh2 = DbConString(Vendor.H2.driver, "jdbc:h2:mem:test;DB_CLOSE_DELAY=-1", "", "")
-        val db = Db(conh2)
+        val db = Db(conh2).open()
         db.execute("CREATE TABLE PERSON(id int primary key, name varchar(255))")
         db.insert("INSERT INTO PERSON" + "(id, name) values" + "(?,?)", listOf(1,"batman@gotham.com"))
         val users = db.mapAll( "select * from PERSON", null) {
