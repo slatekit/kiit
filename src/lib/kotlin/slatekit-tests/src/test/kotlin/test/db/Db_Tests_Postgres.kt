@@ -4,7 +4,6 @@ import org.junit.Assert
 import org.junit.Before
 import org.junit.Ignore
 import org.junit.Test
-import slatekit.common.DateTime
 import slatekit.common.DateTimes
 import slatekit.common.conf.ConfFuncs
 import slatekit.db.Db
@@ -140,7 +139,7 @@ class Db_Tests_Postgres : TestSupport {
 
     @Test
     fun can_query_scalar_date() {
-        ensure_scalar("test_localdatetime", { db, sql -> db.getScalarDate(sql, null) }, DateTimes.of(2017, 7, 6, 9, 25, 0))
+        ensure_scalar("test_localdatetime", { db, sql -> db.getScalarZonedDateTime(sql, null) }, DateTimes.of(2017, 7, 6, 9, 25, 0))
     }
 
 

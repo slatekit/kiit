@@ -2,7 +2,7 @@ package slatekit.app
 
 import slatekit.common.args.ArgsSchema
 import slatekit.common.conf.Conf
-import slatekit.common.db.DbLookup
+import slatekit.common.db.Connections
 import slatekit.common.info.About
 import slatekit.common.info.Folders
 import slatekit.common.templates.Subs
@@ -17,14 +17,14 @@ import slatekit.common.ext.toId
 object AppBuilder {
 
     /**
-     * Builds the DbLookup containing the database connections :
+     * Builds the Connections containing the database connections :
      * 1. default connection
      * 2. named connections
      * 3. grouped connections
      *
      * @return
      */
-    fun dbs(conf: Conf): DbLookup = DbLookup.defaultDb(conf.dbCon("db"))
+    fun dbs(conf: Conf): Connections = Connections.of(conf.dbCon("db"))
 
     /**
      * builds all the info for this application including its

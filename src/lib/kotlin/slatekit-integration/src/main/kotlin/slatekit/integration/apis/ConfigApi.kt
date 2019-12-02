@@ -26,7 +26,7 @@ import slatekit.common.conf.ConfFuncs
 import slatekit.common.conf.Config
 import slatekit.common.db.DbCon
 import slatekit.common.db.DbConString
-import slatekit.common.db.DbType.DbTypeMySql
+import slatekit.common.db.Vendor.MySql
 import slatekit.common.encrypt.Encryptor
 import slatekit.common.log.Logger
 
@@ -53,7 +53,7 @@ class ConfigApi(override val context: slatekit.common.Context) : FileSupport {
 
     @Action(desc = "creates db login in the directory")
     fun createDbConMySql(rootDir: String, name: String, url: String, user: String, pass: String): slatekit.common.db.DbConString {
-        val dbCon = DbConString(DbTypeMySql.driver, url, user, pass)
+        val dbCon = DbConString(MySql.driver, url, user, pass)
         slatekit.common.conf.ConfFuncs.createDbCon(rootDir, name, dbCon, context.enc)
         return dbCon
     }

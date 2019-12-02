@@ -15,7 +15,6 @@ package slatekit.entities.repos
 
 import slatekit.common.db.IDb
 import slatekit.common.ext.tail
-import slatekit.entities.Entity
 import slatekit.entities.EntityMapper
 import slatekit.entities.core.EntityInfo
 import slatekit.query.IQuery
@@ -37,13 +36,30 @@ abstract class SqlRepo<TId, T>(
 
     override fun name(): String = "${info.encodedChar}" + super.name() + "${info.encodedChar}"
 
+    override fun patch(id:TId, values:List<Pair<String,Any?>>): Int {
+        val query = Query()
+        values.forEach { query.set(it.first, it.second) }
+        query.where(id(), Op.Eq, id)
+        val updateSql = query.toUpdatesText()
+        val sql = "update " + name() + updateSql
+        return update(sql)
+    }
+
+
     /**
      * updates the table field using the value supplied
      * @param field: The field name
      * @param value: The value to set
      */
-    override fun updateByField(field: String, value: Any): Int {
+    override fun updateField(field: String, value: Any): Int {
         val query = Query().set(field, value)
+        val updateSql = query.toUpdatesText()
+        val sql = "update " + name() + updateSql
+        return update(sql)
+    }
+
+    override fun updateByField(field: String, oldValue: Any?, newValue: Any?): Int {
+        val query = Query().set(field, newValue).where(field, Op.Eq, oldValue)
         val updateSql = query.toUpdatesText()
         val sql = "update " + name() + updateSql
         return update(sql)
@@ -172,7 +188,7 @@ abstract class SqlRepo<TId, T>(
      * @param value: value of field to search against
      * @return
      */
-    override fun findBy(field: String, op: String, value: Any): List<T> {
+    override fun findByField(field: String, op: String, value: Any): List<T> {
         return find(Query().where(field, op, value))
     }
 
@@ -206,7 +222,7 @@ abstract class SqlRepo<TId, T>(
      * @param value: value of field to search against
      * @return
      */
-    override fun findFirstBy(field: String, op: String, value: Any): T? {
+    override fun findOneByField(field: String, op: String, value: Any): T? {
         return find(Query().where(field, op, value)).firstOrNull()
     }
 
@@ -225,7 +241,7 @@ abstract class SqlRepo<TId, T>(
      * @return
      */
     override fun findByProc(name: String, args: List<Any>?): List<T>? {
-        return db.callQueryMapped(name, mapper, args)
+        return db.callQueryMapped(name, mapper::mapFrom, args)
     }
 
     /**
@@ -248,10 +264,10 @@ abstract class SqlRepo<TId, T>(
     }
 
     protected open fun sqlMapMany(sql: String): List<T>? {
-        return db.mapMany(sql, mapper)
+        return db.mapAll(sql, null, mapper::mapFrom)
     }
 
     protected open fun sqlMapOne(sql: String): T? {
-        return db.mapOne<T>(sql, mapper)
+        return db.mapOne<T>(sql, null, mapper::mapFrom)
     }
 }

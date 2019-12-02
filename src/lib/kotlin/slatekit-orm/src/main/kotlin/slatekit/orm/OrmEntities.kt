@@ -13,15 +13,14 @@
 
 package slatekit.orm
 
-import slatekit.common.db.DbType
-import slatekit.db.types.DbSource
-import slatekit.db.types.DbSourceMySql
-import slatekit.db.types.DbSourcePostGres
+import slatekit.common.db.Vendor
+import slatekit.db.builders.DbBuilder
+import slatekit.db.builders.MySqlBuilder
+import slatekit.db.builders.PostGresBuilder
 import slatekit.entities.Entities
 import slatekit.entities.Entity
 import slatekit.entities.EntityService
 import slatekit.entities.core.*
-import slatekit.entities.repos.EntityMapperEmpty
 import slatekit.meta.models.Model
 import slatekit.orm.core.SqlBuilder
 import slatekit.orm.databases.vendors.MySqlTypeMap
@@ -37,19 +36,19 @@ import kotlin.reflect.KClass
  * register a Entity
  */
 fun <TId, T> Entities.model(
-        dbType:DbType,
+        vendor:Vendor,
         entityIdType: KClass<*>,
         entityType: KClass<*>,
         tableName: String? = null,
         persistUTC: Boolean = false): EntityContext where TId : Comparable<TId>, T : Entity<TId> {
 
-    return orm<TId, T>(dbType, entityType, entityIdType, tableName,
+    return orm<TId, T>(vendor, entityType, entityIdType, tableName,
             null, null, persistUTC)
 }
 
 
 /**
- * @param dbType       :  Database type see[DbType]
+ * @param vendor       :  Database type see[Vendor]
  * @param entityType   :  Type of the Entity / Domain class ( e.g. User )
  * @param entityIdType :  Type of the id of the Entity / Domain class ( e.g. Long )
  * @param tableName    :  Optional name of the database table for entityt ( defaults to class name e.g. "user" )
@@ -58,7 +57,7 @@ fun <TId, T> Entities.model(
  * @param persistUTC   :
  */
 fun <TId, T> Entities.orm(
-        dbType:DbType,
+        vendor:Vendor,
         entityIdType: KClass<*>,
         entityType: KClass<*>,
         tableName: String? = null,
@@ -87,16 +86,16 @@ fun <TId, T> Entities.orm(
 
     // 5. Mapper ( maps entities to/from sql using the model/schema )
     val info = EntityInfo(entityIdType, entityType, table, '`', model, this.enc, this.namer)
-    val mapper = builder.mapper<TId, T>(dbType, db, model, info)
+    val mapper = builder.mapper<TId, T>(vendor, db, model, info)
 
     // 6. Repo ( provides CRUD using the Mapper)
-    val repo = builder.repo(dbType, db, info, mapper)
+    val repo = builder.repo(vendor, db, info, mapper)
 
     // 7. Service ( used to provide validation, placeholder for business functionality )
     val service = builder.service(this, serviceType, repo, serviceCtx)
 
     // 8. Entity context captures all relevant info about a mapped Entity( id type, entity type, etc. )
-    val context = EntityContext(entityType, entityIdType, service::class, repo, mapper, dbType, model, "", "",
+    val context = EntityContext(entityType, entityIdType, service::class, repo, mapper, vendor, model, "", "",
             service, serviceCtx)
 
     // 9. Finally Register
@@ -109,15 +108,15 @@ fun <TId, T> Entities.orm(
 /**
  * Gets the Database source to Build DDL
  */
-fun Entities.getDbSource(dbKey: String = "", dbShard: String = ""): DbSource {
+fun Entities.getDbSource(dbKey: String = "", dbShard: String = ""): DbBuilder {
     val dbType = builder.con(dbKey, dbShard)
 
     // Only supporting MySql for now.
     val source = dbType?.let { type ->
         when (type.driver) {
-            DbType.DbTypeMySql.driver -> DbSourceMySql()
-            DbType.DbTypePGres.driver -> DbSourcePostGres()
-            else -> DbSourceMySql()
+            Vendor.MySql.driver -> MySqlBuilder()
+            Vendor.PGres.driver -> PostGresBuilder()
+            else -> MySqlBuilder()
         }
     }
     return source
@@ -130,9 +129,9 @@ fun Entities.getDbSource(dbKey: String = "", dbShard: String = ""): DbSource {
 fun Entities.sqlBuilder(entityFullName:String): SqlBuilder {
     val ctx = getInfoByName(entityFullName)
     // Only supporting MySql for now.
-    val sqlBuilder = when (ctx.dbType) {
-        DbType.DbTypeMySql -> SqlBuilder(MySqlTypeMap, namer)
-        DbType.DbTypePGres -> SqlBuilder(PostGresMap, namer)
+    val sqlBuilder = when (ctx.vendor) {
+        Vendor.MySql -> SqlBuilder(MySqlTypeMap, namer)
+        Vendor.PGres -> SqlBuilder(PostGresMap, namer)
         else                      -> SqlBuilder(MySqlTypeMap, namer)
     }
     return sqlBuilder

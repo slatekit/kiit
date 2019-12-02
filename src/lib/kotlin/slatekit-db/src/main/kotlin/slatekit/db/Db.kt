@@ -26,20 +26,22 @@ import slatekit.db.DbUtils.executeCon
 import slatekit.db.DbUtils.executePrepAs
 import slatekit.db.DbUtils.executeStmt
 import slatekit.db.DbUtils.fillArgs
-import slatekit.db.types.DbSource
-import slatekit.db.types.DbSourceMySql
+import slatekit.db.builders.DbBuilder
+import slatekit.db.builders.MySqlBuilder
 
 /**
- * Light-weight database wrapper.
- * @param dbCon: DbConfig.loadFromUserFolder(".slate", "db.txt")
- *   although tested using mysql, sql-server should be
+ * Light-weight JDBC based database access wrapper
+ * This is used for 2 purposes:
+ * 1. Facilitate Unit Testing
+ * 2. Facilitate support for the Entities / ORM ( SqlFramework ) project
+ *    to abstract away JDBC for Android
+ *
  * 1. sql-server: driver = "com.microsoft.sqlserver.jdbc.SQLServerDriver"
  * 2. sql-server: url = "jdbc:sqlserver://<server_name>:<port>;database=<database>;user=<user>;
  * password=<password>;encrypt=true;hostNameInCertificate=*.database.windows.net;loginTimeout=30;"
  */
 class Db(
     private val dbCon: DbCon,
-    val source: DbSource = DbSourceMySql(),
     errorCallback: ((Exception) -> Unit)? = null
 ) : IDb {
 
@@ -65,7 +67,7 @@ class Db(
      * @param sql : The sql text
      * @return
      */
-    override fun <T> getScalarOpt(sql: String, typ: Class<*>, inputs: List<Any>?): T? {
+    override fun <T> getScalarOrNull(sql: String, typ: Class<*>, inputs: List<Any>?): T? {
 
         return executePrepAs<T>(dbCon, sql, { _, stmt ->
 
@@ -210,12 +212,12 @@ class Db(
      * @return
      */
     @Suppress("UNCHECKED_CAST")
-    override fun <T> mapOne(sql: String, mapper: Mapper, inputs: List<Any>?): T? {
+    override fun <T> mapOne(sql: String, inputs: List<Any>?, mapper: Mapper<T>): T? {
         val res = query(sql, { rs ->
 
             val rec = RecordSet(rs)
             if (rs.next())
-                mapper.mapFrom<T>(rec)
+                mapper.invoke(rec)
             else
                 null
         }, false, inputs)
@@ -231,13 +233,13 @@ class Db(
      * @return
      */
     @Suppress("UNCHECKED_CAST")
-    override fun <T> mapMany(sql: String, mapper: Mapper, inputs: List<Any>?): List<T>? {
+    override fun <T> mapAll(sql: String, inputs: List<Any>?, mapper: Mapper<T>): List<T>? {
         val res = query(sql, { rs ->
 
             val rec = RecordSet(rs)
             val buf = mutableListOf<T>()
             while (rs.next()) {
-                val item = mapper.mapFrom<T>(rec)
+                val item = mapper.invoke(rec)
                 buf.add(item as T)
             }
             buf.toList()
@@ -274,14 +276,13 @@ class Db(
      */
     override fun <T> callQueryMapped(
         procName: String,
-        mapper: Mapper,
+        mapper: Mapper<T>,
         inputs: List<Any>?
     ): List<T>? {
-
         // {call create_author(?, ?)}
         val holders = inputs?.let { all -> "?".repeatWith(",", all.size) } ?: ""
         val sql = "{call $procName($holders)}"
-        return mapMany(sql, mapper, inputs)
+        return mapAll(sql, inputs, mapper)
     }
 
     /**

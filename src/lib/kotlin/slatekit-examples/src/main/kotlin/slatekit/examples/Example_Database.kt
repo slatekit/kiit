@@ -35,7 +35,7 @@ class Example_Database : Command("db") {
         //<doc:examples>
         // NOTES:
         // 1. The Db.kt simply uses JDBC
-        // 2. There is a separate DbLookup.kt component that
+        // 2. There is a separate Connectionsons.kt component that
         //    loads, stores, and manages named database connections.
         //    Refer to that example for more info.
 
@@ -49,7 +49,7 @@ class Example_Database : Command("db") {
 
         // CASE 2. Initialize the DB with the connection string.
         // NOTE: This defaults the db to mysql. The first line is same
-        // as db = Db(con, source: DbSourceMySql())
+        // as db = Db(con, source: MySqlBuilder())
         // In the future, we can more easily support mutliple databases
         // using this approach.
         val db = Db(con)
@@ -103,11 +103,11 @@ class Example_Database : Command("db") {
         // for "Field" annotations
         val userModelSchema = ModelMapper.loadSchema(User::class)
         val mapper = OrmMapper<Long, User>(userModelSchema, db, MySqlConverter(), Long::class, User::class)
-        val item1 = db.mapOne<User>("select * from `user` where id = 1", mapper)
+        val item1 = db.mapOne<User>("select * from `user` where id = ?", listOf(1), mapper::mapFrom)
         println(item1)
 
         // CASE 13: Map multiple records
-        val items = db.mapMany<User>("select * from `user` where id < 5", mapper)
+        val items = db.mapAll<User>("select * from `user` where id < ?", listOf(5),  mapper::mapFrom)
         println(items)
 
         // CASE 14: Create the table using the model

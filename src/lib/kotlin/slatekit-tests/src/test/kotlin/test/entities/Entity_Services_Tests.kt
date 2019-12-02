@@ -17,7 +17,7 @@ import org.junit.Assert
 import org.junit.Before
 import org.junit.Test
 import slatekit.common.db.DbConString
-import slatekit.common.db.DbLookup
+import slatekit.common.db.Connections
 import slatekit.db.Db
 import slatekit.entities.Entities
 import slatekit.entities.Entity
@@ -35,7 +35,7 @@ class Entity_Services_Tests {
 
 
     @Before fun setup(){
-        entities = Entities({ con -> Db(con) }, DbLookup(DbConString("", "", "", "")))
+        entities = Entities({ con -> Db(con) }, Connections(DbConString("", "", "", "")))
         entities.prototype<User5>(User5::class, loadSchema = true)
         entities.prototype<Member>(Member::class)
         entities.prototype<Group>(Group::class)

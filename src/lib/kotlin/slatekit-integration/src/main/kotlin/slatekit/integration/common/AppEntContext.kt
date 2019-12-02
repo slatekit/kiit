@@ -17,7 +17,7 @@ import slatekit.common.*
 import slatekit.common.args.Args
 import slatekit.common.conf.Config
 import slatekit.common.conf.Conf
-import slatekit.common.db.DbLookup
+import slatekit.common.db.Connections
 import slatekit.common.utils.B64Java8
 import slatekit.common.encrypt.Encryptor
 import slatekit.common.info.*
@@ -53,7 +53,7 @@ data class AppEntContext(
         override val logs: Logs,
         override val info: Info,
         val ent: Entities,
-        val dbs: DbLookup? = null,
+        val dbs: Connections? = null,
         override val enc: Encryptor? = null,
         override val dirs: Folders? = null
 ) : Context {
@@ -72,7 +72,7 @@ data class AppEntContext(
          * the same context without the Entities
          */
         fun fromContext(ctx: Context, namer: Namer? = null): AppEntContext {
-            val dbCons = DbLookup.fromConfig(ctx.conf)
+            val dbCons = Connections.from(ctx.conf)
             return AppEntContext(
                     ctx.args, ctx.envs, ctx.conf, ctx.logs, ctx.info, Entities({ con -> Db(con) }, dbCons, ctx.enc, namer = namer), dbCons, ctx.enc, ctx.dirs
             )
@@ -84,7 +84,7 @@ data class AppEntContext(
          * the same context without the Entities
          */
         fun fromAppContext(ctx: CommonContext, namer: Namer? = null): AppEntContext {
-            val dbCons = DbLookup.fromConfig(ctx.conf)
+            val dbCons = Connections.from(ctx.conf)
             return AppEntContext(
                     ctx.args, ctx.envs, ctx.conf, ctx.logs, ctx.info, Entities({ con -> Db(con) }, dbCons, ctx.enc, namer = namer), dbCons, ctx.enc, ctx.dirs
             )

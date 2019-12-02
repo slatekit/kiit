@@ -27,7 +27,7 @@ interface Finds<TId, T> : ServiceSupport<TId, T> where TId : kotlin.Comparable<T
     fun findByField(field: String, value: Any): List<T> {
         // Get column name from model schema ( if available )
         val column = QueryEncoder.ensureField(field)
-        return repo().findBy(column, "=", value)
+        return repo().findByField(column, "=", value)
     }
 
     /**
@@ -50,7 +50,7 @@ interface Finds<TId, T> : ServiceSupport<TId, T> where TId : kotlin.Comparable<T
     fun findByField(prop: KProperty<*>, value: Any): List<T> {
         // Get column name from model schema ( if available )
         val column = this.repo().columnName(prop)
-        return repo().findBy(column, "=", value)
+        return repo().findByField(column, "=", value)
     }
 
     /**
@@ -87,7 +87,7 @@ interface Finds<TId, T> : ServiceSupport<TId, T> where TId : kotlin.Comparable<T
     fun findFirstByField(name: String, value: Any): T? {
         // Get column name from model schema ( if available )
         val column = QueryEncoder.ensureField(name)
-        return repo().findFirstBy(column, "=", value)
+        return repo().findOneByField(column, "=", value)
     }
 
     /**
@@ -99,7 +99,7 @@ interface Finds<TId, T> : ServiceSupport<TId, T> where TId : kotlin.Comparable<T
     fun findFirstByField(prop: KProperty<*>, value: Any): T? {
         // Get column name from model schema ( if available )
         val column = this.repo().columnName(prop)
-        return repo().findFirstBy(column, "=", value)
+        return repo().findOneByField(column, "=", value)
     }
 
     /**

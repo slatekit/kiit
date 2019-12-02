@@ -20,7 +20,7 @@ import slatekit.common.*
 import slatekit.common.args.Args
 import slatekit.common.conf.Config
 import slatekit.common.db.DbConString
-import slatekit.common.db.DbLookup
+import slatekit.common.db.Connections
 import slatekit.common.envs.Envs
 import slatekit.common.info.About
 import slatekit.common.info.Build
@@ -59,7 +59,7 @@ class ReflectorTests {
                     Build.empty,
                     Sys.build()
             ),
-            dbs  = DbLookup.defaultDb(DbConString("com.mysql.jdbc.Driver", "jdbc:mysql://localhost/World_shard2", "root", "abcdefghi")),
+            dbs  = Connections.of(DbConString("com.mysql.jdbc.Driver", "jdbc:mysql://localhost/World_shard2", "root", "abcdefghi")),
             enc  = MyEncryptor
     )
 

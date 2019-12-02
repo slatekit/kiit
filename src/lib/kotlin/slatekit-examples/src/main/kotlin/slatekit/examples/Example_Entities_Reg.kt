@@ -22,8 +22,8 @@ import slatekit.results.Try
 import slatekit.results.Success
 import slatekit.common.conf.ConfFuncs
 import slatekit.common.db.DbConString
-import slatekit.common.db.DbLookup
-import slatekit.common.db.DbType
+import slatekit.common.db.Connections
+import slatekit.common.db.Vendor
 import slatekit.cmds.Command
 import slatekit.cmds.CommandRequest
 import slatekit.db.Db
@@ -50,13 +50,13 @@ class Example_Entities_Reg : Command("types") {
         // See Example_Database.kt for more info
 
         // 1. Register the default connection
-        val dbs = DbLookup.defaultDb(ConfFuncs.readDbCon("user://.slate/db_default.txt")!!)
+        val dbs = Connections.of(ConfFuncs.readDbCon("user://.slate/db_default.txt")!!)
 
         // 2. Register a named connection
-        //val dbs = DbLookup.namedDbs(("user_db", DbUtils.loadFromUserFolder(".slate", "db_default.txt"))
+        //val dbs = Connections.named(("user_db", DbUtils.loadFromUserFolder(".slate", "db_default.txt"))
 
         // 3: Register connection as a shard and link to a group
-        //val dbs = DbLookup.groupedDbs(("group1", List[(String,DbConString)](("shard1", DbUtils.loadFromUserFolder(".slate", "db_default.txt")))))
+        //val dbs = Connections.groupedDbs(("group1", List[(String,DbConString)](("shard1", DbUtils.loadFromUserFolder(".slate", "db_default.txt")))))
         //</doc:setup>
 
         //<doc:examples>
@@ -80,11 +80,11 @@ class Example_Entities_Reg : Command("types") {
         // Case 3: EntityService<TId, T>
         // NOTE: This is the Entities approach ( you handle the Repo/ Mapper implementation )
         showResults("Case 3", entities.register(
-                User::class, Long::class, UserService(entities, UserRepository()), DbType.DbTypeMemory))
+                User::class, Long::class, UserService(entities, UserRepository()), Vendor.Memory))
 
         // Case 4: ORM : EntityService<TId, T> with supplied MySqlRepo, OrmMapper
         showResults("Case 3", entities.orm<Long, User>(
-                DbType.DbTypeMySql, User::class, Long::class, "users", UserService::class))
+                Vendor.MySql, User::class, Long::class, "users", UserService::class))
 
         // Case 5: Manual setup
         val con = DbConString("com.mysql.jdbc.Driver", "jdbc:mysql://localhost/mydb", "user", "password")
@@ -93,7 +93,7 @@ class Example_Entities_Reg : Command("types") {
         val mapper = MySqlMapper<Long, User>(model, db, EntityInfo(Long::class, User::class, "users"))
         val repo = MySqlRepo<Long, User>(db, EntityInfo(Long::class, User::class, "users"), mapper)
         val service = UserService(entities, repo)
-        showResults("Case 3", entities.register(User::class, Long::class, service, DbType.DbTypeMemory))
+        showResults("Case 3", entities.register(User::class, Long::class, service, Vendor.Memory))
 
         //</doc:setup>
 

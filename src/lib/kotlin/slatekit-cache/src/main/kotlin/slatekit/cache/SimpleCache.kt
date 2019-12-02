@@ -29,7 +29,7 @@ import slatekit.tracking.Fetches
  *
  * @param settings
  */
-open class SimpleCache(override val settings: CacheSettings) : Cache, CacheTypeSync {
+open class SimpleCache(override val settings: CacheSettings) : Cache, SyncCache {
 
     /**
      * The LinkedHashMap already LRU(Least Recently Used) behaviour out of the box.

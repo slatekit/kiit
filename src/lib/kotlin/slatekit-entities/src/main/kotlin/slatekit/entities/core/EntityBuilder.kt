@@ -20,7 +20,7 @@ import slatekit.meta.models.ModelMapper
  */
 open class EntityBuilder(
     val dbCreator: (DbCon) -> IDb,
-    val dbs: DbLookup,
+    val dbs: Connections,
     val enc: Encryptor? = null
 ) {
 

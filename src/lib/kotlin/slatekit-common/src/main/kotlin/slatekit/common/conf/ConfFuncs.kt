@@ -21,8 +21,6 @@ import slatekit.common.encrypt.Encryptor
 import slatekit.common.info.ApiKey
 import slatekit.common.info.ApiLogin
 import slatekit.common.info.Credentials
-import slatekit.common.io.Uri
-import slatekit.common.io.Uris
 import java.io.File
 import java.util.*
 
@@ -163,7 +161,7 @@ object ConfFuncs {
                             key("driver", con.driver, null),
                             key("url", con.url, enc),
                             key("user", con.user, enc),
-                            key("pswd", con.password, enc)
+                            key("pswd", con.pswd, enc)
                     )
                 }
             }

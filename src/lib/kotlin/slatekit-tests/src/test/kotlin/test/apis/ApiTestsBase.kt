@@ -24,8 +24,8 @@ import slatekit.common.Source
 import slatekit.common.args.Args
 import slatekit.common.conf.Config
 import slatekit.common.db.DbConString
-import slatekit.common.db.DbLookup
-import slatekit.common.db.DbLookup.Companion.defaultDb
+import slatekit.common.db.Connections
+import slatekit.common.db.Connections.Companion.of
 import slatekit.common.envs.Envs
 import slatekit.common.info.*
 import slatekit.common.log.LogsDefault
@@ -58,13 +58,13 @@ open class ApiTestsBase {
                 envs = Envs.defaults().select("loc"),
                 conf = cfg,
                 logs = LogsDefault,
-                ent = Entities({ con -> Db(con) }, DbLookup(cfg.dbCon())),
+                ent = Entities({ con -> Db(con) }, Connections(cfg.dbCon())),
                 info = Info(
                         About("tests", "myapp", "sample app", "slatekit", "ny", "", "", "1.1.0", ""),
                         Build.empty,
                         Sys.build()
                 ),
-                dbs = defaultDb(DbConString("com.mysql.jdbc.Driver", "jdbc:mysql://localhost/World_shard2", "root", "abcdefghi")),
+                dbs = of(DbConString("com.mysql.jdbc.Driver", "jdbc:mysql://localhost/World_shard2", "root", "abcdefghi")),
                 enc = MyEncryptor
         )
         ctx.ent.prototype<User>(User::class, serviceCtx = ctx)

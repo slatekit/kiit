@@ -106,7 +106,7 @@ interface Updates<TId, T> : ServiceSupport<TId, T> where TId : kotlin.Comparable
      * @return
      */
     fun updateByField(prop: KProperty<*>, value: Any): Int {
-        return repo().updateByField(prop.name, value)
+        return repo().updateField(prop.name, value)
     }
 
     /**

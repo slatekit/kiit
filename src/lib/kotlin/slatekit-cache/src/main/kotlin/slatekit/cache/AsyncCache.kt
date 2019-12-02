@@ -1,13 +1,15 @@
 package slatekit.cache
 
-interface CacheTypeSync : Cache {
+import kotlinx.coroutines.Deferred
+
+interface AsyncCache : Cache {
     /**
      * gets an item from the cache if it exists and is alive
      * @param key
      * @tparam T
      * @return
      */
-    fun <T> get(key: String): T?
+    fun <T> get(key: String): Deferred<T?>
 
     /**
      * gets an item from the cache as a future
@@ -15,12 +17,12 @@ interface CacheTypeSync : Cache {
      * @tparam T
      * @return
      */
-    fun <T> getOrLoad(key: String): T?
+    fun <T> getOrLoad(key: String): Deferred<T?>
 
     /**
      * manual / explicit refresh of a cache item with a future result
      * in order to get the item
      * @param key
      */
-    fun <T> getFresh(key: String): T?
+    fun <T> getFresh(key: String): Deferred<T?>
 }

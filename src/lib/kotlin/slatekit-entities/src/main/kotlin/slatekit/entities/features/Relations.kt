@@ -65,7 +65,7 @@ interface Relations<TId, T> : ServiceSupport<TId, T> where TId : kotlin.Comparab
         val entity = repo().getById(id)
         return entity?.let { ent ->
             val relRepo = entities().getRepo<TId, R>(model)
-            val relations = relRepo.findBy(prop.name, "=", id)
+            val relations = relRepo.findByField(prop.name, "=", id)
             Pair(entity, relations)
         } ?: Pair(null, listOf())
     }

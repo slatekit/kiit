@@ -146,7 +146,7 @@ open class InMemoryRepo<TId, T>(
      * @param query
      * @return
      */
-    override fun findBy(fieldRaw: String, op: String, value: Any): List<T> {
+    override fun findByField(fieldRaw: String, op: String, value: Any): List<T> {
         return filter(items.all(), fieldRaw, op, value)
     }
 
@@ -169,8 +169,8 @@ open class InMemoryRepo<TId, T>(
      * @param value: value of field to search against
      * @return
      */
-    override fun findFirstBy(field: String, op: String, value: Any): T? {
-        return findBy(field, op, value).firstOrNull()
+    override fun findOneByField(field: String, op: String, value: Any): T? {
+        return findByField(field, op, value).firstOrNull()
     }
 
     /**
@@ -192,7 +192,15 @@ open class InMemoryRepo<TId, T>(
         }
     }
 
-    override fun updateByField(field: String, value: Any): Int {
+    override fun updateField(field: String, value: Any): Int {
+        TODO("not implemented") // To change body of created functions use File | Settings | File Templates.
+    }
+
+    override fun updateByField(field: String, oldValue: Any?, newValue:Any?): Int {
+        TODO("not implemented") // To change body of created functions use File | Settings | File Templates.
+    }
+
+    override fun patch(id:TId, values:List<Pair<String,Any?>>): Int {
         TODO("not implemented") // To change body of created functions use File | Settings | File Templates.
     }
 
@@ -244,7 +252,7 @@ open class InMemoryRepo<TId, T>(
 
     protected fun filter(all: List<T>, fieldRaw: String, op: String, value: Any): List<T> {
         val field = info.model?.fields?.find { it.storedName.toLowerCase() == fieldRaw.toLowerCase() }
-        val prop = field?.prop ?: Reflector.findPropertyExtended(info.entityType, field?.name ?: fieldRaw)
+        val prop = field?.prop ?: Reflector.findPropertyExtended(info.modelType, field?.name ?: fieldRaw)
         val matched = prop?.let { property ->
             val cls = KTypes.getClassFromType(property.returnType)
 
@@ -258,6 +266,16 @@ open class InMemoryRepo<TId, T>(
             }
         } ?: listOf()
         return matched
+    }
+
+
+    companion object {
+
+        inline fun <reified TId, reified T> of():InMemoryRepo<TId, T> where TId : Comparable<TId>, T:Any {
+            val idGen = if(TId::class == Int::class) IntIdGenerator() else LongIdGenerator()
+            val repo = InMemoryRepo<TId, T>(EntityInfo.memory(TId::class, T::class), idGen as IdGenerator<TId>)
+            return repo
+        }
     }
 }
 

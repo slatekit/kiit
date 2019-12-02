@@ -12,9 +12,25 @@
  */
 package slatekit.common.db
 
-sealed class DbType(val name: String, val driver: String) {
-  object DbTypeMySql  : DbType("mysql", "com.mysql.jdbc.Driver")
-  object DbTypePGres  : DbType("pgres", "org.postgresql.Driver")
-  object DbTypeSqLite : DbType("sqlite", "org.sqlite.JDBC")
-  object DbTypeMemory : DbType("memory", "com.slatekit.entities.repository-in-memory")
+sealed class DbType {
+
+    /* ktlint-disable */
+    object DbBool          : DbType()
+    object DbChar          : DbType()
+    object DbString        : DbType()
+    object DbText          : DbType()
+    object DbShort         : DbType()
+    object DbNumber        : DbType()
+    object DbLong          : DbType()
+    object DbFloat         : DbType()
+    object DbDouble        : DbType()
+    object DbDecimal       : DbType()
+    object DbLocalDate     : DbType()
+    object DbLocalTime     : DbType()
+    object DbLocalDateTime : DbType()
+    object DbZonedDateTime : DbType()
+    object DbInstant       : DbType()
+    object DbDateTime      : DbType()
+    object DbEnum          : DbType()
+    /* ktlint-enable */
 }

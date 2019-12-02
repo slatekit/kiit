@@ -142,7 +142,7 @@ class Example_Config : Command("config") {
             println("driver: " + c.driver)
             println("url   : " + c.url)
             println("user  : " + c.user)
-            println("pswd  : " + c.password)
+            println("pswd  : " + c.pswd)
             println()
         }
     }

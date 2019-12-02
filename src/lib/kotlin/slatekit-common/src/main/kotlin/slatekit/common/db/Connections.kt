@@ -21,7 +21,7 @@ import slatekit.common.conf.Conf
   * 2. named connection  : "qa1" -> {connectionString}
   * 3. grouped shard     : ( group="usa", shard="01" ) -> { connectionString }
   */
-class DbLookup(
+class Connections(
     private val defaultCon: DbCon? = null,
     private val names: Map<String, DbCon>? = null,
     private val groups: Map<String, Map<String, DbCon>>? = null
@@ -64,15 +64,15 @@ class DbLookup(
      * @return
      */
     @JvmStatic
-    fun defaultDb(con: DbCon): DbLookup {
-      val db = DbLookup(defaultCon = con)
+    fun of(con: DbCon): Connections {
+      val db = Connections(defaultCon = con)
       return db
     }
 
 
     @JvmStatic
-    fun fromConfig(conf: Conf):DbLookup {
-      return DbLookup.defaultDb(conf.dbCon("db"))
+    fun from(conf: Conf):Connections {
+      return Connections.of(conf.dbCon("db"))
     }
 
     /**
@@ -82,21 +82,10 @@ class DbLookup(
      * @return
      */
     @JvmStatic
-    fun namedDbs(items: List<Pair<String, DbCon>>): DbLookup {
+    fun named(items: List<Pair<String, DbCon>>): Connections {
       val named = items.map { item -> item.first to item.second }.toMap()
-      val db = DbLookup(names = named)
+      val db = Connections(names = named)
       return db
-    }
-
-    /**
-     * Creates a database lookup with just named databases
-     *
-     * @param items
-     * @return
-     */
-    private fun named(items: List<Pair<String, DbCon>>): Map<String, DbCon> {
-      val named = items.map { item -> item.first to item.second }.toMap()
-      return named
     }
   }
 }
