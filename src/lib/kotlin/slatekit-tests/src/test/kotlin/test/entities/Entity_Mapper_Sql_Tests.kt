@@ -15,7 +15,7 @@ package test.entities
 import org.junit.Assert
 import org.junit.Test
 import slatekit.common.DateTimes
-import slatekit.common.db.DbCon
+import slatekit.common.data.DbCon
 import slatekit.common.ext.toUUId
 import slatekit.common.ids.UniqueId
 import slatekit.db.Db

@@ -282,7 +282,11 @@ open class InMemoryRepo<TId, T>(
 class EntityMapperEmpty<TId, T>(val model: Model?) :
     EntityMapper<TId, T> where TId : Comparable<TId>, T : Entity<TId> {
 
+    override fun encode(model: T): Updates {
+        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    }
+
     override fun schema(): Model? = model
 
-    override fun <T> mapFrom(record: Record): T? = null
+    override fun decode(record: Record): T? = null
 }

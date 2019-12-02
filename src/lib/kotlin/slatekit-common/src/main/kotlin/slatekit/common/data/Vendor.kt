@@ -10,7 +10,7 @@
  * mantra: Simplicity above all else
  * </slate_header>
  */
-package slatekit.common.db
+package slatekit.common.data
 
 sealed class Vendor(val name: String, val driver: String) {
   object MySql    : Vendor("mysql", "com.mysql.jdbc.Driver")

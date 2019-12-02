@@ -2,11 +2,13 @@ package slatekit.examples
 
 import slatekit.cmds.Command
 import slatekit.cmds.CommandRequest
+import slatekit.common.Record
 import slatekit.common.conf.Config
-import slatekit.common.db.Connections
-import slatekit.common.db.DbConString
-import slatekit.common.db.Vendor
+import slatekit.common.data.Connections
+import slatekit.common.data.DbConString
+import slatekit.common.data.Vendor
 import slatekit.db.Db
+import slatekit.entities.*
 import slatekit.entities.repos.InMemoryRepo
 import slatekit.examples.common.User
 import slatekit.query.Op
@@ -105,14 +107,56 @@ class Guide_ORM : Command("types") {
 
 
     fun h2(){
+
+        // 1. Connection
         val conh2 = DbConString(Vendor.H2.driver, "jdbc:h2:mem:test;DB_CLOSE_DELAY=-1", "", "")
+
+        // 2. Database ( JDBC abstraction )
         val db = Db(conh2).open()
+
+        // 3. Database usage
         db.execute("CREATE TABLE PERSON(id int primary key, name varchar(255))")
         db.insert("INSERT INTO PERSON" + "(id, name) values" + "(?,?)", listOf(1,"batman@gotham.com"))
         val users = db.mapAll( "select * from PERSON", null) {
             User(it.getInt("id").toLong(),it.getString("name"))
         }
-        println(users)
+    }
+
+
+    fun h2_repo(){
+
+        // 1. Connection
+        val con = DbConString(Vendor.H2.driver, "jdbc:h2:mem:test;DB_CLOSE_DELAY=-1", "", "")
+
+        // 2. Database ( thin JDBC abstraction to support Server + Android )
+        val db = Db.open(con)
+
+        // 3. Mapper: manual field mapping
+        val mapper = object: Mapper<Long, User> {
+
+            override fun encode(model:User): Updates {
+                return listOf(
+                        Value("id", 1),
+                        Value("name", "batman@gotham.com")
+                )
+            }
+
+            override fun decode(record: Record): User? {
+                return User(
+                        id = record.getInt("id").toLong(),
+                        email = record.getString("name")
+                )
+            }
+        }
+
+        // 4. Repo : CRUD repository
+        val repo1 = Repo.h2<Long, User>(db, mapper)
+        val repo2 = Repo.mysql<Long, User>(db, mapper)
+        val repo3 = Repo.postgres<Long, User>(db, mapper)
+
+
+        db.execute("CREATE TABLE PERSON(id int primary key, name varchar(255))")
+
     }
 
 

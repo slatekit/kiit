@@ -14,7 +14,7 @@ package test.entities
 
 import org.junit.Assert
 import org.junit.Test
-import slatekit.common.db.DbCon
+import slatekit.common.data.DbCon
 import slatekit.common.utils.RecordMap
 import slatekit.common.ids.UniqueId
 import slatekit.common.utils.ListMap

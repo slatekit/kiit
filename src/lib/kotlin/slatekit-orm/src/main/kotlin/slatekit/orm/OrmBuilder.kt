@@ -1,10 +1,10 @@
 package slatekit.orm
 
-import slatekit.common.db.*
+import slatekit.common.data.*
 import slatekit.common.encrypt.Encryptor
-import slatekit.common.db.Vendor.*
+import slatekit.common.data.Vendor.*
 import slatekit.common.naming.Namer
-import slatekit.common.db.Vendor
+import slatekit.common.data.Vendor
 import slatekit.entities.Entity
 import slatekit.entities.core.EntityBuilder
 import slatekit.entities.Repo

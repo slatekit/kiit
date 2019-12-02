@@ -19,8 +19,8 @@ import slatekit.apis.*
 import slatekit.common.*
 import slatekit.common.args.Args
 import slatekit.common.conf.Config
-import slatekit.common.db.DbConString
-import slatekit.common.db.Connections
+import slatekit.common.data.DbConString
+import slatekit.common.data.Connections
 import slatekit.common.envs.Envs
 import slatekit.common.info.About
 import slatekit.common.info.Build

@@ -1,6 +1,6 @@
 package slatekit.entities.migrations
 
-import slatekit.common.db.IDb
+import slatekit.common.data.IDb
 import slatekit.common.log.LogSupport
 import slatekit.common.log.Logger
 import slatekit.results.Outcome

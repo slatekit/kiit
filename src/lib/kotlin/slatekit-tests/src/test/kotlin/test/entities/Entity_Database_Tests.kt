@@ -20,8 +20,8 @@ import org.threeten.bp.*
 import slatekit.common.Field
 import slatekit.common.ids.UniqueId
 import slatekit.common.conf.ConfFuncs
-import slatekit.common.db.Connections
-import slatekit.common.db.Vendor
+import slatekit.common.data.Connections
+import slatekit.common.data.Vendor
 import slatekit.db.Db
 import slatekit.entities.Entities
 import slatekit.entities.EntityUpdatable

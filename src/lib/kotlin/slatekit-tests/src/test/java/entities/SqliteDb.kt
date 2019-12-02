@@ -1,7 +1,7 @@
 package entities
 
-import slatekit.common.db.IDb
-import slatekit.common.db.Mapper
+import slatekit.common.data.IDb
+import slatekit.common.data.Mapper
 import java.sql.ResultSet
 
 class SqliteDb : IDb {

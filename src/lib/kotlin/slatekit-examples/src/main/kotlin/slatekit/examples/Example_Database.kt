@@ -14,7 +14,7 @@ package slatekit.examples
 
 //<doc:import_required>
 import slatekit.db.Db
-import slatekit.common.db.DbConString
+import slatekit.common.data.DbConString
 //</doc:import_required>
 
 //<doc:import_examples>

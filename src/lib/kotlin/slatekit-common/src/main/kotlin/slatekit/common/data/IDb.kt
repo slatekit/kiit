@@ -1,4 +1,4 @@
-package slatekit.common.db
+package slatekit.common.data
 
 import java.sql.ResultSet
 

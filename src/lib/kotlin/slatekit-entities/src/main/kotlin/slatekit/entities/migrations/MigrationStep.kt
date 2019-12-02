@@ -1,6 +1,6 @@
 package slatekit.entities.migrations
 
-import slatekit.common.db.IDb
+import slatekit.common.data.IDb
 import slatekit.results.Outcome
 
 interface MigrationStep {

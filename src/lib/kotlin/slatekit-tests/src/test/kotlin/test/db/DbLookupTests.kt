@@ -14,11 +14,11 @@ package test.db
 
 import org.junit.Assert
 import org.junit.Test
-import slatekit.common.db.DbCon
-import slatekit.common.db.DbConString
-import slatekit.common.db.Connections
-import slatekit.common.db.Connections.Companion.of
-import slatekit.common.db.Connections.Companion.named
+import slatekit.common.data.DbCon
+import slatekit.common.data.DbConString
+import slatekit.common.data.Connections
+import slatekit.common.data.Connections.Companion.of
+import slatekit.common.data.Connections.Companion.named
 
 /**
  * Created by kishorereddy on 6/4/17.

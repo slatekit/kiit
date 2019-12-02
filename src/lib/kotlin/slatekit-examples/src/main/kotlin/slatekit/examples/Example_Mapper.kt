@@ -14,7 +14,7 @@ package slatekit.examples
 
 //<doc:import_required>
 import slatekit.common.*
-import slatekit.common.db.DbCon
+import slatekit.common.data.DbCon
 import slatekit.meta.models.Model
 import slatekit.cmds.Command
 import slatekit.cmds.CommandRequest

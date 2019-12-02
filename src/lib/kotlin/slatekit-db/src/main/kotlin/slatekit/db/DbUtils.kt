@@ -15,12 +15,12 @@ package slatekit.db
 
 import slatekit.common.DateTime
 import slatekit.common.Types
-import slatekit.common.db.DbCon
+import slatekit.common.data.DbCon
 import java.sql.*
 // import java.time.*
 import org.threeten.bp.*
 import slatekit.common.DateTimes
-import slatekit.common.db.DbType
+import slatekit.common.data.DbType
 import slatekit.common.ext.local
 
 object DbUtils {

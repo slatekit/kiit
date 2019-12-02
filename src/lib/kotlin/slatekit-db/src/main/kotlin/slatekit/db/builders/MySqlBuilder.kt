@@ -15,7 +15,7 @@ package slatekit.db.builders
 
 import java.rmi.UnexpectedException
 import slatekit.common.Types
-import slatekit.common.db.DbType
+import slatekit.common.data.DbType
 import slatekit.common.newline
 import slatekit.db.DbUtils.ensureField
 

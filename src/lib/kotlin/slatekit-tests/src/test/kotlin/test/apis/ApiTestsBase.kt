@@ -23,9 +23,9 @@ import slatekit.common.CommonRequest
 import slatekit.common.Source
 import slatekit.common.args.Args
 import slatekit.common.conf.Config
-import slatekit.common.db.DbConString
-import slatekit.common.db.Connections
-import slatekit.common.db.Connections.Companion.of
+import slatekit.common.data.DbConString
+import slatekit.common.data.Connections
+import slatekit.common.data.Connections.Companion.of
 import slatekit.common.envs.Envs
 import slatekit.common.info.*
 import slatekit.common.log.LogsDefault

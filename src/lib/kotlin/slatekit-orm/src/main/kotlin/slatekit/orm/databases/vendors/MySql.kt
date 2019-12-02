@@ -1,6 +1,6 @@
 package slatekit.orm.databases.vendors
 
-import slatekit.common.db.IDb
+import slatekit.common.data.IDb
 import slatekit.common.naming.Namer
 import slatekit.entities.repos.SqlRepo
 import slatekit.query.Query

@@ -21,7 +21,7 @@ import slatekit.common.Field
 import slatekit.results.Try
 import slatekit.results.Success
 import slatekit.db.Db
-import slatekit.common.db.DbConString
+import slatekit.common.data.DbConString
 import slatekit.cmds.Command
 import slatekit.cmds.CommandRequest
 import slatekit.entities.*

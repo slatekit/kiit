@@ -18,16 +18,14 @@ import java.sql.PreparedStatement
 import java.sql.ResultSet
 import java.sql.Statement
 import kotlin.io.*
-import slatekit.common.db.DbCon
-import slatekit.common.db.IDb
-import slatekit.common.db.Mapper
+import slatekit.common.data.DbCon
+import slatekit.common.data.IDb
+import slatekit.common.data.Mapper
 import slatekit.common.repeatWith
 import slatekit.db.DbUtils.executeCon
 import slatekit.db.DbUtils.executePrepAs
 import slatekit.db.DbUtils.executeStmt
 import slatekit.db.DbUtils.fillArgs
-import slatekit.db.builders.DbBuilder
-import slatekit.db.builders.MySqlBuilder
 
 /**
  * Light-weight JDBC based database access wrapper
@@ -302,6 +300,16 @@ class Db(
 
     override fun errorHandler(ex: Exception) {
         println("Database error : " + ex.message)
+    }
+
+
+    companion object {
+
+        fun open(con:DbCon):Db {
+            val db = Db(con)
+            db.open()
+            return db
+        }
     }
 
     /*

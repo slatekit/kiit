@@ -26,9 +26,11 @@ import slatekit.meta.models.Model
 import slatekit.meta.models.ModelField
 //import java.time.*
 import org.threeten.bp.*
-import slatekit.common.db.IDb
+import slatekit.common.data.IDb
 import slatekit.entities.EntityMapper
 import slatekit.entities.EntityUpdatable
+import slatekit.entities.Updates
+import slatekit.entities.Value
 import slatekit.entities.core.*
 import slatekit.meta.models.ModelMapper
 import kotlin.reflect.KClass
@@ -45,6 +47,7 @@ open class OrmMapper<TId, T>(
         val info:EntityInfo)
     : ModelMapper(model, encryptor = info.encryptor, namer = info.namer),
         EntityMapper<TId, T> where TId : kotlin.Comparable<TId>, T:Any  {
+
 
     constructor( model: Model, db: IDb, converter: Converter<TId, T>, idType:KClass<*>, clsType:KClass<*>)
         :this(model, db, converter, EntityInfo(idType, clsType, ""))
@@ -69,6 +72,15 @@ open class OrmMapper<TId, T>(
      * and their corresponding column metadata
      */
     override fun schema(): Model? = metaModel
+
+
+    override fun encode(item: T): Updates {
+        return mapFields(null, item, model(), false, true).map { Value(it.first, it.second as Any?) }
+    }
+
+    override fun decode(record: Record): T? {
+        return mapFrom(record)
+    }
 
 
     @Suppress("UNCHECKED_CAST")

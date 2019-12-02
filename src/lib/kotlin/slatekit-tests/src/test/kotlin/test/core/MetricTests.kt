@@ -7,7 +7,6 @@ import io.micrometer.datadog.DatadogConfig
 import io.micrometer.datadog.DatadogMeterRegistry
 import org.junit.Assert
 import org.junit.Test
-import slatekit.core.gate.*
 import java.time.Duration
 import java.util.concurrent.ConcurrentLinkedQueue
 

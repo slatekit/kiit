@@ -20,11 +20,11 @@ package slatekit.examples
 import slatekit.results.Try
 import slatekit.results.Success
 import slatekit.common.conf.ConfFuncs
-import slatekit.common.db.DbCon
-import slatekit.common.db.DbConString
-import slatekit.common.db.Connections
-import slatekit.common.db.Connections.Companion.of
-import slatekit.common.db.Connections.Companion.named
+import slatekit.common.data.DbCon
+import slatekit.common.data.DbConString
+import slatekit.common.data.Connections
+import slatekit.common.data.Connections.Companion.of
+import slatekit.common.data.Connections.Companion.named
 import slatekit.cmds.Command
 import slatekit.cmds.CommandRequest
 
