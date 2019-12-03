@@ -21,5 +21,6 @@ import slatekit.common.Record
 interface Mapper<TId, T> where TId : Comparable<TId> {
 
     fun encode(model:T, action: DataAction): Values
+
     fun decode(record: Record): T?
 }
