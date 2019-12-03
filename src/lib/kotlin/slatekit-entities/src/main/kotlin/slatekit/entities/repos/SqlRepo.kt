@@ -15,7 +15,7 @@ package slatekit.entities.repos
 
 import slatekit.common.data.IDb
 import slatekit.common.ext.tail
-import slatekit.entities.Mapper
+import slatekit.common.data.Mapper
 import slatekit.entities.core.EntityInfo
 import slatekit.query.IQuery
 import slatekit.query.Op

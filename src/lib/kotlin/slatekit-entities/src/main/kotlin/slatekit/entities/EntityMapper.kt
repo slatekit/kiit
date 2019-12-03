@@ -13,6 +13,7 @@
 
 package slatekit.entities
 
+import slatekit.common.data.Mapper
 import kotlin.reflect.KProperty
 import slatekit.meta.models.Model
 

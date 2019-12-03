@@ -4,11 +4,10 @@ import slatekit.cmds.Command
 import slatekit.cmds.CommandRequest
 import slatekit.common.Record
 import slatekit.common.conf.Config
-import slatekit.common.data.Connections
-import slatekit.common.data.DbConString
-import slatekit.common.data.Vendor
+import slatekit.common.data.*
 import slatekit.db.Db
 import slatekit.entities.*
+import slatekit.common.data.Mapper
 import slatekit.entities.repos.InMemoryRepo
 import slatekit.examples.common.User
 import slatekit.query.Op
@@ -134,7 +133,7 @@ class Guide_ORM : Command("types") {
         // 3. Mapper: manual field mapping
         val mapper = object: Mapper<Long, User> {
 
-            override fun encode(model:User): Updates {
+            override fun encode(model:User, action: DataAction): Values {
                 return listOf(
                         Value("id", 1),
                         Value("name", "batman@gotham.com")

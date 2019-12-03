@@ -16,6 +16,7 @@ package slatekit.entities
 import kotlin.reflect.KProperty
 import slatekit.common.DateTime
 import slatekit.common.data.IDb
+import slatekit.common.data.Mapper
 import slatekit.entities.Consts.idCol
 import slatekit.entities.core.EntityInfo
 import slatekit.entities.core.EntityStore
@@ -379,9 +380,9 @@ interface Repo<TId, T> : EntityStore where TId : Comparable<TId> {
         }
 
         inline fun <reified TId, reified T> sqlRepo(db: IDb,
-                                               mapper: Mapper<TId, T>,
-                                               table: String? = null,
-                                               op: (KClass<TId>, KClass<T>, EntityInfo) -> SqlRepo<TId, T>): SqlRepo<TId, T>
+                                                    mapper: Mapper<TId, T>,
+                                                    table: String? = null,
+                                                    op: (KClass<TId>, KClass<T>, EntityInfo) -> SqlRepo<TId, T>): SqlRepo<TId, T>
             where TId : Comparable<TId>, T: Any {
             val idType = TId::class
             val enType = T::class

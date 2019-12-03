@@ -22,6 +22,8 @@ import java.util.*
 // import java.time.*
 import org.threeten.bp.*
 import slatekit.common.Record
+import slatekit.common.data.DataAction
+import slatekit.common.data.Values
 import slatekit.entities.*
 import slatekit.entities.core.EntityInfo
 import slatekit.meta.models.Model
@@ -282,7 +284,7 @@ open class InMemoryRepo<TId, T>(
 class EntityMapperEmpty<TId, T>(val model: Model?) :
     EntityMapper<TId, T> where TId : Comparable<TId>, T : Entity<TId> {
 
-    override fun encode(model: T): Updates {
+    override fun encode(model: T, action:DataAction): Values {
         TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
 
