@@ -13,6 +13,7 @@
 
 package slatekit.db
 
+import slatekit.common.Record
 import java.sql.Connection
 import java.sql.PreparedStatement
 import java.sql.ResultSet
@@ -20,7 +21,6 @@ import java.sql.Statement
 import kotlin.io.*
 import slatekit.common.data.DbCon
 import slatekit.common.data.IDb
-import slatekit.common.data.Mapper
 import slatekit.common.repeatWith
 import slatekit.db.DbUtils.executeCon
 import slatekit.db.DbUtils.executePrepAs
@@ -210,7 +210,7 @@ class Db(
      * @return
      */
     @Suppress("UNCHECKED_CAST")
-    override fun <T> mapOne(sql: String, inputs: List<Any>?, mapper: Mapper<T>): T? {
+    override fun <T> mapOne(sql: String, inputs: List<Any>?, mapper: (Record) -> T?): T? {
         val res = query(sql, { rs ->
 
             val rec = RecordSet(rs)
@@ -231,7 +231,7 @@ class Db(
      * @return
      */
     @Suppress("UNCHECKED_CAST")
-    override fun <T> mapAll(sql: String, inputs: List<Any>?, mapper: Mapper<T>): List<T>? {
+    override fun <T> mapAll(sql: String, inputs: List<Any>?, mapper: (Record) -> T?): List<T>? {
         val res = query(sql, { rs ->
 
             val rec = RecordSet(rs)
@@ -274,7 +274,7 @@ class Db(
      */
     override fun <T> callQueryMapped(
         procName: String,
-        mapper: Mapper<T>,
+        mapper: (Record) -> T?,
         inputs: List<Any>?
     ): List<T>? {
         // {call create_author(?, ?)}
