@@ -20,7 +20,7 @@ import java.sql.*
 // import java.time.*
 import org.threeten.bp.*
 import slatekit.common.DateTimes
-import slatekit.common.data.DbType
+import slatekit.common.data.DataType
 import slatekit.common.ext.local
 
 object DbUtils {
@@ -165,22 +165,22 @@ object DbUtils {
         else null
     }
 
-    fun getTypeFromLang(dataType: Class<*>): DbType =
-            if (dataType == Types.JBoolClass) DbType.DbBool
-            else if (dataType == Types.JStringClass) DbType.DbString
-            else if (dataType == Types.JShortClass) DbType.DbShort
-            else if (dataType == Types.JIntClass) DbType.DbNumber
-            else if (dataType == Types.JLongClass) DbType.DbLong
-            else if (dataType == Types.JFloatClass) DbType.DbFloat
-            else if (dataType == Types.JDoubleClass) DbType.DbDouble
-            // else if (dataType == Types.JDecimalClass) DbType.DbDecimal
-            else if (dataType == Types.JLocalDateClass) DbType.DbLocalDate
-            else if (dataType == Types.JLocalTimeClass) DbType.DbLocalTime
-            else if (dataType == Types.JLocalDateTimeClass) DbType.DbLocalDateTime
-            else if (dataType == Types.JZonedDateTimeClass) DbType.DbZonedDateTime
-            else if (dataType == Types.JInstantClass) DbType.DbInstant
-            else if (dataType == Types.JDateTimeClass) DbType.DbDateTime
-            else DbType.DbString
+    fun getTypeFromLang(dataType: Class<*>): DataType =
+            if (dataType == Types.JBoolClass) DataType.DbBool
+            else if (dataType == Types.JStringClass) DataType.DbString
+            else if (dataType == Types.JShortClass) DataType.DbShort
+            else if (dataType == Types.JIntClass) DataType.DbNumber
+            else if (dataType == Types.JLongClass) DataType.DbLong
+            else if (dataType == Types.JFloatClass) DataType.DbFloat
+            else if (dataType == Types.JDoubleClass) DataType.DbDouble
+            // else if (dataType == Types.JDecimalClass) DataType.DbDecimal
+            else if (dataType == Types.JLocalDateClass) DataType.DbLocalDate
+            else if (dataType == Types.JLocalTimeClass) DataType.DbLocalTime
+            else if (dataType == Types.JLocalDateTimeClass) DataType.DbLocalDateTime
+            else if (dataType == Types.JZonedDateTimeClass) DataType.DbZonedDateTime
+            else if (dataType == Types.JInstantClass) DataType.DbInstant
+            else if (dataType == Types.JDateTimeClass) DataType.DbDateTime
+            else DataType.DbString
 
     fun ensureField(text: String): String =
             if (text.isNullOrEmpty())

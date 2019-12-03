@@ -1,8 +1,8 @@
 package slatekit.orm.core
 
 import slatekit.common.Types
-import slatekit.common.data.DbType
-import slatekit.common.data.DbTypeMap
+import slatekit.common.data.DataType
+import slatekit.common.data.DataTypeMap
 
 /**
  * MySql to Java types
@@ -13,19 +13,19 @@ open class TypeMap {
     /**
      * BOOL
      */
-    open val boolType = DbTypeMap(DbType.DbBool, "BIT", Types.JBoolClass)
+    open val boolType = DataTypeMap(DataType.DbBool, "BIT", Types.JBoolClass)
 
     /**
      * STRINGS
      */
-    open val charType = DbTypeMap(DbType.DbChar, "CHAR", Types.JCharClass)
-    open val stringType = DbTypeMap(DbType.DbString, "NVARCHAR", Types.JStringClass)
-    open val textType = DbTypeMap(DbType.DbText, "TEXT", Types.JStringClass)
+    open val charType = DataTypeMap(DataType.DbChar, "CHAR", Types.JCharClass)
+    open val stringType = DataTypeMap(DataType.DbString, "NVARCHAR", Types.JStringClass)
+    open val textType = DataTypeMap(DataType.DbText, "TEXT", Types.JStringClass)
 
     /**
      * UUID
      */
-    open val uuidType = DbTypeMap(DbType.DbString, "NVARCHAR", Types.JStringClass)
+    open val uuidType = DataTypeMap(DataType.DbString, "NVARCHAR", Types.JStringClass)
 
     /**
      * NUMBERS
@@ -37,22 +37,22 @@ open class TypeMap {
      * INT	      4	                -2147483648	            0	                    2147483647	            4294967295
      * BIGINT	  8	                -263	                0	                    263-1	                264-1
      */
-    open val shortType = DbTypeMap(DbType.DbShort, "SMALLINT", Types.JShortClass)
-    open val intType = DbTypeMap(DbType.DbNumber, "INTEGER", Types.JIntClass)
-    open val longType = DbTypeMap(DbType.DbLong, "BIGINT", Types.JLongClass)
-    open val floatType = DbTypeMap(DbType.DbFloat, "FLOAT", Types.JFloatClass)
-    open val doubleType = DbTypeMap(DbType.DbDouble, "DOUBLE", Types.JDoubleClass)
-    //open val decimalType = DbTypeMap(DbType.DbDecimal, "DECIMAL", Types.JDecimalClass)
+    open val shortType = DataTypeMap(DataType.DbShort, "SMALLINT", Types.JShortClass)
+    open val intType = DataTypeMap(DataType.DbNumber, "INTEGER", Types.JIntClass)
+    open val longType = DataTypeMap(DataType.DbLong, "BIGINT", Types.JLongClass)
+    open val floatType = DataTypeMap(DataType.DbFloat, "FLOAT", Types.JFloatClass)
+    open val doubleType = DataTypeMap(DataType.DbDouble, "DOUBLE", Types.JDoubleClass)
+    //open val decimalType = DataTypeMap(DataType.DbDecimal, "DECIMAL", Types.JDecimalClass)
 
     /**
      * DATES / TIMES
      */
-    open val localdateType = DbTypeMap(DbType.DbLocalDate, "DATE", Types.JLocalDateClass)
-    open val localtimeType = DbTypeMap(DbType.DbLocalTime, "TIME", Types.JLocalTimeClass)
-    open val localDateTimeType = DbTypeMap(DbType.DbLocalDateTime, "DATETIME", Types.JLocalDateTimeClass)
-    open val zonedDateTimeType = DbTypeMap(DbType.DbZonedDateTime, "DATETIME", Types.JZonedDateTimeClass)
-    open val dateTimeType = DbTypeMap(DbType.DbDateTime, "DATETIME", Types.JDateTimeClass)
-    open val instantType = DbTypeMap(DbType.DbInstant, "INSTANT", Types.JInstantClass)
+    open val localdateType = DataTypeMap(DataType.DbLocalDate, "DATE", Types.JLocalDateClass)
+    open val localtimeType = DataTypeMap(DataType.DbLocalTime, "TIME", Types.JLocalTimeClass)
+    open val localDateTimeType = DataTypeMap(DataType.DbLocalDateTime, "DATETIME", Types.JLocalDateTimeClass)
+    open val zonedDateTimeType = DataTypeMap(DataType.DbZonedDateTime, "DATETIME", Types.JZonedDateTimeClass)
+    open val dateTimeType = DataTypeMap(DataType.DbDateTime, "DATETIME", Types.JDateTimeClass)
+    open val instantType = DataTypeMap(DataType.DbInstant, "INSTANT", Types.JInstantClass)
 
     open val lookup = mapOf(
             boolType.metaType to boolType,
