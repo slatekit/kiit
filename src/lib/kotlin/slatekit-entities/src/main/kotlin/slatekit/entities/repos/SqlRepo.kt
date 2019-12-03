@@ -196,7 +196,7 @@ open class SqlRepo<TId, T>(
      * @param value: value of field to search against
      * @return
      */
-    override fun findByField(field: String, op: String, value: Any): List<T> {
+    override fun findByField(field: String, op: Op, value: Any): List<T> {
         return find(Query().where(field, op, value))
     }
 
@@ -230,7 +230,7 @@ open class SqlRepo<TId, T>(
      * @param value: value of field to search against
      * @return
      */
-    override fun findOneByField(field: String, op: String, value: Any): T? {
+    override fun findOneByField(field: String, op: Op, value: Any): T? {
         return find(Query().where(field, op, value)).firstOrNull()
     }
 

@@ -38,6 +38,7 @@ class Model(
 ) {
 
     constructor(dataType: KClass<*>, tableName: String = "") : this(dataType.simpleName!!, dataType.qualifiedName!!, dataType, tableName = tableName)
+    constructor(dataType: KClass<*>, fields: List<ModelField>, tableName: String = "") : this(dataType.simpleName!!, dataType.qualifiedName!!, dataType, tableName = tableName, modelFields = fields)
 
     /**
      * The name of the table
@@ -603,7 +604,7 @@ class Model(
         val field = ModelField.build(
                 null, name, desc, dataCls, dataTpe, isRequired,
                 false, false, true,
-                minLength, maxLength, destName, defaultValue, encrypt, tag, cat
+                minLength, maxLength, destName, defaultValue, encrypt, listOf(tag), cat
         )
         return add(field)
     }
@@ -646,7 +647,7 @@ class Model(
         val field = ModelField.build(
                 prop, name, desc, dataCls, dataTpe, isRequired,
                 false, false, true,
-                minLength, maxLength, destName, defaultValue, encrypt, tag, cat
+                minLength, maxLength, destName, defaultValue, encrypt, listOf(tag), cat
         )
         return add(field)
     }

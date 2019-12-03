@@ -9,6 +9,7 @@ import slatekit.meta.KTypes
 import java.util.*
 import kotlin.reflect.KClass
 import kotlin.reflect.KProperty
+import kotlin.reflect.KType
 
 object ModelUtils {
 
@@ -37,5 +38,28 @@ object ModelUtils {
             else -> ModelFieldType.typeObject
         }
         return fieldType
+    }
+
+
+    fun getFieldType(tpe: KType): ModelFieldType {
+        return when (tpe) {
+            // Basic types
+            KTypes.KStringType -> ModelFieldType.typeString
+            KTypes.KBoolType -> ModelFieldType.typeBool
+            KTypes.KShortType -> ModelFieldType.typeShort
+            KTypes.KIntType -> ModelFieldType.typeInt
+            KTypes.KLongType -> ModelFieldType.typeLong
+            KTypes.KFloatType -> ModelFieldType.typeFloat
+            KTypes.KDoubleType -> ModelFieldType.typeDouble
+            KTypes.KDateTimeType -> ModelFieldType.typeDateTime
+            KTypes.KLocalDateType -> ModelFieldType.typeLocalDate
+            KTypes.KLocalTimeType -> ModelFieldType.typeLocalTime
+            KTypes.KLocalDateTimeType -> ModelFieldType.typeLocalDateTime
+            KTypes.KZonedDateTimeType -> ModelFieldType.typeZonedDateTime
+            KTypes.KInstantType -> ModelFieldType.typeInstant
+            KTypes.KUUIDType -> ModelFieldType.typeUUID
+            KTypes.KUniqueIdType -> ModelFieldType.typeUnique
+            else               -> ModelFieldType.typeObject
+        }
     }
 }

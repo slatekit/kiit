@@ -148,8 +148,8 @@ open class InMemoryRepo<TId, T>(
      * @param query
      * @return
      */
-    override fun findByField(fieldRaw: String, op: String, value: Any): List<T> {
-        return filter(items.all(), fieldRaw, op, value)
+    override fun findByField(fieldRaw: String, op: Op, value: Any): List<T> {
+        return filter(items.all(), fieldRaw, op.text, value)
     }
 
     /**
@@ -171,7 +171,7 @@ open class InMemoryRepo<TId, T>(
      * @param value: value of field to search against
      * @return
      */
-    override fun findOneByField(field: String, op: String, value: Any): T? {
+    override fun findOneByField(field: String, op: Op, value: Any): T? {
         return findByField(field, op, value).firstOrNull()
     }
 

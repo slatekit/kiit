@@ -4,6 +4,7 @@ import java.util.*
 import slatekit.entities.Entity
 import slatekit.entities.EntityWithUUID
 import slatekit.entities.core.ServiceSupport
+import slatekit.query.Op
 
 /**
  * NOTE: There is only 1 type constraint on the type parameter T to be Entity
@@ -19,7 +20,7 @@ interface UniqueIds<TId, T> : ServiceSupport<TId, T> where TId : kotlin.Comparab
      * @return
      */
     fun getByUUID(id: String): T? {
-        return repo().findOneByField(EntityWithUUID::uuid.name, "=", id)
+        return repo().findOneByField(EntityWithUUID::uuid.name, Op.Eq, id)
     }
 
     /**
@@ -28,7 +29,7 @@ interface UniqueIds<TId, T> : ServiceSupport<TId, T> where TId : kotlin.Comparab
      * @return
      */
     fun getByUUID(id: UUID): T? {
-        return repo().findOneByField(EntityWithUUID::uuid.name, "=", id.toString())
+        return repo().findOneByField(EntityWithUUID::uuid.name, Op.Eq, id.toString())
     }
 
     /**
@@ -37,6 +38,6 @@ interface UniqueIds<TId, T> : ServiceSupport<TId, T> where TId : kotlin.Comparab
      * @return
      */
     fun getByUUIDs(ids: List<String>): List<T>? {
-        return repo().findByField(EntityWithUUID::uuid.name, "in", ids)
+        return repo().findByField(EntityWithUUID::uuid.name, Op.In, ids)
     }
 }

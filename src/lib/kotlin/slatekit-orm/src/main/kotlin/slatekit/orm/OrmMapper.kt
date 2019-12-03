@@ -51,9 +51,13 @@ open class OrmMapper<TId, T>(
 
     val mapper = ModelMapper(model, encryptor = info.encryptor, namer = info.namer)
 
+    constructor( model: Model, db: IDb, idType:KClass<*>, clsType:KClass<*>)
+        :this(model, db, Converter<TId, T>(), idType, clsType)
+
 
     constructor( model: Model, db: IDb, converter: Converter<TId, T>, idType:KClass<*>, clsType:KClass<*>)
         :this(model, db, converter, EntityInfo(idType, clsType, ""))
+
 
 
     /**

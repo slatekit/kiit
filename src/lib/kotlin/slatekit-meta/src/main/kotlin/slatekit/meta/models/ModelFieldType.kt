@@ -30,6 +30,7 @@ sealed class ModelFieldType {
     // Enum
     object typeEnum : ModelFieldType()
     object typeUUID : ModelFieldType()
+    object typeUnique : ModelFieldType()
 
     // Complex/Object
     object typeObject : ModelFieldType()

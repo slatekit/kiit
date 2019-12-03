@@ -232,7 +232,7 @@ interface Repo<TId, T> : EntityStore where TId : Comparable<TId> {
      * @param value: value of field to search against
      * @return
      */
-    fun findByField(field: String, op: String, value: Any): List<T> = listOf()
+    fun findByField(field: String, op: Op, value: Any): List<T> = listOf()
 
     /**
      * finds items based on the conditions
@@ -261,7 +261,7 @@ interface Repo<TId, T> : EntityStore where TId : Comparable<TId> {
      * @param value: value of field to search against
      * @return
      */
-    fun findOneByField(field: String, op: String, value: Any): T? = null
+    fun findOneByField(field: String, op: Op, value: Any): T? = null
 
     /**
      * finds items by using the sql

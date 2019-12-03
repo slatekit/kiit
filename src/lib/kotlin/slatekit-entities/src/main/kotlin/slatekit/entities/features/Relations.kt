@@ -6,6 +6,7 @@ import slatekit.common.NOTE
 import slatekit.entities.Entities
 import slatekit.entities.Entity
 import slatekit.entities.core.ServiceSupport
+import slatekit.query.Op
 
 interface Relations<TId, T> : ServiceSupport<TId, T> where TId : kotlin.Comparable<TId>, T : Entity<TId> {
 
@@ -65,7 +66,7 @@ interface Relations<TId, T> : ServiceSupport<TId, T> where TId : kotlin.Comparab
         val entity = repo().getById(id)
         return entity?.let { ent ->
             val relRepo = entities().getRepo<TId, R>(model)
-            val relations = relRepo.findByField(prop.name, "=", id)
+            val relations = relRepo.findByField(prop.name, Op.Eq, id)
             Pair(entity, relations)
         } ?: Pair(null, listOf())
     }

@@ -41,7 +41,7 @@ data class ModelField(
         @JvmField val extra: String = "",
         @JvmField val example: String = "",
         @JvmField val format: String = "",
-        @JvmField val tag: String = "",
+        @JvmField val tags: List<String> = listOf(),
         @JvmField val category: ModelFieldCategory = ModelFieldCategory.Data,
         @JvmField val model: Model? = null
 ) {
@@ -63,7 +63,7 @@ data class ModelField(
         text.append(", format : $format")
         text.append(", key : $key")
         text.append(", extra : $extra")
-        text.append(", tag : $tag")
+        text.append(", tag : $tags")
         text.append(", category : $category")
         text.append(" )")
         return text.toString()
@@ -72,10 +72,8 @@ data class ModelField(
     fun isBasicType(): Boolean = KTypes.isBasicType(dataCls) || isEnum
 
     fun isStandard(): Boolean {
-        return when (tag) {
-            "standard", "id", "meta" -> true
-            else -> false
-        }
+        val result = listOf("standard", "id", "meta").filter { tags.contains(it) }
+        return result.isNotEmpty()
     }
 
     companion object {
@@ -123,7 +121,7 @@ data class ModelField(
                 destName: String? = null,
                 defaultValue: Any? = null,
                 encrypt: Boolean = false,
-                tag: String = "",
+                tags: List<String> = listOf(),
                 cat: ModelFieldCategory = ModelFieldCategory.Data,
                 namer: Namer? = null
         ): ModelField {
@@ -148,7 +146,7 @@ data class ModelField(
                     defaultValue = defaultValue,
                     encrypt = encrypt,
                     key = "",
-                    tag = tag,
+                    tags = tags,
                     category = cat
             )
             return field

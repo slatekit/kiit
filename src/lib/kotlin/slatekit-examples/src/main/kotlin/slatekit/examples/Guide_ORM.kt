@@ -2,17 +2,23 @@ package slatekit.examples
 
 import slatekit.cmds.Command
 import slatekit.cmds.CommandRequest
-import slatekit.common.Record
+import slatekit.common.*
 import slatekit.common.conf.Config
 import slatekit.common.data.*
 import slatekit.db.Db
 import slatekit.entities.*
 import slatekit.common.data.Mapper
+import slatekit.common.utils.ListMap
+import slatekit.common.utils.RecordMap
 import slatekit.entities.repos.InMemoryRepo
-import slatekit.examples.common.User
+import slatekit.meta.Schema
+import slatekit.orm.OrmMapper
+import slatekit.orm.core.Converter
 import slatekit.query.Op
+import slatekit.query.Query
 import slatekit.results.Success
 import slatekit.results.Try
+import java.util.*
 
 
 /**
@@ -23,7 +29,7 @@ class Guide_ORM : Command("types") {
 
     override fun execute(request: CommandRequest): Try<Any> {
         //<doc:setup>
-        h2()
+        model()
         // The entities are dependent on the database connections setup.
         // See Example_Database.kt for more info
 
@@ -32,7 +38,11 @@ class Guide_ORM : Command("types") {
     }
 
     // Sample model
-    data class City(val id:Long, val name:String, val alias:String)
+    data class City(override val id:Long, val name:String, val alias:String) : EntityWithId<Long> {
+        override fun isPersisted(): Boolean {
+            return id > 0
+        }
+    }
 
 
     fun con() {
@@ -105,6 +115,53 @@ class Guide_ORM : Command("types") {
     }
 
 
+    fun records(){
+
+        // Sample connection/DB
+        val con1 = DbConString(Vendor.MySql.driver, "jdbc:mysql://localhost/default", "user1", "pswd3210")
+        val db = Db(con1)
+
+        // Record via wrapped JDBC ResultSet
+        val city = db.mapOne<City>("select * from `city` where id = ?", listOf(1)) { rs:Record ->
+            City(   rs.getLong("id"),
+                    rs.getString("name"),
+                    rs.getString("alias")
+            )
+        }
+
+        // Simulating a Record from a list of key/value pairs
+        val record:Record = RecordMap(
+                ListMap(
+                        listOf(
+                                Pair("id", 1L),
+                                Pair("uuid", "ABC"),
+                                Pair("email", "kishore@abc.com"),
+                                Pair("isActive", true),
+                                Pair("age", 35),
+                                Pair("status", Status.InActive),
+                                Pair("salary", 400.5),
+                                Pair("uid", UUID.fromString("ad6ec896-bc1e-4430-b13c-88e3d4924a6a")),
+                                Pair("createdAt", DateTimes.of(2017, 1, 1, 12, 0, 0, 0))
+                                )
+                )
+        )
+
+        // There are getX methods, getXOrNull, getXOrDefault
+        println(record.getBool("isActive"))
+        println(record.getBoolOrNull("isActive"))
+        println(record.getBoolOrElse("isActive", false))
+
+        // There are several methods for various types
+        println(record.getString("email"))
+        println(record.getBool("isActive"))
+        println(record.getInt("age"))
+        println(record.getLong("id"))
+        println(record.getDouble("salary"))
+        println(record.getUUID("uuid"))
+        println(record.getZonedDateTime("createdAt"))
+    }
+
+
     fun h2(){
 
         // 1. Connection
@@ -135,23 +192,25 @@ class Guide_ORM : Command("types") {
 
             override fun encode(model:User, action: DataAction): Values {
                 return listOf(
-                        Value("id", 1),
-                        Value("name", "batman@gotham.com")
+                        Value("id", model.id),
+                        Value("firstname", model.first),
+                        Value("lastname", model.last),
+                        Value("email", model.email)
                 )
             }
 
             override fun decode(record: Record): User? {
                 return User(
                         id = record.getInt("id").toLong(),
-                        email = record.getString("name")
+                        first = record.getString("first"),
+                        last = record.getString("last"),
+                        email = record.getString("email")
                 )
             }
         }
 
         // 4. Repo : CRUD repository
         val repo1 = Repo.h2<Long, User>(db, mapper)
-        val repo2 = Repo.mysql<Long, User>(db, mapper)
-        val repo3 = Repo.postgres<Long, User>(db, mapper)
 
 
         db.execute("CREATE TABLE PERSON(id int primary key, name varchar(255))")
@@ -159,7 +218,35 @@ class Guide_ORM : Command("types") {
     }
 
 
+    fun mapper():Mapper<Long, City> {
+        val mapper = object: Mapper<Long, City> {
+
+            override fun encode(model:City, action: DataAction): Values {
+                return listOf(
+                        Value("id", model.id),
+                        Value("name", model.name),
+                        Value("alias", model.alias)
+                )
+            }
+
+            override fun decode(record: Record): City? {
+                return City(
+                        id = record.getInt("id").toLong(),
+                        name = record.getString("name"),
+                        alias = record.getString("alias")
+                )
+            }
+        }
+        return mapper
+    }
+
+
     fun repo() {
+        // 1. Connection
+        val con = DbConString(Vendor.H2.driver, "jdbc:h2:mem:test;DB_CLOSE_DELAY=-1", "", "")
+
+        // 2. Database ( thin JDBC abstraction to support Server + Android )
+        val db = Db.open(con)
         val repo = InMemoryRepo.of<Long, City>()
 
         // CRUD
@@ -183,8 +270,8 @@ class Guide_ORM : Command("types") {
         repo.oldest(10)
 
         // Finds
-        val item1 = repo.findOneByField("name", "=", "Brooklyn")
-        val items2 = repo.findByField("name", "=", "Brooklyn")
+        val item1 = repo.findOneByField("name", Op.Eq, "Brooklyn")
+        val items2 = repo.findByField("name", Op.Eq, "Brooklyn")
         val items3 = repo.findByFields(listOf(Pair("name", "Brooklyn")))
         val items4= repo.findIn("name", listOf("Queens", "Brooklyn"))
         repo.find(repo.query())
@@ -206,6 +293,118 @@ class Guide_ORM : Command("types") {
         repo.deleteByQuery(repo.query().where(City::id.name, Op.Eq, 1))
     }
 
+
+    fun service(){
+        // Setup: This is boiler-plate that can be moved
+        // to a helper function/builder
+        // 1. connection
+        // 2. database
+        // 3. mapper
+        // 4. repo
+        // 5. service
+        val con = DbConString(Vendor.H2.driver, "jdbc:h2:mem:test;DB_CLOSE_DELAY=-1", "", "")
+        val db = Db.open(con)
+        val mapper:Mapper<Long, City> = mapper()
+        val repo = Repo.h2<Long, City>(db, mapper)
+        val service = EntityService<Long, City>(repo)
+
+        // CRUD operations
+        val city = City(0, "Brooklyn", "bk")
+
+        // Create
+        val id = service.create(city)
+        service.save(City(0, "New York", "NYC"))
+
+        // Checks
+        service.any()
+        service.count()
+
+        // Gets
+        service.getAll()
+        service.getById(1)
+        service.getByIds(listOf(1, 2))
+        service.first()
+        service.last()
+        service.recent(10)
+        service.oldest(10)
+
+        // Finds
+        val item1 = service.findOneByField(User::email, Op.Eq,"Brooklyn")
+        val items2 = service.findByField(City::name, Op.Eq, "Brooklyn")
+        val items3 = service.findByFields(listOf(Pair("name", "Brooklyn")))
+        val items4= service.findIn(City::name, listOf("Queens", "Brooklyn"))
+        val items5 = service.findByQuery(Query().where(City::name.name, Op.Eq, "Brooklyn"))
+
+        // Updates
+        val updated = city.copy(id = id, name = "Queens")
+        service.update(updated)
+        service.patch(id, listOf(Pair("name", "Queens City"), Pair("alias", "QCity")))
+        service.updateByField(City::name, "Queens", "Queens City")
+        service.updateField(City::name, "test")
+        service.updateByProc("update_alias", listOf(1, "QCity"))
+
+        // Deletes
+        service.deleteAll()
+        service.delete(city)
+        service.deleteById(2)
+        service.deleteByIds(listOf(1, 2))
+        service.deleteByField(City::id, Op.Eq, 1)
+        service.deleteByQuery(Query().where(City::id.name, Op.Eq, 1))
+
+    }
+
+    data class User(
+            val id:Long = 0L,
+            val email:String,
+            val first:String = "",
+            val last:String = "",
+            val active:Boolean = false,
+            val age:Int = 35,
+            val salary:Double = 100.00,
+            val registered:DateTime? = null
+    )
+
+    object UserSchema : Schema<Long, User>(Long::class, User::class, "user") {
+        val id         = id    (User::id        )
+        val email      = field (User::email     , min = 10, max = 50, indexed = true)
+        val first      = field (User::first     , min = 10, max = 50)
+        val last       = field (User::last      , min = 10, max = 50)
+        val age        = field (User::age       )
+        val salary     = field (User::salary    )
+        val active     = field (User::active    )
+        val registered = field (User::registered)
+    }
+
+    fun model(){
+        val model = UserSchema.model
+        model.fields.forEach {
+            println("field: name=${it.name}, ${it.storedName}, ${it.isRequired}, ${it.dataTpe}")
+        }
+        println("done")
+    }
+
+    fun orm(){
+        // Setup: This is boiler-plate that can be moved
+        // to a helper function/builder
+        // 1. connection
+        // 2. database
+        // 3. mapper
+        // 4. repo
+        // 5. service
+        val con = DbConString(Vendor.H2.driver, "jdbc:h2:mem:test;DB_CLOSE_DELAY=-1", "", "")
+        val db = Db.open(con)
+        val model = UserSchema.model
+        val mapper:Mapper<Long, City> = OrmMapper<Long, City>(model, db, Long::class, City::class)
+        val repo = Repo.h2<Long, City>(db, mapper)
+        val service = EntityService<Long, City>(repo)
+
+        service.save(City(0, "New York", "NYC"))
+
+        // CRUD operations
+        service.any()
+        service.count()
+        service.getById(1)
+    }
 
 //        val con2 = default(ConfFuncs.readDbCon("user://.slate/db_default.txt")!!)
 //
