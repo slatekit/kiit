@@ -27,7 +27,7 @@ open class Schema<TId, T>(val idType:KClass<*>, val enType:KClass<*>, val table:
         val fieldType = type ?: ModelUtils.getFieldType(finalType)
         val field = ModelField.build(
                 prop, finalName, "", finalKClas, fieldType, required,
-                false, false, true,
+                true, true, true,
                 min, max, null, defaultValue, encrypt, tags, ModelFieldCategory.Id
         )
         _model = _model.add(field)
