@@ -7,7 +7,7 @@ import slatekit.common.Record
 import slatekit.common.ext.orElse
 import slatekit.orm.Consts
 
-object StringEncoder : SqlEncoder<String> {
+class StringEncoder : SqlEncoder<String> {
 
     override fun encode(value: String?): String {
         return value?.let {

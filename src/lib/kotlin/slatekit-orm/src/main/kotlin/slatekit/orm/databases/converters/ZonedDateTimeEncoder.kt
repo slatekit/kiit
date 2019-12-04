@@ -7,7 +7,7 @@ import slatekit.orm.Consts
 import org.threeten.bp.*
 import slatekit.common.ext.atUtc
 
-object ZonedDateTimeEncoder : SqlEncoder<ZonedDateTime> {
+class ZonedDateTimeEncoder : SqlEncoder<ZonedDateTime> {
 
     override fun encode(value: ZonedDateTime?): String {
         return toSql(value, false)

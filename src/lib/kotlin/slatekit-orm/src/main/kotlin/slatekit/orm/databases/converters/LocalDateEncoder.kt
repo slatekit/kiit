@@ -6,7 +6,7 @@ import slatekit.orm.Consts
 //import java.time.*
 import org.threeten.bp.*
 
-object LocalDateEncoder : SqlEncoder<LocalDate> {
+class LocalDateEncoder : SqlEncoder<LocalDate> {
 
     override fun encode(value: LocalDate?): String {
         return value?.let { "'" + value.format(Consts.dateFormat) + "'" } ?: Consts.NULL
