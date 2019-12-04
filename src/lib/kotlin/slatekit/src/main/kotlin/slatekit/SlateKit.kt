@@ -4,6 +4,7 @@ import slatekit.apis.support.Authenticator
 import slatekit.app.App
 import slatekit.app.AppOptions
 import slatekit.cli.CliSettings
+import slatekit.common.Context
 import slatekit.common.args.ArgsSchema
 import slatekit.common.types.Content
 import slatekit.common.utils.B64Java8
@@ -17,7 +18,7 @@ import slatekit.integration.common.AppEntContext
 import slatekit.meta.Serialization
 import slatekit.results.Failure
 
-class SlateKit(ctx: AppEntContext, val interactive: Boolean) : App<AppEntContext>(ctx, AppOptions(printSummaryBeforeExec = true)), SlateKitServices {
+class SlateKit(ctx: Context, val interactive: Boolean) : App<Context>(ctx, AppOptions(printSummaryBeforeExec = true)), SlateKitServices {
 
     companion object {
 

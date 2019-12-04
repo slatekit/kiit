@@ -4,6 +4,7 @@ import slatekit.apis.Setup
 import slatekit.apis.core.Api
 import slatekit.cloud.aws.AwsCloudFiles
 import slatekit.cloud.aws.AwsCloudQueue
+import slatekit.common.Context
 import slatekit.core.queues.QueueStringConverter
 import slatekit.core.files.CloudFiles
 import slatekit.core.queues.CloudQueue
@@ -25,7 +26,7 @@ import slatekit.generator.GeneratorService
 
 interface SlateKitServices {
 
-    val ctx: AppEntContext
+    val ctx: Context
 
 
     fun emails(): EmailService {
@@ -53,22 +54,6 @@ interface SlateKitServices {
         val apiLogin = ctx.conf.apiLogin("queues")
         val queue = apiLogin.tag
         return AwsCloudQueue("us-east-1", queue, apiLogin, QueueStringConverter(), 3)
-    }
-
-
-    fun migrations(): MigrationService {
-        // entity migration services ( to install/uninstall )
-        val migrationSettings = MigrationSettings(enableLogging = true, enableOutput = true)
-        val migrationService = MigrationService(ctx.ent, ctx.ent.dbs, migrationSettings, ctx.dirs)
-        return migrationService
-    }
-
-
-    fun moduleContext(): ModuleContext {
-        // Services/depenencies for all modules
-        val moduleService = ctx.ent.getSvc<Long, Mod>(Mod::class) as ModService
-        val moduleContext = ModuleContext(moduleService, migrations())
-        return moduleContext
     }
 
     fun apis(): List<Api> {
@@ -101,8 +86,8 @@ interface SlateKitServices {
                 load("email") { Api(EmailApi(emails(), ctx), declaredOnly = true, setup = Setup.Annotated) },
                 load("files") { Api(FilesApi(files(), ctx), declaredOnly = true, setup = Setup.Annotated) },
                 load("queues") { Api(QueueApi(queues(), ctx), declaredOnly = true, setup = Setup.Annotated) },
-                load("sms") { Api(SmsApi(sms(), ctx), declaredOnly = true, setup = Setup.Annotated) },
-                load("db") { Api(DependencyApi(ctx), declaredOnly = false, setup = Setup.Annotated) }
+                load("sms") { Api(SmsApi(sms(), ctx), declaredOnly = true, setup = Setup.Annotated) }
+                //load("db") { Api(DependencyApi(ctx), declaredOnly = false, setup = Setup.Annotated) }
         )
         return apis.filterNotNull()
     }
