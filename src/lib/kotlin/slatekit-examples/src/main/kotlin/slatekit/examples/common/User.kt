@@ -13,7 +13,9 @@
 
 package slatekit.examples.common
 
+import slatekit.common.DateTime
 import slatekit.common.Field
+import slatekit.common.Id
 import slatekit.entities.EntityWithId
 
 
@@ -51,4 +53,46 @@ data class User(
   override fun toString():String  {
     return "$email, $firstName, $lastName, $isMale, $age"
   }
+}
+
+
+data class User2(
+        @property:Id()
+        override val id:Long = 0L,
+
+        @property:Field(length = 30)
+        val email:String = "",
+
+        @property:Field(length = 30)
+        val first:String = "",
+
+        @property:Field(length = 30)
+        val last:String = "",
+
+        @property:Field()
+        val isMale:Boolean = false,
+
+        @property:Field()
+        val age:Int = 35,
+
+        @property:Field()
+        val active:Boolean = false,
+
+        @property:Field()
+        val salary:Double = 100.00,
+
+        @property:Field()
+        val registered:DateTime? = null
+
+) : EntityWithId<Long> {
+
+    override fun isPersisted(): Boolean = id > 0
+
+    fun fullname():String = first + " " + last
+
+
+
+    override fun toString():String  {
+        return "$email, $first, $last, $isMale, $age"
+    }
 }

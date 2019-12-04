@@ -54,7 +54,7 @@ class Model(
     /**
      * The field that represents the id
      */
-    val idField: ModelField? = fields.find { p -> p.category == ModelFieldCategory.Id }
+    val idField: ModelField? = fields.find { p -> p.category == FieldCategory.Id }
 
     /**
      * whether there are any fields in the model
@@ -95,7 +95,7 @@ class Model(
             defaultValue: String = "",
             encrypt: Boolean = false,
             tag: String = "",
-            cat: ModelFieldCategory = ModelFieldCategory.Data
+            cat: FieldCategory = FieldCategory.Data
     ): Model {
         val fieldType = ModelUtils.fieldType(field)
         return addField(
@@ -128,7 +128,7 @@ class Model(
             defaultValue: String = "",
             encrypt: Boolean = false,
             tag: String = "",
-            cat: ModelFieldCategory = ModelFieldCategory.Data
+            cat: FieldCategory = FieldCategory.Data
     ): Model {
         val fieldType = ModelUtils.fieldType(field)
         return addField(
@@ -161,12 +161,12 @@ class Model(
      */
     fun addId(name: String, dataType: KClass<*>, autoIncrement: Boolean = false): Model {
         val fieldType = when(dataType){
-            Int::class -> ModelFieldType.typeInt
-            Long::class -> ModelFieldType.typeLong
-            UUID::class -> ModelFieldType.typeUUID
+            Int::class -> FieldType.typeInt
+            Long::class -> FieldType.typeLong
+            UUID::class -> FieldType.typeUUID
             else -> throw Exception("Unexpected id type for model for : ${dataType.qualifiedName}")
         }
-        return addField(null, name, dataType, fieldType, "", true, 0, 0, name, 0, cat = ModelFieldCategory.Id)
+        return addField(null, name, dataType, fieldType, "", true, 0, 0, name, 0, cat = FieldCategory.Id)
     }
 
 
@@ -193,10 +193,10 @@ class Model(
             defaultValue: String = "",
             encrypt: Boolean = false,
             tag: String = "",
-            cat: ModelFieldCategory = ModelFieldCategory.Data
+            cat: FieldCategory = FieldCategory.Data
     ): Model {
         return addField(
-                name, String::class, ModelFieldType.typeString, desc, isRequired, minLength, maxLength, storedName,
+                name, String::class, FieldType.typeString, desc, isRequired, minLength, maxLength, storedName,
                 defaultValue, encrypt, tag, cat
         )
     }
@@ -224,10 +224,10 @@ class Model(
             defaultValue: String = "",
             encrypt: Boolean = false,
             tag: String = "",
-            cat: ModelFieldCategory = ModelFieldCategory.Data
+            cat: FieldCategory = FieldCategory.Data
     ): Model {
         return addField(
-                name, String::class, ModelFieldType.typeText, desc, isRequired, minLength, maxLength, storedName,
+                name, String::class, FieldType.typeText, desc, isRequired, minLength, maxLength, storedName,
                 defaultValue, encrypt, tag, cat
         )
     }
@@ -248,12 +248,12 @@ class Model(
             isRequired: Boolean = false,
             storedName: String? = null,
             tag: String = "",
-            cat: ModelFieldCategory = ModelFieldCategory.Data
+            cat: FieldCategory = FieldCategory.Data
     ): Model {
         return addField(
                 name,
                 Boolean::class,
-                ModelFieldType.typeBool,
+                FieldType.typeBool,
                 desc,
                 isRequired,
                 0,
@@ -282,12 +282,12 @@ class Model(
             isRequired: Boolean = false,
             storedName: String? = null,
             tag: String = "",
-            cat: ModelFieldCategory = ModelFieldCategory.Data
+            cat: FieldCategory = FieldCategory.Data
     ): Model {
         return addField(
                 name,
                 LocalDate::class,
-                ModelFieldType.typeLocalDate,
+                FieldType.typeLocalDate,
                 desc,
                 isRequired,
                 0,
@@ -316,12 +316,12 @@ class Model(
             isRequired: Boolean = false,
             storedName: String? = null,
             tag: String = "",
-            cat: ModelFieldCategory = ModelFieldCategory.Data
+            cat: FieldCategory = FieldCategory.Data
     ): Model {
         return addField(
                 name,
                 LocalTime::class,
-                ModelFieldType.typeLocalTime,
+                FieldType.typeLocalTime,
                 desc,
                 isRequired,
                 0,
@@ -350,12 +350,12 @@ class Model(
             isRequired: Boolean = false,
             storedName: String? = null,
             tag: String = "",
-            cat: ModelFieldCategory = ModelFieldCategory.Data
+            cat: FieldCategory = FieldCategory.Data
     ): Model {
         return addField(
                 name,
                 LocalDateTime::class,
-                ModelFieldType.typeLocalDateTime,
+                FieldType.typeLocalDateTime,
                 desc,
                 isRequired,
                 0,
@@ -384,12 +384,12 @@ class Model(
             isRequired: Boolean = false,
             storedName: String? = null,
             tag: String = "",
-            cat: ModelFieldCategory = ModelFieldCategory.Data
+            cat: FieldCategory = FieldCategory.Data
     ): Model {
         return addField(
                 name,
                 DateTime::class,
-                ModelFieldType.typeDateTime,
+                FieldType.typeDateTime,
                 desc,
                 isRequired,
                 0,
@@ -418,9 +418,9 @@ class Model(
             isRequired: Boolean = false,
             storedName: String? = null,
             tag: String = "",
-            cat: ModelFieldCategory = ModelFieldCategory.Data
+            cat: FieldCategory = FieldCategory.Data
     ): Model {
-        return addField(name, Short::class, ModelFieldType.typeShort, desc, isRequired, 0, 0, storedName, 0, false, tag, cat)
+        return addField(name, Short::class, FieldType.typeShort, desc, isRequired, 0, 0, storedName, 0, false, tag, cat)
     }
 
     /**
@@ -439,9 +439,9 @@ class Model(
             isRequired: Boolean = false,
             storedName: String? = null,
             tag: String = "",
-            cat: ModelFieldCategory = ModelFieldCategory.Data
+            cat: FieldCategory = FieldCategory.Data
     ): Model {
-        return addField(name, Int::class, ModelFieldType.typeInt, desc, isRequired, 0, 0, storedName, 0, false, tag, cat)
+        return addField(name, Int::class, FieldType.typeInt, desc, isRequired, 0, 0, storedName, 0, false, tag, cat)
     }
 
     /**
@@ -460,9 +460,9 @@ class Model(
             isRequired: Boolean = false,
             storedName: String? = null,
             tag: String = "",
-            cat: ModelFieldCategory = ModelFieldCategory.Data
+            cat: FieldCategory = FieldCategory.Data
     ): Model {
-        return addField(name, Long::class, ModelFieldType.typeLong, desc, isRequired, 0, 0, storedName, 0, false, tag, cat)
+        return addField(name, Long::class, FieldType.typeLong, desc, isRequired, 0, 0, storedName, 0, false, tag, cat)
     }
 
     /**
@@ -481,9 +481,9 @@ class Model(
             isRequired: Boolean = false,
             storedName: String? = null,
             tag: String = "",
-            cat: ModelFieldCategory = ModelFieldCategory.Data
+            cat: FieldCategory = FieldCategory.Data
     ): Model {
-        return addField(name, Float::class, ModelFieldType.typeFloat, desc, isRequired, 0, 0, storedName, 0, false, tag, cat)
+        return addField(name, Float::class, FieldType.typeFloat, desc, isRequired, 0, 0, storedName, 0, false, tag, cat)
     }
 
     /**
@@ -502,9 +502,9 @@ class Model(
             isRequired: Boolean = false,
             storedName: String? = null,
             tag: String = "",
-            cat: ModelFieldCategory = ModelFieldCategory.Data
+            cat: FieldCategory = FieldCategory.Data
     ): Model {
-        return addField(name, Double::class, ModelFieldType.typeDouble, desc, isRequired, 0, 0, storedName, 0, false, tag, cat)
+        return addField(name, Double::class, FieldType.typeDouble, desc, isRequired, 0, 0, storedName, 0, false, tag, cat)
     }
 
     /**
@@ -529,7 +529,7 @@ class Model(
                 null,
                 name,
                 dataType,
-                ModelFieldType.typeObject,
+                FieldType.typeObject,
                 desc,
                 isRequired,
                 0,
@@ -562,7 +562,7 @@ class Model(
                 null,
                 name,
                 dataType,
-                ModelFieldType.typeEnum,
+                FieldType.typeEnum,
                 desc,
                 isRequired,
                 0,
@@ -590,7 +590,7 @@ class Model(
     fun addField(
             name: String,
             dataCls: KClass<*>,
-            dataTpe: ModelFieldType,
+            dataTpe: FieldType,
             desc: String = "",
             isRequired: Boolean = false,
             minLength: Int = -1,
@@ -599,7 +599,7 @@ class Model(
             defaultValue: Any? = null,
             encrypt: Boolean = false,
             tag: String = "",
-            cat: ModelFieldCategory = ModelFieldCategory.Data
+            cat: FieldCategory = FieldCategory.Data
     ): Model {
         val field = ModelField.build(
                 null, name, desc, dataCls, dataTpe, isRequired,
@@ -633,7 +633,7 @@ class Model(
             prop: KProperty<*>?,
             name: String,
             dataCls: KClass<*>,
-            dataTpe: ModelFieldType,
+            dataTpe: FieldType,
             desc: String = "",
             isRequired: Boolean = false,
             minLength: Int = -1,
@@ -642,7 +642,7 @@ class Model(
             defaultValue: Any? = null,
             encrypt: Boolean = false,
             tag: String = "",
-            cat: ModelFieldCategory = ModelFieldCategory.Data
+            cat: FieldCategory = FieldCategory.Data
     ): Model {
         val field = ModelField.build(
                 prop, name, desc, dataCls, dataTpe, isRequired,

@@ -13,53 +13,53 @@ import kotlin.reflect.KType
 
 object ModelUtils {
 
-    fun fieldType(field:KProperty<*>):ModelFieldType {
+    fun fieldType(field:KProperty<*>):FieldType {
         val fieldCls = KTypes.getClassFromType(field.returnType)
         return fieldType(fieldCls)
     }
 
-    fun fieldType(fieldCls:KClass<*>):ModelFieldType {
+    fun fieldType(fieldCls:KClass<*>):FieldType {
         val fieldType = when(fieldCls){
-            Boolean::class -> ModelFieldType.typeBool
-            Char::class -> ModelFieldType.typeChar
-            String::class -> ModelFieldType.typeString
-            Short::class -> ModelFieldType.typeShort
-            Int::class -> ModelFieldType.typeInt
-            Long::class -> ModelFieldType.typeLong
-            Float::class -> ModelFieldType.typeFloat
-            Double::class -> ModelFieldType.typeDouble
-            LocalDate::class -> ModelFieldType.typeLocalDate
-            LocalTime::class -> ModelFieldType.typeLocalTime
-            LocalDateTime::class -> ModelFieldType.typeLocalDateTime
-            ZonedDateTime::class -> ModelFieldType.typeZonedDateTime
-            DateTime::class -> ModelFieldType.typeDateTime
-            Enum::class -> ModelFieldType.typeEnum
-            UUID::class -> ModelFieldType.typeUUID
-            else -> ModelFieldType.typeObject
+            Boolean::class -> FieldType.typeBool
+            Char::class -> FieldType.typeChar
+            String::class -> FieldType.typeString
+            Short::class -> FieldType.typeShort
+            Int::class -> FieldType.typeInt
+            Long::class -> FieldType.typeLong
+            Float::class -> FieldType.typeFloat
+            Double::class -> FieldType.typeDouble
+            LocalDate::class -> FieldType.typeLocalDate
+            LocalTime::class -> FieldType.typeLocalTime
+            LocalDateTime::class -> FieldType.typeLocalDateTime
+            ZonedDateTime::class -> FieldType.typeZonedDateTime
+            DateTime::class -> FieldType.typeDateTime
+            Enum::class -> FieldType.typeEnum
+            UUID::class -> FieldType.typeUUID
+            else -> FieldType.typeObject
         }
         return fieldType
     }
 
 
-    fun getFieldType(tpe: KType): ModelFieldType {
+    fun getFieldType(tpe: KType): FieldType {
         return when (tpe) {
             // Basic types
-            KTypes.KStringType -> ModelFieldType.typeString
-            KTypes.KBoolType -> ModelFieldType.typeBool
-            KTypes.KShortType -> ModelFieldType.typeShort
-            KTypes.KIntType -> ModelFieldType.typeInt
-            KTypes.KLongType -> ModelFieldType.typeLong
-            KTypes.KFloatType -> ModelFieldType.typeFloat
-            KTypes.KDoubleType -> ModelFieldType.typeDouble
-            KTypes.KDateTimeType -> ModelFieldType.typeDateTime
-            KTypes.KLocalDateType -> ModelFieldType.typeLocalDate
-            KTypes.KLocalTimeType -> ModelFieldType.typeLocalTime
-            KTypes.KLocalDateTimeType -> ModelFieldType.typeLocalDateTime
-            KTypes.KZonedDateTimeType -> ModelFieldType.typeZonedDateTime
-            KTypes.KInstantType -> ModelFieldType.typeInstant
-            KTypes.KUUIDType -> ModelFieldType.typeUUID
-            KTypes.KUniqueIdType -> ModelFieldType.typeUnique
-            else               -> ModelFieldType.typeObject
+            KTypes.KStringType -> FieldType.typeString
+            KTypes.KBoolType -> FieldType.typeBool
+            KTypes.KShortType -> FieldType.typeShort
+            KTypes.KIntType -> FieldType.typeInt
+            KTypes.KLongType -> FieldType.typeLong
+            KTypes.KFloatType -> FieldType.typeFloat
+            KTypes.KDoubleType -> FieldType.typeDouble
+            KTypes.KDateTimeType -> FieldType.typeDateTime
+            KTypes.KLocalDateType -> FieldType.typeLocalDate
+            KTypes.KLocalTimeType -> FieldType.typeLocalTime
+            KTypes.KLocalDateTimeType -> FieldType.typeLocalDateTime
+            KTypes.KZonedDateTimeType -> FieldType.typeZonedDateTime
+            KTypes.KInstantType -> FieldType.typeInstant
+            KTypes.KUUIDType -> FieldType.typeUUID
+            KTypes.KUniqueIdType -> FieldType.typeUnique
+            else               -> FieldType.typeObject
         }
     }
 }

@@ -12,8 +12,9 @@ import slatekit.common.utils.ListMap
 import slatekit.common.utils.RecordMap
 import slatekit.entities.repos.InMemoryRepo
 import slatekit.meta.Schema
+import slatekit.meta.models.FieldCategory
+import slatekit.meta.models.ModelMapper
 import slatekit.orm.OrmMapper
-import slatekit.orm.core.Converter
 import slatekit.query.Op
 import slatekit.query.Query
 import slatekit.results.Success
@@ -361,18 +362,23 @@ class Guide_ORM : Command("types") {
             val active:Boolean = false,
             val age:Int = 35,
             val salary:Double = 100.00,
-            val registered:DateTime? = null
+            val registered:DateTime? = null,
+            val createdAt:DateTime = DateTime.now(),
+            val updatedAt:DateTime = DateTime.now()
     )
+
 
     object UserSchema : Schema<Long, User>(Long::class, User::class, "user") {
         val id         = id    (User::id        )
-        val email      = field (User::email     , min = 10, max = 50, indexed = true)
-        val first      = field (User::first     , min = 10, max = 50)
-        val last       = field (User::last      , min = 10, max = 50)
-        val age        = field (User::age       )
-        val salary     = field (User::salary    )
-        val active     = field (User::active    )
-        val registered = field (User::registered)
+        val email      = field  (User::email     , min = 10, max = 50, indexed = true)
+        val first      = field  (User::first     , min = 10, max = 50)
+        val last       = field  (User::last      , min = 10, max = 50)
+        val age        = field  (User::age       )
+        val salary     = field  (User::salary    )
+        val active     = field  (User::active    )
+        val registered = field  (User::registered)
+        val createdAt  = field  (User::updatedAt , category = FieldCategory.Meta)
+        val updatedAt  = field  (User::updatedAt , category = FieldCategory.Meta)
     }
 
     fun model(){
@@ -380,6 +386,8 @@ class Guide_ORM : Command("types") {
         model.fields.forEach {
             println("field: name=${it.name}, ${it.storedName}, ${it.isRequired}, ${it.dataTpe}")
         }
+
+        val model2 = ModelMapper.loadSchema(User::class)
         println("done")
     }
 

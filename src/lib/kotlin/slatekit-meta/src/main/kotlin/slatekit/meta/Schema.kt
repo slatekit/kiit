@@ -10,40 +10,37 @@ open class Schema<TId, T>(val idType:KClass<*>, val enType:KClass<*>, val table:
 
     val model: Model get() = _model
 
+    /**
+     * Builds an id field using property reference to extract type information
+     */
     fun id(
             prop: KProperty<*>,
             name: String? = null,
-            type: ModelFieldType? = null,
+            type: FieldType? = null,
             min: Int = -1,
             max: Int = -1,
             defaultValue: Any? = null,
-            encrypt: Boolean = false,
             tags: List<String> = listOf()
     ): ModelField {
-        val finalName = name ?: prop.name
-        val finalType = prop.returnType
-        val finalKClas = finalType.classifier as KClass<*>
-        val required = !finalType.isMarkedNullable
-        val fieldType = type ?: ModelUtils.getFieldType(finalType)
-        val field = ModelField.build(
-                prop, finalName, "", finalKClas, fieldType, required,
-                true, true, true,
-                min, max, null, defaultValue, encrypt, tags, ModelFieldCategory.Id
-        )
-        _model = _model.add(field)
+        val raw = field(prop, name, type, min, max, defaultValue, false, true,  FieldCategory.Id, tags)
+        val field = raw.copy(isUnique = true, isIndexed = true, isUpdatable = false)
         return field
     }
 
 
+    /**
+     * Builds a normal field using property reference to extract type information
+     */
     fun field(
             prop: KProperty<*>,
             name: String? = null,
-            type: ModelFieldType? = null,
+            type: FieldType? = null,
             min: Int = -1,
             max: Int = -1,
             defaultValue: Any? = null,
             encrypt: Boolean = false,
             indexed: Boolean = false,
+            category: FieldCategory = FieldCategory.Data,
             tags: List<String> = listOf()
     ): ModelField {
         val finalName = name ?: prop.name
@@ -54,7 +51,7 @@ open class Schema<TId, T>(val idType:KClass<*>, val enType:KClass<*>, val table:
         val field = ModelField.build(
                 prop, finalName, "", finalKClas, fieldType, required,
                 false, indexed, true,
-                min, max, null, defaultValue, encrypt, tags, ModelFieldCategory.Data
+                min, max, null, defaultValue, encrypt, tags, category
         )
         _model = _model.add(field)
         return field

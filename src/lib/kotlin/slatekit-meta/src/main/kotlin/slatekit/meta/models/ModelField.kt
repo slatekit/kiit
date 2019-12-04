@@ -25,7 +25,7 @@ data class ModelField(
         @JvmField val desc: String = "",
         @JvmField val prop: KProperty<*>? = null,
         @JvmField val dataCls: KClass<*>,
-        @JvmField val dataTpe: ModelFieldType = ModelUtils.fieldType(dataCls),
+        @JvmField val dataTpe: FieldType = ModelUtils.fieldType(dataCls),
         @JvmField val storedName: String = "",
         @JvmField val pos: Int = 0,
         @JvmField val isRequired: Boolean = true,
@@ -42,7 +42,7 @@ data class ModelField(
         @JvmField val example: String = "",
         @JvmField val format: String = "",
         @JvmField val tags: List<String> = listOf(),
-        @JvmField val category: ModelFieldCategory = ModelFieldCategory.Data,
+        @JvmField val category: FieldCategory = FieldCategory.Data,
         @JvmField val model: Model? = null
 ) {
 
@@ -85,10 +85,10 @@ data class ModelField(
          * @return
          */
         @JvmStatic
-        fun id(name: String, dataType: KClass<*>, dataTpe: ModelFieldType): ModelField {
+        fun id(name: String, dataType: KClass<*>, dataTpe: FieldType): ModelField {
             return build(null, name, "", dataType, dataTpe, true,
                     true, true, false,
-                    0, 0, name, 0, cat = ModelFieldCategory.Id)
+                    0, 0, name, 0, cat = FieldCategory.Id)
         }
 
         /**
@@ -111,7 +111,7 @@ data class ModelField(
                 name: String,
                 desc: String = "",
                 dataType: KClass<*>,
-                dataFieldType: ModelFieldType,
+                dataFieldType: FieldType,
                 isRequired: Boolean = false,
                 isUnique: Boolean = false,
                 isIndexed: Boolean = false,
@@ -122,7 +122,7 @@ data class ModelField(
                 defaultValue: Any? = null,
                 encrypt: Boolean = false,
                 tags: List<String> = listOf(),
-                cat: ModelFieldCategory = ModelFieldCategory.Data,
+                cat: FieldCategory = FieldCategory.Data,
                 namer: Namer? = null
         ): ModelField {
 
@@ -178,7 +178,7 @@ data class ModelField(
                     isIndexed = false,
                     isUnique = false,
                     isUpdatable = false,
-                    cat = ModelFieldCategory.Id,
+                    cat = FieldCategory.Id,
                     namer = namer
             )
             return field
@@ -190,10 +190,10 @@ data class ModelField(
             val name = if (anno.name.isNullOrEmpty()) prop.name else anno.name
             val cat = idFieldName?.let {
                 if(it == name)
-                    ModelFieldCategory.Id
+                    FieldCategory.Id
                 else
-                    ModelFieldCategory.Data
-            } ?: ModelFieldCategory.Data
+                    FieldCategory.Data
+            } ?: FieldCategory.Data
 
             val required = anno.required
             val length = anno.length

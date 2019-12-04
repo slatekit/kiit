@@ -16,7 +16,6 @@ import slatekit.common.ext.toStringYYYYMMDD
 import slatekit.common.smartvalues.SmartValue
 import slatekit.common.smartvalues.SmartValued
 import slatekit.common.Vars
-import slatekit.meta.models.ModelFieldType
 import kotlin.reflect.KClass
 import kotlin.reflect.KType
 import kotlin.reflect.full.createType
