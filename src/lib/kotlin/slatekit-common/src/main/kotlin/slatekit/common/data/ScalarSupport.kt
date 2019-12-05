@@ -1,4 +1,4 @@
-package slatekit.common.db
+package slatekit.common.data
 
 import org.threeten.bp.LocalDate
 import org.threeten.bp.LocalDateTime

@@ -4,7 +4,7 @@ import slatekit.orm.core.SqlEncoder
 import slatekit.common.Record
 import slatekit.orm.Consts
 
-object IntEncoder : SqlEncoder<Int> {
+class IntEncoder : SqlEncoder<Int> {
 
     override fun encode(value: Int?): String {
         return value?.toString() ?: Consts.NULL

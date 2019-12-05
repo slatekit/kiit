@@ -4,6 +4,7 @@ import kotlin.reflect.KProperty
 import slatekit.entities.Entity
 import slatekit.entities.core.ServiceSupport
 import slatekit.query.IQuery
+import slatekit.query.Op
 import slatekit.query.Query
 import slatekit.query.QueryEncoder
 
@@ -24,10 +25,10 @@ interface Finds<TId, T> : ServiceSupport<TId, T> where TId : kotlin.Comparable<T
      * @param value: The value to check for
      * @return
      */
-    fun findByField(field: String, value: Any): List<T> {
+    fun findByField(field: String, op:Op, value: Any): List<T> {
         // Get column name from model schema ( if available )
         val column = QueryEncoder.ensureField(field)
-        return repo().findByField(column, "=", value)
+        return repo().findByField(column, op, value)
     }
 
     /**
@@ -47,10 +48,10 @@ interface Finds<TId, T> : ServiceSupport<TId, T> where TId : kotlin.Comparable<T
      * @param value: The value to check for
      * @return
      */
-    fun findByField(prop: KProperty<*>, value: Any): List<T> {
+    fun findByField(prop: KProperty<*>, op:Op, value: Any): List<T> {
         // Get column name from model schema ( if available )
         val column = this.repo().columnName(prop)
-        return repo().findByField(column, "=", value)
+        return repo().findByField(column, op, value)
     }
 
     /**
@@ -59,10 +60,10 @@ interface Finds<TId, T> : ServiceSupport<TId, T> where TId : kotlin.Comparable<T
      * @param value: The value to check for
      * @return
      */
-    fun findByField(prop: KProperty<*>, value: Any, limit: Int): List<T> {
+    fun findByField(prop: KProperty<*>, op:Op, value: Any, limit: Int): List<T> {
         // Get column name from model schema ( if available )
         val column = this.repo().columnName(prop)
-        val query = Query().where(column, "=", value).limit(limit)
+        val query = Query().where(column, op, value).limit(limit)
         return repo().find(query)
     }
 
@@ -72,7 +73,7 @@ interface Finds<TId, T> : ServiceSupport<TId, T> where TId : kotlin.Comparable<T
      * @param value: The value to check for
      * @return
      */
-    fun findByFieldIn(prop: KProperty<*>, value: List<Any>): List<T> {
+    fun findIn(prop: KProperty<*>, value: List<Any>): List<T> {
         // Get column name from model schema ( if available )
         val column = this.repo().columnName(prop)
         return repo().findIn(column, value)
@@ -80,14 +81,13 @@ interface Finds<TId, T> : ServiceSupport<TId, T> where TId : kotlin.Comparable<T
 
     /**
      * finds items based on the field value
-     * @param prop: The property reference
-     * @param value: The value to check for
+     * @param name: The property reference
+     * @param values: The value to check for
      * @return
      */
-    fun findFirstByField(name: String, value: Any): T? {
+    fun findIn(name:String, values: List<Any>): List<T> {
         // Get column name from model schema ( if available )
-        val column = QueryEncoder.ensureField(name)
-        return repo().findOneByField(column, "=", value)
+        return repo().findIn(name, values)
     }
 
     /**
@@ -96,10 +96,22 @@ interface Finds<TId, T> : ServiceSupport<TId, T> where TId : kotlin.Comparable<T
      * @param value: The value to check for
      * @return
      */
-    fun findFirstByField(prop: KProperty<*>, value: Any): T? {
+    fun findOneByField(name: String, op: Op, value: Any): T? {
+        // Get column name from model schema ( if available )
+        val column = QueryEncoder.ensureField(name)
+        return repo().findOneByField(column, op, value)
+    }
+
+    /**
+     * finds items based on the field value
+     * @param prop: The property reference
+     * @param value: The value to check for
+     * @return
+     */
+    fun findOneByField(prop: KProperty<*>, op:Op, value: Any): T? {
         // Get column name from model schema ( if available )
         val column = this.repo().columnName(prop)
-        return repo().findOneByField(column, "=", value)
+        return repo().findOneByField(column, op, value)
     }
 
     /**

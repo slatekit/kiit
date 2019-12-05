@@ -13,21 +13,19 @@
 
 package slatekit.db
 
+import slatekit.common.Record
 import java.sql.Connection
 import java.sql.PreparedStatement
 import java.sql.ResultSet
 import java.sql.Statement
 import kotlin.io.*
-import slatekit.common.db.DbCon
-import slatekit.common.db.IDb
-import slatekit.common.db.Mapper
+import slatekit.common.data.DbCon
+import slatekit.common.data.IDb
 import slatekit.common.repeatWith
 import slatekit.db.DbUtils.executeCon
 import slatekit.db.DbUtils.executePrepAs
 import slatekit.db.DbUtils.executeStmt
 import slatekit.db.DbUtils.fillArgs
-import slatekit.db.builders.DbBuilder
-import slatekit.db.builders.MySqlBuilder
 
 /**
  * Light-weight JDBC based database access wrapper
@@ -212,7 +210,7 @@ class Db(
      * @return
      */
     @Suppress("UNCHECKED_CAST")
-    override fun <T> mapOne(sql: String, inputs: List<Any>?, mapper: Mapper<T>): T? {
+    override fun <T> mapOne(sql: String, inputs: List<Any>?, mapper: (Record) -> T?): T? {
         val res = query(sql, { rs ->
 
             val rec = RecordSet(rs)
@@ -233,7 +231,7 @@ class Db(
      * @return
      */
     @Suppress("UNCHECKED_CAST")
-    override fun <T> mapAll(sql: String, inputs: List<Any>?, mapper: Mapper<T>): List<T>? {
+    override fun <T> mapAll(sql: String, inputs: List<Any>?, mapper: (Record) -> T?): List<T>? {
         val res = query(sql, { rs ->
 
             val rec = RecordSet(rs)
@@ -276,7 +274,7 @@ class Db(
      */
     override fun <T> callQueryMapped(
         procName: String,
-        mapper: Mapper<T>,
+        mapper: (Record) -> T?,
         inputs: List<Any>?
     ): List<T>? {
         // {call create_author(?, ?)}
@@ -302,6 +300,16 @@ class Db(
 
     override fun errorHandler(ex: Exception) {
         println("Database error : " + ex.message)
+    }
+
+
+    companion object {
+
+        fun open(con:DbCon):Db {
+            val db = Db(con)
+            db.open()
+            return db
+        }
     }
 
     /*

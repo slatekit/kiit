@@ -1,7 +1,7 @@
 package slatekit.orm.core
 
 import slatekit.common.naming.Namer
-import slatekit.common.db.DbType
+import slatekit.common.data.DataType
 import slatekit.db.DbUtils
 import slatekit.common.newline
 import slatekit.orm.Consts.idCol
@@ -85,7 +85,7 @@ open class SqlBuilder(val types: TypeMap, val namer: Namer?) {
         val dataFieldSql = dataFields.fold("") { acc, field ->
             val finalStoredName = prefix?.let { prefix + "_" + field.storedName } ?: field.storedName
             if (field.isEnum) {
-                acc + ", " + createCol(finalStoredName, DbType.DbNumber, field.isRequired, field.maxLength)
+                acc + ", " + createCol(finalStoredName, DataType.DbNumber, field.isRequired, field.maxLength)
             } else if (field.model != null) {
                 val sql = field.model?.let { createColumns(field.storedName, it, false) }
                 acc + sql
@@ -101,7 +101,7 @@ open class SqlBuilder(val types: TypeMap, val namer: Namer?) {
     }
 
 
-    fun createCol(name: String, dataType: DbType, required: Boolean, maxLen: Int): String {
+    fun createCol(name: String, dataType: DataType, required: Boolean, maxLen: Int): String {
         val nullText = if (required) "NOT NULL" else ""
         val colType = colType(dataType, maxLen)
         val colName = colName(name)
@@ -120,12 +120,12 @@ open class SqlBuilder(val types: TypeMap, val namer: Namer?) {
     /**
      * Builds a valid column type
      */
-    fun colType(colType: DbType, maxLen: Int): String {
-        return if (colType == DbType.DbText && maxLen == -1)
+    fun colType(colType: DataType, maxLen: Int): String {
+        return if (colType == DataType.DbText && maxLen == -1)
             types.textType.dbType
-        else if (colType == DbType.DbString && maxLen == -1)
+        else if (colType == DataType.DbString && maxLen == -1)
             types.textType.dbType
-        else if (colType == DbType.DbString)
+        else if (colType == DataType.DbString)
             types.stringType.dbType + "($maxLen)"
         else
             types.lookup[colType]?.dbType ?: ""

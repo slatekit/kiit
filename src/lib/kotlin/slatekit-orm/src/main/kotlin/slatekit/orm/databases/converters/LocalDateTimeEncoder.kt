@@ -9,7 +9,7 @@ import slatekit.common.DateTimes
 import slatekit.common.ext.atUtc
 import slatekit.common.ext.local
 
-object LocalDateTimeEncoder : SqlEncoder<LocalDateTime> {
+class LocalDateTimeEncoder : SqlEncoder<LocalDateTime> {
 
     override fun encode(value: LocalDateTime?): String {
         return toSql(value, false)

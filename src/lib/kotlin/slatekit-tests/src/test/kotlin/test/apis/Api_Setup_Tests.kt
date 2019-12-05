@@ -8,7 +8,7 @@ import slatekit.apis.Verb
 import slatekit.apis.core.Api
 import slatekit.apis.Setup
 import slatekit.common.CommonContext
-import slatekit.common.db.Vendor
+import slatekit.common.data.Vendor
 import slatekit.integration.apis.InfoApi
 import slatekit.integration.apis.VersionApi
 import slatekit.orm.orm

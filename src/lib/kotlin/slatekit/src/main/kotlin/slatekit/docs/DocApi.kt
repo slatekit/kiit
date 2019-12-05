@@ -4,13 +4,14 @@ import slatekit.apis.Api
 import slatekit.apis.Action
 import slatekit.apis.AuthModes
 import slatekit.apis.Verbs
+import slatekit.common.Context
 import slatekit.common.Sources
 import slatekit.integration.common.AppEntContext
 import slatekit.results.Try
 
 @Api(area = "slate", name = "docs", desc= "help doc generator",
         auth = AuthModes.KEYED, roles = ["admin"], verb = Verbs.AUTO, sources = [Sources.ALL])
-class DocApi(val context: AppEntContext) {
+class DocApi(val context: Context) {
 
     /**
      * Generate the markdown docs for the components
@@ -18,7 +19,7 @@ class DocApi(val context: AppEntContext) {
      * @param template: scripts/doc/doc_template_kotlin.md
      * @param output  : src/site/slatekit
      * slate.docs.generateAll -root="C:/Dev/github/blend-server/" -template="scripts/doc/doc_template_kotlin.md" -output="src/site/slatekit"
-     * slate.docs.generateAll -root="/Users/kishorereddy/git/slatekit" -template="scripts/doc/doc_template_kotlin.md" -output="src/site/slatekit"
+     * slate.docs.generateAll -root="/Users/kishore.reddy/dev/tmp/slatekit/slatekit" -template="scripts/doc/doc_template_utils.md" -output="src/site/slatekit"
      */
     @Action(desc= "generates the markdown docs")
     fun generateAll(root:String, template:String, output:String): Try<String> {

@@ -15,8 +15,8 @@ package slatekit.common.conf
 
 import slatekit.common.io.Files
 import slatekit.common.*
-import slatekit.common.db.DbCon
-import slatekit.common.db.DbConString
+import slatekit.common.data.DbCon
+import slatekit.common.data.DbConString
 import slatekit.common.encrypt.Encryptor
 import slatekit.common.info.ApiKey
 import slatekit.common.info.ApiLogin

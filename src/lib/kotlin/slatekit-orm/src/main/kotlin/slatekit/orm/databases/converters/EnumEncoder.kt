@@ -8,7 +8,7 @@ import slatekit.orm.core.SqlEncoder
 import kotlin.reflect.KClass
 
 
-object EnumEncoder : SqlEncoder<EnumLike> {
+class EnumEncoder : SqlEncoder<EnumLike> {
 
     override fun encode(value: EnumLike?): String {
         return value?.let { value.value.toString() } ?: NULL

@@ -14,8 +14,8 @@
 package slatekit.orm.migrations
 
 import slatekit.common.*
-import slatekit.common.db.DbCon
-import slatekit.common.db.Connections
+import slatekit.common.data.DbCon
+import slatekit.common.data.Connections
 import slatekit.common.ext.toStringNumeric
 import slatekit.common.info.Folders
 import slatekit.common.io.Files

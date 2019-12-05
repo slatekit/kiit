@@ -6,7 +6,7 @@ import slatekit.orm.Consts
 //import java.time.*
 import org.threeten.bp.*
 
-object InstantEncoder : SqlEncoder<Instant> {
+class InstantEncoder : SqlEncoder<Instant> {
 
     override fun encode(value: Instant?): String {
         return value?.let {

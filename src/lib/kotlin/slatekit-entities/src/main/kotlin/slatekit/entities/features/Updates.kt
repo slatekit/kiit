@@ -2,6 +2,7 @@ package slatekit.entities.features
 
 import kotlin.reflect.KProperty
 import slatekit.common.DateTime
+import slatekit.common.data.Values
 import slatekit.entities.Entity
 import slatekit.entities.events.EntityAction
 import slatekit.entities.events.EntityEvent
@@ -23,6 +24,15 @@ interface Updates<TId, T> : ServiceSupport<TId, T> where TId : kotlin.Comparable
      */
     fun modify(entity: T): Boolean {
         return repo().update(entity)
+    }
+
+    /**
+     * directly modifies an entity without any additional processing/hooks/etc
+     * @param entity
+     * @return
+     */
+    fun patch(id:TId, values:List<Pair<String,Any?>>): Int {
+        return repo().patch(id, values)
     }
 
     /**
@@ -105,8 +115,18 @@ interface Updates<TId, T> : ServiceSupport<TId, T> where TId : kotlin.Comparable
      * @param value: The value to check for
      * @return
      */
-    fun updateByField(prop: KProperty<*>, value: Any): Int {
+    fun updateField(prop: KProperty<*>, value: Any): Int {
         return repo().updateField(prop.name, value)
+    }
+
+    /**
+     * updates items based on the field name
+     * @param prop: The property reference
+     * @param value: The value to check for
+     * @return
+     */
+    fun updateByField(prop: KProperty<*>, oldValue: Any?, newValue:Any?): Int {
+        return repo().updateByField(prop.name, oldValue, newValue)
     }
 
     /**

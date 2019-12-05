@@ -1,5 +1,6 @@
-package slatekit.common.db
+package slatekit.common.data
 
+import slatekit.common.Record
 import java.sql.ResultSet
 
 interface ProcSupport {
@@ -27,7 +28,7 @@ interface ProcSupport {
      */
     fun <T> callQueryMapped(
             procName: String,
-            mapper: Mapper<T>,
+            mapper: (Record) -> T?,
             inputs: List<Any>? = null
     ): List<T>?
 

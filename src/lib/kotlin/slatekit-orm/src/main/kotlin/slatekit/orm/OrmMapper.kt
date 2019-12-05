@@ -26,9 +26,12 @@ import slatekit.meta.models.Model
 import slatekit.meta.models.ModelField
 //import java.time.*
 import org.threeten.bp.*
-import slatekit.common.db.IDb
+import slatekit.common.data.DataAction
+import slatekit.common.data.IDb
 import slatekit.entities.EntityMapper
 import slatekit.entities.EntityUpdatable
+import slatekit.common.data.Values
+import slatekit.common.data.Value
 import slatekit.entities.core.*
 import slatekit.meta.models.ModelMapper
 import kotlin.reflect.KClass
@@ -39,15 +42,22 @@ import kotlin.reflect.KClass
  * @param model
  */
 open class OrmMapper<TId, T>(
-        model: Model,
+        val model: Model,
         val db: IDb,
         val converter: Converter<TId, T>,
-        val info:EntityInfo)
-    : ModelMapper(model, encryptor = info.encryptor, namer = info.namer),
+        val info:EntityInfo) :
         EntityMapper<TId, T> where TId : kotlin.Comparable<TId>, T:Any  {
+
+
+    val mapper = ModelMapper(model, encryptor = info.encryptor, namer = info.namer)
+
+    constructor( model: Model, db: IDb, idType:KClass<*>, clsType:KClass<*>)
+        :this(model, db, Converter<TId, T>(), idType, clsType)
+
 
     constructor( model: Model, db: IDb, converter: Converter<TId, T>, idType:KClass<*>, clsType:KClass<*>)
         :this(model, db, converter, EntityInfo(idType, clsType, ""))
+
 
 
     /**
@@ -68,7 +78,17 @@ open class OrmMapper<TId, T>(
      * Gets the optional Model schema which stores field/properties
      * and their corresponding column metadata
      */
-    override fun schema(): Model? = metaModel
+    override fun schema(): Model? = model
+
+
+    override fun encode(item: T, action: DataAction): Values {
+        val isUpdate = action == DataAction.Update
+        return mapFields(null, item, model, isUpdate, isUpdate).map { Value(it.first, it.second as Any?) }
+    }
+
+    override fun decode(record: Record): T? {
+        return mapper.decode(record)
+    }
 
 
     @Suppress("UNCHECKED_CAST")
@@ -83,7 +103,7 @@ open class OrmMapper<TId, T>(
      * Inserts the entity into the database and returns the new primary key id
      */
     fun insert(entity: T): TId {
-        val sql = converter.inserts.sql(entity, metaModel, this)
+        val sql = converter.inserts.sql(entity, model, this)
         val id = db.insertGetId(sql, null)
         return convertToId(id, info.idType)
     }
@@ -93,7 +113,7 @@ open class OrmMapper<TId, T>(
      * Updates the entity into the database and returns whether or not the update was successful
      */
     fun update(entity: T): Boolean {
-        val sql = converter.updates.sql(entity, metaModel, this)
+        val sql = converter.updates.sql(entity, model, this)
         val count = db.update(sql)
         return count > 0
     }
@@ -139,14 +159,14 @@ open class OrmMapper<TId, T>(
     }
 
 
-    open fun tableName(): String = columnName(metaModel.table)
+    open fun tableName(): String = columnName(model.table)
 
 
     /**
      * Builds an escaped column name e.g. user => 'user'
      */
     open fun columnName(name: String): String {
-        val finalName = namer?.rename(name) ?: name
+        val finalName = info.namer?.rename(name) ?: name
         return "${info.encodedChar}$finalName${info.encodedChar}"
     }
 
@@ -155,7 +175,7 @@ open class OrmMapper<TId, T>(
      * Builds an escaped column name with the prefix e.g. address, state => 'address_state'
      */
     open fun columnName(prefix: String, name: String): String {
-        val finalName = namer?.rename(name) ?: name
+        val finalName = info.namer?.rename(name) ?: name
         return "${info.encodedChar}${prefix}_$finalName${info.encodedChar}"
     }
 
@@ -180,7 +200,7 @@ open class OrmMapper<TId, T>(
         // Similar to the Mapper class but reversed
         val data = if (mapping.dataCls == KTypes.KStringClass) {
             val sVal = Reflector.getFieldValue(item, mapping.name) as String?
-            converter.strings.toSql(sVal, mapping.encrypt, encryptor)
+            converter.strings.toSql(sVal, mapping.encrypt, info.encryptor)
         } else if (mapping.dataCls == KTypes.KBoolClass) {
             val bVal = Reflector.getFieldValue(item, mapping.name) as Boolean?
             converter.bools.encode(bVal)

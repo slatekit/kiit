@@ -1,7 +1,7 @@
 package entities
 
-import slatekit.common.db.IDb
-import slatekit.common.db.Mapper
+import slatekit.common.Record
+import slatekit.common.data.IDb
 import java.sql.ResultSet
 
 class SqliteDb : IDb {
@@ -36,11 +36,11 @@ class SqliteDb : IDb {
         TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
 
-    override fun <T> mapOne(sql: String, inputs: List<Any>?, mapper: Mapper<T>): T? {
+    override fun <T> mapOne(sql: String, inputs: List<Any>?, mapper: (Record) -> T?): T? {
         TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
 
-    override fun <T> mapAll(sql: String, inputs: List<Any>?, mapper: Mapper<T>): List<T>? {
+    override fun <T> mapAll(sql: String, inputs: List<Any>?, mapper: (Record) -> T?): List<T>? {
         TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
 
@@ -48,7 +48,7 @@ class SqliteDb : IDb {
         TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
 
-    override fun <T> callQueryMapped(procName: String, mapper: Mapper<T>, inputs: List<Any>?): List<T>? {
+    override fun <T> callQueryMapped(procName: String, mapper: (Record) -> T?, inputs: List<Any>?): List<T>? {
         TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
 

@@ -2,7 +2,7 @@ package slatekit.app
 
 import slatekit.common.args.ArgsSchema
 import slatekit.common.conf.Conf
-import slatekit.common.db.Connections
+import slatekit.common.data.Connections
 import slatekit.common.info.About
 import slatekit.common.info.Folders
 import slatekit.common.templates.Subs

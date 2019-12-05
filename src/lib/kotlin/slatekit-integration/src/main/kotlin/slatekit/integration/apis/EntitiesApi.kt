@@ -19,9 +19,9 @@ import slatekit.apis.AuthModes
 import slatekit.apis.Verbs
 import slatekit.apis.support.ApiBase
 import slatekit.common.Sources
-import slatekit.common.db.DbCon
+import slatekit.common.data.DbCon
 import slatekit.common.newline
-import slatekit.common.db.Connections
+import slatekit.common.data.Connections
 import slatekit.integration.common.AppEntContext
 import slatekit.orm.migrations.MigrationService
 import slatekit.orm.migrations.MigrationSettings

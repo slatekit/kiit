@@ -15,9 +15,9 @@ package test.entities
 
 import org.junit.Assert
 import org.junit.Test
-import slatekit.common.db.DbConString
-import slatekit.common.db.Connections
-import slatekit.common.db.Vendor.Memory
+import slatekit.common.data.DbConString
+import slatekit.common.data.Connections
+import slatekit.common.data.Vendor.Memory
 import slatekit.db.Db
 import slatekit.entities.Entities
 import slatekit.entities.EntityMapper

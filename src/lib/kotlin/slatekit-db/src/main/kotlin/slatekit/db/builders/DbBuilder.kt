@@ -12,7 +12,7 @@ mantra: Simplicity above all else
  */
 package slatekit.db.builders
 
-import slatekit.common.db.DbType
+import slatekit.common.data.DataType
 
 /**
  * Created by kishorereddy on 6/14/17.
@@ -28,7 +28,7 @@ interface DbBuilder {
     /**
      * Builds an add column DDL sql statement
      */
-    fun addCol(name: String, dataType: DbType, required: Boolean = false, maxLen: Int = 0): String
+    fun addCol(name: String, dataType: DataType, required: Boolean = false, maxLen: Int = 0): String
 
     /**
      * Builds a valid column name
@@ -38,7 +38,7 @@ interface DbBuilder {
     /**
      * Builds a valid column type
      */
-    fun colType(colType: DbType, maxLen: Int): String
+    fun colType(colType: DataType, maxLen: Int): String
 
     /**
      * Builds a delete statement to delete all rows

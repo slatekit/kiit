@@ -25,7 +25,7 @@ data class ModelField(
         @JvmField val desc: String = "",
         @JvmField val prop: KProperty<*>? = null,
         @JvmField val dataCls: KClass<*>,
-        @JvmField val dataTpe: ModelFieldType = ModelUtils.fieldType(dataCls),
+        @JvmField val dataTpe: FieldType = ModelUtils.fieldType(dataCls),
         @JvmField val storedName: String = "",
         @JvmField val pos: Int = 0,
         @JvmField val isRequired: Boolean = true,
@@ -41,8 +41,8 @@ data class ModelField(
         @JvmField val extra: String = "",
         @JvmField val example: String = "",
         @JvmField val format: String = "",
-        @JvmField val tag: String = "",
-        @JvmField val category: ModelFieldCategory = ModelFieldCategory.Data,
+        @JvmField val tags: List<String> = listOf(),
+        @JvmField val category: FieldCategory = FieldCategory.Data,
         @JvmField val model: Model? = null
 ) {
 
@@ -63,7 +63,7 @@ data class ModelField(
         text.append(", format : $format")
         text.append(", key : $key")
         text.append(", extra : $extra")
-        text.append(", tag : $tag")
+        text.append(", tag : $tags")
         text.append(", category : $category")
         text.append(" )")
         return text.toString()
@@ -72,10 +72,8 @@ data class ModelField(
     fun isBasicType(): Boolean = KTypes.isBasicType(dataCls) || isEnum
 
     fun isStandard(): Boolean {
-        return when (tag) {
-            "standard", "id", "meta" -> true
-            else -> false
-        }
+        val result = listOf("standard", "id", "meta").filter { tags.contains(it) }
+        return result.isNotEmpty()
     }
 
     companion object {
@@ -87,10 +85,10 @@ data class ModelField(
          * @return
          */
         @JvmStatic
-        fun id(name: String, dataType: KClass<*>, dataTpe: ModelFieldType): ModelField {
+        fun id(name: String, dataType: KClass<*>, dataTpe: FieldType): ModelField {
             return build(null, name, "", dataType, dataTpe, true,
                     true, true, false,
-                    0, 0, name, 0, cat = ModelFieldCategory.Id)
+                    0, 0, name, 0, cat = FieldCategory.Id)
         }
 
         /**
@@ -113,7 +111,7 @@ data class ModelField(
                 name: String,
                 desc: String = "",
                 dataType: KClass<*>,
-                dataFieldType: ModelFieldType,
+                dataFieldType: FieldType,
                 isRequired: Boolean = false,
                 isUnique: Boolean = false,
                 isIndexed: Boolean = false,
@@ -123,8 +121,8 @@ data class ModelField(
                 destName: String? = null,
                 defaultValue: Any? = null,
                 encrypt: Boolean = false,
-                tag: String = "",
-                cat: ModelFieldCategory = ModelFieldCategory.Data,
+                tags: List<String> = listOf(),
+                cat: FieldCategory = FieldCategory.Data,
                 namer: Namer? = null
         ): ModelField {
 
@@ -148,7 +146,7 @@ data class ModelField(
                     defaultValue = defaultValue,
                     encrypt = encrypt,
                     key = "",
-                    tag = tag,
+                    tags = tags,
                     category = cat
             )
             return field
@@ -180,7 +178,7 @@ data class ModelField(
                     isIndexed = false,
                     isUnique = false,
                     isUpdatable = false,
-                    cat = ModelFieldCategory.Id,
+                    cat = FieldCategory.Id,
                     namer = namer
             )
             return field
@@ -192,10 +190,10 @@ data class ModelField(
             val name = if (anno.name.isNullOrEmpty()) prop.name else anno.name
             val cat = idFieldName?.let {
                 if(it == name)
-                    ModelFieldCategory.Id
+                    FieldCategory.Id
                 else
-                    ModelFieldCategory.Data
-            } ?: ModelFieldCategory.Data
+                    FieldCategory.Data
+            } ?: FieldCategory.Data
 
             val required = anno.required
             val length = anno.length

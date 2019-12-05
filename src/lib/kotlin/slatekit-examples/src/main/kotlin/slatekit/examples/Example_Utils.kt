@@ -21,7 +21,7 @@ import slatekit.common.utils.Require.requireValidIndex
 
 //<doc:import_examples>
 import slatekit.cmds.Command
-import slatekit.common.db.DbConString
+import slatekit.common.data.DbConString
 import slatekit.common.info.ApiKey
 import slatekit.common.info.ApiLogin
 import slatekit.cmds.CommandRequest

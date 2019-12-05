@@ -5,7 +5,7 @@ import slatekit.common.ids.UniqueId
 import slatekit.common.Record
 import slatekit.orm.Consts
 
-object UniqueIdEncoder : SqlEncoder<UniqueId> {
+class UniqueIdEncoder : SqlEncoder<UniqueId> {
 
     override fun encode(value: UniqueId?): String {
         return value?.let { "'" + value.toString() + "'" } ?: Consts.NULL

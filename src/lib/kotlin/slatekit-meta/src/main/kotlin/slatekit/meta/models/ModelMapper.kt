@@ -65,13 +65,13 @@ open class ModelMapper(
      * @param record
      * @return
      */
-    open fun <T> mapFrom(record: Record): T? {
+    open fun <T> decode(record: Record): T? {
         return if (metaModel.any && metaModel.dataType != null) {
             metaModel.dataType.let { tpe ->
                 if (Reflector.isDataClass(tpe)) {
-                    mapFromToValType<T>(record)
+                    decodeValType<T>(record)
                 } else
-                    mapFromToVarType<T>(record)
+                    decodeVarType<T>(record)
             }
         } else
             null
@@ -85,8 +85,8 @@ open class ModelMapper(
      * @return
      */
     @Suppress("UNCHECKED_CAST")
-    fun <T>  mapFromToValType(record: Record): T? {
-        return mapFromToValType(null, record, metaModel) as T?
+    fun <T>  decodeValType(record: Record): T? {
+        return decodeValType(null, record, metaModel) as T?
     }
 
     /**
@@ -97,8 +97,8 @@ open class ModelMapper(
      * @return
      */
     @Suppress("UNCHECKED_CAST")
-    fun <T> mapFromToVarType(record: Record): T? {
-        return mapFromToVarType(null, record, metaModel) as T?
+    fun <T> decodeVarType(record: Record): T? {
+        return decodeVarType(null, record, metaModel) as T?
     }
 
     override fun toString(): String =
@@ -143,7 +143,7 @@ open class ModelMapper(
         }
     }
 
-    private fun mapFromToValType(prefix: String?, record: Record, model: Model): Any? {
+    private fun decodeValType(prefix: String?, record: Record, model: Model): Any? {
         return if (model.any) {
             val isUTC = settings.persisteUTCDate
             val data = model.fields.map { mapping ->
@@ -156,7 +156,7 @@ open class ModelMapper(
             null
     }
 
-    private fun mapFromToVarType(prefix: String?, record: Record, model: Model): Any? {
+    private fun decodeVarType(prefix: String?, record: Record, model: Model): Any? {
         return if (model.any) {
 
             val isUTC = settings.persisteUTCDate
@@ -204,7 +204,7 @@ open class ModelMapper(
                     val enumValue = Reflector.getEnumValue(mapping.dataCls, enumInt)
                     enumValue
                 } else {
-                    val model = mapFromToValType(mapping.name + "_", record, mapping.model!!)
+                    val model = decodeValType(mapping.name + "_", record, mapping.model!!)
                     model
                 }
             }

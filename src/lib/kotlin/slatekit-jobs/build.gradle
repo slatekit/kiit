@@ -83,12 +83,14 @@ dependencies {
         compile "com.slatekit:slatekit-common:$slatekit_version"
         compile "com.slatekit:slatekit-tracking:$slatekit_version"
         compile "com.slatekit:slatekit-functions:$slatekit_version"
+        compile "com.slatekit:slatekit-core:$slatekit_version"
     } else {
         // */
         compile project(":slatekit-result")
         compile project(":slatekit-common")
         compile project(":slatekit-tracking")
         compile project(":slatekit-functions")
+        compile project(":slatekit-core")
     } //</slatekit_local>
 }
 

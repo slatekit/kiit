@@ -13,7 +13,7 @@
 
 package slatekit.entities
 
-import slatekit.common.Record
+import slatekit.common.data.Mapper
 import kotlin.reflect.KProperty
 import slatekit.meta.models.Model
 
@@ -32,7 +32,7 @@ import slatekit.meta.models.Model
  * to control how this is done. This also allows for potentially hooking
  * into some other mapping library to handle the heavy / tedious work.
  */
-interface EntityMapper<TId, T> where TId : Comparable<TId> {
+interface EntityMapper<TId, T> : Mapper<TId, T> where TId : Comparable<TId> {
 
     /**
      * Gets the optional Model schema which stores field/properties
@@ -40,8 +40,6 @@ interface EntityMapper<TId, T> where TId : Comparable<TId> {
      */
     fun schema(): Model? = null
 
-
-    fun <T> mapFrom(record: Record): T?
 
     /**
      * Gets the column name for the Kproperty from the model schema if available

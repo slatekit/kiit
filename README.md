@@ -68,14 +68,22 @@ Some important links / pages for more info.
 type | link | note
 ------------ | ------------ | -------------
 home | www.slatekit.com | landing page
-overview | http://www.slatekit.com/overview.html | goals / uses / philosophy
-setup    | www.slatekit.com/setup.html | setup kotlin / slatekit
-starting | http://www.slatekit.com/components.html | key concepts / steps
-releases | http://www.slatekit.com/releases.html | relase history / notes
-utilities| http://www.slatekit.com/utils.html    | utilities for client/server
-modules  | http://www.slatekit.com/core.html    | architecture components
-learn    | http://www.slatekit.com/kotlin101.html | kotlin 101
-standards| http://www.slatekit.com/kotlin-standards.html | coding standards
+overview | http://www.slatekit.com/start/overview | goals / uses / philosophy
+setup    | www.slatekit.com/start/hello_world | setup slatekit hello world
+releases | https://github.com/code-helix/slatekit/releases | relase history 
+modules  | http://www.slatekit.com/arch/overview   | architecture components
+utilities| http://www.slatekit.com/utils/overview  | android and server utils
+standards| http://www.slatekit.com/more/standards  | coding standards
+
+
+Website: https://palletsprojects.com/p/click/
+Documentation: https://click.palletsprojects.com/
+License: BSD
+Releases: https://pypi.org/project/click/
+Code: https://github.com/pallets/click
+Issue tracker: https://github.com/pallets/click/issues
+Test status: https://dev.azure.com/pallets/click/_build
+Official chat: https://discord.gg/t6rrQZH
 
 
 # Modules

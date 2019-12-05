@@ -22,6 +22,8 @@ import java.util.*
 // import java.time.*
 import org.threeten.bp.*
 import slatekit.common.Record
+import slatekit.common.data.DataAction
+import slatekit.common.data.Values
 import slatekit.entities.*
 import slatekit.entities.core.EntityInfo
 import slatekit.meta.models.Model
@@ -146,8 +148,8 @@ open class InMemoryRepo<TId, T>(
      * @param query
      * @return
      */
-    override fun findByField(fieldRaw: String, op: String, value: Any): List<T> {
-        return filter(items.all(), fieldRaw, op, value)
+    override fun findByField(fieldRaw: String, op: Op, value: Any): List<T> {
+        return filter(items.all(), fieldRaw, op.text, value)
     }
 
     /**
@@ -169,7 +171,7 @@ open class InMemoryRepo<TId, T>(
      * @param value: value of field to search against
      * @return
      */
-    override fun findOneByField(field: String, op: String, value: Any): T? {
+    override fun findOneByField(field: String, op: Op, value: Any): T? {
         return findByField(field, op, value).firstOrNull()
     }
 
@@ -282,7 +284,11 @@ open class InMemoryRepo<TId, T>(
 class EntityMapperEmpty<TId, T>(val model: Model?) :
     EntityMapper<TId, T> where TId : Comparable<TId>, T : Entity<TId> {
 
+    override fun encode(model: T, action:DataAction): Values {
+        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    }
+
     override fun schema(): Model? = model
 
-    override fun <T> mapFrom(record: Record): T? = null
+    override fun decode(record: Record): T? = null
 }

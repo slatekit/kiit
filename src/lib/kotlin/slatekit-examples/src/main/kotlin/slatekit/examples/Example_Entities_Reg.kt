@@ -21,9 +21,9 @@ import slatekit.entities.core.EntityContext
 import slatekit.results.Try
 import slatekit.results.Success
 import slatekit.common.conf.ConfFuncs
-import slatekit.common.db.DbConString
-import slatekit.common.db.Connections
-import slatekit.common.db.Vendor
+import slatekit.common.data.DbConString
+import slatekit.common.data.Connections
+import slatekit.common.data.Vendor
 import slatekit.cmds.Command
 import slatekit.cmds.CommandRequest
 import slatekit.db.Db

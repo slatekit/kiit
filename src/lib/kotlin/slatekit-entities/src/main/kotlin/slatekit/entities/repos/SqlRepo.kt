@@ -13,9 +13,9 @@
 
 package slatekit.entities.repos
 
-import slatekit.common.db.IDb
+import slatekit.common.data.IDb
 import slatekit.common.ext.tail
-import slatekit.entities.EntityMapper
+import slatekit.common.data.Mapper
 import slatekit.entities.core.EntityInfo
 import slatekit.query.IQuery
 import slatekit.query.Op
@@ -27,12 +27,20 @@ import slatekit.query.Query
  * @param info : Holds all info relevant state/members needed to perform repo operations
  * @tparam T
  */
-abstract class SqlRepo<TId, T>(
+open class SqlRepo<TId, T>(
     val db: IDb,
     info: EntityInfo,
-    val mapper: EntityMapper<TId, T>
+    val mapper: Mapper<TId, T>
 ) : BaseRepo<TId, T>(info)
         where TId : Comparable<TId> {
+
+    override fun create(entity: T): TId {
+        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    }
+
+    override fun update(entity: T): Boolean {
+        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    }
 
     override fun name(): String = "${info.encodedChar}" + super.name() + "${info.encodedChar}"
 
@@ -188,7 +196,7 @@ abstract class SqlRepo<TId, T>(
      * @param value: value of field to search against
      * @return
      */
-    override fun findByField(field: String, op: String, value: Any): List<T> {
+    override fun findByField(field: String, op: Op, value: Any): List<T> {
         return find(Query().where(field, op, value))
     }
 
@@ -222,7 +230,7 @@ abstract class SqlRepo<TId, T>(
      * @param value: value of field to search against
      * @return
      */
-    override fun findOneByField(field: String, op: String, value: Any): T? {
+    override fun findOneByField(field: String, op: Op, value: Any): T? {
         return find(Query().where(field, op, value)).firstOrNull()
     }
 
@@ -241,7 +249,7 @@ abstract class SqlRepo<TId, T>(
      * @return
      */
     override fun findByProc(name: String, args: List<Any>?): List<T>? {
-        return db.callQueryMapped(name, mapper::mapFrom, args)
+        return db.callQueryMapped(name, mapper::decode, args)
     }
 
     /**
@@ -264,10 +272,10 @@ abstract class SqlRepo<TId, T>(
     }
 
     protected open fun sqlMapMany(sql: String): List<T>? {
-        return db.mapAll(sql, null, mapper::mapFrom)
+        return db.mapAll(sql, null, mapper::decode)
     }
 
     protected open fun sqlMapOne(sql: String): T? {
-        return db.mapOne<T>(sql, null, mapper::mapFrom)
+        return db.mapOne<T>(sql, null, mapper::decode)
     }
 }

@@ -14,8 +14,8 @@
 package slatekit.entities.core
 
 import kotlin.reflect.KClass
-import slatekit.common.db.Vendor
-import slatekit.common.db.Vendor.MySql
+import slatekit.common.data.Vendor
+import slatekit.common.data.Vendor.MySql
 import slatekit.entities.EntityMapper
 import slatekit.meta.models.Model
 

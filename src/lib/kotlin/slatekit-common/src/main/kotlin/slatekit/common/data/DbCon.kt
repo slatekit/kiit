@@ -11,7 +11,7 @@
  * </slate_header>
  */
 
-package slatekit.common.db
+package slatekit.common.data
 
 interface DbCon {
   val driver: String

@@ -1,5 +1,6 @@
-package slatekit.common.db
+package slatekit.common.data
 
+import slatekit.common.Record
 import java.sql.ResultSet
 
 /**
@@ -74,7 +75,7 @@ interface IDb : ScalarSupport, ProcSupport {
      * @return
      */
     @Suppress("UNCHECKED_CAST")
-    fun <T> mapOne(sql: String, inputs: List<Any>?, mapper: Mapper<T>): T?
+    fun <T> mapOne(sql: String, inputs: List<Any>?, mapper: (Record) -> T?): T?
 
     /**
      * maps multiple items using the sql supplied
@@ -85,7 +86,7 @@ interface IDb : ScalarSupport, ProcSupport {
      * @return
      */
     @Suppress("UNCHECKED_CAST")
-    fun <T> mapAll(sql: String, inputs: List<Any>?, mapper: Mapper<T>): List<T>?
+    fun <T> mapAll(sql: String, inputs: List<Any>?, mapper: (Record) -> T?): List<T>?
 
 
     fun errorHandler(ex: Exception)

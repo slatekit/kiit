@@ -13,7 +13,7 @@
 
 package slatekit.orm
 
-import slatekit.common.db.Vendor
+import slatekit.common.data.Vendor
 import slatekit.db.builders.DbBuilder
 import slatekit.db.builders.MySqlBuilder
 import slatekit.db.builders.PostGresBuilder
