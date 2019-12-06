@@ -28,11 +28,11 @@ import slatekit.providers.logs.logback.LogbackLogs
  * java -jar ${app.name}.jar -env=dev -log.level=info -conf.dir = "file://./conf-sample-shell"
  * java -jar ${app.name}.jar -env=dev -log.level=info -conf.dir = "file://./conf-sample-server"
  *
- * slatekit new app -name="MyApp1" -package="company1.apps" -envs="dev,qat,stg,pro" -dest="some directory" -creds=encrypted -slatekit='0.9.28'
- * slatekit new api -name="MyApp1" -package="company1.apps"
- * slatekit new cli -name="MyApp1" -package="company1.apps"
- * slatekit new job -name="MyApp1" -package="company1.apps"
- * slatekit new orm -name="MyApp1" -package="company1.apps"
+ * slatekit new app -name="MyApp1" -packageName="company1.apps" -envs="dev,qat,stg,pro" -dest="some directory" -creds=encrypted -slatekit='0.9.28'
+ * slatekit new api -name="MyApp1" -packageName="company1.apps"
+ * slatekit new cli -name="MyApp1" -packageName="company1.apps"
+ * slatekit new job -name="MyApp1" -packageName="company1.apps"
+ * slatekit new orm -name="MyApp1" -packageName="company1.apps"
  */
  fun main(args: Array<String>) {
     runBlocking {
