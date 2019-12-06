@@ -13,7 +13,7 @@ class GeneratorService(val context: Context, val cls:Class<*>, val settings: Gen
 
     fun generate(setupCtx: GeneratorContext, template: Template): Try<String> {
         // Normalize/Canonical names
-        val ctx = setupCtx.normalize(settings.toolSettings)
+        val ctx = setupCtx.normalize(settings)
 
         // Get root directory of destination
         val root = Uris.interpret(ctx.destination) ?: ""

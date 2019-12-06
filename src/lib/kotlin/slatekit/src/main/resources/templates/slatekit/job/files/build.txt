@@ -1,6 +1,6 @@
 buildscript {
-    ext.kotlin_version = '1.3.21'
-    ext.slatekit_version = "${tool.version}"
+    ext.kotlin_version = '${build.kotlin.version}'
+    ext.slatekit_version = "${build.slatekit.version}"
 
     repositories {
         jcenter()

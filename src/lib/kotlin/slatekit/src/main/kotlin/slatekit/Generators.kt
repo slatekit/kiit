@@ -4,10 +4,7 @@ import kotlinx.coroutines.runBlocking
 import slatekit.app.AppRunner
 import slatekit.common.CommonContext
 import slatekit.docs.DocService
-import slatekit.generator.GeneratorApi
-import slatekit.generator.GeneratorService
-import slatekit.generator.GeneratorSettings
-import slatekit.generator.ToolSettings
+import slatekit.generator.*
 import slatekit.integration.common.AppEntContext
 import slatekit.providers.logs.logback.LogbackLogs
 import slatekit.samples.app.App
@@ -131,7 +128,7 @@ fun genSrv(args:Array<String>, dest:String, name:String) {
 
 fun gen(args:Array<String>, op: (GeneratorApi) -> Unit ) {
     val ctx = CommonContext.simple("slatekit.generator")
-    val svc = GeneratorService(ctx, SlateKit::class.java, GeneratorSettings(ToolSettings("0.9.36")))
+    val svc = GeneratorService(ctx, SlateKit::class.java, GeneratorSettings(ToolSettings("0.9.36"), BuildSettings("1.3.21")))
     val api = GeneratorApi(ctx, svc)
     op(api)
 }
