@@ -14,7 +14,6 @@
 package slatekit.app
 
 import slatekit.common.CommonContext
-import slatekit.common.Context
 import slatekit.common.args.Args
 import slatekit.common.args.ArgsCheck
 import slatekit.common.args.ArgsCheck.isExit
@@ -36,18 +35,9 @@ import slatekit.common.log.Logs
 import slatekit.common.log.LogsDefault
 import slatekit.common.log.LogLevel
 import slatekit.results.*
+import java.io.File
 
 object AppUtils {
-
-    fun getScheme(args: Args, default:Alias): Alias {
-        val dirFromArgs = args.getStringOrNull("conf.dir")
-        return dirFromArgs?.let{ Alias.parse(it) } ?: default
-    }
-
-    fun getDir(args: Args, default:Alias): Uri {
-        val dirFromArgs = args.getStringOrNull("conf.dir")
-        return dirFromArgs?.let { Uris.parse(it) } ?: Uri.jar("")
-    }
 
     /**
      * Checks the command for either an instructions about app or for exiting:
@@ -164,15 +154,15 @@ object AppUtils {
             val overrideConfPath = source.combine(overrideConfName).toFile().absolutePath
             val confEnv = Config.of(overrideConfPath, confBase, enc)
 
-            Success(AppInputs(args, Envs(allEnvs).select(env.name), confBase, confEnv))
+            Success(AppInputs(source, args, Envs(allEnvs).select(env.name), confBase, confEnv))
         } ?: Failure("Unknown environment name : $envName supplied")
     }
 
-    private fun buildContext(appInputs: AppInputs, enc: Encryptor?, logs: Logs?): CommonContext {
+    private fun buildContext(inputs: AppInputs, enc: Encryptor?, logs: Logs?): CommonContext {
 
-        val buildInfoExists = resourceExists("build.conf")
+        val buildInfoExists = resourceExists(inputs.loc, "build.conf")
         val build = if (buildInfoExists) {
-            val source = getDir(appInputs.args, Alias.Jar).combine("build.conf")
+            val source = getDir(inputs.args, Alias.Jar).combine("build.conf")
             val props = Props.loadFrom(source)
             val stamp = Config(source,props, enc)
             val info = stamp.buildStamp("build")
@@ -181,12 +171,12 @@ object AppUtils {
             Build.empty
         }
 
-        val args = appInputs.args
-        val env = appInputs.envs
+        val args = inputs.args
+        val env = inputs.envs
 
         // The config is inheritance based.
         // Which means the base env.loc.conf inherits from env.conf.
-        val conf = appInputs.confEnv
+        val conf = inputs.confEnv
 
         return CommonContext(
                 args = args,
@@ -199,12 +189,21 @@ object AppUtils {
         )
     }
 
-    fun resourceExists(path: String): Boolean {
-        val res = this.javaClass.getResource("/$path")
-        return res != null
+    fun resourceExists(uri:Uri, path: String): Boolean {
+        val actual = uri.combine(path)
+        val res = File(actual.full)
+        return res.exists()
     }
 
+    private fun getDir(args: Args, default:Alias): Uri {
+        val dirFromArgs = args.getStringOrNull("conf.dir")
+        return dirFromArgs?.let { Uris.parse(it) } ?: Uri.build(default, "", null)
+    }
+
+
+
     data class AppInputs(
+        val loc : Uri,
         val args: Args,
         val envs: Envs,
         val confBase: Conf,
