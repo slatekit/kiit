@@ -6,6 +6,8 @@ import slatekit.common.CommonContext
 import slatekit.docs.DocService
 import slatekit.generator.GeneratorApi
 import slatekit.generator.GeneratorService
+import slatekit.generator.GeneratorSettings
+import slatekit.generator.ToolSettings
 import slatekit.integration.common.AppEntContext
 import slatekit.providers.logs.logback.LogbackLogs
 import slatekit.samples.app.App
@@ -21,7 +23,7 @@ fun slatekitCLI(args:Array<String>) {
                 schema = SlateKit.schema,
                 enc = SlateKit.encryptor,
                 logs = LogbackLogs(),
-                builder = { ctx -> SlateKit(AppEntContext.fromContext(ctx), interactive = true) }
+                builder = { ctx -> SlateKit(AppEntContext.fromContext(ctx)) }
         )
     }
 }
@@ -39,7 +41,7 @@ fun slatekitApp(args:Array<String>) {
                 schema = SlateKit.schema,
                 enc = SlateKit.encryptor,
                 logs = LogbackLogs(),
-                builder = { ctx -> SlateKit(AppEntContext.fromContext(ctx), interactive = false) }
+                builder = { ctx -> SlateKit(AppEntContext.fromContext(ctx)) }
         )
     }
 }
@@ -129,7 +131,7 @@ fun genSrv(args:Array<String>, dest:String, name:String) {
 
 fun gen(args:Array<String>, op: (GeneratorApi) -> Unit ) {
     val ctx = CommonContext.simple("slatekit.generator")
-    val svc = GeneratorService(ctx, SlateKit::class.java)
+    val svc = GeneratorService(ctx, SlateKit::class.java, GeneratorSettings(ToolSettings("0.9.36")))
     val api = GeneratorApi(ctx, svc)
     op(api)
 }

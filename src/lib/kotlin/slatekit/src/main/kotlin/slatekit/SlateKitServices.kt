@@ -23,6 +23,8 @@ import slatekit.orm.migrations.MigrationService
 import slatekit.orm.migrations.MigrationSettings
 import slatekit.generator.GeneratorApi
 import slatekit.generator.GeneratorService
+import slatekit.generator.GeneratorSettings
+import slatekit.generator.ToolSettings
 
 interface SlateKitServices {
 
@@ -62,8 +64,9 @@ interface SlateKitServices {
 //        moduleApi.register(DependencyModule(ctx, moduleContext()))
 
         // APIs
+        val genSettings = ToolSettings(this.ctx.conf.getString("slatekit.version"))
         val requiredApis = listOf(
-                Api(GeneratorApi(ctx, GeneratorService(ctx, SlateKit::class.java)), declaredOnly = true, setup = Setup.Annotated),
+                Api(GeneratorApi(ctx, GeneratorService(ctx, SlateKit::class.java, GeneratorSettings(genSettings))), declaredOnly = true, setup = Setup.Annotated),
                 Api(DocApi(ctx), declaredOnly = true, setup = Setup.Annotated),
                 Api(InfoApi(ctx), declaredOnly = true, setup = Setup.Annotated),
                 Api(VersionApi(ctx), declaredOnly = true, setup = Setup.Annotated)

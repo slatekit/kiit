@@ -92,7 +92,7 @@ class GeneratorApi(val context: Context, val service: GeneratorService) {
         val template = Templates.load(templateDirPath, templateName)
         //val parentDir = File(templateDirPath, templateName.split("/")[0])
         val rootDir = File(templateDirPath)
-        val ctx = GeneratorContext(rootDir, name, "", packageName, "company", targetPath.absolutePath, CredentialMode.EnvVars)
+        val ctx = GeneratorContext(rootDir, name, "", packageName, "company", targetPath.absolutePath, CredentialMode.EnvVars, service.settings.toolSettings)
         return service.generate(ctx, template)
     }
 }

@@ -44,7 +44,7 @@ import slatekit.providers.logs.logback.LogbackLogs
                 logs = LogbackLogs(),
                 hasAction = true,
                 confSource = Alias.Cfg,
-                builder = { ctx -> SlateKit(ctx, interactive = true) }
+                builder = { ctx -> SlateKit(ctx) }
         )
     }
 }

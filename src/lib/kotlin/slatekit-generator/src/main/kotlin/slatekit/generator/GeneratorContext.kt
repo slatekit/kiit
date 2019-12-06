@@ -13,15 +13,16 @@ data class GeneratorContext(val rootDir: File,
                             val packageName: String,
                             val company: String,
                             val destination: String,
-                            val mode: CredentialMode)
+                            val mode: CredentialMode,
+                            val tool: ToolSettings)
 {
     /**
      * Normalizes the fields to ensure proper names are created.
      * E.g. Removes spaces from package Name
      */
-    fun normalize(): GeneratorContext {
+    fun normalize(tool: ToolSettings): GeneratorContext {
         val canonicalName = name
         val canonicalPackage = packageName.toId()
-        return GeneratorContext(rootDir, canonicalName, desc, canonicalPackage, company, destination, mode)
+        return GeneratorContext(rootDir, canonicalName, desc, canonicalPackage, company, destination, mode, tool)
     }
 }

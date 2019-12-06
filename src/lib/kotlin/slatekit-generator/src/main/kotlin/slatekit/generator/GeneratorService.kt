@@ -6,14 +6,14 @@ import slatekit.results.Success
 import slatekit.results.Try
 import java.io.File
 
-class GeneratorService(val context: Context, val cls:Class<*>) {
+class GeneratorService(val context: Context, val cls:Class<*>, val settings: GeneratorSettings) {
 
     val logger = context.logs.getLogger()
 
 
     fun generate(setupCtx: GeneratorContext, template: Template): Try<String> {
         // Normalize/Canonical names
-        val ctx = setupCtx.normalize()
+        val ctx = setupCtx.normalize(settings.toolSettings)
 
         // Get root directory of destination
         val root = Uris.interpret(ctx.destination) ?: ""
