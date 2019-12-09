@@ -1,4 +1,4 @@
-package slatekit.samples.cli
+package ${app.package}
 
 import slatekit.apis.*
 import slatekit.apis.support.Authenticator
@@ -8,7 +8,7 @@ import slatekit.common.types.Content
 import slatekit.common.info.ApiKey
 import slatekit.integration.apis.CliApi
 import slatekit.results.Try
-import slatekit.samples.common.apis.SampleApi
+import ${app.package}.apis.SampleApi
 
 class CLI(val ctx: Context) {
 

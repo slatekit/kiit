@@ -158,43 +158,4 @@ open class CliApi(
             }
         }
     }
-
-//    override fun collectSummaryExtra(): List<Pair<String, String>>? {
-//        return listOf(
-//                Pair("db.conn", ctx.cfg.dbCon().url ),
-//                Pair("db.user", ctx.cfg.dbCon().user),
-//                Pair("dirs.app", ctx.dirs?.pathToApp ?: "")
-//        )
-//    }
-
-//    private fun buildRequestSample(cmd: CliRequest): Notice<String> {
-//        val opts = InputArgs(mapOf<String, Any>(metaNameForApiKey to creds.key))
-//        val apiCmd = SimpleRequest.cli(cmd.args.line, ApiConstants.SourceCLI, opts, cmd.args, cmd)
-//
-//        // Generate sample json
-//        val fileName = cmd.args.getSysString(SysParam.Sample.id)
-//        val filePath = File(ctx.dirs?.pathToOutputs, fileName).absolutePath
-//        val file = File(filePath)
-//        return apis.sample(apiCmd, file)
-//    }
-//
-//    private fun buildRequestFromFile(cmd: CliRequest): Request {
-//        // The file path
-//        val rawPath = cmd.args.getSysString(SysParam.File.id)
-//        val route = cmd.fullName
-//        val req = Requests.fromFileWithMeta(
-//                route,
-//                rawPath ?: "",
-//                mapOf(metaNameForApiKey to creds.key),
-//                ctx.enc)
-//        return req
-//    }
-//
-//
-//    private fun containsRequestLevelSystemCommand(cmd: CliRequest): Boolean {
-//        return cmd.args.sys.isNotEmpty() &&
-//                (cmd.args.sys.containsKey(SysParam.File.id) ||
-//                  cmd.args.sys.containsKey(SysParam.Sample.id)
-//                )
-//    }
 }
