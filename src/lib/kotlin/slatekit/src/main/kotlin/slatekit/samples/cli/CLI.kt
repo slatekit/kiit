@@ -4,7 +4,6 @@ import slatekit.apis.*
 import slatekit.apis.support.Authenticator
 import slatekit.cli.CliSettings
 import slatekit.common.Context
-import slatekit.common.Source
 import slatekit.common.types.Content
 import slatekit.common.info.ApiKey
 import slatekit.integration.apis.CliApi
@@ -48,16 +47,7 @@ class CLI(val ctx: Context) {
 
     fun apis(): List<slatekit.apis.core.Api> {
         return listOf(
-                slatekit.apis.core.Api(
-                        klass = SampleApi::class,
-                        setup = Setup.Annotated,
-                        declaredOnly = true,
-                        auth = AuthMode.Keyed,
-                        roles = slatekit.apis.core.Roles(listOf("*")),
-                        verb = Verb.Auto,
-                        sources = slatekit.apis.core.Sources(listOf(Source.All)),
-                        singleton = SampleApi(ctx)
-                )
+                slatekit.apis.core.Api(klass = SampleApi::class, singleton = SampleApi(ctx), setup = Setup.Annotated)
         )
     }
 }

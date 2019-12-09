@@ -18,7 +18,7 @@ import slatekit.integration.common.AppEntContext
 import slatekit.meta.Serialization
 import slatekit.results.Failure
 
-class SlateKit(ctx: Context, val interactive: Boolean) : App<Context>(ctx, AppOptions(printSummaryBeforeExec = true)), SlateKitServices {
+class SlateKit(ctx: Context) : App<Context>(ctx, AppOptions(printSummaryBeforeExec = true)), SlateKitServices {
 
     companion object {
 

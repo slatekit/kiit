@@ -13,6 +13,7 @@ import slatekit.notifications.email.EmailServiceSendGrid
 import slatekit.notifications.sms.SmsService
 import slatekit.notifications.sms.SmsServiceTwilio
 import slatekit.docs.DocApi
+import slatekit.generator.*
 import slatekit.info.DependencyApi
 import slatekit.integration.apis.*
 import slatekit.integration.common.AppEntContext
@@ -21,8 +22,6 @@ import slatekit.integration.mods.ModService
 import slatekit.integration.mods.ModuleContext
 import slatekit.orm.migrations.MigrationService
 import slatekit.orm.migrations.MigrationSettings
-import slatekit.generator.GeneratorApi
-import slatekit.generator.GeneratorService
 
 interface SlateKitServices {
 
@@ -62,8 +61,10 @@ interface SlateKitServices {
 //        moduleApi.register(DependencyModule(ctx, moduleContext()))
 
         // APIs
+        val toolSettings = ToolSettings(this.ctx.conf.getString("slatekit.version"))
+        val buildSettings = BuildSettings(this.ctx.conf.getString("kotlin.version"))
         val requiredApis = listOf(
-                Api(GeneratorApi(ctx, GeneratorService(ctx, SlateKit::class.java)), declaredOnly = true, setup = Setup.Annotated),
+                Api(GeneratorApi(ctx, GeneratorService(ctx, SlateKit::class.java, GeneratorSettings(toolSettings, buildSettings))), declaredOnly = true, setup = Setup.Annotated),
                 Api(DocApi(ctx), declaredOnly = true, setup = Setup.Annotated),
                 Api(InfoApi(ctx), declaredOnly = true, setup = Setup.Annotated),
                 Api(VersionApi(ctx), declaredOnly = true, setup = Setup.Annotated)

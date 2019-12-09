@@ -7,20 +7,20 @@
   "keywords": ["slatekit", "app"],
   "type": "common",
   "actions": [
-    { "type": "mkdir", "path": "/gradle" },
-    { "type": "mkdir", "path": "/gradle/wrapper" },
-    { "type": "mkdir", "path": "/src" },
-    { "type": "mkdir", "path": "/src/main" },
-    { "type": "mkdir", "path": "/src/test" },
-    { "type": "mkdir", "path": "/src/main/resources" },
-    { "type": "mkdir", "path": "/src/main/java" },
-    { "type": "mkdir", "path": "/src/main/kotlin"},
+    { "name": "mkdir", "path": "/gradle" },
+    { "name": "mkdir", "path": "/gradle/wrapper" },
+    { "name": "mkdir", "path": "/src" },
+    { "name": "mkdir", "path": "/src/main" },
+    { "name": "mkdir", "path": "/src/test" },
+    { "name": "mkdir", "path": "/src/main/resources" },
+    { "name": "mkdir", "path": "/src/main/java" },
+    { "name": "mkdir", "path": "/src/main/kotlin"},
 
-    { "type": "copy", "doc": "Doc"  , "source": "/README.md"                , "target": "/README.md"                   },
-    { "type": "copy", "doc": "Build", "source": "/gradlew"                  , "target": "/gradlew"                     },
-    { "type": "copy", "doc": "Build", "source": "/gradlew.bat"              , "target": "/gradlew.bat"                 },
-    { "type": "copy", "doc": "Build", "source": "/gradle.properties"        , "target": "/gradle.properties"           },
-    { "type": "copy", "doc": "Build", "source": "/gradle-wrapper.properties", "target": "/gradle/wrapper/gradle-wrapper.properties" }
+    { "name": "copy", "type": "Doc"  , "source": "/README.md"                , "target": "/README.md"                   },
+    { "name": "copy", "type": "Build", "source": "/gradlew"                  , "target": "/gradlew"                     },
+    { "name": "copy", "type": "Build", "source": "/gradlew.bat"              , "target": "/gradlew.bat"                 },
+    { "name": "copy", "type": "Build", "source": "/gradle.properties"        , "target": "/gradle.properties"           },
+    { "name": "copy", "type": "Build", "source": "/gradle-wrapper.properties", "target": "/gradle/wrapper/gradle-wrapper.properties" }
   ],
   "dependencies": {
   }

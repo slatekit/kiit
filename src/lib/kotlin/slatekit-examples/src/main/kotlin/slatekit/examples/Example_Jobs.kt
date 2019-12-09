@@ -161,14 +161,9 @@ class Example_Jobs : Command("utils"), CoroutineScope by MainScope() {
         //<doc:examples>
         runBlocking {
 
-            fun <T> asyncQueue(queue:slatekit.core.queues.Queue<T>):AsyncQueue<T> {
-                // Queues
-                val queue = WrappedAsyncQueue<T>(queue)
-                return queue
-            }
-
-            val queue1 = Queue("queue1", Priority.Mid, asyncQueue(InMemoryQueue.stringQueue(5)))
-            val queue2 = Queue("queue2", Priority.Mid, asyncQueue(InMemoryQueue.stringQueue(5)))
+            // Sample Queues
+            val queue1 = slatekit.jobs.Queue("queue1", Priority.Mid, AsyncQueue.of(InMemoryQueue.stringQueue(5)))
+            val queue2 = slatekit.jobs.Queue("queue2", Priority.Mid, AsyncQueue.of(InMemoryQueue.stringQueue(5)))
 
             // Registry
             val logger = LoggerConsole()

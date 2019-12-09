@@ -47,13 +47,16 @@ object Uris {
     fun parse(raw:String, lookup:Map<String, String>? = null):Uri {
         val path = raw.trim()
         return when {
+
+
             // Using directory root/alias e.g. ~/ ./ ../
             path.startsWith(Alias.Abs.value) -> Uri(path, Alias.Abs, substringOrNull(path, Alias.Abs.value.length))
             path.startsWith(Alias.Usr.value) -> Uri(path, Alias.Usr, substringOrNull(path, Alias.Usr.value.length))
             path.startsWith(Alias.Cur.value) -> Uri(path, Alias.Cur, substringOrNull(path, Alias.Cur.value.length))
             path.startsWith(Alias.Rel.value) -> Uri(path, Alias.Rel, substringOrNull(path, Alias.Rel.value.length))
+
+            path == Alias.Cfg.value -> Uri(path, Alias.Cfg, null)
             path.startsWith(Alias.Cfg.value) -> Uri(path, Alias.Cfg, substringOrNull(path, Alias.Cfg.value.length))
-            //raw.startsWith(Alias.Tmp.value) -> Uri(raw, Alias.Tmp, substringOrNull(raw, Alias.Tmp.value.length))
 
             // Using uri based approach : e.g. abs:// usr://
             path.startsWith(Alias.Abs.name + "://", ignoreCase = true) -> parse(Alias.Abs, path, lookup)

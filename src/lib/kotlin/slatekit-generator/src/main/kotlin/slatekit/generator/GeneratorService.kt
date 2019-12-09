@@ -6,24 +6,27 @@ import slatekit.results.Success
 import slatekit.results.Try
 import java.io.File
 
-class GeneratorService(val context: Context, val cls:Class<*>) {
+class GeneratorService(val context: Context, val cls:Class<*>, val settings: GeneratorSettings) {
 
     val logger = context.logs.getLogger()
 
 
     fun generate(setupCtx: GeneratorContext, template: Template): Try<String> {
         // Normalize/Canonical names
-        val ctx = setupCtx.normalize()
+        val ctx = setupCtx.normalize(settings)
 
         // Get root directory of destination
-        val root = Uris.interpret(ctx.destination) ?: ""
-        val targetDir = File(root)
-        log(targetDir)
+        log(ctx.destDir)
 
         // Rewrite the context
-        val finalCtx = setupCtx.copy(destination = targetDir.toString())
+        val finalCtx = setupCtx.copy(destDir = ctx.destDir)
 
         // Create target dir
+        ctx.destDir.mkdir()
+
+        // Target dir = dest/${name}
+        // e.g. ~/slatekit/gen/MyApp1
+        val targetDir = File(ctx.destDir, setupCtx.name)
         targetDir.mkdir()
 
         // Execute the dependencies first

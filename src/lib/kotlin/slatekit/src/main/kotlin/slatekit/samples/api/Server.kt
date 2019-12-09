@@ -1,4 +1,4 @@
-package slatekit.samples.srv
+package slatekit.samples.api
 
 
 // Ktor
@@ -19,14 +19,12 @@ import slatekit.common.ext.toResponse
 
 // Slate Kit - Server ( Ktor support )
 import slatekit.server.ServerSettings
-import slatekit.server.common.ServerDiagnostics
 import slatekit.server.ktor.KtorHandler
 import slatekit.server.ktor.KtorResponse
 
 // Sample App
 import slatekit.samples.common.apis.SampleApi
 import slatekit.samples.common.auth.SampleAuth
-import slatekit.tracking.MetricsLite
 
 
 class Server(val ctx: Context)  {
@@ -88,7 +86,7 @@ class Server(val ctx: Context)  {
 
     fun apis(): List<slatekit.apis.core.Api> {
         return listOf(
-                slatekit.apis.core.Api(klass = SampleApi::class, singleton = SampleApi(ctx))
+                slatekit.apis.core.Api(klass = SampleApi::class, singleton = SampleApi(ctx), setup = Setup.Annotated)
         )
     }
 

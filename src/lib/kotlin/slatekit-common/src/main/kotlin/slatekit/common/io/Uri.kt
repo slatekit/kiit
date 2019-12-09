@@ -19,7 +19,7 @@ data class Uri internal constructor(val raw: String,
                                     val path: String?,
                                     val full: String) {
 
-   internal constructor(raw:String, root: Alias, path:String?): this(raw, root, path, Paths.get(Alias.resolve(root), path).toString())
+   internal constructor(raw:String, root: Alias, path:String?): this(raw, root, path, resolve(root, path))
 
 
     //val full = Paths.get(Alias.resolve(root), path)
@@ -29,8 +29,18 @@ data class Uri internal constructor(val raw: String,
 
     fun combine(otherPath: String): Uri {
         return when {
-            path.isNullOrEmpty() -> this.copy(path = otherPath)
-            else -> this.copy(path = java.nio.file.Paths.get(path, otherPath).toString())
+            path.isNullOrEmpty() -> {
+                this.copy(
+                        path = otherPath,
+                        full = java.nio.file.Paths.get(full, otherPath).toString()
+                )
+            }
+            else -> {
+                this.copy(
+                        path = java.nio.file.Paths.get(path, otherPath).toString(),
+                        full = java.nio.file.Paths.get(full, otherPath).toString()
+                )
+            }
         }
     }
 
@@ -62,6 +72,14 @@ data class Uri internal constructor(val raw: String,
             val clean = Uris.clean(raw)
             val trim = Uris.trim(clean)
             return Uris.build(alias, raw, trim, lookup)
+        }
+
+
+        fun resolve(root:Alias, path:String?):String {
+            return when(path) {
+                null -> Paths.get(Alias.resolve(root)).toString()
+                else -> Paths.get(Alias.resolve(root), path).toString()
+            }
         }
     }
 }

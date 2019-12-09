@@ -7,8 +7,8 @@
   "keywords": ["slatekit", "app"],
   "type": "application",
   "actions": [
-    { "type": "copy", "doc": "Code", "source": "/templates/app/Run.txt", "target": "/src/main/kotlin/@app.package/Run.kt" },
-    { "type": "copy", "doc": "Code", "source": "/templates/app/App.txt", "target": "/src/main/kotlin/@app.package/App.kt" }
+    { "name":"copy", "type": "Code", "source": "/templates/app/Run.txt", "target": "/src/main/kotlin/@app.package/Run.kt" },
+    { "name": "copy", "type": "Code", "source": "/templates/app/App.txt", "target": "/src/main/kotlin/@app.package/App.kt" }
   ],
   "dependencies": {
     "common": "1.0.0",

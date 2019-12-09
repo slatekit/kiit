@@ -56,6 +56,8 @@ object Codes {
     @JvmField val IGNORED         = Ignored   (400001, "Ignored")         // E.g. Ignored, not exactly an error
     @JvmField val BAD_REQUEST     = Invalid   (400002, "Bad Request")     // E.g. Invalid JSON
     @JvmField val INVALID         = Invalid   (400003, "Invalid")         // E.g. Valid   JSON but invalid values
+
+    // Security related
     @JvmField val DENIED          = Denied    (400004, "Denied")          // Presumes a checked condition
     @JvmField val UNSUPPORTED     = Denied    (400005, "Not supported")   // Presumes a checked condition
     @JvmField val UNIMPLEMENTED   = Denied    (400006, "Not implemented") // Presumes a checked condition
@@ -63,7 +65,7 @@ object Codes {
     @JvmField val UNAUTHENTICATED = Denied    (400008, "Unauthenticated") // Presumes a checked condition
     @JvmField val UNAUTHORIZED    = Denied    (400009, "Unauthorized")    // Presumes a checked condition
 
-    // Errors: 500000 + range
+    // Expected errors: 500000 + range
     @JvmField val NOT_FOUND       = Errored   (500001, "Not found")       // E.g. Resource/End point not found
     @JvmField val MISSING         = Errored   (500002, "Missing item")    // E.g. Domain model not found
     @JvmField val FORBIDDEN       = Errored   (500003, "Forbidden")
@@ -71,8 +73,10 @@ object Codes {
     @JvmField val DEPRECATED      = Errored   (500005, "Deprecated")
     @JvmField val TIMEOUT         = Errored   (500006, "Timeout")
     @JvmField val ERRORED         = Errored   (500007, "Errored")         // General purpose use
-    @JvmField val UNEXPECTED      = Unexpected(500008, "Unexpected")
     @JvmField val LIMITED         = Errored   (500009, "Limited")
+
+    // Unexpected
+    @JvmField val UNEXPECTED      = Unexpected(500008, "Unexpected")
 
     // Success ( Interactive / Metadata )
     @JvmField val EXIT            = Succeeded (600002, "Exiting")

@@ -2,6 +2,7 @@ package slatekit.samples.common.apis
 
 import slatekit.apis.Api
 import slatekit.apis.Action
+import slatekit.apis.AuthModes
 import slatekit.apis.Verbs
 import slatekit.apis.support.ApiBase
 import slatekit.common.DateTime
@@ -9,22 +10,17 @@ import slatekit.common.DateTimes
 import slatekit.common.requests.Request
 import slatekit.common.Context
 import slatekit.common.Sources
+import slatekit.common.ext.toStringUtc
 import slatekit.common.info.About
 import slatekit.results.Outcome
 import slatekit.results.builders.Outcomes
 import slatekit.samples.common.models.SampleMovie
 
 
-@Api(area = "samples", name = "types", desc = "sample to test features of Slate Kit APIs", verb = Verbs.AUTO, sources = [Sources.WEB])
+@Api(area = "samples", name = "types", desc = "sample to test features of Slate Kit APIs", auth = AuthModes.NONE, verb = Verbs.AUTO, sources = [Sources.WEB])
 class SampleApi(context: Context) : ApiBase(context) {
 
     var inc = 0
-
-
-    @Action(desc = "info about this api")
-    fun about(): About {
-        return context.info.about
-    }
 
 
     @Action(desc = "accepts supplied basic data types from send")
@@ -33,10 +29,31 @@ class SampleApi(context: Context) : ApiBase(context) {
     }
 
 
+    @Action(desc = "info about this api")
+    fun about(): About {
+        return context.info.about
+    }
+
+
     @Action(desc = "increments a simple counter")
     fun increment(): Int {
         inc += 1
         return inc
+    }
+
+
+    @Action(desc = "accepts supplied basic data types from send")
+    fun inputs(name: String, isActive: Boolean, age: Short, dept: Int, account: Long, average: Float, salary: Double, date: DateTime): Map<String, Any> {
+        return mapOf(
+               "name"    to name,
+               "active"  to isActive,
+               "age"     to age,
+               "dept"    to dept,
+               "account" to account,
+               "average" to average,
+               "salary"  to salary,
+               "date"    to date.toStringUtc()
+        )
     }
 
 
@@ -71,8 +88,14 @@ class SampleApi(context: Context) : ApiBase(context) {
 
 
     @Action(desc = "test patch")
-    fun patch(greeting: String): String {
+    fun patch1(greeting: String): String {
         return "$greeting back"
+    }
+
+
+    @Action(desc = "test patch")
+    fun lists(movies:List<SampleMovie>): List<SampleMovie> {
+        return movies.map { it.copy(title = "GOT : " + it.title) }
     }
 
 
@@ -98,7 +121,7 @@ class SampleApi(context: Context) : ApiBase(context) {
 
 
     @Action(desc = "test movie list")
-    fun movies(category: String): List<SampleMovie> {
+    fun getRecent(category: String): List<SampleMovie> {
         return listOf(
                 SampleMovie(
                         title = "Sample Movie 1",
@@ -117,11 +140,5 @@ class SampleApi(context: Context) : ApiBase(context) {
                         released = DateTimes.of(1995, 8, 10)
                 )
         )
-    }
-
-
-    @Action(desc = "accepts supplied basic data types from send")
-    fun inputBasicTypes(string1: String, bool1: Boolean, numShort: Short, numInt: Int, numLong: Long, numFloat: Float, numDouble: Double, date: DateTime): String {
-        return "$string1, $bool1, $numShort $numInt, $numLong, $numFloat, $numDouble, $date"
     }
 }

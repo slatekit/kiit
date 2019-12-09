@@ -10,7 +10,11 @@ import slatekit.common.info.About
 import slatekit.results.Success
 import slatekit.results.Try
 
-
+/**
+ * Slate Kit Application template
+ * This provides support for command line args, environment selection, confs, life-cycle methods and help usage
+ * @see https://www.slatekit.com/arch/app/
+ */
 class App(ctx: Context) : App<Context>(ctx, AppOptions(printSummaryBeforeExec = true)) {
 
     companion object {
@@ -31,14 +35,13 @@ class App(ctx: Context) : App<Context>(ctx, AppOptions(printSummaryBeforeExec = 
          * This can be overriden in your env.conf file
          */
         val about = About(
-                id = "${app.id}",
+                area = "${app.company}",
                 name = "${app.name}",
                 desc = "${app.desc}",
                 company = "${app.company}",
                 region = "",
                 version = "1.0.0",
                 url = "${app.url}",
-                group = "",
                 contact = "",
                 tags = "app",
                 examples = ""
@@ -57,8 +60,8 @@ class App(ctx: Context) : App<Context>(ctx, AppOptions(printSummaryBeforeExec = 
     }
 
 
-    override suspend fun execute(): Try<Any> {
-        println("executing")
+    override suspend fun exec(): Try<Any> {
+        println("executing...")
         return Success(true)
     }
 

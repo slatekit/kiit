@@ -11,6 +11,11 @@ import slatekit.results.Success
 import slatekit.results.Try
 
 
+/**
+ * Slate Kit Application template
+ * This provides support for command line args, environment selection, confs, life-cycle methods and help usage
+ * @see https://www.slatekit.com/arch/app/
+ */
 class App(ctx: Context) : App<Context>(ctx, AppOptions(printSummaryBeforeExec = true)) {
 
     companion object {
@@ -58,7 +63,7 @@ class App(ctx: Context) : App<Context>(ctx, AppOptions(printSummaryBeforeExec = 
 
     override suspend fun exec(): Try<Any> {
         println("executing")
-        println("Sample work should be done here....")
+        println("Sample work should be done here...")
         return Success(true)
     }
 

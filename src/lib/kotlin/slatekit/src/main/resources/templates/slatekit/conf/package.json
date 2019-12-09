@@ -7,12 +7,17 @@
   "keywords": ["slatekit", "app"],
   "type": "config",
   "actions": [
-    { "type": "copy", "doc": "Conf", "source": "/env.conf"    , "target": "/src/main/resources/env.conf"     },
-    { "type": "copy", "doc": "Conf", "source": "/env.loc.conf", "target": "/src/main/resources/env.loc.conf" },
-    { "type": "copy", "doc": "Conf", "source": "/env.dev.conf", "target": "/src/main/resources/env.dev.conf" },
-    { "type": "copy", "doc": "Conf", "source": "/env.qat.conf", "target": "/src/main/resources/env.qat.conf" },
-    { "type": "copy", "doc": "Conf", "source": "/env.pro.conf", "target": "/src/main/resources/env.pro.conf" },
-    { "type": "copy", "doc": "Conf", "source": "/logback.txt" , "target": "/src/main/resources/logback.xml"  }
+    { "name": "mkdir", "path": "/src" },
+    { "name": "mkdir", "path": "/src/main" },
+    { "name": "mkdir", "path": "/src/test" },
+    { "name": "mkdir", "path": "/src/main/resources" },
+
+    { "name": "copy", "type": "Conf", "source": "/env.conf"    , "target": "/src/main/resources/env.conf"     },
+    { "name": "copy", "type": "Conf", "source": "/env.loc.conf", "target": "/src/main/resources/env.loc.conf" },
+    { "name": "copy", "type": "Conf", "source": "/env.dev.conf", "target": "/src/main/resources/env.dev.conf" },
+    { "name": "copy", "type": "Conf", "source": "/env.qat.conf", "target": "/src/main/resources/env.qat.conf" },
+    { "name": "copy", "type": "Conf", "source": "/env.pro.conf", "target": "/src/main/resources/env.pro.conf" },
+    { "name": "copy", "type": "Conf", "source": "/logback.txt" , "target": "/src/main/resources/logback.xml"  }
   ],
   "dependencies": {
   }

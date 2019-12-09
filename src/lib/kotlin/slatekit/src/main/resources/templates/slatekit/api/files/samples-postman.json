@@ -1,0 +1,381 @@
+{
+	"info": {
+		"_postman_id": "35b6bd64-bff2-4e5c-9fec-615ef2c31d67",
+		"name": "Samples",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "samples.types.hello",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"type": "text",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"greeting\" : \"hi\"\n}"
+				},
+				"url": {
+					"raw": "http://localhost:5000/api/samples/types/hello",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "5000",
+					"path": [
+						"api",
+						"samples",
+						"types",
+						"hello"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "samples.types.about",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"type": "text",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "http://localhost:5000/api/samples/types/about",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "5000",
+					"path": [
+						"api",
+						"samples",
+						"types",
+						"about"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "samples.types.increment",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"type": "text",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "http://localhost:5000/api/samples/types/increment",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "5000",
+					"path": [
+						"api",
+						"samples",
+						"types",
+						"increment"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "samples.types.inputs",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"type": "text",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"name\" : \"user 1\",\n\t\"isActive\" : true,\n\t\"age\" : 30,\n\t\"dept\": 123456,\n\t\"account\": 1234567890,\n\t\"average\": 12.34,\n\t\"salary\" : 123456.789,\n\t\"date\" : \"2019-12-20T09:30:00Z\"\n}"
+				},
+				"url": {
+					"raw": "http://localhost:5000/api/samples/types/inputs",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "5000",
+					"path": [
+						"api",
+						"samples",
+						"types",
+						"inputs"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "samples.types.getCounter",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"type": "text",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "http://localhost:5000/api/samples/types/getCounter",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "5000",
+					"path": [
+						"api",
+						"samples",
+						"types",
+						"getCounter"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "samples.types.create1",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"type": "text",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"greeting\" : \"Testing Verb POST\"\n}"
+				},
+				"url": {
+					"raw": "http://localhost:5000/api/samples/types/create1",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "5000",
+					"path": [
+						"api",
+						"samples",
+						"types",
+						"create1"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "samples.types.update1",
+			"request": {
+				"method": "PUT",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"type": "text",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"greeting\" : \"Testing Verb PUT\"\n}"
+				},
+				"url": {
+					"raw": "http://localhost:5000/api/samples/types/update1",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "5000",
+					"path": [
+						"api",
+						"samples",
+						"types",
+						"update1"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "samples.types.patch1",
+			"request": {
+				"method": "PATCH",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"type": "text",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"greeting\" : \"Testing Verb PATCH\"\n}"
+				},
+				"url": {
+					"raw": "http://localhost:5000/api/samples/types/patch1",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "5000",
+					"path": [
+						"api",
+						"samples",
+						"types",
+						"patch1"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "samples.types.delete1",
+			"request": {
+				"method": "DELETE",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"type": "text",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"greeting\" : \"Testing Verb DELETE\"\n}"
+				},
+				"url": {
+					"raw": "http://localhost:5000/api/samples/types/delete1",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "5000",
+					"path": [
+						"api",
+						"samples",
+						"types",
+						"delete1"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "samples.types.movies",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"movies\" : [\n        {\n            \"id\": 0,\n            \"title\": \"Sample Movie 1\",\n            \"category\": \"adventure\",\n            \"playing\": false,\n            \"cost\": 10,\n            \"rating\": 4.5,\n            \"released\": \"1985-08-10T00:00:00-04:00\"\n        },\n        {\n            \"id\": 0,\n            \"title\": \"Sample Movie 2\",\n            \"category\": \"adventure\",\n            \"playing\": false,\n            \"cost\": 10,\n            \"rating\": 4.5,\n            \"released\": \"1995-08-10T00:00:00-04:00\"\n        }\n    ]\n}"
+				},
+				"url": {
+					"raw": "http://localhost:5000/api/samples/types/lists",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "5000",
+					"path": [
+						"api",
+						"samples",
+						"types",
+						"lists"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "samples.types.getRecent",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "http://localhost:5000/api/samples/types/getRecent?category=adventure",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "5000",
+					"path": [
+						"api",
+						"samples",
+						"types",
+						"getRecent"
+					],
+					"query": [
+						{
+							"key": "category",
+							"value": "adventure"
+						}
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}

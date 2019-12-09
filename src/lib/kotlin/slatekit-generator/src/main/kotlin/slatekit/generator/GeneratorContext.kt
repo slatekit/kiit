@@ -8,20 +8,21 @@ import java.io.File
  * @param packageName :
  */
 data class GeneratorContext(val rootDir: File,
+                            val destDir: File,
                             val name: String,
                             val desc: String,
                             val packageName: String,
                             val company: String,
-                            val destination: String,
-                            val mode: CredentialMode)
+                            val mode: CredentialMode,
+                            val settings: GeneratorSettings)
 {
     /**
      * Normalizes the fields to ensure proper names are created.
      * E.g. Removes spaces from package Name
      */
-    fun normalize(): GeneratorContext {
+    fun normalize(settings: GeneratorSettings): GeneratorContext {
         val canonicalName = name
         val canonicalPackage = packageName.toId()
-        return GeneratorContext(rootDir, canonicalName, desc, canonicalPackage, company, destination, mode)
+        return GeneratorContext(rootDir, destDir, canonicalName, desc, canonicalPackage, company, mode, settings)
     }
 }

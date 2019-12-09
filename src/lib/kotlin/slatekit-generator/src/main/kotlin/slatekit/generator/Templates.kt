@@ -81,15 +81,15 @@ object Templates {
 
 
     private fun toAction(ndx:Int, jsonAction:JSONObject):Action {
-        val type = jsonAction.get("type") as String?
-        val action = when (type) {
+        val name = jsonAction.get("name") as String?
+        val action = when (name) {
             "mkdir" -> Action.MkDir(jsonAction.get("path") as String? ?: "")
             "copy" -> Action.Copy(
-                    FileType.parse(jsonAction.get("doc") as String? ?: ""),
+                    FileType.parse(jsonAction.get("type") as String? ?: ""),
                     jsonAction.get("source") as String? ?: "",
                     jsonAction.get("target") as String? ?: ""
             )
-            else   -> throw Exception("Unexpected action type: $type")
+            else   -> throw Exception("Unexpected action type: $name")
         }
         return action
     }

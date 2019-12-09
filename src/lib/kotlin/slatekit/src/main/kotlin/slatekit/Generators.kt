@@ -4,8 +4,7 @@ import kotlinx.coroutines.runBlocking
 import slatekit.app.AppRunner
 import slatekit.common.CommonContext
 import slatekit.docs.DocService
-import slatekit.generator.GeneratorApi
-import slatekit.generator.GeneratorService
+import slatekit.generator.*
 import slatekit.integration.common.AppEntContext
 import slatekit.providers.logs.logback.LogbackLogs
 import slatekit.samples.app.App
@@ -21,7 +20,7 @@ fun slatekitCLI(args:Array<String>) {
                 schema = SlateKit.schema,
                 enc = SlateKit.encryptor,
                 logs = LogbackLogs(),
-                builder = { ctx -> SlateKit(AppEntContext.fromContext(ctx), interactive = true) }
+                builder = { ctx -> SlateKit(AppEntContext.fromContext(ctx)) }
         )
     }
 }
@@ -39,7 +38,7 @@ fun slatekitApp(args:Array<String>) {
                 schema = SlateKit.schema,
                 enc = SlateKit.encryptor,
                 logs = LogbackLogs(),
-                builder = { ctx -> SlateKit(AppEntContext.fromContext(ctx), interactive = false) }
+                builder = { ctx -> SlateKit(AppEntContext.fromContext(ctx)) }
         )
     }
 }
@@ -89,11 +88,11 @@ fun sampleSrv(args:Array<String>) {
     runBlocking {
         AppRunner.run(
                 rawArgs = args,
-                about = slatekit.samples.srv.App.about,
-                schema = slatekit.samples.srv.App.schema,
-                enc = slatekit.samples.srv.App.encryptor,
+                about = slatekit.samples.api.App.about,
+                schema = slatekit.samples.api.App.schema,
+                enc = slatekit.samples.api.App.encryptor,
                 logs = LogbackLogs(),
-                builder = { ctx -> slatekit.samples.srv.App(AppEntContext.fromContext(ctx)) }
+                builder = { ctx -> slatekit.samples.api.App(AppEntContext.fromContext(ctx)) }
         )
     }
 }
@@ -129,7 +128,7 @@ fun genSrv(args:Array<String>, dest:String, name:String) {
 
 fun gen(args:Array<String>, op: (GeneratorApi) -> Unit ) {
     val ctx = CommonContext.simple("slatekit.generator")
-    val svc = GeneratorService(ctx, SlateKit::class.java)
+    val svc = GeneratorService(ctx, SlateKit::class.java, GeneratorSettings(ToolSettings("0.9.36"), BuildSettings("1.3.21")))
     val api = GeneratorApi(ctx, svc)
     op(api)
 }
