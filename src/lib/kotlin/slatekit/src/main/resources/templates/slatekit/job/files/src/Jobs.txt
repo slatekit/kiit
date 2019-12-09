@@ -100,7 +100,7 @@ class NewsLetterWorker(id:Identity) : Worker<String>(id) {
 
     // Transition hook for when the status is changed ( e.g. from Status.Running -> Status.Paused )
     override suspend fun move(state: Status) {
-        _status.set(state)
+        //_status.set(state)
         notify("move", listOf("status" to state.name))
     }
 

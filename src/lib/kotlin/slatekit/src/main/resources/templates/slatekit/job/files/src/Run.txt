@@ -2,39 +2,112 @@ package ${app.package}
 
 
 import kotlinx.coroutines.runBlocking
-import slatekit.app.AppRunner
-import slatekit.providers.logs.logback.LogbackLogs
+import slatekit.common.Agent
+import slatekit.common.SimpleIdentity
+import slatekit.common.args.Args
+import slatekit.core.queues.AsyncQueue
+import slatekit.core.queues.InMemoryQueue
+import slatekit.jobs.Job
+import slatekit.jobs.Jobs
+import slatekit.jobs.Priority
+import slatekit.jobs.Queue
+import slatekit.results.Failure
+import slatekit.results.Success
+
 
 
 /**
- * Entry point into the Slate Kit application with support for:
+ * NOTES:
+ * 1. You can use the Slate Kit Application template to
+ * get support for command line args, environment selection, confs, life-cycle methods and help usage
+ * @see https://www.slatekit.com/arch/app/
  *
- * 1. environments ( local, dev, qat, pro )
- * 2. command line args
- * 3. argument validation
- * 4. about / help / version display
- * 5. diagnostics ( on startup and end )
- * 6. logging ( console + logback )
- * 7. life-cycle events ( init, exec, end )
+ * RUN OPTIONS:
  *
- * java -jar ${app.name}.jar ?
- * java -jar ${app.name}.jar --about
- * java -jar ${app.name}.jar --version
- * java -jar ${app.name}.jar -env=dev
- * java -jar ${app.name}.jar -env=dev -conf.dir = "jars"
- * java -jar ${app.name}.jar -env=dev -conf.dir = "conf"
- * java -jar ${app.name}.jar -env=dev -conf.dir = "file://./conf-sample-batch"
- * java -jar ${app.name}.jar -env=dev -config.location="file://./${app.name}/conf"
+ * 1. One Time Job: gradle run -Djob.name=single
+ * 2. Paged    Job: gradle run -Djob.name=paging
+ * 3. Queued   Job: gradle run -Djob.name=queued
+ * 4. Worker   Job: gradle run -Djob.name=worker
  */
-fun main(args: Array<String>) {
+fun main(raw: Array<String>){
+    println("Args: =====================")
+    raw.forEachIndexed { ndx, value ->  println("$ndx : $value") }
+    println("\n")
+
+    val parsed = Args.parseArgs(raw)
+    when(parsed){
+        is Failure ->  println(parsed.error.message)
+        is Success ->  {
+            val args = parsed.value
+            println("job.name: " + args.getStringOrElse("job.name", "nothing"))
+            args.named.forEach { pair -> println("${pair.key}:${pair.value}")}
+            run(args)
+        }
+    }
+}
+
+
+fun <T> of(queue: slatekit.core.queues.Queue<T>): AsyncQueue<T> {
+    // Queues
+    val wrapped = slatekit.core.queues.WrappedAsyncQueue<T>(queue)
+    return wrapped
+}
+
+
+fun run(args: Args){
     runBlocking {
-        AppRunner.run(
-                rawArgs = args,
-                about = App.about,
-                schema = App.schema,
-                enc = App.encryptor,
-                logs = LogbackLogs(),
-                builder = { ctx -> App(ctx) }
+
+        // Identity for the jobs
+        val id = SimpleIdentity("samples", "newsletter", Agent.Job, "dev")
+
+        // Sample Queues: In-Memory
+        //val queue1 = Queue("queue1", Priority.Mid, AsyncQueue.of(InMemoryQueue.stringQueue(5)))
+        //val queue2 = Queue("queue2", Priority.Mid, AsyncQueue.of(InMemoryQueue.stringQueue(5)))
+
+
+        val queue1 = Queue("queue1", Priority.Mid, of<String>(InMemoryQueue.stringQueue(5)))
+        val queue2 = Queue("queue2", Priority.Mid, of<String>(InMemoryQueue.stringQueue(5)))
+
+        // Sample Data: for queue
+        (1 .. 5).forEach {
+            queue1.queue.send(it.toString(), mapOf(
+                    "id"   to "sample_id_$it",
+                    "name" to "sendNewsLetter",
+                    "xid"  to "sample_correlation_id_$it",
+                    "tag"  to "sample_tag_$it"
+            ))
+            queue2.queue.send(it.toString(), mapOf(
+                    "id"   to "sample_id_$it",
+                    "name" to "sendNewsLetter",
+                    "xid"  to "sample_correlation_id_$it",
+                    "tag"  to "sample_tag_$it"
+            ))
+        }
+
+        // Job Registry
+        val jobs = Jobs(
+                listOf(queue1, queue2),
+                listOf(
+                        Job(id.copy(service = "single"), ::sendNewsLetter),
+                        Job(id.copy(service = "paging"), listOf(::sendNewsLetterWithPaging)),
+                        Job(id.copy(service = "queued"), listOf(::sendNewsLetterFromQueue), queue1),
+                        Job(id.copy(service = "worker"), listOf(NewsLetterWorker(id)), queue2)
+                )
         )
+
+        // For Sample purposes, choose which one to run e.g. "samples.single | samples.paging | samples.queued | samples.worker"
+        val name = args.getStringOrElse("job.name", "paging")
+        val fullName = "samples.$name"
+
+        // Run
+        val result = jobs.run(fullName)
+        when(result) {
+            is Success -> result.value.join()
+            is Failure -> {
+                println("\nERROR : =====================")
+                println(result.error.msg)
+                println("\n")
+            }
+        }
     }
 }
