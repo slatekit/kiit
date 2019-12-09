@@ -1,16 +1,18 @@
 package ${app.package}.auth
 
+import slatekit.apis.AuthMode
+import slatekit.apis.core.Roles
 import slatekit.apis.support.Authenticator
 import slatekit.common.info.ApiKey
 import slatekit.common.requests.Request
-import slatekit.results.Notice
+import slatekit.results.Outcome
 import slatekit.results.Success
 
 class SampleAuth : Authenticator(listOf()) {
 
     /**
      * Override and implement this method if you want to completely handle authorization your self.
-     * @param cmd         : The protocol independent API request. e.g. http://abc.com/api/myapp/users/activate
+     * @param cmd         : The source independent API request. e.g. http://abc.com/api/myapp/users/activate
      * @param mode        : The auth-mode of the api ( refer to auth-mode for protocolo independent APIs )
      * @param actionRoles : The role setup on the API action
      * @param apiRoles    : The role setup on the API itself
@@ -24,7 +26,7 @@ class SampleAuth : Authenticator(listOf()) {
      * 3. the base class properly delegates handling the auth modes.
      * @return
      */
-    override fun isAuthorized(cmd: Request, mode: String, actionRoles: String, apiRoles: String) : Notice<Boolean> {
+    override fun check(req: Request, authMode: AuthMode, roles: Roles): Outcome<Boolean> {
         return Success(true)
     }
 

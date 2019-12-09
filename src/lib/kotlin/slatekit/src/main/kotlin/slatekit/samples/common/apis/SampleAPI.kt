@@ -4,7 +4,6 @@ import slatekit.apis.Api
 import slatekit.apis.Action
 import slatekit.apis.AuthModes
 import slatekit.apis.Verbs
-import slatekit.apis.core.Auth
 import slatekit.apis.support.ApiBase
 import slatekit.common.DateTime
 import slatekit.common.DateTimes

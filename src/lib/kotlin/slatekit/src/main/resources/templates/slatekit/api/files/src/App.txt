@@ -11,8 +11,14 @@ import slatekit.results.*
 // Slate Kit - App ( provides args, help, life-cycle methods, etc )
 import slatekit.app.App
 import slatekit.app.AppOptions
+import slatekit.common.utils.B64Java8
 
 
+/**
+ * Slate Kit Application template
+ * This provides support for command line args, environment selection, confs, life-cycle methods and help usage
+ * @see https://www.slatekit.com/arch/app/
+ */
 class App(ctx: Context) : App<Context>(ctx, AppOptions(printSummaryBeforeExec = true)) {
 
     companion object {
@@ -34,17 +40,16 @@ class App(ctx: Context) : App<Context>(ctx, AppOptions(printSummaryBeforeExec = 
          * This can be overriden in your env.conf file
          */
         val about = About(
-                id = "slatekit",
-                name = "Slate Kit",
-                desc = "Slate Kit Server",
-                company = "codehelix.co",
-                region = "NY",
+                area = "${app.company}",
+                name = "${app.name}",
+                desc = "${app.desc}",
+                company = "${app.company}",
+                region = "",
                 version = "1.0.0",
-                url = "www.slatekit.life",
-                group = "codehelix",
-                contact = "user@company.co",
-                tags = "sample, template, app",
-                examples = "http://www.slatekit.com"
+                url = "${app.url}",
+                contact = "",
+                tags = "app",
+                examples = ""
         )
 
         /**
@@ -68,7 +73,7 @@ class App(ctx: Context) : App<Context>(ctx, AppOptions(printSummaryBeforeExec = 
      *
      * @return
      */
-    override suspend fun execute(): Try<Any> {
+    override suspend fun exec(): Try<Any> {
         val server = Server(ctx)
         return server.execute()
     }

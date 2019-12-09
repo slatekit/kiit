@@ -5,7 +5,6 @@ import slatekit.apis.core.Roles
 import slatekit.apis.support.Authenticator
 import slatekit.common.info.ApiKey
 import slatekit.common.requests.Request
-import slatekit.results.Notice
 import slatekit.results.Outcome
 import slatekit.results.Success
 
