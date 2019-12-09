@@ -37,7 +37,7 @@ data class KtorParams(
 ) : Inputs, InputsUpdateable, JsonSupport {
 
     val method = req.httpMethod.value.toLowerCase()
-    val hasBody = KtorRequest.isBodyAllowed(method)
+    val hasBody = KtorRequest.isBodyAllowed(req.httpMethod)
     val json = KtorRequest.loadJson(body, req, false)
 
     override fun toJson(): JSONObject = KtorRequest.loadJson(body, req, true)

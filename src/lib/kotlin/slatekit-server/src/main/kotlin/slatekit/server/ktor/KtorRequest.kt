@@ -14,6 +14,7 @@
 package slatekit.server.ktor
 
 import io.ktor.application.ApplicationCall
+import io.ktor.http.HttpMethod
 import io.ktor.http.content.PartData
 import io.ktor.http.content.readAllParts
 import io.ktor.http.content.streamProvider
@@ -137,9 +138,8 @@ class KtorRequest(val call: ApplicationCall, val req: ApplicationRequest) : Requ
          * Load json from the post/put body using json-simple
          */
         fun loadJson(body: String, req: ApplicationRequest, addQueryParams: Boolean = false): JSONObject {
-            val method = req.httpMethod.value.toLowerCase()
             val isMultiPart = req.isMultipart()
-            val isBodyAllowed = isBodyAllowed(method)
+            val isBodyAllowed = isBodyAllowed(req.httpMethod)
             val json = if (isBodyAllowed && !isMultiPart && !body.isNullOrEmpty()) {
                 val parser = JSONParser()
                 val root = parser.parse(body)
@@ -158,6 +158,11 @@ class KtorRequest(val call: ApplicationCall, val req: ApplicationRequest) : Requ
             return json
         }
 
-        fun isBodyAllowed(method: String): Boolean = method == "put" || method == "post" || method == "delete"
+        fun isBodyAllowed(method: HttpMethod): Boolean {
+            return when(method) {
+                HttpMethod.Post, HttpMethod.Put, HttpMethod.Patch, HttpMethod.Delete -> true
+                else -> false
+            }
+        }
     }
 }

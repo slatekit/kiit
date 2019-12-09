@@ -88,11 +88,11 @@ fun sampleSrv(args:Array<String>) {
     runBlocking {
         AppRunner.run(
                 rawArgs = args,
-                about = slatekit.samples.srv.App.about,
-                schema = slatekit.samples.srv.App.schema,
-                enc = slatekit.samples.srv.App.encryptor,
+                about = slatekit.samples.api.App.about,
+                schema = slatekit.samples.api.App.schema,
+                enc = slatekit.samples.api.App.encryptor,
                 logs = LogbackLogs(),
-                builder = { ctx -> slatekit.samples.srv.App(AppEntContext.fromContext(ctx)) }
+                builder = { ctx -> slatekit.samples.api.App(AppEntContext.fromContext(ctx)) }
         )
     }
 }

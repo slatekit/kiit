@@ -1,4 +1,4 @@
-package slatekit.samples.srv
+package slatekit.samples.api
 
 
 // Slate Kit - Common Utilities
