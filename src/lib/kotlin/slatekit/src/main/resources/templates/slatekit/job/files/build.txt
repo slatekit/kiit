@@ -39,6 +39,7 @@ dependencies {
     compile "com.slatekit:slatekit-common:$slatekit_version"
     compile "com.slatekit:slatekit-providers:$slatekit_version"
     compile "com.slatekit:slatekit-app:$slatekit_version"
+    compile "com.slatekit:slatekit-jobs:$slatekit_version"
 }
 
 
