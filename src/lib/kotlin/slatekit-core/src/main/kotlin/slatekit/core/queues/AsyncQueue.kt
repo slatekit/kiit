@@ -28,5 +28,15 @@ interface AsyncQueue<T> {
     suspend fun send(value: T, attributes: Map<String, Any>?): Try<String>
 
     suspend fun sendFromFile(fileNameLocal: String, tagName: String, tagValue: String): Try<String>
+
+
+    companion object {
+
+        fun <T> of(queue: Queue<T>): AsyncQueue<T> {
+            // Queues
+            val queue = WrappedAsyncQueue<T>(queue)
+            return queue
+        }
+    }
 }
 

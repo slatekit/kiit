@@ -11,6 +11,11 @@ import slatekit.results.Success
 import slatekit.results.Try
 
 
+/**
+ * Slate Kit Application template
+ * This provides support for command line args, environment selection, confs, life-cycle methods and help usage
+ * @see https://www.slatekit.com/arch/app/
+ */
 class App(ctx: Context) : App<Context>(ctx, AppOptions(printSummaryBeforeExec = true)) {
 
     companion object {

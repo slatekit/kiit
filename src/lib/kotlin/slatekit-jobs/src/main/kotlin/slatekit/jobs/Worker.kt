@@ -14,14 +14,23 @@ open class Worker<T>(
     val operation: (suspend (Task) -> WorkResult)? = null
 ) : Workable<T> {
 
-    private val _status = AtomicReference<Status>(Status.InActive)
+    protected val _status = AtomicReference<Status>(Status.InActive)
 
     /**
      * Transition current status to the one supplied
      */
     override suspend fun move(state: Status) {
+        move(state, true)
+    }
+
+    /**
+     * Transition current status to the one supplied
+     */
+    suspend fun move(state: Status, sendNotification:Boolean) {
         _status.set(state)
-        notify(state.name, null)
+        if(sendNotification){
+            notify(state.name, null)
+        }
     }
 
     override fun status(): Status = _status.get()
