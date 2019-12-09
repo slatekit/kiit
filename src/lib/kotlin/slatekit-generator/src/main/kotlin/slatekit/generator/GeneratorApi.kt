@@ -7,6 +7,7 @@ import slatekit.apis.Verbs
 import slatekit.common.Context
 import slatekit.common.Sources
 import slatekit.common.auth.Roles
+import slatekit.common.io.Uris
 import slatekit.results.Try
 import java.io.File
 
@@ -87,12 +88,12 @@ class GeneratorApi(val context: Context, val service: GeneratorService) {
      * @param packageName: The package name of the generate item
      */
     private fun generate(templateName: String, name: String, `package`: String): Try<String> {
-        val targetPath = slatekit.common.io.Files.createAtUserDir(listOf("gen", name))
-        val templateDirPath = context.conf.getString("templates.dir")
-        val template = Templates.load(templateDirPath, templateName)
-        //val parentDir = File(templateDirPath, templateName.split("/")[0])
-        val rootDir = File(templateDirPath)
-        val ctx = GeneratorContext(rootDir, name, "New app from template $templateName", `package`, "company", targetPath.absolutePath, CredentialMode.EnvVars, service.settings)
+        val templateDirPath = context.conf.getString("generation.source")
+        val templateOutPath = context.conf.getString("generation.output")
+        val rootDir = Uris.parse(templateDirPath).toFile()
+        val genDir = Uris.parse(templateOutPath).toFile()
+        val template = Templates.load(rootDir.toString(), templateName)
+        val ctx = GeneratorContext(rootDir, genDir, name, "New app from template $templateName", `package`, "company", CredentialMode.EnvVars, service.settings)
         return service.generate(ctx, template)
     }
 }

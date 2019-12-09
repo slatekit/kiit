@@ -8,11 +8,11 @@ import java.io.File
  * @param packageName :
  */
 data class GeneratorContext(val rootDir: File,
+                            val destDir: File,
                             val name: String,
                             val desc: String,
                             val packageName: String,
                             val company: String,
-                            val destination: String,
                             val mode: CredentialMode,
                             val settings: GeneratorSettings)
 {
@@ -23,6 +23,6 @@ data class GeneratorContext(val rootDir: File,
     fun normalize(settings: GeneratorSettings): GeneratorContext {
         val canonicalName = name
         val canonicalPackage = packageName.toId()
-        return GeneratorContext(rootDir, canonicalName, desc, canonicalPackage, company, destination, mode, settings)
+        return GeneratorContext(rootDir, destDir, canonicalName, desc, canonicalPackage, company, mode, settings)
     }
 }
