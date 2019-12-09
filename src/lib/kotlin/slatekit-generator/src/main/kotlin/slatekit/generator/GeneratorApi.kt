@@ -49,6 +49,17 @@ class GeneratorApi(val context: Context, val service: GeneratorService) {
     }
 
 
+    /**env
+     * slatekit new env -name="myapp1" -package="mycompany.myapp1" -desc="Sample app 1" -destination="~/dev/tests/slatekit/myapp1"
+     * @param name: The name of the generated item
+     * @param package: The package name of the generate item
+     */
+    @Action(desc = "generates a new set of environment files")
+    fun env(name: String, `package`: String): Try<String> {
+        return generate("slatekit/conf", name, `package`)
+    }
+
+
     /**cli
      * slatekit new job -name="myapp1" -package="mycompany.myapp1" -desc="Sample app 1" -destination="~/dev/tests/slatekit/myapp1"
      * @param name: The name of the generated item
