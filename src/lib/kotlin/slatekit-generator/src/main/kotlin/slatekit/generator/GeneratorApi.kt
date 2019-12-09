@@ -18,66 +18,66 @@ class GeneratorApi(val context: Context, val service: GeneratorService) {
     /**
      * slatekit new app -name="myapp1" -package="mycompany.myapp1" -desc="Sample app 1" -destination="~/dev/tests/slatekit/myapp1"
      * @param name: The name of the generated item
-     * @param packageName: The package name of the generate item
+     * @param package: The package name of the generate item
      */
     @Action(desc = "generates a new app project")
-    fun app(name: String, packageName: String): Try<String> {
-        return generate("slatekit/app", name, packageName)
+    fun app(name: String, `package`: String): Try<String> {
+        return generate("slatekit/app", name, `package`)
     }
 
 
     /**
      * slatekit new api -name="myapp1" -package="mycompany.myapp1" -desc="Sample app 1" -destination="~/dev/tests/slatekit/myapp1"
      * @param name: The name of the generated item
-     * @param packageName: The package name of the generate item
+     * @param package: The package name of the generate item
      */
     @Action(desc = "generates a new api project")
-    fun api(name: String, packageName: String): Try<String> {
-        return generate("slatekit/api", name, packageName)
+    fun api(name: String, `package`: String): Try<String> {
+        return generate("slatekit/api", name, `package`)
     }
 
 
     /**
      * slatekit new cli -name="myapp1" -package="mycompany.myapp1" -desc="Sample app 1" -destination="~/dev/tests/slatekit/myapp1"
      * @param name: The name of the generated item
-     * @param packageName: The package name of the generate item
+     * @param package: The package name of the generate item
      */
     @Action(desc = "generates a new cli project")
-    fun cli(name: String, packageName: String): Try<String> {
-        return generate("slatekit/cli", name, packageName)
+    fun cli(name: String, `package`: String): Try<String> {
+        return generate("slatekit/cli", name, `package`)
     }
 
 
-    /**
+    /**cli
      * slatekit new job -name="myapp1" -package="mycompany.myapp1" -desc="Sample app 1" -destination="~/dev/tests/slatekit/myapp1"
      * @param name: The name of the generated item
-     * @param packageName: The package name of the generate item
+     * @param package: The package name of the generate item
      */
     @Action(desc = "generates a new background job project")
-    fun job(name: String, packageName: String): Try<String> {
-        return generate("slatekit/job", name, packageName)
+    fun job(name: String, `package`: String): Try<String> {
+        return generate("slatekit/job", name, `package`)
     }
 
 
     /**
      * slatekit new lib -name="myapp1" -package="mycompany.myapp1" -desc="Sample app 1" -destination="~/dev/tests/slatekit/myapp1"
      * @param name: The name of the generated item
-     * @param packageName: The package name of the generate item
+     * @param package: The package name of the generate item
      */
     @Action(desc= "generates a new library project")
-    fun lib(name:String, packageName:String): Try<String> {
-        return generate("slatekit/lib", name, packageName)
+    fun lib(name:String, `package`:String): Try<String> {
+        return generate("slatekit/lib", name, `package`)
     }
 
 
     /**
      * slatekit new orm -name="myapp1" -package="mycompany.myapp1" -desc="Sample app 1" -destination="~/dev/tests/slatekit/myapp1"
      * @param name: The name of the generated item
-     * @param packageName: The package name of the generate item
+     * @param package: The package name of the generate item
      */
     @Action(desc= "generates a new orm ( domain driven entities ) project")
-    fun orm(name:String, packageName:String): Try<String> {
-        return generate("slatekit/orm", name, packageName)
+    fun orm(name:String, `package`:String): Try<String> {
+        return generate("slatekit/orm", name, `package`)
     }
 
 
@@ -86,13 +86,13 @@ class GeneratorApi(val context: Context, val service: GeneratorService) {
      * @param name: The name of the generated item
      * @param packageName: The package name of the generate item
      */
-    private fun generate(templateName: String, name: String, packageName: String): Try<String> {
+    private fun generate(templateName: String, name: String, `package`: String): Try<String> {
         val targetPath = slatekit.common.io.Files.createAtUserDir(listOf("gen", name))
         val templateDirPath = context.conf.getString("templates.dir")
         val template = Templates.load(templateDirPath, templateName)
         //val parentDir = File(templateDirPath, templateName.split("/")[0])
         val rootDir = File(templateDirPath)
-        val ctx = GeneratorContext(rootDir, name, "New app from template $templateName", packageName, "company", targetPath.absolutePath, CredentialMode.EnvVars, service.settings)
+        val ctx = GeneratorContext(rootDir, name, "New app from template $templateName", `package`, "company", targetPath.absolutePath, CredentialMode.EnvVars, service.settings)
         return service.generate(ctx, template)
     }
 }

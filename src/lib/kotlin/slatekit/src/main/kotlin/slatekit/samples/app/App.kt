@@ -58,7 +58,7 @@ class App(ctx: Context) : App<Context>(ctx, AppOptions(printSummaryBeforeExec = 
 
     override suspend fun exec(): Try<Any> {
         println("executing")
-        println("Sample work should be done here....")
+        println("Sample work should be done here...")
         return Success(true)
     }
 

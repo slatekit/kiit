@@ -28,11 +28,16 @@ import slatekit.providers.logs.logback.LogbackLogs
  * java -jar ${app.name}.jar -env=dev -log.level=info -conf.dir = "file://./conf-sample-shell"
  * java -jar ${app.name}.jar -env=dev -log.level=info -conf.dir = "file://./conf-sample-server"
  *
- * slatekit new app -name="MyApp1" -packageName="company1.apps" -envs="dev,qat,stg,pro" -dest="some directory" -creds=encrypted -slatekit='0.9.28'
- * slatekit new api -name="MyApp1" -packageName="company1.apps"
- * slatekit new cli -name="MyApp1" -packageName="company1.apps"
- * slatekit new job -name="MyApp1" -packageName="company1.apps"
- * slatekit new orm -name="MyApp1" -packageName="company1.apps"
+ * slatekit new app -name="MyApp2" -package="company1.apps"
+ * slatekit new app -name="MyApp1" -package="company1.apps"
+ * slatekit new api -name="MyApp1" -package="company1.apps"
+ * slatekit new cli -name="MyApp1" -package="company1.apps"
+ * slatekit new job -name="MyApp1" -package="company1.apps"
+ * slatekit new lib -name="MyApp1" -package="company1.apps"
+ * slatekit new orm -name="MyApp1" -package="company1.apps"
+ *
+ * FUTURE:
+ * 1. Support more args: -app.envs="dev,qat,stg,pro" -app.dest="some directory" -sk.version='0.9.28'
  */
  fun main(args: Array<String>) {
     runBlocking {
@@ -48,34 +53,3 @@ import slatekit.providers.logs.logback.LogbackLogs
         )
     }
 }
-
-/*
-val samples = listOf(
-            "",
-            "jar",
-            "http://www.slatekit.com:81/apps/app1/env",
-            "usr://dev/tmp",
-            "tmp://slatekit/apps/app1/env.conf",
-            "cfg://slatekit/apps/app1/env.conf",
-            "jar://slatekit/apps/app1/env.conf",
-            "abs://slatekit/apps/app1/env.conf",
-            "http://slatekit.com/apps/app1/env",
-            "http://slatekit.com:81/apps/app1/env",
-            "http://localhost:9000/apps/app1/env"
-            )
-    samples.map { slatekit.common.io.Uris.parse(it) }.forEach {
-        println("\n")
-        println("toString : " + it)
-        println("root   : " + it.root.name)
-        println("path     : " + it.path)
-        if(!it.isEmpty()) {
-            println("tofile   : " + it.toFile().absolutePath)
-        }
-//        println("root   : " + it.root   )
-//        println("host     : " + it.host     )
-//        println("authority: " + it.authority)
-//        println("fragment : " + it.fragment )
-//        println("path     : " + it.path     )
-//        println("port     : " + it.port     )
-    }
- */
