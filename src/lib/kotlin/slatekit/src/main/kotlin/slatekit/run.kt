@@ -60,7 +60,7 @@ fun cli(args:Array<String>) {
                 logs = LogbackLogs(),
                 hasAction = true,
                 confSource = Alias.Cfg,
-                builder = { ctx -> SlateKit(ctx) }
+                builder = { ctx -> slatekit.samples.api.App(ctx) }
         )
     }
 }
