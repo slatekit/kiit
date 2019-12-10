@@ -19,8 +19,7 @@ import io.ktor.http.HttpStatusCode
 import io.ktor.response.header
 import io.ktor.response.respondBytes
 import io.ktor.response.respondText
-import org.json.simple.JSONArray
-import org.json.simple.JSONObject
+import slatekit.apis.core.Errs
 import slatekit.common.types.Content
 import slatekit.common.types.Doc
 import slatekit.common.requests.Response
@@ -38,12 +37,8 @@ class KtorResponse  : ResponseHandler {
         return when(result.success) {
             false -> {
                 when(result.err){
-                    is ExceptionErr -> {
-                        error(call, result, (result.err as ExceptionErr).err)
-                    }
-                    else -> {
-                        json(call, result)
-                    }
+                    is ExceptionErr ->  error(call, result, (result.err as ExceptionErr).err)
+                    else ->  json(call, result)
                 }
             }
             true -> {
@@ -97,49 +92,10 @@ class KtorResponse  : ResponseHandler {
 
 
     private suspend fun error(call: ApplicationCall, result: Response<Any>, err: Err){
-        val errors = JSONArray()
-        flatten(err, errors, 0)
-        val json = JSONObject()
-        json["success"] = false
-        json["code"] = result.code
-        json["meta"] = result.meta
-        json["value"] = null
-        json["msg"] = result.msg
-        json["errs"] = errors
-        json["tag"] = result.tag
+        val json = Errs.response(err, result)
         val text = json.toJSONString()
         val contentType = io.ktor.http.ContentType.Application.Json // "application/json"
         val statusCode = toHttpStatus(result)
         call.respondText(text, contentType, statusCode)
-    }
-
-
-    private fun flatten(error: Err, list:JSONArray, depth:Int) {
-        when(error) {
-            is ErrorField -> {
-                build("field", error.field, error.value, error.msg, list)
-            }
-            is ErrorInfo -> {
-                build("inputs", null, null, error.msg, list)
-            }
-            is ErrorList -> {
-                if(depth < 3) {
-                    val errs = error.errors
-                    errs.forEach {
-                        flatten(it, list, depth + 1)
-                    }
-                }
-            }
-        }
-    }
-
-
-    private fun build(type:String, field:String?, value:String?, msg:String?, list: JSONArray){
-        val err = JSONObject()
-        err["type"] = type
-        err["field"] = field
-        err["value"] = value
-        err["message"] = msg
-        list.add(err)
     }
 }
