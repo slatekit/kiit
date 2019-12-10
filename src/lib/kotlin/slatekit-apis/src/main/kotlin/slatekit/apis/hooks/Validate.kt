@@ -15,11 +15,11 @@ class Validate : Input<ApiRequest> {
 
     @Ignore
     override suspend fun process(request: Outcome<ApiRequest>): Outcome<ApiRequest> {
-        return request.flatMap {
-            val checkResult = Calls.validateCall(it, { r -> it.host.get(r) }, true)
+        return request.flatMap { req ->
+            val checkResult = Calls.validateCall(req, { r -> req.host.get(r) }, true)
             if (!checkResult.success) {
                 // Don't return the result from internal ( as it contains too much info )
-                Outcomes.invalid(checkResult.msg)
+                checkResult.map { req }
             } else {
                 checkResult.transform({ s -> request }, { e -> Outcomes.errored(e) })
             }

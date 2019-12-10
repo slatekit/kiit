@@ -21,6 +21,9 @@ import slatekit.common.requests.InputArgs
 import slatekit.common.requests.Request
 import slatekit.common.smartvalues.SmartCreation
 import slatekit.common.smartvalues.SmartValue
+import slatekit.results.Err
+import slatekit.results.ErrorList
+import slatekit.results.ExceptionErr
 import java.util.*
 import kotlin.reflect.KClass
 import kotlin.reflect.KParameter
@@ -53,43 +56,51 @@ open class Deserializer(
             val parameter = parameters[ndx]
             val paramName = parameter.name!!
             val paramType = parameter.type
-            val result: Any? = when (paramType) {
+            val result:Any? = try {
+                when (paramType) {
 
-                // Basic types
-                KTypes.KStringType -> Conversions.handleString(data.getString(paramName))
-                KTypes.KBoolType -> data.getBool(paramName)
-                KTypes.KShortType -> data.getShort(paramName)
-                KTypes.KIntType -> data.getInt(paramName)
-                KTypes.KLongType -> data.getLong(paramName)
-                KTypes.KFloatType -> data.getFloat(paramName)
-                KTypes.KDoubleType -> data.getDouble(paramName)
-                KTypes.KLocalDateType -> data.getLocalDate(paramName)
-                KTypes.KLocalTimeType -> data.getLocalTime(paramName)
-                KTypes.KLocalDateTimeType -> data.getLocalDateTime(paramName)
-                KTypes.KZonedDateTimeType -> data.getZonedDateTime(paramName)
-                KTypes.KDateTimeType -> data.getDateTime(paramName)
-                KTypes.KUUIDType -> UUID.fromString(data.getString(paramName))
+                    // Basic types
+                    KTypes.KStringType -> Conversions.handleString(data.getString(paramName))
+                    KTypes.KBoolType -> data.getBool(paramName)
+                    KTypes.KShortType -> data.getShort(paramName)
+                    KTypes.KIntType -> data.getInt(paramName)
+                    KTypes.KLongType -> data.getLong(paramName)
+                    KTypes.KFloatType -> data.getFloat(paramName)
+                    KTypes.KDoubleType -> data.getDouble(paramName)
+                    KTypes.KLocalDateType -> data.getLocalDate(paramName)
+                    KTypes.KLocalTimeType -> data.getLocalTime(paramName)
+                    KTypes.KLocalDateTimeType -> data.getLocalDateTime(paramName)
+                    KTypes.KZonedDateTimeType -> data.getZonedDateTime(paramName)
+                    KTypes.KDateTimeType -> data.getDateTime(paramName)
+                    KTypes.KUUIDType -> UUID.fromString(data.getString(paramName))
 
-                // Raw request
-                typeRequest -> req
+                    // Raw request
+                    typeRequest -> req
 
-                // Raw meta
-                typeMeta -> meta
+                    // Raw meta
+                    typeMeta -> meta
 
-                // Doc/File reference ( only if allowed )
-                KTypes.KDocType -> Conversions.toDoc(data.getString(paramName))
+                    // Doc/File reference ( only if allowed )
+                    KTypes.KDocType -> Conversions.toDoc(data.getString(paramName))
 
-                // Map from string string delimited pairs
-                KTypes.KVarsType -> Conversions.toVars(data.getString(paramName))
+                    // Map from string string delimited pairs
+                    KTypes.KVarsType -> Conversions.toVars(data.getString(paramName))
 
-                // Decryption from encrypted types
-                KTypes.KDecIntType -> enc?.let { e -> EncInt(data.getString(paramName), e.decrypt(data.getString(paramName)).toInt()) } ?: EncInt("", 0)
-                KTypes.KDecLongType -> enc?.let { e -> EncLong(data.getString(paramName), e.decrypt(data.getString(paramName)).toLong()) } ?: EncLong("", 0L)
-                KTypes.KDecDoubleType -> enc?.let { e -> EncDouble(data.getString(paramName), e.decrypt(data.getString(paramName)).toDouble()) } ?: EncDouble("", 0.0)
-                KTypes.KDecStringType -> enc?.let { e -> EncString(data.getString(paramName), e.decrypt(data.getString(paramName))) } ?: EncString("", "")
+                    // Decryption from encrypted types
+                    KTypes.KDecIntType -> enc?.let { e -> EncInt(data.getString(paramName), e.decrypt(data.getString(paramName)).toInt()) } ?: EncInt("", 0)
+                    KTypes.KDecLongType -> enc?.let { e -> EncLong(data.getString(paramName), e.decrypt(data.getString(paramName)).toLong()) } ?: EncLong("", 0L)
+                    KTypes.KDecDoubleType -> enc?.let { e -> EncDouble(data.getString(paramName), e.decrypt(data.getString(paramName)).toDouble()) } ?: EncDouble("", 0.0)
+                    KTypes.KDecStringType -> enc?.let { e -> EncString(data.getString(paramName), e.decrypt(data.getString(paramName))) } ?: EncString("", "")
 
-                // Complex type
-                else -> handleComplex(data, parameter, paramType, jsonRaw, data.getString(paramName))
+                    // Complex type
+                    else -> handleComplex(data, parameter, paramType, jsonRaw, data.getString(paramName))
+                }
+            }
+            catch(ex:Exception) {
+                val errValue = data.getStringOrNull(paramName)
+                val errField = Err.on(paramName, errValue ?: "", "Invalid value", ex)
+                val errList = ErrorList(listOf(errField), ex.message ?: "Invalid value")
+                throw ExceptionErr("Error while converting parameters", errList)
             }
             inputs.add(result)
         }

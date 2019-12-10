@@ -82,10 +82,8 @@ object Calls {
                 // Data - ensure matching args
                 else if (action.hasArgs) {
                     val argCheck = validateArgs(action, args)
-                    if (argCheck.success) {
-                        Outcomes.success(target)
-                    } else
-                        Outcomes.invalid("bad request : $fullName: inputs not supplied")
+                    val result = argCheck.map { target }
+                    result
                 } else
                     Outcomes.success(target)
             }

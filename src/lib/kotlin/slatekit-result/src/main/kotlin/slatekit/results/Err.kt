@@ -58,8 +58,8 @@ interface Err {
             return ErrorInfo(ex.message ?: "", ex)
         }
 
-        fun on(field:String, value:String, msg:String):Err {
-            return ErrorField(field, value, msg)
+        fun on(field:String, value:String, msg:String, ex:Throwable? = null):Err {
+            return ErrorField(field, value, msg, ex)
         }
 
         fun ex(ex: Exception): Err {
