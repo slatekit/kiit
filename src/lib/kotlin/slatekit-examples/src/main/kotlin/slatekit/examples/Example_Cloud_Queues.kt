@@ -23,6 +23,8 @@ import slatekit.core.queues.QueueStringConverter
 //<doc:import_examples>
 import slatekit.cmds.Command
 import slatekit.cmds.CommandRequest
+import slatekit.common.io.Alias
+import slatekit.common.io.Uri
 import slatekit.results.Success
 import slatekit.results.Try
 
@@ -41,11 +43,11 @@ class Example_Cloud_Queues  : Command("sqs") {
 
     // Setup 2: Use the type safe config in "{user_id}/myapp/conf/queue.conf"
     // Reads from the section "sqs" by default
-    val queue2 = AwsCloudQueue<String>("app1-queue-1", "queue1", converter,"user://myapp/conf/queue.conf")
+    val queue2 = AwsCloudQueue<String>("app1-queue-1", "queue1", converter, Uri.of(Alias.Usr, "myapp/conf/queue.conf"))
 
     // Setup 3: Use the type safe config in "{user_id}/myapp/conf/queue.conf"
     // Reads from the section supplied "sqs-3" ( if you have multiple sqs configurations )
-    val queue3 = AwsCloudQueue<String>("app1-queue-1",  "queue1", converter, "user://myapp/conf/queue.conf", "sqs-1")
+    val queue3 = AwsCloudQueue<String>("app1-queue-1",  "queue1", converter, Uri.of(Alias.Usr, "myapp/conf/queue.conf"), "sqs-1")
 
     //</doc:setup>
 

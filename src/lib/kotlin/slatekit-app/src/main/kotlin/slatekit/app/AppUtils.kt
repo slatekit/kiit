@@ -197,7 +197,7 @@ object AppUtils {
 
     private fun getDir(args: Args, default:Alias): Uri {
         val dirFromArgs = args.getStringOrNull("conf.dir")
-        return dirFromArgs?.let { Uris.parse(it) } ?: Uri.build(default, "", null)
+        return dirFromArgs?.let { Uris.parse(it) } ?: Uri.of(default, "", null)
     }
 
 

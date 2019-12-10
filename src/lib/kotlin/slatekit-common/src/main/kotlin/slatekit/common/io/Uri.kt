@@ -59,16 +59,16 @@ data class Uri internal constructor(val raw: String,
 
     companion object {
 
-        fun abs(path: String, lookup: Map<String, String>? = null): Uri = build(Alias.Abs, path, lookup)
-        fun cur(path: String, lookup: Map<String, String>? = null): Uri = build(Alias.Cur, path, lookup)
-        fun rel(path: String, lookup: Map<String, String>? = null): Uri = build(Alias.Rel, path, lookup)
-        fun cfg(path: String, lookup: Map<String, String>? = null): Uri = build(Alias.Cfg, path, lookup)
-        fun usr(path: String, lookup: Map<String, String>? = null): Uri = build(Alias.Usr, path, lookup)
-        fun tmp(path: String, lookup: Map<String, String>? = null): Uri = build(Alias.Ref, path, lookup)
-        fun jar(path: String, lookup: Map<String, String>? = null): Uri = build(Alias.Jar, path, lookup)
+        fun abs(path: String, lookup: Map<String, String>? = null): Uri = of(Alias.Abs, path, lookup)
+        fun cur(path: String, lookup: Map<String, String>? = null): Uri = of(Alias.Cur, path, lookup)
+        fun rel(path: String, lookup: Map<String, String>? = null): Uri = of(Alias.Rel, path, lookup)
+        fun cfg(path: String, lookup: Map<String, String>? = null): Uri = of(Alias.Cfg, path, lookup)
+        fun usr(path: String, lookup: Map<String, String>? = null): Uri = of(Alias.Usr, path, lookup)
+        fun tmp(path: String, lookup: Map<String, String>? = null): Uri = of(Alias.Ref, path, lookup)
+        fun jar(path: String, lookup: Map<String, String>? = null): Uri = of(Alias.Jar, path, lookup)
 
 
-        fun build(alias: Alias, raw: String, lookup: Map<String, String>?): Uri {
+        fun of(alias: Alias, raw: String, lookup: Map<String, String>? = null): Uri {
             val clean = Uris.clean(raw)
             val trim = Uris.trim(clean)
             return Uris.build(alias, raw, trim, lookup)

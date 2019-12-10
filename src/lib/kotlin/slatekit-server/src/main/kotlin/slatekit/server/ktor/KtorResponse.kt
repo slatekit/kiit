@@ -28,7 +28,7 @@ import slatekit.results.Codes
 import slatekit.server.common.ResponseHandler
 
 
-object KtorResponse : ResponseHandler {
+class KtorResponse  : ResponseHandler {
 
     /**
      * Returns the value of the result as an html(string)

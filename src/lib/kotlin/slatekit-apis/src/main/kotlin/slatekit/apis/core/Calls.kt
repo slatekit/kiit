@@ -17,10 +17,7 @@ import slatekit.apis.ApiRequest
 import slatekit.apis.hooks.Targets
 import slatekit.common.*
 import slatekit.common.requests.Request
-import slatekit.results.Failure
-import slatekit.results.Notice
-import slatekit.results.Outcome
-import slatekit.results.Success
+import slatekit.results.*
 import slatekit.results.builders.Notices
 import slatekit.results.builders.Outcomes
 import kotlin.reflect.KClass
@@ -95,27 +92,23 @@ object Calls {
         }
     }
 
-    private fun validateArgs(action: Action, args: Inputs): Notice<Boolean> {
-        var error = ": inputs missing or invalid "
-        var totalErrors = 0
-
+    private fun validateArgs(action: Action, args: Inputs): Outcome<Boolean> {
         // Check each parameter to api call
-        for (index in 0 until action.paramsUser.size) {
-            val input = action.paramsUser[index]
-            // parameter not supplied ?
-            val paramName = input.name!!
-            if (!args.containsKey(paramName)) {
-                val separator = if (totalErrors == 0) "( " else ","
-                error += separator + paramName
-                totalErrors += 1
+        val errors = (0 until action.paramsUser.size).map { ndx ->
+            val param = action.paramsUser[ndx]
+            val name = param.name ?: ""
+            val exists = args.containsKey(name)
+            when(exists) {
+                false -> Err.on(name, "", "Missing")
+                true  -> null
             }
         }
+        val failures = errors.filterNotNull()
         // Any errors ?
-        return if (totalErrors > 0) {
-            error = "$error )"
-            Notices.invalid("bad request: action " + action.name + error)
+        return if (failures.isNotEmpty()) {
+            Outcomes.invalid(ErrorList(failures, "Invalid request"))
         } else {
-            Success(true)
+            Outcomes.success(true)
         }
     }
 }

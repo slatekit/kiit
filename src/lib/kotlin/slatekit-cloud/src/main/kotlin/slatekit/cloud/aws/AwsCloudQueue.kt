@@ -21,6 +21,7 @@ import slatekit.common.utils.Random
 import slatekit.common.info.ApiLogin
 import slatekit.common.io.Uris
 import slatekit.common.ext.toStringUtc
+import slatekit.common.io.Uri
 import slatekit.core.queues.QueueEntry
 import slatekit.core.queues.QueueValueConverter
 import slatekit.core.queues.CloudQueue
@@ -81,6 +82,17 @@ class AwsCloudQueue<T>(
                 section: String? = null,
                 waitTimeInSeconds: Int = 0) :
             this (region, queue, AwsFuncs.creds(confPath, section), converter, waitTimeInSeconds)
+
+    /**
+     * Initialize with queue name and the config path/section for aws credentials
+     */
+    constructor(region:String,
+                queue: String,
+                converter: QueueValueConverter<T>,
+                confPath: Uri,
+                section: String? = null,
+                waitTimeInSeconds: Int = 0) :
+            this (region, queue, AwsFuncs.creds(confPath.toFile().absolutePath, section), converter, waitTimeInSeconds)
 
 
 

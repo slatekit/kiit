@@ -25,6 +25,7 @@ import slatekit.server.ktor.KtorResponse
 // Sample App
 import slatekit.samples.common.apis.SampleApi
 import slatekit.samples.common.auth.SampleAuth
+import slatekit.server.common.ResponseHandler
 
 
 class Server(val ctx: Context)  {
@@ -48,8 +49,11 @@ class Server(val ctx: Context)  {
         // 4. API host
         val apiHost = ApiServer.of( ctx, apis, auth = null)
 
-        // Ktor handler
-        val handler = KtorHandler(ctx, settings, apiHost)
+        // Ktor response handler
+        val responder = KtorResponse()
+
+        // Ktor request handler
+        val handler = KtorHandler(ctx, settings, apiHost, responses = responder)
 
         // Ktor
         val server = embeddedServer(Netty, settings.port) {
@@ -57,17 +61,17 @@ class Server(val ctx: Context)  {
 
                 // Root
                 get("/") {
-                    ping(call)
+                    ping(call, responder)
                 }
 
                 // Your own custom path
                 get(settings.prefix + "/ping") {
-                    ping(call)
+                    ping(call, responder)
                 }
 
                 // Your own multi-path route
                 get("module1/feature1/action1") {
-                    KtorResponse.json(call, Success("action 1 : " + DateTime.now().toString()).toResponse())
+                    responder.json(call, Success("action 1 : " + DateTime.now().toString()).toResponse())
                 }
 
                 // Remaining outes beginning with /api/ to be handled by Slate Kit API Server
@@ -95,8 +99,8 @@ class Server(val ctx: Context)  {
      * pings the server to only get back the datetime.
      * Used for quickly checking a deployment.
      */
-    suspend fun ping(call: ApplicationCall) {
+    suspend fun ping(call: ApplicationCall, responses: KtorResponse) {
         val result = "Version ${ctx.info.about.version} : " + DateTime.now()
-        KtorResponse.json(call, Success(result).toResponse())
+        responses.json(call, Success(result).toResponse())
     }
 }

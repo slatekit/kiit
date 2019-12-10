@@ -10,6 +10,8 @@ import slatekit.cloud.aws.AwsCloudFiles
 //<doc:import_examples>
 import slatekit.cmds.Command
 import slatekit.cmds.CommandRequest
+import slatekit.common.io.Alias
+import slatekit.common.io.Uri
 import slatekit.results.Success
 import slatekit.results.Try
 
@@ -26,11 +28,11 @@ class Example_Cloud_Files  : Command("s3") {
 
     // Setup 2: Use the type safe config in "{user_id}/myapp/conf/files.conf"
     // Specify the api key section as "sqs"
-    val files2 = AwsCloudFiles("app1-files-1", "slatekit",false, "user://myapp/conf/files.conf", "s3")
+    val files2 = AwsCloudFiles("app1-files-1", "slatekit",false, Uri.of(Alias.Usr, "myapp/conf/files.conf"), "s3")
 
     // Setup 2: Use the type safe config in "{user_id}/myapp/conf/files.conf"
     // Specify the api key section as "sqs"
-    val files3 = AwsCloudFiles("app1-files-1", "slatekit",false, "user://myapp/conf/files.conf", "s3-1")
+    val files3 = AwsCloudFiles("app1-files-1", "slatekit", false, Uri.of(Alias.Usr, "myapp/conf/files.conf"), "s3-1")
 
     //</doc:setup>
 

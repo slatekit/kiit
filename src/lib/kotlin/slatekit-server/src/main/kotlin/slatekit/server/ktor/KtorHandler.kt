@@ -23,7 +23,7 @@ class KtorHandler(
         val settings: ServerSettings,
         override val container:ApiServer,
         override val diagnostics: Diagnostics<Request> = diagnostics(context),
-        override val responses: ResponseHandler = KtorResponse
+        override val responses: ResponseHandler = KtorResponse()
 ) : RequestHandler {
 
     override fun register(routes:Routing){
