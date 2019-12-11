@@ -12,6 +12,7 @@ import slatekit.common.Context
 import slatekit.common.Sources
 import slatekit.common.ext.toStringUtc
 import slatekit.common.info.About
+import slatekit.common.types.Doc
 import slatekit.results.Outcome
 import slatekit.results.builders.Outcomes
 import slatekit.samples.common.models.SampleMovie
@@ -99,10 +100,21 @@ class SampleApi(context: Context) : ApiBase(context) {
     }
 
 
+    @Action(desc = "File upload")
+    fun upload(file: Doc):Map<String, String> {
+        return mapOf(
+                "name" to file.name,
+                "type" to file.tpe.toString(),
+                "size" to file.size.toString(),
+                "data" to file.content
+        )
+    }
+
+
     @Action(desc = "test access to send")
     fun request(request: Request, greeting: String): String {
         val greetFromBody = request.data.getString("greeting")
-        return "auto mapped: $greeting, manual get from body: $greetFromBody"
+        return "Handled Request: got `$greeting` as parameter, got `$greetFromBody` from request body"
     }
 
 

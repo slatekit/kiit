@@ -81,7 +81,7 @@ object Calls {
 
                 // Data - ensure matching args
                 else if (action.hasArgs) {
-                    val argCheck = validateArgs(action, args)
+                    val argCheck = validateArgs(request, action, args)
                     val result = argCheck.map { target }
                     result
                 } else
@@ -90,12 +90,14 @@ object Calls {
         }
     }
 
-    private fun validateArgs(action: Action, args: Inputs): Outcome<Boolean> {
+    private fun validateArgs(request: ApiRequest, action: Action, args: Inputs): Outcome<Boolean> {
         // Check each parameter to api call
         val errors = (0 until action.paramsUser.size).map { ndx ->
             val param = action.paramsUser[ndx]
             val name = param.name ?: ""
             val exists = args.containsKey(name)
+            // Exclude files
+
             when(exists) {
                 false -> Err.on(name, "", "Missing")
                 true  -> null
