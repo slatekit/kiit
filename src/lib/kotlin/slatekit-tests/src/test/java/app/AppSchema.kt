@@ -1,6 +1,5 @@
 package app
 
-import app.AppEvent
 import slatekit.meta.models.Model
 
 object AppSchema {
@@ -10,8 +9,8 @@ object AppSchema {
         val model = Model.of<Long, AppEvent> {
 
                     field(AppEvent::calendarId)
-                    field(AppEvent::title, true)
-                    field(AppEvent::details, false)
+                    field(AppEvent::title )
+                    field(AppEvent::details)
                     field(AppEvent::startTime)
                     field(AppEvent::endTime)
                     field(AppEvent::timeZone)
@@ -24,6 +23,6 @@ object AppSchema {
                     field(AppEvent::isFavorite)
                     field(AppEvent::isEnabled)
         }
-        return finalModel
+        return model
     }
 }

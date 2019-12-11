@@ -5,6 +5,7 @@ import org.junit.Test
 import slatekit.common.DateTime
 import slatekit.common.ids.UniqueId
 import slatekit.meta.Reflector
+import slatekit.meta.models.FieldCategory
 import slatekit.meta.models.Model
 import slatekit.meta.models.ModelMapper
 import test.setup.*
@@ -116,19 +117,20 @@ class ModelTests {
 
 
     private fun loadSchemaSpecification(): Model {
-        val model = Model(AuthorR::class)
-                .addId( AuthorR::id, true)
-                .add( AuthorR::createdAt )
-                .add( AuthorR::createdBy )
-                .add( AuthorR::updatedAt )
-                .add( AuthorR::updatedBy )
-                .add( AuthorR::uuid  )
-                .add( AuthorR::email     )
-                .add( AuthorR::isActive  )
-                .add( AuthorR::age       )
-                .add( AuthorR::salary    )
-                .add( AuthorR::uid       )
-                .add( AuthorR::shardId   )
+        val model = Model.of<Long, AuthorR> {
+            field(AuthorR::id, category = FieldCategory.Id)
+            field(AuthorR::createdAt)
+            field(AuthorR::createdBy)
+            field(AuthorR::updatedAt)
+            field(AuthorR::updatedBy)
+            field(AuthorR::uuid)
+            field(AuthorR::email)
+            field(AuthorR::isActive)
+            field(AuthorR::age)
+            field(AuthorR::salary)
+            field(AuthorR::uid)
+            field(AuthorR::shardId)
+        }
         return model
     }
 }
