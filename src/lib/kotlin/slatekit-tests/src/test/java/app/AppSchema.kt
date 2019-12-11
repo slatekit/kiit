@@ -7,20 +7,23 @@ object AppSchema {
 
     @JvmStatic
     fun setupEventMappings(model: Model): Model {
-        val finalModel = model.add(AppEvent::calendarId)
-                .add(AppEvent::title, true)
-                .add(AppEvent::details, false)
-                .add(AppEvent::startTime)
-                .add(AppEvent::endTime)
-                .add(AppEvent::timeZone)
+        val model = Model.of<Long, AppEvent> {
 
-                // Attributes
-                .add(AppEvent::status)
-                .add(AppEvent::icon)
-                .add(AppEvent::value)
-                .add(AppEvent::priority)
-                .add(AppEvent::isFavorite)
-                .add(AppEvent::isEnabled)
+                    field(AppEvent::calendarId)
+                    field(AppEvent::title, true)
+                    field(AppEvent::details, false)
+                    field(AppEvent::startTime)
+                    field(AppEvent::endTime)
+                    field(AppEvent::timeZone)
+
+                    // Attributes
+                    field(AppEvent::status)
+                    field(AppEvent::icon)
+                    field(AppEvent::value)
+                    field(AppEvent::priority)
+                    field(AppEvent::isFavorite)
+                    field(AppEvent::isEnabled)
+        }
         return finalModel
     }
 }

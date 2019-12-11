@@ -20,6 +20,7 @@ import slatekit.meta.KTypes
 import org.threeten.bp.*
 import slatekit.common.DateTimes
 import slatekit.common.ext.orElse
+import slatekit.meta.Schema
 import java.util.*
 import kotlin.reflect.KClass
 import kotlin.reflect.KProperty
@@ -75,10 +76,18 @@ class Model(
     val size: Int get() = fields.size
 
 
-
-
     fun add(field: ModelField): Model {
         val newPropList = fields.plus(field)
         return Model(this.name, fullName, this.dataType, desc, table, newPropList)
+    }
+
+
+    companion object {
+
+        inline fun <reified TId, reified T> of(builder: Schema<TId, T>.() -> Unit ): Model where TId : Comparable<TId>, T:Any {
+            val schema = Schema<TId, T>(TId::class, T::class)
+            builder(schema)
+            return schema.model
+        }
     }
 }

@@ -47,25 +47,18 @@ class Example_Model : Command("model") {
     var model = Model("Resource", "slate.ext.resources.Resource")
 
     // CASE 2. add a field for uniqueness / identity
-    model = model.addId  (name = "id", autoIncrement = true, dataType = Long::class)
-
-    // CASE 3: add fields for text, bool, int, date etc.
-    model = model.addText(name = "key"        , isRequired = true, maxLength = 30)
-                 .addText(name = "api"        , isRequired = true, maxLength = 30)
-                 .addText(name = "category"   , isRequired = true, maxLength = 30)
-                 .addText(name = "country"    , isRequired = true, maxLength = 30)
-                 .addText(name = "region"     , isRequired = true, maxLength = 30)
-                 .addText(name = "aggRegion"  , isRequired = true, maxLength = 30)
-                 .addText(name = "aggCategory", isRequired = true, maxLength = 30)
-                 .addText(name = "links"      , isRequired = true, maxLength = 30)
-                 .addText(name = "owner"      , isRequired = true, maxLength = 30)
-                 .addText(name = "status"     , isRequired = true, maxLength = 30)
-                 .addInt (name = "recordState", isRequired = true)
-                 .addObject     (name = "hostInfo"   , isRequired = true, dataType = Host::class)
-                 .addLocalDate  (name = "activated"  , isRequired = true                )
-                 .addLocalTime  (name = "checkTime"  , isRequired = true                )
-                 .addLocalDateTime(name = "created"  , isRequired = true                )
-                 .addDateTime(name = "updated"  , isRequired = true                )
+    val schema2 = Model.of<Long, Example_Mapper.Movie> {
+          field(Example_Mapper.Movie::id       , category = FieldCategory.Id)
+          field(Example_Mapper.Movie::title    , desc = "Title of movie", min = 5, max = 30)
+          field(Example_Mapper.Movie::category , desc = "Category (action|drama)", min = 1, max = 20)
+          field(Example_Mapper.Movie::playing  , desc = "Whether its playing now")
+          field(Example_Mapper.Movie::rating   , desc = "Rating from users")
+          field(Example_Mapper.Movie::released , desc = "Date of release")
+          field(Example_Mapper.Movie::createdAt, desc = "Who created record")
+          field(Example_Mapper.Movie::createdBy, desc = "When record was created")
+          field(Example_Mapper.Movie::updatedAt, desc = "Who updated record")
+          field(Example_Mapper.Movie::updatedBy, desc = "When record was updated")
+    }
 
     // CASE 3: add fields for text, bool, int, date etc.
     model = Model("Resource", "", dataType = User::class, desc = "", tableName = "users", modelFields = listOf(
