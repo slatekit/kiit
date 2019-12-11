@@ -19,8 +19,10 @@ import slatekit.common.*
 import slatekit.common.encrypt.*
 import slatekit.common.requests.InputArgs
 import slatekit.common.requests.Request
+import slatekit.common.requests.RequestSupport
 import slatekit.common.smartvalues.SmartCreation
 import slatekit.common.smartvalues.SmartValue
+import slatekit.common.types.Doc
 import slatekit.results.Err
 import slatekit.results.ErrorList
 import slatekit.results.ExceptionErr
@@ -81,7 +83,7 @@ open class Deserializer(
                     typeMeta -> meta
 
                     // Doc/File reference ( only if allowed )
-                    KTypes.KDocType -> Conversions.toDoc(data.getString(paramName))
+                    KTypes.KDocType -> parseDoc(paramName)
 
                     // Map from string string delimited pairs
                     KTypes.KVarsType -> Conversions.toVars(data.getString(paramName))
@@ -362,5 +364,15 @@ open class Deserializer(
         val creator = cls.companionObjectInstance as SmartCreation<*>
         val result = creator.of(txt)
         return result
+    }
+
+
+    fun parseDoc(name:String): Doc? {
+        // Conversions.toDoc(data.getString(paramName))
+        val doc = when(req){
+            is RequestSupport -> req.getDoc(name)
+            else -> null
+        }
+        return doc
     }
 }

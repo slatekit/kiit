@@ -17,6 +17,8 @@ import slatekit.apis.ApiRequest
 import slatekit.apis.hooks.Targets
 import slatekit.common.*
 import slatekit.common.requests.Request
+import slatekit.common.requests.RequestSupport
+import slatekit.meta.KTypes
 import slatekit.results.*
 import slatekit.results.builders.Notices
 import slatekit.results.builders.Outcomes
@@ -95,9 +97,21 @@ object Calls {
         val errors = (0 until action.paramsUser.size).map { ndx ->
             val param = action.paramsUser[ndx]
             val name = param.name ?: ""
-            val exists = args.containsKey(name)
-            // Exclude files
-
+            val exists = when(param.type) {
+                KTypes.KDocType -> {
+                    // NOTE: For FILES:
+                    // The Reading of the multi-part can be done only one time for
+                    // KTor web server. This means if we load the file/doc to check
+                    // for its existence then we can not read it again during loading
+                    // of the values later on.
+                    // One way to address this is to load / check it here and cache it.
+                    // However, it could be a large file, so this is questionable.
+                    // For now, we are not checking for supplied files here and instead
+                    // just attempting to load them later on.
+                    true
+                }
+                else -> args.containsKey(name)
+            }
             when(exists) {
                 false -> Err.on(name, "", "Missing")
                 true  -> null

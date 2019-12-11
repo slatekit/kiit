@@ -104,7 +104,7 @@ class SampleApi(context: Context) : ApiBase(context) {
     fun upload(file: Doc):Map<String, String> {
         return mapOf(
                 "name" to file.name,
-                "type" to file.tpe.toString(),
+                "type" to file.tpe.http,
                 "size" to file.size.toString(),
                 "data" to file.content
         )

@@ -14,22 +14,18 @@
 package slatekit.server.ktor
 
 import io.ktor.application.ApplicationCall
-import io.ktor.http.HttpMethod
 import io.ktor.http.content.PartData
-import io.ktor.http.content.readAllParts
+import io.ktor.http.content.forEachPart
 import io.ktor.http.content.streamProvider
-import org.json.simple.JSONObject
-import org.json.simple.parser.JSONParser
 import slatekit.common.*
 import slatekit.server.ServerSettings
 import io.ktor.request.*
+import kotlinx.coroutines.runBlocking
 //import kotlinx.coroutines.experimental.async
 import slatekit.common.types.ContentTypeHtml
-import slatekit.common.types.ContentTypeText
 import slatekit.common.types.Doc
 import slatekit.common.requests.Request
 import slatekit.common.requests.RequestSupport
-import slatekit.common.CommonRequest
 import slatekit.common.Source
 import slatekit.common.utils.Random
 import java.io.*
@@ -101,37 +97,16 @@ data class KtorRequest(
      */
     override fun getDoc(name: String): Doc? {
         // This can be expensive. So cache it.
-        return getFile(name) { stream ->
+        return getFile(name) { stream -> KtorUtils.loadFile(name, stream) }
+    }
 
-            val bis = BufferedInputStream(stream)
-            val buf = ByteArrayOutputStream()
-            var ris = bis.read()
-            while (ris != -1) {
-                buf.write(ris.toByte().toInt())
-                ris = bis.read()
-            }
-            val text = buf.toString()
-            Doc(name, text, ContentTypeHtml, text.length.toLong())
+
+    override fun getFile(name: String, callback: (InputStream) -> Doc): Doc {
+        NOTE.IMPLEMENT("API", "Make this non-blocking")
+        val d = runBlocking {
+            KtorUtils.loadFile(call, callback)
         }
-    }
-
-    /**
-     * Access to an uploaded file
-     */
-    override fun getFile(name: String, callback: (InputStream) -> Doc): Doc? {
-        // getFileStream(name, callback)
-        return Doc("", "", ContentTypeText, 0)
-    }
-
-    suspend fun getFileAsync(name: String, callback: (InputStream) -> Doc): Doc {
-        val multiPart = call.receiveMultipart()
-        val part = multiPart.readAllParts().find { (it.name ?: "") == name }
-        val doc = part?.let {
-            val file = it as PartData.FileItem
-            val doc = file.streamProvider().use(callback)
-            doc
-        } ?: Doc.empty
-        return doc
+        return d
     }
 
     /**
@@ -165,7 +140,6 @@ data class KtorRequest(
             val parts = uri.split('/')
             // val headers = req.headers().map { key -> Pair(key, req.headers(key)) }.toMap()
             val method = req.httpMethod.value.toLowerCase()
-            val json = KtorUtils.loadJson(body, req)
 
             // e.g. api/app/users/register
             // parts  : [app, users, register]
