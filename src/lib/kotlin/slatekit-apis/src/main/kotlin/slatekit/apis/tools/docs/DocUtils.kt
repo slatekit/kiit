@@ -1,6 +1,7 @@
 package slatekit.apis.tools.docs
 
 import slatekit.apis.ApiConstants
+import slatekit.apis.core.HelpType
 import slatekit.common.args.ArgsCheck
 import slatekit.common.requests.Request
 import slatekit.results.Outcome
@@ -8,23 +9,23 @@ import slatekit.results.Success
 import slatekit.results.builders.Outcomes
 
 object DocUtils {
-    fun isHelp(request: Request): Outcome<String> {
+    fun isHelp(request: Request): Outcome<HelpType> {
 
         // Case 3a: Help ?
         return if (ArgsCheck.isHelp(request.parts, 0)) {
-            Outcomes.success("?")
+            Outcomes.success(HelpType.All)
         }
         // Case 3b: Help on area ?
         else if (ArgsCheck.isHelp(request.parts, 1)) {
-            Outcomes.success("area ?")
+            Outcomes.success(HelpType.Area)
         }
         // Case 3c: Help on api ?
         else if (ArgsCheck.isHelp(request.parts, 2)) {
-            Outcomes.success("area.api ?")
+            Outcomes.success(HelpType.Api)
         }
         // Case 3d: Help on action ?
         else if (ArgsCheck.isHelp(request.parts, 3)) {
-            Success("area.api.action ?")
+            Outcomes.success(HelpType.Action)
         } else {
             Outcomes.errored("Unknown help option")
         }

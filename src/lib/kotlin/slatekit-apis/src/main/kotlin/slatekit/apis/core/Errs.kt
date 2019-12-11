@@ -12,6 +12,11 @@ object Errs {
 
     /**
      * Builds a Slate Kit standardized response object
+     * NOTES:
+     * 1. code is in the application level status code ( not to be conflated with HTTP status code )
+     * 2. errs is a list of Err types @see[slatekit.results.Err]
+     * 3. tag is used a correlation id
+     * 4. meta is for additional meta data to be provided to the client
      * @sample
      * {
      *      "success": false,
@@ -22,8 +27,7 @@ object Errs {
      *          { "type": "input", "field": "dept", "value": "abc", "message": "Invalid value" }
      *      ],
      *      "meta": null,
-     *      "tag": null,
-     *      "value": null
+     *      "tag": null
      *   }
      */
     fun response(err: Err, result: Response<Any>):JSONObject{

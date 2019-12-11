@@ -27,6 +27,19 @@ class KtorHandler(
 ) : RequestHandler {
 
     override fun register(routes:Routing){
+
+        routes.get(settings.prefix + "/help") {
+            exec(call)
+        }
+        routes.get(settings.prefix + "/*/help") {
+            exec(call)
+        }
+        routes.get(settings.prefix + "/*/*/help") {
+            exec(call)
+        }
+        routes.get(settings.prefix + "/*/*/*/help") {
+            exec(call)
+        }
         routes.get(settings.prefix + "/*/*/*") {
             exec(call)
         }
