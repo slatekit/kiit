@@ -22,6 +22,8 @@ import slatekit.db.Db
 import slatekit.entities.EntityWithId
 import slatekit.entities.core.EntityInfo
 import slatekit.examples.common.User
+import slatekit.meta.KTypes
+import slatekit.meta.models.FieldCategory
 import slatekit.meta.models.ModelMapper
 import slatekit.orm.OrmMapper
 import slatekit.orm.databases.vendors.MySqlBuilder
@@ -123,34 +125,33 @@ class Example_Mapper : Command("mapper") {
         // CASE 1: Load the schema from the annotations on the model
         val schema1 = ModelMapper.loadSchema(Movie::class)
 
-
         // CASE 2: Load the schema manually using properties for type-safety
-        val schema2 = Model(Movie::class)
-                .addId(Movie::id, true)
-                .add(Movie::title     , "Title of movie"         , 5, 30)
-                .add(Movie::category  , "Category (action|drama)", 1, 20)
-                .add(Movie::playing   , "Whether its playing now")
-                .add(Movie::rating    , "Rating from users"      )
-                .add(Movie::released  , "Date of release"        )
-                .add(Movie::createdAt , "Who created record"     )
-                .add(Movie::createdBy , "When record was created")
-                .add(Movie::updatedAt , "Who updated record"     )
-                .add(Movie::updatedBy , "When record was updated")
-
+        val schema2 = Model.of<Long, Movie> {
+                field(Movie::id       , category = FieldCategory.Id)
+                field(Movie::title    , desc = "Title of movie", min = 5, max = 30)
+                field(Movie::category , desc = "Category (action|drama)", min = 1, max = 20)
+                field(Movie::playing  , desc = "Whether its playing now")
+                field(Movie::rating   , desc = "Rating from users")
+                field(Movie::released , desc = "Date of release")
+                field(Movie::createdAt, desc = "Who created record")
+                field(Movie::createdBy, desc = "When record was created")
+                field(Movie::updatedAt, desc = "Who updated record")
+                field(Movie::updatedBy, desc = "When record was updated")
+        }
 
         // CASE 3: Load the schema manually using named fields
-        val schema3 = Model(Movie::class)
-                .addId(Movie::id, true)
-                .addText    ("title"     , "Title of movie"         , true, 1, 30)
-                .addText    ("category"  , "Category (action|drama)", true, 1, 20)
-                .addBool    ("playing"   , "Whether its playing now")
-                .addDouble  ("rating"    , "Rating from users"      )
-                .addDateTime("released"  , "Date of release"        )
-                .addDateTime("createdAt" , "Who created record"     )
-                .addLong    ("createdBy" , "When record was created")
-                .addDateTime("updatedAt" , "Who updated record"     )
-                .addLong    ("updatedBy" , "When record was updated")
-
+        val schema3 =  Model.of<Long, Movie> {
+            field("id"         , KTypes.KLongType   , true, category = FieldCategory.Id)
+            field("title"     , KTypes.KStringType  , true, desc = "Title of movie", min = 1, max = 30)
+            field("category"  , KTypes.KStringType  , true, desc = "Category (action|drama)", min = 1, max = 20)
+            field("playing"   , KTypes.KBoolType    , true, desc = "Whether its playing now")
+            field("rating"    , KTypes.KDoubleType  , true, desc = "Rating from users")
+            field("released"  , KTypes.KDateTimeType, true, desc = "Date of release")
+            field("createdAt" , KTypes.KDateTimeType, true, desc = "Who created record")
+            field("createdBy" , KTypes.KLongType    , true, desc = "When record was created")
+            field("updatedAt" , KTypes.KDateTimeType, true, desc = "Who updated record")
+            field("updatedBy" , KTypes.KLongType    , true, desc = "When record was updated")
+        }
 
         // CASE 4: Now with a schema of the entity, you create a mapper
         val mapper = OrmMapper<Long, User>(schema1, Db(DbCon.empty), MySqlConverter(), EntityInfo(Long::class, User::class, "users"))

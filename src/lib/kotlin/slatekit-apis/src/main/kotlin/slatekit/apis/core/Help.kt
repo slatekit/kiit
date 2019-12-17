@@ -23,12 +23,20 @@ import slatekit.common.requests.Request
 import slatekit.results.*
 import slatekit.results.builders.Outcomes
 
+
+sealed class HelpType {
+    object All    : HelpType()
+    object Area   : HelpType()
+    object Api    : HelpType()
+    object Action : HelpType()
+}
+
 class Help(val host: ApiServer, val routes: Routes, val docKey: String?, val docBuilder: () -> Doc) {
 
     fun process(req: Request): Outcome<Content> {
         val result = DocUtils.isHelp(req)
         return when (result) {
-            is Success -> build(req, result)
+            is Success -> build(req, result.value)
             is Failure -> result
         }
     }
@@ -41,25 +49,25 @@ class Help(val host: ApiServer, val routes: Routes, val docKey: String?, val doc
      * 2. area.api ?
      * 3. area.api.action ?
      */
-    fun build(req: Request, check: Outcome<String>): Outcome<Content> {
+    fun build(req: Request, helpType: HelpType): Outcome<Content> {
         return if (!DocUtils.hasDocKey(req, docKey ?: "")) {
             Outcomes.denied("Unauthorized access to API docs")
         } else {
-            val content = when (check.msg) {
-                // 1: {area} ? = help on area
-                "?" -> {
-                    help()
+            val content = when (helpType) {
+                // 1: ? = help on all
+                HelpType.All -> {
+                    areas()
                 }
                 // 2: {area} ? = help on area
-                "area ?" -> {
+                HelpType.Area -> {
                     area(req.parts[0])
                 }
                 // 3. {area}.{api} = help on api
-                "area.api ?" -> {
+                HelpType.Api -> {
                     api(req.parts[0], req.parts[1])
                 }
-                // 3. {area}.{api}.{action} = help on api action
-                else -> {
+                // 4. {area}.{api}.{action} = help on api
+                HelpType.Action -> {
                     action(req.parts[0], req.parts[1], req.parts[2])
                 }
             }
@@ -72,8 +80,7 @@ class Help(val host: ApiServer, val routes: Routes, val docKey: String?, val doc
      *
      * @return
      */
-    fun help(): String {
-
+    fun areas(): String {
         val doc = docBuilder()
         val visitor = ApiVisitor(routes)
         visitor.visitAreas(doc)

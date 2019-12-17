@@ -24,7 +24,7 @@ import slatekit.results.Success
 import slatekit.results.builders.Outcomes
 
 @Api(area = "samples", name = "core", desc = "api to access and manage users 3", auth = AuthModes.NONE)
-class Sample_API_1_Core(context: AppEntContext) {
+class Sample_API_1_Core(context: Context) {
 
 
     @Action(desc = "processes an request with 0 parameters")

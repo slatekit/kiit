@@ -3,7 +3,12 @@ package slatekit.server.ktor
 import io.ktor.application.ApplicationCall
 import io.ktor.application.call
 import io.ktor.http.HttpMethod
+import io.ktor.http.content.PartData
+import io.ktor.http.content.forEachPart
+import io.ktor.http.content.streamProvider
 import io.ktor.request.httpMethod
+import io.ktor.request.isMultipart
+import io.ktor.request.receiveMultipart
 import io.ktor.request.receiveText
 import io.ktor.routing.*
 import slatekit.apis.ApiServer
@@ -11,6 +16,7 @@ import slatekit.common.Context
 import slatekit.tracking.Diagnostics
 import slatekit.common.requests.Request
 import slatekit.common.ext.toResponse
+import slatekit.common.types.Doc
 import slatekit.server.ServerSettings
 import slatekit.server.common.RequestHandler
 import slatekit.server.common.ResponseHandler
@@ -23,10 +29,23 @@ class KtorHandler(
         val settings: ServerSettings,
         override val container:ApiServer,
         override val diagnostics: Diagnostics<Request> = diagnostics(context),
-        override val responses: ResponseHandler = KtorResponse
+        override val responses: ResponseHandler = KtorResponse()
 ) : RequestHandler {
 
     override fun register(routes:Routing){
+
+        routes.get(settings.prefix + "/help") {
+            exec(call)
+        }
+        routes.get(settings.prefix + "/*/help") {
+            exec(call)
+        }
+        routes.get(settings.prefix + "/*/*/help") {
+            exec(call)
+        }
+        routes.get(settings.prefix + "/*/*/*/help") {
+            exec(call)
+        }
         routes.get(settings.prefix + "/*/*/*") {
             exec(call)
         }
@@ -51,13 +70,22 @@ class KtorHandler(
      * Slate Kit "Protocol Independent APIs".
      */
     override suspend fun exec(call: ApplicationCall) {
-        val body = when (call.request.httpMethod) {
-            HttpMethod.Post -> call.receiveText()
-            HttpMethod.Put -> call.receiveText()
-            HttpMethod.Patch -> call.receiveText()
-            HttpMethod.Delete -> call.receiveText()
-            else -> ""
+
+        // see: https://github.com/ktorio/ktor/issues/482
+        // If multi-part / file upload, we can not call both receiveMultiPart ( later )
+        // and receiveText
+        val body = if(!call.request.isMultipart()) {
+            when (call.request.httpMethod) {
+                HttpMethod.Post -> call.receiveText()
+                HttpMethod.Put -> call.receiveText()
+                HttpMethod.Patch -> call.receiveText()
+                HttpMethod.Delete -> call.receiveText()
+                else -> ""
+            }
+        } else {
+            ""
         }
+
 
         // Convert the http request to a SlateKit Request
         val request = KtorRequest.build(context, body, call, settings)
@@ -78,6 +106,12 @@ class KtorHandler(
 
         // Finally convert the result back to a HttpResult
         responses.result(call, response)
+    }
+
+
+    suspend fun testFile(call:ApplicationCall){
+        val doc = KtorUtils.loadFile(call)
+        println(doc)
     }
 
 

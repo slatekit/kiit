@@ -19,25 +19,35 @@ import io.ktor.http.HttpStatusCode
 import io.ktor.response.header
 import io.ktor.response.respondBytes
 import io.ktor.response.respondText
+import slatekit.apis.core.Errs
 import slatekit.common.types.Content
 import slatekit.common.types.Doc
 import slatekit.common.requests.Response
 import slatekit.meta.Serialization
-import slatekit.results.Status
-import slatekit.results.Codes
+import slatekit.results.*
 import slatekit.server.common.ResponseHandler
 
 
-object KtorResponse : ResponseHandler {
+class KtorResponse  : ResponseHandler {
 
     /**
      * Returns the value of the result as an html(string)
      */
     override suspend fun result(call: ApplicationCall, result: Response<Any>): Any {
-        return when (result.value) {
-            is Content -> content(call, result, result.value as Content)
-            is Doc -> file(call, result, result.value as Doc)
-            else -> json(call, result)
+        return when(result.success) {
+            false -> {
+                when(result.err){
+                    is ExceptionErr ->  error(call, result, (result.err as ExceptionErr).err)
+                    else ->  json(call, result)
+                }
+            }
+            true -> {
+                when (result.value) {
+                    is Content -> content(call, result, result.value as Content)
+                    is Doc -> file(call, result, result.value as Doc)
+                    else -> json(call, result)
+                }
+            }
         }
     }
 
@@ -78,5 +88,14 @@ object KtorResponse : ResponseHandler {
     override fun toHttpStatus(response:Response<Any>): HttpStatusCode {
         val http = Codes.toHttp(Status.Succeeded(response.code, response.msg ?: ""))
         return HttpStatusCode(http.first, http.second.msg)
+    }
+
+
+    private suspend fun error(call: ApplicationCall, result: Response<Any>, err: Err){
+        val json = Errs.response(err, result)
+        val text = json.toJSONString()
+        val contentType = io.ktor.http.ContentType.Application.Json // "application/json"
+        val statusCode = toHttpStatus(result)
+        call.respondText(text, contentType, statusCode)
     }
 }

@@ -15,6 +15,7 @@ package slatekit.integration.apis
 
 import slatekit.apis.ApiServer
 import slatekit.apis.core.Api
+import slatekit.apis.core.HelpType
 import slatekit.cli.*
 import slatekit.common.Source
 import slatekit.common.types.Content
@@ -59,14 +60,6 @@ open class CliApi(
 
     // api container holding all the apis.
     val apis = ApiServer.of(ctx, apiItems, auth, Source.CLI)
-
-    enum class ApiHelpType {
-        Listing,
-        Area,
-        Api,
-        Action,
-        NA
-    }
 
     /**
      * executes a line of text by handing it off to the executor
@@ -114,22 +107,22 @@ open class CliApi(
      * @param req
      * @param mode
      */
-    fun showHelpFor(req: CliRequest, mode: ApiHelpType) {
+    fun showHelpFor(req: CliRequest, mode: HelpType) {
         when (mode) {
             // 1: {area} ? = help on area
-            ApiHelpType.Listing -> {
-                apis.help.help()
+            HelpType.All -> {
+                apis.help.areas()
             }
             // 2: {area} ? = help on area
-            ApiHelpType.Area -> {
+            HelpType.Area -> {
                 apis.help.area(req.args.getVerb(0))
             }
             // 3. {area}.{api} = help on api
-            ApiHelpType.Api -> {
+            HelpType.Api -> {
                 apis.help.api(req.args.getVerb(0), req.args.getVerb(1))
             }
             // 4. {area}.{api}.{action} = help on api action
-            ApiHelpType.Action-> {
+            HelpType.Action-> {
                 apis.help.action(req.args.getVerb(0), req.args.getVerb(1), req.args.getVerb(2))
             }
             else -> {
@@ -139,22 +132,22 @@ open class CliApi(
     }
 
 
-    fun checkForHelp(req:CliRequest):Pair<Boolean, ApiHelpType> {
+    fun checkForHelp(req:CliRequest):Pair<Boolean, HelpType> {
         val args = req.args
         val hasQuestion = args.parts.isNotEmpty() && args.parts.last() == "?"
         return if( hasQuestion ) {
             when(args.parts.size ) {
-                1    -> Pair(true, ApiHelpType.Listing)
-                2    -> Pair(true, ApiHelpType.Area)
-                3    -> Pair(true, ApiHelpType.Api)
-                4    -> Pair(true, ApiHelpType.Action)
-                else -> Pair(false, ApiHelpType.NA)
+                1    -> Pair(true , HelpType.All)
+                2    -> Pair(true , HelpType.Area)
+                3    -> Pair(true , HelpType.Api)
+                4    -> Pair(true , HelpType.Action)
+                else -> Pair(false, HelpType.All)
             }
         } else {
             if(args.parts.isNotEmpty() && args.parts[0] == "?" ){
-                Pair(true, ApiHelpType.Listing)
+                Pair(true, HelpType.All)
             } else {
-                Pair(false, ApiHelpType.NA)
+                Pair(false, HelpType.All)
             }
         }
     }

@@ -3,6 +3,7 @@ package slatekit.meta
 import slatekit.meta.models.*
 import kotlin.reflect.KClass
 import kotlin.reflect.KProperty
+import kotlin.reflect.KType
 
 open class Schema<TId, T>(val idType:KClass<*>, val enType:KClass<*>, val table:String = enType.simpleName!!) : Builder where TId : Comparable<TId>, T: Any {
 
@@ -22,7 +23,7 @@ open class Schema<TId, T>(val idType:KClass<*>, val enType:KClass<*>, val table:
             defaultValue: Any? = null,
             tags: List<String> = listOf()
     ): ModelField {
-        val raw = field(prop, name, type, min, max, defaultValue, false, true,  FieldCategory.Id, tags)
+        val raw = field(prop, name, "", type, min, max, defaultValue, false, true,  FieldCategory.Id, tags)
         val field = raw.copy(isUnique = true, isIndexed = true, isUpdatable = false)
         return field
     }
@@ -34,6 +35,7 @@ open class Schema<TId, T>(val idType:KClass<*>, val enType:KClass<*>, val table:
     fun field(
             prop: KProperty<*>,
             name: String? = null,
+            desc: String = "",
             type: FieldType? = null,
             min: Int = -1,
             max: Int = -1,
@@ -49,7 +51,37 @@ open class Schema<TId, T>(val idType:KClass<*>, val enType:KClass<*>, val table:
         val required = !finalType.isMarkedNullable
         val fieldType = type ?: ModelUtils.getFieldType(finalType)
         val field = ModelField.build(
-                prop, finalName, "", finalKClas, fieldType, required,
+                prop, finalName, desc, finalKClas, fieldType, required,
+                false, indexed, true,
+                min, max, null, defaultValue, encrypt, tags, category
+        )
+        _model = _model.add(field)
+        return field
+    }
+
+
+    /**
+     * Builds a normal field using property reference to extract type information
+     */
+    fun field(
+            name: String,
+            type: KType,
+            required:Boolean,
+            desc: String = "",
+            min: Int = -1,
+            max: Int = -1,
+            defaultValue: Any? = null,
+            encrypt: Boolean = false,
+            indexed: Boolean = false,
+            category: FieldCategory = FieldCategory.Data,
+            tags: List<String> = listOf()
+    ): ModelField {
+        val finalName = name
+        val finalType = type
+        val finalKClas = finalType.classifier as KClass<*>
+        val fieldType = ModelUtils.getFieldType(finalType)
+        val field = ModelField.build(
+                null, finalName, desc, finalKClas, fieldType, required,
                 false, indexed, true,
                 min, max, null, defaultValue, encrypt, tags, category
         )

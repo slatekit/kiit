@@ -198,7 +198,7 @@ class Example_Results : Command("results"), OutcomeBuilder {
         ), "Username is invalid")
 
         // List of Err types
-        val err6 = ErrorList(listOf(
+        val err6 = Err.ErrorList(listOf(
                 Err.on("email", "abc123 is not a valid email", "Invalid email"),
                 Err.on("phone", "123-456-789 is not a valid U.S. phone", "Invalid phone")
         ), "Please correct the errors")
@@ -219,7 +219,7 @@ class Example_Results : Command("results"), OutcomeBuilder {
         val res3 = Notices.notice { "1".toInt() }
 
         // Validated<T> = Result<T, ErrorList>
-        val res4:Validated<String> = Failure(ErrorList(listOf(
+        val res4:Validated<String> = Failure(Err.ErrorList(listOf(
                 Err.on("email", "abc123 is not a valid email", "Invalid email"),
                 Err.on("phone", "123-456-789 is not a valid U.S. phone", "Invalid phone")
         ), "Please correct the errors"))

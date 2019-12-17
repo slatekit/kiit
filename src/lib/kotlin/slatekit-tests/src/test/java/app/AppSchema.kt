@@ -1,26 +1,28 @@
 package app
 
-import app.AppEvent
 import slatekit.meta.models.Model
 
 object AppSchema {
 
     @JvmStatic
     fun setupEventMappings(model: Model): Model {
-        val finalModel = model.add(AppEvent::calendarId)
-                .add(AppEvent::title, true)
-                .add(AppEvent::details, false)
-                .add(AppEvent::startTime)
-                .add(AppEvent::endTime)
-                .add(AppEvent::timeZone)
+        val model = Model.of<Long, AppEvent> {
 
-                // Attributes
-                .add(AppEvent::status)
-                .add(AppEvent::icon)
-                .add(AppEvent::value)
-                .add(AppEvent::priority)
-                .add(AppEvent::isFavorite)
-                .add(AppEvent::isEnabled)
-        return finalModel
+                    field(AppEvent::calendarId)
+                    field(AppEvent::title )
+                    field(AppEvent::details)
+                    field(AppEvent::startTime)
+                    field(AppEvent::endTime)
+                    field(AppEvent::timeZone)
+
+                    // Attributes
+                    field(AppEvent::status)
+                    field(AppEvent::icon)
+                    field(AppEvent::value)
+                    field(AppEvent::priority)
+                    field(AppEvent::isFavorite)
+                    field(AppEvent::isEnabled)
+        }
+        return model
     }
 }

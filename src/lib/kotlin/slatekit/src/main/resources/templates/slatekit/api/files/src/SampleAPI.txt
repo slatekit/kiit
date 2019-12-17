@@ -1,5 +1,6 @@
 package ${app.package}.apis
 
+
 import slatekit.apis.Api
 import slatekit.apis.Action
 import slatekit.apis.AuthModes
@@ -10,8 +11,10 @@ import slatekit.common.DateTimes
 import slatekit.common.requests.Request
 import slatekit.common.Context
 import slatekit.common.Sources
+import slatekit.common.ext.toId
 import slatekit.common.ext.toStringUtc
 import slatekit.common.info.About
+import slatekit.common.types.Doc
 import slatekit.results.Outcome
 import slatekit.results.builders.Outcomes
 import ${app.package}.models.SampleMovie
@@ -96,6 +99,23 @@ class SampleApi(context: Context) : ApiBase(context) {
     @Action(desc = "test patch")
     fun lists(movies:List<SampleMovie>): List<SampleMovie> {
         return movies.map { it.copy(title = "GOT : " + it.title) }
+    }
+
+
+    @Action(desc = "File upload")
+    fun upload(file: Doc):Map<String, String> {
+        return mapOf(
+                "name" to file.name,
+                "type" to file.tpe.http,
+                "size" to file.size.toString(),
+                "data" to file.content
+        )
+    }
+
+
+    @Action(desc = "File download")
+    fun download(text:String):Doc {
+        return Doc.text(DateTime.now().toStringUtc().toId() + ".txt", text)
     }
 
 

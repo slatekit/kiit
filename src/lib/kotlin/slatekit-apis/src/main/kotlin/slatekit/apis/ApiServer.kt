@@ -126,7 +126,11 @@ open class ApiServer(
             execute(req, options)
         } catch (ex: Exception) {
             handleError(req, ex)
-            Outcomes.errored<ApiResult>(ex)
+            val err = when(ex) {
+                is ExceptionErr -> ex.err
+                else -> Err.of(ex)
+            }
+            Outcomes.errored<Any>(err)
         }
         return result.toTry()
     }

@@ -17,14 +17,10 @@ import slatekit.apis.ApiRequest
 import slatekit.apis.hooks.Targets
 import slatekit.common.*
 import slatekit.common.requests.Request
-import slatekit.results.Failure
-import slatekit.results.Notice
-import slatekit.results.Outcome
-import slatekit.results.Success
-import slatekit.results.builders.Notices
+import slatekit.meta.KTypes
+import slatekit.results.*
 import slatekit.results.builders.Outcomes
 import kotlin.reflect.KClass
-import kotlin.reflect.full.callSuspend
 
 object Calls {
 
@@ -84,38 +80,46 @@ object Calls {
 
                 // Data - ensure matching args
                 else if (action.hasArgs) {
-                    val argCheck = validateArgs(action, args)
-                    if (argCheck.success) {
-                        Outcomes.success(target)
-                    } else
-                        Outcomes.invalid("bad request : $fullName: inputs not supplied")
+                    val argCheck = validateArgs(request, action, args)
+                    val result = argCheck.map { target }
+                    result
                 } else
                     Outcomes.success(target)
             }
         }
     }
 
-    private fun validateArgs(action: Action, args: Inputs): Notice<Boolean> {
-        var error = ": inputs missing or invalid "
-        var totalErrors = 0
-
+    private fun validateArgs(request: ApiRequest, action: Action, args: Inputs): Outcome<Boolean> {
         // Check each parameter to api call
-        for (index in 0 until action.paramsUser.size) {
-            val input = action.paramsUser[index]
-            // parameter not supplied ?
-            val paramName = input.name!!
-            if (!args.containsKey(paramName)) {
-                val separator = if (totalErrors == 0) "( " else ","
-                error += separator + paramName
-                totalErrors += 1
+        val errors = (0 until action.paramsUser.size).map { ndx ->
+            val param = action.paramsUser[ndx]
+            val name = param.name ?: ""
+            val exists = when(param.type) {
+                KTypes.KDocType -> {
+                    // NOTE: For FILES:
+                    // The Reading of the multi-part can be done only one time for
+                    // KTor web server. This means if we load the file/doc to check
+                    // for its existence then we can not read it again during loading
+                    // of the values later on.
+                    // One way to address this is to load / check it here and cache it.
+                    // However, it could be a large file, so this is questionable.
+                    // For now, we are not checking for supplied files here and instead
+                    // just attempting to load them later on.
+                    true
+                }
+                else -> args.containsKey(name)
+            }
+            when(exists) {
+                false -> Err.on(name, "", "Missing")
+                true  -> null
             }
         }
+        val failures = errors.filterNotNull()
         // Any errors ?
-        return if (totalErrors > 0) {
-            error = "$error )"
-            Notices.invalid("bad request: action " + action.name + error)
+        return if (failures.isNotEmpty()) {
+            Outcomes.invalid(Err.ErrorList(failures, "Invalid request"))
         } else {
-            Success(true)
+            Outcomes.success(true)
         }
     }
 }

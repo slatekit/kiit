@@ -138,6 +138,39 @@
 			"response": []
 		},
 		{
+			"name": "samples.types.inputs Errors",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"type": "text",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"name\" : \"user 1\",\n\t\"isActive\" : true,\n\t\"age2\" : 123,\n\t\"dept\": 123456,\n\t\"account\": 1234567890,\n\t\"average\": 12.34,\n\t\"salary\" : 123456.789,\n\t\"date\" : \"2019-12-20T09:30:00Z\"\n}"
+				},
+				"url": {
+					"raw": "http://localhost:5000/api/samples/types/inputs",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "5000",
+					"path": [
+						"api",
+						"samples",
+						"types",
+						"inputs"
+					]
+				}
+			},
+			"response": []
+		},
+		{
 			"name": "samples.types.getCounter",
 			"protocolProfileBehavior": {
 				"disableBodyPruning": true
