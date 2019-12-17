@@ -24,7 +24,6 @@ import slatekit.common.smartvalues.SmartCreation
 import slatekit.common.smartvalues.SmartValue
 import slatekit.common.types.Doc
 import slatekit.results.Err
-import slatekit.results.ErrorList
 import slatekit.results.ExceptionErr
 import java.util.*
 import kotlin.reflect.KClass
@@ -101,7 +100,7 @@ open class Deserializer(
             catch(ex:Exception) {
                 val errValue = data.getStringOrNull(paramName)
                 val errField = Err.on(paramName, errValue ?: "", "Invalid value", ex)
-                val errList = ErrorList(listOf(errField), ex.message ?: "Invalid value")
+                val errList = Err.ErrorList(listOf(errField), ex.message ?: "Invalid value")
                 throw ExceptionErr("Error while converting parameters", errList)
             }
             inputs.add(result)

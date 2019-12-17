@@ -32,10 +32,10 @@ typealias Notice<T> = Result<T, String>
 
 
 /**
- * Alias for Result<T,E> defaulting the E error type ( [Failure] branch ) to [ErrorList]
+ * Alias for Result<T,E> defaulting the E error type ( [Failure] branch ) to [Err.ErrorList]
  *
  * This allows for :
  * 1. Is to be used for validation purposes
  * 2. Collecting multiple errors
  */
-typealias Validated<T> = Result<T, ErrorList>
+typealias Validated<T> = Result<T, Err.ErrorList>

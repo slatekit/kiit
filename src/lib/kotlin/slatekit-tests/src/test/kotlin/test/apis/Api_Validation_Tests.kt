@@ -20,12 +20,8 @@ import slatekit.apis.*
 import slatekit.apis.core.Api
 import slatekit.apis.Setup
 import slatekit.common.DateTimes
-import slatekit.results.ErrorField
-import slatekit.results.ErrorList
-import slatekit.results.ExceptionErr
-import slatekit.results.getOrElse
+import slatekit.results.*
 import test.apis.samples.Sample_API_1_Validation
-import test.setup.StatusEnum
 
 /**
  * Created by kishorereddy on 6/12/17.
@@ -48,12 +44,12 @@ class Api_Validation_Tests : ApiTestsBase() {
         Assert.assertFalse(r1.success)
         r1.onFailure {
             val ex = it as ExceptionErr
-            val err = ex.err as ErrorList
+            val err = ex.err as Err.ErrorList
             Assert.assertEquals(4, err.errors.size)
-            Assert.assertEquals("phone", (err.errors[0] as ErrorField).field)
-            Assert.assertEquals("code", (err.errors[1] as ErrorField).field)
-            Assert.assertEquals("isOn", (err.errors[2] as ErrorField).field)
-            Assert.assertEquals("date", (err.errors[3] as ErrorField).field)
+            Assert.assertEquals("phone", (err.errors[0] as Err.ErrorField).field)
+            Assert.assertEquals("code", (err.errors[1]  as Err.ErrorField).field)
+            Assert.assertEquals("isOn", (err.errors[2]  as Err.ErrorField).field)
+            Assert.assertEquals("date", (err.errors[3]  as Err.ErrorField).field)
             println("done")
         }
     }
@@ -73,9 +69,9 @@ class Api_Validation_Tests : ApiTestsBase() {
         Assert.assertFalse(r1.success)
         r1.onFailure {
             val ex = it as ExceptionErr
-            val err = ex.err as ErrorList
+            val err = ex.err as Err.ErrorList
             Assert.assertEquals(1, err.errors.size)
-            Assert.assertEquals("code", (err.errors[0] as ErrorField).field)
+            Assert.assertEquals("code", (err.errors[0] as Err.ErrorField).field)
             println("done")
         }
     }

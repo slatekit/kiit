@@ -23,11 +23,33 @@ package slatekit.results
  * 4. You can create an Err that also implements the Status interface to double as a status code
  * 5. You can create an Err using Sealed classes
  */
-interface Err {
+sealed class Err {
 
-    val msg: String
-    val err: Throwable?
-    val ref: Any?
+    abstract val msg: String
+    abstract val err: Throwable?
+    abstract val ref: Any?
+
+    /**
+     * Different implementations for Error
+     */
+
+    /**
+     * Default Error implementation to represent an error with message and optional throwable
+     */
+    data class ErrorInfo(override val msg: String, override val err: Throwable? = null, override val ref: Any? = null) : Err()
+
+    /**
+     * Error implementation to represent an error on a specific field
+     * @param field: Name of the field causing the error e.g. "email"
+     * @param value: Value of the field causing the error e.g. "some_invalid_value"
+     */
+    data class ErrorField(val field:String, val value:String, override val msg: String, override val err: Throwable? = null, override val ref: Any? = null) : Err()
+
+    /**
+     * Error implementation to store list of errors
+     * @param errors: List of all the errors
+     */
+    data class ErrorList (val errors:List<Err>, override val msg: String, override val err: Throwable? = null, override val ref: Any? = null) : Err()
 
     /**
      *   Here are 3 examples of implementing errors:
@@ -79,33 +101,6 @@ interface Err {
         }
     }
 }
-
-/**
- * Different implementations for Error
- */
-
-/**
- * Default Error implementation to represent an error with message and optional throwable
- */
-data class ErrorInfo(override val msg: String, override val err: Throwable? = null, override val ref: Any? = null) : Err
-
-/**
- * Error implementation to represent an error on a specific field
- * @param field: Name of the field causing the error e.g. "email"
- * @param value: Value of the field causing the error e.g. "some_invalid_value"
- */
-data class ErrorField(val field:String, val value:String, override val msg: String, override val err: Throwable? = null, override val ref: Any? = null) : Err
-
-/**
- * Error implementation to store list of errors
- * @param errors: List of all the errors
- */
-data class ErrorList (val errors:List<Err>, override val msg: String, override val err: Throwable? = null, override val ref: Any? = null) : Err
-
-/**
- * Error implementation extending from exception
- */
-open class ErrorEx(override val msg: String, override val err: Throwable? = null, override val ref: Any? = null) : Exception(msg, err), Err
 
 /**
  * Error implementation extending from exception

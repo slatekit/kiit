@@ -4,9 +4,6 @@ import org.json.simple.JSONArray
 import org.json.simple.JSONObject
 import slatekit.common.requests.Response
 import slatekit.results.Err
-import slatekit.results.ErrorField
-import slatekit.results.ErrorInfo
-import slatekit.results.ErrorList
 
 object Errs {
 
@@ -48,19 +45,19 @@ object Errs {
     /**
      * Recursively flattens the err into the list provided.
      * E.g. Err could be
-     * 1. @see[slatekit.results.ErrorInfo]
-     * 2. @see[slatekit.results.ErrorField]
-     * 3. @see[slatekit.results.ErrorList]
+     * 1. @see[slatekit.results.Err.ErrorInfo]
+     * 2. @see[slatekit.results.Err.ErrorField]
+     * 3. @see[slatekit.results.Err.ErrorList]
      */
     fun flatten(error: Err, list: JSONArray, depth: Int) {
         when (error) {
-            is ErrorField -> {
+            is Err.ErrorField -> {
                 build("input", error.field, error.value, error.msg, list)
             }
-            is ErrorInfo -> {
+            is Err.ErrorInfo -> {
                 build("action", null, null, error.msg, list)
             }
-            is ErrorList -> {
+            is Err.ErrorList -> {
                 if (depth < 3) {
                     val errs = error.errors
                     errs.forEach {

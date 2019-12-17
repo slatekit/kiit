@@ -40,7 +40,7 @@ interface ResultTestSupport {
         result.onFailure {
             when (it) {
                 is String    -> Assert.assertEquals(it , expectedError)
-                is ErrorInfo -> Assert.assertEquals(it.msg , expectedError)
+                is Err.ErrorInfo -> Assert.assertEquals(it.msg , expectedError)
                 else                  -> throw Exception("Unexpected for : $it")
             }
         }

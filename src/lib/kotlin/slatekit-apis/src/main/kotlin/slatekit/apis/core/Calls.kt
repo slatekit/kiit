@@ -17,13 +17,10 @@ import slatekit.apis.ApiRequest
 import slatekit.apis.hooks.Targets
 import slatekit.common.*
 import slatekit.common.requests.Request
-import slatekit.common.requests.RequestSupport
 import slatekit.meta.KTypes
 import slatekit.results.*
-import slatekit.results.builders.Notices
 import slatekit.results.builders.Outcomes
 import kotlin.reflect.KClass
-import kotlin.reflect.full.callSuspend
 
 object Calls {
 
@@ -120,7 +117,7 @@ object Calls {
         val failures = errors.filterNotNull()
         // Any errors ?
         return if (failures.isNotEmpty()) {
-            Outcomes.invalid(ErrorList(failures, "Invalid request"))
+            Outcomes.invalid(Err.ErrorList(failures, "Invalid request"))
         } else {
             Outcomes.success(true)
         }
