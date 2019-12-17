@@ -10,6 +10,7 @@ import slatekit.common.DateTimes
 import slatekit.common.requests.Request
 import slatekit.common.Context
 import slatekit.common.Sources
+import slatekit.common.ext.toId
 import slatekit.common.ext.toStringUtc
 import slatekit.common.info.About
 import slatekit.common.types.Doc
@@ -108,6 +109,12 @@ class SampleApi(context: Context) : ApiBase(context) {
                 "size" to file.size.toString(),
                 "data" to file.content
         )
+    }
+
+
+    @Action(desc = "File download")
+    fun download(text:String):Doc {
+        return Doc.text(DateTime.now().toStringUtc().toId() + ".txt", text)
     }
 
 
