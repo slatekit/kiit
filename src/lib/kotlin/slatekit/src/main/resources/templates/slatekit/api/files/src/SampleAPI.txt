@@ -17,7 +17,7 @@ import slatekit.common.info.About
 import slatekit.common.types.Doc
 import slatekit.results.Outcome
 import slatekit.results.builders.Outcomes
-import slatekit.samples.common.models.SampleMovie
+import ${app.package}.models.SampleMovie
 
 
 @Api(area = "samples", name = "types", desc = "sample to test features of Slate Kit APIs", auth = AuthModes.NONE, verb = Verbs.AUTO, sources = [Sources.WEB])
