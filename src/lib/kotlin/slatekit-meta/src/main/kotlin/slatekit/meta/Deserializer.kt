@@ -39,7 +39,7 @@ import kotlin.reflect.full.createType
 open class Deserializer(
         private val req: Request,
         private val enc: Encryptor? = null,
-        private val converters: (Map<String, (Request, JSONObject, KType) -> Any?>) = mapOf()
+        private val decoders: Map<String, Decoder> = mapOf()
 ) {
 
     private val typeRequest = Request::class.createType()
@@ -239,8 +239,9 @@ open class Deserializer(
             handleList(raw, tpe)
         } else if (cls == Map::class) {
             handleMap(raw, tpe)
-        } else if (converters.containsKey(fullName)) {
-            converters[fullName]?.invoke(req, parent as JSONObject, tpe)
+        } else if (decoders.containsKey(fullName)) {
+            val decoder = decoders[fullName]
+            decoder?.decode(req, parent as JSONObject, tpe)
         }
         // Case 3: Smart String ( e.g. PhoneUS, Email, SSN, ZipCode )
         // Refer to slatekit.common.types

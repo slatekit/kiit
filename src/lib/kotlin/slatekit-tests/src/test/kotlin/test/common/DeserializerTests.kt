@@ -1,5 +1,6 @@
 package test.common
 
+import org.json.simple.JSONObject
 import org.junit.Assert
 import org.junit.Test
 import slatekit.common.DateTime
@@ -9,18 +10,20 @@ import slatekit.common.encrypt.EncDouble
 import slatekit.common.encrypt.EncInt
 import slatekit.common.encrypt.EncLong
 import slatekit.common.encrypt.EncString
-import slatekit.meta.Deserializer
 import test.setup.Movie
 //import java.time.*
 import org.threeten.bp.*
 import slatekit.common.DateTimes
 import slatekit.common.CommonRequest
 import slatekit.common.Source
+import slatekit.common.requests.Request
+import slatekit.meta.*
 import test.setup.MyEncryptor
 import test.setup.StatusEnum
 import java.util.*
 import kotlin.reflect.KClass
 import kotlin.reflect.KType
+import kotlin.reflect.full.createType
 
 class ConvertTests {
 
@@ -175,18 +178,68 @@ class ConvertTests {
 
 
     fun test_custom_converter(tstr:String, tbool:Boolean, movie: Movie):Unit {}
-    @Test fun can_parse_custom_types(){
+
+    @Test fun can_parse_custom_types_using_lambda_decoder(){
         val test = """{ "tstr": "abc", "tbool": false }"""
         val req = CommonRequest("a.b.c", listOf("a", "b", "c"), Source.CLI, "post",
                 InputArgs(mapOf()), InputArgs(mapOf(Pair("movie", "batman"))))
-        val deserializer = Deserializer( req,null, mapOf(Pair(Movie::class.qualifiedName!!, { request, json, tpe ->
+
+        val decoder = LambdaDecoder(Movie::class.createType()) { request, json, tpe ->
             Movie(0L, request.meta.getString("movie"), cost = 0, rating = 4.0, released = DateTime.now() )
-        })))
+        }
+        val deserializer = Deserializer( req,null, mapOf(Pair(Movie::class.qualifiedName!!, decoder)))
         val results = deserializer.convert(this::test_custom_converter.parameters, test)
         Assert.assertTrue(results[0] == "abc")
         Assert.assertTrue(results[1] == false)
         Assert.assertTrue(results[2] is Movie )
         Assert.assertTrue((results[2] as Movie ).title == "batman")
+    }
+
+    @Test fun can_parse_custom_types_using_simple_decoder(){
+        val test = """{
+                "tstr": "abc",
+                "tbool": false,
+                "movie": {
+                    "id": 123,
+                    "title": "dark knight",
+                    "category": "action",
+                    "playing": false,
+                    "cost": 15,
+                    "rating": 4.5,
+                    "released": "2012-07-04T18:00:00Z"
+                }
+            }""".trimIndent()
+        val req = CommonRequest("a.b.c", listOf("a", "b", "c"), Source.CLI, "post",
+                InputArgs(mapOf()), InputArgs(mapOf(Pair("movie", "batman"))))
+
+        val deserializer = Deserializer( req,null, mapOf(Pair(Movie::class.qualifiedName!!, MovieDecoder())))
+        val results = deserializer.convert(this::test_custom_converter.parameters, test)
+        Assert.assertTrue(results[0] == "abc")
+        Assert.assertTrue(results[1] == false)
+        Assert.assertTrue(results[2] is Movie )
+        Assert.assertTrue((results[2] as Movie ).title == "dark knight")
+        Assert.assertTrue((results[2] as Movie ).category == "action")
+        Assert.assertTrue(!(results[2] as Movie ).playing)
+        Assert.assertTrue((results[2] as Movie ).cost == 15)
+        Assert.assertTrue((results[2] as Movie ).rating == 4.5)
+    }
+
+
+    class MovieDecoder() : SimplerDecoder(Movie::class.createType()) {
+        override fun decode(request: Request, root: JSONObject, type: KType): Any? {
+            val doc = root.get("movie") as JSONObject
+            val inputs = InputsJSON(doc, null, doc)
+            val movie = Movie(
+                id = inputs.getLong("id"),
+                title = inputs.getString("title"),
+                category = inputs.getString("category"),
+                playing = inputs.getBool("playing"),
+                cost = inputs.getInt("cost"),
+                rating = inputs.getDouble("rating"),
+                released = inputs.getDateTime("released")
+            )
+            return movie
+        }
     }
 
 
