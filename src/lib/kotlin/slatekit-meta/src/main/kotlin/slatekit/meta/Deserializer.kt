@@ -17,23 +17,19 @@ import org.json.simple.JSONObject
 import org.json.simple.parser.JSONParser
 import slatekit.common.*
 import slatekit.common.encrypt.*
+import slatekit.common.info.Meta
 import slatekit.common.requests.InputArgs
 import slatekit.common.requests.Request
-import slatekit.common.requests.RequestSupport
-import slatekit.common.smartvalues.SmartCreation
-import slatekit.common.smartvalues.SmartValue
-import slatekit.common.types.Doc
 import slatekit.results.Err
 import slatekit.results.ExceptionErr
 import java.util.*
 import kotlin.reflect.KClass
 import kotlin.reflect.KParameter
 import kotlin.reflect.KType
-import kotlin.reflect.full.companionObjectInstance
 import kotlin.reflect.full.createType
 
 /**
- * Deserializes data ( as Inputs ) into the parameter types
+ * De-serializes data ( as Inputs ) into the parameter types
  * represented by rawParams
  */
 open class Deserializer(
@@ -42,6 +38,7 @@ open class Deserializer(
         private val decoders: Map<String, Decoder> = mapOf()
 ) {
 
+    private val conversion = Conversion(req, this::convert)
     private val typeRequest = Request::class.createType()
     private val typeMeta = Metadata::class.createType()
 
@@ -82,7 +79,7 @@ open class Deserializer(
                     typeMeta -> meta
 
                     // Doc/File reference ( only if allowed )
-                    KTypes.KDocType -> parseDoc(paramName)
+                    KTypes.KDocType -> conversion.toDoc(paramName)
 
                     // Map from string string delimited pairs
                     KTypes.KVarsType -> Conversions.toVars(data.getString(paramName))
@@ -94,7 +91,9 @@ open class Deserializer(
                     KTypes.KDecStringType -> enc?.let { e -> EncString(data.getString(paramName), e.decrypt(data.getString(paramName))) } ?: EncString("", "")
 
                     // Complex type
-                    else -> handleComplex(data, parameter, paramType, jsonRaw, data.getString(paramName))
+                    else -> {
+                        handleComplex(data, parameter, paramType, jsonRaw, data.getString(paramName))
+                    }
                 }
             }
             catch(ex:Exception) {
@@ -174,14 +173,14 @@ open class Deserializer(
      * Handles building of a list from various source types
      * @return
      */
-    fun handleComplex(data: Inputs, parameter: KParameter, tpe: KType, jsonRaw: JSONObject?, raw: Any?): Any? {
+    private fun handleComplex(data: Inputs, parameter: KParameter, tpe: KType, jsonRaw: JSONObject?, raw: Any?): Any? {
         val paramName = parameter.name!!
         val cls = tpe.classifier as KClass<*>
 
         val result = if (cls.supertypes.indexOf(KTypes.KSmartValueType) >= 0) {
-            handleSmartString(raw, tpe)
+            handleSmartValue(raw, tpe)
         } else if (cls.supertypes.indexOf(KTypes.KSmartValuedType) >= 0) {
-            handleSmartString(raw, tpe)
+            handleSmartValue(raw, tpe)
         } else if (cls.supertypes.indexOf(KTypes.KEnumLikeType) >= 0) {
             val enumVal = data.get(paramName)
             Reflector.getEnumValue(cls, enumVal)
@@ -204,7 +203,7 @@ open class Deserializer(
             // Case 3: Smart String ( e.g. PhoneUS, Email, SSN, ZipCode )
             // Refer to slatekit.common.types
             else if (cls.supertypes.indexOf(KTypes.KSmartValueType) >= 0) {
-                handleSmartString(raw, tpe)
+                handleSmartValue(raw, tpe)
             }
             // Case 4: Object / Complex type
             else {
@@ -232,7 +231,7 @@ open class Deserializer(
      * @param paramName
      * @return
      */
-    fun handleComplex(parent: Any, raw: Any?, tpe: KType): Any? {
+    private fun handleComplex(parent: Any, raw: Any?, tpe: KType): Any? {
         val cls = tpe.classifier as KClass<*>
         val fullName = cls.qualifiedName
         return if (cls == List::class) {
@@ -246,7 +245,7 @@ open class Deserializer(
         // Case 3: Smart String ( e.g. PhoneUS, Email, SSN, ZipCode )
         // Refer to slatekit.common.types
         else if (cls.supertypes.indexOf(KTypes.KSmartValueType) >= 0) {
-            handleSmartString(raw, tpe)
+            handleSmartValue(raw, tpe)
         }
         // Case 4: Slate Kit Enm
         else if (cls.supertypes.indexOf(KTypes.KEnumLikeType) >= 0) {
@@ -262,117 +261,46 @@ open class Deserializer(
      * @param paramName
      * @return
      */
-    fun handleList(raw: Any?, tpe: KType): List<*> {
+    private fun handleList(raw: Any?, tpe: KType): List<*> {
         val listType = tpe.arguments[0]!!.type!!
-        val items = when (raw) {
-            is JSONArray -> parseList(raw, listType)
-            null -> listOf<Any>()
-            "null" -> listOf<Any>()
-            "\"\"" -> listOf<Any>()
-            else -> listOf<Any>()
+        return when (raw) {
+            is JSONArray -> conversion.toList(raw, listType)
+            else -> handle(raw, listOf<Any>()) { listOf<Any>() } as List<*>
         }
-        return items
     }
 
     /**
      * Handle building of a map from various sources
-     * @param parameter
-     * @param args
-     * @param paramName
-     * @return
      */
-    fun handleMap(raw: Any?, tpe: KType): Map<*, *>? {
+    private fun handleMap(raw: Any?, tpe: KType): Map<*, *>? {
         val tpeKey = tpe.arguments[0].type!!
         val tpeVal = tpe.arguments[1].type!!
-        val clsKey = KTypes.getClassFromType(tpeKey)
-        val clsVal = KTypes.getClassFromType(tpeVal)
         val emptyMap = mapOf<Any, Any>()
         val items = when (raw) {
-            is JSONObject -> parseMap(raw, tpeKey, tpeVal)
-            null -> emptyMap
-            "null" -> emptyMap
-            "\"\"" -> emptyMap
-            else -> emptyMap
+            is JSONObject -> conversion.toMap(raw, tpeKey, tpeVal)
+            else -> handle(raw, emptyMap) { emptyMap } as Map<*, *>
         }
         return items
     }
 
-    /**
-     * Handles building of a list from various source types
-     * @param args
-     * @param paramName
-     * @return
-     */
-    fun handleSmartString(raw: Any?, paramType: KType): Any? {
+    private fun handleSmartValue(raw: Any?, paramType: KType): Any? {
+        return handle(raw, null) { conversion.toSmartValue(raw?.toString() ?: "", paramType) }
+    }
+
+    private fun handleObject(raw: Any?, paramType: KType): Any? {
         return when (raw) {
-            null -> null
-            "null" -> null
-            else -> parseSmartString(raw?.toString() ?: "", paramType)
+            is JSONObject -> conversion.toObject(raw, paramType)
+            else -> handle(raw, null) { null }
         }
     }
 
-    /**
-     * Handle building of an object from various sources.
-     * @param parameter
-     * @param args
-     * @param paramName
-     * @return
-     */
-    fun handleObject(raw: Any?, paramType: KType): Any? {
+    private fun handle(raw:Any?, nullValue:Any?, elseValue:() -> Any?):Any? {
         return when (raw) {
-            is JSONObject -> parseObject(raw, paramType)
-            null -> null
-            "null" -> null
-            "\"\"" -> null
-            "" -> null
-            else -> null
+            null   -> nullValue
+            "null" -> nullValue
+            ""     -> nullValue
+            "\"\"" -> nullValue
+            else   -> elseValue()
         }
-    }
-
-    fun parseList(array: JSONArray, tpe: KType): List<*> {
-        val items = array.map { item ->
-            item?.let { jsonItem -> convert(array, jsonItem, tpe) }
-        }.filterNotNull()
-        return items
-    }
-
-    fun parseMap(obj: JSONObject, tpeKey: KType, tpeVal: KType): Map<*, *> {
-        val keyConverter = Conversions.converterFor(tpeKey.javaClass)
-        val items = obj.map { entry ->
-            val key = keyConverter(entry.key?.toString()!!)
-            val keyVal = convert(obj, entry.value, tpeVal)
-            Pair(key, keyVal)
-        }.filterNotNull().toMap()
-        return items
-    }
-
-    fun parseObject(obj: JSONObject, tpe: KType): Any {
-        val cls = tpe.classifier as KClass<*>
-        val props = Reflector.getProperties(cls)
-        val items = props.map { prop ->
-            val raw = obj.get(prop.name)
-            val converted = convert(obj, raw, prop.returnType)
-            converted
-        }
-        val instance = Reflector.createWithArgs<Any>(cls, items.toTypedArray())
-        return instance
-    }
-
-    fun parseSmartString(txt: String, tpe: KType): SmartValue {
-
-        val cls = tpe.classifier as KClass<*>
-        val creator = cls.companionObjectInstance as SmartCreation<*>
-        val result = creator.of(txt)
-        return result
-    }
-
-
-    fun parseDoc(name:String): Doc? {
-        // Conversions.toDoc(data.getString(paramName))
-        val doc = when(req){
-            is RequestSupport -> req.getDoc(name)
-            else -> null
-        }
-        return doc
     }
 }
