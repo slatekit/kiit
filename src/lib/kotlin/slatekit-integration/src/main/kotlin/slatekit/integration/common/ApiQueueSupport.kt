@@ -1,9 +1,9 @@
-package test.setup
+package slatekit.integration.common
 
 import slatekit.apis.support.QueueSupport
 import slatekit.core.queues.Queue
 
-interface QueueSupportImpl : QueueSupport {
+interface ApiQueueSupport : QueueSupport {
 
 
     fun queues(): List<Queue<String>>

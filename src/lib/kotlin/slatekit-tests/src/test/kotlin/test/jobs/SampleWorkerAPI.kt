@@ -6,13 +6,13 @@ import slatekit.common.Source
 import slatekit.common.CommonContext
 import slatekit.common.utils.Random
 import slatekit.core.queues.Queue
+import slatekit.integration.common.ApiQueueSupport
 import slatekit.results.*
-import test.setup.QueueSupportImpl
 
 
 @Api(area = "samples", name = "workerqueue", desc = "sample api to integrating workers, queues, apis")
 class SampleWorkerAPI(val ctx: CommonContext, val queues:List<Queue<String>> = listOf())
-    : QueueSupportImpl, slatekit.apis.Handler {
+    : ApiQueueSupport, slatekit.apis.Handler {
 
     var _lastResult = ""
 
