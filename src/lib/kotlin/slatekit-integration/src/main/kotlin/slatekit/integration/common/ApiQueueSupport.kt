@@ -1,12 +1,12 @@
 package slatekit.integration.common
 
 import slatekit.apis.support.QueueSupport
-import slatekit.core.queues.Queue
+import slatekit.core.queues.AsyncQueue
 
 interface ApiQueueSupport : QueueSupport {
 
 
-    fun queues(): List<Queue<String>>
+    fun queues(): List<AsyncQueue<String>>
 
     /**
      * Creates a request from the parameters and api info and serializes that as json
@@ -17,7 +17,7 @@ interface ApiQueueSupport : QueueSupport {
      *  @param data     = "JSON data...",
      *  @param xid      = "abc123"
      */
-    override fun enueue(id: String, name: String, data: String, xid: String) {
+    override suspend fun enueue(id: String, name: String, data: String, xid: String) {
         val queues = this.queues()
         val rand = java.util.Random()
         val pos = rand.nextInt(queues.size)
