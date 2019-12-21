@@ -17,7 +17,6 @@ import org.json.simple.JSONObject
 import org.json.simple.parser.JSONParser
 import slatekit.common.*
 import slatekit.common.encrypt.*
-import slatekit.common.info.Meta
 import slatekit.common.requests.InputArgs
 import slatekit.common.requests.Request
 import slatekit.results.Err
@@ -38,9 +37,45 @@ open class Deserializer(
         private val decoders: Map<String, Decoder> = mapOf()
 ) {
 
-    private val conversion = Conversion(req, this::convert)
+    private val conversion = Conversion(this::convert)
     private val typeRequest = Request::class.createType()
     private val typeMeta = Metadata::class.createType()
+
+
+    /**
+     * Deserializes the JSON text associated with the parameters supplied
+     */
+    open fun deserialize(parameters: List<KParameter>, text: String): Array<Any?> {
+        val jsonObj = JSONParser().parse(text) as JSONObject
+        return deserialize(parameters, jsonObj)
+    }
+
+    /**
+     * converts the JSON object data into the instances of the parameter types
+     * @param parameters: The parameter info to convert
+     * @param jsonObj : The json object to containing the data
+     */
+    open fun deserialize(parameters: List<KParameter>, jsonObj: JSONObject): Array<Any?> {
+
+        // Check each parameter to api call
+        val inputs = (0 until parameters.size).map { index ->
+            val parameter = parameters[index]
+            deserialize(parameter, jsonObj)
+        }
+        return inputs.toTypedArray()
+    }
+
+    /**
+     * converts data from the json object as an instance of the parameter type
+     */
+    open fun deserialize(parameter: KParameter, jsonObj: JSONObject): Any? {
+        val paramName = parameter.name!!
+        val paramType = parameter.type
+        val data = jsonObj.get(paramName)
+        val result = convert(jsonObj, data, paramType)
+        return result
+    }
+
 
     open fun deserialize(parameters: List<KParameter>): Array<Any?> {
 
@@ -79,7 +114,7 @@ open class Deserializer(
                     typeMeta -> meta
 
                     // Doc/File reference ( only if allowed )
-                    KTypes.KDocType -> conversion.toDoc(paramName)
+                    KTypes.KDocType -> conversion.toDoc(req, paramName)
 
                     // Map from string string delimited pairs
                     KTypes.KVarsType -> Conversions.toVars(data.getString(paramName))
@@ -108,37 +143,6 @@ open class Deserializer(
         return inputs.toTypedArray()
     }
 
-    open fun convert(parameters: List<KParameter>, text: String): Array<Any?> {
-        val jsonObj = JSONParser().parse(text) as JSONObject
-        return convert(parameters, jsonObj)
-    }
-
-    /**
-     * converts the JSON object data into the instances of the parameter types
-     * @param parameters: The parameter info to convert
-     * @param jsonObj : The json object to containing the data
-     */
-    open fun convert(parameters: List<KParameter>, jsonObj: JSONObject): Array<Any?> {
-
-        // Check each parameter to api call
-        val inputs = (0 until parameters.size).map { index ->
-            val parameter = parameters[index]
-            convert(parameter, jsonObj)
-        }
-        return inputs.toTypedArray()
-    }
-
-    /**
-     * converts data from the json object as an instance of the parameter type
-     */
-    fun convert(parameter: KParameter, jsonObj: JSONObject): Any? {
-        val paramName = parameter.name!!
-        val paramType = parameter.type
-        val data = jsonObj.get(paramName)
-        val result = convert(jsonObj, data, paramType)
-        return result
-    }
-
     /**
      * converts
      */
@@ -164,7 +168,7 @@ open class Deserializer(
             KTypes.KVarsType.classifier -> raw?.let { Conversions.toVars(it) }
             KTypes.KUUIDType.classifier -> UUID.fromString(raw.toString())
 
-        // Complex type
+            // Complex type
             else -> handleComplex(parent, raw, paramType)
         }
     }
@@ -217,10 +221,10 @@ open class Deserializer(
                     }
                     obj
                 } else jsonRaw
-                convert(parameter, json)
+                deserialize(parameter, json)
             }
         } else {
-            convert(parameter, jsonRaw!!)
+            deserialize(parameter, jsonRaw!!)
         }
         return result
     }

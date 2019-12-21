@@ -1,65 +1,66 @@
 package slatekit.meta
 
 import org.json.simple.JSONObject
+import org.json.simple.parser.JSONParser
+import slatekit.common.Converter
 import slatekit.common.requests.Request
 import kotlin.reflect.KClass
 import kotlin.reflect.KType
 
 
 
-interface Encoder {
+interface Encoder<S,T> : Converter<S,T> {
     /**
-     * The data type associated with this encoder
+     * Decodes
      */
-    val type: KType
+    fun encode(data:S?):String?
 
-    /**
-     * Qualified fname of the type
-     */
-    val name:String
-
-
-    /**
-     * Encodes the value to a JSON object.
-     */
-    fun encode(data: Any?): JSONObject?
-}
-
-
-interface Decoder {
-
-    /**
-     * The data type associated with this encoder
-     */
-    val type: KType
-
-    /**
-     * Qualified fname of the type
-     */
-    val name:String
 
     /**
      * Decodes
      */
-    fun decode(request: Request, doc:JSONObject, type: KType):Any?
+    fun decode(item:String?):S?
 }
 
 
-abstract class SimplerDecoder(override val type: KType) : Decoder {
+abstract class JSONEncoder<S>(val type: KType) : Encoder<S,JSONObject> {
 
     /**
      * Qualified name of decoder
      */
-    override val name :String by lazy { (type.classifier as KClass<*>).qualifiedName ?: "" }
+    override val name :String = (type.classifier as KClass<*>).qualifiedName ?: ""
+
+    /**
+     * Encodes the item to a JSON string or null
+     */
+    override fun encode(data:S?):String? {
+        val json= convert(data)
+        return json?.toJSONString()
+    }
+
+    /**
+     * Decodes JSON string to item or null
+     */
+    override fun decode(item:String?):S? {
+        return item?.let {
+            val json = JSONParser()
+            val jsonItem = json.parse(it)
+            when(jsonItem) {
+                is JSONObject -> restore(jsonItem)
+                else          -> null
+            }
+        }
+    }
 }
 
 
-class LambdaDecoder(override val type: KType, val op:(request: Request, doc:JSONObject, type: KType) -> Any?) : Decoder {
+
+class LambdaDecoder<S,T>(val type: KType, val op:(request: Request, doc:JSONObject, type: KType) -> Any?) : Encoder<S,T> {
 
     /**
      * Qualified name of decoder
      */
-    override val name :String by lazy { (type.classifier as KClass<*>).qualifiedName ?: "" }
+    override val name :String = (type.classifier as KClass<*>).qualifiedName ?: ""
 
 
     override fun decode(request: Request, doc:JSONObject, type: KType):Any? {
