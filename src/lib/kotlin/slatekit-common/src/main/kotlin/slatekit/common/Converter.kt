@@ -3,13 +3,16 @@ package slatekit.common
 
 /**
  * Generic converter from an input source type S (Source) to an output target type T (Target)
+ * NOTES: Tthis interface
+ * @param S: Source e.g. Data model such as User
+ * @param T: Target e.g. JSON object
  */
 interface Converter<S,T> {
 
     /**
-     * The full type name associated with T.
+     * The full type associated with T.
      */
-    val name:String
+    val cls:Class<*>
 
     /**
      * Converts from an input source type to an target output type

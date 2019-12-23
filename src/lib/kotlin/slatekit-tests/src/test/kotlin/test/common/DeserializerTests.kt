@@ -184,7 +184,7 @@ class ConvertTests {
         val req = CommonRequest("a.b.c", listOf("a", "b", "c"), Source.CLI, "post",
                 InputArgs(mapOf()), InputArgs(mapOf(Pair("movie", "batman"))))
 
-        val decoder = LambdaDecoder(Movie::class.createType()) { request, json, tpe ->
+        val decoder = JSONLambdaTransformer(Movie::class.createType(), null) { json, tpe ->
             Movie(0L, request.meta.getString("movie"), cost = 0, rating = 4.0, released = DateTime.now() )
         }
         val deserializer = Deserializer( req,null, mapOf(Pair(Movie::class.qualifiedName!!, decoder)))
