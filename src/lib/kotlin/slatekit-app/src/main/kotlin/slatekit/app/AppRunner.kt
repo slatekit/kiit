@@ -140,7 +140,7 @@ object AppRunner {
         val execResult = init(app).then { execute(app) }
 
         // Let the end method run
-        execResult.onSuccess { end(execResult, app) }
+        execResult.onSuccess { done(execResult, app) }
 
         // always return the exec result for now.
         // Not sure if failure of the "end" method should
@@ -161,7 +161,7 @@ object AppRunner {
         val result = rawResult.inner()
 
         // Finally flatMap it to ensure creation of directories for the app.
-        return result.flatMap {
+        val setupResult = result.flatMap {
             Tries.attempt {
                 app.ctx.dirs?.create()
                 it
@@ -169,6 +169,11 @@ object AppRunner {
                 println("Error while creating directories for application in user.home directory")
             }
         }
+
+        // Banner: Welcome
+        setupResult.onSuccess { app.banner.welcome() }
+
+        return setupResult
     }
 
     /**
@@ -176,9 +181,8 @@ object AppRunner {
      */
     private suspend fun <C : Context> execute(app: App<C>): Try<Any> {
 
-        if (app.options.printSummaryBeforeExec) {
-            app.info()
-        }
+        // Banner: Display
+        app.banner.display()
 
         // Wrap App.init() call for safety
         // This will produce a nested Try<Try<Boolean>>
@@ -196,13 +200,16 @@ object AppRunner {
     /**
      * Shutdown / end the app
      */
-    private suspend fun <C : Context> end(execResult: Try<Any>, app: App<C>): Try<Any> {
+    private suspend fun <C : Context> done(execResult: Try<Any>, app: App<C>): Try<Any> {
         // Wrap App.init() call for safety
         // This will produce a nested Try<Try<Boolean>>
-        val rawResult = Tries.attempt { app.end() }
+        val rawResult = Tries.attempt { app.done() }
 
         // Flatten the nested Try<Try<Boolean>> into a simple Try<Boolean>
         val result = rawResult.inner()
+
+        // Banner: Goodbye
+        result.onSuccess { app.banner.goodbye() }
 
         // Finally convert the error
         return result.mapError {
