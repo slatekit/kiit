@@ -13,17 +13,16 @@ import slatekit.common.encrypt.EncString
 import test.setup.Movie
 //import java.time.*
 import org.threeten.bp.*
+import slatekit.apis.core.Transformer
 import slatekit.common.DateTimes
 import slatekit.common.CommonRequest
 import slatekit.common.Source
-import slatekit.common.requests.Request
 import slatekit.meta.*
 import test.setup.MyEncryptor
 import test.setup.StatusEnum
 import java.util.*
 import kotlin.reflect.KClass
 import kotlin.reflect.KType
-import kotlin.reflect.full.createType
 
 class ConvertTests {
 
@@ -180,12 +179,24 @@ class ConvertTests {
     fun test_custom_converter(tstr:String, tbool:Boolean, movie: Movie):Unit {}
 
     @Test fun can_parse_custom_types_using_lambda_decoder(){
-        val test = """{ "tstr": "abc", "tbool": false }"""
+        val test = """{
+                "tstr": "abc",
+                "tbool": false,
+                "movie": {
+                    "id": 123,
+                    "title": "dark knight",
+                    "category": "action",
+                    "playing": false,
+                    "cost": 15,
+                    "rating": 4.5,
+                    "released": "2012-07-04T18:00:00Z"
+                }
+            }""".trimIndent()
         val req = CommonRequest("a.b.c", listOf("a", "b", "c"), Source.CLI, "post",
                 InputArgs(mapOf()), InputArgs(mapOf(Pair("movie", "batman"))))
 
-        val decoder = JSONLambdaTransformer(Movie::class.createType(), null) { json, tpe ->
-            Movie(0L, request.meta.getString("movie"), cost = 0, rating = 4.0, released = DateTime.now() )
+        val decoder = Transformer(Movie::class.java, null) { _, _ ->
+            Movie(0L, "batman", cost = 0, rating = 4.0, released = DateTime.now() )
         }
         val deserializer = Deserializer( req,null, mapOf(Pair(Movie::class.qualifiedName!!, decoder)))
         val results = deserializer.deserialize(this::test_custom_converter.parameters, test)
@@ -225,20 +236,23 @@ class ConvertTests {
     }
 
 
-    class MovieDecoder() : SimplerDecoder(Movie::class.createType()) {
-        override fun decode(request: Request, root: JSONObject, type: KType): Any? {
-            val doc = root.get("movie") as JSONObject
-            val inputs = InputsJSON(doc, null, doc)
-            val movie = Movie(
-                id = inputs.getLong("id"),
-                title = inputs.getString("title"),
-                category = inputs.getString("category"),
-                playing = inputs.getBool("playing"),
-                cost = inputs.getInt("cost"),
-                rating = inputs.getDouble("rating"),
-                released = inputs.getDateTime("released")
-            )
-            return movie
+    class MovieDecoder : Transformer<Movie>(Movie::class.java) {
+
+        override fun restore(output: JSONObject?): Movie? {
+            return output?.let {
+                val doc = output
+                val inputs = InputsJSON(doc, null, doc)
+                val movie = Movie(
+                        id = inputs.getLong("id"),
+                        title = inputs.getString("title"),
+                        category = inputs.getString("category"),
+                        playing = inputs.getBool("playing"),
+                        cost = inputs.getInt("cost"),
+                        rating = inputs.getDouble("rating"),
+                        released = inputs.getDateTime("released")
+                )
+                movie
+            }
         }
     }
 

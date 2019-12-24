@@ -1,6 +1,7 @@
 package test.meta
 
 import org.json.simple.JSONObject
+import org.json.simple.parser.JSONParser
 import org.junit.Assert
 import org.junit.Test
 import slatekit.common.Converter
@@ -39,17 +40,28 @@ class ConverterTests {
                 "playing": false,
                 "cost": 10,
                 "rating": 4.5,
-                "released": "2012-07-04T18:00:00Z"
+                "released": "2012-07-04T16:00:00Z"
             }
         """.trimIndent()
-        val json
+        val jsonObject = JSONParser().parse(json) as JSONObject
+        val converter = MovieConverter()
+        val item = converter.restore(jsonObject)
+        Assert.assertNotNull(json)
+        Assert.assertEquals( movie.id       , item?.id       )
+        Assert.assertEquals( movie.title    , item?.title    )
+        Assert.assertEquals( movie.category , item?.category )
+        Assert.assertEquals( movie.playing  , item?.playing  )
+        Assert.assertEquals( movie.cost     , item?.cost     )
+        Assert.assertEquals( movie.rating   , item?.rating   )
+        Assert.assertEquals( movie.released.toStringUtc() , item?.released?.toStringUtc() )
     }
 }
+
 
 class MovieConverter : Converter<Movie, JSONObject> {
     val type = Movie::class.createType()
 
-    override val name = Movie::class.qualifiedName!!
+    override val cls = Movie::class.java
 
 
     override fun convert(input: Movie?): JSONObject? {
@@ -66,9 +78,9 @@ class MovieConverter : Converter<Movie, JSONObject> {
         }
     }
 
-    override fun restore(root: JSONObject?): Movie? {
-        return root?.let {
-            val doc = root.get("movie") as JSONObject
+    override fun restore(output: JSONObject?): Movie? {
+        return output?.let {
+            val doc = output
             val inputs = InputsJSON(doc, null, doc)
             val movie = Movie(
                     id       = inputs.getLong("id"),

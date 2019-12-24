@@ -4,7 +4,7 @@ import org.json.simple.JSONObject
 import org.json.simple.parser.JSONParser
 import slatekit.common.Transformer
 
-interface JSONTransformable<S> : Transformer<S, JSONObject, String> {
+interface JSONTransformer<S> : Transformer<S, JSONObject, String> {
     /**
      * Encodes the item to a JSON string or null
      */
