@@ -13,6 +13,7 @@
 
 package slatekit.app
 
+import slatekit.common.Banner
 import slatekit.common.Context
 import slatekit.common.args.ArgsSchema
 import slatekit.common.console.SemanticConsole
@@ -32,6 +33,11 @@ open class App<C : Context>(
     val options: AppOptions = AppOptions(),
     val schema: ArgsSchema? = AppBuilder.schema()
 ) : LogSupport, EncryptSupport {
+
+    /**
+     * Banner for displaying welcome/info/goodbye with text/stats/diagnostics.
+     */
+    open val banner: Banner      = Banner(ctx, ctx.logs.getLogger())
 
     /**
      * Provides logger support by supplying debug info, warn, error
@@ -87,66 +93,6 @@ open class App<C : Context>(
     }
 
     /**
-     * Shows the welcome content
-     */
-    open fun welcome() {
-        // Basic welcome
-        val writer = SemanticConsole()
-        writer.text("************************************")
-        writer.title("Welcome to ${ctx.info.about.name}")
-        writer.text("************************************")
-        writer.line()
-        writer.text("starting in environment: " + this.ctx.envs.key)
-
-        // Show basic environment info if not printing the start info
-        if (!options.printSummaryBeforeExec) {
-            logger.info("starting ${ctx.info.about.name}")
-            logger.info("app:version :${ctx.info.about.version}")
-        }
-    }
-
-    /**
-     * Displays diagnostic info about the app and process
-     */
-    open fun info() {
-        val maxLen = Math.max(0, "lang.versionNum  ".length)
-        logger.info("app.area         ".padEnd(maxLen) + ctx.info.about.area)
-        logger.info("app.name         ".padEnd(maxLen) + ctx.info.about.name)
-        logger.info("app.desc         ".padEnd(maxLen) + ctx.info.about.desc)
-        logger.info("app.version      ".padEnd(maxLen) + ctx.info.about.version)
-        logger.info("app.tags         ".padEnd(maxLen) + ctx.info.about.tags)
-        logger.info("app.region       ".padEnd(maxLen) + ctx.info.about.region)
-        logger.info("app.contact      ".padEnd(maxLen) + ctx.info.about.contact)
-        logger.info("app.url          ".padEnd(maxLen) + ctx.info.about.url)
-        logger.info("build.version    ".padEnd(maxLen) + ctx.info.build.version)
-        logger.info("build.commit     ".padEnd(maxLen) + ctx.info.build.commit)
-        logger.info("build.date       ".padEnd(maxLen) + ctx.info.build.date)
-        logger.info("host.name        ".padEnd(maxLen) + ctx.info.system.host.name)
-        logger.info("host.ip          ".padEnd(maxLen) + ctx.info.system.host.ip)
-        logger.info("host.origin      ".padEnd(maxLen) + ctx.info.system.host.origin)
-        logger.info("host.version     ".padEnd(maxLen) + ctx.info.system.host.version)
-        logger.info("lang.name        ".padEnd(maxLen) + ctx.info.system.lang.name)
-        logger.info("lang.version     ".padEnd(maxLen) + ctx.info.system.lang.version)
-        logger.info("lang.versionNum  ".padEnd(maxLen) + ctx.info.system.lang.vendor)
-        logger.info("lang.java        ".padEnd(maxLen) + ctx.info.system.lang.origin)
-        logger.info("lang.home        ".padEnd(maxLen) + ctx.info.system.lang.home)
-    }
-
-    /**
-     * prints the summary at the end of the application run
-     */
-    open fun summary() {
-        info("===============================================================")
-        info("SUMMARY : ")
-        info("===============================================================")
-
-        // Standardized info
-        // e.g. name, desc, env, log, start-time etc.
-        results().forEach { info(it.first + " = " + it.second) }
-        info("===============================================================")
-    }
-
-    /**
      * Initialization life cycle event
      * NOTE: Derived apps should override this to implement initialization code
      * and return a Success/Failure
@@ -173,7 +119,7 @@ open class App<C : Context>(
      * and return a Success/Failure
      *
      */
-    open suspend fun end(): Try<Boolean> {
+    open suspend fun done(): Try<Boolean> {
         return Success(true)
     }
 

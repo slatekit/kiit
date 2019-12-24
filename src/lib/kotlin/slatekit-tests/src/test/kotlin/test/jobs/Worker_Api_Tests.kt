@@ -15,6 +15,7 @@ import slatekit.core.queues.InMemoryQueue
 import slatekit.common.CommonContext
 import slatekit.common.requests.InputArgs
 import slatekit.common.Source
+import slatekit.core.queues.AsyncQueue
 import slatekit.core.queues.WrappedAsyncQueue
 import slatekit.integration.jobs.APIWorker
 import slatekit.jobs.*
@@ -32,36 +33,38 @@ class Worker_Api_Tests {
 
     @Test
     fun can_send_to_queue(){
-        // 1. context
-        val ctx = CommonContext.simple("queues")
+        runBlocking {
+            // 1. context
+            val ctx = CommonContext.simple("queues")
 
-        // 2. queues
-        val queues = listOf(InMemoryQueue.stringQueue())
+            // 2. queues
+            val queues = listOf(AsyncQueue.of(InMemoryQueue.stringQueue()))
 
-        // 3. apis
-        val api = SampleWorkerAPI(ctx, queues)
+            // 3. apis
+            val api = SampleWorkerAPI(ctx, queues)
 
-        // 4. container
-        val apis = ApiServer(ctx, apis = listOf(Api(api, setup = Setup.Annotated)) )
+            // 4. container
+            val apis = ApiServer(ctx, apis = listOf(Api(api, setup = Setup.Annotated)))
 
-        // 5. send method call to queue
-        val result = runBlocking {
-            apis.call("samples", "workerqueue", "test1", Verb.Post, mapOf(), mapOf(
-                    "s" to "user1@abc.com",
-                    "b" to true,
-                    "i" to 123,
-                    "d" to DateTimes.of(2018, 1, 27, 14, 30, 45).toString()
-            ))
-        }
+            // 5. send method call to queue
+            val result = runBlocking {
+                apis.call("samples", "workerqueue", "test1", Verb.Post, mapOf(), mapOf(
+                        "s" to "user1@abc.com",
+                        "b" to true,
+                        "i" to 123,
+                        "d" to DateTimes.of(2018, 1, 27, 14, 30, 45).toString()
+                ))
+            }
 
-        // 6. Ensure item is in queue
-        Assert.assertEquals(1, queues[0].count())
-        val entry = queues[0].next()
-        Assert.assertNotNull(entry)
-        entry?.let {
-            Assert.assertNotNull(it.getTag("id"))
-            Assert.assertNotNull(it.getTag("name"))
-            Assert.assertEquals("api-queue", it.getTag("xid"))
+            // 6. Ensure item is in queue
+            Assert.assertEquals(1, queues[0].count())
+            val entry = queues[0].next()
+            Assert.assertNotNull(entry)
+            entry?.let {
+                Assert.assertNotNull(it.getTag("id"))
+                Assert.assertNotNull(it.getTag("name"))
+                Assert.assertEquals("api-queue", it.getTag("xid"))
+            }
         }
     }
 

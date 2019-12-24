@@ -134,7 +134,7 @@ class SampleApp(ctx: Context) : App<Context>(ctx, AppOptions(
     /**
      * Life-cycle end hook: called when app is shutting down
      */
-    override suspend fun end(): Try<Boolean> {
+    override suspend fun done(): Try<Boolean> {
         info("app shutting down")
         return Success(true)
     }
