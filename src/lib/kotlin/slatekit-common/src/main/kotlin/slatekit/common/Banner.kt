@@ -57,7 +57,7 @@ open class Banner(val ctx: Context,
     /**
      * prints the summary at the end of the application run
      */
-    open fun goodbye() {
+    open fun summary() {
         if(showGoodbye) {
             info("===============================================================")
             info("SUMMARY : ")

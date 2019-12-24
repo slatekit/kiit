@@ -209,7 +209,7 @@ object AppRunner {
         val result = rawResult.inner()
 
         // Banner: Goodbye
-        result.onSuccess { app.banner.goodbye() }
+        result.onSuccess { app.banner.summary() }
 
         // Finally convert the error
         return result.mapError {
