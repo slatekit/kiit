@@ -25,6 +25,17 @@ interface Finds<TId, T> : ServiceSupport<TId, T> where TId : kotlin.Comparable<T
      * @param value: The value to check for
      * @return
      */
+    fun findByField(field: String, value: Any): List<T> {
+        return findByField(field, Op.Eq, value)
+    }
+
+    /**
+     * finds items based on the field value
+     * @param field: The field name
+     * @param op: The comparison operator
+     * @param value: The value to check for
+     * @return
+     */
     fun findByField(field: String, op:Op, value: Any): List<T> {
         // Get column name from model schema ( if available )
         val column = QueryEncoder.ensureField(field)
@@ -45,6 +56,17 @@ interface Finds<TId, T> : ServiceSupport<TId, T> where TId : kotlin.Comparable<T
     /**
      * finds items based on the field value
      * @param prop: The property reference
+     * @param value: The value to check for
+     * @return
+     */
+    fun findByField(prop: KProperty<*>, value: Any): List<T> {
+        return findByField(prop, Op.Eq, value)
+    }
+
+    /**
+     * finds items based on the field value
+     * @param prop: The property reference
+     * @param op: The comparison operator
      * @param value: The value to check for
      * @return
      */
@@ -100,6 +122,16 @@ interface Finds<TId, T> : ServiceSupport<TId, T> where TId : kotlin.Comparable<T
         // Get column name from model schema ( if available )
         val column = QueryEncoder.ensureField(name)
         return repo().findOneByField(column, op, value)
+    }
+
+    /**
+     * finds items based on the field value
+     * @param prop: The property reference
+     * @param value: The value to check for
+     * @return
+     */
+    fun findOneByField(prop: KProperty<*>, value: Any): T? {
+        return findOneByField(prop, Op.Eq, value)
     }
 
     /**

@@ -339,6 +339,39 @@
 			"response": []
 		},
 		{
+			"name": "samples.types.request",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"type": "text",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"greeting\" : \"hi\"\n}"
+				},
+				"url": {
+					"raw": "http://localhost:5000/api/samples/types/request",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "5000",
+					"path": [
+						"api",
+						"samples",
+						"types",
+						"request"
+					]
+				}
+			},
+			"response": []
+		},
+		{
 			"name": "samples.types.movies",
 			"request": {
 				"method": "POST",
@@ -405,6 +438,221 @@
 							"key": "category",
 							"value": "adventure"
 						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "samples.types.upload",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "file",
+							"type": "file",
+							"src": ""
+						}
+					]
+				},
+				"url": {
+					"raw": "http://localhost:5000/api/samples/types/upload",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "5000",
+					"path": [
+						"api",
+						"samples",
+						"types",
+						"upload"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "samples.types.download",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"text\": \"hello world\"\n}"
+				},
+				"url": {
+					"raw": "http://localhost:5000/api/samples/types/download",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "5000",
+					"path": [
+						"api",
+						"samples",
+						"types",
+						"download"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "discover - ALL",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"type": "text",
+						"value": "application/json"
+					},
+					{
+						"key": "docKey",
+						"value": "abc123",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "http://localhost:5000/api/help",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "5000",
+					"path": [
+						"api",
+						"help"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "discover - AREA : samples",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"type": "text",
+						"value": "application/json"
+					},
+					{
+						"key": "docKey",
+						"type": "text",
+						"value": "abc123"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "http://localhost:5000/api/samples/help",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "5000",
+					"path": [
+						"api",
+						"samples",
+						"help"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "discover - API: samples/types",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"type": "text",
+						"value": "application/json"
+					},
+					{
+						"key": "docKey",
+						"type": "text",
+						"value": "abc123"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "http://localhost:5000/api/samples/types/help",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "5000",
+					"path": [
+						"api",
+						"samples",
+						"types",
+						"help"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "discover - ACTION: samples/types/inputs",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"type": "text",
+						"value": "application/json"
+					},
+					{
+						"key": "docKey",
+						"type": "text",
+						"value": "abc123"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "http://localhost:5000/api/samples/types/hello/help",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "5000",
+					"path": [
+						"api",
+						"samples",
+						"types",
+						"hello",
+						"help"
 					]
 				}
 			},

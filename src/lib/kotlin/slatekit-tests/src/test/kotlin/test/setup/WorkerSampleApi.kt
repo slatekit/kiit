@@ -6,17 +6,18 @@ import slatekit.apis.core.Requests
 import slatekit.common.Source
 import slatekit.common.CommonContext
 import slatekit.common.utils.Random
-import slatekit.core.queues.Queue
+import slatekit.core.queues.AsyncQueue
+import slatekit.integration.common.ApiQueueSupport
 import slatekit.results.*
 
 
 @Api(area = "samples", name = "workerqueue", desc = "sample api to integrating workers, queues, apis")
-class WorkerSampleApi(val ctx: CommonContext, val queues:List<Queue<String>> = listOf())
-    : QueueSupportImpl, slatekit.apis.Handler {
+class WorkerSampleApi(val ctx: CommonContext, val queues:List<AsyncQueue<String>> = listOf())
+    : ApiQueueSupport, slatekit.apis.Handler {
 
     var _lastResult = ""
 
-    override fun queues(): List<Queue<String>> = queues
+    override fun queues(): List<AsyncQueue<String>> = queues
 
 
     @Action(desc = "", roles= [], verb = Verbs.POST, tags = ["queued"])

@@ -261,6 +261,15 @@ interface Repo<TId, T> : EntityStore where TId : Comparable<TId> {
      * @param value: value of field to search against
      * @return
      */
+    fun findOneByField(field: String, value: Any): T? = findOneByField(field, Op.Eq, value)
+
+    /**
+     * finds first item based on the field
+     * @param field: name of field
+     * @param op : operator e.g. "="
+     * @param value: value of field to search against
+     * @return
+     */
     fun findOneByField(field: String, op: Op, value: Any): T? = null
 
     /**

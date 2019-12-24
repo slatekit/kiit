@@ -12,7 +12,7 @@ interface QueueSupport {
     /**
      * This can be overridden to support custom call-modes
      */
-    fun enueue(request: ApiRequest): Notice<String> {
+    suspend fun enueue(request: ApiRequest): Notice<String> {
         // Convert from web request to Queued request
         val req = request.request
         val payload = Requests.toJsonAsQueued(req)
@@ -23,7 +23,7 @@ interface QueueSupport {
     /**
      * Converts a request for an action that is queued, to an actual queue
      */
-    fun enqueOrProcess(request: ApiRequest): Notice<String> {
+    suspend fun enqueOrProcess(request: ApiRequest): Notice<String> {
         // Coming in as http request and mode is queued ?
         val req = request.request
         return if (req.source != Source.Queue && request.target?.action?.tags?.contains("queued") == true) {
@@ -42,5 +42,5 @@ interface QueueSupport {
      *  @param data     = "JSON data...",
      *  @param xid      = "abc123"
      */
-    fun enueue(id: String, name: String, data: String, xid: String)
+    suspend fun enueue(id: String, name: String, data: String, xid: String)
 }

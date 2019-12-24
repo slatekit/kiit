@@ -14,7 +14,6 @@ import slatekit.common.info.ApiKey
 import slatekit.integration.apis.*
 import slatekit.results.Success
 import slatekit.results.Try
-import slatekit.integration.common.AppEntContext
 import slatekit.meta.Serialization
 import slatekit.results.Failure
 
@@ -85,9 +84,9 @@ class SlateKit(ctx: Context) : App<Context>(ctx, AppOptions(printSummaryBeforeEx
     }
 
 
-    override suspend fun end(): Try<Boolean> {
+    override suspend fun done(): Try<Boolean> {
         println("ending")
-        return super.end()
+        return super.done()
     }
 
 

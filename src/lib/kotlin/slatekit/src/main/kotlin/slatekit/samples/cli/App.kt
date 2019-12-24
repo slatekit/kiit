@@ -67,8 +67,8 @@ class App(ctx: Context) : App<Context>(ctx, AppOptions(printSummaryBeforeExec = 
     }
 
 
-    override suspend fun end(): Try<Boolean> {
+    override suspend fun done(): Try<Boolean> {
         println("ending")
-        return super.end()
+        return super.done()
     }
 }

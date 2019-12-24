@@ -3,30 +3,24 @@ package slatekit.common
 
 /**
  * Generic converter from an input source type S (Source) to an output target type T (Target)
+ * NOTES: Tthis interface
+ * @param S: Source e.g. Data model such as User
+ * @param T: Target e.g. JSON object
  */
 interface Converter<S,T> {
 
     /**
-     * Converts from an input source type to an target output type
+     * The full type associated with T.
      */
-    fun convert(input:S):T
+    val cls:Class<*>
 
     /**
-     * Converts from a nullable input source type to a target output type
+     * Converts from an input source type to an target output type
      */
-    fun convertOrNull(input:S?):T? {
-        return input?.let { convert(it) }
-    }
+    fun convert(input:S?):T?
 
     /**
      * Restores from a target output type to the source type
      */
-    fun restore(output:T):S
-
-    /**
-     * Restores from nullable target output type to the source type
-     */
-    fun restoreOrNull(output:T?):S? {
-        return output?.let { restore(it) }
-    }
+    fun restore(output:T?):S?
 }
