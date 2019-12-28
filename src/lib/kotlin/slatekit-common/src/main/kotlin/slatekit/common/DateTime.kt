@@ -224,7 +224,10 @@ class DateTimes {
 
         @JvmStatic
         fun parse(value: String): DateTime {
-            if((value.length == 8 || value.length == 12 ) && ValidationFuncs.isNumeric(value)){
+            // 20190101       ( jan 1             ) 8 chars
+            // 201901011200   ( jan 1 @12pm       ) 12 chars
+            // 20190101123045 ( jan 1 @12:30:45 pm) 14 chars
+            if((value.length == 8 || value.length == 12 || value.length == 14) && ValidationFuncs.isNumeric(value)){
                 return parseNumeric(value)
             }
             val dt = DateTime.parse(value)

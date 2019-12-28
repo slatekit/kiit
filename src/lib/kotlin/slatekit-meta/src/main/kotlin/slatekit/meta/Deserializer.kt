@@ -127,7 +127,7 @@ open class Deserializer(
 
                     // Complex type
                     else -> {
-                        handleComplex(data, parameter, paramType, jsonRaw, data.getString(paramName))
+                        handleComplex(data, parameter, paramType, jsonRaw, data.get(paramName))
                     }
                 }
             }
