@@ -7,14 +7,19 @@
     @version : @{version}
     @software: Visit www.slatekit.com for more info
 */
-package @{packageName}.client.api
+package @{packageName}.clientapis
 
-import @{packageName}.client.core.*
-import @{packageName}.client.dto.*
+import @{packageName}.clientapis.dtos.*
+import slatekit.common.HttpRPC
+import slatekit.http.ApiBase
+import slatekit.http.converters.*
+import slatekit.results.Outcome
 
 import java.util.Date;
 
-class @{className}Api(client: HttpClient?) : ApiBase(client) {
-	
+class @{className}Api(http: HttpRPC) : ApiBase(http) {
+
+    constructor() : this(HttpRPC())
+
     @{methods}
 }

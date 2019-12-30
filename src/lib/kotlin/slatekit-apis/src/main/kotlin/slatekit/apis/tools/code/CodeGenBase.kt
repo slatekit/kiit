@@ -1,5 +1,6 @@
 package slatekit.apis.tools.code
 
+import slatekit.apis.Access
 import java.io.File
 import kotlin.reflect.KClass
 import kotlin.reflect.KParameter
@@ -63,7 +64,9 @@ abstract class CodeGenBase(val settings: CodeGenSettings) {
         this.settings.host.routes.visitApis { _, api ->
 
             try {
-                if (api.protocol == Source.Web || api.protocol == Source.All) {
+                val isValidProtocol = api.protocol == Source.Web || api.protocol == Source.All
+                val isValidAccess = api.access == Access.Public
+                if (isValidAccess && isValidProtocol) {
                     println("API: " + api.area + "." + api.name)
 
                     // Get only the declared members in the api/class

@@ -5,7 +5,7 @@
     fun @{methodName}(
         @{methodParams}
 		tag:String,
-        callback: (@{methodReturnType}) -> Unit
+        callback: (Outcome<@{methodReturnType}>) -> Unit
     )
     {
         // headers
@@ -16,17 +16,18 @@
         @{queryParams}
 
         // data
-        @{postDataDecl}
+        val postData = mutableMapOf<String, Any>()
         @{postDataVars}
+        val json = Conversions.convertMapToJson(postData)
 
+        // convert
+        val converter = Converter@{converterClass}<@{converterTypes}>(@{converterTypes}.java)
         // execute
-        _http.@{verb}(
+        http.@{verb}(
             "@{route}",
-            headers,
-            queryParams,
-            @{postDataParam}
-			tag,
-			Converter.Converter@{converterClass}<>(@{converterTypes}),
-            callback
-        );
+            headers = headers,
+            queryParams = queryParams,
+            body = HttpRPC.Body.JsonContent(json),
+            callback = { respond(it, converter, callback ) }
+        )
     }
