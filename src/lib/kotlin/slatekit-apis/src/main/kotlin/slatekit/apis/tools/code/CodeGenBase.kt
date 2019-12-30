@@ -63,7 +63,7 @@ abstract class CodeGenBase(val settings: CodeGenSettings) {
         this.settings.host.routes.visitApis { _, api ->
 
             try {
-                if (api.protocol == Source.Web) {
+                if (api.protocol == Source.Web || api.protocol == Source.All) {
                     println("API: " + api.area + "." + api.name)
 
                     // Get only the declared members in the api/class
