@@ -4,9 +4,10 @@ import slatekit.apis.*
 import slatekit.apis.AuthModes
 import slatekit.apis.Verbs
 import slatekit.apis.setup.HostAware
+import slatekit.apis.tools.code.builders.JavaBuilder
+import slatekit.apis.tools.code.builders.KotlinBuilder
 import slatekit.common.*
 import slatekit.common.auth.Roles
-import slatekit.common.ext.orElse
 import slatekit.common.requests.Request
 import slatekit.results.Notice
 
@@ -62,18 +63,15 @@ class CodeGenApi : HostAware {
                 templatesFolder,
                 outputFolder,
                 packageName,
-                "api.${lang.ext}",
-                "method.${lang.ext}",
-                "model.${lang.ext}",
                 lang
             )
-            val gen = when (lang) {
-                Language.Kotlin -> CodeGenKotlin(settings)
-                Language.Swift -> CodeGenSwift(settings)
-                Language.Java -> CodeGenJava(settings)
-                else -> CodeGenJava(settings)
+            val builder = when (lang) {
+                Language.Kotlin -> KotlinBuilder(settings)
+                Language.Java -> JavaBuilder(settings)
+                else -> JavaBuilder(settings)
             }
-            gen.generate(req)
+            val generator = CodeGen(settings, builder)
+            generator.generate(req)
             slatekit.results.Success("")
         } ?: slatekit.results.Failure("Api Container has not been set")
         return result
