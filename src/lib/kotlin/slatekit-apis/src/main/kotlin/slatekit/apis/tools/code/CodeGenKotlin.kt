@@ -20,11 +20,11 @@ class CodeGenKotlin(settings: CodeGenSettings) : CodeGenBase(settings) {
             Pair(KTypes.KLongType, TypeInfo(true, false, "Long", "Long", KTypes.KLongClass, KTypes.KLongClass, "Long" + ":class")),
             Pair(KTypes.KFloatType, TypeInfo(true, false, "Float", "Float", KTypes.KFloatClass, KTypes.KFloatClass, "Float" + ":class")),
             Pair(KTypes.KDoubleType, TypeInfo(true, false, "Double", "Double", KTypes.KDoubleClass, KTypes.KDoubleClass, "Double" + ":class")),
-            Pair(KTypes.KDateTimeType, TypeInfo(true, false, "Date", "Date", KTypes.KDateTimeClass, KTypes.KDateTimeClass, "Date" + ":class")),
-            Pair(KTypes.KLocalDateType, TypeInfo(true, false, "Date", "Date", KTypes.KLocalDateClass, KTypes.KLocalDateClass, "Date" + ":class")),
-            Pair(KTypes.KLocalTimeType, TypeInfo(true, false, "Date", "Date", KTypes.KLocalTimeClass, KTypes.KLocalTimeClass, "Date" + ":class")),
-            Pair(KTypes.KLocalDateTimeType, TypeInfo(true, false, "Date", "Date", KTypes.KLocalDateTimeClass, KTypes.KLocalDateTimeClass, "Date" + ":class")),
-            Pair(KTypes.KZonedDateTimeType, TypeInfo(true, false, "Date", "Date", KTypes.KZonedDateTimeClass, KTypes.KZonedDateTimeClass, "Date" + ":class")),
+            Pair(KTypes.KDateTimeType, TypeInfo(true, false, "Date", "Date", KTypes.KDateTimeClass, KTypes.KDateTimeClass, "DateTime" + ":class")),
+            Pair(KTypes.KLocalDateType, TypeInfo(true, false, "Date", "Date", KTypes.KLocalDateClass, KTypes.KLocalDateClass, "LocalDate" + ":class")),
+            Pair(KTypes.KLocalTimeType, TypeInfo(true, false, "Date", "Date", KTypes.KLocalTimeClass, KTypes.KLocalTimeClass, "LocalTime" + ":class")),
+            Pair(KTypes.KLocalDateTimeType, TypeInfo(true, false, "Date", "Date", KTypes.KLocalDateTimeClass, KTypes.KLocalDateTimeClass, "LocalDateTime" + ":class")),
+            Pair(KTypes.KZonedDateTimeType, TypeInfo(true, false, "Date", "Date", KTypes.KZonedDateTimeClass, KTypes.KZonedDateTimeClass, "ZonedDateTime" + ":class")),
             Pair(KTypes.KDocType, TypeInfo(true, false, "String", "String", KTypes.KDocClass, KTypes.KDocClass, "String" + ":class")),
             Pair(KTypes.KVarsType, TypeInfo(true, false, "String", "String", KTypes.KVarsClass, KTypes.KVarsClass, "String" + ":class")),
             Pair(KTypes.KSmartValueType, TypeInfo(true, false, "String", "String", KTypes.KSmartValueClass, KTypes.KSmartValueClass, "String" + ":class")),
@@ -35,10 +35,11 @@ class CodeGenKotlin(settings: CodeGenSettings) : CodeGenBase(settings) {
             Pair(KTypes.KDecIntType, TypeInfo(true, false, "String", "String", KTypes.KDecIntClass, KTypes.KDecIntClass, "String" + ":class")),
             Pair(KTypes.KDecLongType, TypeInfo(true, false, "String", "String", KTypes.KDecLongClass, KTypes.KDecLongClass, "String" + ":class")),
             Pair(KTypes.KDecDoubleType, TypeInfo(true, false, "String", "String", KTypes.KDecDoubleClass, KTypes.KDecDoubleClass, "String" + ":class")),
-            Pair(KTypes.KAnyType, TypeInfo(false, false, "Object", "Object", KTypes.KAnyClass, KTypes.KAnyClass, "Object" + ":class"))
+            Pair(KTypes.KAnyType, TypeInfo(false, false, "Object", "Object", KTypes.KAnyClass, KTypes.KAnyClass, "Any" + ":class"))
     ).toMap()
 
     override fun buildModelInfo(cls: KClass<*>): String {
+
         val props = Reflector.getProperties(cls)
         val fields = props.foldIndexed("") { ndx: Int, acc: String, prop: KProperty<*> ->
             val type = prop.returnType

@@ -1,6 +1,5 @@
 package slatekit.apis.tools.code
 
-import slatekit.apis.Access
 import java.io.File
 import kotlin.reflect.KClass
 import kotlin.reflect.KParameter
@@ -20,18 +19,15 @@ import slatekit.meta.Reflector
 
 abstract class CodeGenBase(val settings: CodeGenSettings) {
 
+    /**
+     * Basic type info for type conversion
+     */
     open val basicTypes = mapOf<KType, TypeInfo>()
 
-    open val templateClassSuffix = "Api"
-
-    open fun templateClass(): String {
-        val content = getContent(settings.templatesFolder, settings.classFile)
-        return content
-    }
-
-    open fun templateModel(): String = getContent(settings.templatesFolder, settings.modelFile)
-
-    open fun templateMethod(): String = getContent(settings.templatesFolder, settings.methodFile)
+    /**
+     * Represents the 3 code templates ( api.kt, method.kt, model.kt (DTO) )
+     */
+    val templates = CodeGenTemplates.load(settings.templatesFolder, settings.lang)
 
     /**
      * @command="codegen" -lang="java" -package="blendlife.api" -pathToTemplates="C:\Dev\github\blend-server\scripts\templates\codegen"
@@ -52,56 +48,54 @@ abstract class CodeGenBase(val settings: CodeGenSettings) {
         val outputFolderPath = Uris.interpret(outputFolderPathRaw)
         val dateFolder = Files.folderNameByDate()
 
-        // C:\Users\kv\blendlife-kotlin\core\blend.cli\output\2017-11-08
-        val codeGenDirs = CodeGenDirs(outputFolderPath ?: "", dateFolder)
+        // C:\Users\kv\blendlife-kotlin\core\blend.cli\output\
+        val codeGenDirs = CodeGenDirs(File(outputFolderPath ?: ""))
         codeGenDirs.create(log)
         codeGenDirs.log(log)
 
         // Collection of all custom types
-        this.settings.host.routes.visitApis { _, api ->
-
+        val routes = this.settings.host.routes
+        val rules = CodeGenRules(this.settings)
+        val allApis = routes.areas.items.map { it.apis.items }.flatten()
+        val apis = allApis.filter { rules.isValidApi(it) }
+        apis.forEach { api ->
             try {
-                val isValidProtocol = api.protocol == Source.Web || api.protocol == Source.All
-                val isValidAccess = api.access == Access.Public
-                if (isValidAccess && isValidProtocol) {
-                    println("API: " + api.area + "." + api.name)
+                println("API: " + api.area + "." + api.name)
 
-                    // Get only the declared members in the api/class
-                    val declaredMembers = api.klass.declaredMemberFunctions
-                    val declaredMemberLookup = declaredMembers.map { func -> (func.name to true) }.toMap()
+                // Get only the declared members in the api/class
+                val declaredMembers = api.klass.declaredMemberFunctions
+                val declaredMemberLookup = declaredMembers.map { func -> (func.name to true) }.toMap()
 
-                    // Get all the actions on the api
-                    val buff = StringBuilder()
+                // Get all the actions on the api
+                val methodsBuffer = StringBuilder()
 
-                    // Iterate over all the api actions
-                    api.actions.items.forEach { action ->
+                // Iterate over all the api actions
+                api.actions.items.forEach { action ->
 
-                        // Ok to generate ?
-                        if (canGenerate(api, action, declaredMemberLookup)) {
-
-                            // Generate code here.
-                            val methodInfo = genMethod(api, action)
-                            log.info("generating method for: " + api.area + "/" + api.name + "/" + action.name)
-                            buff.append(methodInfo)
-                            buff.append(newline)
-                        }
+                    // Ok to generate ?
+                    if (rules.isValidAction(api, action, declaredMemberLookup)) {
+                        // Generate code here.
+                        val methodInfo = genMethod(api, action)
+                        log.info("generating method for: " + api.area + "/" + api.name + "/" + action.name)
+                        methodsBuffer.append(methodInfo)
+                        methodsBuffer.append(newline)
                     }
-
-                    // Get unique types
-                    // Iterate over all the api actions
-                    api.actions.items.map { action ->
-                        println(action.member.name)
-                        generateModelFromType(action.paramsUser.map { it.type }, codeGenDirs.modelFolder)
-                        try {
-                            generateModelFromType(listOf(action.member.returnType), codeGenDirs.modelFolder)
-                        } catch (ex: Exception) {
-                            log.error("Error trying to generate types from return type:" + action.member.name + ", " + action.member.returnType.classifier?.toString())
-                        }
-                    }
-
-                    // Generate file.
-                    genClientApi(req, api, codeGenDirs.apiFolder, buff.toString())
                 }
+
+                // Get unique types
+                // Iterate over all the api actions
+                api.actions.items.map { action ->
+                    println(action.member.name)
+                    generateModelFromType(action.paramsUser.map { it.type }, codeGenDirs.modelFolder)
+                    try {
+                        generateModelFromType(listOf(action.member.returnType), codeGenDirs.modelFolder)
+                    } catch (ex: Exception) {
+                        log.error("Error trying to generate types from return type:" + action.member.name + ", " + action.member.returnType.classifier?.toString())
+                    }
+                }
+
+                // Generate file.
+                genClientApi(req, api, codeGenDirs.apiFolder, methodsBuffer.toString())
             } catch (ex: Exception) {
                 log.error("Error inspecting and generating code for: ${api.area}.${api.name}")
                 throw ex
@@ -109,47 +103,67 @@ abstract class CodeGenBase(val settings: CodeGenSettings) {
         }
     }
 
-    fun generateModelFromType(types: List<KType>, modelFolder: File) {
+    /**
+     * Collect all variables for the API
+     */
+    private fun collect(api: Api):Map<String, String>{
+        return mapOf(
+            "className" to  api.name.pascalCase(),
+            "packageName" to  settings.packageName,
+            "about" to  "Client side API for " + api.name.pascalCase(),
+            "description" to  api.desc,
+            "route" to  api.area + "/" + api.name,
+            "version" to  "1.0.0"
+        )
+    }
+
+
+    /**
+     * Collect all variables for Action
+     */
+    private fun collect(api: Api, action: Action):Map<String, String>{
+        val typeInfo = buildTypeName(action.member.returnType)
+        val verb = action.verb
+        return mapOf(
+            "route" to api.area + "/" + api.name + "/" + action.name,
+            "verb" to verb.name,
+            "methodName" to action.name,
+            "methodDesc" to action.desc,
+            "methodParams" to buildArgs(action),
+            "methodReturnType" to typeInfo.targetReturnType,
+            "queryParams" to buildQueryParams(action),
+            "postDataDecl" to if (verb.name == Verbs.GET) "" else "HashMap<String, Object> postData = new HashMap<>();",
+            "postDataVars" to buildDataParams(action),
+            "postDataParam" to if (verb.name == Verbs.GET) "" else "postData,",
+            "converterTypes" to typeInfo.conversionType,
+            "converterClass" to typeInfo.converterTypeName()
+        )
+    }
+
+    private fun generateModelFromType(types: List<KType>, modelFolder: File) {
         types.map { buildTypeName(it) }
-                .filter { isTypeApplicableForCodeGen(it) }
+                .filter { it.isApplicableForCodeGen() }
                 .forEach { typeInfo -> genModel(modelFolder, typeInfo.dataType) }
     }
 
-    fun isTypeApplicableForCodeGen(it: TypeInfo): Boolean {
-        return !it.isBasicType &&
-                !it.isCollection &&
-                it.dataType != Request::class &&
-                it.dataType != Any::class &&
-                it.dataType != Context::class
+    private fun genClientApi(req: Request, api: Api, folder: File, methods: String) {
+        val apiVars = collect(api)
+        val apiName = api.name.pascalCase() + settings.templateClassSuffix
+        templates.api.generate(apiVars, folder.absolutePath, apiName, settings.lang)
     }
 
-    fun genClientApi(req: Request, apiReg: Api, folder: File, methods: String) {
-        val packageName = settings.packageName
-        val rawTemplate = this.templateClass()
-        val template = rawTemplate
-                .replace("@{className}", apiReg.name.pascalCase())
-                .replace("@{packageName}", packageName)
-                .replace("@{about}", "Client side API for " + apiReg.name.pascalCase())
-                .replace("@{description}", apiReg.desc)
-                .replace("@{route}", apiReg.area + "/" + apiReg.name)
-                .replace("@{version}", req.data.getStringOrElse("version", "1.0.0"))
-                .replace("@{methods}", methods)
-
-        File(folder, apiReg.name.pascalCase() + templateClassSuffix + ".${settings.lang.ext}").writeText(template)
-    }
-
-    fun genMethod(api: Api, action: Action): String {
-        val info = buildMethodInfo(api, action)
-        val rawTemplate = this.templateMethod()
+    private fun genMethod(api: Api, action: Action): String {
+        val info = collect(api, action)
+        val rawTemplate = templates.method.raw
         val finalTemplate = info.entries.fold(rawTemplate) { acc, entry ->
             acc.replace("@{${entry.key}}", entry.value)
         }
         return finalTemplate
     }
 
-    fun genModel(folder: File, cls: KClass<*>): String {
+    private fun genModel(folder: File, cls: KClass<*>): String {
         val info = buildModelInfo(cls)
-        val rawTemplate = this.templateModel()
+        val rawTemplate = templates.dto.raw
         val template = rawTemplate
                 .replace("@{packageName}", settings.packageName)
                 .replace("@{className}", cls.simpleName ?: "")
@@ -159,36 +173,6 @@ abstract class CodeGenBase(val settings: CodeGenSettings) {
         return file.absolutePath
     }
 
-    fun buildMethodInfo(api: slatekit.apis.core.Api, action: Action): Map<String, String> {
-        val typeInfo = buildTypeName(action.member.returnType)
-        val verb = action.verb
-        return mapOf(
-                "route" to api.area + "/" + api.name + "/" + action.name,
-                "verb" to verb.name,
-                "methodName" to action.name,
-                "methodDesc" to action.desc,
-                "methodParams" to buildArgs(action),
-                "methodReturnType" to typeInfo.targetReturnType,
-                "queryParams" to buildQueryParams(action),
-                "postDataDecl" to if (verb.name == Verbs.GET) "" else "HashMap<String, Object> postData = new HashMap<>();",
-                "postDataVars" to buildDataParams(action),
-                "postDataParam" to if (verb.name == Verbs.GET) "" else "postData,",
-                "converterTypes" to typeInfo.conversionType,
-                "converterClass" to getConverterTypeName(typeInfo)
-        )
-    }
-
-    fun getConverterTypeName(info: TypeInfo): String {
-        return if (info.isCollection)
-            if (info.isList())
-                "List"
-            else
-                "Map"
-        else if (info.isPair())
-            "Pair"
-        else
-            "Single"
-    }
 
     /**
      * builds the name of the datatype for the target(Java) language.
@@ -265,20 +249,4 @@ abstract class CodeGenBase(val settings: CodeGenSettings) {
      * builds all the properties/fields
      */
     abstract fun buildModelInfo(cls: KClass<*>): String
-
-    open fun canGenerate(apiReg: Api, apiRegAction: Action, declaredMemberLookup: Map<String, Boolean>): Boolean {
-        // Only include declared items
-        val isDeclared = declaredMemberLookup.containsKey(apiRegAction.name)
-        val isWebProtocol = apiRegAction.sources.hasWeb()
-        return (!this.settings.declaredMethodsOnly || isDeclared) && isWebProtocol
-    }
-
-    companion object {
-
-        fun getContent(folderPath: String, path: String): String {
-            val pathToFile = folderPath + File.separator + path
-            val content = Uris.readText(pathToFile) ?: ""
-            return content
-        }
-    }
 }

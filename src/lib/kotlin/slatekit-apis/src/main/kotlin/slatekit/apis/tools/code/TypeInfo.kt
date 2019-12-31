@@ -1,5 +1,7 @@
 package slatekit.apis.tools.code
 
+import slatekit.common.Context
+import slatekit.common.requests.Request
 import kotlin.reflect.KClass
 
 /** Represents type information for the purspose of code generation.
@@ -27,4 +29,26 @@ data class TypeInfo(
     fun isMap(): Boolean = containerType == Map::class
     fun isObject(): Boolean = !isBasicType && !isCollection
     fun isPair(): Boolean = isObject() && dataType.simpleName?.startsWith("Pair") ?: false
+
+
+    fun isApplicableForCodeGen(): Boolean {
+        return !this.isBasicType &&
+            !this.isCollection &&
+            this.dataType != Request::class &&
+            this.dataType != Any::class &&
+            this.dataType != Context::class
+    }
+
+
+    fun converterTypeName(): String {
+        return if (this.isCollection)
+            if (this.isList())
+                "List"
+            else
+                "Map"
+        else if (this.isPair())
+            "Pair"
+        else
+            "Single"
+    }
 }

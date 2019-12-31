@@ -2,6 +2,7 @@ package slatekit
 
 import slatekit.apis.Setup
 import slatekit.apis.core.Api
+import slatekit.apis.tools.code.CodeGenApi
 import slatekit.cloud.aws.AwsCloudFiles
 import slatekit.cloud.aws.AwsCloudQueue
 import slatekit.common.Context
@@ -14,7 +15,6 @@ import slatekit.notifications.sms.SmsService
 import slatekit.notifications.sms.SmsServiceTwilio
 import slatekit.docs.DocApi
 import slatekit.generator.*
-import slatekit.info.DependencyApi
 import slatekit.integration.apis.*
 import slatekit.integration.common.AppEntContext
 import slatekit.integration.mods.Mod
@@ -87,7 +87,8 @@ interface SlateKitServices {
                 load("email") { Api(EmailApi(emails(), ctx), declaredOnly = true, setup = Setup.Annotated) },
                 load("files") { Api(FilesApi(files(), ctx), declaredOnly = true, setup = Setup.Annotated) },
                 load("queues") { Api(QueueApi(queues(), ctx), declaredOnly = true, setup = Setup.Annotated) },
-                load("sms") { Api(SmsApi(sms(), ctx), declaredOnly = true, setup = Setup.Annotated) }
+                load("sms") { Api(SmsApi(sms(), ctx), declaredOnly = true, setup = Setup.Annotated) },
+                Api(CodeGenApi(), declaredOnly = true, setup = Setup.Annotated)
                 //load("db") { Api(DependencyApi(ctx), declaredOnly = false, setup = Setup.Annotated) }
         )
         return apis.filterNotNull()
