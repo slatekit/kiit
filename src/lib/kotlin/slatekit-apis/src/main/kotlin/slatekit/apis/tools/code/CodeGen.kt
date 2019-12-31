@@ -70,7 +70,7 @@ class CodeGen(val settings: CodeGenSettings, val builder:CodeBuilder) {
                     // Ok to generate ?
                     if (rules.isValidAction(api, action, declaredMemberLookup)) {
                         // Generate code here.
-                        val methodInfo = genMethod(api, action)
+                        val methodInfo = generateMethod(api, action)
                         log.info("generating method for: " + api.area + "/" + api.name + "/" + action.name)
                         methodsBuffer.append(methodInfo)
                         methodsBuffer.append(newline)
@@ -90,7 +90,7 @@ class CodeGen(val settings: CodeGenSettings, val builder:CodeBuilder) {
                 }
 
                 // Generate file.
-                genClientApi(req, api, codeGenDirs.apiFolder, methodsBuffer.toString())
+                generateApi(req, api, codeGenDirs.apiFolder, methodsBuffer.toString())
             } catch (ex: Exception) {
                 log.error("Error inspecting and generating code for: ${api.area}.${api.name}")
                 throw ex
@@ -138,16 +138,16 @@ class CodeGen(val settings: CodeGenSettings, val builder:CodeBuilder) {
     private fun generateModelFromType(types: List<KType>, modelFolder: File) {
         types.map { builder.buildTypeName(it) }
                 .filter { it.isApplicableForCodeGen() }
-                .forEach { typeInfo -> genModel(modelFolder, typeInfo.dataType) }
+                .forEach { typeInfo -> generateDTO(modelFolder, typeInfo.dataType) }
     }
 
-    private fun genClientApi(req: Request, api: Api, folder: File, methods: String) {
+    private fun generateApi(req: Request, api: Api, folder: File, methods: String) {
         val apiVars = collect(api)
         val apiName = api.name.pascalCase() + settings.templateClassSuffix
         templates.api.generate(apiVars, folder.absolutePath, apiName, settings.lang)
     }
 
-    private fun genMethod(api: Api, action: Action): String {
+    private fun generateMethod(api: Api, action: Action): String {
         val info = collect(api, action)
         val rawTemplate = templates.method.raw
         val finalTemplate = info.entries.fold(rawTemplate) { acc, entry ->
@@ -156,7 +156,7 @@ class CodeGen(val settings: CodeGenSettings, val builder:CodeBuilder) {
         return finalTemplate
     }
 
-    private fun genModel(folder: File, cls: KClass<*>): String {
+    private fun generateDTO(folder: File, cls: KClass<*>): String {
         val info = builder.buildModelInfo(cls)
         val rawTemplate = templates.dto.raw
         val template = rawTemplate
