@@ -8,26 +8,20 @@ import kotlin.reflect.full.declaredMemberFunctions
 import slatekit.apis.Verbs
 import slatekit.apis.core.Action
 import slatekit.apis.core.Api
+import slatekit.apis.tools.code.builders.CodeBuilder
 import slatekit.common.*
 import slatekit.common.ext.orElse
 import slatekit.common.io.Files
 import slatekit.common.io.Uris
 import slatekit.common.requests.Request
 import slatekit.common.utils.Props
-import slatekit.meta.KTypes
-import slatekit.meta.Reflector
 
-abstract class CodeGenBase(val settings: CodeGenSettings) {
-
-    /**
-     * Basic type info for type conversion
-     */
-    open val basicTypes = mapOf<KType, TypeInfo>()
+class CodeGen(val settings: CodeGenSettings, val builder:CodeBuilder) {
 
     /**
      * Represents the 3 code templates ( api.kt, method.kt, model.kt (DTO) )
      */
-    val templates = CodeGenTemplates.load(settings.templatesFolder, settings.lang)
+    val templates = Templates.load(settings.templatesFolder, settings.lang)
 
     /**
      * @command="codegen" -lang="java" -package="blendlife.api" -pathToTemplates="C:\Dev\github\blend-server\scripts\templates\codegen"
@@ -49,15 +43,16 @@ abstract class CodeGenBase(val settings: CodeGenSettings) {
         val dateFolder = Files.folderNameByDate()
 
         // C:\Users\kv\blendlife-kotlin\core\blend.cli\output\
-        val codeGenDirs = CodeGenDirs(File(outputFolderPath ?: ""))
+        val codeGenDirs = Directories(File(outputFolderPath ?: ""))
         codeGenDirs.create(log)
         codeGenDirs.log(log)
 
         // Collection of all custom types
         val routes = this.settings.host.routes
-        val rules = CodeGenRules(this.settings)
+        val rules = CodeRules(this.settings)
         val allApis = routes.areas.items.map { it.apis.items }.flatten()
         val apis = allApis.filter { rules.isValidApi(it) }
+
         apis.forEach { api ->
             try {
                 println("API: " + api.area + "." + api.name)
@@ -122,7 +117,7 @@ abstract class CodeGenBase(val settings: CodeGenSettings) {
      * Collect all variables for Action
      */
     private fun collect(api: Api, action: Action):Map<String, String>{
-        val typeInfo = buildTypeName(action.member.returnType)
+        val typeInfo = builder.buildTypeName(action.member.returnType)
         val verb = action.verb
         return mapOf(
             "route" to api.area + "/" + api.name + "/" + action.name,
@@ -131,9 +126,9 @@ abstract class CodeGenBase(val settings: CodeGenSettings) {
             "methodDesc" to action.desc,
             "methodParams" to buildArgs(action),
             "methodReturnType" to typeInfo.targetReturnType,
-            "queryParams" to buildQueryParams(action),
+            "queryParams" to builder.buildQueryParams(action),
             "postDataDecl" to if (verb.name == Verbs.GET) "" else "HashMap<String, Object> postData = new HashMap<>();",
-            "postDataVars" to buildDataParams(action),
+            "postDataVars" to builder.buildDataParams(action),
             "postDataParam" to if (verb.name == Verbs.GET) "" else "postData,",
             "converterTypes" to typeInfo.conversionType,
             "converterClass" to typeInfo.converterTypeName()
@@ -141,7 +136,7 @@ abstract class CodeGenBase(val settings: CodeGenSettings) {
     }
 
     private fun generateModelFromType(types: List<KType>, modelFolder: File) {
-        types.map { buildTypeName(it) }
+        types.map { builder.buildTypeName(it) }
                 .filter { it.isApplicableForCodeGen() }
                 .forEach { typeInfo -> genModel(modelFolder, typeInfo.dataType) }
     }
@@ -162,7 +157,7 @@ abstract class CodeGenBase(val settings: CodeGenSettings) {
     }
 
     private fun genModel(folder: File, cls: KClass<*>): String {
-        val info = buildModelInfo(cls)
+        val info = builder.buildModelInfo(cls)
         val rawTemplate = templates.dto.raw
         val template = rawTemplate
                 .replace("@{packageName}", settings.packageName)
@@ -174,79 +169,9 @@ abstract class CodeGenBase(val settings: CodeGenSettings) {
     }
 
 
-    /**
-     * builds the name of the datatype for the target(Java) language.
-     */
-    /**
-     * builds the name of the datatype for the target(Java) language.
-     */
-    open fun buildTypeName(tpe: KType): TypeInfo {
-        return if (basicTypes.containsKey(tpe)) {
-            basicTypes[tpe]!!
-        } else {
-            val cls = tpe.classifier as KClass<*>
-            if (Reflector.isSlateKitEnum(cls)) {
-                buildTypeName(KTypes.KIntType)
-            } else if (cls == slatekit.results.Result::class) {
-                val genType = tpe.arguments[0].type!!
-                val finalType = buildTypeName(genType)
-                finalType
-            } else if (cls.supertypes.contains(KTypes.KSmartValueType)) {
-                TypeInfo(true, false, "String", "String", KTypes.KSmartValueClass, KTypes.KSmartValueClass, "String.class")
-            } else if (cls == List::class) {
-                val listType = tpe.arguments[0].type!!
-                val listCls = KTypes.getClassFromType(listType)
-                val listTypeInfo = buildTypeName(listType)
-                val typeSig = "List<" + listTypeInfo.targetReturnType + ">"
-                TypeInfo(false, true, typeSig, typeSig, List::class, listCls, listTypeInfo.conversionType)
-            } else if (cls == Map::class) {
-                val tpeKey = tpe.arguments[0].type!!
-                val tpeVal = tpe.arguments[1].type!!
-                // val clsKey = KTypes.getClassFromType(tpeKey)
-                val clsVal = KTypes.getClassFromType(tpeVal)
-                val keyTypeInfo = buildTypeName(tpeKey)
-                val valTypeInfo = buildTypeName(tpeVal)
-                val sig = "Map<" + keyTypeInfo.targetReturnType + "," + valTypeInfo.targetReturnType + ">"
-                TypeInfo(false, true, sig, sig, Map::class, clsVal, "${keyTypeInfo.conversionType},${valTypeInfo.conversionType}")
-            } else if (cls == Pair::class) {
-                val tpeFirst = tpe.arguments[0].type!!
-                val tpeSecond = tpe.arguments[1].type!!
-                val firstTypeInfo = buildTypeName(tpeFirst)
-                val secondTypeInfo = buildTypeName(tpeSecond)
-                val sig = "Pair<" + firstTypeInfo.targetReturnType + "," + secondTypeInfo.targetReturnType + ">"
-                TypeInfo(false, false, sig, sig, cls, cls, "${firstTypeInfo.conversionType},${secondTypeInfo.conversionType}")
-            } else {
-                val sig = cls.simpleName ?: ""
-                TypeInfo(false, false, sig, sig, cls, cls, sig + ".class")
-            }
-        }
-    }
-
-    fun buildArgs(reg: Action): String {
+    private fun buildArgs(reg: Action): String {
         return reg.paramsUser.foldIndexed("") { ndx: Int, acc: String, param: KParameter ->
-            acc + (if (ndx > 0) "\t\t" else "") + buildArg(param) + "," + newline
+            acc + (if (ndx > 0) "\t\t" else "") + builder.buildArg(param) + "," + newline
         }
     }
-
-    /**
-     * builds a string of parameters to put into the query string.
-     * e.g. queryParams.put("id", id);
-     */
-    abstract fun buildQueryParams(reg: Action): String
-
-    /**
-     * builds a string of the parameters to put into the entity/body of request
-     * e..g dataParams.put('id", id);
-     */
-    abstract fun buildDataParams(reg: Action): String
-
-    /**
-     * builds an individual argument to the method
-     */
-    abstract fun buildArg(parameter: KParameter): String
-
-    /**
-     * builds all the properties/fields
-     */
-    abstract fun buildModelInfo(cls: KClass<*>): String
 }

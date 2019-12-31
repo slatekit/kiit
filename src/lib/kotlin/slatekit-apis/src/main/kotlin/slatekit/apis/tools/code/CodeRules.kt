@@ -5,7 +5,7 @@ import slatekit.apis.core.Action
 import slatekit.apis.core.Api
 import slatekit.common.Source
 
-class CodeGenRules(val settings: CodeGenSettings) {
+class CodeRules(val settings: CodeGenSettings) {
 
     fun isValidApi(api: Api): Boolean {
         val isValidProtocol = api.protocol == Source.Web || api.protocol == Source.All

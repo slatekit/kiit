@@ -41,14 +41,11 @@ data class TypeInfo(
 
 
     fun converterTypeName(): String {
-        return if (this.isCollection)
-            if (this.isList())
-                "List"
-            else
-                "Map"
-        else if (this.isPair())
-            "Pair"
-        else
-            "Single"
+        return when {
+            isList() -> List::class.simpleName!!
+            isMap()  -> Map::class.simpleName!!
+            isPair() -> Pair::class.simpleName!!
+            else     -> "Single"
+        }
     }
 }

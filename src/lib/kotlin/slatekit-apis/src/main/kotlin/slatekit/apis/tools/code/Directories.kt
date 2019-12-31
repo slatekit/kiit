@@ -10,7 +10,7 @@ import slatekit.common.log.Logger
  * @param apiFolder        : location where apis are created e.g. ~/dev/app1/src/main/kotlin/app/apis
  * @param modelFolder      : location where dtos are created e.g. ~/dev/app1/src/main/kotlin/app/dtos
  */
-data class CodeGenDirs(
+data class Directories(
     val outputFolder: File,
     val targetFolder: File = outputFolder,
     val apiFolder: File = File(targetFolder, "api"),

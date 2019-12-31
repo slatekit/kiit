@@ -1,15 +1,17 @@
-package slatekit.apis.tools.code
+package slatekit.apis.tools.code.builders
 
 import kotlin.reflect.KClass
 import kotlin.reflect.KParameter
 import kotlin.reflect.KProperty
 import slatekit.apis.Verb
 import slatekit.apis.core.Action
+import slatekit.apis.tools.code.CodeGenSettings
+import slatekit.apis.tools.code.TypeInfo
 import slatekit.common.newline
 import slatekit.meta.KTypes
 import slatekit.meta.Reflector
 
-class CodeGenKotlin(settings: CodeGenSettings) : CodeGenBase(settings) {
+class KotlinBuilder(val settings: CodeGenSettings) : CodeBuilder {
 
     override val basicTypes = listOf(
             // Basic types
