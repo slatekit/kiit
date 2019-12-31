@@ -22,6 +22,7 @@ import slatekit.integration.mods.ModService
 import slatekit.integration.mods.ModuleContext
 import slatekit.orm.migrations.MigrationService
 import slatekit.orm.migrations.MigrationSettings
+import slatekit.samples.common.apis.SampleApi
 
 interface SlateKitServices {
 
@@ -66,8 +67,10 @@ interface SlateKitServices {
         val requiredApis = listOf(
                 Api(GeneratorApi(ctx, GeneratorService(ctx, SlateKit::class.java, GeneratorSettings(toolSettings, buildSettings))), declaredOnly = true, setup = Setup.Annotated),
                 Api(DocApi(ctx), declaredOnly = true, setup = Setup.Annotated),
-                Api(InfoApi(ctx), declaredOnly = true, setup = Setup.Annotated),
-                Api(VersionApi(ctx), declaredOnly = true, setup = Setup.Annotated)
+                Api(CodeGenApi(), declaredOnly = true, setup = Setup.Annotated),
+                Api(SampleApi(ctx), declaredOnly = true, setup = Setup.Annotated)
+//                Api(InfoApi(ctx), declaredOnly = true, setup = Setup.Annotated),
+//                Api(VersionApi(ctx), declaredOnly = true, setup = Setup.Annotated)
                 //Api(moduleApi, declaredOnly = true, setup = Setup.Annotated)
         )
         val optionalApis = listOf<Api>() //optionalApis()

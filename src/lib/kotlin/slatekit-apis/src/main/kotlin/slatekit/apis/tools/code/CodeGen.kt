@@ -142,7 +142,7 @@ class CodeGen(val settings: CodeGenSettings, val builder:CodeBuilder) {
     }
 
     private fun generateApi(req: Request, api: Api, folder: File, methods: String) {
-        val apiVars = collect(api)
+        val apiVars = collect(api).plus("methods" to methods)
         val apiName = api.name.pascalCase() + settings.templateClassSuffix
         templates.api.generate(apiVars, folder.absolutePath, apiName, settings.lang)
     }

@@ -142,6 +142,7 @@ class SlateKit(ctx: Context) : App<Context>(ctx, AppOptions(printSummaryBeforeEx
                 },
                 serializer = { item, type -> Content.prop(Serialization.csv().serialize(item)) }
         )
+        cli.apis.setApiContainerHost()
         return cli
     }
 }

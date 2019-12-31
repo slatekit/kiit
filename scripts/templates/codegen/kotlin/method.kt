@@ -21,7 +21,7 @@
         val json = Conversions.convertMapToJson(postData)
 
         // convert
-        val converter = Converter@{converterClass}<@{converterTypes}>(@{converterTypes}.java)
+        val converter = Converter@{converterClass}<@{converterTypes}>(@{converterTypes}::class.java)
         // execute
         http.@{verb}(
             "@{route}",
