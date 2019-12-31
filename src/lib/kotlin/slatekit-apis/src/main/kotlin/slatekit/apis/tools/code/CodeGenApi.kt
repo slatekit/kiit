@@ -37,7 +37,7 @@ class CodeGenApi : HostAware {
         methodFile: String = "",
         modelFile: String = ""
     ): Notice<String> {
-        return generate(req, templatesFolder, outputFolder, packageName, classFile, methodFile, modelFile, "kotlin", "kt")
+        return generate(req, templatesFolder, outputFolder, packageName, classFile, methodFile, modelFile, Language.Kotlin)
     }
 
     @Action(name = "", desc = "generates client code in Swift")
@@ -50,7 +50,7 @@ class CodeGenApi : HostAware {
         methodFile: String = "",
         modelFile: String = ""
     ): Notice<String> {
-        return generate(req, templatesFolder, outputFolder, packageName, classFile, methodFile, modelFile, "swift", "swift")
+        return generate(req, templatesFolder, outputFolder, packageName, classFile, methodFile, modelFile, Language.Kotlin)
     }
 
     @Action(name = "", desc = "generates client code in Java")
@@ -63,7 +63,7 @@ class CodeGenApi : HostAware {
         methodFile: String = "",
         modelFile: String = ""
     ): Notice<String> {
-        return generate(req, templatesFolder, outputFolder, packageName, classFile, methodFile, modelFile, "java", "java")
+        return generate(req, templatesFolder, outputFolder, packageName, classFile, methodFile, modelFile, Language.Kotlin)
     }
 
     @Action(name = "", desc = "generates client code in javascript")
@@ -76,7 +76,7 @@ class CodeGenApi : HostAware {
         methodFile: String = "",
         modelFile: String = ""
     ): Notice<String> {
-        return generate(req, templatesFolder, outputFolder, packageName, classFile, methodFile, modelFile, "js", "js")
+        return generate(req, templatesFolder, outputFolder, packageName, classFile, methodFile, modelFile, Language.JS)
     }
 
     private fun generate(
@@ -87,8 +87,7 @@ class CodeGenApi : HostAware {
         classFile: String = "",
         methodFile: String = "",
         modelFile: String = "",
-        lang: String,
-        extension: String
+        lang: Language
     ): Notice<String> {
 
         val result = this.host?.let { host ->
@@ -98,18 +97,16 @@ class CodeGenApi : HostAware {
                     templatesFolder,
                     outputFolder,
                     packageName,
-                    classFile.orElse("api.$extension"),
-                    methodFile.orElse("method.$extension"),
-                    modelFile.orElse("model.$extension"),
-                    lang,
-                    extension
+                    classFile.orElse("api.${lang.ext}"),
+                    methodFile.orElse("method.${lang.ext}"),
+                    modelFile.orElse("model.${lang.ext}"),
+                    lang
             )
             val gen = when (lang) {
-                "kotlin" -> CodeGenKotlin(settings)
-                "swift" -> CodeGenSwift(settings)
-                "java" -> CodeGenJava(settings)
-                "js" -> CodeGenJS(settings)
-                else -> CodeGenJava(settings)
+                Language.Kotlin -> CodeGenKotlin(settings)
+                Language.Swift  -> CodeGenSwift(settings)
+                Language.Java   -> CodeGenJava(settings)
+                else            -> CodeGenJava(settings)
             }
             gen.generate(req)
             slatekit.results.Success("")

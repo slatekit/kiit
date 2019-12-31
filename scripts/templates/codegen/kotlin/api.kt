@@ -7,7 +7,7 @@
     @version : @{version}
     @software: Visit www.slatekit.com for more info
 */
-package @{packageName}.clientapis
+package @{packageName}.clientapis.apis
 
 import @{packageName}.clientapis.dtos.*
 import slatekit.common.HttpRPC

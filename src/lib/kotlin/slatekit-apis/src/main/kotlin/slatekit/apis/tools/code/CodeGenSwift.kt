@@ -38,13 +38,13 @@ class CodeGenSwift(settings: CodeGenSettings) : CodeGenBase(settings) {
 
     override fun buildModelInfo(cls: KClass<*>): String {
         val props = Reflector.getProperties(cls)
-        val fields = props.foldIndexed("", { ndx: Int, acc: String, prop: KProperty<*> ->
+        val fields = props.foldIndexed("") { ndx: Int, acc: String, prop: KProperty<*> ->
             val type = prop.returnType
             val typeInfo = buildTypeName(type)
             val suffix = if (ndx < props.size - 1) "," else ""
             val field = "val " + prop.name + " : " + typeInfo.targetParameterType + suffix + newline
             acc + (if (ndx > 0) "\t" else "") + field
-        })
+        }
         return fields
     }
 
@@ -58,9 +58,9 @@ class CodeGenSwift(settings: CodeGenSettings) : CodeGenBase(settings) {
      */
     override fun buildQueryParams(reg: Action): String {
         return if (reg.verb == Verb.Get) {
-            reg.paramsUser.foldIndexed("", { ndx: Int, acc: String, param: KParameter ->
+            reg.paramsUser.foldIndexed("") { ndx: Int, acc: String, param: KParameter ->
                 acc + (if (ndx > 0) "\t\t" else "") + "queryParams.put(\"" + param.name + "\", String.valueOf(" + param.name + "));" + newline
-            })
+            }
         } else {
             ""
         }
@@ -72,9 +72,9 @@ class CodeGenSwift(settings: CodeGenSettings) : CodeGenBase(settings) {
      */
     override fun buildDataParams(reg: Action): String {
         return if (reg.verb != Verb.Get) {
-            reg.paramsUser.foldIndexed("", { ndx: Int, acc: String, param: KParameter ->
+            reg.paramsUser.foldIndexed("") { ndx: Int, acc: String, param: KParameter ->
                 acc + (if (ndx > 0) "\t\t" else "") + "postData.put(\"" + param.name + "\", " + param.name + ");" + newline
-            })
+            }
         } else {
             ""
         }

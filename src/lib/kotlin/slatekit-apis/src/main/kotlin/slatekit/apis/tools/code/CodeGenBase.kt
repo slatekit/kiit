@@ -35,9 +35,6 @@ abstract class CodeGenBase(val settings: CodeGenSettings) {
 
     /**
      * @command="codegen" -lang="java" -package="blendlife.api" -pathToTemplates="C:\Dev\github\blend-server\scripts\templates\codegen"
-     *  -nameOfTemplateClass="codegen-java-api.txt"
-     *  -nameOfTemplateMethod="codegen-java-method.txt"
-     *  -nameOfTemplateModel="codegen-java-model.txt"
      */
     fun generate(req: Request) {
         val log = this.settings.host.ctx.logs.getLogger("slate")
@@ -138,15 +135,15 @@ abstract class CodeGenBase(val settings: CodeGenSettings) {
                 .replace("@{version}", req.data.getStringOrElse("version", "1.0.0"))
                 .replace("@{methods}", methods)
 
-        File(folder, apiReg.name.pascalCase() + templateClassSuffix + ".${settings.extension}").writeText(template)
+        File(folder, apiReg.name.pascalCase() + templateClassSuffix + ".${settings.lang.ext}").writeText(template)
     }
 
     fun genMethod(api: Api, action: Action): String {
         val info = buildMethodInfo(api, action)
         val rawTemplate = this.templateMethod()
-        val finalTemplate = info.entries.fold(rawTemplate, { acc, entry ->
+        val finalTemplate = info.entries.fold(rawTemplate) { acc, entry ->
             acc.replace("@{${entry.key}}", entry.value)
-        })
+        }
         return finalTemplate
     }
 
@@ -157,7 +154,7 @@ abstract class CodeGenBase(val settings: CodeGenSettings) {
                 .replace("@{packageName}", settings.packageName)
                 .replace("@{className}", cls.simpleName ?: "")
                 .replace("@{properties}", info)
-        val file = File(folder, cls.simpleName?.pascalCase() + ".${settings.extension}")
+        val file = File(folder, cls.simpleName?.pascalCase() + ".${settings.lang.ext}")
         file.writeText(template)
         return file.absolutePath
     }
@@ -242,9 +239,9 @@ abstract class CodeGenBase(val settings: CodeGenSettings) {
     }
 
     fun buildArgs(reg: Action): String {
-        return reg.paramsUser.foldIndexed("", { ndx: Int, acc: String, param: KParameter ->
+        return reg.paramsUser.foldIndexed("") { ndx: Int, acc: String, param: KParameter ->
             acc + (if (ndx > 0) "\t\t" else "") + buildArg(param) + "," + newline
-        })
+        }
     }
 
     /**

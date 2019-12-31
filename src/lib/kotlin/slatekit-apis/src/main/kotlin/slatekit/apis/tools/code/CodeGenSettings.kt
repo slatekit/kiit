@@ -12,7 +12,7 @@ data class CodeGenSettings(
     val classFile: String = "",
     val methodFile: String = "",
     val modelFile: String = "",
-    val lang: String,
-    val extension: String,
+    val lang: Language,
+    val createDtos:Boolean = true,
     val declaredMethodsOnly: Boolean = true
 )
