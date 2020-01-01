@@ -63,7 +63,7 @@ class KotlinBuilder(val settings: CodeGenSettings) : CodeBuilder {
      */
     override fun buildQueryParams(reg: Action): String {
         return when(reg.verb) {
-            Verb.Get -> collect(reg.paramsUser, "\t\t", ",") { "\"" + it.name + "\" to " + it.name + ".toString()" }
+            Verb.Get -> collect(reg.paramsUser, "\t\t\t", ",") { "\"" + it.name + "\" to " + it.name + ".toString()" }
             else -> ""
         }
     }
@@ -75,7 +75,7 @@ class KotlinBuilder(val settings: CodeGenSettings) : CodeBuilder {
     override fun buildDataParams(reg: Action): String {
         return when(reg.verb) {
             Verb.Get -> ""
-            else     -> collect(reg.paramsUser, "\t\t", ",") { "\"" + it.name + "\" to " + it.name }
+            else     -> collect(reg.paramsUser, "\t\t\t", ",") { "\"" + it.name + "\" to " + it.name }
         }
     }
 }

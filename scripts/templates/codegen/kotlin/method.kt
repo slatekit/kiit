@@ -9,19 +9,22 @@
     )
     {
         // headers
-        val headers = mutableMapOf<String,String>()
+        val headers = mapOf<String,String>()
 
         // query string
-        val queryParams = mutableMapOf<String,String>()
+        val queryParams = mapOf<String,String>(
         @{queryParams}
+        )
 
         // data
-        val postData = mutableMapOf<String, Any>()
+        val postData = mapOf<String, Any>(
         @{postDataVars}
+        )
         val json = Conversions.convertMapToJson(postData)
 
         // convert
         val converter = Converter@{converterClass}<@{converterTypes}>(@{converterTypes}::class.java)
+        
         // execute
         http.@{verb}(
             "@{route}",
