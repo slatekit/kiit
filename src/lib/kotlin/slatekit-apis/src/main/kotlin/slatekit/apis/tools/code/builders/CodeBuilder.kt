@@ -2,6 +2,7 @@ package slatekit.apis.tools.code.builders
 
 import slatekit.apis.core.Action
 import slatekit.apis.tools.code.TypeInfo
+import slatekit.common.newline
 import slatekit.meta.KTypes
 import slatekit.meta.Reflector
 import kotlin.reflect.KClass
@@ -79,6 +80,16 @@ interface CodeBuilder {
                 val sig = cls.simpleName ?: ""
                 TypeInfo(false, false, sig, sig, cls, cls, sig + ".class")
             }
+        }
+    }
+
+
+    fun <T> collect(items:List<T>, tab:String, sep:String?, call:(T) -> String):String {
+        return items.foldIndexed("") { ndx: Int, acc: String, param: T ->
+            val isLast = ndx == items.size - 1
+            val separator = if(sep != null && isLast) sep else null
+            val endLine = if(isLast) "" else newline
+            acc + (if (ndx > 0) tab else "") + call(param) + separator + endLine
         }
     }
 }
