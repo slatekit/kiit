@@ -17,13 +17,20 @@ interface CodeBuilder {
      * builds a string of parameters to put into the query string.
      * e.g. queryParams.put("id", id);
      */
-    fun buildQueryParams(reg: Action): String
+    fun buildQueryParams(action: Action): String
 
     /**
      * builds a string of the parameters to put into the entity/body of request
      * e..g dataParams.put('id", id);
      */
-    fun buildDataParams(reg: Action): String
+    fun buildDataParams(action: Action): String
+
+    /**
+     * Builds the arguments
+     */
+    fun buildArgs(action: Action): String {
+        return collect(action.paramsUser, "\t\t", ",", true) { buildArg(it) }
+    }
 
     /**
      * builds an individual argument to the method
@@ -78,18 +85,18 @@ interface CodeBuilder {
                 TypeInfo(false, false, sig, sig, cls, cls, "${firstTypeInfo.conversionType},${secondTypeInfo.conversionType}")
             } else {
                 val sig = cls.simpleName ?: ""
-                TypeInfo(false, false, sig, sig, cls, cls, sig + ".class")
+                TypeInfo(false, false, sig, sig, cls, cls, sig)
             }
         }
     }
 
 
-    fun <T> collect(items:List<T>, tab:String, sep:String?, call:(T) -> String):String {
+    fun <T> collect(items:List<T>, tabs:String, sep:String?, forceSepator:Boolean, call:(T) -> String):String {
         return items.foldIndexed("") { ndx: Int, acc: String, param: T ->
             val isLast = ndx == items.size - 1
-            val separator = if(sep != null && isLast) sep else null
+            val separator = if(forceSepator || (sep != null && !isLast) ) sep else ""
             val endLine = if(isLast) "" else newline
-            acc + (if (ndx > 0) tab else "") + call(param) + separator + endLine
+            acc + (if (ndx > 0) tabs else "") + call(param) + separator + endLine
         }
     }
 }

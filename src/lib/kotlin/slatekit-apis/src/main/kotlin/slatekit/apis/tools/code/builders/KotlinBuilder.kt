@@ -59,11 +59,11 @@ class KotlinBuilder(val settings: CodeGenSettings) : CodeBuilder {
 
     /**
      * builds a string of parameters to put into the query string.
-     * e.g. "id" to id,
+     * e.g. "id" to id
      */
-    override fun buildQueryParams(reg: Action): String {
-        return when(reg.verb) {
-            Verb.Get -> collect(reg.paramsUser, "\t\t\t", ",") { "\"" + it.name + "\" to " + it.name + ".toString()" }
+    override fun buildQueryParams(action: Action): String {
+        return when(action.verb) {
+            Verb.Get -> collect(action.paramsUser, "\t\t\t", ",", false) { "\"" + it.name + "\" to " + it.name + ".toString()" }
             else -> ""
         }
     }
@@ -72,10 +72,10 @@ class KotlinBuilder(val settings: CodeGenSettings) : CodeBuilder {
      * builds a string of the parameters to put into the entity/body of request
      * e..g dataParams.put('id", id);
      */
-    override fun buildDataParams(reg: Action): String {
-        return when(reg.verb) {
+    override fun buildDataParams(action: Action): String {
+        return when(action.verb) {
             Verb.Get -> ""
-            else     -> collect(reg.paramsUser, "\t\t\t", ",") { "\"" + it.name + "\" to " + it.name }
+            else     -> collect(action.paramsUser, "\t\t\t", ",", false) { "\"" + it.name + "\" to " + it.name }
         }
     }
 }

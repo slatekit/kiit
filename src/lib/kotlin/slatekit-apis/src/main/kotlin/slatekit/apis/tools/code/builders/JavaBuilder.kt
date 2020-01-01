@@ -59,9 +59,9 @@ class JavaBuilder(val settings: CodeGenSettings) : CodeBuilder {
      * builds a string of parameters to put into the query string.
      * e.g. queryParams.put("id", id);
      */
-    override fun buildQueryParams(reg: Action): String {
-        return if (reg.verb == Verb.Get) {
-            reg.paramsUser.foldIndexed("") { ndx: Int, acc: String, param: KParameter ->
+    override fun buildQueryParams(action: Action): String {
+        return if (action.verb == Verb.Get) {
+            action.paramsUser.foldIndexed("") { ndx: Int, acc: String, param: KParameter ->
                 acc + (if (ndx > 0) "\t\t" else "") + "queryParams.put(\"" + param.name + "\", String.valueOf(" + param.name + "));" + newline
             }
         } else {
@@ -73,9 +73,9 @@ class JavaBuilder(val settings: CodeGenSettings) : CodeBuilder {
      * builds a string of the parameters to put into the entity/body of request
      * e..g dataParams.put('id", id);
      */
-    override fun buildDataParams(reg: Action): String {
-        return if (reg.verb != Verb.Get) {
-            reg.paramsUser.foldIndexed("") { ndx: Int, acc: String, param: KParameter ->
+    override fun buildDataParams(action: Action): String {
+        return if (action.verb != Verb.Get) {
+            action.paramsUser.foldIndexed("") { ndx: Int, acc: String, param: KParameter ->
                 acc + (if (ndx > 0) "\t\t" else "") + "postData.put(\"" + param.name + "\", " + param.name + ");" + newline
             }
         } else {

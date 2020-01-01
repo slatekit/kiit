@@ -67,6 +67,8 @@ class CodeGen(val settings: CodeGenSettings, val builder:CodeBuilder) {
                 // Iterate over all the api actions
                 api.actions.items.forEach { action ->
 
+                    log.info("Processing : " + api.area + "/" + api.name + "/" + action.name)
+
                     // Ok to generate ?
                     if (rules.isValidAction(api, action, declaredMemberLookup)) {
                         // Generate code here.
@@ -124,7 +126,7 @@ class CodeGen(val settings: CodeGenSettings, val builder:CodeBuilder) {
             "verb" to verb.name,
             "methodName" to action.name,
             "methodDesc" to action.desc,
-            "methodParams" to buildArgs(action),
+            "methodParams" to builder.buildArgs(action),
             "methodReturnType" to typeInfo.targetReturnType,
             "queryParams" to builder.buildQueryParams(action),
             "postDataDecl" to if (verb.name == Verbs.GET) "" else "HashMap<String, Object> postData = new HashMap<>();",
@@ -166,12 +168,5 @@ class CodeGen(val settings: CodeGenSettings, val builder:CodeBuilder) {
         val file = File(folder, cls.simpleName?.pascalCase() + ".${settings.lang.ext}")
         file.writeText(template)
         return file.absolutePath
-    }
-
-
-    private fun buildArgs(reg: Action): String {
-        return reg.paramsUser.foldIndexed("") { ndx: Int, acc: String, param: KParameter ->
-            acc + (if (ndx > 0) "\t\t" else "") + builder.buildArg(param) + "," + newline
-        }
     }
 }

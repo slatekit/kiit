@@ -13,18 +13,18 @@
 
         // query string
         val queryParams = mapOf<String,String>(
-        @{queryParams}
+            @{queryParams}
         )
 
         // data
         val postData = mapOf<String, Any>(
-        @{postDataVars}
+            @{postDataVars}
         )
         val json = Conversions.convertMapToJson(postData)
 
         // convert
         val converter = Converter@{converterClass}<@{converterTypes}>(@{converterTypes}::class.java)
-        
+
         // execute
         http.@{verb}(
             "@{route}",
