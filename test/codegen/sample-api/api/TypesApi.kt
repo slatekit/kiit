@@ -36,18 +36,18 @@ class TypesApi(http: HttpRPC) : ApiBase(http) {
 
         // query string
         val queryParams = mapOf<String,String>(
-        
+            
         )
 
         // data
         val postData = mapOf<String, Any>(
-        
+            
         )
         val json = Conversions.convertMapToJson(postData)
 
         // convert
-        val converter = ConverterSingle<About.class>(About.class::class.java)
-        
+        val converter = ConverterSingle<About>(About::class.java)
+
         // execute
         http.post(
             "samples/types/about",
@@ -63,7 +63,6 @@ class TypesApi(http: HttpRPC) : ApiBase(http) {
     */
     fun create1(
         greeting : String,
-
 		tag:String,
         callback: (Outcome<String>) -> Unit
     )
@@ -73,18 +72,18 @@ class TypesApi(http: HttpRPC) : ApiBase(http) {
 
         // query string
         val queryParams = mapOf<String,String>(
-        
+            
         )
 
         // data
         val postData = mapOf<String, Any>(
-        "greeting" to greeting,
+            "greeting" to greeting
         )
         val json = Conversions.convertMapToJson(postData)
 
         // convert
         val converter = ConverterSingle<String>(String::class.java)
-        
+
         // execute
         http.post(
             "samples/types/create1",
@@ -100,7 +99,6 @@ class TypesApi(http: HttpRPC) : ApiBase(http) {
     */
     fun delete1(
         greeting : String,
-
 		tag:String,
         callback: (Outcome<String>) -> Unit
     )
@@ -110,18 +108,18 @@ class TypesApi(http: HttpRPC) : ApiBase(http) {
 
         // query string
         val queryParams = mapOf<String,String>(
-        
+            
         )
 
         // data
         val postData = mapOf<String, Any>(
-        "greeting" to greeting,
+            "greeting" to greeting
         )
         val json = Conversions.convertMapToJson(postData)
 
         // convert
         val converter = ConverterSingle<String>(String::class.java)
-        
+
         // execute
         http.delete(
             "samples/types/delete1",
@@ -137,9 +135,8 @@ class TypesApi(http: HttpRPC) : ApiBase(http) {
     */
     fun download(
         text : String,
-
 		tag:String,
-        callback: (Outcome<String>) -> Unit
+        callback: (Outcome<Doc>) -> Unit
     )
     {
         // headers
@@ -147,18 +144,18 @@ class TypesApi(http: HttpRPC) : ApiBase(http) {
 
         // query string
         val queryParams = mapOf<String,String>(
-        
+            
         )
 
         // data
         val postData = mapOf<String, Any>(
-        "text" to text,
+            "text" to text
         )
         val json = Conversions.convertMapToJson(postData)
 
         // convert
-        val converter = ConverterSingle<String>(String::class.java)
-        
+        val converter = ConverterSingle<Doc>(Doc::class.java)
+
         // execute
         http.post(
             "samples/types/download",
@@ -183,18 +180,18 @@ class TypesApi(http: HttpRPC) : ApiBase(http) {
 
         // query string
         val queryParams = mapOf<String,String>(
-        
+            
         )
 
         // data
         val postData = mapOf<String, Any>(
-        
+            
         )
         val json = Conversions.convertMapToJson(postData)
 
         // convert
         val converter = ConverterSingle<Int>(Int::class.java)
-        
+
         // execute
         http.get(
             "samples/types/getCounter",
@@ -210,7 +207,6 @@ class TypesApi(http: HttpRPC) : ApiBase(http) {
     */
     fun getRecent(
         category : String,
-
 		tag:String,
         callback: (Outcome<List<SampleMovie>>) -> Unit
     )
@@ -220,18 +216,18 @@ class TypesApi(http: HttpRPC) : ApiBase(http) {
 
         // query string
         val queryParams = mapOf<String,String>(
-        "category" to category.toString(),
+            "category" to category.toString()
         )
 
         // data
         val postData = mapOf<String, Any>(
-        
+            
         )
         val json = Conversions.convertMapToJson(postData)
 
         // convert
-        val converter = ConverterList<SampleMovie.class>(SampleMovie.class::class.java)
-        
+        val converter = ConverterList<SampleMovie>(SampleMovie::class.java)
+
         // execute
         http.get(
             "samples/types/getRecent",
@@ -247,7 +243,6 @@ class TypesApi(http: HttpRPC) : ApiBase(http) {
     */
     fun hello(
         greeting : String,
-
 		tag:String,
         callback: (Outcome<String>) -> Unit
     )
@@ -257,18 +252,18 @@ class TypesApi(http: HttpRPC) : ApiBase(http) {
 
         // query string
         val queryParams = mapOf<String,String>(
-        
+            
         )
 
         // data
         val postData = mapOf<String, Any>(
-        "greeting" to greeting,
+            "greeting" to greeting
         )
         val json = Conversions.convertMapToJson(postData)
 
         // convert
         val converter = ConverterSingle<String>(String::class.java)
-        
+
         // execute
         http.post(
             "samples/types/hello",
@@ -293,18 +288,18 @@ class TypesApi(http: HttpRPC) : ApiBase(http) {
 
         // query string
         val queryParams = mapOf<String,String>(
-        
+            
         )
 
         // data
         val postData = mapOf<String, Any>(
-        
+            
         )
         val json = Conversions.convertMapToJson(postData)
 
         // convert
         val converter = ConverterSingle<Int>(Int::class.java)
-        
+
         // execute
         http.post(
             "samples/types/increment",
@@ -326,10 +321,9 @@ class TypesApi(http: HttpRPC) : ApiBase(http) {
 		account : Long,
 		average : Float,
 		salary : Double,
-		date : Date,
-
+		date : ZonedDateTime,
 		tag:String,
-        callback: (Outcome<Map<String,Object>>) -> Unit
+        callback: (Outcome<Map<String, Any>>) -> Unit
     )
     {
         // headers
@@ -337,25 +331,25 @@ class TypesApi(http: HttpRPC) : ApiBase(http) {
 
         // query string
         val queryParams = mapOf<String,String>(
-        
+            
         )
 
         // data
         val postData = mapOf<String, Any>(
-        "name" to namenull
-			"isActive" to isActivenull
-			"age" to agenull
-			"dept" to deptnull
-			"account" to accountnull
-			"average" to averagenull
-			"salary" to salarynull
-			"date" to date,
+            "name" to name,
+			"isActive" to isActive,
+			"age" to age,
+			"dept" to dept,
+			"account" to account,
+			"average" to average,
+			"salary" to salary,
+			"date" to date
         )
         val json = Conversions.convertMapToJson(postData)
 
         // convert
-        val converter = ConverterMap<String,Any>(String,Any::class.java)
-        
+        val converter = ConverterMap<String, Any>(String::class.java, Any::class.java)
+
         // execute
         http.post(
             "samples/types/inputs",
@@ -370,8 +364,7 @@ class TypesApi(http: HttpRPC) : ApiBase(http) {
 	The tag parameter is used as a "correlation id"
     */
     fun lists(
-        movies : List<SampleMovie>,
-
+        movies : SampleMovie,
 		tag:String,
         callback: (Outcome<List<SampleMovie>>) -> Unit
     )
@@ -381,18 +374,18 @@ class TypesApi(http: HttpRPC) : ApiBase(http) {
 
         // query string
         val queryParams = mapOf<String,String>(
-        
+            
         )
 
         // data
         val postData = mapOf<String, Any>(
-        "movies" to movies,
+            "movies" to movies
         )
         val json = Conversions.convertMapToJson(postData)
 
         // convert
-        val converter = ConverterList<SampleMovie.class>(SampleMovie.class::class.java)
-        
+        val converter = ConverterList<SampleMovie>(SampleMovie::class.java)
+
         // execute
         http.post(
             "samples/types/lists",
@@ -408,7 +401,6 @@ class TypesApi(http: HttpRPC) : ApiBase(http) {
     */
     fun patch1(
         greeting : String,
-
 		tag:String,
         callback: (Outcome<String>) -> Unit
     )
@@ -418,18 +410,18 @@ class TypesApi(http: HttpRPC) : ApiBase(http) {
 
         // query string
         val queryParams = mapOf<String,String>(
-        
+            
         )
 
         // data
         val postData = mapOf<String, Any>(
-        "greeting" to greeting,
+            "greeting" to greeting
         )
         val json = Conversions.convertMapToJson(postData)
 
         // convert
         val converter = ConverterSingle<String>(String::class.java)
-        
+
         // execute
         http.patch(
             "samples/types/patch1",
@@ -445,7 +437,6 @@ class TypesApi(http: HttpRPC) : ApiBase(http) {
     */
     fun process1(
         greeting : String,
-
 		tag:String,
         callback: (Outcome<String>) -> Unit
     )
@@ -455,18 +446,18 @@ class TypesApi(http: HttpRPC) : ApiBase(http) {
 
         // query string
         val queryParams = mapOf<String,String>(
-        
+            
         )
 
         // data
         val postData = mapOf<String, Any>(
-        "greeting" to greeting,
+            "greeting" to greeting
         )
         val json = Conversions.convertMapToJson(postData)
 
         // convert
         val converter = ConverterSingle<String>(String::class.java)
-        
+
         // execute
         http.post(
             "samples/types/process1",
@@ -482,7 +473,6 @@ class TypesApi(http: HttpRPC) : ApiBase(http) {
     */
     fun request(
         greeting : String,
-
 		tag:String,
         callback: (Outcome<String>) -> Unit
     )
@@ -492,18 +482,18 @@ class TypesApi(http: HttpRPC) : ApiBase(http) {
 
         // query string
         val queryParams = mapOf<String,String>(
-        
+            
         )
 
         // data
         val postData = mapOf<String, Any>(
-        "greeting" to greeting,
+            "greeting" to greeting
         )
         val json = Conversions.convertMapToJson(postData)
 
         // convert
         val converter = ConverterSingle<String>(String::class.java)
-        
+
         // execute
         http.post(
             "samples/types/request",
@@ -519,7 +509,6 @@ class TypesApi(http: HttpRPC) : ApiBase(http) {
     */
     fun response(
         category : String,
-
 		tag:String,
         callback: (Outcome<SampleMovie>) -> Unit
     )
@@ -529,18 +518,18 @@ class TypesApi(http: HttpRPC) : ApiBase(http) {
 
         // query string
         val queryParams = mapOf<String,String>(
-        
+            
         )
 
         // data
         val postData = mapOf<String, Any>(
-        "category" to category,
+            "category" to category
         )
         val json = Conversions.convertMapToJson(postData)
 
         // convert
-        val converter = ConverterSingle<SampleMovie.class>(SampleMovie.class::class.java)
-        
+        val converter = ConverterSingle<SampleMovie>(SampleMovie::class.java)
+
         // execute
         http.post(
             "samples/types/response",
@@ -556,7 +545,6 @@ class TypesApi(http: HttpRPC) : ApiBase(http) {
     */
     fun update1(
         greeting : String,
-
 		tag:String,
         callback: (Outcome<String>) -> Unit
     )
@@ -566,18 +554,18 @@ class TypesApi(http: HttpRPC) : ApiBase(http) {
 
         // query string
         val queryParams = mapOf<String,String>(
-        
+            
         )
 
         // data
         val postData = mapOf<String, Any>(
-        "greeting" to greeting,
+            "greeting" to greeting
         )
         val json = Conversions.convertMapToJson(postData)
 
         // convert
         val converter = ConverterSingle<String>(String::class.java)
-        
+
         // execute
         http.put(
             "samples/types/update1",
@@ -592,10 +580,9 @@ class TypesApi(http: HttpRPC) : ApiBase(http) {
 	The tag parameter is used as a "correlation id"
     */
     fun upload(
-        file : String,
-
+        file : Doc,
 		tag:String,
-        callback: (Outcome<Map<String,String>>) -> Unit
+        callback: (Outcome<Map<String, String>>) -> Unit
     )
     {
         // headers
@@ -603,18 +590,18 @@ class TypesApi(http: HttpRPC) : ApiBase(http) {
 
         // query string
         val queryParams = mapOf<String,String>(
-        
+            
         )
 
         // data
         val postData = mapOf<String, Any>(
-        "file" to file,
+            "file" to file
         )
         val json = Conversions.convertMapToJson(postData)
 
         // convert
-        val converter = ConverterMap<String,String>(String,String::class.java)
-        
+        val converter = ConverterMap<String, String>(String::class.java, String::class.java)
+
         // execute
         http.post(
             "samples/types/upload",

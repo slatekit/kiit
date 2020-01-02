@@ -61,18 +61,18 @@ interface CodeBuilder {
                 val finalType = buildTypeName(genType)
                 finalType
             } else if (cls.supertypes.contains(KTypes.KSmartValueType)) {
-                TypeInfo(true, false, listOf(KTypes.KSmartValueClass))
+                TypeInfo(true, false, listOf(KTypes.KSmartValueClass), null, this::buildTargetName)
             } else if (cls == List::class) {
                 val types = listOf(tpe.arguments[0].type!!)
-                return TypeInfo(false, true, types.map { it.classifier as KClass<*> }, List::class)
+                return TypeInfo(false, true, types.map { it.classifier as KClass<*> }, List::class, this::buildTargetName)
             } else if (cls == Map::class) {
                 val types = listOf(tpe.arguments[0].type!!, tpe.arguments[1].type!!)
-                return TypeInfo(false, true, types.map { it.classifier as KClass<*> }, Map::class)
+                return TypeInfo(false, true, types.map { it.classifier as KClass<*> }, Map::class, this::buildTargetName)
             } else if (cls == Pair::class) {
                 val types = listOf(tpe.arguments[0].type!!, tpe.arguments[1].type!!)
-                return TypeInfo(false, true, types.map { it.classifier as KClass<*> }, Pair::class)
+                return TypeInfo(false, true, types.map { it.classifier as KClass<*> }, Pair::class, this::buildTargetName)
             } else {
-                TypeInfo(false, false, listOf(cls))
+                TypeInfo(false, false, listOf(cls), null, this::buildTargetName)
             }
         }
     }
