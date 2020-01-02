@@ -14,8 +14,6 @@
 package slatekit.apis.core
 
 import slatekit.apis.ApiServer
-import slatekit.apis.tools.docs.ApiVisitOptions
-import slatekit.apis.tools.docs.ApiVisitor
 import slatekit.apis.tools.docs.Doc
 import slatekit.apis.tools.docs.DocUtils
 import slatekit.common.types.Content
@@ -31,7 +29,7 @@ sealed class HelpType {
     object Action : HelpType()
 }
 
-class Help(val host: ApiServer, val routes: Routes, val docKey: String?, val docBuilder: () -> Doc) {
+open class Help(val host: ApiServer, val routes: Routes, val docKey: String?, val docBuilder: () -> Doc) {
 
     fun process(req: Request): Outcome<Content> {
         val result = DocUtils.isHelp(req)
@@ -80,10 +78,9 @@ class Help(val host: ApiServer, val routes: Routes, val docKey: String?, val doc
      *
      * @return
      */
-    fun areas(): String {
+    open fun areas(): String {
         val doc = docBuilder()
-        val visitor = ApiVisitor(routes)
-        visitor.visitAreas(doc)
+        doc.areas(routes.areas)
         return doc.toString()
     }
 
@@ -93,10 +90,14 @@ class Help(val host: ApiServer, val routes: Routes, val docKey: String?, val doc
      * @param area
      * @return
      */
-    fun area(area: String): String {
+    open fun area(name: String): String {
         val doc = docBuilder()
-        val visitor = ApiVisitor(routes)
-        visitor.visitApis(area, doc)
+        if (!routes.contains(name)) {
+            doc.error("Area : $name not found")
+        } else {
+            val area = routes.areas[name]
+            area?.let { doc.area(it) }
+        }
         return doc.toString()
     }
 
@@ -107,10 +108,19 @@ class Help(val host: ApiServer, val routes: Routes, val docKey: String?, val doc
      * @param apiName
      * @return
      */
-    fun api(area: String, api: String): String {
+    open fun api(areaName: String, apiName: String): String {
         val doc = docBuilder()
-        val visitor = ApiVisitor(routes)
-        visitor.visitActions(area, api, doc)
+        if (!routes.contains(areaName, apiName)) {
+            doc.error("Area : $areaName not found")
+        } else {
+            val area = routes.areas[areaName]
+            area?.let { area ->
+                val api = area.apis[apiName]
+                api?.let { api ->
+                    doc.api(area, api)
+                }
+            }
+        }
         return doc.toString()
     }
 
@@ -122,12 +132,21 @@ class Help(val host: ApiServer, val routes: Routes, val docKey: String?, val doc
      * @param actionName
      * @return
      */
-    fun action(area: String, name: String, action: String): String {
+    open fun action(areaName: String, apiName: String, actionName: String): String {
         val doc = docBuilder()
-        val visitor = ApiVisitor(routes)
-        val api = routes.api(area, name)
-        api?.actions?.get(action)?.let { act ->
-            visitor.visitAction(api, act, doc, true, options = ApiVisitOptions())
+        if (!routes.contains(areaName, apiName)) {
+            doc.error("Area : $areaName not found")
+        } else {
+            val area = routes.areas[areaName]
+            area?.let { area ->
+                val api = area.apis[apiName]
+                api?.let { api ->
+                    val action = api.actions[actionName]
+                    action?.let { action ->
+                        doc.action(area, api, action)
+                    }
+                }
+            }
         }
         return doc.toString()
     }

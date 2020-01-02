@@ -18,131 +18,219 @@ import kotlin.reflect.KParameter
 import slatekit.apis.Input
 import slatekit.apis.core.Action
 import slatekit.apis.core.Api
+import slatekit.apis.core.Area
+import slatekit.apis.core.Lookup
 import slatekit.common.console.SemanticConsole
 import slatekit.common.console.SemanticConsoleSettings
+import slatekit.common.console.SemanticText
 import slatekit.common.console.SemanticWrites
 import slatekit.common.ext.orElse
 import slatekit.meta.KTypes
 import slatekit.meta.Serialization
 
-abstract class Doc : ApiVisit {
+abstract class Doc  {
 
     protected open val writer: SemanticWrites = SemanticConsole(SemanticConsoleSettings())
-    override val docSettings = DocSettings()
+    open val docSettings = DocSettings()
     open val pathSeparator = "."
     open val helpSuffix = "?"
     open val helpSeparator = " "
+    open val headerDelimeter = "-"
+    open val headerDelimeterLength = 40
 
     fun lineBreak() {
         writer.text("---------------------------------------------------------------", endLine = true)
     }
 
-    override fun onApiError(msg: String) {
+    fun error(msg: String) {
         writer.failure(msg)
     }
 
-    override fun onVisitSeparator() {
+    fun begin(){
+        writer.line()
+        writer.text(headerDelimeter.repeat(headerDelimeterLength), true)
+    }
+
+    fun end() {
         writer.line()
     }
 
-    override fun onAreasBegin() {
-        lineBreak()
-        writer.title("supported areas: ", endLine = true)
-        writer.line()
+    fun section(call:() -> Unit ){
+        begin()
+        call()
+        end()
     }
 
-    override fun onAreasEnd() {
-        writer.text("use {area}$helpSeparator$helpSuffix to list all apis in the area. ")
-        writer.url("e.g. sys ?", endLine = true)
-        lineBreak()
+    /**
+     * Builds the list of areas:
+     *
+     * AREAS
+     *
+     * 1. areaA
+     * 2. areaB
+     * 3. areaC
+     *
+     * use  {area} ? to list all APIs in an area
+     * e.g. areaA ?
+     */
+    fun areas(areas: Lookup<Area>) {
+        section {
+            writer.title("AREAS", endLine = true)
+            areas.items.forEachIndexed { ndx, area -> writer.highlight((ndx + 1).toString() + "." + area.name, endLine = true) }
+            writer.line()
+
+            // Usage
+            writer.text("use {area}$helpSeparator$helpSuffix to list all apis in the area. ")
+            writer.url("e.g. ${areas.items.first().name} ?", endLine = true)
+            lineBreak()
+        }
     }
 
-    override fun onAreaBegin(area: String) {
-        writer.highlight(area, endLine = true)
+    /**
+     * Builds the list of areas:
+     *
+     * AREA
+     * areaA
+     *
+     * APIs
+     * apiA : description of API
+     * apiB : description of API
+     * apiC : description of API
+     *
+     * use  {area} {api}? to list all Actions in an API
+     * e.g. areaA apiA ?
+     */
+    fun area(area:Area){
+        section {
+            writer.title("AREA", endLine = true)
+            writer.highlight(area.name, endLine = true)
+            writer.line()
+
+            // APISs
+            writer.subTitle("APIs", endLine = true)
+            area.apis.items.sortedBy { it.name }.forEach { buildApi(it, details = false) }
+            writer.line()
+
+            // Usage
+            writer.text("use {area}$helpSeparator{api}$helpSuffix to list all Actions in an API. ")
+            writer.url("e.g. ${area.name}$helpSeparator${area.apis.items.first().name}?", endLine = true)
+        }
     }
 
-    override fun onAreaEnd(area: String) {
+
+    /**
+     * Builds the list of areas:
+     *
+     * AREA
+     * areaA
+     *
+     * APIs
+     * apiA : description of API
+     *
+     * ACTIONS
+     *      action1: description of ACTION
+     *      action2: description of ACTION
+     *      action3: description of ACTION
+     *
+     * use  {area} {api} {action}? to list Action details
+     * e.g. areaA apiA action1 ?
+     */
+    fun api(area:Area, api: Api){
+        section {
+            writer.title("AREA", endLine = true)
+            writer.highlight(area.name, endLine = true)
+            writer.line()
+
+            // APISs
+            writer.subTitle("API", endLine = true)
+            buildApi(api, details = true)
+            writer.line()
+
+            // Actions
+            writer.subTitle("ACTIONS", endLine = true)
+            val maxLength = api.actions.items.maxBy { it.name }?.name?.length ?: 10
+            api.actions.items.sortedBy { it.name }.forEach{ buildAction(api, it, maxLength,false)}
+            writer.line()
+
+            // Usage
+            writer.text("use {area}$helpSeparator{api}$helpSeparator{action}$helpSuffix to list Action details. ")
+            writer.url("e.g. ${area.name}$helpSeparator${api.name}$helpSeparator${api.actions.items.first().name}?", endLine = true)
+        }
     }
 
-    override fun onApisBegin(area: String) {
-        lineBreak()
-        writer.title("supported apis: ", endLine = true)
-        writer.line()
-    }
+    /**
+     * Builds the list of areas:
+     *
+     * AREA
+     * areaA
+     *
+     * APIs
+     * apiA : description of API
+     *
+     * ACTIONS
+     *      action1: description of ACTION
+     *      action2: description of ACTION
+     *      action3: description of ACTION
+     *
+     * use  {area} {api} {action}? to list Action details
+     * e.g. areaA apiA action1 ?
+     */
+    fun action(area:Area, api: Api, action: Action){
+        section {
+            writer.title("AREA", endLine = true)
+            writer.highlight(area.name, endLine = true)
+            writer.line()
 
-    override fun onApisEnd(area: String, exampleApi: String?) {
-        val eg = exampleApi ?: "sys.models"
-        writer.line()
-        writer.text("use {area}$pathSeparator{api}$helpSeparator$helpSuffix to list all actions on an api. ")
-        writer.url("e.g. $eg ?", endLine = true)
-        lineBreak()
-    }
+            // APISs
+            writer.subTitle("API", endLine = true)
+            buildApi(api, details = true)
+            writer.line()
 
-    override fun onApiEnd(api: Api) {
-        writer.line()
-    }
+            // Actions
+            writer.line()
 
-    override fun onArgEnd(arg: Input) {
-        writer.line()
-    }
-
-    override fun onApiActionSyntax(action: Action?) {
-        val exampleCli = action?.let { it -> buildPath(it, null) } ?: "app.movies.last"
-        val exampleWeb = action?.let { it -> buildPath(it, "/") } ?: "app/movies/last"
-        writer.line()
-        writer.text("use {area}$pathSeparator{api}$pathSeparator{action}$helpSeparator$helpSuffix to list inputs for an action. ")
-        writer.url("cli: $exampleCli ?", endLine = true)
-        writer.url("web: $exampleWeb ?", endLine = true)
-        lineBreak()
+            // Usage
+            writer.text("use {area}$helpSeparator{api}$helpSeparator{action}$helpSuffix to list Action details. ")
+            writer.url("e.g. ${area.name}$helpSeparator${api.name}$helpSeparator${api.actions.items.first().name}?", endLine = true)
+        }
     }
 
     protected fun getFormattedText(text: String, max: Int): String {
         return if (text.length == max)
             text
         else {
-            val remainder = " ".repeat(abs(max - text.length))
+            val remainder =  writer.SPACE.repeat(abs(max - text.length))
             text + remainder
         }
     }
 
-    override fun onApiBegin(api: Api, options: ApiVisitOptions?) {
-        writer.highlight(getFormattedText(api.name, (options?.maxLength ?: 0) + 3), endLine = false)
+    private fun buildApi(api: Api, details:Boolean ) {
+        writer.highlight(getFormattedText(api.name, (docSettings.maxLengthApi ) + 3), endLine = false)
         writer.text(":", endLine = false)
-        writer.text(api.desc, endLine = options?.endApiWithLine ?: false)
+        writer.text(api.desc, endLine = true)
+
+        if(details) {
+            with(writer) {
+                line()
+                keyValue("route", "${api.area}$pathSeparator${api.name}", true)
+                keyValue("area", api.area, true)
+                keyValue("name", api.name, true)
+                keyValue("verb", api.verb.name, true)
+                keyValue("roles", api.roles.all.joinToString(","), true)
+                keyValue("proto", api.sources.all.joinToString(",") { it.id }, true)
+            }
+        }
     }
 
-    override fun onApiBeginDetail(api: Api, options: ApiVisitOptions?) {
-
-        writer.subTitle("AREA   : ", false)
-        writer.highlight(api.area, true)
-
-        writer.subTitle("API    : ", false)
-        writer.highlight(api.name, endLine = false)
-        writer.text(" ", endLine = false)
-        writer.text(api.desc, endLine = options?.endApiWithLine ?: false)
-    }
-
-    override fun onApiActionBegin(api: Api, action: Action, name: String, options: ApiVisitOptions?) {
+    private fun buildAction(api: Api, action: Action, maxLength:Int, details: Boolean) {
         writer.tab(1)
-        writer.subTitle(getFormattedText(name, (options?.maxLength ?: 0) + 3), endLine = false)
+        writer.highlight(getFormattedText(action.name, 0 + 3), endLine = false)
         writer.text(":", endLine = false)
         writer.text(action.desc, endLine = true)
     }
 
-    override fun onApiActionBeginDetail(api: Api, action: Action, name: String, options: ApiVisitOptions?) {
-        writer.subTitle("ACTION : ", false)
-        writer.highlight(name, endLine = false)
-        writer.text(" ", endLine = false)
-        writer.text(action.desc, endLine = true)
-        writer.subTitle("PATH   : ", false)
-        writer.highlight(buildPath(api.area, api.name, action.name, null), true)
-    }
 
-    override fun onApiActionEnd(action: Action, name: String) {
-        writer.line()
-    }
-
-    override fun onApiActionExample(
+    fun onApiActionExample(
         api: Api,
         actionName: String,
         action: Action,
@@ -177,37 +265,36 @@ abstract class Doc : ApiVisit {
         writer.line()
     }
 
-    override fun onArgsBegin(action: Action) {
+    fun argsHeader(action: Action) {
         writer.text("Inputs : ", true)
     }
 
-    override fun onArgBegin(arg: Input, options: ApiVisitOptions?) {
+    fun argInfo(arg: Input) {
 
         val example = if (arg.examples.size > 0) arg.examples[0] else ""
-        onArgBegin(arg.name, arg.desc, arg.required, arg.name, arg.defaults, example, options)
+        onArgBegin(arg.name, arg.desc, arg.required, arg.name, arg.defaults, example)
     }
 
-    override fun onArgBegin(
+    fun onArgBegin(
         name: String,
         desc: String,
         required: Boolean,
         type: String,
         defaultVal: String,
-        eg: String,
-        options: ApiVisitOptions?
+        eg: String
     ) {
         writer.line()
         writer.tab(2)
 
         // 1. name of the argument and description
         // e.g. email  : ""
-        writer.highlight(getFormattedText(name, (options?.maxLength ?: 10) + 3), endLine = false)
+        writer.highlight(getFormattedText(name, (docSettings.maxLengthArg ?: 10) + 3), endLine = false)
         writer.text(":", endLine = false)
         writer.text(desc.orElse("\"\""), endLine = true)
 
         // 2. required/optional
         writer.tab(2)
-        val space = getFormattedText("", (options?.maxLength ?: 10) + 3)
+        val space = getFormattedText("", (docSettings.maxLengthArg ?: 10) + 3)
         writer.text(space, endLine = false)
 
         val txt = if (required) "!" else "?"

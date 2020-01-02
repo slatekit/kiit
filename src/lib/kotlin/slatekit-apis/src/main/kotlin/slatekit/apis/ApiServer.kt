@@ -44,7 +44,7 @@ open class ApiServer(
     /**
      * The help class to handle help on an area, api, or action
      */
-    val help: Help by lazy { Help(this, routes, settings.docKey) { settings.docGen } }
+    val help: Help get() = Help(this, routes, settings.docKey) { settings.docGen() }
 
     /**
      * Logger for this server

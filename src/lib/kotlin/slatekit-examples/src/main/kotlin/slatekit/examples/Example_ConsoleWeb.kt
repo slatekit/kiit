@@ -34,7 +34,7 @@ class Example_ConsoleWeb : Command("console-web") {
     override fun execute(request: CommandRequest): Try<Any> {
         //<doc:examples>
         // ConsoleWriter with semantic ( title, url, error, success, highlight ) writing.
-        val writer = WebWriter()
+        val writer = SemanticWeb()
 
         // Case 1: Title - prints text in title format ( CAPS + Color Cyan )
         writer.title("title is in CAPS")
