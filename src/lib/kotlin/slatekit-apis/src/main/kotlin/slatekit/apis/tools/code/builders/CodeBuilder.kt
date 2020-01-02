@@ -12,6 +12,7 @@ import kotlin.reflect.KType
 interface CodeBuilder {
 
     val basicTypes: Map<KType, TypeInfo>
+    val mapTypeDecl:String
 
     /**
      * builds a string of parameters to put into the query string.
@@ -60,35 +61,26 @@ interface CodeBuilder {
                 val finalType = buildTypeName(genType)
                 finalType
             } else if (cls.supertypes.contains(KTypes.KSmartValueType)) {
-                TypeInfo(true, false, "String", "String", KTypes.KSmartValueClass, KTypes.KSmartValueClass, "String.class")
+                TypeInfo(true, false, listOf(KTypes.KSmartValueClass))
             } else if (cls == List::class) {
-                val listType = tpe.arguments[0].type!!
-                val listCls = KTypes.getClassFromType(listType)
-                val listTypeInfo = buildTypeName(listType)
-                val typeSig = "List<" + listTypeInfo.targetReturnType + ">"
-                TypeInfo(false, true, typeSig, typeSig, List::class, listCls, listTypeInfo.conversionType)
+                val types = listOf(tpe.arguments[0].type!!)
+                return TypeInfo(false, true, types.map { it.classifier as KClass<*> }, List::class)
             } else if (cls == Map::class) {
-                val tpeKey = tpe.arguments[0].type!!
-                val tpeVal = tpe.arguments[1].type!!
-                // val clsKey = KTypes.getClassFromType(tpeKey)
-                val clsVal = KTypes.getClassFromType(tpeVal)
-                val keyTypeInfo = buildTypeName(tpeKey)
-                val valTypeInfo = buildTypeName(tpeVal)
-                val sig = "Map<" + keyTypeInfo.targetReturnType + "," + valTypeInfo.targetReturnType + ">"
-                TypeInfo(false, true, sig, sig, Map::class, clsVal, "${keyTypeInfo.conversionType},${valTypeInfo.conversionType}")
+                val types = listOf(tpe.arguments[0].type!!, tpe.arguments[1].type!!)
+                return TypeInfo(false, true, types.map { it.classifier as KClass<*> }, Map::class)
             } else if (cls == Pair::class) {
-                val tpeFirst = tpe.arguments[0].type!!
-                val tpeSecond = tpe.arguments[1].type!!
-                val firstTypeInfo = buildTypeName(tpeFirst)
-                val secondTypeInfo = buildTypeName(tpeSecond)
-                val sig = "Pair<" + firstTypeInfo.targetReturnType + "," + secondTypeInfo.targetReturnType + ">"
-                TypeInfo(false, false, sig, sig, cls, cls, "${firstTypeInfo.conversionType},${secondTypeInfo.conversionType}")
+                val types = listOf(tpe.arguments[0].type!!, tpe.arguments[1].type!!)
+                return TypeInfo(false, true, types.map { it.classifier as KClass<*> }, Pair::class)
             } else {
-                val sig = cls.simpleName ?: ""
-                TypeInfo(false, false, sig, sig, cls, cls, sig)
+                TypeInfo(false, false, listOf(cls))
             }
         }
     }
+
+    fun buildTypeLoader():String
+
+
+    fun buildTargetName(cls:KClass<*>): String = cls.simpleName!!
 
 
     fun <T> collect(items:List<T>, tabs:String, sep:String?, forceSepator:Boolean, call:(T) -> String):String {

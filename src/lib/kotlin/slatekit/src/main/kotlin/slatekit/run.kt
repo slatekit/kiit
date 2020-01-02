@@ -6,6 +6,7 @@ import slatekit.common.CommonContext
 import slatekit.common.args.Args
 import slatekit.common.io.Alias
 import slatekit.integration.common.AppEntContext
+import slatekit.meta.KTypes
 import slatekit.providers.logs.logback.LogbackLogs
 import slatekit.results.Failure
 import slatekit.results.Success
@@ -44,6 +45,9 @@ import slatekit.results.Success
  *
  * FUTURE:
  * 1. Support more args: -app.envs="dev,qat,stg,pro" -app.dest="some directory" -sk.version='0.9.28'
+ *
+ * CODEGEN:
+ * 1. slatekit.codegen.toKotlin -templatesFolder="usr://dev/tmp/slatekit/slatekit/scripts/templates/codegen/kotlin" -outputFolder="usr://dev/tmp/codegen/kotlin" -packageName="blendlife"
  */
 fun main(args: Array<String>) {
     cli(args)

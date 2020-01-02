@@ -2,7 +2,6 @@ package slatekit.apis.tools.code
 
 import java.io.File
 import kotlin.reflect.KClass
-import kotlin.reflect.KParameter
 import kotlin.reflect.KType
 import kotlin.reflect.full.declaredMemberFunctions
 import slatekit.apis.Verbs
@@ -127,20 +126,21 @@ class CodeGen(val settings: CodeGenSettings, val builder:CodeBuilder) {
             "methodName" to action.name,
             "methodDesc" to action.desc,
             "methodParams" to builder.buildArgs(action),
-            "methodReturnType" to typeInfo.targetReturnType,
+            "methodReturnType" to typeInfo.returnType(),
             "queryParams" to builder.buildQueryParams(action),
-            "postDataDecl" to if (verb.name == Verbs.GET) "" else "HashMap<String, Object> postData = new HashMap<>();",
+            "postDataDecl" to if (verb.name == Verbs.GET) "" else builder.mapTypeDecl,
             "postDataVars" to builder.buildDataParams(action),
             "postDataParam" to if (verb.name == Verbs.GET) "" else "postData,",
-            "converterTypes" to typeInfo.conversionType,
-            "converterClass" to typeInfo.converterTypeName()
+            "converterClass" to typeInfo.converterTypeName(),
+            "parameterizedClassNames" to typeInfo.parameterizedNames,
+            "parameterizedClassTypes" to typeInfo.parameterizedTypes(builder.buildTypeLoader())
         )
     }
 
     private fun generateModelFromType(types: List<KType>, modelFolder: File) {
         types.map { builder.buildTypeName(it) }
                 .filter { it.isApplicableForCodeGen() }
-                .forEach { typeInfo -> generateDTO(modelFolder, typeInfo.dataType) }
+                .forEach { typeInfo -> generateDTO(modelFolder, typeInfo.targetType) }
     }
 
     private fun generateApi(req: Request, api: Api, folder: File, methods: String) {

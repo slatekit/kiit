@@ -23,7 +23,7 @@
         val json = Conversions.convertMapToJson(postData)
 
         // convert
-        val converter = Converter@{converterClass}<@{converterTypes}>(@{converterTypes}::class.java)
+        val converter = Converter@{converterClass}<@{parameterizedClassNames}>(@{parameterizedClassTypes})
 
         // execute
         http.@{verb}(
