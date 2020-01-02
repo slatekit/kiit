@@ -27,6 +27,7 @@ import slatekit.common.console.SemanticWrites
 import slatekit.common.ext.orElse
 import slatekit.meta.KTypes
 import slatekit.meta.Serialization
+import kotlin.reflect.KClass
 
 abstract class Doc  {
 
@@ -137,12 +138,7 @@ abstract class Doc  {
      */
     fun api(area:Area, api: Api){
         section {
-            writer.title("AREA", endLine = true)
-            writer.highlight(area.name, endLine = true)
-            writer.line()
-
-            // APISs
-            writer.subTitle("API", endLine = true)
+            writer.title("API", endLine = true)
             buildApi(api, details = true)
             writer.line()
 
@@ -177,9 +173,7 @@ abstract class Doc  {
      */
     fun action(area:Area, api: Api, action: Action){
         section {
-            writer.title("AREA", endLine = true)
-            writer.highlight(area.name, endLine = true)
-            writer.line()
+            writer.title("ACTION", endLine = true)
 
             // APISs
             writer.subTitle("API", endLine = true)
@@ -187,6 +181,8 @@ abstract class Doc  {
             writer.line()
 
             // Actions
+            writer.subTitle("ACTION", endLine = true)
+            buildAction(api, action,30, true)
             writer.line()
 
             // Usage
@@ -216,6 +212,7 @@ abstract class Doc  {
                 keyValue("area", api.area, true)
                 keyValue("name", api.name, true)
                 keyValue("verb", api.verb.name, true)
+                keyValue("auth", api.auth.name, true)
                 keyValue("roles", api.roles.all.joinToString(","), true)
                 keyValue("proto", api.sources.all.joinToString(",") { it.id }, true)
             }
@@ -223,87 +220,26 @@ abstract class Doc  {
     }
 
     private fun buildAction(api: Api, action: Action, maxLength:Int, details: Boolean) {
-        writer.tab(1)
         writer.highlight(getFormattedText(action.name, 0 + 3), endLine = false)
         writer.text(":", endLine = false)
         writer.text(action.desc, endLine = true)
-    }
 
-
-    fun onApiActionExample(
-        api: Api,
-        actionName: String,
-        action: Action,
-        args: List<KParameter>
-    ) {
-        writer.line()
-
-        val exampleCli = buildPath(api.area, api.name, actionName, null)
-        val exampleWeb = buildPath(api.area, api.name, actionName, "/")
-        val paramsCli = args.fold("", { s, arg ->
-            s + "-" + arg.name + "=" + KTypes.getTypeExample(arg.name!!, arg.type, "'a bc'") + " "
-        })
-        val paramsQuery = args.fold("", { s, arg ->
-            s + "&" + arg.name + "=" + KTypes.getTypeExample(arg.name!!, arg.type, "a%20bc")
-        })
-        val serializer = Serialization.sampler()
-        val json = serializer.serialize(args)
-        writer.tab(1)
-        writer.url("1. cli      : $exampleCli ", endLine = false)
-        writer.text(paramsCli, true)
-
-        writer.tab(1)
-        writer.url("2. web/url  : $exampleWeb ", endLine = false)
-        writer.text(paramsQuery, true)
-
-        if (!actionName.startsWith("get")) {
-            writer.tab(1)
-            writer.url("3. web/json : $exampleWeb ", endLine = false)
-            writer.text(json, true)
-        }
-
-        writer.line()
-    }
-
-    fun argsHeader(action: Action) {
-        writer.text("Inputs : ", true)
-    }
-
-    fun argInfo(arg: Input) {
-
-        val example = if (arg.examples.size > 0) arg.examples[0] else ""
-        onArgBegin(arg.name, arg.desc, arg.required, arg.name, arg.defaults, example)
-    }
-
-    fun onArgBegin(
-        name: String,
-        desc: String,
-        required: Boolean,
-        type: String,
-        defaultVal: String,
-        eg: String
-    ) {
-        writer.line()
-        writer.tab(2)
-
-        // 1. name of the argument and description
-        // e.g. email  : ""
-        writer.highlight(getFormattedText(name, (docSettings.maxLengthArg ?: 10) + 3), endLine = false)
-        writer.text(":", endLine = false)
-        writer.text(desc.orElse("\"\""), endLine = true)
-
-        // 2. required/optional
-        writer.tab(2)
-        val space = getFormattedText("", (docSettings.maxLengthArg ?: 10) + 3)
-        writer.text(space, endLine = false)
-
-        val txt = if (required) "!" else "?"
-        if (required) {
-            writer.important(txt, endLine = false)
-            writer.text("required : " + type, endLine = false)
-        } else {
-            writer.text(txt, endLine = false)
-            writer.text("optional : " + type, endLine = false)
+        if(details) {
+            with(writer) {
+                line()
+                keyValue("name", action.name, true)
+                keyValue("verb", action.verb.name, true)
+                keyValue("auth", action.auth.name, true)
+                keyValue("roles", action.roles.all.joinToString(","), true)
+                keyValue("proto", action.sources.all.joinToString(",") { it.id }, true)
+            }
+            writer.subTitle("INPUTS", endLine = true)
+            action.paramsUser.forEach {
+                writer.highlight(it.name!!, endLine = true)
+                writer.keyValue("type", (it.type.classifier as KClass<*>).simpleName!!, true)
+                writer.keyValue("required", (!it.isOptional).toString(), true)
+                writer.line()
+            }
         }
     }
 
