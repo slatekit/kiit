@@ -39,17 +39,18 @@ fun toVerb(name: String?): Verb {
  * @param cls : The class representing the API
  * @param namer: The naming convention
  */
-fun toApi(cls: KClass<*>, instance: Any?, namer: Namer?): slatekit.apis.core.Api {
+fun toApi(cls: KClass<*>, instance: Any?, access: Access?, namer: Namer?): slatekit.apis.core.Api {
 
     // get the @Api annotation on the class
     val anno = Reflector.getAnnotationForClassOpt<slatekit.apis.Api>(cls, slatekit.apis.Api::class)!!
+    val accessAnno = Access.parse(anno.access)
     val api = slatekit.apis.core.Api(
             cls,
             anno.area,
             anno.name,
             anno.desc,
             Roles(anno.roles.toList()),
-            Access.parse(anno.access),
+            accessAnno.min(access) ,
             AuthMode.parse(anno.auth),
             Sources(anno.sources.toList().map { Source.parse(it) }),
             Verb.parse(anno.verb),
@@ -90,6 +91,7 @@ fun toAction(member: KCallable<*>, api: slatekit.apis.core.Api, apiAction: slate
 
     // Default these from api if empty
     val actionRoles = Roles.of(apiAction?.roles ?: arrayOf()).orElse(api.roles)
+    val actionAccess = (apiAction?.access?.let{ Access.parse(it) } ?: api.access).orElse(api.access)
     val actionProtocol = Sources.of(apiAction?.sources ?: arrayOf()).orElse(api.sources)
     val rawVerb = toVerb(apiAction?.verb).orElse(api.verb)
 
@@ -103,7 +105,7 @@ fun toAction(member: KCallable<*>, api: slatekit.apis.core.Api, apiAction: slate
             actionName,
             actionDesc,
             actionRoles,
-            api.access,
+            actionAccess,
             api.auth,
             actionProtocol,
             actionVerb,

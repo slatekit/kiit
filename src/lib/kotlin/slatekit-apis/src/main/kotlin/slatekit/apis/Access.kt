@@ -41,12 +41,15 @@ object AccessLevel {
 
 
 
-sealed class Access(override val name:String)  : Parentable<Access> {
-    object Parent   : Access(AccessLevel.PARENT)
-    object Public   : Access(AccessLevel.PRIVATE)
-    object Internal : Access(AccessLevel.INTERNAL)
-    object Private  : Access(AccessLevel.PRIVATE)
+sealed class Access(val value:Int, override val name:String)  : Parentable<Access> {
+    object Private  : Access(0, AccessLevel.PRIVATE)
+    object Internal : Access(1, AccessLevel.INTERNAL)
+    object Public   : Access(2, AccessLevel.PUBLIC)
+    object Parent   : Access(3, AccessLevel.PARENT)
 
+    fun min(other:Access?):Access {
+        return if(other != null && other.value < this.value) other else this
+    }
 
     companion object  {
 
