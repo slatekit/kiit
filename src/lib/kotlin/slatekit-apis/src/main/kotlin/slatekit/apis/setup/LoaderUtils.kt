@@ -39,17 +39,18 @@ fun toVerb(name: String?): Verb {
  * @param cls : The class representing the API
  * @param namer: The naming convention
  */
-fun toApi(cls: KClass<*>, instance: Any?, namer: Namer?): slatekit.apis.core.Api {
+fun toApi(cls: KClass<*>, instance: Any?, access: Access?, namer: Namer?): slatekit.apis.core.Api {
 
     // get the @Api annotation on the class
     val anno = Reflector.getAnnotationForClassOpt<slatekit.apis.Api>(cls, slatekit.apis.Api::class)!!
+    val accessAnno = Access.parse(anno.access)
     val api = slatekit.apis.core.Api(
             cls,
             anno.area,
             anno.name,
             anno.desc,
             Roles(anno.roles.toList()),
-            Access.parse(anno.access),
+            accessAnno.min(access) ,
             AuthMode.parse(anno.auth),
             Sources(anno.sources.toList().map { Source.parse(it) }),
             Verb.parse(anno.verb),

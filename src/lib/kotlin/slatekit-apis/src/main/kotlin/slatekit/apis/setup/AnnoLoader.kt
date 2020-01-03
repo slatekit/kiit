@@ -17,7 +17,7 @@ class AnnoLoader(val cls: KClass<*>, val raw: Api? = null) : Loader {
      * @param namer: The naming convention
      */
     override fun loadApi(namer: Namer?): Api {
-        val api = toApi(cls, raw?.singleton, namer)
+        val api = toApi(cls, raw?.singleton, raw?.access, namer)
 
         // Get all the actions using the @ApiAction
         val actions = loadActions(api, false, namer)
