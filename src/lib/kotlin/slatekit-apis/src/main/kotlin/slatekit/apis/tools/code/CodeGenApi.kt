@@ -1,5 +1,6 @@
 package slatekit.apis.tools.code
 
+import com.sun.org.apache.xpath.internal.operations.Bool
 import slatekit.apis.*
 import slatekit.apis.AuthModes
 import slatekit.apis.Verbs
@@ -29,23 +30,23 @@ class CodeGenApi : HostAware {
     }
 
     @Action(name = "", desc = "generates client code in Kotlin")
-    fun toKotlin(req: Request, templatesFolder: String, outputFolder: String, packageName: String): Notice<String> {
-        return generate(req, templatesFolder, outputFolder, packageName, Language.Kotlin)
+    fun toKotlin(req: Request, templatesFolder: String, outputFolder: String, packageName: String, createDtos:Boolean): Notice<String> {
+        return generate(req, templatesFolder, outputFolder, packageName, Language.Kotlin, createDtos)
     }
 
     @Action(name = "", desc = "generates client code in Swift")
-    fun toSwift(req: Request, templatesFolder: String, outputFolder: String, packageName: String): Notice<String> {
-        return generate(req, templatesFolder, outputFolder, packageName, Language.Kotlin)
+    fun toSwift(req: Request, templatesFolder: String, outputFolder: String, packageName: String, createDtos:Boolean): Notice<String> {
+        return generate(req, templatesFolder, outputFolder, packageName, Language.Kotlin, createDtos)
     }
 
     @Action(name = "", desc = "generates client code in Java")
-    fun toJava(req: Request, templatesFolder: String, outputFolder: String, packageName: String): Notice<String> {
-        return generate(req, templatesFolder, outputFolder, packageName, Language.Kotlin)
+    fun toJava(req: Request, templatesFolder: String, outputFolder: String, packageName: String, createDtos:Boolean): Notice<String> {
+        return generate(req, templatesFolder, outputFolder, packageName, Language.Kotlin, createDtos)
     }
 
     @Action(name = "", desc = "generates client code in javascript")
-    fun toJS(req: Request, templatesFolder: String, outputFolder: String, packageName: String): Notice<String> {
-        return generate(req, templatesFolder, outputFolder, packageName, Language.JS)
+    fun toJS(req: Request, templatesFolder: String, outputFolder: String, packageName: String, createDtos:Boolean): Notice<String> {
+        return generate(req, templatesFolder, outputFolder, packageName, Language.JS, createDtos)
     }
 
     private fun generate(
@@ -53,7 +54,8 @@ class CodeGenApi : HostAware {
         templatesFolder: String,
         outputFolder: String,
         packageName: String,
-        lang: Language
+        lang: Language,
+        createDtos:Boolean
     ): Notice<String> {
 
         val result = this.host?.let { host ->
@@ -70,7 +72,7 @@ class CodeGenApi : HostAware {
                 Language.Java -> JavaBuilder(settings)
                 else -> JavaBuilder(settings)
             }
-            val generator = CodeGen(settings, builder)
+            val generator = CodeGen(settings.copy(createDtos = createDtos), builder)
             generator.generate(req)
             slatekit.results.Success("")
         } ?: slatekit.results.Failure("Api Container has not been set")

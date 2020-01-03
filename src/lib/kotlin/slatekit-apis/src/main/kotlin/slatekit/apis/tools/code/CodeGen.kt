@@ -80,13 +80,15 @@ class CodeGen(val settings: CodeGenSettings, val builder:CodeBuilder) {
 
                 // Get unique types
                 // Iterate over all the api actions
-                api.actions.items.map { action ->
-                    println(action.member.name)
-                    generateModelFromType(action.paramsUser.map { it.type }, codeGenDirs.modelFolder)
-                    try {
-                        generateModelFromType(listOf(action.member.returnType), codeGenDirs.modelFolder)
-                    } catch (ex: Exception) {
-                        log.error("Error trying to generate types from return type:" + action.member.name + ", " + action.member.returnType.classifier?.toString())
+                if(this.settings.createDtos) {
+                    api.actions.items.map { action ->
+                        println(action.member.name)
+                        generateModelFromType(action.paramsUser.map { it.type }, codeGenDirs.modelFolder)
+                        try {
+                            generateModelFromType(listOf(action.member.returnType), codeGenDirs.modelFolder)
+                        } catch (ex: Exception) {
+                            log.error("Error trying to generate types from return type:" + action.member.name + ", " + action.member.returnType.classifier?.toString())
+                        }
                     }
                 }
 
