@@ -17,6 +17,7 @@ import slatekit.common.newline
 
 interface SemanticWrites {
 
+    val SPACE: String get() = " "
     val TAB: String get() = "    "
 
     val NEWLINE: String get() = newline
@@ -67,7 +68,7 @@ interface SemanticWrites {
     /**
      * prints a empty line
      */
-    fun line() = write(SemanticText.NoFormat, NEWLINE, false)
+    fun line() = write(SemanticText.NewLine, NEWLINE, false)
 
     /**
      * prints a empty line
@@ -79,7 +80,7 @@ interface SemanticWrites {
      *
      * @param count
      */
-    fun tab(count: Int = 1) = (0..count).forEach { write(SemanticText.Text, TAB, false) }
+    fun tab(count: Int = 1) = (0..count).forEach { write(SemanticText.Tab, TAB, false) }
 
     /**
      * prints text in title format ( UPPERCASE and BLUE )

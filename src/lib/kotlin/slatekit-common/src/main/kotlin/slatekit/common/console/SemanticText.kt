@@ -13,7 +13,7 @@
 
 package slatekit.common.console
 
-sealed class SemanticText(val name:String, val color: String, private val upperCase: Boolean) {
+sealed class SemanticText(val name:String, val color: String, private val upperCase: Boolean, val format:Boolean = true) {
 
     object Title     : SemanticText("title"    , Console.BLUE, true)
     object Subtitle  : SemanticText("subtitle" , Console.CYAN, false)
@@ -25,6 +25,9 @@ sealed class SemanticText(val name:String, val color: String, private val upperC
     object Text      : SemanticText("text"     , Console.WHITE, false)
     object Label     : SemanticText("label"    , Console.WHITE, false)
     object NoFormat  : SemanticText("none"     , "",false)
+    object NewLine   : SemanticText("newline"  , "",false)
+    object Tab       : SemanticText("tab"      , "",false)
+    object Raw       : SemanticText("raw"      , "",false, false)
 
     fun format(text: String): String {
         return if (upperCase) text.toUpperCase() else text
@@ -48,7 +51,9 @@ sealed class SemanticText(val name:String, val color: String, private val upperC
                 Failure  .name -> Failure
                 Text     .name -> Text
                 NoFormat .name -> NoFormat
-                else -> Text
+                NewLine  .name -> NewLine
+                Tab      .name -> Tab
+                else           -> Text
             }
         }
     }

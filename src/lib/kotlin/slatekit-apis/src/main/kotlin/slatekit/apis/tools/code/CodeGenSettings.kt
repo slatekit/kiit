@@ -9,10 +9,8 @@ data class CodeGenSettings(
     val templatesFolder: String,
     val outputFolder: String,
     val packageName: String,
-    val classFile: String = "",
-    val methodFile: String = "",
-    val modelFile: String = "",
     val lang: Language,
     val createDtos:Boolean = true,
+    val templateClassSuffix :String = "Api",
     val declaredMethodsOnly: Boolean = true
 )

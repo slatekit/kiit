@@ -37,7 +37,7 @@ data class ApiSettings(
     val decoder: ((Request, Encryptor?) -> Deserializer)? = null,
     val encoder: ((String, Any?) -> String)? = null,
     val docKey: String? = null,
-    val docGen: Doc = doc(source)
+    val docGen: () -> Doc = { doc(source) }
 ) {
     companion object {
         fun doc(protocol: Source): Doc {

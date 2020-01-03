@@ -2,6 +2,7 @@ package slatekit
 
 import slatekit.apis.Setup
 import slatekit.apis.core.Api
+import slatekit.apis.tools.code.CodeGenApi
 import slatekit.cloud.aws.AwsCloudFiles
 import slatekit.cloud.aws.AwsCloudQueue
 import slatekit.common.Context
@@ -14,7 +15,6 @@ import slatekit.notifications.sms.SmsService
 import slatekit.notifications.sms.SmsServiceTwilio
 import slatekit.docs.DocApi
 import slatekit.generator.*
-import slatekit.info.DependencyApi
 import slatekit.integration.apis.*
 import slatekit.integration.common.AppEntContext
 import slatekit.integration.mods.Mod
@@ -22,6 +22,7 @@ import slatekit.integration.mods.ModService
 import slatekit.integration.mods.ModuleContext
 import slatekit.orm.migrations.MigrationService
 import slatekit.orm.migrations.MigrationSettings
+import slatekit.samples.common.apis.SampleApi
 
 interface SlateKitServices {
 
@@ -66,8 +67,10 @@ interface SlateKitServices {
         val requiredApis = listOf(
                 Api(GeneratorApi(ctx, GeneratorService(ctx, SlateKit::class.java, GeneratorSettings(toolSettings, buildSettings))), declaredOnly = true, setup = Setup.Annotated),
                 Api(DocApi(ctx), declaredOnly = true, setup = Setup.Annotated),
-                Api(InfoApi(ctx), declaredOnly = true, setup = Setup.Annotated),
-                Api(VersionApi(ctx), declaredOnly = true, setup = Setup.Annotated)
+                Api(CodeGenApi(), declaredOnly = true, setup = Setup.Annotated),
+                Api(SampleApi(ctx), declaredOnly = true, setup = Setup.Annotated)
+//                Api(InfoApi(ctx), declaredOnly = true, setup = Setup.Annotated),
+//                Api(VersionApi(ctx), declaredOnly = true, setup = Setup.Annotated)
                 //Api(moduleApi, declaredOnly = true, setup = Setup.Annotated)
         )
         val optionalApis = listOf<Api>() //optionalApis()
@@ -87,7 +90,8 @@ interface SlateKitServices {
                 load("email") { Api(EmailApi(emails(), ctx), declaredOnly = true, setup = Setup.Annotated) },
                 load("files") { Api(FilesApi(files(), ctx), declaredOnly = true, setup = Setup.Annotated) },
                 load("queues") { Api(QueueApi(queues(), ctx), declaredOnly = true, setup = Setup.Annotated) },
-                load("sms") { Api(SmsApi(sms(), ctx), declaredOnly = true, setup = Setup.Annotated) }
+                load("sms") { Api(SmsApi(sms(), ctx), declaredOnly = true, setup = Setup.Annotated) },
+                Api(CodeGenApi(), declaredOnly = true, setup = Setup.Annotated)
                 //load("db") { Api(DependencyApi(ctx), declaredOnly = false, setup = Setup.Annotated) }
         )
         return apis.filterNotNull()
