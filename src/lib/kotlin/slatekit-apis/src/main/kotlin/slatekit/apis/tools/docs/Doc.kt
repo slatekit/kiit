@@ -174,6 +174,8 @@ abstract class Doc  {
     fun action(area:Area, api: Api, action: Action){
         section {
             writer.title("ACTION", endLine = true)
+            writer.text(action.verb.name + " ", endLine = false)
+            writer.url("$pathSeparator${area.name}$pathSeparator${api.name}$pathSeparator${action.name}", endLine = true)
 
             // APISs
             writer.subTitle("API", endLine = true)
@@ -236,7 +238,12 @@ abstract class Doc  {
             writer.subTitle("INPUTS", endLine = true)
             action.paramsUser.forEach {
                 writer.highlight(it.name!!, endLine = true)
-                writer.keyValue("type", (it.type.classifier as KClass<*>).simpleName!!, true)
+                val cls = it.type.classifier as KClass<*>
+                val type = when(it.type.arguments.isEmpty()){
+                    true -> cls.simpleName!!
+                    false -> it.type.arguments.joinToString { (it.type?.classifier as KClass<*>).simpleName!! }
+                }
+                writer.keyValue("type", type, true)
                 writer.keyValue("required", (!it.isOptional).toString(), true)
                 writer.line()
             }

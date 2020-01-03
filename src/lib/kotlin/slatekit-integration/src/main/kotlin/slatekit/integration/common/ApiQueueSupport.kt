@@ -1,12 +1,37 @@
 package slatekit.integration.common
 
+import slatekit.apis.ApiRequest
+import slatekit.apis.ApiResult
+import slatekit.apis.Handler
+import slatekit.apis.core.Requests
 import slatekit.apis.support.QueueSupport
+import slatekit.common.Source
+import slatekit.common.utils.Random
 import slatekit.core.queues.AsyncQueue
+import slatekit.results.Outcome
+import slatekit.results.Success
 
-interface ApiQueueSupport : QueueSupport {
+interface ApiQueueSupport : QueueSupport, Handler {
 
 
     fun queues(): List<AsyncQueue<String>>
+
+    /**
+     * Converts a request for an action that is queued, to an actual queue
+     */
+    override suspend fun process(req: ApiRequest, next:suspend(ApiRequest) -> Outcome<ApiResult>): Outcome<ApiResult>  {
+        // Coming in as http request ? and mode is queued ?
+        return if(req.source != Source.Queue && req.target?.action?.tags?.contains("queued") == true){
+            // Convert from web request to Queued request
+            val queuedReq = Requests.toJsonAsQueued(req.request)
+            enueue(Random.guid(), req.request.fullName, queuedReq,  "api-queue")
+            Success("Request processed as queue")
+        }
+        else {
+            next(req)
+        }
+    }
+
 
     /**
      * Creates a request from the parameters and api info and serializes that as json
