@@ -17,7 +17,8 @@ class CodeRules(val settings: CodeGenSettings) {
     fun isValidAction(api: Api, action:Action, declaredMemberLookup: Map<String, Boolean>):Boolean {
         // Only include declared items
         val isValidProtocol = action.protocol == Source.Web || action.protocol == Source.All
+        val isValidAccess = action.access == Access.Public
         val isDeclared = declaredMemberLookup.containsKey(action.name)
-        return isValidProtocol && ( !this.settings.declaredMethodsOnly || isDeclared )
+        return isValidProtocol && isValidAccess && ( !this.settings.declaredMethodsOnly || isDeclared )
     }
 }

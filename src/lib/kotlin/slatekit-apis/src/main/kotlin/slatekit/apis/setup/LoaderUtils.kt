@@ -90,6 +90,7 @@ fun toAction(member: KCallable<*>, api: slatekit.apis.core.Api, apiAction: slate
 
     // Default these from api if empty
     val actionRoles = Roles.of(apiAction?.roles ?: arrayOf()).orElse(api.roles)
+    val actionAccess = (apiAction?.access?.let{ Access.parse(it) } ?: api.access).orElse(api.access)
     val actionProtocol = Sources.of(apiAction?.sources ?: arrayOf()).orElse(api.sources)
     val rawVerb = toVerb(apiAction?.verb).orElse(api.verb)
 
@@ -103,7 +104,7 @@ fun toAction(member: KCallable<*>, api: slatekit.apis.core.Api, apiAction: slate
             actionName,
             actionDesc,
             actionRoles,
-            api.access,
+            actionAccess,
             api.auth,
             actionProtocol,
             actionVerb,
