@@ -25,7 +25,7 @@ apply plugin: 'kotlin'
 def slatekitComponentId = 'apis'
 def slatekitComponentName = 'APIs'
 def slatekitComponentDesc = 'SlateKit APIs: Universal APIs component'
-def slatekitComponentVersion = getCommonVersion()
+def slatekitComponentVersion = ext.slatekit_version_beta
 
 
 // ==================================================================

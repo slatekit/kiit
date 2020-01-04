@@ -23,7 +23,7 @@ apply plugin: 'kotlin'
 def slatekitComponentId = 'orm'
 def slatekitComponentName = 'ORM'
 def slatekitComponentDesc = 'SlateKit ORM: Light-Weight SQL ORM'
-def slatekitComponentVersion = getCommonVersion()
+def slatekitComponentVersion = ext.slatekit_version_beta
 
 
 // ==================================================================
