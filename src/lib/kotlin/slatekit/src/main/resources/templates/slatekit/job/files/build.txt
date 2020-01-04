@@ -1,6 +1,7 @@
 buildscript {
     ext.kotlin_version = '${build.kotlin.version}'
     ext.slatekit_version = "${build.slatekit.version}"
+    ext.slatekit_version_beta = "${build.slatekit.version}"
 
     repositories {
         jcenter()
@@ -39,7 +40,7 @@ dependencies {
     compile "com.slatekit:slatekit-common:$slatekit_version"
     compile "com.slatekit:slatekit-providers:$slatekit_version"
     compile "com.slatekit:slatekit-app:$slatekit_version"
-    compile "com.slatekit:slatekit-jobs:$slatekit_version"
+    compile "com.slatekit:slatekit-jobs:$slatekit_version_beta"
 }
 
 
