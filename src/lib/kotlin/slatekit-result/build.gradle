@@ -23,7 +23,7 @@ apply plugin: 'kotlin'
 def slatekitComponentId = 'results'
 def slatekitComponentName = 'Results'
 def slatekitComponentDesc = 'SlateKit Result: Model successes and failures with optional status codes'
-def slatekitComponentVersion = ext.slatekit_version_beta
+def slatekitComponentVersion = ext.slatekit_version
 
 
 // ==================================================================
