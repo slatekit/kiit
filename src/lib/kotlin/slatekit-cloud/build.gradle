@@ -25,7 +25,7 @@ apply plugin: 'kotlin'
 def slatekitComponentId = 'cloud'
 def slatekitComponentName = 'Cloud'
 def slatekitComponentDesc = 'SlateKit Cloud: AWS Integration with S3, SQS'
-def slatekitComponentVersion = getCommonVersion()
+def slatekitComponentVersion = ext.slatekit_version_beta
 
 
 // ==================================================================

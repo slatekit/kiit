@@ -25,7 +25,7 @@ apply plugin: 'kotlin'
 def slatekitComponentId = 'core'
 def slatekitComponentName = 'Core'
 def slatekitComponentDesc = 'SlateKit Core: Infrastructure components'
-def slatekitComponentVersion = getCommonVersion()
+def slatekitComponentVersion = ext.slatekit_version_beta
 
 
 // ==================================================================

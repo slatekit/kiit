@@ -25,7 +25,7 @@ apply plugin: 'kotlin'
 def slatekitComponentId = 'notifications'
 def slatekitComponentName = 'Notifications'
 def slatekitComponentDesc = 'SlateKit Notifications: Alerts, Emails, SMS, Push notifications'
-def slatekitComponentVersion = getCommonVersion()
+def slatekitComponentVersion = ext.slatekit_version_beta
 
 
 // ==================================================================

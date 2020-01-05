@@ -23,7 +23,7 @@ apply plugin: 'kotlin'
 def slatekitComponentId = 'entities'
 def slatekitComponentName = 'Entities'
 def slatekitComponentDesc = 'SlateKit Entities: Entity Service/Repository pattern'
-def slatekitComponentVersion = getCommonVersion()
+def slatekitComponentVersion = ext.slatekit_version_beta
 
 
 // ==================================================================

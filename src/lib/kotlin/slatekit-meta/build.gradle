@@ -25,7 +25,7 @@ apply plugin: 'kotlin'
 def slatekitComponentId = 'meta'
 def slatekitComponentName = 'Meta'
 def slatekitComponentDesc = 'SlateKit Meta: Reflection and Meta programming components'
-def slatekitComponentVersion = getCommonVersion()
+def slatekitComponentVersion = ext.slatekit_version_beta
 
 
 // ==================================================================

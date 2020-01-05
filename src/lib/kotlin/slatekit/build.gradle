@@ -27,7 +27,7 @@ apply plugin: 'application'
 def slatekitComponentId = 'exe'
 def slatekitComponentName = 'Exe'
 def slatekitComponentDesc = 'SlateKit Exe: CLI application'
-def slatekitComponentVersion = getCommonVersion()
+def slatekitComponentVersion = ext.slatekit_version_beta
 
 
 // ==================================================================
