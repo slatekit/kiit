@@ -6,8 +6,7 @@
  * author: Kishore Reddy
  * copyright: 2016 CodeHelix Solutions Inc.
  * license: refer to website and/or github
- * about: A tool-kit, utility library and server-backend
- * philosophy: Simplicity above all else
+ * about: A Kotlin Tool-Kit for Server + Android
  * </slate_header>
  */
 
@@ -22,9 +21,9 @@ import slatekit.results.Failure
 import slatekit.results.IgnoredException
 import slatekit.results.InvalidException
 import slatekit.results.Result
-import slatekit.results.Success
 import slatekit.results.Status
 import slatekit.results.StatusException
+import slatekit.results.Success
 import slatekit.results.Try
 import slatekit.results.UnexpectedException
 

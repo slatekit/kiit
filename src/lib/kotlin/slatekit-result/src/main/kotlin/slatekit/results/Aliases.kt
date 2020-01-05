@@ -1,3 +1,14 @@
+/**
+ * <slate_header>
+ * url: www.slatekit.com
+ * git: www.github.com/code-helix/slatekit
+ * org: www.codehelix.co
+ * author: Kishore Reddy
+ * copyright: 2016 CodeHelix Solutions Inc.
+ * license: refer to website and/or github
+ * about: A Kotlin Tool-Kit for Server + Android
+ * </slate_header>
+ */
 package slatekit.results
 
 /**
@@ -29,7 +40,6 @@ typealias Outcome<T> = Result<T, Err>
  * 3. use a simple [String] for failures without having to build [Err] or [Exception]
  */
 typealias Notice<T> = Result<T, String>
-
 
 /**
  * Alias for Result<T,E> defaulting the E error type ( [Failure] branch ) to [Err.ErrorList]

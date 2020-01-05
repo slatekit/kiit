@@ -6,10 +6,10 @@
  * author: Kishore Reddy
  * copyright: 2016 CodeHelix Solutions Inc.
  * license: refer to website and/or github
- * about: A tool-kit, utility library and server-backend
- * philosophy: Simplicity above all else
+ * about: A Kotlin Tool-Kit for Server + Android
  * </slate_header>
  */
+
 /* ktlint-disable */
 package slatekit.results
 

@@ -1,14 +1,13 @@
 /**
-<slate_header>
-url: www.slatekit.com
-git: www.github.com/code-helix/slatekit
-org: www.codehelix.co
-author: Kishore Reddy
-copyright: 2016 CodeHelix Solutions Inc.
-license: refer to website and/or github
-about: A Kotlin utility library, tool-kit and server backend.
-philosophy: Simplicity above all else
-</slate_header>
+ * <slate_header>
+ * url: www.slatekit.com
+ * git: www.github.com/code-helix/slatekit
+ * org: www.codehelix.co
+ * author: Kishore Reddy
+ * copyright: 2016 CodeHelix Solutions Inc.
+ * license: refer to website and/or github
+ * about: A Kotlin Tool-Kit for Server + Android
+ * </slate_header>
  */
 
 package slatekit.results
@@ -38,13 +37,13 @@ sealed class Status {
      * 6. [Unexpected] : Err group to represent any unhandled exceptions
      */
     data class Succeeded(override val code: Int, override val msg: String) : Status()
-    data class Pending  (override val code: Int, override val msg: String) : Status()
-    data class Denied   (override val code: Int, override val msg: String) : Status()
-    data class Ignored  (override val code: Int, override val msg: String) : Status()
-    data class Invalid  (override val code: Int, override val msg: String) : Status()
-    data class Errored  (override val code: Int, override val msg: String) : Status()
-    data class Unexpected(override val code: Int, override val msg: String) : Status()
 
+    data class Pending(override val code: Int, override val msg: String) : Status()
+    data class Denied(override val code: Int, override val msg: String) : Status()
+    data class Ignored(override val code: Int, override val msg: String) : Status()
+    data class Invalid(override val code: Int, override val msg: String) : Status()
+    data class Errored(override val code: Int, override val msg: String) : Status()
+    data class Unexpected(override val code: Int, override val msg: String) : Status()
 
     fun copyAll(msg: String, code: Int): Status {
         return when (this) {
@@ -69,5 +68,4 @@ sealed class Status {
             is Unexpected -> this.copy(msg = msg)
         }
     }
-
 }

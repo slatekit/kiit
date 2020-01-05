@@ -1,14 +1,13 @@
 /**
-<slate_header>
-url: www.slatekit.com
-git: www.github.com/code-helix/slatekit
-org: www.codehelix.co
-author: Kishore Reddy
-copyright: 2016 CodeHelix Solutions Inc.
-license: refer to website and/or github
-about: A Kotlin utility library, tool-kit and server backend.
-philosophy: Simplicity above all else
-</slate_header>
+ * <slate_header>
+ * url: www.slatekit.com
+ * git: www.github.com/code-helix/slatekit
+ * org: www.codehelix.co
+ * author: Kishore Reddy
+ * copyright: 2016 CodeHelix Solutions Inc.
+ * license: refer to website and/or github
+ * about: A Kotlin Tool-Kit for Server + Android
+ * </slate_header>
  */
 
 package slatekit.results
@@ -43,13 +42,13 @@ sealed class Err {
      * @param field: Name of the field causing the error e.g. "email"
      * @param value: Value of the field causing the error e.g. "some_invalid_value"
      */
-    data class ErrorField(val field:String, val value:String, override val msg: String, override val err: Throwable? = null, override val ref: Any? = null) : Err()
+    data class ErrorField(val field: String, val value: String, override val msg: String, override val err: Throwable? = null, override val ref: Any? = null) : Err()
 
     /**
      * Error implementation to store list of errors
      * @param errors: List of all the errors
      */
-    data class ErrorList (val errors:List<Err>, override val msg: String, override val err: Throwable? = null, override val ref: Any? = null) : Err()
+    data class ErrorList(val errors: List<Err>, override val msg: String, override val err: Throwable? = null, override val ref: Any? = null) : Err()
 
     /**
      *   Here are 3 examples of implementing errors:
@@ -80,7 +79,7 @@ sealed class Err {
             return ErrorInfo(ex.message ?: "", ex)
         }
 
-        fun on(field:String, value:String, msg:String, ex:Throwable? = null):Err {
+        fun on(field: String, value: String, msg: String, ex: Throwable? = null): Err {
             return ErrorField(field, value, msg, ex)
         }
 
@@ -96,7 +95,7 @@ sealed class Err {
             return ErrorInfo(status.msg)
         }
 
-        fun list(errors:List<String>, msg:String?):ErrorList {
+        fun list(errors: List<String>, msg: String?): ErrorList {
             return ErrorList(errors.map { ErrorInfo(it) }, msg ?: "Error occurred")
         }
     }
