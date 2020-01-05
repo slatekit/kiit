@@ -4,6 +4,7 @@ buildscript {
     ext.kotlin_version = '1.3.21'
     ext.ktor_version = '1.1.1'
     ext.slatekit_version = new File('../version.txt').text
+    ext.slatekit_version_beta = new File('../version-beta.txt').text
 
     repositories {
         jcenter()
@@ -30,7 +31,7 @@ kotlin {
 def slatekitComponentId = 'server'
 def slatekitComponentName = 'Server'
 def slatekitComponentDesc = 'SlateKit Server: Universal API Server using Ktor or Spark'
-def slatekitComponentVersion = getCommonVersion()
+def slatekitComponentVersion = ext.slatekit_version_beta
 
 
 // ==================================================================
@@ -90,17 +91,17 @@ dependencies {
 
     // /* <slatekit_local>
     if( slatekitSetupViaMaven ) {
-        compile "com.slatekit:slatekit-results:$slatekit_version"
-        compile "com.slatekit:slatekit-common:$slatekit_version"
-        compile "com.slatekit:slatekit-app:$slatekit_version"
-        compile "com.slatekit:slatekit-meta:$slatekit_version"
-        compile "com.slatekit:slatekit-query:$slatekit_version"
-        compile "com.slatekit:slatekit-entities:$slatekit_version"
-        compile "com.slatekit:slatekit-orm:$slatekit_version"
-        compile "com.slatekit:slatekit-core:$slatekit_version"
-        compile "com.slatekit:slatekit-apis:$slatekit_version"
-        compile "com.slatekit:slatekit-jobs:$slatekit_version"
-        compile "com.slatekit:slatekit-integration:$slatekit_version"
+        compile "com.slatekit:slatekit-results:$slatekit_version_beta"
+        compile "com.slatekit:slatekit-common:$slatekit_version_beta"
+        compile "com.slatekit:slatekit-app:$slatekit_version_beta"
+        compile "com.slatekit:slatekit-meta:$slatekit_version_beta"
+        compile "com.slatekit:slatekit-query:$slatekit_version_beta"
+        compile "com.slatekit:slatekit-entities:$slatekit_version_beta"
+        compile "com.slatekit:slatekit-orm:$slatekit_version_beta"
+        compile "com.slatekit:slatekit-core:$slatekit_version_beta"
+        compile "com.slatekit:slatekit-apis:$slatekit_version_beta"
+        compile "com.slatekit:slatekit-jobs:$slatekit_version_beta"
+        compile "com.slatekit:slatekit-integration:$slatekit_version_beta"
     } else {
         // */
         compile project(":slatekit-result")

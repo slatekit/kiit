@@ -1,6 +1,7 @@
 buildscript {
     ext.kotlin_version = '${build.kotlin.version}'
     ext.slatekit_version = "${build.slatekit.version}"
+    ext.slatekit_version_beta = "${build.slatekit.version}"
 
     repositories {
         jcenter()
@@ -35,13 +36,13 @@ dependencies {
     compile "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin_version"
     compile 'org.jetbrains.kotlinx:kotlinx-coroutines-core:1.1.0'
 
-    compile "com.slatekit:slatekit-results:$slatekit_version"
-    compile "com.slatekit:slatekit-common:$slatekit_version"
-    compile "com.slatekit:slatekit-providers:$slatekit_version"
-    compile "com.slatekit:slatekit-apis:$slatekit_version"
-    compile "com.slatekit:slatekit-cli:$slatekit_version"
-    compile "com.slatekit:slatekit-app:$slatekit_version"
-    compile "com.slatekit:slatekit-integration:$slatekit_version"
+    compile "com.slatekit:slatekit-results:$slatekit_version_beta"
+    compile "com.slatekit:slatekit-common:$slatekit_version_beta"
+    compile "com.slatekit:slatekit-providers:$slatekit_version_beta"
+    compile "com.slatekit:slatekit-apis:$slatekit_version_beta"
+    compile "com.slatekit:slatekit-cli:$slatekit_version_beta"
+    compile "com.slatekit:slatekit-app:$slatekit_version_beta"
+    compile "com.slatekit:slatekit-integration:$slatekit_version_beta"
 }
 
 
