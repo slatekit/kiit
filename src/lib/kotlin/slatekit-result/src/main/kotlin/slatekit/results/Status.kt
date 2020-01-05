@@ -14,12 +14,10 @@ package slatekit.results
 
 /**
  * Interface to represent a Status Code with both an integer and descriptive message
- * Default implementations are available in [Status]
  * @sample :
  * { code: 8000, msg: "Invalid request" }
  * { code: 8001, msg: "Unauthorized"    }
  *
- * NOTE: A good example would be Http Status Codes
  */
 sealed class Status {
     abstract val code: Int

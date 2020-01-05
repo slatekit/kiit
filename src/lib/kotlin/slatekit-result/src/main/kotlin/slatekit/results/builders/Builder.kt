@@ -20,7 +20,7 @@ import slatekit.results.Status
 import slatekit.results.Success
 
 /**
- * Builder interface with builder functions to create the most common Successes/Failures with
+ * Provides convenient ways to build the most common Successes/Failures with
  * customizable error type [E] with support for [String], [Exception], [Err] as error type [E]
  */
 interface Builder<out E> {

@@ -27,7 +27,7 @@ typealias Try<T> = Result<T, Exception>
  * This allows for :
  * 1. slightly easier usage by only requiring 1 type parameter
  * 2. avoid collision with the Kotlin Result type
- * 3. uses an empty marker interface [Err] with default implementations available
+ * 3. allows for using the sensible default implementations for [Err]
  */
 typealias Outcome<T> = Result<T, Err>
 
