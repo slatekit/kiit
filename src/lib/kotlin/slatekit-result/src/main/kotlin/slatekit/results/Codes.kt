@@ -6,10 +6,10 @@
  * author: Kishore Reddy
  * copyright: 2016 CodeHelix Solutions Inc.
  * license: refer to website and/or github
- * about: A tool-kit, utility library and server-backend
- * philosophy: Simplicity above all else
+ * about: A Kotlin Tool-Kit for Server + Android
  * </slate_header>
  */
+
 /* ktlint-disable */
 package slatekit.results
 
@@ -23,10 +23,10 @@ import slatekit.results.Status.Errored
 import slatekit.results.Status.Unexpected
 
 /**
- * Default set of status and error codes available from this library
+ * Default set of status codes
  *
  * # GOALS:
- * 1. General purpose enough and can be used to model most successes/filters/errors
+ * 1. General purpose enough and can be used to model most logical groups of successes/failures
  * 2. Completely OPTIONAL to use but here for convenience
  * 3. Used as default codes for the [Result] builder methods
  * 4. Can be used at almost any layer of your application ( controller/service/utils etc )
@@ -34,8 +34,7 @@ import slatekit.results.Status.Unexpected
  *
  * # NOTES:
  * 1. [JvmField] is applied for Java Interop to access the value as a static field e.g. `Codes.SUCCESS`
- * 2. [Status] extends [Status] and is used for default implementations of [Status]
- * 3. [Status] also has logical grouping of errors
+ * 2. [Status] has logical grouping of errors
  */
 object Codes {
 

@@ -6,18 +6,29 @@
  * author: Kishore Reddy
  * copyright: 2016 CodeHelix Solutions Inc.
  * license: refer to website and/or github
- * about: A tool-kit, utility library and server-backend
- * philosophy: Simplicity above all else
+ * about: A Kotlin Tool-Kit for Server + Android
  * </slate_header>
  */
 
 package slatekit.results
 
 /**
- * Container for a Success/Failure value of type T with additional values to represent
- * a string message, code, error and more.
+ * Models successes and failures with optional status codes.
+ * This is similar to the Result type from languages such as Rust, Swift, Kotlin, Try from Scala.
  *
- * @tparam T      : Type T
+ *
+ * DESIGN
+ * While similar to other implementations, there are a few major differences
+ * 1. Flexible error	: Error type on the Failure branch can be anything, Exception, Err, String.
+ * 2. Status Codes      : Logical groups of status codes to categorize errors, which can be converted to Http
+ * 3. Sensible defaults	: Default Error types, and builders are provided to reduce custom errors / boiler-plate
+ *
+ *
+ * NOTES:
+ * 1. The success value is of type T
+ * 2. The failure value if of type E
+ * 3. The status code is optional and initialized with sensible defaults
+ *
  */
 sealed class Result<out T, out E> {
 

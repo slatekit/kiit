@@ -3,9 +3,9 @@ package test.results
 import org.junit.Assert
 import org.junit.Test
 import slatekit.results.*
-import slatekit.results.builders.Results.errored
-import slatekit.results.builders.Results.success
 import slatekit.results.Codes
+import slatekit.results.builders.Outcomes.success
+import slatekit.results.builders.Outcomes.errored
 
 /**
  * Tests Operations on the Result class which include:

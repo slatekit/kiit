@@ -6,8 +6,7 @@
  * author: Kishore Reddy
  * copyright: 2016 CodeHelix Solutions Inc.
  * license: refer to website and/or github
- * about: A tool-kit, utility library and server-backend
- * philosophy: Simplicity above all else
+ * about: A Kotlin Tool-Kit for Server + Android
  * </slate_header>
  */
 
@@ -21,7 +20,7 @@ import slatekit.results.Status
 import slatekit.results.Success
 
 /**
- * Builder interface with builder functions to create the most common Successes/Failures with
+ * Provides convenient ways to build the most common Successes/Failures with
  * customizable error type [E] with support for [String], [Exception], [Err] as error type [E]
  */
 interface Builder<out E> {
