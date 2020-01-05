@@ -78,10 +78,10 @@ dependencies {
 
     // /* <slatekit_local>
     if( slatekitSetupViaMaven ) {
-        compile "com.slatekit:slatekit-results:$slatekit_version"
-        compile "com.slatekit:slatekit-common:$slatekit_version"
-        compile "com.slatekit:slatekit-query:$slatekit_version"
-        compile "com.slatekit:slatekit-meta:$slatekit_version"
+        compile "com.slatekit:slatekit-results:$slatekit_version_beta"
+        compile "com.slatekit:slatekit-common:$slatekit_version_beta"
+        compile "com.slatekit:slatekit-query:$slatekit_version_beta"
+        compile "com.slatekit:slatekit-meta:$slatekit_version_beta"
     } else {
         // */
         compile project(":slatekit-result")
