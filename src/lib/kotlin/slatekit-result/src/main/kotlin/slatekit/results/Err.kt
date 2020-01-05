@@ -47,7 +47,6 @@ sealed class Err {
      */
     data class ErrorList(val errors: List<Err>, override val msg: String, override val err: Throwable? = null, override val ref: Any? = null) : Err()
 
-
     /**
      * Provides easy ways to build the Err type from various sources such as strings, exceptions, field errors
      */
