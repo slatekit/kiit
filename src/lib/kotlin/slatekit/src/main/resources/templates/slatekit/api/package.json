@@ -9,7 +9,7 @@
   "actions": [
     { "name": "copy", "type": "Build", "source": "/build.txt"   , "target": "/build.gradle"                },
     { "name": "copy", "type": "Build", "source": "/settings.txt", "target": "/settings.gradle"             },
-    { "name": "copy", "type": "Doc"  , "source": "/samples-postman.json", "target": "//samples-postman.json"             },
+    { "name": "copy", "type": "Doc"  , "source": "/samples-postman.json", "target": "/samples-postman.json"             },
     { "name": "copy", "type": "Code" , "source": "/src/Run.txt" , "target": "/src/main/kotlin/${app.packagePath}/Run.kt" },
     { "name": "copy", "type": "Code" , "source": "/src/App.txt" , "target": "/src/main/kotlin/${app.packagePath}/App.kt" },
     { "name": "copy", "type": "Code" , "source": "/src/Server.txt" , "target": "/src/main/kotlin/${app.packagePath}/Server.kt" },

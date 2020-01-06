@@ -1,6 +1,6 @@
 
 # Foundational
-cd slatekit-result        && gradle clean build bintrayUpload && cd ../ && echo 'sleeping 12s' && sleep 12s     
+# cd slatekit-result        && gradle clean build bintrayUpload && cd ../ && echo 'sleeping 12s' && sleep 12s     
 cd slatekit-common        && gradle clean build bintrayUpload && cd ../ && echo 'sleeping 12s' && sleep 12s     
 cd slatekit-tracking      && gradle clean build bintrayUpload && cd ../ && echo 'sleeping 12s' && sleep 12s   
 cd slatekit-functions     && gradle clean build bintrayUpload && cd ../ && echo 'sleeping 12s' && sleep 12s   
