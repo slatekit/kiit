@@ -100,6 +100,6 @@ class Server(val ctx: Context)  {
      */
     suspend fun ping(call: ApplicationCall, responses: KtorResponse) {
         val result = "Version ${ctx.info.about.version} : " + DateTime.now()
-        responder.json(call, Success(result).toResponse())
+        responses.json(call, Success(result).toResponse())
     }
 }

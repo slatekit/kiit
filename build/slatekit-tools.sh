@@ -84,7 +84,7 @@ if [ $1 != "" ]; then APP_TARGET=$1; fi
 
 # Set settings
 APP_NAME=slatekit
-APP_HOME=~/dev/tmp/slatekit
+APP_HOME=~/dev/tmp/slatekit/slatekit
 APP_SRC=$APP_HOME/src/lib/kotlin/slatekit
 APP_DIST=$APP_SRC/build/distributions/slatekit
 JAVA_JAR=/Library/Java/JavaVirtualMachines/jdk1.8.0_141.jdk/contents/home/bin
@@ -93,28 +93,20 @@ JAVA_JAR=/Library/Java/JavaVirtualMachines/jdk1.8.0_141.jdk/contents/home/bin
 showSettings
 
 # Clean all existing directories
-rm -rf $APP_TEMP/*
-rm -rf $APP_VERSION/*
+rm -rf $APP_TARGET/templates/*
 
-createDirs
-
-# Copy all the jars created by gradle into the release specific directory
-#cp $APP_DIST/lib/slatekit*   $APP_TARGET/lib
-
-# Copy the sample app resources/conf files 
-#cp -a $APP_HOME/src/apps/kotlin/slatekit-sampleapps/sampleapp-batch/src/main/resources/.    $APP_VERSION/conf/sampleapp-batch/
-#cp -a $APP_HOME/src/apps/kotlin/slatekit-sampleapps/sampleapp-server/src/main/resources/.   $APP_VERSION/conf/sampleapp-server/
-#cp -a $APP_HOME/src/apps/kotlin/slatekit-sampleapps/sampleapp-cli/src/main/resources/.      $APP_VERSION/conf/sampleapp-shell/ 
-
-# Copy the script files to run the sample apps
-#cp $APP_HOME/scripts/samples/kotlin/*   $APP_VERSION/
+# Copy all the jars 
+cp $APP_DIST/lib/*   $APP_TARGET/lib/
 
 # Copy launcher
-cp  $APP_DIST/bin/slatekit  	 $APP_TARGET/slatekit
-cp  $APP_DIST/bin/slatekit.bat   $APP_TARGET/slatekit.bat
+# cp  $APP_DIST/bin/slatekit  	 $APP_TARGET/slatekit
+# cp  $APP_DIST/bin/slatekit.bat   $APP_TARGET/slatekit.bat
 
 # Copy confs
-cp  $APP_SRC/src/main/resources/*.conf   $APP_DIST/conf/
+cp $APP_SRC/src/main/resources/*.conf   $APP_TARGET/conf/
+
+# Copy templates
+cp -R $APP_SRC/src/main/resources/templates/   $APP_TARGET/templates/
 
 # Zip up the entires release version directory
 #cd $APP_RELS
