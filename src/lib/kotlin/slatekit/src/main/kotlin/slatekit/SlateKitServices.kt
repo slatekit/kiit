@@ -62,7 +62,9 @@ interface SlateKitServices {
 //        moduleApi.register(DependencyModule(ctx, moduleContext()))
 
         // APIs
-        val toolSettings = ToolSettings(this.ctx.conf.getString("slatekit.version"))
+        val toolSettings = ToolSettings(
+                this.ctx.conf.getString("slatekit.version"),
+                this.ctx.conf.getString("slatekit.version.beta"))
         val buildSettings = BuildSettings(this.ctx.conf.getString("kotlin.version"))
         val requiredApis = listOf(
                 Api(GeneratorApi(ctx, GeneratorService(ctx, SlateKit::class.java, GeneratorSettings(toolSettings, buildSettings))), declaredOnly = true, setup = Setup.Annotated),
