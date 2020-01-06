@@ -37,22 +37,22 @@ dependencies {
     	compile 'com.slatekit:slatekit-results:1.0.0'
 	
 	// slatekit-common: Utilities for Android or Server
-    	compile 'com.slatekit:slatekit-common:1.0.0'
+    	compile 'com.slatekit:slatekit-common:0.9.46'
 	
 	// Misc architecture components ( all depend on results/common components above )
-	compile 'com.slatekit:slatekit-app:0.9.27'
-	compile 'com.slatekit:slatekit-db:0.9.27'
-	compile 'com.slatekit:slatekit-meta:0.9.27'
-	compile 'com.slatekit:slatekit-cloud:0.9.27'
-	compile 'com.slatekit:slatekit-query:0.9.27'
-	compile 'com.slatekit:slatekit-entities:0.9.27'
-	compile 'com.slatekit:slatekit-orm:0.9.27'
-	compile 'com.slatekit:slatekit-core:0.9.27'
-	compile 'com.slatekit:slatekit-apis:0.9.27'
-	compile 'com.slatekit:slatekit-integration:0.9.27'
-	compile 'com.slatekit:slatekit-server:0.9.27'
-	compile 'com.slatekit:slatekit-providers:0.9.27'
-	compile 'com.slatekit:slatekit-workers:0.9.27'
+	compile 'com.slatekit:slatekit-app:0.9.46'
+	compile 'com.slatekit:slatekit-db:0.9.46'
+	compile 'com.slatekit:slatekit-meta:0.9.46'
+	compile 'com.slatekit:slatekit-cloud:0.9.46'
+	compile 'com.slatekit:slatekit-query:0.9.46'
+	compile 'com.slatekit:slatekit-entities:0.9.46'
+	compile 'com.slatekit:slatekit-orm:0.9.46'
+	compile 'com.slatekit:slatekit-core:0.9.46'
+	compile 'com.slatekit:slatekit-apis:0.9.46'
+	compile 'com.slatekit:slatekit-integration:0.9.46'
+	compile 'com.slatekit:slatekit-server:0.9.46'
+	compile 'com.slatekit:slatekit-providers:0.9.46'
+	compile 'com.slatekit:slatekit-workers:0.9.46'
 }
 ```
 
@@ -71,19 +71,10 @@ home | www.slatekit.com | landing page
 overview | http://www.slatekit.com/start/overview | goals / uses / philosophy
 setup    | www.slatekit.com/start/hello_world | setup slatekit hello world
 releases | https://github.com/code-helix/slatekit/releases | relase history 
+issues   | https://github.com/code-helix/slatekit/issues | issue tracker
 modules  | http://www.slatekit.com/arch/overview   | architecture components
 utilities| http://www.slatekit.com/utils/overview  | android and server utils
 standards| http://www.slatekit.com/more/standards  | coding standards
-
-
-Website: https://palletsprojects.com/p/click/
-Documentation: https://click.palletsprojects.com/
-License: BSD
-Releases: https://pypi.org/project/click/
-Code: https://github.com/pallets/click
-Issue tracker: https://github.com/pallets/click/issues
-Test status: https://dev.azure.com/pallets/click/_build
-Official chat: https://discord.gg/t6rrQZH
 
 
 # Modules
@@ -141,8 +132,8 @@ dependencies {
     compile "org.jetbrains.kotlin:kotlin-stdlib-jre8:$kotlin_version"
 	
     // Reference the slate kit binaries here
-    compile 'com.slatekit:slatekit-results:0.9.24'
-    compile 'com.slatekit:slatekit-common:0.9.24'
+    compile 'com.slatekit:slatekit-results:0.9.46'
+    compile 'com.slatekit:slatekit-common:0.9.46'
 }
 ```
 
@@ -153,9 +144,7 @@ dependencies {
 3. Down the line, a potential premium offering will be available for certain modules/upcoming functionality. These may be offered as both an on-premise solution and as a SaaS. 
 
 # Upcoming
-1. A stable 1.0.0 release coming in April 2019
-2. A technical white-paper on the slatekit-results component
-3. A techincal white-paper on the slatekit-apis ( Universal APIs ) component
+1. Several 1.0.0 releases of various modules
 
 
 # Contact
