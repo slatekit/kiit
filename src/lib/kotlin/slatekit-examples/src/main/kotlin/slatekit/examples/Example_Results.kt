@@ -210,13 +210,13 @@ class Example_Results : Command("results"), OutcomeBuilder {
 
     fun aliases(){
         // Try<T> = Result<T, Exception>
-        val res1 = Tries.attempt { "1".toInt() }
+        val res1 = Tries.of { "1".toInt() }
 
         // Outcome<T> = Result<T, Err>
         val res2 = Outcomes.of { "1".toInt() }
 
         // Notice<T> = Result<T, String>
-        val res3 = Notices.notice { "1".toInt() }
+        val res3 = Notices.of { "1".toInt() }
 
         // Validated<T> = Result<T, ErrorList>
         val res4:Validated<String> = Failure(Err.ErrorList(listOf(
@@ -241,7 +241,7 @@ class Example_Results : Command("results"), OutcomeBuilder {
 
     fun tries(){
         // Try<Long> = Result<Long, Exception>
-        val converted1:Try<Long> = Tries.attempt { "1".toLong() }
+        val converted1:Try<Long> = Tries.of { "1".toLong() }
 
         // DeniedException will checked and converted to Status.Denied
         val converted2:Try<Long> = Tries.attemptWithStatus<Long> {

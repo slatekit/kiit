@@ -17,7 +17,7 @@ data class SimpleMigration(
 
     override fun migrate(db: IDb): Outcome<Int> {
         info("Migration starting for : $id", null)
-        val results = steps.map { Tries.attempt { it.run(db) } }
+        val results = steps.map { Tries.of { it.run(db) } }
         val success = results.all { it.success }
         val message = if (success) "" else results.first { !it.success }.msg
         return when (success) {

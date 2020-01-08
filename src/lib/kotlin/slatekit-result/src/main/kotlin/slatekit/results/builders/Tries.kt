@@ -47,21 +47,10 @@ object Tries : TryBuilder {
      * by getting the appropriate status code out of the defined exception
      */
     @JvmStatic
-    inline fun <T> attempt(f: () -> T): Try<T> = attemptWithStatus {
-        val data = f()
-        Success(data)
-    }
-
-    /**
-     * Build a Try<T> ( Result<T,Exception> ) using the supplied callback.
-     * This allows for using throw [Exception] to build the Try
-     * by getting the appropriate status code out of the defined exception
-     */
-    @JvmStatic
-    inline fun <T> attemptWithStatus(f: () -> Success<T>): Try<T> =
+    inline fun <T> of(f: () -> T): Try<T> =
         try {
             val data = f()
-            data
+            Success(data)
         } catch (e: DeniedException) {
             Failure(e, Result.build(e.msg, e.status, Codes.DENIED))
         } catch (e: IgnoredException) {

@@ -80,7 +80,7 @@ open class Command(override val id: Identity,
      * @return
      */
     fun execute(args: Args, mode: FunctionMode): Try<CommandResult> {
-        val result = Tries.attempt {
+        val result = Tries.of {
             Success(args)
                     .map { args -> convert(args) }
                     .map { request -> perform(request, mode) }

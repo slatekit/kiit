@@ -12,7 +12,7 @@ object Runner {
      * Calls this worker with life-cycle hooks and automatic transitioning to proper state
      */
     suspend fun <T> run(worker: Worker<T>): Try<Status> {
-        val result = Tries.attempt {
+        val result = Tries.of {
             worker.move(Status.Starting)
             worker.info().forEach { println(it) }
             worker.init()
@@ -45,7 +45,7 @@ object Runner {
         task: Task = Task.empty,
         statusChanged: (suspend (Worker<T>) -> Unit)? = null
     ): Try<WorkResult> {
-        val result = Tries.attempt {
+        val result = Tries.of {
             start(worker, handleDone, task, statusChanged)
         }
         if (handleFailure) {
@@ -98,7 +98,7 @@ object Runner {
      * Makes the worker work ( this can be used for resuming )
      */
     suspend fun <T> work(worker: Worker<T>): Try<WorkResult> {
-        val result = Tries.attempt {
+        val result = Tries.of {
             worker.move(Status.Running)
             worker.move(Status.Running)
             val workResult = worker.work()

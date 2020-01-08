@@ -95,7 +95,7 @@ object ArgsService {
             metaChar: String,
             sysChar: String
     ): Try<Args> {
-        return Tries.attempt {
+        return Tries.of {
 
             // if input = "area.api.action -arg1="1" -arg2="2"
             // result = "area.api.action"

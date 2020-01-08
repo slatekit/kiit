@@ -175,7 +175,7 @@ class Workers(
 
     private suspend fun loop(context: WorkerContext, workResult: WorkResult) {
         val worker: Workable<*> = context.worker
-        val result = Tries.attempt {
+        val result = Tries.of {
             when (workResult.state) {
                 is WorkState.Done -> {
                     logger.info("Worker ${worker.id.name} complete")

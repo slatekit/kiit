@@ -16,7 +16,7 @@ class Retry<I, O>(val retries: Int, val delayMillis: Long) : Policy<I, O> {
     val counts = Counter()
 
     override suspend fun run(i: I, operation: suspend (I) -> Outcome<O>): Outcome<O> {
-        val r = Tries.attempt { operation(i) }
+        val r = Tries.of { operation(i) }
         val attempts = counts.inc()
         return when(r) {
             is Success -> r.value

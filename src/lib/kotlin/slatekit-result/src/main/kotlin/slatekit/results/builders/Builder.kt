@@ -104,4 +104,24 @@ interface Builder<out E> {
      * message if the message is null / empty.
      */
     fun get(status: Status?, defaultStatus: Status): Status = status ?: defaultStatus
+
+    /**
+     * Build a Result<T,E> using the supplied condition and default error builders
+     */
+    fun <T> of(condition: Boolean, t: T?): Result<T, E> {
+        return if (!condition)
+            errored()
+        else if (t == null)
+            errored()
+        else
+            success(t)
+    }
+
+    /**
+     * Build a Result<T,E> for a possible null value
+     */
+    fun <T> of(t: T?): Result<T,E> = when (t) {
+            null -> errored("null")
+            else -> success(t)
+        }
 }

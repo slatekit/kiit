@@ -2,7 +2,6 @@ package slatekit.entities.features
 
 import kotlin.reflect.KProperty
 import slatekit.common.DateTime
-import slatekit.common.data.Values
 import slatekit.entities.Entity
 import slatekit.entities.events.EntityAction
 import slatekit.entities.events.EntityEvent
@@ -91,7 +90,7 @@ interface Updates<TId, T> : ServiceSupport<TId, T> where TId : kotlin.Comparable
      * @return
      */
     fun updateAsTry(entity: T): Try<Boolean> {
-        return Tries.attempt { update(entity) }
+        return Tries.of { update(entity) }
     }
 
     /**

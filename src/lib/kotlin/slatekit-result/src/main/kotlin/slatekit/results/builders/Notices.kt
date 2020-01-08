@@ -12,12 +12,7 @@
 
 package slatekit.results.builders
 
-import slatekit.results.Codes
-import slatekit.results.Err
-import slatekit.results.Failure
-import slatekit.results.Notice
-import slatekit.results.Result
-import slatekit.results.Status
+import slatekit.results.*
 
 /**
  * Builds [Result] with [Failure] error type of [String]
@@ -36,5 +31,17 @@ object Notices : NoticeBuilder {
      * Build a Notice<T> ( type alias ) for Result<T,String> using the supplied function
      */
     @JvmStatic
-    inline fun <T> notice(f: () -> T): Notice<T> = Result.build(f, { e -> e.message ?: Codes.ERRORED.msg })
+    inline fun <T> of(f: () -> T): Notice<T> = build(f, { e -> e.message ?: Codes.ERRORED.msg })
+
+    /**
+     * Build a Result<T,E> using the supplied callback and error handler
+     */
+    @JvmStatic
+    inline fun <T> build(f: () -> T, onError: (Exception) -> String): Notice<T> =
+        try {
+            val data = f()
+            Success(data)
+        } catch (e: Exception) {
+            Failure(onError(e))
+        }
 }
