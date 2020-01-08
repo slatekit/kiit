@@ -2,7 +2,7 @@
 <!-- General overivew of the PR -->
 
 ## Ticket(s) 
-<!-- Link to any tickets here -->
+<!-- Link to any tickets -->
 
 ## Links(s) 
 <!-- Relevant links -->
