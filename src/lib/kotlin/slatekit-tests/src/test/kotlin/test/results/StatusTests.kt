@@ -1,7 +1,6 @@
 package test.results
 import org.junit.Assert
 import org.junit.Test
-import slatekit.results.*
 import slatekit.results.Status
 import slatekit.results.Codes
 
@@ -82,20 +81,20 @@ class StatusTests {
         val status = Codes.SUCCESS
 
         // Empty values
-        check(Result.status(null, null  , status), status.code, status.msg, status,true)
-        check(Result.status(""  , null  , status), status.code, status.msg, status, true)
+        check(Status.ofCode(null, null  , status), status.code, status.msg, status,true)
+        check(Status.ofCode(""  , null  , status), status.code, status.msg, status, true)
 
         // Empty msg or code
-        check(Result.status(status.msg, null  , status), status.code, status.msg, status, true)
-        check(Result.status(null, status.code , status), status.code, status.msg, status, true)
+        check(Status.ofCode(status.msg, null  , status), status.code, status.msg, status, true)
+        check(Status.ofCode(null, status.code , status), status.code, status.msg, status, true)
 
         // Both values supplied but same
-        check(Result.status(status.msg, status.code , status), status.code, status.msg, status, true)
+        check(Status.ofCode(status.msg, status.code , status), status.code, status.msg, status, true)
 
         // Diff values supplied
-        check(Result.status("abc", 2  , status), 2, "abc", status, false)
-        check(Result.status("abc", null  , status), status.code, "abc", status, false)
-        check(Result.status(null , 2  , status), 2, status.msg, status, false)
+        check(Status.ofCode("abc", 2  , status), 2, "abc", status, false)
+        check(Status.ofCode("abc", null  , status), status.code, "abc", status, false)
+        check(Status.ofCode(null , 2  , status), 2, status.msg, status, false)
 
     }
 

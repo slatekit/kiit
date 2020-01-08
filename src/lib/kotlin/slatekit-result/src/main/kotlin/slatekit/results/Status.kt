@@ -66,4 +66,28 @@ sealed class Status {
             is Unexpected -> this.copy(msg = msg)
         }
     }
+
+    companion object {
+
+        @JvmStatic
+        fun ofCode(msg: String?, code: Int?, defaultStatus: Status): Status {
+            // NOTE: There is small optimization here to avoid creating a new instance
+            // of [Status] if the msg/code are empty and or they are the same as Success.
+            if (code == null && msg == null || msg == "") return defaultStatus
+            if (code == defaultStatus.code && msg == null) return defaultStatus
+            if (code == defaultStatus.code && msg == defaultStatus.msg) return defaultStatus
+            return defaultStatus.copyAll(msg ?: defaultStatus.msg, code ?: defaultStatus.code)
+        }
+
+        @JvmStatic
+        fun ofStatus(msg: String?, rawStatus: Status?, status: Status): Status {
+            // NOTE: There is small optimization here to avoid creating a new instance
+            // of [Status] if the msg/code are empty and or they are the same as Success.
+            if (msg == null && rawStatus == null) return status
+            if (msg == null && rawStatus != null) return rawStatus
+            if (msg != null && rawStatus == null) return status.copyMsg(msg)
+            if (msg != null && rawStatus != null) return rawStatus.copyMsg(msg)
+            return status
+        }
+    }
 }

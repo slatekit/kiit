@@ -12,6 +12,10 @@
 
 package slatekit.results
 
+import slatekit.results.builders.Notices
+import slatekit.results.builders.Outcomes
+import slatekit.results.builders.Tries
+
 /**
  * Models successes and failures with optional status codes.
  * This is similar to the Result type from languages such as Rust, Swift, Kotlin, Try from Scala.
@@ -300,36 +304,13 @@ sealed class Result<out T, out E> {
     companion object {
 
         @JvmStatic
-        fun error(error: Any?): Err {
-            return when (error) {
-                null -> Err.of(Codes.UNEXPECTED.msg)
-                is Err -> error
-                is String -> Err.of(error)
-                is Exception -> Err.of(error)
-                else -> Err.obj(error)
-            }
-        }
+        fun <T> attempt(f: () -> T): Try<T> = Tries.of(f)
 
         @JvmStatic
-        fun status(msg: String?, code: Int?, status: Status): Status {
-            // NOTE: There is small optimization here to avoid creating a new instance
-            // of [Status] if the msg/code are empty and or they are the same as Success.
-            if (code == null && msg == null || msg == "") return status
-            if (code == status.code && msg == null) return status
-            if (code == status.code && msg == status.msg) return status
-            return status.copyAll(msg ?: status.msg, code ?: status.code)
-        }
+        fun <T> outcome(f: () -> T): Outcome<T> = Outcomes.of(f)
 
         @JvmStatic
-        fun build(msg: String?, rawStatus: Status?, status: Status): Status {
-            // NOTE: There is small optimization here to avoid creating a new instance
-            // of [Status] if the msg/code are empty and or they are the same as Success.
-            if (msg == null && rawStatus == null) return status
-            if (msg == null && rawStatus != null) return rawStatus
-            if (msg != null && rawStatus == null) return status.copyMsg(msg)
-            if (msg != null && rawStatus != null) return rawStatus.copyMsg(msg)
-            return status
-        }
+        fun <T> message(f: () -> T): Notice<T> = Notices.of(f)
     }
 }
 
@@ -354,7 +335,7 @@ data class Success<out T>(
      * of [Status] if the msg/code are empty and or they are the same as [Codes.SUCCESS].
      */
     constructor(value: T, msg: String) :
-            this(value, Result.status(msg, null, Codes.SUCCESS))
+            this(value, Status.ofCode(msg, null, Codes.SUCCESS))
 
     /**
      * Initialize using explicitly supplied code
@@ -365,7 +346,7 @@ data class Success<out T>(
      * of [Status] if the msg/code are empty and or they are the same as [Codes.SUCCESS].
      */
     constructor(value: T, code: Int) :
-            this(value, Result.status(null, code, Codes.SUCCESS))
+            this(value, Status.ofCode(null, code, Codes.SUCCESS))
 
     /**
      * Initialize using explicitly supplied message and code
@@ -377,7 +358,7 @@ data class Success<out T>(
      * of [Status] if the msg/code are empty and or they are the same as [Codes.SUCCESS].
      */
     constructor(value: T, msg: String? = null, code: Int? = null) :
-            this(value, Result.status(msg, code, Codes.SUCCESS))
+            this(value, Status.ofCode(msg, code, Codes.SUCCESS))
 }
 
 /**
@@ -401,7 +382,7 @@ data class Failure<out E>(
      * of [Status] if the msg/code are empty and or they are the same as [Codes.ERRORED].
      */
     constructor(error: E, msg: String) :
-            this(error, Result.status(msg, null, Codes.ERRORED))
+            this(error, Status.ofCode(msg, null, Codes.ERRORED))
 
     /**
      * Initialize using explicitly supplied code
@@ -412,7 +393,7 @@ data class Failure<out E>(
      * of [Status] if the msg/code are empty and or they are the same as [Codes.ERRORED].
      */
     constructor(error: E, code: Int) :
-            this(error, Result.status(null, code, Codes.ERRORED))
+            this(error, Status.ofCode(null, code, Codes.ERRORED))
 
     /**
      * Initialize using explicitly supplied message and code
@@ -424,7 +405,7 @@ data class Failure<out E>(
      * of [Status] if the msg/code are empty and or they are the same as [Codes.ERRORED].
      */
     constructor(error: E, msg: String? = null, code: Int? = null) :
-            this(error, Result.status(msg, code, Codes.ERRORED))
+            this(error, Status.ofCode(msg, code, Codes.ERRORED))
 }
 
 /**

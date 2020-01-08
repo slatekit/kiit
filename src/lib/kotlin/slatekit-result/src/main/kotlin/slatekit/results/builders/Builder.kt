@@ -51,8 +51,8 @@ interface Builder<out E> {
 
     fun <T> pending(): Result<T?, E> = Success(null, Codes.PENDING)
     fun <T> pending(value: T): Result<T, E> = Success(value, Codes.PENDING)
-    fun <T> pending(value: T, msg: String): Result<T, E> = Success(value, Result.status(msg, null, Codes.PENDING))
-    fun <T> pending(value: T, code: Int): Result<T, E> = Success(value, Result.status(null, code, Codes.PENDING))
+    fun <T> pending(value: T, msg: String): Result<T, E> = Success(value, Status.ofCode(msg, null, Codes.PENDING))
+    fun <T> pending(value: T, code: Int): Result<T, E> = Success(value, Status.ofCode(null, code, Codes.PENDING))
     fun <T> pending(value: T, status: Status.Pending): Result<T, E> = Success(value, status)
 
     fun <T> denied(): Result<T, E> = Failure(errorFromStr(null, Codes.DENIED), Codes.DENIED)
