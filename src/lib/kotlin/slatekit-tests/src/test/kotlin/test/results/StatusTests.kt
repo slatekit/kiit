@@ -1,10 +1,7 @@
 package test.results
 import org.junit.Assert
 import org.junit.Test
-import slatekit.results.Status
-import slatekit.results.Codes
-import slatekit.results.Failed
-import slatekit.results.Passed
+import slatekit.results.*
 
 class StatusTests {
 
@@ -100,8 +97,29 @@ class StatusTests {
     }
 
 
+    @Test
+    fun can_build_from_custom_error(){
+        val err:Result<Int, RegistrationError> = Failure(RegistrationError.InvalidEmail("abc@somewhere"))
+        Assert.assertTrue(err is Failure)
+        err.onFailure {
+            Assert.assertEquals(it.field, "email")
+            Assert.assertEquals(it.value, "abc@somewhere")
+        }
+    }
+
+
     private fun checkCode(Statuses: Status, expectedCode: Int, expectedMsg: String) {
         Assert.assertEquals(Statuses.code, expectedCode)
         Assert.assertEquals(Statuses.msg, expectedMsg)
     }
+}
+
+
+sealed class RegistrationError(val field:String) {
+    abstract val value:String
+
+    data class InvalidEmail  (override val value:String): RegistrationError("email")
+    data class InvalidPhone  (override val value:String): RegistrationError("phone")
+    data class DuplicateUser (override val value:String): RegistrationError("name")
+    data class ReservedName  (override val value:String): RegistrationError("name")
 }
