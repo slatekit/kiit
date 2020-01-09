@@ -70,13 +70,13 @@ class Example_Results : Command("results"), OutcomeBuilder {
 
         // Pattern match on status
         when (addResult.status) {
-            is Status.Succeeded -> println(addResult.msg)
-            is Status.Pending -> println(addResult.msg)
-            is Status.Denied -> println(addResult.msg)
-            is Status.Invalid -> println(addResult.msg)
-            is Status.Ignored -> println(addResult.msg)
-            is Status.Errored -> println(addResult.msg)
-            is Status.Unexpected -> println(addResult.msg)
+            is Passed.Succeeded  -> println(addResult.msg)
+            is Passed.Pending    -> println(addResult.msg)
+            is Failed.Denied     -> println(addResult.msg)
+            is Failed.Invalid    -> println(addResult.msg)
+            is Failed.Ignored    -> println(addResult.msg)
+            is Failed.Errored    -> println(addResult.msg)
+            is Failed.Unexpected -> println(addResult.msg)
         }
     }
 
@@ -89,9 +89,9 @@ class Example_Results : Command("results"), OutcomeBuilder {
         val result1a: Result<Int, Err> = Success(42)
 
         // Success created with status codes / messages
-        val result1b = Success(42, msg = "Successfully processed")
-        val result1c = Success(42, msg = "Successfully processed", code = 200)
-        val result1d = Outcomes.success(42, status = Codes.SUCCESS)
+        val result1b = Success(42, status = Codes.SUCCESS)
+        val result1c = Success(42, msg = "Successfully processed")
+        val result1d = Success(42, msg = "Successfully processed", code = 200)
 
         // Failure
         val result1e = Failure(Err.of("Invalid email"))
@@ -100,9 +100,9 @@ class Example_Results : Command("results"), OutcomeBuilder {
         val result1f: Result<Int, Err> = Failure(Err.of("Invalid email"))
 
         // Failure created with status codes / messages
-        val result1g = Failure(Err.of("Invalid email"), msg = "Invalid inputs")
-        val result1h = Failure(Err.of("Invalid email"), msg = "Invalid inputs", code = Codes.INVALID.code)
-        val result1i = Outcomes.invalid<Int>(Err.of("Invalid email"), Codes.INVALID)
+        val result1g = Failure(Err.of("Invalid email"), Codes.INVALID)
+        val result1h = Failure(Err.of("Invalid email"), msg = "Invalid inputs")
+        val result1i = Failure(Err.of("Invalid email"), msg = "Invalid inputs", code = Codes.INVALID.code)
     }
 
 
@@ -157,13 +157,13 @@ class Example_Results : Command("results"), OutcomeBuilder {
         // Pattern match 2: "Mid-level" on Status ( 7 logical groups )
         // NOTE: The status property is available on both the Success/Failure branches
         when(result.status) {
-            is Status.Succeeded  -> println(result.msg) // Success!
-            is Status.Pending    -> println(result.msg) // Success, but in progress
-            is Status.Denied     -> println(result.msg) // Security related
-            is Status.Invalid    -> println(result.msg) // Bad inputs / data
-            is Status.Ignored    -> println(result.msg) // Ignored for processing
-            is Status.Errored    -> println(result.msg) // Expected errors
-            is Status.Unexpected -> println(result.msg) // Unexpected errors
+            is Passed.Succeeded  -> println(result.msg) // Success!
+            is Passed.Pending    -> println(result.msg) // Success, but in progress
+            is Failed.Denied     -> println(result.msg) // Security related
+            is Failed.Invalid    -> println(result.msg) // Bad inputs / data
+            is Failed.Ignored    -> println(result.msg) // Ignored for processing
+            is Failed.Errored    -> println(result.msg) // Expected errors
+            is Failed.Unexpected -> println(result.msg) // Unexpected errors
         }
 
         // Pattern match 3: "Low-Level" on numeric code
@@ -374,7 +374,7 @@ class Example_Results : Command("results"), OutcomeBuilder {
         val result1g = Failure(Err.of("Invalid email"), msg = "Invalid inputs", code = Codes.INVALID.code)
         val result1h = Outcomes.invalid<Int>(Err.of("Invalid email"), Codes.INVALID)
 
-        // PATTERN MATCH
+        // PATTERN MATCH 1: Success / Failure
         when (result) {
             is Success -> println(result.value)  // 1
             is Failure -> println(result.error)  // Err
@@ -382,14 +382,18 @@ class Example_Results : Command("results"), OutcomeBuilder {
 
         // PATTERN MATCH 2: On status ( logical categories of statuses )
         // NOTE: The status property is available on both the Success/Failure branches
-        when (result.status) {
-            is Status.Succeeded -> println(result.msg)
-            is Status.Pending -> println(result.msg)
-            is Status.Denied -> println(result.msg)
-            is Status.Invalid -> println(result.msg)
-            is Status.Ignored -> println(result.msg)
-            is Status.Errored -> println(result.msg)
-            is Status.Unexpected -> println(result.msg)
+        when(result) {
+            is Success -> when(result.status) {
+                is Passed.Succeeded  -> println(result.msg)
+                is Passed.Pending    -> println(result.msg)
+            }
+            is Failure -> when(result.status) {
+                is Failed.Denied     -> println(result.msg)
+                is Failed.Invalid    -> println(result.msg)
+                is Failed.Ignored    -> println(result.msg)
+                is Failed.Errored    -> println(result.msg)
+                is Failed.Unexpected -> println(result.msg)
+            }
         }
 
         // PATTERN MATCH 3: On code
