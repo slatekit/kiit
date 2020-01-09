@@ -70,13 +70,13 @@ sealed class Status {
     companion object {
 
         @JvmStatic
-        fun ofCode(msg: String?, code: Int?, defaultStatus: Status): Status {
+        fun <T:Status> ofCode(msg: String?, code: Int?, defaultStatus: T): T {
             // NOTE: There is small optimization here to avoid creating a new instance
             // of [Status] if the msg/code are empty and or they are the same as Success.
             if (code == null && msg == null || msg == "") return defaultStatus
             if (code == defaultStatus.code && msg == null) return defaultStatus
             if (code == defaultStatus.code && msg == defaultStatus.msg) return defaultStatus
-            return defaultStatus.copyAll(msg ?: defaultStatus.msg, code ?: defaultStatus.code)
+            return defaultStatus.copyAll(msg ?: defaultStatus.msg, code ?: defaultStatus.code) as T
         }
 
         @JvmStatic
