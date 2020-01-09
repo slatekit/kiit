@@ -30,30 +30,30 @@ interface StatusException {
 
 data class DeniedException(
     override val msg: String?,
-    override val status: Status? = null,
+    override val status: Status.Denied? = null,
     override val origin: Throwable? = null
 ) : Exception(msg, origin), StatusException
 
 data class InvalidException(
     override val msg: String?,
-    override val status: Status? = null,
+    override val status: Status.Invalid? = null,
     override val origin: Throwable? = null
 ) : Exception(msg, origin), StatusException
 
 data class IgnoredException(
     override val msg: String?,
-    override val status: Status? = null,
+    override val status: Status.Ignored? = null,
     override val origin: Throwable? = null
 ) : Exception(msg, origin), StatusException
 
 data class ErroredException(
     override val msg: String?,
-    override val status: Status? = null,
+    override val status: Status.Errored? = null,
     override val origin: Throwable? = null
 ) : Exception(msg, origin), StatusException
 
 data class UnexpectedException(
     override val msg: String?,
-    override val status: Status? = null,
+    override val status: Status.Unexpected? = null,
     override val origin: Throwable? = null
 ) : Exception(msg, origin), StatusException

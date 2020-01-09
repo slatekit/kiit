@@ -68,7 +68,7 @@ interface Builder<out E> {
     fun <T> invalid(): Result<T, E> = Failure(errorFromStr(null, Codes.INVALID), Codes.INVALID)
     fun <T> invalid(msg: String): Result<T, E> = Failure(errorFromStr(msg, Codes.INVALID), Codes.INVALID)
     fun <T> invalid(ex: Exception): Result<T, E> = Failure(errorFromEx(ex, Codes.INVALID), Codes.INVALID)
-    fun <T> invalid(err: Err): Result<T, E> = Failure(errorFromErr(err, Codes.INVALID), Codes.INVALID)
+    fun <T> invalid(err: Err, status:Status.Invalid? = null): Result<T, E> = Failure(errorFromErr(err, Codes.INVALID), status ?:Codes.INVALID)
 
     fun <T> conflict(): Result<T, E> = Failure(errorFromStr(null, Codes.CONFLICT), Codes.CONFLICT)
     fun <T> conflict(msg: String): Result<T, E> = Failure(errorFromStr(msg, Codes.CONFLICT), Codes.CONFLICT)

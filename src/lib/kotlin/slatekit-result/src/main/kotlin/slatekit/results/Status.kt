@@ -80,13 +80,13 @@ sealed class Status {
         }
 
         @JvmStatic
-        fun ofStatus(msg: String?, rawStatus: Status?, status: Status): Status {
+        fun <T:Status> ofStatus(msg: String?, rawStatus: T?, status: T): T {
             // NOTE: There is small optimization here to avoid creating a new instance
             // of [Status] if the msg/code are empty and or they are the same as Success.
             if (msg == null && rawStatus == null) return status
             if (msg == null && rawStatus != null) return rawStatus
-            if (msg != null && rawStatus == null) return status.copyMsg(msg)
-            if (msg != null && rawStatus != null) return rawStatus.copyMsg(msg)
+            if (msg != null && rawStatus == null) return status.copyMsg(msg) as T
+            if (msg != null && rawStatus != null) return rawStatus.copyMsg(msg) as T
             return status
         }
     }

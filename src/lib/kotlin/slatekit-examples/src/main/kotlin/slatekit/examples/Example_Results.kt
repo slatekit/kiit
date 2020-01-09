@@ -100,9 +100,9 @@ class Example_Results : Command("results"), OutcomeBuilder {
         val result1f: Result<Int, Err> = Failure(Err.of("Invalid email"))
 
         // Failure created with status codes / messages
-        val result1g = Failure(Err.of("Invalid email"), status = Codes.INVALID)
-        val result1h = Failure(Err.of("Invalid email"), msg = "Invalid inputs")
-        val result1i = Failure(Err.of("Invalid email"), msg = "Invalid inputs", code = Codes.INVALID.code)
+        val result1g = Failure(Err.of("Invalid email"), msg = "Invalid inputs")
+        val result1h = Failure(Err.of("Invalid email"), msg = "Invalid inputs", code = Codes.INVALID.code)
+        val result1i = Outcomes.invalid<Int>(Err.of("Invalid email"), Codes.INVALID)
     }
 
 
@@ -370,9 +370,9 @@ class Example_Results : Command("results"), OutcomeBuilder {
 
         // Create failure explicitly
         val result1e: Result<Int, Err> = Failure(Err.of("Invalid email"))
-        val result1f = Failure(Err.of("Invalid email"), Codes.INVALID)
-        val result1g = Failure(Err.of("Invalid email"), msg = "Invalid inputs")
-        val result1h = Failure(Err.of("Invalid email"), msg = "Invalid inputs", code = Codes.INVALID.code)
+        val result1f = Failure(Err.of("Invalid email"), msg = "Invalid inputs")
+        val result1g = Failure(Err.of("Invalid email"), msg = "Invalid inputs", code = Codes.INVALID.code)
+        val result1h = Outcomes.invalid<Int>(Err.of("Invalid email"), Codes.INVALID)
 
         // PATTERN MATCH
         when (result) {

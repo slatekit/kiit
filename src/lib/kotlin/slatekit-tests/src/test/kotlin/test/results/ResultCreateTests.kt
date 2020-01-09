@@ -46,6 +46,6 @@ class ResultCreateTests : ResultTestSupport {
         ensureFailure<Int>(Failure(Err.of("invalid email")), status, expectedError = "invalid email")
         ensureFailure<Int>(Failure(Err.of("invalid email"), "bad data"), status, expectedStatusMsg = "bad data", expectedError = "invalid email")
         ensureFailure<Int>(Failure(Err.of("invalid email"), -1), status, expectedStatusCode = -1, expectedError = "invalid email")
-        ensureFailure<Int>(Failure(Err.of("invalid email"), Codes.BAD_REQUEST), Codes.BAD_REQUEST, expectedError = "invalid email")
+        ensureFailure<Int>(Outcomes.invalid(Err.of("invalid email"), Codes.BAD_REQUEST), Codes.BAD_REQUEST, expectedError = "invalid email")
     }
 }

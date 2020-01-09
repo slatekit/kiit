@@ -171,10 +171,24 @@ open class CLI(
             when (evalResult) {
 
                 // Transfer value back upstream with original parsed args
-                is Success -> Success(Pair(args, evalResult.value), evalResult.status)
+                is Success -> {
+                    val status = evalResult.status
+                    when(status) {
+                        is Status.Pending   -> Tries.pending(Pair(args, evalResult.value), status)
+                        is Status.Succeeded -> Tries.success(Pair(args, evalResult.value), status)
+                        else                -> Success(Pair(args, evalResult.value))
+                    }
+                }
 
                 // Continue processing until exit | quit supplied
-                is Failure -> Success(Pair(args, true), evalResult.status)
+                is Failure -> {
+                    val status = evalResult.status
+                    when(status) {
+                        is Status.Pending   -> Tries.pending(Pair(args, true), status)
+                        is Status.Succeeded -> Tries.success(Pair(args, true), status)
+                        else                -> Success(Pair(args, true))
+                    }
+                }
             }
         }
     }
