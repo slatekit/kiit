@@ -61,17 +61,7 @@ sealed class Result<out T, out E> {
      * ```
      */
     inline fun <T2> map(f: (T) -> T2): Result<T2, E> = when (this) {
-        is Success -> {
-            // NOTE: Only way to set status is via constructors or builders
-            // so a Success can only contain Succeeded or Pending
-            val value = f(this.value)
-            val s = this.status
-            when(s){
-                is Status.Succeeded -> Success(value)
-                is Status.Pending   -> Success.pending(value, s)
-                else                -> Success.pending(value)
-            }
-        }
+        is Success -> Success(f(this.value), this.status)
         is Failure -> this
     }
 
@@ -88,20 +78,7 @@ sealed class Result<out T, out E> {
      */
     inline fun <E2> mapError(f: (E) -> E2): Result<T, E2> = when (this) {
         is Success -> this
-        is Failure -> {
-            // NOTE: Only way to set status is via constructors or builders
-            // so a Failure can only contain Denied, Ignored, Invalid, Errored, Unexpected status
-            val err = f(this.error)
-            val s = this.status
-            when(s){
-                is Status.Denied     -> Failure.denied (err, s)
-                is Status.Ignored    -> Failure.ignored(err, s)
-                is Status.Invalid    -> Failure.invalid(err, s)
-                is Status.Errored    -> Failure.errored(err, s)
-                is Status.Unexpected -> Failure.unexpected(err, s)
-                else                 -> Failure.unexpected(err)
-            }
-        }
+        is Failure -> Failure(f(this.error), this.status)
     }
 
     /**
@@ -229,30 +206,11 @@ sealed class Result<out T, out E> {
      * ```
      */
     @Suppress("NOTHING_TO_INLINE")
-    inline fun withStatus(successCode: Status, failureCode: Status): Result<T, E> =
+    inline fun withStatus(passedStatus: Passed, failedStatus: Failed): Result<T, E> =
         when (this) {
-            is Success -> this.copy(status = successCode)
-            is Failure -> this.copy(status = failureCode)
+            is Success -> this.copy(status = passedStatus)
+            is Failure -> this.copy(status = failedStatus)
         }
-
-    /**
-     *
-     * Applies the supplied message to this result
-     *
-     * @param successCode: The [Status] code to apply if success
-     * @param failureCode: The [Status] code to apply if failure
-     *
-     * # Example
-     * ```
-     * Success(42).withStatus( Codes. ) // Result<String,E>
-     * ```
-     */
-    @Suppress("NOTHING_TO_INLINE")
-    inline fun withMessage(successMessage: String, failureMessage: String): Result<T, E> =
-            when (this) {
-                is Success -> this.copy(status = status.copyMsg(successMessage))
-                is Failure -> this.copy(status = status.copyMsg(failureMessage))
-            }
 
     /**
      * Transform this to a Notice (type alias ) with error type of [String]
@@ -343,9 +301,9 @@ sealed class Result<out T, out E> {
  * @param value : Value representing the success
  * @param status : Optional status code as [Status]
  */
-data class Success<out T> internal constructor(
+data class Success<out T>(
     val value: T,
-    override val status: Status
+    override val status: Passed
     ) : Result<T, Nothing>() {
 
     // NOTE: These overloads are here for convenience + Java Interoperability
@@ -366,7 +324,7 @@ data class Success<out T> internal constructor(
      * NOTE: There is small optimization here to avoid creating a new instance
      * of [Status] if the msg/code are empty and or they are the same as [Codes.SUCCESS].
      */
-    constructor(value: T, msg: String) : this(value, Status.ofCode(msg, null, Codes.SUCCESS))
+    constructor(value: T, msg: String) : this(value, Status.ofCode<Passed>(msg, null, Codes.SUCCESS))
 
     /**
      * Initialize using explicitly supplied code
@@ -376,7 +334,7 @@ data class Success<out T> internal constructor(
      * NOTE: There is small optimization here to avoid creating a new instance
      * of [Status] if the msg/code are empty and or they are the same as [Codes.SUCCESS].
      */
-    constructor(value: T, code: Int) : this(value, Status.ofCode(null, code, Codes.SUCCESS))
+    constructor(value: T, code: Int) : this(value, Status.ofCode<Passed>(null, code, Codes.SUCCESS))
 
     /**
      * Initialize using explicitly supplied message and code
@@ -387,11 +345,11 @@ data class Success<out T> internal constructor(
      * NOTE: There is small optimization here to avoid creating a new instance
      * of [Status] if the msg/code are empty and or they are the same as [Codes.SUCCESS].
      */
-    constructor(value: T, msg: String?, code: Int?) : this(value, Status.ofCode(msg, code, Codes.SUCCESS))
+    constructor(value: T, msg: String?, code: Int?) : this(value, Status.ofCode<Passed>(msg, code, Codes.SUCCESS))
 
 
     companion object {
-        fun <T> pending(value:T, status:Status.Pending? = null):Success<T> = Success(value, status ?: Codes.PENDING)
+        fun <T> pending(value:T, status:Passed.Pending? = null):Success<T> = Success(value, status ?: Codes.PENDING)
     }
 
 }
@@ -402,9 +360,9 @@ data class Success<out T> internal constructor(
  * @param error : Error representing the failure
  * @param status : Optional status code as [Status]
  */
-data class Failure<out E> internal constructor(
+data class Failure<out E> (
     val error: E,
-    override val status: Status
+    override val status: Failed
 ) : Result<Nothing, E>() {
 
     // NOTE: These overloads are here for convenience + Java Interoperability
@@ -425,7 +383,7 @@ data class Failure<out E> internal constructor(
      * NOTE: There is small optimization here to avoid creating a new instance
      * of [Status] if the msg/code are empty and or they are the same as [Codes.ERRORED].
      */
-    constructor(error: E, msg: String) : this(error, Status.ofCode(msg, null, Codes.ERRORED))
+    constructor(error: E, msg: String) : this(error, Status.ofCode<Failed>(msg, null, Codes.ERRORED))
 
     /**
      * Initialize using explicitly supplied code
@@ -435,7 +393,7 @@ data class Failure<out E> internal constructor(
      * NOTE: There is small optimization here to avoid creating a new instance
      * of [Status] if the msg/code are empty and or they are the same as [Codes.ERRORED].
      */
-    constructor(error: E, code: Int) : this(error, Status.ofCode(null, code, Codes.ERRORED))
+    constructor(error: E, code: Int) : this(error, Status.ofCode<Failed>(null, code, Codes.ERRORED))
 
     /**
      * Initialize using explicitly supplied message and code
@@ -446,14 +404,14 @@ data class Failure<out E> internal constructor(
      * NOTE: There is small optimization here to avoid creating a new instance
      * of [Status] if the msg/code are empty and or they are the same as [Codes.ERRORED].
      */
-    constructor(error: E, msg: String?, code: Int?) : this(error, Status.ofCode(msg, code, Codes.ERRORED))
+    constructor(error: E, msg: String?, code: Int?) : this(error, Status.ofCode<Failed>(msg, code, Codes.ERRORED))
 
     companion object {
-        fun <E> denied    (err: E, status:Status.Denied     ? = null):Failure<E> = Failure(err, status ?: Codes.DENIED)
-        fun <E> ignored   (err: E, status:Status.Ignored    ? = null):Failure<E> = Failure(err, status ?: Codes.IGNORED)
-        fun <E> invalid   (err: E, status:Status.Invalid    ? = null):Failure<E> = Failure(err, status ?: Codes.INVALID)
-        fun <E> errored   (err: E, status:Status.Errored    ? = null):Failure<E> = Failure(err, status ?: Codes.ERRORED)
-        fun <E> unexpected(err: E, status:Status.Unexpected ? = null):Failure<E> = Failure(err, status ?: Codes.UNEXPECTED)
+        fun <E> denied    (err: E, status:Failed.Denied     ? = null):Failure<E> = Failure(err, status ?: Codes.DENIED)
+        fun <E> ignored   (err: E, status:Failed.Ignored    ? = null):Failure<E> = Failure(err, status ?: Codes.IGNORED)
+        fun <E> invalid   (err: E, status:Failed.Invalid    ? = null):Failure<E> = Failure(err, status ?: Codes.INVALID)
+        fun <E> errored   (err: E, status:Failed.Errored    ? = null):Failure<E> = Failure(err, status ?: Codes.ERRORED)
+        fun <E> unexpected(err: E, status:Failed.Unexpected ? = null):Failure<E> = Failure(err, status ?: Codes.UNEXPECTED)
     }
 
 }

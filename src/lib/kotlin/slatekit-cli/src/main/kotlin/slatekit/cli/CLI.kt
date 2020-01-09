@@ -99,8 +99,8 @@ open class CLI(
      */
     open suspend fun end(status: Status): Try<Boolean> {
         return when(status){
-            is Status.Succeeded -> Tries.success(true, status)
-            is Status.Pending   -> Tries.pending(true, status)
+            is Passed.Succeeded -> Tries.success(true, status)
+            is Passed.Pending   -> Tries.pending(true, status)
             else                -> Failure(Exception(status.msg), status.msg, status.code)
         }
     }
@@ -174,20 +174,15 @@ open class CLI(
                 is Success -> {
                     val status = evalResult.status
                     when(status) {
-                        is Status.Pending   -> Tries.pending(Pair(args, evalResult.value), status)
-                        is Status.Succeeded -> Tries.success(Pair(args, evalResult.value), status)
+                        is Passed.Pending   -> Tries.pending(Pair(args, evalResult.value), status)
+                        is Passed.Succeeded -> Tries.success(Pair(args, evalResult.value), status)
                         else                -> Success(Pair(args, evalResult.value))
                     }
                 }
 
                 // Continue processing until exit | quit supplied
                 is Failure -> {
-                    val status = evalResult.status
-                    when(status) {
-                        is Status.Pending   -> Tries.pending(Pair(args, true), status)
-                        is Status.Succeeded -> Tries.success(Pair(args, true), status)
-                        else                -> Success(Pair(args, true))
-                    }
+                    Success(Pair(args, true))
                 }
             }
         }
@@ -248,7 +243,7 @@ open class CLI(
             // we would end up showing help text at the global / CLI level.
             val finalResult = when (result.status.code) {
                 // Even for failure, let the repl continue processing
-                Codes.HELP.code -> result.withStatus(Codes.SUCCESS, Codes.SUCCESS)
+                Codes.HELP.code -> result.withStatus(Codes.SUCCESS, Codes.ERRORED)
                 else -> result
             }
             print(finalResult)

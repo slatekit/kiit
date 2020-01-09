@@ -1,5 +1,7 @@
 package slatekit.tracking
 
+import slatekit.results.Failed
+import slatekit.results.Passed
 import slatekit.results.Status
 
 /**
@@ -70,12 +72,12 @@ interface Countable : Tagged {
     fun increment(status:Status) {
         incProcessed()
         when(status) {
-            is Status.Succeeded  -> incSucceeded()
-            is Status.Denied     -> incDenied()
-            is Status.Invalid    -> incInvalid()
-            is Status.Ignored    -> incIgnored()
-            is Status.Errored    -> incErrored()
-            is Status.Unexpected -> incUnexpected()
+            is Passed.Succeeded  -> incSucceeded()
+            is Failed.Denied     -> incDenied()
+            is Failed.Invalid    -> incInvalid()
+            is Failed.Ignored    -> incIgnored()
+            is Failed.Errored    -> incErrored()
+            is Failed.Unexpected -> incUnexpected()
             else                 -> incUnexpected()
         }
     }

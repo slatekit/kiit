@@ -326,6 +326,4 @@ open class ApiServer(
             )
         }
     }
-
-    val HELP = Status.Errored(10000, "help")
 }
