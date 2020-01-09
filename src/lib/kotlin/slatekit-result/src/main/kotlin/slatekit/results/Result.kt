@@ -403,8 +403,8 @@ data class Success<out T> internal constructor(
  * @param status : Optional status code as [Status]
  */
 data class Failure<out E> internal constructor(
-    override val status: Status,
-    val error: E
+    val error: E,
+    override val status: Status
 ) : Result<Nothing, E>() {
 
     // NOTE: These overloads are here for convenience + Java Interoperability
@@ -447,16 +447,6 @@ data class Failure<out E> internal constructor(
      * of [Status] if the msg/code are empty and or they are the same as [Codes.ERRORED].
      */
     constructor(error: E, msg: String?, code: Int?) : this(error, Status.ofCode(msg, code, Codes.ERRORED))
-
-    /**
-     * Initialize using explicitly supplied message and code
-     * @param error : Error representing the failure
-     * @param status : Status to use
-     *
-     * NOTE: There is small optimization here to avoid creating a new instance
-     * of [Status] if the msg/code are empty and or they are the same as [Codes.ERRORED].
-     */
-    internal constructor(error: E, status:Status) : this(status, error)
 
     companion object {
         fun <E> denied    (err: E, status:Status.Denied     ? = null):Failure<E> = Failure(err, status ?: Codes.DENIED)
