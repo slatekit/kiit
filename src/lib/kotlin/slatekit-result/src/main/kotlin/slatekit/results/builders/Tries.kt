@@ -52,13 +52,13 @@ object Tries : TryBuilder {
             val data = f()
             Success(data)
         } catch (e: DeniedException) {
-            Failure(e, Status.ofStatus(e.msg, e.status, Codes.DENIED))
+            Tries.denied(e, Status.ofStatus(e.msg, e.status, Codes.DENIED))
         } catch (e: IgnoredException) {
-            Failure(e, Status.ofStatus(e.msg, e.status, Codes.IGNORED))
+            Tries.ignored(e, Status.ofStatus(e.msg, e.status, Codes.IGNORED))
         } catch (e: InvalidException) {
-            Failure(e, Status.ofStatus(e.msg, e.status, Codes.INVALID))
+            Tries.invalid(e, Status.ofStatus(e.msg, e.status, Codes.INVALID))
         } catch (e: ErroredException) {
-            Failure(e, Status.ofStatus(e.msg, e.status, Codes.ERRORED))
+            Tries.errored(e, Status.ofStatus(e.msg, e.status, Codes.ERRORED))
         } catch (e: UnexpectedException) {
             // Theoretically, anything outside of Denied/Ignored/Invalid/Errored
             // is an unexpected expection ( even a normal [Exception].
@@ -66,11 +66,8 @@ object Tries : TryBuilder {
             // that correspond to the various [Status] groups), and to cover the
             // case when someone wants to explicitly use an UnhandledException
             // or Status group/code
-            Failure(e, Status.ofStatus(e.message, null, Codes.UNEXPECTED))
+            Tries.unexpected(e, Status.ofStatus(e.message, null, Codes.UNEXPECTED))
         } catch (e: Exception) {
-            when (e) {
-                is StatusException -> Failure(e, Status.ofStatus(e.msg, e.status, Codes.UNEXPECTED))
-                else -> Failure(e, Status.ofStatus(e.message, null, Codes.UNEXPECTED))
-            }
+            Tries.unexpected(e)
         }
 }

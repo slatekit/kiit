@@ -4,6 +4,7 @@ import org.junit.Test
 import slatekit.results.*
 import slatekit.results.Err
 import slatekit.results.Codes
+import slatekit.results.builders.Notices
 import slatekit.results.builders.Outcomes
 
 /**
@@ -36,7 +37,6 @@ class ResultCreateTests : ResultTestSupport {
         ensureFailure<Int>(Failure("invalid email"), status, expectedError = "invalid email")
         ensureFailure<Int>(Failure("invalid email", "bad data"), status, expectedStatusMsg = "bad data", expectedError = "invalid email")
         ensureFailure<Int>(Failure("invalid email", -1), status, expectedStatusCode = -1, expectedError = "invalid email")
-        ensureFailure<Int>(Failure("invalid email", Codes.BAD_REQUEST), Codes.BAD_REQUEST, expectedError = "invalid email")
     }
 
 
