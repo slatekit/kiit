@@ -98,7 +98,11 @@ open class CLI(
      * Hook for shutdown for derived classes
      */
     open suspend fun end(status: Status): Try<Boolean> {
-        return Success(true, status)
+        return when(status){
+            is Status.Succeeded -> Tries.success(true, status)
+            is Status.Pending   -> Tries.pending(true, status)
+            else                -> Failure(Exception(status.msg), status.msg, status.code)
+        }
     }
 
     /**
@@ -184,13 +188,13 @@ open class CLI(
         // These are typically system level
         return if (args.parts.size == 1) {
             when (args.line) {
-                Reserved.About.id -> { context.help.showAbout() ; Success(true, Codes.ABOUT) }
-                Reserved.Help.id -> { context.help.showHelp() ; Success(true, Codes.HELP) }
-                Reserved.Version.id -> { context.help.showVersion(); Success(true, Codes.VERSION) }
-                Reserved.Last.id -> { context.writer.text(lastArgs.get().line, false); Success(true) }
-                Reserved.Retry.id -> { executeRepl(lastArgs.get()) }
-                Reserved.Exit.id -> { Success(false, Codes.EXIT) }
-                Reserved.Quit.id -> { Success(false, Codes.EXIT) }
+                Reserved.About.id   -> { context.help.showAbout()    ; Tries.success(true, Codes.ABOUT) }
+                Reserved.Help.id    -> { context.help.showHelp()      ; Tries.success(true, Codes.HELP) }
+                Reserved.Version.id -> { context.help.showVersion(); Tries.success(true, Codes.VERSION) }
+                Reserved.Last.id    -> { context.writer.text(lastArgs.get().line, false); Tries.success(true) }
+                Reserved.Retry.id   -> { executeRepl(lastArgs.get()) }
+                Reserved.Exit.id    -> { Tries.success(false, Codes.EXIT) }
+                Reserved.Quit.id    -> { Tries.success(false, Codes.EXIT) }
                 else -> executeRepl(args)
             }
         } else {

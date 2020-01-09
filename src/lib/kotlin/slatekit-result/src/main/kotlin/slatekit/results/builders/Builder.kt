@@ -43,13 +43,13 @@ interface Builder<out E> {
     // The success(...) methods below could be 100% replaced with direct usage of top level class Success
     // But its here for completeness to be able to build all the various types
     // of successes / failures using builder methods.
-    fun <T> success(): Result<T?, E> = Success(null, Codes.SUCCESS)
+    fun <T> success(): Result<T?, E> = Success.of(null, Codes.SUCCESS)
     fun <T> success(value: T): Result<T, E> = Success(value, Codes.SUCCESS)
     fun <T> success(value: T, msg: String): Result<T, E> = Success(value, msg)
     fun <T> success(value: T, code: Int): Result<T, E> = Success(value, code)
     fun <T> success(value: T, status: Status.Succeeded): Result<T, E> = Success(value, status)
 
-    fun <T> pending(): Result<T?, E> = Success(null, Codes.PENDING)
+    fun <T> pending(): Result<T?, E> = Success.of(null, Codes.PENDING)
     fun <T> pending(value: T): Result<T, E> = Success(value, Codes.PENDING)
     fun <T> pending(value: T, msg: String): Result<T, E> = Success(value, Status.ofCode(msg, null, Codes.PENDING))
     fun <T> pending(value: T, code: Int): Result<T, E> = Success(value, Status.ofCode(null, code, Codes.PENDING))

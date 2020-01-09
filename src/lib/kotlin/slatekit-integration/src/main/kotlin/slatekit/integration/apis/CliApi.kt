@@ -25,6 +25,7 @@ import slatekit.common.info.Info
 import slatekit.results.Codes
 import slatekit.results.Success
 import slatekit.results.Try
+import slatekit.results.builders.Tries
 
 /**
  * Layer on top of the core CliService to provide support for handling command line requests
@@ -73,7 +74,7 @@ open class CliApi(
         val helpCheck = checkForHelp(request)
         return if(helpCheck.first) {
             showHelpFor(request, helpCheck.second)
-            Success(CliResponse(request, true, Codes.HELP.code, mapOf(), args.line), Codes.HELP)
+            Tries.success(CliResponse(request, true, Codes.HELP.code, mapOf(), args.line), Codes.HELP)
         }
         else {
             // Supply the api-key into each command.

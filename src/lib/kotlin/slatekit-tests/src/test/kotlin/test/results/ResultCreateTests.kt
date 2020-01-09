@@ -4,6 +4,7 @@ import org.junit.Test
 import slatekit.results.*
 import slatekit.results.Err
 import slatekit.results.Codes
+import slatekit.results.builders.Outcomes
 
 /**
  * Tests Operations on the Result class which include:
@@ -25,7 +26,7 @@ class ResultCreateTests : ResultTestSupport {
         ensureSuccess(Success(42), status, 42)
         ensureSuccess(Success(42, "created"), status, 42, "created")
         ensureSuccess(Success(42, "created", 1), status, 42, "created", 1)
-        ensureSuccess(Success(42, Codes.PENDING), Codes.PENDING, 42)
+        ensureSuccess(Outcomes.pending(42), Codes.PENDING, 42)
     }
 
 

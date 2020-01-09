@@ -89,9 +89,9 @@ class Example_Results : Command("results"), OutcomeBuilder {
         val result1a: Result<Int, Err> = Success(42)
 
         // Success created with status codes / messages
-        val result1b = Success(42, status = Codes.SUCCESS)
-        val result1c = Success(42, msg = "Successfully processed")
-        val result1d = Success(42, msg = "Successfully processed", code = 200)
+        val result1b = Success(42, msg = "Successfully processed")
+        val result1c = Success(42, msg = "Successfully processed", code = 200)
+        val result1d = Outcomes.success(42, status = Codes.SUCCESS)
 
         // Failure
         val result1e = Failure(Err.of("Invalid email"))
@@ -364,9 +364,9 @@ class Example_Results : Command("results"), OutcomeBuilder {
             is Failure -> println(result.error)  // Err
         }
 
-        val result1b = Success(42, Codes.SUCCESS)
-        val result1c = Success(42, msg = "Successfully processed")
-        val result1d = Success(42, msg = "Successfully processed", code = 200)
+        val result1b = Success(42, msg = "Successfully processed")
+        val result1c = Success(42, msg = "Successfully processed", code = 200)
+        val result1d = Outcomes.success(42, Codes.SUCCESS)
 
         // Create failure explicitly
         val result1e: Result<Int, Err> = Failure(Err.of("Invalid email"))
