@@ -86,7 +86,7 @@ interface Creates<TId, T> : ServiceSupport<TId, T> where TId : kotlin.Comparable
      * @return
      */
     fun createAsTry(entity: T): Try<TId> {
-        return Tries.attempt {
+        return Tries.of {
             create(entity)
         }
     }

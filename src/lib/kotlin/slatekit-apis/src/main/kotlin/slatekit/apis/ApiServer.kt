@@ -128,7 +128,7 @@ open class ApiServer(
             handleError(req, ex)
             val err = when(ex) {
                 is ExceptionErr -> ex.err
-                else -> Err.of(ex)
+                else -> Err.ex(ex)
             }
             Outcomes.errored<Any>(err)
         }

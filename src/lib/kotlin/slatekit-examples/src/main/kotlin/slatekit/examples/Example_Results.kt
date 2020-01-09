@@ -18,6 +18,8 @@ package slatekit.examples
 //<doc:import_examples>
 import slatekit.cmds.Command
 import slatekit.cmds.CommandRequest
+import slatekit.common.validations.Validations
+import slatekit.examples.common.User
 import slatekit.results.*
 import slatekit.results.Try
 import slatekit.results.Success
@@ -146,13 +148,13 @@ class Example_Results : Command("results"), OutcomeBuilder {
         // Check if the value matches the one provided
         result.contains(2)        // false
 
-        // Pattern match scenario 1: "Top-Level" on Success/Failure (Binary true / false )
+        // Pattern match 1: "Top-Level" on Success/Failure (Binary true / false )
         when(result) {
             is Success -> println(result.value)  // 42
             is Failure -> println(result.error)  // Err
         }
 
-        // Pattern match scenario 2: "Mid-level" on Status ( 7 logical groups )
+        // Pattern match 2: "Mid-level" on Status ( 7 logical groups )
         // NOTE: The status property is available on both the Success/Failure branches
         when(result.status) {
             is Status.Succeeded  -> println(result.msg) // Success!
@@ -164,40 +166,41 @@ class Example_Results : Command("results"), OutcomeBuilder {
             is Status.Unexpected -> println(result.msg) // Unexpected errors
         }
 
-        // Pattern match scenario 3: "Low-Level" on numeric code
+        // Pattern match 3: "Low-Level" on numeric code
         when(result.status.code) {
-            Codes.SUCCESS.code    -> "OK"
-            Codes.QUEUED.code     -> "Pending"
-            Codes.UPDATED.code    -> "User updated"
-            Codes.DENIED.code     -> "Log in again"
-            Codes.DEPRECATED.code -> "No longer supported"
-            Codes.CONFLICT.code   -> "Email already exists"
-            else                  -> "Other!!"
+            Codes.SUCCESS.code    -> println("OK")
+            Codes.QUEUED.code     -> println("Pending")
+            Codes.UPDATED.code    -> println("User updated")
+            Codes.DENIED.code     -> println("Log in again")
+            Codes.DEPRECATED.code -> println("No longer supported")
+            Codes.CONFLICT.code   -> println("Email already exists")
+            else                  -> println("Other!!")
         }
     }
 
 
     fun errors() {
 
-        // Simple string
+        // Build Err from various sources using convenience methods
+        // From simple string
         val err1 = Err.of("Invalid email")
 
-        // Exception
-        val err2 = Err.of(Exception("Invalid email"))
+        // From Exception
+        val err2 = Err.ex(Exception("Invalid email"))
 
-        // Field: name / value
-        val err3 = Err.on("email", "abc123 is not a valid email", "Invalid email")
+        // From field name / value
+        val err3 = Err.on("email", "abc123@", "Invalid email")
 
-        // String message from status code
+        // From status code
         val err4 = Err.code(Codes.INVALID)
 
-        // List of error strings
+        // From list of error strings
         val err5 = Err.list(listOf(
                 "username must be at least 8 chars",
-                "username must have 1 UPPERCASE letter"
-        ), "Username is invalid")
+                "username must have 1 UPPERCASE letter"),
+                "Username is invalid")
 
-        // List of Err types
+        // From list of Err types
         val err6 = Err.ErrorList(listOf(
                 Err.on("email", "abc123 is not a valid email", "Invalid email"),
                 Err.on("phone", "123-456-789 is not a valid U.S. phone", "Invalid phone")
@@ -208,15 +211,29 @@ class Example_Results : Command("results"), OutcomeBuilder {
     }
 
 
+    fun aliases1(){
+        val result:Try<Int> = Success( "1".toInt() )
+        println(result)
+    }
+
+
     fun aliases(){
+
+        // Build results ( imagine this is some user registration flow )
         // Try<T> = Result<T, Exception>
-        val res1 = Tries.attempt { "1".toInt() }
+        val tried1 = Tries.success( User() )
+        val tried2 = Tries.denied<User>("Phone exists")
+        val tried3 = Tries.invalid<User>("Email required")
 
         // Outcome<T> = Result<T, Err>
-        val res2 = Outcomes.of { "1".toInt() }
+        val outcome1 = Outcomes.success( User() )
+        val outcome2 = Outcomes.denied<User>("Phone exists")
+        val outcome3 = Outcomes.invalid<User>("Email required" )
 
         // Notice<T> = Result<T, String>
-        val res3 = Notices.notice { "1".toInt() }
+        val notice1 = Notices.success( User() )
+        val notice2 = Notices.denied<User>("Phone exists")
+        val notice3 = Notices.invalid<User>("Email required" )
 
         // Validated<T> = Result<T, ErrorList>
         val res4:Validated<String> = Failure(Err.ErrorList(listOf(
@@ -241,11 +258,33 @@ class Example_Results : Command("results"), OutcomeBuilder {
 
     fun tries(){
         // Try<Long> = Result<Long, Exception>
-        val converted1:Try<Long> = Tries.attempt { "1".toLong() }
+        val converted1:Try<Long> = Tries.of { "1".toLong() }
 
         // DeniedException will checked and converted to Status.Denied
-        val converted2:Try<Long> = Tries.attemptWithStatus<Long> {
+        val converted2:Try<Long> = Tries.of<Long> {
             throw DeniedException("Token invalid")
+        }
+    }
+
+
+    fun validated(){
+
+        // Model to validate
+        val user = User(0, "batman_gotham", "batman", "", true, 34)
+
+        // Validated<User> = Result<User, Err.ErrorList>
+        val validated = Validations.collect<User,String, Err>(user) {
+            listOf(
+                    isNotEmpty(user.firstName),
+                    isNotEmpty(user.lastName),
+                    isEmail(user.email)
+            )
+        }
+
+        // Print first error
+        when(validated) {
+            is Success -> println("User model is valid")
+            is Failure -> println("User model failed with : " + validated.error.errors.first().msg)
         }
     }
 

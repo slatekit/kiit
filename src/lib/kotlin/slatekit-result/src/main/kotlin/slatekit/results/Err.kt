@@ -52,32 +52,45 @@ sealed class Err {
      */
     companion object {
 
+        @JvmStatic
         fun of(msg: String, ex: Throwable? = null): Err {
             return ErrorInfo(msg, ex)
         }
 
-        fun of(ex: Throwable): Err {
-            return ErrorInfo(ex.message ?: "", ex)
-        }
-
+        @JvmStatic
         fun on(field: String, value: String, msg: String, ex: Throwable? = null): Err {
             return ErrorField(field, value, msg, ex)
         }
 
+        @JvmStatic
         fun ex(ex: Exception): Err {
             return ErrorInfo(ex.message ?: "", ex)
         }
 
+        @JvmStatic
         fun obj(err: Any): Err {
             return ErrorInfo(err.toString(), null, err)
         }
 
+        @JvmStatic
         fun code(status: Status): Err {
             return ErrorInfo(status.msg)
         }
 
+        @JvmStatic
         fun list(errors: List<String>, msg: String?): ErrorList {
             return ErrorList(errors.map { ErrorInfo(it) }, msg ?: "Error occurred")
+        }
+
+        @JvmStatic
+        fun build(error: Any?): Err {
+            return when (error) {
+                null -> Err.of(Codes.UNEXPECTED.msg)
+                is Err -> error
+                is String -> Err.of(error)
+                is Exception -> Err.ex(error)
+                else -> Err.obj(error)
+            }
         }
     }
 }

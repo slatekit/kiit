@@ -1,6 +1,4 @@
-import com.sun.org.apache.xerces.internal.dom.DeferredCommentImpl
 import kotlinx.coroutines.*
-import slatekit.examples.*
 import java.nio.file.Paths
 //import java.util.logging.*
 
@@ -16,7 +14,6 @@ import slatekit.cache.SimpleCache
 import slatekit.common.DateTime
 import slatekit.common.ext.toStringUtc
 import slatekit.providers.logs.logback.LogbackLogs
-import slatekit.functions.common.FunctionMode
 import slatekit.results.builders.Tries
 import java.io.File
 import java.util.*
@@ -65,17 +62,17 @@ fun testPaths(){
     println(f.readText())
 
     val results = items.map {
-        val path = Tries.attempt { Paths.get(it) }
-        val file = Tries.attempt { File(it) }
+        val path = Tries.of { Paths.get(it) }
+        val file = Tries.of { File(it) }
         Triple(it, path, file)
     }
     results.map {
         println("\n")
         println("text: ${it.first}" )
-        println("path.abs: ${it.second.fold({ Tries.attempt{ it.toAbsolutePath()}.fold({ it }, { "FAILED" })}, { "ERROR" })}" )
-        println("path.rea: ${it.second.fold({ Tries.attempt{ it.toRealPath()    }.fold({ it }, { "FAILED" })}, { "ERROR" })}" )
-        println("path.uri: ${it.second.fold({ Tries.attempt{ it.toUri()         }.fold({ it }, { "FAILED" })}, { "ERROR" })}" )
-        println("path.nor: ${it.second.fold({ Tries.attempt{ it.normalize()     }.fold({ it }, { "FAILED" })}, { "ERROR" })}" )
+        println("path.abs: ${it.second.fold({ Tries.of{ it.toAbsolutePath()}.fold({ it }, { "FAILED" })}, { "ERROR" })}" )
+        println("path.rea: ${it.second.fold({ Tries.of{ it.toRealPath()    }.fold({ it }, { "FAILED" })}, { "ERROR" })}" )
+        println("path.uri: ${it.second.fold({ Tries.of{ it.toUri()         }.fold({ it }, { "FAILED" })}, { "ERROR" })}" )
+        println("path.nor: ${it.second.fold({ Tries.of{ it.normalize()     }.fold({ it }, { "FAILED" })}, { "ERROR" })}" )
         println("file.abs: ${it.third .fold({ it.absolutePath } , { "ERROR" })}" )
         println("file.can: ${it.third .fold({ it.canonicalPath }, { "ERROR" })}" )
     }

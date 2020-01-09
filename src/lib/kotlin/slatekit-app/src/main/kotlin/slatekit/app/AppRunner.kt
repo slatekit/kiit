@@ -155,14 +155,14 @@ object AppRunner {
     private suspend fun <C : Context> init(app: App<C>): Try<Any> {
         // Wrap App.init() call for safety
         // This will produce a nested Try<Try<Boolean>>
-        val rawResult = Tries.attempt { app.init() }
+        val rawResult = Tries.of { app.init() }
 
         // Flatten the nested Try<Try<Boolean>> into a simple Try<Boolean>
         val result = rawResult.inner()
 
         // Finally flatMap it to ensure creation of directories for the app.
         val setupResult = result.flatMap {
-            Tries.attempt {
+            Tries.of {
                 app.ctx.dirs?.create()
                 it
             }.onFailure {
@@ -186,7 +186,7 @@ object AppRunner {
 
         // Wrap App.init() call for safety
         // This will produce a nested Try<Try<Boolean>>
-        val rawResult = Tries.attempt { app.exec() }
+        val rawResult = Tries.of { app.exec() }
 
         // Flatten the nested Try<Try<Boolean>> into a simple Try<Boolean>
         val result = rawResult.inner()
@@ -203,7 +203,7 @@ object AppRunner {
     private suspend fun <C : Context> done(execResult: Try<Any>, app: App<C>): Try<Any> {
         // Wrap App.init() call for safety
         // This will produce a nested Try<Try<Boolean>>
-        val rawResult = Tries.attempt { app.done() }
+        val rawResult = Tries.of { app.done() }
 
         // Flatten the nested Try<Try<Boolean>> into a simple Try<Boolean>
         val result = rawResult.inner()

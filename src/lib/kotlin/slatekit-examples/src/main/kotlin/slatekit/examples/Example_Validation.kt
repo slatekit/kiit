@@ -12,7 +12,7 @@
 package slatekit.examples
 
 //<doc:import_required>
-import slatekit.common.validations.ValidationFuncsExt
+import slatekit.common.validations.Validations
 //</doc:import_required>
 
 //<doc:import_examples>
@@ -60,7 +60,7 @@ class Example_Validation : Command("validation") {
 
   //<doc:examples>
   // CASE 1: Simple true/false checks
-  fun showSimple():Unit {
+  fun showSimple() {
 
     println("CASE 1: Simple true/false checks")
     println( isEmpty      ("")              )
@@ -79,7 +79,7 @@ class Example_Validation : Command("validation") {
 
 
   // CASE 2: Simple RegEx based checks returning true/false
-  fun showSimpleRegEx():Unit {
+  fun showSimpleRegEx() {
 
     println("CASE 2: Simple RegEx based checks returning true/false")
     println( isEmail         ("wonderwoman@amazonian.com"))
@@ -98,28 +98,28 @@ class Example_Validation : Command("validation") {
   // CASE 3: Same checks above but these return a ValidationResult
   // which contains success(true/false), message, reference, and status code
   // You can supply a reference to a field/position refer to common\Reference.kt
-  fun showValidationResult():Unit {
+  fun showValidationResult() {
 
     println("CASE 3: Same checks above but these return a ValidationResult")
-    println( ValidationFuncsExt.isEmpty       (""      ,     "Email is required"   ))
-    println( ValidationFuncsExt.isAlphaNumeric("abCD12",     "Password is invalid" ))
-    println( ValidationFuncsExt.isZipCodeUS   ("12345" ,     "ZipCode is required" ))
-    println( ValidationFuncsExt.isMinLength   ("12"    , 3, "Min 3 chars required"))
+    println( Validations.isEmpty       (""      ,     "Email is required"   ))
+    println( Validations.isAlphaNumeric("abCD12",     "Password is invalid" ))
+    println( Validations.isZipCodeUS   ("12345" ,     "ZipCode is required" ))
+    println( Validations.isMinLength   ("12"    , 3, "Min 3 chars required"))
     println()
   }
 
 
   // CASE 4: Collect errors via thunks(0 parameter functions)
-  fun showErrorCollection():Unit {
+  fun showErrorCollection() {
 
     val password = "abc123XYZ"
 
     println("CASE 4: Collect errors via thunks(0 parameter functions)")
     val errors = listOf (
-        { ValidationFuncsExt.isLength      ( password,   9 , "Email must be 9 characters")          } ,
-        { ValidationFuncsExt.hasCharsLCase ( password, 3 , "Email must have 3 lowercase letters") } ,
-        { ValidationFuncsExt.hasCharsUCase ( password, 3 , "Email must have 3 uppercase letters") } ,
-        { ValidationFuncsExt.hasDigits     ( password, 3 , "Email must have 3 digits")            }
+        { Validations.isLength      ( password,   9 , "Email must be 9 characters")          } ,
+        { Validations.hasCharsLCase ( password, 3 , "Email must have 3 lowercase letters") } ,
+        { Validations.hasCharsUCase ( password, 3 , "Email must have 3 uppercase letters") } ,
+        { Validations.hasDigits     ( password, 3 , "Email must have 3 digits")            }
       ).map    { rule -> rule() }
        .filter { result -> !result.success }
        .toList()

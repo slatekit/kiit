@@ -39,7 +39,7 @@ interface Deletes<TId, T> : ServiceSupport<TId, T> where TId : kotlin.Comparable
      * @return
      */
     fun deleteAsTry(entity: T): Try<Boolean> {
-        return Tries.attempt { delete(entity) }
+        return Tries.of { delete(entity) }
     }
 
     /**

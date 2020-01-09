@@ -29,7 +29,7 @@ open class Recorder<TRequest, TResponse>(val id: Identity,
      * Record all relevant diagnostics
      */
     fun record(sender: Any, request: TRequest, result: Outcome<TResponse>) {
-        Tries.attempt {
+        Tries.of {
             // Structured logging ( convert the request/result into an Event
             converter?.let { c -> Event.log(logger, id, c(request, result)) }
 

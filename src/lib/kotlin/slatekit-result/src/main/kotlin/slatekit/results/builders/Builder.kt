@@ -51,8 +51,8 @@ interface Builder<out E> {
 
     fun <T> pending(): Result<T?, E> = Success(null, Codes.PENDING)
     fun <T> pending(value: T): Result<T, E> = Success(value, Codes.PENDING)
-    fun <T> pending(value: T, msg: String): Result<T, E> = Success(value, Result.status(msg, null, Codes.PENDING))
-    fun <T> pending(value: T, code: Int): Result<T, E> = Success(value, Result.status(null, code, Codes.PENDING))
+    fun <T> pending(value: T, msg: String): Result<T, E> = Success(value, Status.ofCode(msg, null, Codes.PENDING))
+    fun <T> pending(value: T, code: Int): Result<T, E> = Success(value, Status.ofCode(null, code, Codes.PENDING))
     fun <T> pending(value: T, status: Status.Pending): Result<T, E> = Success(value, status)
 
     fun <T> denied(): Result<T, E> = Failure(errorFromStr(null, Codes.DENIED), Codes.DENIED)
@@ -104,4 +104,24 @@ interface Builder<out E> {
      * message if the message is null / empty.
      */
     fun get(status: Status?, defaultStatus: Status): Status = status ?: defaultStatus
+
+    /**
+     * Build a Result<T,E> using the supplied condition and default error builders
+     */
+    fun <T> of(condition: Boolean, t: T?): Result<T, E> {
+        return if (!condition)
+            errored()
+        else if (t == null)
+            errored()
+        else
+            success(t)
+    }
+
+    /**
+     * Build a Result<T,E> for a possible null value
+     */
+    fun <T> of(t: T?): Result<T,E> = when (t) {
+            null -> errored("null")
+            else -> success(t)
+        }
 }

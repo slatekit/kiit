@@ -7,6 +7,7 @@ import slatekit.common.validations.ValidationFuncs
 import slatekit.functions.Input
 import slatekit.functions.middleware.Middleware
 import slatekit.results.Outcome
+import slatekit.results.builders.Outcomes
 import slatekit.results.flatMap
 
 class Restify : Input<ApiRequest>, RewriteSupport, Middleware {
@@ -29,19 +30,19 @@ class Restify : Input<ApiRequest>, RewriteSupport, Middleware {
             val container = it.host
 
             val result = if (verb == verbGet && req.parts[2] == "") {
-                Outcome.of { rewrite(it, container.rename("getAll")) }
+                Outcomes.of { rewrite(it, container.rename("getAll")) }
             } else if (verb == verbGet && ValidationFuncs.isNumeric(req.parts[2])) {
-                Outcome.of { rewriteWithParam(it, container.rename("getById"), "id", req.parts[2]) }
+                Outcomes.of { rewriteWithParam(it, container.rename("getById"), "id", req.parts[2]) }
             } else if (verb == verbPost && req.parts[2] == "") {
-                    Outcome.of { rewrite(it, container.rename("create")) }
+                    Outcomes.of { rewrite(it, container.rename("create")) }
             } else if (verb == verbPut && req.parts[2] == "") {
-                    Outcome.of { rewrite(it, container.rename("update")) }
+                    Outcomes.of { rewrite(it, container.rename("update")) }
             } else if (verb == verbPatch && ValidationFuncs.isNumeric(req.parts[2])) {
-                    Outcome.of { rewriteWithParam(it, container.rename("patch"), "id", req.parts[2]) }
+                    Outcomes.of { rewriteWithParam(it, container.rename("patch"), "id", req.parts[2]) }
             } else if (verb == verbDelete && req.parts[2] == "") {
-                    Outcome.of { rewrite(it, container.rename(verbDelete)) }
+                    Outcomes.of { rewrite(it, container.rename(verbDelete)) }
             } else if (verb == verbDelete && ValidationFuncs.isNumeric(req.parts[2])) {
-                    Outcome.of { rewriteWithParam(it, container.rename("deleteById"), "id", req.parts[2]) }
+                    Outcomes.of { rewriteWithParam(it, container.rename("deleteById"), "id", req.parts[2]) }
             } else {
                 request
             }

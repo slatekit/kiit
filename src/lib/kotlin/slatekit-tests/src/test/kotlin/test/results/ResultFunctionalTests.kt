@@ -4,6 +4,7 @@ import org.junit.Assert
 import org.junit.Test
 import slatekit.results.*
 import slatekit.results.Codes
+import slatekit.results.builders.Outcomes
 import slatekit.results.builders.Outcomes.success
 import slatekit.results.builders.Outcomes.errored
 
@@ -193,7 +194,7 @@ class ResultFunctionalTests {
     fun can_chain() {
         var successValue = ""
 
-        val result1 = Result.of { "1" }
+        val result1 = Outcomes.of { "1" }
         val result2 =
             result1.map { it.toInt() }
                 .onSuccess { successValue = "converted to int: $it" }

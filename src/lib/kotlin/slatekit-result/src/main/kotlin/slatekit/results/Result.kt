@@ -12,6 +12,10 @@
 
 package slatekit.results
 
+import slatekit.results.builders.Notices
+import slatekit.results.builders.Outcomes
+import slatekit.results.builders.Tries
+
 /**
  * Models successes and failures with optional status codes.
  * This is similar to the Result type from languages such as Rust, Swift, Kotlin, Try from Scala.
@@ -265,7 +269,7 @@ sealed class Result<out T, out E> {
                 null -> Err.of(Codes.UNEXPECTED.msg)
                 is Err -> error
                 is String -> Err.of(error)
-                is Exception -> Err.of(error)
+                is Exception -> Err.ex(error)
                 else -> Err.obj(error)
             }
             when (retainStatus) {
@@ -299,94 +303,14 @@ sealed class Result<out T, out E> {
 
     companion object {
 
-        /**
-         * Build a Outcome<T> ( type alias ) for Result<T,Err> using the supplied function
-         */
         @JvmStatic
-        inline fun <T> of(f: () -> T): Outcome<T> = build(f, { ex -> Err.of(ex) })
-
-        /**
-         * Build a Try<T> ( Result<T,Exception> ) using the supplied callback.
-         * This allows for using throw [Exception] to build the Try
-         * by getting the appropriate status code out of the defined exception
-         */
-        @JvmStatic
-        inline fun <T> attemptWithStatus(f: () -> Success<T>): Try<T> =
-                try {
-                    val data = f()
-                    data
-                } catch (e: DeniedException) {
-                    Failure(e, build(e.msg, e.status, Codes.DENIED))
-                } catch (e: IgnoredException) {
-                    Failure(e, build(e.msg, e.status, Codes.IGNORED))
-                } catch (e: InvalidException) {
-                    Failure(e, build(e.msg, e.status, Codes.INVALID))
-                } catch (e: ErroredException) {
-                    Failure(e, build(e.msg, e.status, Codes.ERRORED))
-                } catch (e: UnexpectedException) {
-                    // Theoretically, anything outside of Denied/Ignored/Invalid/Errored
-                    // is an unexpected expection ( even a normal [Exception].
-                    // However, this is here for completeness ( to have exceptions
-                    // that correspond to the various [Status] groups), and to cover the
-                    // case when someone wants to explicitly use an UnhandledException
-                    // or Status group/code
-                    Failure(e, build(e.message, null, Codes.UNEXPECTED))
-                } catch (e: Exception) {
-                    when (e) {
-                        is StatusException -> Failure(e, build(e.msg, e.status, Codes.UNEXPECTED))
-                        else -> Failure(e, build(e.message, null, Codes.UNEXPECTED))
-                    }
-                }
-
-        /**
-         * Build a Notice<T> ( type alias ) for Result<T,String> using the supplied function
-         */
-        @JvmStatic
-        inline fun <T> notice(f: () -> T): Notice<T> = build(f, { e -> e.message ?: Codes.ERRORED.msg })
-
-        /**
-         * Build a Result<T,E> using the supplied callback and error handler
-         */
-        @JvmStatic
-        inline fun <T, E> build(f: () -> T, onError: (Exception) -> E): Result<T, E> =
-            try {
-                val data = f()
-                Success(data)
-            } catch (e: Exception) {
-                Failure(onError(e))
-            }
+        fun <T> attempt(f: () -> T): Try<T> = Tries.of(f)
 
         @JvmStatic
-        fun error(error: Any?): Err {
-            return when (error) {
-                null -> Err.of(Codes.UNEXPECTED.msg)
-                is Err -> error
-                is String -> Err.of(error)
-                is Exception -> Err.of(error)
-                else -> Err.obj(error)
-            }
-        }
+        fun <T> outcome(f: () -> T): Outcome<T> = Outcomes.of(f)
 
         @JvmStatic
-        fun status(msg: String?, code: Int?, status: Status): Status {
-            // NOTE: There is small optimization here to avoid creating a new instance
-            // of [Status] if the msg/code are empty and or they are the same as Success.
-            if (code == null && msg == null || msg == "") return status
-            if (code == status.code && msg == null) return status
-            if (code == status.code && msg == status.msg) return status
-            return status.copyAll(msg ?: status.msg, code ?: status.code)
-        }
-
-        @JvmStatic
-        fun build(msg: String?, rawStatus: Status?, status: Status): Status {
-            // NOTE: There is small optimization here to avoid creating a new instance
-            // of [Status] if the msg/code are empty and or they are the same as Success.
-            if (msg == null && rawStatus == null) return status
-            if (msg == null && rawStatus != null) return rawStatus
-            if (msg != null && rawStatus == null) return status.copyMsg(msg)
-            if (msg != null && rawStatus != null) return rawStatus.copyMsg(msg)
-            return status
-        }
+        fun <T> message(f: () -> T): Notice<T> = Notices.of(f)
     }
 }
 
@@ -411,7 +335,7 @@ data class Success<out T>(
      * of [Status] if the msg/code are empty and or they are the same as [Codes.SUCCESS].
      */
     constructor(value: T, msg: String) :
-            this(value, Result.status(msg, null, Codes.SUCCESS))
+            this(value, Status.ofCode(msg, null, Codes.SUCCESS))
 
     /**
      * Initialize using explicitly supplied code
@@ -422,7 +346,7 @@ data class Success<out T>(
      * of [Status] if the msg/code are empty and or they are the same as [Codes.SUCCESS].
      */
     constructor(value: T, code: Int) :
-            this(value, Result.status(null, code, Codes.SUCCESS))
+            this(value, Status.ofCode(null, code, Codes.SUCCESS))
 
     /**
      * Initialize using explicitly supplied message and code
@@ -434,7 +358,7 @@ data class Success<out T>(
      * of [Status] if the msg/code are empty and or they are the same as [Codes.SUCCESS].
      */
     constructor(value: T, msg: String? = null, code: Int? = null) :
-            this(value, Result.status(msg, code, Codes.SUCCESS))
+            this(value, Status.ofCode(msg, code, Codes.SUCCESS))
 }
 
 /**
@@ -458,7 +382,7 @@ data class Failure<out E>(
      * of [Status] if the msg/code are empty and or they are the same as [Codes.ERRORED].
      */
     constructor(error: E, msg: String) :
-            this(error, Result.status(msg, null, Codes.ERRORED))
+            this(error, Status.ofCode(msg, null, Codes.ERRORED))
 
     /**
      * Initialize using explicitly supplied code
@@ -469,7 +393,7 @@ data class Failure<out E>(
      * of [Status] if the msg/code are empty and or they are the same as [Codes.ERRORED].
      */
     constructor(error: E, code: Int) :
-            this(error, Result.status(null, code, Codes.ERRORED))
+            this(error, Status.ofCode(null, code, Codes.ERRORED))
 
     /**
      * Initialize using explicitly supplied message and code
@@ -481,7 +405,7 @@ data class Failure<out E>(
      * of [Status] if the msg/code are empty and or they are the same as [Codes.ERRORED].
      */
     constructor(error: E, msg: String? = null, code: Int? = null) :
-            this(error, Result.status(msg, code, Codes.ERRORED))
+            this(error, Status.ofCode(msg, code, Codes.ERRORED))
 }
 
 /**

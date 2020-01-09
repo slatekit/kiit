@@ -37,7 +37,7 @@ class Calls(val id: Identity) {
 
 
     fun failed(ex:Exception): Long {
-        lastErr.set(Err.of(ex))
+        lastErr.set(Err.ex(ex))
         return counters.incUnexpected()
     }
 

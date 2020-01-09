@@ -22,7 +22,7 @@ import slatekit.results.builders.Tries
 interface IO<in I, out O> {
 
     fun run(i: I): O
-    fun attempt(i:I): Try<O> = Tries.attempt { run(i) }
+    fun attempt(i:I): Try<O> = Tries.of { run(i) }
     fun outcome(i:I): Outcome<O> = Outcomes.of { run(i) }
 }
 
