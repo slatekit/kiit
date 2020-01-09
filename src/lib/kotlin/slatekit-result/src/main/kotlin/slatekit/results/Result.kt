@@ -269,7 +269,7 @@ sealed class Result<out T, out E> {
                 null -> Err.of(Codes.UNEXPECTED.msg)
                 is Err -> error
                 is String -> Err.of(error)
-                is Exception -> Err.of(error)
+                is Exception -> Err.ex(error)
                 else -> Err.obj(error)
             }
             when (retainStatus) {

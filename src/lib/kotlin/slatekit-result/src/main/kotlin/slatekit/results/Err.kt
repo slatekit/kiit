@@ -58,11 +58,6 @@ sealed class Err {
         }
 
         @JvmStatic
-        fun of(ex: Throwable): Err {
-            return ErrorInfo(ex.message ?: "", ex)
-        }
-
-        @JvmStatic
         fun on(field: String, value: String, msg: String, ex: Throwable? = null): Err {
             return ErrorField(field, value, msg, ex)
         }
@@ -93,7 +88,7 @@ sealed class Err {
                 null -> Err.of(Codes.UNEXPECTED.msg)
                 is Err -> error
                 is String -> Err.of(error)
-                is Exception -> Err.of(error)
+                is Exception -> Err.ex(error)
                 else -> Err.obj(error)
             }
         }

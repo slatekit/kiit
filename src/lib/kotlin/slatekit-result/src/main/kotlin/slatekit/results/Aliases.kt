@@ -22,16 +22,6 @@ package slatekit.results
 typealias Try<T> = Result<T, Exception>
 
 /**
- * Alias for Result<T,E> defaulting the E error type ( [Failure] branch ) to [Err] interface
- *
- * This allows for :
- * 1. slightly easier usage by only requiring 1 type parameter
- * 2. avoid collision with the Kotlin Result type
- * 3. allows for using the sensible default implementations for [Err]
- */
-typealias Outcome<T> = Result<T, Err>
-
-/**
  * Alias for Result<T,E> defaulting the E error type ( [Failure] branch ) to [String]
  *
  * This allows for :
@@ -40,6 +30,16 @@ typealias Outcome<T> = Result<T, Err>
  * 3. use a simple [String] for failures without having to build [Err] or [Exception]
  */
 typealias Notice<T> = Result<T, String>
+
+/**
+ * Alias for Result<T,E> defaulting the E error type ( [Failure] branch ) to [Err] interface
+ *
+ * This allows for :
+ * 1. slightly easier usage by only requiring 1 type parameter
+ * 2. avoid collision with the Kotlin Result type
+ * 3. allows for using the sensible default implementations for [Err]
+ */
+typealias Outcome<T> = Result<T, Err>
 
 /**
  * Alias for Result<T,E> defaulting the E error type ( [Failure] branch ) to [Err.ErrorList]
