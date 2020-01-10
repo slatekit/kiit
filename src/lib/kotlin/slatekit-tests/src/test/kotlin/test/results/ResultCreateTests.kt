@@ -4,6 +4,8 @@ import org.junit.Test
 import slatekit.results.*
 import slatekit.results.Err
 import slatekit.results.Codes
+import slatekit.results.builders.Notices
+import slatekit.results.builders.Outcomes
 
 /**
  * Tests Operations on the Result class which include:
@@ -25,7 +27,7 @@ class ResultCreateTests : ResultTestSupport {
         ensureSuccess(Success(42), status, 42)
         ensureSuccess(Success(42, "created"), status, 42, "created")
         ensureSuccess(Success(42, "created", 1), status, 42, "created", 1)
-        ensureSuccess(Success(42, Codes.PENDING), Codes.PENDING, 42)
+        ensureSuccess(Outcomes.pending(42), Codes.PENDING, 42)
     }
 
 
@@ -35,7 +37,6 @@ class ResultCreateTests : ResultTestSupport {
         ensureFailure<Int>(Failure("invalid email"), status, expectedError = "invalid email")
         ensureFailure<Int>(Failure("invalid email", "bad data"), status, expectedStatusMsg = "bad data", expectedError = "invalid email")
         ensureFailure<Int>(Failure("invalid email", -1), status, expectedStatusCode = -1, expectedError = "invalid email")
-        ensureFailure<Int>(Failure("invalid email", Codes.BAD_REQUEST), Codes.BAD_REQUEST, expectedError = "invalid email")
     }
 
 
@@ -45,6 +46,6 @@ class ResultCreateTests : ResultTestSupport {
         ensureFailure<Int>(Failure(Err.of("invalid email")), status, expectedError = "invalid email")
         ensureFailure<Int>(Failure(Err.of("invalid email"), "bad data"), status, expectedStatusMsg = "bad data", expectedError = "invalid email")
         ensureFailure<Int>(Failure(Err.of("invalid email"), -1), status, expectedStatusCode = -1, expectedError = "invalid email")
-        ensureFailure<Int>(Failure(Err.of("invalid email"), Codes.BAD_REQUEST), Codes.BAD_REQUEST, expectedError = "invalid email")
+        ensureFailure<Int>(Outcomes.invalid(Err.of("invalid email"), Codes.BAD_REQUEST), Codes.BAD_REQUEST, expectedError = "invalid email")
     }
 }

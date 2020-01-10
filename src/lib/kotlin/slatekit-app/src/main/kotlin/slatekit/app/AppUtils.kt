@@ -35,6 +35,7 @@ import slatekit.common.log.Logs
 import slatekit.common.log.LogsDefault
 import slatekit.common.log.LogLevel
 import slatekit.results.*
+import slatekit.results.builders.Outcomes
 import java.io.File
 
 object AppUtils {
@@ -52,16 +53,16 @@ object AppUtils {
 
         return when {
             // Case 1: Exit ?
-            isExit(raw, 0) -> Success("exit", Codes.EXIT)
+            isExit(raw, 0) -> Outcomes.success("exit", Codes.EXIT)
 
             // Case 2a: version ?
-            isVersion(raw, 0) -> Success("version", Codes.VERSION)
+            isVersion(raw, 0) -> Outcomes.success("version", Codes.VERSION)
 
             // Case 2b: about ?
-            ArgsCheck.isAbout(raw, 0) -> Success("about", Codes.ABOUT)
+            ArgsCheck.isAbout(raw, 0) -> Outcomes.success("about", Codes.ABOUT)
 
             // Case 3a: Help ?
-            ArgsCheck.isHelp(raw, 0) -> Success("help", Codes.HELP)
+            ArgsCheck.isHelp(raw, 0) -> Outcomes.success("help", Codes.HELP)
 
             else -> Failure(Err.of("other"))
         }

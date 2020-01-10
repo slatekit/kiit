@@ -1,14 +1,13 @@
 package test.results
 import org.junit.Assert
 import org.junit.Test
-import slatekit.results.Status
-import slatekit.results.Codes
+import slatekit.results.*
 
 class StatusTests {
 
     @Test
     fun can_build_basic(){
-        val status = Status.Succeeded(1, "success")
+        val status = Passed.Succeeded(1, "success")
         Assert.assertEquals(1, status.code)
         Assert.assertEquals("success", status.msg)
     }
@@ -20,9 +19,8 @@ class StatusTests {
             Assert.assertEquals(code, status.code)
             Assert.assertEquals(msg, status.msg)
         }
-        val status = Status.Succeeded(1, "success")
+        val status = Passed.Succeeded(1, "success")
         val statusGroup: Status = status
-        check(statusGroup.copyMsg("ok"), status.code, "ok")
         check(statusGroup.copyAll("ok", 2), 2, "ok")
     }
 
@@ -55,13 +53,13 @@ class StatusTests {
 
     @Test
     fun confirm_group_types() {
-        Assert.assertTrue(Codes.SUCCESS    is Status.Succeeded )
-        Assert.assertTrue(Codes.PENDING    is Status.Pending   )
-        Assert.assertTrue(Codes.IGNORED    is Status.Ignored   )
-        Assert.assertTrue(Codes.INVALID    is Status.Invalid   )
-        Assert.assertTrue(Codes.DENIED     is Status.Denied    )
-        Assert.assertTrue(Codes.ERRORED    is Status.Errored   )
-        Assert.assertTrue(Codes.UNEXPECTED is Status.Unexpected )
+        Assert.assertTrue(Codes.SUCCESS    is Passed.Succeeded )
+        Assert.assertTrue(Codes.PENDING    is Passed.Pending   )
+        Assert.assertTrue(Codes.IGNORED    is Failed.Ignored   )
+        Assert.assertTrue(Codes.INVALID    is Failed.Invalid   )
+        Assert.assertTrue(Codes.DENIED     is Failed.Denied    )
+        Assert.assertTrue(Codes.ERRORED    is Failed.Errored   )
+        Assert.assertTrue(Codes.UNEXPECTED is Failed.Unexpected )
     }
 
     @Test
@@ -99,8 +97,29 @@ class StatusTests {
     }
 
 
+    @Test
+    fun can_build_from_custom_error(){
+        val err:Result<Int, RegistrationError> = Failure(RegistrationError.InvalidEmail("abc@somewhere"))
+        Assert.assertTrue(err is Failure)
+        err.onFailure {
+            Assert.assertEquals(it.field, "email")
+            Assert.assertEquals(it.value, "abc@somewhere")
+        }
+    }
+
+
     private fun checkCode(Statuses: Status, expectedCode: Int, expectedMsg: String) {
         Assert.assertEquals(Statuses.code, expectedCode)
         Assert.assertEquals(Statuses.msg, expectedMsg)
     }
+}
+
+
+sealed class RegistrationError(val field:String) {
+    abstract val value:String
+
+    data class InvalidEmail  (override val value:String): RegistrationError("email")
+    data class InvalidPhone  (override val value:String): RegistrationError("phone")
+    data class DuplicateUser (override val value:String): RegistrationError("name")
+    data class ReservedName  (override val value:String): RegistrationError("name")
 }

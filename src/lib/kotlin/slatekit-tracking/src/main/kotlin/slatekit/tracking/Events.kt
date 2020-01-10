@@ -1,9 +1,6 @@
 package slatekit.tracking
 
-import slatekit.results.Failure
-import slatekit.results.Result
-import slatekit.results.Status
-import slatekit.results.Success
+import slatekit.results.*
 
 /**
  * Handles the various success / failures statuses represented in the @see[slatekit.results.Status]
@@ -83,11 +80,11 @@ open class Events<TRequest, TResponse, TFailure>(
             is Success -> this.succeeded(sender, request, result.value)
             is Failure -> {
                 when (result.status) {
-                    is Status.Denied     -> this.denied    (sender, request, result )
-                    is Status.Invalid    -> this.invalid   (sender, request, result)
-                    is Status.Ignored    -> this.ignored   (sender, request, result)
-                    is Status.Errored    -> this.errored   (sender, request, result)
-                    is Status.Unexpected -> this.unexpected(sender, request, result)
+                    is Failed.Denied     -> this.denied    (sender, request, result )
+                    is Failed.Invalid    -> this.invalid   (sender, request, result)
+                    is Failed.Ignored    -> this.ignored   (sender, request, result)
+                    is Failed.Errored    -> this.errored   (sender, request, result)
+                    is Failed.Unexpected -> this.unexpected(sender, request, result)
                     else                 -> this.unexpected(sender, request, result)
                 }
             }

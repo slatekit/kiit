@@ -7,11 +7,8 @@ import slatekit.common.Identity
 import slatekit.tracking.Calls
 import slatekit.tracking.Counters
 import slatekit.functions.policy.*
-import slatekit.results.Codes
-import slatekit.results.Outcome
-import slatekit.results.Status
+import slatekit.results.*
 import slatekit.results.builders.Outcomes
-import slatekit.results.getOrElse
 
 class Policy_Tests {
 
@@ -26,7 +23,7 @@ class Policy_Tests {
             }
         }
         Assert.assertTrue(result.success)
-        Assert.assertTrue(result.status is Status.Succeeded)
+        Assert.assertTrue(result.status is Passed.Succeeded)
         Assert.assertEquals(1, result.getOrNull())
     }
 
@@ -41,7 +38,7 @@ class Policy_Tests {
             policy.run("3") { Outcomes.of(it.toInt()) }
         }
         Assert.assertFalse(result.success)
-        Assert.assertTrue(result.status is Status.Errored)
+        Assert.assertTrue(result.status is Failed.Errored)
         Assert.assertEquals(result.code, Codes.LIMITED.code)
     }
 
@@ -57,7 +54,7 @@ class Policy_Tests {
             }
         }
         Assert.assertTrue(result.success)
-        Assert.assertTrue(result.status is Status.Succeeded)
+        Assert.assertTrue(result.status is Passed.Succeeded)
         Assert.assertEquals(1, result.getOrNull())
     }
 
@@ -72,7 +69,7 @@ class Policy_Tests {
             policy.run("3") { calls.inc(); Outcomes.of(it.toInt()) }
         }
         Assert.assertFalse(result.success)
-        Assert.assertTrue(result.status is Status.Errored)
+        Assert.assertTrue(result.status is Failed.Errored)
         Assert.assertEquals(result.code, Codes.LIMITED.code)
     }
 
@@ -87,7 +84,7 @@ class Policy_Tests {
             policy.run("3") { Outcomes.of(it.toInt()) }
         }
         Assert.assertTrue(result.success)
-        Assert.assertTrue(result.status is Status.Succeeded)
+        Assert.assertTrue(result.status is Passed.Succeeded)
         Assert.assertEquals(3, result.getOrNull())
         Assert.assertEquals(2, value)
     }
@@ -96,14 +93,14 @@ class Policy_Tests {
     @Test
     fun test_ratio_success(){
         val counts = Counters(Identity.test("policy"))
-        val policy:Policy<String,Int> = Ratio(.4, Status.Denied(0, ""), { counts })
+        val policy:Policy<String,Int> = Ratio(.4, Failed.Denied(0, ""), { counts })
         val result = runBlocking {
             policy.run("1") { counts.incProcessed(); counts.incSucceeded(); Outcomes.of(it.toInt()) }
             policy.run("2") { counts.incProcessed(); counts.incDenied(); Outcomes.of(it.toInt()) }
             policy.run("3") { counts.incProcessed(); counts.incSucceeded(); Outcomes.of(it.toInt()) }
         }
         Assert.assertTrue(result.success)
-        Assert.assertTrue(result.status is Status.Succeeded)
+        Assert.assertTrue(result.status is Passed.Succeeded)
         Assert.assertEquals(3, result.getOrNull())
     }
 
@@ -111,14 +108,14 @@ class Policy_Tests {
     @Test
     fun test_ratio_failure(){
         val counts = Counters(Identity.test("policy"))
-        val policy:Policy<String,Int> = Ratio(.5, Status.Denied(0, ""), { counts })
+        val policy:Policy<String,Int> = Ratio(.5, Failed.Denied(0, ""), { counts })
         val result = runBlocking {
             policy.run("1") { counts.incProcessed(); counts.incSucceeded(); Outcomes.of(it.toInt()) }
             policy.run("2") { counts.incProcessed(); counts.incDenied(); Outcomes.of(it.toInt()) }
             policy.run("3") { counts.incProcessed();counts.incDenied(); Outcomes.of(it.toInt()) }
         }
         Assert.assertFalse(result.success)
-        Assert.assertTrue(result.status is Status.Errored)
+        Assert.assertTrue(result.status is Failed.Errored)
         Assert.assertEquals(result.code, Codes.LIMITED.code)
     }
 
@@ -135,7 +132,7 @@ class Policy_Tests {
         val call = Policies.compose(p1, exec)
         val result = runBlocking { call("1"); call("2"); }
         Assert.assertTrue(result.success)
-        Assert.assertTrue(result.status is Status.Succeeded)
+        Assert.assertTrue(result.status is Passed.Succeeded)
         Assert.assertEquals(result.code, Codes.SUCCESS.code)
         Assert.assertEquals(2, result.getOrElse { -1 })
         Assert.assertEquals(2, calls.totalRuns())
@@ -167,7 +164,7 @@ class Policy_Tests {
             r2
         }
         Assert.assertTrue(result.success)
-        Assert.assertTrue(result.status is Status.Succeeded)
+        Assert.assertTrue(result.status is Passed.Succeeded)
         Assert.assertEquals(result.code, Codes.SUCCESS.code)
         Assert.assertEquals(2, result.getOrElse { -1 })
         Assert.assertEquals(2, calls.totalRuns())

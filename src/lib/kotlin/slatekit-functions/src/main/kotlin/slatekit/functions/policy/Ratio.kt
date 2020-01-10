@@ -1,10 +1,8 @@
 package slatekit.functions.policy
 
 import slatekit.common.log.Logger
+import slatekit.results.*
 import slatekit.tracking.Counters
-import slatekit.results.Codes
-import slatekit.results.Outcome
-import slatekit.results.Status
 import slatekit.results.builders.Outcomes
 
 /**
@@ -23,12 +21,12 @@ class Ratio<I, O>(val limit: Double, val status: Status, val stats: (I) -> Count
         val result = operation(i)
         val counts = stats(i)
         val isMatch = when (status) {
-            is Status.Succeeded -> isAtThreshold(counts.totalSucceeded(), counts.totalProcessed())
-            is Status.Denied -> isAtThreshold(counts.totalDenied(), counts.totalProcessed())
-            is Status.Invalid -> isAtThreshold(counts.totalInvalid(), counts.totalProcessed())
-            is Status.Ignored -> isAtThreshold(counts.totalIgnored(), counts.totalProcessed())
-            is Status.Errored -> isAtThreshold(counts.totalErrored(), counts.totalProcessed())
-            is Status.Unexpected -> isAtThreshold(counts.totalUnexpected(), counts.totalProcessed())
+            is Passed.Succeeded -> isAtThreshold(counts.totalSucceeded(), counts.totalProcessed())
+            is Failed.Denied -> isAtThreshold(counts.totalDenied(), counts.totalProcessed())
+            is Failed.Invalid -> isAtThreshold(counts.totalInvalid(), counts.totalProcessed())
+            is Failed.Ignored -> isAtThreshold(counts.totalIgnored(), counts.totalProcessed())
+            is Failed.Errored -> isAtThreshold(counts.totalErrored(), counts.totalProcessed())
+            is Failed.Unexpected -> isAtThreshold(counts.totalUnexpected(), counts.totalProcessed())
             else -> isAtThreshold(counts.totalUnexpected(), counts.totalProcessed())
         }
         logger?.info("RATIO: status = ${result.status.msg}")
