@@ -1,11 +1,13 @@
 
 ![Kotlin](https://img.shields.io/badge/kotlin-1.3-orange.svg)
+<!--
 ![Build](https://travis-ci.org/code-helix/slatekit.svg?branch=master)
+-->
 ![macOS](https://img.shields.io/badge/os-linux-green.svg?style=flat)
 ![Apache 2](https://img.shields.io/badge/license-Apache2-blue.svg?style=flat)
 ![LGPL V3](https://img.shields.io/badge/license-LGPL__v3-blue.svg?style=flat)
 [![Join the chat at https://gitter.im/code-helix/slatekit](https://badges.gitter.im/code-helix/slatekit.svg)](https://gitter.im/code-helix/slatekit?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
-[![Follow us on twitter](https://img.shields.io/badge/twitter-kishore__reddy-green.svg)](https://twitter.com/kishore_reddy)
+[![Follow us on twitter](https://img.shields.io/badge/twitter-slatekit-green.svg)](https://twitter.com/slatekit)
 
 ![image](media/slatekit-banner.png)
 
@@ -40,19 +42,7 @@ dependencies {
     	compile 'com.slatekit:slatekit-common:0.9.46'
 	
 	// Misc architecture components ( all depend on results/common components above )
-	compile 'com.slatekit:slatekit-app:0.9.46'
-	compile 'com.slatekit:slatekit-db:0.9.46'
-	compile 'com.slatekit:slatekit-meta:0.9.46'
-	compile 'com.slatekit:slatekit-cloud:0.9.46'
-	compile 'com.slatekit:slatekit-query:0.9.46'
-	compile 'com.slatekit:slatekit-entities:0.9.46'
-	compile 'com.slatekit:slatekit-orm:0.9.46'
-	compile 'com.slatekit:slatekit-core:0.9.46'
-	compile 'com.slatekit:slatekit-apis:0.9.46'
-	compile 'com.slatekit:slatekit-integration:0.9.46'
-	compile 'com.slatekit:slatekit-server:0.9.46'
-	compile 'com.slatekit:slatekit-providers:0.9.46'
-	compile 'com.slatekit:slatekit-workers:0.9.46'
+	// Refer to docs for gradle setup for other components
 }
 ```
 
@@ -155,5 +145,4 @@ dependencies {
 
 # Like Us ? :heart:
 - Support Slate Kit by clicking the :star: button on the upper right of this page. :v:
-- Buy [Kishore](https://patreon.com/kishorepreddy-placeholder) a coffee to work nights/weekends! ( coming soon )
-- Contribute to continued development https://opencollective.com/kishorepreddy-placeholder ( coming soon )
+- Contribute to continued development 
