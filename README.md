@@ -1,8 +1,5 @@
 
 ![Kotlin](https://img.shields.io/badge/kotlin-1.3-orange.svg)
-<!--
-![Build](https://travis-ci.org/code-helix/slatekit.svg?branch=master)
--->
 ![macOS](https://img.shields.io/badge/os-linux-green.svg?style=flat)
 ![Apache 2](https://img.shields.io/badge/license-Apache2-blue.svg?style=flat)
 ![LGPL V3](https://img.shields.io/badge/license-LGPL__v3-blue.svg?style=flat)
@@ -10,6 +7,10 @@
 [![Follow us on twitter](https://img.shields.io/badge/twitter-slatekit-green.svg)](https://twitter.com/slatekit)
 
 ![image](media/slatekit-banner.png)
+
+<!--
+![Build](https://travis-ci.org/code-helix/slatekit.svg?branch=master)
+-->
 
 # About
 **Slate Kit** is a collection of architecture components and libraries for full-stack Kotlin development.
