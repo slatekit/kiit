@@ -302,8 +302,8 @@ sealed class Result<out T, out E> {
  * @param status : Optional status code as [Status]
  */
 data class Success<out T>(
-    val value: T,
-    override val status: Passed
+    @JvmField val value: T,
+    @JvmField override val status: Passed
     ) : Result<T, Nothing>() {
 
     // NOTE: These overloads are here for convenience + Java Interoperability
@@ -361,8 +361,8 @@ data class Success<out T>(
  * @param status : Optional status code as [Status]
  */
 data class Failure<out E> (
-    val error: E,
-    override val status: Failed
+    @JvmField val error: E,
+    @JvmField override val status: Failed
 ) : Result<Nothing, E>() {
 
     // NOTE: These overloads are here for convenience + Java Interoperability

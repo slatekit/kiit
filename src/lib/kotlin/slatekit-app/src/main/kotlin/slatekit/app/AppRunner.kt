@@ -39,7 +39,7 @@ object AppRunner {
      * 2. validation command line args
      * 3. building an AppContext for the app ( from inputs )
      * 4. creating an App using supplied lambda
-     * 5. executing the life-cycle steps ( init, execute, end )
+     * 5. executing the life-cycle steps ( init, exec, done )
      *
      * @param rawArgs    : The raw arguments from command line
      * @param schema     : The schema of the command line arguments

@@ -55,6 +55,18 @@ fun main(args: Array<String>) {
 
 
 fun cli(args:Array<String>) {
+    /**
+     * DOCS : https://www.slatekit.com/arch/app/
+     *
+     * NOTES: The AppRunner does the following:
+     *
+     * 1. checks for command line args
+     * 2. validates command line args against the Args schema ( optional )
+     * 3. builds an AppContext for the app ( containing args, environment, config, logs )
+     * 4. creates an App using supplied lambda ( Your Application instance )
+     * 5. displays start up information and diagnostics using the Banner
+     * 6. executes the life-cycle steps ( init, exec, done )
+     */
     runBlocking {
         AppRunner.run(
                 rawArgs = args,
