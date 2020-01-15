@@ -1,6 +1,6 @@
 package slatekit
 
-import slatekit.apis.Setup
+import slatekit.apis.SetupType
 import slatekit.apis.core.Api
 import slatekit.apis.tools.code.CodeGenApi
 import slatekit.cloud.aws.AwsCloudFiles
@@ -16,12 +16,6 @@ import slatekit.notifications.sms.SmsServiceTwilio
 import slatekit.docs.DocApi
 import slatekit.generator.*
 import slatekit.integration.apis.*
-import slatekit.integration.common.AppEntContext
-import slatekit.integration.mods.Mod
-import slatekit.integration.mods.ModService
-import slatekit.integration.mods.ModuleContext
-import slatekit.orm.migrations.MigrationService
-import slatekit.orm.migrations.MigrationSettings
 import slatekit.samples.common.apis.SampleApi
 
 interface SlateKitServices {
@@ -67,10 +61,10 @@ interface SlateKitServices {
                 this.ctx.conf.getString("slatekit.version.beta"))
         val buildSettings = BuildSettings(this.ctx.conf.getString("kotlin.version"))
         val requiredApis = listOf(
-                Api(GeneratorApi(ctx, GeneratorService(ctx, SlateKit::class.java, GeneratorSettings(toolSettings, buildSettings))), declaredOnly = true, setup = Setup.Annotated),
-                Api(DocApi(ctx), declaredOnly = true, setup = Setup.Annotated),
-                Api(CodeGenApi(), declaredOnly = true, setup = Setup.Annotated),
-                Api(SampleApi(ctx), declaredOnly = true, setup = Setup.Annotated)
+                Api(GeneratorApi(ctx, GeneratorService(ctx, SlateKit::class.java, GeneratorSettings(toolSettings, buildSettings))), declaredOnly = true, setup = SetupType.Annotated),
+                Api(DocApi(ctx), declaredOnly = true, setup = SetupType.Annotated),
+                Api(CodeGenApi(), declaredOnly = true, setup = SetupType.Annotated),
+                Api(SampleApi(ctx), declaredOnly = true, setup = SetupType.Annotated)
 //                Api(InfoApi(ctx), declaredOnly = true, setup = Setup.Annotated),
 //                Api(VersionApi(ctx), declaredOnly = true, setup = Setup.Annotated)
                 //Api(moduleApi, declaredOnly = true, setup = Setup.Annotated)
@@ -89,11 +83,11 @@ interface SlateKitServices {
         }
 
         val apis = listOf(
-                load("email") { Api(EmailApi(emails(), ctx), declaredOnly = true, setup = Setup.Annotated) },
-                load("files") { Api(FilesApi(files(), ctx), declaredOnly = true, setup = Setup.Annotated) },
-                load("queues") { Api(QueueApi(queues(), ctx), declaredOnly = true, setup = Setup.Annotated) },
-                load("sms") { Api(SmsApi(sms(), ctx), declaredOnly = true, setup = Setup.Annotated) },
-                Api(CodeGenApi(), declaredOnly = true, setup = Setup.Annotated)
+                load("email") { Api(EmailApi(emails(), ctx), declaredOnly = true, setup = SetupType.Annotated) },
+                load("files") { Api(FilesApi(files(), ctx), declaredOnly = true, setup = SetupType.Annotated) },
+                load("queues") { Api(QueueApi(queues(), ctx), declaredOnly = true, setup = SetupType.Annotated) },
+                load("sms") { Api(SmsApi(sms(), ctx), declaredOnly = true, setup = SetupType.Annotated) },
+                Api(CodeGenApi(), declaredOnly = true, setup = SetupType.Annotated)
                 //load("db") { Api(DependencyApi(ctx), declaredOnly = false, setup = Setup.Annotated) }
         )
         return apis.filterNotNull()

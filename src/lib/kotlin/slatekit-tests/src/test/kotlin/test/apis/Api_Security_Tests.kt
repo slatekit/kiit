@@ -14,7 +14,7 @@ package test.apis
 
 import org.junit.Test
 import slatekit.apis.core.Api
-import slatekit.apis.Setup
+import slatekit.apis.SetupType
 import slatekit.apis.Verbs
 import slatekit.common.info.Credentials
 import slatekit.common.CommonRequest
@@ -37,7 +37,7 @@ class Api_Security_TestsTests : ApiTestsBase() {
     @Test fun roles_should_work_when_role_is_any() {
         ensure(
                 protocol = Source.All,
-                apis     = listOf(Api(Sample_API_2_Roles(), setup = Setup.Annotated)),
+                apis     = listOf(Api(Sample_API_2_Roles(), setup = SetupType.Annotated)),
                 user     = Credentials(name = "kishore", roles = "dev"),
                 request  = CommonRequest.path("app.rolesTest.rolesAny", Verbs.GET, mapOf(), mapOf(
                         Pair("code", "1"),
@@ -48,7 +48,7 @@ class Api_Security_TestsTests : ApiTestsBase() {
 
         ensure(
                 protocol = Source.All,
-                apis     = listOf(Api(Sample_API_2_Roles(), setup = Setup.Annotated)),
+                apis     = listOf(Api(Sample_API_2_Roles(), setup = SetupType.Annotated)),
                 user     = Credentials(name = "kishore", roles = "qa"),
                 request  = CommonRequest.path("app.rolesTest.rolesAny", Verbs.GET, mapOf(), mapOf(
                         Pair("code", "1"),
@@ -59,7 +59,7 @@ class Api_Security_TestsTests : ApiTestsBase() {
 
         ensure(
                 protocol = Source.All,
-                apis     = listOf(Api(Sample_API_2_Roles(), setup = Setup.Annotated)),
+                apis     = listOf(Api(Sample_API_2_Roles(), setup = SetupType.Annotated)),
                 user     = Credentials(name = "kishore", roles = ""),
                 request  = CommonRequest.path("app.rolesTest.rolesAny", Verbs.GET, mapOf(), mapOf(
                         Pair("code", "1"),
@@ -73,7 +73,7 @@ class Api_Security_TestsTests : ApiTestsBase() {
     @Test fun roles_should_fail_for_any_role_any_with_no_user() {
         ensure(
                 protocol = Source.All,
-                apis     = listOf(Api(Sample_API_2_Roles(), setup = Setup.Annotated)),
+                apis     = listOf(Api(Sample_API_2_Roles(), setup = SetupType.Annotated)),
                 user     = null,
                 request  = CommonRequest.path("app.rolesTest.rolesAny", Verbs.GET, mapOf(), mapOf(
                         Pair("code", "1"),
@@ -87,7 +87,7 @@ class Api_Security_TestsTests : ApiTestsBase() {
     @Test fun roles_should_work_for_a_specific_role() {
         ensure(
                 protocol = Source.All,
-                apis     = listOf(Api(Sample_API_2_Roles(), setup = Setup.Annotated)),
+                apis     = listOf(Api(Sample_API_2_Roles(), setup = SetupType.Annotated)),
                 user     = Credentials(name = "kishore", roles = "dev"),
                 request  = CommonRequest.path("app.rolesTest.rolesSpecific", Verbs.GET, mapOf(), mapOf(
                         Pair("code", "1"),
@@ -101,7 +101,7 @@ class Api_Security_TestsTests : ApiTestsBase() {
     @Test fun roles_should_fail_for_a_specific_role_when_user_has_a_different_role() {
         ensure(
                 protocol = Source.All,
-                apis     = listOf(Api(Sample_API_2_Roles(), setup = Setup.Annotated)),
+                apis     = listOf(Api(Sample_API_2_Roles(), setup = SetupType.Annotated)),
                 user     = Credentials(name = "kishore", roles = "ops"),
                 request  = CommonRequest.path("app.rolesTest.rolesSpecific", Verbs.GET, mapOf(), mapOf(
                         Pair("code", "1"),
@@ -115,7 +115,7 @@ class Api_Security_TestsTests : ApiTestsBase() {
     @Test fun roles_should_work_for_a_specific_role_when_referring_to_its_parent_role() {
         ensure(
                 protocol = Source.All,
-                apis     = listOf(Api(Sample_API_2_Roles(), setup = Setup.Annotated)),
+                apis     = listOf(Api(Sample_API_2_Roles(), setup = SetupType.Annotated)),
                 user     = Credentials(name = "kishore", roles = "admin"),
                 request  = CommonRequest.path("app.rolesTest.rolesParent", Verbs.GET, mapOf(), mapOf(
                         Pair("code", "1"),
@@ -129,7 +129,7 @@ class Api_Security_TestsTests : ApiTestsBase() {
     @Test fun roles_should_fail_for_a_specific_role_when_referring_to_its_parent_role_when_user_has_a_different_role() {
         ensure(
                 protocol = Source.All,
-                apis     = listOf(Api(Sample_API_2_Roles(), setup = Setup.Annotated)),
+                apis     = listOf(Api(Sample_API_2_Roles(), setup = SetupType.Annotated)),
                 user     = Credentials(name = "kishore", roles = "dev"),
                 request  = CommonRequest.path("app.rolesTest.rolesParent", Verbs.GET, mapOf(), mapOf(
                         Pair("code", "1"),
@@ -144,7 +144,7 @@ class Api_Security_TestsTests : ApiTestsBase() {
     @Test fun roles_by_key_should_work_when_role_is_any() {
         ensure(
                 protocol = Source.All,
-                apis     = listOf(Api(Sample_API_2_Roles(), setup = Setup.Annotated)),
+                apis     = listOf(Api(Sample_API_2_Roles(), setup = SetupType.Annotated)),
                 user     = Credentials(name = "kishore", roles = "dev"),
                 request  = CommonRequest.path("app.rolesTest.rolesAny", Verbs.GET, mapOf(
                         Pair("api-key", "3E35584A8DE0460BB28D6E0D32FB4CFD")
@@ -160,7 +160,7 @@ class Api_Security_TestsTests : ApiTestsBase() {
     @Test fun roles_by_key_should_fail_for_any_role_with_no_user() {
         ensure(
                 protocol = Source.All,
-                apis     = listOf(Api(Sample_API_2_Roles(), setup = Setup.Annotated)),
+                apis     = listOf(Api(Sample_API_2_Roles(), setup = SetupType.Annotated)),
                 user     = null,
                 request  = CommonRequest.path("app.rolesTest.rolesAny", Verbs.GET, mapOf(), mapOf(
                         Pair("code", "1"),
@@ -174,7 +174,7 @@ class Api_Security_TestsTests : ApiTestsBase() {
     @Test fun roles_by_key_should_work_for_a_specific_role() {
         ensure(
                 protocol = Source.All,
-                apis     = listOf(Api(Sample_API_2_Roles(), setup = Setup.Annotated)),
+                apis     = listOf(Api(Sample_API_2_Roles(), setup = SetupType.Annotated)),
                 user     = Credentials(name = "kishore", roles = "dev"),
                 request  = CommonRequest.path("app.rolesTest.rolesSpecific", Verbs.GET, mapOf(
                         Pair("api-key", "3E35584A8DE0460BB28D6E0D32FB4CFD")
@@ -190,7 +190,7 @@ class Api_Security_TestsTests : ApiTestsBase() {
     @Test fun roles_by_key_should_fail_for_a_specific_role_when_user_has_a_different_role() {
         ensure(
                 protocol = Source.All,
-                apis     = listOf(Api(Sample_API_2_Roles(), setup = Setup.Annotated)),
+                apis     = listOf(Api(Sample_API_2_Roles(), setup = SetupType.Annotated)),
                 user     = Credentials(name = "kishore", roles = "qa"),
                 request  = CommonRequest.path("app.rolesTest.rolesSpecific", Verbs.GET, mapOf(
                         Pair("api-key", "EB7EB37764AD4411A1763E6A593992BD")
@@ -206,7 +206,7 @@ class Api_Security_TestsTests : ApiTestsBase() {
     @Test fun roles_by_key_should_work_for_a_specific_role_when_referring_to_its_parent_role() {
         ensure(
                 protocol = Source.All,
-                apis     = listOf(Api(Sample_API_2_Roles(), setup = Setup.Annotated)),
+                apis     = listOf(Api(Sample_API_2_Roles(), setup = SetupType.Annotated)),
                 user     = Credentials(name = "kishore", roles = "admin"),
                 request  = CommonRequest.path("app.rolesTest.rolesParent", Verbs.GET, mapOf(
                         Pair("api-key", "54B1817194C1450B886404C6BEA81673")
@@ -222,7 +222,7 @@ class Api_Security_TestsTests : ApiTestsBase() {
     @Test fun roles_by_key_should_fail_for_a_specific_role_when_referring_to_its_parent_role_when_user_has_a_different_role() {
         ensure(
                 protocol = Source.All,
-                apis     = listOf(Api(Sample_API_2_Roles(), setup = Setup.Annotated)),
+                apis     = listOf(Api(Sample_API_2_Roles(), setup = SetupType.Annotated)),
                 user     = Credentials(name = "kishore", roles = "dev"),
                 request  = CommonRequest.path("app.rolesTest.rolesParent", Verbs.GET, mapOf(
                         Pair("api-key", "3E35584A8DE0460BB28D6E0D32FB4CFD")

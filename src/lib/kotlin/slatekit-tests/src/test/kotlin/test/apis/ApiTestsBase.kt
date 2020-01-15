@@ -18,7 +18,7 @@ import slatekit.apis.*
 import slatekit.apis.core.Api
 import slatekit.apis.core.Auth
 import slatekit.apis.hooks.Authorize
-import slatekit.apis.Setup
+import slatekit.apis.SetupType
 import slatekit.common.CommonRequest
 import slatekit.common.Source
 import slatekit.common.args.Args
@@ -125,7 +125,7 @@ open class ApiTestsBase {
 
 
     fun buildUserApiRegSingleton(ctx: AppEntContext): Api {
-        return Api(UserApi(ctx), setup = Setup.Annotated)
+        return Api(UserApi(ctx), setup = SetupType.Annotated)
     }
 
 

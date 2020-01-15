@@ -9,7 +9,7 @@ import slatekit.apis.ApiServer
 import slatekit.apis.Verb
 import slatekit.apis.core.Api
 import slatekit.apis.core.Requests
-import slatekit.apis.Setup
+import slatekit.apis.SetupType
 import slatekit.common.*
 import slatekit.core.queues.InMemoryQueue
 import slatekit.common.CommonContext
@@ -44,7 +44,7 @@ class Worker_Api_Tests {
             val api = SampleWorkerAPI(ctx, queues)
 
             // 4. container
-            val apis = ApiServer(ctx, apis = listOf(Api(api, setup = Setup.Annotated)))
+            val apis = ApiServer(ctx, apis = listOf(Api(api, setup = SetupType.Annotated)))
 
             // 5. send method call to queue
             val result = runBlocking {
