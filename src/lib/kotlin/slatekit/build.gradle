@@ -100,6 +100,8 @@ dependencies {
         compile "com.slatekit:slatekit-entities:$slatekit_version_beta"
         compile "com.slatekit:slatekit-orm:$slatekit_version_beta"
         compile "com.slatekit:slatekit-core:$slatekit_version_beta"
+        compile "com.slatekit:slatekit-http:$slatekit_version_beta"
+        compile "com.slatekit:slatekit-notifications:$slatekit_version_beta"
         compile "com.slatekit:slatekit-apis:$slatekit_version_beta"
         compile "com.slatekit:slatekit-integration:$slatekit_version_beta"
         compile "com.slatekit:slatekit-server:$slatekit_version_beta"
@@ -123,6 +125,7 @@ dependencies {
         implementation project(":slatekit-entities")
         implementation project(":slatekit-orm")
         implementation project(":slatekit-core")
+        implementation project(":slatekit-http")
         implementation project(":slatekit-notifications")
         implementation project(":slatekit-apis")
         implementation project(":slatekit-integration")

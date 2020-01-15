@@ -21,6 +21,9 @@ project(':slatekit-query').projectDir=new File('../slatekit-query')
 include ':slatekit-meta'
 project(':slatekit-meta').projectDir=new File('../slatekit-meta')
 
+include ':slatekit-http'
+project(':slatekit-http').projectDir=new File('../slatekit-http')
+
 include ':slatekit-entities'
 project(':slatekit-entities').projectDir=new File('../slatekit-entities')
 
