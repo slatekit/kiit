@@ -1,4 +1,4 @@
-package slatekit.meta
+package slatekit.context
 
 import kotlin.reflect.KClass
 

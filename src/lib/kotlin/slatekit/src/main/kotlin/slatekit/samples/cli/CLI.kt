@@ -3,7 +3,7 @@ package slatekit.samples.cli
 import slatekit.apis.*
 import slatekit.apis.support.Authenticator
 import slatekit.cli.CliSettings
-import slatekit.common.Context
+import slatekit.context.Context
 import slatekit.common.types.Content
 import slatekit.common.info.ApiKey
 import slatekit.integration.apis.CliApi

@@ -13,7 +13,7 @@
 
 package slatekit.app
 
-import slatekit.common.CommonContext
+import slatekit.context.AppContext
 import slatekit.common.args.Args
 import slatekit.common.args.ArgsCheck
 import slatekit.common.args.ArgsCheck.isExit
@@ -34,6 +34,7 @@ import slatekit.common.io.Uris
 import slatekit.common.log.Logs
 import slatekit.common.log.LogsDefault
 import slatekit.common.log.LogLevel
+import slatekit.context.Context
 import slatekit.results.*
 import slatekit.results.builders.Outcomes
 import java.io.File
@@ -115,7 +116,7 @@ object AppUtils {
             cfg ?: finalDefaultValue
     }
 
-    fun context(args: Args, envs: Envs, about: About, schema: ArgsSchema, enc: Encryptor?, logs: Logs?, confSource:Alias = Alias.Jar): Notice<CommonContext> {
+    fun context(args: Args, envs: Envs, about: About, schema: ArgsSchema, enc: Encryptor?, logs: Logs?, confSource:Alias = Alias.Jar): Notice<AppContext> {
         val inputs = inputs(args, envs, about, schema, enc, logs, confSource)
         return inputs.flatMap { Success(buildContext(it, enc, logs)) }
     }
@@ -159,7 +160,7 @@ object AppUtils {
         } ?: Failure("Unknown environment name : $envName supplied")
     }
 
-    private fun buildContext(inputs: AppInputs, enc: Encryptor?, logs: Logs?): CommonContext {
+    private fun buildContext(inputs: AppInputs, enc: Encryptor?, logs: Logs?): AppContext {
 
         val buildInfoExists = resourceExists(inputs.loc, "build.conf")
         val build = if (buildInfoExists) {
@@ -179,14 +180,14 @@ object AppUtils {
         // Which means the base env.loc.conf inherits from env.conf.
         val conf = inputs.confEnv
 
-        return CommonContext(
-                args = args,
-                envs = env,
-                conf = conf,
-                enc = enc,
-                logs = logs ?: LogsDefault,
-                info = Info(AppBuilder.about(conf), build, Sys.build()),
-                dirs = AppBuilder.folders(conf)
+        return AppContext(
+            args = args,
+            envs = env,
+            conf = conf,
+            enc = enc,
+            logs = logs ?: LogsDefault,
+            info = Info(AppBuilder.about(conf), build, Sys.build()),
+            dirs = AppBuilder.folders(conf)
         )
     }
 

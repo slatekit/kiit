@@ -29,10 +29,11 @@ import slatekit.common.data.DbConString
 import slatekit.common.data.Vendor.MySql
 import slatekit.common.encrypt.Encryptor
 import slatekit.common.log.Logger
+import slatekit.context.Context
 
 @Api(area = "infra", name = "configs", desc = "api info about the application and host",
         auth = AuthModes.KEYED, roles = ["admin"], verb = Verbs.AUTO, sources = [Sources.CLI])
-class ConfigApi(override val context: slatekit.common.Context) : FileSupport {
+class ConfigApi(override val context: Context) : FileSupport {
 
     override val encryptor: Encryptor? = context.enc
     override val logger: Logger? = context.logs.getLogger()

@@ -4,9 +4,8 @@ import slatekit.apis.Api
 import slatekit.apis.Action
 import slatekit.apis.AuthModes
 import slatekit.apis.Verbs
-import slatekit.common.Context
+import slatekit.context.Context
 import slatekit.common.Sources
-import slatekit.integration.common.AppEntContext
 import slatekit.results.Try
 
 @Api(area = "slatekit", name = "docs", desc= "help doc generator",

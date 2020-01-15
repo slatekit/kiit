@@ -14,13 +14,13 @@
 package slatekit.integration.mods
 
 import slatekit.common.newline
-import slatekit.common.CommonContext
+import slatekit.context.Context
 import slatekit.results.Failure
 import slatekit.results.Success
 import slatekit.results.Try
 
 abstract class Module(
-        val appCtx: CommonContext,
+        val appCtx: Context,
         val modCtx: ModuleContext
 ) {
     abstract val info: ModuleInfo

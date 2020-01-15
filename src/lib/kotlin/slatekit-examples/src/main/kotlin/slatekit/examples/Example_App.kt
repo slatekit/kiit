@@ -13,7 +13,7 @@ package slatekit.examples
 
 //<doc:import_required>
 import kotlinx.coroutines.runBlocking
-import slatekit.common.Context
+import slatekit.context.Context
 import slatekit.app.AppOptions
 import slatekit.app.App
 import slatekit.app.AppRunner

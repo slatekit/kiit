@@ -14,7 +14,7 @@ package slatekit.examples
 
 //<doc:import_required>
 import slatekit.app.AppUtils
-import slatekit.common.CommonContext
+import slatekit.context.AppContext
 //</doc:import_required>
 
 //<doc:import_examples>
@@ -25,7 +25,7 @@ import slatekit.common.utils.B64Java8
 import slatekit.common.encrypt.Encryptor
 import slatekit.common.info.*
 import slatekit.common.log.LogsDefault
-import slatekit.common.Context
+import slatekit.context.Context
 import slatekit.common.envs.Envs
 import slatekit.cmds.Command
 import slatekit.cmds.CommandRequest
@@ -61,13 +61,13 @@ class Example_Context : Command("cmd") {
         // NOTES:
         // 1. Many of these are OPTIONAL
         // 2. It is implemented as a data class
-        // 3. The Context is an interface defined in slatekit.common.Context
+        // 3. The Context is an interface defined in slatekit.context.Context
         // 4. The AppContext is an implementation defined in slatekit.core.common.AppContext
         // 5. To customize the context for different components, you
         //    either extend the Context, and/or copy the AppContext
         //    with modifications
         // CASE 1: Build a simple context with minimal info that includes:
-        val ctx = CommonContext.simple("demoapp")
+        val ctx = AppContext.simple("demoapp")
 
         // CASE 2: Build a simple context with minimal info that includes:
         // - default arguments ( command line )
@@ -75,7 +75,7 @@ class Example_Context : Command("cmd") {
         // - Config() representing conf settings from "env.conf"
         // - default logger ( console )
         // - entities ( registrations for orm )
-        val ctx2 = CommonContext(
+        val ctx2 = AppContext(
                 args = Args.empty(),
                 envs = Envs.defaults(),
                 conf = Config(),
@@ -175,7 +175,7 @@ class Example_Context : Command("cmd") {
         ctx.info.build.version
 
         // CASE 5: You can also build an error context representing an invalid context
-        val ctx4 = CommonContext.err(Codes.BAD_REQUEST.code, "Bad context, invalid inputs supplied")
+        val ctx4 = AppContext.err(Codes.BAD_REQUEST.code, "Bad context, invalid inputs supplied")
         showContext(ctx4)
 
         //</doc:examples>

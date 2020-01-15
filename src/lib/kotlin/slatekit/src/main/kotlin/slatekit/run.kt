@@ -2,14 +2,8 @@ package slatekit
 
 import kotlinx.coroutines.runBlocking
 import slatekit.app.AppRunner
-import slatekit.common.CommonContext
-import slatekit.common.args.Args
 import slatekit.common.io.Alias
-import slatekit.integration.common.AppEntContext
-import slatekit.meta.KTypes
 import slatekit.providers.logs.logback.LogbackLogs
-import slatekit.results.Failure
-import slatekit.results.Success
 
 
 /**

@@ -1,11 +1,11 @@
-package slatekit.common
+package slatekit.context
 
 import slatekit.common.args.Args
 import slatekit.common.conf.Conf
 import slatekit.common.encrypt.Encryptor
-import slatekit.common.envs.Env
 import slatekit.common.envs.Envs
-import slatekit.common.info.*
+import slatekit.common.info.Folders
+import slatekit.common.info.Info
 import slatekit.common.log.Logs
 
 /**
@@ -18,7 +18,7 @@ import slatekit.common.log.Logs
  * enc  : encryption/decryption service
  * dirs : directories used for the app
  */
-interface Context {
+interface Context  {
     val args: Args
     val envs: Envs
     val conf: Conf
@@ -27,3 +27,4 @@ interface Context {
     val enc: Encryptor?
     val dirs: Folders?
 }
+

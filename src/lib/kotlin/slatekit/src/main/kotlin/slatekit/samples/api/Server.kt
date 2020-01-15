@@ -16,6 +16,7 @@ import slatekit.results.*
 
 // Slate Kit - App ( provides args, help, life-cycle methods, etc )
 import slatekit.common.ext.toResponse
+import slatekit.context.Context
 
 // Slate Kit - Server ( Ktor support )
 import slatekit.server.ServerSettings

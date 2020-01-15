@@ -22,6 +22,7 @@ import slatekit.common.types.Doc
 import slatekit.common.encrypt.Encryptor
 import slatekit.common.io.Uris
 import slatekit.common.log.Logger
+import slatekit.context.Context
 import slatekit.core.files.CloudFiles
 import slatekit.results.Failure
 import slatekit.results.Success
@@ -30,7 +31,7 @@ import slatekit.results.getOrElse
 
 @Api(area = "cloud", name = "files", desc = "api info about the application and host",
         auth = AuthModes.KEYED, roles = ["admin"], verb = Verbs.AUTO, sources = [Sources.ALL])
-class FilesApi(val files: CloudFiles, override val context: slatekit.common.Context) : slatekit.apis.support.FileSupport {
+class FilesApi(val files: CloudFiles, override val context: Context) : slatekit.apis.support.FileSupport {
 
     override val encryptor: Encryptor? = context.enc
     override val logger: Logger? = context.logs.getLogger()

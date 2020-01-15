@@ -1,6 +1,6 @@
 package slatekit.generator
 
-import slatekit.common.Context
+import slatekit.context.Context
 import slatekit.common.io.Uris
 import slatekit.common.ext.toId
 import slatekit.common.utils.Props

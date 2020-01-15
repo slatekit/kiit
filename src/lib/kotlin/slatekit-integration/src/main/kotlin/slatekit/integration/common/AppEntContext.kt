@@ -13,7 +13,6 @@
 
 package slatekit.integration.common
 
-import slatekit.common.*
 import slatekit.common.args.Args
 import slatekit.common.conf.Config
 import slatekit.common.conf.Conf
@@ -24,8 +23,9 @@ import slatekit.common.info.*
 import slatekit.common.log.Logs
 import slatekit.common.log.LogsDefault
 import slatekit.common.naming.Namer
-import slatekit.common.CommonContext
+import slatekit.context.AppContext
 import slatekit.common.envs.Envs
+import slatekit.context.Context
 import slatekit.db.Db
 import slatekit.entities.Entities
 
@@ -61,8 +61,8 @@ data class AppEntContext(
      * converts this to an app context which is basically
      * the same context without the Entities
      */
-    fun toAppContext(): CommonContext {
-        return CommonContext(args, envs, conf, logs, info, enc, dirs)
+    fun toAppContext(): AppContext {
+        return AppContext(args, envs, conf, logs, info, enc, dirs)
     }
 
     companion object {
@@ -83,7 +83,7 @@ data class AppEntContext(
          * converts this to an app context which is basically
          * the same context without the Entities
          */
-        fun fromAppContext(ctx: CommonContext, namer: Namer? = null): AppEntContext {
+        fun fromAppContext(ctx: Context, namer: Namer? = null): AppEntContext {
             val dbCons = Connections.from(ctx.conf)
             return AppEntContext(
                     ctx.args, ctx.envs, ctx.conf, ctx.logs, ctx.info, Entities({ con -> Db(con) }, dbCons, ctx.enc, namer = namer), dbCons, ctx.enc, ctx.dirs

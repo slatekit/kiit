@@ -16,7 +16,7 @@ package slatekit.examples
 //</doc:import_required>
 
 //<doc:import_examples>
-import slatekit.common.Context
+import slatekit.context.Context
 import slatekit.common.log.LoggerConsole
 import slatekit.tracking.MetricsLite
 import slatekit.common.requests.Response

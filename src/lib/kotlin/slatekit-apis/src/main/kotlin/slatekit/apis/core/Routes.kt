@@ -1,7 +1,7 @@
 package slatekit.apis.core
 
 import kotlin.reflect.full.primaryConstructor
-import slatekit.common.Context
+import slatekit.context.Context
 import slatekit.common.naming.Namer
 import slatekit.meta.Reflector
 import slatekit.results.Notice

@@ -5,7 +5,7 @@ import slatekit.apis.core.Api
 import slatekit.apis.tools.code.CodeGenApi
 import slatekit.cloud.aws.AwsCloudFiles
 import slatekit.cloud.aws.AwsCloudQueue
-import slatekit.common.Context
+import slatekit.context.Context
 import slatekit.core.queues.QueueStringConverter
 import slatekit.core.files.CloudFiles
 import slatekit.core.queues.CloudQueue

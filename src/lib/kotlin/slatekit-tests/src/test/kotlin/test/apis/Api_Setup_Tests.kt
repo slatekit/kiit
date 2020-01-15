@@ -7,7 +7,7 @@ import slatekit.apis.ApiServer
 import slatekit.apis.Verb
 import slatekit.apis.core.Api
 import slatekit.apis.SetupType
-import slatekit.common.CommonContext
+import slatekit.context.AppContext
 import slatekit.common.data.Vendor
 import slatekit.integration.apis.InfoApi
 import slatekit.integration.apis.VersionApi
@@ -134,7 +134,7 @@ class Api_Setup_Tests : ApiTestsBase() {
 
     @Test
     fun can_get_api_info_from_method() {
-        val ctx = CommonContext.simple("queues")
+        val ctx = AppContext.simple("queues")
         val api = WorkerSampleApi(ctx)
         val apis = ApiServer(ctx, apis = listOf(Api(api, setup = SetupType.Annotated)) )
         val apiRef = apis.getApi(WorkerSampleApi::class, WorkerSampleApi::test1)

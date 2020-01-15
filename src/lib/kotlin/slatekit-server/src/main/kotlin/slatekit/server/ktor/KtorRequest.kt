@@ -14,20 +14,17 @@
 package slatekit.server.ktor
 
 import io.ktor.application.ApplicationCall
-import io.ktor.http.content.PartData
-import io.ktor.http.content.forEachPart
-import io.ktor.http.content.streamProvider
 import slatekit.common.*
 import slatekit.server.ServerSettings
 import io.ktor.request.*
 import kotlinx.coroutines.runBlocking
 //import kotlinx.coroutines.experimental.async
-import slatekit.common.types.ContentTypeHtml
 import slatekit.common.types.Doc
 import slatekit.common.requests.Request
 import slatekit.common.requests.RequestSupport
 import slatekit.common.Source
 import slatekit.common.utils.Random
+import slatekit.context.Context
 import java.io.*
 
 /**

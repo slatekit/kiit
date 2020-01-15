@@ -13,7 +13,7 @@
 
 package slatekit.entities.support
 
-import slatekit.common.Context
+import slatekit.context.Context
 import slatekit.common.encrypt.EncryptSupport
 import slatekit.common.encrypt.Encryptor
 import slatekit.common.log.LogSupport

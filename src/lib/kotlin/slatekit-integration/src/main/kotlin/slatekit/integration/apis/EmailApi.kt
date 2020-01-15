@@ -18,7 +18,7 @@ import slatekit.apis.Action
 import slatekit.apis.AuthModes
 import slatekit.apis.Verbs
 import slatekit.apis.support.FileSupport
-import slatekit.common.Context
+import slatekit.context.Context
 import slatekit.common.Sources
 import slatekit.common.io.Uris
 import slatekit.common.Vars
