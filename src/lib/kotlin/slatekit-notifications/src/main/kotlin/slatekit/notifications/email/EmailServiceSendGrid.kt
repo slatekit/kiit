@@ -14,9 +14,9 @@
 package slatekit.notifications.email
 
 import okhttp3.Request
-import slatekit.common.*
 import slatekit.common.info.ApiLogin
 import slatekit.common.templates.Templates
+import slatekit.http.HttpRPC
 import slatekit.results.*
 import slatekit.results.builders.Outcomes
 

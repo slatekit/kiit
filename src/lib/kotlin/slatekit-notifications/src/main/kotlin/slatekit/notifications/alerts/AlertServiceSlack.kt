@@ -3,7 +3,7 @@ package slatekit.notifications.alerts
 import okhttp3.Request
 import org.json.simple.JSONArray
 import org.json.simple.JSONObject
-import slatekit.common.HttpRPC
+import slatekit.http.HttpRPC
 import slatekit.common.Identity
 import slatekit.results.Outcome
 import slatekit.results.Success

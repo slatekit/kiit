@@ -2,7 +2,8 @@ package slatekit.notifications.common
 
 import okhttp3.Request
 import okhttp3.Response
-import slatekit.common.HttpRPC
+import slatekit.http.HttpRPC
+import slatekit.http.awaitHttpOutcome
 import slatekit.results.Outcome
 import slatekit.results.builders.Outcomes
 import slatekit.results.then
