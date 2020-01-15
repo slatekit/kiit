@@ -40,7 +40,7 @@ dependencies {
     	compile 'com.slatekit:slatekit-results:1.0.0'
 	
 	// slatekit-common: Utilities for Android or Server
-    	compile 'com.slatekit:slatekit-common:0.9.46'
+    	compile 'com.slatekit:slatekit-common:0.9.48'
 	
 	// Misc architecture components ( all depend on results/common components above )
 	// Refer to docs for gradle setup for other components
@@ -123,8 +123,8 @@ dependencies {
     compile "org.jetbrains.kotlin:kotlin-stdlib-jre8:$kotlin_version"
 	
     // Reference the slate kit binaries here
-    compile 'com.slatekit:slatekit-results:0.9.46'
-    compile 'com.slatekit:slatekit-common:0.9.46'
+    compile 'com.slatekit:slatekit-results:1.0.0'
+    compile 'com.slatekit:slatekit-common:0.9.48'
 }
 ```
 
