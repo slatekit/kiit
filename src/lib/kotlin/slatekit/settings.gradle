@@ -3,6 +3,9 @@ rootProject.name = 'slatekit'
 include ':slatekit-common'
 project(':slatekit-common').projectDir=new File('../slatekit-common')
 
+include ':slatekit-context'
+project(':slatekit-context').projectDir=new File('../slatekit-context')
+
 include ':slatekit-app'
 project(':slatekit-app').projectDir=new File('../slatekit-app')
 

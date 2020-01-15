@@ -2,7 +2,7 @@
 buildscript {
     ext.kotlin_version = '1.3.21'
     ext.slatekit_version = new File('../version.txt').text
-    ext.slatekit_version_beta = new File('../version-beta.txt').text
+    ext.slatekit_version_beta = '0.9.48' //new File('../version-beta.txt').text
 
     repositories {
         mavenCentral()
@@ -51,6 +51,7 @@ dependencies {
     compile 'org.threeten:threetenbp:1.3.8'
     implementation project(":slatekit-result")
     implementation project(":slatekit-common")
+    implementation project(":slatekit-context")
     implementation project(":slatekit-app")
     implementation project(":slatekit-cli")
     implementation project(":slatekit-db")
