@@ -7,12 +7,12 @@ import java.nio.file.Paths
 
 /**
  * Represents a File or Directory using a simple form of a Uniform Resource Identifier ( URI ) approach
- * 1. user root: user://{path} -> ~/{path}
- * 2. curr root: curr://{path} -> ./{path}
- * 3. path root: path://{path} -> /{path}
- * 4. temp root: temp://{path} -> $TMPDIR/{path}
- * 5. conf root: conf://{path} -> ./conf/{path}
- * 6. jars root: jars://{path} -> app.jar/resources/{path}
+ * 1. user root: usr://{path} -> ~/{path}
+ * 2. curr root: cur://{path} -> ./{path}
+ * 3. path root: abs://{path} -> /{path}
+ * 4. temp root: tmp://{path} -> $TMPDIR/{path}
+ * 5. conf root: cfg://{path} -> ./conf/{path}
+ * 6. jars root: jar://{path} -> app.jar/resources/{path}
  * @param root: The root           e.g. "user | curr | path | temp | conf | jars"
  * @param path  : The path to file     e.g. "user://company/app1/conf/env.conf
  */
