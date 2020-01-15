@@ -19,7 +19,7 @@ num | about | note
 -----|------|------
 1 | who | For Kotlin **Android**, **Server Side** developers for building startups, mobile apps, personal projects.
 2 | what    | This is a modular set of utilities and architecture components.
-3 | where  | Reach us on [Gitter](https://gitter.im/code-helix/slatekit), [Twitter](https://twitter.com/kishore_reddy), and log issues on the issues board here.
+3 | where  | Reach us on [Gitter](https://gitter.im/code-helix/slatekit), [Twitter](https://twitter.com/slatekit), and log issues on the issues board here.
 4 | when | This has been around for 3 years as a internal library which we slowly open-sourced.
 5 | why | Designed as reusable modules for any company / product. We use it internally for all projects.
 6 | how | Check out our website at www.slatekit.com for more info, overview, details, usage, docs, etc.
