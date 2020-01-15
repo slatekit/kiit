@@ -18,7 +18,7 @@ import slatekit.common.*
 import slatekit.common.types.Doc
 import slatekit.common.requests.Request
 import slatekit.common.validations.ValidationFuncs
-import slatekit.integration.common.AppEntContext
+import slatekit.context.Context
 import slatekit.results.Outcome
 import slatekit.results.Success
 import slatekit.results.builders.Outcomes

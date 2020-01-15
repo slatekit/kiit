@@ -13,11 +13,11 @@
 package slatekit.examples.common
 
 import slatekit.apis.*
-import slatekit.common.CommonContext
 import slatekit.common.DateTime
 import slatekit.common.Sources
 import slatekit.common.requests.Request
 import slatekit.common.auth.Roles
+import slatekit.context.Context
 import slatekit.integration.common.ApiBaseEntity
 import slatekit.integration.common.AppEntContext
 import slatekit.results.Outcome
@@ -33,7 +33,7 @@ import slatekit.results.builders.Outcomes
  */
 @Api(area = "app", name = "movies", desc = "api for users",
         auth = AuthModes.TOKEN, roles = [Roles.ALL], verb = Verbs.AUTO, sources = [Sources.ALL])
-class MovieApi( ctx: AppEntContext) : ApiBaseEntity<Long, Movie, MovieService>(ctx, Long::class, Movie::class, MovieService(ctx as CommonContext, ctx.ent, ctx.ent.getRepo(Movie::class)))
+class MovieApi( ctx: AppEntContext) : ApiBaseEntity<Long, Movie, MovieService>(ctx, Long::class, Movie::class, MovieService(ctx as Context, ctx.ent, ctx.ent.getRepo(Movie::class)))
 {
     /**
      * Create a sample movie using the fields.

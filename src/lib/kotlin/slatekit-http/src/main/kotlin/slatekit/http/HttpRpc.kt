@@ -1,4 +1,4 @@
-package slatekit.common
+package slatekit.http
 
 import okhttp3.*
 import slatekit.results.Failure
@@ -68,7 +68,7 @@ class HttpRPC(val serializer:((Any?) -> String)? = null) {
 
         // AUTHORIZATION
         when(creds) {
-            is Auth.Basic  -> builder.addHeader("Authorization", Credentials.basic(creds.name, creds.pswd))
+            is Auth.Basic -> builder.addHeader("Authorization", Credentials.basic(creds.name, creds.pswd))
             is Auth.Bearer -> builder.addHeader("Authorization", "Bearer " + creds.token)
             else               -> {}
         }
@@ -217,11 +217,11 @@ class HttpRPC(val serializer:((Any?) -> String)? = null) {
      * @param callback    : The callback to call when the response is available.
      */
     fun sendSync(method: Method,
-                  url: String,
-                  headers: Map<String, String>? = null,
-                  queryParams: Map<String, String>? = null,
-                  creds: Auth? = null,
-                  body: Body? = null): Result<Response, Exception> {
+                 url: String,
+                 headers: Map<String, String>? = null,
+                 queryParams: Map<String, String>? = null,
+                 creds: Auth? = null,
+                 body: Body? = null): Result<Response, Exception> {
         val request = build(method, url, headers, queryParams, creds, body)
         return call(request)
     }
@@ -256,27 +256,27 @@ class HttpRPC(val serializer:((Any?) -> String)? = null) {
 
         // BODY
         val finalBody = when(body) {
-            is Body.FormData    -> buildForm(body.values)
-            is Body.RawContent  -> RequestBody.create(textType, body.content )
+            is Body.FormData -> buildForm(body.values)
+            is Body.RawContent -> RequestBody.create(textType, body.content )
             is Body.JsonContent -> RequestBody.create(jsonType, body.content )
-            is Body.JsonObject  -> RequestBody.create(jsonType, serializer?.let{ it(body.toString()) } ?: "" )
+            is Body.JsonObject -> RequestBody.create(jsonType, serializer?.let{ it(body.toString()) } ?: "" )
             else                -> RequestBody.create(jsonType, serializer?.let{ it(body.toString()) } ?: "" )
         }
 
         // AUTHORIZATION
         when(creds) {
-            is Auth.Basic  -> builder.addHeader("Authorization", Credentials.basic(creds.name, creds.pswd))
+            is Auth.Basic -> builder.addHeader("Authorization", Credentials.basic(creds.name, creds.pswd))
             is Auth.Bearer -> builder.addHeader("Authorization", "Bearer " + creds.token)
             else           -> {}
         }
 
         // SEND ( post / put / etc )
         val request = when (method) {
-            Method.Get    -> builder.get().build()
-            Method.Post   -> builder.post(finalBody).build()
+            Method.Get -> builder.get().build()
+            Method.Post -> builder.post(finalBody).build()
             Method.Delete -> builder.delete(finalBody).build()
-            Method.Put    -> builder.put(finalBody).build()
-            Method.Patch  -> builder.patch(finalBody).build()
+            Method.Put -> builder.put(finalBody).build()
+            Method.Patch -> builder.patch(finalBody).build()
             else          -> builder.post(finalBody).build()
         }
         return request

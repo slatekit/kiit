@@ -1,7 +1,6 @@
-package slatekit.core.common
+package slatekit.http
 
 import okhttp3.Response
-import slatekit.common.HttpRPC
 import slatekit.results.Notice
 import slatekit.results.Outcome
 import slatekit.results.Try

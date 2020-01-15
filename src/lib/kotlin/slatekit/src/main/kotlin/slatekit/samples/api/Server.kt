@@ -16,6 +16,7 @@ import slatekit.results.*
 
 // Slate Kit - App ( provides args, help, life-cycle methods, etc )
 import slatekit.common.ext.toResponse
+import slatekit.context.Context
 
 // Slate Kit - Server ( Ktor support )
 import slatekit.server.ServerSettings
@@ -25,7 +26,6 @@ import slatekit.server.ktor.KtorResponse
 // Sample App
 import slatekit.samples.common.apis.SampleApi
 import slatekit.samples.common.auth.SampleAuth
-import slatekit.server.common.ResponseHandler
 
 
 class Server(val ctx: Context)  {
@@ -90,7 +90,7 @@ class Server(val ctx: Context)  {
 
     fun apis(): List<slatekit.apis.core.Api> {
         return listOf(
-                slatekit.apis.core.Api(klass = SampleApi::class, singleton = SampleApi(ctx), setup = Setup.Annotated)
+                slatekit.apis.core.Api(klass = SampleApi::class, singleton = SampleApi(ctx), setup = SetupType.Annotated)
         )
     }
 

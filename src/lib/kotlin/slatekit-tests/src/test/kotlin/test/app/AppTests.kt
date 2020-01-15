@@ -18,7 +18,7 @@ import org.junit.Assert
 import org.junit.Test
 import slatekit.app.App
 import slatekit.app.AppRunner
-import slatekit.common.Context
+import slatekit.context.Context
 import slatekit.common.args.ArgsSchema
 import slatekit.common.encrypt.Encryptor
 import slatekit.common.info.About

@@ -1,7 +1,7 @@
 package slatekit.apis
 
 import slatekit.apis.core.Target
-import slatekit.common.Context
+import slatekit.context.Context
 import slatekit.common.requests.Request
 
 /**

@@ -16,7 +16,7 @@ package slate.test
 import kotlinx.coroutines.runBlocking
 import org.junit.Assert
 import org.junit.Test
-import slatekit.common.Context
+import slatekit.context.Context
 import slatekit.common.info.About
 import slatekit.app.App
 import slatekit.app.AppRunner
@@ -85,7 +85,7 @@ class AppLoaderTests  {
     }
 
 
-    class AppConfigTest(ctx:Context) : App<Context>(ctx) {
+    class AppConfigTest(ctx: Context) : App<Context>(ctx) {
 
         override suspend fun exec(): Try<Any> {
             val data = ConfigValueTest(

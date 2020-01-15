@@ -55,6 +55,7 @@ dependencies {
 
     compile project(":slatekit-result")
     compile project(":slatekit-common")
+    compile project(":slatekit-context")
     compile project(":slatekit-tracking")
     compile project(":slatekit-app")
     compile project(":slatekit-meta")

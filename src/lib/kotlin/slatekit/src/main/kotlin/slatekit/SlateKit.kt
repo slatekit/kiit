@@ -4,7 +4,7 @@ import slatekit.apis.support.Authenticator
 import slatekit.app.App
 import slatekit.app.AppOptions
 import slatekit.cli.CliSettings
-import slatekit.common.Context
+import slatekit.context.Context
 import slatekit.common.args.ArgsSchema
 import slatekit.common.types.Content
 import slatekit.common.utils.B64Java8

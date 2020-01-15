@@ -4,12 +4,11 @@ import slatekit.apis.Api
 import slatekit.apis.Action
 import slatekit.apis.AuthModes
 import slatekit.apis.Verbs
-import slatekit.common.Context
+import slatekit.context.Context
 import slatekit.common.Sources
 import slatekit.common.auth.Roles
 import slatekit.common.io.Uris
 import slatekit.results.Try
-import java.io.File
 
 
 @Api(area = "slatekit", name = "new", desc = "generator for new projects",

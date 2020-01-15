@@ -13,13 +13,13 @@
 
 package slatekit.examples.common
 
-import slatekit.common.CommonContext
+import slatekit.context.Context
 import slatekit.entities.Entities
 import slatekit.entities.Repo
 import slatekit.entities.support.EntityServiceWithSupport
 
 
-class MovieService(context: CommonContext, entities: Entities, repo: Repo<Long, Movie>)
+class MovieService(context: Context, entities: Entities, repo: Repo<Long, Movie>)
   : EntityServiceWithSupport<Long, Movie>(context, entities, repo)
 {
 }

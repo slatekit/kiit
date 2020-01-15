@@ -14,7 +14,7 @@
 package slatekit.apis.support
 
 import java.io.File
-import slatekit.common.Context
+import slatekit.context.Context
 import slatekit.common.Ignore
 import slatekit.common.encrypt.EncryptSupport
 import slatekit.common.log.LogSupport

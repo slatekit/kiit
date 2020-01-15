@@ -15,7 +15,7 @@ package slatekit.app
 
 import slatekit.common.args.Args
 import slatekit.common.args.ArgsSchema
-import slatekit.common.Context
+import slatekit.context.Context
 import slatekit.common.encrypt.Encryptor
 import slatekit.common.envs.Envs
 import slatekit.common.info.About

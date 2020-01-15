@@ -22,6 +22,7 @@ import slatekit.common.types.Content
 import slatekit.common.types.ContentType
 import slatekit.common.requests.InputArgs
 import slatekit.common.info.Info
+import slatekit.context.Context
 import slatekit.results.Codes
 import slatekit.results.Success
 import slatekit.results.Try
@@ -47,7 +48,7 @@ import slatekit.results.builders.Tries
  *  3. code gen : generates client code for apis : $codegen=true -lang="kotlin"
  */
 open class CliApi(
-        val ctx: slatekit.common.Context,
+        val ctx: Context,
         val auth: slatekit.apis.core.Auth,
         settings: CliSettings = CliSettings(),
         apiItems: List<Api> = listOf(),

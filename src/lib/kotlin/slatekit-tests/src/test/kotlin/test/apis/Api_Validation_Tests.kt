@@ -18,7 +18,7 @@ import org.junit.Test
 import org.threeten.bp.ZoneId
 import slatekit.apis.*
 import slatekit.apis.core.Api
-import slatekit.apis.Setup
+import slatekit.apis.SetupType
 import slatekit.common.DateTimes
 import slatekit.results.*
 import test.apis.samples.Sample_API_1_Validation
@@ -37,7 +37,7 @@ class Api_Validation_Tests : ApiTestsBase() {
     @Test
     fun can_fail_with_missing_args() {
         val api = Sample_API_1_Validation()
-        val apis = ApiServer(ctx, apis = listOf(Api(api, setup = Setup.Annotated)) )
+        val apis = ApiServer(ctx, apis = listOf(Api(api, setup = SetupType.Annotated)) )
         val r1 = runBlocking {
             apis.call("samples", "validation", Sample_API_1_Validation::processInputs.name, Verb.Post, mapOf(), mapOf())
         }
@@ -58,7 +58,7 @@ class Api_Validation_Tests : ApiTestsBase() {
     @Test
     fun can_fail_with_conversion() {
         val api = Sample_API_1_Validation()
-        val apis = ApiServer(ctx, apis = listOf(Api(api, setup = Setup.Annotated)) )
+        val apis = ApiServer(ctx, apis = listOf(Api(api, setup = SetupType.Annotated)) )
         val r1 = runBlocking {
             apis.call("samples", "validation", Sample_API_1_Validation::processInputs.name, Verb.Post, mapOf(), mapOf(
                     Pair("phone", "p1"),

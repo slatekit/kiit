@@ -9,10 +9,10 @@ import slatekit.apis.ApiServer
 import slatekit.apis.Verb
 import slatekit.apis.core.Api
 import slatekit.apis.core.Requests
-import slatekit.apis.Setup
+import slatekit.apis.SetupType
 import slatekit.common.*
 import slatekit.core.queues.InMemoryQueue
-import slatekit.common.CommonContext
+import slatekit.context.AppContext
 import slatekit.common.requests.InputArgs
 import slatekit.common.Source
 import slatekit.core.queues.AsyncQueue
@@ -24,7 +24,7 @@ import test.setup.SampleTypes2Api
 class Worker_Api_Tests {
 
     fun buildContainer(): ApiServer {
-        val ctx = CommonContext.simple("queues")
+        val ctx = AppContext.simple("queues")
         val api = SampleTypes2Api()
         val apis = ApiServer(ctx, apis = listOf(Api(api, area = "samples", name = "types2")))
         return apis
@@ -35,7 +35,7 @@ class Worker_Api_Tests {
     fun can_send_to_queue(){
         runBlocking {
             // 1. context
-            val ctx = CommonContext.simple("queues")
+            val ctx = AppContext.simple("queues")
 
             // 2. queues
             val queues = listOf(AsyncQueue.of(InMemoryQueue.stringQueue()))
@@ -44,7 +44,7 @@ class Worker_Api_Tests {
             val api = SampleWorkerAPI(ctx, queues)
 
             // 4. container
-            val apis = ApiServer(ctx, apis = listOf(Api(api, setup = Setup.Annotated)))
+            val apis = ApiServer(ctx, apis = listOf(Api(api, setup = SetupType.Annotated)))
 
             // 5. send method call to queue
             val result = runBlocking {

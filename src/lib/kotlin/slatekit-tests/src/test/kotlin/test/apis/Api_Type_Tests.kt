@@ -17,7 +17,7 @@ import org.junit.Assert
 import org.junit.Test
 import slatekit.apis.*
 import slatekit.apis.core.Api
-import slatekit.apis.Setup
+import slatekit.apis.SetupType
 import slatekit.results.getOrElse
 import test.setup.SampleTypes3Api
 import test.setup.MyEncryptor
@@ -35,7 +35,7 @@ class Api_Type_Tests : ApiTestsBase() {
     @Test fun can_decrypt_int() {
         val encryptedText = MyEncryptor.encrypt("123")
         val api = SampleTypes3Api()
-        val apis = ApiServer(ctx, apis = listOf(Api(api, setup = Setup.Annotated)) )
+        val apis = ApiServer(ctx, apis = listOf(Api(api, setup = SetupType.Annotated)) )
         val r1 = runBlocking {
             apis.call("samples", "types3", "getDecInt", Verb.Get, mapOf(), mapOf("id" to encryptedText))
         }
@@ -47,7 +47,7 @@ class Api_Type_Tests : ApiTestsBase() {
     @Test fun can_decrypt_long() {
         val encryptedText = MyEncryptor.encrypt("123456")
         val api = SampleTypes3Api()
-        val apis = ApiServer(ctx, apis = listOf(Api(api, setup = Setup.Annotated)))
+        val apis = ApiServer(ctx, apis = listOf(Api(api, setup = SetupType.Annotated)))
         val r1 = runBlocking {
             apis.call("samples", "types3", "getDecLong", Verb.Get, mapOf(), mapOf("id" to encryptedText))
         }
@@ -59,7 +59,7 @@ class Api_Type_Tests : ApiTestsBase() {
     @Test fun can_decrypt_double() {
         val encryptedText = MyEncryptor.encrypt("123.456")
         val api = SampleTypes3Api()
-        val apis = ApiServer(ctx, apis = listOf(Api(api, setup = Setup.Annotated))  )
+        val apis = ApiServer(ctx, apis = listOf(Api(api, setup = SetupType.Annotated))  )
         val r1 = runBlocking {
             apis.call("samples", "types3", "getDecDouble", Verb.Get, mapOf(), mapOf("id" to encryptedText))
         }
@@ -71,7 +71,7 @@ class Api_Type_Tests : ApiTestsBase() {
     @Test fun can_decrypt_string() {
         val encryptedText = MyEncryptor.encrypt("slate-kit")
         val api = SampleTypes3Api()
-        val apis = ApiServer(ctx, apis = listOf(Api(api, setup = Setup.Annotated)) )
+        val apis = ApiServer(ctx, apis = listOf(Api(api, setup = SetupType.Annotated)) )
         val r1 = runBlocking {
             apis.call("samples", "types3", "getDecString", Verb.Get, mapOf(), mapOf("id" to encryptedText))
         }
@@ -100,7 +100,7 @@ class Api_Type_Tests : ApiTestsBase() {
 
     @Test fun can_use_enum_by_name() {
         val api = SampleTypes3Api()
-        val apis = ApiServer(ctx, apis = listOf(Api(api, setup = Setup.Annotated)) )
+        val apis = ApiServer(ctx, apis = listOf(Api(api, setup = SetupType.Annotated)) )
         val r1 = runBlocking {
             apis.call("samples", "types3", "getEnum", Verb.Get, mapOf(), mapOf(Pair("status", StatusEnum.Active.name)))
         }
@@ -111,7 +111,7 @@ class Api_Type_Tests : ApiTestsBase() {
 
     @Test fun can_use_enum_by_number() {
         val api = SampleTypes3Api()
-        val apis = ApiServer(ctx, apis = listOf(Api(api, setup = Setup.Annotated)))
+        val apis = ApiServer(ctx, apis = listOf(Api(api, setup = SetupType.Annotated)))
         val r1 = runBlocking {
             apis.call("samples", "types3", "getEnum", Verb.Get, mapOf(), mapOf(Pair("status", StatusEnum.Active.value)))
         }
@@ -122,7 +122,7 @@ class Api_Type_Tests : ApiTestsBase() {
 
     @Test fun can_use_enum_value() {
         val api = SampleTypes3Api()
-        val apis = ApiServer(ctx, apis = listOf(Api(api, setup = Setup.Annotated)))
+        val apis = ApiServer(ctx, apis = listOf(Api(api, setup = SetupType.Annotated)))
         val r1 = runBlocking {
             apis.call("samples", "types3", "getEnumValue", Verb.Get, mapOf(), mapOf(Pair("status", StatusEnum.Pending.value)))
         }
@@ -137,7 +137,7 @@ class Api_Type_Tests : ApiTestsBase() {
 
     fun ensureSmartString(method:String, text:String, success:Boolean, expected:String) {
         val api = SampleTypes3Api()
-        val apis = ApiServer(ctx, apis = listOf(Api(api, setup = Setup.Annotated)))
+        val apis = ApiServer(ctx, apis = listOf(Api(api, setup = SetupType.Annotated)))
         val r1 = runBlocking {
             apis.call("samples", "types3", method, Verb.Get, mapOf(), mapOf("text" to text))
         }

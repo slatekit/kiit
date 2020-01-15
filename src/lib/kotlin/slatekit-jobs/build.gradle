@@ -82,6 +82,7 @@ dependencies {
     if( slatekitSetupViaMaven ) {
         compile "com.slatekit:slatekit-results:$slatekit_version"
         compile "com.slatekit:slatekit-common:$slatekit_version_beta"
+        compile "com.slatekit:slatekit-context:$slatekit_version_beta"
         compile "com.slatekit:slatekit-tracking:$slatekit_version_beta"
         compile "com.slatekit:slatekit-functions:$slatekit_version_beta"
         compile "com.slatekit:slatekit-core:$slatekit_version_beta"
@@ -89,6 +90,7 @@ dependencies {
         // */
         compile project(":slatekit-result")
         compile project(":slatekit-common")
+        compile project(":slatekit-context")
         compile project(":slatekit-tracking")
         compile project(":slatekit-functions")
         compile project(":slatekit-core")

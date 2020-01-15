@@ -21,6 +21,7 @@ import slatekit.common.*
 import slatekit.common.encrypt.Encryptor
 import slatekit.common.log.Logger
 import slatekit.common.utils.ListMap
+import slatekit.context.Context
 import slatekit.integration.mods.Mod
 import slatekit.query.Query
 import slatekit.results.Failure
@@ -30,7 +31,7 @@ import slatekit.results.Try
 
 @Api(area = "setup", name = "modules", desc = "management of system modules",
         auth = AuthModes.KEYED, roles = ["admin"], verb = Verbs.AUTO, sources = [Sources.ALL])
-class ModuleApi(val ctx: slatekit.integration.mods.ModuleContext, override val context: slatekit.common.Context) : slatekit.apis.support.FileSupport {
+class ModuleApi(val ctx: slatekit.integration.mods.ModuleContext, override val context: Context) : slatekit.apis.support.FileSupport {
 
     override val encryptor: Encryptor? = context.enc
     override val logger: Logger? = context.logs.getLogger()

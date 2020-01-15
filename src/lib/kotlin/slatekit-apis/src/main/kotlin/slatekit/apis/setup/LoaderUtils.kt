@@ -3,7 +3,7 @@ package slatekit.apis.setup
 import kotlin.reflect.KCallable
 import kotlin.reflect.KClass
 import slatekit.apis.*
-import slatekit.apis.Setup
+import slatekit.apis.SetupType
 import slatekit.apis.core.*
 import slatekit.apis.core.Action
 import slatekit.apis.core.Api
@@ -56,7 +56,7 @@ fun toApi(cls: KClass<*>, instance: Any?, access: Access?, namer: Namer?): slate
             Verb.parse(anno.verb),
             false,
             instance,
-            Setup.Annotated
+            SetupType.Annotated
     )
     return api
 }
@@ -145,7 +145,7 @@ fun loadApiFromSetup(api: Api, namer: Namer?): Api {
     // during setup, so we have to load the api methods
     // from either annotations or from public methods
     return if (api.actions.size == 0) {
-        if (api.setup == Setup.Annotated) {
+        if (api.setup == SetupType.Annotated) {
             val apiAnnotated = AnnoLoader(api.klass, api).loadApi(namer)
             val area = rename(apiAnnotated.area, namer)
             val name = rename(apiAnnotated.name, namer)

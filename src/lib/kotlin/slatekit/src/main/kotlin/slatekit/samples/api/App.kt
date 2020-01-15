@@ -2,7 +2,6 @@ package slatekit.samples.api
 
 
 // Slate Kit - Common Utilities
-import slatekit.common.*
 import slatekit.common.args.ArgsSchema
 import slatekit.common.encrypt.*
 import slatekit.common.info.*
@@ -12,6 +11,7 @@ import slatekit.results.*
 import slatekit.app.App
 import slatekit.app.AppOptions
 import slatekit.common.utils.B64Java8
+import slatekit.context.Context
 
 
 class App(ctx: Context) : App<Context>(ctx, AppOptions(printSummaryBeforeExec = true)) {

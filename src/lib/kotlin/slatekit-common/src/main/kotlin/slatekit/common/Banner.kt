@@ -1,10 +1,13 @@
 package slatekit.common
 
 import slatekit.common.console.SemanticConsole
+import slatekit.common.envs.Envs
+import slatekit.common.info.Info
 import slatekit.common.log.LogSupport
 import slatekit.common.log.Logger
 
-open class Banner(val ctx: Context,
+open class Banner(val info: Info,
+                  val envs: Envs,
                   override val logger: Logger?,
                   val showWelcome: Boolean = true,
                   val showDisplay: Boolean = true,
@@ -18,10 +21,10 @@ open class Banner(val ctx: Context,
         if(showWelcome) {
             val writer = SemanticConsole()
             writer.text("************************************")
-            writer.title("Welcome to ${ctx.info.about.name}")
+            writer.title("Welcome to ${info.about.name}")
             writer.text("************************************")
             writer.line()
-            writer.text("starting in environment: " + this.ctx.envs.key)
+            writer.text("starting in environment: " + this.envs.key)
         }
     }
 
@@ -31,26 +34,26 @@ open class Banner(val ctx: Context,
     open fun display() {
         if(showDisplay) {
             val maxLen = Math.max(0, "lang.versionNum  ".length)
-            info("app.area         ".padEnd(maxLen) + ctx.info.about.area)
-            info("app.name         ".padEnd(maxLen) + ctx.info.about.name)
-            info("app.desc         ".padEnd(maxLen) + ctx.info.about.desc)
-            info("app.version      ".padEnd(maxLen) + ctx.info.about.version)
-            info("app.tags         ".padEnd(maxLen) + ctx.info.about.tags)
-            info("app.region       ".padEnd(maxLen) + ctx.info.about.region)
-            info("app.contact      ".padEnd(maxLen) + ctx.info.about.contact)
-            info("app.url          ".padEnd(maxLen) + ctx.info.about.url)
-            info("build.version    ".padEnd(maxLen) + ctx.info.build.version)
-            info("build.commit     ".padEnd(maxLen) + ctx.info.build.commit)
-            info("build.date       ".padEnd(maxLen) + ctx.info.build.date)
-            info("host.name        ".padEnd(maxLen) + ctx.info.system.host.name)
-            info("host.ip          ".padEnd(maxLen) + ctx.info.system.host.ip)
-            info("host.origin      ".padEnd(maxLen) + ctx.info.system.host.origin)
-            info("host.version     ".padEnd(maxLen) + ctx.info.system.host.version)
-            info("lang.name        ".padEnd(maxLen) + ctx.info.system.lang.name)
-            info("lang.version     ".padEnd(maxLen) + ctx.info.system.lang.version)
-            info("lang.versionNum  ".padEnd(maxLen) + ctx.info.system.lang.vendor)
-            info("lang.java        ".padEnd(maxLen) + ctx.info.system.lang.origin)
-            info("lang.home        ".padEnd(maxLen) + ctx.info.system.lang.home)
+            info("app.area         ".padEnd(maxLen) + info.about.area)
+            info("app.name         ".padEnd(maxLen) + info.about.name)
+            info("app.desc         ".padEnd(maxLen) + info.about.desc)
+            info("app.version      ".padEnd(maxLen) + info.about.version)
+            info("app.tags         ".padEnd(maxLen) + info.about.tags)
+            info("app.region       ".padEnd(maxLen) + info.about.region)
+            info("app.contact      ".padEnd(maxLen) + info.about.contact)
+            info("app.url          ".padEnd(maxLen) + info.about.url)
+            info("build.version    ".padEnd(maxLen) + info.build.version)
+            info("build.commit     ".padEnd(maxLen) + info.build.commit)
+            info("build.date       ".padEnd(maxLen) + info.build.date)
+            info("host.name        ".padEnd(maxLen) + info.system.host.name)
+            info("host.ip          ".padEnd(maxLen) + info.system.host.ip)
+            info("host.origin      ".padEnd(maxLen) + info.system.host.origin)
+            info("host.version     ".padEnd(maxLen) + info.system.host.version)
+            info("lang.name        ".padEnd(maxLen) + info.system.lang.name)
+            info("lang.version     ".padEnd(maxLen) + info.system.lang.version)
+            info("lang.versionNum  ".padEnd(maxLen) + info.system.lang.vendor)
+            info("lang.java        ".padEnd(maxLen) + info.system.lang.origin)
+            info("lang.home        ".padEnd(maxLen) + info.system.lang.home)
         }
     }
 

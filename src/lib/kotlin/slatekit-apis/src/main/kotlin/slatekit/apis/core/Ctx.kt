@@ -14,13 +14,13 @@ package slatekit.apis.core
 
 import slatekit.apis.ApiRequest
 import slatekit.apis.ApiServer
-import slatekit.common.Context
+import slatekit.context.Context
 import slatekit.common.requests.Request
 
 data class Ctx(val host: ApiServer, val context: Context, val req: Request, val target: Target) {
 
     companion object {
-        fun of(host: ApiServer, ctx:Context, request: ApiRequest):Ctx {
+        fun of(host: ApiServer, ctx: Context, request: ApiRequest):Ctx {
             return Ctx(host, ctx, request.request, request.target!!)
         }
     }

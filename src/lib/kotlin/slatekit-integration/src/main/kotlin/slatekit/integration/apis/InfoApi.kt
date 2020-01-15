@@ -17,7 +17,7 @@ import slatekit.apis.Api
 import slatekit.apis.Action
 import slatekit.apis.AuthModes
 import slatekit.apis.Verbs
-import slatekit.common.Context
+import slatekit.context.Context
 import slatekit.common.Sources
 import slatekit.common.requests.Request
 import slatekit.common.info.*

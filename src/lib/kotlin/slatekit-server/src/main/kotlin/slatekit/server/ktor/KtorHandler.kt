@@ -3,20 +3,15 @@ package slatekit.server.ktor
 import io.ktor.application.ApplicationCall
 import io.ktor.application.call
 import io.ktor.http.HttpMethod
-import io.ktor.http.content.PartData
-import io.ktor.http.content.forEachPart
-import io.ktor.http.content.streamProvider
 import io.ktor.request.httpMethod
 import io.ktor.request.isMultipart
-import io.ktor.request.receiveMultipart
 import io.ktor.request.receiveText
 import io.ktor.routing.*
 import slatekit.apis.ApiServer
-import slatekit.common.Context
+import slatekit.context.Context
 import slatekit.tracking.Diagnostics
 import slatekit.common.requests.Request
 import slatekit.common.ext.toResponse
-import slatekit.common.types.Doc
 import slatekit.server.ServerSettings
 import slatekit.server.common.RequestHandler
 import slatekit.server.common.ResponseHandler
@@ -116,7 +111,7 @@ class KtorHandler(
 
 
     companion object {
-        fun diagnostics(ctx:Context):Diagnostics<Request> {
+        fun diagnostics(ctx: Context):Diagnostics<Request> {
             val metrics = MetricsLite(ctx.info.about.toId())
             val diagnostics = ServerDiagnostics("app", ctx.logs.getLogger("app"), metrics, listOf())
             return diagnostics
