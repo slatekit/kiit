@@ -70,7 +70,7 @@ class Example_Policy : Command("todo") {
             // Case 4: Ratio
             println("============================")
             // NOTE: The exact code/msg does not matter, only the type of the Status
-            val ratioOperation = ratio(.3, Status.Denied(100, "")) {
+            val ratioOperation = ratio(.3, Failed.Denied(100, "")) {
                 val curr = pager.current(moveNext = true)
                 if(curr == 2) Outcomes.denied("test") else Outcomes.success(curr)
             }

@@ -12,6 +12,7 @@
 package slatekit.examples
 
 //<doc:import_required>
+import kotlinx.coroutines.runBlocking
 import slatekit.notifications.sms.SmsMessage
 import slatekit.notifications.sms.TwilioSms
 //</doc:import_required>
@@ -43,7 +44,7 @@ class Example_Sms : Command("sms") {
     // Load the config file from slatekit directory in user_home directory
     // e.g. {user_home}/slatekit/conf/sms.conf
     // NOTE: It is safer/more secure to store config files there.
-    val conf =  Config.of("~/slatekit/conf/sms.conf")
+    val conf =  Config.of("~/.slatekit/conf/sms.conf")
 
     // Setup 2: Get the api key either through conf or explicitly
     val apiKey1 = conf.apiLogin("sms")
@@ -57,9 +58,9 @@ class Example_Sms : Command("sms") {
     // Setup 3b: Setup the sms service with support for templates
     val templates = Templates.build(
       templates = listOf(
-         Template("sms_welcome", Uris.readText("~/.slatekit/templates/sms_welcome.txt") ?: ""),
-         Template("email_welcome", Uris.readText("~/.slatekit/templates/email_welcome.txt") ?: ""),
-         Template("email_pass", Uris.readText("~/.slatekit/templates/email_password.txt") ?: "")
+         Template("sms_welcome", Uris.readText("~/slatekit/templates/sms_welcome.txt") ?: ""),
+         Template("email_welcome", Uris.readText("~/slatekit/templates/email_welcome.txt") ?: ""),
+         Template("email_pass", Uris.readText("~/slatekit/templates/email_password.txt") ?: "")
       ),
       subs = listOf(
         "company.api" to { s: TemplatePart -> "MyCompany"        },
@@ -74,19 +75,21 @@ class Example_Sms : Command("sms") {
     //</doc:setup>
 
     //<doc:examples>
-    // Use case 1: Send an invitation message to phone "234567890 in the United States.
-    sms3.send("Invitation to MyApp.com", "us", "234567890")
+    runBlocking {
+      // Use case 1: Send an invitation message to phone "234567890 in the United States.
+      sms3.send("Invitation to MyApp.com 1", "us", "234567890")
 
-    // Use case 2: Send using a constructed message object
-    sms3.sendSync(SmsMessage("Invitation to MyApp.com", "us", "234567890"))
+      // Use case 2: Send using a constructed message object
+      sms3.sendSync(SmsMessage("Invitation to MyApp.com 2", "us", "234567890"))
 
-    // Use case 3: Send message using one of the setup templates
-    sms3.sendUsingTemplate("sms_welcome", "us", "234567890",
-            Vars(listOf(
-                    "greeting" to "hello",
-                    "user.api" to "kishore",
-                    "app.code" to "ABC123"
-            )))
+      // Use case 3: Send message using one of the setup templates
+      sms3.sendUsingTemplate("sms_welcome", "us", "234567890",
+              Vars(listOf(
+                      "greeting" to "hello",
+                      "user.api" to "kishore",
+                      "app.code" to "ABC123"
+              )))
+    }
     //</doc:examples>
 
     return Success("")

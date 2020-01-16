@@ -13,6 +13,7 @@ package slatekit.examples
 
 
 //<doc:import_required>
+import kotlinx.coroutines.runBlocking
 import slatekit.notifications.email.EmailMessage
 import slatekit.notifications.email.SendGrid
 import slatekit.common.templates.Template
@@ -27,6 +28,7 @@ import slatekit.common.info.ApiLogin
 import slatekit.cmds.CommandRequest
 import slatekit.common.io.Uris
 import slatekit.common.Vars
+import slatekit.results.builders.Tries
 
 //</doc:import_examples>
 
@@ -53,8 +55,8 @@ class Example_Email  : Command("auth") {
     // Setup 3b: Setup the sms service with support for templates
     val templates = Templates.build(
       templates = listOf(
-         Template("email_welcome", Uris.readText("~/.slatekit/templates/email_welcome.txt") ?: "" ),
-         Template("email_pass", Uris.readText("~/.slatekit/templates/email_password.txt") ?: "")
+         Template("email_welcome", Uris.readText("~/slatekit/templates/email_welcome.txt") ?: "" ),
+         Template("email_pass", Uris.readText("~/slatekit/templates/email_password.txt") ?: "")
       ),
       subs = listOf(
         "company.api" to { s -> "MyCompany"        },
@@ -65,21 +67,23 @@ class Example_Email  : Command("auth") {
     //</doc:setup>
 
     //<doc:examples>
-    // Use case 1: Send a confirmation code to the U.S. to verify a users phone number.
-    val result = emailService2.send("kishore@abc.com", "Welcome to MyApp.com", "showWelcome!", false)
+    runBlocking {
+      // Use case 1: Send a confirmation code to the U.S. to verify a users phone number.
+      val result1 = emailService1.send("user1@company1.com", "Welcome to MyApp.com", "showWelcome!", false)
 
-    // Use case 2: Send using a constructed message object
-    emailService2.sendSync(EmailMessage("kishore@abc.com", "Welcome to MyApp.com", "showWelcome!", false))
+      // Use case 2: Send using a constructed message object
+      emailService1.sendSync(EmailMessage("user1@company1.com", "Welcome to MyApp.com", "showWelcome!", false))
 
-    // Use case 3: Send message using one of the setup templates
-    emailService2.sendUsingTemplate("email_welcome", "kishore@abc.com", "Welcome to MyApp.com", true,
-            Vars(listOf(
-                    "greeting" to "hello",
-                    "user.api" to "kishore",
-                    "app.code" to "ABC123"
-            )))
+      // Use case 3: Send message using one of the setup templates
+      val result2 = emailService2.sendUsingTemplate("email_welcome", "user1@company1.com", "Welcome to MyApp.com", true,
+              Vars(listOf(
+                      "greeting" to "hello",
+                      "user.api" to "user1",
+                      "app.code" to "ABC123"
+              )))
+    }
     //</doc:examples>
 
-    return result.toTry()
+    return Tries.success("Ok")
   }
 }

@@ -14,6 +14,7 @@ import slatekit.cache.SimpleCache
 import slatekit.common.DateTime
 import slatekit.common.ext.toStringUtc
 import slatekit.examples.Example_Email
+import slatekit.examples.Example_Sms
 import slatekit.functions.common.FunctionMode
 import slatekit.providers.logs.logback.LogbackLogs
 import slatekit.results.builders.Tries
@@ -41,7 +42,7 @@ fun main(args:Array<String>) {
     //testLRU()
     //testPaths()
 
-    val example = Example_Email()
+    val example = Example_Sms()
     example.execute(args)
 }
 
