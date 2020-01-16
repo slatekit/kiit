@@ -44,7 +44,7 @@ class Example_Cloud_Files : Command("s3") {
 
         // Setup 3: Use the config "{user_id}/myapp/conf/files.conf"
         // Specify the api key section as "files"
-        val files3 = AwsCloudFiles.of(region = "us-east-1", bucket = "slatekit-unit-tests", createBucket = false,
+        val files3 = AwsCloudFiles.of(region = "us-west-2", bucket = "slatekit-unit-tests", createBucket = false,
                 confPath = "~/.slatekit/conf/files.conf", confSection = "files")
 
         val files = files2.getOrElse { files1 }
