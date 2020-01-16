@@ -14,6 +14,7 @@
 package slatekit.cloud.aws
 
 import com.amazonaws.auth.AWSCredentials
+import com.amazonaws.regions.Regions
 import com.amazonaws.services.sqs.AmazonSQSClient
 import com.amazonaws.services.sqs.model.*
 import slatekit.common.DateTime
@@ -31,38 +32,50 @@ import java.io.IOException
 
 /**
  *
- * @param queue : Name of the SQS Queue
- * @param creds : The aws credentials
+ * @param credentials : The aws credentials
+ * @param region : AWS Region e.g. Regions.US_EAST_1
+ * @param name : Name of the SQS Queue
+ * @param converter: Converts the queue entry content to a value of type T
  * @param waitTimeInSeconds: Set value between 1-20 to enable long polling
  * @see:
  * 1. https://github.com/ex-aws/ex_aws/issues/486
  * 2. https://docs.aws.amazon.com/sdk-for-java/v1/developer-guide/examples-sqs-long-polling.html
  */
 class AwsCloudQueue<T>(
-        region:String,
-        queue: String,
-        creds: AWSCredentials,
+        credentials: AWSCredentials,
+        val region: Regions,
+        override val name: String,
         override val converter: QueueValueConverter<T>,
         val waitTimeInSeconds: Int = 0
 ) : CloudQueue<T>, AwsSupport {
 
-
-    private val queue = queue
-    private val sqs: AmazonSQSClient = AwsFuncs.sqs(creds, region)
-    private val queueUrl = sqs.getQueueUrl(this.queue).queueUrl
     private val SOURCE = "aws:sqs"
-    override val name = queue
+    private val sqs: AmazonSQSClient = AwsFuncs.sqs(credentials, region)
+    private val queueUrl = sqs.getQueueUrl(this.name).queueUrl
 
     /**
      * Initialize with the queue with a Slate Kit [ApiLogin] which
      * will get converted to the Aws credentials
      */
     constructor(region:String,
-                queue: String,
+                name: String,
                 apiKey: ApiLogin,
                 converter: QueueValueConverter<T>,
                 waitTimeInSeconds: Int = 0) :
-            this(region, queue, AwsFuncs.credsWithKeySecret(apiKey.key, apiKey.pass), converter, waitTimeInSeconds)
+            this(AwsFuncs.credsWithKeySecret(apiKey.key, apiKey.pass), region.toRegion(), name, converter, waitTimeInSeconds)
+
+    /**
+     * Initialize with queue name and the config path and section for aws credentials
+     */
+    constructor(region:String,
+                name: String,
+                converter: QueueValueConverter<T>,
+                confPath: String? = null,
+                confSection: String? = null,
+                waitTimeInSeconds: Int = 0) :
+            this (AwsFuncs.creds(confPath, confSection), region.toRegion(), name, converter, waitTimeInSeconds)
+
+
 
     override suspend fun init() {
 
@@ -71,30 +84,6 @@ class AwsCloudQueue<T>(
     override suspend fun close() {
 
     }
-
-    /**
-     * Initialize with queue name and the config path/section for aws credentials
-     */
-    constructor(region:String,
-                queue: String,
-                converter: QueueValueConverter<T>,
-                confPath: String? = null,
-                section: String? = null,
-                waitTimeInSeconds: Int = 0) :
-            this (region, queue, AwsFuncs.creds(confPath, section), converter, waitTimeInSeconds)
-
-    /**
-     * Initialize with queue name and the config path/section for aws credentials
-     */
-    constructor(region:String,
-                queue: String,
-                converter: QueueValueConverter<T>,
-                confPath: Uri,
-                section: String? = null,
-                waitTimeInSeconds: Int = 0) :
-            this (region, queue, AwsFuncs.creds(confPath.toFile().absolutePath, section), converter, waitTimeInSeconds)
-
-
 
     /**Gets the total number of items in the queue
      *

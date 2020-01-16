@@ -27,8 +27,8 @@ import slatekit.results.Try
  */
 interface CloudFiles : CloudSupport {
 
-    val defaultFolder:String
-    val createDefaultFolder:Boolean
+    val rootFolder:String
+    val createRootFolder:Boolean
 
 
     /**
@@ -39,13 +39,13 @@ interface CloudFiles : CloudSupport {
 
 
     suspend fun create(name: String, content: String) {
-        create(defaultFolder, name, content)
+        create(rootFolder, name, content)
     }
 
     suspend fun createFromPath(name: String, filePath: String) {
 
         val content = FileUtils.loadFromFile(filePath)
-        create(defaultFolder, name, content)
+        create(rootFolder, name, content)
     }
 
     suspend fun createFromPath(folder: String, name: String, filePath: String): Try<String> {
@@ -55,26 +55,26 @@ interface CloudFiles : CloudSupport {
     }
 
     suspend fun delete(name: String) {
-        delete(defaultFolder, name)
+        delete(rootFolder, name)
     }
 
-    suspend fun getAsText(name: String): Try<String> = getAsText(defaultFolder, name)
+    suspend fun getAsText(name: String): Try<String> = getAsText(rootFolder, name)
 
     suspend fun download(name: String, localFolder: String): Try<String> {
-        return download(defaultFolder, name, localFolder)
+        return download(rootFolder, name, localFolder)
     }
 
     suspend fun downloadToFile(name: String, localFilePath: String): Try<String> {
-        return downloadToFile(defaultFolder, name, localFilePath)
+        return downloadToFile(rootFolder, name, localFilePath)
     }
 
     suspend fun update(name: String, content: String) {
-        update(defaultFolder, name, content)
+        update(rootFolder, name, content)
     }
 
     suspend fun updateFromPath(name: String, filePath: String): Try<String> {
         val content = "simulating from file : " + filePath; // loadFromFile(filePath)
-        return update(defaultFolder, name, content)
+        return update(rootFolder, name, content)
     }
 
     suspend fun updateFromPath(folder: String, name: String, filePath: String): Try<String> {

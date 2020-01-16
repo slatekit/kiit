@@ -13,6 +13,7 @@ import slatekit.cache.CacheSettings
 import slatekit.cache.SimpleCache
 import slatekit.common.DateTime
 import slatekit.common.ext.toStringUtc
+import slatekit.examples.Example_Cloud_Files
 import slatekit.examples.Example_Email
 import slatekit.examples.Example_Sms
 import slatekit.functions.common.FunctionMode
@@ -42,7 +43,7 @@ fun main(args:Array<String>) {
     //testLRU()
     //testPaths()
 
-    val example = Example_Sms()
+    val example = Example_Cloud_Files()
     example.execute(args)
 }
 
