@@ -57,8 +57,8 @@ class Example_Email  : Command("auth") {
          Template("email_pass", Uris.readText("~/.slatekit/templates/email_password.txt") ?: "")
       ),
       subs = listOf(
-        Pair("company.api" , { s -> "MyCompany"        }),
-        Pair("app.api"     , { s -> "SlateKit.Sample"  })
+        "company.api" to { s -> "MyCompany"        },
+        "app.api"     to { s -> "SlateKit.Sample"  }
       )
     )
     val emailService2 =  SendGrid(apiKey.key, apiKey.pass, apiKey.account, templates)
@@ -74,9 +74,9 @@ class Example_Email  : Command("auth") {
     // Use case 3: Send message using one of the setup templates
     emailService2.sendUsingTemplate("email_welcome", "kishore@abc.com", "Welcome to MyApp.com", true,
             Vars(listOf(
-                    Pair("greeting", "hello"),
-                    Pair("user.api", "kishore"),
-                    Pair("app.code", "ABC123")
+                    "greeting" to "hello",
+                    "user.api" to "kishore",
+                    "app.code" to "ABC123"
             )))
     //</doc:examples>
 

@@ -62,8 +62,8 @@ class Example_Sms : Command("sms") {
          Template("email_pass", Uris.readText("~/.slatekit/templates/email_password.txt") ?: "")
       ),
       subs = listOf(
-        Pair("company.api" , { s: TemplatePart -> "MyCompany"        }),
-        Pair("app.api"     , { s: TemplatePart -> "SlateKit.Sample"  })
+        "company.api" to { s: TemplatePart -> "MyCompany"        },
+        "app.api"     to { s: TemplatePart -> "SlateKit.Sample"  }
       )
     )
     val sms2 =  TwilioSms(apiKey.key, apiKey.pass, apiKey.account, templates)
@@ -83,26 +83,12 @@ class Example_Sms : Command("sms") {
     // Use case 3: Send message using one of the setup templates
     sms3.sendUsingTemplate("sms_welcome", "us", "234567890",
             Vars(listOf(
-                    Pair("greeting", "hello"),
-                    Pair("user.api", "kishore"),
-                    Pair("app.code", "ABC123")
+                    "greeting" to "hello",
+                    "user.api" to "kishore",
+                    "app.code" to "ABC123"
             )))
     //</doc:examples>
 
     return Success("")
   }
-
-  /*
-  val c = Country.allCountries()
-    val text =  StringBuilder()
-    val maxPhoneLen = c.map( c => c.phone.trim() ).maxBy( c => c.length).length + 2
-    val maxNameLen = c.map( c => c.api.trim() ).maxBy( c => c.length).length + 2
-    c.foreach( c => {
-      val phone = Strings.pad("'" + c.phone.trim() + "'", maxPhoneLen)
-      val api = Strings.pad("'" + c.api.trim() + "'", maxNameLen)
-      text.append(s"Country('${c.iso}', '${c.iso3}', ${phone}, ${api})," + Strings.line())
-    })
-    println(text)
-    ""
-  * */
 }
