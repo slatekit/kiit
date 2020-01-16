@@ -12,7 +12,6 @@ import slatekit.cloud.aws.AwsCloudFiles
 //<doc:import_examples>
 import slatekit.cmds.Command
 import slatekit.cmds.CommandRequest
-import slatekit.common.io.Uri
 import slatekit.results.Success
 import slatekit.results.Try
 
