@@ -23,7 +23,7 @@ class AwsSqsTests {
                     "us-east-1",
                     name,
                     QueueStringConverter(),
-                    "user://$SLATEKIT_DIR/conf/aws.conf",
+                    "~/$SLATEKIT_DIR/conf/aws.conf",
                     "aws")
 
             queue.init()
@@ -58,7 +58,7 @@ class AwsSqsTests {
                     "us-east-1",
                     name,
                     QueueStringConverter(),
-                    "user://$SLATEKIT_DIR/conf/aws.conf",
+                    "~/$SLATEKIT_DIR/conf/aws.conf",
                     "aws")
 
             queue.init()

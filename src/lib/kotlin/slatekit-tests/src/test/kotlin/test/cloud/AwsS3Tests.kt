@@ -25,7 +25,7 @@ class AwsS3Tests {
             // Not storing any key/secret in source code for security purposes
             // Setup 1: Use the default aws config file in "{user_dir}/.aws/credentials"
             val bucket = "slatekit-unit-tests"
-            val files = AwsCloudFiles("us-east-1", bucket, false, "user://$SLATEKIT_DIR/conf/aws.conf", "aws")
+            val files = AwsCloudFiles("us-east-1", bucket, false, "~/$SLATEKIT_DIR/conf/aws.conf", "aws")
 
             files.init()
 
@@ -59,7 +59,7 @@ class AwsS3Tests {
             Assert.assertTrue(result1.getOrElse { null } == expectedContent)
 
             // Download
-            val folderPath = Uris.interpret("user://$SLATEKIT_DIR/temp/")
+            val folderPath = Uris.interpret("~/$SLATEKIT_DIR/temp/")
             val downloadResult1 = files.download(fileName, folderPath!!)
             val downloadFilePath1 = downloadResult1.getOrElse { null }
             val file1 = File(downloadFilePath1)
