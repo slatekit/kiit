@@ -174,10 +174,6 @@ class Example_Context : Command("cmd") {
         ctx.info.build.commit
         ctx.info.build.version
 
-        // CASE 5: You can also build an error context representing an invalid context
-        val ctx4 = AppContext.err(Codes.BAD_REQUEST.code, "Bad context, invalid inputs supplied")
-        showContext(ctx4)
-
         //</doc:examples>
         return Success("")
     }
