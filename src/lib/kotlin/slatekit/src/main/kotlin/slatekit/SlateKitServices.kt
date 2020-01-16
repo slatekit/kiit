@@ -10,9 +10,9 @@ import slatekit.core.queues.QueueStringConverter
 import slatekit.core.files.CloudFiles
 import slatekit.core.queues.CloudQueue
 import slatekit.notifications.email.EmailService
-import slatekit.notifications.email.EmailServiceSendGrid
+import slatekit.notifications.email.SendGrid
 import slatekit.notifications.sms.SmsService
-import slatekit.notifications.sms.SmsServiceTwilio
+import slatekit.notifications.sms.TwilioSms
 import slatekit.docs.DocApi
 import slatekit.generator.*
 import slatekit.integration.apis.*
@@ -26,14 +26,14 @@ interface SlateKitServices {
     fun emails(): EmailService {
         val cfg = ctx.conf
         val apiLogin = cfg.apiLogin("email")
-        return EmailServiceSendGrid(apiLogin)
+        return SendGrid(apiLogin)
     }
 
 
     fun sms(): SmsService {
         val cfg = ctx.conf
         val apiLogin = cfg.apiLogin("sms")
-        return SmsServiceTwilio(apiLogin)
+        return TwilioSms(apiLogin)
     }
 
 

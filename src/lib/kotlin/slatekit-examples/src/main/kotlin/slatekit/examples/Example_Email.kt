@@ -14,7 +14,7 @@ package slatekit.examples
 
 //<doc:import_required>
 import slatekit.notifications.email.EmailMessage
-import slatekit.notifications.email.EmailServiceSendGrid
+import slatekit.notifications.email.SendGrid
 import slatekit.common.templates.Template
 import slatekit.common.templates.Templates
 //</doc:import_required>
@@ -48,7 +48,7 @@ class Example_Email  : Command("auth") {
     val apiKey  = apiKey1 ?: apiKey2
 
     // Setup 3a: Setup the email service ( basic ) with api key
-    val emailService1 =  EmailServiceSendGrid(apiKey.key, apiKey.pass, apiKey.account)
+    val emailService1 =  SendGrid(apiKey.key, apiKey.pass, apiKey.account)
 
     // Setup 3b: Setup the sms service with support for templates
     val templates = Templates.build(
@@ -61,7 +61,7 @@ class Example_Email  : Command("auth") {
         Pair("app.api"     , { s -> "SlateKit.Sample"  })
       )
     )
-    val emailService2 =  EmailServiceSendGrid(apiKey.key, apiKey.pass, apiKey.account, templates)
+    val emailService2 =  SendGrid(apiKey.key, apiKey.pass, apiKey.account, templates)
     //</doc:setup>
 
     //<doc:examples>

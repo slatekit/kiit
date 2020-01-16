@@ -20,7 +20,7 @@ import slatekit.http.HttpRPC
 import slatekit.results.*
 import slatekit.results.builders.Outcomes
 
-class EmailServiceSendGrid(
+class SendGrid(
     user: String,
     key: String,
     phone: String,

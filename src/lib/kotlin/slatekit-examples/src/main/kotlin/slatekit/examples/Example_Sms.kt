@@ -13,7 +13,7 @@ package slatekit.examples
 
 //<doc:import_required>
 import slatekit.notifications.sms.SmsMessage
-import slatekit.notifications.sms.SmsServiceTwilio
+import slatekit.notifications.sms.TwilioSms
 //</doc:import_required>
 
 //<doc:import_examples>
@@ -52,7 +52,7 @@ class Example_Sms : Command("sms") {
 
     // Setup 3a: Setup the sms service ( basic ) with api key
     // Note: The sms service will default to only USA ( you can customize this later )
-    val sms1 =  SmsServiceTwilio(apiKey.key, apiKey.pass, apiKey.account)
+    val sms1 =  TwilioSms(apiKey.key, apiKey.pass, apiKey.account)
 
     // Setup 3b: Setup the sms service with support for templates
     val templates = Templates.build(
@@ -66,11 +66,11 @@ class Example_Sms : Command("sms") {
         Pair("app.api"     , { s: TemplatePart -> "SlateKit.Sample"  })
       )
     )
-    val sms2 =  SmsServiceTwilio(apiKey.key, apiKey.pass, apiKey.account, templates)
+    val sms2 =  TwilioSms(apiKey.key, apiKey.pass, apiKey.account, templates)
 
     // Setup 3b: Setup the templates with support for different country codes
     val countries = listOf(CountryCode("US"), CountryCode("FR"))
-    val sms3 =  SmsServiceTwilio(apiKey.key, apiKey.pass, apiKey.account, templates, countries)
+    val sms3 =  TwilioSms(apiKey.key, apiKey.pass, apiKey.account, templates, countries)
     //</doc:setup>
 
     //<doc:examples>

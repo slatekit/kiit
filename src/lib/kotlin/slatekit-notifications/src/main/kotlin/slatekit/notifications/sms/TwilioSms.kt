@@ -38,7 +38,7 @@ curl -X POST 'https://api.twilio.com/2010-04-01/Accounts/BCa1234567890d49dcffd51
 --data-urlencode 'Body=test from slate sms service' \
 -u ACb1234567890d49dcffd51736e0e2e123:xyz5a123456d78d415eaab7ab90e4bab
  */
-class SmsServiceTwilio(
+class TwilioSms(
     key: String,
     password: String,
     phone: String,
