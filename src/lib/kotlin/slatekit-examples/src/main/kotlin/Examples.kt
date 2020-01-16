@@ -13,6 +13,8 @@ import slatekit.cache.CacheSettings
 import slatekit.cache.SimpleCache
 import slatekit.common.DateTime
 import slatekit.common.ext.toStringUtc
+import slatekit.examples.Example_Email
+import slatekit.functions.common.FunctionMode
 import slatekit.providers.logs.logback.LogbackLogs
 import slatekit.results.builders.Tries
 import java.io.File
@@ -37,9 +39,10 @@ mantra: Simplicity above all else
 // https://looksok.wordpress.com/2014/07/12/compile-gradle-project-with-another-project-as-a-dependency/
 fun main(args:Array<String>) {
     //testLRU()
-    testPaths()
-    //val example = Guide_Cache()
-    //example.execute(args, FunctionMode.Called)
+    //testPaths()
+
+    val example = Example_Email()
+    example.execute(args)
 }
 
 

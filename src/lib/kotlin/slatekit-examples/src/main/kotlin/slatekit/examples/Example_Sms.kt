@@ -43,7 +43,7 @@ class Example_Sms : Command("sms") {
     // Load the config file from slatekit directory in user_home directory
     // e.g. {user_home}/slatekit/conf/sms.conf
     // NOTE: It is safer/more secure to store config files there.
-    val conf =  Config.of("user://slatekit/conf/sms.conf")
+    val conf =  Config.of("~/slatekit/conf/sms.conf")
 
     // Setup 2: Get the api key either through conf or explicitly
     val apiKey1 = conf.apiLogin("sms")
@@ -57,9 +57,9 @@ class Example_Sms : Command("sms") {
     // Setup 3b: Setup the sms service with support for templates
     val templates = Templates.build(
       templates = listOf(
-         Template("sms_welcome", Uris.readText("user://slatekit/templates/sms_welcome.txt") ?: ""),
-         Template("email_welcome", Uris.readText("user://slatekit/templates/email_welcome.txt") ?: ""),
-         Template("email_pass", Uris.readText("user://slatekit/templates/email_password.txt") ?: "")
+         Template("sms_welcome", Uris.readText("~/.slatekit/templates/sms_welcome.txt") ?: ""),
+         Template("email_welcome", Uris.readText("~/.slatekit/templates/email_welcome.txt") ?: ""),
+         Template("email_pass", Uris.readText("~/.slatekit/templates/email_password.txt") ?: "")
       ),
       subs = listOf(
         Pair("company.api" , { s: TemplatePart -> "MyCompany"        }),
