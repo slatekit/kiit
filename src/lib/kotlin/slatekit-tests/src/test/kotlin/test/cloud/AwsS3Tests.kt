@@ -25,27 +25,28 @@ class AwsS3Tests {
             // Not storing any key/secret in source code for security purposes
             // Setup 1: Use the default aws config file in "{user_dir}/.aws/credentials"
             val bucket = "slatekit-unit-tests"
-            val files = AwsCloudFiles("us-east-1", bucket, false, "~/$SLATEKIT_DIR/conf/aws.conf", "aws")
+            val files = AwsCloudFiles.of("us-east-1", bucket, false, "~/$SLATEKIT_DIR/conf/aws.conf", "aws")
+            files.onSuccess { files ->
+                files.init()
 
-            files.init()
+                // Create unique file name "yyyyMMddhhmmss
+                val filename = "file-" + DateTime.now().toStringNumeric()
 
-            // Create unique file name "yyyyMMddhhmmss
-            val filename = "file-" + DateTime.now().toStringNumeric()
+                // 1. Test Create
+                val contentCreate = "version 1 : $filename"
+                files.create(filename, contentCreate)
+                ensureFile(files, filename, contentCreate)
 
-            // 1. Test Create
-            val contentCreate = "version 1 : $filename"
-            files.create(filename, contentCreate)
-            ensureFile(files, filename, contentCreate)
+                // 2. Test update
+                val contentUpdate = "version 2 : $filename"
+                files.update(filename, contentUpdate)
+                ensureFile(files, filename, contentUpdate)
 
-            // 2. Test update
-            val contentUpdate = "version 2 : $filename"
-            files.update(filename, contentUpdate)
-            ensureFile(files, filename, contentUpdate)
-
-            // 3. Test delete
-            files.delete(filename)
-            val result = files.getAsText(filename)
-            Assert.assertTrue(!result.success)
+                // 3. Test delete
+                files.delete(filename)
+                val result = files.getAsText(filename)
+                Assert.assertTrue(!result.success)
+            }
         }
     }
 

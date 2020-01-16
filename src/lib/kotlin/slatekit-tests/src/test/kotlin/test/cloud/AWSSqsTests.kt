@@ -19,27 +19,28 @@ class AwsSqsTests {
             // Not storing any key/secret in source code for security purposes
             // Setup 1: Use the default aws config file in "{user_dir}/.aws/credentials"
             val name = "slatekit-unit-tests"
-            val queue = AwsCloudQueue<String>(
+            val queue = AwsCloudQueue.of<String>(
                     "us-east-1",
                     name,
                     QueueStringConverter(),
                     "~/$SLATEKIT_DIR/conf/aws.conf",
-                    "aws")
+                    "aws").onSuccess { queue ->
 
-            queue.init()
+                queue.init()
 
-            // Create unique file name "yyyyMMddhhmmss
-            val timestamp = DateTime.now().toStringNumeric()
+                // Create unique file name "yyyyMMddhhmmss
+                val timestamp = DateTime.now().toStringNumeric()
 
-            // 1. Test Create
-            val contentCreate = "version 1 : $timestamp"
-            val result = queue.send(contentCreate)
-            Assert.assertTrue(result.success)
-            ensureQueue(queue, contentCreate, true)
+                // 1. Test Create
+                val contentCreate = "version 1 : $timestamp"
+                val result = queue.send(contentCreate)
+                Assert.assertTrue(result.success)
+                ensureQueue(queue, contentCreate, true)
 
-            // Get text
-            val result1 = queue.next()
-            Assert.assertEquals(result1, null)
+                // Get text
+                val result1 = queue.next()
+                Assert.assertEquals(result1, null)
+            }
 //        val item = result1?.getValue()
 //        Assert.assertTrue(item != null)
 //        Assert.assertTrue(item == contentCreate)
@@ -54,39 +55,40 @@ class AwsSqsTests {
             // Not storing any key/secret in source code for security purposes
             // Setup 1: Use the default aws config file in "{user_dir}/.aws/credentials"
             val name = "slatekit-unit-tests"
-            val queue = AwsCloudQueue<String>(
+            val queue = AwsCloudQueue.of<String>(
                     "us-east-1",
                     name,
                     QueueStringConverter(),
                     "~/$SLATEKIT_DIR/conf/aws.conf",
-                    "aws")
+                    "aws").onSuccess { queue ->
 
-            queue.init()
+                queue.init()
 
-            // Create unique file name "yyyyMMddhhmmss
-            val timestamp = DateTime.now().toStringNumeric()
+                // Create unique file name "yyyyMMddhhmmss
+                val timestamp = DateTime.now().toStringNumeric()
 
-            // 2. Test update
-            val contentBatch1 = "batch 1 : $timestamp"
-            val contentBatch2 = "batch 2 : $timestamp"
-            val contentBatch3 = "batch 3 : $timestamp"
-            queue.send(contentBatch1)
-            queue.send(contentBatch2)
-            queue.send(contentBatch3)
+                // 2. Test update
+                val contentBatch1 = "batch 1 : $timestamp"
+                val contentBatch2 = "batch 2 : $timestamp"
+                val contentBatch3 = "batch 3 : $timestamp"
+                queue.send(contentBatch1)
+                queue.send(contentBatch2)
+                queue.send(contentBatch3)
 
-            // Get text
-            val results = queue.next(2)
-            Assert.assertTrue(results.size == 2)
+                // Get text
+                val results = queue.next(2)
+                Assert.assertTrue(results.size == 2)
 
-            val item1 = results[0]?.getValue()
-            Assert.assertTrue(item1 != null)
-            Assert.assertTrue(item1 == contentBatch1)
-            queue.done(results[0])
+                val item1 = results[0]?.getValue()
+                Assert.assertTrue(item1 != null)
+                Assert.assertTrue(item1 == contentBatch1)
+                queue.done(results[0])
 
-            val item2 = results[1]?.getValue()
-            Assert.assertTrue(item2 != null)
-            Assert.assertTrue(item2 == contentBatch2)
-            queue.done(results[1])
+                val item2 = results[1]?.getValue()
+                Assert.assertTrue(item2 != null)
+                Assert.assertTrue(item2 == contentBatch2)
+                queue.done(results[1])
+            }
         }
     }
 
