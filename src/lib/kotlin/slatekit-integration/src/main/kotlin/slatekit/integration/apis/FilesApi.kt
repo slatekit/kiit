@@ -37,7 +37,7 @@ class FilesApi(val files: CloudFiles, override val context: Context) : slatekit.
     override val logger: Logger? = context.logs.getLogger()
 
     @Action(desc = "creates the root folder/bucket")
-    suspend fun createRootFolder(rootFolder: String) {
+    suspend fun createRootFolder(rootFolder: String):Try<String> {
         return files.createRootFolder(rootFolder)
     }
 

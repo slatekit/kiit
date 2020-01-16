@@ -14,6 +14,7 @@ import slatekit.cmds.Command
 import slatekit.cmds.CommandRequest
 import slatekit.results.Success
 import slatekit.results.Try
+import slatekit.results.getOrElse
 
 //</doc:import_examples>
 
@@ -36,17 +37,18 @@ class Example_Cloud_Files : Command("s3") {
         // Not storing any key/secret in source code for security purposes
         // Setup 1: Use the default aws config file in "{user_dir}/.aws/credentials"
         val files1 = AwsCloudFiles(credentials = ProfileCredentialsProvider().credentials,
-                region = Regions.US_EAST_1, bucket = "slatekit", createBucket = false)
+                region = Regions.US_EAST_1, bucket = "slatekit-unit-tests", createBucket = false)
 
         // Setup 2: Use the default aws config file in "{user_dir}/.aws/credentials"
-        val files2 = AwsCloudFiles(region = "app1-files-1", bucket = "slatekit", createBucket = false)
+        val files2 = AwsCloudFiles.of(region = "us-west-2", bucket = "slatekit-unit-tests", createBucket = false)
 
         // Setup 3: Use the config "{user_id}/myapp/conf/files.conf"
         // Specify the api key section as "files"
-        val files3 = AwsCloudFiles(region = "app1-files-1", bucket = "slatekit", createBucket = false,
+        val files3 = AwsCloudFiles.of(region = "us-east-1", bucket = "slatekit-unit-tests", createBucket = false,
                 confPath = "~/.slatekit/conf/files.conf", confSection = "files")
 
-        val files = files2
+        val files = files2.getOrElse { files1 }
+
         //</doc:setup>
 
         //<doc:examples>
@@ -55,7 +57,7 @@ class Example_Cloud_Files : Command("s3") {
             files.init()
 
             // Use case 2: create using just name and content
-            files.create("file-1", "content 1")
+            val result1:Try<String> = files.create("file-1", "content 1")
 
             // Use case 3: update using just name and content
             files.update("file-1", "content 2")

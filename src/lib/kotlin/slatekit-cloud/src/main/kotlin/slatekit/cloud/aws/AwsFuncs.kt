@@ -21,32 +21,44 @@ import com.amazonaws.regions.Regions
 import com.amazonaws.services.s3.AmazonS3Client
 import com.amazonaws.services.sqs.AmazonSQSClient
 import slatekit.common.conf.Config
-
+import slatekit.results.Try
+import slatekit.results.builders.Tries
 
 
 /**
  * Gets the region from the name
  */
-fun String?.toRegion():Regions {
+fun String?.toRegion():Regions? {
+    // Use .getName instead of name as .name uses the Enum.name instead of the "us-east-1"
     return when(this){
-        null                        -> Regions.US_EAST_1
-        Regions.GovCloud.name       -> Regions.GovCloud
-        Regions.US_EAST_1.name      -> Regions.US_EAST_1
-        Regions.US_EAST_2.name      -> Regions.US_EAST_2
-        Regions.US_WEST_1.name      -> Regions.US_WEST_1
-        Regions.US_WEST_2.name      -> Regions.US_WEST_2
-        Regions.EU_WEST_1.name      -> Regions.EU_WEST_1
-        Regions.EU_WEST_2.name      -> Regions.EU_WEST_2
-        Regions.EU_CENTRAL_1.name   -> Regions.EU_CENTRAL_1
-        Regions.AP_SOUTH_1.name     -> Regions.AP_SOUTH_1
-        Regions.AP_SOUTHEAST_1.name -> Regions.AP_SOUTHEAST_1
-        Regions.AP_SOUTHEAST_2.name -> Regions.AP_SOUTHEAST_2
-        Regions.AP_NORTHEAST_1.name -> Regions.AP_NORTHEAST_1
-        Regions.AP_NORTHEAST_2.name -> Regions.AP_NORTHEAST_2
-        Regions.SA_EAST_1.name      -> Regions.SA_EAST_1
-        Regions.CN_NORTH_1.name     -> Regions.CN_NORTH_1
-        Regions.CA_CENTRAL_1.name   -> Regions.CA_CENTRAL_1
-        else                        -> Regions.US_EAST_1
+        null                             -> null
+        Regions.GovCloud.getName()       -> Regions.GovCloud
+        Regions.US_EAST_1.getName()      -> Regions.US_EAST_1
+        Regions.US_EAST_2.getName()      -> Regions.US_EAST_2
+        Regions.US_WEST_1.getName()      -> Regions.US_WEST_1
+        Regions.US_WEST_2.getName()      -> Regions.US_WEST_2
+        Regions.EU_WEST_1.getName()      -> Regions.EU_WEST_1
+        Regions.EU_WEST_2.getName()      -> Regions.EU_WEST_2
+        Regions.EU_CENTRAL_1.getName()   -> Regions.EU_CENTRAL_1
+        Regions.AP_SOUTH_1.getName()     -> Regions.AP_SOUTH_1
+        Regions.AP_SOUTHEAST_1.getName() -> Regions.AP_SOUTHEAST_1
+        Regions.AP_SOUTHEAST_2.getName() -> Regions.AP_SOUTHEAST_2
+        Regions.AP_NORTHEAST_1.getName() -> Regions.AP_NORTHEAST_1
+        Regions.AP_NORTHEAST_2.getName() -> Regions.AP_NORTHEAST_2
+        Regions.SA_EAST_1.getName()      -> Regions.SA_EAST_1
+        Regions.CN_NORTH_1.getName()     -> Regions.CN_NORTH_1
+        Regions.CA_CENTRAL_1.getName()   -> Regions.CA_CENTRAL_1
+        else                             -> null
+    }
+}
+
+
+
+fun <T> build(region: String, op:(Regions)-> T) : Try<T> {
+    val regions = region.toRegion()
+    return when(regions) {
+        null -> Tries.invalid("Invalid region: $region")
+        else -> Tries.of { op(regions) }
     }
 }
 

@@ -16,6 +16,7 @@ package slatekit.core.files
 import slatekit.core.cloud.CloudSupport
 import slatekit.core.common.FileUtils
 import slatekit.results.Try
+import slatekit.results.then
 
 /**
  * Abstraction for cloud based file storage and retrieval.
@@ -38,14 +39,13 @@ interface CloudFiles : CloudSupport {
     }
 
 
-    suspend fun create(name: String, content: String) {
-        create(rootFolder, name, content)
+    suspend fun create(name: String, content: String): Try<String> {
+        return create(rootFolder, name, content)
     }
 
-    suspend fun createFromPath(name: String, filePath: String) {
-
-        val content = FileUtils.loadFromFile(filePath)
-        create(rootFolder, name, content)
+    suspend fun createFromPath(name: String, filePath: String):Try<String> {
+        val content = Try.attempt {  FileUtils.loadFromFile(filePath) }
+        return content.then {  create(rootFolder, name, it) }
     }
 
     suspend fun createFromPath(folder: String, name: String, filePath: String): Try<String> {
@@ -54,8 +54,8 @@ interface CloudFiles : CloudSupport {
         return create(folder, name, content)
     }
 
-    suspend fun delete(name: String) {
-        delete(rootFolder, name)
+    suspend fun delete(name: String):Try<String> {
+        return delete(rootFolder, name)
     }
 
     suspend fun getAsText(name: String): Try<String> = getAsText(rootFolder, name)
@@ -68,13 +68,13 @@ interface CloudFiles : CloudSupport {
         return downloadToFile(rootFolder, name, localFilePath)
     }
 
-    suspend fun update(name: String, content: String) {
-        update(rootFolder, name, content)
+    suspend fun update(name: String, content: String):Try<String> {
+        return update(rootFolder, name, content)
     }
 
     suspend fun updateFromPath(name: String, filePath: String): Try<String> {
-        val content = "simulating from file : " + filePath; // loadFromFile(filePath)
-        return update(rootFolder, name, content)
+        val content = Try.attempt {  FileUtils.loadFromFile(filePath) }
+        return content.then { update(rootFolder, name, it) }
     }
 
     suspend fun updateFromPath(folder: String, name: String, filePath: String): Try<String> {
@@ -82,7 +82,7 @@ interface CloudFiles : CloudSupport {
         return update(folder, name, content)
     }
 
-    suspend fun createRootFolder(rootFolder: String): Unit
+    suspend fun createRootFolder(rootFolder: String):Try<String>
 
     suspend fun create(folder: String, name: String, content: String): Try<String>
 

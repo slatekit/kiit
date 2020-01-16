@@ -23,7 +23,11 @@ import slatekit.common.io.Uri
 import slatekit.common.io.Uris
 import slatekit.core.files.CloudFiles
 import slatekit.core.common.FileUtils
+import slatekit.results.InvalidException
+import slatekit.results.Outcome
 import slatekit.results.Try
+import slatekit.results.builders.Outcomes
+import slatekit.results.builders.Tries
 import slatekit.results.getOrElse
 import java.io.File
 
@@ -48,24 +52,6 @@ class AwsCloudFiles(
     private val FOLDER_SEPARATOR = "/"
     private val s3: AmazonS3Client = AwsFuncs.s3(credentials, region)
 
-    constructor(
-            region: String,
-            bucket: String,
-            createBucket: Boolean,
-            apiKey: ApiLogin
-    ) : this(
-            AwsFuncs.credsWithKeySecret(apiKey.key, apiKey.pass), region.toRegion(), bucket, createBucket
-    )
-
-    constructor(
-            region: String,
-            bucket: String,
-            createBucket: Boolean,
-            confPath: String? = null,
-            confSection: String? = null
-    ) : this(
-            AwsFuncs.creds(confPath, confSection), region.toRegion(), bucket, createBucket
-    )
 
     /**
      * hook for any initialization
@@ -81,9 +67,11 @@ class AwsCloudFiles(
      *
      * @param rootFolder
      */
-    override suspend fun createRootFolder(rootFolder: String) {
-        if (!rootFolder.isNullOrEmpty() && rootFolder != this.rootFolder) {
-            s3.createBucket(rootFolder)
+    override suspend fun createRootFolder(rootFolder: String): Try<String> {
+        return if (!rootFolder.isNullOrEmpty() && rootFolder != this.rootFolder) {
+            Try.attempt { s3.createBucket(rootFolder).name }
+        } else {
+            Tries.success("Exists")
         }
     }
 
@@ -209,6 +197,21 @@ class AwsCloudFiles(
 
             // Case 3: sub-folder
             else -> "$folder$FOLDER_SEPARATOR$name"
+        }
+    }
+
+
+    companion object {
+        fun of(region: String, bucket: String, createBucket: Boolean, apiKey: ApiLogin): Try<AwsCloudFiles> {
+            return build(region) { regions ->
+                AwsCloudFiles(AwsFuncs.credsWithKeySecret(apiKey.key, apiKey.pass), regions, bucket, createBucket)
+            }
+        }
+
+        fun of(region: String, bucket: String, createBucket: Boolean, confPath: String? = null, confSection: String? = null): Try<AwsCloudFiles> {
+            return build(region) { regions ->
+                AwsCloudFiles(AwsFuncs.creds(confPath, confSection), regions, bucket, createBucket)
+            }
         }
     }
 }

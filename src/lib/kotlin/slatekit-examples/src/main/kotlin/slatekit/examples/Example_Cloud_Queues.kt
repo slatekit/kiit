@@ -29,6 +29,7 @@ import slatekit.results.Try
 import com.amazonaws.auth.profile.ProfileCredentialsProvider
 import com.amazonaws.regions.Regions
 import kotlinx.coroutines.runBlocking
+import slatekit.results.getOrElse
 
 //</doc:import_examples>
 
@@ -62,14 +63,14 @@ class Example_Cloud_Queues : Command("sqs") {
                 region = Regions.US_EAST_1, name = "slatekit", converter = converter)
 
         // Setup 2: Allow auto-loading of credentials from ~/.aws/credentials and region by string name supplied
-        val queue2 = AwsCloudQueue<String>(region = "us-east-1", name = "slatekit", converter = converter)
+        val queue2 = AwsCloudQueue.of<String>(region = "us-east-1", name = "slatekit", converter = converter)
 
         // Setup 3: Use the config at "~/myapp/conf/queue.conf"
         // Reads from the section "queues" by default
-        val queue3 = AwsCloudQueue<String>( region = "us-east-1", name = "slatekit", converter = converter,
+        val queue3 = AwsCloudQueue.of<String>( region = "us-east-1", name = "slatekit", converter = converter,
                 confPath = "~/myapp/conf/queue.conf", confSection = "queues")
 
-        val queue = queue3
+        val queue = queue3.getOrElse { queue1 }
 
         //</doc:setup>
 

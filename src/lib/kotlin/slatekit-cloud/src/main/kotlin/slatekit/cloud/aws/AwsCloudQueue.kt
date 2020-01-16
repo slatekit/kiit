@@ -27,6 +27,7 @@ import slatekit.core.queues.QueueEntry
 import slatekit.core.queues.QueueValueConverter
 import slatekit.core.queues.CloudQueue
 import slatekit.results.Try
+import slatekit.results.builders.Tries
 import java.io.File
 import java.io.IOException
 
@@ -52,30 +53,6 @@ class AwsCloudQueue<T>(
     private val SOURCE = "aws:sqs"
     private val sqs: AmazonSQSClient = AwsFuncs.sqs(credentials, region)
     private val queueUrl = sqs.getQueueUrl(this.name).queueUrl
-
-    /**
-     * Initialize with the queue with a Slate Kit [ApiLogin] which
-     * will get converted to the Aws credentials
-     */
-    constructor(region:String,
-                name: String,
-                apiKey: ApiLogin,
-                converter: QueueValueConverter<T>,
-                waitTimeInSeconds: Int = 0) :
-            this(AwsFuncs.credsWithKeySecret(apiKey.key, apiKey.pass), region.toRegion(), name, converter, waitTimeInSeconds)
-
-    /**
-     * Initialize with queue name and the config path and section for aws credentials
-     */
-    constructor(region:String,
-                name: String,
-                converter: QueueValueConverter<T>,
-                confPath: String? = null,
-                confSection: String? = null,
-                waitTimeInSeconds: Int = 0) :
-            this (AwsFuncs.creds(confPath, confSection), region.toRegion(), name, converter, waitTimeInSeconds)
-
-
 
     override suspend fun init() {
 
@@ -123,12 +100,12 @@ class AwsCloudQueue<T>(
     override suspend fun next(size: Int): List<QueueEntry<T>> {
         val results = executeSync(SOURCE, "nextbatch", data = size, call = { ->
             val reqRaw = ReceiveMessageRequest(queueUrl)
-                .withMaxNumberOfMessages(size)
+                    .withMaxNumberOfMessages(size)
             val req1 = if (waitTimeInSeconds > 0) reqRaw.withWaitTimeSeconds(waitTimeInSeconds) else reqRaw
             val req2 = req1.withAttributeNames(QueueAttributeName.All)
             val req = req2.withMessageAttributeNames(QueueAttributeName.All.name)
             val msgs = sqs.receiveMessage(req).messages
-            val entries = if(msgs.isEmpty()) listOf() else msgs.map { createEntry(it)  }
+            val entries = if (msgs.isEmpty()) listOf() else msgs.map { createEntry(it) }
             entries
         })
         return results ?: listOf()
@@ -140,9 +117,9 @@ class AwsCloudQueue<T>(
      * @param msg: String message, or map containing the fields "message", and "atts"
      */
     override suspend fun send(value: T, tagName: String, tagValue: String): Try<String> {
-        return when(tagName){
+        return when (tagName) {
             null, "" -> send(value, mapOf("id" to Random.uuid(), "createdAt" to DateTime.now().toStringUtc()))
-            else     -> send(value, mapOf(tagName to tagValue, "id" to Random.uuid(), "createdAt" to DateTime.now().toStringUtc()))
+            else -> send(value, mapOf(tagName to tagValue, "id" to Random.uuid(), "createdAt" to DateTime.now().toStringUtc()))
         }
     }
 
@@ -236,20 +213,20 @@ class AwsCloudQueue<T>(
     }
 
 
-    private fun createEntry(msg:Message): QueueEntry<T> {
+    private fun createEntry(msg: Message): QueueEntry<T> {
         val bodyAsString = msg.body
         val item = converter.decode(bodyAsString)
         val id = AwsQueueEntry.getMessageTag(msg, "id")
         val timestamp = AwsQueueEntry.getMessageTag(msg, "createdAt")
-        val createdAt = if(timestamp.isNullOrEmpty()) DateTime.now() else DateTime.parse(timestamp)
+        val createdAt = if (timestamp.isNullOrEmpty()) DateTime.now() else DateTime.parse(timestamp)
         val entry = AwsQueueEntry(item, msg, id, createdAt)
         return entry
     }
 
 
     data class AwsQueueEntry<T>(
-            val entry:T?,
-            val message:Message,
+            val entry: T?,
+            val message: Message,
             override val id: String = Random.uuid(),
             override val createdAt: DateTime = DateTime.now()
     ) : QueueEntry<T> {
@@ -261,7 +238,7 @@ class AwsCloudQueue<T>(
         override val raw: Any? = message
 
 
-        override fun getValue():T? {
+        override fun getValue(): T? {
             return entry
         }
 
@@ -269,7 +246,7 @@ class AwsCloudQueue<T>(
         /**
          * Gets the named tag stored in this entry
          */
-        override fun getTag(name:String):String? {
+        override fun getTag(name: String): String? {
             return getMessageTag(message, name)
         }
 
@@ -284,6 +261,20 @@ class AwsCloudQueue<T>(
                     val tagVal = atts.get(tagName)
                     tagVal?.stringValue ?: ""
                 }
+            }
+        }
+    }
+
+    companion object {
+        fun <T> of(region: String, name: String, apiKey: ApiLogin, converter: QueueValueConverter<T>, waitTimeInSeconds: Int = 0): Try<AwsCloudQueue<T>> {
+            return build(region) { regions ->
+                AwsCloudQueue<T>(AwsFuncs.credsWithKeySecret(apiKey.key, apiKey.pass), regions, name, converter, waitTimeInSeconds)
+            }
+        }
+
+        fun <T> of(region: String, name: String, converter: QueueValueConverter<T>, confPath: String? = null, confSection: String? = null, waitTimeInSeconds: Int = 0): Try<AwsCloudQueue<T>> {
+            return build(region) { regions ->
+                AwsCloudQueue<T>(AwsFuncs.creds(confPath, confSection), regions, name, converter, waitTimeInSeconds)
             }
         }
     }
