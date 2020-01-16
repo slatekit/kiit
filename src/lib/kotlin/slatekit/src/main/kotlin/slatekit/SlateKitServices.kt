@@ -1,5 +1,6 @@
 package slatekit
 
+import com.sun.net.httpserver.Authenticator
 import slatekit.apis.SetupType
 import slatekit.apis.core.Api
 import slatekit.apis.tools.code.CodeGenApi
@@ -16,6 +17,8 @@ import slatekit.notifications.sms.TwilioSms
 import slatekit.docs.DocApi
 import slatekit.generator.*
 import slatekit.integration.apis.*
+import slatekit.results.Failure
+import slatekit.results.Success
 import slatekit.samples.common.apis.SampleApi
 
 interface SlateKitServices {
@@ -40,14 +43,22 @@ interface SlateKitServices {
     fun files(): CloudFiles {
         val apiLogin = ctx.conf.apiLogin("files")
         val bucket = apiLogin.tag
-        return AwsCloudFiles("us-east-1", bucket, false, apiLogin)
+        val files = AwsCloudFiles.of("us-east-1", bucket, false, apiLogin)
+        return when(files){
+            is Success -> files.value
+            is Failure -> throw files.error
+        }
     }
 
 
     fun queues(): CloudQueue<String> {
         val apiLogin = ctx.conf.apiLogin("queues")
-        val queue = apiLogin.tag
-        return AwsCloudQueue("us-east-1", queue, apiLogin, QueueStringConverter(), 3)
+        val name = apiLogin.tag
+        val queue = AwsCloudQueue.of("us-east-1", name, apiLogin, QueueStringConverter(), 3)
+        return when(queue){
+            is Success -> queue.value
+            is Failure -> throw queue.error
+        }
     }
 
     fun apis(): List<Api> {

@@ -16,7 +16,7 @@ import slatekit.results.Try
  * This provides support for command line args, environment selection, confs, life-cycle methods and help usage
  * @see https://www.slatekit.com/arch/app/
  */
-class App(ctx: Context) : App<Context>(ctx, AppOptions(printSummaryBeforeExec = true)) {
+class App(ctx: Context) : App<Context>(ctx, AppOptions(showWelcome = true)) {
 
     companion object {
 

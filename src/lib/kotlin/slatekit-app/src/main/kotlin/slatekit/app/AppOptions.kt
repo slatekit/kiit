@@ -14,8 +14,9 @@
 package slatekit.app
 
 open class AppOptions(
-    val printSummaryBeforeExec: Boolean = false,
-    val printSummaryOnShutdown: Boolean = true,
+    val showWelcome: Boolean = true,
+    val showDisplay: Boolean = true,
+    val showSummary: Boolean = true,
     val getConfNameFromEnv: Boolean = true,
     val getLogNameFromEnv: Boolean = true
 )

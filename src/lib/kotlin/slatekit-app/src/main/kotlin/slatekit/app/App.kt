@@ -36,7 +36,7 @@ open class App<C : Context>(
     /**
      * Banner for displaying welcome/info/goodbye with text/stats/diagnostics.
      */
-    open val banner: Banner      = Banner(ctx.info, ctx.envs, ctx.logs.getLogger())
+    open val banner: Banner      = Banner(ctx.info, ctx.envs, ctx.logs.getLogger(), options.showWelcome, options.showDisplay, options.showSummary)
 
     /**
      * Provides logger support by supplying debug info, warn, error
