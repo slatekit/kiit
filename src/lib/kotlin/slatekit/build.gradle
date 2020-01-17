@@ -101,7 +101,7 @@ dependencies {
         compile "com.slatekit:slatekit-orm:$slatekit_version_beta"
         compile "com.slatekit:slatekit-core:$slatekit_version_beta"
         compile "com.slatekit:slatekit-http:$slatekit_version_beta"
-        compile "com.slatekit:slatekit-notifications:$slatekit_version_beta"
+        compile "com.slatekit:slatekit-notifications:$slatekit_version"
         compile "com.slatekit:slatekit-apis:$slatekit_version_beta"
         compile "com.slatekit:slatekit-integration:$slatekit_version_beta"
         compile "com.slatekit:slatekit-server:$slatekit_version_beta"
