@@ -4,9 +4,8 @@ import okhttp3.Request
 import okhttp3.Response
 import slatekit.http.HttpRPC
 import slatekit.http.awaitHttpOutcome
-import slatekit.results.Outcome
+import slatekit.results.*
 import slatekit.results.builders.Outcomes
-import slatekit.results.then
 
 interface Sender<T> {
 
@@ -35,7 +34,25 @@ interface Sender<T> {
         return if (!isEnabled(model)) {
             Outcomes.ignored("Not enabled")
         } else {
-            build(model).then { send(it) }.map { it.body()?.string() ?: "" }
+            validate(model)
+                .then { build(it)   }
+                .then { send (it)   }
+                .then { convert(it) }
+        }
+    }
+
+    /**
+     * Sends the model synchronously
+     * @param model: The data model to send ( e.g. EmailMessage )
+     */
+    fun sendSync(model: T): Outcome<String> {
+        return if (!isEnabled(model)) {
+            Outcomes.ignored("Not enabled")
+        } else {
+            validate(model)
+                .then { build(it)     }
+                .then { sendSync (it) }
+                .then { convert(it)   }
         }
     }
 
@@ -49,22 +66,25 @@ interface Sender<T> {
 
     /**
      * Sends the model synchronously
-     * @param model: The data model to send ( e.g. EmailMessage )
-     */
-    fun sendSync(model: T): Outcome<String> {
-        return if (!isEnabled(model)) {
-            Outcomes.ignored("Not enabled")
-        } else {
-            build(model).then { sendSync(it) }.map { it.body()?.string() ?: "" }
-        }
-    }
-
-    /**
-     * Sends the model synchronously
      * @param request: A prebuilt http request representing the send
      */
     fun sendSync(request: Request): Outcome<Response> {
         val response = HttpRPC().call(request)
         return response.toOutcome()
+    }
+
+
+    fun convert(response:Response):Outcome<String> {
+        return if(response.isSuccessful) {
+            Outcomes.success(response.body()?.string() ?: "")
+        } else {
+            val code = response.code()
+            when {
+                code.isFilteredOut()       -> Outcomes.ignored(response.message())
+                code.isInBadRequestRange() -> Outcomes.invalid(response.message())
+                code.isInFailureRange()    -> Outcomes.errored(response.message())
+                else                       -> Outcomes.unexpected(response.message())
+            }
+        }
     }
 }

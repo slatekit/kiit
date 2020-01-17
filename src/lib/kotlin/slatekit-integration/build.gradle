@@ -96,7 +96,7 @@ dependencies {
         compile "com.slatekit:slatekit-functions:$slatekit_version_beta"
         compile "com.slatekit:slatekit-cache:$slatekit_version_beta"
         compile "com.slatekit:slatekit-cmds:$slatekit_version_beta"
-        compile "com.slatekit:slatekit-notifications:$slatekit_version_beta"
+        compile "com.slatekit:slatekit-notifications:$slatekit_version"
     } else {
         // */
         compile project(":slatekit-result")
