@@ -28,6 +28,7 @@ import slatekit.common.info.ApiLogin
 import slatekit.cmds.CommandRequest
 import slatekit.common.io.Uris
 import slatekit.common.Vars
+import slatekit.common.ext.env
 import slatekit.results.builders.Tries
 
 //</doc:import_examples>
@@ -64,21 +65,29 @@ class Example_Email  : Command("auth") {
       )
     )
     val emailService2 =  SendGrid(apiKey.key, apiKey.pass, apiKey.account, templates)
+    val email = emailService2
     //</doc:setup>
 
     //<doc:examples>
     runBlocking {
+      // Get phone from environment variable
+      val toAddress = "SLATEKIT_EXAMPLE_EMAIL".env() // "user1@gmail.com"
+
       // Use case 1: Send a confirmation code to the U.S. to verify a users phone number.
-      val result1 = emailService1.send("user1@company1.com", "Welcome to MyApp.com", "showWelcome!", false)
+      val result1 = email.send(toAddress, "Welcome to MyApp.com 1", "showWelcome!", false)
 
       // Use case 2: Send using a constructed message object
-      emailService1.sendSync(EmailMessage("user1@company1.com", "Welcome to MyApp.com", "showWelcome!", false))
+      email.sendSync(EmailMessage(toAddress, "Welcome to MyApp.com 2", "showWelcome!", false))
 
       // Use case 3: Send message using one of the setup templates
-      val result2 = emailService2.sendTemplate("email_welcome", "user1@company1.com", "Welcome to MyApp.com", true,
+      val result2 = email.sendTemplate("email_welcome", toAddress, "Welcome to MyApp.com 3", true,
               Vars(listOf(
-                      "greeting" to "hello",
-                      "user.api" to "user1",
+                      "app.name" to "my app",
+                      "app.from" to "my app team",
+                      "app.tagline"  to "My App tagline",
+                      "app.confirmUrl"  to "https://www.myapp.com/confirm?abc=123",
+                      "user.name" to "user1",
+                      "user.email" to "user1@gmail.com",
                       "app.code" to "ABC123"
               )))
     }

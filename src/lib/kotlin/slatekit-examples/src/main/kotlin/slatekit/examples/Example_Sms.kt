@@ -28,6 +28,8 @@ import slatekit.common.types.CountryCode
 import slatekit.cmds.CommandRequest
 import slatekit.common.io.Uris
 import slatekit.common.Vars
+import slatekit.common.ext.env
+import slatekit.common.ext.getEnv
 import slatekit.results.Try
 import slatekit.results.Success
 
@@ -72,22 +74,26 @@ class Example_Sms : Command("sms") {
     // Setup 3b: Setup the templates with support for different country codes
     val countries = listOf(CountryCode("US"), CountryCode("FR"))
     val sms3 =  TwilioSms(apiKey.key, apiKey.pass, apiKey.account, templates, countries)
+    val sms = sms3
     //</doc:setup>
 
     //<doc:examples>
     runBlocking {
+      // Get phone from environment variable
+      val phone = "SLATEKIT_EXAMPLE_PHONE".env() // "1234567890"
+
       // Use case 1: Send an invitation message to phone "234567890 in the United States.
-      sms3.send("Invitation to MyApp.com 1", "us", "234567890")
+      //sms.send("Invitation to MyApp.com 1", "us", phone)
 
       // Use case 2: Send using a constructed message object
-      sms3.sendSync(SmsMessage("Invitation to MyApp.com 2", "us", "234567890"))
+      //sms.sendSync(SmsMessage("Invitation to MyApp.com 2", "us", phone))
 
       // Use case 3: Send message using one of the setup templates
-      sms3.sendTemplate("sms_welcome", "us", "234567890",
+      sms.sendTemplate("sms_welcome", "us", phone,
               Vars(listOf(
-                      "greeting" to "hello",
-                      "user.api" to "kishore",
-                      "app.code" to "ABC123"
+                      "app.name"   to "my app",
+                      "user.name"  to "user1",
+                      "user.email" to "user1@gmail.com"
               )))
     }
     //</doc:examples>

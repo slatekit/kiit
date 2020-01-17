@@ -43,7 +43,7 @@ fun main(args:Array<String>) {
     //testLRU()
     //testPaths()
 
-    val example = Example_Cloud_Files()
+    val example = Example_Email()
     example.execute(args)
 }
 
