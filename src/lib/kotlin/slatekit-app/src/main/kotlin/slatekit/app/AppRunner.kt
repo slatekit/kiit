@@ -166,7 +166,11 @@ object AppRunner {
         }
 
         // Banner: Welcome
-        setupResult.onSuccess { app.banner.welcome() }
+        setupResult.onSuccess {
+            if (app.options.showWelcome) {
+                app.banner.welcome()
+            }
+        }
 
         return setupResult
     }
@@ -177,7 +181,9 @@ object AppRunner {
     private suspend fun <C : Context> execute(app: App<C>): Try<Any> {
 
         // Banner: Display
-        app.banner.display()
+        if(app.options.showDisplay) {
+            app.banner.display()
+        }
 
         // Wrap App.init() call for safety
         // This will produce a nested Try<Try<Boolean>>
@@ -204,7 +210,11 @@ object AppRunner {
         val result = rawResult.inner()
 
         // Banner: Goodbye
-        result.onSuccess { app.banner.summary() }
+        result.onSuccess {
+            if (app.options.showSummary) {
+                app.banner.summary()
+            }
+        }
 
         // Finally convert the error
         return result.mapError {
