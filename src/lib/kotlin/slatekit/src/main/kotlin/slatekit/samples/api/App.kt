@@ -14,7 +14,7 @@ import slatekit.common.utils.B64Java8
 import slatekit.context.Context
 
 
-class App(ctx: Context) : App<Context>(ctx, AppOptions(printSummaryBeforeExec = true)) {
+class App(ctx: Context) : App<Context>(ctx, AppOptions(showWelcome = true)) {
 
     companion object {
 

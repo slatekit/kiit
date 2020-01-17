@@ -20,7 +20,7 @@ import slatekit.http.HttpRPC
 import slatekit.results.*
 import slatekit.results.builders.Outcomes
 
-class EmailServiceSendGrid(
+class SendGrid(
     user: String,
     key: String,
     phone: String,
@@ -52,21 +52,21 @@ class EmailServiceSendGrid(
      * Builds the HttpRequest for the model
      * @param model: The data model to send ( e.g. EmailMessage )
      */
-    override fun build(msg: EmailMessage): Outcome<Request> {
+    override fun build(model: EmailMessage): Outcome<Request> {
         // Parameters
-        val bodyArg = if (msg.html) "html" else "text"
+        val bodyArg = if (model.html) "html" else "text"
         val request = HttpRPC().build(
                 method = HttpRPC.Method.Post,
                 urlRaw = baseUrl,
                 headerParams = null,
                 creds = HttpRPC.Auth.Basic(settings.user, settings.key),
                 body = HttpRPC.Body.FormData(listOf(
-                        Pair("api_user", settings.user),
-                        Pair("api_key", settings.key),
-                        Pair("to", msg.to),
-                        Pair("from", settings.account),
-                        Pair("subject", msg.subject),
-                        Pair(bodyArg, msg.body)
+                        "api_user" to settings.user,
+                        "api_key"  to settings.key,
+                        "to"       to model.to,
+                        "from"     to settings.account,
+                        "subject"  to model.subject,
+                        bodyArg    to model.body
                 )
         ))
         return Success(request)

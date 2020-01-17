@@ -14,6 +14,7 @@
 package slatekit.cloud.aws
 
 import com.amazonaws.auth.AWSCredentials
+import com.amazonaws.regions.Regions
 import com.amazonaws.services.s3.AmazonS3Client
 import com.amazonaws.services.s3.model.GetObjectRequest
 import com.amazonaws.services.s3.model.ObjectMetadata
@@ -22,65 +23,42 @@ import slatekit.common.io.Uri
 import slatekit.common.io.Uris
 import slatekit.core.files.CloudFiles
 import slatekit.core.common.FileUtils
+import slatekit.results.InvalidException
+import slatekit.results.Outcome
 import slatekit.results.Try
+import slatekit.results.builders.Outcomes
+import slatekit.results.builders.Tries
 import slatekit.results.getOrElse
 import java.io.File
 
 /**
  *
+ * @param credentials : The aws credentials
+ * @param region : AWS Region e.g. Regions.US_EAST_1
  * @param bucket : Name of the bucket to store files in
  * @param createBucket : Whether or not to create the bucket
- * @param path : Path to aws conf file, e.g. Some("user://myapp/conf/sqs.conf")
- * @param section : Name of section in conf file for api key. e.g. Some("sqs")
  */
 class AwsCloudFiles(
-        region:String,
+        credentials: AWSCredentials,
+        val region: Regions,
         bucket: String,
-    createBucket: Boolean,
-    creds: AWSCredentials
+        createBucket: Boolean
 ) : CloudFiles, AwsSupport {
 
-    override val defaultFolder = bucket
-    override val createDefaultFolder = createBucket
+    override val rootFolder = formatBucket(bucket)
+    override val createRootFolder = createBucket
 
     private val SOURCE = "aws:s3"
-    private val s3: AmazonS3Client = AwsFuncs.s3(creds,region)
+    private val FOLDER_SEPARATOR = "/"
+    private val s3: AmazonS3Client = AwsFuncs.s3(credentials, region)
 
-    constructor(
-        region:String,
-        bucket: String,
-        createBucket: Boolean,
-        apiKey: ApiLogin
-    ) : this(
-              region,  bucket, createBucket, AwsFuncs.credsWithKeySecret(apiKey.key, apiKey.pass)
-    )
-
-    constructor(
-            region:String,
-            bucket: String,
-        createBucket: Boolean,
-        confPath: String? = null,
-        section: String? = null
-    ) : this (
-            region, bucket, createBucket, AwsFuncs.creds(confPath, section)
-    )
-
-    constructor(
-            region:String,
-            bucket: String,
-            createBucket: Boolean,
-            conf:Uri,
-            section: String? = null
-    ) : this (
-            region, bucket, createBucket, AwsFuncs.creds(conf.toFile().absolutePath, section)
-    )
 
     /**
      * hook for any initialization
      */
     override suspend fun init() {
-        if (createDefaultFolder) {
-            s3.createBucket(defaultFolder)
+        if (createRootFolder) {
+            s3.createBucket(rootFolder)
         }
     }
 
@@ -89,9 +67,11 @@ class AwsCloudFiles(
      *
      * @param rootFolder
      */
-    override suspend fun createRootFolder(rootFolder: String) {
-        if (!rootFolder.isNullOrEmpty() && rootFolder != defaultFolder) {
-            s3.createBucket(rootFolder)
+    override suspend fun createRootFolder(rootFolder: String): Try<String> {
+        return if (!rootFolder.isNullOrEmpty() && rootFolder != this.rootFolder) {
+            Try.attempt { s3.createBucket(rootFolder).name }
+        } else {
+            Tries.success("Exists")
         }
     }
 
@@ -126,7 +106,7 @@ class AwsCloudFiles(
     override suspend fun delete(folder: String, name: String): Try<String> {
         val fullName = getName(folder, name)
         return executeResult(SOURCE, "delete", data = fullName, call = {
-            s3.deleteObject(defaultFolder, fullName)
+            s3.deleteObject(rootFolder, fullName)
             fullName
         })
     }
@@ -142,7 +122,7 @@ class AwsCloudFiles(
         val fullName = getName(folder, name)
         return executeResult(SOURCE, "getAsText", data = fullName, call = {
 
-            val obj = s3.getObject(GetObjectRequest(defaultFolder, fullName))
+            val obj = s3.getObject(GetObjectRequest(rootFolder, fullName))
             val content = FileUtils.toString(obj.getObjectContent())
             // val content = "simulating download of " + fullName
             content
@@ -202,7 +182,7 @@ class AwsCloudFiles(
 
         return executeResult(SOURCE, action, data = fullName, call = {
 
-            s3.putObject(defaultFolder, fullName, FileUtils.toInputStream(content), ObjectMetadata())
+            s3.putObject(rootFolder, fullName, FileUtils.toInputStream(content), ObjectMetadata())
             fullName
         })
     }
@@ -213,10 +193,25 @@ class AwsCloudFiles(
             folder.isNullOrEmpty() -> name
 
             // Case 2: folder == root folder
-            folder == defaultFolder -> name
+            folder == rootFolder -> name
 
             // Case 3: sub-folder
-            else -> "$folder-$name"
+            else -> "$folder$FOLDER_SEPARATOR$name"
+        }
+    }
+
+
+    companion object {
+        fun of(region: String, bucket: String, createBucket: Boolean, apiKey: ApiLogin): Try<AwsCloudFiles> {
+            return build(region) { regions ->
+                AwsCloudFiles(AwsFuncs.credsWithKeySecret(apiKey.key, apiKey.pass), regions, bucket, createBucket)
+            }
+        }
+
+        fun of(region: String, bucket: String, createBucket: Boolean, confPath: String? = null, confSection: String? = null): Try<AwsCloudFiles> {
+            return build(region) { regions ->
+                AwsCloudFiles(AwsFuncs.creds(confPath, confSection), regions, bucket, createBucket)
+            }
         }
     }
 }

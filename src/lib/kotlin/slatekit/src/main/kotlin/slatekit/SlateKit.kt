@@ -17,7 +17,7 @@ import slatekit.results.Try
 import slatekit.meta.Serialization
 import slatekit.results.Failure
 
-class SlateKit(ctx: Context) : App<Context>(ctx, AppOptions(printSummaryBeforeExec = true)), SlateKitServices {
+class SlateKit(ctx: Context) : App<Context>(ctx, AppOptions(showWelcome = true)), SlateKitServices {
 
     companion object {
 

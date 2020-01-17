@@ -40,7 +40,7 @@ class SmsApi(val svc: SmsService, override val context: Context) : FileSupport {
      * @param phone : destination phone
      */
     @Action(desc = "send an sms")
-    fun send(message: String, countryCode: String, phone: String): Outcome<Boolean> {
+    suspend fun send(message: String, countryCode: String, phone: String): Outcome<Boolean> {
         return this.svc.send(message, countryCode, phone).map { true }
     }
 
@@ -53,7 +53,7 @@ class SmsApi(val svc: SmsService, override val context: Context) : FileSupport {
      *                      will be automatically added into this collection )
      */
     @Action(desc = "send an sms using a template")
-    fun sendUsingTemplate(name: String, countryCode: String, phone: String, vars: Vars): Outcome<Boolean> {
+    suspend fun sendUsingTemplate(name: String, countryCode: String, phone: String, vars: Vars): Outcome<Boolean> {
         return this.svc.sendUsingTemplate(name, countryCode, phone, vars).map { true }
     }
 }

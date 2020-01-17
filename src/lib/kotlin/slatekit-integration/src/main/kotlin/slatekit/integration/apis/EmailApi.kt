@@ -43,7 +43,7 @@ class EmailApi(val svc: EmailService, override val context: Context) : FileSuppo
      * @return
      */
     @Action(desc = "send an email")
-    fun send(to: String, subject: String, body: String, html: Boolean): Outcome<Boolean> {
+    suspend fun send(to: String, subject: String, body: String, html: Boolean): Outcome<Boolean> {
         return this.svc.send(to, subject, body, html).map { true }
     }
 
@@ -56,7 +56,7 @@ class EmailApi(val svc: EmailService, override val context: Context) : FileSuppo
      * @return
      */
     @Action(desc = "send an email")
-    fun sendFile(to: String, subject: String, filePath: String, html: Boolean): Outcome<Boolean> {
+    suspend fun sendFile(to: String, subject: String, filePath: String, html: Boolean): Outcome<Boolean> {
         val content = Uris.readText(filePath)
         return this.svc.send(to, subject, content ?: "", html).map { true }
     }
@@ -71,7 +71,7 @@ class EmailApi(val svc: EmailService, override val context: Context) : FileSuppo
      *                      will be automatically added into this collection )
      */
     @Action(desc = "send an email using a template")
-    fun sendUsingTemplate(name: String, to: String, subject: String, html: Boolean, vars: Vars): Outcome<Boolean> {
+    suspend fun sendUsingTemplate(name: String, to: String, subject: String, html: Boolean, vars: Vars): Outcome<Boolean> {
         return this.svc.sendUsingTemplate(name, to, subject, html, vars).map { true }
     }
 }

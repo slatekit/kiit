@@ -60,8 +60,8 @@ object AppRunner {
         logs: Logs? = null,
         envs: Envs = Envs.defaults(),
         errorMode: ErrorMode = ErrorMode.Print,
-        confSource:Alias = Alias.Jar,
-        hasAction:Boolean = false
+        confSource: Alias = Alias.Jar,
+        hasAction: Boolean = false
     ): Try<Any> {
 
         // Parse raw args to structured args with lookup ability e.g. args["env"] etc.
@@ -100,7 +100,8 @@ object AppRunner {
             when (errorMode) {
                 ErrorMode.Throw -> throw it
                 ErrorMode.Print -> showError(result, it)
-                else -> {}
+                else -> {
+                }
             }
         }
 
@@ -121,13 +122,7 @@ object AppRunner {
 
             // Validate args against schema
             val checkResult = ArgsSchema.validate(sch, args)
-
-            // Invalid args ? error out
-            if (!checkResult.success) {
-                Notices.invalid<Args>(checkResult.msg)
-            } else {
-                Success(args)
-            }
+            checkResult.map { args }
         } ?: Success(args)
 
         return finalResult
@@ -171,7 +166,11 @@ object AppRunner {
         }
 
         // Banner: Welcome
-        setupResult.onSuccess { app.banner.welcome() }
+        setupResult.onSuccess {
+            if (app.options.showWelcome) {
+                app.banner.welcome()
+            }
+        }
 
         return setupResult
     }
@@ -182,7 +181,9 @@ object AppRunner {
     private suspend fun <C : Context> execute(app: App<C>): Try<Any> {
 
         // Banner: Display
-        app.banner.display()
+        if(app.options.showDisplay) {
+            app.banner.display()
+        }
 
         // Wrap App.init() call for safety
         // This will produce a nested Try<Try<Boolean>>
@@ -209,7 +210,11 @@ object AppRunner {
         val result = rawResult.inner()
 
         // Banner: Goodbye
-        result.onSuccess { app.banner.summary() }
+        result.onSuccess {
+            if (app.options.showSummary) {
+                app.banner.summary()
+            }
+        }
 
         // Finally convert the error
         return result.mapError {

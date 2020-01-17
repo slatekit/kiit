@@ -180,7 +180,7 @@ class Example_Jobs : Command("utils"), CoroutineScope by MainScope() {
                             slatekit.jobs.Job(id.copy(service = "job7"), listOf(::sendNewsLetterWithPaging), policies = listOf(
                                     Every(10, { req, res -> println("Paged : " + req.task.id + ":" + res.msg) }),
                                     Limit(12, true, { req -> req.context.stats.counts }),
-                                    Ratio(.1, slatekit.results.Status.Errored(0, ""), { req -> req.context.stats.counts })
+                                    Ratio(.1, slatekit.results.Failed.Errored(0, ""), { req -> req.context.stats.counts })
                                 )
                             )
                     )

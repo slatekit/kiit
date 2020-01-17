@@ -43,11 +43,11 @@ abstract class SmsService(
      * @param countryCode : destination phone country code
      * @param phone : destination phone
      */
-    fun send(message: String, countryCode: String, phone: String): Outcome<String> {
-        val validationResult = validate(countryCode, phone)
+    suspend fun send(message: String, countryCode: String, phone: String): Outcome<String> {
+        val validationResult = validate(countryCode, phone).toOutcome()
         val result = validationResult.then {
-            sendSync(SmsMessage(message, countryCode, phone))
-        }.toOutcome()
+            send(SmsMessage(message, countryCode, phone))
+        }
         return result
     }
 
@@ -59,8 +59,8 @@ abstract class SmsService(
      * @param phone : destination phone
      * @param variables : values to replace the variables in template
      */
-    fun sendUsingTemplate(name: String, countryCode: String, phone: String, variables: Vars): Outcome<String> {
-        val result = validate(countryCode, phone)
+    suspend fun sendUsingTemplate(name: String, countryCode: String, phone: String, variables: Vars): Outcome<String> {
+        val result = validate(countryCode, phone).toOutcome()
         return if (result.success) {
             // Send the message
             // send(to, subject, message, html)

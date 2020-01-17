@@ -49,7 +49,7 @@ class InMemoryQueue<T>(
 
 
     /**
-     * Close the queue
+     * Close the queue ( allows for a shutdown hook )
      */
     override fun close() {}
 

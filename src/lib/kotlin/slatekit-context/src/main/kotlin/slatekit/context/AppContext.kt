@@ -34,20 +34,6 @@ data class AppContext(
     companion object {
 
         @JvmStatic
-        fun err(code: Int, msg: String? = null): AppContext {
-            val args = Args.empty()
-            val envs = Envs.defaults()
-            val conf = Config()
-            return AppContext(
-                    args = args,
-                    envs = envs,
-                    conf = conf,
-                    logs = LogsDefault,
-                    info = Info.none
-            )
-        }
-
-        @JvmStatic
         fun simple(name: String): AppContext {
             val args = Args.empty()
             val envs = Envs.defaults()
@@ -59,26 +45,6 @@ data class AppContext(
                     logs = LogsDefault,
                     info = Info.none,
                     dirs = Folders.userDir("slatekit", name.toIdent(), name.toIdent())
-            )
-        }
-
-        @JvmStatic
-        fun sample(id: String, name: String, about: String, company: String): AppContext {
-            val args = Args.empty()
-            val envs = Envs.defaults()
-            val conf = Config()
-            return AppContext(
-                    args = args,
-                    envs = envs,
-                    conf = conf,
-                    logs = LogsDefault,
-                    info = Info(
-                            About(id, name, about, company),
-                            Build.empty,
-                            Sys.build()
-                    ),
-                    enc = Encryptor("wejklhviuxywehjk", "3214maslkdf03292", B64Java8),
-                    dirs = Folders.userDir("slatekit", "samples", "sample1")
             )
         }
     }

@@ -12,7 +12,7 @@ import slatekit.results.builders.Outcomes
 /**
  * @param settings: The list of slack channels
  */
-class AlertServiceSlack(
+class SlackAlerts(
     override val identity: Identity,
     override val settings: AlertSettings
 ) : AlertService() {

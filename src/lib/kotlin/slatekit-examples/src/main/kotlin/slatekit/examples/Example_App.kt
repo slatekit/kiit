@@ -66,8 +66,8 @@ import slatekit.results.Try
 // 1. Manually      ( explictly supply the components - see below )
 // 2. Automatically ( using helper functions to that check command line args )
 class SampleApp(ctx: Context) : App<Context>(ctx, AppOptions(
-        printSummaryBeforeExec = false,
-        printSummaryOnShutdown = true
+        showWelcome = false,
+        showSummary = true
 )) {
 
     /**

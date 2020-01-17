@@ -64,6 +64,17 @@ open class Command(override val id: Identity,
      * @param args
      * @return
      */
+    fun execute(args: Array<String>) {
+        execute(args, FunctionMode.Called)
+    }
+
+
+    /**
+     * execute this function with the supplied args
+     *
+     * @param args
+     * @return
+     */
     fun execute(args: Array<String>, mode: FunctionMode) {
         val parseResult = Args.parseArgs(args)
         when (parseResult) {
