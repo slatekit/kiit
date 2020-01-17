@@ -72,6 +72,6 @@ class EmailApi(val svc: EmailService, override val context: Context) : FileSuppo
      */
     @Action(desc = "send an email using a template")
     suspend fun sendUsingTemplate(name: String, to: String, subject: String, html: Boolean, vars: Vars): Outcome<Boolean> {
-        return this.svc.sendUsingTemplate(name, to, subject, html, vars).map { true }
+        return this.svc.sendTemplate(name, to, subject, html, vars).map { true }
     }
 }

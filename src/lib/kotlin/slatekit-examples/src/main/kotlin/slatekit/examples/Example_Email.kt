@@ -75,7 +75,7 @@ class Example_Email  : Command("auth") {
       emailService1.sendSync(EmailMessage("user1@company1.com", "Welcome to MyApp.com", "showWelcome!", false))
 
       // Use case 3: Send message using one of the setup templates
-      val result2 = emailService2.sendUsingTemplate("email_welcome", "user1@company1.com", "Welcome to MyApp.com", true,
+      val result2 = emailService2.sendTemplate("email_welcome", "user1@company1.com", "Welcome to MyApp.com", true,
               Vars(listOf(
                       "greeting" to "hello",
                       "user.api" to "user1",

@@ -17,9 +17,8 @@ import slatekit.common.templates.Templates
 import slatekit.common.types.Countries
 import slatekit.common.types.CountryCode
 import slatekit.common.Vars
-import slatekit.notifications.common.Sender
+import slatekit.notifications.common.TemplateSender
 import slatekit.results.*
-import slatekit.results.builders.Outcomes
 
 /**
  * Sms Service base class with support for templates and countries
@@ -27,14 +26,14 @@ import slatekit.results.builders.Outcomes
  * @param ctns : The supported countries ( Defaults to US )
  */
 abstract class SmsService(
-    val templates: Templates? = null,
+    override val templates: Templates? = null,
     ctns: List<CountryCode>? = null
-) : Sender<SmsMessage> {
+) : TemplateSender<SmsMessage> {
 
     /**
      * Default the supported countries to just USA
      */
-    val countries = Countries.filter(ctns ?: listOf(CountryCode("US"))).map { c -> c.iso2 to c }.toMap()
+    protected val countries = Countries.filter(ctns ?: listOf(CountryCode("US"))).map { c -> c.iso2 to c }.toMap()
 
     /**
      * sends a message via an IO wrapper that can be later called.
@@ -44,11 +43,7 @@ abstract class SmsService(
      * @param phone : destination phone
      */
     suspend fun send(message: String, countryCode: String, phone: String): Outcome<String> {
-        val validationResult = validate(countryCode, phone).toOutcome()
-        val result = validationResult.then {
-            send(SmsMessage(message, countryCode, phone))
-        }
-        return result
+        return send(SmsMessage(message, countryCode, phone))
     }
 
     /**
@@ -59,20 +54,8 @@ abstract class SmsService(
      * @param phone : destination phone
      * @param variables : values to replace the variables in template
      */
-    suspend fun sendUsingTemplate(name: String, countryCode: String, phone: String, variables: Vars): Outcome<String> {
-        val result = validate(countryCode, phone).toOutcome()
-        return if (result.success) {
-            // Send the message
-            // send(to, subject, message, html)
-            templates?.let { t ->
-                val tres = t.resolveTemplateWithVars(name, variables.toMap())
-                tres?.let { message ->
-                    send(message, countryCode, phone)
-                }
-            } ?: Outcomes.invalid("templates are not setup")
-        } else {
-            Outcomes.errored(result.msg)
-        }
+    suspend fun sendTemplate(name: String, countryCode: String, phone: String, variables: Vars): Outcome<String> {
+        return sendTemplate(name, variables) { SmsMessage(it, countryCode, phone) }
     }
 
     /**

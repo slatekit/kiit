@@ -83,7 +83,7 @@ class Example_Sms : Command("sms") {
       sms3.sendSync(SmsMessage("Invitation to MyApp.com 2", "us", "234567890"))
 
       // Use case 3: Send message using one of the setup templates
-      sms3.sendUsingTemplate("sms_welcome", "us", "234567890",
+      sms3.sendTemplate("sms_welcome", "us", "234567890",
               Vars(listOf(
                       "greeting" to "hello",
                       "user.api" to "kishore",
