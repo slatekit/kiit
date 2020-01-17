@@ -17,9 +17,11 @@ import slatekit.common.*
 import slatekit.common.utils.Random.uuid
 import slatekit.common.io.Uris
 import slatekit.common.utils.Random
+import slatekit.results.Codes
 import slatekit.results.Failure
 import slatekit.results.Success
 import slatekit.results.Try
+import slatekit.results.builders.Tries
 import java.io.File
 import java.util.concurrent.LinkedBlockingQueue
 
@@ -117,24 +119,21 @@ class InMemoryQueue<T>(
     /**
      * Completes the item ( removing it from the queue )
      */
-    override fun done(entry: QueueEntry<T>?) {
-        entry?.let { discard(it) }
-    }
-
-
-    /**
-     * Completes all the items ( removing them from the queue )
-     */
-    override fun done(entries: List<QueueEntry<T>>?) {
-        entries?.forEach { discard(it) }
+    override fun done(entry: QueueEntry<T>?):Try<QueueEntry<T>> {
+        return entry?.let {
+            Tries.of {
+                discard(it)
+                it
+            }
+        } ?: Tries.invalid()
     }
 
 
     /**
      * Removes the item from the queue
      */
-    override fun abandon(entry: QueueEntry<T>?) {
-        entry?.let { discard(it) }
+    override fun abandon(entry: QueueEntry<T>?):Try<QueueEntry<T>> {
+        return done(entry)
     }
 
 

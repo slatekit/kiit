@@ -26,6 +26,7 @@ import slatekit.common.io.Uri
 import slatekit.core.queues.QueueEntry
 import slatekit.core.queues.QueueValueConverter
 import slatekit.core.queues.CloudQueue
+import slatekit.core.queues.completeAll
 import slatekit.results.Try
 import slatekit.results.builders.Tries
 import java.io.File
@@ -166,8 +167,13 @@ class AwsCloudQueue<T>(
      *
      * @param entry : The message to abandon/delete
      */
-    override suspend fun abandon(entry: QueueEntry<T>?) {
-        entry?.let { discard(it, "abandon") }
+    override suspend fun abandon(entry: QueueEntry<T>?):Try<QueueEntry<T>> {
+        return entry?.let {
+            Tries.of {
+                discard(it, "abandon")
+                it
+            }
+        } ?: Tries.invalid()
     }
 
 
@@ -175,17 +181,13 @@ class AwsCloudQueue<T>(
      *
      * @param entry : The message to complete
      */
-    override suspend fun done(entry: QueueEntry<T>?) {
-        entry?.let { discard(it, "complete") }
-    }
-
-
-    /** Completes the message by deleting it from the queue
-     *
-     * @param entries : The messages to complete
-     */
-    override suspend fun done(entries: List<QueueEntry<T>>?) {
-        entries?.forEach { discard(it, "completeAll") }
+    override suspend fun done(entry: QueueEntry<T>?):Try<QueueEntry<T>> {
+        return entry?.let {
+            Tries.of {
+                discard(it, "done")
+                it
+            }
+        } ?: Tries.invalid()
     }
 
 

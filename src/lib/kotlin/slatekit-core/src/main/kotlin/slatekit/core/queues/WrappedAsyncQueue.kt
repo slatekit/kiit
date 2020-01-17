@@ -27,15 +27,15 @@ class WrappedAsyncQueue<T>(val queue:Queue<T>) : AsyncQueue<T> {
         return queue.next(size)
     }
 
-    override suspend fun done(entry: QueueEntry<T>?) {
+    override suspend fun done(entry: QueueEntry<T>?):Try<QueueEntry<T>> {
         return queue.done(entry)
     }
 
-    override suspend fun done(entries: List<QueueEntry<T>>?) {
+    override suspend fun done(entries: List<QueueEntry<T>>?):slatekit.results.Result<String, List<Pair<QueueEntry<T>, Exception>>> {
         return queue.done(entries)
     }
 
-    override suspend fun abandon(entry: QueueEntry<T>?) {
+    override suspend fun abandon(entry: QueueEntry<T>?): Try<QueueEntry<T>> {
         return queue.abandon(entry)
     }
 
