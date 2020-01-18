@@ -62,9 +62,9 @@ class Example_Sms : Command("sms") {
         val templates = Templates.build(
                 templates = listOf(
                         Template("sms_welcome", """
-            Hi @{user.name}, Welcome to @{app.name}!
-            We have sent a welcome email and account confirmation to @{user.email}.
-         """.trimIndent()),
+                            Hi @{user.name}, Welcome to @{app.name}!
+                            We have sent a welcome email and account confirmation to @{user.email}.
+                         """.trimIndent()),
                         Template("sms_confirm", Uris.readText("~/slatekit/templates/sms_confirm.txt") ?: "")
                 ),
                 subs = listOf(
