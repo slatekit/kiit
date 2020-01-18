@@ -21,9 +21,9 @@ import slatekit.common.newline
  * Semantic console writer to print text in different colors and in Uppercase/lowercase for
  * things like title, subtitle, url etc.
  */
-class SemanticConsole(
-        val settings: SemanticConsoleSettings = Console.defaults(),
-        writer  : IO<Any?, Unit>? = null ) : SemanticWrites {
+class ConsoleWriter(
+        val settings: TextSettings = Colors.defaults(),
+        writer  : IO<Any?, Unit>? = null ) : Writer {
 
     /**
      * IO abstraction for system.println.
@@ -31,7 +31,7 @@ class SemanticConsole(
      * This is a simple, custom alternative to the IO Monad.
      * Refer to IO.kt for details.
      */
-    val semanticIO: IO<Any?, Unit> = writer ?: Print()
+    private val io: IO<Any?, Unit> = writer ?: Print()
 
 
     /**
@@ -41,7 +41,7 @@ class SemanticConsole(
      * @param text
      * @param endLine
      */
-    override fun write(mode: SemanticText, text: String, endLine: Boolean) {
+    override fun write(mode: TextType, text: String, endLine: Boolean) {
         write(mode.color, mode.format(text), endLine)
     }
 
@@ -58,6 +58,6 @@ class SemanticConsole(
             finalColor + text + newline
         else
             finalColor + text
-        semanticIO.run(finalText)
+        io.perform(finalText)
     }
 }

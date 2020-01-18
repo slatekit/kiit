@@ -21,15 +21,15 @@ import slatekit.results.builders.Tries
 
 interface IO<in I, out O> {
 
-    fun run(i: I): O
-    fun attempt(i:I): Try<O> = Tries.of { run(i) }
-    fun outcome(i:I): Outcome<O> = Outcomes.of { run(i) }
+    fun perform(i: I): O
+    fun attempt(i:I): Try<O> = Tries.of { perform(i) }
+    fun outcome(i:I): Outcome<O> = Outcomes.of { perform(i) }
 }
 
 
 class Print(val io: ((Any?) -> Unit)? = null) : IO<Any?, Unit> {
 
-    override fun run(i: Any?) = when (io) {
+    override fun perform(i: Any?) = when (io) {
         null -> print(i)
         else -> io.invoke(i)
     }
@@ -38,7 +38,7 @@ class Print(val io: ((Any?) -> Unit)? = null) : IO<Any?, Unit> {
 
 class Println(val io: ((Any?) -> Unit)? = null) : IO<Any?, Unit> {
 
-    override fun run(i: Any?) = when (io) {
+    override fun perform(i: Any?) = when (io) {
         null -> println(i)
         else -> io.invoke(i)
     }
@@ -47,7 +47,7 @@ class Println(val io: ((Any?) -> Unit)? = null) : IO<Any?, Unit> {
 
 class Readln(val io: ((Unit) -> String?)? = null) : IO<Unit, String?> {
 
-    override fun run(i: Unit): String? = when (io) {
+    override fun perform(i: Unit): String? = when (io) {
         null -> readLine()
         else -> io.invoke(Unit)
     }
@@ -56,7 +56,7 @@ class Readln(val io: ((Unit) -> String?)? = null) : IO<Unit, String?> {
 
 class StringWriter(private val buffer: StringBuilder) : IO<Any?, Unit> {
 
-    override fun run(i: Any?) {
+    override fun perform(i: Any?) {
         buffer.append(i)
     }
 }

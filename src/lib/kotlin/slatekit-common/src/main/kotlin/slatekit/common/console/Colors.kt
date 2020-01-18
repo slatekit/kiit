@@ -27,7 +27,7 @@ package slatekit.common.console
  * Created by kishorereddy on 5/19/17.
  */
 
-object Console {
+object Colors {
 
     val BLACK: String = "\u001B[30m"
     val RED: String = "\u001B[31m"
@@ -39,5 +39,5 @@ object Console {
     val WHITE: String = "\u001B[37m"
     val RESET: String = "\u001B[0m"
 
-    fun defaults(): SemanticConsoleSettings = SemanticConsoleSettings(darkMode = true)
+    fun defaults(): TextSettings = TextSettings(darkMode = true)
 }

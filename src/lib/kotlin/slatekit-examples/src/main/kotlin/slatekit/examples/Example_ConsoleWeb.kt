@@ -34,7 +34,7 @@ class Example_ConsoleWeb : Command("console-web") {
     override fun execute(request: CommandRequest): Try<Any> {
         //<doc:examples>
         // ConsoleWriter with semantic ( title, url, error, success, highlight ) writing.
-        val writer = SemanticWeb()
+        val writer = WebWriter()
 
         // Case 1: Title - prints text in title format ( CAPS + Color Cyan )
         writer.title("title is in CAPS")
@@ -76,10 +76,10 @@ class Example_ConsoleWeb : Command("console-web") {
 
         // Case 13: Supply a list of items to print specifying the semantic mode ( title, url, etc )
         writer.writeItems(listOf(
-                SemanticOutput(SemanticText.Title, "About App", true),
-                SemanticOutput(SemanticText.Subtitle, "Example of Console component", true),
-                SemanticOutput(SemanticText.Url, "http://www.slatekit.com", true),
-                SemanticOutput(SemanticText.Highlight, "visit us for more info", true)
+                TextOutput(TextType.Title, "About App", true),
+                TextOutput(TextType.Subtitle, "Example of Console component", true),
+                TextOutput(TextType.Url, "http://www.slatekit.com", true),
+                TextOutput(TextType.Highlight, "visit us for more info", true)
         ))
         val html = writer.toString()
         val path = Uris.interpret("user://slatekit-kotlin/examples/console/consoleweb.html")

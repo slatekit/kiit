@@ -14,8 +14,8 @@
 package slatekit.cli
 
 import java.io.File
-import slatekit.common.console.SemanticText
-import slatekit.common.console.SemanticWrites
+import slatekit.common.console.TextType
+import slatekit.common.console.Writer
 import slatekit.common.types.Content
 import slatekit.common.types.ContentType
 import slatekit.common.io.Files
@@ -26,7 +26,7 @@ import slatekit.results.Success
 import slatekit.results.Try
 
 open class CliIO(private val io: IO<CliOutput, Unit>,
-                 private val serializer:(Any?, ContentType) -> Content) : SemanticWrites {
+                 private val serializer:(Any?, ContentType) -> Content) : Writer {
 
     /**
      * Writes the text using the TextType
@@ -35,8 +35,8 @@ open class CliIO(private val io: IO<CliOutput, Unit>,
      * @param text
      * @param endLine
      */
-    override fun write(mode: SemanticText, text: String, endLine: Boolean) {
-        io.run(CliOutput(mode, text, endLine))
+    override fun write(mode: TextType, text: String, endLine: Boolean) {
+        io.perform(CliOutput(mode, text, endLine))
     }
 
     /**
@@ -52,7 +52,7 @@ open class CliIO(private val io: IO<CliOutput, Unit>,
     fun output(result: Try<CliResponse<*>>, outputDir: String) {
         when (result) {
             is Failure -> {
-                write(SemanticText.Failure, "error : " + result.error.toString())
+                write(TextType.Failure, "error : " + result.error.toString())
             }
             is Success -> {
                 val request = result.value.request

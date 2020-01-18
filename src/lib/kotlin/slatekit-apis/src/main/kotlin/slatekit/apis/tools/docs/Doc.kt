@@ -14,24 +14,18 @@
 package slatekit.apis.tools.docs
 
 import java.lang.Math.abs
-import kotlin.reflect.KParameter
-import slatekit.apis.Input
 import slatekit.apis.core.Action
 import slatekit.apis.core.Api
 import slatekit.apis.core.Area
 import slatekit.apis.core.Lookup
-import slatekit.common.console.SemanticConsole
-import slatekit.common.console.SemanticConsoleSettings
-import slatekit.common.console.SemanticText
-import slatekit.common.console.SemanticWrites
-import slatekit.common.ext.orElse
-import slatekit.meta.KTypes
-import slatekit.meta.Serialization
+import slatekit.common.console.ConsoleWriter
+import slatekit.common.console.TextSettings
+import slatekit.common.console.Writer
 import kotlin.reflect.KClass
 
 abstract class Doc  {
 
-    protected open val writer: SemanticWrites = SemanticConsole(SemanticConsoleSettings())
+    protected open val writer: Writer = ConsoleWriter(TextSettings())
     open val docSettings = DocSettings()
     open val pathSeparator = "."
     open val helpSuffix = "?"
