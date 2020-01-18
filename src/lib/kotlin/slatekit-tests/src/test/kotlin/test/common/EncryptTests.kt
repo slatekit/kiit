@@ -13,7 +13,7 @@ mantra: Simplicity above all else
 package test.common
 
 import org.junit.Assert
-import slatekit.common.encrypt.Encryptor
+import slatekit.common.crypto.Encryptor
 
 /**
  * Created by kishorereddy on 5/22/17.

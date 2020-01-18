@@ -1,7 +1,7 @@
 package test.setup
 
 import slatekit.apis.Api
-import slatekit.common.encrypt.Encryptor
+import slatekit.common.crypto.Encryptor
 import slatekit.results.Notice
 import slatekit.results.Codes
 import slatekit.results.Success

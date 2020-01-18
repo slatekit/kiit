@@ -1,52 +1,10 @@
-package slatekit.common
+package slatekit.common.requests
 
+import slatekit.common.DateTime
+import slatekit.common.Inputs
+import slatekit.common.Metadata
+import slatekit.common.Source
 import slatekit.common.args.Args
-import slatekit.common.requests.InputArgs
-import slatekit.common.requests.Request
-import slatekit.common.requests.Response
-
-/**
- * =================================================================================
- * ABOUT: This file contains default implementations of multiple components
- * 1. Context  : Default implementation of container for storing args, env, config, logs
- * 2. Request  : Default implementation of an abstracted response for web/cli
- * 3. Response : Default implementation of an abstracted request  for web/cli
- *
- * NOTES:
- * 1. These 3 components are used throughout Slate Kit
- * 2. The Context is used to pass core application dependencies to other components
- * 3. The Request/Response are used for the purpose of building "Universal APIs" in Slate Kit
- * 4. The Request is used by both the Slate Kit APIs and CLI component
- * 5. The Response is used by both the Slate Kit APIs and CLI component
- * =================================================================================
- */
-/**
- * General purpose class to model a Response at an application boundary ( such as http response )
- * NOTE: This is used for the APIs in Slate Kit
- * @param success : Whether or not the response is successful
- * @param code : A status code ( can be the http status code )
- * @param meta : Meta data for the response ( can be used for headers for http )
- * @param value : The actual value returned by the response
- * @param msg : Message in the case of an failure
- * @param err : Exception in event of failure
- * @param tag : Tag used as a correlation field
- */
-data class CommonResponse<out T>(
-        override val success: Boolean,
-        override val code: Int,
-        override val meta: Map<String, String>?,
-        override val value: T?,
-        override val msg: String? = null,
-        override val err: Exception? = null,
-        override val tag: String? = null
-) : Response<T> {
-
-    override fun withMeta(meta: List<Pair<String, String>>): Response<T> {
-        return this.meta?.let {
-            copy(meta = it.plus(meta))
-        } ?: copy(meta = meta.toMap())
-    }
-}
 
 
 /**
@@ -84,12 +42,12 @@ data class CommonRequest(
             otherSource: Source,
             otherVerb: String,
             otherData: Inputs,
-            otherMeta: slatekit.common.Metadata,
+            otherMeta: Metadata,
             otherRaw: Any?,
             otherOutput: String?,
             otherTag: String,
             otherVersion: String,
-            otherTimestamp:DateTime) : Request {
+            otherTimestamp: DateTime) : Request {
         return this.copy(
                 path      = otherPath,
                 parts     = otherParts,

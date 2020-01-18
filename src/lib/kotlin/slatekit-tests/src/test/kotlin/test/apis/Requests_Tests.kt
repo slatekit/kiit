@@ -4,7 +4,7 @@ import org.junit.Assert
 import org.junit.Test
 import org.threeten.bp.ZoneId
 import slatekit.apis.core.Requests
-import slatekit.common.CommonRequest
+import slatekit.common.requests.CommonRequest
 import slatekit.common.DateTime
 import slatekit.common.requests.InputArgs
 import slatekit.common.Source

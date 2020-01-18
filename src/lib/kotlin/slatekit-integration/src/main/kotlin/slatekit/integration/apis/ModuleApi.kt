@@ -18,7 +18,7 @@ import slatekit.apis.Action
 import slatekit.apis.AuthModes
 import slatekit.apis.Verbs
 import slatekit.common.*
-import slatekit.common.encrypt.Encryptor
+import slatekit.common.crypto.Encryptor
 import slatekit.common.log.Logger
 import slatekit.common.utils.ListMap
 import slatekit.context.Context

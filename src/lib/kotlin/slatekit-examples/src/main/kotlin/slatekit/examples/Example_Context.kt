@@ -22,7 +22,7 @@ import slatekit.common.args.Args
 import slatekit.common.args.ArgsSchema
 import slatekit.common.conf.Config
 import slatekit.common.utils.B64Java8
-import slatekit.common.encrypt.Encryptor
+import slatekit.common.crypto.Encryptor
 import slatekit.common.info.*
 import slatekit.common.log.LogsDefault
 import slatekit.context.Context

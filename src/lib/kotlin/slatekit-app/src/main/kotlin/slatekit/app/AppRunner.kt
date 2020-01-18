@@ -16,12 +16,11 @@ package slatekit.app
 import slatekit.common.args.Args
 import slatekit.common.args.ArgsSchema
 import slatekit.context.Context
-import slatekit.common.encrypt.Encryptor
+import slatekit.common.crypto.Encryptor
 import slatekit.common.envs.Envs
 import slatekit.common.info.About
 import slatekit.common.io.Alias
 import slatekit.common.log.Logs
-import slatekit.results.builders.Notices
 import slatekit.results.builders.Tries
 import slatekit.results.flatMap
 import slatekit.results.inner

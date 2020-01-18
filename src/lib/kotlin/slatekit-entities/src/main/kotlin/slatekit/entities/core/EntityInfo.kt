@@ -1,7 +1,7 @@
 package slatekit.entities.core
 
 import kotlin.reflect.KClass
-import slatekit.common.encrypt.Encryptor
+import slatekit.common.crypto.Encryptor
 import slatekit.common.naming.Namer
 import slatekit.entities.EntityIdInfo
 import slatekit.entities.IdInfo

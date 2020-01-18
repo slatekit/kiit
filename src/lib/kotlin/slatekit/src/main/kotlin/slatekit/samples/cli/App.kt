@@ -5,7 +5,7 @@ import slatekit.app.AppOptions
 import slatekit.context.Context
 import slatekit.common.args.ArgsSchema
 import slatekit.common.utils.B64Java8
-import slatekit.common.encrypt.Encryptor
+import slatekit.common.crypto.Encryptor
 import slatekit.common.info.About
 import slatekit.results.Try
 

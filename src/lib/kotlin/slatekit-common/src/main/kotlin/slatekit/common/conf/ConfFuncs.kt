@@ -17,7 +17,7 @@ import slatekit.common.io.Files
 import slatekit.common.*
 import slatekit.common.data.DbCon
 import slatekit.common.data.DbConString
-import slatekit.common.encrypt.Encryptor
+import slatekit.common.crypto.Encryptor
 import slatekit.common.info.ApiKey
 import slatekit.common.info.ApiLogin
 import slatekit.common.info.Credentials

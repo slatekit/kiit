@@ -95,7 +95,7 @@ dependencies {
         compile "com.slatekit:slatekit-functions:$slatekit_version_beta"
         compile "com.slatekit:slatekit-cmds:$slatekit_version_beta"
         compile "com.slatekit:slatekit-meta:$slatekit_version_beta"
-        compile "com.slatekit:slatekit-cloud:$slatekit_version_beta"
+        compile "com.slatekit:slatekit-cloud:$slatekit_version"
         compile "com.slatekit:slatekit-query:$slatekit_version_beta"
         compile "com.slatekit:slatekit-entities:$slatekit_version_beta"
         compile "com.slatekit:slatekit-orm:$slatekit_version_beta"

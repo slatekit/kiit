@@ -2,7 +2,7 @@ package slatekit.apis.support
 
 import slatekit.apis.ApiServer
 import slatekit.apis.Verb
-import slatekit.common.CommonRequest
+import slatekit.common.requests.CommonRequest
 import slatekit.common.requests.Request
 import slatekit.common.requests.Response
 import slatekit.common.ext.toResponse

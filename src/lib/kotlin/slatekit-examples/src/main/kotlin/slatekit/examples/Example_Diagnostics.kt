@@ -20,7 +20,7 @@ import slatekit.context.Context
 import slatekit.common.log.LoggerConsole
 import slatekit.tracking.MetricsLite
 import slatekit.common.requests.Response
-import slatekit.common.CommonResponse
+import slatekit.common.requests.CommonResponse
 import slatekit.cmds.Command
 import slatekit.cmds.CommandRequest
 import slatekit.common.Identity

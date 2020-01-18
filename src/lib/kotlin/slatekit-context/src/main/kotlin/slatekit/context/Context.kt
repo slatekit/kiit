@@ -2,7 +2,7 @@ package slatekit.context
 
 import slatekit.common.args.Args
 import slatekit.common.conf.Conf
-import slatekit.common.encrypt.Encryptor
+import slatekit.common.crypto.Encryptor
 import slatekit.common.envs.Envs
 import slatekit.common.info.Folders
 import slatekit.common.info.Info

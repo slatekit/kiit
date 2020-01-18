@@ -2,7 +2,7 @@ package slatekit.meta
 
 import org.threeten.bp.*
 import slatekit.common.*
-import slatekit.common.encrypt.Encryptor
+import slatekit.common.crypto.Encryptor
 import slatekit.common.ext.atUtc
 import kotlin.reflect.KClass
 import kotlin.reflect.full.declaredMemberProperties

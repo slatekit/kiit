@@ -21,7 +21,7 @@ import slatekit.common.args.ArgsCheck.isVersion
 import slatekit.common.args.ArgsSchema
 import slatekit.common.conf.*
 import slatekit.common.conf.ConfFuncs.CONFIG_DEFAULT_SUFFIX
-import slatekit.common.encrypt.Encryptor
+import slatekit.common.crypto.Encryptor
 import slatekit.common.envs.Env
 import slatekit.common.envs.Envs
 import slatekit.common.info.About
@@ -34,7 +34,6 @@ import slatekit.common.io.Uris
 import slatekit.common.log.Logs
 import slatekit.common.log.LogsDefault
 import slatekit.common.log.LogLevel
-import slatekit.context.Context
 import slatekit.results.*
 import slatekit.results.builders.Outcomes
 import java.io.File

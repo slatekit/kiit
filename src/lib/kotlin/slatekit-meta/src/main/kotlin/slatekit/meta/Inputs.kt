@@ -2,8 +2,7 @@ package slatekit.meta
 
 import slatekit.common.Conversions
 import slatekit.common.Inputs
-import slatekit.common.conf.Conf
-import slatekit.common.encrypt.*
+import slatekit.common.crypto.*
 import kotlin.reflect.KClass
 import kotlin.reflect.KType
 

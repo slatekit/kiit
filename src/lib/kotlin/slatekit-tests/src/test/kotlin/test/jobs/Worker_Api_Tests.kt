@@ -15,6 +15,7 @@ import slatekit.core.queues.InMemoryQueue
 import slatekit.context.AppContext
 import slatekit.common.requests.InputArgs
 import slatekit.common.Source
+import slatekit.common.requests.CommonRequest
 import slatekit.core.queues.AsyncQueue
 import slatekit.core.queues.WrappedAsyncQueue
 import slatekit.integration.jobs.APIWorker

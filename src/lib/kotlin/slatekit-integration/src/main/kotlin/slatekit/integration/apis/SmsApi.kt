@@ -21,7 +21,7 @@ import slatekit.apis.support.FileSupport
 import slatekit.context.Context
 import slatekit.common.Sources
 import slatekit.common.Vars
-import slatekit.common.encrypt.Encryptor
+import slatekit.common.crypto.Encryptor
 import slatekit.common.log.Logger
 import slatekit.notifications.sms.SmsService
 import slatekit.results.Outcome

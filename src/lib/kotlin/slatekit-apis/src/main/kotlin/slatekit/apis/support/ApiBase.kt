@@ -15,7 +15,7 @@ package slatekit.apis.support
 
 import slatekit.apis.ApiRequest
 import slatekit.apis.ApiResult
-import slatekit.common.encrypt.Encryptor
+import slatekit.common.crypto.Encryptor
 import slatekit.common.log.Logger
 import slatekit.context.Context
 import slatekit.results.Outcome

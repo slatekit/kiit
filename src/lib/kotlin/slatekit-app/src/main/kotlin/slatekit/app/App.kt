@@ -16,7 +16,7 @@ package slatekit.app
 import slatekit.common.Banner
 import slatekit.context.Context
 import slatekit.common.args.ArgsSchema
-import slatekit.common.encrypt.EncryptSupport
+import slatekit.common.crypto.EncryptSupport
 import slatekit.common.info.About
 import slatekit.common.log.LogSupport
 import slatekit.results.Success

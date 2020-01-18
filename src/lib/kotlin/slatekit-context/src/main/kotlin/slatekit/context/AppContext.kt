@@ -3,13 +3,12 @@ package slatekit.context
 import slatekit.common.args.Args
 import slatekit.common.conf.Conf
 import slatekit.common.conf.Config
-import slatekit.common.encrypt.Encryptor
+import slatekit.common.crypto.Encryptor
 import slatekit.common.envs.Envs
 import slatekit.common.ext.toIdent
 import slatekit.common.info.*
 import slatekit.common.log.Logs
 import slatekit.common.log.LogsDefault
-import slatekit.common.utils.B64Java8
 
 /**
  *
