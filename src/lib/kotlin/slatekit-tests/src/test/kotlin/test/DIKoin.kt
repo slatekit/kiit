@@ -7,7 +7,7 @@ package test
 //import org.koin.core.module.Module
 //import org.koin.dsl.module
 //import slatekit.common.utils.Random
-//import slatekit.common.encrypt.HMAC
+//import slatekit.common.crypto.HMAC
 //import slatekit.common.info.ApiLogin
 //import slatekit.core.email.EmailService
 //import slatekit.core.email.EmailServiceSendGrid
