@@ -1,11 +1,10 @@
 package slatekit
 
-import com.sun.net.httpserver.Authenticator
 import slatekit.apis.SetupType
 import slatekit.apis.core.Api
 import slatekit.apis.tools.code.CodeGenApi
-import slatekit.cloud.aws.AwsCloudFiles
-import slatekit.cloud.aws.AwsCloudQueue
+import slatekit.cloud.aws.S3
+import slatekit.cloud.aws.SQS
 import slatekit.context.Context
 import slatekit.core.queues.QueueStringConverter
 import slatekit.core.files.CloudFiles
@@ -43,7 +42,7 @@ interface SlateKitServices {
     fun files(): CloudFiles {
         val apiLogin = ctx.conf.apiLogin("files")
         val bucket = apiLogin.tag
-        val files = AwsCloudFiles.of("us-east-1", bucket, false, apiLogin)
+        val files = S3.of("us-east-1", bucket, false, apiLogin)
         return when(files){
             is Success -> files.value
             is Failure -> throw files.error
@@ -54,7 +53,7 @@ interface SlateKitServices {
     fun queues(): CloudQueue<String> {
         val apiLogin = ctx.conf.apiLogin("queues")
         val name = apiLogin.tag
-        val queue = AwsCloudQueue.of("us-east-1", name, apiLogin, QueueStringConverter(), 3)
+        val queue = SQS.of("us-east-1", name, apiLogin, QueueStringConverter(), 3)
         return when(queue){
             is Success -> queue.value
             is Failure -> throw queue.error

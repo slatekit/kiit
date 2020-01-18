@@ -19,14 +19,10 @@ import com.amazonaws.services.s3.AmazonS3Client
 import com.amazonaws.services.s3.model.GetObjectRequest
 import com.amazonaws.services.s3.model.ObjectMetadata
 import slatekit.common.info.ApiLogin
-import slatekit.common.io.Uri
 import slatekit.common.io.Uris
 import slatekit.core.files.CloudFiles
 import slatekit.core.common.FileUtils
-import slatekit.results.InvalidException
-import slatekit.results.Outcome
 import slatekit.results.Try
-import slatekit.results.builders.Outcomes
 import slatekit.results.builders.Tries
 import slatekit.results.getOrElse
 import java.io.File
@@ -38,7 +34,7 @@ import java.io.File
  * @param bucket : Name of the bucket to store files in
  * @param createBucket : Whether or not to create the bucket
  */
-class AwsCloudFiles(
+class S3(
         credentials: AWSCredentials,
         val region: Regions,
         bucket: String,
@@ -202,15 +198,15 @@ class AwsCloudFiles(
 
 
     companion object {
-        fun of(region: String, bucket: String, createBucket: Boolean, apiKey: ApiLogin): Try<AwsCloudFiles> {
+        fun of(region: String, bucket: String, createBucket: Boolean, apiKey: ApiLogin): Try<S3> {
             return build(region) { regions ->
-                AwsCloudFiles(AwsFuncs.credsWithKeySecret(apiKey.key, apiKey.pass), regions, bucket, createBucket)
+                S3(AwsFuncs.credsWithKeySecret(apiKey.key, apiKey.pass), regions, bucket, createBucket)
             }
         }
 
-        fun of(region: String, bucket: String, createBucket: Boolean, confPath: String? = null, confSection: String? = null): Try<AwsCloudFiles> {
+        fun of(region: String, bucket: String, createBucket: Boolean, confPath: String? = null, confSection: String? = null): Try<S3> {
             return build(region) { regions ->
-                AwsCloudFiles(AwsFuncs.creds(confPath, confSection), regions, bucket, createBucket)
+                S3(AwsFuncs.creds(confPath, confSection), regions, bucket, createBucket)
             }
         }
     }

@@ -15,11 +15,13 @@ interface AsyncQueue<T> {
 
     suspend fun next(size: Int = 10): List<QueueEntry<T>>?
 
-    suspend fun done(entry: QueueEntry<T>?)
+    suspend fun done(entry: QueueEntry<T>?): Try<QueueEntry<T>>
 
-    suspend fun done(entries: List<QueueEntry<T>>?)
+    suspend fun done(entries: List<QueueEntry<T>>?):slatekit.results.Result<String, List<Pair<QueueEntry<T>, Exception>>> {
+        return completeAll(entries) { done(it) }
+    }
 
-    suspend fun abandon(entry: QueueEntry<T>?)
+    suspend fun abandon(entry: QueueEntry<T>?): Try<QueueEntry<T>>
 
     suspend fun send(value: T): Try<String> = send(value, null)
 
