@@ -22,11 +22,9 @@ import slatekit.common.utils.Random
 import slatekit.common.info.ApiLogin
 import slatekit.common.io.Uris
 import slatekit.common.ext.toStringUtc
-import slatekit.common.io.Uri
 import slatekit.core.queues.QueueEntry
 import slatekit.core.queues.QueueValueConverter
 import slatekit.core.queues.CloudQueue
-import slatekit.core.queues.completeAll
 import slatekit.results.Try
 import slatekit.results.builders.Tries
 import java.io.File
@@ -43,7 +41,7 @@ import java.io.IOException
  * 1. https://github.com/ex-aws/ex_aws/issues/486
  * 2. https://docs.aws.amazon.com/sdk-for-java/v1/developer-guide/examples-sqs-long-polling.html
  */
-class AwsCloudQueue<T>(
+class SQS<T>(
         credentials: AWSCredentials,
         val region: Regions,
         override val name: String,
@@ -268,15 +266,15 @@ class AwsCloudQueue<T>(
     }
 
     companion object {
-        fun <T> of(region: String, name: String, apiKey: ApiLogin, converter: QueueValueConverter<T>, waitTimeInSeconds: Int = 0): Try<AwsCloudQueue<T>> {
+        fun <T> of(region: String, name: String, apiKey: ApiLogin, converter: QueueValueConverter<T>, waitTimeInSeconds: Int = 0): Try<SQS<T>> {
             return build(region) { regions ->
-                AwsCloudQueue<T>(AwsFuncs.credsWithKeySecret(apiKey.key, apiKey.pass), regions, name, converter, waitTimeInSeconds)
+                SQS<T>(AwsFuncs.credsWithKeySecret(apiKey.key, apiKey.pass), regions, name, converter, waitTimeInSeconds)
             }
         }
 
-        fun <T> of(region: String, name: String, converter: QueueValueConverter<T>, confPath: String? = null, confSection: String? = null, waitTimeInSeconds: Int = 0): Try<AwsCloudQueue<T>> {
+        fun <T> of(region: String, name: String, converter: QueueValueConverter<T>, confPath: String? = null, confSection: String? = null, waitTimeInSeconds: Int = 0): Try<SQS<T>> {
             return build(region) { regions ->
-                AwsCloudQueue<T>(AwsFuncs.creds(confPath, confSection), regions, name, converter, waitTimeInSeconds)
+                SQS<T>(AwsFuncs.creds(confPath, confSection), regions, name, converter, waitTimeInSeconds)
             }
         }
     }

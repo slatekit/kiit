@@ -14,7 +14,7 @@ package slatekit.examples
 
 
 //<doc:import_required>
-import slatekit.cloud.aws.AwsCloudQueue
+import slatekit.cloud.aws.SQS
 import slatekit.core.queues.QueueStringConverter
 
 //</doc:import_required>
@@ -22,8 +22,6 @@ import slatekit.core.queues.QueueStringConverter
 //<doc:import_examples>
 import slatekit.cmds.Command
 import slatekit.cmds.CommandRequest
-import slatekit.common.io.Alias
-import slatekit.common.io.Uri
 import slatekit.results.Success
 import slatekit.results.Try
 import com.amazonaws.auth.profile.ProfileCredentialsProvider
@@ -59,15 +57,15 @@ class Example_Cloud_Queues : Command("sqs") {
          */
         // Not storing any key/secret in source code for security purposes
         // Setup 1: Use the default aws config file in "~/.aws/credentials and supply AWS region
-        val queue1 = AwsCloudQueue<String>(credentials = ProfileCredentialsProvider().credentials,
+        val queue1 = SQS<String>(credentials = ProfileCredentialsProvider().credentials,
                 region = Regions.US_EAST_1, name = "slatekit", converter = converter)
 
         // Setup 2: Allow auto-loading of credentials from ~/.aws/credentials and region by string name supplied
-        val queue2 = AwsCloudQueue.of<String>(region = "us-east-1", name = "slatekit", converter = converter)
+        val queue2 = SQS.of<String>(region = "us-east-1", name = "slatekit", converter = converter)
 
         // Setup 3: Use the config at "~/myapp/conf/queue.conf"
         // Reads from the section "queues" by default
-        val queue3 = AwsCloudQueue.of<String>( region = "us-east-1", name = "slatekit", converter = converter,
+        val queue3 = SQS.of<String>( region = "us-east-1", name = "slatekit", converter = converter,
                 confPath = "~/myapp/conf/queue.conf", confSection = "queues")
 
         val queue = queue3.getOrElse { queue1 }

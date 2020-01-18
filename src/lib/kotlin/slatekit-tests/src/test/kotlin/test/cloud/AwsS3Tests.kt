@@ -4,7 +4,7 @@ import kotlinx.coroutines.runBlocking
 import org.junit.Assert
 import org.junit.Ignore
 import org.junit.Test
-import slatekit.cloud.aws.AwsCloudFiles
+import slatekit.cloud.aws.S3
 import slatekit.common.DateTime
 import slatekit.common.io.Uris
 import slatekit.common.ext.toStringNumeric
@@ -25,7 +25,7 @@ class AwsS3Tests {
             // Not storing any key/secret in source code for security purposes
             // Setup 1: Use the default aws config file in "{user_dir}/.aws/credentials"
             val bucket = "slatekit-unit-tests"
-            val files = AwsCloudFiles.of("us-east-1", bucket, false, "~/$SLATEKIT_DIR/conf/aws.conf", "aws")
+            val files = S3.of("us-east-1", bucket, false, "~/$SLATEKIT_DIR/conf/aws.conf", "aws")
             files.onSuccess { files ->
                 files.init()
 

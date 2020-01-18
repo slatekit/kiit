@@ -2,10 +2,10 @@ package slatekit.examples
 
 
 //<doc:import_required>
+import slatekit.cloud.aws.S3
+import slatekit.core.files.CloudFiles
 import com.amazonaws.auth.profile.ProfileCredentialsProvider
 import com.amazonaws.regions.Regions
-import kotlinx.coroutines.runBlocking
-import slatekit.cloud.aws.AwsCloudFiles
 
 //</doc:import_required>
 
@@ -15,6 +15,7 @@ import slatekit.cmds.CommandRequest
 import slatekit.results.Success
 import slatekit.results.Try
 import slatekit.results.getOrElse
+import kotlinx.coroutines.runBlocking
 
 //</doc:import_examples>
 
@@ -22,32 +23,27 @@ class Example_Cloud_Files : Command("s3") {
 
     override fun execute(request: CommandRequest): Try<Any> {
         //<doc:setup>
+        // Setup 1: Use the default aws config file in "{user_dir}/.aws/credentials"
+        val files1 = S3(credentials = ProfileCredentialsProvider().credentials,
+                region = Regions.US_EAST_1, bucket = "slatekit-unit-tests", createBucket = false)
+
+        // Setup 2: Use the default aws config file in "{user_dir}/.aws/credentials"
+        val files2 = S3.of(region = "us-west-2", bucket = "slatekit-unit-tests", createBucket = false)
+
+        // Setup 3: Use the config "{user_id}/myapp/conf/files.conf"
+        // Specify the api key section as "files"
         /**
-         *  PATHS:
-         *  1. /.aws/credentials
-         *  2. ~/.slatekit/conf/files.conf
-         *
-         *  CONTENT:
+         *  SAMPLE CONFIG:
          *  files = true
          *  files.key  = AWS_KEY_HERE
          *  files.pass = AWS_PASSWORD_HERE
          *  files.env  = dev
          *  files.tag  = samples
          */
-        // Not storing any key/secret in source code for security purposes
-        // Setup 1: Use the default aws config file in "{user_dir}/.aws/credentials"
-        val files1 = AwsCloudFiles(credentials = ProfileCredentialsProvider().credentials,
-                region = Regions.US_EAST_1, bucket = "slatekit-unit-tests", createBucket = false)
-
-        // Setup 2: Use the default aws config file in "{user_dir}/.aws/credentials"
-        val files2 = AwsCloudFiles.of(region = "us-west-2", bucket = "slatekit-unit-tests", createBucket = false)
-
-        // Setup 3: Use the config "{user_id}/myapp/conf/files.conf"
-        // Specify the api key section as "files"
-        val files3 = AwsCloudFiles.of(region = "us-west-2", bucket = "slatekit-unit-tests", createBucket = false,
+        val files3 = S3.of(region = "us-west-2", bucket = "slatekit-unit-tests", createBucket = false,
                 confPath = "~/.slatekit/conf/files.conf", confSection = "files")
 
-        val files = files2.getOrElse { files1 }
+        val files:CloudFiles = files2.getOrElse { files1 }
 
         //</doc:setup>
 
@@ -56,6 +52,9 @@ class Example_Cloud_Files : Command("s3") {
             // Use case 1: Creates bucket if configured
             files.init()
 
+            // NOTES:
+            // 1. All operations use the slate kit Result<T,E> type
+            // 2. All operations return a slate kit Try<T> = Result<T, Exception>
             // Use case 2: create using just name and content
             val result1:Try<String> = files.create("file-1", "content 1")
 
