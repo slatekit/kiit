@@ -15,7 +15,7 @@ import test.setup.Movie
 import org.threeten.bp.*
 import slatekit.apis.core.Transformer
 import slatekit.common.DateTimes
-import slatekit.common.CommonRequest
+import slatekit.common.requests.CommonRequest
 import slatekit.common.Source
 import slatekit.meta.*
 import test.setup.MyEncryptor

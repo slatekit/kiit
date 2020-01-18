@@ -19,7 +19,7 @@ import slatekit.apis.core.Api
 import slatekit.apis.core.Auth
 import slatekit.apis.hooks.Authorize
 import slatekit.apis.SetupType
-import slatekit.common.CommonRequest
+import slatekit.common.requests.CommonRequest
 import slatekit.common.Source
 import slatekit.common.args.Args
 import slatekit.common.conf.Config

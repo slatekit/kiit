@@ -16,7 +16,7 @@ import org.junit.Test
 import slatekit.apis.core.Api
 import slatekit.apis.SetupType
 import slatekit.apis.Verbs
-import slatekit.common.CommonRequest
+import slatekit.common.requests.CommonRequest
 import slatekit.common.Source
 import slatekit.common.ext.toResponse
 import slatekit.results.Err

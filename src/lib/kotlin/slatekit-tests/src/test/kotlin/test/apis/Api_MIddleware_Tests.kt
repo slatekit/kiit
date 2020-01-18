@@ -17,15 +17,8 @@ import org.junit.Assert
 import org.junit.Test
 import slatekit.apis.*
 import slatekit.apis.core.Api
-import slatekit.common.*
-import slatekit.common.auth.Roles
-import slatekit.common.info.Credentials
-import slatekit.common.CommonRequest
 import slatekit.results.Codes
-import slatekit.results.builders.Outcomes
 import slatekit.results.getOrElse
-import test.setup.SampleErrorsApi
-import test.setup.SampleErrorsNoMiddlewareApi
 import test.setup.SampleMiddlewareApi
 
 /**

@@ -17,7 +17,7 @@ import org.threeten.bp.ZoneId
 import slatekit.apis.Verbs
 import slatekit.apis.core.Api
 import slatekit.apis.SetupType
-import slatekit.common.CommonRequest
+import slatekit.common.requests.CommonRequest
 import slatekit.common.DateTimes
 import slatekit.common.Source
 import slatekit.common.ext.toResponse

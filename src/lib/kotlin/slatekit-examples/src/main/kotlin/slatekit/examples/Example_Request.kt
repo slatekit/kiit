@@ -15,7 +15,7 @@ package slatekit.examples
 import slatekit.apis.Verbs
 import slatekit.common.requests.InputArgs
 import slatekit.common.requests.Request
-import slatekit.common.CommonRequest
+import slatekit.common.requests.CommonRequest
 import slatekit.common.Source
 //</doc:import_required>
 
