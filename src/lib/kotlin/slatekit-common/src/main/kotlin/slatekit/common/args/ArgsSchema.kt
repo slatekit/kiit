@@ -14,7 +14,7 @@
 package slatekit.common.args
 
 import slatekit.common.Types
-import slatekit.common.console.SemanticConsole
+import slatekit.common.console.ConsoleWriter
 import slatekit.results.Failure
 import slatekit.results.Notice
 import slatekit.results.Try
@@ -149,7 +149,7 @@ class ArgsSchema(val items: List<Arg> = listOf()) {
     fun buildHelp(prefix: String? = "-", separator: String? = "=") {
 
         // For color and semantic writing
-        val writer = SemanticConsole()
+        val writer = ConsoleWriter()
         val maxLen = maxLengthOfName()
 
         items.forEach { arg ->

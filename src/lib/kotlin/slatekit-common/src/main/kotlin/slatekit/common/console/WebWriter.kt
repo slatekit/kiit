@@ -18,7 +18,7 @@ import slatekit.common.ext.escapeHtml
 /**
  * Generates help docs on the console.
  */
-class SemanticWeb : SemanticWrites {
+class WebWriter : Writer {
 
     val template = """
     <html>
@@ -31,7 +31,7 @@ class SemanticWeb : SemanticWrites {
     """
 
     private val buffer = StringBuilder()
-    val settings = SemanticConsoleSettings()
+    val settings = TextSettings()
 
     override val SPACE: String get() = " "
     override val TAB: String get() = "&nbsp;&nbsp;&nbsp;&nbsp;"
@@ -45,19 +45,19 @@ class SemanticWeb : SemanticWrites {
      * @param msg
      * @param endLine
      */
-    override fun writeItem(mode: SemanticText, msg: String, endLine: Boolean) {
+    override fun writeItem(mode: TextType, msg: String, endLine: Boolean) {
         when (mode) {
-            SemanticText.Title     -> writeTag("H1", mode.format(msg), endLine, "color:Black ")
-            SemanticText.Subtitle  -> writeTag("H2", mode.format(msg), endLine, "color:Black ")
-            SemanticText.Url       -> writeLink(msg, mode.format(msg), endLine, "color:Blue ")
-            SemanticText.Important -> writeTag(tag("span", endLine,"h4"), mode.format(msg), endLine, "color:Black ")
-            SemanticText.Highlight -> writeTag(tag("span", endLine,"p" ), mode.format(msg), endLine, "color:Orange")
-            SemanticText.Success   -> writeTag(tag("span", endLine,"p" ), mode.format(msg), endLine, "color:Green ")
-            SemanticText.Failure   -> writeTag(tag("span", endLine,"p" ), mode.format(msg), endLine, "color:Red   ")
-            SemanticText.Text      -> writeTag("span", mode.format(msg), endLine, "color:Black ")
-            SemanticText.NoFormat  -> writeTag("", mode.format(msg), endLine, "")
-            SemanticText.NewLine   -> buffer.append(NEWLINE)
-            SemanticText.Tab       -> buffer.append(TAB)
+            TextType.Title     -> writeTag("H1", mode.format(msg), endLine, "color:Black ")
+            TextType.Subtitle  -> writeTag("H2", mode.format(msg), endLine, "color:Black ")
+            TextType.Url       -> writeLink(msg, mode.format(msg), endLine, "color:Blue ")
+            TextType.Important -> writeTag(tag("span", endLine,"h4"), mode.format(msg), endLine, "color:Black ")
+            TextType.Highlight -> writeTag(tag("span", endLine,"p" ), mode.format(msg), endLine, "color:Orange")
+            TextType.Success   -> writeTag(tag("span", endLine,"p" ), mode.format(msg), endLine, "color:Green ")
+            TextType.Failure   -> writeTag(tag("span", endLine,"p" ), mode.format(msg), endLine, "color:Red   ")
+            TextType.Text      -> writeTag("span", mode.format(msg), endLine, "color:Black ")
+            TextType.NoFormat  -> writeTag("", mode.format(msg), endLine, "")
+            TextType.NewLine   -> buffer.append(NEWLINE)
+            TextType.Tab       -> buffer.append(TAB)
         }
     }
 
@@ -68,7 +68,7 @@ class SemanticWeb : SemanticWrites {
      * @param text
      * @param endLine
      */
-    override fun write(mode: SemanticText, text: String, endLine: Boolean) {
+    override fun write(mode: TextType, text: String, endLine: Boolean) {
         writeItem(mode, text, endLine)
     }
 
@@ -79,7 +79,7 @@ class SemanticWeb : SemanticWrites {
      * @param endLine : whether or not to include a newline at the end
      */
     override fun label(text: String, endLine: Boolean) {
-        writeItem(SemanticText.Text, text, endLine)
+        writeItem(TextType.Text, text, endLine)
     }
 
     /**

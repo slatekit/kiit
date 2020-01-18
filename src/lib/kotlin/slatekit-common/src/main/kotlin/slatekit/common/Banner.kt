@@ -1,6 +1,6 @@
 package slatekit.common
 
-import slatekit.common.console.SemanticConsole
+import slatekit.common.console.ConsoleWriter
 import slatekit.common.envs.Envs
 import slatekit.common.info.Info
 import slatekit.common.log.LogSupport
@@ -15,7 +15,7 @@ open class Banner(val info: Info,
      */
     open fun welcome() {
         // Basic welcome
-        val writer = SemanticConsole()
+        val writer = ConsoleWriter()
         writer.text("************************************")
         writer.title("Welcome to ${info.about.name}")
         writer.text("************************************")

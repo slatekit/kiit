@@ -13,21 +13,21 @@
 
 package slatekit.common.console
 
-sealed class SemanticText(val name:String, val color: String, private val upperCase: Boolean, val format:Boolean = true) {
+sealed class TextType(val name:String, val color: String, private val upperCase: Boolean, val format:Boolean = true) {
 
-    object Title     : SemanticText("title"    , Console.BLUE, true)
-    object Subtitle  : SemanticText("subtitle" , Console.CYAN, false)
-    object Url       : SemanticText("url"      , Console.BLUE, false)
-    object Important : SemanticText("important", Console.RED, false)
-    object Highlight : SemanticText("highlight", Console.YELLOW, false)
-    object Success   : SemanticText("success"  , Console.GREEN, false)
-    object Failure   : SemanticText("failure"  , Console.RED, false)
-    object Text      : SemanticText("text"     , Console.WHITE, false)
-    object Label     : SemanticText("label"    , Console.WHITE, false)
-    object NoFormat  : SemanticText("none"     , "",false)
-    object NewLine   : SemanticText("newline"  , "",false)
-    object Tab       : SemanticText("tab"      , "",false)
-    object Raw       : SemanticText("raw"      , "",false, false)
+    object Title     : TextType("title"    , Colors.BLUE, true)
+    object Subtitle  : TextType("subtitle" , Colors.CYAN, false)
+    object Url       : TextType("url"      , Colors.BLUE, false)
+    object Important : TextType("important", Colors.RED, false)
+    object Highlight : TextType("highlight", Colors.YELLOW, false)
+    object Success   : TextType("success"  , Colors.GREEN, false)
+    object Failure   : TextType("failure"  , Colors.RED, false)
+    object Text      : TextType("text"     , Colors.WHITE, false)
+    object Label     : TextType("label"    , Colors.WHITE, false)
+    object NoFormat  : TextType("none"     , "",false)
+    object NewLine   : TextType("newline"  , "",false)
+    object Tab       : TextType("tab"      , "",false)
+    object Raw       : TextType("raw"      , "",false, false)
 
     fun format(text: String): String {
         return if (upperCase) text.toUpperCase() else text
@@ -40,7 +40,7 @@ sealed class SemanticText(val name:String, val color: String, private val upperC
          *
          * @param mode
          */
-        fun parse(mode: String): SemanticText {
+        fun parse(mode: String): TextType {
             return when (mode.toLowerCase()) {
                 Title    .name -> Title
                 Subtitle .name -> Subtitle

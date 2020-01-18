@@ -1,7 +1,7 @@
 package slatekit.docs
 
 import slatekit.common.*
-import slatekit.common.console.SemanticConsole
+import slatekit.common.console.ConsoleWriter
 import slatekit.common.ext.toStringYYYYMMDD
 import slatekit.common.utils.StringParser
 import slatekit.results.Notice
@@ -13,7 +13,7 @@ class DocService(val rootdir: String, val outputDir: String, val templatePathRaw
 
     private val templatePath = File(rootdir, templatePathRaw).toString()
     private var template = ""
-    private val writer = SemanticConsole()
+    private val writer = ConsoleWriter()
     private val docFiles = DocFiles()
     private val version = "0.9.35"
 

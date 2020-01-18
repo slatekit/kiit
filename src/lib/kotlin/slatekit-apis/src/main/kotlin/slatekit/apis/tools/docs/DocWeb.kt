@@ -2,8 +2,8 @@ package slatekit.apis.tools.docs
 
 import slatekit.apis.core.Action
 import slatekit.apis.core.Api
-import slatekit.common.console.SemanticWrites
-import slatekit.common.console.SemanticWeb
+import slatekit.common.console.Writer
+import slatekit.common.console.WebWriter
 
 /**
  * Generates help docs on the console.
@@ -13,7 +13,7 @@ class DocWeb : Doc() {
     override val helpSuffix = "help"
     override val helpSeparator = "/"
 
-    override val writer: SemanticWrites = SemanticWeb()
+    override val writer: Writer = WebWriter()
 
     override fun toString(): String = writer.toString()
 
