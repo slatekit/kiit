@@ -3,7 +3,7 @@ package slatekit.meta
 import org.json.simple.JSONObject
 import org.threeten.bp.*
 import slatekit.common.*
-import slatekit.common.encrypt.Encryptor
+import slatekit.common.crypto.Encryptor
 
 /**
  * Used to represent a request that originate from a json file.

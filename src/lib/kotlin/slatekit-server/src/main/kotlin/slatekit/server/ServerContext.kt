@@ -2,7 +2,7 @@ package slatekit.server
 
 import slatekit.apis.support.Authenticator
 import slatekit.tracking.Diagnostics
-import slatekit.common.encrypt.Encryptor
+import slatekit.common.crypto.Encryptor
 import slatekit.common.log.Logger
 import slatekit.tracking.MetricsLite
 import slatekit.common.requests.Request

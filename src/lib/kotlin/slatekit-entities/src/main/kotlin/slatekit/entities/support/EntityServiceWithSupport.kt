@@ -14,8 +14,8 @@
 package slatekit.entities.support
 
 import slatekit.context.Context
-import slatekit.common.encrypt.EncryptSupport
-import slatekit.common.encrypt.Encryptor
+import slatekit.common.crypto.EncryptSupport
+import slatekit.common.crypto.Encryptor
 import slatekit.common.log.LogSupport
 import slatekit.common.log.Logger
 import slatekit.entities.Entities

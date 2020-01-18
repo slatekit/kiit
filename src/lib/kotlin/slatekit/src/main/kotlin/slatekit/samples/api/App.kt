@@ -3,7 +3,7 @@ package slatekit.samples.api
 
 // Slate Kit - Common Utilities
 import slatekit.common.args.ArgsSchema
-import slatekit.common.encrypt.*
+import slatekit.common.crypto.*
 import slatekit.common.info.*
 import slatekit.results.*
 

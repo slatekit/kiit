@@ -18,7 +18,7 @@ import org.json.simple.parser.JSONParser
 import slatekit.apis.ApiConstants
 import slatekit.apis.support.JsonSupport
 import slatekit.common.*
-import slatekit.common.encrypt.Encryptor
+import slatekit.common.crypto.Encryptor
 import slatekit.common.ext.toStringUtc
 import slatekit.common.io.Uris
 import slatekit.common.requests.CommonRequest

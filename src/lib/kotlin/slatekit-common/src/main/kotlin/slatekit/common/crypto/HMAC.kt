@@ -1,4 +1,4 @@
-package slatekit.common.encrypt
+package slatekit.common.crypto
 
 import java.util.*
 import javax.crypto.Mac

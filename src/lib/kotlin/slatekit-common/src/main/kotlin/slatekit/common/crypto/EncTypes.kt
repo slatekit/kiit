@@ -11,7 +11,7 @@
  * </slate_header>
  */
 
-package slatekit.common.encrypt
+package slatekit.common.crypto
 
 
 abstract class EncType {

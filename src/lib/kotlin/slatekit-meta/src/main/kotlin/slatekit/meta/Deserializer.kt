@@ -16,7 +16,7 @@ import org.json.simple.JSONArray
 import org.json.simple.JSONObject
 import org.json.simple.parser.JSONParser
 import slatekit.common.*
-import slatekit.common.encrypt.*
+import slatekit.common.crypto.*
 import slatekit.common.requests.InputArgs
 import slatekit.common.requests.Request
 import slatekit.results.Err

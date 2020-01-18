@@ -22,7 +22,7 @@ import slatekit.context.Context
 import slatekit.common.Sources
 import slatekit.common.io.Uris
 import slatekit.common.Vars
-import slatekit.common.encrypt.Encryptor
+import slatekit.common.crypto.Encryptor
 import slatekit.common.log.Logger
 import slatekit.notifications.email.EmailService
 import slatekit.results.Outcome

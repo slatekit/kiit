@@ -17,7 +17,7 @@ import slatekit.apis.tools.docs.Doc
 import slatekit.apis.tools.docs.DocConsole
 import slatekit.apis.tools.docs.DocWeb
 import slatekit.common.Source
-import slatekit.common.encrypt.Encryptor
+import slatekit.common.crypto.Encryptor
 import slatekit.common.naming.Namer
 import slatekit.common.requests.Request
 import slatekit.meta.Deserializer

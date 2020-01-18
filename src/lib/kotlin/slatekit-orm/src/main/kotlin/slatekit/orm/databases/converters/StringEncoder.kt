@@ -1,7 +1,7 @@
 package slatekit.orm.databases.converters
 
 import slatekit.orm.core.SqlEncoder
-import slatekit.common.encrypt.Encryptor
+import slatekit.common.crypto.Encryptor
 import slatekit.query.QueryEncoder
 import slatekit.common.Record
 import slatekit.common.ext.orElse

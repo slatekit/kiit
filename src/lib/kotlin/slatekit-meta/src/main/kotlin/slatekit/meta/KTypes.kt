@@ -1,10 +1,10 @@
 package slatekit.meta
 
 import slatekit.common.*
-import slatekit.common.encrypt.EncDouble
-import slatekit.common.encrypt.EncInt
-import slatekit.common.encrypt.EncLong
-import slatekit.common.encrypt.EncString
+import slatekit.common.crypto.EncDouble
+import slatekit.common.crypto.EncInt
+import slatekit.common.crypto.EncLong
+import slatekit.common.crypto.EncString
 import slatekit.common.ids.UniqueId
 import slatekit.common.types.Content
 import slatekit.common.types.Doc

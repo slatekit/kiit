@@ -1,7 +1,7 @@
 package slatekit.orm
 
 import slatekit.common.data.*
-import slatekit.common.encrypt.Encryptor
+import slatekit.common.crypto.Encryptor
 import slatekit.common.data.Vendor.*
 import slatekit.common.naming.Namer
 import slatekit.common.data.Vendor

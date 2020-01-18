@@ -15,7 +15,7 @@ package slatekit.common.conf
 
 import slatekit.common.Conversions
 import slatekit.common.DateTime
-import slatekit.common.encrypt.Encryptor
+import slatekit.common.crypto.Encryptor
 //import java.time.*
 import org.threeten.bp.*
 import slatekit.common.io.Uri

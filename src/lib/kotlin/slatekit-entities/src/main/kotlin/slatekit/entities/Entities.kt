@@ -15,7 +15,7 @@ package slatekit.entities
 
 import kotlin.reflect.KClass
 import slatekit.common.data.*
-import slatekit.common.encrypt.Encryptor
+import slatekit.common.crypto.Encryptor
 import slatekit.common.log.Logs
 import slatekit.common.log.LogsDefault
 import slatekit.common.naming.Namer

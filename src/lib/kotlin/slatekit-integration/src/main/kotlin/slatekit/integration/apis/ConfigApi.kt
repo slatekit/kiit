@@ -27,7 +27,7 @@ import slatekit.common.conf.Config
 import slatekit.common.data.DbCon
 import slatekit.common.data.DbConString
 import slatekit.common.data.Vendor.MySql
-import slatekit.common.encrypt.Encryptor
+import slatekit.common.crypto.Encryptor
 import slatekit.common.log.Logger
 import slatekit.context.Context
 

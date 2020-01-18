@@ -14,7 +14,7 @@
 package slatekit.meta.models
 
 import slatekit.common.*
-import slatekit.common.encrypt.Encryptor
+import slatekit.common.crypto.Encryptor
 import slatekit.common.naming.Namer
 import slatekit.meta.Reflector
 import slatekit.common.Record

@@ -15,7 +15,7 @@ package slatekit.server.ktor
 
 import slatekit.common.Conversions
 import slatekit.common.DateTime
-import slatekit.common.encrypt.Encryptor
+import slatekit.common.crypto.Encryptor
 
 import io.ktor.request.*
 import org.json.simple.JSONObject

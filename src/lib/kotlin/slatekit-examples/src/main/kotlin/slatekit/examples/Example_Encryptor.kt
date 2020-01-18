@@ -12,7 +12,7 @@ package slatekit.examples
 
 
 //<doc:import_required>
-import slatekit.common.encrypt.Encryptor
+import slatekit.common.crypto.Encryptor
 import slatekit.common.utils.B64Java8
 //</doc:import_required>
 

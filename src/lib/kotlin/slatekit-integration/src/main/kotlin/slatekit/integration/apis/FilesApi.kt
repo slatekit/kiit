@@ -19,7 +19,7 @@ import slatekit.apis.AuthModes
 import slatekit.apis.Verbs
 import slatekit.common.Sources
 import slatekit.common.types.Doc
-import slatekit.common.encrypt.Encryptor
+import slatekit.common.crypto.Encryptor
 import slatekit.common.io.Uris
 import slatekit.common.log.Logger
 import slatekit.context.Context
