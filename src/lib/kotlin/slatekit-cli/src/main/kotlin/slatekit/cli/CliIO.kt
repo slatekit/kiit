@@ -36,7 +36,7 @@ open class CliIO(private val io: IO<CliOutput, Unit>,
      * @param endLine
      */
     override fun write(mode: TextType, text: String, endLine: Boolean) {
-        io.run(CliOutput(mode, text, endLine))
+        io.perform(CliOutput(mode, text, endLine))
     }
 
     /**

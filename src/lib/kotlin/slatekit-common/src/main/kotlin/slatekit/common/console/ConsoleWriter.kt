@@ -31,7 +31,7 @@ class ConsoleWriter(
      * This is a simple, custom alternative to the IO Monad.
      * Refer to IO.kt for details.
      */
-    val semanticIO: IO<Any?, Unit> = writer ?: Print()
+    private val io: IO<Any?, Unit> = writer ?: Print()
 
 
     /**
@@ -58,6 +58,6 @@ class ConsoleWriter(
             finalColor + text + newline
         else
             finalColor + text
-        semanticIO.run(finalText)
+        io.perform(finalText)
     }
 }

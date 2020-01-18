@@ -13,12 +13,12 @@ class CliWriter(val io: ((CliOutput) -> Unit)? = null) : IO<CliOutput, Unit>, Wr
 
     private val consoleWriter = ConsoleWriter()
 
-    override fun run(i: CliOutput) = when (io) {
+    override fun perform(i: CliOutput) = when (io) {
         null -> consoleWriter.write(i.type, i.text ?: "", i.newline)
         else -> io.invoke(i)
     }
 
     override fun write(mode: TextType, text: String, endLine: Boolean) {
-        this.run(CliOutput(mode, text, endLine))
+        this.perform(CliOutput(mode, text, endLine))
     }
 }

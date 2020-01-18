@@ -142,7 +142,7 @@ open class CLI(
             context.writer.text(PROMPT, false)
 
             // Get line
-            val raw = context.reader.run(Unit)
+            val raw = context.reader.perform(Unit)
             val text = raw?.trim() ?: ""
             val result = runBlocking { eval(text) }
 
