@@ -20,6 +20,7 @@ import slatekit.results.getOrElse
 import org.threeten.bp.*
 import org.threeten.bp.format.*
 import slatekit.common.ext.atUtc
+import java.util.*
 
 //import java.time.format.DateTimeFormatter
 
@@ -109,12 +110,12 @@ open class Serializer(
             is Long -> buff.append(s.toString())
             is Float -> buff.append(s.toString())
             is Double -> buff.append(s.toString())
+            is UUID -> buff.append(s.toString())
             is LocalDate -> buff.append("\"" + s.format(dateFormat) + "\"")
             is LocalTime -> buff.append("\"" + s.format(timeFormat) + "\"")
             is LocalDateTime -> buff.append("\"" + s.format(dateTimeFormat) + "\"")
-            is ZonedDateTime -> buff.append("\"" + s.format(dateTimeFormat) + "\"")
             is Instant -> buff.append("\"" + LocalDateTime.ofInstant(s, ZoneId.systemDefault()).format(dateTimeFormat) + "\"")
-            is DateTime -> buff.append("\"" + (if (isoDates) s.atUtc().format(dateTimeFormat) else s.format(dateTimeFormat)) + "\"")
+            is ZonedDateTime -> buff.append("\"" + (if (isoDates) s.atUtc().format(dateTimeFormat) else s.format(dateTimeFormat)) + "\"")
             is Result<*, *> -> serializeResult(s, depth)
             is List<*> -> serializeList(s, depth + 1)
             is Map<*, *> -> serializeMap(s, depth + 1)
