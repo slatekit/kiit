@@ -21,6 +21,7 @@ import slatekit.common.newline
 import slatekit.meta.Serialization
 import test.setup.StatusEnum
 import test.setup.User
+import java.util.*
 
 /**
  * Created by kishorereddy on 6/14/17.
@@ -62,6 +63,13 @@ class SerializerTests {
         val serializer = Serialization.json()
         Assert.assertTrue( serializer.serialize(StatusEnum.Pending)          == "0" )
         Assert.assertTrue( serializer.serialize(StatusEnum.Active)           == "1" )
+    }
+
+
+    @Test fun can_serialize_uuid() {
+        val serializer = Serialization.json()
+        val uuid = UUID.fromString("c2186430-3665-4dde-8a7e-27397e428ae8")
+        Assert.assertTrue( serializer.serialize(uuid)          == uuid.toString() )
     }
 
 
