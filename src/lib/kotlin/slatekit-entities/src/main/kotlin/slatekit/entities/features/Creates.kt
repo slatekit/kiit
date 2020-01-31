@@ -38,7 +38,7 @@ interface Creates<TId, T> : ServiceSupport<TId, T> where TId : kotlin.Comparable
         val id = insert(entityWithMeta)
 
         // Update id
-        val entityFinal = when (entityWithMeta is EntityUpdatable<*, *>) {
+        val entityFinal = when (options.applyId && entityWithMeta is EntityUpdatable<*, *>) {
             true -> entityWithMeta.withIdAny(id) as T
             false -> entityWithMeta
         }
@@ -78,6 +78,21 @@ interface Creates<TId, T> : ServiceSupport<TId, T> where TId : kotlin.Comparable
         }
 
         return id
+    }
+
+    /**
+     * creates the entity in the data store and updates its id with the one generated
+     * @param entity
+     * @return
+     */
+    fun createWithId(entity: T): T {
+        val id = create(entity)
+
+        // Update id
+        return when (entity is EntityUpdatable<*, *>) {
+            true -> entity.withIdAny(id) as T
+            false -> entity
+        }
     }
 
     /**
