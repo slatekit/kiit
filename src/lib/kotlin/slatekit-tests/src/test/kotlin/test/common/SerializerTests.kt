@@ -69,7 +69,9 @@ class SerializerTests {
     @Test fun can_serialize_uuid() {
         val serializer = Serialization.json()
         val uuid = UUID.fromString("c2186430-3665-4dde-8a7e-27397e428ae8")
-        Assert.assertTrue( serializer.serialize(uuid)          == uuid.toString() )
+        val actual = serializer.serialize(uuid)
+        val expected = "\"$uuid\""
+        Assert.assertTrue( expected == actual )
     }
 
 

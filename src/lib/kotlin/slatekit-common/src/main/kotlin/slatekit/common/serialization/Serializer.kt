@@ -110,7 +110,7 @@ open class Serializer(
             is Long -> buff.append(s.toString())
             is Float -> buff.append(s.toString())
             is Double -> buff.append(s.toString())
-            is UUID -> buff.append(s.toString())
+            is UUID -> buff.append(serializeString(s.toString()))
             is LocalDate -> buff.append("\"" + s.format(dateFormat) + "\"")
             is LocalTime -> buff.append("\"" + s.format(timeFormat) + "\"")
             is LocalDateTime -> buff.append("\"" + s.format(dateTimeFormat) + "\"")
