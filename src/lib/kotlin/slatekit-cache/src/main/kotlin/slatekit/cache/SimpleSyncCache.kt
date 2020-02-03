@@ -1,5 +1,7 @@
 package slatekit.cache
 
+import slatekit.common.log.Logger
+
 
 class SimpleSyncCache(private val cache: SyncCache) : SyncCache {
     override val settings: CacheSettings = cache.settings
@@ -45,4 +47,17 @@ class SimpleSyncCache(private val cache: SyncCache) : SyncCache {
 
     @Synchronized
     override fun invalidateAll() = cache.invalidateAll()
+
+
+    companion object {
+
+        /**
+         * Convenience method to build async cache using Default channel coordinator
+         */
+        fun of(settings: CacheSettings? = null):SimpleSyncCache {
+            val raw = SimpleCache(settings ?: CacheSettings(10))
+            val syncCache = SimpleSyncCache(raw)
+            return syncCache
+        }
+    }
 }
