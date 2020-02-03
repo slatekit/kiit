@@ -13,13 +13,15 @@ import slatekit.common.*
 import slatekit.common.log.Logger
 import slatekit.common.requests.Request
 import slatekit.context.Context
-import slatekit.functions.Input
-import slatekit.functions.Output
-import slatekit.functions.Processor
+import slatekit.policy.Input
+import slatekit.policy.Output
+import slatekit.policy.Processor
 import slatekit.meta.*
+import slatekit.policy.Process
 import slatekit.results.*
 import slatekit.results.builders.Notices
 import slatekit.results.builders.Outcomes
+import slatekit.results.builders.Tries
 
 /**
  * This is the core container hosting, managing and executing the source independent apis.
@@ -188,7 +190,7 @@ open class ApiServer(
      * @return
      */
     private val hasChainedExecution = hooks.middleware.isNotEmpty()
-    private val chainedExecutor = slatekit.functions.Processor.chain(hooks.middleware) { request ->
+    private val chainedExecutor = Processor.chain(hooks.middleware) { request ->
         executeMethod(Ctx.of(this, this.ctx, request), request)
     }
     suspend fun execute(raw: Request, options: Flags? = null): Outcome<Any> {
@@ -217,22 +219,25 @@ open class ApiServer(
             .operate { processor.input(hooks.inputters, it)    }
 
         // Step 5: Execute request
-        val executed = requested.flatMap { request ->
-            if(hasChainedExecution) {
-                chainedExecutor(request)
-            } else {
-                request.target?.let {
-                    if(it.instance is slatekit.functions.Process<*,*>){
-                        val processor = it.instance as slatekit.functions.Process<ApiRequest, ApiResult>
-                        processor.process(request) {
+        val executed = try {
+            requested.flatMap { request ->
+                if (hasChainedExecution) {
+                    chainedExecutor(request)
+                } else {
+                    request.target?.let {
+                        if (it.instance is Process<*, *>) {
+                            val processor = it.instance as Process<ApiRequest, ApiResult>
+                            processor.process(request) {
+                                executeMethod(Ctx.of(this, this.ctx, request), request)
+                            }
+                        } else {
                             executeMethod(Ctx.of(this, this.ctx, request), request)
                         }
-                    }
-                    else {
-                        executeMethod(Ctx.of(this, this.ctx, request), request)
-                    }
-                } ?:executeMethod(Ctx.of(this, this.ctx, request), request)
+                    } ?: executeMethod(Ctx.of(this, this.ctx, request), request)
+                }
             }
+        } catch(ex:Exception){
+            Outcomes.unexpected<ApiResult>(ex)
         }
 
         // Step 6: Hooks: Post-Processing Stage 1: errors hooks on API ( only if we mapped to a class.method )

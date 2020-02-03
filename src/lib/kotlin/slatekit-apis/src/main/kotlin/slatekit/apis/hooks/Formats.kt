@@ -6,7 +6,7 @@ import slatekit.common.Ignore
 import slatekit.common.types.ContentTypeCsv
 import slatekit.common.types.ContentTypeJson
 import slatekit.common.types.ContentTypeProp
-import slatekit.functions.Input
+import slatekit.policy.Input
 import slatekit.results.Outcome
 import slatekit.results.builders.Outcomes
 import slatekit.results.flatMap
@@ -14,8 +14,8 @@ import slatekit.results.flatMap
 class Formats : Input<ApiRequest>, RewriteSupport {
 
     @Ignore
-    override suspend fun process(req: Outcome<ApiRequest>): Outcome<ApiRequest> {
-        return req.flatMap {
+    override suspend fun process(i: Outcome<ApiRequest>): Outcome<ApiRequest> {
+        return i.flatMap {
             // Update request if formats are supplied
             // 1. movies.json
             // 2. movies.csv
@@ -29,7 +29,7 @@ class Formats : Input<ApiRequest>, RewriteSupport {
                 ContentTypeCsv.ext -> Outcomes.of { rewrite(it, action, ContentTypeCsv.ext) }
                 ContentTypeJson.ext -> Outcomes.of { rewrite(it, action, ContentTypeJson.ext) }
                 ContentTypeProp.ext -> Outcomes.of { rewrite(it, action, ContentTypeProp.ext) }
-                else -> req
+                else -> i
             }
             result
         }

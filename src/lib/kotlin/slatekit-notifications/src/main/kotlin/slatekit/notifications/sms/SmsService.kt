@@ -15,8 +15,8 @@ package slatekit.notifications.sms
 
 import slatekit.common.templates.Templates
 import slatekit.common.types.Countries
-import slatekit.common.types.CountryCode
 import slatekit.common.Vars
+import slatekit.common.types.Country
 import slatekit.notifications.common.TemplateSender
 import slatekit.results.*
 
@@ -27,13 +27,13 @@ import slatekit.results.*
  */
 abstract class SmsService(
     override val templates: Templates? = null,
-    ctns: List<CountryCode>? = null
+    val countries:List<Country> = listOf(Countries.usa)
 ) : TemplateSender<SmsMessage> {
 
     /**
      * Default the supported countries to just USA
      */
-    protected val countries = Countries.filter(ctns ?: listOf(CountryCode("US"))).map { c -> c.iso2 to c }.toMap()
+    protected val countryLookup = countries.map { c -> c.iso2 to c }.toMap()
 
     /**
      * sends a message via an IO wrapper that can be later called.
@@ -74,12 +74,12 @@ abstract class SmsService(
             Failure(result.msg)
         }
         // Case 2: Invalid iso or unsupported
-        else if (!countries.contains(finalIso)) {
+        else if (!countryLookup.contains(finalIso)) {
             Failure("$finalIso is not a valid country code")
         }
         // Case 3: Inputs valid so massage
         else {
-            val country = countries[finalIso]
+            val country = countryLookup[finalIso]
             val finalPhone = country?.let { c ->
                 if (!phone.startsWith(country.phoneCode)) {
                     "${c.phoneCode}$phone"

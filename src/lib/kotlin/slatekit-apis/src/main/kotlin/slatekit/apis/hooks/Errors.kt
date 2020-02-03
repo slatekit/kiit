@@ -14,12 +14,8 @@ package slatekit.apis.hooks
 
 import slatekit.apis.ApiRequest
 import slatekit.apis.ApiResult
-import slatekit.common.Ignore
-import slatekit.common.log.Logger
-import slatekit.functions.Output
-import slatekit.results.Err
+import slatekit.policy.middleware.Failed
 import slatekit.results.Outcome
-import slatekit.results.builders.Outcomes
 
 class Errors {
 
@@ -28,9 +24,9 @@ class Errors {
 
         suspend fun applyError(raw:ApiRequest, apiReq: ApiRequest, req:Outcome<ApiRequest>, res: Outcome<ApiResult>) {
             val inst = apiReq.target?.instance
-            if(inst is slatekit.functions.middleware.Error<*, *>) {
-                val beforeHook = inst as slatekit.functions.middleware.Error<ApiRequest, ApiResult>
-                beforeHook.onDone(raw, req, res)
+            if(inst is slatekit.policy.middleware.Failed<*, *>) {
+                val middleware = inst as slatekit.policy.middleware.Failed<ApiRequest, ApiResult>
+                Failed.handle(middleware, raw, req, res)
             }
         }
     }

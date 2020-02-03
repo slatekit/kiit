@@ -16,7 +16,8 @@ package slatekit.notifications.sms
 import okhttp3.Request
 import slatekit.common.info.ApiLogin
 import slatekit.common.templates.Templates
-import slatekit.common.types.CountryCode
+import slatekit.common.types.Countries
+import slatekit.common.types.Country
 import slatekit.http.HttpRPC
 import slatekit.results.*
 import slatekit.results.builders.Outcomes
@@ -43,7 +44,7 @@ class TwilioSms(
     password: String,
     phone: String,
     templates: Templates? = null,
-    countries: List<CountryCode>? = null
+    countries: List<Country> = listOf(Countries.usa)
 ) :
     SmsService(templates, countries) {
     private val settings = SmsSettings(key, password, phone)
@@ -54,8 +55,8 @@ class TwilioSms(
      *
      * @param apiKey
      */
-    constructor(apiKey: ApiLogin, templates: Templates? = null, countries: List<CountryCode>? = null) :
-            this(apiKey.key, apiKey.pass, apiKey.account, templates, countries)
+    constructor(apiKey: ApiLogin, templates: Templates? = null, countries: List<Country>? = null) :
+            this(apiKey.key, apiKey.pass, apiKey.account, templates, countries ?: listOf(slatekit.common.types.Countries.usa))
 
     /**
      * Validates the model supplied

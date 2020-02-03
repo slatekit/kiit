@@ -6,7 +6,7 @@ import slatekit.common.Status
 import slatekit.common.log.LogLevel
 import slatekit.common.log.Logger
 import slatekit.tracking.Recorder
-import slatekit.functions.policy.Policy
+import slatekit.policy.Policy
 import slatekit.jobs.events.Events
 import slatekit.jobs.events.WorkerEvents
 import slatekit.jobs.support.*

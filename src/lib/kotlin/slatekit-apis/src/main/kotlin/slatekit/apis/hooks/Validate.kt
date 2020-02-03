@@ -3,7 +3,7 @@ package slatekit.apis.hooks
 import slatekit.apis.ApiRequest
 import slatekit.apis.core.Calls
 import slatekit.common.Ignore
-import slatekit.functions.Input
+import slatekit.policy.Input
 import slatekit.results.Outcome
 import slatekit.results.builders.Outcomes
 import slatekit.results.flatMap

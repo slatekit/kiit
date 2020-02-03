@@ -14,11 +14,9 @@
 package slatekit.cmds
 
 import slatekit.common.DateTime
-import slatekit.functions.common.*
+import slatekit.policy.common.*
 import slatekit.results.Outcome
-import slatekit.results.Result
 import slatekit.results.builders.Outcomes
-import slatekit.results.builders.Tries
 
 /**
  * The result of command ( cmd ) that was run

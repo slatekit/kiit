@@ -2,10 +2,7 @@ package test.functions
 
 import kotlinx.coroutines.runBlocking
 import org.junit.Test
-import slatekit.functions.middleware.After
-import slatekit.functions.middleware.Before
-import slatekit.functions.middleware.Filter
-import slatekit.functions.middleware.Handle
+import slatekit.policy.middleware.*
 import slatekit.meta.kClass
 import slatekit.results.Outcome
 import slatekit.results.builders.Outcomes
@@ -45,16 +42,16 @@ data class ApiCall(val req: ApiRequest, val api: Api, val action: KCallable<*>, 
 typealias  ApiResult = Any?
 
 
-open class MyAPI1 : Api, Filter<ApiRequest>, Before<ApiRequest>, After<ApiRequest, ApiResult>, slatekit.functions.middleware.Error<ApiRequest, ApiResult> {
+open class MyAPI1 : Api, Filter<ApiRequest>, Before<ApiRequest>, After<ApiRequest, ApiResult>, slatekit.policy.middleware.Failed<ApiRequest, ApiResult> {
     override val api: String = "myapi1"
 
 
-    override suspend fun onBefore(req: ApiRequest) {
+    override suspend fun before(req: ApiRequest) {
         println("before: ${req.api}.${req.action}")
     }
 
 
-    override suspend fun onFilter(req: ApiRequest): Outcome<ApiRequest> {
+    override suspend fun filter(req: ApiRequest): Outcome<ApiRequest> {
         println("filter: ${req.api}.${req.action} args=${req.args.size}")
         return if(req.args.size > 1) {
             Outcomes.invalid("Invalid number of inputs, expected 1 input, got ${req.args.size}")
@@ -63,7 +60,7 @@ open class MyAPI1 : Api, Filter<ApiRequest>, Before<ApiRequest>, After<ApiReques
         }
     }
 
-    override suspend fun onAfter(raw: ApiRequest, req: Outcome<ApiRequest>, res: Outcome<ApiResult>) {
+    override suspend fun after(raw: ApiRequest, req: Outcome<ApiRequest>, res: Outcome<ApiResult>) {
     }
 
 
@@ -71,7 +68,7 @@ open class MyAPI1 : Api, Filter<ApiRequest>, Before<ApiRequest>, After<ApiReques
 
 }
 
-class MyAPI2 : MyAPI1(), Filter<ApiRequest>, Before<ApiRequest>, After<ApiRequest, ApiResult>, slatekit.functions.middleware.Error<ApiRequest, ApiResult>, Handle<ApiRequest, ApiResult> {
+class MyAPI2 : MyAPI1(), Filter<ApiRequest>, Before<ApiRequest>, After<ApiRequest, ApiResult>, slatekit.policy.middleware.Failed<ApiRequest, ApiResult>, Handle<ApiRequest, ApiResult> {
 
     override val api: String = "myapi2"
 
@@ -119,12 +116,12 @@ class ApiHost(val apis: List<Api>) {
 
         // Hook: Before
         if (api is Before<*>) {
-            (api as Before<ApiRequest>).onBefore(req)
+            (api as Before<ApiRequest>).before(req)
         }
 
         // Filter
         val filter:Outcome<ApiRequest> = when(api) {
-            is Filter<*> -> (api as Filter<ApiRequest>).onFilter(req)
+            is Filter<*> -> (api as Filter<ApiRequest>).filter(req)
             else         -> Outcomes.success(req)
         }
 
@@ -141,12 +138,12 @@ class ApiHost(val apis: List<Api>) {
 
         // Hook: After
         if (api is After<*, *>) {
-            (api as After<ApiRequest, Any?>).onAfter(req, filter, result)
+            (api as After<ApiRequest, Any?>).after(req, filter, result)
         }
 
         // Hook: Error
-        if(!result.success && api is slatekit.functions.middleware.Error<*, *>){
-            (api as slatekit.functions.middleware.Error<ApiResult, Any?>).onDone(req, filter, result)
+        if(!result.success && api is slatekit.policy.middleware.Failed<*, *>){
+            Failed.handle(api as slatekit.policy.middleware.Failed<ApiResult, Any?>, req, filter, result)
         }
         return result
     }

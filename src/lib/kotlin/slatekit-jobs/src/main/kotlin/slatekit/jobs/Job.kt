@@ -11,7 +11,7 @@ import slatekit.common.StatusCheck
 import slatekit.common.log.LogLevel
 import slatekit.common.log.Logger
 import slatekit.common.log.LoggerConsole
-import slatekit.functions.policy.Policy
+import slatekit.policy.Policy
 import slatekit.jobs.events.Events
 import slatekit.jobs.events.JobEvents
 import slatekit.jobs.support.*

@@ -1,6 +1,6 @@
 package slatekit.jobs
 
-import slatekit.functions.policy.Policies
+import slatekit.policy.Policies
 import slatekit.jobs.support.Runner
 import slatekit.results.Outcome
 import slatekit.results.builders.Outcomes

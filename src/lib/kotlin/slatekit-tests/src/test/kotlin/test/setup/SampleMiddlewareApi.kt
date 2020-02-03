@@ -18,7 +18,7 @@ open class SampleMiddlewareApi : HooksSupport {
     /**
      * Hook for before this api handles any request
      */
-    override suspend fun onBefore(req:ApiRequest) {
+    override suspend fun before(req:ApiRequest) {
         onBeforeHookCount.add(req)
     }
 
@@ -26,7 +26,7 @@ open class SampleMiddlewareApi : HooksSupport {
     /**
      * Hook to first filter a request before it is handled by this api.
      */
-    override suspend fun onFilter(req:ApiRequest): Outcome<ApiRequest>  {
+    override suspend fun filter(req:ApiRequest): Outcome<ApiRequest>  {
         return if(req.request.action.startsWith("hi")) {
             Outcomes.errored(Exception("filtered out"))
         } else {
@@ -38,17 +38,27 @@ open class SampleMiddlewareApi : HooksSupport {
     /**
      * Hook for after this api handles any request
      */
-    override suspend fun onAfter(raw:ApiRequest, req: Outcome<ApiRequest>, res:Outcome<ApiResult>) {
+    override suspend fun after(raw:ApiRequest, req: Outcome<ApiRequest>, res:Outcome<ApiResult>) {
         onAfterHookCount.add(raw)
     }
 
 
-    override suspend fun onDone(raw:ApiRequest, req: Outcome<ApiRequest>, res:Outcome<ApiResult>) {
+    override suspend fun failed(raw:ApiRequest, req: Outcome<ApiRequest>, res:Outcome<ApiResult>) {
         onErrorHookCount.add(req)
     }
 
 
     fun hi(): String = "hi world"
+
+
+    fun unexpected(): String {
+        throw Exception("Testing failed middleware")
+    }
+
+
+    fun errored(): Outcome<String> {
+        return Outcomes.errored("test failed")
+    }
 
 
     fun hello(): String = "hello world"

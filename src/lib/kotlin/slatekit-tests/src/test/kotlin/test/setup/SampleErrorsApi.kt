@@ -48,19 +48,19 @@ open class SampleErrorsApi : HooksSupport {
     }
 
 
-    override suspend fun onBefore(req: ApiRequest) {
+    override suspend fun before(req: ApiRequest) {
 
     }
 
-    override suspend fun onAfter(raw:ApiRequest, req: Outcome<ApiRequest>, res: Outcome<ApiResult>) {
+    override suspend fun after(raw:ApiRequest, req: Outcome<ApiRequest>, res: Outcome<ApiResult>) {
 
     }
 
-    override suspend fun onFilter(req: ApiRequest): Outcome<ApiRequest> {
+    override suspend fun filter(req: ApiRequest): Outcome<ApiRequest> {
         return Outcomes.success(req)
     }
 
-    override suspend fun onDone(raw:ApiRequest, req: Outcome<ApiRequest>, res: Outcome<ApiResult>) {
+    override suspend fun failed(raw:ApiRequest, req: Outcome<ApiRequest>, res: Outcome<ApiResult>) {
     }
 
 }

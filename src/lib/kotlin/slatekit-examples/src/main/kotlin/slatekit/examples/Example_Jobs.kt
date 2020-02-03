@@ -14,7 +14,6 @@ package slatekit.examples
 
 //<doc:import_required>
 import kotlinx.coroutines.*
-import slatekit.cache.*
 import slatekit.common.*
 //</doc:import_required>
 
@@ -22,14 +21,11 @@ import slatekit.common.*
 import slatekit.core.queues.InMemoryQueue
 import slatekit.cmds.Command
 import slatekit.cmds.CommandRequest
-import slatekit.common.ids.Paired
 import slatekit.common.log.LoggerConsole
 import slatekit.core.queues.AsyncQueue
-import slatekit.core.queues.WrappedAsyncQueue
-import slatekit.examples.common.MockCacheCoordinator
-import slatekit.functions.policy.Every
-import slatekit.functions.policy.Limit
-import slatekit.functions.policy.Ratio
+import slatekit.policy.policies.Every
+import slatekit.policy.policies.Limit
+import slatekit.policy.policies.Ratio
 import slatekit.jobs.*
 import slatekit.results.Try
 import slatekit.results.Success

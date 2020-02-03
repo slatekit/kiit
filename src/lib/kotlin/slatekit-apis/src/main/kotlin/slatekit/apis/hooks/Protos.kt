@@ -5,7 +5,7 @@ import slatekit.apis.Verb
 import slatekit.common.Ignore
 import slatekit.common.Source
 import slatekit.common.requests.Request
-import slatekit.functions.Input
+import slatekit.policy.Input
 import slatekit.results.Outcome
 import slatekit.results.builders.Outcomes
 import slatekit.results.flatMap
@@ -16,8 +16,8 @@ import slatekit.results.flatMap
 class Protos : Input<ApiRequest> {
 
     @Ignore
-    override suspend fun process(request: Outcome<ApiRequest>): Outcome<ApiRequest> {
-        return request.flatMap {
+    override suspend fun process(i: Outcome<ApiRequest>): Outcome<ApiRequest> {
+        return i.flatMap {
         // Ensure verb is correct get/post
         val req = it.request
         val target = it.target!!
@@ -26,8 +26,8 @@ class Protos : Input<ApiRequest> {
         val isCli = actionProtocols.hasCLI()
         val isWeb = actionProtocols.hasWeb()
 
-        val verbResult = validateVerb(isWeb, isCli, actionVerb, req, request)
-        val finalResult = verbResult.flatMap { validateProto(actionProtocols, req, request) }
+        val verbResult = validateVerb(isWeb, isCli, actionVerb, req, i)
+        val finalResult = verbResult.flatMap { validateProto(actionProtocols, req, i) }
         finalResult
         }
     }

@@ -13,10 +13,7 @@ import slatekit.cache.CacheSettings
 import slatekit.cache.SimpleCache
 import slatekit.common.DateTime
 import slatekit.common.ext.toStringUtc
-import slatekit.examples.Example_Cloud_Files
 import slatekit.examples.Example_Email
-import slatekit.examples.Example_Sms
-import slatekit.functions.common.FunctionMode
 import slatekit.providers.logs.logback.LogbackLogs
 import slatekit.results.builders.Tries
 import java.io.File

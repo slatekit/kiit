@@ -2,7 +2,7 @@ package slatekit.jobs
 
 import slatekit.common.Identity
 import slatekit.tracking.Recorder
-import slatekit.functions.policy.Policy
+import slatekit.policy.Policy
 
 /**
  * Represents the context of a Worker

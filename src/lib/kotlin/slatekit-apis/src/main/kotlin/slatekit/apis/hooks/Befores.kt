@@ -2,7 +2,7 @@ package slatekit.apis.hooks
 
 import slatekit.apis.ApiRequest
 import slatekit.common.Ignore
-import slatekit.functions.Input
+import slatekit.policy.Input
 import slatekit.results.Outcome
 import slatekit.results.flatMap
 
@@ -12,9 +12,9 @@ import slatekit.results.flatMap
 class Befores : Input<ApiRequest> {
 
     @Ignore
-    override suspend fun process(req: Outcome<ApiRequest>): Outcome<ApiRequest> {
-        val filtered = req.flatMap { applyFilter(it, req) }
-        filtered.onSuccess { applyBefore(it, req) }
+    override suspend fun process(i: Outcome<ApiRequest>): Outcome<ApiRequest> {
+        val filtered = i.flatMap { applyFilter(it, i) }
+        filtered.onSuccess { applyBefore(it, i) }
         return filtered
     }
 
@@ -22,9 +22,9 @@ class Befores : Input<ApiRequest> {
     private suspend fun applyFilter(apiReq:ApiRequest, req:Outcome<ApiRequest>): Outcome<ApiRequest> {
         val inst = apiReq.target?.instance
         val result = when(inst) {
-            is slatekit.functions.middleware.Filter<*> -> {
-                val filterHook = inst as slatekit.functions.middleware.Filter<ApiRequest>
-                filterHook.onFilter(apiReq)
+            is slatekit.policy.middleware.Filter<*> -> {
+                val filterHook = inst as slatekit.policy.middleware.Filter<ApiRequest>
+                filterHook.filter(apiReq)
             }
             else -> req
         }
@@ -34,9 +34,9 @@ class Befores : Input<ApiRequest> {
 
     private suspend fun applyBefore(apiReq:ApiRequest, req:Outcome<ApiRequest>): Outcome<ApiRequest> {
         val inst = apiReq.target?.instance
-        if(inst is slatekit.functions.middleware.Before<*>) {
-            val beforeHook = inst as slatekit.functions.middleware.Before<ApiRequest>
-            beforeHook.onBefore(apiReq)
+        if(inst is slatekit.policy.middleware.Before<*>) {
+            val beforeHook = inst as slatekit.policy.middleware.Before<ApiRequest>
+            beforeHook.before(apiReq)
         }
         return req
     }
