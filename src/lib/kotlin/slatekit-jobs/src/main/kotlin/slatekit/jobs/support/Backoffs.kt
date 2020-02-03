@@ -2,13 +2,19 @@ package slatekit.jobs.slatekit.jobs.support
 
 import slatekit.common.paged.Pager
 
-class Backoffs(val times: Pager<Long> = default){
+class Backoffs(val times: Pager<Long> = times()){
     private var isOn = false
 
     fun next():Long {
         return when(isOn){
-            true  -> times.next()
-            false -> times.current(moveNext = true)
+            true  -> {
+                times.next()
+            }
+            false -> {
+                isOn = true
+                val currSec = times.current(moveNext = true)
+                currSec
+            }
         }
     }
 
@@ -18,7 +24,12 @@ class Backoffs(val times: Pager<Long> = default){
     }
 
 
+    fun curr():Long {
+        return times.current()
+    }
+
+
     companion object {
-        val default = Pager<Long>(listOf(2, 4, 8, 16, 32, 64, 128, 256), true, 0)
+        fun times() = Pager<Long>(listOf(2, 4, 8, 16, 32, 64, 128, 256), true, 0)
     }
 }

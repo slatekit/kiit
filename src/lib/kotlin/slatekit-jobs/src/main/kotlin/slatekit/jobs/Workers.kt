@@ -73,12 +73,12 @@ class Workers(
     /**
      * Starts the worker associated with the identity and makes it work using the supplied Task
      */
-    suspend fun start(id: Identity, task: Task = Task.empty) {
+    suspend fun start(id: Identity, task: Task = Task.empty, requireTask:Boolean = false) {
         perform("Starting", id) { executor ->
             val context = executor.context
             val worker = context.worker
             val result = Runner.record(context) {
-                val result: Try<WorkResult> = Runner.attemptStart(worker, false, true, task) {
+                val result: Try<WorkResult> = Runner.attemptStart(worker, false, true, task, requireTask) {
                     notify(context)
                 }
                 result.toOutcome()
@@ -123,6 +123,19 @@ class Workers(
             val worker = context.worker
             pausable.pause(reason ?: "Paused")
             val pauseInSecs = seconds ?: pauseInSeconds
+            scheduler.schedule(DateTime.now().plusSeconds(pauseInSecs)) {
+                coordinator.send(Command.WorkerCommand(ids.nextId(), ids.nextUUID().toString(), JobAction.Resume, worker.id, 0, ""))
+            }
+            Outcomes.success(Status.Paused)
+        }
+    }
+
+    suspend fun backoff(id: Identity, reason: String?) {
+        performPausableAction(Status.Paused, id) { executor, pausable ->
+            val context = executor.context
+            val worker = context.worker
+            pausable.pause(reason ?: "Paused")
+            val pauseInSecs = context.backoffs.next()
             scheduler.schedule(DateTime.now().plusSeconds(pauseInSecs)) {
                 coordinator.send(Command.WorkerCommand(ids.nextId(), ids.nextUUID().toString(), JobAction.Resume, worker.id, 0, ""))
             }

@@ -43,10 +43,11 @@ object Runner {
         handleDone: Boolean = true,
         handleFailure: Boolean = true,
         task: Task = Task.empty,
+        isTaskRequired:Boolean = false,
         statusChanged: (suspend (Worker<T>) -> Unit)? = null
     ): Try<WorkResult> {
         val result = Tries.of {
-            start(worker, handleDone, task, statusChanged)
+            start(worker, handleDone, task, isTaskRequired, statusChanged)
         }
         if (handleFailure) {
             when (result) {
@@ -73,6 +74,7 @@ object Runner {
         worker: Worker<T>,
         handleDone: Boolean,
         task: Task = Task.empty,
+        isTaskRequired:Boolean = false,
         statusChanged: (suspend (Worker<T>) -> Unit)? = null
     ): WorkResult {
 
@@ -85,7 +87,10 @@ object Runner {
         worker.move(Status.Running)
         statusChanged?.invoke(worker)
 
-        val result = worker.work(task)
+        val result = when {
+            task == Task.empty && isTaskRequired -> WorkResult(WorkState.More)
+            else -> worker.work(task)
+        }
         if (result.state == WorkState.Done && handleDone) {
             worker.move(Status.Complete)
             statusChanged?.invoke(worker)

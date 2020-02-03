@@ -64,7 +64,7 @@ class Job(
     val scheduler: Scheduler = DefaultScheduler(),
     val scope: CoroutineScope = Jobs.scope,
     policies: List<Policy<WorkRequest, WorkResult>>? = null,
-    val backoffs: Pager<Long> = Backoffs.default
+    val backoffs: Pager<Long> = Backoffs.times()
 ) : Management, StatusCheck, Events<Job> {
     /**
      * Initialize with just a function that will handle the work
@@ -221,7 +221,17 @@ class Job(
                 val worker = context.worker
                 val status = worker.status()
                 val task = nextTask(context.id, context.task)
-                manageWorker(request, task, status, launch)
+                val isTaskRequired = queue != null
+                val isTaskEmpty = task == Task.empty
+
+                when {
+                    request.action == JobAction.Process && isTaskRequired && isTaskEmpty -> { workers.backoff(workerId, request.desc) }
+                    request.action == JobAction.Resume  && isTaskRequired && isTaskEmpty -> { workers.backoff(workerId, request.desc) }
+                    else -> {
+                        context.backoffs.reset()
+                        manageWorker(request, task, status, launch, isTaskRequired)
+                    }
+                }
 
                 // Check for completion of all workers
                 val completed = workers.all.all { it.isComplete() }
@@ -233,16 +243,16 @@ class Job(
         }
     }
 
-    private suspend fun manageWorker(request: Command.WorkerCommand, task:Task, status:Status, launch: Boolean) {
+    private suspend fun manageWorker(request: Command.WorkerCommand, task:Task, status:Status, launch: Boolean, requireTask:Boolean) {
         val action = request.action
         val workerId = request.workerId
         when (action) {
-            is JobAction.Start   -> JobUtils.perform(this, action, status, launch, scope) { workers.start(workerId, task) }
+            is JobAction.Start   -> JobUtils.perform(this, action, status, launch, scope) { workers.start(workerId, task, requireTask) }
             is JobAction.Stop    -> JobUtils.perform(this, action, status, launch, scope) { workers.stop(workerId, request.desc) }
             is JobAction.Pause   -> JobUtils.perform(this, action, status, launch, scope) { workers.pause(workerId, request.desc) }
             is JobAction.Process -> JobUtils.perform(this, action, status, launch, scope) { workers.process(workerId, task) }
             is JobAction.Resume  -> JobUtils.perform(this, action, status, launch, scope) { workers.resume(workerId, request.desc, task) }
-            is JobAction.Delay   -> JobUtils.perform(this, action, status, launch, scope) { workers.start(workerId) }
+            is JobAction.Delay   -> JobUtils.perform(this, action, status, launch, scope) { workers.start(workerId, requireTask = requireTask) }
             else -> {
                 logger.info("Unexpected state: ${request.action}")
             }
