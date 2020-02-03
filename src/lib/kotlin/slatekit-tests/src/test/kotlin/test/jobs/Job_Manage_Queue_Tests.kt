@@ -39,27 +39,6 @@ class Job_Manage_Queue_Tests : JobTestSupport {
 
 
     @Test
-    fun can_pause_workers_when_queue_is_empty() {
-        runBlocking {
-            val queue = sampleQueue()
-            (1..1).forEach { queue.queue.send(it.toString()) }
-            val manager = run(2, queue, JobAction.Start)
-            runBlocking {
-                val worker1 = manager.workers.all.first()
-                val worker2 = manager.workers.all.last()
-                manager.respond() // Start worker1
-                manager.respond() // Start worker2
-                manager.respond() // Perform task 1
-                manager.respond() // Pause worker1
-                manager.respond() // Pause worker2
-                Assert.assertEquals(Status.Paused, worker1.status())
-                Assert.assertEquals(Status.Paused, worker2.status())
-            }
-        }
-    }
-
-
-    @Test
     fun can_pause_worker() {
         runBlocking {
             val queue = sampleQueue()
