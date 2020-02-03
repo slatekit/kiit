@@ -64,7 +64,7 @@ class Job(
     val scheduler: Scheduler = DefaultScheduler(),
     val scope: CoroutineScope = Jobs.scope,
     policies: List<Policy<WorkRequest, WorkResult>>? = null,
-    val backoffs: Pager<Long> = Backoffs.times()
+    val backoffs: () -> Pager<Long> = { Backoffs.times() }
 ) : Management, StatusCheck, Events<Job> {
     /**
      * Initialize with just a function that will handle the work
@@ -102,7 +102,7 @@ class Job(
     ) :
             this(id, workers(id, lambdas), queue, scope = scope ?: Jobs.scope, policies = policies)
 
-    val workers = Workers(id, all, coordinator, scheduler, logger, ids, 30, policies ?: listOf())
+    val workers = Workers(id, all, coordinator, scheduler, logger, ids, 30, policies ?: listOf(), backoffs)
     private val events: Events<Job> = JobEvents()
     private val dispatch = JobDispatch(this, workers, events as JobEvents, scope)
     private val _status = AtomicReference<Status>(Status.InActive)

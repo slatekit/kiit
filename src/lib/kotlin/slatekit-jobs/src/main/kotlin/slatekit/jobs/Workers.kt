@@ -5,6 +5,7 @@ import slatekit.common.Identity
 import slatekit.common.Status
 import slatekit.common.log.LogLevel
 import slatekit.common.log.Logger
+import slatekit.common.paged.Pager
 import slatekit.tracking.Recorder
 import slatekit.policy.Policy
 import slatekit.jobs.events.Events
@@ -26,11 +27,12 @@ class Workers(
     val logger: Logger,
     val ids: JobId,
     val pauseInSeconds: Long,
-    val policies: List<Policy<WorkRequest, WorkResult>> = listOf()
+    val policies: List<Policy<WorkRequest, WorkResult>> = listOf(),
+    val backoffs: () -> Pager<Long> = { Backoffs.times() }
 ) : Events<Worker<*>> {
 
     private val events: Events<Worker<*>> = WorkerEvents(this)
-    private val lookup: Map<String, WorkExecutor> = all.map { it.id.id to WorkerContext(jobId, it, Recorder.of(it.id), Backoffs(), policies) }
+    private val lookup: Map<String, WorkExecutor> = all.map { it.id.id to WorkerContext(jobId, it, Recorder.of(it.id), Backoffs(backoffs()), policies) }
             .map { it.first to WorkExecutor.of(it.second) }.toMap()
 
     /**

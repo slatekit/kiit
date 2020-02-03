@@ -30,6 +30,9 @@ class Backoffs(val times: Pager<Long> = times()){
 
 
     companion object {
+
+        fun default() = Backoffs(times())
+
         fun times() = Pager<Long>(listOf(2, 4, 8, 16, 32, 64, 128, 256), true, 0)
     }
 }
