@@ -65,7 +65,7 @@ dependencies {
     implementation project(":slatekit-apis")
     implementation project(":slatekit-jobs")
     implementation project(":slatekit-tracking")
-    implementation project(":slatekit-functions")
+    implementation project(":slatekit-policy")
     implementation project(":slatekit-cmds")
     implementation project(":slatekit-integration")
     implementation project(":slatekit-cloud")

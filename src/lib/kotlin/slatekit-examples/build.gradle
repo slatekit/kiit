@@ -62,7 +62,7 @@ dependencies {
     compile project(":slatekit-entities")
     compile project(":slatekit-orm")
     compile project(":slatekit-core")
-    compile project(":slatekit-functions")
+    compile project(":slatekit-policy")
     compile project(":slatekit-notifications")
     compile project(":slatekit-apis")
     compile project(":slatekit-jobs")
