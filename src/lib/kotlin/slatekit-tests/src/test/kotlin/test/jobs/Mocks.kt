@@ -42,7 +42,9 @@ open class MockCoordinator(override val logger: Logger, override val ids: JobId)
 
 class MockCoordinatorWithChannel(logger: Logger, ids: JobId, val channel: Channel<Command>) : MockCoordinator(logger, ids) {
 
+    // To simulate scheduled pauses. e.g.
     private var pauses = mutableListOf<Command>()
+    private var all = mutableListOf<Command>()
 
 
     override suspend fun send(request: Command){
@@ -51,6 +53,7 @@ class MockCoordinatorWithChannel(logger: Logger, ids: JobId, val channel: Channe
 //                "id" to request.id.toString(),
 //                "action" to request.action.name)
 //        )
+        all.add(request)
         if(request is Command.WorkerCommand && request.action == JobAction.Resume) {
             pauses.add(request)
         } else {

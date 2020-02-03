@@ -65,27 +65,57 @@ class Job_Manage_Queue_Tests : JobTestSupport {
             (1..2).forEach { queue.queue.send(it.toString()) }
             val manager = run(2, queue, JobAction.Start)
             runBlocking {
+
+                manager.respond() // Start worker1
+                manager.respond() // Start worker2
+
                 val worker1 = manager.workers.all.first()
                 val worker2 = manager.workers.all.last()
+                println("worker 1 id: " + worker1.id.id)
+                println("worker 2 id: " + worker2.id.id)
 
+                // Backoff at 2, status is
                 val worker1BackoffBefore = manager.workers.get(worker1.id)!!.backoffs.curr()
                 val worker2BackoffBefore = manager.workers.get(worker2.id)!!.backoffs.curr()
                 Assert.assertEquals(2, worker1BackoffBefore)
                 Assert.assertEquals(2, worker2BackoffBefore)
+                Assert.assertEquals(Status.Running, worker1.status())
+                Assert.assertEquals(Status.Running, worker2.status())
 
-                manager.request(JobAction.Process, worker1.id, "test")
-                manager.request(JobAction.Process, worker2.id, "test")
-                manager.respond() // Start worker1
-                manager.respond() // Start worker2
+                // Backed off at, moved to 4
                 manager.respond() // Backoff worker1
                 manager.respond() // Backoff worker1
+                val worker1Backoff2 = manager.workers.get(worker1.id)!!.backoffs.curr()
+                val worker2Backoff2 = manager.workers.get(worker2.id)!!.backoffs.curr()
+                Assert.assertEquals(4, worker1Backoff2)
+                Assert.assertEquals(4, worker2Backoff2)
                 Assert.assertEquals(Status.Paused, worker1.status())
                 Assert.assertEquals(Status.Paused, worker2.status())
 
-                val worker1BackoffAfter = manager.workers.get(worker1.id)!!.backoffs.curr()
-                val worker2BackoffAfter = manager.workers.get(worker2.id)!!.backoffs.curr()
-                Assert.assertEquals(4, worker1BackoffAfter)
-                Assert.assertEquals(4, worker2BackoffAfter)
+                // Back off at 4 moved to 8
+                (manager.coordinator as MockCoordinatorWithChannel).resume()
+                (manager.coordinator as MockCoordinatorWithChannel).resume()
+                manager.respond() // Resume worker 1
+                manager.respond() // Resume worker 2
+                val worker1Backoff3 = manager.workers.get(worker1.id)!!.backoffs.curr()
+                val worker2Backoff3 = manager.workers.get(worker2.id)!!.backoffs.curr()
+                Assert.assertEquals(8, worker1Backoff3)
+                Assert.assertEquals(8, worker2Backoff3)
+                Assert.assertEquals(Status.Paused, worker1.status())
+                Assert.assertEquals(Status.Paused, worker2.status())
+
+                // Ensure its back to running
+                (3..4).forEach { queue.queue.send(it.toString()) }
+                (manager.coordinator as MockCoordinatorWithChannel).resume()
+                (manager.coordinator as MockCoordinatorWithChannel).resume()
+                manager.respond() // Resume worker 1
+                manager.respond() // Resume worker 2
+                val worker1Backoff4 = manager.workers.get(worker1.id)!!.backoffs.curr()
+                val worker2Backoff4 = manager.workers.get(worker2.id)!!.backoffs.curr()
+                Assert.assertEquals(2, worker1Backoff4)
+                Assert.assertEquals(2, worker2Backoff4)
+                Assert.assertEquals(Status.Running, worker1.status())
+                Assert.assertEquals(Status.Running, worker2.status())
             }
         }
     }
