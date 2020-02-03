@@ -111,7 +111,7 @@ class Workers(
     }
 
     suspend fun resume(id: Identity, reason: String?, task: Task = Task.empty) {
-        performPausableAction(Status.Running, id) { executor, pausable ->
+        performPausableAction(Status.Running, reason, id) { executor, pausable ->
             val context = executor.context
             val result = executor.resume(reason ?: "Resuming", task)
             result.map { res -> loop(context, res) }
@@ -120,33 +120,33 @@ class Workers(
     }
 
     suspend fun pause(id: Identity, reason: String?, seconds: Long? = null) {
-        performPausableAction(Status.Paused, id) { executor, pausable ->
+        performPausableAction(Status.Paused, reason, id) { executor, pausable ->
             val context = executor.context
             val worker = context.worker
             pausable.pause(reason ?: "Paused")
             val pauseInSecs = seconds ?: pauseInSeconds
             scheduler.schedule(DateTime.now().plusSeconds(pauseInSecs)) {
-                coordinator.send(Command.WorkerCommand(ids.nextId(), ids.nextUUID().toString(), JobAction.Resume, worker.id, 0, ""))
+                coordinator.send(Command.WorkerCommand(ids.nextId(), ids.nextUUID().toString(), JobAction.Resume, worker.id, 0, null))
             }
             Outcomes.success(Status.Paused)
         }
     }
 
     suspend fun backoff(id: Identity, reason: String?) {
-        performPausableAction(Status.Paused, id) { executor, pausable ->
+        performPausableAction(Status.Paused, reason ?: "Backoff", id) { executor, pausable ->
             val context = executor.context
             val worker = context.worker
-            pausable.pause(reason ?: "Paused")
+            pausable.pause(reason ?: "Backoff")
             val pauseInSecs = context.backoffs.next()
             scheduler.schedule(DateTime.now().plusSeconds(pauseInSecs)) {
-                coordinator.send(Command.WorkerCommand(ids.nextId(), ids.nextUUID().toString(), JobAction.Resume, worker.id, 0, ""))
+                coordinator.send(Command.WorkerCommand(ids.nextId(), ids.nextUUID().toString(), JobAction.Resume, worker.id, 0, null))
             }
             Outcomes.success(Status.Paused)
         }
     }
 
     suspend fun stop(id: Identity, reason: String?) {
-        performPausableAction(Status.Stopped, id) { worker, pausable ->
+        performPausableAction(Status.Stopped, reason, id) { worker, pausable ->
             pausable.stop(reason ?: "Stopped")
             Outcomes.success(Status.Stopped)
         }
@@ -155,7 +155,7 @@ class Workers(
     suspend fun delay(id: Identity, seconds: Long) {
         logger.log(LogLevel.Info, "Worker:", listOf("id" to id.name, "action" to "delaying", "seconds" to "$seconds"))
         scheduler.schedule(DateTime.now().plusSeconds(seconds)) {
-            coordinator.send(Command.WorkerCommand(ids.nextId(), ids.nextUUID().toString(), JobAction.Start, id, 0, ""))
+            coordinator.send(Command.WorkerCommand(ids.nextId(), ids.nextUUID().toString(), JobAction.Start, id, 0, null))
         }
     }
 
@@ -171,7 +171,7 @@ class Workers(
         }
     }
 
-    private suspend fun performPausableAction(status: Status, id: Identity, operation: suspend (WorkExecutor, Pausable) -> Outcome<Status>): Outcome<Status> {
+    private suspend fun performPausableAction(status: Status, reason: String?, id: Identity, operation: suspend (WorkExecutor, Pausable) -> Outcome<Status>): Outcome<Status> {
         logger.log(LogLevel.Info, "Worker:", listOf("id" to id.name, "move" to status.name))
         val executor = this.lookup[id.id]
         return when (executor) {
@@ -180,7 +180,7 @@ class Workers(
                 val context = executor.context
                 when (context.worker) {
                     is Pausable -> {
-                        context.worker.move(status)
+                        context.worker.move(status, reason)
                         notify(context)
                         operation(executor, context.worker)
                     }

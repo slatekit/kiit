@@ -216,7 +216,9 @@ class Job(
         val workerId = request.workerId
         val context = workers.get(workerId)
         when (context) {
-            null -> { }
+            null -> {
+                logger.warn("Worker context not found for : ${request.workerId.id}")
+            }
             else -> {
                 val worker = context.worker
                 val status = worker.status()

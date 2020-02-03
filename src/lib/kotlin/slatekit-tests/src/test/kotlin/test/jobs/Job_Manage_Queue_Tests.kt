@@ -103,6 +103,8 @@ class Job_Manage_Queue_Tests : JobTestSupport {
                 Assert.assertEquals(8, worker2Backoff3)
                 Assert.assertEquals(Status.Paused, worker1.status())
                 Assert.assertEquals(Status.Paused, worker2.status())
+                Assert.assertEquals("Backoff", worker1.note())
+                Assert.assertEquals("Backoff", worker2.note())
 
                 // Ensure its back to running
                 (3..4).forEach { queue.queue.send(it.toString()) }
