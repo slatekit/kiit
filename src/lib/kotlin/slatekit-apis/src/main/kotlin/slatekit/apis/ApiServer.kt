@@ -237,7 +237,10 @@ open class ApiServer(
                 }
             }
         } catch(ex:Exception){
-            Outcomes.unexpected<ApiResult>(ex)
+            when(ex){
+                is ExceptionErr -> Outcomes.unexpected(ex.err, Codes.UNEXPECTED)
+                else            -> Outcomes.unexpected<ApiResult>(ex)
+            }
         }
 
         // Step 6: Hooks: Post-Processing Stage 1: errors hooks on API ( only if we mapped to a class.method )

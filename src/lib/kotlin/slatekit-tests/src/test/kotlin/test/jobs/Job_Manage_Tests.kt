@@ -6,7 +6,7 @@ import org.junit.Test
 import slatekit.common.Status
 import slatekit.jobs.*
 
-class Manage_Job_Tests : JobTestSupport {
+class Job_Manage_Tests : JobTestSupport {
 
     @Test
     fun can_start_job() {

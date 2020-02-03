@@ -4,16 +4,15 @@ import java.util.*
 import java.util.concurrent.atomic.AtomicReference
 import kotlinx.coroutines.*
 import kotlinx.coroutines.channels.Channel
-import slatekit.common.Identity
-import slatekit.common.SimpleIdentity
-import slatekit.common.Status
-import slatekit.common.StatusCheck
+import slatekit.common.*
 import slatekit.common.log.LogLevel
 import slatekit.common.log.Logger
 import slatekit.common.log.LoggerConsole
+import slatekit.common.paged.Pager
 import slatekit.policy.Policy
 import slatekit.jobs.events.Events
 import slatekit.jobs.events.JobEvents
+import slatekit.jobs.slatekit.jobs.support.Backoffs
 import slatekit.jobs.support.*
 
 /**
@@ -64,7 +63,8 @@ class Job(
     val coordinator: Coordinator = coordinator(ids, logger),
     val scheduler: Scheduler = DefaultScheduler(),
     val scope: CoroutineScope = Jobs.scope,
-    policies: List<Policy<WorkRequest, WorkResult>>? = null
+    policies: List<Policy<WorkRequest, WorkResult>>? = null,
+    val backoffs: Pager<Long> = Backoffs.default
 ) : Management, StatusCheck, Events<Job> {
     /**
      * Initialize with just a function that will handle the work
@@ -174,7 +174,7 @@ class Job(
 
             // Affects just a specific worker
             is Command.WorkerCommand -> {
-                manageWorker(request, launch)
+                manageWork(request, launch)
             }
         }
     }
@@ -211,8 +211,8 @@ class Job(
         }
     }
 
-    private suspend fun manageWorker(request: Command.WorkerCommand, launch: Boolean) {
-        val action = request.action
+
+    private suspend fun manageWork(request: Command.WorkerCommand, launch: Boolean) {
         val workerId = request.workerId
         val context = workers.get(workerId)
         when (context) {
@@ -221,17 +221,8 @@ class Job(
                 val worker = context.worker
                 val status = worker.status()
                 val task = nextTask(context.id, context.task)
-                when (action) {
-                    is JobAction.Start -> JobUtils.perform(this, action, status, launch, scope) { workers.start(workerId, task) }
-                    is JobAction.Stop -> JobUtils.perform(this, action, status, launch, scope) { workers.stop(workerId, request.desc) }
-                    is JobAction.Pause -> JobUtils.perform(this, action, status, launch, scope) { workers.pause(workerId, request.desc) }
-                    is JobAction.Process -> JobUtils.perform(this, action, status, launch, scope) { workers.process(workerId, task) }
-                    is JobAction.Resume -> JobUtils.perform(this, action, status, launch, scope) { workers.resume(workerId, request.desc, task) }
-                    is JobAction.Delay -> JobUtils.perform(this, action, status, launch, scope) { workers.start(workerId) }
-                    else -> {
-                        logger.info("Unexpected state: ${request.action}")
-                    }
-                }
+                manageWorker(request, task, status, launch)
+
                 // Check for completion of all workers
                 val completed = workers.all.all { it.isComplete() }
                 if (completed) {
@@ -241,6 +232,23 @@ class Job(
             }
         }
     }
+
+    private suspend fun manageWorker(request: Command.WorkerCommand, task:Task, status:Status, launch: Boolean) {
+        val action = request.action
+        val workerId = request.workerId
+        when (action) {
+            is JobAction.Start   -> JobUtils.perform(this, action, status, launch, scope) { workers.start(workerId, task) }
+            is JobAction.Stop    -> JobUtils.perform(this, action, status, launch, scope) { workers.stop(workerId, request.desc) }
+            is JobAction.Pause   -> JobUtils.perform(this, action, status, launch, scope) { workers.pause(workerId, request.desc) }
+            is JobAction.Process -> JobUtils.perform(this, action, status, launch, scope) { workers.process(workerId, task) }
+            is JobAction.Resume  -> JobUtils.perform(this, action, status, launch, scope) { workers.resume(workerId, request.desc, task) }
+            is JobAction.Delay   -> JobUtils.perform(this, action, status, launch, scope) { workers.start(workerId) }
+            else -> {
+                logger.info("Unexpected state: ${request.action}")
+            }
+        }
+    }
+
 
     private suspend fun nextTask(id: Identity, empty: Task): Task {
         val task = when (queue) {
@@ -254,6 +262,7 @@ class Job(
     }
 
     companion object {
+
 
         fun worker(call: suspend() -> WorkResult): suspend(Task) -> WorkResult {
             return { t ->

@@ -9,6 +9,7 @@ import slatekit.tracking.Recorder
 import slatekit.policy.Policy
 import slatekit.jobs.events.Events
 import slatekit.jobs.events.WorkerEvents
+import slatekit.jobs.slatekit.jobs.support.Backoffs
 import slatekit.jobs.support.*
 import slatekit.results.*
 import slatekit.results.builders.Outcomes
@@ -29,7 +30,7 @@ class Workers(
 ) : Events<Worker<*>> {
 
     private val events: Events<Worker<*>> = WorkerEvents(this)
-    private val lookup: Map<String, WorkExecutor> = all.map { it.id.id to WorkerContext(jobId, it, Recorder.of(it.id), policies) }
+    private val lookup: Map<String, WorkExecutor> = all.map { it.id.id to WorkerContext(jobId, it, Recorder.of(it.id), Backoffs(), policies) }
             .map { it.first to WorkExecutor.of(it.second) }.toMap()
 
     /**
@@ -116,12 +117,13 @@ class Workers(
         }
     }
 
-    suspend fun pause(id: Identity, reason: String?) {
+    suspend fun pause(id: Identity, reason: String?, seconds: Long? = null) {
         performPausableAction(Status.Paused, id) { executor, pausable ->
             val context = executor.context
             val worker = context.worker
             pausable.pause(reason ?: "Paused")
-            scheduler.schedule(DateTime.now().plusSeconds(pauseInSeconds)) {
+            val pauseInSecs = seconds ?: pauseInSeconds
+            scheduler.schedule(DateTime.now().plusSeconds(pauseInSecs)) {
                 coordinator.send(Command.WorkerCommand(ids.nextId(), ids.nextUUID().toString(), JobAction.Resume, worker.id, 0, ""))
             }
             Outcomes.success(Status.Paused)

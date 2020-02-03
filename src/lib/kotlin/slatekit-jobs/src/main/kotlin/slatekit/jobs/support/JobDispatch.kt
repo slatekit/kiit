@@ -1,11 +1,12 @@
-package slatekit.jobs
+package slatekit.jobs.support
 
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 import slatekit.common.Status
+import slatekit.jobs.Job
+import slatekit.jobs.JobAction
+import slatekit.jobs.Workers
 import slatekit.jobs.events.JobEvents
-import slatekit.jobs.support.Command
-import slatekit.jobs.support.JobUtils
 
 /**
  * Dispatches control and management requests on all the workers

@@ -6,7 +6,7 @@ import org.junit.Test
 import slatekit.common.Status
 import slatekit.jobs.*
 
-class Manage_Worker_Tests : JobTestSupport {
+class Job_Manage_Worker_Tests : JobTestSupport {
 
     @Test
     fun can_start_all_workers() {
