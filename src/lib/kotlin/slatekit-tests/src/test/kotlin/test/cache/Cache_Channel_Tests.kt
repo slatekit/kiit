@@ -24,9 +24,9 @@ import test.cache.MockCacheCoordinator
 
 class Cache_Channel_Tests {
 
-    fun getCache(initialize:Boolean = true, settings: CacheSettings = CacheSettings(10)): SimpleAsyncCache {
-        val raw =  SimpleCache(settings)
-        val cache = SimpleAsyncCache(LoggerConsole(), raw, MockCacheCoordinator(LoggerConsole(), Paired()))
+    fun getCache(initialize:Boolean = true, settings: CacheSettings = CacheSettings(10), listener:((CacheEvent) -> Unit)? = null): SimpleAsyncCache {
+        val raw =  SimpleCache("async-cache", settings = settings, listener = listener)
+        val cache = SimpleAsyncCache(raw, MockCacheCoordinator(LoggerConsole(), Paired()))
         if(initialize) {
             cache.put("countries", "countries supported for mobile app", 60) { listOf("us", "ca") }
             runBlocking {

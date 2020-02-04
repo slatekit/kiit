@@ -4,7 +4,12 @@ import slatekit.common.log.Logger
 
 
 class SimpleSyncCache(private val cache: SyncCache) : SyncCache {
+
+
+    override val name: String get() = cache.name
     override val settings: CacheSettings = cache.settings
+    override val listener: ((CacheEvent) -> Unit)? get() = cache.listener
+    override val logger: Logger? get() = cache.logger
 
     @Synchronized
     override fun size(): Int = cache.size()
@@ -54,8 +59,8 @@ class SimpleSyncCache(private val cache: SyncCache) : SyncCache {
         /**
          * Convenience method to build async cache using Default channel coordinator
          */
-        fun of(settings: CacheSettings? = null):SimpleSyncCache {
-            val raw = SimpleCache(settings ?: CacheSettings(10))
+        fun of(name:String, settings: CacheSettings? = null, listener:((CacheEvent) -> Unit)? = null):SimpleSyncCache {
+            val raw = SimpleCache(name,settings ?: CacheSettings(10), listener )
             val syncCache = SimpleSyncCache(raw)
             return syncCache
         }
