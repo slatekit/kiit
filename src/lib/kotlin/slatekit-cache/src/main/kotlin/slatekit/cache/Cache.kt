@@ -13,12 +13,29 @@
 
 package slatekit.cache
 
+import slatekit.common.log.Logger
+
 interface Cache {
+    /**
+     * Name of the this cache, used to identify it between multiple caches
+     */
+    val name:String
 
     /**
      * settings for the cache
      */
     val settings: CacheSettings
+
+    /**
+     * Listener for cache events which describe past activity on the cache.
+     * Serves as a simple event stream for this cache
+     */
+    val listener:((CacheEvent) -> Unit)?
+
+    /**
+     * Logger for warnings/errors
+     */
+    val logger:Logger?
 
     /**
      * number of items in the cache
@@ -86,6 +103,18 @@ interface Cache {
      * invalidates all the cache items
      */
     fun invalidateAll()
+
+
+    companion object {
+
+        fun notify(event: CacheEvent, listener:((CacheEvent) -> Unit)?, logger: Logger?){
+            try {
+                listener?.invoke(event)
+            } catch(ex:Exception){
+                logger?.warn("Unable to send cache event for ${event.id}")
+            }
+        }
+    }
 }
 
 

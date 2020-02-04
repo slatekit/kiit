@@ -1,9 +1,9 @@
 package slatekit.apis
 
-import slatekit.functions.Input
-import slatekit.functions.Output
-import slatekit.functions.Process
-import slatekit.functions.middleware.Middleware
+import slatekit.policy.Input
+import slatekit.policy.Output
+import slatekit.policy.Process
+import slatekit.policy.middleware.Middleware
 
 /**
  * Created by kreddy on 3/25/2016.

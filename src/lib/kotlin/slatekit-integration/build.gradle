@@ -93,7 +93,7 @@ dependencies {
         compile "com.slatekit:slatekit-core:$slatekit_version_beta"
         compile "com.slatekit:slatekit-apis:$slatekit_version_beta"
         compile "com.slatekit:slatekit-jobs:$slatekit_version_beta"
-        compile "com.slatekit:slatekit-functions:$slatekit_version_beta"
+        compile "com.slatekit:slatekit-policy:$slatekit_version_beta"
         compile "com.slatekit:slatekit-cache:$slatekit_version_beta"
         compile "com.slatekit:slatekit-cmds:$slatekit_version_beta"
         compile "com.slatekit:slatekit-notifications:$slatekit_version"
@@ -108,7 +108,7 @@ dependencies {
         compile project(":slatekit-entities")
         compile project(":slatekit-orm")
         compile project(":slatekit-core")
-        compile project(":slatekit-functions")
+        compile project(":slatekit-policy")
         compile project(":slatekit-cache")
         compile project(":slatekit-cmds")
         compile project(":slatekit-apis")

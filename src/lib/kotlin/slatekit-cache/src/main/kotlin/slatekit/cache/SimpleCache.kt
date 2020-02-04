@@ -13,6 +13,8 @@
 
 package slatekit.cache
 
+import slatekit.common.log.Logger
+import slatekit.common.utils.Random
 import slatekit.tracking.Fetches
 
 /**
@@ -29,7 +31,10 @@ import slatekit.tracking.Fetches
  *
  * @param settings
  */
-open class SimpleCache(override val settings: CacheSettings) : Cache, SyncCache {
+open class SimpleCache(override val name:String = Random.uuid(),
+                       override val settings: CacheSettings,
+                       override val listener:((CacheEvent) -> Unit)? = null,
+                       override val logger: Logger? = null ) : Cache, SyncCache {
 
     /**
      * The LinkedHashMap already LRU(Least Recently Used) behaviour out of the box.
@@ -116,13 +121,17 @@ open class SimpleCache(override val settings: CacheSettings) : Cache, SyncCache 
     /**
      * invalidates all the entries in this cache by maxing out their expiration times
      */
-    override fun invalidateAll(): Unit = lookup.keys.toList().forEach { key -> invalidate(key) }
+    override fun invalidateAll() {
+        lookup.keys.toList().forEach { key -> invalidate(key) }
+        notify(CacheAction.Clear)
+    }
 
     /**
      * invalidates a specific cache item with the key
      */
     override fun invalidate(key: String) {
         lookup.get(key)?.let { c -> c.expire() }
+        notify(CacheAction.Clear, key)
     }
 
     /**
@@ -131,7 +140,9 @@ open class SimpleCache(override val settings: CacheSettings) : Cache, SyncCache 
      * @param key
      */
     override fun clear(): Boolean {
-        return lookup.keys.toList().map { key -> remove(key) }.reduceRight({ r, a -> a })
+        val result = lookup.keys.toList().map { key -> remove(key) }.reduceRight({ r, a -> a })
+        notify(CacheAction.Clear)
+        return result
     }
 
     /**
@@ -139,7 +150,11 @@ open class SimpleCache(override val settings: CacheSettings) : Cache, SyncCache 
      *
      * @param key
      */
-    override fun remove(key: String): Boolean = lookup.remove(key)?.let { k -> true } ?: false
+    override fun remove(key: String): Boolean {
+        val result = lookup.remove(key)?.let { k -> true } ?: false
+        notify(CacheAction.Delete, key)
+        return result
+    }
 
     /**
      * gets a cache item associated with the key
@@ -158,6 +173,7 @@ open class SimpleCache(override val settings: CacheSettings) : Cache, SyncCache 
      */
     override fun refresh(key: String) {
         lookup.get(key)?.refresh()
+        notify(CacheAction.Refresh, key)
     }
 
     /**
@@ -170,6 +186,7 @@ open class SimpleCache(override val settings: CacheSettings) : Cache, SyncCache 
      */
     override fun <T> put(key: String, desc: String, seconds: Int, fetcher: suspend () -> T?) {
         insert(key, desc, seconds, fetcher)
+        notify(CacheAction.Create, key)
     }
 
     /**
@@ -186,6 +203,7 @@ open class SimpleCache(override val settings: CacheSettings) : Cache, SyncCache 
         entry?.let {
             it.set(cacheValue, content)
         }
+        notify(CacheAction.Update, key)
     }
 
     /**
@@ -234,6 +252,16 @@ open class SimpleCache(override val settings: CacheSettings) : Cache, SyncCache 
         }
         @Suppress("UNCHECKED_CAST")
         return result?.let { r -> r as T }
+    }
+
+
+    protected fun notify(action:CacheAction, key:String? = null){
+        notify(CacheEvent.of(name, action, key ?: ""))
+    }
+
+
+    protected fun notify(event:CacheEvent){
+        Cache.notify(event, listener, logger)
     }
 
 

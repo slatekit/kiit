@@ -2,7 +2,10 @@ package slatekit.cache
 
 import kotlinx.coroutines.CompletableDeferred
 import kotlinx.coroutines.Deferred
+import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.runBlocking
+import slatekit.common.ids.Paired
+import slatekit.common.log.Logger
 import slatekit.core.common.ChannelCoordinator
 import slatekit.core.common.Coordinator
 
@@ -10,8 +13,13 @@ import slatekit.core.common.Coordinator
  * Write are queued (via channels )
  * Reads are optimistic/dirty ( depending on method get | getOrLoad | getFresh )
  */
-class SimpleAsyncCache(private val cache:SyncCache, val coordinator: Coordinator<CacheCommand>) : AsyncCache {
-    val logger = coordinator.logger
+class SimpleAsyncCache(private val cache:SyncCache,
+                       val coordinator: Coordinator<CacheCommand>) : AsyncCache {
+
+    override val name: String get() = cache.name
+    override val settings: CacheSettings = cache.settings
+    override val listener: ((CacheEvent) -> Unit)? get() = cache.listener
+    override val logger: Logger? get() = cache.logger
 
     override fun <T> get(key: String): Deferred<T?> = getInternal(key, false)
 
@@ -22,8 +30,6 @@ class SimpleAsyncCache(private val cache:SyncCache, val coordinator: Coordinator
         request(CacheCommand.GetFresh(key, deferred))
         return deferred as Deferred<T?>
     }
-
-    override val settings: CacheSettings = cache.settings
 
     override fun size(): Int = cache.size()
 
@@ -103,8 +109,22 @@ class SimpleAsyncCache(private val cache:SyncCache, val coordinator: Coordinator
             is CacheCommand.Invalidate -> { cache.invalidate(cmd.key) }
             else -> {
                 // How to handle error here?
-                logger.error("Unexpected command : ${cmd.action}")
+                logger?.error("Unexpected command : ${cmd.action}")
             }
+        }
+    }
+
+
+    companion object {
+
+        /**
+         * Convenience method to build async cache using Default channel coordinator
+         */
+        fun of(name:String, logger: Logger, settings: CacheSettings? = null, listener:((CacheEvent) -> Unit)? = null):SimpleAsyncCache {
+            val raw = SimpleCache(name,settings ?: CacheSettings(10), listener)
+            val coordinator = ChannelCoordinator(logger, Paired(), Channel<CacheCommand>(Channel.UNLIMITED))
+            val asyncCache = SimpleAsyncCache(raw, coordinator)
+            return asyncCache
         }
     }
 }

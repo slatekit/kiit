@@ -15,7 +15,7 @@ package slatekit.cmds
 
 import slatekit.common.Status
 import slatekit.common.args.Args
-import slatekit.functions.common.*
+import slatekit.policy.common.*
 import slatekit.results.*
 import slatekit.results.builders.Outcomes
 

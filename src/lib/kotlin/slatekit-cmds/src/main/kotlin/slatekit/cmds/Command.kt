@@ -18,8 +18,8 @@ import slatekit.common.Identity
 import slatekit.common.args.Args
 import slatekit.common.args.ArgsSchema
 import slatekit.common.envs.EnvMode
-import slatekit.functions.common.Function
-import slatekit.functions.common.*
+import slatekit.policy.common.Function
+import slatekit.policy.common.*
 import slatekit.results.*
 import slatekit.results.builders.Outcomes
 import slatekit.results.builders.Tries

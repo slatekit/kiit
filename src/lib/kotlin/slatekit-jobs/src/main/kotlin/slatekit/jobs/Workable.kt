@@ -17,6 +17,11 @@ interface Workable<T> : StatusCheck {
     val stats: Recorder
 
     /**
+     * Description of current status
+     */
+    fun note():String
+
+    /**
      * Get key/value pairs representing information about this worker.
      * e.g. such as settings
      */
@@ -61,6 +66,13 @@ interface Workable<T> : StatusCheck {
      * Transition current status to the one supplied
      */
     suspend fun move(state: Status) {
+        move(state, null)
+    }
+
+    /**
+     * Transition current status to the one supplied
+     */
+    suspend fun move(state: Status, note:String?) {
         notify(state.name, null)
     }
 

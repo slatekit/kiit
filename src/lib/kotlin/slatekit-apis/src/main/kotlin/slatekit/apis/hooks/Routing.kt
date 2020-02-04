@@ -2,7 +2,7 @@ package slatekit.apis.hooks
 
 import slatekit.apis.ApiRequest
 import slatekit.common.Ignore
-import slatekit.functions.Input
+import slatekit.policy.Input
 import slatekit.results.Outcome
 import slatekit.results.builders.Outcomes
 import slatekit.results.flatMap
@@ -13,8 +13,8 @@ import slatekit.results.flatMap
 class Routing : Input<ApiRequest> {
 
     @Ignore
-    override suspend fun process(request: Outcome<ApiRequest>): Outcome<ApiRequest> {
-        return request.flatMap {
+    override suspend fun process(i: Outcome<ApiRequest>): Outcome<ApiRequest> {
+        return i.flatMap {
             val req = it.request
             // e.g. "users.invite" = [ "users", "invite" ]
             // Check 1: at least 2 parts
@@ -22,7 +22,7 @@ class Routing : Input<ApiRequest> {
             return if (totalParts < 2) {
                 Outcomes.invalid(req.action + ": invalid call")
             } else {
-                request
+                i
             }
         }
     }

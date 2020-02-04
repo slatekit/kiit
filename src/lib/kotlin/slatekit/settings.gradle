@@ -33,8 +33,8 @@ project(':slatekit-orm').projectDir=new File('../slatekit-orm')
 include ':slatekit-core'
 project(':slatekit-core').projectDir=new File('../slatekit-core')
 
-include ':slatekit-functions'
-project(':slatekit-functions').projectDir=new File('../slatekit-functions')
+include ':slatekit-policy'
+project(':slatekit-policy').projectDir=new File('../slatekit-policy')
 
 include ':slatekit-cache'
 project(':slatekit-cache').projectDir=new File('../slatekit-cache')

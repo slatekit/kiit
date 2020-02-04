@@ -1,10 +1,6 @@
 package test.core
 
-import org.junit.Assert
-import org.junit.Test
-import slatekit.functions.common.FunctionMode
 //import slatekit.functions.syncs.Sync
-import slatekit.results.builders.Notices
 
 //class SyncTests {
 //

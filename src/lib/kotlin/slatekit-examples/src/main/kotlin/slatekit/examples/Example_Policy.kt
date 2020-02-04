@@ -13,7 +13,6 @@ usage: Please refer to license on github for more info.
 package slatekit.examples
 
 //<doc:import_required>
-import slatekit.functions.*
 import slatekit.results.*
 //</doc:import_required>
 
@@ -24,7 +23,7 @@ import slatekit.common.paged.Pager
 import slatekit.results.Success
 import slatekit.results.builders.Outcomes
 import kotlinx.coroutines.runBlocking
-import slatekit.results.Status
+import slatekit.policy.*
 
 //</doc:import_examples>
 
@@ -61,7 +60,7 @@ class Example_Policy : Command("todo") {
 
             // Case 3: Every
             println("============================")
-            val everyOperation = every(2L, {res -> println("Every test: curr=${res.getOrNull()}") }) {
+            val everyOperation = every(2L, { res -> println("Every test: curr=${res.getOrNull()}") }) {
                 val curr = pager.current(moveNext = true)
                 Outcomes.success(curr)
             }
@@ -72,14 +71,14 @@ class Example_Policy : Command("todo") {
             // NOTE: The exact code/msg does not matter, only the type of the Status
             val ratioOperation = ratio(.3, Failed.Denied(100, "")) {
                 val curr = pager.current(moveNext = true)
-                if(curr == 2) Outcomes.denied("test") else Outcomes.success(curr)
+                if (curr == 2) Outcomes.denied("test") else Outcomes.success(curr)
             }
             repeat(6){ ratioOperation() }
 
             // Case 5: Rewrite
             println("============================")
             // NOTE: The exact code/msg does not matter, only the type of the Status
-            val rewriteOperation = rewrite<String, String>( {input -> "CLI.$input" } ) { input ->
+            val rewriteOperation = rewrite<String, String>({ input -> "CLI.$input" }) { input ->
                 println("Rewritten to: $input")
                 Outcomes.success("Rewritten to : $input")
             }

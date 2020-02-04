@@ -4,8 +4,8 @@ import slatekit.apis.ApiRequest
 import slatekit.apis.support.RewriteSupport
 import slatekit.common.Ignore
 import slatekit.common.validations.ValidationFuncs
-import slatekit.functions.Input
-import slatekit.functions.middleware.Middleware
+import slatekit.policy.Input
+import slatekit.policy.middleware.Middleware
 import slatekit.results.Outcome
 import slatekit.results.builders.Outcomes
 import slatekit.results.flatMap
@@ -22,8 +22,8 @@ class Restify : Input<ApiRequest>, RewriteSupport, Middleware {
      * Rewrites restful routes and maps them to SlateKit API routes
      */
     @Ignore
-    override suspend fun process(request: Outcome<ApiRequest>): Outcome<ApiRequest> {
-        return request.flatMap {
+    override suspend fun process(i: Outcome<ApiRequest>): Outcome<ApiRequest> {
+        return i.flatMap {
             // Get the first and second part
             val req = it.request
             val verb = req.verb.toLowerCase()
@@ -44,7 +44,7 @@ class Restify : Input<ApiRequest>, RewriteSupport, Middleware {
             } else if (verb == verbDelete && ValidationFuncs.isNumeric(req.parts[2])) {
                     Outcomes.of { rewriteWithParam(it, container.rename("deleteById"), "id", req.parts[2]) }
             } else {
-                request
+                i
             }
             result
         }

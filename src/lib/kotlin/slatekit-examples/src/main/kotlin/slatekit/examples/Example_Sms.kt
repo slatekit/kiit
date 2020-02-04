@@ -33,6 +33,7 @@ import slatekit.results.Success
 import kotlinx.coroutines.runBlocking
 import slatekit.common.ext.orElse
 import slatekit.common.io.Uris
+import slatekit.common.types.Countries
 
 //</doc:import_examples>
 
@@ -75,7 +76,7 @@ class Example_Sms : Command("sms") {
         val sms2 = TwilioSms(apiKey.key, apiKey.pass, apiKey.account, templates)
 
         // Setup 3b: Setup the templates with support for different country codes
-        val countries = listOf(CountryCode("US"), CountryCode("FR"))
+        val countries = Countries.filter(listOf("US", "FR"))
         val sms3 = TwilioSms(apiKey.key, apiKey.pass, apiKey.account, templates, countries)
         val sms: SmsService = sms3
         //</doc:setup>

@@ -2,7 +2,7 @@ package slatekit.apis.hooks
 
 import slatekit.apis.ApiRequest
 import slatekit.common.Ignore
-import slatekit.functions.Input
+import slatekit.policy.Input
 import slatekit.results.Failure
 import slatekit.results.Outcome
 import slatekit.results.Success

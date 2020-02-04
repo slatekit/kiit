@@ -4,9 +4,11 @@ import kotlinx.coroutines.runBlocking
 import org.junit.Assert
 import org.junit.Test
 import slatekit.common.Identity
+import slatekit.policy.Policies
+import slatekit.policy.Policy
 import slatekit.tracking.Calls
 import slatekit.tracking.Counters
-import slatekit.functions.policy.*
+import slatekit.policy.policies.*
 import slatekit.results.*
 import slatekit.results.builders.Outcomes
 
@@ -16,7 +18,7 @@ class Policy_Tests {
     @Test
     fun test_limit_success(){
         val counters = Counters(Identity.test("policy"))
-        val policy:Policy<String,Int> = Limit(2, true, { counters } )
+        val policy: Policy<String, Int> = Limit(2, true, { counters } )
         val result = runBlocking {
             policy.run("1") {
                 Outcomes.of(it.toInt())
@@ -31,7 +33,7 @@ class Policy_Tests {
     @Test
     fun test_limit_failure(){
         val counters = Counters(Identity.test("policy"))
-        val policy:Policy<String,Int> = Limit(2, true, { counters } )
+        val policy: Policy<String, Int> = Limit(2, true, { counters } )
         val result = runBlocking {
             policy.run("1") { Outcomes.of(it.toInt()) }
             policy.run("2") { Outcomes.of(it.toInt()) }
@@ -46,7 +48,7 @@ class Policy_Tests {
     @Test
     fun test_calls_success(){
         val calls = Calls(Identity.test("policy"))
-        val policy:Policy<String,Int> = Calls(2, { calls } )
+        val policy: Policy<String, Int> = Calls(2, { calls } )
         val result = runBlocking {
             policy.run("1") {
                 calls.inc()
@@ -62,7 +64,7 @@ class Policy_Tests {
     @Test
     fun test_calls_failure(){
         val calls = Calls(Identity.test("policy"))
-        val policy:Policy<String,Int> = Calls(2, { calls } )
+        val policy: Policy<String, Int> = Calls(2, { calls } )
         val result = runBlocking {
             policy.run("1") { calls.inc(); Outcomes.of(it.toInt()) }
             policy.run("2") { calls.inc(); Outcomes.of(it.toInt()) }
@@ -77,7 +79,7 @@ class Policy_Tests {
     @Test
     fun test_every_success(){
         var value = -1
-        val policy:Policy<String,Int> = Every(2, { i, o -> value = o.getOrElse { -1 }  } )
+        val policy: Policy<String, Int> = Every(2, { i, o -> value = o.getOrElse { -1 }  } )
         val result = runBlocking {
             policy.run("1") { Outcomes.of(it.toInt()) }
             policy.run("2") { Outcomes.of(it.toInt()) }
@@ -93,7 +95,7 @@ class Policy_Tests {
     @Test
     fun test_ratio_success(){
         val counts = Counters(Identity.test("policy"))
-        val policy:Policy<String,Int> = Ratio(.4, Failed.Denied(0, ""), { counts })
+        val policy: Policy<String, Int> = Ratio(.4, Failed.Denied(0, ""), { counts })
         val result = runBlocking {
             policy.run("1") { counts.incProcessed(); counts.incSucceeded(); Outcomes.of(it.toInt()) }
             policy.run("2") { counts.incProcessed(); counts.incDenied(); Outcomes.of(it.toInt()) }
@@ -108,7 +110,7 @@ class Policy_Tests {
     @Test
     fun test_ratio_failure(){
         val counts = Counters(Identity.test("policy"))
-        val policy:Policy<String,Int> = Ratio(.5, Failed.Denied(0, ""), { counts })
+        val policy: Policy<String, Int> = Ratio(.5, Failed.Denied(0, ""), { counts })
         val result = runBlocking {
             policy.run("1") { counts.incProcessed(); counts.incSucceeded(); Outcomes.of(it.toInt()) }
             policy.run("2") { counts.incProcessed(); counts.incDenied(); Outcomes.of(it.toInt()) }

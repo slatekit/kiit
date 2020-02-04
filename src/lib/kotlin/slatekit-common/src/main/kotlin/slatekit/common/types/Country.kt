@@ -13,6 +13,7 @@
 
 package slatekit.common.types
 
+
 /**
  * Represents a country with iso code, name, and phone codes for sms features
  *
@@ -29,4 +30,3 @@ data class Country(val iso2: String, val iso3: String, val phoneCode: String, va
         else phone
     }
 }
-

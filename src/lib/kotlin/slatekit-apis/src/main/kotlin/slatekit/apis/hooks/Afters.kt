@@ -3,9 +3,7 @@ package slatekit.apis.hooks
 import slatekit.apis.ApiRequest
 import slatekit.apis.ApiResult
 import slatekit.common.Ignore
-import slatekit.common.log.Logger
-import slatekit.functions.Input
-import slatekit.functions.Output
+import slatekit.policy.Output
 import slatekit.results.Outcome
 
 /**
@@ -14,14 +12,14 @@ import slatekit.results.Outcome
 class Afters : Output<ApiRequest, ApiResult> {
 
     @Ignore
-    override suspend fun process(raw:ApiRequest, req:Outcome<ApiRequest>, res: Outcome<ApiResult>): Outcome<ApiResult> {
-        req.onSuccess {
+    override suspend fun process(raw:ApiRequest, i:Outcome<ApiRequest>, o: Outcome<ApiResult>): Outcome<ApiResult> {
+        i.onSuccess {
             val inst = it.target?.instance
-            if (inst is slatekit.functions.middleware.After<*, *>) {
-                val filterHook = inst as slatekit.functions.middleware.After<ApiRequest, ApiResult>
-                filterHook.onAfter(raw, req, res)
+            if (inst is slatekit.policy.middleware.After<*, *>) {
+                val filterHook = inst as slatekit.policy.middleware.After<ApiRequest, ApiResult>
+                filterHook.after(raw, i, o)
             }
         }
-        return res
+        return o
     }
 }
