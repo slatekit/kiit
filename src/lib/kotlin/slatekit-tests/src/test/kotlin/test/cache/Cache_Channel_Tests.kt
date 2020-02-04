@@ -48,7 +48,9 @@ class Cache_Channel_Tests {
     @Test
     fun can_put() {
         val timestamp = DateTime.now()
-        val cache = getCache()
+        var event:CacheEvent? = null
+        val listener = { ev:CacheEvent -> event = ev }
+        val cache = getCache(listener = listener)
         val countries1Deferred = cache.get<List<String>>("countries")
         val countries1 = runBlocking {
             cache.respond()
@@ -87,6 +89,14 @@ class Cache_Channel_Tests {
         Assert.assertTrue(stats[0].expiry.isAlive())
         Assert.assertTrue(timestamp <= stats[0].expiry.started )
         Assert.assertTrue(stats[0].expiry.expires > stats[0].expiry.started)
+
+        // Events
+        Assert.assertNotNull(event)
+        Assert.assertEquals(CacheAction.Create, event?.action)
+        Assert.assertEquals(cache.name, event?.origin)
+        Assert.assertEquals("countries", event?.key)
+        Assert.assertTrue(!event?.uuid.isNullOrEmpty())
+        Assert.assertEquals("async-cache.${CacheAction.Create.name}.countries", event?.name ?: "")
     }
 
 
@@ -161,7 +171,9 @@ class Cache_Channel_Tests {
 
     @Test
     fun can_clear() {
-        val cache = getCache()
+        var event:CacheEvent? = null
+        val listener = { ev:CacheEvent -> event = ev }
+        val cache = getCache(listener = listener)
         cache.put("promocode", "promotion code", 60) { "promo-123" }
 
         runBlocking {
@@ -178,13 +190,23 @@ class Cache_Channel_Tests {
 
         Assert.assertEquals(0, cache.keys().size)
         Assert.assertEquals(0, cache.size())
+
+        // Events
+        Assert.assertNotNull(event)
+        Assert.assertEquals(CacheAction.Clear, event?.action)
+        Assert.assertEquals(cache.name, event?.origin)
+        Assert.assertEquals("*", event?.key)
+        Assert.assertTrue(!event?.uuid.isNullOrEmpty())
+        Assert.assertEquals("async-cache.${CacheAction.Clear.name}.*", event?.name ?: "")
     }
 
 
     @Test
     fun can_set() {
         val timestamp = DateTime.now()
-        val cache = getCache()
+        var event:CacheEvent? = null
+        val listener = { ev:CacheEvent -> event = ev }
+        val cache = getCache(listener = listener)
         val countries1Future = cache.get<List<String>>("countries")
         val countries1 = runBlocking {
             cache.respond()
@@ -236,7 +258,9 @@ class Cache_Channel_Tests {
     @Test
     fun can_refresh() {
         val timestamp = DateTime.now()
-        val cache = getCache(initialize = false)
+        var event:CacheEvent? = null
+        val listener = { ev:CacheEvent -> event = ev }
+        val cache = getCache(initialize = false, listener = listener)
         var count = 0
         cache.put("countries", "countries supported for mobile app", 300) {
             if(count == 0) {
@@ -275,7 +299,9 @@ class Cache_Channel_Tests {
     @Test
     fun can_invalidate() {
         val timestamp1 = DateTime.now()
-        val cache = getCache(initialize = false)
+        var event:CacheEvent? = null
+        val listener = { ev:CacheEvent -> event = ev }
+        val cache = getCache(initialize = false, listener = listener)
         var count = 0
         cache.put("countries", "countries supported for mobile app", 300) {
             if(count == 0) {
@@ -334,5 +360,13 @@ class Cache_Channel_Tests {
         Assert.assertEquals(2, stats2.hits.count)
         Assert.assertNotNull(stats2.hits.timestamp)
         Assert.assertTrue(stats2.hits.timestamp!! >= timestamp1)
+
+        // Events
+        Assert.assertNotNull(event)
+        Assert.assertEquals(CacheAction.Clear, event?.action)
+        Assert.assertEquals(cache.name, event?.origin)
+        Assert.assertEquals("countries", event?.key)
+        Assert.assertTrue(!event?.uuid.isNullOrEmpty())
+        Assert.assertEquals("async-cache.${CacheAction.Clear.name}.countries", event?.name ?: "")
     }
 }
