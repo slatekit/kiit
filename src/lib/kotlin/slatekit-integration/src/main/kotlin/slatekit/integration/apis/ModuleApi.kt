@@ -54,10 +54,15 @@ class ModuleApi(val ctx: slatekit.integration.mods.ModuleContext, override val c
     }
 
     @Action(desc = "installs all modules from initial setup")
-    fun install(): Notice<Any> {
+    fun installAll(): Notice<Any> {
         val res = _items.all().map { module -> installUpdate(module, false) }
         val finalResult = res.reduce({ acc, item -> if (!acc.success) acc else item })
         return finalResult
+    }
+
+    @Action(desc = "installs a specific module")
+    fun installByName(name: String): Notice<Any> {
+        return _items[name]?.let { installUpdate(it, false) } ?: Failure("Unknown module : $name")
     }
 
     @Action(desc = "generates sql scripts for all models")
@@ -67,11 +72,6 @@ class ModuleApi(val ctx: slatekit.integration.mods.ModuleContext, override val c
             sqlScript
         }
         return scripts.flatten()
-    }
-
-    @Action(desc = "installs a specific module")
-    fun installByName(name: String): Notice<Any> {
-        return _items[name]?.let { installUpdate(it, false) } ?: Failure("Unknown module : $name")
     }
 
     @Action(desc = "forces the install of a specific module or updates it. updates the mod entry and creates table")
@@ -87,7 +87,7 @@ class ModuleApi(val ctx: slatekit.integration.mods.ModuleContext, override val c
     @Action(desc = "gets the names of the modules")
     fun uninstallAll(): Try<String> {
         val all = _items.all().map { it.info.name }
-        val results = all.map { name -> uninstall(name) }
+        val results = all.map { name -> uninstallByName(name) }
         val success = results.foldRight(true, { res, acc -> if (!res.success) false else acc })
         val message = results.map({ result -> if (result.success) "" else result.msg }).joinToString { newline }
         val result = if (success) Success("Uninstalled all") else Failure(Exception(message))
@@ -95,7 +95,7 @@ class ModuleApi(val ctx: slatekit.integration.mods.ModuleContext, override val c
     }
 
     @Action(desc = "gets the names of the modules")
-    fun uninstall(name: String): Try<String> {
+    fun uninstallByName(name: String): Try<String> {
         val tablesResult = _items[name]?.let { it.uninstall() } ?: Failure("Unknown module : $name").toTry()
         val moduleResult = tablesResult.map { ctx.service.deleteByField(Mod::name, name) }
         return when (moduleResult) {
