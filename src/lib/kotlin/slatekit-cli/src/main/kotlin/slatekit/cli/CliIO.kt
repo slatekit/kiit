@@ -91,7 +91,7 @@ open class CliIO(private val io: IO<CliOutput, Unit>,
      * @param obj
      */
     private fun write(request: CliRequest, cmd: CliResponse<*>, obj: Any?, outputDir: String) {
-        val format = request.args.getStringOrElse(SysParam.Format.id, "prop")
+        val format = request.args.getSysString(SysParam.Format.id) ?: "prop"
         text("===============================")
         val contentType = ContentType.parse(format)
         val content = serializer(obj, contentType)

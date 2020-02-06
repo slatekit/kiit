@@ -140,7 +140,7 @@ class SlateKit(ctx: Context) : App<Context>(ctx, AppOptions(showWelcome = true))
                 metaTransform = {
                     listOf("api-key" to keys.first().key)
                 },
-                serializer = { item, type -> Content.prop(Serialization.csv().serialize(item)) }
+                serializer = Serialization::serialize
         )
         cli.apis.setApiContainerHost()
         return cli
