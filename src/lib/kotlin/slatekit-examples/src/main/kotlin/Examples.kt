@@ -83,7 +83,7 @@ fun testPaths(){
 
 
 fun testLRU() {
-    val cache = SimpleCache(CacheSettings(3))
+    val cache = SimpleCache(settings = CacheSettings(3))
     cache.put("a", "desc a", 500) { 1 }
     cache.put("b", "desc a", 500) { 2 }
     cache.put("c", "desc a", 500) { 3 }

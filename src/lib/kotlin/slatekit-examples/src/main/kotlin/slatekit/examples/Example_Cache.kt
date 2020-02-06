@@ -35,7 +35,7 @@ class Example_Cache  : Command("auth") {
 
   //<doc:setup>
 
-  val cache = SimpleCache(CacheSettings(10) )
+  val cache = SimpleCache(settings = CacheSettings(10) )
   //</doc:setup>
 
   override fun execute(request: CommandRequest) : Try<Any>
