@@ -1,5 +1,6 @@
 package slatekit.tracking
 
+import slatekit.common.Event
 import slatekit.results.*
 
 /**

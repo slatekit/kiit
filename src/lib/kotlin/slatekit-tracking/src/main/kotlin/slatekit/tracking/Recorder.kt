@@ -1,10 +1,13 @@
 package slatekit.tracking
 
+import slatekit.common.Event
 import slatekit.common.Identity
 import slatekit.common.log.Logger
 import slatekit.common.log.LoggerConsole
 import slatekit.results.Err
+import slatekit.results.Failed
 import slatekit.results.Outcome
+import slatekit.results.Passed
 import slatekit.results.builders.Tries
 
 /**
@@ -31,7 +34,7 @@ open class Recorder<TRequest, TResponse>(val id: Identity,
     fun record(sender: Any, request: TRequest, result: Outcome<TResponse>) {
         Tries.of {
             // Structured logging ( convert the request/result into an Event
-            converter?.let { c -> Event.log(logger, id, c(request, result)) }
+            converter?.let { c -> log(logger, id, c(request, result)) }
 
             // Track the last response
             lasts?.let { lasts.handle(sender, request, result) }
@@ -47,7 +50,7 @@ open class Recorder<TRequest, TResponse>(val id: Identity,
 
     fun log(sender: Any, request: TRequest, result: Outcome<TResponse>){
         // Structured logging ( convert the request/result into an Event
-        converter?.let { c -> Event.log(logger, id, c(request, result)) }
+        converter?.let { c -> log(logger, id, c(request, result)) }
     }
 
 
@@ -80,6 +83,27 @@ open class Recorder<TRequest, TResponse>(val id: Identity,
                 else -> Events<TRequest, TResponse, Err>(tags ?: listOf())
             }
             return Recorder(id, logger, Calls(id), Counters(id), Lasts(id), events, converter)
+        }
+
+        fun log(logger:Logger, id: Identity, event: Event){
+            val extra = event.fields?.fold("") { acc, info -> acc + ", ${info.first}=${info.second}" }
+            when(event.status) {
+                is Passed.Succeeded  -> logger.info ("id=${id.id}, area=${event.area}, name=${event.name}, uuid=${event.uuid}, success=true , code=${event.status.code}, desc=${event.desc} $extra")
+                is Passed.Pending    -> logger.info ("id=${id.id}, area=${event.area}, name=${event.name}, uuid=${event.uuid}, success=true , code=${event.status.code}, desc=${event.desc} $extra")
+                is Failed.Ignored    -> logger.info ("id=${id.id}, area=${event.area}, name=${event.name}, uuid=${event.uuid}, success=false, code=${event.status.code}, desc=${event.desc} $extra")
+                is Failed.Invalid    -> logger.error("id=${id.id}, area=${event.area}, name=${event.name}, uuid=${event.uuid}, success=false, code=${event.status.code}, desc=${event.desc} $extra")
+                is Failed.Denied     -> logger.error("id=${id.id}, area=${event.area}, name=${event.name}, uuid=${event.uuid}, success=false, code=${event.status.code}, desc=${event.desc} $extra")
+                is Failed.Errored    -> logger.error("id=${id.id}, area=${event.area}, name=${event.name}, uuid=${event.uuid}, success=false, code=${event.status.code}, desc=${event.desc} $extra")
+                is Failed.Unexpected -> logger.error("id=${id.id}, area=${event.area}, name=${event.name}, uuid=${event.uuid}, success=false, code=${event.status.code}, desc=${event.desc} $extra")
+                else                 -> logger.error("id=${id.id}, area=${event.area}, name=${event.name}, uuid=${event.uuid}, success=false, code=${event.status.code}, desc=${event.desc} $extra")
+
+            }
+        }
+
+        fun logger(logger: Logger, id: Identity): (Event) -> Unit {
+            return { event: Event ->
+                log(logger, id, event)
+            }
         }
     }
 }

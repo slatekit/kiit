@@ -148,19 +148,19 @@ class Example_Tracking : Command("auth") {
          */
         // Use case 4.1: Create a sample registration event
         val event = Event(
-             area  = "registration",
-             name  = "NEW_ANDROID_REGISTRATION",
-             agent ="job",
-             env   = "dev",
-             uuid  = "abc-123-xyz",
-             desc  = "User registration via mobile",
-             status= Codes.SUCCESS,
-             target= "registration-alerts",
-             tag   = "a1b2c3",
-             fields= listOf(
-                 Triple("region" , "usa"     , ""),
-                 Triple("device" , "android" , "")
-             )
+                area = "registration",
+                name = "NEW_ANDROID_REGISTRATION",
+                agent = "job",
+                env = "dev",
+                uuid = "abc-123-xyz",
+                desc = "User registration via mobile",
+                status = Codes.SUCCESS,
+                target = "registration-alerts",
+                tag = "a1b2c3",
+                fields = listOf(
+                        Triple("region", "usa", ""),
+                        Triple("device", "android", "")
+                )
         )
 
         /** Setup a simple Events class that can handle Requests/Results/Failures of type
