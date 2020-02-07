@@ -143,7 +143,7 @@ abstract class Doc  {
 
             // Actions
             writer.subTitle("ACTIONS", endLine = true)
-            val maxLength = api.actions.items.maxBy { it.name }?.name?.length ?: 10
+            val maxLength = api.actions.items.maxBy { it.name.length }?.name?.length ?: 15
             api.actions.items.sortedBy { it.name }.forEach{ buildAction(api, it, maxLength,false)}
             writer.line()
 
@@ -175,6 +175,7 @@ abstract class Doc  {
             writer.title("ACTION", endLine = true)
             writer.text(action.verb.name + " ", endLine = false)
             writer.url("$pathSeparator${area.name}$pathSeparator${api.name}$pathSeparator${action.name}", endLine = true)
+            writer.line()
 
             // APISs
             writer.subTitle("API", endLine = true)
@@ -210,7 +211,6 @@ abstract class Doc  {
         if(details) {
             with(writer) {
                 line()
-                subTitle("Setup")
                 tab(); keyValue("route", "${api.area}$pathSeparator${api.name}", true)
                 tab(); keyValue("area ", api.area, true)
                 tab(); keyValue("name ", api.name, true)
@@ -224,14 +224,13 @@ abstract class Doc  {
 
     private fun buildAction(api: Api, action: Action, maxLength:Int, details: Boolean) {
         writer.tab()
-        writer.highlight(getFormattedText(action.name, maxLength + 3), endLine = false)
+        writer.highlight(getFormattedText(action.name, maxLength), endLine = false)
         writer.text(":", endLine = false)
         writer.text(action.desc, endLine = true)
 
         if(details) {
             with(writer) {
                 line()
-                subTitle("Setup")
                 tab(); keyValue("name", action.name, true)
                 tab(); keyValue("verb", action.verb.name, true)
                 tab(); keyValue("auth", action.auth.name, true)
