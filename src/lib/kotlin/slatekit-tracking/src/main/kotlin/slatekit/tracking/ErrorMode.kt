@@ -1,4 +1,4 @@
-package slatekit.app
+package slatekit.tracking
 
 import slatekit.common.EnumLike
 import slatekit.common.EnumSupport
