@@ -11,7 +11,7 @@ cd slatekit-core          && gradle clean build bintrayUpload && cd ../ && echo 
 
 # Apps / Services
 # cd slatekit-app           && gradle clean build bintrayUpload && cd ../ && echo 'sleeping 12s' && sleep 12s  
-cd slatekit-cli           && gradle clean build bintrayUpload && cd ../ && echo 'sleeping 12s' && sleep 12s  
+# cd slatekit-cli           && gradle clean build bintrayUpload && cd ../ && echo 'sleeping 12s' && sleep 12s  
 cd slatekit-jobs          && gradle clean build bintrayUpload && cd ../ && echo 'sleeping 12s' && sleep 12s 
 cd slatekit-apis          && gradle clean build bintrayUpload && cd ../ && echo 'sleeping 12s' && sleep 12s 
 cd slatekit-cache         && gradle clean build bintrayUpload && cd ../ && echo 'sleeping 12s' && sleep 12s 

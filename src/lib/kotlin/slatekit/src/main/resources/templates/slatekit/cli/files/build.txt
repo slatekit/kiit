@@ -40,7 +40,7 @@ dependencies {
     compile "com.slatekit:slatekit-common:$slatekit_version_beta"
     compile "com.slatekit:slatekit-providers:$slatekit_version_beta"
     compile "com.slatekit:slatekit-apis:$slatekit_version_beta"
-    compile "com.slatekit:slatekit-cli:$slatekit_version_beta"
+    compile "com.slatekit:slatekit-cli:$slatekit_version"
     compile "com.slatekit:slatekit-app:$slatekit_version"
     compile "com.slatekit:slatekit-integration:$slatekit_version_beta"
 }

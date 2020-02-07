@@ -25,7 +25,7 @@ apply plugin: 'kotlin'
 def slatekitComponentId = 'cli'
 def slatekitComponentName = 'CLI'
 def slatekitComponentDesc = 'SlateKit CLI: Command Line Interface Template'
-def slatekitComponentVersion = ext.slatekit_version_beta
+def slatekitComponentVersion = ext.slatekit_version
 
 
 // ==================================================================
