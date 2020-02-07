@@ -20,10 +20,9 @@ import slatekit.common.types.Content
 import slatekit.common.types.ContentType
 import slatekit.common.io.Files
 import slatekit.common.io.IO
+import slatekit.common.newline
 import slatekit.common.serialization.Serializer
-import slatekit.results.Failure
-import slatekit.results.Success
-import slatekit.results.Try
+import slatekit.results.*
 
 open class CliIO(private val io: IO<CliOutput, Unit>,
                  private val serializer:(Any?, ContentType) -> Content) : Writer {
@@ -57,10 +56,18 @@ open class CliIO(private val io: IO<CliOutput, Unit>,
             is Success -> {
                 val request = result.value.request
                 val response = result.value
-                response.value?.let { value ->
-                    write(request, response, value, outputDir)
-                    summary(response)
-                } ?: empty()
+                when(response.success){
+                    false -> ex(response)
+                    true  -> {
+                        when(response.value){
+                            null -> empty()
+                            else -> {
+                                write(request, response, response.value, outputDir)
+                                summary(response)
+                            }
+                        }
+                    }
+                }
             }
         }
     }
@@ -79,10 +86,11 @@ open class CliIO(private val io: IO<CliOutput, Unit>,
      * @param result
      */
     private fun summary(result: CliResponse<*>) {
-        text("Success : " + result.success)
-        text("Status  : " + result.code)
-        text("Message : " + result.msg)
-        text("Tag     : " + result.tag)
+        val textType = if(result.success) TextType.Success else TextType.Failure
+        write(textType, "Success : " + result.success)
+        text( "Status  : " + result.code)
+        text( "Message : " + result.msg)
+        text( "Tag     : " + result.tag)
     }
 
     /**
@@ -91,12 +99,12 @@ open class CliIO(private val io: IO<CliOutput, Unit>,
      * @param obj
      */
     private fun write(request: CliRequest, cmd: CliResponse<*>, obj: Any?, outputDir: String) {
-        val format = request.args.getStringOrElse(SysParam.Format.id, "prop")
+        val format = request.args.getSysString(SysParam.Format.id) ?: "prop"
         text("===============================")
         val contentType = ContentType.parse(format)
         val content = serializer(obj, contentType)
         val text = content.text
-        text(text)
+        text("RESULTS: $text")
         text("===============================")
 
         // Writer to log
@@ -110,51 +118,41 @@ open class CliIO(private val io: IO<CliOutput, Unit>,
     }
 
     /**
-     * recursive serialization for a object.
+     * prints an item ( non-recursive )
      *
-     * @param item: The object to serialize
-     * @param serializer: The serializer to serialize a value to a string
-     * @param depth: The the depth of this object in a nested heirarchy
+     * @param obj
      */
-    private fun serialize(serializer: Serializer, item: Any, depth: Int) {
-
-        // Handle enum
-        if (item is Enum<*>) {
-            val enumVal = (item).ordinal
-            serializer.serializeValue(enumVal, depth)
-            return
-        }
-
-        // Begin
-        serializer.onContainerStart(item, Serializer.ParentType.OBJECT_TYPE, depth)
-
-        // Get fields
-        val fields = item.javaClass.declaredFields
-
-        // Standardize the display of the props
-        val maxLen = if (serializer.standardizeWidth) {
-            fields.maxBy { it.name.length }?.name?.length ?: 0
-        } else {
-            0
-        }
-
-        fields.forEachIndexed { index, field ->
-            // Get name/value
-            val propName = field.name.trim()
-
-            // Standardized width
-            val finalPropName = if (serializer.standardizeWidth) {
-                propName.padEnd(maxLen)
-            } else {
-                propName
+    private fun ex(response:CliResponse<*>) {
+        summary(response)
+        line()
+        val ex = response.err
+        when(ex){
+            null -> { }
+            is ExceptionErr -> {
+                text("ERRORS")
+                line()
+                val flattened = slatekit.common.ext.flatten(ex.err)
+                errs(flattened)
+                line()
             }
-            val value = field.get(item)
-
-            // Entry
-            serializer.onMapItem(item, depth, index, finalPropName, value)
+            is StatusException -> {
+                failure(ex.message ?: "Status error: $ex")
+            }
+            else -> {
+                failure(ex.message ?: "Unexpected error")
+            }
         }
+    }
 
-        // End
-        serializer.onContainerEnd(item, Serializer.ParentType.OBJECT_TYPE, depth)
+
+    private fun errs(all:List<Err>){
+        all.forEachIndexed { ndx, err ->
+            val num = (ndx + 1).toString()
+            when(err){
+                is Err.ErrorInfo  -> failure("$num. Error   : " + err.msg)
+                is Err.ErrorField -> failure("$num. Field   : name=" + err.field + ", value=" + err.value + ", msg=" + err.msg)
+                else              -> failure("$num. ${err.msg}")
+            }
+        }
     }
 }

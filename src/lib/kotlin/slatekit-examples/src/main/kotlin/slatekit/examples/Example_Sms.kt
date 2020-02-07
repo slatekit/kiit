@@ -23,7 +23,6 @@ import slatekit.common.templates.TemplatePart
 import slatekit.common.templates.Templates
 import slatekit.common.conf.Config
 import slatekit.common.info.ApiLogin
-import slatekit.common.types.CountryCode
 import slatekit.cmds.Command
 import slatekit.cmds.CommandRequest
 import slatekit.common.Vars

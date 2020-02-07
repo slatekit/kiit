@@ -29,7 +29,7 @@ class Guide_Cache : Command("types") {
     fun sync() {
 
         //<doc:section name="sync">
-        val raw = SimpleCache(CacheSettings(10))
+        val raw = SimpleCache(settings = CacheSettings(10))
         val syncCache:SyncCache = SimpleSyncCache(raw)
         //</doc:setup>
 

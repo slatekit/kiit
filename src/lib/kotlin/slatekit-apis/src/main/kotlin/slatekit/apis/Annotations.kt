@@ -89,3 +89,26 @@ annotation class Input(
 @Target(AnnotationTarget.FUNCTION)
 @Retention(AnnotationRetention.SOURCE)
 annotation class Documented(val path: String = "", val key: String = "")
+
+
+/**
+ * Annotation used specify additional operations to perform on the action using middleware hooks.
+ *
+ * @param action : the name of the action, leave empty to use the method name this is applied to
+ * @param at     : the description of the action
+ * @param inputs : the roles allowed ( use @parent to refer to parent Api anntoation roles )
+ * @param tags   : the verb ( "get", "post", "cli", "*" ) allowed.
+ * @sample
+ *          @Perform(action = "log"  , name="logger", at="after", inputs=["*"]                 , tags=["detail"])
+ *          @Perform(action = "event", name="stream", at="after", inputs=["senderId", "userId"], tags=["detail"])
+ */
+@Target(AnnotationTarget.FUNCTION)
+@Retention(AnnotationRetention.SOURCE)
+@Repeatable
+annotation class Perform(
+    val action: String,
+    val name  : String = "",
+    val at    : String = "",
+    val inputs: Array<String> = [],
+    val tags: Array<String> = []
+)

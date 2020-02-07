@@ -20,6 +20,7 @@ import slatekit.apis.core.Area
 import slatekit.apis.core.Lookup
 import slatekit.common.console.ConsoleWriter
 import slatekit.common.console.TextSettings
+import slatekit.common.console.TextType
 import slatekit.common.console.Writer
 import kotlin.reflect.KClass
 
@@ -71,7 +72,10 @@ abstract class Doc  {
     fun areas(areas: Lookup<Area>) {
         section {
             writer.title("AREAS", endLine = true)
-            areas.items.forEachIndexed { ndx, area -> writer.highlight((ndx + 1).toString() + "." + area.name, endLine = true) }
+            areas.items.forEachIndexed { ndx, area ->
+                writer.tab()
+                writer.highlight((ndx + 1).toString() + "." + area.name, endLine = true)
+            }
             writer.line()
 
             // Usage
@@ -98,6 +102,7 @@ abstract class Doc  {
     fun area(area:Area){
         section {
             writer.title("AREA", endLine = true)
+            writer.tab()
             writer.highlight(area.name, endLine = true)
             writer.line()
 
@@ -138,7 +143,7 @@ abstract class Doc  {
 
             // Actions
             writer.subTitle("ACTIONS", endLine = true)
-            val maxLength = api.actions.items.maxBy { it.name }?.name?.length ?: 10
+            val maxLength = api.actions.items.maxBy { it.name.length }?.name?.length ?: 15
             api.actions.items.sortedBy { it.name }.forEach{ buildAction(api, it, maxLength,false)}
             writer.line()
 
@@ -170,6 +175,7 @@ abstract class Doc  {
             writer.title("ACTION", endLine = true)
             writer.text(action.verb.name + " ", endLine = false)
             writer.url("$pathSeparator${area.name}$pathSeparator${api.name}$pathSeparator${action.name}", endLine = true)
+            writer.line()
 
             // APISs
             writer.subTitle("API", endLine = true)
@@ -197,6 +203,7 @@ abstract class Doc  {
     }
 
     private fun buildApi(api: Api, details:Boolean ) {
+        writer.tab()
         writer.highlight(getFormattedText(api.name, (docSettings.maxLengthApi ) + 3), endLine = false)
         writer.text(":", endLine = false)
         writer.text(api.desc, endLine = true)
@@ -204,41 +211,44 @@ abstract class Doc  {
         if(details) {
             with(writer) {
                 line()
-                keyValue("route", "${api.area}$pathSeparator${api.name}", true)
-                keyValue("area", api.area, true)
-                keyValue("name", api.name, true)
-                keyValue("verb", api.verb.name, true)
-                keyValue("auth", api.auth.name, true)
-                keyValue("roles", api.roles.all.joinToString(","), true)
-                keyValue("proto", api.sources.all.joinToString(",") { it.id }, true)
+                tab(); keyValue("route", "${api.area}$pathSeparator${api.name}", true)
+                tab(); keyValue("area ", api.area, true)
+                tab(); keyValue("name ", api.name, true)
+                tab(); keyValue("verb ", api.verb.name, true)
+                tab(); keyValue("auth ", api.auth.name, true)
+                tab(); keyValue("roles", api.roles.all.joinToString(","), true)
+                tab(); keyValue("proto", api.sources.all.joinToString(",") { it.id }, true)
             }
         }
     }
 
     private fun buildAction(api: Api, action: Action, maxLength:Int, details: Boolean) {
-        writer.highlight(getFormattedText(action.name, 0 + 3), endLine = false)
+        writer.tab()
+        writer.highlight(getFormattedText(action.name, maxLength), endLine = false)
         writer.text(":", endLine = false)
         writer.text(action.desc, endLine = true)
 
         if(details) {
             with(writer) {
                 line()
-                keyValue("name", action.name, true)
-                keyValue("verb", action.verb.name, true)
-                keyValue("auth", action.auth.name, true)
-                keyValue("roles", action.roles.all.joinToString(","), true)
-                keyValue("proto", action.sources.all.joinToString(",") { it.id }, true)
+                tab(); keyValue("name ", action.name, true)
+                tab(); keyValue("verb ", action.verb.name, true)
+                tab(); keyValue("auth ", action.auth.name, true)
+                tab(); keyValue("roles", action.roles.all.joinToString(","), true)
+                tab(); keyValue("proto", action.sources.all.joinToString(",") { it.id }, true)
             }
+            writer.line()
             writer.subTitle("INPUTS", endLine = true)
-            action.paramsUser.forEach {
-                writer.highlight(it.name!!, endLine = true)
-                val cls = it.type.classifier as KClass<*>
-                val type = when(it.type.arguments.isEmpty()){
+            action.paramsUser.forEachIndexed { ndx, input ->
+                writer.tab()
+                writer.highlight( (ndx + 1).toString() + ". " + input.name!!, endLine = true)
+                val cls = input.type.classifier as KClass<*>
+                val type = when(input.type.arguments.isEmpty()){
                     true -> cls.simpleName!!
-                    false -> it.type.arguments.joinToString { (it.type?.classifier as KClass<*>).simpleName!! }
+                    false -> input.type.arguments.joinToString { (it.type?.classifier as KClass<*>).simpleName!! }
                 }
-                writer.keyValue("type", type, true)
-                writer.keyValue("required", (!it.isOptional).toString(), true)
+                writer.tab(); writer.keyValue("type    ", type, true)
+                writer.tab(); writer.keyValue("required", (!input.isOptional).toString(), true)
                 writer.line()
             }
         }

@@ -58,8 +58,6 @@ open class CliApi(
     : CLI(settings, Info(ctx.info.about, ctx.info.build, ctx.info.system), ctx.dirs, serializer = serializer)
 {
 
-    val metaNameForApiKey = "api-key"
-
     // api container holding all the apis.
     val apis = ApiServer.of(ctx, apiItems, auth, Source.CLI)
 
@@ -75,7 +73,7 @@ open class CliApi(
         val helpCheck = checkForHelp(request)
         return if(helpCheck.first) {
             showHelpFor(request, helpCheck.second)
-            Tries.success(CliResponse(request, true, Codes.HELP.code, mapOf(), args.line), Codes.HELP)
+            Success(CliResponse(request, true, Codes.HELP.code, mapOf(), args.line), Codes.HELP)
         }
         else {
             // Supply the api-key into each command.
