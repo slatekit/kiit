@@ -231,12 +231,13 @@ abstract class Doc  {
         if(details) {
             with(writer) {
                 line()
-                tab(); keyValue("name", action.name, true)
-                tab(); keyValue("verb", action.verb.name, true)
-                tab(); keyValue("auth", action.auth.name, true)
+                tab(); keyValue("name ", action.name, true)
+                tab(); keyValue("verb ", action.verb.name, true)
+                tab(); keyValue("auth ", action.auth.name, true)
                 tab(); keyValue("roles", action.roles.all.joinToString(","), true)
                 tab(); keyValue("proto", action.sources.all.joinToString(",") { it.id }, true)
             }
+            writer.line()
             writer.subTitle("INPUTS", endLine = true)
             action.paramsUser.forEachIndexed { ndx, input ->
                 writer.tab()
@@ -246,7 +247,7 @@ abstract class Doc  {
                     true -> cls.simpleName!!
                     false -> input.type.arguments.joinToString { (it.type?.classifier as KClass<*>).simpleName!! }
                 }
-                writer.tab(); writer.keyValue("type", type, true)
+                writer.tab(); writer.keyValue("type    ", type, true)
                 writer.tab(); writer.keyValue("required", (!input.isOptional).toString(), true)
                 writer.line()
             }
