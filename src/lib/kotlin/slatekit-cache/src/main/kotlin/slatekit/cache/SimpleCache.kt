@@ -107,7 +107,6 @@ open class SimpleCache(override val name:String = Random.uuid(),
      * Gets stats on all entries.
      */
     override fun stats():List<CacheStats> {
-
         val allStats = this.lookup.values.map {
             val stats = accesses.get(it.key)
             val accesses = stats?.first
@@ -117,43 +116,43 @@ open class SimpleCache(override val name:String = Random.uuid(),
         return allStats
     }
 
+    /**
+     * delete a single cache item with the key
+     *
+     * @param key
+     */
+    override fun delete(key: String): Boolean {
+        val result = lookup.remove(key)?.let { k -> true } ?: false
+        notify(CacheAction.Delete, key)
+        return result
+    }
 
     /**
-     * invalidates all the entries in this cache by maxing out their expiration times
+     * delete all items from cache
+     *
+     * @param key
      */
-    override fun invalidateAll() {
-        lookup.keys.toList().forEach { key -> invalidate(key) }
-        notify(CacheAction.Clear)
+    override fun deleteAll(): Boolean {
+        val result = lookup.keys.toList().map { key -> delete(key) }.reduceRight({ r, a -> a })
+        notify(CacheAction.DeleteAll)
+        return result
     }
 
     /**
      * invalidates a specific cache item with the key
      */
-    override fun invalidate(key: String) {
+    override fun expire(key: String) {
         lookup.get(key)?.let { c -> c.expire() }
-        notify(CacheAction.Clear, key)
+        notify(CacheAction.Expire, key)
     }
 
-    /**
-     * remove all items from cache
-     *
-     * @param key
-     */
-    override fun clear(): Boolean {
-        val result = lookup.keys.toList().map { key -> remove(key) }.reduceRight({ r, a -> a })
-        notify(CacheAction.Clear)
-        return result
-    }
 
     /**
-     * remove a single cache item with the key
-     *
-     * @param key
+     * invalidates all the entries in this cache by maxing out their expiration times
      */
-    override fun remove(key: String): Boolean {
-        val result = lookup.remove(key)?.let { k -> true } ?: false
-        notify(CacheAction.Delete, key)
-        return result
+    override fun expireAll() {
+        lookup.keys.toList().forEach { key -> expire(key) }
+        notify(CacheAction.ExpireAll)
     }
 
     /**
@@ -255,12 +254,12 @@ open class SimpleCache(override val name:String = Random.uuid(),
     }
 
 
-    protected fun notify(action:CacheAction, key:String? = null){
+    private fun notify(action:CacheAction, key:String? = null){
         notify(CacheEvent.of(name, action, key ?: ""))
     }
 
 
-    protected fun notify(event:CacheEvent){
+    private fun notify(event:CacheEvent){
         Cache.notify(event, listener, logger)
     }
 

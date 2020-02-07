@@ -147,7 +147,7 @@ class Cache_Sync_Tests {
         Assert.assertEquals(2, cache.keys().size)
         Assert.assertEquals(2, cache.size())
 
-        cache.clear()
+        cache.deleteAll()
 
         Assert.assertEquals(0, cache.keys().size)
         Assert.assertEquals(0, cache.size())
@@ -257,7 +257,7 @@ class Cache_Sync_Tests {
         Assert.assertNotNull(stats1.hits.timestamp)
         Assert.assertTrue(stats1.hits.timestamp!! >= timestamp1)
 
-        cache.invalidate("countries")
+        cache.expire("countries")
 
         // Get 2
         val countries2 = cache.getOrLoad<List<String>>("countries")

@@ -43,15 +43,15 @@ class SimpleAsyncCache(private val cache:SyncCache,
 
     override fun <T> set(key: String, value: T?) = request(CacheCommand.Set(key, value))
 
-    override fun remove(key: String): Boolean { request(CacheCommand.Del(key)); return true; }
+    override fun delete(key: String): Boolean { request(CacheCommand.Delete(key)); return true; }
 
-    override fun clear(): Boolean  { request(CacheCommand.ClearAll); return true }
+    override fun deleteAll(): Boolean  { request(CacheCommand.DeleteAll); return true }
+
+    override fun expire(key: String) = request(CacheCommand.Expire(key))
+
+    override fun expireAll() = request(CacheCommand.ExpireAll)
 
     override fun refresh(key: String) = request(CacheCommand.Refresh(key))
-
-    override fun invalidate(key: String) = request(CacheCommand.Invalidate(key))
-
-    override fun invalidateAll() = keys().forEach { invalidate(it) }
 
 
     fun request(command: CacheCommand) {
@@ -82,7 +82,6 @@ class SimpleAsyncCache(private val cache:SyncCache,
     }
 
 
-
     private fun <T> getInternal(key: String, load:Boolean): Deferred<T?> {
         val deferred = CompletableDeferred<Any?>()
         request(CacheCommand.Get(key, deferred, load))
@@ -92,9 +91,10 @@ class SimpleAsyncCache(private val cache:SyncCache,
 
     private suspend fun manage(cmd:CacheCommand) {
         when(cmd) {
-            is CacheCommand.ClearAll   -> { cache.clear() }
-            is CacheCommand.Clear      -> { cache.remove(cmd.key) }
-            is CacheCommand.Del        -> { cache.remove(cmd.key) }
+            is CacheCommand.Delete     -> { cache.delete(cmd.key) }
+            is CacheCommand.DeleteAll  -> { cache.deleteAll() }
+            is CacheCommand.Expire     -> { cache.expire(cmd.key) }
+            is CacheCommand.ExpireAll  -> { cache.expireAll()     }
             is CacheCommand.Refresh    -> { cache.refresh(cmd.key) }
             is CacheCommand.Put        -> { cache.put(cmd.key, cmd.desc, cmd.expiryInSeconds, cmd.fetcher) }
             is CacheCommand.Set        -> { cache.set(cmd.key, cmd.value) }
@@ -106,7 +106,6 @@ class SimpleAsyncCache(private val cache:SyncCache,
                 val item = cache.getFresh<Any>(cmd.key)
                 cmd.deferred.complete(item)
             }
-            is CacheCommand.Invalidate -> { cache.invalidate(cmd.key) }
             else -> {
                 // How to handle error here?
                 logger?.error("Unexpected command : ${cmd.action}")

@@ -5,28 +5,24 @@ import kotlinx.coroutines.CompletableDeferred
 sealed class CacheCommand {
     abstract val action: CacheAction
 
-    object ClearAll : CacheCommand() {
-        override val action = CacheAction.Clear
+    object DeleteAll : CacheCommand() {
+        override val action = CacheAction.DeleteAll
     }
 
-    class Clear(val key:String) : CacheCommand() {
-        override val action = CacheAction.Clear
+    object ExpireAll : CacheCommand() {
+        override val action = CacheAction.ExpireAll
     }
 
-    class Check(val key: String) : CacheCommand() {
-        override val action = CacheAction.Check
-    }
-
-    class Del(val key: String) : CacheCommand() {
+    class Delete(val key: String) : CacheCommand() {
         override val action = CacheAction.Delete
+    }
+
+    class Expire(val key: String) : CacheCommand() {
+        override val action = CacheAction.Expire
     }
 
     class Refresh(val key: String) : CacheCommand() {
         override val action = CacheAction.Refresh
-    }
-
-    class Invalidate(val key: String) : CacheCommand() {
-        override val action = CacheAction.Invalid
     }
 
     class Put(val key: String, val desc: String, val expiryInSeconds: Int, val fetcher: suspend () -> Any?) : CacheCommand() {

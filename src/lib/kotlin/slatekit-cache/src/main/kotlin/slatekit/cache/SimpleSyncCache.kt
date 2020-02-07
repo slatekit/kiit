@@ -39,19 +39,19 @@ class SimpleSyncCache(private val cache: SyncCache) : SyncCache {
     override fun <T> set(key: String, value: T?) = cache.set(key, value)
 
     @Synchronized
-    override fun remove(key: String): Boolean = cache.remove(key)
+    override fun delete(key: String): Boolean = cache.delete(key)
 
     @Synchronized
-    override fun clear(): Boolean = cache.clear()
+    override fun deleteAll(): Boolean = cache.deleteAll()
 
     @Synchronized
     override fun refresh(key: String) = cache.refresh(key)
 
     @Synchronized
-    override fun invalidate(key: String) = cache.invalidate(key)
+    override fun expire(key: String) = cache.expire(key)
 
     @Synchronized
-    override fun invalidateAll() = cache.invalidateAll()
+    override fun expireAll() = cache.expireAll()
 
 
     companion object {

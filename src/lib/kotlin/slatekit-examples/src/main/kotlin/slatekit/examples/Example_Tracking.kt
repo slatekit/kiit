@@ -138,7 +138,7 @@ class Example_Tracking : Command("auth") {
         println(lasts.lastErrored())
         println(lasts.lastUnexpected())
 
-        // Use case 3.3: Clear the tracking
+        // Use case 3.3: DeleteAll the tracking
         lasts.clear()
 
         /** COMPONENT: Event

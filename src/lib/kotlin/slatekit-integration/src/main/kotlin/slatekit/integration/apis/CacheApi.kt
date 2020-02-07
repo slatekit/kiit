@@ -48,11 +48,11 @@ class CacheApi(override val context: Context, val cache: SyncCache) : FileSuppor
 
     @Action(desc = "invalidates a single cache item")
     fun invalidate(key: String) {
-        return cache.invalidate(key)
+        return cache.expire(key)
     }
 
     @Action(desc = "invalidates the entire cache")
     fun invalidateAll() {
-        return cache.invalidateAll()
+        return cache.expireAll()
     }
 }
