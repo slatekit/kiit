@@ -11,15 +11,6 @@ import slatekit.query.QueryEncoder
 interface Finds<TId, T> : ServiceSupport<TId, T> where TId : kotlin.Comparable<TId>, T : Entity<TId> {
 
     /**
-     * finds items based on the query
-     * @param query
-     * @return
-     */
-    fun findByQuery(query: IQuery): List<T> {
-        return repo().find(query)
-    }
-
-    /**
      * finds items based on the field value
      * @param field: The field name
      * @param value: The value to check for
@@ -38,7 +29,7 @@ interface Finds<TId, T> : ServiceSupport<TId, T> where TId : kotlin.Comparable<T
      */
     fun findByField(field: String, op:Op, value: Any): List<T> {
         // Get column name from model schema ( if available )
-        val column = QueryEncoder.ensureField(field)
+        val column = columnName(field)
         return repo().findByField(column, op, value)
     }
 
@@ -49,7 +40,10 @@ interface Finds<TId, T> : ServiceSupport<TId, T> where TId : kotlin.Comparable<T
      */
     fun findByFields(conditions: List<Pair<String, Any>>): List<T> {
         // Get column name from model schema ( if available )
-        val pairs = conditions.map { Pair(QueryEncoder.ensureField(it.first), it.second) }
+        val pairs = conditions.map {
+            val column = columnName(it.first)
+            Pair(column, it.second)
+        }
         return repo().findByFields(pairs)
     }
 
@@ -72,7 +66,7 @@ interface Finds<TId, T> : ServiceSupport<TId, T> where TId : kotlin.Comparable<T
      */
     fun findByField(prop: KProperty<*>, op:Op, value: Any): List<T> {
         // Get column name from model schema ( if available )
-        val column = this.repo().columnName(prop)
+        val column = columnName(prop.name)
         return repo().findByField(column, op, value)
     }
 
@@ -84,7 +78,7 @@ interface Finds<TId, T> : ServiceSupport<TId, T> where TId : kotlin.Comparable<T
      */
     fun findByField(prop: KProperty<*>, op:Op, value: Any, limit: Int): List<T> {
         // Get column name from model schema ( if available )
-        val column = this.repo().columnName(prop)
+        val column = columnName(prop.name)
         val query = Query().where(column, op, value).limit(limit)
         return repo().find(query)
     }
@@ -97,7 +91,7 @@ interface Finds<TId, T> : ServiceSupport<TId, T> where TId : kotlin.Comparable<T
      */
     fun findIn(prop: KProperty<*>, value: List<Any>): List<T> {
         // Get column name from model schema ( if available )
-        val column = this.repo().columnName(prop)
+        val column = columnName(prop.name)
         return repo().findIn(column, value)
     }
 
@@ -109,7 +103,8 @@ interface Finds<TId, T> : ServiceSupport<TId, T> where TId : kotlin.Comparable<T
      */
     fun findIn(name:String, values: List<Any>): List<T> {
         // Get column name from model schema ( if available )
-        return repo().findIn(name, values)
+        val column = columnName(name)
+        return repo().findIn(column, values)
     }
 
     /**
@@ -120,7 +115,7 @@ interface Finds<TId, T> : ServiceSupport<TId, T> where TId : kotlin.Comparable<T
      */
     fun findOneByField(name: String, op: Op, value: Any): T? {
         // Get column name from model schema ( if available )
-        val column = QueryEncoder.ensureField(name)
+        val column = columnName(name)
         return repo().findOneByField(column, op, value)
     }
 
@@ -142,16 +137,23 @@ interface Finds<TId, T> : ServiceSupport<TId, T> where TId : kotlin.Comparable<T
      */
     fun findOneByField(prop: KProperty<*>, op:Op, value: Any): T? {
         // Get column name from model schema ( if available )
-        val column = this.repo().columnName(prop)
+        val column = columnName(prop.name)
         return repo().findOneByField(column, op, value)
     }
 
     /**
-     * finds the first item by the query
+     * finds items based on the field value
+     * @param prop: The property reference
+     * @param value: The value to check for
+     * @return
      */
-    fun findFirstByQuery(query: IQuery): T? {
-        val results = findByQuery(query.limit(1))
-        return results.firstOrNull()
+    fun findOneByFields(conditions: List<Pair<String, Any>>): T? {
+        // Get column name from model schema ( if available )
+        val pairs = conditions.map {
+            val column = columnName(it.first)
+            Pair(column, it.second)
+        }
+        return repo().findByFields(pairs).firstOrNull()
     }
 
     /**
@@ -161,9 +163,26 @@ interface Finds<TId, T> : ServiceSupport<TId, T> where TId : kotlin.Comparable<T
         return repo().findByProc(name, args)
     }
 
+    /**
+     * finds items based on the query
+     * @param query
+     * @return
+     */
+    fun findByQuery(query: IQuery): List<T> {
+        return repo().find(query)
+    }
+
+    /**
+     * finds the first item by the query
+     */
+    fun findOneByQuery(query: IQuery): T? {
+        val results = findByQuery(query.limit(1))
+        return results.firstOrNull()
+    }
+
     fun where(prop: KProperty<*>, op: String, value: Any?): IQuery {
         // Get column name from model schema ( if available )
-        val column = this.repo().columnName(prop)
+        val column = columnName(prop.name)
         return Query().where(column, op, value ?: Query.Null)
     }
 }

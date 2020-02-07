@@ -147,7 +147,7 @@ class ModuleApi(val ctx: slatekit.integration.mods.ModuleContext, override val c
 
     fun installUpdate(mod: slatekit.integration.mods.Module, updateIfPresent: Boolean = false): Notice<Any> {
 
-        val checkResult = ctx.service.findFirstByQuery(Query().where("name", "=", mod.info.name))
+        val checkResult = ctx.service.findOneByQuery(Query().where("name", "=", mod.info.name))
         if (checkResult == null) {
 
             if (mod.info.isEnabled) {
