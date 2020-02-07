@@ -238,15 +238,16 @@ abstract class Doc  {
                 tab(); keyValue("proto", action.sources.all.joinToString(",") { it.id }, true)
             }
             writer.subTitle("INPUTS", endLine = true)
-            action.paramsUser.forEach {
-                writer.highlight(it.name!!, endLine = true)
-                val cls = it.type.classifier as KClass<*>
-                val type = when(it.type.arguments.isEmpty()){
+            action.paramsUser.forEachIndexed { ndx, input ->
+                writer.tab()
+                writer.highlight( (ndx + 1).toString() + ". " + input.name!!, endLine = true)
+                val cls = input.type.classifier as KClass<*>
+                val type = when(input.type.arguments.isEmpty()){
                     true -> cls.simpleName!!
-                    false -> it.type.arguments.joinToString { (it.type?.classifier as KClass<*>).simpleName!! }
+                    false -> input.type.arguments.joinToString { (it.type?.classifier as KClass<*>).simpleName!! }
                 }
-                writer.keyValue("type", type, true)
-                writer.keyValue("required", (!it.isOptional).toString(), true)
+                writer.tab(); writer.keyValue("type", type, true)
+                writer.tab(); writer.keyValue("required", (!input.isOptional).toString(), true)
                 writer.line()
             }
         }
