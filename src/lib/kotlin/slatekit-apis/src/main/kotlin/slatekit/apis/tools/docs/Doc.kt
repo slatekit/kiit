@@ -20,6 +20,7 @@ import slatekit.apis.core.Area
 import slatekit.apis.core.Lookup
 import slatekit.common.console.ConsoleWriter
 import slatekit.common.console.TextSettings
+import slatekit.common.console.TextType
 import slatekit.common.console.Writer
 import kotlin.reflect.KClass
 
@@ -71,7 +72,10 @@ abstract class Doc  {
     fun areas(areas: Lookup<Area>) {
         section {
             writer.title("AREAS", endLine = true)
-            areas.items.forEachIndexed { ndx, area -> writer.highlight((ndx + 1).toString() + "." + area.name, endLine = true) }
+            areas.items.forEachIndexed { ndx, area ->
+                writer.tab()
+                writer.highlight((ndx + 1).toString() + "." + area.name, endLine = true)
+            }
             writer.line()
 
             // Usage
@@ -98,6 +102,7 @@ abstract class Doc  {
     fun area(area:Area){
         section {
             writer.title("AREA", endLine = true)
+            writer.tab()
             writer.highlight(area.name, endLine = true)
             writer.line()
 
@@ -197,6 +202,7 @@ abstract class Doc  {
     }
 
     private fun buildApi(api: Api, details:Boolean ) {
+        writer.tab()
         writer.highlight(getFormattedText(api.name, (docSettings.maxLengthApi ) + 3), endLine = false)
         writer.text(":", endLine = false)
         writer.text(api.desc, endLine = true)
@@ -204,30 +210,33 @@ abstract class Doc  {
         if(details) {
             with(writer) {
                 line()
-                keyValue("route", "${api.area}$pathSeparator${api.name}", true)
-                keyValue("area", api.area, true)
-                keyValue("name", api.name, true)
-                keyValue("verb", api.verb.name, true)
-                keyValue("auth", api.auth.name, true)
-                keyValue("roles", api.roles.all.joinToString(","), true)
-                keyValue("proto", api.sources.all.joinToString(",") { it.id }, true)
+                subTitle("Setup")
+                tab(); keyValue("route", "${api.area}$pathSeparator${api.name}", true)
+                tab(); keyValue("area ", api.area, true)
+                tab(); keyValue("name ", api.name, true)
+                tab(); keyValue("verb ", api.verb.name, true)
+                tab(); keyValue("auth ", api.auth.name, true)
+                tab(); keyValue("roles", api.roles.all.joinToString(","), true)
+                tab(); keyValue("proto", api.sources.all.joinToString(",") { it.id }, true)
             }
         }
     }
 
     private fun buildAction(api: Api, action: Action, maxLength:Int, details: Boolean) {
-        writer.highlight(getFormattedText(action.name, 0 + 3), endLine = false)
+        writer.tab()
+        writer.highlight(getFormattedText(action.name, maxLength + 3), endLine = false)
         writer.text(":", endLine = false)
         writer.text(action.desc, endLine = true)
 
         if(details) {
             with(writer) {
                 line()
-                keyValue("name", action.name, true)
-                keyValue("verb", action.verb.name, true)
-                keyValue("auth", action.auth.name, true)
-                keyValue("roles", action.roles.all.joinToString(","), true)
-                keyValue("proto", action.sources.all.joinToString(",") { it.id }, true)
+                subTitle("Setup")
+                tab(); keyValue("name", action.name, true)
+                tab(); keyValue("verb", action.verb.name, true)
+                tab(); keyValue("auth", action.auth.name, true)
+                tab(); keyValue("roles", action.roles.all.joinToString(","), true)
+                tab(); keyValue("proto", action.sources.all.joinToString(",") { it.id }, true)
             }
             writer.subTitle("INPUTS", endLine = true)
             action.paramsUser.forEach {

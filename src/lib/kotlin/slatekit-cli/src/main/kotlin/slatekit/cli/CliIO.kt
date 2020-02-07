@@ -96,7 +96,7 @@ open class CliIO(private val io: IO<CliOutput, Unit>,
         val contentType = ContentType.parse(format)
         val content = serializer(obj, contentType)
         val text = content.text
-        text(text)
+        text("RESULTS: $text")
         text("===============================")
 
         // Writer to log
