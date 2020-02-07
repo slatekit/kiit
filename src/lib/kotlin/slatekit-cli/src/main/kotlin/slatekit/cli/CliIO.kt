@@ -20,10 +20,9 @@ import slatekit.common.types.Content
 import slatekit.common.types.ContentType
 import slatekit.common.io.Files
 import slatekit.common.io.IO
+import slatekit.common.newline
 import slatekit.common.serialization.Serializer
-import slatekit.results.Failure
-import slatekit.results.Success
-import slatekit.results.Try
+import slatekit.results.*
 
 open class CliIO(private val io: IO<CliOutput, Unit>,
                  private val serializer:(Any?, ContentType) -> Content) : Writer {
@@ -57,10 +56,18 @@ open class CliIO(private val io: IO<CliOutput, Unit>,
             is Success -> {
                 val request = result.value.request
                 val response = result.value
-                response.value?.let { value ->
-                    write(request, response, value, outputDir)
-                    summary(response)
-                } ?: empty()
+                when(response.success){
+                    false -> ex(response)
+                    true  -> {
+                        when(response.value){
+                            null -> empty()
+                            else -> {
+                                write(request, response, response.value, outputDir)
+                                summary(response)
+                            }
+                        }
+                    }
+                }
             }
         }
     }
@@ -79,10 +86,11 @@ open class CliIO(private val io: IO<CliOutput, Unit>,
      * @param result
      */
     private fun summary(result: CliResponse<*>) {
-        text("Success : " + result.success)
-        text("Status  : " + result.code)
-        text("Message : " + result.msg)
-        text("Tag     : " + result.tag)
+        val textType = if(result.success) TextType.Success else TextType.Failure
+        write(textType, "Success : " + result.success)
+        text( "Status  : " + result.code)
+        text( "Message : " + result.msg)
+        text( "Tag     : " + result.tag)
     }
 
     /**
@@ -106,6 +114,45 @@ open class CliIO(private val io: IO<CliOutput, Unit>,
             val filePath = File(outputDir, fileName)
             filePath.writeText(text)
             text("Wrote content to: ${filePath.absolutePath}")
+        }
+    }
+
+    /**
+     * prints an item ( non-recursive )
+     *
+     * @param obj
+     */
+    private fun ex(response:CliResponse<*>) {
+        summary(response)
+        line()
+        val ex = response.err
+        when(ex){
+            null -> { }
+            is ExceptionErr -> {
+                text("ERRORS")
+                line()
+                val flattened = slatekit.common.ext.flatten(ex.err)
+                errs(flattened)
+                line()
+            }
+            is StatusException -> {
+                failure(ex.message ?: "Status error: $ex")
+            }
+            else -> {
+                failure(ex.message ?: "Unexpected error")
+            }
+        }
+    }
+
+
+    private fun errs(all:List<Err>){
+        all.forEachIndexed { ndx, err ->
+            val num = (ndx + 1).toString()
+            when(err){
+                is Err.ErrorInfo  -> failure("$num. Error   : " + err.msg)
+                is Err.ErrorField -> failure("$num. Field   : name=" + err.field + ", value=" + err.value + ", msg=" + err.msg)
+                else              -> failure("$num. ${err.msg}")
+            }
         }
     }
 }

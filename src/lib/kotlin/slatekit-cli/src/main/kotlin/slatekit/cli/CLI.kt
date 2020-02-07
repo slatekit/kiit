@@ -249,7 +249,6 @@ open class CLI(
             print(finalResult)
             finalResult.map { true }
         } catch (ex: Exception) {
-
             context.writer.failure(ex.message ?: "", true)
             context.writer.failure(ex.stackTrace.toString(), true)
 
