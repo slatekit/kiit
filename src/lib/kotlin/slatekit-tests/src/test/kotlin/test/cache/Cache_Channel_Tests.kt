@@ -297,7 +297,7 @@ class Cache_Channel_Tests {
 
 
     @Test
-    fun can_invalidate() {
+    fun can_expire() {
         val timestamp1 = DateTime.now()
         var event:CacheEvent? = null
         val listener = { ev:CacheEvent -> event = ev }
@@ -367,6 +367,6 @@ class Cache_Channel_Tests {
         Assert.assertEquals(cache.name, event?.origin)
         Assert.assertEquals("countries", event?.key)
         Assert.assertTrue(!event?.uuid.isNullOrEmpty())
-        Assert.assertEquals("async-cache.${CacheAction.DeleteAll.name}.countries", event?.name ?: "")
+        Assert.assertEquals("async-cache.${CacheAction.Expire.name}.countries", event?.name ?: "")
     }
 }
