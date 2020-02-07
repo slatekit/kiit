@@ -363,7 +363,7 @@ class Cache_Channel_Tests {
 
         // Events
         Assert.assertNotNull(event)
-        Assert.assertEquals(CacheAction.DeleteAll, event?.action)
+        Assert.assertEquals(CacheAction.Expire, event?.action)
         Assert.assertEquals(cache.name, event?.origin)
         Assert.assertEquals("countries", event?.key)
         Assert.assertTrue(!event?.uuid.isNullOrEmpty())
