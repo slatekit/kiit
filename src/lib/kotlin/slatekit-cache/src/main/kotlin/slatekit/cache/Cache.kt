@@ -109,7 +109,7 @@ interface Cache {
 
         fun notify(event: CacheEvent, listener:((CacheEvent) -> Unit)?, logger: Logger?) {
             // E.g. origin=service1-cache, uuid=abc123, action=delete, key=some-data
-            val pairs = event.toPairs()
+            val pairs = event.structured()
             val info = pairs.joinToString { "${it.first}=${it.second}" }
 
             try {

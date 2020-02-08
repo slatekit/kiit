@@ -10,6 +10,8 @@ import slatekit.apis.setup.HostAware
 import slatekit.apis.setup.loadAll
 import slatekit.apis.support.ExecSupport
 import slatekit.common.*
+import slatekit.common.ext.numbered
+import slatekit.common.ext.structured
 import slatekit.common.log.Logger
 import slatekit.common.requests.Request
 import slatekit.context.Context
@@ -21,7 +23,6 @@ import slatekit.policy.Process
 import slatekit.results.*
 import slatekit.results.builders.Notices
 import slatekit.results.builders.Outcomes
-import slatekit.results.builders.Tries
 
 /**
  * This is the core container hosting, managing and executing the source independent apis.
@@ -125,7 +126,9 @@ open class ApiServer(
      */
     suspend fun call(req: Request, options: Flags?): Try<Any> {
         val result = try {
-            execute(req, options)
+            val result = execute(req, options)
+            record(req, result)
+            result
         } catch (ex: Exception) {
             handleError(req, ex)
             val err = when(ex) {
@@ -206,12 +209,8 @@ open class ApiServer(
         // Step 3: Hooks: Pre-Processing Stage 1 : rewrite request, and ensure system validations
         val startInput = Outcomes.success(rawRequest)
         val validated = startInput
-            .operate {
-                processor.input(hooks.formatters  , it)
-            }
-            .operate {
-                processor.input(preProcessBuiltIns, it)
-            }
+            .operate { processor.input(hooks.formatters  , it) }
+            .operate { processor.input(preProcessBuiltIns, it) }
 
         // Step 4: Hooks: Pre-Processing Stage 2: run through more hooks ( API level & supplied )
         val requested = validated
@@ -301,9 +300,26 @@ open class ApiServer(
     }
 
     private suspend fun handleError(req: Request, ex: Exception) {
-        val apiReq = ApiRequest(this, ctx, req, null, this, null)
-        logger.error("Unexpected error executing ${req.fullName}", ex)
+        val parts = req.structured()
+        val info = parts.joinToString { "${it.first}=${it.second?.toString()}" }
+        logger.error("API Server: ERROR: $info", ex)
     }
+
+
+    private fun record(req: Request, res:Outcome<Any>){
+        logger.info({
+            val info = listOf("path" to req.path) + res.structured()
+            val summary= info.joinToString { "${it.first}=${it.second?.toString()}" }
+            val inputs = req.structured().joinToString { "${it.first}=${it.second?.toString()}" }
+            "API Server Result: $summary, inputs : $inputs"
+        }, null)
+
+        res.onFailure {
+            val numbered = it.numbered().joinToString(newline)
+            logger.error("API Server Error(s): $newline$numbered")
+        }
+    }
+
 
     companion object {
 

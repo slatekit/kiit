@@ -18,7 +18,7 @@ data class CacheEvent(val uuid:String, val origin:String, val action: CacheActio
     val name:String = "$origin.${action.name}.$key"
 
 
-    fun toPairs():List<Pair<String, Any>>{
+    fun structured():List<Pair<String, Any>>{
         return listOf(
             CacheEvent::origin.name to origin,
             CacheEvent::uuid.name   to uuid,
