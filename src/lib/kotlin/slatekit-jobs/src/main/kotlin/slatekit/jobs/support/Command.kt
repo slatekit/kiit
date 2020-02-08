@@ -14,7 +14,8 @@ sealed class Command {
     abstract val uuid: String
     abstract val action: JobAction
     abstract val target: String
-    abstract fun pairs(): List<Pair<String, String>>
+
+    abstract fun structured(): List<Pair<String, String>>
 
     data class JobCommand(
         override val id: Long,
@@ -23,7 +24,7 @@ sealed class Command {
     ) : Command() {
         override val target: String = "job"
 
-        override fun pairs(): List<Pair<String, String>> {
+        override fun structured(): List<Pair<String, String>> {
             return listOf(
                     "target" to target,
                     "id" to id.toString(),
@@ -44,12 +45,14 @@ sealed class Command {
 
         override val target: String = "wrk"
 
-        override fun pairs(): List<Pair<String, String>> {
+        override fun structured(): List<Pair<String, String>> {
             return listOf(
                     "target" to target,
                     "id" to id.toString(),
                     "uuid" to uuid,
-                    "action" to action.name
+                    "action" to action.name,
+                    "worker" to workerId.id,
+                    "seconds" to seconds.toString()
             )
         }
     }

@@ -44,7 +44,8 @@ import slatekit.providers.logs.logback.LogbackLogs
  * 1. slatekit.codegen.toKotlin -templatesFolder="usr://dev/tmp/slatekit/slatekit/scripts/templates/codegen/kotlin" -outputFolder="usr://dev/tmp/codegen/kotlin" -packageName="blendlife"
  */
 fun main(args: Array<String>) {
-    cli(args)
+    //cli(args)
+    slatekit.samples.job.main(args)
 }
 
 

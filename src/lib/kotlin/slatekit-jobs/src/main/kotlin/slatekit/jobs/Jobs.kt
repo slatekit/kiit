@@ -1,9 +1,6 @@
 package slatekit.jobs
 
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.SupervisorJob
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.*
 import slatekit.results.Outcome
 import slatekit.results.builders.Outcomes
 
@@ -75,7 +72,7 @@ class Jobs(
      * Runs the jobs by starting it and then managing it ( by
      * continuously listening of requests )
      */
-    suspend fun run(job: slatekit.jobs.Job): kotlinx.coroutines.Job {
+    private suspend fun run(job: slatekit.jobs.Job): kotlinx.coroutines.Job {
         val j = scope.launch {
             job.start()
             job.manage()

@@ -3,12 +3,15 @@ package slatekit.jobs
 import java.util.*
 import slatekit.common.Identity
 import slatekit.common.Status
+import slatekit.common.log.Logger
 import slatekit.jobs.support.Command
 
 /**
  * Represents all operations to control / manage a job
  */
 interface Management {
+
+    val logger: Logger?
 
     /**
      * Run the job by starting it first and then managing it by listening for requests
@@ -45,8 +48,8 @@ interface Management {
      */
     suspend fun request(action: JobAction) {
         val (id, uuid) = nextIds()
-        val req = Command.JobCommand(id, uuid.toString(), action)
-        request(req)
+        val cmd = Command.JobCommand(id, uuid.toString(), action)
+        request(cmd)
     }
 
     /**
@@ -54,8 +57,8 @@ interface Management {
      */
     suspend fun request(action: JobAction, workerId: Identity, desc: String?) {
         val (id, uuid) = nextIds()
-        val req = Command.WorkerCommand(id, uuid.toString(), action, workerId, 30, desc)
-        request(req)
+        val cmd = Command.WorkerCommand(id, uuid.toString(), action, workerId, 30, desc)
+        request(cmd)
     }
 
     /**

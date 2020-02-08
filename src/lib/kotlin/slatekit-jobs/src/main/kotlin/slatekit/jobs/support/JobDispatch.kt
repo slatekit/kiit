@@ -35,7 +35,6 @@ class JobDispatch(val job: Job, val workers: Workers, val events: JobEvents, val
             workers.all.forEach {
                 val (id, uuid) = job.nextIds()
                 val req = Command.WorkerCommand(id, uuid.toString(), action, it.id, seconds, "")
-                // logger.log(Info, "Job:", listOf(nameKey, "target" to req.target.id, "action" to req.action.name))
                 job.request(req)
             }
         }
