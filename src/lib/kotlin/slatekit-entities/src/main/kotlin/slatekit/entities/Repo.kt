@@ -342,10 +342,18 @@ interface Repo<TId, T> : EntityStore where TId : Comparable<TId> {
      * or defaults to the property name.
      */
     fun columnName(prop: KProperty<*>): String {
+        return columnName(prop.name)
+    }
+
+    /**
+     * Gets the column name for the Kproperty from the model schema if available
+     * or defaults to the property name.
+     */
+    fun columnName(name:String): String {
         val model = info.model
         return when (model) {
-            null -> prop.name
-            else -> if (model.any) model.fields.first { it.name == prop.name }.storedName else prop.name
+            null -> name
+            else -> if (model.any) model.fields.first { it.name == name }.storedName else name
         }
     }
 

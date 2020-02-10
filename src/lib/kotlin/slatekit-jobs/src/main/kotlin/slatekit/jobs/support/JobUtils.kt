@@ -5,7 +5,7 @@ import kotlinx.coroutines.launch
 import org.threeten.bp.Duration
 import slatekit.common.DateTime
 import slatekit.common.Status
-import slatekit.tracking.Event
+import slatekit.common.Event
 import slatekit.jobs.*
 import slatekit.results.Codes
 
@@ -65,27 +65,27 @@ object JobUtils {
             is Status.Failed -> Codes.ERRORED
         }
         val ev = Event(
-                area = id.area,
-                name = id.name,
-                agent = id.agent.name,
-                env = id.env,
-                uuid = id.instance,
-                desc = desc,
-                status = code,
-                target = target,
-                tag = "",
-                fields = listOf(
-                        Triple("started   ", started.toString(), ""),
-                        Triple("duration  ", "$duration secs", ""),
-                        Triple("status    ", status.name, ""),
-                        Triple("called    ", calls.totalRuns().toString(), ""),
-                        Triple("processed ", counts.totalProcessed().toString(), ""),
-                        Triple("succeeded ", counts.totalSucceeded().toString(), ""),
-                        Triple("invalid   ", counts.totalInvalid().toString(), ""),
-                        Triple("ignored   ", counts.totalIgnored().toString(), ""),
-                        Triple("errored   ", counts.totalErrored().toString(), ""),
-                        Triple("unexpected", counts.totalUnexpected().toString(), "")
-                )
+            area = id.area,
+            name = id.name,
+            agent = id.agent.name,
+            env = id.env,
+            uuid = id.instance,
+            desc = desc,
+            status = code,
+            target = target,
+            tag = "",
+            fields = listOf(
+                Triple("started   ", started.toString(), ""),
+                Triple("duration  ", "$duration secs", ""),
+                Triple("status    ", status.name, ""),
+                Triple("called    ", calls.totalRuns().toString(), ""),
+                Triple("processed ", counts.totalProcessed().toString(), ""),
+                Triple("succeeded ", counts.totalSucceeded().toString(), ""),
+                Triple("invalid   ", counts.totalInvalid().toString(), ""),
+                Triple("ignored   ", counts.totalIgnored().toString(), ""),
+                Triple("errored   ", counts.totalErrored().toString(), ""),
+                Triple("unexpected", counts.totalUnexpected().toString(), "")
+            )
         )
         return ev
     }

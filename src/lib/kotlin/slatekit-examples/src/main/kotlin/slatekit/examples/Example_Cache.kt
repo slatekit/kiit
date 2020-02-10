@@ -79,21 +79,21 @@ class Example_Cache  : Command("auth") {
       // CASE 7: Explicitly refresh one of the items ( without caring about getting notified )
       cache.refresh("recent-movies")
 
-      // CASE 8: Invalidate a cache item by setting it to expired
+      // CASE 8: Expire a cache item by setting it to expired
       // NOTE: This will result in :
       // 1. get[T](key) calls returning null but triggering a refresh for that item
       // 2. getOrLoad[T](key) calls calling refresh
-      cache.invalidate("recent-movies")
+      cache.expire("recent-movies")
 
       // CASE 9: Invalidates all the cache items setting their time to expired.
       // NOTE: This will result in :
       // 1. get[T](key) calls returning null but triggering a refresh for that item
       // 2. getOrLoad[T](key) calls calling refresh
-      cache.invalidateAll()
+      cache.expireAll()
 
       // CASE 10: Removes the cache item completely.
       // NOTE: This will not be accessible anymore until you call .put again.
-      cache.remove("top-movies")
+      cache.delete("top-movies")
 
       // CASE 11: Get the cache item entry ( contains data + metadata )
       val recentEntry = cache.getEntry("recent-movies")

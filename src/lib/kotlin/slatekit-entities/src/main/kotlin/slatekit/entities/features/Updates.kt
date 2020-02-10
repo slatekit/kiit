@@ -115,7 +115,8 @@ interface Updates<TId, T> : ServiceSupport<TId, T> where TId : kotlin.Comparable
      * @return
      */
     fun updateField(prop: KProperty<*>, value: Any): Int {
-        return repo().updateField(prop.name, value)
+        val column = columnName(prop.name)
+        return repo().updateField(column, value)
     }
 
     /**
@@ -125,7 +126,8 @@ interface Updates<TId, T> : ServiceSupport<TId, T> where TId : kotlin.Comparable
      * @return
      */
     fun updateByField(prop: KProperty<*>, oldValue: Any?, newValue:Any?): Int {
-        return repo().updateByField(prop.name, oldValue, newValue)
+        val column = columnName(prop.name)
+        return repo().updateByField(column, oldValue, newValue)
     }
 
     /**

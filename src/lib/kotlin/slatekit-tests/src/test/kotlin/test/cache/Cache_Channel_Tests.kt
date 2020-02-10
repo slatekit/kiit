@@ -25,8 +25,9 @@ import test.cache.MockCacheCoordinator
 class Cache_Channel_Tests {
 
     fun getCache(initialize:Boolean = true, settings: CacheSettings = CacheSettings(10), listener:((CacheEvent) -> Unit)? = null): SimpleAsyncCache {
-        val raw =  SimpleCache("async-cache", settings = settings, listener = listener)
-        val cache = SimpleAsyncCache(raw, MockCacheCoordinator(LoggerConsole(), Paired()))
+        val logger = LoggerConsole()
+        val raw =  SimpleCache("async-cache", settings = settings, listener = listener, logger = logger)
+        val cache = SimpleAsyncCache(raw, MockCacheCoordinator(logger, Paired()))
         if(initialize) {
             cache.put("countries", "countries supported for mobile app", 60) { listOf("us", "ca") }
             runBlocking {
@@ -183,7 +184,7 @@ class Cache_Channel_Tests {
         Assert.assertEquals(2, cache.keys().size)
         Assert.assertEquals(2, cache.size())
 
-        cache.clear()
+        cache.deleteAll()
         runBlocking {
             cache.respond()
         }
@@ -193,11 +194,11 @@ class Cache_Channel_Tests {
 
         // Events
         Assert.assertNotNull(event)
-        Assert.assertEquals(CacheAction.Clear, event?.action)
+        Assert.assertEquals(CacheAction.DeleteAll, event?.action)
         Assert.assertEquals(cache.name, event?.origin)
         Assert.assertEquals("*", event?.key)
         Assert.assertTrue(!event?.uuid.isNullOrEmpty())
-        Assert.assertEquals("async-cache.${CacheAction.Clear.name}.*", event?.name ?: "")
+        Assert.assertEquals("async-cache.${CacheAction.DeleteAll.name}.*", event?.name ?: "")
     }
 
 
@@ -297,7 +298,7 @@ class Cache_Channel_Tests {
 
 
     @Test
-    fun can_invalidate() {
+    fun can_expire() {
         val timestamp1 = DateTime.now()
         var event:CacheEvent? = null
         val listener = { ev:CacheEvent -> event = ev }
@@ -333,7 +334,7 @@ class Cache_Channel_Tests {
         Assert.assertNotNull(stats1.hits.timestamp)
         Assert.assertTrue(stats1.hits.timestamp!! >= timestamp1)
 
-        cache.invalidate("countries")
+        cache.expire("countries")
         runBlocking {  cache.respond() }
 
         // Get 2
@@ -363,10 +364,10 @@ class Cache_Channel_Tests {
 
         // Events
         Assert.assertNotNull(event)
-        Assert.assertEquals(CacheAction.Clear, event?.action)
+        Assert.assertEquals(CacheAction.Expire, event?.action)
         Assert.assertEquals(cache.name, event?.origin)
         Assert.assertEquals("countries", event?.key)
         Assert.assertTrue(!event?.uuid.isNullOrEmpty())
-        Assert.assertEquals("async-cache.${CacheAction.Clear.name}.countries", event?.name ?: "")
+        Assert.assertEquals("async-cache.${CacheAction.Expire.name}.countries", event?.name ?: "")
     }
 }

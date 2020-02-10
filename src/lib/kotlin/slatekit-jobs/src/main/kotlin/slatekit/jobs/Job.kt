@@ -58,7 +58,7 @@ class Job(
     val id: Identity,
     all: List<Worker<*>>,
     val queue: Queue? = null,
-    val logger: Logger = LoggerConsole(),
+    override val logger: Logger = LoggerConsole(),
     val ids: JobId = JobId(),
     val coordinator: Coordinator = coordinator(ids, logger),
     val scheduler: Scheduler = DefaultScheduler(),
@@ -136,9 +136,10 @@ class Job(
 
     /**
      * Requests this job to perform the supplied command
+     * Coordinator handles requests via kotlin channels
      */
     override suspend fun request(command: Command) {
-        // Coordinator handles requests via kotlin channels
+        record("Request", command.structured())
         coordinator.send(command)
     }
 
@@ -164,17 +165,17 @@ class Job(
         }
     }
 
-    suspend fun manage(request: Command, launch: Boolean = true) {
-        logger.log(LogLevel.Info, "Job: send - ", request.pairs(), null)
-        when (request) {
+    suspend fun manage(command: Command, launch: Boolean = true) {
+        record("Manage", command.structured())
+        when (command) {
             // Affects the whole job/queue/workers
             is Command.JobCommand -> {
-                manageJob(request, launch)
+                manageJob(command, launch)
             }
 
             // Affects just a specific worker
             is Command.WorkerCommand -> {
-                manageWork(request, launch)
+                manageWork(command, launch)
             }
         }
     }
@@ -206,7 +207,7 @@ class Job(
             is JobAction.Pause -> dispatch.pause(launch, 30)
             is JobAction.Delay -> dispatch.delayed(launch, 30)
             else -> {
-                logger.info("Unexpected state: ${request.action}")
+                logger.error("Unexpected state: ${request.action}")
             }
         }
     }
@@ -245,18 +246,19 @@ class Job(
         }
     }
 
-    private suspend fun manageWorker(request: Command.WorkerCommand, task:Task, status:Status, launch: Boolean, requireTask:Boolean) {
-        val action = request.action
-        val workerId = request.workerId
+    private suspend fun manageWorker(command: Command.WorkerCommand, task:Task, status:Status, launch: Boolean, requireTask:Boolean) {
+        record("Workers-Dispatch", command.structured() + task.structured())
+        val action = command.action
+        val workerId = command.workerId
         when (action) {
             is JobAction.Start   -> JobUtils.perform(this, action, status, launch, scope) { workers.start(workerId, task, requireTask) }
-            is JobAction.Stop    -> JobUtils.perform(this, action, status, launch, scope) { workers.stop(workerId, request.desc) }
-            is JobAction.Pause   -> JobUtils.perform(this, action, status, launch, scope) { workers.pause(workerId, request.desc) }
+            is JobAction.Stop    -> JobUtils.perform(this, action, status, launch, scope) { workers.stop(workerId, command.desc) }
+            is JobAction.Pause   -> JobUtils.perform(this, action, status, launch, scope) { workers.pause(workerId, command.desc) }
             is JobAction.Process -> JobUtils.perform(this, action, status, launch, scope) { workers.process(workerId, task) }
-            is JobAction.Resume  -> JobUtils.perform(this, action, status, launch, scope) { workers.resume(workerId, request.desc, task) }
+            is JobAction.Resume  -> JobUtils.perform(this, action, status, launch, scope) { workers.resume(workerId, command.desc, task) }
             is JobAction.Delay   -> JobUtils.perform(this, action, status, launch, scope) { workers.start(workerId, requireTask = requireTask) }
             else -> {
-                logger.info("Unexpected state: ${request.action}")
+                logger.error("Unexpected state: ${command.action}")
             }
         }
     }
@@ -273,8 +275,12 @@ class Job(
         return task
     }
 
-    companion object {
 
+    private fun record(action:String, pairs:List<Pair<String,String>>) {
+        logger.log(LogLevel.Info, "JOB", listOf("perform" to action, "job_id" to id.fullname) + pairs)
+    }
+
+    companion object {
 
         fun worker(call: suspend() -> WorkResult): suspend(Task) -> WorkResult {
             return { t ->

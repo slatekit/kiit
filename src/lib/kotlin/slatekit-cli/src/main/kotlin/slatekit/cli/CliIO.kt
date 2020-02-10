@@ -16,6 +16,7 @@ package slatekit.cli
 import java.io.File
 import slatekit.common.console.TextType
 import slatekit.common.console.Writer
+import slatekit.common.ext.flatten
 import slatekit.common.types.Content
 import slatekit.common.types.ContentType
 import slatekit.common.io.Files
@@ -131,7 +132,7 @@ open class CliIO(private val io: IO<CliOutput, Unit>,
             is ExceptionErr -> {
                 text("ERRORS")
                 line()
-                val flattened = slatekit.common.ext.flatten(ex.err)
+                val flattened = ex.err.flatten()
                 errs(flattened)
                 line()
             }

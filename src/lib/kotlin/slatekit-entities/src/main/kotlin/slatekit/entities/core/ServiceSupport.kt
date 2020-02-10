@@ -4,6 +4,7 @@ import java.util.*
 import slatekit.entities.Entity
 import slatekit.entities.Repo
 import slatekit.entities.events.EntityAction
+import slatekit.query.QueryEncoder
 
 interface ServiceSupport<TId, T> where TId : Comparable<TId>, T : Entity<TId> {
 
@@ -28,5 +29,12 @@ interface ServiceSupport<TId, T> where TId : Comparable<TId>, T : Entity<TId> {
             is UUID -> !id.toString().trim().isEmpty()
             else -> false
         }
+    }
+
+    fun columnName(name:String):String {
+        // Get column name from model schema ( if available )
+        val column = this.repo().columnName(name)
+        //val encoded = QueryEncoder.ensureField(column)
+        return column
     }
 }

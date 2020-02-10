@@ -80,12 +80,12 @@ interface Cache {
      * @param key
      * @return
      */
-    fun remove(key: String): Boolean
+    fun delete(key: String): Boolean
 
     /**
      * removes all items from the cache
      */
-    fun clear(): Boolean
+    fun deleteAll(): Boolean
 
     /**
      * manual / explicit refresh of a cache item
@@ -97,21 +97,26 @@ interface Cache {
      * invalidates a single cache item by its key
      * @param key
      */
-    fun invalidate(key: String)
+    fun expire(key: String)
 
     /**
      * invalidates all the cache items
      */
-    fun invalidateAll()
+    fun expireAll()
 
 
     companion object {
 
-        fun notify(event: CacheEvent, listener:((CacheEvent) -> Unit)?, logger: Logger?){
+        fun notify(event: CacheEvent, listener:((CacheEvent) -> Unit)?, logger: Logger?) {
+            // E.g. origin=service1-cache, uuid=abc123, action=delete, key=some-data
+            val pairs = event.structured()
+            val info = pairs.joinToString { "${it.first}=${it.second}" }
+
             try {
+                logger?.info("Cache event: $info")
                 listener?.invoke(event)
-            } catch(ex:Exception){
-                logger?.warn("Unable to send cache event for ${event.id}")
+            } catch (ex: Exception) {
+                logger?.warn("Cache error while notifying: $info")
             }
         }
     }

@@ -38,6 +38,18 @@ data class Task(
     val source: Queue
 ) {
 
+    fun structured(): List<Pair<String, String>> {
+        return listOf(
+            Task::id.name     to id  ,
+            Task::from.name   to from,
+            Task::job.name    to job ,
+            Task::name.name   to name,
+            Task::xid.name    to xid ,
+            Task::source.name to source.name
+        )
+    }
+
+
     /**
      *  Acknowledges this task with the Queue to complete it
      */

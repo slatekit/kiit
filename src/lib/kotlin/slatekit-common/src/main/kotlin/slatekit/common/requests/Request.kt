@@ -16,6 +16,7 @@ package slatekit.common.requests
 import slatekit.common.DateTime
 import slatekit.common.Inputs
 import slatekit.common.Source
+import slatekit.common.ext.toStringUtc
 
 
 /**
@@ -77,6 +78,22 @@ interface Request {
      */
     fun isAction(targetArea: String, targetName: String, targetAction: String): Boolean {
         return area == targetArea && name == targetName && action == targetAction
+    }
+
+
+    /**
+     * Descturctured into key/value pairs for structured logging
+     */
+    fun structured():List<Pair<String, Any?>>{
+        return listOf(
+                Request::area.name      to area,
+                Request::name.name      to name,
+                Request::action.name    to action,
+                Request::source.name    to source.id,
+                Request::verb.name      to verb,
+                Request::tag.name       to tag,
+                Request::timestamp.name to timestamp.toStringUtc()
+        )
     }
 
 

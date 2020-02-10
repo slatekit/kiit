@@ -23,7 +23,7 @@ class ServerDiagnostics(override val source: String,
      * Record all relevant diagnostics
      */
     override fun record(sender: Any, request: Request, response: Response<*>, target:Array<String>?) {
-        logger?.let  { log(sender, request, response) }
+        //logger?.let  { log(sender, request, response) }
         metrics?.let { meter(sender, request, response) }
     }
 

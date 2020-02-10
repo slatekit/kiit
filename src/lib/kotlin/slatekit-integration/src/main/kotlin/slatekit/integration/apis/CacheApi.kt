@@ -26,33 +26,57 @@ import slatekit.context.Context
 
 @Api(area = "infra", name = "cache", desc = "api info about the application and host",
         auth = AuthModes.KEYED, roles = ["admin"], verb = Verbs.AUTO, sources = [Sources.ALL])
-class CacheApi(override val context: Context, val cache: SyncCache) : FileSupport {
+class CacheApi(override val context: Context, val caches: List<AsyncCache>) : FileSupport {
 
+    private val lookup = caches.map { it.name to it }.toMap()
     override val encryptor: Encryptor? = context.enc
     override val logger: Logger? = context.logs.getLogger()
 
     @Action(desc = "gets the names of keys in the cache")
-    fun keys(): List<String> {
-        return cache.keys()
+    suspend fun keys(name:String): List<String>? {
+        return lookup[name]?.keys()
     }
 
     @Action(desc = "gets the size of the cache")
-    fun size(): Int {
-        return cache.size()
+    suspend fun size(name:String): Int? {
+        return lookup[name]?.size()
     }
 
     @Action(desc = "gets the details of a single cache item")
-    fun get(key: String): Any? {
-        return cache.get(key)
+    suspend fun get(name:String, key: String): Any? {
+        return lookup[name]?.get<Any>(key)
+    }
+
+    @Action(desc = "gets the details of a single cache item")
+    suspend fun stats(name:String): List<CacheStats>? {
+        return lookup[name]?.stats()
     }
 
     @Action(desc = "invalidates a single cache item")
-    fun invalidate(key: String) {
-        return cache.invalidate(key)
+    suspend fun delete(name:String, key: String):Boolean? {
+        return lookup[name]?.delete(key)
     }
 
     @Action(desc = "invalidates the entire cache")
-    fun invalidateAll() {
-        return cache.invalidateAll()
+    suspend fun deleteAll(name:String):Boolean? {
+        return lookup[name]?.deleteAll()
+    }
+
+    @Action(desc = "invalidates a single cache item")
+    suspend fun expire(name:String, key: String):Boolean? {
+        val cache = lookup[name]
+        return when(cache){
+            null -> false
+            else -> { cache.expire(key); true }
+        }
+    }
+
+    @Action(desc = "invalidates the entire cache")
+    suspend fun expireAll(name:String):Boolean {
+        val cache = lookup[name]
+        return when(cache){
+            null -> false
+            else -> { cache.expireAll(); true }
+        }
     }
 }

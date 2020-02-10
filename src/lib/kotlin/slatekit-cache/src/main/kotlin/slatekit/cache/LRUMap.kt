@@ -2,7 +2,7 @@ package slatekit.cache
 
 
 /**
- * The LinkedHashMap already LRU(Least Recently Used) behaviour out of the box.
+ * The LinkedHashMap already has LRU(Least Recently Used) behaviour out of the box.
  * The LRUMap is simply an derived implementation with removeEldestEntry implemented!
  */
 class LRUMap<K, V>(private val capacity: Int)

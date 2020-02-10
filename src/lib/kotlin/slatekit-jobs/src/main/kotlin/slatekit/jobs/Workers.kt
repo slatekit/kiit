@@ -81,7 +81,7 @@ class Workers(
             val worker = context.worker
             val result = Runner.record(context) {
                 val result: Try<WorkResult> = Runner.attemptStart(worker, false, true, task, requireTask) {
-                    notify(context)
+                    notify(context, it.status().name)
                 }
                 result.toOutcome()
             }.inner()
@@ -138,7 +138,9 @@ class Workers(
             val worker = context.worker
             pausable.pause(reason ?: "Backoff")
             val pauseInSecs = context.backoffs.next()
+            record(worker.id, "pause_start", listOf("seconds" to pauseInSecs.toString()))
             scheduler.schedule(DateTime.now().plusSeconds(pauseInSecs)) {
+                record(worker.id, "pause_finish")
                 coordinator.send(Command.WorkerCommand(ids.nextId(), ids.nextUUID().toString(), JobAction.Resume, worker.id, 0, null))
             }
             Outcomes.success(Status.Paused)
@@ -153,14 +155,14 @@ class Workers(
     }
 
     suspend fun delay(id: Identity, seconds: Long) {
-        logger.log(LogLevel.Info, "Worker:", listOf("id" to id.name, "action" to "delaying", "seconds" to "$seconds"))
+        record(id, "delay", listOf("seconds" to seconds.toString()))
         scheduler.schedule(DateTime.now().plusSeconds(seconds)) {
             coordinator.send(Command.WorkerCommand(ids.nextId(), ids.nextUUID().toString(), JobAction.Start, id, 0, null))
         }
     }
 
     private suspend fun perform(action: String, id: Identity, operation: suspend (WorkExecutor) -> Outcome<Status>): Outcome<Status> {
-        logger.log(LogLevel.Info, "Worker:", listOf("id" to id.name, "action" to action))
+        record(id, action)
         val executor = this.lookup[id.id]
         return when (executor) {
             null -> Outcomes.errored("Unable to find worker with id : ${id.name}")
@@ -172,7 +174,7 @@ class Workers(
     }
 
     private suspend fun performPausableAction(status: Status, reason: String?, id: Identity, operation: suspend (WorkExecutor, Pausable) -> Outcome<Status>): Outcome<Status> {
-        logger.log(LogLevel.Info, "Worker:", listOf("id" to id.name, "move" to status.name))
+        record(id, status.name)
         val executor = this.lookup[id.id]
         return when (executor) {
             null -> Outcomes.errored("Unable to find worker with id : ${id.name}")
@@ -181,7 +183,7 @@ class Workers(
                 when (context.worker) {
                     is Pausable -> {
                         context.worker.move(status, reason)
-                        notify(context)
+                        notify(context, status.name)
                         operation(executor, context.worker)
                     }
                     else -> Outcomes.errored("${context.worker.id.name} does not implement Pausable and can not handle a pause/stop/resume action")
@@ -198,7 +200,7 @@ class Workers(
                     logger.info("Worker ${worker.id.name} complete")
                     worker.move(Status.Complete)
                     worker.done()
-                    notify(context)
+                    notify(context, "Done")
                 }
                 is WorkState.Next -> {
                     val (id, uuid) = ids.next()
@@ -219,7 +221,20 @@ class Workers(
         }
     }
 
-    private suspend fun notify(context: WorkerContext) {
-        (events as WorkerEvents).notify(context.worker)
+
+    private fun record(id:Identity, action:String, extra:List<Pair<String,String>> = listOf()){
+        val pairs = listOf("id" to id.id, "action" to action) + extra
+        logger.log(LogLevel.Info, "Workers:", pairs)
+    }
+
+    private suspend fun notify(context: WorkerContext, action:String) {
+        try {
+            val worker = context.worker
+            val task = context.task
+            record(worker.id, action, task.structured())
+            (events as WorkerEvents).notify(context.worker)
+        }
+        catch(ex:Exception){
+        }
     }
 }
