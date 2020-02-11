@@ -1,4 +1,6 @@
-package slatekit.jobs
+package slatekit.jobs.workers
+
+import slatekit.jobs.Task
 
 /**
  * Represents a request for work by a worker

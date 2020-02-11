@@ -27,6 +27,9 @@ import slatekit.policy.policies.Every
 import slatekit.policy.policies.Limit
 import slatekit.policy.policies.Ratio
 import slatekit.jobs.*
+import slatekit.jobs.workers.WorkResult
+import slatekit.jobs.workers.WorkState
+import slatekit.jobs.workers.Worker
 import slatekit.results.Try
 import slatekit.results.Success
 import java.util.concurrent.atomic.AtomicInteger
@@ -54,7 +57,7 @@ class Example_Jobs : Command("utils"), CoroutineScope by MainScope() {
         }
 
         // NOTE: This is a helper method used for the real example(s) below
-        suspend fun sendNewsLetterBatch(sender:String, offset:AtomicInteger, batchSize:Int):WorkResult {
+        suspend fun sendNewsLetterBatch(sender:String, offset:AtomicInteger, batchSize:Int): WorkResult {
             val start = offset.get()
             val users = if(start < 0 || start >= allUsers.size) listOf()
             else allUsers.subList(start, start + batchSize)
@@ -79,7 +82,7 @@ class Example_Jobs : Command("utils"), CoroutineScope by MainScope() {
 
 
         // Option 1: Use a function for a job that runs to completion
-        suspend fun sendNewsLetter(task: Task):WorkResult {
+        suspend fun sendNewsLetter(task: Task): WorkResult {
             allUsers.forEach { user -> send(task.job, NEWS_LETTER_MESSAGE, user) }
             return WorkResult(WorkState.Done)
         }
@@ -87,7 +90,7 @@ class Example_Jobs : Command("utils"), CoroutineScope by MainScope() {
 
         // Option 2: Use a function for a job that pages through work
         val offset1 = AtomicInteger(0)
-        suspend fun sendNewsLetterWithPaging(task: Task):WorkResult {
+        suspend fun sendNewsLetterWithPaging(task: Task): WorkResult {
             println(task.id)    // abc123
             println(task.from)  // queue://notification
             println(task.job)   // job1
@@ -101,7 +104,7 @@ class Example_Jobs : Command("utils"), CoroutineScope by MainScope() {
 
 
         // Option 3: Use a function for a job that processes a task from a queue
-        suspend fun sendNewsLetterFromQueue(task: Task):WorkResult {
+        suspend fun sendNewsLetterFromQueue(task: Task): WorkResult {
             val userId = task.data.toInt()
             val user = allUsers.first { it.id == userId }
             send(task.job, NEWS_LETTER_MESSAGE, user)

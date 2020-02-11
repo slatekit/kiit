@@ -7,6 +7,7 @@ import slatekit.common.DateTime
 import slatekit.common.Status
 import slatekit.common.Event
 import slatekit.jobs.*
+import slatekit.jobs.workers.Workable
 import slatekit.results.Codes
 
 object JobUtils {

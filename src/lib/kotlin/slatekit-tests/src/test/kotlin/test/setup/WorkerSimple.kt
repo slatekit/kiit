@@ -2,6 +2,9 @@ package test.setup
 
 import slatekit.common.Identity
 import slatekit.jobs.*
+import slatekit.jobs.workers.WorkResult
+import slatekit.jobs.workers.WorkState
+import slatekit.jobs.workers.Worker
 
 class MyWorker(
     var acc: Int = 0

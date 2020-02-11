@@ -20,7 +20,7 @@ class MockScheduler : Scheduler {
 }
 
 
-open class MockCoordinator(override val logger: Logger, override val ids: JobId) : Coordinator {
+open class MockCoordinator(override val logger: Logger, override val ids: Paired) : Coordinator {
 
     val requests = mutableListOf<Command>()
 
@@ -40,7 +40,7 @@ open class MockCoordinator(override val logger: Logger, override val ids: JobId)
 }
 
 
-class MockCoordinatorWithChannel(logger: Logger, ids: JobId, val channel: Channel<Command>) : MockCoordinator(logger, ids) {
+class MockCoordinatorWithChannel(logger: Logger, ids: Paired, val channel: Channel<Command>) : MockCoordinator(logger, ids) {
 
     // To simulate scheduled pauses. e.g.
     private var pauses = mutableListOf<Command>()

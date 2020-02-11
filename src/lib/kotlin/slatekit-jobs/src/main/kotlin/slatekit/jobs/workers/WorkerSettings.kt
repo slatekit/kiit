@@ -1,4 +1,4 @@
-package slatekit.jobs
+package slatekit.jobs.workers
 
 /**
  * Settings for each worker

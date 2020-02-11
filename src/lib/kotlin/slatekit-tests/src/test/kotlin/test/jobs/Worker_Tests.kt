@@ -5,9 +5,9 @@ import org.junit.Assert
 import org.junit.Test
 import slatekit.common.Status
 import slatekit.common.Identity
-import slatekit.jobs.WorkResult
-import slatekit.jobs.WorkState
-import slatekit.jobs.Worker
+import slatekit.jobs.workers.WorkResult
+import slatekit.jobs.workers.WorkState
+import slatekit.jobs.workers.Worker
 import slatekit.jobs.support.Runner
 
 class Worker_Tests {

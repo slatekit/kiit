@@ -5,10 +5,13 @@ import org.junit.Assert
 import org.junit.Test
 import slatekit.common.Status
 import slatekit.common.Identity
+import slatekit.common.ids.Paired
 import slatekit.common.log.LoggerConsole
 import slatekit.jobs.*
 import slatekit.jobs.support.Command
 import slatekit.jobs.support.JobId
+import slatekit.jobs.workers.WorkerContext
+import slatekit.jobs.workers.Workers
 
 
 class Workers_Tests {
@@ -93,9 +96,9 @@ class Workers_Tests {
     }
 
 
-    private fun ensure(workers:Workers, hasRun:Boolean, totalRuns:Long, totalPassed:Long, totalFailed:Long, id: Identity,
+    private fun ensure(workers: Workers, hasRun:Boolean, totalRuns:Long, totalPassed:Long, totalFailed:Long, id: Identity,
                        status: Status, requestCount:Int, action: JobAction?, seconds:Long){
-        val context:WorkerContext = workers.get(id)!!
+        val context: WorkerContext = workers.get(id)!!
         val runs = context.stats.calls
         val worker = context.worker
 
@@ -129,8 +132,8 @@ class Workers_Tests {
     private fun build(): Workers {
         val worker = PagedWorker(0, 5, 2)
         val logger = LoggerConsole()
-        val ids = JobId()
-        val workers = Workers(worker.id, listOf(worker), MockCoordinator(logger, ids), MockScheduler(), logger,ids, 20)
+        val ids = Paired()
+        val workers = Workers(worker.id, listOf(worker), MockCoordinator(logger, ids), MockScheduler(), logger, ids, 20)
         return workers
     }
 }

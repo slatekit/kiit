@@ -1,10 +1,12 @@
 package slatekit.jobs
 
+import kotlinx.coroutines.runBlocking
 import java.util.*
 import slatekit.common.Identity
 import slatekit.common.Status
 import slatekit.common.log.Logger
 import slatekit.jobs.support.Command
+import slatekit.jobs.support.Coordinator
 
 /**
  * Represents all operations to control / manage a job
@@ -12,6 +14,8 @@ import slatekit.jobs.support.Command
 interface Management {
 
     val logger: Logger?
+
+    val coordinator:Coordinator
 
     /**
      * Run the job by starting it first and then managing it by listening for requests
@@ -62,21 +66,6 @@ interface Management {
     }
 
     /**
-     * Requests an action to manage a job/worker
-     */
-    suspend fun request(command: Command)
-
-    /**
-     * Listens to and handles 1 request
-     */
-    suspend fun respond()
-
-    /**
-     * Listens to and handles all incoming requests
-     */
-    suspend fun manage()
-
-    /**
      * logs/handle error state/condition
      */
     suspend fun error(currentStatus: Status, message: String)
@@ -85,4 +74,40 @@ interface Management {
      * Gets the next id for uniquely representing requests
      */
     fun nextIds(): Pair<Long, UUID>
+
+
+    fun record(name:String, info:List<Pair<String, String>>)
+
+    /**
+     * Requests this job to perform the supplied command
+     * Coordinator handles requests via kotlin channels
+     */
+    suspend fun request(command: Command) {
+        record("Request", command.structured())
+        coordinator.send(command)
+    }
+
+    /**
+     * Listens to and handles 1 single request
+     */
+    suspend fun respond() {
+        // Coordinator takes 1 request off the channel
+        val request = coordinator.poll()
+        request?.let {
+            runBlocking {
+                manage(request, false)
+            }
+        }
+    }
+
+    /**
+     * Listens to incoming requests ( name of worker )
+     */
+    suspend fun manage() {
+        coordinator.consume { request ->
+            manage(request, false)
+        }
+    }
+
+    suspend fun manage(command: Command, launch: Boolean = true)
 }

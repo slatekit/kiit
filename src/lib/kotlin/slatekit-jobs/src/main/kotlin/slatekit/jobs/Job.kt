@@ -5,6 +5,7 @@ import java.util.concurrent.atomic.AtomicReference
 import kotlinx.coroutines.*
 import kotlinx.coroutines.channels.Channel
 import slatekit.common.*
+import slatekit.common.ids.Paired
 import slatekit.common.log.LogLevel
 import slatekit.common.log.Logger
 import slatekit.common.log.LoggerConsole
@@ -12,8 +13,13 @@ import slatekit.common.paged.Pager
 import slatekit.policy.Policy
 import slatekit.jobs.events.Events
 import slatekit.jobs.events.JobEvents
+import slatekit.jobs.events.SubscribedEvents
 import slatekit.jobs.slatekit.jobs.support.Backoffs
 import slatekit.jobs.support.*
+import slatekit.jobs.workers.WorkRequest
+import slatekit.jobs.workers.WorkResult
+import slatekit.jobs.workers.Worker
+import slatekit.jobs.workers.Workers
 
 /**
  * A Job is the top level model in this Background Job/Task Queue system. A job is composed of the following:
@@ -59,8 +65,8 @@ class Job(
     all: List<Worker<*>>,
     val queue: Queue? = null,
     override val logger: Logger = LoggerConsole(),
-    val ids: JobId = JobId(),
-    val coordinator: Coordinator = coordinator(ids, logger),
+    val ids: Paired = Paired(),
+    override val coordinator: Coordinator = coordinator(ids, logger),
     val scheduler: Scheduler = DefaultScheduler(),
     val scope: CoroutineScope = Jobs.scope,
     policies: List<Policy<WorkRequest, WorkResult>>? = null,
@@ -102,9 +108,9 @@ class Job(
     ) :
             this(id, workers(id, lambdas), queue, scope = scope ?: Jobs.scope, policies = policies)
 
-    val workers = Workers(id, all, coordinator, scheduler, logger, ids, 30, policies ?: listOf(), backoffs)
-    private val events: Events<Job> = JobEvents()
-    private val dispatch = JobDispatch(this, workers, events as JobEvents, scope)
+    val workers = Workers(id, all, coordinator, scheduler, logger, ids, 30, policies
+        ?: listOf(), backoffs)
+    private val events: SubscribedEvents<Job> = JobEvents()
     private val _status = AtomicReference<Status>(Status.InActive)
 
     /**
@@ -134,38 +140,7 @@ class Job(
         manage()
     }
 
-    /**
-     * Requests this job to perform the supplied command
-     * Coordinator handles requests via kotlin channels
-     */
-    override suspend fun request(command: Command) {
-        record("Request", command.structured())
-        coordinator.send(command)
-    }
-
-    /**
-     * Listens to and handles 1 single request
-     */
-    override suspend fun respond() {
-        // Coordinator takes 1 request off the channel
-        val request = coordinator.poll()
-        request?.let {
-            runBlocking {
-                manage(request, false)
-            }
-        }
-    }
-
-    /**
-     * Listens to incoming requests ( name of worker )
-     */
-    override suspend fun manage() {
-        coordinator.consume { request ->
-            manage(request, false)
-        }
-    }
-
-    suspend fun manage(command: Command, launch: Boolean = true) {
+    override suspend fun manage(command: Command, launch: Boolean) {
         record("Manage", command.structured())
         when (command) {
             // Affects the whole job/queue/workers
@@ -200,12 +175,12 @@ class Job(
     private suspend fun manageJob(request: Command, launch: Boolean) {
         val action = request.action
         when (action) {
-            is JobAction.Start -> dispatch.start(launch)
-            is JobAction.Stop -> dispatch.stop(launch)
-            is JobAction.Resume -> dispatch.resume(launch)
-            is JobAction.Process -> dispatch.process(launch)
-            is JobAction.Pause -> dispatch.pause(launch, 30)
-            is JobAction.Delay -> dispatch.delayed(launch, 30)
+            is JobAction.Start   -> transition(JobAction.Start, Status.Running, launch)
+            is JobAction.Stop    -> transition(JobAction.Stop, Status.Stopped, launch)
+            is JobAction.Resume  -> transition(JobAction.Resume, Status.Running, launch)
+            is JobAction.Process -> transition(JobAction.Process, Status.Running, launch)
+            is JobAction.Pause   -> transition(JobAction.Pause, Status.Paused, launch, 30)
+            is JobAction.Delay   -> transition(JobAction.Start, Status.Paused, launch, 30)
             else -> {
                 logger.error("Unexpected state: ${request.action}")
             }
@@ -276,8 +251,27 @@ class Job(
     }
 
 
-    private fun record(action:String, pairs:List<Pair<String,String>>) {
+    override fun record(action:String, pairs:List<Pair<String,String>>) {
         logger.log(LogLevel.Info, "JOB", listOf("perform" to action, "job_id" to id.fullname) + pairs)
+    }
+
+    /**
+     * Transitions all workers to the new status supplied
+     */
+    private suspend fun transition(action: JobAction, newStatus: Status, launch: Boolean, seconds: Long = 0) {
+        JobUtils.perform(this, action, this.status(), launch, scope) {
+            this.setStatus(newStatus)
+            val job = this
+            scope.launch {
+                events.notify(job)
+            }
+
+            workers.all.forEach {
+                val (id, uuid) = this.nextIds()
+                val req = Command.WorkerCommand(id, uuid.toString(), action, it.id, seconds, "")
+                this.request(req)
+            }
+        }
     }
 
     companion object {
@@ -298,7 +292,7 @@ class Job(
             }
         }
 
-        fun coordinator(ids: JobId, logger: Logger): Coordinator {
+        fun coordinator(ids: Paired, logger: Logger): Coordinator {
             return ChannelCoordinator(logger, ids, Channel(Channel.UNLIMITED))
         }
     }

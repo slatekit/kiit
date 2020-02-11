@@ -1,11 +1,14 @@
-package slatekit.jobs
+package slatekit.jobs.workers
 
 import slatekit.common.DateTime
 import slatekit.common.Identity
 import slatekit.common.Status
+import slatekit.common.ids.Paired
 import slatekit.common.log.LogLevel
 import slatekit.common.log.Logger
 import slatekit.common.paged.Pager
+import slatekit.jobs.JobAction
+import slatekit.jobs.Task
 import slatekit.tracking.Recorder
 import slatekit.policy.Policy
 import slatekit.jobs.events.Events
@@ -25,7 +28,7 @@ class Workers(
     val coordinator: Coordinator,
     val scheduler: Scheduler,
     val logger: Logger,
-    val ids: JobId,
+    val ids: Paired,
     val pauseInSeconds: Long,
     val policies: List<Policy<WorkRequest, WorkResult>> = listOf(),
     val backoffs: () -> Pager<Long> = { Backoffs.times() }

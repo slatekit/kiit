@@ -2,6 +2,7 @@ package slatekit.jobs
 
 import slatekit.common.Identity
 import slatekit.core.queues.QueueEntry
+import slatekit.jobs.workers.WorkState
 
 /**
  * Represents a unit-of work ( a work-item that is handled by a Worker ).
@@ -40,15 +41,14 @@ data class Task(
 
     fun structured(): List<Pair<String, String>> {
         return listOf(
-            Task::id.name     to id  ,
-            Task::from.name   to from,
-            Task::job.name    to job ,
-            Task::name.name   to name,
-            Task::xid.name    to xid ,
+            Task::id.name to id,
+            Task::from.name to from,
+            Task::job.name to job,
+            Task::name.name to name,
+            Task::xid.name to xid,
             Task::source.name to source.name
         )
     }
-
 
     /**
      *  Acknowledges this task with the Queue to complete it

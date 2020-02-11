@@ -1,8 +1,9 @@
-package slatekit.jobs
+package slatekit.jobs.workers
 
 import slatekit.common.Identity
 import slatekit.common.Status
 import slatekit.common.StatusCheck
+import slatekit.jobs.Task
 
 interface Workable<T> : StatusCheck {
 

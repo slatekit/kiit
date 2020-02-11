@@ -6,7 +6,7 @@ import org.junit.Test
 import slatekit.tracking.Recorder
 import slatekit.jobs.Task
 import slatekit.jobs.support.Runner
-import slatekit.jobs.WorkerContext
+import slatekit.jobs.workers.WorkerContext
 import slatekit.jobs.slatekit.jobs.support.Backoffs
 
 
@@ -28,7 +28,7 @@ class Worker_Stats_Tests {
     @Test
     fun can_record_single_success() {
         val worker = OneTimeWorker(0, 10)
-        val context = WorkerContext(worker.id, worker, Recorder.of(worker.id), Backoffs(),listOf(), Task.owned)
+        val context = WorkerContext(worker.id, worker, Recorder.of(worker.id), Backoffs(), listOf(), Task.owned)
         val runs = context.stats.calls
         runBlocking {
             Runner.record(context, { })

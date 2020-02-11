@@ -4,9 +4,9 @@ import kotlinx.coroutines.runBlocking
 import slatekit.common.Identity
 import slatekit.common.Status
 import slatekit.jobs.Task
-import slatekit.jobs.WorkResult
-import slatekit.jobs.WorkState
-import slatekit.jobs.Worker
+import slatekit.jobs.workers.WorkResult
+import slatekit.jobs.workers.WorkState
+import slatekit.jobs.workers.Worker
 import java.util.concurrent.atomic.AtomicInteger
 
 // Sample User model

@@ -17,6 +17,9 @@ sealed class Command {
 
     abstract fun structured(): List<Pair<String, String>>
 
+    /**
+     * A command to issue on a Job ( which will then issues commands to individual workers )
+     */
     data class JobCommand(
         override val id: Long,
         override val uuid: String,
@@ -34,6 +37,9 @@ sealed class Command {
         }
     }
 
+    /**
+     * A command to issue on a specific Worker
+     */
     data class WorkerCommand(
         override val id: Long,
         override val uuid: String,

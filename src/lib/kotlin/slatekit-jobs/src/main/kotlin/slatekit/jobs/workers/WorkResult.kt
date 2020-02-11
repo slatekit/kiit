@@ -1,4 +1,4 @@
-package slatekit.jobs
+package slatekit.jobs.workers
 
 data class WorkResult(val state: WorkState, val acknowledge: Boolean = true) {
 

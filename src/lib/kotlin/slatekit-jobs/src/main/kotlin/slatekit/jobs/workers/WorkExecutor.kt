@@ -1,5 +1,6 @@
-package slatekit.jobs
+package slatekit.jobs.workers
 
+import slatekit.jobs.Task
 import slatekit.policy.Policies
 import slatekit.jobs.support.Runner
 import slatekit.results.Outcome

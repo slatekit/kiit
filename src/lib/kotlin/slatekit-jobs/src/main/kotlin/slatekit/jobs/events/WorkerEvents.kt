@@ -1,6 +1,7 @@
 package slatekit.jobs.events
 
-import slatekit.jobs.*
+import slatekit.jobs.workers.Worker
+import slatekit.jobs.workers.Workers
 
 class WorkerEvents(val workers: Workers) : SubscribedEvents<Worker<*>>() {
 

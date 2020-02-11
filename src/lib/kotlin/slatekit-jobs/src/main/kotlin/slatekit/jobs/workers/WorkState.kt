@@ -1,4 +1,4 @@
-package slatekit.jobs
+package slatekit.jobs.workers
 
 /**
  * Represents the state of a single iteration of work done by a worker

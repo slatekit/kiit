@@ -5,10 +5,13 @@ import slatekit.results.Outcome
 import slatekit.results.builders.Outcomes
 
 /**
- * Simple registry of all the jobs
+ * Registry of all the jobs. This registry is used to:
+ * 1. Get a job
+ * 2. Start | Stop | Pause | Resume | Process a job by name
+ * 3. Run a one-off Job
  * @param queues: List of all queues
- * @param jobs: List of all jobs
- * @scope scope: CoroutineScope to launch jobs in
+ * @param jobs  : List of all jobs
+ * @scope scope : CoroutineScope to launch jobs in
  */
 class Jobs(
     val queues: List<Queue>,

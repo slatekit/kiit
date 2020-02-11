@@ -1,8 +1,9 @@
-package slatekit.jobs
+package slatekit.jobs.workers
 
 import java.util.concurrent.atomic.AtomicReference
 import slatekit.common.Identity
 import slatekit.common.Status
+import slatekit.jobs.Task
 
 
 /**

@@ -2,6 +2,10 @@ package test.jobs
 
 import slatekit.common.Identity
 import slatekit.jobs.*
+import slatekit.jobs.workers.Pausable
+import slatekit.jobs.workers.WorkResult
+import slatekit.jobs.workers.WorkState
+import slatekit.jobs.workers.Worker
 import java.util.concurrent.atomic.AtomicInteger
 
 class OneTimeWorker(val start:Int, val end:Int, id: Identity) : Worker<Int>(id), Pausable {
