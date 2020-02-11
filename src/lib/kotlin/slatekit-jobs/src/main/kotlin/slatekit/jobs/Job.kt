@@ -251,8 +251,8 @@ class Job(
     }
 
 
-    override fun record(action:String, pairs:List<Pair<String,String>>) {
-        logger.log(LogLevel.Info, "JOB", listOf("perform" to action, "job_id" to id.fullname) + pairs)
+    override fun record(name:String, info:List<Pair<String,String>>) {
+        logger.log(LogLevel.Info, "JOB", listOf("perform" to name, "job_id" to id.fullname) + info)
     }
 
     /**

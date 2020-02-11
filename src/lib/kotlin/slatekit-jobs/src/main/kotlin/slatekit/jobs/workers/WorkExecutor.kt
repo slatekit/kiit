@@ -78,7 +78,7 @@ class WorkExecutor(
             }
             val rawResume: suspend (WorkRequest) -> Outcome<WorkResult> = { req ->
                 Runner.record(context) {
-                    (it as Pausable).resume("", req.task)
+                    it.resume("", req.task)
                 }
             }
 

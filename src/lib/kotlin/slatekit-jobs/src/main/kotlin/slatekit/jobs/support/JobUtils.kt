@@ -7,7 +7,7 @@ import slatekit.common.DateTime
 import slatekit.common.Status
 import slatekit.common.Event
 import slatekit.jobs.*
-import slatekit.jobs.workers.Workable
+import slatekit.jobs.workers.Worker
 import slatekit.results.Codes
 
 object JobUtils {
@@ -47,7 +47,7 @@ object JobUtils {
         }
     }
 
-    fun toEvent(started: DateTime, desc: String, target: String, worker: Workable<*>): Event {
+    fun toEvent(started: DateTime, desc: String, target: String, worker: Worker<*>): Event {
         // Convert the worker info / state / stats into a generalized event
         val id = worker.id
         val status = worker.status()
