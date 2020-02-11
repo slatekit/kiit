@@ -11,7 +11,6 @@ import slatekit.common.log.LogLevel
 import slatekit.common.log.LoggerConsole
 import slatekit.jobs.*
 import slatekit.jobs.support.Command
-import slatekit.jobs.support.JobId
 import slatekit.jobs.workers.Worker
 import slatekit.jobs.workers.WorkerContext
 import slatekit.jobs.workers.Workers

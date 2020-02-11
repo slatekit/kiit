@@ -46,7 +46,7 @@ open class Worker<T>(
      */
     override suspend fun work(task: Task): WorkResult {
         return when (operation) {
-            null -> WorkResult(WorkState.Done)
+            null -> WorkResult.Done
             else -> operation.invoke(task)
         }
     }

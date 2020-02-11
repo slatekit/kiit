@@ -5,7 +5,6 @@ import slatekit.common.Identity
 import slatekit.common.Status
 import slatekit.jobs.Task
 import slatekit.jobs.workers.WorkResult
-import slatekit.jobs.workers.WorkState
 import slatekit.jobs.workers.Worker
 import java.util.concurrent.atomic.AtomicInteger
 
@@ -28,7 +27,7 @@ val allUsers = (1..20).map { User(it, "user$it@company1.com")}
  */
 suspend fun sendNewsLetter(task: Task): WorkResult {
     allUsers.forEach { user -> JobUtils.send(task.job, NEWS_LETTER_MESSAGE, user) }
-    return WorkResult(WorkState.Done)
+    return WorkResult.Done
 }
 
 
@@ -70,7 +69,7 @@ suspend fun sendNewsLetterFromQueue(task: Task): WorkResult {
     task.done()
 
     // Indicate that this can now handle more
-    return WorkResult(WorkState.More)
+    return WorkResult.More
 }
 
 
@@ -157,7 +156,7 @@ object JobUtils {
 
         // No more records so indicate done
         if(users.isEmpty())
-            return WorkResult(WorkState.Done)
+            return WorkResult.Done
 
         // Get next page of records
         users.forEach { user -> send(sender,"New version coming out soon!", user) }

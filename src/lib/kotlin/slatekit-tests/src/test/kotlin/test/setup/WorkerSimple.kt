@@ -3,7 +3,6 @@ package test.setup
 import slatekit.common.Identity
 import slatekit.jobs.*
 import slatekit.jobs.workers.WorkResult
-import slatekit.jobs.workers.WorkState
 import slatekit.jobs.workers.Worker
 
 class MyWorker(
@@ -27,10 +26,10 @@ class MyWorker(
         // Simulate different results for testing purposes
         return if (acc % 2 == 0)
             //Success(acc, msg = "even")
-            WorkResult(WorkState.Done)
+            WorkResult.Done
         else
             //Success(acc, msg = "odd")
-            WorkResult(WorkState.More)
+            WorkResult.More
     }
 }
 

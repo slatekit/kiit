@@ -28,7 +28,6 @@ import slatekit.policy.policies.Limit
 import slatekit.policy.policies.Ratio
 import slatekit.jobs.*
 import slatekit.jobs.workers.WorkResult
-import slatekit.jobs.workers.WorkState
 import slatekit.jobs.workers.Worker
 import slatekit.results.Try
 import slatekit.results.Success
@@ -65,7 +64,7 @@ class Example_Jobs : Command("utils"), CoroutineScope by MainScope() {
 
             // No more records so indicate done
             if(users.isEmpty())
-                return WorkResult(WorkState.Done)
+                return WorkResult.Done
 
             // Get next page of records
             users.forEach { user -> send(sender,"New version coming out soon!", user) }
@@ -84,7 +83,7 @@ class Example_Jobs : Command("utils"), CoroutineScope by MainScope() {
         // Option 1: Use a function for a job that runs to completion
         suspend fun sendNewsLetter(task: Task): WorkResult {
             allUsers.forEach { user -> send(task.job, NEWS_LETTER_MESSAGE, user) }
-            return WorkResult(WorkState.Done)
+            return WorkResult.Done
         }
 
 
@@ -113,7 +112,7 @@ class Example_Jobs : Command("utils"), CoroutineScope by MainScope() {
             task.done()
 
             // Indicate that this can now handle more
-            return WorkResult(WorkState.More)
+            return WorkResult.More
         }
 
 

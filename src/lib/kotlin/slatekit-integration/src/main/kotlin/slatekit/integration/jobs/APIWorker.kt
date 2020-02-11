@@ -6,7 +6,6 @@ import slatekit.common.Identity
 import slatekit.common.Sources
 import slatekit.jobs.*
 import slatekit.jobs.workers.WorkResult
-import slatekit.jobs.workers.WorkState
 import slatekit.jobs.workers.Worker
 import slatekit.jobs.workers.WorkerSettings
 import slatekit.results.Failure
@@ -41,6 +40,6 @@ open class APIWorker(
             is Failure -> result.toTry()
         }
         slatekit.common.NOTE.IMPLEMENT("jobs", "Success/Failure handling")
-        return WorkResult(WorkState.More)
+        return WorkResult.More
     }
 }

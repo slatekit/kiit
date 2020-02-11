@@ -9,7 +9,6 @@ import slatekit.common.log.Logger
 import slatekit.jobs.*
 import slatekit.jobs.support.Command
 import slatekit.jobs.support.Coordinator
-import slatekit.jobs.support.JobId
 import slatekit.jobs.support.Scheduler
 
 

@@ -19,7 +19,7 @@ import slatekit.policy.Policy
 data class WorkerContext(
     val id: Identity,
     val worker: Worker<*>,
-    val stats: Recorder<Task, WorkState>,
+    val stats: Recorder<Task, WorkResult>,
     val backoffs:Backoffs = Backoffs(),
     val policies: List<Policy<WorkRequest, WorkResult>> = listOf(),
     val task: Task = Task.empty.copy(job = id.id)

@@ -198,18 +198,18 @@ class Workers(
     private suspend fun loop(context: WorkerContext, workResult: WorkResult) {
         val worker: Workable<*> = context.worker
         val result = Tries.of {
-            when (workResult.state) {
-                is WorkState.Done -> {
+            when (workResult) {
+                is WorkResult.Done -> {
                     logger.info("Worker ${worker.id.name} complete")
                     worker.move(Status.Complete)
                     worker.done()
                     notify(context, "Done")
                 }
-                is WorkState.Next -> {
+                is WorkResult.Next -> {
                     val (id, uuid) = ids.next()
                     coordinator.send(Command.WorkerCommand(id, uuid.toString(), JobAction.Process, worker.id, 0, ""))
                 }
-                is WorkState.More -> {
+                is WorkResult.More -> {
                     val (id, uuid) = ids.next()
                     coordinator.send(Command.WorkerCommand(id, uuid.toString(), JobAction.Process, worker.id, 0, ""))
                 }
