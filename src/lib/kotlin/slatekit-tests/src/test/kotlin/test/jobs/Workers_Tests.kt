@@ -5,10 +5,12 @@ import org.junit.Assert
 import org.junit.Test
 import slatekit.common.Status
 import slatekit.common.Identity
+import slatekit.common.ids.Paired
 import slatekit.common.log.LoggerConsole
 import slatekit.jobs.*
 import slatekit.jobs.support.Command
-import slatekit.jobs.support.JobId
+import slatekit.jobs.workers.WorkerContext
+import slatekit.jobs.workers.Workers
 
 
 class Workers_Tests {
@@ -19,7 +21,7 @@ class Workers_Tests {
         val worker = workers.all.first()
         runBlocking {
             workers.start(worker.id)
-            ensure(workers,true, 1, 1, 0, worker.id, Status.Running, 1, JobAction.Process, 0)
+            ensure(workers,true, 1, 1, 0, worker.id, Status.Running, 1, Action.Process, 0)
         }
     }
 
@@ -30,9 +32,9 @@ class Workers_Tests {
         val worker = workers.all.first()
         runBlocking {
             workers.start(worker.id)
-            ensure(workers,true, 1, 1, 0, worker.id, Status.Running, 1, JobAction.Process, 0)
+            ensure(workers,true, 1, 1, 0, worker.id, Status.Running, 1, Action.Process, 0)
             workers.pause(worker.id, "test pause")
-            ensure(workers,true, 1, 1, 0, worker.id, Status.Paused, 2, JobAction.Resume, 0)
+            ensure(workers,true, 1, 1, 0, worker.id, Status.Paused, 2, Action.Resume, 0)
         }
     }
 
@@ -43,7 +45,7 @@ class Workers_Tests {
         val worker = workers.all.first()
         runBlocking {
             workers.start(worker.id)
-            ensure(workers,true, 1, 1, 0, worker.id, Status.Running, 1, JobAction.Process, 0)
+            ensure(workers,true, 1, 1, 0, worker.id, Status.Running, 1, Action.Process, 0)
             workers.stop(worker.id, "test stop")
             ensure(workers,true, 1, 1, 0, worker.id, Status.Stopped, 1,null, 0)
         }
@@ -56,11 +58,11 @@ class Workers_Tests {
         val worker = workers.all.first()
         runBlocking {
             workers.start(worker.id)
-            ensure(workers,true, 1, 1, 0, worker.id, Status.Running, 1, JobAction.Process, 0)
+            ensure(workers,true, 1, 1, 0, worker.id, Status.Running, 1, Action.Process, 0)
             workers.pause(worker.id, "test pause")
-            ensure(workers,true, 1, 1, 0, worker.id, Status.Paused, 2, JobAction.Resume, 0)
+            ensure(workers,true, 1, 1, 0, worker.id, Status.Paused, 2, Action.Resume, 0)
             workers.resume(worker.id, "test resume")
-            ensure(workers,true, 2, 2, 0, worker.id, Status.Running, 3, JobAction.Process, 0)
+            ensure(workers,true, 2, 2, 0, worker.id, Status.Running, 3, Action.Process, 0)
         }
     }
 
@@ -71,9 +73,9 @@ class Workers_Tests {
         val worker = workers.all.first()
         runBlocking {
             workers.start(worker.id)
-            ensure(workers,true, 1, 1, 0, worker.id, Status.Running, 1, JobAction.Process, 0)
+            ensure(workers,true, 1, 1, 0, worker.id, Status.Running, 1, Action.Process, 0)
             workers.process(worker.id)
-            ensure(workers,true, 2, 2, 0, worker.id, Status.Running, 2, JobAction.Process, 0)
+            ensure(workers,true, 2, 2, 0, worker.id, Status.Running, 2, Action.Process, 0)
         }
     }
 
@@ -84,18 +86,18 @@ class Workers_Tests {
         val worker = workers.all.first()
         runBlocking {
             workers.start(worker.id)
-            ensure(workers,true, 1, 1, 0, worker.id, Status.Running, 1, JobAction.Process, 0)
+            ensure(workers,true, 1, 1, 0, worker.id, Status.Running, 1, Action.Process, 0)
             (1 .. 4).forEach {
                 workers.process(worker.id)
             }
-            ensure(workers, true, 5, 5, 0, worker.id, Status.Complete, 4, JobAction.Process, 0)
+            ensure(workers, true, 5, 5, 0, worker.id, Status.Complete, 4, Action.Process, 0)
         }
     }
 
 
-    private fun ensure(workers:Workers, hasRun:Boolean, totalRuns:Long, totalPassed:Long, totalFailed:Long, id: Identity,
-                       status: Status, requestCount:Int, action: JobAction?, seconds:Long){
-        val context:WorkerContext = workers.get(id)!!
+    private fun ensure(workers: Workers, hasRun:Boolean, totalRuns:Long, totalPassed:Long, totalFailed:Long, id: Identity,
+                       status: Status, requestCount:Int, action: Action?, seconds:Long){
+        val context: WorkerContext = workers.get(id)!!
         val runs = context.stats.calls
         val worker = context.worker
 
@@ -129,8 +131,8 @@ class Workers_Tests {
     private fun build(): Workers {
         val worker = PagedWorker(0, 5, 2)
         val logger = LoggerConsole()
-        val ids = JobId()
-        val workers = Workers(worker.id, listOf(worker), MockCoordinator(logger, ids), MockScheduler(), logger,ids, 20)
+        val ids = Paired()
+        val workers = Workers(worker.id, listOf(worker), MockCoordinator(logger, ids), MockScheduler(), logger, ids, 20)
         return workers
     }
 }

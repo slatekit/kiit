@@ -7,21 +7,22 @@ import slatekit.common.DateTime
 import slatekit.common.Status
 import slatekit.common.Event
 import slatekit.jobs.*
+import slatekit.jobs.workers.Worker
 import slatekit.results.Codes
 
 object JobUtils {
 
-    fun validate(action: JobAction, currState: Status): Boolean {
+    fun validate(action: Action, currState: Status): Boolean {
         val nextState = toState(action)
         return when (nextState) {
             null -> false
             else -> {
                 val isRunning = currState.value == Status.Running.value
                 val isValid = when (action) {
-                    is JobAction.Start -> !isRunning
-                    is JobAction.Process -> isRunning
-                    is JobAction.Control -> isRunning
-                    is JobAction.Resume -> true
+                    is Action.Start -> !isRunning
+                    is Action.Process -> isRunning
+                    is Action.Control -> isRunning
+                    is Action.Resume -> true
                     else -> {
                         // No reason to:
                         // 1. Pause if already "Paused"
@@ -34,19 +35,19 @@ object JobUtils {
         }
     }
 
-    fun toState(action: JobAction): Status? {
+    fun toState(action: Action): Status? {
         return when (action) {
-            is JobAction.Start -> Status.Running
-            is JobAction.Stop -> Status.Stopped
-            is JobAction.Pause -> Status.Paused
-            is JobAction.Resume -> Status.Running
-            is JobAction.Process -> Status.Running
-            is JobAction.Control -> Status.Running
+            is Action.Start -> Status.Running
+            is Action.Stop -> Status.Stopped
+            is Action.Pause -> Status.Paused
+            is Action.Resume -> Status.Running
+            is Action.Process -> Status.Running
+            is Action.Control -> Status.Running
             else -> null
         }
     }
 
-    fun toEvent(started: DateTime, desc: String, target: String, worker: Workable<*>): Event {
+    fun toEvent(started: DateTime, desc: String, target: String, worker: Worker<*>): Event {
         // Convert the worker info / state / stats into a generalized event
         val id = worker.id
         val status = worker.status()
@@ -93,7 +94,7 @@ object JobUtils {
     /**
      * Performs the operation if the action supplied is correct with regard to the current state.
      */
-    suspend fun perform(job: Job, action: JobAction, currentState: Status, launch: Boolean, scope: CoroutineScope, operation: suspend() -> Unit) {
+    suspend fun perform(job: Job, action: Action, currentState: Status, launch: Boolean, scope: CoroutineScope, operation: suspend() -> Unit) {
         // Check state move
         if (!JobUtils.validate(action, currentState)) {
             val currentStatus = job.status()

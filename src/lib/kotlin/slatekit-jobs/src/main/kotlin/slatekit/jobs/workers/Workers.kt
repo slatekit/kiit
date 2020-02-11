@@ -1,15 +1,18 @@
-package slatekit.jobs
+package slatekit.jobs.workers
 
 import slatekit.common.DateTime
 import slatekit.common.Identity
 import slatekit.common.Status
+import slatekit.common.ids.Paired
 import slatekit.common.log.LogLevel
 import slatekit.common.log.Logger
 import slatekit.common.paged.Pager
+import slatekit.jobs.Event
+import slatekit.jobs.Action
+import slatekit.jobs.Task
 import slatekit.tracking.Recorder
 import slatekit.policy.Policy
-import slatekit.jobs.events.Events
-import slatekit.jobs.events.WorkerEvents
+import slatekit.jobs.Events
 import slatekit.jobs.slatekit.jobs.support.Backoffs
 import slatekit.jobs.support.*
 import slatekit.results.*
@@ -25,27 +28,27 @@ class Workers(
     val coordinator: Coordinator,
     val scheduler: Scheduler,
     val logger: Logger,
-    val ids: JobId,
+    val ids: Paired,
     val pauseInSeconds: Long,
     val policies: List<Policy<WorkRequest, WorkResult>> = listOf(),
     val backoffs: () -> Pager<Long> = { Backoffs.times() }
-) : Events<Worker<*>> {
+)  {
 
-    private val events: Events<Worker<*>> = WorkerEvents(this)
-    private val lookup: Map<String, WorkExecutor> = all.map { it.id.id to WorkerContext(jobId, it, Recorder.of(it.id), Backoffs(backoffs()), policies) }
-            .map { it.first to WorkExecutor.of(it.second) }.toMap()
+    private val events = Events<Event.WorkerEvent>()
+    private val lookup: Map<String, Executor> = all.map { it.id.id to WorkerContext(jobId, it, Recorder.of(it.id), Backoffs(backoffs()), policies) }
+            .map { it.first to Executor.of(it.second) }.toMap()
 
     /**
      * Subscribe to status being changed for any worker
      */
-    override suspend fun subscribe(op: suspend (Worker<*>) -> Unit) {
+    suspend fun subscribe(op: suspend (Event.WorkerEvent) -> Unit) {
         events.subscribe(op)
     }
 
     /**
      * Subscribe to status beging changed to the one supplied for any worker
      */
-    override suspend fun subscribe(status: Status, op: suspend (Worker<*>) -> Unit) {
+    suspend fun subscribe(status: Status, op: suspend (Event.WorkerEvent) -> Unit) {
         events.subscribe(status, op)
     }
 
@@ -76,7 +79,7 @@ class Workers(
      * Starts the worker associated with the identity and makes it work using the supplied Task
      */
     suspend fun start(id: Identity, task: Task = Task.empty, requireTask:Boolean = false) {
-        perform("Starting", id) { executor ->
+        perform(null,"Starting", id) { executor ->
             val context = executor.context
             val worker = context.worker
             val result = Runner.record(context) {
@@ -102,7 +105,7 @@ class Workers(
     }
 
     suspend fun process(id: Identity, task: Task = Task.empty) {
-        perform("Processing", id) { executor ->
+        perform(null, "Processing", id) { executor ->
             val context = executor.context
             val result = executor.execute(task)
             result.map { res -> loop(context, res) }
@@ -111,7 +114,7 @@ class Workers(
     }
 
     suspend fun resume(id: Identity, reason: String?, task: Task = Task.empty) {
-        performPausableAction(Status.Running, reason, id) { executor, pausable ->
+        perform(Status.Running, reason, id) { executor ->
             val context = executor.context
             val result = executor.resume(reason ?: "Resuming", task)
             result.map { res -> loop(context, res) }
@@ -120,36 +123,38 @@ class Workers(
     }
 
     suspend fun pause(id: Identity, reason: String?, seconds: Long? = null) {
-        performPausableAction(Status.Paused, reason, id) { executor, pausable ->
+        perform(Status.Paused, reason, id) { executor ->
             val context = executor.context
             val worker = context.worker
-            pausable.pause(reason ?: "Paused")
+            worker.pause(reason ?: "Paused")
             val pauseInSecs = seconds ?: pauseInSeconds
             scheduler.schedule(DateTime.now().plusSeconds(pauseInSecs)) {
-                coordinator.send(Command.WorkerCommand(ids.nextId(), ids.nextUUID().toString(), JobAction.Resume, worker.id, 0, null))
+                coordinator.send(Command.WorkerCommand(ids.nextId(), ids.nextUUID().toString(), Action.Resume, worker.id, 0, null))
             }
             Outcomes.success(Status.Paused)
         }
     }
 
     suspend fun backoff(id: Identity, reason: String?) {
-        performPausableAction(Status.Paused, reason ?: "Backoff", id) { executor, pausable ->
+        perform(Status.Paused, reason ?: "Backoff", id) { executor ->
             val context = executor.context
             val worker = context.worker
-            pausable.pause(reason ?: "Backoff")
+            worker.pause(reason ?: "Backoff")
             val pauseInSecs = context.backoffs.next()
             record(worker.id, "pause_start", listOf("seconds" to pauseInSecs.toString()))
             scheduler.schedule(DateTime.now().plusSeconds(pauseInSecs)) {
                 record(worker.id, "pause_finish")
-                coordinator.send(Command.WorkerCommand(ids.nextId(), ids.nextUUID().toString(), JobAction.Resume, worker.id, 0, null))
+                coordinator.send(Command.WorkerCommand(ids.nextId(), ids.nextUUID().toString(), Action.Resume, worker.id, 0, null))
             }
             Outcomes.success(Status.Paused)
         }
     }
 
     suspend fun stop(id: Identity, reason: String?) {
-        performPausableAction(Status.Stopped, reason, id) { worker, pausable ->
-            pausable.stop(reason ?: "Stopped")
+        perform(Status.Stopped, reason, id) { executor ->
+            val context = executor.context
+            val worker = context.worker
+            worker.stop(reason ?: "Stopped")
             Outcomes.success(Status.Stopped)
         }
     }
@@ -157,58 +162,43 @@ class Workers(
     suspend fun delay(id: Identity, seconds: Long) {
         record(id, "delay", listOf("seconds" to seconds.toString()))
         scheduler.schedule(DateTime.now().plusSeconds(seconds)) {
-            coordinator.send(Command.WorkerCommand(ids.nextId(), ids.nextUUID().toString(), JobAction.Start, id, 0, null))
+            coordinator.send(Command.WorkerCommand(ids.nextId(), ids.nextUUID().toString(), Action.Start, id, 0, null))
         }
     }
 
-    private suspend fun perform(action: String, id: Identity, operation: suspend (WorkExecutor) -> Outcome<Status>): Outcome<Status> {
-        record(id, action)
-        val executor = this.lookup[id.id]
-        return when (executor) {
-            null -> Outcomes.errored("Unable to find worker with id : ${id.name}")
-            else -> {
-                val result = operation(executor)
-                result
-            }
-        }
-    }
-
-    private suspend fun performPausableAction(status: Status, reason: String?, id: Identity, operation: suspend (WorkExecutor, Pausable) -> Outcome<Status>): Outcome<Status> {
-        record(id, status.name)
+    private suspend fun perform(status: Status?, reason: String?, id: Identity, operation: suspend (Executor) -> Outcome<Status>): Outcome<Status> {
+        record(id, status?.name ?: reason ?: "")
         val executor = this.lookup[id.id]
         return when (executor) {
             null -> Outcomes.errored("Unable to find worker with id : ${id.name}")
             else -> {
                 val context = executor.context
-                when (context.worker) {
-                    is Pausable -> {
-                        context.worker.move(status, reason)
-                        notify(context, status.name)
-                        operation(executor, context.worker)
-                    }
-                    else -> Outcomes.errored("${context.worker.id.name} does not implement Pausable and can not handle a pause/stop/resume action")
+                status?.let {
+                    context.worker.move(status, reason)
+                    notify(context, status.name)
                 }
+                operation(executor)
             }
         }
     }
 
     private suspend fun loop(context: WorkerContext, workResult: WorkResult) {
-        val worker: Workable<*> = context.worker
+        val worker: Worker<*> = context.worker
         val result = Tries.of {
-            when (workResult.state) {
-                is WorkState.Done -> {
+            when (workResult) {
+                is WorkResult.Done -> {
                     logger.info("Worker ${worker.id.name} complete")
                     worker.move(Status.Complete)
                     worker.done()
                     notify(context, "Done")
                 }
-                is WorkState.Next -> {
+                is WorkResult.Next -> {
                     val (id, uuid) = ids.next()
-                    coordinator.send(Command.WorkerCommand(id, uuid.toString(), JobAction.Process, worker.id, 0, ""))
+                    coordinator.send(Command.WorkerCommand(id, uuid.toString(), Action.Process, worker.id, 0, ""))
                 }
-                is WorkState.More -> {
+                is WorkResult.More -> {
                     val (id, uuid) = ids.next()
-                    coordinator.send(Command.WorkerCommand(id, uuid.toString(), JobAction.Process, worker.id, 0, ""))
+                    coordinator.send(Command.WorkerCommand(id, uuid.toString(), Action.Process, worker.id, 0, ""))
                 }
             }
             ""
@@ -232,7 +222,8 @@ class Workers(
             val worker = context.worker
             val task = context.task
             record(worker.id, action, task.structured())
-            (events as WorkerEvents).notify(context.worker)
+            val event = Event.WorkerEvent(worker.id, worker.status(), worker.info())
+            events.notify(event)
         }
         catch(ex:Exception){
         }

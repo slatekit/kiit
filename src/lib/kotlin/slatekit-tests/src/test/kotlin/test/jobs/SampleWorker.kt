@@ -2,9 +2,11 @@ package test.jobs
 
 import slatekit.common.Identity
 import slatekit.jobs.*
+import slatekit.jobs.workers.WorkResult
+import slatekit.jobs.workers.Worker
 import java.util.concurrent.atomic.AtomicInteger
 
-class OneTimeWorker(val start:Int, val end:Int, id: Identity) : Worker<Int>(id), Pausable {
+class OneTimeWorker(val start:Int, val end:Int, id: Identity) : Worker<Int>(id) {
 
 
     constructor(start:Int, end:Int):this(start, end, Identity.test(OneTimeWorker::class.simpleName!!))
@@ -31,7 +33,7 @@ class OneTimeWorker(val start:Int, val end:Int, id: Identity) : Worker<Int>(id),
     override suspend fun work(task: Task): WorkResult {
         flow.add("work")
         (start .. end).forEach { current.incrementAndGet()  }
-        return WorkResult(WorkState.Done)
+        return WorkResult.Done
     }
 
 
@@ -59,7 +61,7 @@ class OneTimeWorker(val start:Int, val end:Int, id: Identity) : Worker<Int>(id),
 }
 
 
-class PagedWorker(start:Int, val maxRuns:Int, val countsPerRun:Int) : Worker<Int>(Identity.test(PagedWorker::class.simpleName!!)), Pausable {
+class PagedWorker(start:Int, val maxRuns:Int, val countsPerRun:Int) : Worker<Int>(Identity.test(PagedWorker::class.simpleName!!)) {
 
     private val runs = AtomicInteger(0)
     private val counts = AtomicInteger(start)
@@ -74,10 +76,10 @@ class PagedWorker(start:Int, val maxRuns:Int, val countsPerRun:Int) : Worker<Int
         }
         val run = runs.incrementAndGet()
         return if(run < maxRuns) {
-            WorkResult(WorkState.More)
+            WorkResult.More
         }
         else {
-            WorkResult(WorkState.Done)
+            WorkResult.Done
         }
     }
 

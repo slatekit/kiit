@@ -7,6 +7,7 @@ import slatekit.common.Status
 import slatekit.core.queues.InMemoryQueue
 import slatekit.core.queues.QueueStringConverter
 import slatekit.core.queues.WrappedAsyncQueue
+import slatekit.integration.jobs.JobQueue
 import slatekit.jobs.*
 
 
@@ -14,7 +15,7 @@ class Job_Manage_Queue_Tests : JobTestSupport {
 
     fun sampleQueue():Queue{
         val source = InMemoryQueue<String>("q1", QueueStringConverter())
-        val queue = Queue(source.name, Priority.Mid, WrappedAsyncQueue(source))
+        val queue = JobQueue(source.name, Priority.Mid, WrappedAsyncQueue(source))
         return queue
     }
 
@@ -23,16 +24,16 @@ class Job_Manage_Queue_Tests : JobTestSupport {
     fun can_start_all_workers() {
         runBlocking {
             val queue = sampleQueue()
-            (1..10).forEach { queue.queue.send(it.toString()) }
-            val manager = run(2, queue, JobAction.Start)
+            (1..10).forEach { queue.send(it.toString()) }
+            val manager = run(2, queue, Action.Start)
             runBlocking {
                 val worker1 = manager.workers.all.first()
                 manager.respond() // Start worker1
-                ensure(manager.workers, true, 1, 1, 0, worker1.id, Status.Running, 4, JobAction.Process, 0)
+                ensure(manager.workers, true, 1, 1, 0, worker1.id, Status.Running, 4, Action.Process, 0)
 
                 val worker2 = manager.workers.all.last()
                 manager.respond() // Start worker2val worker = manager.workers.all.first()
-                ensure(manager.workers, true, 1, 1, 0, worker2.id, Status.Running, 5, JobAction.Process, 0)
+                ensure(manager.workers, true, 1, 1, 0, worker2.id, Status.Running, 5, Action.Process, 0)
             }
         }
     }
@@ -42,12 +43,12 @@ class Job_Manage_Queue_Tests : JobTestSupport {
     fun can_pause_worker() {
         runBlocking {
             val queue = sampleQueue()
-            (1..10).forEach { queue.queue.send(it.toString()) }
-            val manager = run(2, queue, JobAction.Start)
+            (1..10).forEach { queue.send(it.toString()) }
+            val manager = run(2, queue, Action.Start)
             runBlocking {
                 val worker1 = manager.workers.all.first()
                 val worker2 = manager.workers.all.last()
-                manager.request(JobAction.Pause, worker2.id, "test")
+                manager.request(Action.Pause, worker2.id, "test")
                 manager.respond() // Start worker1
                 manager.respond() // Start worker2
                 manager.respond() // Pause worker1
@@ -62,8 +63,8 @@ class Job_Manage_Queue_Tests : JobTestSupport {
     fun can_pause_worker_due_to_empty_queue() {
         runBlocking {
             val queue = sampleQueue()
-            (1..2).forEach { queue.queue.send(it.toString()) }
-            val manager = run(2, queue, JobAction.Start)
+            (1..2).forEach { queue.send(it.toString()) }
+            val manager = run(2, queue, Action.Start)
             runBlocking {
 
                 manager.respond() // Start worker1
@@ -107,7 +108,7 @@ class Job_Manage_Queue_Tests : JobTestSupport {
                 Assert.assertEquals("Backoff", worker2.note())
 
                 // Ensure its back to running
-                (3..4).forEach { queue.queue.send(it.toString()) }
+                (3..4).forEach { queue.send(it.toString()) }
                 (manager.coordinator as MockCoordinatorWithChannel).resume()
                 (manager.coordinator as MockCoordinatorWithChannel).resume()
                 manager.respond() // Resume worker 1
@@ -127,12 +128,12 @@ class Job_Manage_Queue_Tests : JobTestSupport {
     fun can_resume_worker() {
         runBlocking {
             val queue = sampleQueue()
-            (1..10).forEach { queue.queue.send(it.toString()) }
-            val manager = run(2, queue, JobAction.Start)
+            (1..10).forEach { queue.send(it.toString()) }
+            val manager = run(2, queue, Action.Start)
             runBlocking {
                 val worker1 = manager.workers.all.first()
                 val worker2 = manager.workers.all.last()
-                manager.request(JobAction.Pause, worker2.id, "test")
+                manager.request(Action.Pause, worker2.id, "test")
                 manager.respond() // Start worker1
                 manager.respond() // Start worker2
                 manager.respond() // Pause worker1
@@ -152,12 +153,12 @@ class Job_Manage_Queue_Tests : JobTestSupport {
     fun can_stop_worker() {
         runBlocking {
             val queue = sampleQueue()
-            (1..10).forEach { queue.queue.send(it.toString()) }
-            val manager = run(2, queue, JobAction.Start)
+            (1..10).forEach { queue.send(it.toString()) }
+            val manager = run(2, queue, Action.Start)
             runBlocking {
                 val worker1 = manager.workers.all.first()
                 val worker2 = manager.workers.all.last()
-                manager.request(JobAction.Stop, worker2.id, "test")
+                manager.request(Action.Stop, worker2.id, "test")
                 manager.respond() // Start worker1
                 manager.respond() // Start worker2
                 manager.respond() // Pause worker1

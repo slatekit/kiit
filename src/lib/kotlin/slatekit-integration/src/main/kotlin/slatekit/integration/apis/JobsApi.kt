@@ -23,8 +23,8 @@ import slatekit.common.Sources
 import slatekit.common.crypto.Encryptor
 import slatekit.common.log.Logger
 import slatekit.integration.common.AppEntContext
-import slatekit.jobs.JobAction
 import slatekit.jobs.Job
+
 
 @Api(area = "infra", name = "workers", desc = "api to get version information",
         auth = AuthModes.KEYED, roles = ["admin"], verb = Verbs.AUTO, sources = [Sources.ALL])
@@ -43,32 +43,32 @@ class JobsApi(override val context: AppEntContext) : FileSupport {
      * starts the system
      */
     @Action(desc = "start the workers system")
-    suspend fun start() = perform { it.request(JobAction.Start) }
+    suspend fun start() = perform { it.request(slatekit.jobs.Action.Start) }
 
     /**
      * pauses the system
      */
     @Action(desc = "pauses the workers system")
-    suspend fun pause() = perform { it.request(JobAction.Pause) }
+    suspend fun pause() = perform { it.request(slatekit.jobs.Action.Pause) }
 
     /**
      * resumes the system
      */
     @Action(desc = "resumes the workers system")
-    suspend fun resume() = perform { it.request(JobAction.Resume) }
+    suspend fun resume() = perform { it.request(slatekit.jobs.Action.Resume) }
 
     /**
      * stops the system
      */
     @Action(desc = "stops the workers system")
-    suspend fun stop() = perform { it.request(JobAction.Stop) }
+    suspend fun stop() = perform { it.request(slatekit.jobs.Action.Stop) }
 
     /**
      * starts the worker in the group supplied
      */
     @Action(desc = "starts the worker")
     suspend fun startWorker(workerId: String) = requestWork(workerId){
-        manager.request(JobAction.Start, it, "from api")
+        manager.request(slatekit.jobs.Action.Start, it, "from api")
     }
 
     /**
@@ -76,7 +76,7 @@ class JobsApi(override val context: AppEntContext) : FileSupport {
      */
     @Action(desc = "pauses the worker")
     suspend fun pauseWorker(workerId: String) = requestWork(workerId) {
-        manager.request(JobAction.Pause, it, "from api")
+        manager.request(slatekit.jobs.Action.Pause, it, "from api")
     }
 
     /**
@@ -84,7 +84,7 @@ class JobsApi(override val context: AppEntContext) : FileSupport {
      */
     @Action(desc = "resumes the worker")
     suspend fun resumeWorker(workerId: String) = requestWork(workerId) {
-        manager.request(JobAction.Resume, it, "from api")
+        manager.request(slatekit.jobs.Action.Resume, it, "from api")
     }
 
     /**
@@ -92,7 +92,7 @@ class JobsApi(override val context: AppEntContext) : FileSupport {
      */
     @Action(desc = "stops the worker")
     suspend fun stopWorker(workerId: String) = requestWork(workerId) {
-        manager.request(JobAction.Stop, it, "from api")
+        manager.request(slatekit.jobs.Action.Stop, it, "from api")
     }
 
     /**

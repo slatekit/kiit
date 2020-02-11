@@ -12,6 +12,7 @@
  */
 package test
 
+import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.runBlocking
 import org.junit.Assert
 import org.junit.Test
@@ -19,7 +20,7 @@ import slatekit.cache.*
 import slatekit.common.DateTime
 import slatekit.common.ids.Paired
 import slatekit.common.log.LoggerConsole
-import test.cache.MockCacheCoordinator
+import slatekit.core.common.ChannelCoordinator
 
 
 class Cache_Channel_Tests {
@@ -27,7 +28,9 @@ class Cache_Channel_Tests {
     fun getCache(initialize:Boolean = true, settings: CacheSettings = CacheSettings(10), listener:((CacheEvent) -> Unit)? = null): SimpleAsyncCache {
         val logger = LoggerConsole()
         val raw =  SimpleCache("async-cache", settings = settings, listener = listener, logger = logger)
-        val cache = SimpleAsyncCache(raw, MockCacheCoordinator(logger, Paired()))
+        val coordinator = ChannelCoordinator<CacheCommand>(logger, Paired(), Channel(Channel.UNLIMITED))
+        //val coordinator = MockCacheCoordinator(logger, Paired())
+        val cache = SimpleAsyncCache(raw, coordinator)
         if(initialize) {
             cache.put("countries", "countries supported for mobile app", 60) { listOf("us", "ca") }
             runBlocking {

@@ -5,13 +5,14 @@ import slatekit.apis.core.Requests
 import slatekit.common.Identity
 import slatekit.common.Sources
 import slatekit.jobs.*
+import slatekit.jobs.workers.WorkResult
+import slatekit.jobs.workers.Worker
 import slatekit.results.Failure
 import slatekit.results.Success
 import slatekit.results.Try
 
 open class APIWorker(
         val container: ApiServer,
-        val settings: WorkerSettings,
         identity: Identity
 )
     : Worker<Any>( identity ) {
@@ -37,6 +38,6 @@ open class APIWorker(
             is Failure -> result.toTry()
         }
         slatekit.common.NOTE.IMPLEMENT("jobs", "Success/Failure handling")
-        return WorkResult(WorkState.More)
+        return WorkResult.More
     }
 }

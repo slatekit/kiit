@@ -6,16 +6,19 @@ import org.junit.Assert
 import slatekit.common.Status
 import slatekit.common.Identity
 import slatekit.common.SimpleIdentity
+import slatekit.common.ids.Paired
 import slatekit.common.log.LogLevel
 import slatekit.common.log.LoggerConsole
 import slatekit.jobs.*
 import slatekit.jobs.support.Command
-import slatekit.jobs.support.JobId
+import slatekit.jobs.workers.Worker
+import slatekit.jobs.workers.WorkerContext
+import slatekit.jobs.workers.Workers
 
 interface JobTestSupport {
 
 
-    fun run(numWorkers: Int, queue:Queue?, action:JobAction, operation:((Job) -> Unit)? = null ):Job{
+    fun run(numWorkers: Int, queue:Queue?, action:Action, operation:((Job) -> Unit)? = null ):Job{
         val manager = build(numWorkers, queue)
         runBlocking {
             manager.request(action)
@@ -26,13 +29,13 @@ interface JobTestSupport {
     }
 
 
-    fun buildWorker():Worker<Int> = PagedWorker(0, 5, 3)
+    fun buildWorker(): Worker<Int> = PagedWorker(0, 5, 3)
 
 
     fun build(numWorkers:Int, queue: Queue?): Job {
         val workers = (1..numWorkers).map { buildWorker() }
         val logger = LoggerConsole(LogLevel.Info, "manager")
-        val ids = JobId()
+        val ids = Paired()
         val coordinator = MockCoordinatorWithChannel(logger, ids, Channel(Channel.UNLIMITED))
         val id = (workers.first().id as SimpleIdentity)
         val jobId = id.copy(service = id.service + "-job")
@@ -42,7 +45,7 @@ interface JobTestSupport {
 
 
     fun ensure(workers: Workers, hasRun:Boolean, totalRuns:Long, totalPassed:Long, totalFailed:Long, id: Identity,
-               status: Status, requestCount:Int, action: JobAction?, seconds:Long){
+               status: Status, requestCount:Int, action: Action?, seconds:Long){
         val context: WorkerContext = workers.get(id)!!
         val runs = context.stats.calls
         val worker = context.worker

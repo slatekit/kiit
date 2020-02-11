@@ -57,13 +57,13 @@ fun run(args: Args){
 
         // Sample Data: for queue
         (1 .. 5).forEach {
-            queue1.queue.send(it.toString(), mapOf(
+            queue1.send(it.toString(), mapOf(
                     "id"   to "sample_id_$it",
                     "name" to "sendNewsLetter",
                     "xid"  to "sample_correlation_id_$it",
                     "tag"  to "sample_tag_$it"
             ))
-            queue2.queue.send(it.toString(), mapOf(
+            queue2.send(it.toString(), mapOf(
                     "id"   to "sample_id_$it",
                     "name" to "sendNewsLetter",
                     "xid"  to "sample_correlation_id_$it",

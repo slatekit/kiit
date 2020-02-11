@@ -1,7 +1,10 @@
-package slatekit.jobs
+package slatekit.jobs.support
 
+import slatekit.jobs.Task
 import slatekit.policy.Policies
-import slatekit.jobs.support.Runner
+import slatekit.jobs.workers.WorkRequest
+import slatekit.jobs.workers.WorkResult
+import slatekit.jobs.workers.WorkerContext
 import slatekit.results.Outcome
 import slatekit.results.builders.Outcomes
 
@@ -12,7 +15,7 @@ import slatekit.results.builders.Outcomes
  * 3. direct  : execute directly
  * 4. resume  : execute the resume method on a pauseable
  */
-class WorkExecutor(
+class Executor(
     val context: WorkerContext,
     val workWithPolicies: suspend (WorkRequest) -> Outcome<WorkResult>,
     val resumeWithPolicies: suspend (WorkRequest) -> Outcome<WorkResult>
@@ -69,7 +72,7 @@ class WorkExecutor(
          * 1. composition of policies(middleware)
          * 2. final call to worker.work
          */
-        fun of(context: WorkerContext): WorkExecutor {
+        fun of(context: WorkerContext): Executor {
             val rawWork: suspend (WorkRequest) -> Outcome<WorkResult> = { req ->
                 Runner.record(context) {
                     it.work(req.task)
@@ -77,18 +80,18 @@ class WorkExecutor(
             }
             val rawResume: suspend (WorkRequest) -> Outcome<WorkResult> = { req ->
                 Runner.record(context) {
-                    (it as Pausable).resume("", req.task)
+                    it.resume("", req.task)
                 }
             }
 
             return when (context.policies.isEmpty()) {
                 true -> {
-                    WorkExecutor(context, rawWork, rawResume)
+                    Executor(context, rawWork, rawResume)
                 }
                 false -> {
                     val work = Policies.chain(context.policies, rawWork)
                     val resume = Policies.chain(context.policies, rawResume)
-                    WorkExecutor(context, work, resume)
+                    Executor(context, work, resume)
                 }
             }
         }

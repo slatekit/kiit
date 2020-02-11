@@ -4,9 +4,8 @@ import kotlinx.coroutines.runBlocking
 import slatekit.common.Identity
 import slatekit.common.Status
 import slatekit.jobs.Task
-import slatekit.jobs.WorkResult
-import slatekit.jobs.WorkState
-import slatekit.jobs.Worker
+import slatekit.jobs.workers.WorkResult
+import slatekit.jobs.workers.Worker
 import java.util.concurrent.atomic.AtomicInteger
 
 // Sample User model
@@ -28,7 +27,7 @@ val allUsers = (1..20).map { User(it, "user$it@company1.com")}
  */
 suspend fun sendNewsLetter(task: Task): WorkResult {
     allUsers.forEach { user -> JobUtils.send(task.job, NEWS_LETTER_MESSAGE, user) }
-    return WorkResult(WorkState.Done)
+    return WorkResult.Done
 }
 
 
@@ -70,7 +69,7 @@ suspend fun sendNewsLetterFromQueue(task: Task): WorkResult {
     task.done()
 
     // Indicate that this can now handle more
-    return WorkResult(WorkState.More)
+    return WorkResult.More
 }
 
 
@@ -99,7 +98,7 @@ class NewsLetterWorker(id:Identity) : Worker<String>(id) {
     }
 
     // Transition hook for when the status is changed ( e.g. from Status.Running -> Status.Paused )
-    override suspend fun move(state: Status) {
+    override suspend fun move(state: Status, note:String?) {
         _status.set(Pair(state, state.name))
         notify("move", listOf("status" to state.name))
     }
@@ -115,7 +114,7 @@ class NewsLetterWorker(id:Identity) : Worker<String>(id) {
     }
 
     // Initialization hook ( for setup / logs / alerts )
-    override fun notify(desc: String?, extra: List<Pair<String, String>>?) {
+    override suspend fun notify(desc: String?, extra: List<Pair<String, String>>?) {
         val detail = extra?.joinToString(",") { it.first + "=" + it.second }
         // Simulate notification to email/alerts/etc
         println(desc + detail)
@@ -157,7 +156,7 @@ object JobUtils {
 
         // No more records so indicate done
         if(users.isEmpty())
-            return WorkResult(WorkState.Done)
+            return WorkResult.Done
 
         // Get next page of records
         users.forEach { user -> send(sender,"New version coming out soon!", user) }

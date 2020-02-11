@@ -2,6 +2,9 @@ package slatekit.jobs.support
 
 import slatekit.common.Status
 import slatekit.jobs.*
+import slatekit.jobs.workers.WorkResult
+import slatekit.jobs.workers.Worker
+import slatekit.jobs.workers.WorkerContext
 import slatekit.results.*
 import slatekit.results.builders.Outcomes
 import slatekit.results.builders.Tries
@@ -88,10 +91,10 @@ object Runner {
         statusChanged?.invoke(worker)
 
         val result = when {
-            task == Task.empty && isTaskRequired -> WorkResult(WorkState.More)
+            task == Task.empty && isTaskRequired -> WorkResult.More
             else -> worker.work(task)
         }
-        if (result.state == WorkState.Done && handleDone) {
+        if (result == WorkResult.Done && handleDone) {
             worker.move(Status.Complete)
             statusChanged?.invoke(worker)
             worker.done()
@@ -107,7 +110,7 @@ object Runner {
             worker.move(Status.Running)
             worker.move(Status.Running)
             val workResult = worker.work()
-            if (workResult.state == WorkState.Done) {
+            if (workResult == WorkResult.Done) {
                 worker.move(Status.Complete)
                 worker.done()
             }

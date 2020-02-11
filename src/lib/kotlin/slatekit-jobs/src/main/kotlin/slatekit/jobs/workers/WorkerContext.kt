@@ -1,12 +1,13 @@
-package slatekit.jobs
+package slatekit.jobs.workers
 
 import slatekit.common.Identity
+import slatekit.jobs.Task
 import slatekit.jobs.slatekit.jobs.support.Backoffs
 import slatekit.tracking.Recorder
 import slatekit.policy.Policy
 
 /**
- * Represents the context of a Worker
+ * Represents the context of a Worker containing its statistics, policies, and other components
  * @param id : Identity of its parent ( Job Identity )
  * @param worker : The Worker component itself
  * @param stats : The metrics recorder containing Calls, Counts, Lasts, Logger, etc
@@ -18,7 +19,7 @@ import slatekit.policy.Policy
 data class WorkerContext(
     val id: Identity,
     val worker: Worker<*>,
-    val stats: Recorder<Task, WorkState>,
+    val stats: Recorder<Task, WorkResult>,
     val backoffs:Backoffs = Backoffs(),
     val policies: List<Policy<WorkRequest, WorkResult>> = listOf(),
     val task: Task = Task.empty.copy(job = id.id)

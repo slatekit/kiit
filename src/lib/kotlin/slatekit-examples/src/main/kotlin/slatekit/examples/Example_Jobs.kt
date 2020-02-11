@@ -23,10 +23,13 @@ import slatekit.cmds.Command
 import slatekit.cmds.CommandRequest
 import slatekit.common.log.LoggerConsole
 import slatekit.core.queues.AsyncQueue
+import slatekit.integration.jobs.JobQueue
 import slatekit.policy.policies.Every
 import slatekit.policy.policies.Limit
 import slatekit.policy.policies.Ratio
 import slatekit.jobs.*
+import slatekit.jobs.workers.WorkResult
+import slatekit.jobs.workers.Worker
 import slatekit.results.Try
 import slatekit.results.Success
 import java.util.concurrent.atomic.AtomicInteger
@@ -54,7 +57,7 @@ class Example_Jobs : Command("utils"), CoroutineScope by MainScope() {
         }
 
         // NOTE: This is a helper method used for the real example(s) below
-        suspend fun sendNewsLetterBatch(sender:String, offset:AtomicInteger, batchSize:Int):WorkResult {
+        suspend fun sendNewsLetterBatch(sender:String, offset:AtomicInteger, batchSize:Int): WorkResult {
             val start = offset.get()
             val users = if(start < 0 || start >= allUsers.size) listOf()
             else allUsers.subList(start, start + batchSize)
@@ -62,7 +65,7 @@ class Example_Jobs : Command("utils"), CoroutineScope by MainScope() {
 
             // No more records so indicate done
             if(users.isEmpty())
-                return WorkResult(WorkState.Done)
+                return WorkResult.Done
 
             // Get next page of records
             users.forEach { user -> send(sender,"New version coming out soon!", user) }
@@ -79,15 +82,15 @@ class Example_Jobs : Command("utils"), CoroutineScope by MainScope() {
 
 
         // Option 1: Use a function for a job that runs to completion
-        suspend fun sendNewsLetter(task: Task):WorkResult {
+        suspend fun sendNewsLetter(task: Task): WorkResult {
             allUsers.forEach { user -> send(task.job, NEWS_LETTER_MESSAGE, user) }
-            return WorkResult(WorkState.Done)
+            return WorkResult.Done
         }
 
 
         // Option 2: Use a function for a job that pages through work
         val offset1 = AtomicInteger(0)
-        suspend fun sendNewsLetterWithPaging(task: Task):WorkResult {
+        suspend fun sendNewsLetterWithPaging(task: Task): WorkResult {
             println(task.id)    // abc123
             println(task.from)  // queue://notification
             println(task.job)   // job1
@@ -101,7 +104,7 @@ class Example_Jobs : Command("utils"), CoroutineScope by MainScope() {
 
 
         // Option 3: Use a function for a job that processes a task from a queue
-        suspend fun sendNewsLetterFromQueue(task: Task):WorkResult {
+        suspend fun sendNewsLetterFromQueue(task: Task): WorkResult {
             val userId = task.data.toInt()
             val user = allUsers.first { it.id == userId }
             send(task.job, NEWS_LETTER_MESSAGE, user)
@@ -110,7 +113,7 @@ class Example_Jobs : Command("utils"), CoroutineScope by MainScope() {
             task.done()
 
             // Indicate that this can now handle more
-            return WorkResult(WorkState.More)
+            return WorkResult.More
         }
 
 
@@ -131,8 +134,10 @@ class Example_Jobs : Command("utils"), CoroutineScope by MainScope() {
             }
 
             // Transition hook for when the status is changed ( e.g. from Status.Running -> Status.Paused )
-            override suspend fun move(state: Status) {
-                notify("move", listOf("status" to state.name))
+            override suspend fun move(state: Status, note:String?, sendNotification:Boolean) {
+                if(sendNotification) {
+                    notify("move", listOf("status" to state.name))
+                }
             }
 
             // Completion hook ( for logic / logs / alerts )
@@ -146,7 +151,7 @@ class Example_Jobs : Command("utils"), CoroutineScope by MainScope() {
             }
 
             // Initialization hook ( for setup / logs / alerts )
-            override fun notify(desc: String?, extra: List<Pair<String, String>>?) {
+            override suspend fun notify(desc: String?, extra: List<Pair<String, String>>?) {
                 val detail = extra?.joinToString(",") { it.first + "=" + it.second }
                 // Simulate notification to email/alerts/etc
                 println(desc + detail)
@@ -158,8 +163,8 @@ class Example_Jobs : Command("utils"), CoroutineScope by MainScope() {
         runBlocking {
 
             // Sample Queues
-            val queue1 = slatekit.jobs.Queue("queue1", Priority.Mid, AsyncQueue.of(InMemoryQueue.stringQueue(5)))
-            val queue2 = slatekit.jobs.Queue("queue2", Priority.Mid, AsyncQueue.of(InMemoryQueue.stringQueue(5)))
+            val queue1 = JobQueue("queue1", Priority.Mid, AsyncQueue.of(InMemoryQueue.stringQueue(5)))
+            val queue2 = JobQueue("queue2", Priority.Mid, AsyncQueue.of(InMemoryQueue.stringQueue(5)))
 
             // Registry
             val logger = LoggerConsole()
@@ -302,9 +307,9 @@ class Example_Jobs : Command("utils"), CoroutineScope by MainScope() {
 
         // Sample 4: JOB ( Events ) + Subscribe to worker status changes
         jobs["samples.job4"]?.let { job ->
-            job.subscribe { println("Job ${it.id.name} status changed to : ${it.status().name}") }
+            job.subscribe { println("Job ${it.id.name} status changed to : ${it.status.name}") }
             job.subscribe(Status.Complete) { println("Job ${it.id.name} completed") }
-            job.workers.subscribe { it -> println("Worker ${it.id.name}: status = ${it.status().name}") }
+            job.workers.subscribe { it -> println("Worker ${it.id.name}: status = ${it.status.name}") }
             job.workers.subscribe(Status.Complete) { it -> println("Worker ${it.id.name} completed") }
         }
         jobs.respond("samples.job4", 7, start = true)

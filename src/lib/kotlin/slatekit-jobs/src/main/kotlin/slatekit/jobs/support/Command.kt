@@ -1,7 +1,7 @@
 package slatekit.jobs.support
 
 import slatekit.common.Identity
-import slatekit.jobs.JobAction
+import slatekit.jobs.Action
 
 /**
  * Represents commands that can be sent to a Job to initiate an action.
@@ -12,15 +12,18 @@ import slatekit.jobs.JobAction
 sealed class Command {
     abstract val id: Long
     abstract val uuid: String
-    abstract val action: JobAction
+    abstract val action: Action
     abstract val target: String
 
     abstract fun structured(): List<Pair<String, String>>
 
+    /**
+     * A command to issue on a Job ( which will then issues commands to individual workers )
+     */
     data class JobCommand(
         override val id: Long,
         override val uuid: String,
-        override val action: JobAction
+        override val action: Action
     ) : Command() {
         override val target: String = "job"
 
@@ -34,10 +37,13 @@ sealed class Command {
         }
     }
 
+    /**
+     * A command to issue on a specific Worker
+     */
     data class WorkerCommand(
         override val id: Long,
         override val uuid: String,
-        override val action: JobAction,
+        override val action: Action,
         val workerId: Identity,
         val seconds: Long = 0,
         val desc: String?

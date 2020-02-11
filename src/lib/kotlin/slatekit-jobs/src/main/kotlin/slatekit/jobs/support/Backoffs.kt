@@ -2,6 +2,12 @@ package slatekit.jobs.slatekit.jobs.support
 
 import slatekit.common.paged.Pager
 
+/**
+ * Used to cycle through exponential "backoff" time in seconds
+ * This can be used to back-off from processing a job/worker.
+ * e.g.
+ * 1, 2, 4, 8, 16, 32, 64
+ */
 class Backoffs(val times: Pager<Long> = times()){
     private var isOn = false
 

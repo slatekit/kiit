@@ -1,19 +1,52 @@
 package slatekit.jobs
 
-import slatekit.core.queues.*
+import slatekit.common.Identity
+import slatekit.results.Try
 
 /**
- * Wraps the underlying queue holding the messages with other metadata ( name, priority )
- * The metadata can be extended in the future
+ * Represents a simple interface for a Queue that can store Tasks which represent a unit of work.
  *
- * @param name : Name of the queue ( e.g. "notifications" )
- * @param priority : Priority of the queue ( low, medium, high ) for weighted selection
- * @param queue : The actual queue source / implementation
+ * NOTES:
+ * 1. A default implementation is available at @see[slatekit.integration.jobs.JobQueue]
+ * 2. Default implementation uses AWS SQS by leveraging Slate Kit Cloud project @see[slatekit.cloud]
+ * 3. Default implementation is NOT provided here to avoid dependency on these other libraries in this project.
  */
-data class Queue(val name: String, val priority: Priority, val queue: AsyncQueue<String>) {
+interface Queue {
 
-    companion object {
-        val source = InMemoryQueue<String>("", QueueStringConverter())
-        val empty = Queue("empty", Priority.Low, WrappedAsyncQueue(source))
-    }
+    /**
+     * Name of the queue. e.g. "notification"
+     */
+    val name: String
+
+    /**
+     * Priority of the queue
+     */
+    val priority: Priority
+
+    /**
+     * Sends an payload / task into the queue
+     */
+    suspend fun send(value: String, attributes: Map<String, Any>? = null): Try<String>
+
+    /**
+     * Gets the next available task from the queue
+     */
+    suspend fun next(): Task?
+
+    /**
+     * Gets the next available task from the queue
+     */
+    suspend fun next(id: Identity): Task?
+
+    /**
+     * Completes the task, removing it from the queue
+     */
+    suspend fun done(task: Task)
+
+    /**
+     * Fails the task, abandoning it from the queue.
+     * You should implement this yourself to handle invalid/bad tasks.
+     * This could be accomplished by moving them to a "dead-letter queue" or marking the tasks somehow.
+     */
+    suspend fun fail(task: Task)
 }

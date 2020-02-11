@@ -2,15 +2,18 @@ package slatekit.jobs.support
 
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.yield
+import slatekit.common.ids.Paired
 import slatekit.common.log.Logger
 import slatekit.jobs.*
 
 /**
- * Coordinates the work loop
+ * Coordinates the work loop.
+ * Coordination of work is controlled by sending Commands ( of @see[slatekit.jobs.support.Command.JobCommand]
+ * or @see[slatekit.jobs.support.Command.WorkerCommand] to an in-memory Queue ).
  */
 interface Coordinator {
     val logger: Logger
-    val ids: JobId
+    val ids: Paired
 
     /**
      * Sends a command to manage the job/worker
@@ -28,7 +31,8 @@ interface Coordinator {
     suspend fun consume(operation: suspend (Command) -> Unit)
 }
 
-class ChannelCoordinator(override val logger: Logger, override val ids: JobId, val channel: Channel<Command>) : Coordinator {
+
+class ChannelCoordinator(override val logger: Logger, override val ids: Paired, val channel: Channel<Command>) : Coordinator {
 
     override suspend fun send(request: Command) {
         channel.send(request)
