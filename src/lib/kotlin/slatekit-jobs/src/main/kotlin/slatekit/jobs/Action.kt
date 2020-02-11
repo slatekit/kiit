@@ -10,14 +10,14 @@ package slatekit.jobs
  * 5. Processed ( 1 time )
  * 6. Delayed ( delayed start )
  */
-sealed class JobAction(val name: String) {
+sealed class Action(val name: String) {
     /* ktlint-disable */
-    object Start    : JobAction( "Start"  )
-    object Stop     : JobAction( "Stop"   )
-    object Pause    : JobAction( "Pause"  )
-    object Resume   : JobAction( "Resume" )
-    object Control  : JobAction( "Control")
-    object Process  : JobAction( "Process")
-    object Delay    : JobAction( "Delay" )
+    object Start    : Action( "Start"  )
+    object Stop     : Action( "Stop"   )
+    object Pause    : Action( "Pause"  )
+    object Resume   : Action( "Resume" )
+    object Control  : Action( "Control")
+    object Process  : Action( "Process")
+    object Delay    : Action( "Delay" )
     /* ktlint-enable */
 }

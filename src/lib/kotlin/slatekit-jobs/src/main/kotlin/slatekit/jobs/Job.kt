@@ -11,9 +11,6 @@ import slatekit.common.log.Logger
 import slatekit.common.log.LoggerConsole
 import slatekit.common.paged.Pager
 import slatekit.policy.Policy
-import slatekit.jobs.events.Events
-import slatekit.jobs.events.JobEvent
-import slatekit.jobs.events.JobEvents
 import slatekit.jobs.slatekit.jobs.support.Backoffs
 import slatekit.jobs.support.*
 import slatekit.jobs.workers.WorkRequest
@@ -71,7 +68,7 @@ class Job(
     val scope: CoroutineScope = Jobs.scope,
     policies: List<Policy<WorkRequest, WorkResult>>? = null,
     val backoffs: () -> Pager<Long> = { Backoffs.times() }
-) : Managed, StatusCheck, Events<JobEvent> {
+) : Managed, StatusCheck {
     /**
      * Initialize with just a function that will handle the work
      */
@@ -110,20 +107,20 @@ class Job(
 
     val workers = Workers(id, all, coordinator, scheduler, logger, ids, 30, policies
         ?: listOf(), backoffs)
-    private val events = JobEvents()
+    private val events = Events<Event.JobEvent>()
     private val _status = AtomicReference<Status>(Status.InActive)
 
     /**
      * Subscribe to @see[slatekit.common.Status] being changed
      */
-    override suspend fun subscribe(op: suspend (JobEvent) -> Unit) {
+    suspend fun subscribe(op: suspend (Event.JobEvent) -> Unit) {
         events.subscribe(op)
     }
 
     /**
      * Subscribe to @see[slatekit.common.Status] beging changed to the one supplied
      */
-    override suspend fun subscribe(status: Status, op: suspend (JobEvent) -> Unit) {
+    suspend fun subscribe(status: Status, op: suspend (Event.JobEvent) -> Unit) {
         events.subscribe(status, op)
     }
 
@@ -175,12 +172,12 @@ class Job(
     private suspend fun manageJob(request: Command, launch: Boolean) {
         val action = request.action
         when (action) {
-            is JobAction.Start   -> transition(JobAction.Start, Status.Running, launch)
-            is JobAction.Stop    -> transition(JobAction.Stop, Status.Stopped, launch)
-            is JobAction.Resume  -> transition(JobAction.Resume, Status.Running, launch)
-            is JobAction.Process -> transition(JobAction.Process, Status.Running, launch)
-            is JobAction.Pause   -> transition(JobAction.Pause, Status.Paused, launch, 30)
-            is JobAction.Delay   -> transition(JobAction.Start, Status.Paused, launch, 30)
+            is Action.Start   -> transition(Action.Start, Status.Running, launch)
+            is Action.Stop    -> transition(Action.Stop, Status.Stopped, launch)
+            is Action.Resume  -> transition(Action.Resume, Status.Running, launch)
+            is Action.Process -> transition(Action.Process, Status.Running, launch)
+            is Action.Pause   -> transition(Action.Pause, Status.Paused, launch, 30)
+            is Action.Delay   -> transition(Action.Start, Status.Paused, launch, 30)
             else -> {
                 logger.error("Unexpected state: ${request.action}")
             }
@@ -203,8 +200,8 @@ class Job(
                 val isTaskEmpty = task == Task.empty
 
                 when {
-                    request.action == JobAction.Process && isTaskRequired && isTaskEmpty -> { workers.backoff(workerId, request.desc) }
-                    request.action == JobAction.Resume  && isTaskRequired && isTaskEmpty -> { workers.backoff(workerId, request.desc) }
+                    request.action == Action.Process && isTaskRequired && isTaskEmpty -> { workers.backoff(workerId, request.desc) }
+                    request.action == Action.Resume  && isTaskRequired && isTaskEmpty -> { workers.backoff(workerId, request.desc) }
                     else -> {
                         context.backoffs.reset()
                         manageWorker(request, task, status, launch, isTaskRequired)
@@ -215,8 +212,8 @@ class Job(
                 val completed = workers.all.all { it.isComplete() }
                 if (completed) {
                     this.setStatus(Status.Complete)
-                    val event = JobEvent(this.id, this.status(), this.queue?.name)
-                    (this.events as JobEvents).notify(event)
+                    val event = Event.JobEvent(this.id, this.status(), this.queue?.name)
+                    events.notify(event)
                 }
             }
         }
@@ -227,12 +224,12 @@ class Job(
         val action = command.action
         val workerId = command.workerId
         when (action) {
-            is JobAction.Start   -> JobUtils.perform(this, action, status, launch, scope) { workers.start(workerId, task, requireTask) }
-            is JobAction.Stop    -> JobUtils.perform(this, action, status, launch, scope) { workers.stop(workerId, command.desc) }
-            is JobAction.Pause   -> JobUtils.perform(this, action, status, launch, scope) { workers.pause(workerId, command.desc) }
-            is JobAction.Process -> JobUtils.perform(this, action, status, launch, scope) { workers.process(workerId, task) }
-            is JobAction.Resume  -> JobUtils.perform(this, action, status, launch, scope) { workers.resume(workerId, command.desc, task) }
-            is JobAction.Delay   -> JobUtils.perform(this, action, status, launch, scope) { workers.start(workerId, requireTask = requireTask) }
+            is Action.Start   -> JobUtils.perform(this, action, status, launch, scope) { workers.start(workerId, task, requireTask) }
+            is Action.Stop    -> JobUtils.perform(this, action, status, launch, scope) { workers.stop(workerId, command.desc) }
+            is Action.Pause   -> JobUtils.perform(this, action, status, launch, scope) { workers.pause(workerId, command.desc) }
+            is Action.Process -> JobUtils.perform(this, action, status, launch, scope) { workers.process(workerId, task) }
+            is Action.Resume  -> JobUtils.perform(this, action, status, launch, scope) { workers.resume(workerId, command.desc, task) }
+            is Action.Delay   -> JobUtils.perform(this, action, status, launch, scope) { workers.start(workerId, requireTask = requireTask) }
             else -> {
                 logger.error("Unexpected state: ${command.action}")
             }
@@ -259,12 +256,12 @@ class Job(
     /**
      * Transitions all workers to the new status supplied
      */
-    private suspend fun transition(action: JobAction, newStatus: Status, launch: Boolean, seconds: Long = 0) {
+    private suspend fun transition(action: Action, newStatus: Status, launch: Boolean, seconds: Long = 0) {
         JobUtils.perform(this, action, this.status(), launch, scope) {
             this.setStatus(newStatus)
             val job = this
             scope.launch {
-                val event = JobEvent(job.id, job.status(), job.queue?.name)
+                val event = Event.JobEvent(job.id, job.status(), job.queue?.name)
                 events.notify(event)
             }
 

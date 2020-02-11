@@ -18,7 +18,7 @@ import slatekit.jobs.workers.Workers
 interface JobTestSupport {
 
 
-    fun run(numWorkers: Int, queue:Queue?, action:JobAction, operation:((Job) -> Unit)? = null ):Job{
+    fun run(numWorkers: Int, queue:Queue?, action:Action, operation:((Job) -> Unit)? = null ):Job{
         val manager = build(numWorkers, queue)
         runBlocking {
             manager.request(action)
@@ -45,7 +45,7 @@ interface JobTestSupport {
 
 
     fun ensure(workers: Workers, hasRun:Boolean, totalRuns:Long, totalPassed:Long, totalFailed:Long, id: Identity,
-               status: Status, requestCount:Int, action: JobAction?, seconds:Long){
+               status: Status, requestCount:Int, action: Action?, seconds:Long){
         val context: WorkerContext = workers.get(id)!!
         val runs = context.stats.calls
         val worker = context.worker

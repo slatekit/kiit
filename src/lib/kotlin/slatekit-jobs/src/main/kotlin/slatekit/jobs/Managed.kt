@@ -25,32 +25,32 @@ interface Managed {
     /**
      * Requests starting of the job
      */
-    suspend fun start() = request(JobAction.Start)
+    suspend fun start() = request(Action.Start)
 
     /**
      * Requests stopping of the job
      */
-    suspend fun stop() = request(JobAction.Stop)
+    suspend fun stop() = request(Action.Stop)
 
     /**
      * Requests pausing of the job
      */
-    suspend fun pause() = request(JobAction.Pause)
+    suspend fun pause() = request(Action.Pause)
 
     /**
      * Requests resuming of the job
      */
-    suspend fun resume() = request(JobAction.Resume)
+    suspend fun resume() = request(Action.Resume)
 
     /**
      * Requests processing of the job
      */
-    suspend fun process() = request(JobAction.Process)
+    suspend fun process() = request(Action.Process)
 
     /**
      * Requests an action on the entire job
      */
-    suspend fun request(action: JobAction) {
+    suspend fun request(action: Action) {
         val (id, uuid) = nextIds()
         val cmd = Command.JobCommand(id, uuid.toString(), action)
         request(cmd)
@@ -59,7 +59,7 @@ interface Managed {
     /**
      * Requests an action on a specific worker
      */
-    suspend fun request(action: JobAction, workerId: Identity, desc: String?) {
+    suspend fun request(action: Action, workerId: Identity, desc: String?) {
         val (id, uuid) = nextIds()
         val cmd = Command.WorkerCommand(id, uuid.toString(), action, workerId, 30, desc)
         request(cmd)

@@ -1,8 +1,6 @@
 package test.jobs
 
 import kotlinx.coroutines.channels.Channel
-import kotlinx.coroutines.channels.sendBlocking
-import slatekit.cache.CacheCommand
 import slatekit.common.DateTime
 import slatekit.common.ids.Paired
 import slatekit.common.log.Logger
@@ -53,7 +51,7 @@ class MockCoordinatorWithChannel(logger: Logger, ids: Paired, val channel: Chann
 //                "action" to request.action.name)
 //        )
         all.add(request)
-        if(request is Command.WorkerCommand && request.action == JobAction.Resume) {
+        if(request is Command.WorkerCommand && request.action == Action.Resume) {
             pauses.add(request)
         } else {
             sendInternal(request)

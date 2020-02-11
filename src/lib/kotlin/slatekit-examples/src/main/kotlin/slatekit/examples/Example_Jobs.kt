@@ -23,6 +23,7 @@ import slatekit.cmds.Command
 import slatekit.cmds.CommandRequest
 import slatekit.common.log.LoggerConsole
 import slatekit.core.queues.AsyncQueue
+import slatekit.integration.jobs.JobQueue
 import slatekit.policy.policies.Every
 import slatekit.policy.policies.Limit
 import slatekit.policy.policies.Ratio
@@ -162,8 +163,8 @@ class Example_Jobs : Command("utils"), CoroutineScope by MainScope() {
         runBlocking {
 
             // Sample Queues
-            val queue1 = slatekit.jobs.Queue("queue1", Priority.Mid, AsyncQueue.of(InMemoryQueue.stringQueue(5)))
-            val queue2 = slatekit.jobs.Queue("queue2", Priority.Mid, AsyncQueue.of(InMemoryQueue.stringQueue(5)))
+            val queue1 = JobQueue("queue1", Priority.Mid, AsyncQueue.of(InMemoryQueue.stringQueue(5)))
+            val queue2 = JobQueue("queue2", Priority.Mid, AsyncQueue.of(InMemoryQueue.stringQueue(5)))
 
             // Registry
             val logger = LoggerConsole()

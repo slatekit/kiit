@@ -7,13 +7,12 @@ import slatekit.common.ids.Paired
 import slatekit.common.log.LogLevel
 import slatekit.common.log.Logger
 import slatekit.common.paged.Pager
-import slatekit.jobs.JobAction
+import slatekit.jobs.Event
+import slatekit.jobs.Action
 import slatekit.jobs.Task
 import slatekit.tracking.Recorder
 import slatekit.policy.Policy
-import slatekit.jobs.events.Events
-import slatekit.jobs.events.WorkerEvent
-import slatekit.jobs.events.WorkerEvents
+import slatekit.jobs.Events
 import slatekit.jobs.slatekit.jobs.support.Backoffs
 import slatekit.jobs.support.*
 import slatekit.results.*
@@ -33,23 +32,23 @@ class Workers(
     val pauseInSeconds: Long,
     val policies: List<Policy<WorkRequest, WorkResult>> = listOf(),
     val backoffs: () -> Pager<Long> = { Backoffs.times() }
-) : Events<WorkerEvent> {
+)  {
 
-    private val events: Events<WorkerEvent> = WorkerEvents()
+    private val events = Events<Event.WorkerEvent>()
     private val lookup: Map<String, Executor> = all.map { it.id.id to WorkerContext(jobId, it, Recorder.of(it.id), Backoffs(backoffs()), policies) }
             .map { it.first to Executor.of(it.second) }.toMap()
 
     /**
      * Subscribe to status being changed for any worker
      */
-    override suspend fun subscribe(op: suspend (WorkerEvent) -> Unit) {
+    suspend fun subscribe(op: suspend (Event.WorkerEvent) -> Unit) {
         events.subscribe(op)
     }
 
     /**
      * Subscribe to status beging changed to the one supplied for any worker
      */
-    override suspend fun subscribe(status: Status, op: suspend (WorkerEvent) -> Unit) {
+    suspend fun subscribe(status: Status, op: suspend (Event.WorkerEvent) -> Unit) {
         events.subscribe(status, op)
     }
 
@@ -130,7 +129,7 @@ class Workers(
             worker.pause(reason ?: "Paused")
             val pauseInSecs = seconds ?: pauseInSeconds
             scheduler.schedule(DateTime.now().plusSeconds(pauseInSecs)) {
-                coordinator.send(Command.WorkerCommand(ids.nextId(), ids.nextUUID().toString(), JobAction.Resume, worker.id, 0, null))
+                coordinator.send(Command.WorkerCommand(ids.nextId(), ids.nextUUID().toString(), Action.Resume, worker.id, 0, null))
             }
             Outcomes.success(Status.Paused)
         }
@@ -145,7 +144,7 @@ class Workers(
             record(worker.id, "pause_start", listOf("seconds" to pauseInSecs.toString()))
             scheduler.schedule(DateTime.now().plusSeconds(pauseInSecs)) {
                 record(worker.id, "pause_finish")
-                coordinator.send(Command.WorkerCommand(ids.nextId(), ids.nextUUID().toString(), JobAction.Resume, worker.id, 0, null))
+                coordinator.send(Command.WorkerCommand(ids.nextId(), ids.nextUUID().toString(), Action.Resume, worker.id, 0, null))
             }
             Outcomes.success(Status.Paused)
         }
@@ -163,7 +162,7 @@ class Workers(
     suspend fun delay(id: Identity, seconds: Long) {
         record(id, "delay", listOf("seconds" to seconds.toString()))
         scheduler.schedule(DateTime.now().plusSeconds(seconds)) {
-            coordinator.send(Command.WorkerCommand(ids.nextId(), ids.nextUUID().toString(), JobAction.Start, id, 0, null))
+            coordinator.send(Command.WorkerCommand(ids.nextId(), ids.nextUUID().toString(), Action.Start, id, 0, null))
         }
     }
 
@@ -195,11 +194,11 @@ class Workers(
                 }
                 is WorkResult.Next -> {
                     val (id, uuid) = ids.next()
-                    coordinator.send(Command.WorkerCommand(id, uuid.toString(), JobAction.Process, worker.id, 0, ""))
+                    coordinator.send(Command.WorkerCommand(id, uuid.toString(), Action.Process, worker.id, 0, ""))
                 }
                 is WorkResult.More -> {
                     val (id, uuid) = ids.next()
-                    coordinator.send(Command.WorkerCommand(id, uuid.toString(), JobAction.Process, worker.id, 0, ""))
+                    coordinator.send(Command.WorkerCommand(id, uuid.toString(), Action.Process, worker.id, 0, ""))
                 }
             }
             ""
@@ -223,8 +222,8 @@ class Workers(
             val worker = context.worker
             val task = context.task
             record(worker.id, action, task.structured())
-            val event = WorkerEvent(worker.id, worker.status(), worker.info())
-            (events as WorkerEvents).notify(event)
+            val event = Event.WorkerEvent(worker.id, worker.status(), worker.info())
+            events.notify(event)
         }
         catch(ex:Exception){
         }
