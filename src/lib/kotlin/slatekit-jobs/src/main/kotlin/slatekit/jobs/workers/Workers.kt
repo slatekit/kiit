@@ -35,8 +35,8 @@ class Workers(
 ) : Events<Worker<*>> {
 
     private val events: Events<Worker<*>> = WorkerEvents(this)
-    private val lookup: Map<String, WorkExecutor> = all.map { it.id.id to WorkerContext(jobId, it, Recorder.of(it.id), Backoffs(backoffs()), policies) }
-            .map { it.first to WorkExecutor.of(it.second) }.toMap()
+    private val lookup: Map<String, Executor> = all.map { it.id.id to WorkerContext(jobId, it, Recorder.of(it.id), Backoffs(backoffs()), policies) }
+            .map { it.first to Executor.of(it.second) }.toMap()
 
     /**
      * Subscribe to status being changed for any worker
@@ -166,7 +166,7 @@ class Workers(
         }
     }
 
-    private suspend fun perform(status: Status?, reason: String?, id: Identity, operation: suspend (WorkExecutor) -> Outcome<Status>): Outcome<Status> {
+    private suspend fun perform(status: Status?, reason: String?, id: Identity, operation: suspend (Executor) -> Outcome<Status>): Outcome<Status> {
         record(id, status?.name ?: reason ?: "")
         val executor = this.lookup[id.id]
         return when (executor) {
