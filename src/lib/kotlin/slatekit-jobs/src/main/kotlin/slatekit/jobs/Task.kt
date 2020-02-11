@@ -1,7 +1,5 @@
 package slatekit.jobs
 
-import slatekit.common.Identity
-import slatekit.core.queues.QueueEntry
 import slatekit.jobs.workers.WorkResult
 
 /**
@@ -35,8 +33,8 @@ data class Task(
     val data: String,
     val xid: String,
     val tag: String,
-    val entry: QueueEntry<String>?,
-    val queue: Queue
+    val entry: Any?,
+    val queue: Queue?
 ) {
 
     fun structured(): List<Pair<String, String>> {
@@ -46,7 +44,7 @@ data class Task(
             Task::job.name to job,
             Task::name.name to name,
             Task::xid.name to xid,
-            Task::queue.name to queue.name
+            Task::queue.name to (queue?.name ?: "")
         )
     }
 
@@ -54,21 +52,21 @@ data class Task(
      *  Acknowledges this task with the Queue to complete it
      */
     suspend fun done() {
-        this.entry?.let { this.queue.done(this) }
+        this.entry?.let { this.queue?.done(this) }
     }
 
     /**
      * Fails
      */
     suspend fun fail() {
-        this.entry?.let { this.queue.fail(this) }
+        this.entry?.let { this.queue?.fail(this) }
     }
 
     companion object {
 
         @JvmStatic
-        val empty: Task = Task("empty", "empty", "empty", "empty", "empty", "empty", "empty", null, Queue.empty())
-        val owned: Task = Task("owned", "owned", "owned", "owned", "owned", "owned", "owned", null, Queue.empty())
+        val empty: Task = Task("empty", "empty", "empty", "empty", "empty", "empty", "empty", null, null)
+        val owned: Task = Task("owned", "owned", "owned", "owned", "owned", "owned", "owned", null, null)
 
         /**
          * Converts a message from any queue into a Task
@@ -76,20 +74,7 @@ data class Task(
         fun next(state: WorkResult.Next): Task {
             val id = owned.id
             val name = owned.name
-            val task = Task(id, state.offset.toString(), owned.job, name, state.reference, "", "", owned.entry, Queue.empty())
-            return task
-        }
-
-        /**
-         * Converts a message from any queue into a Task
-         */
-        operator fun invoke(identity: Identity, entry: QueueEntry<String>, queue: Queue): Task {
-            val id = entry.getTag("id") ?: ""
-            val name = entry.getTag("name") ?: ""
-            val data = entry.getValue()?.toString() ?: ""
-            val xid = entry.getTag("xid") ?: ""
-            val tag = entry.getTag("tag") ?: ""
-            val task = Task(id, queue.name, identity.id, name, data, xid, tag, entry, queue)
+            val task = Task(id, state.offset.toString(), owned.job, name, state.reference, "", "", owned.entry, null)
             return task
         }
     }

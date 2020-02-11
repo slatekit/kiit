@@ -19,6 +19,7 @@ import slatekit.common.requests.CommonRequest
 import slatekit.core.queues.AsyncQueue
 import slatekit.core.queues.WrappedAsyncQueue
 import slatekit.integration.jobs.APIWorker
+import slatekit.integration.jobs.JobQueue
 import slatekit.jobs.*
 import slatekit.jobs.workers.WorkerSettings
 import test.setup.SampleTypes2Api
@@ -103,8 +104,8 @@ class Worker_Api_Tests {
         queue.send(json1, mapOf("id" to "123", "refId" to "abc", "task" to "samples.types2.loadBasicTypes"))
         val entry = queue.next()!!
 
-        val queueInfo = Queue("tests", Priority.Mid, WrappedAsyncQueue(queue))
-        val job = Task(Identity.test("samples"), entry, queueInfo)
+        val queueInfo = JobQueue("tests", Priority.Mid, WrappedAsyncQueue(queue))
+        val job = JobQueue.task(Identity.test("samples"), entry, queueInfo)
         val result = runBlocking {
             worker.work(job)
         }

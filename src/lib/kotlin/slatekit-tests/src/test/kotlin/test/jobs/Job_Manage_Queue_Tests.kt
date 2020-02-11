@@ -8,6 +8,7 @@ import slatekit.common.Status
 import slatekit.core.queues.InMemoryQueue
 import slatekit.core.queues.QueueStringConverter
 import slatekit.core.queues.WrappedAsyncQueue
+import slatekit.integration.jobs.JobQueue
 import slatekit.jobs.*
 
 
@@ -15,7 +16,7 @@ class Job_Manage_Queue_Tests : JobTestSupport {
 
     fun sampleQueue():Queue{
         val source = InMemoryQueue<String>("q1", QueueStringConverter())
-        val queue = Queue(source.name, Priority.Mid, WrappedAsyncQueue(source))
+        val queue = JobQueue(source.name, Priority.Mid, WrappedAsyncQueue(source))
         return queue
     }
 

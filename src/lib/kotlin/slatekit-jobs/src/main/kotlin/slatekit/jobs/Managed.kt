@@ -11,7 +11,7 @@ import slatekit.jobs.support.Coordinator
 /**
  * Represents all operations to control / manage a job
  */
-interface Management {
+interface Managed {
 
     val logger: Logger?
 

@@ -14,7 +14,6 @@ import slatekit.policy.Policy
 import slatekit.jobs.events.Events
 import slatekit.jobs.events.JobEvent
 import slatekit.jobs.events.JobEvents
-import slatekit.jobs.events.SubscribedEvents
 import slatekit.jobs.slatekit.jobs.support.Backoffs
 import slatekit.jobs.support.*
 import slatekit.jobs.workers.WorkRequest
@@ -72,7 +71,7 @@ class Job(
     val scope: CoroutineScope = Jobs.scope,
     policies: List<Policy<WorkRequest, WorkResult>>? = null,
     val backoffs: () -> Pager<Long> = { Backoffs.times() }
-) : Management, StatusCheck, Events<JobEvent> {
+) : Managed, StatusCheck, Events<JobEvent> {
     /**
      * Initialize with just a function that will handle the work
      */
