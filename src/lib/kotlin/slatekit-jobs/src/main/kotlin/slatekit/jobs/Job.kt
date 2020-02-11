@@ -12,6 +12,7 @@ import slatekit.common.log.LoggerConsole
 import slatekit.common.paged.Pager
 import slatekit.policy.Policy
 import slatekit.jobs.events.Events
+import slatekit.jobs.events.JobEvent
 import slatekit.jobs.events.JobEvents
 import slatekit.jobs.events.SubscribedEvents
 import slatekit.jobs.slatekit.jobs.support.Backoffs
@@ -71,7 +72,7 @@ class Job(
     val scope: CoroutineScope = Jobs.scope,
     policies: List<Policy<WorkRequest, WorkResult>>? = null,
     val backoffs: () -> Pager<Long> = { Backoffs.times() }
-) : Management, StatusCheck, Events<Job> {
+) : Management, StatusCheck, Events<JobEvent> {
     /**
      * Initialize with just a function that will handle the work
      */
@@ -110,20 +111,20 @@ class Job(
 
     val workers = Workers(id, all, coordinator, scheduler, logger, ids, 30, policies
         ?: listOf(), backoffs)
-    private val events: SubscribedEvents<Job> = JobEvents()
+    private val events = JobEvents()
     private val _status = AtomicReference<Status>(Status.InActive)
 
     /**
      * Subscribe to @see[slatekit.common.Status] being changed
      */
-    override suspend fun subscribe(op: suspend (Job) -> Unit) {
+    override suspend fun subscribe(op: suspend (JobEvent) -> Unit) {
         events.subscribe(op)
     }
 
     /**
      * Subscribe to @see[slatekit.common.Status] beging changed to the one supplied
      */
-    override suspend fun subscribe(status: Status, op: suspend (Job) -> Unit) {
+    override suspend fun subscribe(status: Status, op: suspend (JobEvent) -> Unit) {
         events.subscribe(status, op)
     }
 
@@ -215,7 +216,8 @@ class Job(
                 val completed = workers.all.all { it.isComplete() }
                 if (completed) {
                     this.setStatus(Status.Complete)
-                    (this.events as JobEvents).notify(this)
+                    val event = JobEvent(this.id, this.status(), this.queue?.name)
+                    (this.events as JobEvents).notify(event)
                 }
             }
         }
@@ -263,7 +265,8 @@ class Job(
             this.setStatus(newStatus)
             val job = this
             scope.launch {
-                events.notify(job)
+                val event = JobEvent(job.id, job.status(), job.queue?.name)
+                events.notify(event)
             }
 
             workers.all.forEach {

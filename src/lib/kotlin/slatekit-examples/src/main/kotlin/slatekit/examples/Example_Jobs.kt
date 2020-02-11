@@ -133,8 +133,10 @@ class Example_Jobs : Command("utils"), CoroutineScope by MainScope() {
             }
 
             // Transition hook for when the status is changed ( e.g. from Status.Running -> Status.Paused )
-            override suspend fun move(state: Status) {
-                notify("move", listOf("status" to state.name))
+            override suspend fun move(state: Status, note:String?, sendNotification:Boolean) {
+                if(sendNotification) {
+                    notify("move", listOf("status" to state.name))
+                }
             }
 
             // Completion hook ( for logic / logs / alerts )
@@ -148,7 +150,7 @@ class Example_Jobs : Command("utils"), CoroutineScope by MainScope() {
             }
 
             // Initialization hook ( for setup / logs / alerts )
-            override fun notify(desc: String?, extra: List<Pair<String, String>>?) {
+            override suspend fun notify(desc: String?, extra: List<Pair<String, String>>?) {
                 val detail = extra?.joinToString(",") { it.first + "=" + it.second }
                 // Simulate notification to email/alerts/etc
                 println(desc + detail)
@@ -304,9 +306,9 @@ class Example_Jobs : Command("utils"), CoroutineScope by MainScope() {
 
         // Sample 4: JOB ( Events ) + Subscribe to worker status changes
         jobs["samples.job4"]?.let { job ->
-            job.subscribe { println("Job ${it.id.name} status changed to : ${it.status().name}") }
+            job.subscribe { println("Job ${it.id.name} status changed to : ${it.status.name}") }
             job.subscribe(Status.Complete) { println("Job ${it.id.name} completed") }
-            job.workers.subscribe { it -> println("Worker ${it.id.name}: status = ${it.status().name}") }
+            job.workers.subscribe { it -> println("Worker ${it.id.name}: status = ${it.status.name}") }
             job.workers.subscribe(Status.Complete) { it -> println("Worker ${it.id.name} completed") }
         }
         jobs.respond("samples.job4", 7, start = true)

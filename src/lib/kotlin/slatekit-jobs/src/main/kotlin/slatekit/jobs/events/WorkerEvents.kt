@@ -1,11 +1,19 @@
 package slatekit.jobs.events
 
-import slatekit.jobs.workers.Worker
-import slatekit.jobs.workers.Workers
+import slatekit.common.Identity
+import slatekit.common.Status
 
-class WorkerEvents(val workers: Workers) : SubscribedEvents<Worker<*>>() {
+/**
+ * @param id: Identity of the worker
+ * @param status: Status of the worker
+ * @param info: Info/diagnostics provided by the worker
+ */
+class WorkerEvent(val id:Identity, val status: Status, val info:List<Pair<String, String>>)
 
-    override suspend fun notify(item: Worker<*>) {
-        notify(item, item.status())
+
+class WorkerEvents : SubscribedEvents<WorkerEvent>() {
+
+    override suspend fun notify(item: WorkerEvent) {
+        notify(item, item.status)
     }
 }

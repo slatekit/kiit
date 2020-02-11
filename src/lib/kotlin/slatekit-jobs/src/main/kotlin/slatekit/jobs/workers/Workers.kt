@@ -12,6 +12,7 @@ import slatekit.jobs.Task
 import slatekit.tracking.Recorder
 import slatekit.policy.Policy
 import slatekit.jobs.events.Events
+import slatekit.jobs.events.WorkerEvent
 import slatekit.jobs.events.WorkerEvents
 import slatekit.jobs.slatekit.jobs.support.Backoffs
 import slatekit.jobs.support.*
@@ -32,23 +33,23 @@ class Workers(
     val pauseInSeconds: Long,
     val policies: List<Policy<WorkRequest, WorkResult>> = listOf(),
     val backoffs: () -> Pager<Long> = { Backoffs.times() }
-) : Events<Worker<*>> {
+) : Events<WorkerEvent> {
 
-    private val events: Events<Worker<*>> = WorkerEvents(this)
+    private val events: Events<WorkerEvent> = WorkerEvents()
     private val lookup: Map<String, Executor> = all.map { it.id.id to WorkerContext(jobId, it, Recorder.of(it.id), Backoffs(backoffs()), policies) }
             .map { it.first to Executor.of(it.second) }.toMap()
 
     /**
      * Subscribe to status being changed for any worker
      */
-    override suspend fun subscribe(op: suspend (Worker<*>) -> Unit) {
+    override suspend fun subscribe(op: suspend (WorkerEvent) -> Unit) {
         events.subscribe(op)
     }
 
     /**
      * Subscribe to status beging changed to the one supplied for any worker
      */
-    override suspend fun subscribe(status: Status, op: suspend (Worker<*>) -> Unit) {
+    override suspend fun subscribe(status: Status, op: suspend (WorkerEvent) -> Unit) {
         events.subscribe(status, op)
     }
 
@@ -222,7 +223,8 @@ class Workers(
             val worker = context.worker
             val task = context.task
             record(worker.id, action, task.structured())
-            (events as WorkerEvents).notify(context.worker)
+            val event = WorkerEvent(worker.id, worker.status(), worker.info())
+            (events as WorkerEvents).notify(event)
         }
         catch(ex:Exception){
         }
