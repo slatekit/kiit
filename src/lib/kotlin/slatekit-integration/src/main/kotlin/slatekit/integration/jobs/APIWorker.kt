@@ -7,14 +7,12 @@ import slatekit.common.Sources
 import slatekit.jobs.*
 import slatekit.jobs.workers.WorkResult
 import slatekit.jobs.workers.Worker
-import slatekit.jobs.workers.WorkerSettings
 import slatekit.results.Failure
 import slatekit.results.Success
 import slatekit.results.Try
 
 open class APIWorker(
         val container: ApiServer,
-        val settings: WorkerSettings,
         identity: Identity
 )
     : Worker<Any>( identity ) {

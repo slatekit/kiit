@@ -32,6 +32,13 @@ data class JobQueue(
      * Gets the next available task from the queue
      */
     override suspend fun next(): Task? {
+        return next(this.id)
+    }
+
+    /**
+     * Gets the next available task from the queue
+     */
+    override suspend fun next(id: Identity): Task? {
         val entry = queue.next()
         return entry?.let { task(id, entry, this) }
     }

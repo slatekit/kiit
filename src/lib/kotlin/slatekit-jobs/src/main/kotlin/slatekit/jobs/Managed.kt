@@ -9,7 +9,19 @@ import slatekit.jobs.support.Command
 import slatekit.jobs.support.Coordinator
 
 /**
- * Represents all operations to control / manage a job
+ * Represents all operations to control / manage a job.
+ *
+ * 1. starting a job
+ * 2. stopping a job
+ * 3. pausing  a job
+ * 4. resuming a job
+ * 5. processing 1 item of the job
+ *
+ * NOTES:
+ * 1. These operations are sent as @see[slatekit.jobs.Action]s to the coordinator
+ * 2. The coordinator handles concurrent operations using Kotlin Channels
+ * 3. These operations are then dispatched to the individual workers in this job
+ *
  */
 interface Managed {
 

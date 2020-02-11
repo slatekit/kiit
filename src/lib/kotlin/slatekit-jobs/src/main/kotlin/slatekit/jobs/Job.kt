@@ -22,14 +22,16 @@ import slatekit.jobs.workers.Workers
  * A Job is the top level model in this Background Job/Task Queue system. A job is composed of the following:
  *
  * TERMS:
- * 1. Identity  : @see[slatekit.common.Identity] to distinctly identify a job
- * 2. Queue     : Optional Queue ( containing @see[slatekit.jobs.Task]s that workers can work on
- * 3. Task      : A single work item ( from a queue ) that a worker can work on
+ * 1. Identity  : An id, @see[slatekit.common.Identity] to distinctly identify a job
+ * 3. Task      : A single work item with a payload that a worker can work on. @see[slatekit.jobs.Task]
+ * 2. Queue     : Interface for a Queue that workers can optional source tasks from
  * 4. Workers   : 1 or more @see[slatekit.jobs.Worker]s that can work on this job
  * 5. Manage    : Operations to manage ( start | stop | pause | resume | delay ) a job or individual worker
- * 6. Events    : Subscribing to events on the job/worker ( only status changes for now )
+ * 6. Events    : Used to subscribe to events on the job/worker ( only status changes for now )
  * 7. Stats     : Reasonable statistics / diagnostics for workers such as total calls, processed, logging
  * 8. Policies  : @see[slatekit.functions.policy.Policy] associated with a worker such as limits, retries
+ * 9. Backoffs  : Exponential sequence of seconds to use to back off from processing queues when queue is empty
+ *
  *
  * NOTES:
  * 1. Coordination is kept thread safe as all requests to manage / control a job are handled via channels
@@ -38,6 +40,8 @@ import slatekit.jobs.workers.Workers
  * 4. You can stop / pause / resume a single worker also
  * 5. Policies such as limiting the amount of runs, processed work, error rates, retries are done via policies
  * 6. The identity of a worker is based on the identity of its parent job + a workers uuid/unique
+ * 7. A default implementation of the Queue is available in slatekit.integration.jobs.JobQueue
+ *
  *
  * INSPIRED BY:
  * 1. Inspired by Ruby Rails SideKiq, NodesJS Bull, Python Celery
@@ -46,14 +50,13 @@ import slatekit.jobs.workers.Workers
  *
  *
  * LIMITS:
- * 1. Only support queues from slatekit ( which is abstracted ) with implementations for AWS SQS
- * 2. No database support ( e.g. for storing status/state/results in the database, etc )
- * 3. No distributed jobs support
+ * 1. No database support ( e.g. for storing status/state/results in the database, etc )
+ * 2. No distributed jobs support
  *
  *
  * FUTURE:
  * 1. Address the limits listed above
- * 2. Improve events/subscriptions
+ * 2. Add support for Redis as a Queue
  * 3. Integration with Kotlin Flow ( e.g. a job could feed data into a Flow )
  *
  */
@@ -113,14 +116,14 @@ class Job(
     /**
      * Subscribe to @see[slatekit.common.Status] being changed
      */
-    suspend fun subscribe(op: suspend (Event.JobEvent) -> Unit) {
+    fun subscribe(op: suspend (Event.JobEvent) -> Unit) {
         events.subscribe(op)
     }
 
     /**
      * Subscribe to @see[slatekit.common.Status] beging changed to the one supplied
      */
-    suspend fun subscribe(status: Status, op: suspend (Event.JobEvent) -> Unit) {
+    fun subscribe(status: Status, op: suspend (Event.JobEvent) -> Unit) {
         events.subscribe(status, op)
     }
 
@@ -165,7 +168,7 @@ class Job(
      */
     override fun nextIds(): Pair<Long, UUID> = ids.next()
 
-    internal fun setStatus(newStatus: Status) {
+    private fun setStatus(newStatus: Status) {
         _status.set(newStatus)
     }
 

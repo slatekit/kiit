@@ -1,11 +1,15 @@
 package slatekit.jobs
 
+import slatekit.common.Identity
 import slatekit.results.Try
 
 /**
- * Wraps the underlying queue holding the messages with other metadata ( name, priority )
- * The metadata can be extended in the future.
- * For an implementation using Slate Kit Queues, @see[slatekit.integration.jobs.JobQueue]
+ * Represents a simple interface for a Queue that can store Tasks which represent a unit of work.
+ *
+ * NOTES:
+ * 1. A default implementation is available at @see[slatekit.integration.jobs.JobQueue]
+ * 2. Default implementation uses AWS SQS by leveraging Slate Kit Cloud project @see[slatekit.cloud]
+ * 3. Default implementation is NOT provided here to avoid dependency on these other libraries in this project.
  */
 interface Queue {
 
@@ -30,6 +34,11 @@ interface Queue {
     suspend fun next(): Task?
 
     /**
+     * Gets the next available task from the queue
+     */
+    suspend fun next(id: Identity): Task?
+
+    /**
      * Completes the task, removing it from the queue
      */
     suspend fun done(task: Task)
@@ -41,5 +50,3 @@ interface Queue {
      */
     suspend fun fail(task: Task)
 }
-
-

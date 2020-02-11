@@ -3,16 +3,17 @@ package slatekit.jobs
 import slatekit.jobs.workers.WorkResult
 
 /**
- * Represents a unit-of work ( a work-item that is handled by a Worker ).
- * A job is stored as a single message in queue or a record in a database.
+ * Task represents a unit-of work ( a work-item  ) that is handled by a Worker.
+ * A task is stored as a single message in queue or a record in a database.
  *
- * @param id : The id of the job ( a UUID )
- * @param from : The origin source/queue from which this job came from
- * @param job : The job associatd with this task
- * @param name : The name of this task ( to distinguish which worker can handle it )
- * @param data : The inputs/data of the job as a json payload
- * @param xid : Serves as a correlation id
- * @param tag : Serves as a way to label this item
+ * @param id    : The id of the Task ( a UUID )
+ * @param from  : The origin source/queue from which this task came from
+ * @param job   : The name of the job associatd with this task                        e.g. "notifications"
+ * @param name  : The name of this task ( to distinguish which worker can handle it ) e.g. "sendNewsLetter"
+ * @param data  : The inputs/data of the job as a json payload
+ * @param xid   : Serves as a correlation id
+ * @param tag   : Serves as a way to label this item
+ * @param entry : An instance of the message/record from the queue. Used to acknowledge/completete/fail
  * @param queue : The raw source/instance of the job from the queue ( e.g. could be the QueueSourceMsg )
  * @sample:
  *
@@ -23,7 +24,7 @@ import slatekit.jobs.workers.WorkResult
  *  data     = "JSON data...",
  *  xid      = "abc123"
  *  tag      = "JIRA-1234"
- *  source   = rawSource ( e.g. AWS SQS messages )
+ *  entry    = e.g. @see[slatekit.core.queues.QueueEntry]
  */
 data class Task(
     val id: String,

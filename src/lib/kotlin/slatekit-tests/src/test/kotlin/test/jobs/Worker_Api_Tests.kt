@@ -21,7 +21,6 @@ import slatekit.core.queues.WrappedAsyncQueue
 import slatekit.integration.jobs.APIWorker
 import slatekit.integration.jobs.JobQueue
 import slatekit.jobs.*
-import slatekit.jobs.workers.WorkerSettings
 import test.setup.SampleTypes2Api
 
 class Worker_Api_Tests {
@@ -76,7 +75,7 @@ class Worker_Api_Tests {
     fun can_run_from_queue() {
         val container = buildContainer()
         val queues = listOf(InMemoryQueue.stringQueue())
-        val worker = APIWorker(container, WorkerSettings(), Identity.test("api-worker"))
+        val worker = APIWorker(container, Identity.test("api-worker"))
         val sampleDate = DateTime.of(2018, 1, 27, 9, 30, 45, 0, ZoneId.of("UTC"))
         val sampleRequest = CommonRequest(
                 path = "samples.types2.loadBasicTypes",
