@@ -243,8 +243,8 @@ class Job(
         val task = when (queue) {
             null -> empty
             else -> {
-                val entry = queue.queue.next()
-                entry?.let { Task(id, it, queue) } ?: Task.empty
+                val task = queue.next() ?: Task.empty
+                task
             }
         }
         return task

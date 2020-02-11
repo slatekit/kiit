@@ -130,7 +130,7 @@ open class Worker<T>(
     /**
      * Transition current status to the one supplied
      */
-    suspend fun move(state: Status, note:String? = null) {
+    open suspend fun move(state: Status, note:String? = null) {
         move(state, note, true)
     }
 

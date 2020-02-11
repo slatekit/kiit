@@ -15,7 +15,7 @@ import slatekit.jobs.workers.WorkResult
  * @param data : The inputs/data of the job as a json payload
  * @param xid : Serves as a correlation id
  * @param tag : Serves as a way to label this item
- * @param source : The raw source/instance of the job from the queue ( e.g. could be the QueueSourceMsg )
+ * @param queue : The raw source/instance of the job from the queue ( e.g. could be the QueueSourceMsg )
  * @sample:
  *
  *  id       = "ABC123",
@@ -36,7 +36,7 @@ data class Task(
     val xid: String,
     val tag: String,
     val entry: QueueEntry<String>?,
-    val source: Queue
+    val queue: Queue
 ) {
 
     fun structured(): List<Pair<String, String>> {
@@ -46,7 +46,7 @@ data class Task(
             Task::job.name to job,
             Task::name.name to name,
             Task::xid.name to xid,
-            Task::source.name to source.name
+            Task::queue.name to queue.name
         )
     }
 
@@ -54,21 +54,21 @@ data class Task(
      *  Acknowledges this task with the Queue to complete it
      */
     suspend fun done() {
-        this.entry?.let { this.source.queue.done(it) }
+        this.entry?.let { this.queue.done(this) }
     }
 
     /**
      * Fails
      */
     suspend fun fail() {
-        this.entry?.let { this.source.queue.abandon(it) }
+        this.entry?.let { this.queue.fail(this) }
     }
 
     companion object {
 
         @JvmStatic
-        val empty: Task = Task("empty", "empty", "empty", "empty", "empty", "empty", "empty", null, Queue.empty)
-        val owned: Task = Task("owned", "owned", "owned", "owned", "owned", "owned", "owned", null, Queue.empty)
+        val empty: Task = Task("empty", "empty", "empty", "empty", "empty", "empty", "empty", null, Queue.empty())
+        val owned: Task = Task("owned", "owned", "owned", "owned", "owned", "owned", "owned", null, Queue.empty())
 
         /**
          * Converts a message from any queue into a Task
@@ -76,7 +76,7 @@ data class Task(
         fun next(state: WorkResult.Next): Task {
             val id = owned.id
             val name = owned.name
-            val task = Task(id, state.offset.toString(), owned.job, name, state.reference, "", "", owned.entry, Queue.empty)
+            val task = Task(id, state.offset.toString(), owned.job, name, state.reference, "", "", owned.entry, Queue.empty())
             return task
         }
 

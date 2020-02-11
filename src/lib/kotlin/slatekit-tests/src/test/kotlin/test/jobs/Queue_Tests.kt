@@ -2,6 +2,7 @@ package test.jobs
 
 import org.junit.Assert
 import org.junit.Test
+import slatekit.common.Identity
 
 import slatekit.core.queues.InMemoryQueue
 import slatekit.core.queues.QueueStringConverter

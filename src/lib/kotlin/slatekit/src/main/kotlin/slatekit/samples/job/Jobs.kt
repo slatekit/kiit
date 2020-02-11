@@ -98,7 +98,7 @@ class NewsLetterWorker(id:Identity) : Worker<String>(id) {
     }
 
     // Transition hook for when the status is changed ( e.g. from Status.Running -> Status.Paused )
-    override suspend fun move(state: Status) {
+    override suspend fun move(state: Status, note:String?) {
         _status.set(Pair(state, state.name))
         notify("move", listOf("status" to state.name))
     }
@@ -114,7 +114,7 @@ class NewsLetterWorker(id:Identity) : Worker<String>(id) {
     }
 
     // Initialization hook ( for setup / logs / alerts )
-    override fun notify(desc: String?, extra: List<Pair<String, String>>?) {
+    override suspend fun notify(desc: String?, extra: List<Pair<String, String>>?) {
         val detail = extra?.joinToString(",") { it.first + "=" + it.second }
         // Simulate notification to email/alerts/etc
         println(desc + detail)

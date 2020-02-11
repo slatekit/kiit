@@ -3,6 +3,7 @@ package test.jobs
 import kotlinx.coroutines.runBlocking
 import org.junit.Assert
 import org.junit.Test
+import slatekit.common.Identity
 import slatekit.common.Status
 import slatekit.core.queues.InMemoryQueue
 import slatekit.core.queues.QueueStringConverter
@@ -23,7 +24,7 @@ class Job_Manage_Queue_Tests : JobTestSupport {
     fun can_start_all_workers() {
         runBlocking {
             val queue = sampleQueue()
-            (1..10).forEach { queue.queue.send(it.toString()) }
+            (1..10).forEach { queue.send(it.toString()) }
             val manager = run(2, queue, JobAction.Start)
             runBlocking {
                 val worker1 = manager.workers.all.first()
@@ -42,7 +43,7 @@ class Job_Manage_Queue_Tests : JobTestSupport {
     fun can_pause_worker() {
         runBlocking {
             val queue = sampleQueue()
-            (1..10).forEach { queue.queue.send(it.toString()) }
+            (1..10).forEach { queue.send(it.toString()) }
             val manager = run(2, queue, JobAction.Start)
             runBlocking {
                 val worker1 = manager.workers.all.first()
@@ -62,7 +63,7 @@ class Job_Manage_Queue_Tests : JobTestSupport {
     fun can_pause_worker_due_to_empty_queue() {
         runBlocking {
             val queue = sampleQueue()
-            (1..2).forEach { queue.queue.send(it.toString()) }
+            (1..2).forEach { queue.send(it.toString()) }
             val manager = run(2, queue, JobAction.Start)
             runBlocking {
 
@@ -107,7 +108,7 @@ class Job_Manage_Queue_Tests : JobTestSupport {
                 Assert.assertEquals("Backoff", worker2.note())
 
                 // Ensure its back to running
-                (3..4).forEach { queue.queue.send(it.toString()) }
+                (3..4).forEach { queue.send(it.toString()) }
                 (manager.coordinator as MockCoordinatorWithChannel).resume()
                 (manager.coordinator as MockCoordinatorWithChannel).resume()
                 manager.respond() // Resume worker 1
@@ -127,7 +128,7 @@ class Job_Manage_Queue_Tests : JobTestSupport {
     fun can_resume_worker() {
         runBlocking {
             val queue = sampleQueue()
-            (1..10).forEach { queue.queue.send(it.toString()) }
+            (1..10).forEach { queue.send(it.toString()) }
             val manager = run(2, queue, JobAction.Start)
             runBlocking {
                 val worker1 = manager.workers.all.first()
@@ -152,7 +153,7 @@ class Job_Manage_Queue_Tests : JobTestSupport {
     fun can_stop_worker() {
         runBlocking {
             val queue = sampleQueue()
-            (1..10).forEach { queue.queue.send(it.toString()) }
+            (1..10).forEach { queue.send(it.toString()) }
             val manager = run(2, queue, JobAction.Start)
             runBlocking {
                 val worker1 = manager.workers.all.first()
