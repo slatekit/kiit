@@ -13,7 +13,7 @@ class LogbackLogger(private val instance: org.slf4j.Logger) : Logger(parseLevel(
      *
      * @param entry: 
      */
-    override fun performLog(entry: LogEntry) {
+    override fun log(entry: LogEntry) {
         when (level) {
             LogLevel.Debug -> instance.debug(entry.msg, entry.ex)
             LogLevel.Info  -> instance.info (entry.msg, entry.ex)

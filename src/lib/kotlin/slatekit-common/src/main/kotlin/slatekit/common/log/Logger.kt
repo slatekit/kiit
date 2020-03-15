@@ -16,9 +16,9 @@ package slatekit.common.log
 import slatekit.common.Ignore
 
 abstract class Logger(
-    val level: LogLevel = LogLevel.Warn,
-    val name: String = "",
-    val logType: Class<*>? = null
+    open val level: LogLevel = LogLevel.Warn,
+    open val name: String = "",
+    open val logType: Class<*>? = null
 ) : LogSupport {
 
     fun isEnabled(level: LogLevel): Boolean = level >= this.level
@@ -36,7 +36,7 @@ abstract class Logger(
     @Ignore
     override fun log(level: LogLevel, msg: String, ex: Exception?) {
         checkLog(level) {
-            performLog(LogEntry(name, level, msg, ex))
+            log(LogEntry(name, level, msg, ex))
         }
     }
 
@@ -51,7 +51,7 @@ abstract class Logger(
     override fun log(level: LogLevel, msg: String, pairs:List<Pair<String,String>>, ex: Exception?) {
         checkLog(level) {
             val info = pairs.joinToString { it -> it.first + "=" + it.second }
-            performLog(LogEntry(name, level, "$msg $info", null))
+            log(LogEntry(name, level, "$msg $info", null))
         }
     }
 
@@ -65,7 +65,7 @@ abstract class Logger(
     override fun log(level: LogLevel, callback: () -> String, ex: Exception?) {
         checkLog(level) {
             val msg = callback()
-            performLog(LogEntry(name, level, msg, ex))
+            log(LogEntry(name, level, msg, ex))
         }
     }
 
@@ -80,5 +80,5 @@ abstract class Logger(
      *
      * @param entry
      */
-    protected abstract fun performLog(entry: LogEntry)
+    abstract fun log(entry: LogEntry)
 }
