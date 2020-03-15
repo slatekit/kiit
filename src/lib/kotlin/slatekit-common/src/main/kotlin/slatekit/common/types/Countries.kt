@@ -3,7 +3,10 @@ package slatekit.common.types
 import slatekit.results.Outcome
 import slatekit.results.builders.Outcomes
 
-object Countries {
+interface CountryLookup {
+
+    val supported:List<Country>
+
 
     /**
      * Finds the Country with matching iso2 representation
@@ -42,15 +45,19 @@ object Countries {
     fun find(iso2: String?): Country? {
         return when (iso2) {
             null -> null
-            "" -> usa
-            else -> supported.first { it.iso2 == iso2.toUpperCase() }
+            else -> supported.firstOrNull { it.iso2 == iso2.toUpperCase() }
         }
     }
+}
+
+
+
+object Countries : CountryLookup {
 
     /**
      * Supported country codes ( minimal list for now with expected length of phone chars)
      */
-    val supported = listOf(
+    override val supported = listOf(
             Country("United States"      ,  "US", "USA", "1"    , 10, "^[0-9]{10}", "1234567890", "ic_flag_USA"),
             Country("Australia"          ,  "AU", "AUS", "61"   , 10, "^[0-9]{10}", "1234567890", "ic_flag_AUS"),
             Country("Canada"             ,  "CA", "CAN", "1"    , 10, "^[0-9]{10}", "1234567890", "ic_flag_CAN"),
