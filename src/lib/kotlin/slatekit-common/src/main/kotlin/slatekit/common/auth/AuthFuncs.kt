@@ -21,7 +21,6 @@ import slatekit.results.builders.Notices
 
 object AuthFuncs {
 
-    val guest = User(id = "guest")
     val emptyRoles = mapOf<String, String>()
 
     /**

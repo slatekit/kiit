@@ -40,7 +40,7 @@ open class Auth(val isAuthenticated: Boolean, val user: User?, rolesDelimited: S
      * @param user
      * @return
      */
-    fun isUser(user: User?): Boolean = user?.isMatch(this.user ?: AuthFuncs.guest) ?: false
+    fun isUser(user: User?): Boolean = user?.equals(this.user) ?: false
 
     /**
      * whether or not the user in the role supplied.
@@ -50,10 +50,27 @@ open class Auth(val isAuthenticated: Boolean, val user: User?, rolesDelimited: S
     fun isInRole(role: String): Boolean = roles.containsKey(role)
 
     /**
+     * whether or not the user in any of the roles supplied.
+     * @param role
+     * @return
+     */
+    fun isInRoles(rolesToCheck:List<String>): Boolean {
+        val inRoles = rolesToCheck.filter { roles.containsKey(it) }
+        return inRoles.isNotEmpty()
+    }
+
+    /**
      * whether or not the users phone is verified
      * @return
      */
     val isPhoneVerified: Boolean get() = user?.isPhoneVerified ?: false
+
+    /**
+     * whether or not the users device/phone is verified ( different than the phone ).
+     * Can be used for push notifications after a device id is verified
+     * @return
+     */
+    val isDeviceVerified: Boolean get() = user?.isDeviceVerified ?: false
 
     /**
      * whether or not the users email is verified
