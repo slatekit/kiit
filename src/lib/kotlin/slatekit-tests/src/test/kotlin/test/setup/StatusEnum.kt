@@ -54,6 +54,24 @@ data class StatusEnum2(
 }
 
 
+sealed class StatusEnum3(override val name:String, override val value:Int) : EnumLike {
+
+    object Pending    : StatusEnum3( "Pending", 0 )
+    object Active     : StatusEnum3( "Active" , 1 )
+    object Blocked    : StatusEnum3( "Blocked", 2 )
+
+
+    companion object : EnumSupport()  {
+
+        val allItems = arrayOf<EnumLike>(Pending, Active, Blocked)
+
+        override fun all(): Array<EnumLike> {
+            return allItems
+        }
+    }
+}
+
+
 
 enum class RoleEnum(val value:Int) {
     Member(0),

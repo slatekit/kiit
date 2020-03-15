@@ -16,7 +16,7 @@ package slatekit.query
 enum class Op(val text: String) {
     Eq("="),
     Neq("<>"),
-    Gt("="),
+    Gt(">"),
     Gte(">="),
     Lt("<"),
     Lte("<="),

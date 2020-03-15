@@ -55,7 +55,14 @@ object Reflector {
         val companion = cls.companionObjectInstance
         return when (companion) {
             is EnumSupport -> true
-            else -> false
+            else -> {
+                val superCompanion = getSuperClassCompanion(cls)
+                val result = when(superCompanion){
+                    is EnumSupport -> true
+                    else -> false
+                }
+                result
+            }
         }
     }
 
@@ -70,17 +77,38 @@ object Reflector {
     fun getEnumValue(cls: KClass<*>, value: Any?): EnumLike {
         val companion = cls.companionObjectInstance
         return when (companion) {
-            is EnumSupport -> {
-                when (value) {
-                    is EnumLike -> value
-                    is Int -> companion.convert(value)
-                    is Long -> companion.convert(value.toInt())
-                    is String -> companion.parse(value)
-                    null -> throw Exception("Unable to dynamically parse enum : " + cls.qualifiedName + ", with null value")
-                    else -> throw Exception("Unable to dynamically parse enum : " + cls.qualifiedName + ", with value : " + value)
+            is EnumSupport -> getEnumValue(cls, companion, value)
+            else -> {
+                val superCompanion = getSuperClassCompanion(cls)
+                when(superCompanion){
+                    is EnumSupport -> getEnumValue(cls, superCompanion, value)
+                    else -> throw Exception("Unable to dynamically parse enum : " + cls.qualifiedName + ", enum does not extend EnumSupport")
                 }
             }
-            else -> throw Exception("Unable to dynamically parse enum : " + cls.qualifiedName + ", enum does not extend EnumSupport")
+        }
+    }
+
+    fun getSuperClassCompanion(cls:KClass<*>):Any? {
+        return if(cls.supertypes.isNotEmpty()) {
+            val first = cls.supertypes.firstOrNull()?.classifier
+            first?.let {
+                val parent = it as KClass<*>
+                val comp = parent.companionObjectInstance
+                comp
+            }
+        } else {
+            null
+        }
+    }
+
+    fun getEnumValue(cls:KClass<*>, companion:EnumSupport, value:Any?): EnumLike {
+        return when (value) {
+            is EnumLike -> value
+            is Int -> companion.convert(value)
+            is Long -> companion.convert(value.toInt())
+            is String -> companion.parse(value)
+            null -> throw Exception("Unable to dynamically parse enum : " + cls.qualifiedName + ", with null value")
+            else -> throw Exception("Unable to dynamically parse enum : " + cls.qualifiedName + ", with value : " + value)
         }
     }
 
