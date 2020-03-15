@@ -60,6 +60,12 @@ open class Auth(val isAuthenticated: Boolean, val user: User?, rolesDelimited: S
     }
 
     /**
+     * The user id
+     * @return
+     */
+    val userId: String get() = user?.id ?: ""
+
+    /**
      * whether or not the users phone is verified
      * @return
      */
@@ -77,10 +83,4 @@ open class Auth(val isAuthenticated: Boolean, val user: User?, rolesDelimited: S
      * @return
      */
     val isEmailVerified: Boolean get() = user?.isEmailVerified ?: false
-
-    /**
-     * The user id
-     * @return
-     */
-    val userId: String get() = user?.id ?: ""
 }
