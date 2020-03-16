@@ -2,7 +2,7 @@ package test.common
 
 import org.junit.Assert
 import org.junit.Test
-import slatekit.common.utils.Version
+import slatekit.common.types.Version
 
 
 class VersionTests {

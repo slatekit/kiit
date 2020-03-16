@@ -14,11 +14,17 @@ package test.common
 
 import org.junit.Assert
 import org.junit.Test
+import org.threeten.bp.LocalDate
+import org.threeten.bp.LocalDateTime
+import org.threeten.bp.LocalTime
 import slatekit.common.info.ApiLogin
 import slatekit.common.DateTimes
 import slatekit.common.conf.ConfFuncs
 import slatekit.common.conf.Config
+import slatekit.common.conf.MapSettings
 import slatekit.common.envs.EnvMode
+import slatekit.common.ext.zoned
+import slatekit.common.ids.UniqueId
 import slatekit.meta.map
 import test.setup.Movie
 import test.setup.MyEncryptor
@@ -174,6 +180,45 @@ class ConfigTests {
         val conf = ConfFuncs.loadWithFallbackConfig("jar://env.dev.conf", "jar://env.conf", null)
         Assert.assertTrue(conf.getString("env.name") == "dev")
         Assert.assertTrue(conf.getString("root_name") == "parent env config")
+    }
+
+
+    @Test fun test_map_settings() {
+        val bValue = true
+        val sValue = 0.toShort()
+        val iValue = 1
+        val lValue = 2.toLong()
+        val dValue = 3.toDouble()
+
+        val localDate = LocalDate.of(2020, 3, 1)
+        val localTime = LocalTime.of(9, 30, 45)
+        val localDateTime = LocalDateTime.of(2020, 3, 1, 9, 30, 45)
+        val zonedDateTime = localDateTime.zoned()
+        val uuid = UUID.randomUUID()
+        val uniqueId = UniqueId.create()
+
+        val settings = MapSettings()
+        settings.putString("sString", "abc")
+        settings.putBool("sBool", bValue)
+        settings.putShort("sShort", sValue)
+        settings.putInt("sInt", iValue)
+        settings.putLong("sLong", lValue)
+        settings.putDouble("sDouble", dValue)
+        settings.putLocalDate("sLocalDate", localDate)
+        settings.putLocalTime("sLocalTime", localTime)
+        settings.putLocalDateTime("sLocalDateTime", localDateTime)
+        settings.putZonedDateTime("sZonedDateTime", zonedDateTime)
+        settings.putUUID("sUUID", uuid)
+        settings.putUniqueId("sUniqueId", uniqueId)
+
+        Assert.assertEquals(bValue, settings.getBool("sBool"))
+        Assert.assertEquals(sValue, settings.getShort("sShort"))
+        Assert.assertEquals(iValue, settings.getInt("sInt"))
+        Assert.assertEquals(lValue, settings.getLong("sLong"))
+        Assert.assertEquals(dValue.toString(), settings.getDouble("sDouble").toString())
+        Assert.assertEquals(localDate, settings.getLocalDate("sLocalDate"))
+        Assert.assertEquals(localTime, settings.getLocalTime("sLocalTime"))
+        Assert.assertEquals(localDateTime, settings.getLocalDateTime("sLocalDateTime"))
     }
 
 

@@ -20,6 +20,8 @@ import slatekit.common.ext.tail
 import slatekit.common.newline
 import slatekit.meta.Serialization
 import test.setup.StatusEnum
+import test.setup.StatusEnum2
+import test.setup.StatusEnum3
 import test.setup.User
 import java.util.*
 
@@ -59,10 +61,24 @@ class SerializerTests {
     }
 
 
-    @Test fun can_serialize_enums() {
+    @Test fun can_serialize_enums_java() {
         val serializer = Serialization.json()
         Assert.assertTrue( serializer.serialize(StatusEnum.Pending)          == "0" )
         Assert.assertTrue( serializer.serialize(StatusEnum.Active)           == "1" )
+    }
+
+
+    @Test fun can_serialize_enums_kotlin_data_class() {
+        val serializer = Serialization.json()
+        Assert.assertTrue( serializer.serialize(StatusEnum2.Pending)          == "0" )
+        Assert.assertTrue( serializer.serialize(StatusEnum2.Active)           == "1" )
+    }
+
+
+    @Test fun can_serialize_enums_kotlin_sealed_class() {
+        val serializer = Serialization.json()
+        Assert.assertTrue( serializer.serialize(StatusEnum3.Pending)          == "0" )
+        Assert.assertTrue( serializer.serialize(StatusEnum3.Active)           == "1" )
     }
 
 

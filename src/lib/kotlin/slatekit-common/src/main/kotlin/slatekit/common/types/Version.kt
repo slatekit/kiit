@@ -1,4 +1,4 @@
-package slatekit.common.utils
+package slatekit.common.types
 
 import slatekit.common.validations.ValidationFuncs
 import slatekit.results.Failure
@@ -9,7 +9,8 @@ data class Version(
     val major: Int,
     val minor: Int,
     val patch: Int,
-    val build: Int
+    val build: Int,
+    val label: String = ""
 ) {
 
     constructor(major:Int) : this(major, 0, 0, 0)
@@ -43,18 +44,19 @@ data class Version(
 
         @JvmStatic
         fun parse(text:String): Notice<Version> {
-            val parts = text.trim().split('.')
-            val numeric = parts.all { ValidationFuncs.isWholeNumber(it) }
+            val tokens = text.trim().split('.')
+            val numeric = tokens.all { ValidationFuncs.isWholeNumber(it) }
             return if(!numeric) {
                 Failure("Not all parts of the version are numeric")
             } else {
-                val digits = parts.map { it.trim().toInt() }
-                when (parts.size) {
-                    1 -> Success(Version(digits[0]))
-                    2 -> Success(Version(digits[0], digits[1]))
-                    3 -> Success(Version(digits[0], digits[1], digits[2]))
-                    4 -> Success(Version(digits[0], digits[1], digits[2], digits[3]))
-                    else -> Failure("Invalid version, expected 4 parts separated by .")
+                val parts = tokens.map { it.trim() }
+                when (tokens.size) {
+                    1 -> Success(Version(parts[0].toInt()))
+                    2 -> Success(Version(parts[0].toInt(), parts[1].toInt()))
+                    3 -> Success(Version(parts[0].toInt(), parts[1].toInt(), parts[2].toInt()))
+                    4 -> Success(Version(parts[0].toInt(), parts[1].toInt(), parts[2].toInt(), parts[3].toInt()))
+                    5 -> Success(Version(parts[0].toInt(), parts[1].toInt(), parts[2].toInt(), parts[3].toInt(), parts[4]))
+                    else -> Failure("Invalid version, expected 4-5 parts separated by . e.g. 1.2.3.4.ABC")
                 }
             }
         }

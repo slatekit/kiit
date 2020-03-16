@@ -44,7 +44,7 @@ class Example_Logger  : Command("logger"), LogSupport {
     override val logger:Logger? = LoggerConsole()
 
 
-    override fun performLog(entry: LogEntry)
+    override fun log(entry: LogEntry)
     {
       println("custom logger : " + entry.level + " : " + entry.msg)
     }

@@ -33,7 +33,7 @@ class LoggerConsole(
      *
      * @param entry: 
      */
-    override fun performLog(entry: LogEntry) {
+    override fun log(entry: LogEntry) {
         val prefix = "${entry.time} [$name] ${level.name}"
         when (entry.level) {
             LogLevel.Debug -> println("$prefix + : + ${entry.msg}")
