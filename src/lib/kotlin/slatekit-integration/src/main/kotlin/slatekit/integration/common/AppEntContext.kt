@@ -25,6 +25,7 @@ import slatekit.common.log.LogsDefault
 import slatekit.common.naming.Namer
 import slatekit.context.AppContext
 import slatekit.common.envs.Envs
+import slatekit.common.naming.LowerCamelNamer
 import slatekit.context.Context
 import slatekit.db.Db
 import slatekit.entities.Entities
@@ -63,6 +64,15 @@ data class AppEntContext(
      */
     fun toAppContext(): AppContext {
         return AppContext(args, envs, conf, logs, info, enc, dirs)
+    }
+
+    /**
+     * Copies this item with the build modified
+     */
+    fun withBuild(build: Build):AppEntContext {
+        val info = this.info
+        val newCtx = this.copy( info = info.copy(build = build, about = info.about.copy(version = build.version)))
+        return newCtx
     }
 
     companion object {
