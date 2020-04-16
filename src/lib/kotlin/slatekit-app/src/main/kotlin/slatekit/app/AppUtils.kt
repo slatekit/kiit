@@ -196,11 +196,21 @@ object AppUtils {
         return res.exists()
     }
 
-    private fun getDir(args: Args, default:Alias): Uri {
+
+    fun getDir(args: Args, default:Alias): Uri {
         val dirFromArgs = args.getStringOrNull("conf.dir")
         return dirFromArgs?.let { Uris.parse(it) } ?: Uri.of(default, "", null)
     }
 
+
+    fun build(args: Args, alias: Alias = Alias.Jar): Build {
+        val source = getDir(args, alias)
+        val name = "build.conf"
+        val props = Props.loadFrom(source.combine(name))
+        val stamp = Config(source,props, null)
+        val build = stamp.buildStamp("build")
+        return build
+    }
 
 
     data class AppInputs(

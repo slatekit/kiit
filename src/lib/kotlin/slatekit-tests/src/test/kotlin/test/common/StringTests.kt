@@ -5,6 +5,7 @@ import org.junit.Test
 import slatekit.common.repeatWith
 import slatekit.common.ext.toId
 import slatekit.common.ext.toIdent
+import slatekit.common.utils.StringSearch
 
 
 class StringTests {
@@ -32,5 +33,50 @@ class StringTests {
         Assert.assertTrue("ABC_123_" == "ABC 123 $%^".toIdent(lowerCase = false))
         Assert.assertTrue("abc_123_" == " ABC 123 $%^ ".toIdent())
         Assert.assertTrue("abc_123__-_" == " ABC 123 $%^ &*-()_ ".toIdent())
+    }
+
+
+    @Test fun can_search_url() {
+        val url = "mysite.com/area/page?id=123&name=Something"
+        val checks = listOf("http://$url", "https://$url", "www.$url")
+        checks.forEach { check ->
+            val text = check
+            val samples = samples(text)
+            val matches = samples.map { StringSearch.url(it) }
+            matches.forEach {
+                Assert.assertEquals(text, it)
+            }
+        }
+    }
+
+
+    @Test fun can_search_phone() {
+        val checks = listOf("123-456-7890", "123 - 456 - 7890", "1234567890")
+        checks.forEach { check ->
+            val text = check
+            val samples = samples(text)
+            val matches = samples.map { StringSearch.phone(it) }
+            matches.forEach {
+                Assert.assertEquals(text, it)
+            }
+        }
+    }
+
+
+    @Test fun can_search_email() {
+        val checks = listOf("batman@gotham.com", "bat.man@gotham.com", "bat_man@gotham.com", "bat-man@gotham.com")
+        checks.forEach { check ->
+            val text = check
+            val samples = samples(text)
+            val matches = samples.map { StringSearch.email(it) }
+            matches.forEach {
+                Assert.assertEquals(text, it)
+            }
+        }
+    }
+
+
+    private fun samples(text:String):List<String> {
+        return listOf(text, " $text ", "abc $text abc", "abc $text 123")
     }
 }

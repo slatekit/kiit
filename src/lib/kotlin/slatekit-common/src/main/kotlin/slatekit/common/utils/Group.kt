@@ -9,11 +9,11 @@ package slatekit.common.utils
  * @param tag    : Reference / Correlation id   e.g. Group / Batch id
  */
 data class Group<out T>(
-    val name: String,
-    val source: String,
-    val items: List<T>,
-    val total:Int = items.size,
-    val tag: String = ""
+    @JvmField val name: String,
+    @JvmField val source: String,
+    @JvmField val items: List<T>,
+    @JvmField val total:Int = items.size,
+    @JvmField val tag: String = ""
 ) {
 
     fun isEmpty(): Boolean = items.isEmpty()
