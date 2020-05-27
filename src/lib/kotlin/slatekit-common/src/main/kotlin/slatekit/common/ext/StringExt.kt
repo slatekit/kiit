@@ -188,3 +188,32 @@ fun String.subStringPair(pattern: String): Pair<String, String>? {
     } else
         null
 }
+
+
+fun String.intAfter(text:String):Int {
+    val value = this.substring(text.length).toInt()
+    return value
+}
+
+
+fun String.intAfterLast(text:String):Int {
+    val ndxSeparator = this.lastIndexOf(text)
+    val value = when(ndxSeparator >= 0) {
+        true  -> this.substring(ndxSeparator + 1).toInt()
+        false -> -1
+    }
+    return value
+}
+
+
+fun String.toSentenceCase():String {
+    return when(this.length) {
+        0 -> ""
+        1 -> this[0].toUpperCase().toString()
+        else -> this[0].toUpperCase() + this.substring(1)
+    }
+}
+
+fun String.removeNewLines(replacement:String = " "):String {
+    return this.replace("\r\n", replacement).replace("\n", replacement)
+}

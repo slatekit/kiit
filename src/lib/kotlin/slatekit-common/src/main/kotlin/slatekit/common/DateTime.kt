@@ -16,6 +16,8 @@ package slatekit.common
 //import java.time.*
 import org.threeten.bp.*
 import org.threeten.bp.format.DateTimeFormatter
+import slatekit.common.ext.atStartOfMonth
+import slatekit.common.ext.daysInMonth
 import slatekit.common.validations.ValidationFuncs
 import java.util.*
 
@@ -237,6 +239,29 @@ class DateTimes {
         @JvmStatic
         fun parseISO(value: String): DateTime {
             return DateTime.parse(value, DateTimeFormatter.ISO_OFFSET_DATE_TIME)
+        }
+
+        fun daysInMonth(month:Int, year:Int) : Int {
+            return Month.of(month).daysInMonth(year)
+        }
+
+
+        fun startOfCurrentMonth():DateTime {
+            return DateTimes.now().atStartOfMonth()
+        }
+
+
+        /** Gets the start of the current days month.
+         * @return
+         */
+        @JvmStatic
+        fun closestNextHour(): DateTime {
+            val now = DateTime.now()
+            if (now.minute < 30) {
+                return DateTime.of(now.year, now.monthValue, now.dayOfMonth, now.hour, 30, 0, 0, now.zone)
+            }
+            val next = DateTime.of(now.year, now.monthValue, now.dayOfMonth, now.hour, 0, 0, 0, now.zone)
+            return next.plusHours(1)
         }
 
         @JvmStatic
