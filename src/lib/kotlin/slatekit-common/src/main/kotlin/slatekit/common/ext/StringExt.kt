@@ -1,5 +1,6 @@
 package slatekit.common.ext
 
+import org.threeten.bp.LocalTime
 import slatekit.common.Strings
 import java.util.*
 
@@ -187,4 +188,64 @@ fun String.subStringPair(pattern: String): Pair<String, String>? {
         }
     } else
         null
+}
+
+
+fun String.intAfter(text:String):Int {
+    val value = this.substring(text.length).toInt()
+    return value
+}
+
+
+fun String.intAfterLast(text:String):Int {
+    val ndxSeparator = this.lastIndexOf(text)
+    val value = when(ndxSeparator >= 0) {
+        true  -> this.substring(ndxSeparator + 1).toInt()
+        false -> -1
+    }
+    return value
+}
+
+
+fun String.toSentenceCase():String {
+    return when(this.length) {
+        0 -> ""
+        1 -> this[0].toUpperCase().toString()
+        else -> this[0].toUpperCase() + this.substring(1)
+    }
+}
+
+fun String.removeNewLines(replacement:String = " "):String {
+    return this.replace("\r\n", replacement).replace("\n", replacement)
+}
+
+
+fun String.toTime(text:String): LocalTime {
+    return try {
+        val num = text.toInt()
+        toTime(num)
+    }
+    catch(ex:Exception) {
+        LocalTime.of(12, 0, 0)
+    }
+}
+
+
+fun String.toTime(numval:Int):LocalTime {
+    // nothing
+    if (numval == 0)
+        return LocalTime.of(0, 0, 0)
+
+    // 8:30:00 am = 83000
+    // 8:30:00 pm = 203000
+    // 12:30:00 am = 03000
+    var value = numval.toString()
+    if (value.length < 5)
+        value = "00"
+    if (value.length < 6)
+        value = "0$value"
+    val hours = value.substring(0, 2).toInt()
+    val mins = value.substring(2, 4).toInt()
+    val secs = value.substring(4, 6).toInt()
+    return LocalTime.of(hours, mins, secs, 0)
 }

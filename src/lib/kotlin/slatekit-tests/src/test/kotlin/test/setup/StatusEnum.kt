@@ -63,7 +63,7 @@ sealed class StatusEnum3(override val name:String, override val value:Int) : Enu
 
     companion object : EnumSupport()  {
 
-        val allItems = arrayOf<EnumLike>(Pending, Active, Blocked)
+        val allItems:Array<EnumLike> by lazy { arrayOf<EnumLike>(Pending, Active, Blocked) }
 
         override fun all(): Array<EnumLike> {
             return allItems

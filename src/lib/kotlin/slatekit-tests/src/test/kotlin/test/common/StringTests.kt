@@ -2,9 +2,8 @@ package test.common
 
 import org.junit.Assert
 import org.junit.Test
+import slatekit.common.ext.*
 import slatekit.common.repeatWith
-import slatekit.common.ext.toId
-import slatekit.common.ext.toIdent
 import slatekit.common.utils.StringSearch
 
 
@@ -33,6 +32,22 @@ class StringTests {
         Assert.assertTrue("ABC_123_" == "ABC 123 $%^".toIdent(lowerCase = false))
         Assert.assertTrue("abc_123_" == " ABC 123 $%^ ".toIdent())
         Assert.assertTrue("abc_123__-_" == " ABC 123 $%^ &*-()_ ".toIdent())
+    }
+
+
+    @Test fun can_get_int_after() {
+        Assert.assertEquals(1, "action_email_1".intAfter("action_email_"))
+    }
+
+
+    @Test fun can_get_int_after_last() {
+        Assert.assertEquals(1, "action_email_1".intAfterLast("_"))
+    }
+
+
+    @Test fun can_convert_to_sentance_case() {
+        Assert.assertEquals("K", "k".toSentenceCase())
+        Assert.assertEquals("Kay", "kay".toSentenceCase())
     }
 
 

@@ -116,6 +116,15 @@ class Api_Setup_Tests : ApiTestsBase() {
     }
 
 
+    @Test fun can_call_action_with_request() {
+        val apis = ApiServer(ctx, apis = listOf(Api(SamplePOKOApi::class, "app", "SamplePOKO")))
+        val result = runBlocking {
+            apis.call("app", "SamplePOKO", SamplePOKOApi::request.name, Verb.Auto, mapOf(), mapOf("greeting" to "hi"))
+        }
+        Assert.assertTrue(result.success)
+    }
+
+
     @Test fun can_call_action_in_derived_class() {
         val apis = ApiServer(ctx, apis = listOf(Api(SampleExtendedApi::class, "app", "SampleExtended")))
         val result = runBlocking { apis.call("app", "SampleExtended", "getSeconds", Verb.Auto, mapOf(), mapOf()) }

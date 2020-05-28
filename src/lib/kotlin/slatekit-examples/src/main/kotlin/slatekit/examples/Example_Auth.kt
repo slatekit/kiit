@@ -42,7 +42,7 @@ class Example_Auth  : Command("auth") {
     // * 4. The SlateKit.Api component, while supporting basic api "Keys" based authentication,
     // *    and a roles based authentication, it leaves the login/logout and actual generating
     // *    of tokens to libraries such as OAuth.
-    val user2 = User( "2", "john doe", "john", "doe", "jdoe@gmail.com", "123-456-7890", false, false, true)
+    val user2 = User( "2", "johndoe","john doe", "john doe", "john","doe", "jdoe@gmail.com", "123-456-7890", "us", false, false, true)
     val auth = AuthConsole(isAuthenticated = true, user = user2, roles = "admin")
     //</doc:setup>
 

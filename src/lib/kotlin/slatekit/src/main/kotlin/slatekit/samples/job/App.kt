@@ -6,6 +6,7 @@ import slatekit.common.SimpleIdentity
 import slatekit.common.args.Args
 import slatekit.core.queues.AsyncQueue
 import slatekit.core.queues.InMemoryQueue
+import slatekit.integration.jobs.JobQueue
 import slatekit.jobs.Job
 import slatekit.jobs.Jobs
 import slatekit.jobs.Priority
@@ -52,8 +53,8 @@ fun run(args: Args){
         val id = SimpleIdentity("samples", "newsletter", Agent.Job, "dev")
 
         // Sample Queues: In-Memory
-        val queue1 = Queue("queue1", Priority.Mid, AsyncQueue.of(InMemoryQueue.stringQueue(5)))
-        val queue2 = Queue("queue2", Priority.Mid, AsyncQueue.of(InMemoryQueue.stringQueue(5)))
+        val queue1 = JobQueue("q1", Priority.Mid, AsyncQueue.of(InMemoryQueue.stringQueue(5)))
+        val queue2 = JobQueue("q2", Priority.Mid, AsyncQueue.of(InMemoryQueue.stringQueue(5)))
 
         // Sample Data: for queue
         (1 .. 5).forEach {
