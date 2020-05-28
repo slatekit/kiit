@@ -209,13 +209,21 @@ open class ApiServer(
         // Step 3: Hooks: Pre-Processing Stage 1 : rewrite request, and ensure system validations
         val startInput = Outcomes.success(rawRequest)
         val validated = startInput
-            .operate { processor.input(hooks.formatters  , it) }
-            .operate { processor.input(preProcessBuiltIns, it) }
+            .operate {
+                processor.input(hooks.formatters  , it)
+            }
+            .operate {
+                processor.input(preProcessBuiltIns, it)
+            }
 
         // Step 4: Hooks: Pre-Processing Stage 2: run through more hooks ( API level & supplied )
         val requested = validated
-            .operate { processor.input(preProcessAPIHooks, it) }
-            .operate { processor.input(hooks.inputters, it)    }
+            .operate {
+                processor.input(preProcessAPIHooks, it)
+            }
+            .operate {
+                processor.input(hooks.inputters, it)
+            }
 
         // Step 5: Execute request
         val executed = try {
@@ -247,9 +255,15 @@ open class ApiServer(
 
         // Step 7: Hooks: Post-Processing Stage 2: remaining hooks ( afters, built-ins, outputters )
         val result = executed
-            .operate { processor.output(rawRequest, requested, it, postProcessAPIHooks) }
-            .operate { processor.output(rawRequest, requested, it, postProcessBuiltIns) }
-            .operate { processor.output(rawRequest, requested, it, hooks.outputter)     }
+            .operate {
+                processor.output(rawRequest, requested, it, postProcessAPIHooks)
+            }
+            .operate {
+                processor.output(rawRequest, requested, it, postProcessBuiltIns)
+            }
+            .operate {
+                processor.output(rawRequest, requested, it, hooks.outputter)
+            }
 
         return result
     }
