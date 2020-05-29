@@ -2,25 +2,58 @@ package slatekit.meta.deserializer
 
 import org.json.simple.JSONArray
 import org.json.simple.JSONObject
-import slatekit.meta.Conversion
-import slatekit.meta.JSONRestoreWithContext
-import slatekit.meta.JSONTransformer
-import slatekit.meta.Reflector
+import slatekit.common.Conversions
+import slatekit.common.crypto.*
+import slatekit.meta.*
+import java.util.*
 import kotlin.reflect.KClass
 import kotlin.reflect.KType
 
 
-class Deserializers(conversion: Conversion, decoders:Map<String, JSONTransformer<*>>) {
-    val lists  = ListDeserializer(conversion)
-    val maps   = MapDeserializer(conversion)
-    val enums  = EnumDeserializer(conversion)
-    val smart  = SmartValueDeserializer(conversion)
-    val objs   = ObjectDeserializer(conversion)
-    val custom = CustomDeserializer(conversion, decoders)
+class Deserializers(conversion: Conversion, enc: Encryptor?, decoders:Map<String, JSONTransformer<*>>) {
+    val basic  = BasicDeserializer(conversion, enc)
+    val lists  = ListDeserializer(conversion, enc)
+    val maps   = MapDeserializer(conversion, enc)
+    val enums  = EnumDeserializer(conversion, enc)
+    val smart  = SmartValueDeserializer(conversion, enc)
+    val objs   = ObjectDeserializer(conversion, enc)
+    val custom = CustomDeserializer(conversion, enc, decoders)
 }
 
 
-class ListDeserializer(override val conversion: Conversion) : DeserializerPart, DeserializeSupport {
+class BasicDeserializer(override val conversion: Conversion,
+                        override val enc: Encryptor?) : DeserializerPart, DeserializeSupport {
+
+    override fun deserialize(context:Any, parent:Any, paramValue:Any?, paramName:String, paramType: KType):Any? {
+        val result = when (paramType.classifier) {
+            // Basic types
+            KTypes.KStringType.classifier -> paramValue?.let { Conversions.handleString(it) }
+            KTypes.KBoolType.classifier -> paramValue?.toString()?.toBoolean()
+            KTypes.KShortType.classifier -> paramValue?.toString()?.toShort()
+            KTypes.KIntType.classifier -> paramValue?.toString()?.toInt()
+            KTypes.KLongType.classifier -> paramValue?.toString()?.toLong()
+            KTypes.KFloatType.classifier -> paramValue?.toString()?.toFloat()
+            KTypes.KDoubleType.classifier -> paramValue?.toString()?.toDouble()
+            KTypes.KLocalDateType.classifier -> paramValue?.let { Conversions.toLocalDate(it as String) }
+            KTypes.KLocalTimeType.classifier -> paramValue?.let { Conversions.toLocalTime(it as String) }
+            KTypes.KLocalDateTimeType.classifier -> paramValue?.let { Conversions.toLocalDateTime(it as String) }
+            KTypes.KZonedDateTimeType.classifier -> paramValue?.let { Conversions.toZonedDateTime(it as String) }
+            KTypes.KDateTimeType.classifier -> paramValue?.let { Conversions.toDateTime(it as String) }
+            KTypes.KDecIntType.classifier -> enc?.let { e -> EncInt(paramValue as String, e.decrypt(paramValue).toInt()) } ?: EncInt("", 0)
+            KTypes.KDecLongType.classifier -> enc?.let { e -> EncLong(paramValue as String, e.decrypt(paramValue).toLong()) } ?: EncLong("", 0L)
+            KTypes.KDecDoubleType.classifier -> enc?.let { e -> EncDouble(paramValue as String, e.decrypt(paramValue).toDouble()) } ?: EncDouble("", 0.0)
+            KTypes.KDecStringType.classifier -> enc?.let { e -> EncString(paramValue as String, e.decrypt(paramValue)) } ?: EncString("", "")
+            KTypes.KVarsType.classifier -> paramValue?.let { Conversions.toVars(it) }
+            KTypes.KUUIDType.classifier -> UUID.fromString(paramValue.toString())
+            else -> null
+        }
+        return result
+    }
+}
+
+
+class ListDeserializer(override val conversion: Conversion,
+                       override val enc: Encryptor?) : DeserializerPart, DeserializeSupport {
 
     override fun deserialize(context:Any, parent:Any, paramValue:Any?, paramName:String, paramType: KType):Any? {
         val listType = paramType.arguments[0]!!.type!!
@@ -32,7 +65,8 @@ class ListDeserializer(override val conversion: Conversion) : DeserializerPart, 
 }
 
 
-class MapDeserializer(override val conversion: Conversion) : DeserializerPart, DeserializeSupport {
+class MapDeserializer(override val conversion: Conversion,
+                      override val enc: Encryptor?) : DeserializerPart, DeserializeSupport {
 
     override fun deserialize(context:Any, parent:Any, paramValue:Any?, paramName:String, paramType: KType):Any? {
         val tpeKey = paramType.arguments[0].type!!
@@ -47,7 +81,8 @@ class MapDeserializer(override val conversion: Conversion) : DeserializerPart, D
 }
 
 
-class EnumDeserializer(override val conversion: Conversion) : DeserializerPart, DeserializeSupport {
+class EnumDeserializer(override val conversion: Conversion,
+                       override val enc: Encryptor?) : DeserializerPart, DeserializeSupport {
 
     override fun deserialize(context:Any, parent:Any, paramValue:Any?, paramName:String, paramType: KType):Any? {
         val cls = paramType.classifier as KClass<*>
@@ -57,7 +92,8 @@ class EnumDeserializer(override val conversion: Conversion) : DeserializerPart, 
 }
 
 
-class SmartValueDeserializer(override val conversion: Conversion) : DeserializerPart, DeserializeSupport {
+class SmartValueDeserializer(override val conversion: Conversion,
+                             override val enc: Encryptor?) : DeserializerPart, DeserializeSupport {
 
     override fun deserialize(context:Any, parent:Any, paramValue:Any?, paramName:String, paramType: KType):Any? {
         val result = handle(paramValue, null) { conversion.toSmartValue(paramValue?.toString() ?: "", paramName, paramType) }
@@ -66,7 +102,8 @@ class SmartValueDeserializer(override val conversion: Conversion) : Deserializer
 }
 
 
-class ObjectDeserializer(override val conversion: Conversion) : DeserializerPart, DeserializeSupport {
+class ObjectDeserializer(override val conversion: Conversion,
+                         override val enc: Encryptor?) : DeserializerPart, DeserializeSupport {
 
     override fun deserialize(context:Any, parent:Any, paramValue:Any?, paramName:String, paramType: KType):Any? {
         return when (paramValue) {
@@ -78,6 +115,7 @@ class ObjectDeserializer(override val conversion: Conversion) : DeserializerPart
 
 
 class CustomDeserializer(override val conversion: Conversion,
+                         override val enc: Encryptor?,
                          val decoders: Map<String, JSONTransformer<*>> = mapOf()) : DeserializerPart, DeserializeSupport {
 
     override fun deserialize(context:Any, parent:Any, paramValue:Any?, paramName:String, paramType: KType):Any? {

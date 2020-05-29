@@ -1,10 +1,12 @@
 package slatekit.meta.deserializer
 
+import slatekit.common.crypto.Encryptor
 import slatekit.meta.Conversion
 import kotlin.reflect.KType
 
 interface DeserializerPart {
     val conversion: Conversion
+    val enc: Encryptor?
 
     /**
      * Given following Source JSON

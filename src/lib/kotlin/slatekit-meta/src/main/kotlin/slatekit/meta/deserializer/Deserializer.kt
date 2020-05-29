@@ -43,7 +43,27 @@ open class Deserializer(
     private val conversion  = Conversion(this::convert)
     private val typeRequest = Request::class.createType()
     private val typeMeta    = Metadata::class.createType()
-    private val deserializers = Deserializers(conversion, decoders)
+    private val deserializers = Deserializers(conversion, enc, decoders)
+    private val basicTypes = mapOf(
+            KTypes.KStringClass.qualifiedName!! to true,
+            KTypes.KBoolClass.qualifiedName!! to true,
+            KTypes.KShortClass.qualifiedName!! to true,
+            KTypes.KIntClass.qualifiedName!! to true,
+            KTypes.KLongClass.qualifiedName!! to true,
+            KTypes.KFloatClass.qualifiedName!! to true,
+            KTypes.KDoubleClass.qualifiedName!! to true,
+            KTypes.KLocalDateClass.qualifiedName!! to true,
+            KTypes.KLocalTimeClass.qualifiedName!! to true,
+            KTypes.KLocalDateTimeClass.qualifiedName!! to true,
+            KTypes.KZonedDateTimeClass.qualifiedName!! to true,
+            KTypes.KDateTimeClass.qualifiedName!! to true,
+            KTypes.KDecIntClass.qualifiedName!! to true,
+            KTypes.KDecLongClass.qualifiedName!! to true,
+            KTypes.KDecDoubleClass.qualifiedName!! to true,
+            KTypes.KDecStringClass.qualifiedName!! to true,
+            KTypes.KVarsClass.qualifiedName!! to true,
+            KTypes.KUUIDClass.qualifiedName!! to true
+    )
 
 
     /**
@@ -151,30 +171,12 @@ open class Deserializer(
      * converts
      */
     fun convert(parent: Any, paramValue: Any?, paramName:String, paramType: KType): Any? {
-        return when (paramType.classifier) {
-            // Basic types
-            KTypes.KStringType.classifier -> paramValue?.let { Conversions.handleString(it) }
-            KTypes.KBoolType.classifier -> paramValue?.toString()?.toBoolean()
-            KTypes.KShortType.classifier -> paramValue?.toString()?.toShort()
-            KTypes.KIntType.classifier -> paramValue?.toString()?.toInt()
-            KTypes.KLongType.classifier -> paramValue?.toString()?.toLong()
-            KTypes.KFloatType.classifier -> paramValue?.toString()?.toFloat()
-            KTypes.KDoubleType.classifier -> paramValue?.toString()?.toDouble()
-            KTypes.KLocalDateType.classifier -> paramValue?.let { Conversions.toLocalDate(it as String) }
-            KTypes.KLocalTimeType.classifier -> paramValue?.let { Conversions.toLocalTime(it as String) }
-            KTypes.KLocalDateTimeType.classifier -> paramValue?.let { Conversions.toLocalDateTime(it as String) }
-            KTypes.KZonedDateTimeType.classifier -> paramValue?.let { Conversions.toZonedDateTime(it as String) }
-            KTypes.KDateTimeType.classifier -> paramValue?.let { Conversions.toDateTime(it as String) }
-            KTypes.KDecIntType.classifier -> enc?.let { e -> EncInt(paramValue as String, e.decrypt(paramValue).toInt()) } ?: EncInt("", 0)
-            KTypes.KDecLongType.classifier -> enc?.let { e -> EncLong(paramValue as String, e.decrypt(paramValue).toLong()) } ?: EncLong("", 0L)
-            KTypes.KDecDoubleType.classifier -> enc?.let { e -> EncDouble(paramValue as String, e.decrypt(paramValue).toDouble()) } ?: EncDouble("", 0.0)
-            KTypes.KDecStringType.classifier -> enc?.let { e -> EncString(paramValue as String, e.decrypt(paramValue)) } ?: EncString("", "")
-            KTypes.KVarsType.classifier -> paramValue?.let { Conversions.toVars(it) }
-            KTypes.KUUIDType.classifier -> UUID.fromString(paramValue.toString())
-
-            // Complex type
+        val cls = paramType.classifier as KClass<*>
+        val result = when(basicTypes.containsKey(cls.qualifiedName)) {
+            true -> deserializers.basic.deserialize(this.req, parent, paramValue, paramName, paramType)
             else -> handleComplex(parent, paramValue, paramName, paramType)
         }
+        return result
     }
 
     /**
