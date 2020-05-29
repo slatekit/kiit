@@ -31,8 +31,17 @@ import kotlin.reflect.KType
 import kotlin.reflect.full.createType
 
 /**
- * De-serializes data ( as Inputs ) into the parameter types
- * represented by rawParams
+ * De-serializes data ( as Inputs ) into the parameter types represented by rawParams
+ *
+ * DESIGN:
+ * This custom serializer exists because the use cases are not (At the moment) supported by others such as
+ * 1. GSON
+ * 2. Jackson
+ * 3. Moshi
+ *
+ * USE-CASES:
+ * 1. A context object ( in this case the Request - API, CLI, etc ) is supplied to the deserializers
+ * 2. Deserialization is passed the specific parameters ( list ) not a single value to deserialize
  */
 open class Deserializer(
         private val req: Request,
