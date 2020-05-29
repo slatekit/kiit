@@ -24,7 +24,6 @@ import slatekit.meta.KTypes
 import slatekit.meta.Reflector
 import slatekit.results.Err
 import slatekit.results.ExceptionErr
-import java.util.*
 import kotlin.reflect.KClass
 import kotlin.reflect.KParameter
 import kotlin.reflect.KType
@@ -157,13 +156,48 @@ open class Deserializer(
     /**
      * converts
      */
-    fun convert(parent: Any, paramValue: Any?, paramName:String, paramType: KType): Any? {
+    private fun convert(parent: Any, paramValue: Any?, paramName:String, paramType: KType): Any? {
         val cls = paramType.classifier as KClass<*>
         val result = when(basicTypes.containsKey(cls.qualifiedName)) {
             true -> deserializers.basic.deserialize(this.req, parent, paramValue, paramName, paramType)
             else -> handleComplex(parent, paramValue, paramName, paramType)
         }
         return result
+    }
+
+
+    /**
+     * Handles building of a list from various source types
+     * @param args
+     * @param paramName
+     * @return
+     */
+    private fun handleComplex(parent: Any, paramValue: Any?, paramName:String, paramType: KType): Any? {
+        val cls = paramType.classifier as KClass<*>
+        val fullName = cls.qualifiedName
+        return if (cls == List::class) {
+            deserializers.lists.deserialize(this.req, parent, paramValue, paramName, paramType)
+        }
+        // Case 2: Map
+        else if (cls == Map::class) {
+            deserializers.maps.deserialize(this.req, parent, paramValue, paramName, paramType)
+        }
+        // Case 3: Custom Decoders ( for custom types )
+        else if (decoders.containsKey(fullName)) {
+            deserializers.custom.deserialize(this.req, parent, paramValue, paramName, paramType)
+        }
+        // Case 4: Smart String ( e.g. PhoneUS, Email, SSN, ZipCode )
+        else if (cls.supertypes.indexOf(KTypes.KSmartValueType) >= 0) {
+            deserializers.smart.deserialize(this.req, parent, paramValue, paramName, paramType)
+        }
+        // Case 5: Slate Kit Enm
+        else if (cls.supertypes.indexOf(KTypes.KEnumLikeType) >= 0) {
+            deserializers.enums.deserialize(this.req, parent, paramValue, paramName, paramType)
+        }
+        // Case 6: Class / Object
+        else {
+            deserializers.objs.deserialize(this.req, parent, paramValue, paramName, paramType)!!
+        }
     }
 
     /**
@@ -220,40 +254,5 @@ open class Deserializer(
             deserialize(parameter, jsonRaw!!)
         }
         return result
-    }
-
-
-    /**
-     * Handles building of a list from various source types
-     * @param args
-     * @param paramName
-     * @return
-     */
-    private fun handleComplex(parent: Any, paramValue: Any?, paramName:String, paramType: KType): Any? {
-        val cls = paramType.classifier as KClass<*>
-        val fullName = cls.qualifiedName
-        return if (cls == List::class) {
-            deserializers.lists.deserialize(this.req, parent, paramValue, paramName, paramType)
-        }
-        // Case 2: Map
-        else if (cls == Map::class) {
-            deserializers.maps.deserialize(this.req, parent, paramValue, paramName, paramType)
-        }
-        // Case 3: Custom Decoders ( for custom types )
-        else if (decoders.containsKey(fullName)) {
-            deserializers.custom.deserialize(this.req, parent, paramValue, paramName, paramType)
-        }
-        // Case 4: Smart String ( e.g. PhoneUS, Email, SSN, ZipCode )
-        else if (cls.supertypes.indexOf(KTypes.KSmartValueType) >= 0) {
-            deserializers.smart.deserialize(this.req, parent, paramValue, paramName, paramType)
-        }
-        // Case 5: Slate Kit Enm
-        else if (cls.supertypes.indexOf(KTypes.KEnumLikeType) >= 0) {
-            deserializers.enums.deserialize(this.req, parent, paramValue, paramName, paramType)
-        }
-        // Case 6: Class / Object
-        else {
-            deserializers.objs.deserialize(this.req, parent, paramValue, paramName, paramType)!!
-        }
     }
 }
