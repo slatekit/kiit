@@ -247,11 +247,12 @@ class DeserializerTests {
 
 
     fun test_context_converter(actor:Self, tstr:String, tbool:Boolean):Unit {}
+
+
     @Test fun can_parse_custom_types_using_context(){
         val test = """{
                 "tstr": "abc",
-                "tbool": false,
-                "actor": "user999"
+                "tbool": false
             }""".trimIndent()
         val req = CommonRequest("a.b.c", listOf("a", "b", "c"), Source.CLI, "post",
                 InputArgs(mapOf(Pair("movie", "batman"))), InputArgs(mapOf("Authorization" to "a.user123.c")))
@@ -262,6 +263,26 @@ class DeserializerTests {
         Assert.assertTrue(results[1] == "abc")
         Assert.assertTrue(results[2] == false )
     }
+
+
+    @Test fun can_parse_custom_types_using_context_with_override(){
+        val test = """{
+                "tstr": "abc",
+                "tbool": false,
+                "actor": "user999"
+            }""".trimIndent()
+        val req = CommonRequest("a.b.c", listOf("a", "b", "c"), Source.CLI, "post",
+                InputArgs(mapOf(Pair("movie", "batman"))), InputArgs(mapOf("Authorization" to "a.user123.c")))
+
+        val deserializer = Deserializer(req, null, mapOf(Pair(Self::class.qualifiedName!!, JWTSelfDecoder())))
+        val results = deserializer.deserialize(this::test_context_converter.parameters, test)
+        Assert.assertTrue(results[0] == Self("user999"))
+        Assert.assertTrue(results[1] == "abc")
+        Assert.assertTrue(results[2] == false )
+    }
+
+
+
     data class Self(val uuid:String)
     class JWTSelfDecoder : Transformer<Self>(Self::class.java), JSONRestoreWithContext<Self>{
 

@@ -90,7 +90,7 @@ class CustomDeserializer(override val conversion: Conversion,
         }
         val result = when(decoder) {
             is JSONRestoreWithContext<*> -> {
-                decoder.restore(context, json, "")
+                decoder.restore(context, json, paramName)
             }
             else -> {
                 decoder?.restore(json)
