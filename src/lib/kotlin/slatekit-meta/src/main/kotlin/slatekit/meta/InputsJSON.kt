@@ -1,6 +1,7 @@
 package slatekit.meta
 
 import org.json.simple.JSONObject
+import org.json.simple.parser.JSONParser
 import org.threeten.bp.*
 import slatekit.common.*
 import slatekit.common.crypto.Encryptor
@@ -59,4 +60,14 @@ data class InputsJSON(
     }
 
     fun getStringRaw(key: String): String = getInternalString(key).trim()
+
+
+    companion object {
+
+        fun of(text:String, enc:Encryptor? = null):InputsJSON {
+            val parser = JSONParser()
+            val json = parser.parse(text) as JSONObject
+            return InputsJSON(text, enc, json)
+        }
+    }
 }

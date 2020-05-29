@@ -282,6 +282,24 @@ class DeserializerTests {
     }
 
 
+    @Test fun can_parse_custom_types_using_context_with_override_using_JSON(){
+        val test = """{
+                "tstr": "abc",
+                "tbool": false,
+                "actor": "user901"
+            }""".trimIndent()
+        val json = InputsJSON.of(test)
+        val req = CommonRequest("a.b.c", listOf("a", "b", "c"), Source.CLI, "post",
+                json, InputArgs(mapOf("Authorization" to "a.user123.c")))
+
+        val deserializer = Deserializer(req, null, mapOf(Pair(Self::class.qualifiedName!!, JWTSelfDecoder())))
+        val results = deserializer.deserialize(this::test_context_converter.parameters)
+        Assert.assertTrue(results[0] == Self("user901"))
+        Assert.assertTrue(results[1] == "abc")
+        Assert.assertTrue(results[2] == false )
+    }
+
+
 
     data class Self(val uuid:String)
     class JWTSelfDecoder : Transformer<Self>(Self::class.java), JSONRestoreWithContext<Self>{
