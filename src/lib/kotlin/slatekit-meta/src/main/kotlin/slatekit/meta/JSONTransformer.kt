@@ -27,3 +27,15 @@ interface JSONTransformer<S> : Transformer<S, JSONObject, String> {
         }
     }
 }
+
+
+
+interface JSONRestoreWithContext<S> : Transformer<S, JSONObject, String> {
+
+    /**
+     * Enriched method with access to context
+     */
+    fun <C> restore(ctx:C, output: JSONObject?): S? {
+        return restore(output)
+    }
+}

@@ -37,9 +37,9 @@ open class Deserializer(
         private val decoders: Map<String, JSONTransformer<*>> = mapOf()
 ) {
 
-    private val conversion = Conversion(this::convert)
+    private val conversion  = Conversion(this::convert)
     private val typeRequest = Request::class.createType()
-    private val typeMeta = Metadata::class.createType()
+    private val typeMeta    = Metadata::class.createType()
 
 
     /**
@@ -148,7 +148,7 @@ open class Deserializer(
      */
     fun convert(parent: Any, raw: Any?, paramType: KType): Any? {
         return when (paramType.classifier) {
-        // Basic types
+            // Basic types
             KTypes.KStringType.classifier -> raw?.let { Conversions.handleString(it) }
             KTypes.KBoolType.classifier -> raw?.toString()?.toBoolean()
             KTypes.KShortType.classifier -> raw?.toString()?.toShort()
@@ -243,9 +243,7 @@ open class Deserializer(
         } else if (cls == Map::class) {
             handleMap(raw, tpe)
         } else if (decoders.containsKey(fullName)) {
-            val decoder = decoders[fullName]
-            val objectJson = raw as JSONObject
-            decoder?.restore(objectJson)
+            handleCustom(parent, raw, tpe)
         }
         // Case 3: Smart String ( e.g. PhoneUS, Email, SSN, ZipCode )
         // Refer to slatekit.common.types
@@ -258,6 +256,23 @@ open class Deserializer(
         } else {
             handleObject(raw, tpe)!!
         }
+    }
+
+
+    private fun handleCustom(parent:Any, raw:Any?, tpe:KType):Any? {
+        val cls = tpe.classifier as KClass<*>
+        val fullName = cls.qualifiedName
+        val decoder = decoders[fullName]
+        val json = ( raw ?: parent ) as JSONObject
+        val result = when(decoder) {
+            is JSONRestoreWithContext<*> -> {
+                decoder.restore(this.req, json)
+            }
+            else -> {
+                decoder?.restore(json)
+            }
+        }
+        return result
     }
 
     /**
