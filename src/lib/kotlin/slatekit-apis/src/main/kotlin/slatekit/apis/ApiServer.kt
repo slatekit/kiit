@@ -19,6 +19,7 @@ import slatekit.policy.Input
 import slatekit.policy.Output
 import slatekit.policy.Processor
 import slatekit.meta.*
+import slatekit.meta.deserializer.Deserializer
 import slatekit.policy.Process
 import slatekit.results.*
 import slatekit.results.builders.Notices
