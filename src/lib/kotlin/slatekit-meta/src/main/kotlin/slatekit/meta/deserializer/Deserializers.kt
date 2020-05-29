@@ -4,6 +4,7 @@ import org.json.simple.JSONArray
 import org.json.simple.JSONObject
 import slatekit.common.Conversions
 import slatekit.common.crypto.*
+import slatekit.common.requests.Request
 import slatekit.meta.*
 import java.util.*
 import kotlin.reflect.KClass
@@ -26,7 +27,8 @@ class BasicDeserializer(override val conversion: Conversion,
 
     override fun deserialize(context:Any, parent:Any, paramValue:Any?, paramName:String, paramType: KType):Any? {
         val result = when (paramType.classifier) {
-            // Basic types
+
+            // Basic
             KTypes.KStringType.classifier -> paramValue?.let { Conversions.handleString(it) }
             KTypes.KBoolType.classifier -> paramValue?.toString()?.toBoolean()
             KTypes.KShortType.classifier -> paramValue?.toString()?.toShort()
@@ -34,17 +36,25 @@ class BasicDeserializer(override val conversion: Conversion,
             KTypes.KLongType.classifier -> paramValue?.toString()?.toLong()
             KTypes.KFloatType.classifier -> paramValue?.toString()?.toFloat()
             KTypes.KDoubleType.classifier -> paramValue?.toString()?.toDouble()
+
+            // Dates
             KTypes.KLocalDateType.classifier -> paramValue?.let { Conversions.toLocalDate(it as String) }
             KTypes.KLocalTimeType.classifier -> paramValue?.let { Conversions.toLocalTime(it as String) }
             KTypes.KLocalDateTimeType.classifier -> paramValue?.let { Conversions.toLocalDateTime(it as String) }
             KTypes.KZonedDateTimeType.classifier -> paramValue?.let { Conversions.toZonedDateTime(it as String) }
             KTypes.KDateTimeType.classifier -> paramValue?.let { Conversions.toDateTime(it as String) }
+
+            // Encrypted
             KTypes.KDecIntType.classifier -> enc?.let { e -> EncInt(paramValue as String, e.decrypt(paramValue).toInt()) } ?: EncInt("", 0)
             KTypes.KDecLongType.classifier -> enc?.let { e -> EncLong(paramValue as String, e.decrypt(paramValue).toLong()) } ?: EncLong("", 0L)
             KTypes.KDecDoubleType.classifier -> enc?.let { e -> EncDouble(paramValue as String, e.decrypt(paramValue).toDouble()) } ?: EncDouble("", 0.0)
             KTypes.KDecStringType.classifier -> enc?.let { e -> EncString(paramValue as String, e.decrypt(paramValue)) } ?: EncString("", "")
+
+            // Slate Kit
             KTypes.KVarsType.classifier -> paramValue?.let { Conversions.toVars(it) }
+            KTypes.KDocType.classifier  -> conversion.toDoc(context as Request, paramName)
             KTypes.KUUIDType.classifier -> UUID.fromString(paramValue.toString())
+
             else -> null
         }
         return result

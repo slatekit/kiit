@@ -87,7 +87,7 @@ class CallTests {
         fun ensureTypes(inputs: InputArgs):Unit {
             val req = CommonRequest("app.users.testTypes", listOf("app", "users", "testTypes"), Source.CLI, "post", inputs, InputArgs(mapOf()))
             val deserializer = Deserializer(req)
-            val method = Reflector.getMethod(UserApi::class, "testTypes")
+            val method = Reflector.getMethod(UserApi::class, UserApi::testTypes.name)
             val args = deserializer.deserialize(method!!.parameters.drop(1))
 
             Assert.assertTrue(args.size == 8)

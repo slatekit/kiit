@@ -71,6 +71,7 @@ open class Deserializer(
             KTypes.KDecDoubleClass.qualifiedName!! to true,
             KTypes.KDecStringClass.qualifiedName!! to true,
             KTypes.KVarsClass.qualifiedName!! to true,
+            KTypes.KDocClass.qualifiedName!! to true,
             KTypes.KUUIDClass.qualifiedName!! to true
     )
 
@@ -122,45 +123,22 @@ open class Deserializer(
             val parameter = parameters[ndx]
             val paramName = parameter.name!!
             val paramType = parameter.type
+            val paramCls = paramType.classifier as KClass<*>
             val result:Any? = try {
-                when (paramType) {
-
-                    // Basic types
-                    KTypes.KStringType -> Conversions.handleString(data.getString(paramName))
-                    KTypes.KBoolType -> data.getBool(paramName)
-                    KTypes.KShortType -> data.getShort(paramName)
-                    KTypes.KIntType -> data.getInt(paramName)
-                    KTypes.KLongType -> data.getLong(paramName)
-                    KTypes.KFloatType -> data.getFloat(paramName)
-                    KTypes.KDoubleType -> data.getDouble(paramName)
-                    KTypes.KLocalDateType -> data.getLocalDate(paramName)
-                    KTypes.KLocalTimeType -> data.getLocalTime(paramName)
-                    KTypes.KLocalDateTimeType -> data.getLocalDateTime(paramName)
-                    KTypes.KZonedDateTimeType -> data.getZonedDateTime(paramName)
-                    KTypes.KDateTimeType -> data.getDateTime(paramName)
-                    KTypes.KUUIDType -> UUID.fromString(data.getString(paramName))
-
-                    // Raw request
-                    typeRequest -> req
-
-                    // Raw meta
-                    typeMeta -> meta
-
-                    // Doc/File reference ( only if allowed )
-                    KTypes.KDocType -> conversion.toDoc(req, paramName)
-
-                    // Map from string string delimited pairs
-                    KTypes.KVarsType -> Conversions.toVars(data.getString(paramName))
-
-                    // Decryption from encrypted types
-                    KTypes.KDecIntType -> enc?.let { e -> EncInt(data.getString(paramName), e.decrypt(data.getString(paramName)).toInt()) } ?: EncInt("", 0)
-                    KTypes.KDecLongType -> enc?.let { e -> EncLong(data.getString(paramName), e.decrypt(data.getString(paramName)).toLong()) } ?: EncLong("", 0L)
-                    KTypes.KDecDoubleType -> enc?.let { e -> EncDouble(data.getString(paramName), e.decrypt(data.getString(paramName)).toDouble()) } ?: EncDouble("", 0.0)
-                    KTypes.KDecStringType -> enc?.let { e -> EncString(data.getString(paramName), e.decrypt(data.getString(paramName))) } ?: EncString("", "")
-
-                    // Complex type
-                    else -> {
-                        handleComplex(data, parameter, paramType, jsonRaw, data.get(paramName))
+                val isBasicType = basicTypes.containsKey(paramCls.qualifiedName)
+                when(isBasicType) {
+                    true -> {
+                        val paramValue = data.get(paramName)
+                        deserializers.basic.deserialize(this.req, inputs, paramValue, paramName, paramType)
+                    }
+                    false -> {
+                        when(paramType) {
+                            typeRequest -> req
+                            typeMeta -> meta
+                            else -> {
+                                handleComplex(data, parameter, paramType, jsonRaw, data.get(paramName))
+                            }
+                        }
                     }
                 }
             }
