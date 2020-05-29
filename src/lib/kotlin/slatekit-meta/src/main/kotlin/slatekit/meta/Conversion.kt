@@ -13,38 +13,38 @@ import kotlin.reflect.KClass
 import kotlin.reflect.KType
 import kotlin.reflect.full.companionObjectInstance
 
-class Conversion(val converter: (parent: Any, raw: Any?, paramType: KType) -> Any?) {
+class Conversion(val converter: (parent: Any, raw: Any?, paramName:String, paramType: KType) -> Any?) {
 
-    fun toList(source: JSONArray, tpe: KType): List<*> {
+    fun toList(source: JSONArray, name:String, tpe: KType): List<*> {
         val items = source.map { item ->
-            item?.let { jsonItem -> converter(source, jsonItem, tpe) }
+            item?.let { jsonItem -> converter(source, jsonItem, name, tpe) }
         }.filterNotNull()
         return items
     }
 
-    fun toMap(source: JSONObject, tpeKey: KType, tpeVal: KType): Map<*, *> {
+    fun toMap(source: JSONObject, name:String, tpeKey: KType, tpeVal: KType): Map<*, *> {
         val keyConverter = Conversions.converterFor(tpeKey.javaClass)
         val items = source.map { entry ->
             val key = keyConverter(entry.key?.toString()!!)
-            val keyVal = converter(source, entry.value, tpeVal)
+            val keyVal = converter(source, entry.value, name, tpeVal)
             Pair(key, keyVal)
         }.filterNotNull().toMap()
         return items
     }
 
-    fun toObject(source: JSONObject, tpe: KType): Any {
+    fun toObject(source: JSONObject, name:String, tpe: KType): Any {
         val cls = tpe.classifier as KClass<*>
         val props = Reflector.getProperties(cls)
         val items = props.map { prop ->
             val raw = source.get(prop.name)
-            val converted = converter(source, raw, prop.returnType)
+            val converted = converter(source, raw, name, prop.returnType)
             converted
         }
         val instance = Reflector.createWithArgs<Any>(cls, items.toTypedArray())
         return instance
     }
 
-    fun toSmartValue(source: String, tpe: KType): SmartValue {
+    fun toSmartValue(source: String, name:String, tpe: KType): SmartValue {
 
         val cls = tpe.classifier as KClass<*>
         val creator = cls.companionObjectInstance as SmartCreation<*>

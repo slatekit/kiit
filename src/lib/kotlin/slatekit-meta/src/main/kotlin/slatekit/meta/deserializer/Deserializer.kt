@@ -10,15 +10,18 @@ about: A Kotlin utility library, tool-kit and server backend.
 mantra: Simplicity above all else
 </slate_header>
  */
-package slatekit.meta
+package slatekit.meta.deserializer
 
-import org.json.simple.JSONArray
 import org.json.simple.JSONObject
 import org.json.simple.parser.JSONParser
 import slatekit.common.*
 import slatekit.common.crypto.*
 import slatekit.common.requests.InputArgs
 import slatekit.common.requests.Request
+import slatekit.meta.Conversion
+import slatekit.meta.JSONTransformer
+import slatekit.meta.KTypes
+import slatekit.meta.Reflector
 import slatekit.results.Err
 import slatekit.results.ExceptionErr
 import java.util.*
@@ -40,6 +43,7 @@ open class Deserializer(
     private val conversion  = Conversion(this::convert)
     private val typeRequest = Request::class.createType()
     private val typeMeta    = Metadata::class.createType()
+    private val deserializers = Deserializers(conversion, decoders)
 
 
     /**
@@ -72,7 +76,7 @@ open class Deserializer(
         val paramName = parameter.name!!
         val paramType = parameter.type
         val data = jsonObj.get(paramName)
-        val result = convert(jsonObj, data, paramType)
+        val result = convert(jsonObj, data, paramName, paramType)
         return result
     }
 
@@ -146,30 +150,30 @@ open class Deserializer(
     /**
      * converts
      */
-    fun convert(parent: Any, raw: Any?, paramType: KType): Any? {
+    fun convert(parent: Any, paramValue: Any?, paramName:String, paramType: KType): Any? {
         return when (paramType.classifier) {
             // Basic types
-            KTypes.KStringType.classifier -> raw?.let { Conversions.handleString(it) }
-            KTypes.KBoolType.classifier -> raw?.toString()?.toBoolean()
-            KTypes.KShortType.classifier -> raw?.toString()?.toShort()
-            KTypes.KIntType.classifier -> raw?.toString()?.toInt()
-            KTypes.KLongType.classifier -> raw?.toString()?.toLong()
-            KTypes.KFloatType.classifier -> raw?.toString()?.toFloat()
-            KTypes.KDoubleType.classifier -> raw?.toString()?.toDouble()
-            KTypes.KLocalDateType.classifier -> raw?.let { Conversions.toLocalDate(it as String) }
-            KTypes.KLocalTimeType.classifier -> raw?.let { Conversions.toLocalTime(it as String) }
-            KTypes.KLocalDateTimeType.classifier -> raw?.let { Conversions.toLocalDateTime(it as String) }
-            KTypes.KZonedDateTimeType.classifier -> raw?.let { Conversions.toZonedDateTime(it as String) }
-            KTypes.KDateTimeType.classifier -> raw?.let { Conversions.toDateTime(it as String) }
-            KTypes.KDecIntType.classifier -> enc?.let { e -> EncInt(raw as String, e.decrypt(raw).toInt()) } ?: EncInt("", 0)
-            KTypes.KDecLongType.classifier -> enc?.let { e -> EncLong(raw as String, e.decrypt(raw).toLong()) } ?: EncLong("", 0L)
-            KTypes.KDecDoubleType.classifier -> enc?.let { e -> EncDouble(raw as String, e.decrypt(raw).toDouble()) } ?: EncDouble("", 0.0)
-            KTypes.KDecStringType.classifier -> enc?.let { e -> EncString(raw as String, e.decrypt(raw)) } ?: EncString("", "")
-            KTypes.KVarsType.classifier -> raw?.let { Conversions.toVars(it) }
-            KTypes.KUUIDType.classifier -> UUID.fromString(raw.toString())
+            KTypes.KStringType.classifier -> paramValue?.let { Conversions.handleString(it) }
+            KTypes.KBoolType.classifier -> paramValue?.toString()?.toBoolean()
+            KTypes.KShortType.classifier -> paramValue?.toString()?.toShort()
+            KTypes.KIntType.classifier -> paramValue?.toString()?.toInt()
+            KTypes.KLongType.classifier -> paramValue?.toString()?.toLong()
+            KTypes.KFloatType.classifier -> paramValue?.toString()?.toFloat()
+            KTypes.KDoubleType.classifier -> paramValue?.toString()?.toDouble()
+            KTypes.KLocalDateType.classifier -> paramValue?.let { Conversions.toLocalDate(it as String) }
+            KTypes.KLocalTimeType.classifier -> paramValue?.let { Conversions.toLocalTime(it as String) }
+            KTypes.KLocalDateTimeType.classifier -> paramValue?.let { Conversions.toLocalDateTime(it as String) }
+            KTypes.KZonedDateTimeType.classifier -> paramValue?.let { Conversions.toZonedDateTime(it as String) }
+            KTypes.KDateTimeType.classifier -> paramValue?.let { Conversions.toDateTime(it as String) }
+            KTypes.KDecIntType.classifier -> enc?.let { e -> EncInt(paramValue as String, e.decrypt(paramValue).toInt()) } ?: EncInt("", 0)
+            KTypes.KDecLongType.classifier -> enc?.let { e -> EncLong(paramValue as String, e.decrypt(paramValue).toLong()) } ?: EncLong("", 0L)
+            KTypes.KDecDoubleType.classifier -> enc?.let { e -> EncDouble(paramValue as String, e.decrypt(paramValue).toDouble()) } ?: EncDouble("", 0.0)
+            KTypes.KDecStringType.classifier -> enc?.let { e -> EncString(paramValue as String, e.decrypt(paramValue)) } ?: EncString("", "")
+            KTypes.KVarsType.classifier -> paramValue?.let { Conversions.toVars(it) }
+            KTypes.KUUIDType.classifier -> UUID.fromString(paramValue.toString())
 
             // Complex type
-            else -> handleComplex(parent, raw, paramType)
+            else -> handleComplex(parent, paramValue, paramName, paramType)
         }
     }
 
@@ -182,9 +186,9 @@ open class Deserializer(
         val cls = tpe.classifier as KClass<*>
 
         val result = if (cls.supertypes.indexOf(KTypes.KSmartValueType) >= 0) {
-            handleSmartValue(raw, tpe)
+            deserializers.smart.deserialize(this.req, data, raw, paramName, tpe)
         } else if (cls.supertypes.indexOf(KTypes.KSmartValuedType) >= 0) {
-            handleSmartValue(raw, tpe)
+            deserializers.smart.deserialize(this.req, data, raw, paramName, tpe)
         } else if (cls.supertypes.indexOf(KTypes.KEnumLikeType) >= 0) {
             val enumVal = data.get(paramName)
             Reflector.getEnumValue(cls, enumVal)
@@ -207,7 +211,7 @@ open class Deserializer(
             // Case 3: Smart String ( e.g. PhoneUS, Email, SSN, ZipCode )
             // Refer to slatekit.common.types
             else if (cls.supertypes.indexOf(KTypes.KSmartValueType) >= 0) {
-                handleSmartValue(raw, tpe)
+                deserializers.smart.deserialize(this.req, data, raw, paramName, tpe)
             }
             // Case 4: Object / Complex type
             else {
@@ -236,97 +240,31 @@ open class Deserializer(
      * @param paramName
      * @return
      */
-    private fun handleComplex(parent: Any, raw: Any?, tpe: KType): Any? {
-        val cls = tpe.classifier as KClass<*>
+    private fun handleComplex(parent: Any, paramValue: Any?, paramName:String, paramType: KType): Any? {
+        val cls = paramType.classifier as KClass<*>
         val fullName = cls.qualifiedName
         return if (cls == List::class) {
-            handleList(raw, tpe)
-        } else if (cls == Map::class) {
-            handleMap(raw, tpe)
-        } else if (decoders.containsKey(fullName)) {
-            handleCustom(parent, raw, tpe)
+            deserializers.lists.deserialize(this.req, parent, paramValue, paramName, paramType)
         }
-        // Case 3: Smart String ( e.g. PhoneUS, Email, SSN, ZipCode )
-        // Refer to slatekit.common.types
+        // Case 2: Map
+        else if (cls == Map::class) {
+            deserializers.maps.deserialize(this.req, parent, paramValue, paramName, paramType)
+        }
+        // Case 3: Custom Decoders ( for custom types )
+        else if (decoders.containsKey(fullName)) {
+            deserializers.custom.deserialize(this.req, parent, paramValue, paramName, paramType)
+        }
+        // Case 4: Smart String ( e.g. PhoneUS, Email, SSN, ZipCode )
         else if (cls.supertypes.indexOf(KTypes.KSmartValueType) >= 0) {
-            handleSmartValue(raw, tpe)
+            deserializers.smart.deserialize(this.req, parent, paramValue, paramName, paramType)
         }
-        // Case 4: Slate Kit Enm
+        // Case 5: Slate Kit Enm
         else if (cls.supertypes.indexOf(KTypes.KEnumLikeType) >= 0) {
-            Reflector.getEnumValue(cls, raw)
-        } else {
-            handleObject(raw, tpe)!!
+            deserializers.enums.deserialize(this.req, parent, paramValue, paramName, paramType)
         }
-    }
-
-
-    private fun handleCustom(parent:Any, raw:Any?, tpe:KType):Any? {
-        val cls = tpe.classifier as KClass<*>
-        val fullName = cls.qualifiedName
-        val decoder = decoders[fullName]
-        val json = when(raw) {
-            is JSONObject -> raw
-            else -> parent as JSONObject
-        }
-        val result = when(decoder) {
-            is JSONRestoreWithContext<*> -> {
-                decoder.restore(this.req, json)
-            }
-            else -> {
-                decoder?.restore(json)
-            }
-        }
-        return result
-    }
-
-
-    /**
-     * Handles building of a list from various source types
-     * @param args
-     * @param paramName
-     * @return
-     */
-    private fun handleList(raw: Any?, tpe: KType): List<*> {
-        val listType = tpe.arguments[0]!!.type!!
-        return when (raw) {
-            is JSONArray -> conversion.toList(raw, listType)
-            else -> handle(raw, listOf<Any>()) { listOf<Any>() } as List<*>
-        }
-    }
-
-
-    /**
-     * Handle building of a map from various sources
-     */
-    private fun handleMap(raw: Any?, tpe: KType): Map<*, *>? {
-        val tpeKey = tpe.arguments[0].type!!
-        val tpeVal = tpe.arguments[1].type!!
-        val emptyMap = mapOf<Any, Any>()
-        val items = when (raw) {
-            is JSONObject -> conversion.toMap(raw, tpeKey, tpeVal)
-            else -> handle(raw, emptyMap) { emptyMap } as Map<*, *>
-        }
-        return items
-    }
-
-
-    private fun handleSmartValue(raw: Any?, paramType: KType): Any? {
-        return handle(raw, null) { conversion.toSmartValue(raw?.toString() ?: "", paramType) }
-    }
-
-
-    private fun handleObject(raw: Any?, paramType: KType): Any? {
-        return when (raw) {
-            is JSONObject -> conversion.toObject(raw, paramType)
-            else -> handle(raw, null) { null }
-        }
-    }
-
-
-    private fun handle(raw:Any?, nullValue:Any?, elseValue:() -> Any?):Any? {
-        return when (raw) {
-            null   -> nullValue
-            else   -> elseValue()
+        // Case 6: Class / Object
+        else {
+            deserializers.objs.deserialize(this.req, parent, paramValue, paramName, paramType)!!
         }
     }
 }

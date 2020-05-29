@@ -35,7 +35,7 @@ interface JSONRestoreWithContext<S> : Transformer<S, JSONObject, String> {
     /**
      * Enriched method with access to context
      */
-    fun <C> restore(ctx:C, output: JSONObject?): S? {
-        return restore(output)
+    fun <C> restore(ctx:C, model: JSONObject?, key:String): S? {
+        return restore(model)
     }
 }

@@ -20,7 +20,7 @@ import slatekit.common.requests.InputArgs
 import slatekit.common.requests.CommonRequest
 import slatekit.common.Source
 import slatekit.meta.Reflector
-import slatekit.meta.Deserializer
+import slatekit.meta.deserializer.Deserializer
 import test.setup.UserApi
 
 /**

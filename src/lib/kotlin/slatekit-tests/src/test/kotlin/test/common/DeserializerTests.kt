@@ -18,6 +18,7 @@ import slatekit.common.requests.CommonRequest
 import slatekit.common.Source
 import slatekit.common.requests.Request
 import slatekit.meta.*
+import slatekit.meta.deserializer.Deserializer
 import test.setup.MyEncryptor
 import test.setup.StatusEnum
 import java.util.*
@@ -186,7 +187,7 @@ class DeserializerTests {
         val decoder = Transformer(Movie::class.java, null) { _, _ ->
             Movie(0L, "batman", cost = 0, rating = 4.0, released = DateTime.now() )
         }
-        val deserializer = Deserializer( req,null, mapOf(Pair(Movie::class.qualifiedName!!, decoder)))
+        val deserializer = Deserializer(req, null, mapOf(Pair(Movie::class.qualifiedName!!, decoder)))
         val results = deserializer.deserialize(this::test_custom_converter.parameters, test)
         Assert.assertTrue(results[0] == "abc")
         Assert.assertTrue(results[1] == false)
@@ -211,7 +212,7 @@ class DeserializerTests {
         val req = CommonRequest("a.b.c", listOf("a", "b", "c"), Source.CLI, "post",
                 InputArgs(mapOf()), InputArgs(mapOf(Pair("movie", "batman"))))
 
-        val deserializer = Deserializer( req,null, mapOf(Pair(Movie::class.qualifiedName!!, MovieDecoder())))
+        val deserializer = Deserializer(req, null, mapOf(Pair(Movie::class.qualifiedName!!, MovieDecoder())))
         val results = deserializer.deserialize(this::test_custom_converter.parameters, test)
         Assert.assertTrue(results[0] == "abc")
         Assert.assertTrue(results[1] == false)
@@ -255,7 +256,7 @@ class DeserializerTests {
         val req = CommonRequest("a.b.c", listOf("a", "b", "c"), Source.CLI, "post",
                 InputArgs(mapOf(Pair("movie", "batman"))), InputArgs(mapOf("Authorization" to "a.user123.c")))
 
-        val deserializer = Deserializer( req,null, mapOf(Pair(Self::class.qualifiedName!!, JWTSelfDecoder())))
+        val deserializer = Deserializer(req, null, mapOf(Pair(Self::class.qualifiedName!!, JWTSelfDecoder())))
         val results = deserializer.deserialize(this::test_context_converter.parameters, test)
         Assert.assertTrue(results[0] == Self("user123"))
         Assert.assertTrue(results[1] == "abc")
@@ -264,7 +265,7 @@ class DeserializerTests {
     data class Self(val uuid:String)
     class JWTSelfDecoder : Transformer<Self>(Self::class.java), JSONRestoreWithContext<Self>{
 
-        override fun <T> restore(ctx: T, output: JSONObject?): Self? {
+        override fun <T> restore(ctx: T, model: JSONObject?, key:String): Self? {
             if(!(ctx is Request)) throw Exception("Request not available")
             if(!ctx.meta.containsKey("Authorization")) throw Exception("JWT Not found")
 
@@ -272,7 +273,13 @@ class DeserializerTests {
             val token = ctx.meta.getString("Authorization")
             val parts = token.split(".")
             val uuidFromToken = parts[1]
-            return Self(uuidFromToken)
+
+            val exists = model?.containsKey(key) ?: false
+            val tokenFinal = when(exists) {
+                true -> model?.get(key) as String
+                false -> uuidFromToken
+            }
+            return Self(tokenFinal)
         }
     }
 
