@@ -249,7 +249,8 @@ class DeserializerTests {
     @Test fun can_parse_custom_types_using_context(){
         val test = """{
                 "tstr": "abc",
-                "tbool": false
+                "tbool": false,
+                "actor": "user999"
             }""".trimIndent()
         val req = CommonRequest("a.b.c", listOf("a", "b", "c"), Source.CLI, "post",
                 InputArgs(mapOf(Pair("movie", "batman"))), InputArgs(mapOf("Authorization" to "a.user123.c")))

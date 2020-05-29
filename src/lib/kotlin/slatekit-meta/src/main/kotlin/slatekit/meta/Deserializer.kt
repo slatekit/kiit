@@ -229,6 +229,7 @@ open class Deserializer(
         return result
     }
 
+
     /**
      * Handles building of a list from various source types
      * @param args
@@ -263,7 +264,10 @@ open class Deserializer(
         val cls = tpe.classifier as KClass<*>
         val fullName = cls.qualifiedName
         val decoder = decoders[fullName]
-        val json = ( raw ?: parent ) as JSONObject
+        val json = when(raw) {
+            is JSONObject -> raw
+            else -> parent as JSONObject
+        }
         val result = when(decoder) {
             is JSONRestoreWithContext<*> -> {
                 decoder.restore(this.req, json)
@@ -274,6 +278,7 @@ open class Deserializer(
         }
         return result
     }
+
 
     /**
      * Handles building of a list from various source types
@@ -289,6 +294,7 @@ open class Deserializer(
         }
     }
 
+
     /**
      * Handle building of a map from various sources
      */
@@ -303,9 +309,11 @@ open class Deserializer(
         return items
     }
 
+
     private fun handleSmartValue(raw: Any?, paramType: KType): Any? {
         return handle(raw, null) { conversion.toSmartValue(raw?.toString() ?: "", paramType) }
     }
+
 
     private fun handleObject(raw: Any?, paramType: KType): Any? {
         return when (raw) {
@@ -313,6 +321,7 @@ open class Deserializer(
             else -> handle(raw, null) { null }
         }
     }
+
 
     private fun handle(raw:Any?, nullValue:Any?, elseValue:() -> Any?):Any? {
         return when (raw) {
