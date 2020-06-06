@@ -17,6 +17,18 @@ class SampleApi(context: AppEntContext): ApiBase(context) {
     fun defaultAnnotationValues(string1: String): String {
         return "$string1"
     }
+
+
+    @Action(desc = "test partial override", auth = AuthModes.KEYED, roles= ["user"])
+    fun overridePartial(string1: String): String {
+        return "$string1"
+    }
+
+
+    @Action(desc = "test overrides", auth = AuthModes.KEYED, roles= ["user"], sources = [Sources.CLI], access = AccessLevel.INTERNAL)
+    fun overrideFull(string1: String): String {
+        return "$string1"
+    }
 }
 
 
