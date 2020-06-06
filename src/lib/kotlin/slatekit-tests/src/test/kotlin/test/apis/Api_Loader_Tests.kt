@@ -52,20 +52,55 @@ class Api_Loader_Tests : ApiTestsBase() {
 
     @Test fun can_load_api_from_annotations_with_defaults() {
         val api = AnnoLoader(SampleApi::class).loadApi(null)
-        Assert.assertTrue(api.actions.size == 1)
+        Assert.assertTrue(api.actions.size == 3)
         Assert.assertTrue(api.area == "app")
         Assert.assertTrue(api.name == "tests")
         Assert.assertTrue(api.desc == "sample to test features of Slate Kit APIs")
         Assert.assertTrue(api.roles.contains("admin"))
         Assert.assertTrue(api.auth == AuthMode.Token)
         Assert.assertTrue(api.verb == Verb.Auto)
+        Assert.assertTrue(api.sources == Sources(listOf(Source.All)))
+        Assert.assertTrue(api.access == Access.Public)
         Assert.assertTrue(api.protocol == Source.All)
 
-        val action = api.actions.items[0]
-        Assert.assertTrue(action.name == "defaultAnnotationValues")
+        val action = api.actions.items.first { it.name == SampleApi::defaultAnnotationValues.name }
+        Assert.assertTrue(action.name == SampleApi::defaultAnnotationValues.name )
         Assert.assertTrue(action.protocol == api.protocol)
         Assert.assertTrue(action.verb == Verb.Post)
+        Assert.assertTrue(action.auth == AuthMode.Token)
         Assert.assertTrue(action.roles == api.roles)
+        Assert.assertTrue(action.params.size == 1)
+        Assert.assertTrue(action.paramsUser.size == 1)
+    }
+
+
+    @Test fun can_load_action_from_annotations_with_overrides_partial() {
+        val api = AnnoLoader(SampleApi::class).loadApi(null)
+
+        val action = api.actions.items.first { it.name == SampleApi::overridePartial.name }
+        Assert.assertTrue(action.name == SampleApi::overridePartial.name)
+        Assert.assertTrue(action.protocol == api.protocol)
+        Assert.assertTrue(action.verb == Verb.Post)
+        Assert.assertTrue(action.auth == AuthMode.Keyed)
+        Assert.assertTrue(action.roles == slatekit.apis.core.Roles(listOf("user")))
+        Assert.assertTrue(action.sources == api.sources)
+        Assert.assertTrue(action.access == api.access)
+        Assert.assertTrue(action.params.size == 1)
+        Assert.assertTrue(action.paramsUser.size == 1)
+    }
+
+
+    @Test fun can_load_action_from_annotations_with_overrides_full() {
+        val api = AnnoLoader(SampleApi::class).loadApi(null)
+
+        val action = api.actions.items.first { it.name == SampleApi::overrideFull.name }
+        Assert.assertTrue(action.name == SampleApi::overrideFull.name)
+        Assert.assertTrue(action.protocol == Source.CLI)
+        Assert.assertTrue(action.verb == Verb.Post)
+        Assert.assertTrue(action.auth == AuthMode.Keyed)
+        Assert.assertTrue(action.roles == slatekit.apis.core.Roles(listOf("user")))
+        Assert.assertTrue(action.sources == Sources(listOf(Source.CLI)))
+        Assert.assertTrue(action.access == Access.Internal)
         Assert.assertTrue(action.params.size == 1)
         Assert.assertTrue(action.paramsUser.size == 1)
     }

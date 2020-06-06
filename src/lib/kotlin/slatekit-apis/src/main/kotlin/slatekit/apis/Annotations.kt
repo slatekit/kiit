@@ -23,8 +23,8 @@ annotation class Api(
     val area: String = "",
     val name: String = "",
     val desc: String = "",
-    val roles: Array<String> = [],
     val auth: String = AuthModes.KEYED,
+    val roles: Array<String> = [],
     val verb: String = Verbs.AUTO,
     val access: String = AccessLevel.PUBLIC,
     val sources: Array<String> = [Sources.ALL],
@@ -50,6 +50,7 @@ annotation class Api(
 annotation class Action(
     val name: String = "",
     val desc: String = "",
+    val auth: String = AuthModes.PARENT,
     val roles: Array<String> = [],
     val verb: String = Verbs.AUTO,
     val access: String = AccessLevel.PARENT,
