@@ -45,4 +45,10 @@ class Sample_API_2_Roles {
   fun rolesParent(code:Int, tag:String): Outcome<String> {
     return Success("rolesParent", msg ="${code} ${tag}")
   }
+
+
+  @Action(desc = "", auth = AuthModes.KEYED, roles=[Roles.ALL])
+  fun authOverride(code:Int, tag:String): Outcome<String> {
+    return Success("authOverride", msg ="${code} ${tag}")
+  }
 }
