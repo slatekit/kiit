@@ -40,9 +40,9 @@ data class Api(
     val area: String = "",
     val name: String = "",
     val desc: String = "",
+    val auth: AuthMode = AuthMode.None,
     val roles: Roles = Roles.empty,
     val access: Access = Access.Public,
-    val auth: AuthMode = AuthMode.None,
     val sources: Sources = Sources.all,
     val verb: Verb = Verb.Auto,
     val declaredOnly: Boolean = true,
@@ -65,6 +65,6 @@ data class Api(
         verb: Verb = Verb.Auto,
         declaredOnly: Boolean = true,
         setup: SetupType = SetupType.Methods
-    ) : this(instance.kClass, area, name, desc, Roles(roles), access, auth, Sources(protocol), verb, declaredOnly, instance, setup)
+    ) : this(instance.kClass, area, name, desc, auth, Roles(roles), access, Sources(protocol), verb, declaredOnly, instance, setup)
 
 }

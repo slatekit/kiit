@@ -32,7 +32,7 @@ class Authorize(val auth: Auth?) : Input<ApiRequest>, Middleware {
             }
             // CASE 3: Proceed to authorize
             else {
-                val authResult = auth?.check(it.request, target.api.auth, actionRoles)
+                val authResult = auth?.check(it.request, target.action.auth, actionRoles)
                         ?: Outcomes.denied("Unable to authorize, authorization provider not set")
                 authResult.flatMap { i }
             }

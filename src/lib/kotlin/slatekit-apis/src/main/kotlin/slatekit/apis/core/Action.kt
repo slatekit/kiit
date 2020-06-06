@@ -36,9 +36,9 @@ data class Action(
     val member: KCallable<*>,
     val name: String = "",
     val desc: String = "",
+    val auth: AuthMode = AuthMode.Parent,
     val roles: Roles = Roles.empty,
     val access: Access = Access.Public,
-    val auth: AuthMode = AuthMode.Token,
     val sources: Sources = Sources.all,
     val verb: Verb = Verb.Auto,
     val tags: List<String> = listOf()

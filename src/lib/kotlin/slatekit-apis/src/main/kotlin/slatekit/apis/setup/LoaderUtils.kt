@@ -49,9 +49,9 @@ fun toApi(cls: KClass<*>, instance: Any?, access: Access?, namer: Namer?): slate
             anno.area,
             anno.name,
             anno.desc,
+            AuthMode.parse(anno.auth),
             Roles(anno.roles.toList()),
             accessAnno.min(access) ,
-            AuthMode.parse(anno.auth),
             Sources(anno.sources.toList().map { Source.parse(it) }),
             Verb.parse(anno.verb),
             false,
@@ -77,7 +77,7 @@ fun toApi(
     // Create initial temporary api
     // with all settings that can be used for override values
     val api = slatekit.apis.core.Api(cls, area, name, desc
-            ?: "", roles, access, auth, protocol, verb, local, singleton)
+            ?: "", auth, roles, access, protocol, verb, local, singleton)
     return api
 }
 
@@ -90,6 +90,7 @@ fun toAction(member: KCallable<*>, api: slatekit.apis.core.Api, apiAction: slate
     val actionTags = apiAction?.tags?.toList() ?: listOf()
 
     // Default these from api if empty
+    val actionAuth = AuthMode.parse( apiAction?.auth?.orElse(api.auth.name) ?: AuthModes.PARENT).orElse(api.auth)
     val actionRoles = Roles.of(apiAction?.roles ?: arrayOf()).orElse(api.roles)
     val actionAccess = (apiAction?.access?.let{ Access.parse(it) } ?: api.access).orElse(api.access)
     val actionProtocol = Sources.of(apiAction?.sources ?: arrayOf()).orElse(api.sources)
@@ -104,9 +105,9 @@ fun toAction(member: KCallable<*>, api: slatekit.apis.core.Api, apiAction: slate
             member,
             actionName,
             actionDesc,
+            actionAuth,
             actionRoles,
             actionAccess,
-            api.auth,
             actionProtocol,
             actionVerb,
             actionTags
