@@ -11,32 +11,21 @@ import slatekit.common.crypto.EncInt
 import slatekit.common.crypto.EncLong
 import slatekit.common.crypto.EncString
 import test.setup.Movie
-//import java.time.*
 import org.threeten.bp.*
 import slatekit.apis.core.Transformer
 import slatekit.common.DateTimes
 import slatekit.common.requests.CommonRequest
 import slatekit.common.Source
+import slatekit.common.requests.Request
 import slatekit.meta.*
+import slatekit.meta.deserializer.Deserializer
 import test.setup.MyEncryptor
 import test.setup.StatusEnum
 import java.util.*
 import kotlin.reflect.KClass
 import kotlin.reflect.KType
 
-class ConvertTests {
-
-    //val test = """{ "tstr": "abc", "tbool": false, "tint": 123, "tdoub": 123.45, "tarr": [false, 1, 1.12] }"""
-
-//    @Test fun can_get_fields() {
-//        val parser = JSONParser()
-//        val json = parser.parse(test) as JSONObject
-//        printInfo(json.get("tstr"))
-//        printInfo(json.get("tbool"))
-//        printInfo(json.get("tint"))
-//        printInfo(json.get("tdoub"))
-//        printInfo(json.get("tarr"))
-//    }
+class DeserializerTests {
 
 
     fun test_basic_types(tstr:String, tbool:Boolean, tshort:Short, tint:Int, tlong:Long, tdoub:Double):Unit {}
@@ -66,12 +55,12 @@ class ConvertTests {
 
 
     fun test_uuid(uid: UUID) {}
-    @Test fun can_parse_guids(){
-        val guid = Random.guid()
-        val test = """{ "uid": "$guid" }"""
+    @Test fun can_parse_uuids(){
+        val uuid = Random.uuid()
+        val test = """{ "uid": "$uuid" }"""
         val deserializer = Deserializer(CommonRequest.cli("a", "b", "c", "post", mapOf(), mapOf()))
         val results = deserializer.deserialize(this::test_uuid.parameters, test)
-        Assert.assertTrue(results[0] == UUID.fromString(guid))
+        Assert.assertTrue(results[0] == UUID.fromString(uuid))
     }
 
 
@@ -132,7 +121,7 @@ class ConvertTests {
         val test = """{ "sample1": { "tstr": "abc", "tbool": false, "tshort": 1, "tint": 12, "tlong": 123, "tdoub": 123.45 } }"""
         val deserializer = Deserializer(CommonRequest.cli("a", "b", "c", "post", mapOf(), mapOf()))
         val results = deserializer.deserialize(this::test_object.parameters, test)
-        Assert.assertTrue(results[0] == ConvertTests.SampleObject1("abc", false, 1, 12, 123, 123.45))
+        Assert.assertTrue(results[0] == DeserializerTests.SampleObject1("abc", false, 1, 12, 123, 123.45))
     }
 
 
@@ -147,8 +136,8 @@ class ConvertTests {
         val inputs = deserializer.deserialize(this::test_object_list.parameters, test)
         val results = inputs.get(0) as ArrayList<*>
         println(results)
-        Assert.assertTrue(results[0] == ConvertTests.SampleObject1("abc", false, 1, 12, 123, 123.45))
-        Assert.assertTrue(results[1] == ConvertTests.SampleObject1("def", true, 2, 34, 456, 678.91))
+        Assert.assertTrue(results[0] == DeserializerTests.SampleObject1("abc", false, 1, 12, 123, 123.45))
+        Assert.assertTrue(results[1] == DeserializerTests.SampleObject1("def", true, 2, 34, 456, 678.91))
     }
 
 
@@ -171,8 +160,8 @@ class ConvertTests {
         val results = deserializer.deserialize(this::test_nested_object_list.parameters, test)
         val item = results[1] as NestedObject1
         Assert.assertTrue(results[0] == "abc")
-        Assert.assertTrue(item.items[0] == ConvertTests.SampleObject1("abc", false, 1, 12, 123, 123.45))
-        Assert.assertTrue(item.items[1] == ConvertTests.SampleObject1("def", true, 2, 34, 456, 678.91))
+        Assert.assertTrue(item.items[0] == DeserializerTests.SampleObject1("abc", false, 1, 12, 123, 123.45))
+        Assert.assertTrue(item.items[1] == DeserializerTests.SampleObject1("def", true, 2, 34, 456, 678.91))
     }
 
 
@@ -198,7 +187,7 @@ class ConvertTests {
         val decoder = Transformer(Movie::class.java, null) { _, _ ->
             Movie(0L, "batman", cost = 0, rating = 4.0, released = DateTime.now() )
         }
-        val deserializer = Deserializer( req,null, mapOf(Pair(Movie::class.qualifiedName!!, decoder)))
+        val deserializer = Deserializer(req, null, mapOf(Pair(Movie::class.qualifiedName!!, decoder)))
         val results = deserializer.deserialize(this::test_custom_converter.parameters, test)
         Assert.assertTrue(results[0] == "abc")
         Assert.assertTrue(results[1] == false)
@@ -223,7 +212,7 @@ class ConvertTests {
         val req = CommonRequest("a.b.c", listOf("a", "b", "c"), Source.CLI, "post",
                 InputArgs(mapOf()), InputArgs(mapOf(Pair("movie", "batman"))))
 
-        val deserializer = Deserializer( req,null, mapOf(Pair(Movie::class.qualifiedName!!, MovieDecoder())))
+        val deserializer = Deserializer(req, null, mapOf(Pair(Movie::class.qualifiedName!!, MovieDecoder())))
         val results = deserializer.deserialize(this::test_custom_converter.parameters, test)
         Assert.assertTrue(results[0] == "abc")
         Assert.assertTrue(results[1] == false)
@@ -253,6 +242,83 @@ class ConvertTests {
                 )
                 movie
             }
+        }
+    }
+
+
+    fun test_context_converter(actor:Self, tstr:String, tbool:Boolean):Unit {}
+
+
+    @Test fun can_parse_custom_types_using_context(){
+        val test = """{
+                "tstr": "abc",
+                "tbool": false
+            }""".trimIndent()
+        val req = CommonRequest("a.b.c", listOf("a", "b", "c"), Source.CLI, "post",
+                InputArgs(mapOf(Pair("movie", "batman"))), InputArgs(mapOf("Authorization" to "a.user123.c")))
+
+        val deserializer = Deserializer(req, null, mapOf(Pair(Self::class.qualifiedName!!, JWTSelfDecoder())))
+        val results = deserializer.deserialize(this::test_context_converter.parameters, test)
+        Assert.assertTrue(results[0] == Self("user123"))
+        Assert.assertTrue(results[1] == "abc")
+        Assert.assertTrue(results[2] == false )
+    }
+
+
+    @Test fun can_parse_custom_types_using_context_with_override(){
+        val test = """{
+                "tstr": "abc",
+                "tbool": false,
+                "actor": "user999"
+            }""".trimIndent()
+        val req = CommonRequest("a.b.c", listOf("a", "b", "c"), Source.CLI, "post",
+                InputArgs(mapOf(Pair("movie", "batman"))), InputArgs(mapOf("Authorization" to "a.user123.c")))
+
+        val deserializer = Deserializer(req, null, mapOf(Pair(Self::class.qualifiedName!!, JWTSelfDecoder())))
+        val results = deserializer.deserialize(this::test_context_converter.parameters, test)
+        Assert.assertTrue(results[0] == Self("user999"))
+        Assert.assertTrue(results[1] == "abc")
+        Assert.assertTrue(results[2] == false )
+    }
+
+
+    @Test fun can_parse_custom_types_using_context_with_override_using_JSON(){
+        val test = """{
+                "tstr": "abc",
+                "tbool": false,
+                "actor": "user901"
+            }""".trimIndent()
+        val json = InputsJSON.of(test)
+        val req = CommonRequest("a.b.c", listOf("a", "b", "c"), Source.CLI, "post",
+                json, InputArgs(mapOf("Authorization" to "a.user123.c")))
+
+        val deserializer = Deserializer(req, null, mapOf(Pair(Self::class.qualifiedName!!, JWTSelfDecoder())))
+        val results = deserializer.deserialize(this::test_context_converter.parameters)
+        Assert.assertTrue(results[0] == Self("user901"))
+        Assert.assertTrue(results[1] == "abc")
+        Assert.assertTrue(results[2] == false )
+    }
+
+
+
+    data class Self(val uuid:String)
+    class JWTSelfDecoder : Transformer<Self>(Self::class.java), JSONRestoreWithContext<Self>{
+
+        override fun <T> restore(ctx: T, model: JSONObject?, key:String): Self? {
+            if(!(ctx is Request)) throw Exception("Request not available")
+            if(!ctx.meta.containsKey("Authorization")) throw Exception("JWT Not found")
+
+            // Simple extractor of uuid from JWT for test purpose.
+            val token = ctx.meta.getString("Authorization")
+            val parts = token.split(".")
+            val uuidFromToken = parts[1]
+
+            val exists = model?.containsKey(key) ?: false
+            val tokenFinal = when(exists) {
+                true -> model?.get(key) as String
+                false -> uuidFromToken
+            }
+            return Self(tokenFinal)
         }
     }
 

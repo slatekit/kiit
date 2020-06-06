@@ -20,19 +20,4 @@ open class Transformer<S>(override val cls: Class<*>,
     override fun restore(output: JSONObject?): S? {
         return restoreOp?.invoke(output, cls)
     }
-
-
-//    /**
-//     * Enriched method with access to request
-//     */
-//    fun convert(req:ApiRequest, input: S?): JSONObject? {
-//        return convert(input)
-//    }
-//
-//    /**
-//     * Enriched method with access to request
-//     */
-//    fun restore(req:ApiRequest, output: JSONObject?): S? {
-//        return restore(output)
-//    }
 }
