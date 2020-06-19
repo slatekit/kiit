@@ -461,6 +461,29 @@ inline fun <T1, T2, E> Result<T1, E>.then(f: (T1) -> Result<T2, E>): Result<T2, 
  * )
  * ```
  */
+inline fun <T, E> Result<T, E>.orElse(other: (Result<T, E>)): Result<T, E> {
+    return when (this) {
+        is Success -> this
+        is Failure -> other
+    }
+}
+
+
+/**
+ * Applies supplied function `op` if this is a [Success]. The difference to flatMap / then is that the whole
+ * Result is provided as an input
+ *
+ * @param op: The function to apply if this is a [Success]
+ *
+ * # Example:
+ * ```
+ * val result : Result<String,Err> = someOperation()
+ * result.fold(
+ *      { println( "operation succeeded" ) },
+ *      { println( "operation failed"    ) }
+ * )
+ * ```
+ */
 inline fun <T1, T2, E> Result<T1, E>.operate(op: (Result<T1, E>) -> Result<T2, E>): Result<T2, E> {
     return when (this) {
         is Success -> op(this)

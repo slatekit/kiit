@@ -1,5 +1,6 @@
 package test.functions
 
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.runBlocking
 import org.junit.Assert
 import org.junit.Test
@@ -79,15 +80,31 @@ class Policy_Tests {
     @Test
     fun test_every_success(){
         var value = -1
-        val policy: Policy<String, Int> = Every(2, { i, o -> value = o.getOrElse { -1 }  } )
+        val policy: Policy<String, Int> = Every(3, { i, o -> value = o.getOrElse { -1 }  } )
         val result = runBlocking {
             policy.run("1") { Outcomes.of(it.toInt()) }
             policy.run("2") { Outcomes.of(it.toInt()) }
             policy.run("3") { Outcomes.of(it.toInt()) }
+            policy.run("4") { Outcomes.of(it.toInt()) }
         }
         Assert.assertTrue(result.success)
         Assert.assertTrue(result.status is Passed.Succeeded)
-        Assert.assertEquals(3, result.getOrNull())
+        Assert.assertEquals(4, result.getOrNull())
+        Assert.assertEquals(3, value)
+    }
+
+
+    @Test
+    fun test_steps(){
+        var value = -1
+        val policy: Policy<String, Int> = Step(2, null)
+        val result = runBlocking {
+            policy.run("1") { value = it.toInt(); Outcomes.of(it.toInt()) }
+            policy.run("2") { value = it.toInt(); Outcomes.of(it.toInt()) }
+            policy.run("3") { value = it.toInt(); Outcomes.of(it.toInt()) }
+        }
+        Assert.assertFalse(result.success)
+        Assert.assertTrue(result.status is Failed.Ignored)
         Assert.assertEquals(2, value)
     }
 
@@ -172,6 +189,79 @@ class Policy_Tests {
         Assert.assertEquals(2, calls.totalRuns())
         Assert.assertEquals(2, counts.totalProcessed())
         Assert.assertEquals(2, everyValue)
+    }
+
+
+    @Test
+    fun test_periodic(){
+        var value = -1
+        val policy: Policy<String, Int> = Periodic(3, null)
+        val result = runBlocking {
+            policy.run("1") { value = it.toInt(); Outcomes.of(it.toInt()) }
+            delay(1000)
+            policy.run("2") { value = it.toInt(); Outcomes.of(it.toInt()) }
+        }
+        Assert.assertFalse(result.success)
+        Assert.assertTrue(result.status is Failed.Ignored)
+        Assert.assertEquals(1, value)
+    }
+
+
+    @Test
+    fun test_and(){
+        var value = -1
+        val policy1: Policy<String, Int> = Step(2, null)
+        val policy2: Policy<String, Int> = Step(4, null)
+        val policy : Policy<String, Int> = And(policy1, policy2, Outcomes.success(0))
+
+        fun check(result:Outcome<Int>, success:Boolean, status:Status, expectedVal:Int) {
+            Assert.assertEquals(success, result.success)
+            Assert.assertEquals(status, result.status)
+            Assert.assertEquals(expectedVal, value)
+        }
+
+        runBlocking {
+            val result1 = policy.run("1") { value = it.toInt(); Outcomes.of(it.toInt()) }
+            check(result1, false, Codes.IGNORED, -1)
+
+            val result2 = policy.run("2") { value = it.toInt(); Outcomes.of(it.toInt()) }
+            check(result2, false, Codes.IGNORED, -1)
+
+            val result3 = policy.run("3") { value = it.toInt(); Outcomes.of(it.toInt()) }
+            check(result3, false, Codes.IGNORED, -1)
+
+            val result4 = policy.run("4") { value = it.toInt(); Outcomes.of(it.toInt()) }
+            check(result4, true, Codes.SUCCESS, 4)
+        }
+    }
+
+
+    @Test
+    fun test_or(){
+        var value = -1
+        val policy1: Policy<String, Int> = Step(2, null)
+        val policy2: Policy<String, Int> = Step(4, null)
+        val policy : Policy<String, Int> = Or(policy1, policy2)
+
+        fun check(result:Outcome<Int>, success:Boolean, status:Status, expectedVal:Int) {
+            Assert.assertEquals(success, result.success)
+            Assert.assertEquals(status, result.status)
+            Assert.assertEquals(expectedVal, value)
+        }
+
+        runBlocking {
+            val result1 = policy.run("1") { value = it.toInt(); Outcomes.of(it.toInt()) }
+            check(result1, false, Codes.IGNORED, -1)
+
+            val result2 = policy.run("2") { value = it.toInt(); Outcomes.of(it.toInt()) }
+            check(result2, true, Codes.SUCCESS, 2)
+
+            val result3 = policy.run("3") { value = it.toInt(); Outcomes.of(it.toInt()) }
+            check(result3, false, Codes.IGNORED, 2)
+
+            val result4 = policy.run("4") { value = it.toInt(); Outcomes.of(it.toInt()) }
+            check(result4, true, Codes.SUCCESS, 4)
+        }
     }
 
 }
