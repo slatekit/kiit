@@ -45,27 +45,42 @@ object Random {
     @JvmStatic fun alphaSym6(): String = alphaSymN(6)
 
     @JvmStatic fun digitsN(n: Int): Int {
-        val text = randomize(n, NUMS)
-        val num = safeNum(text)
-        return num
+        return when {
+            n <= 0 -> 0
+            n == 1 -> randomize(n, NUMS).toInt()
+            else -> {
+                // This ensures that a number starting with 0 has the first char "0" with a non-zero char
+                // E..g 012345 -> {NON-ZERO-FIRST-CHAR}12345 -> 912345
+                // Note: We could potentially also do random( 10^(n-1), 10^n),
+                // but this will likely be replaced with Kotlin MultiPlatform Random function at some point anyway
+                val text = randomize(n, NUMS)
+                val num = safeNum(text)
+                num
+            }
+        }
     }
 
     @JvmStatic fun safeNum(text:String, firstNum:Int? = null):Int {
-        val startsWithZero = text.startsWith("0")
-
-        return when {
-            startsWithZero && firstNum == null -> {
-                val first = randomize(1, NUMS_NON_ZERO)
-                val rest = text.substring(1)
-                val num = (first + rest).toInt()
-                num
+        return when(text.length) {
+            0 -> 0
+            1 -> text.toInt()
+            else -> {
+                val startsWithZero = text.startsWith("0")
+                when {
+                    startsWithZero && firstNum == null -> {
+                        val first = randomize(1, NUMS_NON_ZERO)
+                        val rest = text.substring(1)
+                        val num = (first + rest).toInt()
+                        num
+                    }
+                    startsWithZero && firstNum != null -> {
+                        val rest = text.substring(1)
+                        val num = (firstNum.toString() + rest).toInt()
+                        num
+                    }
+                    else -> text.toInt()
+                }
             }
-            startsWithZero && firstNum != null -> {
-                val rest = text.substring(1)
-                val num = (firstNum.toString() + rest ).toInt()
-                num
-            }
-            else -> text.toInt()
         }
     }
 
