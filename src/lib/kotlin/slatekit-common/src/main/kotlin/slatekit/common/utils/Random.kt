@@ -44,28 +44,28 @@ object Random {
 
     @JvmStatic fun alphaSym6(): String = alphaSymN(6)
 
-    @JvmStatic fun digitsN(n: Int): Long {
+    @JvmStatic fun digitsN(n: Int): Int {
         val text = randomize(n, NUMS)
         val num = safeNum(text)
         return num
     }
 
-    @JvmStatic fun safeNum(text:String, firstNum:Int? = null):Long {
+    @JvmStatic fun safeNum(text:String, firstNum:Int? = null):Int {
         val startsWithZero = text.startsWith("0")
 
         return when {
             startsWithZero && firstNum == null -> {
                 val first = randomize(1, NUMS_NON_ZERO)
                 val rest = text.substring(1)
-                val num = (first + rest).toLong()
+                val num = (first + rest).toInt()
                 num
             }
             startsWithZero && firstNum != null -> {
                 val rest = text.substring(1)
-                val num = (firstNum.toString() + rest ).toLong()
+                val num = (firstNum.toString() + rest ).toInt()
                 num
             }
-            else -> text.toLong()
+            else -> text.toInt()
         }
     }
 
