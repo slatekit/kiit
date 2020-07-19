@@ -12,6 +12,10 @@ class StringTests {
 
 
     @Test fun can_create_safe_num() {
+        Assert.assertEquals(0, Random.safeNum(""))
+        Assert.assertEquals(0, Random.safeNum("0"))
+        Assert.assertEquals(1, Random.safeNum("1"))
+        Assert.assertEquals(11, Random.safeNum("01", 1))
         Assert.assertEquals(123456, Random.safeNum("123456"))
         Assert.assertEquals(123456, Random.safeNum("123456", 9))
         Assert.assertEquals(912345, Random.safeNum("012345", 9))
