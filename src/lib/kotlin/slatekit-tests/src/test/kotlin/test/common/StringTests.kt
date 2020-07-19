@@ -4,10 +4,18 @@ import org.junit.Assert
 import org.junit.Test
 import slatekit.common.ext.*
 import slatekit.common.repeatWith
+import slatekit.common.utils.Random
 import slatekit.common.utils.StringSearch
 
 
 class StringTests {
+
+
+    @Test fun can_create_safe_num() {
+        Assert.assertEquals(123456, Random.safeNum("123456"))
+        Assert.assertEquals(123456, Random.safeNum("123456", 9))
+        Assert.assertEquals(912345, Random.safeNum("012345", 9))
+    }
 
 
     @Test fun can_repeat_with() {

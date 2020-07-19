@@ -16,6 +16,7 @@ package slatekit.common.utils
 object Random {
 
     @JvmField val NUMS = "0123456789"
+    @JvmField val NUMS_NON_ZERO = "123456789"
     @JvmField val LETTERS_LCASE = "abcdefghijklmnopqrstuvwxyz"
     @JvmField val LETTERS_ALL = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"
     @JvmField val ALPHA = "0123456789abcdefghijklmnopqrstuvwxyz"
@@ -43,7 +44,30 @@ object Random {
 
     @JvmStatic fun alphaSym6(): String = alphaSymN(6)
 
-    @JvmStatic fun digitsN(n: Int): Long = randomize(n, NUMS).toLong()
+    @JvmStatic fun digitsN(n: Int): Long {
+        val text = randomize(n, NUMS)
+        val num = safeNum(text)
+        return num
+    }
+
+    @JvmStatic fun safeNum(text:String, firstNum:Int? = null):Long {
+        val startsWithZero = text.startsWith("0")
+
+        return when {
+            startsWithZero && firstNum == null -> {
+                val first = randomize(1, NUMS_NON_ZERO)
+                val rest = text.substring(1)
+                val num = (first + rest).toLong()
+                num
+            }
+            startsWithZero && firstNum != null -> {
+                val rest = text.substring(1)
+                val num = (firstNum.toString() + rest ).toLong()
+                num
+            }
+            else -> text.toLong()
+        }
+    }
 
     @JvmStatic fun stringN(n: Int, allowUpper: Boolean = true): String {
         return if (allowUpper) randomize(n, LETTERS_ALL) else randomize(n, LETTERS_LCASE)
@@ -68,7 +92,6 @@ object Random {
 
     @JvmStatic fun randomize(n: Int, allowedChars: String): String {
         val text = 0.until(n).fold("") { s, _ ->
-
             s + allowedChars[rnd.nextInt(allowedChars.length)]
         }
         return text
