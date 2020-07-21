@@ -68,24 +68,6 @@ interface Repo<TId, T> : EntityStore where TId : Comparable<TId> {
     fun update(entity: T): Boolean
 
     /**
-     * Updates fields/columns
-     */
-    fun patch(id: TId, values: List<Pair<String, Any?>>): Int
-
-    /**
-     * updates items based on the field name
-     * @param field: The property reference
-     * @param value: The value to set
-     * @return
-     */
-    fun updateField(field: String, value: Any): Int
-
-    /**
-     * Updates items by their old field
-     */
-    fun updateByField(field: String, oldValue: Any?, newValue: Any?): Int
-
-    /**
      * updates items using the proc and args
      */
     fun updateByProc(name: String, args: List<Any>? = null): Int
@@ -94,6 +76,21 @@ interface Repo<TId, T> : EntityStore where TId : Comparable<TId> {
      * updates items using the query
      */
     fun updateByQuery(query: IQuery): Int
+
+    /**
+     * ======================================================================================================
+     * PATCHES: Field updates
+     * ======================================================================================================
+     */
+
+    /**
+     * Updates fields/columns
+     */
+    fun patchById(id: TId, updates: List<Pair<String, Any?>>): Int = patchByFields(updates, listOf(Pair(id(), id)))
+
+    fun patchByField(field: String, value: Any?): Int = patchByFields(listOf(Pair(field, value)), listOf())
+
+    fun patchByFields(fields:List<Pair<String, Any?>>, conditions: List<Pair<String, Any?>>): Int
 
     /**
      * ======================================================================================================

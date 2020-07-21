@@ -49,6 +49,7 @@ open class InMemoryRepo<TId, T>(
     val idGenerator: IdGenerator<TId>
 ) : BaseRepo<TId, T>(info)
         where TId : kotlin.Comparable<TId>, T: Any {
+
     protected var items = ListMap<TId, T>(listOf())
 
     /**
@@ -194,17 +195,10 @@ open class InMemoryRepo<TId, T>(
         }
     }
 
-    override fun updateField(field: String, value: Any): Int {
-        TODO("not implemented") // To change body of created functions use File | Settings | File Templates.
+    override fun patchByFields(fields: List<Pair<String, Any?>>, conditions: List<Pair<String, Any?>>): Int {
+        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
 
-    override fun updateByField(field: String, oldValue: Any?, newValue:Any?): Int {
-        TODO("not implemented") // To change body of created functions use File | Settings | File Templates.
-    }
-
-    override fun patch(id:TId, values:List<Pair<String,Any?>>): Int {
-        TODO("not implemented") // To change body of created functions use File | Settings | File Templates.
-    }
 
     override fun updateByProc(name: String, args: List<Any>?): Int {
         TODO("not implemented") // To change body of created functions use File | Settings | File Templates.

@@ -44,7 +44,7 @@ open class SqlRepo<TId, T>(
 
     override fun name(): String = "${info.encodedChar}" + super.name() + "${info.encodedChar}"
 
-    override fun patch(id:TId, values:List<Pair<String,Any?>>): Int {
+    override fun patchById(id:TId, values:List<Pair<String,Any?>>): Int {
         val query = Query()
         values.forEach { query.set(it.first, it.second) }
         query.where(id(), Op.Eq, id)
@@ -59,15 +59,17 @@ open class SqlRepo<TId, T>(
      * @param field: The field name
      * @param value: The value to set
      */
-    override fun updateField(field: String, value: Any): Int {
+    override fun patchByField(field: String, value: Any?): Int {
         val query = Query().set(field, value)
         val updateSql = query.toUpdatesText()
         val sql = "update " + name() + updateSql
         return update(sql)
     }
 
-    override fun updateByField(field: String, oldValue: Any?, newValue: Any?): Int {
-        val query = Query().set(field, newValue).where(field, Op.Eq, oldValue)
+    override fun patchByFields(fields: List<Pair<String, Any?>>, conditions: List<Pair<String, Any?>>): Int {
+        val query = Query()
+        fields.forEach { query.set(it.first, it.second) }
+        conditions.forEach { query.where(it.first, Op.Eq, it.second) }
         val updateSql = query.toUpdatesText()
         val sql = "update " + name() + updateSql
         return update(sql)
