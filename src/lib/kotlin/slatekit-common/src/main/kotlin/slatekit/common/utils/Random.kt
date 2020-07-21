@@ -44,10 +44,10 @@ object Random {
 
     @JvmStatic fun alphaSym6(): String = alphaSymN(6)
 
-    @JvmStatic fun digitsN(n: Int): Int {
+    @JvmStatic fun digitsN(n: Int): Long {
         return when {
             n <= 0 -> 0
-            n == 1 -> randomize(n, NUMS).toInt()
+            n == 1 -> randomize(n, NUMS).toLong()
             else -> {
                 // This ensures that a number starting with 0 has the first char "0" with a non-zero char
                 // E..g 012345 -> {NON-ZERO-FIRST-CHAR}12345 -> 912345
@@ -60,25 +60,25 @@ object Random {
         }
     }
 
-    @JvmStatic fun safeNum(text:String, firstNum:Int? = null):Int {
+    @JvmStatic fun safeNum(text:String, firstNum:Int? = null):Long {
         return when(text.length) {
             0 -> 0
-            1 -> text.toInt()
+            1 -> text.toLong()
             else -> {
                 val startsWithZero = text.startsWith("0")
                 when {
                     startsWithZero && firstNum == null -> {
                         val first = randomize(1, NUMS_NON_ZERO)
                         val rest = text.substring(1)
-                        val num = (first + rest).toInt()
+                        val num = (first + rest).toLong()
                         num
                     }
                     startsWithZero && firstNum != null -> {
                         val rest = text.substring(1)
-                        val num = (firstNum.toString() + rest).toInt()
+                        val num = (firstNum.toString() + rest).toLong()
                         num
                     }
-                    else -> text.toInt()
+                    else -> text.toLong()
                 }
             }
         }
