@@ -281,8 +281,8 @@ class Guide_ORM : Command("types") {
         val updated = city.copy(id = id, name = "Queens")
         repo.update(updated)
         repo.patchById(id, listOf(Pair("name", "Queens City"), Pair("alias", "QCity")))
-        repo.updateByField("name", "Queens", "Queens City")
-        repo.updateField("tag", "test")
+        repo.patchByFields(listOf("name" to "Queens"), listOf("name" to "Queens City"))
+        repo.patchByField("tag", "test")
         repo.updateByProc("update_alias", listOf(1, "QCity"))
 
         // Deletes
