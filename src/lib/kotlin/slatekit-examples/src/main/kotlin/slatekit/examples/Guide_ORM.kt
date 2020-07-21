@@ -280,9 +280,9 @@ class Guide_ORM : Command("types") {
         // Updates
         val updated = city.copy(id = id, name = "Queens")
         repo.update(updated)
-        repo.patch(id, listOf(Pair("name", "Queens City"), Pair("alias", "QCity")))
-        repo.updateByField("name", "Queens", "Queens City")
-        repo.updateField("tag", "test")
+        repo.patchById(id, listOf(Pair("name", "Queens City"), Pair("alias", "QCity")))
+        repo.patchByFields(listOf("name" to "Queens"), listOf("name" to "Queens City"))
+        repo.patchByField("tag", "test")
         repo.updateByProc("update_alias", listOf(1, "QCity"))
 
         // Deletes
@@ -340,8 +340,8 @@ class Guide_ORM : Command("types") {
         val updated = city.copy(id = id, name = "Queens")
         service.update(updated)
         service.patch(id, listOf(Pair("name", "Queens City"), Pair("alias", "QCity")))
-        service.updateByField(City::name, "Queens", "Queens City")
-        service.updateField(City::name, "test")
+        service.patchByFields(City::name, "Queens", "Queens City")
+        service.patchByField(City::name, "test")
         service.updateByProc("update_alias", listOf(1, "QCity"))
 
         // Deletes

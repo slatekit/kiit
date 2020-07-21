@@ -123,7 +123,6 @@ interface EntityWithOrdinal {
  */
 interface EntityWithShard {
     val shard: String
-    val tag: String
 }
 
 /**

@@ -31,7 +31,7 @@ interface Updates<TId, T> : ServiceSupport<TId, T> where TId : kotlin.Comparable
      * @return
      */
     fun patch(id:TId, values:List<Pair<String,Any?>>): Int {
-        return repo().patch(id, values)
+        return repo().patchById(id, values)
     }
 
     /**
@@ -109,28 +109,6 @@ interface Updates<TId, T> : ServiceSupport<TId, T> where TId : kotlin.Comparable
     }
 
     /**
-     * updates items based on the field name
-     * @param prop: The property reference
-     * @param value: The value to check for
-     * @return
-     */
-    fun updateField(prop: KProperty<*>, value: Any): Int {
-        val column = columnName(prop.name)
-        return repo().updateField(column, value)
-    }
-
-    /**
-     * updates items based on the field name
-     * @param prop: The property reference
-     * @param value: The value to check for
-     * @return
-     */
-    fun updateByField(prop: KProperty<*>, oldValue: Any?, newValue:Any?): Int {
-        val column = columnName(prop.name)
-        return repo().updateByField(column, oldValue, newValue)
-    }
-
-    /**
      * updates items by a stored proc
      */
     fun updateByProc(name: String, args: List<Any>? = null): Int {
@@ -142,5 +120,27 @@ interface Updates<TId, T> : ServiceSupport<TId, T> where TId : kotlin.Comparable
      */
     fun updateByQuery(query: IQuery): Int {
         return repo().updateByQuery(query)
+    }
+
+    /**
+     * updates items based on the field name
+     * @param prop: The property reference
+     * @param value: The value to check for
+     * @return
+     */
+    fun patchByField(prop: KProperty<*>, value: Any): Int {
+        val column = columnName(prop.name)
+        return repo().patchByField(column, value)
+    }
+
+    /**
+     * updates items based on the field name
+     * @param prop: The property reference
+     * @param value: The value to check for
+     * @return
+     */
+    fun patchByFields(prop: KProperty<*>, oldValue: Any?, newValue:Any?): Int {
+        val column = columnName(prop.name)
+        return repo().patchByFields(listOf(Pair(column, oldValue)), listOf(Pair(column, newValue)))
     }
 }
