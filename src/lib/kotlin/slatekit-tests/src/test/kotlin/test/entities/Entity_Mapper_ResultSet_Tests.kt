@@ -14,9 +14,11 @@ package test.entities
 
 import org.junit.Assert
 import org.junit.Test
+import slatekit.common.crypto.Encryptor
 import slatekit.common.data.DbCon
 import slatekit.common.utils.RecordMap
 import slatekit.common.ids.UniqueId
+import slatekit.common.utils.B64Java8
 import slatekit.common.utils.ListMap
 import slatekit.db.Db
 import slatekit.meta.models.ModelMapper
@@ -39,7 +41,7 @@ class Entity_Mapper_ResultSet_Tests {
         val mapper = OrmMapper(model, Db(DbCon.empty), MySqlConverter<Long, AuthorR>(), Long::class, AuthorR::class)
         val data = buildSampleDataForAuthor()
         val source = RecordMap(data)
-        val entity = mapper.decode(source)!!
+        val entity = mapper.decode(source, null)!!
 
         Assert.assertTrue( entity.id == 1L )
         Assert.assertTrue( entity.uuid == "ABC" )
@@ -59,7 +61,7 @@ class Entity_Mapper_ResultSet_Tests {
         val mapper = OrmMapper(model, Db(DbCon.empty), MySqlConverter<Long, AuthorW>(), Long::class, AuthorW::class)
         val data = buildSampleDataForAuthor()
         val source = RecordMap(data)
-        val entity = mapper.decode(source)!!
+        val entity = mapper.decode(source, null)!!
 
         Assert.assertTrue( entity.id == 1L )
         Assert.assertTrue( entity.uuid == "ABC" )
@@ -79,7 +81,7 @@ class Entity_Mapper_ResultSet_Tests {
         val mapper = OrmMapper(model, Db(DbCon.empty), MySqlConverter<Long, UserWithAddress>(), Long::class, UserWithAddress::class)
         val data = buildSampleDataForEmbeddedObject()
         val source = RecordMap(data)
-        val entity = mapper.decode(source)!!
+        val entity = mapper.decode(source, null)!!
 
         Assert.assertTrue( entity.id == 1L )
         Assert.assertTrue( entity.email == "kishore@abc.com" )
@@ -92,8 +94,61 @@ class Entity_Mapper_ResultSet_Tests {
     }
 
 
-    fun buildSampleDataForAuthor(): ListMap<String, Any> {
+    @Test fun can_map_with_custom_mapper_auto_with_encryption(){
+        val model = ModelMapper.loadSchema(AuthorEnc::class, AuthorEnc::id.name)
 
+
+        val encA = Encryptor("aejklhviuxywehjk", "3214a99lkdf03292", B64Java8)
+        val encB = Encryptor("bejklhviuxywehjk", "3214b99lkdf03292", B64Java8)
+
+        val mapper = CustomMapper1<AuthorEnc>(model, Db(DbCon.empty), AuthorEnc::class, AuthorEnc::encmode.name, mapOf("a" to encA, "b" to encB))
+        val data = buildSampleDataForAuthor(encA)
+        val source = RecordMap(data)
+        val entity = mapper.decode(source, null)!!
+
+        Assert.assertTrue( entity.id == 1L )
+        Assert.assertTrue( entity.uuid == "ABC" )
+        Assert.assertTrue( entity.email == "kishore@abc.com" )
+        Assert.assertTrue( entity.isActive )
+        Assert.assertTrue( entity.age == 35 )
+        Assert.assertTrue( entity.salary == 400.5 )
+        Assert.assertTrue( entity.status == StatusEnum.Active )
+        Assert.assertTrue( entity.uid == UUID.fromString(sampleUUID1) )
+        Assert.assertTrue( entity.shardId == UniqueId.parse(sampleUUID2) )
+    }
+
+
+
+
+    @Test fun can_map_with_custom_mapper_manual_with_encryption(){
+        val model = ModelMapper.loadSchema(AuthorEnc::class, AuthorEnc::id.name)
+
+
+        val encA = Encryptor("aejklhviuxywehjk", "3214a99lkdf03292", B64Java8)
+        val encB = Encryptor("bejklhviuxywehjk", "3214b99lkdf03292", B64Java8)
+
+        val mapper = CustomMapper2(model, Db(DbCon.empty), AuthorEnc::class, AuthorEnc::encmode.name, mapOf("a" to encA, "b" to encB))
+        val data = buildSampleDataForAuthor(encA)
+        val source = RecordMap(data)
+        val entity = mapper.decode(source, null)!!
+
+        Assert.assertTrue( entity.id == 1L )
+        Assert.assertTrue( entity.uuid == "ABC" )
+        Assert.assertTrue( entity.email == "kishore@abc.com" )
+        Assert.assertTrue( entity.isActive )
+        Assert.assertTrue( entity.age == 35 )
+        Assert.assertTrue( entity.salary == 400.5 )
+        Assert.assertTrue( entity.status == StatusEnum.Active )
+        Assert.assertTrue( entity.uid == UUID.fromString(sampleUUID1) )
+        Assert.assertTrue( entity.shardId == UniqueId.parse(sampleUUID2) )
+    }
+
+
+    fun buildSampleDataForAuthor(enc:Encryptor? = null): ListMap<String, Any> {
+        val email = when(enc){
+            null -> "kishore@abc.com"
+            else -> enc.encrypt("kishore@abc.com")
+        }
         val data = ListMap(
             listOf(
                 Pair("id", 1L),
@@ -102,13 +157,14 @@ class Entity_Mapper_ResultSet_Tests {
                 Pair("createdBy", 100L),
                 Pair("updatedAt", Timestamp(2017, 1, 2, 12, 0, 0, 0)),
                 Pair("updatedBy", 101L),
-                Pair("email", "kishore@abc.com"),
+                Pair("email", email),
                 Pair("isActive", true),
                 Pair("age", 35),
                 Pair("status", StatusEnum.Active.value),
                 Pair("salary", 400.5),
                 Pair("uid", UUID.fromString(sampleUUID1)),
-                Pair("shardId", UniqueId.parse(sampleUUID2))
+                Pair("shardId", UniqueId.parse(sampleUUID2)),
+                Pair("encmode", "a")
             )
         )
         return data

@@ -22,6 +22,7 @@ import java.util.*
 // import java.time.*
 import org.threeten.bp.*
 import slatekit.common.Record
+import slatekit.common.crypto.Encryptor
 import slatekit.common.data.DataAction
 import slatekit.common.data.Values
 import slatekit.entities.*
@@ -278,11 +279,11 @@ open class InMemoryRepo<TId, T>(
 class EntityMapperEmpty<TId, T>(val model: Model?) :
     EntityMapper<TId, T> where TId : Comparable<TId>, T : Entity<TId> {
 
-    override fun encode(model: T, action:DataAction): Values {
+    override fun encode(model: T, action:DataAction, encryptor: Encryptor?): Values {
         TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
 
     override fun schema(): Model? = model
 
-    override fun decode(record: Record): T? = null
+    override fun decode(record: Record, encryptor: Encryptor?): T? = null
 }

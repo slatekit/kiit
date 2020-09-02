@@ -251,7 +251,7 @@ open class SqlRepo<TId, T>(
      * @return
      */
     override fun findByProc(name: String, args: List<Any>?): List<T>? {
-        return db.callQueryMapped(name, mapper::decode, args)
+        return db.callQueryMapped(name, {r -> mapper.decode(r, null) }, args)
     }
 
     /**
@@ -274,10 +274,10 @@ open class SqlRepo<TId, T>(
     }
 
     protected open fun sqlMapMany(sql: String): List<T>? {
-        return db.mapAll(sql, null, mapper::decode)
+        return db.mapAll(sql, null) { record -> mapper.decode(record, null) }
     }
 
     protected open fun sqlMapOne(sql: String): T? {
-        return db.mapOne<T>(sql, null, mapper::decode)
+        return db.mapOne<T>(sql, null) { record ->  mapper.decode(record, null) }
     }
 }

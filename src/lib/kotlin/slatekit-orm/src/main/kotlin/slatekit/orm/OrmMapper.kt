@@ -26,6 +26,7 @@ import slatekit.meta.models.Model
 import slatekit.meta.models.ModelField
 //import java.time.*
 import org.threeten.bp.*
+import slatekit.common.crypto.Encryptor
 import slatekit.common.data.DataAction
 import slatekit.common.data.IDb
 import slatekit.entities.EntityMapper
@@ -81,13 +82,13 @@ open class OrmMapper<TId, T>(
     override fun schema(): Model? = model
 
 
-    override fun encode(item: T, action: DataAction): Values {
+    override fun encode(item: T, action: DataAction, enc: Encryptor?): Values {
         val isUpdate = action == DataAction.Update
-        return mapFields(null, item, model, isUpdate, isUpdate).map { Value(it.first, it.second as Any?) }
+        return mapFields(null, item, model, isUpdate, isUpdate, enc).map { Value(it.first, it.second as Any?) }
     }
 
-    override fun decode(record: Record): T? {
-        return mapper.decode(record)
+    override fun decode(record: Record, enc: Encryptor?): T? {
+        return mapper.decode(record, enc)
     }
 
 
@@ -127,7 +128,7 @@ open class OrmMapper<TId, T>(
      * NOTE: For a simple model, only this 1 function call is required to
      * generate the sql for inserts/updates, allowing 1 record = 1 function call
      */
-    fun mapFields(prefix: String?, item: Any, model: Model, useKeyValue: Boolean, filterId: Boolean = true): List<Pair<String, String>> {
+    fun mapFields(prefix: String?, item: Any, model: Model, useKeyValue: Boolean, filterId: Boolean = true, enc: Encryptor? = null): List<Pair<String, String>> {
 
         val converted = mutableListOf<Pair<String, String>>()
         val len = model.fields.size
@@ -141,7 +142,7 @@ open class OrmMapper<TId, T>(
                 val col = prefix?.let { columnName(it, mapping.storedName) } ?: columnName(mapping.storedName)
 
                 // Convert to sql value
-                val data = toSql(mapping, item, useKeyValue)
+                val data = toSql(mapping, item, useKeyValue, enc)
 
                 // Build up list of values
                 when (data) {
@@ -194,13 +195,20 @@ open class OrmMapper<TId, T>(
      * 1. a single sql string value
      * 2. a list of sql string value ( used for embedded objects )
      */
-    private inline fun toSql(mapping: ModelField, item: Any, useKeyValue: Boolean): Any {
+    protected inline fun toSql(mapping: ModelField, item: Any, useKeyValue: Boolean, enc: Encryptor?): Any {
         // =======================================================
         // NOTE: Refactor this to use pattern matching ?
         // Similar to the Mapper class but reversed
         val data = if (mapping.dataCls == KTypes.KStringClass) {
             val sVal = Reflector.getFieldValue(item, mapping.name) as String?
-            converter.strings.toSql(sVal, mapping.encrypt, info.encryptor)
+            val sVanEnc = when {
+                !mapping.encrypt -> sVal
+                sVal == null -> sVal
+                enc != null -> enc.encrypt(sVal)
+                info.encryptor != null -> info.encryptor?.encrypt(sVal)
+                else -> sVal
+            }
+            converter.strings.encode(sVanEnc)
         } else if (mapping.dataCls == KTypes.KBoolClass) {
             val bVal = Reflector.getFieldValue(item, mapping.name) as Boolean?
             converter.bools.encode(bVal)
