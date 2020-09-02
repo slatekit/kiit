@@ -103,11 +103,11 @@ class Example_Database : Command("db") {
         // for "Field" annotations
         val userModelSchema = ModelMapper.loadSchema(User::class)
         val mapper = OrmMapper<Long, User>(userModelSchema, db, MySqlConverter(), Long::class, User::class)
-        val item1 = db.mapOne<User>("select * from `user` where id = ?", listOf(1), mapper::decode)
+        val item1 = db.mapOne<User>("select * from `user` where id = ?", listOf(1))  { mapper.decode(it, null) }
         println(item1)
 
         // CASE 13: Map multiple records
-        val items = db.mapAll<User>("select * from `user` where id < ?", listOf(5),  mapper::decode)
+        val items = db.mapAll<User>("select * from `user` where id < ?", listOf(5)) {  mapper.decode(it, null) }
         println(items)
 
         // CASE 14: Create the table using the model

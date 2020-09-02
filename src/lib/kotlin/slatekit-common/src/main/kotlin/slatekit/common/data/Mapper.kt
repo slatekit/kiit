@@ -1,6 +1,7 @@
 package slatekit.common.data
 
 import slatekit.common.Record
+import slatekit.common.crypto.Encryptor
 
 
 /**
@@ -20,7 +21,7 @@ import slatekit.common.Record
  */
 interface Mapper<TId, T> where TId : Comparable<TId> {
 
-    fun encode(model:T, action: DataAction): Values
+    fun encode(model:T, action: DataAction, enc: Encryptor?): Values
 
-    fun decode(record: Record): T?
+    fun decode(record: Record, enc:Encryptor?): T?
 }

@@ -65,13 +65,13 @@ open class ModelMapper(
      * @param record
      * @return
      */
-    open fun <T> decode(record: Record): T? {
+    open fun <T> decode(record: Record, enc: Encryptor?): T? {
         return if (metaModel.any && metaModel.dataType != null) {
             metaModel.dataType.let { tpe ->
                 if (Reflector.isDataClass(tpe)) {
-                    decodeValType<T>(record)
+                    decodeValType<T>(record, enc)
                 } else
-                    decodeVarType<T>(record)
+                    decodeVarType<T>(record, enc)
             }
         } else
             null
@@ -85,8 +85,8 @@ open class ModelMapper(
      * @return
      */
     @Suppress("UNCHECKED_CAST")
-    fun <T>  decodeValType(record: Record): T? {
-        return decodeValType(null, record, metaModel) as T?
+    fun <T>  decodeValType(record: Record, enc:Encryptor? = null): T? {
+        return decodeValType(null, record, metaModel, enc) as T?
     }
 
     /**
@@ -97,8 +97,8 @@ open class ModelMapper(
      * @return
      */
     @Suppress("UNCHECKED_CAST")
-    fun <T> decodeVarType(record: Record): T? {
-        return decodeVarType(null, record, metaModel) as T?
+    fun <T> decodeVarType(record: Record, enc:Encryptor? = null): T? {
+        return decodeVarType(null, record, metaModel, enc) as T?
     }
 
     override fun toString(): String =
@@ -143,11 +143,11 @@ open class ModelMapper(
         }
     }
 
-    private fun decodeValType(prefix: String?, record: Record, model: Model): Any? {
+    private fun decodeValType(prefix: String?, record: Record, model: Model, enc:Encryptor? = null): Any? {
         return if (model.any) {
             val isUTC = settings.persisteUTCDate
             val data = model.fields.map { mapping ->
-                val dataValue = getDataValue(prefix, mapping, record, isUTC)
+                val dataValue = getDataValue(prefix, mapping, record, isUTC, enc)
                 dataValue
             }
             val entity = createEntityWithArgs(model.dataType!!, data)
@@ -156,13 +156,13 @@ open class ModelMapper(
             null
     }
 
-    private fun decodeVarType(prefix: String?, record: Record, model: Model): Any? {
+    private fun decodeVarType(prefix: String?, record: Record, model: Model, enc:Encryptor? = null): Any? {
         return if (model.any) {
 
             val isUTC = settings.persisteUTCDate
             val entity: Any? = createEntity()
             model.fields.forEach { mapping ->
-                val dataValue = getDataValue(prefix, mapping, record, isUTC)
+                val dataValue = getDataValue(prefix, mapping, record, isUTC, enc)
                 mapping.prop?.let { prop ->
                     Reflector.setFieldValue(entity, prop, dataValue)
                 } ?: Reflector.setFieldValue(model.dataType!!, entity, mapping.name, dataValue)
@@ -179,11 +179,11 @@ open class ModelMapper(
      * @param isUTC : Whether to handle dates as UTC
      */
     @Suppress("IMPLICIT_CAST_TO_ANY")
-    private fun getDataValue(prefix: String?, mapping: ModelField, record: Record, isUTC: Boolean): Any? {
+    private fun getDataValue(prefix: String?, mapping: ModelField, record: Record, isUTC: Boolean, enc:Encryptor? = null): Any? {
         val colName = prefix?.let { prefix + mapping.storedName } ?: mapping.storedName
 
         val dataValue = when (mapping.dataCls) {
-            KTypes.KStringClass        -> getString(record, mapping, colName, encryptor)
+            KTypes.KStringClass        -> getString(record, mapping, colName, enc ?: encryptor)
             KTypes.KBoolClass          -> if ( mapping.isRequired ) record.getBool(colName)          else record.getBoolOrNull(colName)
             KTypes.KShortClass         -> if ( mapping.isRequired ) record.getShort(colName)         else record.getShortOrNull(colName)
             KTypes.KIntClass           -> if ( mapping.isRequired ) record.getInt(colName)           else record.getIntOrNull(colName)
