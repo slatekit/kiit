@@ -11,16 +11,12 @@
 package slatekit.examples
 
 //<doc:import_required>
-import slatekit.common.utils.Random.alpha3
 import slatekit.common.utils.Random.alpha6
 import slatekit.common.utils.Random.alphaN
-import slatekit.common.utils.Random.alphaSym3
 import slatekit.common.utils.Random.alphaSym6
 import slatekit.common.utils.Random.alphaSymN
-import slatekit.common.utils.Random.digits3
 import slatekit.common.utils.Random.digits6
 import slatekit.common.utils.Random.digitsN
-import slatekit.common.utils.Random.string3
 import slatekit.common.utils.Random.string6
 import slatekit.common.utils.Random.uuid
 import slatekit.common.utils.Random.stringN
@@ -30,6 +26,8 @@ import slatekit.common.utils.Random.stringN
 //<doc:import_examples>
 import slatekit.cmds.Command
 import slatekit.cmds.CommandRequest
+import slatekit.common.utils.Random
+import slatekit.common.utils.Random.alphaNum6
 import slatekit.results.Try
 import slatekit.results.Success
 
@@ -42,15 +40,14 @@ class Example_Random : Command("random") {
     //<doc:examples>
     // CASE 1: Create random strings ( characters only ) of different lengths
     println("Random STRINGS - UPPER + lower case")
-    println( "len 3 : " + string3()  )
     println( "len 6 : " + string6()  )
     println( "len n : " + stringN(9) )
     println()
 
     println("Random STRINGS - lower case only")
-    println( "len 3 : " + stringN(3, allowUpper = false) )
-    println( "len 6 : " + stringN(6, allowUpper = false) )
-    println( "len n : " + stringN(9, allowUpper = false) )
+    println( "len 3 : " + stringN(3, Random.ALPHA_LCASE) )
+    println( "len 6 : " + stringN(6, Random.ALPHA) )
+    println( "len n : " + stringN(9, Random.ALPHA_SAFE) )
     println()
 
     // CASE 2: Create Guid
@@ -62,21 +59,19 @@ class Example_Random : Command("random") {
 
     // CASE 3: Create numbers of different lengths
     println("Random NUMBERS")
-    println( "len 3 : " + digits3()  )
     println( "len 6 : " + digits6()  )
     println( "len n : " + digitsN(9) )
     println()
 
     // CASE 4: Create alpha-numeric strings ( chars + digits ) of different lengths
     println("Random ALPHA-NUMERIC")
-    println( "len 3 : " + alpha3()  )
     println( "len 6 : " + alpha6()  )
+    println( "len n : " + alphaNum6() )
     println( "len n : " + alphaN(9) )
     println()
 
     // CASE 5: Create alpha-numeric-symbol strings ( chars + digits + symbols ) of different lengths
     println("Random ALPHA-NUMERIC-SYMBOL")
-    println( "len 3 : " + alphaSym3()  )
     println( "len 6 : " + alphaSym6()  )
     println( "len n : " + alphaSymN(9) )
 

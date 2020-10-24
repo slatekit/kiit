@@ -23,7 +23,7 @@ interface Service<T> {
  */
 open class SimpleRepo<T> : Repo<T> {
     var t:T? = null
-    override val id:String = "repo:" + Random.alpha3()
+    override val id:String = "repo:" + Random.alphaN(3)
 
     override fun save(item:T){
         t = item
@@ -34,7 +34,7 @@ open class SimpleRepo<T> : Repo<T> {
 }
 
 open class SimpleService<T>(val app:App, val repo:Repo<T>) : Service<T> {
-    override val id:String = "app:" + app.name + "_" + repo.id + "_" + "svc:" + Random.alpha3()
+    override val id:String = "app:" + app.name + "_" + repo.id + "_" + "svc:" + Random.alphaN(3)
 
     override fun save(item:T){
         println("saving")

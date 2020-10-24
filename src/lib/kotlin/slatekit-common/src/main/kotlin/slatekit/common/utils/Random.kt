@@ -13,39 +13,32 @@
 
 package slatekit.common.utils
 
+import kotlin.random.Random as KRandom
+
 object Random {
 
-    @JvmField val NUMS = "0123456789"
-    @JvmField val NUMS_NON_ZERO = "123456789"
-    @JvmField val LETTERS_LCASE = "abcdefghijklmnopqrstuvwxyz"
-    @JvmField val LETTERS_ALL = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"
-    @JvmField val ALPHA = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"
-    @JvmField val ALPHANUM = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789"
-    @JvmField val ALPHANUM_SAFE = "abcdefghjkmnpqrstuvwxyzABCDEFGHJKMNPQRSTUVWXYZ0123456789"
-    @JvmField val ALPHASYM = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#$%^&*()_+-=[]{}|;:,./<>?"
+    const val NUMS = "0123456789"
+    const val NUMS_NON_ZERO = "123456789"
+    const val ALPHA = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"
+    const val ALPHA_SAFE = "abcdefghjkmnpqrstuvwxyzABCDEFGHJKMNPQRSTUVWXYZ"
+    const val ALPHA_LCASE = "abcdefghijklmnopqrstuvwxyz"
+    const val ALPHA_UCASE = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
+    const val ALPHA_NUM = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789"
+    const val ALPHA_NUM_SAFE = "abcdefghjkmnpqrstuvwxyzABCDEFGHJKMNPQRSTUVWXYZ0123456789"
+    const val ALPHA_SYM = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#$%^&*()_+-=[]{}|;:,./<>?"
     @JvmField val rnd = java.util.Random()
 
-    @JvmStatic fun string3(): String = stringN(3)
-
+    @JvmStatic fun digits6(): Int = KRandom.nextInt(100000, 999999)
     @JvmStatic fun string6(): String = stringN(6)
-
-    @JvmStatic fun digits3(): Int = digitsN(3).toInt()
-
-    @JvmStatic fun digits6(): Int = digitsN(6).toInt()
-
-    @JvmStatic fun alpha3(): String = alphaN(3)
-
     @JvmStatic fun alpha6(): String = alphaN(6)
-
-    @JvmStatic fun alphaNum3(): String = alphaNumN(3)
-
     @JvmStatic fun alphaNum6(): String = alphaNumN(6)
-
-    @JvmStatic fun alphaSym3(): String = alphaSymN(3)
-
     @JvmStatic fun alphaSym6(): String = alphaSymN(6)
+    @JvmStatic fun stringN(n: Int, allowed:String = ALPHA_SAFE): String = randomize(n, allowed)
+    @JvmStatic fun alphaN(n: Int): String = randomize(n, ALPHA)
+    @JvmStatic fun alphaNumN(n: Int): String = randomize(n, ALPHA_NUM)
+    @JvmStatic fun alphaSymN(n: Int): String = randomize(n, ALPHA_SYM)
 
-    @JvmStatic fun digitsN(n: Int): Long {
+    @JvmStatic fun digitsN(n: Int, allowStartingZero:Boolean = false): Long {
         return when {
             n <= 0 -> 0
             n == 1 -> randomize(n, NUMS).toLong()
@@ -55,8 +48,10 @@ object Random {
                 // Note: We could potentially also do random( 10^(n-1), 10^n),
                 // but this will likely be replaced with Kotlin MultiPlatform Random function at some point anyway
                 val text = randomize(n, NUMS)
-                val num = safeNum(text)
-                num
+                when(allowStartingZero) {
+                    true -> text.toLong()
+                    false -> safeNum(text)
+                }
             }
         }
     }
@@ -84,16 +79,6 @@ object Random {
             }
         }
     }
-
-    @JvmStatic fun stringN(n: Int, allowUpper: Boolean = true): String {
-        return if (allowUpper) randomize(n, LETTERS_ALL) else randomize(n, LETTERS_LCASE)
-    }
-
-    @JvmStatic fun alphaN(n: Int): String = randomize(n, ALPHA)
-
-    @JvmStatic fun alphaSymN(n: Int): String = randomize(n, ALPHASYM)
-
-    @JvmStatic fun alphaNumN(n: Int): String = randomize(n, ALPHANUM)
 
     @JvmStatic fun guid(): String = uuid(true)
 
