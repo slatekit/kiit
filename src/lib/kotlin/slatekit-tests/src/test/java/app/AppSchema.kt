@@ -6,7 +6,7 @@ object AppSchema {
 
     @JvmStatic
     fun setupEventMappings(model: Model): Model {
-        val model = Model.of<Long, AppEvent> {
+        val model = Model.of<Long, AppEvent>(Long::class, AppEvent::class) {
 
                     field(AppEvent::calendarId)
                     field(AppEvent::title )

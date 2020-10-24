@@ -47,7 +47,7 @@ class Example_Model : Command("model") {
     var model = Model("Resource", "slate.ext.resources.Resource")
 
     // CASE 2. add a field for uniqueness / identity
-    val schema2 = Model.of<Long, Example_Mapper.Movie> {
+    val schema2 = Model.of<Long, Example_Mapper.Movie>(Long::class, Example_Mapper.Movie::class) {
           field(Example_Mapper.Movie::id       , category = FieldCategory.Id)
           field(Example_Mapper.Movie::title    , desc = "Title of movie", min = 5, max = 30)
           field(Example_Mapper.Movie::category , desc = "Category (action|drama)", min = 1, max = 20)

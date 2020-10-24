@@ -1,6 +1,6 @@
 package slatekit.common.io
 
-import java.nio.file.Paths
+import java.io.File
 
 
 /**
@@ -11,8 +11,10 @@ import java.nio.file.Paths
  * 4. temp dir: tmp://{path} or $TMPDIR/{path}
  * 5. conf dir: cfg://{path} or ./conf/{path}
  * 6. jars dir: jar://{path} or app.jar/resources/{path}
- * @param root: The root               e.g. "user | curr | path | temp | conf | jars"
- * @param path  : The path to file     e.g. "user://company/app1/conf/env.conf
+ * @param raw  : Raw path             e.g. "~/app1/conf/env.conf"
+ * @param root : Root Alias           e.g. "abs | usr | cur | tmp | cfg"
+ * @param path : Path to file         e.g. "app1/conf/env.conf"
+ * @param full : Full path to file    e.g. "/Users/batman/app1/conf/env.conf"
  */
 data class Uri internal constructor(val raw: String,
                                     val root: Alias,
@@ -22,23 +24,22 @@ data class Uri internal constructor(val raw: String,
    internal constructor(raw:String, root: Alias, path:String?): this(raw, root, path, resolve(root, path))
 
 
-    //val full = Paths.get(Alias.resolve(root), path)
-
-
     fun isEmpty(): Boolean = path.isNullOrEmpty()
 
     fun combine(otherPath: String): Uri {
         return when {
             path.isNullOrEmpty() -> {
                 this.copy(
+                        raw = otherPath,
                         path = otherPath,
-                        full = java.nio.file.Paths.get(full, otherPath).toString()
+                        full = File(full, otherPath).toString()
                 )
             }
             else -> {
                 this.copy(
-                        path = java.nio.file.Paths.get(path, otherPath).toString(),
-                        full = java.nio.file.Paths.get(full, otherPath).toString()
+                        raw  = File(path, otherPath).toString(),
+                        path = File(path, otherPath).toString(),
+                        full = File(full, otherPath).toString()
                 )
             }
         }
@@ -69,16 +70,33 @@ data class Uri internal constructor(val raw: String,
 
 
         fun of(alias: Alias, raw: String, lookup: Map<String, String>? = null): Uri {
-            val clean = Uris.clean(raw)
-            val trim = Uris.trim(clean)
+            val clean = clean(raw)
+            val trim = trim(clean)
             return Uris.build(alias, raw, trim, lookup)
         }
 
+        fun clean(path:String):String {
+            return when {
+                File.separator == "/" -> { path.replace("\\", File.separator).replace("\\\\", File.separator) }
+                File.separator == "\\" -> { path.replace("/", File.separator).replace("//", File.separator) }
+                else -> path
+            }
+        }
 
-        fun resolve(root:Alias, path:String?):String {
+        fun trim(path:String):String {
+            val trimmed = path.trim()
+            return when {
+                trimmed.startsWith("/") -> trimmed.substring(1)
+                trimmed.startsWith("\\") -> trimmed.substring(1)
+                trimmed.startsWith(File.separator) -> trimmed.substring(1)
+                else -> trimmed
+            }
+        }
+
+        private fun resolve(root:Alias, path:String?):String {
             return when(path) {
-                null -> Paths.get(Alias.resolve(root)).toString()
-                else -> Paths.get(Alias.resolve(root), path).toString()
+                null -> File(Alias.resolve(root)).toString()
+                else -> File(Alias.resolve(root), path).toString()
             }
         }
     }

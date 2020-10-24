@@ -68,14 +68,14 @@ sealed class Alias(val name: String, val value:String) {
          */
         @JvmStatic
         fun parse(text: String): Alias = when (text.trim().toLowerCase()) {
-            Alias.Abs.name -> Alias.Abs
-            Alias.Usr.name -> Alias.Usr
-            Alias.Cur.name -> Alias.Cur
-            Alias.Jar.name -> Alias.Jar
-            Alias.Cfg.name -> Alias.Cfg
-            Alias.Ref.name -> Alias.Ref
-            Alias.Rel.name -> Alias.Rel
-            else           -> Alias.Other(text)
+            Abs.name -> Abs
+            Usr.name -> Usr
+            Cur.name -> Cur
+            Jar.name -> Jar
+            Cfg.name -> Cfg
+            Ref.name -> Ref
+            Rel.name -> Rel
+            else           -> Other(text)
         }
 
         /**
@@ -84,10 +84,10 @@ sealed class Alias(val name: String, val value:String) {
         @JvmStatic
         fun resolve(alias: Alias): String {
             return when (alias) {
-                Alias.Abs -> Files.absDir
-                Alias.Usr -> Files.usrDir
-                Alias.Cur -> Files.curDir
-                Alias.Cfg -> Files.cfgDir
+                Abs -> Files.absDir
+                Usr -> Files.usrDir
+                Cur -> Files.curDir
+                Cfg -> Files.cfgDir
                 else -> Files.curDir
             }
         }

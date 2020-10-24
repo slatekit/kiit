@@ -84,7 +84,6 @@ class ModelTests {
         Assert.assertEquals(a2Type, prop2Type)
         //Assert.assertEquals(a2Type, a2Type3)
         Assert.assertEquals(a2Type.isMarkedNullable, prop2Type.isMarkedNullable)
-
     }
 
 
@@ -117,7 +116,7 @@ class ModelTests {
 
 
     private fun loadSchemaSpecification(): Model {
-        val model = Model.of<Long, AuthorR> {
+        val model = Model.of<Long, AuthorR>(Long::class, AuthorR::class) {
             field(AuthorR::id, category = FieldCategory.Id)
             field(AuthorR::createdAt)
             field(AuthorR::createdBy)
