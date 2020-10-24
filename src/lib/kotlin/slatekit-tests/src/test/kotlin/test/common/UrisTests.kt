@@ -3,12 +3,13 @@ package test.common
 import org.junit.Assert
 import org.junit.Test
 import slatekit.common.io.Alias
+import slatekit.common.io.Files
 import slatekit.common.io.Uri
 import slatekit.common.io.Uris
 import slatekit.common.naming.*
 
 
-class UriTests {
+class UrisTests {
 
     val lookups = mapOf(
             "/" to "/",
@@ -16,23 +17,28 @@ class UriTests {
             "." to "/Users/batman/slatekit"
     )
 
-
-    fun ensure(raw:String, alias:Alias, child:String, full:String){
+    fun ensure(raw: String, alias: Alias, child: String, full: String) {
         val uri = Uris.parse(raw, lookups)
         Assert.assertEquals(raw.trim(), uri.raw)
         Assert.assertEquals(alias, uri.root)
         Assert.assertEquals(child, uri.path)
-        Assert.assertEquals(full , uri.full)
+        Assert.assertEquals(full, uri.full)
     }
 
-    fun ensure(uri:Uri, alias:Alias, child:String, full:String){
+    fun ensure(uri: Uri, alias: Alias, child: String, full: String) {
         Assert.assertEquals(alias, uri.root)
         Assert.assertEquals(child, uri.path)
-        Assert.assertEquals(full , uri.full)
+        Assert.assertEquals(full, uri.full)
     }
 
+    @Test
+    fun can_load_cfg_dir(){
+        val cfg = Files.cfgDir
+        println(cfg)
+    }
 
-    @Test fun can_parse_alias() {
+    @Test
+    fun can_parse_alias() {
         ensure("abs://dev/tmp/out.txt", Alias.Abs, "dev/tmp/out.txt", "/dev/tmp/out.txt")
         ensure("usr://dev/tmp/out.txt", Alias.Usr, "dev/tmp/out.txt", "/Users/batman/dev/tmp/out.txt")
         ensure("cur://dev/tmp/out.txt", Alias.Cur, "dev/tmp/out.txt", "/Users/batman/slatekit/dev/tmp/out.txt")
@@ -40,16 +46,18 @@ class UriTests {
         ensure("rel://dev/tmp/out.txt", Alias.Rel, "dev/tmp/out.txt", "/Users/batman/dev/tmp/out.txt")
     }
 
-    @Test fun can_parse_variations() {
-        ensure("abs://dev/tmp/out.txt", Alias.Abs    , "dev/tmp/out.txt", "/dev/tmp/out.txt")
-        ensure("abs://dev\\tmp\\out.txt", Alias.Abs  , "dev/tmp/out.txt", "/dev/tmp/out.txt")
-        ensure(" abs://dev/tmp/out.txt ", Alias.Abs  , "dev/tmp/out.txt", "/dev/tmp/out.txt")
-        ensure("abs:///dev/tmp/out.txt", Alias.Abs   , "dev/tmp/out.txt", "/dev/tmp/out.txt")
-        ensure("abs://\\dev/tmp/out.txt", Alias.Abs  , "dev/tmp/out.txt", "/dev/tmp/out.txt")
+    @Test
+    fun can_parse_variations() {
+        ensure("abs://dev/tmp/out.txt", Alias.Abs, "dev/tmp/out.txt", "/dev/tmp/out.txt")
+        ensure("abs://dev\\tmp\\out.txt", Alias.Abs, "dev/tmp/out.txt", "/dev/tmp/out.txt")
+        ensure(" abs://dev/tmp/out.txt ", Alias.Abs, "dev/tmp/out.txt", "/dev/tmp/out.txt")
+        ensure("abs:///dev/tmp/out.txt", Alias.Abs, "dev/tmp/out.txt", "/dev/tmp/out.txt")
+        ensure("abs://\\dev/tmp/out.txt", Alias.Abs, "dev/tmp/out.txt", "/dev/tmp/out.txt")
         ensure(" abs://dev\\tmp\\out.txt ", Alias.Abs, "dev/tmp/out.txt", "/dev/tmp/out.txt")
     }
 
-    @Test fun can_build_uri() {
+    @Test
+    fun can_build_uri() {
         ensure(Uri.abs("dev/tmp/out.txt", lookups), Alias.Abs, "dev/tmp/out.txt", "/dev/tmp/out.txt")
         ensure(Uri.usr("dev/tmp/out.txt", lookups), Alias.Usr, "dev/tmp/out.txt", "/Users/batman/dev/tmp/out.txt")
         ensure(Uri.cur("dev/tmp/out.txt", lookups), Alias.Cur, "dev/tmp/out.txt", "/Users/batman/slatekit/dev/tmp/out.txt")

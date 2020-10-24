@@ -4,6 +4,7 @@ import slatekit.cmds.Command
 import slatekit.cmds.CommandRequest
 import slatekit.common.*
 import slatekit.common.conf.Config
+import slatekit.common.crypto.Encryptor
 import slatekit.common.data.*
 import slatekit.db.Db
 import slatekit.entities.*
@@ -191,7 +192,7 @@ class Guide_ORM : Command("types") {
         // 3. Mapper: manual field mapping
         val mapper = object: Mapper<Long, User> {
 
-            override fun encode(model:User, action: DataAction): Values {
+            override fun encode(model:User, action: DataAction, enc: Encryptor?): Values {
                 return listOf(
                         Value("id", model.id),
                         Value("firstname", model.first),
@@ -200,7 +201,7 @@ class Guide_ORM : Command("types") {
                 )
             }
 
-            override fun decode(record: Record): User? {
+            override fun decode(record: Record, enc: Encryptor?): User? {
                 return User(
                         id = record.getInt("id").toLong(),
                         first = record.getString("first"),
@@ -222,7 +223,7 @@ class Guide_ORM : Command("types") {
     fun mapper():Mapper<Long, City> {
         val mapper = object: Mapper<Long, City> {
 
-            override fun encode(model:City, action: DataAction): Values {
+            override fun encode(model:City, action: DataAction, enc: Encryptor?): Values {
                 return listOf(
                         Value("id", model.id),
                         Value("name", model.name),
@@ -230,7 +231,7 @@ class Guide_ORM : Command("types") {
                 )
             }
 
-            override fun decode(record: Record): City? {
+            override fun decode(record: Record, enc: Encryptor?): City? {
                 return City(
                         id = record.getInt("id").toLong(),
                         name = record.getString("name"),

@@ -1,5 +1,5 @@
 import kotlinx.coroutines.*
-import java.nio.file.Paths
+//import java.nio.file.Paths
 //import java.util.logging.*
 
 //import org.apache.logging.log4j.LogManager
@@ -41,45 +41,45 @@ fun main(args:Array<String>) {
     //testPaths()
 
     val example = Example_Email()
-    example.execute(args)
+    //example.execute(args)
 }
 
 
-fun testPaths(){
-    val roots = File.listRoots()
-    println(roots.first().absolutePath)
-
-    val items = listOf(
-            "/Users/kishore.reddy/dev/tmp/out.txt",
-            "~/dev/tmp/out.txt",
-            "./dev/tmp/out.txt",
-            ".conf/dev/tmp/out.txt",
-            "../dev/tmp/out.txt",
-            "\$tmp:///dev/tmp/out.txt",
-            "jar://dev/tmp/out.txt"
-    )
-    val f = File("~/dev/tmp/out.txt")
-    println(f.absolutePath)
-    println(f.canonicalPath)
-    println(f.readText())
-
-    val results = items.map {
-        val path = Tries.of { Paths.get(it) }
-        val file = Tries.of { File(it) }
-        Triple(it, path, file)
-    }
-    results.map {
-        println("\n")
-        println("text: ${it.first}" )
-        println("path.abs: ${it.second.fold({ Tries.of{ it.toAbsolutePath()}.fold({ it }, { "FAILED" })}, { "ERROR" })}" )
-        println("path.rea: ${it.second.fold({ Tries.of{ it.toRealPath()    }.fold({ it }, { "FAILED" })}, { "ERROR" })}" )
-        println("path.uri: ${it.second.fold({ Tries.of{ it.toUri()         }.fold({ it }, { "FAILED" })}, { "ERROR" })}" )
-        println("path.nor: ${it.second.fold({ Tries.of{ it.normalize()     }.fold({ it }, { "FAILED" })}, { "ERROR" })}" )
-        println("file.abs: ${it.third .fold({ it.absolutePath } , { "ERROR" })}" )
-        println("file.can: ${it.third .fold({ it.canonicalPath }, { "ERROR" })}" )
-    }
-    println("\nDONE")
-}
+//fun testPaths(){
+//    val roots = File.listRoots()
+//    println(roots.first().absolutePath)
+//
+//    val items = listOf(
+//            "/Users/kishore.reddy/dev/tmp/out.txt",
+//            "~/dev/tmp/out.txt",
+//            "./dev/tmp/out.txt",
+//            ".conf/dev/tmp/out.txt",
+//            "../dev/tmp/out.txt",
+//            "\$tmp:///dev/tmp/out.txt",
+//            "jar://dev/tmp/out.txt"
+//    )
+//    //val f = File("~/dev/tmp/out.txt")
+//    //println(f.absolutePath)
+//    //println(f.canonicalPath)
+//    //println(f.readText())
+//
+//    val results = items.map {
+//        val path = Tries.of { Paths.get(it) }
+//        val file = Tries.of { File(it) }
+//        Triple(it, path, file)
+//    }
+//    results.map {
+//        println("\n")
+//        println("text: ${it.first}" )
+//        println("path.abs: ${it.second.fold({ Tries.of{ it.toAbsolutePath()}.fold({ it }, { "FAILED" })}, { "ERROR" })}" )
+//        println("path.rea: ${it.second.fold({ Tries.of{ it.toRealPath()    }.fold({ it }, { "FAILED" })}, { "ERROR" })}" )
+//        println("path.uri: ${it.second.fold({ Tries.of{ it.toUri()         }.fold({ it }, { "FAILED" })}, { "ERROR" })}" )
+//        println("path.nor: ${it.second.fold({ Tries.of{ it.normalize()     }.fold({ it }, { "FAILED" })}, { "ERROR" })}" )
+//        println("file.abs: ${it.third .fold({ it.absolutePath } , { "ERROR" })}" )
+//        println("file.can: ${it.third .fold({ it.canonicalPath }, { "ERROR" })}" )
+//    }
+//    println("\nDONE")
+//}
 
 
 fun testLRU() {
@@ -125,8 +125,6 @@ suspend fun testProcess(req:Req) {
 
 
 fun testLogs() {
-    println(Paths.get(""))
-
 
     fun testlog(logger:slatekit.common.log.Logger) {
         val name = logger.name

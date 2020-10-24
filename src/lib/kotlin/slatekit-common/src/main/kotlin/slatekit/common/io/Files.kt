@@ -17,7 +17,7 @@ import slatekit.common.DateTime
 import slatekit.common.ext.toStringNumeric
 import slatekit.common.ext.toStringYYYYMMDD
 import java.io.File
-import java.nio.file.Paths
+//import java.nio.file.Paths
 
 object Files {
 
@@ -25,8 +25,8 @@ object Files {
     val usrDir :String by lazy { System.getProperty("user.home") }
     val curDir :String by lazy { System.getProperty("user.dir")  }
     val tmpDir :String by lazy { System.getProperty("java.io.tmpdir") }
-    val cfgDir :String by lazy { Paths.get(System.getProperty("user.dir"), "conf").toString() }
-    val relDir :String by lazy { Paths.get(System.getProperty("user.dir"), "").parent.toString() }
+    val cfgDir :String by lazy { File(System.getProperty("user.dir"), "conf").toString() }
+    val relDir :String by lazy { File(System.getProperty("user.dir"), "").parent.toString() }
 
 
     fun createAtUserDir(dirs:List<String>):File {

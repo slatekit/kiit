@@ -2,7 +2,6 @@ package slatekit.common.io
 
 import slatekit.common.types.Doc
 import java.io.File
-import java.nio.file.Paths
 
 
 /**
@@ -13,8 +12,6 @@ import java.nio.file.Paths
  * 4. temp root: tmp://{path} -> $TMPDIR/{path}
  * 5. conf root: cfg://{path} -> ./conf/{path}
  * 6. jars root: jar://{path} -> app.jar/resources/{path}
- * @param root: The root           e.g. "user | curr | path | temp | conf | jars"
- * @param path  : The path to file     e.g. "user://company/app1/conf/env.conf
  */
 object Uris {
 
@@ -110,51 +107,31 @@ object Uris {
         return Doc.text(file.name, content)
     }
 
-    fun substringOrNull(text:String, start:Int):String? {
+    private fun substringOrNull(text:String, start:Int):String? {
         return if(start >= text.length) null else text.substring(start)
     }
 
     private fun parse(alias: Alias, raw:String, lookup:Map<String, String>? = null):Uri {
         val index = raw.indexOf("://")
         val rest = raw.substring(index + 3).trim()
-        val path = trim(rest)
+        val path = Uri.trim(rest)
         return build(alias, raw, path, lookup)
     }
 
 
     private fun resolve(alias: Alias, lookup: Map<String, String>?):String {
-        val actual = when(alias) {
-            Alias.Cfg -> lookup?.get(Alias.Cur.value)?.let { Paths.get(it, "conf").toString() } ?: Files.cfgDir
-            Alias.Rel -> lookup?.get(Alias.Cur.value)?.let { Paths.get(it, "").parent.toString() } ?: Files.relDir
+        return when(alias) {
+            Alias.Cfg -> lookup?.get(Alias.Cur.value)?.let { File(it, "conf").toString() } ?: Files.cfgDir
+            Alias.Rel -> lookup?.get(Alias.Cur.value)?.let { File(it, "").parent.toString() } ?: Files.relDir
             else      -> lookup?.getOrDefault(alias.value, Alias.resolve(alias)) ?: Alias.resolve(alias)
         }
-        return actual
     }
 
 
     fun build(alias: Alias, raw: String, path:String, lookup: Map<String, String>?):Uri {
         val root = resolve(alias, lookup)
-        val full = Paths.get(root, path).toString()
-        val child = Paths.get(path, "").toString()
-        return Uri(raw, alias, clean(child), clean(full))
-    }
-
-
-    fun clean(path:String):String {
-        return when {
-            File.separator == "/" -> { path.replace("\\", File.separator).replace("\\\\", File.separator) }
-            File.separator == "\\" -> { path.replace("/", File.separator).replace("//", File.separator) }
-            else -> path
-        }
-    }
-
-    fun trim(path:String):String {
-        val trimmed = path.trim()
-        return when {
-            trimmed.startsWith("/") -> trimmed.substring(1)
-            trimmed.startsWith("\\") -> trimmed.substring(1)
-            trimmed.startsWith(File.separator) -> trimmed.substring(1)
-            else -> trimmed
-        }
+        val full = File(root, path).toString()
+        val child = File(path, "").toString()
+        return Uri(raw, alias, Uri.clean(child), Uri.clean(full))
     }
 }

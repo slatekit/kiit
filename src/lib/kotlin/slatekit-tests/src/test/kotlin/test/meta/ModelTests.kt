@@ -84,7 +84,6 @@ class ModelTests {
         Assert.assertEquals(a2Type, prop2Type)
         //Assert.assertEquals(a2Type, a2Type3)
         Assert.assertEquals(a2Type.isMarkedNullable, prop2Type.isMarkedNullable)
-
     }
 
 
