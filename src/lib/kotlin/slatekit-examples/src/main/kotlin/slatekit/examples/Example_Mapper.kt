@@ -126,7 +126,7 @@ class Example_Mapper : Command("mapper") {
         val schema1 = ModelMapper.loadSchema(Movie::class)
 
         // CASE 2: Load the schema manually using properties for type-safety
-        val schema2 = Model.of<Long, Movie> {
+        val schema2 = Model.of<Long, Movie>(Long::class, Movie::class) {
                 field(Movie::id       , category = FieldCategory.Id)
                 field(Movie::title    , desc = "Title of movie", min = 5, max = 30)
                 field(Movie::category , desc = "Category (action|drama)", min = 1, max = 20)
@@ -140,7 +140,7 @@ class Example_Mapper : Command("mapper") {
         }
 
         // CASE 3: Load the schema manually using named fields
-        val schema3 =  Model.of<Long, Movie> {
+        val schema3 =  Model.of<Long, Movie>(Long::class, Movie::class) {
             field("id"         , KTypes.KLongType   , true, category = FieldCategory.Id)
             field("title"     , KTypes.KStringType  , true, desc = "Title of movie", min = 1, max = 30)
             field("category"  , KTypes.KStringType  , true, desc = "Category (action|drama)", min = 1, max = 20)

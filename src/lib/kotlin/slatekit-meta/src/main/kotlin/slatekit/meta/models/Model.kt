@@ -89,5 +89,11 @@ class Model(
             builder(schema)
             return schema.model
         }
+
+        fun <TId, T> of(idType:KClass<*>, tType:KClass<*>, builder: Schema<TId, T>.() -> Unit ): Model where TId : Comparable<TId>, T:Any {
+            val schema = Schema<TId, T>(idType, tType)
+            builder(schema)
+            return schema.model
+        }
     }
 }

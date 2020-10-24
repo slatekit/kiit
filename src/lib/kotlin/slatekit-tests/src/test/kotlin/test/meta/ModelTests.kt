@@ -117,7 +117,7 @@ class ModelTests {
 
 
     private fun loadSchemaSpecification(): Model {
-        val model = Model.of<Long, AuthorR> {
+        val model = Model.of<Long, AuthorR>(Long::class, AuthorR::class) {
             field(AuthorR::id, category = FieldCategory.Id)
             field(AuthorR::createdAt)
             field(AuthorR::createdBy)
