@@ -131,7 +131,7 @@ object Uris {
     fun build(alias: Alias, raw: String, path:String, lookup: Map<String, String>?):Uri {
         val root = resolve(alias, lookup)
         val full = File(root, path).toString()
-        val child = File(path, "").toString()
+        val child = File(path).toString()
         return Uri(raw, alias, Uri.clean(child), Uri.clean(full))
     }
 }
