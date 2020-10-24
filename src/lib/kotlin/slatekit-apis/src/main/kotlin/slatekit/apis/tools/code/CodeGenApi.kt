@@ -1,6 +1,5 @@
 package slatekit.apis.tools.code
 
-import com.sun.org.apache.xpath.internal.operations.Bool
 import slatekit.apis.*
 import slatekit.apis.AuthModes
 import slatekit.apis.Verbs
