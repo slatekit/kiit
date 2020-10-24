@@ -19,9 +19,10 @@ object Random {
     @JvmField val NUMS_NON_ZERO = "123456789"
     @JvmField val LETTERS_LCASE = "abcdefghijklmnopqrstuvwxyz"
     @JvmField val LETTERS_ALL = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"
-    @JvmField val ALPHA = "0123456789abcdefghijklmnopqrstuvwxyz"
-    @JvmField val ALPHANUM = "0123456789abcdefghijklmnopqrstuvwxyz0123456789"
-    @JvmField val ALPHASYM = "0123456789abcdefghijklmnopqrstuvwxyz!@#$%^&*()_+-=[]{}|;:,./<>?"
+    @JvmField val ALPHA = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"
+    @JvmField val ALPHANUM = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789"
+    @JvmField val ALPHANUM_SAFE = "abcdefghjkmnpqrstuvwxyzABCDEFGHJKMNPQRSTUVWXYZ0123456789"
+    @JvmField val ALPHASYM = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#$%^&*()_+-=[]{}|;:,./<>?"
     @JvmField val rnd = java.util.Random()
 
     @JvmStatic fun string3(): String = stringN(3)
