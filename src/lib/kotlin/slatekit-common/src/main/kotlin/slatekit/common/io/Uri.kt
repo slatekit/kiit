@@ -47,6 +47,11 @@ data class Uri internal constructor(val raw: String,
 
     fun toFile(): java.io.File {
         return when (root) {
+            is Alias.Abs -> java.io.File(full)
+            is Alias.Cur -> java.io.File(full)
+            is Alias.Rel -> java.io.File(full)
+            is Alias.Cfg -> java.io.File(full)
+            is Alias.Usr -> java.io.File(full)
             is Alias.Ref -> java.io.File(System.getProperty("java.io.tmpdir"), path)
             is Alias.Jar -> java.io.File(this.javaClass.getResource("/$path").file)
             else -> java.io.File(path)
