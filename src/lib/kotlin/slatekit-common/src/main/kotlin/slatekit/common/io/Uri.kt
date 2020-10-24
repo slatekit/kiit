@@ -30,14 +30,16 @@ data class Uri internal constructor(val raw: String,
         return when {
             path.isNullOrEmpty() -> {
                 this.copy(
+                        raw = otherPath,
                         path = otherPath,
-                        full = java.nio.file.Paths.get(full, otherPath).toString()
+                        full = File(full, otherPath).toString()
                 )
             }
             else -> {
                 this.copy(
-                        path = java.nio.file.Paths.get(path, otherPath).toString(),
-                        full = java.nio.file.Paths.get(full, otherPath).toString()
+                        raw  = File(path, otherPath).toString(),
+                        path = File(path, otherPath).toString(),
+                        full = File(full, otherPath).toString()
                 )
             }
         }
