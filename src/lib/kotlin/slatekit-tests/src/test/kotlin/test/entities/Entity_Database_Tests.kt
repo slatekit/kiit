@@ -18,10 +18,11 @@ import org.junit.Test
 //import java.time.*
 import org.threeten.bp.*
 import slatekit.common.Field
-import slatekit.common.ids.UniqueId
+import slatekit.common.ids.UPID
 import slatekit.common.conf.ConfFuncs
 import slatekit.common.data.Connections
 import slatekit.common.data.Vendor
+import slatekit.common.ids.UPIDs
 import slatekit.db.Db
 import slatekit.entities.Entities
 import slatekit.entities.EntityUpdatable
@@ -102,7 +103,7 @@ class Entity_Database_Tests {
                 test_localdatetime = LocalDateTime.of(2017, 7, 6, 10,30,0),
                 //test_timestamp = Instant.now(),
                 test_uuid = UUID.fromString(sampleUUID1),
-                test_uniqueId = UniqueId.parse(sampleUUID2)
+                test_uniqueId = UPIDs.parse(sampleUUID2)
         ))
         val created = svc.get(id)
         val update = created!!.copy(
@@ -120,7 +121,7 @@ class Entity_Database_Tests {
                 test_localdatetime = LocalDateTime.of(2017, 7, 7, 12,30,0),
                 //test_timestamp = Instant.now(),
                 test_uuid = UUID.fromString(sampleUUID1),
-                test_uniqueId = UniqueId.parse("abc:" + sampleUUID2)
+                test_uniqueId = UPIDs.parse("abc:" + sampleUUID2)
         )
         svc.update(update)
         val updated = svc.get(id)!!
@@ -223,7 +224,7 @@ class Entity_Database_Tests {
             val test_uuid: UUID = UUID.randomUUID(),
 
             @property:Field(length = 50)
-            val test_uniqueId: UniqueId = UniqueId.create("usa")
+            val test_uniqueId: UPID = UPIDs.create("usa")
 
     ) : EntityWithId<Long>, EntityUpdatable<Long, SampleEntity> {
         override fun isPersisted(): Boolean = id > 0

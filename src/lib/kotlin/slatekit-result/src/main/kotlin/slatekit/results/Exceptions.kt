@@ -53,7 +53,7 @@ data class ErroredException(
 ) : Exception(msg, origin), StatusException
 
 data class UnexpectedException(
-    override val msg: String?,
-    override val status: Failed.Unexpected? = null,
-    override val origin: Throwable? = null
+        override val msg: String?,
+        override val status: Failed.Unknown? = null,
+        override val origin: Throwable? = null
 ) : Exception(msg, origin), StatusException

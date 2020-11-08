@@ -94,7 +94,7 @@ open class Recorder<TRequest, TResponse>(val id: Identity,
                 is Failed.Invalid    -> logger.error("id=${id.id}, area=${event.area}, name=${event.name}, uuid=${event.uuid}, success=false, code=${event.status.code}, desc=${event.desc} $extra")
                 is Failed.Denied     -> logger.error("id=${id.id}, area=${event.area}, name=${event.name}, uuid=${event.uuid}, success=false, code=${event.status.code}, desc=${event.desc} $extra")
                 is Failed.Errored    -> logger.error("id=${id.id}, area=${event.area}, name=${event.name}, uuid=${event.uuid}, success=false, code=${event.status.code}, desc=${event.desc} $extra")
-                is Failed.Unexpected -> logger.error("id=${id.id}, area=${event.area}, name=${event.name}, uuid=${event.uuid}, success=false, code=${event.status.code}, desc=${event.desc} $extra")
+                is Failed.Unknown    -> logger.error("id=${id.id}, area=${event.area}, name=${event.name}, uuid=${event.uuid}, success=false, code=${event.status.code}, desc=${event.desc} $extra")
                 else                 -> logger.error("id=${id.id}, area=${event.area}, name=${event.name}, uuid=${event.uuid}, success=false, code=${event.status.code}, desc=${event.desc} $extra")
 
             }

@@ -27,7 +27,7 @@ class Ratio<I, O>(val limit: Double, val status: Status, val stats: (I) -> Count
             is Failed.Invalid -> isAtThreshold(counts.totalInvalid(), counts.totalProcessed())
             is Failed.Ignored -> isAtThreshold(counts.totalIgnored(), counts.totalProcessed())
             is Failed.Errored -> isAtThreshold(counts.totalErrored(), counts.totalProcessed())
-            is Failed.Unexpected -> isAtThreshold(counts.totalUnexpected(), counts.totalProcessed())
+            is Failed.Unknown -> isAtThreshold(counts.totalUnexpected(), counts.totalProcessed())
             else -> isAtThreshold(counts.totalUnexpected(), counts.totalProcessed())
         }
         logger?.info("RATIO: status = ${result.status.msg}")

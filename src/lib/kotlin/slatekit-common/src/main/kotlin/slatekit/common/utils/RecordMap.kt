@@ -15,7 +15,7 @@ package slatekit.common.utils
 
 import slatekit.common.DateTime
 import slatekit.common.Record
-import slatekit.common.ids.UniqueId
+import slatekit.common.ids.UPID
 //import java.time.*
 import org.threeten.bp.*
 import slatekit.common.DateTimes
@@ -43,7 +43,7 @@ class RecordMap(private val rs: ListMap<String, Any>) : Record {
     override fun getFloat(key: String): Float = rs.get(key) as Float
     override fun getDouble(key: String): Double = rs.get(key) as Double
     override fun getUUID(key: String): java.util.UUID = rs.get(key) as UUID
-    override fun getUniqueId(key: String): UniqueId = rs.get(key) as UniqueId
+    override fun getUPID(key: String): UPID = rs.get(key) as UPID
     override fun getInstant(key: String): Instant = DateTimes.of(rs.get(key) as java.sql.Timestamp).toInstant()
     override fun getDateTime(key: String): DateTime = (rs.get(key) as java.sql.Timestamp).let { DateTimes.of(it) }
     override fun getLocalDate(key: String): LocalDate = DateTimes.of(rs.get(key) as java.sql.Date).date()

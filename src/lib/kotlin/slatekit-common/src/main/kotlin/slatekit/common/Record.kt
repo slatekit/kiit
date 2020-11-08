@@ -13,7 +13,7 @@
 
 package slatekit.common
 
-import slatekit.common.ids.UniqueId
+import slatekit.common.ids.UPID
 //import java.time.*
 import org.threeten.bp.*
 
@@ -43,5 +43,5 @@ interface Record : Inputs {
     fun getZonedDateTime(pos: Int): ZonedDateTime = getZonedDateTime(getName(pos))
     fun getZonedDateTimeUtc(pos: Int): ZonedDateTime = getZonedDateTimeUtc(getName(pos))
     fun getUUID(pos: Int): java.util.UUID = getUUID(getName(pos))
-    fun getUniqueId(pos: Int): UniqueId = getUniqueId(getName(pos))
+    fun getUPID(pos: Int): UPID = getUPID(getName(pos))
 }

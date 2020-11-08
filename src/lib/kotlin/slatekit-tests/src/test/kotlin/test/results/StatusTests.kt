@@ -59,7 +59,7 @@ class StatusTests {
         Assert.assertTrue(Codes.INVALID    is Failed.Invalid   )
         Assert.assertTrue(Codes.DENIED     is Failed.Denied    )
         Assert.assertTrue(Codes.ERRORED    is Failed.Errored   )
-        Assert.assertTrue(Codes.UNEXPECTED is Failed.Unexpected )
+        Assert.assertTrue(Codes.UNEXPECTED is Failed.Unknown )
     }
 
     @Test

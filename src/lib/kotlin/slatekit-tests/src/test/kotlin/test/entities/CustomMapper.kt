@@ -8,7 +8,6 @@ import slatekit.common.data.Value
 import slatekit.common.data.Values
 import slatekit.meta.Reflector
 import slatekit.meta.models.Model
-import slatekit.meta.models.ModelField
 import slatekit.orm.OrmMapper
 import slatekit.orm.databases.vendors.MySqlConverter
 import test.setup.AuthorEnc
@@ -93,7 +92,7 @@ class CustomMapper2(model: Model, db: IDb, kls: KClass<AuthorEnc>, val modeKey:S
                 status    = StatusEnum.convert(record.getInt("status"   )) as StatusEnum,
                 salary    = record.getDouble  ("salary"   ),
                 uid       = record.getUUID    ("uid"      ),
-                shardId   = record.getUniqueId("shardId"  ),
+                shardId   = record.getUPID("shardId"  ),
                 encmode   = record.getString  ("encmode"  )
         )
         return item

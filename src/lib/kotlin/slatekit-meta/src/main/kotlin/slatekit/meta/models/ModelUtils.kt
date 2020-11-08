@@ -58,7 +58,7 @@ object ModelUtils {
             KTypes.KZonedDateTimeType -> FieldType.typeZonedDateTime
             KTypes.KInstantType -> FieldType.typeInstant
             KTypes.KUUIDType -> FieldType.typeUUID
-            KTypes.KUniqueIdType -> FieldType.typeUnique
+            KTypes.KUPIDType -> FieldType.typeUnique
             else               -> FieldType.typeObject
         }
     }

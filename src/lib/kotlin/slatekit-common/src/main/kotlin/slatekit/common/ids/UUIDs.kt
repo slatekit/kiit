@@ -1,33 +1,46 @@
 package slatekit.common.ids
 
-import slatekit.common.utils.Random
 import java.util.*
 
 
 
 /**
+ * Wrapper for UUID V4 conforming to allow for using
+ */
+data class UUID4(val uuid: UUID) : UID {
+    override val name: String = "4"
+    override val value: String = uuid.toString()
+}
+
+
+/**
  * Default implementation of the Ids interface with integration with a UUID v4
  */
-open class UUIDs(val upperCase:Boolean) : Ids {
-    override fun create(): String {
-        return Random.uuid(true, upperCase)
+object UUIDs : UIDGen<UUID4> {
+
+    override fun create(): UUID4 {
+        return UUID4(UUID.randomUUID())
     }
 
-    override fun parse(id: String):String {
-        return UUID.fromString(id).toString()
+    override fun create(context:String?): UUID4 {
+        return UUID4(UUID.randomUUID())
     }
 
-    override fun isValid(id: String): Boolean {
-        return try { UUID.fromString(id); true } catch (ex:Exception) { false }
+    override fun parse(id: String):UUID4 {
+        return UUID4(UUID.fromString(id))
     }
 
     override fun split(id: String): Array<String> {
-        val uuid = UUID.fromString(id)
-        return arrayOf(
-                uuid.timestamp().toString(),
-                uuid.version().toString(),
-                uuid.variant().toString(),
-                uuid.clockSequence().toString(),
-                uuid.node().toString())
+        return try {
+            val uuid = UUID.fromString(id)
+            arrayOf(
+                    uuid.timestamp().toString(),
+                    uuid.version().toString(),
+                    uuid.variant().toString(),
+                    uuid.clockSequence().toString(),
+                    uuid.node().toString())
+        } catch(ex:Exception) {
+            arrayOf()
+        }
     }
 }

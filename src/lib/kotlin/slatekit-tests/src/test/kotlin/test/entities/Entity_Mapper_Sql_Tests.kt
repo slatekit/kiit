@@ -17,7 +17,8 @@ import org.junit.Test
 import slatekit.common.DateTimes
 import slatekit.common.data.DbCon
 import slatekit.common.ext.toUUId
-import slatekit.common.ids.UniqueId
+import slatekit.common.ids.UPID
+import slatekit.common.ids.UPIDs
 import slatekit.db.Db
 import slatekit.meta.models.ModelMapper
 import slatekit.orm.OrmMapper
@@ -34,7 +35,7 @@ class Entity_Mapper_Sql_Tests {
 
     val sampleDate = DateTimes.of(2018, 11, 1, 8, 30, 0)
     val sampleUser = AuthorR(0, sampleUUID1, sampleDate, 0, sampleDate, 0, "k@abc.com",
-            true, 35, StatusEnum.Active, 123.45, sampleUUID1.toUUId(), UniqueId.parse("us:" + sampleUUID1) )
+            true, 35, StatusEnum.Active, 123.45, sampleUUID1.toUUId(), UPIDs.parse("us:" + sampleUUID1) )
 
 
     @Test fun can_map_sql_insert(){

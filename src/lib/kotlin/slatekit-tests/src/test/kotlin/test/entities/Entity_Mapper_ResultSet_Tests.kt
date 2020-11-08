@@ -17,7 +17,8 @@ import org.junit.Test
 import slatekit.common.crypto.Encryptor
 import slatekit.common.data.DbCon
 import slatekit.common.utils.RecordMap
-import slatekit.common.ids.UniqueId
+import slatekit.common.ids.UPIDs
+import slatekit.common.ids.UUIDs
 import slatekit.common.utils.B64Java8
 import slatekit.common.utils.ListMap
 import slatekit.db.Db
@@ -51,7 +52,7 @@ class Entity_Mapper_ResultSet_Tests {
         Assert.assertTrue( entity.salary == 400.5 )
         Assert.assertTrue( entity.status == StatusEnum.Active )
         Assert.assertTrue( entity.uid == UUID.fromString(sampleUUID1) )
-        Assert.assertTrue( entity.shardId == UniqueId.parse(sampleUUID2) )
+        Assert.assertTrue( entity.shardId == UPIDs.parse(sampleUUID2) )
     }
 
 
@@ -70,8 +71,8 @@ class Entity_Mapper_ResultSet_Tests {
         Assert.assertTrue( entity.age == 35 )
         Assert.assertTrue( entity.status == StatusEnum.Active )
         Assert.assertTrue( entity.salary == 400.5 )
-        Assert.assertTrue( entity.uid == UUID.fromString(sampleUUID1) )
-        Assert.assertTrue( entity.shardId == UniqueId.parse(sampleUUID2) )
+        Assert.assertTrue( entity.uid == UUIDs.parse(sampleUUID1).uuid )
+        Assert.assertTrue( entity.shardId == UPIDs.parse(sampleUUID2) )
     }
 
 
@@ -90,7 +91,7 @@ class Entity_Mapper_ResultSet_Tests {
         Assert.assertTrue( entity.salary == 400.5 )
         Assert.assertTrue( entity.addr == Address("street 1", "city 1", "state 1", 1,"12345", true))
         Assert.assertTrue( entity.uid == UUID.fromString(sampleUUID1) )
-        Assert.assertTrue( entity.shardId == UniqueId.parse(sampleUUID2) )
+        Assert.assertTrue( entity.shardId == UPIDs.parse(sampleUUID2) )
     }
 
 
@@ -114,7 +115,7 @@ class Entity_Mapper_ResultSet_Tests {
         Assert.assertTrue( entity.salary == 400.5 )
         Assert.assertTrue( entity.status == StatusEnum.Active )
         Assert.assertTrue( entity.uid == UUID.fromString(sampleUUID1) )
-        Assert.assertTrue( entity.shardId == UniqueId.parse(sampleUUID2) )
+        Assert.assertTrue( entity.shardId == UPIDs.parse(sampleUUID2))
     }
 
 
@@ -140,7 +141,7 @@ class Entity_Mapper_ResultSet_Tests {
         Assert.assertTrue( entity.salary == 400.5 )
         Assert.assertTrue( entity.status == StatusEnum.Active )
         Assert.assertTrue( entity.uid == UUID.fromString(sampleUUID1) )
-        Assert.assertTrue( entity.shardId == UniqueId.parse(sampleUUID2) )
+        Assert.assertTrue( entity.shardId == UPIDs.parse(sampleUUID2) )
     }
 
 
@@ -163,7 +164,7 @@ class Entity_Mapper_ResultSet_Tests {
                 Pair("status", StatusEnum.Active.value),
                 Pair("salary", 400.5),
                 Pair("uid", UUID.fromString(sampleUUID1)),
-                Pair("shardId", UniqueId.parse(sampleUUID2)),
+                Pair("shardId", UPIDs.parse(sampleUUID2)),
                 Pair("encmode", "a")
             )
         )
@@ -187,7 +188,7 @@ class Entity_Mapper_ResultSet_Tests {
                 Pair("addr_zip", "12345"),
                 Pair("addr_isPOBox", true),
                 Pair("uid", UUID.fromString(sampleUUID1)),
-                Pair("shardId", UniqueId.parse(sampleUUID2))
+                Pair("shardId", UPIDs.parse(sampleUUID2))
             )
         )
         return data

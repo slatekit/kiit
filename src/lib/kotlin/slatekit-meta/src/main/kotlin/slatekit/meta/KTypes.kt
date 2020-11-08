@@ -5,7 +5,7 @@ import slatekit.common.crypto.EncDouble
 import slatekit.common.crypto.EncInt
 import slatekit.common.crypto.EncLong
 import slatekit.common.crypto.EncString
-import slatekit.common.ids.UniqueId
+import slatekit.common.ids.UPID
 import slatekit.common.types.Content
 import slatekit.common.types.Doc
 //import java.time.*
@@ -36,7 +36,7 @@ object KTypes {
     val KZonedDateTimeClass = ZonedDateTime::class
     val KInstantClass = Instant::class
     val KUUIDClass = java.util.UUID::class
-    val KUniqueIdClass = UniqueId::class
+    val KUPIDClass = UPID::class
     val KDocClass = Doc::class
     val KVarsClass = Vars::class
     val KSmartValueClass = SmartValue::class
@@ -62,7 +62,7 @@ object KTypes {
     val KZonedDateTimeType = ZonedDateTime::class.createType()
     val KInstantType = Instant::class.createType()
     val KUUIDType = java.util.UUID::class.createType()
-    val KUniqueIdType = UniqueId::class.createType()
+    val KUPIDType = UPID::class.createType()
     val KDocType = Doc::class.createType()
     val KVarsType = Vars::class.createType()
     val KSmartValueType = SmartValue::class.createType()
@@ -92,7 +92,7 @@ object KTypes {
             KZonedDateTimeType -> KZonedDateTimeClass
             KInstantType -> KInstantClass
             KUUIDType -> KUUIDClass
-            KUniqueIdType -> KUniqueIdClass
+            KUPIDType -> KUPIDClass
             KDocType -> KDocClass
             KVarsType -> KVarsClass
             KSmartValueType -> KSmartValueClass
@@ -122,7 +122,7 @@ object KTypes {
             KZonedDateTimeType -> DateTime.now().toStringNumeric()
             KInstantType -> DateTime.now().toStringNumeric()
             KUUIDType -> "782d1a4a-9223-4c49-96ee-cecb4c368a61"
-            KUniqueIdType -> "prefix:782d1a4a-9223-4c49-96ee-cecb4c368a61"
+            KUPIDType -> "prefix:782d1a4a-9223-4c49-96ee-cecb4c368a61"
             KDocType -> "user://myapp/conf/abc.conf"
             KVarsType -> "a=1,b=2,c=3"
             KSmartValueType -> "123-456-7890"
@@ -152,7 +152,7 @@ object KTypes {
             KZonedDateTimeType -> true
             KInstantType -> true
             KUUIDType -> true
-            KUniqueIdType -> true
+            KUPIDType -> true
             KSmartValueType -> true
             KDecStringType -> true
             KDecIntType -> true
@@ -179,7 +179,7 @@ object KTypes {
             KZonedDateTimeClass -> true
             KInstantClass -> true
             KUUIDClass -> true
-            KUniqueIdClass -> true
+            KUPIDClass -> true
             KSmartValueClass -> true
             KDecStringClass -> true
             KDecIntClass -> true

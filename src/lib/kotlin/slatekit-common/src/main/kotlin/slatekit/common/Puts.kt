@@ -1,7 +1,7 @@
 package slatekit.common
 
 import org.threeten.bp.*
-import slatekit.common.ids.UniqueId
+import slatekit.common.ids.UPID
 import java.util.*
 
 interface Puts {
@@ -20,7 +20,7 @@ interface Puts {
     fun putZonedDateTime(key: String, value: ZonedDateTime)
     fun putZonedDateTimeUtc(key: String, value: ZonedDateTime)
     fun putUUID(key: String, value: java.util.UUID)
-    fun putUniqueId(key: String, value: UniqueId)
+    fun putUPID(key: String, value: UPID)
 
     // put values as Option[T]
     fun putStringOrNull(key: String, value: String?)
@@ -38,5 +38,5 @@ interface Puts {
     fun putZonedDateTimeOrNull(key: String, value: ZonedDateTime?)
     fun putZonedDateTimeUtcOrNull(key: String, value: ZonedDateTime?)
     fun putUUIDOrNull(key: String, value: UUID?)
-    fun putUniqueIdOrNull(key: String, value: UniqueId?)
+    fun putUPIDOrNull(key: String, value: UPID?)
 }

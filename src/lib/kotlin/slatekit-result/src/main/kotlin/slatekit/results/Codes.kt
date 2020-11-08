@@ -68,7 +68,7 @@ object Codes {
     @JvmField val LIMITED         = Failed.Errored   (500009, "Limited")
 
     // Unexpected
-    @JvmField val UNEXPECTED      = Failed.Unexpected(500008, "Unexpected")
+    @JvmField val UNEXPECTED      = Failed.Unknown(500008, "Unexpected")
 
     // Success ( Interactive / Metadata )
     @JvmField val EXIT            = Passed.Succeeded (600002, "Exiting")

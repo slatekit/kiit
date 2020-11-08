@@ -24,7 +24,8 @@ import slatekit.common.conf.Config
 import slatekit.common.conf.MapSettings
 import slatekit.common.envs.EnvMode
 import slatekit.common.ext.zoned
-import slatekit.common.ids.UniqueId
+import slatekit.common.ids.UPID
+import slatekit.common.ids.UPIDs
 import slatekit.meta.map
 import test.setup.Movie
 import test.setup.MyEncryptor
@@ -195,7 +196,7 @@ class ConfigTests {
         val localDateTime = LocalDateTime.of(2020, 3, 1, 9, 30, 45)
         val zonedDateTime = localDateTime.zoned()
         val uuid = UUID.randomUUID()
-        val uniqueId = UniqueId.create()
+        val uniqueId = UPIDs.create()
 
         val settings = MapSettings()
         settings.putString("sString", "abc")
@@ -209,7 +210,7 @@ class ConfigTests {
         settings.putLocalDateTime("sLocalDateTime", localDateTime)
         settings.putZonedDateTime("sZonedDateTime", zonedDateTime)
         settings.putUUID("sUUID", uuid)
-        settings.putUniqueId("sUniqueId", uniqueId)
+        settings.putUPID("sUniqueId", uniqueId)
 
         Assert.assertEquals(bValue, settings.getBool("sBool"))
         Assert.assertEquals(sValue, settings.getShort("sShort"))

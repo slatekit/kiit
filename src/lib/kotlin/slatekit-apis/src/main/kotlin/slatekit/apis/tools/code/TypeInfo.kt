@@ -112,7 +112,7 @@ data class TypeInfo(
             KTypes.KDocType           to TypeInfo(true, false, listOf(KTypes.KDocClass          ), null),
             KTypes.KVarsType          to TypeInfo(true, false, listOf(KTypes.KVarsClass         ), null),
             KTypes.KSmartValueType    to TypeInfo(true, false, listOf(KTypes.KSmartValueClass   ), null),
-            KTypes.KUniqueIdType      to TypeInfo(true, false, listOf(KTypes.KUniqueIdClass     ), null),
+            KTypes.KUPIDType      to TypeInfo(true, false, listOf(KTypes.KUPIDClass     ), null),
             KTypes.KUUIDType          to TypeInfo(true, false, listOf(KTypes.KUUIDClass         ), null),
             KTypes.KContentType       to TypeInfo(true, false, listOf(KTypes.KContentClass      ), null),
             KTypes.KDecStringType     to TypeInfo(true, false, listOf(KTypes.KDecStringClass    ), null),

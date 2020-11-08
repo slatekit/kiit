@@ -6,7 +6,7 @@ import slatekit.common.DateTime
 import slatekit.common.Internal
 import slatekit.common.Strings
 import slatekit.common.ext.atUtc
-import slatekit.common.ids.UniqueId
+import slatekit.common.ids.UPID
 import java.util.*
 
 /**
@@ -57,7 +57,7 @@ class MapSettings(private val _data:MutableMap<String, Any?> = mutableMapOf()) :
     override fun putZonedDateTime(key: String, value: ZonedDateTime) = putZonedDateTimeOrNull(key, value)
     override fun putZonedDateTimeUtc(key: String, value: ZonedDateTime) = putZonedDateTimeOrNull(key, value)
     override fun putUUID(key: String, value: UUID) = putUUIDOrNull(key, value)
-    override fun putUniqueId(key: String, value: UniqueId) = putUniqueIdOrNull(key, value)
+    override fun putUPID(key: String, value: UPID) = putUPIDOrNull(key, value)
 
     override fun putStringOrNull(key: String, value: String?) { _data[key] = value }
     override fun putBoolOrNull(key: String, value: Boolean?) { _data.put(key, value) }
@@ -74,7 +74,7 @@ class MapSettings(private val _data:MutableMap<String, Any?> = mutableMapOf()) :
     override fun putZonedDateTimeOrNull(key: String, value: ZonedDateTime?) { _data.put(key, value) }
     override fun putZonedDateTimeUtcOrNull(key: String, value: ZonedDateTime?) { _data.put(key, value) }
     override fun putUUIDOrNull(key: String, value: UUID?) { _data.put(key, value) }
-    override fun putUniqueIdOrNull(key: String, value: UniqueId?) { _data.put(key, value) }
+    override fun putUPIDOrNull(key: String, value: UPID?) { _data.put(key, value) }
 
 
     private fun getStringRaw(key: String): String = _data.get(key)?.toString()?.trim() ?: ""
