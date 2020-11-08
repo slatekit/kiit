@@ -248,7 +248,7 @@ open class OrmMapper<TId, T>(
         } else if (mapping.dataCls == KTypes.KUUIDClass) {
             val raw = Reflector.getFieldValue(item, mapping.name) as java.util.UUID?
             converter.uuids.encode(raw)
-        } else if (mapping.dataCls == KTypes.KUniqueIdClass) {
+        } else if (mapping.dataCls == KTypes.KUPIDClass) {
             val raw = Reflector.getFieldValue(item, mapping.name) as UPID?
             converter.uniqueIds.encode(raw)
         } else if (mapping.isEnum) {

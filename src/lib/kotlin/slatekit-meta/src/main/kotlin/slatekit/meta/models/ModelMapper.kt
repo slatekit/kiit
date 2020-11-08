@@ -197,7 +197,7 @@ open class ModelMapper(
             KTypes.KDateTimeClass      -> if ( mapping.isRequired ) record.getDateTime(colName)      else record.getDateTimeOrNull(colName)
             KTypes.KInstantClass       -> if ( mapping.isRequired ) record.getInstant(colName)       else record.getInstantOrNull(colName)
             KTypes.KUUIDClass          -> if ( mapping.isRequired ) record.getUUID(colName)          else record.getUUIDOrNull(colName)
-            KTypes.KUniqueIdClass      -> if ( mapping.isRequired ) record.getUPID(colName)      else record.getUPIDOrNull(colName)
+            KTypes.KUPIDClass      -> if ( mapping.isRequired ) record.getUPID(colName)      else record.getUPIDOrNull(colName)
             else -> {
                 if (mapping.isEnum) {
                     val enumInt = record.getInt(colName)

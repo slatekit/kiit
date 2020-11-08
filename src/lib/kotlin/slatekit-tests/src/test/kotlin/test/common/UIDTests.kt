@@ -73,17 +73,18 @@ class ULIDTests {
     @Test
     fun upid_can_create(){
         val id = ULIDs.create()
-        Assert.assertTrue(id.value == "${id.instant}${id.node}${id.random}")
+        Assert.assertTrue(id.value == "${id.instant}${id.node}${id.random}${id.version}")
     }
 
     @Test
     fun upid_can_create_empty(){
         val id = ULIDs.create("kprmac01")
-        Assert.assertTrue(id.value == "${id.instant}kprmac01${id.random}")
+        Assert.assertTrue(id.value == "${id.instant}kprmac01${id.random}${id.version}")
     }
 
     @Test
     fun upid_can_validate(){
+        // 175aa15decd62wym53449wvhyjmuw
         val id = ULIDs.create().value
         Assert.assertTrue(ULIDs.isValid(id))
     }

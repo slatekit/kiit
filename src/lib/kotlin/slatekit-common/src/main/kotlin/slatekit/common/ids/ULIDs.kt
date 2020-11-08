@@ -22,9 +22,9 @@ import slatekit.common.utils.Random
  *
  *
  */
-data class ULID internal constructor(val instant:String, val node:String, val random:String) : UID {
+data class ULID internal constructor(val instant:String, val node:String, val random:String, val version:String) : UID {
     override val name: String = "ulid"
-    override val value: String = "$instant$node$random"
+    override val value: String = "$instant$node$random$version"
 }
 
 
@@ -52,13 +52,13 @@ object ULIDs : UIDGen<ULID> {
         val timestamp = getTime()
         val instant = java.lang.Long.toHexString(timestamp).toLowerCase()
         val random = Random.randomize(10, RANDOM_CHARS)
-        return ULID(instant, node, random)
+        return ULID(instant, node, random, VERSION)
     }
 
     override fun parse(id: String): ULID {
         val parts = split(id)
         return when(parts.size){
-            3 -> ULID(parts[0], parts[1], parts[2])
+            4 -> ULID(parts[0], parts[1], parts[2], parts[3])
             else -> throw Exception("ULID has invalid value of $id")
         }
     }
