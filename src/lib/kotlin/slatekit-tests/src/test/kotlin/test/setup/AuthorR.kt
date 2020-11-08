@@ -5,6 +5,7 @@ import slatekit.common.Field
 import slatekit.common.Id
 import slatekit.common.utils.Random
 import slatekit.common.ids.UPID
+import slatekit.common.ids.UPIDs
 import slatekit.entities.EntityWithId
 import java.util.*
 
@@ -43,10 +44,10 @@ data class AuthorR(
         val salary:Double = 20.5,
 
         @property:Field(required = true)
-        val uid: UUID = UUID.fromString(UUIDs.sampleUUID1),
+        val uid: UUID = UUID.fromString(UUIDSamples.sampleUUID1),
 
         @property:Field(required = true)
-        val shardId: UPID = UPID.parse(UUIDs.sampleUUID2)
+        val shardId: UPID = UPIDs.parse(UUIDSamples.sampleUUID2)
 ) : EntityWithId<Long> {
         override fun isPersisted(): Boolean = id > 0
 }

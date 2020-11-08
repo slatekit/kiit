@@ -31,10 +31,10 @@ data class ULID internal constructor(val instant:String, val node:String, val ra
 /**
  * Default implementation of the Ids interface with integration UPID ( using UUID V4 )
  */
-open class ULIDs() : UIDGen<ULID> {
-    open val VERSION = "a"
-    open val RANDOM_CHARS = "abcdefghjkmnpqrstuvwxyz23456789"
-    open val NODE_ID = Random.randomize(8, RANDOM_CHARS)
+object ULIDs : UIDGen<ULID> {
+    val VERSION = "a"
+    val RANDOM_CHARS = "abcdefghjkmnpqrstuvwxyz23456789"
+    val NODE_ID = Random.randomize(8, RANDOM_CHARS)
     private var lastTime = System.currentTimeMillis()
 
     override fun create(): ULID {
@@ -85,6 +85,4 @@ open class ULIDs() : UIDGen<ULID> {
         return lastTime
     }
 }
-
-object ULIDGen : ULIDs()
 
