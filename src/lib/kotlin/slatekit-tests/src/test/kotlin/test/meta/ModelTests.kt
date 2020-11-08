@@ -3,7 +3,7 @@ package test.meta
 import org.junit.Assert
 import org.junit.Test
 import slatekit.common.DateTime
-import slatekit.common.ids.UniqueId
+import slatekit.common.ids.UPID
 import slatekit.meta.Reflector
 import slatekit.meta.models.FieldCategory
 import slatekit.meta.models.Model
@@ -111,7 +111,7 @@ class ModelTests {
         ensureField(model, "age"       , true, Int::class      )
         ensureField(model, "salary"    , true, Double::class   )
         ensureField(model, "uid"       , true, UUID::class     )
-        ensureField(model, "shardId"   , true, UniqueId::class )
+        ensureField(model, "shardId"   , true, UPID::class )
     }
 
 

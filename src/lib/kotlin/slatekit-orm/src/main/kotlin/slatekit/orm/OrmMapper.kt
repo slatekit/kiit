@@ -17,7 +17,7 @@ package slatekit.orm
 
 import slatekit.common.*
 import slatekit.query.QueryEncoder
-import slatekit.common.ids.UniqueId
+import slatekit.common.ids.UPID
 import slatekit.orm.Consts.idCol
 import slatekit.orm.core.Converter
 import slatekit.meta.KTypes
@@ -249,7 +249,7 @@ open class OrmMapper<TId, T>(
             val raw = Reflector.getFieldValue(item, mapping.name) as java.util.UUID?
             converter.uuids.encode(raw)
         } else if (mapping.dataCls == KTypes.KUniqueIdClass) {
-            val raw = Reflector.getFieldValue(item, mapping.name) as UniqueId?
+            val raw = Reflector.getFieldValue(item, mapping.name) as UPID?
             converter.uniqueIds.encode(raw)
         } else if (mapping.isEnum) {
             val raw = Reflector.getFieldValue(item, mapping.name) as EnumLike

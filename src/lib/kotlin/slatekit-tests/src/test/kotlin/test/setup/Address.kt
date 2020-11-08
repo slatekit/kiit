@@ -2,7 +2,7 @@ package test.setup
 
 import slatekit.common.Field
 import slatekit.common.Id
-import slatekit.common.ids.UniqueId
+import slatekit.common.ids.UPID
 import slatekit.entities.EntityWithId
 import java.util.*
 
@@ -56,7 +56,7 @@ data class UserWithAddress(
         val uid: UUID = UUID.fromString(UUIDs.sampleUUID1),
 
         @property:Field(required = true)
-        val shardId: UniqueId = UniqueId.parse(UUIDs.sampleUUID2)
+        val shardId: UPID = UPID.parse(UUIDs.sampleUUID2)
 ) : EntityWithId<Long> {
         override fun isPersisted(): Boolean = id > 0
 }

@@ -22,7 +22,7 @@ open class Converter<TId, T> where TId: kotlin.Comparable<TId>, T:Any {
     open val dateTimes          = DateTimeEncoder()
     open val instants           = InstantEncoder()
     open val uuids              = UUIDEncoder()
-    open val uniqueIds          = UniqueIdEncoder()
+    open val uniqueIds          = UPIDEncoder()
     open val enums              = EnumEncoder()
 
     open val inserts = Insert<TId, T>()

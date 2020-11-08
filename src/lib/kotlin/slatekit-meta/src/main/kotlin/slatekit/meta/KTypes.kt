@@ -5,7 +5,7 @@ import slatekit.common.crypto.EncDouble
 import slatekit.common.crypto.EncInt
 import slatekit.common.crypto.EncLong
 import slatekit.common.crypto.EncString
-import slatekit.common.ids.UniqueId
+import slatekit.common.ids.UPID
 import slatekit.common.types.Content
 import slatekit.common.types.Doc
 //import java.time.*
@@ -36,7 +36,7 @@ object KTypes {
     val KZonedDateTimeClass = ZonedDateTime::class
     val KInstantClass = Instant::class
     val KUUIDClass = java.util.UUID::class
-    val KUniqueIdClass = UniqueId::class
+    val KUniqueIdClass = UPID::class
     val KDocClass = Doc::class
     val KVarsClass = Vars::class
     val KSmartValueClass = SmartValue::class
@@ -62,7 +62,7 @@ object KTypes {
     val KZonedDateTimeType = ZonedDateTime::class.createType()
     val KInstantType = Instant::class.createType()
     val KUUIDType = java.util.UUID::class.createType()
-    val KUniqueIdType = UniqueId::class.createType()
+    val KUniqueIdType = UPID::class.createType()
     val KDocType = Doc::class.createType()
     val KVarsType = Vars::class.createType()
     val KSmartValueType = SmartValue::class.createType()

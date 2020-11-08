@@ -3,7 +3,8 @@ package test.setup
 import slatekit.common.DateTime
 import slatekit.common.Field
 import slatekit.common.utils.Random
-import slatekit.common.ids.UniqueId
+import slatekit.common.ids.UPID
+import slatekit.common.ids.UPIDGen
 import slatekit.entities.EntityWithId
 import java.util.*
 
@@ -47,5 +48,5 @@ class AuthorW : EntityWithId<Long> {
     var uid: UUID = UUID.fromString(UUIDs.sampleUUID1)
 
     @property:Field(required = true)
-    var shardId: UniqueId = UniqueId.parse(UUIDs.sampleUUID2)
+    var shardId: UPID = UPIDGen.parse(UUIDs.sampleUUID2)
 }
