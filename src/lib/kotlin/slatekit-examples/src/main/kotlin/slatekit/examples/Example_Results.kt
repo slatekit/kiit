@@ -76,7 +76,7 @@ class Example_Results : Command("results"), OutcomeBuilder {
             is Failed.Invalid    -> println(addResult.msg)
             is Failed.Ignored    -> println(addResult.msg)
             is Failed.Errored    -> println(addResult.msg)
-            is Failed.Unexpected -> println(addResult.msg)
+            is Failed.Unknown -> println(addResult.msg)
         }
     }
 
@@ -163,7 +163,7 @@ class Example_Results : Command("results"), OutcomeBuilder {
             is Failed.Invalid    -> println(result.msg) // Bad inputs / data
             is Failed.Ignored    -> println(result.msg) // Ignored for processing
             is Failed.Errored    -> println(result.msg) // Expected errors
-            is Failed.Unexpected -> println(result.msg) // Unexpected errors
+            is Failed.Unknown -> println(result.msg) // Unexpected errors
         }
 
         // Pattern match 3: "Low-Level" on numeric code
@@ -392,7 +392,7 @@ class Example_Results : Command("results"), OutcomeBuilder {
                 is Failed.Invalid    -> println(result.msg)
                 is Failed.Ignored    -> println(result.msg)
                 is Failed.Errored    -> println(result.msg)
-                is Failed.Unexpected -> println(result.msg)
+                is Failed.Unknown -> println(result.msg)
             }
         }
 

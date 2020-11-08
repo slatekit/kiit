@@ -85,7 +85,7 @@ open class Events<TRequest, TResponse, TFailure>(
                     is Failed.Invalid    -> this.invalid   (sender, request, result)
                     is Failed.Ignored    -> this.ignored   (sender, request, result)
                     is Failed.Errored    -> this.errored   (sender, request, result)
-                    is Failed.Unexpected -> this.unexpected(sender, request, result)
+                    is Failed.Unknown    -> this.unexpected(sender, request, result)
                     else                 -> this.unexpected(sender, request, result)
                 }
             }

@@ -86,11 +86,12 @@ sealed class Passed : Status {
  * Sum Type to represent the different possible Statuses that can be supplied to the @see[Failure]
  */
 sealed class Failed : Status {
-    data class Denied    (override val code: Int, override val msg: String) : Failed()
-    data class Ignored   (override val code: Int, override val msg: String) : Failed()
-    data class Invalid   (override val code: Int, override val msg: String) : Failed()
-    data class Errored   (override val code: Int, override val msg: String) : Failed()
-    data class Unexpected(override val code: Int, override val msg: String) : Failed()
+    data class Denied    (override val code: Int, override val msg: String) : Failed() // Security related
+    data class Ignored   (override val code: Int, override val msg: String) : Failed() // Ignored for processing
+    data class Invalid   (override val code: Int, override val msg: String) : Failed() // Bad inputs
+    data class Errored   (override val code: Int, override val msg: String) : Failed() // Expected failures
+    data class Unknown   (override val code: Int, override val msg: String) : Failed() // Unexpected failures
+
 
     override fun copyAll(msg: String, code: Int): Status {
         return when (this) {
@@ -98,7 +99,7 @@ sealed class Failed : Status {
             is Invalid -> this.copy(code = code, msg = msg)
             is Ignored -> this.copy(code = code, msg = msg)
             is Errored -> this.copy(code = code, msg = msg)
-            is Unexpected -> this.copy(code = code, msg = msg)
+            is Unknown -> this.copy(code = code, msg = msg)
         }
     }
 
@@ -108,7 +109,7 @@ sealed class Failed : Status {
             is Invalid -> this.copy(msg = msg)
             is Ignored -> this.copy(msg = msg)
             is Errored -> this.copy(msg = msg)
-            is Unexpected -> this.copy(msg = msg)
+            is Unknown -> this.copy(msg = msg)
         }
     }
 }

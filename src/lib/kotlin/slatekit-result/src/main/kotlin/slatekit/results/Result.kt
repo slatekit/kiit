@@ -411,7 +411,7 @@ data class Failure<out E> (
         fun <E> ignored   (err: E, status:Failed.Ignored    ? = null):Failure<E> = Failure(err, status ?: Codes.IGNORED)
         fun <E> invalid   (err: E, status:Failed.Invalid    ? = null):Failure<E> = Failure(err, status ?: Codes.INVALID)
         fun <E> errored   (err: E, status:Failed.Errored    ? = null):Failure<E> = Failure(err, status ?: Codes.ERRORED)
-        fun <E> unexpected(err: E, status:Failed.Unexpected ? = null):Failure<E> = Failure(err, status ?: Codes.UNEXPECTED)
+        fun <E> unexpected(err: E, status:Failed.Unknown ? = null):Failure<E> = Failure(err, status ?: Codes.UNEXPECTED)
     }
 
 }
@@ -461,12 +461,22 @@ inline fun <T1, T2, E> Result<T1, E>.then(f: (T1) -> Result<T2, E>): Result<T2, 
  * )
  * ```
  */
-inline fun <T, E> Result<T, E>.orElse(other: (Result<T, E>)): Result<T, E> {
+
+@Suppress("NOTHING_TO_INLINE")
+inline fun <T, E> Result<T, E>.or(other: (Result<T, E>)): Result<T, E> {
     return when (this) {
         is Success -> this
         is Failure -> other
     }
 }
+
+
+@Suppress("NOTHING_TO_INLINE")
+inline fun <T,E> Result<T,E>.and(other:Result<T, E>):Result<T,E> =
+    when(this){
+        is Success -> other
+        is Failure -> this
+    }
 
 
 /**

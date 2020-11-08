@@ -77,7 +77,7 @@ interface Countable : Tagged {
             is Failed.Invalid    -> incInvalid()
             is Failed.Ignored    -> incIgnored()
             is Failed.Errored    -> incErrored()
-            is Failed.Unexpected -> incUnexpected()
+            is Failed.Unknown    -> incUnexpected()
             else                 -> incUnexpected()
         }
     }

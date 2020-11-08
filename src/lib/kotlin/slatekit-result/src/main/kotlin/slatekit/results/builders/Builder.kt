@@ -80,8 +80,8 @@ interface Builder<out E> {
 
     fun <T> unexpected(): Result<T, E> = Failure(errorFromStr(null, Codes.UNEXPECTED), Codes.UNEXPECTED)
     fun <T> unexpected(msg: String): Result<T, E> = Failure(errorFromStr(msg, Codes.UNEXPECTED), Codes.UNEXPECTED)
-    fun <T> unexpected(ex: Exception, status: Failed.Unexpected? = null): Result<T, E> = Failure(errorFromEx(ex, Codes.UNEXPECTED), status ?: Codes.UNEXPECTED)
-    fun <T> unexpected(err: Err, status: Failed.Unexpected? = null): Result<T, E> = Failure(errorFromErr(err, Codes.UNEXPECTED), status ?: Codes.UNEXPECTED)
+    fun <T> unexpected(ex: Exception, status: Failed.Unknown? = null): Result<T, E> = Failure(errorFromEx(ex, Codes.UNEXPECTED), status ?: Codes.UNEXPECTED)
+    fun <T> unexpected(err: Err, status: Failed.Unknown? = null): Result<T, E> = Failure(errorFromErr(err, Codes.UNEXPECTED), status ?: Codes.UNEXPECTED)
 
     /**
      * Builds a status from a message.
@@ -93,13 +93,16 @@ interface Builder<out E> {
     /**
      * Build a Result<T,E> using the supplied condition and default error builders
      */
-    fun <T> of(condition: Boolean, t: T?): Result<T, E> {
+    fun <T> of(condition: Boolean, t: T?,
+               err:String? = null,
+               success:Passed.Succeeded = Codes.SUCCESS,
+               failure:Failed.Errored = Codes.ERRORED): Result<T, E> {
         return if (!condition)
-            errored()
+            errored(failure)
         else if (t == null)
-            errored()
+            errored(failure)
         else
-            success(t)
+            success(t, success)
     }
 
     /**
