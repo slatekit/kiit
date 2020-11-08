@@ -8,7 +8,7 @@ import slatekit.orm.Consts
 class UPIDEncoder : SqlEncoder<UPID> {
 
     override fun encode(value: UPID?): String {
-        return value?.let { "'" + value.toString() + "'" } ?: Consts.NULL
+        return value?.let { "'${value.value}'" } ?: Consts.NULL
     }
 
     override fun decode(record: Record, name: String): UPID? {
