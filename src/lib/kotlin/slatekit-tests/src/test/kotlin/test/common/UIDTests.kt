@@ -2,7 +2,6 @@ package test.common
 
 import org.junit.Assert
 import org.junit.Test
-import slatekit.common.ids.ULID
 import slatekit.common.ids.ULIDs
 import slatekit.common.ids.UPIDs
 
@@ -11,8 +10,7 @@ class UIDTests {
 
     @Test
     fun can_create_upid(){
-        val upids = UPIDs(":")
-        val id = upids.create("spc")
+        val id = UPIDs.create("spc")
         Assert.assertTrue(id.value.startsWith("spc:"))
     }
 

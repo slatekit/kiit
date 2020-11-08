@@ -2,9 +2,7 @@ package slatekit.common
 
 import org.threeten.bp.*
 import slatekit.common.ids.UPID
-import slatekit.common.ids.UPIDGen
 import slatekit.common.ids.UPIDs
-import slatekit.common.ids.UUIDGen
 import java.util.*
 
 interface Gets {
@@ -24,7 +22,7 @@ interface Gets {
     fun getZonedDateTime(key: String): ZonedDateTime
     fun getZonedDateTimeUtc(key: String): ZonedDateTime
     fun getUUID(key: String): java.util.UUID = UUID.fromString(getString(key))
-    fun getUPID(key: String): UPID = UPIDGen.parse(getString(key))
+    fun getUPID(key: String): UPID = UPIDs.parse(getString(key))
 
     // Get values as Option[T]
     fun getStringOrNull(key: String): String? = getOrNull(key) { k: String -> getString(k) }
@@ -42,7 +40,7 @@ interface Gets {
     fun getZonedDateTimeOrNull(key: String): ZonedDateTime? = getOrNull(key) { k: String -> getZonedDateTime(k) }
     fun getZonedDateTimeUtcOrNull(key: String): ZonedDateTime? = getOrNull(key) { k: String -> getZonedDateTimeUtc(k) }
     fun getUUIDOrNull(key: String): UUID? = getOrNull(key) { k: String -> UUID.fromString(getString(k)) }
-    fun getUPIDOrNull(key: String): UPID? = getOrNull(key) { k: String -> UPIDGen.parse(getString(k)) }
+    fun getUPIDOrNull(key: String): UPID? = getOrNull(key) { k: String -> UPIDs.parse(getString(k)) }
 
 
     // Get value or default
@@ -61,7 +59,7 @@ interface Gets {
     fun getZonedDateTimeOrElse(key: String, default: ZonedDateTime): ZonedDateTime = getOrElse(key, { k: String -> getZonedDateTime(k) }, default)
     fun getZonedDateTimeUtcOrElse(key: String, default: ZonedDateTime): ZonedDateTime = getOrElse(key, { k: String -> getZonedDateTimeUtc(k) }, default)
     fun getUUIDOrElse(key: String, default:UUID): UUID = getOrElse(key, { k: String -> UUID.fromString(getString(k)) }, default)
-    fun getUPIDOrElse(key: String, default:UPID): UPID = getOrElse(key, { k: String -> UPIDGen.parse(getString(k)) }, default)
+    fun getUPIDOrElse(key: String, default:UPID): UPID = getOrElse(key, { k: String -> UPIDs.parse(getString(k)) }, default)
 
     fun <T> getOrNull(key: String, fetcher: (String) -> T): T?
     fun <T> getOrElse(key: String, fetcher: (String) -> T, default: T): T

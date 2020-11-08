@@ -16,7 +16,9 @@ data class UPID(val prefix: String, val uuid: UUID) : UID {
 /**
  * Default implementation of the Ids interface with integration UPID ( using UUID V4 )
  */
-open class UPIDs(val separator:String) : UIDGen<UPID> {
+object UPIDs : UIDGen<UPID> {
+    val separator:String = ":"
+
     override fun create(): UPID {
         return create(null)
     }
@@ -42,6 +44,3 @@ open class UPIDs(val separator:String) : UIDGen<UPID> {
         }
     }
 }
-
-
-object UPIDGen : UPIDs(":")

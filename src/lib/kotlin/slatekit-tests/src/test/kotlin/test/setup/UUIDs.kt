@@ -12,7 +12,7 @@ mantra: Simplicity above all else
  */
 package test.setup
 
-object UUIDs {
+object UUIDSamples {
     val sampleUUID1 = "67bdb72a-1d74-11e8-b467-0ed5f89f7181"
     val sampleUUID2 = "67bdb72a-1d74-11e8-b467-0ed5f89f7182"
 }

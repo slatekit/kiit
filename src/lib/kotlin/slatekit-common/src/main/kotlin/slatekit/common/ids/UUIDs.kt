@@ -16,7 +16,7 @@ data class UUID4(val uuid: UUID) : UID {
 /**
  * Default implementation of the Ids interface with integration with a UUID v4
  */
-open class UUIDs() : UIDGen<UUID4> {
+object UUIDs : UIDGen<UUID4> {
 
     override fun create(): UUID4 {
         return UUID4(UUID.randomUUID())
@@ -44,6 +44,3 @@ open class UUIDs() : UIDGen<UUID4> {
         }
     }
 }
-
-
-object UUIDGen : UUIDs()
