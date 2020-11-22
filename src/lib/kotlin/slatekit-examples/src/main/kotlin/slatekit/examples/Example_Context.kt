@@ -126,9 +126,7 @@ class Example_Context : Command("cmd") {
                 about = About("app id", "sample app", "app desc"),
                 logs = LogsDefault
         )
-        ctx3.onSuccess {
-            showContext(it)
-        }
+        showContext(ctx3)
 
 
         // CASE 4: Access common info

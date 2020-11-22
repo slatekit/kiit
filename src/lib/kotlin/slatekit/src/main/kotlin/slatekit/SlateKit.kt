@@ -57,9 +57,8 @@ class SlateKit(ctx: Context) : App<Context>(ctx, AppOptions(showWelcome = true))
     }
 
 
-    override suspend fun init(): Try<Boolean> {
+    override suspend fun init() {
         println("initializing")
-        return super.init()
     }
 
 
@@ -68,7 +67,7 @@ class SlateKit(ctx: Context) : App<Context>(ctx, AppOptions(showWelcome = true))
      *
      * @return
      */
-    override suspend fun exec(): Try<Any> {
+    override suspend fun exec(): Any {
         // Create the CLI
         // All commands are dispatched to it as it handles the
         // integration between CLI inputs -> API requests
@@ -80,13 +79,12 @@ class SlateKit(ctx: Context) : App<Context>(ctx, AppOptions(showWelcome = true))
             true -> run(cli)
             false -> gen(cli)
         }
-        return Success(true)
+        return OK
     }
 
 
-    override suspend fun done(): Try<Boolean> {
+    override suspend fun done(result:Any?) {
         println("ending")
-        return super.done()
     }
 
 
