@@ -9,7 +9,7 @@ import slatekit.common.templates.Subs
 import slatekit.common.ext.toId
 
 /**
- * Builds default application components:
+ * Builds various application components:
  * 1. env   : environments
  * 2. about : info about app
  * 3. schema: command line argument schema

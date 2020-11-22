@@ -38,10 +38,10 @@ sealed class AppCmd(val names: List<String>) {
         fun parse(raw: String): AppCmd {
             val text = raw.trim().toLowerCase()
             return when {
-                AppCmd.Help.isMatch(text) -> AppCmd.Help
-                AppCmd.Version.isMatch(text) -> AppCmd.Version
-                AppCmd.About.isMatch(text) -> AppCmd.About
-                else -> AppCmd.Other(text)
+                Help.isMatch(text) -> Help
+                Version.isMatch(text) -> Version
+                About.isMatch(text) -> About
+                else -> Other(text)
             }
         }
     }

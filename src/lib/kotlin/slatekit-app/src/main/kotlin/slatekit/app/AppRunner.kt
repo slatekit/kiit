@@ -21,14 +21,8 @@ import slatekit.common.envs.Envs
 import slatekit.common.info.About
 import slatekit.common.io.Alias
 import slatekit.common.log.Logs
+import slatekit.results.*
 import slatekit.results.builders.Tries
-import slatekit.results.flatMap
-import slatekit.results.inner
-import slatekit.results.then
-import slatekit.results.Failure
-import slatekit.results.Notice
-import slatekit.results.Success
-import slatekit.results.Try
 
 object AppRunner {
 
@@ -68,24 +62,19 @@ object AppRunner {
 
         // Begin the processing pipeline
         val result = argsResult.then { args ->
-
             // STEP 1: Help - Handle for help | version | about
-            AppMeta.process(rawArgs.toList(), args, about, schema)
+            AppHelp.process(rawArgs.toList(), args, about, schema)
         }.then { args ->
-
             // STEP 2: Context - Build AppContext using args, about, schema
             val context = AppUtils.context(args, envs, about, schema ?: AppBuilder.schema(), enc, logs, confSource)
             context.fold({ Success(it) }, { Failure(Exception(it)) })
         }.then { context ->
-
             // STEP 3: Transform - Command line args
             Success(context.copy(args = ArgsSchema.transform(schema, context.args)))
         }.then { context ->
-
             // STEP 4: Validate - Command line args
             validate(context.args, schema).fold({ Success(context) }, { Failure(Exception(it)) })
         }.then { context ->
-
             // STEP 5: App - Create App using supplied lambda and context
             val app = Success(builder(context))
             app
@@ -96,10 +85,17 @@ object AppRunner {
         }
 
         result.onFailure {
-            when (errorMode) {
-                ErrorMode.Throw -> throw it
-                ErrorMode.Print -> showError(result, it)
-                else -> {
+            when(result.code) {
+                Codes.ABOUT.code   -> {}
+                Codes.HELP.code    -> {}
+                Codes.VERSION.code -> {}
+                else               -> {
+                    when (errorMode) {
+                        ErrorMode.Throw -> throw it
+                        ErrorMode.Print -> showError(result, it)
+                        else -> {
+                        }
+                    }
                 }
             }
         }
@@ -221,14 +217,17 @@ object AppRunner {
         }
     }
 
-    private fun showError(result: Try<Any>, ex: Exception) {
+    private fun showError(result: Try<Any>, ex: Exception?) : Try<Any> {
         println("success: " + result.success)
         println("code   : " + result.code)
         println("message: " + result.msg)
-        println("error  : " + ex.message)
-        val count = Math.min(5, ex.stackTrace.size)
-        (0 until count).forEach { ndx ->
-            println(ex.stackTrace[ndx])
+        ex?.let {
+            println("error  : " + ex.message)
+            val count = Math.min(5, ex.stackTrace.size)
+            (0 until count).forEach { ndx ->
+                println(ex.stackTrace[ndx])
+            }
         }
+        return result
     }
 }
