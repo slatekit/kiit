@@ -44,8 +44,36 @@ import slatekit.providers.logs.logback.LogbackLogs
  * 1. slatekit.codegen.toKotlin -templatesFolder="usr://dev/tmp/slatekit/slatekit/scripts/templates/codegen/kotlin" -outputFolder="usr://dev/tmp/codegen/kotlin" -packageName="blendlife"
  */
 fun main(args: Array<String>) {
-    cli(args)
+    app(args)
     //slatekit.samples.job.main(args)
+}
+
+
+fun app(args:Array<String>) {
+    /**
+     * DOCS : https://www.slatekit.com/arch/app/
+     *
+     * NOTES: The AppRunner does the following:
+     *
+     * 1. checks for command line args
+     * 2. validates command line args against the Args schema ( optional )
+     * 3. builds an AppContext for the app ( containing args, environment, config, logs )
+     * 4. creates an App using supplied lambda ( Your Application instance )
+     * 5. displays start up information and diagnostics using the Banner
+     * 6. executes the life-cycle steps ( init, exec, done )
+     */
+    runBlocking {
+        AppRunner.run(
+                rawArgs = args,
+                about = SlateKit.about,
+                schema = SlateKit.schema,
+                enc = SlateKit.encryptor,
+                logs = LogbackLogs(),
+                hasAction = true,
+                confSource = Alias.Jar,
+                builder = { ctx -> slatekit.samples.app.App(ctx) }
+        )
+    }
 }
 
 
