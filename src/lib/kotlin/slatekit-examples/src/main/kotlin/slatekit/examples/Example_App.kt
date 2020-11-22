@@ -38,7 +38,6 @@ import slatekit.db.Db
 import slatekit.entities.Entities
 import slatekit.integration.common.AppEntContext
 import slatekit.providers.logs.logback.LogbackLogs
-import slatekit.results.Success
 import slatekit.results.Try
 
 //</doc:import_examples>
@@ -73,9 +72,8 @@ class SampleApp(ctx: Context) : App<Context>(ctx, AppOptions(
     /**
      * Life-cycle init hook: for your app to perform any initialization
      */
-    override suspend fun init(): Try<Boolean> {
+    override suspend fun init() {
         println("app initialized")
-        return Success(true)
     }
 
 
@@ -84,7 +82,7 @@ class SampleApp(ctx: Context) : App<Context>(ctx, AppOptions(
      *
      * @return
      */
-    override suspend fun exec(): Try<Any> {
+    override suspend fun exec():Any {
         // The AppContext ( ctx ) is required for the AppProcess and will be
         // available for derived classes to access its components.
 
@@ -127,16 +125,15 @@ class SampleApp(ctx: Context) : App<Context>(ctx, AppOptions(
 
         info("app completed")
 
-        return Success("")
+        return OK
     }
 
 
     /**
      * Life-cycle end hook: called when app is shutting down
      */
-    override suspend fun done(): Try<Boolean> {
+    override suspend fun done(result:Any?) {
         info("app shutting down")
-        return Success(true)
     }
 
 

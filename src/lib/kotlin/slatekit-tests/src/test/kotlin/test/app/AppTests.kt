@@ -56,7 +56,7 @@ class AppTests {
      * Case: No schema
      */
     class AppArgsSchemaNull(ctx: Context) : App<Context>(ctx) {
-        override suspend fun exec(): Try<Any> = Success("ok", msg = "schema null")
+        override suspend fun exec(): Any = "ok - schema null"
     }
 
 
@@ -65,7 +65,7 @@ class AppTests {
      * @param schema
      */
     class AppArgsSchemaEmpty(ctx: Context) : App<Context>(ctx) {
-        override suspend fun exec(): Try<Any> = Success("ok", msg = "schema empty")
+        override suspend fun exec(): Any = "ok - schema empty"
     }
 
 
@@ -86,8 +86,9 @@ class AppTests {
         runBlocking {
             val result = runApp(null, null, null, { ctx -> AppArgsSchemaNull(ctx) })
             Assert.assertTrue(result.success)
-            Assert.assertEquals("schema null", result.msg)
-            Assert.assertEquals("ok", result.getOrElse { "" })
+            result.onSuccess { value ->
+                Assert.assertEquals("ok - schema null", value)
+            }
         }
     }
 
@@ -97,8 +98,9 @@ class AppTests {
         runBlocking {
             val result = runApp(null, ArgsSchema(listOf()), null, { ctx -> AppArgsSchemaEmpty(ctx) })
             Assert.assertTrue(result.success)
-            Assert.assertEquals("schema empty", result.msg)
-            Assert.assertEquals("ok", result.getOrElse { "" })
+            result.onSuccess { value ->
+                Assert.assertEquals("ok - schema empty", value)
+            }
         }
     }
 

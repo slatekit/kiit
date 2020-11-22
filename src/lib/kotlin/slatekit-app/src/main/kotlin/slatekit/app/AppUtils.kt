@@ -13,6 +13,7 @@
 
 package slatekit.app
 
+import slatekit.app.AppUtils.getEnv
 import slatekit.context.AppContext
 import slatekit.common.args.Args
 import slatekit.common.args.ArgsCheck
@@ -115,12 +116,12 @@ object AppUtils {
             cfg ?: finalDefaultValue
     }
 
-    fun context(args: Args, envs: Envs, about: About, schema: ArgsSchema, enc: Encryptor?, logs: Logs?, confSource:Alias = Alias.Jar): Notice<AppContext> {
+    fun context(args: Args, envs: Envs, about: About, schema: ArgsSchema, enc: Encryptor?, logs: Logs?, confSource:Alias = Alias.Jar): AppContext {
         val inputs = inputs(args, envs, about, schema, enc, logs, confSource)
-        return inputs.flatMap { Success(buildContext(it, enc, logs)) }
+        return buildContext(inputs, enc, logs)
     }
 
-    private fun inputs(args: Args, envs: Envs, about: About, schema: ArgsSchema, enc: Encryptor?, logs: Logs?, confSource:Alias = Alias.Jar): Notice<AppInputs> {
+    private fun inputs(args: Args, envs: Envs, about: About, schema: ArgsSchema, enc: Encryptor?, logs: Logs?, confSource:Alias = Alias.Jar): AppInputs {
         // We need to determine where the "env.conf" is loaded from.
         // The location is defaulted to load from jars but can be explicitly supplied in args
         // or specified in the "conf.dirs" config setting in the env.conf file
@@ -155,8 +156,8 @@ object AppUtils {
             val overrideConfPath = source.combine(overrideConfName).toFile().absolutePath
             val confEnv = Config.of(overrideConfPath, confBase, enc)
 
-            Success(AppInputs(source, args, Envs(allEnvs).select(env.name), confBase, confEnv))
-        } ?: Failure("Unknown environment name : $envName supplied")
+            AppInputs(source, args, Envs(allEnvs).select(env.name), confBase, confEnv)
+        } ?: throw Exception("Unknown environment name : $envName supplied")
     }
 
     private fun buildContext(inputs: AppInputs, enc: Encryptor?, logs: Logs?): AppContext {

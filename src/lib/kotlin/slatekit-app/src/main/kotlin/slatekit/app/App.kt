@@ -17,10 +17,7 @@ import slatekit.common.Banner
 import slatekit.context.Context
 import slatekit.common.args.ArgsSchema
 import slatekit.common.crypto.EncryptSupport
-import slatekit.common.info.About
 import slatekit.common.log.LogSupport
-import slatekit.results.Success
-import slatekit.results.Try
 
 /**
  * Application base class providing most of the scaffolding to support command line argument
@@ -51,75 +48,47 @@ open class App<C : Context>(
     override val encryptor = ctx.enc
 
     /**
-     * Builds info about the app. You can optionally place and load this from the
-     * config file using "app" section.
-     */
-    fun about(): About {
-        val conf = ctx.conf
-        return About(
-                area = conf.getStringOrElse("app.area", ctx.info.about.area),
-                name = conf.getStringOrElse("app.name", ctx.info.about.name),
-                desc = conf.getStringOrElse("app.desc", ctx.info.about.desc),
-                company = conf.getStringOrElse("app.company", ctx.info.about.company),
-                region = conf.getStringOrElse("app.region", ctx.info.about.region),
-                version = conf.getStringOrElse("app.version", ctx.info.about.version),
-                url = conf.getStringOrElse("app.url", ctx.info.about.url),
-                contact = conf.getStringOrElse("app.contact", ctx.info.about.contact),
-                tags = conf.getStringOrElse("app.tags", ctx.info.about.tags),
-                examples = conf.getStringOrElse("app.examples", ctx.info.about.examples)
-        )
-    }
-
-    /**
-     * Shows the help text
-     */
-    open fun help(code: Int) {
-        if (schema == null) {
-            println("\n")
-            println("=================================================")
-            println("ABOUT: " + this.ctx.info.about.name)
-            println("ARGS : ")
-            println("  -env       : environment to run in ")
-            println("               string, required. dev | qat | pro ")
-            println("  -log.level : the log level to use")
-            println("               string, required. debug | info | warn | error ")
-            println("\n")
-            println("=================================================")
-            return
-        } else {
-            println(schema.buildHelp())
-        }
-    }
-
-    /**
      * Initialization life cycle event
      * NOTE: Derived apps should override this to implement initialization code
      * and return a Success/Failure
      *
      */
-    open suspend fun init(): Try<Boolean> {
-        return Success(true, msg = "default initialization")
+    open suspend fun init() {
     }
 
     /**
-     * Execution life-cycle event
-     * NOTE: Derived apps should override this to implement core execution code
+     * Life-cycle method to run app specific logic
+     * NOTE: Derived apps should override this to implement
      * and return a Success/Failure
      *
      * @return
      */
-    open suspend fun exec(): Try<Any> {
-        return Success<Any>("default")
+    open suspend fun exec():Any = OK
+
+    /**
+     * Life-cycle hook for completion
+     * NOTE: Derived apps should override this to implement shut-down code
+     */
+    open suspend fun done(result:Any?) {
     }
 
     /**
-     * Shuts down life-cycle event
-     * NOTE: Derived apps should override this to implement shut-down code
-     * and return a Success/Failure
-     *
+     * Life-cycle hook to handle failure
      */
-    open suspend fun done(): Try<Boolean> {
-        return Success(true)
+    open suspend fun fail(err: Throwable?) {
+        notify("Errored: " + err?.message, null)
+    }
+
+    /**
+     * ============================================================================
+     * NOTIFICATION
+     * 1. To notify during state changes, life-cycle events etc
+     * ============================================================================
+     */
+    /**
+     * Send out notifications
+     */
+    open suspend fun notify(desc: String?, extra: List<Pair<String, String>>?) {
     }
 
     /**
@@ -128,5 +97,10 @@ open class App<C : Context>(
      */
     protected open fun results(): List<Pair<String, String>> {
         return listOf()
+    }
+
+
+    companion object {
+        const val OK = "OK"
     }
 }

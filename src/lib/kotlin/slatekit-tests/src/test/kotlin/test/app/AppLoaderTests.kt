@@ -87,14 +87,14 @@ class AppLoaderTests  {
 
     class AppConfigTest(ctx: Context) : App<Context>(ctx) {
 
-        override suspend fun exec(): Try<Any> {
+        override suspend fun exec():Any {
             val data = ConfigValueTest(
                     ctx.envs.name,
                     ctx.conf.getString("test_stri"),
                     ctx.conf.getInt("test_int"),
                     ctx.conf.getDouble("test_doub")
             )
-            return Success(data)
+            return data
         }
     }
 }

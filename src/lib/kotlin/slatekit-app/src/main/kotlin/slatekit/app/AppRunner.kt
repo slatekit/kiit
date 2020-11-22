@@ -60,29 +60,19 @@ object AppRunner {
         // Parse raw args to structured args with lookup ability e.g. args["env"] etc.
         val argsResult = Args.parseArgs(rawArgs, "-", "=", hasAction)
 
-        // Begin the processing pipeline
-        val result = argsResult.then { args ->
-            // STEP 1: Help - Handle for help | version | about
-            AppHelp.process(rawArgs.toList(), args, about, schema)
-        }.then { args ->
-            // STEP 2: Context - Build AppContext using args, about, schema
-            val context = AppUtils.context(args, envs, about, schema ?: AppBuilder.schema(), enc, logs, confSource)
-            context.fold({ Success(it) }, { Failure(Exception(it)) })
-        }.then { context ->
-            // STEP 3: Transform - Command line args
-            Success(context.copy(args = ArgsSchema.transform(schema, context.args)))
-        }.then { context ->
-            // STEP 4: Validate - Command line args
-            validate(context.args, schema).fold({ Success(context) }, { Failure(Exception(it)) })
-        }.then { context ->
-            // STEP 5: App - Create App using supplied lambda and context
-            val app = Success(builder(context))
-            app
-        }.then { app ->
-
-            // STEP 6: Run - Finally run the application with workflow ( init, exec, end )
-            run(app)
-        }
+        // Begin the processing pipeline ( Monadic using Slate Kit Try<T> ( alias for Result<T,Exception> )
+        // STEP 1: Help      - Handle request for help | version | about
+        // STEP 2: Context   - Build AppContext to have args, conf, about, schema
+        // STEP 3: Transform - Command line args from raw, aliases to canonical ones
+        // STEP 4: Validate  - Command line args based on args schema
+        // STEP 5: Build App - Create App using supplied lambda and context
+        // STEP 6: Run App   - Finally run the application with workflow ( init, exec, end )
+        val result = argsResult.then { args -> AppHelp.process(rawArgs.toList(), args, about, schema) }
+            .then { args    -> Tries.of { AppUtils.context(args, envs, about, schema ?: AppBuilder.schema(), enc, logs, confSource) } }
+            .then { context -> Tries.of { context.copy(args = ArgsSchema.transform(schema, context.args)) } }
+            .then { context -> validate(context.args, schema).map { context } }
+            .then { context -> Tries.of { builder(context) } }
+            .then { app     -> run(app) }
 
         result.onFailure {
             when(result.code) {
@@ -110,7 +100,7 @@ object AppRunner {
      * @param schema
      * @return
      */
-    fun validate(args: Args, schema: ArgsSchema?): Notice<Args> {
+    fun validate(args: Args, schema: ArgsSchema?): Try<Args> {
 
         // 5. No schema ? default to success otherwise validate args against schema
         val finalResult = schema?.let { sch ->
@@ -118,7 +108,7 @@ object AppRunner {
             // Validate args against schema
             val checkResult = ArgsSchema.validate(sch, args)
             checkResult.map { args }
-        } ?: Success(args)
+        } ?: Tries.success(args)
 
         return finalResult
     }
@@ -127,94 +117,26 @@ object AppRunner {
      * Run the app using the workflow init -> execute -> end
      */
     suspend fun <C : Context> run(app: App<C>): Try<Any> {
-        val execResult = init(app).then { execute(app) }
+        val result = Tries.of {
+            // Welcome Banner + init + create app directories
+            if (app.options.showWelcome) { app.banner.welcome() }
+            app.init()
+            app.ctx.dirs?.create()
 
-        // Let the end method run
-        execResult.onSuccess { done(execResult, app) }
+            // Display info before executing
+            if (app.options.showDisplay) { app.banner.display() }
+            val value = app.exec()
 
-        // always return the exec result for now.
-        // Not sure if failure of the "end" method should
-        // designate a failure entirely.
-        // Perhaps, there should be a configuration flag ?
-        return execResult
-    }
+            // Display summary before completion ( using value from execution )
+            if (app.options.showSummary) { app.banner.summary() }
+            app.done(value)
 
-    /**
-     * Initialize the app
-     */
-    private suspend fun <C : Context> init(app: App<C>): Try<Any> {
-        // Wrap App.init() call for safety
-        // This will produce a nested Try<Try<Boolean>>
-        val rawResult = Tries.of { app.init() }
-
-        // Flatten the nested Try<Try<Boolean>> into a simple Try<Boolean>
-        val result = rawResult.inner()
-
-        // Finally flatMap it to ensure creation of directories for the app.
-        val setupResult = result.flatMap {
-            Tries.of {
-                app.ctx.dirs?.create()
-                it
-            }.onFailure {
-                println("Error while creating directories for application in user.home directory")
-            }
+            value
         }
-
-        // Banner: Welcome
-        setupResult.onSuccess {
-            if (app.options.showWelcome) {
-                app.banner.welcome()
-            }
+        result.onFailure {
+            app.fail(it)
         }
-
-        return setupResult
-    }
-
-    /**
-     * Execute the app
-     */
-    private suspend fun <C : Context> execute(app: App<C>): Try<Any> {
-
-        // Banner: Display
-        if(app.options.showDisplay) {
-            app.banner.display()
-        }
-
-        // Wrap App.init() call for safety
-        // This will produce a nested Try<Try<Boolean>>
-        val rawResult = Tries.of { app.exec() }
-
-        // Flatten the nested Try<Try<Boolean>> into a simple Try<Boolean>
-        val result = rawResult.inner()
-
-        // Finally convert the error
-        return result.mapError {
-            Exception("Unexpected error : " + it.message, it)
-        }
-    }
-
-    /**
-     * Shutdown / end the app
-     */
-    private suspend fun <C : Context> done(execResult: Try<Any>, app: App<C>): Try<Any> {
-        // Wrap App.init() call for safety
-        // This will produce a nested Try<Try<Boolean>>
-        val rawResult = Tries.of { app.done() }
-
-        // Flatten the nested Try<Try<Boolean>> into a simple Try<Boolean>
-        val result = rawResult.inner()
-
-        // Banner: Goodbye
-        result.onSuccess {
-            if (app.options.showSummary) {
-                app.banner.summary()
-            }
-        }
-
-        // Finally convert the error
-        return result.mapError {
-            Exception("error while shutting down app : " + it.message, it)
-        }
+        return result
     }
 
     private fun showError(result: Try<Any>, ex: Exception?) : Try<Any> {
@@ -223,7 +145,7 @@ object AppRunner {
         println("message: " + result.msg)
         ex?.let {
             println("error  : " + ex.message)
-            val count = Math.min(5, ex.stackTrace.size)
+            val count = Math.min(10, ex.stackTrace.size)
             (0 until count).forEach { ndx ->
                 println(ex.stackTrace[ndx])
             }
