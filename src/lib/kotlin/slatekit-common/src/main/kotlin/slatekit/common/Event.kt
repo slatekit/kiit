@@ -1,9 +1,5 @@
 package slatekit.common
 
-import slatekit.common.Identity
-import slatekit.common.log.Logger
-import slatekit.results.Failed
-import slatekit.results.Passed
 import slatekit.results.Status
 
 /**

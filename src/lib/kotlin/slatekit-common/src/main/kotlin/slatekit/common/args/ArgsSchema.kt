@@ -18,6 +18,7 @@ import slatekit.common.console.ConsoleWriter
 import slatekit.results.Failure
 import slatekit.results.Notice
 import slatekit.results.Try
+import slatekit.results.builders.Tries
 
 /**
  * stores and builds a list of 1 or more arguments which collectively represent the schema.
@@ -208,12 +209,12 @@ class ArgsSchema(val items: List<Arg> = listOf()) {
          * @param schema: The argument schema to validate against
          * @param args  : The parsed arguments
          */
-        @JvmStatic fun validate(schema: ArgsSchema, args: Args): Notice<Boolean> {
+        @JvmStatic fun validate(schema: ArgsSchema, args: Args): Try<Boolean> {
             val missing = schema.items.filter { arg -> arg.isRequired && !args.containsKey(arg.name) }
             return if (missing.isNotEmpty()) {
-                Failure("invalid arguments supplied: Missing : " + missing.first().name)
+                Tries.errored("invalid arguments supplied: Missing : " + missing.first().name)
             } else {
-                slatekit.results.Success(true)
+                Tries.success(true)
             }
         }
     }
