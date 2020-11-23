@@ -82,7 +82,7 @@ class SampleApp(ctx: Context) : App<Context>(ctx, AppOptions(
      *
      * @return
      */
-    override suspend fun exec():Any {
+    override suspend fun exec():Any? {
         // The AppContext ( ctx ) is required for the AppProcess and will be
         // available for derived classes to access its components.
 

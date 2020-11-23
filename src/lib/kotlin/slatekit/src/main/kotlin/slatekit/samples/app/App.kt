@@ -60,7 +60,7 @@ class App(ctx: Context) : App<Context>(ctx, AppOptions(showWelcome = true)) {
     }
 
 
-    override suspend fun exec(): Any {
+    override suspend fun exec(): Any? {
         println("executing")
         println("Sample work should be done here...")
         return OK

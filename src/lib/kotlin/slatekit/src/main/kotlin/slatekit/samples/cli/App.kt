@@ -60,7 +60,7 @@ class App(ctx: Context) : App<Context>(ctx, AppOptions(showWelcome = true)) {
     }
 
 
-    override suspend fun exec(): Any {
+    override suspend fun exec(): Any? {
         println("executing")
         val cli = CLI(ctx)
         return cli.execute()

@@ -56,7 +56,7 @@ class AppTests {
      * Case: No schema
      */
     class AppArgsSchemaNull(ctx: Context) : App<Context>(ctx) {
-        override suspend fun exec(): Any = "ok - schema null"
+        override suspend fun exec(): Any? = "ok - schema null"
     }
 
 
@@ -65,7 +65,7 @@ class AppTests {
      * @param schema
      */
     class AppArgsSchemaEmpty(ctx: Context) : App<Context>(ctx) {
-        override suspend fun exec(): Any = "ok - schema empty"
+        override suspend fun exec(): Any? = "ok - schema empty"
     }
 
 
