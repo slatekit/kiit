@@ -59,7 +59,7 @@ class Templates(
                 content = text,
                 parsed = true,
                 valid = result.success,
-                status = result.msg,
+                status = result.desc,
                 group = null,
                 path = null,
                 parts = result.getOrElse({ listOf<TemplatePart>() })
@@ -123,7 +123,7 @@ class Templates(
                 resolveParts(parts, substitutions ?: subs)
             }
         } else {
-            result.msg
+            result.desc
         }
         return finalResult
     }

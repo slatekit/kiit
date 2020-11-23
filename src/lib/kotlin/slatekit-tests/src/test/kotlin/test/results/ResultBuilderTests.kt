@@ -40,7 +40,7 @@ class ResultBuilderTests : ResultTestSupport, OutcomeBuilder {
     @Test
     fun can_build_ignored() {
         val status = Codes.IGNORED
-        ensureFailure(ignored<Int>(), status, expectedError = status.msg)
+        ensureFailure(ignored<Int>(), status, expectedError = status.desc)
         ensureFailure(ignored<Int>("ignored-x"), status, expectedError = "ignored-x")
         ensureFailure(ignored<Int>(Exception("ignored-x")), status, expectedError = "ignored-x")
         ensureFailure(ignored<Int>(Err.of("ignored-x")), status, expectedError = "ignored-x")
@@ -50,7 +50,7 @@ class ResultBuilderTests : ResultTestSupport, OutcomeBuilder {
     @Test
     fun can_build_invalid() {
         val status = Codes.INVALID
-        ensureFailure(invalid<Int>(), status, expectedError = status.msg)
+        ensureFailure(invalid<Int>(), status, expectedError = status.desc)
         ensureFailure(invalid<Int>("invalid-x"), status, expectedError = "invalid-x")
         ensureFailure(invalid<Int>(Exception("invalid-x")), status, expectedError = "invalid-x")
         ensureFailure(invalid<Int>(Err.of("invalid-x")), status, expectedError = "invalid-x")
@@ -60,7 +60,7 @@ class ResultBuilderTests : ResultTestSupport, OutcomeBuilder {
     @Test
     fun can_build_denied() {
         val status = Codes.DENIED
-        ensureFailure(denied<Int>(), status, expectedError = status.msg)
+        ensureFailure(denied<Int>(), status, expectedError = status.desc)
         ensureFailure(denied<Int>("denied-x"), status, expectedError = "denied-x")
         ensureFailure(denied<Int>(Exception("denied-x")), status, expectedError = "denied-x")
         ensureFailure(denied<Int>(Err.of("denied-x")), status, expectedError = "denied-x")
@@ -70,7 +70,7 @@ class ResultBuilderTests : ResultTestSupport, OutcomeBuilder {
     @Test
     fun can_build_error() {
         val status = Codes.ERRORED
-        ensureFailure(errored<Int>(), status, expectedError = status.msg)
+        ensureFailure(errored<Int>(), status, expectedError = status.desc)
         ensureFailure(errored<Int>("error-x"), status, expectedError = "error-x")
         ensureFailure(errored<Int>(Exception("error-x")), status, expectedError = "error-x")
         ensureFailure(errored<Int>(Err.of("error-x")), status, expectedError = "error-x")
@@ -80,7 +80,7 @@ class ResultBuilderTests : ResultTestSupport, OutcomeBuilder {
     @Test
     fun can_build_unexpected() {
         val status = Codes.UNEXPECTED
-        ensureFailure(Outcomes.unexpected<Int>(), status, expectedError = status.msg)
+        ensureFailure(Outcomes.unexpected<Int>(), status, expectedError = status.desc)
         ensureFailure(Outcomes.unexpected<Int>("unexpected-x"), status, expectedError = "unexpected-x")
         ensureFailure(Outcomes.unexpected<Int>(Exception("unexpected-x")), status, expectedError = "unexpected-x")
         ensureFailure(Outcomes.unexpected<Int>(Err.of("unexpected-x")), status, expectedError = "unexpected-x")

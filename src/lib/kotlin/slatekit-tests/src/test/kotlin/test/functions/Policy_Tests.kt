@@ -112,7 +112,7 @@ class Policy_Tests {
     @Test
     fun test_ratio_success(){
         val counts = Counters(Identity.test("policy"))
-        val policy: Policy<String, Int> = Ratio(.4, Failed.Denied(0, ""), { counts })
+        val policy: Policy<String, Int> = Ratio(.4, Failed.Denied(Codes.DENIED.name, 0, ""), { counts })
         val result = runBlocking {
             policy.run("1") { counts.incProcessed(); counts.incSucceeded(); Outcomes.of(it.toInt()) }
             policy.run("2") { counts.incProcessed(); counts.incDenied(); Outcomes.of(it.toInt()) }
@@ -127,7 +127,7 @@ class Policy_Tests {
     @Test
     fun test_ratio_failure(){
         val counts = Counters(Identity.test("policy"))
-        val policy: Policy<String, Int> = Ratio(.5, Failed.Denied(0, ""), { counts })
+        val policy: Policy<String, Int> = Ratio(.5, Failed.Denied(Codes.DENIED.name, 0, ""), { counts })
         val result = runBlocking {
             policy.run("1") { counts.incProcessed(); counts.incSucceeded(); Outcomes.of(it.toInt()) }
             policy.run("2") { counts.incProcessed(); counts.incDenied(); Outcomes.of(it.toInt()) }

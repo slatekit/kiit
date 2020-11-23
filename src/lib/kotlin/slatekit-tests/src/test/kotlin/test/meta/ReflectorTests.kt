@@ -217,7 +217,7 @@ class ReflectorTests {
         val result = res as Notice<String>
         val v = result.getOrElse { "" }
         Assert.assertTrue(v == "ok")
-        Assert.assertTrue(result.msg == "activated 123456789, 987, true, 2017-05-27T00:00-04:00[America/New_York]")
+        Assert.assertTrue(result.desc == "activated 123456789, 987, true, 2017-05-27T00:00-04:00[America/New_York]")
     }
 
 

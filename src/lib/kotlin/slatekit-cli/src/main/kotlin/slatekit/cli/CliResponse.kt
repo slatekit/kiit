@@ -14,6 +14,7 @@ package slatekit.cli
 
 import slatekit.common.args.Args
 import slatekit.common.requests.Response
+import slatekit.results.Codes
 
 /**
  * General purpose class to model a Response at an application boundary ( such as http response )
@@ -22,19 +23,20 @@ import slatekit.common.requests.Response
  * @param code : A status code ( can be the http status code )
  * @param meta : Meta data for the response ( can be used for headers for http )
  * @param value : The actual value returned by the response
- * @param msg : Message in the case of an failure
+ * @param desc : Message in the case of an failure
  * @param err : Exception in event of failure
  * @param tag : Tag used as a correlation field
  */
 data class CliResponse<out T>(
-    val request: CliRequest,
-    override val success: Boolean,
-    override val code: Int,
-    override val meta: Map<String, String>?,
-    override val value: T?,
-    override val msg: String? = null,
-    override val err: Exception? = null,
-    override val tag: String? = null
+        val request: CliRequest,
+        override val success: Boolean,
+        override val name: String,
+        override val code: Int,
+        override val meta: Map<String, String>?,
+        override val value: T?,
+        override val desc: String? = null,
+        override val err: Exception? = null,
+        override val tag: String? = null
 ) : Response<T> {
 
     /**
@@ -50,6 +52,7 @@ data class CliResponse<out T>(
         val empty = CliResponse(
                 CliRequest.build(Args.empty(), ""),
                 true,
+                Codes.SUCCESS.name,
                 1,
                 mapOf(),
                 "empty"

@@ -32,7 +32,7 @@ class ServerDiagnostics(override val source: String,
      * Record all relevant diagnostics
      */
     private fun log(sender: Any, request: Request, response: Response<*>) {
-        val msg = response.msg ?: ""
+        val msg = response.desc ?: ""
         when {
             response.isInSuccessRange()    -> logger?.info ("$source succeeded: $msg")
             response.isFilteredOut()       -> logger?.info ("$source filtered : $msg")
@@ -47,7 +47,7 @@ class ServerDiagnostics(override val source: String,
      * Record all relevant diagnostics
      */
     private fun meter(sender: Any, request: Request, response: Response<*>) {
-        val msg = response.msg ?: ""
+        val msg = response.desc ?: ""
         when {
             response.isInSuccessRange()    -> metrics?.count("$source.total_successes", tags)
             response.isFilteredOut()       -> metrics?.count("$source.total_filtered", tags)

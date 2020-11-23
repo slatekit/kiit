@@ -101,7 +101,7 @@ open class CLI(
         return when(status){
             is Passed.Succeeded -> Tries.success(true, status)
             is Passed.Pending   -> Tries.pending(true, status)
-            else                -> Failure(Exception(status.msg), status.msg, status.code)
+            else                -> Failure(Exception(status.desc), status.desc, status.code)
         }
     }
 

@@ -32,49 +32,49 @@ package slatekit.results
 object Codes {
 
     // Success: 200000 + range
-    @JvmField val SUCCESS         = Passed.Succeeded (200001, "Success")
-    @JvmField val CREATED         = Passed.Succeeded (200002, "Created")
-    @JvmField val UPDATED         = Passed.Succeeded (200003, "Updated")
-    @JvmField val FETCHED         = Passed.Succeeded (200004, "Fetched")
-    @JvmField val PATCHED         = Passed.Succeeded (200005, "Patched")         // E.g. Update a small subset of info
-    @JvmField val DELETED         = Passed.Succeeded (200006, "Deleted")
-    @JvmField val HANDLED         = Passed.Succeeded (200007, "Handled")         // E.g. A silent ok ( similar to http 204 )
-    @JvmField val PENDING         = Passed.Pending   (200008, "Pending")
-    @JvmField val QUEUED          = Passed.Pending   (200009, "Queued" )
-    @JvmField val CONFIRM         = Passed.Pending   (200010, "Confirm")
+    @JvmField val SUCCESS         = Passed.Succeeded ("SUCCESS", 200001, "Success")
+    @JvmField val CREATED         = Passed.Succeeded ("CREATED", 200002, "Created")
+    @JvmField val UPDATED         = Passed.Succeeded ("UPDATED", 200003, "Updated")
+    @JvmField val FETCHED         = Passed.Succeeded ("FETCHED", 200004, "Fetched")
+    @JvmField val PATCHED         = Passed.Succeeded ("PATCHED", 200005, "Patched")         // E.g. Update a small subset of info
+    @JvmField val DELETED         = Passed.Succeeded ("DELETED", 200006, "Deleted")
+    @JvmField val HANDLED         = Passed.Succeeded ("HANDLED", 200007, "Handled")         // E.g. A silent ok ( similar to http 204 )
+    @JvmField val PENDING         = Passed.Pending   ("PENDING", 200008, "Pending")
+    @JvmField val QUEUED          = Passed.Pending   ("QUEUED" , 200009, "Queued" )
+    @JvmField val CONFIRM         = Passed.Pending   ("CONFIRM", 200010, "Confirm")
 
 
     // Invalid: 400000 + range
-    @JvmField val IGNORED         = Failed.Ignored   (400001, "Ignored")         // E.g. Ignored, not exactly an error
-    @JvmField val BAD_REQUEST     = Failed.Invalid   (400002, "Bad Request")     // E.g. Invalid JSON
-    @JvmField val INVALID         = Failed.Invalid   (400003, "Invalid")         // E.g. Valid   JSON but invalid values
+    @JvmField val IGNORED         = Failed.Ignored   ("IGNORED"    , 400001, "Ignored")         // E.g. Ignored, not exactly an error
+    @JvmField val BAD_REQUEST     = Failed.Invalid   ("BAD_REQUEST", 400002, "Bad Request")     // E.g. Invalid JSON
+    @JvmField val INVALID         = Failed.Invalid   ("INVALID"    , 400003, "Invalid")         // E.g. Valid   JSON but invalid values
 
     // Security related
-    @JvmField val DENIED          = Failed.Denied    (400004, "Denied")          // Presumes a checked condition
-    @JvmField val UNSUPPORTED     = Failed.Denied    (400005, "Not supported")   // Presumes a checked condition
-    @JvmField val UNIMPLEMENTED   = Failed.Denied    (400006, "Not implemented") // Presumes a checked condition
-    @JvmField val UNAVAILABLE     = Failed.Denied    (400007, "Not available")   // Presumes a checked condition
-    @JvmField val UNAUTHENTICATED = Failed.Denied    (400008, "Unauthenticated") // Presumes a checked condition
-    @JvmField val UNAUTHORIZED    = Failed.Denied    (400009, "Unauthorized")    // Presumes a checked condition
+    @JvmField val DENIED          = Failed.Denied    ("DENIED"         ,400004, "Denied")          // Presumes a checked condition
+    @JvmField val UNSUPPORTED     = Failed.Denied    ("UNSUPPORTED"    ,400005, "Not supported")   // Presumes a checked condition
+    @JvmField val UNIMPLEMENTED   = Failed.Denied    ("UNIMPLEMENTED"  ,400006, "Not implemented") // Presumes a checked condition
+    @JvmField val UNAVAILABLE     = Failed.Denied    ("UNAVAILABLE"    ,400007, "Not available")   // Presumes a checked condition
+    @JvmField val UNAUTHENTICATED = Failed.Denied    ("UNAUTHENTICATED",400008, "Unauthenticated") // Presumes a checked condition
+    @JvmField val UNAUTHORIZED    = Failed.Denied    ("UNAUTHORIZED"   ,400009, "Unauthorized")    // Presumes a checked condition
 
     // Expected errors: 500000 + range
-    @JvmField val NOT_FOUND       = Failed.Errored   (500001, "Not found")       // E.g. Resource/End point not found
-    @JvmField val MISSING         = Failed.Errored   (500002, "Missing item")    // E.g. Domain model not found
-    @JvmField val FORBIDDEN       = Failed.Errored   (500003, "Forbidden")
-    @JvmField val CONFLICT        = Failed.Errored   (500004, "Conflict")
-    @JvmField val DEPRECATED      = Failed.Errored   (500005, "Deprecated")
-    @JvmField val TIMEOUT         = Failed.Errored   (500006, "Timeout")
-    @JvmField val ERRORED         = Failed.Errored   (500007, "Errored")         // General purpose use
-    @JvmField val LIMITED         = Failed.Errored   (500009, "Limited")
+    @JvmField val NOT_FOUND       = Failed.Errored   ("NOT_FOUND" ,500001, "Not found")       // E.g. Resource/End point not found
+    @JvmField val MISSING         = Failed.Errored   ("MISSING"   ,500002, "Missing item")    // E.g. Domain model not found
+    @JvmField val FORBIDDEN       = Failed.Errored   ("FORBIDDEN" ,500003, "Forbidden")
+    @JvmField val CONFLICT        = Failed.Errored   ("CONFLICT"  ,500004, "Conflict")
+    @JvmField val DEPRECATED      = Failed.Errored   ("DEPRECATED",500005, "Deprecated")
+    @JvmField val TIMEOUT         = Failed.Errored   ("TIMEOUT"   ,500006, "Timeout")
+    @JvmField val ERRORED         = Failed.Errored   ("ERRORED"   ,500007, "Errored")         // General purpose use
+    @JvmField val LIMITED         = Failed.Errored   ("LIMITED"   ,500009, "Limited")
 
     // Unexpected
-    @JvmField val UNEXPECTED      = Failed.Unknown(500008, "Unexpected")
+    @JvmField val UNEXPECTED      = Failed.Unknown("UNEXPECTED",500008, "Unexpected")
 
     // Success ( Interactive / Metadata )
-    @JvmField val EXIT            = Passed.Succeeded (600002, "Exiting")
-    @JvmField val HELP            = Passed.Succeeded (600003, "Help")
-    @JvmField val ABOUT           = Passed.Succeeded (600004, "About")
-    @JvmField val VERSION         = Passed.Succeeded (600005, "Version")
+    @JvmField val EXIT            = Passed.Succeeded ("EXIT"   , 600002, "Exiting")
+    @JvmField val HELP            = Passed.Succeeded ("HELP"   , 600003, "Help")
+    @JvmField val ABOUT           = Passed.Succeeded ("ABOUT"  , 600004, "About")
+    @JvmField val VERSION         = Passed.Succeeded ("VERSION", 600005, "Version")
 
 
     private val mappings = listOf(
@@ -152,10 +152,10 @@ object Codes {
                 info?.second ?: BAD_REQUEST
             }
             else -> when {
-                code in 1..999 -> Passed.Succeeded(code, SUCCESS.msg)
-                code in 2000..2999 -> Failed.Invalid(code, INVALID.msg)
-                code >= 3000 -> Failed.Errored(code, ERRORED.msg)
-                else -> Failed.Errored(code, "Unexpected")
+                code in 1..999 -> Passed.Succeeded(SUCCESS.name, code, SUCCESS.desc)
+                code in 2000..2999 -> Failed.Invalid(INVALID.name, code, INVALID.desc)
+                code >= 3000 -> Failed.Errored(ERRORED.name, code, ERRORED.desc)
+                else -> Failed.Errored(UNEXPECTED.name, code, "Unexpected")
             }
         }
     }

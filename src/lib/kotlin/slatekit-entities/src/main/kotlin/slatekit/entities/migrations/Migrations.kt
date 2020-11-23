@@ -19,7 +19,7 @@ data class SimpleMigration(
         info("Migration starting for : $id", null)
         val results = steps.map { Tries.of { it.run(db) } }
         val success = results.all { it.success }
-        val message = if (success) "" else results.first { !it.success }.msg
+        val message = if (success) "" else results.first { !it.success }.desc
         return when (success) {
             true -> {
                 info("Migration success : $id. \n $message", null)

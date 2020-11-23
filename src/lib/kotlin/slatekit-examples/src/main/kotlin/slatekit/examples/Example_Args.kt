@@ -91,7 +91,7 @@ class Example_Args  : Command("args") {
     println("RESULTS:")
 
     if(!result.success) {
-      println("Error parsing args : " + result.msg)
+      println("Error parsing args : " + result.desc)
       return
     }
     val args = result.getOrElse { Args.empty() }

@@ -71,7 +71,7 @@ abstract class SmsService(
 
         // Case 1: Invalid params
         return if (!result.success) {
-            Failure(result.msg)
+            Failure(result.desc)
         }
         // Case 2: Invalid iso or unsupported
         else if (!countryLookup.contains(finalIso)) {

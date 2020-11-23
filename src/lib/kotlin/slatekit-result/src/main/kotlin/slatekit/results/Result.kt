@@ -47,7 +47,7 @@ sealed class Result<out T, out E> {
      */
     val success: Boolean get() = this is Success
     val code: Int get() = status.code
-    val msg: String get() = status.msg
+    val desc: String get() = status.desc
 
     /**
      * Applies supplied function `f` if this is a [Success]
@@ -247,7 +247,7 @@ sealed class Result<out T, out E> {
         is Success -> this
         is Failure -> {
             val err = when (this.error) {
-                null -> Err.of(Codes.UNEXPECTED.msg)
+                null -> Err.of(Codes.UNEXPECTED.desc)
                 is Err -> error
                 is String -> Err.of(error)
                 is Exception -> Err.ex(error)
@@ -276,7 +276,7 @@ sealed class Result<out T, out E> {
             when (this.error) {
                 is Exception -> this as Try<T>
                 is Err -> Failure(ExceptionErr(this.error.toString(), this.error), this.status)
-                null -> Failure(Exception(this.status.msg), this.status)
+                null -> Failure(Exception(this.status.desc), this.status)
                 else -> Failure(Exception(this.error.toString()), this.status)
             }
         }

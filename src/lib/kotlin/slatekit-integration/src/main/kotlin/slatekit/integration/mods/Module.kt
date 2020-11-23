@@ -40,7 +40,7 @@ abstract class Module(
             info.models?.let { models ->
                 val results = models.map { modCtx.setup.install(it, info.version, "", "") }
                 val success = results.all { it.success }
-                val messages = results.map { it.msg }
+                val messages = results.map { it.desc }
                 val message = if (success) "" else messages.joinToString(newline)
                 if (success) Success(message, msg = "") else Failure(Exception(message), msg = message)
             } ?: Failure(Exception(this.info.name + " has no models"))
@@ -57,7 +57,7 @@ abstract class Module(
             info.models?.let { models ->
                 val results = models.map { modCtx.setup.uinstall(it) }
                 val success = results.all { it.success }
-                val messages = results.map { it.msg }
+                val messages = results.map { it.desc }
                 val message = if (success) "" else messages.joinToString(newline)
                 if (success) Success(message, msg = "") else Failure(Exception(message), msg = message)
             } ?: Failure(Exception(this.info.name + " has no models"))
@@ -77,7 +77,7 @@ abstract class Module(
             info.models?.let { models ->
                 models.map { modelName ->
                     val result = modCtx.setup.generateSql(modelName, info.version)
-                    result.msg ?: modelName
+                    result.desc ?: modelName
                 }
             } ?: listOf<String>()
         } else

@@ -95,7 +95,7 @@ class TwilioSms(
                 )
                 Success(request)
             }
-            is Failure -> Outcomes.errored(phoneResult.msg)
+            is Failure -> Outcomes.errored(phoneResult.desc)
         }
     }
 

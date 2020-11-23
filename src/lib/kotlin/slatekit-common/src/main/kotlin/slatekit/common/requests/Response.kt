@@ -21,10 +21,11 @@ import slatekit.results.Codes
  */
 interface Response<out T>  {
     val success: Boolean
+    val name: String
     val code: Int
     val meta: Map<String, String>?
     val value: T?
-    val msg: String?
+    val desc: String?
     val err: Exception?
     val tag: String?
 

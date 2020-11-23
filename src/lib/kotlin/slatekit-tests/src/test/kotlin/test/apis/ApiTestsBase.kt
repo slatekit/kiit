@@ -120,7 +120,7 @@ open class ApiTestsBase {
 
         Assert.assertTrue(actual.code == expected.code)
         Assert.assertTrue(actual.success == expected.success)
-        Assert.assertTrue(actual.msg == expected.msg)
+        Assert.assertTrue(actual.desc == expected.desc)
     }
 
 
@@ -156,7 +156,7 @@ open class ApiTestsBase {
         // Compare here.
         Assert.assertTrue(actual.code == response.code)
         Assert.assertTrue(actual.success == response.success)
-        Assert.assertTrue(actual.msg == response.msg)
+        Assert.assertTrue(actual.desc == response.desc)
         actual.onSuccess {
             Assert.assertTrue(it == response.value)
         }

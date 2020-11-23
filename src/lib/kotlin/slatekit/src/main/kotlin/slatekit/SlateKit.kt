@@ -6,14 +6,12 @@ import slatekit.app.AppOptions
 import slatekit.cli.CliSettings
 import slatekit.context.Context
 import slatekit.common.args.ArgsSchema
-import slatekit.common.types.Content
 import slatekit.common.utils.B64Java8
 import slatekit.common.crypto.Encryptor
 import slatekit.common.info.About
 import slatekit.common.info.ApiKey
 import slatekit.integration.apis.*
 import slatekit.results.Success
-import slatekit.results.Try
 import slatekit.meta.Serialization
 import slatekit.results.Failure
 
@@ -105,7 +103,7 @@ class SlateKit(ctx: Context) : App<Context>(ctx, AppOptions(showWelcome = true))
         val result = cli.executeArgs(copy)
         when(result) {
             is Failure -> println("Failure: " + result.error)
-            is Success -> println("Success: " + result.value.msg)
+            is Success -> println("Success: " + result.value.desc)
         }
     }
 

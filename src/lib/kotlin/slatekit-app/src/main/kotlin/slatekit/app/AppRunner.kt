@@ -142,7 +142,7 @@ object AppRunner {
     private fun showError(result: Try<Any>, ex: Exception?) : Try<Any> {
         println("success: " + result.success)
         println("code   : " + result.code)
-        println("message: " + result.msg)
+        println("message: " + result.desc)
         ex?.let {
             println("error  : " + ex.message)
             val count = Math.min(10, ex.stackTrace.size)

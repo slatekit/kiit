@@ -7,9 +7,10 @@ class StatusTests {
 
     @Test
     fun can_build_basic(){
-        val status = Passed.Succeeded(1, "success")
+        val status = Passed.Succeeded("SUCCESS", 1, "success")
+        Assert.assertEquals("SUCCESS", status.name)
         Assert.assertEquals(1, status.code)
-        Assert.assertEquals("success", status.msg)
+        Assert.assertEquals("success", status.desc)
     }
 
 
@@ -17,9 +18,9 @@ class StatusTests {
     fun can_copy_values(){
         fun check(status: Status, code:Int, msg:String){
             Assert.assertEquals(code, status.code)
-            Assert.assertEquals(msg, status.msg)
+            Assert.assertEquals(msg, status.desc)
         }
-        val status = Passed.Succeeded(1, "success")
+        val status = Passed.Succeeded("SUCCESS",1, "success")
         val statusGroup: Status = status
         check(statusGroup.copyAll("ok", 2), 2, "ok")
     }
@@ -30,7 +31,7 @@ class StatusTests {
         fun checkHttp(status:Status, code:Int, msg:String) {
             val result = Codes.toHttp(status)
             Assert.assertEquals(result.first, code)
-            Assert.assertEquals(result.second.msg, msg)
+            Assert.assertEquals(result.second.desc, msg)
         }
         checkHttp(Codes.SUCCESS   , 200, "Success")
         checkHttp(Codes.CONFIRM   , 200, "Confirm")
@@ -74,25 +75,25 @@ class StatusTests {
                 Assert.assertEquals(built, original)
             }
             Assert.assertEquals(code, built.code)
-            Assert.assertEquals(msg , built.msg )
+            Assert.assertEquals(msg , built.desc )
         }
         val status = Codes.SUCCESS
 
         // Empty values
-        check(Status.ofCode(null, null  , status), status.code, status.msg, status,true)
-        check(Status.ofCode(""  , null  , status), status.code, status.msg, status, true)
+        check(Status.ofCode(null, null  , status), status.code, status.desc, status,true)
+        check(Status.ofCode(""  , null  , status), status.code, status.desc, status, true)
 
         // Empty msg or code
-        check(Status.ofCode(status.msg, null  , status), status.code, status.msg, status, true)
-        check(Status.ofCode(null, status.code , status), status.code, status.msg, status, true)
+        check(Status.ofCode(status.desc, null  , status), status.code, status.desc, status, true)
+        check(Status.ofCode(null, status.code , status), status.code, status.desc, status, true)
 
         // Both values supplied but same
-        check(Status.ofCode(status.msg, status.code , status), status.code, status.msg, status, true)
+        check(Status.ofCode(status.desc, status.code , status), status.code, status.desc, status, true)
 
         // Diff values supplied
         check(Status.ofCode("abc", 2  , status), 2, "abc", status, false)
         check(Status.ofCode("abc", null  , status), status.code, "abc", status, false)
-        check(Status.ofCode(null , 2  , status), 2, status.msg, status, false)
+        check(Status.ofCode(null , 2  , status), 2, status.desc, status, false)
 
     }
 
@@ -110,7 +111,7 @@ class StatusTests {
 
     private fun checkCode(Statuses: Status, expectedCode: Int, expectedMsg: String) {
         Assert.assertEquals(Statuses.code, expectedCode)
-        Assert.assertEquals(Statuses.msg, expectedMsg)
+        Assert.assertEquals(Statuses.desc, expectedMsg)
     }
 }
 

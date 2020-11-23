@@ -24,6 +24,7 @@ import slatekit.common.requests.CommonResponse
 import slatekit.cmds.Command
 import slatekit.cmds.CommandRequest
 import slatekit.common.Identity
+import slatekit.results.Codes
 import slatekit.tracking.Recorder
 import slatekit.results.Try
 import slatekit.results.Success
@@ -66,7 +67,7 @@ class Example_Diagnostics : Command("cmd") {
 
         // Sample response ( assume you've done processing on your sample request )
         // NOTE: The response has to be an instance of the slatekit.common.requests.Response interface
-        val result1:Response<String> = CommonResponse(true, 1000, mapOf(), "processed")
+        val result1:Response<String> = CommonResponse(true, Codes.SUCCESS.name, 1000, mapOf(), "processed")
 
         // CASE 1: Record all diagnostics  :
         // 1. log   : log the response to the logger

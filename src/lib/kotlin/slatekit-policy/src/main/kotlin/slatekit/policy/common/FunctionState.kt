@@ -26,7 +26,7 @@ interface FunctionState<out T> where T : FunctionResult {
     /**
      * The last message from the result
      */
-    fun msg(): String = lastResult?.msg ?: ""
+    fun msg(): String = lastResult?.desc ?: ""
 
     /**
      * Whether or not the function has been run

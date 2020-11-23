@@ -32,10 +32,11 @@ object Errs {
         flatten(err, errors, 0)
         val json = JSONObject()
         json["success"] = false
+        json["name"] = result.name
         json["code"] = result.code
+        json["desc"] = result.desc
         json["meta"] = result.meta
         json["value"] = null
-        json["msg"] = result.msg
         json["errs"] = errors
         json["tag"] = result.tag
         return json
