@@ -69,7 +69,7 @@ class AppTests {
     }
 
 
-    suspend fun runApp(args: Array<String>?, schema: ArgsSchema?, enc: Encryptor?, appCreator: (Context) -> App<Context>): Try<Any> {
+    suspend fun runApp(args: Array<String>?, schema: ArgsSchema?, enc: Encryptor?, appCreator: (Context) -> App<Context>): Try<Any?> {
         return AppRunner.run(
                 rawArgs = args ?: arrayOf(),
                 about = About.simple("test id", "test name", "test desc", "test company", "1.0"),
