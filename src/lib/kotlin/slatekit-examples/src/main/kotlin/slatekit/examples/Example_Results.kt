@@ -70,13 +70,13 @@ class Example_Results : Command("results"), OutcomeBuilder {
 
         // Pattern match on status
         when (addResult.status) {
-            is Passed.Succeeded  -> println(addResult.msg)
-            is Passed.Pending    -> println(addResult.msg)
-            is Failed.Denied     -> println(addResult.msg)
-            is Failed.Invalid    -> println(addResult.msg)
-            is Failed.Ignored    -> println(addResult.msg)
-            is Failed.Errored    -> println(addResult.msg)
-            is Failed.Unknown -> println(addResult.msg)
+            is Passed.Succeeded  -> println(addResult.desc)
+            is Passed.Pending    -> println(addResult.desc)
+            is Failed.Denied     -> println(addResult.desc)
+            is Failed.Invalid    -> println(addResult.desc)
+            is Failed.Ignored    -> println(addResult.desc)
+            is Failed.Errored    -> println(addResult.desc)
+            is Failed.Unknown -> println(addResult.desc)
         }
     }
 
@@ -157,13 +157,13 @@ class Example_Results : Command("results"), OutcomeBuilder {
         // Pattern match 2: "Mid-level" on Status ( 7 logical groups )
         // NOTE: The status property is available on both the Success/Failure branches
         when(result.status) {
-            is Passed.Succeeded  -> println(result.msg) // Success!
-            is Passed.Pending    -> println(result.msg) // Success, but in progress
-            is Failed.Denied     -> println(result.msg) // Security related
-            is Failed.Invalid    -> println(result.msg) // Bad inputs / data
-            is Failed.Ignored    -> println(result.msg) // Ignored for processing
-            is Failed.Errored    -> println(result.msg) // Expected errors
-            is Failed.Unknown -> println(result.msg) // Unexpected errors
+            is Passed.Succeeded  -> println(result.desc) // Success!
+            is Passed.Pending    -> println(result.desc) // Success, but in progress
+            is Failed.Denied     -> println(result.desc) // Security related
+            is Failed.Invalid    -> println(result.desc) // Bad inputs / data
+            is Failed.Ignored    -> println(result.desc) // Ignored for processing
+            is Failed.Errored    -> println(result.desc) // Expected errors
+            is Failed.Unknown -> println(result.desc) // Unexpected errors
         }
 
         // Pattern match 3: "Low-Level" on numeric code
@@ -384,15 +384,15 @@ class Example_Results : Command("results"), OutcomeBuilder {
         // NOTE: The status property is available on both the Success/Failure branches
         when(result) {
             is Success -> when(result.status) {
-                is Passed.Succeeded  -> println(result.msg)
-                is Passed.Pending    -> println(result.msg)
+                is Passed.Succeeded  -> println(result.desc)
+                is Passed.Pending    -> println(result.desc)
             }
             is Failure -> when(result.status) {
-                is Failed.Denied     -> println(result.msg)
-                is Failed.Invalid    -> println(result.msg)
-                is Failed.Ignored    -> println(result.msg)
-                is Failed.Errored    -> println(result.msg)
-                is Failed.Unknown -> println(result.msg)
+                is Failed.Denied     -> println(result.desc)
+                is Failed.Invalid    -> println(result.desc)
+                is Failed.Ignored    -> println(result.desc)
+                is Failed.Errored    -> println(result.desc)
+                is Failed.Unknown -> println(result.desc)
             }
         }
 
@@ -478,7 +478,7 @@ class Example_Results : Command("results"), OutcomeBuilder {
 
     fun printResult(result: Result<*, *>): Unit {
         println("success: " + result.success)
-        println("message: " + result.msg)
+        println("message: " + result.desc)
         println("code   : " + result.code)
         println()
         println()

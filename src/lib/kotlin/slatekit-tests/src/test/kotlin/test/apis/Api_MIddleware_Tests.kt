@@ -61,7 +61,7 @@ class Api_Middleware_Tests : ApiTestsBase() {
 
         Assert.assertTrue(!r1.success)
         Assert.assertTrue(r1.code == Codes.ERRORED.code)
-        Assert.assertTrue(r1.msg == Codes.ERRORED.desc)
+        Assert.assertTrue(r1.desc == Codes.ERRORED.desc)
     }
 
 
@@ -72,7 +72,7 @@ class Api_Middleware_Tests : ApiTestsBase() {
 
         Assert.assertTrue(!r1.success)
         Assert.assertTrue(r1.code == Codes.UNEXPECTED.code)
-        Assert.assertTrue(r1.msg == Codes.UNEXPECTED.desc)
+        Assert.assertTrue(r1.desc == Codes.UNEXPECTED.desc)
         Assert.assertTrue(api.onErrorHookCount.size == 1)
     }
 
@@ -84,7 +84,7 @@ class Api_Middleware_Tests : ApiTestsBase() {
 
         Assert.assertTrue(!r1.success)
         Assert.assertTrue(r1.code == Codes.ERRORED.code)
-        Assert.assertTrue(r1.msg == Codes.ERRORED.desc)
+        Assert.assertTrue(r1.desc == Codes.ERRORED.desc)
         Assert.assertTrue(api.onErrorHookCount.size == 1)
     }
 }

@@ -77,7 +77,7 @@ class AppLoaderTests  {
 
             Assert.assertEquals(true, result.success)
             Assert.assertEquals(status.code, result.code)
-            Assert.assertEquals(status.desc, result.msg)
+            Assert.assertEquals(status.desc, result.desc)
             val actual = result as Success<ConfigValueTest>
             Assert.assertTrue(value == actual.value)
         }

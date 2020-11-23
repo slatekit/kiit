@@ -63,6 +63,7 @@ open class CliExecutor {
             CliResponse(
                     request,
                     true,
+                    Codes.SUCCESS.name,
                     0,
                     mapOf(),
                     ""

@@ -115,10 +115,11 @@ class Example_CLI : Command("auth") {
                     CliResponse(
                             request = request,
                             success = true,
+                            name = Codes.SUCCESS.name,
                             code = Codes.SUCCESS.code,
                             meta = mapOf(),
                             value = "Sample Response",
-                            msg = "Processed",
+                            desc = "Processed",
                             err = null,
                             tag = "tag-123"
                     ))

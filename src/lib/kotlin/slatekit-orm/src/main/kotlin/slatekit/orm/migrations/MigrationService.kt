@@ -120,7 +120,7 @@ class MigrationService(
         }
         val succeeded = results.filter { it.success }
         val allSql = succeeded.fold("") { acc, result ->
-            acc + newline + "-- ${result.msg}" + newline + result.getOrElse { "Error generating sql" }
+            acc + newline + "-- ${result.desc}" + newline + result.getOrElse { "Error generating sql" }
         }
         val finalFileName = "$fileName.sql"
         val filePath = folders?.let {
@@ -141,7 +141,7 @@ class MigrationService(
         }
         val succeeded = results.filter { it.success }
         val allSql = succeeded.fold("") { acc, result ->
-            acc + newline + "-- ${result.msg}" + newline + result.getOrElse { "Error generating sql" }
+            acc + newline + "-- ${result.desc}" + newline + result.getOrElse { "Error generating sql" }
         }
         val finalFileName = "$fileName.sql"
         val filePath = folders?.let {
@@ -226,7 +226,7 @@ class MigrationService(
     private fun each(operation: (EntityContext) -> Try<String>): Try<List<String>> {
         val results = entities.getEntities().map { operation(it ) }
         val success = results.all { it.success }
-        val messages = results.map { it.msg ?: "" }
+        val messages = results.map { it.desc ?: "" }
         val error = if (success) "" else messages.joinToString(newline)
         return if (success) slatekit.results.Success(messages, msg = "") else slatekit.results.Failure(Exception(error), msg = error)
     }

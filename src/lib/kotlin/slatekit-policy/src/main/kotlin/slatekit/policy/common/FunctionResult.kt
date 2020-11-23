@@ -20,7 +20,7 @@ interface FunctionResult {
     val ended: DateTime
 
     val success: Boolean get() { return result.success }
-    val message: String get() { return result.msg }
+    val message: String get() { return result.desc }
     val value: Any? get() { return result.getOrNull() }
 
     fun duration(): Duration { return ended.durationFrom(started) }

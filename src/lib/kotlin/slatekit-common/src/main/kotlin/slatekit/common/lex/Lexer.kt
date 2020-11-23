@@ -29,7 +29,7 @@ open class Lexer(val text: String) {
     fun parse(): LexResult {
         val res = getTokens()
         val tokens = res.getOrElse({ listOf<Token>() })
-        return LexResult(res.success, res.msg.orEmpty(), tokens, tokens.size, false, null)
+        return LexResult(res.success, res.desc.orEmpty(), tokens, tokens.size, false, null)
     }
 
     fun getTokens(batchSize: Int = -1): Try<List<Token>> {

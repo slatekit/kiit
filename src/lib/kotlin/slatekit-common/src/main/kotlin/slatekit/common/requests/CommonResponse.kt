@@ -7,16 +7,17 @@ package slatekit.common.requests
  * @param code : A status code ( can be the http status code )
  * @param meta : Meta data for the response ( can be used for headers for http )
  * @param value : The actual value returned by the response
- * @param msg : Message in the case of an failure
+ * @param desc : Message in the case of an failure
  * @param err : Exception in event of failure
  * @param tag : Tag used as a correlation field
  */
 data class CommonResponse<out T>(
         override val success: Boolean,
+        override val name: String,
         override val code: Int,
         override val meta: Map<String, String>?,
         override val value: T?,
-        override val msg: String? = null,
+        override val desc: String? = null,
         override val err: Exception? = null,
         override val tag: String? = null
 ) : Response<T> {

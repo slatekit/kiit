@@ -21,8 +21,6 @@ import slatekit.common.types.Content
 import slatekit.common.types.ContentType
 import slatekit.common.io.Files
 import slatekit.common.io.IO
-import slatekit.common.newline
-import slatekit.common.serialization.Serializer
 import slatekit.results.*
 
 open class CliIO(private val io: IO<CliOutput, Unit>,
@@ -90,7 +88,7 @@ open class CliIO(private val io: IO<CliOutput, Unit>,
         val textType = if(result.success) TextType.Success else TextType.Failure
         write(textType, "Success : " + result.success)
         text( "Status  : " + result.code)
-        text( "Message : " + result.msg)
+        text( "Message : " + result.desc)
         text( "Tag     : " + result.tag)
     }
 

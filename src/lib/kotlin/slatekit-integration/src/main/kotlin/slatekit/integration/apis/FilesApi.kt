@@ -99,6 +99,6 @@ class FilesApi(val files: CloudFiles, override val context: Context) : slatekit.
                     "CONTENT: " + text
         } else
             "PATH   : " + path
-        return result.fold( { Success(output) }, { Failure(result.msg) }).toTry()
+        return result.fold( { Success(output) }, { Failure(result.desc) }).toTry()
     }
 }

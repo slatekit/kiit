@@ -47,7 +47,7 @@ sealed class Result<out T, out E> {
      */
     val success: Boolean get() = this is Success
     val code: Int get() = status.code
-    val msg: String get() = status.desc
+    val desc: String get() = status.desc
 
     /**
      * Applies supplied function `f` if this is a [Success]

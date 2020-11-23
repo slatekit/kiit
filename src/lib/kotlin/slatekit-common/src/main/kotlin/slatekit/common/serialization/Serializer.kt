@@ -13,7 +13,6 @@
 
 package slatekit.common.serialization
 
-import slatekit.common.DateTime
 import slatekit.results.Result
 import slatekit.results.getOrElse
 //import java.time.*
@@ -185,7 +184,7 @@ open class Serializer(
             // Entry
             onMapItem(item, depth, 0, "success", item.success)
             onMapItem(item, depth, 1, "code", item.code)
-            onMapItem(item, depth, 2, "msg", item.msg)
+            onMapItem(item, depth, 2, "msg", item.desc)
             onMapItem(item, depth, 3, "value", item.getOrElse { null })
 
             // End

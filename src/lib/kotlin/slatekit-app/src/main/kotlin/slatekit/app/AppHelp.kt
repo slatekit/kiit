@@ -59,7 +59,7 @@ class AppHelp(val about: About, val args: ArgsSchema, val envs: Envs = Envs.defa
                     appMeta.handle(assist)
 
                     // Prevent futher processing by return failure
-                    Tries.errored<Args>(Exception(assist.msg), Codes.ERRORED.copy(assist.status.name, assist.status.code, assist.status.desc))
+                    Tries.errored<Args>(Exception(assist.desc), Codes.ERRORED.copy(assist.status.name, assist.status.code, assist.status.desc))
                 }
             }
         }
@@ -81,7 +81,7 @@ class AppHelp(val about: About, val args: ArgsSchema, val envs: Envs = Envs.defa
                 Codes.HELP.code -> help()
                 Codes.ABOUT.code -> about()
                 Codes.VERSION.code -> version()
-                else -> println("Unexpected command: " + check.msg)
+                else -> println("Unexpected command: " + check.desc)
             }
         }
     }

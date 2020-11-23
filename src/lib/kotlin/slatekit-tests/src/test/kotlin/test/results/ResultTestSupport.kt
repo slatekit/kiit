@@ -17,7 +17,7 @@ interface ResultTestSupport {
         Assert.assertEquals( result.status.code, (expectedCode ?: expectedStatus.code))
         Assert.assertEquals( result.status.desc , (expectedMessage ?: expectedStatus.desc))
         Assert.assertEquals( result.code , (expectedCode ?: expectedStatus.code))
-        Assert.assertEquals( result.msg , (expectedMessage ?: expectedStatus.desc))
+        Assert.assertEquals( result.desc , (expectedMessage ?: expectedStatus.desc))
 
         result.onSuccess { value ->
             Assert.assertEquals(expectedValue, value)
@@ -36,7 +36,7 @@ interface ResultTestSupport {
         Assert.assertEquals(result.status.code , (expectedStatusCode ?: expectedStatus.code))
         Assert.assertEquals(result.status.desc , (expectedStatusMsg ?: expectedStatus.desc))
         Assert.assertEquals(result.code , (expectedStatusCode ?: expectedStatus.code))
-        Assert.assertEquals(result.msg , (expectedStatusMsg ?: expectedStatus.desc))
+        Assert.assertEquals(result.desc , (expectedStatusMsg ?: expectedStatus.desc))
         result.onFailure {
             when (it) {
                 is String    -> Assert.assertEquals(it , expectedError)

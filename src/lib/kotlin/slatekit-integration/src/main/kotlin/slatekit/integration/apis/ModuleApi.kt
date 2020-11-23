@@ -89,7 +89,7 @@ class ModuleApi(val ctx: slatekit.integration.mods.ModuleContext, override val c
         val all = _items.all().map { it.info.name }
         val results = all.map { name -> uninstallByName(name) }
         val success = results.foldRight(true, { res, acc -> if (!res.success) false else acc })
-        val message = results.map({ result -> if (result.success) "" else result.msg }).joinToString { newline }
+        val message = results.map({ result -> if (result.success) "" else result.desc }).joinToString { newline }
         val result = if (success) Success("Uninstalled all") else Failure(Exception(message))
         return result
     }

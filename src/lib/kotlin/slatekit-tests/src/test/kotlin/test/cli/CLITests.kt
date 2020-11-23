@@ -57,7 +57,7 @@ class CLITests {
             val text = args.line
             testExec.add(text)
             val req = CliRequest.build(Args.empty(), text)
-            return Success(CliResponse(req, true, Codes.SUCCESS.code, mapOf(), text))
+            return Success(CliResponse(req, true, Codes.SUCCESS.name, Codes.SUCCESS.code, mapOf(), text))
         }
 
 

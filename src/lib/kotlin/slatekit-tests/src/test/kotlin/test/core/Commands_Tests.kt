@@ -19,7 +19,6 @@ import slatekit.common.*
 import slatekit.cmds.Command
 import slatekit.cmds.CommandRequest
 import slatekit.cmds.Commands
-import slatekit.common.envs.Env
 import slatekit.common.envs.EnvMode
 import slatekit.results.Success
 import slatekit.results.Try
@@ -203,7 +202,7 @@ class Commands_Tests {
             Assert.assertTrue(it.hasRun())
 //            Assert.assertTrue(it.countFailure() == 1L)
 //            Assert.assertTrue(it.countAttempt() == 1L)
-            Assert.assertTrue(it.lastResult?.msg == "Unexpected")
+            Assert.assertTrue(it.lastResult?.desc == "Unexpected")
             //Assert.assertTrue(it.lastResult?.error()!!.message == "Error while executing : create error. error_1")
             Assert.assertTrue(it.id.name == "create.error")
         }

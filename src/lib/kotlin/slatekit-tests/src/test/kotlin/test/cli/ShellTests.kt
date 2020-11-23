@@ -43,7 +43,7 @@ class ShellTests  {
       val result = runBlocking { cli.executeText("app.version.host") }
 
       val res = result.getOrElse {
-        CliResponse( CliRequest.build(Args.empty(), ""),true, 1, mapOf(), "" )
+        CliResponse( CliRequest.build(Args.empty(), ""),true, Codes.SUCCESS.name, 1, mapOf(), "" )
       }
       val req = res.request
       Assert.assertTrue( req.area == "app" )
@@ -59,7 +59,7 @@ class ShellTests  {
       val cli = getCli()
       val result = runBlocking { cli.executeText("?") }
       Assert.assertTrue( result.code == Codes.HELP.code )
-      Assert.assertTrue( result.msg  == Codes.HELP.desc)
+      Assert.assertTrue( result.desc  == Codes.HELP.desc)
     }
 
 
@@ -68,7 +68,7 @@ class ShellTests  {
       val result = runBlocking {  cli.executeText("app ?") }
       //Assert.assertTrue( result.getOrElse { null } == null )
       Assert.assertTrue( result.code == Codes.HELP.code )
-      Assert.assertTrue( result.msg  == Codes.HELP.desc)
+      Assert.assertTrue( result.desc  == Codes.HELP.desc)
     }
 
 
@@ -77,7 +77,7 @@ class ShellTests  {
       val result = runBlocking { cli.executeText("app.info ?") }
       //Assert.assertTrue( result.getOrElse { null } == null )
       Assert.assertTrue( result.code == Codes.HELP.code )
-      Assert.assertTrue( result.msg  == Codes.HELP.desc)
+      Assert.assertTrue( result.desc  == Codes.HELP.desc)
     }
 
 
@@ -86,7 +86,7 @@ class ShellTests  {
       val result = runBlocking { cli.executeText("app.version.host ?") }
       //Assert.assertTrue( result.getOrElse { null } == null )
       Assert.assertTrue( result.code == Codes.HELP.code )
-      Assert.assertTrue( result.msg  == Codes.HELP.desc)
+      Assert.assertTrue( result.desc  == Codes.HELP.desc)
     }
 
 
