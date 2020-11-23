@@ -65,7 +65,7 @@ class SlateKit(ctx: Context) : App<Context>(ctx, AppOptions(showWelcome = true))
      *
      * @return
      */
-    override suspend fun exec(): Any {
+    override suspend fun exec(): Any? {
         // Create the CLI
         // All commands are dispatched to it as it handles the
         // integration between CLI inputs -> API requests

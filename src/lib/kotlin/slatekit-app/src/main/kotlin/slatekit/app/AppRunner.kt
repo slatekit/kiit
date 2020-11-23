@@ -55,7 +55,7 @@ object AppRunner {
         errorMode: ErrorMode = ErrorMode.Print,
         confSource: Alias = Alias.Jar,
         hasAction: Boolean = false
-    ): Try<Any> {
+    ): Try<Any?> {
 
         // Parse raw args to structured args with lookup ability e.g. args["env"] etc.
         val argsResult = Args.parseArgs(rawArgs, "-", "=", hasAction)
@@ -116,7 +116,7 @@ object AppRunner {
     /**
      * Run the app using the workflow init -> execute -> end
      */
-    suspend fun <C : Context> run(app: App<C>): Try<Any> {
+    suspend fun <C : Context> run(app: App<C>): Try<Any?> {
         val result = Tries.of {
             // Welcome Banner + init + create app directories
             if (app.options.showWelcome) { app.banner.welcome() }
@@ -139,7 +139,7 @@ object AppRunner {
         return result
     }
 
-    private fun showError(result: Try<Any>, ex: Exception?) : Try<Any> {
+    private fun showError(result: Try<Any?>, ex: Exception?) : Try<Any?> {
         println("success: " + result.success)
         println("code   : " + result.code)
         println("message: " + result.desc)

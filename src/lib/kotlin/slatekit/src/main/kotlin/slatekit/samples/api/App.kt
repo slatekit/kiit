@@ -67,7 +67,7 @@ class App(ctx: Context) : App<Context>(ctx, AppOptions(showWelcome = true)) {
      *
      * @return
      */
-    override suspend fun exec(): Any {
+    override suspend fun exec(): Any? {
         val server = Server(ctx)
         return server.execute()
     }

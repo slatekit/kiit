@@ -86,7 +86,7 @@ class AppLoaderTests  {
 
     class AppConfigTest(ctx: Context) : App<Context>(ctx) {
 
-        override suspend fun exec():Any {
+        override suspend fun exec():Any? {
             val data = ConfigValueTest(
                     ctx.envs.name,
                     ctx.conf.getString("test_stri"),

@@ -63,7 +63,7 @@ open class App<C : Context>(
      *
      * @return
      */
-    open suspend fun exec():Any = OK
+    open suspend fun exec():Any? = OK
 
     /**
      * Life-cycle hook for completion
@@ -76,19 +76,6 @@ open class App<C : Context>(
      * Life-cycle hook to handle failure
      */
     open suspend fun fail(err: Throwable?) {
-        notify("Errored: " + err?.message, null)
-    }
-
-    /**
-     * ============================================================================
-     * NOTIFICATION
-     * 1. To notify during state changes, life-cycle events etc
-     * ============================================================================
-     */
-    /**
-     * Send out notifications
-     */
-    open suspend fun notify(desc: String?, extra: List<Pair<String, String>>?) {
     }
 
     /**
