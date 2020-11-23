@@ -30,6 +30,7 @@ import slatekit.policy.policies.Ratio
 import slatekit.jobs.*
 import slatekit.jobs.workers.WorkResult
 import slatekit.jobs.workers.Worker
+import slatekit.results.Codes
 import slatekit.results.Try
 import slatekit.results.Success
 import java.util.concurrent.atomic.AtomicInteger
@@ -181,7 +182,7 @@ class Example_Jobs : Command("utils"), CoroutineScope by MainScope() {
                             slatekit.jobs.Job(id.copy(service = "job7"), listOf(::sendNewsLetterWithPaging), policies = listOf(
                                     Every(10, { req, res -> println("Paged : " + req.task.id + ":" + res.desc) }),
                                     Limit(12, true, { req -> req.context.stats.counts }),
-                                    Ratio(.1, slatekit.results.Failed.Errored(0, ""), { req -> req.context.stats.counts })
+                                    Ratio(.1, Codes.ERRORED, { req -> req.context.stats.counts })
                                 )
                             )
                     )
