@@ -87,7 +87,7 @@ class KtorResponse  : ResponseHandler {
 
     override fun toHttpStatus(response:Response<Any>): HttpStatusCode {
         val http = Codes.toHttp(Passed.Succeeded(response.code, response.msg ?: ""))
-        return HttpStatusCode(http.first, http.second.msg)
+        return HttpStatusCode(http.first, http.second.desc)
     }
 
 

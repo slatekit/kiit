@@ -19,7 +19,7 @@ import slatekit.results.*
  */
 interface OutcomeBuilder : Builder<Err> {
     override fun errorFromEx(ex: Exception, defaultStatus: Status): Err = Err.ex(ex)
-    override fun errorFromStr(msg: String?, defaultStatus: Status): Err = Err.of(msg ?: defaultStatus.msg)
+    override fun errorFromStr(msg: String?, defaultStatus: Status): Err = Err.of(msg ?: defaultStatus.desc)
     override fun errorFromErr(err: Err, defaultStatus: Status): Err = err
 }
 

@@ -100,7 +100,7 @@ class ResultFunctionalTests {
         Assert.assertEquals(false, result2.success)
         Assert.assertEquals(Codes.ERRORED, result2.status)
         Assert.assertEquals(Codes.ERRORED.code, result2.code)
-        Assert.assertEquals(Codes.ERRORED.msg, result2.msg)
+        Assert.assertEquals(Codes.ERRORED.desc, result2.msg)
         Assert.assertEquals("??", result2.getOrElse { "??" })
     }
 
@@ -112,7 +112,7 @@ class ResultFunctionalTests {
         Assert.assertEquals(false, result2.success)
         Assert.assertEquals(Codes.ERRORED, result2.status)
         Assert.assertEquals(Codes.ERRORED.code, result2.code)
-        Assert.assertEquals(Codes.ERRORED.msg, result2.msg)
+        Assert.assertEquals(Codes.ERRORED.desc, result2.msg)
         Assert.assertEquals("??", result2.getOrElse { "??" })
     }
 
@@ -124,7 +124,7 @@ class ResultFunctionalTests {
         Assert.assertEquals(false, result2.success)
         Assert.assertEquals(Codes.ERRORED, result2.status)
         Assert.assertEquals(Codes.ERRORED.code, result2.code)
-        Assert.assertEquals(Codes.ERRORED.msg, result2.msg)
+        Assert.assertEquals(Codes.ERRORED.desc, result2.msg)
         Assert.assertEquals("??", result2.getOrElse { "??" })
     }
 
@@ -136,7 +136,7 @@ class ResultFunctionalTests {
         Assert.assertEquals(false, result2.success)
         Assert.assertEquals(Codes.ERRORED, result2.status)
         Assert.assertEquals(Codes.ERRORED.code, result2.code)
-        Assert.assertEquals(Codes.ERRORED.msg, result2.msg)
+        Assert.assertEquals(Codes.ERRORED.desc, result2.msg)
         result2.onFailure {
             Assert.assertEquals(0, it)
         }
@@ -150,7 +150,7 @@ class ResultFunctionalTests {
         Assert.assertEquals(false, result2.success)
         Assert.assertEquals(Codes.ERRORED, result2.status)
         Assert.assertEquals(Codes.ERRORED.code, result2.code)
-        Assert.assertEquals(Codes.ERRORED.msg, result2.msg)
+        Assert.assertEquals(Codes.ERRORED.desc, result2.msg)
         result2.onFailure {
             Assert.assertEquals(0, it)
         }
@@ -170,7 +170,7 @@ class ResultFunctionalTests {
         Assert.assertEquals(true, r2.success)
         Assert.assertEquals(Codes.SUCCESS, r2.status)
         Assert.assertEquals(Codes.SUCCESS.code, r2.code)
-        Assert.assertEquals(Codes.SUCCESS.msg, r2.msg)
+        Assert.assertEquals(Codes.SUCCESS.desc, r2.msg)
         r2.onSuccess {
             Assert.assertEquals("peter parker : spider-man", it )
         }

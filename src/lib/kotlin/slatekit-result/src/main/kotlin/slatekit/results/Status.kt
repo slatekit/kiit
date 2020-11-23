@@ -16,17 +16,29 @@ package slatekit.results
 
 
 /**
- * Interface to represent a Status with both an integer code and descriptive message
+ * Interface to represent a Status with both an integer code and description
  * @sample :
- * { code: 8000, msg: "Invalid request" }
- * { code: 8001, msg: "Unauthorized"    }
+ * { name: "INVALID"     , code: 400000, msg: "Invalid request" }
+ * { name: "UNAUTHORIZED", code: 400001, msg: "Unauthorized"    }
  *
  */
 interface Status {
-    val code:Int
-    val msg: String
+    /**
+     * Used as short user-friendly enum e.g. "INVALID", "UNAUTHORIZED"
+     */
+    val name:String
 
-    fun copyMsg(msg: String): Status
+    /**
+     * Used as a generic application code that can be converted to other codes such as HTTP.
+     */
+    val code:Int
+
+    /**
+     * Description for status
+     */
+    val desc: String
+
+    fun copyDesc(msg: String): Status
     fun copyAll(msg: String, code: Int): Status
 
     companion object {
@@ -39,8 +51,8 @@ interface Status {
             // of [Status] if the msg/code are empty and or they are the same as Success.
             if (code == null && msg == null || msg == "") return defaultStatus
             if (code == defaultStatus.code && msg == null) return defaultStatus
-            if (code == defaultStatus.code && msg == defaultStatus.msg) return defaultStatus
-            return defaultStatus.copyAll(msg ?: defaultStatus.msg, code ?: defaultStatus.code) as T
+            if (code == defaultStatus.code && msg == defaultStatus.desc) return defaultStatus
+            return defaultStatus.copyAll(msg ?: defaultStatus.desc, code ?: defaultStatus.code) as T
         }
 
         /**
@@ -51,8 +63,8 @@ interface Status {
             // of [Status] if the msg/code are empty and or they are the same as Success.
             if (msg == null && rawStatus == null) return status
             if (msg == null && rawStatus != null) return rawStatus
-            if (msg != null && rawStatus == null) return status.copyMsg(msg) as T
-            if (msg != null && rawStatus != null) return rawStatus.copyMsg(msg) as T
+            if (msg != null && rawStatus == null) return status.copyDesc(msg) as T
+            if (msg != null && rawStatus != null) return rawStatus.copyDesc(msg) as T
             return status
         }
     }
@@ -63,20 +75,20 @@ interface Status {
  * Sum Type to represent the different possible Statuses that can be supplied to the @see[Success]
  */
 sealed class Passed : Status {
-    data class Succeeded (override val code: Int, override val msg: String) : Passed()
-    data class Pending   (override val code: Int, override val msg: String) : Passed()
+    data class Succeeded (override val name:String, override val code: Int, override val desc: String) : Passed()
+    data class Pending   (override val name:String, override val code: Int, override val desc: String) : Passed()
 
     override fun copyAll(msg: String, code: Int): Status {
         return when (this) {
-            is Succeeded -> this.copy(code = code, msg = msg)
-            is Pending -> this.copy(code = code, msg = msg)
+            is Succeeded -> this.copy(code = code, desc = msg)
+            is Pending -> this.copy(code = code, desc = msg)
         }
     }
 
-    override fun copyMsg(msg: String): Status {
+    override fun copyDesc(msg: String): Status {
         return when (this) {
-            is Succeeded -> this.copy(msg = msg)
-            is Pending -> this.copy(msg = msg)
+            is Succeeded -> this.copy(desc = msg)
+            is Pending -> this.copy(desc = msg)
         }
     }
 }
@@ -86,30 +98,30 @@ sealed class Passed : Status {
  * Sum Type to represent the different possible Statuses that can be supplied to the @see[Failure]
  */
 sealed class Failed : Status {
-    data class Denied    (override val code: Int, override val msg: String) : Failed() // Security related
-    data class Ignored   (override val code: Int, override val msg: String) : Failed() // Ignored for processing
-    data class Invalid   (override val code: Int, override val msg: String) : Failed() // Bad inputs
-    data class Errored   (override val code: Int, override val msg: String) : Failed() // Expected failures
-    data class Unknown   (override val code: Int, override val msg: String) : Failed() // Unexpected failures
+    data class Denied    (override val name:String, override val code: Int, override val desc: String) : Failed() // Security related
+    data class Ignored   (override val name:String, override val code: Int, override val desc: String) : Failed() // Ignored for processing
+    data class Invalid   (override val name:String, override val code: Int, override val desc: String) : Failed() // Bad inputs
+    data class Errored   (override val name:String, override val code: Int, override val desc: String) : Failed() // Expected failures
+    data class Unknown   (override val name:String, override val code: Int, override val desc: String) : Failed() // Unexpected failures
 
 
     override fun copyAll(msg: String, code: Int): Status {
         return when (this) {
-            is Denied  -> this.copy(code = code, msg = msg)
-            is Invalid -> this.copy(code = code, msg = msg)
-            is Ignored -> this.copy(code = code, msg = msg)
-            is Errored -> this.copy(code = code, msg = msg)
-            is Unknown -> this.copy(code = code, msg = msg)
+            is Denied  -> this.copy(name = name, code = code, desc = msg)
+            is Invalid -> this.copy(name = name, code = code, desc = msg)
+            is Ignored -> this.copy(name = name, code = code, desc = msg)
+            is Errored -> this.copy(name = name, code = code, desc = msg)
+            is Unknown -> this.copy(name = name, code = code, desc = msg)
         }
     }
 
-    override fun copyMsg(msg: String): Status {
+    override fun copyDesc(msg: String): Status {
         return when (this) {
-            is Denied -> this.copy(msg = msg)
-            is Invalid -> this.copy(msg = msg)
-            is Ignored -> this.copy(msg = msg)
-            is Errored -> this.copy(msg = msg)
-            is Unknown -> this.copy(msg = msg)
+            is Denied  -> this.copy(desc = msg)
+            is Invalid -> this.copy(desc = msg)
+            is Ignored -> this.copy(desc = msg)
+            is Errored -> this.copy(desc = msg)
+            is Unknown -> this.copy(desc = msg)
         }
     }
 }

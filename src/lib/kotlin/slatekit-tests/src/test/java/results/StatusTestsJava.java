@@ -33,6 +33,6 @@ public class StatusTestsJava {
 
     private void checkCode(Status status, int expectedCode, String expectedMsg){
         Assert.assertEquals(status.getCode(), expectedCode);
-        Assert.assertEquals(status.getMsg(), expectedMsg);
+        Assert.assertEquals(status.getDesc(), expectedMsg);
     }
 }

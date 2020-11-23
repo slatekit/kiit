@@ -59,7 +59,7 @@ class ShellTests  {
       val cli = getCli()
       val result = runBlocking { cli.executeText("?") }
       Assert.assertTrue( result.code == Codes.HELP.code )
-      Assert.assertTrue( result.msg  == Codes.HELP.msg)
+      Assert.assertTrue( result.msg  == Codes.HELP.desc)
     }
 
 
@@ -68,7 +68,7 @@ class ShellTests  {
       val result = runBlocking {  cli.executeText("app ?") }
       //Assert.assertTrue( result.getOrElse { null } == null )
       Assert.assertTrue( result.code == Codes.HELP.code )
-      Assert.assertTrue( result.msg  == Codes.HELP.msg)
+      Assert.assertTrue( result.msg  == Codes.HELP.desc)
     }
 
 
@@ -77,7 +77,7 @@ class ShellTests  {
       val result = runBlocking { cli.executeText("app.info ?") }
       //Assert.assertTrue( result.getOrElse { null } == null )
       Assert.assertTrue( result.code == Codes.HELP.code )
-      Assert.assertTrue( result.msg  == Codes.HELP.msg)
+      Assert.assertTrue( result.msg  == Codes.HELP.desc)
     }
 
 
@@ -86,7 +86,7 @@ class ShellTests  {
       val result = runBlocking { cli.executeText("app.version.host ?") }
       //Assert.assertTrue( result.getOrElse { null } == null )
       Assert.assertTrue( result.code == Codes.HELP.code )
-      Assert.assertTrue( result.msg  == Codes.HELP.msg)
+      Assert.assertTrue( result.msg  == Codes.HELP.desc)
     }
 
 

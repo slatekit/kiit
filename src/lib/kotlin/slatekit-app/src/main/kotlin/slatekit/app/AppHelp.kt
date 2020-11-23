@@ -59,7 +59,7 @@ class AppHelp(val about: About, val args: ArgsSchema, val envs: Envs = Envs.defa
                     appMeta.handle(assist)
 
                     // Prevent futher processing by return failure
-                    Tries.errored<Args>(Exception(assist.msg), Codes.ERRORED.copy(assist.status.code, assist.status.msg))
+                    Tries.errored<Args>(Exception(assist.msg), Codes.ERRORED.copy(assist.status.name, assist.status.code, assist.status.desc))
                 }
             }
         }

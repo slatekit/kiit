@@ -44,7 +44,7 @@ class Example_Results : Command("results"), OutcomeBuilder {
         // Properties
         println(start.success)     // true
         println(start.status.code) // Codes.SUCCESS.code
-        println(start.status.msg)  // Codes.SUCCESS.msg
+        println(start.status.desc)  // Codes.SUCCESS.msg
 
         // Safely operate on values with map/flatMap
         val addResult = start.map { it + 1 }
@@ -329,7 +329,7 @@ class Example_Results : Command("results"), OutcomeBuilder {
         // Properties
         println(result.success)     // true
         println(result.status.code) // Codes.SUCCESS.code
-        println(result.status.msg)  // Codes.SUCCESS.msg
+        println(result.status.desc)  // Codes.SUCCESS.msg
 
         // Get value or default to null
         val value1: Int? = result.getOrNull()

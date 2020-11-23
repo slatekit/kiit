@@ -30,7 +30,7 @@ class Ratio<I, O>(val limit: Double, val status: Status, val stats: (I) -> Count
             is Failed.Unknown -> isAtThreshold(counts.totalUnexpected(), counts.totalProcessed())
             else -> isAtThreshold(counts.totalUnexpected(), counts.totalProcessed())
         }
-        logger?.info("RATIO: status = ${result.status.msg}")
+        logger?.info("RATIO: status = ${result.status.desc}")
         return if (isMatch) {
             Outcomes.errored(Codes.LIMITED)
         } else {

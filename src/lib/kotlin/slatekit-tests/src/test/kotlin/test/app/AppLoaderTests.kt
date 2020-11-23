@@ -23,7 +23,6 @@ import slatekit.app.AppRunner
 import slatekit.results.Status
 import slatekit.results.Codes
 import slatekit.results.Success
-import slatekit.results.Try
 
 
 class AppLoaderTests  {
@@ -78,7 +77,7 @@ class AppLoaderTests  {
 
             Assert.assertEquals(true, result.success)
             Assert.assertEquals(status.code, result.code)
-            Assert.assertEquals(status.msg, result.msg)
+            Assert.assertEquals(status.desc, result.msg)
             val actual = result as Success<ConfigValueTest>
             Assert.assertTrue(value == actual.value)
         }

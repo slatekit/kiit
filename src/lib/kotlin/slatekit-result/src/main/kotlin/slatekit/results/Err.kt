@@ -74,7 +74,7 @@ sealed class Err {
 
         @JvmStatic
         fun code(status: Status): Err {
-            return ErrorInfo(status.msg)
+            return ErrorInfo(status.desc)
         }
 
         @JvmStatic
@@ -85,7 +85,7 @@ sealed class Err {
         @JvmStatic
         fun build(error: Any?): Err {
             return when (error) {
-                null -> Err.of(Codes.UNEXPECTED.msg)
+                null -> Err.of(Codes.UNEXPECTED.desc)
                 is Err -> error
                 is String -> Err.of(error)
                 is Exception -> Err.ex(error)

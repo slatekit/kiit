@@ -18,8 +18,8 @@ import slatekit.results.*
  * Builds [Result] with [Failure] error type of [String]
  */
 interface NoticeBuilder : Builder<String> {
-    override fun errorFromEx(ex: Exception, defaultStatus: Status): String = ex.message ?: defaultStatus.msg
-    override fun errorFromStr(msg: String?, defaultStatus: Status): String = msg ?: defaultStatus.msg
+    override fun errorFromEx(ex: Exception, defaultStatus: Status): String = ex.message ?: defaultStatus.desc
+    override fun errorFromStr(msg: String?, defaultStatus: Status): String = msg ?: defaultStatus.desc
     override fun errorFromErr(err: Err, defaultStatus: Status): String = err.toString()
 }
 
@@ -31,7 +31,7 @@ object Notices : NoticeBuilder {
      * Build a Notice<T> ( type alias ) for Result<T,String> using the supplied function
      */
     @JvmStatic
-    inline fun <T> of(f: () -> T): Notice<T> = build(f, { e -> e.message ?: Codes.ERRORED.msg })
+    inline fun <T> of(f: () -> T): Notice<T> = build(f, { e -> e.message ?: Codes.ERRORED.desc })
 
     /**
      * Build a Result<T,E> using the supplied callback and error handler

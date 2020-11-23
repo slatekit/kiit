@@ -22,7 +22,6 @@ import slatekit.results.IgnoredException
 import slatekit.results.InvalidException
 import slatekit.results.Result
 import slatekit.results.Status
-import slatekit.results.StatusException
 import slatekit.results.Success
 import slatekit.results.Try
 import slatekit.results.UnexpectedException
@@ -32,8 +31,8 @@ import slatekit.results.UnexpectedException
  */
 interface TryBuilder : Builder<Exception> {
     override fun errorFromEx(ex: Exception, defaultStatus: Status): Exception = ex
-    override fun errorFromStr(msg: String?, defaultStatus: Status): Exception = Exception(msg ?: defaultStatus.msg)
-    override fun errorFromErr(err: Err, defaultStatus: Status): Exception = ExceptionErr(defaultStatus.msg, err)
+    override fun errorFromStr(msg: String?, defaultStatus: Status): Exception = Exception(msg ?: defaultStatus.desc)
+    override fun errorFromErr(err: Err, defaultStatus: Status): Exception = ExceptionErr(defaultStatus.desc, err)
 }
 
 /**
