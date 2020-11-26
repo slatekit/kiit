@@ -3,7 +3,7 @@ package slatekit.cache
 import slatekit.common.log.Logger
 
 
-class SimpleSyncCache(private val cache: SyncCache) : SyncCache {
+class SimpleSyncCache(private val cache: Cache) : Cache {
 
 
     override val name: String get() = cache.name
@@ -52,7 +52,6 @@ class SimpleSyncCache(private val cache: SyncCache) : SyncCache {
 
     @Synchronized
     override fun expireAll() = cache.expireAll()
-
 
     companion object {
 

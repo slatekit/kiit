@@ -45,10 +45,17 @@ import slatekit.providers.logs.logback.LogbackLogs
  */
 fun main(args: Array<String>) {
     println("kotlin")
+    test(args)
     //app(args)
     //slatekit.samples.job.main(args)
 }
 
+fun test(args:Array<String>){
+
+    val app = CacheApp()
+    app.exec()
+
+}
 
 fun app(args:Array<String>) {
     /**

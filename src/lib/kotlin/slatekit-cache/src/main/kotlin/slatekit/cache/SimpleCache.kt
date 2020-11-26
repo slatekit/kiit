@@ -34,7 +34,7 @@ import slatekit.tracking.Fetches
 open class SimpleCache(override val name:String = Random.uuid(),
                        override val settings: CacheSettings,
                        override val listener:((CacheEvent) -> Unit)? = null,
-                       override val logger: Logger? = null ) : Cache, SyncCache {
+                       override val logger: Logger? = null ) : Cache {
 
     /**
      * The LinkedHashMap already LRU(Least Recently Used) behaviour out of the box.

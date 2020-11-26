@@ -44,7 +44,7 @@ class CacheApi(override val context: Context, val caches: List<AsyncCache>) : Fi
 
     @Action(desc = "gets the details of a single cache item")
     suspend fun get(name:String, key: String): Any? {
-        return lookup[name]?.get<Any>(key)
+        return lookup[name]?.getAsync<Any>(key)
     }
 
     @Action(desc = "gets the details of a single cache item")

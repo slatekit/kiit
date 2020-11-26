@@ -28,13 +28,13 @@ import java.util.concurrent.atomic.AtomicReference
  *
  * @param key : The key of the cache item for lookup
  * @param text : A text value for the item ( for description purposes )
- * @param seconds : Amount of time in seconds until it expires
+ * @param expiryInSecs : Amount of time in seconds until it expires
  * @param fetcher : The function that can actually fetch the cache data
  */
 data class CacheEntry(
     val key: String,
     val desc: String,
-    val seconds: Int,
+    val expiryInSecs: Int,
     val fetcher: suspend () -> Any?,
     val updateCount:Int = 20
 ) {
@@ -44,7 +44,7 @@ data class CacheEntry(
     val item = AtomicReference<CacheValue>(
             CacheValue(
                 text = null,
-                expiry = Expiry(seconds.toLong()),
+                expiry = Expiry(expiryInSecs.toLong()),
                 hits = Fetches(updateCount),
                 value = Tracked(),
                 error = Tracked())
