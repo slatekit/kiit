@@ -7,6 +7,7 @@ package slatekit.cache
  */
 sealed class CacheAction(val name: String) {
     /* ktlint-disable */
+    object Exists    : CacheAction( "Exists"    )
     object Create    : CacheAction( "Create"    )
     object Fetch     : CacheAction( "Fetch"     )
     object Update    : CacheAction( "Update"    )

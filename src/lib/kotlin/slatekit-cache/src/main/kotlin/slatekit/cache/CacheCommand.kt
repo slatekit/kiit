@@ -13,8 +13,16 @@ import slatekit.results.Outcome
 sealed class CacheCommand {
     abstract val action: CacheAction
 
-    class Put(val key: String, val desc: String, val expiryInSeconds: Int, val fetcher: suspend () -> Any?) : CacheCommand() {
+    class Exists(val key:String, val response: CompletableDeferred<Boolean>) : CacheCommand() {
+        override val action = CacheAction.Exists
+    }
+
+    class Put(val key: String, val desc: String, val expiryInSeconds: Int, val fetcher: suspend () -> Any?, val response: CompletableDeferred<Boolean>) : CacheCommand() {
         override val action = CacheAction.Create
+    }
+
+    class Set(val key: String, val value: Any?, val response: CompletableDeferred<Boolean>) : CacheCommand() {
+        override val action = CacheAction.Update
     }
 
     class Get(val key: String, val response: CompletableDeferred<Any?>, val load:Boolean = false) : CacheCommand() {
@@ -23,10 +31,6 @@ sealed class CacheCommand {
 
     class GetFresh(val key: String, val response: CompletableDeferred<Any?>) : CacheCommand() {
         override val action = CacheAction.Fetch
-    }
-
-    class Set(val key: String, val value: Any?) : CacheCommand() {
-        override val action = CacheAction.Update
     }
 
     class Refresh(val key: String, val response: CompletableDeferred<Outcome<Boolean>>) : CacheCommand() {

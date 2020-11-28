@@ -23,6 +23,8 @@ import slatekit.common.crypto.Encryptor
 import slatekit.common.log.Logger
 import slatekit.common.Sources
 import slatekit.context.Context
+import slatekit.results.Outcome
+import slatekit.results.builders.Outcomes
 
 @Api(area = "infra", name = "cache", desc = "api info about the application and host",
         auth = AuthModes.KEYED, roles = ["admin"], verb = Verbs.AUTO, sources = [Sources.ALL])
@@ -53,30 +55,29 @@ class CacheApi(override val context: Context, val caches: List<AsyncCache>) : Fi
     }
 
     @Action(desc = "invalidates a single cache item")
-    suspend fun delete(name:String, key: String):Boolean? {
-        return lookup[name]?.delete(key)
+    suspend fun delete(name:String, key: String):Outcome<Boolean> {
+        return operate(name) { it.delete(key) }
     }
 
     @Action(desc = "invalidates the entire cache")
-    suspend fun deleteAll(name:String):Boolean? {
-        return lookup[name]?.deleteAll()
+    suspend fun deleteAll(name:String):Outcome<Boolean> {
+        return operate(name) { it.deleteAll() }
     }
 
     @Action(desc = "invalidates a single cache item")
-    suspend fun expire(name:String, key: String):Boolean? {
-        val cache = lookup[name]
-        return when(cache){
-            null -> false
-            else -> { cache.expire(key); true }
-        }
+    suspend fun expire(name:String, key: String):Outcome<Boolean> {
+        return operate(name) { it.expire(key) }
     }
 
     @Action(desc = "invalidates the entire cache")
-    suspend fun expireAll(name:String):Boolean {
-        val cache = lookup[name]
-        return when(cache){
-            null -> false
-            else -> { cache.expireAll(); true }
+    suspend fun expireAll(name:String):Outcome<Boolean> {
+        return operate(name) { it.expireAll() }
+    }
+
+    private suspend fun <T> operate(key:String, op:suspend (AsyncCache) -> Outcome<T>): Outcome<T> {
+        return when(val cache = lookup[key]) {
+            null -> Outcomes.invalid("Cache with name $key not found")
+            else -> op(cache)
         }
     }
 }

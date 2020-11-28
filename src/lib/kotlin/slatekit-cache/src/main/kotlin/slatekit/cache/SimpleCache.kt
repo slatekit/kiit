@@ -15,6 +15,8 @@ package slatekit.cache
 
 import slatekit.common.log.Logger
 import slatekit.common.utils.Random
+import slatekit.results.Outcome
+import slatekit.results.builders.Outcomes
 import slatekit.tracking.Fetches
 
 /**
@@ -39,7 +41,7 @@ open class SimpleCache(override val name:String = Random.uuid(),
     /**
      * The LinkedHashMap already LRU(Least Recently Used) behaviour out of the box.
      */
-    protected val lookup = LRUMap<String, CacheEntry>(settings.size)
+    protected val lruCache = LRUMap<String, CacheEntry>(settings.size)
 
     /**
      * Stats to record cache accesses and cache misses.
@@ -86,14 +88,14 @@ open class SimpleCache(override val name:String = Random.uuid(),
      *
      * @return
      */
-    override fun size(): Int = lookup.size
+    override fun size(): Int = lruCache.size
 
     /**
      * size of the cache
      *
      * @return
      */
-    override fun keys(): List<String> = lookup.keys.map { it }
+    override fun keys(): List<String> = lruCache.keys.map { it }
 
     /**
      * whether this cache contains the entry with the supplied key
@@ -101,19 +103,59 @@ open class SimpleCache(override val name:String = Random.uuid(),
      * @param key
      * @return
      */
-    override fun contains(key: String): Boolean = lookup.containsKey(key)
+    override fun contains(key: String): Boolean = lruCache.containsKey(key)
 
     /**
      * Gets stats on all entries.
      */
     override fun stats():List<CacheStats> {
-        val allStats = this.lookup.values.map {
+        return this.lruCache.keys.mapNotNull { stats(it) }
+    }
+
+    /**
+     * Gets stats on all entries.
+     */
+    override fun stats(key:String):CacheStats? {
+        val entry = lruCache[key]
+        return entry?.let {
             val stats = accesses.get(it.key)
             val accesses = stats?.first
             val misses = stats?.second
             it.stats(accesses, misses)
         }
-        return allStats
+    }
+
+    /**
+     * gets a cache item associated with the key
+     *
+     * @param key
+     * @return
+     */
+    override fun refresh(key: String): Outcome<Boolean> {
+        return operate(key, CacheAction.Refresh) {
+            it.refresh()
+        }
+    }
+
+    /**
+     * invalidates a specific cache item with the key
+     */
+    override fun expire(key: String):Outcome<Boolean> {
+        return operate(key, CacheAction.Expire) {
+            it.expire()
+        }
+    }
+
+    /**
+     * invalidates all the entries in this cache by maxing out their expiration times
+     */
+    override fun expireAll():Outcome<Boolean> {
+        val results = lruCache.keys.toList().map { key -> expire(key) }
+        notify(CacheAction.ExpireAll)
+        return when(results.all { it.success }) {
+            true  -> results.first()
+            false -> results.first { !it.success }
+        }
     }
 
     /**
@@ -121,10 +163,11 @@ open class SimpleCache(override val name:String = Random.uuid(),
      *
      * @param key
      */
-    override fun delete(key: String): Boolean {
-        val result = lookup.remove(key)?.let { k -> true } ?: false
-        notify(CacheAction.Delete, key)
-        return result
+    override fun delete(key: String): Outcome<Boolean> {
+        return operate(key, CacheAction.Delete) {
+            lruCache.remove(key)
+            Outcomes.success(true)
+        }
     }
 
     /**
@@ -132,27 +175,13 @@ open class SimpleCache(override val name:String = Random.uuid(),
      *
      * @param key
      */
-    override fun deleteAll(): Boolean {
-        val result = lookup.keys.toList().map { key -> delete(key) }.reduceRight({ r, a -> a })
+    override fun deleteAll(): Outcome<Boolean> {
+        val results = lruCache.keys.toList().map { key -> delete(key) }
         notify(CacheAction.DeleteAll)
-        return result
-    }
-
-    /**
-     * invalidates a specific cache item with the key
-     */
-    override fun expire(key: String) {
-        lookup.get(key)?.let { c -> c.expire() }
-        notify(CacheAction.Expire, key)
-    }
-
-
-    /**
-     * invalidates all the entries in this cache by maxing out their expiration times
-     */
-    override fun expireAll() {
-        lookup.keys.toList().forEach { key -> expire(key) }
-        notify(CacheAction.ExpireAll)
+        return when(results.all { it.success }) {
+            true  -> results.first()
+            false -> results.first { !it.success }
+        }
     }
 
     /**
@@ -161,19 +190,7 @@ open class SimpleCache(override val name:String = Random.uuid(),
      * @param key
      * @return
      */
-    fun getEntry(key: String): CacheValue? = lookup.get(key)?.item?.get()
-
-
-    /**
-     * gets a cache item associated with the key
-     *
-     * @param key
-     * @return
-     */
-    override fun refresh(key: String) {
-        lookup.get(key)?.refresh()
-        notify(CacheAction.Refresh, key)
-    }
+    fun getEntry(key: String): CacheValue? = lruCache.get(key)?.item?.get()
 
     /**
      * creates a cache item
@@ -198,7 +215,7 @@ open class SimpleCache(override val name:String = Random.uuid(),
     override fun <T> set(key: String, value:T?) {
         val cacheValue = value
         val content = cacheValue?.toString() ?: ""
-        val entry = lookup[key]
+        val entry = lruCache[key]
         entry?.let {
             it.set(cacheValue, content)
         }
@@ -217,7 +234,7 @@ open class SimpleCache(override val name:String = Random.uuid(),
         // Stats: Update ACCESS count
         accesses[key]?.let { it.first.inc() }
 
-        val entry = lookup.get(key)
+        val entry = lruCache.get(key)
         val result = when(entry) {
             null -> {
                 // Stats: Update MISS count
@@ -263,6 +280,18 @@ open class SimpleCache(override val name:String = Random.uuid(),
         Cache.notify(event, listener, logger)
     }
 
+    private fun <T> operate(key:String, action: CacheAction, op: (CacheEntry) -> Outcome<T>): Outcome<T> {
+        return when(val entry = lruCache[key]) {
+            null -> Outcomes.invalid("Cache Key $key not found")
+            else -> {
+                val result = op(entry)
+                if(result.success) {
+                    notify(action, key)
+                }
+                result
+            }
+        }
+    }
 
     protected fun insert(
         key: String,
@@ -275,7 +304,7 @@ open class SimpleCache(override val name:String = Random.uuid(),
         accesses[key] = stats
 
         val entry = CacheEntry(key, desc, seconds, fetcher)
-        lookup[key] = entry
+        lruCache[key] = entry
         entry.refresh()
     }
 }

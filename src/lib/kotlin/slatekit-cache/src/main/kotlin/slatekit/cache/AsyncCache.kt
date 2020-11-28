@@ -50,35 +50,6 @@ interface AsyncCache {
     suspend fun stats():List<CacheStats>
 
     /**
-     * gets an item from the cache if it exists and is alive
-     * @param key
-     * @tparam T
-     * @return
-     */
-    suspend fun <T> get(key: String): T? {
-        return getAsync<T>(key).await()
-    }
-
-    /**
-     * gets an item from the cache as a future
-     * @param key
-     * @tparam T
-     * @return
-     */
-    suspend fun <T> getOrLoad(key: String): T? {
-        return getOrLoadAsync<T>(key).await()
-    }
-
-    /**
-     * manual / explicit refresh of a cache item with a future result
-     * in order to get the item
-     * @param key
-     */
-    suspend fun <T> getFresh(key: String): T? {
-        return getFreshAsync<T>(key).await()
-    }
-
-    /**
      * puts an item in the cache and loads it immediately
      * @param key
      * @param desc
@@ -86,12 +57,58 @@ interface AsyncCache {
      * @param fetcher
      * @tparam T
      */
-    suspend fun <T> put(key: String, desc: String, seconds: Int, fetcher: suspend () -> T?)
+    suspend fun <T> put(key: String, desc: String, seconds: Int, fetcher: suspend () -> T?): Boolean
 
     /**
      * Sets an explict value for the entry
      */
-    suspend fun <T> set(key: String, value:T?)
+    suspend fun <T> set(key: String, value:T?): Boolean
+
+    /**
+     * gets an item from the cache if it exists and is alive
+     * @param key
+     * @tparam T
+     * @return
+     */
+    fun <T> getAsync(key: String): Deferred<T?>
+
+    /**
+     * gets an item from the cache as a future
+     * @param key
+     * @tparam T
+     * @return
+     */
+    fun <T> getOrLoadAsync(key: String): Deferred<T?>
+
+    /**
+     * manual / explicit refresh of a cache item with a future result
+     * in order to get the item
+     * @param key
+     */
+    fun <T> getFreshAsync(key: String): Deferred<T?>
+
+    /**
+     * gets an item from the cache if it exists and is alive
+     * @param key
+     * @tparam T
+     * @return
+     */
+    suspend fun <T> get(key: String): T?
+
+    /**
+     * gets an item from the cache as a future
+     * @param key
+     * @tparam T
+     * @return
+     */
+    suspend fun <T> getOrLoad(key: String): T?
+
+    /**
+     * manual / explicit refresh of a cache item with a future result
+     * in order to get the item
+     * @param key
+     */
+    suspend fun <T> getFresh(key: String): T?
 
     /**
      * manual / explicit refresh of a cache item
@@ -121,27 +138,4 @@ interface AsyncCache {
      * removes all items from the cache
      */
     suspend fun deleteAll(): Outcome<Boolean>
-
-    /**
-     * gets an item from the cache if it exists and is alive
-     * @param key
-     * @tparam T
-     * @return
-     */
-    fun <T> getAsync(key: String): Deferred<T?>
-
-    /**
-     * gets an item from the cache as a future
-     * @param key
-     * @tparam T
-     * @return
-     */
-    fun <T> getOrLoadAsync(key: String): Deferred<T?>
-
-    /**
-     * manual / explicit refresh of a cache item with a future result
-     * in order to get the item
-     * @param key
-     */
-    fun <T> getFreshAsync(key: String): Deferred<T?>
 }

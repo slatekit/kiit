@@ -1,6 +1,7 @@
 package slatekit.cache
 
 import slatekit.common.log.Logger
+import slatekit.results.Outcome
 
 
 class SimpleSyncCache(private val cache: Cache) : Cache {
@@ -24,6 +25,9 @@ class SimpleSyncCache(private val cache: Cache) : Cache {
     override fun stats(): List<CacheStats> = cache.stats()
 
     @Synchronized
+    override fun stats(key:String): CacheStats? = cache.stats(key)
+
+    @Synchronized
     override fun <T> get(key: String): T? = cache.get(key)
 
     @Synchronized
@@ -39,19 +43,19 @@ class SimpleSyncCache(private val cache: Cache) : Cache {
     override fun <T> set(key: String, value: T?) = cache.set(key, value)
 
     @Synchronized
-    override fun delete(key: String): Boolean = cache.delete(key)
+    override fun delete(key: String): Outcome<Boolean> = cache.delete(key)
 
     @Synchronized
-    override fun deleteAll(): Boolean = cache.deleteAll()
+    override fun deleteAll(): Outcome<Boolean> = cache.deleteAll()
 
     @Synchronized
-    override fun refresh(key: String) = cache.refresh(key)
+    override fun refresh(key: String):Outcome<Boolean>  = cache.refresh(key)
 
     @Synchronized
-    override fun expire(key: String) = cache.expire(key)
+    override fun expire(key: String):Outcome<Boolean>  = cache.expire(key)
 
     @Synchronized
-    override fun expireAll() = cache.expireAll()
+    override fun expireAll():Outcome<Boolean> = cache.expireAll()
 
     companion object {
 
