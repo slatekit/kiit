@@ -9,11 +9,12 @@ import slatekit.common.log.LoggerConsole
 import slatekit.results.Outcome
 
 /**
- * Cache implementation using channels for managed shared state ( cache data )
+ * Cache implementation using channels for managing shared state ( cache data / stats )
  * @see
  * 1. https://kotlinlang.org/docs/reference/coroutines/shared-mutable-state-and-concurrency.html
  * 2. https://kotlinlang.org/docs/reference/coroutines/shared-mutable-state-and-concurrency.html#actors
  * 3. https://github.com/Kotlin/kotlinx.coroutines/issues/87
+ * 4. https://medium.com/swlh/channels-in-kotlin-part-one-594ba12dcb5a
  */
 class SimpleAsyncCache(private val cache: Cache,
                        val channel:Channel<CacheCommand> = Channel(Channel.UNLIMITED)) : AsyncCache {
