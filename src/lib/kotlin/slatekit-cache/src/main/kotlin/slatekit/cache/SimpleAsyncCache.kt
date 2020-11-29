@@ -4,10 +4,8 @@ import kotlinx.coroutines.CompletableDeferred
 import kotlinx.coroutines.Deferred
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.yield
-import slatekit.common.ids.Paired
 import slatekit.common.log.Logger
 import slatekit.common.log.LoggerConsole
-import slatekit.core.common.ChannelCoordinator
 import slatekit.results.Outcome
 
 /**

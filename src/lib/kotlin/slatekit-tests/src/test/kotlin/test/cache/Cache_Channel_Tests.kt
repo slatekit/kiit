@@ -22,8 +22,9 @@ import slatekit.common.log.LoggerConsole
 
 class Cache_Channel_Tests {
 
+    val CACHE_NAME = "unit-tests-cache"
     fun getCache(initialize: Boolean = true, settings: CacheSettings = CacheSettings(10), listener: ((CacheEvent) -> Unit)? = null): SimpleAsyncCache {
-        val cache = SimpleAsyncCache.of("unit-tests-cache", LoggerConsole(), settings, listener)
+        val cache = SimpleAsyncCache.of(CACHE_NAME, LoggerConsole(), settings, listener)
         return cache
     }
 
@@ -32,9 +33,7 @@ class Cache_Channel_Tests {
         runBlocking {
             val cache = getCache(initialize = false, listener = listener)
             if (initialize) {
-                scope.launch {
-                    cache.put("countries", "countries supported for mobile app", 60) { listOf("us", "ca") }
-                }
+                cache.put("countries", "countries supported for mobile app", 60) { listOf("us", "ca") }
             }
             //cache.respond()
             scope.launch {
@@ -60,10 +59,7 @@ class Cache_Channel_Tests {
         var event: CacheEvent? = null
         val listener = { ev: CacheEvent -> event = ev }
         runTest(listener = listener) { cache ->
-            val countries1Deferred = cache.getAsync<List<String>>("countries")
-
-            cache.poll()
-            val countries1 = countries1Deferred.await()
+            val countries1 = cache.get<List<String>>("countries")
 
             // Check values
             Assert.assertTrue(countries1!!.size == 2)
@@ -104,7 +100,7 @@ class Cache_Channel_Tests {
             Assert.assertEquals(cache.name, event?.origin)
             Assert.assertEquals("countries", event?.key)
             Assert.assertTrue(!event?.uuid.isNullOrEmpty())
-            Assert.assertEquals("async-cache.${CacheAction.Create.name}.countries", event?.name ?: "")
+            Assert.assertEquals("$CACHE_NAME.${CacheAction.Create.name}.countries", event?.name ?: "")
         }
     }
 
@@ -114,10 +110,7 @@ class Cache_Channel_Tests {
         // Get 1
         val timestamp1 = DateTime.now()
         runTest { cache ->
-            val countries1Deferred = cache.getAsync<List<String>>("countries")
-            cache.poll()
-            val countries1 = countries1Deferred.await()
-
+            val countries1 = cache.get<List<String>>("countries")
             // Check values
             Assert.assertTrue(countries1!!.size == 2)
             Assert.assertTrue(countries1[0] == "us")
@@ -202,7 +195,7 @@ class Cache_Channel_Tests {
             Assert.assertEquals(cache.name, event?.origin)
             Assert.assertEquals("*", event?.key)
             Assert.assertTrue(!event?.uuid.isNullOrEmpty())
-            Assert.assertEquals("async-cache.${CacheAction.DeleteAll.name}.*", event?.name ?: "")
+            Assert.assertEquals("$CACHE_NAME.${CacheAction.DeleteAll.name}.*", event?.name ?: "")
         }
     }
 
@@ -214,9 +207,7 @@ class Cache_Channel_Tests {
         val listener = { ev: CacheEvent -> event = ev }
 
         runTest(listener = listener) {cache ->
-            val countries1Future = cache.getAsync<List<String>>("countries")
-            cache.poll()
-            val countries1 = countries1Future.await()
+            val countries1 = cache.get<List<String>>("countries")
 
             // Check values
             Assert.assertTrue(countries1!!.size == 2)
@@ -311,7 +302,7 @@ class Cache_Channel_Tests {
         var event: CacheEvent? = null
         val listener = { ev: CacheEvent -> event = ev }
 
-        runTest(listener = listener) {cache ->
+        runTest(listener = listener, initialize = false) {cache ->
             var count = 0
             cache.put("countries", "countries supported for mobile app", 300) {
                 if (count == 0) {
@@ -326,10 +317,7 @@ class Cache_Channel_Tests {
             cache.poll()
 
             // Get 1
-            val countries1Deferred = cache.getAsync<List<String>>("countries")
-
-            cache.poll()
-            val countries1 = countries1Deferred.await()
+            val countries1 = cache.get<List<String>>("countries")
 
             // Check values
             Assert.assertTrue(countries1!!.size == 2)
@@ -346,10 +334,7 @@ class Cache_Channel_Tests {
             cache.poll()
 
             // Get 2
-            val countries2Deferred = cache.getOrLoadAsync<List<String>>("countries")
-
-            cache.poll()
-            val countries2 = countries2Deferred.await()
+            val countries2 = cache.getOrLoad<List<String>>("countries")
 
             val stats2 = cache.stats().first { it.key == "countries" }
 
@@ -376,7 +361,7 @@ class Cache_Channel_Tests {
             Assert.assertEquals(cache.name, event?.origin)
             Assert.assertEquals("countries", event?.key)
             Assert.assertTrue(!event?.uuid.isNullOrEmpty())
-            Assert.assertEquals("async-cache.${CacheAction.Expire.name}.countries", event?.name ?: "")
+            Assert.assertEquals("$CACHE_NAME.${CacheAction.Expire.name}.countries", event?.name ?: "")
         }
     }
 }
