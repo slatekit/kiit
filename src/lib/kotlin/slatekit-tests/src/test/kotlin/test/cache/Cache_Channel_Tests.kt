@@ -12,8 +12,8 @@
  */
 package test
 
+import kotlinx.coroutines.*
 import kotlinx.coroutines.channels.Channel
-import kotlinx.coroutines.runBlocking
 import org.junit.Assert
 import org.junit.Test
 import slatekit.cache.*
@@ -25,28 +25,47 @@ import slatekit.core.common.ChannelCoordinator
 
 class Cache_Channel_Tests {
 
-    suspend fun getCache(initialize:Boolean = true, settings: CacheSettings = CacheSettings(10), listener:((CacheEvent) -> Unit)? = null): SimpleAsyncCache {
+    fun getCache(initialize:Boolean = true, settings: CacheSettings = CacheSettings(10), listener:((CacheEvent) -> Unit)? = null): SimpleAsyncCache {
         val logger = LoggerConsole()
         val raw =  SimpleCache("async-cache", settings = settings, listener = listener, logger = logger)
         val coordinator = ChannelCoordinator<CacheCommand>(logger, Paired(), Channel(Channel.UNLIMITED))
         //val coordinator = MockCacheCoordinator(logger, Paired())
         val cache = SimpleAsyncCache(raw, coordinator)
-        if(initialize) {
-            cache.put("countries", "countries supported for mobile app", 60) { listOf("us", "ca") }
-            runBlocking {
-                cache.respond()
-            }
-        }
         return cache
     }
 
+    fun runTest(initialize:Boolean = true, op:suspend (AsyncCache) -> Unit) {
+        val scope = CoroutineScope(Dispatchers.IO)
+        runBlocking {
+            val cache = getCache(initialize = false)
+            if(initialize) {
+                scope.launch {
+                    val res = cache.put("countries", "countries supported for mobile app", 60) { listOf("us", "ca") }
+                    println("Put $res")
+                }
+            }
+            //cache.respond()
+            scope.launch {
+                cache.work()
+            }
+            op(cache)
+            val c = cache.coordinator as ChannelCoordinator<CacheCommand>
+            c.channel.close()
+        }
+    }
 
     @Test
     fun can_init() {
-        runBlocking {
-            val cache = getCache(initialize = false)
+//        runBlocking {
+//            val cache = getCache(initialize = true)
+//            this.launch { cache.manage() }
+//            val stats = cache.stats()
+//            println(stats)
+//            println("done")
+//        }
+        runTest { cache ->
             val stats = cache.stats()
-            Assert.assertEquals(0, stats.size)
+            Assert.assertEquals(1, stats.size)
         }
     }
 
@@ -60,7 +79,7 @@ class Cache_Channel_Tests {
             val cache = getCache(listener = listener)
             val countries1Deferred = cache.getAsync<List<String>>("countries")
 
-            cache.respond()
+            cache.poll()
             val countries1 = countries1Deferred.await()
 
             // Check values
@@ -114,7 +133,7 @@ class Cache_Channel_Tests {
             val timestamp1 = DateTime.now()
             val cache = getCache()
             val countries1Deferred = cache.getAsync<List<String>>("countries")
-            cache.respond()
+            cache.poll()
             val countries1 = countries1Deferred.await()
 
 
@@ -133,7 +152,7 @@ class Cache_Channel_Tests {
             val timestamp2 = DateTime.now()
             val countries2Deferred = cache.getAsync<List<String>>("countries")
             val countries2 = runBlocking {
-                cache.respond()
+                cache.poll()
                 countries2Deferred.await()
             }
 
@@ -166,7 +185,7 @@ class Cache_Channel_Tests {
         runBlocking {
             val cache = getCache()
             cache.put("promocode", "promotion code", 60) { "promo-123" }
-            cache.respond()
+            cache.poll()
 
             // Keys
             val keys = cache.keys()
@@ -189,14 +208,14 @@ class Cache_Channel_Tests {
             cache.put("promocode", "promotion code", 60) { "promo-123" }
 
             runBlocking {
-                cache.respond()
+                cache.poll()
             }
 
             Assert.assertEquals(2, cache.keys().size)
             Assert.assertEquals(2, cache.size())
 
             cache.deleteAll()
-            cache.respond()
+            cache.poll()
 
 
             Assert.assertEquals(0, cache.keys().size)
@@ -221,7 +240,7 @@ class Cache_Channel_Tests {
             val listener = { ev:CacheEvent -> event = ev }
             val cache = getCache(listener = listener)
             val countries1Future = cache.getAsync<List<String>>("countries")
-            cache.respond()
+            cache.poll()
             val countries1 = countries1Future.await()
 
             // Check values
@@ -241,10 +260,10 @@ class Cache_Channel_Tests {
             Assert.assertEquals(stats1[0].value.applied, 1)
 
             cache.set("countries", listOf("us", "ca", "uk"))
-            cache.respond()
+            cache.poll()
             val countries2Deferred = cache.getAsync<List<String>>("countries")
             val countries2 = runBlocking {
-                cache.respond()
+                cache.poll()
                 countries2Deferred.await()
             }
 
@@ -284,10 +303,10 @@ class Cache_Channel_Tests {
                     listOf("us", "ca", "uk")
                 }
             }
-            cache.respond()
+            cache.poll()
             val countries1Deferred = cache.getAsync<List<String>>("countries")
             val countries1 = runBlocking {
-                cache.respond()
+                cache.poll()
                 countries1Deferred.await()
             }
 
@@ -299,7 +318,7 @@ class Cache_Channel_Tests {
             // Check values after update
             val countries2Deferred = cache.getFreshAsync<List<String>>("countries")
             val countries2 = runBlocking {
-                cache.respond()
+                cache.poll()
                 countries2Deferred.await()
             }
 
@@ -327,14 +346,14 @@ class Cache_Channel_Tests {
                     listOf("us", "ca", "uk")
                 }
             }
-            cache.respond()
+            cache.poll()
             cache.put("promocode", "promotion code", 300) { "promo-123" }
-            cache.respond()
+            cache.poll()
 
             // Get 1
             val countries1Deferred = cache.getAsync<List<String>>("countries")
 
-            cache.respond()
+            cache.poll()
             val countries1 = countries1Deferred.await()
 
             // Check values
@@ -349,12 +368,12 @@ class Cache_Channel_Tests {
             Assert.assertTrue(stats1.hits.timestamp!! >= timestamp1)
 
             cache.expire("countries")
-            cache.respond()
+            cache.poll()
 
             // Get 2
             val countries2Deferred = cache.getOrLoadAsync<List<String>>("countries")
 
-            cache.respond()
+            cache.poll()
             val countries2 = countries2Deferred.await()
 
             val stats2 = cache.stats().first { it.key == "countries" }

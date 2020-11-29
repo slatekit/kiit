@@ -164,7 +164,7 @@ class CacheTests {
 
 
 object CacheUtils {
-    fun getCache(initialize:Boolean = true, settings: CacheSettings = CacheSettings(10), listener:((CacheEvent) -> Unit)? = null): SimpleAsyncCache {
+    suspend fun getCache(initialize:Boolean = true, settings: CacheSettings = CacheSettings(10), listener:((CacheEvent) -> Unit)? = null): SimpleAsyncCache {
         val logger = LoggerConsole()
         val raw =  SimpleCache("async-cache", settings = settings, listener = listener, logger = logger)
         val coordinator = ChannelCoordinator<CacheCommand>(logger, Paired(), Channel(Channel.UNLIMITED))

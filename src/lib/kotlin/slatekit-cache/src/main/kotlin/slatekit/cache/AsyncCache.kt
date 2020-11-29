@@ -70,7 +70,7 @@ interface AsyncCache {
      * @tparam T
      * @return
      */
-    fun <T> getAsync(key: String): Deferred<T?>
+    suspend fun <T> getAsync(key: String): Deferred<T?>
 
     /**
      * gets an item from the cache as a future
@@ -78,14 +78,14 @@ interface AsyncCache {
      * @tparam T
      * @return
      */
-    fun <T> getOrLoadAsync(key: String): Deferred<T?>
+    suspend fun <T> getOrLoadAsync(key: String): Deferred<T?>
 
     /**
      * manual / explicit refresh of a cache item with a future result
      * in order to get the item
      * @param key
      */
-    fun <T> getFreshAsync(key: String): Deferred<T?>
+    suspend fun <T> getFreshAsync(key: String): Deferred<T?>
 
     /**
      * gets an item from the cache if it exists and is alive

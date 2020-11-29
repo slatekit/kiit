@@ -51,9 +51,11 @@ fun main(args: Array<String>) {
 }
 
 fun test(args:Array<String>){
-
-    val app = CacheApp()
-    app.exec()
+    runBlocking {
+        ChannelTests.run(this)
+    }
+//    val app = CacheApp()
+//    app.exec()
 
 }
 

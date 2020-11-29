@@ -109,7 +109,8 @@ open class SimpleCache(override val name:String = Random.uuid(),
      * Gets stats on all entries.
      */
     override fun stats():List<CacheStats> {
-        return this.lruCache.keys.mapNotNull { stats(it) }
+        val keys = this.lruCache.keys.toList()
+        return keys.mapNotNull { stats(it) }
     }
 
     /**
