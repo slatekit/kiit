@@ -132,7 +132,7 @@ class CacheTests {
     suspend fun cache() {
         val cache = CacheUtils.getCache()
         CoroutineScope(Dispatchers.IO).launch {
-            cache.manage()
+            cache.work()
         }
         cache.put("a", "", 200) { delay(2000); 1 }
         cache.put("b", "", 200) { delay(2000); 2 }
@@ -165,15 +165,11 @@ class CacheTests {
 
 object CacheUtils {
     suspend fun getCache(initialize:Boolean = true, settings: CacheSettings = CacheSettings(10), listener:((CacheEvent) -> Unit)? = null): SimpleAsyncCache {
-        val logger = LoggerConsole()
-        val raw =  SimpleCache("async-cache", settings = settings, listener = listener, logger = logger)
-        val coordinator = ChannelCoordinator<CacheCommand>(logger, Paired(), Channel(Channel.UNLIMITED))
-        //val coordinator = MockCacheCoordinator(logger, Paired())
-        val cache = SimpleAsyncCache(raw, coordinator)
+        val cache = SimpleAsyncCache.of("test-cache")
         if(initialize) {
             cache.put("countries", "countries supported for mobile app", 60) { listOf("us", "ca") }
             runBlocking {
-                cache.respond()
+                cache.poll()
             }
         }
         return cache

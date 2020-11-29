@@ -18,7 +18,6 @@ import org.junit.Assert
 import org.junit.Test
 import slatekit.cache.*
 import slatekit.common.DateTime
-import slatekit.common.ids.Paired
 import slatekit.common.log.LoggerConsole
 import slatekit.core.common.ChannelCoordinator
 
@@ -26,11 +25,7 @@ import slatekit.core.common.ChannelCoordinator
 class Cache_Channel_Tests {
 
     fun getCache(initialize:Boolean = true, settings: CacheSettings = CacheSettings(10), listener:((CacheEvent) -> Unit)? = null): SimpleAsyncCache {
-        val logger = LoggerConsole()
-        val raw =  SimpleCache("async-cache", settings = settings, listener = listener, logger = logger)
-        val coordinator = ChannelCoordinator<CacheCommand>(logger, Paired(), Channel(Channel.UNLIMITED))
-        //val coordinator = MockCacheCoordinator(logger, Paired())
-        val cache = SimpleAsyncCache(raw, coordinator)
+        val cache = SimpleAsyncCache.of("unit-tests-cache", LoggerConsole(), settings, listener)
         return cache
     }
 

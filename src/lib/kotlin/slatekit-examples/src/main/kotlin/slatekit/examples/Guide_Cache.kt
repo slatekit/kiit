@@ -87,8 +87,7 @@ class Guide_Cache : Command("types") {
         // Async
         runBlocking {
             val logger = LoggerConsole()
-            val coordinator = ChannelCoordinator(logger, Paired(), Channel<CacheCommand>(Channel.UNLIMITED))
-            val asyncCache: AsyncCache = SimpleAsyncCache(raw, coordinator)
+            val asyncCache: AsyncCache = SimpleAsyncCache.of(logger = logger)
 
             // Writes
             // 1. Put new entry ( using a function to fetch )

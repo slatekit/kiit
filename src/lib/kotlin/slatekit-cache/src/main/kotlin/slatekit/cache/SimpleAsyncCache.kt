@@ -6,6 +6,7 @@ import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.yield
 import slatekit.common.ids.Paired
 import slatekit.common.log.Logger
+import slatekit.common.log.LoggerConsole
 import slatekit.core.common.ChannelCoordinator
 import slatekit.results.Outcome
 
@@ -17,8 +18,7 @@ import slatekit.results.Outcome
  * 3. https://github.com/Kotlin/kotlinx.coroutines/issues/87
  */
 class SimpleAsyncCache(private val cache: Cache,
-                       val channel:Channel<CacheCommand> = Channel(Channel.UNLIMITED),
-                       val coordinator: ChannelCoordinator<CacheCommand>) : AsyncCache {
+                       val channel:Channel<CacheCommand> = Channel(Channel.UNLIMITED)) : AsyncCache {
 
     override val name: String get() = cache.name
     override val settings: CacheSettings = cache.settings
@@ -57,7 +57,7 @@ class SimpleAsyncCache(private val cache: Cache,
 
     override suspend fun <T> getFreshAsync(key: String): Deferred<T?> {
         val deferred = CompletableDeferred<Any?>()
-        coordinator.send(CacheCommand.GetFresh(key, deferred))
+        channel.send(CacheCommand.GetFresh(key, deferred))
         return deferred as Deferred<T?>
     }
 
@@ -135,7 +135,7 @@ class SimpleAsyncCache(private val cache: Cache,
 
     private suspend fun <T> getInternalAsync(key: String, load: Boolean): Deferred<T?> {
         val deferred = CompletableDeferred<Any?>()
-        coordinator.send(CacheCommand.Get(key, deferred, load))
+        channel.send(CacheCommand.Get(key, deferred, load))
         return deferred as Deferred<T?>
     }
 
@@ -177,7 +177,7 @@ class SimpleAsyncCache(private val cache: Cache,
     private suspend fun <T> operate(op: (CompletableDeferred<Outcome<T>>) -> CacheCommand): Outcome<T> {
         val response = CompletableDeferred<Outcome<T>>()
         val command = op(response)
-        coordinator.send(command)
+        channel.send(command)
         return response.await()
     }
 
@@ -185,7 +185,7 @@ class SimpleAsyncCache(private val cache: Cache,
     private suspend fun <T> perform(op: (CompletableDeferred<T>) -> CacheCommand): T {
         val response = CompletableDeferred<T>()
         val command = op(response)
-        coordinator.send(command)
+        channel.send(command)
         val result = response.await()
         return result
     }
@@ -208,16 +208,9 @@ class SimpleAsyncCache(private val cache: Cache,
         /**
          * Convenience method to build async cache using Default channel coordinator
          */
-        fun of(name: String, logger: Logger, settings: CacheSettings? = null, listener: ((CacheEvent) -> Unit)? = null): SimpleAsyncCache {
+        fun of(name: String = "channel-cache", logger: Logger = LoggerConsole(), settings: CacheSettings? = null, listener: ((CacheEvent) -> Unit)? = null): SimpleAsyncCache {
             val raw = SimpleCache(name, settings = settings ?: CacheSettings(10), listener = listener, logger = logger)
-            val coordinator = ChannelCoordinator(logger, Paired(), Channel<CacheCommand>(Channel.UNLIMITED))
-            val asyncCache = SimpleAsyncCache(raw, coordinator)
-            return asyncCache
-        }
-
-
-        fun of() {
-
+            return  SimpleAsyncCache(raw)
         }
     }
 }
