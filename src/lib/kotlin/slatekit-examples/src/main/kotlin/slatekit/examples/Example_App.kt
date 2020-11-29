@@ -219,7 +219,7 @@ class Example_App : Command("app") {
                     builder = { ctx -> SampleApp(ctx) }
             )
         }
-        return res
+        return res.map { it ?: App.OK }
         //</doc:examples>
     }
 

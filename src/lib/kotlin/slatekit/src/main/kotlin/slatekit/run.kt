@@ -1,9 +1,12 @@
 package slatekit
 
-import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.*
 import slatekit.app.AppRunner
+import slatekit.cache.SimpleAsyncCache
+import slatekit.common.DateTime
 import slatekit.common.io.Alias
 import slatekit.providers.logs.logback.LogbackLogs
+import kotlin.random.Random
 
 
 /**
@@ -45,10 +48,10 @@ import slatekit.providers.logs.logback.LogbackLogs
  */
 fun main(args: Array<String>) {
     println("kotlin")
-    //app(args)
+    //test(args)
+    app(args)
     //slatekit.samples.job.main(args)
 }
-
 
 fun app(args:Array<String>) {
     /**
@@ -104,3 +107,32 @@ fun cli(args:Array<String>) {
         )
     }
 }
+
+
+//class CacheTests {
+//    suspend fun cache() {
+//        val cache = SimpleAsyncCache.of("test")
+//        val scope = CoroutineScope(Dispatchers.IO)
+//        scope.launch {
+//            cache.work()
+//        }
+//        cache.put("a", "", 200) { delay(2000); 1 }
+//        cache.put("b", "", 200) { delay(2000); 2 }
+//        cache.put("c", "", 200) { delay(2000); 3 }
+//        val items = listOf("a", "b", "c")
+//
+//        for(ndx in 1..100) {
+//            scope.launch {
+//                delay(1000)
+//                val time = DateTime.now()
+//                val r = Random.nextInt(0, 3)
+//                val key = items[r]
+//                val value = cache.get<Int>(key)
+//                val name = this.toString()
+//                println("$time : $name : $value")
+//            }
+//        }
+//        delay(12000)
+//        println("done")
+//    }
+//}

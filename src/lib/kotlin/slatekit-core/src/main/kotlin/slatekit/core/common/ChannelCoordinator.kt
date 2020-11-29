@@ -13,12 +13,16 @@ class ChannelCoordinator<C>(override val logger: Logger, override val ids: Paire
     }
 
 
-    override suspend fun send(request: C) {
-        channel.send(request)
+    override suspend fun send(cmd: C) {
+        channel.send(cmd)
     }
 
     override suspend fun poll(): C? {
         return channel.poll()
+    }
+
+    suspend fun stop():Boolean {
+        return channel.close()
     }
 
     override suspend fun consume(operation: suspend (C) -> Unit) {

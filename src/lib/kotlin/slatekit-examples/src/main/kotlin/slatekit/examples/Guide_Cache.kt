@@ -30,7 +30,7 @@ class Guide_Cache : Command("types") {
 
         //<doc:section name="sync">
         val raw = SimpleCache(settings = CacheSettings(10))
-        val syncCache:SyncCache = SimpleSyncCache(raw)
+        val syncCache:Cache = SimpleSyncCache(raw)
         //</doc:setup>
 
         // Writes
@@ -87,8 +87,7 @@ class Guide_Cache : Command("types") {
         // Async
         runBlocking {
             val logger = LoggerConsole()
-            val coordinator = ChannelCoordinator(logger, Paired(), Channel<CacheCommand>(Channel.UNLIMITED))
-            val asyncCache: AsyncCache = SimpleAsyncCache(raw, coordinator)
+            val asyncCache: AsyncCache = SimpleAsyncCache.of(logger = logger)
 
             // Writes
             // 1. Put new entry ( using a function to fetch )
@@ -102,13 +101,13 @@ class Guide_Cache : Command("types") {
 
             // Reads
             // 1. Get existing cache item
-            val a1 = asyncCache.get<List<Country>>("countries").await()
+            val a1 = asyncCache.getAsync<List<Country>>("countries").await()
 
             // 2. Get existing cache item or load it if expired
-            val a2 = asyncCache.getOrLoad<List<String>>("promos").await()
+            val a2 = asyncCache.getOrLoadAsync<List<String>>("promos").await()
 
             // 3. Get after refreshing it first
-            val a3 = asyncCache.getFresh<List<String>>("promos").await()
+            val a3 = asyncCache.getFreshAsync<List<String>>("promos").await()
         }
         println("done")
     }

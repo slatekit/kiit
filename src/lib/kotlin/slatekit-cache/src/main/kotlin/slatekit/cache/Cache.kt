@@ -14,12 +14,13 @@
 package slatekit.cache
 
 import slatekit.common.log.Logger
+import slatekit.results.Outcome
 
 interface Cache {
     /**
      * Name of the this cache, used to identify it between multiple caches
      */
-    val name:String
+    val name: String
 
     /**
      * settings for the cache
@@ -30,12 +31,12 @@ interface Cache {
      * Listener for cache events which describe past activity on the cache.
      * Serves as a simple event stream for this cache
      */
-    val listener:((CacheEvent) -> Unit)?
+    val listener: ((CacheEvent) -> Unit)?
 
     /**
      * Logger for warnings/errors
      */
-    val logger:Logger?
+    val logger: Logger?
 
     /**
      * number of items in the cache
@@ -58,7 +59,35 @@ interface Cache {
     /**
      * Gets stats on all entries
      */
-    fun stats():List<CacheStats>
+    fun stats(): List<CacheStats>
+
+    /**
+     * Gets stats on a specific entry
+     */
+    fun stats(key: String): CacheStats?
+
+    /**
+     * gets an item from the cache if it exists and is alive
+     * @param key
+     * @tparam T
+     * @return
+     */
+    fun <T> get(key: String): T?
+
+    /**
+     * gets an item from the cache as a future
+     * @param key
+     * @tparam T
+     * @return
+     */
+    fun <T> getOrLoad(key: String): T?
+
+    /**
+     * manual / explicit refresh of a cache item with a future result
+     * in order to get the item
+     * @param key
+     */
+    fun <T> getFresh(key: String): T?
 
     /**
      * puts an item in the cache and loads it immediately
@@ -73,41 +102,41 @@ interface Cache {
     /**
      * Sets an explict value for the entry
      */
-    fun <T> set(key: String, value:T?)
+    fun <T> set(key: String, value: T?)
+
+    /**
+     * manual / explicit refresh of a cache item
+     * @param key
+     */
+    fun refresh(key: String): Outcome<Boolean>
+
+    /**
+     * invalidates a single cache item by its key
+     * @param key
+     */
+    fun expire(key: String): Outcome<Boolean>
+
+    /**
+     * invalidates all the cache items
+     */
+    fun expireAll(): Outcome<Boolean>
 
     /**
      * removes a item from the cache
      * @param key
      * @return
      */
-    fun delete(key: String): Boolean
+    fun delete(key: String): Outcome<Boolean>
 
     /**
      * removes all items from the cache
      */
-    fun deleteAll(): Boolean
-
-    /**
-     * manual / explicit refresh of a cache item
-     * @param key
-     */
-    fun refresh(key: String)
-
-    /**
-     * invalidates a single cache item by its key
-     * @param key
-     */
-    fun expire(key: String)
-
-    /**
-     * invalidates all the cache items
-     */
-    fun expireAll()
+    fun deleteAll(): Outcome<Boolean>
 
 
     companion object {
 
-        fun notify(event: CacheEvent, listener:((CacheEvent) -> Unit)?, logger: Logger?) {
+        fun notify(event: CacheEvent, listener: ((CacheEvent) -> Unit)?, logger: Logger?) {
             // E.g. origin=service1-cache, uuid=abc123, action=delete, key=some-data
             val pairs = event.structured()
             val info = pairs.joinToString { "${it.first}=${it.second}" }

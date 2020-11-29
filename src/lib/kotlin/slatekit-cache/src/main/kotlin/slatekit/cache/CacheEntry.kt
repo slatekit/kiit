@@ -14,6 +14,8 @@
 package slatekit.cache
 
 import kotlinx.coroutines.runBlocking
+import slatekit.results.Outcome
+import slatekit.results.builders.Outcomes
 import slatekit.tracking.Expiry
 import slatekit.tracking.Fetches
 import slatekit.tracking.Tracked
@@ -28,26 +30,26 @@ import java.util.concurrent.atomic.AtomicReference
  *
  * @param key : The key of the cache item for lookup
  * @param text : A text value for the item ( for description purposes )
- * @param seconds : Amount of time in seconds until it expires
+ * @param expiryInSecs : Amount of time in seconds until it expires
  * @param fetcher : The function that can actually fetch the cache data
  */
 data class CacheEntry(
     val key: String,
     val desc: String,
-    val seconds: Int,
+    val expiryInSecs: Int,
     val fetcher: suspend () -> Any?,
-    val updateCount:Int = 20
+    val updateCount: Int = 20
 ) {
     /**
      * The actual cache item which is updatd only when its refreshed.
      */
     val item = AtomicReference<CacheValue>(
-            CacheValue(
-                text = null,
-                expiry = Expiry(seconds.toLong()),
-                hits = Fetches(updateCount),
-                value = Tracked(),
-                error = Tracked())
+        CacheValue(
+            text = null,
+            expiry = Expiry(expiryInSecs.toLong()),
+            hits = Fetches(updateCount),
+            value = Tracked(),
+            error = Tracked())
     )
 
 
@@ -62,7 +64,7 @@ data class CacheEntry(
      * This is called on successful refresh of the cache
      * @param result
      */
-    fun success(result: Any?, text:String? = null) {
+    fun success(result: Any?, text: String? = null) {
         val curr = item.get()
         val next = curr.update(result, text)
         item.set(next)
@@ -71,27 +73,32 @@ data class CacheEntry(
     /**
      * invalidates the current item by setting its expiry to to current time
      */
-    fun expire() {
-        val expired = item.get().expire()
-        return item.set(expired)
+    fun expire(): Outcome<Boolean> {
+        return Outcomes.of {
+            val expired = item.get().expire()
+            item.set(expired)
+            expired.expiry.isExpired()
+        }
     }
 
     /**
      * Refreshes this cache item
      */
-    fun refresh() {
-        try {
+    fun refresh(): Outcome<Boolean> {
+        return try {
             val result = runBlocking {
                 fetcher()
             }
             val content = result?.toString() ?: ""
             success(result, content)
+            Outcomes.success(true)
         } catch (ex: Exception) {
             failure(ex)
+            Outcomes.errored(ex)
         }
     }
 
-    fun stats(accesses:Fetches?, misses:Fetches?):CacheStats {
+    fun stats(accesses: Fetches?, misses: Fetches?): CacheStats {
         val item = item.get()
         return CacheStats(
             key = key,
@@ -103,7 +110,7 @@ data class CacheEntry(
             error = item.error.get().get())
     }
 
-    fun set(value:Any?, text: String?){
+    fun set(value: Any?, text: String?) {
         success(value, text)
     }
 
