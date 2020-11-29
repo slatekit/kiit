@@ -22,16 +22,16 @@ import slatekit.common.log.LoggerConsole
 
 class Cache_Channel_Tests {
 
-    fun getCache(initialize:Boolean = true, settings: CacheSettings = CacheSettings(10), listener:((CacheEvent) -> Unit)? = null): SimpleAsyncCache {
+    fun getCache(initialize: Boolean = true, settings: CacheSettings = CacheSettings(10), listener: ((CacheEvent) -> Unit)? = null): SimpleAsyncCache {
         val cache = SimpleAsyncCache.of("unit-tests-cache", LoggerConsole(), settings, listener)
         return cache
     }
 
-    fun runTest(initialize:Boolean = true, op:suspend (AsyncCache) -> Unit) {
+    fun runTest(initialize: Boolean = true, listener: ((CacheEvent) -> Unit)? = null, op: suspend (SimpleAsyncCache) -> Unit) {
         val scope = CoroutineScope(Dispatchers.IO)
         runBlocking {
-            val cache = getCache(initialize = false)
-            if(initialize) {
+            val cache = getCache(initialize = false, listener = listener)
+            if (initialize) {
                 scope.launch {
                     cache.put("countries", "countries supported for mobile app", 60) { listOf("us", "ca") }
                 }
@@ -56,11 +56,10 @@ class Cache_Channel_Tests {
 
     @Test
     fun can_put() {
-        runBlocking {
-            val timestamp = DateTime.now()
-            var event:CacheEvent? = null
-            val listener = { ev:CacheEvent -> event = ev }
-            val cache = getCache(listener = listener)
+        val timestamp = DateTime.now()
+        var event: CacheEvent? = null
+        val listener = { ev: CacheEvent -> event = ev }
+        runTest(listener = listener) { cache ->
             val countries1Deferred = cache.getAsync<List<String>>("countries")
 
             cache.poll()
@@ -113,13 +112,11 @@ class Cache_Channel_Tests {
     @Test
     fun can_get() {
         // Get 1
-        runBlocking {
-            val timestamp1 = DateTime.now()
-            val cache = getCache()
+        val timestamp1 = DateTime.now()
+        runTest { cache ->
             val countries1Deferred = cache.getAsync<List<String>>("countries")
             cache.poll()
             val countries1 = countries1Deferred.await()
-
 
             // Check values
             Assert.assertTrue(countries1!!.size == 2)
@@ -156,8 +153,7 @@ class Cache_Channel_Tests {
 
     @Test
     fun can_check() {
-        runBlocking {
-            val cache = getCache()
+        runTest { cache ->
             Assert.assertTrue(cache.contains("countries"))
             Assert.assertFalse(cache.contains("promocodes"))
         }
@@ -166,8 +162,7 @@ class Cache_Channel_Tests {
 
     @Test
     fun can_key() {
-        runBlocking {
-            val cache = getCache()
+        runTest { cache ->
             cache.put("promocode", "promotion code", 60) { "promo-123" }
             cache.poll()
 
@@ -185,16 +180,12 @@ class Cache_Channel_Tests {
 
     @Test
     fun can_clear() {
-        runBlocking {
-            var event: CacheEvent? = null
-            val listener = { ev: CacheEvent -> event = ev }
-            val cache = getCache(listener = listener)
+        val timestamp = DateTime.now()
+        var event: CacheEvent? = null
+        val listener = { ev: CacheEvent -> event = ev }
+        runTest(listener = listener) { cache ->
             cache.put("promocode", "promotion code", 60) { "promo-123" }
-
-            runBlocking {
-                cache.poll()
-            }
-
+            cache.poll()
             Assert.assertEquals(2, cache.keys().size)
             Assert.assertEquals(2, cache.size())
 
@@ -218,11 +209,11 @@ class Cache_Channel_Tests {
 
     @Test
     fun can_set() {
-        runBlocking {
-            val timestamp = DateTime.now()
-            var event:CacheEvent? = null
-            val listener = { ev:CacheEvent -> event = ev }
-            val cache = getCache(listener = listener)
+        val timestamp = DateTime.now()
+        var event: CacheEvent? = null
+        val listener = { ev: CacheEvent -> event = ev }
+
+        runTest(listener = listener) {cache ->
             val countries1Future = cache.getAsync<List<String>>("countries")
             cache.poll()
             val countries1 = countries1Future.await()
@@ -273,11 +264,11 @@ class Cache_Channel_Tests {
 
     @Test
     fun can_refresh() {
-        runBlocking {
-            val timestamp = DateTime.now()
-            var event: CacheEvent? = null
-            val listener = { ev: CacheEvent -> event = ev }
-            val cache = getCache(initialize = false, listener = listener)
+        val timestamp = DateTime.now()
+        var event: CacheEvent? = null
+        val listener = { ev: CacheEvent -> event = ev }
+
+        runTest(listener = listener) {cache ->
             var count = 0
             cache.put("countries", "countries supported for mobile app", 300) {
                 if (count == 0) {
@@ -316,11 +307,11 @@ class Cache_Channel_Tests {
 
     @Test
     fun can_expire() {
-        runBlocking {
-            val timestamp1 = DateTime.now()
-            var event: CacheEvent? = null
-            val listener = { ev: CacheEvent -> event = ev }
-            val cache = getCache(initialize = false, listener = listener)
+        val timestamp1 = DateTime.now()
+        var event: CacheEvent? = null
+        val listener = { ev: CacheEvent -> event = ev }
+
+        runTest(listener = listener) {cache ->
             var count = 0
             cache.put("countries", "countries supported for mobile app", 300) {
                 if (count == 0) {
