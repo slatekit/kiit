@@ -165,10 +165,6 @@ class SimpleAsyncCache(private val cache: Cache,
                 val item = cache.getFresh<Any>(cmd.key)
                 cmd.response.complete(item)
             }
-            else -> {
-                // How to handle error here?
-                logger?.error("Unexpected command : ${cmd.action}")
-            }
         }
     }
 
