@@ -13,13 +13,11 @@
 package test
 
 import kotlinx.coroutines.*
-import kotlinx.coroutines.channels.Channel
 import org.junit.Assert
 import org.junit.Test
 import slatekit.cache.*
 import slatekit.common.DateTime
 import slatekit.common.log.LoggerConsole
-import slatekit.core.common.ChannelCoordinator
 
 
 class Cache_Channel_Tests {
@@ -35,8 +33,7 @@ class Cache_Channel_Tests {
             val cache = getCache(initialize = false)
             if(initialize) {
                 scope.launch {
-                    val res = cache.put("countries", "countries supported for mobile app", 60) { listOf("us", "ca") }
-                    println("Put $res")
+                    cache.put("countries", "countries supported for mobile app", 60) { listOf("us", "ca") }
                 }
             }
             //cache.respond()
@@ -44,20 +41,12 @@ class Cache_Channel_Tests {
                 cache.work()
             }
             op(cache)
-            val c = cache.coordinator as ChannelCoordinator<CacheCommand>
-            c.channel.close()
+            cache.stop()
         }
     }
 
     @Test
     fun can_init() {
-//        runBlocking {
-//            val cache = getCache(initialize = true)
-//            this.launch { cache.manage() }
-//            val stats = cache.stats()
-//            println(stats)
-//            println("done")
-//        }
         runTest { cache ->
             val stats = cache.stats()
             Assert.assertEquals(1, stats.size)

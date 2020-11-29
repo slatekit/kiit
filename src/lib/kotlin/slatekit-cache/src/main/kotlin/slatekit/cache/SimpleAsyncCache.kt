@@ -43,12 +43,12 @@ class SimpleAsyncCache(private val cache: Cache,
         return perform { response -> CacheCommand.CompleteStats(response) }
     }
 
-    override suspend fun <T> put(key: String, desc: String, seconds: Int, fetcher: suspend () -> T?): Boolean {
-        return perform { response -> CacheCommand.Put(key, "", seconds, fetcher, response) }
+    override suspend fun <T> put(key: String, desc: String, seconds: Int, fetcher: suspend () -> T?) {
+        return request<Boolean> { response -> CacheCommand.Put(key, "", seconds, fetcher, response) }
     }
 
-    override suspend fun <T> set(key: String, value: T?): Boolean {
-        return perform { response -> CacheCommand.Set(key, value, response) }
+    override suspend fun <T> set(key: String, value: T?) {
+        return request<Boolean> { response -> CacheCommand.Set(key, value, response) }
     }
 
     override suspend fun <T> getAsync(key: String): Deferred<T?> = getInternalAsync(key, false)
@@ -188,6 +188,13 @@ class SimpleAsyncCache(private val cache: Cache,
         channel.send(command)
         val result = response.await()
         return result
+    }
+
+
+    private suspend fun <T> request(op: (CompletableDeferred<T>) -> CacheCommand) {
+        val response = CompletableDeferred<T>()
+        val command = op(response)
+        channel.send(command)
     }
 
 

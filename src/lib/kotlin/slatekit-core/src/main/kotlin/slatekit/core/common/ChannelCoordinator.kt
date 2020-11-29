@@ -21,7 +21,7 @@ class ChannelCoordinator<C>(override val logger: Logger, override val ids: Paire
         return channel.poll()
     }
 
-    override suspend fun stop():Boolean {
+    suspend fun stop():Boolean {
         return channel.close()
     }
 

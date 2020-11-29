@@ -25,11 +25,6 @@ interface Coordinator<C> {
     /**
      * Attempts to respond/handle to a command for a job/worker
      */
-    suspend fun stop(): Boolean
-
-    /**
-     * Attempts to respond/handle to a command for a job/worker
-     */
     suspend fun consume(operation: suspend (C) -> Unit)
 }
 

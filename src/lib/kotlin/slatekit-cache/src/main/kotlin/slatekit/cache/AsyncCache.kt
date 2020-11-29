@@ -57,12 +57,12 @@ interface AsyncCache {
      * @param fetcher
      * @tparam T
      */
-    suspend fun <T> put(key: String, desc: String, seconds: Int, fetcher: suspend () -> T?): Boolean
+    suspend fun <T> put(key: String, desc: String, seconds: Int, fetcher: suspend () -> T?)
 
     /**
      * Sets an explict value for the entry
      */
-    suspend fun <T> set(key: String, value:T?): Boolean
+    suspend fun <T> set(key: String, value:T?)
 
     /**
      * gets an item from the cache if it exists and is alive
