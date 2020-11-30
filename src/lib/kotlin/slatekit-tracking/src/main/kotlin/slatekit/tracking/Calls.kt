@@ -26,25 +26,25 @@ class Calls(val id: Identity) {
 
     fun inc(): Long {
         lastRunTime.set(DateTime.now())
-        return counters.incProcessed()
+        return counters.processed.inc()
     }
 
 
-    fun passed(): Long = counters.incSucceeded()
+    fun passed(): Long = counters.succeeded.inc()
 
 
-    fun failed(): Long = counters.incErrored()
+    fun failed(): Long = counters.errored.inc()
 
 
     fun failed(ex:Exception): Long {
         lastErr.set(Err.ex(ex))
-        return counters.incUnexpected()
+        return counters.unknown.inc()
     }
 
 
-    fun totalRuns():Long = counters.totalProcessed()
-    fun totalPassed():Long = counters.totalSucceeded()
-    fun totalFailed():Long = counters.totalErrored() + counters.totalUnexpected()
+    fun totalRuns():Long = counters.processed.get()
+    fun totalPassed():Long = counters.succeeded.get()
+    fun totalFailed():Long = counters.errored.get() + counters.unknown.get()
     fun lastError():Err? = lastErr.get()
     fun lastTime():DateTime? = lastRunTime.get()
 }
