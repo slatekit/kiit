@@ -75,14 +75,6 @@ class MetricsLite(
     }
 
 
-    /**
-     * Gets the current counters as a first class Countable
-     */
-    fun toCountable(): Countable {
-        return Counters(id, tags, counters.toMap())
-    }
-
-
     val emptyGlobals = listOf<Tag>()
     private fun globals(): List<Tag> {
         return if (settings.standardize) settings.tags.global else emptyGlobals
