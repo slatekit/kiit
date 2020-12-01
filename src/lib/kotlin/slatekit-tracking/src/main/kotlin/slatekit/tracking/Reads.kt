@@ -17,7 +17,7 @@ data class Fetched(@JvmField val count:Long,
  * while changing the timestamp at periodic intervals to avoid
  * constant new DateTime allocations as an optimization.
  */
-class Fetches(private val timeStampUpdateCount:Int) {
+class Reads(private val timeStampUpdateCount:Int) {
     private val stamped = AtomicReference<DateTime?>(null)
     private val counts = AtomicLong(0)
     private val interval = AtomicInteger(0)

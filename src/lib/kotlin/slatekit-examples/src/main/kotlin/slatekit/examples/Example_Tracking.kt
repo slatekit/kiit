@@ -199,7 +199,7 @@ class Example_Tracking : Command("auth") {
         val settings = UserSettings("user1", false)
 
         // Track as updates
-        val updates = Updates.of(settings)
+        val updates = Writes.of(settings)
         val update1 = updates.set(settings)
         val update2 = update1.map { it.copy(isBetaTester = true) }
 

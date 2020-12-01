@@ -2,7 +2,7 @@ package slatekit.cache
 
 import slatekit.tracking.Expiry
 import slatekit.tracking.Fetched
-import slatekit.tracking.Updates
+import slatekit.tracking.Writes
 
 /**
  * Provides a copy of the CacheValue
@@ -12,5 +12,5 @@ data class CacheStats(val key:String,
                       val hits  : Fetched,
                       val reads : Fetched?,
                       val misses: Fetched?,
-                      val value : Updates<Any>,
-                      val error : Updates<Throwable>)
+                      val value : Writes<Any>,
+                      val error : Writes<Throwable>)

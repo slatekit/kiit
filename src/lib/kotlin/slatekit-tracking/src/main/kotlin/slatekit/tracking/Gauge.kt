@@ -1,6 +1,6 @@
 package slatekit.tracking
 
-import org.threeten.bp.ZonedDateTime
+import java.util.concurrent.atomic.AtomicReference
 
 /**
  * Simple gauge to check / refresh a value
@@ -10,14 +10,14 @@ data class Gauge<T>(override val tags: List<Tag>,
                     val customTags:List<Tag>? = null,
                     val reloadSeconds: Long = 10) : Tagged {
 
-    private var value: T? = null
-    private var lastTimeStamp = ZonedDateTime.now()
+    private val value = AtomicReference<T?>(null)
+    private val expiry = Expiry(reloadSeconds)
 
     fun get(): T? {
-        if(isOld()) {
+        if(isExpired()) {
             refresh()
         }
-        return value
+        return value.get()
     }
 
 
@@ -27,14 +27,10 @@ data class Gauge<T>(override val tags: List<Tag>,
 
 
     fun set(newValue:T){
-        value = newValue
-        lastTimeStamp = ZonedDateTime.now()
+        value.set(newValue)
+        expiry.extend()
     }
 
 
-    fun isOld():Boolean {
-        val now = ZonedDateTime.now()
-        val expires = lastTimeStamp.plusSeconds(reloadSeconds)
-        return now > expires
-    }
+    fun isExpired():Boolean = expiry.isExpired()
 }
