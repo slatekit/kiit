@@ -184,7 +184,7 @@ class Example_Tracking : Command("auth") {
         /** COMPONENT: Recorder
          * The recorder component is a combination of all the above.
          */
-        val recorder = Recorder<UserRequest, UserResult>(Identity.test("job1"), LoggerConsole(), calls, counts, lasts, events)
+        val recorder = Recorder<UserRequest, UserResult, Err>(Identity.test("job1"), LoggerConsole(), calls, counts, lasts, events)
 
         // Use case 5: Record the request / result in the recorder which will track the call, counts, lasts, and events
         recorder.record(this, sampleRequest, Outcomes.success(sampleResult))
@@ -199,7 +199,7 @@ class Example_Tracking : Command("auth") {
         val settings = UserSettings("user1", false)
 
         // Track as updates
-        val updates = Writes.of(settings)
+        val updates = Tracker(settings)
         val update1 = updates.set(settings)
         val update2 = update1.map { it.copy(isBetaTester = true) }
 

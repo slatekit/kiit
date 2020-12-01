@@ -17,7 +17,7 @@ import slatekit.common.log.Logger
 import slatekit.common.utils.Random
 import slatekit.results.Outcome
 import slatekit.results.builders.Outcomes
-import slatekit.tracking.Reads
+import slatekit.tracking.Tracker
 
 /**
  * This light-weight implementation of a Cache ( LRU - Least recently used )
@@ -47,7 +47,7 @@ open class SimpleCache(override val name:String = Random.uuid(),
      * Stats to record cache accesses and cache misses.
      * CacheEntry only records hits as it only exist if there is an entry for the key
      */
-    protected val accesses  = LRUMap<String, Pair<Reads, Reads>>(settings.size)
+    protected val accesses  = LRUMap<String, Pair<Tracker<Any>, Tracker<Any>>>(settings.size)
 
 
     /**
@@ -250,7 +250,7 @@ open class SimpleCache(override val name:String = Random.uuid(),
                     value.hits.inc()
 
                     val tracked = value.value
-                    tracked.current
+                    tracked.value()
                 } else if(load){
 
                     entry.refresh()
@@ -260,7 +260,7 @@ open class SimpleCache(override val name:String = Random.uuid(),
                     value.hits.inc()
 
                     val tracked = value.value
-                    tracked.current
+                    tracked.value()
                 } else {
                     null
                 }
@@ -301,7 +301,7 @@ open class SimpleCache(override val name:String = Random.uuid(),
         fetcher: suspend () -> Any?
     ) {
 
-        val stats = Pair(Reads(settings.updateCount), Reads(settings.updateCount))
+        val stats = Pair(Tracker<Any>(settings.updateCount), Tracker<Any>(settings.updateCount))
         accesses[key] = stats
 
         val entry = CacheEntry(key, desc, seconds, fetcher)

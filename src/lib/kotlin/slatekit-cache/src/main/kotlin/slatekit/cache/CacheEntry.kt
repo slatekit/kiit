@@ -16,9 +16,7 @@ package slatekit.cache
 import kotlinx.coroutines.runBlocking
 import slatekit.results.Outcome
 import slatekit.results.builders.Outcomes
-import slatekit.tracking.Expiry
-import slatekit.tracking.Reads
-import slatekit.tracking.Writes
+import slatekit.tracking.*
 import java.util.concurrent.atomic.AtomicReference
 
 /**
@@ -47,9 +45,9 @@ data class CacheEntry(
         CacheValue(
             text = null,
             expiry = Expiry(expiryInSecs.toLong()),
-            hits = Reads(updateCount),
-            value = Writes<Any>(),
-            error = Writes<Throwable>())
+            hits = Tracker<Any>(null, updateCount),
+            value = Tracker<Any>(),
+            error = Tracker<Throwable>())
     )
 
 
@@ -98,7 +96,7 @@ data class CacheEntry(
         }
     }
 
-    fun stats(accesses: Reads?, misses: Reads?): CacheStats {
+    fun stats(accesses: Tracker<Any>?, misses: Tracker<Any>?): CacheStats {
         val item = item.get()
         return CacheStats(
             key = key,
@@ -106,8 +104,8 @@ data class CacheEntry(
             hits = item.hits.get(),
             reads = accesses?.get(),
             misses = misses?.get(),
-            value = item.value,
-            error = item.error)
+            value = item.value.get(),
+            error = item.error.get())
     }
 
     fun set(value: Any?, text: String?) {
