@@ -106,8 +106,8 @@ data class CacheEntry(
             hits = item.hits.get(),
             reads = accesses?.get(),
             misses = misses?.get(),
-            value = item.value.get(),
-            error = item.error.get())
+            value = item.value,
+            error = item.error)
     }
 
     fun set(value: Any?, text: String?) {

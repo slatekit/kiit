@@ -37,10 +37,6 @@ data class Updates<T>(val created: DateTime? = null,
         }
     }
 
-    fun get(): Updated<T> {
-        return Updated(current, applied, created, updated)
-    }
-
     companion object {
         fun <T> of(item:T):Updates<T> {
             return Updates<T>(DateTime.now(), null, 0, item)
