@@ -259,13 +259,13 @@ class Example_Jobs : Command("utils"), CoroutineScope by MainScope() {
 
                     // Counts: Counts the result success/failure categories
                     // See slatekit.results.Status.kt for more info
-                    println("counts.totalProcessed : " + ctx.stats.counts.totalProcessed())
-                    println("counts.totalSucceeded : " + ctx.stats.counts.totalSucceeded())
-                    println("counts.totalDenied    : " + ctx.stats.counts.totalDenied())
-                    println("counts.totalInvalid   : " + ctx.stats.counts.totalInvalid())
-                    println("counts.totalIgnored   : " + ctx.stats.counts.totalIgnored())
-                    println("counts.totalErrored   : " + ctx.stats.counts.totalErrored())
-                    println("counts.totalUnexpected: " + ctx.stats.counts.totalUnexpected())
+                    println("counts.totalProcessed : " + ctx.stats.counts.processed.get())
+                    println("counts.totalSucceeded : " + ctx.stats.counts.succeeded.get())
+                    println("counts.totalDenied    : " + ctx.stats.counts.denied.get())
+                    println("counts.totalInvalid   : " + ctx.stats.counts.invalid.get())
+                    println("counts.totalIgnored   : " + ctx.stats.counts.ignored.get())
+                    println("counts.totalErrored   : " + ctx.stats.counts.errored.get())
+                    println("counts.totalUnexpected: " + ctx.stats.counts.unknown.get())
 
                     // Lasts: Stores the last request/result of an call to work
                     println("lasts.totalProcessed : " + ctx.stats.lasts?.lastProcessed())

@@ -250,7 +250,7 @@ open class SimpleCache(override val name:String = Random.uuid(),
                     value.hits.inc()
 
                     val tracked = value.value
-                    tracked.get().current
+                    tracked.current
                 } else if(load){
 
                     entry.refresh()
@@ -260,7 +260,7 @@ open class SimpleCache(override val name:String = Random.uuid(),
                     value.hits.inc()
 
                     val tracked = value.value
-                    tracked.get().current
+                    tracked.current
                 } else {
                     null
                 }

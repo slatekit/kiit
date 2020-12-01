@@ -18,7 +18,7 @@ import slatekit.results.Outcome
 import slatekit.results.builders.Outcomes
 import slatekit.tracking.Expiry
 import slatekit.tracking.Fetches
-import slatekit.tracking.Tracked
+import slatekit.tracking.Updates
 import java.util.concurrent.atomic.AtomicReference
 
 /**
@@ -48,8 +48,8 @@ data class CacheEntry(
             text = null,
             expiry = Expiry(expiryInSecs.toLong()),
             hits = Fetches(updateCount),
-            value = Tracked(),
-            error = Tracked())
+            value = Updates<Any>(),
+            error = Updates<Throwable>())
     )
 
 
@@ -106,8 +106,8 @@ data class CacheEntry(
             hits = item.hits.get(),
             reads = accesses?.get(),
             misses = misses?.get(),
-            value = item.value.get().get(),
-            error = item.error.get().get())
+            value = item.value.get(),
+            error = item.error.get())
     }
 
     fun set(value: Any?, text: String?) {

@@ -4,9 +4,9 @@ import slatekit.common.DateTime
 
 
 data class Updated<T>(@JvmField val value:T?,
-                      @JvmField override val applied:Long,
-                      @JvmField override val created:DateTime?,
-                      @JvmField override val updated: DateTime?) : Timed
+                      @JvmField val applied:Long,
+                      @JvmField val created:DateTime?,
+                      @JvmField val updated: DateTime?)
 
 
 /**
@@ -17,10 +17,10 @@ data class Updated<T>(@JvmField val value:T?,
  * @param applied: Number of times this was updated/accessed
  * @param current: Current value of this time
  */
-data class Updates<T>(override val created: DateTime? = null,
-                      override val updated: DateTime? = null,
-                      override val applied: Long = 0,
-                      val current: T? = null) : Timed {
+data class Updates<T>(val created: DateTime? = null,
+                      val updated: DateTime? = null,
+                      val applied: Long = 0,
+                      val current: T? = null) {
 
     fun set(newValue:T?):Updates<T> {
         return this.copy(

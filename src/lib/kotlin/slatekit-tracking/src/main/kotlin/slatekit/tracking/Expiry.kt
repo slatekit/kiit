@@ -7,10 +7,7 @@ data class Expiry(val seconds:Long,
                   val expires:DateTime = started.plusSeconds(seconds.toLong())) {
 
     fun isExpired(): Boolean {
-        return if (seconds <= 0)
-            false
-        else
-            expires <= DateTime.now()
+        return if (seconds <= 0) false else expires <= DateTime.now()
     }
 
 
