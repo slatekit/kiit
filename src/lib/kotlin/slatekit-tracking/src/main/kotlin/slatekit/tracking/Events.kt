@@ -12,7 +12,8 @@ open class Events<TRequest, TResponse, TFailure>(
     val failureConverter:((Any, TRequest, Failure<TFailure> ) -> Event)? = null,
     val eventHandler:((Event) -> Unit)? = null) : Tagged {
 
-    open fun requested(sender: Any, request: TRequest) {}
+    open fun requested(sender: Any, request: TRequest) {
+    }
 
 
     open fun succeeded(sender: Any, request: TRequest, response:TResponse) {
@@ -65,23 +66,26 @@ open class Events<TRequest, TResponse, TFailure>(
     }
 
     protected fun handleFailure(sender:Any, request: TRequest, error:Failure<TFailure>){
-        error?.let { err ->
-            failureConverter?.let { converter ->
-                eventHandler?.let { handler ->
-                    val event = converter(sender, request, error)
-                    handler(event)
-                }
+        failureConverter?.let { converter ->
+            eventHandler?.let { handler ->
+                val event = converter(sender, request, error)
+                handler(event)
             }
         }
     }
 
 
-    open fun handle(sender: Any, request: TRequest, result:slatekit.results.Result<TResponse, TFailure>){
+    open fun handle(sender: Any, request: TRequest, result:Result<TResponse, TFailure>){
         when(result) {
-            is Success -> this.succeeded(sender, request, result.value)
+            is Success -> {
+                when(result.status){
+                    is Passed.Succeeded -> this.succeeded(sender, request, result.value)
+                    is Passed.Pending   -> this.succeeded(sender, request, result.value)
+                }
+            }
             is Failure -> {
                 when (result.status) {
-                    is Failed.Denied     -> this.denied    (sender, request, result )
+                    is Failed.Denied     -> this.denied    (sender, request, result)
                     is Failed.Invalid    -> this.invalid   (sender, request, result)
                     is Failed.Ignored    -> this.ignored   (sender, request, result)
                     is Failed.Errored    -> this.errored   (sender, request, result)
