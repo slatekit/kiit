@@ -191,7 +191,6 @@ class Example_Jobs : Command("utils"), CoroutineScope by MainScope() {
             //jobs.run("samples.job7")
             val job = jobs.get("samples.job7")
             job?.let { job ->
-
                 // Ids
                 println("id   : " + job.id.id)
                 println("name : " + job.id.name)
