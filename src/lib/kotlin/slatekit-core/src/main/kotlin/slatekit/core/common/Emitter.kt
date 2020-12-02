@@ -1,5 +1,7 @@
 package slatekit.core.slatekit.core.common
 
+import java.util.concurrent.atomic.AtomicLong
+
 /**
  * Javascript like Event emitter
  * https://www.tutorialspoint.com/nodejs/nodejs_event_emitter.htm
@@ -12,7 +14,13 @@ class Emitter<T> {
      * 2. "job_1" : Listener2
      * 3. "job_2" : Listener3
      */
-    data class Listener<T>(val name: String, val count: Int?, val isMin: Boolean, val call: suspend (T) -> Unit)
+    data class Listener<T>(val name: String, val limit: Int?, val call: suspend (T) -> Unit) {
+        private val counter = AtomicLong(0L)
+
+        fun hasLimit():Boolean = limit != null
+        fun inc() = counter.incrementAndGet()
+        fun count():Long = counter.get()
+    }
 
     private val _listeners = mutableMapOf<String, MutableList<Listener<T>>>()
 
@@ -23,31 +31,42 @@ class Emitter<T> {
 
     suspend fun emit(name:String, args:T) {
         process(name, create = false) { all ->
-            all.forEach {
-                it.call.invoke(args)
+            val removals = mutableListOf<Int>()
+            all.forEachIndexed { ndx, listener ->
+                when(listener.limit) {
+                    null -> listener.call.invoke(args)
+                    else  -> {
+                        val count = listener.count()
+                        if(count >= listener.limit) {
+                            removals.add(ndx)
+                        }
+                        else {
+                            listener.inc()
+                            listener.call.invoke(args)
+                        }
+                    }
+                }
             }
+            removals.sortDescending()
+            removals.forEach { all.removeAt(it) }
         }
     }
 
     fun on(name: String, listener: suspend (T) -> Unit) {
-        on(name, null, false, listener)
+        on(name, null, listener)
     }
 
     fun one(name: String, listener: suspend (T) -> Unit) {
-        on(name, 1, false, listener)
-    }
-
-    fun min(name: String, count: Int, listener: suspend (T) -> Unit) {
-        on(name, count, true, listener)
+        on(name, 1, listener)
     }
 
     fun max(name: String, count: Int, listener: suspend (T) -> Unit) {
-        on(name, count, false, listener)
+        on(name, count, listener)
     }
 
-    fun on(name: String, count: Int?, isMin: Boolean, listener: suspend (T) -> Unit) {
+    fun on(name: String, count: Int?, listener: suspend (T) -> Unit) {
         update(name, create = true) { all ->
-            val newEntry = Listener<T>(name, count, isMin, listener)
+            val newEntry = Listener<T>(name, count, listener)
             all.add(newEntry)
         }
     }
@@ -80,7 +99,7 @@ class Emitter<T> {
     }
 
     private fun filter(name:String, create:Boolean) : MutableList<Listener<T>>? {
-        val existing = _listeners[name] as MutableList<Listener<T>>?
+        val existing = _listeners[name]
         return when {
             existing != null -> existing
             !create -> existing
