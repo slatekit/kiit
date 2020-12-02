@@ -27,6 +27,10 @@ class Tracker<T>(value:T? = null, private val timeStampUpdateCount:Int = 0){
 
 
     fun set(value:T?) {
+        val createdAt = created.get()
+        if(createdAt == null) {
+            created.set(DateTime.now())
+        }
         this.current.set(value)
         this.inc()
     }
