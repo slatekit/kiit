@@ -7,20 +7,7 @@ import java.util.concurrent.atomic.AtomicLong
  * https://www.tutorialspoint.com/nodejs/nodejs_event_emitter.htm
  */
 class Emitter<T> {
-    /**
-     * Gets all listeners in this emitter.
-     * e.g.
-     * 1. "job_1" : Listener1
-     * 2. "job_1" : Listener2
-     * 3. "job_2" : Listener3
-     */
-    data class Listener<T>(val name: String, val limit: Int?, val call: suspend (T) -> Unit) {
-        private val counter = AtomicLong(0L)
 
-        fun hasLimit():Boolean = limit != null
-        fun inc() = counter.incrementAndGet()
-        fun count():Long = counter.get()
-    }
 
     private val _listeners = mutableMapOf<String, MutableList<Listener<T>>>()
 
@@ -51,6 +38,7 @@ class Emitter<T> {
                     }
                 }
             }
+            // Remove items that passed their limit
             removals.sortDescending()
             removals.forEach { all.removeAt(it) }
         }
@@ -117,6 +105,21 @@ class Emitter<T> {
                 all
             }
         }
+    }
+
+    /**
+     * Gets all listeners in this emitter.
+     * e.g.
+     * 1. "job_1" : Listener1
+     * 2. "job_1" : Listener2
+     * 3. "job_2" : Listener3
+     */
+    data class Listener<T>(val name: String, val limit: Int?, val call: suspend (T) -> Unit) {
+        private val counter = AtomicLong(0L)
+
+        fun hasLimit():Boolean = limit != null
+        fun inc() = counter.incrementAndGet()
+        fun count():Long = counter.get()
     }
 
     companion object {
