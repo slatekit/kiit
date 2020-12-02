@@ -5,6 +5,12 @@ import java.util.concurrent.atomic.AtomicInteger
 import java.util.concurrent.atomic.AtomicLong
 import java.util.concurrent.atomic.AtomicReference
 
+/**
+ * Used to track a value to :
+ * 1. record when it is created
+ * 2. record number of times accessed/updated
+ * 3. store its current value
+ */
 class Tracker<T>(value:T? = null, private val timeStampUpdateCount:Int = 0){
     private val current = AtomicReference<T?>(value)
     private val created = AtomicReference<DateTime?>(null)

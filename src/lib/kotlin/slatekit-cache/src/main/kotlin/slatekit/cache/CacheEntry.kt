@@ -45,7 +45,7 @@ data class CacheEntry(
         CacheValue(
             text = null,
             expiry = Expiry(expiryInSecs.toLong()),
-            hits = Tracker<Any>(null, updateCount),
+            hits  = Tracker<Any>(null, updateCount),
             value = Tracker<Any>(),
             error = Tracker<Throwable>())
     )
