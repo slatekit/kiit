@@ -6,7 +6,6 @@ import slatekit.common.ids.Paired
 import slatekit.common.log.Logger
 import slatekit.jobs.*
 import slatekit.jobs.support.Command
-import slatekit.jobs.support.Coordinator
 import slatekit.jobs.support.Scheduler
 
 
@@ -17,9 +16,13 @@ class MockScheduler : Scheduler {
 }
 
 
-open class MockCoordinator(override val logger: Logger, override val ids: Paired) : Coordinator {
+open class MockCoordinator(override val logger: Logger, override val ids: Paired) : slatekit.core.common.Coordinator<Command> {
 
     val requests = mutableListOf<Command>()
+
+    override fun sendSync(cmd:Command) {
+        requests.add(cmd)
+    }
 
     override suspend fun send(jobRequest: Command) {
         requests.add(jobRequest)

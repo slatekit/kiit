@@ -25,7 +25,7 @@ import slatekit.results.builders.Tries
 class Workers(
     val jobId: Identity,
     val all: List<Worker<*>>,
-    val coordinator: Coordinator,
+    val coordinator: slatekit.core.common.ChannelCoordinator<Command>,
     val scheduler: Scheduler,
     val logger: Logger,
     val ids: Paired,

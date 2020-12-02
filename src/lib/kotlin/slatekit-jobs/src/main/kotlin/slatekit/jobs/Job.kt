@@ -10,6 +10,7 @@ import slatekit.common.log.LogLevel
 import slatekit.common.log.Logger
 import slatekit.common.log.LoggerConsole
 import slatekit.common.paged.Pager
+import slatekit.core.common.Coordinator
 import slatekit.policy.Policy
 import slatekit.jobs.slatekit.jobs.support.Backoffs
 import slatekit.jobs.support.*
@@ -66,7 +67,7 @@ class Job(
     val queue: Queue? = null,
     override val logger: Logger = LoggerConsole(),
     val ids: Paired = Paired(),
-    override val coordinator: Coordinator = coordinator(ids, logger),
+    override val coordinator: slatekit.core.common.Coordinator<Command> = coordinator(ids, logger),
     val scheduler: Scheduler = DefaultScheduler(),
     val scope: CoroutineScope = Jobs.scope,
     policies: List<Policy<WorkRequest, WorkResult>>? = null,
@@ -294,8 +295,8 @@ class Job(
             }
         }
 
-        fun coordinator(ids: Paired, logger: Logger): Coordinator {
-            return ChannelCoordinator(logger, ids, Channel(Channel.UNLIMITED))
+        fun coordinator(ids: Paired, logger: Logger): Coordinator<Command> {
+            return slatekit.core.common.ChannelCoordinator(logger, ids, Channel(Channel.UNLIMITED))
         }
     }
 }
