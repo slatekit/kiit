@@ -8,8 +8,8 @@ import slatekit.tracking.Tracked
  */
 data class CacheStats(val key:String,
                       val expiry: Expiry,
-                      val hits  : Tracked<Any>?,
+                      val hits  : Tracked<Any>,
                       val reads : Tracked<Any>?,
                       val misses: Tracked<Any>?,
-                      val value : Tracked<Any>?,
-                      val error : Tracked<Throwable>?)
+                      val value : Tracked<Any>,
+                      val error : Tracked<Throwable>)
