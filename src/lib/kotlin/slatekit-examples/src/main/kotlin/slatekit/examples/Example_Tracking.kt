@@ -82,34 +82,34 @@ class Example_Tracking : Command("auth") {
         val counts = Counters(id, custom = listOf("deferred"))
 
         // Use case 2.1: Increment total processed
-        counts.incProcessed()
-        counts.incSucceeded()
-        counts.incDenied()
-        counts.incInvalid()
-        counts.incIgnored()
-        counts.incErrored()
-        counts.incUnexpected()
+        counts.processed.inc()
+        counts.succeeded.inc()
+        counts.denied.inc()
+        counts.invalid.inc()
+        counts.ignored.inc()
+        counts.errored.inc()
+        counts.unknown.inc()
         counts.inc("deferred")
 
         // Use case 2.2: Increment total processed
-        counts.decProcessed()
-        counts.decSucceeded()
-        counts.decDenied()
-        counts.decInvalid()
-        counts.decIgnored()
-        counts.decErrored()
-        counts.decUnexpected()
+        counts.processed.dec()
+        counts.succeeded.dec()
+        counts.denied.dec()
+        counts.invalid.dec()
+        counts.ignored.dec()
+        counts.errored.dec()
+        counts.unknown.dec()
         counts.dec("deferred")
 
         // Use case 2.3: Get totals
-        counts.totalProcessed()
-        counts.totalSucceeded()
-        counts.totalDenied()
-        counts.totalInvalid()
-        counts.totalIgnored()
-        counts.totalErrored()
-        counts.totalUnexpected()
-        counts.totalCustom("deferred")
+        counts.processed.get()
+        counts.succeeded.get()
+        counts.denied.get()
+        counts.invalid.get()
+        counts.ignored.get()
+        counts.errored.get()
+        counts.unknown.get()
+        counts.get("deferred")
 
         // The next 2 examples involve tracking and handling requests/results.
         // Lets setup some example request / result types
@@ -184,7 +184,7 @@ class Example_Tracking : Command("auth") {
         /** COMPONENT: Recorder
          * The recorder component is a combination of all the above.
          */
-        val recorder = Recorder<UserRequest, UserResult>(Identity.test("job1"), LoggerConsole(), calls, counts, lasts, events)
+        val recorder = Recorder<UserRequest, UserResult, Err>(Identity.test("job1"), LoggerConsole(), calls, counts, lasts, events)
 
         // Use case 5: Record the request / result in the recorder which will track the call, counts, lasts, and events
         recorder.record(this, sampleRequest, Outcomes.success(sampleResult))
@@ -199,7 +199,7 @@ class Example_Tracking : Command("auth") {
         val settings = UserSettings("user1", false)
 
         // Track as updates
-        val updates = Updates.of(settings)
+        val updates = Tracker(settings)
         val update1 = updates.set(settings)
         val update2 = update1.map { it.copy(isBetaTester = true) }
 

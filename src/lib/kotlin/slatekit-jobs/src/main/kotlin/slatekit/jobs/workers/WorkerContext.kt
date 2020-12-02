@@ -5,6 +5,7 @@ import slatekit.jobs.Task
 import slatekit.jobs.slatekit.jobs.support.Backoffs
 import slatekit.tracking.Recorder
 import slatekit.policy.Policy
+import slatekit.results.Err
 
 /**
  * Represents the context of a Worker containing its statistics, policies, and other components
@@ -19,7 +20,7 @@ import slatekit.policy.Policy
 data class WorkerContext(
     val id: Identity,
     val worker: Worker<*>,
-    val stats: Recorder<Task, WorkResult>,
+    val stats: Recorder<Task, WorkResult, Err>,
     val backoffs:Backoffs = Backoffs(),
     val policies: List<Policy<WorkRequest, WorkResult>> = listOf(),
     val task: Task = Task.empty.copy(job = id.id)

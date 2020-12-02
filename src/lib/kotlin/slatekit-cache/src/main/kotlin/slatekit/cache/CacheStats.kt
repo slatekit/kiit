@@ -1,16 +1,15 @@
 package slatekit.cache
 
 import slatekit.tracking.Expiry
-import slatekit.tracking.Fetched
-import slatekit.tracking.Updated
+import slatekit.tracking.Tracked
 
 /**
  * Provides a copy of the CacheValue
  */
 data class CacheStats(val key:String,
                       val expiry: Expiry,
-                      val hits  : Fetched,
-                      val reads : Fetched?,
-                      val misses: Fetched?,
-                      val value : Updated<Any>,
-                      val error : Updated<Throwable>)
+                      val hits  : Tracked<Any>,
+                      val reads : Tracked<Any>?,
+                      val misses: Tracked<Any>?,
+                      val value : Tracked<Any>,
+                      val error : Tracked<Throwable>)

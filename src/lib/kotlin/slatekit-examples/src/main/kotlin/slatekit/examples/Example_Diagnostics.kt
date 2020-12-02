@@ -25,6 +25,7 @@ import slatekit.cmds.Command
 import slatekit.cmds.CommandRequest
 import slatekit.common.Identity
 import slatekit.results.Codes
+import slatekit.results.Err
 import slatekit.tracking.Recorder
 import slatekit.results.Try
 import slatekit.results.Success
@@ -59,7 +60,7 @@ class Example_Diagnostics : Command("cmd") {
         // in the slatekit.providers project
         val metrics = MetricsLite.build(id)
 
-        val recorder = Recorder.of<MyJob, Response<String>>(id, logger = logger)
+        val recorder = Recorder.of<MyJob, Response<String>, Err>(id, logger = logger)
 
         // Create sample request
         // NOTE: The request can be any data type you want

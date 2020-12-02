@@ -4,13 +4,10 @@ import slatekit.common.DateTime
 
 data class Expiry(val seconds:Long,
                   val started:DateTime = DateTime.now(),
-                  val expires:DateTime = started.plusSeconds(seconds.toLong())) {
+                  val expires:DateTime = started.plusSeconds(seconds)) {
 
     fun isExpired(): Boolean {
-        return if (seconds <= 0)
-            false
-        else
-            expires <= DateTime.now()
+        return if (seconds <= 0) false else expires <= DateTime.now()
     }
 
 

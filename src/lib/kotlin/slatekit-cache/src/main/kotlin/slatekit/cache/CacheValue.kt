@@ -14,8 +14,7 @@
 package slatekit.cache
 
 import slatekit.tracking.Expiry
-import slatekit.tracking.Fetches
-import slatekit.tracking.Tracked
+import slatekit.tracking.Tracker
 
 /**
  * Represents a single cache item
@@ -28,9 +27,9 @@ import slatekit.tracking.Tracked
 data class CacheValue(
     val text: String?,
     val expiry: Expiry,
-    val hits: Fetches,
-    val value: Tracked<Any>,
-    val error: Tracked<Throwable>
+    val hits: Tracker<Any>,
+    val value: Tracker<Any>,
+    val error: Tracker<Throwable>
 ) {
 
     fun expire():CacheValue {

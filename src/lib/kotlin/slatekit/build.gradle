@@ -90,7 +90,7 @@ dependencies {
         compile "com.slatekit:slatekit-context:$slatekit_version"
         compile "com.slatekit:slatekit-app:$slatekit_version"
         compile "com.slatekit:slatekit-db:$slatekit_version_beta"
-        compile "com.slatekit:slatekit-tracking:$slatekit_version_beta"
+        compile "com.slatekit:slatekit-tracking:$slatekit_version"
         compile "com.slatekit:slatekit-cache:$slatekit_version"
         compile "com.slatekit:slatekit-policy:$slatekit_version_beta"
         compile "com.slatekit:slatekit-cmds:$slatekit_version_beta"

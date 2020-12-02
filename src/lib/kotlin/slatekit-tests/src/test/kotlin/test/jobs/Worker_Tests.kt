@@ -25,13 +25,13 @@ class Worker_Tests {
         Assert.assertEquals(worker.status(), Status.InActive)
 
         // State
-        Assert.assertEquals(worker.stats.counts.totalProcessed(), 0)
-        Assert.assertEquals(worker.stats.counts.totalSucceeded(), 0)
-        Assert.assertEquals(worker.stats.counts.totalInvalid(), 0)
-        Assert.assertEquals(worker.stats.counts.totalIgnored(), 0)
-        Assert.assertEquals(worker.stats.counts.totalDenied(), 0)
-        Assert.assertEquals(worker.stats.counts.totalErrored(), 0)
-        Assert.assertEquals(worker.stats.counts.totalUnexpected(), 0)
+        Assert.assertEquals(worker.stats.counts.processed.get(), 0)
+        Assert.assertEquals(worker.stats.counts.succeeded.get(), 0)
+        Assert.assertEquals(worker.stats.counts.invalid.get(), 0)
+        Assert.assertEquals(worker.stats.counts.ignored.get(), 0)
+        Assert.assertEquals(worker.stats.counts.denied.get(), 0)
+        Assert.assertEquals(worker.stats.counts.errored.get(), 0)
+        Assert.assertEquals(worker.stats.counts.unknown.get(), 0)
 
         // Info
         val info = worker.info()

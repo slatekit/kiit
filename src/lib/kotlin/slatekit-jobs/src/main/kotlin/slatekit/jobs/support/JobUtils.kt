@@ -80,12 +80,13 @@ object JobUtils {
                 Triple("duration  ", "$duration secs", ""),
                 Triple("status    ", status.name, ""),
                 Triple("called    ", calls.totalRuns().toString(), ""),
-                Triple("processed ", counts.totalProcessed().toString(), ""),
-                Triple("succeeded ", counts.totalSucceeded().toString(), ""),
-                Triple("invalid   ", counts.totalInvalid().toString(), ""),
-                Triple("ignored   ", counts.totalIgnored().toString(), ""),
-                Triple("errored   ", counts.totalErrored().toString(), ""),
-                Triple("unexpected", counts.totalUnexpected().toString(), "")
+                Triple("processed ", counts.processed.get().toString(), ""),
+                Triple("succeeded ", counts.succeeded.get().toString(), ""),
+                Triple("denied    ", counts.denied.get().toString(), ""),
+                Triple("invalid   ", counts.invalid.get().toString(), ""),
+                Triple("ignored   ", counts.ignored.get().toString(), ""),
+                Triple("errored   ", counts.errored.get().toString(), ""),
+                Triple("unexpected", counts.unknown.get().toString(), "")
             )
         )
         return ev

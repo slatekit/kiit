@@ -39,7 +39,7 @@ class MetricsLite(
 
 
     override fun total(name: String): Double {
-        return getOrCreate(name, counters, { Counter(globals(), null) } ).get().toDouble()
+        return getOrCreate(name, counters) { Counter(globals(), null) }.get().toDouble()
     }
 
 
@@ -47,7 +47,7 @@ class MetricsLite(
      * Increment a counter
      */
     override fun count(name: String, tags: List<String>?) {
-        getOrCreate(name, counters, { Counter(globals(), tags) } ).inc()
+        getOrCreate(name, counters) { Counter(globals(), tags) }.inc()
     }
 
 
@@ -55,7 +55,7 @@ class MetricsLite(
      * Set value on a gauge
      */
     override fun <T> gauge(name: String, call: () -> T, tags: List<Tag>?) where T: kotlin.Number {
-        getOrCreate(name, gauges, { Gauge(globals(), call, tags, 10) })
+        getOrCreate(name, gauges) { Gauge(globals(), call, tags, 10) }
     }
 
 
@@ -71,15 +71,7 @@ class MetricsLite(
      * Times an event
      */
     override fun time(name: String, tags: List<String>?, call:() -> Unit ) {
-        getOrCreate(name, timers, { Timer(globals(), tags) }).record(call)
-    }
-
-
-    /**
-     * Gets the current counters as a first class Countable
-     */
-    fun toCountable(): Countable {
-        return Counters(id, tags, counters.toMap())
+        getOrCreate(name, timers) { Timer(globals(), tags) }.record(call)
     }
 
 

@@ -1,6 +1,8 @@
 package slatekit.tracking
 
 import slatekit.common.Identity
+import slatekit.results.Failed
+import slatekit.results.Passed
 import slatekit.results.Status
 import java.util.concurrent.atomic.AtomicLong
 
@@ -19,29 +21,52 @@ import java.util.concurrent.atomic.AtomicLong
  * 7. total unexpected e.g. unexpected errors
  */
 class Counters(val id: Identity = Identity.empty,
-               override val tags:List<Tag> = listOf(),
-               lookup:Map<String, Counter>? = null,
-               custom:List<String>? = null) : Countable {
-
-    private val counters = build(lookup, custom)
+               val tags:List<Tag> = listOf(),
+               custom:List<String>? = null) {
 
 
-    override fun get(name:String):Long = getInternal(name)?.get() ?: 0L
-    override fun inc(name:String):Long = getInternal(name)?.inc() ?: 0L
-    override fun dec(name:String):Long = getInternal(name)?.dec() ?: 0L
+    private val counters = build(custom)
+    val processed = Counter()
+    val succeeded = Counter()
+    val denied    = Counter()
+    val invalid   = Counter()
+    val ignored   = Counter()
+    val errored   = Counter()
+    val unknown   = Counter()
+
+    /**
+     * Track status in the counters
+     */
+    fun increment(status:Status) {
+        processed.inc()
+        when(status) {
+            is Passed.Succeeded  -> succeeded.inc()
+            is Failed.Denied     -> denied.inc()
+            is Failed.Invalid    -> invalid.inc()
+            is Failed.Ignored    -> ignored.inc()
+            is Failed.Errored    -> errored.inc()
+            is Failed.Unknown    -> unknown.inc()
+            else                 -> unknown.inc()
+        }
+    }
+
+    fun get(name:String):Long = getInternal(name)?.get() ?: 0L
+    fun inc(name:String):Long = getInternal(name)?.inc() ?: 0L
+    fun dec(name:String):Long = getInternal(name)?.dec() ?: 0L
 
 
     /**
      * Reset all counterst to 0
      */
-    override fun reset() {
-        getInternal(Countable.PROCESSED)   ?.set(0L)
-        getInternal(Countable.SUCCEEDED)   ?.set(0L)
-        getInternal(Countable.DENIED)   ?.set(0L)
-        getInternal(Countable.INVALID)   ?.set(0L)
-        getInternal(Countable.IGNORED)   ?.set(0L)
-        getInternal(Countable.ERRORED)   ?.set(0L)
-        getInternal(Countable.UNEXPECTED)   ?.set(0L)
+    fun reset() {
+        processed.set(0L)
+        succeeded.set(0L)
+        denied.set(0L)
+        invalid.set(0L)
+        ignored.set(0L)
+        errored.set(0L)
+        unknown.set(0L)
+        counters.keys.map { counters[it]?.set(0L) }
     }
 
 
@@ -58,6 +83,13 @@ class Counters(val id: Identity = Identity.empty,
 
 
     companion object {
+        val PROCESSED  = "Processed"
+        val SUCCEEDED  = "Succeeded"
+        val DENIED     = "Denied"
+        val INVALID    = "Invalid"
+        val IGNORED    = "Ignored"
+        val ERRORED    = "Errored"
+        val UNEXPECTED = "Unexpected"
 
         /**
          * Track status in the counters
@@ -96,21 +128,8 @@ class Counters(val id: Identity = Identity.empty,
         }
 
 
-        fun build(lookup:Map<String, Counter>? = null, custom:List<String>? = null):Map<String, Counter> {
-            val initial = lookup ?: listOf(
-                    Countable.PROCESSED,
-                    Countable.SUCCEEDED,
-                    Countable.DENIED,
-                    Countable.INVALID,
-                    Countable.IGNORED,
-                    Countable.ERRORED,
-                    Countable.UNEXPECTED
-            ).map{ it to Counter(listOf()) }.toMap()
-            val all = custom?.let {
-                val pairs = it.map { it to Counter(listOf()) }
-                initial.plus(pairs)
-            } ?: initial
-            return all
+        fun build(custom:List<String>? = null):Map<String, Counter> {
+            return custom?.let { names -> names.map { it to Counter(listOf()) }.toMap() } ?: mapOf()
         }
     }
 }

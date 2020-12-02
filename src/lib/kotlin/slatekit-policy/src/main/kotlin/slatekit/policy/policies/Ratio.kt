@@ -22,13 +22,13 @@ class Ratio<I, O>(val limit: Double, val status: Status, val stats: (I) -> Count
         val result = operation(i)
         val counts = stats(i)
         val isMatch = when (status) {
-            is Passed.Succeeded -> isAtThreshold(counts.totalSucceeded(), counts.totalProcessed())
-            is Failed.Denied -> isAtThreshold(counts.totalDenied(), counts.totalProcessed())
-            is Failed.Invalid -> isAtThreshold(counts.totalInvalid(), counts.totalProcessed())
-            is Failed.Ignored -> isAtThreshold(counts.totalIgnored(), counts.totalProcessed())
-            is Failed.Errored -> isAtThreshold(counts.totalErrored(), counts.totalProcessed())
-            is Failed.Unknown -> isAtThreshold(counts.totalUnexpected(), counts.totalProcessed())
-            else -> isAtThreshold(counts.totalUnexpected(), counts.totalProcessed())
+            is Passed.Succeeded -> isAtThreshold(counts.succeeded.get(), counts.processed.get())
+            is Failed.Denied -> isAtThreshold(counts.denied.get(), counts.processed.get())
+            is Failed.Invalid -> isAtThreshold(counts.invalid.get(), counts.processed.get())
+            is Failed.Ignored -> isAtThreshold(counts.ignored.get(), counts.processed.get())
+            is Failed.Errored -> isAtThreshold(counts.errored.get(), counts.processed.get())
+            is Failed.Unknown -> isAtThreshold(counts.unknown.get(), counts.processed.get())
+            else -> isAtThreshold(counts.unknown.get(), counts.processed.get())
         }
         logger?.info("RATIO: status = ${result.status.desc}")
         return if (isMatch) {

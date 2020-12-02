@@ -16,7 +16,7 @@ class Limit<I, O>(val limit: Long, val autoProcess:Boolean, val stats: (I) -> Co
 
     override suspend fun run(i: I, operation: suspend (I) -> Outcome<O>): Outcome<O> {
         val counts = stats(i)
-        val processed = counts.totalProcessed()
+        val processed = counts.processed.get()
         val pastLimit = processed >= limit
         logger?.info("LIMIT: processed = $processed")
         return if (pastLimit) {
@@ -24,7 +24,7 @@ class Limit<I, O>(val limit: Long, val autoProcess:Boolean, val stats: (I) -> Co
         } else {
             val res = operation(i)
             if(autoProcess){
-                counts.incProcessed()
+                counts.processed.inc()
             }
             res
         }

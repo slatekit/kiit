@@ -1,18 +1,15 @@
 package slatekit.tracking
 
-import java.util.concurrent.atomic.AtomicReference
+import slatekit.common.DateTime
 
-class Tracked<T> {
-    private val stamped = AtomicReference<Updates<T>>(Updates<T>())
-
-
-    fun get(): Updates<T> {
-        return stamped.get()
-    }
-
-
-    fun set(newValue: T?) {
-        val curr = get()
-        stamped.set(curr.set(newValue))
-    }
-}
+/**
+ * @param value   : Current value tracked
+ * @param count   : Number of times accessed
+ * @param created : Time this value originally created
+ * @param updated : Time this value was accessed/updated
+ */
+data class Tracked<T>(
+    @JvmField val value: T?,
+    @JvmField val count: Long,
+    @JvmField val created: DateTime?,
+    @JvmField val updated: DateTime?)
