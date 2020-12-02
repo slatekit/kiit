@@ -8,12 +8,12 @@ import slatekit.common.log.LogLevel
 import slatekit.common.log.Logger
 import slatekit.common.paged.Pager
 import slatekit.core.common.Scheduler
+import slatekit.core.common.Emitter
 import slatekit.jobs.Event
 import slatekit.jobs.Action
 import slatekit.jobs.Task
 import slatekit.tracking.Recorder
 import slatekit.policy.Policy
-import slatekit.jobs.Events
 import slatekit.jobs.slatekit.jobs.support.Backoffs
 import slatekit.jobs.support.*
 import slatekit.results.*
@@ -35,7 +35,7 @@ class Workers(
     val backoffs: () -> Pager<Long> = { Backoffs.times() }
 )  {
 
-    private val events = Events<Event.WorkerEvent>()
+    private val events = Emitter<Event.WorkerEvent>()
     private val lookup: Map<String, Executor> = all.map { it.id.id to WorkerContext(jobId, it, Recorder.of(it.id), Backoffs(backoffs()), policies) }
             .map { it.first to Executor.of(it.second) }.toMap()
 
@@ -43,14 +43,14 @@ class Workers(
      * Subscribe to status being changed for any worker
      */
     suspend fun subscribe(op: suspend (Event.WorkerEvent) -> Unit) {
-        events.subscribe(op)
+        events.on(op)
     }
 
     /**
      * Subscribe to status beging changed to the one supplied for any worker
      */
     suspend fun subscribe(status: Status, op: suspend (Event.WorkerEvent) -> Unit) {
-        events.subscribe(status, op)
+        events.on(status.name, op)
     }
 
     /**
@@ -224,7 +224,9 @@ class Workers(
             val task = context.task
             record(worker.id, action, task.structured())
             val event = Event.WorkerEvent(worker.id, worker.status(), worker.info())
-            events.notify(event)
+
+            events.emit(event)
+            events.emit(event.status.name, event)
         }
         catch(ex:Exception){
         }

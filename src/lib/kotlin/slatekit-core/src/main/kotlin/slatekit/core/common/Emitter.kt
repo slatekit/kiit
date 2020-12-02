@@ -1,4 +1,4 @@
-package slatekit.core.slatekit.core.common
+package slatekit.core.common
 
 import java.util.concurrent.atomic.AtomicLong
 
@@ -29,6 +29,10 @@ class Emitter<T> {
             return _listeners.values.flatten()
         }
 
+    suspend fun emit(args:T) {
+        emit(ALL, args)
+    }
+
     suspend fun emit(name:String, args:T) {
         process(name, create = false) { all ->
             val removals = mutableListOf<Int>()
@@ -50,6 +54,10 @@ class Emitter<T> {
             removals.sortDescending()
             removals.forEach { all.removeAt(it) }
         }
+    }
+
+    fun on(listener: suspend (T) -> Unit) {
+        on(ALL, null, listener)
     }
 
     fun on(name: String, listener: suspend (T) -> Unit) {
@@ -109,5 +117,9 @@ class Emitter<T> {
                 all
             }
         }
+    }
+
+    companion object {
+        const val ALL = "*"
     }
 }
