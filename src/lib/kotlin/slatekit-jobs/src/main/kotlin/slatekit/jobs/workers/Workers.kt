@@ -7,6 +7,7 @@ import slatekit.common.ids.Paired
 import slatekit.common.log.LogLevel
 import slatekit.common.log.Logger
 import slatekit.common.paged.Pager
+import slatekit.core.common.Scheduler
 import slatekit.jobs.Event
 import slatekit.jobs.Action
 import slatekit.jobs.Task

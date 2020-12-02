@@ -12,8 +12,17 @@
  */
 package test
 
+import org.junit.Assert
+import org.junit.Test
+import slatekit.core.slatekit.core.common.Emitter
 
-class CoreTests {
+
+class Emitter_Tests {
 
 
+    @Test
+    fun can_init() {
+        val emitter = Emitter<String>()
+        Assert.assertTrue(emitter.listeners.isEmpty())
+    }
 }

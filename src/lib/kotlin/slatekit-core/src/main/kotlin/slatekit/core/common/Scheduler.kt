@@ -1,4 +1,4 @@
-package slatekit.jobs.support
+package slatekit.core.common
 
 import kotlinx.coroutines.runBlocking
 import org.threeten.bp.Duration

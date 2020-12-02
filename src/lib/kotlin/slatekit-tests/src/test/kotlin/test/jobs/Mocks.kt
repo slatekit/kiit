@@ -6,7 +6,7 @@ import slatekit.common.ids.Paired
 import slatekit.common.log.Logger
 import slatekit.jobs.*
 import slatekit.jobs.support.Command
-import slatekit.jobs.support.Scheduler
+import slatekit.core.slatekit.core.common.Scheduler
 
 
 class MockScheduler : Scheduler {
