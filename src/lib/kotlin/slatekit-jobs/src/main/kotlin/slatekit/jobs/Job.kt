@@ -10,8 +10,12 @@ import slatekit.common.log.LogLevel
 import slatekit.common.log.Logger
 import slatekit.common.log.LoggerConsole
 import slatekit.common.paged.Pager
+import slatekit.core.common.Coordinator
+import slatekit.core.common.DefaultScheduler
+import slatekit.core.common.Scheduler
+import slatekit.core.common.Emitter
 import slatekit.policy.Policy
-import slatekit.jobs.slatekit.jobs.support.Backoffs
+import slatekit.core.common.Backoffs
 import slatekit.jobs.support.*
 import slatekit.jobs.workers.WorkRequest
 import slatekit.jobs.workers.WorkResult
@@ -66,7 +70,7 @@ class Job(
     val queue: Queue? = null,
     override val logger: Logger = LoggerConsole(),
     val ids: Paired = Paired(),
-    override val coordinator: Coordinator = coordinator(ids, logger),
+    override val coordinator: Coordinator<Command> = coordinator(ids, logger),
     val scheduler: Scheduler = DefaultScheduler(),
     val scope: CoroutineScope = Jobs.scope,
     policies: List<Policy<WorkRequest, WorkResult>>? = null,
@@ -110,21 +114,21 @@ class Job(
 
     val workers = Workers(id, all, coordinator, scheduler, logger, ids, 30, policies
         ?: listOf(), backoffs)
-    private val events = Events<Event.JobEvent>()
+    private val events = Emitter<Event.JobEvent>()
     private val _status = AtomicReference<Status>(Status.InActive)
 
     /**
      * Subscribe to @see[slatekit.common.Status] being changed
      */
     fun subscribe(op: suspend (Event.JobEvent) -> Unit) {
-        events.subscribe(op)
+        events.on(op)
     }
 
     /**
      * Subscribe to @see[slatekit.common.Status] beging changed to the one supplied
      */
     fun subscribe(status: Status, op: suspend (Event.JobEvent) -> Unit) {
-        events.subscribe(status, op)
+        events.on(status.name, op)
     }
 
     /**
@@ -216,7 +220,8 @@ class Job(
                 if (completed) {
                     this.setStatus(Status.Complete)
                     val event = Event.JobEvent(this.id, this.status(), this.queue?.name)
-                    events.notify(event)
+                    events.emit(event)
+                    events.emit(event.status.name, event)
                 }
             }
         }
@@ -265,7 +270,8 @@ class Job(
             val job = this
             scope.launch {
                 val event = Event.JobEvent(job.id, job.status(), job.queue?.name)
-                events.notify(event)
+                events.emit(event)
+                events.emit(event.status.name, event)
             }
 
             workers.all.forEach {
@@ -294,8 +300,8 @@ class Job(
             }
         }
 
-        fun coordinator(ids: Paired, logger: Logger): Coordinator {
-            return ChannelCoordinator(logger, ids, Channel(Channel.UNLIMITED))
+        fun coordinator(ids: Paired, logger: Logger): Coordinator<Command> {
+            return slatekit.core.common.ChannelCoordinator(logger, ids, Channel(Channel.UNLIMITED))
         }
     }
 }

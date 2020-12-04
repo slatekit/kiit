@@ -54,7 +54,7 @@ class Example_Jobs : Command("utils"), CoroutineScope by MainScope() {
         // Sends the message ( newsletter ) to the user
         suspend fun send(sender:String, msg:String, user:User) {
             // Simulate sending message to user
-            runBlocking { println("Source: ${sender}: Sent $msg to ${user.email}") }
+            println("Source: ${sender}: Sent $msg to ${user.email}")
         }
 
         // NOTE: This is a helper method used for the real example(s) below
@@ -191,7 +191,6 @@ class Example_Jobs : Command("utils"), CoroutineScope by MainScope() {
             //jobs.run("samples.job7")
             val job = jobs.get("samples.job7")
             job?.let { job ->
-
                 // Ids
                 println("id   : " + job.id.id)
                 println("name : " + job.id.name)

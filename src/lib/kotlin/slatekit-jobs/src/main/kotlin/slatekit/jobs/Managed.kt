@@ -5,8 +5,8 @@ import java.util.*
 import slatekit.common.Identity
 import slatekit.common.Status
 import slatekit.common.log.Logger
+import slatekit.core.common.Coordinator
 import slatekit.jobs.support.Command
-import slatekit.jobs.support.Coordinator
 
 /**
  * Represents all operations to control / manage a job.
@@ -27,7 +27,7 @@ interface Managed {
 
     val logger: Logger?
 
-    val coordinator:Coordinator
+    val coordinator: Coordinator<Command>
 
     /**
      * Run the job by starting it first and then managing it by listening for requests
@@ -60,6 +60,15 @@ interface Managed {
     suspend fun process() = request(Action.Process)
 
     /**
+     * Requests this job to perform the supplied command
+     * Coordinator handles requests via kotlin channels
+     */
+    suspend fun request(command: Command) {
+        record("Request", command.structured())
+        coordinator.send(command)
+    }
+
+    /**
      * Requests an action on the entire job
      */
     suspend fun request(action: Action) {
@@ -90,14 +99,6 @@ interface Managed {
 
     fun record(name:String, info:List<Pair<String, String>>)
 
-    /**
-     * Requests this job to perform the supplied command
-     * Coordinator handles requests via kotlin channels
-     */
-    suspend fun request(command: Command) {
-        record("Request", command.structured())
-        coordinator.send(command)
-    }
 
     /**
      * Listens to and handles 1 single request

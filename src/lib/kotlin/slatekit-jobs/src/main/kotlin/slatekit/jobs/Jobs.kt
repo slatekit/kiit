@@ -15,7 +15,7 @@ import slatekit.results.builders.Outcomes
  */
 class Jobs(
     val queues: List<Queue>,
-    val jobs: List<slatekit.jobs.Job>,
+    val jobs: List<Job>,
     val scope: CoroutineScope = Jobs.scope
 ) {
     private val lookup = jobs.map { it.id.name to it }.toMap()

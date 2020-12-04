@@ -132,13 +132,6 @@ class SimpleAsyncCache(private val cache: Cache,
     }
 
 
-    private suspend fun <T> getInternalAsync(key: String, load: Boolean): Deferred<T?> {
-        val deferred = CompletableDeferred<Any?>()
-        channel.send(CacheCommand.Get(key, deferred, load))
-        return deferred as Deferred<T?>
-    }
-
-
     private fun manage(cmd: CacheCommand) {
         when (cmd) {
             /* ktlint-disable */
@@ -166,6 +159,13 @@ class SimpleAsyncCache(private val cache: Cache,
                 cmd.response.complete(item)
             }
         }
+    }
+
+
+    private suspend fun <T> getInternalAsync(key: String, load: Boolean): Deferred<T?> {
+        val deferred = CompletableDeferred<Any?>()
+        channel.send(CacheCommand.Get(key, deferred, load))
+        return deferred as Deferred<T?>
     }
 
 

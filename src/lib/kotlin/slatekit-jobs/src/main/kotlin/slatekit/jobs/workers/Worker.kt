@@ -5,6 +5,8 @@ import slatekit.common.Identity
 import slatekit.common.Status
 import slatekit.common.StatusCheck
 import slatekit.jobs.Task
+import slatekit.results.Err
+import slatekit.tracking.Recorder
 
 
 /**
@@ -12,7 +14,7 @@ import slatekit.jobs.Task
  */
 open class Worker<T>(
     val id: Identity,
-    val stats: Recorder = Recorder.of(id),
+    val stats: Recorder<Task, WorkResult, Err> = Recorder.of(id),
     val operation: (suspend (Task) -> WorkResult)? = null
 ) : StatusCheck {
 
