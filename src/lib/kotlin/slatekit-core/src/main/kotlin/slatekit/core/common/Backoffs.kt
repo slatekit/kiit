@@ -1,4 +1,4 @@
-package slatekit.jobs.slatekit.jobs.support
+package slatekit.core.common
 
 import slatekit.common.paged.Pager
 

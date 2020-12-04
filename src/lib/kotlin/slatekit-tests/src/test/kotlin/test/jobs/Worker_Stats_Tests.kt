@@ -7,7 +7,7 @@ import slatekit.tracking.Recorder
 import slatekit.jobs.Task
 import slatekit.jobs.support.Runner
 import slatekit.jobs.workers.WorkerContext
-import slatekit.jobs.slatekit.jobs.support.Backoffs
+import slatekit.core.common.Backoffs
 
 
 class Worker_Stats_Tests {

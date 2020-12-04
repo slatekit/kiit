@@ -15,7 +15,7 @@ import slatekit.core.common.DefaultScheduler
 import slatekit.core.common.Scheduler
 import slatekit.core.common.Emitter
 import slatekit.policy.Policy
-import slatekit.jobs.slatekit.jobs.support.Backoffs
+import slatekit.core.common.Backoffs
 import slatekit.jobs.support.*
 import slatekit.jobs.workers.WorkRequest
 import slatekit.jobs.workers.WorkResult

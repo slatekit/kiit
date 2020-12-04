@@ -14,7 +14,7 @@ import slatekit.jobs.Action
 import slatekit.jobs.Task
 import slatekit.tracking.Recorder
 import slatekit.policy.Policy
-import slatekit.jobs.slatekit.jobs.support.Backoffs
+import slatekit.core.common.Backoffs
 import slatekit.jobs.support.*
 import slatekit.results.*
 import slatekit.results.builders.Outcomes
