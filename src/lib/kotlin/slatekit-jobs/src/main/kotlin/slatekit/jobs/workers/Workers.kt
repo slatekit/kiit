@@ -27,14 +27,14 @@ class Workers(val ctx: JobContext) {
     /**
      * Subscribe to status being changed for any worker
      */
-    suspend fun subscribe(op: suspend (Event.WorkerEvent) -> Unit) {
+    suspend fun on(op: suspend (Event.WorkerEvent) -> Unit) {
         events.on(op)
     }
 
     /**
      * Subscribe to status beging changed to the one supplied for any worker
      */
-    suspend fun subscribe(status: Status, op: suspend (Event.WorkerEvent) -> Unit) {
+    suspend fun on(status: Status, op: suspend (Event.WorkerEvent) -> Unit) {
         events.on(status.name, op)
     }
 
