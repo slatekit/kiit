@@ -23,7 +23,7 @@ apply plugin: 'kotlin'
 def slatekitComponentId = 'common'
 def slatekitComponentName = 'Common'
 def slatekitComponentDesc = 'SlateKit Common: Kotlin Utilities for Android and Server'
-def slatekitComponentVersion = ext.slatekit_version_beta
+def slatekitComponentVersion = ext.slatekit_version
 
 
 // ==================================================================
