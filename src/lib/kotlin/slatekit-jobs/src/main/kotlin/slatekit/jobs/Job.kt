@@ -56,10 +56,7 @@ import slatekit.jobs.workers.*
  * 3. Integration with Kotlin Flow ( e.g. a job could feed data into a Flow )
  *
  */
-class Job(
-    val ctx: JobContext,
-    val queue: Queue? = null
-) : Managed, StatusCheck {
+class Job(val ctx: JobContext) : Managed, StatusCheck {
 
     /**
      * Initialize with just a function that will handle the work
@@ -97,7 +94,7 @@ class Job(
         ids: Paired = Paired(),
         logger: Logger = LoggerConsole()
     ) :
-        this(JobContext(id, coordinator(ids, logger), workers(id, lambdas), scope = scope, policies = policies), queue)
+        this(JobContext(id, coordinator(ids, logger), workers(id, lambdas), queue = queue, scope = scope, policies = policies))
 
     val id:Identity = ctx.id
     val workers = Workers(ctx)
@@ -190,7 +187,7 @@ class Job(
                 val worker = context.worker
                 val status = worker.status()
                 val task = nextTask(context.id, context.task)
-                val isTaskRequired = queue != null
+                val isTaskRequired = ctx.queue != null
                 val isTaskEmpty = task == Task.empty
 
                 when {
@@ -211,7 +208,7 @@ class Job(
                 val completed = workers.all.all { it.isComplete() }
                 if (completed) {
                     this.setStatus(Status.Complete)
-                    notifier.notify(job)
+                    ctx.notifier.notify(job)
                 }
             }
         }
@@ -222,12 +219,12 @@ class Job(
         val action = command.action
         val workerId = command.workerId
         when (action) {
-            is Action.Start -> JobUtils.perform(this, action, status, launch, scope) { workers.start(workerId, task, requireTask) }
-            is Action.Stop -> JobUtils.perform(this, action, status, launch, scope) { workers.stop(workerId, command.desc) }
-            is Action.Pause -> JobUtils.perform(this, action, status, launch, scope) { workers.pause(workerId, command.desc) }
-            is Action.Process -> JobUtils.perform(this, action, status, launch, scope) { workers.process(workerId, task) }
-            is Action.Resume -> JobUtils.perform(this, action, status, launch, scope) { workers.resume(workerId, command.desc, task) }
-            is Action.Delay -> JobUtils.perform(this, action, status, launch, scope) { workers.start(workerId, requireTask = requireTask) }
+            is Action.Start -> JobUtils.perform(this, action, status, launch, ctx.scope) { workers.start(workerId, task, requireTask) }
+            is Action.Stop -> JobUtils.perform(this, action, status, launch, ctx.scope) { workers.stop(workerId, command.desc) }
+            is Action.Pause -> JobUtils.perform(this, action, status, launch, ctx.scope) { workers.pause(workerId, command.desc) }
+            is Action.Process -> JobUtils.perform(this, action, status, launch, ctx.scope) { workers.process(workerId, task) }
+            is Action.Resume -> JobUtils.perform(this, action, status, launch, ctx.scope) { workers.resume(workerId, command.desc, task) }
+            is Action.Delay -> JobUtils.perform(this, action, status, launch, ctx.scope) { workers.start(workerId, requireTask = requireTask) }
             else -> {
                 ctx.logger.error("Unexpected state: ${command.action}")
             }
@@ -236,9 +233,9 @@ class Job(
 
 
     private suspend fun nextTask(id: Identity, empty: Task): Task {
-        val task = when (queue) {
+        val task = when (ctx.queue) {
             null -> empty
-            else -> queue.next() ?: Task.empty
+            else -> ctx.queue.next() ?: Task.empty
         }
         return task
     }
@@ -252,10 +249,10 @@ class Job(
      * Transitions all workers to the new status supplied
      */
     private suspend fun transition(action: Action, newStatus: Status, launch: Boolean, seconds: Long = 0) {
-        JobUtils.perform(this, action, this.status(), launch, scope) {
+        JobUtils.perform(this, action, this.status(), launch, ctx.scope) {
             val job = this
             this.setStatus(newStatus)
-            scope.launch {
+            ctx.scope.launch {
                 ctx.notifier.notify(job)
             }
 

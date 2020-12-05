@@ -10,6 +10,7 @@ import slatekit.core.common.Backoffs
 import slatekit.core.common.DefaultScheduler
 import slatekit.core.common.Scheduler
 import slatekit.jobs.Jobs
+import slatekit.jobs.Queue
 import slatekit.jobs.support.Command
 import slatekit.jobs.workers.WorkRequest
 import slatekit.jobs.workers.WorkResult
@@ -31,6 +32,7 @@ data class JobContext(val id: Identity,
                       val channel: slatekit.core.common.Coordinator<Command>,
                       val workers: List<Worker<*>>,
                       val logger : Logger = LoggerConsole(),
+                      val queue  : Queue? = null,
                       val scope  : CoroutineScope = Jobs.scope,
                       val policies: List<Policy<WorkRequest, WorkResult>> = listOf(),
                       val backoffs: () -> Pager<Long> = { Backoffs.times() },

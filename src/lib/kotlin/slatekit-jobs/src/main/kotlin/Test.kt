@@ -9,15 +9,15 @@ fun main(args: Array<String>) {
     runBlocking {
 
         // Subscribe to any status change
-        job.on { j -> println(j.id) }
+        job.on { event -> println(event.id) }
 
         // Subscribe to completed status
-        job.on(Status.Complete) { j -> println(j.id) }
+        job.on(Status.Complete) { event -> println(event.id) }
 
         // Subscribe to any status change
-        job.workers.on { w -> println(w.id) }
+        job.workers.on { event -> println(event.id) }
 
         // Subscribe to completed status
-        job.workers.on(Status.Complete) { w -> println(w.id) }
+        job.workers.on(Status.Complete) { event -> println(event.id) }
     }
 }
