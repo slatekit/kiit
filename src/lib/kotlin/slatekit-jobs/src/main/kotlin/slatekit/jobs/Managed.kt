@@ -25,8 +25,6 @@ import slatekit.jobs.support.Command
  */
 interface Managed {
 
-    val logger: Logger?
-
     val coordinator: Coordinator<Command>
 
     /**

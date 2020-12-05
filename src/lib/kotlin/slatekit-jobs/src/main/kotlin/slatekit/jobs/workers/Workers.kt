@@ -3,17 +3,12 @@ package slatekit.jobs.workers
 import slatekit.common.DateTime
 import slatekit.common.Identity
 import slatekit.common.Status
-import slatekit.common.ids.Paired
 import slatekit.common.log.LogLevel
 import slatekit.common.log.Logger
-import slatekit.common.paged.Pager
-import slatekit.core.common.Scheduler
-import slatekit.core.common.Emitter
 import slatekit.jobs.Event
 import slatekit.jobs.Action
 import slatekit.jobs.Task
 import slatekit.tracking.Recorder
-import slatekit.policy.Policy
 import slatekit.core.common.Backoffs
 import slatekit.jobs.support.*
 import slatekit.results.*
@@ -23,21 +18,11 @@ import slatekit.results.builders.Tries
 /**
  * Represents a cluster of Workers that are affiliated with 1 job.
  */
-class Workers(
-    val jobId: Identity,
-    val all: List<Worker<*>>,
-    val coordinator: slatekit.core.common.Coordinator<Command>,
-    val scheduler: Scheduler,
-    val logger: Logger,
-    val ids: Paired,
-    val pauseInSeconds: Long,
-    val policies: List<Policy<WorkRequest, WorkResult>> = listOf(),
-    val backoffs: () -> Pager<Long> = { Backoffs.times() }
-)  {
-
-    private val events = Emitter<Event.WorkerEvent>()
-    private val lookup: Map<String, Executor> = all.map { it.id.id to WorkerContext(jobId, it, Recorder.of(it.id), Backoffs(backoffs()), policies) }
-            .map { it.first to Executor.of(it.second) }.toMap()
+class Workers(val ctx: JobContext) {
+    private val PAUSE_IN_SECONDS = 30L
+    private val events = ctx.notifier.wrkEvents
+    private val lookup: Map<String, Executor> = all.map { it.id.id to WorkerContext(id, it, Recorder.of(it.id), Backoffs(ctx.backoffs), ctx.policies) }
+        .map { it.first to Executor.of(it.second) }.toMap()
 
     /**
      * Subscribe to status being changed for any worker
@@ -79,8 +64,8 @@ class Workers(
     /**
      * Starts the worker associated with the identity and makes it work using the supplied Task
      */
-    suspend fun start(id: Identity, task: Task = Task.empty, requireTask:Boolean = false) {
-        perform(null,"Starting", id) { executor ->
+    suspend fun start(id: Identity, task: Task = Task.empty, requireTask: Boolean = false) {
+        perform(null, "Starting", id) { executor ->
             val context = executor.context
             val worker = context.worker
             val result = Runner.record(context) {
@@ -97,7 +82,7 @@ class Workers(
                     worker.status()
                 }
                 is Failure -> {
-                    logger.error("Unable to start worker ${id.id}")
+                    ctx.logger.error("Unable to start worker ${id.id}")
                     Status.Failed
                 }
             }
@@ -128,9 +113,9 @@ class Workers(
             val context = executor.context
             val worker = context.worker
             worker.pause(reason ?: "Paused")
-            val pauseInSecs = seconds ?: pauseInSeconds
-            scheduler.schedule(DateTime.now().plusSeconds(pauseInSecs)) {
-                coordinator.send(Command.WorkerCommand(ids.nextId(), ids.nextUUID().toString(), Action.Resume, worker.id, 0, null))
+            val pauseInSecs = seconds ?: PAUSE_IN_SECONDS
+            ctx.scheduler.schedule(DateTime.now().plusSeconds(pauseInSecs)) {
+                ctx.channel.send(Command.WorkerCommand(ctx.ids.nextId(), ctx.ids.nextUUID().toString(), Action.Resume, worker.id, 0, null))
             }
             Outcomes.success(Status.Paused)
         }
@@ -143,9 +128,9 @@ class Workers(
             worker.pause(reason ?: "Backoff")
             val pauseInSecs = context.backoffs.next()
             record(worker.id, "pause_start", listOf("seconds" to pauseInSecs.toString()))
-            scheduler.schedule(DateTime.now().plusSeconds(pauseInSecs)) {
+            ctx.scheduler.schedule(DateTime.now().plusSeconds(pauseInSecs)) {
                 record(worker.id, "pause_finish")
-                coordinator.send(Command.WorkerCommand(ids.nextId(), ids.nextUUID().toString(), Action.Resume, worker.id, 0, null))
+                ctx.channel.send(Command.WorkerCommand(ctx.ids.nextId(), ctx.ids.nextUUID().toString(), Action.Resume, worker.id, 0, null))
             }
             Outcomes.success(Status.Paused)
         }
@@ -162,8 +147,8 @@ class Workers(
 
     suspend fun delay(id: Identity, seconds: Long) {
         record(id, "delay", listOf("seconds" to seconds.toString()))
-        scheduler.schedule(DateTime.now().plusSeconds(seconds)) {
-            coordinator.send(Command.WorkerCommand(ids.nextId(), ids.nextUUID().toString(), Action.Start, id, 0, null))
+        ctx.scheduler.schedule(DateTime.now().plusSeconds(seconds)) {
+            ctx.channel.send(Command.WorkerCommand(ctx.ids.nextId(), ctx.ids.nextUUID().toString(), Action.Start, id, 0, null))
         }
     }
 
@@ -188,47 +173,42 @@ class Workers(
         val result = Tries.of {
             when (workResult) {
                 is WorkResult.Done -> {
-                    logger.info("Worker ${worker.id.name} complete")
+                    ctx.logger.info("Worker ${worker.id.name} complete")
                     worker.move(Status.Complete)
                     worker.done()
                     notify(context, "Done")
                 }
                 is WorkResult.Next -> {
-                    val (id, uuid) = ids.next()
-                    coordinator.send(Command.WorkerCommand(id, uuid.toString(), Action.Process, worker.id, 0, ""))
+                    val (id, uuid) = ctx.ids.next()
+                    ctx.channel.send(Command.WorkerCommand(id, uuid.toString(), Action.Process, worker.id, 0, ""))
                 }
                 is WorkResult.More -> {
-                    val (id, uuid) = ids.next()
-                    coordinator.send(Command.WorkerCommand(id, uuid.toString(), Action.Process, worker.id, 0, ""))
+                    val (id, uuid) = ctx.ids.next()
+                    ctx.channel.send(Command.WorkerCommand(id, uuid.toString(), Action.Process, worker.id, 0, ""))
+                }
+                else -> {
+                    ctx. logger.error("Worker in unexpected state ${worker.id.id}, ${workResult.name}")
                 }
             }
             ""
         }
-        when (result) {
-            is Success -> { }
-            is Failure -> {
-                logger.error("Error while looping on : ${worker.id.id}")
-            }
+        result.onFailure {
+            ctx.logger.error("Error while looping on : ${worker.id.id}")
         }
     }
 
-
-    private fun record(id:Identity, action:String, extra:List<Pair<String,String>> = listOf()){
+    private fun record(id: Identity, action: String, extra: List<Pair<String, String>> = listOf()) {
         val pairs = listOf("id" to id.id, "action" to action) + extra
-        logger.log(LogLevel.Info, "Workers:", pairs)
+        ctx.logger.log(LogLevel.Info, "Workers:", pairs)
     }
 
-    private suspend fun notify(context: WorkerContext, action:String) {
+    private suspend fun notify(context: WorkerContext, action: String) {
         try {
             val worker = context.worker
             val task = context.task
             record(worker.id, action, task.structured())
-            val event = Event.WorkerEvent(worker.id, worker.status(), worker.info())
-
-            events.emit(event)
-            events.emit(event.status.name, event)
-        }
-        catch(ex:Exception){
+            ctx.notifier.notify(worker)
+        } catch (ex: Exception) {
         }
     }
 }

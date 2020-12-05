@@ -19,8 +19,9 @@ sealed class WorkResult(val name: String) {
             else -> {
                 val tokens = name.split(".")
                 val first = tokens[0]
-                when (first) {
-                    "Next" -> Next(tokens[1].toLong(), tokens[2].toLong(), tokens[3])
+                when (first.toLowerCase()) {
+                    "next"  -> Next(tokens[1].toLong(), tokens[2].toLong(), tokens[3])
+                    "delay" -> Delay(tokens[1].toInt())
                     else -> Unknown
                 }
             }
