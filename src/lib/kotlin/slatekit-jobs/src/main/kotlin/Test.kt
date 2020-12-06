@@ -5,6 +5,15 @@ import slatekit.common.Status
 
 fun main(args: Array<String>) {
 
+    /*
+    1. managed
+    2. workers
+    3. job
+    4. jobs
+    5. executor
+    6. channel control
+    7. tests
+     */
     lateinit var job: Job // = slatekit.jobs.Job()
     runBlocking {
 
