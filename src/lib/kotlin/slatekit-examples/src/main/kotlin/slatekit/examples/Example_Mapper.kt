@@ -16,8 +16,8 @@ package slatekit.examples
 import slatekit.common.*
 import slatekit.common.data.DbCon
 import slatekit.meta.models.Model
-import slatekit.cmds.Command
-import slatekit.cmds.CommandRequest
+
+
 import slatekit.db.Db
 import slatekit.entities.EntityWithId
 import slatekit.entities.core.EntityInfo

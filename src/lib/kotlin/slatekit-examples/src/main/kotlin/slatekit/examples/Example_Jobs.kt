@@ -19,8 +19,8 @@ import slatekit.common.*
 
 //<doc:import_examples>
 import slatekit.core.queues.InMemoryQueue
-import slatekit.cmds.Command
-import slatekit.cmds.CommandRequest
+
+
 import slatekit.common.log.LoggerConsole
 import slatekit.core.queues.AsyncQueue
 import slatekit.integration.jobs.JobQueue

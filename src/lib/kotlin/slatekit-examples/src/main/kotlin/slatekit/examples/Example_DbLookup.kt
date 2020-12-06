@@ -25,8 +25,8 @@ import slatekit.common.data.DbConString
 import slatekit.common.data.Connections
 import slatekit.common.data.Connections.Companion.of
 import slatekit.common.data.Connections.Companion.named
-import slatekit.cmds.Command
-import slatekit.cmds.CommandRequest
+
+
 
 //</doc:import_examples>
 

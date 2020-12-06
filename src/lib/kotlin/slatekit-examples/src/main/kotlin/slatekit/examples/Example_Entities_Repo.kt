@@ -19,8 +19,8 @@ import slatekit.common.*
 //<doc:import_examples>
 import slatekit.db.Db
 import slatekit.common.data.DbConString
-import slatekit.cmds.Command
-import slatekit.cmds.CommandRequest
+
+
 import slatekit.entities.EntityWithId
 import slatekit.entities.core.EntityInfo
 import slatekit.entities.repos.InMemoryRepoWithLongId

@@ -13,8 +13,8 @@
 package slatekit.examples
 
 //<doc:import_required>
-import slatekit.cmds.Command
-import slatekit.cmds.CommandRequest
+
+
 
 //</doc:import_required>
 

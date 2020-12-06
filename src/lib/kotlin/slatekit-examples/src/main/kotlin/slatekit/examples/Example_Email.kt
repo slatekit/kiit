@@ -23,10 +23,10 @@ import slatekit.common.templates.Template
 import slatekit.common.templates.TemplatePart
 import slatekit.common.templates.Templates
 import slatekit.results.Try
-import slatekit.cmds.Command
+
 import slatekit.common.conf.Config
 import slatekit.common.info.ApiLogin
-import slatekit.cmds.CommandRequest
+
 import slatekit.common.io.Uris
 import slatekit.common.Vars
 import slatekit.common.ext.env

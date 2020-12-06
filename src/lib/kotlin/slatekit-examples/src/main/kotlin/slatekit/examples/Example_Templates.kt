@@ -20,9 +20,9 @@ import slatekit.common.templates.Templates
 //</doc:import_required>
 
 //<doc:import_examples>
-import slatekit.cmds.Command
+
 import slatekit.common.utils.Random
-import slatekit.cmds.CommandRequest
+
 import slatekit.results.Try
 import slatekit.results.getOrElse
 

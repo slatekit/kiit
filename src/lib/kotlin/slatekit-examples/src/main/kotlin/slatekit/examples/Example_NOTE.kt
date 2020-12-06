@@ -18,8 +18,8 @@ import slatekit.common.NOTE
 //</doc:import_required>
 
 //<doc:import_examples>
-import slatekit.cmds.Command
-import slatekit.cmds.CommandRequest
+
+
 import slatekit.results.Success
 import slatekit.results.Try
 

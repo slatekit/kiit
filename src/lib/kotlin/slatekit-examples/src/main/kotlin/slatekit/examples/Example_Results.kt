@@ -16,8 +16,8 @@ package slatekit.examples
 //</doc:import_required>
 
 //<doc:import_examples>
-import slatekit.cmds.Command
-import slatekit.cmds.CommandRequest
+
+
 import slatekit.common.validations.Validations
 import slatekit.examples.common.User
 import slatekit.results.*

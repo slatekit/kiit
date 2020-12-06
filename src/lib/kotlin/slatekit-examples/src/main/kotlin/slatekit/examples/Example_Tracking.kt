@@ -17,8 +17,8 @@ import slatekit.common.*
 //</doc:import_required>
 
 //<doc:import_examples>
-import slatekit.cmds.Command
-import slatekit.cmds.CommandRequest
+
+
 import slatekit.common.log.LoggerConsole
 import slatekit.results.*
 import slatekit.results.builders.Outcomes

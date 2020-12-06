@@ -15,8 +15,8 @@ package slatekit.tutorial
 
 
 import slatekit.common.NOTE
-import slatekit.cmds.Command
-import slatekit.cmds.CommandRequest
+
+
 import slatekit.results.Success
 import slatekit.results.Try
 

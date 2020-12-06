@@ -24,8 +24,8 @@ import slatekit.common.utils.Random.stringN
 //</doc:import_required>
 
 //<doc:import_examples>
-import slatekit.cmds.Command
-import slatekit.cmds.CommandRequest
+
+
 import slatekit.common.utils.Random
 import slatekit.common.utils.Random.alphaNum6
 import slatekit.results.Try

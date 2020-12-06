@@ -27,8 +27,8 @@ import slatekit.common.info.*
 import slatekit.common.log.LogsDefault
 import slatekit.context.Context
 import slatekit.common.envs.Envs
-import slatekit.cmds.Command
-import slatekit.cmds.CommandRequest
+
+
 import slatekit.results.*
 
 //</doc:import_examples>
