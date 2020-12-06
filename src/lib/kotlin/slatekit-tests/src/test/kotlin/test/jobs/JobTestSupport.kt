@@ -11,6 +11,7 @@ import slatekit.common.log.LogLevel
 import slatekit.common.log.LoggerConsole
 import slatekit.jobs.*
 import slatekit.jobs.support.Command
+import slatekit.jobs.support.JobContext
 import slatekit.jobs.workers.Worker
 import slatekit.jobs.workers.WorkerContext
 import slatekit.jobs.workers.Workers
@@ -39,7 +40,8 @@ interface JobTestSupport {
         val coordinator = MockCoordinatorWithChannel(logger, ids, Channel(Channel.UNLIMITED))
         val id = (workers.first().id as SimpleIdentity)
         val jobId = id.copy(service = id.service + "-job")
-        val manager = slatekit.jobs.Job(jobId,workers, queue, logger, ids, coordinator,  MockScheduler())
+        val ctx = JobContext(jobId, coordinator, workers, logger, queue, scheduler = MockScheduler())
+        val manager = slatekit.jobs.Job(ctx)
         return manager
     }
 
@@ -64,7 +66,7 @@ interface JobTestSupport {
         Assert.assertEquals(totalFailed, runs.totalFailed())
 
         // Request count
-        val coordinator = workers.coordinator as MockCoordinator
+        val coordinator = workers.ctx.channel as MockCoordinator
         Assert.assertEquals(requestCount, coordinator.requests.count())
 
         // Next request
