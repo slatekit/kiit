@@ -12,12 +12,12 @@ class Job_Manage_Worker_Tests : JobTestSupport {
     fun can_start_all_workers() {
         val manager = run(2, null, Action.Start)
         runBlocking {
-            val worker1 = manager.workers.all.first()
+            val worker1 = manager.ctx.workers.first()
             manager.respond() // Start worker1
             ensure(manager.workers, true, 1, 1, 0, worker1.id, Status.Running, 4, Action.Process, 0)
 
-            val worker2 = manager.workers.all.last()
-            manager.respond() // Start worker2val worker = manager.workers.all.first()
+            val worker2 = manager.ctx.workers.last()
+            manager.respond() // Start worker2val worker = manager.ctx.workers.first()
             ensure(manager.workers, true, 1, 1, 0, worker2.id, Status.Running, 5, Action.Process, 0)
         }
     }
@@ -27,8 +27,8 @@ class Job_Manage_Worker_Tests : JobTestSupport {
     fun can_pause_worker() {
         val manager = run(2, null, Action.Start)
         runBlocking {
-            val worker1 = manager.workers.all.first()
-            val worker2 = manager.workers.all.last()
+            val worker1 = manager.ctx.workers.first()
+            val worker2 = manager.ctx.workers.last()
             manager.request(Action.Pause, worker2.id, "test")
             manager.respond() // Start worker1
             manager.respond() // Start worker2
@@ -43,8 +43,8 @@ class Job_Manage_Worker_Tests : JobTestSupport {
     fun can_resume_worker() {
         val manager = run(2, null, Action.Start)
         runBlocking {
-            val worker1 = manager.workers.all.first()
-            val worker2 = manager.workers.all.last()
+            val worker1 = manager.ctx.workers.first()
+            val worker2 = manager.ctx.workers.last()
             manager.request(Action.Pause, worker2.id, "test")
             manager.respond() // Start worker1
             manager.respond() // Start worker2
@@ -64,8 +64,8 @@ class Job_Manage_Worker_Tests : JobTestSupport {
     fun can_stop_worker() {
         val manager = run(2, null, Action.Start)
         runBlocking {
-            val worker1 = manager.workers.all.first()
-            val worker2 = manager.workers.all.last()
+            val worker1 = manager.ctx.workers.first()
+            val worker2 = manager.ctx.workers.last()
             manager.request(Action.Stop, worker2.id, "test")
             manager.respond() // Start worker1
             manager.respond() // Start worker2

@@ -11,7 +11,7 @@ class Job_Manage_Tests : JobTestSupport {
     fun can_start_job() {
         run(1, null, Action.Start) {
             runBlocking {
-                val worker = it.workers.all.first()
+                val worker = it.ctx.workers.first()
                 ensure(it.workers, false, 0, 0, 0, worker.id, Status.InActive, 2, Action.Start, 0)
             }
         }
@@ -23,7 +23,7 @@ class Job_Manage_Tests : JobTestSupport {
         val manager = run(1, null, Action.Start)
         runBlocking {
             manager.respond() // Start worker
-            val worker = manager.workers.all.first()
+            val worker = manager.ctx.workers.first()
             ensure(manager.workers, true, 1, 1, 0, worker.id, Status.Running, 3, Action.Process, 0)
         }
     }
@@ -39,7 +39,7 @@ class Job_Manage_Tests : JobTestSupport {
             manager.respond() // Process 2nd time
             manager.respond() // Wrk pause
             (manager.coordinator as MockCoordinatorWithChannel).resume()
-            val worker = manager.workers.all.first()
+            val worker = manager.ctx.workers.first()
             ensure(manager.workers, true, 2, 2, 0, worker.id, Status.Paused, 7, Action.Resume, 0)
         }
     }
@@ -55,7 +55,7 @@ class Job_Manage_Tests : JobTestSupport {
             manager.respond() // Process 2nd time
             manager.respond() // Wrk stop
             (manager.coordinator as MockCoordinatorWithChannel).resume()
-            val worker = manager.workers.all.first()
+            val worker = manager.ctx.workers.first()
             ensure(manager.workers, true, 2, 2, 0, worker.id, Status.Stopped, 6, Action.Process, 0)
         }
     }
@@ -73,7 +73,7 @@ class Job_Manage_Tests : JobTestSupport {
             (manager.coordinator as MockCoordinatorWithChannel).resume()
             manager.respond()
             manager.respond()
-            val worker = manager.workers.all.first()
+            val worker = manager.ctx.workers.first()
             ensure(manager.workers, true, 3, 3, 0, worker.id, Status.Running, 8, Action.Process, 0)
         }
     }
