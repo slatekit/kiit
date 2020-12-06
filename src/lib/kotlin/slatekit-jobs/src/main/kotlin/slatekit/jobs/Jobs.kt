@@ -43,11 +43,15 @@ class Jobs(
      * @param name: The name of the job/worker
      * @sample : job = "signup.emails", worker = "signup.emails.worker_1"
      */
-    override suspend fun perform(name: String, action: slatekit.jobs.Action, seconds:Int?): Outcome<String> {
+    override suspend fun perform(request: Request, action: Action): Outcome<String> {
+        if(request.name == Jobs.ALL) {
+            return Outcomes.invalid("Starting all jobs WIP")
+        }
+
         // - Job     : {Identity.area}.{Identity.service}
         // - Worker  : {Identity.area}.{Identity.service}.{Identity.instance}
         // - Example : job = "signup.emails", worker = "signup.emails.worker_1"
-        val parts = name.split(".")
+        val parts = request.name.split(".")
         val jobName = "${parts[0]}.${parts[1]}"
         val workerName = if(parts.size < 3) null else "$jobName.${parts[2]}"
         val job = this[jobName] ?: return Outcomes.invalid("Unable to find job with name $jobName")
@@ -69,7 +73,7 @@ class Jobs(
     companion object {
 
         val ALL = "ALL"
-        
+
         /**
          * Default scope used by the Jobs system
          */

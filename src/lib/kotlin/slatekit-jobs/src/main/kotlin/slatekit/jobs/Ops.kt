@@ -18,81 +18,45 @@ import slatekit.results.Outcome
  *              - Workers
  *                  - Worker 3
  *                  - Worker 4
- *
- * NOTES:
- * 1. When called on the Jobs component, the name can be "ALL" to perform the operation on all jobs
- * 2. When called on the Jobs component, the name can be either job "sign.emails" or worker "signup.email.worker1"
- * 3. When called on the Job  component, the name can be "ALL" to perform the operation on all workers
- * 4. When called on the Job  component, the name can be just the name of the worker "worker1"
+ * starts a single item in this component
+ * 1. Job    = {Identity.area}.{Identity.service}
+ * 2. Worker = {Identity.area}.{Identity.service}.{Identity.instance}
  */
 interface Ops<T> {
     /**
-     * Gets the job by name e.g. "area.service"
+     * Gets the item by name e.g.
+     * job name = "area.service"
+     * worker name = "area.service.instance"
      */
     operator fun get(name: String): T?
 
-    /**
-     * starts the job and/or worker
-     * 1. Job    = {Identity.area}.{Identity.service}
-     * 2. Worker = {Identity.area}.{Identity.service}.{Identity.instance}
-     * @param name: The name of the job/worker
-     * @sample : job = "signup.emails", worker = "signup.emails.worker_1"
-     */
-    suspend fun start(name: String = Jobs.ALL): Outcome<String> = perform(name, Action.Start)
+    suspend fun start(): Outcome<String> = start(Request(Jobs.ALL))
+    suspend fun start(name: String): Outcome<String> = start(Request(name))
+    suspend fun start(request: Request): Outcome<String> = perform(request, Action.Start)
 
-    /**
-     * pauses the job and/or worker
-     * 1. Job    = {Identity.area}.{Identity.service}
-     * 2. Worker = {Identity.area}.{Identity.service}.{Identity.instance}
-     * @param name: The name of the job/worker
-     * @sample : job = "signup.emails", worker = "signup.emails.worker_1"
-     */
-    suspend fun pause(name: String = Jobs.ALL): Outcome<String> = perform(name, Action.Pause)
+    suspend fun pause(): Outcome<String> = pause(Request(Jobs.ALL))
+    suspend fun pause(name: String): Outcome<String> = pause(Request(name))
+    suspend fun pause(request: Request): Outcome<String> = perform(request, Action.Pause)
 
-    /**
-     * resumes the job and/or worker
-     * 1. Job    = {Identity.area}.{Identity.service}
-     * 2. Worker = {Identity.area}.{Identity.service}.{Identity.instance}
-     * @param name: The name of the job/worker
-     * @sample : job = "signup.emails", worker = "signup.emails.worker_1"
-     */
-    suspend fun resume(name: String = Jobs.ALL): Outcome<String> = perform(name, Action.Resume)
+    suspend fun resume(): Outcome<String> = resume(Request(Jobs.ALL))
+    suspend fun resume(name: String): Outcome<String> = resume(Request(name))
+    suspend fun resume(request: Request): Outcome<String> = perform(request, Action.Resume)
 
-    /**
-     * stops the job and/or worker
-     * 1. Job    = {Identity.area}.{Identity.service}
-     * 2. Worker = {Identity.area}.{Identity.service}.{Identity.instance}
-     * @param name: The name of the job/worker
-     * @sample : job = "signup.emails", worker = "signup.emails.worker_1"
-     */
-    suspend fun delay(name: String = Jobs.ALL, seconds: Int? = null): Outcome<String> = perform(name, Action.Delay, seconds)
+    suspend fun delay(seconds: Int? = null): Outcome<String> = delay(Request(Jobs.ALL, seconds))
+    suspend fun delay(name: String, seconds: Int? = null): Outcome<String> = delay(Request(name, seconds))
+    suspend fun delay(request: Request): Outcome<String> = perform(request, Action.Delay)
 
-    /**
-     * checks the job and/or worker
-     * 1. Job    = {Identity.area}.{Identity.service}
-     * 2. Worker = {Identity.area}.{Identity.service}.{Identity.instance}
-     * @param name: The name of the job/worker
-     * @sample : job = "signup.emails", worker = "signup.emails.worker_1"
-     */
-    suspend fun check(name: String = Jobs.ALL): Outcome<String> = perform(name, Action.Check)
+    suspend fun check(): Outcome<String> = check(Request(Jobs.ALL))
+    suspend fun check(name: String): Outcome<String> = check(Request(name))
+    suspend fun check(request: Request): Outcome<String> = perform(request, Action.Check)
 
-    /**
-     * checks the job and/or worker
-     * 1. Job    = {Identity.area}.{Identity.service}
-     * 2. Worker = {Identity.area}.{Identity.service}.{Identity.instance}
-     * @param name: The name of the job/worker
-     * @sample : job = "signup.emails", worker = "signup.emails.worker_1"
-     */
-    suspend fun process(name: String = Jobs.ALL): Outcome<String> = perform(name, Action.Process)
+    suspend fun process(): Outcome<String> = process(Request(Jobs.ALL))
+    suspend fun process(name: String): Outcome<String> = process(Request(name))
+    suspend fun process(request: Request): Outcome<String> = perform(request, Action.Process)
 
-    /**
-     * stops the job and/or worker
-     * 1. Job    = {Identity.area}.{Identity.service}
-     * 2. Worker = {Identity.area}.{Identity.service}.{Identity.instance}
-     * @param name: The name of the job/worker
-     * @sample : job = "signup.emails", worker = "signup.emails.worker_1"
-     */
-    suspend fun stop(name: String = Jobs.ALL): Outcome<String> = perform(name, Action.Stop)
+    suspend fun stop(): Outcome<String> = stop(Request(Jobs.ALL))
+    suspend fun stop(name: String): Outcome<String> = stop(Request(name))
+    suspend fun stop(request: Request): Outcome<String> = perform(request, Action.Stop)
 
     /**
      * performs the operation on the supplied job/worker
@@ -101,5 +65,5 @@ interface Ops<T> {
      * @param name: The name of the job/worker
      * @sample : job = "signup.emails", worker = "signup.emails.worker_1"
      */
-    suspend fun perform(name: String = Jobs.ALL, action: Action, seconds:Int? = null): Outcome<String>
+    suspend fun perform(request:Request, action: Action): Outcome<String>
 }

@@ -13,6 +13,8 @@ import slatekit.core.common.Coordinator
 import slatekit.policy.Policy
 import slatekit.jobs.support.*
 import slatekit.jobs.workers.*
+import slatekit.results.Outcome
+import slatekit.results.builders.Outcomes
 
 /**
  * A Job is the top level model in this Background Job/Task Queue system. A job is composed of the following:
@@ -21,11 +23,11 @@ import slatekit.jobs.workers.*
  * 1. Identity  : An id, @see[slatekit.common.Identity] to distinctly identify a job
  * 3. Task      : A single work item with a payload that a worker can work on. @see[slatekit.jobs.Task]
  * 2. Queue     : Interface for a Queue that workers can optional source tasks from
- * 4. Workers   : 1 or more @see[slatekit.jobs.Worker]s that can work on this job
+ * 4. Workers   : 1 or more @see[slatekit.jobs.workers.Worker]s that can work on this job
  * 5. Manage    : Operations to manage ( start | stop | pause | resume | delay ) a job or individual worker
  * 6. Events    : Used to subscribe to events on the job/worker ( only status changes for now )
  * 7. Stats     : Reasonable statistics / diagnostics for workers such as total calls, processed, logging
- * 8. Policies  : @see[slatekit.functions.policy.Policy] associated with a worker such as limits, retries
+ * 8. Policies  : @see[slatekit.policy.Policy] associated with a worker such as limits, retries
  * 9. Backoffs  : Exponential sequence of seconds to use to back off from processing queues when queue is empty
  *
  *
@@ -56,7 +58,7 @@ import slatekit.jobs.workers.*
  * 3. Integration with Kotlin Flow ( e.g. a job could feed data into a Flow )
  *
  */
-class Job(val ctx: JobContext) : Managed, StatusCheck {
+class Job(val ctx: JobContext) : Ops<WorkerContext>, StatusCheck {
 
     /**
      * Initialize with just a function that will handle the work
@@ -106,7 +108,7 @@ class Job(val ctx: JobContext) : Managed, StatusCheck {
     ) :
         this(JobContext(id, coordinator(Paired(), LoggerConsole()), workers(id, lambdas), queue = queue, scope = scope, policies = policies))
 
-    val id:Identity = ctx.id
+    val id: Identity = ctx.id
     val workers = Workers(ctx)
     private val events = ctx.notifier.jobEvents
     private val _status = AtomicReference<Status>(Status.InActive)
@@ -129,17 +131,83 @@ class Job(val ctx: JobContext) : Managed, StatusCheck {
      * Gets the current @see[slatekit.common.Status] of the job
      */
     override fun status(): Status = _status.get()
-    override val coordinator: Coordinator<Command> = ctx.channel
+    val coordinator: Coordinator<Command> = ctx.channel
+
+    override fun get(name: String): WorkerContext? = workers[name]
+
+    override suspend fun perform(request: Request, action: Action): Outcome<String> {
+        return if (request.name == Jobs.ALL) {
+            request(action)
+            Outcomes.success("Started job ${ctx.id.id}")
+        } else {
+            when (val workerId = workers.getIds().first { it.instance == request.name }) {
+                null -> Outcomes.success("Unable to find worker ${request.name} for job ${ctx.id.id}")
+                else -> {
+                    request(action, id, null)
+                    Outcomes.success("Started worker ${workerId.id}")
+                }
+            }
+        }
+    }
 
     /**
      * Run the job by starting it first and then managing it by listening for requests
      */
-    override suspend fun run() {
+    suspend fun run() {
         start()
         manage()
     }
 
-    override suspend fun manage(command: Command, launch: Boolean) {
+    /**
+     * Requests this job to perform the supplied command
+     * Coordinator handles requests via kotlin channels
+     */
+    suspend fun request(command: Command) {
+        record("Request", command.structured())
+        coordinator.send(command)
+    }
+
+    /**
+     * Requests an action on the entire job
+     */
+    suspend fun request(action: Action) {
+        val (id, uuid) = nextIds()
+        val cmd = Command.JobCommand(id, uuid.toString(), action)
+        request(cmd)
+    }
+
+    /**
+     * Requests an action on a specific worker
+     */
+    suspend fun request(action: Action, workerId: Identity, desc: String?) {
+        val (id, uuid) = nextIds()
+        val cmd = Command.WorkerCommand(id, uuid.toString(), action, DateTime.now(), workerId, 30, desc)
+        request(cmd)
+    }
+
+    /**
+     * Listens to and handles 1 single request
+     */
+    suspend fun respond() {
+        // Coordinator takes 1 request off the channel
+        val request = coordinator.poll()
+        request?.let {
+            runBlocking {
+                manage(request, false)
+            }
+        }
+    }
+
+    /**
+     * Listens to incoming requests ( name of worker )
+     */
+    suspend fun manage() {
+        coordinator.consume { request ->
+            manage(request, false)
+        }
+    }
+
+    suspend fun manage(command: Command, launch: Boolean) {
         record("Manage", command.structured())
         when (command) {
             // Affects the whole job/queue/workers
@@ -157,7 +225,7 @@ class Job(val ctx: JobContext) : Managed, StatusCheck {
     /**
      * logs/handle error state/condition
      */
-    override suspend fun error(currentStatus: Status, message: String) {
+    suspend fun error(currentStatus: Status, message: String) {
         val id = ctx.workers.first()
         ctx.logger.error("Error with job ${id.id.name}: $message")
     }
@@ -165,7 +233,7 @@ class Job(val ctx: JobContext) : Managed, StatusCheck {
     /**
      * Gets the next pair of ids
      */
-    override fun nextIds(): Pair<Long, UUID> = ctx.commands.ids.next()
+    fun nextIds(): Pair<Long, UUID> = ctx.commands.ids.next()
 
     private fun setStatus(newStatus: Status) {
         _status.set(newStatus)
@@ -252,7 +320,7 @@ class Job(val ctx: JobContext) : Managed, StatusCheck {
     }
 
 
-    override fun record(name: String, info: List<Pair<String, String>>) {
+    fun record(name: String, info: List<Pair<String, String>>) {
         ctx.logger.log(LogLevel.Info, "JOB", listOf("perform" to name, "job_id" to id.fullname) + info)
     }
 

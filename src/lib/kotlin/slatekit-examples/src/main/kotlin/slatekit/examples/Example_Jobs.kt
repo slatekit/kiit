@@ -297,10 +297,10 @@ class Example_Jobs : Command("utils"), CoroutineScope by MainScope() {
     private suspend fun runSamples(jobs:Jobs){
 
         // Sample 1: JOB that runs to completion
-        jobs.respond("samples.job1", 2, start = true)
+        jobs.start("samples.job1")
 
         // Sample 2: JOB ( 2 Workers ) constructor with list of 2 functions which will create 2 workers
-        jobs.respond("samples.job2", 3, start = true)
+        jobs.start("samples.job2")
 
         // Sample 3: JOB ( Paged )
         jobs.start("samples.job3")
@@ -312,10 +312,10 @@ class Example_Jobs : Command("utils"), CoroutineScope by MainScope() {
             job.workers.on { it -> println("Worker ${it.id.name}: status = ${it.status.name}") }
             job.workers.on(Status.Complete) { it -> println("Worker ${it.id.name} completed") }
         }
-        jobs.respond("samples.job4", 7, start = true)
+        jobs.start("samples.job4")
 
         // Sample 5: JOB ( Queued ) + Subscribe to worker status changes
-        jobs.respond("samples.job5", 3, start = true)
+        jobs.start("samples.job5")
 
         // Sample 6: JOB ( Worker ) implementation with queue
         jobs.start("samples.job6")
@@ -324,6 +324,6 @@ class Example_Jobs : Command("utils"), CoroutineScope by MainScope() {
         // 1. a callback for every 10 items processed
         // 2. a limit to processing at most 12 items ( to support running a job in "waves" )
         // 3. a threshold / error limit of .1 ( 10% )
-        jobs.respond("samples.job7", 4)
+        jobs.start("samples.job7")
     }
 }
