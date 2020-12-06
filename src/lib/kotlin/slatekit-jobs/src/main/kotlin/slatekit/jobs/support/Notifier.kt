@@ -9,7 +9,7 @@ class Notifier(val jobEvents: Emitter<Event.JobEvent> = Emitter<Event.JobEvent>(
                val wrkEvents: Emitter<Event.WorkerEvent> = Emitter<Event.WorkerEvent>()) {
 
     suspend fun notify(job: Job) {
-        val event = Event.JobEvent(job.id, job.status(), job.queue?.name)
+        val event = Event.JobEvent(job.id, job.status(), job.ctx.queue?.name)
         jobEvents.emit(event)
         jobEvents.emit(event.status.name, event)
     }

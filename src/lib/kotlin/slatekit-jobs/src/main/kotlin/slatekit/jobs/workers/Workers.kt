@@ -21,7 +21,7 @@ import slatekit.results.builders.Tries
 class Workers(val ctx: JobContext) {
     private val PAUSE_IN_SECONDS = 30L
     private val events = ctx.notifier.wrkEvents
-    private val lookup: Map<String, Executor> = all.map { it.id.id to WorkerContext(id, it, Recorder.of(it.id), Backoffs(ctx.backoffs), ctx.policies) }
+    private val lookup: Map<String, Executor> = ctx.workers.map { it.id.id to WorkerContext(it.id, it, Recorder.of(it.id), ctx.backoffs, ctx.policies) }
         .map { it.first to Executor.of(it.second) }.toMap()
 
     /**
@@ -59,7 +59,7 @@ class Workers(val ctx: JobContext) {
     /**
      * Gets all the worker ids
      */
-    fun getIds(): List<Identity> = all.map { it.id }
+    fun getIds(): List<Identity> = ctx.workers.map { it.id }
 
     /**
      * Starts the worker associated with the identity and makes it work using the supplied Task

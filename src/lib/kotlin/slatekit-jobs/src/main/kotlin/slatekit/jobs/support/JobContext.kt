@@ -35,7 +35,7 @@ data class JobContext(val id: Identity,
                       val queue  : Queue? = null,
                       val scope  : CoroutineScope = Jobs.scope,
                       val policies: List<Policy<WorkRequest, WorkResult>> = listOf(),
-                      val backoffs: () -> Pager<Long> = { Backoffs.times() },
+                      val backoffs: Backoffs = Backoffs(Backoffs.times()),
                       val notifier: Notifier = Notifier(),
                       val ids: Paired = Paired(),
                       val scheduler: Scheduler = DefaultScheduler()

@@ -119,6 +119,7 @@ class Job(val ctx: JobContext) : Managed, StatusCheck {
      * Gets the current @see[slatekit.common.Status] of the job
      */
     override fun status(): Status = _status.get()
+    override val coordinator: Coordinator<Command> = ctx.channel
 
     /**
      * Run the job by starting it first and then managing it by listening for requests
@@ -147,14 +148,14 @@ class Job(val ctx: JobContext) : Managed, StatusCheck {
      * logs/handle error state/condition
      */
     override suspend fun error(currentStatus: Status, message: String) {
-        val id = workers.all.first()
-        logger.error("Error with job ${id.id.name}: $message")
+        val id = ctx.workers.first()
+        ctx.logger.error("Error with job ${id.id.name}: $message")
     }
 
     /**
      * Gets the next pair of ids
      */
-    override fun nextIds(): Pair<Long, UUID> = ids.next()
+    override fun nextIds(): Pair<Long, UUID> = ctx.ids.next()
 
     private fun setStatus(newStatus: Status) {
         _status.set(newStatus)
@@ -205,7 +206,7 @@ class Job(val ctx: JobContext) : Managed, StatusCheck {
 
                 // Check for completion of all workers
                 val job = this
-                val completed = workers.all.all { it.isComplete() }
+                val completed = ctx.workers.all { it.isComplete() }
                 if (completed) {
                     this.setStatus(Status.Complete)
                     ctx.notifier.notify(job)
@@ -256,7 +257,7 @@ class Job(val ctx: JobContext) : Managed, StatusCheck {
                 ctx.notifier.notify(job)
             }
 
-            workers.all.forEach {
+            ctx.workers.forEach {
                 val (id, uuid) = this.nextIds()
                 val req = Command.WorkerCommand(id, uuid.toString(), action, it.id, seconds, "")
                 this.request(req)
