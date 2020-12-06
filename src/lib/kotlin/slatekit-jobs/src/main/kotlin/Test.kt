@@ -15,6 +15,8 @@ fun main(args: Array<String>) {
     7. tests
      */
     lateinit var job: Job // = slatekit.jobs.Job()
+    lateinit var jobs: Jobs
+
     runBlocking {
 
         // Subscribe to any status change

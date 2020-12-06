@@ -4,12 +4,10 @@ import slatekit.common.DateTime
 import slatekit.common.Identity
 import slatekit.common.Status
 import slatekit.common.log.LogLevel
-import slatekit.common.log.Logger
 import slatekit.jobs.Event
 import slatekit.jobs.Action
 import slatekit.jobs.Task
 import slatekit.tracking.Recorder
-import slatekit.core.common.Backoffs
 import slatekit.jobs.support.*
 import slatekit.results.*
 import slatekit.results.builders.Outcomes
@@ -115,7 +113,8 @@ class Workers(val ctx: JobContext) {
             worker.pause(reason ?: "Paused")
             val pauseInSecs = seconds ?: PAUSE_IN_SECONDS
             ctx.scheduler.schedule(DateTime.now().plusSeconds(pauseInSecs)) {
-                ctx.channel.send(Command.WorkerCommand(ctx.ids.nextId(), ctx.ids.nextUUID().toString(), Action.Resume, worker.id, 0, null))
+                val cmd = ctx.commands.work(worker.id, Action.Resume)
+                ctx.channel.send(cmd)
             }
             Outcomes.success(Status.Paused)
         }
@@ -130,7 +129,8 @@ class Workers(val ctx: JobContext) {
             record(worker.id, "pause_start", listOf("seconds" to pauseInSecs.toString()))
             ctx.scheduler.schedule(DateTime.now().plusSeconds(pauseInSecs)) {
                 record(worker.id, "pause_finish")
-                ctx.channel.send(Command.WorkerCommand(ctx.ids.nextId(), ctx.ids.nextUUID().toString(), Action.Resume, worker.id, 0, null))
+                val cmd = ctx.commands.work(worker.id, Action.Resume)
+                ctx.channel.send(cmd)
             }
             Outcomes.success(Status.Paused)
         }
@@ -148,7 +148,8 @@ class Workers(val ctx: JobContext) {
     suspend fun delay(id: Identity, seconds: Long) {
         record(id, "delay", listOf("seconds" to seconds.toString()))
         ctx.scheduler.schedule(DateTime.now().plusSeconds(seconds)) {
-            ctx.channel.send(Command.WorkerCommand(ctx.ids.nextId(), ctx.ids.nextUUID().toString(), Action.Start, id, 0, null))
+            val cmd = ctx.commands.work(id, Action.Start)
+            ctx.channel.send(cmd)
         }
     }
 
@@ -179,12 +180,13 @@ class Workers(val ctx: JobContext) {
                     notify(context, "Done")
                 }
                 is WorkResult.Next -> {
-                    val (id, uuid) = ctx.ids.next()
-                    ctx.channel.send(Command.WorkerCommand(id, uuid.toString(), Action.Process, worker.id, 0, ""))
+
+                    val cmd = ctx.commands.work(worker.id, Action.Process)
+                    ctx.channel.send(cmd)
                 }
                 is WorkResult.More -> {
-                    val (id, uuid) = ctx.ids.next()
-                    ctx.channel.send(Command.WorkerCommand(id, uuid.toString(), Action.Process, worker.id, 0, ""))
+                    val cmd = ctx.commands.work(worker.id, Action.Process)
+                    ctx.channel.send(cmd)
                 }
                 else -> {
                     ctx. logger.error("Worker in unexpected state ${worker.id.id}, ${workResult.name}")

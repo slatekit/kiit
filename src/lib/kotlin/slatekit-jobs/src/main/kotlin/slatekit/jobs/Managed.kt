@@ -1,6 +1,7 @@
 package slatekit.jobs
 
 import kotlinx.coroutines.runBlocking
+import slatekit.common.DateTime
 import java.util.*
 import slatekit.common.Identity
 import slatekit.common.Status
@@ -38,26 +39,6 @@ interface Managed {
     suspend fun start() = request(Action.Start)
 
     /**
-     * Requests stopping of the job
-     */
-    suspend fun stop() = request(Action.Stop)
-
-    /**
-     * Requests pausing of the job
-     */
-    suspend fun pause() = request(Action.Pause)
-
-    /**
-     * Requests resuming of the job
-     */
-    suspend fun resume() = request(Action.Resume)
-
-    /**
-     * Requests processing of the job
-     */
-    suspend fun process() = request(Action.Process)
-
-    /**
      * Requests this job to perform the supplied command
      * Coordinator handles requests via kotlin channels
      */
@@ -80,7 +61,7 @@ interface Managed {
      */
     suspend fun request(action: Action, workerId: Identity, desc: String?) {
         val (id, uuid) = nextIds()
-        val cmd = Command.WorkerCommand(id, uuid.toString(), action, workerId, 30, desc)
+        val cmd = Command.WorkerCommand(id, uuid.toString(), action, DateTime.now(), workerId, 30, desc)
         request(cmd)
     }
 

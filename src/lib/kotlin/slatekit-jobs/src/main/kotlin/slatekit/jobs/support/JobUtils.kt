@@ -21,7 +21,7 @@ object JobUtils {
                 val isValid = when (action) {
                     is Action.Start -> !isRunning
                     is Action.Process -> isRunning
-                    is Action.Control -> isRunning
+                    is Action.Check -> isRunning
                     is Action.Resume -> true
                     else -> {
                         // No reason to:
@@ -42,7 +42,7 @@ object JobUtils {
             is Action.Pause -> Status.Paused
             is Action.Resume -> Status.Running
             is Action.Process -> Status.Running
-            is Action.Control -> Status.Running
+            is Action.Check -> Status.Running
             else -> null
         }
     }

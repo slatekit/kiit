@@ -24,6 +24,10 @@ import slatekit.common.crypto.Encryptor
 import slatekit.common.log.Logger
 import slatekit.integration.common.AppEntContext
 import slatekit.jobs.Job
+import slatekit.jobs.Jobs
+import slatekit.jobs.support.Command
+import slatekit.results.Outcome
+import slatekit.results.builders.Outcomes
 
 
 @Api(area = "infra", name = "workers", desc = "api to get version information",
@@ -33,88 +37,61 @@ class JobsApi(override val context: AppEntContext) : FileSupport {
     override val encryptor: Encryptor? = context.enc
     override val logger: Logger? = context.logs.getLogger()
 
-    private lateinit var manager: Job
+    private lateinit var jobs: Jobs
 
-    fun configure(manager: Job){
-        this.manager = manager
+    fun configure(jobs: Jobs){
+        this.jobs = jobs
     }
 
     /**
      * starts the system
      */
-    @Action(desc = "start the workers system")
-    suspend fun start() = perform { it.request(slatekit.jobs.Action.Start) }
+    @Action(desc = "start the job")
+    suspend fun start(name:String):Outcome<String> = jobs.start(name)
 
     /**
      * pauses the system
      */
-    @Action(desc = "pauses the workers system")
-    suspend fun pause() = perform { it.request(slatekit.jobs.Action.Pause) }
+    @Action(desc = "pauses the job")
+    suspend fun pause(name:String):Outcome<String> =jobs.pause(name)
 
     /**
      * resumes the system
      */
-    @Action(desc = "resumes the workers system")
-    suspend fun resume() = perform { it.request(slatekit.jobs.Action.Resume) }
+    @Action(desc = "resumes job")
+    suspend fun resume(name:String):Outcome<String> = jobs.resume(name)
 
     /**
      * stops the system
      */
-    @Action(desc = "stops the workers system")
-    suspend fun stop() = perform { it.request(slatekit.jobs.Action.Stop) }
+    @Action(desc = "stops the job")
+    suspend fun delay(name:String):Outcome<String> = jobs.delay(name)
 
     /**
-     * starts the worker in the group supplied
+     * stops the system
      */
-    @Action(desc = "starts the worker")
-    suspend fun startWorker(workerId: String) = requestWork(workerId){
-        manager.request(slatekit.jobs.Action.Start, it, "from api")
-    }
+    @Action(desc = "stops the job")
+    suspend fun process(name:String):Outcome<String> = jobs.process(name)
 
     /**
-     * pauses the worker in the group supplied
+     * stops the system
      */
-    @Action(desc = "pauses the worker")
-    suspend fun pauseWorker(workerId: String) = requestWork(workerId) {
-        manager.request(slatekit.jobs.Action.Pause, it, "from api")
-    }
+    @Action(desc = "stops the job")
+    suspend fun stop(name:String):Outcome<String> = jobs.stop(name)
 
     /**
-     * resumes the worker in the group supplied
-     */
-    @Action(desc = "resumes the worker")
-    suspend fun resumeWorker(workerId: String) = requestWork(workerId) {
-        manager.request(slatekit.jobs.Action.Resume, it, "from api")
-    }
-
-    /**
-     * stops the worker in the group supplied
-     */
-    @Action(desc = "stops the worker")
-    suspend fun stopWorker(workerId: String) = requestWork(workerId) {
-        manager.request(slatekit.jobs.Action.Stop, it, "from api")
-    }
-
-    /**
-     * Get the worker names
+     * Get the names of all jobs
      */
     @Action(desc = "gets the names of all the workers")
-    fun getWorkerIds():List<String> = manager.workers.getIds().map { it.id }
+    fun jobs():List<String> = jobs.ids.map { it.id }
 
-
-    private suspend fun perform(operation: suspend (Job) -> Unit) {
-        if(this.manager == null) {
-            error("Work System has not been configured")
-            return
-        }
-        this.manager.let { operation(it) }
-    }
-
-
-    private suspend fun requestWork(workerId:String, operation: suspend (Identity) -> Unit){
-        val worker = manager.workers.get(workerId)
-        worker?.let {
-            operation(worker.worker.id)
-        }
-    }
+    /**
+     * Get the names of all workers on a job
+     */
+    @Action(desc = "gets the names of all the workers")
+    fun workers():List<String> = jobs.ids.mapNotNull {
+        val workers = jobs.get(it.name)?.workers
+        val ids = workers?.getIds()?.map { it.id }
+        ids
+    }.flatten()
 }

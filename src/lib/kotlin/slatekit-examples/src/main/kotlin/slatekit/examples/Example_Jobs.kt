@@ -303,7 +303,7 @@ class Example_Jobs : Command("utils"), CoroutineScope by MainScope() {
         jobs.respond("samples.job2", 3, start = true)
 
         // Sample 3: JOB ( Paged )
-        jobs.run("samples.job3")
+        jobs.start("samples.job3")
 
         // Sample 4: JOB ( Events ) + Subscribe to worker status changes
         jobs["samples.job4"]?.let { job ->

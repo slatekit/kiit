@@ -5,9 +5,9 @@ import slatekit.results.Outcome
 import slatekit.results.builders.Outcomes
 
 /**
- * Registry of all the jobs. This registry is used to:
+ * Registry of all the jobs and queues. This registry is used to:
  * 1. Get a job
- * 2. Start | Stop | Pause | Resume | Process a job by name
+ * 2. Perform Start | Stop | Pause | Resume | Process | Check operations on a job or worker
  * 3. Run a one-off Job
  * @param queues: List of all queues
  * @param jobs  : List of all jobs
@@ -17,7 +17,8 @@ class Jobs(
     val queues: List<Queue>,
     val jobs: List<Job>,
     val scope: CoroutineScope = Jobs.scope
-) {
+) : Ops<Job> {
+
     private val lookup = jobs.map { it.id.name to it }.toMap()
 
     /**
@@ -26,74 +27,49 @@ class Jobs(
     val ids = jobs.map { it.id }
 
     /**
-     * Gets the job by name e.g. "area.service"
-     */
-    operator fun get(name: String): Job? = if (lookup.containsKey(name)) lookup[name] else null
-
-    /**
      * Number of jobs
      */
     fun size(): Int = jobs.size
 
     /**
-     * Runs the jobs by starting it and then managing it ( listening of requests )
+     * Gets the job by name e.g. "area.service"
      */
-    suspend fun start(name: String): Outcome<String> {
-        return perform(name) { job ->
-            job.start()
-            "Job $name started"
-        }
-    }
+    override operator fun get(name: String): Job? = if (lookup.containsKey(name)) lookup[name] else null
 
     /**
-     * Runs the jobs by starting it and then managing it ( listening of requests )
+     * performs the operation on the supplied job/worker
+     * 1. Job    = {Identity.area}.{Identity.service}
+     * 2. Worker = {Identity.area}.{Identity.service}.{Identity.instance}
+     * @param name: The name of the job/worker
+     * @sample : job = "signup.emails", worker = "signup.emails.worker_1"
      */
-    suspend fun run(name: String): Outcome<kotlinx.coroutines.Job> {
-        return perform(name) { job ->
-            run(job)
-        }
-    }
+    override suspend fun perform(name: String, action: slatekit.jobs.Action, seconds:Int?): Outcome<String> {
+        // - Job     : {Identity.area}.{Identity.service}
+        // - Worker  : {Identity.area}.{Identity.service}.{Identity.instance}
+        // - Example : job = "signup.emails", worker = "signup.emails.worker_1"
+        val parts = name.split(".")
+        val jobName = "${parts[0]}.${parts[1]}"
+        val workerName = if(parts.size < 3) null else "$jobName.${parts[2]}"
+        val job = this[jobName] ?: return Outcomes.invalid("Unable to find job with name $jobName")
 
-    /**
-     * Responds to the requests in the jobs request queue
-     * This is intended for on-demand / forced running of a request/job
-     * rather than kicking of the management of a job ( continously listening of requests )
-     */
-    suspend fun respond(name: String, count: Int, start: Boolean = false): Outcome<String> {
-        return perform(name) { job ->
-            if (start) {
-                job.start()
-            }
-            (0 until count).forEach {
-                job.respond()
-            }
-            "Responded $count  times"
+        // Start the entire job
+        if (workerName == null) {
+            val cmd = job.ctx.commands.job(action)
+            job.request(cmd)
+            return Outcomes.success("Requested $action on job $jobName")
         }
-    }
 
-    /**
-     * Runs the jobs by starting it and then managing it ( by
-     * continuously listening of requests )
-     */
-    private suspend fun run(job: slatekit.jobs.Job): kotlinx.coroutines.Job {
-        val j = scope.launch {
-            job.start()
-            job.manage()
-        }
-        return j
-    }
-
-    private suspend fun <T> perform(name: String, op: suspend(Job) -> T): Outcome<T> {
-        val job = this[name]
-        val result = when (job) {
-            null -> Outcomes.invalid("Job with name $name not found")
-            else -> Outcomes.success(op(job))
-        }
-        return result
+        // Start just the worker
+        val worker = job.workers[workerName] ?: return Outcomes.invalid("Unable to find worker $workerName")
+        val cmd = job.ctx.commands.work(worker.id, action)
+        job.request(cmd)
+        return Outcomes.success("Requested $action on worker $jobName/$workerName")
     }
 
     companion object {
 
+        val ALL = "ALL"
+        
         /**
          * Default scope used by the Jobs system
          */

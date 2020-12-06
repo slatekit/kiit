@@ -5,13 +5,11 @@ import slatekit.common.Identity
 import slatekit.common.ids.Paired
 import slatekit.common.log.Logger
 import slatekit.common.log.LoggerConsole
-import slatekit.common.paged.Pager
 import slatekit.core.common.Backoffs
 import slatekit.core.common.DefaultScheduler
 import slatekit.core.common.Scheduler
 import slatekit.jobs.Jobs
 import slatekit.jobs.Queue
-import slatekit.jobs.support.Command
 import slatekit.jobs.workers.WorkRequest
 import slatekit.jobs.workers.WorkResult
 import slatekit.jobs.workers.Worker
@@ -37,6 +35,8 @@ data class JobContext(val id: Identity,
                       val policies: List<Policy<WorkRequest, WorkResult>> = listOf(),
                       val backoffs: Backoffs = Backoffs(Backoffs.times()),
                       val notifier: Notifier = Notifier(),
-                      val ids: Paired = Paired(),
+                      val commands: Commands = Commands(Paired()),
                       val scheduler: Scheduler = DefaultScheduler()
 )
+
+

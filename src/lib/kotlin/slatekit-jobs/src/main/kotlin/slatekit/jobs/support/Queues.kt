@@ -18,6 +18,7 @@ import slatekit.jobs.Queue
 /**
  * Contains the collection of all the available queues and provides
  * functionality to lookup, and get the next queue while factoring in queue priority
+ * NOTE: This is for future state. It was originally implemented but not used due to scope of work.
  */
 class Queues(val queues: List<Queue>, applyPrioritization: Boolean = true) {
 

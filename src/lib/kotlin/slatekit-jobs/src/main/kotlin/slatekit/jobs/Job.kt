@@ -165,7 +165,7 @@ class Job(val ctx: JobContext) : Managed, StatusCheck {
     /**
      * Gets the next pair of ids
      */
-    override fun nextIds(): Pair<Long, UUID> = ctx.ids.next()
+    override fun nextIds(): Pair<Long, UUID> = ctx.commands.ids.next()
 
     private fun setStatus(newStatus: Status) {
         _status.set(newStatus)
@@ -269,7 +269,7 @@ class Job(val ctx: JobContext) : Managed, StatusCheck {
 
             ctx.workers.forEach {
                 val (id, uuid) = this.nextIds()
-                val req = Command.WorkerCommand(id, uuid.toString(), action, it.id, seconds, "")
+                val req = Command.WorkerCommand(id, uuid.toString(), action, DateTime.now(), it.id, seconds, "")
                 this.request(req)
             }
         }
