@@ -177,7 +177,7 @@ class Example_Jobs : Command("utils"), CoroutineScope by MainScope() {
                             slatekit.jobs.Job(id.copy(service = "job3"), listOf(::sendNewsLetterWithPaging)),
                             slatekit.jobs.Job(id.copy(service = "job4"), listOf(::sendNewsLetterWithPaging)),
                             slatekit.jobs.Job(id.copy(service = "job5"), listOf(::sendNewsLetterFromQueue), queue1),
-                            slatekit.jobs.Job(id.copy(service = "job6"), listOf(NewsLetterWorker()), queue2),
+                            slatekit.jobs.Job(id.copy(service = "job6"), NewsLetterWorker(), queue2),
 
                             slatekit.jobs.Job(id.copy(service = "job7"), listOf(::sendNewsLetterWithPaging), policies = listOf(
                                     Every(10, { req, res -> println("Paged : " + req.task.id + ":" + res.desc) }),
@@ -307,10 +307,10 @@ class Example_Jobs : Command("utils"), CoroutineScope by MainScope() {
 
         // Sample 4: JOB ( Events ) + Subscribe to worker status changes
         jobs["samples.job4"]?.let { job ->
-            job.subscribe { println("Job ${it.id.name} status changed to : ${it.status.name}") }
-            job.subscribe(Status.Complete) { println("Job ${it.id.name} completed") }
-            job.workers.subscribe { it -> println("Worker ${it.id.name}: status = ${it.status.name}") }
-            job.workers.subscribe(Status.Complete) { it -> println("Worker ${it.id.name} completed") }
+            job.on { println("Job ${it.id.name} status changed to : ${it.status.name}") }
+            job.on(Status.Complete) { println("Job ${it.id.name} completed") }
+            job.workers.on { it -> println("Worker ${it.id.name}: status = ${it.status.name}") }
+            job.workers.on(Status.Complete) { it -> println("Worker ${it.id.name} completed") }
         }
         jobs.respond("samples.job4", 7, start = true)
 

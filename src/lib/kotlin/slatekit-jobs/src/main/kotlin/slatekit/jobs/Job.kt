@@ -83,6 +83,18 @@ class Job(val ctx: JobContext) : Managed, StatusCheck {
         this(id, listOf(lambda), queue, scope, policies)
 
     /**
+     * Initialize with just a function that will handle the work
+     */
+    constructor(
+        id: Identity,
+        worker: Worker<*>,
+        queue: Queue? = null,
+        scope: CoroutineScope = Jobs.scope,
+        policies: List<Policy<WorkRequest, WorkResult>> = listOf()
+    ) :
+        this(JobContext(id, coordinator(Paired(), LoggerConsole()), listOf(worker), queue = queue, scope = scope, policies = policies))
+
+    /**
      * Initialize with a list of functions to excecute work
      */
     constructor(
@@ -90,11 +102,9 @@ class Job(val ctx: JobContext) : Managed, StatusCheck {
         lambdas: List<suspend (Task) -> WorkResult>,
         queue: Queue? = null,
         scope: CoroutineScope = Jobs.scope,
-        policies: List<Policy<WorkRequest, WorkResult>> = listOf(),
-        ids: Paired = Paired(),
-        logger: Logger = LoggerConsole()
+        policies: List<Policy<WorkRequest, WorkResult>> = listOf()
     ) :
-        this(JobContext(id, coordinator(ids, logger), workers(id, lambdas), queue = queue, scope = scope, policies = policies))
+        this(JobContext(id, coordinator(Paired(), LoggerConsole()), workers(id, lambdas), queue = queue, scope = scope, policies = policies))
 
     val id:Identity = ctx.id
     val workers = Workers(ctx)
