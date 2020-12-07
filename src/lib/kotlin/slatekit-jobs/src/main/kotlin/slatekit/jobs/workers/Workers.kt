@@ -15,6 +15,14 @@ import slatekit.results.builders.Tries
 
 /**
  * Represents a cluster of Workers that are affiliated with 1 job.
+ * This helps manage the coordination between a @see[Worker] and a @see[slatekit.jobs.Job]
+ * This is done by this class interpreting the @see[WorkResult] returned by a Worker
+ * Based on the WorkResult, this may send commands @see[slatekit.jobs.support.Command]s to a Job's Channel
+ * Essentially, this works like a glorified loop over each work, continuously:
+ * 1. checking its WorkResult
+ * 2. sending more commands to the Job's channel to pause, resume, process etc.
+ * 3. handling errors
+ * 4. notification of state changes
  */
 class Workers(val ctx: JobContext) {
     private val PAUSE_IN_SECONDS = 30L
