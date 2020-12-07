@@ -304,11 +304,10 @@ class Job(val ctx: JobContext) : Ops<WorkerContext>, StatusCheck {
 
 
     private suspend fun nextTask(id: Identity, empty: Task): Task {
-        val task = when (ctx.queue) {
+        return when (ctx.queue) {
             null -> empty
             else -> ctx.queue.next() ?: Task.empty
         }
-        return task
     }
 
 
