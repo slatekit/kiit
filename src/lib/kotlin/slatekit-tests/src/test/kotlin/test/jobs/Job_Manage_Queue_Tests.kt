@@ -28,11 +28,11 @@ class Job_Manage_Queue_Tests : JobTestSupport {
             val manager = run(2, queue, Action.Start)
             runBlocking {
                 val worker1 = manager.ctx.workers.first()
-                manager.respond() // Start worker1
+                manager.poll() // Start worker1
                 ensure(manager.workers, true, 1, 1, 0, worker1.id, Status.Running, 4, Action.Process, 0)
 
                 val worker2 = manager.ctx.workers.last()
-                manager.respond() // Start worker2val worker = manager.workers.all.first()
+                manager.poll() // Start worker2val worker = manager.workers.all.first()
                 ensure(manager.workers, true, 1, 1, 0, worker2.id, Status.Running, 5, Action.Process, 0)
             }
         }
@@ -48,10 +48,10 @@ class Job_Manage_Queue_Tests : JobTestSupport {
             runBlocking {
                 val worker1 = manager.ctx.workers.first()
                 val worker2 = manager.ctx.workers.last()
-                manager.request(Action.Pause, worker2.id, "test")
-                manager.respond() // Start worker1
-                manager.respond() // Start worker2
-                manager.respond() // Pause worker1
+                manager.send(worker2.id, Action.Pause, "test")
+                manager.poll() // Start worker1
+                manager.poll() // Start worker2
+                manager.poll() // Pause worker1
                 Assert.assertEquals(Status.Running, worker1.status())
                 Assert.assertEquals(Status.Paused, worker2.status())
             }
@@ -67,8 +67,8 @@ class Job_Manage_Queue_Tests : JobTestSupport {
             val manager = run(2, queue, Action.Start)
             runBlocking {
 
-                manager.respond() // Start worker1
-                manager.respond() // Start worker2
+                manager.poll() // Start worker1
+                manager.poll() // Start worker2
 
                 val worker1 = manager.ctx.workers.first()
                 val worker2 = manager.ctx.workers.last()
@@ -84,8 +84,8 @@ class Job_Manage_Queue_Tests : JobTestSupport {
                 Assert.assertEquals(Status.Running, worker2.status())
 
                 // Backed off at, moved to 4
-                manager.respond() // Backoff worker1
-                manager.respond() // Backoff worker1
+                manager.poll() // Backoff worker1
+                manager.poll() // Backoff worker1
                 val worker1Backoff2 = manager.workers.get(worker1.id)!!.backoffs.curr()
                 val worker2Backoff2 = manager.workers.get(worker2.id)!!.backoffs.curr()
                 Assert.assertEquals(4, worker1Backoff2)
@@ -96,8 +96,8 @@ class Job_Manage_Queue_Tests : JobTestSupport {
                 // Back off at 4 moved to 8
                 (manager.coordinator as MockCoordinatorWithChannel).resume()
                 (manager.coordinator as MockCoordinatorWithChannel).resume()
-                manager.respond() // Resume worker 1
-                manager.respond() // Resume worker 2
+                manager.poll() // Resume worker 1
+                manager.poll() // Resume worker 2
                 val worker1Backoff3 = manager.workers.get(worker1.id)!!.backoffs.curr()
                 val worker2Backoff3 = manager.workers.get(worker2.id)!!.backoffs.curr()
                 Assert.assertEquals(8, worker1Backoff3)
@@ -111,8 +111,8 @@ class Job_Manage_Queue_Tests : JobTestSupport {
                 (3..4).forEach { queue.send(it.toString()) }
                 (manager.coordinator as MockCoordinatorWithChannel).resume()
                 (manager.coordinator as MockCoordinatorWithChannel).resume()
-                manager.respond() // Resume worker 1
-                manager.respond() // Resume worker 2
+                manager.poll() // Resume worker 1
+                manager.poll() // Resume worker 2
                 val worker1Backoff4 = manager.workers.get(worker1.id)!!.backoffs.curr()
                 val worker2Backoff4 = manager.workers.get(worker2.id)!!.backoffs.curr()
                 Assert.assertEquals(2, worker1Backoff4)
@@ -133,15 +133,15 @@ class Job_Manage_Queue_Tests : JobTestSupport {
             runBlocking {
                 val worker1 = manager.ctx.workers.first()
                 val worker2 = manager.ctx.workers.last()
-                manager.request(Action.Pause, worker2.id, "test")
-                manager.respond() // Start worker1
-                manager.respond() // Start worker2
-                manager.respond() // Pause worker1
-                manager.respond() // Process worker1
-                manager.respond() // Process worker2
+                manager.send(worker2.id, Action.Pause, "test")
+                manager.poll() // Start worker1
+                manager.poll() // Start worker2
+                manager.poll() // Pause worker1
+                manager.poll() // Process worker1
+                manager.poll() // Process worker2
                 (manager.coordinator as MockCoordinatorWithChannel).resume()
-                manager.respond() // Process worker1
-                manager.respond() // Resume worker1
+                manager.poll() // Process worker1
+                manager.poll() // Resume worker1
                 Assert.assertEquals(Status.Running, worker1.status())
                 Assert.assertEquals(Status.Running, worker2.status())
             }
@@ -158,10 +158,10 @@ class Job_Manage_Queue_Tests : JobTestSupport {
             runBlocking {
                 val worker1 = manager.ctx.workers.first()
                 val worker2 = manager.ctx.workers.last()
-                manager.request(Action.Stop, worker2.id, "test")
-                manager.respond() // Start worker1
-                manager.respond() // Start worker2
-                manager.respond() // Pause worker1
+                manager.send(worker2.id, Action.Stop, "test")
+                manager.poll() // Start worker1
+                manager.poll() // Start worker2
+                manager.poll() // Pause worker1
                 Assert.assertEquals(Status.Running, worker1.status())
                 Assert.assertEquals(Status.Stopped, worker2.status())
             }

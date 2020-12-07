@@ -1,6 +1,9 @@
 package slatekit.jobs
 
+import slatekit.common.Identity
+import slatekit.jobs.support.Command
 import slatekit.results.Outcome
+import slatekit.results.builders.Outcomes
 
 /**
  * This interface is reused by both the Jobs component and the Job component.
@@ -30,40 +33,55 @@ interface Ops<T> {
      */
     operator fun get(name: String): T?
 
-    suspend fun start(): Outcome<String> = start(Request(Jobs.ALL))
-    suspend fun start(name: String): Outcome<String> = start(Request(name))
-    suspend fun start(request: Request): Outcome<String> = perform(request, Action.Start)
+    suspend fun start(): Outcome<String> = send(Action.Start)
+    suspend fun start(name: String): Outcome<String> = send(name, Action.Start, "")
 
-    suspend fun pause(): Outcome<String> = pause(Request(Jobs.ALL))
-    suspend fun pause(name: String): Outcome<String> = pause(Request(name))
-    suspend fun pause(request: Request): Outcome<String> = perform(request, Action.Pause)
+    suspend fun pause(): Outcome<String> = send(Action.Pause)
+    suspend fun pause(name: String): Outcome<String> = send(name, Action.Pause, "")
 
-    suspend fun resume(): Outcome<String> = resume(Request(Jobs.ALL))
-    suspend fun resume(name: String): Outcome<String> = resume(Request(name))
-    suspend fun resume(request: Request): Outcome<String> = perform(request, Action.Resume)
+    suspend fun resume(): Outcome<String> = send(Action.Resume)
+    suspend fun resume(name: String): Outcome<String> = send(name, Action.Resume, "")
 
-    suspend fun delay(seconds: Int? = null): Outcome<String> = delay(Request(Jobs.ALL, seconds))
-    suspend fun delay(name: String, seconds: Int? = null): Outcome<String> = delay(Request(name, seconds))
-    suspend fun delay(request: Request): Outcome<String> = perform(request, Action.Delay)
+    suspend fun delay(): Outcome<String> = send(Action.Delay)
+    suspend fun delay(name: String): Outcome<String> = send(name, Action.Delay, "")
 
-    suspend fun check(): Outcome<String> = check(Request(Jobs.ALL))
-    suspend fun check(name: String): Outcome<String> = check(Request(name))
-    suspend fun check(request: Request): Outcome<String> = perform(request, Action.Check)
+    suspend fun check(): Outcome<String> = send(Action.Check)
+    suspend fun check(name: String): Outcome<String> = send(name, Action.Check, "")
 
-    suspend fun process(): Outcome<String> = process(Request(Jobs.ALL))
-    suspend fun process(name: String): Outcome<String> = process(Request(name))
-    suspend fun process(request: Request): Outcome<String> = perform(request, Action.Process)
+    suspend fun process(): Outcome<String> = send(Action.Process)
+    suspend fun process(name: String): Outcome<String> = send(name, Action.Process, "")
 
-    suspend fun stop(): Outcome<String> = stop(Request(Jobs.ALL))
-    suspend fun stop(name: String): Outcome<String> = stop(Request(name))
-    suspend fun stop(request: Request): Outcome<String> = perform(request, Action.Stop)
+    suspend fun stop(): Outcome<String> = send(Action.Stop)
+    suspend fun stop(name: String): Outcome<String> = send(name, Action.Stop, "")
 
     /**
-     * performs the operation on the supplied job/worker
-     * 1. Job    = {Identity.area}.{Identity.service}
-     * 2. Worker = {Identity.area}.{Identity.service}.{Identity.instance}
-     * @param name: The name of the job/worker
-     * @sample : job = "signup.emails", worker = "signup.emails.worker_1"
+     * Sends a command to take action ( start, pause, stop, etc ) on all items
      */
-    suspend fun perform(request:Request, action: Action): Outcome<String>
+    suspend fun send(action: Action): Outcome<String>
+
+    /**
+     * Sends a command to take action ( start, pause, stop, etc ) on a specific job or worker by id
+     */
+    suspend fun send(id: Identity, action: Action, note: String): Outcome<String>
+
+    /**
+     * Sends a command to take action ( start, pause, stop, etc ) on a specific job or worker by id
+     */
+    suspend fun send(name:String, action: Action, note: String): Outcome<String> {
+        return when(val id = toId(name)) {
+            null -> Outcomes.invalid("Unable to find job or worker with name $name")
+            else -> send(id, action, note)
+        }
+    }
+
+    /**
+     * Requests this job to perform the supplied command
+     * Coordinator handles requests via kotlin channels
+     */
+    suspend fun send(command: Command): Outcome<String>
+
+    /**
+     * Converts the name to an identity
+     */
+    fun toId(name: String): Identity?
 }

@@ -16,6 +16,7 @@ fun main(args: Array<String>) {
      */
     lateinit var job: Job // = slatekit.jobs.Job()
     lateinit var jobs: Jobs
+    job.status()
 
     runBlocking {
 

@@ -1,6 +1,9 @@
 package slatekit.jobs
 
 import kotlinx.coroutines.*
+import slatekit.common.Identity
+import slatekit.jobs.support.Command
+import slatekit.jobs.support.JobUtils
 import slatekit.results.Outcome
 import slatekit.results.builders.Outcomes
 
@@ -37,42 +40,63 @@ class Jobs(
     override operator fun get(name: String): Job? = if (lookup.containsKey(name)) lookup[name] else null
 
     /**
-     * performs the operation on the supplied job/worker
-     * 1. Job    = {Identity.area}.{Identity.service}
-     * 2. Worker = {Identity.area}.{Identity.service}.{Identity.instance}
-     * @param name: The name of the job/worker
-     * @sample : job = "signup.emails", worker = "signup.emails.worker_1"
+     * Sends a command to take action ( start, pause, stop, etc ) on all items ( jobs )
      */
-    override suspend fun perform(request: Request, action: Action): Outcome<String> {
-        if(request.name == Jobs.ALL) {
-            return Outcomes.invalid("Starting all jobs WIP")
+    override suspend fun send(action: Action):Outcome<String> {
+        val results = ids.mapNotNull { id ->
+            // "{identity.area}.{identity.service}"
+            // e.g. "signup.emails"
+            val job = this[id.name]
+            job?.let { send(job.ctx.commands.job(id, action)) }
         }
-
-        // - Job     : {Identity.area}.{Identity.service}
-        // - Worker  : {Identity.area}.{Identity.service}.{Identity.instance}
-        // - Example : job = "signup.emails", worker = "signup.emails.worker_1"
-        val parts = request.name.split(".")
-        val jobName = "${parts[0]}.${parts[1]}"
-        val workerName = if(parts.size < 3) null else "$jobName.${parts[2]}"
-        val job = this[jobName] ?: return Outcomes.invalid("Unable to find job with name $jobName")
-
-        // Start the entire job
-        if (workerName == null) {
-            val cmd = job.ctx.commands.job(action)
-            job.request(cmd)
-            return Outcomes.success("Requested $action on job $jobName")
+        return when(results.all { it.success }){
+            true  -> Outcomes.success("Sent command=${action.name}, type=job, target=all")
+            false -> results.first { !it.success }
         }
+    }
 
-        // Start just the worker
-        val worker = job.workers[workerName] ?: return Outcomes.invalid("Unable to find worker $workerName")
-        val cmd = job.ctx.commands.work(worker.id, action)
-        job.request(cmd)
-        return Outcomes.success("Requested $action on worker $jobName/$workerName")
+    /**
+     * Sends a command to take action ( start, pause, stop, etc )  on a specific job or worker by id
+     */
+    override suspend fun send(id: Identity, action: Action, note: String):Outcome<String> {
+        // "{identity.area}.{identity.service}"
+        // e.g. "signup.emails"
+        return when(val job = this[id.name]){
+            null -> Outcomes.invalid("Unable to find job with name ${id.name}")
+            else -> {
+                when(JobUtils.isWorker(id)){
+                    false -> send(job.ctx.commands.job(id, action))
+                    true  -> send(job.ctx.commands.work(id, action))
+                }
+            }
+        }
+    }
+
+    /**
+     * Sends a command to take action ( start, pause, stop, etc ) on a specific job or worker
+     */
+    override suspend fun send(command: Command):Outcome<String> {
+        // "{identity.area}.{identity.service}"
+        // e.g. "signup.emails"
+        return when(val job = this[command.identity.name]) {
+            null -> Outcomes.invalid("Unable to find job with name ${command.identity.name}")
+            else -> job.send(command)
+        }
+    }
+
+    override fun toId(name: String): Identity? {
+        if(name.isBlank()) return null
+        val parts = name.split(".")
+        return when (parts.size) {
+            2 -> this["${parts[0]}.${parts[1]}"]?.id
+            3 -> this["${parts[0]}.${parts[1]}"]?.workers?.getIds()?.first { it.instance == name }
+            else -> null
+        }
     }
 
     companion object {
 
-        val ALL = "ALL"
+        const val ALL = "ALL"
 
         /**
          * Default scope used by the Jobs system

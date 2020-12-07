@@ -22,8 +22,8 @@ interface JobTestSupport {
     fun run(numWorkers: Int, queue:Queue?, action:Action, operation:((Job) -> Unit)? = null ):Job{
         val manager = build(numWorkers, queue)
         runBlocking {
-            manager.request(action)
-            manager.respond()
+            manager.send(action)
+            manager.poll()
             operation?.invoke(manager)
         }
         return manager

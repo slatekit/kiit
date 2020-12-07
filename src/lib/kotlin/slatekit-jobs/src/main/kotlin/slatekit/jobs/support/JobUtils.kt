@@ -6,11 +6,17 @@ import org.threeten.bp.Duration
 import slatekit.common.DateTime
 import slatekit.common.Status
 import slatekit.common.Event
+import slatekit.common.Identity
 import slatekit.jobs.*
 import slatekit.jobs.workers.Worker
 import slatekit.results.Codes
 
 object JobUtils {
+
+    fun isWorker(identity: Identity):Boolean {
+        return identity.tags.contains("worker")
+    }
+
 
     fun validate(action: Action, currState: Status): Boolean {
         val nextState = toState(action)

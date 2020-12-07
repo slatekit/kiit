@@ -7,11 +7,11 @@ import slatekit.jobs.Action
 
 
 class Commands(val ids: Paired) {
-    fun job(action: Action): Command.JobCommand
-        = Command.JobCommand(ids.nextId(), ids.nextUUID().toString(), action)
+    fun job(id:Identity, action: Action): Command.JobCommand
+        = Command.JobCommand(ids.nextId(), ids.nextUUID().toString(), id, action)
 
     fun work(id: Identity, action: Action): Command.WorkerCommand
-        = Command.WorkerCommand(ids.nextId(), ids.nextUUID().toString(), action, DateTime.now(), id)
+        = Command.WorkerCommand(ids.nextId(), ids.nextUUID().toString(), id, action, DateTime.now())
 }
 
 
@@ -24,6 +24,7 @@ class Commands(val ids: Paired) {
 sealed class Command {
     abstract val id: Long
     abstract val uuid: String
+    abstract val identity:Identity
     abstract val action: Action
     abstract val target: String
     abstract val timestamp:DateTime
@@ -36,6 +37,7 @@ sealed class Command {
     data class JobCommand(
         override val id: Long,
         override val uuid: String,
+        override val identity: Identity,
         override val action: Action,
         override val timestamp:DateTime = DateTime.now()
     ) : Command() {
@@ -46,6 +48,7 @@ sealed class Command {
                     "target" to target,
                     "id" to id.toString(),
                     "uuid" to uuid,
+                    "identity" to identity.id,
                     "action" to action.name
             )
         }
@@ -57,9 +60,9 @@ sealed class Command {
     data class WorkerCommand(
         override val id: Long,
         override val uuid: String,
+        override val identity: Identity,
         override val action: Action,
         override val timestamp:DateTime = DateTime.now(),
-        val workerId: Identity,
         val seconds: Long = 0,
         val desc: String? = null
     ) : Command() {
@@ -71,8 +74,9 @@ sealed class Command {
                     "target" to target,
                     "id" to id.toString(),
                     "uuid" to uuid,
+                    "identity" to identity.id,
                     "action" to action.name,
-                    "worker" to workerId.id,
+                    "worker" to identity.instance,
                     "seconds" to seconds.toString()
             )
         }
