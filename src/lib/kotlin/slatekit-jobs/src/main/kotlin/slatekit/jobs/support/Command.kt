@@ -5,10 +5,20 @@ import slatekit.common.Identity
 import slatekit.common.ids.Paired
 import slatekit.jobs.Action
 
-
+/**
+ * Builds commands to send to a job channel to manage a job/worker.
+ * Notes:
+ * 1. A command can be a job command ( to control the entire job )
+ * 2. A command can be a work command ( to control just 1 worker in the job )
+ *
+ * Ids:
+ * 1. long : Simple incrementing long
+ * 2. uuid : UUID v4 for unique id
+ *
+ */
 class Commands(val ids: Paired) {
     fun job(id:Identity, action: Action): Command.JobCommand
-        = Command.JobCommand(ids.nextId(), ids.nextUUID().toString(), id, action)
+        = Command.JobCommand(ids.nextId(), ids.nextUUID().toString(), id, action, DateTime.now())
 
     fun work(id: Identity, action: Action): Command.WorkerCommand
         = Command.WorkerCommand(ids.nextId(), ids.nextUUID().toString(), id, action, DateTime.now())
