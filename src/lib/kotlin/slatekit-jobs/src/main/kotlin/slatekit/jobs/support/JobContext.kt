@@ -16,7 +16,7 @@ import slatekit.jobs.workers.Worker
 import slatekit.policy.Policy
 
 /**
- * @param id        : Identity of the job e.g. signup.alerts.job.qat.ABC123
+ * @param id        : Identity of the job e.g. signup.alerts.job.qat.ABC123 @see[slatekit.common.Identity]
  * @param channel   : Channel to communicate commands to a job and between job/workers
  * @param workers   : List of all @see[Worker] involved in this job
  * @param logger    : Logger used inside the job
