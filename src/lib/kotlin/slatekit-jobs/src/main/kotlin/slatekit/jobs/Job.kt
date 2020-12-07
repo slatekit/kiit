@@ -178,8 +178,8 @@ class Job(val ctx: JobContext) : Ops<WorkerContext>, StatusCheck {
      * Coordinator handles requests via kotlin channels
      */
     override suspend fun send(command: Command): Outcome<String> {
-        record("Send", command.structured())
         coordinator.send(command)
+        record("Sent", command.structured())
         return when (JobUtils.isWorker(command.identity)) {
             true -> Outcomes.success("Sent command=${command.action.name}, type=job, target=${ctx.id.id}")
             false -> Outcomes.success("Send command=${command.action.name}, type=wrk, target=${ctx.id.id}")
@@ -305,7 +305,7 @@ class Job(val ctx: JobContext) : Ops<WorkerContext>, StatusCheck {
     }
 
     private suspend fun manageWorker(command: Command.WorkerCommand, task: Task, status: Status, launch: Boolean, requireTask: Boolean) {
-        record("Workers-Dispatch", command.structured() + task.structured())
+        record("Working", command.structured() + task.structured())
         val action = command.action
         val workerId = command.identity
         when (action) {
