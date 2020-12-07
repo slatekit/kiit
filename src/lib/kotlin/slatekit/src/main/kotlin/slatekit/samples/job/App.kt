@@ -79,7 +79,7 @@ fun run(args: Args){
                         Job(id.copy(service = "single"), ::sendNewsLetter),
                         Job(id.copy(service = "paging"), listOf(::sendNewsLetterWithPaging)),
                         Job(id.copy(service = "queued"), listOf(::sendNewsLetterFromQueue), queue1),
-                        Job(id.copy(service = "worker"), NewsLetterWorker(id), queue2)
+                        Job(id.copy(service = "worker"), NewsLetterWorker(id.copy(tags = listOf("worker"))), queue2)
                 )
         )
 

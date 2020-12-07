@@ -62,30 +62,43 @@ class Job(val ctx: JobContext) : Ops<WorkerContext>, StatusCheck {
 
     /**
      * Initialize with just a function that will handle the work
+     * @sample
+     *  val job1 = Job(Identity.job("signup", "email"), ::sendEmail)
+     *  val job2 = Job(Identity.job("signup", "email"), suspend {
+     *      // do work here
+     *      WorkResult.Done
+     *  })
      */
     constructor(
         id: Identity,
-        lambda: suspend () -> WorkResult,
+        op: suspend () -> WorkResult,
+        scope: CoroutineScope = Jobs.scope
+    ) :
+        this(id, listOf(worker(op)), null, scope, listOf())
+
+    /**
+     * Initialize with just a function that will handle the work
+     * @sample
+     *  val job1 = Job(Identity.job("signup", "email"), ::sendEmail)
+     *  val job2 = Job(Identity.job("signup", "email"), suspend { task ->
+     *      println("task id=${task.id}")
+     *      // do work here
+     *      WorkResult.Done
+     *  })
+     */
+    constructor(
+        id: Identity,
+        op: suspend (Task) -> WorkResult,
         queue: Queue? = null,
         scope: CoroutineScope = Jobs.scope,
         policies: List<Policy<WorkRequest, WorkResult>> = listOf()
     ) :
-        this(id, listOf(worker(lambda)), queue, scope, policies)
+        this(id, listOf(op), queue, scope, policies)
 
     /**
      * Initialize with just a function that will handle the work
-     */
-    constructor(
-        id: Identity,
-        lambda: suspend (Task) -> WorkResult,
-        queue: Queue? = null,
-        scope: CoroutineScope = Jobs.scope,
-        policies: List<Policy<WorkRequest, WorkResult>> = listOf()
-    ) :
-        this(id, listOf(lambda), queue, scope, policies)
-
-    /**
-     * Initialize with just a function that will handle the work
+     *  val id = Identity.job("signup", "email")
+     *  val job1 = Job(id, EmailWorker(id.copy(tags = listOf("worker")))
      */
     constructor(
         id: Identity,
@@ -101,12 +114,12 @@ class Job(val ctx: JobContext) : Ops<WorkerContext>, StatusCheck {
      */
     constructor(
         id: Identity,
-        lambdas: List<suspend (Task) -> WorkResult>,
+        ops: List<suspend (Task) -> WorkResult>,
         queue: Queue? = null,
         scope: CoroutineScope = Jobs.scope,
         policies: List<Policy<WorkRequest, WorkResult>> = listOf()
     ) :
-        this(JobContext(id, coordinator(Paired(), LoggerConsole()), workers(id, lambdas), queue = queue, scope = scope, policies = policies))
+        this(JobContext(id, coordinator(Paired(), LoggerConsole()), workers(id, ops), queue = queue, scope = scope, policies = policies))
 
     val id: Identity = ctx.id
     val workers = Workers(ctx)
@@ -168,7 +181,7 @@ class Job(val ctx: JobContext) : Ops<WorkerContext>, StatusCheck {
         record("Send", command.structured())
         coordinator.send(command)
         return when (JobUtils.isWorker(command.identity)) {
-            true  -> Outcomes.success("Sent command=${command.action.name}, type=job, target=${ctx.id.id}")
+            true -> Outcomes.success("Sent command=${command.action.name}, type=job, target=${ctx.id.id}")
             false -> Outcomes.success("Send command=${command.action.name}, type=wrk, target=${ctx.id.id}")
         }
     }
@@ -216,7 +229,7 @@ class Job(val ctx: JobContext) : Ops<WorkerContext>, StatusCheck {
      * 2. Worker : {identity.area}.{identity.service}.{identity.instance}   e.g. "signup.emails.worker_1"
      */
     override fun toId(name: String): Identity? {
-        if(name.isBlank()) return null
+        if (name.isBlank()) return null
         val parts = name.split(".")
         return when (parts.size) {
             2 -> ctx.id
@@ -340,6 +353,16 @@ class Job(val ctx: JobContext) : Ops<WorkerContext>, StatusCheck {
     }
 
     companion object {
+
+        suspend fun sendEmail(): WorkResult = WorkResult.Done
+
+        suspend fun test() {
+            Job(Identity.job("signup", "email"), ::sendEmail)
+            Job(Identity.job("signup", "email"), suspend {
+                println("simulate email...")
+                WorkResult.Done
+            })
+        }
 
         fun worker(call: suspend () -> WorkResult): suspend (Task) -> WorkResult {
             return { t ->

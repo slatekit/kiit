@@ -89,6 +89,12 @@ class Example_Jobs : Command("utils"), CoroutineScope by MainScope() {
         }
 
 
+        // Option 1: Use a function for a job that runs to completion
+        suspend fun sendNewsLetterNoArgs(): WorkResult {
+            return sendNewsLetter(Task.empty)
+        }
+
+
         // Option 2: Use a function for a job that pages through work
         val offset1 = AtomicInteger(0)
         suspend fun sendNewsLetterWithPaging(task: Task): WorkResult {
