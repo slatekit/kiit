@@ -9,7 +9,7 @@ package slatekit.jobs.slatekit.jobs
  */
 sealed class Mode(val name: String) {
     /* ktlint-disable */
-    object Once    : Mode( "Start"  )
+    object Once    : Mode( "Once"   )
     object Paged   : Mode( "Paged"  )
     object Queued  : Mode( "Queued" )
     object Repeat  : Mode( "Repeat" )
