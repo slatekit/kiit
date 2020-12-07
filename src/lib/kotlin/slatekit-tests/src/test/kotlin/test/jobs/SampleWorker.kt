@@ -13,10 +13,10 @@ class OneTimeWorker(val start:Int, val end:Int, id: Identity) : Worker<Int>(id) 
 
 
     private val current = AtomicInteger(start)
-    private val flow = mutableListOf<String>()
+    private val audit = mutableListOf<String>()
 
     override suspend fun init() {
-        flow.add("init")
+        audit.add("init")
         super.init()
     }
 
@@ -31,14 +31,14 @@ class OneTimeWorker(val start:Int, val end:Int, id: Identity) : Worker<Int>(id) 
 
 
     override suspend fun work(task: Task): WorkResult {
-        flow.add("work")
+        audit.add("work")
         (start .. end).forEach { current.incrementAndGet()  }
         return WorkResult.Done
     }
 
 
     override suspend fun done() {
-        flow.add("done")
+        audit.add("done")
         super.done()
     }
 
@@ -57,7 +57,7 @@ class OneTimeWorker(val start:Int, val end:Int, id: Identity) : Worker<Int>(id) 
 
 
     fun currentValue():Int = current.get()
-    fun currentFlows():List<String> = flow.toList()
+    fun audits():List<String> = audit.toList()
 }
 
 

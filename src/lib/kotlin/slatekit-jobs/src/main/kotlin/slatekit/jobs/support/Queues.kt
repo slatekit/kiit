@@ -22,9 +22,9 @@ import slatekit.jobs.Queue
  */
 class Queues(val queues: List<Queue>, applyPrioritization: Boolean = true) {
 
-    val prioritizedQueues: List<Queue> = if (applyPrioritization) prioritize(queues) else queues
-    val lookup: Map<String, Queue> = prioritizedQueues.map { it -> it.name to it }.toMap()
-    val random = Random()
+    val prioritized: List<Queue> = if (applyPrioritization) prioritize(queues) else queues
+    private val lookup: Map<String, Queue> = prioritized.map { it -> it.name to it }.toMap()
+    private val random = Random()
 
     fun size(): Int = queues.size
 
@@ -33,7 +33,7 @@ class Queues(val queues: List<Queue>, applyPrioritization: Boolean = true) {
      */
     fun next(): Queue {
         val ndx = nextPos()
-        val queue = prioritizedQueues[ndx]
+        val queue = prioritized[ndx]
         return queue
     }
 
@@ -41,8 +41,8 @@ class Queues(val queues: List<Queue>, applyPrioritization: Boolean = true) {
      * Gets the queue at the supplied position if the position is a valid range
      */
     operator fun get(pos: Int): Queue? {
-        if (pos < 0 || pos >= prioritizedQueues.size) return null
-        return prioritizedQueues[pos]
+        if (pos < 0 || pos >= prioritized.size) return null
+        return prioritized[pos]
     }
 
     /**
@@ -56,7 +56,7 @@ class Queues(val queues: List<Queue>, applyPrioritization: Boolean = true) {
      * gets the next queue based on weighted priority of the queues
      */
     private fun nextPos(): Int {
-        val ndx = random.nextInt(prioritizedQueues.size)
+        val ndx = random.nextInt(prioritized.size)
         return ndx
     }
 

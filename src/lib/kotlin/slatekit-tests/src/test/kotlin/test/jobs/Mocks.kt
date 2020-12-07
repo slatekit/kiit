@@ -24,8 +24,8 @@ open class MockCoordinator(override val logger: Logger, override val ids: Paired
         requests.add(cmd)
     }
 
-    override suspend fun send(jobRequest: Command) {
-        requests.add(jobRequest)
+    override suspend fun send(command: Command) {
+        requests.add(command)
     }
 
     override suspend fun poll(): Command? {
