@@ -4,7 +4,6 @@ import slatekit.common.Event
 import slatekit.common.Identity
 import slatekit.common.Status
 import slatekit.core.common.Emitter
-import slatekit.jobs.Job
 import slatekit.jobs.support.JobContext
 import slatekit.jobs.support.JobUtils
 import slatekit.jobs.workers.WorkerContext

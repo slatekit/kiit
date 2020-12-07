@@ -67,41 +67,6 @@ object JobUtils {
         }
     }
 
-    fun toEvent(started: DateTime, desc: String, target: String, worker: Worker<*>): Event {
-        // Convert the worker info / state / stats into a generalized event
-        val id = worker.id
-        val status = worker.status()
-        val calls = worker.stats.calls
-        val counts = worker.stats.counts
-        val now = DateTime.now()
-        val duration = Duration.between(started, now).seconds
-        val code = toCode(status)
-        val ev = Event(
-            area = id.area,
-            name = id.name,
-            agent = id.agent.name,
-            env = id.env,
-            uuid = id.instance,
-            desc = desc,
-            status = code,
-            target = target,
-            tag = "",
-            fields = listOf(
-                Triple("started   ", started.toString(), ""),
-                Triple("duration  ", "$duration secs", ""),
-                Triple("status    ", status.name, ""),
-                Triple("called    ", calls.totalRuns().toString(), ""),
-                Triple("processed ", counts.processed.get().toString(), ""),
-                Triple("succeeded ", counts.succeeded.get().toString(), ""),
-                Triple("denied    ", counts.denied.get().toString(), ""),
-                Triple("invalid   ", counts.invalid.get().toString(), ""),
-                Triple("ignored   ", counts.ignored.get().toString(), ""),
-                Triple("errored   ", counts.errored.get().toString(), ""),
-                Triple("unexpected", counts.unknown.get().toString(), "")
-            )
-        )
-        return ev
-    }
 
     /**
      * Performs the operation if the action supplied is correct with regard to the current state.
