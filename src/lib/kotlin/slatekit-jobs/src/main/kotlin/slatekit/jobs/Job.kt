@@ -209,6 +209,11 @@ class Job(val ctx: JobContext) : Ops<WorkerContext>, StatusCheck {
         }
     }
 
+    /**
+     * Converts the name supplied to either the identity of either
+     * 1. Job    : {identity.area}.{identity.service}                       e.g. "signup.emails"
+     * 2. Worker : {identity.area}.{identity.service}.{identity.instance}   e.g. "signup.emails.worker_1"
+     */
     override fun toId(name: String): Identity? {
         if(name.isBlank()) return null
         val parts = name.split(".")
