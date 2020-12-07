@@ -30,13 +30,6 @@ interface Identity {
             return DetailIdentity(area, service, Agent.Job, env.name)
         }
 
-        fun cmd(name:String, env:EnvMode = EnvMode.Dev):Identity {
-            val tokens = name.split(".")
-            val area = if(tokens.size > 1) tokens[0] else ""
-            val svc = if(tokens.size > 1) tokens[1] else tokens[0]
-            return DetailIdentity(area, svc, Agent.Cmd, env.name)
-        }
-
         fun test(name:String): Identity {
             return SimpleIdentity("tests", name, Agent.Test, EnvMode.Dev.name)
         }

@@ -38,5 +38,3 @@ data class JobContext(val id: Identity,
                       val commands: Commands = Commands(Paired()),
                       val scheduler: Scheduler = DefaultScheduler()
 )
-
-

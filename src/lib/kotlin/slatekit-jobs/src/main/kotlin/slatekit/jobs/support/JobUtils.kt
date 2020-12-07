@@ -62,14 +62,14 @@ object JobUtils {
         val now = DateTime.now()
         val duration = Duration.between(started, now).seconds
         val code = when (status) {
-            is Status.InActive -> Codes.SUCCESS
-            is Status.Starting -> Codes.SUCCESS
-            is Status.Idle -> Codes.PENDING
-            is Status.Running -> Codes.SUCCESS
-            is Status.Paused -> Codes.PENDING
-            is Status.Stopped -> Codes.PENDING
-            is Status.Complete -> Codes.EXIT
-            is Status.Failed -> Codes.ERRORED
+            is Status.InActive -> Codes.INACTIVE
+            is Status.Starting -> Codes.STARTING
+            is Status.Idle     -> Codes.WAITING
+            is Status.Running  -> Codes.RUNNING
+            is Status.Paused   -> Codes.PAUSED
+            is Status.Stopped  -> Codes.STOPPED
+            is Status.Complete -> Codes.COMPLETE
+            is Status.Failed   -> Codes.ERRORED
         }
         val ev = Event(
             area = id.area,
