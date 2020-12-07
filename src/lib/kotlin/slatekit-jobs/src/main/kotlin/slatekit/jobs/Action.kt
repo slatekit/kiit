@@ -21,4 +21,3 @@ sealed class Action(val name: String) {
     object Process  : Action( "Process")
     /* ktlint-enable */
 }
-
