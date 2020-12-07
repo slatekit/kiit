@@ -14,7 +14,7 @@ import slatekit.results.Try
 interface Queue {
 
     /**
-     * Name of the queue. e.g. "notification"
+     * Name of the queue. e.g. "email-notification"
      */
     val name: String
 

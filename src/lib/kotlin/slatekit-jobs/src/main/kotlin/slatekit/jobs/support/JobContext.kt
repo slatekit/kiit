@@ -23,7 +23,7 @@ import slatekit.policy.Policy
  * @param policies  : Policies that control or respond to work/task execution
  * @param backoffs  : Exponential backoff times during idling or pauses
  * @param notifier  : Notifier to emit job/work events to subscribers
- * @param ids       : Id generator used for creating ids for commands
+ * @param commands  : Builder for job / worker commands
  * @param scheduler : Scheduler used to continue resuming work
  */
 data class JobContext(val id: Identity,
