@@ -4,9 +4,10 @@ import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.runBlocking
 import slatekit.results.Try
 import slatekit.results.Success
-import slatekit.cmds.Command
-import slatekit.cmds.CommandRequest
+
+
 import slatekit.cache.*
+import slatekit.common.Identity
 import slatekit.common.ext.toStringUtc
 import slatekit.common.ids.Paired
 import slatekit.common.log.LoggerConsole
@@ -29,7 +30,8 @@ class Guide_Cache : Command("types") {
     fun sync() {
 
         //<doc:section name="sync">
-        val raw = SimpleCache(settings = CacheSettings(10))
+        val id = Identity.app("app", "cache")
+        val raw = SimpleCache(id, settings = CacheSettings(10))
         val syncCache:Cache = SimpleSyncCache(raw)
         //</doc:setup>
 
@@ -65,21 +67,21 @@ class Guide_Cache : Command("types") {
             println("expiry.expires : " + it.expiry.expires.toStringUtc())
 
             println("access.count     : " + it.reads?.count)
-            println("access.time      : " + it.reads?.timestamp?.toStringUtc() )
+            println("access.time      : " + it.reads?.updated?.toStringUtc() )
 
             println("hits.count     : " + it.hits.count)
-            println("hits.time      : " + it.hits.timestamp?.toStringUtc() )
+            println("hits.time      : " + it.hits.updated?.toStringUtc() )
 
             println("misses.count     : " + it.misses?.count)
-            println("misses.time      : " + it.misses?.timestamp?.toStringUtc() )
+            println("misses.time      : " + it.misses?.updated?.toStringUtc() )
 
             println("value.created  : " + it.value.created?.toStringUtc() )
             println("value.updated  : " + it.value.updated?.toStringUtc() )
-            println("value.applied  : " + it.value.applied)
+            println("value.applied  : " + it.value.count)
 
             println("error.created  : " + it.error.created?.toStringUtc() )
             println("error.updated  : " + it.error.updated?.toStringUtc() )
-            println("error.applied  : " + it.error.applied)
+            println("error.applied  : " + it.error.count)
             println("\n")
         }
 
@@ -87,7 +89,7 @@ class Guide_Cache : Command("types") {
         // Async
         runBlocking {
             val logger = LoggerConsole()
-            val asyncCache: AsyncCache = SimpleAsyncCache.of(logger = logger)
+            val asyncCache: AsyncCache = SimpleAsyncCache.of(id, logger = logger)
 
             // Writes
             // 1. Put new entry ( using a function to fetch )

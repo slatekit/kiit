@@ -22,8 +22,8 @@ import slatekit.meta.Reflector
 //</doc:import_required>
 
 //<doc:import_examples>
-import slatekit.cmds.Command
-import slatekit.cmds.CommandRequest
+
+
 import slatekit.results.Try
 import slatekit.results.Success
 import slatekit.examples.common.User

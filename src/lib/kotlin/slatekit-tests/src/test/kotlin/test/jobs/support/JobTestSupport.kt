@@ -1,4 +1,4 @@
-package test.jobs
+package test.jobs.support
 
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.runBlocking
@@ -11,9 +11,11 @@ import slatekit.common.log.LogLevel
 import slatekit.common.log.LoggerConsole
 import slatekit.jobs.*
 import slatekit.jobs.support.Command
+import slatekit.jobs.support.JobContext
 import slatekit.jobs.workers.Worker
 import slatekit.jobs.workers.WorkerContext
 import slatekit.jobs.workers.Workers
+import test.jobs.samples.PagedWorker
 
 interface JobTestSupport {
 
@@ -21,8 +23,8 @@ interface JobTestSupport {
     fun run(numWorkers: Int, queue:Queue?, action:Action, operation:((Job) -> Unit)? = null ):Job{
         val manager = build(numWorkers, queue)
         runBlocking {
-            manager.request(action)
-            manager.respond()
+            manager.send(action)
+            manager.poll()
             operation?.invoke(manager)
         }
         return manager
@@ -39,7 +41,8 @@ interface JobTestSupport {
         val coordinator = MockCoordinatorWithChannel(logger, ids, Channel(Channel.UNLIMITED))
         val id = (workers.first().id as SimpleIdentity)
         val jobId = id.copy(service = id.service + "-job")
-        val manager = slatekit.jobs.Job(jobId,workers, queue, logger, ids, coordinator,  MockScheduler())
+        val ctx = JobContext(jobId, coordinator, workers, logger, queue, scheduler = MockScheduler())
+        val manager = slatekit.jobs.Job(ctx)
         return manager
     }
 
@@ -64,13 +67,13 @@ interface JobTestSupport {
         Assert.assertEquals(totalFailed, runs.totalFailed())
 
         // Request count
-        val coordinator = workers.coordinator as MockCoordinator
+        val coordinator = workers.ctx.channel as MockCoordinator
         Assert.assertEquals(requestCount, coordinator.requests.count())
 
         // Next request
         if(action != null) {
             val req = coordinator.requests.last() as Command.WorkerCommand
-            Assert.assertEquals(id     , req.workerId )
+            Assert.assertEquals(id     , req.identity )
             Assert.assertEquals(action , req.action )
             Assert.assertEquals(seconds, req.seconds)
         }

@@ -21,6 +21,7 @@ import slatekit.core.queues.WrappedAsyncQueue
 import slatekit.integration.jobs.APIWorker
 import slatekit.integration.jobs.JobQueue
 import slatekit.jobs.*
+import test.jobs.samples.SampleWorkerAPI
 import test.setup.SampleTypes2Api
 
 class Worker_Api_Tests {

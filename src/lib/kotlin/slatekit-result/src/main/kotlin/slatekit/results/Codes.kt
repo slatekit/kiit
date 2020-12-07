@@ -31,7 +31,7 @@ package slatekit.results
  */
 object Codes {
 
-    // Success: 200000 + range
+    // Success: 200000 + range ( useful for CRUD operations )
     @JvmField val SUCCESS         = Passed.Succeeded ("SUCCESS", 200001, "Success")
     @JvmField val CREATED         = Passed.Succeeded ("CREATED", 200002, "Created")
     @JvmField val UPDATED         = Passed.Succeeded ("UPDATED", 200003, "Updated")
@@ -42,6 +42,16 @@ object Codes {
     @JvmField val PENDING         = Passed.Pending   ("PENDING", 200008, "Pending")
     @JvmField val QUEUED          = Passed.Pending   ("QUEUED" , 200009, "Queued" )
     @JvmField val CONFIRM         = Passed.Pending   ("CONFIRM", 200010, "Confirm")
+
+    // Success: 200000 + range ( useful for JOB States )
+    @JvmField val ACTIVE          = Passed.Pending   ("ACTIVE"  , 200101, "Active"  )
+    @JvmField val INACTIVE        = Passed.Pending   ("INACTIVE", 200102, "Inactive")
+    @JvmField val STARTING        = Passed.Pending   ("STARTING", 200103, "Starting")
+    @JvmField val WAITING         = Passed.Pending   ("WAITING" , 200104, "Waiting" )
+    @JvmField val RUNNING         = Passed.Pending   ("RUNNING" , 200105, "Running" )
+    @JvmField val PAUSED          = Passed.Pending   ("PAUSED"  , 200106, "Paused"  )
+    @JvmField val STOPPED         = Passed.Pending   ("STOPPED" , 200107, "Stopped" )
+    @JvmField val COMPLETE        = Passed.Pending   ("COMPLETE", 200108, "Complete")
 
 
     // Invalid: 400000 + range
@@ -78,43 +88,54 @@ object Codes {
 
 
     private val mappings = listOf(
-            Triple(SUCCESS.code          , SUCCESS          , 200),
-            Triple(CREATED.code          , CREATED          , 201),
-            Triple(UPDATED.code          , UPDATED          , 200),
-            Triple(FETCHED.code          , FETCHED          , 200),
-            Triple(PATCHED.code          , PATCHED          , 200),
-            Triple(DELETED.code          , DELETED          , 200),
-            Triple(PENDING.code          , PENDING          , 202),
-            Triple(QUEUED .code          , QUEUED           , 202),
-            Triple(HANDLED.code          , HANDLED          , 204),
-            Triple(CONFIRM.code          , CONFIRM          , 200),
+        // CRUD
+        Triple(SUCCESS.code          , SUCCESS          , 200),
+        Triple(CREATED.code          , CREATED          , 201),
+        Triple(UPDATED.code          , UPDATED          , 200),
+        Triple(FETCHED.code          , FETCHED          , 200),
+        Triple(PATCHED.code          , PATCHED          , 200),
+        Triple(DELETED.code          , DELETED          , 200),
+        Triple(PENDING.code          , PENDING          , 202),
+        Triple(QUEUED .code          , QUEUED           , 202),
+        Triple(HANDLED.code          , HANDLED          , 204),
+        Triple(CONFIRM.code          , CONFIRM          , 200),
 
-            // Info
-            Triple(HELP.code             , HELP             , 200),
-            Triple(ABOUT.code            , ABOUT            , 200),
-            Triple(VERSION.code          , VERSION          , 200),
+        // JOB (States )
+        Triple(ACTIVE  .code          , ACTIVE           , 200),
+        Triple(INACTIVE.code          , INACTIVE         , 200),
+        Triple(STARTING.code          , STARTING         , 200),
+        Triple(WAITING .code          , WAITING          , 200),
+        Triple(RUNNING .code          , RUNNING          , 200),
+        Triple(PAUSED  .code          , PAUSED           , 200),
+        Triple(STOPPED .code          , STOPPED          , 200),
+        Triple(COMPLETE.code          , COMPLETE         , 200),
 
-            // Invalid
-            Triple(IGNORED.code          , IGNORED          , 400),
-            Triple(BAD_REQUEST.code      , BAD_REQUEST      , 400),
-            Triple(INVALID.code          , INVALID          , 400),
-            Triple(UNSUPPORTED.code      , UNSUPPORTED      , 501),
-            Triple(UNIMPLEMENTED.code    , UNIMPLEMENTED    , 501),
-            Triple(UNAVAILABLE.code      , UNAVAILABLE      , 503),
+        // Info
+        Triple(HELP.code             , HELP             , 200),
+        Triple(ABOUT.code            , ABOUT            , 200),
+        Triple(VERSION.code          , VERSION          , 200),
 
-            // Errors
-            Triple(MISSING.code          , MISSING          , 400),
-            Triple(NOT_FOUND.code        , NOT_FOUND        , 404),
-            Triple(DENIED.code           , DENIED           , 401),
-            Triple(UNAUTHENTICATED.code  , UNAUTHENTICATED  , 401),
-            Triple(UNAUTHORIZED.code     , UNAUTHORIZED     , 401),
-            Triple(FORBIDDEN.code        , FORBIDDEN        , 403),
-            Triple(TIMEOUT.code          , TIMEOUT          , 408),
-            Triple(CONFLICT.code         , CONFLICT         , 409),
-            Triple(DEPRECATED.code       , DEPRECATED       , 426),
-            Triple(ERRORED.code          , ERRORED          , 500),
-            Triple(UNEXPECTED.code       , UNEXPECTED       , 500),
-            Triple(EXIT.code             , EXIT             , 503)
+        // Invalid
+        Triple(IGNORED.code          , IGNORED          , 400),
+        Triple(BAD_REQUEST.code      , BAD_REQUEST      , 400),
+        Triple(INVALID.code          , INVALID          , 400),
+        Triple(UNSUPPORTED.code      , UNSUPPORTED      , 501),
+        Triple(UNIMPLEMENTED.code    , UNIMPLEMENTED    , 501),
+        Triple(UNAVAILABLE.code      , UNAVAILABLE      , 503),
+
+        // Errors
+        Triple(MISSING.code          , MISSING          , 400),
+        Triple(NOT_FOUND.code        , NOT_FOUND        , 404),
+        Triple(DENIED.code           , DENIED           , 401),
+        Triple(UNAUTHENTICATED.code  , UNAUTHENTICATED  , 401),
+        Triple(UNAUTHORIZED.code     , UNAUTHORIZED     , 401),
+        Triple(FORBIDDEN.code        , FORBIDDEN        , 403),
+        Triple(TIMEOUT.code          , TIMEOUT          , 408),
+        Triple(CONFLICT.code         , CONFLICT         , 409),
+        Triple(DEPRECATED.code       , DEPRECATED       , 426),
+        Triple(ERRORED.code          , ERRORED          , 500),
+        Triple(UNEXPECTED.code       , UNEXPECTED       , 500),
+        Triple(EXIT.code             , EXIT             , 503)
     )
 
     private val lookupHttp = mappings.map{ Pair(it.first, it) }.toMap()

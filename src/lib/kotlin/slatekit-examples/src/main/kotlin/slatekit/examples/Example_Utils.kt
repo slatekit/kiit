@@ -20,11 +20,11 @@ import slatekit.common.utils.Require.requireValidIndex
 //</doc:import_required>
 
 //<doc:import_examples>
-import slatekit.cmds.Command
+
 import slatekit.common.data.DbConString
 import slatekit.common.info.ApiKey
 import slatekit.common.info.ApiLogin
-import slatekit.cmds.CommandRequest
+
 import slatekit.common.io.Uris
 import slatekit.results.Try
 import slatekit.results.Success

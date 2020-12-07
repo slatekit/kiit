@@ -17,8 +17,8 @@ import slatekit.results.*
 //</doc:import_required>
 
 //<doc:import_examples>
-import slatekit.cmds.Command
-import slatekit.cmds.CommandRequest
+
+
 import slatekit.common.paged.Pager
 import slatekit.results.Success
 import slatekit.results.builders.Outcomes

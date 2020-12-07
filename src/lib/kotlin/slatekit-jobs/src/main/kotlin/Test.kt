@@ -5,19 +5,31 @@ import slatekit.common.Status
 
 fun main(args: Array<String>) {
 
+    /*
+    1. managed
+    2. workers
+    3. job
+    4. jobs
+    5. executor
+    6. channel control
+    7. tests
+     */
     lateinit var job: Job // = slatekit.jobs.Job()
+    lateinit var jobs: Jobs
+    job.status()
+
     runBlocking {
 
         // Subscribe to any status change
-        job.subscribe { j -> println(j.id) }
+        job.on { event -> println(event.id) }
 
         // Subscribe to completed status
-        job.subscribe(Status.Complete) { j -> println(j.id) }
+        job.on(Status.Complete) { event -> println(event.id) }
 
         // Subscribe to any status change
-        job.workers.subscribe { w -> println(w.id) }
+        job.workers.on { event -> println(event.id) }
 
         // Subscribe to completed status
-        job.workers.subscribe(Status.Complete) { w -> println(w.id) }
+        job.workers.on(Status.Complete) { event -> println(event.id) }
     }
 }

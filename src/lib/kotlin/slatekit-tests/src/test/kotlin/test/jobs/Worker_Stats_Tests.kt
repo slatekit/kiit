@@ -8,6 +8,7 @@ import slatekit.jobs.Task
 import slatekit.jobs.support.Runner
 import slatekit.jobs.workers.WorkerContext
 import slatekit.core.common.Backoffs
+import test.jobs.samples.OneTimeWorker
 
 
 class Worker_Stats_Tests {

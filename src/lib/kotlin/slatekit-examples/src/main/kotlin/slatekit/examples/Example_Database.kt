@@ -20,8 +20,8 @@ import slatekit.common.data.DbConString
 //<doc:import_examples>
 import slatekit.results.Try
 import slatekit.results.Success
-import slatekit.cmds.Command
-import slatekit.cmds.CommandRequest
+
+
 import slatekit.examples.common.User
 import slatekit.meta.models.ModelMapper
 import slatekit.orm.OrmMapper

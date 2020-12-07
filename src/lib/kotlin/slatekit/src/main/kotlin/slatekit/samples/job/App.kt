@@ -79,7 +79,7 @@ fun run(args: Args){
                         Job(id.copy(service = "single"), ::sendNewsLetter),
                         Job(id.copy(service = "paging"), listOf(::sendNewsLetterWithPaging)),
                         Job(id.copy(service = "queued"), listOf(::sendNewsLetterFromQueue), queue1),
-                        Job(id.copy(service = "worker"), listOf(NewsLetterWorker(id)), queue2)
+                        Job(id.copy(service = "worker"), NewsLetterWorker(id.copy(tags = listOf("worker"))), queue2)
                 )
         )
 
@@ -88,9 +88,9 @@ fun run(args: Args){
         val fullName = "samples.$name"
 
         // Run
-        val result = jobs.run(fullName)
+        val result = jobs.start(fullName)
         when(result) {
-            is Success -> result.value.join()
+            is Success -> result.value
             is Failure -> {
                 println("\nERROR : =====================")
                 println(result.error.msg)

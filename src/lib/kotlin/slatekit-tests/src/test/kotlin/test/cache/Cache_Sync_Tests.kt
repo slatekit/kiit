@@ -21,7 +21,7 @@ import slatekit.common.DateTime
 class Cache_Sync_Tests {
 
     fun getCache(initialize:Boolean = true, synced:Boolean = true, settings: CacheSettings = CacheSettings(10)): Cache {
-        val raw =  SimpleCache("sync-cache", settings = settings)
+        val raw =  SimpleCache(settings = settings)
         val cache = if(synced) SimpleSyncCache(raw) else raw
         if(initialize) {
             cache.put("countries", "countries supported for mobile app", 60) { listOf("us", "ca") }

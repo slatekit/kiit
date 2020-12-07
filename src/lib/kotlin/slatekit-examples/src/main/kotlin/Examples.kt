@@ -12,6 +12,7 @@ import org.slf4j.LoggerFactory
 import slatekit.cache.CacheSettings
 import slatekit.cache.SimpleCache
 import slatekit.common.DateTime
+import slatekit.common.Identity
 import slatekit.common.ext.toStringUtc
 import slatekit.examples.Example_Email
 import slatekit.providers.logs.logback.LogbackLogs

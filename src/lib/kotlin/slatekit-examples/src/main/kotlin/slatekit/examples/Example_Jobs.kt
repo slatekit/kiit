@@ -19,8 +19,8 @@ import slatekit.common.*
 
 //<doc:import_examples>
 import slatekit.core.queues.InMemoryQueue
-import slatekit.cmds.Command
-import slatekit.cmds.CommandRequest
+
+
 import slatekit.common.log.LoggerConsole
 import slatekit.core.queues.AsyncQueue
 import slatekit.integration.jobs.JobQueue
@@ -86,6 +86,12 @@ class Example_Jobs : Command("utils"), CoroutineScope by MainScope() {
         suspend fun sendNewsLetter(task: Task): WorkResult {
             allUsers.forEach { user -> send(task.job, NEWS_LETTER_MESSAGE, user) }
             return WorkResult.Done
+        }
+
+
+        // Option 1: Use a function for a job that runs to completion
+        suspend fun sendNewsLetterNoArgs(): WorkResult {
+            return sendNewsLetter(Task.empty)
         }
 
 
@@ -177,7 +183,7 @@ class Example_Jobs : Command("utils"), CoroutineScope by MainScope() {
                             slatekit.jobs.Job(id.copy(service = "job3"), listOf(::sendNewsLetterWithPaging)),
                             slatekit.jobs.Job(id.copy(service = "job4"), listOf(::sendNewsLetterWithPaging)),
                             slatekit.jobs.Job(id.copy(service = "job5"), listOf(::sendNewsLetterFromQueue), queue1),
-                            slatekit.jobs.Job(id.copy(service = "job6"), listOf(NewsLetterWorker()), queue2),
+                            slatekit.jobs.Job(id.copy(service = "job6"), NewsLetterWorker(), queue2),
 
                             slatekit.jobs.Job(id.copy(service = "job7"), listOf(::sendNewsLetterWithPaging), policies = listOf(
                                     Every(10, { req, res -> println("Paged : " + req.task.id + ":" + res.desc) }),
@@ -297,25 +303,25 @@ class Example_Jobs : Command("utils"), CoroutineScope by MainScope() {
     private suspend fun runSamples(jobs:Jobs){
 
         // Sample 1: JOB that runs to completion
-        jobs.respond("samples.job1", 2, start = true)
+        jobs.start("samples.job1")
 
         // Sample 2: JOB ( 2 Workers ) constructor with list of 2 functions which will create 2 workers
-        jobs.respond("samples.job2", 3, start = true)
+        jobs.start("samples.job2")
 
         // Sample 3: JOB ( Paged )
-        jobs.run("samples.job3")
+        jobs.start("samples.job3")
 
         // Sample 4: JOB ( Events ) + Subscribe to worker status changes
         jobs["samples.job4"]?.let { job ->
-            job.subscribe { println("Job ${it.id.name} status changed to : ${it.status.name}") }
-            job.subscribe(Status.Complete) { println("Job ${it.id.name} completed") }
-            job.workers.subscribe { it -> println("Worker ${it.id.name}: status = ${it.status.name}") }
-            job.workers.subscribe(Status.Complete) { it -> println("Worker ${it.id.name} completed") }
+            job.on { println("Job ${it.id.name} status changed to : ${it.status.name}") }
+            job.on(Status.Complete) { println("Job ${it.id.name} completed") }
+            job.workers.on { it -> println("Worker ${it.id.name}: status = ${it.status.name}") }
+            job.workers.on(Status.Complete) { it -> println("Worker ${it.id.name} completed") }
         }
-        jobs.respond("samples.job4", 7, start = true)
+        jobs.start("samples.job4")
 
         // Sample 5: JOB ( Queued ) + Subscribe to worker status changes
-        jobs.respond("samples.job5", 3, start = true)
+        jobs.start("samples.job5")
 
         // Sample 6: JOB ( Worker ) implementation with queue
         jobs.start("samples.job6")
@@ -324,6 +330,6 @@ class Example_Jobs : Command("utils"), CoroutineScope by MainScope() {
         // 1. a callback for every 10 items processed
         // 2. a limit to processing at most 12 items ( to support running a job in "waves" )
         // 3. a threshold / error limit of .1 ( 10% )
-        jobs.respond("samples.job7", 4)
+        jobs.start("samples.job7")
     }
 }

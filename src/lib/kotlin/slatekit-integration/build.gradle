@@ -110,7 +110,6 @@ dependencies {
         compile project(":slatekit-core")
         compile project(":slatekit-policy")
         compile project(":slatekit-cache")
-        compile project(":slatekit-cmds")
         compile project(":slatekit-apis")
         compile project(":slatekit-jobs")
         compile project(":slatekit-notifications")

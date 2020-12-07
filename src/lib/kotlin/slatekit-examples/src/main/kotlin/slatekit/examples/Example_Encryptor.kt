@@ -17,8 +17,8 @@ import slatekit.common.utils.B64Java8
 //</doc:import_required>
 
 //<doc:import_examples>
-import slatekit.cmds.Command
-import slatekit.cmds.CommandRequest
+
+
 import slatekit.results.Try
 import slatekit.results.Success
 //</doc:import_examples>

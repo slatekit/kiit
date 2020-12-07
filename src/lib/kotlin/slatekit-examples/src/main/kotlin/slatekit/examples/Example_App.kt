@@ -30,8 +30,6 @@ import slatekit.common.crypto.Encryptor
 import slatekit.common.info.Build
 import slatekit.common.info.Sys
 import slatekit.common.log.LogsDefault
-import slatekit.cmds.Command
-import slatekit.cmds.CommandRequest
 import slatekit.common.envs.Envs
 import slatekit.common.info.Info
 import slatekit.db.Db

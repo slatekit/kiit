@@ -39,9 +39,6 @@ project(':slatekit-policy').projectDir=new File('../slatekit-policy')
 include ':slatekit-cache'
 project(':slatekit-cache').projectDir=new File('../slatekit-cache')
 
-include ':slatekit-cmds'
-project(':slatekit-cmds').projectDir=new File('../slatekit-cmds')
-
 include ':slatekit-apis'
 project(':slatekit-apis').projectDir=new File('../slatekit-apis')
 

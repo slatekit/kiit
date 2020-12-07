@@ -17,14 +17,16 @@ import org.junit.Assert
 import org.junit.Test
 import slatekit.cache.*
 import slatekit.common.DateTime
+import slatekit.common.Identity
 import slatekit.common.log.LoggerConsole
 
 
 class Cache_Channel_Tests {
 
     val CACHE_NAME = "unit-tests-cache"
+    val id = Identity.app("app", "cache")
     fun getCache(initialize: Boolean = true, settings: CacheSettings = CacheSettings(10), listener: ((CacheEvent) -> Unit)? = null): SimpleAsyncCache {
-        val cache = SimpleAsyncCache.of(CACHE_NAME, LoggerConsole(), settings, listener)
+        val cache = SimpleAsyncCache.of(id, LoggerConsole(), settings, listener)
         return cache
     }
 
@@ -97,7 +99,7 @@ class Cache_Channel_Tests {
             // Events
             Assert.assertNotNull(event)
             Assert.assertEquals(CacheAction.Create, event?.action)
-            Assert.assertEquals(cache.name, event?.origin)
+            Assert.assertEquals(id.name, event?.name)
             Assert.assertEquals("countries", event?.key)
             Assert.assertTrue(!event?.uuid.isNullOrEmpty())
             Assert.assertEquals("$CACHE_NAME.${CacheAction.Create.name}.countries", event?.name ?: "")
@@ -192,7 +194,7 @@ class Cache_Channel_Tests {
             // Events
             Assert.assertNotNull(event)
             Assert.assertEquals(CacheAction.DeleteAll, event?.action)
-            Assert.assertEquals(cache.name, event?.origin)
+            Assert.assertEquals(cache.id.name, event?.name)
             Assert.assertEquals("*", event?.key)
             Assert.assertTrue(!event?.uuid.isNullOrEmpty())
             Assert.assertEquals("$CACHE_NAME.${CacheAction.DeleteAll.name}.*", event?.name ?: "")
@@ -358,7 +360,7 @@ class Cache_Channel_Tests {
             // Events
             Assert.assertNotNull(event)
             Assert.assertEquals(CacheAction.Expire, event?.action)
-            Assert.assertEquals(cache.name, event?.origin)
+            Assert.assertEquals(cache.id.name, event?.name)
             Assert.assertEquals("countries", event?.key)
             Assert.assertTrue(!event?.uuid.isNullOrEmpty())
             Assert.assertEquals("$CACHE_NAME.${CacheAction.Expire.name}.countries", event?.name ?: "")

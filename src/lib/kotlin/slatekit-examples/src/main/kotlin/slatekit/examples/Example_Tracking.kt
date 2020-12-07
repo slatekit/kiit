@@ -17,8 +17,8 @@ import slatekit.common.*
 //</doc:import_required>
 
 //<doc:import_examples>
-import slatekit.cmds.Command
-import slatekit.cmds.CommandRequest
+
+
 import slatekit.common.log.LoggerConsole
 import slatekit.results.*
 import slatekit.results.builders.Outcomes
@@ -150,6 +150,7 @@ class Example_Tracking : Command("auth") {
         val event = Event(
                 area = "registration",
                 name = "NEW_ANDROID_REGISTRATION",
+                action = "created",
                 agent = "job",
                 env = "dev",
                 uuid = "abc-123-xyz",

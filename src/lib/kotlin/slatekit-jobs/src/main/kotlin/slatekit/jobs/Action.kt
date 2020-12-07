@@ -13,11 +13,11 @@ package slatekit.jobs
 sealed class Action(val name: String) {
     /* ktlint-disable */
     object Start    : Action( "Start"  )
-    object Stop     : Action( "Stop"   )
     object Pause    : Action( "Pause"  )
     object Resume   : Action( "Resume" )
-    object Control  : Action( "Control")
+    object Delay    : Action( "Delay"  )
+    object Stop     : Action( "Stop"   )
+    object Check    : Action( "Check"  )
     object Process  : Action( "Process")
-    object Delay    : Action( "Delay" )
     /* ktlint-enable */
 }

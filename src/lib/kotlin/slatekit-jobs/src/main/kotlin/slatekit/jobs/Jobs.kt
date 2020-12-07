@@ -1,13 +1,16 @@
 package slatekit.jobs
 
 import kotlinx.coroutines.*
+import slatekit.common.Identity
+import slatekit.jobs.support.Command
+import slatekit.jobs.support.JobUtils
 import slatekit.results.Outcome
 import slatekit.results.builders.Outcomes
 
 /**
- * Registry of all the jobs. This registry is used to:
+ * Registry of all the jobs and queues. This registry is used to:
  * 1. Get a job
- * 2. Start | Stop | Pause | Resume | Process a job by name
+ * 2. Perform Start | Stop | Pause | Resume | Process | Check operations on a job or worker
  * 3. Run a one-off Job
  * @param queues: List of all queues
  * @param jobs  : List of all jobs
@@ -17,7 +20,8 @@ class Jobs(
     val queues: List<Queue>,
     val jobs: List<Job>,
     val scope: CoroutineScope = Jobs.scope
-) {
+) : Ops<Job> {
+
     private val lookup = jobs.map { it.id.name to it }.toMap()
 
     /**
@@ -26,73 +30,78 @@ class Jobs(
     val ids = jobs.map { it.id }
 
     /**
-     * Gets the job by name e.g. "area.service"
-     */
-    operator fun get(name: String): Job? = if (lookup.containsKey(name)) lookup[name] else null
-
-    /**
      * Number of jobs
      */
     fun size(): Int = jobs.size
 
     /**
-     * Runs the jobs by starting it and then managing it ( listening of requests )
+     * Gets the job by name e.g. "area.service"
      */
-    suspend fun start(name: String): Outcome<String> {
-        return perform(name) { job ->
-            job.start()
-            "Job $name started"
+    override operator fun get(name: String): Job? = if (lookup.containsKey(name)) lookup[name] else null
+
+    /**
+     * Sends a command to take action ( start, pause, stop, etc ) on all items ( jobs )
+     */
+    override suspend fun send(action: Action):Outcome<String> {
+        val results = ids.mapNotNull { id ->
+            // "{identity.area}.{identity.service}"
+            // e.g. "signup.emails"
+            val job = this[id.name]
+            job?.let { send(job.ctx.commands.job(id, action)) }
+        }
+        return when(results.all { it.success }){
+            true  -> Outcomes.success("Sent command=${action.name}, type=job, target=all")
+            false -> results.first { !it.success }
         }
     }
 
     /**
-     * Runs the jobs by starting it and then managing it ( listening of requests )
+     * Sends a command to take action ( start, pause, stop, etc )  on a specific job or worker by id
      */
-    suspend fun run(name: String): Outcome<kotlinx.coroutines.Job> {
-        return perform(name) { job ->
-            run(job)
-        }
-    }
-
-    /**
-     * Responds to the requests in the jobs request queue
-     * This is intended for on-demand / forced running of a request/job
-     * rather than kicking of the management of a job ( continously listening of requests )
-     */
-    suspend fun respond(name: String, count: Int, start: Boolean = false): Outcome<String> {
-        return perform(name) { job ->
-            if (start) {
-                job.start()
+    override suspend fun send(id: Identity, action: Action, note: String):Outcome<String> {
+        // "{identity.area}.{identity.service}"
+        // e.g. "signup.emails"
+        return when(val job = this[id.name]){
+            null -> Outcomes.invalid("Unable to find job with name ${id.name}")
+            else -> {
+                when(JobUtils.isWorker(id)){
+                    false -> send(job.ctx.commands.job(id, action))
+                    true  -> send(job.ctx.commands.work(id, action))
+                }
             }
-            (0 until count).forEach {
-                job.respond()
-            }
-            "Responded $count  times"
         }
     }
 
     /**
-     * Runs the jobs by starting it and then managing it ( by
-     * continuously listening of requests )
+     * Sends a command to take action ( start, pause, stop, etc ) on a specific job or worker
      */
-    private suspend fun run(job: slatekit.jobs.Job): kotlinx.coroutines.Job {
-        val j = scope.launch {
-            job.start()
-            job.manage()
+    override suspend fun send(command: Command):Outcome<String> {
+        // "{identity.area}.{identity.service}"
+        // e.g. "signup.emails"
+        return when(val job = this[command.identity.name]) {
+            null -> Outcomes.invalid("Unable to find job with name ${command.identity.name}")
+            else -> job.send(command)
         }
-        return j
     }
 
-    private suspend fun <T> perform(name: String, op: suspend(Job) -> T): Outcome<T> {
-        val job = this[name]
-        val result = when (job) {
-            null -> Outcomes.invalid("Job with name $name not found")
-            else -> Outcomes.success(op(job))
+    /**
+     * Converts the name supplied to either the identity of either
+     * 1. Job    : {identity.area}.{identity.service}                       e.g. "signup.emails"
+     * 2. Worker : {identity.area}.{identity.service}.{identity.instance}   e.g. "signup.emails.worker_1"
+     */
+    override fun toId(name: String): Identity? {
+        if(name.isBlank()) return null
+        val parts = name.split(".")
+        return when (parts.size) {
+            2 -> this["${parts[0]}.${parts[1]}"]?.id
+            3 -> this["${parts[0]}.${parts[1]}"]?.workers?.getIds()?.first { it.instance == name }
+            else -> null
         }
-        return result
     }
 
     companion object {
+
+        const val ALL = "ALL"
 
         /**
          * Default scope used by the Jobs system

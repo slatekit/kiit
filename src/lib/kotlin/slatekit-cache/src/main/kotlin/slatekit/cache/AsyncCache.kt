@@ -1,6 +1,7 @@
 package slatekit.cache
 
 import kotlinx.coroutines.Deferred
+import slatekit.common.Identity
 import slatekit.common.log.Logger
 import slatekit.results.Outcome
 
@@ -8,7 +9,7 @@ interface AsyncCache {
     /**
      * Name of the this cache, used to identify it between multiple caches
      */
-    val name:String
+    val id:Identity
 
     /**
      * settings for the cache

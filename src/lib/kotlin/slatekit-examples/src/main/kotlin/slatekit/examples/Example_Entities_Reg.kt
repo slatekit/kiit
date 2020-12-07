@@ -24,8 +24,8 @@ import slatekit.common.conf.ConfFuncs
 import slatekit.common.data.DbConString
 import slatekit.common.data.Connections
 import slatekit.common.data.Vendor
-import slatekit.cmds.Command
-import slatekit.cmds.CommandRequest
+
+
 import slatekit.db.Db
 import slatekit.entities.core.EntityInfo
 import slatekit.examples.common.User

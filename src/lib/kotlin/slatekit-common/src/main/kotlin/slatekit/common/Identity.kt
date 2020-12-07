@@ -26,11 +26,20 @@ interface Identity {
 
         val empty = SimpleIdentity("empty", "empty", Agent.Test, "empty")
 
-        fun cmd(name:String, env:EnvMode = EnvMode.Dev):Identity {
-            val tokens = name.split(".")
-            val area = if(tokens.size > 1) tokens[0] else ""
-            val svc = if(tokens.size > 1) tokens[1] else tokens[0]
-            return DetailIdentity(area, svc, Agent.Cmd, env.name)
+        fun app(area:String, service:String, env:EnvMode = EnvMode.Dev):Identity {
+            return DetailIdentity(area, service, Agent.App, env.name)
+        }
+
+        fun api(area:String, service:String, env:EnvMode = EnvMode.Dev):Identity {
+            return DetailIdentity(area, service, Agent.API, env.name)
+        }
+
+        fun cli(area:String, service:String, env:EnvMode = EnvMode.Dev):Identity {
+            return DetailIdentity(area, service, Agent.CLI, env.name)
+        }
+
+        fun job(area:String, service:String, env:EnvMode = EnvMode.Dev):Identity {
+            return DetailIdentity(area, service, Agent.Job, env.name)
         }
 
         fun test(name:String): Identity {

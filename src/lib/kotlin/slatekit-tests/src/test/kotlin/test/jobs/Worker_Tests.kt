@@ -8,13 +8,15 @@ import slatekit.common.Identity
 import slatekit.jobs.workers.WorkResult
 import slatekit.jobs.workers.Worker
 import slatekit.jobs.support.Runner
+import test.jobs.samples.OneTimeWorker
+import test.jobs.samples.PagedWorker
 
 class Worker_Tests {
 
     @Test
     fun can_setup() {
         val worker = OneTimeWorker(0, 3)
-        val context =
+
         // Id
         Assert.assertEquals(worker.id.area , "tests")
         Assert.assertEquals(worker.id.service, "OneTimeWorker")
@@ -45,15 +47,15 @@ class Worker_Tests {
     fun can_run() {
         val worker = OneTimeWorker(0, 3)
         val result = runBlocking { Runner.run(worker) }
-        val flows = worker.currentFlows()
+        val audit = worker.audits()
 
         Assert.assertTrue(result.success)
         Assert.assertEquals(worker.currentValue(), 4)
         Assert.assertEquals(worker.status(), Status.Complete)
-        Assert.assertEquals(flows.size, 3)
-        Assert.assertEquals(flows[0], "init")
-        Assert.assertEquals(flows[1], "work")
-        Assert.assertEquals(flows[2], "done")
+        Assert.assertEquals(audit.size, 3)
+        Assert.assertEquals(audit[0], "init")
+        Assert.assertEquals(audit[1], "work")
+        Assert.assertEquals(audit[2], "done")
         result.map {
             Assert.assertEquals(it, Status.Complete)
         }
@@ -89,14 +91,14 @@ class Worker_Tests {
     fun can_start() {
         val worker = OneTimeWorker(0, 3)
         val result = runBlocking { Runner.attemptStart(worker) }
-        val flows = worker.currentFlows()
+        val audits = worker.audits()
         Assert.assertTrue(result.success)
         Assert.assertEquals(worker.currentValue(), 4)
         Assert.assertEquals(worker.status(), Status.Complete)
-        Assert.assertEquals(flows.size, 3)
-        Assert.assertEquals(flows[0], "init")
-        Assert.assertEquals(flows[1], "work")
-        Assert.assertEquals(flows[2], "done")
+        Assert.assertEquals(audits.size, 3)
+        Assert.assertEquals(audits[0], "init")
+        Assert.assertEquals(audits[1], "work")
+        Assert.assertEquals(audits[2], "done")
         result.map {
             Assert.assertEquals(it, WorkResult.Done)
         }

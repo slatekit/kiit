@@ -19,8 +19,8 @@ import slatekit.common.info.Folders
 //<doc:import_examples>
 import slatekit.results.Try
 import slatekit.results.Success
-import slatekit.cmds.Command
-import slatekit.cmds.CommandRequest
+
+
 
 //</doc:import_examples>
 
