@@ -9,6 +9,7 @@ import slatekit.core.common.Backoffs
 import slatekit.core.common.DefaultScheduler
 import slatekit.core.common.Scheduler
 import slatekit.jobs.Jobs
+import slatekit.jobs.Notifier
 import slatekit.jobs.Queue
 import slatekit.jobs.workers.WorkRequest
 import slatekit.jobs.workers.WorkResult

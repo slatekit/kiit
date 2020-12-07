@@ -1,12 +1,36 @@
-package slatekit.jobs.support
+package slatekit.jobs
 
 import slatekit.common.Event
 import slatekit.common.Identity
 import slatekit.common.Status
 import slatekit.core.common.Emitter
 import slatekit.jobs.Job
+import slatekit.jobs.support.JobContext
+import slatekit.jobs.support.JobUtils
 import slatekit.jobs.workers.WorkerContext
 
+/**
+ * Notification emitter for job and state changes.
+ * Sends out events for changes to either job or a worker.
+ * Uses the @see[slatekit.common.Event] model
+ * Event(
+ *      area   = "signup",
+ *      name   = "emails",
+ *      action = "Starting",
+ *      agent  = "job",
+ *      env    = "pro",
+ *      uuid   = "worker-001",
+ *      status = Codes.SUCCESS,
+ *      desc   = "State changed",
+ *      source = "wrk",
+ *      target = "queue://emails",
+ *      tag    = "worker",
+ *      fields = listOf(
+ *          Triple( "region" , "usa"     , "" ),
+ *          Triple( "device" , "android" , "" )
+ *      )
+ *  )
+*/
 open class Notifier(val jobEvents: Emitter<Event> = Emitter<Event>(),
                val wrkEvents: Emitter<Event> = Emitter<Event>()) {
 
@@ -18,6 +42,9 @@ open class Notifier(val jobEvents: Emitter<Event> = Emitter<Event>(),
         val id = job.id
         val status = job.status()
         val event = toEvent(id, status, "State changed", "job", queue)
+
+        // Notify listeners interested in all (*) state changes
+        // Notify listeners interested in only X state change
         jobEvents.emit(event)
         jobEvents.emit(event.status.name, event)
     }
@@ -31,29 +58,14 @@ open class Notifier(val jobEvents: Emitter<Event> = Emitter<Event>(),
         val id = worker.id
         val status = worker.status()
         val event = toEvent(id, status, "State changed", "wrk", queue)
+
+        // Notify listeners interested in all (*) state changes
+        // Notify listeners interested in only X state change
         wrkEvents.emit(event)
         wrkEvents.emit(event.status.name, event)
     }
 
-    /**
-     * Event(
-     *      area   = "signup",
-     *      name   = "emails",
-     *      action = "Starting",
-     *      agent  = "job",
-     *      env    = "pro",
-     *      uuid   = "worker-001",
-     *      status = Codes.SUCCESS,
-     *      desc   = "State changed",
-     *      source = "wrk",
-     *      target = "queue://emails",
-     *      tag    = "worker",
-     *      fields = listOf(
-     *          Triple( "region" , "usa"     , "" ),
-     *          Triple( "device" , "android" , "" )
-     *      )
-     *  )
-     */
+
     protected open fun toEvent(id:Identity, status: Status, desc:String, source:String, target:String, fields:List<Triple<String, String, String>> = emptyFields):Event {
         val code = JobUtils.toCode(status)
         val tag = if(id.tags.isEmpty()) "" else id.tags.first()
