@@ -14,11 +14,11 @@ import slatekit.results.Status
  *
  * @param uuid   : unique id ( UUID ) identification
  * @param area   : logical group/project this alert is associated with
- * @param name   : name of the event        e.g. "SIGNUP"
+ * @param service   : name of the event        e.g. "SIGNUP"
  * @param agent  : application / service sending this alert
  * @param env    : environment of this alert e.g. dev | qat | pro
  * @param inst   : instance name e.g. of server or node id
- * @param action : action being performed ( e.g. "register" )
+ * @param name : action being performed ( e.g. "register" )
  * @param desc   : description of the alert e.g. "User registration via mobile"
  * @param status : status code for alert ( success/failure/etc )
  * @param source : name / id of the source/origin if applicable
@@ -51,11 +51,11 @@ import slatekit.results.Status
 data class Event(
         @JvmField val uuid: String,
         @JvmField val area: String,
-        @JvmField val name: String,
+        @JvmField val service: String,
         @JvmField val agent: String,
         @JvmField val env: String,
         @JvmField val inst: String,
-        @JvmField val action: String,
+        @JvmField val name: String,
         @JvmField val desc: String,
         @JvmField val status: Status,
         @JvmField val source: String,

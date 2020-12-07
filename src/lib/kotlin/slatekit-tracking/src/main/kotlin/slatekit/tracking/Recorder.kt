@@ -89,14 +89,14 @@ open class Recorder<TRequest, TResponse, TFailure>(val id: Identity,
         fun log(logger:Logger, id: Identity, event: Event){
             val extra = event.fields?.fold("") { acc, info -> acc + ", ${info.first}=${info.second}" }
             when(event.status) {
-                is Passed.Succeeded  -> logger.info ("id=${id.id}, area=${event.area}, name=${event.name}, uuid=${event.uuid}, success=true , code=${event.status.code}, desc=${event.desc} $extra")
-                is Passed.Pending    -> logger.info ("id=${id.id}, area=${event.area}, name=${event.name}, uuid=${event.uuid}, success=true , code=${event.status.code}, desc=${event.desc} $extra")
-                is Failed.Ignored    -> logger.info ("id=${id.id}, area=${event.area}, name=${event.name}, uuid=${event.uuid}, success=false, code=${event.status.code}, desc=${event.desc} $extra")
-                is Failed.Invalid    -> logger.error("id=${id.id}, area=${event.area}, name=${event.name}, uuid=${event.uuid}, success=false, code=${event.status.code}, desc=${event.desc} $extra")
-                is Failed.Denied     -> logger.error("id=${id.id}, area=${event.area}, name=${event.name}, uuid=${event.uuid}, success=false, code=${event.status.code}, desc=${event.desc} $extra")
-                is Failed.Errored    -> logger.error("id=${id.id}, area=${event.area}, name=${event.name}, uuid=${event.uuid}, success=false, code=${event.status.code}, desc=${event.desc} $extra")
-                is Failed.Unknown    -> logger.error("id=${id.id}, area=${event.area}, name=${event.name}, uuid=${event.uuid}, success=false, code=${event.status.code}, desc=${event.desc} $extra")
-                else                 -> logger.error("id=${id.id}, area=${event.area}, name=${event.name}, uuid=${event.uuid}, success=false, code=${event.status.code}, desc=${event.desc} $extra")
+                is Passed.Succeeded  -> logger.info ("id=${id.id}, area=${event.area}, service=${event.service}, name=${event.name}, uuid=${event.uuid}, success=true , code=${event.status.code}, desc=${event.desc} $extra")
+                is Passed.Pending    -> logger.info ("id=${id.id}, area=${event.area}, service=${event.service}, name=${event.name}, uuid=${event.uuid}, success=true , code=${event.status.code}, desc=${event.desc} $extra")
+                is Failed.Ignored    -> logger.info ("id=${id.id}, area=${event.area}, service=${event.service}, name=${event.name}, uuid=${event.uuid}, success=false, code=${event.status.code}, desc=${event.desc} $extra")
+                is Failed.Invalid    -> logger.error("id=${id.id}, area=${event.area}, service=${event.service}, name=${event.name}, uuid=${event.uuid}, success=false, code=${event.status.code}, desc=${event.desc} $extra")
+                is Failed.Denied     -> logger.error("id=${id.id}, area=${event.area}, service=${event.service}, name=${event.name}, uuid=${event.uuid}, success=false, code=${event.status.code}, desc=${event.desc} $extra")
+                is Failed.Errored    -> logger.error("id=${id.id}, area=${event.area}, service=${event.service}, name=${event.name}, uuid=${event.uuid}, success=false, code=${event.status.code}, desc=${event.desc} $extra")
+                is Failed.Unknown    -> logger.error("id=${id.id}, area=${event.area}, service=${event.service}, name=${event.name}, uuid=${event.uuid}, success=false, code=${event.status.code}, desc=${event.desc} $extra")
+                else                 -> logger.error("id=${id.id}, area=${event.area}, service=${event.service}, name=${event.name}, uuid=${event.uuid}, success=false, code=${event.status.code}, desc=${event.desc} $extra")
             }
         }
 

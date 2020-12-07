@@ -1,11 +1,11 @@
 package slatekit.jobs.workers
 
 import slatekit.common.DateTime
-import slatekit.common.Event
 import slatekit.common.Identity
 import slatekit.common.Status
 import slatekit.common.log.LogLevel
 import slatekit.jobs.Action
+import slatekit.jobs.Event
 import slatekit.jobs.Task
 import slatekit.tracking.Recorder
 import slatekit.jobs.support.*

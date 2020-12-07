@@ -149,8 +149,8 @@ class Example_Tracking : Command("auth") {
         // Use case 4.1: Create a sample registration event
         val event = Event(
                 area = "registration",
-                name = "NEW_ANDROID_REGISTRATION",
-                action = "created",
+                service = "NEW_ANDROID_REGISTRATION",
+                name = "created",
                 agent = "job",
                 env = "dev",
                 uuid = "abc-123-xyz",
