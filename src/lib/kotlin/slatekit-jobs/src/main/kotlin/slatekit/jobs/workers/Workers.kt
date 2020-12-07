@@ -163,8 +163,7 @@ class Workers(val ctx: JobContext) {
 
     private suspend fun perform(status: Status?, reason: String?, id: Identity, operation: suspend (Executor) -> Outcome<Status>): Outcome<Status> {
         record(id, status?.name ?: reason ?: "")
-        val executor = this.lookup[id.id]
-        return when (executor) {
+        return when (val executor = this.lookup[id.id]) {
             null -> Outcomes.errored("Unable to find worker with id : ${id.name}")
             else -> {
                 val context = executor.context
@@ -185,10 +184,9 @@ class Workers(val ctx: JobContext) {
                     ctx.logger.info("Worker ${worker.id.name} complete")
                     worker.move(Status.Complete)
                     worker.done()
-                    notify(context, "Done")
+                    notify(context, Status.Complete.name)
                 }
                 is WorkResult.Next -> {
-
                     val cmd = ctx.commands.work(worker.id, Action.Process)
                     ctx.channel.send(cmd)
                 }

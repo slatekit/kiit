@@ -1,8 +1,10 @@
 package slatekit.jobs
 
+import slatekit.common.DateTime
 import slatekit.common.Event
 import slatekit.common.Identity
 import slatekit.common.Status
+import slatekit.common.ids.ULIDs
 import slatekit.jobs.support.JobContext
 import slatekit.jobs.support.JobUtils
 import slatekit.jobs.workers.WorkerContext
@@ -62,16 +64,18 @@ object Events {
         val code = JobUtils.toCode(status)
         val tag = if(id.tags.isEmpty()) "" else id.tags.first()
         return Event(
+            uuid   = ULIDs.create().value,
             area   = id.area,
             name   = id.name,
-            action = status.name,
             agent  = id.agent.name,
             env    = id.env,
-            uuid   = id.instance,
-            status = code,
+            inst   = id.instance,
+            action = status.name,
             desc   = desc,
+            status = code,
             source = source,
             target = target,
+            time   = DateTime.now(),
             tag    = tag,
             fields = fields
         )
