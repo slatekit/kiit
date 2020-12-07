@@ -26,6 +26,18 @@ interface Identity {
 
         val empty = SimpleIdentity("empty", "empty", Agent.Test, "empty")
 
+        fun app(area:String, service:String, env:EnvMode = EnvMode.Dev):Identity {
+            return DetailIdentity(area, service, Agent.App, env.name)
+        }
+
+        fun api(area:String, service:String, env:EnvMode = EnvMode.Dev):Identity {
+            return DetailIdentity(area, service, Agent.API, env.name)
+        }
+
+        fun cli(area:String, service:String, env:EnvMode = EnvMode.Dev):Identity {
+            return DetailIdentity(area, service, Agent.CLI, env.name)
+        }
+
         fun job(area:String, service:String, env:EnvMode = EnvMode.Dev):Identity {
             return DetailIdentity(area, service, Agent.Job, env.name)
         }

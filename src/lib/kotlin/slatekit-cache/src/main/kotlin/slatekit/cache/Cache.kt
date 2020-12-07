@@ -13,14 +13,16 @@
 
 package slatekit.cache
 
+import slatekit.common.Identity
 import slatekit.common.log.Logger
 import slatekit.results.Outcome
 
 interface Cache {
     /**
-     * Name of the this cache, used to identify it between multiple caches
+     * Identity of the this cache, used to identify it between multiple caches
+     * @see[slatekit.common.Identity]
      */
-    val name: String
+    val id: Identity
 
     /**
      * settings for the cache

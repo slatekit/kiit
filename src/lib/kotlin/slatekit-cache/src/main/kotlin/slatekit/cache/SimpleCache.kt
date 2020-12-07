@@ -13,6 +13,7 @@
 
 package slatekit.cache
 
+import slatekit.common.Identity
 import slatekit.common.log.Logger
 import slatekit.common.utils.Random
 import slatekit.results.Outcome
@@ -33,7 +34,7 @@ import slatekit.tracking.Tracker
  *
  * @param settings
  */
-open class SimpleCache(override val name:String = Random.uuid(),
+open class SimpleCache(override val id:Identity = Identity.app("app", "cache"),
                        override val settings: CacheSettings,
                        override val listener:((CacheEvent) -> Unit)? = null,
                        override val logger: Logger? = null ) : Cache {
@@ -273,7 +274,7 @@ open class SimpleCache(override val name:String = Random.uuid(),
 
 
     private fun notify(action:CacheAction, key:String? = null){
-        notify(CacheEvent.of(name, action, key ?: ""))
+        notify(CacheEvent.of(id, action, key ?: ""))
     }
 
 

@@ -4,6 +4,7 @@ import kotlinx.coroutines.CompletableDeferred
 import kotlinx.coroutines.Deferred
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.yield
+import slatekit.common.Identity
 import slatekit.common.log.Logger
 import slatekit.common.log.LoggerConsole
 import slatekit.results.Outcome
@@ -19,7 +20,7 @@ import slatekit.results.Outcome
 class SimpleAsyncCache(private val cache: Cache,
                        val channel:Channel<CacheCommand> = Channel(Channel.UNLIMITED)) : AsyncCache {
 
-    override val name: String get() = cache.name
+    override val id: Identity get() = cache.id
     override val settings: CacheSettings = cache.settings
     override val listener: ((CacheEvent) -> Unit)? get() = cache.listener
     override val logger: Logger? get() = cache.logger
@@ -210,8 +211,8 @@ class SimpleAsyncCache(private val cache: Cache,
         /**
          * Convenience method to build async cache using Default channel coordinator
          */
-        fun of(name: String = "channel-cache", logger: Logger = LoggerConsole(), settings: CacheSettings? = null, listener: ((CacheEvent) -> Unit)? = null): SimpleAsyncCache {
-            val raw = SimpleCache(name, settings = settings ?: CacheSettings(10), listener = listener, logger = logger)
+        fun of(id:Identity, logger: Logger = LoggerConsole(), settings: CacheSettings? = null, listener: ((CacheEvent) -> Unit)? = null): SimpleAsyncCache {
+            val raw = SimpleCache(id, settings = settings ?: CacheSettings(10), listener = listener, logger = logger)
             return  SimpleAsyncCache(raw)
         }
     }

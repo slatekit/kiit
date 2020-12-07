@@ -1,5 +1,6 @@
 package slatekit.cache
 
+import slatekit.common.Identity
 import slatekit.common.log.Logger
 import slatekit.results.Outcome
 
@@ -7,7 +8,7 @@ import slatekit.results.Outcome
 class SimpleSyncCache(private val cache: Cache) : Cache {
 
 
-    override val name: String get() = cache.name
+    override val id: Identity get() = cache.id
     override val settings: CacheSettings = cache.settings
     override val listener: ((CacheEvent) -> Unit)? get() = cache.listener
     override val logger: Logger? get() = cache.logger
@@ -62,8 +63,8 @@ class SimpleSyncCache(private val cache: Cache) : Cache {
         /**
          * Convenience method to build async cache using Default channel coordinator
          */
-        fun of(name:String, settings: CacheSettings? = null, listener:((CacheEvent) -> Unit)? = null):SimpleSyncCache {
-            val raw = SimpleCache(name,settings ?: CacheSettings(10), listener )
+        fun of(id:Identity, settings: CacheSettings? = null, listener:((CacheEvent) -> Unit)? = null):SimpleSyncCache {
+            val raw = SimpleCache(id,settings ?: CacheSettings(10), listener )
             val syncCache = SimpleSyncCache(raw)
             return syncCache
         }
