@@ -1,10 +1,10 @@
 package slatekit.jobs.workers
 
 import slatekit.common.DateTime
+import slatekit.common.Event
 import slatekit.common.Identity
 import slatekit.common.Status
 import slatekit.common.log.LogLevel
-import slatekit.jobs.Event
 import slatekit.jobs.Action
 import slatekit.jobs.Task
 import slatekit.tracking.Recorder
@@ -33,14 +33,14 @@ class Workers(val ctx: JobContext) {
     /**
      * Subscribe to status being changed for any worker
      */
-    suspend fun on(op: suspend (Event.WorkerEvent) -> Unit) {
+    suspend fun on(op: suspend (Event) -> Unit) {
         events.on(op)
     }
 
     /**
      * Subscribe to status beging changed to the one supplied for any worker
      */
-    suspend fun on(status: Status, op: suspend (Event.WorkerEvent) -> Unit) {
+    suspend fun on(status: Status, op: suspend (Event) -> Unit) {
         events.on(status.name, op)
     }
 
@@ -217,7 +217,7 @@ class Workers(val ctx: JobContext) {
             val worker = context.worker
             val task = context.task
             record(worker.id, action, task.structured())
-            ctx.notifier.notify(worker)
+            ctx.notifier.notify(ctx, context)
         } catch (ex: Exception) {
         }
     }

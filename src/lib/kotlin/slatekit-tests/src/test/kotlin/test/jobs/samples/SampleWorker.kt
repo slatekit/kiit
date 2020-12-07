@@ -1,4 +1,4 @@
-package test.jobs
+package test.jobs.samples
 
 import slatekit.common.Identity
 import slatekit.jobs.*

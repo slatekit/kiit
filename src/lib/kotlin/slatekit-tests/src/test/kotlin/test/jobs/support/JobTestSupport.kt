@@ -1,4 +1,4 @@
-package test.jobs
+package test.jobs.support
 
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.runBlocking
@@ -15,6 +15,7 @@ import slatekit.jobs.support.JobContext
 import slatekit.jobs.workers.Worker
 import slatekit.jobs.workers.WorkerContext
 import slatekit.jobs.workers.Workers
+import test.jobs.samples.PagedWorker
 
 interface JobTestSupport {
 

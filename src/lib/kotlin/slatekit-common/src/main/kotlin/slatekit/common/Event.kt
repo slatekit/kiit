@@ -22,29 +22,35 @@ import slatekit.results.Status
  * @param tag    : correlation id/tag for linking to other items
  * @param fields : Optional list of additional fields 1=key, 2=value, 3=tag
  *
- * event : {
- *     area: 'registration',
- *     name: 'NEW_ANDROID_REGISTRATION',
- *     agent:'job',
- *     uuid: 'abc-123-xyz',
- *     desc: 'User registration via mobile',
- *     status: Codes.SUCCESS,
- *     target: "registration-alerts",
- *     tag : "a1b2c3",
- *     fields: [
- *         { 'region' , 'usa'     , '' },
- *         { 'device' , 'android' , '' }
- *     ]
- * }
+ * @sample
+ * Event(
+ *      area   = "signup",
+ *      name   = "registration",
+ *      action = "created",
+ *      agent  = "api",
+ *      env    = "pro",
+ *      uuid   = "abc-123-xyz",
+ *      desc   = "User registration via mobile",
+ *      status = Codes.SUCCESS,
+ *      source = "android",
+ *      target = "2.1",
+ *      tag    = "a1b2c3",
+ *      fields = listOf(
+ *          Triple( "region" , "usa"     , "" ),
+ *          Triple( "device" , "android" , "" )
+ *      )
+ *  )
  */
 data class Event(
         @JvmField val area: String,
         @JvmField val name: String,
+        @JvmField val action: String,
         @JvmField val agent: String,
         @JvmField val env : String,
         @JvmField val uuid: String,
         @JvmField val desc: String,
         @JvmField val status: Status,
+        @JvmField val source: String,
         @JvmField val target: String,
         @JvmField val tag: String,
         @JvmField val fields: List<Triple<String, String, String>>?

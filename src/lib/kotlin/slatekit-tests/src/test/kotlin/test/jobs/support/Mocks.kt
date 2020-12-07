@@ -1,4 +1,4 @@
-package test.jobs
+package test.jobs.support
 
 import kotlinx.coroutines.channels.Channel
 import slatekit.common.DateTime

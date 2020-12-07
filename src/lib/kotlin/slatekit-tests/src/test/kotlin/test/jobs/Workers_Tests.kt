@@ -12,6 +12,9 @@ import slatekit.jobs.support.Command
 import slatekit.jobs.support.JobContext
 import slatekit.jobs.workers.WorkerContext
 import slatekit.jobs.workers.Workers
+import test.jobs.samples.PagedWorker
+import test.jobs.support.MockCoordinator
+import test.jobs.support.MockScheduler
 
 
 class Workers_Tests {

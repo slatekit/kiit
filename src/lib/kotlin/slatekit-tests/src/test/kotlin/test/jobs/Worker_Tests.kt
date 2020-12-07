@@ -8,6 +8,8 @@ import slatekit.common.Identity
 import slatekit.jobs.workers.WorkResult
 import slatekit.jobs.workers.Worker
 import slatekit.jobs.support.Runner
+import test.jobs.samples.OneTimeWorker
+import test.jobs.samples.PagedWorker
 
 class Worker_Tests {
 

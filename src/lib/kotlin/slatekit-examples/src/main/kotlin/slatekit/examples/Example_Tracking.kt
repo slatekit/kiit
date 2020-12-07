@@ -150,6 +150,7 @@ class Example_Tracking : Command("auth") {
         val event = Event(
                 area = "registration",
                 name = "NEW_ANDROID_REGISTRATION",
+                action = "created",
                 agent = "job",
                 env = "dev",
                 uuid = "abc-123-xyz",

@@ -129,14 +129,14 @@ class Job(val ctx: JobContext) : Ops<WorkerContext>, StatusCheck {
     /**
      * Subscribe to @see[slatekit.common.Status] being changed
      */
-    fun on(op: suspend (Event.JobEvent) -> Unit) {
+    fun on(op: suspend (Event) -> Unit) {
         events.on(op)
     }
 
     /**
      * Subscribe to @see[slatekit.common.Status] beging changed to the one supplied
      */
-    fun on(status: Status, op: suspend (Event.JobEvent) -> Unit) {
+    fun on(status: Status, op: suspend (Event) -> Unit) {
         events.on(status.name, op)
     }
 

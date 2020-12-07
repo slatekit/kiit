@@ -53,15 +53,8 @@ object JobUtils {
         }
     }
 
-    fun toEvent(started: DateTime, desc: String, target: String, worker: Worker<*>): Event {
-        // Convert the worker info / state / stats into a generalized event
-        val id = worker.id
-        val status = worker.status()
-        val calls = worker.stats.calls
-        val counts = worker.stats.counts
-        val now = DateTime.now()
-        val duration = Duration.between(started, now).seconds
-        val code = when (status) {
+    fun toCode(status: Status): slatekit.results.Status {
+        return when (status) {
             is Status.InActive -> Codes.INACTIVE
             is Status.Starting -> Codes.STARTING
             is Status.Idle     -> Codes.WAITING
@@ -70,7 +63,19 @@ object JobUtils {
             is Status.Stopped  -> Codes.STOPPED
             is Status.Complete -> Codes.COMPLETE
             is Status.Failed   -> Codes.ERRORED
+            else               -> Codes.SUCCESS
         }
+    }
+
+    fun toEvent(started: DateTime, desc: String, target: String, worker: Worker<*>): Event {
+        // Convert the worker info / state / stats into a generalized event
+        val id = worker.id
+        val status = worker.status()
+        val calls = worker.stats.calls
+        val counts = worker.stats.counts
+        val now = DateTime.now()
+        val duration = Duration.between(started, now).seconds
+        val code = toCode(status)
         val ev = Event(
             area = id.area,
             name = id.name,

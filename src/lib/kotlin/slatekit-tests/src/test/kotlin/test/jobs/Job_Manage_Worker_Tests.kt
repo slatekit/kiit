@@ -5,6 +5,8 @@ import org.junit.Assert
 import org.junit.Test
 import slatekit.common.Status
 import slatekit.jobs.*
+import test.jobs.support.JobTestSupport
+import test.jobs.support.MockCoordinatorWithChannel
 
 class Job_Manage_Worker_Tests : JobTestSupport {
 

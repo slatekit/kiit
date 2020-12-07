@@ -9,6 +9,8 @@ import slatekit.core.queues.QueueStringConverter
 import slatekit.core.queues.WrappedAsyncQueue
 import slatekit.integration.jobs.JobQueue
 import slatekit.jobs.*
+import test.jobs.support.JobTestSupport
+import test.jobs.support.MockCoordinatorWithChannel
 
 
 class Job_Manage_Queue_Tests : JobTestSupport {
