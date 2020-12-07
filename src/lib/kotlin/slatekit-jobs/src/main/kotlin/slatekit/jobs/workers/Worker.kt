@@ -19,7 +19,7 @@ import slatekit.tracking.Recorder
  *
  * NOTES:
  * 1. All anonymous functions supplied to a Job are wrapped in a worker
- * 2. Clients should extend worker to use/enrich the life-cycle, state change, alerting, diagnostic methods above
+ * 2. Clients should only extend worker to use/enrich the life-cycle, state change, alerting, diagnostic methods above
  */
 open class Worker<T>(
     val id: Identity,
