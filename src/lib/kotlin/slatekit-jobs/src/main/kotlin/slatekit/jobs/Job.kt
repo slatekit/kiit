@@ -254,12 +254,12 @@ class Job(val ctx: JobContext) : Ops<WorkerContext>, StatusCheck {
         val action = request.action
         val launch = false
         when (action) {
-            is Action.Start -> transition(Action.Start, Status.Running, launch)
-            is Action.Stop -> transition(Action.Stop, Status.Stopped, launch)
-            is Action.Resume -> transition(Action.Resume, Status.Running, launch)
+            is Action.Start   -> transition(Action.Start  , Status.Running, launch)
+            is Action.Stop    -> transition(Action.Stop   , Status.Stopped, launch)
+            is Action.Resume  -> transition(Action.Resume , Status.Running, launch)
             is Action.Process -> transition(Action.Process, Status.Running, launch)
-            is Action.Pause -> transition(Action.Pause, Status.Paused, launch, 30)
-            is Action.Delay -> transition(Action.Start, Status.Paused, launch, 30)
+            is Action.Pause   -> transition(Action.Pause  , Status.Paused, launch, 30)
+            is Action.Delay   -> transition(Action.Start  , Status.Paused, launch, 30)
             else -> {
                 ctx.logger.error("Unexpected state: ${request.action}")
             }
@@ -309,12 +309,12 @@ class Job(val ctx: JobContext) : Ops<WorkerContext>, StatusCheck {
         val action = command.action
         val workerId = command.identity
         when (action) {
-            is Action.Start -> JobUtils.perform(this, action, status, launch, ctx.scope) { workers.start(workerId, task, requireTask) }
-            is Action.Stop -> JobUtils.perform(this, action, status, launch, ctx.scope) { workers.stop(workerId, command.desc) }
-            is Action.Pause -> JobUtils.perform(this, action, status, launch, ctx.scope) { workers.pause(workerId, command.desc) }
+            is Action.Start   -> JobUtils.perform(this, action, status, launch, ctx.scope) { workers.start(workerId, task, requireTask) }
+            is Action.Stop    -> JobUtils.perform(this, action, status, launch, ctx.scope) { workers.stop(workerId, command.desc) }
+            is Action.Pause   -> JobUtils.perform(this, action, status, launch, ctx.scope) { workers.pause(workerId, command.desc) }
             is Action.Process -> JobUtils.perform(this, action, status, launch, ctx.scope) { workers.process(workerId, task) }
-            is Action.Resume -> JobUtils.perform(this, action, status, launch, ctx.scope) { workers.resume(workerId, command.desc, task) }
-            is Action.Delay -> JobUtils.perform(this, action, status, launch, ctx.scope) { workers.start(workerId, requireTask = requireTask) }
+            is Action.Resume  -> JobUtils.perform(this, action, status, launch, ctx.scope) { workers.resume(workerId, command.desc, task) }
+            is Action.Delay   -> JobUtils.perform(this, action, status, launch, ctx.scope) { workers.start(workerId, requireTask = requireTask) }
             else -> {
                 ctx.logger.error("Unexpected state: ${command.action}")
             }
@@ -353,16 +353,6 @@ class Job(val ctx: JobContext) : Ops<WorkerContext>, StatusCheck {
     }
 
     companion object {
-
-        suspend fun sendEmail(): WorkResult = WorkResult.Done
-
-        suspend fun test() {
-            Job(Identity.job("signup", "email"), ::sendEmail)
-            Job(Identity.job("signup", "email"), suspend {
-                println("simulate email...")
-                WorkResult.Done
-            })
-        }
 
         fun worker(call: suspend () -> WorkResult): suspend (Task) -> WorkResult {
             return { t ->
