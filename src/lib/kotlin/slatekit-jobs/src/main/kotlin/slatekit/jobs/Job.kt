@@ -23,11 +23,12 @@ import slatekit.results.builders.Outcomes
  * 3. Task      : A single work item with a payload that a worker can work on. @see[slatekit.jobs.Task]
  * 2. Queue     : Interface for a Queue that workers can optional source tasks from
  * 4. Workers   : 1 or more @see[slatekit.jobs.workers.Worker]s that can work on this job
- * 5. Manage    : Operations to manage ( start | stop | pause | resume | delay ) a job or individual worker
+ * 5. Command   : Commands ( start | stop | pause | resume | delay ) to manage a job or individual worker
  * 6. Events    : Used to subscribe to events on the job/worker ( only status changes for now )
  * 7. Stats     : Reasonable statistics / diagnostics for workers such as total calls, processed, logging
  * 8. Policies  : @see[slatekit.policy.Policy] associated with a worker such as limits, retries
  * 9. Backoffs  : Exponential sequence of seconds to use to back off from processing queues when queue is empty
+ * 10. Channel  : The mode of communication to send commands to a job for safe access to shared state
  *
  *
  * NOTES:
@@ -43,7 +44,7 @@ import slatekit.results.builders.Outcomes
  * INSPIRED BY:
  * 1. Inspired by Ruby Rails SideKiq, NodesJS Bull, Python Celery
  * 2. Kotlin Structured Concurrency via Channels ( misc blog posts by Kotlin Team )
- * 3. Actor model from other languages
+ * 3. Actor model see https://kotlinlang.org/docs/reference/coroutines/shared-mutable-state-and-concurrency.html
  *
  *
  * LIMITS:
