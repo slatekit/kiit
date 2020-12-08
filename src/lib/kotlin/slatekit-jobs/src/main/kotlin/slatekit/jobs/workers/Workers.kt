@@ -3,7 +3,6 @@ package slatekit.jobs.workers
 import slatekit.common.DateTime
 import slatekit.common.Identity
 import slatekit.common.Status
-import slatekit.common.log.LogLevel
 import slatekit.jobs.Action
 import slatekit.jobs.Event
 import slatekit.jobs.Task
@@ -207,7 +206,7 @@ class Workers(val ctx: JobContext) {
 
     private fun record(id: Identity, action: String, extra: List<Pair<String, String>> = listOf()) {
         val pairs = listOf("id" to id.id, "action" to action) + extra
-        ctx.logger.log(LogLevel.Info, "Workers:", pairs)
+        //ctx.logger.log(LogLevel.Info, "Workers:", pairs)
     }
 
     private suspend fun notify(context: WorkerContext, action: String) {

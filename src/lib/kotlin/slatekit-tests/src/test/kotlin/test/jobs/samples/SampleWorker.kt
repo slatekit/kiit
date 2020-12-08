@@ -61,7 +61,8 @@ class OneTimeWorker(val start:Int, val end:Int, id: Identity) : Worker<Int>(id) 
 }
 
 
-class PagedWorker(start:Int, val maxRuns:Int, val countsPerRun:Int) : Worker<Int>(Identity.test(PagedWorker::class.simpleName!!)) {
+class PagedWorker(start:Int, val maxRuns:Int, val countsPerRun:Int, id: Identity? = null)
+    : Worker<Int>( id ?: Identity.test(PagedWorker::class.simpleName!!)) {
 
     private val runs = AtomicInteger(0)
     private val counts = AtomicInteger(start)
@@ -96,4 +97,16 @@ class PagedWorker(start:Int, val maxRuns:Int, val countsPerRun:Int) : Worker<Int
         return work(task)
     }
 
+}
+
+
+class BatchWorker(id: Identity? = null, val limit:Int = 10)
+    : Worker<Int>( id ?: Identity.test(BatchWorker::class.simpleName!!)) {
+
+    val counts = AtomicInteger(0)
+
+    override suspend fun work(task: Task): WorkResult {
+        val curr = counts.incrementAndGet()
+        return if(curr < limit) WorkResult.More else WorkResult.Done
+    }
 }

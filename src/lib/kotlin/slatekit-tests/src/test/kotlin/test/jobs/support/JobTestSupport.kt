@@ -12,6 +12,7 @@ import slatekit.common.log.LoggerConsole
 import slatekit.jobs.*
 import slatekit.jobs.support.Command
 import slatekit.jobs.support.JobContext
+import slatekit.jobs.support.pull
 import slatekit.jobs.workers.Worker
 import slatekit.jobs.workers.WorkerContext
 import slatekit.jobs.workers.Workers
@@ -24,7 +25,7 @@ interface JobTestSupport {
         val manager = build(numWorkers, queue)
         runBlocking {
             manager.send(action)
-            manager.poll()
+            manager.pull()
             operation?.invoke(manager)
         }
         return manager
@@ -36,12 +37,9 @@ interface JobTestSupport {
 
     fun build(numWorkers:Int, queue: Queue?): Job {
         val workers = (1..numWorkers).map { buildWorker() }
-        val logger = LoggerConsole(LogLevel.Info, "manager")
-        val ids = Paired()
-        val coordinator = MockCoordinatorWithChannel(logger, ids, Channel(Channel.UNLIMITED))
         val id = (workers.first().id as SimpleIdentity)
         val jobId = id.copy(service = id.service + "-job")
-        val ctx = JobContext(jobId, coordinator, workers, logger, queue, scheduler = MockScheduler())
+        val ctx = JobContext(jobId, Channel(Channel.UNLIMITED), workers, queue = queue, scheduler = MockScheduler())
         val manager = slatekit.jobs.Job(ctx)
         return manager
     }
@@ -49,7 +47,7 @@ interface JobTestSupport {
 
     fun ensure(workers: Workers, hasRun:Boolean, totalRuns:Long, totalPassed:Long, totalFailed:Long, id: Identity,
                status: Status, requestCount:Int, action: Action?, seconds:Long){
-        val context: WorkerContext = workers.get(id)!!
+        val context: WorkerContext = workers[id]!!
         val runs = context.stats.calls
         val worker = context.worker
 
@@ -59,8 +57,8 @@ interface JobTestSupport {
         // Calls
         Assert.assertEquals(hasRun, runs.hasRun())
         when(hasRun){
-            true  -> Assert.assertNotNull  (runs.lastTime())
-            false -> Assert.assertNull  (runs.lastTime())
+            true  -> Assert.assertNotNull(runs.lastTime())
+            false -> Assert.assertNull   (runs.lastTime())
         }
         Assert.assertEquals(totalRuns  , runs.totalRuns()  )
         Assert.assertEquals(totalPassed, runs.totalPassed())

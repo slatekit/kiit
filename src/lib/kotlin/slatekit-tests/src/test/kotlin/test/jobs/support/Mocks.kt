@@ -16,7 +16,7 @@ class MockScheduler : Scheduler {
 }
 
 
-open class MockCoordinator(override val logger: Logger, override val ids: Paired) : slatekit.core.common.Coordinator<Command> {
+open class MockCoordinator() : slatekit.core.common.Coordinator<Command> {
 
     val requests = mutableListOf<Command>()
 
@@ -24,8 +24,8 @@ open class MockCoordinator(override val logger: Logger, override val ids: Paired
         requests.add(cmd)
     }
 
-    override suspend fun send(command: Command) {
-        requests.add(command)
+    override suspend fun send(cmd: Command) {
+        requests.add(cmd)
     }
 
     override suspend fun poll(): Command? {
@@ -40,7 +40,7 @@ open class MockCoordinator(override val logger: Logger, override val ids: Paired
 }
 
 
-class MockCoordinatorWithChannel(logger: Logger, ids: Paired, val channel: Channel<Command>) : MockCoordinator(logger, ids) {
+class MockCoordinatorWithChannel(logger: Logger, ids: Paired, val channel: Channel<Command>) : MockCoordinator() {
 
     // To simulate scheduled pauses. e.g.
     private var pauses = mutableListOf<Command>()

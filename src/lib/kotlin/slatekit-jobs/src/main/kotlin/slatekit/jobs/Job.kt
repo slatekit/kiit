@@ -8,6 +8,7 @@ import slatekit.common.ids.Paired
 import slatekit.common.log.LogLevel
 import slatekit.common.log.Logger
 import slatekit.common.log.LoggerConsole
+import slatekit.core.common.ChannelCoordinator
 import slatekit.core.common.Coordinator
 import slatekit.policy.Policy
 import slatekit.jobs.support.*
@@ -107,7 +108,7 @@ class Job(val ctx: JobContext) : Ops<WorkerContext>, StatusCheck {
         scope: CoroutineScope = Jobs.scope,
         policies: List<Policy<WorkRequest, WorkResult>> = listOf()
     ) :
-        this(JobContext(id, coordinator(Paired(), LoggerConsole()), listOf(worker), queue = queue, scope = scope, policies = policies))
+        this(JobContext(id, coordinator(), listOf(worker), queue = queue, scope = scope, policies = policies))
 
     /**
      * Initialize with a list of functions to excecute work
@@ -119,7 +120,7 @@ class Job(val ctx: JobContext) : Ops<WorkerContext>, StatusCheck {
         scope: CoroutineScope = Jobs.scope,
         policies: List<Policy<WorkRequest, WorkResult>> = listOf()
     ) :
-        this(JobContext(id, coordinator(Paired(), LoggerConsole()), workers(id, ops), queue = queue, scope = scope, policies = policies))
+        this(JobContext(id, coordinator(), workers(id, ops), queue = queue, scope = scope, policies = policies))
 
     val id: Identity = ctx.id
     val workers = Workers(ctx)
@@ -144,9 +145,14 @@ class Job(val ctx: JobContext) : Ops<WorkerContext>, StatusCheck {
      * Gets the current @see[slatekit.common.Status] of the job
      */
     override fun status(): Status = _status.get()
-    val coordinator: Coordinator<Command> = ctx.channel
 
     override fun get(name: String): WorkerContext? = workers[name]
+
+    suspend fun kill() {
+        if(ctx.channel is ChannelCoordinator<*>){
+            ctx.channel.stop()
+        }
+    }
 
     /**
      * Run the job by starting it first and then managing it by listening for requests
@@ -178,8 +184,7 @@ class Job(val ctx: JobContext) : Ops<WorkerContext>, StatusCheck {
      * Coordinator handles requests via kotlin channels
      */
     override suspend fun send(command: Command): Outcome<String> {
-        coordinator.send(command)
-        record("Sent", command.structured())
+        ctx.channel.send(command)
         return when (JobUtils.isWorker(command.identity)) {
             true -> Outcomes.success("Sent command=${command.action.name}, type=job, target=${ctx.id.id}")
             false -> Outcomes.success("Send command=${command.action.name}, type=wrk, target=${ctx.id.id}")
@@ -187,29 +192,17 @@ class Job(val ctx: JobContext) : Ops<WorkerContext>, StatusCheck {
     }
 
     /**
-     * Listens to and handles 1 single request
-     */
-    suspend fun poll(count: Int = 1) {
-        // Process X off the channel
-        for (x in 0..count) {
-            val command = coordinator.poll()
-            command?.let { cmd ->
-                manage(cmd)
-            }
-        }
-    }
-
-    /**
-     * Listens to incoming requests ( name of worker )
+     * Listens to incoming commands
      */
     suspend fun manage() {
-        coordinator.consume { command ->
-            manage(command)
+        for (cmd in ctx.channel) {
+            record("MNGR", cmd)
+            manage(cmd)
+            yield()
         }
     }
 
     suspend fun manage(command: Command) {
-        record("Manage", command.structured())
         when (command) {
             // Affects the whole job/queue/workers
             is Command.JobCommand -> {
@@ -305,7 +298,7 @@ class Job(val ctx: JobContext) : Ops<WorkerContext>, StatusCheck {
     }
 
     private suspend fun manageWorker(command: Command.WorkerCommand, task: Task, status: Status, launch: Boolean, requireTask: Boolean) {
-        record("Working", command.structured() + task.structured())
+        record("WORK", command, task)
         val action = command.action
         val workerId = command.identity
         when (action) {
@@ -321,7 +314,6 @@ class Job(val ctx: JobContext) : Ops<WorkerContext>, StatusCheck {
         }
     }
 
-
     private suspend fun nextTask(id: Identity, empty: Task): Task {
         return when (ctx.queue) {
             null -> empty
@@ -330,8 +322,9 @@ class Job(val ctx: JobContext) : Ops<WorkerContext>, StatusCheck {
     }
 
 
-    private fun record(name: String, info: List<Pair<String, String>>) {
-        ctx.logger.log(LogLevel.Info, "JOB", listOf("perform" to name, "job_id" to id.fullname) + info)
+    fun record(name: String, cmd:Command, task:Task? = null) {
+        val info = cmd.structured()
+        ctx.logger.log(LogLevel.Info, "JOB", listOf("perform" to name, "job_id" to id.name) + info)
     }
 
     /**
@@ -370,8 +363,8 @@ class Job(val ctx: JobContext) : Ops<WorkerContext>, StatusCheck {
             }
         }
 
-        fun coordinator(ids: Paired, logger: Logger): Coordinator<Command> {
-            return slatekit.core.common.ChannelCoordinator(logger, ids, Channel(Channel.UNLIMITED))
+        fun coordinator(): Channel<Command> {
+            return Channel(Channel.UNLIMITED)
         }
     }
 }

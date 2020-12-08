@@ -57,9 +57,8 @@ sealed class Command {
             return listOf(
                     "target" to target,
                     "id" to id.toString(),
-                    "uuid" to uuid,
-                    "identity" to identity.id,
-                    "action" to action.name
+                    "action" to action.name,
+                    "identity" to identity.id
             )
         }
     }
@@ -83,9 +82,8 @@ sealed class Command {
             return listOf(
                     "target" to target,
                     "id" to id.toString(),
-                    "uuid" to uuid,
-                    "identity" to identity.id,
                     "action" to action.name,
+                    "identity" to identity.id,
                     "worker" to identity.instance,
                     "seconds" to seconds.toString()
             )

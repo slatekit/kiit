@@ -5,7 +5,7 @@ import slatekit.common.ids.Paired
 import slatekit.common.log.Logger
 
 
-open class MockCacheCoordinator(override val logger: Logger, override val ids: Paired) : slatekit.core.common.Coordinator<CacheCommand> {
+open class MockCacheCoordinator() : slatekit.core.common.Coordinator<CacheCommand> {
     val requests = mutableListOf<CacheCommand>()
 
     override fun sendSync(cmd: CacheCommand) {
