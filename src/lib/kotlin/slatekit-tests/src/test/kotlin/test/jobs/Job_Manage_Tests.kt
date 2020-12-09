@@ -6,19 +6,15 @@ import org.junit.Assert
 import org.junit.Test
 import slatekit.common.Identity
 import slatekit.common.Status
-import slatekit.core.common.ChannelCoordinator
 import slatekit.jobs.*
 import slatekit.jobs.support.Command
 import slatekit.jobs.support.JobContext
-import slatekit.jobs.support.poll
-import slatekit.jobs.support.pull
 import slatekit.jobs.workers.Worker
 import slatekit.jobs.workers.WorkerContext
-import slatekit.jobs.workers.Workers
+import slatekit.jobs.slatekit.jobs.Workers
 import test.jobs.samples.BatchWorker
 import test.jobs.samples.PagedWorker
 import test.jobs.support.JobTestSupport
-import test.jobs.support.MockCoordinatorWithChannel
 import test.jobs.support.MockScheduler
 
 class Job_Manage_Tests : JobTestSupport {

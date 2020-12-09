@@ -15,9 +15,9 @@ class OneTimeWorker(val start:Int, val end:Int, id: Identity) : Worker<Int>(id) 
     private val current = AtomicInteger(start)
     private val audit = mutableListOf<String>()
 
-    override suspend fun init() {
+    override suspend fun start() {
         audit.add("init")
-        super.init()
+        super.start()
     }
 
 

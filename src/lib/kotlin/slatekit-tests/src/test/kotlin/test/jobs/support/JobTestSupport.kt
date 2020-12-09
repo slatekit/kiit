@@ -6,16 +6,13 @@ import org.junit.Assert
 import slatekit.common.Status
 import slatekit.common.Identity
 import slatekit.common.SimpleIdentity
-import slatekit.common.ids.Paired
-import slatekit.common.log.LogLevel
-import slatekit.common.log.LoggerConsole
 import slatekit.jobs.*
 import slatekit.jobs.support.Command
 import slatekit.jobs.support.JobContext
 import slatekit.jobs.support.pull
 import slatekit.jobs.workers.Worker
 import slatekit.jobs.workers.WorkerContext
-import slatekit.jobs.workers.Workers
+import slatekit.jobs.slatekit.jobs.Workers
 import test.jobs.samples.PagedWorker
 
 interface JobTestSupport {

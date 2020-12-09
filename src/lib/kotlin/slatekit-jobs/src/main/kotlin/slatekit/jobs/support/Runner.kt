@@ -18,7 +18,7 @@ object Runner {
         val result = Tries.of {
             worker.move(Status.Started)
             worker.info().forEach { println(it) }
-            worker.init()
+            worker.start()
 
             worker.move(Status.Running)
             worker.work()
@@ -85,7 +85,7 @@ object Runner {
         statusChanged?.invoke(worker)
 
         worker.info().forEach { println(it) }
-        worker.init()
+        worker.start()
 
         worker.move(Status.Running)
         statusChanged?.invoke(worker)

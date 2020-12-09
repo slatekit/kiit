@@ -1,8 +1,7 @@
 package slatekit.jobs
 
 import slatekit.core.common.Emitter
-import slatekit.jobs.support.JobContext
-import slatekit.jobs.workers.WorkerContext
+import slatekit.jobs.workers.Worker
 
 /**
  * Notification emitter for job and state changes.
@@ -17,7 +16,7 @@ open class Notifier(val jobEvents: Emitter<Event> = Emitter<Event>(),
     open suspend fun notify(job: Job, name:String = stateChanged) {
         // Notify listeners interested in all (*) state changes
         // Notify listeners interested in only X state change
-        val event = Event(job.id, name, "job", job.status(), job.ctx.queue?.name, listOf())
+        val event = Event(job.id, name, "State changed", "job", job.status(), job.ctx.queue?.name)
         jobEvents.emit(event)
         jobEvents.emit(event.status.name, event)
     }
@@ -25,11 +24,10 @@ open class Notifier(val jobEvents: Emitter<Event> = Emitter<Event>(),
     /**
      * Notifies listeners of worker changes using the @see[slatekit.common.Event] model
      */
-    open suspend fun notify(jctx: JobContext, wctx: WorkerContext, name:String = stateChanged) {
+    open suspend fun notify(job: Job, worker: Worker<*>, name:String = stateChanged) {
         // Notify listeners interested in all (*) state changes
         // Notify listeners interested in only X state change
-        val worker = wctx.worker
-        val event = Event(wctx.id, name, "wrk", worker.status(), jctx.queue?.name, worker.info())
+        val event = Event(worker.id, name, "State changed","wrk", worker.status(), job.ctx.queue?.name, info = worker.info())
         wrkEvents.emit(event)
         wrkEvents.emit(event.status.name, event)
     }

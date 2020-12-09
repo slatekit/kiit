@@ -12,7 +12,7 @@ import slatekit.tracking.Recorder
 /**
  * Optional base class for Workers.
  * All work is done inside this worker which has
- * 1. life-cycle methods : [init], [work], [done]
+ * 1. life-cycle methods : [start], [work], [done]
  * 2. state changes      : [pause], [stop], [resume], [move]
  * 3. alerting ability   : [notify]
  * 4. diagnostic features: [info] method to build diagnostics info
@@ -59,9 +59,9 @@ open class Worker<T>(
      * ============================================================================
      */
     /**
-     * Life-cycle hook to allow for initialization
+     * Hook for starting job ( put initialization in here )
      */
-    open suspend fun init() {
+    open suspend fun start() {
     }
 
     /**
@@ -114,7 +114,13 @@ open class Worker<T>(
      * Hook for handling stopping of a job
      */
     open suspend fun stop(reason: String?){
+    }
 
+    /**
+     * Hook for handling killing of a job permanently
+     * This will not allow a restart
+     */
+    open suspend fun kill(reason: String?){
     }
 
     /**

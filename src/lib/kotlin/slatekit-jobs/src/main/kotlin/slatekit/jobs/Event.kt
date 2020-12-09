@@ -1,5 +1,6 @@
 package slatekit.jobs
 
+import slatekit.common.DateTime
 import slatekit.common.Identity
 import slatekit.common.Status
 
@@ -13,7 +14,9 @@ import slatekit.common.Status
  */
 data class Event(val id: Identity,
                  val name: String,
+                 val desc: String,
                  val source: String,
                  val status: Status,
                  val queue: String?,
-                 val info: List<Pair<String, String>>)
+                 val time: DateTime = DateTime.now(),
+                 val info: List<Pair<String, String>> = listOf())

@@ -6,6 +6,7 @@ import kotlinx.coroutines.channels.Channel
 import slatekit.common.*
 import slatekit.common.ext.toStringMySql
 import slatekit.common.log.LogLevel
+import slatekit.jobs.slatekit.jobs.Workers
 import slatekit.policy.Policy
 import slatekit.jobs.support.*
 import slatekit.jobs.workers.*
@@ -123,6 +124,8 @@ class Job(val ctx: JobContext) : Ops<WorkerContext>, StatusCheck {
     val workers = Workers(ctx)
     private val events = ctx.notifier.jobEvents
     private val _status = AtomicReference<Status>(Status.InActive)
+    private val control = Control(this)
+    private val work = control.work
 
     /**
      * Subscribe to @see[slatekit.common.Status] being changed
@@ -143,6 +146,8 @@ class Job(val ctx: JobContext) : Ops<WorkerContext>, StatusCheck {
      */
     override fun status(): Status = _status.get()
 
+
+    fun get(id: Identity): WorkerContext? = workers[id.id]
     override fun get(name: String): WorkerContext? = workers[name]
 
     suspend fun kill() {
@@ -261,19 +266,21 @@ class Job(val ctx: JobContext) : Ops<WorkerContext>, StatusCheck {
         ctx.logger.error("Error with job ${id.id.name}: $message")
     }
 
-    private fun setStatus(newStatus: Status) {
+
+    internal fun move(newStatus: Status) {
         _status.set(newStatus)
     }
 
+
     private suspend fun manageJob(request: Command.JobCommand) {
-        val action = request.action
-        when (action) {
-            is Action.Delay   -> all(Action.Start , Status.Paused ) { Work.delay(this, it, 30) }
-            is Action.Start   -> all(Action.Start , Status.Running) { Work.start(this, it) }
-            is Action.Pause   -> all(Action.Pause , Status.Paused ) { Work.pause(this, it, 30) }
-            is Action.Stop    -> all(Action.Stop  , Status.Stopped) { Work.stop(this, it) }
-            is Action.Resume  -> all(Action.Resume, Status.Running) { Work.resume(this, it) }
-            is Action.Check   -> each { Work.notify(this, it, "Check")}
+        when (request.action) {
+            is Action.Delay   -> control.delay(30)
+            is Action.Start   -> control.start()
+            is Action.Pause   -> control.pause(30)
+            is Action.Stop    -> control.stop()
+            is Action.Kill    -> control.kill()
+            is Action.Resume  -> control.resume()
+            is Action.Check   -> control.check()
             is Action.Process -> {
                 ctx.logger.info( "Process action on job does nothing")
             }
@@ -282,13 +289,13 @@ class Job(val ctx: JobContext) : Ops<WorkerContext>, StatusCheck {
 
     private suspend fun manageWork(command: Command.WorkerCommand) {
         when (command.action) {
-            is Action.Delay   -> one(command.identity,false ) { Work.delay(this, it, 30) }
-            is Action.Start   -> one(command.identity,false ) { Work.start(this, it) }
-            is Action.Pause   -> one(command.identity,false ) { Work.pause(this, it, 30) }
-            is Action.Stop    -> one(command.identity,false ) { Work.stop(this, it) }
-            is Action.Resume  -> one(command.identity,false ) { Work.resume(this, it) }
-            is Action.Check   -> one(command.identity,false ) { Work.notify(this, it, null) }
-            is Action.Process -> run(command.identity,true  ) { Work.work(this, it, nextTask(it.task)) }
+            is Action.Delay   -> one(command.identity,false ) { work.delay( it, 30) }
+            is Action.Start   -> one(command.identity,false ) { work.start( it) }
+            is Action.Pause   -> one(command.identity,false ) { work.pause( it, 30) }
+            is Action.Stop    -> one(command.identity,false ) { work.stop ( it) }
+            is Action.Resume  -> one(command.identity,false ) { work.resume(it) }
+            is Action.Check   -> one(command.identity,false ) { work.notify(null, id) }
+            is Action.Process -> run(command.identity,true  ) { work.work  (it, nextTask(it.task)) }
         }
     }
 
@@ -319,7 +326,7 @@ class Job(val ctx: JobContext) : Ops<WorkerContext>, StatusCheck {
      */
     private suspend fun all(action: Action, newStatus: Status, op:suspend(WorkerContext) -> Try<Status>) {
         val job = this
-        this.setStatus(newStatus)
+        this.move(newStatus)
         ctx.scope.launch {
             ctx.notifier.notify(job)
         }

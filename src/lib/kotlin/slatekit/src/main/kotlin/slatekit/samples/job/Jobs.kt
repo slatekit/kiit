@@ -84,7 +84,7 @@ class NewsLetterWorker(id:Identity) : Worker<String>(id) {
     private val offset = AtomicInteger(0)
 
     // Initialization hook ( for setup / logs / alerts )
-    override suspend fun init() {
+    override suspend fun start() {
         notify("initializing", listOf(("id" to this.id.name)))
     }
 

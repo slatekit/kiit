@@ -12,7 +12,7 @@ class MyWorker(
     var isInitialized = false
     var isEnded = false
 
-    override suspend fun init() {
+    override suspend fun start() {
         isInitialized = true
     }
 

@@ -12,6 +12,7 @@ sealed class Status(val name:String, val value:Int) {
     object Stopped   : Status("Stopped"  , 5)
     object Completed : Status("Completed", 6)
     object Failed    : Status("Failed"   , 7)
+    object Killed    : Status("Killed"   , 8)
 }
 
 
@@ -73,11 +74,25 @@ interface StatusCheck {
     fun isFailed(): Boolean = isState(Status.Failed)
 
     /**
+     * whether this has been killed, there is no restart possible
+     *
+     * @return
+     */
+    fun isKilled(): Boolean = isState(Status.Killed)
+
+    /**
      * whether this is not running ( stopped or paused )
      *
      * @return
      */
     fun isStoppedOrPaused(): Boolean = isState(Status.Stopped) || isState(Status.Paused)
+
+    /**
+     * whether this is not running ( stopped or paused or killed)
+     *
+     * @return
+     */
+    fun isStoppedOrPausedOrKilled(): Boolean = isState(Status.Stopped) || isState(Status.Paused) || isState(Status.Killed)
 
     /**
      * whether the current state is at the one supplied.
