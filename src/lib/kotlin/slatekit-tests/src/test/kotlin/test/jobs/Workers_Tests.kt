@@ -1,5 +1,6 @@
 package test.jobs
 
+import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.runBlocking
 import org.junit.Assert
 import org.junit.Test
@@ -136,7 +137,7 @@ class Workers_Tests {
         val worker = PagedWorker(0, 5, 2)
         val logger = LoggerConsole()
         val ids = Paired()
-        val ctx = JobContext(worker.id, MockCoordinator(), listOf(worker), logger, scheduler = MockScheduler())
+        val ctx = JobContext(worker.id, Channel<Command>(Channel.UNLIMITED), listOf(worker), logger, scheduler = MockScheduler())
         val workers = Workers(ctx)
         return workers
     }

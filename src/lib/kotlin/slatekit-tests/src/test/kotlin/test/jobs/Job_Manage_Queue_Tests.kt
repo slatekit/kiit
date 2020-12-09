@@ -97,8 +97,6 @@ class Job_Manage_Queue_Tests : JobTestSupport {
                 Assert.assertEquals(Status.Paused, worker2.status())
 
                 // Back off at 4 moved to 8
-                (manager.coordinator as MockCoordinatorWithChannel).resume()
-                (manager.coordinator as MockCoordinatorWithChannel).resume()
                 manager.pull() // Resume worker 1
                 manager.pull() // Resume worker 2
                 val worker1Backoff3 = manager.workers.get(worker1.id)!!.backoffs.curr()
@@ -112,8 +110,6 @@ class Job_Manage_Queue_Tests : JobTestSupport {
 
                 // Ensure its back to running
                 (3..4).forEach { queue.send(it.toString()) }
-                (manager.coordinator as MockCoordinatorWithChannel).resume()
-                (manager.coordinator as MockCoordinatorWithChannel).resume()
                 manager.pull() // Resume worker 1
                 manager.pull() // Resume worker 2
                 val worker1Backoff4 = manager.workers.get(worker1.id)!!.backoffs.curr()
@@ -142,7 +138,6 @@ class Job_Manage_Queue_Tests : JobTestSupport {
                 manager.pull() // Pause worker1
                 manager.pull() // Process worker1
                 manager.pull() // Process worker2
-                (manager.coordinator as MockCoordinatorWithChannel).resume()
                 manager.pull() // Process worker1
                 manager.pull() // Resume worker1
                 Assert.assertEquals(Status.Running, worker1.status())

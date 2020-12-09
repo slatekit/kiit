@@ -68,8 +68,13 @@ object Events {
         val status = job.status()
         val target = if(cmd is Command.JobCommand) "Job" else "Wrk"
         val action = cmd.action.name
-        val name = "CMD_${target.toUpperCase()}_${action.toUpperCase()}"
-        return build(id, status, name, "$target command - $action", "cmd", target.toLowerCase())
+        val name = "${target.toUpperCase()}_${action.toUpperCase()}"
+        val finalName = when {
+            name.length < 20 -> name.padEnd(20 - name.length)
+            name.length > 20 -> name.substring(0, 20)
+            else -> name
+        }
+        return build(id, status, finalName, "$target command - $action", "cmd", target.toLowerCase())
     }
 
 

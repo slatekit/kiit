@@ -318,13 +318,12 @@ class Job(val ctx: JobContext) : Ops<WorkerContext>, StatusCheck {
     fun record(name: String, cmd:Command, task:Task? = null) {
         val event = Events.build(this,cmd)
         val info = listOf(
-            "name" to event.name,
             "source" to event.source,
+            "name" to event.name,
             "target" to event.target,
-            "time"   to event.time.toString(),
-            "identity" to cmd.identity.id
+            "time"   to event.time.toString()
         )
-        ctx.logger.log(LogLevel.Info, "JOB", listOf("perform" to name, "job_id" to id.name) + info)
+        ctx.logger.log(LogLevel.Info, "JOB", listOf("perform" to name, "id" to cmd.identity.id) + info)
     }
 
     /**

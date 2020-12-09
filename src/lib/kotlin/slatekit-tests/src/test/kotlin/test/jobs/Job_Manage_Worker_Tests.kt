@@ -56,7 +56,6 @@ class Job_Manage_Worker_Tests : JobTestSupport {
             manager.pull() // Pause worker1
             manager.pull() // Process worker1
             manager.pull() // Process worker2
-            (manager.coordinator as MockCoordinatorWithChannel).resume()
             manager.pull() // Process worker1
             manager.pull() // Resume worker1
             Assert.assertEquals(Status.Running, worker1.status())
