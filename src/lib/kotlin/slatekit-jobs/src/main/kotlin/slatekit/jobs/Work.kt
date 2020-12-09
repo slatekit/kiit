@@ -14,7 +14,7 @@ class Work(override val job: Job) : Support {
      * This is a delayed start of the worker in X seconds.
      * Schedules a command to the channel afterwards to start
      */
-    suspend fun delay(wctx: WorkerContext, seconds: Long, handle:Boolean, notify: Boolean = true): Try<Status> {
+    suspend fun delay(wctx: WorkerContext, handle:Boolean = true, notify: Boolean = true, seconds: Long = 30): Try<Status> {
         return perform(wctx.id, Status.InActive, notify = notify, msg = "Delayed") {
             if(handle){
                 schedule(seconds, Action.Start, wctx.id)
@@ -42,7 +42,7 @@ class Work(override val job: Job) : Support {
      * Pauses the worker for X seconds.
      * Schedules a command to the channel afterwards to resume
      */
-    suspend fun pause(wctx: WorkerContext, handle: Boolean, notify: Boolean = true, seconds: Long = 30, reason: String? = null): Try<Status> {
+    suspend fun pause(wctx: WorkerContext, handle: Boolean = true, notify: Boolean = true, seconds: Long = 30, reason: String? = null): Try<Status> {
         return perform(wctx.id, Status.Paused, notify = true) {
             wctx.worker.pause(reason)
             if (handle) {

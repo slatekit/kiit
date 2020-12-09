@@ -289,9 +289,9 @@ class Job(val ctx: JobContext) : Ops<WorkerContext>, StatusCheck {
 
     private suspend fun manageWork(command: Command.WorkerCommand) {
         when (command.action) {
-            is Action.Delay   -> one(command.identity,false ) { work.delay( it, 30) }
+            is Action.Delay   -> one(command.identity,false ) { work.delay( it, seconds = 30) }
             is Action.Start   -> one(command.identity,false ) { work.start( it) }
-            is Action.Pause   -> one(command.identity,false ) { work.pause( it, 30) }
+            is Action.Pause   -> one(command.identity,false ) { work.pause( it, seconds = 30) }
             is Action.Stop    -> one(command.identity,false ) { work.stop ( it) }
             is Action.Resume  -> one(command.identity,false ) { work.resume(it) }
             is Action.Check   -> one(command.identity,false ) { work.notify(null, id) }
