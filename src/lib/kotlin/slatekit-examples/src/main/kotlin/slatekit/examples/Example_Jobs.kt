@@ -314,9 +314,9 @@ class Example_Jobs : Command("utils"), CoroutineScope by MainScope() {
         // Sample 4: JOB ( Events ) + Subscribe to worker status changes
         jobs["samples.job4"]?.let { job ->
             job.on { println("Job ${it.id.name} status changed to : ${it.status.name}") }
-            job.on(Status.Complete) { println("Job ${it.id.name} completed") }
+            job.on(Status.Completed) { println("Job ${it.id.name} completed") }
             job.workers.on { it -> println("Worker ${it.id.name}: status = ${it.status.name}") }
-            job.workers.on(Status.Complete) { it -> println("Worker ${it.id.name} completed") }
+            job.workers.on(Status.Completed) { it -> println("Worker ${it.id.name} completed") }
         }
         jobs.start("samples.job4")
 

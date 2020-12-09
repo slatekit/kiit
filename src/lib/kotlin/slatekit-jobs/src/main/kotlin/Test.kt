@@ -24,12 +24,12 @@ fun main(args: Array<String>) {
         job.on { event -> println(event.id) }
 
         // Subscribe to completed status
-        job.on(Status.Complete) { event -> println(event.id) }
+        job.on(Status.Completed) { event -> println(event.id) }
 
         // Subscribe to any status change
         job.workers.on { event -> println(event.id) }
 
         // Subscribe to completed status
-        job.workers.on(Status.Complete) { event -> println(event.id) }
+        job.workers.on(Status.Completed) { event -> println(event.id) }
     }
 }

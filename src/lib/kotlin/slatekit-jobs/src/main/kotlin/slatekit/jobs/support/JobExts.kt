@@ -8,7 +8,7 @@ import slatekit.jobs.Job
  */
 suspend fun Job.pull(count: Int = 1) {
     // Process X off the channel
-    for (x in 0..count) {
+    for (x in 1..count) {
         val command = ctx.channel.poll()
         command?.let { cmd ->
             record("PULL", cmd)

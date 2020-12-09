@@ -181,9 +181,9 @@ class Workers(val ctx: JobContext) {
             when (workResult) {
                 is WorkResult.Done -> {
                     ctx.logger.info("Worker ${worker.id.name} complete")
-                    worker.move(Status.Complete)
+                    worker.move(Status.Completed)
                     worker.done()
-                    notify(context, Status.Complete.name)
+                    notify(context, Status.Completed.name)
                 }
                 is WorkResult.Next -> {
                     val cmd = ctx.commands.work(worker.id, Action.Process)

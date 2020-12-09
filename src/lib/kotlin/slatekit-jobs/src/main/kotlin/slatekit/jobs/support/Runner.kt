@@ -16,16 +16,16 @@ object Runner {
      */
     suspend fun <T> run(worker: Worker<T>): Try<Status> {
         val result = Tries.of {
-            worker.move(Status.Starting)
+            worker.move(Status.Started)
             worker.info().forEach { println(it) }
             worker.init()
 
             worker.move(Status.Running)
             worker.work()
 
-            worker.move(Status.Complete)
+            worker.move(Status.Completed)
             worker.done()
-            Status.Complete
+            Status.Completed
         }
         when (result) {
             is Success -> { }
@@ -81,7 +81,7 @@ object Runner {
         statusChanged: (suspend (Worker<T>) -> Unit)? = null
     ): WorkResult {
 
-        worker.move(Status.Starting)
+        worker.move(Status.Started)
         statusChanged?.invoke(worker)
 
         worker.info().forEach { println(it) }
@@ -95,7 +95,7 @@ object Runner {
             else -> worker.work(task)
         }
         if (result == WorkResult.Done && handleDone) {
-            worker.move(Status.Complete)
+            worker.move(Status.Completed)
             statusChanged?.invoke(worker)
             worker.done()
         }
@@ -111,7 +111,7 @@ object Runner {
             worker.move(Status.Running)
             val workResult = worker.work()
             if (workResult == WorkResult.Done) {
-                worker.move(Status.Complete)
+                worker.move(Status.Completed)
                 worker.done()
             }
             workResult

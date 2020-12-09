@@ -51,13 +51,13 @@ class Worker_Tests {
 
         Assert.assertTrue(result.success)
         Assert.assertEquals(worker.currentValue(), 4)
-        Assert.assertEquals(worker.status(), Status.Complete)
+        Assert.assertEquals(worker.status(), Status.Completed)
         Assert.assertEquals(audit.size, 3)
         Assert.assertEquals(audit[0], "init")
         Assert.assertEquals(audit[1], "work")
         Assert.assertEquals(audit[2], "done")
         result.map {
-            Assert.assertEquals(it, Status.Complete)
+            Assert.assertEquals(it, Status.Completed)
         }
     }
 
@@ -82,7 +82,7 @@ class Worker_Tests {
         val result3 = runBlocking {  Runner.work(worker) }
         Assert.assertTrue(result3.success)
         Assert.assertEquals(worker.currentValue(), 9)
-        Assert.assertEquals(worker.status(), Status.Complete)
+        Assert.assertEquals(worker.status(), Status.Completed)
         result3.map { Assert.assertEquals(it, WorkResult.Done) }
     }
 
@@ -94,7 +94,7 @@ class Worker_Tests {
         val audits = worker.audits()
         Assert.assertTrue(result.success)
         Assert.assertEquals(worker.currentValue(), 4)
-        Assert.assertEquals(worker.status(), Status.Complete)
+        Assert.assertEquals(worker.status(), Status.Completed)
         Assert.assertEquals(audits.size, 3)
         Assert.assertEquals(audits[0], "init")
         Assert.assertEquals(audits[1], "work")

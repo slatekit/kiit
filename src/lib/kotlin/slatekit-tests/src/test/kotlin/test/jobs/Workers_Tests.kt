@@ -95,7 +95,7 @@ class Workers_Tests {
             (1 .. 4).forEach {
                 workers.process(worker.id)
             }
-            ensure(workers, true, 5, 5, 0, worker.id, Status.Complete, 4, Action.Process, 0)
+            ensure(workers, true, 5, 5, 0, worker.id, Status.Completed, 4, Action.Process, 0)
         }
     }
 

@@ -4,6 +4,7 @@ import java.util.concurrent.atomic.AtomicReference
 import kotlinx.coroutines.*
 import kotlinx.coroutines.channels.Channel
 import slatekit.common.*
+import slatekit.common.ext.toStringMySql
 import slatekit.common.log.LogLevel
 import slatekit.policy.Policy
 import slatekit.jobs.support.*
@@ -240,12 +241,12 @@ class Job(val ctx: JobContext) : Ops<WorkerContext>, StatusCheck {
         val action = request.action
         val launch = false
         when (action) {
-            is Action.Start   -> transition(Action.Start  , Status.Running, launch)
-            is Action.Stop    -> transition(Action.Stop   , Status.Stopped, launch)
-            is Action.Resume  -> transition(Action.Resume , Status.Running, launch)
+            is Action.Start -> transition(Action.Start, Status.Running, launch)
+            is Action.Stop -> transition(Action.Stop, Status.Stopped, launch)
+            is Action.Resume -> transition(Action.Resume, Status.Running, launch)
             is Action.Process -> transition(Action.Process, Status.Running, launch)
-            is Action.Pause   -> transition(Action.Pause  , Status.Paused, launch, 30)
-            is Action.Delay   -> transition(Action.Start  , Status.Paused, launch, 30)
+            is Action.Pause -> transition(Action.Pause, Status.Paused, launch, 30)
+            is Action.Delay -> transition(Action.Start, Status.Paused, launch, 30)
             else -> {
                 ctx.logger.error("Unexpected state: ${request.action}")
             }
@@ -255,6 +256,11 @@ class Job(val ctx: JobContext) : Ops<WorkerContext>, StatusCheck {
 
     private suspend fun manageWork(command: Command.WorkerCommand) {
         val launch = false
+        val context = workers[command.identity]
+        if (context == null) {
+            record("FAIL", command, "Worker id unavailable")
+        }
+
         when (val context = workers[command.identity]) {
             null -> {
                 ctx.logger.warn("Worker context not found for : ${command.identity.id}")
@@ -281,9 +287,9 @@ class Job(val ctx: JobContext) : Ops<WorkerContext>, StatusCheck {
 
                 // Check for completion of all workers
                 val job = this
-                val completed = ctx.workers.all { it.isComplete() }
+                val completed = ctx.workers.all { it.isCompleted() }
                 if (completed) {
-                    this.setStatus(Status.Complete)
+                    this.setStatus(Status.Completed)
                     ctx.notifier.notify(job)
                 }
             }
@@ -291,16 +297,15 @@ class Job(val ctx: JobContext) : Ops<WorkerContext>, StatusCheck {
     }
 
     private suspend fun manageWorker(command: Command.WorkerCommand, task: Task, status: Status, launch: Boolean, requireTask: Boolean) {
-        record("WORK", command, task)
         val action = command.action
         val workerId = command.identity
         when (action) {
-            is Action.Start   -> JobUtils.perform(this, action, status, launch, ctx.scope) { workers.start(workerId, task, requireTask) }
-            is Action.Stop    -> JobUtils.perform(this, action, status, launch, ctx.scope) { workers.stop(workerId, command.desc) }
-            is Action.Pause   -> JobUtils.perform(this, action, status, launch, ctx.scope) { workers.pause(workerId, command.desc) }
+            is Action.Start -> JobUtils.perform(this, action, status, launch, ctx.scope) { workers.start(workerId, task, requireTask) }
+            is Action.Stop -> JobUtils.perform(this, action, status, launch, ctx.scope) { workers.stop(workerId, command.desc) }
+            is Action.Pause -> JobUtils.perform(this, action, status, launch, ctx.scope) { workers.pause(workerId, command.desc) }
             is Action.Process -> JobUtils.perform(this, action, status, launch, ctx.scope) { workers.process(workerId, task) }
-            is Action.Resume  -> JobUtils.perform(this, action, status, launch, ctx.scope) { workers.resume(workerId, command.desc, task) }
-            is Action.Delay   -> JobUtils.perform(this, action, status, launch, ctx.scope) { workers.start(workerId, requireTask = requireTask) }
+            is Action.Resume -> JobUtils.perform(this, action, status, launch, ctx.scope) { workers.resume(workerId, command.desc, task) }
+            is Action.Delay -> JobUtils.perform(this, action, status, launch, ctx.scope) { workers.start(workerId, requireTask = requireTask) }
             else -> {
                 ctx.logger.error("Unexpected state: ${command.action}")
             }
@@ -315,16 +320,19 @@ class Job(val ctx: JobContext) : Ops<WorkerContext>, StatusCheck {
     }
 
 
-    fun record(name: String, cmd:Command, task:Task? = null) {
-        val event = Events.build(this,cmd)
+    fun record(name: String, cmd: Command, desc: String? = null, task: Task? = null) {
+        val event = Events.build(this, cmd)
         val info = listOf(
+            "id" to cmd.identity.id,
             "source" to event.source,
             "name" to event.name,
             "target" to event.target,
-            "time"   to event.time.toString()
+            "time" to event.time.toStringMySql(),
+            "desc" to (desc ?: event.desc)
         )
-        ctx.logger.log(LogLevel.Info, "JOB", listOf("perform" to name, "id" to cmd.identity.id) + info)
+        ctx.logger.log(LogLevel.Info, "JOB $name", info)
     }
+
 
     /**
      * Transitions all workers to the new status supplied
@@ -333,15 +341,21 @@ class Job(val ctx: JobContext) : Ops<WorkerContext>, StatusCheck {
         JobUtils.perform(this, action, this.status(), launch, ctx.scope) {
             val job = this
             this.setStatus(newStatus)
-            ctx.workers.forEach {
-                val cmd = job.ctx.commands.work(it.id, action)
-                this.send(cmd)
-            }
             ctx.scope.launch {
                 ctx.notifier.notify(job)
             }
+            ctx.workers.forEach { worker ->
+                // Start
+                if (action == Action.Start) {
+                    val wctx = workers[worker.id]
+                    wctx?.let { Wks.start(this, wctx) }
+                }
+                val cmd = job.ctx.commands.work(it.id, action)
+                this.send(cmd)
+            }
         }
     }
+
 
     companion object {
 
