@@ -79,9 +79,10 @@ class Executor(
                 }
             }
             val rawResume: suspend (WorkRequest) -> Outcome<WorkResult> = { req ->
-                Runner.record(context) {
-                    it.resume("", req.task)
-                }
+//                Runner.record(context) {
+//                    it.resume("")
+//                }
+                 Outcomes.errored("Implement")
             }
 
             return when (context.policies.isEmpty()) {

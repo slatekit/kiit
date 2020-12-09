@@ -107,8 +107,7 @@ open class Worker<T>(
      * @param reason
      * @return
      */
-    open suspend fun resume(reason: String?, task: Task): WorkResult {
-        return work(task)
+    open suspend fun resume(reason: String?) {
     }
 
     /**

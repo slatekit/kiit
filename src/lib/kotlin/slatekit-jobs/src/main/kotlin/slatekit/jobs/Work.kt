@@ -5,6 +5,8 @@ import slatekit.common.Status
 import slatekit.jobs.support.JobUtils
 import slatekit.jobs.workers.WorkResult
 import slatekit.jobs.workers.WorkerContext
+import slatekit.results.Failure
+import slatekit.results.Success
 import slatekit.results.Try
 import slatekit.results.builders.Tries
 import slatekit.results.then
@@ -21,6 +23,7 @@ object Work {
         }
     }
 
+
     /**
      * Moves the worker to the new status
      * Notifies all listeners of the job/worker events
@@ -28,7 +31,7 @@ object Work {
     suspend fun move(job: Job, wctx: WorkerContext, status: Status, notify: Boolean, msg: String?) {
         wctx.worker.move(status)
         if (notify) {
-            job.ctx.notifier.notify(job.ctx, wctx, msg ?: "State changed")
+            notify(job, wctx, msg)
         }
     }
 
@@ -38,10 +41,10 @@ object Work {
      */
     suspend fun schedule(job: Job, wctx: WorkerContext, seconds: Long, action: Action) {
         job.ctx.scheduler.schedule(DateTime.now().plusSeconds(seconds)) {
-            val cmd = job.ctx.commands.work(wctx.id, action)
-            job.ctx.channel.send(cmd)
+            send(job, wctx, action)
         }
     }
+
 
     /**
      * Start worker and moves it to running
@@ -49,17 +52,11 @@ object Work {
      */
     suspend fun start(job: Job, wctx: WorkerContext): Try<Status> {
         return perform(job, wctx, Status.Started, notify = true)
-            .then { init(job, wctx) }
-    }
-
-
-    /**
-     * Initialize worker.
-     * Calls the init life-cycle method on the worker.
-     */
-    suspend fun init(job: Job, wctx: WorkerContext): Try<Status> {
-        return perform(job, wctx, Status.Running, notify = true) {
-            wctx.worker.init()
+        .then {
+            perform( job, wctx, Status.Running, notify = true) { wctx.worker.init(); Status.Running }
+        }
+        .then {
+            Tries.of { send(job, wctx, Action.Process); Status.Running }
         }
     }
 
@@ -77,6 +74,18 @@ object Work {
 
 
     /**
+     * Resumes the worker.
+     * Life-cycle hook is called and command is sent to channe to continue processing
+     */
+    suspend fun resume(job: Job, wctx: WorkerContext): Try<Status> {
+        return perform(job, wctx, Status.Running, notify = true) {
+            wctx.worker.resume("")
+            send(job, wctx, Action.Process)
+        }
+    }
+
+
+    /**
      * Stops the worker.
      * Only way to start again is to issue the start/resume command
      */
@@ -84,6 +93,25 @@ object Work {
         return perform(job, wctx, Status.Stopped, notify = true) {
             wctx.worker.stop("")
         }
+    }
+
+
+    /**
+     * Resumes the worker.
+     * Life-cycle hook is called and command is sent to channe to continue processing
+     */
+    suspend fun send(job: Job, wctx: WorkerContext, action: Action) {
+        val cmd = job.ctx.commands.work(wctx.id, action)
+        job.ctx.channel.send(cmd)
+    }
+
+
+    /**
+     * Notifies listeners of the worker about its state
+     */
+    suspend fun notify(job: Job, wctx: WorkerContext, msg:String?): Try<Status> {
+        job.ctx.notifier.notify(job.ctx, wctx, msg ?: "Info")
+        return Tries.of { wctx.worker.status() }
     }
 
 
@@ -126,9 +154,17 @@ object Work {
     }
 
     suspend fun handle(job:Job, wctx: WorkerContext, result:Try<Status>): Try<Status> {
-        result.onFailure { ex ->
-            wctx.worker.move(Status.Failed, ex.message)
-            job.ctx.notifier.notify(job.ctx, wctx)
+        when(result){
+            is Success -> {
+                if(result.value == Status.Completed){
+                    wctx.worker.move(Status.Completed)
+                    notify(job, wctx, null)
+                }
+            }
+            is Failure -> {
+                wctx.worker.move(Status.Failed, result.error.message)
+                notify(job, wctx, null)
+            }
         }
         return result
     }
