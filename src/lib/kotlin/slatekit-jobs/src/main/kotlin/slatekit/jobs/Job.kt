@@ -4,12 +4,7 @@ import java.util.concurrent.atomic.AtomicReference
 import kotlinx.coroutines.*
 import kotlinx.coroutines.channels.Channel
 import slatekit.common.*
-import slatekit.common.ids.Paired
 import slatekit.common.log.LogLevel
-import slatekit.common.log.Logger
-import slatekit.common.log.LoggerConsole
-import slatekit.core.common.ChannelCoordinator
-import slatekit.core.common.Coordinator
 import slatekit.policy.Policy
 import slatekit.jobs.support.*
 import slatekit.jobs.workers.*
@@ -149,9 +144,7 @@ class Job(val ctx: JobContext) : Ops<WorkerContext>, StatusCheck {
     override fun get(name: String): WorkerContext? = workers[name]
 
     suspend fun kill() {
-        if(ctx.channel is ChannelCoordinator<*>){
-            ctx.channel.stop()
-        }
+        ctx.channel.close()
     }
 
     /**
@@ -323,7 +316,14 @@ class Job(val ctx: JobContext) : Ops<WorkerContext>, StatusCheck {
 
 
     fun record(name: String, cmd:Command, task:Task? = null) {
-        val info = cmd.structured()
+        val event = Events.build(this,cmd)
+        val info = listOf(
+            "name" to event.name,
+            "source" to event.source,
+            "target" to event.target,
+            "time"   to event.time.toString(),
+            "identity" to cmd.identity.id
+        )
         ctx.logger.log(LogLevel.Info, "JOB", listOf("perform" to name, "job_id" to id.name) + info)
     }
 
@@ -334,13 +334,12 @@ class Job(val ctx: JobContext) : Ops<WorkerContext>, StatusCheck {
         JobUtils.perform(this, action, this.status(), launch, ctx.scope) {
             val job = this
             this.setStatus(newStatus)
-            ctx.scope.launch {
-                ctx.notifier.notify(job)
-            }
-
             ctx.workers.forEach {
                 val cmd = job.ctx.commands.work(it.id, action)
                 this.send(cmd)
+            }
+            ctx.scope.launch {
+                ctx.notifier.notify(job)
             }
         }
     }

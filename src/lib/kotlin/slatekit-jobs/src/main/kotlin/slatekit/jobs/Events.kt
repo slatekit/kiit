@@ -5,6 +5,7 @@ import slatekit.common.Event
 import slatekit.common.Identity
 import slatekit.common.Status
 import slatekit.common.ids.ULIDs
+import slatekit.jobs.support.Command
 import slatekit.jobs.support.JobContext
 import slatekit.jobs.support.JobUtils
 import slatekit.jobs.workers.WorkerContext
@@ -56,6 +57,19 @@ object Events {
         val id = worker.id
         val status = worker.status()
         return build(id, status, name, "State changed", "wrk", queue)
+    }
+
+
+    /**
+     * Builds an event for the worker
+     */
+    fun build(job:Job, cmd: Command): Event {
+        val id = job.id
+        val status = job.status()
+        val target = if(cmd is Command.JobCommand) "Job" else "Wrk"
+        val action = cmd.action.name
+        val name = "CMD_${target.toUpperCase()}_${action.toUpperCase()}"
+        return build(id, status, name, "$target command - $action", "cmd", target.toLowerCase())
     }
 
 

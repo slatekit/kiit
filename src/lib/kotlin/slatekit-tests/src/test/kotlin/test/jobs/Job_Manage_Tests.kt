@@ -38,8 +38,8 @@ class Job_Manage_Tests : JobTestSupport {
 
     fun create(numWorkers: Int, id: Identity, builder: (Identity) -> Worker<*>, queue: Queue?): Job {
         val workers = (1..numWorkers).map { builder(id) }
-        val coordinator = ChannelCoordinator<Command>(Channel(Channel.UNLIMITED))
-        val ctx = JobContext(id, coordinator, workers, queue = queue, scheduler = MockScheduler())
+        val channel = Channel<Command>(Channel.UNLIMITED)
+        val ctx = JobContext(id, channel, workers, queue = queue, scheduler = MockScheduler())
         return Job(ctx)
     }
 
@@ -115,34 +115,31 @@ class Job_Manage_Tests : JobTestSupport {
 
     @Test
     fun can_stop_job() {
-        val manager = run(1, null, Action.Start)
+        val job = run(1, null, Action.Start)
         runBlocking {
-            manager.send(Action.Stop)
-            manager.pull() // Start worker
-            manager.pull() // Job stop
-            manager.pull() // Process 2nd time
-            manager.pull() // Wrk stop
-            (manager.coordinator as MockCoordinatorWithChannel).resume()
-            val worker = manager.ctx.workers.first()
-            ensure(manager.workers, true, 2, 2, 0, worker.id, Status.Stopped, 6, Action.Process, 0)
+            job.send(Action.Stop)
+            job.pull(5)
+            job.ctx.channel.close()
+            val worker = job.ctx.workers.first()
+            ensure(job.workers, true, 2, 2, 0, worker.id, Status.Stopped, 6, Action.Process, 0)
         }
     }
 
 
     @Test
     fun can_resume_job() {
-        val manager = run(1, null, Action.Start)
+        val job = run(1, null, Action.Start)
         runBlocking {
-            manager.send(Action.Pause)
-            manager.pull() // Start worker
-            manager.pull() // Job stop
-            manager.pull() // Process 2nd time
-            manager.pull() // Wrk pause
-            (manager.coordinator as MockCoordinatorWithChannel).resume()
-            manager.pull()
-            manager.pull()
-            val worker = manager.ctx.workers.first()
-            ensure(manager.workers, true, 3, 3, 0, worker.id, Status.Running, 8, Action.Process, 0)
+            job.send(Action.Pause)
+            job.pull() // Start worker
+            job.pull() // Job stop
+            job.pull() // Process 2nd time
+            job.pull() // Wrk pause
+            job.ctx.channel.close()
+            job.pull()
+            job.pull()
+            val worker = job.ctx.workers.first()
+            ensure(job.workers, true, 3, 3, 0, worker.id, Status.Running, 8, Action.Process, 0)
         }
     }
 }
