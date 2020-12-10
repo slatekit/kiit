@@ -1,4 +1,4 @@
-package slatekit.jobs.slatekit.jobs.support
+package slatekit.jobs.support
 
 import kotlinx.coroutines.launch
 import slatekit.common.DateTime
@@ -6,7 +6,7 @@ import slatekit.common.Identity
 import slatekit.common.Status
 import slatekit.jobs.Action
 import slatekit.jobs.Job
-import slatekit.jobs.slatekit.jobs.Rules
+import slatekit.jobs.Rules
 import slatekit.jobs.support.Command
 import slatekit.results.Failure
 import slatekit.results.Success

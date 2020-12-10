@@ -1,4 +1,4 @@
-package slatekit.jobs.slatekit.jobs
+package slatekit.jobs
 
 import slatekit.common.Status
 

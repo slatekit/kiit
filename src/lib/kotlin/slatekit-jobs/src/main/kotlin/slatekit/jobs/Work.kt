@@ -2,7 +2,7 @@ package slatekit.jobs
 
 import slatekit.common.Identity
 import slatekit.common.Status
-import slatekit.jobs.slatekit.jobs.support.Support
+import slatekit.jobs.support.Support
 import slatekit.jobs.support.Utils
 import slatekit.jobs.workers.WorkResult
 import slatekit.jobs.workers.WorkerContext

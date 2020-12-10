@@ -6,9 +6,9 @@ import kotlinx.coroutines.channels.Channel
 import slatekit.common.*
 import slatekit.common.ext.toStringMySql
 import slatekit.common.log.LogLevel
-import slatekit.jobs.slatekit.jobs.Workers
-import slatekit.jobs.slatekit.jobs.support.Control
-import slatekit.jobs.slatekit.jobs.support.Ops
+import slatekit.jobs.Workers
+import slatekit.jobs.support.Control
+import slatekit.jobs.support.Ops
 import slatekit.policy.Policy
 import slatekit.jobs.support.*
 import slatekit.jobs.workers.*

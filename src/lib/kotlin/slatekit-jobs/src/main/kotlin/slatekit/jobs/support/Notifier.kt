@@ -1,4 +1,4 @@
-package slatekit.jobs.slatekit.jobs.support
+package slatekit.jobs.support
 
 import slatekit.core.common.Emitter
 import slatekit.jobs.Event
