@@ -1,16 +1,24 @@
-package slatekit.actors
+package test.actors
 
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.runBlocking
+import slatekit.actors.*
 import slatekit.common.Identity
 import java.util.concurrent.atomic.AtomicLong
 
 
-class Task(val name:String, val data:String)
 
-class ActorJob(context: Context, channel: Channel<Message<Task>>) : Manager<Task>(context, channel) {
+class Task(val name: String, val data: String)
+
+
+class ActorJob(val identity: Identity,
+               scope: CoroutineScope,
+               channel: Channel<Message<Task>>,
+               val workers: List<Worker<Task>>
+) : Controlled<Task>(Context(identity.id, scope), channel) {
+
     private val counter = AtomicLong(0)
 
 
@@ -26,7 +34,7 @@ class ActorJob(context: Context, channel: Channel<Message<Task>>) : Manager<Task
     }
 
 
-    private suspend fun handle(action: Action, target:String, task:Task) {
+    override suspend fun handle(action: Action, target: String, task: Task) {
 
     }
 }

@@ -2,7 +2,7 @@ package test.actors
 
 import kotlinx.coroutines.channels.Channel
 import org.junit.Test
-import slatekit.core.actors.Control
+import slatekit.actors.Control
 
 class Control_Tests {
 
@@ -11,7 +11,7 @@ class Control_Tests {
     fun can_pull(){
         val actor = ""
         val channel = Channel<Int>(Channel.UNLIMITED)
-        val control = Control(channel)
+
     }
 
 

@@ -1,6 +1,6 @@
 package slatekit.actors
 
-interface Ops {
+interface Controls {
     suspend fun delay()  = control(Action.Delay)
     suspend fun start()  = control(Action.Start)
     suspend fun pause()  = control(Action.Pause)

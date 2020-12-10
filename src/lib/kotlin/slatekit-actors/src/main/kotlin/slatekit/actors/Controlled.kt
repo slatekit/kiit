@@ -1,11 +1,9 @@
 package slatekit.actors
 
 import kotlinx.coroutines.channels.Channel
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.yield
 import java.util.concurrent.atomic.AtomicReference
 
-abstract class Manager<T>(context: Context, channel: Channel<Message<T>>) : Base<T>(context, channel), Ops {
+abstract class Controlled<T>(context: Context, channel: Channel<Message<T>>) : Base<T>(context, channel), Controls {
 
     protected val _status = AtomicReference<Status>(Status.InActive)
 
@@ -35,15 +33,16 @@ abstract class Manager<T>(context: Context, channel: Channel<Message<T>>) : Base
     }
 
 
-    open suspend fun changed(msg:Control<T>, oldStatus: Status, newStatus: Status) {
-
-    }
+    protected open suspend fun changed(msg:Control<T>, oldStatus: Status, newStatus: Status) {}
 
 
-    protected abstract suspend fun request(item:Request<T>)
+    protected abstract suspend fun request(req:Request<T>)
 
 
     protected abstract suspend fun handle(item:Content<T>)
+
+
+    protected abstract suspend fun handle(action: Action, target: String, item: T)
 
 
     protected open suspend fun control(msg: Control<T>) {

@@ -49,7 +49,7 @@ abstract class Base<T>(protected val context: Context,
     override suspend fun work(): Job {
         return context.scope.launch {
             for (msg in channel) {
-                track(Consumer.WORK, msg)
+                track(Remover.WORK, msg)
                 work(msg)
                 yield()
             }
