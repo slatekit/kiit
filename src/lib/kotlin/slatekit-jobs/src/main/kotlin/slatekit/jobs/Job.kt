@@ -103,7 +103,7 @@ class Job(val ctx: Context) : Ops<WorkerContext>, StatusCheck {
     }
 
     /**
-     * Run the job by starting it first and then managing it by listening for requests
+     * Run the job by starting it first and then managing it by handling commands
      */
     suspend fun run() {
         start()
@@ -111,14 +111,14 @@ class Job(val ctx: Context) : Ops<WorkerContext>, StatusCheck {
     }
 
     /**
-     * Requests an action on the entire job
+     * Sends a command, that represents the action, to the job
      */
     override suspend fun send(action: Action): Outcome<String> {
         return send(ctx.commands.job(ctx.id, action))
     }
 
     /**
-     * Requests an action on a specific worker
+     * Sends a command, that represents the action, to a worker
      */
     override suspend fun send(id: Identity, action: Action, note: String): Outcome<String> {
         return when (Utils.isWorker(id)) {
@@ -128,8 +128,7 @@ class Job(val ctx: Context) : Ops<WorkerContext>, StatusCheck {
     }
 
     /**
-     * Requests this job to perform the supplied command
-     * Coordinator handles requests via kotlin channels
+     * Sends a command to the job
      */
     override suspend fun send(command: Command): Outcome<String> {
         ctx.channel.send(command)
@@ -141,7 +140,7 @@ class Job(val ctx: Context) : Ops<WorkerContext>, StatusCheck {
 
 
     /**
-     * Listens to and handles X commands
+     * Handles X commands on the channel
      */
     suspend fun pull(count: Int = 1) {
         // Process X off the channel
@@ -155,7 +154,7 @@ class Job(val ctx: Context) : Ops<WorkerContext>, StatusCheck {
     }
 
     /**
-     * Listens to and handles commands until there are no more
+     * Handles commands until there are no more
      */
     suspend fun poll() {
         var cmd: Command? = ctx.channel.poll()
