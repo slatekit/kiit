@@ -7,6 +7,7 @@ import slatekit.common.*
 import slatekit.common.ext.toStringMySql
 import slatekit.common.log.LogLevel
 import slatekit.jobs.slatekit.jobs.Workers
+import slatekit.jobs.slatekit.jobs.Ops
 import slatekit.policy.Policy
 import slatekit.jobs.support.*
 import slatekit.jobs.workers.*
@@ -150,7 +151,7 @@ class Job(val ctx: JobContext) : Ops<WorkerContext>, StatusCheck {
     fun get(id: Identity): WorkerContext? = workers[id.id]
     override fun get(name: String): WorkerContext? = workers[name]
 
-    suspend fun kill() {
+    suspend fun close() {
         ctx.channel.close()
     }
 

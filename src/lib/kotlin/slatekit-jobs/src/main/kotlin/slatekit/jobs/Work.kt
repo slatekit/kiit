@@ -1,6 +1,8 @@
 package slatekit.jobs
 
+import slatekit.common.Identity
 import slatekit.common.Status
+import slatekit.jobs.slatekit.jobs.support.Support
 import slatekit.jobs.support.JobUtils
 import slatekit.jobs.workers.WorkResult
 import slatekit.jobs.workers.WorkerContext
@@ -14,9 +16,9 @@ class Work(override val job: Job) : Support {
      * This is a delayed start of the worker in X seconds.
      * Schedules a command to the channel afterwards to start
      */
-    suspend fun delay(wctx: WorkerContext, handle:Boolean = true, notify: Boolean = true, seconds: Long = 30): Try<Status> {
+    suspend fun delay(wctx: WorkerContext, handle: Boolean = true, notify: Boolean = true, seconds: Long = 30): Try<Status> {
         return perform(wctx.id, Status.InActive, notify = notify, msg = "Delayed") {
-            if(handle){
+            if (handle) {
                 schedule(seconds, Action.Start, wctx.id)
             }
         }
@@ -27,14 +29,13 @@ class Work(override val job: Job) : Support {
      * Start worker and moves it to running
      * Only requires init method on worker
      */
-    suspend fun start(wctx: WorkerContext, notify: Boolean = true): Try<Status> {
-        return perform(wctx.id, Status.Started, notify = true)
-            .then {
-                perform(wctx.id, Status.Running, notify = true) { wctx.worker.start(); Status.Running }
-            }
-            .then {
-                Tries.of { send(Action.Process, wctx.id); Status.Running }
-            }
+    suspend fun start(wctx: WorkerContext, handle: Boolean = true, notify: Boolean = true): Try<Status> {
+        return perform(wctx.id, Status.Started, notify = notify) {
+            wctx.worker.start()
+        }
+        .then { perform(wctx.id, Status.Running, notify = notify ) {
+            send(Action.Process, wctx.id)
+        }}
     }
 
 
@@ -43,7 +44,7 @@ class Work(override val job: Job) : Support {
      * Schedules a command to the channel afterwards to resume
      */
     suspend fun pause(wctx: WorkerContext, handle: Boolean = true, notify: Boolean = true, seconds: Long = 30, reason: String? = null): Try<Status> {
-        return perform(wctx.id, Status.Paused, notify = true) {
+        return perform(wctx.id, Status.Paused, notify = notify) {
             wctx.worker.pause(reason)
             if (handle) {
                 schedule(seconds, Action.Resume, wctx.id)
@@ -57,7 +58,7 @@ class Work(override val job: Job) : Support {
      * Life-cycle hook is called and command is sent to channe to continue processing
      */
     suspend fun resume(wctx: WorkerContext, notify: Boolean = true, reason: String? = null): Try<Status> {
-        return perform(wctx.id, Status.Running, notify = true) {
+        return perform(wctx.id, Status.Running, notify = notify) {
             wctx.worker.resume(reason)
             send(Action.Process, wctx.id)
         }
@@ -69,7 +70,7 @@ class Work(override val job: Job) : Support {
      * Only way to start again is to issue the start/resume command
      */
     suspend fun stop(wctx: WorkerContext, notify: Boolean = true, reason: String? = null): Try<Status> {
-        return perform(wctx.id, Status.Stopped, notify = true) {
+        return perform(wctx.id, Status.Stopped, notify = notify) {
             wctx.worker.stop(reason)
         }
     }
@@ -80,7 +81,7 @@ class Work(override val job: Job) : Support {
      * Restart not possible
      */
     suspend fun kill(wctx: WorkerContext, notify: Boolean = true, reason: String? = null): Try<Status> {
-        return perform(wctx.id, Status.Killed, notify = true) {
+        return perform(wctx.id, Status.Killed, notify = notify) {
             wctx.worker.kill(reason)
         }
     }
@@ -118,5 +119,17 @@ class Work(override val job: Job) : Support {
             status
         }
         return handle(status, wctx.id)
+    }
+
+
+    suspend fun perform(id: Identity, newStatus: Status, notify: Boolean, msg: String? = null,
+                        op: (suspend () -> Unit)? = null): Try<Status> {
+        val result = Tries.of {
+            op?.invoke()
+            move(newStatus, notify, id, msg)
+            newStatus
+        }
+        handle(result, id)
+        return result
     }
 }

@@ -1,4 +1,4 @@
-package slatekit.jobs
+package slatekit.jobs.slatekit.jobs.support
 
 import slatekit.common.DateTime
 import slatekit.common.Identity
@@ -7,7 +7,6 @@ import slatekit.jobs.Action
 import slatekit.jobs.Job
 import slatekit.jobs.slatekit.jobs.Rules
 import slatekit.jobs.support.Command
-import slatekit.jobs.workers.WorkerContext
 import slatekit.results.Failure
 import slatekit.results.Success
 import slatekit.results.Try
@@ -101,18 +100,6 @@ interface Support {
         is Action.Stop   -> Rules.canStop (currentStatus)
         is Action.Kill   -> Rules.canKill(currentStatus)
         else             -> true
-    }
-
-
-    suspend fun perform(id: Identity, newStatus: Status, notify: Boolean, msg: String? = null,
-                        op: (suspend () -> Unit)? = null): Try<Status> {
-        val result = Tries.of {
-            op?.invoke()
-            move(newStatus, notify, id, msg)
-            newStatus
-        }
-        handle(result, id)
-        return result
     }
 
 

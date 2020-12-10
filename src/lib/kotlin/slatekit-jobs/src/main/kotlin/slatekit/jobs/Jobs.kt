@@ -2,6 +2,7 @@ package slatekit.jobs
 
 import kotlinx.coroutines.*
 import slatekit.common.Identity
+import slatekit.jobs.slatekit.jobs.Ops
 import slatekit.jobs.support.Command
 import slatekit.jobs.support.JobUtils
 import slatekit.results.Outcome
