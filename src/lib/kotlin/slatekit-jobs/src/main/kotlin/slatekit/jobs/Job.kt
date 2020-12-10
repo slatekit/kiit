@@ -251,7 +251,7 @@ class Job(val ctx: Context) : Ops<WorkerContext>, StatusCheck {
 
     private suspend fun manageWork(cmd: Command.WorkerCommand) {
         if(cmd.action == Action.Process && !Rules.canWork(this.status())) {
-            notify("CMD_ERROR")
+            notify("CMD_WARN")
             return
         }
         when (cmd.action) {
