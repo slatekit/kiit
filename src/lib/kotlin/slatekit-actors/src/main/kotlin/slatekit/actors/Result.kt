@@ -1,9 +1,9 @@
 package slatekit.actors
 
 sealed class Result(val name: String) {
-    object Done : Result("Done")
     object More : Result("More")
-    object Fail : Result("Fail")
+    object Done : Result("Done")
     object Stop : Result("Stop")
+    object Fail : Result("Fail")
     data class Next(val offset: Long, val processed: Long, val reference: String) : Result("next")
 }

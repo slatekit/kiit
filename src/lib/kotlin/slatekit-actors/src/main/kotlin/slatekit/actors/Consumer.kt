@@ -2,8 +2,8 @@ package slatekit.actors
 
 import kotlinx.coroutines.channels.Channel
 
-open class Control<T>(private val channel: Channel<Message<T>>,
-                      private val actor: Actor<Message<T>>) {
+open class Consumer<T>(private val channel: Channel<Message<T>>,
+                      private val actor: Manager<T>) {
 
     suspend fun pull(count: Int = 1) {
         // Process X off the channel

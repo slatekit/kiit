@@ -1,24 +1,55 @@
 package slatekit.actors
 
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.yield
 
-abstract class Base<T>(private val context:Context,
+/**
+ * Base Actor that supports basic operations
+ */
+abstract class Base<T>(protected val context: Context,
                        protected val channel: Channel<Message<T>>) : Actor<T> {
 
-    override val id:String = context.id
+    /**
+     * Id of the actor e.g. {AREA}.{NAME}.{ENV}.{INSTANCE}
+     * e.g. "signup.emails.dev.abc123"
+     */
+    override val id: String = context.id
 
 
-    override suspend fun send(item:T) {
-        channel.send(item)
+    /**
+     * Sends a content message with target
+     * @param item  : Data / payload for message
+     */
+    override suspend fun send(item: T) {
+        send(Content(item))
     }
 
 
-    override suspend fun work() {
-        context.scope.launch {
+    /**
+     * Sends a content message with target
+     * @param item  : Data / payload for message
+     * @param target: Optional, used as classifier to direct message to specific handler if enabled.
+     */
+    suspend fun send(item:T, target:String) {
+        send(Content(item, target = target))
+    }
+
+
+    /**
+     * Sends a message
+     * @param msg  : Full message
+     */
+    suspend fun send(msg: Message<T>) {
+        channel.send(msg)
+    }
+
+
+    override suspend fun work(): Job {
+        return context.scope.launch {
             for (msg in channel) {
-                track(Control.WORK, msg)
+                track(Consumer.WORK, msg)
                 work(msg)
                 yield()
             }
@@ -26,6 +57,6 @@ abstract class Base<T>(private val context:Context,
     }
 
 
-    protected open suspend fun track(source:String, data: T) {
+    protected open suspend fun track(source: String, data: Message<T>) {
     }
 }

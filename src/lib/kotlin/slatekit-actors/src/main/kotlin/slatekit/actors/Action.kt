@@ -19,17 +19,21 @@ sealed class Action(val name: String) {
     object Stop     : Action( "Stop"   )
     object Kill     : Action( "Kill"   )
     object Check    : Action( "Check"  )
+    object Process  : Action( "Process")
+    object Request  : Action( "Request")
     /* ktlint-enable */
 
-    fun toStatus(current:Status):Status {
+    fun toStatus(current: Status): Status {
         return when(this) {
-            Delay  -> Status.InActive
-            Start  -> Status.Started
-            Pause  -> Status.Paused
+            Delay -> Status.InActive
+            Start -> Status.Started
+            Pause -> Status.Paused
             Resume -> Status.Running
-            Stop   -> Status.Stopped
-            Kill   -> Status.Killed
-            Check  -> current
+            Stop -> Status.Stopped
+            Kill -> Status.Killed
+            Check -> current
+            Process -> current
+            Request -> current
         }
     }
 }

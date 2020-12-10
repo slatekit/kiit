@@ -1,36 +1,32 @@
 package slatekit.actors
 
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.runBlocking
+import slatekit.common.Identity
+import java.util.concurrent.atomic.AtomicLong
 
-sealed class Target2 {
-    object Job : Target2()
-    object Wrk : Target2()
-}
 
 class Task(val name:String, val data:String)
-class Command(val target:Target2, val id:String, val task:Task)
 
-class MyWorker() : Worker<Task>("myworker") {
-    override fun work(item: Task): Result {
-        return Result.Done
-    }
-}
-
-class TestActor(channel:Channel<Message<Command>>) : Actor<Command>(channel) {
+class ActorJob(context: Context, channel: Channel<Message<Task>>) : Manager<Task>(context, channel) {
+    private val counter = AtomicLong(0)
 
 
-    override suspend fun track(source: String, item: Message<Command>) {
-
+    override suspend fun request(item: Request<Task>) {
+        val data = counter.incrementAndGet()
+        val task = Task("sendEmail", data.toString())
+        handle(Action.Process, item.target, task)
     }
 
 
-    override suspend fun work(data: Command) {
-
+    override suspend fun handle(item: Content<Task>) {
+        handle(Action.Process, item.target, item.data)
     }
 
 
-    override suspend fun changed(oldStatus: Status, newStatus: Status) {
+    private suspend fun handle(action: Action, target:String, task:Task) {
 
     }
 }
@@ -39,10 +35,16 @@ class TestActor(channel:Channel<Message<Command>>) : Actor<Command>(channel) {
 class Launcher {
     fun run() {
         runBlocking {
-            val channel = Channel<Message<Command>>(Channel.UNLIMITED)
-            val actor = TestActor(channel)
-            actor.send(Action.Pause)
-            actor.send(Action.Resume)
+            val channel = Channel<Message<Task>>(Channel.UNLIMITED)
+            val scope = CoroutineScope(Dispatchers.IO)
+            val context = Context("signup.emails", scope)
+            val mgr = ActorJob(context, channel)
+
+            mgr.start()
+            mgr.pause()
+            mgr.stop()
+            mgr.resume()
+
         }
     }
 }
