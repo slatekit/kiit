@@ -16,14 +16,14 @@ class StatusTests {
     }
 
 
-    @Test fun can_check_idle()      = assertCheck(Status.Idle)     { it.isIdle()     }
+    @Test fun can_check_idle()      = assertCheck(Status.Waiting)     { it.isIdle()     }
     @Test fun can_check_running()   = assertCheck(Status.Running)  { it.isRunning()  }
     @Test fun can_check_paused()    = assertCheck(Status.Paused)   { it.isPaused()   }
     @Test fun can_check_paused2()   = assertCheck(Status.Paused)   { it.isStoppedOrPaused()  }
     @Test fun can_check_stopped()   = assertCheck(Status.Stopped)  { it.isStopped()  }
     @Test fun can_check_stopped2()  = assertCheck(Status.Stopped)  { it.isStoppedOrPaused()  }
     @Test fun can_check_failed()    = assertCheck(Status.Failed)   { it.isFailed()   }
-    @Test fun can_check_completed() = assertCheck(Status.Complete) { it.isComplete() }
+    @Test fun can_check_completed() = assertCheck(Status.Completed) { it.isCompleted() }
 
 
 

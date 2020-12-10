@@ -1,7 +1,7 @@
 package slatekit.common
 
 import slatekit.common.envs.EnvMode
-import java.util.*
+import slatekit.common.ids.ULIDs
 
 /**
  * Used to identity services / components
@@ -21,6 +21,9 @@ interface Identity {
     val env :String
     val instance:String
     val tags:List<String>
+
+    fun newInstance():Identity
+    fun with(inst:String? = null, tags:List<String>):Identity
 
     companion object {
 
@@ -66,7 +69,7 @@ data class SimpleIdentity(
         override val service:String,
         override val agent: Agent,
         override val env:String,
-        override val instance:String = UUID.randomUUID().toString(),
+        override val instance:String = ULIDs.create().value,
         override val tags:List<String> = listOf()) : Identity {
     private val tagged = tags.joinToString()
 
@@ -95,7 +98,8 @@ data class SimpleIdentity(
      */
     override val idWithTags:String = "$fullname.$instance" + if (tagged.isNullOrEmpty()) "" else ".$tagged"
 
-    fun newInstance():SimpleIdentity = this.copy(instance = UUID.randomUUID().toString())
+    override fun newInstance():Identity = this.copy(instance = ULIDs.create().value)
+    override fun with(inst:String?, tags:List<String>):Identity = this.copy(instance = inst ?: ULIDs.create().value, tags = tags)
 }
 
 
@@ -104,11 +108,11 @@ data class DetailIdentity(
         override val service:String,
         override val agent: Agent,
         override val env:String,
-        override val instance:String = UUID.randomUUID().toString(),
+        override val instance:String = ULIDs.create().value,
         override val tags:List<String> = listOf(),
+        val version: String = "LATEST",
         val desc: String = "",
-        val alias: String = "",
-        val version: String = "1_0") : Identity {
+        val alias: String = "") : Identity {
 
     val tagged = tags.joinToString()
 
@@ -128,15 +132,17 @@ data class DetailIdentity(
      * @sample: signup.alerts.job.qat.4a3b300b-d0ac-4776-8a9c-31aa75e412b3
      *
      */
-    override val id:String = "$fullname.$instance"/**
+    override val id:String = "$fullname.$instance"
 
+    /**
      * The id contains the instance name
      * @sample: signup.alerts.job.qat.4a3b300b-d0ac-4776-8a9c-31aa75e412b3.a1,b2,c3
      *
      */
     override val idWithTags:String = "$fullname.$instance" + if (tagged.isNullOrEmpty()) "" else ".$tagged"
 
-    fun newInstance():DetailIdentity = this.copy(instance = UUID.randomUUID().toString())
+    override fun newInstance():Identity = this.copy(instance = ULIDs.create().value)
+    override fun with(inst:String?, tags:List<String>):Identity = this.copy(instance = inst ?: ULIDs.create().value, tags = tags)
 }
 
 

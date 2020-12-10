@@ -12,7 +12,7 @@ import slatekit.tracking.Recorder
 /**
  * Optional base class for Workers.
  * All work is done inside this worker which has
- * 1. life-cycle methods : [init], [work], [done]
+ * 1. life-cycle methods : [start], [work], [done]
  * 2. state changes      : [pause], [stop], [resume], [move]
  * 3. alerting ability   : [notify]
  * 4. diagnostic features: [info] method to build diagnostics info
@@ -22,11 +22,10 @@ import slatekit.tracking.Recorder
  * 2. Clients should only extend worker to use/enrich the life-cycle, state change, alerting, diagnostic methods above
  */
 open class Worker<T>(
-    val id: Identity,
-    val stats: Recorder<Task, WorkResult, Err> = Recorder.of(id),
+    id: Identity,
     val operation: (suspend (Task) -> WorkResult)? = null
 ) : StatusCheck {
-
+    val id = if(id.tags.isEmpty() || !id.tags.contains("worker")) id.with(tags = listOf("worker")) else id
     protected val _status = AtomicReference<Pair<Status, String>>(Pair(Status.InActive, Status.InActive.name))
 
     /**
@@ -59,9 +58,9 @@ open class Worker<T>(
      * ============================================================================
      */
     /**
-     * Life-cycle hook to allow for initialization
+     * Hook for starting job ( put initialization in here )
      */
-    open suspend fun init() {
+    open suspend fun start() {
     }
 
     /**
@@ -107,15 +106,20 @@ open class Worker<T>(
      * @param reason
      * @return
      */
-    open suspend fun resume(reason: String?, task: Task): WorkResult {
-        return work(task)
+    open suspend fun resume(reason: String?) {
     }
 
     /**
      * Hook for handling stopping of a job
      */
     open suspend fun stop(reason: String?){
+    }
 
+    /**
+     * Hook for handling killing of a job permanently
+     * This will not allow a restart
+     */
+    open suspend fun kill(reason: String?){
     }
 
     /**

@@ -1,6 +1,7 @@
 package slatekit.jobs.support
 
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.channels.Channel
 import slatekit.common.Identity
 import slatekit.common.ids.Paired
 import slatekit.common.log.Logger
@@ -9,7 +10,7 @@ import slatekit.core.common.Backoffs
 import slatekit.core.common.DefaultScheduler
 import slatekit.core.common.Scheduler
 import slatekit.jobs.Jobs
-import slatekit.jobs.Notifier
+import slatekit.jobs.support.Notifier
 import slatekit.jobs.Queue
 import slatekit.jobs.workers.WorkRequest
 import slatekit.jobs.workers.WorkResult
@@ -28,7 +29,7 @@ import slatekit.policy.Policy
  * @param scheduler : Scheduler used to continue resuming work
  */
 data class JobContext(val id: Identity,
-                      val channel: slatekit.core.common.Coordinator<Command>,
+                      val channel: Channel<Command>,
                       val workers: List<Worker<*>>,
                       val logger : Logger = LoggerConsole(),
                       val queue  : Queue? = null,

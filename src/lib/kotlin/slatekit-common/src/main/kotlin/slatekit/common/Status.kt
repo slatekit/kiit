@@ -4,14 +4,15 @@ package slatekit.common
  * Represents the different "states" of a life-cycle
  */
 sealed class Status(val name:String, val value:Int) {
-    object InActive : Status("InActive", 0)
-    object Starting : Status("Starting", 1)
-    object Idle     : Status("Idle"    , 2)
-    object Running  : Status("Running" , 3)
-    object Paused   : Status("Paused"  , 4)
-    object Stopped  : Status("Stopped" , 5)
-    object Complete : Status("Complete", 6)
-    object Failed   : Status("Failed"  , 7)
+    object InActive  : Status("InActive" , 0)
+    object Started   : Status("Started"  , 1)
+    object Waiting   : Status("Waiting"  , 2)
+    object Running   : Status("Running"  , 3)
+    object Paused    : Status("Paused"   , 4)
+    object Stopped   : Status("Stopped"  , 5)
+    object Completed : Status("Completed", 6)
+    object Failed    : Status("Failed"   , 7)
+    object Killed    : Status("Killed"   , 8)
 }
 
 
@@ -22,6 +23,13 @@ interface StatusCheck {
      * @return
      */
     fun status(): Status
+
+    /**
+     * whether this is started
+     *
+     * @return
+     */
+    fun isStarted(): Boolean = isState(Status.Started)
 
     /**
      * whether this is executing
@@ -35,7 +43,7 @@ interface StatusCheck {
      *
      * @return
      */
-    fun isIdle(): Boolean = isState(Status.Idle)
+    fun isIdle(): Boolean = isState(Status.Waiting)
 
     /**
      * whether this is paused
@@ -56,7 +64,7 @@ interface StatusCheck {
      *
      * @return
      */
-    fun isComplete(): Boolean = isState(Status.Complete)
+    fun isCompleted(): Boolean = isState(Status.Completed)
 
     /**
      * whether this has failed
@@ -66,11 +74,25 @@ interface StatusCheck {
     fun isFailed(): Boolean = isState(Status.Failed)
 
     /**
+     * whether this has been killed, there is no restart possible
+     *
+     * @return
+     */
+    fun isKilled(): Boolean = isState(Status.Killed)
+
+    /**
      * whether this is not running ( stopped or paused )
      *
      * @return
      */
     fun isStoppedOrPaused(): Boolean = isState(Status.Stopped) || isState(Status.Paused)
+
+    /**
+     * whether this is not running ( stopped or paused or killed)
+     *
+     * @return
+     */
+    fun isStoppedOrPausedOrKilled(): Boolean = isState(Status.Stopped) || isState(Status.Paused) || isState(Status.Killed)
 
     /**
      * whether the current state is at the one supplied.

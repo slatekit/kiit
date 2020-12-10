@@ -14,11 +14,11 @@ import slatekit.results.Status
  *
  * @param uuid   : unique id ( UUID ) identification
  * @param area   : logical group/project this alert is associated with
- * @param name   : name of the event        e.g. "SIGNUP"
+ * @param service   : name of the event        e.g. "SIGNUP"
  * @param agent  : application / service sending this alert
  * @param env    : environment of this alert e.g. dev | qat | pro
  * @param inst   : instance name e.g. of server or node id
- * @param action : action being performed ( e.g. "register" )
+ * @param name : action being performed ( e.g. "register" )
  * @param desc   : description of the alert e.g. "User registration via mobile"
  * @param status : status code for alert ( success/failure/etc )
  * @param source : name / id of the source/origin if applicable
@@ -29,20 +29,20 @@ import slatekit.results.Status
  *
  * @sample
  * Event(
- *      uuid   = "abc-123-xyz",
- *      area   = "accounts",
- *      name   = "signup",
- *      agent  = "api",
- *      env    = "pro",
- *      inst   = "server-123",
- *      action = "register",
- *      desc   = "User registration via mobile",
- *      status = Codes.SUCCESS,
- *      source = "android",
- *      target = "user-123",
- *      tag    = "a1b2c3",
- *      time   = DateTime.now()
- *      fields = listOf(
+ *      uuid    = "abc-123-xyz",
+ *      area    = "accounts",
+ *      service = "signup",
+ *      agent   = "api",
+ *      env     = "pro",
+ *      inst    = "server-123",
+ *      source  = "android",
+ *      name    = "NEW_REGISTRATION",
+ *      desc    = "User registration via mobile",
+ *      status  = Codes.SUCCESS,
+ *      target  = "user-123",
+ *      tag     = "a1b2c3",
+ *      time    = DateTime.now()
+ *      fields  = listOf(
  *          Triple( "region" , "usa"     , "" ),
  *          Triple( "device" , "android" , "" )
  *      )
@@ -51,14 +51,14 @@ import slatekit.results.Status
 data class Event(
         @JvmField val uuid: String,
         @JvmField val area: String,
-        @JvmField val name: String,
+        @JvmField val service: String,
         @JvmField val agent: String,
         @JvmField val env: String,
         @JvmField val inst: String,
-        @JvmField val action: String,
+        @JvmField val source: String,
+        @JvmField val name: String,
         @JvmField val desc: String,
         @JvmField val status: Status,
-        @JvmField val source: String,
         @JvmField val target: String,
         @JvmField val time: DateTime,
         @JvmField val tag: String,

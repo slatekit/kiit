@@ -17,6 +17,7 @@ sealed class Action(val name: String) {
     object Resume   : Action( "Resume" )
     object Delay    : Action( "Delay"  )
     object Stop     : Action( "Stop"   )
+    object Kill     : Action( "Kill"   )
     object Check    : Action( "Check"  )
     object Process  : Action( "Process")
     /* ktlint-enable */

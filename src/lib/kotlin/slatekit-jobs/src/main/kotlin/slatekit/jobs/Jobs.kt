@@ -2,8 +2,9 @@ package slatekit.jobs
 
 import kotlinx.coroutines.*
 import slatekit.common.Identity
+import slatekit.jobs.support.Ops
 import slatekit.jobs.support.Command
-import slatekit.jobs.support.JobUtils
+import slatekit.jobs.support.Utils
 import slatekit.results.Outcome
 import slatekit.results.builders.Outcomes
 
@@ -64,7 +65,7 @@ class Jobs(
         return when(val job = this[id.name]){
             null -> Outcomes.invalid("Unable to find job with name ${id.name}")
             else -> {
-                when(JobUtils.isWorker(id)){
+                when(Utils.isWorker(id)){
                     false -> send(job.ctx.commands.job(id, action))
                     true  -> send(job.ctx.commands.work(id, action))
                 }

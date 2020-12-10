@@ -1,6 +1,7 @@
-package slatekit.jobs
+package slatekit.jobs.support
 
 import slatekit.common.Identity
+import slatekit.jobs.Action
 import slatekit.jobs.support.Command
 import slatekit.results.Outcome
 import slatekit.results.builders.Outcomes
@@ -33,6 +34,9 @@ interface Ops<T> {
      */
     operator fun get(name: String): T?
 
+    suspend fun delay(): Outcome<String> = send(Action.Delay)
+    suspend fun delay(name: String): Outcome<String> = send(name, Action.Delay, "")
+
     suspend fun start(): Outcome<String> = send(Action.Start)
     suspend fun start(name: String): Outcome<String> = send(name, Action.Start, "")
 
@@ -42,9 +46,6 @@ interface Ops<T> {
     suspend fun resume(): Outcome<String> = send(Action.Resume)
     suspend fun resume(name: String): Outcome<String> = send(name, Action.Resume, "")
 
-    suspend fun delay(): Outcome<String> = send(Action.Delay)
-    suspend fun delay(name: String): Outcome<String> = send(name, Action.Delay, "")
-
     suspend fun check(): Outcome<String> = send(Action.Check)
     suspend fun check(name: String): Outcome<String> = send(name, Action.Check, "")
 
@@ -53,6 +54,9 @@ interface Ops<T> {
 
     suspend fun stop(): Outcome<String> = send(Action.Stop)
     suspend fun stop(name: String): Outcome<String> = send(name, Action.Stop, "")
+
+    suspend fun kill(): Outcome<String> = send(Action.Kill)
+    suspend fun kill(name: String): Outcome<String> = send(name, Action.Kill, "")
 
     /**
      * Sends a command to take action ( start, pause, stop, etc ) on all items

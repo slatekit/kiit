@@ -30,7 +30,7 @@ import slatekit.results.builders.Outcomes
         auth = AuthModes.KEYED, roles = ["admin"], verb = Verbs.AUTO, sources = [Sources.ALL])
 class CacheApi(override val context: Context, val caches: List<AsyncCache>) : FileSupport {
 
-    private val lookup = caches.map { it.name to it }.toMap()
+    private val lookup = caches.map { it.id.name to it }.toMap()
     override val encryptor: Encryptor? = context.enc
     override val logger: Logger? = context.logs.getLogger()
 

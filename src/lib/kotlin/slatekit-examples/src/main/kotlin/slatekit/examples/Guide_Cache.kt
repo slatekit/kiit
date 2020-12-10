@@ -1,6 +1,5 @@
 package slatekit.examples
 
-import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.runBlocking
 import slatekit.results.Try
 import slatekit.results.Success
@@ -9,10 +8,8 @@ import slatekit.results.Success
 import slatekit.cache.*
 import slatekit.common.Identity
 import slatekit.common.ext.toStringUtc
-import slatekit.common.ids.Paired
 import slatekit.common.log.LoggerConsole
 import slatekit.common.types.Country
-import slatekit.core.common.ChannelCoordinator
 
 
 /**

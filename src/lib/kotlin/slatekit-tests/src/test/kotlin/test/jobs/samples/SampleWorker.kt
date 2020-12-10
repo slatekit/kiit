@@ -1,6 +1,7 @@
 package test.jobs.samples
 
 import slatekit.common.Identity
+import slatekit.common.Status
 import slatekit.jobs.*
 import slatekit.jobs.workers.WorkResult
 import slatekit.jobs.workers.Worker
@@ -15,9 +16,9 @@ class OneTimeWorker(val start:Int, val end:Int, id: Identity) : Worker<Int>(id) 
     private val current = AtomicInteger(start)
     private val audit = mutableListOf<String>()
 
-    override suspend fun init() {
+    override suspend fun start() {
         audit.add("init")
-        super.init()
+        super.start()
     }
 
 
@@ -51,8 +52,7 @@ class OneTimeWorker(val start:Int, val end:Int, id: Identity) : Worker<Int>(id) 
     }
 
 
-    override suspend fun resume(reason: String?, task: Task): WorkResult {
-        return work(task)
+    override suspend fun resume(reason: String?) {
     }
 
 
@@ -61,7 +61,8 @@ class OneTimeWorker(val start:Int, val end:Int, id: Identity) : Worker<Int>(id) 
 }
 
 
-class PagedWorker(start:Int, val maxRuns:Int, val countsPerRun:Int) : Worker<Int>(Identity.test(PagedWorker::class.simpleName!!)) {
+class PagedWorker(start:Int, val maxRuns:Int, val countsPerRun:Int, id: Identity? = null)
+    : Worker<Int>( id ?: Identity.test(PagedWorker::class.simpleName!!)) {
 
     private val runs = AtomicInteger(0)
     private val counts = AtomicInteger(start)
@@ -92,8 +93,51 @@ class PagedWorker(start:Int, val maxRuns:Int, val countsPerRun:Int) : Worker<Int
     }
 
 
-    override suspend fun resume(reason: String?, task: Task): WorkResult {
-        return work(task)
+    override suspend fun resume(reason: String?) {
     }
 
+}
+
+
+class TestWorker(id: Identity? = null, val limit:Int = 10, operation: (suspend (Task) -> WorkResult)? = null)
+    : Worker<Int>( id ?: Identity.test(TestWorker::class.simpleName!!), operation) {
+
+    val counts = AtomicInteger(0)
+    val cycles = mutableMapOf<String, Boolean>()
+
+    override suspend fun start() {
+        cycles[Status.Started.name] = true
+    }
+
+    override suspend fun work(task: Task): WorkResult {
+        val curr = counts.get()
+        return if(curr < limit) {
+            counts.incrementAndGet()
+            WorkResult.More
+        } else {
+            WorkResult.Done
+        }
+    }
+
+    override suspend fun pause(reason: String?) {
+        cycles[Status.Paused.name] = true
+
+    }
+
+    override suspend fun resume(reason: String?) {
+        cycles["Resumed"] = true
+
+    }
+
+    override suspend fun stop(reason: String?) {
+        cycles[Status.Stopped.name] = true
+    }
+
+    override suspend fun done() {
+        cycles[Status.Completed.name] = true
+    }
+
+    override suspend fun kill(reason: String?) {
+        cycles[Status.Killed.name] = true
+    }
 }
