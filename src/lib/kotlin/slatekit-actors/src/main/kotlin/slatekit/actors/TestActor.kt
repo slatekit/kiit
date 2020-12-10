@@ -1,15 +1,21 @@
-package slatekit.core.slatekit.core.actors
+package slatekit.actors
 
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.runBlocking
 
-sealed class Target {
-    object Job : Target()
-    object Wrk : Target()
+sealed class Target2 {
+    object Job : Target2()
+    object Wrk : Target2()
 }
 
-class Command(val target:Target, val id:String)
+class Task(val name:String, val data:String)
+class Command(val target:Target2, val id:String, val task:Task)
 
+class MyWorker() : Worker<Task>("myworker") {
+    override fun work(item: Task): Result {
+        return Result.Done
+    }
+}
 
 class TestActor(channel:Channel<Message<Command>>) : Actor<Command>(channel) {
 

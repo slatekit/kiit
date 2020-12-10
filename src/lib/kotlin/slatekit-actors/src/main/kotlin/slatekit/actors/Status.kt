@@ -1,4 +1,4 @@
-package slatekit.core.slatekit.core.actors
+package slatekit.actors
 
 /**
  * Represents the different "states" of a life-cycle
