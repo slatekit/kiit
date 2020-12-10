@@ -20,10 +20,7 @@ object Rules {
 
 
     fun canWork(current: Status): Boolean
-        =  current != Status.InActive
-        && current != Status.Completed
-        && current != Status.Failed
-        && current != Status.Killed
+        =  current == Status.Running
 
 
     fun canPause(current: Status): Boolean

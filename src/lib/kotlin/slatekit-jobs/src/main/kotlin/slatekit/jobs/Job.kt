@@ -8,7 +8,6 @@ import slatekit.common.ext.toStringMySql
 import slatekit.common.log.LogLevel
 import slatekit.jobs.support.Events
 import slatekit.jobs.support.Control
-import slatekit.jobs.Ops
 import slatekit.policy.Policy
 import slatekit.jobs.support.*
 import slatekit.jobs.workers.*
@@ -237,29 +236,33 @@ class Job(val ctx: Context) : Ops<WorkerContext>, StatusCheck {
             return
         }
         when (cmd.action) {
-            is Action.Delay -> control.delay(30)
-            is Action.Start -> control.start()
-            is Action.Pause -> control.pause(30)
-            is Action.Stop -> control.stop()
-            is Action.Kill -> control.kill()
-            is Action.Resume -> control.resume()
-            is Action.Check -> control.check()
+            is Action.Delay   -> control.delay(30)
+            is Action.Start   -> control.start()
+            is Action.Pause   -> control.pause(30)
+            is Action.Stop    -> control.stop()
+            is Action.Kill    -> control.kill()
+            is Action.Resume  -> control.resume()
+            is Action.Check   -> control.check()
             is Action.Process -> {
                 ctx.logger.info("Process action on job does nothing")
             }
         }
     }
 
-    private suspend fun manageWork(command: Command.WorkerCommand) {
-        when (command.action) {
-            is Action.Delay -> one(command.identity, false) { work.delay(it, seconds = 30) }
-            is Action.Start -> one(command.identity, false) { work.start(it) }
-            is Action.Pause -> one(command.identity, false) { work.pause(it, seconds = 30) }
-            is Action.Resume -> one(command.identity, false) { work.resume(it) }
-            is Action.Stop -> one(command.identity, false) { work.stop(it) }
-            is Action.Process -> run(command.identity, true) { work.work(it, nextTask(it.task)) }
-            is Action.Check -> one(command.identity, true) { work.check(it) }
-            is Action.Kill -> one(command.identity, true) { work.kill(it) }
+    private suspend fun manageWork(cmd: Command.WorkerCommand) {
+        if(cmd.action == Action.Process && !Rules.canWork(this.status())) {
+            notify("CMD_ERROR")
+            return
+        }
+        when (cmd.action) {
+            is Action.Delay   -> one(cmd.identity, false) { work.delay(it, seconds = 30) }
+            is Action.Start   -> one(cmd.identity, false) { work.start(it) }
+            is Action.Pause   -> one(cmd.identity, false) { work.pause(it, seconds = 30) }
+            is Action.Resume  -> one(cmd.identity, false) { work.resume(it) }
+            is Action.Stop    -> one(cmd.identity, false) { work.stop(it) }
+            is Action.Process -> run(cmd.identity, true) { work.work(it, nextTask(it.task)) }
+            is Action.Check   -> one(cmd.identity, true) { work.check(it) }
+            is Action.Kill    -> one(cmd.identity, true) { work.kill(it) }
         }
     }
 
