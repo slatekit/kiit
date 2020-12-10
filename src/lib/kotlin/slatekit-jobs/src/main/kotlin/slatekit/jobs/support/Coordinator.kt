@@ -18,7 +18,7 @@ import slatekit.results.then
  * 4. Notifying listeners of status changes
  * Compliments the Work component, but this is essentially to control job
  */
-class Control(override val job: Job, val work: Work = Work(job)) : Support {
+class Coordinator(override val job: Job, val work: Work = Work(job)) : Support {
 
     /**
      * This is a delayed start of the job in X seconds.

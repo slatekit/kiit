@@ -7,7 +7,7 @@ import slatekit.common.*
 import slatekit.common.ext.toStringMySql
 import slatekit.common.log.LogLevel
 import slatekit.jobs.support.Events
-import slatekit.jobs.support.Control
+import slatekit.jobs.support.Coordinator
 import slatekit.policy.Policy
 import slatekit.jobs.support.*
 import slatekit.jobs.workers.*
@@ -64,7 +64,7 @@ class Job(val ctx: Context) : Ops<WorkerContext>, StatusCheck {
     val workers = Workers(ctx)
     private val events = ctx.notifier.jobEvents
     private val _status = AtomicReference<Status>(Status.InActive)
-    private val control = Control(this)
+    private val control = Coordinator(this)
     private val work = control.work
 
     /**
