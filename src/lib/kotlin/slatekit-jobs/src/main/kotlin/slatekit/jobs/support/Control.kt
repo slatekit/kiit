@@ -3,7 +3,7 @@ package slatekit.jobs.support
 import slatekit.common.Status
 import slatekit.jobs.Action
 import slatekit.jobs.Job
-import slatekit.jobs.Work
+import slatekit.jobs.workers.Work
 import slatekit.jobs.workers.WorkerContext
 import slatekit.results.Try
 import slatekit.results.builders.Tries

@@ -6,9 +6,9 @@ import kotlinx.coroutines.channels.Channel
 import slatekit.common.*
 import slatekit.common.ext.toStringMySql
 import slatekit.common.log.LogLevel
-import slatekit.jobs.Workers
+import slatekit.jobs.support.Events
 import slatekit.jobs.support.Control
-import slatekit.jobs.support.Ops
+import slatekit.jobs.Ops
 import slatekit.policy.Policy
 import slatekit.jobs.support.*
 import slatekit.jobs.workers.*
@@ -59,7 +59,7 @@ import slatekit.results.builders.Outcomes
  * 3. Integration with Kotlin Flow ( e.g. a job could feed data into a Flow )
  *
  */
-class Job(val ctx: JobContext) : Ops<WorkerContext>, StatusCheck {
+class Job(val ctx: Context) : Ops<WorkerContext>, StatusCheck {
 
     /**
      * Initialize with just a function that will handle the work
@@ -108,7 +108,7 @@ class Job(val ctx: JobContext) : Ops<WorkerContext>, StatusCheck {
         scope: CoroutineScope = Jobs.scope,
         policies: List<Policy<WorkRequest, WorkResult>> = listOf()
     ) :
-        this(JobContext(id, coordinator(), listOf(worker), queue = queue, scope = scope, policies = policies))
+        this(Context(id, coordinator(), listOf(worker), queue = queue, scope = scope, policies = policies))
 
     /**
      * Initialize with a list of functions to excecute work
@@ -120,7 +120,7 @@ class Job(val ctx: JobContext) : Ops<WorkerContext>, StatusCheck {
         scope: CoroutineScope = Jobs.scope,
         policies: List<Policy<WorkRequest, WorkResult>> = listOf()
     ) :
-        this(JobContext(id, coordinator(), workers(id, ops), queue = queue, scope = scope, policies = policies))
+        this(Context(id, coordinator(), workers(id, ops), queue = queue, scope = scope, policies = policies))
 
     val id: Identity = ctx.id
     val workers = Workers(ctx)

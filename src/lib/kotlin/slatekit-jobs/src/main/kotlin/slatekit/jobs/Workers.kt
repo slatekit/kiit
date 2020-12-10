@@ -2,9 +2,7 @@ package slatekit.jobs
 
 import slatekit.common.Identity
 import slatekit.common.Status
-import slatekit.jobs.Event
 import slatekit.tracking.Recorder
-import slatekit.jobs.support.*
 import slatekit.jobs.workers.WorkerContext
 
 /**
@@ -18,7 +16,7 @@ import slatekit.jobs.workers.WorkerContext
  * 3. handling errors
  * 4. notification of state changes
  */
-class Workers(val ctx: JobContext) {
+class Workers(val ctx: Context) {
     private val events = ctx.notifier.wrkEvents
     private val contexts = ctx.workers.map { WorkerContext(it.id, it, Recorder.of(it.id), ctx.policies) }
     private val lookup: Map<String, WorkerContext> = contexts.map { it.id.id to it }.toMap()

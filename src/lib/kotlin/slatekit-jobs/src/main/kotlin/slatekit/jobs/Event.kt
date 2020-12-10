@@ -5,7 +5,7 @@ import slatekit.common.Identity
 import slatekit.common.Status
 
 /**
- * @param id    : Identity of the job/worker
+ * @param id    : Identity of the job/worker @see[slatekit.common.Identity]
  * @param name  : Name of the event ( e.g. STATE_CHANGED )
  * @param source: Name of the source either "job" or "worker"
  * @param status: Status of the worker

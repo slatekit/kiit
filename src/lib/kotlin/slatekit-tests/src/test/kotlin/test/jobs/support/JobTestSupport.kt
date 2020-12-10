@@ -7,7 +7,7 @@ import slatekit.common.Status
 import slatekit.common.Identity
 import slatekit.jobs.*
 import slatekit.jobs.support.Command
-import slatekit.jobs.support.JobContext
+import slatekit.jobs.Context
 import slatekit.jobs.workers.Worker
 import test.jobs.samples.TestWorker
 
@@ -23,7 +23,7 @@ interface JobTestSupport {
     fun create(numWorkers: Int, id: Identity, builder: (Identity) -> Worker<*>, queue: Queue?): Job {
         val workers = (1..numWorkers).map { builder(id) }
         val channel = Channel<Command>(Channel.UNLIMITED)
-        val ctx = JobContext(id, channel, workers, queue = queue, scheduler = MockScheduler())
+        val ctx = Context(id, channel, workers, queue = queue, scheduler = MockScheduler())
         return Job(ctx)
     }
 

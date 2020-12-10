@@ -1,4 +1,4 @@
-package slatekit.jobs.support
+package slatekit.jobs
 
 import slatekit.common.Identity
 import slatekit.jobs.Action

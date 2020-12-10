@@ -6,8 +6,7 @@ import slatekit.common.Identity
 import slatekit.common.Status
 import slatekit.jobs.Action
 import slatekit.jobs.Job
-import slatekit.jobs.Rules
-import slatekit.jobs.support.Command
+import slatekit.jobs.support.Rules
 import slatekit.results.Failure
 import slatekit.results.Success
 import slatekit.results.Try

@@ -1,7 +1,10 @@
-package slatekit.jobs
+package slatekit.jobs.workers
 
 import slatekit.common.Identity
 import slatekit.common.Status
+import slatekit.jobs.Action
+import slatekit.jobs.Job
+import slatekit.jobs.Task
 import slatekit.jobs.support.Support
 import slatekit.jobs.support.Utils
 import slatekit.jobs.workers.WorkResult
@@ -10,6 +13,13 @@ import slatekit.results.Try
 import slatekit.results.builders.Tries
 import slatekit.results.then
 
+/**
+ * Controls a Worker by :
+ * 1. Moving its @see[slatekit.common.Status] ( Running to Paused )
+ * 2. Scheduling resuming via a scheduled Resume command
+ * 3. Notifying listeners of status changes
+ * 4. Handling the running of a workers work method and checking for completion
+ */
 class Work(override val job: Job) : Support {
 
     /**

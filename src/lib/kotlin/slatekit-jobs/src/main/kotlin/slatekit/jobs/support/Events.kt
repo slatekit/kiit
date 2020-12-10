@@ -1,18 +1,17 @@
-package slatekit.jobs
+package slatekit.jobs.support
 
 import slatekit.common.DateTime
 import slatekit.common.Event
 import slatekit.common.Identity
 import slatekit.common.Status
 import slatekit.common.ids.ULIDs
-import slatekit.jobs.support.Command
-import slatekit.jobs.support.JobContext
-import slatekit.jobs.support.Utils
+import slatekit.jobs.Job
+import slatekit.jobs.Context
 import slatekit.jobs.workers.WorkerContext
 
 /**
  * Builds events using the @see[slatekit.common.Event] model
- * to represent either a job/worker current state or for state changes.
+ * to represent either a job or worker's current state.
  * This event model is used for structured logging.
  *
  * Event(
@@ -40,18 +39,18 @@ object Events {
     /**
      * Builds an event for the job ( based on its current state )
      */
-    fun build(job:Job, name:String): Event {
+    fun build(job: Job, name:String): Event {
         val queue = job.ctx.queue?.name ?: "no-queue"
         val id = job.id
         val status = job.status()
-        return build(id, status, name,"State changed", "job", queue)
+        return build(id, status, name, "State changed", "job", queue)
     }
 
 
     /**
      * Builds an event for the worker
      */
-    fun build(jctx:JobContext, wctx:WorkerContext, name:String): Event {
+    fun build(jctx: Context, wctx:WorkerContext, name:String): Event {
         val queue = jctx.queue?.name ?: "no-queue"
         val worker = wctx.worker
         val id = worker.id
@@ -63,7 +62,7 @@ object Events {
     /**
      * Builds an event for the worker
      */
-    fun build(job:Job, cmd: Command): Event {
+    fun build(job: Job, cmd: Command): Event {
         val id = job.id
         val status = job.status()
         val target = if(cmd is Command.JobCommand) "Job" else "Wrk"
