@@ -61,67 +61,6 @@ import slatekit.results.builders.Outcomes
  */
 class Job(val ctx: Context) : Ops<WorkerContext>, StatusCheck {
 
-    /**
-     * Initialize with just a function that will handle the work
-     * @sample
-     *  val job1 = Job(Identity.job("signup", "email"), ::sendEmail)
-     *  val job2 = Job(Identity.job("signup", "email"), suspend {
-     *      // do work here
-     *      WorkResult.Done
-     *  })
-     */
-    constructor(
-        id: Identity,
-        op: suspend () -> WorkResult,
-        scope: CoroutineScope = Jobs.scope
-    ) :
-        this(id, listOf(worker(op)), null, scope, listOf())
-
-    /**
-     * Initialize with just a function that will handle the work
-     * @sample
-     *  val job1 = Job(Identity.job("signup", "email"), ::sendEmail)
-     *  val job2 = Job(Identity.job("signup", "email"), suspend { task ->
-     *      println("task id=${task.id}")
-     *      // do work here
-     *      WorkResult.Done
-     *  })
-     */
-    constructor(
-        id: Identity,
-        op: suspend (Task) -> WorkResult,
-        queue: Queue? = null,
-        scope: CoroutineScope = Jobs.scope,
-        policies: List<Policy<WorkRequest, WorkResult>> = listOf()
-    ) :
-        this(id, listOf(op), queue, scope, policies)
-
-    /**
-     * Initialize with just a function that will handle the work
-     *  val id = Identity.job("signup", "email")
-     *  val job1 = Job(id, EmailWorker(id.copy(tags = listOf("worker")))
-     */
-    constructor(
-        id: Identity,
-        worker: Worker<*>,
-        queue: Queue? = null,
-        scope: CoroutineScope = Jobs.scope,
-        policies: List<Policy<WorkRequest, WorkResult>> = listOf()
-    ) :
-        this(Context(id, coordinator(), listOf(worker), queue = queue, scope = scope, policies = policies))
-
-    /**
-     * Initialize with a list of functions to excecute work
-     */
-    constructor(
-        id: Identity,
-        ops: List<suspend (Task) -> WorkResult>,
-        queue: Queue? = null,
-        scope: CoroutineScope = Jobs.scope,
-        policies: List<Policy<WorkRequest, WorkResult>> = listOf()
-    ) :
-        this(Context(id, coordinator(), workers(id, ops), queue = queue, scope = scope, policies = policies))
-
     val id: Identity = ctx.id
     val workers = Workers(ctx)
     private val events = ctx.notifier.jobEvents
@@ -218,9 +157,9 @@ class Job(val ctx: Context) : Ops<WorkerContext>, StatusCheck {
     /**
      * Listens to and handles commands until there are no more
      */
-    suspend fun poll(){
+    suspend fun poll() {
         var cmd: Command? = ctx.channel.poll()
-        while(cmd != null) {
+        while (cmd != null) {
             record("POLL", cmd)
             handle(cmd)
             cmd = ctx.channel.poll()
@@ -233,7 +172,7 @@ class Job(val ctx: Context) : Ops<WorkerContext>, StatusCheck {
      */
     suspend fun wipe() {
         var cmd: Command? = ctx.channel.poll()
-        while(cmd != null) {
+        while (cmd != null) {
             record("WIPE", cmd)
             cmd = ctx.channel.poll()
         }
@@ -294,34 +233,34 @@ class Job(val ctx: Context) : Ops<WorkerContext>, StatusCheck {
 
 
     private suspend fun manageJob(cmd: Command.JobCommand) {
-        if(!validate(cmd)) {
+        if (!validate(cmd)) {
             notify("CMD_ERROR")
             return
         }
         when (cmd.action) {
-            is Action.Delay   -> control.delay(30)
-            is Action.Start   -> control.start()
-            is Action.Pause   -> control.pause(30)
-            is Action.Stop    -> control.stop()
-            is Action.Kill    -> control.kill()
-            is Action.Resume  -> control.resume()
-            is Action.Check   -> control.check()
+            is Action.Delay -> control.delay(30)
+            is Action.Start -> control.start()
+            is Action.Pause -> control.pause(30)
+            is Action.Stop -> control.stop()
+            is Action.Kill -> control.kill()
+            is Action.Resume -> control.resume()
+            is Action.Check -> control.check()
             is Action.Process -> {
-                ctx.logger.info( "Process action on job does nothing")
+                ctx.logger.info("Process action on job does nothing")
             }
         }
     }
 
     private suspend fun manageWork(command: Command.WorkerCommand) {
         when (command.action) {
-            is Action.Delay   -> one(command.identity,false ) { work.delay( it, seconds = 30) }
-            is Action.Start   -> one(command.identity,false ) { work.start( it) }
-            is Action.Pause   -> one(command.identity,false ) { work.pause( it, seconds = 30) }
-            is Action.Resume  -> one(command.identity,false ) { work.resume(it) }
-            is Action.Stop    -> one(command.identity,false ) { work.stop ( it) }
-            is Action.Process -> run(command.identity,true  ) { work.work  (it, nextTask(it.task)) }
-            is Action.Check   -> one(command.identity, true ) { work.check(it) }
-            is Action.Kill    -> one(command.identity, true ) { work.kill(it) }
+            is Action.Delay -> one(command.identity, false) { work.delay(it, seconds = 30) }
+            is Action.Start -> one(command.identity, false) { work.start(it) }
+            is Action.Pause -> one(command.identity, false) { work.pause(it, seconds = 30) }
+            is Action.Resume -> one(command.identity, false) { work.resume(it) }
+            is Action.Stop -> one(command.identity, false) { work.stop(it) }
+            is Action.Process -> run(command.identity, true) { work.work(it, nextTask(it.task)) }
+            is Action.Check -> one(command.identity, true) { work.check(it) }
+            is Action.Kill -> one(command.identity, true) { work.kill(it) }
         }
     }
 
@@ -351,7 +290,7 @@ class Job(val ctx: Context) : Ops<WorkerContext>, StatusCheck {
     /**
      * Transitions all workers to the new status supplied
      */
-    private suspend fun all(action: Action, newStatus: Status, op:suspend(WorkerContext) -> Try<Status>) {
+    private suspend fun all(action: Action, newStatus: Status, op: suspend (WorkerContext) -> Try<Status>) {
         val job = this
         this.move(newStatus)
         ctx.scope.launch {
@@ -364,7 +303,7 @@ class Job(val ctx: Context) : Ops<WorkerContext>, StatusCheck {
     /**
      * Transitions all workers to the new status supplied
      */
-    private suspend fun each(op:suspend(WorkerContext) -> Try<Status>) {
+    private suspend fun each(op: suspend (WorkerContext) -> Try<Status>) {
         ctx.workers.forEach { worker ->
             val wctx = workers[worker.id]
             wctx?.let {
@@ -377,7 +316,7 @@ class Job(val ctx: Context) : Ops<WorkerContext>, StatusCheck {
     /**
      * Transitions all workers to the new status supplied
      */
-    private suspend fun one(id:Identity, launch:Boolean, op:suspend(WorkerContext) -> Try<Status>) {
+    private suspend fun one(id: Identity, launch: Boolean, op: suspend (WorkerContext) -> Try<Status>) {
         val wctx = workers[id]
         wctx?.let {
             op(it)
@@ -388,7 +327,7 @@ class Job(val ctx: Context) : Ops<WorkerContext>, StatusCheck {
     /**
      * Transitions all workers to the new status supplied
      */
-    private suspend fun run(id:Identity, launch:Boolean, op:suspend(WorkerContext) -> Unit) {
+    private suspend fun run(id: Identity, launch: Boolean, op: suspend (WorkerContext) -> Unit) {
         val wctx = workers[id]
         wctx?.let {
             op(it)
@@ -396,15 +335,15 @@ class Job(val ctx: Context) : Ops<WorkerContext>, StatusCheck {
     }
 
 
-    private fun validate(cmd:Command):Boolean {
-        return when(this.status()){
+    private fun validate(cmd: Command): Boolean {
+        return when (this.status()) {
             Status.Killed -> cmd.action == Action.Check
             else -> true
         }
     }
 
 
-    private fun notify(name:String) {
+    private fun notify(name: String) {
         val job = this
         ctx.scope.launch {
             ctx.notifier.notify(job, name)
@@ -415,6 +354,50 @@ class Job(val ctx: Context) : Ops<WorkerContext>, StatusCheck {
     companion object {
 
         const val ERROR_KEY = "Error"
+
+
+        /**
+         * Initialize with just a function that will handle the work
+         * @sample
+         *  val job1 = Job(Identity.job("signup", "email"), ::sendEmail)
+         *  val job2 = Job(Identity.job("signup", "email"), suspend {
+         *      // do work here
+         *      WorkResult.Done
+         *  })
+         */
+        operator fun invoke(id: Identity, op: suspend () -> WorkResult, scope: CoroutineScope = Jobs.scope): Job {
+            return Job(id, listOf(worker(op)), null, scope, listOf())
+        }
+
+        /**
+         * Initialize with just a function that will handle the work
+         * @sample
+         *  val job1 = Job(Identity.job("signup", "email"), ::sendEmail)
+         *  val job2 = Job(Identity.job("signup", "email"), suspend { task ->
+         *      println("task id=${task.id}")
+         *      // do work here
+         *      WorkResult.Done
+         *  })
+         */
+        operator fun invoke(id: Identity, op: suspend (Task) -> WorkResult, queue: Queue? = null, scope: CoroutineScope = Jobs.scope, policies: List<Policy<WorkRequest, WorkResult>> = listOf()): Job {
+            return Job(id, listOf(op), queue, scope, policies)
+        }
+
+        /**
+         * Initialize with a list of functions to excecute work
+         */
+        operator fun invoke(id: Identity, ops: List<suspend (Task) -> WorkResult>, queue: Queue? = null, scope: CoroutineScope = Jobs.scope, policies: List<Policy<WorkRequest, WorkResult>> = listOf()): Job {
+            return Job(Context(id, coordinator(), workers(id, ops), queue = queue, scope = scope, policies = policies))
+        }
+
+        /**
+         * Initialize with just a function that will handle the work
+         *  val id = Identity.job("signup", "email")
+         *  val job1 = Job(id, EmailWorker(id.copy(tags = listOf("worker")))
+         */
+        operator fun invoke(id: Identity, worker: Worker<*>, queue: Queue? = null, scope: CoroutineScope = Jobs.scope,
+                            policies: List<Policy<WorkRequest, WorkResult>> = listOf()): Job = Job(Context(id, coordinator(), listOf(worker), queue = queue, scope = scope, policies = policies))
+
 
         fun worker(call: suspend () -> WorkResult): suspend (Task) -> WorkResult {
             return { t ->
