@@ -7,7 +7,8 @@ import slatekit.common.*
 import slatekit.common.ext.toStringMySql
 import slatekit.common.log.LogLevel
 import slatekit.jobs.slatekit.jobs.Workers
-import slatekit.jobs.slatekit.jobs.Ops
+import slatekit.jobs.slatekit.jobs.support.Control
+import slatekit.jobs.slatekit.jobs.support.Ops
 import slatekit.policy.Policy
 import slatekit.jobs.support.*
 import slatekit.jobs.workers.*
@@ -143,6 +144,13 @@ class Job(val ctx: JobContext) : Ops<WorkerContext>, StatusCheck {
     }
 
     /**
+     * Subscribe to @see[slatekit.common.Status] beging changed to the one supplied
+     */
+    fun onError(op: suspend (Event) -> Unit) {
+        events.on(ERROR_KEY, op)
+    }
+
+    /**
      * Gets the current @see[slatekit.common.Status] of the job
      */
     override fun status(): Status = _status.get()
@@ -174,7 +182,7 @@ class Job(val ctx: JobContext) : Ops<WorkerContext>, StatusCheck {
      * Requests an action on a specific worker
      */
     override suspend fun send(id: Identity, action: Action, note: String): Outcome<String> {
-        return when (JobUtils.isWorker(id)) {
+        return when (Utils.isWorker(id)) {
             false -> send(ctx.commands.job(id, action))
             true -> send(ctx.commands.work(id, action))
         }
@@ -186,7 +194,7 @@ class Job(val ctx: JobContext) : Ops<WorkerContext>, StatusCheck {
      */
     override suspend fun send(command: Command): Outcome<String> {
         ctx.channel.send(command)
-        return when (JobUtils.isWorker(command.identity)) {
+        return when (Utils.isWorker(command.identity)) {
             true -> Outcomes.success("Sent command=${command.action.name}, type=job, target=${ctx.id.id}")
             false -> Outcomes.success("Send command=${command.action.name}, type=wrk, target=${ctx.id.id}")
         }
@@ -215,6 +223,18 @@ class Job(val ctx: JobContext) : Ops<WorkerContext>, StatusCheck {
         while(cmd != null) {
             record("POLL", cmd)
             handle(cmd)
+            cmd = ctx.channel.poll()
+        }
+    }
+
+
+    /**
+     * Wipes all the commands on the channel
+     */
+    suspend fun wipe() {
+        var cmd: Command? = ctx.channel.poll()
+        while(cmd != null) {
+            record("WIPE", cmd)
             cmd = ctx.channel.poll()
         }
     }
@@ -273,8 +293,12 @@ class Job(val ctx: JobContext) : Ops<WorkerContext>, StatusCheck {
     }
 
 
-    private suspend fun manageJob(request: Command.JobCommand) {
-        when (request.action) {
+    private suspend fun manageJob(cmd: Command.JobCommand) {
+        if(!validate(cmd)) {
+            notify("CMD_ERROR")
+            return
+        }
+        when (cmd.action) {
             is Action.Delay   -> control.delay(30)
             is Action.Start   -> control.start()
             is Action.Pause   -> control.pause(30)
@@ -293,10 +317,11 @@ class Job(val ctx: JobContext) : Ops<WorkerContext>, StatusCheck {
             is Action.Delay   -> one(command.identity,false ) { work.delay( it, seconds = 30) }
             is Action.Start   -> one(command.identity,false ) { work.start( it) }
             is Action.Pause   -> one(command.identity,false ) { work.pause( it, seconds = 30) }
-            is Action.Stop    -> one(command.identity,false ) { work.stop ( it) }
             is Action.Resume  -> one(command.identity,false ) { work.resume(it) }
-            is Action.Check   -> one(command.identity,false ) { work.notify(null, id) }
+            is Action.Stop    -> one(command.identity,false ) { work.stop ( it) }
             is Action.Process -> run(command.identity,true  ) { work.work  (it, nextTask(it.task)) }
+            is Action.Check   -> one(command.identity, true ) { work.check(it) }
+            is Action.Kill    -> one(command.identity, true ) { work.kill(it) }
         }
     }
 
@@ -311,7 +336,8 @@ class Job(val ctx: JobContext) : Ops<WorkerContext>, StatusCheck {
     private fun record(name: String, cmd: Command, desc: String? = null, task: Task? = null) {
         val event = Events.build(this, cmd)
         val info = listOf(
-            "id" to cmd.identity.id,
+            "id" to cmd.id.toString(),
+            "uuid" to cmd.identity.id,
             "source" to event.source,
             "name" to event.name,
             "target" to event.target,
@@ -370,7 +396,25 @@ class Job(val ctx: JobContext) : Ops<WorkerContext>, StatusCheck {
     }
 
 
+    private fun validate(cmd:Command):Boolean {
+        return when(this.status()){
+            Status.Killed -> cmd.action == Action.Check
+            else -> true
+        }
+    }
+
+
+    private fun notify(name:String) {
+        val job = this
+        ctx.scope.launch {
+            ctx.notifier.notify(job, name)
+        }
+    }
+
+
     companion object {
+
+        const val ERROR_KEY = "Error"
 
         fun worker(call: suspend () -> WorkResult): suspend (Task) -> WorkResult {
             return { t ->
@@ -379,12 +423,8 @@ class Job(val ctx: JobContext) : Ops<WorkerContext>, StatusCheck {
         }
 
         fun workers(id: Identity, lamdas: List<suspend (Task) -> WorkResult>): List<Worker<*>> {
-            val idInfo = when (id) {
-                is SimpleIdentity -> id.copy(tags = listOf("worker"))
-                else -> SimpleIdentity(id.area, id.service, id.agent, id.env, id.instance, listOf("worker"))
-            }
             return lamdas.map {
-                Worker<String>(idInfo.newInstance(), operation = it)
+                Worker<String>(id, operation = it)
             }
         }
 

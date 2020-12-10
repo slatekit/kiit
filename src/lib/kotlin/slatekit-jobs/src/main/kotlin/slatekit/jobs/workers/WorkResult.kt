@@ -18,8 +18,6 @@ sealed class WorkResult(val name: String) {
     object More    : WorkResult("More")
     object Fail    : WorkResult("Fail")
     object Stop    : WorkResult("Stop")
-
-    data class Delay(val seconds: Int) : WorkResult("Delay")
     data class Next(val offset: Long, val processed: Long, val reference: String) : WorkResult("next")
 
 
@@ -32,7 +30,6 @@ sealed class WorkResult(val name: String) {
                 val first = tokens[0]
                 when (first.toLowerCase()) {
                     "next"  -> Next(tokens[1].toLong(), tokens[2].toLong(), tokens[3])
-                    "delay" -> Delay(tokens[1].toInt())
                     else -> Unknown
                 }
             }

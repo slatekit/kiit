@@ -1,7 +1,9 @@
-package slatekit.jobs
+package slatekit.jobs.slatekit.jobs.support
 
 import slatekit.common.Status
-import slatekit.jobs.slatekit.jobs.support.Support
+import slatekit.jobs.Action
+import slatekit.jobs.Job
+import slatekit.jobs.Work
 import slatekit.jobs.workers.WorkerContext
 import slatekit.results.Try
 import slatekit.results.builders.Tries
@@ -40,7 +42,8 @@ class Control(override val job: Job, val work: Work = Work(job)) : Support {
     suspend fun start(): Try<Status> {
         return move(Action.Start, Status.Started).then {
             move(Action.Process, Status.Running) {
-                each { wctx -> work.start(wctx, handle = true) }
+                each { wctx -> work.start(wctx, handle = false) }
+                each { wctx -> send(Action.Process, wctx.id) }
             }
         }
     }
@@ -86,6 +89,18 @@ class Control(override val job: Job, val work: Work = Work(job)) : Support {
 
 
     /**
+     * Stops the job.
+     * Only way to start again is to issue the start/resume command
+     */
+    suspend fun done(): Try<Status> {
+        return Tries.of {
+            move(Status.Completed, true, null, null)
+            Status.Completed
+        }
+    }
+
+
+    /**
      * Kills the job.
      * No restart is possible
      */
@@ -100,9 +115,15 @@ class Control(override val job: Job, val work: Work = Work(job)) : Support {
      * Checks a job by notifying listeners of its status/info
      */
     suspend fun check(): Try<Status> {
-        val result = notify("check")
-        each { wctx -> work.check(wctx, reason = null) }
-        return result
+        val isDone = job.ctx.workers.all { it.status() == Status.Completed }
+        return when(isDone) {
+            true -> this.done()
+            else -> {
+                val result = notify("check")
+                each { wctx -> work.check(wctx, reason = null) }
+                result
+            }
+        }
     }
 
 
@@ -127,37 +148,10 @@ class Control(override val job: Job, val work: Work = Work(job)) : Support {
                 throw Exception("ERROR: Moving job - action=${action.name}, job=${job.id}, currentState=${currentStatus.name}")
             }
             op?.invoke()
-            move(newStatus, notify, job.id, msg)
+            move(newStatus, notify, null, msg)
             newStatus
         }
         handle(result, null)
         return result
-    }
-
-    private fun move(condition: Boolean, status: Status, newStatus: Status) {
-
-        val isRunning = status == Status.Running
-
-        // No need to change to same status
-        if (status != newStatus) {
-            when (newStatus) {
-                Status.InActive -> {
-                }
-                Status.Started -> {
-                }
-                Status.Waiting -> {
-                }
-                Status.Running -> {
-                }
-                Status.Paused -> {
-                }
-                Status.Stopped -> {
-                }
-                Status.Completed -> {
-                }
-                Status.Failed -> {
-                }
-            }
-        }
     }
 }

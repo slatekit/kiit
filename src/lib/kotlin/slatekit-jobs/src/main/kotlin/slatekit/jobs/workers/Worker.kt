@@ -22,11 +22,10 @@ import slatekit.tracking.Recorder
  * 2. Clients should only extend worker to use/enrich the life-cycle, state change, alerting, diagnostic methods above
  */
 open class Worker<T>(
-    val id: Identity,
-    val stats: Recorder<Task, WorkResult, Err> = Recorder.of(id),
+    id: Identity,
     val operation: (suspend (Task) -> WorkResult)? = null
 ) : StatusCheck {
-
+    val id = if(id.tags.isEmpty() || !id.tags.contains("worker")) id.with(tags = listOf("worker")) else id
     protected val _status = AtomicReference<Pair<Status, String>>(Pair(Status.InActive, Status.InActive.name))
 
     /**

@@ -20,9 +20,8 @@ import slatekit.jobs.workers.WorkerContext
  */
 class Workers(val ctx: JobContext) {
     private val events = ctx.notifier.wrkEvents
-    private val lookup: Map<String, WorkerContext> = ctx.workers.map {
-        it.id.id to WorkerContext(it.id, it, Recorder.of(it.id), ctx.backoffs, ctx.policies)
-    }.toMap()
+    private val contexts = ctx.workers.map { WorkerContext(it.id, it, Recorder.of(it.id), ctx.policies) }
+    private val lookup: Map<String, WorkerContext> = contexts.map { it.id.id to it }.toMap()
 
     /**
      * Subscribe to status being changed for any worker
@@ -55,6 +54,12 @@ class Workers(val ctx: JobContext) {
         true -> lookup[id]
         false -> null
     }
+
+    /**
+     * Gets the WorkContext for the worker with the supplied identity.
+     * This is to allow for looking up the job/stats metadata for a worker.
+     */
+    operator fun get(index:Int): WorkerContext? = contexts[index]
 
     /**
      * Gets all the worker ids

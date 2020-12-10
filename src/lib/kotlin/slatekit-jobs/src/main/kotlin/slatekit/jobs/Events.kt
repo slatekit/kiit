@@ -7,7 +7,7 @@ import slatekit.common.Status
 import slatekit.common.ids.ULIDs
 import slatekit.jobs.support.Command
 import slatekit.jobs.support.JobContext
-import slatekit.jobs.support.JobUtils
+import slatekit.jobs.support.Utils
 import slatekit.jobs.workers.WorkerContext
 
 /**
@@ -82,7 +82,7 @@ object Events {
      * Builds a Event using the job/worker identity, status and other info.
      */
     fun build(id: Identity, status: Status, name:String, desc:String, source:String, target:String, fields:List<Triple<String, String, String>> = emptyFields): Event {
-        val code = JobUtils.toCode(status)
+        val code = Utils.toCode(status)
         val tag = if(id.tags.isEmpty()) "" else id.tags.first()
 
         // JOB_STARTING | WRK_STARTING

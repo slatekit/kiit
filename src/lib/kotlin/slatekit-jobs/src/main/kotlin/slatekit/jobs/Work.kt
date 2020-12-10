@@ -3,7 +3,7 @@ package slatekit.jobs
 import slatekit.common.Identity
 import slatekit.common.Status
 import slatekit.jobs.slatekit.jobs.support.Support
-import slatekit.jobs.support.JobUtils
+import slatekit.jobs.support.Utils
 import slatekit.jobs.workers.WorkResult
 import slatekit.jobs.workers.WorkerContext
 import slatekit.results.Try
@@ -100,8 +100,11 @@ class Work(override val job: Job) : Support {
      * This is the main method to perform the actual work on the task
      */
     suspend fun work(wctx: WorkerContext, task: Task): Try<Status> {
+        val current = wctx.worker.status()
+        if(current == Status.Killed) return Tries.errored("Worker is killed, can not start")
+
         // Change status if not already running and notify everyone
-        if (wctx.worker.status() != Status.Running) {
+        if (current != Status.Running) {
             move(Status.Running, true, wctx.id, null)
         }
         val status = Tries.of {
@@ -111,11 +114,15 @@ class Work(override val job: Job) : Support {
             when (result) {
                 is WorkResult.More -> send(Action.Process, wctx.id)
                 is WorkResult.Next -> send(Action.Process, wctx.id)
-                is WorkResult.Delay -> schedule(result.seconds.toLong(), Action.Start, wctx.id)
+                is WorkResult.Done -> {
+                    move(Status.Completed, true, wctx.id, null)
+                    wctx.worker.done()
+                    send(Action.Check)
+                }
                 else -> {
                 }
             }
-            val status = JobUtils.toStatus(result)
+            val status = Utils.toStatus(result)
             status
         }
         return handle(status, wctx.id)

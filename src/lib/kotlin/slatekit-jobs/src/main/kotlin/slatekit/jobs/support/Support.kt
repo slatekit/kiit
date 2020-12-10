@@ -1,5 +1,6 @@
 package slatekit.jobs.slatekit.jobs.support
 
+import kotlinx.coroutines.launch
 import slatekit.common.DateTime
 import slatekit.common.Identity
 import slatekit.common.Status
@@ -41,8 +42,8 @@ interface Support {
      */
     fun command(action: Action, id: Identity?): Command {
         return when (id) {
-            null -> job.ctx.commands.job(id!!, action)
-            else -> job.ctx.commands.work(id!!, action)
+            null   -> job.ctx.commands.job(job.id, action)
+            else   -> job.ctx.commands.work(id, action)
         }
     }
 
@@ -80,7 +81,9 @@ interface Support {
         return Tries.of {
             when (id) {
                 null -> {
-                    job.ctx.notifier.notify(job, msg ?: "")
+                    job.ctx.scope.launch {
+                        job.ctx.notifier.notify(job, msg ?: "")
+                    }
                     job.status()
                 }
                 else -> {
