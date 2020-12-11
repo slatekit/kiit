@@ -59,7 +59,9 @@ class Cache_Channel_Tests {
     fun can_put() {
         val timestamp = DateTime.now()
         var event: CacheEvent? = null
-        val listener = { ev: CacheEvent -> event = ev }
+        val listener = { ev: CacheEvent ->
+            event = ev
+        }
         runTest(listener = listener) { cache ->
             val countries1 = cache.get<List<String>>("countries")
 
@@ -99,10 +101,9 @@ class Cache_Channel_Tests {
             // Events
             Assert.assertNotNull(event)
             Assert.assertEquals(CacheAction.Create, event?.action)
-            Assert.assertEquals(id.name, event?.name)
             Assert.assertEquals("countries", event?.key)
             Assert.assertTrue(!event?.uuid.isNullOrEmpty())
-            Assert.assertEquals("$CACHE_NAME.${CacheAction.Create.name}.countries", event?.name ?: "")
+            Assert.assertEquals("app.cache.${CacheAction.Create.name}.countries", event?.name ?: "")
         }
     }
 
@@ -194,10 +195,9 @@ class Cache_Channel_Tests {
             // Events
             Assert.assertNotNull(event)
             Assert.assertEquals(CacheAction.DeleteAll, event?.action)
-            Assert.assertEquals(cache.id.name, event?.name)
             Assert.assertEquals("*", event?.key)
             Assert.assertTrue(!event?.uuid.isNullOrEmpty())
-            Assert.assertEquals("$CACHE_NAME.${CacheAction.DeleteAll.name}.*", event?.name ?: "")
+            Assert.assertEquals("app.cache.${CacheAction.DeleteAll.name}.*", event?.name ?: "")
         }
     }
 
@@ -360,10 +360,9 @@ class Cache_Channel_Tests {
             // Events
             Assert.assertNotNull(event)
             Assert.assertEquals(CacheAction.Expire, event?.action)
-            Assert.assertEquals(cache.id.name, event?.name)
             Assert.assertEquals("countries", event?.key)
             Assert.assertTrue(!event?.uuid.isNullOrEmpty())
-            Assert.assertEquals("$CACHE_NAME.${CacheAction.Expire.name}.countries", event?.name ?: "")
+            Assert.assertEquals("app.cache.${CacheAction.Expire.name}.countries", event?.name ?: "")
         }
     }
 }

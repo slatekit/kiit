@@ -1,5 +1,11 @@
 rootProject.name = 'slatekit'
 
+include ':slatekit-result'
+project(':slatekit-result').projectDir=new File('../slatekit-result')
+
+include ':slatekit-actors'
+project(':slatekit-actors').projectDir=new File('../slatekit-actors')
+
 include ':slatekit-common'
 project(':slatekit-common').projectDir=new File('../slatekit-common')
 
@@ -53,9 +59,6 @@ project(':slatekit-integration').projectDir=new File('../slatekit-integration')
 
 include ':slatekit-notifications'
 project(':slatekit-notifications').projectDir=new File('../slatekit-notifications')
-
-include ':slatekit-result'
-project(':slatekit-result').projectDir=new File('../slatekit-result')
 
 include ':slatekit-server'
 project(':slatekit-server').projectDir=new File('../slatekit-server')

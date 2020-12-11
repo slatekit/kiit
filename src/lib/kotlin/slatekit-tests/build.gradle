@@ -50,6 +50,7 @@ dependencies {
     compile "postgresql:postgresql:9.1-901-1.jdbc4"
     compile 'org.threeten:threetenbp:1.3.8'
     implementation project(":slatekit-result")
+    implementation project(":slatekit-actors")
     implementation project(":slatekit-common")
     implementation project(":slatekit-context")
     implementation project(":slatekit-app")

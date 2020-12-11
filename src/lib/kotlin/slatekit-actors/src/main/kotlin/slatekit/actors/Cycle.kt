@@ -1,5 +1,8 @@
-package slatekit.core.slatekit.core.actors
+package slatekit.actors
 
+/**
+ * Life-cycle methods used for a Worker
+ */
 interface Cycle {
 
     suspend fun started() {

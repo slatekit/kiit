@@ -1,15 +1,17 @@
-package slatekit.core.slatekit.core.actors
+package slatekit.actors
 
 import kotlinx.coroutines.channels.Channel
 
-class Control<T>(val channel:Channel<Message<T>>, val actor:Actor<T>) {
+open class Puller<T>(val channel: Channel<Message<T>>,
+                     val handler: Handler<T>, val tracker:((Message<T>) -> Unit)? = null) {
+
     suspend fun pull(count: Int = 1) {
         // Process X off the channel
         for (x in 1..count) {
             val item = channel.poll()
             item?.let {
-                actor.track(PULL, it)
-                actor.work(it)
+                track(PULL, it)
+                handler.handle(it)
             }
         }
     }
@@ -18,8 +20,8 @@ class Control<T>(val channel:Channel<Message<T>>, val actor:Actor<T>) {
     suspend fun poll() {
         var item: Message<T>? = channel.poll()
         while (item != null) {
-            actor.track(POLL, item)
-            actor.work(item)
+            track(POLL, item)
+            handler.handle(item)
             item = channel.poll()
         }
     }
@@ -28,10 +30,16 @@ class Control<T>(val channel:Channel<Message<T>>, val actor:Actor<T>) {
     suspend fun wipe() {
         var item: Message<T>? = channel.poll()
         while (item != null) {
-            actor.track(WIPE, item)
+            track(WIPE, item)
             item = channel.poll()
         }
     }
+
+
+    suspend fun track(source: String, item: Message<T>) {
+        tracker?.invoke(item)
+    }
+
 
     companion object {
         const val PULL = "PULL"
