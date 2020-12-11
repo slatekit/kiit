@@ -4,6 +4,7 @@ import kotlinx.coroutines.Job
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.yield
+import java.util.concurrent.atomic.AtomicLong
 import java.util.concurrent.atomic.AtomicReference
 
 /**
@@ -12,6 +13,7 @@ import java.util.concurrent.atomic.AtomicReference
 abstract class Controlled<T>(override val ctx: Context, val channel: Channel<Message<T>>) : Actor<T>, Controls {
 
     protected val _status = AtomicReference<Status>(Status.InActive)
+    protected val idGen = AtomicLong(0L)
 
 
     /**
@@ -61,7 +63,7 @@ abstract class Controlled<T>(override val ctx: Context, val channel: Channel<Mes
      * Sends a control message to start, pause, resume, stop processing
      */
     override suspend fun control(action: Action, msg: String?, target: String) : Feedback {
-        send(Control<T>(action, msg, target = target))
+        send(Control<T>(nextId(), action, msg, target = target))
         return Feedback(true, "")
     }
 
@@ -127,6 +129,9 @@ abstract class Controlled<T>(override val ctx: Context, val channel: Channel<Mes
 
     protected open suspend fun track(source: String, data: Message<T>) {
     }
+
+
+    protected fun nextId():Long = idGen.incrementAndGet()
 
 
     protected fun move(newStatus: Status) {

@@ -132,7 +132,7 @@ class Work(override val job: Job) : Support {
                 else -> {
                 }
             }
-            val status = Utils.toStatus(result)
+            val status = result.toStatus()
             status
         }
         return handle(status, wctx.id)

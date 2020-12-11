@@ -136,7 +136,8 @@ class Job(val jctx: Context) : Controlled<Task>(slatekit.actors.Context(jctx.id.
     }
 
 
-    private suspend fun manageJob(action: Action) {
+    private suspend fun manageJob(cmd: Control<Task>) {
+        val action = cmd.action
         if (!validate(action)) {
             notify("CMD_ERROR")
             return
@@ -155,20 +156,20 @@ class Job(val jctx: Context) : Controlled<Task>(slatekit.actors.Context(jctx.id.
         }
     }
 
-    private suspend fun manageWork(cmd: Command.WorkerCommand) {
+    private suspend fun manageWork(cmd: Control<Task>) {
         if (cmd.action == Action.Process && !Rules.canWork(this.status())) {
             notify("CMD_WARN")
             return
         }
         when (cmd.action) {
-            is Action.Delay -> one(cmd.identity, false) { work.delay(it, seconds = 30) }
-            is Action.Start -> one(cmd.identity, false) { work.start(it) }
-            is Action.Pause -> one(cmd.identity, false) { work.pause(it, seconds = 30) }
-            is Action.Resume -> one(cmd.identity, false) { work.resume(it) }
-            is Action.Stop -> one(cmd.identity, false) { work.stop(it) }
-            is Action.Process -> run(cmd.identity, true) { work.work(it, nextTask(it.task)) }
-            is Action.Check -> one(cmd.identity, true) { work.check(it) }
-            is Action.Kill -> one(cmd.identity, true) { work.kill(it) }
+            is Action.Delay   -> one(cmd.target, false) { work.delay(it, seconds = 30) }
+            is Action.Start   -> one(cmd.target, false) { work.start(it) }
+            is Action.Pause   -> one(cmd.target, false) { work.pause(it, seconds = 30) }
+            is Action.Resume  -> one(cmd.target, false) { work.resume(it) }
+            is Action.Stop    -> one(cmd.target, false) { work.stop(it) }
+            is Action.Process -> run(cmd.target, true) { work.work(it, nextTask(it.task)) }
+            is Action.Check   -> one(cmd.target, true) { work.check(it) }
+            is Action.Kill    -> one(cmd.target, true) { work.kill(it) }
         }
     }
 
@@ -180,7 +181,7 @@ class Job(val jctx: Context) : Controlled<Task>(slatekit.actors.Context(jctx.id.
     }
 
 
-    private fun record(name: String, cmd: Command, desc: String? = null, task: Task? = null) {
+    private fun record(name: String, cmd: Message<Task>, desc: String? = null, task: Task? = null) {
         val event = Events.build(this, cmd)
         val info = listOf(
             "id" to cmd.id.toString(),
@@ -224,7 +225,7 @@ class Job(val jctx: Context) : Controlled<Task>(slatekit.actors.Context(jctx.id.
     /**
      * Transitions all workers to the new status supplied
      */
-    private suspend fun one(id: Identity, launch: Boolean, op: suspend (WorkContext) -> Try<Status>) {
+    private suspend fun one(id: String, launch: Boolean, op: suspend (WorkContext) -> Try<Status>) {
         val wctx = workers[id]
         wctx?.let {
             op(it)
@@ -235,7 +236,7 @@ class Job(val jctx: Context) : Controlled<Task>(slatekit.actors.Context(jctx.id.
     /**
      * Transitions all workers to the new status supplied
      */
-    private suspend fun run(id: Identity, launch: Boolean, op: suspend (WorkContext) -> Unit) {
+    private suspend fun run(id: String, launch: Boolean, op: suspend (WorkContext) -> Unit) {
         val wctx = workers[id]
         wctx?.let {
             op(it)
@@ -262,50 +263,6 @@ class Job(val jctx: Context) : Controlled<Task>(slatekit.actors.Context(jctx.id.
     companion object {
 
         const val ERROR_KEY = "Error"
-
-
-        /**
-         * Initialize with just a function that will handle the work
-         * @sample
-         *  val job1 = Job(Identity.job("signup", "email"), ::sendEmail)
-         *  val job2 = Job(Identity.job("signup", "email"), suspend {
-         *      // do work here
-         *      WResult.Done
-         *  })
-         */
-        operator fun invoke(id: Identity, op: suspend () -> WResult, scope: CoroutineScope = Jobs.scope): Job {
-            return Job(id, listOf(worker(op)), null, scope, listOf())
-        }
-
-        /**
-         * Initialize with just a function that will handle the work
-         * @sample
-         *  val job1 = Job(Identity.job("signup", "email"), ::sendEmail)
-         *  val job2 = Job(Identity.job("signup", "email"), suspend { task ->
-         *      println("task id=${task.id}")
-         *      // do work here
-         *      WResult.Done
-         *  })
-         */
-        operator fun invoke(id: Identity, op: suspend (Task) -> WResult, queue: Queue? = null, scope: CoroutineScope = Jobs.scope, policies: List<Policy<WorkRequest, WResult>> = listOf()): Job {
-            return Job(id, listOf(op), queue, scope, policies)
-        }
-
-        /**
-         * Initialize with a list of functions to excecute work
-         */
-        operator fun invoke(id: Identity, ops: List<suspend (Task) -> WResult>, queue: Queue? = null, scope: CoroutineScope = Jobs.scope, policies: List<Policy<WorkRequest, WResult>> = listOf()): Job {
-            return Job(Context(id, coordinator(), workers(id, ops), queue = queue, scope = scope, policies = policies))
-        }
-
-        /**
-         * Initialize with just a function that will handle the work
-         *  val id = Identity.job("signup", "email")
-         *  val job1 = Job(id, EmailWorker(id.copy(tags = listOf("worker")))
-         */
-        operator fun invoke(id: Identity, worker: Worker<*>, queue: Queue? = null, scope: CoroutineScope = Jobs.scope,
-                            policies: List<Policy<WorkRequest, WResult>> = listOf()): Job = Job(Context(id, coordinator(), listOf(worker), queue = queue, scope = scope, policies = policies))
-
 
         fun worker(call: suspend () -> WResult): suspend (Task) -> WResult {
             return { t ->

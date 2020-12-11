@@ -11,6 +11,18 @@ sealed class WResult(val name: String) {
     data class Next(val offset: Long, val processed: Long, val reference: String) : WResult("next")
 
 
+    fun toStatus(): Status {
+        return when(this) {
+            is Next  -> Status.Running
+            is More  -> Status.Running
+            is Stop  -> Status.Stopped
+            is Done  -> Status.Completed
+            is Fail  -> Status.Failed
+            else                -> Status.Running
+        }
+    }
+
+
     companion object {
         fun next(offset: Long, processed: Long, reference: String): WResult {
             return WResult.Next(offset, processed, reference)

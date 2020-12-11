@@ -4,6 +4,7 @@ import kotlinx.coroutines.Job
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.yield
+import java.util.concurrent.atomic.AtomicLong
 
 /**
  * Simple Base Actor that supports sending and receiving
@@ -11,11 +12,34 @@ import kotlinx.coroutines.yield
  */
 abstract class Basic<T>(override val ctx: Context, protected val channel: Channel<Content<T>>) : Actor<T> {
 
+    protected val idGen = AtomicLong(0L)
+
+
     /**
      * Id of the actor e.g. {AREA}.{NAME}.{ENV}.{INSTANCE}
      * e.g. "signup.emails.dev.abc123"
      */
     override val id: String get() { return ctx.id }
+
+
+
+    /**
+     * Sends a payload to the actor
+     * @param item  : Data / payload for message
+     */
+    override suspend fun send(item: T) {
+        send(Content(nextId(), item))
+    }
+
+
+    /**
+     * Sends a payload with target to the actor
+     * @param item  : Data / payload for message
+     * @param target: Optional, used as classifier to direct message to specific handler if enabled.
+     */
+    override suspend fun send(item:T, target:String) {
+        send(Content(nextId(), item, target = target))
+    }
 
 
     /**
@@ -36,6 +60,9 @@ abstract class Basic<T>(override val ctx: Context, protected val channel: Channe
             }
         }
     }
+
+
+    protected fun nextId():Long = idGen.incrementAndGet()
 
 
     /**

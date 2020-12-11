@@ -23,19 +23,14 @@ interface Actor<T> {
      * Sends a payload to the actor
      * @param item  : Data / payload for message
      */
-    suspend fun send(item: T) {
-        send(Content(item))
-    }
-
+    suspend fun send(item: T)
 
     /**
      * Sends a payload with target to the actor
      * @param item  : Data / payload for message
      * @param target: Optional, used as classifier to direct message to specific handler if enabled.
      */
-    suspend fun send(item:T, target:String) {
-        send(Content(item, target = target))
-    }
+    suspend fun send(item:T, target:String)
 
     suspend fun send(msg: Content<T>)
 

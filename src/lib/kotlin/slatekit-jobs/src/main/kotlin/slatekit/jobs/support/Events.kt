@@ -40,8 +40,8 @@ object Events {
      * Builds an event for the job ( based on its current state )
      */
     fun build(job: Job, name:String): Event {
-        val queue = job.ctx.queue?.name ?: "no-queue"
-        val id = job.id
+        val queue = job.jctx.queue?.name ?: "no-queue"
+        val id = job.jctx.id
         val status = job.status()
         return build(id, status, name, "State changed", "job", queue)
     }
@@ -63,7 +63,7 @@ object Events {
      * Builds an event for the worker
      */
     fun build(job: Job, cmd: Command): Event {
-        val id = job.id
+        val id = job.jctx.id
         val status = job.status()
         val target = if(cmd is Command.JobCommand) "Job" else "Wrk"
         val action = cmd.action.name
@@ -81,7 +81,7 @@ object Events {
      * Builds a Event using the job/worker identity, status and other info.
      */
     fun build(id: Identity, status: Status, name:String, desc:String, source:String, target:String, fields:List<Triple<String, String, String>> = emptyFields): Event {
-        val code = Utils.toCode(status)
+        val code = status.toCode()
         val tag = if(id.tags.isEmpty()) "" else id.tags.first()
 
         // JOB_STARTING | WRK_STARTING
