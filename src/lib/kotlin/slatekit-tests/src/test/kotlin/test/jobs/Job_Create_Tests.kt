@@ -5,10 +5,10 @@ import org.junit.Assert
 import org.junit.Test
 import slatekit.common.Identity
 import slatekit.actors.Status
+import slatekit.actors.WResult
 import test.jobs.support.JobTestSupport
 import slatekit.jobs.Job
 import slatekit.jobs.Task
-import slatekit.jobs.workers.WorkResult
 import slatekit.jobs.workers.Worker
 
 class Job_Create_Tests : JobTestSupport {
@@ -19,7 +19,7 @@ class Job_Create_Tests : JobTestSupport {
     @Test
     fun can_create_with_lambda() {
         var value = 0
-        val job = Job(ID, suspend { value = 1; WorkResult.Done  })
+        val job = Job(ID, suspend { value = 1; WResult.Done  })
         runBlocking {
             job.start()
             job.pull(4)
@@ -33,7 +33,7 @@ class Job_Create_Tests : JobTestSupport {
     fun can_create_with_lambda_task() {
         var name = ""
         var value = 0
-        val job = Job(ID, { task: Task -> name = task.name; value = 1; WorkResult.Done })
+        val job = Job(ID, { task: Task -> name = task.name; value = 1; WResult.Done })
         runBlocking {
             job.start()
             job.pull(4)
@@ -48,7 +48,7 @@ class Job_Create_Tests : JobTestSupport {
     fun can_create_with_worker() {
         var name = ""
         var value = 0
-        val job = Job(ID, Worker<String>(ID) { task -> name = task.name; value = 1; WorkResult.Done })
+        val job = Job(ID, Worker<String>(ID) { task -> name = task.name; value = 1; WResult.Done })
         runBlocking {
             job.start()
             job.pull(4)

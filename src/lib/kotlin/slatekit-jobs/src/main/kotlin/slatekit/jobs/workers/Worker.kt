@@ -5,6 +5,7 @@ import java.util.concurrent.atomic.AtomicReference
 import slatekit.common.Identity
 import slatekit.actors.Status
 import slatekit.actors.Check
+import slatekit.actors.WResult
 import slatekit.jobs.Task
 
 
@@ -22,7 +23,7 @@ import slatekit.jobs.Task
  */
 open class Worker<T>(
     id: Identity,
-    val operation: (suspend (Task) -> WorkResult)? = null
+    val operation: (suspend (Task) -> WResult)? = null
 ) : Check, Cycle {
     val id = if(id.tags.isEmpty() || !id.tags.contains("worker")) id.with(tags = listOf("worker")) else id
     protected val _status = AtomicReference<Pair<Status, String>>(Pair(Status.InActive, Status.InActive.name))
@@ -50,7 +51,7 @@ open class Worker<T>(
      * Performs the work
      * This assumes that this work manages it's own work load/queue/source
      */
-    open suspend fun work(): WorkResult {
+    open suspend fun work(): WResult {
         return work(Task.owned)
     }
 
@@ -62,9 +63,9 @@ open class Worker<T>(
      * provided by the work() method and assigned Task.owned. Otherwise, the task is
      * supplied by the @see[slatekit.jobs.Job]
      */
-    open suspend fun work(task: Task): WorkResult {
+    open suspend fun work(task: Task): WResult {
         return when (operation) {
-            null -> WorkResult.Done
+            null -> WResult.Done
             else -> operation.invoke(task)
         }
     }

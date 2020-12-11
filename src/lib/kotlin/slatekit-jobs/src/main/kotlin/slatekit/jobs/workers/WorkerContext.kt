@@ -1,8 +1,8 @@
 package slatekit.jobs.workers
 
+import slatekit.actors.WResult
 import slatekit.common.Identity
 import slatekit.jobs.Task
-import slatekit.core.common.Backoffs
 import slatekit.tracking.Recorder
 import slatekit.policy.Policy
 import slatekit.results.Err
@@ -18,9 +18,9 @@ import slatekit.results.Err
  *                   e.g. signup.alerts.job.qat.4a3b300b-d0ac-4776-8a9c-31aa75e412b3
  */
 data class WorkerContext(
-        val id: Identity,
-        val worker: Worker<*>,
-        val stats: Recorder<Task, WorkResult, Err>,
-        val policies: List<Policy<WorkRequest, WorkResult>> = listOf(),
-        val task: Task = Task.empty.copy(job = id.id)
+    val id: Identity,
+    val worker: Worker<*>,
+    val stats: Recorder<Task, WResult, Err>,
+    val policies: List<Policy<WorkRequest, WResult>> = listOf(),
+    val task: Task = Task.empty.copy(job = id.id)
 )

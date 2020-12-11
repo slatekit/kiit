@@ -1,8 +1,8 @@
 package test.setup
 
+import slatekit.actors.WResult
 import slatekit.common.Identity
 import slatekit.jobs.*
-import slatekit.jobs.workers.WorkResult
 import slatekit.jobs.workers.Worker
 
 class MyWorker(
@@ -20,16 +20,16 @@ class MyWorker(
         isEnded = true
     }
 
-    override suspend fun work(task: Task): WorkResult {
+    override suspend fun work(task: Task): WResult {
         acc += 1
 
         // Simulate different results for testing purposes
         return if (acc % 2 == 0)
             //Success(acc, msg = "even")
-            WorkResult.Done
+            WResult.Done
         else
             //Success(acc, msg = "odd")
-            WorkResult.More
+            WResult.More
     }
 }
 

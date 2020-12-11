@@ -15,6 +15,7 @@ package slatekit.examples
 //<doc:import_required>
 import kotlinx.coroutines.*
 import slatekit.actors.Status
+import slatekit.actors.WResult
 import slatekit.common.*
 //</doc:import_required>
 
@@ -29,7 +30,6 @@ import slatekit.policy.policies.Every
 import slatekit.policy.policies.Limit
 import slatekit.policy.policies.Ratio
 import slatekit.jobs.*
-import slatekit.jobs.workers.WorkResult
 import slatekit.jobs.workers.Worker
 import slatekit.results.Codes
 import slatekit.results.Try
@@ -59,7 +59,7 @@ class Example_Jobs : Command("utils"), CoroutineScope by MainScope() {
         }
 
         // NOTE: This is a helper method used for the real example(s) below
-        suspend fun sendNewsLetterBatch(sender:String, offset:AtomicInteger, batchSize:Int): WorkResult {
+        suspend fun sendNewsLetterBatch(sender:String, offset:AtomicInteger, batchSize:Int): WResult {
             val start = offset.get()
             val users = if(start < 0 || start >= allUsers.size) listOf()
             else allUsers.subList(start, start + batchSize)
@@ -67,7 +67,7 @@ class Example_Jobs : Command("utils"), CoroutineScope by MainScope() {
 
             // No more records so indicate done
             if(users.isEmpty())
-                return WorkResult.Done
+                return WResult.Done
 
             // Get next page of records
             users.forEach { user -> send(sender,"New version coming out soon!", user) }
@@ -79,26 +79,26 @@ class Example_Jobs : Command("utils"), CoroutineScope by MainScope() {
             // 1. Indicate that we are paging through work
             // 2. Provide a way to stop/pause/resume processing of this task in between pages
             // 3. Provides context into diagnostics/status
-            return WorkResult.next(offset.get() + batchSize.toLong(), users.size.toLong(), "users")
+            return WResult.next(offset.get() + batchSize.toLong(), users.size.toLong(), "users")
         }
 
 
         // Option 1: Use a function for a job that runs to completion
-        suspend fun sendNewsLetter(task: Task): WorkResult {
+        suspend fun sendNewsLetter(task: Task): WResult {
             allUsers.forEach { user -> send(task.job, NEWS_LETTER_MESSAGE, user) }
-            return WorkResult.Done
+            return WResult.Done
         }
 
 
         // Option 1: Use a function for a job that runs to completion
-        suspend fun sendNewsLetterNoArgs(): WorkResult {
+        suspend fun sendNewsLetterNoArgs(): WResult {
             return sendNewsLetter(Task.empty)
         }
 
 
         // Option 2: Use a function for a job that pages through work
         val offset1 = AtomicInteger(0)
-        suspend fun sendNewsLetterWithPaging(task: Task): WorkResult {
+        suspend fun sendNewsLetterWithPaging(task: Task): WResult {
             println(task.id)    // abc123
             println(task.from)  // queue://notification
             println(task.job)   // job1
@@ -106,13 +106,13 @@ class Example_Jobs : Command("utils"), CoroutineScope by MainScope() {
             println(task.data)  // { ... } json payload
             println(task.xid)   // 12345   correlation id
 
-            // WorkResult.next(offset.get() + batchSize.toLong(), users.size.toLong(), "users")
+            // WResult.next(offset.get() + batchSize.toLong(), users.size.toLong(), "users")
             return sendNewsLetterBatch(task.job, offset1, 4)
         }
 
 
         // Option 3: Use a function for a job that processes a task from a queue
-        suspend fun sendNewsLetterFromQueue(task: Task): WorkResult {
+        suspend fun sendNewsLetterFromQueue(task: Task): WResult {
             val userId = task.data.toInt()
             val user = allUsers.first { it.id == userId }
             send(task.job, NEWS_LETTER_MESSAGE, user)
@@ -121,7 +121,7 @@ class Example_Jobs : Command("utils"), CoroutineScope by MainScope() {
             task.done()
 
             // Indicate that this can now handle more
-            return WorkResult.More
+            return WResult.More
         }
 
 
@@ -137,7 +137,7 @@ class Example_Jobs : Command("utils"), CoroutineScope by MainScope() {
 
             // Implement your work here.
             // NOTE: If you are not using a queue, this task will be empty e.g. Task.empty
-            override suspend fun work(task:Task): WorkResult {
+            override suspend fun work(task:Task): WResult {
                 return sendNewsLetterBatch(task.job, offset, 4)
             }
 
@@ -313,7 +313,7 @@ class Example_Jobs : Command("utils"), CoroutineScope by MainScope() {
         jobs.start("samples.job3")
 
         // Sample 4: JOB ( Events ) + Subscribe to worker status changes
-        jobs["samples.job4"]?.let { job ->
+        jobs.get("samples.job4")?.let { job ->
             job.on { println("Job ${it.id.name} status changed to : ${it.status.name}") }
             job.on(Status.Completed) { println("Job ${it.id.name} completed") }
             job.workers.on { it -> println("Worker ${it.id.name}: status = ${it.status.name}") }

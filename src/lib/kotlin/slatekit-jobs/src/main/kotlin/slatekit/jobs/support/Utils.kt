@@ -1,8 +1,8 @@
 package slatekit.jobs.support
 
 import slatekit.actors.Status
+import slatekit.actors.WResult
 import slatekit.common.Identity
-import slatekit.jobs.workers.WorkResult
 import slatekit.results.Codes
 
 object Utils {
@@ -11,13 +11,13 @@ object Utils {
         return identity.tags.contains("worker")
     }
 
-    fun toStatus(result:WorkResult): Status {
+    fun toStatus(result:WResult): Status {
         return when(result) {
-            is WorkResult.Next  -> Status.Running
-            is WorkResult.More  -> Status.Running
-            is WorkResult.Stop  -> Status.Stopped
-            is WorkResult.Done  -> Status.Completed
-            is WorkResult.Fail  -> Status.Failed
+            is WResult.Next  -> Status.Running
+            is WResult.More  -> Status.Running
+            is WResult.Stop  -> Status.Stopped
+            is WResult.Done  -> Status.Completed
+            is WResult.Fail  -> Status.Failed
             else                -> Status.Running
         }
     }

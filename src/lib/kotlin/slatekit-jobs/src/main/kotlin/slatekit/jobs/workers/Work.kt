@@ -3,6 +3,7 @@ package slatekit.jobs.workers
 import slatekit.common.Identity
 import slatekit.actors.Status
 import slatekit.actors.Action
+import slatekit.actors.WResult
 import slatekit.jobs.Job
 import slatekit.jobs.Task
 import slatekit.jobs.support.Support
@@ -120,9 +121,9 @@ class Work(override val job: Job) : Support {
 
             // Handle result
             when (result) {
-                is WorkResult.More -> send(Action.Process, wctx.id)
-                is WorkResult.Next -> send(Action.Process, wctx.id)
-                is WorkResult.Done -> {
+                is WResult.More -> send(Action.Process, wctx.id)
+                is WResult.Next -> send(Action.Process, wctx.id)
+                is WResult.Done -> {
                     move(Status.Completed, true, wctx.id, null)
                     wctx.worker.completed(null)
                     send(Action.Check)

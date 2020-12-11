@@ -2,8 +2,8 @@ package test.jobs.samples
 
 import slatekit.common.Identity
 import slatekit.actors.Status
+import slatekit.actors.WResult
 import slatekit.jobs.*
-import slatekit.jobs.workers.WorkResult
 import slatekit.jobs.workers.Worker
 import java.util.concurrent.atomic.AtomicInteger
 
@@ -31,10 +31,10 @@ class OneTimeWorker(val start:Int, val end:Int, id: Identity) : Worker<Int>(id) 
     }
 
 
-    override suspend fun work(task: Task): WorkResult {
+    override suspend fun work(task: Task): WResult {
         audit.add("work")
         (start .. end).forEach { current.incrementAndGet()  }
-        return WorkResult.Done
+        return WResult.Done
     }
 
 
@@ -71,16 +71,16 @@ class PagedWorker(start:Int, val maxRuns:Int, val countsPerRun:Int, id: Identity
     fun currentValue():Int = counts.get()
 
 
-    override suspend fun work(task: Task): WorkResult {
+    override suspend fun work(task: Task): WResult {
         (0 until countsPerRun).forEach {
             counts.incrementAndGet()
         }
         val run = runs.incrementAndGet()
         return if(run < maxRuns) {
-            WorkResult.More
+            WResult.More
         }
         else {
-            WorkResult.Done
+            WResult.Done
         }
     }
 
@@ -99,7 +99,7 @@ class PagedWorker(start:Int, val maxRuns:Int, val countsPerRun:Int, id: Identity
 }
 
 
-class TestWorker(id: Identity? = null, val limit:Int = 10, operation: (suspend (Task) -> WorkResult)? = null)
+class TestWorker(id: Identity? = null, val limit:Int = 10, operation: (suspend (Task) -> WResult)? = null)
     : Worker<Int>( id ?: Identity.test(TestWorker::class.simpleName!!), operation) {
 
     val counts = AtomicInteger(0)
@@ -109,13 +109,13 @@ class TestWorker(id: Identity? = null, val limit:Int = 10, operation: (suspend (
         cycles[Status.Started.name] = true
     }
 
-    override suspend fun work(task: Task): WorkResult {
+    override suspend fun work(task: Task): WResult {
         val curr = counts.get()
         return if(curr < limit) {
             counts.incrementAndGet()
-            WorkResult.More
+            WResult.More
         } else {
-            WorkResult.Done
+            WResult.Done
         }
     }
 

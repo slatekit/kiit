@@ -2,6 +2,7 @@ package slatekit.jobs
 
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.channels.Channel
+import slatekit.actors.WResult
 import slatekit.common.Identity
 import slatekit.common.ids.Paired
 import slatekit.common.log.Logger
@@ -13,7 +14,6 @@ import slatekit.jobs.support.Notifier
 import slatekit.jobs.support.Command
 import slatekit.jobs.support.Commands
 import slatekit.jobs.workers.WorkRequest
-import slatekit.jobs.workers.WorkResult
 import slatekit.jobs.workers.Worker
 import slatekit.policy.Policy
 
@@ -35,7 +35,7 @@ data class Context(val id: Identity,
                    val logger : Logger = LoggerConsole(),
                    val queue  : Queue? = null,
                    val scope  : CoroutineScope = Jobs.scope,
-                   val policies: List<Policy<WorkRequest, WorkResult>> = listOf(),
+                   val policies: List<Policy<WorkRequest, WResult>> = listOf(),
                    val backoffs: Backoffs = Backoffs(Backoffs.times()),
                    val notifier: Notifier = Notifier(),
                    val commands: Commands = Commands(Paired()),

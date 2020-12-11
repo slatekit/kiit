@@ -326,10 +326,10 @@ class Job(val ctx: Context) : Check, Controls {
          *  val job1 = Job(Identity.job("signup", "email"), ::sendEmail)
          *  val job2 = Job(Identity.job("signup", "email"), suspend {
          *      // do work here
-         *      WorkResult.Done
+         *      WResult.Done
          *  })
          */
-        operator fun invoke(id: Identity, op: suspend () -> WorkResult, scope: CoroutineScope = Jobs.scope): Job {
+        operator fun invoke(id: Identity, op: suspend () -> WResult, scope: CoroutineScope = Jobs.scope): Job {
             return Job(id, listOf(worker(op)), null, scope, listOf())
         }
 
@@ -340,17 +340,17 @@ class Job(val ctx: Context) : Check, Controls {
          *  val job2 = Job(Identity.job("signup", "email"), suspend { task ->
          *      println("task id=${task.id}")
          *      // do work here
-         *      WorkResult.Done
+         *      WResult.Done
          *  })
          */
-        operator fun invoke(id: Identity, op: suspend (Task) -> WorkResult, queue: Queue? = null, scope: CoroutineScope = Jobs.scope, policies: List<Policy<WorkRequest, WorkResult>> = listOf()): Job {
+        operator fun invoke(id: Identity, op: suspend (Task) -> WResult, queue: Queue? = null, scope: CoroutineScope = Jobs.scope, policies: List<Policy<WorkRequest, WResult>> = listOf()): Job {
             return Job(id, listOf(op), queue, scope, policies)
         }
 
         /**
          * Initialize with a list of functions to excecute work
          */
-        operator fun invoke(id: Identity, ops: List<suspend (Task) -> WorkResult>, queue: Queue? = null, scope: CoroutineScope = Jobs.scope, policies: List<Policy<WorkRequest, WorkResult>> = listOf()): Job {
+        operator fun invoke(id: Identity, ops: List<suspend (Task) -> WResult>, queue: Queue? = null, scope: CoroutineScope = Jobs.scope, policies: List<Policy<WorkRequest, WResult>> = listOf()): Job {
             return Job(Context(id, coordinator(), workers(id, ops), queue = queue, scope = scope, policies = policies))
         }
 
@@ -360,16 +360,16 @@ class Job(val ctx: Context) : Check, Controls {
          *  val job1 = Job(id, EmailWorker(id.copy(tags = listOf("worker")))
          */
         operator fun invoke(id: Identity, worker: Worker<*>, queue: Queue? = null, scope: CoroutineScope = Jobs.scope,
-                            policies: List<Policy<WorkRequest, WorkResult>> = listOf()): Job = Job(Context(id, coordinator(), listOf(worker), queue = queue, scope = scope, policies = policies))
+                            policies: List<Policy<WorkRequest, WResult>> = listOf()): Job = Job(Context(id, coordinator(), listOf(worker), queue = queue, scope = scope, policies = policies))
 
 
-        fun worker(call: suspend () -> WorkResult): suspend (Task) -> WorkResult {
+        fun worker(call: suspend () -> WResult): suspend (Task) -> WResult {
             return { t ->
                 call()
             }
         }
 
-        fun workers(id: Identity, lamdas: List<suspend (Task) -> WorkResult>): List<Worker<*>> {
+        fun workers(id: Identity, lamdas: List<suspend (Task) -> WResult>): List<Worker<*>> {
             return lamdas.map {
                 Worker<String>(id, operation = it)
             }
