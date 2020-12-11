@@ -7,7 +7,7 @@ import kotlinx.coroutines.yield
 import java.util.concurrent.atomic.AtomicLong
 
 /**
- * Simple Base Actor that supports sending and receiving
+ * Simple base class for an Actor that supports sending and receiving
  * of content ( payload ) messages only
  */
 abstract class Basic<T>(override val ctx: Context, protected val channel: Channel<Content<T>>) : Actor<T> {
@@ -51,6 +51,10 @@ abstract class Basic<T>(override val ctx: Context, protected val channel: Channe
     }
 
 
+    /**
+     * Launches this actor to start processing messages.
+     * This launches on the scope supplied in the context
+     */
     override suspend fun work(): Job {
         return ctx.scope.launch {
             for (msg in channel) {
@@ -62,6 +66,9 @@ abstract class Basic<T>(override val ctx: Context, protected val channel: Channe
     }
 
 
+    /**
+     * Gets the next id used in creating a new Message
+     */
     protected fun nextId():Long = idGen.incrementAndGet()
 
 

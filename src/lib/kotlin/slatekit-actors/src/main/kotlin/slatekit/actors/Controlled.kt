@@ -8,7 +8,7 @@ import java.util.concurrent.atomic.AtomicLong
 import java.util.concurrent.atomic.AtomicReference
 
 /**
- *
+ * Base class for an Actor that can be started, stopped, paused, and resumed
  */
 abstract class Controlled<T>(override val ctx: Context, val channel: Channel<Message<T>>) : Actor<T>, Controls {
 
@@ -33,16 +33,17 @@ abstract class Controlled<T>(override val ctx: Context, val channel: Channel<Mes
 
 
     /**
-     * Sends a
+     * Sends a request message
+     * This represents a request to get payload internally ( say from a queue ) and process it
      * @param msg  : Full message
      */
-    suspend fun send(req: Request<T>) {
-        channel.send(req)
+    suspend fun send(msg: Request<T>) {
+        channel.send(msg)
     }
 
 
     /**
-     * Sends a message
+     * Sends a content message ( representing a payload to process )
      * @param msg  : Full message
      */
     override suspend fun send(msg: Content<T>) {
@@ -51,23 +52,27 @@ abstract class Controlled<T>(override val ctx: Context, val channel: Channel<Mes
 
 
     /**
-     * Sends a message
+     * Sends a control message ( representing an action to start, stop, pause, resume the actor )
      * @param msg  : Full message
      */
-    suspend fun send(ctl: Control<T>) {
-        channel.send(ctl)
+    suspend fun send(msg: Control<T>) {
+        channel.send(msg)
     }
 
 
     /**
      * Sends a control message to start, pause, resume, stop processing
      */
-    override suspend fun control(action: Action, msg: String?, target: String) : Feedback {
+    override suspend fun control(action: Action, msg: String?, target: String): Feedback {
         send(Control<T>(nextId(), action, msg, target = target))
         return Feedback(true, "")
     }
 
 
+    /**
+     * Launches this actor to start processing messages.
+     * This launches on the scope supplied in the context
+     */
     override suspend fun work(): Job {
         return ctx.scope.launch {
             for (msg in channel) {
@@ -79,6 +84,13 @@ abstract class Controlled<T>(override val ctx: Context, val channel: Channel<Mes
     }
 
 
+    /**
+     *  Handles each message based on its type @see[Content], @see[Control],
+     *  This handles following message types and moves this actor to a running state correctly
+     *  1. @see[Control] messages to start, stop, pause, resume the actor
+     *  2. @see[Request] messages to load payloads from a source ( e.g. queue )
+     *  3. @see[Content] messages are simply delegated to the work method
+     */
     open suspend fun work(item: Message<T>) {
         when (item) {
             is Control -> {
@@ -94,20 +106,26 @@ abstract class Controlled<T>(override val ctx: Context, val channel: Channel<Mes
     }
 
 
+    /**
+     * Handles a @see[Control] message to start, stop, pause, resume this actor.
+     */
     protected open suspend fun control(msg: Control<T>) {
         val action = msg.action
         val oldStatus = _status.get()
         val newStatus = action.toStatus(oldStatus)
-        if(newStatus == Status.Stopped) {
+        if (newStatus == Status.Stopped) {
             println("STOPPING:")
         }
         when (action) {
             is Action.Delay -> move(newStatus)
             is Action.Start -> move(newStatus)
-            is Action.Pause -> move(newStatus)
             is Action.Resume -> move(newStatus)
             is Action.Stop -> move(newStatus)
             is Action.Kill -> move(newStatus)
+            is Action.Pause -> {
+                move(newStatus)
+                ctx.scheduler.schedule(msg.seconds ?: 30) { resume() }
+            }
             else -> {
 
             }
@@ -116,24 +134,43 @@ abstract class Controlled<T>(override val ctx: Context, val channel: Channel<Mes
     }
 
 
+    /**
+     * Handles a @see[Request] message to request load the payload
+     * for example from a Queue and delegating it to the work method
+     */
     protected open suspend fun request(req: Request<T>) {
     }
 
 
+    /**
+     * This is the only method to implement to handle the actual work.
+     */
     protected abstract suspend fun work(action: Action, target: String, item: T)
 
 
+    /**
+     * Serves as a hook for implementations to override to listen to state changes
+     */
     protected open suspend fun changed(msg: Control<T>, oldStatus: Status, newStatus: Status) {
     }
 
 
+    /**
+     * Serves as a hook for implementations to override for add custom diagnostics
+     */
     protected open suspend fun track(source: String, data: Message<T>) {
     }
 
 
-    protected fun nextId():Long = idGen.incrementAndGet()
+    /**
+     * Gets the next id used in creating a new Message
+     */
+    protected fun nextId(): Long = idGen.incrementAndGet()
 
 
+    /**
+     * Moves this actors status to the one supplied
+     */
     protected fun move(newStatus: Status) {
         _status.set(newStatus)
     }
