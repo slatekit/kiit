@@ -63,6 +63,11 @@ class TestController(context: Context, channel:Channel<Message<Int>>): Controlle
     }
 
 
+    override suspend fun request(req: Request<Int>) {
+        this.work(Action.Process, req.target, 10)
+    }
+
+
     override suspend fun work(action: Action, target: String, item: Int) {
         current = item
     }

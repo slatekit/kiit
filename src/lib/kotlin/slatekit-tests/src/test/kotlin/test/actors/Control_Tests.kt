@@ -38,7 +38,6 @@ class Control_Tests : ActorTestSupport {
     }
 
 
-
     @Test
     fun can_pause() {
         setup { actor, puller ->
@@ -49,7 +48,6 @@ class Control_Tests : ActorTestSupport {
     }
 
 
-
     @Test
     fun can_stop() {
         setup { actor, puller ->
@@ -58,7 +56,6 @@ class Control_Tests : ActorTestSupport {
             Assert.assertEquals(Status.Stopped, actor.status())
         }
     }
-
 
 
     @Test
@@ -74,7 +71,6 @@ class Control_Tests : ActorTestSupport {
     }
 
 
-
     @Test
     fun can_resume_after_stop() {
         setup { actor, puller ->
@@ -88,7 +84,6 @@ class Control_Tests : ActorTestSupport {
     }
 
 
-
     @Test
     fun can_kill() {
         setup { actor, puller ->
@@ -97,7 +92,6 @@ class Control_Tests : ActorTestSupport {
             Assert.assertEquals(Status.Killed, actor.status())
         }
     }
-
 
 
     @Test
@@ -109,6 +103,19 @@ class Control_Tests : ActorTestSupport {
             puller.pull(3)
             Assert.assertEquals(Status.Running, actor.status())
             Assert.assertEquals(2, actor.current)
+        }
+    }
+
+
+    @Test
+    fun can_request() {
+        setup { actor, puller ->
+            actor.start()
+            actor.send(1)
+            actor.send(Request())
+            puller.poll()
+            Assert.assertEquals(Status.Running, actor.status())
+            Assert.assertEquals(10, actor.current)
         }
     }
 
