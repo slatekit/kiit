@@ -3,7 +3,7 @@ package test.jobs.support
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.runBlocking
 import org.junit.Assert
-import slatekit.common.Status
+import slatekit.actors.Status
 import slatekit.common.Identity
 import slatekit.jobs.*
 import slatekit.jobs.support.Command

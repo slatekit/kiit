@@ -1,7 +1,7 @@
 package test.jobs.samples
 
 import slatekit.common.Identity
-import slatekit.common.Status
+import slatekit.actors.Status
 import slatekit.jobs.*
 import slatekit.jobs.workers.WorkResult
 import slatekit.jobs.workers.Worker

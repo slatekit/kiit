@@ -4,7 +4,7 @@ import kotlinx.coroutines.runBlocking
 import org.junit.Assert
 import org.junit.Test
 import slatekit.common.Identity
-import slatekit.common.Status
+import slatekit.actors.Status
 import test.jobs.support.JobTestSupport
 import slatekit.jobs.Job
 import slatekit.jobs.Task

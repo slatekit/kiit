@@ -3,7 +3,7 @@ package slatekit.jobs.support
 import slatekit.common.DateTime
 import slatekit.common.Event
 import slatekit.common.Identity
-import slatekit.common.Status
+import slatekit.actors.Status
 import slatekit.common.ids.ULIDs
 import slatekit.jobs.Job
 import slatekit.jobs.Context

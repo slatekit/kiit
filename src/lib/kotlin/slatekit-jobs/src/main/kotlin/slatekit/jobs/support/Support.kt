@@ -3,7 +3,7 @@ package slatekit.jobs.support
 import kotlinx.coroutines.launch
 import slatekit.common.DateTime
 import slatekit.common.Identity
-import slatekit.common.Status
+import slatekit.actors.Status
 import slatekit.actors.Action
 import slatekit.jobs.Job
 import slatekit.jobs.support.Rules

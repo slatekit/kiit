@@ -1,7 +1,7 @@
 package slatekit.jobs
 
 import slatekit.common.Identity
-import slatekit.common.Status
+import slatekit.actors.Status
 import slatekit.tracking.Recorder
 import slatekit.jobs.workers.WorkerContext
 

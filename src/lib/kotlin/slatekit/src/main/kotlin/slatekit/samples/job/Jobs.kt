@@ -2,7 +2,7 @@ package slatekit.samples.job
 
 import kotlinx.coroutines.runBlocking
 import slatekit.common.Identity
-import slatekit.common.Status
+import slatekit.actors.Status
 import slatekit.jobs.Task
 import slatekit.jobs.workers.WorkResult
 import slatekit.jobs.workers.Worker

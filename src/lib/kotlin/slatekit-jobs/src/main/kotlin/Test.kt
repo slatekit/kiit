@@ -1,7 +1,7 @@
 package slatekit.jobs
 
 import kotlinx.coroutines.runBlocking
-import slatekit.common.Status
+import slatekit.actors.Status
 
 fun main(args: Array<String>) {
 

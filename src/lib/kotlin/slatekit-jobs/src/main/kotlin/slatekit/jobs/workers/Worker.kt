@@ -3,8 +3,8 @@ package slatekit.jobs.workers
 import slatekit.actors.Cycle
 import java.util.concurrent.atomic.AtomicReference
 import slatekit.common.Identity
-import slatekit.common.Status
-import slatekit.common.StatusCheck
+import slatekit.actors.Status
+import slatekit.jobs.Check
 import slatekit.jobs.Task
 
 
@@ -23,7 +23,7 @@ import slatekit.jobs.Task
 open class Worker<T>(
     id: Identity,
     val operation: (suspend (Task) -> WorkResult)? = null
-) : StatusCheck, Cycle {
+) : Check, Cycle {
     val id = if(id.tags.isEmpty() || !id.tags.contains("worker")) id.with(tags = listOf("worker")) else id
     protected val _status = AtomicReference<Pair<Status, String>>(Pair(Status.InActive, Status.InActive.name))
 

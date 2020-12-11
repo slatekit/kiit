@@ -10,6 +10,7 @@ import slatekit.jobs.support.Events
 import slatekit.jobs.support.Coordinator
 import slatekit.policy.Policy
 import slatekit.actors.Action
+import slatekit.actors.Status
 import slatekit.jobs.support.*
 import slatekit.jobs.workers.*
 import slatekit.results.Outcome
@@ -59,7 +60,7 @@ import slatekit.results.builders.Outcomes
  * 3. Integration with Kotlin Flow ( e.g. a job could feed data into a Flow )
  *
  */
-class Job(val ctx: Context) : Ops<WorkerContext>, StatusCheck {
+class Job(val ctx: Context) : Ops<WorkerContext>, Check {
 
     val id: Identity = ctx.id
     val workers = Workers(ctx)

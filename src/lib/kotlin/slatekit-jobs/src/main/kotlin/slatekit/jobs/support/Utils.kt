@@ -1,6 +1,6 @@
 package slatekit.jobs.support
 
-import slatekit.common.Status
+import slatekit.actors.Status
 import slatekit.common.Identity
 import slatekit.jobs.workers.WorkResult
 import slatekit.results.Codes

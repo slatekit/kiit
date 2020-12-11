@@ -6,10 +6,11 @@ package slatekit.actors
 sealed class Status(val name:String, val value:Int) {
     object InActive  : Status("InActive" , 0)
     object Started   : Status("Started"  , 1)
-    object Running   : Status("Running"  , 2)
-    object Paused    : Status("Paused"   , 3)
-    object Stopped   : Status("Stopped"  , 4)
-    object Completed : Status("Completed", 5)
-    object Failed    : Status("Failed"   , 6)
-    object Killed    : Status("Killed"   , 7)
+    object Waiting   : Status("Waiting"  , 2)
+    object Running   : Status("Running"  , 3)
+    object Paused    : Status("Paused"   , 4)
+    object Stopped   : Status("Stopped"  , 5)
+    object Completed : Status("Completed", 6)
+    object Failed    : Status("Failed"   , 7)
+    object Killed    : Status("Killed"   , 8)
 }
