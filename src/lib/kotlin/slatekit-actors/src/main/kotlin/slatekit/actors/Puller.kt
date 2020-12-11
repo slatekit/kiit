@@ -2,8 +2,8 @@ package slatekit.actors
 
 import kotlinx.coroutines.channels.Channel
 
-open class Remover<T>(private val channel: Channel<Message<T>>,
-                      private val actor: Controlled<T>) {
+open class Puller<T>(val channel: Channel<Message<T>>,
+                     val handler: Handler<T>, val tracker:((Message<T>) -> Unit)? = null) {
 
     suspend fun pull(count: Int = 1) {
         // Process X off the channel
@@ -11,7 +11,7 @@ open class Remover<T>(private val channel: Channel<Message<T>>,
             val item = channel.poll()
             item?.let {
                 track(PULL, it)
-                actor.work(it)
+                handler.handle(it)
             }
         }
     }
@@ -21,7 +21,7 @@ open class Remover<T>(private val channel: Channel<Message<T>>,
         var item: Message<T>? = channel.poll()
         while (item != null) {
             track(POLL, item)
-            actor.work(item)
+            handler.handle(item)
             item = channel.poll()
         }
     }
@@ -37,7 +37,7 @@ open class Remover<T>(private val channel: Channel<Message<T>>,
 
 
     suspend fun track(source: String, item: Message<T>) {
-
+        tracker?.invoke(item)
     }
 
 
