@@ -9,4 +9,11 @@ sealed class Result(val name: String) {
     object Stop : Result("Stop")
     object Fail : Result("Fail")
     data class Next(val offset: Long, val processed: Long, val reference: String) : Result("next")
+
+
+    companion object {
+        fun next(offset: Long, processed: Long, reference: String): Result {
+            return Result.Next(offset, processed, reference)
+        }
+    }
 }

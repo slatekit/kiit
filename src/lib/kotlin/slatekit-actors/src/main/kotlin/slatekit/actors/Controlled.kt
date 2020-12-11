@@ -60,8 +60,9 @@ abstract class Controlled<T>(override val ctx: Context, val channel: Channel<Mes
     /**
      * Sends a control message to start, pause, resume, stop processing
      */
-    override suspend fun control(action: Action, msg: String?, target: String) {
+    override suspend fun control(action: Action, msg: String?, target: String) : Feedback {
         send(Control<T>(action, msg, target = target))
+        return Feedback(true, "")
     }
 
 

@@ -1,4 +1,4 @@
-package slatekit.jobs
+package slatekit.actors
 
 import slatekit.actors.Status
 

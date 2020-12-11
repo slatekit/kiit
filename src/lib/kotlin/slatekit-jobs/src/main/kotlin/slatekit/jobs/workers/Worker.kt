@@ -4,7 +4,7 @@ import slatekit.actors.Cycle
 import java.util.concurrent.atomic.AtomicReference
 import slatekit.common.Identity
 import slatekit.actors.Status
-import slatekit.jobs.Check
+import slatekit.actors.Check
 import slatekit.jobs.Task
 
 

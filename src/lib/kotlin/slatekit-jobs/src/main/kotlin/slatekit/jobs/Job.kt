@@ -3,14 +3,13 @@ package slatekit.jobs
 import java.util.concurrent.atomic.AtomicReference
 import kotlinx.coroutines.*
 import kotlinx.coroutines.channels.Channel
+import slatekit.actors.*
 import slatekit.common.*
 import slatekit.common.ext.toStringMySql
 import slatekit.common.log.LogLevel
 import slatekit.jobs.support.Events
 import slatekit.jobs.support.Coordinator
 import slatekit.policy.Policy
-import slatekit.actors.Action
-import slatekit.actors.Status
 import slatekit.jobs.support.*
 import slatekit.jobs.workers.*
 import slatekit.results.Outcome
@@ -60,7 +59,7 @@ import slatekit.results.builders.Outcomes
  * 3. Integration with Kotlin Flow ( e.g. a job could feed data into a Flow )
  *
  */
-class Job(val ctx: Context) : Ops<WorkerContext>, Check {
+class Job(val ctx: Context) : Check, Controls {
 
     val id: Identity = ctx.id
     val workers = Workers(ctx)
@@ -111,31 +110,18 @@ class Job(val ctx: Context) : Ops<WorkerContext>, Check {
         manage()
     }
 
-    /**
-     * Sends a command, that represents the action, to the job
-     */
-    override suspend fun send(action: Action): Outcome<String> {
-        return send(ctx.commands.job(ctx.id, action))
-    }
 
-    /**
-     * Sends a command, that represents the action, to a worker
-     */
-    override suspend fun send(id: Identity, action: Action, note: String): Outcome<String> {
-        return when (Utils.isWorker(id)) {
-            false -> send(ctx.commands.job(id, action))
-            true -> send(ctx.commands.work(id, action))
-        }
-    }
-
-    /**
-     * Sends a command to the job
-     */
-    override suspend fun send(command: Command): Outcome<String> {
-        ctx.channel.send(command)
-        return when (Utils.isWorker(command.identity)) {
-            true -> Outcomes.success("Sent command=${command.action.name}, type=job, target=${ctx.id.id}")
-            false -> Outcomes.success("Send command=${command.action.name}, type=wrk, target=${ctx.id.id}")
+    override suspend fun control(action: Action, msg: String?, target: String): Feedback {
+        return when(target.isEmpty()) {
+            true -> {
+                ctx.channel.send(ctx.commands.job(id, action))
+                Feedback(true, "job")
+            }
+            else -> {
+                val id = ctx.workers.first { it.id.instance == target }.id
+                ctx.channel.send(ctx.commands.work(id, action))
+                Feedback(true, "wrk")
+            }
         }
     }
 
@@ -151,18 +137,6 @@ class Job(val ctx: Context) : Ops<WorkerContext>, Check {
                 record("PULL", cmd)
                 handle(cmd)
             }
-        }
-    }
-
-    /**
-     * Handles commands until there are no more
-     */
-    suspend fun poll() {
-        var cmd: Command? = ctx.channel.poll()
-        while (cmd != null) {
-            record("POLL", cmd)
-            handle(cmd)
-            cmd = ctx.channel.poll()
         }
     }
 
@@ -203,20 +177,6 @@ class Job(val ctx: Context) : Ops<WorkerContext>, Check {
         }
     }
 
-    /**
-     * Converts the name supplied to either the identity of either
-     * 1. Job    : {identity.area}.{identity.service}                       e.g. "signup.emails"
-     * 2. Worker : {identity.area}.{identity.service}.{identity.instance}   e.g. "signup.emails.worker_1"
-     */
-    override fun toId(name: String): Identity? {
-        if (name.isBlank()) return null
-        val parts = name.split(".")
-        return when (parts.size) {
-            2 -> ctx.id
-            3 -> workers.getIds().first { it.instance == name }
-            else -> null
-        }
-    }
 
     /**
      * logs/handle error state/condition

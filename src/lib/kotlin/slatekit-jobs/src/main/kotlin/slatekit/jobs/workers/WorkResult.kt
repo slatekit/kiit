@@ -20,23 +20,6 @@ sealed class WorkResult(val name: String) {
     object Stop    : WorkResult("Stop")
     data class Next(val offset: Long, val processed: Long, val reference: String) : WorkResult("next")
 
-
-    fun parse(name: String): WorkResult {
-        return when (name) {
-            Done.name -> Done
-            More.name -> More
-            else -> {
-                val tokens = name.split(".")
-                val first = tokens[0]
-                when (first.toLowerCase()) {
-                    "next"  -> Next(tokens[1].toLong(), tokens[2].toLong(), tokens[3])
-                    else -> Unknown
-                }
-            }
-        }
-    }
-
-
     companion object {
         fun next(offset: Long, processed: Long, reference: String): WorkResult {
             return WorkResult.Next(offset, processed, reference)
