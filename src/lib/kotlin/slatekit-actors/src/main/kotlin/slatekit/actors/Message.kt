@@ -1,16 +1,32 @@
 package slatekit.actors
 
 /**
- * Message that is handled by Manager
+ * Represents the "envelope" / container for all items sent to the actor.
  */
 sealed class Message<T> {
     companion object {
         const val SELF = "self"
     }
 }
-class Control<T>(val action: Action, val msg:String? = null, val seconds:Long? = 30, val target:String = SELF) : Message<T>()
-class Content<T>(val data: T, val target:String = SELF) : Message<T>()
-class Request<T>(val action:Action = Action.Request, val target:String = SELF) : Message<T>()
+
+
+/**
+ * Used to control the status of the actor ( to start, pause, resume, stop )
+ */
+class Control<T>(val action: Action, val msg: String? = null, val seconds: Long? = 30, val target: String = SELF) : Message<T>()
+
+
+/**
+ * Used for actual payloads to send data to the actor for processing
+ */
+class Content<T>(val data: T, val target: String = SELF) : Message<T>()
+
+
+/**
+ * Used for actors that can load payloads them selves
+ * NOTE: This is for usage in slatekit.jobs
+ */
+class Request<T>(val action: Action = Action.Request, val target: String = SELF) : Message<T>()
 
 
 

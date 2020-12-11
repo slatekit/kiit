@@ -1,8 +1,8 @@
 package slatekit.actors
 
 /**
- * Convenience methods to support controlling
- * an Actor by sending action commands
+ * Provides convenience methods to support sending actions
+ * to an actor to control its status.
  */
 interface Controls {
     suspend fun delay()  = control(Action.Delay)

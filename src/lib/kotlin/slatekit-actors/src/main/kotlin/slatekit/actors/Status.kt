@@ -1,7 +1,7 @@
 package slatekit.actors
 
 /**
- * Represents the different "states" of a life-cycle
+ * Represents the different "states" a @see[Controlled] actor can be in
  */
 sealed class Status(val name:String, val value:Int) {
     object InActive  : Status("InActive" , 0)

@@ -1,5 +1,8 @@
 package slatekit.actors
 
+/**
+ * Future use
+ */
 sealed class Result(val name: String) {
     object More : Result("More")
     object Done : Result("Done")

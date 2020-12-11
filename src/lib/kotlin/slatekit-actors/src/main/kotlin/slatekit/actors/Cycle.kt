@@ -1,7 +1,7 @@
 package slatekit.actors
 
 /**
- * Life-cycle methods used for a Worker
+ * Life-cycle methods ( future state )
  */
 interface Cycle {
 

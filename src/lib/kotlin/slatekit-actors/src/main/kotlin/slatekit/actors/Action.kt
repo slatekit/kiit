@@ -1,8 +1,7 @@
 package slatekit.actors
 
 /**
- * Represents the actions that can be performed on either a Job or worker.
- * NOTE: Either a Job or Worker can be
+ * Represents the actions that control the state @see[Status] of a @see[Controlled] actor
  * 1. started
  * 2. stopped
  * 3. paused

@@ -2,6 +2,13 @@ package slatekit.actors
 
 import kotlinx.coroutines.channels.Channel
 
+/**
+ * Provides a way to extract messages out of an actor's channel,
+ * and send them to the handler ( which could be the same actor ).
+ * This is useful for controlling the content of the channel ( such as for tests )
+ * and also for cleanup in some cases.
+ * This allows to ull, poll, wipe ( clear ) messages from the channel.
+ */
 open class Puller<T>(val channel: Channel<Message<T>>,
                      val handler: Handler<T>, val tracker:((Message<T>) -> Unit)? = null) {
 

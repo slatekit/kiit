@@ -6,6 +6,9 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.yield
 import java.util.concurrent.atomic.AtomicReference
 
+/**
+ *
+ */
 abstract class Controlled<T>(override val ctx: Context, val channel: Channel<Message<T>>) : Actor<T>, Controls {
 
     protected val _status = AtomicReference<Status>(Status.InActive)
