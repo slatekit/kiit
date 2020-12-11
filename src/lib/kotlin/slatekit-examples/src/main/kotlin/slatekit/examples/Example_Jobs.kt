@@ -14,6 +14,7 @@ package slatekit.examples
 
 //<doc:import_required>
 import kotlinx.coroutines.*
+import slatekit.actors.Status
 import slatekit.common.*
 //</doc:import_required>
 
@@ -148,13 +149,13 @@ class Example_Jobs : Command("utils"), CoroutineScope by MainScope() {
             }
 
             // Completion hook ( for logic / logs / alerts )
-            override suspend fun completed() {
+            override suspend fun completed(note:String?) {
                 notify("done", listOf(("id" to this.id.name)))
             }
 
             // Failure hook ( for logic / logs / alerts )
-            override suspend fun failed(err:Throwable?) {
-                notify("failure", listOf(("id" to this.id.name), ("err" to (err?.message ?: ""))))
+            override suspend fun failed(note:String?) {
+                notify("failure", listOf(("id" to this.id.name), ("err" to (note ?: ""))))
             }
 
             // Initialization hook ( for setup / logs / alerts )

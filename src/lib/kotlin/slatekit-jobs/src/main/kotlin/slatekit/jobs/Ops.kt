@@ -27,12 +27,6 @@ import slatekit.results.builders.Outcomes
  * 2. Worker = {Identity.area}.{Identity.service}.{Identity.instance}
  */
 interface Ops<T> {
-    /**
-     * Gets the item by name e.g.
-     * job name = "area.service"
-     * worker name = "area.service.instance"
-     */
-    operator fun get(name: String): T?
 
     suspend fun delay(): Outcome<String> = send(Action.Delay)
     suspend fun delay(name: String): Outcome<String> = send(name, Action.Delay, "")

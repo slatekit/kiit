@@ -97,7 +97,7 @@ class Job(val ctx: Context) : Ops<WorkerContext>, Check {
 
 
     fun get(id: Identity): WorkerContext? = workers[id.id]
-    override fun get(name: String): WorkerContext? = workers[name]
+    fun get(name: String): WorkerContext? = workers[name]
 
     suspend fun close() {
         ctx.channel.close()
@@ -193,7 +193,7 @@ class Job(val ctx: Context) : Ops<WorkerContext>, Check {
         when (command) {
             // Affects the whole job/queue/workers
             is Command.JobCommand -> {
-                manageJob(command)
+                manageJob(command.action)
             }
 
             // Affects just a specific worker
@@ -232,12 +232,12 @@ class Job(val ctx: Context) : Ops<WorkerContext>, Check {
     }
 
 
-    private suspend fun manageJob(cmd: Command.JobCommand) {
-        if (!validate(cmd)) {
+    private suspend fun manageJob(action: Action) {
+        if (!validate(action)) {
             notify("CMD_ERROR")
             return
         }
-        when (cmd.action) {
+        when (action) {
             is Action.Delay   -> control.delay(30)
             is Action.Start   -> control.start()
             is Action.Pause   -> control.pause(30)
@@ -339,9 +339,9 @@ class Job(val ctx: Context) : Ops<WorkerContext>, Check {
     }
 
 
-    private fun validate(cmd: Command): Boolean {
+    private fun validate(action: Action): Boolean {
         return when (this.status()) {
-            Status.Killed -> cmd.action == Action.Check
+            Status.Killed -> action == Action.Check
             else -> true
         }
     }

@@ -38,7 +38,7 @@ class Jobs(
     /**
      * Gets the job by name e.g. "area.service"
      */
-    override operator fun get(name: String): Job? = if (lookup.containsKey(name)) lookup[name] else null
+    operator fun get(name: String): Job? = if (lookup.containsKey(name)) lookup[name] else null
 
     /**
      * Sends a command to take action ( start, pause, stop, etc ) on all items ( jobs )
