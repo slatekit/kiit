@@ -13,6 +13,7 @@
 
 package slatekit.integration.apis
 
+import slatekit.actors.Feedback
 import slatekit.apis.Api
 import slatekit.apis.Action
 import slatekit.apis.AuthModes
@@ -47,37 +48,37 @@ class JobsApi(override val context: AppEntContext) : FileSupport {
      * starts the system
      */
     @Action(desc = "start the job")
-    suspend fun start(name:String):Outcome<String> = jobs.start(name)
+    suspend fun start(name:String):Outcome<String> = jobs.start(name).outcome()
 
     /**
      * pauses the system
      */
     @Action(desc = "pauses the job")
-    suspend fun pause(name:String):Outcome<String> =jobs.pause(name)
+    suspend fun pause(name:String):Outcome<String> =jobs.pause(name).outcome()
 
     /**
      * resumes the system
      */
     @Action(desc = "resumes job")
-    suspend fun resume(name:String):Outcome<String> = jobs.resume(name)
+    suspend fun resume(name:String):Outcome<String> = jobs.resume(name).outcome()
 
     /**
      * stops the system
      */
     @Action(desc = "stops the job")
-    suspend fun delay(name:String):Outcome<String> = jobs.delay(name)
+    suspend fun delay(name:String):Outcome<String> = jobs.delay(name).outcome()
 
     /**
      * stops the system
      */
     @Action(desc = "stops the job")
-    suspend fun process(name:String):Outcome<String> = jobs.process(name)
+    suspend fun process(name:String):Outcome<String> = jobs.process(name).outcome()
 
     /**
      * stops the system
      */
     @Action(desc = "stops the job")
-    suspend fun stop(name:String):Outcome<String> = jobs.stop(name)
+    suspend fun stop(name:String):Outcome<String> = jobs.stop(name).outcome()
 
     /**
      * Get the names of all jobs
@@ -94,4 +95,7 @@ class JobsApi(override val context: AppEntContext) : FileSupport {
         val ids = workers?.getIds()?.map { it.id }
         ids
     }.flatten()
+
+
+    private fun Feedback.outcome():Outcome<String> = Outcomes.of(this.success, "", this.msg)
 }
