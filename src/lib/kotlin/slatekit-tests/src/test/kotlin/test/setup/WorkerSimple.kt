@@ -3,7 +3,7 @@ package test.setup
 import slatekit.actors.WResult
 import slatekit.common.Identity
 import slatekit.jobs.*
-import slatekit.jobs.workers.Worker
+import slatekit.jobs.slatekit.jobs.Worker
 
 class MyWorker(
     var acc: Int = 0

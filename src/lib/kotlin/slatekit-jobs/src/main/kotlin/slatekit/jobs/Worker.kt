@@ -1,4 +1,4 @@
-package slatekit.jobs.workers
+package slatekit.jobs.slatekit.jobs
 
 import slatekit.actors.Cycle
 import java.util.concurrent.atomic.AtomicReference

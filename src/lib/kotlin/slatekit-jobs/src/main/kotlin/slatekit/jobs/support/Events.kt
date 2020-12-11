@@ -7,7 +7,7 @@ import slatekit.actors.Status
 import slatekit.common.ids.ULIDs
 import slatekit.jobs.Job
 import slatekit.jobs.Context
-import slatekit.jobs.workers.WorkerContext
+import slatekit.jobs.slatekit.jobs.WorkContext
 
 /**
  * Builds events using the @see[slatekit.common.Event] model
@@ -50,7 +50,7 @@ object Events {
     /**
      * Builds an event for the worker
      */
-    fun build(jctx: Context, wctx:WorkerContext, name:String): Event {
+    fun build(jctx: Context, wctx: WorkContext, name:String): Event {
         val queue = jctx.queue?.name ?: "no-queue"
         val worker = wctx.worker
         val id = worker.id

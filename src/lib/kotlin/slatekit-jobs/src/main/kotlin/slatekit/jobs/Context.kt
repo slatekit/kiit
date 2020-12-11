@@ -13,8 +13,8 @@ import slatekit.core.common.Scheduler
 import slatekit.jobs.support.Notifier
 import slatekit.jobs.support.Command
 import slatekit.jobs.support.Commands
-import slatekit.jobs.workers.WorkRequest
-import slatekit.jobs.workers.Worker
+import slatekit.jobs.slatekit.jobs.WorkRequest
+import slatekit.jobs.slatekit.jobs.Worker
 import slatekit.policy.Policy
 
 /**

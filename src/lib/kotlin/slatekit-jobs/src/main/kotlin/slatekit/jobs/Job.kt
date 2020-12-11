@@ -7,14 +7,14 @@ import slatekit.actors.*
 import slatekit.common.*
 import slatekit.common.ext.toStringMySql
 import slatekit.common.log.LogLevel
+import slatekit.jobs.slatekit.jobs.WorkRequest
+import slatekit.jobs.slatekit.jobs.Worker
+import slatekit.jobs.slatekit.jobs.WorkContext
 import slatekit.jobs.support.Events
 import slatekit.jobs.support.Coordinator
 import slatekit.policy.Policy
 import slatekit.jobs.support.*
-import slatekit.jobs.workers.*
-import slatekit.results.Outcome
 import slatekit.results.Try
-import slatekit.results.builders.Outcomes
 
 /**
  * A Job is the top level model in this Background Job/Task Queue system. A job is composed of the following:
@@ -95,8 +95,8 @@ class Job(val ctx: Context) : Check, Controls {
     override fun status(): Status = _status.get()
 
 
-    fun get(id: Identity): WorkerContext? = workers[id.id]
-    fun get(name: String): WorkerContext? = workers[name]
+    fun get(id: Identity): WorkContext? = workers[id.id]
+    fun get(name: String): WorkContext? = workers[name]
 
     suspend fun close() {
         ctx.channel.close()
@@ -254,7 +254,7 @@ class Job(val ctx: Context) : Check, Controls {
     /**
      * Transitions all workers to the new status supplied
      */
-    private suspend fun all(action: Action, newStatus: Status, op: suspend (WorkerContext) -> Try<Status>) {
+    private suspend fun all(action: Action, newStatus: Status, op: suspend (WorkContext) -> Try<Status>) {
         val job = this
         this.move(newStatus)
         ctx.scope.launch {
@@ -267,7 +267,7 @@ class Job(val ctx: Context) : Check, Controls {
     /**
      * Transitions all workers to the new status supplied
      */
-    private suspend fun each(op: suspend (WorkerContext) -> Try<Status>) {
+    private suspend fun each(op: suspend (WorkContext) -> Try<Status>) {
         ctx.workers.forEach { worker ->
             val wctx = workers[worker.id]
             wctx?.let {
@@ -280,7 +280,7 @@ class Job(val ctx: Context) : Check, Controls {
     /**
      * Transitions all workers to the new status supplied
      */
-    private suspend fun one(id: Identity, launch: Boolean, op: suspend (WorkerContext) -> Try<Status>) {
+    private suspend fun one(id: Identity, launch: Boolean, op: suspend (WorkContext) -> Try<Status>) {
         val wctx = workers[id]
         wctx?.let {
             op(it)
@@ -291,7 +291,7 @@ class Job(val ctx: Context) : Check, Controls {
     /**
      * Transitions all workers to the new status supplied
      */
-    private suspend fun run(id: Identity, launch: Boolean, op: suspend (WorkerContext) -> Unit) {
+    private suspend fun run(id: Identity, launch: Boolean, op: suspend (WorkContext) -> Unit) {
         val wctx = workers[id]
         wctx?.let {
             op(it)

@@ -6,7 +6,7 @@ import slatekit.apis.core.Requests
 import slatekit.common.Identity
 import slatekit.common.Sources
 import slatekit.jobs.*
-import slatekit.jobs.workers.Worker
+import slatekit.jobs.slatekit.jobs.Worker
 import slatekit.results.Failure
 import slatekit.results.Success
 import slatekit.results.Try

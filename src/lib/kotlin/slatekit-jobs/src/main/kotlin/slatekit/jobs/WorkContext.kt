@@ -1,4 +1,4 @@
-package slatekit.jobs.workers
+package slatekit.jobs.slatekit.jobs
 
 import slatekit.actors.WResult
 import slatekit.common.Identity
@@ -6,6 +6,15 @@ import slatekit.jobs.Task
 import slatekit.tracking.Recorder
 import slatekit.policy.Policy
 import slatekit.results.Err
+
+
+/**
+ * Represents a request for work by a worker
+ * @param context: The current context of the worker including its job, worker, stats, etc
+ * @param task : The current task for the worker to work on.
+ */
+data class WorkRequest(val context: WorkContext, val task: Task)
+
 
 /**
  * Represents the context of a Worker containing its statistics, policies, and other components
@@ -17,7 +26,7 @@ import slatekit.results.Err
  *                   This allows passing in a Task which has the job name properly set.
  *                   e.g. signup.alerts.job.qat.4a3b300b-d0ac-4776-8a9c-31aa75e412b3
  */
-data class WorkerContext(
+data class WorkContext(
     val id: Identity,
     val worker: Worker<*>,
     val stats: Recorder<Task, WResult, Err>,

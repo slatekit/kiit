@@ -3,8 +3,8 @@ package slatekit.jobs.support
 import slatekit.actors.Status
 import slatekit.actors.Action
 import slatekit.jobs.Job
-import slatekit.jobs.workers.Work
-import slatekit.jobs.workers.WorkerContext
+import slatekit.jobs.slatekit.jobs.support.Work
+import slatekit.jobs.slatekit.jobs.WorkContext
 import slatekit.results.Try
 import slatekit.results.builders.Tries
 import slatekit.results.then
@@ -130,7 +130,7 @@ class Coordinator(override val job: Job, val work: Work = Work(job)) : Support {
     /**
      * Iterates over all workers
      */
-    private suspend fun each(op: suspend (WorkerContext) -> Unit) {
+    private suspend fun each(op: suspend (WorkContext) -> Unit) {
         job.ctx.workers.forEach { worker ->
             val wctx = job.workers[worker.id]
             wctx?.let {
