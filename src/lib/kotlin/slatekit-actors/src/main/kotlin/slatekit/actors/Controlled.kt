@@ -129,7 +129,7 @@ abstract class Controlled<T>(override val ctx: Context, val channel: Channel<Mes
     }
 
 
-    private fun move(newStatus: Status) {
+    protected fun move(newStatus: Status) {
         _status.set(newStatus)
     }
 

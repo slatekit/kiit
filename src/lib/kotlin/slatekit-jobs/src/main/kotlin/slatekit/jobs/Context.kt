@@ -2,6 +2,7 @@ package slatekit.jobs
 
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.channels.Channel
+import slatekit.actors.Message
 import slatekit.actors.WResult
 import slatekit.common.Identity
 import slatekit.common.ids.Paired
@@ -30,7 +31,7 @@ import slatekit.policy.Policy
  * @param scheduler : Scheduler used to continue resuming work
  */
 data class Context(val id: Identity,
-                   val channel: Channel<Command>,
+                   val channel: Channel<Message<Task>>,
                    val workers: List<Worker<*>>,
                    val logger : Logger = LoggerConsole(),
                    val queue  : Queue? = null,
