@@ -1,7 +1,7 @@
 package slatekit.jobs.support
 
 import slatekit.common.Status
-import slatekit.jobs.Action
+import slatekit.actors.Action
 import slatekit.jobs.Job
 import slatekit.jobs.workers.Work
 import slatekit.jobs.workers.WorkerContext

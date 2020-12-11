@@ -3,7 +3,7 @@ package slatekit.jobs.support
 import slatekit.common.DateTime
 import slatekit.common.Identity
 import slatekit.common.ids.Paired
-import slatekit.jobs.Action
+import slatekit.actors.Action
 
 /**
  * Builds commands to send to a job channel to manage a job/worker.

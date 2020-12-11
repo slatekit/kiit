@@ -1,7 +1,7 @@
 package slatekit.jobs
 
 import slatekit.common.Identity
-import slatekit.jobs.Action
+import slatekit.actors.Action
 import slatekit.jobs.support.Command
 import slatekit.results.Outcome
 import slatekit.results.builders.Outcomes

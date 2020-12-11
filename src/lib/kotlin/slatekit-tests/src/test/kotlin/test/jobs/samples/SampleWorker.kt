@@ -16,9 +16,9 @@ class OneTimeWorker(val start:Int, val end:Int, id: Identity) : Worker<Int>(id) 
     private val current = AtomicInteger(start)
     private val audit = mutableListOf<String>()
 
-    override suspend fun start() {
+    override suspend fun started() {
         audit.add("init")
-        super.start()
+        super.started()
     }
 
 
@@ -38,21 +38,21 @@ class OneTimeWorker(val start:Int, val end:Int, id: Identity) : Worker<Int>(id) 
     }
 
 
-    override suspend fun done() {
+    override suspend fun completed(note:String?) {
         audit.add("done")
-        super.done()
+        super.completed(note)
     }
 
 
-    override suspend fun pause(reason: String?) {
+    override suspend fun paused(reason: String?) {
     }
 
 
-    override suspend fun stop(reason: String?) {
+    override suspend fun stopped(reason: String?) {
     }
 
 
-    override suspend fun resume(reason: String?) {
+    override suspend fun resumed(reason: String?) {
     }
 
 
@@ -85,15 +85,15 @@ class PagedWorker(start:Int, val maxRuns:Int, val countsPerRun:Int, id: Identity
     }
 
 
-    override suspend fun pause(reason: String?) {
+    override suspend fun paused(reason: String?) {
     }
 
 
-    override suspend fun stop(reason: String?) {
+    override suspend fun stopped(reason: String?) {
     }
 
 
-    override suspend fun resume(reason: String?) {
+    override suspend fun resumed(reason: String?) {
     }
 
 }
@@ -105,7 +105,7 @@ class TestWorker(id: Identity? = null, val limit:Int = 10, operation: (suspend (
     val counts = AtomicInteger(0)
     val cycles = mutableMapOf<String, Boolean>()
 
-    override suspend fun start() {
+    override suspend fun started() {
         cycles[Status.Started.name] = true
     }
 
@@ -119,25 +119,25 @@ class TestWorker(id: Identity? = null, val limit:Int = 10, operation: (suspend (
         }
     }
 
-    override suspend fun pause(reason: String?) {
+    override suspend fun paused(reason: String?) {
         cycles[Status.Paused.name] = true
 
     }
 
-    override suspend fun resume(reason: String?) {
+    override suspend fun resumed(reason: String?) {
         cycles["Resumed"] = true
 
     }
 
-    override suspend fun stop(reason: String?) {
+    override suspend fun stopped(reason: String?) {
         cycles[Status.Stopped.name] = true
     }
 
-    override suspend fun done() {
+    override suspend fun completed(note:String?) {
         cycles[Status.Completed.name] = true
     }
 
-    override suspend fun kill(reason: String?) {
+    override suspend fun killed(reason: String?) {
         cycles[Status.Killed.name] = true
     }
 }

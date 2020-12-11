@@ -1,19 +1,18 @@
 package slatekit.jobs.workers
 
+import slatekit.actors.Cycle
 import java.util.concurrent.atomic.AtomicReference
 import slatekit.common.Identity
 import slatekit.common.Status
 import slatekit.common.StatusCheck
 import slatekit.jobs.Task
-import slatekit.results.Err
-import slatekit.tracking.Recorder
 
 
 /**
  * Optional base class for Workers.
  * All work is done inside this worker which has
- * 1. life-cycle methods : [start], [work], [done]
- * 2. state changes      : [pause], [stop], [resume], [move]
+ * 1. life-cycle methods : [started], [work], [completed]
+ * 2. state changes      : [paused], [stopped], [resumed], [move]
  * 3. alerting ability   : [notify]
  * 4. diagnostic features: [info] method to build diagnostics info
  *
@@ -24,7 +23,7 @@ import slatekit.tracking.Recorder
 open class Worker<T>(
     id: Identity,
     val operation: (suspend (Task) -> WorkResult)? = null
-) : StatusCheck {
+) : StatusCheck, Cycle {
     val id = if(id.tags.isEmpty() || !id.tags.contains("worker")) id.with(tags = listOf("worker")) else id
     protected val _status = AtomicReference<Pair<Status, String>>(Pair(Status.InActive, Status.InActive.name))
 
@@ -46,22 +45,6 @@ open class Worker<T>(
      */
     open fun info(): List<Pair<String, String>> = listOf()
 
-
-    /**
-     * ============================================================================
-     * LIFE-CYCLE Methods
-     * 1. init
-     * 2. work
-     * 3. work(task:Task)
-     * 4. done
-     * 5. fail
-     * ============================================================================
-     */
-    /**
-     * Hook for starting job ( put initialization in here )
-     */
-    open suspend fun start() {
-    }
 
     /**
      * Performs the work
@@ -93,47 +76,6 @@ open class Worker<T>(
      * 2. job processes paged resources, when its on Page 20, and then paused, it can resume at Page 21
      */
 
-    /**
-     * Hook for handling pausing of a job
-     * @param reason
-     * @return
-     */
-    open suspend fun pause(reason: String?) {
-    }
-
-    /**
-     * Hook for handling resuming of a job
-     * @param reason
-     * @return
-     */
-    open suspend fun resume(reason: String?) {
-    }
-
-    /**
-     * Hook for handling stopping of a job
-     */
-    open suspend fun stop(reason: String?){
-    }
-
-    /**
-     * Hook for handling killing of a job permanently
-     * This will not allow a restart
-     */
-    open suspend fun kill(reason: String?){
-    }
-
-    /**
-     * Life-cycle hook to allow for completion
-     */
-    open suspend fun done() {
-    }
-
-    /**
-     * Life-cycle hook to allow for failure
-     */
-    open suspend fun fail(err: Throwable?) {
-        notify("Errored: " + err?.message, null)
-    }
 
     /**
      * ============================================================================

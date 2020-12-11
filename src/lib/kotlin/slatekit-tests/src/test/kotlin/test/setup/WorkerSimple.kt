@@ -12,11 +12,11 @@ class MyWorker(
     var isInitialized = false
     var isEnded = false
 
-    override suspend fun start() {
+    override suspend fun started() {
         isInitialized = true
     }
 
-    override suspend fun done() {
+    override suspend fun completed() {
         isEnded = true
     }
 

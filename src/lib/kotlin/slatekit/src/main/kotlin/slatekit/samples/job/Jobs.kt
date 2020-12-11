@@ -84,7 +84,7 @@ class NewsLetterWorker(id:Identity) : Worker<String>(id) {
     private val offset = AtomicInteger(0)
 
     // Initialization hook ( for setup / logs / alerts )
-    override suspend fun start() {
+    override suspend fun started() {
         notify("initializing", listOf(("id" to this.id.name)))
     }
 
@@ -104,12 +104,12 @@ class NewsLetterWorker(id:Identity) : Worker<String>(id) {
     }
 
     // Completion hook ( for logic / logs / alerts )
-    override suspend fun done() {
+    override suspend fun completed() {
         notify("done", listOf(("id" to this.id.name)))
     }
 
     // Failure hook ( for logic / logs / alerts )
-    override suspend fun fail(err:Throwable?) {
+    override suspend fun failed(err:Throwable?) {
         notify("failure", listOf(("id" to this.id.name), ("err" to (err?.message ?: ""))))
     }
 

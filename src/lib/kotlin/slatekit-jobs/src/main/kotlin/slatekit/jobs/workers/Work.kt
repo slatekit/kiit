@@ -2,13 +2,11 @@ package slatekit.jobs.workers
 
 import slatekit.common.Identity
 import slatekit.common.Status
-import slatekit.jobs.Action
+import slatekit.actors.Action
 import slatekit.jobs.Job
 import slatekit.jobs.Task
 import slatekit.jobs.support.Support
 import slatekit.jobs.support.Utils
-import slatekit.jobs.workers.WorkResult
-import slatekit.jobs.workers.WorkerContext
 import slatekit.results.Try
 import slatekit.results.builders.Tries
 import slatekit.results.then
@@ -41,7 +39,7 @@ class Work(override val job: Job) : Support {
      */
     suspend fun start(wctx: WorkerContext, handle: Boolean = true, notify: Boolean = true): Try<Status> {
         return perform(wctx.id, Status.Started, notify = notify) {
-            wctx.worker.start()
+            wctx.worker.started()
         }
         .then { perform(wctx.id, Status.Running, notify = notify ) {
             send(Action.Process, wctx.id)
@@ -55,7 +53,7 @@ class Work(override val job: Job) : Support {
      */
     suspend fun pause(wctx: WorkerContext, handle: Boolean = true, notify: Boolean = true, seconds: Long = 30, reason: String? = null): Try<Status> {
         return perform(wctx.id, Status.Paused, notify = notify) {
-            wctx.worker.pause(reason)
+            wctx.worker.paused(reason)
             if (handle) {
                 schedule(seconds, Action.Resume, wctx.id)
             }
@@ -69,7 +67,7 @@ class Work(override val job: Job) : Support {
      */
     suspend fun resume(wctx: WorkerContext, notify: Boolean = true, reason: String? = null): Try<Status> {
         return perform(wctx.id, Status.Running, notify = notify) {
-            wctx.worker.resume(reason)
+            wctx.worker.resumed(reason)
             send(Action.Process, wctx.id)
         }
     }
@@ -81,7 +79,7 @@ class Work(override val job: Job) : Support {
      */
     suspend fun stop(wctx: WorkerContext, notify: Boolean = true, reason: String? = null): Try<Status> {
         return perform(wctx.id, Status.Stopped, notify = notify) {
-            wctx.worker.stop(reason)
+            wctx.worker.stopped(reason)
         }
     }
 
@@ -92,7 +90,7 @@ class Work(override val job: Job) : Support {
      */
     suspend fun kill(wctx: WorkerContext, notify: Boolean = true, reason: String? = null): Try<Status> {
         return perform(wctx.id, Status.Killed, notify = notify) {
-            wctx.worker.kill(reason)
+            wctx.worker.killed(reason)
         }
     }
 
@@ -126,7 +124,7 @@ class Work(override val job: Job) : Support {
                 is WorkResult.Next -> send(Action.Process, wctx.id)
                 is WorkResult.Done -> {
                     move(Status.Completed, true, wctx.id, null)
-                    wctx.worker.done()
+                    wctx.worker.completed(null)
                     send(Action.Check)
                 }
                 else -> {
