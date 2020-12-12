@@ -1,4 +1,4 @@
-package slatekit.actors
+package slatekit.jobs
 
 /**
  * Life-cycle methods ( future state )

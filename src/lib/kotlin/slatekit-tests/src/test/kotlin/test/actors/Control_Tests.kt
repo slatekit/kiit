@@ -99,7 +99,7 @@ class Control_Tests : ActorTestSupport {
         setup { actor, puller ->
             actor.start()
             actor.send(1)
-            actor.send(Content(2))
+            actor.send(2)
             puller.pull(3)
             Assert.assertEquals(Status.Running, actor.status())
             Assert.assertEquals(2, actor.current)
@@ -112,7 +112,7 @@ class Control_Tests : ActorTestSupport {
         setup { actor, puller ->
             actor.start()
             actor.send(1)
-            actor.send(Request())
+            actor.request()
             puller.poll()
             Assert.assertEquals(Status.Running, actor.status())
             Assert.assertEquals(10, actor.current)

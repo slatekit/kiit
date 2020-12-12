@@ -54,7 +54,8 @@ import slatekit.results.Try
  * 3. Integration with Kotlin Flow ( e.g. a job could feed data into a Flow )
  *
  */
-class Job(val jctx: Context) : Managed<Task>(slatekit.actors.Context(jctx.id.id, jctx.scope), jctx.channel), Check, Controls {
+class Job(val jctx: Context)
+    : Managed<Task>(slatekit.actors.Context(jctx.id.id, jctx.scope), jctx.channel), Issuer, Check, Ops {
 
     val workers = Workers(jctx)
     private val events = jctx.notifier.jobEvents
@@ -111,10 +112,52 @@ class Job(val jctx: Context) : Managed<Task>(slatekit.actors.Context(jctx.id.id,
 
 
     /**
+     * Sends a request message
+     * This represents a request to get payload internally ( say from a queue ) and process it
+     * @param msg  : Full message
+     */
+    override suspend fun request() {
+        request(Reference.NONE)
+    }
+
+
+    /**
+     * Sends a request message associated with the supplied target
+     * This represents a request to get payload internally ( say from a queue ) and process it
+     * @param reference  : Full message
+     */
+    override suspend fun request(reference: String) {
+        channel.send(Request(nextId(), reference = reference))
+    }
+
+
+    /**
+     *  Handles each message based on its type @see[Content], @see[Control],
+     *  This handles following message types and moves this actor to a running state correctly
+     *  1. @see[Control] messages to start, stop, pause, resume the actor
+     *  2. @see[Request] messages to load payloads from a source ( e.g. queue )
+     *  3. @see[Content] messages are simply delegated to the work method
+     */
+    override suspend fun work(item: Message<Task>) {
+        when (item) {
+            is Request -> {
+                begin(); handle(item)
+            }
+            is Control -> {
+                handle(item)
+            }
+            is Content -> {
+                begin(); handle(Action.Process, item.reference, item.data)
+            }
+        }
+    }
+
+
+    /**
      * Handles a request for a @see[Task] and dispatches it to the default or target @see[Worker]
      */
-    override suspend fun request(req: Request<Task>) {
-        one(req.target, true) {
+    private suspend fun handle(req: Request<Task>) {
+        one(req.reference, true) {
             work.work(it, nextTask(it.task))
         }
     }
@@ -123,7 +166,7 @@ class Job(val jctx: Context) : Managed<Task>(slatekit.actors.Context(jctx.id.id,
     /**
      * Handles a processing of a @see[Task] by dispatching it to the default or target @see[Worker]
      */
-    override suspend fun work(action: Action, target: String, item: Task) {
+    override suspend fun handle(action: Action, target: String, item: Task) {
         one(target, true) {
             work.work(it, item)
         }
@@ -144,14 +187,14 @@ class Job(val jctx: Context) : Managed<Task>(slatekit.actors.Context(jctx.id.id,
             return
         }
         when (cmd.action) {
-            is Action.Delay -> one(cmd.target, false) { work.delay(it, seconds = 30) }
-            is Action.Start -> one(cmd.target, false) { work.start(it) }
-            is Action.Pause -> one(cmd.target, false) { work.pause(it, seconds = 30) }
-            is Action.Resume -> one(cmd.target, false) { work.resume(it) }
-            is Action.Stop -> one(cmd.target, false) { work.stop(it) }
-            is Action.Process -> run(cmd.target, true) { work.work(it, nextTask(it.task)) }
-            is Action.Check -> one(cmd.target, true) { work.check(it) }
-            is Action.Kill -> one(cmd.target, true) { work.kill(it) }
+            is Action.Delay -> one(cmd.reference, false) { work.delay(it, seconds = 30) }
+            is Action.Start -> one(cmd.reference, false) { work.start(it) }
+            is Action.Pause -> one(cmd.reference, false) { work.pause(it, seconds = 30) }
+            is Action.Resume -> one(cmd.reference, false) { work.resume(it) }
+            is Action.Stop -> one(cmd.reference, false) { work.stop(it) }
+            is Action.Process -> run(cmd.reference, true) { work.work(it, nextTask(it.task)) }
+            is Action.Check -> one(cmd.reference, true) { work.check(it) }
+            is Action.Kill -> one(cmd.reference, true) { work.kill(it) }
         }
     }
 

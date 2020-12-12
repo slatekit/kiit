@@ -1,6 +1,6 @@
 package slatekit.integration.jobs
 
-import slatekit.actors.WResult
+import slatekit.jobs.WResult
 import slatekit.apis.ApiServer
 import slatekit.apis.core.Requests
 import slatekit.common.Identity

@@ -5,7 +5,7 @@ import org.junit.Assert
 import org.junit.Test
 import slatekit.common.Identity
 import slatekit.actors.Status
-import slatekit.actors.WResult
+import slatekit.jobs.WResult
 import test.jobs.support.JobTestSupport
 import slatekit.jobs.Job
 import slatekit.jobs.Task

@@ -5,6 +5,7 @@ import slatekit.common.Identity
 import slatekit.jobs.Job
 import slatekit.jobs.Task
 import slatekit.jobs.WorkerContext
+import slatekit.jobs.WResult
 import slatekit.results.Failure
 import slatekit.results.Success
 import slatekit.results.Try
@@ -199,7 +200,7 @@ class Work(val job: Job) {
      */
     suspend fun schedule(seconds: Long, action: Action, id: Identity? = null) {
         job.ctx.scheduler.schedule(seconds) {
-            job.control(action, "", id?.name ?: Message.SELF)
+            job.control(action, "", id?.name ?: Reference.NONE)
         }
     }
 

@@ -2,7 +2,6 @@ package slatekit.jobs
 
 import slatekit.common.Identity
 import slatekit.actors.Status
-import slatekit.actors.WResult
 import slatekit.tracking.Recorder
 import slatekit.policy.Policy
 import slatekit.results.Err

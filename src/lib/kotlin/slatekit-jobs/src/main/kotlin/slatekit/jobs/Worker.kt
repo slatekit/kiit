@@ -1,12 +1,9 @@
 package slatekit.jobs
 
-import slatekit.actors.Cycle
 import java.util.concurrent.atomic.AtomicReference
 import slatekit.common.Identity
 import slatekit.actors.Status
 import slatekit.actors.Check
-import slatekit.actors.WResult
-import slatekit.jobs.Task
 
 
 /**

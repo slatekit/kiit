@@ -15,7 +15,7 @@ package slatekit.examples
 //<doc:import_required>
 import kotlinx.coroutines.*
 import slatekit.actors.Status
-import slatekit.actors.WResult
+import slatekit.jobs.WResult
 import slatekit.common.*
 //</doc:import_required>
 

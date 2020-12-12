@@ -3,7 +3,6 @@ package slatekit.jobs
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.channels.Channel
 import slatekit.actors.Message
-import slatekit.actors.WResult
 import slatekit.common.Identity
 import slatekit.common.log.Logger
 import slatekit.common.log.LoggerConsole
@@ -11,8 +10,6 @@ import slatekit.core.common.Backoffs
 import slatekit.core.common.DefaultScheduler
 import slatekit.core.common.Scheduler
 import slatekit.jobs.support.Notifier
-import slatekit.jobs.WorkRequest
-import slatekit.jobs.Worker
 import slatekit.policy.Policy
 
 /**

@@ -1,6 +1,5 @@
 package slatekit.jobs
 
-import slatekit.actors.WResult
 
 /**
  * Task represents a unit-of work ( a work-item  ) that is handled by a Worker.

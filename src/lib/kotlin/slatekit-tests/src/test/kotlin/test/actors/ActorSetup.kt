@@ -64,11 +64,11 @@ class TestController(context: Context, channel:Channel<Message<Int>>): Managed<I
 
 
     override suspend fun request(req: Request<Int>) {
-        this.work(Action.Process, req.target, 10)
+        this.handle(Action.Process, req.reference, 10)
     }
 
 
-    override suspend fun work(action: Action, target: String, item: Int) {
+    override suspend fun handle(action: Action, target: String, item: Int) {
         current = item
     }
 
@@ -85,7 +85,7 @@ class TestAdder(context: Context, channel:Channel<Message<Int>>): Managed<Int>(c
     }
 
 
-    override suspend fun work(action: Action, target: String, item: Int) {
+    override suspend fun handle(action: Action, target: String, item: Int) {
         current += item
     }
 

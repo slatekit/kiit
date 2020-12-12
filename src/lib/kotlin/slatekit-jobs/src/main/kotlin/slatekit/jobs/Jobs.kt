@@ -38,11 +38,11 @@ class Jobs(val queues: List<Queue>,
 
 
     /**
-     * @param target : Job = "signup.email", Worker = "signup.email.worker_123"
+     * @param reference : Job = "signup.email", Worker = "signup.email.worker_123"
      */
-    override suspend fun control(action: Action, msg: String?, target: String): Feedback {
-        val job = jobNames[target]
-        val wrk = wrkInsts[target]
+    override suspend fun control(action: Action, msg: String?, reference: String): Feedback {
+        val job = jobNames[reference]
+        val wrk = wrkInsts[reference]
         return when {
             job != null -> {
                 job.control(action, null, job.id)
@@ -51,10 +51,10 @@ class Jobs(val queues: List<Queue>,
             wrk != null -> {
                 val j = wrk.first
                 val w = wrk.second
-                j.control(action, null, target = w.id.id)
+                j.control(action, null, reference = w.id.id)
                 Feedback(true, "")
             }
-            else -> Feedback(false, "Unable to find job or worker $target")
+            else -> Feedback(false, "Unable to find job or worker $reference")
         }
     }
 

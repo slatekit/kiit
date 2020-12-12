@@ -28,11 +28,12 @@ interface Actor<T> {
     /**
      * Sends a payload with target to the actor
      * @param item  : Data / payload for message
-     * @param target: Optional, used as classifier to direct message to specific handler if enabled.
+     * @param reference: Optional value to associate with the item
      */
-    suspend fun send(item:T, target:String)
+    suspend fun send(item:T, reference:String)
 
-    suspend fun send(msg: Content<T>)
-
+    /**
+     * Launches the actor by processing all items in its channel
+     */
     suspend fun work(): Job
 }

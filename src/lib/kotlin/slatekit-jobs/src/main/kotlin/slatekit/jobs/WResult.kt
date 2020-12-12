@@ -1,4 +1,6 @@
-package slatekit.actors
+package slatekit.jobs
+
+import slatekit.actors.Status
 
 /**
  * Future use
@@ -13,11 +15,11 @@ sealed class WResult(val name: String) {
 
     fun toStatus(): Status {
         return when(this) {
-            is Next  -> Status.Running
-            is More  -> Status.Running
-            is Stop  -> Status.Stopped
-            is Done  -> Status.Completed
-            is Fail  -> Status.Failed
+            is Next -> Status.Running
+            is More -> Status.Running
+            is Stop -> Status.Stopped
+            is Done -> Status.Completed
+            is Fail -> Status.Failed
             else                -> Status.Running
         }
     }
@@ -25,7 +27,7 @@ sealed class WResult(val name: String) {
 
     companion object {
         fun next(offset: Long, processed: Long, reference: String): WResult {
-            return WResult.Next(offset, processed, reference)
+            return Next(offset, processed, reference)
         }
     }
 }

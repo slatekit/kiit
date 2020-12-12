@@ -28,26 +28,17 @@ abstract class Basic<T>(override val ctx: Context, protected val channel: Channe
      * @param item  : Data / payload for message
      */
     override suspend fun send(item: T) {
-        send(Content(nextId(), item))
+        channel.send(Content(nextId(), item))
     }
 
 
     /**
      * Sends a payload with target to the actor
      * @param item  : Data / payload for message
-     * @param target: Optional, used as classifier to direct message to specific handler if enabled.
+     * @param reference: Optional, used as classifier to direct message to specific handler if enabled.
      */
-    override suspend fun send(item:T, target:String) {
-        send(Content(nextId(), item, target = target))
-    }
-
-
-    /**
-     * Sends a message
-     * @param msg  : Full message
-     */
-    override suspend fun send(msg: Content<T>) {
-        channel.send(msg)
+    override suspend fun send(item:T, reference:String) {
+        channel.send(Content(nextId(), item, reference = reference))
     }
 
 

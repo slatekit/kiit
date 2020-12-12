@@ -31,71 +31,32 @@ abstract class Managed<T>(override val ctx: Context, val channel: Channel<Messag
      */
     fun status(): Status = _status.get()
 
-
-
+    
     /**
      * Sends a content message using the payload supplied
      * @param item : The payload to process
      */
     override suspend fun send(item: T) {
-        send(item, Message.SELF)
+        channel.send(Control<T>(nextId(), Action.Process, reference = Reference.NONE))
     }
 
 
     /**
      * Sends a content message using the payload and target supplied
      * @param item  : The payload to process
-     * @param target: Target name which can be anything for implementing class
+     * @param reference: Target name which can be anything for implementing class
      *                This is available in the Message class
      */
-    override suspend fun send(item: T, target: String) {
-        send(Control<T>(nextId(), Action.Process, target = Message.SELF))
-    }
-
-
-    /**
-     * Sends a request message
-     * This represents a request to get payload internally ( say from a queue ) and process it
-     * @param msg  : Full message
-     */
-    suspend fun request() {
-        request(Message.SELF)
-    }
-
-
-    /**
-     * Sends a request message associated with the supplied target
-     * This represents a request to get payload internally ( say from a queue ) and process it
-     * @param msg  : Full message
-     */
-    suspend fun request(target: String) {
-        channel.send(Request(nextId(), target = target))
-    }
-
-
-    /**
-     * Sends a content message ( representing a payload to process )
-     * @param msg  : Full message
-     */
-    override suspend fun send(msg: Content<T>) {
-        channel.send(msg)
-    }
-
-
-    /**
-     * Sends a control message ( representing an action to start, stop, pause, resume the actor )
-     * @param msg  : Full message
-     */
-    suspend fun send(msg: Control<T>) {
-        channel.send(msg)
+    override suspend fun send(item: T, reference: String) {
+        channel.send(Control<T>(nextId(), Action.Process, reference = reference))
     }
 
 
     /**
      * Sends a control message to start, pause, resume, stop processing
      */
-    override suspend fun control(action: Action, msg: String?, target: String): Feedback {
-        send(Control<T>(nextId(), action, msg, target = target))
+    override suspend fun control(action: Action, msg: String?, reference: String): Feedback {
+        channel.send(Control<T>(nextId(), action, msg, reference = reference))
         return Feedback(true, "")
     }
 
@@ -125,13 +86,13 @@ abstract class Managed<T>(override val ctx: Context, val channel: Channel<Messag
     open suspend fun work(item: Message<T>) {
         when (item) {
             is Control -> {
-                control(item)
-            }
-            is Request -> {
-                begin(); request(item)
+                handle(item)
             }
             is Content -> {
-                begin(); work(Action.Process, item.target, item.data)
+                begin(); handle(Action.Process, item.reference, item.data)
+            }
+            else -> {
+                // Does not support Request<T>
             }
         }
     }
@@ -140,7 +101,7 @@ abstract class Managed<T>(override val ctx: Context, val channel: Channel<Messag
     /**
      * Handles a @see[Control] message to start, stop, pause, resume this actor.
      */
-    protected open suspend fun control(msg: Control<T>) {
+    protected open suspend fun handle(msg: Control<T>) {
         val action = msg.action
         val oldStatus = _status.get()
         val newStatus = action.toStatus(oldStatus)
@@ -166,17 +127,9 @@ abstract class Managed<T>(override val ctx: Context, val channel: Channel<Messag
 
 
     /**
-     * Handles a @see[Request] message to request load the payload
-     * for example from a Queue and delegating it to the work method
-     */
-    protected open suspend fun request(req: Request<T>) {
-    }
-
-
-    /**
      * This is the only method to implement to handle the actual work.
      */
-    protected abstract suspend fun work(action: Action, target: String, item: T)
+    protected abstract suspend fun handle(action: Action, target: String, item: T)
 
 
     /**
@@ -218,7 +171,10 @@ abstract class Managed<T>(override val ctx: Context, val channel: Channel<Messag
     }
 
 
-    private fun begin() {
+    /**
+     * Sets the status to running if started
+     */
+    protected fun begin() {
         val current = status()
         if (current == Status.Started) {
             move(Status.Running)

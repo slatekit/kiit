@@ -2,7 +2,7 @@ package test.jobs.samples
 
 import slatekit.common.Identity
 import slatekit.actors.Status
-import slatekit.actors.WResult
+import slatekit.jobs.WResult
 import slatekit.jobs.*
 import slatekit.jobs.Worker
 import java.util.concurrent.atomic.AtomicInteger
