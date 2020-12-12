@@ -1,7 +1,5 @@
 package slatekit.actors
 
-import kotlinx.coroutines.Job
-
 /**
  * Simple interface for an Actor
  */
@@ -18,6 +16,7 @@ interface Actor<T> : Workable {
      * Contains relevant info about the actor
      */
     val ctx: Context
+
 
     /**
      * Sends a payload to the actor

@@ -1,7 +1,7 @@
 package slatekit.actors.pause
 
 import slatekit.actors.Action
-import slatekit.actors.Reference
+import slatekit.actors.Message
 
 
 /**
@@ -18,7 +18,7 @@ interface Controls {
     suspend fun stop()    = control(Action.Stop)
     suspend fun kill()    = control(Action.Kill)
 
-    suspend fun control(action: Action) = control(action, null, Reference.NONE)
-    suspend fun control(action: Action, msg:String?) = control(action, msg, Reference.NONE)
+    suspend fun control(action: Action) = control(action, null, Message.NONE)
+    suspend fun control(action: Action, msg:String?) = control(action, msg, Message.NONE)
     suspend fun control(action: Action, msg:String?, reference:String) : Feedback
 }

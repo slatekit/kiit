@@ -202,7 +202,7 @@ class Work(val job: Job) {
      */
     suspend fun schedule(seconds: Long, action: Action, id: Identity? = null) {
         job.ctx.scheduler.schedule(seconds) {
-            job.control(action, "", id?.name ?: Reference.NONE)
+            job.control(action, "", id?.name ?: Message.NONE)
         }
     }
 

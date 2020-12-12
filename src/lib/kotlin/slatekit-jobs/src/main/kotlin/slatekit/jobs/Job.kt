@@ -55,7 +55,7 @@ import slatekit.results.Try
  * 3. Integration with Kotlin Flow ( e.g. a job could feed data into a Flow )
  *
  */
-class Job(val jctx: Context) : Pausable<Task>(jctx.channel), Issuer, Check, Ops {
+class Job(val jctx: Context) : Pausable<Task>(jctx.channel), Producer, Check, Ops {
 
     val workers = Workers(jctx)
     private val events = jctx.notifier.jobEvents
@@ -108,26 +108,6 @@ class Job(val jctx: Context) : Pausable<Task>(jctx.channel), Issuer, Check, Ops 
     suspend fun run(): kotlinx.coroutines.Job  {
         start()
         return work()
-    }
-
-
-    /**
-     * Sends a request message
-     * This represents a request to get payload internally ( say from a queue ) and process it
-     * @param msg  : Full message
-     */
-    override suspend fun request() {
-        request(Reference.NONE)
-    }
-
-
-    /**
-     * Sends a request message associated with the supplied target
-     * This represents a request to get payload internally ( say from a queue ) and process it
-     * @param reference  : Full message
-     */
-    override suspend fun request(reference: String) {
-        channel.send(Request(nextId(), reference = reference))
     }
 
 

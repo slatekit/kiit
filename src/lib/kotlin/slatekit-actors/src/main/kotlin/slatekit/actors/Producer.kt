@@ -5,29 +5,29 @@ import kotlinx.coroutines.channels.Channel
 /**
  * Base class for an Actor that can be started, stopped, paused, and resumed
  */
-abstract class Managed<T>(ctx: Context, channel: Channel<Message<T>>)
+abstract class Producer<T>(ctx: Context, channel: Channel<Message<T>>)
     : Pausable<T>(ctx, channel), Actor<T> {
 
 
     /**
-     * Sends a content message using the payload supplied
-     * @param item : The payload to process
+     * Request to produce a payload internally ( say from a queue ) and process it
+     * @param msg  : Full message
      */
-    override suspend fun send(item: T) {
+    suspend fun request() {
         allow {
-            channel.send(Content<T>(nextId(), data = item, reference = Message.NONE))
+            channel.send(Request(nextId(), reference = Message.NONE))
         }
     }
 
 
     /**
-     * Sends a content message using the payload and target supplied
-     * @param item  : The payload to process
-     * @param reference: Target name which can be anything for implementing class
+     * Sends a request message associated with the supplied target to produce a payload
+     * This represents a request to get payload internally ( say from a queue ) and process it
+     * @param reference  : Full message
      */
-    override suspend fun send(item: T, reference: String) {
+    suspend fun request(reference: String) {
         allow {
-            channel.send(Content<T>(nextId(), data = item, reference = reference))
+            channel.send(Request(nextId(), reference = reference))
         }
     }
 
@@ -44,7 +44,7 @@ abstract class Managed<T>(ctx: Context, channel: Channel<Message<T>>)
             is Control -> {
                 state.handle(item.action)
             }
-            is Content -> {
+            is Request -> {
                 state.begin(); handle(item)
             }
             else -> {
@@ -55,7 +55,7 @@ abstract class Managed<T>(ctx: Context, channel: Channel<Message<T>>)
 
 
     /**
-     * Implementing classes need to handle the work.
+     * Handles a request for to produce a payload and dispatches
      */
-    protected abstract suspend fun handle(item: Content<T>)
+    protected abstract suspend fun handle(req: Request<T>)
 }
