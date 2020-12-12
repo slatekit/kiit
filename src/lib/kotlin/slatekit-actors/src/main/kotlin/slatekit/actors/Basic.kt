@@ -12,7 +12,7 @@ import java.util.concurrent.atomic.AtomicLong
  */
 abstract class Basic<T>(override val ctx: Context, protected val channel: Channel<Content<T>>) : Actor<T> {
 
-    protected val idGen = AtomicLong(0L)
+    private val idGen = AtomicLong(0L)
 
 
     /**

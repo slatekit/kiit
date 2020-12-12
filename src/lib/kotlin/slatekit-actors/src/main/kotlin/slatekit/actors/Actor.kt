@@ -5,7 +5,7 @@ import kotlinx.coroutines.Job
 /**
  * Simple interface for an Actor
  */
-interface Actor<T> {
+interface Actor<T> : Workable {
 
     /**
      * Id of the actor, this can simply be a name like
@@ -31,9 +31,4 @@ interface Actor<T> {
      * @param reference: Optional value to associate with the item
      */
     suspend fun send(item:T, reference:String)
-
-    /**
-     * Launches the actor by processing all items in its channel
-     */
-    suspend fun work(): Job
 }

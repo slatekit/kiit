@@ -55,8 +55,7 @@ import slatekit.results.Try
  * 3. Integration with Kotlin Flow ( e.g. a job could feed data into a Flow )
  *
  */
-class Job(val jctx: Context)
-    : Managed<Task>(slatekit.actors.Context(jctx.id.id, jctx.scope), jctx.channel), Issuer, Check, Ops {
+class Job(val jctx: Context) : Pausable<Task>(jctx.channel), Issuer, Check, Ops {
 
     val workers = Workers(jctx)
     private val events = jctx.notifier.jobEvents
