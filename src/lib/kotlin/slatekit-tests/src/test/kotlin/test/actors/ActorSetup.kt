@@ -7,9 +7,9 @@ import slatekit.actors.*
 import slatekit.actors.Action
 
 interface ActorTestSupport {
-    fun puller(id:String = "test" ):Puller<Int> {
+    fun puller(id:String = "test" ):Issuer<Int> {
         val actor = controller(id)
-        return Puller<Int>(actor.channel, actor)
+        return Issuer<Int>(actor.channel, actor)
     }
 
 
@@ -32,7 +32,7 @@ interface ActorTestSupport {
 
 
 
-class TestActor(context: Context, channel:Channel<Content<Int>>): Basic<Int>(context, channel), Handler<Int> {
+class TestActor(context: Context, channel:Channel<Content<Int>>): Basic<Int>(context, channel), Issuable<Int> {
     var current = 0
     var tracked = 0
 
@@ -55,7 +55,7 @@ class TestActor(context: Context, channel:Channel<Content<Int>>): Basic<Int>(con
 
 
 
-class TestController(context: Context, channel:Channel<Message<Int>>): Managed<Int>(context, channel), Handler<Int> {
+class TestController(context: Context, channel:Channel<Message<Int>>): Managed<Int>(context, channel), Issuable<Int> {
     var current = 0
 
 
@@ -77,7 +77,7 @@ class TestController(context: Context, channel:Channel<Message<Int>>): Managed<I
 
 
 
-class TestAdder(context: Context, channel:Channel<Message<Int>>): Managed<Int>(context, channel), Handler<Int> {
+class TestAdder(context: Context, channel:Channel<Message<Int>>): Managed<Int>(context, channel), Issuable<Int> {
     var current = 0
 
 

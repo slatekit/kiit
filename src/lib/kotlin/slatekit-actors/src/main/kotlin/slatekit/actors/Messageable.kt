@@ -9,7 +9,7 @@ import java.util.concurrent.atomic.AtomicLong
 /**
  * Base class for any @see[Actor]
  */
-abstract class Messageable<T>(val ctx:Context, val channel:Channel<Message<T>>) {
+abstract class Messageable<T>(val ctx:Context, val channel:Channel<Message<T>>) : Workable {
 
     private val idGen = AtomicLong(0L)
 
@@ -25,10 +25,10 @@ abstract class Messageable<T>(val ctx:Context, val channel:Channel<Message<T>>) 
      * Launches this actor to start processing messages.
      * This launches on the scope supplied in the context
      */
-    suspend fun work(): Job {
+    override suspend fun work(): Job {
         return ctx.scope.launch {
             for (msg in channel) {
-                track(Puller.WORK, msg)
+                track(Issuer.WORK, msg)
                 work(msg)
                 yield()
             }

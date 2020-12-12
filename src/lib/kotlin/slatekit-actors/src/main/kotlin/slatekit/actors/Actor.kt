@@ -12,6 +12,7 @@ interface Actor<T> : Workable {
      */
     val id:String
 
+
     /**
      * Contains relevant info about the actor
      */
@@ -23,6 +24,7 @@ interface Actor<T> : Workable {
      * @param item  : Data / payload for message
      */
     suspend fun send(item: T)
+
 
     /**
      * Sends a payload with target to the actor
