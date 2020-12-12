@@ -10,6 +10,7 @@ import slatekit.common.log.LogLevel
 import slatekit.jobs.support.Events
 import slatekit.jobs.support.Rules
 import slatekit.jobs.support.Work
+import slatekit.policy.Policy
 import slatekit.results.Try
 
 /**
@@ -215,6 +216,50 @@ class Job(val jctx: Context)
 
         fun coordinator(): Channel<Message<Task>> {
             return Channel(Channel.UNLIMITED)
+        }
+
+        /**
+         * Initialize with just a function that will handle the work
+         * @sample
+         *  val job1 = Job(Identity.job("signup", "email"), ::sendEmail)
+         *  val job2 = Job(Identity.job("signup", "email"), suspend {
+         *      // do work here
+         *      WResult.Done
+         *  })
+         */
+        operator fun invoke(id: Identity, op: suspend () -> WResult, scope: CoroutineScope = Jobs.scope): Job {
+            return Job(id, worker(op), null, scope, listOf())
+        }
+
+        /**
+         * Initialize with just a function that will handle the work
+         * @sample
+         *  val job1 = Job(Identity.job("signup", "email"), ::sendEmail)
+         *  val job2 = Job(Identity.job("signup", "email"), suspend { task ->
+         *      println("task id=${task.id}")
+         *      // do work here
+         *      WResult.Done
+         *  })
+         */
+        operator fun invoke(id: Identity, op: suspend (Task) -> WResult, queue: Queue? = null, scope: CoroutineScope = Jobs.scope, policies: List<Policy<WorkRequest, WResult>> = listOf()): Job {
+            return Job(id, listOf(op), queue, scope, policies)
+        }
+
+        /**
+         * Initialize with a list of functions to excecute work
+         */
+        operator fun invoke(id: Identity, ops: List<suspend (Task) -> WResult>, queue: Queue? = null, scope: CoroutineScope = Jobs.scope, policies: List<Policy<WorkRequest, WResult>> = listOf()): Job {
+            return Job(Context(id, coordinator(), workers(id, ops), queue = queue, scope = scope, policies = policies))
+        }
+
+        /**
+         * Initialize with just a function that will handle the work
+         *  val id = Identity.job("signup", "email")
+         *  val job1 = Job(id, EmailWorker(id.copy(tags = listOf("worker")))
+         */
+        operator fun invoke(id: Identity, worker: Worker<*>, queue: Queue? = null, scope: CoroutineScope = Jobs.scope,
+                            policies: List<Policy<WorkRequest, WResult>> = listOf()): Job {
+            return Job(Context(id, coordinator(), listOf(worker), queue = queue, scope = scope, policies = policies))
         }
     }
 }
