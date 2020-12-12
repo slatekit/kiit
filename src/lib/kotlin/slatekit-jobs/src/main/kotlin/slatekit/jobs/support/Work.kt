@@ -1,4 +1,4 @@
-package slatekit.jobs.slatekit.jobs.support
+package slatekit.jobs.support
 
 import slatekit.common.Identity
 import slatekit.actors.Status
@@ -6,9 +6,9 @@ import slatekit.actors.Action
 import slatekit.actors.WResult
 import slatekit.jobs.Job
 import slatekit.jobs.Task
-import slatekit.jobs.support.Support
-import slatekit.jobs.support.Utils
-import slatekit.jobs.slatekit.jobs.WorkContext
+import slatekit.jobs.slatekit.jobs.WorkerContext
+import slatekit.results.Failure
+import slatekit.results.Success
 import slatekit.results.Try
 import slatekit.results.builders.Tries
 import slatekit.results.then
@@ -20,13 +20,13 @@ import slatekit.results.then
  * 3. Notifying listeners of status changes
  * 4. Handling the running of a workers work method and checking for completion
  */
-class Work(override val job: Job) : Support {
+class Work(val job: Job) {
 
     /**
      * This is a delayed start of the worker in X seconds.
      * Schedules a command to the channel afterwards to start
      */
-    suspend fun delay(wctx: WorkContext, handle: Boolean = true, notify: Boolean = true, seconds: Long = 30): Try<Status> {
+    suspend fun delay(wctx: WorkerContext, handle: Boolean = true, notify: Boolean = true, seconds: Long = 30): Try<Status> {
         return perform(wctx.id, Status.InActive, notify = notify, msg = "Delayed") {
             if (handle) {
                 schedule(seconds, Action.Start, wctx.id)
@@ -39,7 +39,7 @@ class Work(override val job: Job) : Support {
      * Start worker and moves it to running
      * Only requires init method on worker
      */
-    suspend fun start(wctx: WorkContext, handle: Boolean = true, notify: Boolean = true): Try<Status> {
+    suspend fun start(wctx: WorkerContext, handle: Boolean = true, notify: Boolean = true): Try<Status> {
         return perform(wctx.id, Status.Started, notify = notify) {
             wctx.worker.started()
         }
@@ -53,7 +53,7 @@ class Work(override val job: Job) : Support {
      * Pauses the worker for X seconds.
      * Schedules a command to the channel afterwards to resume
      */
-    suspend fun pause(wctx: WorkContext, handle: Boolean = true, notify: Boolean = true, seconds: Long = 30, reason: String? = null): Try<Status> {
+    suspend fun pause(wctx: WorkerContext, handle: Boolean = true, notify: Boolean = true, seconds: Long = 30, reason: String? = null): Try<Status> {
         return perform(wctx.id, Status.Paused, notify = notify) {
             wctx.worker.paused(reason)
             if (handle) {
@@ -67,7 +67,7 @@ class Work(override val job: Job) : Support {
      * Resumes the worker.
      * Life-cycle hook is called and command is sent to channe to continue processing
      */
-    suspend fun resume(wctx: WorkContext, notify: Boolean = true, reason: String? = null): Try<Status> {
+    suspend fun resume(wctx: WorkerContext, notify: Boolean = true, reason: String? = null): Try<Status> {
         return perform(wctx.id, Status.Running, notify = notify) {
             wctx.worker.resumed(reason)
             send(Action.Process, wctx.id)
@@ -79,7 +79,7 @@ class Work(override val job: Job) : Support {
      * Stops the worker.
      * Only way to start again is to issue the start/resume command
      */
-    suspend fun stop(wctx: WorkContext, notify: Boolean = true, reason: String? = null): Try<Status> {
+    suspend fun stop(wctx: WorkerContext, notify: Boolean = true, reason: String? = null): Try<Status> {
         return perform(wctx.id, Status.Stopped, notify = notify) {
             wctx.worker.stopped(reason)
         }
@@ -90,7 +90,7 @@ class Work(override val job: Job) : Support {
      * Kills the worker.
      * Restart not possible
      */
-    suspend fun kill(wctx: WorkContext, notify: Boolean = true, reason: String? = null): Try<Status> {
+    suspend fun kill(wctx: WorkerContext, notify: Boolean = true, reason: String? = null): Try<Status> {
         return perform(wctx.id, Status.Killed, notify = notify) {
             wctx.worker.killed(reason)
         }
@@ -100,7 +100,7 @@ class Work(override val job: Job) : Support {
     /**
      * Checks the worker
      */
-    suspend fun check(wctx: WorkContext, notify: Boolean = true, reason: String? = null): Try<Status> {
+    suspend fun check(wctx: WorkerContext, notify: Boolean = true, reason: String? = null): Try<Status> {
         return notify(reason, wctx.id)
     }
 
@@ -109,7 +109,7 @@ class Work(override val job: Job) : Support {
      * Works the worker ( with optional task )
      * This is the main method to perform the actual work on the task
      */
-    suspend fun work(wctx: WorkContext, task: Task): Try<Status> {
+    suspend fun work(wctx: WorkerContext, task: Task): Try<Status> {
         val current = wctx.worker.status()
         if(current == Status.Killed) return Tries.errored("Worker is killed, can not start")
 
@@ -148,5 +148,59 @@ class Work(override val job: Job) : Support {
         }
         handle(result, id)
         return result
+    }
+
+
+    fun validate(action:Action, currentStatus:Status): Boolean = when(action) {
+        is Action.Start  -> Rules.canStart(currentStatus)
+        is Action.Pause  -> Rules.canPause(currentStatus)
+        is Action.Resume -> Rules.canResume(currentStatus)
+        is Action.Stop   -> Rules.canStop (currentStatus)
+        is Action.Kill   -> Rules.canKill(currentStatus)
+        else             -> true
+    }
+
+
+    suspend fun handle(result:Try<Status>, id: Identity?): Try<Status> {
+        when(result){
+            is Success -> {
+                if(result.value == Status.Completed){
+                    move(Status.Completed, true, id, null)
+                }
+            }
+            is Failure -> {
+                move(Status.Failed, true, id, result.error.message)
+            }
+        }
+        return result
+    }
+
+    /**
+     * Moves the worker to the new status
+     * @param status : New Status to move the job or worker to
+     * @param notify : Whether or not to send out notifications
+     * @param id     : Identity of Job/Worker, controls if Job or Work command is built
+
+     */
+    suspend fun move(status: Status, notify: Boolean, id:Identity?, msg: String?) {
+        when(id) {
+            null -> job.move(status)
+            else -> job.get(id)?.worker?.move(status, msg)
+        }
+        if (notify) {
+            notify(msg, id)
+        }
+    }
+
+    /**
+     * Schedules a timed command to be run in the supplied seconds.
+     * @param seconds : Number of seconds in the future from now to schedule this at
+     * @param action  : Action for the command such as Start, Pause, Resume, etc
+     * @param id      : Identity of Job/Worker, controls if Job or Work command is used
+     */
+    suspend fun schedule(seconds: Long, action: Action, id: Identity? = null) {
+        job.ctx.scheduler.schedule(DateTime.now().plusSeconds(seconds)) {
+            send(action, id)
+        }
     }
 }

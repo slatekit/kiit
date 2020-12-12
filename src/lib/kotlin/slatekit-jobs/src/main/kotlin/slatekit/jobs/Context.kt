@@ -5,15 +5,12 @@ import kotlinx.coroutines.channels.Channel
 import slatekit.actors.Message
 import slatekit.actors.WResult
 import slatekit.common.Identity
-import slatekit.common.ids.Paired
 import slatekit.common.log.Logger
 import slatekit.common.log.LoggerConsole
 import slatekit.core.common.Backoffs
 import slatekit.core.common.DefaultScheduler
 import slatekit.core.common.Scheduler
 import slatekit.jobs.support.Notifier
-import slatekit.jobs.support.Command
-import slatekit.jobs.support.Commands
 import slatekit.jobs.slatekit.jobs.WorkRequest
 import slatekit.jobs.slatekit.jobs.Worker
 import slatekit.policy.Policy
@@ -27,7 +24,6 @@ import slatekit.policy.Policy
  * @param policies  : Policies that control or respond to work/task execution
  * @param backoffs  : Exponential backoff times during idling or pauses
  * @param notifier  : Notifier to emit job/work events to subscribers
- * @param commands  : Builder for job / worker commands
  * @param scheduler : Scheduler used to continue resuming work
  */
 data class Context(val id: Identity,
@@ -51,8 +47,8 @@ data class Context(val id: Identity,
          *      WResult.Done
          *  })
          */
-        operator fun invoke(id: Identity, op: suspend () -> WResult, scope: CoroutineScope = Jobs.scope): Job {
-            return Job(id, listOf(Job.worker(op)), null, scope, listOf())
+        operator fun invoke(id: Identity, op: suspend () -> WResult, scope: CoroutineScope = Jobs.scope): Context {
+            return Context(id, listOf(Job.worker(op)), null, scope, listOf())
         }
 
         /**
@@ -65,15 +61,15 @@ data class Context(val id: Identity,
          *      WResult.Done
          *  })
          */
-        operator fun invoke(id: Identity, op: suspend (Task) -> WResult, queue: Queue? = null, scope: CoroutineScope = Jobs.scope, policies: List<Policy<WorkRequest, WResult>> = listOf()): Job {
-            return Job(id, listOf(op), queue, scope, policies)
+        operator fun invoke(id: Identity, op: suspend (Task) -> WResult, queue: Queue? = null, scope: CoroutineScope = Jobs.scope, policies: List<Policy<WorkRequest, WResult>> = listOf()): Context {
+            return Context(id, listOf(op), queue, scope, policies)
         }
 
         /**
          * Initialize with a list of functions to excecute work
          */
-        operator fun invoke(id: Identity, ops: List<suspend (Task) -> WResult>, queue: Queue? = null, scope: CoroutineScope = Jobs.scope, policies: List<Policy<WorkRequest, WResult>> = listOf()): Job {
-            return Job(Context(id, Job.coordinator(), Job.workers(id, ops), queue = queue, scope = scope, policies = policies))
+        operator fun invoke(id: Identity, ops: List<suspend (Task) -> WResult>, queue: Queue? = null, scope: CoroutineScope = Jobs.scope, policies: List<Policy<WorkRequest, WResult>> = listOf()): Context {
+            return Context(id, Job.coordinator(), Job.workers(id, ops), queue = queue, scope = scope, policies = policies)
         }
 
         /**
@@ -82,8 +78,8 @@ data class Context(val id: Identity,
          *  val job1 = Job(id, EmailWorker(id.copy(tags = listOf("worker")))
          */
         operator fun invoke(id: Identity, worker: Worker<*>, queue: Queue? = null, scope: CoroutineScope = Jobs.scope,
-                            policies: List<Policy<WorkRequest, WResult>> = listOf()): Job = Job(Context(id, Job.coordinator(), listOf(worker), queue = queue, scope = scope, policies = policies))
-
-
+                            policies: List<Policy<WorkRequest, WResult>> = listOf()): Context {
+            return Context(id, Job.coordinator(), listOf(worker), queue = queue, scope = scope, policies = policies)
+        }
     }
 }

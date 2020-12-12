@@ -6,12 +6,9 @@ import slatekit.actors.*
 import slatekit.common.*
 import slatekit.common.ext.toStringMySql
 import slatekit.common.log.LogLevel
-import slatekit.jobs.slatekit.jobs.WorkRequest
 import slatekit.jobs.slatekit.jobs.Worker
-import slatekit.jobs.slatekit.jobs.WorkContext
+import slatekit.jobs.slatekit.jobs.WorkerContext
 import slatekit.jobs.support.Events
-import slatekit.jobs.support.Coordinator
-import slatekit.policy.Policy
 import slatekit.jobs.support.*
 import slatekit.results.Try
 
@@ -23,7 +20,7 @@ import slatekit.results.Try
  * 3. Task      : A single work item with a payload that a worker can work on. @see[slatekit.jobs.Task]
  * 2. Queue     : Interface for a Queue that workers can optional source tasks from
  * 4. Workers   : 1 or more @see[slatekit.jobs.workers.Worker]s that can work on this job
- * 5. Command   : Commands ( start | stop | pause | resume | delay ) to manage a job or individual worker
+ * 5. Action    : Actions ( start | stop | pause | resume | delay ) to control a job or individual worker
  * 6. Events    : Used to subscribe to events on the job/worker ( only status changes for now )
  * 7. Stats     : Reasonable statistics / diagnostics for workers such as total calls, processed, logging
  * 8. Policies  : @see[slatekit.policy.Policy] associated with a worker such as limits, retries
@@ -58,39 +55,47 @@ import slatekit.results.Try
  * 3. Integration with Kotlin Flow ( e.g. a job could feed data into a Flow )
  *
  */
-class Job(val jctx: Context) : Controlled<Task>(slatekit.actors.Context(jctx.id.id, jctx.scope),jctx.channel), Check, Controls {
+class Job(val jctx: Context) : Managed<Task>(Context(jctx.id.id, jctx.scope), jctx.channel), Check, Controls {
 
     val workers = Workers(jctx)
     private val events = jctx.notifier.jobEvents
-    private val control = Coordinator(this)
-    private val work = control.work
+    private val work = Work(this)
+
 
     /**
-     * Subscribe to @see[slatekit.common.Status] being changed
+     * Subscribe to any @see[slatekit.actors.Status] being changed
      */
     fun on(op: suspend (Event) -> Unit) = events.on(op)
 
+
     /**
-     * Subscribe to @see[slatekit.common.Status] beging changed to the one supplied
+     * Subscribe to @see[slatekit.actors.Status] beging changed to the one supplied
      */
     fun on(status: Status, op: suspend (Event) -> Unit) = events.on(status.name, op)
 
-    /**
-     * Subscribe to @see[slatekit.common.Status] beging changed to the one supplied
-     */
-    fun onError(op: suspend (Event) -> Unit) = events.on(ERROR_KEY, op)
-
 
     /**
-     * Get work context by worker identity
+     * Subscribe to @see[slatekit.actors.Status] beging changed to the one supplied
      */
-    fun get(id: Identity): WorkContext? = workers[id.id]
+    fun onErr(op: suspend (Event) -> Unit) = events.on(ERROR_KEY, op)
 
 
     /**
-     * Get work context by worker name
+     * Get worker context by identity
      */
-    fun get(name: String): WorkContext? = workers[name]
+    fun get(id: Identity): WorkerContext? = workers[id.id]
+
+
+    /**
+     * Get WorkerContext by worker name
+     */
+    fun get(name: String): WorkerContext? = workers[name]
+
+
+    /**
+     * Get WorkerContext by index
+     */
+    fun get(index: Int): WorkerContext? = workers.contexts[index]
 
 
     suspend fun close() {
@@ -100,78 +105,68 @@ class Job(val jctx: Context) : Controlled<Task>(slatekit.actors.Context(jctx.id.
     /**
      * Run the job by starting it first and then managing it by handling commands
      */
-    suspend fun run() {
+    suspend fun run(): kotlinx.coroutines.Job  {
         start()
-        manage()
+        return work()
     }
 
 
+    /**
+     * Request to control ( start, stop, pause, resume ) this job.
+     * This is only a request and is handled later on after other request are processed.
+     */
     override suspend fun control(action: Action, msg: String?, target: String): Feedback {
-        return when (target.isEmpty()) {
-            true -> {
-                jctx.channel.send(Control(action, msg, target = target))
-                Feedback(true, "job")
-            }
-            else -> {
-                val id = jctx.workers.first { it.id.instance == target }.id
-                jctx.channel.send(Control(action, msg, target = target))
-                Feedback(true, "wrk")
-            }
+        control(Control(nextId(), action, msg, target = target))
+        val message = if (target.isEmpty()) Target.Wrk.name else Target.Job.name
+        return Feedback(true, message)
+    }
+
+
+    /**
+     * Handles a request for a @see[Task] and dispatches it to the default or target @see[Worker]
+     */
+    override suspend fun request(req: Request<Task>) {
+        one(req.target, true) {
+            work.work(it, nextTask(it.task))
         }
     }
 
+
     /**
-     * Listens to incoming commands
+     * Handles a processing of a @see[Task] by dispatching it to the default or target @see[Worker]
      */
-    suspend fun manage() {
-        work()
+    override suspend fun work(action: Action, target: String, item: Task) {
+        one(target, true) {
+            work.work(it, item)
+        }
     }
 
 
     /**
      * logs/handle error state/condition
      */
-    suspend fun error(currentStatus: Status, message: String) {
+    private fun error(message: String, ex:Exception? = null) {
         jctx.logger.error("Error with job ${jctx.id.id} - $message")
     }
 
 
-    private suspend fun manageJob(cmd: Control<Task>) {
-        val action = cmd.action
-        if (!validate(action)) {
-            notify("CMD_ERROR")
-            return
-        }
-        when (action) {
-            is Action.Delay -> control.delay(30)
-            is Action.Start -> control.start()
-            is Action.Pause -> control.pause(30)
-            is Action.Stop -> control.stop()
-            is Action.Kill -> control.kill()
-            is Action.Resume -> control.resume()
-            is Action.Check -> control.check()
-            is Action.Process -> {
-                jctx.logger.info("Process action on job does nothing")
-            }
-        }
-    }
-
-    private suspend fun manageWork(cmd: Control<Task>) {
+    private suspend fun manage(cmd: Control<Task>) {
         if (cmd.action == Action.Process && !Rules.canWork(this.status())) {
             notify("CMD_WARN")
             return
         }
         when (cmd.action) {
-            is Action.Delay   -> one(cmd.target, false) { work.delay(it, seconds = 30) }
-            is Action.Start   -> one(cmd.target, false) { work.start(it) }
-            is Action.Pause   -> one(cmd.target, false) { work.pause(it, seconds = 30) }
-            is Action.Resume  -> one(cmd.target, false) { work.resume(it) }
-            is Action.Stop    -> one(cmd.target, false) { work.stop(it) }
+            is Action.Delay -> one(cmd.target, false) { work.delay(it, seconds = 30) }
+            is Action.Start -> one(cmd.target, false) { work.start(it) }
+            is Action.Pause -> one(cmd.target, false) { work.pause(it, seconds = 30) }
+            is Action.Resume -> one(cmd.target, false) { work.resume(it) }
+            is Action.Stop -> one(cmd.target, false) { work.stop(it) }
             is Action.Process -> run(cmd.target, true) { work.work(it, nextTask(it.task)) }
-            is Action.Check   -> one(cmd.target, true) { work.check(it) }
-            is Action.Kill    -> one(cmd.target, true) { work.kill(it) }
+            is Action.Check -> one(cmd.target, true) { work.check(it) }
+            is Action.Kill -> one(cmd.target, true) { work.kill(it) }
         }
     }
+
 
     private suspend fun nextTask(empty: Task): Task {
         return when (jctx.queue) {
@@ -182,10 +177,9 @@ class Job(val jctx: Context) : Controlled<Task>(slatekit.actors.Context(jctx.id.
 
 
     private fun record(name: String, cmd: Message<Task>, desc: String? = null, task: Task? = null) {
-        val event = Events.build(this, cmd)
+        val event = Events.build(this, "message")
         val info = listOf(
             "id" to cmd.id.toString(),
-            "uuid" to cmd.identity.id,
             "source" to event.source,
             "name" to event.name,
             "target" to event.target,
@@ -199,33 +193,7 @@ class Job(val jctx: Context) : Controlled<Task>(slatekit.actors.Context(jctx.id.
     /**
      * Transitions all workers to the new status supplied
      */
-    private suspend fun all(action: Action, newStatus: Status, op: suspend (WorkContext) -> Try<Status>) {
-        val job = this
-        this.move(newStatus)
-        ctx.scope.launch {
-            jctx.notifier.notify(job)
-        }
-        each(op)
-    }
-
-
-    /**
-     * Transitions all workers to the new status supplied
-     */
-    private suspend fun each(op: suspend (WorkContext) -> Try<Status>) {
-        jctx.workers.forEach { worker ->
-            val wctx = workers[worker.id]
-            wctx?.let {
-                op(it)
-            }
-        }
-    }
-
-
-    /**
-     * Transitions all workers to the new status supplied
-     */
-    private suspend fun one(id: String, launch: Boolean, op: suspend (WorkContext) -> Try<Status>) {
+    private suspend fun one(id: String, launch: Boolean, op: suspend (WorkerContext) -> Try<Status>) {
         val wctx = workers[id]
         wctx?.let {
             op(it)
@@ -236,18 +204,10 @@ class Job(val jctx: Context) : Controlled<Task>(slatekit.actors.Context(jctx.id.
     /**
      * Transitions all workers to the new status supplied
      */
-    private suspend fun run(id: String, launch: Boolean, op: suspend (WorkContext) -> Unit) {
+    private suspend fun run(id: String, launch: Boolean, op: suspend (WorkerContext) -> Unit) {
         val wctx = workers[id]
         wctx?.let {
             op(it)
-        }
-    }
-
-
-    private fun validate(action: Action): Boolean {
-        return when (this.status()) {
-            Status.Killed -> action == Action.Check
-            else -> true
         }
     }
 

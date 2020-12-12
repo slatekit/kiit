@@ -10,7 +10,7 @@ import java.util.concurrent.atomic.AtomicReference
 /**
  * Base class for an Actor that can be started, stopped, paused, and resumed
  */
-abstract class Controlled<T>(override val ctx: Context, val channel: Channel<Message<T>>) : Actor<T>, Controls {
+abstract class Managed<T>(override val ctx: Context, val channel: Channel<Message<T>>) : Actor<T>, Controls {
 
     protected val _status = AtomicReference<Status>(Status.InActive)
     protected val idGen = AtomicLong(0L)
@@ -30,6 +30,27 @@ abstract class Controlled<T>(override val ctx: Context, val channel: Channel<Mes
      * Get running status of this Actor
      */
     fun status(): Status = _status.get()
+
+
+
+    /**
+     * Sends a content message using the payload supplied
+     * @param item : The payload to process
+     */
+    override suspend fun send(item: T) {
+        send(item, Message.SELF)
+    }
+
+
+    /**
+     * Sends a content message using the payload and target supplied
+     * @param item  : The payload to process
+     * @param target: Target name which can be anything for implementing class
+     *                This is available in the Message class
+     */
+    override suspend fun send(item: T, target: String) {
+        send(Control<T>(nextId(), Action.Process, target = Message.SELF))
+    }
 
 
     /**
@@ -173,6 +194,17 @@ abstract class Controlled<T>(override val ctx: Context, val channel: Channel<Mes
      */
     protected fun move(newStatus: Status) {
         _status.set(newStatus)
+    }
+
+
+    /**
+     * Validate the action based on the current status
+     */
+    protected fun validate(action: Action): Boolean {
+        return when (this.status()) {
+            Status.Killed -> action == Action.Check
+            else -> true
+        }
     }
 
 

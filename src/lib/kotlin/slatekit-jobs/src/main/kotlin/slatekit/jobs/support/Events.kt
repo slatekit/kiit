@@ -1,5 +1,6 @@
 package slatekit.jobs.support
 
+import slatekit.actors.Action
 import slatekit.common.DateTime
 import slatekit.common.Event
 import slatekit.common.Identity
@@ -7,7 +8,7 @@ import slatekit.actors.Status
 import slatekit.common.ids.ULIDs
 import slatekit.jobs.Job
 import slatekit.jobs.Context
-import slatekit.jobs.slatekit.jobs.WorkContext
+import slatekit.jobs.slatekit.jobs.WorkerContext
 
 /**
  * Builds events using the @see[slatekit.common.Event] model
@@ -50,7 +51,7 @@ object Events {
     /**
      * Builds an event for the worker
      */
-    fun build(jctx: Context, wctx: WorkContext, name:String): Event {
+    fun build(jctx: Context, wctx: WorkerContext, name:String): Event {
         val queue = jctx.queue?.name ?: "no-queue"
         val worker = wctx.worker
         val id = worker.id
@@ -62,18 +63,16 @@ object Events {
     /**
      * Builds an event for the worker
      */
-    fun build(job: Job, cmd: Command): Event {
-        val id = job.jctx.id
+    fun worker(job: Job, action:Action, id:Identity): Event {
         val status = job.status()
-        val target = if(cmd is Command.JobCommand) "Job" else "Wrk"
-        val action = cmd.action.name
-        val name = "${target.toUpperCase()}_${action.toUpperCase()}"
+        val operator = "WRK"
+        val name = "${operator}_${action.name.toUpperCase()}"
         val finalName = when {
             name.length < 20 -> name.padEnd(20 - name.length)
             name.length > 20 -> name.substring(0, 20)
             else -> name
         }
-        return build(id, status, finalName, "$target command - $action", "cmd", target.toLowerCase())
+        return build(id, status, finalName, "$operator command - $action", "cmd" , operator.toLowerCase())
     }
 
 

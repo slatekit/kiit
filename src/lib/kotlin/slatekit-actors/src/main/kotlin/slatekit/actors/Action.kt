@@ -1,7 +1,7 @@
 package slatekit.actors
 
 /**
- * Represents the actions that control the state @see[Status] of a @see[Controlled] actor
+ * Represents the actions that control the state @see[Status] of a @see[Managed] actor
  * 1. started
  * 2. stopped
  * 3. paused

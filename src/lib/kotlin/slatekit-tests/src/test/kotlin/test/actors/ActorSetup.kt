@@ -54,7 +54,7 @@ class TestActor(context: Context, channel:Channel<Content<Int>>): Basic<Int>(con
 
 
 
-class TestController(context: Context, channel:Channel<Message<Int>>): Controlled<Int>(context, channel), Handler<Int> {
+class TestController(context: Context, channel:Channel<Message<Int>>): Managed<Int>(context, channel), Handler<Int> {
     var current = 0
 
 
@@ -76,7 +76,7 @@ class TestController(context: Context, channel:Channel<Message<Int>>): Controlle
 
 
 
-class TestAdder(context: Context, channel:Channel<Message<Int>>): Controlled<Int>(context, channel), Handler<Int> {
+class TestAdder(context: Context, channel:Channel<Message<Int>>): Managed<Int>(context, channel), Handler<Int> {
     var current = 0
 
 

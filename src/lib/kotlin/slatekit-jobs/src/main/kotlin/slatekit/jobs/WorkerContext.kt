@@ -13,7 +13,7 @@ import slatekit.results.Err
  * @param context: The current context of the worker including its job, worker, stats, etc
  * @param task : The current task for the worker to work on.
  */
-data class WorkRequest(val context: WorkContext, val task: Task)
+data class WorkRequest(val context: WorkerContext, val task: Task)
 
 
 /**
@@ -26,7 +26,7 @@ data class WorkRequest(val context: WorkContext, val task: Task)
  *                   This allows passing in a Task which has the job name properly set.
  *                   e.g. signup.alerts.job.qat.4a3b300b-d0ac-4776-8a9c-31aa75e412b3
  */
-data class WorkContext(
+data class WorkerContext(
     val id: Identity,
     val worker: Worker<*>,
     val stats: Recorder<Task, WResult, Err>,

@@ -3,7 +3,7 @@ package slatekit.jobs
 import slatekit.common.Identity
 import slatekit.actors.Status
 import slatekit.tracking.Recorder
-import slatekit.jobs.slatekit.jobs.WorkContext
+import slatekit.jobs.slatekit.jobs.WorkerContext
 
 /**
  * Represents a cluster of Workers that are affiliated with 1 job.
@@ -18,8 +18,8 @@ import slatekit.jobs.slatekit.jobs.WorkContext
  */
 class Workers(val ctx: Context) {
     val events = ctx.notifier.wrkEvents
-    val contexts = ctx.workers.map { WorkContext(it.id, it, Recorder.of(it.id), ctx.policies) }
-    private val lookup: Map<String, WorkContext> = contexts.map { it.id.id to it }.toMap()
+    val contexts = ctx.workers.map { WorkerContext(it.id, it, Recorder.of(it.id), ctx.policies) }
+    private val lookup: Map<String, WorkerContext> = contexts.map { it.id.id to it }.toMap()
 
     /**
      * Subscribe to status being changed for any worker
@@ -39,7 +39,7 @@ class Workers(val ctx: Context) {
      * Gets the WorkContext for the worker with the supplied identity.
      * This is to allow for looking up the job/stats metadata for a worker.
      */
-    operator fun get(id: Identity): WorkContext? = when (lookup.containsKey(id.id)) {
+    operator fun get(id: Identity): WorkerContext? = when (lookup.containsKey(id.id)) {
         true -> lookup[id.id]
         false -> null
     }
@@ -48,7 +48,7 @@ class Workers(val ctx: Context) {
      * Gets the WorkContext for the worker with the supplied identity.
      * This is to allow for looking up the job/stats metadata for a worker.
      */
-    operator fun get(id: String): WorkContext? = when (lookup.containsKey(id)) {
+    operator fun get(id: String): WorkerContext? = when (lookup.containsKey(id)) {
         true -> lookup[id]
         false -> null
     }
@@ -57,7 +57,7 @@ class Workers(val ctx: Context) {
      * Gets the WorkContext for the worker with the supplied identity.
      * This is to allow for looking up the job/stats metadata for a worker.
      */
-    operator fun get(index:Int): WorkContext? = contexts[index]
+    operator fun get(index:Int): WorkerContext? = contexts[index]
 
     /**
      * Gets all the worker ids
