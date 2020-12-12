@@ -2,8 +2,8 @@ package slatekit.jobs
 
 import kotlinx.coroutines.*
 import slatekit.actors.Action
-import slatekit.actors.Controls
-import slatekit.actors.Feedback
+import slatekit.actors.pause.Controls
+import slatekit.actors.pause.Feedback
 
 /**
  * Registry of all the jobs and queues. This registry is used to:

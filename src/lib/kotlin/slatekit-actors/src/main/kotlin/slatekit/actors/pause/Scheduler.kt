@@ -1,4 +1,4 @@
-package slatekit.actors
+package slatekit.actors.pause
 
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.runBlocking

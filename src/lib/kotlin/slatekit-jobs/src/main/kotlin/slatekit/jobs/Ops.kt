@@ -1,8 +1,8 @@
 package slatekit.jobs
 
 import slatekit.actors.Action
-import slatekit.actors.Controls
-import slatekit.actors.Feedback
+import slatekit.actors.pause.Controls
+import slatekit.actors.pause.Feedback
 
 interface Ops : Controls {
     suspend fun delay(name: String): Feedback = control(Action.Delay  , "", name)

@@ -28,7 +28,7 @@ interface JobTestSupport {
     }
 
 
-    fun ensure(job:Job, workers:Int, calls:Int, status:Status, isResumed:Boolean = false) {
+    fun ensure(job:Job, workers:Int, calls:Int, status: Status, isResumed:Boolean = false) {
         Assert.assertEquals(workers, job.ctx.workers.size)
         job.workers.getIds().forEach { workerId ->
             val wrkCtx = job.workers[workerId]!!

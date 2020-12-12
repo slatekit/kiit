@@ -1,4 +1,4 @@
-package slatekit.actors
+package slatekit.actors.pause
 
 import slatekit.actors.Status
 

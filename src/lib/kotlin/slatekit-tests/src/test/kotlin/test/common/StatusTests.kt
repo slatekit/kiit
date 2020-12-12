@@ -36,7 +36,7 @@ class StatusTests {
     }
 
 
-    fun assertCheck(status:Status, check:(MyWorker) -> Boolean ) {
+    fun assertCheck(status: Status, check:(MyWorker) -> Boolean ) {
         // Test
         val worker = MyWorker()
         runBlocking {  worker.move(status) }

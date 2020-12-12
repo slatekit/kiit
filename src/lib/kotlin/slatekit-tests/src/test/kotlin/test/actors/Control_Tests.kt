@@ -4,6 +4,8 @@ import kotlinx.coroutines.channels.Channel
 import org.junit.Assert
 import org.junit.Test
 import slatekit.actors.*
+import slatekit.actors.Action
+import slatekit.actors.Status
 
 class Control_Tests : ActorTestSupport {
 

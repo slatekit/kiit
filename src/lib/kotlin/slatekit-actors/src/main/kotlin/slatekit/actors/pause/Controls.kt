@@ -1,4 +1,7 @@
-package slatekit.actors
+package slatekit.actors.pause
+
+import slatekit.actors.Action
+import slatekit.actors.Reference
 
 
 /**

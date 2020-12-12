@@ -4,6 +4,7 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.channels.Channel
 import slatekit.actors.*
+import slatekit.actors.Action
 
 interface ActorTestSupport {
     fun puller(id:String = "test" ):Puller<Int> {

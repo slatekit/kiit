@@ -63,7 +63,7 @@ object Events {
     /**
      * Builds an event for the worker
      */
-    fun worker(job: Job, action:Action, id:Identity): Event {
+    fun worker(job: Job, action: Action, id:Identity): Event {
         val status = job.status()
         val operator = "WRK"
         val name = "${operator}_${action.name.toUpperCase()}"

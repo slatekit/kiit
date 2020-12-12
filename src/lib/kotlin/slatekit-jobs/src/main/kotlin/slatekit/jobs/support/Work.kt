@@ -1,6 +1,8 @@
 package slatekit.jobs.support
 
 import slatekit.actors.*
+import slatekit.actors.Action
+import slatekit.actors.Status
 import slatekit.common.Identity
 import slatekit.jobs.Job
 import slatekit.jobs.Task
@@ -153,7 +155,7 @@ class Work(val job: Job) {
     }
 
 
-    fun validate(action:Action, currentStatus:Status): Boolean = when(action) {
+    fun validate(action: Action, currentStatus: Status): Boolean = when(action) {
         is Action.Start  -> Rules.canStart(currentStatus)
         is Action.Pause  -> Rules.canPause(currentStatus)
         is Action.Resume -> Rules.canResume(currentStatus)

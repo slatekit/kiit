@@ -1,5 +1,7 @@
-package slatekit.actors
+package slatekit.actors.pause
 
+import slatekit.actors.Action
+import slatekit.actors.Status
 import java.util.concurrent.atomic.AtomicReference
 
 /**

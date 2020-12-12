@@ -4,6 +4,7 @@ import kotlinx.coroutines.Job
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.yield
+import slatekit.actors.pause.*
 import java.util.concurrent.atomic.AtomicLong
 
 /**
@@ -11,7 +12,7 @@ import java.util.concurrent.atomic.AtomicLong
  */
 abstract class Pausable<T>(val ctx:Context, val channel: Channel<Message<T>>) : Workable, Controls {
 
-    protected val _state:State = State { action, oldState, newState -> this.changed(action, oldState, newState) }
+    protected val _state: State = State { action, oldState, newState -> this.changed(action, oldState, newState) }
     private val idGen = AtomicLong(0L)
 
 

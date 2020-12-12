@@ -18,14 +18,14 @@ sealed class Status(val name:String, val value:Int) {
 
     fun toCode(): slatekit.results.Status {
         return when (this) {
-            is InActive  -> Codes.INACTIVE
-            is Started   -> Codes.STARTING
-            is Waiting   -> Codes.WAITING
-            is Running   -> Codes.RUNNING
-            is Paused    -> Codes.PAUSED
-            is Stopped   -> Codes.STOPPED
+            is InActive -> Codes.INACTIVE
+            is Started -> Codes.STARTING
+            is Waiting -> Codes.WAITING
+            is Running -> Codes.RUNNING
+            is Paused -> Codes.PAUSED
+            is Stopped -> Codes.STOPPED
             is Completed -> Codes.COMPLETE
-            is Failed    -> Codes.ERRORED
+            is Failed -> Codes.ERRORED
             else         -> Codes.SUCCESS
         }
     }

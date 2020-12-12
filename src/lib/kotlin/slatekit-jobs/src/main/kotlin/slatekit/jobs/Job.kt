@@ -1,9 +1,9 @@
 package slatekit.jobs
 
 import kotlinx.coroutines.*
-import kotlinx.coroutines.Job
 import kotlinx.coroutines.channels.Channel
 import slatekit.actors.*
+import slatekit.actors.pause.Check
 import slatekit.common.*
 import slatekit.common.ext.toStringMySql
 import slatekit.common.log.LogLevel
