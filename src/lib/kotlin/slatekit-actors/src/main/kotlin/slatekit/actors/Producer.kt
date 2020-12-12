@@ -5,8 +5,7 @@ import kotlinx.coroutines.channels.Channel
 /**
  * Base class for an Actor that can be started, stopped, paused, and resumed
  */
-abstract class Producer<T>(ctx: Context, channel: Channel<Message<T>>)
-    : Pausable<T>(ctx, channel), Actor<T> {
+abstract class Producer<T>(ctx: Context, channel: Channel<Message<T>>) : Pausable<T>(ctx, channel) {
 
 
     /**

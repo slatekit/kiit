@@ -55,7 +55,8 @@ import slatekit.results.Try
  * 3. Integration with Kotlin Flow ( e.g. a job could feed data into a Flow )
  *
  */
-class Job(val jctx: Context) : Pausable<Task>(jctx.channel), Producer, Check, Ops {
+class Job(val jctx: Context)
+    : Producer<Task>(slatekit.actors.Context(jctx.id.name, jctx.scope), jctx.channel), Check, Ops {
 
     val workers = Workers(jctx)
     private val events = jctx.notifier.jobEvents
@@ -102,54 +103,19 @@ class Job(val jctx: Context) : Pausable<Task>(jctx.channel), Producer, Check, Op
         jctx.channel.close()
     }
 
-    /**
-     * Run the job by starting it first and then managing it by handling commands
-     */
-    suspend fun run(): kotlinx.coroutines.Job  {
-        start()
-        return work()
-    }
-
-
-    /**
-     *  Handles each message based on its type @see[Content], @see[Control],
-     *  This handles following message types and moves this actor to a running state correctly
-     *  1. @see[Control] messages to start, stop, pause, resume the actor
-     *  2. @see[Request] messages to load payloads from a source ( e.g. queue )
-     *  3. @see[Content] messages are simply delegated to the work method
-     */
-    override suspend fun work(item: Message<Task>) {
-        when (item) {
-            is Request -> {
-                begin(); handle(item)
-            }
-            is Control -> {
-                handle(item)
-            }
-            is Content -> {
-                begin(); handle(Action.Process, item.reference, item.data)
-            }
-        }
-    }
-
 
     /**
      * Handles a request for a @see[Task] and dispatches it to the default or target @see[Worker]
      */
-    private suspend fun handle(req: Request<Task>) {
+    override suspend fun handle(req: Request<Task>) {
         one(req.reference, true) {
             work.work(it, nextTask(it.task))
         }
     }
 
 
-    /**
-     * Handles a processing of a @see[Task] by dispatching it to the default or target @see[Worker]
-     */
-    override suspend fun handle(action: Action, target: String, item: Task) {
-        one(target, true) {
-            work.work(it, item)
-        }
+    override suspend fun changed(msg: Action, oldStatus: Status, newStatus: Status) {
+        // Handle workers here.
     }
 
 
