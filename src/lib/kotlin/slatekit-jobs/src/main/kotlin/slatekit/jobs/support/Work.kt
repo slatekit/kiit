@@ -13,7 +13,7 @@ import slatekit.results.then
 
 /**
  * Controls a Worker by :
- * 1. Moving its @see[slatekit.common.Status] ( Running to Paused )
+ * 1. Moving its @see[slatekit.actors.Status] ( Running to Paused )
  * 2. Scheduling resuming via a scheduled Resume command
  * 3. Notifying listeners of status changes
  * 4. Handling the running of a workers work method and checking for completion
@@ -99,7 +99,10 @@ class Work(val job: Job) {
      * Checks the worker
      */
     suspend fun check(wctx: WorkerContext, notify: Boolean = true, reason: String? = null): Try<Status> {
-        return notify(reason, wctx.id)
+        return Tries.of {
+            notify(reason, wctx.id)
+            job.status()
+        }
     }
 
 
@@ -125,7 +128,7 @@ class Work(val job: Job) {
                 is WResult.Done -> {
                     move(Status.Completed, true, wctx.id, null)
                     wctx.worker.completed(null)
-                    job.send(Action.Check)
+                    job.check()
                 }
                 else -> {
                 }
@@ -159,7 +162,7 @@ class Work(val job: Job) {
     }
 
 
-    suspend fun handle(result:Try<Status>, id: Identity?): Try<Status> {
+    suspend fun handle(result:Try<Status>, id: Identity): Try<Status> {
         when(result){
             is Success -> {
                 if(result.value == Status.Completed){
@@ -180,7 +183,8 @@ class Work(val job: Job) {
      * @param id     : Identity of Job/Worker, controls if Job or Work command is built
 
      */
-    suspend fun move(status: Status, notify: Boolean, id:Identity?, msg: String?) {
+    suspend fun move(status: Status, notify: Boolean, id:Identity, msg: String?) {
+
         job.get(id)?.worker?.move(status, msg)
         if (notify) {
             notify(msg, id)
@@ -202,5 +206,10 @@ class Work(val job: Job) {
 
     private suspend fun request(id:Identity) {
         job.request(id.instance)
+    }
+
+
+    private suspend fun notify(reason:String?, id:Identity) {
+
     }
 }

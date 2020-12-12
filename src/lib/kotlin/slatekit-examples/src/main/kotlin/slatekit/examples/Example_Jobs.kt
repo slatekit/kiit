@@ -216,7 +216,7 @@ class Example_Jobs : Command("utils"), CoroutineScope by MainScope() {
 //                job.resume()
 //                job.process()
 //
-//                // Status: slatekit.common.Status
+//                // Status: slatekit.actors.Status
 //                val status = job.status()
 //                println(status.name)
 //
@@ -228,7 +228,7 @@ class Example_Jobs : Command("utils"), CoroutineScope by MainScope() {
 //                job.isComplete()
 //                job.isFailed()
 //                job.isStoppedOrPaused()
-//                job.isState(slatekit.common.Status.Starting)
+//                job.isState(slatekit.actors.Status.Starting)
 //
 //                // Subscribe to changes in status
 //                job.subscribe { println("Job: ${it.id} status changed to ${it.status().name}") }
