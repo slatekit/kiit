@@ -6,7 +6,6 @@ import slatekit.actors.*
 import slatekit.common.*
 import slatekit.common.ext.toStringMySql
 import slatekit.common.log.LogLevel
-import slatekit.jobs.*
 import slatekit.jobs.support.Events
 import slatekit.jobs.support.Rules
 import slatekit.jobs.support.Work
@@ -108,17 +107,6 @@ class Job(val jctx: Context) : Managed<Task>(slatekit.actors.Context(jctx.id.id,
     suspend fun run(): kotlinx.coroutines.Job  {
         start()
         return work()
-    }
-
-
-    /**
-     * Request to control ( start, stop, pause, resume ) this job.
-     * This is only a request and is handled later on after other request are processed.
-     */
-    override suspend fun control(action: Action, msg: String?, target: String): Feedback {
-        control(Control(nextId(), action, msg, target = target))
-        val message = if (target.isEmpty()) Target.Wrk.name else Target.Job.name
-        return Feedback(true, message)
     }
 
 
