@@ -1,12 +1,10 @@
 package slatekit.jobs.support
 
+import slatekit.actors.*
 import slatekit.common.Identity
-import slatekit.actors.Status
-import slatekit.actors.Action
-import slatekit.actors.WResult
 import slatekit.jobs.Job
 import slatekit.jobs.Task
-import slatekit.jobs.slatekit.jobs.WorkerContext
+import slatekit.jobs.WorkerContext
 import slatekit.results.Failure
 import slatekit.results.Success
 import slatekit.results.Try
@@ -44,7 +42,7 @@ class Work(val job: Job) {
             wctx.worker.started()
         }
         .then { perform(wctx.id, Status.Running, notify = notify ) {
-            send(Action.Process, wctx.id)
+            request(wctx.id)
         }}
     }
 
@@ -70,7 +68,7 @@ class Work(val job: Job) {
     suspend fun resume(wctx: WorkerContext, notify: Boolean = true, reason: String? = null): Try<Status> {
         return perform(wctx.id, Status.Running, notify = notify) {
             wctx.worker.resumed(reason)
-            send(Action.Process, wctx.id)
+            request(wctx.id)
         }
     }
 
@@ -122,12 +120,12 @@ class Work(val job: Job) {
 
             // Handle result
             when (result) {
-                is WResult.More -> send(Action.Process, wctx.id)
-                is WResult.Next -> send(Action.Process, wctx.id)
+                is WResult.More -> request(wctx.id)
+                is WResult.Next -> request(wctx.id)
                 is WResult.Done -> {
                     move(Status.Completed, true, wctx.id, null)
                     wctx.worker.completed(null)
-                    send(Action.Check)
+                    job.send(Action.Check)
                 }
                 else -> {
                 }
@@ -183,10 +181,7 @@ class Work(val job: Job) {
 
      */
     suspend fun move(status: Status, notify: Boolean, id:Identity?, msg: String?) {
-        when(id) {
-            null -> job.move(status)
-            else -> job.get(id)?.worker?.move(status, msg)
-        }
+        job.get(id)?.worker?.move(status, msg)
         if (notify) {
             notify(msg, id)
         }
@@ -199,8 +194,13 @@ class Work(val job: Job) {
      * @param id      : Identity of Job/Worker, controls if Job or Work command is used
      */
     suspend fun schedule(seconds: Long, action: Action, id: Identity? = null) {
-        job.ctx.scheduler.schedule(DateTime.now().plusSeconds(seconds)) {
-            send(action, id)
+        job.ctx.scheduler.schedule(seconds) {
+            job.control(action, "", id?.name ?: Message.SELF)
         }
+    }
+
+
+    private suspend fun request(id:Identity) {
+        job.request(id.instance)
     }
 }

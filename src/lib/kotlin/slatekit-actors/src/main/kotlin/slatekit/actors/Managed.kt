@@ -58,8 +58,18 @@ abstract class Managed<T>(override val ctx: Context, val channel: Channel<Messag
      * This represents a request to get payload internally ( say from a queue ) and process it
      * @param msg  : Full message
      */
-    suspend fun send(msg: Request<T>) {
-        channel.send(msg)
+    suspend fun request() {
+        request(Message.SELF)
+    }
+
+
+    /**
+     * Sends a request message associated with the supplied target
+     * This represents a request to get payload internally ( say from a queue ) and process it
+     * @param msg  : Full message
+     */
+    suspend fun request(target: String) {
+        channel.send(Request(nextId(), target = target))
     }
 
 

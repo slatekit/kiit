@@ -6,10 +6,10 @@ import slatekit.actors.*
 import slatekit.common.*
 import slatekit.common.ext.toStringMySql
 import slatekit.common.log.LogLevel
-import slatekit.jobs.slatekit.jobs.Worker
-import slatekit.jobs.slatekit.jobs.WorkerContext
+import slatekit.jobs.*
 import slatekit.jobs.support.Events
-import slatekit.jobs.support.*
+import slatekit.jobs.support.Rules
+import slatekit.jobs.support.Work
 import slatekit.results.Try
 
 /**

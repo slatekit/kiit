@@ -4,7 +4,7 @@ import slatekit.common.Identity
 import slatekit.actors.Status
 import slatekit.actors.WResult
 import slatekit.jobs.*
-import slatekit.jobs.slatekit.jobs.Worker
+import slatekit.jobs.Worker
 import java.util.concurrent.atomic.AtomicInteger
 
 class OneTimeWorker(val start:Int, val end:Int, id: Identity) : Worker<Int>(id) {

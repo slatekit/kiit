@@ -9,7 +9,7 @@ import slatekit.actors.WResult
 import test.jobs.support.JobTestSupport
 import slatekit.jobs.Job
 import slatekit.jobs.Task
-import slatekit.jobs.slatekit.jobs.Worker
+import slatekit.jobs.Worker
 
 class Job_Create_Tests : JobTestSupport {
 

@@ -30,7 +30,7 @@ import slatekit.policy.policies.Every
 import slatekit.policy.policies.Limit
 import slatekit.policy.policies.Ratio
 import slatekit.jobs.*
-import slatekit.jobs.slatekit.jobs.Worker
+import slatekit.jobs.Worker
 import slatekit.results.Codes
 import slatekit.results.Try
 import slatekit.results.Success

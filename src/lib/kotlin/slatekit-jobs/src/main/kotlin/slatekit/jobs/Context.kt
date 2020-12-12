@@ -11,8 +11,8 @@ import slatekit.core.common.Backoffs
 import slatekit.core.common.DefaultScheduler
 import slatekit.core.common.Scheduler
 import slatekit.jobs.support.Notifier
-import slatekit.jobs.slatekit.jobs.WorkRequest
-import slatekit.jobs.slatekit.jobs.Worker
+import slatekit.jobs.WorkRequest
+import slatekit.jobs.Worker
 import slatekit.policy.Policy
 
 /**

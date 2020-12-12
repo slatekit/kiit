@@ -3,7 +3,7 @@ package slatekit.jobs.support
 import slatekit.core.common.Emitter
 import slatekit.jobs.Event
 import slatekit.jobs.Job
-import slatekit.jobs.slatekit.jobs.Worker
+import slatekit.jobs.Worker
 
 /**
  * Notification emitter for job and state changes.

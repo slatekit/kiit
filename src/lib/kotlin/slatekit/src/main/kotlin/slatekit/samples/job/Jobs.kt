@@ -5,7 +5,7 @@ import slatekit.common.Identity
 import slatekit.actors.Status
 import slatekit.actors.WResult
 import slatekit.jobs.Task
-import slatekit.jobs.slatekit.jobs.Worker
+import slatekit.jobs.Worker
 import java.util.concurrent.atomic.AtomicInteger
 
 // Sample User model

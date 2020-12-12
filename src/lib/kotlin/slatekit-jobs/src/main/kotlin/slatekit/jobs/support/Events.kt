@@ -8,7 +8,7 @@ import slatekit.actors.Status
 import slatekit.common.ids.ULIDs
 import slatekit.jobs.Job
 import slatekit.jobs.Context
-import slatekit.jobs.slatekit.jobs.WorkerContext
+import slatekit.jobs.WorkerContext
 
 /**
  * Builds events using the @see[slatekit.common.Event] model
@@ -72,7 +72,7 @@ object Events {
             name.length > 20 -> name.substring(0, 20)
             else -> name
         }
-        return build(id, status, finalName, "$operator command - $action", "cmd" , operator.toLowerCase())
+        return build(id, status, finalName, "$operator command - $action", "cmd", operator.toLowerCase())
     }
 
 

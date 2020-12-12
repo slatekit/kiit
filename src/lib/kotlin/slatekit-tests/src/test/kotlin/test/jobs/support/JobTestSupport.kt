@@ -8,7 +8,7 @@ import slatekit.common.Identity
 import slatekit.jobs.*
 import slatekit.jobs.support.Command
 import slatekit.jobs.Context
-import slatekit.jobs.slatekit.jobs.Worker
+import slatekit.jobs.Worker
 import test.jobs.samples.TestWorker
 
 interface JobTestSupport {
