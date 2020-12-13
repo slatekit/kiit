@@ -4,11 +4,12 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.channels.Channel
 import slatekit.actors.*
+import slatekit.actors.Action
 
 interface ActorTestSupport {
-    fun puller(id:String = "test" ):Puller<Int> {
+    fun puller(id:String = "test" ):Issuer<Int> {
         val actor = controller(id)
-        return Puller<Int>(actor.channel, actor)
+        return Issuer<Int>(actor.channel, actor)
     }
 
 
@@ -31,62 +32,57 @@ interface ActorTestSupport {
 
 
 
-class TestActor(context: Context, channel:Channel<Content<Int>>): Basic<Int>(context, channel), Handler<Int> {
+class TestActor(context: Context, channel:Channel<Message<Int>>): Basic<Int>(context, channel), Issuable<Int> {
     var current = 0
     var tracked = 0
 
-    override suspend fun work(item: Content<Int>) {
+    override suspend fun handle(item: Content<Int>) {
         current = item.data
     }
 
 
-    override suspend fun handle(item:Message<Int>) {
+    override suspend fun issue(item:Message<Int>) {
         if(item is Content<Int>) { work(item) }
     }
 
 
-
-
-    override suspend fun track(source: String, data: Content<Int>) {
-        tracked = data.data
+    override suspend fun track(source: String, data: Message<Int>) {
+        if(data is Content) {
+            tracked = data.data
+        }
     }
 }
 
 
 
-class TestController(context: Context, channel:Channel<Message<Int>>): Controlled<Int>(context, channel), Handler<Int> {
+class TestController(context: Context, channel:Channel<Message<Int>>): Managed<Int>(context, channel), Issuable<Int> {
     var current = 0
 
 
-    override suspend fun handle(item:Message<Int>) {
+    override suspend fun issue(item:Message<Int>) {
         work(item)
     }
 
 
-    override suspend fun request(req: Request<Int>) {
-        this.work(Action.Process, req.target, 10)
-    }
-
-
-    override suspend fun work(action: Action, target: String, item: Int) {
-        current = item
+    override suspend fun handle(req: Content<Int>) {
+        current = req.data
     }
 
 }
 
 
 
-class TestAdder(context: Context, channel:Channel<Message<Int>>): Controlled<Int>(context, channel), Handler<Int> {
+class TestAdder(context: Context, channel:Channel<Message<Int>>): Managed<Int>(context, channel), Issuable<Int> {
     var current = 0
 
 
-    override suspend fun handle(item:Message<Int>) {
+    override suspend fun issue(item:Message<Int>) {
         work(item)
     }
 
 
-    override suspend fun work(action: Action, target: String, item: Int) {
-        current += item
+    override suspend fun handle(req: Content<Int>) {
+        current += req.data
     }
 
 }

@@ -4,10 +4,12 @@ import kotlinx.coroutines.channels.Channel
 import org.junit.Assert
 import org.junit.Test
 import slatekit.actors.*
+import slatekit.actors.Action
+import slatekit.actors.Status
 
 class Control_Tests : ActorTestSupport {
 
-    fun setup(op:suspend(TestController, Puller<Int>) -> Unit) {
+    fun setup(op:suspend(TestController, Issuer<Int>) -> Unit) {
         runBlocking {
             val puller = puller("control.1")
             val actor = puller.handler as TestController
@@ -16,13 +18,13 @@ class Control_Tests : ActorTestSupport {
     }
 
 
-    fun adder(callback:(Message<Int>) -> Unit, op:suspend(TestAdder, Puller<Int>) -> Unit) {
+    fun adder(callback:(Message<Int>) -> Unit, op:suspend(TestAdder, Issuer<Int>) -> Unit) {
         runBlocking {
             val channel = Channel<Message<Int>>(Channel.UNLIMITED)
             val scope = CoroutineScope(Dispatchers.IO)
             val context = Context("control.1", scope)
             val actor = TestAdder(context, channel)
-            val puller = Puller<Int>(channel, actor, callback)
+            val puller = Issuer<Int>(channel, actor, callback)
             op(actor, puller)
         }
     }
@@ -99,7 +101,7 @@ class Control_Tests : ActorTestSupport {
         setup { actor, puller ->
             actor.start()
             actor.send(1)
-            actor.send(Content(2))
+            actor.send(2)
             puller.pull(3)
             Assert.assertEquals(Status.Running, actor.status())
             Assert.assertEquals(2, actor.current)
@@ -112,7 +114,7 @@ class Control_Tests : ActorTestSupport {
         setup { actor, puller ->
             actor.start()
             actor.send(1)
-            actor.send(Request())
+            actor.request()
             puller.poll()
             Assert.assertEquals(Status.Running, actor.status())
             Assert.assertEquals(10, actor.current)

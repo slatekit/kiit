@@ -1,12 +1,12 @@
 package slatekit.integration.jobs
 
+import slatekit.jobs.WResult
 import slatekit.apis.ApiServer
 import slatekit.apis.core.Requests
 import slatekit.common.Identity
 import slatekit.common.Sources
 import slatekit.jobs.*
-import slatekit.jobs.workers.WorkResult
-import slatekit.jobs.workers.Worker
+import slatekit.jobs.Worker
 import slatekit.results.Failure
 import slatekit.results.Success
 import slatekit.results.Try
@@ -22,7 +22,7 @@ open class APIWorker(
      * This converts the json message body to the Request and delegates the call
      * to the container which will call the corresponding API method.
      */
-    override suspend fun work(task: Task): WorkResult {
+    override suspend fun work(task: Task): WResult {
 
         // content ( json body )
         val rawBody = task.data
@@ -38,6 +38,6 @@ open class APIWorker(
             is Failure -> result.toTry()
         }
         slatekit.common.NOTE.IMPLEMENT("jobs", "Success/Failure handling")
-        return WorkResult.More
+        return WResult.More
     }
 }

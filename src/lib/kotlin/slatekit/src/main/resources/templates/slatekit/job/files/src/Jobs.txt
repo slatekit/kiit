@@ -2,10 +2,10 @@ package ${app.package}
 
 import kotlinx.coroutines.runBlocking
 import slatekit.common.Identity
-import slatekit.common.Status
+import slatekit.actors.Status
 import slatekit.jobs.Task
 import slatekit.jobs.workers.WorkResult
-import slatekit.jobs.workers.Worker
+import slatekit.jobs.Worker
 import java.util.concurrent.atomic.AtomicInteger
 
 // Sample User model

@@ -36,7 +36,7 @@ class Actor_Tests {
 
             actor.send(1)
             actor.send(2, "abc")
-            actor.send(Content(3, "def"))
+            actor.send(3, "def")
 
             val job = actor.work()
             delay(100)

@@ -2,7 +2,7 @@ package slatekit.jobs
 
 import slatekit.common.DateTime
 import slatekit.common.Identity
-import slatekit.common.Status
+import slatekit.actors.Status
 
 /**
  * @param id    : Identity of the job/worker @see[slatekit.common.Identity]

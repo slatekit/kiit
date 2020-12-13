@@ -4,13 +4,13 @@ import kotlinx.coroutines.channels.Channel
 
 /**
  * Provides a way to extract messages out of an actor's channel,
- * and send them to the handler ( which could be the same actor ).
+ * and send them to the Issuable to handle directly ( which could be the same actor ).
  * This is useful for controlling the content of the channel ( such as for tests )
  * and also for cleanup in some cases.
  * This allows to ull, poll, wipe ( clear ) messages from the channel.
  */
-open class Puller<T>(val channel: Channel<Message<T>>,
-                     val handler: Handler<T>, val tracker:((Message<T>) -> Unit)? = null) {
+open class Issuer<T>(val channel: Channel<Message<T>>,
+                     val issuable: Issuable<T>, val tracker:((Message<T>) -> Unit)? = null) {
 
     suspend fun pull(count: Int = 1) {
         // Process X off the channel
@@ -18,7 +18,7 @@ open class Puller<T>(val channel: Channel<Message<T>>,
             val item = channel.poll()
             item?.let {
                 track(PULL, it)
-                handler.handle(it)
+                issuable.issue(it)
             }
         }
     }
@@ -28,7 +28,7 @@ open class Puller<T>(val channel: Channel<Message<T>>,
         var item: Message<T>? = channel.poll()
         while (item != null) {
             track(POLL, item)
-            handler.handle(item)
+            issuable.issue(item)
             item = channel.poll()
         }
     }

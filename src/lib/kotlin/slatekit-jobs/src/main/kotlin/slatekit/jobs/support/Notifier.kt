@@ -3,7 +3,7 @@ package slatekit.jobs.support
 import slatekit.core.common.Emitter
 import slatekit.jobs.Event
 import slatekit.jobs.Job
-import slatekit.jobs.workers.Worker
+import slatekit.jobs.Worker
 
 /**
  * Notification emitter for job and state changes.
@@ -19,7 +19,7 @@ open class Notifier(val jobEvents: Emitter<Event> = Emitter<Event>(),
     open suspend fun notify(job: Job, name:String = stateChanged) {
         // Notify listeners interested in all (*) state changes
         // Notify listeners interested in only X state change
-        val event = Event(job.id, name, "State changed", "job", job.status(), job.ctx.queue?.name)
+        val event = Event(job.jctx.id, name, "State changed", "job", job.status(), job.jctx.queue?.name)
         jobEvents.emit(event)
         jobEvents.emit(event.status.name, event)
     }
@@ -30,7 +30,7 @@ open class Notifier(val jobEvents: Emitter<Event> = Emitter<Event>(),
     open suspend fun notify(job: Job, worker: Worker<*>, name:String = stateChanged) {
         // Notify listeners interested in all (*) state changes
         // Notify listeners interested in only X state change
-        val event = Event(worker.id, name, "State changed", "wrk", worker.status(), job.ctx.queue?.name, info = worker.info())
+        val event = Event(worker.id, name, "State changed", "wrk", worker.status(), job.jctx.queue?.name, info = worker.info())
         wrkEvents.emit(event)
         wrkEvents.emit(event.status.name, event)
     }

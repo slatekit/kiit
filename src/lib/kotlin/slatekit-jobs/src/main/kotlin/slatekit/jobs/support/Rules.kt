@@ -1,6 +1,6 @@
 package slatekit.jobs.support
 
-import slatekit.common.Status
+import slatekit.actors.Status
 
 /**
  * Rules to control switching of State (Paused, Running, etc ) for job/workers

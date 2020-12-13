@@ -1,6 +1,5 @@
 package slatekit.jobs
 
-import slatekit.jobs.workers.WorkResult
 
 /**
  * Task represents a unit-of work ( a work-item  ) that is handled by a Worker.
@@ -72,7 +71,7 @@ data class Task(
         /**
          * Converts a message from any queue into a Task
          */
-        fun next(state: WorkResult.Next): Task {
+        fun next(state: WResult.Next): Task {
             val id = owned.id
             val name = owned.name
             val task = Task(id, state.offset.toString(), owned.job, name, state.reference, "", "", owned.entry, null)

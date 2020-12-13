@@ -2,10 +2,10 @@ package slatekit.samples.job
 
 import kotlinx.coroutines.runBlocking
 import slatekit.common.Identity
-import slatekit.common.Status
+import slatekit.actors.Status
+import slatekit.jobs.WResult
 import slatekit.jobs.Task
-import slatekit.jobs.workers.WorkResult
-import slatekit.jobs.workers.Worker
+import slatekit.jobs.Worker
 import java.util.concurrent.atomic.AtomicInteger
 
 // Sample User model
@@ -25,9 +25,9 @@ val allUsers = (1..20).map { User(it, "user$it@company1.com")}
  * Use a function for a job that runs to completion: return WorkState.Done
  * =================================================================================================
  */
-suspend fun sendNewsLetter(task: Task): WorkResult {
+suspend fun sendNewsLetter(task: Task): WResult {
     allUsers.forEach { user -> JobUtils.send(task.job, NEWS_LETTER_MESSAGE, user) }
-    return WorkResult.Done
+    return WResult.Done
 }
 
 
@@ -39,13 +39,13 @@ suspend fun sendNewsLetter(task: Task): WorkResult {
  * =================================================================================================
  */
 val offset1 = AtomicInteger(0)
-suspend fun sendNewsLetterWithPaging(task: Task): WorkResult {
+suspend fun sendNewsLetterWithPaging(task: Task): WResult {
 
     // Print some info
     println("\nProcessing : ====================================")
     println("offset: " + offset1.get())
 
-    // WorkResult.next(offset.get() + batchSize.toLong(), users.size.toLong(), "users")
+    // WResult.next(offset.get() + batchSize.toLong(), users.size.toLong(), "users")
     return JobUtils.sendNewsLetterBatch(task.job, offset1, 4)
 }
 
@@ -57,7 +57,7 @@ suspend fun sendNewsLetterWithPaging(task: Task): WorkResult {
  * Use a function for a job that processes a task from a queue: Process and return WorkState.More
  * =================================================================================================
  */
-suspend fun sendNewsLetterFromQueue(task: Task): WorkResult {
+suspend fun sendNewsLetterFromQueue(task: Task): WResult {
     val userId = task.data.toInt()
     val user = allUsers.first { it.id == userId }
     JobUtils.send(task.job, NEWS_LETTER_MESSAGE, user)
@@ -69,7 +69,7 @@ suspend fun sendNewsLetterFromQueue(task: Task): WorkResult {
     task.done()
 
     // Indicate that this can now handle more
-    return WorkResult.More
+    return WResult.More
 }
 
 
@@ -84,13 +84,13 @@ class NewsLetterWorker(id:Identity) : Worker<String>(id) {
     private val offset = AtomicInteger(0)
 
     // Initialization hook ( for setup / logs / alerts )
-    override suspend fun start() {
+    override suspend fun started() {
         notify("initializing", listOf(("id" to this.id.name)))
     }
 
     // Implement your work here.
     // NOTE: If you are not using a queue, this task will be empty e.g. Task.empty
-    override suspend fun work(task: Task): WorkResult {
+    override suspend fun work(task: Task): WResult {
         // Print some info
         JobUtils.showInfo(task)
 
@@ -104,13 +104,13 @@ class NewsLetterWorker(id:Identity) : Worker<String>(id) {
     }
 
     // Completion hook ( for logic / logs / alerts )
-    override suspend fun done() {
+    override suspend fun completed(note:String?) {
         notify("done", listOf(("id" to this.id.name)))
     }
 
     // Failure hook ( for logic / logs / alerts )
-    override suspend fun fail(err:Throwable?) {
-        notify("failure", listOf(("id" to this.id.name), ("err" to (err?.message ?: ""))))
+    override suspend fun failed(note:String?) {
+        notify("failure", listOf(("id" to this.id.name), ("err" to (note ?: ""))))
     }
 
     // Initialization hook ( for setup / logs / alerts )
@@ -148,7 +148,7 @@ object JobUtils {
 
 
     // NOTE: This is a helper method used for the real example(s) below
-    suspend fun sendNewsLetterBatch(sender:String, offset: AtomicInteger, batchSize:Int): WorkResult {
+    suspend fun sendNewsLetterBatch(sender:String, offset: AtomicInteger, batchSize:Int): WResult {
         val start = offset.get()
         val users = if(start < 0 || start >= allUsers.size) listOf()
         else allUsers.subList(start, start + batchSize)
@@ -156,7 +156,7 @@ object JobUtils {
 
         // No more records so indicate done
         if(users.isEmpty())
-            return WorkResult.Done
+            return WResult.Done
 
         // Get next page of records
         users.forEach { user -> send(sender,"New version coming out soon!", user) }
@@ -168,7 +168,7 @@ object JobUtils {
         // 1. Indicate that we are paging through work
         // 2. Provide a way to stop/pause/resume processing of this task in between pages
         // 3. Provides context into diagnostics/status
-        return WorkResult.next(offset.get() + batchSize.toLong(), users.size.toLong(), "users")
+        return WResult.next(offset.get() + batchSize.toLong(), users.size.toLong(), "users")
     }
 }
 

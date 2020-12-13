@@ -1,19 +1,16 @@
-package slatekit.jobs.workers
+package slatekit.jobs
 
 import java.util.concurrent.atomic.AtomicReference
 import slatekit.common.Identity
-import slatekit.common.Status
-import slatekit.common.StatusCheck
-import slatekit.jobs.Task
-import slatekit.results.Err
-import slatekit.tracking.Recorder
+import slatekit.actors.Status
+import slatekit.actors.pause.Check
 
 
 /**
  * Optional base class for Workers.
  * All work is done inside this worker which has
- * 1. life-cycle methods : [start], [work], [done]
- * 2. state changes      : [pause], [stop], [resume], [move]
+ * 1. life-cycle methods : [started], [work], [completed]
+ * 2. state changes      : [paused], [stopped], [resumed], [move]
  * 3. alerting ability   : [notify]
  * 4. diagnostic features: [info] method to build diagnostics info
  *
@@ -23,8 +20,8 @@ import slatekit.tracking.Recorder
  */
 open class Worker<T>(
     id: Identity,
-    val operation: (suspend (Task) -> WorkResult)? = null
-) : StatusCheck {
+    val operation: (suspend (Task) -> WResult)? = null
+) : Check, Cycle {
     val id = if(id.tags.isEmpty() || !id.tags.contains("worker")) id.with(tags = listOf("worker")) else id
     protected val _status = AtomicReference<Pair<Status, String>>(Pair(Status.InActive, Status.InActive.name))
 
@@ -48,26 +45,10 @@ open class Worker<T>(
 
 
     /**
-     * ============================================================================
-     * LIFE-CYCLE Methods
-     * 1. init
-     * 2. work
-     * 3. work(task:Task)
-     * 4. done
-     * 5. fail
-     * ============================================================================
-     */
-    /**
-     * Hook for starting job ( put initialization in here )
-     */
-    open suspend fun start() {
-    }
-
-    /**
      * Performs the work
      * This assumes that this work manages it's own work load/queue/source
      */
-    open suspend fun work(): WorkResult {
+    open suspend fun work(): WResult {
         return work(Task.owned)
     }
 
@@ -79,61 +60,13 @@ open class Worker<T>(
      * provided by the work() method and assigned Task.owned. Otherwise, the task is
      * supplied by the @see[slatekit.jobs.Job]
      */
-    open suspend fun work(task: Task): WorkResult {
+    open suspend fun work(task: Task): WResult {
         return when (operation) {
-            null -> WorkResult.Done
+            null -> WResult.Done
             else -> operation.invoke(task)
         }
     }
 
-    /**
-     * Interface for a Job that can be gracefully paused and resuming.
-     * This is possible under various scenarios:
-     * 1. job processes tasks from a queue, in which case, when paused, it just resumes by getting the next task
-     * 2. job processes paged resources, when its on Page 20, and then paused, it can resume at Page 21
-     */
-
-    /**
-     * Hook for handling pausing of a job
-     * @param reason
-     * @return
-     */
-    open suspend fun pause(reason: String?) {
-    }
-
-    /**
-     * Hook for handling resuming of a job
-     * @param reason
-     * @return
-     */
-    open suspend fun resume(reason: String?) {
-    }
-
-    /**
-     * Hook for handling stopping of a job
-     */
-    open suspend fun stop(reason: String?){
-    }
-
-    /**
-     * Hook for handling killing of a job permanently
-     * This will not allow a restart
-     */
-    open suspend fun kill(reason: String?){
-    }
-
-    /**
-     * Life-cycle hook to allow for completion
-     */
-    open suspend fun done() {
-    }
-
-    /**
-     * Life-cycle hook to allow for failure
-     */
-    open suspend fun fail(err: Throwable?) {
-        notify("Errored: " + err?.message, null)
-    }
 
     /**
      * ============================================================================

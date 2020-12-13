@@ -10,7 +10,7 @@ about: A Kotlin utility library, tool-kit and server backend.
 mantra: Simplicity above all else
 </slate_header>
  */
-package slatekit.jobs.support
+package slatekit.jobs
 
 import java.util.*
 import slatekit.jobs.Queue

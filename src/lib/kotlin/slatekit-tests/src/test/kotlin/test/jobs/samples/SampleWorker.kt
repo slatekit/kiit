@@ -1,10 +1,10 @@
 package test.jobs.samples
 
 import slatekit.common.Identity
-import slatekit.common.Status
+import slatekit.actors.Status
+import slatekit.jobs.WResult
 import slatekit.jobs.*
-import slatekit.jobs.workers.WorkResult
-import slatekit.jobs.workers.Worker
+import slatekit.jobs.Worker
 import java.util.concurrent.atomic.AtomicInteger
 
 class OneTimeWorker(val start:Int, val end:Int, id: Identity) : Worker<Int>(id) {
@@ -16,9 +16,9 @@ class OneTimeWorker(val start:Int, val end:Int, id: Identity) : Worker<Int>(id) 
     private val current = AtomicInteger(start)
     private val audit = mutableListOf<String>()
 
-    override suspend fun start() {
+    override suspend fun started() {
         audit.add("init")
-        super.start()
+        super.started()
     }
 
 
@@ -31,28 +31,28 @@ class OneTimeWorker(val start:Int, val end:Int, id: Identity) : Worker<Int>(id) 
     }
 
 
-    override suspend fun work(task: Task): WorkResult {
+    override suspend fun work(task: Task): WResult {
         audit.add("work")
         (start .. end).forEach { current.incrementAndGet()  }
-        return WorkResult.Done
+        return WResult.Done
     }
 
 
-    override suspend fun done() {
+    override suspend fun completed(note:String?) {
         audit.add("done")
-        super.done()
+        super.completed(note)
     }
 
 
-    override suspend fun pause(reason: String?) {
+    override suspend fun paused(reason: String?) {
     }
 
 
-    override suspend fun stop(reason: String?) {
+    override suspend fun stopped(reason: String?) {
     }
 
 
-    override suspend fun resume(reason: String?) {
+    override suspend fun resumed(reason: String?) {
     }
 
 
@@ -71,73 +71,73 @@ class PagedWorker(start:Int, val maxRuns:Int, val countsPerRun:Int, id: Identity
     fun currentValue():Int = counts.get()
 
 
-    override suspend fun work(task: Task): WorkResult {
+    override suspend fun work(task: Task): WResult {
         (0 until countsPerRun).forEach {
             counts.incrementAndGet()
         }
         val run = runs.incrementAndGet()
         return if(run < maxRuns) {
-            WorkResult.More
+            WResult.More
         }
         else {
-            WorkResult.Done
+            WResult.Done
         }
     }
 
 
-    override suspend fun pause(reason: String?) {
+    override suspend fun paused(reason: String?) {
     }
 
 
-    override suspend fun stop(reason: String?) {
+    override suspend fun stopped(reason: String?) {
     }
 
 
-    override suspend fun resume(reason: String?) {
+    override suspend fun resumed(reason: String?) {
     }
 
 }
 
 
-class TestWorker(id: Identity? = null, val limit:Int = 10, operation: (suspend (Task) -> WorkResult)? = null)
+class TestWorker(id: Identity? = null, val limit:Int = 10, operation: (suspend (Task) -> WResult)? = null)
     : Worker<Int>( id ?: Identity.test(TestWorker::class.simpleName!!), operation) {
 
     val counts = AtomicInteger(0)
     val cycles = mutableMapOf<String, Boolean>()
 
-    override suspend fun start() {
+    override suspend fun started() {
         cycles[Status.Started.name] = true
     }
 
-    override suspend fun work(task: Task): WorkResult {
+    override suspend fun work(task: Task): WResult {
         val curr = counts.get()
         return if(curr < limit) {
             counts.incrementAndGet()
-            WorkResult.More
+            WResult.More
         } else {
-            WorkResult.Done
+            WResult.Done
         }
     }
 
-    override suspend fun pause(reason: String?) {
+    override suspend fun paused(reason: String?) {
         cycles[Status.Paused.name] = true
 
     }
 
-    override suspend fun resume(reason: String?) {
+    override suspend fun resumed(reason: String?) {
         cycles["Resumed"] = true
 
     }
 
-    override suspend fun stop(reason: String?) {
+    override suspend fun stopped(reason: String?) {
         cycles[Status.Stopped.name] = true
     }
 
-    override suspend fun done() {
+    override suspend fun completed(note:String?) {
         cycles[Status.Completed.name] = true
     }
 
-    override suspend fun kill(reason: String?) {
+    override suspend fun killed(reason: String?) {
         cycles[Status.Killed.name] = true
     }
 }

@@ -9,10 +9,10 @@ class Puller_Tests : ActorTestSupport{
 
 
     @Test
-    fun can_handle(){
+    fun can_issue(){
         runBlocking {
             val actor = controller()
-            actor.handle(Content(1))
+            actor.issue(Content(0, 1))
             Assert.assertEquals(1, actor.current)
         }
     }
@@ -22,7 +22,7 @@ class Puller_Tests : ActorTestSupport{
     fun can_pull(){
         runBlocking {
             val puller = puller()
-            val actor = puller.handler as TestController
+            val actor = puller.issuable as TestController
             actor.send(1)
             actor.send(2)
             actor.send(3)
@@ -36,7 +36,7 @@ class Puller_Tests : ActorTestSupport{
     fun can_poll(){
         runBlocking {
             val puller = puller()
-            val actor = puller.handler as TestController
+            val actor = puller.issuable as TestController
             actor.send(1)
             actor.send(2)
             actor.send(3)
@@ -50,7 +50,7 @@ class Puller_Tests : ActorTestSupport{
     fun can_wipe(){
         runBlocking {
             val puller = puller()
-            val actor = puller.handler as TestController
+            val actor = puller.issuable as TestController
             actor.send(1)
             actor.send(2)
             actor.send(3)

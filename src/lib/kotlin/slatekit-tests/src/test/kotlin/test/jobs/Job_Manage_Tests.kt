@@ -3,7 +3,7 @@ package test.jobs
 import org.junit.Assert
 import org.junit.Test
 import slatekit.common.Identity
-import slatekit.common.Status
+import slatekit.actors.Status
 import test.jobs.samples.TestWorker
 import test.jobs.support.JobTestSupport
 
@@ -14,8 +14,8 @@ class Job_Manage_Tests : JobTestSupport {
 
     @Test
     fun can_create_job() {
-        setup(ID, 2, null, { id -> TestWorker(id) }) { job ->
-            Assert.assertEquals(2, job.ctx.workers.size)
+        setup(ID, 2, null, { id -> TestWorker(id) }) { job, issuer ->
+            Assert.assertEquals(2, job.jctx.workers.size)
             Assert.assertEquals(Status.InActive, job.status())
             ensure(job, 2, 0, Status.InActive)
         }
@@ -23,9 +23,9 @@ class Job_Manage_Tests : JobTestSupport {
 
     @Test
     fun can_start_job() {
-        setup(ID, 2, null, { id -> TestWorker(id, 1) }) { job ->
+        setup(ID, 2, null, { id -> TestWorker(id, 1) }) { job, issuer ->
             job.start()
-            job.pull(1)
+            issuer.pull(1)
             Assert.assertEquals(Status.Running, job.status())
             ensure(job, 2, 0, Status.Running)
         }
@@ -33,9 +33,9 @@ class Job_Manage_Tests : JobTestSupport {
 
     @Test
     fun can_start_and_process_job() {
-        setup(ID, 2, null, { id -> TestWorker(id, 4) }) { job ->
+        setup(ID, 2, null, { id -> TestWorker(id, 4) }) { job, issuer ->
             job.start()
-            job.pull(3)
+            issuer.pull(3)
             Assert.assertEquals(Status.Running, job.status())
             ensure(job, 2, 1, Status.Running)
         }
@@ -43,9 +43,9 @@ class Job_Manage_Tests : JobTestSupport {
 
     @Test
     fun can_start_to_completion_of_job() {
-        setup(ID, 1, null, { id -> TestWorker(id, 2) }) { job ->
+        setup(ID, 1, null, { id -> TestWorker(id, 2) }) { job, issuer ->
             job.start()
-            job.pull(6)
+            issuer.pull(6)
             Assert.assertEquals(Status.Completed, job.status())
             ensure(job, 1, 2, Status.Completed)
         }
@@ -53,16 +53,16 @@ class Job_Manage_Tests : JobTestSupport {
 
     @Test
     fun can_process_job() {
-        setup(ID, 1, null, { id -> TestWorker(id, 3) }) { job ->
+        setup(ID, 1, null, { id -> TestWorker(id, 3) }) { job, issuer ->
             job.start()
-            job.pull(1)
+            issuer.pull(1)
 
             Assert.assertEquals(Status.Running, job.status())
             val worker = job.workers[0]!!.worker as TestWorker
             Assert.assertEquals(0, worker.counts.get())
 
             job.process()
-            job.pull(1)
+            issuer.pull(1)
             Assert.assertEquals(1, worker.counts.get())
             Assert.assertEquals(Status.Running, job.status())
             Assert.assertEquals(Status.Running, worker.status())
@@ -72,15 +72,15 @@ class Job_Manage_Tests : JobTestSupport {
 
     @Test
     fun can_pause_job() {
-        setup(ID, 2, null, { id -> TestWorker(id, 3) }) { job ->
+        setup(ID, 2, null, { id -> TestWorker(id, 3) }) { job, issuer ->
 
             job.start()
-            job.pull(3)
+            issuer.pull(3)
             Assert.assertEquals(Status.Running, job.status())
 
-            job.wipe()
+            issuer.wipe()
             job.pause()
-            job.pull(1)
+            issuer.pull(1)
 
             Assert.assertEquals(Status.Paused, job.status())
             ensure(job, 2, 1, Status.Paused)
@@ -90,18 +90,18 @@ class Job_Manage_Tests : JobTestSupport {
 
     @Test
     fun can_resume_job() {
-        setup(ID, 2, null, { id -> TestWorker(id, 3) }) { job ->
+        setup(ID, 2, null, { id -> TestWorker(id, 3) }) { job, issuer ->
             job.start()
-            job.pull(3)
+            issuer.pull(3)
             Assert.assertEquals(Status.Running, job.status())
-            job.wipe()
+            issuer.wipe()
             job.pause()
-            job.pull(1)
+            issuer.pull(1)
             Assert.assertEquals(Status.Paused, job.status())
             ensure(job, 2, 1, Status.Paused)
-            job.wipe()
+            issuer.wipe()
             job.resume()
-            job.pull(3)
+            issuer.pull(3)
             Assert.assertEquals(Status.Running, job.status())
             ensure(job, 2, 2, Status.Running, true)
         }
@@ -110,14 +110,14 @@ class Job_Manage_Tests : JobTestSupport {
 
     @Test
     fun can_stop_job() {
-        setup(ID, 2, null, { id -> TestWorker(id, 3) }) { job ->
+        setup(ID, 2, null, { id -> TestWorker(id, 3) }) { job, issuer ->
             job.start()
-            job.pull(3)
+            issuer.pull(3)
             Assert.assertEquals(Status.Running, job.status())
             ensure(job, 2, 1, Status.Running)
-            job.wipe()
+            issuer.wipe()
             job.stop()
-            job.pull(1)
+            issuer.pull(1)
             Assert.assertEquals(Status.Stopped, job.status())
             ensure(job, 2, 1, Status.Stopped)
         }
@@ -126,14 +126,14 @@ class Job_Manage_Tests : JobTestSupport {
 
     @Test
     fun can_kill_job() {
-        setup(ID, 2, null, { id -> TestWorker(id, 3) }) { job ->
+        setup(ID, 2, null, { id -> TestWorker(id, 3) }) { job, issuer ->
             job.start()
-            job.pull(3)
+            issuer.pull(3)
             Assert.assertEquals(Status.Running, job.status())
             ensure(job, 2, 1, Status.Running)
-            job.wipe()
+            issuer.wipe()
             job.kill()
-            job.pull(1)
+            issuer.pull(1)
             Assert.assertEquals(Status.Killed, job.status())
             ensure(job, 2, 1, Status.Killed)
         }
@@ -142,21 +142,21 @@ class Job_Manage_Tests : JobTestSupport {
 
     @Test
     fun can_not_process_killed_job() {
-        setup(ID, 2, null, { id -> TestWorker(id, 3) }) { job ->
+        setup(ID, 2, null, { id -> TestWorker(id, 3) }) { job, issuer ->
 
             job.start()
-            job.pull(3)
+            issuer.pull(3)
             Assert.assertEquals(Status.Running, job.status())
 
-            job.wipe()
+            issuer.wipe()
             job.kill()
-            job.pull(1)
+            issuer.pull(1)
             Assert.assertEquals(Status.Killed, job.status())
             ensure(job, 2, 1, Status.Killed)
 
-            job.wipe()
+            issuer.wipe()
             job.resume()
-            job.pull(1)
+            issuer.pull(1)
             Assert.assertEquals(Status.Killed, job.status())
             ensure(job, 2, 1, Status.Killed)
         }

@@ -3,7 +3,7 @@ package test.common
 import kotlinx.coroutines.runBlocking
 import org.junit.Assert
 import org.junit.Test
-import slatekit.common.Status
+import slatekit.actors.Status
 import test.setup.MyWorker
 
 
@@ -36,7 +36,7 @@ class StatusTests {
     }
 
 
-    fun assertCheck(status:Status, check:(MyWorker) -> Boolean ) {
+    fun assertCheck(status: Status, check:(MyWorker) -> Boolean ) {
         // Test
         val worker = MyWorker()
         runBlocking {  worker.move(status) }
