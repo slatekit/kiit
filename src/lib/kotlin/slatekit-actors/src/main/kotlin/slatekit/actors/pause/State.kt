@@ -20,7 +20,7 @@ open class State(val changed:(suspend(Action, Status, Status) -> Unit)? = null) 
     /**
      * Handles a @see[Control] message to start, stop, pause, resume this actor.
      */
-    suspend fun handle(action: Action) {
+    suspend fun handle(action: Action): Status {
         val oldStatus = _status.get()
         val newStatus = action.toStatus(oldStatus)
         when (action) {
@@ -35,6 +35,7 @@ open class State(val changed:(suspend(Action, Status, Status) -> Unit)? = null) 
             }
         }
         changed?.invoke(action, oldStatus, newStatus)
+        return newStatus
     }
 
 

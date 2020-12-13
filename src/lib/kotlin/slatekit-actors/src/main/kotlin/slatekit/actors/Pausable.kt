@@ -29,6 +29,14 @@ abstract class Pausable<T>(ctx:Context, channel: Channel<Message<T>>)
 
 
     /**
+     * Forces an immediate change to running status
+     */
+    suspend fun force(action: Action, msg: String?, reference: String): Status {
+        return state.handle(action)
+    }
+
+
+    /**
      * Allows the operation to proceed only if this is started or running
      */
     protected suspend fun allow(op:suspend () -> Unit) {
