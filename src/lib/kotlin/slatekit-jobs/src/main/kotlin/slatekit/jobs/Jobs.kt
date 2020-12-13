@@ -16,7 +16,7 @@ import slatekit.actors.pause.Feedback
  */
 class Jobs(val queues: List<Queue>,
            val jobs: List<Job>,
-           val scope: CoroutineScope = Jobs.scope) : Controls {
+           val scope: CoroutineScope = Jobs.scope) : Ops {
 
     private val jobNames = jobs.map { it.jctx.id.name to it }.toMap()
     private val wrkInsts = jobs.map { it.workers.contexts.map { wctx -> wctx.id.instance to Pair(it, wctx) } }.flatten().toMap()

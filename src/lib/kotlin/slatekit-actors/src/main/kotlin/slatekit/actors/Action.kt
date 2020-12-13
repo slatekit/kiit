@@ -19,7 +19,6 @@ sealed class Action(val name: String) {
     object Kill     : Action( "Kill"   )
     object Check    : Action( "Check"  )
     object Process  : Action( "Process")
-    object Request  : Action( "Request")
     /* ktlint-enable */
 
     fun toStatus(current: Status): Status {
@@ -32,7 +31,6 @@ sealed class Action(val name: String) {
             Kill -> Status.Killed
             Check -> current
             Process -> current
-            Request -> current
         }
     }
 }

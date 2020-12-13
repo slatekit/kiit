@@ -10,7 +10,7 @@ abstract class Pausable<T>(ctx:Context, channel: Channel<Message<T>>)
     : Messageable<T>(ctx, channel), Controls {
 
     protected val state: State = State { action, oldState, newState
-        -> this.changed(action, oldState, newState)
+        -> this.onChanged(action, oldState, newState)
     }
 
     /**
@@ -43,7 +43,7 @@ abstract class Pausable<T>(ctx:Context, channel: Channel<Message<T>>)
     /**
      * Serves as a hook for implementations to override to listen to state changes
      */
-    protected open suspend fun changed(msg: Action, oldStatus: Status, newStatus: Status) {
+    protected open suspend fun onChanged(msg: Action, oldStatus: Status, newStatus: Status) {
     }
 }
 

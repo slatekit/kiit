@@ -115,7 +115,7 @@ class Job(val jctx: Context)
     }
 
 
-    override suspend fun changed(msg: Action, oldStatus: Status, newStatus: Status) {
+    override suspend fun onChanged(msg: Action, oldStatus: Status, newStatus: Status) {
         // Handle workers here.
     }
 
