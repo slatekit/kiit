@@ -39,11 +39,14 @@ abstract class Pausable<T>(ctx:Context, channel: Channel<Message<T>>)
     /**
      * Allows the operation to proceed only if this is started or running
      */
-    protected suspend fun allow(op:suspend () -> Unit) {
-        when(status()) {
-            is Status.Started -> op()
-            is Status.Running -> op()
-            else -> { }
+    protected suspend fun allow(enableStrictMode:Boolean = true, op:suspend () -> Unit) {
+        when(enableStrictMode) {
+            false -> op()
+            true  -> when (status()) {
+                is Status.Started -> op()
+                is Status.Running -> op()
+                else -> { }
+            }
         }
     }
 
