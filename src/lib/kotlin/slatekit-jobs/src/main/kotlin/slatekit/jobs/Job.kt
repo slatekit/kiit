@@ -57,7 +57,7 @@ import slatekit.results.Try
  *
  */
 class Job(val jctx: Context)
-    : Producer<Task>(slatekit.actors.Context(jctx.id.name, jctx.scope), jctx.channel), Check, Ops {
+    : Loader<Task>(slatekit.actors.Context(jctx.id.name, jctx.scope), jctx.channel), Check, Ops {
 
     val workers = Workers(jctx)
     private val events = jctx.notifier.jobEvents

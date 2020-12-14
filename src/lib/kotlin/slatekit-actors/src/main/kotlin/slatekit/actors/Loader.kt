@@ -5,14 +5,13 @@ import kotlinx.coroutines.channels.Channel
 /**
  * Base class for an Actor that can be started, stopped, paused, and resumed
  */
-abstract class Producer<T>(ctx: Context, channel: Channel<Message<T>>) : Pausable<T>(ctx, channel) {
+abstract class Loader<T>(ctx: Context, channel: Channel<Message<T>>) : Pausable<T>(ctx, channel) {
 
 
     /**
-     * Request to produce a payload internally ( say from a queue ) and process it
-     * @param msg  : Full message
+     * Request to load a payload internally into the channel
      */
-    suspend fun request() {
+    suspend fun load() {
         allow {
             channel.send(Request(nextId(), reference = Message.NONE))
         }
@@ -20,11 +19,10 @@ abstract class Producer<T>(ctx: Context, channel: Channel<Message<T>>) : Pausabl
 
 
     /**
-     * Sends a request message associated with the supplied target to produce a payload
-     * This represents a request to get payload internally ( say from a queue ) and process it
-     * @param reference  : Full message
+     * Request to load a payload internally into the channel, pay load is associated with the reference
+     * @param reference  : Value to associate with the payload
      */
-    suspend fun request(reference: String) {
+    suspend fun load(reference: String) {
         allow {
             channel.send(Request(nextId(), reference = reference))
         }

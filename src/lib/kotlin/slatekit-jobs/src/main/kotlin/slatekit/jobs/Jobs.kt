@@ -24,7 +24,7 @@ class Jobs(val queues: List<Queue>,
     /**
      * Ids of all the jobs
      */
-    val ids = jobs.map { it.id }
+    val ids = jobs.map { it.jctx.id }
 
     /**
      * Number of jobs

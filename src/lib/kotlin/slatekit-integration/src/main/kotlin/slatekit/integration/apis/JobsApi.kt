@@ -24,7 +24,6 @@ import slatekit.common.crypto.Encryptor
 import slatekit.common.log.Logger
 import slatekit.integration.common.AppEntContext
 import slatekit.jobs.Jobs
-import slatekit.jobs.support.Command
 import slatekit.results.Outcome
 import slatekit.results.builders.Outcomes
 

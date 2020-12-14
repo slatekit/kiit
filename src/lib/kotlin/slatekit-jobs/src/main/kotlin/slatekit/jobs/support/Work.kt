@@ -208,7 +208,7 @@ class Work(val job: Job) {
 
 
     private suspend fun request(id:Identity) {
-        job.request(id.instance)
+        job.load(id.instance)
     }
 
 
