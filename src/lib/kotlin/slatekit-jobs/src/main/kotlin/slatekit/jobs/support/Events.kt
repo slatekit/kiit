@@ -9,6 +9,7 @@ import slatekit.common.ids.ULIDs
 import slatekit.jobs.Job
 import slatekit.jobs.Context
 import slatekit.jobs.WorkerContext
+import slatekit.results.Codes
 
 /**
  * Builds events using the @see[slatekit.common.Event] model
@@ -101,6 +102,21 @@ object Events {
             tag     = tag,
             fields  = fields
         )
+    }
+
+
+    private fun Status.toCode(): slatekit.results.Status {
+        return when (this) {
+            is Status.InActive -> Codes.INACTIVE
+            is Status.Started -> Codes.STARTING
+            is Status.Waiting -> Codes.WAITING
+            is Status.Running -> Codes.RUNNING
+            is Status.Paused -> Codes.PAUSED
+            is Status.Stopped -> Codes.STOPPED
+            is Status.Completed -> Codes.COMPLETE
+            is Status.Failed -> Codes.ERRORED
+            else         -> Codes.SUCCESS
+        }
     }
 
 
