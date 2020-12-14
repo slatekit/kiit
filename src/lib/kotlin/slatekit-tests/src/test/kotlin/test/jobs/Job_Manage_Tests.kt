@@ -21,6 +21,7 @@ class Job_Manage_Tests : JobTestSupport {
         }
     }
 
+
     @Test
     fun can_start_job() {
         setup(ID, 2, null, { id -> TestWorker(id, 1) }) { job, issuer ->
@@ -30,6 +31,7 @@ class Job_Manage_Tests : JobTestSupport {
             ensure(job, 2, 0, Status.Running)
         }
     }
+
 
     @Test
     fun can_start_and_process_job() {
@@ -41,6 +43,7 @@ class Job_Manage_Tests : JobTestSupport {
         }
     }
 
+
     @Test
     fun can_start_to_completion_of_job() {
         setup(ID, 1, null, { id -> TestWorker(id, 2) }) { job, issuer ->
@@ -51,13 +54,14 @@ class Job_Manage_Tests : JobTestSupport {
         }
     }
 
+
     @Test
     fun can_process_job() {
         setup(ID, 1, null, { id -> TestWorker(id, 3) }) { job, issuer ->
             job.start()
             issuer.pull(1)
 
-            Assert.assertEquals(Status.Running, job.status())
+            Assert.assertEquals(Status.Started, job.status())
             val worker = job.workers[0]!!.worker as TestWorker
             Assert.assertEquals(0, worker.counts.get())
 

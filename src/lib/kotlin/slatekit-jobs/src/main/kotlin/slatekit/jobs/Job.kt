@@ -57,7 +57,7 @@ import slatekit.results.Try
  *
  */
 class Job(val jctx: Context)
-    : Loader<Task>(slatekit.actors.Context(jctx.id.name, jctx.scope), jctx.channel), Check, Ops {
+    : Loader<Task>(slatekit.actors.Context(jctx.id.name, jctx.scope), jctx.channel, false), Check, Ops, Issuable<Task> {
 
     val workers = Workers(jctx)
     private val events = jctx.notifier.jobEvents
@@ -102,6 +102,10 @@ class Job(val jctx: Context)
 
     suspend fun close() {
         jctx.channel.close()
+    }
+
+    override suspend fun issue(item: Message<Task>) {
+        work(item)
     }
 
 

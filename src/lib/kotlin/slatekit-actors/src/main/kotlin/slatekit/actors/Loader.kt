@@ -5,7 +5,8 @@ import kotlinx.coroutines.channels.Channel
 /**
  * Base class for an Actor that can be started, stopped, paused, and resumed
  */
-abstract class Loader<T>(ctx: Context, channel: Channel<Message<T>>) : Pausable<T>(ctx, channel) {
+abstract class Loader<T>(ctx: Context, channel: Channel<Message<T>>, enableStrictMode:Boolean = true)
+    : Pausable<T>(ctx, channel, enableStrictMode) {
 
 
     /**
