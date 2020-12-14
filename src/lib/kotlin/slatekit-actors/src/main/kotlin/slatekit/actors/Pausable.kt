@@ -7,7 +7,7 @@ import slatekit.actors.pause.*
  * Base class to support Actors that can be started, stopped, paused, and resumed
  */
 abstract class Pausable<T>(ctx:Context, channel: Channel<Message<T>>, private val enableStrictMode: Boolean )
-    : Messageable<T>(ctx, channel), Controls {
+    : Messageable<T>(ctx, channel), Controls, Check {
 
     protected val state: State = State { action, oldState, newState
         -> this.onChanged(action, oldState, newState)
@@ -16,7 +16,7 @@ abstract class Pausable<T>(ctx:Context, channel: Channel<Message<T>>, private va
     /**
      * Get running status of this Actor
      */
-    fun status(): Status = state.status()
+    override fun status(): Status = state.status()
 
 
     /**
