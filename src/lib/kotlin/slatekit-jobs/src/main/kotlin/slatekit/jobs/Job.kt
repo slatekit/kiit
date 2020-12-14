@@ -85,7 +85,7 @@ class Job(val jctx: Context)
     /**
      * Get worker context by identity
      */
-    fun get(id: Identity): WorkerContext? = workers[id.id]
+    fun get(id: Identity): WorkerContext? = workers[id]
 
 
     /**
@@ -104,6 +104,37 @@ class Job(val jctx: Context)
         jctx.channel.close()
     }
 
+
+    /**
+     *  Handles each message based on its type @see[Content], @see[Control],
+     *  This handles following message types and moves this actor to a running state correctly
+     *  1. @see[Control] messages to start, stop, pause, resume the actor
+     *  2. @see[Request] messages to load payloads from a source ( e.g. queue )
+     *  3. @see[Content] messages are simply delegated to the work method
+     */
+    override suspend fun work(item: Message<Task>) {
+        when (item) {
+            is Control -> {
+                when(item.reference.isEmpty()) {
+                    true -> state.handle(item.action)
+                    false -> manage(item)
+                }
+            }
+            is Request -> {
+                state.begin(); handle(item)
+            }
+            else -> {
+                // Does not support Request<T>
+            }
+        }
+    }
+
+
+    /**
+     * Supports direct issuing of messages
+     * For internal/support/test purposes.
+     * This should not be used for regular usage
+     */
     override suspend fun issue(item: Message<Task>) {
         work(item)
     }
@@ -119,8 +150,48 @@ class Job(val jctx: Context)
     }
 
 
-    override suspend fun onChanged(msg: Action, oldStatus: Status, newStatus: Status) {
-        // Handle workers here.
+    /**
+     * Responds to changes in job state.
+     * Notifies listeners and transitions all workers to the correct state.
+     */
+    override suspend fun onChanged(action: Action, oldStatus: Status, newStatus: Status) {
+        // Notify listeners of job state change
+        notify("Status_Changed")
+
+        // Transition workers here
+        all { wctx ->
+            when (action) {
+                is Action.Delay   -> work.delay(wctx, seconds = 30)
+                is Action.Start   -> work.start(wctx)
+                is Action.Pause   -> work.pause(wctx, seconds = 30)
+                is Action.Resume  -> work.resume(wctx)
+                is Action.Stop    -> work.stop(wctx)
+                is Action.Process -> work.work(wctx, nextTask(wctx.task))
+                is Action.Check   -> work.check(wctx)
+                is Action.Kill    -> work.kill(wctx)
+            }
+        }
+    }
+
+
+    /**
+     * Manages a request to control a specific worker
+     */
+    private suspend fun manage(cmd: Control<Task>) {
+        if (cmd.action == Action.Process && !Rules.canWork(this.status())) {
+            notify("CMD_WARN")
+            return
+        }
+        when (cmd.action) {
+            is Action.Delay   -> one(cmd.reference, false) { work.delay(it, seconds = 30) }
+            is Action.Start   -> one(cmd.reference, false) { work.start(it) }
+            is Action.Pause   -> one(cmd.reference, false) { work.pause(it, seconds = 30) }
+            is Action.Resume  -> one(cmd.reference, false) { work.resume(it) }
+            is Action.Stop    -> one(cmd.reference, false) { work.stop(it) }
+            is Action.Process -> run(cmd.reference, true) { work.work(it, nextTask(it.task)) }
+            is Action.Check   -> one(cmd.reference, true) { work.check(it) }
+            is Action.Kill    -> one(cmd.reference, true) { work.kill(it) }
+        }
     }
 
 
@@ -129,24 +200,6 @@ class Job(val jctx: Context)
      */
     private fun error(message: String, ex:Exception? = null) {
         jctx.logger.error("Error with job ${jctx.id.id} - $message")
-    }
-
-
-    private suspend fun manage(cmd: Control<Task>) {
-        if (cmd.action == Action.Process && !Rules.canWork(this.status())) {
-            notify("CMD_WARN")
-            return
-        }
-        when (cmd.action) {
-            is Action.Delay -> one(cmd.reference, false) { work.delay(it, seconds = 30) }
-            is Action.Start -> one(cmd.reference, false) { work.start(it) }
-            is Action.Pause -> one(cmd.reference, false) { work.pause(it, seconds = 30) }
-            is Action.Resume -> one(cmd.reference, false) { work.resume(it) }
-            is Action.Stop -> one(cmd.reference, false) { work.stop(it) }
-            is Action.Process -> run(cmd.reference, true) { work.work(it, nextTask(it.task)) }
-            is Action.Check -> one(cmd.reference, true) { work.check(it) }
-            is Action.Kill -> one(cmd.reference, true) { work.kill(it) }
-        }
     }
 
 
@@ -175,10 +228,20 @@ class Job(val jctx: Context)
     /**
      * Transitions all workers to the new status supplied
      */
+    private suspend fun all(op: suspend (WorkerContext) -> Unit) {
+        workers.contexts.forEach { op(it) }
+    }
+
+
+    /**
+     * Transitions all workers to the new status supplied
+     */
     private suspend fun one(id: String, launch: Boolean, op: suspend (WorkerContext) -> Try<Status>) {
-        val wctx = workers[id]
-        wctx?.let {
-            op(it)
+        workers[id]?.let {
+            when(launch){
+                true -> jctx.scope.launch { op(it) }
+                false -> op(it)
+            }
         }
     }
 
@@ -194,10 +257,10 @@ class Job(val jctx: Context)
     }
 
 
-    private fun notify(name: String) {
+    private fun notify(eventName: String) {
         val job = this
         ctx.scope.launch {
-            jctx.notifier.notify(job, name)
+            jctx.notifier.notify(job, eventName)
         }
     }
 

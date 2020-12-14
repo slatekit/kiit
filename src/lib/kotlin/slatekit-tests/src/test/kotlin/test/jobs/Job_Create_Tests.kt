@@ -19,9 +19,22 @@ class Job_Create_Tests : JobTestSupport {
 
 
     @Test
+    fun can_setup_ids() {
+        var value = 0
+        val job = Job(ID, suspend { value = 1; WResult.Done })
+        val wrk = job.workers[0]!!
+
+        Assert.assertEquals(wrk.worker, job.get(0)?.worker)
+        Assert.assertEquals(wrk.worker, job.get(wrk.id)?.worker)
+        Assert.assertEquals(wrk.worker, job.get("tests.job.${wrk.id.instance}")?.worker)
+    }
+
+
+    @Test
     fun can_create_with_lambda() {
         var value = 0
         val job = Job(ID, suspend { value = 1; WResult.Done  })
+
         val issuer = Issuer<Task>(job.channel, job as Issuable<Task>)
         runBlocking {
             job.start()

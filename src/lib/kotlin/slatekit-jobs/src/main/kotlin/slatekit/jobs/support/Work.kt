@@ -4,10 +4,7 @@ import slatekit.actors.*
 import slatekit.actors.Action
 import slatekit.actors.Status
 import slatekit.common.Identity
-import slatekit.jobs.Job
-import slatekit.jobs.Task
-import slatekit.jobs.WorkerContext
-import slatekit.jobs.WResult
+import slatekit.jobs.*
 import slatekit.results.Failure
 import slatekit.results.Success
 import slatekit.results.Try
@@ -208,7 +205,7 @@ class Work(val job: Job) {
 
 
     private suspend fun request(id:Identity) {
-        job.load(id.instance)
+        job.load(Workers.shortId(id))
     }
 
 

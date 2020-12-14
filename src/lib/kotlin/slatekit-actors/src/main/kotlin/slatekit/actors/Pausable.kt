@@ -54,7 +54,7 @@ abstract class Pausable<T>(ctx:Context, channel: Channel<Message<T>>, private va
     /**
      * Serves as a hook for implementations to override to listen to state changes
      */
-    protected open suspend fun onChanged(msg: Action, oldStatus: Status, newStatus: Status) {
+    protected open suspend fun onChanged(action: Action, oldStatus: Status, newStatus: Status) {
     }
 }
 

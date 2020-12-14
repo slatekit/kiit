@@ -47,7 +47,7 @@ data class WorkerContext(
 class Workers(val ctx: Context) {
     val events = ctx.notifier.wrkEvents
     val contexts = ctx.workers.map { WorkerContext(it.id, it, Recorder.of(it.id), ctx.policies) }
-    private val lookup: Map<String, WorkerContext> = contexts.map { it.id.id to it }.toMap()
+    private val lookup: Map<String, WorkerContext> = contexts.map { shortId(it.id) to it }.toMap()
 
     /**
      * Subscribe to status being changed for any worker
@@ -67,9 +67,12 @@ class Workers(val ctx: Context) {
      * Gets the WorkContext for the worker with the supplied identity.
      * This is to allow for looking up the job/stats metadata for a worker.
      */
-    operator fun get(id: Identity): WorkerContext? = when (lookup.containsKey(id.id)) {
-        true -> lookup[id.id]
-        false -> null
+    operator fun get(id: Identity): WorkerContext? {
+        val lookupId = shortId(id)
+        return when (lookup.containsKey(lookupId)) {
+            true -> lookup[lookupId]
+            false -> null
+        }
     }
 
     /**
@@ -91,4 +94,8 @@ class Workers(val ctx: Context) {
      * Gets all the worker ids
      */
     fun getIds(): List<Identity> = ctx.workers.map { it.id }
+
+    companion object {
+        fun shortId(id:Identity):String = "${id.name}.${id.instance}"
+    }
 }
