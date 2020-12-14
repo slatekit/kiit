@@ -7,6 +7,6 @@ import slatekit.actors.pause.Scheduler
 /**
  * Contains current ( and future ) dependencies for an actor
  */
-data class Context(val id:String,
+open class Context(val id:String,
                    val scope:CoroutineScope,
                    val scheduler: Scheduler = Scheduler(CoroutineScope(Dispatchers.IO)))

@@ -5,7 +5,7 @@ import org.junit.Assert
 import org.junit.Test
 import slatekit.actors.*
 
-class Puller_Tests : ActorTestSupport{
+class Issuer_Tests : ActorTestSupport{
 
 
     @Test
@@ -21,8 +21,10 @@ class Puller_Tests : ActorTestSupport{
     @Test
     fun can_pull(){
         runBlocking {
-            val puller = puller()
+            val puller = issuer()
             val actor = puller.issuable as TestController
+            actor.start()
+            puller.pull()
             actor.send(1)
             actor.send(2)
             actor.send(3)
@@ -35,8 +37,10 @@ class Puller_Tests : ActorTestSupport{
     @Test
     fun can_poll(){
         runBlocking {
-            val puller = puller()
+            val puller = issuer()
             val actor = puller.issuable as TestController
+            actor.start()
+            puller.pull()
             actor.send(1)
             actor.send(2)
             actor.send(3)
@@ -49,7 +53,7 @@ class Puller_Tests : ActorTestSupport{
     @Test
     fun can_wipe(){
         runBlocking {
-            val puller = puller()
+            val puller = issuer()
             val actor = puller.issuable as TestController
             actor.send(1)
             actor.send(2)

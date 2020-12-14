@@ -7,7 +7,7 @@ import slatekit.actors.*
 import slatekit.actors.Action
 
 interface ActorTestSupport {
-    fun puller(id:String = "test" ):Issuer<Int> {
+    fun issuer(id:String = "test" ):Issuer<Int> {
         val actor = controller(id)
         return Issuer<Int>(actor.channel, actor)
     }
@@ -84,5 +84,19 @@ class TestAdder(context: Context, channel:Channel<Message<Int>>): Managed<Int>(c
     override suspend fun handle(req: Content<Int>) {
         current += req.data
     }
+}
 
+
+
+class TestLoader(context: Context, channel:Channel<Message<Int>>): Loader<Int>(context, channel), Issuable<Int> {
+    var current = 0
+
+    override suspend fun issue(item:Message<Int>) {
+        work(item)
+    }
+
+
+    override suspend fun handle(req: Request<Int>) {
+        current += 1
+    }
 }

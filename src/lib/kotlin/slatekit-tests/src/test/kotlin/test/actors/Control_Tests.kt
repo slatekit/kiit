@@ -4,16 +4,15 @@ import kotlinx.coroutines.channels.Channel
 import org.junit.Assert
 import org.junit.Test
 import slatekit.actors.*
-import slatekit.actors.Action
 import slatekit.actors.Status
 
 class Control_Tests : ActorTestSupport {
 
     fun setup(op:suspend(TestController, Issuer<Int>) -> Unit) {
         runBlocking {
-            val puller = puller("control.1")
-            val actor = puller.handler as TestController
-            op(actor, puller)
+            val issuer = issuer("control.1")
+            val actor = issuer.issuable as TestController
+            op(actor, issuer)
         }
     }
 
@@ -24,17 +23,29 @@ class Control_Tests : ActorTestSupport {
             val scope = CoroutineScope(Dispatchers.IO)
             val context = Context("control.1", scope)
             val actor = TestAdder(context, channel)
-            val puller = Issuer<Int>(channel, actor, callback)
-            op(actor, puller)
+            val issuer = Issuer<Int>(channel, actor, callback)
+            op(actor, issuer)
+        }
+    }
+
+
+    fun loader(callback:(Message<Int>) -> Unit, op:suspend(TestLoader, Issuer<Int>) -> Unit) {
+        runBlocking {
+            val channel = Channel<Message<Int>>(Channel.UNLIMITED)
+            val scope = CoroutineScope(Dispatchers.IO)
+            val context = Context("control.1", scope)
+            val actor = TestLoader(context, channel)
+            val issuer = Issuer<Int>(channel, actor, callback)
+            op(actor, issuer)
         }
     }
 
 
     @Test
     fun can_start() {
-        setup { actor, puller ->
+        setup { actor, issuer ->
             actor.start()
-            puller.pull(1)
+            issuer.pull(1)
             Assert.assertEquals(Status.Started, actor.status())
         }
     }
@@ -42,9 +53,9 @@ class Control_Tests : ActorTestSupport {
 
     @Test
     fun can_pause() {
-        setup { actor, puller ->
+        setup { actor, issuer ->
             actor.pause()
-            puller.pull(1)
+            issuer.pull(1)
             Assert.assertEquals(Status.Paused, actor.status())
         }
     }
@@ -52,9 +63,9 @@ class Control_Tests : ActorTestSupport {
 
     @Test
     fun can_stop() {
-        setup { actor, puller ->
+        setup { actor, issuer ->
             actor.stop()
-            puller.pull(1)
+            issuer.pull(1)
             Assert.assertEquals(Status.Stopped, actor.status())
         }
     }
@@ -62,12 +73,12 @@ class Control_Tests : ActorTestSupport {
 
     @Test
     fun can_resume_after_pause() {
-        setup { actor, puller ->
+        setup { actor, issuer ->
             actor.pause()
-            puller.pull(1)
+            issuer.pull(1)
             Assert.assertEquals(Status.Paused, actor.status())
             actor.resume()
-            puller.pull(1)
+            issuer.pull(1)
             Assert.assertEquals(Status.Running, actor.status())
         }
     }
@@ -75,12 +86,12 @@ class Control_Tests : ActorTestSupport {
 
     @Test
     fun can_resume_after_stop() {
-        setup { actor, puller ->
+        setup { actor, issuer ->
             actor.stop()
-            puller.pull(1)
+            issuer.pull(1)
             Assert.assertEquals(Status.Stopped, actor.status())
             actor.resume()
-            puller.pull(1)
+            issuer.pull(1)
             Assert.assertEquals(Status.Running, actor.status())
         }
     }
@@ -88,9 +99,9 @@ class Control_Tests : ActorTestSupport {
 
     @Test
     fun can_kill() {
-        setup { actor, puller ->
+        setup { actor, issuer ->
             actor.kill()
-            puller.pull(1)
+            issuer.pull(1)
             Assert.assertEquals(Status.Killed, actor.status())
         }
     }
@@ -98,11 +109,12 @@ class Control_Tests : ActorTestSupport {
 
     @Test
     fun can_process() {
-        setup { actor, puller ->
+        setup { actor, issuer ->
             actor.start()
+            issuer.pull(1)
             actor.send(1)
             actor.send(2)
-            puller.pull(3)
+            issuer.pull(2)
             Assert.assertEquals(Status.Running, actor.status())
             Assert.assertEquals(2, actor.current)
         }
@@ -110,14 +122,15 @@ class Control_Tests : ActorTestSupport {
 
 
     @Test
-    fun can_request() {
-        setup { actor, puller ->
+    fun can_load() {
+        loader({ }) { actor, issuer ->
             actor.start()
-            actor.send(1)
-            actor.request()
-            puller.poll()
+            issuer.pull(1)
+            actor.load()
+            actor.load()
+            issuer.poll()
             Assert.assertEquals(Status.Running, actor.status())
-            Assert.assertEquals(10, actor.current)
+            Assert.assertEquals(2, actor.current)
         }
     }
 
@@ -125,35 +138,56 @@ class Control_Tests : ActorTestSupport {
     @Test
     fun can_work() {
 
-        adder( { msg ->
-            when(msg){
-                is Control -> println("control: " + msg.action)
-                is Content -> println("content: " + msg.data)
-                is Request -> println("request: " + msg.action)
-            }
-
-        }) { actor, puller ->
+        adder(this::printMsg) { actor, issuer ->
             actor.start()
             val scope = CoroutineScope(Dispatchers.IO)
-            val actions = listOf(Action.Pause, Action.Stop)
-            (1..100).forEachIndexed { ndx, number ->
-                scope.launch {
-                    println("index=$number - sending 1")
-                    actor.send(number)
-                    when {
-                        number % 20 == 0 -> { println("index=$number stopping"); actor.stop()    }
-                        number % 10 == 0 -> { println("index=$number pausing "); actor.pause()   }
-                        number % 5  == 0 -> { println("index=$number resuming"); actor.resume()  }
-                        else -> {}
-                    }
-                }
-            }
-            // To account for ending with a stop
-            puller.poll()
-            actor.resume()
-            puller.poll()
+            issuer.poll()
+            actor.send(1)
+            actor.send(1)
+            issuer.poll()
             Assert.assertEquals(Status.Running, actor.status())
-            Assert.assertEquals(5050, actor.current)
+            Assert.assertEquals(2, actor.current)
+
+            // Paused, send prevented
+            actor.pause()
+            issuer.poll()
+            actor.send(1)
+            issuer.poll()
+            Assert.assertEquals(Status.Paused, actor.status())
+            Assert.assertEquals(2, actor.current)
+
+            // Resume
+            actor.resume()
+            issuer.poll()
+            actor.send(1)
+            issuer.poll()
+            Assert.assertEquals(Status.Running, actor.status())
+            Assert.assertEquals(3, actor.current)
+
+            // Stop
+            actor.stop()
+            issuer.poll()
+            actor.send(1)
+            issuer.poll()
+            Assert.assertEquals(Status.Stopped, actor.status())
+            Assert.assertEquals(3, actor.current)
+
+            // Resume
+            actor.resume()
+            issuer.poll()
+            actor.send(1)
+            issuer.poll()
+            Assert.assertEquals(Status.Running, actor.status())
+            Assert.assertEquals(4, actor.current)
+        }
+    }
+
+
+    private fun printMsg(msg:Message<Int>){
+        when(msg){
+            is Control -> println("control: " + msg.action)
+            is Content -> println("content: " + msg.data)
+            is Request -> println("request: ")
         }
     }
 }

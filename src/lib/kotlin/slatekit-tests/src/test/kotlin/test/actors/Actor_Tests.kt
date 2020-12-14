@@ -12,7 +12,7 @@ import slatekit.actors.*
 class Actor_Tests {
 
     fun build(): TestActor {
-        val channel = Channel<Content<Int>>(Channel.UNLIMITED)
+        val channel = Channel<Message<Int>>(Channel.UNLIMITED)
         val scope = CoroutineScope(Dispatchers.IO)
         val actor = TestActor(Context("basic.1", scope), channel)
         return actor
