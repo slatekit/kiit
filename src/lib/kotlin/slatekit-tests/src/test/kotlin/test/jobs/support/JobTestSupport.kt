@@ -17,7 +17,7 @@ interface JobTestSupport {
     fun setup(id: Identity, numWorkers: Int, queue: Queue?, builder: (Identity) -> Worker<*>, operation: (suspend (Job, Issuer<Task>) -> Unit)?) {
         val job = create(numWorkers, id, builder, queue)
         runBlocking {
-            val issuer = Issuer<Task>(job.channel, job as Issuable<Task>)
+            val issuer = Issuer<Task>(job.channel, job as Issuable<Task>) { it.print() }
             operation?.invoke(job, issuer)
             job.close()
         }

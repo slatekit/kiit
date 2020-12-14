@@ -3,7 +3,6 @@ package slatekit.jobs
 import kotlinx.coroutines.*
 import kotlinx.coroutines.channels.Channel
 import slatekit.actors.*
-import slatekit.actors.pause.Check
 import slatekit.common.*
 import slatekit.common.ext.toStringMySql
 import slatekit.common.log.LogLevel
@@ -57,7 +56,7 @@ import slatekit.results.Try
  *
  */
 class Job(val jctx: Context)
-    : Loader<Task>(slatekit.actors.Context(jctx.id.name, jctx.scope), jctx.channel, false), Ops, Issuable<Task> {
+    : Loader<Task>(slatekit.actors.Context(jctx.id.name, jctx.scope), jctx.channel, enableStrictMode = false), Ops, Issuable<Task> {
 
     val workers = Workers(jctx)
     private val events = jctx.notifier.jobEvents
@@ -106,31 +105,6 @@ class Job(val jctx: Context)
 
 
     /**
-     *  Handles each message based on its type @see[Content], @see[Control],
-     *  This handles following message types and moves this actor to a running state correctly
-     *  1. @see[Control] messages to start, stop, pause, resume the actor
-     *  2. @see[Request] messages to load payloads from a source ( e.g. queue )
-     *  3. @see[Content] messages are simply delegated to the work method
-     */
-    override suspend fun work(item: Message<Task>) {
-        when (item) {
-            is Control -> {
-                when(item.reference.isEmpty()) {
-                    true -> state.handle(item.action)
-                    false -> manage(item)
-                }
-            }
-            is Request -> {
-                state.begin(); handle(item)
-            }
-            else -> {
-                // Does not support Request<T>
-            }
-        }
-    }
-
-
-    /**
      * Supports direct issuing of messages
      * For internal/support/test purposes.
      * This should not be used for regular usage
@@ -141,12 +115,69 @@ class Job(val jctx: Context)
 
 
     /**
+     *  Handles each message based on its type @see[Content], @see[Control],
+     *  This handles following message types and moves this actor to a running state correctly
+     *  1. @see[Control] messages to start, stop, pause, resume the actor
+     *  2. @see[Request] messages to load payloads from a source ( e.g. queue )
+     *  3. @see[Content] messages are simply delegated to the work method
+     */
+    override suspend fun work(item: Message<Task>) {
+        when (item) {
+            is Control -> {
+                handle(item)
+            }
+            is Request -> {
+                state.begin(false)
+                handle(item)
+            }
+            else -> {
+                // Does not support Request<T>
+            }
+        }
+    }
+
+
+    /**
      * Handles a request for a @see[Task] and dispatches it to the default or target @see[Worker]
      */
     override suspend fun handle(req: Request<Task>) {
-        one(req.reference, true) {
+        // Id of worker
+        val id = when(req.reference) {
+            Message.NONE -> Workers.shortId(jctx.workers[0].id)
+            else -> req.reference
+        }
+
+        // Run
+        one(id) {
             work.work(it, nextTask(it.task))
         }
+    }
+
+
+    /**
+     * Handles a request for a @see[Task] and dispatches it to the default or target @see[Worker]
+     */
+    private suspend fun handle(item: Control<Task>) {
+        if(item.action == Action.Check){
+            val allDone = jctx.workers.all { it.isCompleted() }
+            if(allDone) {
+                complete()
+            }
+            return
+        }
+        when(item.reference) {
+            Message.NONE -> state.handle(item.action)
+            else -> manage(item)
+        }
+    }
+
+
+    /**
+     * Completes this job ( when all workers completed )
+     */
+    private suspend fun complete() {
+        state.complete(false)
+        notify()
     }
 
 
@@ -156,20 +187,15 @@ class Job(val jctx: Context)
      */
     override suspend fun onChanged(action: Action, oldStatus: Status, newStatus: Status) {
         // Notify listeners of job state change
-        notify("Status_Changed")
+        notify()
 
-        // Transition workers here
-        all { wctx ->
-            when (action) {
-                is Action.Delay   -> work.delay(wctx, seconds = 30)
-                is Action.Start   -> work.start(wctx)
-                is Action.Pause   -> work.pause(wctx, seconds = 30)
-                is Action.Resume  -> work.resume(wctx)
-                is Action.Stop    -> work.stop(wctx)
-                is Action.Process -> work.work(wctx, nextTask(wctx.task))
-                is Action.Check   -> work.check(wctx)
-                is Action.Kill    -> work.kill(wctx)
-            }
+        // Transition all workers here
+        val canChangeWorkers = when {
+            action == Action.Kill -> true
+            else -> state.validate(action)
+        }
+        if(canChangeWorkers) {
+            all { process(action, 30, it) }
         }
     }
 
@@ -178,19 +204,26 @@ class Job(val jctx: Context)
      * Manages a request to control a specific worker
      */
     private suspend fun manage(cmd: Control<Task>) {
+        // Ensure only processing of running job
         if (cmd.action == Action.Process && !Rules.canWork(this.status())) {
             notify("CMD_WARN")
             return
         }
-        when (cmd.action) {
-            is Action.Delay   -> one(cmd.reference, false) { work.delay(it, seconds = 30) }
-            is Action.Start   -> one(cmd.reference, false) { work.start(it) }
-            is Action.Pause   -> one(cmd.reference, false) { work.pause(it, seconds = 30) }
-            is Action.Resume  -> one(cmd.reference, false) { work.resume(it) }
-            is Action.Stop    -> one(cmd.reference, false) { work.stop(it) }
-            is Action.Process -> run(cmd.reference, true) { work.work(it, nextTask(it.task)) }
-            is Action.Check   -> one(cmd.reference, true) { work.check(it) }
-            is Action.Kill    -> one(cmd.reference, true) { work.kill(it) }
+        one(cmd.reference) { process(cmd.action, cmd.seconds, it) }
+    }
+
+
+    private suspend fun process(action: Action, seconds:Long?, wctx:WorkerContext) {
+        val finalSeconds = seconds ?: 30
+        when (action) {
+            is Action.Delay   -> work.delay(wctx, seconds = finalSeconds)
+            is Action.Start   -> work.start(wctx)
+            is Action.Pause   -> work.pause(wctx, seconds = finalSeconds)
+            is Action.Resume  -> work.resume(wctx)
+            is Action.Stop    -> work.stop(wctx)
+            is Action.Process -> jctx.scope.launch {  work.work(wctx, nextTask(wctx.task)) }
+            is Action.Check   -> work.check(wctx)
+            is Action.Kill    -> work.kill(wctx)
         }
     }
 
@@ -236,13 +269,8 @@ class Job(val jctx: Context)
     /**
      * Transitions all workers to the new status supplied
      */
-    private suspend fun one(id: String, launch: Boolean, op: suspend (WorkerContext) -> Try<Status>) {
-        workers[id]?.let {
-            when(launch){
-                true -> jctx.scope.launch { op(it) }
-                false -> op(it)
-            }
-        }
+    private suspend fun one(id: String, op: suspend (WorkerContext) -> Unit) {
+        workers[id]?.let { op(it) }
     }
 
 
@@ -257,7 +285,7 @@ class Job(val jctx: Context)
     }
 
 
-    private fun notify(eventName: String) {
+    private fun notify(eventName: String? = null) {
         val job = this
         ctx.scope.launch {
             jctx.notifier.notify(job, eventName)

@@ -1,5 +1,6 @@
 package test.jobs
 
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.runBlocking
 import org.junit.Assert
 import org.junit.Test
@@ -33,12 +34,17 @@ class Job_Create_Tests : JobTestSupport {
     @Test
     fun can_create_with_lambda() {
         var value = 0
-        val job = Job(ID, suspend { value = 1; WResult.Done  })
+        val job = Job(ID, suspend {
+            value = 1
+            WResult.Done
+        })
 
-        val issuer = Issuer<Task>(job.channel, job as Issuable<Task>)
+        val issuer = Issuer<Task>(job.channel, job as Issuable<Task>) { it.print() }
         runBlocking {
             job.start()
-            issuer.pull(4)
+            issuer.pull(2)
+            delay(500)
+            issuer.pull(1)
             ensure(job)
             Assert.assertEquals(1, value)
         }
@@ -50,7 +56,7 @@ class Job_Create_Tests : JobTestSupport {
         var name = ""
         var value = 0
         val job = Job(ID, { task: Task -> name = task.name; value = 1; WResult.Done })
-        val issuer = Issuer<Task>(job.channel, job as Issuable<Task>)
+        val issuer = Issuer<Task>(job.channel, job as Issuable<Task>)  { it.print() }
         runBlocking {
             job.start()
             issuer.pull(4)
@@ -66,7 +72,7 @@ class Job_Create_Tests : JobTestSupport {
         var name = ""
         var value = 0
         val job = Job(ID, Worker<String>(ID) { task -> name = task.name; value = 1; WResult.Done })
-        val issuer = Issuer<Task>(job.channel, job as Issuable<Task>)
+        val issuer = Issuer<Task>(job.channel, job as Issuable<Task>)  { it.print() }
         runBlocking {
             job.start()
             issuer.pull(4)
@@ -87,8 +93,6 @@ class Job_Create_Tests : JobTestSupport {
         Assert.assertEquals(ID.agent, job.jctx.workers.first().id.agent)
         Assert.assertEquals(ID.env, job.jctx.workers.first().id.env)
         Assert.assertEquals("worker", job.jctx.workers.first().id.tags[0])
-        Assert.assertNotEquals(ID.instance, job.jctx.workers.first().id.instance)
-        Assert.assertNotEquals(ID.tags, job.jctx.workers.first().id.tags)
 
         Assert.assertEquals(1, job.jctx.workers.size)
         Assert.assertEquals(1, job.workers.getIds().size)

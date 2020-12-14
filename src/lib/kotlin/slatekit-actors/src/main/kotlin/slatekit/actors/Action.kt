@@ -22,15 +22,19 @@ sealed class Action(val name: String) {
     /* ktlint-enable */
 
     fun toStatus(current: Status): Status {
-        return when(this) {
-            Delay -> Status.InActive
-            Start -> Status.Started
-            Pause -> Status.Paused
-            Resume -> Status.Running
-            Stop -> Status.Stopped
-            Kill -> Status.Killed
-            Check -> current
-            Process -> current
+        return when(current) {
+            Status.Completed -> current
+            Status.Killed    -> current
+            else -> when(this) {
+                Delay -> Status.InActive
+                Start -> Status.Started
+                Pause -> Status.Paused
+                Resume -> Status.Running
+                Stop -> Status.Stopped
+                Kill -> Status.Killed
+                Check -> current
+                Process -> current
+            }
         }
     }
 }

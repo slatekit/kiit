@@ -16,9 +16,10 @@ open class Notifier(val jobEvents: Emitter<Event> = Emitter<Event>(),
     /**
      * Notifies listeners of Job changes using the @see[slatekit.common.Event] model
      */
-    open suspend fun notify(job: Job, name:String = stateChanged) {
+    open suspend fun notify(job: Job, eventName:String? = stateChanged) {
         // Notify listeners interested in all (*) state changes
         // Notify listeners interested in only X state change
+        val name = eventName ?: stateChanged
         val event = Event(job.jctx.id, name, "State changed", "job", job.status(), job.jctx.queue?.name)
         jobEvents.emit(event)
         jobEvents.emit(event.status.name, event)
@@ -27,9 +28,10 @@ open class Notifier(val jobEvents: Emitter<Event> = Emitter<Event>(),
     /**
      * Notifies listeners of worker changes using the @see[slatekit.common.Event] model
      */
-    open suspend fun notify(job: Job, worker: Worker<*>, name:String = stateChanged) {
+    open suspend fun notify(job: Job, worker: Worker<*>, eventName:String? = stateChanged) {
         // Notify listeners interested in all (*) state changes
         // Notify listeners interested in only X state change
+        val name = eventName ?: stateChanged
         val event = Event(worker.id, name, "State changed", "wrk", worker.status(), job.jctx.queue?.name, info = worker.info())
         wrkEvents.emit(event)
         wrkEvents.emit(event.status.name, event)

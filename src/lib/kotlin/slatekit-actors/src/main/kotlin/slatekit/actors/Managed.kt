@@ -45,7 +45,8 @@ abstract class Managed<T>(ctx: Context, channel: Channel<Message<T>>, enableStri
                 state.handle(item.action)
             }
             is Content -> {
-                state.begin(); handle(item)
+                state.begin(false)
+                handle(item)
             }
             else -> {
                 // Does not support Request<T>
