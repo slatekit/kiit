@@ -27,7 +27,7 @@ class Job_Manage_Tests : JobTestSupport {
         setup(ID, 2, null, { id -> TestWorker(id, 1) }) { job, issuer ->
             job.start()
             issuer.pull(1)
-            Assert.assertEquals(Status.Running, job.status())
+            Assert.assertEquals(Status.Started, job.status())
             ensure(job, 2, 0, Status.Running)
         }
     }

@@ -43,7 +43,8 @@ abstract class Loader<T>(ctx: Context, channel: Channel<Message<T>>, enableStric
                 state.handle(item.action)
             }
             is Request -> {
-                state.begin(); handle(item)
+                state.begin(false)
+                handle(item)
             }
             else -> {
                 // Does not support Request<T>

@@ -7,6 +7,14 @@ sealed class Message<T> {
     abstract val id:Long
     abstract val reference:String
 
+    fun print() {
+        when(this) {
+            is Control -> println("control: id=${this.id}, action=${this.action.name}, reference=${this.reference}, msg=${this.msg}")
+            is Content -> println("content: id=${this.id}, reference=${this.reference}")
+            is Request -> println("request: id=${this.id}, reference=${this.reference}")
+        }
+    }
+
     companion object {
 
         // Used for the reference

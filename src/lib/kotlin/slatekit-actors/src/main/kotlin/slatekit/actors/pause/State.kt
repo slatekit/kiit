@@ -6,6 +6,11 @@ import java.util.concurrent.atomic.AtomicReference
 
 /**
  * Base class for an Actor that can be started, stopped, paused, and resumed
+ * 1. start   -> started
+ * 2. process -> running
+ * 2. stop    -> stopped
+ * 3. pause   -> paused
+ * 4. resume  -> running
  */
 open class State(val changed:(suspend(Action, Status, Status) -> Unit)? = null)  {
 
@@ -40,7 +45,35 @@ open class State(val changed:(suspend(Action, Status, Status) -> Unit)? = null) 
 
 
     /**
-     * Moves this actors status to the one supplied
+     * Sets the status to running if started
+     */
+    suspend fun begin(notify:Boolean) {
+        val current = status()
+        if (current == Status.Started) {
+            move(Status.Running)
+            if(notify){
+                changed?.invoke(Action.Process, Status.Started, Status.Running)
+            }
+        }
+    }
+
+
+    /**
+     * Moves this actors status to the one supplied.
+     */
+    suspend fun complete(notify:Boolean) {
+        val current = status()
+        if (current == Status.Running) {
+            move(Status.Completed)
+            if(notify){
+                changed?.invoke(Action.Process, Status.Started, Status.Running)
+            }
+        }
+    }
+
+
+    /**
+     * Moves this actors status to the one supplied.
      */
     protected fun move(newStatus: Status) {
         _status.set(newStatus)
@@ -54,17 +87,6 @@ open class State(val changed:(suspend(Action, Status, Status) -> Unit)? = null) 
         return when (this.status()) {
             Status.Killed -> action == Action.Check
             else -> true
-        }
-    }
-
-
-    /**
-     * Sets the status to running if started
-     */
-    fun begin() {
-        val current = status()
-        if (current == Status.Started) {
-            move(Status.Running)
         }
     }
 }

@@ -39,7 +39,7 @@ abstract class Pausable<T>(ctx:Context, channel: Channel<Message<T>>, private va
     /**
      * Allows the operation to proceed only if this is started or running
      */
-    protected suspend fun allow(enableStrictMode:Boolean = true, op:suspend () -> Unit) {
+    protected suspend fun allow(op:suspend () -> Unit) {
         when(enableStrictMode) {
             false -> op()
             true  -> when (status()) {
