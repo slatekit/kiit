@@ -88,11 +88,11 @@ fun run(args: Args){
 
         // Run
         val result = jobs.start(fullName)
-        when(result) {
-            is Success -> result.value
-            is Failure -> {
+        when(result.success) {
+            true -> result.msg
+            false -> {
                 println("\nERROR : =====================")
-                println(result.error.msg)
+                println(result.msg)
                 println("\n")
             }
         }
