@@ -10,12 +10,14 @@ about: A Kotlin utility library, tool-kit and server backend.
 mantra: Simplicity above all else
 </slate_header>
  */
-package slatekit.apis.core
+package slatekit.apis.services
 
 import java.io.File
 import org.json.simple.JSONObject
 import org.json.simple.parser.JSONParser
 import slatekit.apis.ApiConstants
+import slatekit.apis.core.Data
+import slatekit.apis.core.Meta
 import slatekit.apis.support.JsonSupport
 import slatekit.common.*
 import slatekit.common.crypto.Encryptor
@@ -25,7 +27,7 @@ import slatekit.common.requests.CommonRequest
 import slatekit.common.requests.Request
 import slatekit.meta.Serialization
 
-object Requests {
+object Reqs {
 
     /**
      * Loads a file from a file with the existing meta data supplied.

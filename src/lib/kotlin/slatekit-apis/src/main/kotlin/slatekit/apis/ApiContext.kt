@@ -1,6 +1,6 @@
 package slatekit.apis
 
-import slatekit.apis.core.Help
+import slatekit.apis.services.Help
 import slatekit.apis.routes.Routes
 import slatekit.apis.routes.Api
 import slatekit.common.Source

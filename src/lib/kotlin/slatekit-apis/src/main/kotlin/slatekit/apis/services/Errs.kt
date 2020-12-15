@@ -1,4 +1,4 @@
-package slatekit.apis.core
+package slatekit.apis.services
 
 import org.json.simple.JSONArray
 import org.json.simple.JSONObject

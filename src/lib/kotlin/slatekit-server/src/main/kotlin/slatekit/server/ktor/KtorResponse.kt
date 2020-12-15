@@ -19,7 +19,7 @@ import io.ktor.http.HttpStatusCode
 import io.ktor.response.header
 import io.ktor.response.respondBytes
 import io.ktor.response.respondText
-import slatekit.apis.core.Errs
+import slatekit.apis.services.Errs
 import slatekit.common.types.Content
 import slatekit.common.types.Doc
 import slatekit.common.requests.Response

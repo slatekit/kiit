@@ -1,7 +1,7 @@
 package slatekit.apis.support
 
 import slatekit.apis.ApiRequest
-import slatekit.apis.core.Requests
+import slatekit.apis.services.Reqs
 import slatekit.common.Source
 import slatekit.common.utils.Random
 import slatekit.results.Notice
@@ -15,7 +15,7 @@ interface QueueSupport {
     suspend fun enueue(request: ApiRequest): Notice<String> {
         // Convert from web request to Queued request
         val req = request.request
-        val payload = Requests.toJsonAsQueued(req)
+        val payload = Reqs.toJsonAsQueued(req)
         enueue(Random.uuid(), req.path, payload, req.tag)
         return slatekit.results.Success("Request processed as queue")
     }

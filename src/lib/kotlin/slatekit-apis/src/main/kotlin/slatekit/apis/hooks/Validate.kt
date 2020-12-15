@@ -2,7 +2,7 @@ package slatekit.apis.hooks
 
 import slatekit.apis.ApiRequest
 import slatekit.apis.Middleware
-import slatekit.apis.core.Calls
+import slatekit.apis.services.Calls
 import slatekit.common.Ignore
 import slatekit.results.Outcome
 

@@ -2,7 +2,7 @@ package test.setup
 
 import slatekit.apis.*
 import slatekit.apis.Action
-import slatekit.apis.core.Requests
+import slatekit.apis.services.Reqs
 import slatekit.common.Source
 import slatekit.context.AppContext
 import slatekit.common.utils.Random
@@ -33,7 +33,7 @@ class WorkerSampleApi(val ctx: AppContext, val queues:List<AsyncQueue<String>> =
         // Coming in as http request ? and mode is queued ?
         return if(req.source != Source.Queue && req.target?.action?.tags?.contains("queued") == true){
             // Convert from web request to Queued request
-            val queuedReq = Requests.toJsonAsQueued(req.request)
+            val queuedReq = Reqs.toJsonAsQueued(req.request)
             enueue(queuedReq, Random.guid().toString(), req.request.tag, "api-queue")
             Success("Request processed as queue")
         }

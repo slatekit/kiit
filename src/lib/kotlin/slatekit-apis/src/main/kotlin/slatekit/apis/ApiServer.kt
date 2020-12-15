@@ -7,6 +7,8 @@ import slatekit.apis.core.*
 import slatekit.apis.core.Target
 import slatekit.apis.hooks.*
 import slatekit.apis.routes.Routes
+import slatekit.apis.services.Calls
+import slatekit.apis.services.Help
 import slatekit.apis.setup.HostAware
 import slatekit.apis.setup.loadAll
 import slatekit.apis.support.ExecSupport

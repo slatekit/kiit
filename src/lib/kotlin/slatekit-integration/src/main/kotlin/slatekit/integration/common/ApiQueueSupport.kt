@@ -3,7 +3,7 @@ package slatekit.integration.common
 import slatekit.apis.ApiRequest
 import slatekit.apis.ApiResult
 import slatekit.apis.Middleware
-import slatekit.apis.core.Requests
+import slatekit.apis.services.Reqs
 import slatekit.apis.support.QueueSupport
 import slatekit.common.Source
 import slatekit.common.utils.Random
@@ -23,7 +23,7 @@ interface ApiQueueSupport : QueueSupport, Middleware{
         // Coming in as http request ? and mode is queued ?
         return if(req.source != Source.Queue && req.target?.action?.tags?.contains("queued") == true){
             // Convert from web request to Queued request
-            val queuedReq = Requests.toJsonAsQueued(req.request)
+            val queuedReq = Reqs.toJsonAsQueued(req.request)
             enueue(Random.guid(), req.request.fullName, queuedReq,  "api-queue")
             Success("Request processed as queue")
         }

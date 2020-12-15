@@ -11,9 +11,10 @@
  * </slate_header>
  */
 
-package slatekit.apis.core
+package slatekit.apis.services
 
 import slatekit.apis.ApiRequest
+import slatekit.apis.core.Target
 import slatekit.apis.routes.Action
 import slatekit.common.*
 import slatekit.common.requests.Request
