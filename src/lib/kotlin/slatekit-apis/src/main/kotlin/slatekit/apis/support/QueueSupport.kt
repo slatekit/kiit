@@ -1,7 +1,7 @@
 package slatekit.apis.support
 
 import slatekit.apis.ApiRequest
-import slatekit.apis.services.Reqs
+import slatekit.apis.core.Reqs
 import slatekit.common.Source
 import slatekit.common.utils.Random
 import slatekit.results.Notice

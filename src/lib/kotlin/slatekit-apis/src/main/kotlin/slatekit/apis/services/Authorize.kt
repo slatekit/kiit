@@ -1,4 +1,4 @@
-package slatekit.apis.hooks
+package slatekit.apis.services
 
 import slatekit.apis.ApiRequest
 import slatekit.apis.Middleware

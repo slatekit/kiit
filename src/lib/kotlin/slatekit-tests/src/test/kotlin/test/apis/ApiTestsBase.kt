@@ -17,7 +17,7 @@ import org.junit.Assert
 import slatekit.apis.*
 import slatekit.apis.routes.Api
 import slatekit.apis.core.Auth
-import slatekit.apis.hooks.Authorize
+import slatekit.apis.services.Authorize
 import slatekit.apis.SetupType
 import slatekit.common.requests.CommonRequest
 import slatekit.common.Source

@@ -2,7 +2,7 @@ package test.setup
 
 import slatekit.apis.*
 import slatekit.apis.Action
-import slatekit.apis.services.Reqs
+import slatekit.apis.core.Reqs
 import slatekit.common.Source
 import slatekit.context.AppContext
 import slatekit.common.utils.Random

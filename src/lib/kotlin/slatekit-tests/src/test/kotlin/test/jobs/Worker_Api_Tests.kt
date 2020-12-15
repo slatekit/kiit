@@ -8,7 +8,7 @@ import org.threeten.bp.ZoneId
 import slatekit.apis.ApiServer
 import slatekit.apis.Verb
 import slatekit.apis.routes.Api
-import slatekit.apis.services.Reqs
+import slatekit.apis.core.Reqs
 import slatekit.apis.SetupType
 import slatekit.common.*
 import slatekit.core.queues.InMemoryQueue

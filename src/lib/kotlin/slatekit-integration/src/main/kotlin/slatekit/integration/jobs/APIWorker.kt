@@ -2,7 +2,7 @@ package slatekit.integration.jobs
 
 import slatekit.jobs.WResult
 import slatekit.apis.ApiServer
-import slatekit.apis.services.Reqs
+import slatekit.apis.core.Reqs
 import slatekit.common.Identity
 import slatekit.common.Sources
 import slatekit.jobs.*

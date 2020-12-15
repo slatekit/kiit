@@ -52,7 +52,7 @@ object Calls {
      */
     suspend fun validateCall(
         request: ApiRequest,
-        fetcher: (Request) -> Notice<Target>,
+        fetcher: (Request) -> Outcome<Target>,
         allowSingleDefaultParam: Boolean = false
     ): Outcome<Target> {
         val req = request.request

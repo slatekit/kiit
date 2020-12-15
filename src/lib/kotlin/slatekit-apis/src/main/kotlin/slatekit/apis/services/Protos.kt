@@ -1,4 +1,4 @@
-package slatekit.apis.hooks
+package slatekit.apis.services
 
 import slatekit.apis.ApiRequest
 import slatekit.apis.Middleware
@@ -6,7 +6,6 @@ import slatekit.apis.Verb
 import slatekit.common.Ignore
 import slatekit.common.Source
 import slatekit.common.requests.Request
-import slatekit.results.Failure
 import slatekit.results.Outcome
 import slatekit.results.builders.Outcomes
 import slatekit.results.flatMap

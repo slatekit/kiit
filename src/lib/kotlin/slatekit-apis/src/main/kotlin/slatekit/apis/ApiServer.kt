@@ -5,10 +5,8 @@ import kotlin.reflect.KCallable
 import kotlin.reflect.KClass
 import slatekit.apis.core.*
 import slatekit.apis.core.Target
-import slatekit.apis.hooks.*
 import slatekit.apis.routes.Routes
-import slatekit.apis.services.Calls
-import slatekit.apis.services.Help
+import slatekit.apis.services.*
 import slatekit.apis.setup.HostAware
 import slatekit.apis.setup.loadAll
 import slatekit.apis.support.ExecSupport

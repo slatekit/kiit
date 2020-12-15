@@ -3,7 +3,7 @@ package slatekit.integration.common
 import slatekit.apis.ApiRequest
 import slatekit.apis.ApiResult
 import slatekit.apis.Middleware
-import slatekit.apis.services.Reqs
+import slatekit.apis.core.Reqs
 import slatekit.apis.support.QueueSupport
 import slatekit.common.Source
 import slatekit.common.utils.Random

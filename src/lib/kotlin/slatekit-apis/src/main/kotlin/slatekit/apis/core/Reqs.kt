@@ -10,14 +10,12 @@ about: A Kotlin utility library, tool-kit and server backend.
 mantra: Simplicity above all else
 </slate_header>
  */
-package slatekit.apis.services
+package slatekit.apis.core
 
 import java.io.File
 import org.json.simple.JSONObject
 import org.json.simple.parser.JSONParser
 import slatekit.apis.ApiConstants
-import slatekit.apis.core.Data
-import slatekit.apis.core.Meta
 import slatekit.apis.support.JsonSupport
 import slatekit.common.*
 import slatekit.common.crypto.Encryptor

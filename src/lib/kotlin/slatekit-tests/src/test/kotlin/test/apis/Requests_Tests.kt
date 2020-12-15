@@ -3,7 +3,7 @@ package test.apis
 import org.junit.Assert
 import org.junit.Test
 import org.threeten.bp.ZoneId
-import slatekit.apis.services.Reqs
+import slatekit.apis.core.Reqs
 import slatekit.common.requests.CommonRequest
 import slatekit.common.DateTime
 import slatekit.common.requests.InputArgs
