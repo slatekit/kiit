@@ -1,9 +1,9 @@
 package slatekit.apis.setup
 
 import kotlin.reflect.KClass
-import slatekit.apis.core.Action
-import slatekit.apis.core.Api
-import slatekit.apis.core.Lookup
+import slatekit.apis.routes.Action
+import slatekit.apis.routes.Api
+import slatekit.apis.routes.Lookup
 import slatekit.common.Ignore
 import slatekit.common.naming.Namer
 import slatekit.meta.Reflector

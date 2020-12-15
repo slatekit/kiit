@@ -1,6 +1,8 @@
 package slatekit.apis.core
 
 import slatekit.apis.Verb
+import slatekit.apis.routes.Action
+import slatekit.apis.routes.Api
 import slatekit.common.Source
 
 data class Target(val api: Api, val action: Action, val instance: Any) {

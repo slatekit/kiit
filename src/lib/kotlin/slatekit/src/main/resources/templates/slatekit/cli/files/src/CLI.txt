@@ -45,9 +45,9 @@ class CLI(val ctx: Context) {
     }
 
 
-    fun apis(): List<slatekit.apis.core.Api> {
+    fun apis(): List<slatekit.apis.routes.Api> {
         return listOf(
-                slatekit.apis.core.Api(klass = SampleApi::class, singleton = SampleApi(ctx), setup = Setup.Annotated)
+                slatekit.apis.routes.Api(klass = SampleApi::class, singleton = SampleApi(ctx), setup = Setup.Annotated)
         )
     }
 }

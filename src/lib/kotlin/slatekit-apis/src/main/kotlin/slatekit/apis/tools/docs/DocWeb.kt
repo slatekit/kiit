@@ -1,7 +1,7 @@
 package slatekit.apis.tools.docs
 
-import slatekit.apis.core.Action
-import slatekit.apis.core.Api
+import slatekit.apis.routes.Action
+import slatekit.apis.routes.Api
 import slatekit.common.console.Writer
 import slatekit.common.console.WebWriter
 

@@ -14,7 +14,7 @@
 package slatekit.apis.core
 
 import slatekit.apis.ApiRequest
-import slatekit.apis.hooks.Targets
+import slatekit.apis.routes.Action
 import slatekit.common.*
 import slatekit.common.requests.Request
 import slatekit.meta.KTypes
@@ -57,7 +57,7 @@ object Calls {
         val req = request.request
         val fullName = req.fullName
         val args = req.data
-        val apiRefCheck = request.host.getApi(req.area, req.name, req.action).toOutcome()
+        val apiRefCheck = request.host.get(req.area, req.name, req.action).toOutcome()
         return apiRefCheck.flatMap { check ->
             val target = request.target!!
             val action = target.action

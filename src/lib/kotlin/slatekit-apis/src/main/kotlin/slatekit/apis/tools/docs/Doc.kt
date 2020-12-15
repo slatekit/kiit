@@ -14,13 +14,12 @@
 package slatekit.apis.tools.docs
 
 import java.lang.Math.abs
-import slatekit.apis.core.Action
-import slatekit.apis.core.Api
-import slatekit.apis.core.Area
-import slatekit.apis.core.Lookup
+import slatekit.apis.routes.Action
+import slatekit.apis.routes.Api
+import slatekit.apis.routes.Area
+import slatekit.apis.routes.Lookup
 import slatekit.common.console.ConsoleWriter
 import slatekit.common.console.TextSettings
-import slatekit.common.console.TextType
 import slatekit.common.console.Writer
 import kotlin.reflect.KClass
 
@@ -99,7 +98,7 @@ abstract class Doc  {
      * use  {area} {api}? to list all Actions in an API
      * e.g. areaA apiA ?
      */
-    fun area(area:Area){
+    fun area(area: Area){
         section {
             writer.title("AREA", endLine = true)
             writer.tab()
@@ -135,7 +134,7 @@ abstract class Doc  {
      * use  {area} {api} {action}? to list Action details
      * e.g. areaA apiA action1 ?
      */
-    fun api(area:Area, api: Api){
+    fun api(area: Area, api: Api){
         section {
             writer.title("API", endLine = true)
             buildApi(api, details = true)
@@ -170,7 +169,7 @@ abstract class Doc  {
      * use  {area} {api} {action}? to list Action details
      * e.g. areaA apiA action1 ?
      */
-    fun action(area:Area, api: Api, action: Action){
+    fun action(area: Area, api: Api, action: Action){
         section {
             writer.title("ACTION", endLine = true)
             writer.text(action.verb.name + " ", endLine = false)

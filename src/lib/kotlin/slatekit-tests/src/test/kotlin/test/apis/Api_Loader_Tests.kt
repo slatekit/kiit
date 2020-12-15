@@ -15,9 +15,9 @@ package test.apis
 import org.junit.Assert
 import org.junit.Test
 import slatekit.apis.*
-import slatekit.apis.core.Api
+import slatekit.apis.routes.Api
 import slatekit.apis.core.Sources
-import slatekit.apis.core.Routes
+import slatekit.apis.routes.Routes
 import slatekit.apis.setup.AnnoLoader
 import slatekit.apis.setup.MethodLoader
 import slatekit.apis.setup.loadAll

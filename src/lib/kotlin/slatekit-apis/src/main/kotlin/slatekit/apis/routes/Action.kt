@@ -11,7 +11,7 @@
  * </slate_header>
  */
 
-package slatekit.apis.core
+package slatekit.apis.routes
 
 import kotlin.reflect.KCallable
 import kotlin.reflect.KParameter
@@ -19,15 +19,17 @@ import kotlin.reflect.full.createType
 import slatekit.apis.Access
 import slatekit.apis.AuthMode
 import slatekit.apis.Verb
+import slatekit.apis.core.Roles
+import slatekit.apis.core.Sources
 import slatekit.common.Metadata
 import slatekit.common.ext.tail
 import slatekit.common.requests.Request
 
 /**
- * @param api : Reference to the API associated w/ the action
  * @param member : The callable method associated w/ the action
  * @param name : Name of action which may have a different name than method due to conventions
  * @param desc : Description of the action
+ * @param auth : Authentication mode @see[AuthMode] for the action/method
  * @param roles : Roles allowed to call this action
  * @param verb : Get/Post verb for Http enabled source
  * @param source : Protocol associated with the action.
@@ -69,9 +71,7 @@ data class Action(
      * All the parameters that can me mapped over for
      * populating during calls on the CLI / Web
      */
-    val params =
-            if (paramsAll.size <= 1) listOf()
-            else paramsAll.tail()
+    val params = if (paramsAll.size <= 1) listOf() else paramsAll.tail()
 
     /**
      * Whether the action has any arguments.

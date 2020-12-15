@@ -1,8 +1,8 @@
 package slatekit.apis.tools.code
 
 import slatekit.apis.Access
-import slatekit.apis.core.Action
-import slatekit.apis.core.Api
+import slatekit.apis.routes.Action
+import slatekit.apis.routes.Api
 import slatekit.common.Source
 
 class CodeRules(val settings: CodeGenSettings) {
@@ -14,7 +14,7 @@ class CodeRules(val settings: CodeGenSettings) {
     }
 
 
-    fun isValidAction(api: Api, action:Action, declaredMemberLookup: Map<String, Boolean>):Boolean {
+    fun isValidAction(api: Api, action: Action, declaredMemberLookup: Map<String, Boolean>):Boolean {
         // Only include declared items
         val isValidProtocol = action.protocol == Source.Web || action.protocol == Source.All
         val isValidAccess = action.access == Access.Public

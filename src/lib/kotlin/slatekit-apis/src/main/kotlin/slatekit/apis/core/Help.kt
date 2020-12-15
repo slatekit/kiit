@@ -14,6 +14,7 @@
 package slatekit.apis.core
 
 import slatekit.apis.ApiServer
+import slatekit.apis.routes.Routes
 import slatekit.apis.tools.docs.Doc
 import slatekit.apis.tools.docs.DocUtils
 import slatekit.common.types.Content

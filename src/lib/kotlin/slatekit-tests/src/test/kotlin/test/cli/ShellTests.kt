@@ -16,7 +16,7 @@ package slate.test
 import kotlinx.coroutines.runBlocking
 import org.junit.Assert
 import org.junit.Test
-import slatekit.apis.core.Api
+import slatekit.apis.routes.Api
 import slatekit.apis.SetupType
 import slatekit.apis.support.Authenticator
 import slatekit.cli.CliRequest
@@ -110,7 +110,7 @@ class ShellTests  {
 
     // 2. Register the apis using default textType ( uses permissions in annotations on class )
     val apis = listOf(
-            Api(InfoApi(ctx)    , setup = SetupType.Annotated, declaredOnly = true, roles = listOf("qa")),
+            Api(InfoApi(ctx), setup = SetupType.Annotated, declaredOnly = true, roles = listOf("qa")),
             Api(VersionApi(ctx), setup = SetupType.Annotated, declaredOnly = true, roles = listOf("qa"))
     )
 

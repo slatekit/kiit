@@ -1,7 +1,9 @@
 package slatekit.apis.setup
 
 import kotlin.reflect.KVisibility
-import slatekit.apis.core.*
+import slatekit.apis.routes.Lookup
+import slatekit.apis.routes.Action
+import slatekit.apis.routes.Api
 import slatekit.common.naming.Namer
 import slatekit.meta.Reflector
 
@@ -19,7 +21,7 @@ class MethodLoader(val api: Api) : Loader {
         return api.copy(actions = Lookup(actions, { t -> t.name }))
     }
 
-    override fun loadActions(api: slatekit.apis.core.Api, local: Boolean, namer: Namer?): List<Action> {
+    override fun loadActions(api: Api, local: Boolean, namer: Namer?): List<Action> {
         val members = Reflector.getMembers(api.klass, local, true, KVisibility.PUBLIC)
         val actions: List<Action> = members.map { member -> toAction(member, api, null, namer) }
         return actions

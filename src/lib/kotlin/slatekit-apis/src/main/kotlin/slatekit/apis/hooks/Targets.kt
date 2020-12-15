@@ -17,7 +17,7 @@ class Targets : Middleware {
     override suspend fun process(req: ApiRequest, next:suspend(ApiRequest) -> Outcome<Any>): Outcome<Any> {
 
         val request = req.request
-        val result = req.host.getApi(request.area, request.name, request.action)
+        val result = req.host.get(request.area, request.name, request.action)
         return when (result) {
             is Success -> next(req.copy(target = result.value))
             is Failure -> Outcomes.errored(result.error)

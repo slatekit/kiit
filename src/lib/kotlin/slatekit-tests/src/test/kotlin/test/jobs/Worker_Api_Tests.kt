@@ -7,7 +7,7 @@ import org.threeten.bp.ZoneId
 
 import slatekit.apis.ApiServer
 import slatekit.apis.Verb
-import slatekit.apis.core.Api
+import slatekit.apis.routes.Api
 import slatekit.apis.core.Requests
 import slatekit.apis.SetupType
 import slatekit.common.*

@@ -11,22 +11,24 @@
  * </slate_header>
  */
 
-package slatekit.apis.core
+package slatekit.apis.routes
 
 import kotlin.reflect.KClass
 import slatekit.apis.*
 import slatekit.apis.SetupType
+import slatekit.apis.core.Roles
+import slatekit.apis.core.Sources
 import slatekit.common.Source
 import slatekit.meta.kClass
 
 /**
  * Represents an API in Slate Kit which is a reference to a regular Class
  *
- *  NOTE: API routes are considered Universal APIs and are organized into 3 parts in the route.
- *  e.g. area / api  / action
- *       app  / user / invite
+ *  NOTE: API routes are considered Universal Routes and are organized into 3 parts in the route.
+ *  e.g. area     / api    / action
+ *       account  / signup / invite
  *
- * @param area : the top level area/category of the api "sys", "app", "ops"
+ * @param area : the top level area/category of the api "account", "alerts"
  * @param name : the name of the api "users"
  * @param desc : description of the api
  * @param roles : the roles allowed to access this api ( "admin", "ops" )

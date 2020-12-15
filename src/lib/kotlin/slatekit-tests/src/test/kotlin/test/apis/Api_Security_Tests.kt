@@ -13,7 +13,7 @@ mantra: Simplicity above all else
 package test.apis
 
 import org.junit.Test
-import slatekit.apis.core.Api
+import slatekit.apis.routes.Api
 import slatekit.apis.SetupType
 import slatekit.apis.Verbs
 import slatekit.common.info.Credentials

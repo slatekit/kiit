@@ -17,7 +17,7 @@ import org.junit.Assert
 import org.junit.Test
 import org.threeten.bp.ZoneId
 import slatekit.apis.*
-import slatekit.apis.core.Api
+import slatekit.apis.routes.Api
 import slatekit.apis.SetupType
 import slatekit.common.DateTimes
 import slatekit.results.*

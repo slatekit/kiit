@@ -15,7 +15,7 @@ package test.apis
 import kotlinx.coroutines.runBlocking
 import org.junit.Assert
 import slatekit.apis.*
-import slatekit.apis.core.Api
+import slatekit.apis.routes.Api
 import slatekit.apis.core.Auth
 import slatekit.apis.hooks.Authorize
 import slatekit.apis.SetupType
@@ -145,7 +145,6 @@ open class ApiTestsBase {
         // Host
         val host = ApiServer(ctx,
                 apis = apis,
-                hooks = ApiHooks.of(hooks),
                 settings = ApiSettings(protocol))
 
         // Get result

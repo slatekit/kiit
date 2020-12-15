@@ -1,4 +1,4 @@
-package slatekit.apis.core
+package slatekit.apis.routes
 
 open class Lookup<T>(
     val items: List<T>,

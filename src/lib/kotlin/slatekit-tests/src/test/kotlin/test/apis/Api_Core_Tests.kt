@@ -15,7 +15,7 @@ package test.apis
 import org.junit.Test
 import org.threeten.bp.ZoneId
 import slatekit.apis.Verbs
-import slatekit.apis.core.Api
+import slatekit.apis.routes.Api
 import slatekit.apis.SetupType
 import slatekit.common.requests.CommonRequest
 import slatekit.common.DateTimes

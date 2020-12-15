@@ -14,7 +14,7 @@
 package slatekit.integration.apis
 
 import slatekit.apis.ApiServer
-import slatekit.apis.core.Api
+import slatekit.apis.routes.Api
 import slatekit.apis.core.HelpType
 import slatekit.cli.*
 import slatekit.common.Source

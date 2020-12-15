@@ -16,7 +16,7 @@ import kotlinx.coroutines.runBlocking
 import org.junit.Assert
 import org.junit.Test
 import slatekit.apis.*
-import slatekit.apis.core.Api
+import slatekit.apis.routes.Api
 import slatekit.results.Codes
 import slatekit.results.getOrElse
 import test.setup.SampleMiddlewareApi

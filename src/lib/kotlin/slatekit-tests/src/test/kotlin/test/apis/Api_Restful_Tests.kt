@@ -17,10 +17,8 @@ import org.json.simple.JSONObject
 import org.junit.Assert
 import org.junit.Test
 import slatekit.apis.*
-import slatekit.apis.core.Api
-import slatekit.apis.hooks.Restify
+import slatekit.apis.routes.Api
 import slatekit.common.*
-import slatekit.common.ext.toStringYYYYMMDD
 import slatekit.common.naming.LowerHyphenNamer
 import slatekit.common.naming.Namer
 import slatekit.results.Result

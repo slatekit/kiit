@@ -1,8 +1,8 @@
-package slatekit.apis.core
+package slatekit.apis.routes
 
 /**
  * The top most level qualifier in the Universal Routing Structure
- * Essentially the root of the Routing tree
+ * Essentially the logical root of APIs
  * e.g.
  *
  * Format:  {area}.{api}.{action}

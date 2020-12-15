@@ -4,7 +4,7 @@ import kotlinx.coroutines.runBlocking
 import slatekit.apis.ApiServer
 import slatekit.apis.AuthMode
 import slatekit.apis.Verb
-import slatekit.apis.core.Api
+import slatekit.apis.routes.Api
 import slatekit.common.conf.Config
 import slatekit.results.Try
 import slatekit.results.Success

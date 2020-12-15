@@ -5,9 +5,11 @@ import kotlin.reflect.KClass
 import slatekit.apis.*
 import slatekit.apis.SetupType
 import slatekit.apis.core.*
-import slatekit.apis.core.Action
-import slatekit.apis.core.Api
+import slatekit.apis.routes.Action
+import slatekit.apis.routes.Api
 import slatekit.apis.core.Sources
+import slatekit.apis.routes.Lookup
+import slatekit.apis.routes.Area
 import slatekit.common.Source
 import slatekit.common.ext.orElse
 import slatekit.common.naming.Namer
@@ -39,24 +41,24 @@ fun toVerb(name: String?): Verb {
  * @param cls : The class representing the API
  * @param namer: The naming convention
  */
-fun toApi(cls: KClass<*>, instance: Any?, access: Access?, namer: Namer?): slatekit.apis.core.Api {
+fun toApi(cls: KClass<*>, instance: Any?, access: Access?, namer: Namer?): Api {
 
     // get the @Api annotation on the class
     val anno = Reflector.getAnnotationForClassOpt<slatekit.apis.Api>(cls, slatekit.apis.Api::class)!!
     val accessAnno = Access.parse(anno.access)
-    val api = slatekit.apis.core.Api(
-            cls,
-            anno.area,
-            anno.name,
-            anno.desc,
-            AuthMode.parse(anno.auth),
-            Roles(anno.roles.toList()),
-            accessAnno.min(access) ,
-            Sources(anno.sources.toList().map { Source.parse(it) }),
-            Verb.parse(anno.verb),
-            false,
-            instance,
-            SetupType.Annotated
+    val api = Api(
+        cls,
+        anno.area,
+        anno.name,
+        anno.desc,
+        AuthMode.parse(anno.auth),
+        Roles(anno.roles.toList()),
+        accessAnno.min(access),
+        Sources(anno.sources.toList().map { Source.parse(it) }),
+        Verb.parse(anno.verb),
+        false,
+        instance,
+        SetupType.Annotated
     )
     return api
 }
@@ -73,15 +75,15 @@ fun toApi(
     verb: Verb = Verb.Auto,
     protocol: Sources = Sources.all,
     singleton: Boolean = false
-): slatekit.apis.core.Api {
+): Api {
     // Create initial temporary api
     // with all settings that can be used for override values
-    val api = slatekit.apis.core.Api(cls, area, name, desc
-            ?: "", auth, roles, access, protocol, verb, local, singleton)
+    val api = Api(cls, area, name, desc
+        ?: "", auth, roles, access, protocol, verb, local, singleton)
     return api
 }
 
-fun toAction(member: KCallable<*>, api: slatekit.apis.core.Api, apiAction: slatekit.apis.Action?, namer: Namer?): Action {
+fun toAction(member: KCallable<*>, api: Api, apiAction: slatekit.apis.Action?, namer: Namer?): Action {
 
     val methodName = member.name
     val actionNameRaw = apiAction?.name.orElse(methodName)
@@ -102,19 +104,19 @@ fun toAction(member: KCallable<*>, api: slatekit.apis.core.Api, apiAction: slate
         else -> rawVerb
     }
     return Action(
-            member,
-            actionName,
-            actionDesc,
-            actionAuth,
-            actionRoles,
-            actionAccess,
-            actionProtocol,
-            actionVerb,
-            actionTags
+        member,
+        actionName,
+        actionDesc,
+        actionAuth,
+        actionRoles,
+        actionAccess,
+        actionProtocol,
+        actionVerb,
+        actionTags
     )
 }
 
-fun toLookup(rawApis: List<slatekit.apis.core.Api>, namer: Namer? = null): Lookup<Area> {
+fun toLookup(rawApis: List<Api>, namer: Namer? = null): Lookup<Area> {
 
     // Get the apis with actions loaded from either
     // annotations or from public methods.
@@ -136,7 +138,7 @@ fun toLookup(rawApis: List<slatekit.apis.core.Api>, namer: Namer? = null): Looku
     return Lookup(areas, { area -> area.name })
 }
 
-fun loadAll(rawApis: List<slatekit.apis.core.Api>, namer: Namer? = null): Lookup<Area> {
+fun loadAll(rawApis: List<Api>, namer: Namer? = null): Lookup<Area> {
     return toLookup(rawApis, namer)
 }
 
