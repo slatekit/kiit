@@ -25,7 +25,7 @@ apply plugin: 'kotlin'
 def slatekitComponentId = 'jobs'
 def slatekitComponentName = 'Jobs'
 def slatekitComponentDesc = 'SlateKit Jobs: Background job/task queue system'
-def slatekitComponentVersion = ext.slatekit_version_beta
+def slatekitComponentVersion = ext.slatekit_version
 
 
 // ==================================================================
@@ -81,6 +81,7 @@ dependencies {
     /* <slatekit_local>
     if( slatekitSetupViaMaven ) {
         compile "com.slatekit:slatekit-results:$slatekit_version"
+        compile "com.slatekit:slatekit-actors:$slatekit_version"
         compile "com.slatekit:slatekit-common:$slatekit_version"
         compile "com.slatekit:slatekit-core:$slatekit_version_beta"
         compile "com.slatekit:slatekit-tracking:$slatekit_version"

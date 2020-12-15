@@ -105,7 +105,7 @@ dependencies {
         compile "com.slatekit:slatekit-integration:$slatekit_version_beta"
         compile "com.slatekit:slatekit-server:$slatekit_version_beta"
         compile "com.slatekit:slatekit-providers:$slatekit_version_beta"
-        compile "com.slatekit:slatekit-jobs:$slatekit_version_beta"
+        compile "com.slatekit:slatekit-jobs:$slatekit_version"
     } else {
         // */
         implementation project(":slatekit-result")
