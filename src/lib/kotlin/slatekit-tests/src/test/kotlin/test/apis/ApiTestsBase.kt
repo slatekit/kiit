@@ -145,7 +145,7 @@ open class ApiTestsBase {
         // Host
         val host = ApiServer(ctx,
                 apis = apis,
-                settings = ApiSettings(protocol))
+                settings = Settings(protocol))
 
         // Get result
         val actual = runBlocking {

@@ -1,7 +1,6 @@
 package slatekit.apis
 
 import java.io.File
-import kotlin.reflect.KCallable
 import kotlin.reflect.KClass
 import slatekit.apis.core.*
 import slatekit.apis.core.Target
@@ -9,7 +8,8 @@ import slatekit.apis.routes.Routes
 import slatekit.apis.services.*
 import slatekit.apis.setup.HostAware
 import slatekit.apis.setup.loadAll
-import slatekit.apis.support.ExecSupport
+import slatekit.apis.support.CallSupport
+import slatekit.apis.support.RouteSupport
 import slatekit.common.*
 import slatekit.common.ext.numbered
 import slatekit.common.ext.structured
@@ -30,17 +30,17 @@ import slatekit.results.builders.Outcomes
  * @param settings : Settings for the server
  */
 open class ApiServer(
-    val ctx: Context,
+    override val ctx: Context,
     val apis: List<slatekit.apis.routes.Api>,
     val hooks: List<Middleware> = listOf(),
-    val settings: ApiSettings = ApiSettings()
-) : ExecSupport {
+    val settings: Settings = Settings()
+) : CallSupport, RouteSupport {
 
     /**
      * Load all the routes from the APIs supplied.
      * The API setup can be either annotation based or public methods on the Class
      */
-    val routes = Routes(loadAll(apis, settings.naming), settings.naming)
+    override val routes = Routes(loadAll(apis, settings.naming), settings.naming)
 
     /**
      * The help class to handle help on an area, api, or action
@@ -63,49 +63,6 @@ open class ApiServer(
 
     override fun host(): ApiServer = this
 
-    /**
-     * gets the api info associated with the request
-     * @param cmd
-     * @return
-     */
-    fun get(cmd: Request): Outcome<Target> {
-        return get(cmd.area, cmd.name, cmd.action)
-    }
-
-    /**
-     * gets the mapped method associated with the api action.
-     * @param area
-     * @param name
-     * @param action
-     * @return
-     */
-    fun get(area: String, name: String, action: String): Outcome<Target> {
-        return routes.api(area, name, action, ctx)
-    }
-
-    /**
-     * gets the mapped method associated with the api action.
-     * @param area
-     * @param name
-     * @param action
-     * @return
-     */
-    fun get(clsType: KClass<*>, member: KCallable<*>): Outcome<Target> {
-        val apiAnno = Reflector.getAnnotationForClassOpt<Api>(clsType, Api::class)
-        val result = apiAnno?.let { anno ->
-
-            val area = anno.area
-            val api = anno.name
-            val actionAnno = Reflector.getAnnotationForMember<Action>(member, Action::class)
-            val action = actionAnno?.let { act ->
-                val action = if (act.name.isBlank()) member.name else act.name
-                action
-            } ?: member.name
-            val info = get(area, api, action)
-            info
-        } ?: Outcomes.errored("member/annotation not found for : ${member.name}")
-        return result
-    }
 
     fun sample(cmd: Request, path: File): Notice<String> {
         val action = get(cmd)
@@ -277,7 +234,7 @@ open class ApiServer(
 
         @JvmStatic
         fun of(ctx: Context, apis: List<slatekit.apis.routes.Api>, auth: Auth? = null, source: Source? = null): ApiServer {
-            val server = ApiServer(ctx, apis, listOf(), ApiSettings(source ?: Source.Web))
+            val server = ApiServer(ctx, apis, listOf(), Settings(source ?: Source.Web))
             return server
         }
 

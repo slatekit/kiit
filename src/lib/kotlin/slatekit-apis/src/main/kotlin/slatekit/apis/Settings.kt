@@ -31,7 +31,7 @@ import slatekit.meta.deserializer.Deserializer
  * @param docKey : Documentation API key ( for help/doc requests )
  * @param docGen : Documentation generator
  */
-data class ApiSettings(
+data class Settings(
     val source: Source = Source.Web,
     val naming: Namer? = null,
     val decoder: ((Request, Encryptor?) -> Deserializer)? = null,

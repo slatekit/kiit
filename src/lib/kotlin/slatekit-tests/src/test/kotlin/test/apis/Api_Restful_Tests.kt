@@ -181,7 +181,7 @@ class Api_Restful_Tests : ApiTestsBase() {
         }
         callback(r1)
 
-        val api2 = ApiServer(ctx, apis = listOf(Api(SampleRESTApi::class, "app", "SampleREST")), settings = ApiSettings(naming = namer))
+        val api2 = ApiServer(ctx, apis = listOf(Api(SampleRESTApi::class, "app", "SampleREST")), settings = Settings(naming = namer))
         val name = namer?.rename("SampleREST")  ?: "SampleREST"
         val act  = namer?.rename(action) ?: action
         val r2 = runBlocking {

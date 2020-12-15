@@ -9,7 +9,7 @@ import slatekit.common.ext.toResponse
 import slatekit.results.Outcome
 import slatekit.results.Try
 
-interface ExecSupport {
+interface CallSupport {
 
     fun host(): ApiServer
 
