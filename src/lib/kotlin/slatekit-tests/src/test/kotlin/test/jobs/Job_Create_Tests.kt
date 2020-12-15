@@ -52,7 +52,7 @@ class Job_Create_Tests : JobTestSupport {
     fun can_create_with_lambda_task() {
         var name = ""
         var value = 0
-        val mgr = Manager(ID, { task: Task -> name = task.name; value = 1; WResult.Done })
+        val mgr = Manager(ID, { task: Task -> name = task.name; value = 1; WResult.Done }, settings = Settings(false, false))
         val issuer = Issuer<Task>(mgr.channel, mgr as Issuable<Task>)  { it.print() }
         runBlocking {
             mgr.start()
@@ -68,7 +68,7 @@ class Job_Create_Tests : JobTestSupport {
     fun can_create_with_worker() {
         var name = ""
         var value = 0
-        val mgr = Manager(ID, WorkerF<String>(ID) { task -> name = task.name; value = 1; WResult.Done })
+        val mgr = Manager(ID, WorkerF<String>(ID) { task -> name = task.name; value = 1; WResult.Done }, settings = Settings(false, false))
         val issuer = Issuer<Task>(mgr.channel, mgr as Issuable<Task>)  { it.print() }
         runBlocking {
             mgr.start()

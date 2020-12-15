@@ -173,7 +173,9 @@ class Manager(val jctx: Context, val settings: Settings = Settings())
         }
 
         // Run
-        one(id) { run(it) }
+        if(Rules.canWork(status())) {
+            one(id) { run(it) }
+        }
     }
 
 
