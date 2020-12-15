@@ -10,7 +10,7 @@ import slatekit.common.Identity
 import slatekit.actors.Status
 import slatekit.jobs.WResult
 import test.jobs.support.JobTestSupport
-import slatekit.jobs.Job
+import slatekit.jobs.Manager
 import slatekit.jobs.Task
 import slatekit.jobs.Worker
 
@@ -22,30 +22,30 @@ class Job_Create_Tests : JobTestSupport {
     @Test
     fun can_setup_ids() {
         var value = 0
-        val job = Job(ID, suspend { value = 1; WResult.Done })
-        val wrk = job.workers[0]!!
+        val mgr = Manager(ID, suspend { value = 1; WResult.Done })
+        val wrk = mgr.workers[0]!!
 
-        Assert.assertEquals(wrk.worker, job.get(0)?.worker)
-        Assert.assertEquals(wrk.worker, job.get(wrk.id)?.worker)
-        Assert.assertEquals(wrk.worker, job.get("tests.job.${wrk.id.instance}")?.worker)
+        Assert.assertEquals(wrk.worker, mgr.get(0)?.worker)
+        Assert.assertEquals(wrk.worker, mgr.get(wrk.id)?.worker)
+        Assert.assertEquals(wrk.worker, mgr.get("tests.job.${wrk.id.instance}")?.worker)
     }
 
 
     @Test
     fun can_create_with_lambda() {
         var value = 0
-        val job = Job(ID, suspend {
+        val mgr = Manager(ID, suspend {
             value = 1
             WResult.Done
         })
 
-        val issuer = Issuer<Task>(job.channel, job as Issuable<Task>) { it.print() }
+        val issuer = Issuer<Task>(mgr.channel, mgr as Issuable<Task>) { it.print() }
         runBlocking {
-            job.start()
+            mgr.start()
             issuer.pull(2)
             delay(500)
             issuer.pull(1)
-            ensure(job)
+            ensure(mgr)
             Assert.assertEquals(1, value)
         }
     }
@@ -55,12 +55,12 @@ class Job_Create_Tests : JobTestSupport {
     fun can_create_with_lambda_task() {
         var name = ""
         var value = 0
-        val job = Job(ID, { task: Task -> name = task.name; value = 1; WResult.Done })
-        val issuer = Issuer<Task>(job.channel, job as Issuable<Task>)  { it.print() }
+        val mgr = Manager(ID, { task: Task -> name = task.name; value = 1; WResult.Done })
+        val issuer = Issuer<Task>(mgr.channel, mgr as Issuable<Task>)  { it.print() }
         runBlocking {
-            job.start()
+            mgr.start()
             issuer.pull(4)
-            ensure(job)
+            ensure(mgr)
             Assert.assertEquals(1, value)
             Assert.assertEquals("empty", name)
         }
@@ -71,30 +71,30 @@ class Job_Create_Tests : JobTestSupport {
     fun can_create_with_worker() {
         var name = ""
         var value = 0
-        val job = Job(ID, Worker<String>(ID) { task -> name = task.name; value = 1; WResult.Done })
-        val issuer = Issuer<Task>(job.channel, job as Issuable<Task>)  { it.print() }
+        val mgr = Manager(ID, Worker<String>(ID) { task -> name = task.name; value = 1; WResult.Done })
+        val issuer = Issuer<Task>(mgr.channel, mgr as Issuable<Task>)  { it.print() }
         runBlocking {
-            job.start()
+            mgr.start()
             issuer.pull(4)
-            ensure(job)
+            ensure(mgr)
             Assert.assertEquals(1, value)
             Assert.assertEquals("empty", name)
         }
     }
 
 
-    private fun ensure(job: Job){
+    private fun ensure(mgr: Manager){
 
-        Assert.assertEquals(Status.Completed, job.status())
-        Assert.assertEquals(Status.Completed, job.jctx.workers[0].status())
+        Assert.assertEquals(Status.Completed, mgr.status())
+        Assert.assertEquals(Status.Completed, mgr.jctx.workers[0].status())
 
-        Assert.assertEquals(ID.area, job.jctx.workers.first().id.area)
-        Assert.assertEquals(ID.service, job.jctx.workers.first().id.service)
-        Assert.assertEquals(ID.agent, job.jctx.workers.first().id.agent)
-        Assert.assertEquals(ID.env, job.jctx.workers.first().id.env)
-        Assert.assertEquals("worker", job.jctx.workers.first().id.tags[0])
+        Assert.assertEquals(ID.area, mgr.jctx.workers.first().id.area)
+        Assert.assertEquals(ID.service, mgr.jctx.workers.first().id.service)
+        Assert.assertEquals(ID.agent, mgr.jctx.workers.first().id.agent)
+        Assert.assertEquals(ID.env, mgr.jctx.workers.first().id.env)
+        Assert.assertEquals("worker", mgr.jctx.workers.first().id.tags[0])
 
-        Assert.assertEquals(1, job.jctx.workers.size)
-        Assert.assertEquals(1, job.workers.getIds().size)
+        Assert.assertEquals(1, mgr.jctx.workers.size)
+        Assert.assertEquals(1, mgr.workers.getIds().size)
     }
 }

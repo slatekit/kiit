@@ -10,7 +10,6 @@ import slatekit.jobs.support.Events
 import slatekit.jobs.support.Rules
 import slatekit.jobs.support.Work
 import slatekit.policy.Policy
-import slatekit.results.Try
 
 /**
  * A Job is the top level model in this Background Job/Task Queue system. A job is composed of the following:
@@ -55,7 +54,7 @@ import slatekit.results.Try
  * 3. Integration with Kotlin Flow ( e.g. a job could feed data into a Flow )
  *
  */
-class Job(val jctx: Context)
+class Manager(val jctx: Context)
     : Loader<Task>(slatekit.actors.Context(jctx.id.name, jctx.scope), jctx.channel, enableStrictMode = false), Ops, Issuable<Task> {
 
     val workers = Workers(jctx)
@@ -322,8 +321,8 @@ class Job(val jctx: Context)
          *      WResult.Done
          *  })
          */
-        operator fun invoke(id: Identity, op: suspend () -> WResult, scope: CoroutineScope = Jobs.scope): Job {
-            return Job(id, worker(op), null, scope, listOf())
+        operator fun invoke(id: Identity, op: suspend () -> WResult, scope: CoroutineScope = Jobs.scope): Manager {
+            return Manager(id, worker(op), null, scope, listOf())
         }
 
         /**
@@ -336,15 +335,15 @@ class Job(val jctx: Context)
          *      WResult.Done
          *  })
          */
-        operator fun invoke(id: Identity, op: suspend (Task) -> WResult, queue: Queue? = null, scope: CoroutineScope = Jobs.scope, policies: List<Policy<WorkRequest, WResult>> = listOf()): Job {
-            return Job(id, listOf(op), queue, scope, policies)
+        operator fun invoke(id: Identity, op: suspend (Task) -> WResult, queue: Queue? = null, scope: CoroutineScope = Jobs.scope, policies: List<Policy<WorkRequest, WResult>> = listOf()): Manager {
+            return Manager(id, listOf(op), queue, scope, policies)
         }
 
         /**
          * Initialize with a list of functions to excecute work
          */
-        operator fun invoke(id: Identity, ops: List<suspend (Task) -> WResult>, queue: Queue? = null, scope: CoroutineScope = Jobs.scope, policies: List<Policy<WorkRequest, WResult>> = listOf()): Job {
-            return Job(Context(id, coordinator(), workers(id, ops), queue = queue, scope = scope, policies = policies))
+        operator fun invoke(id: Identity, ops: List<suspend (Task) -> WResult>, queue: Queue? = null, scope: CoroutineScope = Jobs.scope, policies: List<Policy<WorkRequest, WResult>> = listOf()): Manager {
+            return Manager(Context(id, coordinator(), workers(id, ops), queue = queue, scope = scope, policies = policies))
         }
 
         /**
@@ -353,8 +352,8 @@ class Job(val jctx: Context)
          *  val job1 = Job(id, EmailWorker(id.copy(tags = listOf("worker")))
          */
         operator fun invoke(id: Identity, worker: Worker<*>, queue: Queue? = null, scope: CoroutineScope = Jobs.scope,
-                            policies: List<Policy<WorkRequest, WResult>> = listOf()): Job {
-            return Job(Context(id, coordinator(), listOf(worker), queue = queue, scope = scope, policies = policies))
+                            policies: List<Policy<WorkRequest, WResult>> = listOf()): Manager {
+            return Manager(Context(id, coordinator(), listOf(worker), queue = queue, scope = scope, policies = policies))
         }
     }
 }

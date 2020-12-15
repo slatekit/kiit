@@ -58,7 +58,7 @@ open class Worker<T>(
      * @param task: The task to perform.
      * NOTE: If this worker manages it's own work load/queue/source, then this task is
      * provided by the work() method and assigned Task.owned. Otherwise, the task is
-     * supplied by the @see[slatekit.jobs.Job]
+     * supplied by the @see[slatekit.jobs.Manager]
      */
     open suspend fun work(task: Task): WResult {
         return when (operation) {

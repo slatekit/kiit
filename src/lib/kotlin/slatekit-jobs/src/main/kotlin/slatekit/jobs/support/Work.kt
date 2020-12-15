@@ -18,7 +18,7 @@ import slatekit.results.then
  * 3. Notifying listeners of status changes
  * 4. Handling the running of a workers work method and checking for completion
  */
-class Work(val job: Job) {
+class Work(val job: Manager) {
 
     /**
      * This is a delayed start of the worker in X seconds.

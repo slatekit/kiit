@@ -179,14 +179,14 @@ class Example_Jobs : Command("utils"), CoroutineScope by MainScope() {
             val jobs = Jobs(
                     listOf(queue1, queue2),
                     listOf(
-                            slatekit.jobs.Job(id.copy(service = "job1"), ::sendNewsLetter),
-                            slatekit.jobs.Job(id.copy(service = "job2"), listOf(::sendNewsLetter, ::sendNewsLetterWithPaging)),
-                            slatekit.jobs.Job(id.copy(service = "job3"), listOf(::sendNewsLetterWithPaging)),
-                            slatekit.jobs.Job(id.copy(service = "job4"), listOf(::sendNewsLetterWithPaging)),
-                            slatekit.jobs.Job(id.copy(service = "job5"), listOf(::sendNewsLetterFromQueue), queue1),
-                            slatekit.jobs.Job(id.copy(service = "job6"), NewsLetterWorker(), queue2),
+                            Manager(id.copy(service = "job1"), ::sendNewsLetter),
+                            Manager(id.copy(service = "job2"), listOf(::sendNewsLetter, ::sendNewsLetterWithPaging)),
+                            Manager(id.copy(service = "job3"), listOf(::sendNewsLetterWithPaging)),
+                            Manager(id.copy(service = "job4"), listOf(::sendNewsLetterWithPaging)),
+                            Manager(id.copy(service = "job5"), listOf(::sendNewsLetterFromQueue), queue1),
+                            Manager(id.copy(service = "job6"), NewsLetterWorker(), queue2),
 
-                            slatekit.jobs.Job(id.copy(service = "job7"), listOf(::sendNewsLetterWithPaging), policies = listOf(
+                            Manager(id.copy(service = "job7"), listOf(::sendNewsLetterWithPaging), policies = listOf(
                                     Every(10, { req, res -> println("Paged : " + req.task.id + ":" + res.desc) }),
                                     Limit(12, true, { req -> req.context.stats.counts }),
                                     Ratio(.1, Codes.ERRORED, { req -> req.context.stats.counts })
@@ -196,18 +196,18 @@ class Example_Jobs : Command("utils"), CoroutineScope by MainScope() {
             )
 
             //jobs.run("samples.job7")
-            val job = jobs.get("samples.job7")
-            job?.let { job ->
+            val mgr = jobs.get("samples.job7")
+            mgr?.let { mgr ->
                 // Ids
-                println("id   : " + job.id.id)
-                println("name : " + job.id.name)
-                println("full : " + job.id.fullname)
-                println("area : " + job.id.area)
-                println("svc  : " + job.id.service)
-                println("agent: " + job.id.agent.name)
-                println("env  : " + job.id.env)
-                println("inst : " + job.id.instance)
-                println("tags : " + job.id.tags)
+                println("id   : " + mgr.jctx.id.id)
+                println("name : " + mgr.jctx.id.name)
+                println("full : " + mgr.jctx.id.fullname)
+                println("area : " + mgr.jctx.id.area)
+                println("svc  : " + mgr.jctx.id.service)
+                println("agent: " + mgr.jctx.id.agent.name)
+                println("env  : " + mgr.jctx.id.env)
+                println("inst : " + mgr.jctx.id.instance)
+                println("tags : " + mgr.jctx.id.tags)
 
 //                // Actions
 //                job.start()
@@ -237,13 +237,13 @@ class Example_Jobs : Command("utils"), CoroutineScope by MainScope() {
 //                job.subscribe(Status.Stopped) { println("Job: ${it.id} stopped!")  }
 
                 // Get the workers collection
-                val workers = job.workers
+                val workers = mgr.workers
 
                 // Get all worker ids
                 val workerIds = workers.getIds()
 
                 // Get the context for a specific worker
-                val workerContext = job.workers.get(workerIds.first())
+                val workerContext = mgr.workers.get(workerIds.first())
 
                 // The worker performing work on tasks
                 workerContext?.let { ctx ->

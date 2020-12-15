@@ -35,7 +35,7 @@ data class WorkerContext(
 
 /**
  * Represents a cluster of Workers that are affiliated with 1 job.
- * This helps manage the coordination between a @see[Worker] and a @see[slatekit.jobs.Job]
+ * This helps manage the coordination between a @see[Worker] and a @see[slatekit.jobs.Manager]
  * This is done by this class interpreting the @see[WorkResult] returned by a Worker
  * Based on the WorkResult, this may send commands @see[slatekit.jobs.support.Command]s to a Job's Channel
  * Essentially, this works like a glorified loop over each work, continuously:

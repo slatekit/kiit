@@ -6,7 +6,7 @@ import slatekit.common.Event
 import slatekit.common.Identity
 import slatekit.actors.Status
 import slatekit.common.ids.ULIDs
-import slatekit.jobs.Job
+import slatekit.jobs.Manager
 import slatekit.jobs.Context
 import slatekit.jobs.WorkerContext
 import slatekit.results.Codes
@@ -41,10 +41,10 @@ object Events {
     /**
      * Builds an event for the job ( based on its current state )
      */
-    fun build(job: Job, name:String): Event {
-        val queue = job.jctx.queue?.name ?: "no-queue"
-        val id = job.jctx.id
-        val status = job.status()
+    fun build(manager: Manager, name:String): Event {
+        val queue = manager.jctx.queue?.name ?: "no-queue"
+        val id = manager.jctx.id
+        val status = manager.status()
         return build(id, status, name, "State changed", "job", queue)
     }
 
@@ -64,8 +64,8 @@ object Events {
     /**
      * Builds an event for the worker
      */
-    fun worker(job: Job, action: Action, id:Identity): Event {
-        val status = job.status()
+    fun worker(manager: Manager, action: Action, id:Identity): Event {
+        val status = manager.status()
         val operator = "WRK"
         val name = "${operator}_${action.name.toUpperCase()}"
         val finalName = when {
@@ -78,7 +78,7 @@ object Events {
 
 
     /**
-     * Builds a Event using the job/worker identity, status and other info.
+     * Builds a Event using the managermg/worker identity, status and other info.
      */
     fun build(id: Identity, status: Status, name:String, desc:String, source:String, target:String, fields:List<Triple<String, String, String>> = emptyFields): Event {
         val code = status.toCode()

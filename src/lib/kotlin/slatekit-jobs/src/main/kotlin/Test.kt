@@ -14,22 +14,22 @@ fun main(args: Array<String>) {
     6. channel control
     7. tests
      */
-    lateinit var job: Job // = slatekit.jobs.Job()
+    lateinit var mgr: Manager // = slatekit.jobs.Job()
     lateinit var jobs: Jobs
-    job.status()
+    mgr.status()
 
     runBlocking {
 
         // Subscribe to any status change
-        job.on { event -> println(event.id) }
+        mgr.on { event -> println(event.id) }
 
         // Subscribe to completed status
-        job.on(Status.Completed) { event -> println(event.id) }
+        mgr.on(Status.Completed) { event -> println(event.id) }
 
         // Subscribe to any status change
-        job.workers.on { event -> println(event.id) }
+        mgr.workers.on { event -> println(event.id) }
 
         // Subscribe to completed status
-        job.workers.on(Status.Completed) { event -> println(event.id) }
+        mgr.workers.on(Status.Completed) { event -> println(event.id) }
     }
 }
