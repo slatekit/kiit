@@ -5,7 +5,6 @@ import slatekit.apis.core.HelpType
 import slatekit.common.args.ArgsCheck
 import slatekit.common.requests.Request
 import slatekit.results.Outcome
-import slatekit.results.Success
 import slatekit.results.builders.Outcomes
 
 object DocUtils {

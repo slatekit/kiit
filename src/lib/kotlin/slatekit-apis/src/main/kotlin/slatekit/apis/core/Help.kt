@@ -23,13 +23,6 @@ import slatekit.results.*
 import slatekit.results.builders.Outcomes
 
 
-sealed class HelpType {
-    object All    : HelpType()
-    object Area   : HelpType()
-    object Api    : HelpType()
-    object Action : HelpType()
-}
-
 open class Help(val host: ApiServer, val routes: Routes, val docKey: String?, val docBuilder: () -> Doc) {
 
     fun process(req: Request): Outcome<Content> {

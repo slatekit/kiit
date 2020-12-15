@@ -149,14 +149,14 @@ fun loadApiFromSetup(api: Api, namer: Namer?): Api {
     // from either annotations or from public methods
     return if (api.actions.size == 0) {
         if (api.setup == SetupType.Annotated) {
-            val apiAnnotated = AnnoLoader(api.klass, api).loadApi(namer)
+            val apiAnnotated = Annotations(api.klass, api).api(namer)
             val area = rename(apiAnnotated.area, namer)
             val name = rename(apiAnnotated.name, namer)
             apiAnnotated.copy(area = area, name = name, singleton = api.singleton)
         } else { // if(api.setup == PublicMethods){
             val area = rename(api.area, namer)
             val name = rename(api.name, namer)
-            val actions = MethodLoader(api).loadActions(api, api.declaredOnly, namer)
+            val actions = Methods(api).actions(api, api.declaredOnly, namer)
             api.copy(area = area, name = name, actions = Lookup(actions, { t -> t.name }))
         }
     } else api

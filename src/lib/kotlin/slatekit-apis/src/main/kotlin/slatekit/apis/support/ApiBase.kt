@@ -23,7 +23,7 @@ interface Api
  * Base class for any Api, provides lookup functionality to check for exposed api actions.
  * @param context : The context of the application ( logger, config, encryptor, etc )
  */
-abstract class ApiBase(override val context: Context) : FileSupport, HooksSupport {
+abstract class ApiBase(override val context: Context) : FileSupport {
     override val encryptor: Encryptor? = context.enc
     override val logger: Logger? = context.logs.getLogger()
 }

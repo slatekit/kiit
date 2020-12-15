@@ -2,7 +2,6 @@ package test.setup
 
 import slatekit.apis.ApiRequest
 import slatekit.apis.ApiResult
-import slatekit.apis.support.HooksSupport
 import slatekit.common.*
 import slatekit.common.requests.Request
 import slatekit.common.validations.ValidationFuncs
@@ -14,7 +13,7 @@ import slatekit.results.builders.Outcomes
 import slatekit.results.builders.Tries
 
 
-open class SampleErrorsApi : HooksSupport {
+open class SampleErrorsApi  {
 
     /**
      * Error-handling using the Result<T> object to model

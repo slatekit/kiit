@@ -50,7 +50,7 @@ data class Api(
     val declaredOnly: Boolean = true,
     val singleton: Any? = null,
     val setup: SetupType = SetupType.Methods,
-    val actions: Lookup<Action> = Lookup(listOf(), { t -> t.name })
+    val actions: Lookup<Action> = Lookup(listOf()) { t -> t.name }
 ) {
 
     val protocol = sources.all.first()
