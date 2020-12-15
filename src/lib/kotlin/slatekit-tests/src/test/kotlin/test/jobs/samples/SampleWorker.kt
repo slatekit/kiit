@@ -99,8 +99,8 @@ class PagedWorker(start:Int, val maxRuns:Int, val countsPerRun:Int, id: Identity
 }
 
 
-class TestWorker(id: Identity? = null, val limit:Int = 10, operation: (suspend (Task) -> WResult)? = null)
-    : Worker<Int>( id ?: Identity.test(TestWorker::class.simpleName!!), operation) {
+class TestWorker(id: Identity? = null, val limit:Int = 10)
+    : Worker<Int>( id ?: Identity.test(TestWorker::class.simpleName!!)) {
 
     val counts = AtomicInteger(0)
     val cycles = mutableMapOf<String, Boolean>()

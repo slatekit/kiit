@@ -8,11 +8,8 @@ import slatekit.actors.Issuable
 import slatekit.actors.Issuer
 import slatekit.common.Identity
 import slatekit.actors.Status
-import slatekit.jobs.WResult
+import slatekit.jobs.*
 import test.jobs.support.JobTestSupport
-import slatekit.jobs.Manager
-import slatekit.jobs.Task
-import slatekit.jobs.Worker
 
 class Job_Create_Tests : JobTestSupport {
 
@@ -71,7 +68,7 @@ class Job_Create_Tests : JobTestSupport {
     fun can_create_with_worker() {
         var name = ""
         var value = 0
-        val mgr = Manager(ID, Worker<String>(ID) { task -> name = task.name; value = 1; WResult.Done })
+        val mgr = Manager(ID, WorkerF<String>(ID) { task -> name = task.name; value = 1; WResult.Done })
         val issuer = Issuer<Task>(mgr.channel, mgr as Issuable<Task>)  { it.print() }
         runBlocking {
             mgr.start()

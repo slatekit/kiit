@@ -54,8 +54,8 @@ import slatekit.policy.Policy
  * 3. Integration with Kotlin Flow ( e.g. a job could feed data into a Flow )
  *
  */
-class Manager(val jctx: Context)
-    : Loader<Task>(slatekit.actors.Context(jctx.id.name, jctx.scope), jctx.channel, enableStrictMode = false), Ops, Issuable<Task> {
+class Manager(val jctx: Context, val settings: Settings = Settings())
+    : Loader<Task>(Context(jctx.id.name, jctx.scope), jctx.channel, enableStrictMode = settings.isStrictlyPaused), Ops, Issuable<Task> {
 
     val workers = Workers(jctx)
     private val events = jctx.notifier.jobEvents
@@ -144,6 +144,25 @@ class Manager(val jctx: Context)
 
 
     /**
+     * Responds to changes in job state.
+     * Notifies listeners and transitions all workers to the correct state.
+     */
+    override suspend fun onChanged(action: Action, oldStatus: Status, newStatus: Status) {
+        // Notify listeners of job state change
+        notify()
+
+        // Transition all workers here
+        val canChangeWorkers = when {
+            action == Action.Kill -> true
+            else -> state.validate(action)
+        }
+        if (canChangeWorkers) {
+            all { process(action, 30, it) }
+        }
+    }
+
+
+    /**
      * Handles a request for a @see[Task] and dispatches it to the default or target @see[Worker]
      */
     override suspend fun handle(req: Request<Task>) {
@@ -154,9 +173,7 @@ class Manager(val jctx: Context)
         }
 
         // Run
-        one(id) {
-            work.work(it, nextTask(it.task))
-        }
+        one(id) { run(it) }
     }
 
 
@@ -188,25 +205,6 @@ class Manager(val jctx: Context)
 
 
     /**
-     * Responds to changes in job state.
-     * Notifies listeners and transitions all workers to the correct state.
-     */
-    override suspend fun onChanged(action: Action, oldStatus: Status, newStatus: Status) {
-        // Notify listeners of job state change
-        notify()
-
-        // Transition all workers here
-        val canChangeWorkers = when {
-            action == Action.Kill -> true
-            else -> state.validate(action)
-        }
-        if (canChangeWorkers) {
-            all { process(action, 30, it) }
-        }
-    }
-
-
-    /**
      * Manages a request to control a specific worker
      */
     private suspend fun manage(cmd: Control<Task>) {
@@ -226,19 +224,11 @@ class Manager(val jctx: Context)
             is Action.Start -> work.start(wctx)
             is Action.Pause -> work.pause(wctx, seconds = finalSeconds)
             is Action.Resume -> work.resume(wctx)
-            is Action.Stop -> work.stop(wctx)
-            is Action.Process -> jctx.scope.launch { work.work(wctx, nextTask(wctx.task)) }
+            is Action.Stop   -> work.stop(wctx)
+            is Action.Process -> run(wctx)
             is Action.Check -> work.check(wctx)
             is Action.Kill -> work.kill(wctx)
         }
-    }
-
-
-    /**
-     * logs/handle error state/condition
-     */
-    private fun error(message: String, ex: Exception? = null) {
-        jctx.logger.error("Error with job ${jctx.id.id} - $message")
     }
 
 
@@ -283,10 +273,11 @@ class Manager(val jctx: Context)
     /**
      * Transitions all workers to the new status supplied
      */
-    private suspend fun run(id: String, launch: Boolean, op: suspend (WorkerContext) -> Unit) {
-        val wctx = workers[id]
-        wctx?.let {
-            op(it)
+    private suspend fun run(wctx:WorkerContext) {
+        val task = nextTask(wctx.task)
+        when(settings.isWorkLaunchable) {
+            true -> jctx.scope.launch { work.work(wctx, task) }
+            false -> work.work(wctx, task)
         }
     }
 
@@ -311,7 +302,7 @@ class Manager(val jctx: Context)
 
         fun workers(id: Identity, lamdas: List<suspend (Task) -> WResult>): List<Worker<*>> {
             return lamdas.map {
-                Worker<String>(id, operation = it)
+                WorkerF<String>(id, op = it)
             }
         }
 
@@ -328,8 +319,11 @@ class Manager(val jctx: Context)
          *      WResult.Done
          *  })
          */
-        operator fun invoke(id: Identity, op: suspend () -> WResult, scope: CoroutineScope = Jobs.scope, middleware: Middleware? = null): Manager {
-            return Manager(id, worker(op), null, scope, middleware, listOf())
+        operator fun invoke(id: Identity, op: suspend () -> WResult,
+                            scope: CoroutineScope = Jobs.scope,
+                            middleware: Middleware? = null,
+                            settings: Settings = Settings()): Manager {
+            return Manager(id, worker(op), null, scope, middleware, settings, listOf())
         }
 
         /**
@@ -347,8 +341,9 @@ class Manager(val jctx: Context)
                             queue: Queue? = null,
                             scope: CoroutineScope = Jobs.scope,
                             middleware: Middleware? = null,
+                            settings: Settings = Settings(),
                             policies: List<Policy<WorkRequest, WResult>> = listOf()): Manager {
-            return Manager(id, listOf(op), queue, scope, middleware, policies)
+            return Manager(id, listOf(op), queue, scope, middleware, settings, policies)
         }
 
         /**
@@ -358,8 +353,9 @@ class Manager(val jctx: Context)
                             queue: Queue? = null,
                             scope: CoroutineScope = Jobs.scope,
                             middleware: Middleware? = null,
+                            settings: Settings = Settings(),
                             policies: List<Policy<WorkRequest, WResult>> = listOf()): Manager {
-            return Manager(Context(id, coordinator(), workers(id, ops), queue = queue, scope = scope, middleware = middleware, policies = policies))
+            return Manager(Context(id, coordinator(), workers(id, ops), queue = queue, scope = scope, middleware = middleware, policies = policies), settings)
         }
 
         /**
@@ -371,8 +367,9 @@ class Manager(val jctx: Context)
                             queue: Queue? = null,
                             scope: CoroutineScope = Jobs.scope,
                             middleware: Middleware? = null,
+                            settings: Settings = Settings(),
                             policies: List<Policy<WorkRequest, WResult>> = listOf()): Manager {
-            return Manager(Context(id, coordinator(), listOf(worker), queue = queue, scope = scope, middleware = middleware, policies = policies))
+            return Manager(Context(id, coordinator(), listOf(worker), queue = queue, scope = scope, middleware = middleware, policies = policies), settings)
         }
     }
 }

@@ -27,7 +27,7 @@ interface JobTestSupport {
         val workers = (1..numWorkers).map { builder(id) }
         val channel = Channel<Message<Task>>(Channel.UNLIMITED)
         val ctx = Context(id, channel, workers, queue = queue, scheduler = MockScheduler())
-        return Manager(ctx)
+        return Manager(ctx, Settings(false, false))
     }
 
 

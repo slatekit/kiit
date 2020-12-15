@@ -18,12 +18,10 @@ import slatekit.actors.pause.Check
  * 1. All anonymous functions supplied to a Job are wrapped in a worker
  * 2. Clients should only extend worker to use/enrich the life-cycle, state change, alerting, diagnostic methods above
  */
-open class Worker<T>(
-    id: Identity,
-    val operation: (suspend (Task) -> WResult)? = null
-) : Check, Cycle {
-    val id = if(id.tags.isEmpty() || !id.tags.contains("worker")) id.with(tags = listOf("worker")) else id
+open class Worker<T>(id: Identity) : Check, Cycle {
+    val id = if (id.tags.isEmpty() || !id.tags.contains("worker")) id.with(tags = listOf("worker")) else id
     protected val _status = AtomicReference<Pair<Status, String>>(Pair(Status.InActive, Status.InActive.name))
+
 
     /**
      * ============================================================================
@@ -35,7 +33,9 @@ open class Worker<T>(
      */
     override fun status(): Status = _status.get().first
 
-    open fun note():String = _status.get().second
+
+    open fun note(): String = _status.get().second
+
 
     /**
      * Get key/value pairs representing information about this worker.
@@ -46,25 +46,13 @@ open class Worker<T>(
 
     /**
      * Performs the work
-     * This assumes that this work manages it's own work load/queue/source
-     */
-    open suspend fun work(): WResult {
-        return work(Task.owned)
-    }
-
-
-    /**
-     * Performs the work
      * @param task: The task to perform.
      * NOTE: If this worker manages it's own work load/queue/source, then this task is
      * provided by the work() method and assigned Task.owned. Otherwise, the task is
      * supplied by the @see[slatekit.jobs.Manager]
      */
     open suspend fun work(task: Task): WResult {
-        return when (operation) {
-            null -> WResult.Done
-            else -> operation.invoke(task)
-        }
+        return WResult.Done
     }
 
 
@@ -78,16 +66,17 @@ open class Worker<T>(
     /**
      * Transition current status to the one supplied
      */
-    open suspend fun move(state: Status, note:String? = null) {
+    open suspend fun move(state: Status, note: String? = null) {
         move(state, note, true)
     }
+
 
     /**
      * Transition current status to the one supplied
      */
-    open suspend fun move(state: Status, note:String?, sendNotification:Boolean) {
+    open suspend fun move(state: Status, note: String?, sendNotification: Boolean) {
         _status.set(Pair(state, note ?: state.name))
-        if(sendNotification){
+        if (sendNotification) {
             notify(state.name, null)
         }
     }
