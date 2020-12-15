@@ -35,7 +35,7 @@ import slatekit.results.builders.Outcomes
 open class ApiServer(
     val ctx: Context,
     val apis: List<slatekit.apis.core.Api>,
-    val hooks: ApiHooks = ApiHooks(),
+    val hooks: List<Middleware> = listOf(),
     val settings: ApiSettings = ApiSettings()
 ) : ExecSupport {
 
@@ -54,24 +54,6 @@ open class ApiServer(
      * Logger for this server
      */
     private val logger: Logger = ctx.logs.getLogger("api")
-
-    /**
-     * Helps run the hooks/middleware
-     */
-    private val processor = Processor<ApiRequest, ApiResult>()
-
-    /**
-     * Request pre-processors ( filters, converters )
-     */
-    private val preProcessBuiltIns: List<Input<ApiRequest>> = defaultPreHooks()
-    private val preProcessAPIHooks = listOf(Befores())
-
-
-    /**
-     * Request pre-processors ( filters, converters )
-     */
-    private val postProcessAPIHooks: List<Output<ApiRequest, ApiResult>> = listOf(Afters())
-    private val postProcessBuiltIns: List<Output<ApiRequest, ApiResult>> = listOf()
 
     /**
      * Provides access to naming conventions used for actions
@@ -193,10 +175,6 @@ open class ApiServer(
      * @param cmd
      * @return
      */
-    private val hasChainedExecution = hooks.middleware.isNotEmpty()
-    private val chainedExecutor = Processor.chain(hooks.middleware) { request ->
-        executeMethod(Ctx.of(this, this.ctx, request), request)
-    }
     suspend fun execute(raw: Request, options: Flags? = null): Outcome<Any> {
         // Step 1: Check for help / discovery
         val helpCheck = help.process(raw)
@@ -210,39 +188,24 @@ open class ApiServer(
         // Step 3: Hooks: Pre-Processing Stage 1 : rewrite request, and ensure system validations
         val startInput = Outcomes.success(rawRequest)
         val validated = startInput
-            .operate {
-                processor.input(hooks.formatters  , it)
-            }
-            .operate {
-                processor.input(preProcessBuiltIns, it)
-            }
 
         // Step 4: Hooks: Pre-Processing Stage 2: run through more hooks ( API level & supplied )
         val requested = validated
-            .operate {
-                processor.input(preProcessAPIHooks, it)
-            }
-            .operate {
-                processor.input(hooks.inputters, it)
-            }
 
         // Step 5: Execute request
         val executed = try {
             requested.flatMap { request ->
-                if (hasChainedExecution) {
-                    chainedExecutor(request)
-                } else {
-                    request.target?.let {
-                        if (it.instance is Process<*, *>) {
-                            val processor = it.instance as Process<ApiRequest, ApiResult>
-                            processor.process(request) {
-                                executeMethod(Ctx.of(this, this.ctx, request), request)
-                            }
-                        } else {
+                request.target?.let {
+                    if (it.instance is Process<*, *>) {
+                        val processor = it.instance as Process<ApiRequest, ApiResult>
+                        processor.process(request) {
                             executeMethod(Ctx.of(this, this.ctx, request), request)
                         }
-                    } ?: executeMethod(Ctx.of(this, this.ctx, request), request)
-                }
+                    } else {
+                        executeMethod(Ctx.of(this, this.ctx, request), request)
+                    }
+                } ?: executeMethod(Ctx.of(this, this.ctx, request), request)
+
             }
         } catch(ex:Exception){
             when(ex){
@@ -251,21 +214,8 @@ open class ApiServer(
             }
         }
 
-        // Step 6: Hooks: Post-Processing Stage 1: errors hooks on API ( only if we mapped to a class.method )
-        validated.onSuccess { Errors.applyError(rawRequest, it, requested, executed) }
-
         // Step 7: Hooks: Post-Processing Stage 2: remaining hooks ( afters, built-ins, outputters )
         val result = executed
-            .operate {
-                processor.output(rawRequest, requested, it, postProcessAPIHooks)
-            }
-            .operate {
-                processor.output(rawRequest, requested, it, postProcessBuiltIns)
-            }
-            .operate {
-                processor.output(rawRequest, requested, it, hooks.outputter)
-            }
-
         return result
     }
 
@@ -340,8 +290,7 @@ open class ApiServer(
 
         @JvmStatic
         fun of(ctx: Context, apis: List<slatekit.apis.core.Api>, auth: Auth? = null, source: Source? = null): ApiServer {
-            val hooks = ApiHooks(inputters = listOf(Authorize(auth)))
-            val server = ApiServer(ctx, apis, hooks, ApiSettings(source ?: Source.Web))
+            val server = ApiServer(ctx, apis, listOf(), ApiSettings(source ?: Source.Web))
             return server
         }
 
@@ -356,7 +305,7 @@ open class ApiServer(
          * Default list of API Request input validators
          */
         @JvmStatic
-        fun defaultPreHooks(): List<Input<ApiRequest>> {
+        fun middleware(): List<Middleware> {
             return listOf(
                 Routing(),
                 Targets(),

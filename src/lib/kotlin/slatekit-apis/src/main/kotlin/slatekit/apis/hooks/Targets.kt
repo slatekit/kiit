@@ -1,28 +1,26 @@
 package slatekit.apis.hooks
 
 import slatekit.apis.ApiRequest
+import slatekit.apis.Middleware
 import slatekit.common.Ignore
-import slatekit.policy.Input
 import slatekit.results.Failure
 import slatekit.results.Outcome
 import slatekit.results.Success
 import slatekit.results.builders.Outcomes
-import slatekit.results.flatMap
 
 /**
  * Checks that the route/path is valid ( mapped to a method target )
  */
-class Targets : Input<ApiRequest> {
+class Targets : Middleware {
 
     @Ignore
-    override suspend fun process(request: Outcome<ApiRequest>): Outcome<ApiRequest> {
-        return request.flatMap {
-            val req = it.request
-            val result = it.host.getApi(req.area, req.name, req.action)
-            when (result) {
-                is Success -> request.map { it.copy(target = result.value) }
-                is Failure -> Outcomes.errored(result.error)
-            }
+    override suspend fun process(req: ApiRequest, next:suspend(ApiRequest) -> Outcome<Any>): Outcome<Any> {
+
+        val request = req.request
+        val result = req.host.getApi(request.area, request.name, request.action)
+        return when (result) {
+            is Success -> next(req.copy(target = result.value))
+            is Failure -> Outcomes.errored(result.error)
         }
     }
 }
