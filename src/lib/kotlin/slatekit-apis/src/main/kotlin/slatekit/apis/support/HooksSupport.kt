@@ -16,7 +16,4 @@ package slatekit.apis.support
 /**
  * Base class for an Api with all the middleware ( hooks, filters, errors )
  */
-interface HooksSupport : Api,
-        slatekit.apis.Hooks,
-        slatekit.apis.Filter,
-        slatekit.apis.Error
+interface HooksSupport : Api

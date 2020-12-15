@@ -2,7 +2,7 @@ package slatekit.integration.common
 
 import slatekit.apis.ApiRequest
 import slatekit.apis.ApiResult
-import slatekit.apis.Handler
+import slatekit.apis.Middleware
 import slatekit.apis.core.Requests
 import slatekit.apis.support.QueueSupport
 import slatekit.common.Source
@@ -11,7 +11,7 @@ import slatekit.core.queues.AsyncQueue
 import slatekit.results.Outcome
 import slatekit.results.Success
 
-interface ApiQueueSupport : QueueSupport, Handler {
+interface ApiQueueSupport : QueueSupport, Middleware{
 
 
     fun queues(): List<AsyncQueue<String>>

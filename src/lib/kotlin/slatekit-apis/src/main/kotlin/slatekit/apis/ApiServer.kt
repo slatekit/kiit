@@ -67,16 +67,6 @@ open class ApiServer(
     override fun host(): ApiServer = this
 
     /**
-     * validates the request by checking for the api/action, and ensuring inputs are valid.
-     *
-     * @param req
-     * @return
-     */
-    suspend fun check(request: ApiRequest): Outcome<Target> {
-        return Calls.validateCall(request, { req -> get(req) })
-    }
-
-    /**
      * gets the api info associated with the request
      * @param cmd
      * @return

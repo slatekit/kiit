@@ -13,13 +13,9 @@
 
 package slatekit.apis.support
 
-import slatekit.apis.ApiRequest
-import slatekit.apis.ApiResult
 import slatekit.common.crypto.Encryptor
 import slatekit.common.log.Logger
 import slatekit.context.Context
-import slatekit.results.Outcome
-import slatekit.results.builders.Outcomes
 
 interface Api
 
@@ -30,14 +26,4 @@ interface Api
 abstract class ApiBase(override val context: Context) : FileSupport, HooksSupport {
     override val encryptor: Encryptor? = context.enc
     override val logger: Logger? = context.logs.getLogger()
-
-    override suspend fun before(req: ApiRequest) {
-    }
-
-    override suspend fun filter(req: ApiRequest): Outcome<ApiRequest> {
-        return Outcomes.success(req)
-    }
-
-    override suspend fun after(raw: ApiRequest, req: Outcome<ApiRequest>, res: Outcome<ApiResult>) {
-    }
 }

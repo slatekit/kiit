@@ -57,35 +57,31 @@ object Calls {
         val req = request.request
         val fullName = req.fullName
         val args = req.data
-        val apiRefCheck = Targets().process(Outcomes.of(request))
+        val apiRefCheck = request.host.getApi(req.area, req.name, req.action).toOutcome()
+        return apiRefCheck.flatMap { check ->
+            val target = request.target!!
+            val action = target.action
 
-        return when (apiRefCheck) {
-            is Failure -> Outcomes.invalid("bad request : $fullName: inputs not supplied")
-            is Success -> {
-                val apiRef = apiRefCheck.value
-                val target = apiRef.target!!
-                val action = target.action
-
-                // 1 param with default argument.
-                if (allowSingleDefaultParam && action.isSingleDefaultedArg() && args.size() == 0) {
-                    Outcomes.success(target)
-                }
-                // Param: Raw ApiCmd itself!
-                else if (action.isSingleArg() && action.paramsUser.isEmpty()) {
-                    Outcomes.success(target)
-                }
-                // Data - check args needed
-                else if (!allowSingleDefaultParam && action.hasArgs && args.size() == 0)
-                    Outcomes.invalid("bad request : $fullName: inputs not supplied")
-
-                // Data - ensure matching args
-                else if (action.hasArgs) {
-                    val argCheck = validateArgs(request, action, args)
-                    val result = argCheck.map { target }
-                    result
-                } else
-                    Outcomes.success(target)
+            // 1 param with default argument.
+            val res = if (allowSingleDefaultParam && action.isSingleDefaultedArg() && args.size() == 0) {
+                Outcomes.success(target)
             }
+            // Param: Raw ApiCmd itself!
+            else if (action.isSingleArg() && action.paramsUser.isEmpty()) {
+                Outcomes.success(target)
+            }
+            // Data - check args needed
+            else if (!allowSingleDefaultParam && action.hasArgs && args.size() == 0)
+                Outcomes.invalid("bad request : $fullName: inputs not supplied")
+
+            // Data - ensure matching args
+            else if (action.hasArgs) {
+                val argCheck = validateArgs(request, action, args)
+                val result = argCheck.map { target }
+                result
+            } else
+                Outcomes.success(target)
+            res
         }
     }
 

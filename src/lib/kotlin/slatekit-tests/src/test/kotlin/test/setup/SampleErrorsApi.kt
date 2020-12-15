@@ -46,23 +46,6 @@ open class SampleErrorsApi : HooksSupport {
         val num = text.toInt()
         return num
     }
-
-
-    override suspend fun before(req: ApiRequest) {
-
-    }
-
-    override suspend fun after(raw:ApiRequest, req: Outcome<ApiRequest>, res: Outcome<ApiResult>) {
-
-    }
-
-    override suspend fun filter(req: ApiRequest): Outcome<ApiRequest> {
-        return Outcomes.success(req)
-    }
-
-    override suspend fun failed(raw:ApiRequest, req: Outcome<ApiRequest>, res: Outcome<ApiResult>) {
-    }
-
 }
 
 
