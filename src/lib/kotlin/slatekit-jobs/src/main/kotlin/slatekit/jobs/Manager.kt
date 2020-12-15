@@ -121,13 +121,20 @@ class Manager(val jctx: Context)
      *  3. @see[Content] messages are simply delegated to the work method
      */
     override suspend fun work(item: Message<Task>) {
+        val middleware = jctx.middleware
         when (item) {
             is Control -> {
-                handle(item)
+                when(middleware){
+                    null -> handle(item)
+                    else -> middleware.handle(this,"JOBS", item) { handle(item) }
+                }
             }
             is Request -> {
                 state.begin(false)
-                handle(item)
+                when(middleware){
+                    null -> handle(item)
+                    else -> middleware.handle(this,"JOBS", item) { handle(item) }
+                }
             }
             else -> {
                 // Does not support Request<T>
@@ -141,7 +148,7 @@ class Manager(val jctx: Context)
      */
     override suspend fun handle(req: Request<Task>) {
         // Id of worker
-        val id = when(req.reference) {
+        val id = when (req.reference) {
             Message.NONE -> Workers.shortId(jctx.workers[0].id)
             else -> req.reference
         }
@@ -157,14 +164,14 @@ class Manager(val jctx: Context)
      * Handles a request for a @see[Task] and dispatches it to the default or target @see[Worker]
      */
     private suspend fun handle(item: Control<Task>) {
-        if(item.action == Action.Check){
+        if (item.action == Action.Check) {
             val allDone = jctx.workers.all { it.isCompleted() }
-            if(allDone) {
+            if (allDone) {
                 complete()
             }
             return
         }
-        when(item.reference) {
+        when (item.reference) {
             Message.NONE -> state.handle(item.action)
             else -> manage(item)
         }
@@ -193,7 +200,7 @@ class Manager(val jctx: Context)
             action == Action.Kill -> true
             else -> state.validate(action)
         }
-        if(canChangeWorkers) {
+        if (canChangeWorkers) {
             all { process(action, 30, it) }
         }
     }
@@ -212,17 +219,17 @@ class Manager(val jctx: Context)
     }
 
 
-    private suspend fun process(action: Action, seconds:Long?, wctx:WorkerContext) {
+    private suspend fun process(action: Action, seconds: Long?, wctx: WorkerContext) {
         val finalSeconds = seconds ?: 30
         when (action) {
-            is Action.Delay   -> work.delay(wctx, seconds = finalSeconds)
-            is Action.Start   -> work.start(wctx)
-            is Action.Pause   -> work.pause(wctx, seconds = finalSeconds)
-            is Action.Resume  -> work.resume(wctx)
-            is Action.Stop    -> work.stop(wctx)
-            is Action.Process -> jctx.scope.launch {  work.work(wctx, nextTask(wctx.task)) }
-            is Action.Check   -> work.check(wctx)
-            is Action.Kill    -> work.kill(wctx)
+            is Action.Delay -> work.delay(wctx, seconds = finalSeconds)
+            is Action.Start -> work.start(wctx)
+            is Action.Pause -> work.pause(wctx, seconds = finalSeconds)
+            is Action.Resume -> work.resume(wctx)
+            is Action.Stop -> work.stop(wctx)
+            is Action.Process -> jctx.scope.launch { work.work(wctx, nextTask(wctx.task)) }
+            is Action.Check -> work.check(wctx)
+            is Action.Kill -> work.kill(wctx)
         }
     }
 
@@ -230,7 +237,7 @@ class Manager(val jctx: Context)
     /**
      * logs/handle error state/condition
      */
-    private fun error(message: String, ex:Exception? = null) {
+    private fun error(message: String, ex: Exception? = null) {
         jctx.logger.error("Error with job ${jctx.id.id} - $message")
     }
 
@@ -321,12 +328,13 @@ class Manager(val jctx: Context)
          *      WResult.Done
          *  })
          */
-        operator fun invoke(id: Identity, op: suspend () -> WResult, scope: CoroutineScope = Jobs.scope): Manager {
-            return Manager(id, worker(op), null, scope, listOf())
+        operator fun invoke(id: Identity, op: suspend () -> WResult, scope: CoroutineScope = Jobs.scope, middleware: Middleware? = null): Manager {
+            return Manager(id, worker(op), null, scope, middleware, listOf())
         }
 
         /**
          * Initialize with just a function that will handle the work
+         * @param queue: Queue
          * @sample
          *  val job1 = Job(Identity.job("signup", "email"), ::sendEmail)
          *  val job2 = Job(Identity.job("signup", "email"), suspend { task ->
@@ -335,15 +343,23 @@ class Manager(val jctx: Context)
          *      WResult.Done
          *  })
          */
-        operator fun invoke(id: Identity, op: suspend (Task) -> WResult, queue: Queue? = null, scope: CoroutineScope = Jobs.scope, policies: List<Policy<WorkRequest, WResult>> = listOf()): Manager {
-            return Manager(id, listOf(op), queue, scope, policies)
+        operator fun invoke(id: Identity, op: suspend (Task) -> WResult,
+                            queue: Queue? = null,
+                            scope: CoroutineScope = Jobs.scope,
+                            middleware: Middleware? = null,
+                            policies: List<Policy<WorkRequest, WResult>> = listOf()): Manager {
+            return Manager(id, listOf(op), queue, scope, middleware, policies)
         }
 
         /**
          * Initialize with a list of functions to excecute work
          */
-        operator fun invoke(id: Identity, ops: List<suspend (Task) -> WResult>, queue: Queue? = null, scope: CoroutineScope = Jobs.scope, policies: List<Policy<WorkRequest, WResult>> = listOf()): Manager {
-            return Manager(Context(id, coordinator(), workers(id, ops), queue = queue, scope = scope, policies = policies))
+        operator fun invoke(id: Identity, ops: List<suspend (Task) -> WResult>,
+                            queue: Queue? = null,
+                            scope: CoroutineScope = Jobs.scope,
+                            middleware: Middleware? = null,
+                            policies: List<Policy<WorkRequest, WResult>> = listOf()): Manager {
+            return Manager(Context(id, coordinator(), workers(id, ops), queue = queue, scope = scope, middleware = middleware, policies = policies))
         }
 
         /**
@@ -351,9 +367,12 @@ class Manager(val jctx: Context)
          *  val id = Identity.job("signup", "email")
          *  val job1 = Job(id, EmailWorker(id.copy(tags = listOf("worker")))
          */
-        operator fun invoke(id: Identity, worker: Worker<*>, queue: Queue? = null, scope: CoroutineScope = Jobs.scope,
+        operator fun invoke(id: Identity, worker: Worker<*>,
+                            queue: Queue? = null,
+                            scope: CoroutineScope = Jobs.scope,
+                            middleware: Middleware? = null,
                             policies: List<Policy<WorkRequest, WResult>> = listOf()): Manager {
-            return Manager(Context(id, coordinator(), listOf(worker), queue = queue, scope = scope, policies = policies))
+            return Manager(Context(id, coordinator(), listOf(worker), queue = queue, scope = scope, middleware = middleware, policies = policies))
         }
     }
 }
