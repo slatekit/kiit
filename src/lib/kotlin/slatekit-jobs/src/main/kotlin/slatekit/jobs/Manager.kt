@@ -311,7 +311,7 @@ class Manager(val jctx: Context, val settings: Settings = Settings())
                             scope: CoroutineScope = Jobs.scope,
                             middleware: Middleware? = null,
                             settings: Settings = Settings()): Manager {
-            return Manager(id, worker(op), null, scope, middleware, settings, listOf())
+            return Manager(id, worker(op), null, scope, middleware, settings)
         }
 
         /**
@@ -329,9 +329,8 @@ class Manager(val jctx: Context, val settings: Settings = Settings())
                             queue: Queue? = null,
                             scope: CoroutineScope = Jobs.scope,
                             middleware: Middleware? = null,
-                            settings: Settings = Settings(),
-                            policies: List<Policy<WorkRequest, WResult>> = listOf()): Manager {
-            return Manager(id, listOf(op), queue, scope, middleware, settings, policies)
+                            settings: Settings = Settings()): Manager {
+            return Manager(id, listOf(op), queue, scope, middleware, settings)
         }
 
         /**
@@ -341,9 +340,8 @@ class Manager(val jctx: Context, val settings: Settings = Settings())
                             queue: Queue? = null,
                             scope: CoroutineScope = Jobs.scope,
                             middleware: Middleware? = null,
-                            settings: Settings = Settings(),
-                            policies: List<Policy<WorkRequest, WResult>> = listOf()): Manager {
-            return Manager(Context(id, coordinator(), workers(id, ops), queue = queue, scope = scope, middleware = middleware, policies = policies), settings)
+                            settings: Settings = Settings()): Manager {
+            return Manager(Context(id, coordinator(), workers(id, ops), queue = queue, scope = scope, middleware = middleware), settings)
         }
 
         /**
@@ -355,9 +353,8 @@ class Manager(val jctx: Context, val settings: Settings = Settings())
                             queue: Queue? = null,
                             scope: CoroutineScope = Jobs.scope,
                             middleware: Middleware? = null,
-                            settings: Settings = Settings(),
-                            policies: List<Policy<WorkRequest, WResult>> = listOf()): Manager {
-            return Manager(Context(id, coordinator(), listOf(worker), queue = queue, scope = scope, middleware = middleware, policies = policies), settings)
+                            settings: Settings = Settings()): Manager {
+            return Manager(Context(id, coordinator(), listOf(worker), queue = queue, scope = scope, middleware = middleware), settings)
         }
     }
 }

@@ -28,7 +28,6 @@ data class WorkerContext(
     val id: Identity,
     val worker: Worker<*>,
     val stats: Recorder<Task, WResult, Err>,
-    val policies: List<Policy<WorkRequest, WResult>> = listOf(),
     val task: Task = Task.empty.copy(job = id.id)
 )
 
@@ -46,7 +45,7 @@ data class WorkerContext(
  */
 class Workers(val ctx: Context) {
     val events = ctx.notifier.wrkEvents
-    val contexts = ctx.workers.map { WorkerContext(it.id, it, Recorder.of(it.id), ctx.policies) }
+    val contexts = ctx.workers.map { WorkerContext(it.id, it, Recorder.of(it.id)) }
     private val lookup: Map<String, WorkerContext> = contexts.map { shortId(it.id) to it }.toMap()
 
     /**
