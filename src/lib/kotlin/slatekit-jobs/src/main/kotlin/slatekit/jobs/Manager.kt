@@ -242,20 +242,6 @@ class Manager(val jctx: Context, val settings: Settings = Settings())
     }
 
 
-    private fun record(name: String, cmd: Message<Task>, desc: String? = null, task: Task? = null) {
-        val event = Events.build(this, "message")
-        val info = listOf(
-            "id" to cmd.id.toString(),
-            "source" to event.source,
-            "name" to event.name,
-            "target" to event.target,
-            "time" to event.time.toStringMySql(),
-            "desc" to (desc ?: event.desc)
-        )
-        jctx.logger.log(LogLevel.Info, "JOB $name", info)
-    }
-
-
     /**
      * Transitions all workers to the new status supplied
      */

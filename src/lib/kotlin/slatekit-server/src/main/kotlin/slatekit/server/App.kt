@@ -9,10 +9,10 @@ import io.ktor.server.engine.embeddedServer
 import io.ktor.server.netty.Netty
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.runBlocking
-import slatekit.actors.Issuer
-import slatekit.actors.Message
+import slatekit.actors.*
 import slatekit.common.Identity
 import slatekit.jobs.*
+import slatekit.jobs.support.Events
 import java.util.concurrent.atomic.AtomicLong
 
 
@@ -36,8 +36,15 @@ fun main(args:Array<String>) {
 
 class Printer : Middleware {
     override suspend fun handle(mgr: Manager, source: String, message: Message<*>, next: suspend (Message<*>) -> Unit) {
-        message.print()
+        //message.print()
+        val action = when(message){
+            is Control -> message.action.name.toUpperCase()
+            is Content -> Action.Process.name.toUpperCase()
+            is Request -> "LOAD"
+        }
         next(message)
+        val value = wrk.count.get().toString()
+        Events.record(mgr, action, message, value)
     }
 }
 
@@ -64,7 +71,7 @@ class Emailer(id:Identity) : Worker<String>(id) {
         if(finished) return WResult.Done
         val curr = count.incrementAndGet()
         delay(4000)
-        println("Worker id=${this.id.instance}, value=${curr}")
+        //println("Worker id=${this.id.instance}, value=${curr}")
         return WResult.More
     }
 }
