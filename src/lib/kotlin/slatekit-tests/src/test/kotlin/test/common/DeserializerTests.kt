@@ -185,7 +185,7 @@ class DeserializerTests {
                 InputArgs(mapOf()), InputArgs(mapOf(Pair("movie", "batman"))))
 
         val decoder = Transformer(Movie::class.java, null) { _, _ ->
-            Movie(0L, "batman", cost = 0, rating = 4.0, released = DateTime.now() )
+            Movie(0L, "batman", cost = 0, rating = 4.0, released = DateTime.now())
         }
         val deserializer = Deserializer(req, null, mapOf(Pair(Movie::class.qualifiedName!!, decoder)))
         val results = deserializer.deserialize(this::test_custom_converter.parameters, test)

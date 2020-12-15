@@ -47,7 +47,7 @@ interface Auth : RolesSupport {
      * @param roles : The values of the "roles" attribute on the annotation of the Action ( class )
      * @return
      */
-    fun check(req: Request, authMode: AuthMode, roles: slatekit.apis.core.Roles): Outcome<Boolean>
+    fun check(req: Request, authMode: AuthMode, roles: Roles): Outcome<Boolean>
 
     /**
      * Gets the user roles that are applicable for the supplied request.
