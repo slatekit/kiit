@@ -10,7 +10,6 @@ import slatekit.jobs.support.Events
 import slatekit.jobs.support.Rules
 import slatekit.jobs.support.Work
 import slatekit.policy.Policy
-import slatekit.results.Try
 
 /**
  * A Job is the top level model in this Background Job/Task Queue system. A job is composed of the following:
@@ -55,8 +54,8 @@ import slatekit.results.Try
  * 3. Integration with Kotlin Flow ( e.g. a job could feed data into a Flow )
  *
  */
-class Job(val jctx: Context)
-    : Loader<Task>(slatekit.actors.Context(jctx.id.name, jctx.scope), jctx.channel, enableStrictMode = false), Ops, Issuable<Task> {
+class Manager(val jctx: Context, val settings: Settings = Settings())
+    : Loader<Task>(Context(jctx.id.name, jctx.scope), jctx.channel, enableStrictMode = settings.isStrictlyPaused), Ops, Issuable<Task> {
 
     val workers = Workers(jctx)
     private val events = jctx.notifier.jobEvents
@@ -122,62 +121,25 @@ class Job(val jctx: Context)
      *  3. @see[Content] messages are simply delegated to the work method
      */
     override suspend fun work(item: Message<Task>) {
+        val middleware = jctx.middleware
         when (item) {
             is Control -> {
-                handle(item)
+                when(middleware){
+                    null -> handle(item)
+                    else -> middleware.handle(this,"JOBS", item) { handle(item) }
+                }
             }
             is Request -> {
                 state.begin(false)
-                handle(item)
+                when(middleware){
+                    null -> handle(item)
+                    else -> middleware.handle(this,"JOBS", item) { handle(item) }
+                }
             }
             else -> {
                 // Does not support Request<T>
             }
         }
-    }
-
-
-    /**
-     * Handles a request for a @see[Task] and dispatches it to the default or target @see[Worker]
-     */
-    override suspend fun handle(req: Request<Task>) {
-        // Id of worker
-        val id = when(req.reference) {
-            Message.NONE -> Workers.shortId(jctx.workers[0].id)
-            else -> req.reference
-        }
-
-        // Run
-        one(id) {
-            work.work(it, nextTask(it.task))
-        }
-    }
-
-
-    /**
-     * Handles a request for a @see[Task] and dispatches it to the default or target @see[Worker]
-     */
-    private suspend fun handle(item: Control<Task>) {
-        if(item.action == Action.Check){
-            val allDone = jctx.workers.all { it.isCompleted() }
-            if(allDone) {
-                complete()
-            }
-            return
-        }
-        when(item.reference) {
-            Message.NONE -> state.handle(item.action)
-            else -> manage(item)
-        }
-    }
-
-
-    /**
-     * Completes this job ( when all workers completed )
-     */
-    private suspend fun complete() {
-        state.complete(false)
-        notify()
     }
 
 
@@ -194,9 +156,53 @@ class Job(val jctx: Context)
             action == Action.Kill -> true
             else -> state.validate(action)
         }
-        if(canChangeWorkers) {
+        if (canChangeWorkers) {
             all { process(action, 30, it) }
         }
+    }
+
+
+    /**
+     * Handles a request for a @see[Task] and dispatches it to the default or target @see[Worker]
+     */
+    override suspend fun handle(req: Request<Task>) {
+        // Id of worker
+        val id = when (req.reference) {
+            Message.NONE -> Workers.shortId(jctx.workers[0].id)
+            else -> req.reference
+        }
+
+        // Run
+        if(Rules.canWork(status())) {
+            one(id) { run(it) }
+        }
+    }
+
+
+    /**
+     * Handles a request for a @see[Task] and dispatches it to the default or target @see[Worker]
+     */
+    private suspend fun handle(item: Control<Task>) {
+        if (item.action == Action.Check) {
+            val allDone = jctx.workers.all { it.isCompleted() }
+            if (allDone) {
+                complete()
+            }
+            return
+        }
+        when (item.reference) {
+            Message.NONE -> state.handle(item.action)
+            else -> manage(item)
+        }
+    }
+
+
+    /**
+     * Completes this job ( when all workers completed )
+     */
+    private suspend fun complete() {
+        state.complete(false)
+        notify()
     }
 
 
@@ -213,26 +219,18 @@ class Job(val jctx: Context)
     }
 
 
-    private suspend fun process(action: Action, seconds:Long?, wctx:WorkerContext) {
+    private suspend fun process(action: Action, seconds: Long?, wctx: WorkerContext) {
         val finalSeconds = seconds ?: 30
         when (action) {
-            is Action.Delay   -> work.delay(wctx, seconds = finalSeconds)
-            is Action.Start   -> work.start(wctx)
-            is Action.Pause   -> work.pause(wctx, seconds = finalSeconds)
-            is Action.Resume  -> work.resume(wctx)
-            is Action.Stop    -> work.stop(wctx)
-            is Action.Process -> jctx.scope.launch {  work.work(wctx, nextTask(wctx.task)) }
-            is Action.Check   -> work.check(wctx)
-            is Action.Kill    -> work.kill(wctx)
+            is Action.Delay -> work.delay(wctx, seconds = finalSeconds)
+            is Action.Start -> work.start(wctx)
+            is Action.Pause -> work.pause(wctx, seconds = finalSeconds)
+            is Action.Resume -> work.resume(wctx)
+            is Action.Stop   -> work.stop(wctx)
+            is Action.Process -> run(wctx)
+            is Action.Check -> work.check(wctx)
+            is Action.Kill -> work.kill(wctx)
         }
-    }
-
-
-    /**
-     * logs/handle error state/condition
-     */
-    private fun error(message: String, ex:Exception? = null) {
-        jctx.logger.error("Error with job ${jctx.id.id} - $message")
     }
 
 
@@ -241,20 +239,6 @@ class Job(val jctx: Context)
             null -> empty
             else -> jctx.queue.next() ?: empty
         }
-    }
-
-
-    private fun record(name: String, cmd: Message<Task>, desc: String? = null, task: Task? = null) {
-        val event = Events.build(this, "message")
-        val info = listOf(
-            "id" to cmd.id.toString(),
-            "source" to event.source,
-            "name" to event.name,
-            "target" to event.target,
-            "time" to event.time.toStringMySql(),
-            "desc" to (desc ?: event.desc)
-        )
-        jctx.logger.log(LogLevel.Info, "JOB $name", info)
     }
 
 
@@ -277,10 +261,11 @@ class Job(val jctx: Context)
     /**
      * Transitions all workers to the new status supplied
      */
-    private suspend fun run(id: String, launch: Boolean, op: suspend (WorkerContext) -> Unit) {
-        val wctx = workers[id]
-        wctx?.let {
-            op(it)
+    private suspend fun run(wctx:WorkerContext) {
+        val task = nextTask(wctx.task)
+        when(settings.isWorkLaunchable) {
+            true -> jctx.scope.launch { work.work(wctx, task) }
+            false -> work.work(wctx, task)
         }
     }
 
@@ -305,7 +290,7 @@ class Job(val jctx: Context)
 
         fun workers(id: Identity, lamdas: List<suspend (Task) -> WResult>): List<Worker<*>> {
             return lamdas.map {
-                Worker<String>(id, operation = it)
+                WorkerF<String>(id, op = it)
             }
         }
 
@@ -322,12 +307,16 @@ class Job(val jctx: Context)
          *      WResult.Done
          *  })
          */
-        operator fun invoke(id: Identity, op: suspend () -> WResult, scope: CoroutineScope = Jobs.scope): Job {
-            return Job(id, worker(op), null, scope, listOf())
+        operator fun invoke(id: Identity, op: suspend () -> WResult,
+                            scope: CoroutineScope = Jobs.scope,
+                            middleware: Middleware? = null,
+                            settings: Settings = Settings()): Manager {
+            return Manager(id, worker(op), null, scope, middleware, settings)
         }
 
         /**
          * Initialize with just a function that will handle the work
+         * @param queue: Queue
          * @sample
          *  val job1 = Job(Identity.job("signup", "email"), ::sendEmail)
          *  val job2 = Job(Identity.job("signup", "email"), suspend { task ->
@@ -336,15 +325,23 @@ class Job(val jctx: Context)
          *      WResult.Done
          *  })
          */
-        operator fun invoke(id: Identity, op: suspend (Task) -> WResult, queue: Queue? = null, scope: CoroutineScope = Jobs.scope, policies: List<Policy<WorkRequest, WResult>> = listOf()): Job {
-            return Job(id, listOf(op), queue, scope, policies)
+        operator fun invoke(id: Identity, op: suspend (Task) -> WResult,
+                            queue: Queue? = null,
+                            scope: CoroutineScope = Jobs.scope,
+                            middleware: Middleware? = null,
+                            settings: Settings = Settings()): Manager {
+            return Manager(id, listOf(op), queue, scope, middleware, settings)
         }
 
         /**
          * Initialize with a list of functions to excecute work
          */
-        operator fun invoke(id: Identity, ops: List<suspend (Task) -> WResult>, queue: Queue? = null, scope: CoroutineScope = Jobs.scope, policies: List<Policy<WorkRequest, WResult>> = listOf()): Job {
-            return Job(Context(id, coordinator(), workers(id, ops), queue = queue, scope = scope, policies = policies))
+        operator fun invoke(id: Identity, ops: List<suspend (Task) -> WResult>,
+                            queue: Queue? = null,
+                            scope: CoroutineScope = Jobs.scope,
+                            middleware: Middleware? = null,
+                            settings: Settings = Settings()): Manager {
+            return Manager(Context(id, coordinator(), workers(id, ops), queue = queue, scope = scope, middleware = middleware), settings)
         }
 
         /**
@@ -352,9 +349,12 @@ class Job(val jctx: Context)
          *  val id = Identity.job("signup", "email")
          *  val job1 = Job(id, EmailWorker(id.copy(tags = listOf("worker")))
          */
-        operator fun invoke(id: Identity, worker: Worker<*>, queue: Queue? = null, scope: CoroutineScope = Jobs.scope,
-                            policies: List<Policy<WorkRequest, WResult>> = listOf()): Job {
-            return Job(Context(id, coordinator(), listOf(worker), queue = queue, scope = scope, policies = policies))
+        operator fun invoke(id: Identity, worker: Worker<*>,
+                            queue: Queue? = null,
+                            scope: CoroutineScope = Jobs.scope,
+                            middleware: Middleware? = null,
+                            settings: Settings = Settings()): Manager {
+            return Manager(Context(id, coordinator(), listOf(worker), queue = queue, scope = scope, middleware = middleware), settings)
         }
     }
 }

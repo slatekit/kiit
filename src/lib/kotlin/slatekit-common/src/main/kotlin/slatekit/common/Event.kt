@@ -35,11 +35,12 @@ import slatekit.results.Status
  *      agent   = "api",
  *      env     = "pro",
  *      inst    = "server-123",
- *      source  = "android",
  *      name    = "NEW_REGISTRATION",
  *      desc    = "User registration via mobile",
  *      status  = Codes.SUCCESS,
- *      target  = "user-123",
+ *      source  = "android",
+ *      target  = "promo-code-1",
+ *      value   = "user-123",
  *      tag     = "a1b2c3",
  *      time    = DateTime.now()
  *      fields  = listOf(
@@ -55,11 +56,12 @@ data class Event(
         @JvmField val agent: String,
         @JvmField val env: String,
         @JvmField val inst: String,
-        @JvmField val source: String,
         @JvmField val name: String,
         @JvmField val desc: String,
         @JvmField val status: Status,
+        @JvmField val source: String,
         @JvmField val target: String,
+        @JvmField val value: String,
         @JvmField val time: DateTime,
         @JvmField val tag: String,
         @JvmField val fields: List<Triple<String, String, String>>?

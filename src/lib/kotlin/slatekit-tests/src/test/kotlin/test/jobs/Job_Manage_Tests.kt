@@ -165,4 +165,28 @@ class Job_Manage_Tests : JobTestSupport {
             ensure(job, 2, 1, Status.Killed)
         }
     }
+
+
+    @Test
+    fun can_not_process_paused_job() {
+        setup(ID, 2, null, { id -> TestWorker(id, 3) }) { job, issuer ->
+
+            job.start()
+            issuer.pull(3)
+            Assert.assertEquals(Status.Running, job.status())
+            ensure(job, 2, 1, Status.Running)
+
+            issuer.wipe()
+            job.pause()
+            issuer.pull(1)
+            Assert.assertEquals(Status.Paused, job.status())
+            ensure(job, 2, 1, Status.Paused)
+
+            issuer.wipe()
+            job.load()
+            issuer.pull(1)
+            Assert.assertEquals(Status.Paused, job.status())
+            ensure(job, 2, 1, Status.Paused)
+        }
+    }
 }

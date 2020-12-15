@@ -1,13 +1,17 @@
 package slatekit.jobs.support
 
 import slatekit.actors.Action
+import slatekit.actors.Message
 import slatekit.common.DateTime
 import slatekit.common.Event
 import slatekit.common.Identity
 import slatekit.actors.Status
+import slatekit.common.ext.toStringMySql
 import slatekit.common.ids.ULIDs
-import slatekit.jobs.Job
+import slatekit.common.log.LogLevel
+import slatekit.jobs.Manager
 import slatekit.jobs.Context
+import slatekit.jobs.Task
 import slatekit.jobs.WorkerContext
 import slatekit.results.Codes
 
@@ -41,11 +45,11 @@ object Events {
     /**
      * Builds an event for the job ( based on its current state )
      */
-    fun build(job: Job, name:String): Event {
-        val queue = job.jctx.queue?.name ?: "no-queue"
-        val id = job.jctx.id
-        val status = job.status()
-        return build(id, status, name, "State changed", "job", queue)
+    fun build(manager: Manager, name:String): Event {
+        val queue = manager.jctx.queue?.name ?: "no-queue"
+        val id = manager.jctx.id
+        val status = manager.status()
+        return build(id, status, name, "State changed", "job", queue, "")
     }
 
 
@@ -57,15 +61,15 @@ object Events {
         val worker = wctx.worker
         val id = worker.id
         val status = worker.status()
-        return build(id, status, name, "State changed", "wrk", queue)
+        return build(id, status, name, "State changed", "wrk", queue, "")
     }
 
 
     /**
      * Builds an event for the worker
      */
-    fun worker(job: Job, action: Action, id:Identity): Event {
-        val status = job.status()
+    fun worker(manager: Manager, action: Action, id:Identity): Event {
+        val status = manager.status()
         val operator = "WRK"
         val name = "${operator}_${action.name.toUpperCase()}"
         val finalName = when {
@@ -73,19 +77,16 @@ object Events {
             name.length > 20 -> name.substring(0, 20)
             else -> name
         }
-        return build(id, status, finalName, "$operator command - $action", "cmd", operator.toLowerCase())
+        return build(id, status, finalName, "$operator command - $action", "cmd", operator.toLowerCase(), "")
     }
 
 
     /**
-     * Builds a Event using the job/worker identity, status and other info.
+     * Builds a Event using the managermg/worker identity, status and other info.
      */
-    fun build(id: Identity, status: Status, name:String, desc:String, source:String, target:String, fields:List<Triple<String, String, String>> = emptyFields): Event {
+    fun build(id: Identity, status: Status, name:String, desc:String, source:String, target:String, value:String, fields:List<Triple<String, String, String>> = emptyFields): Event {
         val code = status.toCode()
         val tag = if(id.tags.isEmpty()) "" else id.tags.first()
-
-        // JOB_STARTING | WRK_STARTING
-        //val name = "${source.toUpperCase()}_${status.name.toUpperCase()}"
         return Event(
             uuid    = ULIDs.create().value,
             area    = id.area,
@@ -98,10 +99,26 @@ object Events {
             status  = code,
             source  = source,
             target  = target,
+            value   = value,
             time    = DateTime.now(),
             tag     = tag,
             fields  = fields
         )
+    }
+
+
+    fun record(mgr:Manager, name: String, cmd: Message<*>, value:String, desc: String? = null, task: Task? = null) {
+        val event = Events.build(mgr, name)
+        val info = listOf(
+            "id" to cmd.id.toString(),
+            "source" to event.source,
+            "name" to event.name,
+            "target" to event.target,
+            "value" to value,
+            "time" to event.time.toStringMySql(),
+            "desc" to (desc ?: event.desc)
+        )
+        mgr.jctx.logger.log(LogLevel.Info, "JOB $name", info)
     }
 
 

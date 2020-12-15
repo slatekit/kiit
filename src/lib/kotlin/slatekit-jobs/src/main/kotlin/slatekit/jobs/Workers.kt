@@ -28,14 +28,13 @@ data class WorkerContext(
     val id: Identity,
     val worker: Worker<*>,
     val stats: Recorder<Task, WResult, Err>,
-    val policies: List<Policy<WorkRequest, WResult>> = listOf(),
     val task: Task = Task.empty.copy(job = id.id)
 )
 
 
 /**
  * Represents a cluster of Workers that are affiliated with 1 job.
- * This helps manage the coordination between a @see[Worker] and a @see[slatekit.jobs.Job]
+ * This helps manage the coordination between a @see[Worker] and a @see[slatekit.jobs.Manager]
  * This is done by this class interpreting the @see[WorkResult] returned by a Worker
  * Based on the WorkResult, this may send commands @see[slatekit.jobs.support.Command]s to a Job's Channel
  * Essentially, this works like a glorified loop over each work, continuously:
@@ -46,7 +45,7 @@ data class WorkerContext(
  */
 class Workers(val ctx: Context) {
     val events = ctx.notifier.wrkEvents
-    val contexts = ctx.workers.map { WorkerContext(it.id, it, Recorder.of(it.id), ctx.policies) }
+    val contexts = ctx.workers.map { WorkerContext(it.id, it, Recorder.of(it.id)) }
     private val lookup: Map<String, WorkerContext> = contexts.map { shortId(it.id) to it }.toMap()
 
     /**

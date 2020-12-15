@@ -7,10 +7,9 @@ import slatekit.common.args.Args
 import slatekit.core.queues.AsyncQueue
 import slatekit.core.queues.InMemoryQueue
 import slatekit.integration.jobs.JobQueue
-import slatekit.jobs.Job
+import slatekit.jobs.Manager
 import slatekit.jobs.Jobs
 import slatekit.jobs.Priority
-import slatekit.jobs.Queue
 import slatekit.results.Failure
 import slatekit.results.Success
 
@@ -76,10 +75,10 @@ fun run(args: Args){
         val jobs = Jobs(
                 listOf(queue1, queue2),
                 listOf(
-                        Job(id.copy(service = "single"), ::sendNewsLetter),
-                        Job(id.copy(service = "paging"), listOf(::sendNewsLetterWithPaging)),
-                        Job(id.copy(service = "queued"), listOf(::sendNewsLetterFromQueue), queue1),
-                        Job(id.copy(service = "worker"), NewsLetterWorker(id.copy(tags = listOf("worker"))), queue2)
+                        Manager(id.copy(service = "single"), ::sendNewsLetter),
+                        Manager(id.copy(service = "paging"), listOf(::sendNewsLetterWithPaging)),
+                        Manager(id.copy(service = "queued"), listOf(::sendNewsLetterFromQueue), queue1),
+                        Manager(id.copy(service = "worker"), NewsLetterWorker(id.copy(tags = listOf("worker"))), queue2)
                 )
         )
 

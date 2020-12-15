@@ -14,27 +14,27 @@ import slatekit.jobs.Worker
 import test.jobs.samples.TestWorker
 
 interface JobTestSupport {
-    fun setup(id: Identity, numWorkers: Int, queue: Queue?, builder: (Identity) -> Worker<*>, operation: (suspend (Job, Issuer<Task>) -> Unit)?) {
-        val job = create(numWorkers, id, builder, queue)
+    fun setup(id: Identity, numWorkers: Int, queue: Queue?, builder: (Identity) -> Worker<*>, operation: (suspend (Manager, Issuer<Task>) -> Unit)?) {
+        val mgr = create(numWorkers, id, builder, queue)
         runBlocking {
-            val issuer = Issuer<Task>(job.channel, job as Issuable<Task>) { it.print() }
-            operation?.invoke(job, issuer)
-            job.close()
+            val issuer = Issuer<Task>(mgr.channel, mgr as Issuable<Task>) { it.print() }
+            operation?.invoke(mgr, issuer)
+            mgr.close()
         }
     }
 
-    fun create(numWorkers: Int, id: Identity, builder: (Identity) -> Worker<*>, queue: Queue?): Job {
+    fun create(numWorkers: Int, id: Identity, builder: (Identity) -> Worker<*>, queue: Queue?): Manager {
         val workers = (1..numWorkers).map { builder(id) }
         val channel = Channel<Message<Task>>(Channel.UNLIMITED)
         val ctx = Context(id, channel, workers, queue = queue, scheduler = MockScheduler())
-        return Job(ctx)
+        return Manager(ctx, Settings(false, false))
     }
 
 
-    fun ensure(job:Job, workers:Int, calls:Int, status: Status, isResumed:Boolean = false) {
-        Assert.assertEquals(workers, job.jctx.workers.size)
-        job.workers.getIds().forEach { workerId ->
-            val wrkCtx = job.workers[workerId]!!
+    fun ensure(mgr:Manager, workers:Int, calls:Int, status: Status, isResumed:Boolean = false) {
+        Assert.assertEquals(workers, mgr.jctx.workers.size)
+        mgr.workers.getIds().forEach { workerId ->
+            val wrkCtx = mgr.workers[workerId]!!
             val worker = wrkCtx.worker as TestWorker
             Assert.assertEquals(status, worker.status())
             Assert.assertEquals(calls, worker.counts.get())

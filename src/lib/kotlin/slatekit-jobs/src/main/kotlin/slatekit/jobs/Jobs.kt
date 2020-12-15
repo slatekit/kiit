@@ -2,7 +2,6 @@ package slatekit.jobs
 
 import kotlinx.coroutines.*
 import slatekit.actors.Action
-import slatekit.actors.pause.Controls
 import slatekit.actors.pause.Feedback
 
 /**
@@ -15,7 +14,7 @@ import slatekit.actors.pause.Feedback
  * @scope scope : CoroutineScope to launch jobs in
  */
 class Jobs(val queues: List<Queue>,
-           val jobs: List<Job>,
+           val jobs: List<Manager>,
            val scope: CoroutineScope = Jobs.scope) : Ops {
 
     private val jobNames = jobs.map { it.jctx.id.name to it }.toMap()
@@ -34,7 +33,7 @@ class Jobs(val queues: List<Queue>,
     /**
      * Gets the job by name e.g. "area.service"
      */
-    fun get(name: String): Job? = if (jobNames.containsKey(name)) jobNames[name] else null
+    fun get(name: String): Manager? = if (jobNames.containsKey(name)) jobNames[name] else null
 
 
     /**
