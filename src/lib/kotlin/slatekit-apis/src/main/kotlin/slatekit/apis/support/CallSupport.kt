@@ -2,12 +2,16 @@ package slatekit.apis.support
 
 import slatekit.apis.ApiServer
 import slatekit.apis.Verb
+import slatekit.apis.core.Flags
 import slatekit.common.requests.CommonRequest
 import slatekit.common.requests.Request
 import slatekit.common.requests.Response
 import slatekit.common.ext.toResponse
+import slatekit.results.Err
+import slatekit.results.ExceptionErr
 import slatekit.results.Outcome
 import slatekit.results.Try
+import slatekit.results.builders.Outcomes
 
 interface CallSupport {
 

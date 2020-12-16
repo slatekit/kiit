@@ -22,8 +22,8 @@ interface RouteSupport {
      * @param cmd
      * @return
      */
-    fun get(cmd: Request): Outcome<Target> {
-        return get(cmd.area, cmd.name, cmd.action)
+    fun get(req: Request): Outcome<Target> {
+        return get(req.area, req.name, req.action)
     }
 
 

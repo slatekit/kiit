@@ -31,7 +31,7 @@ import test.setup.*
  */
 
 
-class Api_Loader_Tests : ApiTestsBase() {
+class Api_001_Loader_Tests : ApiTestsBase() {
 
 
     @Test fun can_load_api_from_annotations() {
@@ -184,31 +184,5 @@ class Api_Loader_Tests : ApiTestsBase() {
         Assert.assertTrue(areas.contains("tests"))
         Assert.assertTrue(areas.get("app")?.apis?.size == 2)
         Assert.assertTrue(areas.get("tests")?.apis?.size == 1)
-    }
-
-
-
-    @Test fun can_load_routes() {
-        val areas = loadAll(listOf(
-                Api(SampleRolesByApp::class, "app", "sampleRolesByApp", "sample roles by application auth", roles = slatekit.apis.core.Roles(listOf("users")), auth = AuthMode.Token, sources = Sources(listOf(Source.CLI)), declaredOnly = true),
-                Api(SampleRolesByKey::class, "app", "sampleRolesByKey", "sample roles by api-key", roles = slatekit.apis.core.Roles(listOf("users")), auth = AuthMode.Keyed, sources = Sources(listOf(Source.CLI)), declaredOnly = true),
-                Api(SampleExtendedApi::class, "tests", "sampleExtended", "sample plain kotlin class", roles = slatekit.apis.core.Roles(listOf("users")), auth = AuthMode.Token, sources = Sources(listOf(Source.CLI)), declaredOnly = false)
-        ))
-
-        val routes = Routes(areas, null)
-        Assert.assertTrue(routes.areas.size == 2)
-        Assert.assertTrue(routes.contains("app"))
-        Assert.assertTrue(routes.contains("tests"))
-
-        // Declared locally in class
-        Assert.assertTrue(routes.contains("tests", "sampleExtended", "ping"))
-
-        // Inherited from super class
-        Assert.assertTrue(routes.contains("tests", "sampleExtended","hello"))
-
-        val api = routes.api("tests", "sampleExtended")
-        Assert.assertTrue(api?.area == "tests")
-        Assert.assertTrue(api?.name == "sampleExtended")
-        Assert.assertTrue(api?.actions?.size == 8)
     }
 }

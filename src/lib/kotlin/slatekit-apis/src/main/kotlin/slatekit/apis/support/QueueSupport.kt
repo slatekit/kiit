@@ -20,6 +20,7 @@ interface QueueSupport {
         return slatekit.results.Success("Request processed as queue")
     }
 
+
     /**
      * Converts a request for an action that is queued, to an actual queue
      */
@@ -32,6 +33,7 @@ interface QueueSupport {
             slatekit.results.Failure("Continue processing")
         }
     }
+
 
     /**
      * Creates a request from the parameters and api info and serializes that as json
