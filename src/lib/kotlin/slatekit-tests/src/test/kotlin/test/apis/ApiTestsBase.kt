@@ -17,7 +17,6 @@ import org.junit.Assert
 import slatekit.apis.*
 import slatekit.apis.routes.Api
 import slatekit.apis.core.Auth
-import slatekit.apis.services.Authorize
 import slatekit.apis.SetupType
 import slatekit.common.requests.CommonRequest
 import slatekit.common.Source
@@ -140,7 +139,6 @@ open class ApiTestsBase {
 
         // Optional auth
         val auth = user?.let { u -> MyAuthProvider(u.name, u.roles, buildKeys()) }
-        val hooks = middleware.plus(Authorize(auth))
 
         // Host
         val host = ApiServer(ctx,

@@ -69,7 +69,9 @@ open class ApiServer(
 
 
     /**
-     * Generates a sample response based on the inputs/outputs
+     * Generates a sample response for the route specified in the request ( area.api.action )
+     * This checks the methods ( associated with the route ) and generates a response based on
+     * its inputs( parameter types ) and its return type.
      */
     fun sample(req: Request, path: File): Notice<String> {
         return sample(this, req, path)
@@ -77,8 +79,8 @@ open class ApiServer(
 
 
     /**
-     * gets the api info associated with the request
-     * @param req
+     * gets the @see[Target] ( mapped method ) associated with the route ( area.api.action ) in the Request
+     * @param req : Request to get route info from
      * @return
      */
     fun get(req: Request): Outcome<Target> {
@@ -87,10 +89,10 @@ open class ApiServer(
 
 
     /**
-     * gets the mapped method associated with the api action.
-     * @param area
-     * @param name
-     * @param action
+     * gets the @see[Target] ( mapped method ) associated with the route info ( area.api.action )
+     * @param area   : e.g. "accounts"
+     * @param name   : e.g. "signup"
+     * @param action : e.g. "register"
      * @return
      */
     fun get(area: String, name: String, action: String): Outcome<Target> {
@@ -99,7 +101,7 @@ open class ApiServer(
 
 
     /**
-     * gets the mapped method associated with the api action.
+     * gets the @see[Target] ( mapped method ) associated with annotations on the class/method supplied
      * @return
      */
     fun get(clsType: KClass<*>, member: KCallable<*>): Outcome<Target> {
@@ -257,21 +259,6 @@ open class ApiServer(
     }
 
 
-    private fun record(req: Request, res:Outcome<Any>){
-        logger.info({
-            val info = listOf("path" to req.path) + res.structured()
-            val summary= info.joinToString { "${it.first}=${it.second?.toString()}" }
-            val inputs = req.structured().joinToString { "${it.first}=${it.second?.toString()}" }
-            "API Server Result: $summary, inputs : $inputs"
-        }, null)
-
-        res.onFailure {
-            val numbered = it.numbered().joinToString(newline)
-            logger.error("API Server Error(s): $newline$numbered")
-        }
-    }
-
-
     companion object {
 
         @JvmStatic
@@ -304,6 +291,21 @@ open class ApiServer(
 
             path.writeText(sample)
             return Success("sample call written to : ${path.absolutePath}")
+        }
+
+
+        fun record(req: Request, res:Outcome<Any>){
+            logger.info({
+                val info = listOf("path" to req.path) + res.structured()
+                val summary= info.joinToString { "${it.first}=${it.second?.toString()}" }
+                val inputs = req.structured().joinToString { "${it.first}=${it.second?.toString()}" }
+                "API Server Result: $summary, inputs : $inputs"
+            }, null)
+
+            res.onFailure {
+                val numbered = it.numbered().joinToString(newline)
+                logger.error("API Server Error(s): $newline$numbered")
+            }
         }
     }
 }
