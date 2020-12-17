@@ -13,8 +13,6 @@ object RouteRule : Rule {
         if (totalParts < 2) {
             return Outcomes.invalid(req.request.action + ": invalid call")
         }
-        val request = req.request
-        val result = req.host.get(request.area, request.name, request.action)
-        return result.map { true }
+        return Outcomes.success(true)
     }
 }

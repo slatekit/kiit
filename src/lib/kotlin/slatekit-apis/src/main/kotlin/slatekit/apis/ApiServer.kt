@@ -177,11 +177,16 @@ open class ApiServer(
         if (helpCheck.success) return helpCheck
 
         // Build ApiRequest from the raw request ( this is used for middleware )
-        val req = ApiRequest(this, auth, ctx, raw, null, raw.source, null)
+        val request = ApiRequest(this, auth, ctx, raw, null, raw.source, null)
 
         // Route    : area.api.action
-        val routeResult = RouteRule.validate(req)
+        val routeResult = RouteRule.validate(request)
         if(!routeResult.success) return routeResult
+
+        // Target
+        val targetResult = request.host.get(raw.area, raw.name, raw.action)
+        if(!targetResult.success) return targetResult
+        val req = request.copy(target = targetResult.getOrNull())
 
         // Protocol : e.g. cli, web, que
         val protocolResult = ProtoRule.validate(req)
