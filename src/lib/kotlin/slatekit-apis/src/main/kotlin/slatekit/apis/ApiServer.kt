@@ -5,6 +5,10 @@ import kotlin.reflect.KClass
 import slatekit.apis.core.*
 import slatekit.apis.core.Target
 import slatekit.apis.routes.Routes
+import slatekit.apis.rules.AuthRule
+import slatekit.apis.rules.ParamsRule
+import slatekit.apis.rules.ProtoRule
+import slatekit.apis.rules.RouteRule
 import slatekit.apis.services.*
 import slatekit.apis.setup.HostAware
 import slatekit.apis.setup.loadAll
@@ -35,6 +39,7 @@ open class ApiServer(
     val ctx: Context,
     val apis: List<slatekit.apis.routes.Api>,
     val hooks: List<Middleware> = listOf(),
+    val auth: Auth? = null,
     val settings: Settings = Settings()
 )  {
 
@@ -66,20 +71,8 @@ open class ApiServer(
     /**
      * Generates a sample response based on the inputs/outputs
      */
-    fun sample(cmd: Request, path: File): Notice<String> {
-        val action = get(cmd)
-        val sample = if (action.success) {
-            val parameters = when (action) {
-                is Success -> action.value.action.paramsUser
-                is Failure -> listOf()
-            }
-            val serializer = Serialization.sampler() as SerializerSample
-            val text = serializer.serializeParams(parameters)
-            text
-        } else "Unable to find command: " + cmd.path
-
-        path.writeText(sample)
-        return Success("sample call written to : ${path.absolutePath}")
+    fun sample(req: Request, path: File): Notice<String> {
+        return sample(this, req, path)
     }
 
 
@@ -172,63 +165,43 @@ open class ApiServer(
     }
 
     /**
-     * Executes the api request in a pipe-line of various checks and validations.
-     * NOTE: This is effectively the core processing method of API Container.
-     * The flow is as follows:
-     *
-     * 1. before:
-     *      - BEFORE : formatters   : pre-request formatters
-     *      - BEFORE : pre-process  : built in validators
-     *      - BEFORE : before hooks : API overrides
-     *      - BEFORE : inputters    : pre-request processors
-     *      - EXECUTE:
-     *      - AFTER  : outputters
-     *      - AFTER  : after hooks  : API overrides
-     *      - AFTER  : outputters   : post process
+     * Executes the api request after performing basic checks/rules
      * @param cmd
      * @return
      */
     suspend fun execute(raw: Request, options: Flags? = null): Outcome<Any> {
-        // Step 1: Check for help / discovery
+        // Help ?
         val helpCheck = help.process(raw)
-        if (helpCheck.success) {
-            return helpCheck
-        }
+        if (helpCheck.success) return helpCheck
 
-        // Step 2: Build ApiRequest from the raw request ( this is used for middleware )
-        val rawRequest = ApiRequest(this, ctx, raw, null, raw.source, null)
+        // Build ApiRequest from the raw request ( this is used for middleware )
+        val req = ApiRequest(this, auth, ctx, raw, null, raw.source, null)
 
-        // Step 3: Hooks: Pre-Processing Stage 1 : rewrite request, and ensure system validations
-        val startInput = Outcomes.success(rawRequest)
-        val validated = startInput
+        // Route    : area.api.action
+        val routeResult = RouteRule.validate(req)
+        if(!routeResult.success) return routeResult
 
-        // Step 4: Hooks: Pre-Processing Stage 2: run through more hooks ( API level & supplied )
-        val requested = validated
+        // Protocol : e.g. cli, web, que
+        val protocolResult = ProtoRule.validate(req)
+        if(!protocolResult.success) return protocolResult
+
+        // Auth     : e.g. cli, web, que
+        val authResult = AuthRule.validate(req)
+        if(!authResult.success) return authResult
+
+        // Params   : e.g. cli, web, que
+        val paramsResult = ParamsRule.validate(req)
+        if(!paramsResult.success) return paramsResult
 
         // Step 5: Execute request
-        val executed = try {
-            requested.flatMap { request ->
-                request.target?.let {
-                    if (it.instance is Process<*, *>) {
-                        val processor = it.instance as Process<ApiRequest, ApiResult>
-                        processor.process(request) {
-                            executeMethod(Ctx.of(this, this.ctx, request), request)
-                        }
-                    } else {
-                        executeMethod(Ctx.of(this, this.ctx, request), request)
-                    }
-                } ?: executeMethod(Ctx.of(this, this.ctx, request), request)
-
-            }
+        val result = try {
+            executeMethod(Ctx.of(this, this.ctx, req), req)
         } catch(ex:Exception){
             when(ex){
                 is ExceptionErr -> Outcomes.unexpected(ex.err, Codes.UNEXPECTED)
                 else            -> Outcomes.unexpected<ApiResult>(ex)
             }
         }
-
-        // Step 7: Hooks: Post-Processing Stage 2: remaining hooks ( afters, built-ins, outputters )
-        val result = executed
         return result
     }
 
@@ -303,7 +276,7 @@ open class ApiServer(
 
         @JvmStatic
         fun of(ctx: Context, apis: List<slatekit.apis.routes.Api>, auth: Auth? = null, source: Source? = null): ApiServer {
-            val server = ApiServer(ctx, apis, listOf(), Settings(source ?: Source.Web))
+            val server = ApiServer(ctx, apis, listOf(), auth, Settings(source ?: Source.Web))
             return server
         }
 
@@ -315,15 +288,22 @@ open class ApiServer(
         }
 
         /**
-         * Default list of API Request input validators
+         * Generates a sample response based on the inputs/outputs
          */
-        @JvmStatic
-        fun middleware(): List<Middleware> {
-            return listOf(
-                Routing(),
-                Protos(),
-                Validate()
-            )
+        fun sample(server:ApiServer, req: Request, path: File): Notice<String> {
+            val action = server.get(req)
+            val sample = if (action.success) {
+                val parameters = when (action) {
+                    is Success -> action.value.action.paramsUser
+                    is Failure -> listOf()
+                }
+                val serializer = Serialization.sampler() as SerializerSample
+                val text = serializer.serializeParams(parameters)
+                text
+            } else "Unable to find command: " + req.path
+
+            path.writeText(sample)
+            return Success("sample call written to : ${path.absolutePath}")
         }
     }
 }
