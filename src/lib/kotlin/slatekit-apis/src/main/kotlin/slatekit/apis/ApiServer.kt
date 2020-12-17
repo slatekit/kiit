@@ -121,7 +121,7 @@ open class ApiServer(
      * @param req
      * @return
      */
-    suspend fun executeResponse(req: Request): Response<Any> {
+    suspend fun executeResponse(req: Request): Response<ApiResult> {
         return executeAttempt(req, null).toResponse()
     }
 
@@ -129,7 +129,7 @@ open class ApiServer(
     /**
      * Call with inputs instead of the request
      */
-    suspend fun executeAttempt(area: String, api: String, action: String, verb: Verb, opts: Map<String, Any>, args: Map<String, Any>): Try<Any> {
+    suspend fun executeAttempt(area: String, api: String, action: String, verb: Verb, opts: Map<String, Any>, args: Map<String, Any>): Try<ApiResult> {
         val req = CommonRequest.cli(area, api, action, verb.name, opts, args)
         return executeAttempt(req, null)
     }
@@ -140,7 +140,7 @@ open class ApiServer(
      * @param req
      * @return
      */
-    suspend fun executeAttempt(req: Request, options: Flags?): Try<Any> {
+    suspend fun executeAttempt(req: Request, options: Flags?): Try<ApiResult> {
         val result = executeOutcome(req, options)
         return result.toTry()
     }
@@ -150,7 +150,7 @@ open class ApiServer(
      * @param req
      * @return
      */
-    suspend fun executeOutcome(req: Request, options: Flags?): Outcome<Any> {
+    suspend fun executeOutcome(req: Request, options: Flags?): Outcome<ApiResult> {
         val result = try {
             val result = execute(req, options)
             record(req, result, logger)
@@ -171,7 +171,7 @@ open class ApiServer(
      * @param cmd
      * @return
      */
-    suspend fun execute(raw: Request, options: Flags? = null): Outcome<Any> {
+    suspend fun execute(raw: Request, options: Flags? = null): Outcome<ApiResult> {
         // Help ?
         val helpCheck = help.process(raw)
         if (helpCheck.success) return helpCheck
@@ -297,7 +297,7 @@ open class ApiServer(
         }
 
 
-        fun record(req: Request, res:Outcome<Any>, logger:Logger){
+        fun record(req: Request, res:Outcome<ApiResult>, logger:Logger){
             logger.info({
                 val info = listOf("path" to req.path) + res.structured()
                 val summary= info.joinToString { "${it.first}=${it.second?.toString()}" }

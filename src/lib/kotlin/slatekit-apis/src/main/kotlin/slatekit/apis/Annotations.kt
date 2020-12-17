@@ -19,7 +19,7 @@ import slatekit.common.Sources
  *      }
  * ================================================================
  * This Api annotations represents the "@Api(area = "accounts" ) portion in the example
- * 
+ *
  * @param area : the top level area/category of the api "sys", "app", "ops"
  * @param name : the name of the api "users"
  * @param desc : description of the api

@@ -33,10 +33,6 @@ open class APIWorker(
         // let the container execute the request
         // this will follow the same pipeline/flow as the http requests now.
         val result = container.execute(req)
-        val resultFinal:Try<Any> = when(result) {
-            is Success -> slatekit.results.Success(result.value)
-            is Failure -> result.toTry()
-        }
         slatekit.common.NOTE.IMPLEMENT("jobs", "Success/Failure handling")
         return WResult.More
     }

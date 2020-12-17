@@ -1,6 +1,7 @@
 package slatekit.apis.services
 
 import slatekit.apis.ApiRequest
+import slatekit.apis.ApiResult
 import slatekit.apis.ApiServer
 import slatekit.apis.Middleware
 import slatekit.apis.support.RewriteSupport
@@ -21,7 +22,7 @@ class Restify : RewriteSupport, Middleware {
      * Rewrites restful routes and maps them to SlateKit API routes
      */
     @Ignore
-    override suspend fun process(req: ApiRequest, next:suspend(ApiRequest) -> Outcome<Any>): Outcome<Any> {
+    override suspend fun process(req: ApiRequest, next:suspend(ApiRequest) -> Outcome<ApiResult>): Outcome<ApiResult> {
 
         // Get the first and second part
         val parts = req.request.parts
