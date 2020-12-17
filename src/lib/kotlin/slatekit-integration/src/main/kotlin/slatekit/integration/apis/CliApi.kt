@@ -80,7 +80,7 @@ open class CliApi(
             val transformedMeta = metaTransform?.invoke(existingMeta)?.toMap() ?: existingMeta
             val metaUpdated = InputArgs(transformedMeta)
             val requestWithMeta = request.copy(meta = metaUpdated)
-            val response = apis.respond(requestWithMeta)
+            val response = apis.executeResponse(requestWithMeta)
             val cliResponse = CliResponse(
                     requestWithMeta,
                     response.success,

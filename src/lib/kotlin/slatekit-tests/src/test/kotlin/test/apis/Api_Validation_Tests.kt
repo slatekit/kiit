@@ -39,7 +39,7 @@ class Api_Validation_Tests : ApiTestsBase() {
         val api = Sample_API_1_Validation()
         val apis = ApiServer(ctx, apis = listOf(Api(api, setup = SetupType.Annotated)) )
         val r1 = runBlocking {
-            apis.call("samples", "validation", Sample_API_1_Validation::processInputs.name, Verb.Post, mapOf(), mapOf())
+            apis.executeAttempt("samples", "validation", Sample_API_1_Validation::processInputs.name, Verb.Post, mapOf(), mapOf())
         }
         Assert.assertFalse(r1.success)
         r1.onFailure {
@@ -60,7 +60,7 @@ class Api_Validation_Tests : ApiTestsBase() {
         val api = Sample_API_1_Validation()
         val apis = ApiServer(ctx, apis = listOf(Api(api, setup = SetupType.Annotated)) )
         val r1 = runBlocking {
-            apis.call("samples", "validation", Sample_API_1_Validation::processInputs.name, Verb.Post, mapOf(), mapOf(
+            apis.executeAttempt("samples", "validation", Sample_API_1_Validation::processInputs.name, Verb.Post, mapOf(), mapOf(
                     Pair("phone", "p1"),
                     Pair("code" , "abc" ),
                     Pair("isOn" , "something"),

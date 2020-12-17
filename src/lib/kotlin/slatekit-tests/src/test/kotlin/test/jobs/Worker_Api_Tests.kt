@@ -51,7 +51,7 @@ class Worker_Api_Tests {
 
             // 5. send method call to queue
             val result = runBlocking {
-                apis.call("samples", "workerqueue", "test1", Verb.Post, mapOf(), mapOf(
+                apis.executeAttempt("samples", "workerqueue", "test1", Verb.Post, mapOf(), mapOf(
                         "s" to "user1@abc.com",
                         "b" to true,
                         "i" to 123,

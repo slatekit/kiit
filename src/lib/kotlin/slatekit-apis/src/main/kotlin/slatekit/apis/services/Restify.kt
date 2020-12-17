@@ -1,6 +1,7 @@
 package slatekit.apis.services
 
 import slatekit.apis.ApiRequest
+import slatekit.apis.ApiServer
 import slatekit.apis.Middleware
 import slatekit.apis.support.RewriteSupport
 import slatekit.common.Ignore
@@ -28,22 +29,28 @@ class Restify : RewriteSupport, Middleware {
         val container = req.host
 
         val result = if (verb == verbGet && parts[2] == "") {
-            Outcomes.of { rewrite(req, container.rename("getAll")) }
+            Outcomes.of { rewrite(req, rename(container,"getAll")) }
         } else if (verb == verbGet && ValidationFuncs.isNumeric(parts[2])) {
-            Outcomes.of { rewriteWithParam(req, container.rename("getById"), "id", parts[2]) }
+            Outcomes.of { rewriteWithParam(req, rename(container,"getById"), "id", parts[2]) }
         } else if (verb == verbPost && parts[2] == "") {
-                Outcomes.of { rewrite(req, container.rename("create")) }
+                Outcomes.of { rewrite(req, rename(container,"create")) }
         } else if (verb == verbPut && parts[2] == "") {
-                Outcomes.of { rewrite(req, container.rename("update")) }
+                Outcomes.of { rewrite(req, rename(container,"update")) }
         } else if (verb == verbPatch && ValidationFuncs.isNumeric(parts[2])) {
-                Outcomes.of { rewriteWithParam(req, container.rename("patch"), "id", parts[2]) }
+                Outcomes.of { rewriteWithParam(req, rename(container,"patch"), "id", parts[2]) }
         } else if (verb == verbDelete && parts[2] == "") {
-                Outcomes.of { rewrite(req, container.rename(verbDelete)) }
+                Outcomes.of { rewrite(req, rename(container,verbDelete)) }
         } else if (verb == verbDelete && ValidationFuncs.isNumeric(parts[2])) {
-                Outcomes.of { rewriteWithParam(req, container.rename("deleteById"), "id", parts[2]) }
+                Outcomes.of { rewriteWithParam(req, rename(container,"deleteById"), "id", parts[2]) }
         } else {
             next(req)
         }
         return result
     }
+
+    /**
+     * Provides access to naming conventions used for actions
+     */
+    fun rename(server:ApiServer, text: String): String = server.settings.naming?.rename(text) ?: text
+
 }

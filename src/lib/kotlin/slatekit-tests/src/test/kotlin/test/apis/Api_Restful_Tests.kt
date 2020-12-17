@@ -60,7 +60,7 @@ class Api_Restful_Tests : ApiTestsBase() {
 
         val apis = ApiServer(ctx, apis = listOf(Api(SampleRESTApi::class, "app", "SampleREST")))
         val r1 = runBlocking {
-            apis.call("app", "SampleREST", "1", Verb.Get, mapOf(), mapOf())
+            apis.executeAttempt("app", "SampleREST", "1", Verb.Get, mapOf(), mapOf())
         }
         Assert.assertTrue(r1.success)
         Assert.assertTrue(r1.code == Codes.SUCCESS.code)
@@ -74,7 +74,7 @@ class Api_Restful_Tests : ApiTestsBase() {
 
         val apis = ApiServer(ctx, apis = listOf(Api(SampleRESTApi::class, "app", "SampleREST")))
         val r1 = runBlocking {
-            apis.call("app", "SampleREST", "1", Verb.Patch, mapOf(),
+            apis.executeAttempt("app", "SampleREST", "1", Verb.Patch, mapOf(),
                     mapOf("title" to "Indiana Jones Original"))
         }
 
@@ -88,7 +88,7 @@ class Api_Restful_Tests : ApiTestsBase() {
 
         val apis = ApiServer(ctx, apis = listOf(Api(SampleRESTApi::class, "app", "SampleREST")))
         val r1 = runBlocking {
-            apis.call("app", "SampleREST", "1", Verb.Delete, mapOf(), mapOf())
+            apis.executeAttempt("app", "SampleREST", "1", Verb.Delete, mapOf(), mapOf())
         }
 
         Assert.assertTrue(r1.success)
@@ -101,7 +101,7 @@ class Api_Restful_Tests : ApiTestsBase() {
 
         val apis = ApiServer(ctx, apis = listOf(Api(SampleRESTApi::class, "app", "SampleREST")))
         val r1 = runBlocking {
-            apis.call("app", "SampleREST", "activateById", Verb.Post, mapOf(), mapOf("id" to 1))
+            apis.executeAttempt("app", "SampleREST", "activateById", Verb.Post, mapOf(), mapOf("id" to 1))
         }
 
         Assert.assertTrue(r1.success)
@@ -129,7 +129,7 @@ class Api_Restful_Tests : ApiTestsBase() {
                 apis = listOf(Api(SampleRESTApi::class, "app", "SampleREST"))
         )
         val r1 = runBlocking {
-            apis.call(
+            apis.executeAttempt(
                     "app", "SampleREST", "", Verb.Post,
                     mapOf("api-key" to "3E35584A8DE0460BB28D6E0D32FB4CFD"),
                     data
@@ -160,7 +160,7 @@ class Api_Restful_Tests : ApiTestsBase() {
         val data = mapOf( "item" to json )
         val apis = ApiServer(ctx, apis = listOf(Api(SampleRESTApi::class, "app", "SampleREST")))
         val r1 = runBlocking {
-            apis.call(
+            apis.executeAttempt(
                     "app", "SampleREST", "", Verb.Put,
                     mapOf("api-key" to "3E35584A8DE0460BB28D6E0D32FB4CFD"),
                     data
@@ -177,7 +177,7 @@ class Api_Restful_Tests : ApiTestsBase() {
 
         val apis = ApiServer(ctx, apis = listOf(Api(SampleRESTApi::class, "app", "SampleREST")))
         val r1 = runBlocking {
-            apis.call("app", "SampleREST", action, verb, mapOf(), args)
+            apis.executeAttempt("app", "SampleREST", action, verb, mapOf(), args)
         }
         callback(r1)
 
@@ -185,7 +185,7 @@ class Api_Restful_Tests : ApiTestsBase() {
         val name = namer?.rename("SampleREST")  ?: "SampleREST"
         val act  = namer?.rename(action) ?: action
         val r2 = runBlocking {
-            api2.call("app", name, act, verb, mapOf(), args)
+            api2.executeAttempt("app", name, act, verb, mapOf(), args)
         }
         callback(r2)
     }

@@ -3,7 +3,7 @@ package test.setup
 import slatekit.apis.*
 import slatekit.apis.AuthModes
 import slatekit.apis.Verbs
-import slatekit.apis.support.ApiBase
+import slatekit.apis.ApiBase
 import slatekit.context.Context
 import slatekit.common.Sources
 import slatekit.integration.common.AppEntContext

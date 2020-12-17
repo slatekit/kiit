@@ -13,7 +13,7 @@
 
 package slatekit.integration.common
 
-import slatekit.apis.support.ApiBase
+import slatekit.apis.ApiBase
 import slatekit.entities.Entities
 import slatekit.entities.Entity
 import slatekit.entities.EntityService

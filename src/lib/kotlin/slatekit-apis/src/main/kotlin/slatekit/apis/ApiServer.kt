@@ -8,19 +8,21 @@ import slatekit.apis.routes.Routes
 import slatekit.apis.services.*
 import slatekit.apis.setup.HostAware
 import slatekit.apis.setup.loadAll
-import slatekit.apis.support.CallSupport
-import slatekit.apis.support.RouteSupport
 import slatekit.common.*
 import slatekit.common.ext.numbered
 import slatekit.common.ext.structured
+import slatekit.common.ext.toResponse
 import slatekit.common.log.Logger
+import slatekit.common.requests.CommonRequest
 import slatekit.common.requests.Request
+import slatekit.common.requests.Response
 import slatekit.context.Context
 import slatekit.meta.*
 import slatekit.meta.deserializer.Deserializer
 import slatekit.policy.Process
 import slatekit.results.*
 import slatekit.results.builders.Outcomes
+import kotlin.reflect.KCallable
 
 /**
  * This is the core container hosting, managing and executing the source independent apis.
@@ -30,17 +32,17 @@ import slatekit.results.builders.Outcomes
  * @param settings : Settings for the server
  */
 open class ApiServer(
-    override val ctx: Context,
+    val ctx: Context,
     val apis: List<slatekit.apis.routes.Api>,
     val hooks: List<Middleware> = listOf(),
     val settings: Settings = Settings()
-) : CallSupport, RouteSupport {
+)  {
 
     /**
      * Load all the routes from the APIs supplied.
      * The API setup can be either annotation based or public methods on the Class
      */
-    override val routes = Routes(loadAll(apis, settings.naming), settings.naming)
+    val routes = Routes(loadAll(apis, settings.naming), settings.naming)
 
     /**
      * The help class to handle help on an area, api, or action
@@ -52,18 +54,18 @@ open class ApiServer(
      */
     private val logger: Logger = ctx.logs.getLogger("api")
 
-    /**
-     * Provides access to naming conventions used for actions
-     */
-    fun rename(text: String): String = settings.naming?.rename(text) ?: text
 
-    fun setApiContainerHost() {
-        routes.visitApis { _, api -> ApiServer.setApiHost(api.singleton, this) }
+    /**
+     * Initialize all the routes with reference to this server
+     */
+    init {
+        routes.visitApis { _, api -> setApiHost(api.singleton, this) }
     }
 
-    override fun host(): ApiServer = this
 
-
+    /**
+     * Generates a sample response based on the inputs/outputs
+     */
     fun sample(cmd: Request, path: File): Notice<String> {
         val action = get(cmd)
         val sample = if (action.success) {
@@ -80,13 +82,80 @@ open class ApiServer(
         return Success("sample call written to : ${path.absolutePath}")
     }
 
+
+    /**
+     * gets the api info associated with the request
+     * @param req
+     * @return
+     */
+    fun get(req: Request): Outcome<Target> {
+        return get(req.area, req.name, req.action)
+    }
+
+
+    /**
+     * gets the mapped method associated with the api action.
+     * @param area
+     * @param name
+     * @param action
+     * @return
+     */
+    fun get(area: String, name: String, action: String): Outcome<Target> {
+        return routes.api(area, name, action, ctx)
+    }
+
+
+    /**
+     * gets the mapped method associated with the api action.
+     * @return
+     */
+    fun get(clsType: KClass<*>, member: KCallable<*>): Outcome<Target> {
+        val apiAnno = Reflector.getAnnotationForClassOpt<Api>(clsType, Api::class)
+        return apiAnno?.let { anno ->
+            val action = when(val actionAnno = Reflector.getAnnotationForMember<Action>(member, Action::class)){
+                null -> member.name
+                else -> if (actionAnno.name.isBlank()) member.name else actionAnno.name
+            }
+            get(anno.area, anno.name, action)
+        } ?: Outcomes.errored("member/annotation not found for : ${member.name}")
+    }
+
+
+    /**
+     * calls the api/action associated with the request
+     * @param req
+     * @return
+     */
+    suspend fun executeResponse(req: Request): Response<Any> {
+        return executeAttempt(req, null).toResponse()
+    }
+
+
+    /**
+     * Call with inputs instead of the request
+     */
+    suspend fun executeAttempt(area: String, api: String, action: String, verb: Verb, opts: Map<String, Any>, args: Map<String, Any>): Try<Any> {
+        val req = CommonRequest.cli(area, api, action, verb.name, opts, args)
+        return executeAttempt(req, null)
+    }
+
     /**
      * calls the api/action associated with the request with optional execution options.
      * This is to allow requests to be sourced from some other source such as a secure storage
      * @param req
      * @return
      */
-    suspend fun call(req: Request, options: Flags?): Try<Any> {
+    suspend fun executeAttempt(req: Request, options: Flags?): Try<Any> {
+        val result = executeOutcome(req, options)
+        return result.toTry()
+    }
+
+    /**
+     * calls the api/action associated with the request
+     * @param req
+     * @return
+     */
+    suspend fun executeOutcome(req: Request, options: Flags?): Outcome<Any> {
         val result = try {
             val result = execute(req, options)
             record(req, result)
@@ -99,7 +168,7 @@ open class ApiServer(
             }
             Outcomes.errored<Any>(err)
         }
-        return result.toTry()
+        return result
     }
 
     /**

@@ -92,7 +92,7 @@ class KtorHandler(
         // 3. Decoding request to method parameters
         // 4. Executing the method
         // 5. Handling errors
-        val result = container.call(request, null)
+        val result = container.executeAttempt(request, null)
         val response = result.toResponse()
 
         // Record all diagnostics

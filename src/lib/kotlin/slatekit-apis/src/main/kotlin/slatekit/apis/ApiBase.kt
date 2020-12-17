@@ -11,13 +11,13 @@
  * </slate_header>
  */
 
-package slatekit.apis.support
+package slatekit.apis
 
+import slatekit.apis.support.FileSupport
 import slatekit.common.crypto.Encryptor
 import slatekit.common.log.Logger
 import slatekit.context.Context
 
-interface Api
 
 /**
  * Base class for any Api, provides lookup functionality to check for exposed api actions.

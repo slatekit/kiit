@@ -31,8 +31,8 @@ class Api_Middleware_Tests : ApiTestsBase() {
     @Test fun can_handle_hooks() {
         val api = SampleMiddlewareApi()
         val apis = ApiServer(ctx, apis = listOf(Api(api, "app", "SampleMiddleware")))
-        val r1 = runBlocking { apis.call("app", "SampleMiddleware", SampleMiddlewareApi::hello.name, Verb.Post, mapOf(), mapOf()) }
-        val r2 = runBlocking { apis.call("app", "SampleMiddleware", SampleMiddlewareApi::hello.name, Verb.Post, mapOf(), mapOf()) }
+        val r1 = runBlocking { apis.executeAttempt("app", "SampleMiddleware", SampleMiddlewareApi::hello.name, Verb.Post, mapOf(), mapOf()) }
+        val r2 = runBlocking { apis.executeAttempt("app", "SampleMiddleware", SampleMiddlewareApi::hello.name, Verb.Post, mapOf(), mapOf()) }
 
         Assert.assertTrue(api.onBeforeHookCount.size == 2)
         Assert.assertTrue(api.onAfterHookCount.size == 2)
@@ -46,7 +46,7 @@ class Api_Middleware_Tests : ApiTestsBase() {
     @Test fun can_handle_filters_request_pass() {
         val api = SampleMiddlewareApi()
         val apis = ApiServer(ctx, apis = listOf(Api(api, "app", "SampleMiddleware")))
-        val r1 = runBlocking { apis.call("app", "SampleMiddleware", SampleMiddlewareApi::hello.name, Verb.Post, mapOf(), mapOf()) }
+        val r1 = runBlocking { apis.executeAttempt("app", "SampleMiddleware", SampleMiddlewareApi::hello.name, Verb.Post, mapOf(), mapOf()) }
 
         Assert.assertTrue(r1.success)
         Assert.assertTrue(r1.code == Codes.SUCCESS.code)
@@ -57,7 +57,7 @@ class Api_Middleware_Tests : ApiTestsBase() {
     @Test fun can_handle_filters_request_fail() {
         val api = SampleMiddlewareApi()
         val apis = ApiServer(ctx, apis = listOf(Api(api, "app", "SampleMiddleware")))
-        val r1 = runBlocking { apis.call("app", "SampleMiddleware", SampleMiddlewareApi::hi.name, Verb.Post, mapOf(), mapOf()) }
+        val r1 = runBlocking { apis.executeAttempt("app", "SampleMiddleware", SampleMiddlewareApi::hi.name, Verb.Post, mapOf(), mapOf()) }
 
         Assert.assertTrue(!r1.success)
         Assert.assertTrue(r1.code == Codes.ERRORED.code)
@@ -68,7 +68,7 @@ class Api_Middleware_Tests : ApiTestsBase() {
     @Test fun can_handle_unexpected_at_api_level() {
         val api = SampleMiddlewareApi()
         val apis = ApiServer(ctx, apis = listOf(Api(api, "app", "SampleMiddleware")))
-        val r1 = runBlocking { apis.call("app", "SampleMiddleware", SampleMiddlewareApi::unexpected.name, Verb.Post, mapOf(), mapOf()) }
+        val r1 = runBlocking { apis.executeAttempt("app", "SampleMiddleware", SampleMiddlewareApi::unexpected.name, Verb.Post, mapOf(), mapOf()) }
 
         Assert.assertTrue(!r1.success)
         Assert.assertTrue(r1.code == Codes.UNEXPECTED.code)
@@ -80,7 +80,7 @@ class Api_Middleware_Tests : ApiTestsBase() {
     @Test fun can_handle_error_at_api_level() {
         val api = SampleMiddlewareApi()
         val apis = ApiServer(ctx, apis = listOf(Api(api, "app", "SampleMiddleware")))
-        val r1 = runBlocking { apis.call("app", "SampleMiddleware", SampleMiddlewareApi::errored.name, Verb.Post, mapOf(), mapOf()) }
+        val r1 = runBlocking { apis.executeAttempt("app", "SampleMiddleware", SampleMiddlewareApi::errored.name, Verb.Post, mapOf(), mapOf()) }
 
         Assert.assertTrue(!r1.success)
         Assert.assertTrue(r1.code == Codes.ERRORED.code)

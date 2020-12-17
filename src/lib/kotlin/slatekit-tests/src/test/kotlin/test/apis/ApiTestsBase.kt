@@ -115,7 +115,7 @@ open class ApiTestsBase {
         }
         val cmd = CommonRequest.cli(path, inputs, opts)
         val actual = runBlocking {
-            apis.call(cmd, null)
+            apis.executeAttempt(cmd, null)
         }
 
         Assert.assertTrue(actual.code == expected.code)
@@ -149,7 +149,7 @@ open class ApiTestsBase {
 
         // Get result
         val actual = runBlocking {
-            host.call(request, null)
+            host.executeAttempt(request, null)
         }
 
         // Compare here.

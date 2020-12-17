@@ -36,7 +36,7 @@ class Guide_APIs : Command("types") {
                 )
         )
         runBlocking {
-            container.call("app", "movies", "createSample", Verb.Post,
+            container.executeAttempt("app", "movies", "createSample", Verb.Post,
                     opts = mapOf(),
                     args = mapOf()
             )
