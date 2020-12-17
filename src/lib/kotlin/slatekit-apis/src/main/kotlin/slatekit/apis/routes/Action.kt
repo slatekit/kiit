@@ -33,7 +33,7 @@ import slatekit.common.requests.Request
  * CLI             =  :> accounts.signup.register -email=".." -pswd=".."
  * Queue           =  JSON { path: "account.signup.register", meta: { }, data : { } }
  * Class           =
- *      @Api(area = "samples", name = "core", ...)
+ *      @Api(area = "accounts", name = "signup", ...)
  *      class Signup {
  *          @Action(desc = "processes an request with 0 parameters")
  *          suspend fun register(email:String, pswd:String): Outcome<UUID> {
