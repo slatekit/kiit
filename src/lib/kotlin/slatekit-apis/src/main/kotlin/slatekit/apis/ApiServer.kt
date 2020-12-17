@@ -153,7 +153,7 @@ open class ApiServer(
     suspend fun executeOutcome(req: Request, options: Flags?): Outcome<Any> {
         val result = try {
             val result = execute(req, options)
-            record(req, result)
+            record(req, result, logger)
             result
         } catch (ex: Exception) {
             handleError(req, ex)
@@ -294,7 +294,7 @@ open class ApiServer(
         }
 
 
-        fun record(req: Request, res:Outcome<Any>){
+        fun record(req: Request, res:Outcome<Any>, logger:Logger){
             logger.info({
                 val info = listOf("path" to req.path) + res.structured()
                 val summary= info.joinToString { "${it.first}=${it.second?.toString()}" }

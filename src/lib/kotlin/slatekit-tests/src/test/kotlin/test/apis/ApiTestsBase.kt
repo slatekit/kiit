@@ -143,6 +143,7 @@ open class ApiTestsBase {
         // Host
         val host = ApiServer(ctx,
                 apis = apis,
+                auth = auth,
                 settings = Settings(protocol))
 
         // Get result
