@@ -4,15 +4,12 @@ import slatekit.apis.ApiRequest
 import slatekit.results.Outcome
 import slatekit.results.builders.Outcomes
 
-object RouteRule : Rule {
+object RouteRule {
 
-    override fun validate(req: ApiRequest): Outcome<Boolean> {
+    fun isValid(req: ApiRequest): Boolean {
         // e.g. "users.invite" = [ "users", "invite" ]
         // Check 1: at least 2 parts
         val totalParts = req.request.parts.size
-        if (totalParts < 2) {
-            return Outcomes.invalid(req.request.action + ": invalid call")
-        }
-        return Outcomes.success(true)
+        return totalParts >= 2
     }
 }

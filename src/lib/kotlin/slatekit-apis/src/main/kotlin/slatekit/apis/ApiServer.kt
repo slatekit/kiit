@@ -180,8 +180,8 @@ open class ApiServer(
         val request = ApiRequest(this, auth, ctx, raw, null, raw.source, null)
 
         // Route    : area.api.action
-        val routeResult = RouteRule.validate(request)
-        if(!routeResult.success) return routeResult
+        val routeResult = RouteRule.isValid(request)
+        if(!routeResult) return Outcomes.invalid("Route ${request.request.path} invalid")
 
         // Target
         val targetResult = request.host.get(raw.area, raw.name, raw.action)
