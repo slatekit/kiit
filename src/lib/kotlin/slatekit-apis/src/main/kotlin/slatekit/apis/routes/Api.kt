@@ -22,12 +22,23 @@ import slatekit.common.Source
 import slatekit.meta.kClass
 
 /**
- * Represents an API in Slate Kit which is a reference to a regular Class
- *
- *  NOTE: API routes are considered Universal Routes and are organized into 3 parts in the route.
- *  e.g. area     / api    / action
- *       account  / signup / invite
- *
+ * ================================================================
+ * Universal Route =  {AREA}.{API}.{ACTION}
+ * Route           =  accounts.signup.register
+ * Web             =  POST https://{host}/api/accounts/signup/register
+ * CLI             =  :> accounts.signup.register -email=".." -pswd=".."
+ * Queue           =  JSON { path: "account.signup.register", meta: { }, data : { } }
+ * Class           =
+ *      @Api(area = "samples", name = "core", ...)
+ *      class Signup {
+ *          @Action(desc = "processes an request with 0 parameters")
+ *          suspend fun register(email:String, pswd:String): Outcome<UUID> {
+ *              // code...
+ *          }
+ *      }
+ * ================================================================
+ * From the example above, this represents the Api "signup" and it's mapped class.
+
  * @param area : the top level area/category of the api "account", "alerts"
  * @param name : the name of the api "users"
  * @param desc : description of the api

@@ -26,6 +26,23 @@ import slatekit.common.ext.tail
 import slatekit.common.requests.Request
 
 /**
+ * ================================================================
+ * Universal Route =  {AREA}.{API}.{ACTION}
+ * Route           =  accounts.signup.register
+ * Web             =  POST https://{host}/api/accounts/signup/register
+ * CLI             =  :> accounts.signup.register -email=".." -pswd=".."
+ * Queue           =  JSON { path: "account.signup.register", meta: { }, data : { } }
+ * Class           =
+ *      @Api(area = "samples", name = "core", ...)
+ *      class Signup {
+ *          @Action(desc = "processes an request with 0 parameters")
+ *          suspend fun register(email:String, pswd:String): Outcome<UUID> {
+ *              // code...
+ *          }
+ *      }
+ * ================================================================
+ * From the example above, this represents the action "register" and it's mapped method.
+ *
  * @param member : The callable method associated w/ the action
  * @param name : Name of action which may have a different name than method due to conventions
  * @param desc : Description of the action

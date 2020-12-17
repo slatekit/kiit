@@ -219,9 +219,7 @@ open class ApiServer(
         val target = context.target
         val converter = settings.decoder?.invoke(req, ctx.enc) ?: Deserializer(req, ctx.enc)
         val inputs = fillArgs(converter, target, req)
-
         val returnVal = Calls.callMethod(target.api.klass, target.instance, target.action.member.name, inputs)
-
         val wrapped = returnVal?.let { res ->
             if (res is Result<*, *>) {
                 (res as Result<ApiResult, Err>)
