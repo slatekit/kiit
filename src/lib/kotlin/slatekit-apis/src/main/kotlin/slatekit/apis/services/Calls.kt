@@ -50,7 +50,7 @@ object Calls {
      * @param req : the command input
      * @return
      */
-    suspend fun validateCall(
+    fun validateCall(
         request: ApiRequest,
         fetcher: (Request) -> Outcome<Target>,
         allowSingleDefaultParam: Boolean = false

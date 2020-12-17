@@ -321,7 +321,6 @@ open class ApiServer(
         fun middleware(): List<Middleware> {
             return listOf(
                 Routing(),
-                Targets(),
                 Protos(),
                 Validate()
             )

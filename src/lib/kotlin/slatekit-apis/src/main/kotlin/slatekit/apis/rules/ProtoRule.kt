@@ -1,23 +1,16 @@
-package slatekit.apis.services
+package slatekit.apis.rules
 
 import slatekit.apis.ApiRequest
-import slatekit.apis.Middleware
 import slatekit.apis.Verb
-import slatekit.common.Ignore
 import slatekit.common.Source
 import slatekit.common.requests.Request
 import slatekit.results.Outcome
 import slatekit.results.builders.Outcomes
 import slatekit.results.flatMap
 
-/**
- * Checks the source of the request matches the allowed sources on the action/api
- */
-class Protos : Middleware {
+object ProtoRule : Rule {
 
-    @Ignore
-    override suspend fun process(req:ApiRequest, next:suspend(ApiRequest) -> Outcome<Any>): Outcome<Any> {
-
+    override fun validate(req: ApiRequest): Outcome<Boolean> {
         // Ensure verb is correct get/post
         val request = req.request
         val target = req.target!!
@@ -28,10 +21,11 @@ class Protos : Middleware {
 
         val verbResult = validateVerb(isWeb, isCli, actionVerb, request, req)
         val finalResult = verbResult.flatMap { validateProto(actionProtocols, request, req) }
-        return finalResult.flatMap { next(req) }
+        return finalResult.map { true }
     }
 
-    private fun validateVerb(isWeb:Boolean, isCLI:Boolean, actionVerb: Verb, req: Request, request:ApiRequest):Outcome<ApiRequest> {
+
+    private fun validateVerb(isWeb: Boolean, isCLI: Boolean, actionVerb: Verb, req: Request, request: ApiRequest): Outcome<ApiRequest> {
         return when {
             // Case 1: Queued request, being processed
             req.verb == Source.Queue.id -> Outcomes.success(request)
@@ -47,7 +41,7 @@ class Protos : Middleware {
         }
     }
 
-    private fun validateProto(actionProtocols: slatekit.apis.core.Sources, req: Request, request:ApiRequest):Outcome<ApiRequest> {
+    private fun validateProto(actionProtocols: slatekit.apis.core.Sources, req: Request, request: ApiRequest): Outcome<ApiRequest> {
         val requestProtocol = req.source
         return when {
             actionProtocols.isMatchOrAll(requestProtocol) -> Outcomes.success(request)

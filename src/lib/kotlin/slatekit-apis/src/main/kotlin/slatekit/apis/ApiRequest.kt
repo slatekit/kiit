@@ -1,5 +1,6 @@
 package slatekit.apis
 
+import slatekit.apis.core.Auth
 import slatekit.apis.core.Target
 import slatekit.context.Context
 import slatekit.common.requests.Request
@@ -14,6 +15,7 @@ import slatekit.common.requests.Request
  */
 data class ApiRequest(
     val host: ApiServer,
+    val auth: Auth?,
     val context: Context,
     val request: Request,
     val target: Target?,

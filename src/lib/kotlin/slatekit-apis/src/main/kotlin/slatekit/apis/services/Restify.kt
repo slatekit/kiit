@@ -53,4 +53,6 @@ class Restify : RewriteSupport, Middleware {
      */
     fun rename(server:ApiServer, text: String): String = server.settings.naming?.rename(text) ?: text
 
+    companion object {
+    }
 }
