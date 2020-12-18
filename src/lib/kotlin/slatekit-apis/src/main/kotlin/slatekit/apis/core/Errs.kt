@@ -27,7 +27,7 @@ object Errs {
      *      "tag": null
      *   }
      */
-    fun response(err: Err, result: Response<Any>):JSONObject{
+    fun response(err: Err, result: Response<Any?>):JSONObject{
         val errors = JSONArray()
         flatten(err, errors, 0)
         val json = JSONObject()

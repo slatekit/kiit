@@ -36,6 +36,7 @@ data class Settings(
     val naming: Namer? = null,
     val decoder: ((Request, Encryptor?) -> Deserializer)? = null,
     val encoder: ((String, Any?) -> String)? = null,
+    val record : Boolean = false,
     val docKey: String? = null,
     val docGen: () -> Doc = { doc(source) }
 ) {

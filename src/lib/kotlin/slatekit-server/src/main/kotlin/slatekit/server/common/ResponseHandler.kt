@@ -10,23 +10,23 @@ interface ResponseHandler {
     /**
      * Returns the value of the result as an html(string)
      */
-    suspend fun result(call: ApplicationCall, result: Response<Any>): Any
+    suspend fun result(call: ApplicationCall, result: Response<Any?>): Any
 
     /**
      * Returns the value of the resulut as JSON.
      */
-    suspend fun json(call: ApplicationCall, result: Response<Any>)
+    suspend fun json(call: ApplicationCall, result: Response<Any?>)
 
     /**
      * Explicitly supplied content
      * Return the value of the result as a content with type
      */
-    suspend fun content(call: ApplicationCall, result: Response<Any>, content: Content?)
+    suspend fun content(call: ApplicationCall, result: Response<Any?>, content: Content?)
 
     /**
      * Returns the value of the result as a file document
      */
-    suspend fun file(call: ApplicationCall, result: Response<Any>, doc: Doc)
+    suspend fun file(call: ApplicationCall, result: Response<Any?>, doc: Doc)
 
-    fun toHttpStatus(response: Response<Any>): HttpStatusCode
+    fun toHttpStatus(response: Response<Any?>): HttpStatusCode
 }

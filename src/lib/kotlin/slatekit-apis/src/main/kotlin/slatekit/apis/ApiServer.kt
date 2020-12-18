@@ -31,14 +31,14 @@ import kotlin.reflect.KCallable
  * This is the core container hosting, managing and executing the source independent apis.
  * @param ctx : Context of the environment @see[slatekti.common.Context]
  * @param apis : APIs to host/serve
- * @param hooks : Hooks and middleware for filters, conversions, execution
+ * @param middleware : Hooks and middleware for filters, conversions, execution
  * @param settings : Settings for the server
  */
 open class ApiServer(
     val ctx: Context,
     val apis: List<slatekit.apis.routes.Api>,
     val writer: Rewriter? = null,
-    val hooks: List<Middleware> = listOf(),
+    val middleware: Middleware? = null,
     val auth: Auth? = null,
     val settings: Settings = Settings()
 )  {
@@ -122,7 +122,7 @@ open class ApiServer(
      * @return
      */
     suspend fun executeResponse(req: Request): Response<ApiResult> {
-        return executeAttempt(req, null).toResponse()
+        return executeAttempt(req).toResponse()
     }
 
 
@@ -131,7 +131,7 @@ open class ApiServer(
      */
     suspend fun executeAttempt(area: String, api: String, action: String, verb: Verb, opts: Map<String, Any>, args: Map<String, Any>): Try<ApiResult> {
         val req = CommonRequest.web(area, api, action, verb.name, opts, args)
-        return executeAttempt(req, null)
+        return executeAttempt(req)
     }
 
     /**
@@ -140,8 +140,8 @@ open class ApiServer(
      * @param req
      * @return
      */
-    suspend fun executeAttempt(req: Request, options: Flags?): Try<ApiResult> {
-        val result = executeOutcome(req, options)
+    suspend fun executeAttempt(req: Request): Try<ApiResult> {
+        val result = executeOutcome(req)
         return result.toTry()
     }
 
@@ -150,10 +150,12 @@ open class ApiServer(
      * @param req
      * @return
      */
-    suspend fun executeOutcome(req: Request, options: Flags?): Outcome<ApiResult> {
+    suspend fun executeOutcome(req: Request): Outcome<ApiResult> {
         val result = try {
-            val result = execute(req, options)
-            record(req, result, logger)
+            val result = execute(req)
+            if(settings.record) {
+                record(req, result, logger)
+            }
             result
         } catch (ex: Exception) {
             handleError(req, ex)
@@ -171,7 +173,7 @@ open class ApiServer(
      * @param cmd
      * @return
      */
-    suspend fun execute(raw: Request, options: Flags? = null): Outcome<ApiResult> {
+    suspend fun execute(raw: Request): Outcome<ApiResult> {
         // Help ?
         val helpCheck = help.process(raw)
         if (helpCheck.success) return helpCheck
@@ -202,16 +204,13 @@ open class ApiServer(
         if(!paramsResult.success) return paramsResult
 
         // Step 5: Execute request
-        val result = try {
+        val result:Outcome<ApiResult> = try {
             val instance = req.target
-            when(instance != null && instance.instance is Middleware) {
-                false -> executeMethod(Ctx.of(this, this.ctx, req), req)
-                true  -> {
-                    val middleware = instance.instance as Middleware
-                    middleware.process(req) {
-                        executeMethod(Ctx.of(this, this.ctx, req), req)
-                    }
-                }
+            when {
+                instance == null  -> Outcomes.errored("Route not mapped")
+                instance.instance is Middleware -> executeWithMiddleware(req, instance.instance)
+                middleware != null -> executeWithMiddleware(req, middleware)
+                else -> executeWithMiddleware(req, null)
             }
 
         } catch(ex:Exception){
@@ -221,6 +220,18 @@ open class ApiServer(
             }
         }
         return result
+    }
+
+
+    private suspend fun executeWithMiddleware(req:ApiRequest, middleware: Middleware?): Outcome<ApiResult> {
+        return when(middleware) {
+            null -> executeMethod(Ctx.of(this, this.ctx, req), req)
+            else  -> {
+                middleware.process(req) {
+                    executeMethod(Ctx.of(this, this.ctx, req), req)
+                }
+            }
+        }
     }
 
     @Suppress("UNCHECKED_CAST")
@@ -277,7 +288,7 @@ open class ApiServer(
 
         @JvmStatic
         fun of(ctx: Context, apis: List<slatekit.apis.routes.Api>, auth: Auth? = null, source: Source? = null): ApiServer {
-            val server = ApiServer(ctx, apis, null, listOf(), auth, Settings(source ?: Source.Web))
+            val server = ApiServer(ctx, apis, null, null, auth, Settings(source ?: Source.Web))
             return server
         }
 

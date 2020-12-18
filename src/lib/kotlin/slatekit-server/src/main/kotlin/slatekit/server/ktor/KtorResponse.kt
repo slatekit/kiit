@@ -33,7 +33,7 @@ class KtorResponse  : ResponseHandler {
     /**
      * Returns the value of the result as an html(string)
      */
-    override suspend fun result(call: ApplicationCall, result: Response<Any>): Any {
+    override suspend fun result(call: ApplicationCall, result: Response<Any?>): Any {
         return when(result.success) {
             false -> {
                 when(result.err){
@@ -54,7 +54,7 @@ class KtorResponse  : ResponseHandler {
     /**
      * Returns the value of the resulut as JSON.
      */
-    override suspend fun json(call: ApplicationCall, result: Response<Any>) {
+    override suspend fun json(call: ApplicationCall, result: Response<Any?>) {
         val text = Serialization.json(true).serialize(result)
         val contentType = io.ktor.http.ContentType.Application.Json // "application/json"
         val statusCode = toHttpStatus(result)
@@ -65,7 +65,7 @@ class KtorResponse  : ResponseHandler {
      * Explicitly supplied content
      * Return the value of the result as a content with type
      */
-    override suspend fun content(call: ApplicationCall, result: Response<Any>, content: Content?) {
+    override suspend fun content(call: ApplicationCall, result: Response<Any?>, content: Content?) {
         val text = content?.text ?: ""
         val contentType = content?.let { ContentType.parse(it.tpe.http) } ?: io.ktor.http.ContentType.Text.Plain
         val statusCode = toHttpStatus(result)
@@ -75,7 +75,7 @@ class KtorResponse  : ResponseHandler {
     /**
      * Returns the value of the result as a file document
      */
-    override suspend fun file(call: ApplicationCall, result: Response<Any>, doc: Doc) {
+    override suspend fun file(call: ApplicationCall, result: Response<Any?>, doc: Doc) {
         val bytes = doc.content.toByteArray()
         val statusCode = toHttpStatus(result)
 
@@ -85,13 +85,13 @@ class KtorResponse  : ResponseHandler {
     }
 
 
-    override fun toHttpStatus(response:Response<Any>): HttpStatusCode {
+    override fun toHttpStatus(response:Response<Any?>): HttpStatusCode {
         val http = Codes.toHttp(Passed.Succeeded(response.name, response.code, response.desc ?: ""))
         return HttpStatusCode(http.first, http.second.desc)
     }
 
 
-    private suspend fun error(call: ApplicationCall, result: Response<Any>, err: Err){
+    private suspend fun error(call: ApplicationCall, result: Response<Any?>, err: Err){
         val json = Errs.response(err, result)
         val text = json.toJSONString()
         val contentType = io.ktor.http.ContentType.Application.Json // "application/json"
