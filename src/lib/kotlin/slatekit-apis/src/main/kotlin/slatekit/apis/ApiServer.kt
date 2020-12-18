@@ -132,7 +132,7 @@ open class ApiServer(
      * Call with inputs instead of the request
      */
     suspend fun executeAttempt(area: String, api: String, action: String, verb: Verb, opts: Map<String, Any>, args: Map<String, Any>): Try<ApiResult> {
-        val req = CommonRequest.cli(area, api, action, verb.name, opts, args)
+        val req = CommonRequest.web(area, api, action, verb.name, opts, args)
         return executeAttempt(req, null)
     }
 
@@ -187,7 +187,7 @@ open class ApiServer(
         if(!routeResult) return Outcomes.invalid("Route ${request.request.path} invalid")
 
         // Target
-        val targetResult = request.host.get(raw.area, raw.name, raw.action)
+        val targetResult = request.host.get(request.request.area, request.request.name, request.request.action)
         if(!targetResult.success) return targetResult
         val req = request.copy(target = targetResult.getOrNull())
 
