@@ -202,7 +202,17 @@ open class ApiServer(
 
         // Step 5: Execute request
         val result = try {
-            executeMethod(Ctx.of(this, this.ctx, req), req)
+            val instance = req.target
+            when(instance != null && instance.instance is Middleware) {
+                false -> executeMethod(Ctx.of(this, this.ctx, req), req)
+                true  -> {
+                    val middleware = instance.instance as Middleware
+                    middleware.process(req) {
+                        executeMethod(Ctx.of(this, this.ctx, req), req)
+                    }
+                }
+            }
+
         } catch(ex:Exception){
             when(ex){
                 is ExceptionErr -> Outcomes.unexpected(ex.err, Codes.UNEXPECTED)

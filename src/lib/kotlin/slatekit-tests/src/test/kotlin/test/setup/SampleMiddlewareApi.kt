@@ -2,16 +2,15 @@ package test.setup
 
 import slatekit.apis.ApiRequest
 import slatekit.apis.ApiResult
+import slatekit.apis.Middleware
 import slatekit.results.*
 import slatekit.results.builders.Outcomes
 
 
-open class SampleMiddlewareApi {
+open class SampleMiddlewareApi : Middleware {
 
     // Used for demo/testing purposes
-    var onBeforeHookCount = mutableListOf<ApiRequest>()
-    var onAfterHookCount = mutableListOf<ApiRequest>()
-    var onErrorHookCount = mutableListOf<Outcome<ApiRequest>>()
+    var middlewareHook = mutableListOf<ApiRequest>()
 
 
     fun hi(): String = "hi world"
@@ -28,4 +27,10 @@ open class SampleMiddlewareApi {
 
 
     fun hello(): String = "hello world"
+
+
+    override suspend fun process(req: ApiRequest, next: suspend (ApiRequest) -> Outcome<ApiResult>): Outcome<ApiResult> {
+        middlewareHook.add(req)
+        return next(req)
+    }
 }
