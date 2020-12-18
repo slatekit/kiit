@@ -11,13 +11,21 @@
  * </slate_header>
  */
 
-package slatekit.policy.middleware
+package slatekit.policy.hooks
+
+import slatekit.common.*
+import slatekit.results.Outcome
 
 /**
- * A "Hooks" based middle-ware that allows only handling before/after events
- * of an API call, without any modification to the life-cycle/flow.
- *
- * NOTE: The hooks are applied right before and after the call to the action
+ * A middle-ware that handles the request
  *
  */
-interface Hooks<TReq, TRes> : Middleware, Before<TReq>, After<TReq, TRes>
+interface Handle<TReq, TRes> : Middleware {
+
+    /**
+     * Handles a call
+     * @param req : The request
+     */
+    @Ignore
+    suspend fun handle(req: TReq, op: suspend (TReq) -> Outcome<TRes>): Outcome<TRes>
+}

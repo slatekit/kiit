@@ -32,7 +32,7 @@ import slatekit.common.requests.Request
 import slatekit.common.requests.Response
 import slatekit.db.Db
 import slatekit.entities.Entities
-import slatekit.policy.middleware.Middleware
+import slatekit.policy.hooks.Middleware
 import slatekit.integration.common.AppEntContext
 import slatekit.results.Try
 import test.setup.MyAuthProvider

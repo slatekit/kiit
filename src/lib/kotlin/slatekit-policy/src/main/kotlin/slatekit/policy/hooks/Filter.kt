@@ -1,4 +1,4 @@
-package slatekit.policy.middleware
+package slatekit.policy.hooks
 
 import slatekit.common.Ignore
 import slatekit.results.Outcome
