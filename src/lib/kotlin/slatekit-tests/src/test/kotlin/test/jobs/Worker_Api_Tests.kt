@@ -7,8 +7,8 @@ import org.threeten.bp.ZoneId
 
 import slatekit.apis.ApiServer
 import slatekit.apis.Verb
-import slatekit.apis.core.Api
-import slatekit.apis.core.Requests
+import slatekit.apis.routes.Api
+import slatekit.apis.core.Reqs
 import slatekit.apis.SetupType
 import slatekit.common.*
 import slatekit.core.queues.InMemoryQueue
@@ -51,7 +51,7 @@ class Worker_Api_Tests {
 
             // 5. send method call to queue
             val result = runBlocking {
-                apis.call("samples", "workerqueue", "test1", Verb.Post, mapOf(), mapOf(
+                apis.executeAttempt("samples", "workerqueue", "test1", Verb.Post, mapOf(), mapOf(
                         "s" to "user1@abc.com",
                         "b" to true,
                         "i" to 123,
@@ -99,7 +99,7 @@ class Worker_Api_Tests {
                 version = "1.0",
                 timestamp = sampleDate
         )
-        val json1 = Requests.toJsonString(sampleRequest)
+        val json1 = Reqs.toJsonString(sampleRequest)
         val queue = queues.first()
         queue.send(json1, mapOf("id" to "123", "refId" to "abc", "task" to "samples.types2.loadBasicTypes"))
         val entry = queue.next()!!

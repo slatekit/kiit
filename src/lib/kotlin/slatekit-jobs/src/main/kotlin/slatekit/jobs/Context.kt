@@ -22,8 +22,8 @@ import slatekit.jobs.support.Notifier
  * @param scheduler : Scheduler used to continue resuming work
  */
 data class Context(val id: Identity,
-                   val channel: Channel<Message<Task>>,
                    val workers: List<Worker<*>>,
+                   val channel: Channel<Message<Task>> = Channel(Channel.UNLIMITED),
                    val logger : Logger = LoggerConsole(),
                    val queue  : Queue? = null,
                    val scope  : CoroutineScope = Jobs.scope,

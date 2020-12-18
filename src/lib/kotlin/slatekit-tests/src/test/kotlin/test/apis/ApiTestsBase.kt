@@ -15,9 +15,8 @@ package test.apis
 import kotlinx.coroutines.runBlocking
 import org.junit.Assert
 import slatekit.apis.*
-import slatekit.apis.core.Api
+import slatekit.apis.routes.Api
 import slatekit.apis.core.Auth
-import slatekit.apis.hooks.Authorize
 import slatekit.apis.SetupType
 import slatekit.common.requests.CommonRequest
 import slatekit.common.Source
@@ -115,7 +114,7 @@ open class ApiTestsBase {
         }
         val cmd = CommonRequest.cli(path, inputs, opts)
         val actual = runBlocking {
-            apis.call(cmd, null)
+            apis.executeAttempt(cmd, null)
         }
 
         Assert.assertTrue(actual.code == expected.code)
@@ -140,17 +139,16 @@ open class ApiTestsBase {
 
         // Optional auth
         val auth = user?.let { u -> MyAuthProvider(u.name, u.roles, buildKeys()) }
-        val hooks = middleware.plus(Authorize(auth))
 
         // Host
         val host = ApiServer(ctx,
                 apis = apis,
-                hooks = ApiHooks.of(hooks),
-                settings = ApiSettings(protocol))
+                auth = auth,
+                settings = Settings(protocol))
 
         // Get result
         val actual = runBlocking {
-            host.call(request, null)
+            host.executeAttempt(request, null)
         }
 
         // Compare here.

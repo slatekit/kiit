@@ -3,7 +3,7 @@ package test.apis
 import org.junit.Assert
 import org.junit.Test
 import org.threeten.bp.ZoneId
-import slatekit.apis.core.Requests
+import slatekit.apis.core.Reqs
 import slatekit.common.requests.CommonRequest
 import slatekit.common.DateTime
 import slatekit.common.requests.InputArgs
@@ -50,7 +50,7 @@ class Requests_Tests {
 
     @Test
     fun can_convert_to_json() {
-        val json = Requests.toJsonObject(sampleRequest)
+        val json = Reqs.toJsonObject(sampleRequest)
         Assert.assertEquals("1.1"           , json.get("version"))
         Assert.assertEquals(Source.Web.id           , json.get("source"))
         Assert.assertEquals("post"         , json.get("verb"))
@@ -62,7 +62,7 @@ class Requests_Tests {
 
     @Test
     fun can_convert_to_json_with_override() {
-        val json = Requests.toJsonObject(sampleRequest, null, "aws", "queue")
+        val json = Reqs.toJsonObject(sampleRequest, null, "aws", "queue")
         Assert.assertEquals("1.1"           , json.get("version"))
         Assert.assertEquals("aws"           , json.get("source"))
         Assert.assertEquals("queue"         , json.get("verb"))
@@ -77,7 +77,7 @@ class Requests_Tests {
     @Test
     fun can_convert_from_json() {
         val timestamp = DateTime.of(2018, 1, 27, 9, 30, 45, 0, ZoneId.of("Z"))
-        val request = Requests.fromJson(sampleJson)
+        val request = Reqs.fromJson(sampleJson)
         Assert.assertEquals("1.1"           , request.version)
         Assert.assertEquals("other"         , request.source.id)
         Assert.assertEquals("aws"           , (request.source as Source.Other).name)
@@ -96,7 +96,7 @@ class Requests_Tests {
     @Test
     fun can_convert_from_json_with_override() {
         val timestamp = DateTime.of(2018, 1, 27, 9, 30, 45, 0, ZoneId.of("Z"))
-        val request = Requests.fromJson(sampleJson, "cloud", "post", null, null, null)
+        val request = Reqs.fromJson(sampleJson, "cloud", "post", null, null, null)
         Assert.assertEquals("1.1"           , request.version)
         Assert.assertEquals("other"         , request.source.id)
         Assert.assertEquals("cloud"         , (request.source as Source.Other).name)

@@ -9,6 +9,7 @@ import io.ktor.routing.routing
 import io.ktor.server.engine.embeddedServer
 import io.ktor.server.netty.Netty
 import slatekit.apis.*
+import slatekit.apis.routes.Api
 
 // Slate Kit - Common Utilities
 import slatekit.common.*
@@ -88,9 +89,9 @@ class Server(val ctx: Context)  {
     }
 
 
-    fun apis(): List<slatekit.apis.core.Api> {
+    fun apis(): List<Api> {
         return listOf(
-                slatekit.apis.core.Api(klass = SampleApi::class, singleton = SampleApi(ctx), setup = SetupType.Annotated)
+                Api(klass = SampleApi::class, singleton = SampleApi(ctx), setup = SetupType.Annotated)
         )
     }
 

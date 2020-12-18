@@ -4,7 +4,7 @@ import kotlinx.coroutines.runBlocking
 import slatekit.apis.ApiServer
 import slatekit.apis.AuthMode
 import slatekit.apis.Verb
-import slatekit.apis.core.Api
+import slatekit.apis.routes.Api
 import slatekit.common.conf.Config
 import slatekit.results.Try
 import slatekit.results.Success
@@ -36,7 +36,7 @@ class Guide_APIs : Command("types") {
                 )
         )
         runBlocking {
-            container.call("app", "movies", "createSample", Verb.Post,
+            container.executeAttempt("app", "movies", "createSample", Verb.Post,
                     opts = mapOf(),
                     args = mapOf()
             )

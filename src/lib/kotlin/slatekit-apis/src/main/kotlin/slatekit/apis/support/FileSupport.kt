@@ -20,7 +20,7 @@ import slatekit.common.crypto.EncryptSupport
 import slatekit.common.log.LogSupport
 import slatekit.common.ext.subStringPair
 
-interface FileSupport : Api, EncryptSupport, LogSupport {
+interface FileSupport : EncryptSupport, LogSupport {
 
     val context: Context
 

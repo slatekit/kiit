@@ -1,29 +1,33 @@
 package slatekit.apis
 
 import java.io.File
-import kotlin.reflect.KCallable
 import kotlin.reflect.KClass
 import slatekit.apis.core.*
 import slatekit.apis.core.Target
-import slatekit.apis.hooks.*
+import slatekit.apis.routes.Routes
+import slatekit.apis.rules.AuthRule
+import slatekit.apis.rules.ParamsRule
+import slatekit.apis.rules.ProtoRule
+import slatekit.apis.rules.RouteRule
+import slatekit.apis.services.*
 import slatekit.apis.setup.HostAware
 import slatekit.apis.setup.loadAll
-import slatekit.apis.support.ExecSupport
 import slatekit.common.*
 import slatekit.common.ext.numbered
 import slatekit.common.ext.structured
+import slatekit.common.ext.toResponse
 import slatekit.common.log.Logger
+import slatekit.common.requests.CommonRequest
 import slatekit.common.requests.Request
+import slatekit.common.requests.Response
 import slatekit.context.Context
-import slatekit.policy.Input
-import slatekit.policy.Output
-import slatekit.policy.Processor
 import slatekit.meta.*
 import slatekit.meta.deserializer.Deserializer
 import slatekit.policy.Process
+import slatekit.policy.rewrite
 import slatekit.results.*
-import slatekit.results.builders.Notices
 import slatekit.results.builders.Outcomes
+import kotlin.reflect.KCallable
 
 /**
  * This is the core container hosting, managing and executing the source independent apis.
@@ -34,10 +38,12 @@ import slatekit.results.builders.Outcomes
  */
 open class ApiServer(
     val ctx: Context,
-    val apis: List<slatekit.apis.core.Api>,
-    val hooks: ApiHooks = ApiHooks(),
-    val settings: ApiSettings = ApiSettings()
-) : ExecSupport {
+    val apis: List<slatekit.apis.routes.Api>,
+    val writer: Rewriter? = null,
+    val hooks: List<Middleware> = listOf(),
+    val auth: Auth? = null,
+    val settings: Settings = Settings()
+)  {
 
     /**
      * Load all the routes from the APIs supplied.
@@ -55,68 +61,79 @@ open class ApiServer(
      */
     private val logger: Logger = ctx.logs.getLogger("api")
 
-    /**
-     * Helps run the hooks/middleware
-     */
-    private val processor = Processor<ApiRequest, ApiResult>()
 
     /**
-     * Request pre-processors ( filters, converters )
+     * Initialize all the routes with reference to this server
      */
-    private val preProcessBuiltIns: List<Input<ApiRequest>> = defaultPreHooks()
-    private val preProcessAPIHooks = listOf(Befores())
-
-
-    /**
-     * Request pre-processors ( filters, converters )
-     */
-    private val postProcessAPIHooks: List<Output<ApiRequest, ApiResult>> = listOf(Afters())
-    private val postProcessBuiltIns: List<Output<ApiRequest, ApiResult>> = listOf()
-
-    /**
-     * Provides access to naming conventions used for actions
-     */
-    fun rename(text: String): String = settings.naming?.rename(text) ?: text
-
-    fun setApiContainerHost() {
-        routes.visitApis { _, api -> ApiServer.setApiHost(api.singleton, this) }
+    init {
+        routes.visitApis { _, api -> setApiHost(api.singleton, this) }
     }
 
-    override fun host(): ApiServer = this
 
     /**
-     * validates the request by checking for the api/action, and ensuring inputs are valid.
-     *
+     * Generates a sample response for the route specified in the request ( area.api.action )
+     * This checks the methods ( associated with the route ) and generates a response based on
+     * its inputs( parameter types ) and its return type.
+     */
+    fun sample(req: Request, path: File): Notice<String> {
+        return sample(this, req, path)
+    }
+
+
+    /**
+     * gets the @see[Target] ( mapped method ) associated with the route ( area.api.action ) in the Request
+     * @param req : Request to get route info from
+     * @return
+     */
+    fun get(req: Request): Outcome<Target> {
+        return get(req.area, req.name, req.action)
+    }
+
+
+    /**
+     * gets the @see[Target] ( mapped method ) associated with the route info ( area.api.action )
+     * @param area   : e.g. "accounts"
+     * @param name   : e.g. "signup"
+     * @param action : e.g. "register"
+     * @return
+     */
+    fun get(area: String, name: String, action: String): Outcome<Target> {
+        return routes.api(area, name, action, ctx)
+    }
+
+
+    /**
+     * gets the @see[Target] ( mapped method ) associated with annotations on the class/method supplied
+     * @return
+     */
+    fun get(clsType: KClass<*>, member: KCallable<*>): Outcome<Target> {
+        val apiAnno = Reflector.getAnnotationForClassOpt<Api>(clsType, Api::class)
+        return apiAnno?.let { anno ->
+            val action = when(val actionAnno = Reflector.getAnnotationForMember<Action>(member, Action::class)){
+                null -> member.name
+                else -> if (actionAnno.name.isBlank()) member.name else actionAnno.name
+            }
+            get(anno.area, anno.name, action)
+        } ?: Outcomes.errored("member/annotation not found for : ${member.name}")
+    }
+
+
+    /**
+     * calls the api/action associated with the request
      * @param req
      * @return
      */
-    suspend fun check(request: ApiRequest): Outcome<Target> {
-        return Calls.validateCall(request, { req -> get(req) })
+    suspend fun executeResponse(req: Request): Response<ApiResult> {
+        return executeAttempt(req, null).toResponse()
     }
+
 
     /**
-     * gets the api info associated with the request
-     * @param cmd
-     * @return
+     * Call with inputs instead of the request
      */
-    fun get(cmd: Request): Notice<Target> {
-        return getApi(cmd.area, cmd.name, cmd.action)
-    }
-
-    fun sample(cmd: Request, path: File): Notice<String> {
-        val action = get(cmd)
-        val sample = if (action.success) {
-            val parameters = when (action) {
-                is Success -> action.value.action.paramsUser
-                is Failure -> listOf()
-            }
-            val serializer = Serialization.sampler() as SerializerSample
-            val text = serializer.serializeParams(parameters)
-            text
-        } else "Unable to find command: " + cmd.path
-
-        path.writeText(sample)
-        return Success("sample call written to : ${path.absolutePath}")
+    suspend fun executeAttempt(area: String, api: String, action: String, verb: Verb, opts: Map<String, Any>, args: Map<String, Any>): Try<ApiResult> {
+        val req = CommonRequest.web(area, api, action, verb.name, opts, args)
+        return executeAttempt(req, null)
     }
 
     /**
@@ -125,10 +142,20 @@ open class ApiServer(
      * @param req
      * @return
      */
-    suspend fun call(req: Request, options: Flags?): Try<Any> {
+    suspend fun executeAttempt(req: Request, options: Flags?): Try<ApiResult> {
+        val result = executeOutcome(req, options)
+        return result.toTry()
+    }
+
+    /**
+     * calls the api/action associated with the request
+     * @param req
+     * @return
+     */
+    suspend fun executeOutcome(req: Request, options: Flags?): Outcome<ApiResult> {
         val result = try {
             val result = execute(req, options)
-            record(req, result)
+            record(req, result, logger)
             result
         } catch (ex: Exception) {
             handleError(req, ex)
@@ -138,134 +165,63 @@ open class ApiServer(
             }
             Outcomes.errored<Any>(err)
         }
-        return result.toTry()
-    }
-
-    /**
-     * gets the mapped method associated with the api action.
-     * @param area
-     * @param name
-     * @param action
-     * @return
-     */
-    fun getApi(area: String, name: String, action: String): Notice<Target> {
-        return routes.api(area, name, action, ctx)
-    }
-
-    /**
-     * gets the mapped method associated with the api action.
-     * @param area
-     * @param name
-     * @param action
-     * @return
-     */
-    fun getApi(clsType: KClass<*>, member: KCallable<*>): Notice<Target> {
-        val apiAnno = Reflector.getAnnotationForClassOpt<Api>(clsType, Api::class)
-        val result = apiAnno?.let { anno ->
-
-            val area = anno.area
-            val api = anno.name
-            val actionAnno = Reflector.getAnnotationForMember<Action>(member, Action::class)
-            val action = actionAnno?.let { act ->
-                val action = if (act.name.isBlank()) member.name else act.name
-                action
-            } ?: member.name
-            val info = getApi(area, api, action)
-            info
-        } ?: Notices.errored("member/annotation not found for : ${member.name}")
         return result
     }
 
     /**
-     * Executes the api request in a pipe-line of various checks and validations.
-     * NOTE: This is effectively the core processing method of API Container.
-     * The flow is as follows:
-     *
-     * 1. before:
-     *      - BEFORE : formatters   : pre-request formatters
-     *      - BEFORE : pre-process  : built in validators
-     *      - BEFORE : before hooks : API overrides
-     *      - BEFORE : inputters    : pre-request processors
-     *      - EXECUTE:
-     *      - AFTER  : outputters
-     *      - AFTER  : after hooks  : API overrides
-     *      - AFTER  : outputters   : post process
+     * Executes the api request after performing basic checks/rules
      * @param cmd
      * @return
      */
-    private val hasChainedExecution = hooks.middleware.isNotEmpty()
-    private val chainedExecutor = Processor.chain(hooks.middleware) { request ->
-        executeMethod(Ctx.of(this, this.ctx, request), request)
-    }
-    suspend fun execute(raw: Request, options: Flags? = null): Outcome<Any> {
-        // Step 1: Check for help / discovery
+    suspend fun execute(raw: Request, options: Flags? = null): Outcome<ApiResult> {
+        // Help ?
         val helpCheck = help.process(raw)
-        if (helpCheck.success) {
-            return helpCheck
-        }
+        if (helpCheck.success) return helpCheck
 
-        // Step 2: Build ApiRequest from the raw request ( this is used for middleware )
-        val rawRequest = ApiRequest(this, ctx, raw, null, raw.source, null)
+        // Build ApiRequest from the raw request ( this is used for middleware )
+        val initial = ApiRequest(this, auth, ctx, raw, null, raw.source, null)
+        val request = writer?.process(initial) ?: initial
 
-        // Step 3: Hooks: Pre-Processing Stage 1 : rewrite request, and ensure system validations
-        val startInput = Outcomes.success(rawRequest)
-        val validated = startInput
-            .operate {
-                processor.input(hooks.formatters  , it)
-            }
-            .operate {
-                processor.input(preProcessBuiltIns, it)
-            }
+        // Route    : area.api.action
+        val routeResult = RouteRule.isValid(request)
+        if(!routeResult) return Outcomes.invalid("Route ${request.request.path} invalid")
 
-        // Step 4: Hooks: Pre-Processing Stage 2: run through more hooks ( API level & supplied )
-        val requested = validated
-            .operate {
-                processor.input(preProcessAPIHooks, it)
-            }
-            .operate {
-                processor.input(hooks.inputters, it)
-            }
+        // Target
+        val targetResult = request.host.get(request.request.area, request.request.name, request.request.action)
+        if(!targetResult.success) return targetResult
+        val req = request.copy(target = targetResult.getOrNull())
+
+        // Protocol : e.g. cli, web, que
+        val protocolResult = ProtoRule.validate(req)
+        if(!protocolResult.success) return protocolResult
+
+        // Auth     : e.g. cli, web, que
+        val authResult = AuthRule.validate(req)
+        if(!authResult.success) return authResult
+
+        // Params   : e.g. cli, web, que
+        val paramsResult = ParamsRule.validate(req)
+        if(!paramsResult.success) return paramsResult
 
         // Step 5: Execute request
-        val executed = try {
-            requested.flatMap { request ->
-                if (hasChainedExecution) {
-                    chainedExecutor(request)
-                } else {
-                    request.target?.let {
-                        if (it.instance is Process<*, *>) {
-                            val processor = it.instance as Process<ApiRequest, ApiResult>
-                            processor.process(request) {
-                                executeMethod(Ctx.of(this, this.ctx, request), request)
-                            }
-                        } else {
-                            executeMethod(Ctx.of(this, this.ctx, request), request)
-                        }
-                    } ?: executeMethod(Ctx.of(this, this.ctx, request), request)
+        val result = try {
+            val instance = req.target
+            when(instance != null && instance.instance is Middleware) {
+                false -> executeMethod(Ctx.of(this, this.ctx, req), req)
+                true  -> {
+                    val middleware = instance.instance as Middleware
+                    middleware.process(req) {
+                        executeMethod(Ctx.of(this, this.ctx, req), req)
+                    }
                 }
             }
+
         } catch(ex:Exception){
             when(ex){
                 is ExceptionErr -> Outcomes.unexpected(ex.err, Codes.UNEXPECTED)
                 else            -> Outcomes.unexpected<ApiResult>(ex)
             }
         }
-
-        // Step 6: Hooks: Post-Processing Stage 1: errors hooks on API ( only if we mapped to a class.method )
-        validated.onSuccess { Errors.applyError(rawRequest, it, requested, executed) }
-
-        // Step 7: Hooks: Post-Processing Stage 2: remaining hooks ( afters, built-ins, outputters )
-        val result = executed
-            .operate {
-                processor.output(rawRequest, requested, it, postProcessAPIHooks)
-            }
-            .operate {
-                processor.output(rawRequest, requested, it, postProcessBuiltIns)
-            }
-            .operate {
-                processor.output(rawRequest, requested, it, hooks.outputter)
-            }
-
         return result
     }
 
@@ -276,9 +232,7 @@ open class ApiServer(
         val target = context.target
         val converter = settings.decoder?.invoke(req, ctx.enc) ?: Deserializer(req, ctx.enc)
         val inputs = fillArgs(converter, target, req)
-
         val returnVal = Calls.callMethod(target.api.klass, target.instance, target.action.member.name, inputs)
-
         val wrapped = returnVal?.let { res ->
             if (res is Result<*, *>) {
                 (res as Result<ApiResult, Err>)
@@ -321,27 +275,11 @@ open class ApiServer(
     }
 
 
-    private fun record(req: Request, res:Outcome<Any>){
-        logger.info({
-            val info = listOf("path" to req.path) + res.structured()
-            val summary= info.joinToString { "${it.first}=${it.second?.toString()}" }
-            val inputs = req.structured().joinToString { "${it.first}=${it.second?.toString()}" }
-            "API Server Result: $summary, inputs : $inputs"
-        }, null)
-
-        res.onFailure {
-            val numbered = it.numbered().joinToString(newline)
-            logger.error("API Server Error(s): $newline$numbered")
-        }
-    }
-
-
     companion object {
 
         @JvmStatic
-        fun of(ctx: Context, apis: List<slatekit.apis.core.Api>, auth: Auth? = null, source: Source? = null): ApiServer {
-            val hooks = ApiHooks(inputters = listOf(Authorize(auth)))
-            val server = ApiServer(ctx, apis, hooks, ApiSettings(source ?: Source.Web))
+        fun of(ctx: Context, apis: List<slatekit.apis.routes.Api>, auth: Auth? = null, source: Source? = null): ApiServer {
+            val server = ApiServer(ctx, apis, null, listOf(), auth, Settings(source ?: Source.Web))
             return server
         }
 
@@ -353,16 +291,37 @@ open class ApiServer(
         }
 
         /**
-         * Default list of API Request input validators
+         * Generates a sample response based on the inputs/outputs
          */
-        @JvmStatic
-        fun defaultPreHooks(): List<Input<ApiRequest>> {
-            return listOf(
-                Routing(),
-                Targets(),
-                Protos(),
-                Validate()
-            )
+        fun sample(server:ApiServer, req: Request, path: File): Notice<String> {
+            val action = server.get(req)
+            val sample = if (action.success) {
+                val parameters = when (action) {
+                    is Success -> action.value.action.paramsUser
+                    is Failure -> listOf()
+                }
+                val serializer = Serialization.sampler() as SerializerSample
+                val text = serializer.serializeParams(parameters)
+                text
+            } else "Unable to find command: " + req.path
+
+            path.writeText(sample)
+            return Success("sample call written to : ${path.absolutePath}")
+        }
+
+
+        fun record(req: Request, res:Outcome<ApiResult>, logger:Logger){
+            logger.info({
+                val info = listOf("path" to req.path) + res.structured()
+                val summary= info.joinToString { "${it.first}=${it.second?.toString()}" }
+                val inputs = req.structured().joinToString { "${it.first}=${it.second?.toString()}" }
+                "API Server Result: $summary, inputs : $inputs"
+            }, null)
+
+            res.onFailure {
+                val numbered = it.numbered().joinToString(newline)
+                logger.error("API Server Error(s): $newline$numbered")
+            }
         }
     }
 }

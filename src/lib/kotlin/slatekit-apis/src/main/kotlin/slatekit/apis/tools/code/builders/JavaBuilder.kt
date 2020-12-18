@@ -4,7 +4,7 @@ import kotlin.reflect.KClass
 import kotlin.reflect.KParameter
 import kotlin.reflect.KProperty
 import slatekit.apis.Verb
-import slatekit.apis.core.Action
+import slatekit.apis.routes.Action
 import slatekit.apis.tools.code.CodeGenSettings
 import slatekit.apis.tools.code.TypeInfo
 import slatekit.common.newline

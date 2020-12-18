@@ -1,14 +1,14 @@
 package slatekit.apis.setup
 
 import kotlin.reflect.KClass
-import slatekit.apis.core.Action
-import slatekit.apis.core.Api
-import slatekit.apis.core.Lookup
+import slatekit.apis.routes.Action
+import slatekit.apis.routes.Api
+import slatekit.apis.routes.Lookup
 import slatekit.common.Ignore
 import slatekit.common.naming.Namer
 import slatekit.meta.Reflector
 
-class AnnoLoader(val cls: KClass<*>, val raw: Api? = null) : Loader {
+class Annotations(val cls: KClass<*>, val raw: Api? = null) : Loader {
     /**
      * Loads an api using class and method annotations e.g. @Api on class and @ApiAction on members.
      * NOTE: This allows all the API setup to be in 1 place ( in the class/memebers )
@@ -16,15 +16,18 @@ class AnnoLoader(val cls: KClass<*>, val raw: Api? = null) : Loader {
      * @param cls : The class representing the API
      * @param namer: The naming convention
      */
-    override fun loadApi(namer: Namer?): Api {
+    override fun api(namer: Namer?): Api {
         val api = toApi(cls, raw?.singleton, raw?.access, namer)
 
         // Get all the actions using the @ApiAction
-        val actions = loadActions(api, false, namer)
+        val actions = actions(api, false, namer)
         return api.copy(actions = Lookup(actions, { t -> t.name }))
     }
 
-    override fun loadActions(api: Api, local: Boolean, namer: Namer?): List<Action> {
+    /**
+     * Load all actions available in the API
+     */
+    override fun actions(api: Api, local: Boolean, namer: Namer?): List<Action> {
 
         // 1. get all the methods with the apiAction annotation
         val rawMatches = Reflector.getAnnotatedMembers<slatekit.apis.Action>(api.klass, slatekit.apis.Action::class, api.declaredOnly)

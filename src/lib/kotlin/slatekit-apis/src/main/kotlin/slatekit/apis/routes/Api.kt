@@ -11,22 +11,35 @@
  * </slate_header>
  */
 
-package slatekit.apis.core
+package slatekit.apis.routes
 
 import kotlin.reflect.KClass
 import slatekit.apis.*
 import slatekit.apis.SetupType
+import slatekit.apis.core.Roles
+import slatekit.apis.core.Sources
 import slatekit.common.Source
 import slatekit.meta.kClass
 
 /**
- * Represents an API in Slate Kit which is a reference to a regular Class
- *
- *  NOTE: API routes are considered Universal APIs and are organized into 3 parts in the route.
- *  e.g. area / api  / action
- *       app  / user / invite
- *
- * @param area : the top level area/category of the api "sys", "app", "ops"
+ * ================================================================
+ * Universal Route =  {AREA}.{API}.{ACTION}
+ * Route           =  accounts.signup.register
+ * Web             =  POST https://{host}/api/accounts/signup/register
+ * CLI             =  :> accounts.signup.register -email=".." -pswd=".."
+ * Queue           =  JSON { path: "account.signup.register", meta: { }, data : { } }
+ * Class           =
+ *      @Api(area = "accounts", name = "signup", ...)
+ *      class Signup {
+ *          @Action(desc = "processes an request with 0 parameters")
+ *          suspend fun register(email:String, pswd:String): Outcome<UUID> {
+ *              // code...
+ *          }
+ *      }
+ * ================================================================
+ * From the example above, this represents the Api "signup" and it's mapped class.
+
+ * @param area : the top level area/category of the api "account", "alerts"
  * @param name : the name of the api "users"
  * @param desc : description of the api
  * @param roles : the roles allowed to access this api ( "admin", "ops" )
@@ -48,7 +61,7 @@ data class Api(
     val declaredOnly: Boolean = true,
     val singleton: Any? = null,
     val setup: SetupType = SetupType.Methods,
-    val actions: Lookup<Action> = Lookup(listOf(), { t -> t.name })
+    val actions: Lookup<Action> = Lookup(listOf()) { t -> t.name }
 ) {
 
     val protocol = sources.all.first()

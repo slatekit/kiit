@@ -11,7 +11,7 @@ import slatekit.results.Success
 
 
 @Api(area = "app", name = "retry", desc = "sample to test features of Slate Kit APIs")
-open class SampleRetryApi(val err:slatekit.apis.Error) : slatekit.apis.Error {
+open class SampleRetryApi()  {
 
 
     private var counter = -1
@@ -28,12 +28,6 @@ open class SampleRetryApi(val err:slatekit.apis.Error) : slatekit.apis.Error {
             throw Exception("testing retry")
         }
         return Success(counter, msg = text)
-    }
-
-
-    @Ignore
-    override suspend fun failed(raw:ApiRequest, req: Outcome<ApiRequest>, res: Outcome<ApiResult>) {
-        return err.failed(raw, req, res)
     }
 }
 

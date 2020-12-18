@@ -1,6 +1,7 @@
 package slatekit.samples.cli
 
 import slatekit.apis.*
+import slatekit.apis.routes.Api
 import slatekit.apis.support.Authenticator
 import slatekit.cli.CliSettings
 import slatekit.context.Context
@@ -45,9 +46,9 @@ class CLI(val ctx: Context) {
     }
 
 
-    fun apis(): List<slatekit.apis.core.Api> {
+    fun apis(): List<Api> {
         return listOf(
-                slatekit.apis.core.Api(klass = SampleApi::class, singleton = SampleApi(ctx), setup = SetupType.Annotated)
+                Api(klass = SampleApi::class, singleton = SampleApi(ctx), setup = SetupType.Annotated)
         )
     }
 }

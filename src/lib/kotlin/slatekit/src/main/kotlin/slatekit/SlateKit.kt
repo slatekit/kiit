@@ -138,7 +138,6 @@ class SlateKit(ctx: Context) : App<Context>(ctx, AppOptions(showWelcome = true))
                 },
                 serializer = Serialization::serialize
         )
-        cli.apis.setApiContainerHost()
         return cli
     }
 }

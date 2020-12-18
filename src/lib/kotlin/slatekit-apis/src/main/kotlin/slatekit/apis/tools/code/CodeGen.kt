@@ -5,8 +5,8 @@ import kotlin.reflect.KClass
 import kotlin.reflect.KType
 import kotlin.reflect.full.declaredMemberFunctions
 import slatekit.apis.Verbs
-import slatekit.apis.core.Action
-import slatekit.apis.core.Api
+import slatekit.apis.routes.Action
+import slatekit.apis.routes.Api
 import slatekit.apis.tools.code.builders.CodeBuilder
 import slatekit.common.*
 import slatekit.common.ext.orElse

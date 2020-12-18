@@ -458,7 +458,7 @@ class Example_Results : Command("results"), OutcomeBuilder {
 
 
         // CASE 7: Not found
-        val res6 = errored<String>(Codes.NOT_FOUND)
+        val res6 = invalid<String>(Codes.NOT_FOUND)
         printResult(res6)
 
 

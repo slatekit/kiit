@@ -16,7 +16,7 @@ import kotlinx.coroutines.runBlocking
 import org.junit.Assert
 import org.junit.Test
 import slatekit.apis.*
-import slatekit.apis.core.Api
+import slatekit.apis.routes.Api
 import slatekit.apis.SetupType
 import slatekit.results.getOrElse
 import test.setup.SampleTypes3Api
@@ -37,7 +37,7 @@ class Api_Type_Tests : ApiTestsBase() {
         val api = SampleTypes3Api()
         val apis = ApiServer(ctx, apis = listOf(Api(api, setup = SetupType.Annotated)) )
         val r1 = runBlocking {
-            apis.call("samples", "types3", "getDecInt", Verb.Get, mapOf(), mapOf("id" to encryptedText))
+            apis.executeAttempt("samples", "types3", "getDecInt", Verb.Get, mapOf(), mapOf("id" to encryptedText))
         }
         Assert.assertTrue(r1.success)
         Assert.assertTrue(r1.getOrElse { "" } == "decrypted int : 123")
@@ -49,7 +49,7 @@ class Api_Type_Tests : ApiTestsBase() {
         val api = SampleTypes3Api()
         val apis = ApiServer(ctx, apis = listOf(Api(api, setup = SetupType.Annotated)))
         val r1 = runBlocking {
-            apis.call("samples", "types3", "getDecLong", Verb.Get, mapOf(), mapOf("id" to encryptedText))
+            apis.executeAttempt("samples", "types3", "getDecLong", Verb.Get, mapOf(), mapOf("id" to encryptedText))
         }
         Assert.assertTrue(r1.success)
         Assert.assertTrue(r1.getOrElse { "" } == "decrypted long : 123456")
@@ -61,7 +61,7 @@ class Api_Type_Tests : ApiTestsBase() {
         val api = SampleTypes3Api()
         val apis = ApiServer(ctx, apis = listOf(Api(api, setup = SetupType.Annotated))  )
         val r1 = runBlocking {
-            apis.call("samples", "types3", "getDecDouble", Verb.Get, mapOf(), mapOf("id" to encryptedText))
+            apis.executeAttempt("samples", "types3", "getDecDouble", Verb.Get, mapOf(), mapOf("id" to encryptedText))
         }
         Assert.assertTrue(r1.success)
         Assert.assertTrue(r1.getOrElse { "" } == "decrypted double : 123.456")
@@ -73,7 +73,7 @@ class Api_Type_Tests : ApiTestsBase() {
         val api = SampleTypes3Api()
         val apis = ApiServer(ctx, apis = listOf(Api(api, setup = SetupType.Annotated)) )
         val r1 = runBlocking {
-            apis.call("samples", "types3", "getDecString", Verb.Get, mapOf(), mapOf("id" to encryptedText))
+            apis.executeAttempt("samples", "types3", "getDecString", Verb.Get, mapOf(), mapOf("id" to encryptedText))
         }
         Assert.assertTrue(r1.success)
         Assert.assertTrue(r1.getOrElse { "" } == "decrypted string : slate-kit")
@@ -102,7 +102,7 @@ class Api_Type_Tests : ApiTestsBase() {
         val api = SampleTypes3Api()
         val apis = ApiServer(ctx, apis = listOf(Api(api, setup = SetupType.Annotated)) )
         val r1 = runBlocking {
-            apis.call("samples", "types3", "getEnum", Verb.Get, mapOf(), mapOf(Pair("status", StatusEnum.Active.name)))
+            apis.executeAttempt("samples", "types3", "getEnum", Verb.Get, mapOf(), mapOf(Pair("status", StatusEnum.Active.name)))
         }
         Assert.assertTrue(r1.success)
         Assert.assertTrue(r1.getOrElse { "" } == "${StatusEnum.Active.name}:${StatusEnum.Active.value}")
@@ -113,7 +113,7 @@ class Api_Type_Tests : ApiTestsBase() {
         val api = SampleTypes3Api()
         val apis = ApiServer(ctx, apis = listOf(Api(api, setup = SetupType.Annotated)))
         val r1 = runBlocking {
-            apis.call("samples", "types3", "getEnum", Verb.Get, mapOf(), mapOf(Pair("status", StatusEnum.Active.value)))
+            apis.executeAttempt("samples", "types3", "getEnum", Verb.Get, mapOf(), mapOf(Pair("status", StatusEnum.Active.value)))
         }
         Assert.assertTrue(r1.success)
         Assert.assertTrue(r1.getOrElse { "" } == "${StatusEnum.Active.name}:${StatusEnum.Active.value}")
@@ -124,7 +124,7 @@ class Api_Type_Tests : ApiTestsBase() {
         val api = SampleTypes3Api()
         val apis = ApiServer(ctx, apis = listOf(Api(api, setup = SetupType.Annotated)))
         val r1 = runBlocking {
-            apis.call("samples", "types3", "getEnumValue", Verb.Get, mapOf(), mapOf(Pair("status", StatusEnum.Pending.value)))
+            apis.executeAttempt("samples", "types3", "getEnumValue", Verb.Get, mapOf(), mapOf(Pair("status", StatusEnum.Pending.value)))
         }
         Assert.assertTrue(r1.success)
         r1.onSuccess { it ->
@@ -139,7 +139,7 @@ class Api_Type_Tests : ApiTestsBase() {
         val api = SampleTypes3Api()
         val apis = ApiServer(ctx, apis = listOf(Api(api, setup = SetupType.Annotated)))
         val r1 = runBlocking {
-            apis.call("samples", "types3", method, Verb.Get, mapOf(), mapOf("text" to text))
+            apis.executeAttempt("samples", "types3", method, Verb.Get, mapOf(), mapOf("text" to text))
         }
 
         Assert.assertEquals(success, r1.success)

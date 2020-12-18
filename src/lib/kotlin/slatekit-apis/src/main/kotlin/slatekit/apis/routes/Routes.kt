@@ -1,12 +1,15 @@
-package slatekit.apis.core
+package slatekit.apis.routes
 
+import slatekit.apis.core.Target
 import kotlin.reflect.full.primaryConstructor
 import slatekit.context.Context
 import slatekit.common.naming.Namer
 import slatekit.meta.Reflector
-import slatekit.results.Notice
+import slatekit.results.Codes
+import slatekit.results.Err
+import slatekit.results.Outcome
 import slatekit.results.Success
-import slatekit.results.builders.Notices
+import slatekit.results.builders.Outcomes
 
 /**
  * The top most level qualifier in the Universal Routing Structure
@@ -15,29 +18,23 @@ import slatekit.results.builders.Notices
  *
  * Format :  {area}.{api}.{action}
  * Routes :
- *          { area_1 }
+ *          { Area 1 }
+ *              - { API 1 }
+ *                  - { Action a }
+ *                  - { Action b }
  *
- *              - { api_1 }
+ *              - { API 2 }
+ *                  - { Action c }
+ *                  - { Action d }
  *
- *                  - { action_a }
- *                  - { action_b }
+ *         { Area 2 }
+ *              - { API 1 }
+ *                  - { Action a }
+ *                  - { Action b }
  *
- *              - { api_2 }
- *
- *                  - { action_c }
- *                  - { action_d }
- *
- *         { area_2 }
- *
- *              - { api_1 }
- *
- *                  - { action_a }
- *                  - { action_b }
- *
- *              - { api_2 }
- *
- *                  - { action_c }
- *                  - { action_d }
+ *              - { API 2 }
+ *                  - { Action c }
+ *                  - { Action d }
 */
 data class Routes(
     val areas: Lookup<Area>,
@@ -100,18 +97,18 @@ data class Routes(
      * @param action
      * @return
      */
-    fun api(area: String, name: String, action: String, ctx: Context): Notice<Target> {
-        if (area.isEmpty()) return Notices.invalid("area not supplied")
-        if (name.isEmpty()) return Notices.invalid("api not supplied")
-        if (action.isEmpty()) return Notices.invalid("action not supplied")
-        if (!contains(area, name, action)) return Notices.invalid("api route $area $name $action not found")
+    fun api(area: String, name: String, action: String, ctx: Context): Outcome<Target> {
+        if (area.isEmpty()) return Outcomes.invalid("area not supplied")
+        if (name.isEmpty()) return Outcomes.invalid("api not supplied")
+        if (action.isEmpty()) return Outcomes.invalid("action not supplied")
+        if (!contains(area, name, action)) return Outcomes.invalid(Err.of("api route $area $name $action not found"), status = Codes.NOT_FOUND)
 
         val api = api(area, name)!!
         val act = api.actions[action]!!
         val instance = instance(area, name, ctx)
         return instance?.let { inst ->
             Success(Target(api, act, inst))
-        } ?: Notices.invalid("api route $area $name $action not found")
+        } ?: Outcomes.errored("api route $area $name $action not found")
     }
 
     /**

@@ -25,7 +25,7 @@ import slatekit.common.requests.CommonRequest
 import slatekit.common.requests.Request
 import slatekit.meta.Serialization
 
-object Requests {
+object Reqs {
 
     /**
      * Loads a file from a file with the existing meta data supplied.

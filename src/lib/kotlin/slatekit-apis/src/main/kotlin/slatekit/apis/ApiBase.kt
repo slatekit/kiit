@@ -11,33 +11,19 @@
  * </slate_header>
  */
 
-package slatekit.apis.support
+package slatekit.apis
 
-import slatekit.apis.ApiRequest
-import slatekit.apis.ApiResult
+import slatekit.apis.support.FileSupport
 import slatekit.common.crypto.Encryptor
 import slatekit.common.log.Logger
 import slatekit.context.Context
-import slatekit.results.Outcome
-import slatekit.results.builders.Outcomes
 
-interface Api
 
 /**
  * Base class for any Api, provides lookup functionality to check for exposed api actions.
  * @param context : The context of the application ( logger, config, encryptor, etc )
  */
-abstract class ApiBase(override val context: Context) : FileSupport, HooksSupport {
+abstract class ApiBase(override val context: Context) : FileSupport {
     override val encryptor: Encryptor? = context.enc
     override val logger: Logger? = context.logs.getLogger()
-
-    override suspend fun before(req: ApiRequest) {
-    }
-
-    override suspend fun filter(req: ApiRequest): Outcome<ApiRequest> {
-        return Outcomes.success(req)
-    }
-
-    override suspend fun after(raw: ApiRequest, req: Outcome<ApiRequest>, res: Outcome<ApiResult>) {
-    }
 }

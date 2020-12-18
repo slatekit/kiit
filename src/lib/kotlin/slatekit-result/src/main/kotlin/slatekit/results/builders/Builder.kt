@@ -54,21 +54,25 @@ interface Builder<out E> {
     fun <T> denied(msg: String): Result<T, E> = Failure(errorFromStr(msg, Codes.DENIED), Codes.DENIED)
     fun <T> denied(ex: Exception, status: Failed.Denied? = null): Result<T, E> = Failure(errorFromEx(ex, Codes.DENIED), status ?: Codes.DENIED)
     fun <T> denied(err: Err, status: Failed.Denied? = null): Result<T, E> = Failure(errorFromErr(err, Codes.DENIED), status ?: Codes.DENIED)
+    fun <T> denied(status:Failed.Denied): Result<T, E> = Failure(errorFromStr(null, get(status, Codes.DENIED)), status)
 
     fun <T> ignored(): Result<T, E> = Failure(errorFromStr(null, Codes.IGNORED), Codes.IGNORED)
     fun <T> ignored(msg: String): Result<T, E> = Failure(errorFromStr(msg, Codes.IGNORED), Codes.IGNORED)
     fun <T> ignored(ex: Exception, status: Failed.Ignored? = null): Result<T, E> = Failure(errorFromEx(ex, Codes.IGNORED), status ?: Codes.IGNORED)
     fun <T> ignored(err: Err, status: Failed.Ignored? = null): Result<T, E> = Failure(errorFromErr(err, Codes.IGNORED), status ?: Codes.IGNORED)
+    fun <T> ignored(status:Failed.Ignored): Result<T, E> = Failure(errorFromStr(null, get(status, Codes.IGNORED)), status)
 
     fun <T> invalid(): Result<T, E> = Failure(errorFromStr(null, Codes.INVALID), Codes.INVALID)
     fun <T> invalid(msg: String): Result<T, E> = Failure(errorFromStr(msg, Codes.INVALID), Codes.INVALID)
     fun <T> invalid(ex: Exception, status: Failed.Invalid? = null): Result<T, E> = Failure(errorFromEx(ex, Codes.INVALID), status ?: Codes.INVALID)
     fun <T> invalid(err: Err, status:Failed.Invalid? = null): Result<T, E> = Failure(errorFromErr(err, Codes.INVALID), status ?: Codes.INVALID)
+    fun <T> invalid(status:Failed.Invalid): Result<T, E> = Failure(errorFromStr(null, get(status, Codes.INVALID)), status)
 
     fun <T> conflict(): Result<T, E> = Failure(errorFromStr(null, Codes.CONFLICT), Codes.CONFLICT)
     fun <T> conflict(msg: String): Result<T, E> = Failure(errorFromStr(msg, Codes.CONFLICT), Codes.CONFLICT)
     fun <T> conflict(ex: Exception, status:Failed.Errored? = null): Result<T, E> = Failure(errorFromEx(ex, Codes.CONFLICT), status ?: Codes.CONFLICT)
     fun <T> conflict(err: Err, status:Failed.Errored? = null): Result<T, E> = Failure(errorFromErr(err, Codes.CONFLICT), status ?: Codes.CONFLICT)
+    fun <T> conflict(status:Failed.Errored): Result<T, E> = Failure(errorFromStr(null, Codes.CONFLICT), status)
 
     // General purpose error, but allow user to supply the status code optionally
     // Named errored to avoid collision with Kotlin [Result.failed]
@@ -82,6 +86,7 @@ interface Builder<out E> {
     fun <T> unexpected(msg: String): Result<T, E> = Failure(errorFromStr(msg, Codes.UNEXPECTED), Codes.UNEXPECTED)
     fun <T> unexpected(ex: Exception, status: Failed.Unknown? = null): Result<T, E> = Failure(errorFromEx(ex, Codes.UNEXPECTED), status ?: Codes.UNEXPECTED)
     fun <T> unexpected(err: Err, status: Failed.Unknown? = null): Result<T, E> = Failure(errorFromErr(err, Codes.UNEXPECTED), status ?: Codes.UNEXPECTED)
+    fun <T> unexpected(status: Failed.Unknown): Result<T, E> = Failure(errorFromStr(null, get(status, Codes.UNEXPECTED)), status)
 
     /**
      * Builds a status from a message.

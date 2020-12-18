@@ -3,11 +3,22 @@ package slatekit.apis
 import slatekit.common.Sources
 
 /**
- * Annotation to designate a class as an API
- *
- *  NOTE: Apis in SlateKit are organized into 3 parts in the route.
- *  e.g. area / api  / action
- *       app  / user / invite
+ * ================================================================
+ * Universal Route =  {AREA}.{API}.{ACTION}
+ * Route           =  accounts.signup.register
+ * Web             =  POST https://{host}/api/accounts/signup/register
+ * CLI             =  :> accounts.signup.register -email=".." -pswd=".."
+ * Queue           =  JSON { path: "account.signup.register", meta: { }, data : { } }
+ * Class           =
+ *      @Api(area = "accounts", name = "signup", ...)
+ *      class Signup {
+ *          @Action(desc = "processes an request with 0 parameters")
+ *          suspend fun register(email:String, pswd:String): Outcome<UUID> {
+ *              // code...
+ *          }
+ *      }
+ * ================================================================
+ * This Api annotations represents the "@Api(area = "accounts" ) portion in the example
  *
  * @param area : the top level area/category of the api "sys", "app", "ops"
  * @param name : the name of the api "users"

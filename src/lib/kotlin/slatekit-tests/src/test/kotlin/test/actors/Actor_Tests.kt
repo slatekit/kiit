@@ -58,4 +58,24 @@ class Actor_Tests {
             Assert.assertEquals(2, actor.tracked)
         }
     }
+
+
+    @Test
+    fun can_close() {
+        runBlocking {
+            val channel = Channel<String>(Channel.UNLIMITED)
+            channel.send("1")
+            val i = channel.poll()
+            println(i)
+            channel.close()
+            var ex:Exception? = null
+            try {
+                channel.send("2")
+            }
+            catch(cex:Exception) {
+               ex = cex
+            }
+            Assert.assertNotNull(ex)
+        }
+    }
 }

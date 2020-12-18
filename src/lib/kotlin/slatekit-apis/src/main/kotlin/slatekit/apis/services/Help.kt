@@ -11,9 +11,11 @@
  * </slate_header>
  */
 
-package slatekit.apis.core
+package slatekit.apis.services
 
 import slatekit.apis.ApiServer
+import slatekit.apis.core.Part
+import slatekit.apis.routes.Routes
 import slatekit.apis.tools.docs.Doc
 import slatekit.apis.tools.docs.DocUtils
 import slatekit.common.types.Content
@@ -21,13 +23,6 @@ import slatekit.common.requests.Request
 import slatekit.results.*
 import slatekit.results.builders.Outcomes
 
-
-sealed class HelpType {
-    object All    : HelpType()
-    object Area   : HelpType()
-    object Api    : HelpType()
-    object Action : HelpType()
-}
 
 open class Help(val host: ApiServer, val routes: Routes, val docKey: String?, val docBuilder: () -> Doc) {
 
@@ -47,25 +42,25 @@ open class Help(val host: ApiServer, val routes: Routes, val docKey: String?, va
      * 2. area.api ?
      * 3. area.api.action ?
      */
-    fun build(req: Request, helpType: HelpType): Outcome<Content> {
+    fun build(req: Request, helpType: Part): Outcome<Content> {
         return if (!DocUtils.hasDocKey(req, docKey ?: "")) {
             Outcomes.denied("Unauthorized access to API docs")
         } else {
             val content = when (helpType) {
                 // 1: ? = help on all
-                HelpType.All -> {
+                Part.All -> {
                     areas()
                 }
                 // 2: {area} ? = help on area
-                HelpType.Area -> {
+                Part.Area -> {
                     area(req.parts[0])
                 }
                 // 3. {area}.{api} = help on api
-                HelpType.Api -> {
+                Part.Api -> {
                     api(req.parts[0], req.parts[1])
                 }
                 // 4. {area}.{api}.{action} = help on api
-                HelpType.Action -> {
+                Part.Action -> {
                     action(req.parts[0], req.parts[1], req.parts[2])
                 }
             }

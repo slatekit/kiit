@@ -11,10 +11,11 @@
  * </slate_header>
  */
 
-package slatekit.apis.core
+package slatekit.apis.services
 
 import slatekit.apis.ApiRequest
-import slatekit.apis.hooks.Targets
+import slatekit.apis.core.Target
+import slatekit.apis.routes.Action
 import slatekit.common.*
 import slatekit.common.requests.Request
 import slatekit.meta.KTypes
@@ -49,43 +50,39 @@ object Calls {
      * @param req : the command input
      * @return
      */
-    suspend fun validateCall(
+    fun validateCall(
         request: ApiRequest,
-        fetcher: (Request) -> Notice<Target>,
+        fetcher: (Request) -> Outcome<Target>,
         allowSingleDefaultParam: Boolean = false
     ): Outcome<Target> {
         val req = request.request
         val fullName = req.fullName
         val args = req.data
-        val apiRefCheck = Targets().process(Outcomes.of(request))
+        val apiRefCheck = request.host.get(req.area, req.name, req.action).toOutcome()
+        return apiRefCheck.flatMap { check ->
+            val target = request.target!!
+            val action = target.action
 
-        return when (apiRefCheck) {
-            is Failure -> Outcomes.invalid("bad request : $fullName: inputs not supplied")
-            is Success -> {
-                val apiRef = apiRefCheck.value
-                val target = apiRef.target!!
-                val action = target.action
-
-                // 1 param with default argument.
-                if (allowSingleDefaultParam && action.isSingleDefaultedArg() && args.size() == 0) {
-                    Outcomes.success(target)
-                }
-                // Param: Raw ApiCmd itself!
-                else if (action.isSingleArg() && action.paramsUser.isEmpty()) {
-                    Outcomes.success(target)
-                }
-                // Data - check args needed
-                else if (!allowSingleDefaultParam && action.hasArgs && args.size() == 0)
-                    Outcomes.invalid("bad request : $fullName: inputs not supplied")
-
-                // Data - ensure matching args
-                else if (action.hasArgs) {
-                    val argCheck = validateArgs(request, action, args)
-                    val result = argCheck.map { target }
-                    result
-                } else
-                    Outcomes.success(target)
+            // 1 param with default argument.
+            val res = if (allowSingleDefaultParam && action.isSingleDefaultedArg() && args.size() == 0) {
+                Outcomes.success(target)
             }
+            // Param: Raw ApiCmd itself!
+            else if (action.isSingleArg() && action.paramsUser.isEmpty()) {
+                Outcomes.success(target)
+            }
+            // Data - check args needed
+            else if (!allowSingleDefaultParam && action.hasArgs && args.size() == 0)
+                Outcomes.invalid("bad request : $fullName: inputs not supplied")
+
+            // Data - ensure matching args
+            else if (action.hasArgs) {
+                val argCheck = validateArgs(request, action, args)
+                val result = argCheck.map { target }
+                result
+            } else
+                Outcomes.success(target)
+            res
         }
     }
 

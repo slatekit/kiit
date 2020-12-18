@@ -1,7 +1,7 @@
 package slatekit
 
 import slatekit.apis.SetupType
-import slatekit.apis.core.Api
+import slatekit.apis.routes.Api
 import slatekit.apis.tools.code.CodeGenApi
 import slatekit.context.Context
 import slatekit.docs.DocApi

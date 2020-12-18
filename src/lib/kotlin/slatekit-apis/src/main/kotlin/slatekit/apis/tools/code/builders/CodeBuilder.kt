@@ -1,6 +1,6 @@
 package slatekit.apis.tools.code.builders
 
-import slatekit.apis.core.Action
+import slatekit.apis.routes.Action
 import slatekit.apis.tools.code.TypeInfo
 import slatekit.common.newline
 import slatekit.meta.KTypes

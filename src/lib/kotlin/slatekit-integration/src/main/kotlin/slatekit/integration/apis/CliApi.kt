@@ -14,8 +14,8 @@
 package slatekit.integration.apis
 
 import slatekit.apis.ApiServer
-import slatekit.apis.core.Api
-import slatekit.apis.core.HelpType
+import slatekit.apis.routes.Api
+import slatekit.apis.core.Part
 import slatekit.cli.*
 import slatekit.common.Source
 import slatekit.common.types.Content
@@ -80,7 +80,7 @@ open class CliApi(
             val transformedMeta = metaTransform?.invoke(existingMeta)?.toMap() ?: existingMeta
             val metaUpdated = InputArgs(transformedMeta)
             val requestWithMeta = request.copy(meta = metaUpdated)
-            val response = apis.respond(requestWithMeta)
+            val response = apis.executeResponse(requestWithMeta)
             val cliResponse = CliResponse(
                     requestWithMeta,
                     response.success,
@@ -107,22 +107,22 @@ open class CliApi(
      * @param req
      * @param mode
      */
-    fun showHelpFor(req: CliRequest, mode: HelpType) {
+    fun showHelpFor(req: CliRequest, mode: Part) {
         when (mode) {
             // 1: {area} ? = help on area
-            HelpType.All -> {
+            Part.All -> {
                 apis.help.areas()
             }
             // 2: {area} ? = help on area
-            HelpType.Area -> {
+            Part.Area -> {
                 apis.help.area(req.args.getVerb(0))
             }
             // 3. {area}.{api} = help on api
-            HelpType.Api -> {
+            Part.Api -> {
                 apis.help.api(req.args.getVerb(0), req.args.getVerb(1))
             }
             // 4. {area}.{api}.{action} = help on api action
-            HelpType.Action-> {
+            Part.Action-> {
                 apis.help.action(req.args.getVerb(0), req.args.getVerb(1), req.args.getVerb(2))
             }
             else -> {
@@ -132,22 +132,22 @@ open class CliApi(
     }
 
 
-    fun checkForHelp(req:CliRequest):Pair<Boolean, HelpType> {
+    fun checkForHelp(req:CliRequest):Pair<Boolean, Part> {
         val args = req.args
         val hasQuestion = args.parts.isNotEmpty() && args.parts.last() == "?"
         return if( hasQuestion ) {
             when(args.parts.size ) {
-                1    -> Pair(true , HelpType.All)
-                2    -> Pair(true , HelpType.Area)
-                3    -> Pair(true , HelpType.Api)
-                4    -> Pair(true , HelpType.Action)
-                else -> Pair(false, HelpType.All)
+                1    -> Pair(true , Part.All)
+                2    -> Pair(true , Part.Area)
+                3    -> Pair(true , Part.Api)
+                4    -> Pair(true , Part.Action)
+                else -> Pair(false, Part.All)
             }
         } else {
             if(args.parts.isNotEmpty() && args.parts[0] == "?" ){
-                Pair(true, HelpType.All)
+                Pair(true, Part.All)
             } else {
-                Pair(false, HelpType.All)
+                Pair(false, Part.All)
             }
         }
     }
