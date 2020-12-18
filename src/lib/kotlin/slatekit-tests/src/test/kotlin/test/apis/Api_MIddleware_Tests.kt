@@ -37,5 +37,6 @@ class Api_Middleware_Tests : ApiTestsBase() {
         Assert.assertTrue(api.middlewareHook.size == 2)
         Assert.assertTrue(api.middlewareHook[0].request.path == "app.SampleMiddleware.hello")
         Assert.assertTrue(api.middlewareHook[1].request.path == "app.SampleMiddleware.hello")
+        Assert.assertEquals("hello world", r2.getOrNull())
     }
 }
