@@ -24,6 +24,7 @@ import slatekit.context.Context
 import slatekit.meta.*
 import slatekit.meta.deserializer.Deserializer
 import slatekit.policy.Process
+import slatekit.policy.rewrite
 import slatekit.results.*
 import slatekit.results.builders.Outcomes
 import kotlin.reflect.KCallable
@@ -38,6 +39,7 @@ import kotlin.reflect.KCallable
 open class ApiServer(
     val ctx: Context,
     val apis: List<slatekit.apis.routes.Api>,
+    val writer: Rewriter? = null,
     val hooks: List<Middleware> = listOf(),
     val auth: Auth? = null,
     val settings: Settings = Settings()
@@ -177,7 +179,8 @@ open class ApiServer(
         if (helpCheck.success) return helpCheck
 
         // Build ApiRequest from the raw request ( this is used for middleware )
-        val request = ApiRequest(this, auth, ctx, raw, null, raw.source, null)
+        val initial = ApiRequest(this, auth, ctx, raw, null, raw.source, null)
+        val request = writer?.process(initial) ?: initial
 
         // Route    : area.api.action
         val routeResult = RouteRule.isValid(request)
@@ -276,7 +279,7 @@ open class ApiServer(
 
         @JvmStatic
         fun of(ctx: Context, apis: List<slatekit.apis.routes.Api>, auth: Auth? = null, source: Source? = null): ApiServer {
-            val server = ApiServer(ctx, apis, listOf(), auth, Settings(source ?: Source.Web))
+            val server = ApiServer(ctx, apis, null, listOf(), auth, Settings(source ?: Source.Web))
             return server
         }
 

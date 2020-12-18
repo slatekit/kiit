@@ -10,7 +10,7 @@ import slatekit.common.validations.ValidationFuncs
 import slatekit.results.Outcome
 import slatekit.results.builders.Outcomes
 
-class Restify : RewriteSupport, Middleware {
+open class Restify : Rewriter, RewriteSupport {
 
     private val verbGet = "get"
     private val verbPost = "post"
@@ -21,8 +21,7 @@ class Restify : RewriteSupport, Middleware {
     /**
      * Rewrites restful routes and maps them to SlateKit API routes
      */
-    @Ignore
-    override suspend fun process(req: ApiRequest, next:suspend(ApiRequest) -> Outcome<ApiResult>): Outcome<ApiResult> {
+    override suspend fun process(req: ApiRequest): ApiRequest {
 
         // Get the first and second part
         val parts = req.request.parts
@@ -30,21 +29,21 @@ class Restify : RewriteSupport, Middleware {
         val container = req.host
 
         val result = if (verb == verbGet && parts[2] == "") {
-            Outcomes.of { rewrite(req, rename(container,"getAll")) }
+            rewrite(req, rename(container,"getAll"))
         } else if (verb == verbGet && ValidationFuncs.isNumeric(parts[2])) {
-            Outcomes.of { rewriteWithParam(req, rename(container,"getById"), "id", parts[2]) }
+            rewriteWithParam(req, rename(container,"getById"), "id", parts[2])
         } else if (verb == verbPost && parts[2] == "") {
-                Outcomes.of { rewrite(req, rename(container,"create")) }
+                rewrite(req, rename(container,"create"))
         } else if (verb == verbPut && parts[2] == "") {
-                Outcomes.of { rewrite(req, rename(container,"update")) }
+                rewrite(req, rename(container,"update"))
         } else if (verb == verbPatch && ValidationFuncs.isNumeric(parts[2])) {
-                Outcomes.of { rewriteWithParam(req, rename(container,"patch"), "id", parts[2]) }
+                rewriteWithParam(req, rename(container,"patch"), "id", parts[2])
         } else if (verb == verbDelete && parts[2] == "") {
-                Outcomes.of { rewrite(req, rename(container,verbDelete)) }
+                rewrite(req, rename(container,verbDelete))
         } else if (verb == verbDelete && ValidationFuncs.isNumeric(parts[2])) {
-                Outcomes.of { rewriteWithParam(req, rename(container,"deleteById"), "id", parts[2]) }
+                rewriteWithParam(req, rename(container,"deleteById"), "id", parts[2])
         } else {
-            next(req)
+            req
         }
         return result
     }
@@ -52,8 +51,5 @@ class Restify : RewriteSupport, Middleware {
     /**
      * Provides access to naming conventions used for actions
      */
-    fun rename(server:ApiServer, text: String): String = server.settings.naming?.rename(text) ?: text
-
-    companion object {
-    }
+    open fun rename(server:ApiServer, text: String): String = server.settings.naming?.rename(text) ?: text
 }
