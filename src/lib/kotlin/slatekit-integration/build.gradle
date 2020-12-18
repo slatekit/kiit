@@ -91,9 +91,9 @@ dependencies {
         compile "com.slatekit:slatekit-entities:$slatekit_version_beta"
         compile "com.slatekit:slatekit-orm:$slatekit_version_beta"
         compile "com.slatekit:slatekit-core:$slatekit_version"
-        compile "com.slatekit:slatekit-apis:$slatekit_version_beta"
+        compile "com.slatekit:slatekit-apis:$slatekit_version"
         compile "com.slatekit:slatekit-jobs:$slatekit_version"
-        compile "com.slatekit:slatekit-policy:$slatekit_version_beta"
+        compile "com.slatekit:slatekit-policy:$slatekit_version"
         compile "com.slatekit:slatekit-cache:$slatekit_version"
         compile "com.slatekit:slatekit-notifications:$slatekit_version"
     } else {
