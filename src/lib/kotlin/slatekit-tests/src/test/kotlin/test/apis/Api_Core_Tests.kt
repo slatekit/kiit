@@ -21,6 +21,7 @@ import slatekit.common.requests.CommonRequest
 import slatekit.common.DateTimes
 import slatekit.common.Source
 import slatekit.common.ext.toResponse
+import slatekit.results.Codes
 import slatekit.results.Failure
 import slatekit.results.Success
 import test.apis.samples.Sample_API_1_Core
@@ -54,7 +55,7 @@ class Api_Core_Tests : ApiTestsBase() {
                 apis = listOf(Api(Sample_API_1_Core(ctx), setup = SetupType.Annotated)),
                 user = null,
                 request = CommonRequest.path("$AREA.$NAME.privateMethod", Verbs.GET, mapOf(), mapOf(Pair("code", "1"), Pair("tag", "abc"))),
-                response = Failure("api route samples core privateMethod not found", msg = "Errored").toResponse(),
+                response = Failure("api route samples core privateMethod not found", Codes.NOT_FOUND).toResponse(),
                 checkFailMsg = true
         )
     }

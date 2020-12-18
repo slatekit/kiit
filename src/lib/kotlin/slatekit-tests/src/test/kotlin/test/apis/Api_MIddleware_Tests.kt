@@ -43,28 +43,6 @@ class Api_Middleware_Tests : ApiTestsBase() {
     }
 
 
-    @Test fun can_handle_filters_request_pass() {
-        val api = SampleMiddlewareApi()
-        val apis = ApiServer(ctx, apis = listOf(Api(api, "app", "SampleMiddleware")))
-        val r1 = runBlocking { apis.executeAttempt("app", "SampleMiddleware", SampleMiddlewareApi::hello.name, Verb.Post, mapOf(), mapOf()) }
-
-        Assert.assertTrue(r1.success)
-        Assert.assertTrue(r1.code == Codes.SUCCESS.code)
-        Assert.assertTrue(r1.getOrElse { ""} == "hello world")
-    }
-
-
-    @Test fun can_handle_filters_request_fail() {
-        val api = SampleMiddlewareApi()
-        val apis = ApiServer(ctx, apis = listOf(Api(api, "app", "SampleMiddleware")))
-        val r1 = runBlocking { apis.executeAttempt("app", "SampleMiddleware", SampleMiddlewareApi::hi.name, Verb.Post, mapOf(), mapOf()) }
-
-        Assert.assertTrue(!r1.success)
-        Assert.assertTrue(r1.code == Codes.ERRORED.code)
-        Assert.assertTrue(r1.desc == Codes.ERRORED.desc)
-    }
-
-
     @Test fun can_handle_unexpected_at_api_level() {
         val api = SampleMiddlewareApi()
         val apis = ApiServer(ctx, apis = listOf(Api(api, "app", "SampleMiddleware")))

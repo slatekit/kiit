@@ -5,6 +5,8 @@ import kotlin.reflect.full.primaryConstructor
 import slatekit.context.Context
 import slatekit.common.naming.Namer
 import slatekit.meta.Reflector
+import slatekit.results.Codes
+import slatekit.results.Err
 import slatekit.results.Outcome
 import slatekit.results.Success
 import slatekit.results.builders.Outcomes
@@ -99,14 +101,14 @@ data class Routes(
         if (area.isEmpty()) return Outcomes.invalid("area not supplied")
         if (name.isEmpty()) return Outcomes.invalid("api not supplied")
         if (action.isEmpty()) return Outcomes.invalid("action not supplied")
-        if (!contains(area, name, action)) return Outcomes.invalid("api route $area $name $action not found")
+        if (!contains(area, name, action)) return Outcomes.invalid(Err.of("api route $area $name $action not found"), status = Codes.NOT_FOUND)
 
         val api = api(area, name)!!
         val act = api.actions[action]!!
         val instance = instance(area, name, ctx)
         return instance?.let { inst ->
             Success(Target(api, act, inst))
-        } ?: Outcomes.invalid("api route $area $name $action not found")
+        } ?: Outcomes.errored("api route $area $name $action not found")
     }
 
     /**

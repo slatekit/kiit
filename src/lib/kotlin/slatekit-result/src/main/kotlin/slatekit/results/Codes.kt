@@ -58,6 +58,7 @@ object Codes {
     @JvmField val IGNORED         = Failed.Ignored   ("IGNORED"    , 400001, "Ignored")         // E.g. Ignored, not exactly an error
     @JvmField val BAD_REQUEST     = Failed.Invalid   ("BAD_REQUEST", 400002, "Bad Request")     // E.g. Invalid JSON
     @JvmField val INVALID         = Failed.Invalid   ("INVALID"    , 400003, "Invalid")         // E.g. Valid   JSON but invalid values
+    @JvmField val NOT_FOUND       = Failed.Invalid   ("NOT_FOUND"  , 400004, "Not found")       // E.g. Resource/End point not found
 
     // Security related
     @JvmField val DENIED          = Failed.Denied    ("DENIED"         ,400004, "Denied")          // Presumes a checked condition
@@ -68,7 +69,6 @@ object Codes {
     @JvmField val UNAUTHORIZED    = Failed.Denied    ("UNAUTHORIZED"   ,400009, "Unauthorized")    // Presumes a checked condition
 
     // Expected errors: 500000 + range
-    @JvmField val NOT_FOUND       = Failed.Errored   ("NOT_FOUND" ,500001, "Not found")       // E.g. Resource/End point not found
     @JvmField val MISSING         = Failed.Errored   ("MISSING"   ,500002, "Missing item")    // E.g. Domain model not found
     @JvmField val FORBIDDEN       = Failed.Errored   ("FORBIDDEN" ,500003, "Forbidden")
     @JvmField val CONFLICT        = Failed.Errored   ("CONFLICT"  ,500004, "Conflict")

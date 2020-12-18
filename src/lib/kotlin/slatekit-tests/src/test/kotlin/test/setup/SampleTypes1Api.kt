@@ -2,10 +2,7 @@ package test.setup
 
 import slatekit.apis.Api
 import slatekit.common.crypto.Encryptor
-import slatekit.results.Notice
-import slatekit.results.Codes
-import slatekit.results.Success
-import slatekit.results.Try
+import slatekit.results.*
 import slatekit.results.builders.Notices
 import slatekit.results.builders.Tries
 
@@ -37,7 +34,7 @@ class SampleTypes1Api {
      */
     fun getSuccess()              : Notice<Movie>     = Success(Movie.samples().first())
     fun getBadRequest()           : Notice<Movie>     = Notices.invalid("Check your inputs")
-    fun getNotFound()             : Notice<Movie>     = Notices.errored("Item not found", Codes.NOT_FOUND)
+    fun getNotFound()             : Notice<Movie>     = Notices.invalid(Err.of("Item not found"), Codes.NOT_FOUND)
     fun getUnauthorized()         : Notice<Movie>     = Notices.denied ("You can not edit this item")
     fun getConflict()             : Notice<Movie>     = Notices.errored("Item has already been changed", Codes.CONFLICT)
     fun getFailure()              : Notice<Movie>     = Notices.errored("Error finding item")
