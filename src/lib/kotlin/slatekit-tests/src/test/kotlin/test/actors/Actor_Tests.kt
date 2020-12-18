@@ -68,8 +68,14 @@ class Actor_Tests {
             val i = channel.poll()
             println(i)
             channel.close()
-            channel.send("2")
-
+            var ex:Exception? = null
+            try {
+                channel.send("2")
+            }
+            catch(cex:Exception) {
+               ex = cex
+            }
+            Assert.assertNotNull(ex)
         }
     }
 }
