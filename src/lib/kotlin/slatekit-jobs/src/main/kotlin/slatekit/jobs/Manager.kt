@@ -294,10 +294,6 @@ class Manager(val jctx: Context, val settings: Settings = Settings())
             }
         }
 
-        fun coordinator(): Channel<Message<Task>> {
-            return Channel(Channel.UNLIMITED)
-        }
-
         /**
          * Initialize with just a function that will handle the work
          * @sample
@@ -341,7 +337,7 @@ class Manager(val jctx: Context, val settings: Settings = Settings())
                             scope: CoroutineScope = Jobs.scope,
                             middleware: Middleware? = null,
                             settings: Settings = Settings()): Manager {
-            return Manager(Context(id, coordinator(), workers(id, ops), queue = queue, scope = scope, middleware = middleware), settings)
+            return Manager(Context(id, workers(id, ops), queue = queue, scope = scope, middleware = middleware), settings)
         }
 
         /**
@@ -354,7 +350,7 @@ class Manager(val jctx: Context, val settings: Settings = Settings())
                             scope: CoroutineScope = Jobs.scope,
                             middleware: Middleware? = null,
                             settings: Settings = Settings()): Manager {
-            return Manager(Context(id, coordinator(), listOf(worker), queue = queue, scope = scope, middleware = middleware), settings)
+            return Manager(Context(id, listOf(worker), queue = queue, scope = scope, middleware = middleware), settings)
         }
     }
 }
