@@ -1,4 +1,4 @@
-package slatekit.policy.middleware
+package slatekit.policy.hooks
 
 /**
  * Base trait for the 3 different types of middle ware ( hooks, filters, controls )
