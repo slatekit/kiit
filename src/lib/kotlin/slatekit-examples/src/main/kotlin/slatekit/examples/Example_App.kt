@@ -25,13 +25,10 @@ import slatekit.common.args.Args
 import slatekit.common.args.ArgsSchema
 import slatekit.common.conf.Config
 import slatekit.common.utils.B64Java8
-import slatekit.common.info.About
 import slatekit.common.crypto.Encryptor
-import slatekit.common.info.Build
-import slatekit.common.info.Sys
 import slatekit.common.log.LogsDefault
 import slatekit.common.envs.Envs
-import slatekit.common.info.Info
+import slatekit.common.info.*
 import slatekit.db.Db
 import slatekit.entities.Entities
 import slatekit.integration.common.AppEntContext
@@ -107,10 +104,10 @@ class SampleApp(ctx: Context) : App<Context>(ctx, AppOptions(
         println(ctx.info.about.name)
 
         // 7. Get the host computer info
-        println(ctx.info.system.host)
+        println(ctx.info.host)
 
         // 8. Get the java runtime info
-        println(ctx.info.system.lang)
+        println(ctx.info.lang)
 
         // 9. Get the encryptor to encrypt/decrypt
         println(ctx.enc?.let { enc -> enc.encrypt("hello world") })
@@ -165,29 +162,27 @@ class Example_App : Command("app") {
         // Load the config "env.conf" from resources
         val conf = Config.of("env.conf")
         val ctx = AppEntContext(
-                args = Args.empty(),
-                envs = Envs.defaults().select(conf.env().name),
-                conf = conf,
-                logs = LogsDefault,
-                ent = Entities({ con -> Db(con) }),
-                enc = Encryptor("wejklhviuxywehjk", "3214maslkdf03292", B64Java8),
-                info = Info(
-                        About(
-                                area = "slatekit",
-                                name = "sample-app",
-                                desc = "Sample to show the base application with manually built context",
-                                company = "slatekit",
-                                version = "0.9.1",
-                                contact = "kishore@abc.co",
-                                region = "",
-                                url = "",
-                                tags = "",
-                                examples = ""
-                        ),
-                        Build.empty,
-                        Sys.build()
+            args = Args.empty(),
+            envs = Envs.defaults().select(conf.env().name),
+            conf = conf,
+            logs = LogsDefault,
+            ent = Entities({ con -> Db(con) }),
+            enc = Encryptor("wejklhviuxywehjk", "3214maslkdf03292", B64Java8),
+            info = Info.of(
+                    About(
+                            area = "slatekit",
+                            name = "sample-app",
+                            desc = "Sample to show the base application with manually built context",
+                            company = "slatekit",
+                            version = "0.9.1",
+                            contact = "kishore@abc.co",
+                            region = "",
+                            url = "",
+                            tags = "",
+                            examples = ""
+                    )
                 )
-        )
+            )
         // Now run the app with context info with
         // the help of the AppRunner which will call the life-cycle events.
         runBlocking {

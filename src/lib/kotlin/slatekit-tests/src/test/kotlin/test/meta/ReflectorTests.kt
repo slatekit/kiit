@@ -23,9 +23,7 @@ import slatekit.common.data.DbConString
 import slatekit.common.data.Connections
 import slatekit.common.envs.Envs
 import slatekit.common.info.About
-import slatekit.common.info.Build
 import slatekit.common.info.Info
-import slatekit.common.info.Sys
 import slatekit.common.log.LogsDefault
 import slatekit.common.smartvalues.PhoneUS
 import slatekit.common.smartvalues.SmartValued
@@ -54,10 +52,8 @@ class ReflectorTests {
             conf  = Config(),
             logs = LogsDefault,
             ent  = Entities({ con -> Db(con) }),
-            info = Info(
-                    About("tests", "myapp", "sample app", "slatekit", "ny", "", "", "1.1.0", ""),
-                    Build.empty,
-                    Sys.build()
+            info = Info.of(
+                    About("tests", "myapp", "sample app", "slatekit", "ny", "", "", "1.1.0", "")
             ),
             dbs  = Connections.of(DbConString("com.mysql.jdbc.Driver", "jdbc:mysql://localhost/World_shard2", "root", "abcdefghi")),
             enc  = MyEncryptor

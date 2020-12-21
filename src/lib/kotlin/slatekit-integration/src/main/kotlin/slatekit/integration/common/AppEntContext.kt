@@ -110,11 +110,7 @@ data class AppEntContext(
                     envs = envs,
                     conf = conf,
                     logs = LogsDefault,
-                    info = Info(
-                            About(id, name, about, company),
-                            Build.empty,
-                            Sys.build()
-                    ),
+                    info = Info.of(About(id, name, about, company)),
                     ent = Entities({ con -> Db(con) }),
                     enc = Encryptor("wejklhviuxywehjk", "3214maslkdf03292", B64Java8),
                     dirs = Folders.userDir("slatekit", "samples", "sample1")

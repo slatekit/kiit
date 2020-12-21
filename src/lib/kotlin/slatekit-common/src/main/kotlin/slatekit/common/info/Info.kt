@@ -16,7 +16,8 @@ package slatekit.common.info
 data class Info(
     @JvmField val about: About,
     @JvmField val build: Build,
-    @JvmField val system: Sys
+    @JvmField val host : Host,
+    @JvmField val lang : Lang
 ) {
 
 
@@ -40,22 +41,26 @@ data class Info(
         callback("build.date       ", build.date)
 
         // Host
-        callback("host.name        ".padEnd(maxLen), system.host.name)
-        callback("host.ip          ".padEnd(maxLen), system.host.ip)
-        callback("host.origin      ".padEnd(maxLen), system.host.origin)
-        callback("host.version     ".padEnd(maxLen), system.host.version)
+        callback("host.name        ".padEnd(maxLen), host.name)
+        callback("host.ip          ".padEnd(maxLen), host.ip)
+        callback("host.origin      ".padEnd(maxLen), host.origin)
+        callback("host.version     ".padEnd(maxLen), host.version)
 
         // Lang
-        callback("lang.name        ".padEnd(maxLen), system.lang.name)
-        callback("lang.version     ".padEnd(maxLen), system.lang.version)
-        callback("lang.versionNum  ".padEnd(maxLen), system.lang.vendor)
-        callback("lang.java        ".padEnd(maxLen), system.lang.origin)
-        callback("lang.home        ".padEnd(maxLen), system.lang.home)
+        callback("lang.name        ".padEnd(maxLen), lang.name)
+        callback("lang.version     ".padEnd(maxLen), lang.version)
+        callback("lang.versionNum  ".padEnd(maxLen), lang.vendor)
+        callback("lang.java        ".padEnd(maxLen), lang.origin)
+        callback("lang.home        ".padEnd(maxLen), lang.home)
     }
 
 
     companion object {
         @JvmStatic
-        val none = Info(About.none, Build.empty, Sys.build())
+        val none = Info(About.none, Build.empty, Host.local(), Lang.kotlin())
+
+        fun of(about: About, build: Build? = Build.empty): Info {
+            return Info(about, build ?: Build.empty, Host.local(), Lang.kotlin())
+        }
     }
 }
