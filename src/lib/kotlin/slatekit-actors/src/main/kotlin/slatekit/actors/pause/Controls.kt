@@ -21,4 +21,6 @@ interface Controls {
     suspend fun control(action: Action) = control(action, null, Message.NONE)
     suspend fun control(action: Action, msg:String?) = control(action, msg, Message.NONE)
     suspend fun control(action: Action, msg:String?, reference:String) : Feedback
+    suspend fun force(action: Action) : Feedback = force(action, null, Message.NONE)
+    suspend fun force(action: Action, msg:String?, reference:String) : Feedback
 }

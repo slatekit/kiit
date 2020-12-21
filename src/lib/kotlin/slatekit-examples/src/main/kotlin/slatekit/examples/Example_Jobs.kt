@@ -14,6 +14,7 @@ package slatekit.examples
 
 //<doc:import_required>
 import kotlinx.coroutines.*
+import slatekit.actors.Message
 import slatekit.actors.Status
 import slatekit.jobs.WResult
 import slatekit.common.*
@@ -39,7 +40,7 @@ import java.util.concurrent.atomic.AtomicInteger
 //</doc:import_examples>
 
 
-class Example_Jobs : Command("utils"), CoroutineScope by MainScope() {
+class Example_Jobs : Command("utils") {
 
     override fun execute(request: CommandRequest): Try<Any> {
         //<doc:setup>
@@ -186,12 +187,12 @@ class Example_Jobs : Command("utils"), CoroutineScope by MainScope() {
                             Manager(id.copy(service = "job5"), listOf(::sendNewsLetterFromQueue), queue1),
                             Manager(id.copy(service = "job6"), NewsLetterWorker(), queue2),
 
-                            Manager(id.copy(service = "job7"), listOf(::sendNewsLetterWithPaging), policies = listOf(
-                                    Every(10, { req, res -> println("Paged : " + req.task.id + ":" + res.desc) }),
-                                    Limit(12, true, { req -> req.context.stats.counts }),
-                                    Ratio(.1, Codes.ERRORED, { req -> req.context.stats.counts })
-                                )
-                            )
+                            Manager(id.copy(service = "job7"), listOf(::sendNewsLetterWithPaging), middleware = object : Middleware {
+                                override suspend fun handle(mgr: Manager, source: String, message: Message<*>, next: suspend (Message<*>) -> Unit) {
+                                    // You custom code here.
+                                    next(message)
+                                }
+                            })
                     )
             )
 
@@ -253,9 +254,6 @@ class Example_Jobs : Command("utils"), CoroutineScope by MainScope() {
 
                     // Worker itself
                     ctx.worker
-
-                    // Worker middleware applied
-                    ctx.policies
 
                     // Worker statistics
                     // Calls: Simple counters to count calls to a worker
