@@ -29,11 +29,10 @@ data class AppContext(
         override val conf: Conf,
         override val logs: Logs,
         override val info: Info,
+        override val id: Identity = Context.identity(info, envs),
         override val enc: Encryptor? = null,
         override val dirs: Folders? = null
 ) : Context {
-
-    val id = SimpleIdentity(info.about.area, info.about.name, Agent.App, envs.name, version = info.build.version, desc = info.about.desc)
 
     companion object {
 
