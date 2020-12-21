@@ -1,5 +1,6 @@
 package slatekit.jobs.support
 
+import kotlinx.coroutines.launch
 import slatekit.actors.*
 import slatekit.actors.Action
 import slatekit.actors.Status
@@ -205,7 +206,9 @@ class Work(val job: Manager) {
 
 
     private suspend fun request(id:Identity) {
-        job.load(Workers.shortId(id))
+        job.jctx.scope.launch {
+            job.load(Workers.shortId(id))
+        }
     }
 
 
