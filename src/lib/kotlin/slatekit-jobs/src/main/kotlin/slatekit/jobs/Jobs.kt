@@ -57,6 +57,22 @@ class Jobs(val queues: List<Queue>,
         }
     }
 
+    override suspend fun force(action: Action, msg: String?, reference: String): Feedback {
+        val job = jobNames[reference]
+        val wrk = wrkInsts[reference]
+        return when {
+            job != null -> {
+                job.force(action, null, job.id)
+            }
+            wrk != null -> {
+                val j = wrk.first
+                val w = wrk.second
+                j.force(action, null, reference = w.id.id)
+            }
+            else -> Feedback(false, "Unable to find job or worker $reference")
+        }
+    }
+
     companion object {
 
         const val ALL = "ALL"
