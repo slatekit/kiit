@@ -33,21 +33,21 @@ class VersionApi(override val context: Context) : FileSupport {
 
 
     @Action(desc = "gets info about the host")
-    fun host(): Host = context.info.system.host
+    fun host(): Host = context.info.host
 
 
     @Action(desc = "get the version of the application")
-    fun app(): String = context.info.about.version
+    fun app(): String = context.info.build.version
 
 
     @Action(desc = "gets the version of java")
-    fun java(): String = context.info.system.lang.version
+    fun java(): String = context.info.lang.version
 
 
     @Action(desc = "gets the version of kotlin")
-    fun kotlin(): String = context.info.system.lang.vendor
+    fun kotlin(): String = context.info.lang.vendor
 
 
     @Action(desc = "gets the version of the system")
-    fun version(): String = context.info.system.host.version
+    fun version(): String = context.info.host.version
 }

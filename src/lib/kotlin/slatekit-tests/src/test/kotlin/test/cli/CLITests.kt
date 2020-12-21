@@ -31,7 +31,7 @@ class CLITests {
                 reader: ((Unit) -> String?)? = null,
                 writer: ((CliOutput) -> Unit)? = null) : CLI(
             CliSettings(),
-            Info.none.copy(about = Info.none.about.copy(version = version)),
+            Info.none.copy(build = Info.none.build.copy(version = version)),
             Folders.default,
             null,
             commands,reader,writer,

@@ -69,7 +69,7 @@ open class CliHelp(private val info: Info, private val io: IO<CliOutput, Unit>) 
     fun showVersion() {
         line()
         subTitle(info.about.name)
-        highlight(info.about.version)
+        highlight(info.build.version)
     }
 
     fun showAbout() {

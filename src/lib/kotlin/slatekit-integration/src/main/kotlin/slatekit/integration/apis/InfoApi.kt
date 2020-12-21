@@ -39,7 +39,7 @@ class InfoApi(val context: Context)  {
 
 
     @Action(desc = "gets info about the language")
-    fun lang(): Lang = context.info.system.lang
+    fun lang(): Lang = context.info.lang
 
 
     @Action(desc = "gets info about the folders")
