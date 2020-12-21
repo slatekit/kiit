@@ -29,7 +29,6 @@ data class Info(
         callback("app.area         ".padEnd(maxLen), about.area)
         callback("app.name         ".padEnd(maxLen), about.name)
         callback("app.desc         ".padEnd(maxLen), about.desc)
-        callback("app.version      ".padEnd(maxLen), about.version)
         callback("app.tags         ".padEnd(maxLen), about.tags)
         callback("app.region       ".padEnd(maxLen), about.region)
         callback("app.contact      ".padEnd(maxLen), about.contact)
