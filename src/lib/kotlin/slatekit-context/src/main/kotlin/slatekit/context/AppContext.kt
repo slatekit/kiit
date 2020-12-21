@@ -1,5 +1,8 @@
 package slatekit.context
 
+import slatekit.common.Agent
+import slatekit.common.Identity
+import slatekit.common.SimpleIdentity
 import slatekit.common.args.Args
 import slatekit.common.conf.Conf
 import slatekit.common.conf.Config
@@ -29,6 +32,8 @@ data class AppContext(
         override val enc: Encryptor? = null,
         override val dirs: Folders? = null
 ) : Context {
+
+    val id = SimpleIdentity(info.about.area, info.about.name, Agent.App, envs.name, version = info.build.version, desc = info.about.desc)
 
     companion object {
 

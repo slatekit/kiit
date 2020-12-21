@@ -40,7 +40,6 @@ class App(ctx: Context) : App<Context>(ctx, AppOptions(showWelcome = true)) {
                 desc = "Slate Kit Server",
                 company = "codehelix.co",
                 region = "NY",
-                version = "1.0.0",
                 url = "www.slatekit.com",
                 contact = "user@company.co",
                 tags = "sample, template, app",

@@ -174,7 +174,6 @@ class Example_App : Command("app") {
                             name = "sample-app",
                             desc = "Sample to show the base application with manually built context",
                             company = "slatekit",
-                            version = "0.9.1",
                             contact = "kishore@abc.co",
                             region = "",
                             url = "",

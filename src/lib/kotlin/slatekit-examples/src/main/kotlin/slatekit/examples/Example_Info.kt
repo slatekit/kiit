@@ -49,7 +49,6 @@ class Example_Info  : Command("info") {
       desc = "Sample app using Slate Kit",
       company = "slatekit",
       region = "usa.ny",
-      version = "1.0.1.3",
       tags = "api,slate,app",
       url = "http://products.myapp.com",
       contact = "kishore@codehelix.co",

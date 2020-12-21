@@ -59,7 +59,7 @@ open class ApiTestsBase {
                 logs = LogsDefault,
                 ent = Entities({ con -> Db(con) }, Connections(cfg.dbCon())),
                 info = Info.of(
-                        About("tests", "myapp", "sample app", "slatekit", "ny", "", "", "1.1.0", "")
+                        About("tests", "myapp", "sample app", "slatekit", "ny", "", "", "")
                 ),
                 dbs = of(DbConString("com.mysql.jdbc.Driver", "jdbc:mysql://localhost/World_shard2", "root", "abcdefghi")),
                 enc = MyEncryptor

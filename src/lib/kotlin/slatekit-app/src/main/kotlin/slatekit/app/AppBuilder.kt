@@ -40,7 +40,6 @@ object AppBuilder {
             desc = conf.getStringOrElse("app.desc", "app desc"),
             company = conf.getStringOrElse("app.company", "company"),
             region = conf.getStringOrElse("app.region", "ny"),
-            version = conf.getStringOrElse("app.version", "1.0.0"),
             url = conf.getStringOrElse("app.url", "https://www.slatekit.com"),
             contact = conf.getStringOrElse("app.contact", "kishore@abc.co"),
             tags = conf.getStringOrElse("app.tags", "slate,shell,cli"),
