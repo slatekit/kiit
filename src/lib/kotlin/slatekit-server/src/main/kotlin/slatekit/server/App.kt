@@ -1,17 +1,20 @@
 package slatekit.server
 
 
+import io.ktor.application.ApplicationCall
 import io.ktor.application.call
 import io.ktor.response.respondText
 import io.ktor.routing.get
 import io.ktor.routing.routing
 import io.ktor.server.engine.embeddedServer
 import io.ktor.server.netty.Netty
+import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.runBlocking
 import slatekit.actors.*
 import slatekit.common.Identity
 import slatekit.jobs.*
+import slatekit.jobs.Context
 import slatekit.jobs.support.Events
 import java.util.concurrent.atomic.AtomicLong
 
@@ -19,6 +22,8 @@ import java.util.concurrent.atomic.AtomicLong
 lateinit var id: Identity
 lateinit var wrk: Emailer
 lateinit var mgr: Manager
+lateinit var ctx: Context
+lateinit var chn: Channel<Message<Task>>
 lateinit var iss: Issuer<Task>
 
 
@@ -26,7 +31,10 @@ fun main(args:Array<String>) {
     runBlocking {
         id = Identity.job("account", "signup")
         wrk = Emailer(id)
-        mgr = Manager(id, wrk, middleware = Printer(), settings = Settings(false, false))
+        chn = Channel(Channel.UNLIMITED)
+        ctx = Context(id, listOf(wrk), channel = chn, middleware = Printer())
+        mgr = Manager(ctx, settings = Settings(false, false))
+        //mgr = Manager(id, wrk, middleware = Printer(), settings = Settings(false, false))
         iss = Issuer<Task>(mgr.channel, mgr)
         val job = mgr.work()
         serve()
@@ -76,7 +84,11 @@ class Emailer(id:Identity) : Worker<String>(id) {
     }
 }
 
-
+suspend fun process(name:String, call: ApplicationCall, op:suspend () -> Unit) {
+    println("GOT : $name")
+    op()
+    call.respondText(name)
+}
 /**
  * Server to host the jobs
  */
@@ -87,24 +99,29 @@ fun serve() {
                 call.respondText("Hello, Slate Kit Actors and Jobs!")
             }
             get ( "/job/start" ) {
-                mgr.start()
-                call.respondText("job.start")
+                process("job.start", call) {
+                    mgr.start()
+                }
             }
             get ( "/job/stop" ) {
-                mgr.stop()
-                call.respondText("job.stop")
+                process("job.stop", call) {
+                    mgr.stop()
+                }
             }
             get ( "/job/pause" ) {
-                mgr.pause()
-                call.respondText("job.pause")
+                process("job.pause", call) {
+                    mgr.pause()
+                }
             }
             get ( "/job/resume" ) {
-                mgr.resume()
-                call.respondText("job.resume")
+                process("job.resume", call) {
+                    mgr.resume()
+                }
             }
             get ( "/job/kill" ) {
-                mgr.kill()
-                call.respondText("job.kill")
+                process("job.kill", call) {
+                    mgr.kill()
+                }
             }
             get ( "/job/value" ) {
                 call.respondText("job.value = ${wrk.count}")
