@@ -6,6 +6,7 @@ import slatekit.common.args.ArgsSchema
 import slatekit.common.console.ConsoleWriter
 import slatekit.common.envs.Envs
 import slatekit.common.info.About
+import slatekit.common.info.Info
 import slatekit.results.*
 import slatekit.results.builders.Tries
 
@@ -45,7 +46,8 @@ import slatekit.results.builders.Tries
  *
  *  ==================================================
  */
-class AppHelp(val about: About, val args: ArgsSchema, val envs: Envs = Envs.defaults()) {
+class AppHelp(val info: Info, val args: ArgsSchema, val envs: Envs = Envs.defaults()) {
+    private val about = info.about
     private val writer = ConsoleWriter()
 
     companion object {
@@ -55,7 +57,7 @@ class AppHelp(val about: About, val args: ArgsSchema, val envs: Envs = Envs.defa
                 is Failure -> Success(args)
                 is Success -> {
                     // Delegate help to the AppMeta component for (help | version | about )
-                    val appMeta = AppHelp(about, schema ?: AppBuilder.schema(), envs)
+                    val appMeta = AppHelp(Info.of(about), schema ?: AppBuilder.schema(), envs)
                     appMeta.handle(assist)
 
                     // Prevent futher processing by return failure
@@ -92,7 +94,7 @@ class AppHelp(val about: About, val args: ArgsSchema, val envs: Envs = Envs.defa
             writer.text("area         " + about.area)
             writer.text("name         " + about.name)
             writer.text("desc         " + about.desc)
-            writer.text("version      " + about.version)
+            writer.text("version      " + info.build.version)
             options()
             usage()
             envs()
@@ -105,7 +107,6 @@ class AppHelp(val about: About, val args: ArgsSchema, val envs: Envs = Envs.defa
             writer.text("area         " + about.area)
             writer.text("name         " + about.name)
             writer.text("desc         " + about.desc)
-            writer.text("version      " + about.version)
             writer.text("tags         " + about.tags)
             writer.text("region       " + about.region)
             writer.text("contact      " + about.contact)
@@ -136,7 +137,7 @@ class AppHelp(val about: About, val args: ArgsSchema, val envs: Envs = Envs.defa
 
     private fun version() {
         wrap {
-            println("version : " + about.version)
+            println("version : " + info.build.version)
         }
     }
 
