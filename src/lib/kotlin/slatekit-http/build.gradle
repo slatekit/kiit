@@ -25,7 +25,7 @@ apply plugin: 'kotlin'
 def slatekitComponentId = 'http'
 def slatekitComponentName = 'Http'
 def slatekitComponentDesc = 'SlateKit Http: An Http RPC client library'
-def slatekitComponentVersion = ext.slatekit_version_beta
+def slatekitComponentVersion = ext.slatekit_version
 
 
 // ==================================================================
