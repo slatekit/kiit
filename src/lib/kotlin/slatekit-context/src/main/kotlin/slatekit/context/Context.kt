@@ -9,7 +9,7 @@ import slatekit.common.info.Info
 import slatekit.common.log.Logs
 
 /**
- * Represents context of a running application and contains information used for most components
+ * Represents context of a running application and contains identity and dependencies used for most components
  * args  : command line arguments
  * envs  : environment selection ( dev, qa, staging, prod )
  * conf  : config settings
