@@ -90,7 +90,6 @@ dependencies {
         compile project(":slatekit-result")
         compile project(":slatekit-actors")
         compile project(":slatekit-common")
-        compile project(":slatekit-core")
         compile project(":slatekit-tracking")
     // } //</slatekit_local>
 }

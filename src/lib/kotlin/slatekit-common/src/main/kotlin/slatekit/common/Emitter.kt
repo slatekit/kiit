@@ -1,4 +1,4 @@
-package slatekit.core.common
+package slatekit.common
 
 import java.util.concurrent.atomic.AtomicLong
 
