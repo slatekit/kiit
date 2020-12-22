@@ -257,32 +257,32 @@ class Example_Jobs : Command("utils") {
 
                     // Worker statistics
                     // Calls: Simple counters to count calls to a worker
-                    println("calls.totalRuns: " + ctx.stats.calls.totalRuns())
-                    println("calls.totalPassed: " + ctx.stats.calls.totalPassed())
-                    println("calls.totalFailed: " + ctx.stats.calls.totalFailed())
-
-                    // Counts: Counts the result success/failure categories
-                    // See slatekit.results.Status.kt for more info
-                    println("counts.totalProcessed : " + ctx.stats.counts.processed.get())
-                    println("counts.totalSucceeded : " + ctx.stats.counts.succeeded.get())
-                    println("counts.totalDenied    : " + ctx.stats.counts.denied.get())
-                    println("counts.totalInvalid   : " + ctx.stats.counts.invalid.get())
-                    println("counts.totalIgnored   : " + ctx.stats.counts.ignored.get())
-                    println("counts.totalErrored   : " + ctx.stats.counts.errored.get())
-                    println("counts.totalUnexpected: " + ctx.stats.counts.unknown.get())
-
-                    // Lasts: Stores the last request/result of an call to work
-                    println("lasts.totalProcessed : " + ctx.stats.lasts?.lastProcessed())
-                    println("lasts.totalSucceeded : " + ctx.stats.lasts?.lastSuccess())
-                    println("lasts.totalDenied    : " + ctx.stats.lasts?.lastDenied())
-                    println("lasts.totalInvalid   : " + ctx.stats.lasts?.lastInvalid())
-                    println("lasts.totalIgnored   : " + ctx.stats.lasts?.lastIgnored())
-                    println("lasts.totalErrored   : " + ctx.stats.lasts?.lastErrored())
-                    println("lasts.totalUnexpected: " + ctx.stats.lasts?.lastUnexpected())
-
-                    // You can also hook up loggers and events
-                    ctx.stats.logger
-                    ctx.stats.events
+//                    println("calls.totalRuns: " + ctx.stats.calls.totalRuns())
+//                    println("calls.totalPassed: " + ctx.stats.calls.totalPassed())
+//                    println("calls.totalFailed: " + ctx.stats.calls.totalFailed())
+//
+//                    // Counts: Counts the result success/failure categories
+//                    // See slatekit.results.Status.kt for more info
+//                    println("counts.totalProcessed : " + ctx.stats.counts.processed.get())
+//                    println("counts.totalSucceeded : " + ctx.stats.counts.succeeded.get())
+//                    println("counts.totalDenied    : " + ctx.stats.counts.denied.get())
+//                    println("counts.totalInvalid   : " + ctx.stats.counts.invalid.get())
+//                    println("counts.totalIgnored   : " + ctx.stats.counts.ignored.get())
+//                    println("counts.totalErrored   : " + ctx.stats.counts.errored.get())
+//                    println("counts.totalUnexpected: " + ctx.stats.counts.unknown.get())
+//
+//                    // Lasts: Stores the last request/result of an call to work
+//                    println("lasts.totalProcessed : " + ctx.stats.lasts?.lastProcessed())
+//                    println("lasts.totalSucceeded : " + ctx.stats.lasts?.lastSuccess())
+//                    println("lasts.totalDenied    : " + ctx.stats.lasts?.lastDenied())
+//                    println("lasts.totalInvalid   : " + ctx.stats.lasts?.lastInvalid())
+//                    println("lasts.totalIgnored   : " + ctx.stats.lasts?.lastIgnored())
+//                    println("lasts.totalErrored   : " + ctx.stats.lasts?.lastErrored())
+//                    println("lasts.totalUnexpected: " + ctx.stats.lasts?.lastUnexpected())
+//
+//                    // You can also hook up loggers and events
+//                    ctx.stats.logger
+//                    ctx.stats.events
 
                     println(id.id)
                 }

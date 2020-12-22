@@ -2,8 +2,6 @@ package slatekit.jobs
 
 import slatekit.common.Identity
 import slatekit.actors.Status
-import slatekit.tracking.Recorder
-import slatekit.results.Err
 
 /**
  * Represents a request for work by a worker
@@ -17,7 +15,6 @@ data class WorkRequest(val context: WorkerContext, val task: Task)
  * Represents the context of a Worker containing its statistics, policies, and other components
  * @param id : Identity of its parent ( Job Identity )
  * @param worker : The Worker component itself
- * @param stats : The metrics recorder containing Calls, Counts, Lasts, Logger, etc
  * @param policies : List of policies ( middleware ) associated with this Worker
  * @param task : Empty task, this is used for Self-Managed jobs where there is no Task/Queue.
  *                   This allows passing in a Task which has the job name properly set.
@@ -26,7 +23,6 @@ data class WorkRequest(val context: WorkerContext, val task: Task)
 data class WorkerContext(
     val id: Identity,
     val worker: Worker<*>,
-    val stats: Recorder<Task, WResult, Err>,
     val task: Task = Task.empty.copy(job = id.id)
 )
 
@@ -44,7 +40,7 @@ data class WorkerContext(
  */
 class Workers(val ctx: Context) {
     val events = ctx.notifier.wrkEvents
-    val contexts = ctx.workers.map { WorkerContext(it.id, it, Recorder.of(it.id)) }
+    val contexts = ctx.workers.map { WorkerContext(it.id, it) }
     private val lookup: Map<String, WorkerContext> = contexts.map { shortId(it.id) to it }.toMap()
 
     /**
