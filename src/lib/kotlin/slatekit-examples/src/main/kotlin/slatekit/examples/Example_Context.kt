@@ -80,7 +80,7 @@ class Example_Context : Command("cmd") {
                 envs = Envs.defaults(),
                 conf = Config(),
                 logs = LogsDefault,
-                info = Info(
+                info = Info.of(
                         About(
                                 area = "department1",
                                 name = "sample-app-1",
@@ -92,9 +92,7 @@ class Example_Context : Command("cmd") {
                                 version = "1.0.1",
                                 tags = "sample app slatekit",
                                 examples = ""
-                        ),
-                        Build.empty,
-                        Sys.build()
+                        )
                 )
         )
 
@@ -184,7 +182,7 @@ class Example_Context : Command("cmd") {
         println("logs: " + ctx.logs)
         println("dirs: " + ctx.dirs)
         println("app : " + ctx.info.about)
-        println("host: " + ctx.info.system.host)
+        println("host: " + ctx.info.host)
     }
 
 }

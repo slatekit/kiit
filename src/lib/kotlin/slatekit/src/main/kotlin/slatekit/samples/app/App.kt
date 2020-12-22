@@ -41,7 +41,6 @@ class App(ctx: Context) : App<Context>(ctx, AppOptions(showWelcome = true)) {
                 desc = "myapp.desc",
                 company = "myapp.company",
                 region = "",
-                version = "1.0.0",
                 url = "myapp.url",
                 contact = "",
                 tags = "app",

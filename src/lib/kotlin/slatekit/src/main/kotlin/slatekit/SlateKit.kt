@@ -41,7 +41,6 @@ class SlateKit(ctx: Context) : App<Context>(ctx, AppOptions(showWelcome = true))
                 desc = "Slate Kit CLI for creating projects and access to other tools",
                 company = "codehelix.co",
                 region = "NY",
-                version = "1.0.0",
                 url = "www.slatekit.life",
                 contact = "user@company.co",
                 tags = "sample, template, app",

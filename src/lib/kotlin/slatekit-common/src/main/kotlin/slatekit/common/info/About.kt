@@ -53,9 +53,6 @@ data class About(
     val contact: String = "",
 
     @JvmField
-    val version: String = "",
-
-    @JvmField
     val tags: String = "",
 
     @JvmField
@@ -74,7 +71,6 @@ data class About(
         callback("region  ", region)
         callback("url     ", url)
         callback("contact ", contact)
-        callback("version ", version)
         callback("tags    ", tags)
         callback("examples", examples)
     }
@@ -87,7 +83,6 @@ data class About(
                 "region   : " + region + newline +
                 "url      : " + url + newline +
                 "contact  : " + contact + newline +
-                "version  : " + version + newline +
                 "tags     : " + tags + newline +
                 "examples : " + examples + newline
         return text
@@ -108,7 +103,6 @@ data class About(
                 region = "",
                 url = "",
                 contact = "",
-                version = "",
                 tags = "",
                 examples = ""
                         )
@@ -123,7 +117,7 @@ data class About(
          * @return
          */
         @JvmStatic
-        fun simple(area:String, name: String, desc: String, company: String, version: String): About =
-                About(area, name, desc, company, "", "", "", version, "", "")
+        fun simple(area:String, name: String, desc: String, company: String): About =
+                About(area, name, desc, company, "", "", "", "", "")
     }
 }

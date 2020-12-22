@@ -1,15 +1,10 @@
 package slatekit.jobs
 
 import kotlinx.coroutines.*
-import kotlinx.coroutines.channels.Channel
 import slatekit.actors.*
-import slatekit.common.*
-import slatekit.common.ext.toStringMySql
-import slatekit.common.log.LogLevel
-import slatekit.jobs.support.Events
+import slatekit.common.Identity
 import slatekit.jobs.support.Rules
 import slatekit.jobs.support.Work
-import slatekit.policy.Policy
 
 /**
  * A Job is the top level model in this Background Job/Task Queue system. A job is composed of the following:

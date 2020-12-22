@@ -13,6 +13,7 @@
 
 package slatekit.integration.common
 
+import slatekit.common.Identity
 import slatekit.common.args.Args
 import slatekit.common.conf.Config
 import slatekit.common.conf.Conf
@@ -53,6 +54,7 @@ data class AppEntContext(
         override val conf: Conf,
         override val logs: Logs,
         override val info: Info,
+        override val id: Identity = Context.identity(info, envs),
         val ent: Entities,
         val dbs: Connections? = null,
         override val enc: Encryptor? = null,
@@ -63,7 +65,7 @@ data class AppEntContext(
      * the same context without the Entities
      */
     fun toAppContext(): AppContext {
-        return AppContext(args, envs, conf, logs, info, enc, dirs)
+        return AppContext(args, envs, conf, logs, info, Context.identity(info, envs), enc, dirs)
     }
 
     /**
@@ -71,7 +73,7 @@ data class AppEntContext(
      */
     fun withBuild(build: Build):AppEntContext {
         val info = this.info
-        val newCtx = this.copy( info = info.copy(build = build, about = info.about.copy(version = build.version)))
+        val newCtx = this.copy( info = info.copy(build = build))
         return newCtx
     }
 
@@ -83,8 +85,9 @@ data class AppEntContext(
          */
         fun fromContext(ctx: Context, namer: Namer? = null): AppEntContext {
             val dbCons = Connections.from(ctx.conf)
+            val id = Context.identity(ctx.info, ctx.envs)
             return AppEntContext(
-                    ctx.args, ctx.envs, ctx.conf, ctx.logs, ctx.info, Entities({ con -> Db(con) }, dbCons, ctx.enc, namer = namer), dbCons, ctx.enc, ctx.dirs
+                    ctx.args, ctx.envs, ctx.conf, ctx.logs, ctx.info, id, Entities({ con -> Db(con) }, dbCons, ctx.enc, namer = namer), dbCons, ctx.enc, ctx.dirs
             )
 
         }
@@ -95,8 +98,9 @@ data class AppEntContext(
          */
         fun fromAppContext(ctx: Context, namer: Namer? = null): AppEntContext {
             val dbCons = Connections.from(ctx.conf)
+            val id = Context.identity(ctx.info, ctx.envs)
             return AppEntContext(
-                    ctx.args, ctx.envs, ctx.conf, ctx.logs, ctx.info, Entities({ con -> Db(con) }, dbCons, ctx.enc, namer = namer), dbCons, ctx.enc, ctx.dirs
+                    ctx.args, ctx.envs, ctx.conf, ctx.logs, ctx.info, id, Entities({ con -> Db(con) }, dbCons, ctx.enc, namer = namer), dbCons, ctx.enc, ctx.dirs
             )
 
         }
@@ -110,11 +114,7 @@ data class AppEntContext(
                     envs = envs,
                     conf = conf,
                     logs = LogsDefault,
-                    info = Info(
-                            About(id, name, about, company),
-                            Build.empty,
-                            Sys.build()
-                    ),
+                    info = Info.of(About(id, name, about, company)),
                     ent = Entities({ con -> Db(con) }),
                     enc = Encryptor("wejklhviuxywehjk", "3214maslkdf03292", B64Java8),
                     dirs = Folders.userDir("slatekit", "samples", "sample1")

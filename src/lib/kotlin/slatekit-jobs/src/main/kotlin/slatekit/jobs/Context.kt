@@ -6,9 +6,9 @@ import slatekit.actors.Message
 import slatekit.common.Identity
 import slatekit.common.log.Logger
 import slatekit.common.log.LoggerConsole
-import slatekit.core.common.Backoffs
-import slatekit.core.common.DefaultScheduler
-import slatekit.core.common.Scheduler
+import slatekit.jobs.support.DefaultScheduler
+import slatekit.jobs.support.Backoffs
+import slatekit.jobs.support.Scheduler
 import slatekit.jobs.support.Notifier
 
 /**
@@ -23,6 +23,7 @@ import slatekit.jobs.support.Notifier
  */
 data class Context(val id: Identity,
                    val workers: List<Worker<*>>,
+                   val mode   : Int = Channel.UNLIMITED,
                    val channel: Channel<Message<Task>> = Channel(Channel.UNLIMITED),
                    val logger : Logger = LoggerConsole(),
                    val queue  : Queue? = null,

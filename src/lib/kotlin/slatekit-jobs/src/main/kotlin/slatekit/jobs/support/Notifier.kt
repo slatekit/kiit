@@ -1,6 +1,6 @@
 package slatekit.jobs.support
 
-import slatekit.core.common.Emitter
+import slatekit.common.Emitter
 import slatekit.jobs.Event
 import slatekit.jobs.Manager
 import slatekit.jobs.Worker

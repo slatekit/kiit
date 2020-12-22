@@ -1,5 +1,8 @@
 package slatekit.context
 
+import slatekit.common.Agent
+import slatekit.common.Identity
+import slatekit.common.SimpleIdentity
 import slatekit.common.args.Args
 import slatekit.common.conf.Conf
 import slatekit.common.conf.Config
@@ -26,6 +29,7 @@ data class AppContext(
         override val conf: Conf,
         override val logs: Logs,
         override val info: Info,
+        override val id: Identity = Context.identity(info, envs),
         override val enc: Encryptor? = null,
         override val dirs: Folders? = null
 ) : Context {

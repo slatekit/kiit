@@ -31,8 +31,16 @@ abstract class Pausable<T>(ctx:Context, channel: Channel<Message<T>>, private va
     /**
      * Forces an immediate change to running status
      */
-    suspend fun force(action: Action, msg: String?, reference: String): Status {
-        return state.handle(action)
+    override suspend fun force(action: Action, msg: String?, reference: String): Feedback {
+        val oldStatus = status()
+        val newStatus = state.handle(action)
+        return when(oldStatus != newStatus){
+            true -> {
+                onChanged(action, oldStatus, newStatus)
+                Feedback(true, "")
+            }
+            false -> Feedback(false, "Unable to force change, current status = : ${status().name}")
+        }
     }
 
 
