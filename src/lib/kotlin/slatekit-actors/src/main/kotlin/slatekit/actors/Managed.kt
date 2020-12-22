@@ -5,7 +5,7 @@ import kotlinx.coroutines.channels.Channel
 /**
  * Base class for an Actor that can be started, stopped, paused, and resumed
  */
-abstract class Managed<T>(ctx: Context, channel: Channel<Message<T>>, enableStrictMode:Boolean = true)
+abstract class Managed<T>(ctx: Context, channel: Channel<Message<T>>, enableStrictMode: Boolean = true)
     : Pausable<T>(ctx, channel, enableStrictMode), Actor<T> {
 
 
@@ -13,8 +13,8 @@ abstract class Managed<T>(ctx: Context, channel: Channel<Message<T>>, enableStri
      * Sends a content message using the payload supplied
      * @param item : The payload to process
      */
-    override suspend fun send(item: T) {
-        allow {
+    override suspend fun send(item: T): Receipt {
+        return allow {
             channel.send(Content<T>(nextId(), data = item, reference = Message.NONE))
         }
     }
@@ -25,8 +25,8 @@ abstract class Managed<T>(ctx: Context, channel: Channel<Message<T>>, enableStri
      * @param item  : The payload to process
      * @param reference: Target name which can be anything for implementing class
      */
-    override suspend fun send(item: T, reference: String) {
-        allow {
+    override suspend fun send(item: T, reference: String): Receipt {
+        return allow {
             channel.send(Content<T>(nextId(), data = item, reference = reference))
         }
     }

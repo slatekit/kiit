@@ -13,8 +13,9 @@ abstract class Basic<T>(ctx: Context, channel: Channel<Message<T>>)
      * Sends a payload to the actor
      * @param item  : Data / payload for message
      */
-    override suspend fun send(item: T) {
+    override suspend fun send(item: T): Receipt {
         channel.send(Content(nextId(), item, reference = Message.NONE))
+        return Receipt.Accepted
     }
 
 
@@ -23,8 +24,9 @@ abstract class Basic<T>(ctx: Context, channel: Channel<Message<T>>)
      * @param item  : Data / payload for message
      * @param reference: Optional, used as classifier to direct message to specific handler if enabled.
      */
-    override suspend fun send(item:T, reference:String) {
+    override suspend fun send(item: T, reference: String): Receipt {
         channel.send(Content(nextId(), item, reference = reference))
+        return Receipt.Accepted
     }
 
 

@@ -12,8 +12,8 @@ abstract class Loader<T>(ctx: Context, channel: Channel<Message<T>>, enableStric
     /**
      * Request to load a payload internally into the channel
      */
-    suspend fun load() {
-        allow {
+    suspend fun load():Receipt {
+        return allow {
             channel.send(Request(nextId(), reference = Message.NONE))
         }
     }
@@ -23,8 +23,8 @@ abstract class Loader<T>(ctx: Context, channel: Channel<Message<T>>, enableStric
      * Request to load a payload internally into the channel, pay load is associated with the reference
      * @param reference  : Value to associate with the payload
      */
-    suspend fun load(reference: String) {
-        allow {
+    suspend fun load(reference: String):Receipt {
+        return allow {
             channel.send(Request(nextId(), reference = reference))
         }
     }

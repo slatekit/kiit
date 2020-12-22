@@ -6,11 +6,12 @@ import slatekit.actors.pause.*
 /**
  * Base class to support Actors that can be started, stopped, paused, and resumed
  */
-abstract class Pausable<T>(ctx:Context, channel: Channel<Message<T>>, private val enableStrictMode: Boolean )
+abstract class Pausable<T>(ctx: Context, channel: Channel<Message<T>>, private val enableStrictMode: Boolean)
     : Messageable<T>(ctx, channel), Controls, Check {
 
     protected val state: State = State { action, oldState, newState
-        -> this.onChanged(action, oldState, newState)
+        ->
+        this.onChanged(action, oldState, newState)
     }
 
     /**
@@ -34,7 +35,7 @@ abstract class Pausable<T>(ctx:Context, channel: Channel<Message<T>>, private va
     override suspend fun force(action: Action, msg: String?, reference: String): Feedback {
         val oldStatus = status()
         val newStatus = state.handle(action)
-        return when(oldStatus != newStatus){
+        return when (oldStatus != newStatus) {
             true -> {
                 onChanged(action, oldStatus, newStatus)
                 Feedback(true, "")
@@ -47,13 +48,18 @@ abstract class Pausable<T>(ctx:Context, channel: Channel<Message<T>>, private va
     /**
      * Allows the operation to proceed only if this is started or running
      */
-    protected suspend fun allow(op:suspend () -> Unit) {
-        when(enableStrictMode) {
-            false -> op()
-            true  -> when (status()) {
-                is Status.Started -> op()
-                is Status.Running -> op()
-                else -> { }
+    protected suspend fun allow(op: suspend () -> Unit): Receipt {
+        return when (enableStrictMode) {
+            false -> {
+                op()
+                Receipt.Accepted
+            }
+            true -> when (status()) {
+                is Status.Started -> { op(); Receipt.Accepted }
+                is Status.Running -> { op(); Receipt.Accepted }
+                else -> {
+                    Receipt.Rejected
+                }
             }
         }
     }

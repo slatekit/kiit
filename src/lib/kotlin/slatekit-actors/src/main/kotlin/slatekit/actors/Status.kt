@@ -14,3 +14,5 @@ sealed class Status(val name:String, val value:Int) {
     object Failed    : Status("Failed"   , 7)
     object Killed    : Status("Killed"   , 8)
 }
+
+

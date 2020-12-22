@@ -23,7 +23,7 @@ interface Actor<T> : Workable {
      * Sends a payload to the actor
      * @param item  : Data / payload for message
      */
-    suspend fun send(item: T)
+    suspend fun send(item: T): Receipt
 
 
     /**
@@ -31,5 +31,5 @@ interface Actor<T> : Workable {
      * @param item  : Data / payload for message
      * @param reference: Optional value to associate with the item
      */
-    suspend fun send(item:T, reference:String)
+    suspend fun send(item:T, reference:String): Receipt
 }
