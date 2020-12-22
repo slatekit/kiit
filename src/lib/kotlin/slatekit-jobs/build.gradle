@@ -85,7 +85,6 @@ dependencies {
         compile "com.slatekit:slatekit-common:$slatekit_version"
         compile "com.slatekit:slatekit-core:$slatekit_version"
         compile "com.slatekit:slatekit-tracking:$slatekit_version"
-        compile "com.slatekit:slatekit-policy:$slatekit_version"
     } else {
         // */
         compile project(":slatekit-result")
@@ -93,7 +92,6 @@ dependencies {
         compile project(":slatekit-common")
         compile project(":slatekit-core")
         compile project(":slatekit-tracking")
-        compile project(":slatekit-policy")
     // } //</slatekit_local>
 }
 

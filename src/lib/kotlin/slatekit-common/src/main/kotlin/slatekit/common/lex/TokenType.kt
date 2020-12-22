@@ -14,16 +14,15 @@
 package slatekit.common.lex
 
 object TokenType {
-
-    val None = 0
-    val Ident = 1
-    val String = 2
-    val Number = 3
-    val Boolean = 4
-    val NonAlphaNum = 5
-    val NewLine = 6
-    val End = 7
-    val ParamRef = 8
-    val Interpolated = 9
-    val Comment = 10
+    const val None = 0
+    const val Ident = 1
+    const val String = 2
+    const val Number = 3
+    const val Boolean = 4
+    const val NonAlphaNum = 5
+    const val NewLine = 6
+    const val End = 7
+    const val ParamRef = 8
+    const val Interpolated = 9
+    const val Comment = 10
 }
