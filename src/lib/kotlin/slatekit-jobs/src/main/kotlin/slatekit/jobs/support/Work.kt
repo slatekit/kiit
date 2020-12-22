@@ -1,10 +1,12 @@
 package slatekit.jobs.support
 
+import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.launch
 import slatekit.actors.*
 import slatekit.actors.Action
 import slatekit.actors.Status
 import slatekit.common.Identity
+import slatekit.common.NOTE
 import slatekit.jobs.*
 import slatekit.results.Failure
 import slatekit.results.Success
@@ -206,8 +208,10 @@ class Work(val job: Manager) {
 
 
     private suspend fun request(id:Identity) {
-        job.jctx.scope.launch {
-            job.load(Workers.shortId(id))
+        NOTE.REFACTOR("jobs", "Check if this can always be launched, it just seems tough to test")
+        when(job.jctx.mode) {
+            Channel.UNLIMITED -> job.load(Workers.shortId(id))
+            else -> job.jctx.scope.launch { job.load(Workers.shortId(id)) }
         }
     }
 

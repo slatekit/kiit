@@ -23,6 +23,7 @@ import slatekit.jobs.support.Notifier
  */
 data class Context(val id: Identity,
                    val workers: List<Worker<*>>,
+                   val mode   : Int = Channel.UNLIMITED,
                    val channel: Channel<Message<Task>> = Channel(Channel.UNLIMITED),
                    val logger : Logger = LoggerConsole(),
                    val queue  : Queue? = null,
