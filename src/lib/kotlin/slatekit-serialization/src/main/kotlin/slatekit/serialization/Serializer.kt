@@ -11,7 +11,7 @@
  * </slate_header>
  */
 
-package slatekit.common.serialization
+package slatekit.serialization
 
 import slatekit.results.Result
 import slatekit.results.getOrElse
@@ -40,8 +40,8 @@ import java.util.*
  *
  */
 open class Serializer(
-    val objectSerializer: ((Serializer, Any, Int) -> Unit)? = null,
-    val isoDates: Boolean = false
+        val objectSerializer: ((Serializer, Any, Int) -> Unit)? = null,
+        val isoDates: Boolean = false
 ) {
 
     open val standardizeWidth = false

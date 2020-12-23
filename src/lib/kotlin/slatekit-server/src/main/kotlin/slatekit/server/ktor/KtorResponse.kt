@@ -23,7 +23,7 @@ import slatekit.apis.core.Errs
 import slatekit.common.types.Content
 import slatekit.common.types.Doc
 import slatekit.common.requests.Response
-import slatekit.meta.Serialization
+import slatekit.serialization.Serialization
 import slatekit.results.*
 import slatekit.server.common.ResponseHandler
 

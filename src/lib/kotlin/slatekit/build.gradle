@@ -105,6 +105,7 @@ dependencies {
         compile "com.slatekit:slatekit-integration:$slatekit_version_beta"
         compile "com.slatekit:slatekit-server:$slatekit_version_beta"
         compile "com.slatekit:slatekit-providers:$slatekit_version"
+        compile "com.slatekit:slatekit-serialization:$slatekit_version"
         compile "com.slatekit:slatekit-jobs:$slatekit_version"
     } else {
         // */
@@ -129,6 +130,7 @@ dependencies {
         implementation project(":slatekit-integration")
         implementation project(":slatekit-server")
         implementation project(":slatekit-providers")
+        implementation project(":slatekit-serialization")
         implementation project(":slatekit-jobs")
         implementation project(":slatekit-generator")
         //compile project(":slatekit-support")

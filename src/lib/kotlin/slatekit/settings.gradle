@@ -69,6 +69,9 @@ project(':slatekit-jobs').projectDir=new File('../slatekit-jobs')
 include ':slatekit-providers'
 project(':slatekit-providers').projectDir=new File('../slatekit-providers')
 
+include ':slatekit-serialization'
+project(':slatekit-serialization').projectDir=new File('../slatekit-serialization')
+
 include ':slatekit-tracking'
 project(':slatekit-tracking').projectDir=new File('../slatekit-tracking')
 

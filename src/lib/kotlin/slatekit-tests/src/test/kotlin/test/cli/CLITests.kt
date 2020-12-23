@@ -22,6 +22,7 @@ import slatekit.common.types.Content
 import slatekit.common.info.Folders
 import slatekit.common.info.Info
 import slatekit.results.*
+import slatekit.serialization.Serialization
 
 
 class CLITests {
@@ -35,7 +36,7 @@ class CLITests {
             Folders.default,
             null,
             commands,reader,writer,
-            { item, type -> Content.csv(slatekit.meta.Serialization.csv().serialize(item) )}
+            { item, type -> Content.csv(Serialization.csv().serialize(item) )}
             ) {
 
         var testInit = false

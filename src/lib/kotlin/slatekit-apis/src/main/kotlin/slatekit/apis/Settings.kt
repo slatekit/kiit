@@ -20,7 +20,7 @@ import slatekit.common.Source
 import slatekit.common.crypto.Encryptor
 import slatekit.common.naming.Namer
 import slatekit.common.requests.Request
-import slatekit.meta.deserializer.Deserializer
+import slatekit.serialization.deserializer.Deserializer
 
 /**
  * Server Settings
