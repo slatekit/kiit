@@ -14,9 +14,7 @@
 package slatekit.common.args
 
 import slatekit.common.Types
-import slatekit.common.console.ConsoleWriter
-import slatekit.results.Failure
-import slatekit.results.Notice
+import slatekit.common.writer.ConsoleWriter
 import slatekit.results.Try
 import slatekit.results.builders.Tries
 

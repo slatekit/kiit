@@ -11,7 +11,7 @@
  * </slate_header>
  */
 
-package slatekit.common.console
+package slatekit.common.writer
 
 sealed class TextType(val name:String, val color: String, private val upperCase: Boolean, val format:Boolean = true) {
 

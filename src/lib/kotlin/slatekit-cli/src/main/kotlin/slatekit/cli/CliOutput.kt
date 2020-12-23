@@ -1,6 +1,6 @@
 package slatekit.cli
 
-import slatekit.common.console.TextType
+import slatekit.common.writer.TextType
 
 data class CliOutput(
     val type: TextType,

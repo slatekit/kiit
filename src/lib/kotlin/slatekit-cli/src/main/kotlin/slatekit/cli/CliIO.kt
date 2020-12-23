@@ -14,8 +14,8 @@
 package slatekit.cli
 
 import java.io.File
-import slatekit.common.console.TextType
-import slatekit.common.console.Writer
+import slatekit.common.writer.TextType
+import slatekit.common.writer.Writer
 import slatekit.common.ext.flatten
 import slatekit.common.types.Content
 import slatekit.common.types.ContentType

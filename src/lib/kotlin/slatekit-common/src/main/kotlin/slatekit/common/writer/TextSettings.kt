@@ -11,10 +11,6 @@
  * </slate_header>
  */
 
-package slatekit.common.console
+package slatekit.common.writer
 
-/**
- * Created by kishorereddy on 5/19/17.
- */
-
-data class TextOutput(val textType: TextType, val msg: String, val endLine: Boolean = false, val format:Boolean = true)
+data class TextSettings(val darkMode: Boolean = true)

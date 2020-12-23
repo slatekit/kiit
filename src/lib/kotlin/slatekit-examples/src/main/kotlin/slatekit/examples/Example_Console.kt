@@ -13,7 +13,7 @@
 package slatekit.examples
 
 //<doc:import_required>
-import slatekit.common.console.*
+import slatekit.common.writer.*
 
 //</doc:import_required>
 

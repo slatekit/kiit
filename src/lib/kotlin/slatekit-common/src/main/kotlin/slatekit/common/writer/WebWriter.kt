@@ -11,7 +11,7 @@
  * </slate_header>
  */
 
-package slatekit.common.console
+package slatekit.common.writer
 
 import slatekit.common.ext.escapeHtml
 

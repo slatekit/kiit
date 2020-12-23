@@ -1,6 +1,6 @@
 package slatekit.common.display
 
-import slatekit.common.console.ConsoleWriter
+import slatekit.common.writer.ConsoleWriter
 import slatekit.common.envs.Envs
 import slatekit.common.info.Info
 import slatekit.common.log.LogSupport

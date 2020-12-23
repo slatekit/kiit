@@ -11,7 +11,7 @@
  * </slate_header>
  */
 
-package slatekit.common.console
+package slatekit.common.writer
 
 import slatekit.common.io.IO
 import slatekit.common.io.Print

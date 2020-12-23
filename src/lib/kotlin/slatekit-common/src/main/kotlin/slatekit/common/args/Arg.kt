@@ -13,7 +13,7 @@
 
 package slatekit.common.args
 
-import slatekit.common.console.*
+import slatekit.common.writer.*
 
 /**
  *

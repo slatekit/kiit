@@ -3,7 +3,7 @@ package slatekit.app
 import slatekit.common.Types
 import slatekit.common.args.Args
 import slatekit.common.args.ArgsSchema
-import slatekit.common.console.ConsoleWriter
+import slatekit.common.writer.ConsoleWriter
 import slatekit.common.envs.Envs
 import slatekit.common.info.About
 import slatekit.common.info.Info

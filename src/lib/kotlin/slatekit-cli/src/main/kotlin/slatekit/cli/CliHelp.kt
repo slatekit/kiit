@@ -13,8 +13,8 @@
 
 package slatekit.cli
 
-import slatekit.common.console.TextType
-import slatekit.common.console.Writer
+import slatekit.common.writer.TextType
+import slatekit.common.writer.Writer
 import slatekit.common.info.Info
 import slatekit.common.io.IO
 
