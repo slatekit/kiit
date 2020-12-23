@@ -1,6 +1,4 @@
-package slatekit.common.conf
-
-import slatekit.common.*
+package slatekit.common
 
 /**
  * Provides both gets ( Reads ) / puts ( Writes ) on configurable settings
