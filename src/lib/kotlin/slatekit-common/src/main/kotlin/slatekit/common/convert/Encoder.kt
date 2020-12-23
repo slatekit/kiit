@@ -1,5 +1,5 @@
 
-package slatekit.common
+package slatekit.common.convert
 
 /**
  * Interface for encoding/decoding from source type S to output target type String

@@ -15,7 +15,7 @@ package test.common
 import org.junit.Assert
 import org.junit.Test
 import slatekit.common.utils.ListMap
-import slatekit.common.Vars
+import slatekit.common.types.Vars
 
 /**
  * Created by kishorereddy on 6/4/17.

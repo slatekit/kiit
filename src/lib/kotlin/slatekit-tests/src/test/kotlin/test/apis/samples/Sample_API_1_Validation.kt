@@ -15,13 +15,8 @@ package test.apis.samples
 
 import slatekit.apis.*
 import slatekit.common.*
-import slatekit.common.types.Doc
-import slatekit.common.requests.Request
-import slatekit.common.validations.ValidationFuncs
-import slatekit.integration.common.AppEntContext
 import slatekit.results.Outcome
 import slatekit.results.Success
-import slatekit.results.builders.Outcomes
 
 @Api(area = "samples", name = "validation", desc = "api to access and manage users 3", auth = AuthModes.NONE)
 class Sample_API_1_Validation() {

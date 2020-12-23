@@ -11,11 +11,15 @@
  * </slate_header>
  */
 
-package slatekit.common
+package slatekit.common.convert
 
 import slatekit.common.types.Doc
 //import java.time.*
 import org.threeten.bp.*
+import slatekit.common.DateTime
+import slatekit.common.DateTimes
+import slatekit.common.Types
+import slatekit.common.types.Vars
 import slatekit.common.io.Uris
 
 /**
@@ -71,10 +75,10 @@ object Conversions {
      */
     fun toVars(data: Any?): Vars {
         return when (data) {
-            null -> Vars.apply("")
-            "null" -> Vars.apply("")
-            is String -> if (data.isNullOrEmpty()) Vars.apply("") else Vars.apply(data)
-            else -> Vars.apply("")
+            null -> Vars.of("")
+            "null" -> Vars.of("")
+            is String -> if (data.isNullOrEmpty()) Vars.of("") else Vars.of(data)
+            else -> Vars.of("")
         }
     }
 

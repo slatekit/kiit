@@ -2,8 +2,7 @@ package slatekit.meta
 
 import org.json.simple.JSONArray
 import org.json.simple.JSONObject
-import org.json.simple.parser.JSONParser
-import slatekit.common.Conversions
+import slatekit.common.convert.Conversions
 import slatekit.common.requests.Request
 import slatekit.common.requests.RequestSupport
 import slatekit.common.smartvalues.SmartCreation

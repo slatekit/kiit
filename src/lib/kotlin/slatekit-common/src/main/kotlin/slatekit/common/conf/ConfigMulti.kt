@@ -13,7 +13,7 @@
 
 package slatekit.common.conf
 
-import slatekit.common.Conversions
+import slatekit.common.convert.Conversions
 import slatekit.common.DateTime
 import slatekit.common.crypto.Encryptor
 //import java.time.*

@@ -1,14 +1,9 @@
 package slatekit.apis.services
 
 import slatekit.apis.ApiRequest
-import slatekit.apis.ApiResult
 import slatekit.apis.ApiServer
-import slatekit.apis.Middleware
 import slatekit.apis.support.RewriteSupport
-import slatekit.common.Ignore
-import slatekit.common.validations.ValidationFuncs
-import slatekit.results.Outcome
-import slatekit.results.builders.Outcomes
+import slatekit.common.checks.Check
 
 open class Restify : Rewriter, RewriteSupport {
 
@@ -30,17 +25,17 @@ open class Restify : Rewriter, RewriteSupport {
 
         val result = if (verb == verbGet && parts[2] == "") {
             rewrite(req, rename(container,"getAll"))
-        } else if (verb == verbGet && ValidationFuncs.isNumeric(parts[2])) {
+        } else if (verb == verbGet && Check.isNumeric(parts[2])) {
             rewriteWithParam(req, rename(container,"getById"), "id", parts[2])
         } else if (verb == verbPost && parts[2] == "") {
                 rewrite(req, rename(container,"create"))
         } else if (verb == verbPut && parts[2] == "") {
                 rewrite(req, rename(container,"update"))
-        } else if (verb == verbPatch && ValidationFuncs.isNumeric(parts[2])) {
+        } else if (verb == verbPatch && Check.isNumeric(parts[2])) {
                 rewriteWithParam(req, rename(container,"patch"), "id", parts[2])
         } else if (verb == verbDelete && parts[2] == "") {
                 rewrite(req, rename(container,verbDelete))
-        } else if (verb == verbDelete && ValidationFuncs.isNumeric(parts[2])) {
+        } else if (verb == verbDelete && Check.isNumeric(parts[2])) {
                 rewriteWithParam(req, rename(container,"deleteById"), "id", parts[2])
         } else {
             req

@@ -11,11 +11,11 @@
  * </slate_header>
  */
 
-package slatekit.common.validations
+package slatekit.common.checks
 
 import slatekit.common.toCharMap
 
-object ValidationConsts {
+object CheckConsts {
 
     @JvmField val NUMS = "0123456789".toCharMap
     @JvmField val LETTERS_LCASE = "abcdefghijklmnopqrstuvwxyz".toCharMap

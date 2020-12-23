@@ -1,4 +1,4 @@
-package slatekit.common.colors
+package slatekit.common.display
 
 /**
  * Selectable colors ( e.g. for handling/changing themes )

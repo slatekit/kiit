@@ -13,7 +13,7 @@
 
 package slatekit.app
 
-import slatekit.common.Banner
+import slatekit.common.display.Banner
 import slatekit.context.Context
 import slatekit.common.args.ArgsSchema
 import slatekit.common.crypto.EncryptSupport
@@ -33,7 +33,7 @@ open class App<C : Context>(
     /**
      * Banner for displaying welcome/info/goodbye with text/stats/diagnostics.
      */
-    open val banner: Banner      = Banner(ctx.info, ctx.envs, ctx.logs.getLogger())
+    open val banner: Banner = Banner(ctx.info, ctx.envs, ctx.logs.getLogger())
 
     /**
      * Provides logger support by supplying debug info, warn, error

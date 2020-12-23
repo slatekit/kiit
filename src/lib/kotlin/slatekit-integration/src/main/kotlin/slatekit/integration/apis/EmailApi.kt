@@ -21,7 +21,7 @@ import slatekit.apis.support.FileSupport
 import slatekit.context.Context
 import slatekit.common.Sources
 import slatekit.common.io.Uris
-import slatekit.common.Vars
+import slatekit.common.types.Vars
 import slatekit.common.crypto.Encryptor
 import slatekit.common.log.Logger
 import slatekit.notifications.email.EmailService

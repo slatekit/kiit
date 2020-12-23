@@ -1,7 +1,7 @@
 package slatekit.common.conf
 
 import org.threeten.bp.*
-import slatekit.common.Conversions
+import slatekit.common.convert.Conversions
 import slatekit.common.DateTime
 import slatekit.common.Internal
 import slatekit.common.Strings

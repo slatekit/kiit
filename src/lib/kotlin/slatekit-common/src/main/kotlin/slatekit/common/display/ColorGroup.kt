@@ -1,4 +1,4 @@
-package slatekit.common.colors
+package slatekit.common.display
 
 /**
  * A color group that contains light/normal/dark color with name

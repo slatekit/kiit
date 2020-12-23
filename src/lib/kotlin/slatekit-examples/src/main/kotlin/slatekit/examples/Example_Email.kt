@@ -28,7 +28,7 @@ import slatekit.common.conf.Config
 import slatekit.common.info.ApiLogin
 
 import slatekit.common.io.Uris
-import slatekit.common.Vars
+import slatekit.common.types.Vars
 import slatekit.common.ext.env
 import slatekit.results.builders.Tries
 import kotlinx.coroutines.runBlocking
