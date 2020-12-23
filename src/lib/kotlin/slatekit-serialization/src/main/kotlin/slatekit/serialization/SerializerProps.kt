@@ -11,7 +11,7 @@
  * </slate_header>
  */
 
-package slatekit.common.serialization
+package slatekit.serialization
 
 import slatekit.common.newline
 
@@ -19,11 +19,14 @@ import slatekit.common.newline
  * Created by kishorereddy on 6/3/17.
  */
 
-class SerializerCsv(
+class SerializerProps(
+    standardizeFieldWidth: Boolean = false,
     objectSerializer: ((Serializer, Any, Int) -> Unit)? = null,
     isoDates: Boolean = false
 )
     : Serializer(objectSerializer, isoDates) {
+
+    override val standardizeWidth = standardizeFieldWidth
 
     /**
      * handler for when a container item has started
@@ -40,17 +43,21 @@ class SerializerCsv(
         }
     }
 
+    /**
+     * serializes a string value handling escape values
+     */
+    override fun serializeString(text: String): String {
+        return text
+    }
+
     override fun onMapItem(item: Any, depth: Int, pos: Int, key: String, value: Any?) {
-        if (pos > 0 && depth <= 2) {
-            buff.append(", ")
-        }
+        buff.append(newline)
+        buff.append("$key = ")
         serializeValue(value, depth)
     }
 
     override fun onListItem(item: Any, depth: Int, pos: Int, value: Any?) {
-        if (pos > 0 && depth <= 0) {
-            buff.append(", ")
-        }
+        buff.append(newline)
         serializeValue(value, depth)
     }
 }

@@ -11,16 +11,16 @@
  * </slate_header>
  */
 
-package slatekit.common.serialization
+package slatekit.serialization
 
-import java.util.concurrent.atomic.AtomicInteger
+/**
+ * Created by kishorereddy on 6/3/17.
+ */
+class SerializerJson(
+    objectSerializer: ((Serializer, Any, Int) -> Unit)? = null,
+    isoDates: Boolean = false
+)
+    : Serializer(objectSerializer, isoDates) {
 
-class Indenter {
-    val count = AtomicInteger()
-
-    fun value(): String = "\t".repeat(count.get())
-
-    fun inc(): Int = count.incrementAndGet()
-
-    fun dec(): Int = count.decrementAndGet()
+    override val standardizeResult = true
 }

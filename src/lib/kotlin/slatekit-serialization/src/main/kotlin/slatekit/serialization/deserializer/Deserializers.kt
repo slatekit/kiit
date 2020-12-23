@@ -1,4 +1,4 @@
-package slatekit.meta.deserializer
+package slatekit.serialization.deserializer
 
 import org.json.simple.JSONArray
 import org.json.simple.JSONObject

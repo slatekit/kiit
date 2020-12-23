@@ -18,7 +18,7 @@ import slatekit.common.DateTime
 import slatekit.common.DateTimes
 import slatekit.common.ext.tail
 import slatekit.common.newline
-import slatekit.meta.Serialization
+import slatekit.serialization.*
 import test.setup.StatusEnum
 import test.setup.StatusEnum2
 import test.setup.StatusEnum3

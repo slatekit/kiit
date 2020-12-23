@@ -23,7 +23,7 @@ import slatekit.common.ext.toStringUtc
 import slatekit.common.io.Uris
 import slatekit.common.requests.CommonRequest
 import slatekit.common.requests.Request
-import slatekit.meta.Serialization
+import slatekit.serialization.Serialization
 
 object Reqs {
 

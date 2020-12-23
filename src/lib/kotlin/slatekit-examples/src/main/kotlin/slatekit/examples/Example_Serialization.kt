@@ -14,7 +14,7 @@ package slatekit.examples
 //<doc:import_required>
 import slatekit.results.Try
 import slatekit.results.Success
-import slatekit.common.serialization.*
+import slatekit.serialization.*
 //</doc:import_required>
 
 //<doc:import_examples>

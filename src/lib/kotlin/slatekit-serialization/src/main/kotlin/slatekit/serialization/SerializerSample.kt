@@ -1,8 +1,9 @@
-package slatekit.meta
+package slatekit.serialization
 
 import slatekit.common.DateTimes
 import slatekit.common.ext.local
-import slatekit.common.serialization.Serializer
+import slatekit.meta.KTypes
+import slatekit.meta.Reflector
 import kotlin.reflect.KClass
 import kotlin.reflect.KParameter
 import kotlin.reflect.KProperty

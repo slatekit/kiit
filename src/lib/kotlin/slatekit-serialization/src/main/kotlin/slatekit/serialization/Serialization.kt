@@ -1,14 +1,12 @@
-package slatekit.meta
+package slatekit.serialization
 
 import slatekit.common.EnumLike
-import slatekit.common.serialization.Serializer
-import slatekit.common.serialization.SerializerCsv
-import slatekit.common.serialization.SerializerJson
-import slatekit.common.serialization.SerializerProps
 import slatekit.common.types.Content
 import slatekit.common.types.ContentType
 import slatekit.common.types.ContentTypeCsv
 import slatekit.common.types.ContentTypeJson
+import slatekit.meta.Reflector
+import slatekit.meta.kClass
 
 object Serialization {
     fun csv(isoDates: Boolean = false): SerializerCsv = SerializerCsv(this::serializeObject, isoDates)
@@ -19,9 +17,9 @@ object Serialization {
 
     fun serialize(item:Any?, type: ContentType): Content {
         return when(type){
-            ContentTypeCsv  -> Content.csv (slatekit.meta.Serialization.csv().serialize(item))
-            ContentTypeJson -> Content.json(slatekit.meta.Serialization.json().serialize(item))
-            else            -> Content.prop(slatekit.meta.Serialization.props().serialize(item))
+            ContentTypeCsv  -> Content.csv (csv().serialize(item))
+            ContentTypeJson -> Content.json(json().serialize(item))
+            else            -> Content.prop(props().serialize(item))
         }
     }
 

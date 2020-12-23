@@ -1,4 +1,4 @@
-package slatekit.meta.deserializer
+package slatekit.serialization.deserializer
 
 import slatekit.common.crypto.Encryptor
 import slatekit.meta.Conversion
