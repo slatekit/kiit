@@ -14,26 +14,26 @@ package test.common
 
 import org.junit.Assert
 import org.junit.Test
-import slatekit.common.validations.ValidationFuncs.hasCharsLCase
-import slatekit.common.validations.ValidationFuncs.hasCharsUCase
-import slatekit.common.validations.ValidationFuncs.hasDigits
-import slatekit.common.validations.ValidationFuncs.hasSymbols
-import slatekit.common.validations.ValidationFuncs.isAlpha
-import slatekit.common.validations.ValidationFuncs.isAlphaLowerCase
-import slatekit.common.validations.ValidationFuncs.isAlphaNumeric
-import slatekit.common.validations.ValidationFuncs.isAlphaUpperCase
-import slatekit.common.validations.ValidationFuncs.isEmail
-import slatekit.common.validations.ValidationFuncs.isEmpty
-import slatekit.common.validations.ValidationFuncs.isLength
-import slatekit.common.validations.ValidationFuncs.isMinValue
-import slatekit.common.validations.ValidationFuncs.isMaxValue
-import slatekit.common.validations.ValidationFuncs.isMinLength
-import slatekit.common.validations.ValidationFuncs.isMaxLength
-import slatekit.common.validations.ValidationFuncs.isNotEmpty
-import slatekit.common.validations.ValidationFuncs.isNumeric
-import slatekit.common.validations.ValidationFuncs.isPhoneUS
-import slatekit.common.validations.ValidationFuncs.isUrl
-import slatekit.common.validations.ValidationFuncs.isZipCodeUS
+import slatekit.common.checks.Check.hasCharsLCase
+import slatekit.common.checks.Check.hasCharsUCase
+import slatekit.common.checks.Check.hasDigits
+import slatekit.common.checks.Check.hasSymbols
+import slatekit.common.checks.Check.isAlpha
+import slatekit.common.checks.Check.isAlphaLowerCase
+import slatekit.common.checks.Check.isAlphaNumeric
+import slatekit.common.checks.Check.isAlphaUpperCase
+import slatekit.common.checks.Check.isEmail
+import slatekit.common.checks.Check.isEmpty
+import slatekit.common.checks.Check.isLength
+import slatekit.common.checks.Check.isMinValue
+import slatekit.common.checks.Check.isMaxValue
+import slatekit.common.checks.Check.isMinLength
+import slatekit.common.checks.Check.isMaxLength
+import slatekit.common.checks.Check.isNotEmpty
+import slatekit.common.checks.Check.isNumeric
+import slatekit.common.checks.Check.isPhoneUS
+import slatekit.common.checks.Check.isUrl
+import slatekit.common.checks.Check.isZipCodeUS
 
 /**
  * Created by kishorereddy on 5/23/17.

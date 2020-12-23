@@ -12,33 +12,33 @@
 package slatekit.examples
 
 //<doc:import_required>
-import slatekit.common.validations.Validations
+import slatekit.common.checks.Checks
 //</doc:import_required>
 
 //<doc:import_examples>
 
 import slatekit.results.Try
 import slatekit.results.Success
-import slatekit.common.validations.ValidationFuncs.isEmpty
-import slatekit.common.validations.ValidationFuncs.isNotEmpty
-import slatekit.common.validations.ValidationFuncs.isLength
-import slatekit.common.validations.ValidationFuncs.isMinLength
-import slatekit.common.validations.ValidationFuncs.isMaxLength
-import slatekit.common.validations.ValidationFuncs.isMinValue
-import slatekit.common.validations.ValidationFuncs.isMaxValue
-import slatekit.common.validations.ValidationFuncs.hasDigits
-import slatekit.common.validations.ValidationFuncs.hasCharsLCase
-import slatekit.common.validations.ValidationFuncs.hasCharsUCase
-import slatekit.common.validations.ValidationFuncs.hasSymbols
-import slatekit.common.validations.ValidationFuncs.isAlpha
-import slatekit.common.validations.ValidationFuncs.isAlphaLowerCase
-import slatekit.common.validations.ValidationFuncs.isAlphaNumeric
-import slatekit.common.validations.ValidationFuncs.isAlphaUpperCase
-import slatekit.common.validations.ValidationFuncs.isEmail
-import slatekit.common.validations.ValidationFuncs.isNumeric
-import slatekit.common.validations.ValidationFuncs.isPhoneUS
-import slatekit.common.validations.ValidationFuncs.isUrl
-import slatekit.common.validations.ValidationFuncs.isZipCodeUS
+import slatekit.common.checks.Check.isEmpty
+import slatekit.common.checks.Check.isNotEmpty
+import slatekit.common.checks.Check.isLength
+import slatekit.common.checks.Check.isMinLength
+import slatekit.common.checks.Check.isMaxLength
+import slatekit.common.checks.Check.isMinValue
+import slatekit.common.checks.Check.isMaxValue
+import slatekit.common.checks.Check.hasDigits
+import slatekit.common.checks.Check.hasCharsLCase
+import slatekit.common.checks.Check.hasCharsUCase
+import slatekit.common.checks.Check.hasSymbols
+import slatekit.common.checks.Check.isAlpha
+import slatekit.common.checks.Check.isAlphaLowerCase
+import slatekit.common.checks.Check.isAlphaNumeric
+import slatekit.common.checks.Check.isAlphaUpperCase
+import slatekit.common.checks.Check.isEmail
+import slatekit.common.checks.Check.isNumeric
+import slatekit.common.checks.Check.isPhoneUS
+import slatekit.common.checks.Check.isUrl
+import slatekit.common.checks.Check.isZipCodeUS
 
 
 //</doc:import_examples>
@@ -101,10 +101,10 @@ class Example_Validation : Command("validation") {
   fun showValidationResult() {
 
     println("CASE 3: Same checks above but these return a ValidationResult")
-    println( Validations.isEmpty       (""      ,     "Email is required"   ))
-    println( Validations.isAlphaNumeric("abCD12",     "Password is invalid" ))
-    println( Validations.isZipCodeUS   ("12345" ,     "ZipCode is required" ))
-    println( Validations.isMinLength   ("12"    , 3, "Min 3 chars required"))
+    println( Checks.isEmpty       (""      ,     "Email is required"   ))
+    println( Checks.isAlphaNumeric("abCD12",     "Password is invalid" ))
+    println( Checks.isZipCodeUS   ("12345" ,     "ZipCode is required" ))
+    println( Checks.isMinLength   ("12"    , 3, "Min 3 chars required"))
     println()
   }
 
@@ -116,10 +116,10 @@ class Example_Validation : Command("validation") {
 
     println("CASE 4: Collect errors via thunks(0 parameter functions)")
     val errors = listOf (
-        { Validations.isLength      ( password,   9 , "Email must be 9 characters")          } ,
-        { Validations.hasCharsLCase ( password, 3 , "Email must have 3 lowercase letters") } ,
-        { Validations.hasCharsUCase ( password, 3 , "Email must have 3 uppercase letters") } ,
-        { Validations.hasDigits     ( password, 3 , "Email must have 3 digits")            }
+        { Checks.isLength      ( password,   9 , "Email must be 9 characters")          } ,
+        { Checks.hasCharsLCase ( password, 3 , "Email must have 3 lowercase letters") } ,
+        { Checks.hasCharsUCase ( password, 3 , "Email must have 3 uppercase letters") } ,
+        { Checks.hasDigits     ( password, 3 , "Email must have 3 digits")            }
       ).map    { rule -> rule() }
        .filter { result -> !result.success }
        .toList()

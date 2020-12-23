@@ -14,7 +14,7 @@
 package slatekit.notifications.email
 
 import slatekit.common.templates.Templates
-import slatekit.common.Vars
+import slatekit.common.types.Vars
 import slatekit.notifications.common.TemplateSender
 import slatekit.results.*
 

@@ -13,6 +13,7 @@
 
 package slatekit.common
 
+import slatekit.common.convert.Conversions
 import slatekit.common.ext.splitToMapOfType
 
 

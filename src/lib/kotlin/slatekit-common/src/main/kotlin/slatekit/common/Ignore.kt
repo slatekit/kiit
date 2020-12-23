@@ -18,5 +18,4 @@ package slatekit.common
  */
 
 annotation class Ignore(val desc: String = "")
-
 annotation class Internal(val desc: String = "")

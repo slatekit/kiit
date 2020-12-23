@@ -19,6 +19,7 @@ import slatekit.common.*
 import slatekit.common.crypto.Encryptor
 // import java.time.*
 import org.threeten.bp.*
+import slatekit.common.convert.Conversions
 
 /**
  * Used to represent a request that originate from a json file.

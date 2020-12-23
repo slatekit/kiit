@@ -1,6 +1,6 @@
 package test.setup
 
-import slatekit.common.validations.ValidationFuncs
+import slatekit.common.checks.Check
 import slatekit.results.Notice
 import slatekit.results.builders.Notices
 
@@ -16,7 +16,7 @@ open class SampleErrorsNoMiddlewareApi  {
         return if(text.isNullOrEmpty()) {
             Notices.invalid("You must supply a non-empty string")
         }
-        else if(!ValidationFuncs.isNumeric(text)){
+        else if(!Check.isNumeric(text)){
             Notices.errored("$text is not a valid number")
         }
         else {

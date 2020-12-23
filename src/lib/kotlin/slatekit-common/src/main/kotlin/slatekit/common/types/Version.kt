@@ -1,6 +1,6 @@
 package slatekit.common.types
 
-import slatekit.common.validations.ValidationFuncs
+import slatekit.common.checks.Check
 import slatekit.results.Failure
 import slatekit.results.Notice
 import slatekit.results.Success
@@ -45,7 +45,7 @@ data class Version(
         @JvmStatic
         fun parse(text:String): Notice<Version> {
             val tokens = text.trim().split('.')
-            val numeric = tokens.all { ValidationFuncs.isWholeNumber(it) }
+            val numeric = tokens.all { Check.isWholeNumber(it) }
             return if(!numeric) {
                 Failure("Not all parts of the version are numeric")
             } else {

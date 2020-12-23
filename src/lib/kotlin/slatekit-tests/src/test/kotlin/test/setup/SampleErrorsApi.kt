@@ -1,16 +1,8 @@
 package test.setup
 
-import slatekit.apis.ApiRequest
-import slatekit.apis.ApiResult
-import slatekit.common.*
-import slatekit.common.requests.Request
-import slatekit.common.validations.ValidationFuncs
+import slatekit.common.checks.Check
 import slatekit.results.Notice
-import slatekit.results.Outcome
-import slatekit.results.Try
 import slatekit.results.builders.Notices
-import slatekit.results.builders.Outcomes
-import slatekit.results.builders.Tries
 
 
 open class SampleErrorsApi  {
@@ -24,7 +16,7 @@ open class SampleErrorsApi  {
         return if(text.isNullOrEmpty()) {
             Notices.invalid("You must supply a non-empty string")
         }
-        else if(!ValidationFuncs.isNumeric(text)){
+        else if(!Check.isNumeric(text)){
             Notices.errored("$text is not a valid number")
         }
         else {

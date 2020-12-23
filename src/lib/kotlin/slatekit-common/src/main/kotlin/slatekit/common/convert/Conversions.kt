@@ -11,11 +11,15 @@
  * </slate_header>
  */
 
-package slatekit.common
+package slatekit.common.convert
 
 import slatekit.common.types.Doc
 //import java.time.*
 import org.threeten.bp.*
+import slatekit.common.DateTime
+import slatekit.common.DateTimes
+import slatekit.common.Types
+import slatekit.common.types.Vars
 import slatekit.common.io.Uris
 
 /**

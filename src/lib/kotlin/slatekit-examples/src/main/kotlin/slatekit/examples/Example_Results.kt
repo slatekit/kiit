@@ -18,7 +18,7 @@ package slatekit.examples
 //<doc:import_examples>
 
 
-import slatekit.common.validations.Validations
+import slatekit.common.checks.Checks
 import slatekit.examples.common.User
 import slatekit.results.*
 import slatekit.results.Try
@@ -273,7 +273,7 @@ class Example_Results : Command("results"), OutcomeBuilder {
         val user = User(0, "batman_gotham", "batman", "", true, 34)
 
         // Validated<User> = Result<User, Err.ErrorList>
-        val validated = Validations.collect<User,String, Err>(user) {
+        val validated = Checks.collect<User,String, Err>(user) {
             listOf(
                     isNotEmpty(user.firstName),
                     isNotEmpty(user.lastName),

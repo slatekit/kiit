@@ -20,6 +20,7 @@ import slatekit.common.crypto.EncLong
 import slatekit.common.crypto.EncString
 //import java.time.*
 import org.threeten.bp.*
+import slatekit.common.types.Vars
 
 object Types {
 

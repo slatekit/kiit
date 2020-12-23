@@ -1,4 +1,4 @@
-package slatekit.common
+package slatekit.common.convert
 
 /**
  * Interface for transforming a source type S to a converted target type T or encoded type E.

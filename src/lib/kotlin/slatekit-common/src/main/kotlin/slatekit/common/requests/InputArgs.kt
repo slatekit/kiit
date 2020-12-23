@@ -16,6 +16,7 @@ package slatekit.common.requests
 import slatekit.common.*
 //import java.time.*
 import org.threeten.bp.*
+import slatekit.common.convert.Conversions
 
 /**
  * Created by kishorereddy on 5/25/17.

@@ -1,4 +1,4 @@
-package slatekit.common
+package slatekit.common.convert
 
 
 /**

@@ -11,7 +11,7 @@
  * </slate_header>
  */
 
-package slatekit.common
+package slatekit.common.types
 
 import slatekit.common.ext.splitToMapWithPairs
 import slatekit.common.utils.ListMap

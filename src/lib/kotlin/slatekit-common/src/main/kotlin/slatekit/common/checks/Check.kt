@@ -11,14 +11,14 @@
  * </slate_header>
  */
 
-package slatekit.common.validations
+package slatekit.common.checks
 
-import slatekit.common.validations.ValidationConsts.NUMS
-import slatekit.common.validations.ValidationConsts.SYMS
-import slatekit.common.validations.ValidationConsts.LETTERS_UCASE
-import slatekit.common.validations.ValidationConsts.LETTERS_LCASE
+import slatekit.common.checks.CheckConsts.NUMS
+import slatekit.common.checks.CheckConsts.SYMS
+import slatekit.common.checks.CheckConsts.LETTERS_UCASE
+import slatekit.common.checks.CheckConsts.LETTERS_LCASE
 
-object ValidationFuncs {
+object Check {
 
   // Empty / Non-Empty
   @JvmStatic fun isEmpty(text: String): Boolean = text.isNullOrEmpty()

@@ -1,4 +1,4 @@
-package slatekit.common
+package slatekit.common.display
 
 import slatekit.common.console.ConsoleWriter
 import slatekit.common.envs.Envs

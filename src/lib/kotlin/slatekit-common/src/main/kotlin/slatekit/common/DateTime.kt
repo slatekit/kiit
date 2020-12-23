@@ -18,7 +18,7 @@ import org.threeten.bp.*
 import org.threeten.bp.format.DateTimeFormatter
 import slatekit.common.ext.atStartOfMonth
 import slatekit.common.ext.daysInMonth
-import slatekit.common.validations.ValidationFuncs
+import slatekit.common.checks.Check
 import java.util.*
 
 /**
@@ -229,7 +229,7 @@ class DateTimes {
             // 20190101       ( jan 1             ) 8 chars
             // 201901011200   ( jan 1 @12pm       ) 12 chars
             // 20190101123045 ( jan 1 @12:30:45 pm) 14 chars
-            if((value.length == 8 || value.length == 12 || value.length == 14) && ValidationFuncs.isNumeric(value)){
+            if((value.length == 8 || value.length == 12 || value.length == 14) && Check.isNumeric(value)){
                 return parseNumeric(value)
             }
             val dt = DateTime.parse(value)

@@ -17,7 +17,7 @@ import slatekit.apis.*
 import slatekit.common.*
 import slatekit.common.types.Doc
 import slatekit.common.requests.Request
-import slatekit.common.validations.ValidationFuncs
+import slatekit.common.checks.Check
 import slatekit.context.Context
 import slatekit.results.Outcome
 import slatekit.results.Success
@@ -93,7 +93,7 @@ class Sample_API_1_Core(context: Context) {
         return if(text.isNullOrEmpty()) {
             Outcomes.invalid("You must supply a non-empty string")
         }
-        else if(!ValidationFuncs.isNumeric(text)){
+        else if(!Check.isNumeric(text)){
             Outcomes.errored("$text is not a valid number")
         }
         else {

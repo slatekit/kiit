@@ -11,7 +11,7 @@
  * </slate_header>
  */
 
-package slatekit.common.validations
+package slatekit.common.checks
 
 /**
   * Named pattern as a value class

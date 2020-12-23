@@ -14,7 +14,7 @@ package test.meta
 
 import org.junit.Assert
 import org.junit.Test
-import slatekit.common.Conversions
+import slatekit.common.convert.Conversions
 import slatekit.common.DateTimes
 import slatekit.common.requests.InputArgs
 import slatekit.common.requests.CommonRequest

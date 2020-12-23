@@ -1,6 +1,6 @@
 package slatekit.meta
 
-import slatekit.common.Conversions
+import slatekit.common.convert.Conversions
 import slatekit.common.Inputs
 import slatekit.common.crypto.*
 import kotlin.reflect.KClass
