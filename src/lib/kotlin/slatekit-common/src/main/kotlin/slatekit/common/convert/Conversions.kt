@@ -75,10 +75,10 @@ object Conversions {
      */
     fun toVars(data: Any?): Vars {
         return when (data) {
-            null -> Vars.apply("")
-            "null" -> Vars.apply("")
-            is String -> if (data.isNullOrEmpty()) Vars.apply("") else Vars.apply(data)
-            else -> Vars.apply("")
+            null -> Vars.of("")
+            "null" -> Vars.of("")
+            is String -> if (data.isNullOrEmpty()) Vars.of("") else Vars.of(data)
+            else -> Vars.of("")
         }
     }
 

@@ -35,7 +35,7 @@ class Vars(items: List<Pair<String, Any>>) : ListMap<String, Any>(items) {
          * with key=String, value=Any and separators expected to
          * be "," for pairs values and "=" between key / value
          */
-        fun apply(text: String): Vars {
+        fun of(text: String): Vars {
             return if (text.isNullOrEmpty()) {
                 Vars(listOf())
             } else {
