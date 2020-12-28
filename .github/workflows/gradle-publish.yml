@@ -27,8 +27,9 @@ jobs:
 
     # The USERNAME and TOKEN need to correspond to the credentials environment variables used in
     # the publishing section of your build.gradle
-    #- name: Publish to GitHub Packages
-    #  run: gradle publish
-    #  env:
-    #    USERNAME: ${{ github.actor }}
-    #    TOKEN: ${{ secrets.GITHUB_TOKEN }}
+    - name: Publish to GitHub Packages
+      working-directory: src/lib/kotlin/slatekit-result
+      run: gradle publish
+      env:
+        GITHUB_ACTOR: ${{ github.actor }}
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
