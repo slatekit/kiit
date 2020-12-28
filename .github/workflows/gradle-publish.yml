@@ -3,14 +3,18 @@
 
 name: Gradle Package
 
-on:
-  release:
-    types: [created]
+# on:
+#   release:
+#     types: [created]
+
+on: workflow_dispatch
 
 jobs:
   build:
-
     runs-on: ubuntu-latest
+    env:
+        GITHUB_ACTOR: ${{ github.actor }}
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
     steps:
     - uses: actions/checkout@v2
@@ -21,30 +25,34 @@ jobs:
         server-id: github # Value of the distributionManagement/repository/id field of the pom.xml
         settings-path: ${{ github.workspace }} # location for the settings.xml file
 
-    # ====================================================
     # Slate Kit-Result
-    - name: Build Result with Gradle
+    - name: Build SlateKit.Result with Gradle
       working-directory: src/lib/kotlin/slatekit-result
-      run: gradle build
+      run: gradle clean build bintrayUpload
+    - name: Sleep for 30 seconds
+      uses: whatnick/wait-action@master
+      with: time: '30s'
 
-    - name: Publish Result to GitHub Packages
-      working-directory: src/lib/kotlin/slatekit-result
-      run: gradle publish
-      env:
-        GITHUB_ACTOR: ${{ github.actor }}
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-    # ====================================================
+    # Slate Kit-Actors
+    - name: Build SlateKit.Result with Gradle
+      working-directory: src/lib/kotlin/slatekit-actors
+      run: gradle clean build bintrayUpload
+    - name: Sleep for 30 seconds
+      uses: whatnick/wait-action@master
+      with: time: '30s'
 
-    # ====================================================
     # Slate Kit-Common
-    - name: Build Commons with Gradle
+    - name: Build SlateKit.Result with Gradle
       working-directory: src/lib/kotlin/slatekit-common
-      run: gradle build
+      run: gradle clean build bintrayUpload
+    - name: Sleep for 30 seconds
+      uses: whatnick/wait-action@master
+      with: time: '30s'
 
-    - name: Publish Common to GitHub Packages
-      working-directory: src/lib/kotlin/slatekit-common
-      run: gradle publish
-      env:
-        GITHUB_ACTOR: ${{ github.actor }}
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-    # ====================================================
+    # Slate Kit-Context
+    - name: Build SlateKit.Result with Gradle
+      working-directory: src/lib/kotlin/slatekit-context
+      run: gradle clean build bintrayUpload
+    - name: Sleep for 30 seconds
+      uses: whatnick/wait-action@master
+      with: time: '30s'
