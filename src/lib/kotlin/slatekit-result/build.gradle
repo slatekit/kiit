@@ -148,7 +148,7 @@ publishing {
     }
     repositories {
       maven {
-        name = "GitHubPackages"
+        //name = "GitHubPackages"
         url = "https://maven.pkg.github.com/code-helix/slatekit"
         credentials {
           username = System.getenv("GITHUB_ACTOR")
