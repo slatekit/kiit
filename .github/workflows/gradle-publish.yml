@@ -13,8 +13,13 @@ jobs:
   build:
     runs-on: ubuntu-latest
     env:
-        GITHUB_ACTOR: ${{ github.actor }}
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        SLATEKIT_PROJECT_MODE: binary
+        SLATEKIT_INSTALL_ACTOR: ${{ secrets.SLATEKIT_INSTALL_ACTOR }}
+        SLATEKIT_INSTALL_TOKEN: ${{ secrets.SLATEKIT_INSTALL_TOKEN }}
+        SLATEKIT_BINTRAY_ACTOR: ${{ secrets.SLATEKIT_BINTRAY_ACTOR }}
+        SLATEKIT_BINTRAY_TOKEN: ${{ secrets.SLATEKIT_BINTRAY_TOKEN }}
+        SLATEKIT_PUBLISH_ACTOR: ${{ github.actor }}
+        SLATEKIT_PUBLISH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
     steps:
     - uses: actions/checkout@v2
