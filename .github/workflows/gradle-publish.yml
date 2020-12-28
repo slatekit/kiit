@@ -31,7 +31,8 @@ jobs:
       run: gradle clean build bintrayUpload
     - name: Sleep for 30 seconds
       uses: whatnick/wait-action@master
-      with: time: '30s'
+      with: 
+        time: '30s'
 
     # Slate Kit-Actors
     - name: Build SlateKit.Result with Gradle
@@ -39,7 +40,8 @@ jobs:
       run: gradle clean build bintrayUpload
     - name: Sleep for 30 seconds
       uses: whatnick/wait-action@master
-      with: time: '30s'
+      with: 
+        time: '30s'
 
     # Slate Kit-Common
     - name: Build SlateKit.Result with Gradle
@@ -47,7 +49,8 @@ jobs:
       run: gradle clean build bintrayUpload
     - name: Sleep for 30 seconds
       uses: whatnick/wait-action@master
-      with: time: '30s'
+      with: 
+        time: '30s'
 
     # Slate Kit-Context
     - name: Build SlateKit.Result with Gradle
@@ -55,4 +58,6 @@ jobs:
       run: gradle clean build bintrayUpload
     - name: Sleep for 30 seconds
       uses: whatnick/wait-action@master
-      with: time: '30s'
+      with: 
+        time: '30s'
+
