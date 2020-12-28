@@ -31,10 +31,10 @@ def slatekitComponentVersion = ext.slatekit_version
 // ==================================================================
 // Slate Kit Setup mode: defaults to maven vs loading project sources
 // ==================================================================
-ext.slatekitSetupViaMaven = System.getenv('SLATEKIT_SETUP_MODE') != 'sources'
+ext.slatekitSetupViaBinary = System.getenv('SLATEKIT_PROJECT_MODE') != 'sources'
 task info {
-    println('slatekit.setup     : ' + System.getenv('SLATEKIT_SETUP_MODE'))
-    println('slatekit.maven     : ' + slatekitSetupViaMaven)
+    println('slatekit.setup     : ' + System.getenv('SLATEKIT_PROJECT_MODE'))
+    println('slatekit.maven     : ' + slatekitSetupViaBinary)
     println('slatekit.comp.id   : ' + slatekitComponentId)
     println('slatekit.comp.name : ' + slatekitComponentName)
     println('slatekit.comp.desc : ' + slatekitComponentDesc)
@@ -69,6 +69,13 @@ repositories {
     maven {
         url  "https://dl.bintray.com/codehelixinc/slatekit"
     }
+    maven {
+        url  "https://maven.pkg.github.com/code-helix/slatekit"
+        credentials {
+            username = System.getenv('SLATEKIT_INSTALL_ACTOR')
+            password = System.getenv('SLATEKIT_INSTALL_TOKEN')
+        }
+    }
 }
 
 dependencies {
@@ -89,7 +96,7 @@ dependencies {
     compile 'org.threeten:threetenbp:1.3.8'
 
     /* <slatekit_local>
-    if( slatekitSetupViaMaven ) {
+    if( slatekitSetupViaBinary ) {
         compile "com.slatekit:slatekit-results:$slatekit_version"
         compile "com.slatekit:slatekit-common:$slatekit_version"
         compile "com.slatekit:slatekit-tracking:$slatekit_version"
@@ -169,13 +176,22 @@ publishing {
             }
         }
     }
+    repositories {
+        maven {
+            url = "https://maven.pkg.github.com/code-helix/slatekit"
+            credentials {
+                username = System.getenv("SLATEKIT_PUBLISH_ACTOR")
+                password = System.getenv("SLATEKIT_PUBLISH_TOKEN")
+            }
+        }
+    }
 }
 
 // gradle bintrayUpload
 bintray {
 
-    user = project.hasProperty('bintrayUser') ? project.property('bintrayUser') : System.getenv('SLATEKIT_BINTRAY_USER')
-    key = project.hasProperty('bintrayApiKey') ? project.property('bintrayApiKey') : System.getenv('SLATEKIT_BINTRAY_API_KEY')
+    user = project.hasProperty('bintrayUser') ? project.property('bintrayUser') : System.getenv('SLATEKIT_BINTRAY_ACTOR')
+    key = project.hasProperty('bintrayApiKey') ? project.property('bintrayApiKey') : System.getenv('SLATEKIT_BINTRAY_TOKEN')
     publish = true
     //configurations = ['archives']
     publications = ['mavenPublication']
