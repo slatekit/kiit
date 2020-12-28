@@ -21,15 +21,30 @@ jobs:
         server-id: github # Value of the distributionManagement/repository/id field of the pom.xml
         settings-path: ${{ github.workspace }} # location for the settings.xml file
 
-    - name: Build with Gradle
+    # ====================================================
+    # Slate Kit-Result
+    - name: Build Result with Gradle
       working-directory: src/lib/kotlin/slatekit-result
       run: gradle build
 
-    # The USERNAME and TOKEN need to correspond to the credentials environment variables used in
-    # the publishing section of your build.gradle
-    - name: Publish to GitHub Packages
+    - name: Publish Result to GitHub Packages
       working-directory: src/lib/kotlin/slatekit-result
       run: gradle publish
       env:
         GITHUB_ACTOR: ${{ github.actor }}
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+    # ====================================================
+
+    # ====================================================
+    # Slate Kit-Common
+    - name: Build Commons with Gradle
+      working-directory: src/lib/kotlin/slatekit-common
+      run: gradle build
+
+    - name: Publish Common to GitHub Packages
+      working-directory: src/lib/kotlin/slatekit-common
+      run: gradle publish
+      env:
+        GITHUB_ACTOR: ${{ github.actor }}
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+    # ====================================================
