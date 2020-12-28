@@ -148,7 +148,6 @@ publishing {
     }
     repositories {
       maven {
-        //name = "GitHubPackages"
         url = "https://maven.pkg.github.com/code-helix/slatekit"
         credentials {
           username = System.getenv("GITHUB_ACTOR")
@@ -158,29 +157,29 @@ publishing {
     }
 }
 
-//// gradle bintrayUpload
-//bintray {
-//
-//    user = project.hasProperty('bintrayUser') ? project.property('bintrayUser') : System.getenv('SLATEKIT_BINTRAY_USER')
-//    key = project.hasProperty('bintrayApiKey') ? project.property('bintrayApiKey') : System.getenv('SLATEKIT_BINTRAY_API_KEY')
-//    publish = true
-//    //configurations = ['archives']
-//    publications = ['mavenPublication']
-//    pkg {
-//        repo            = "slatekit"
-//        name            = "slatekit-${slatekitComponentId}"
-//        userOrg         = "codehelixinc"
-//        desc            = "${slatekitComponentDesc}"
-//        websiteUrl      = "http://www.slatekit.com/"
-//        issueTrackerUrl = "https://github.com/code-helix/slatekit-${slatekitComponentId}/issues"
-//        vcsUrl          = "https://github.com/code-helix/slatekit-${slatekitComponentId}"
-//        licenses        = ['Apache-2.0']
-//        publicDownloadNumbers = false
-//        version {
-//            name = "${slatekitComponentVersion}"
-//        }
-//    }
-//}
+// gradle bintrayUpload
+bintray {
+
+    user = project.hasProperty('bintrayUser') ? project.property('bintrayUser') : System.getenv('SLATEKIT_BINTRAY_USER')
+    key = project.hasProperty('bintrayApiKey') ? project.property('bintrayApiKey') : System.getenv('SLATEKIT_BINTRAY_API_KEY')
+    publish = true
+    //configurations = ['archives']
+    publications = ['mavenPublication']
+    pkg {
+        repo            = "slatekit"
+        name            = "slatekit-${slatekitComponentId}"
+        userOrg         = "codehelixinc"
+        desc            = "${slatekitComponentDesc}"
+        websiteUrl      = "http://www.slatekit.com/"
+        issueTrackerUrl = "https://github.com/code-helix/slatekit-${slatekitComponentId}/issues"
+        vcsUrl          = "https://github.com/code-helix/slatekit-${slatekitComponentId}"
+        licenses        = ['Apache-2.0']
+        publicDownloadNumbers = false
+        version {
+            name = "${slatekitComponentVersion}"
+        }
+    }
+}
 
 /* ==================================================================
 *
