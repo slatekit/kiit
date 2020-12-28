@@ -69,6 +69,8 @@ standards| http://www.slatekit.com/more/standards  | coding standards
 # Modules
 Slate Kit contains many useful architecture components, utilities and applications features. The slatekit-common has 0 dependencies adn contains most of the common utilities and components used throughout all the other projects. 
 
+![image](https://www.slatekit.com/assets/app/media/arch/slatekit-overview.png)
+
 docs | source | license | desc | download
 ------------ | ------------ | ------------- | ------------- | -------------
 [slatekit-results](http://www.slatekit.com/utils.html)                  | [src](src/lib/kotlin/slatekit-result)  | Apache2.0     | successes/failures with optional status codes | [ ![Download](https://api.bintray.com/packages/codehelixinc/slatekit/slatekit-results/images/download.svg) ](https://bintray.com/codehelixinc/slatekit/slatekit-results/_latestVersion)
