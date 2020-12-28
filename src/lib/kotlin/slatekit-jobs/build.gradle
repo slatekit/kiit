@@ -83,7 +83,7 @@ dependencies {
     compile "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin_version"
     compile 'org.jetbrains.kotlinx:kotlinx-coroutines-core:1.1.0'
 
-    /* <slatekit_local>
+    // /* <slatekit_local>
     if( slatekitSetupViaBinary ) {
         compile "com.slatekit:slatekit-results:$slatekit_version"
         compile "com.slatekit:slatekit-actors:$slatekit_version"
@@ -93,7 +93,7 @@ dependencies {
         compile project(":slatekit-result")
         compile project(":slatekit-actors")
         compile project(":slatekit-common")
-    // } //</slatekit_local>
+    } //</slatekit_local>
 }
 
 // ==================================================================

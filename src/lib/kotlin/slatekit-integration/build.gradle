@@ -87,7 +87,7 @@ dependencies {
     compile 'com.squareup.okhttp3:okhttp:3.9.0'
     compile 'org.threeten:threetenbp:1.3.8'
 
-    /* <slatekit_local>
+    // /* <slatekit_local>
     if( slatekitSetupViaBinary ) {
         compile "com.slatekit:slatekit-results:$slatekit_version"
         compile "com.slatekit:slatekit-common:$slatekit_version"
@@ -119,7 +119,7 @@ dependencies {
         compile project(":slatekit-apis")
         compile project(":slatekit-jobs")
         compile project(":slatekit-notifications")
-    // } //</slatekit_local>
+    } //</slatekit_local>
 }
 
 // ==================================================================
