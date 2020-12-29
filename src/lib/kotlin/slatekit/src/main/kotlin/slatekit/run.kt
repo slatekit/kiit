@@ -110,6 +110,8 @@ fun test(res:Try<Properties>, desc:String){
  * 3. Missing pattern match in loadFrom { ... is Alias.Jar   -> loadFromJar2(cls,uri.path ?: ConfFuncs.CONFIG_DEFAULT_PROPERTIES) }
  * 4. Uri.parse( for jar is buggy ) ? maybe not even have a value
  * 5. Need separate conf function to load conf like below
+ * 6. Maybe add Parent Alias PRN
+ * 7. Support -conf.dir=PRN://conf, -conf.dir=../conf = other ( but figure out path )
  */
 fun conf(cls:Class<*>, raw: Array<String>, name:String = ConfFuncs.CONFIG_DEFAULT_PROPERTIES, alias:Alias = Alias.Jar): Properties {
     val args = Args.parseArgs(raw).getOrNull() ?: Args.empty()
