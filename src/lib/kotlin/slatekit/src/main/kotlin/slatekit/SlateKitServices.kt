@@ -47,8 +47,8 @@ interface SlateKitServices {
 
         val apis = listOf(
                 load("email") { Api(EmailApi(Builder.emails(ctx), ctx), declaredOnly = true, setup = SetupType.Annotated) },
-                load("files") { Api(FilesApi(Builder.files(ctx), ctx), declaredOnly = true, setup = SetupType.Annotated) },
-                load("queues") { Api(QueueApi(Builder.queues(ctx), ctx), declaredOnly = true, setup = SetupType.Annotated) },
+//                load("files") { Api(FilesApi(Builder.files(ctx), ctx), declaredOnly = true, setup = SetupType.Annotated) },
+//                load("queues") { Api(QueueApi(Builder.queues(ctx), ctx), declaredOnly = true, setup = SetupType.Annotated) },
                 load("sms") { Api(SmsApi(Builder.sms(ctx), ctx), declaredOnly = true, setup = SetupType.Annotated) },
                 Api(CodeGenApi(), declaredOnly = true, setup = SetupType.Annotated)
                 //load("db") { Api(DependencyApi(ctx), declaredOnly = false, setup = Setup.Annotated) }
