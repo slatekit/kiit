@@ -24,10 +24,10 @@ apply plugin: 'application'
 // ==================================================================
 // Slate Kit Component Info
 // ==================================================================
-def slatekitComponentId = 'exe'
-def slatekitComponentName = 'Exe'
-def slatekitComponentDesc = 'SlateKit Exe: CLI application'
-def slatekitComponentVersion = ext.slatekit_version_beta
+def slatekitComponentId = 'samples'
+def slatekitComponentName = 'Samples'
+def slatekitComponentDesc = 'SlateKit Samples: Sample Applications'
+def slatekitComponentVersion = ext.slatekit_version
 
 
 // ==================================================================
@@ -135,7 +135,6 @@ dependencies {
         implementation project(":slatekit-integration")
         implementation project(":slatekit-server")
         implementation project(":slatekit-providers")
-        implementation project(":slatekit-samples")
     } //</slatekit_local>
 //    implementation project(":slatekit-examples")
 //    implementation project(":slatekit-tests")

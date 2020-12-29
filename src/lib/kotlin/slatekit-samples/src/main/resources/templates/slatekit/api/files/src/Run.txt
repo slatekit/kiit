@@ -1,0 +1,50 @@
+package ${app.package}
+
+
+import kotlinx.coroutines.runBlocking
+import slatekit.app.AppRunner
+import slatekit.providers.logs.logback.LogbackLogs
+
+
+/**
+ * Entry point into the Slate Kit application with support for:
+ *
+ * 1. environments ( local, dev, qat, pro )
+ * 2. command line args
+ * 3. argument validation
+ * 4. about / help / version display
+ * 5. diagnostics ( on startup and end )
+ * 6. logging ( console + logback )
+ * 7. life-cycle events ( init, exec, end )
+ *
+ * java -jar ${app.name}.jar ?
+ * java -jar ${app.name}.jar --about
+ * java -jar ${app.name}.jar --version
+ * java -jar ${app.name}.jar -env=dev
+ * java -jar ${app.name}.jar -env=dev -conf.dir = "jars"
+ * java -jar ${app.name}.jar -env=dev -conf.dir = "conf"
+ */
+fun main(args: Array<String>) {
+    /**
+     * DOCS : https://www.slatekit.com/arch/app/
+     *
+     * NOTES: The AppRunner does the following:
+     *
+     * 1. checks for command line args
+     * 2. validates command line args against the Args schema ( optional )
+     * 3. builds an AppContext for the app ( containing args, environment, config, logs )
+     * 4. creates an App using supplied lambda ( Your Application instance )
+     * 5. displays start up information and diagnostics using the Banner
+     * 6. executes the life-cycle steps ( init, exec, done )
+     */
+    runBlocking {
+        AppRunner.run(
+                rawArgs = args,
+                about = App.about,
+                schema = App.schema,
+                enc = App.encryptor,
+                logs = LogbackLogs(),
+                builder = { ctx -> App(ctx) }
+        )
+    }
+}

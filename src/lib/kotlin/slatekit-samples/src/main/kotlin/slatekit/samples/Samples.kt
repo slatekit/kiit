@@ -1,17 +1,9 @@
-package slatekit
+package slatekit.samples
 
 import kotlinx.coroutines.*
 import slatekit.app.AppRunner
-import slatekit.cache.SimpleAsyncCache
-import slatekit.common.DateTime
-import slatekit.common.display.Banner
-import slatekit.common.envs.Envs
-import slatekit.common.info.*
 import slatekit.common.io.Alias
-import slatekit.common.log.LoggerConsole
-import slatekit.context.AppContext
 import slatekit.providers.logs.logback.LogbackLogs
-import slatekit.results.builders.Tries
 
 
 /**
@@ -51,79 +43,63 @@ import slatekit.results.builders.Tries
  * CODEGEN:
  * 1. slatekit.codegen.toKotlin -templatesFolder="usr://dev/tmp/slatekit/slatekit/scripts/templates/codegen/kotlin" -outputFolder="usr://dev/tmp/codegen/kotlin" -packageName="blendlife"
  */
-fun main(args: Array<String>) {
-    Tries.of {
-        val envs = Envs.defaults("dev")
-        val info = Info(
-                About.simple("slatekit", "cli", "", ""),
-                Build("1.29.0", "abc", "main", "12-30-20"),
-                Host.local(),
-                Lang.kotlin()
-        )
-        val banner = Banner(info, envs, LoggerConsole())
-        banner.welcome()
-        banner.display()
-
+object Samples {
+    fun app(args: Array<String>) {
+        /**
+         * DOCS : https://www.slatekit.com/arch/app/
+         *
+         * NOTES: The AppRunner does the following:
+         *
+         * 1. checks for command line args
+         * 2. validates command line args against the Args schema ( optional )
+         * 3. builds an AppContext for the app ( containing args, environment, config, logs )
+         * 4. creates an App using supplied lambda ( Your Application instance )
+         * 5. displays start up information and diagnostics using the Banner
+         * 6. executes the life-cycle steps ( init, exec, done )
+         */
+        runBlocking {
+            val sample = slatekit.samples.app.App
+            AppRunner.run(
+                    rawArgs = args,
+                    about = sample.about,
+                    schema = sample.schema,
+                    enc = sample.encryptor,
+                    logs = LogbackLogs(),
+                    hasAction = true,
+                    confSource = Alias.Jar,
+                    builder = { ctx -> slatekit.samples.app.App(ctx) }
+            )
+        }
     }
-    //test(args)
-    //app(args)
-    //slatekit.samples.job.main(args)
-}
 
-fun app(args:Array<String>) {
-    /**
-     * DOCS : https://www.slatekit.com/arch/app/
-     *
-     * NOTES: The AppRunner does the following:
-     *
-     * 1. checks for command line args
-     * 2. validates command line args against the Args schema ( optional )
-     * 3. builds an AppContext for the app ( containing args, environment, config, logs )
-     * 4. creates an App using supplied lambda ( Your Application instance )
-     * 5. displays start up information and diagnostics using the Banner
-     * 6. executes the life-cycle steps ( init, exec, done )
-     */
-    runBlocking {
-        AppRunner.run(
-            rawArgs = args,
-            about = SlateKit.about,
-            schema = SlateKit.schema,
-            enc = SlateKit.encryptor,
-            logs = LogbackLogs(),
-            hasAction = true,
-            confSource = Alias.Jar,
-            builder = { ctx -> slatekit.samples.app.App(ctx) }
-        )
+
+    fun cli(args: Array<String>) {
+        /**
+         * DOCS : https://www.slatekit.com/arch/app/
+         *
+         * NOTES: The AppRunner does the following:
+         *
+         * 1. checks for command line args
+         * 2. validates command line args against the Args schema ( optional )
+         * 3. builds an AppContext for the app ( containing args, environment, config, logs )
+         * 4. creates an App using supplied lambda ( Your Application instance )
+         * 5. displays start up information and diagnostics using the Banner
+         * 6. executes the life-cycle steps ( init, exec, done )
+         */
+        runBlocking {
+            val sample = slatekit.samples.api.App
+            AppRunner.run(
+                    rawArgs = args,
+                    about = sample.about,
+                    schema = sample.schema,
+                    enc = sample.encryptor,
+                    logs = LogbackLogs(),
+                    hasAction = true,
+                    confSource = Alias.Jar,
+                    builder = { ctx -> slatekit.samples.api.App(ctx) }
+            )
+        }
     }
-}
-
-
-fun cli(args:Array<String>) {
-    /**
-     * DOCS : https://www.slatekit.com/arch/app/
-     *
-     * NOTES: The AppRunner does the following:
-     *
-     * 1. checks for command line args
-     * 2. validates command line args against the Args schema ( optional )
-     * 3. builds an AppContext for the app ( containing args, environment, config, logs )
-     * 4. creates an App using supplied lambda ( Your Application instance )
-     * 5. displays start up information and diagnostics using the Banner
-     * 6. executes the life-cycle steps ( init, exec, done )
-     */
-    runBlocking {
-        AppRunner.run(
-                rawArgs = args,
-                about = SlateKit.about,
-                schema = SlateKit.schema,
-                enc = SlateKit.encryptor,
-                logs = LogbackLogs(),
-                hasAction = true,
-                confSource = Alias.Jar,
-                builder = { ctx -> slatekit.samples.api.App(ctx) }
-        )
-    }
-}
 
 
 //class CacheTests {
@@ -153,3 +129,4 @@ fun cli(args:Array<String>) {
 //        println("done")
 //    }
 //}
+}
