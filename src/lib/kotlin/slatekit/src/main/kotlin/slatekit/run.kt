@@ -2,8 +2,14 @@ package slatekit
 
 import kotlinx.coroutines.*
 import slatekit.app.AppRunner
+import slatekit.app.AppUtils
 import slatekit.cache.SimpleAsyncCache
 import slatekit.common.DateTime
+import slatekit.common.args.Args
+import slatekit.common.conf.Conf
+import slatekit.common.conf.ConfFuncs
+import slatekit.common.conf.Config
+import slatekit.common.conf.Props
 import slatekit.common.display.Banner
 import slatekit.common.envs.Envs
 import slatekit.common.info.*
@@ -63,11 +69,17 @@ fun main(args: Array<String>) {
         val banner = Banner(info, envs, LoggerConsole())
         banner.welcome()
         banner.display()
-
+        val conf = conf(args)
+        println(conf.getString("slatekit.title"))
     }
-    //test(args)
-    //app(args)
-    //slatekit.samples.job.main(args)
+}
+
+fun conf(raw: Array<String>, name:String = ConfFuncs.CONFIG_DEFAULT_PROPERTIES, confSource:Alias = Alias.Jar): Conf {
+    val args = Args.parseArgs(raw).getOrNull() ?: Args.empty()
+    val source = AppUtils.getDir(args, confSource)
+    val props = Props.loadFrom(source.combine(name))
+    val config = Config(source, props, null)
+    return config
 }
 
 fun app(args:Array<String>) {
