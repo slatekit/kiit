@@ -2,7 +2,7 @@
 ![Kotlin](https://img.shields.io/badge/kotlin-1.3-orange.svg)
 ![Apache 2](https://img.shields.io/badge/license-Apache2-blue.svg?style=flat)
 [![Follow us on twitter](https://img.shields.io/badge/twitter-slatekit-green.svg)](https://twitter.com/slatekit)
-![Gradle Package](https://github.com/code-helix/slatekit/workflows/Gradle%20Package/badge.svg)
+![Gradle Release](https://github.com/code-helix/slatekit/workflows/Gradle%20Package/badge.svg)
 
 ![image](media/slatekit-banner.png)
 
