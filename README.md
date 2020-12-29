@@ -1,7 +1,6 @@
 
 ![Kotlin](https://img.shields.io/badge/kotlin-1.3-orange.svg)
 ![Apache 2](https://img.shields.io/badge/license-Apache2-blue.svg?style=flat)
-[![Join the chat at https://gitter.im/code-helix/slatekit](https://badges.gitter.im/code-helix/slatekit.svg)](https://gitter.im/code-helix/slatekit?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 [![Follow us on twitter](https://img.shields.io/badge/twitter-slatekit-green.svg)](https://twitter.com/slatekit)
 ![Gradle Package](https://github.com/code-helix/slatekit/workflows/Gradle%20Package/badge.svg)
 
@@ -9,6 +8,7 @@
 
 <!--
 ![Build](https://travis-ci.org/code-helix/slatekit.svg?branch=master)
+[![Join the chat at https://gitter.im/code-helix/slatekit](https://badges.gitter.im/code-helix/slatekit.svg)](https://gitter.im/code-helix/slatekit?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 -->
 
 # About
