@@ -5,6 +5,7 @@ import slatekit.app.AppRunner
 import slatekit.cache.SimpleAsyncCache
 import slatekit.common.DateTime
 import slatekit.common.io.Alias
+import slatekit.context.AppContext
 import slatekit.providers.logs.logback.LogbackLogs
 import kotlin.random.Random
 
@@ -48,8 +49,9 @@ import kotlin.random.Random
  */
 fun main(args: Array<String>) {
     println("kotlin")
+    println("VERSION = 1.29.0")
     //test(args)
-    app(args)
+    //app(args)
     //slatekit.samples.job.main(args)
 }
 
@@ -68,14 +70,14 @@ fun app(args:Array<String>) {
      */
     runBlocking {
         AppRunner.run(
-                rawArgs = args,
-                about = SlateKit.about,
-                schema = SlateKit.schema,
-                enc = SlateKit.encryptor,
-                logs = LogbackLogs(),
-                hasAction = true,
-                confSource = Alias.Jar,
-                builder = { ctx -> slatekit.samples.app.App(ctx) }
+            rawArgs = args,
+            about = SlateKit.about,
+            schema = SlateKit.schema,
+            enc = SlateKit.encryptor,
+            logs = LogbackLogs(),
+            hasAction = true,
+            confSource = Alias.Jar,
+            builder = { ctx -> slatekit.samples.app.App(ctx) }
         )
     }
 }
