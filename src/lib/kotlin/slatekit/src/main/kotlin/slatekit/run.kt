@@ -70,7 +70,9 @@ fun main(args: Array<String>) {
         banner.welcome()
         banner.display()
         val conf = conf(args)
-        println(conf.getString("slatekit.title"))
+        println("title    : " + conf.getString("slatekit.title"))
+        println("user.dir : " + System.getProperty("user.dir"))
+        println("path.get : " + java.nio.file.Paths.get("").toAbsolutePath().toString())
     }
 }
 
