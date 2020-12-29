@@ -12,7 +12,7 @@ import slatekit.common.info.About
 import slatekit.common.info.ApiKey
 import slatekit.integration.apis.*
 import slatekit.results.Success
-import slatekit.meta.Serialization
+import slatekit.serialization.Serialization
 import slatekit.results.Failure
 
 class SlateKit(ctx: Context) : App<Context>(ctx, AppOptions(showWelcome = true)), SlateKitServices {

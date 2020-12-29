@@ -9,6 +9,7 @@ import slatekit.common.types.Content
 import slatekit.common.info.ApiKey
 import slatekit.integration.apis.CliApi
 import slatekit.results.Try
+import slatekit.serialization.Serialization
 import slatekit.samples.common.apis.SampleApi
 
 class CLI(val ctx: Context) {
@@ -38,7 +39,7 @@ class CLI(val ctx: Context) {
                 metaTransform = {
                     listOf("api-key" to keys.first().key)
                 },
-                serializer = {item, type -> Content.csv(slatekit.meta.Serialization.csv().serialize(item))}
+                serializer = {item, type -> Content.csv(Serialization.csv().serialize(item))}
         )
 
         // 5. Run interactive mode
