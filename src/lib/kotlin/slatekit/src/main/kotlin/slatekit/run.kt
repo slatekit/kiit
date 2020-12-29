@@ -92,7 +92,7 @@ fun app(args:Array<String>) {
             logs = LogbackLogs(),
             hasAction = true,
             confSource = Alias.Jar,
-            builder = { ctx -> slatekit.samples.app.App(ctx) }
+            builder = { ctx -> SlateKit(ctx) }
         )
     }
 }
@@ -120,7 +120,7 @@ fun cli(args:Array<String>) {
                 logs = LogbackLogs(),
                 hasAction = true,
                 confSource = Alias.Jar,
-                builder = { ctx -> slatekit.samples.api.App(ctx) }
+                builder = { ctx -> SlateKit(ctx) }
         )
     }
 }

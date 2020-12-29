@@ -7,7 +7,7 @@ import slatekit.context.Context
 import slatekit.docs.DocApi
 import slatekit.generator.*
 import slatekit.integration.apis.*
-import slatekit.samples.common.apis.SampleApi
+//import slatekit.samples.common.apis.SampleApi
 
 interface SlateKitServices {
 
@@ -26,8 +26,8 @@ interface SlateKitServices {
         val requiredApis = listOf(
                 Api(GeneratorApi(ctx, GeneratorService(ctx, SlateKit::class.java, GeneratorSettings(toolSettings, buildSettings))), declaredOnly = true, setup = SetupType.Annotated),
                 Api(DocApi(ctx), declaredOnly = true, setup = SetupType.Annotated),
-                Api(CodeGenApi(), declaredOnly = true, setup = SetupType.Annotated),
-                Api(SampleApi(ctx), declaredOnly = true, setup = SetupType.Annotated)
+                Api(CodeGenApi(), declaredOnly = true, setup = SetupType.Annotated)
+                //Api(SampleApi(ctx), declaredOnly = true, setup = SetupType.Annotated)
 //                Api(InfoApi(ctx), declaredOnly = true, setup = Setup.Annotated),
 //                Api(VersionApi(ctx), declaredOnly = true, setup = Setup.Annotated)
                 //Api(moduleApi, declaredOnly = true, setup = SetupType.Annotated)
