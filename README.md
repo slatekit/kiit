@@ -3,6 +3,7 @@
 ![Apache 2](https://img.shields.io/badge/license-Apache2-blue.svg?style=flat)
 [![Join the chat at https://gitter.im/code-helix/slatekit](https://badges.gitter.im/code-helix/slatekit.svg)](https://gitter.im/code-helix/slatekit?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 [![Follow us on twitter](https://img.shields.io/badge/twitter-slatekit-green.svg)](https://twitter.com/slatekit)
+![Gradle Package](https://github.com/code-helix/slatekit/workflows/Gradle%20Package/badge.svg)
 
 ![image](media/slatekit-banner.png)
 
@@ -13,18 +14,19 @@
 # About
 **Slate Kit** is a collection of architecture components and libraries for full-stack Kotlin development.
 
-num | about | note
+-- | about | note
 -----|------|------
-1 | who | For Kotlin **Android**, **Server Side** developers for building startups, mobile apps, personal projects.
-2 | what    | This is a modular set of utilities and architecture components.
-3 | where  | Reach us on [Gitter](https://gitter.im/code-helix/slatekit), [Twitter](https://twitter.com/slatekit), and log issues on the issues board here.
-4 | when | This has been around for 3 years as a internal library which we slowly open-sourced.
+1 | who | This is for Kotlin **Server** and **Android** developers building startups, mobile apps, personal projects.
+2 | what    | This is a modular set of libraries, utilities and architecture components.
+3 | where  |  This is used for 3 years in internal projects, mobile apps and server side APIs
+4 | when | This has been around for 4 years as a internal project which has been slowly open-sourced.
 5 | why | Designed as reusable modules for any company / product. We use it internally for all projects.
-6 | how | Check out our website at www.slatekit.com for more info, overview, details, usage, docs, etc.
-7 | compare | Slate Kit is a modern, simple, 100% Kotlin alternative to Spring Framework.
+6 | how | Check out www.slatekit.com for overviews, getting started, concepts, guides, docs, details and more
+7 | contact  |  You can contact us on [Twitter](https://twitter.com/slatekit), and log issues on the issues board.
+8 | compare | Slate Kit is a modern, simple, 100% Kotlin alternative to Spring Framework for both Android and Server
 
 # Install
-You can set up gradle using the example below. You can use a little or as many slatekit-components as you need. 
+You can set up gradle using the example below. You can use as few or as many slatekit modules as you need. 
 
 ```groovy
 repositories {
@@ -35,10 +37,10 @@ dependencies {
 	// other libraries
 	
 	// slatekit-results: Result<T,E> to model successes/failures with optional status codes
-    	compile 'com.slatekit:slatekit-results:1.0.0'
+    	compile 'com.slatekit:slatekit-results:1.28.0'
 	
 	// slatekit-common: Utilities for Android or Server
-    	compile 'com.slatekit:slatekit-common:0.9.48'
+    	compile 'com.slatekit:slatekit-common:1.28.0'
 	
 	// Misc architecture components ( all depend on results/common components above )
 	// Refer to docs for gradle setup for other components
@@ -46,7 +48,7 @@ dependencies {
 ```
 
 # Goals
-Slate Kit is a Kotlin based open-source set of utilities, libraries and modular architecture components
+Slate Kit is a Kotlin based open-source set of libraries, utilities and modular architecture components
 
 # Design
 Slate Kit is designed as a collection of modular components. In this way, it is more like a library than an `framework`.
@@ -67,7 +69,7 @@ standards| http://www.slatekit.com/more/standards  | coding standards
 
 
 # Modules
-Slate Kit contains many useful architecture components, utilities and applications features. The slatekit-common has 0 dependencies adn contains most of the common utilities and components used throughout all the other projects. 
+Slate Kit contains many useful architecture components, utilities and applications features. Slatekit-common has 0 dependencies adn contains most of the common utilities and components used throughout all the other projects. 
 
 ![image](doc/diagrams/slatekit-overview.png)
 
@@ -123,8 +125,8 @@ dependencies {
     compile "org.jetbrains.kotlin:kotlin-stdlib-jre8:$kotlin_version"
 	
     // Reference the slate kit binaries here
-    compile 'com.slatekit:slatekit-results:1.0.0'
-    compile 'com.slatekit:slatekit-common:0.9.48'
+    compile 'com.slatekit:slatekit-results:1.28.0'
+    compile 'com.slatekit:slatekit-common:1.28.0'
 }
 ```
 
