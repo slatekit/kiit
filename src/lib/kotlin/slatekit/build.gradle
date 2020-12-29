@@ -145,7 +145,15 @@ dependencies {
 // gradle build distZip
 mainClassName = 'slatekit.RunKt'
 
-//sourceSets.main.resources.srcDirs = [ "src/" ]
+sourceSets {
+    main.java.srcDirs += 'src/main/kotlin/'
+    //test.java.srcDirs += 'src/test/kotlin/'
+    main {
+        resources {
+            srcDirs = ["src/main/resources"]
+        }
+    }
+}
 
 jar {
     manifest {

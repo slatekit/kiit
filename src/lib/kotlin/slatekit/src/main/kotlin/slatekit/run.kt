@@ -14,10 +14,16 @@ import slatekit.common.display.Banner
 import slatekit.common.envs.Envs
 import slatekit.common.info.*
 import slatekit.common.io.Alias
+import slatekit.common.io.Uri
 import slatekit.common.log.LoggerConsole
 import slatekit.context.AppContext
 import slatekit.providers.logs.logback.LogbackLogs
+import slatekit.results.Failure
+import slatekit.results.Success
+import slatekit.results.Try
 import slatekit.results.builders.Tries
+import java.io.FileInputStream
+import java.util.*
 
 
 /**
@@ -56,32 +62,128 @@ import slatekit.results.builders.Tries
  *
  * CODEGEN:
  * 1. slatekit.codegen.toKotlin -templatesFolder="usr://dev/tmp/slatekit/slatekit/scripts/templates/codegen/kotlin" -outputFolder="usr://dev/tmp/codegen/kotlin" -packageName="blendlife"
+ *
+ * // Test
+ * /Users/kishorereddy/git/slatekit/slatekit/src/lib/kotlin/slatekit/build/distributions/slatekit/bin
  */
 fun main(args: Array<String>) {
     Tries.of {
         val envs = Envs.defaults("dev")
         val info = Info(
                 About.simple("slatekit", "cli", "", ""),
-                Build("1.29.0", "abc", "main", "12-30-20"),
+                Build("1.38.0", "abc", "main", "12-30-20"),
                 Host.local(),
                 Lang.kotlin()
         )
-        val banner = Banner(info, envs, LoggerConsole())
+        val logger = LoggerConsole()
+        val banner = Banner(info, envs, logger)
         banner.welcome()
         banner.display()
-        val conf = conf(args)
-        println("title    : " + conf.getString("slatekit.title"))
-        println("user.dir : " + System.getProperty("user.dir"))
-        println("path.get : " + java.nio.file.Paths.get("").toAbsolutePath().toString())
+        val confTest = Tries.of { conf(SlateKit::class.java, args) }
+        val jar1Test = Tries.of { Props2.loadFromJar(SlateKit::class.java,"env.conf") }
+        val jar2Test = Tries.of { Props2.loadFromJar2(SlateKit::class.java,"env.conf") }
+        val jar3Test = Tries.of { loadFromJar3("env.conf") }
+        test(confTest, "auto")
+        test(jar1Test, "jar1")
+        test(jar2Test, "jar2")
+        test(jar3Test, "jar3")
+        println()
+        logger.info("user.dir : " + System.getProperty("user.dir"))
+        logger.info("path.get : " + java.nio.file.Paths.get("").toAbsolutePath().toString())
     }
 }
 
-fun conf(raw: Array<String>, name:String = ConfFuncs.CONFIG_DEFAULT_PROPERTIES, confSource:Alias = Alias.Jar): Conf {
+fun test(res:Try<Properties>, desc:String){
+    println()
+    println("======================================")
+    when(res){
+        is Success -> println("conf.${desc} : " + res.value.getProperty("slatekit.title"))
+        is Failure -> println("conf.${desc} : FAILED error=${res.error.message}")
+    }
+}
+
+
+/**
+ * Problems:
+ * 1. Use SlateKit::class not Props { ... this.class }
+ * 2. Use cls.getResourceAsStream("/" + path) instead of getResource(..).file
+ * 3. Missing pattern match in loadFrom { ... is Alias.Jar   -> loadFromJar2(cls,uri.path ?: ConfFuncs.CONFIG_DEFAULT_PROPERTIES) }
+ * 4. Uri.parse( for jar is buggy ) ? maybe not even have a value
+ * 5. Need separate conf function to load conf like below
+ */
+fun conf(cls:Class<*>, raw: Array<String>, name:String = ConfFuncs.CONFIG_DEFAULT_PROPERTIES, alias:Alias = Alias.Jar): Properties {
     val args = Args.parseArgs(raw).getOrNull() ?: Args.empty()
-    val source = AppUtils.getDir(args, confSource)
-    val props = Props.loadFrom(source.combine(name))
-    val config = Config(source, props, null)
-    return config
+    val source = AppUtils.getDir(args, alias)
+    val path = source.combine(name)
+    println("CFG name=${name}")
+    println("CFG alias=${alias.name}")
+    source.print()
+    val props = Props2.loadFrom(cls, path)
+    return props
+}
+
+
+fun Uri.print() {
+    println()
+    println("==============================================")
+    println("URI full=${this.full}")
+    println("URI path=${this.path}")
+    println("URI raw=${this.raw}"  )
+    println("URI root=${this.root}")
+    println("==============================================")
+    println()
+}
+
+
+object Props2 {
+    fun loadFrom(cls:Class<*>, uri: Uri): Properties {
+        uri.print()
+        val props = when (uri.root) {
+            null -> loadFromJar2(cls,uri.path ?: ConfFuncs.CONFIG_DEFAULT_PROPERTIES)
+            is Alias.Jar   -> loadFromJar2(cls,uri.path ?: ConfFuncs.CONFIG_DEFAULT_PROPERTIES)
+            is Alias.Other -> loadFromJar2(cls,uri.path ?: ConfFuncs.CONFIG_DEFAULT_PROPERTIES)
+            else -> loadFromPath(uri.toFile().absolutePath)
+        }
+        return props
+    }
+
+
+    fun loadFromJar(cls:Class<*>, path: String): Properties {
+        // This is here to debug loading app conf
+        val file = cls.getResource("/" + path).file
+        val input = FileInputStream(file)
+        val conf = Properties()
+        conf.load(input)
+        return conf
+    }
+
+
+    fun loadFromJar2(cls:Class<*>, path: String): Properties {
+        // This is here to debug loading app conf
+        val input = cls.getResourceAsStream("/" + path)
+        val conf = Properties()
+        conf.load(input)
+        return conf
+    }
+
+    fun loadFromPath(path: String): Properties {
+        // This is here to debug loading app conf
+        val input = FileInputStream(path)
+        val conf = Properties()
+        conf.load(input)
+        return conf
+    }
+}
+
+fun loadFromJar3(path: String): Properties {
+    // This is here to debug loading app conf
+    println("Load jar path =/$path")
+    val clsK = SlateKit::class
+    val clsJ = clsK.java
+    val input = clsJ.getResourceAsStream("/" + path)
+    val conf = Properties()
+    conf.load(input)
+    return conf
 }
 
 fun app(args:Array<String>) {
