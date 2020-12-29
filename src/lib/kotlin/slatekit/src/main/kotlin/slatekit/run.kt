@@ -3,7 +3,6 @@ package slatekit
 import kotlinx.coroutines.*
 import slatekit.app.AppRunner
 import slatekit.app.AppUtils
-import slatekit.cache.SimpleAsyncCache
 import slatekit.common.DateTime
 import slatekit.common.args.Args
 import slatekit.common.conf.Conf
@@ -16,8 +15,8 @@ import slatekit.common.info.*
 import slatekit.common.io.Alias
 import slatekit.common.io.Uri
 import slatekit.common.log.LoggerConsole
+import slatekit.common.log.LogsDefault
 import slatekit.context.AppContext
-import slatekit.providers.logs.logback.LogbackLogs
 import slatekit.results.Failure
 import slatekit.results.Success
 import slatekit.results.Try
@@ -207,7 +206,7 @@ fun app(args:Array<String>) {
             about = SlateKit.about,
             schema = SlateKit.schema,
             enc = SlateKit.encryptor,
-            logs = LogbackLogs(),
+            logs = LogsDefault,
             hasAction = true,
             confSource = Alias.Jar,
             builder = { ctx -> SlateKit(ctx) }
@@ -235,7 +234,7 @@ fun cli(args:Array<String>) {
                 about = SlateKit.about,
                 schema = SlateKit.schema,
                 enc = SlateKit.encryptor,
-                logs = LogbackLogs(),
+                logs = LogsDefault,
                 hasAction = true,
                 confSource = Alias.Jar,
                 builder = { ctx -> SlateKit(ctx) }

@@ -1,4 +1,4 @@
-package slatekit
+package slatekit.samples
 
 import slatekit.cloud.aws.S3
 import slatekit.cloud.aws.SQS
