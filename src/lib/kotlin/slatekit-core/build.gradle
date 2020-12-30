@@ -89,14 +89,10 @@ dependencies {
     if( slatekitSetupViaBinary ) {
         compile "com.slatekit:slatekit-results:$slatekit_version"
         compile "com.slatekit:slatekit-common:$slatekit_version"
-        compile "com.slatekit:slatekit-http:$slatekit_version"
-        compile "com.slatekit:slatekit-tracking:$slatekit_version"
     } else {
         // */
         compile project(":slatekit-result")
         compile project(":slatekit-common")
-        compile project(":slatekit-http")
-        compile project(":slatekit-tracking")
     } //</slatekit_local>
 }
 
