@@ -92,7 +92,6 @@ dependencies {
         compile "com.slatekit:slatekit-common:$slatekit_version"
         compile "com.slatekit:slatekit-context:$slatekit_version"
         compile "com.slatekit:slatekit-meta:$slatekit_version_beta"
-        compile "com.slatekit:slatekit-policy:$slatekit_version"
         compile "com.slatekit:slatekit-serialization:$slatekit_version"
     } else {
         // */
@@ -100,7 +99,6 @@ dependencies {
         compile project(":slatekit-common")
         compile project(":slatekit-context")
         compile project(":slatekit-meta")
-        compile project(":slatekit-policy")
         compile project(":slatekit-serialization")
     } //</slatekit_local>
 }
