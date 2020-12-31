@@ -87,7 +87,7 @@ class ConfigApi(override val context: Context) : FileSupport {
 
     @Action(desc = "loads and shows the database info from config with supplied name")
     fun showDbFromUri(path: String, name: String): DbCon? {
-        val conf = Config.of(path)
+        val conf = Config.of(context.app, path)
         val dbCon = conf.dbCon(name)
         return dbCon
     }
@@ -99,7 +99,7 @@ class ConfigApi(override val context: Context) : FileSupport {
 
     @Action(desc = "loads and shows an api key from config")
     fun showApiLoginFromUri(path: String, name: String): ApiLogin {
-        val conf = Config.of(path)
+        val conf = Config.of(context.app, path)
         val apiInfo = conf.apiLogin(name)
         return apiInfo
     }
@@ -111,7 +111,7 @@ class ConfigApi(override val context: Context) : FileSupport {
 
     @Action(desc = "loads and shows an api key from config")
     fun showApiKeyFromUri(path: String, name: String): ApiLogin {
-        val conf = Config.of(path)
+        val conf = Config.of(context.app, path)
         val apiInfo = conf.apiLogin(name)
         return apiInfo
     }

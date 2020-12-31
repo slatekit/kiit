@@ -92,7 +92,7 @@ object Confs {
      */
     fun load(cls: Class<*>, fileName: String? = null, enc: Encryptor? = null): Conf {
         val info = Props.fromPath(cls, fileName)
-        return Config(info.first, info.second, enc)
+        return Config(cls, info.first, info.second, enc)
     }
 
     /**

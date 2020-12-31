@@ -99,7 +99,7 @@ object AppUtils {
             // for directory reference provide: "file://./conf/"
             val overrideConfName = "env.${env.name}" + CONFIG_DEFAULT_SUFFIX
             val overrideConfPath = source.combine(overrideConfName).toFile().absolutePath
-            val confEnv = Config.of(overrideConfPath, confBase, enc)
+            val confEnv = Config.of(cls, overrideConfPath, confBase, enc)
 
             AppInputs(source, args, Envs(allEnvs).select(env.name), confBase, confEnv)
         } ?: throw Exception("Unknown environment name : $envName supplied")

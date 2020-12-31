@@ -24,11 +24,12 @@ import slatekit.common.io.Uri
  * Created by kishorereddy on 6/15/17.
  */
 class ConfigMulti(
+        cls:Class<*>,
         private val config: Conf,
         private val parent: Conf,
         uri: Uri,
         private val enc: Encryptor? = null
-) : Conf(uri, { raw -> enc?.decrypt(raw) ?: raw }) {
+) : Conf(cls, uri, { raw -> enc?.decrypt(raw) ?: raw }) {
 
 
     override val raw: Any = config
@@ -57,7 +58,7 @@ class ConfigMulti(
      * @param file
      * @return
      */
-    override fun loadFrom(file: String?): Conf? = Confs.load(file, enc)
+    override fun loadFrom(file: String?): Conf? = Confs.load(cls, file, enc)
 
     private fun containsKeyInternal(key: String): Boolean {
         return config.containsKey(key) || parent.containsKey(key)

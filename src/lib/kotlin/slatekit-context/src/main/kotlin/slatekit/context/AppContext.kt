@@ -24,6 +24,7 @@ import slatekit.common.log.LogsDefault
  * @param dirs  : directories used for the app
  */
 data class AppContext(
+        override val app :Class<*>,
         override val args: Args,
         override val envs: Envs,
         override val conf: Conf,
@@ -37,11 +38,12 @@ data class AppContext(
     companion object {
 
         @JvmStatic
-        fun simple(name: String): AppContext {
+        fun simple(cls:Class<*>, name: String): AppContext {
             val args = Args.empty()
             val envs = Envs.defaults()
-            val conf = Config()
+            val conf = Config(cls)
             return AppContext(
+                    app  = cls,
                     args = args,
                     envs = envs,
                     conf = conf,

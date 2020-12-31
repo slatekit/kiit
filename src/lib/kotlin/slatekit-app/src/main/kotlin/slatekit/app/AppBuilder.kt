@@ -38,7 +38,7 @@ object AppBuilder {
      *
      * @return
      */
-    fun dbs(conf: Conf): Connections = Connections.of(conf.dbCon("db"))
+    fun dbs(cls:Class<*>, conf: Conf): Connections = Connections.of(conf.dbCon(cls, "db"))
 
     /**
      * builds all the info for this application including its
@@ -132,7 +132,7 @@ object AppBuilder {
         val name = "build.conf"
         val props = Props.fromUri(cls, source.combine(name))
         val stamp = Config(source,props, null)
-        val build = stamp.buildStamp("build")
+        val build = stamp.buildStamp(cls,"build")
         return build
     }
 
@@ -175,6 +175,7 @@ object AppBuilder {
         val conf = inputs.confEnv
 
         return AppContext(
+            cls = cls,
             args = args,
             envs = env,
             conf = conf,
