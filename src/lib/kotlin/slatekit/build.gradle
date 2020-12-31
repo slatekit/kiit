@@ -33,7 +33,7 @@ def slatekitComponentVersion = ext.slatekit_version_beta
 // ==================================================================
 // Slate Kit Setup mode: defaults to maven vs loading project sources
 // ==================================================================
-ext.slatekitSetupViaBinary = true //System.getenv('SLATEKIT_PROJECT_MODE') != 'sources'
+ext.slatekitSetupViaBinary = false //System.getenv('SLATEKIT_PROJECT_MODE') != 'sources'
 task info {
     println('slatekit.setup     : ' + System.getenv('SLATEKIT_PROJECT_MODE'))
     println('slatekit.maven     : ' + slatekitSetupViaBinary)
@@ -97,6 +97,9 @@ dependencies {
         implementation "com.slatekit:slatekit-apis:$slatekit_version"
         implementation "com.slatekit:slatekit-generator:$slatekit_version_beta"
         implementation "com.slatekit:slatekit-cli:$slatekit_version"
+        implementation "com.slatekit:slatekit-providers-aws:$slatekit_version"
+        implementation "com.slatekit:slatekit-providers-logback:$slatekit_version"
+        implementation "com.slatekit:slatekit-providers-datadog:$slatekit_version"
 //        implementation "com.slatekit:slatekit-core:$slatekit_version"
 //        implementation "com.slatekit:slatekit-http:$slatekit_version"
 //        implementation "com.slatekit:slatekit-cache:$slatekit_version"
@@ -109,7 +112,6 @@ dependencies {
 //        implementation "com.slatekit:slatekit-orm:$slatekit_version_beta"
 //        implementation "com.slatekit:slatekit-integration:$slatekit_version_beta"
 //        implementation "com.slatekit:slatekit-server:$slatekit_version_beta"
-//        implementation "com.slatekit:slatekit-providers:$slatekit_version"
     } else {
         implementation project(":slatekit-result")
         implementation project(":slatekit-common")
@@ -122,6 +124,9 @@ dependencies {
         implementation project(":slatekit-apis")
         implementation project(":slatekit-generator")
         implementation project(":slatekit-cli")
+        implementation project(":slatekit-providers-aws")
+        implementation project(":slatekit-providers-logback")
+        implementation project(":slatekit-providers-datadog")
 //        implementation project(":slatekit-core")
 //        implementation project(":slatekit-http")
 //        implementation project(":slatekit-cache")
@@ -134,11 +139,10 @@ dependencies {
 //        implementation project(":slatekit-orm")
 //        implementation project(":slatekit-integration")
 //        implementation project(":slatekit-server")
-//        implementation project(":slatekit-providers")
 //        implementation project(":slatekit-samples")
     } //</slatekit_local>
 //    implementation project(":slatekit-examples")
-//    implementation project(":slatekit-tests")
+    implementation project(":slatekit-tests")
 }
 
 // https://www.anexinet.com/blog/six-ways-to-package-a-java-application-with-gradle/

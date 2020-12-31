@@ -1,6 +1,7 @@
 package slatekit
 
 import kotlinx.coroutines.*
+import slatekit.app.AppBuilder
 import slatekit.app.AppRunner
 import slatekit.app.AppUtils
 import slatekit.common.DateTime
@@ -115,7 +116,7 @@ fun test(res:Try<Properties>, desc:String){
  */
 fun conf(cls:Class<*>, raw: Array<String>, name:String = Confs.CONFIG_DEFAULT_PROPERTIES, alias:Alias = Alias.Jar): Properties {
     val args = Args.parseArgs(raw).getOrNull() ?: Args.empty()
-    val source = AppUtils.getDir(args, alias)
+    val source = AppBuilder.dir(args, alias)
     val path = source.combine(name)
     println("CFG name=${name}")
     println("CFG alias=${alias.name}")
@@ -203,6 +204,7 @@ fun app(args:Array<String>) {
      */
     runBlocking {
         AppRunner.run(
+                app = SlateKit::class.java,
             rawArgs = args,
             about = SlateKit.about,
             schema = SlateKit.schema,

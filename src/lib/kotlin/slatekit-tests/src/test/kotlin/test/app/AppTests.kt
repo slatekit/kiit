@@ -22,7 +22,7 @@ import slatekit.context.Context
 import slatekit.common.args.ArgsSchema
 import slatekit.common.crypto.Encryptor
 import slatekit.common.info.About
-import slatekit.providers.logs.logback.LogbackLogs
+import slatekit.ext.logs.logback.LogbackLogs
 import slatekit.results.Success
 import slatekit.results.Try
 import slatekit.results.getOrElse
