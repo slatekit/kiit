@@ -29,15 +29,16 @@ import slatekit.entities.EntityUpdatable
 import slatekit.entities.EntityWithId
 import slatekit.orm.orm
 import slatekit.orm.sqlBuilder
+import test.TestApp
 import test.setup.MyEncryptor
 import test.setup.StatusEnum
+import test.setup.TestSupport
 import java.util.*
 
 
-class Entity_Database_Tests {
+class Entity_Database_Tests : TestSupport {
 
-
-     val sampleUUID1 = "67bdb72a-1d74-11e8-b467-0ed5f89f7181"
+    val sampleUUID1 = "67bdb72a-1d74-11e8-b467-0ed5f89f7181"
      val sampleUUID2 = "67bdb72a-1d74-11e8-b467-0ed5f89f7182"
     val sampleUUID3 = "67bdb72a-1d74-11e8-b467-0ed5f89f7183"
     val sampleUUID4 = "67bdb72a-1d74-11e8-b467-0ed5f89f7184"
@@ -140,7 +141,7 @@ class Entity_Database_Tests {
         Assert.assertTrue(updated.test_uniqueId == update.test_uniqueId)
     }
 
-    val con = Confs.readDbCon("usr://.slatekit/conf/db.conf")
+    val con = Confs.readDbCon(app,"usr://.slatekit/conf/db.conf")
 
     private fun realDb(): Entities {
         val dbs = Connections.of(con!!)

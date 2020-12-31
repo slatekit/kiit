@@ -30,6 +30,7 @@ import slatekit.meta.map
 import test.TestApp
 import test.setup.Movie
 import test.setup.MyEncryptor
+import test.setup.TestSupport
 import java.util.*
 import java.io.FileInputStream
 
@@ -38,8 +39,7 @@ import java.io.FileInputStream
 /**
  * Created by kishorereddy on 6/4/17.
  */
-class ConfigTests {
-    val app = TestApp::class.java
+class ConfigTests : TestSupport {
 
     fun load(): Properties {
         val file = this.javaClass.getResource("/" + Confs.CONFIG_DEFAULT_PROPERTIES).file
@@ -144,14 +144,14 @@ class ConfigTests {
 
 
     @Test fun test_model_api_key() {
-        val conf  = Config.of(Confs.CONFIG_DEFAULT_PROPERTIES)
+        val conf  = Config.of(app, Confs.CONFIG_DEFAULT_PROPERTIES)
         val key = conf.apiLogin("aws-sqs")
         matchkey(key, ApiLogin("mycompany1.dev", "key1", "pass1", "env1", "tag1"))
     }
 
 
     @Test fun test_read_api_from() {
-        val key = Confs.readApiKey("usr://.slatekit/conf/env.conf", sectionName = "aws-sqs")
+        val key = Confs.readApiKey(app,"usr://.slatekit/conf/env.conf", sectionName = "aws-sqs")
         matchkey(key!!, ApiLogin("mycompany1.dev", "key1", "pass1", "env1", "tag1"))
     }
 
@@ -171,7 +171,7 @@ class ConfigTests {
 
 
     @Test fun test_enc() {
-        val conf  = Config.of(Confs.CONFIG_DEFAULT_PROPERTIES, MyEncryptor)
+        val conf  = Config.of(app, Confs.CONFIG_DEFAULT_PROPERTIES, MyEncryptor)
         val raw = "StarTrek2100"
         var enc = MyEncryptor.encrypt(raw)
 
@@ -181,7 +181,7 @@ class ConfigTests {
 
 
     @Test fun test_inheritance() {
-        val conf = Confs.loadWithFallbackConfig("jar://env.dev.conf", "jar://env.conf", null)
+        val conf = Confs.loadWithFallbackConfig(app, "jar://env.dev.conf", "jar://env.conf", null)
         Assert.assertTrue(conf.getString("env.name") == "dev")
         Assert.assertTrue(conf.getString("root_name") == "parent env config")
     }

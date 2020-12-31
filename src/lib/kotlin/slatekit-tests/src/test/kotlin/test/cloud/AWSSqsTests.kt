@@ -8,16 +8,16 @@ import slatekit.common.ext.toStringNumeric
 import slatekit.core.queues.QueueStringConverter
 import slatekit.core.queues.CloudQueue
 import test.TestApp
+import test.setup.TestSupport
 
 
-class AwsSqsTests {
+class AwsSqsTests : TestSupport {
 
     val SLATEKIT_DIR = ".slatekit"
 
     //@Test
     fun can_test_create() {
         runBlocking {
-            val app = TestApp::class.java
             // Not storing any key/secret in source code for security purposes
             // Setup 1: Use the default aws config file in "{user_dir}/.aws/credentials"
             val name = "slatekit-unit-tests"
