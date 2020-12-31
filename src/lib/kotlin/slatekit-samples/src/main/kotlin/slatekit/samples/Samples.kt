@@ -3,7 +3,7 @@ package slatekit.samples
 import kotlinx.coroutines.*
 import slatekit.app.AppRunner
 import slatekit.common.io.Alias
-import slatekit.providers.logs.logback.LogbackLogs
+import slatekit.providers.logback.LogbackLogs
 
 
 /**

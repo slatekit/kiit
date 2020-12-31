@@ -3,7 +3,7 @@ package ${app.package}
 
 import kotlinx.coroutines.runBlocking
 import slatekit.app.AppRunner
-import slatekit.providers.logs.logback.LogbackLogs
+import slatekit.providers.logback.LogbackLogs
 
 
 /**
