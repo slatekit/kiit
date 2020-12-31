@@ -34,6 +34,7 @@ import slatekit.integration.common.AppEntContext
 import slatekit.results.Codes
 import slatekit.results.getOrElse
 import slatekit.serialization.Serialization
+import test.TestApp
 
 
 class ShellTests  {
@@ -94,7 +95,8 @@ class ShellTests  {
 
   private fun getCli(): CliApi {
 
-    val ctx = AppEntContext.sample(Config(),"id", "slate.tests", "slate unit tests", "slatekit")
+    val app = TestApp::class.java
+    val ctx = AppEntContext.sample(app, Config(app),"id", "slate.tests", "slate unit tests", "slatekit")
 
     val apiKeys = listOf(
             ApiKey("user", "7BF84B28FC8A41BBA3FDFA48D2B462DA", "user"),

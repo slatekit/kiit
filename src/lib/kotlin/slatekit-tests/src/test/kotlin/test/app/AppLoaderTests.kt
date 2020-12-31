@@ -23,6 +23,7 @@ import slatekit.app.AppRunner
 import slatekit.results.Status
 import slatekit.results.Codes
 import slatekit.results.Success
+import test.TestApp
 
 
 class AppLoaderTests  {
@@ -70,6 +71,7 @@ class AppLoaderTests  {
     private fun run(args:Array<String>, value:ConfigValueTest, status: Status) {
         runBlocking {
             val result = AppRunner.run(
+                    TestApp::class.java,
                     rawArgs = args,
                     about = About.none,
                     builder = { ctx -> AppConfigTest(ctx) }

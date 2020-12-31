@@ -5,7 +5,7 @@ import org.junit.Before
 import org.junit.Ignore
 import org.junit.Test
 import slatekit.common.DateTimes
-import slatekit.common.conf.ConfFuncs
+import slatekit.common.conf.Confs
 import slatekit.db.Db
 import test.setup.TestSupport
 import java.time.LocalDate
@@ -40,7 +40,7 @@ class Db_Tests_Postgres : TestSupport {
         var id = 0L
     }
 
-    val con = ConfFuncs.readDbCon("user://.slatekit/conf/db_postgres.conf")
+    val con = Confs.readDbCon("user://.slatekit/conf/db_postgres.conf")
     val tableName = "sample_entity"
 
 

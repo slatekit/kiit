@@ -26,6 +26,7 @@ import slatekit.providers.logs.logback.LogbackLogs
 import slatekit.results.Success
 import slatekit.results.Try
 import slatekit.results.getOrElse
+import test.TestApp
 
 
 class AppTests {
@@ -71,6 +72,7 @@ class AppTests {
 
     suspend fun runApp(args: Array<String>?, schema: ArgsSchema?, enc: Encryptor?, appCreator: (Context) -> App<Context>): Try<Any?> {
         return AppRunner.run(
+                TestApp::class.java,
                 rawArgs = args ?: arrayOf(),
                 about = About.simple("test id", "test name", "test desc", "test company"),
                 schema = schema,

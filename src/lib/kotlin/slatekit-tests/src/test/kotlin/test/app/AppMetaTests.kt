@@ -21,6 +21,7 @@ import slatekit.common.info.About
 import slatekit.app.App
 import slatekit.app.AppRunner
 import slatekit.results.Codes
+import test.TestApp
 
 
 class AppMetaTests  {
@@ -45,6 +46,7 @@ class AppMetaTests  {
     runBlocking {
       for (word in words) {
         val result = AppRunner.run(
+                TestApp::class.java,
                 rawArgs = arrayOf(word),
                 about = About.none,
                 builder = { ctx -> App(ctx) }

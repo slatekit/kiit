@@ -19,7 +19,7 @@ import org.junit.Test
 import org.threeten.bp.*
 import slatekit.common.Field
 import slatekit.common.ids.UPID
-import slatekit.common.conf.ConfFuncs
+import slatekit.common.conf.Confs
 import slatekit.common.data.Connections
 import slatekit.common.data.Vendor
 import slatekit.common.ids.UPIDs
@@ -140,7 +140,7 @@ class Entity_Database_Tests {
         Assert.assertTrue(updated.test_uniqueId == update.test_uniqueId)
     }
 
-    val con = ConfFuncs.readDbCon("usr://.slatekit/conf/db.conf")
+    val con = Confs.readDbCon("usr://.slatekit/conf/db.conf")
 
     private fun realDb(): Entities {
         val dbs = Connections.of(con!!)
