@@ -8,7 +8,7 @@ import slatekit.results.Try
  *
  * NOTES:
  * 1. A default implementation is available at @see[slatekit.integration.jobs.JobQueue]
- * 2. Default implementation uses AWS SQS by leveraging Slate Kit Cloud project @see[slatekit.cloud]
+ * 2. Default implementation uses AWS SQS by leveraging Slate Kit Cloud project @see[slatekit.providers.aws]
  * 3. Default implementation is NOT provided here to avoid dependency on these other libraries in this project.
  */
 interface Queue {

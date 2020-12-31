@@ -24,7 +24,7 @@ import slatekit.results.then
  * 1. This supports an async model via Coroutines
  * 2. Cloud files implementation in Slate Kit ( AWS S3 ) is Java SDK 1.0 ( synchronous )
  * 3. This is to "future proof" this public API to make it Async
- * 4. The AWS S3 component in slatekit.cloud will be migrated to Java SDK 2.0 ( async ) version in the future
+ * 4. The AWS S3 component in slatekit.providers.aws will be migrated to Java SDK 2.0 ( async ) version in the future
  */
 interface CloudFiles : CloudSupport {
 
