@@ -78,7 +78,7 @@ object AppUtils {
         // 6. jars dir: conf.dir=jars:/app1  -> app.jar/resources
         val source = AppBuilder.dir(args, alias)
         val props = AppBuilder.conf(cls, args, Confs.CONFIG_DEFAULT_PROPERTIES, alias)
-        val confBase = Config(source, props, enc)
+        val confBase = Config(cls, source, props, enc)
 
         // 2. The environment can be selected in the following order:
         // - command line ( via "-env=dev"   )
