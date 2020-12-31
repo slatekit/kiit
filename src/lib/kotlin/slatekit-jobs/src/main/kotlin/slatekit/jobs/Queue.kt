@@ -7,7 +7,7 @@ import slatekit.results.Try
  * Represents a simple interface for a Queue that can store Tasks which represent a unit of work.
  *
  * NOTES:
- * 1. A default implementation is available at @see[slatekit.integration.jobs.JobQueue]
+ * 1. A default implementation is available at @see[slatekit.connectors.jobs.JobQueue]
  * 2. Default implementation uses AWS SQS by leveraging Slate Kit Cloud project @see[slatekit.providers.aws]
  * 3. Default implementation is NOT provided here to avoid dependency on these other libraries in this project.
  */

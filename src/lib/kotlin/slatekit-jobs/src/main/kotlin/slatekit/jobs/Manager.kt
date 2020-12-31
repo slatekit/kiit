@@ -29,7 +29,7 @@ import slatekit.jobs.support.Work
  * 4. You can stop / pause / resume a single worker also
  * 5. Policies such as limiting the amount of runs, processed work, error rates, retries are done via policies
  * 6. The identity of a worker is based on the identity of its parent job + a workers uuid/unique
- * 7. A default implementation of the Queue is available in slatekit.integration.jobs.JobQueue
+ * 7. A default implementation of the Queue is available in slatekit.connectors.jobs.JobQueue
  *
  *
  * INSPIRED BY:
