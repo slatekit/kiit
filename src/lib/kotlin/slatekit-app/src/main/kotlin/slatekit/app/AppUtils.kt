@@ -13,7 +13,6 @@
 
 package slatekit.app
 
-import slatekit.app.AppUtils.getEnv
 import slatekit.context.AppContext
 import slatekit.common.args.Args
 import slatekit.common.args.ArgsCheck
@@ -21,19 +20,13 @@ import slatekit.common.args.ArgsCheck.isExit
 import slatekit.common.args.ArgsCheck.isVersion
 import slatekit.common.args.ArgsSchema
 import slatekit.common.conf.*
-import slatekit.common.conf.ConfFuncs.CONFIG_DEFAULT_SUFFIX
+import slatekit.common.conf.Confs.CONFIG_DEFAULT_SUFFIX
 import slatekit.common.crypto.Encryptor
-import slatekit.common.envs.Env
 import slatekit.common.envs.Envs
 import slatekit.common.info.About
-import slatekit.common.info.Build
-import slatekit.common.info.Info
 import slatekit.common.io.Alias
 import slatekit.common.io.Uri
-import slatekit.common.io.Uris
 import slatekit.common.log.Logs
-import slatekit.common.log.LogsDefault
-import slatekit.common.log.LogLevel
 import slatekit.results.*
 import slatekit.results.builders.Outcomes
 import java.io.File
@@ -68,59 +61,12 @@ object AppUtils {
         }
     }
 
-    /**
-     * gets the selected environment by key "env" from command line args first or env.conf second
-     *
-     * @return
-     */
-    fun getEnv(args: Args, conf: Conf): Env {
-        val env = getConfOverride(args, conf, "env", "loc")
-        return Env.parse(env)
+    fun context(cls:Class<*>, args: Args, envs: Envs, about: About, schema: ArgsSchema, enc: Encryptor?, logs: Logs?, confSource:Alias = Alias.Jar): AppContext {
+        val inputs = inputs(cls, args, envs, about, schema, enc, logs, confSource)
+        return AppBuilder.context(cls, inputs, enc, logs)
     }
 
-    /**
-     * gets log level by key "log.level" from command line args first or environment config 2nd
-     *
-     * @return
-     */
-    fun getLogLevel(args: Args, conf: Conf): LogLevel {
-        val level = getConfOverride(args, conf, "log.level", "info")
-        return LogLevel.parse(level)
-    }
-
-    /**
-     * gets log name by key "log.name" from command line args first or environment config 2nd
-     *
-     * @return
-     */
-    fun getLogName(args: Args, conf: Conf): String {
-        val log = getConfOverride(args, conf, "log.name", "@{app}-@{env}-@{date}.log")
-        return log
-    }
-
-    fun getConfOverride(args: Args, conf: Conf, key: String, defaultValue: String?): String {
-
-        val finalDefaultValue = defaultValue ?: ""
-
-        // 1. From cmd line args
-        val arg = args.getStringOrElse(key, "")
-
-        // 2. From env.conf ( or respective environment config )
-        val cfg = conf.getStringOrElse(key, finalDefaultValue)
-
-        // 3. Cmd line override
-        return if (!arg.isNullOrEmpty())
-            arg
-        else
-            cfg ?: finalDefaultValue
-    }
-
-    fun context(args: Args, envs: Envs, about: About, schema: ArgsSchema, enc: Encryptor?, logs: Logs?, confSource:Alias = Alias.Jar): AppContext {
-        val inputs = inputs(args, envs, about, schema, enc, logs, confSource)
-        return buildContext(inputs, enc, logs)
-    }
-
-    private fun inputs(args: Args, envs: Envs, about: About, schema: ArgsSchema, enc: Encryptor?, logs: Logs?, confSource:Alias = Alias.Jar): AppInputs {
+    private fun inputs(cls:Class<*>, args: Args, envs: Envs, about: About, schema: ArgsSchema, enc: Encryptor?, logs: Logs?, alias:Alias = Alias.Jar): AppInputs {
         // We need to determine where the "env.conf" is loaded from.
         // The location is defaulted to load from jars but can be explicitly supplied in args
         // or specified in the "conf.dirs" config setting in the env.conf file
@@ -130,16 +76,16 @@ object AppUtils {
         // 4. temp dir: conf.dir=temp:/app1  -> $TMPDIR/app1
         // 5. conf dir: conf.dir=conf:/app1  -> ./conf
         // 6. jars dir: conf.dir=jars:/app1  -> app.jar/resources
-        val source = getDir(args, confSource)
-        val envRootName = ConfFuncs.CONFIG_DEFAULT_PROPERTIES
-        val props = Props.loadFrom(source.combine(envRootName))
+        val source = AppBuilder.dir(args, alias)
+        val props = AppBuilder.conf(cls, args, Confs.CONFIG_DEFAULT_PROPERTIES, alias)
         val confBase = Config(source, props, enc)
 
         // 2. The environment can be selected in the following order:
         // - command line ( via "-env=dev"   )
         // - env.conf ( via env.name = dev )
         // getEnv will first look for selected environment from args, then in config.
-        val envSelected = getEnv(args, confBase)
+        val values = AppValues(args, confBase)
+        val envSelected = values.env()
 
         // 2. Validate the environment
         // Get all
@@ -159,57 +105,10 @@ object AppUtils {
         } ?: throw Exception("Unknown environment name : $envName supplied")
     }
 
-    private fun buildContext(inputs: AppInputs, enc: Encryptor?, logs: Logs?): AppContext {
-
-        val buildInfoExists = resourceExists(inputs.loc, "build.conf")
-        val build = if (buildInfoExists) {
-            val source = getDir(inputs.args, Alias.Jar).combine("build.conf")
-            val props = Props.loadFrom(source)
-            val stamp = Config(source,props, enc)
-            val info = stamp.buildStamp("build")
-            info
-        } else {
-            Build.empty
-        }
-
-        val args = inputs.args
-        val env = inputs.envs
-
-        // The config is inheritance based.
-        // Which means the base env.loc.conf inherits from env.conf.
-        val conf = inputs.confEnv
-
-        return AppContext(
-            args = args,
-            envs = env,
-            conf = conf,
-            enc = enc,
-            logs = logs ?: LogsDefault,
-            info = Info.of(AppBuilder.about(conf), build),
-            dirs = AppBuilder.folders(conf)
-        )
-    }
-
     fun resourceExists(uri:Uri, path: String): Boolean {
         val actual = uri.combine(path)
         val res = File(actual.full)
         return res.exists()
-    }
-
-
-    fun getDir(args: Args, default:Alias): Uri {
-        val dirFromArgs = args.getStringOrNull("conf.dir")
-        return dirFromArgs?.let { Uris.parse(it) } ?: Uri.of(default, "", null)
-    }
-
-
-    fun build(args: Args, alias: Alias = Alias.Jar): Build {
-        val source = getDir(args, alias)
-        val name = "build.conf"
-        val props = Props.loadFrom(source.combine(name))
-        val stamp = Config(source,props, null)
-        val build = stamp.buildStamp("build")
-        return build
     }
 
 

@@ -57,7 +57,7 @@ class ConfigMulti(
      * @param file
      * @return
      */
-    override fun loadFrom(file: String?): Conf? = ConfFuncs.load(file, enc)
+    override fun loadFrom(file: String?): Conf? = Confs.load(file, enc)
 
     private fun containsKeyInternal(key: String): Boolean {
         return config.containsKey(key) || parent.containsKey(key)

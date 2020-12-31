@@ -58,7 +58,7 @@ abstract class Conf(val uri:Uri, val encryptor: ((String) -> String)?) : Inputs,
      * @param file
      * @return
      */
-    open fun loadFrom(file: String?): Conf? = null
+    open fun loadFrom(cls:Class<*>, file: String?): Conf? = null
 
     /**
      * To support convenience methods

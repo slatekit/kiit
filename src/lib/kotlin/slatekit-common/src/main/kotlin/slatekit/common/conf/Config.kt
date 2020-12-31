@@ -112,7 +112,7 @@ class Config(
      * @param file
      * @return
      */
-    override fun loadFrom(file: String?): Conf? = ConfFuncs.load(file, enc)
+    override fun loadFrom(cls:Class<*>, file: String?): Conf? = Confs.load(cls, file, enc)
 
 
     /**
@@ -156,24 +156,24 @@ class Config(
 
     companion object {
 
-        operator fun invoke():Config {
-            val info = Props.load("")
+        operator fun invoke(cls:Class<*>):Config {
+            val info = Props.fromPath(cls, "")
             return Config(info.first, info.second)
         }
 
 
-        fun of(configPath: String, enc: Encryptor? = null):Config {
-            val info = Props.load(configPath)
+        fun of(cls:Class<*>, configPath: String, enc: Encryptor? = null):Config {
+            val info = Props.fromPath(cls, configPath)
             val conf = Config(info.first, info.second, enc)
             return conf
         }
 
 
-        fun of(configPath: String, configParentPath: String, enc: Encryptor?):ConfigMulti {
-            val parentInfo = Props.load(configParentPath)
+        fun of(cls:Class<*>, configPath: String, configParentPath: String, enc: Encryptor?):ConfigMulti {
+            val parentInfo = Props.fromPath(cls, configParentPath)
             val parentConf = Config(parentInfo.first, parentInfo.second, enc)
 
-            val inheritInfo = Props.load(configPath)
+            val inheritInfo = Props.fromPath(cls, configPath)
             val inheritConf = Config(inheritInfo.first, inheritInfo.second, enc)
 
             val conf = ConfigMulti(inheritConf, parentConf, inheritInfo.first, enc)
@@ -181,8 +181,8 @@ class Config(
         }
 
 
-        fun of(configPath: String, configParent: Conf, enc: Encryptor?) :ConfigMulti {
-            val inheritInfo = Props.load(configPath)
+        fun of(cls:Class<*>, configPath: String, configParent: Conf, enc: Encryptor?) :ConfigMulti {
+            val inheritInfo = Props.fromPath(cls, configPath)
             val inheritConf = Config(inheritInfo.first, inheritInfo.second, enc)
             val conf = ConfigMulti(inheritConf, configParent, inheritInfo.first, enc)
             return conf

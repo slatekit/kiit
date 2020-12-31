@@ -22,7 +22,7 @@ import slatekit.common.Sources
 import slatekit.common.info.ApiKey
 import slatekit.common.info.ApiLogin
 import slatekit.common.info.Credentials
-import slatekit.common.conf.ConfFuncs
+import slatekit.common.conf.Confs
 import slatekit.common.conf.Config
 import slatekit.common.data.DbCon
 import slatekit.common.data.DbConString
@@ -41,21 +41,21 @@ class ConfigApi(override val context: Context) : FileSupport {
     @Action(desc = "creates an api key in the directory")
     fun createApiKey(rootDir: String, name: String, key: String, roles: String): ApiKey {
         val apiKey = ApiKey(name, key, roles)
-        slatekit.common.conf.ConfFuncs.createApiKey(rootDir, name, apiKey, context.enc)
+        slatekit.common.conf.Confs.createApiKey(rootDir, name, apiKey, context.enc)
         return apiKey
     }
 
     @Action(desc = "creates an api login in the directory")
     fun createApiLogin(rootDir: String, name: String, account: String, key: String, pass: String, env: String, tag: String): ApiLogin {
         val login = ApiLogin(account, key, pass, env, tag)
-        ConfFuncs.createApiLogin(rootDir, name, login, context.enc)
+        Confs.createApiLogin(rootDir, name, login, context.enc)
         return login
     }
 
     @Action(desc = "creates db login in the directory")
     fun createDbConMySql(rootDir: String, name: String, url: String, user: String, pass: String): slatekit.common.data.DbConString {
         val dbCon = DbConString(MySql.driver, url, user, pass)
-        slatekit.common.conf.ConfFuncs.createDbCon(rootDir, name, dbCon, context.enc)
+        slatekit.common.conf.Confs.createDbCon(rootDir, name, dbCon, context.enc)
         return dbCon
     }
 
@@ -71,7 +71,7 @@ class ConfigApi(override val context: Context) : FileSupport {
         region: String
     ): Credentials {
         val credentials = Credentials(id, name, email, key, env, region)
-        ConfFuncs.createLogin(rootDir, name, credentials, context.enc)
+        Confs.createLogin(rootDir, name, credentials, context.enc)
         return credentials
     }
 

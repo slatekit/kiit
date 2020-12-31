@@ -34,6 +34,7 @@ object AppRunner {
      * 4. creating an App using supplied lambda
      * 5. executing the life-cycle steps ( init, exec, done )
      *
+     * @param cls        : The class being run and holding resources for configuration
      * @param rawArgs    : The raw arguments from command line
      * @param schema     : The schema of the command line arguments
      * @param enc        : Optional encryptor
@@ -45,6 +46,7 @@ object AppRunner {
      * @return
      */
     suspend fun <C : Context> run(
+        cls: Class<*>,
         rawArgs: Array<String>,
         about: About,
         builder: (Context) -> App<C>,
@@ -68,7 +70,7 @@ object AppRunner {
         // STEP 5: Build App - Create App using supplied lambda and context
         // STEP 6: Run App   - Finally run the application with workflow ( init, exec, end )
         val result = argsResult.then { args -> AppHelp.process(rawArgs.toList(), args, about, schema) }
-            .then { args    -> Tries.of { AppUtils.context(args, envs, about, schema ?: AppBuilder.schema(), enc, logs, confSource) } }
+            .then { args    -> Tries.of { AppUtils.context(cls, args, envs, about, schema ?: AppBuilder.schema(), enc, logs, confSource) } }
             .then { context -> Tries.of { context.copy(args = ArgsSchema.transform(schema, context.args)) } }
             .then { context -> validate(context.args, schema).map { context } }
             .then { context -> Tries.of { builder(context) } }
@@ -91,26 +93,6 @@ object AppRunner {
         }
 
         return result
-    }
-
-    /**
-     * validate the arguments against the schema.
-     *
-     * @param result
-     * @param schema
-     * @return
-     */
-    fun validate(args: Args, schema: ArgsSchema?): Try<Args> {
-
-        // 5. No schema ? default to success otherwise validate args against schema
-        val finalResult = schema?.let { sch ->
-
-            // Validate args against schema
-            val checkResult = ArgsSchema.validate(sch, args)
-            checkResult.map { args }
-        } ?: Tries.success(args)
-
-        return finalResult
     }
 
     /**
@@ -137,6 +119,26 @@ object AppRunner {
             app.fail(it)
         }
         return result
+    }
+
+    /**
+     * validate the arguments against the schema.
+     *
+     * @param result
+     * @param schema
+     * @return
+     */
+    private fun validate(args: Args, schema: ArgsSchema?): Try<Args> {
+
+        // 5. No schema ? default to success otherwise validate args against schema
+        val finalResult = schema?.let { sch ->
+
+            // Validate args against schema
+            val checkResult = ArgsSchema.validate(sch, args)
+            checkResult.map { args }
+        } ?: Tries.success(args)
+
+        return finalResult
     }
 
     private fun showError(result: Try<Any?>, ex: Exception?) : Try<Any?> {
