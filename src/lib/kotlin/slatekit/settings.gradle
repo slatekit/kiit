@@ -66,9 +66,6 @@ project(':slatekit-jobs').projectDir=new File('../slatekit-jobs')
 include ':slatekit-serialization'
 project(':slatekit-serialization').projectDir=new File('../slatekit-serialization')
 
-include ':slatekit-samples'
-project(':slatekit-samples').projectDir=new File('../slatekit-samples')
-
 include ':slatekit-tracking'
 project(':slatekit-tracking').projectDir=new File('../slatekit-tracking')
 
@@ -80,6 +77,9 @@ project(':slatekit-providers-logback').projectDir=new File('../../../ext/kotlin/
 
 include ':slatekit-providers-datadog'
 project(':slatekit-providers-datadog').projectDir=new File('../../../ext/kotlin/slatekit-providers-datadog')
+
+include ':slatekit-samples'
+project(':slatekit-samples').projectDir=new File('../../../apps/kotlin/slatekit-samples')
 
 //include ':slatekit-examples'
 //project(':slatekit-examples').projectDir=new File('../slatekit-examples')
