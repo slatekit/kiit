@@ -7,7 +7,7 @@ import slatekit.cli.CliSettings
 import slatekit.context.Context
 import slatekit.common.types.Content
 import slatekit.common.info.ApiKey
-import slatekit.integration.apis.CliApi
+import slatekit.connectors.cli.CliApi
 import slatekit.results.Try
 import slatekit.serialization.Serialization
 import slatekit.samples.common.apis.SampleApi

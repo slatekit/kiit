@@ -30,7 +30,7 @@ import slatekit.common.smartvalues.SmartValued
 import slatekit.db.Db
 import slatekit.meta.Reflector
 import slatekit.entities.Entities
-import slatekit.integration.common.AppEntContext
+import slatekit.connectors.entities.AppEntContext
 import slatekit.meta.KTypes
 import slatekit.results.Notice
 import slatekit.results.getOrElse

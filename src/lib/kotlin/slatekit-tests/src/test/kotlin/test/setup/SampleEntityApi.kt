@@ -4,7 +4,7 @@ import slatekit.apis.Api
 import slatekit.apis.Action
 import slatekit.entities.EntityService
 import slatekit.integration.common.ApiBaseEntity
-import slatekit.integration.common.AppEntContext
+import slatekit.connectors.entities.AppEntContext
 
 /**
  * REST Sample

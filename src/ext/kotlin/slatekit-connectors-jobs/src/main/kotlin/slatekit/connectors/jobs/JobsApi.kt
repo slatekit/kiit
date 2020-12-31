@@ -11,7 +11,7 @@
  * </slate_header>
  */
 
-package slatekit.integration.apis
+package slatekit.connectors.jobs
 
 import slatekit.actors.pause.Feedback
 import slatekit.apis.Api
@@ -22,7 +22,7 @@ import slatekit.apis.support.FileSupport
 import slatekit.common.Sources
 import slatekit.common.crypto.Encryptor
 import slatekit.common.log.Logger
-import slatekit.integration.common.AppEntContext
+import slatekit.connectors.entities.AppEntContext
 import slatekit.jobs.Jobs
 import slatekit.results.Outcome
 import slatekit.results.builders.Outcomes

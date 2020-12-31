@@ -6,7 +6,7 @@ import slatekit.common.SimpleIdentity
 import slatekit.common.args.Args
 import slatekit.core.queues.AsyncQueue
 import slatekit.core.queues.InMemoryQueue
-import slatekit.integration.jobs.JobQueue
+import slatekit.connectors.jobs.JobQueue
 import slatekit.jobs.Manager
 import slatekit.jobs.Jobs
 import slatekit.jobs.Priority

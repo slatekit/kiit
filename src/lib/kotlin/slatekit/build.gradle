@@ -100,6 +100,9 @@ dependencies {
 //        implementation "com.slatekit:slatekit-providers-aws:$slatekit_version"
 //        implementation "com.slatekit:slatekit-providers-logback:$slatekit_version"
 //        implementation "com.slatekit:slatekit-providers-datadog:$slatekit_version"
+//        implementation "com.slatekit:slatekit-connectors-cli:$slatekit_version"
+//        implementation "com.slatekit:slatekit-connectors-entities:$slatekit_version"
+//        implementation "com.slatekit:slatekit-connectors-jobs:$slatekit_version"
 //        implementation "com.slatekit:slatekit-core:$slatekit_version"
 //        implementation "com.slatekit:slatekit-http:$slatekit_version"
 //        implementation "com.slatekit:slatekit-cache:$slatekit_version"
@@ -124,6 +127,9 @@ dependencies {
         implementation project(":slatekit-apis")
         implementation project(":slatekit-generator")
         implementation project(":slatekit-cli")
+        implementation project(":slatekit-connectors-entities")
+        implementation project(":slatekit-connectors-cli")
+        implementation project(":slatekit-connectors-jobs")
 //        implementation project(":slatekit-providers-aws")
 //        implementation project(":slatekit-providers-logback")
 //        implementation project(":slatekit-providers-datadog")

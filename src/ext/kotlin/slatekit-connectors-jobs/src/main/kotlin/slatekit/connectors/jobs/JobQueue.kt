@@ -1,4 +1,4 @@
-package slatekit.integration.jobs
+package slatekit.connectors.jobs
 
 import slatekit.common.Identity
 import slatekit.core.queues.*
