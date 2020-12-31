@@ -48,9 +48,6 @@ project(':slatekit-cache').projectDir=new File('../slatekit-cache')
 include ':slatekit-apis'
 project(':slatekit-apis').projectDir=new File('../slatekit-apis')
 
-include ':slatekit-cloud'
-project(':slatekit-cloud').projectDir=new File('../slatekit-cloud')
-
 include ':slatekit-generator'
 project(':slatekit-generator').projectDir=new File('../slatekit-generator')
 
@@ -66,9 +63,6 @@ project(':slatekit-server').projectDir=new File('../slatekit-server')
 include ':slatekit-jobs'
 project(':slatekit-jobs').projectDir=new File('../slatekit-jobs')
 
-include ':slatekit-providers'
-project(':slatekit-providers').projectDir=new File('../slatekit-providers')
-
 include ':slatekit-serialization'
 project(':slatekit-serialization').projectDir=new File('../slatekit-serialization')
 
@@ -78,8 +72,17 @@ project(':slatekit-samples').projectDir=new File('../slatekit-samples')
 include ':slatekit-tracking'
 project(':slatekit-tracking').projectDir=new File('../slatekit-tracking')
 
+include ':slatekit-providers-aws'
+project(':slatekit-providers-aws').projectDir=new File('../../../ext/kotlin/slatekit-providers-aws')
+
+include ':slatekit-providers-logback'
+project(':slatekit-providers-logback').projectDir=new File('../../../ext/kotlin/slatekit-providers-logback')
+
+include ':slatekit-providers-datadog'
+project(':slatekit-providers-datadog').projectDir=new File('../../../ext/kotlin/slatekit-providers-datadog')
+
 //include ':slatekit-examples'
 //project(':slatekit-examples').projectDir=new File('../slatekit-examples')
-//
-//include ':slatekit-tests'
-//project(':slatekit-tests').projectDir=new File('../slatekit-tests')
+
+include ':slatekit-tests'
+project(':slatekit-tests').projectDir=new File('../slatekit-tests')

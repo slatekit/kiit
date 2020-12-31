@@ -40,7 +40,7 @@ data class Doc(
                 "com" -> items += " slatekit-common"
                 "ent" -> items += " slatekit-entities"
                 "core" -> items += " slatekit-core"
-                "cloud" -> items += " slatekit-cloud"
+                "cloud" -> items += " slatekit-providers-aws"
                 else -> {
                 }
             }

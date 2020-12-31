@@ -68,8 +68,9 @@ dependencies {
     implementation project(":slatekit-tracking")
     implementation project(":slatekit-policy")
     implementation project(":slatekit-integration")
-    implementation project(":slatekit-cloud")
-    implementation project(":slatekit-providers")
+    implementation project(":slatekit-providers-aws")
+    implementation project(":slatekit-providers-logback")
+    implementation project(":slatekit-providers-datadog")
     //compile project(":slatekit-support")
 
     compile 'io.micrometer:micrometer-registry-datadog:latest.release'

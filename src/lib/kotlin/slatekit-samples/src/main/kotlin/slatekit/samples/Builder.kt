@@ -1,7 +1,7 @@
 package slatekit.samples
 
-import slatekit.cloud.aws.S3
-import slatekit.cloud.aws.SQS
+import slaetkit.providers.aws.aws.S3
+import slaetkit.providers.aws.aws.SQS
 import slatekit.context.AppContext
 import slatekit.context.Context
 import slatekit.core.files.CloudFiles

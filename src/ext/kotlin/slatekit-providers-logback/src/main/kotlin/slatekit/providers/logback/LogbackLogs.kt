@@ -1,4 +1,4 @@
-package slatekit.providers.logs.logback
+package slatekit.providers.logback
 
 import slatekit.common.log.Logger
 import slatekit.common.log.Logs

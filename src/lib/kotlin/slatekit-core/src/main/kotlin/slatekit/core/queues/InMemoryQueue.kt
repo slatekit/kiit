@@ -33,7 +33,7 @@ import java.util.concurrent.LinkedBlockingQueue
  * 2. unit-testing
  * 3. mocks
  *
- * For production usage, use the [slatekit.cloud.aws.AwsCloudQueue]
+ * For production usage, use the [slatekit.providers.aws.aws.AwsCloudQueue]
  */
 class InMemoryQueue<T>(
         override val name: String = "",
