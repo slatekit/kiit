@@ -76,11 +76,12 @@ Examples:
  * @param props
  */
 class Config(
+        cls: Class<*>,
         uri:Uri,
         val config: Properties,
         val enc: Encryptor? = null
 )
-    : Conf(uri, { raw -> enc?.decrypt(raw) ?: raw }) {
+    : Conf(cls, uri, { raw -> enc?.decrypt(raw) ?: raw }) {
 
 
     /**
@@ -112,7 +113,7 @@ class Config(
      * @param file
      * @return
      */
-    override fun loadFrom(file: String?): Conf? = ConfFuncs.load(file, enc)
+    override fun loadFrom(file: String?): Conf? = Confs.load(cls, file, enc)
 
 
     /**
@@ -156,35 +157,35 @@ class Config(
 
     companion object {
 
-        operator fun invoke():Config {
-            val info = Props.load("")
-            return Config(info.first, info.second)
+        operator fun invoke(cls:Class<*>):Config {
+            val info = Props.fromPath(cls, "")
+            return Config(cls, info.first, info.second)
         }
 
 
-        fun of(configPath: String, enc: Encryptor? = null):Config {
-            val info = Props.load(configPath)
-            val conf = Config(info.first, info.second, enc)
+        fun of(cls:Class<*>, configPath: String, enc: Encryptor? = null):Config {
+            val info = Props.fromPath(cls, configPath)
+            val conf = Config(cls, info.first, info.second, enc)
             return conf
         }
 
 
-        fun of(configPath: String, configParentPath: String, enc: Encryptor?):ConfigMulti {
-            val parentInfo = Props.load(configParentPath)
-            val parentConf = Config(parentInfo.first, parentInfo.second, enc)
+        fun of(cls:Class<*>, configPath: String, configParentPath: String, enc: Encryptor?):ConfigMulti {
+            val parentInfo = Props.fromPath(cls, configParentPath)
+            val parentConf = Config(cls, parentInfo.first, parentInfo.second, enc)
 
-            val inheritInfo = Props.load(configPath)
-            val inheritConf = Config(inheritInfo.first, inheritInfo.second, enc)
+            val inheritInfo = Props.fromPath(cls, configPath)
+            val inheritConf = Config(cls, inheritInfo.first, inheritInfo.second, enc)
 
-            val conf = ConfigMulti(inheritConf, parentConf, inheritInfo.first, enc)
+            val conf = ConfigMulti(cls, inheritConf, parentConf, inheritInfo.first, enc)
             return conf
         }
 
 
-        fun of(configPath: String, configParent: Conf, enc: Encryptor?) :ConfigMulti {
-            val inheritInfo = Props.load(configPath)
-            val inheritConf = Config(inheritInfo.first, inheritInfo.second, enc)
-            val conf = ConfigMulti(inheritConf, configParent, inheritInfo.first, enc)
+        fun of(cls:Class<*>, configPath: String, configParent: Conf, enc: Encryptor?) :ConfigMulti {
+            val inheritInfo = Props.fromPath(cls, configPath)
+            val inheritConf = Config(cls, inheritInfo.first, inheritInfo.second, enc)
+            val conf = ConfigMulti(cls, inheritConf, configParent, inheritInfo.first, enc)
             return conf
         }
     }

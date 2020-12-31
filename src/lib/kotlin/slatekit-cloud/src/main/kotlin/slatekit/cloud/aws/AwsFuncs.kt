@@ -78,10 +78,10 @@ object AwsFuncs {
      * @param section : Section name in config containing slate kit ApiCredentials
      * @return
      */
-    fun sqs(path: String? = null, section: String? = null, region:Regions?): AmazonSQSClient {
+    fun sqs(cls:Class<*>, path: String? = null, section: String? = null, region:Regions?): AmazonSQSClient {
 
         // Get credentials from either default location of specific config
-        val credentials = creds(path, section)
+        val credentials = creds(cls, path, section)
         return sqs(credentials, region ?: Regions.US_EAST_1)
     }
 
@@ -102,9 +102,9 @@ object AwsFuncs {
      * @param path : Path to config ( None => default aws {user_dir}/.aws/credentials file}
      * @param section : Section name in config containing slate kit ApiCredentials
      */
-    fun s3(path: String? = null, section: String? = null, region:Regions?): AmazonS3Client {
+    fun s3(cls:Class<*>, path: String? = null, section: String? = null, region:Regions?): AmazonS3Client {
         // Get credentials from either default location of specific config
-        val credentials = creds(path, section)
+        val credentials = creds(cls, path, section)
         return s3(credentials, region ?: Regions.US_EAST_1)
     }
 
@@ -127,11 +127,11 @@ object AwsFuncs {
      * @param section : Section name in config containing slate kit ApiCredentials
      * @return
      */
-    fun creds(path: String? = null, section: String? = null): AWSCredentials {
+    fun creds(cls:Class<*>, path: String? = null, section: String? = null): AWSCredentials {
         val credentials = path?.let { filePath ->
 
             // Get api key from config path supplied
-            val apiKey = Config.of(filePath).apiLogin(section ?: "aws")
+            val apiKey = Config.of(cls, filePath).apiLogin(section ?: "aws")
 
             // Build creds from api key
             credsWithKeySecret(apiKey.key, apiKey.pass)

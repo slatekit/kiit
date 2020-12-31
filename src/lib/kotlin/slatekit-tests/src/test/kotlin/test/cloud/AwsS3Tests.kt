@@ -10,12 +10,13 @@ import slatekit.common.io.Uris
 import slatekit.common.ext.toStringNumeric
 import slatekit.core.files.CloudFiles
 import slatekit.results.getOrElse
+import test.TestApp
+import test.setup.TestSupport
 import java.io.File
 
 
 @Ignore
-class AwsS3Tests {
-
+class AwsS3Tests : TestSupport {
     val SLATEKIT_DIR = ".slatekit"
 
     @Test
@@ -25,7 +26,7 @@ class AwsS3Tests {
             // Not storing any key/secret in source code for security purposes
             // Setup 1: Use the default aws config file in "{user_dir}/.aws/credentials"
             val bucket = "slatekit-unit-tests"
-            val files = S3.of("us-east-1", bucket, false, "~/$SLATEKIT_DIR/conf/aws.conf", "aws")
+            val files = S3.of(app,"us-east-1", bucket, false, "~/$SLATEKIT_DIR/conf/aws.conf", "aws")
             files.onSuccess { files ->
                 files.init()
 

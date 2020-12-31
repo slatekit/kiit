@@ -30,9 +30,7 @@ interface ConfigSupport {
      * @return
      */
     fun env(): Env =
-
             mapTo("env") { conf ->
-
                 val name = conf.getString("env.name")
                 val mode = conf.getString("env.mode")
                 Env(name, Env.interpret(mode), "$mode : $name")
@@ -45,9 +43,7 @@ interface ConfigSupport {
      * @return
      */
     fun login(name: String): Credentials =
-
             mapTo(name) { conf ->
-
                 Credentials(
                         conf.getString(name + ".id"),
                         conf.getString(name + ".name"),
@@ -64,7 +60,6 @@ interface ConfigSupport {
      * @return
      */
     fun buildStamp(name: String): Build =
-
             mapTo(name) { conf ->
 
                 Build(
@@ -123,14 +118,14 @@ fun <T> ConfigSupport.mapTo(key: String, mapper: (Conf) -> T): T? {
     // Section not present!
     return if (config().containsKey(locationKey)) {
 
-            // 1. "@{resource}/sms.conf"
-            // 2. "@{company.dir}/sms.conf"
-            // 3. "@{app.dir}/sms.conf"
-            // 3. "/conf/sms.conf"
-            val location = config().getString(locationKey)
-            val conf: Conf? = config().loadFrom(location)
-            conf?.let { c -> mapper(c) }
-        } else {
+        // 1. "@{resource}/sms.conf"
+        // 2. "@{company.dir}/sms.conf"
+        // 3. "@{app.dir}/sms.conf"
+        // 3. "/conf/sms.conf"
+        val location = config().getString(locationKey)
+        val conf: Conf? = config().loadFrom(location)
+        conf?.let { c -> mapper(c) }
+    } else {
         mapper(config())
     }
 }

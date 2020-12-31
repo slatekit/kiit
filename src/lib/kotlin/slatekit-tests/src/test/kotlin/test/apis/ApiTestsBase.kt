@@ -35,6 +35,7 @@ import slatekit.entities.Entities
 import slatekit.policy.hooks.Middleware
 import slatekit.integration.common.AppEntContext
 import slatekit.results.Try
+import test.TestApp
 import test.setup.MyAuthProvider
 import test.setup.UserApi
 import test.setup.MyEncryptor
@@ -51,8 +52,10 @@ open class ApiTestsBase {
 
 
     fun buildCtx(): AppEntContext {
-        val cfg = Config()
+        val cls = TestApp::class.java
+        val cfg = Config(cls)
         val ctx = AppEntContext(
+                app = cls,
                 args = Args.empty(),
                 envs = Envs.defaults().select("loc"),
                 conf = cfg,

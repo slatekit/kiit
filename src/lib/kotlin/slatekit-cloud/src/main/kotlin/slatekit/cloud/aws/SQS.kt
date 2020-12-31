@@ -266,15 +266,15 @@ class SQS<T>(
     }
 
     companion object {
-        fun <T> of(region: String, name: String, apiKey: ApiLogin, converter: QueueValueConverter<T>, waitTimeInSeconds: Int = 0): Try<SQS<T>> {
+        fun <T> of(cls:Class<*>, region: String, name: String, apiKey: ApiLogin, converter: QueueValueConverter<T>, waitTimeInSeconds: Int = 0): Try<SQS<T>> {
             return build(region) { regions ->
                 SQS<T>(AwsFuncs.credsWithKeySecret(apiKey.key, apiKey.pass), regions, name, converter, waitTimeInSeconds)
             }
         }
 
-        fun <T> of(region: String, name: String, converter: QueueValueConverter<T>, confPath: String? = null, confSection: String? = null, waitTimeInSeconds: Int = 0): Try<SQS<T>> {
+        fun <T> of(cls:Class<*>, region: String, name: String, converter: QueueValueConverter<T>, confPath: String? = null, confSection: String? = null, waitTimeInSeconds: Int = 0): Try<SQS<T>> {
             return build(region) { regions ->
-                SQS<T>(AwsFuncs.creds(confPath, confSection), regions, name, converter, waitTimeInSeconds)
+                SQS<T>(AwsFuncs.creds(cls, confPath, confSection), regions, name, converter, waitTimeInSeconds)
             }
         }
     }

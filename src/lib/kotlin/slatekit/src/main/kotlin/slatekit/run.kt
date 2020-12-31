@@ -6,7 +6,7 @@ import slatekit.app.AppUtils
 import slatekit.common.DateTime
 import slatekit.common.args.Args
 import slatekit.common.conf.Conf
-import slatekit.common.conf.ConfFuncs
+import slatekit.common.conf.Confs
 import slatekit.common.conf.Config
 import slatekit.common.conf.Props
 import slatekit.common.display.Banner
@@ -106,13 +106,13 @@ fun test(res:Try<Properties>, desc:String){
  * Problems:
  * 1. Use SlateKit::class not Props { ... this.class }
  * 2. Use cls.getResourceAsStream("/" + path) instead of getResource(..).file
- * 3. Missing pattern match in loadFrom { ... is Alias.Jar   -> loadFromJar2(cls,uri.path ?: ConfFuncs.CONFIG_DEFAULT_PROPERTIES) }
+ * 3. Missing pattern match in loadFrom { ... is Alias.Jar   -> loadFromJar2(cls,uri.path ?: Confs.CONFIG_DEFAULT_PROPERTIES) }
  * 4. Uri.parse( for jar is buggy ) ? maybe not even have a value
  * 5. Need separate conf function to load conf like below
  * 6. Maybe add Parent Alias PRN
  * 7. Support -conf.dir=PRN://conf, -conf.dir=../conf = other ( but figure out path )
  */
-fun conf(cls:Class<*>, raw: Array<String>, name:String = ConfFuncs.CONFIG_DEFAULT_PROPERTIES, alias:Alias = Alias.Jar): Properties {
+fun conf(cls:Class<*>, raw: Array<String>, name:String = Confs.CONFIG_DEFAULT_PROPERTIES, alias:Alias = Alias.Jar): Properties {
     val args = Args.parseArgs(raw).getOrNull() ?: Args.empty()
     val source = AppUtils.getDir(args, alias)
     val path = source.combine(name)
@@ -140,9 +140,9 @@ object Props2 {
     fun loadFrom(cls:Class<*>, uri: Uri): Properties {
         uri.print()
         val props = when (uri.root) {
-            null -> loadFromJar2(cls,uri.path ?: ConfFuncs.CONFIG_DEFAULT_PROPERTIES)
-            is Alias.Jar   -> loadFromJar2(cls,uri.path ?: ConfFuncs.CONFIG_DEFAULT_PROPERTIES)
-            is Alias.Other -> loadFromJar2(cls,uri.path ?: ConfFuncs.CONFIG_DEFAULT_PROPERTIES)
+            null -> loadFromJar2(cls,uri.path ?: Confs.CONFIG_DEFAULT_PROPERTIES)
+            is Alias.Jar   -> loadFromJar2(cls,uri.path ?: Confs.CONFIG_DEFAULT_PROPERTIES)
+            is Alias.Other -> loadFromJar2(cls,uri.path ?: Confs.CONFIG_DEFAULT_PROPERTIES)
             else -> loadFromPath(uri.toFile().absolutePath)
         }
         return props

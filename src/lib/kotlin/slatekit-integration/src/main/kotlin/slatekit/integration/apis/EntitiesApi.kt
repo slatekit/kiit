@@ -104,7 +104,7 @@ class EntitiesApi(context: AppEntContext) : ApiBase(context) {
         return service().connectionByName(name)
     }
 
-    private val dbLookup by lazy { Connections.from(context.conf) }
+    private val dbLookup by lazy { Connections.from(context.app, context.conf) }
 
     private fun service(): MigrationService {
         return MigrationService(appContext.ent, dbLookup, MigrationSettings(), context.dirs)

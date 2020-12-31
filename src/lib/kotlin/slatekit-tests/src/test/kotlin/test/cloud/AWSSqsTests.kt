@@ -7,9 +7,11 @@ import slatekit.common.DateTime
 import slatekit.common.ext.toStringNumeric
 import slatekit.core.queues.QueueStringConverter
 import slatekit.core.queues.CloudQueue
+import test.TestApp
+import test.setup.TestSupport
 
 
-class AwsSqsTests {
+class AwsSqsTests : TestSupport {
 
     val SLATEKIT_DIR = ".slatekit"
 
@@ -20,6 +22,7 @@ class AwsSqsTests {
             // Setup 1: Use the default aws config file in "{user_dir}/.aws/credentials"
             val name = "slatekit-unit-tests"
             val queue = SQS.of<String>(
+                    app,
                     "us-east-1",
                     name,
                     QueueStringConverter(),
@@ -52,10 +55,12 @@ class AwsSqsTests {
     //@Test
     fun can_test_update() {
         runBlocking {
+            val app = TestApp::class.java
             // Not storing any key/secret in source code for security purposes
             // Setup 1: Use the default aws config file in "{user_dir}/.aws/credentials"
             val name = "slatekit-unit-tests"
             val queue = SQS.of<String>(
+                    app,
                     "us-east-1",
                     name,
                     QueueStringConverter(),

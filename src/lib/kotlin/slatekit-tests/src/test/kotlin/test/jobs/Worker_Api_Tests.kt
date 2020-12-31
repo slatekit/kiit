@@ -21,13 +21,15 @@ import slatekit.core.queues.WrappedAsyncQueue
 import slatekit.integration.jobs.APIWorker
 import slatekit.integration.jobs.JobQueue
 import slatekit.jobs.*
+import test.TestApp
 import test.jobs.samples.SampleWorkerAPI
 import test.setup.SampleTypes2Api
+import test.setup.TestSupport
 
-class Worker_Api_Tests {
+class Worker_Api_Tests : TestSupport {
 
     fun buildContainer(): ApiServer {
-        val ctx = AppContext.simple("queues")
+        val ctx = AppContext.simple(app,"queues")
         val api = SampleTypes2Api()
         val apis = ApiServer(ctx, apis = listOf(Api(api, area = "samples", name = "types2")))
         return apis
@@ -38,7 +40,7 @@ class Worker_Api_Tests {
     fun can_send_to_queue(){
         runBlocking {
             // 1. context
-            val ctx = AppContext.simple("queues")
+            val ctx = AppContext.simple(app,"queues")
 
             // 2. queues
             val queues = listOf(AsyncQueue.of(InMemoryQueue.stringQueue()))

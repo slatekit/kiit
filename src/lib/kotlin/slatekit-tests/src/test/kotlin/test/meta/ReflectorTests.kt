@@ -34,6 +34,7 @@ import slatekit.integration.common.AppEntContext
 import slatekit.meta.KTypes
 import slatekit.results.Notice
 import slatekit.results.getOrElse
+import test.TestApp
 import test.setup.*
 import kotlin.reflect.KClass
 import kotlin.reflect.KParameter
@@ -42,14 +43,13 @@ import kotlin.reflect.jvm.javaType
 
 
 
-class ReflectorTests {
-
-
+class ReflectorTests : TestSupport {
 
     val ctx: AppEntContext = AppEntContext (
+            app = app,
             args  = Args.empty(),
             envs  = Envs.defaults().select("loc"),
-            conf  = Config(),
+            conf  = Config(app),
             logs = LogsDefault,
             ent  = Entities({ con -> Db(con) }),
             info = Info.of(

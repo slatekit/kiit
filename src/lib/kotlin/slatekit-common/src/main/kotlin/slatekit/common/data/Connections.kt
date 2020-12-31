@@ -71,8 +71,8 @@ class Connections(
 
 
     @JvmStatic
-    fun from(conf: Conf):Connections {
-      return Connections.of(conf.dbCon("db"))
+    fun from(cls:Class<*>, conf: Conf):Connections {
+      return of(conf.dbCon("db"))
     }
 
     /**

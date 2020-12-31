@@ -13,7 +13,7 @@ import java.io.File
  * cur:/dev/slatekit                => ~/dev/slatekit
  * rel:/dev/slatekit                => ~/dev/slatekit
  * cfg:/dev/slatekit                => ~/dev/slatekit
- * :/dev/slatekit                => ~/dev/slatekit
+ * :/dev/slatekit                   => ~/dev/slatekit
  */
 sealed class Alias(val name: String, val value:String) {
 

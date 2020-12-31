@@ -22,6 +22,7 @@ import slatekit.common.log.Logs
  * dirs : directories used for the app
  */
 interface Context  {
+    val app : Class<*>
     val args: Args
     val envs: Envs
     val conf: Conf

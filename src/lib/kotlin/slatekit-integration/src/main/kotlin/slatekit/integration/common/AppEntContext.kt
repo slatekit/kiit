@@ -49,6 +49,7 @@ import slatekit.entities.Entities
   * @param tnt : tenant info ( if running in multi-tenant mode - not officially supported )
   */
 data class AppEntContext(
+        override val app: Class<*>,
         override val args: Args,
         override val envs: Envs,
         override val conf: Conf,
@@ -65,7 +66,7 @@ data class AppEntContext(
      * the same context without the Entities
      */
     fun toAppContext(): AppContext {
-        return AppContext(args, envs, conf, logs, info, Context.identity(info, envs), enc, dirs)
+        return AppContext(app, args, envs, conf, logs, info, Context.identity(info, envs), enc, dirs)
     }
 
     /**
@@ -84,10 +85,10 @@ data class AppEntContext(
          * the same context without the Entities
          */
         fun fromContext(ctx: Context, namer: Namer? = null): AppEntContext {
-            val dbCons = Connections.from(ctx.conf)
+            val dbCons = Connections.from(ctx.app, ctx.conf)
             val id = Context.identity(ctx.info, ctx.envs)
             return AppEntContext(
-                    ctx.args, ctx.envs, ctx.conf, ctx.logs, ctx.info, id, Entities({ con -> Db(con) }, dbCons, ctx.enc, namer = namer), dbCons, ctx.enc, ctx.dirs
+                    ctx.app, ctx.args, ctx.envs, ctx.conf, ctx.logs, ctx.info, id, Entities({ con -> Db(con) }, dbCons, ctx.enc, namer = namer), dbCons, ctx.enc, ctx.dirs
             )
 
         }
@@ -97,19 +98,20 @@ data class AppEntContext(
          * the same context without the Entities
          */
         fun fromAppContext(ctx: Context, namer: Namer? = null): AppEntContext {
-            val dbCons = Connections.from(ctx.conf)
+            val dbCons = Connections.from(ctx.app, ctx.conf)
             val id = Context.identity(ctx.info, ctx.envs)
             return AppEntContext(
-                    ctx.args, ctx.envs, ctx.conf, ctx.logs, ctx.info, id, Entities({ con -> Db(con) }, dbCons, ctx.enc, namer = namer), dbCons, ctx.enc, ctx.dirs
+                    ctx.app, ctx.args, ctx.envs, ctx.conf, ctx.logs, ctx.info, id, Entities({ con -> Db(con) }, dbCons, ctx.enc, namer = namer), dbCons, ctx.enc, ctx.dirs
             )
 
         }
 
         @JvmStatic
-        fun sample(conf:Config, id: String, name: String, about: String, company: String): AppEntContext {
+        fun sample(app:Class<*>, conf:Config, id: String, name: String, about: String, company: String): AppEntContext {
             val args = Args.empty()
             val envs = Envs.defaults().select("loc")
             return AppEntContext(
+                    app = app,
                     args = args,
                     envs = envs,
                     conf = conf,

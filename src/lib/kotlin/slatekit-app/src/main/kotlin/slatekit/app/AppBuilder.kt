@@ -1,12 +1,26 @@
 package slatekit.app
 
+import slatekit.common.args.Args
 import slatekit.common.args.ArgsSchema
 import slatekit.common.conf.Conf
+import slatekit.common.conf.Confs
+import slatekit.common.conf.Config
+import slatekit.common.conf.Props
+import slatekit.common.crypto.Encryptor
 import slatekit.common.data.Connections
 import slatekit.common.info.About
 import slatekit.common.info.Folders
 import slatekit.common.templates.Subs
 import slatekit.common.ext.toId
+import slatekit.common.info.Build
+import slatekit.common.info.Info
+import slatekit.common.io.Alias
+import slatekit.common.io.Uri
+import slatekit.common.io.Uris
+import slatekit.common.log.Logs
+import slatekit.common.log.LogsDefault
+import slatekit.context.AppContext
+import java.util.*
 
 /**
  * Builds various application components:
@@ -24,7 +38,7 @@ object AppBuilder {
      *
      * @return
      */
-    fun dbs(conf: Conf): Connections = Connections.of(conf.dbCon("db"))
+    fun dbs(cls:Class<*>, conf: Conf): Connections = Connections.of(conf.dbCon("db"))
 
     /**
      * builds all the info for this application including its
@@ -76,9 +90,7 @@ object AppBuilder {
      * @return
      */
     fun folders(conf: Conf): Folders {
-
         val abt = about(conf)
-
         // The root directory can be overriden in the config
         // e..g app.dir = user://company/dept/app
         return Folders.userDir(
@@ -110,5 +122,79 @@ object AppBuilder {
                 Pair("app.name", { _ -> abt.name }),
                 Pair("app.dir", { _ -> "@{root.dir}/@{area.id}/@{app.id}" })
         ))
+    }
+
+    /**
+     * Builds the build info file
+     */
+    fun build(cls:Class<*>, args: Args, alias: Alias = Alias.Jar): Build {
+        val source = dir(args, alias)
+        val name = "build.conf"
+        val props = Props.fromUri(cls, source.combine(name))
+        val stamp = Config(cls, source,props, null)
+        val build = stamp.buildStamp("build")
+        return build
+    }
+
+
+    /**
+     * Gets the build info file
+     */
+    fun build(cls:Class<*>, args: Args, loc:Uri): Build {
+        val buildInfoExists = AppUtils.resourceExists(loc, "build.conf")
+        return if (buildInfoExists) {
+            build(cls, args, Alias.Jar)
+        } else {
+            Build.empty
+        }
+    }
+
+    /**
+     * Gets the uri from where to load config settings
+     */
+    fun dir(args: Args, default: Alias): Uri {
+        val dirFromArgs = args.getStringOrNull("conf.dir")
+        return dirFromArgs?.let { Uris.parse(it) } ?: Uri.of(default, "", null)
+    }
+
+    /**
+     * Builds the Application Context with all relevant dependencies:
+     * 1. args
+     * 2. envs
+     * 3. confs
+     * 4. logs ( defaults )
+     * 5. dirs ( defaults )
+     */
+    fun context(cls:Class<*>, inputs: AppUtils.AppInputs, enc: Encryptor?, logs: Logs?): AppContext {
+        val build = AppBuilder.build(cls, inputs.args, inputs.loc)
+        val args = inputs.args
+        val env = inputs.envs
+
+        // The config is inheritance based.
+        // Which means the base env.loc.conf inherits from env.conf.
+        val conf = inputs.confEnv
+
+        return AppContext(
+            app = cls,
+            args = args,
+            envs = env,
+            conf = conf,
+            enc = enc,
+            logs = logs ?: LogsDefault,
+            info = Info.of(about(conf), build),
+            dirs = folders(conf)
+        )
+    }
+
+    fun conf(cls:Class<*>, raw: Array<String>, name:String = Confs.CONFIG_DEFAULT_PROPERTIES, alias:Alias = Alias.Jar): Properties {
+        val args = Args.parseArgs(raw).getOrNull() ?: Args.empty()
+        return conf(cls, args, name, alias)
+    }
+
+    fun conf(cls:Class<*>, args: Args, name:String = Confs.CONFIG_DEFAULT_PROPERTIES, alias:Alias = Alias.Jar): Properties {
+        val source = dir(args, alias)
+        val path = source.combine(name)
+        val props = Props.fromUri(cls, path)
+        return props
     }
 }

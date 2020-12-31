@@ -204,9 +204,9 @@ class S3(
             }
         }
 
-        fun of(region: String, bucket: String, createBucket: Boolean, confPath: String? = null, confSection: String? = null): Try<S3> {
+        fun of(cls:Class<*>, region: String, bucket: String, createBucket: Boolean, confPath: String? = null, confSection: String? = null): Try<S3> {
             return build(region) { regions ->
-                S3(AwsFuncs.creds(confPath, confSection), regions, bucket, createBucket)
+                S3(AwsFuncs.creds(cls, confPath, confSection), regions, bucket, createBucket)
             }
         }
     }

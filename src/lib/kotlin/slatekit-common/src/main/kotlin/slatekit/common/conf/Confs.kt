@@ -27,14 +27,13 @@ import java.util.*
 /**
  * Created by kishorereddy on 6/4/17.
  */
-object ConfFuncs {
+object Confs {
 
-
-    val CONFIG_DEFAULT_SUFFIX = ".conf"
-    val CONFIG_DEFAULT_PROPERTIES = "env.conf"
-    val CONFIG_DEFAULT_SECTION_DB = "db"
-    val CONFIG_DEFAULT_SECTION_LOGIN = "login"
-    val CONFIG_DEFAULT_SECTION_API = "api"
+    const val CONFIG_DEFAULT_SUFFIX = ".conf"
+    const val CONFIG_DEFAULT_PROPERTIES = "env.conf"
+    const val CONFIG_DEFAULT_SECTION_DB = "db"
+    const val CONFIG_DEFAULT_SECTION_LOGIN = "login"
+    const val CONFIG_DEFAULT_SECTION_API = "api"
 
 
     /**
@@ -45,12 +44,12 @@ object ConfFuncs {
      * @param sectionName : the name of the section in the file representing the settings
      * @return
      */
-    fun readDbCon(
-        fileName: String? = null,
-        enc: Encryptor? = null,
-        sectionName: String? = CONFIG_DEFAULT_SECTION_DB
+    fun readDbCon(cls: Class<*>,
+                  fileName: String? = null,
+                  enc: Encryptor? = null,
+                  sectionName: String? = CONFIG_DEFAULT_SECTION_DB
     ): DbCon? =
-            load(fileName, enc).dbCon(sectionName ?: CONFIG_DEFAULT_SECTION_DB)
+            load(cls, fileName, enc).dbCon(sectionName ?: CONFIG_DEFAULT_SECTION_DB)
 
     /**
      * loads the login info from the location specified
@@ -61,11 +60,12 @@ object ConfFuncs {
      * @return
      */
     fun readLogin(
-        fileName: String? = null,
-        enc: Encryptor? = null,
-        sectionName: String? = CONFIG_DEFAULT_SECTION_LOGIN
+            cls: Class<*>,
+            fileName: String? = null,
+            enc: Encryptor? = null,
+            sectionName: String? = CONFIG_DEFAULT_SECTION_LOGIN
     ): Credentials? =
-            load(fileName, enc).login(sectionName ?: CONFIG_DEFAULT_SECTION_LOGIN)
+            load(cls, fileName, enc).login(sectionName ?: CONFIG_DEFAULT_SECTION_LOGIN)
 
     /**
      * loads the api key info from the location specified
@@ -76,11 +76,12 @@ object ConfFuncs {
      * @return
      */
     fun readApiKey(
-        fileName: String? = null,
-        enc: Encryptor? = null,
-        sectionName: String? = CONFIG_DEFAULT_SECTION_API
+            cls: Class<*>,
+            fileName: String? = null,
+            enc: Encryptor? = null,
+            sectionName: String? = CONFIG_DEFAULT_SECTION_API
     ): ApiLogin? =
-            load(fileName, enc).apiLogin(sectionName ?: CONFIG_DEFAULT_SECTION_API)
+            load(cls, fileName, enc).apiLogin(sectionName ?: CONFIG_DEFAULT_SECTION_API)
 
     /**
      * Loads a config file using the source/location supplied.
@@ -89,9 +90,9 @@ object ConfFuncs {
      * @param enc : the encryptor for decrypting config settings.
      * @return
      */
-    fun load(fileName: String? = null, enc: Encryptor? = null): Conf {
-        val info = Props.load(fileName)
-        return Config(info.first, info.second, enc)
+    fun load(cls: Class<*>, fileName: String? = null, enc: Encryptor? = null): Conf {
+        val info = Props.fromPath(cls, fileName)
+        return Config(cls, info.first, info.second, enc)
     }
 
     /**
@@ -171,34 +172,14 @@ object ConfFuncs {
      *
      * @return
      */
-    fun loadWithFallbackConfig(
-        fileName: String,
-        parentFilePath: String,
-        enc: Encryptor? = null
+    fun loadWithFallbackConfig(cls: Class<*>,
+                               fileName: String,
+                               parentFilePath: String,
+                               enc: Encryptor? = null
     ): Conf {
 
-        val conf = Config.of(fileName, parentFilePath, enc)
+        val conf = Config.of(cls, fileName, parentFilePath, enc)
         return conf
-    }
-
-    /**
-     * Loads the typesafe config from the filename can be prefixed with a uri to indicate location,
-     * such as:
-     * 1. "jars://" to indicate loading from resources directory inside jar
-     * 2. "user://" to indicate loading from user.home directory
-     * 3. "file://" to indicate loading from file system
-     *
-     * e.g.
-     *  - jars://env.qa.conf
-     *  - user://${company.dir}/${group.dir}/${app.id}/conf/env.qa.conf
-     *  - file://c:/slatekit/${company.dir}/${group.dir}/${app.id}/conf/env.qa.conf
-     *  - file://./conf/env.qa.conf
-     *
-     * @param fileName : name of file e.g. email.conf
-     * @return
-     */
-    fun loadPropertiesFrom(fileName: String?): Properties {
-        return Props.loadFrom(fileName)
     }
 
     /**

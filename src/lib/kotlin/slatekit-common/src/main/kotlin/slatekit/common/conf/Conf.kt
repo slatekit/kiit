@@ -25,7 +25,7 @@ import slatekit.common.io.Uri
  *
  * @param encryptor: Optional encryptor for decrypting encrypted config settings.
  */
-abstract class Conf(val uri:Uri, val encryptor: ((String) -> String)?) : Inputs, ConfigSupport {
+abstract class Conf(val cls:Class<*>, val uri:Uri, val encryptor: ((String) -> String)?) : Inputs, ConfigSupport {
 
     /**
      * The origin of the config ( e.g. file name for now )
