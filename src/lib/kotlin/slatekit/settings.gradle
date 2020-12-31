@@ -48,9 +48,6 @@ project(':slatekit-cache').projectDir=new File('../slatekit-cache')
 include ':slatekit-apis'
 project(':slatekit-apis').projectDir=new File('../slatekit-apis')
 
-include ':slatekit-cloud'
-project(':slatekit-cloud').projectDir=new File('../slatekit-cloud')
-
 include ':slatekit-generator'
 project(':slatekit-generator').projectDir=new File('../slatekit-generator')
 
