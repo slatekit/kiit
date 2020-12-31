@@ -6,7 +6,7 @@ import slatekit.apis.Verbs
 import slatekit.apis.ApiBase
 import slatekit.context.Context
 import slatekit.common.Sources
-import slatekit.integration.common.AppEntContext
+import slatekit.connectors.entities.AppEntContext
 
 
 @Api(area = "app", name = "tests", desc = "sample to test features of Slate Kit APIs",

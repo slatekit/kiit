@@ -30,7 +30,7 @@ import slatekit.common.info.Host
 import slatekit.integration.apis.InfoApi
 import slatekit.integration.apis.CliApi
 import slatekit.integration.apis.VersionApi
-import slatekit.integration.common.AppEntContext
+import slatekit.connectors.entities.AppEntContext
 import slatekit.results.Codes
 import slatekit.results.getOrElse
 import slatekit.serialization.Serialization

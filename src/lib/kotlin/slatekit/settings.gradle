@@ -78,6 +78,15 @@ project(':slatekit-providers-logback').projectDir=new File('../../../ext/kotlin/
 include ':slatekit-providers-datadog'
 project(':slatekit-providers-datadog').projectDir=new File('../../../ext/kotlin/slatekit-providers-datadog')
 
+include ':slatekit-connectors-cli'
+project(':slatekit-connectors-cli').projectDir=new File('../../../ext/kotlin/slatekit-connectors-cli')
+
+include ':slatekit-connectors-entities'
+project(':slatekit-connectors-entities').projectDir=new File('../../../ext/kotlin/slatekit-connectors-entities')
+
+include ':slatekit-connectors-jobs'
+project(':slatekit-connectors-jobs').projectDir=new File('../../../ext/kotlin/slatekit-connectors-jobs')
+
 include ':slatekit-samples'
 project(':slatekit-samples').projectDir=new File('../../../apps/kotlin/slatekit-samples')
 

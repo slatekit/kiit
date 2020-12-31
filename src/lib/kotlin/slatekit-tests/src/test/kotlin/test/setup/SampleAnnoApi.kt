@@ -11,7 +11,7 @@ import slatekit.common.crypto.EncString
 import slatekit.common.requests.Request
 import slatekit.common.smartvalues.Email
 import slatekit.common.smartvalues.PhoneUS
-import slatekit.integration.common.AppEntContext
+import slatekit.connectors.entities.AppEntContext
 import slatekit.results.Notice
 import slatekit.results.Success
 

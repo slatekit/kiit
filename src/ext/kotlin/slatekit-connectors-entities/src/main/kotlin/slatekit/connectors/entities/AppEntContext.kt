@@ -11,7 +11,7 @@
  * </slate_header>
  */
 
-package slatekit.integration.common
+package slatekit.connectors.entities
 
 import slatekit.common.Identity
 import slatekit.common.args.Args
@@ -26,7 +26,6 @@ import slatekit.common.log.LogsDefault
 import slatekit.common.naming.Namer
 import slatekit.context.AppContext
 import slatekit.common.envs.Envs
-import slatekit.common.naming.LowerCamelNamer
 import slatekit.context.Context
 import slatekit.db.Db
 import slatekit.entities.Entities
@@ -72,7 +71,7 @@ data class AppEntContext(
     /**
      * Copies this item with the build modified
      */
-    fun withBuild(build: Build):AppEntContext {
+    fun withBuild(build: Build): AppEntContext {
         val info = this.info
         val newCtx = this.copy( info = info.copy(build = build))
         return newCtx
