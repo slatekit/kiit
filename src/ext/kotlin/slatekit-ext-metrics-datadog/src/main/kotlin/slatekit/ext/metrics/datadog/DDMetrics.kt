@@ -1,4 +1,4 @@
-package slatekit.providers.metrics
+package slatekit.ext.metrics.datadog
 
 import io.micrometer.core.instrument.Clock
 import io.micrometer.core.instrument.MeterRegistry

@@ -66,6 +66,7 @@ import java.util.*
  * /Users/kishorereddy/git/slatekit/slatekit/src/lib/kotlin/slatekit/build/distributions/slatekit/bin
  */
 fun main(args: Array<String>) {
+
     Tries.of {
         val envs = Envs.defaults("dev")
         val info = Info(
