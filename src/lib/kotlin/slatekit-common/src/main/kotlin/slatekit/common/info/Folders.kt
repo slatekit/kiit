@@ -13,6 +13,7 @@
 
 package slatekit.common.info
 
+import slatekit.common.ext.toId
 import slatekit.common.io.Files
 import java.io.File
 
@@ -22,19 +23,18 @@ import java.io.File
  * e.g.
  *
  * - user                   ( e.g /usr/kreddy or c:/users/kreddy )
- *   - rootOrCompany        ( ? name of company or name of root folder )
- *                           ( recommended to use root folder containing 1 or more apps )
- *     - group              ( ? parent folder for all apps for group )
+ *   - company              ( ? name of company or name of root folder )
+ *     - area               ( ? parent folder for all apps for a certain area/department/group )
  *       - product1.console ( individual apps go here )
- *       - product1.shell
- *       - product1.server
+ *       - product2.shell
+ *       - product3.server
  *         - conf
  *         - cache
  *         - logs
  *         - inputs
  *         - outputs
  *
- * @param home: location of where the folders reside ( local (to app) | programs | user.home )
+ * @param home: location of where the folders reside ( e.g. ~/ ( user directory), /apps/, current directory )
  * @param root : optional name of root folder or company name
  * @param area : optional name of group folder that holds all apps
  * @param app : name of the application folder for this app
@@ -44,7 +44,7 @@ import java.io.File
  * @param outputs : name of output folder for the application
  */
 
-data class Folders(
+data class Folders private constructor(
 
         @JvmField
         val home: String,
@@ -88,12 +88,12 @@ data class Folders(
             "temp" to temp
     )
 
-    val pathToConf: String get() = this.pathToApp + File.separator + conf
-    val pathToCache: String get() = this.pathToApp + File.separator + cache
-    val pathToInputs: String get() = this.pathToApp + File.separator + inputs
-    val pathToLogs: String get() = this.pathToApp + File.separator + logs
+    val pathToConf   : String get() = this.pathToApp + File.separator + conf
+    val pathToCache  : String get() = this.pathToApp + File.separator + cache
+    val pathToInputs : String get() = this.pathToApp + File.separator + inputs
+    val pathToLogs   : String get() = this.pathToApp + File.separator + logs
     val pathToOutputs: String get() = this.pathToApp + File.separator + outputs
-    val pathToTemp: String get() = this.pathToApp + File.separator + temp
+    val pathToTemp   : String get() = this.pathToApp + File.separator + temp
 
     fun buildPath(part: String): String {
         val userHome = System.getProperty("user.home")
@@ -104,27 +104,20 @@ data class Folders(
         return path
     }
 
-    fun getConfFilePath(fileName: String): String = pathToConf + File.separator + fileName
-    fun getCacheFilePath(fileName: String): String = pathToCache + File.separator + fileName
-    fun getInputsFilePath(fileName: String): String = pathToInputs + File.separator + fileName
-    fun getOutputsFilePath(fileName: String): String = pathToOutputs + File.separator + fileName
-    fun getLogsFilePath(fileName: String): String = pathToLogs + File.separator + fileName
-    fun getTempFilePath(fileName: String): String = pathToTemp + File.separator + fileName
-
     val pathToApp: String
         get() {
             val sep = File.separator
             val homePath = home
-            val rootPath = root?.let { folder -> homePath + sep + folder } ?: homePath
-            val groupPath = area?.let { folder -> rootPath + sep + folder } ?: rootPath
-            val finalPath = groupPath + sep + app
+            val rootPath = homePath + sep + root
+            val areaPath = rootPath + sep + area
+            val finalPath = areaPath + sep + app
             return finalPath
         }
 
     fun create() {
-        val rootPath = Files.mkDir(home, root ?: "")
-        val groupPath = Files.mkDir(rootPath, area ?: "")
-        val appPath = Files.mkDir(groupPath, app)
+        val rootPath = Files.mkDir(home, root)
+        val areaPath = Files.mkDir(rootPath, area)
+        val appPath = Files.mkDir(areaPath, app)
         Files.mkDir(appPath, cache)
         Files.mkDir(appPath, conf)
         Files.mkDir(appPath, inputs)
@@ -164,18 +157,28 @@ data class Folders(
         )
 
         @JvmStatic
-        fun userDir(root: String, area: String, app: String) =
-                Folders(
-                        System.getProperty("user.home"),
-                        root = root,
-                        area = area,
-                        app = app,
-                        cache = "cache",
-                        inputs = "input",
-                        logs = "log",
-                        outputs = "output",
-                        temp = "temp",
-                        conf = "conf"
-                )
+        fun userDir(about:About) : Folders {
+            return userDir(about.company, about.area, about.name)
+        }
+
+        @JvmStatic
+        fun userDir(root: String, area: String, app: String) : Folders {
+            // For user home directories ( ~/ ), the root always begins with "." as in ~/.slatekit
+            val finalRoot = "." + root.toId()
+            val finalArea = area.toId()
+            val finalApp = app.toId()
+            return Folders(
+                    System.getProperty("user.home"),
+                    root = finalRoot,
+                    area = finalArea,
+                    app = finalApp,
+                    cache = "cache",
+                    inputs = "input",
+                    logs = "log",
+                    outputs = "output",
+                    temp = "temp",
+                    conf = "conf"
+            )
+        }
     }
 }

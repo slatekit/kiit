@@ -93,11 +93,7 @@ object AppBuilder {
         val abt = about(conf)
         // The root directory can be overriden in the config
         // e..g app.dir = user://company/dept/app
-        return Folders.userDir(
-                root = conf.getStringOrElse("app.dir", abt.company.toId()),
-                area = abt.area.toId(),
-                app = abt.name
-        )
+        return Folders.userDir(abt)
     }
 
     /**
@@ -115,7 +111,7 @@ object AppBuilder {
                 Pair("company.name", { _ -> abt.company }),
                 Pair("company.dir", { _ -> "@{user.home}/@{company.id}" }),
                 Pair("root.dir", { _ -> "@{company.dir}" }),
-                Pair("area.id", { _ -> abt.area.toId() }),
+                Pair("area.id" , { _ -> abt.area.toId() }),
                 Pair("area.name", { _ -> abt.area }),
                 Pair("area.dir", { _ -> "@{root.dir}/@{area.id}" }),
                 Pair("app.id", { _ -> abt.id }),

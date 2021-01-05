@@ -67,7 +67,19 @@ import java.util.*
  * /Users/kishorereddy/git/slatekit/slatekit/src/lib/kotlin/slatekit/build/distributions/slatekit/bin
  */
 fun main(args: Array<String>) {
-    app(args)
+    //app(args)
+    val about = SlateKit.about
+    val folders = Folders.userDir(about)
+    folders.create()
+    println("root   : " + folders.root           )
+    println("area   : " + folders.area           )
+    println("app    : " + folders.app            )
+    println("conf   : " + folders.pathToConf     )
+    println("cache  : " + folders.pathToCache    )
+    println("inputs : " + folders.pathToInputs   )
+    println("logs   : " + folders.pathToLogs     )
+    println("outputs: " + folders.pathToOutputs  )
+    println("temp   : " + folders.pathToTemp     )
 }
 
 fun app(args: Array<String>) {
