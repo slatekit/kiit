@@ -6,7 +6,10 @@ import slatekit.app.AppOptions
 import slatekit.cli.CliSettings
 import slatekit.context.Context
 import slatekit.common.args.ArgsSchema
+import slatekit.common.conf.Conf
+import slatekit.common.conf.Config
 import slatekit.common.conf.PropSettings
+import slatekit.common.conf.Props
 import slatekit.common.utils.B64Java8
 import slatekit.common.crypto.Encryptor
 import slatekit.common.info.About
@@ -17,8 +20,11 @@ import slatekit.connectors.cli.CliApi
 import slatekit.results.Success
 import slatekit.serialization.Serialization
 import slatekit.results.Failure
+import java.io.File
 
 class SlateKit(ctx: Context) : App<Context>(ctx, AppOptions(showWelcome = true)), SlateKitServices {
+
+    private lateinit var settingsConf: Conf
 
     companion object {
 
@@ -75,18 +81,42 @@ class SlateKit(ctx: Context) : App<Context>(ctx, AppOptions(showWelcome = true))
         println("initializing")
         val logger = ctx.logs.getLogger("slatekit.tools.cli")
         log(about, logger)
+
+        // Current version
+        val slatekitVersion = ctx.conf.getString("slatekit.version")
+        val brewAppLocation = "/usr/local/Cellar/slatekit/${slatekitVersion}"
+
+        // Create the root folder using about info {COMPANY}/{AREA}/{NAME}
+        // eg. ~/slatekit/tools/cli
         val folders = Folders.userDir(about)
         folders.create()
-        val settings = PropSettings(dir = folders.pathToConf, name = "settings.conf")
-        val slatekitVersion = ctx.conf.getString("slatekit.version")
-        val installLocation = System.getenv("SLATEKIT_TOOLS_CLI_HOME") ?: "/usr/local/Cellar"
-        settings.putString("slatekit.version", slatekitVersion)
-        settings.putString("slatekit.version.beta", ctx.conf.getString("slatekit.version.beta"))
-        settings.putString("kotlin.version", ctx.conf.getString("kotlin.version"))
-        settings.putString("generation.source",  "${installLocation}/slatekit/${slatekitVersion}")
-        settings.putString("generation.templates",  "${installLocation}/slatekit/${slatekitVersion}/templates")
-        settings.putString("generation.output", "")
-        settings.save(overwrite = false, desc = "default settings")
+        val pathToHOME = folders.pathToApp
+
+        // Load settings
+        // NOTES:
+        // 1. Home location is where the settings, logs are maintained ( regardless of version )
+        // 2. Install location is baesd on env variable or homebrew ( supported ), this changes based on version
+        val homeLocation = System.getenv("SLATEKIT_TOOLS_CLI_HOME") ?:pathToHOME
+        val installLocation = System.getenv("SLATEKIT_TOOLS_CLI_HOME") ?: brewAppLocation
+        val settingsName = "settings.conf"
+        val confDir = File(homeLocation, folders.conf)
+        val file = File(confDir, settingsName)
+        if(!file.exists()) {
+            val settings = PropSettings(dir = confDir.absolutePath, name = settingsName)
+            settings.put("slatekit.version", slatekitVersion, false)
+            settings.put("slatekit.version.beta", ctx.conf.getString("slatekit.version.beta"), false)
+            settings.put("kotlin.version", ctx.conf.getString("kotlin.version"), false)
+            settings.put("generation.source", "$installLocation/templates", false)
+            settings.put("generation.output", "", false)
+            settings.save(desc = "default settings")
+        }
+        else {
+            val settings = Props.fromFile(file.absolutePath)
+            settings.put("generation.source", "$installLocation/templates")
+            PropSettings.save(settings, confDir.absolutePath, settingsName, true, "upgrade to $slatekitVersion")
+        }
+        // Now load from HOME/conf/settings.conf
+        settingsConf = Config.of(SlateKit::class.java, file.absolutePath)
     }
 
 
@@ -102,12 +132,11 @@ class SlateKit(ctx: Context) : App<Context>(ctx, AppOptions(showWelcome = true))
         val cli = build()
 
         // Determine if running in CLI interactive mode or executing a project generator
-//        val args = ctx.args
-//        when (args.parts.isEmpty()) {
-//            true -> run(cli)
-//            false -> gen(cli)
-//        }
-        println()
+        val args = ctx.args
+        when (args.parts.isEmpty()) {
+            true -> run(cli)
+            false -> gen(cli)
+        }
         return OK
     }
 
@@ -156,7 +185,7 @@ class SlateKit(ctx: Context) : App<Context>(ctx, AppOptions(showWelcome = true))
         val auth = Authenticator(keys)
 
         // Load all the Slate Kit Universal APIs
-        val apis = apis()
+        val apis = apis(settingsConf)
 
         // Makes the APIs accessible on the CLI
         val cli = CliApi(

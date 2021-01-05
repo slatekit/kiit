@@ -27,11 +27,7 @@ class PropSettings(private val props:Properties = Properties(), val dir:String =
     }
 
     fun save(overwrite:Boolean = false, desc:String? = "") {
-        val file = File(dir, name)
-        if(!file.exists() || overwrite) {
-            val writer = FileOutputStream(file, false)
-            props.store(writer, desc)
-        }
+        save(props, dir, name, overwrite, desc)
     }
 
     override val raw:Any = props
@@ -91,4 +87,15 @@ class PropSettings(private val props:Properties = Properties(), val dir:String =
 
 
     private fun getStringRaw(key: String): String = props.get(key)?.toString()?.trim() ?: ""
+
+
+    companion object {
+        fun save(props:Properties, dir:String, name:String, overwrite:Boolean = false, desc:String? = "") {
+            val file = File(dir, name)
+            if(!file.exists() || overwrite) {
+                val writer = FileOutputStream(file, false)
+                props.store(writer, desc)
+            }
+        }
+    }
 }

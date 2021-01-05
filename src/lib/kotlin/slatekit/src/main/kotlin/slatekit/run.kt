@@ -64,22 +64,6 @@ import java.util.*
  * /Users/kishorereddy/git/slatekit/slatekit/src/lib/kotlin/slatekit/build/distributions/slatekit/bin
  */
 fun main(args: Array<String>) {
-    //app(args)
-    val about = SlateKit.about
-    SlateKit.log(about, LoggerConsole())
-    val folders = Folders.userDir(SlateKit.about)
-    folders.create()
-    val settings = PropSettings(dir = folders.pathToConf, name = "settings.conf")
-    settings.putString("slatekit.version", "1.28.0")
-    settings.putString("slatekit.version.beta", "0.58")
-    settings.putString("kotlin.version", "1.3.21")
-    settings.putString("generation.source",  "usr://slatekit/generator")
-    settings.putString("generation.templates",  "usr://slatekit/generator/templates")
-    settings.putString("generation.output", "usr://slatekit/generator/gen")
-    settings.save(true, "Default settings")
-}
-
-fun app(args: Array<String>) {
     /**
      * DOCS : https://www.slatekit.com/arch/app/
      *
@@ -106,61 +90,3 @@ fun app(args: Array<String>) {
         )
     }
 }
-
-
-fun cli(args: Array<String>) {
-    /**
-     * DOCS : https://www.slatekit.com/arch/app/
-     *
-     * NOTES: The AppRunner does the following:
-     *
-     * 1. checks for command line args
-     * 2. validates command line args against the Args schema ( optional )
-     * 3. builds an AppContext for the app ( containing args, environment, config, logs )
-     * 4. creates an App using supplied lambda ( Your Application instance )
-     * 5. displays start up information and diagnostics using the Banner
-     * 6. executes the life-cycle steps ( init, exec, done )
-     */
-    runBlocking {
-        AppRunner.run(
-                cls = SlateKit::class.java,
-                rawArgs = args,
-                about = SlateKit.about,
-                schema = SlateKit.schema,
-                enc = SlateKit.encryptor,
-                logs = LogsDefault,
-                hasAction = true,
-                confSource = Alias.Jar,
-                builder = { ctx -> SlateKit(ctx) }
-        )
-    }
-}
-
-
-//class CacheTests {
-//    suspend fun cache() {
-//        val cache = SimpleAsyncCache.of("test")
-//        val scope = CoroutineScope(Dispatchers.IO)
-//        scope.launch {
-//            cache.work()
-//        }
-//        cache.put("a", "", 200) { delay(2000); 1 }
-//        cache.put("b", "", 200) { delay(2000); 2 }
-//        cache.put("c", "", 200) { delay(2000); 3 }
-//        val items = listOf("a", "b", "c")
-//
-//        for(ndx in 1..100) {
-//            scope.launch {
-//                delay(1000)
-//                val time = DateTime.now()
-//                val r = Random.nextInt(0, 3)
-//                val key = items[r]
-//                val value = cache.get<Int>(key)
-//                val name = this.toString()
-//                println("$time : $name : $value")
-//            }
-//        }
-//        delay(12000)
-//        println("done")
-//    }
-//}

@@ -1,11 +1,12 @@
 package slatekit.generator
 
+import slatekit.common.conf.Conf
 import slatekit.context.Context
 import slatekit.results.Success
 import slatekit.results.Try
 import java.io.File
 
-class GeneratorService(val context: Context, val cls:Class<*>, val settings: GeneratorSettings) {
+class GeneratorService(val context: Context, val conf: Conf, val cls:Class<*>, val settings: GeneratorSettings) {
 
     val logger = context.logs.getLogger()
 

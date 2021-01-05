@@ -25,6 +25,13 @@ interface Settings : Inputs, Puts {
      * Designates completion of editing settings
      */
     fun done()
+
+
+    fun put(key:String, value:String, overwrite:Boolean = false) {
+        if(!containsKey(key) || overwrite){
+            putString(key, value)
+        }
+    }
 }
 
 

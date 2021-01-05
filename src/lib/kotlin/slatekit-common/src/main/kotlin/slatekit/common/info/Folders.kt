@@ -158,17 +158,27 @@ data class Folders private constructor(
 
         @JvmStatic
         fun userDir(about:About) : Folders {
-            return userDir(about.company, about.area, about.name)
+            return create(System.getProperty("user.home"), about.company, about.area, about.name)
         }
 
         @JvmStatic
-        fun userDir(root: String, area: String, app: String) : Folders {
+        fun userDir(root: String, area: String, name: String) : Folders {
+            return create(System.getProperty("user.home"), root, area, name)
+        }
+
+        @JvmStatic
+        fun installDir(tool:String, about:About) : Folders {
+            return create("/usr/local/opt/$tool", about.company, about.area, about.name)
+        }
+
+        @JvmStatic
+        private fun create(home:String, root: String, area: String, app: String) : Folders {
             // For user home directories ( ~/ ), the root always begins with "." as in ~/.slatekit
             val finalRoot = "." + root.toId()
             val finalArea = area.toId()
             val finalApp = app.toId()
             return Folders(
-                    System.getProperty("user.home"),
+                    home = home,
                     root = finalRoot,
                     area = finalArea,
                     app = finalApp,
