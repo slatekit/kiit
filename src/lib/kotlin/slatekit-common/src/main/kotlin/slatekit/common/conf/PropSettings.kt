@@ -26,10 +26,12 @@ class PropSettings(private val props:Properties = Properties(), val dir:String =
         save()
     }
 
-    fun save(desc:String? = "") {
+    fun save(overwrite:Boolean = false, desc:String? = "") {
         val file = File(dir, name)
-        val writer = FileOutputStream(file, false)
-        props.store(writer, desc)
+        if(!file.exists() || overwrite) {
+            val writer = FileOutputStream(file, false)
+            props.store(writer, desc)
+        }
     }
 
     override val raw:Any = props

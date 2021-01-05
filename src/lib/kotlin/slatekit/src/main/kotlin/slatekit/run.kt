@@ -73,10 +73,10 @@ fun main(args: Array<String>) {
     settings.putString("slatekit.version", "1.28.0")
     settings.putString("slatekit.version.beta", "0.58")
     settings.putString("kotlin.version", "1.3.21")
-    settings.putString("generation.source",  "usr://slatekit/generator/templates")
+    settings.putString("generation.source",  "usr://slatekit/generator")
+    settings.putString("generation.templates",  "usr://slatekit/generator/templates")
     settings.putString("generation.output", "usr://slatekit/generator/gen")
-    settings.putString("templates.dir", "/Users/kishore.reddy/dev/tmp/slatekit/slatekit/src/lib/kotlin/slatekit/src/main/resources/templates")
-    settings.save("Default settings")
+    settings.save(true, "Default settings")
 }
 
 fun app(args: Array<String>) {

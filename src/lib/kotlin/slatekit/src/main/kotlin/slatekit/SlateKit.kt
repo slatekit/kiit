@@ -79,13 +79,14 @@ class SlateKit(ctx: Context) : App<Context>(ctx, AppOptions(showWelcome = true))
         folders.create()
         val settings = PropSettings(dir = folders.pathToConf, name = "settings.conf")
         val slatekitVersion = ctx.conf.getString("slatekit.version")
+        val installLocation = System.getenv("SLATEKIT_TOOLS_CLI_HOME") ?: "/usr/local/Cellar"
         settings.putString("slatekit.version", slatekitVersion)
         settings.putString("slatekit.version.beta", ctx.conf.getString("slatekit.version.beta"))
         settings.putString("kotlin.version", ctx.conf.getString("kotlin.version"))
-        settings.putString("generation.source",  "install://slatekit/${slatekitVersion}")
-        settings.putString("generation.templates",  "install://slatekit/${slatekitVersion}/templates")
+        settings.putString("generation.source",  "${installLocation}/slatekit/${slatekitVersion}")
+        settings.putString("generation.templates",  "${installLocation}/slatekit/${slatekitVersion}/templates")
         settings.putString("generation.output", "")
-        settings.save()
+        settings.save(overwrite = false, desc = "default settings")
     }
 
 
