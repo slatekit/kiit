@@ -10,6 +10,7 @@ import slatekit.common.utils.B64Java8
 import slatekit.common.crypto.Encryptor
 import slatekit.common.info.About
 import slatekit.common.info.ApiKey
+import slatekit.connectors.cli.CliApi
 import slatekit.results.Success
 import slatekit.serialization.Serialization
 import slatekit.results.Failure
@@ -87,7 +88,7 @@ class SlateKit(ctx: Context) : App<Context>(ctx, AppOptions(showWelcome = true))
     /**
      * Generate the project
      */
-    private suspend fun gen(cli: CLIApi2) {
+    private suspend fun gen(cli: CliApi) {
         // slatekit new api -name="MyApp1" -package="company1.apps"
         //
         // NOTES:
@@ -109,12 +110,12 @@ class SlateKit(ctx: Context) : App<Context>(ctx, AppOptions(showWelcome = true))
     /**
      * Begin interactive mode
      */
-    private suspend fun run(cli: CLIApi2) {
+    private suspend fun run(cli: CliApi) {
         cli.run()
     }
 
 
-    private fun build(): CLIApi2 {
+    private fun build(): CliApi {
         // The APIs ( DocApi, SetupApi are authenticated using an sample API key )
         val keys = listOf(ApiKey(name = "cli", key = "abc", roles = "dev,qa,ops,admin"))
 
@@ -126,7 +127,7 @@ class SlateKit(ctx: Context) : App<Context>(ctx, AppOptions(showWelcome = true))
         val apis = apis()
 
         // Makes the APIs accessible on the CLI
-        val cli = CLIApi2(
+        val cli = CliApi(
                 ctx = ctx,
                 auth = auth,
                 settings = CliSettings(enableLogging = true, enableOutput = true),

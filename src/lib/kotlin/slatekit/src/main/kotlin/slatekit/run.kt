@@ -80,24 +80,28 @@ fun main(args: Array<String>) {
         val banner = Banner(info, envs, logger)
         banner.welcome()
         banner.display()
-        val confTest = Tries.of { conf(SlateKit::class.java, args) }
-        val jar1Test = Tries.of { Props2.loadFromJar(SlateKit::class.java,"env.conf") }
-        val jar2Test = Tries.of { Props2.loadFromJar2(SlateKit::class.java,"env.conf") }
-        val jar3Test = Tries.of { loadFromJar3("env.conf") }
-        test(confTest, "auto")
+        val con1Test = Tries.of { AppBuilder.conf(SlateKit::class.java, args) }
+        val con2Test = Tries.of { conf(SlateKit::class.java, args) }
+        val jar1Test = Tries.of { Props.fromJar(SlateKit::class.java, "env.conf") }
+        val jar2Test = Tries.of { Props2.loadFromJar(SlateKit::class.java, "env.conf") }
+        val jar3Test = Tries.of { Props2.loadFromJar2(SlateKit::class.java, "env.conf") }
+        val jar4Test = Tries.of { loadFromJar3("env.conf") }
+        test(con1Test, "auto1")
+        test(con2Test, "auto2")
         test(jar1Test, "jar1")
         test(jar2Test, "jar2")
         test(jar3Test, "jar3")
+        test(jar4Test, "jar4")
         println()
         logger.info("user.dir : " + System.getProperty("user.dir"))
         logger.info("path.get : " + java.nio.file.Paths.get("").toAbsolutePath().toString())
     }
 }
 
-fun test(res:Try<Properties>, desc:String){
+fun test(res: Try<Properties>, desc: String) {
     println()
     println("======================================")
-    when(res){
+    when (res) {
         is Success -> println("conf.${desc} : " + res.value.getProperty("slatekit.title"))
         is Failure -> println("conf.${desc} : FAILED error=${res.error.message}")
     }
@@ -114,7 +118,7 @@ fun test(res:Try<Properties>, desc:String){
  * 6. Maybe add Parent Alias PRN
  * 7. Support -conf.dir=PRN://conf, -conf.dir=../conf = other ( but figure out path )
  */
-fun conf(cls:Class<*>, raw: Array<String>, name:String = Confs.CONFIG_DEFAULT_PROPERTIES, alias:Alias = Alias.Jar): Properties {
+fun conf(cls: Class<*>, raw: Array<String>, name: String = Confs.CONFIG_DEFAULT_PROPERTIES, alias: Alias = Alias.Jar): Properties {
     val args = Args.parseArgs(raw).getOrNull() ?: Args.empty()
     val source = AppBuilder.dir(args, alias)
     val path = source.combine(name)
@@ -131,7 +135,7 @@ fun Uri.print() {
     println("==============================================")
     println("URI full=${this.full}")
     println("URI path=${this.path}")
-    println("URI raw=${this.raw}"  )
+    println("URI raw=${this.raw}")
     println("URI root=${this.root}")
     println("==============================================")
     println()
@@ -139,19 +143,19 @@ fun Uri.print() {
 
 
 object Props2 {
-    fun loadFrom(cls:Class<*>, uri: Uri): Properties {
+    fun loadFrom(cls: Class<*>, uri: Uri): Properties {
         uri.print()
         val props = when (uri.root) {
-            null -> loadFromJar2(cls,uri.path ?: Confs.CONFIG_DEFAULT_PROPERTIES)
-            is Alias.Jar   -> loadFromJar2(cls,uri.path ?: Confs.CONFIG_DEFAULT_PROPERTIES)
-            is Alias.Other -> loadFromJar2(cls,uri.path ?: Confs.CONFIG_DEFAULT_PROPERTIES)
+            null -> loadFromJar2(cls, uri.path ?: Confs.CONFIG_DEFAULT_PROPERTIES)
+            is Alias.Jar -> loadFromJar2(cls, uri.path ?: Confs.CONFIG_DEFAULT_PROPERTIES)
+            is Alias.Other -> loadFromJar2(cls, uri.path ?: Confs.CONFIG_DEFAULT_PROPERTIES)
             else -> loadFromPath(uri.toFile().absolutePath)
         }
         return props
     }
 
 
-    fun loadFromJar(cls:Class<*>, path: String): Properties {
+    fun loadFromJar(cls: Class<*>, path: String): Properties {
         // This is here to debug loading app conf
         val file = cls.getResource("/" + path).file
         val input = FileInputStream(file)
@@ -161,7 +165,7 @@ object Props2 {
     }
 
 
-    fun loadFromJar2(cls:Class<*>, path: String): Properties {
+    fun loadFromJar2(cls: Class<*>, path: String): Properties {
         // This is here to debug loading app conf
         val input = cls.getResourceAsStream("/" + path)
         val conf = Properties()
@@ -189,7 +193,7 @@ fun loadFromJar3(path: String): Properties {
     return conf
 }
 
-fun app(args:Array<String>) {
+fun app(args: Array<String>) {
     /**
      * DOCS : https://www.slatekit.com/arch/app/
      *
@@ -204,21 +208,21 @@ fun app(args:Array<String>) {
      */
     runBlocking {
         AppRunner.run(
-                app = SlateKit::class.java,
-            rawArgs = args,
-            about = SlateKit.about,
-            schema = SlateKit.schema,
-            enc = SlateKit.encryptor,
-            logs = LogsDefault,
-            hasAction = true,
-            confSource = Alias.Jar,
-            builder = { ctx -> SlateKit(ctx) }
+                cls = SlateKit::class.java,
+                rawArgs = args,
+                about = SlateKit.about,
+                schema = SlateKit.schema,
+                enc = SlateKit.encryptor,
+                logs = LogsDefault,
+                hasAction = true,
+                confSource = Alias.Jar,
+                builder = { ctx -> SlateKit(ctx) }
         )
     }
 }
 
 
-fun cli(args:Array<String>) {
+fun cli(args: Array<String>) {
     /**
      * DOCS : https://www.slatekit.com/arch/app/
      *
@@ -233,6 +237,7 @@ fun cli(args:Array<String>) {
      */
     runBlocking {
         AppRunner.run(
+                cls = SlateKit::class.java,
                 rawArgs = args,
                 about = SlateKit.about,
                 schema = SlateKit.schema,
