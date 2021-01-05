@@ -7,23 +7,16 @@ import slatekit.cli.CliSettings
 import slatekit.context.Context
 import slatekit.common.args.ArgsSchema
 import slatekit.common.conf.PropSettings
-import slatekit.common.conf.Props
 import slatekit.common.utils.B64Java8
 import slatekit.common.crypto.Encryptor
 import slatekit.common.info.About
 import slatekit.common.info.ApiKey
 import slatekit.common.info.Folders
-import slatekit.common.io.Files
 import slatekit.common.log.Logger
-import slatekit.common.log.LoggerConsole
 import slatekit.connectors.cli.CliApi
 import slatekit.results.Success
 import slatekit.serialization.Serialization
 import slatekit.results.Failure
-import java.io.File
-import java.io.FileOutputStream
-import java.nio.file.Paths
-import java.util.*
 
 class SlateKit(ctx: Context) : App<Context>(ctx, AppOptions(showWelcome = true)), SlateKitServices {
 
@@ -85,12 +78,13 @@ class SlateKit(ctx: Context) : App<Context>(ctx, AppOptions(showWelcome = true))
         val folders = Folders.userDir(about)
         folders.create()
         val settings = PropSettings(dir = folders.pathToConf, name = "settings.conf")
-        settings.putString("slatekit.version", "1.28.0")
-        settings.putString("slatekit.version.beta", "0.58")
-        settings.putString("kotlin.version", "1.3.21")
-        settings.putString("generation.source",  "usr://slatekit/generator/templates")
-        settings.putString("generation.output", "usr://slatekit/generator/gen")
-        settings.putString("templates.dir", "/Users/kishore.reddy/dev/tmp/slatekit/slatekit/src/lib/kotlin/slatekit/src/main/resources/templates")
+        val slatekitVersion = ctx.conf.getString("slatekit.version")
+        settings.putString("slatekit.version", slatekitVersion)
+        settings.putString("slatekit.version.beta", ctx.conf.getString("slatekit.version.beta"))
+        settings.putString("kotlin.version", ctx.conf.getString("kotlin.version"))
+        settings.putString("generation.source",  "install://slatekit/${slatekitVersion}")
+        settings.putString("generation.templates",  "install://slatekit/${slatekitVersion}/templates")
+        settings.putString("generation.output", "")
         settings.save()
     }
 
