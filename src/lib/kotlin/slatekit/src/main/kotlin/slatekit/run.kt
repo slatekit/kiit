@@ -6,10 +6,7 @@ import slatekit.app.AppRunner
 import slatekit.app.AppUtils
 import slatekit.common.DateTime
 import slatekit.common.args.Args
-import slatekit.common.conf.Conf
-import slatekit.common.conf.Confs
-import slatekit.common.conf.Config
-import slatekit.common.conf.Props
+import slatekit.common.conf.*
 import slatekit.common.display.Banner
 import slatekit.common.envs.Envs
 import slatekit.common.info.*
@@ -69,17 +66,17 @@ import java.util.*
 fun main(args: Array<String>) {
     //app(args)
     val about = SlateKit.about
-    val folders = Folders.userDir(about)
+    SlateKit.log(about, LoggerConsole())
+    val folders = Folders.userDir(SlateKit.about)
     folders.create()
-    println("root   : " + folders.root           )
-    println("area   : " + folders.area           )
-    println("app    : " + folders.app            )
-    println("conf   : " + folders.pathToConf     )
-    println("cache  : " + folders.pathToCache    )
-    println("inputs : " + folders.pathToInputs   )
-    println("logs   : " + folders.pathToLogs     )
-    println("outputs: " + folders.pathToOutputs  )
-    println("temp   : " + folders.pathToTemp     )
+    val settings = PropSettings(dir = folders.pathToConf, name = "settings.conf")
+    settings.putString("slatekit.version", "1.28.0")
+    settings.putString("slatekit.version.beta", "0.58")
+    settings.putString("kotlin.version", "1.3.21")
+    settings.putString("generation.source",  "usr://slatekit/generator/templates")
+    settings.putString("generation.output", "usr://slatekit/generator/gen")
+    settings.putString("templates.dir", "/Users/kishore.reddy/dev/tmp/slatekit/slatekit/src/lib/kotlin/slatekit/src/main/resources/templates")
+    settings.save("Default settings")
 }
 
 fun app(args: Array<String>) {

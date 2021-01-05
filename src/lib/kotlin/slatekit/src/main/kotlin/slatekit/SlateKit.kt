@@ -6,14 +6,24 @@ import slatekit.app.AppOptions
 import slatekit.cli.CliSettings
 import slatekit.context.Context
 import slatekit.common.args.ArgsSchema
+import slatekit.common.conf.PropSettings
+import slatekit.common.conf.Props
 import slatekit.common.utils.B64Java8
 import slatekit.common.crypto.Encryptor
 import slatekit.common.info.About
 import slatekit.common.info.ApiKey
+import slatekit.common.info.Folders
+import slatekit.common.io.Files
+import slatekit.common.log.Logger
+import slatekit.common.log.LoggerConsole
 import slatekit.connectors.cli.CliApi
 import slatekit.results.Success
 import slatekit.serialization.Serialization
 import slatekit.results.Failure
+import java.io.File
+import java.io.FileOutputStream
+import java.nio.file.Paths
+import java.util.*
 
 class SlateKit(ctx: Context) : App<Context>(ctx, AppOptions(showWelcome = true)), SlateKitServices {
 
@@ -51,11 +61,37 @@ class SlateKit(ctx: Context) : App<Context>(ctx, AppOptions(showWelcome = true))
          * Encryptor for files
          */
         val encryptor = Encryptor("aksf2409bklja24b", "k3l4lkdfaoi97042", B64Java8)
+
+        fun log(about: About, logger: Logger){
+            val folders = Folders.userDir(about)
+            folders.create()
+            logger.debug("root   : " + folders.root           )
+            logger.debug("area   : " + folders.area           )
+            logger.debug("app    : " + folders.app            )
+            logger.debug("conf   : " + folders.pathToConf     )
+            logger.debug("cache  : " + folders.pathToCache    )
+            logger.debug("inputs : " + folders.pathToInputs   )
+            logger.debug("logs   : " + folders.pathToLogs     )
+            logger.debug("outputs: " + folders.pathToOutputs  )
+            logger.debug("temp   : " + folders.pathToTemp     )
+        }
     }
 
 
     override suspend fun init() {
         println("initializing")
+        val logger = ctx.logs.getLogger("slatekit.tools.cli")
+        log(about, logger)
+        val folders = Folders.userDir(about)
+        folders.create()
+        val settings = PropSettings(dir = folders.pathToConf, name = "settings.conf")
+        settings.putString("slatekit.version", "1.28.0")
+        settings.putString("slatekit.version.beta", "0.58")
+        settings.putString("kotlin.version", "1.3.21")
+        settings.putString("generation.source",  "usr://slatekit/generator/templates")
+        settings.putString("generation.output", "usr://slatekit/generator/gen")
+        settings.putString("templates.dir", "/Users/kishore.reddy/dev/tmp/slatekit/slatekit/src/lib/kotlin/slatekit/src/main/resources/templates")
+        settings.save()
     }
 
 
@@ -71,11 +107,12 @@ class SlateKit(ctx: Context) : App<Context>(ctx, AppOptions(showWelcome = true))
         val cli = build()
 
         // Determine if running in CLI interactive mode or executing a project generator
-        val args = ctx.args
-        when (args.parts.isEmpty()) {
-            true -> run(cli)
-            false -> gen(cli)
-        }
+//        val args = ctx.args
+//        when (args.parts.isEmpty()) {
+//            true -> run(cli)
+//            false -> gen(cli)
+//        }
+        println()
         return OK
     }
 
