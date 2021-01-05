@@ -164,7 +164,6 @@ object Props2 {
         return conf
     }
 
-
     fun loadFromJar2(cls: Class<*>, path: String): Properties {
         // This is here to debug loading app conf
         val input = cls.getResourceAsStream("/" + path)

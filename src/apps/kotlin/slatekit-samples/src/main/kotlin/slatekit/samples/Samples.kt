@@ -60,6 +60,7 @@ object Samples {
         runBlocking {
             val sample = slatekit.samples.app.App
             AppRunner.run(
+                    cls = Samples::class.java,
                     rawArgs = args,
                     about = sample.about,
                     schema = sample.schema,
@@ -89,6 +90,7 @@ object Samples {
         runBlocking {
             val sample = slatekit.samples.api.App
             AppRunner.run(
+                    cls = Samples::class.java,
                     rawArgs = args,
                     about = sample.about,
                     schema = sample.schema,
