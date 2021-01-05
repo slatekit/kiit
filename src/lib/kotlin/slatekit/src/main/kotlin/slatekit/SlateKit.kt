@@ -36,10 +36,10 @@ class SlateKit(ctx: Context) : App<Context>(ctx, AppOptions(showWelcome = true))
          * This can be overriden in your env.conf file
          */
         val about = About(
-                area = "slatekit",
-                name = "Slate Kit",
+                company = "slatekit",
+                area = "tools",
+                name = "cli",
                 desc = "Slate Kit CLI for creating projects and access to other tools",
-                company = "codehelix.co",
                 region = "NY",
                 url = "www.slatekit.life",
                 contact = "user@company.co",

@@ -106,7 +106,7 @@ data class AppEntContext(
         }
 
         @JvmStatic
-        fun sample(app:Class<*>, conf:Config, id: String, name: String, about: String, company: String): AppEntContext {
+        fun sample(app:Class<*>, conf:Config, area: String, name: String, desc: String, company: String): AppEntContext {
             val args = Args.empty()
             val envs = Envs.defaults().select("loc")
             return AppEntContext(
@@ -115,7 +115,7 @@ data class AppEntContext(
                     envs = envs,
                     conf = conf,
                     logs = LogsDefault,
-                    info = Info.of(About(id, name, about, company)),
+                    info = Info.of(About(company, area, name, desc)),
                     ent = Entities({ con -> Db(con) }),
                     enc = Encryptor("wejklhviuxywehjk", "3214maslkdf03292", B64Java8),
                     dirs = Folders.userDir("slatekit", "samples", "sample1")

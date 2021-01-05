@@ -49,15 +49,15 @@ object AppBuilder {
      * @return
      */
     fun about(conf: Conf): About = About(
-            area = conf.getStringOrElse("app.area", "products-dept"),
-            name = conf.getStringOrElse("app.name", "app name"),
-            desc = conf.getStringOrElse("app.desc", "app desc"),
-            company = conf.getStringOrElse("app.company", "company"),
-            region = conf.getStringOrElse("app.region", "ny"),
-            url = conf.getStringOrElse("app.url", "https://www.slatekit.com"),
-            contact = conf.getStringOrElse("app.contact", "kishore@abc.co"),
-            tags = conf.getStringOrElse("app.tags", "slate,shell,cli"),
-            examples = conf.getStringOrElse("app.examples", "")
+        company = conf.getStringOrElse("app.company", "company"),
+        area = conf.getStringOrElse("app.area", "products-dept"),
+        name = conf.getStringOrElse("app.name", "app name"),
+        desc = conf.getStringOrElse("app.desc", "app desc"),
+        region = conf.getStringOrElse("app.region", "ny"),
+        url = conf.getStringOrElse("app.url", "https://www.slatekit.com"),
+        contact = conf.getStringOrElse("app.contact", "kishore@abc.co"),
+        tags = conf.getStringOrElse("app.tags", "slate,shell,cli"),
+        examples = conf.getStringOrElse("app.examples", "")
     )
 
     /**

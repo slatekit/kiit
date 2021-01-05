@@ -32,6 +32,9 @@ import slatekit.common.ext.orElse
 data class About(
 
     @JvmField
+    val company: String = "",
+
+    @JvmField
     val area: String = "",
 
     @JvmField
@@ -39,9 +42,6 @@ data class About(
 
     @JvmField
     val desc: String,
-
-    @JvmField
-    val company: String = "",
 
     @JvmField
     val region: String = "",
@@ -118,6 +118,6 @@ data class About(
          */
         @JvmStatic
         fun simple(area:String, name: String, desc: String, company: String): About =
-                About(area, name, desc, company, "", "", "", "", "")
+                About(company, area, name, desc, "", "", "", "", "")
     }
 }
