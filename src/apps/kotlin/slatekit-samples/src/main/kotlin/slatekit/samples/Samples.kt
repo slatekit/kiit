@@ -88,7 +88,7 @@ object Samples {
          * 6. executes the life-cycle steps ( init, exec, done )
          */
         runBlocking {
-            val sample = slatekit.samples.api.App
+            val sample = slatekit.samples.cli.App
             AppRunner.run(
                     cls = Samples::class.java,
                     rawArgs = args,

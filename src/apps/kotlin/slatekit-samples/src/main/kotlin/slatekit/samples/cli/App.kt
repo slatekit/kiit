@@ -14,7 +14,7 @@ import slatekit.common.info.About
  * This provides support for command line args, environment selection, confs, life-cycle methods and help usage
  * @see https://www.slatekit.com/arch/app/
  */
-class App(ctx: Context) : App<Context>(ctx, AppOptions(showWelcome = true)) {
+class App(ctx: Context) : App<Context>(ctx, AppOptions(showWelcome = false, showDisplay = false)) {
 
     companion object {
 
@@ -53,13 +53,11 @@ class App(ctx: Context) : App<Context>(ctx, AppOptions(showWelcome = true)) {
 
 
     override suspend fun init() {
-        println("initializing")
         return super.init()
     }
 
 
     override suspend fun exec(): Any? {
-        println("executing")
         val cli = CLI(ctx)
         return cli.execute()
     }

@@ -21,6 +21,7 @@ import slatekit.common.Source
 import slatekit.common.types.Content
 import slatekit.common.types.ContentType
 import slatekit.common.requests.InputArgs
+import slatekit.common.writer.ConsoleWriter
 import slatekit.context.Context
 import slatekit.results.Codes
 import slatekit.results.Success
@@ -149,5 +150,45 @@ open class CliApi(
                 Pair(false, Part.All)
             }
         }
+    }
+
+
+    fun showOverview() {
+        val writer = ConsoleWriter()
+        writer.title("Welcome to the Slate Kit CLI Sample")
+        writer.text("You can organize, discover, execute actions")
+        writer.text("")
+
+        // Routing
+        writer.highlight("1) ROUTING:   Actions are organized into 3 part routes ( AREAS, APIS, ACTIONS )")
+        writer.subTitle("{area}.{api}.{action}")
+        writer.text("e.g. in the example, the area = comics, api = marvel, action = recent")
+        writer.url("1. comics.marvel.movies ")
+        writer.url("2. netflix.shows.recent ")
+        writer.text("")
+
+        // Discovery
+        writer.text("")
+        writer.highlight("2) DISCOVERY: Actions are easily discovered by using \"?\"")
+        writer.subTitle("?                ", false); writer.text("- to show all areas")
+        writer.subTitle("area ?           ", false); writer.text("- to show all apis in an area")
+        writer.subTitle("area.api ?       ", false); writer.text("- to show all actions in an api.area")
+        writer.subTitle("area.api.action ?", false); writer.text("- to show all inputs to api.area.action")
+        writer.text("e.g. you can run the following commands to discover areas, apis, actions, inputs to actions: ")
+        writer.url("1. ?")
+        writer.url("2. comics ?")
+        writer.url("3. comics.marvel ?")
+        writer.url("4. comics.marvel.movies ?")
+        writer.text("")
+
+        // Universal
+        writer.text("")
+        writer.highlight("3) EXECUTION: Actions can be executed by their name and passing inputs")
+        writer.subTitle("{area}.{api}.{action} -key=value")
+        writer.url("1. comics.marvel.movies  -limit=2")
+        writer.url("2. netflix.shows.recent  -language=\"english\" -category=\"drama\"")
+        writer.text("")
+        writer.text("type \"?\" to discover areas!")
+        writer.text("")
     }
 }

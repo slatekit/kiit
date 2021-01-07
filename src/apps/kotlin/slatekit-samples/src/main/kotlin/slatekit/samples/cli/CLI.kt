@@ -7,6 +7,7 @@ import slatekit.cli.CliSettings
 import slatekit.context.Context
 import slatekit.common.types.Content
 import slatekit.common.info.ApiKey
+import slatekit.common.writer.ConsoleWriter
 import slatekit.connectors.cli.CliApi
 import slatekit.results.Try
 import slatekit.serialization.Serialization
@@ -43,6 +44,7 @@ class CLI(val ctx: Context) {
         )
 
         // 5. Run interactive mode
+        cli.showOverview()
         return cli.run()
     }
 
