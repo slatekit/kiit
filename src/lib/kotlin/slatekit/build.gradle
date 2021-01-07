@@ -146,7 +146,7 @@ dependencies {
 //        implementation project(":slatekit-integration")
 //        implementation project(":slatekit-server")
 //        implementation project(":slatekit-samples")
-    // } //</slatekit_local>
+    } //</slatekit_local>
 //    implementation project(":slatekit-examples")
     //implementation project(":slatekit-samples")
     //implementation project(":slatekit-tests")
