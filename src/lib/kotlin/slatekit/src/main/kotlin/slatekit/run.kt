@@ -1,26 +1,11 @@
 package slatekit
 
 import kotlinx.coroutines.*
-import slatekit.app.AppBuilder
 import slatekit.app.AppRunner
-import slatekit.app.AppUtils
-import slatekit.common.DateTime
-import slatekit.common.args.Args
-import slatekit.common.conf.*
-import slatekit.common.display.Banner
-import slatekit.common.envs.Envs
-import slatekit.common.info.*
 import slatekit.common.io.Alias
-import slatekit.common.io.Uri
-import slatekit.common.log.LoggerConsole
 import slatekit.common.log.LogsDefault
 import slatekit.context.AppContext
-import slatekit.results.Failure
-import slatekit.results.Success
-import slatekit.results.Try
-import slatekit.results.builders.Tries
-import java.io.FileInputStream
-import java.util.*
+import slatekit.context.Context
 
 
 /**
@@ -64,6 +49,7 @@ import java.util.*
  * /Users/kishorereddy/git/slatekit/slatekit/src/lib/kotlin/slatekit/build/distributions/slatekit/bin
  */
 fun main(args: Array<String>) {
+
     /**
      * DOCS : https://www.slatekit.com/arch/app/
      *
@@ -86,7 +72,14 @@ fun main(args: Array<String>) {
                 logs = LogsDefault,
                 hasAction = true,
                 confSource = Alias.Jar,
-                builder = { ctx -> SlateKit(ctx) }
+                builder = { ctx -> SlateKit(version(ctx)) }
         )
     }
+}
+
+
+fun version(ctx:Context): Context {
+    return if(ctx is AppContext) {
+        ctx.copy(info = ctx.info.copy(build = ctx.info.build.copy(version = "1.32.0")))
+    } else ctx
 }

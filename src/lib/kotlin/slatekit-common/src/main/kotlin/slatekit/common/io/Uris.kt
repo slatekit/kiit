@@ -121,6 +121,7 @@ object Uris {
 
     private fun resolve(alias: Alias, lookup: Map<String, String>?):String {
         return when(alias) {
+            Alias.Jar -> ""
             Alias.Cfg -> lookup?.get(Alias.Cur.value)?.let { File(it, "conf").toString() } ?: Files.cfgDir
             Alias.Rel -> lookup?.get(Alias.Cur.value)?.let { File(it, "").parent.toString() } ?: Files.relDir
             else      -> lookup?.getOrDefault(alias.value, Alias.resolve(alias)) ?: Alias.resolve(alias)

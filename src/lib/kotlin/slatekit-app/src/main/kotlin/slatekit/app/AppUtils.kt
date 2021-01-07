@@ -27,6 +27,7 @@ import slatekit.common.info.About
 import slatekit.common.io.Alias
 import slatekit.common.io.Uri
 import slatekit.common.log.Logs
+import slatekit.common.log.Prints
 import slatekit.results.*
 import slatekit.results.builders.Outcomes
 import java.io.File
@@ -77,6 +78,7 @@ object AppUtils {
         // 5. conf dir: conf.dir=conf:/app1  -> ./conf
         // 6. jars dir: conf.dir=jars:/app1  -> app.jar/resources
         val source = AppBuilder.dir(args, alias)
+        Prints.keys("appinputs.inputs", listOf("alias" to alias.value, "source.root" to source.root.value, "source.path" to source.path))
         val props = AppBuilder.conf(cls, args, Confs.CONFIG_DEFAULT_PROPERTIES, alias)
         val confBase = Config(cls, source, props, enc)
 
@@ -98,8 +100,9 @@ object AppUtils {
             // Now load the final environment specific override
             // for directory reference provide: "file://./conf/"
             val overrideConfName = "env.${env.name}" + CONFIG_DEFAULT_SUFFIX
-            val overrideConfPath = source.combine(overrideConfName).toFile().absolutePath
-            val confEnv = Config.of(cls, overrideConfPath, confBase, enc)
+            val overrideConfSource = source.combine(overrideConfName)
+            Prints.keys("appinputs.inputs.override", listOf("name" to overrideConfName, "path" to overrideConfSource.path))
+            val confEnv = Config.of(cls, overrideConfSource, confBase, enc)
 
             AppInputs(source, args, Envs(allEnvs).select(env.name), confBase, confEnv)
         } ?: throw Exception("Unknown environment name : $envName supplied")

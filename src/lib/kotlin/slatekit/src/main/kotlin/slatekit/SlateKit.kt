@@ -131,12 +131,13 @@ class SlateKit(ctx: Context) : App<Context>(ctx, AppOptions(showWelcome = true))
         // integration between CLI inputs -> API requests
         val cli = build()
 
-        // Determine if running in CLI interactive mode or executing a project generator
-        val args = ctx.args
-        when (args.parts.isEmpty()) {
-            true -> run(cli)
-            false -> gen(cli)
-        }
+//        // Determine if running in CLI interactive mode or executing a project generator
+//        val args = ctx.args
+//        when (args.parts.isEmpty()) {
+//            true -> run(cli)
+//            false -> gen(cli)
+//        }
+        info()
         return OK
     }
 
@@ -199,5 +200,16 @@ class SlateKit(ctx: Context) : App<Context>(ctx, AppOptions(showWelcome = true))
                 serializer = Serialization::serialize
         )
         return cli
+    }
+
+
+    private fun info() {
+        println("system.currentDir     : " + System.getProperty("user.dir"))
+        println("system.currentDir     : " + ctx.conf.getString("slatekit.title"))
+        println("slatekit.version      : " + settingsConf.getString("slatekit.version"     ))
+        println("slatekit.version.beta : " + settingsConf.getString("slatekit.version.beta"))
+        println("kotlin.version        : " + settingsConf.getString("kotlin.version"       ))
+        println("generation.source     : " + settingsConf.getString("generation.source"    ))
+        println("generation.output     : " + settingsConf.getString("generation.output"    ))
     }
 }

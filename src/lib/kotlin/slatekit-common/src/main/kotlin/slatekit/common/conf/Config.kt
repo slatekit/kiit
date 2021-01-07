@@ -182,10 +182,10 @@ class Config(
         }
 
 
-        fun of(cls:Class<*>, configPath: String, configParent: Conf, enc: Encryptor?) :ConfigMulti {
-            val inheritInfo = Props.fromPath(cls, configPath)
-            val inheritConf = Config(cls, inheritInfo.first, inheritInfo.second, enc)
-            val conf = ConfigMulti(cls, inheritConf, configParent, inheritInfo.first, enc)
+        fun of(cls:Class<*>, configSource: Uri, configParent: Conf, enc: Encryptor?) :ConfigMulti {
+            val inheritProps = Props.fromUri(cls, configSource)
+            val inheritConf = Config(cls, configSource, inheritProps, enc)
+            val conf = ConfigMulti(cls, inheritConf, configParent, configSource, enc)
             return conf
         }
     }

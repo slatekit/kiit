@@ -98,37 +98,8 @@ object Samples {
                     logs = LogbackLogs(),
                     hasAction = true,
                     confSource = Alias.Jar,
-                    builder = { ctx -> slatekit.samples.api.App(ctx) }
+                    builder = { ctx -> slatekit.samples.cli.App(ctx) }
             )
         }
     }
-
-
-//class CacheTests {
-//    suspend fun cache() {
-//        val cache = SimpleAsyncCache.of("test")
-//        val scope = CoroutineScope(Dispatchers.IO)
-//        scope.launch {
-//            cache.work()
-//        }
-//        cache.put("a", "", 200) { delay(2000); 1 }
-//        cache.put("b", "", 200) { delay(2000); 2 }
-//        cache.put("c", "", 200) { delay(2000); 3 }
-//        val items = listOf("a", "b", "c")
-//
-//        for(ndx in 1..100) {
-//            scope.launch {
-//                delay(1000)
-//                val time = DateTime.now()
-//                val r = Random.nextInt(0, 3)
-//                val key = items[r]
-//                val value = cache.get<Int>(key)
-//                val name = this.toString()
-//                println("$time : $name : $value")
-//            }
-//        }
-//        delay(12000)
-//        println("done")
-//    }
-//}
 }
