@@ -39,7 +39,7 @@ class CLI(val ctx: Context) {
                 metaTransform = {
                     listOf("api-key" to keys.first().key)
                 },
-                serializer = {item, type -> Content.csv(Serialization.csv().serialize(item))}
+                serializer = {item, type -> Content.text(Serialization.props().serialize(item))}
         )
 
         // 5. Run interactive mode
