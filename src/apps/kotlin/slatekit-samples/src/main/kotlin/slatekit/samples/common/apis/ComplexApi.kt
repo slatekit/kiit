@@ -22,7 +22,8 @@ import slatekit.samples.common.models.SampleMovie
 @Api(area = "samples", name = "complex", desc = "sample to test features of Slate Kit APIs", auth = AuthModes.NONE, verb = Verbs.AUTO, sources = [Sources.WEB])
 class ComplexApi(context: Context) : ApiBase(context) {
 
-    var inc = 0
+    // Simple value to test actions/methods
+    private var accumulator = 0
 
 
     @Action(desc = "info about this api")
@@ -32,15 +33,28 @@ class ComplexApi(context: Context) : ApiBase(context) {
 
 
     @Action(desc = "accepts supplied basic data types from send")
-    fun hello(greeting: String): String {
+    fun greet(greeting: String): String {
         return "$greeting back"
     }
 
 
-    @Action(desc = "increments a simple counter")
-    fun increment(): Int {
-        inc += 1
-        return inc
+    @Action(desc = "increments a simple accumulator")
+    fun inc(): Int {
+        accumulator += 1
+        return accumulator
+    }
+
+
+    @Action(desc = "add a value to a simple accumulator")
+    fun add(value:Int): Int {
+        accumulator += value
+        return accumulator
+    }
+
+
+    @Action(desc = "get current value of counter")
+    fun value(): Int {
+        return accumulator
     }
 
 
@@ -56,12 +70,6 @@ class ComplexApi(context: Context) : ApiBase(context) {
                "salary"  to salary,
                "date"    to date.toStringUtc()
         )
-    }
-
-
-    @Action(desc = "get current value of counter")
-    fun getCounter(): Int {
-        return inc
     }
 
 
@@ -110,7 +118,7 @@ class ComplexApi(context: Context) : ApiBase(context) {
 
 
     @Action(desc = "test movie list")
-    fun getRecent(category: String): List<SampleMovie> {
+    fun recent(category: String): List<SampleMovie> {
         return listOf(
                 SampleMovie(
                         title = "Sample Movie 1",
