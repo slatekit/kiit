@@ -25,7 +25,7 @@ import slatekit.server.ktor.KtorHandler
 import slatekit.server.ktor.KtorResponse
 
 // Sample App
-import slatekit.samples.common.apis.BasicApi
+import slatekit.samples.common.apis.SampleApi
 import slatekit.samples.common.auth.SampleAuth
 
 
@@ -91,7 +91,7 @@ class Server(val ctx: Context)  {
 
     fun apis(): List<Api> {
         return listOf(
-                Api(klass = BasicApi::class, singleton = BasicApi(ctx), setup = SetupType.Annotated)
+                Api(klass = SampleApi::class, singleton = SampleApi(ctx), setup = SetupType.Annotated)
         )
     }
 

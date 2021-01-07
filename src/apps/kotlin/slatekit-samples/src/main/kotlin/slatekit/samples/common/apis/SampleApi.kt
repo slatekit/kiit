@@ -19,8 +19,8 @@ import slatekit.results.builders.Outcomes
 import slatekit.samples.common.models.SampleMovie
 
 
-@Api(area = "samples", name = "complex", desc = "sample to test features of Slate Kit APIs", auth = AuthModes.NONE, verb = Verbs.AUTO, sources = [Sources.WEB])
-class ComplexApi(context: Context) : ApiBase(context) {
+@Api(area = "samples", name = "all", desc = "sample to test features of Slate Kit APIs", auth = AuthModes.NONE, verb = Verbs.AUTO, sources = [Sources.WEB])
+class SampleApi(context: Context) : ApiBase(context) {
 
     // Simple value to test actions/methods
     private var accumulator = 0
@@ -137,5 +137,35 @@ class ComplexApi(context: Context) : ApiBase(context) {
                         released = DateTimes.of(1995, 8, 10)
                 )
         )
+    }
+
+
+    @Action(desc = "test post")
+    fun create(greeting: String): String {
+        return "$greeting back"
+    }
+
+
+    @Action(desc = "test post")
+    fun process(greeting: String): String {
+        return "$greeting back"
+    }
+
+
+    @Action(desc = "test put")
+    fun update(greeting: String): String {
+        return "$greeting back"
+    }
+
+
+    @Action(desc = "test patch")
+    fun patch(greeting: String): String {
+        return "$greeting back"
+    }
+
+
+    @Action(desc = "test delete")
+    fun delete(greeting: String): String {
+        return "$greeting back"
     }
 }
