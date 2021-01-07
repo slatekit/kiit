@@ -19,21 +19,21 @@ import slatekit.results.builders.Outcomes
 import slatekit.samples.common.models.SampleMovie
 
 
-@Api(area = "samples", name = "types", desc = "sample to test features of Slate Kit APIs", auth = AuthModes.NONE, verb = Verbs.AUTO, sources = [Sources.WEB])
-class SampleApi(context: Context) : ApiBase(context) {
+@Api(area = "samples", name = "complex", desc = "sample to test features of Slate Kit APIs", auth = AuthModes.NONE, verb = Verbs.AUTO, sources = [Sources.WEB])
+class ComplexApi(context: Context) : ApiBase(context) {
 
     var inc = 0
-
-
-    @Action(desc = "accepts supplied basic data types from send")
-    fun hello(greeting: String): String {
-        return "$greeting back"
-    }
 
 
     @Action(desc = "info about this api")
     fun about(): About {
         return context.info.about
+    }
+
+
+    @Action(desc = "accepts supplied basic data types from send")
+    fun hello(greeting: String): String {
+        return "$greeting back"
     }
 
 
@@ -65,38 +65,8 @@ class SampleApi(context: Context) : ApiBase(context) {
     }
 
 
-    @Action(desc = "test post")
-    fun create1(greeting: String): String {
-        return "$greeting back"
-    }
-
-
-    @Action(desc = "test put")
-    fun update1(greeting: String): String {
-        return "$greeting back"
-    }
-
-
-    @Action(desc = "test post")
-    fun process1(greeting: String): String {
-        return "$greeting back"
-    }
-
-
-    @Action(desc = "test delete")
-    fun delete1(greeting: String): String {
-        return "$greeting back"
-    }
-
-
-    @Action(desc = "test patch")
-    fun patch1(greeting: String): String {
-        return "$greeting back"
-    }
-
-
-    @Action(desc = "test patch")
-    fun lists(movies:List<SampleMovie>): List<SampleMovie> {
+    @Action(desc = "get lists of movies")
+    fun movies(movies:List<SampleMovie>): List<SampleMovie> {
         return movies.map { it.copy(title = "GOT : " + it.title) }
     }
 

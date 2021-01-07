@@ -153,18 +153,20 @@ open class CliApi(
     }
 
 
-    fun showOverview() {
+    fun showOverview(name:String) {
         val writer = ConsoleWriter()
-        writer.title("Welcome to the Slate Kit CLI Sample")
+
+        writer.text("**********************************************")
+        writer.title("Welcome to $name")
         writer.text("You can organize, discover, execute actions")
+        writer.text("**********************************************")
         writer.text("")
 
         // Routing
         writer.highlight("1) ROUTING:   Actions are organized into 3 part routes ( AREAS, APIS, ACTIONS )")
         writer.subTitle("{area}.{api}.{action}")
-        writer.text("e.g. in the example, the area = comics, api = marvel, action = recent")
-        writer.url("1. comics.marvel.movies ")
-        writer.url("2. netflix.shows.recent ")
+        writer.text("e.g. in the example, the area = netflix, api = search, action = movies")
+        writer.url("1. netflix.search.movies ")
         writer.text("")
 
         // Discovery
@@ -176,17 +178,17 @@ open class CliApi(
         writer.subTitle("area.api.action ?", false); writer.text("- to show all inputs to api.area.action")
         writer.text("e.g. you can run the following commands to discover areas, apis, actions, inputs to actions: ")
         writer.url("1. ?")
-        writer.url("2. comics ?")
-        writer.url("3. comics.marvel ?")
-        writer.url("4. comics.marvel.movies ?")
+        writer.url("2. netflix ?")
+        writer.url("3. netflix.search ?")
+        writer.url("4. netflix.search.movies ?")
         writer.text("")
 
         // Universal
         writer.text("")
         writer.highlight("3) EXECUTION: Actions can be executed by their name and passing inputs")
         writer.subTitle("{area}.{api}.{action} -key=value")
-        writer.url("1. comics.marvel.movies  -limit=2")
-        writer.url("2. netflix.shows.recent  -language=\"english\" -category=\"drama\"")
+        writer.url("1. netflix.search.recent  -limit=2")
+        writer.url("2. netflix.search.movies  -language=\"english\" -category=\"drama\"")
         writer.text("")
         writer.text("type \"?\" to discover areas!")
         writer.text("")

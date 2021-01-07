@@ -7,11 +7,10 @@ import slatekit.cli.CliSettings
 import slatekit.context.Context
 import slatekit.common.types.Content
 import slatekit.common.info.ApiKey
-import slatekit.common.writer.ConsoleWriter
 import slatekit.connectors.cli.CliApi
 import slatekit.results.Try
 import slatekit.serialization.Serialization
-import slatekit.samples.common.apis.SampleApi
+import slatekit.samples.common.apis.BasicApi
 
 class CLI(val ctx: Context) {
 
@@ -44,14 +43,14 @@ class CLI(val ctx: Context) {
         )
 
         // 5. Run interactive mode
-        cli.showOverview()
+        cli.showOverview("Slate Kit CLI Sample")
         return cli.run()
     }
 
 
     fun apis(): List<Api> {
         return listOf(
-                Api(klass = SampleApi::class, singleton = SampleApi(ctx), setup = SetupType.Annotated)
+                Api(klass = BasicApi::class, singleton = BasicApi(ctx), setup = SetupType.Annotated)
         )
     }
 }
