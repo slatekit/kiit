@@ -33,22 +33,24 @@ def slatekitComponentVersion = ext.slatekit_version
 // ==================================================================
 ext.slatekitSetupViaBinary = System.getenv('SLATEKIT_PROJECT_MODE') != 'sources'
 task info {
-    println('slatekit.setup     : ' + System.getenv('SLATEKIT_PROJECT_MODE'))
-    println('slatekit.maven     : ' + slatekitSetupViaBinary)
-    println('slatekit.comp.id   : ' + slatekitComponentId)
-    println('slatekit.comp.name : ' + slatekitComponentName)
-    println('slatekit.comp.desc : ' + slatekitComponentDesc)
-    println('slatekit.comp.vers : ' + slatekitComponentVersion)
-    println()
-    println('project.name       : ' + project.name)
-    println('project.path       : ' + project.path)
-    println('project.desc       : ' + project.description)
-    println('project.projectDir : ' + project.projectDir)
-    println('project.buildDir   : ' + project.buildDir)
-    println()
-    println('build.commit       : ' + gitCommitId())
-    println('build.branch       : ' + gitBranchName())
-    println('build.date         : ' + getBuildDate())
+    doLast {
+      println('slatekit.setup     : ' + System.getenv('SLATEKIT_PROJECT_MODE'))
+      println('slatekit.maven     : ' + slatekitSetupViaBinary)
+      println('slatekit.comp.id   : ' + slatekitComponentId)
+      println('slatekit.comp.name : ' + slatekitComponentName)
+      println('slatekit.comp.desc : ' + slatekitComponentDesc)
+      println('slatekit.comp.vers : ' + slatekitComponentVersion)
+      println()
+      println('project.name       : ' + project.name)
+      println('project.path       : ' + project.path)
+      println('project.desc       : ' + project.description)
+      println('project.projectDir : ' + project.projectDir)
+      println('project.buildDir   : ' + project.buildDir)
+      println()
+      println('build.commit       : ' + gitCommitId())
+      println('build.branch       : ' + gitBranchName())
+      println('build.date         : ' + getBuildDate())
+    }
 }
 
 tasks.withType(org.jetbrains.kotlin.gradle.tasks.KotlinCompile).all {

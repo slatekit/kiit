@@ -93,5 +93,5 @@ project(':slatekit-samples').projectDir=new File('../../../apps/kotlin/slatekit-
 //include ':slatekit-examples'
 //project(':slatekit-examples').projectDir=new File('../slatekit-examples')
 
-include ':slatekit-tests'
-project(':slatekit-tests').projectDir=new File('../slatekit-tests')
+//include ':slatekit-tests'
+//project(':slatekit-tests').projectDir=new File('../slatekit-tests')

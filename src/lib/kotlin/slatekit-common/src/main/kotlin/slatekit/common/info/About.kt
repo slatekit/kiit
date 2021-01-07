@@ -32,6 +32,9 @@ import slatekit.common.ext.orElse
 data class About(
 
     @JvmField
+    val company: String = "",
+
+    @JvmField
     val area: String = "",
 
     @JvmField
@@ -39,9 +42,6 @@ data class About(
 
     @JvmField
     val desc: String,
-
-    @JvmField
-    val company: String = "",
 
     @JvmField
     val region: String = "",
@@ -64,7 +64,7 @@ data class About(
 
 
     fun log(callback: (String, String) -> Unit) {
-
+        callback("company" , company)
         callback("area    ", area)
         callback("name    ", name)
         callback("desc    ", desc)
@@ -77,6 +77,7 @@ data class About(
 
     fun toStringProps(): String {
         val text = "" +
+                "company  : " + company + newline +
                 "area     : " + area + newline +
                 "name     : " + name + newline +
                 "desc     : " + desc + newline +
@@ -96,16 +97,16 @@ data class About(
     companion object {
         @JvmStatic
         val none = About(
+                company = "",
                 area = "",
                 name = "",
                 desc = "",
-                company = "",
                 region = "",
                 url = "",
                 contact = "",
                 tags = "",
                 examples = ""
-                        )
+        )
 
         /**
          * builds the about object using just the parameters supplied.
@@ -117,7 +118,7 @@ data class About(
          * @return
          */
         @JvmStatic
-        fun simple(area:String, name: String, desc: String, company: String): About =
-                About(area, name, desc, company, "", "", "", "", "")
+        fun simple(company: String, area:String, name: String, desc: String): About =
+                About(company, area, name, desc, "", "", "", "", "")
     }
 }

@@ -35,10 +35,10 @@ class App(ctx: Context) : App<Context>(ctx, AppOptions(showWelcome = true)) {
          * This can be overriden in your env.conf file
          */
         val about = About(
-                area = "sample",
-                name = "Slate Kit",
-                desc = "Slate Kit Server",
-                company = "codehelix.co",
+                company = "slatekit",
+                area = "samples",
+                name = "apis",
+                desc = "Sample Web API Server using Slate Kit Universal APIs",
                 region = "NY",
                 url = "www.slatekit.com",
                 contact = "user@company.co",

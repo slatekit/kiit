@@ -19,6 +19,7 @@ import slatekit.common.io.Uri
 import slatekit.common.io.Uris
 import slatekit.common.log.Logs
 import slatekit.common.log.LogsDefault
+import slatekit.common.log.Prints
 import slatekit.context.AppContext
 import java.util.*
 
@@ -49,15 +50,15 @@ object AppBuilder {
      * @return
      */
     fun about(conf: Conf): About = About(
-            area = conf.getStringOrElse("app.area", "products-dept"),
-            name = conf.getStringOrElse("app.name", "app name"),
-            desc = conf.getStringOrElse("app.desc", "app desc"),
-            company = conf.getStringOrElse("app.company", "company"),
-            region = conf.getStringOrElse("app.region", "ny"),
-            url = conf.getStringOrElse("app.url", "https://www.slatekit.com"),
-            contact = conf.getStringOrElse("app.contact", "kishore@abc.co"),
-            tags = conf.getStringOrElse("app.tags", "slate,shell,cli"),
-            examples = conf.getStringOrElse("app.examples", "")
+        company = conf.getStringOrElse("app.company", "company"),
+        area = conf.getStringOrElse("app.area", "products-dept"),
+        name = conf.getStringOrElse("app.name", "app name"),
+        desc = conf.getStringOrElse("app.desc", "app desc"),
+        region = conf.getStringOrElse("app.region", "ny"),
+        url = conf.getStringOrElse("app.url", "https://www.slatekit.com"),
+        contact = conf.getStringOrElse("app.contact", "kishore@abc.co"),
+        tags = conf.getStringOrElse("app.tags", "slate,shell,cli"),
+        examples = conf.getStringOrElse("app.examples", "")
     )
 
     /**
@@ -93,11 +94,7 @@ object AppBuilder {
         val abt = about(conf)
         // The root directory can be overriden in the config
         // e..g app.dir = user://company/dept/app
-        return Folders.userDir(
-                root = conf.getStringOrElse("app.dir", abt.company.toId()),
-                area = abt.area.toId(),
-                app = abt.name
-        )
+        return Folders.userDir(abt)
     }
 
     /**
@@ -115,7 +112,7 @@ object AppBuilder {
                 Pair("company.name", { _ -> abt.company }),
                 Pair("company.dir", { _ -> "@{user.home}/@{company.id}" }),
                 Pair("root.dir", { _ -> "@{company.dir}" }),
-                Pair("area.id", { _ -> abt.area.toId() }),
+                Pair("area.id" , { _ -> abt.area.toId() }),
                 Pair("area.name", { _ -> abt.area }),
                 Pair("area.dir", { _ -> "@{root.dir}/@{area.id}" }),
                 Pair("app.id", { _ -> abt.id }),

@@ -84,7 +84,6 @@ dependencies {
     compile 'org.threeten:threetenbp:1.3.8'
 
     // /* <slatekit_local>
-        // */
     if( slatekitSetupViaBinary ) {
         implementation "com.slatekit:slatekit-results:$slatekit_version"
         implementation "com.slatekit:slatekit-common:$slatekit_version"
@@ -97,10 +96,10 @@ dependencies {
         implementation "com.slatekit:slatekit-apis:$slatekit_version"
         implementation "com.slatekit:slatekit-generator:$slatekit_version_beta"
         implementation "com.slatekit:slatekit-cli:$slatekit_version"
+        implementation "com.slatekit:slatekit-connectors-cli:$slatekit_version"
+        implementation "com.slatekit:slatekit-providers-logback:$slatekit_version"
 //        implementation "com.slatekit:slatekit-providers-aws:$slatekit_version"
-//        implementation "com.slatekit:slatekit-providers-logback:$slatekit_version"
 //        implementation "com.slatekit:slatekit-providers-datadog:$slatekit_version"
-//        implementation "com.slatekit:slatekit-connectors-cli:$slatekit_version"
 //        implementation "com.slatekit:slatekit-connectors-entities:$slatekit_version"
 //        implementation "com.slatekit:slatekit-connectors-jobs:$slatekit_version"
 //        implementation "com.slatekit:slatekit-core:$slatekit_version"
@@ -116,6 +115,7 @@ dependencies {
 //        implementation "com.slatekit:slatekit-integration:$slatekit_version_beta"
 //        implementation "com.slatekit:slatekit-server:$slatekit_version_beta"
     } else {
+        // */
         implementation project(":slatekit-result")
         implementation project(":slatekit-common")
         implementation project(":slatekit-context")
@@ -127,11 +127,11 @@ dependencies {
         implementation project(":slatekit-apis")
         implementation project(":slatekit-generator")
         implementation project(":slatekit-cli")
-        implementation project(":slatekit-connectors-entities")
         implementation project(":slatekit-connectors-cli")
-        implementation project(":slatekit-connectors-jobs")
+        implementation project(":slatekit-providers-logback")
+//        implementation project(":slatekit-connectors-entities")
+//        implementation project(":slatekit-connectors-jobs")
 //        implementation project(":slatekit-providers-aws")
-//        implementation project(":slatekit-providers-logback")
 //        implementation project(":slatekit-providers-datadog")
 //        implementation project(":slatekit-core")
 //        implementation project(":slatekit-http")
@@ -148,8 +148,8 @@ dependencies {
 //        implementation project(":slatekit-samples")
     } //</slatekit_local>
 //    implementation project(":slatekit-examples")
-    implementation project(":slatekit-samples")
-    implementation project(":slatekit-tests")
+    //implementation project(":slatekit-samples")
+    //implementation project(":slatekit-tests")
 }
 
 // https://www.anexinet.com/blog/six-ways-to-package-a-java-application-with-gradle/
@@ -158,7 +158,6 @@ mainClassName = 'slatekit.RunKt'
 
 sourceSets {
     main.java.srcDirs += 'src/main/kotlin/'
-    //test.java.srcDirs += 'src/test/kotlin/'
     main {
         resources {
             srcDirs = ["src/main/resources"]

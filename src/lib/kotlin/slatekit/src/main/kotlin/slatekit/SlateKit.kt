@@ -6,15 +6,25 @@ import slatekit.app.AppOptions
 import slatekit.cli.CliSettings
 import slatekit.context.Context
 import slatekit.common.args.ArgsSchema
+import slatekit.common.conf.Conf
+import slatekit.common.conf.Config
+import slatekit.common.conf.PropSettings
+import slatekit.common.conf.Props
 import slatekit.common.utils.B64Java8
 import slatekit.common.crypto.Encryptor
 import slatekit.common.info.About
 import slatekit.common.info.ApiKey
+import slatekit.common.info.Folders
+import slatekit.common.log.Logger
+import slatekit.connectors.cli.CliApi
 import slatekit.results.Success
 import slatekit.serialization.Serialization
 import slatekit.results.Failure
+import java.io.File
 
 class SlateKit(ctx: Context) : App<Context>(ctx, AppOptions(showWelcome = true)), SlateKitServices {
+
+    private lateinit var settingsConf: Conf
 
     companion object {
 
@@ -35,10 +45,10 @@ class SlateKit(ctx: Context) : App<Context>(ctx, AppOptions(showWelcome = true))
          * This can be overriden in your env.conf file
          */
         val about = About(
-                area = "slatekit",
-                name = "Slate Kit",
+                company = "slatekit",
+                area = "tools",
+                name = "cli",
                 desc = "Slate Kit CLI for creating projects and access to other tools",
-                company = "codehelix.co",
                 region = "NY",
                 url = "www.slatekit.life",
                 contact = "user@company.co",
@@ -50,11 +60,63 @@ class SlateKit(ctx: Context) : App<Context>(ctx, AppOptions(showWelcome = true))
          * Encryptor for files
          */
         val encryptor = Encryptor("aksf2409bklja24b", "k3l4lkdfaoi97042", B64Java8)
+
+        fun log(about: About, logger: Logger){
+            val folders = Folders.userDir(about)
+            folders.create()
+            logger.debug("root   : " + folders.root           )
+            logger.debug("area   : " + folders.area           )
+            logger.debug("app    : " + folders.app            )
+            logger.debug("conf   : " + folders.pathToConf     )
+            logger.debug("cache  : " + folders.pathToCache    )
+            logger.debug("inputs : " + folders.pathToInputs   )
+            logger.debug("logs   : " + folders.pathToLogs     )
+            logger.debug("outputs: " + folders.pathToOutputs  )
+            logger.debug("temp   : " + folders.pathToTemp     )
+        }
     }
 
 
     override suspend fun init() {
         println("initializing")
+        val logger = ctx.logs.getLogger("slatekit.tools.cli")
+        log(about, logger)
+
+        // Current version
+        val slatekitVersion = ctx.conf.getString("slatekit.version")
+        val brewAppLocation = "/usr/local/Cellar/slatekit/${slatekitVersion}"
+
+        // Create the root folder using about info {COMPANY}/{AREA}/{NAME}
+        // eg. ~/slatekit/tools/cli
+        val folders = Folders.userDir(about)
+        folders.create()
+        val pathToHOME = folders.pathToApp
+
+        // Load settings
+        // NOTES:
+        // 1. Home location is where the settings, logs are maintained ( regardless of version )
+        // 2. Install location is baesd on env variable or homebrew ( supported ), this changes based on version
+        val homeLocation = System.getenv("SLATEKIT_TOOLS_CLI_HOME") ?:pathToHOME
+        val installLocation = System.getenv("SLATEKIT_TOOLS_CLI_HOME") ?: brewAppLocation
+        val settingsName = "settings.conf"
+        val confDir = File(homeLocation, folders.conf)
+        val file = File(confDir, settingsName)
+        if(!file.exists()) {
+            val settings = PropSettings(dir = confDir.absolutePath, name = settingsName)
+            settings.put("slatekit.version", slatekitVersion, false)
+            settings.put("slatekit.version.beta", ctx.conf.getString("slatekit.version.beta"), false)
+            settings.put("kotlin.version", ctx.conf.getString("kotlin.version"), false)
+            settings.put("generation.source", "$installLocation/templates", false)
+            settings.put("generation.output", "", false)
+            settings.save(desc = "default settings")
+        }
+        else {
+            val settings = Props.fromFile(file.absolutePath)
+            settings.put("generation.source", "$installLocation/templates")
+            PropSettings.save(settings, confDir.absolutePath, settingsName, true, "upgrade to $slatekitVersion")
+        }
+        // Now load from HOME/conf/settings.conf
+        settingsConf = Config.of(SlateKit::class.java, file.absolutePath)
     }
 
 
@@ -69,12 +131,13 @@ class SlateKit(ctx: Context) : App<Context>(ctx, AppOptions(showWelcome = true))
         // integration between CLI inputs -> API requests
         val cli = build()
 
-        // Determine if running in CLI interactive mode or executing a project generator
-        val args = ctx.args
-        when (args.parts.isEmpty()) {
-            true -> run(cli)
-            false -> gen(cli)
-        }
+//        // Determine if running in CLI interactive mode or executing a project generator
+//        val args = ctx.args
+//        when (args.parts.isEmpty()) {
+//            true -> run(cli)
+//            false -> gen(cli)
+//        }
+        info()
         return OK
     }
 
@@ -87,7 +150,7 @@ class SlateKit(ctx: Context) : App<Context>(ctx, AppOptions(showWelcome = true))
     /**
      * Generate the project
      */
-    private suspend fun gen(cli: CLIApi2) {
+    private suspend fun gen(cli: CliApi) {
         // slatekit new api -name="MyApp1" -package="company1.apps"
         //
         // NOTES:
@@ -109,12 +172,12 @@ class SlateKit(ctx: Context) : App<Context>(ctx, AppOptions(showWelcome = true))
     /**
      * Begin interactive mode
      */
-    private suspend fun run(cli: CLIApi2) {
+    private suspend fun run(cli: CliApi) {
         cli.run()
     }
 
 
-    private fun build(): CLIApi2 {
+    private fun build(): CliApi {
         // The APIs ( DocApi, SetupApi are authenticated using an sample API key )
         val keys = listOf(ApiKey(name = "cli", key = "abc", roles = "dev,qa,ops,admin"))
 
@@ -123,10 +186,10 @@ class SlateKit(ctx: Context) : App<Context>(ctx, AppOptions(showWelcome = true))
         val auth = Authenticator(keys)
 
         // Load all the Slate Kit Universal APIs
-        val apis = apis()
+        val apis = apis(settingsConf)
 
         // Makes the APIs accessible on the CLI
-        val cli = CLIApi2(
+        val cli = CliApi(
                 ctx = ctx,
                 auth = auth,
                 settings = CliSettings(enableLogging = true, enableOutput = true),
@@ -137,5 +200,16 @@ class SlateKit(ctx: Context) : App<Context>(ctx, AppOptions(showWelcome = true))
                 serializer = Serialization::serialize
         )
         return cli
+    }
+
+
+    private fun info() {
+        println("system.currentDir     : " + System.getProperty("user.dir"))
+        println("system.currentDir     : " + ctx.conf.getString("slatekit.title"))
+        println("slatekit.version      : " + settingsConf.getString("slatekit.version"     ))
+        println("slatekit.version.beta : " + settingsConf.getString("slatekit.version.beta"))
+        println("kotlin.version        : " + settingsConf.getString("kotlin.version"       ))
+        println("generation.source     : " + settingsConf.getString("generation.source"    ))
+        println("generation.output     : " + settingsConf.getString("generation.output"    ))
     }
 }

@@ -1,7 +1,7 @@
 package slatekit.samples
 
-import slaetkit.providers.aws.aws.S3
-import slaetkit.providers.aws.aws.SQS
+import slatekit.providers.aws.S3
+import slatekit.providers.aws.SQS
 import slatekit.context.AppContext
 import slatekit.context.Context
 import slatekit.core.files.CloudFiles
@@ -44,7 +44,7 @@ object Builder {
     fun queues(ctx:Context): CloudQueue<String> {
         val apiLogin = ctx.conf.apiLogin("queues")
         val name = apiLogin.tag
-        val queue = SQS.of("us-east-1", name, apiLogin, QueueStringConverter(), 3)
+        val queue = SQS.of(Samples::class.java,"us-east-1", name, apiLogin, QueueStringConverter(), 3)
         return when(queue){
             is Success -> queue.value
             is Failure -> throw queue.error

@@ -3,6 +3,7 @@ package slatekit
 import slatekit.apis.SetupType
 import slatekit.apis.routes.Api
 import slatekit.apis.tools.code.CodeGenApi
+import slatekit.common.conf.Conf
 import slatekit.context.Context
 import slatekit.docs.DocApi
 import slatekit.generator.*
@@ -12,7 +13,7 @@ interface SlateKitServices {
 
     val ctx: Context
 
-    fun apis(): List<Api> {
+    fun apis(settings:Conf): List<Api> {
 //        // Module api
 //        val moduleApi = ModuleApi(moduleContext(), ctx)
 //        moduleApi.register(DependencyModule(ctx, moduleContext()))
@@ -23,7 +24,7 @@ interface SlateKitServices {
                 this.ctx.conf.getString("slatekit.version.beta"))
         val buildSettings = BuildSettings(this.ctx.conf.getString("kotlin.version"))
         val requiredApis = listOf(
-                Api(GeneratorApi(ctx, GeneratorService(ctx, SlateKit::class.java, GeneratorSettings(toolSettings, buildSettings))), declaredOnly = true, setup = SetupType.Annotated),
+                Api(GeneratorApi(ctx, GeneratorService(ctx, settings, SlateKit::class.java, GeneratorSettings(toolSettings, buildSettings))), declaredOnly = true, setup = SetupType.Annotated),
                 Api(DocApi(ctx), declaredOnly = true, setup = SetupType.Annotated),
                 Api(CodeGenApi(), declaredOnly = true, setup = SetupType.Annotated)
                 //Api(SampleApi(ctx), declaredOnly = true, setup = SetupType.Annotated)

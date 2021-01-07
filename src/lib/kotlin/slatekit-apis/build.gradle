@@ -33,6 +33,7 @@ def slatekitComponentVersion = ext.slatekit_version
 // ==================================================================
 ext.slatekitSetupViaBinary = System.getenv('SLATEKIT_PROJECT_MODE') != 'sources'
 task info {
+  doLast {
     println('slatekit.setup     : ' + System.getenv('SLATEKIT_PROJECT_MODE'))
     println('slatekit.maven     : ' + slatekitSetupViaBinary)
     println('slatekit.comp.id   : ' + slatekitComponentId)
@@ -49,6 +50,7 @@ task info {
     println('build.commit       : ' + gitCommitId())
     println('build.branch       : ' + gitBranchName())
     println('build.date         : ' + getBuildDate())
+  }
 }
 
 tasks.withType(org.jetbrains.kotlin.gradle.tasks.KotlinCompile).all {

@@ -34,10 +34,10 @@ class App(ctx: Context) : App<Context>(ctx, AppOptions(showWelcome = true)) {
          * This can be overriden in your env.conf file
          */
         val about = About(
+                company = "slatekit",
                 area = "samples",
-                name = "myapp.name",
-                desc = "myapp.desc",
-                company = "myapp.company",
+                name = "cli",
+                desc = "Sample CLI - Command Line Interactive application",
                 region = "",
                 url = "myapp.url",
                 contact = "",
