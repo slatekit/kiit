@@ -191,7 +191,6 @@ object AppBuilder {
     fun conf(cls:Class<*>, args: Args, name:String = Confs.CONFIG_DEFAULT_PROPERTIES, alias:Alias = Alias.Jar): Properties {
         val source = dir(args, alias)
         val path = source.combine(name)
-        Prints.keys("appbuilder.conf", listOf("name" to name, "alias" to alias.value, "path.root" to path.root.value, "path.path" to path.path))
         val props = Props.fromUri(cls, path)
         return props
     }

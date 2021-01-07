@@ -78,7 +78,6 @@ object AppUtils {
         // 5. conf dir: conf.dir=conf:/app1  -> ./conf
         // 6. jars dir: conf.dir=jars:/app1  -> app.jar/resources
         val source = AppBuilder.dir(args, alias)
-        Prints.keys("appinputs.inputs", listOf("alias" to alias.value, "source.root" to source.root.value, "source.path" to source.path))
         val props = AppBuilder.conf(cls, args, Confs.CONFIG_DEFAULT_PROPERTIES, alias)
         val confBase = Config(cls, source, props, enc)
 
@@ -101,7 +100,6 @@ object AppUtils {
             // for directory reference provide: "file://./conf/"
             val overrideConfName = "env.${env.name}" + CONFIG_DEFAULT_SUFFIX
             val overrideConfSource = source.combine(overrideConfName)
-            Prints.keys("appinputs.inputs.override", listOf("name" to overrideConfName, "path" to overrideConfSource.path))
             val confEnv = Config.of(cls, overrideConfSource, confBase, enc)
 
             AppInputs(source, args, Envs(allEnvs).select(env.name), confBase, confEnv)
