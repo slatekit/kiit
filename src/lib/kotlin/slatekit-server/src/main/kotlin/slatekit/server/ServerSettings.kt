@@ -25,5 +25,6 @@ data class ServerSettings(
     val prefix: String = "/api/",
     val info: Boolean = true,
     val docs: Boolean = false,
-    val docKey: String = ""
+    val docKey: String = "",
+    val formatJson:Boolean = false
 )

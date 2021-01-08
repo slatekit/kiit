@@ -25,10 +25,11 @@ import slatekit.common.types.Doc
 import slatekit.common.requests.Response
 import slatekit.serialization.Serialization
 import slatekit.results.*
+import slatekit.server.ServerSettings
 import slatekit.server.common.ResponseHandler
 
 
-class KtorResponse  : ResponseHandler {
+class KtorResponse(val settings:ServerSettings)  : ResponseHandler {
 
     /**
      * Returns the value of the result as an html(string)
@@ -55,10 +56,14 @@ class KtorResponse  : ResponseHandler {
      * Returns the value of the resulut as JSON.
      */
     override suspend fun json(call: ApplicationCall, result: Response<Any?>) {
-        val text = Serialization.json(true).serialize(result)
+        val rawJson = Serialization.json(true).serialize(result)
+        val json = when(settings.formatJson) {
+            false -> rawJson
+            true  -> org.json.JSONObject(rawJson).toString(4)
+        }
         val contentType = io.ktor.http.ContentType.Application.Json // "application/json"
         val statusCode = toHttpStatus(result)
-        call.respondText(text, contentType, statusCode)
+        call.respondText(json, contentType, statusCode)
     }
 
     /**

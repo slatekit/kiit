@@ -20,26 +20,60 @@ import slatekit.results.builders.Outcomes
 import slatekit.samples.common.models.SampleMovie
 
 
-@Api(area = "samples", name = "all", desc = "sample to test features of Slate Kit APIs",
-        auth = AuthModes.NONE, verb = Verbs.AUTO, sources = [Sources.ALL])
+/**
+ * Sample API that can be used on both
+ * 1. CLI : Command line interface apps
+ * 2. WEB : As Http/Web API ( see postman script at /doc/samples/apis/slatekit-samples-postman.json
+ *
+ * NOTES:
+ * This has examples for showing
+ * 1. Basic Types    : Basic data types ( bool, string, int, double, datetime )
+ * 2. Complex Types  : Complex types such as classes/objects/lists/maps
+ * 3. Requests       : Access to the request object
+ * 4. Error handling : Working with errors and exceptions
+ * 5. CLI Only       : Configuring actions for CLI access only
+ * 6. WEB Only       : Configuring actions for WEB access only
+ * 7. WEB Verbs      : HTTP Verbs post, put, patch, delete actions
+ * 8. WEB Files      : File handling with uploads / downloads
+ *
+ */
+@Api(area = "samples", name = "all", desc = "sample to test features of Slate Kit APIs", auth = AuthModes.NONE, verb = Verbs.AUTO, sources = [Sources.ALL])
 class SampleAPI(context: Context) : ApiBase(context) {
 
     // Simple value to test actions/methods
     private var accumulator = 0
 
 
+    /*
+     Sample acton to show version, and other info about this app/api
+     Examples:
+     CLI: samples.all.about
+     WEB: curl -X POST http://localhost:5000/api/samples/all/about
+     */
     @Action(desc = "info about this api")
     fun about(): About {
         return context.info.about
     }
 
 
+    /*
+     Sample action to take in a input and return a simple response
+     Examples:
+     CLI: samples.all.greet -greeting="hey there"
+     WEB: curl -X POST http://localhost:5000/api/samples/all/greet -d '{ "greeting": "hello" }'
+     */
     @Action(desc = "accepts supplied basic data types from send")
     fun greet(greeting: String): String {
         return "$greeting back"
     }
 
 
+    /*
+     Sample action to increment the accumulator
+     Examples:
+     CLI: samples.all.inc
+     WEB: curl -X POST http://localhost:5000/api/samples/all/inc
+     */
     @Action(desc = "increments a simple accumulator")
     fun inc(): Int {
         accumulator += 1
@@ -47,12 +81,11 @@ class SampleAPI(context: Context) : ApiBase(context) {
     }
 
 
-    @Action(desc = "get current value of counter")
-    fun value(): Int {
-        return accumulator
-    }
-
-
+    /*
+     Simple action to add a value to the accumulator
+     CLI: samples.all.add -value=2
+     WEB: curl -X POST http://localhost:5000/api/samples/all/add -d '{ "value" : 2 }'
+     */
     @Action(desc = "add a value to a simple accumulator")
     fun add(value:Int): Int {
         accumulator += value
@@ -60,8 +93,21 @@ class SampleAPI(context: Context) : ApiBase(context) {
     }
 
 
-    /**
-     * Make this only available on the CLI ( demo )
+    /*
+     Sample action to get value of accumulator
+     CLI: samples.all.getValue
+     WEB: curl -X GET http://localhost:5000/api/samples/all/getValue
+     */
+    @Action(desc = "get current value of counter")
+    fun getValue(): Int {
+        return accumulator
+    }
+
+
+    /*
+     Sample action to show restricted access to only the CLI
+     CLI: samples.all.sub -value=1
+     WEB: Not available with this configuration
      */
     @Action(desc = "subtracts a value to a simple accumulator", sources = [Sources.CLI])
     fun sub(value:Int): Int {
@@ -169,12 +215,23 @@ class SampleAPI(context: Context) : ApiBase(context) {
     }
 
 
+    /**
+     * The HTTP Verb handling is automatic or can be explicitly supplied.
+     * Names starting with the following match to HTTP Verbs
+     * 1. create -> post
+     * 2. update -> put
+     * 3. patch  -> patch
+     * 4. delete -> delete
+     */
     @Action(desc = "test post", sources = [Sources.API])
     fun create(movie: SampleMovie): String {
         return "movie ${movie.title} created"
     }
 
 
+    /**
+     * Example showing
+     */
     @Action(desc = "test put", sources = [Sources.API])
     fun update(movie: SampleMovie): String {
         return "movie ${movie.title} updated"

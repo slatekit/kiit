@@ -6,7 +6,9 @@ fun main(args: Array<String>) {
     // println("slate kit samples")
 
     // API
+    // 1. source restrict to web/api not working
     // 2. verb not auto-handled
+    // 3. patch with fields of name/value ( any? ) not parsed
 
 
     // CLI

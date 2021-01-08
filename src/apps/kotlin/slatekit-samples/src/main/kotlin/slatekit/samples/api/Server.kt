@@ -39,7 +39,7 @@ class Server(val ctx: Context)  {
     suspend fun execute(): Try<Any> {
 
         // 1. Settings
-        val settings = ServerSettings(port = 5000, prefix = "/api/", docs = true, docKey = "abc123")
+        val settings = ServerSettings(port = 5000, prefix = "/api/", docs = true, docKey = "abc123", formatJson = true)
 
         // 2. APIs ( these are Slate Kit Universal APIs )
         val apis = apis()
@@ -51,7 +51,7 @@ class Server(val ctx: Context)  {
         val apiHost = ApiServer.of( ctx, apis, auth = null)
 
         // Ktor response handler
-        val responder = KtorResponse()
+        val responder = KtorResponse(settings)
 
         // Ktor request handler
         val handler = KtorHandler(ctx, settings, apiHost, responses = responder)
