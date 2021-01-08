@@ -23,7 +23,7 @@ object Verbs {
     const val GET = "get"
     const val CREATE = "create"
     const val UPDATE = "update"
-    const val Delete = "delete"
+    const val DELETE = "delete"
 
 
     /**
@@ -44,7 +44,7 @@ sealed class Verb(override val name: String)  : Parentable<Verb> {
     object Put    : Verb(Verbs.PUT)
     object Post   : Verb(Verbs.POST)
     object Patch  : Verb(Verbs.PATCH)
-    object Delete : Verb(Verbs.Delete)
+    object Delete : Verb(Verbs.DELETE)
     object Parent : Verb(Verbs.PARENT)
 
 
@@ -61,7 +61,7 @@ sealed class Verb(override val name: String)  : Parentable<Verb> {
                 Verbs.PUT    -> Verb.Put
                 Verbs.POST   -> Verb.Post
                 Verbs.PATCH  -> Verb.Patch
-                Verbs.Delete -> Verb.Delete
+                Verbs.DELETE -> Verb.Delete
                 Verbs.PARENT -> Verb.Parent
                 else         -> Verb.Auto
             }

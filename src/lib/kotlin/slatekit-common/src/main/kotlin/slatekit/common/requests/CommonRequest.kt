@@ -70,9 +70,9 @@ data class CommonRequest(
          * Builds a request that is designated as a web request with empty data and meta objects.
          */
         @JvmStatic
-        fun web(area: String, api: String, action: String, verb: String, opts: Map<String, Any>, args: Map<String, Any>, raw: Any? = null): Request {
+        fun api(area: String, api: String, action: String, verb: String, opts: Map<String, Any>, args: Map<String, Any>, raw: Any? = null): Request {
             val path = if (area.isNullOrEmpty()) "$api.$action" else "$area.$api.$action"
-            return CommonRequest(path, listOf(area, api, action), Source.Web, verb, InputArgs(args), meta = InputArgs(opts), raw = raw)
+            return CommonRequest(path, listOf(area, api, action), Source.API, verb, InputArgs(args), meta = InputArgs(opts), raw = raw)
         }
 
         /**

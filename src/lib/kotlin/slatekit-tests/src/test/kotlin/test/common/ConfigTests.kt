@@ -151,20 +151,20 @@ class ConfigTests : TestSupport {
 
 
     @Test fun test_read_api_from() {
-        val key = Confs.readApiKey(app,"usr://.slatekit/conf/env.conf", sectionName = "aws-sqs")
+        val key = Confs.readApiKey(app,"usr://.slatekit/common/conf/env.conf", sectionName = "aws-sqs")
         matchkey(key!!, ApiLogin("mycompany1.dev", "key1", "pass1", "env1", "tag1"))
     }
 
 
     @Test fun test_loading_from_dir_user() {
-        val conf  = Config.of(app, "usr://.slatekit/conf/env.conf")
+        val conf  = Config.of(app, "usr://.slatekit/common/conf/env.conf")
         val key = conf.apiLogin("aws-sqs")
         matchkey(key, ApiLogin("mycompany1.dev", "key1", "pass1", "env1", "tag1"))
     }
 
 
     @Test fun test_loading_from_dir_explicit() {
-        val conf  = Config.of(app, "abs:///Users/kishorereddy/.slatekit/conf/env.conf")
+        val conf  = Config.of(app, "abs:///Users/kishorereddy/.slatekit/common/conf/env.conf")
         val key = conf.apiLogin("aws-sqs")
         matchkey(key, ApiLogin("mycompany1.dev", "key1", "pass1", "env1", "tag1"))
     }

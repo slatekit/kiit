@@ -23,7 +23,7 @@ fun toVerb(name: String?): Verb {
             val verb = when {
                 nameToCheck.startsWith(Verbs.AUTO) -> Verb.Auto
                 nameToCheck.startsWith(Verbs.GET)  -> Verb.Get
-                nameToCheck.startsWith(Verbs.Delete) -> Verb.Delete
+                nameToCheck.startsWith(Verbs.DELETE) -> Verb.Delete
                 nameToCheck.startsWith(Verbs.PATCH) -> Verb.Patch
                 nameToCheck.startsWith(Verbs.CREATE) -> Verb.Post
                 nameToCheck.startsWith(Verbs.UPDATE) -> Verb.Put
@@ -116,11 +116,16 @@ fun toAction(member: KCallable<*>, api: Api, apiAction: slatekit.apis.Action?, n
     )
 }
 
-fun toLookup(rawApis: List<Api>, namer: Namer? = null): Lookup<Area> {
+/**
+ * Creates a lookup object of all the APIs and Actions ensuring that only
+ * the actions that are applicable based on the host source are loaded
+ * e.g. hostSource = WEB, only actions where source = ALL || source = WEB will be loaded
+ */
+fun toLookup(rawApis: List<Api>, hostSource: Source, namer: Namer? = null): Lookup<Area> {
 
     // Get the apis with actions loaded from either
     // annotations or from public methods.
-    val apis = rawApis.map { it -> loadApiFromSetup(it, namer) }
+    val apis = rawApis.map { it -> loadApiFromSetup(it, hostSource, namer) }
 
     // Routes: area.api.action
     // Get unique areas
@@ -138,17 +143,16 @@ fun toLookup(rawApis: List<Api>, namer: Namer? = null): Lookup<Area> {
     return Lookup(areas, { area -> area.name })
 }
 
-fun loadAll(rawApis: List<Api>, namer: Namer? = null): Lookup<Area> {
-    return toLookup(rawApis, namer)
+fun loadAll(rawApis: List<Api>, hostSource: Source = Source.All, namer: Namer? = null): Lookup<Area> {
+    return toLookup(rawApis, hostSource, namer)
 }
 
-fun loadApiFromSetup(api: Api, namer: Namer?): Api {
-
+fun loadApiFromSetup(api: Api, hostSource: Source, namer: Namer?): Api {
     // If no actions, that means it was the raw input
     // during setup, so we have to load the api methods
     // from either annotations or from public methods
-    return if (api.actions.size == 0) {
-        if (api.setup == SetupType.Annotated) {
+    val finalized = if (api.actions.size == 0) {
+        val loaded = if (api.setup == SetupType.Annotated) {
             val apiAnnotated = Annotations(api.klass, api).api(namer)
             val area = rename(apiAnnotated.area, namer)
             val name = rename(apiAnnotated.name, namer)
@@ -157,9 +161,27 @@ fun loadApiFromSetup(api: Api, namer: Namer?): Api {
             val area = rename(api.area, namer)
             val name = rename(api.name, namer)
             val actions = Methods(api).actions(api, api.declaredOnly, namer)
-            api.copy(area = area, name = name, actions = Lookup(actions, { t -> t.name }))
+            api.copy(area = area, name = name, actions = Lookup(actions) { t -> t.name })
         }
+        // Filter out actions that are only applicable for the host source
+        val all = loaded.actions.items
+        val actions = all.filter { validate(it, hostSource) }
+        val filtered = loaded.copy( actions = Lookup(actions) { t -> t.name } )
+        filtered
     } else api
+    return finalized
+}
+
+fun validate(action: Action, hostSource: Source):Boolean {
+    val include = when(hostSource) {
+        Source.All -> true
+        Source.CLI -> action.sources.isMatchOrAll(Source.CLI) || action.sources.isMatchOrAll(Source.Queue)
+        Source.Web -> action.sources.isMatchOrAll(listOf(Source.Web, Source.API, Source.Queue))
+        Source.API -> action.sources.isMatchOrAll(listOf(Source.Web, Source.API, Source.Queue))
+        else       -> false
+    }
+    //println("filtering name=${action.name}, include=$include")
+    return include
 }
 
 fun rename(text: String, namer: Namer?): String {

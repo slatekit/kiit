@@ -2,6 +2,7 @@ package slatekit.apis.rules
 
 import slatekit.apis.ApiRequest
 import slatekit.apis.Verb
+import slatekit.apis.Verbs
 import slatekit.common.Source
 import slatekit.common.requests.Request
 import slatekit.results.Outcome
@@ -16,27 +17,36 @@ object ProtoRule : Rule {
         val target = req.target!!
         val actionVerb = target.action.verb.orElse(target.api.verb)
         val actionProtocols = target.action.sources.orElse(target.api.sources)
-        val isCli = actionProtocols.hasCLI()
-        val isWeb = actionProtocols.hasWeb()
+        val hasCli = actionProtocols.hasCLI()
+        val hasApi = actionProtocols.hasAPI()
 
-        val verbResult = validateVerb(isWeb, isCli, actionVerb, request, req)
+        val verbResult = validateVerb(hasApi, hasCli, actionVerb, request, req)
         val finalResult = verbResult.flatMap { validateProto(actionProtocols, request, req) }
         return finalResult.map { true }
     }
 
 
-    private fun validateVerb(isWeb: Boolean, isCLI: Boolean, actionVerb: Verb, req: Request, request: ApiRequest): Outcome<ApiRequest> {
+    private fun validateVerb(hasWeb: Boolean, hasCLI: Boolean, actionVerb: Verb, req: Request, request: ApiRequest): Outcome<ApiRequest> {
+        val source = request.host.settings.source
         return when {
             // Case 1: Queued request, being processed
             req.verb == Source.Queue.id -> Outcomes.success(request)
 
-            // Case 2: Web, ensure verb match
-            isWeb && actionVerb.isMatch(req.verb) -> Outcomes.success(request)
+            // Case 2: Web, auto handle
+            source == Source.API -> {
+                when(actionVerb.isMatch(req.verb)) {
+                    true -> Outcomes.success(request)
+                    false -> Outcomes.denied("Incorrect verb, expected=${actionVerb.name}, actual=${req.verb}")
+                }
+            }
 
             // Case 3: CLI, doesn't matter
-            isCLI -> Outcomes.success(request)
+            source == Source.CLI -> Outcomes.success(request)
 
-            // Case 4: invalid
+            // Case 4: ALL, doesn't matter
+            source == Source.All -> Outcomes.success(request)
+
+            // Case 5: invalid
             else -> Outcomes.errored("expected verb $actionVerb, but got ${req.verb}")
         }
     }
@@ -49,6 +59,22 @@ object ProtoRule : Rule {
                 val oneOf = actionProtocols.all.joinToString { it.id }
                 Outcomes.errored("expected source $oneOf, but got ${req.source.id}")
             }
+        }
+    }
+
+
+    fun validate(name:String, verb:String):Boolean {
+        return when {
+            name.startsWith("create") -> verb == Verbs.POST
+            name.startsWith("insert") -> verb == Verbs.POST
+            name.startsWith("update") -> verb == Verbs.PUT
+            name.startsWith("modify") -> verb == Verbs.PUT
+            name.startsWith("remove") -> verb == Verbs.DELETE
+            name.startsWith("delete") -> verb == Verbs.DELETE
+            name.startsWith("patch")  -> verb == Verbs.PATCH
+            name.startsWith("get")    -> verb == Verbs.GET
+            name.startsWith("fetch")  -> verb == Verbs.GET
+            else -> false
         }
     }
 }

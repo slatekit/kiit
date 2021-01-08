@@ -16,7 +16,7 @@ class Requests_Tests {
     val sampleRequest = CommonRequest(
             path = "samples.types2.loadBasicTypes",
             parts = listOf("samples", "types2", "loadBasicTypes"),
-            source = Source.Web,
+            source = Source.API,
             verb = "post",
             data = InputArgs(mapOf(
                     "s" to "user1@abc.com",
@@ -52,7 +52,7 @@ class Requests_Tests {
     fun can_convert_to_json() {
         val json = Reqs.toJsonObject(sampleRequest)
         Assert.assertEquals("1.1"           , json.get("version"))
-        Assert.assertEquals(Source.Web.id           , json.get("source"))
+        Assert.assertEquals(Source.API.id           , json.get("source"))
         Assert.assertEquals("post"         , json.get("verb"))
         Assert.assertEquals("tag123"        , json.get("tag"))
         Assert.assertEquals("2018-01-27T09:30:45Z", json.get("timestamp"))

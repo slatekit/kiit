@@ -12,8 +12,8 @@ data class Sources(val all: List<Source>) {
         return all.any { it == Source.CLI || it == Source.All }
     }
 
-    fun hasWeb(): Boolean {
-        return all.any { it == Source.Web || it == Source.All }
+    fun hasAPI(): Boolean {
+        return all.any { it == Source.API || it == Source.All }
     }
 
     fun isMatchExact(expected:Source):Boolean {
@@ -27,9 +27,13 @@ data class Sources(val all: List<Source>) {
         return isMatchOrElse(expected, Source.All)
     }
 
+    fun isMatchOrAll(expected:List<Source>):Boolean {
+        return expected.any { isMatchOrElse(it, Source.All) }
+    }
+
     fun isMatchOrElse(expected:Source, other:Source):Boolean {
         return when {
-            all.contains(expected)     -> true
+            all.contains(expected) -> true
             all.contains(other) -> true
             else -> false
         }

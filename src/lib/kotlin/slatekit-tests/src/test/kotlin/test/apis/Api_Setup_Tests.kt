@@ -111,7 +111,7 @@ class Api_Setup_Tests : ApiTestsBase() {
 
     @Test fun can_call_action_without_area() {
         val apis = ApiServer(ctx, apis = listOf(Api(SamplePOKOApi::class, "app", "SamplePOKO")))
-        val result = runBlocking {  apis.executeAttempt("app", "SamplePOKO", "getCounter", Verb.Auto, mapOf(), mapOf()) }
+        val result = runBlocking {  apis.executeAttempt("app", "SamplePOKO", "getCounter", Verb.Get, mapOf(), mapOf()) }
         Assert.assertTrue(result.success)
         Assert.assertTrue(result.getOrElse { 0 } == 1)
     }
@@ -120,7 +120,7 @@ class Api_Setup_Tests : ApiTestsBase() {
     @Test fun can_call_action_with_request() {
         val apis = ApiServer(ctx, apis = listOf(Api(SamplePOKOApi::class, "app", "SamplePOKO")))
         val result = runBlocking {
-            apis.executeAttempt("app", "SamplePOKO", SamplePOKOApi::request.name, Verb.Auto, mapOf(), mapOf("greeting" to "hi"))
+            apis.executeAttempt("app", "SamplePOKO", SamplePOKOApi::request.name, Verb.Post, mapOf(), mapOf("greeting" to "hi"))
         }
         Assert.assertTrue(result.success)
     }
@@ -128,7 +128,7 @@ class Api_Setup_Tests : ApiTestsBase() {
 
     @Test fun can_call_action_in_derived_class() {
         val apis = ApiServer(ctx, apis = listOf(Api(SampleExtendedApi::class, "app", "SampleExtended")))
-        val result = runBlocking { apis.executeAttempt("app", "SampleExtended", "getSeconds", Verb.Auto, mapOf(), mapOf()) }
+        val result = runBlocking { apis.executeAttempt("app", "SampleExtended", "getSeconds", Verb.Get, mapOf(), mapOf()) }
         Assert.assertTrue(result.success)
         Assert.assertTrue(result.getOrElse { -1 } in 0..59)
     }
@@ -136,7 +136,7 @@ class Api_Setup_Tests : ApiTestsBase() {
 
     @Test fun can_call_action_in_base_class() {
         val apis = ApiServer(ctx, apis = listOf(Api(SampleExtendedApi::class, "app", "SampleExtended", declaredOnly = false)))
-        val result = runBlocking { apis.executeAttempt("app", "SampleExtended", "getCounter", Verb.Auto, mapOf(), mapOf()) }
+        val result = runBlocking { apis.executeAttempt("app", "SampleExtended", "getCounter", Verb.Get, mapOf(), mapOf()) }
         Assert.assertTrue(result.success)
         Assert.assertTrue(result.getOrElse { 0 } == 1)
     }

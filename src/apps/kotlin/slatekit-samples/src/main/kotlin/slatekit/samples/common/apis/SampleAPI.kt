@@ -5,6 +5,7 @@ import slatekit.apis.Action
 import slatekit.apis.AuthModes
 import slatekit.apis.Verbs
 import slatekit.apis.ApiBase
+import slatekit.apis.core.Patch
 import slatekit.common.DateTime
 import slatekit.common.DateTimes
 import slatekit.common.requests.Request
@@ -19,16 +20,12 @@ import slatekit.results.builders.Outcomes
 import slatekit.samples.common.models.SampleMovie
 
 
-@Api(area = "samples", name = "types", desc = "sample to test features of Slate Kit APIs", auth = AuthModes.NONE, verb = Verbs.AUTO, sources = [Sources.WEB])
-class SampleApi(context: Context) : ApiBase(context) {
+@Api(area = "samples", name = "all", desc = "sample to test features of Slate Kit APIs",
+        auth = AuthModes.NONE, verb = Verbs.AUTO, sources = [Sources.ALL])
+class SampleAPI(context: Context) : ApiBase(context) {
 
-    var inc = 0
-
-
-    @Action(desc = "accepts supplied basic data types from send")
-    fun hello(greeting: String): String {
-        return "$greeting back"
-    }
+    // Simple value to test actions/methods
+    private var accumulator = 0
 
 
     @Action(desc = "info about this api")
@@ -37,84 +34,77 @@ class SampleApi(context: Context) : ApiBase(context) {
     }
 
 
-    @Action(desc = "increments a simple counter")
-    fun increment(): Int {
-        inc += 1
-        return inc
+    @Action(desc = "accepts supplied basic data types from send")
+    fun greet(greeting: String): String {
+        return "$greeting back"
+    }
+
+
+    @Action(desc = "increments a simple accumulator")
+    fun inc(): Int {
+        accumulator += 1
+        return accumulator
+    }
+
+
+    @Action(desc = "get current value of counter")
+    fun value(): Int {
+        return accumulator
+    }
+
+
+    @Action(desc = "add a value to a simple accumulator")
+    fun add(value:Int): Int {
+        accumulator += value
+        return accumulator
+    }
+
+
+    /**
+     * Make this only available on the CLI ( demo )
+     */
+    @Action(desc = "subtracts a value to a simple accumulator", sources = [Sources.CLI])
+    fun sub(value:Int): Int {
+        accumulator += value
+        return accumulator
     }
 
 
     @Action(desc = "accepts supplied basic data types from send")
     fun inputs(name: String, isActive: Boolean, age: Short, dept: Int, account: Long, average: Float, salary: Double, date: DateTime): Map<String, Any> {
         return mapOf(
-               "name"    to name,
-               "active"  to isActive,
-               "age"     to age,
-               "dept"    to dept,
-               "account" to account,
-               "average" to average,
-               "salary"  to salary,
-               "date"    to date.toStringUtc()
+                "name"    to name,
+                "active"  to isActive,
+                "age"     to age,
+                "dept"    to dept,
+                "account" to account,
+                "average" to average,
+                "salary"  to salary,
+                "date"    to date.toStringUtc()
         )
     }
 
 
-    @Action(desc = "get current value of counter")
-    fun getCounter(): Int {
-        return inc
-    }
-
-
-    @Action(desc = "test post")
-    fun create1(greeting: String): String {
-        return "$greeting back"
-    }
-
-
-    @Action(desc = "test put")
-    fun update1(greeting: String): String {
-        return "$greeting back"
-    }
-
-
-    @Action(desc = "test post")
-    fun process1(greeting: String): String {
-        return "$greeting back"
-    }
-
-
-    @Action(desc = "test delete")
-    fun delete1(greeting: String): String {
-        return "$greeting back"
-    }
-
-
-    @Action(desc = "test patch")
-    fun patch1(greeting: String): String {
-        return "$greeting back"
-    }
-
-
-    @Action(desc = "test patch")
-    fun lists(movies:List<SampleMovie>): List<SampleMovie> {
-        return movies.map { it.copy(title = "GOT : " + it.title) }
-    }
-
-
-    @Action(desc = "File upload")
-    fun upload(file: Doc):Map<String, String> {
-        return mapOf(
-                "name" to file.name,
-                "type" to file.tpe.http,
-                "size" to file.size.toString(),
-                "data" to file.content
+    @Action(desc = "get lists of movies")
+    fun movies(): List<SampleMovie> {
+        return listOf(
+                SampleMovie(
+                        title = "Indiana Jones",
+                        category = "action",
+                        playing = false,
+                        cost = 10,
+                        rating = 4.5,
+                        released = DateTimes.of(1985, 8, 10)
+                ),
+                SampleMovie(
+                        title = "Contact",
+                        category = "sci-fi",
+                        playing = false,
+                        cost = 10,
+                        rating = 4.5,
+                        released = DateTimes.of(1995, 8, 10)
+                )
         )
-    }
-
-
-    @Action(desc = "File download")
-    fun download(text:String):Doc {
-        return Doc.text(DateTime.now().toStringUtc().toId() + ".txt", text)
     }
 
 
@@ -139,8 +129,25 @@ class SampleApi(context: Context) : ApiBase(context) {
     }
 
 
+    @Action(desc = "File upload", sources = [Sources.API])
+    fun upload(file: Doc):Map<String, String> {
+        return mapOf(
+                "name" to file.name,
+                "type" to file.tpe.http,
+                "size" to file.size.toString(),
+                "data" to file.content
+        )
+    }
+
+
+    @Action(desc = "File download", sources = [Sources.API])
+    fun download(text:String):Doc {
+        return Doc.text(DateTime.now().toStringUtc().toId() + ".txt", text)
+    }
+
+
     @Action(desc = "test movie list")
-    fun getRecent(category: String): List<SampleMovie> {
+    fun recent(category: String): List<SampleMovie> {
         return listOf(
                 SampleMovie(
                         title = "Sample Movie 1",
@@ -160,4 +167,31 @@ class SampleApi(context: Context) : ApiBase(context) {
                 )
         )
     }
+
+
+    @Action(desc = "test post", sources = [Sources.API])
+    fun create(movie: SampleMovie): String {
+        return "movie ${movie.title} created"
+    }
+
+
+    @Action(desc = "test put", sources = [Sources.API])
+    fun update(movie: SampleMovie): String {
+        return "movie ${movie.title} updated"
+    }
+
+
+    @Action(desc = "test patch", sources = [Sources.API])
+    fun patch(id:Long, fields: List<Patch>): String {
+        val info = fields.joinToString("") { i -> i.name + "=" + i.value + " " }
+        return "movie ${id} updated with $info"
+    }
+
+
+    @Action(desc = "test delete", sources = [Sources.API])
+    fun delete(movie: SampleMovie): String {
+        return "movie ${movie.title} deleted"
+    }
 }
+
+

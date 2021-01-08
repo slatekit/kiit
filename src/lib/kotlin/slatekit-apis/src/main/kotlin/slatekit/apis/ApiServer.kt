@@ -49,7 +49,7 @@ open class ApiServer(
      * Load all the routes from the APIs supplied.
      * The API setup can be either annotation based or public methods on the Class
      */
-    val routes = Routes(loadAll(apis, settings.naming), settings.naming)
+    val routes = Routes(loadAll(apis, settings.source, settings.naming), settings.naming)
 
     /**
      * The help class to handle help on an area, api, or action
@@ -132,7 +132,7 @@ open class ApiServer(
      * Call with inputs instead of the request
      */
     suspend fun executeAttempt(area: String, api: String, action: String, verb: Verb, opts: Map<String, Any>, args: Map<String, Any>): Try<ApiResult> {
-        val req = CommonRequest.web(area, api, action, verb.name, opts, args)
+        val req = CommonRequest.api(area, api, action, verb.name, opts, args)
         return executeAttempt(req)
     }
 
@@ -290,7 +290,7 @@ open class ApiServer(
 
         @JvmStatic
         fun of(ctx: Context, apis: List<slatekit.apis.routes.Api>, auth: Auth? = null, source: Source? = null): ApiServer {
-            val server = ApiServer(ctx, apis, null, null, auth, Settings(source ?: Source.Web))
+            val server = ApiServer(ctx, apis, null, null, auth, Settings(source ?: Source.API))
             return server
         }
 

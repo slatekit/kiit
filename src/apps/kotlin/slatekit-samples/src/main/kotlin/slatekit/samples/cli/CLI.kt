@@ -10,7 +10,7 @@ import slatekit.common.info.ApiKey
 import slatekit.connectors.cli.CliApi
 import slatekit.results.Try
 import slatekit.serialization.Serialization
-import slatekit.samples.common.apis.SampleApi
+import slatekit.samples.common.apis.SampleAPI
 
 class CLI(val ctx: Context) {
 
@@ -39,17 +39,18 @@ class CLI(val ctx: Context) {
                 metaTransform = {
                     listOf("api-key" to keys.first().key)
                 },
-                serializer = {item, type -> Content.csv(Serialization.csv().serialize(item))}
+                serializer = {item, type -> Content.text(Serialization.props().serialize(item))}
         )
 
         // 5. Run interactive mode
+        cli.showOverview("Slate Kit CLI Sample")
         return cli.run()
     }
 
 
     fun apis(): List<Api> {
         return listOf(
-                Api(klass = SampleApi::class, singleton = SampleApi(ctx), setup = SetupType.Annotated)
+                Api(klass = SampleAPI::class, singleton = SampleAPI(ctx), setup = SetupType.Annotated)
         )
     }
 }

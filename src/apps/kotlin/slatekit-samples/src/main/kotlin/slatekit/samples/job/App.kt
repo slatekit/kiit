@@ -27,7 +27,7 @@ import slatekit.results.Success
  * 3. Queued   Job: gradle run --args='-job.name=queued'
  * 4. Worker   Job: gradle run --args='-job.name=worker'
  */
-fun main(raw: Array<String>){
+fun run(raw: Array<String>){
     println("Args: =====================")
     raw.forEachIndexed { ndx, value ->  println("$ndx : $value") }
     println("\n")
