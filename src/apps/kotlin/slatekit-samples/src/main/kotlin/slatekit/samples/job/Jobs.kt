@@ -26,7 +26,7 @@ val allUsers = (1..20).map { User(it, "user$it@company1.com")}
  * =================================================================================================
  */
 suspend fun sendNewsLetter(task: Task): WResult {
-    allUsers.forEach { user -> JobUtils.send(task.job, NEWS_LETTER_MESSAGE, user) }
+    allUsers.forEachIndexed { ndx, user -> JobUtils.send(task.job, NEWS_LETTER_MESSAGE, user) }
     return WResult.Done
 }
 
@@ -58,7 +58,7 @@ suspend fun sendNewsLetterWithPaging(task: Task): WResult {
  * =================================================================================================
  */
 suspend fun sendNewsLetterFromQueue(task: Task): WResult {
-    val userId = task.data.toInt()
+    val userId = task.data.split("=")[1].toInt()
     val user = allUsers.first { it.id == userId }
     JobUtils.send(task.job, NEWS_LETTER_MESSAGE, user)
 
@@ -130,20 +130,20 @@ object JobUtils {
     fun showInfo(task: Task) {
 
         println("\nProcessing : ====================================")
-        println("job.id  : " + task.id)    // abc123
-        println("job.from: " + task.from)  // queue://notification
-        println("job.job : " + task.job)   // job1
-        println("job.name: " + task.name)  // users.sendNewsletter
-        println("job.data: " + task.data)  // { ... } json payload
-        println("job.xid : " + task.xid)   // 12345   correlation id
+        println("task.id  : " + task.id)    // abc123
+        println("task.from: " + task.from)  // queue://notification
+        println("task.job : " + task.job)   // job1
+        println("task.name: " + task.name)  // users.sendNewsletter
+        println("task.data: " + task.data)  // { ... } json payload
+        println("task.xid : " + task.xid)   // 12345   correlation id
         println("\n")
 
     }
 
     // Sends the message ( newsletter ) to the user
-    suspend fun send(sender:String, msg:String, user: User) {
+    fun send(sender:String, msg:String, user: User) {
         // Simulate sending message to user
-        runBlocking { println("Source: ${sender}: Sent $msg to ${user.email}") }
+        println("job=${sender}, id=${user.id}, email=${user.email}, message=$msg")
     }
 
 
@@ -159,7 +159,7 @@ object JobUtils {
             return WResult.Done
 
         // Get next page of records
-        users.forEach { user -> send(sender,"New version coming out soon!", user) }
+        users.forEachIndexed { ndx, user -> send(sender,"New version coming out soon!", user) }
 
         // Update offset and totals
         offset.addAndGet(users.size)

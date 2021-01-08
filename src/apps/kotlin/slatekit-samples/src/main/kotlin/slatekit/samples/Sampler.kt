@@ -2,7 +2,8 @@ package slatekit.samples
 
 
 fun main(args: Array<String>) {
-    Samples.api(args)
+    val options = arrayOf("onetime", "paging", "queued", "worker")
+    Samples.job(arrayOf("-sample=${options[3]}"))
     // println("slate kit samples")
 
     // API
