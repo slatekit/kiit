@@ -21,6 +21,26 @@ import slatekit.samples.common.models.SampleMovie
  * 1. CLI : Command line interface apps
  * 2. WEB : As Http/Web API ( see postman script at /doc/samples/apis/slatekit-samples-postman.json
  *
+ * SAMPLES:
+ * ROUTE                | SOURCE        | PURPOSE
+ * samples/all/about    , CLI + WEB     , 0 params: get version info
+ * samples/all/greet    , CLI + WEB     , 1 param : simple hello world greeting
+ * samples/all/inc      , CLI + WEB     , 0 params: increment a accumulator
+ * samples/all/add      , CLI + WEB     , 1 param : add to a accumulator
+ * samples/all/value    , CLI + WEB     , get value of the counter
+ * samples/all/dec      , CLI           , CLI restricted access, decrement accumulator
+ * samples/all/inputs   , CLI + WEB     , 5 + params: use basic data types
+ * samples/all/movies   , CLI + WEB     , show retrieval of complex objects
+ * samples/all/request  , CLI + WEB     , show access to request object
+ * samples/all/response , CLI + WEB     , show error handling responses
+ * samples/all/recent   , CLI + WEB     , show both inputs and complex object response
+ * samples/all/create   , WEB           , http post   example
+ * samples/all/update   , WEB           , http put    example
+ * samples/all/patch    , WEB           , http patch  example
+ * samples/all/delete   , WEB           , http delete example
+ *
+ *
+ *
  * NOTES:
  * This has examples for showing
  * 1. Basic Types    : Basic data types ( bool, string, int, double, datetime )
@@ -102,11 +122,11 @@ class SampleAPI(context: Context) : ApiBase(context) {
 
     /*
      Sample action to show restricted access to only the CLI
-     CLI: samples.all.sub -value=1
+     CLI: samples.all.dec -value=1
      WEB: Not available with this configuration
      */
     @Action(desc = "subtracts a value from the accumulator", sources = [Sources.CLI])
-    fun sub(value:Int): Int {
+    fun dec(value:Int): Int {
         accumulator += value
         return accumulator
     }
@@ -344,6 +364,20 @@ class SampleAPI(context: Context) : ApiBase(context) {
     }
 
 
+    /*
+     Sample action to show getting a file containing the sample text supplied
+     Examples:
+     CLI: n/a
+     WEB: curl -X POST http://localhost:5000/api/samples/all/download \
+          -H 'Content-Type: application/json' \
+          -d '{ "text" : "some content" }'
+     */
+    @Action(desc = "File download", sources = [Sources.API])
+    fun download(text:String):Doc {
+        return Doc.text(DateTime.now().toStringUtc().toId() + ".txt", text)
+    }
+
+
     @Action(desc = "File upload", sources = [Sources.API])
     fun upload(file: Doc):Map<String, String> {
         return mapOf(
@@ -352,12 +386,6 @@ class SampleAPI(context: Context) : ApiBase(context) {
                 "size" to file.size.toString(),
                 "data" to file.content
         )
-    }
-
-
-    @Action(desc = "File download", sources = [Sources.API])
-    fun download(text:String):Doc {
-        return Doc.text(DateTime.now().toStringUtc().toId() + ".txt", text)
     }
 }
 
