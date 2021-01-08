@@ -10,7 +10,7 @@ import slatekit.common.info.ApiKey
 import slatekit.connectors.cli.CliApi
 import slatekit.results.Try
 import slatekit.serialization.Serialization
-import slatekit.samples.common.apis.SampleCLI
+import slatekit.samples.common.apis.SampleAPI
 
 class CLI(val ctx: Context) {
 
@@ -50,7 +50,7 @@ class CLI(val ctx: Context) {
 
     fun apis(): List<Api> {
         return listOf(
-                Api(klass = SampleCLI::class, singleton = SampleCLI(ctx), setup = SetupType.Annotated)
+                Api(klass = SampleAPI::class, singleton = SampleAPI(ctx), setup = SetupType.Annotated)
         )
     }
 }

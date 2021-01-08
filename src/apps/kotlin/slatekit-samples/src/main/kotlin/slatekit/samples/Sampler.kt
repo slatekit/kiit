@@ -2,8 +2,14 @@ package slatekit.samples
 
 
 fun main(args: Array<String>) {
-    Samples.api(args)
+    Samples.cli(args)
     // println("slate kit samples")
+
+    // API
+    // 1. verb not auto-handled
+    // 2. patch with fields of name/value ( any? ) not parsed
+    // 3. source restrict to web/api not working
+
 
     // CLI
     // samples.cli.about

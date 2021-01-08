@@ -5,6 +5,7 @@ import slatekit.apis.Action
 import slatekit.apis.AuthModes
 import slatekit.apis.Verbs
 import slatekit.apis.ApiBase
+import slatekit.apis.core.Patch
 import slatekit.common.DateTime
 import slatekit.common.DateTimes
 import slatekit.common.requests.Request
@@ -58,6 +59,16 @@ class SampleAPI(context: Context) : ApiBase(context) {
     }
 
 
+    /**
+     * Make this only available on the CLI ( demo )
+     */
+    @Action(desc = "subtracts a value to a simple accumulator", sources = [Sources.CLI])
+    fun sub(value:Int): Int {
+        accumulator += value
+        return accumulator
+    }
+
+
     @Action(desc = "accepts supplied basic data types from send")
     fun inputs(name: String, isActive: Boolean, age: Short, dept: Int, account: Long, average: Float, salary: Double, date: DateTime): Map<String, Any> {
         return mapOf(
@@ -96,23 +107,6 @@ class SampleAPI(context: Context) : ApiBase(context) {
     }
 
 
-    @Action(desc = "File upload")
-    fun upload(file: Doc):Map<String, String> {
-        return mapOf(
-                "name" to file.name,
-                "type" to file.tpe.http,
-                "size" to file.size.toString(),
-                "data" to file.content
-        )
-    }
-
-
-    @Action(desc = "File download")
-    fun download(text:String):Doc {
-        return Doc.text(DateTime.now().toStringUtc().toId() + ".txt", text)
-    }
-
-
     @Action(desc = "test access to send")
     fun request(request: Request, greeting: String): String {
         val greetFromBody = request.data.getString("greeting")
@@ -131,6 +125,23 @@ class SampleAPI(context: Context) : ApiBase(context) {
                         rating = 4.5,
                         released = DateTimes.of(1985, 8, 10)
                 ))
+    }
+
+
+    @Action(desc = "File upload", sources = [Sources.API])
+    fun upload(file: Doc):Map<String, String> {
+        return mapOf(
+                "name" to file.name,
+                "type" to file.tpe.http,
+                "size" to file.size.toString(),
+                "data" to file.content
+        )
+    }
+
+
+    @Action(desc = "File download", sources = [Sources.API])
+    fun download(text:String):Doc {
+        return Doc.text(DateTime.now().toStringUtc().toId() + ".txt", text)
     }
 
 
@@ -157,30 +168,29 @@ class SampleAPI(context: Context) : ApiBase(context) {
     }
 
 
-    @Action(desc = "test post")
+    @Action(desc = "test post", sources = [Sources.API])
     fun create(movie: SampleMovie): String {
         return "movie ${movie.title} created"
     }
 
 
-    @Action(desc = "test put")
+    @Action(desc = "test put", sources = [Sources.API])
     fun update(movie: SampleMovie): String {
         return "movie ${movie.title} updated"
     }
 
 
-    @Action(desc = "test patch")
-    fun patch(id:Long, fields: List<PatchedField>): String {
+    @Action(desc = "test patch", sources = [Sources.API])
+    fun patch(id:Long, fields: List<Patch>): String {
         val info = fields.joinToString("") { i -> i.name + "=" + i.value }
         return "movie ${id} updated with $info"
     }
 
 
-    @Action(desc = "test delete")
+    @Action(desc = "test delete", sources = [Sources.API])
     fun delete(movie: SampleMovie): String {
         return "movie ${movie.title} deleted"
     }
 }
 
 
-data class PatchedField(val name:String, val value:Double)
