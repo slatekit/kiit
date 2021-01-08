@@ -141,7 +141,7 @@ class Entity_Database_Tests : TestSupport {
         Assert.assertTrue(updated.test_uniqueId == update.test_uniqueId)
     }
 
-    val con = Confs.readDbCon(app,"usr://.slatekit/conf/db.conf")
+    val con = Confs.readDbCon(app,"usr://.slatekit/common/conf/db.conf")
 
     private fun realDb(): Entities {
         val dbs = Connections.of(con!!)
