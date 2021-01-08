@@ -32,7 +32,7 @@ import slatekit.serialization.deserializer.Deserializer
  * @param docGen : Documentation generator
  */
 data class Settings(
-    val source: Source = Source.Web,
+    val source: Source = Source.API,
     val naming: Namer? = null,
     val decoder: ((Request, Encryptor?) -> Deserializer)? = null,
     val encoder: ((String, Any?) -> String)? = null,
@@ -44,6 +44,7 @@ data class Settings(
         fun doc(protocol: Source): Doc {
             return when (protocol) {
                 is Source.Web -> DocWeb()
+                is Source.API -> DocWeb()
                 else -> DocConsole()
             }
         }

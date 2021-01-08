@@ -17,9 +17,9 @@ object ProtoRule : Rule {
         val actionVerb = target.action.verb.orElse(target.api.verb)
         val actionProtocols = target.action.sources.orElse(target.api.sources)
         val isCli = actionProtocols.hasCLI()
-        val isWeb = actionProtocols.hasWeb()
+        val isApi = actionProtocols.hasAPI()
 
-        val verbResult = validateVerb(isWeb, isCli, actionVerb, request, req)
+        val verbResult = validateVerb(isApi, isCli, actionVerb, request, req)
         val finalResult = verbResult.flatMap { validateProto(actionProtocols, request, req) }
         return finalResult.map { true }
     }
