@@ -98,12 +98,12 @@ class SampleAPI(context: Context) : ApiBase(context) {
 
 
     /*
-     Simple action to add a value to the accumulator
-     CLI: samples.all.add -value=2
-     WEB: curl -X POST http://localhost:5000/api/samples/all/add -d '{ "value" : 2 }'
+     Sample action to show restricted access to only the CLI
+     CLI: samples.all.dec -value=1
+     WEB: Not available with this configuration
      */
-    @Action(desc = "add a value to the accumulator")
-    fun add(value:Int): Int {
+    @Action(desc = "subtracts a value from the accumulator", sources = [Sources.CLI])
+    fun dec(value:Int): Int {
         accumulator += value
         return accumulator
     }
@@ -121,14 +121,13 @@ class SampleAPI(context: Context) : ApiBase(context) {
 
 
     /*
-     Sample action to show restricted access to only the CLI
-     CLI: samples.all.dec -value=1
-     WEB: Not available with this configuration
+     Simple action to add 2 values
+     CLI: samples.all.add -a=1 -b=2
+     WEB: curl -X POST http://localhost:5000/api/samples/all/add -d '{ "a" : 1, "b" : 2 }'
      */
-    @Action(desc = "subtracts a value from the accumulator", sources = [Sources.CLI])
-    fun dec(value:Int): Int {
-        accumulator += value
-        return accumulator
+    @Action(desc = "simple addition of 2 numbers")
+    fun add(a:Int, b:Int): Int {
+        return a + b
     }
 
 
@@ -148,7 +147,7 @@ class SampleAPI(context: Context) : ApiBase(context) {
             "date"    : "2019-04-01T11:05:30Z"
          }'
      */
-    @Action(desc = "accepts supplied basic data types from send", verb = Verbs.GET)
+    @Action(desc = "accepts supplied basic data types from send")
     fun inputs(name: String, isActive: Boolean, age: Short, dept: Int, account: Long, average: Float, salary: Double, date: DateTime): Map<String, Any> {
         return mapOf(
                 "name"    to name,

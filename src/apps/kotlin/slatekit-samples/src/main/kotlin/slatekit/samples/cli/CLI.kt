@@ -7,7 +7,9 @@ import slatekit.cli.CliSettings
 import slatekit.context.Context
 import slatekit.common.types.Content
 import slatekit.common.info.ApiKey
+import slatekit.common.types.ContentType
 import slatekit.connectors.cli.CliApi
+import slatekit.meta.Reflector
 import slatekit.results.Try
 import slatekit.serialization.Serialization
 import slatekit.samples.common.apis.SampleAPI
@@ -39,7 +41,7 @@ class CLI(val ctx: Context) {
                 metaTransform = {
                     listOf("api-key" to keys.first().key)
                 },
-                serializer = {item, type -> Content.text(Serialization.props().serialize(item))}
+                serializer = {item, type -> print(item, type)}
         )
 
         // 5. Run interactive mode
@@ -52,5 +54,15 @@ class CLI(val ctx: Context) {
         return listOf(
                 Api(klass = SampleAPI::class, singleton = SampleAPI(ctx), setup = SetupType.Annotated)
         )
+    }
+
+
+    open fun print(item:Any?, type:ContentType) : Content {
+        val text = Serialization.json().serialize(item)
+        val wrap = """{ "value" : $text }""".trimMargin()
+        val body = org.json.JSONObject(wrap)
+        val pretty = body.toString(4)
+        val content = Content.text(pretty)
+        return content
     }
 }

@@ -166,7 +166,7 @@ open class CliApi(
         writer.highlight("1) ROUTING:   Actions are organized into 3 part routes ( AREAS, APIS, ACTIONS )")
         writer.subTitle("{area}.{api}.{action}")
         writer.text("e.g. in the example, the area = netflix, api = search, action = movies")
-        writer.url("1. netflix.search.movies ")
+        writer.url("1. samples.all.greet ")
         writer.text("")
 
         // Discovery
@@ -178,17 +178,17 @@ open class CliApi(
         writer.subTitle("area.api.action ?", false); writer.text("- to show all inputs to api.area.action")
         writer.text("e.g. you can run the following commands to discover areas, apis, actions, inputs to actions: ")
         writer.url("1. ?")
-        writer.url("2. netflix ?")
-        writer.url("3. netflix.search ?")
-        writer.url("4. netflix.search.movies ?")
+        writer.url("2. samples ?")
+        writer.url("3. samples.all ?")
+        writer.url("4. samples.all.add ?")
         writer.text("")
 
         // Universal
         writer.text("")
         writer.highlight("3) EXECUTION: Actions can be executed by their name and passing inputs")
         writer.subTitle("{area}.{api}.{action} -key=value")
-        writer.url("1. netflix.search.recent  -limit=2")
-        writer.url("2. netflix.search.movies  -language=\"english\" -category=\"drama\"")
+        writer.url("1. samples.all.add  -a=1 -b=2")
+        writer.url("2. samples.all.movies  -category=\"drama\"")
         writer.text("")
         writer.text("type \"?\" to discover areas!")
         writer.text("")
