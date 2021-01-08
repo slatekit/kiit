@@ -32,9 +32,9 @@ interface FileSupport : EncryptSupport, LogSupport {
             val loc = parts.second
             this.context.dirs?.let { dirs ->
                 when (uri) {
-                    "user://" -> File(System.getProperty("user.home"), loc).toString()
-                    "temp://" -> File(System.getProperty("java.io.tmpdir"), loc).toString()
-                    "file://" -> File(loc).toString()
+                    "usr://" -> File(System.getProperty("user.home"), loc).toString()
+                    "tmp://" -> File(System.getProperty("java.io.tmpdir"), loc).toString()
+                    "abs://" -> File(loc).toString()
                     "inputs://" -> File(dirs.pathToInputs, loc).toString()
                     "outputs://" -> File(dirs.pathToOutputs, loc).toString()
                     "logs://" -> File(dirs.pathToLogs, loc).toString()

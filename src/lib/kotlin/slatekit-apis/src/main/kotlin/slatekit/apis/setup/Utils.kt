@@ -23,7 +23,7 @@ fun toVerb(name: String?): Verb {
             val verb = when {
                 nameToCheck.startsWith(Verbs.AUTO) -> Verb.Auto
                 nameToCheck.startsWith(Verbs.GET)  -> Verb.Get
-                nameToCheck.startsWith(Verbs.Delete) -> Verb.Delete
+                nameToCheck.startsWith(Verbs.DELETE) -> Verb.Delete
                 nameToCheck.startsWith(Verbs.PATCH) -> Verb.Patch
                 nameToCheck.startsWith(Verbs.CREATE) -> Verb.Post
                 nameToCheck.startsWith(Verbs.UPDATE) -> Verb.Put
