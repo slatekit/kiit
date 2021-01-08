@@ -183,7 +183,7 @@ class SampleAPI(context: Context) : ApiBase(context) {
 
     @Action(desc = "test patch", sources = [Sources.API])
     fun patch(id:Long, fields: List<Patch>): String {
-        val info = fields.joinToString("") { i -> i.name + "=" + i.value }
+        val info = fields.joinToString("") { i -> i.name + "=" + i.value + " " }
         return "movie ${id} updated with $info"
     }
 
