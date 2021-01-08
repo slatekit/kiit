@@ -1,10 +1,6 @@
 package slatekit.samples.common.apis
 
-import slatekit.apis.Api
-import slatekit.apis.Action
-import slatekit.apis.AuthModes
-import slatekit.apis.Verbs
-import slatekit.apis.ApiBase
+import slatekit.apis.*
 import slatekit.apis.core.Patch
 import slatekit.common.DateTime
 import slatekit.common.DateTimes
@@ -218,24 +214,13 @@ class SampleAPI(context: Context) : ApiBase(context) {
     }
 
 
-    @Action(desc = "File upload", sources = [Sources.API])
-    fun upload(file: Doc):Map<String, String> {
-        return mapOf(
-                "name" to file.name,
-                "type" to file.tpe.http,
-                "size" to file.size.toString(),
-                "data" to file.content
-        )
-    }
-
-
-    @Action(desc = "File download", sources = [Sources.API])
-    fun download(text:String):Doc {
-        return Doc.text(DateTime.now().toStringUtc().toId() + ".txt", text)
-    }
-
-
-    @Action(desc = "test movie list")
+    /*
+     Sample action to show getting list of objects
+     Examples:
+     CLI: samples.all.recent -category="sci-fi"
+     WEB: curl -X POST http://localhost:5000/api/samples/all/recent -d '{ "category": "sci-fi" }'
+     */
+    @Action(desc = "test movie list", verb = Verbs.GET)
     fun recent(category: String): List<SampleMovie> {
         return listOf(
                 SampleMovie(
@@ -266,14 +251,47 @@ class SampleAPI(context: Context) : ApiBase(context) {
      * 3. patch  -> patch
      * 4. delete -> delete
      */
+    /*
+     Sample action to show creating a complex object with POST, restricted to WEB only calls
+     Examples:
+     CLI: N/A
+     WEB: curl -X POST http://localhost:5000/api/samples/all/create \
+          -H 'Content-Type: application/json' \
+          -d '{
+                "movie" : {
+                    "id": 0,
+                    "title": "Indiana Jones",
+                    "category": "action",
+                    "playing": false,
+                    "cost": 10,
+                    "rating": 4.5,
+                    "released": "1985-08-10T04:00:00Z"
+                }
+            }'
+     */
     @Action(desc = "test post", sources = [Sources.API])
     fun create(movie: SampleMovie): String {
         return "movie ${movie.title} created"
     }
 
 
-    /**
-     * Example showing
+    /*
+     Sample action to show updating a complex object with PUT, restricted to WEB only calls
+     Examples:
+     CLI: N/A
+     WEB: curl -X PUT http://localhost:5000/api/samples/all/update \
+          -H 'Content-Type: application/json' \
+          -d '{
+                "movie" : {
+                    "id": 0,
+                    "title": "Indiana Jones",
+                    "category": "action",
+                    "playing": false,
+                    "cost": 10,
+                    "rating": 4.5,
+                    "released": "1985-08-10T04:00:00Z"
+                }
+            }'
      */
     @Action(desc = "test put", sources = [Sources.API])
     fun update(movie: SampleMovie): String {
@@ -281,6 +299,20 @@ class SampleAPI(context: Context) : ApiBase(context) {
     }
 
 
+    /*
+     Sample action to show updating a complex object with PUT, restricted to WEB only calls
+     Examples:
+     CLI: N/A
+     WEB: curl -X PATCH http://localhost:5000/api/samples/all/patch \
+          -H 'Content-Type: application/json' \
+          -d '{
+                "id": 1,
+                "fields" : [
+                    { "name" : "cost"  , "value" : 12 },
+                    { "name" : "rating", "value" : 4.8 }
+                ]
+            }'
+     */
     @Action(desc = "test patch", sources = [Sources.API])
     fun patch(id:Long, fields: List<Patch>): String {
         val info = fields.joinToString("") { i -> i.name + "=" + i.value + " " }
@@ -288,9 +320,44 @@ class SampleAPI(context: Context) : ApiBase(context) {
     }
 
 
+    /*
+     Sample action to show deleting a complex object with DELETE, restricted to WEB only calls
+     Examples:
+     CLI: N/A
+     WEB: curl -X DELETE http://localhost:5000/api/samples/all/delete \
+          -H 'Content-Type: application/json' \
+          -d '{
+                "movie" : {
+                    "id": 0,
+                    "title": "Indiana Jones",
+                    "category": "action",
+                    "playing": false,
+                    "cost": 10,
+                    "rating": 4.5,
+                    "released": "1985-08-10T04:00:00Z"
+                }
+            }'
+     */
     @Action(desc = "test delete", sources = [Sources.API])
     fun delete(movie: SampleMovie): String {
         return "movie ${movie.title} deleted"
+    }
+
+
+    @Action(desc = "File upload", sources = [Sources.API])
+    fun upload(file: Doc):Map<String, String> {
+        return mapOf(
+                "name" to file.name,
+                "type" to file.tpe.http,
+                "size" to file.size.toString(),
+                "data" to file.content
+        )
+    }
+
+
+    @Action(desc = "File download", sources = [Sources.API])
+    fun download(text:String):Doc {
+        return Doc.text(DateTime.now().toStringUtc().toId() + ".txt", text)
     }
 }
 
