@@ -180,7 +180,7 @@ fun validate(action: Action, hostSource: Source):Boolean {
         Source.API -> action.sources.isMatchOrAll(listOf(Source.Web, Source.API, Source.Queue))
         else       -> false
     }
-    println("filtering name=${action.name}, include=$include")
+    //println("filtering name=${action.name}, include=$include")
     return include
 }
 
