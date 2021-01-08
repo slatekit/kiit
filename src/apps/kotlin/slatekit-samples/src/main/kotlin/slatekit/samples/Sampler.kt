@@ -2,8 +2,10 @@ package slatekit.samples
 
 
 fun main(args: Array<String>) {
-    Samples.cli(args)
+    Samples.api(args)
     // println("slate kit samples")
+
+    // CLI
     // samples.cli.about
     // samples.cli.inc
     // samples.cli.value

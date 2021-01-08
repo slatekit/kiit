@@ -1,0 +1,542 @@
+{
+	"info": {
+		"_postman_id": "8cc37afe-899c-4a4c-bc4c-9a063ccaad63",
+		"name": "slatekit-samples",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "samples.all.about",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "api-key",
+						"value": "54B1817194C1450B886404C6BEA81673"
+					},
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "http://localhost:5000/api/samples/all/about",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "5000",
+					"path": [
+						"api",
+						"samples",
+						"all",
+						"about"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "samples.all.greet",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "api-key",
+						"value": "54B1817194C1450B886404C6BEA81673"
+					},
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"type": "text",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"greeting\": \"hello\"\n}"
+				},
+				"url": {
+					"raw": "http://localhost:5000/api/samples/all/greet",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "5000",
+					"path": [
+						"api",
+						"samples",
+						"all",
+						"greet"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "samples.all.inc",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "api-key",
+						"value": "54B1817194C1450B886404C6BEA81673"
+					},
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"type": "text",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "http://localhost:5000/api/samples/all/inc",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "5000",
+					"path": [
+						"api",
+						"samples",
+						"all",
+						"inc"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "samples.all.add",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "api-key",
+						"value": "54B1817194C1450B886404C6BEA81673"
+					},
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"type": "text",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{ \n\t\"value\" : 2\n}"
+				},
+				"url": {
+					"raw": "http://localhost:5000/api/samples/all/add",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "5000",
+					"path": [
+						"api",
+						"samples",
+						"all",
+						"add"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "samples.all.value",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "api-key",
+						"value": "54B1817194C1450B886404C6BEA81673"
+					},
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"type": "text",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "http://localhost:5000/api/samples/all/value",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "5000",
+					"path": [
+						"api",
+						"samples",
+						"all",
+						"value"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "samples.all.movies",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "api-key",
+						"value": "54B1817194C1450B886404C6BEA81673"
+					},
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"type": "text",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "http://localhost:5000/api/samples/all/movies",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "5000",
+					"path": [
+						"api",
+						"samples",
+						"all",
+						"movies"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "samples.all.recent",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "api-key",
+						"value": "54B1817194C1450B886404C6BEA81673"
+					},
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"type": "text",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"category\"    : \"drama\"\n}"
+				},
+				"url": {
+					"raw": "http://localhost:5000/api/samples/all/recent?category=action",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "5000",
+					"path": [
+						"api",
+						"samples",
+						"all",
+						"recent"
+					],
+					"query": [
+						{
+							"key": "category",
+							"value": "action"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "samples.all.inputs",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "api-key",
+						"value": "54B1817194C1450B886404C6BEA81673"
+					},
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"type": "text",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"name\"    : \"kishore\",\n    \"isActive\"  : true,\n    \"age\"     : 30,\n    \"dept\"    : 10,\n    \"account\" : 1234,\n    \"average\" : 3.1,\n    \"salary\"  : 100000,\n    \"date\"    : \"2019-04-01T11:05:30Z\"\n}"
+				},
+				"url": {
+					"raw": "http://localhost:5000/api/samples/all/inputs",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "5000",
+					"path": [
+						"api",
+						"samples",
+						"all",
+						"inputs"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "samples.all.request",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "api-key",
+						"value": "54B1817194C1450B886404C6BEA81673"
+					},
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"type": "text",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"greeting\"    : \"welcome\"\n}"
+				},
+				"url": {
+					"raw": "http://localhost:5000/api/samples/all/request",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "5000",
+					"path": [
+						"api",
+						"samples",
+						"all",
+						"request"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "samples.all.response",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "api-key",
+						"value": "54B1817194C1450B886404C6BEA81673"
+					},
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"type": "text",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"category\"    : \"drama\"\n}"
+				},
+				"url": {
+					"raw": "http://localhost:5000/api/samples/all/response",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "5000",
+					"path": [
+						"api",
+						"samples",
+						"all",
+						"response"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "samples.all.create",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "api-key",
+						"value": "54B1817194C1450B886404C6BEA81673"
+					},
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"type": "text",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"movie\" : {\n\t    \"id\": 0,\n\t    \"title\": \"Indiana Jones\",\n\t    \"category\": \"action\",\n\t    \"playing\": false,\n\t    \"cost\": 10,\n\t    \"rating\": 4.5,\n\t    \"released\": \"1985-08-10T04:00:00Z\"\n\t}\n}"
+				},
+				"url": {
+					"raw": "http://localhost:5000/api/samples/all/create",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "5000",
+					"path": [
+						"api",
+						"samples",
+						"all",
+						"create"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "samples.all.update",
+			"request": {
+				"method": "PUT",
+				"header": [
+					{
+						"key": "api-key",
+						"value": "54B1817194C1450B886404C6BEA81673"
+					},
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"type": "text",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"movie\" : {\n\t    \"id\": 1,\n\t    \"title\": \"Indiana Jones\",\n\t    \"category\": \"action\",\n\t    \"playing\": false,\n\t    \"cost\": 10,\n\t    \"rating\": 4.5,\n\t    \"released\": \"1985-08-10T04:00:00Z\"\n\t}\n}"
+				},
+				"url": {
+					"raw": "http://localhost:5000/api/samples/all/update",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "5000",
+					"path": [
+						"api",
+						"samples",
+						"all",
+						"update"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "samples.all.delete",
+			"request": {
+				"method": "DELETE",
+				"header": [
+					{
+						"key": "api-key",
+						"value": "54B1817194C1450B886404C6BEA81673"
+					},
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"type": "text",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"movie\" : {\n\t    \"id\": 1,\n\t    \"title\": \"Indiana Jones\",\n\t    \"category\": \"action\",\n\t    \"playing\": false,\n\t    \"cost\": 10,\n\t    \"rating\": 4.5,\n\t    \"released\": \"1985-08-10T04:00:00Z\"\n\t}\n}"
+				},
+				"url": {
+					"raw": "http://localhost:5000/api/samples/all/delete",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "5000",
+					"path": [
+						"api",
+						"samples",
+						"all",
+						"delete"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "samples.all.patch",
+			"request": {
+				"method": "PATCH",
+				"header": [
+					{
+						"key": "api-key",
+						"value": "54B1817194C1450B886404C6BEA81673"
+					},
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"type": "text",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\n    \"id\": 1,\n    \"fields\" : [ \n    \t{ \"name\" : \"cost\"  , \"value\" : 12 },\n    \t{ \"name\" : \"rating\", \"value\" : 4.8 }\n    ]\n\t\n}"
+				},
+				"url": {
+					"raw": "http://localhost:5000/api/samples/all/patch",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "5000",
+					"path": [
+						"api",
+						"samples",
+						"all",
+						"patch"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}

@@ -19,14 +19,11 @@ import slatekit.results.builders.Outcomes
 import slatekit.samples.common.models.SampleMovie
 
 
-@Api(area = "samples", name = "api", desc = "sample to test features of Slate Kit APIs", auth = AuthModes.NONE, verb = Verbs.AUTO, sources = [Sources.WEB])
+@Api(area = "samples", name = "all", desc = "sample to test features of Slate Kit APIs", auth = AuthModes.NONE, verb = Verbs.AUTO, sources = [Sources.WEB])
 class SampleAPI(context: Context) : ApiBase(context) {
 
     // Simple value to test actions/methods
     private var accumulator = 0
-
-
-
 
 
     @Action(desc = "info about this api")
@@ -161,31 +158,29 @@ class SampleAPI(context: Context) : ApiBase(context) {
 
 
     @Action(desc = "test post")
-    fun create(greeting: String): String {
-        return "$greeting back"
-    }
-
-
-    @Action(desc = "test post")
-    fun process(greeting: String): String {
-        return "$greeting back"
+    fun create(movie: SampleMovie): String {
+        return "movie ${movie.title} created"
     }
 
 
     @Action(desc = "test put")
-    fun update(greeting: String): String {
-        return "$greeting back"
+    fun update(movie: SampleMovie): String {
+        return "movie ${movie.title} updated"
     }
 
 
     @Action(desc = "test patch")
-    fun patch(greeting: String): String {
-        return "$greeting back"
+    fun patch(id:Long, fields: List<PatchedField>): String {
+        val info = fields.joinToString("") { i -> i.name + "=" + i.value }
+        return "movie ${id} updated with $info"
     }
 
 
     @Action(desc = "test delete")
-    fun delete(greeting: String): String {
-        return "$greeting back"
+    fun delete(movie: SampleMovie): String {
+        return "movie ${movie.title} deleted"
     }
 }
+
+
+data class PatchedField(val name:String, val value:Double)
