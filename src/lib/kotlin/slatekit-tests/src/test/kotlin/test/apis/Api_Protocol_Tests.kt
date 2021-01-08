@@ -89,7 +89,7 @@ class Api_Protocol_Tests : ApiTestsBase() {
                 apis = listOf(Api(Sample_API_1_Protocol(), setup = SetupType.Annotated)),
                 user = null,
                 request = CommonRequest.api("$AREA", "$NAME", "${Sample_API_1_Protocol::processCLI.name}", Verbs.POST, mapOf(), mapOf(Pair("name", "abc"))),
-                response = Failure(Err.of("expected source cli, but got web"), msg = "Errored").toResponse(),
+                response = Failure(Err.of("expected source cli, but got api"), msg = "Errored").toResponse(),
                 checkFailMsg = true
         )
     }
