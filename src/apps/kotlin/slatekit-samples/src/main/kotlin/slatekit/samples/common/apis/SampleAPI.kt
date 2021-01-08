@@ -62,7 +62,7 @@ class SampleAPI(context: Context) : ApiBase(context) {
      CLI: samples.all.greet -greeting="hey there"
      WEB: curl -X POST http://localhost:5000/api/samples/all/greet -d '{ "greeting": "hello" }'
      */
-    @Action(desc = "accepts supplied basic data types from send")
+    @Action(desc = "simple hello world greeting")
     fun greet(greeting: String): String {
         return "$greeting back"
     }
@@ -74,7 +74,7 @@ class SampleAPI(context: Context) : ApiBase(context) {
      CLI: samples.all.inc
      WEB: curl -X POST http://localhost:5000/api/samples/all/inc
      */
-    @Action(desc = "increments a simple accumulator")
+    @Action(desc = "increments the accumulator")
     fun inc(): Int {
         accumulator += 1
         return accumulator
@@ -86,7 +86,7 @@ class SampleAPI(context: Context) : ApiBase(context) {
      CLI: samples.all.add -value=2
      WEB: curl -X POST http://localhost:5000/api/samples/all/add -d '{ "value" : 2 }'
      */
-    @Action(desc = "add a value to a simple accumulator")
+    @Action(desc = "add a value to the accumulator")
     fun add(value:Int): Int {
         accumulator += value
         return accumulator
@@ -95,11 +95,11 @@ class SampleAPI(context: Context) : ApiBase(context) {
 
     /*
      Sample action to get value of accumulator
-     CLI: samples.all.getValue
-     WEB: curl -X GET http://localhost:5000/api/samples/all/getValue
+     CLI: samples.all.value
+     WEB: curl -X GET http://localhost:5000/api/samples/all/value
      */
-    @Action(desc = "get current value of counter")
-    fun getValue(): Int {
+    @Action(desc = "get current value of accumulator", verb = Verbs.GET)
+    fun value(): Int {
         return accumulator
     }
 
@@ -109,14 +109,30 @@ class SampleAPI(context: Context) : ApiBase(context) {
      CLI: samples.all.sub -value=1
      WEB: Not available with this configuration
      */
-    @Action(desc = "subtracts a value to a simple accumulator", sources = [Sources.CLI])
+    @Action(desc = "subtracts a value from the accumulator", sources = [Sources.CLI])
     fun sub(value:Int): Int {
         accumulator += value
         return accumulator
     }
 
 
-    @Action(desc = "accepts supplied basic data types from send")
+    /*
+     Sample action to show accepting different basic data types
+     CLI: samples.all.inputs -name="jason" -isActive=true -age=32 -dept=2 -account=123 -average=2.4 -salary=120000 -date="2019-04-01T11:05:30Z"
+     WEB: curl -X POST http://localhost:5000/api/samples/all/inputs \
+        -H 'Content-Type: application/json' \
+        -d '{
+            "name"    : "kishore",
+            "isActive"  : true,
+            "age"     : 30,
+            "dept"    : 10,
+            "account" : 1234,
+            "average" : 3.1,
+            "salary"  : 100000,
+            "date"    : "2019-04-01T11:05:30Z"
+         }'
+     */
+    @Action(desc = "accepts supplied basic data types from send", verb = Verbs.GET)
     fun inputs(name: String, isActive: Boolean, age: Short, dept: Int, account: Long, average: Float, salary: Double, date: DateTime): Map<String, Any> {
         return mapOf(
                 "name"    to name,
@@ -131,7 +147,12 @@ class SampleAPI(context: Context) : ApiBase(context) {
     }
 
 
-    @Action(desc = "get lists of movies")
+    /*
+     Sample action to show retrieving complex objects
+     CLI: samples.all.movies
+     WEB: curl -X GET http://localhost:5000/api/samples/all/movies
+     */
+    @Action(desc = "get lists of movies", verb = Verbs.GET)
     fun movies(): List<SampleMovie> {
         return listOf(
                 SampleMovie(
@@ -154,24 +175,46 @@ class SampleAPI(context: Context) : ApiBase(context) {
     }
 
 
-    @Action(desc = "test access to send")
+    /*
+     Sample action ( similar to greeting above ), but with access to the Request object
+     Examples:
+     CLI: samples.all.request -greeting="hey there"
+     WEB: curl -X POST http://localhost:5000/api/samples/all/request -d '{ "greeting": "hello" }'
+     */
+    @Action(desc = "test access to the request")
     fun request(request: Request, greeting: String): String {
         val greetFromBody = request.data.getString("greeting")
         return "Handled Request: got `$greeting` as parameter, got `$greetFromBody` from request body"
     }
 
 
+    /*
+     Sample action ( similar to greeting above ), to show error handling and returning statuses
+     Examples:
+     CLI: samples.all.response -status="invalid"
+     WEB: curl -X POST http://localhost:5000/api/samples/all/request -d '{ "greeting": "hello" }'
+     */
     @Action(desc = "test wrapped result")
-    fun response(request: Request, category: String): Outcome<SampleMovie> {
-        return Outcomes.success(
-                SampleMovie(
-                        title = "Sample Movie 1",
-                        category = category,
-                        playing = false,
-                        cost = 10,
-                        rating = 4.5,
-                        released = DateTimes.of(1985, 8, 10)
-                ))
+    fun response(request: Request, status: String): Outcome<SampleMovie> {
+        val sampleMovie = SampleMovie(
+                title = "Sample Movie 1",
+                category = "action",
+                playing = false,
+                cost = 10,
+                rating = 4.5,
+                released = DateTimes.of(1985, 8, 10)
+        )
+        val result:Outcome<SampleMovie> = when(status) {
+            "invalid"  -> Outcomes.invalid ("test status invalid")
+            "ignored"  -> Outcomes.ignored ("test status ignored")
+            "denied"   -> Outcomes.denied  ("test status denied ")
+            "errored"  -> Outcomes.errored ("test status errored")
+            "conflict" -> Outcomes.conflict("test status conflict")
+            "pending"  -> Outcomes.pending (sampleMovie)
+            "success"  -> Outcomes.success (sampleMovie)
+            else       -> Outcomes.unexpected("test status unknown")
+        }
+        return result
     }
 
 
