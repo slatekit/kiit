@@ -153,7 +153,7 @@ open class CliApi(
     }
 
 
-    fun showOverview(name:String) {
+    open fun showOverview(name:String) {
         val writer = ConsoleWriter()
 
         writer.text("**********************************************")
