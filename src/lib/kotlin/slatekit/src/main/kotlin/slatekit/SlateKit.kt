@@ -27,7 +27,6 @@ import java.io.File
 class SlateKit(ctx: Context) : App<Context>(ctx, AppOptions(showWelcome = false, showDisplay = false, showSummary = false)), SlateKitServices {
 
     private lateinit var settingsConf: Conf
-    private lateinit var help: Help
     private val setup = Setup(ctx)
 
     companion object {
@@ -82,10 +81,7 @@ class SlateKit(ctx: Context) : App<Context>(ctx, AppOptions(showWelcome = false,
 
 
     override suspend fun init() {
-        settingsConf = setup.config()
-        help = Help(ctx, settingsConf)
-//        val logger = ctx.logs.getLogger("slatekit.tools.cli")
-//        log(about, logger)
+        settingsConf = setup.install()
     }
 
 
@@ -100,13 +96,13 @@ class SlateKit(ctx: Context) : App<Context>(ctx, AppOptions(showWelcome = false,
         // integration between CLI inputs -> API requests
         val cli = build()
 
-//        // Determine if running in CLI interactive mode or executing a project generator
-//        val args = ctx.args
-//        when (args.parts.isEmpty()) {
-//            true -> run(cli)
-//            false -> gen(cli)
-//        }
-        help.help("Slate Kit CLI")
+        // Determine if running in CLI interactive mode or executing a project generator
+        val args = ctx.args
+        when {
+            args.isHelp          -> Help.help("Slate Kit CLI") { Help.info(ctx, settingsConf) }
+            args.parts.isEmpty() -> run(cli)
+            else                 -> gen(cli)
+        }
         return OK
     }
 

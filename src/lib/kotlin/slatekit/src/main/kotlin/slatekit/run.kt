@@ -2,10 +2,14 @@ package slatekit
 
 import kotlinx.coroutines.*
 import slatekit.app.AppRunner
+import slatekit.common.args.Args
 import slatekit.common.io.Alias
 import slatekit.common.log.LogsDefault
 import slatekit.context.AppContext
 import slatekit.context.Context
+import slatekit.generator.Help
+import slatekit.results.Failure
+import slatekit.results.Success
 
 
 /**
@@ -49,7 +53,25 @@ import slatekit.context.Context
  * /Users/kishorereddy/git/slatekit/slatekit/src/lib/kotlin/slatekit/build/distributions/slatekit/bin
  */
 fun main(args: Array<String>) {
+    val finalArgs = arrayOf("help")
+    val parsed = Args.parseArgs(finalArgs)
+    when(parsed) {
+        is Success -> {
+            val parsedArgs = parsed.value
+            if(parsedArgs.isHelp) {
+                Help.help("Slate Kit CLI", null)
+            }
+            else {
+                run(finalArgs)
+            }
+        }
+        is Failure -> {
 
+        }
+    }
+}
+
+fun run(args:Array<String>){
     /**
      * DOCS : https://www.slatekit.com/arch/app/
      *
@@ -76,7 +98,6 @@ fun main(args: Array<String>) {
         )
     }
 }
-
 
 fun version(ctx:Context): Context {
     return if(ctx is AppContext) {

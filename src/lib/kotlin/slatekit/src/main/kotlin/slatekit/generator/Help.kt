@@ -1,16 +1,16 @@
 package slatekit.generator
 
 import slatekit.common.conf.Conf
+import slatekit.common.ext.orElse
 import slatekit.common.writer.ConsoleWriter
 import slatekit.context.Context
 
-class Help(val ctx:Context, val settings:Conf) {
-    private val writer = ConsoleWriter()
+object Help {
 
     /**
      * Shows help info on how to run the generator
      */
-    fun help(name:String) {
+    fun help(name:String, op:(() -> Unit)?) {
         val writer = ConsoleWriter()
 
         writer.text("**********************************************")
@@ -26,8 +26,7 @@ class Help(val ctx:Context, val settings:Conf) {
         writer.text("3. EXECUTE   : using 3 part name and passing inputs e.g. {area}.{api}.{action} -key=value*")
         writer.text("")
 
-        info()
-        writer.text("")
+        op?.invoke()
 
         writer.title("EXAMPLE")
         writer.text("You can create the various Slate Kit Projects below")
@@ -43,15 +42,19 @@ class Help(val ctx:Context, val settings:Conf) {
     /**
      * Shows diagnostics info about directory / versions used
      */
-    fun info() {
+    fun info(ctx: Context, settings: Conf) {
+        val writer = ConsoleWriter()
+        val outputDir = settings.getString("generation.output"    ).orElse("CURRENT_DIR")
         writer.title("SETTINGS")
-        writer.keyValue("system.currentDir    ",  System.getProperty("user.dir"))
-        writer.keyValue("slatekit.tag         ",  ctx.conf.getString("slatekit.tag"))
-        writer.keyValue("slatekit.version     ",  settings.getString("slatekit.version"     ))
-        writer.keyValue("slatekit.version.beta",  settings.getString("slatekit.version.beta"))
-        writer.keyValue("kotlin.version       ",  settings.getString("kotlin.version"       ))
-        writer.keyValue("generation.source    ",  settings.getString("generation.source"    ))
-        writer.keyValue("generation.output    ",  settings.getString("generation.output"    ))
+        writer.keyValue("system.currentDir      ",  System.getProperty("user.dir"))
+        writer.keyValue("slatekit.dir           ",  ctx.dirs?.pathToApp ?: "")
+        writer.keyValue("slatekit.settings      ",  java.io.File(ctx.dirs?.pathToConf, "settings.conf").absolutePath)
+        writer.keyValue("slatekit.tag           ",  ctx.conf.getString("slatekit.tag"))
+        writer.keyValue("slatekit.version       ",  settings.getString("slatekit.version"     ))
+        writer.keyValue("slatekit.version.beta  ",  settings.getString("slatekit.version.beta"))
+        writer.keyValue("slatekit.kotlin.version",  settings.getString("kotlin.version"       ))
+        writer.keyValue("generation.source      ",  settings.getString("generation.source"    ))
+        writer.keyValue("generation.output      ",  outputDir)
     }
 
 
