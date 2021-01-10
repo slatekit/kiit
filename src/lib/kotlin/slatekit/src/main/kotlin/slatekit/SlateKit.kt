@@ -99,7 +99,7 @@ class SlateKit(ctx: Context) : App<Context>(ctx, AppOptions(showWelcome = false,
         // Determine if running in CLI interactive mode or executing a project generator
         val args = ctx.args
         when {
-            args.isHelp          -> Help.help("Slate Kit CLI") { Help.info(ctx, settingsConf) }
+            args.isHelp          -> info()
             args.parts.isEmpty() -> run(cli)
             else                 -> gen(cli)
         }
@@ -111,10 +111,19 @@ class SlateKit(ctx: Context) : App<Context>(ctx, AppOptions(showWelcome = false,
     }
 
 
+    private suspend fun info(){
+        Help.show() { Help.settings(ctx, settingsConf) }
+    }
+
+
     /**
      * Generate the project
      */
     private suspend fun gen(cli: CliApi) {
+        // Show settings only
+        Help.intro()
+        Help.settings(ctx, settingsConf)
+
         // slatekit new api -name="MyApp1" -package="company1.apps"
         //
         // NOTES:
@@ -137,6 +146,10 @@ class SlateKit(ctx: Context) : App<Context>(ctx, AppOptions(showWelcome = false,
      * Begin interactive mode
      */
     private suspend fun run(cli: CliApi) {
+        // Show startup info
+        info()
+        Help.exit()
+        
         cli.run()
     }
 

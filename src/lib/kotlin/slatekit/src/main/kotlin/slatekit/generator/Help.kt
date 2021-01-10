@@ -7,17 +7,28 @@ import slatekit.context.Context
 
 object Help {
 
-    /**
-     * Shows help info on how to run the generator
-     */
-    fun help(name:String, op:(() -> Unit)?) {
-        val writer = ConsoleWriter()
+    val APP_NAME = "Slate Kit CLI"
 
+    /**
+     * Shows just the welcome header
+     */
+    fun intro(){
+        val writer = ConsoleWriter()
         writer.text("**********************************************")
-        writer.title("Welcome to $name")
+        writer.title("Welcome to $APP_NAME")
         writer.text("You can use this CLI to create new Slate Kit projects")
         writer.text("**********************************************")
         writer.text("")
+    }
+
+
+    /**
+     * Shows help info on how to run the generator
+     */
+    fun show(op:(() -> Unit)? = null) {
+        val writer = ConsoleWriter()
+
+        intro()
 
         // Routing
         writer.title("OVERVIEW")
@@ -26,23 +37,19 @@ object Help {
         writer.text("3. EXECUTE   : using 3 part name and passing inputs e.g. {area}.{api}.{action} -key=value*")
         writer.text("")
 
-        op?.invoke()
+        op?.let {
+            it.invoke()
+            writer.text("")
+        }
 
-        writer.title("EXAMPLE")
-        writer.text("You can create the various Slate Kit Projects below")
-        writer.highlight("1. slatekit new app -name=\"MyApp1\" -package=\"company1.apps\"")
-        writer.highlight("2. slatekit new api -name=\"MyAPI1\" -package=\"company1.apis\"")
-        writer.highlight("3. slatekit new cli -name=\"MyCLI1\" -package=\"company1.apps\"")
-        writer.highlight("4. slatekit new env -name=\"MyApp2\" -package=\"company1.apps\"")
-        writer.highlight("5. slatekit new job -name=\"MyJob1\" -package=\"company1.jobs\"")
-        writer.text("")
+        examples()
     }
 
 
     /**
      * Shows diagnostics info about directory / versions used
      */
-    fun info(ctx: Context, settings: Conf) {
+    fun settings(ctx: Context, settings: Conf) {
         val writer = ConsoleWriter()
         val outputDir = settings.getString("generation.output"    ).orElse("CURRENT_DIR")
         writer.title("SETTINGS")
@@ -58,5 +65,28 @@ object Help {
     }
 
 
+    /**
+     * Shows examples of usage
+     */
+    private fun examples(){
+        val writer = ConsoleWriter()
+        writer.title("EXAMPLES")
+        writer.text("You can create the various Slate Kit Projects below")
+        writer.highlight("1. slatekit new app -name=\"MyApp1\" -package=\"company1.apps\"")
+        writer.highlight("2. slatekit new api -name=\"MyAPI1\" -package=\"company1.apis\"")
+        writer.highlight("3. slatekit new cli -name=\"MyCLI1\" -package=\"company1.apps\"")
+        writer.highlight("4. slatekit new env -name=\"MyApp2\" -package=\"company1.apps\"")
+        writer.highlight("5. slatekit new job -name=\"MyJob1\" -package=\"company1.jobs\"")
+        writer.text("")
+    }
 
+
+    /**
+     * Shows examples of usage
+     */
+    fun exit(){
+        val writer = ConsoleWriter()
+        writer.failure("Type \"exit\" to exit app")
+        writer.text("")
+    }
 }

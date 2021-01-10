@@ -53,13 +53,13 @@ import slatekit.results.Success
  * /Users/kishorereddy/git/slatekit/slatekit/src/lib/kotlin/slatekit/build/distributions/slatekit/bin
  */
 fun main(args: Array<String>) {
-    val finalArgs = arrayOf("help")
+    val finalArgs = arrayOf("")
     val parsed = Args.parseArgs(finalArgs)
     when(parsed) {
         is Success -> {
             val parsedArgs = parsed.value
             if(parsedArgs.isHelp) {
-                Help.help("Slate Kit CLI", null)
+                Help.show()
             }
             else {
                 run(finalArgs)
