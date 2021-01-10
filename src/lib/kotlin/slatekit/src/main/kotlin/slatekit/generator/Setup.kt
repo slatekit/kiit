@@ -16,7 +16,7 @@ class Setup(val ctx: Context) {
      * 1. Updates the current version number
      * 2. Updates the path to the templates of the slate kit version installed/upgraded to
      */
-    suspend fun install(): Config {
+    suspend fun configure(): Config {
         // Current version
         val slatekitVersion = slatekitVersion(ctx.conf)
         val info = SetupInfo(slatekitVersion)

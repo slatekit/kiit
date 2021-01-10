@@ -81,7 +81,7 @@ class SlateKit(ctx: Context) : App<Context>(ctx, AppOptions(showWelcome = false,
 
 
     override suspend fun init() {
-        settingsConf = setup.install()
+        settingsConf = setup.configure()
     }
 
 
