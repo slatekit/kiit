@@ -1,11 +1,18 @@
 package slatekit.generator
 
 import slatekit.common.conf.Conf
+import slatekit.common.writer.ConsoleWriter
 import slatekit.context.Context
 import slatekit.results.Success
 import slatekit.results.Try
 import java.io.File
 
+/**
+ * @param context  : Startup context
+ * @param conf     : Conf containing settings / path to templates
+ * @param cls      : Class containing the startup resources ( if applicable )
+ * @param settings : Settings for the generator
+ */
 class GeneratorService(val context: Context, val conf: Conf, val cls:Class<*>, val settings: GeneratorSettings) {
 
     val logger = context.logs.getLogger()
@@ -30,11 +37,12 @@ class GeneratorService(val context: Context, val conf: Conf, val cls:Class<*>, v
         targetDir.mkdir()
 
         // Execute the dependencies first
+        val writer = ConsoleWriter()
+        writer.text("")
         template.requires.forEach { execute(finalCtx, it, targetDir) }
 
         // Execute the template actions
         execute(finalCtx, template, targetDir)
-
         return Success("")
     }
 
@@ -47,10 +55,7 @@ class GeneratorService(val context: Context, val conf: Conf, val cls:Class<*>, v
         }
         val creator = Creator(context, ctx, template, cls)
         logger.info("")
-        logger.info("EXECUTING ===============================")
-        logger.info("target.dir: ${finalTargetDir.absolutePath}")
-        logger.info("template.name: ${template.name}")
-        logger.info("template.path: ${template.dir.absolutePath}")
+        logger.info("template.name=${template.name}, template.path: ${template.dir.absolutePath}, target.dir=${finalTargetDir.absolutePath}")
 
         template.actions.forEach {
             when(it) {

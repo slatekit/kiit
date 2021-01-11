@@ -7,8 +7,6 @@ import slatekit.common.args.ArgsSchema
 import slatekit.common.utils.B64Java8
 import slatekit.common.crypto.Encryptor
 import slatekit.common.info.About
-import slatekit.results.Success
-import slatekit.results.Try
 
 /**
  * Slate Kit Application template
@@ -54,19 +52,19 @@ class App(ctx: Context) : App<Context>(ctx, AppOptions(showWelcome = true)) {
     }
 
 
-    override suspend fun init(): Try<Boolean> {
+    override suspend fun init() {
         println("initializing")
         return super.init()
     }
 
 
-    override suspend fun exec(): Try<Any> {
+    override suspend fun exec(): Any? {
         println("executing...")
-        return Success(true)
+        return OK
     }
 
 
-    override suspend fun done(): Try<Boolean> {
+    override suspend fun done(result:Any?) {
         println("ending")
         return super.done()
     }

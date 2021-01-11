@@ -1,7 +1,7 @@
 {
   "name": "conf",
   "description": "Runs common config code for slatekit projects",
-  "version": "1.0.0",
+  "version": "1.28.0",
   "url": "https://www.slatekit.com",
   "contact": "https://www.slatekit.com",
   "keywords": ["slatekit", "app"],
@@ -19,6 +19,6 @@
     { "name": "copy", "type": "Conf", "source": "/env.pro.conf", "target": "/src/main/resources/env.pro.conf" },
     { "name": "copy", "type": "Conf", "source": "/logback.txt" , "target": "/src/main/resources/logback.xml"  }
   ],
-  "dependencies": {
-  }
+  "dependencies": [
+  ]
 }

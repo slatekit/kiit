@@ -9,6 +9,9 @@ import java.io.File
 
 object Templates {
 
+    const val TEMPLATE_NAME = "template.json"
+
+
     /**
      * Loads a template from and its dependencies
      * Assuming this is the structure of the templates folder:
@@ -45,7 +48,7 @@ object Templates {
      */
     fun load( root:File, parentDir:File, templateName:String):Template {
         val templateDir = File(parentDir, templateName)
-        val templateJson = File(templateDir, "package.json").readText()
+        val templateJson = File(templateDir, TEMPLATE_NAME).readText()
         val template = load(root, parentDir, templateDir, templateName, templateJson)
         return template
     }
@@ -70,8 +73,9 @@ object Templates {
         val type = jsonRoot.get("type") as String? ?: ""
         val jsonActions = jsonRoot.get("actions") as JSONArray
         val actions = iterateList(jsonActions, ::toAction)
-        val jsonDependencies = jsonRoot.get("dependencies") as JSONObject
-        val dependencies = iterateMap(jsonDependencies) { _, key, jsonDep ->
+        val jsonDependencies = jsonRoot.get("dependencies") as JSONArray
+        val dependencies = iterateList(jsonDependencies) { _, item ->
+            val key = item.keys.first().toString()
             val template = load(root, parent, key)
             template
         }

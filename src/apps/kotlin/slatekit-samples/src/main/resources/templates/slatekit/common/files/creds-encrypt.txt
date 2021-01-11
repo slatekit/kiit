@@ -1,6 +1,0 @@
-${creds.ident}.enabled = true
-${creds.ident}.account = @{decrypt('YOUR_CREDS_ACCOUNT')}
-${creds.ident}.key     = @{decrypt('YOUR_CREDS_KEY')}
-${creds.ident}.pass    = @{decrypt('YOUR_CREDS_PASS')}
-${creds.ident}.env     = env
-${creds.ident}.tag     = tag

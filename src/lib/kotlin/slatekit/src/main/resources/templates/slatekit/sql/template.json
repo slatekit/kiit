@@ -1,7 +1,7 @@
 {
   "name": "app",
   "description": "Generates a slatekit.app console application",
-  "version": "1.0.0",
+  "version": "1.28.0",
   "url": "https://www.slatekit.com",
   "contact": "https://www.slatekit.com",
   "keywords": ["slatekit", "app"],
@@ -12,8 +12,8 @@
     { "name": "copy", "type": "Code" , "source": "/src/Run.txt" , "target": "/src/main/kotlin/${app.packagePath}/Run.kt" },
     { "name": "copy", "type": "Code" , "source": "/src/App.txt" , "target": "/src/main/kotlin/${app.packagePath}/App.kt" }
   ],
-  "dependencies": {
-    "common": "1.0.0",
-    "conf": "1.0.0"
-  }
+  "dependencies": [
+    { "common": "@CURRENT" },
+    { "conf": "@CURRENT" }
+  ]
 }

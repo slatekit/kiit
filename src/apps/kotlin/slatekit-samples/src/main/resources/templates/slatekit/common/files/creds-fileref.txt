@@ -1,2 +1,0 @@
-${creds.ident}.enabled = true
-${creds.ident}.location = user://.${app.id}/conf/${creds.ident}.conf
