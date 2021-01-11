@@ -52,7 +52,7 @@ class Creator(val context: Context, val ctx: GeneratorContext, val template: Tem
      * Creates the directory from the root directory supplied
      */
     fun dir(root: File, action: Action.MkDir) {
-        log("Dir : " + action.path)
+        //log("Dir : " + action.path)
         val packagePath = ctx.packageName.replace(".", Props.pathSeparator)
         val target = File(root, action.path.replace("@app.package", packagePath))
         createDir(target)
@@ -74,7 +74,7 @@ class Creator(val context: Context, val ctx: GeneratorContext, val template: Tem
      * Creates the file from the root directory supplied
      */
     fun file(root: File, action: Action.Copy) {
-        log("${action.fileType}: " + action.target)
+        //log("${action.fileType}: " + action.target)
         val content = read(action.source)
         val target = File(root, action.target)
         createFile(target, content)
@@ -85,7 +85,7 @@ class Creator(val context: Context, val ctx: GeneratorContext, val template: Tem
      * Creates the source code from the root directory supplied
      */
     fun code(root: File, action: Action.Copy) {
-        log("Code: " + action.target)
+        //log("Code: " + action.target)
         val content = read(action.source)
         val packagePath = ctx.packageName.replace(".", Props.pathSeparator)
         val target = File(root, action.target.replace("@app.package", packagePath))

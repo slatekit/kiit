@@ -149,7 +149,7 @@ class SlateKit(ctx: Context) : App<Context>(ctx, AppOptions(showWelcome = false,
         // Show startup info
         info()
         help.exit()
-        
+
         cli.run()
     }
 

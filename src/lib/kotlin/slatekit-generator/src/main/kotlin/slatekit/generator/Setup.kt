@@ -46,8 +46,8 @@ class Setup(val cls:Class<*>, val ctx: Context) {
     private fun create(conf: Conf, info: SetupInfo) {
         val settings = PropSettings(dir = info.confDir.absolutePath, name = info.settingsName)
         settings.put(KEY_SLATEKIT_VERSION, info.slatekitVersion, false)
-        settings.put(KEY_SLATEKIT_VERSION_BETA, conf.getString("slatekit.version.beta"), false)
-        settings.put(KEY_KOTLIN_VERSION, conf.getString("kotlin.version"), false)
+        settings.put(KEY_SLATEKIT_VERSION_BETA, conf.getString(KEY_SLATEKIT_VERSION_BETA), false)
+        settings.put(KEY_KOTLIN_VERSION, conf.getString(KEY_KOTLIN_VERSION), false)
         settings.put(KEY_GENERATION_SOURCE, "${info.installLocation}/templates", false)
         settings.put(KEY_GENERATION_OUTPUT, "", false)
         settings.save(desc = "default settings")
@@ -62,15 +62,20 @@ class Setup(val cls:Class<*>, val ctx: Context) {
         val file = File(info.confDir, info.settingsName)
         val raw = Props.fromFile(file.absolutePath)
         val settings = PropSettings(raw, dir = info.confDir.absolutePath, name = info.settingsName)
-        settings.put(KEY_SLATEKIT_VERSION, info.slatekitVersion)
-        settings.put(KEY_SLATEKIT_VERSION_BETA, conf.getString("slatekit.version.beta"))
-        settings.put(KEY_KOTLIN_VERSION, conf.getString("kotlin.version"))
-        settings.put(KEY_GENERATION_SOURCE, "${info.installLocation}/templates")
-        settings.save(desc = "upgrade to ${info.slatekitVersion}")
+
+        // Only update if different version
+        val current = settings.getString(KEY_SLATEKIT_VERSION)
+        if(current != info.slatekitVersion) {
+            settings.put(KEY_SLATEKIT_VERSION, info.slatekitVersion)
+            settings.put(KEY_SLATEKIT_VERSION_BETA, conf.getString(KEY_SLATEKIT_VERSION_BETA))
+            settings.put(KEY_KOTLIN_VERSION, conf.getString(KEY_KOTLIN_VERSION))
+            settings.put(KEY_GENERATION_SOURCE, "${info.installLocation}/templates")
+            settings.save(desc = "upgrade to ${info.slatekitVersion}")
+        }
     }
 
 
-    private fun slatekitVersion(config: Conf): String = ctx.conf.getString("slatekit.version")
+    private fun slatekitVersion(config: Conf): String = ctx.conf.getString(KEY_SLATEKIT_VERSION)
 
 
     data class SetupInfo(val slatekitVersion:String, val about: About) {
