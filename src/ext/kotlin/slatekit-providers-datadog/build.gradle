@@ -22,9 +22,9 @@ apply plugin: 'kotlin'
 // ==================================================================
 // Slate Kit Component Info
 // ==================================================================
-def slatekitComponentId = 'providers'
-def slatekitComponentName = 'Providers'
-def slatekitComponentDesc = 'SlateKit Providers: 3rd-party provider setup for logging, metrics'
+def slatekitComponentId = 'providers-datadog'
+def slatekitComponentName = 'Providers DataDog'
+def slatekitComponentDesc = 'SlateKit Providers: DataDog integration for metrics'
 def slatekitComponentVersion = ext.slatekit_version
 
 

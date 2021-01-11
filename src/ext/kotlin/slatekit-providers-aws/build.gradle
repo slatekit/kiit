@@ -22,9 +22,9 @@ apply plugin: 'kotlin'
 // ==================================================================
 // Slate Kit Component Info
 // ==================================================================
-def slatekitComponentId = 'cloud'
-def slatekitComponentName = 'Cloud'
-def slatekitComponentDesc = 'SlateKit Cloud: AWS Integration with S3, SQS'
+def slatekitComponentId = 'providers-aws'
+def slatekitComponentName = 'Providers AWS'
+def slatekitComponentDesc = 'SlateKit Providers: AWS Integration with S3, SQS'
 def slatekitComponentVersion = ext.slatekit_version
 
 
