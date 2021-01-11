@@ -166,14 +166,6 @@ jobs:
       with: 
         time: '30s'
 
-    - name: Build SlateKit.cloud with Gradle
-      working-directory: src/lib/kotlin/slatekit-cloud
-      run: gradle clean build bintrayUpload
-    - name: Sleep for 30 seconds
-      uses: whatnick/wait-action@master
-      with: 
-        time: '30s'
-
     - name: Build SlateKit.notifications with Gradle
       working-directory: src/lib/kotlin/slatekit-notifications
       run: gradle clean build bintrayUpload
