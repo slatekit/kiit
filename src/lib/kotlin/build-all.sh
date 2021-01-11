@@ -28,18 +28,20 @@ cd slatekit-query         && gradle clean build bintrayUpload && cd ../ && echo 
 cd slatekit-entities      && gradle clean build bintrayUpload && cd ../ && echo 'sleeping 20s' && sleep 20s       
 cd slatekit-orm           && gradle clean build bintrayUpload && cd ../ && echo 'sleeping 20s' && sleep 20s  
 
+# Providers
+cd ../../ext/kotlin/
+cd slatekit-providers-aws         && gradle clean build bintrayUpload && cd ../ && echo 'sleeping 20s' && sleep 20s          
+cd slatekit-providers-datadog     && gradle clean build bintrayUpload && cd ../ && echo 'sleeping 20s' && sleep 20s          
+cd slatekit-providers-logback     && gradle clean build bintrayUpload && cd ../ && echo 'sleeping 20s' && sleep 20s          
+
 # Connectors
-cd ../../ext/kotlin/slatekit-connectors-cli        && gradle clean build bintrayUpload && cd ../ && echo 'sleeping 20s' && sleep 20s          
-cd ../../ext/kotlin/slatekit-connectors-entities   && gradle clean build bintrayUpload && cd ../ && echo 'sleeping 20s' && sleep 20s          
-cd ../../ext/kotlin/slatekit-connectors-jobs       && gradle clean build bintrayUpload && cd ../ && echo 'sleeping 20s' && sleep 20s          
-cd ../../ext/kotlin/slatekit-providers-aws         && gradle clean build bintrayUpload && cd ../ && echo 'sleeping 20s' && sleep 20s          
-cd ../../ext/kotlin/slatekit-providers-datadog     && gradle clean build bintrayUpload && cd ../ && echo 'sleeping 20s' && sleep 20s          
-cd ../../ext/kotlin/slatekit-providers-logback     && gradle clean build bintrayUpload && cd ../ && echo 'sleeping 20s' && sleep 20s          
+cd slatekit-connectors-cli        && gradle clean build bintrayUpload && cd ../ && echo 'sleeping 20s' && sleep 20s          
+cd slatekit-connectors-entities   && gradle clean build bintrayUpload && cd ../ && echo 'sleeping 20s' && sleep 20s          
+cd slatekit-connectors-jobs       && gradle clean build bintrayUpload && cd ../ && echo 'sleeping 20s' && sleep 20s          
 cd ../../lib/kotlin
 
 # Integration
 cd slatekit-integration   && gradle clean build bintrayUpload && cd ../ && echo 'sleeping 20s' && sleep 20s          
-cd slatekit-providers     && gradle clean build bintrayUpload && cd ../ && echo 'sleeping 20s' && sleep 20s        
 cd slatekit-server        && gradle clean build bintrayUpload && cd ../ && echo 'sleeping 20s' && sleep 20s   
 cd slatekit-generator     && gradle clean build bintrayUpload && cd ../ && echo 'sleeping 20s' && sleep 20s   
 #cd slatekit-tools       && gradle clean build && cd ../ && echo 'sleeping 5s' && sleep 5s       
