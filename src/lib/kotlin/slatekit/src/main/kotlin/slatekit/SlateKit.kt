@@ -7,9 +7,6 @@ import slatekit.cli.CliSettings
 import slatekit.context.Context
 import slatekit.common.args.ArgsSchema
 import slatekit.common.conf.Conf
-import slatekit.common.conf.Config
-import slatekit.common.conf.PropSettings
-import slatekit.common.conf.Props
 import slatekit.common.utils.B64Java8
 import slatekit.common.crypto.Encryptor
 import slatekit.common.info.About
@@ -22,12 +19,12 @@ import slatekit.generator.Setup
 import slatekit.results.Success
 import slatekit.serialization.Serialization
 import slatekit.results.Failure
-import java.io.File
 
 class SlateKit(ctx: Context) : App<Context>(ctx, AppOptions(showWelcome = false, showDisplay = false, showSummary = false)), SlateKitServices {
 
     private lateinit var settingsConf: Conf
-    private val setup = Setup(ctx)
+    private val setup = Setup(SlateKit::class.java, ctx)
+    private val help = Help(TITLE)
 
     companion object {
 
@@ -63,6 +60,8 @@ class SlateKit(ctx: Context) : App<Context>(ctx, AppOptions(showWelcome = false,
          * Encryptor for files
          */
         val encryptor = Encryptor("aksf2409bklja24b", "k3l4lkdfaoi97042", B64Java8)
+
+        const val TITLE = "Slate Kit CLI"
 
         fun log(about: About, logger: Logger){
             val folders = Folders.userDir(about)
@@ -112,7 +111,7 @@ class SlateKit(ctx: Context) : App<Context>(ctx, AppOptions(showWelcome = false,
 
 
     private suspend fun info(){
-        Help.show() { Help.settings(ctx, settingsConf) }
+        help.show() { help.settings(ctx, settingsConf) }
     }
 
 
@@ -121,9 +120,9 @@ class SlateKit(ctx: Context) : App<Context>(ctx, AppOptions(showWelcome = false,
      */
     private suspend fun gen(cli: CliApi) {
         // Show settings only
-        Help.intro()
-        Help.settings(ctx, settingsConf)
-
+        help.intro()
+        help.settings(ctx, settingsConf)
+        return
         // slatekit new api -name="MyApp1" -package="company1.apps"
         //
         // NOTES:
@@ -148,8 +147,8 @@ class SlateKit(ctx: Context) : App<Context>(ctx, AppOptions(showWelcome = false,
     private suspend fun run(cli: CliApi) {
         // Show startup info
         info()
-        Help.exit()
-        
+        help.exit()
+        return
         cli.run()
     }
 

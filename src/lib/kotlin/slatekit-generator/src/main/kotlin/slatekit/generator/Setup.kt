@@ -1,15 +1,15 @@
 package slatekit.generator
 
-import slatekit.SlateKit
 import slatekit.common.conf.Conf
 import slatekit.common.conf.Config
 import slatekit.common.conf.PropSettings
 import slatekit.common.conf.Props
+import slatekit.common.info.About
 import slatekit.common.info.Folders
 import slatekit.context.Context
 import java.io.File
 
-class Setup(val ctx: Context) {
+class Setup(val cls:Class<*>, val ctx: Context) {
 
     /**
      * Creates / Updates the Slate Kit home directory and settings ~/.slatekit/tools/cli/conf/settings.conf
@@ -19,7 +19,7 @@ class Setup(val ctx: Context) {
     suspend fun configure(): Config {
         // Current version
         val slatekitVersion = slatekitVersion(ctx.conf)
-        val info = SetupInfo(slatekitVersion)
+        val info = SetupInfo(slatekitVersion, ctx.info.about)
 
         // Check for ~/.slatekit/tools/cli/conf/settings.conf
         val file = File(info.confDir, info.settingsName)
@@ -34,7 +34,7 @@ class Setup(val ctx: Context) {
             update(conf, info)
         }
         // Now load from HOME/conf/settings.conf
-        val settings = Config.of(SlateKit::class.java, file.absolutePath)
+        val settings = Config.of(cls, file.absolutePath)
         return settings
     }
 
@@ -43,7 +43,7 @@ class Setup(val ctx: Context) {
      * Creates the slatekit home directory and settings
      * settings: ~/.slatekit/tools/cli/conf/settings.conf
      */
-    private fun create(conf: Conf, info:SetupInfo) {
+    private fun create(conf: Conf, info: SetupInfo) {
         val settings = PropSettings(dir = info.confDir.absolutePath, name = info.settingsName)
         settings.put("slatekit.version", info.slatekitVersion, false)
         settings.put("slatekit.version.beta", conf.getString("slatekit.version.beta"), false)
@@ -58,7 +58,7 @@ class Setup(val ctx: Context) {
      * Updates the settings to path to templates of slate kit LATEST version
      * settings: ~/.slatekit/tools/cli/conf/settings.conf
      */
-    private fun update(conf: Conf, info:SetupInfo){
+    private fun update(conf: Conf, info: SetupInfo){
         val file = File(info.confDir, info.settingsName)
         val raw = Props.fromFile(file.absolutePath)
         val settings = PropSettings(raw, dir = info.confDir.absolutePath, name = info.settingsName)
@@ -73,13 +73,13 @@ class Setup(val ctx: Context) {
     private fun slatekitVersion(config: Conf): String = ctx.conf.getString("slatekit.version")
 
 
-    data class SetupInfo(val slatekitVersion:String) {
+    data class SetupInfo(val slatekitVersion:String, val about: About) {
 
         // For MAC
         val brewAppLocation = "/usr/local/Cellar/slatekit/${slatekitVersion}"
 
         // Build folder structure from {company}/{area}/{name}
-        val folders = Folders.userDir(SlateKit.about)
+        val folders = Folders.userDir(about)
 
         // ~/.slatekit/tools/cli
         val pathToHOME = folders.pathToApp

@@ -59,7 +59,8 @@ fun main(args: Array<String>) {
         is Success -> {
             val parsedArgs = parsed.value
             if(parsedArgs.isHelp) {
-                Help.show()
+                val help = Help(SlateKit.TITLE)
+                help.show()
             }
             else {
                 run(finalArgs)

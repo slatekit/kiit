@@ -5,17 +5,16 @@ import slatekit.common.ext.orElse
 import slatekit.common.writer.ConsoleWriter
 import slatekit.context.Context
 
-object Help {
+class Help(val name:String) {
 
-    val APP_NAME = "Slate Kit CLI"
 
     /**
      * Shows just the welcome header
      */
-    fun intro(){
+    open fun intro(){
         val writer = ConsoleWriter()
         writer.text("**********************************************")
-        writer.title("Welcome to $APP_NAME")
+        writer.title("Welcome to $name")
         writer.text("You can use this CLI to create new Slate Kit projects")
         writer.text("**********************************************")
         writer.text("")
@@ -25,7 +24,7 @@ object Help {
     /**
      * Shows help info on how to run the generator
      */
-    fun show(op:(() -> Unit)? = null) {
+    open fun show(op:(() -> Unit)? = null) {
         val writer = ConsoleWriter()
 
         intro()
@@ -49,7 +48,7 @@ object Help {
     /**
      * Shows diagnostics info about directory / versions used
      */
-    fun settings(ctx: Context, settings: Conf) {
+    open fun settings(ctx: Context, settings: Conf) {
         val writer = ConsoleWriter()
         val outputDir = settings.getString("generation.output"    ).orElse("CURRENT_DIR")
         writer.title("SETTINGS")
@@ -68,7 +67,7 @@ object Help {
     /**
      * Shows examples of usage
      */
-    private fun examples(){
+    open fun examples(){
         val writer = ConsoleWriter()
         writer.title("EXAMPLES")
         writer.text("You can create the various Slate Kit Projects below")
@@ -84,7 +83,7 @@ object Help {
     /**
      * Shows examples of usage
      */
-    fun exit(){
+    open fun exit(){
         val writer = ConsoleWriter()
         writer.failure("Type \"exit\" to exit app")
         writer.text("")
