@@ -31,16 +31,20 @@ repositories {
 
 
 dependencies {
+    // Kotlin
     compile "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
     compile "org.jetbrains.kotlin:kotlin-reflect:$kotlin_version"
     compile "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin_version"
     compile 'org.jetbrains.kotlinx:kotlinx-coroutines-core:1.1.0'
 
+    // Slate Kit
     compile "com.slatekit:slatekit-results:$slatekit_version"
     compile "com.slatekit:slatekit-common:$slatekit_version"
-    compile "com.slatekit:slatekit-providers:$slatekit_version"
     compile "com.slatekit:slatekit-app:$slatekit_version"
+    compile "com.slatekit:slatekit-core:$slatekit_version"
     compile "com.slatekit:slatekit-jobs:$slatekit_version"
+    compile "com.slatekit:slatekit-connectors-jobs:$slatekit_version"
+    compile "com.slatekit:slatekit-providers-logback:$slatekit_version"
 }
 
 

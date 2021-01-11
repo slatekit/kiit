@@ -31,18 +31,23 @@ repositories {
 
 
 dependencies {
+    // Kotlin
     compile "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
     compile "org.jetbrains.kotlin:kotlin-reflect:$kotlin_version"
     compile "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin_version"
     compile 'org.jetbrains.kotlinx:kotlinx-coroutines-core:1.1.0'
 
+    // Misc ( for JSON formatting/indentation )
+    compile "org.json:json:20201115"
+
+    // Slate Kit
     compile "com.slatekit:slatekit-results:$slatekit_version"
     compile "com.slatekit:slatekit-common:$slatekit_version"
-    compile "com.slatekit:slatekit-providers:$slatekit_version"
-    compile "com.slatekit:slatekit-apis:$slatekit_version"
-    compile "com.slatekit:slatekit-cli:$slatekit_version"
     compile "com.slatekit:slatekit-app:$slatekit_version"
-    compile "com.slatekit:slatekit-integration:$slatekit_version_beta"
+    compile "com.slatekit:slatekit-cli:$slatekit_version"
+    compile "com.slatekit:slatekit-apis:$slatekit_version"
+    compile "com.slatekit:slatekit-providers-logback:$slatekit_version"
+    compile "com.slatekit:slatekit-connectors-cli:$slatekit_version"
 }
 
 

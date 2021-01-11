@@ -103,7 +103,7 @@ class GeneratorApi(val context: Context, val service: GeneratorService) {
         val rootDir = Uris.parse(templateDirPath).toFile()
         val genDir = Uris.parse(templateOutPath).toFile()
         val template = Templates.load(rootDir.toString(), templateName)
-        val ctx = GeneratorContext(rootDir, genDir, name, "New app from template $templateName", packageName, "company", CredentialMode.EnvVars, service.settings)
+        val ctx = GeneratorContext(rootDir, genDir, name, "New app from template $templateName", packageName, "company", "apps", CredentialMode.EnvVars, service.settings)
         return service.generate(ctx, template)
     }
 }

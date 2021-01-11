@@ -36,12 +36,11 @@ class App(ctx: Context) : App<Context>(ctx, AppOptions(showWelcome = true)) {
          * This can be overriden in your env.conf file
          */
         val about = About(
-                area = "${app.company}",
+                company = "${app.company}",
+                area = "${app.area}",
                 name = "${app.name}",
                 desc = "${app.desc}",
-                company = "${app.company}",
                 region = "",
-                version = "1.0.0",
                 url = "${app.url}",
                 contact = "",
                 tags = "app",
@@ -55,21 +54,26 @@ class App(ctx: Context) : App<Context>(ctx, AppOptions(showWelcome = true)) {
     }
 
 
-    override suspend fun init(): Try<Boolean> {
+    override suspend fun init() {
+        println()
         println("initializing")
+        println()
         return super.init()
     }
 
 
-    override suspend fun exec(): Try<Any> {
+    override suspend fun exec(): Any? {
+        println()
         println("executing...")
+        println()
         val cli = CLI(ctx)
         return cli.execute()
     }
 
 
-    override suspend fun done(): Try<Boolean> {
+    override suspend fun done(result:Any?) {
+        println()
         println("ending")
-        return super.done()
+        println()
     }
 }
