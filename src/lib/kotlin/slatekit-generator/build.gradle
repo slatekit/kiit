@@ -25,7 +25,7 @@ apply plugin: 'kotlin'
 def slatekitComponentId = 'generator'
 def slatekitComponentName = 'Generator'
 def slatekitComponentDesc = 'SlateKit Generator: Code Generator'
-def slatekitComponentVersion = ext.slatekit_version_beta
+def slatekitComponentVersion = ext.slatekit_version
 
 
 // ==================================================================

@@ -99,7 +99,7 @@ dependencies {
         implementation "com.slatekit:slatekit-serialization:$slatekit_version"
         implementation "com.slatekit:slatekit-tracking:$slatekit_version"
         implementation "com.slatekit:slatekit-apis:$slatekit_version"
-        implementation "com.slatekit:slatekit-generator:$slatekit_version_beta"
+        implementation "com.slatekit:slatekit-generator:$slatekit_version"
         implementation "com.slatekit:slatekit-cache:$slatekit_version"
         implementation "com.slatekit:slatekit-jobs:$slatekit_version"
         implementation "com.slatekit:slatekit-core:$slatekit_version"
