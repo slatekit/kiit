@@ -206,16 +206,59 @@ jobs:
       with: 
         time: '30s'
 
-    - name: Build SlateKit.integration with Gradle
-      working-directory: src/lib/kotlin/slatekit-integration
+    # Providers
+    - name: Build Slate Kit Providers - AWS with Gradle
+      working-directory: src/ext/kotlin/slatekit-providers-aws
       run: gradle clean build bintrayUpload
     - name: Sleep for 30 seconds
       uses: whatnick/wait-action@master
       with: 
         time: '30s'
 
-    - name: Build SlateKit.providers with Gradle
-      working-directory: src/lib/kotlin/slatekit-providers
+    - name: Build Slate Kit Providers - DataDog with Gradle
+      working-directory: src/ext/kotlin/slatekit-providers-datadog
+      run: gradle clean build bintrayUpload
+    - name: Sleep for 30 seconds
+      uses: whatnick/wait-action@master
+      with: 
+        time: '30s'
+
+    - name: Build Slate Kit Providers - Logback with Gradle
+      working-directory: src/ext/kotlin/slatekit-providers-logback
+      run: gradle clean build bintrayUpload
+    - name: Sleep for 30 seconds
+      uses: whatnick/wait-action@master
+      with: 
+        time: '30s'
+
+    # Connectors
+    - name: Build Slate Kit Connectors - AWS with Gradle
+      working-directory: src/ext/kotlin/slatekit-connectors-cli
+      run: gradle clean build bintrayUpload
+    - name: Sleep for 30 seconds
+      uses: whatnick/wait-action@master
+      with: 
+        time: '30s'
+
+    - name: Build Slate Kit Connectors - DataDog with Gradle
+      working-directory: src/ext/kotlin/slatekit-connectors-entities
+      run: gradle clean build bintrayUpload
+    - name: Sleep for 30 seconds
+      uses: whatnick/wait-action@master
+      with: 
+        time: '30s'
+
+    - name: Build Slate Kit Connectors - Logback with Gradle
+      working-directory: src/ext/kotlin/slatekit-connectors-jobs
+      run: gradle clean build bintrayUpload
+    - name: Sleep for 30 seconds
+      uses: whatnick/wait-action@master
+      with: 
+        time: '30s'
+
+    # Integration
+    - name: Build SlateKit.integration with Gradle
+      working-directory: src/lib/kotlin/slatekit-integration
       run: gradle clean build bintrayUpload
     - name: Sleep for 30 seconds
       uses: whatnick/wait-action@master
