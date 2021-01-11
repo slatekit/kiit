@@ -22,9 +22,9 @@ apply plugin: 'kotlin'
 // ==================================================================
 // Slate Kit Component Info
 // ==================================================================
-def slatekitComponentId = 'providers'
-def slatekitComponentName = 'Providers'
-def slatekitComponentDesc = 'SlateKit Providers: 3rd-party provider setup for logging, metrics'
+def slatekitComponentId = 'connectors-entities'
+def slatekitComponentName = 'Connectors Entities'
+def slatekitComponentDesc = 'SlateKit Connectors: Connects the Entities and Context modules'
 def slatekitComponentVersion = ext.slatekit_version
 
 
