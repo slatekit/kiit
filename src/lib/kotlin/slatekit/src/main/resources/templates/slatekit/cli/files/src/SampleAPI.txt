@@ -10,6 +10,7 @@ import slatekit.common.Sources
 import slatekit.common.ext.toId
 import slatekit.common.ext.toStringUtc
 import slatekit.common.info.About
+import slatekit.common.info.Build
 import slatekit.common.types.Doc
 import slatekit.results.Outcome
 import slatekit.results.builders.Outcomes
@@ -61,7 +62,7 @@ class SampleAPI(context: Context) : ApiBase(context) {
 
 
     /*
-     Sample acton to show version, and other info about this app/api
+     Sample acton to show info about this app/api
      Examples:
      CLI: samples.all.about
      WEB: curl -X POST http://localhost:5000/api/samples/all/about
@@ -69,6 +70,18 @@ class SampleAPI(context: Context) : ApiBase(context) {
     @Action(desc = "info about this api")
     fun about(): About {
         return context.info.about
+    }
+
+
+    /*
+     Sample acton to show build info of this app/api
+     Examples:
+     CLI: samples.all.build
+     WEB: curl -X POST http://localhost:5000/api/samples/all/build
+     */
+    @Action(desc = "info about this api")
+    fun build(): Build {
+        return context.info.build
     }
 
 

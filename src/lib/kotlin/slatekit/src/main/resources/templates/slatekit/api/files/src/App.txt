@@ -2,7 +2,6 @@ package ${app.package}
 
 
 // Slate Kit - Common Utilities
-import slatekit.common.*
 import slatekit.common.args.ArgsSchema
 import slatekit.common.crypto.*
 import slatekit.common.info.*
@@ -12,6 +11,7 @@ import slatekit.results.*
 import slatekit.app.App
 import slatekit.app.AppOptions
 import slatekit.common.utils.B64Java8
+import slatekit.context.Context
 
 
 /**
@@ -45,7 +45,6 @@ class App(ctx: Context) : App<Context>(ctx, AppOptions(showWelcome = true)) {
                 name = "${app.name}",
                 desc = "${app.desc}",
                 region = "",
-                version = "1.0.0",
                 url = "${app.url}",
                 contact = "",
                 tags = "app",
@@ -62,8 +61,10 @@ class App(ctx: Context) : App<Context>(ctx, AppOptions(showWelcome = true)) {
     /**
      * Initialization Life-Cycle method
      */
-    override suspend fun init(): Try<Boolean> {
+    override suspend fun init() {
+        println()
         println("initializing")
+        println()
         return super.init()
     }
 
@@ -73,14 +74,15 @@ class App(ctx: Context) : App<Context>(ctx, AppOptions(showWelcome = true)) {
      *
      * @return
      */
-    override suspend fun exec(): Try<Any> {
+    override suspend fun exec(): Any? {
         val server = Server(ctx)
         return server.execute()
     }
 
 
-    override suspend fun done(): Try<Boolean> {
+    override suspend fun done(result:Any?) {
+        println()
         println("ending")
-        return super.done()
+        println()
     }
 }

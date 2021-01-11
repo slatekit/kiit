@@ -9,6 +9,7 @@ import io.ktor.routing.routing
 import io.ktor.server.engine.embeddedServer
 import io.ktor.server.netty.Netty
 import slatekit.apis.*
+import slatekit.apis.routes.Api
 
 // Slate Kit - Common Utilities
 import slatekit.common.*
@@ -16,6 +17,7 @@ import slatekit.results.*
 
 // Slate Kit - App ( provides args, help, life-cycle methods, etc )
 import slatekit.common.ext.toResponse
+import slatekit.context.Context
 
 // Slate Kit - Server ( Ktor support )
 import slatekit.server.ServerSettings
@@ -23,7 +25,7 @@ import slatekit.server.ktor.KtorHandler
 import slatekit.server.ktor.KtorResponse
 
 // Sample App
-import ${app.package}.apis.SampleApi
+import ${app.package}.apis.SampleAPI
 import ${app.package}.auth.SampleAuth
 
 
@@ -37,7 +39,7 @@ class Server(val ctx: Context)  {
     suspend fun execute(): Try<Any> {
 
         // 1. Settings
-        val settings = ServerSettings(port = 5000, prefix = "/api/", docs = true, docKey = "abc123")
+        val settings = ServerSettings(port = 5000, prefix = "/api/", docs = true, docKey = "abc123", formatJson = true)
 
         // 2. APIs ( these are Slate Kit Universal APIs )
         val apis = apis()
@@ -49,10 +51,10 @@ class Server(val ctx: Context)  {
         val apiHost = ApiServer.of( ctx, apis, auth = null)
 
         // Ktor response handler
-        val responder = KtorResponse()
+        val responder = KtorResponse(settings)
 
-        // Ktor handler
-        val handler = KtorHandler(ctx, settings, apiHost)
+        // Ktor request handler
+        val handler = KtorHandler(ctx, settings, apiHost, responses = responder)
 
         // Ktor
         val server = embeddedServer(Netty, settings.port) {
@@ -87,9 +89,9 @@ class Server(val ctx: Context)  {
     }
 
 
-    fun apis(): List<slatekit.apis.routes.Api> {
+    fun apis(): List<Api> {
         return listOf(
-                slatekit.apis.routes.Api(klass = SampleApi::class, singleton = SampleApi(ctx), setup = Setup.Annotated)
+                Api(klass = SampleAPI::class, singleton = SampleAPI(ctx), setup = SetupType.Annotated)
         )
     }
 
@@ -99,7 +101,7 @@ class Server(val ctx: Context)  {
      * Used for quickly checking a deployment.
      */
     suspend fun ping(call: ApplicationCall, responses: KtorResponse) {
-        val result = "Version ${ctx.info.about.version} : " + DateTime.now()
+        val result = "Version ${ctx.info.build.version} : " + DateTime.now()
         responses.json(call, Success(result).toResponse())
     }
 }

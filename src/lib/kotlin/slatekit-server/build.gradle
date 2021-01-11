@@ -102,30 +102,16 @@ dependencies {
         compile "com.slatekit:slatekit-results:$slatekit_version"
         compile "com.slatekit:slatekit-common:$slatekit_version"
         compile "com.slatekit:slatekit-context:$slatekit_version"
-        compile "com.slatekit:slatekit-app:$slatekit_version"
-        compile "com.slatekit:slatekit-meta:$slatekit_version_beta"
-        compile "com.slatekit:slatekit-query:$slatekit_version_beta"
-        compile "com.slatekit:slatekit-entities:$slatekit_version_beta"
-        compile "com.slatekit:slatekit-orm:$slatekit_version_beta"
-        compile "com.slatekit:slatekit-core:$slatekit_version"
+        compile "com.slatekit:slatekit-tracking:$slatekit_version"
         compile "com.slatekit:slatekit-apis:$slatekit_version"
-        compile "com.slatekit:slatekit-jobs:$slatekit_version"
-        compile "com.slatekit:slatekit-integration:$slatekit_version_beta"
         compile "com.slatekit:slatekit-serialization:$slatekit_version"
     } else {
         // */
         compile project(":slatekit-result")
         compile project(":slatekit-common")
         compile project(":slatekit-context")
-        compile project(":slatekit-app")
-        compile project(":slatekit-meta")
-        compile project(":slatekit-query")
-        compile project(":slatekit-entities")
-        compile project(":slatekit-orm")
-        compile project(":slatekit-core")
+        compile project(":slatekit-tracking")
         compile project(":slatekit-apis")
-        compile project(":slatekit-jobs")
-        compile project(":slatekit-integration")
         compile project(":slatekit-serialization")
     } //</slatekit_local>
 }
