@@ -54,21 +54,26 @@ class App(ctx: Context) : App<Context>(ctx, AppOptions(showWelcome = true)) {
     }
 
 
-    override suspend fun init(): Try<Boolean> {
+    override suspend fun init() {
+        println()
         println("initializing")
+        println()
         return super.init()
     }
 
 
-    override suspend fun exec(): Try<Any> {
+    override suspend fun exec(): Any? {
+        println()
         println("executing...")
+        println()
         val cli = CLI(ctx)
         return cli.execute()
     }
 
 
-    override suspend fun done(): Try<Boolean> {
+    override suspend fun done(result:Any?) {
+        println()
         println("ending")
-        return super.done()
+        println()
     }
 }

@@ -14,8 +14,8 @@ interface SlateKitServices {
 
     fun apis(settings:Conf): List<Api> {
         // APIs
-        val toolSettings = ToolSettings(this.ctx.conf.getString("slatekit.version"), this.ctx.conf.getString("slatekit.version.beta"))
-        val buildSettings = BuildSettings(this.ctx.conf.getString("kotlin.version"))
+        val toolSettings = ToolSettings(settings.getString("slatekit.version"), settings.getString("slatekit.version.beta"))
+        val buildSettings = BuildSettings(settings.getString("kotlin.version"))
         return listOf(
                 Api(GeneratorApi(ctx, GeneratorService(ctx, settings, SlateKit::class.java, GeneratorSettings(toolSettings, buildSettings))), declaredOnly = true, setup = SetupType.Annotated),
                 Api(DocApi(ctx), declaredOnly = true, setup = SetupType.Annotated),

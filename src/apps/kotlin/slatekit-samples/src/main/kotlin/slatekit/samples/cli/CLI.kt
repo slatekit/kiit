@@ -9,7 +9,6 @@ import slatekit.common.types.Content
 import slatekit.common.info.ApiKey
 import slatekit.common.types.ContentType
 import slatekit.connectors.cli.CliApi
-import slatekit.meta.Reflector
 import slatekit.results.Try
 import slatekit.serialization.Serialization
 import slatekit.samples.common.apis.SampleAPI
@@ -17,8 +16,8 @@ import slatekit.samples.common.apis.SampleAPI
 class CLI(val ctx: Context) {
 
     /**
-     * executes the app
-     *
+     * executes the CLI integrated with the API module
+     * to be able to call APIs on the command line
      * @return
      */
     suspend fun execute(): Try<Any> {
@@ -57,7 +56,7 @@ class CLI(val ctx: Context) {
     }
 
 
-    open fun print(item:Any?, type:ContentType) : Content {
+    private fun print(item:Any?, type:ContentType) : Content {
         val text = Serialization.json().serialize(item)
         val wrap = """{ "value" : $text }""".trimMargin()
         val body = org.json.JSONObject(wrap)

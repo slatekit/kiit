@@ -1,20 +1,23 @@
 package ${app.package}
 
 import slatekit.apis.*
+import slatekit.apis.routes.Api
 import slatekit.apis.support.Authenticator
 import slatekit.cli.CliSettings
 import slatekit.context.Context
 import slatekit.common.types.Content
 import slatekit.common.info.ApiKey
+import slatekit.common.types.ContentType
 import slatekit.connectors.cli.CliApi
 import slatekit.results.Try
-import ${app.package}.apis.SampleApi
+import slatekit.serialization.Serialization
+import ${app.package}.apis.SampleAPI
 
 class CLI(val ctx: Context) {
 
     /**
-     * executes the app
-     *
+     * executes the CLI integrated with the API module
+     * to be able to call APIs on the command line
      * @return
      */
     suspend fun execute(): Try<Any> {
@@ -37,17 +40,28 @@ class CLI(val ctx: Context) {
                 metaTransform = {
                     listOf("api-key" to keys.first().key)
                 },
-                serializer = {item, type -> Content.csv(slatekit.meta.Serialization.csv().serialize(item))}
+                serializer = {item, type -> print(item, type)}
         )
 
         // 5. Run interactive mode
+        cli.showOverview("Slate Kit CLI Sample")
         return cli.run()
     }
 
 
-    fun apis(): List<slatekit.apis.routes.Api> {
+    fun apis(): List<Api> {
         return listOf(
-                slatekit.apis.routes.Api(klass = SampleApi::class, singleton = SampleApi(ctx), setup = Setup.Annotated)
+                Api(klass = SampleAPI::class, singleton = SampleAPI(ctx), setup = SetupType.Annotated)
         )
+    }
+
+
+    private fun print(item:Any?, type:ContentType) : Content {
+        val text = Serialization.json().serialize(item)
+        val wrap = """{ "value" : $text }""".trimMargin()
+        val body = org.json.JSONObject(wrap)
+        val pretty = body.toString(4)
+        val content = Content.text(pretty)
+        return content
     }
 }
