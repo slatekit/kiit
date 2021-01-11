@@ -6,6 +6,12 @@ import slatekit.results.Success
 import slatekit.results.Try
 import java.io.File
 
+/**
+ * @param context  : Startup context
+ * @param conf     : Conf containing settings / path to templates
+ * @param cls      : Class containing the startup resources ( if applicable )
+ * @param settings : Settings for the generator
+ */
 class GeneratorService(val context: Context, val conf: Conf, val cls:Class<*>, val settings: GeneratorSettings) {
 
     val logger = context.logs.getLogger()

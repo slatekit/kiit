@@ -80,6 +80,7 @@ class SlateKit(ctx: Context) : App<Context>(ctx, AppOptions(showWelcome = false,
 
 
     override suspend fun init() {
+        // Install the directories and settings( if needed )
         settingsConf = setup.configure()
     }
 
@@ -122,7 +123,7 @@ class SlateKit(ctx: Context) : App<Context>(ctx, AppOptions(showWelcome = false,
         // Show settings only
         help.intro()
         help.settings(ctx, settingsConf)
-        return
+
         // slatekit new api -name="MyApp1" -package="company1.apps"
         //
         // NOTES:
@@ -148,7 +149,7 @@ class SlateKit(ctx: Context) : App<Context>(ctx, AppOptions(showWelcome = false,
         // Show startup info
         info()
         help.exit()
-        return
+        
         cli.run()
     }
 

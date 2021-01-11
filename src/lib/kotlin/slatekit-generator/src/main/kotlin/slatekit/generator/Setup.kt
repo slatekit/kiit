@@ -45,11 +45,11 @@ class Setup(val cls:Class<*>, val ctx: Context) {
      */
     private fun create(conf: Conf, info: SetupInfo) {
         val settings = PropSettings(dir = info.confDir.absolutePath, name = info.settingsName)
-        settings.put("slatekit.version", info.slatekitVersion, false)
-        settings.put("slatekit.version.beta", conf.getString("slatekit.version.beta"), false)
-        settings.put("kotlin.version", conf.getString("kotlin.version"), false)
-        settings.put("generation.source", "${info.installLocation}/templates", false)
-        settings.put("generation.output", "", false)
+        settings.put(KEY_SLATEKIT_VERSION, info.slatekitVersion, false)
+        settings.put(KEY_SLATEKIT_VERSION_BETA, conf.getString("slatekit.version.beta"), false)
+        settings.put(KEY_KOTLIN_VERSION, conf.getString("kotlin.version"), false)
+        settings.put(KEY_GENERATION_SOURCE, "${info.installLocation}/templates", false)
+        settings.put(KEY_GENERATION_OUTPUT, "", false)
         settings.save(desc = "default settings")
     }
 
@@ -62,10 +62,10 @@ class Setup(val cls:Class<*>, val ctx: Context) {
         val file = File(info.confDir, info.settingsName)
         val raw = Props.fromFile(file.absolutePath)
         val settings = PropSettings(raw, dir = info.confDir.absolutePath, name = info.settingsName)
-        settings.put("slatekit.version", info.slatekitVersion)
-        settings.put("slatekit.version.beta", conf.getString("slatekit.version.beta"))
-        settings.put("kotlin.version", conf.getString("kotlin.version"))
-        settings.put("generation.source", "${info.installLocation}/templates")
+        settings.put(KEY_SLATEKIT_VERSION, info.slatekitVersion)
+        settings.put(KEY_SLATEKIT_VERSION_BETA, conf.getString("slatekit.version.beta"))
+        settings.put(KEY_KOTLIN_VERSION, conf.getString("kotlin.version"))
+        settings.put(KEY_GENERATION_SOURCE, "${info.installLocation}/templates")
         settings.save(desc = "upgrade to ${info.slatekitVersion}")
     }
 
@@ -95,5 +95,15 @@ class Setup(val cls:Class<*>, val ctx: Context) {
 
         // ~/.slatekit/tools/cli/conf
         val confDir = File(homeLocation, folders.conf)
+    }
+
+
+    companion object {
+        const val KEY_KOTLIN_VERSION = "kotlin.version"
+        const val KEY_SLATEKIT_VERSION = "slatekit.version"
+        const val KEY_SLATEKIT_VERSION_BETA = "slatekit.version.beta"
+        const val KEY_GENERATION_SOURCE = "generation.source"
+        const val KEY_GENERATION_OUTPUT = "generation.output"
+
     }
 }
