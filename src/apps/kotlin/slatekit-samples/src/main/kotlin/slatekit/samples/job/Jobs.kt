@@ -1,6 +1,5 @@
 package slatekit.samples.job
 
-import kotlinx.coroutines.runBlocking
 import slatekit.common.Identity
 import slatekit.actors.Status
 import slatekit.jobs.WResult
