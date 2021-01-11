@@ -15,8 +15,8 @@
     { "name": "copy", "type": "Code" , "source": "/src/SampleAPI.txt" , "target": "/src/main/kotlin/${app.packagePath}/apis/SampleAPI.kt" },
     { "name": "copy", "type": "Code" , "source": "/src/SampleModel.txt" , "target": "/src/main/kotlin/${app.packagePath}/models/SampleModel.kt" }
   ],
-  "dependencies": {
-    "common": "1.0.0",
-    "conf": "1.0.0"
-  }
+  "dependencies": [
+    { "common": "@CURRENT" },
+    { "conf": "@CURRENT" }
+  ]
 }

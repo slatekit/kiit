@@ -19,6 +19,6 @@
     { "name": "copy", "type": "Conf", "source": "/env.pro.conf", "target": "/src/main/resources/env.pro.conf" },
     { "name": "copy", "type": "Conf", "source": "/logback.txt" , "target": "/src/main/resources/logback.xml"  }
   ],
-  "dependencies": {
-  }
+  "dependencies": [
+  ]
 }

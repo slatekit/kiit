@@ -23,6 +23,6 @@
     { "name": "copy", "type": "Build", "source": "/gradle-wrapper.jar"       , "target": "/gradle/wrapper/gradle-wrapper.jar" },
     { "name": "copy", "type": "Build", "source": "/gradle-wrapper.properties", "target": "/gradle/wrapper/gradle-wrapper.properties" }
   ],
-  "dependencies": {
-  }
+  "dependencies": [
+  ]
 }

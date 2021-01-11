@@ -5,6 +5,7 @@ import slatekit.app.AppRunner
 import slatekit.common.args.Args
 import slatekit.common.io.Alias
 import slatekit.common.log.LogsDefault
+import slatekit.common.writer.ConsoleWriter
 import slatekit.context.AppContext
 import slatekit.context.Context
 import slatekit.generator.Help
@@ -55,11 +56,12 @@ import slatekit.results.Success
 fun main(args: Array<String>) {
     val finalArgs = arrayOf("")
     val parsed = Args.parseArgs(finalArgs)
+    val help = Help(SlateKit.TITLE)
+    val writer = ConsoleWriter()
     when(parsed) {
         is Success -> {
             val parsedArgs = parsed.value
             if(parsedArgs.isHelp) {
-                val help = Help(SlateKit.TITLE)
                 help.show()
             }
             else {
@@ -67,7 +69,8 @@ fun main(args: Array<String>) {
             }
         }
         is Failure -> {
-
+            writer.failure("Error parsing command line arguments")
+            help.show()
         }
     }
 }

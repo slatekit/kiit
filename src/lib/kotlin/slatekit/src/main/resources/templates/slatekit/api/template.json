@@ -17,8 +17,8 @@
     { "name": "copy", "type": "Code" , "source": "/src/SampleAuth.txt" , "target": "/src/main/kotlin/${app.packagePath}/auth/SampleAuth.kt" },
     { "name": "copy", "type": "Code" , "source": "/src/SampleModel.txt" , "target": "/src/main/kotlin/${app.packagePath}/models/SampleModel.kt" }
   ],
-  "dependencies": {
-    "common": "1.0.0",
-    "conf": "1.0.0"
-  }
+  "dependencies": [
+    { "common": "@CURRENT" },
+    { "conf": "@CURRENT" }
+  ]
 }
