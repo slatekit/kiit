@@ -144,7 +144,7 @@ dependencies {
 - **author**: Kishore Reddy
 - **website**: www.slatekit.com
 - **company**: www.codehelix.co
-
+- **email**: kishore  codehelix.co
 
 # Like Us ? :heart:
 - Support Slate Kit by clicking the :star: button on the upper right of this page. :v:
