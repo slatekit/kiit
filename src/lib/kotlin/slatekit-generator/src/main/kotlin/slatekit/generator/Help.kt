@@ -71,11 +71,11 @@ class Help(val name:String) {
         val writer = ConsoleWriter()
         writer.title("EXAMPLES")
         writer.text("You can create the various Slate Kit Projects below")
-        writer.highlight("1. slatekit new app -name=\"MyApp1\" -package=\"company1.apps\"")
-        writer.highlight("2. slatekit new api -name=\"MyAPI1\" -package=\"company1.apis\"")
-        writer.highlight("3. slatekit new cli -name=\"MyCLI1\" -package=\"company1.apps\"")
-        writer.highlight("4. slatekit new env -name=\"MyApp2\" -package=\"company1.apps\"")
-        writer.highlight("5. slatekit new job -name=\"MyJob1\" -package=\"company1.jobs\"")
+        writer.highlight("1. slatekit new app -name=\"MyApp1\" -packageName=\"company1.apps\"")
+        writer.highlight("2. slatekit new api -name=\"MyAPI1\" -packageName=\"company1.apis\"")
+        writer.highlight("3. slatekit new cli -name=\"MyCLI1\" -packageName=\"company1.apps\"")
+        writer.highlight("4. slatekit new env -name=\"MyApp2\" -packageName=\"company1.apps\"")
+        writer.highlight("5. slatekit new job -name=\"MyJob1\" -packageName=\"company1.jobs\"")
         writer.text("")
     }
 
