@@ -13,6 +13,7 @@ data class GeneratorContext(val rootDir: File,
                             val desc: String,
                             val packageName: String,
                             val company: String,
+                            val area: String,
                             val mode: CredentialMode,
                             val settings: GeneratorSettings)
 {
@@ -23,6 +24,6 @@ data class GeneratorContext(val rootDir: File,
     fun normalize(settings: GeneratorSettings): GeneratorContext {
         val canonicalName = name
         val canonicalPackage = packageName.toId()
-        return GeneratorContext(rootDir, destDir, canonicalName, desc, canonicalPackage, company, mode, settings)
+        return GeneratorContext(rootDir, destDir, canonicalName, desc, canonicalPackage, company, area, mode, settings)
     }
 }

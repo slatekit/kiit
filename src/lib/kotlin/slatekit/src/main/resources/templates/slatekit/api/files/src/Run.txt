@@ -39,6 +39,7 @@ fun main(args: Array<String>) {
      */
     runBlocking {
         AppRunner.run(
+                cls = App::class.java,
                 rawArgs = args,
                 about = App.about,
                 schema = App.schema,

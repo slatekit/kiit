@@ -40,10 +40,10 @@ class App(ctx: Context) : App<Context>(ctx, AppOptions(showWelcome = true)) {
          * This can be overriden in your env.conf file
          */
         val about = About(
-                area = "${app.company}",
+                company = "${app.company}",
+                area = "${app.area}",
                 name = "${app.name}",
                 desc = "${app.desc}",
-                company = "${app.company}",
                 region = "",
                 version = "1.0.0",
                 url = "${app.url}",
