@@ -20,7 +20,7 @@ import slatekit.results.Success
  *
  * RUN OPTIONS:
  *
- * 1. One Time Job: gradle run --args='-sample=single'
+ * 1. One Time Job: gradle run --args='-sample=onetime'
  * 2. Paged    Job: gradle run --args='-sample=paging'
  * 3. Queued   Job: gradle run --args='-sample=queued'
  * 4. Worker   Job: gradle run --args='-sample=worker'
