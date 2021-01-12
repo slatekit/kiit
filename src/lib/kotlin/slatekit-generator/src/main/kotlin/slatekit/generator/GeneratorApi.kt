@@ -23,7 +23,7 @@ class GeneratorApi(val context: Context, val service: GeneratorService) {
      * @param packageName: The package name of the generate item
      */
     @Action(desc = "generates a new app project")
-    fun app(name: String, packageName: String): Try<String> {
+    fun app(name: String, packageName: String): Try<GeneratorResult> {
         return generate("slatekit/app", name, packageName)
     }
 
@@ -34,7 +34,7 @@ class GeneratorApi(val context: Context, val service: GeneratorService) {
      * @param packageName: The package name of the generate item
      */
     @Action(desc = "generates a new api project")
-    fun api(name: String, packageName: String): Try<String> {
+    fun api(name: String, packageName: String): Try<GeneratorResult> {
         return generate("slatekit/api", name, packageName)
     }
 
@@ -45,7 +45,7 @@ class GeneratorApi(val context: Context, val service: GeneratorService) {
      * @param packageName: The package name of the generate item
      */
     @Action(desc = "generates a new cli project")
-    fun cli(name: String, packageName: String): Try<String> {
+    fun cli(name: String, packageName: String): Try<GeneratorResult> {
         return generate("slatekit/cli", name, packageName)
     }
 
@@ -56,7 +56,7 @@ class GeneratorApi(val context: Context, val service: GeneratorService) {
      * @param packageName: The package name of the generate item
      */
     @Action(desc = "generates a new set of environment files")
-    fun env(name: String, packageName: String): Try<String> {
+    fun env(name: String, packageName: String): Try<GeneratorResult> {
         return generate("slatekit/conf", name, packageName)
     }
 
@@ -67,7 +67,7 @@ class GeneratorApi(val context: Context, val service: GeneratorService) {
      * @param packageName: The package name of the generate item
      */
     @Action(desc = "generates a new background job project")
-    fun job(name: String, packageName: String): Try<String> {
+    fun job(name: String, packageName: String): Try<GeneratorResult> {
         return generate("slatekit/job", name, packageName)
     }
 
@@ -78,7 +78,7 @@ class GeneratorApi(val context: Context, val service: GeneratorService) {
      * @param packageName: The package name of the generate item
      */
     @Action(desc= "generates a new library project")
-    fun lib(name:String, packageName:String): Try<String> {
+    fun lib(name:String, packageName:String): Try<GeneratorResult> {
         return generate("slatekit/lib", name, packageName)
     }
 
@@ -89,7 +89,7 @@ class GeneratorApi(val context: Context, val service: GeneratorService) {
      * @param packageName: The package name of the generate item
      */
     @Action(desc= "generates a new orm ( domain driven entities ) project")
-    fun orm(name:String, packageName:String): Try<String> {
+    fun orm(name:String, packageName:String): Try<GeneratorResult> {
         return generate("slatekit/orm", name, packageName)
     }
 
@@ -99,7 +99,7 @@ class GeneratorApi(val context: Context, val service: GeneratorService) {
      * @param name: Name of generated app/item
      * @param packageName: The package name of the generate item
      */
-    private fun generate(templateName: String, name: String, packageName: String): Try<String> {
+    private fun generate(templateName: String, name: String, packageName: String): Try<GeneratorResult> {
         val loadResult = Tries.of {
             val templateDirPath = service.conf.getString(Setup.KEY_GENERATION_SOURCE)
             val templateOutPath = service.conf.getString(Setup.KEY_GENERATION_OUTPUT)

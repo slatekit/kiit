@@ -19,7 +19,7 @@ class GeneratorService(val context: Context, val conf: Conf, val cls:Class<*>, v
     val logger = context.logs.getLogger()
     val currentDir = System.getProperty("user.dir")
 
-    fun generate(setupCtx: GeneratorContext, template: Template): Try<String> {
+    fun generate(setupCtx: GeneratorContext, template: Template): Try<GeneratorResult> {
         return Tries.of {
             // Normalize/Canonical names
             val ctx = setupCtx.normalize(settings)
@@ -49,7 +49,7 @@ class GeneratorService(val context: Context, val conf: Conf, val cls:Class<*>, v
 
             // Execute the template actions
             execute(finalCtx, template, targetDir)
-            "Created project from ${template.path.absolutePath}"
+            GeneratorResult("Created project", targetDir.absolutePath, template.path.absolutePath)
         }
     }
 
