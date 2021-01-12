@@ -4,8 +4,8 @@ import slatekit.common.ext.toId
 import java.io.File
 
 /**
- * @param name        :
- * @param packageName :
+ * @param name        : Name of app e.g. "MyApp1"
+ * @param packageName : Name of package e.g. "MyCompany.product1"
  */
 data class GeneratorContext(val rootDir: File,
                             val destDir: File,

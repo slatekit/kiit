@@ -14,6 +14,7 @@ import java.io.File
 data class Template(val root:File,
                     val parent:File,
                     val dir: File,
+                    val path: File,
                     val name:String,
                     val version:String,
                     val desc:String,

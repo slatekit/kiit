@@ -56,6 +56,7 @@ class Help(val name:String) {
         writer.keyValue("slatekit.dir           ",  ctx.dirs?.pathToApp ?: "")
         writer.keyValue("slatekit.settings      ",  java.io.File(ctx.dirs?.pathToConf, "settings.conf").absolutePath)
         writer.keyValue("slatekit.tag           ",  ctx.conf.getString("slatekit.tag"))
+        writer.keyValue("slatekit.version.cli   ",  ctx.conf.getString("slatekit.version.cli" ))
         writer.keyValue("slatekit.version       ",  settings.getString("slatekit.version"     ))
         writer.keyValue("slatekit.version.beta  ",  settings.getString("slatekit.version.beta"))
         writer.keyValue("slatekit.kotlin.version",  settings.getString("kotlin.version"       ))

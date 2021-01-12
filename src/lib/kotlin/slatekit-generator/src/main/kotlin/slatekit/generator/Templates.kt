@@ -48,8 +48,9 @@ object Templates {
      */
     fun load( root:File, parentDir:File, templateName:String):Template {
         val templateDir = File(parentDir, templateName)
-        val templateJson = File(templateDir, TEMPLATE_NAME).readText()
-        val template = load(root, parentDir, templateDir, templateName, templateJson)
+        val templateFile = File(templateDir, TEMPLATE_NAME)
+        val templateJson = templateFile.readText()
+        val template = load(root, parentDir, templateDir, templateName, templateFile, templateJson)
         return template
     }
 
@@ -63,7 +64,7 @@ object Templates {
      *   { "type": "copy", "doc": "Build", "source": "/templates/app/build.txt"   , "target": "/build.gradle"    },
      *   { "type": "copy", "doc": "Build", "source": "/templates/app/settings.txt", "target": "/settings.gradle" },
      */
-    fun load(root:File, parent:File, dir:File, name:String, jsonRaw: String): Template {
+    fun load(root:File, parent:File, dir:File, templateName:String, templateFile:File, jsonRaw: String): Template {
         val parser = JSONParser()
         val doc = parser.parse(jsonRaw)
         val jsonRoot = doc as JSONObject
@@ -79,7 +80,7 @@ object Templates {
             val template = load(root, parent, key)
             template
         }
-        val template = Template(root, parent, dir, name, version, desc, type, actions, dependencies)
+        val template = Template(root, parent, dir, templateFile, name, version, desc, type, actions, dependencies)
         return template
     }
 
