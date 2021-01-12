@@ -5,6 +5,7 @@ import slatekit.common.writer.ConsoleWriter
 import slatekit.context.Context
 import slatekit.results.Success
 import slatekit.results.Try
+import slatekit.results.builders.Tries
 import java.io.File
 
 /**
@@ -16,34 +17,40 @@ import java.io.File
 class GeneratorService(val context: Context, val conf: Conf, val cls:Class<*>, val settings: GeneratorSettings) {
 
     val logger = context.logs.getLogger()
-
+    val currentDir = System.getProperty("user.dir")
 
     fun generate(setupCtx: GeneratorContext, template: Template): Try<String> {
-        // Normalize/Canonical names
-        val ctx = setupCtx.normalize(settings)
+        return Tries.of {
+            // Normalize/Canonical names
+            val ctx = setupCtx.normalize(settings)
 
-        // Get root directory of destination
-        log(ctx.destDir)
+            // Get root directory of destination
+            log(ctx.destDir)
 
-        // Rewrite the context
-        val finalCtx = setupCtx.copy(destDir = ctx.destDir)
+            // Rewrite the context
+            val finalCtx = setupCtx.copy(destDir = ctx.destDir)
 
-        // Create target dir
-        ctx.destDir.mkdir()
+            // Create target dir
+            ctx.destDir.mkdir()
 
-        // Target dir = dest/${name}
-        // e.g. ~/slatekit/gen/MyApp1
-        val targetDir = File(ctx.destDir, setupCtx.name)
-        targetDir.mkdir()
+            // Target dir = dest/${name}
+            // e.g. ~/slatekit/gen/MyApp1 or CURRENT_DIR/MyApp1
+            val targetRoot = File(ctx.destDir.absolutePath)
+            val targetDir = File(ctx.destDir.absolutePath, setupCtx.name)
+            println("creating : ${targetRoot.absolutePath}")
+            println("creating : ${targetDir.absolutePath}")
+            targetRoot.mkdir()
+            targetDir.mkdir()
 
-        // Execute the dependencies first
-        val writer = ConsoleWriter()
-        writer.text("")
-        template.requires.forEach { execute(finalCtx, it, targetDir) }
+            // Execute the dependencies first
+            val writer = ConsoleWriter()
+            writer.text("")
+            template.requires.forEach { execute(finalCtx, it, targetDir) }
 
-        // Execute the template actions
-        execute(finalCtx, template, targetDir)
-        return Success("")
+            // Execute the template actions
+            execute(finalCtx, template, targetDir)
+            "Created project from ${template.path.absolutePath}"
+        }
     }
 
 

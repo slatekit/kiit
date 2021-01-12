@@ -105,6 +105,6 @@ fun run(args:Array<String>){
 
 fun version(ctx:Context): Context {
     return if(ctx is AppContext) {
-        ctx.copy(info = ctx.info.copy(build = ctx.info.build.copy(version = "1.32.0")))
+        ctx.copy(info = ctx.info.copy(build = ctx.info.build.copy(version = "1.34.3")))
     } else ctx
 }
