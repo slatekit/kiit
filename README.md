@@ -15,7 +15,7 @@ Slate Kit is a **Kotlin** Tool-Kit, a simple, light-weight, modular framework to
 
 # Goals
 1. Simple, light-weight, modular, 100% Kotlin based alternative to Spring Framework
-2. Targeted for Start-Ups, Personal Projects, SMB 
+2. Targeted for Start-Ups, Personal Projects, SMB ( small-medium sized businesses )
 3. Ability to use many of these libraries for both Server and Android ( due to being simple/light-weight)
 4. Will support Multi-Platform in the future
 5. Designed as a set of libraries rather than a typical `"framework"`
