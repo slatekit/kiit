@@ -106,9 +106,9 @@ Slate Kit has a unique **Dual License** approach using **BSL** (Business Source 
 **Apache 2.0**: This is effectively Apache 2.0 for the following groups and usage
 1. Non-Profits ( .org ) 
 2. Educational Institutions ( .edu )
-3. Start Ups ( Pre Series A and not in the cloud-provider space )
+3. Start Ups ( Same as commercial - see below )
 4. Personal projects
-5. Non-Cloud Provider companies ( See definitiion below - e.g. AWS, Google, Azure, Digital Ocean )
+5. Commercial use : Must NOT be a Cloud Provider company and/or used for building Cloud-Provider infrastructure ( such as AWS, Google Cloud, Azure, Digital Ocean, etc )
 
 **BSL 1.1** 
 For Cloud-Providers such as AWS, Google Cloud, Azure, Digital Ocean, etc, this is a BSL license. 
