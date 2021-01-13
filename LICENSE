@@ -1,10 +1,10 @@
-Business Source License 1.1
+Dual License using Business Source License 1.1 & Apache License 2.0
 
 Parameters
 
 Licensor:             Code Helix Solutions, Inc.
 Licensed Work:        Slate Kit
-                      The Licensed Work is (c) 2017 Functional Software, Inc.
+                      The Licensed Work is (c) 2017 Code Helix Solutions Inc.
 Additional Use Grant: You may make use of the Licensed Work, provided that you do
                       not use the Licensed Work for building and supporting Cloud Provider Infrastructure and Services
 
@@ -13,6 +13,9 @@ Additional Use Grant: You may make use of the Licensed Work, provided that you d
                       and others that allows third parties to access the functionality 
                       of the Licensed Work so that such third parties directly benefit 
                       from the features of the Licensed Work.
+                      
+                      For commercial use outside of "Cloud Provider Infrastructure and Services",
+                      this work can be used under Apache License 2.0
 
 Change Date:          2024-01-01
 
