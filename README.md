@@ -101,7 +101,7 @@ docs | source | desc | download
 
 
 # License
-Slate Kit has a unique **Dual License** approach using **BSL** (Business Source License) and **Apache 2.0** using the `Additional Use Grants` parameter of the BSL. This is a reletively new license and approach. At the moment, we are making this framework as permissive as possible and more details will come. We plan to allow this to be used as Apache 2.0 immediately for the groups listed below.
+Slate Kit has a unique **Dual License** approach using **BSL** (Business Source License) and **Apache 2.0** using the `Additional Use Grants` parameter of the BSL. This is a relatively new approach and license that we are trying out and we plan to improve on this dual licensing approach in time. Currently, we are allowing this software to be used as Apache 2.0 immediately for the groups / usage listed below and for the foreseeable future.
 
 **Apache 2.0**: This is effectively Apache 2.0 for the following groups and usage
 1. Non-Profits ( .org ) 
@@ -116,9 +116,9 @@ It can not be used for production usage without obtaining a license.
 
 **Notes**:
 1. BSL is a relatively new license type.
-2. BSL is technicall NOT an open-source" license but rather `source available`
+2. BSL is technically NOT an open-source license but rather `source available`
 3. BSL has parameters `Change Date | Change License | Additional Use` that convert it to open source
-4. BSL `Additional Use Grant` is used to grant production use and further rights to various groups
+4. BSL `Additional Use Grant` is used to grant additional rights ( we are using this broadly to provide Apache 2.0 licensing rights above )
 
 **Links**:
 1. https://mariadb.com/bsl-faq-adopting/
@@ -128,7 +128,7 @@ It can not be used for production usage without obtaining a license.
 **Parameters**
 1. **Change Date** : Jan 1, 2024  - Converts to Apache 2.0 on Jan 1, 2024
 2. **Change License** :  Apache 2.0 - Type of license this BSL will convert to
-3. **Additional Use Grants** : Grants production use immediately under Apache 2.0 for non-profits (.org), edus (.edu), startups (pre-Series A), personal projects, and any company not in the cloud-provider space like AWS, Google Cloud, Azure, Digital Ocean, etc.
+3. **Additional Use Grants** : Grants production use immediately under Apache 2.0 for certain groups and usage ( see above )
 
 
 # Upcoming
