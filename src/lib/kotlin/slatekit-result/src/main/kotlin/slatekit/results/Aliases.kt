@@ -18,6 +18,16 @@ package slatekit.results
 typealias Expect<T,E> = slatekit.results.Result<T,E>
 
 /**
+ * Alias for Result<T,E> defaulting the E error type ( [Failure] branch ) to [Unit]
+ *
+ * This allows for :
+ * 1. Representing null using Option
+ * 2. Allows for mapping Option<T> to Outcome<T>
+ * 3. Can provide additional info on why something is null via status
+ */
+typealias Option<T> = Result<T, Unit>
+
+/**
  * Alias for Result<T,E> defaulting the E error type ( [Failure] branch ) to [Exception]
  *
  * This allows for :
