@@ -73,6 +73,7 @@ num | type | link
 7   | utilities   | http://www.slatekit.com/utils/overview          
 8   | standards   | http://www.slatekit.com/more/standards  
 9   | packages    | http://dl.bintray.com/codehelixinc/slatekit
+10  | bintray     | https://bintray.com/codehelixinc/slatekit
 
 
 # Modules
