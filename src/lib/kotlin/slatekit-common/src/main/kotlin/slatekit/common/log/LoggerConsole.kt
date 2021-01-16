@@ -13,7 +13,6 @@
 
 package slatekit.common.log
 
-import slatekit.common.DateTime
 
 /**
  * Lightweight logger that prints to the console

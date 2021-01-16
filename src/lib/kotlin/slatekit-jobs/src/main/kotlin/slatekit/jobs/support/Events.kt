@@ -118,7 +118,7 @@ object Events {
             "time" to event.time.toStringMySql(),
             "desc" to (desc ?: event.desc)
         )
-        mgr.jctx.logger.log(LogLevel.Info, "JOB $name", info)
+        mgr.jctx.logger.log(LogLevel.Info, null, "JOB $name", info)
     }
 
 

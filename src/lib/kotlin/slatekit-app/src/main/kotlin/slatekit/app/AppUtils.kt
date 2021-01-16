@@ -27,7 +27,6 @@ import slatekit.common.info.About
 import slatekit.common.io.Alias
 import slatekit.common.io.Uri
 import slatekit.common.log.Logs
-import slatekit.common.log.Prints
 import slatekit.results.*
 import slatekit.results.builders.Outcomes
 import java.io.File

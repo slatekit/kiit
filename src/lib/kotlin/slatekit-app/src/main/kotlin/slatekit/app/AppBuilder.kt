@@ -19,7 +19,6 @@ import slatekit.common.io.Uri
 import slatekit.common.io.Uris
 import slatekit.common.log.Logs
 import slatekit.common.log.LogsDefault
-import slatekit.common.log.Prints
 import slatekit.context.AppContext
 import java.util.*
 

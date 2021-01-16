@@ -2,17 +2,46 @@ package test.common
 
 import org.junit.Assert
 import org.junit.Test
-import slatekit.common.log.Log
 import slatekit.common.log.LogEntry
 import slatekit.common.log.LogLevel
 import slatekit.common.log.Logger
 import slatekit.common.naming.*
+import slatekit.common.newline
 
 
 class LogTests {
 
     fun ensure(namer: Namer, input:String, expected:String){
         Assert.assertTrue(namer.rename(input) == expected)
+    }
+
+    @Test fun can_build_message_with_args(){
+        val template = "error on action=%s, id=%s, name=%s"
+        val expected = template.format("register", "user01", "batman")
+        val logger = MemoryLogger(LogLevel.Info)
+        logger.info(template, "register", "user01", "batman")
+        val actual = logger.entries.first().msg
+        Assert.assertEquals(expected, actual)
+    }
+
+
+    @Test fun can_build_message_with_exception(){
+        val ex = Exception("testing exception message")
+        val logger = MemoryLogger(LogLevel.Info)
+        logger.info(ex, "error check")
+        val actual = logger.entries.first().msg
+        val expected = "error check" + newline + "testing exception message"
+        Assert.assertEquals(expected, actual)
+    }
+
+
+    @Test fun can_build_message_with_exception_only(){
+        val ex = Exception("testing exception message")
+        val logger = MemoryLogger(LogLevel.Info)
+        logger.info(ex)
+        val actual = logger.entries.first().msg
+        val expected = "testing exception message"
+        Assert.assertEquals(expected, actual)
     }
 
 
@@ -41,22 +70,6 @@ class LogTests {
         levels.forEach {
             test(it)
         }
-    }
-
-
-    @Test fun can_ensure_static() {
-        val logger = MemoryLogger(LogLevel.Info)
-        Log.init(logger)
-        Log.debug("d")
-        Log.info("i")
-        Log.warn("w")
-        Log.error("e")
-        Log.fatal("f")
-        Assert.assertEquals(4, logger.entries.size)
-        Assert.assertEquals("i", logger.entries[0].msg)
-        Assert.assertEquals("w", logger.entries[1].msg)
-        Assert.assertEquals("e", logger.entries[2].msg)
-        Assert.assertEquals("f", logger.entries[3].msg)
     }
 
 

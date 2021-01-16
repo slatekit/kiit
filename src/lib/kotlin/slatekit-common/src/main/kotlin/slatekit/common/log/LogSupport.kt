@@ -14,114 +14,82 @@
 package slatekit.common.log
 
 import slatekit.common.Ignore
+import slatekit.common.newline
+import java.io.PrintWriter
+import java.io.StringWriter
 
 /**
  * Log methods with messages that are both eager and lazyily called via functions
+ * NOTE: This @Ignore attribute is used to avoid these methods in any meta/reflection processing
  */
 interface LogSupport {
 
     val logger: Logger?
 
+    /** =====================================================================
+     * Logging using string with optional args for formatting
+     * ======================================================================
+     */
+    @Ignore fun debug(msg: String?, vararg args:Any?) = log(LogLevel.Debug, null, msg, *args)
+    @Ignore fun info (msg: String?, vararg args:Any?) = log(LogLevel.Info , null, msg, *args)
+    @Ignore fun warn (msg: String?, vararg args:Any?) = log(LogLevel.Warn , null, msg, *args)
+    @Ignore fun error(msg: String?, vararg args:Any?) = log(LogLevel.Error, null, msg, *args)
+    @Ignore fun fatal(msg: String?, vararg args:Any?) = log(LogLevel.Fatal, null, msg, *args)
+
+    /** =====================================================================
+     * Logging using exceptions + messages
+     * ======================================================================
+     */
+    @Ignore fun debug(ex:Exception?, msg: String?, vararg args:Any?) = log(LogLevel.Debug, ex, msg, *args)
+    @Ignore fun info (ex:Exception?, msg: String?, vararg args:Any?) = log(LogLevel.Info , ex, msg, *args)
+    @Ignore fun warn (ex:Exception?, msg: String?, vararg args:Any?) = log(LogLevel.Warn , ex, msg, *args)
+    @Ignore fun error(ex:Exception?, msg: String?, vararg args:Any?) = log(LogLevel.Error, ex, msg, *args)
+    @Ignore fun fatal(ex:Exception?, msg: String?, vararg args:Any?) = log(LogLevel.Fatal, ex, msg, *args)
+
+    /** =====================================================================
+     * Logging using exceptions only
+     * ======================================================================
+     */
+    @Ignore fun debug(ex:Exception?) = log(LogLevel.Debug, ex, null)
+    @Ignore fun info (ex:Exception?) = log(LogLevel.Info , ex, null)
+    @Ignore fun warn (ex:Exception?) = log(LogLevel.Warn , ex, null)
+    @Ignore fun error(ex:Exception?) = log(LogLevel.Error, ex, null)
+    @Ignore fun fatal(ex:Exception?) = log(LogLevel.Fatal, ex, null)
+
+    /** =====================================================================
+     * Lazy logging
+     * ======================================================================
+     */
+    @Ignore fun debug(msg: String? = null, callback: () -> String) = log(LogLevel.Debug, msg, callback)
+    @Ignore fun info (msg: String? = null, callback: () -> String) = log(LogLevel.Info , msg, callback)
+    @Ignore fun warn (msg: String? = null, callback: () -> String) = log(LogLevel.Warn , msg, callback)
+    @Ignore fun error(msg: String? = null, callback: () -> String) = log(LogLevel.Error, msg, callback)
+    @Ignore fun fatal(msg: String? = null, callback: () -> String) = log(LogLevel.Fatal, msg, callback)
+
     /**
-     * Logs an debug message
-     * @param msg : The message
-     * @param ex : The exception to log
+     * Logs an entry
+     * @param level
+     * @param msg
+     * @param ex
      */
     @Ignore
-    fun debug(msg: String, ex: Exception? = null) {
-        log(LogLevel.Debug, msg, ex)
+    fun log(level: LogLevel, ex: Exception?, msg: String?, vararg args:Any?) {
+        var fmsg = msg
+        val hasMsg = !msg.isNullOrEmpty()
+        val hasArgs = args.isNotEmpty()
+        if(hasMsg && hasArgs) {
+            fmsg = format(msg ?: "", args)
+        }
+        log(level, fmsg, ex)
     }
 
     /**
-     * Logs an info message
-     * @param msg : The message
-     * @param ex : The exception to log
+     * Logs key/value pairs
      */
     @Ignore
-    fun info(msg: String, ex: Exception? = null) {
-        log(LogLevel.Info, msg, ex)
-    }
-
-    /**
-     * Logs an warning
-     * @param msg : The message
-     * @param ex : The exception to log
-     */
-    @Ignore
-    fun warn(msg: String, ex: Exception? = null) {
-        log(LogLevel.Warn, msg, ex)
-    }
-
-    /**
-     * Logs an error
-     * @param msg : The message
-     * @param ex : The exception to log
-     */
-    @Ignore
-    fun error(msg: String, ex: Exception? = null) {
-        log(LogLevel.Error, msg, ex)
-    }
-
-    /**
-     * Logs an fatal
-     *
-     * @param msg : The message
-     * @param ex : The exception to log
-     */
-    @Ignore
-    fun fatal(msg: String, ex: Exception? = null) {
-        log(LogLevel.Fatal, msg, ex)
-    }
-
-    /**
-     * Logs an debug message
-     * @param msg : The callback to build the message
-     * @param ex : The exception to log
-     */
-    @Ignore
-    fun debug(callback: () -> String, ex: Exception? = null) {
-        log(LogLevel.Debug, callback, ex)
-    }
-
-    /**
-     * Logs an info message
-     * @param msg : The callback to build the message
-     * @param ex : The exception to log
-     */
-    @Ignore
-    fun info(callback: () -> String, ex: Exception? = null) {
-        log(LogLevel.Info, callback, ex)
-    }
-
-    /**
-     * Logs an warning
-     * @param msg : The callback to build the message
-     * @param ex : The exception to log
-     */
-    @Ignore
-    fun warn(callback: () -> String, ex: Exception? = null) {
-        log(LogLevel.Warn, callback, ex)
-    }
-
-    /**
-     * Logs an error
-     * @param msg : The callback to build the message
-     * @param ex : The exception to log
-     */
-    @Ignore
-    fun error(callback: () -> String, ex: Exception? = null) {
-        log(LogLevel.Error, callback, ex)
-    }
-
-    /**
-     * Logs an fatal
-     *
-     * @param msg : The callback to build the message
-     * @param ex : The exception to log
-     */
-    @Ignore
-    fun fatal(callback: () -> String, ex: Exception? = null) {
-        log(LogLevel.Fatal, callback, ex)
+    fun log(level: LogLevel, ex:Exception?, msg: String?, pairs:List<Pair<String,String>>) {
+        val info = pairs.joinToString { it -> it.first + "=" + it.second }
+        log(level, "$msg $info", ex)
     }
 
     /**
@@ -131,22 +99,28 @@ interface LogSupport {
      * @param ex
      */
     @Ignore
-    fun log(level: LogLevel, msg: String, ex: Exception? = null) {
-        logger?.let { l -> l.log(level, msg, ex) }
-    }
-
-    /**
-     * Logs key/value pairs
-     */
-    @Ignore
-    fun log(level: LogLevel, msg: String, pairs:List<Pair<String,String>>, ex:Exception? = null) {
-        val info = pairs.joinToString { it -> it.first + "=" + it.second }
-        logger?.let { l -> l.log(level, msg + " " + info, ex) }
+    fun log(level: LogLevel, msg: String?, ex: Exception? = null) {
+        val hasMsg = !msg.isNullOrEmpty()
+        val hasEx = ex != null
+        var fmsg = msg
+        if(!hasMsg && hasEx) fmsg = ex?.message
+        if(hasMsg && hasEx) fmsg += newline + ex?.message
+        logger?.let { l -> l.performLog(level, fmsg, ex) }
     }
 
 
     @Ignore
-    fun log(level: LogLevel, callback: () -> String, ex: Exception?) {
-        logger?.let { l -> l.log(level, callback, ex) }
+    fun log(level: LogLevel, msg:String?, callback: () -> String) {
+        logger?.let { l -> l.performLog(level, msg, callback) }
     }
+
+
+    fun trace(t:Throwable?):String {
+        val sw = StringWriter()
+        t?.printStackTrace(PrintWriter(sw))
+        val trace = sw.toString()
+        return trace
+    }
+
+    fun format(msg:String, args:Array<out Any?>):String = msg.format(*args)
 }
