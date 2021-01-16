@@ -105,12 +105,6 @@ object AppUtils {
         } ?: throw Exception("Unknown environment name : $envName supplied")
     }
 
-    fun resourceExists(uri:Uri, path: String): Boolean {
-        val actual = uri.combine(path)
-        val res = File(actual.full)
-        return res.exists()
-    }
-
 
     data class AppInputs(
         val loc : Uri,
