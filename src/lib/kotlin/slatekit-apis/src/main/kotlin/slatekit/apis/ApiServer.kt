@@ -322,12 +322,12 @@ open class ApiServer(
 
 
         fun record(req: Request, res:Outcome<ApiResult>, logger:Logger){
-            logger.info({
+            logger.info {
                 val info = listOf("path" to req.path) + res.structured()
                 val summary= info.joinToString { "${it.first}=${it.second?.toString()}" }
                 val inputs = req.structured().joinToString { "${it.first}=${it.second?.toString()}" }
                 "API Server Result: $summary, inputs : $inputs"
-            }, null)
+            }
 
             res.onFailure {
                 val numbered = it.numbered().joinToString(newline)

@@ -27,7 +27,6 @@ import slatekit.common.info.About
 import slatekit.common.io.Alias
 import slatekit.common.io.Uri
 import slatekit.common.log.Logs
-import slatekit.common.log.Prints
 import slatekit.results.*
 import slatekit.results.builders.Outcomes
 import java.io.File
@@ -104,12 +103,6 @@ object AppUtils {
 
             AppInputs(source, args, Envs(allEnvs).select(env.name), confBase, confEnv)
         } ?: throw Exception("Unknown environment name : $envName supplied")
-    }
-
-    fun resourceExists(uri:Uri, path: String): Boolean {
-        val actual = uri.combine(path)
-        val res = File(actual.full)
-        return res.exists()
     }
 
 

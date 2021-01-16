@@ -34,24 +34,9 @@ abstract class Logger(
      * @param ex
      */
     @Ignore
-    override fun log(level: LogLevel, msg: String, ex: Exception?) {
-        checkLog(level) {
-            log(LogEntry(name, level, msg, ex))
-        }
-    }
-
-    /**
-     * Logs an entry
-     *
-     * @param level
-     * @param msg
-     * @param ex
-     */
-    @Ignore
-    override fun log(level: LogLevel, msg: String, pairs:List<Pair<String,String>>, ex: Exception?) {
-        checkLog(level) {
-            val info = pairs.joinToString { it -> it.first + "=" + it.second }
-            log(LogEntry(name, level, "$msg $info", null))
+    fun performLog(level: LogLevel, msg: String?, ex: Exception?) {
+        if(level >= this.level) {
+            log(LogEntry(name, level, msg ?: "", ex))
         }
     }
 
@@ -62,23 +47,13 @@ abstract class Logger(
      * @param ex
      */
     @Ignore
-    override fun log(level: LogLevel, callback: () -> String, ex: Exception?) {
-        checkLog(level) {
-            val msg = callback()
-            log(LogEntry(name, level, msg, ex))
+    fun performLog(level: LogLevel, msg:String?, callback: () -> String) {
+        if(level >= this.level) {
+            val label = msg ?: ""
+            val output = callback()
+            log(LogEntry(name, level, "$label : $output"))
         }
     }
 
-    private fun checkLog(level: LogLevel, callback: () -> Unit) {
-        if (level >= this.level) {
-            callback()
-        }
-    }
-
-    /**
-     * Logs an entry
-     *
-     * @param entry
-     */
     abstract fun log(entry: LogEntry)
 }

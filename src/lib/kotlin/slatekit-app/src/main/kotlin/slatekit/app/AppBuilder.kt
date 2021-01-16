@@ -19,8 +19,9 @@ import slatekit.common.io.Uri
 import slatekit.common.io.Uris
 import slatekit.common.log.Logs
 import slatekit.common.log.LogsDefault
-import slatekit.common.log.Prints
 import slatekit.context.AppContext
+import slatekit.results.builders.Tries
+import slatekit.results.getOrElse
 import java.util.*
 
 /**
@@ -138,12 +139,14 @@ object AppBuilder {
      * Gets the build info file
      */
     fun build(cls:Class<*>, args: Args, loc:Uri): Build {
-        val buildInfoExists = AppUtils.resourceExists(loc, "build.conf")
-        return if (buildInfoExists) {
-            build(cls, args, Alias.Jar)
-        } else {
-            Build.empty
+        val result = Tries.of {
+            val uri = loc.combine("build.conf")
+            val props = Props.fromUri(cls, uri)
+            val stamp = Config(cls, uri, props, null)
+            val build = stamp.buildStamp("build")
+            build
         }
+        return result.getOrElse { Build.empty }
     }
 
     /**
@@ -163,7 +166,7 @@ object AppBuilder {
      * 5. dirs ( defaults )
      */
     fun context(cls:Class<*>, inputs: AppUtils.AppInputs, enc: Encryptor?, logs: Logs?): AppContext {
-        val build = AppBuilder.build(cls, inputs.args, inputs.loc)
+        val build = build(cls, inputs.args, inputs.loc)
         val args = inputs.args
         val env = inputs.envs
 

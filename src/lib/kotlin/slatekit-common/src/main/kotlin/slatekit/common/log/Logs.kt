@@ -13,6 +13,7 @@
 
 package slatekit.common.log
 
+
 interface Logs {
 
     fun getLogger(name: String? = ""): Logger

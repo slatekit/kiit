@@ -16,17 +16,17 @@ data class SimpleMigration(
 ) : Migration, LogSupport {
 
     override fun migrate(db: IDb): Outcome<Int> {
-        info("Migration starting for : $id", null)
+        info("Migration starting for : $id")
         val results = steps.map { Tries.of { it.run(db) } }
         val success = results.all { it.success }
         val message = if (success) "" else results.first { !it.success }.desc
         return when (success) {
             true -> {
-                info("Migration success : $id. \n $message", null)
+                info("Migration success : $id. \n $message")
                 Outcomes.success(steps.count())
             }
             false -> {
-                info("Migration failure : $id. \n $message", null)
+                info("Migration failure : $id. \n $message")
                 Outcomes.errored(message)
             }
         }

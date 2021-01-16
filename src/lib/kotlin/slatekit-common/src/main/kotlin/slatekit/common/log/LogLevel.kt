@@ -18,8 +18,8 @@ sealed class LogLevel(val name: String, val code: Int) {
     operator fun compareTo(lv: LogLevel): Int = this.code.compareTo(lv.code)
 
     object Debug : LogLevel("Debug", 1)
-    object Info : LogLevel("Meta", 2)
-    object Warn : LogLevel("Warn", 3)
+    object Info  : LogLevel("Meta", 2 )
+    object Warn  : LogLevel("Warn", 3 )
     object Error : LogLevel("Error", 4)
     object Fatal : LogLevel("Fatal", 5)
 
@@ -27,12 +27,12 @@ sealed class LogLevel(val name: String, val code: Int) {
     companion object {
         fun parse(level: String): LogLevel {
             return when (level.trim().toLowerCase()) {
-                LogLevel.Debug.name -> LogLevel.Debug
-                LogLevel.Info.name -> LogLevel.Info
-                LogLevel.Warn.name -> LogLevel.Warn
-                LogLevel.Error.name -> LogLevel.Error
-                LogLevel.Fatal.name -> LogLevel.Fatal
-                else -> LogLevel.Debug
+                Debug.name -> Debug
+                Info.name  -> Info
+                Warn.name  -> Warn
+                Error.name -> Error
+                Fatal.name -> Fatal
+                else -> Debug
             }
         }
     }
