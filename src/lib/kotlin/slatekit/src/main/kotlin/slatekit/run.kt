@@ -54,8 +54,7 @@ import slatekit.results.Success
  * /Users/kishorereddy/git/slatekit/slatekit/src/lib/kotlin/slatekit/build/distributions/slatekit/bin
  */
 fun main(args: Array<String>) {
-    val finalArgs = arrayOf("")
-    val parsed = Args.parseArgs(finalArgs)
+    val parsed = Args.parseArgs(args)
     val help = Help(SlateKit.TITLE)
     val writer = ConsoleWriter()
     when(parsed) {
@@ -65,7 +64,7 @@ fun main(args: Array<String>) {
                 help.show()
             }
             else {
-                run(finalArgs)
+                run(args)
             }
         }
         is Failure -> {
