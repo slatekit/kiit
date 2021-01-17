@@ -67,7 +67,7 @@ object Samples {
                     enc = sample.encryptor,
                     logs = LogbackLogs(),
                     hasAction = true,
-                    confSource = Alias.Jar,
+                    source = Alias.Jar,
                     builder = { ctx -> slatekit.samples.app.App(ctx) }
             )
         }
@@ -97,7 +97,7 @@ object Samples {
                     enc = sample.encryptor,
                     logs = LogbackLogs(),
                     hasAction = true,
-                    confSource = Alias.Jar,
+                    source = Alias.Jar,
                     builder = { ctx -> slatekit.samples.cli.App(ctx) }
             )
         }
@@ -127,7 +127,7 @@ object Samples {
                     enc = sample.encryptor,
                     logs = LogbackLogs(),
                     hasAction = true,
-                    confSource = Alias.Jar,
+                    source = Alias.Jar,
                     builder = { ctx -> slatekit.samples.api.App(ctx) }
             )
         }
