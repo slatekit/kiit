@@ -48,11 +48,12 @@ class Setup(val cls:Class<*>, val ctx: Context) {
      */
     private fun create(conf: Conf, info: SetupInfo) {
         val settings = PropSettings(dir = info.confDir.absolutePath, name = info.settingsName)
-        settings.put(KEY_SLATEKIT_VERSION, conf.getString(KEY_SLATEKIT_VERSION), false)
-        settings.put(KEY_SLATEKIT_VERSION_BETA, conf.getString(KEY_SLATEKIT_VERSION_BETA), false)
-        settings.put(KEY_KOTLIN_VERSION, conf.getString(KEY_KOTLIN_VERSION), false)
-        settings.put(KEY_GENERATION_SOURCE, "${info.installLocation}/templates", false)
-        settings.put(KEY_GENERATION_OUTPUT, "", false)
+        settings.putString(KEY_SLATEKIT_VERSION, conf.getString(KEY_SLATEKIT_VERSION))
+        settings.putString(KEY_SLATEKIT_VERSION_BETA, conf.getString(KEY_SLATEKIT_VERSION_BETA))
+        settings.putString(KEY_KOTLIN_VERSION, conf.getString(KEY_KOTLIN_VERSION))
+        settings.putString(KEY_GENERATION_SOURCE, "${info.installLocation}/templates")
+        settings.putString(KEY_GENERATION_OUTPUT, "")
+        settings.putBool(KEY_GENERATION_CUSTOM, false)
         settings.save(desc = "default settings")
     }
 
@@ -68,11 +69,12 @@ class Setup(val cls:Class<*>, val ctx: Context) {
 
         // Only update if different version
         val current = settings.getString(KEY_SLATEKIT_VERSION)
-        if(current != info.slatekitVersion) {
-            settings.put(KEY_SLATEKIT_VERSION, conf.getString(KEY_SLATEKIT_VERSION))
-            settings.put(KEY_SLATEKIT_VERSION_BETA, conf.getString(KEY_SLATEKIT_VERSION_BETA))
-            settings.put(KEY_KOTLIN_VERSION, conf.getString(KEY_KOTLIN_VERSION))
-            settings.put(KEY_GENERATION_SOURCE, "${info.installLocation}/templates")
+        val custom = settings.getBool(KEY_GENERATION_CUSTOM)
+        if(!custom && current != info.slatekitVersion) {
+            settings.putString(KEY_SLATEKIT_VERSION, conf.getString(KEY_SLATEKIT_VERSION))
+            settings.putString(KEY_SLATEKIT_VERSION_BETA, conf.getString(KEY_SLATEKIT_VERSION_BETA))
+            settings.putString(KEY_KOTLIN_VERSION, conf.getString(KEY_KOTLIN_VERSION))
+            settings.putString(KEY_GENERATION_SOURCE, "${info.installLocation}/templates")
             settings.save(desc = "upgrade to ${info.slatekitVersion}")
         }
     }
@@ -108,6 +110,7 @@ class Setup(val cls:Class<*>, val ctx: Context) {
         const val KEY_SLATEKIT_VERSION = "slatekit.version"
         const val KEY_SLATEKIT_VERSION_BETA = "slatekit.version.beta"
         const val KEY_SLATEKIT_VERSION_CLI = "slatekit.version.cli"
+        const val KEY_GENERATION_CUSTOM = "generation.custom"
         const val KEY_GENERATION_SOURCE = "generation.source"
         const val KEY_GENERATION_OUTPUT = "generation.output"
     }

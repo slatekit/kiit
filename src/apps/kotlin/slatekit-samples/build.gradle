@@ -113,6 +113,7 @@ dependencies {
         implementation "com.slatekit:slatekit-integration:$slatekit_version_beta"
         implementation "com.slatekit:slatekit-server:$slatekit_version_beta"
         implementation "com.slatekit:slatekit-connectors-cli:$slatekit_version"
+        implementation "com.slatekit:slatekit-connectors-jobs:$slatekit_version"
         implementation "com.slatekit:slatekit-providers-aws:$slatekit_version"
         implementation "com.slatekit:slatekit-providers-logback:$slatekit_version"
         implementation "com.slatekit:slatekit-providers-datadog:$slatekit_version"

@@ -26,8 +26,8 @@ class PropSettings(private val props:Properties = Properties(), val dir:String =
         save()
     }
 
-    fun save(overwrite:Boolean = false, desc:String? = "") {
-        save(props, dir, name, overwrite, desc)
+    fun save(desc:String? = "") {
+        save(props, dir, name, true, desc)
     }
 
     override val raw:Any = props
@@ -69,21 +69,21 @@ class PropSettings(private val props:Properties = Properties(), val dir:String =
     override fun putUPID(key: String, value: UPID) = putUPIDOrNull(key, value)
 
     override fun putStringOrNull(key: String, value: String?) { props[key] = value }
-    override fun putBoolOrNull(key: String, value: Boolean?) { props.put(key, value) }
-    override fun putShortOrNull(key: String, value: Short?) { props.put(key, value) }
-    override fun putIntOrNull(key: String, value: Int?) { props.put(key, value) }
-    override fun putLongOrNull(key: String, value: Long?) { props.put(key, value) }
-    override fun putFloatOrNull(key: String, value: Float?) { props.put(key, value) }
-    override fun putDoubleOrNull(key: String, value: Double?) { props.put(key, value) }
-    override fun putInstantOrNull(key: String, value: Instant?) { props.put(key, value) }
-    override fun putDateTimeOrNull(key: String, value: DateTime?) { props.put(key, value) }
-    override fun putLocalDateOrNull(key: String, value: LocalDate?) { props.put(key, value) }
-    override fun putLocalTimeOrNull(key: String, value: LocalTime?) { props.put(key, value) }
-    override fun putLocalDateTimeOrNull(key: String, value: LocalDateTime?) { props.put(key, value) }
-    override fun putZonedDateTimeOrNull(key: String, value: ZonedDateTime?) { props.put(key, value) }
-    override fun putZonedDateTimeUtcOrNull(key: String, value: ZonedDateTime?) { props.put(key, value) }
-    override fun putUUIDOrNull(key: String, value: UUID?) { props.put(key, value) }
-    override fun putUPIDOrNull(key: String, value: UPID?) { props.put(key, value) }
+    override fun putBoolOrNull(key: String, value: Boolean?) { props.put(key, value.toString()) }
+    override fun putShortOrNull(key: String, value: Short?) { props.put(key, value.toString()) }
+    override fun putIntOrNull(key: String, value: Int?) { props.put(key, value.toString()) }
+    override fun putLongOrNull(key: String, value: Long?) { props.put(key, value.toString()) }
+    override fun putFloatOrNull(key: String, value: Float?) { props.put(key, value.toString()) }
+    override fun putDoubleOrNull(key: String, value: Double?) { props.put(key, value.toString()) }
+    override fun putInstantOrNull(key: String, value: Instant?) { props.put(key, value.toString()) }
+    override fun putDateTimeOrNull(key: String, value: DateTime?) { props.put(key, value.toString()) }
+    override fun putLocalDateOrNull(key: String, value: LocalDate?) { props.put(key, value.toString()) }
+    override fun putLocalTimeOrNull(key: String, value: LocalTime?) { props.put(key, value.toString()) }
+    override fun putLocalDateTimeOrNull(key: String, value: LocalDateTime?) { props.put(key, value.toString()) }
+    override fun putZonedDateTimeOrNull(key: String, value: ZonedDateTime?) { props.put(key, value.toString()) }
+    override fun putZonedDateTimeUtcOrNull(key: String, value: ZonedDateTime?) { props.put(key, value.toString()) }
+    override fun putUUIDOrNull(key: String, value: UUID?) { props.put(key, value.toString()) }
+    override fun putUPIDOrNull(key: String, value: UPID?) { props.put(key, value.toString()) }
 
 
     private fun getStringRaw(key: String): String = props.get(key)?.toString()?.trim() ?: ""
