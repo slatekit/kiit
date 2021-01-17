@@ -41,7 +41,7 @@ object AppRunner {
      * @param logs       : Optional logs
      * @param envs       : The supported environments
      * @param errorMode  : Indicates what to do when there is an error
-     * @param confSource : The source of the configs ( e.g. jars | conf sub-directory )
+     * @param source : The source of the configs ( e.g. jars | conf sub-directory )
      * @param hasAction  : Whether or not the command line args have an action as a prefix before parameters e.g. "service.action"
      * @return
      */
@@ -55,7 +55,7 @@ object AppRunner {
         logs: Logs? = null,
         envs: Envs = Envs.defaults(),
         errorMode: ErrorMode = ErrorMode.Print,
-        confSource: Alias = Alias.Jar,
+        source: Alias = Alias.Jar,
         hasAction: Boolean = false
     ): Try<Any?> {
 
@@ -69,8 +69,8 @@ object AppRunner {
         // STEP 4: Validate  - Command line args based on args schema
         // STEP 5: Build App - Create App using supplied lambda and context
         // STEP 6: Run App   - Finally run the application with workflow ( init, exec, end )
-        val result = argsResult.then { args -> AppHelp.process(rawArgs.toList(), args, about, schema) }
-            .then { args    -> Tries.of { AppUtils.context(cls, args, envs, about, schema ?: AppBuilder.schema(), enc, logs, confSource) } }
+        val result = argsResult.then { args -> AppHelp.process(cls, source, rawArgs.toList(), args, about, schema) }
+            .then { args    -> Tries.of { AppUtils.context(cls, args, envs, about, schema ?: AppBuilder.schema(), enc, logs, source) } }
             .then { context -> Tries.of { context.copy(args = ArgsSchema.transform(schema, context.args)) } }
             .then { context -> validate(context.args, schema).map { context } }
             .then { context -> Tries.of { builder(context) } }

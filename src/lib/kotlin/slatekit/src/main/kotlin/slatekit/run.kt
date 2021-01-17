@@ -96,7 +96,7 @@ fun run(args:Array<String>){
                 enc = SlateKit.encryptor,
                 logs = LogsDefault,
                 hasAction = true,
-                confSource = Alias.Jar,
+                source = Alias.Jar,
                 builder = { ctx -> SlateKit(version(ctx)) }
         )
     }
