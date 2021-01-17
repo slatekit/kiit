@@ -7,6 +7,7 @@ import slatekit.common.writer.ConsoleWriter
 import slatekit.common.envs.Envs
 import slatekit.common.info.About
 import slatekit.common.info.Info
+import slatekit.common.io.Alias
 import slatekit.results.*
 import slatekit.results.builders.Tries
 
@@ -51,13 +52,14 @@ class AppHelp(val info: Info, val args: ArgsSchema, val envs: Envs = Envs.defaul
     private val writer = ConsoleWriter()
 
     companion object {
-        fun process(rawArgs: List<String>, args: Args, about: About, schema: ArgsSchema?, envs: Envs = Envs.defaults()): Try<Args> {
+        fun process(cls:Class<*>, alias: Alias, rawArgs: List<String>, args: Args, about: About, schema: ArgsSchema?, envs: Envs = Envs.defaults()): Try<Args> {
             val assist = isAssist(rawArgs)
             return when (assist) {
                 is Failure -> Success(args)
                 is Success -> {
                     // Delegate help to the AppMeta component for (help | version | about )
-                    val appMeta = AppHelp(Info.of(about), schema ?: AppBuilder.schema(), envs)
+                    val build = AppBuilder.build(cls, args, alias)
+                    val appMeta = AppHelp(Info.of(about).copy(build = build), schema ?: AppBuilder.schema(), envs)
                     appMeta.handle(assist)
 
                     // Prevent futher processing by return failure

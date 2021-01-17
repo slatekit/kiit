@@ -126,12 +126,15 @@ object AppBuilder {
      * Builds the build info file
      */
     fun build(cls:Class<*>, args: Args, alias: Alias = Alias.Jar): Build {
-        val source = dir(args, alias)
-        val name = "build.conf"
-        val props = Props.fromUri(cls, source.combine(name))
-        val stamp = Config(cls, source,props, null)
-        val build = stamp.buildStamp("build")
-        return build
+        val result = Tries.of {
+            val source = dir(args, alias)
+            val name = "build.conf"
+            val props = Props.fromUri(cls, source.combine(name))
+            val stamp = Config(cls, source, props, null)
+            val build = stamp.buildStamp("build")
+            build
+        }
+        return result.getOrElse { Build.empty }
     }
 
 
