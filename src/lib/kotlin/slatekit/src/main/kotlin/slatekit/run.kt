@@ -97,13 +97,7 @@ fun run(args:Array<String>){
                 logs = LogsDefault,
                 hasAction = true,
                 source = Alias.Jar,
-                builder = { ctx -> SlateKit(version(ctx)) }
+                builder = { ctx -> SlateKit(ctx) }
         )
     }
-}
-
-fun version(ctx:Context): Context {
-    return if(ctx is AppContext) {
-        ctx.copy(info = ctx.info.copy(build = ctx.info.build.copy(version = "1.34.5")))
-    } else ctx
 }
