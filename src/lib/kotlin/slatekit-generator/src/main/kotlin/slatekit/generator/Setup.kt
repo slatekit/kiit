@@ -6,10 +6,12 @@ import slatekit.common.conf.PropSettings
 import slatekit.common.conf.Props
 import slatekit.common.info.About
 import slatekit.common.info.Folders
+import slatekit.common.writer.ConsoleWriter
 import slatekit.context.Context
 import java.io.File
 
 class Setup(val cls:Class<*>, val ctx: Context) {
+    private val writer = ConsoleWriter()
 
     /**
      * Creates / Updates the Slate Kit home directory and settings ~/.slatekit/tools/cli/conf/settings.conf
@@ -36,6 +38,8 @@ class Setup(val cls:Class<*>, val ctx: Context) {
         else {
             update(conf, info)
         }
+        writer.text("")
+        
         // Now load from HOME/conf/settings.conf
         val settings = Config.of(cls, file.absolutePath)
         return settings
@@ -47,6 +51,7 @@ class Setup(val cls:Class<*>, val ctx: Context) {
      * settings: ~/.slatekit/tools/cli/conf/settings.conf
      */
     private fun create(conf: Conf, info: SetupInfo) {
+        writer.highlight("Creating settings at ~/.slatekit/tools/cli/conf/settings.conf to ${info.slatekitVersion}")
         val settings = PropSettings(dir = info.confDir.absolutePath, name = info.settingsName)
         settings.putString(KEY_SLATEKIT_VERSION, conf.getString(KEY_SLATEKIT_VERSION))
         settings.putString(KEY_SLATEKIT_VERSION_BETA, conf.getString(KEY_SLATEKIT_VERSION_BETA))
@@ -71,6 +76,7 @@ class Setup(val cls:Class<*>, val ctx: Context) {
         val current = settings.getString(KEY_SLATEKIT_VERSION)
         val custom = settings.getBool(KEY_GENERATION_CUSTOM)
         if(!custom && current != info.slatekitVersion) {
+            writer.highlight("Upgrading settings at ~/.slatekit/tools/cli/conf/settings.conf to ${info.slatekitVersion}")
             settings.putString(KEY_SLATEKIT_VERSION, conf.getString(KEY_SLATEKIT_VERSION))
             settings.putString(KEY_SLATEKIT_VERSION_BETA, conf.getString(KEY_SLATEKIT_VERSION_BETA))
             settings.putString(KEY_KOTLIN_VERSION, conf.getString(KEY_KOTLIN_VERSION))
