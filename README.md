@@ -137,7 +137,8 @@ It can not be used for production usage without obtaining a license.
 2. Kotlin Flow integration where applicable
 3. Kotlin Multi-Platform
 4. Code Generators and OpenAPI integrations
-5. Docker, Kubernetes integrations
+5. Docker, Kubernetes build scripts
+6. Slate Kit Cloud Console to manage apps ( initial focus on AWS )
 
 
 # Contact
