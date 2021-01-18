@@ -67,13 +67,14 @@ num | type | link
 1   | website     | www.slatekit.com                            
 2   | start       | www.slatekit.com/start/hello_world           
 3   | modules     | https://www.slatekit.com/arch/overview/             
-4   | releases    | https://github.com/code-helix/slatekit/releases 
-5   | issues      | https://github.com/code-helix/slatekit/issues   
-6   | license     | http://www.slatekit.com/arch/license           
-7   | utilities   | http://www.slatekit.com/utils/overview          
-8   | standards   | http://www.slatekit.com/more/standards  
-9   | packages    | http://dl.bintray.com/codehelixinc/slatekit
-10  | bintray     | https://bintray.com/codehelixinc/slatekit
+4   | releases    | https://github.com/slatekit/slatekit/releases 
+5   | issues      | https://github.com/slatekit/slatekit/issues   
+6   | discuss     | https://github.com/slatekit/slatekit/discussions   
+7   | license     | http://www.slatekit.com/arch/license           
+8   | utilities   | http://www.slatekit.com/utils/overview          
+9   | standards   | http://www.slatekit.com/more/standards  
+10  | packages    | http://dl.bintray.com/codehelixinc/slatekit
+11  | bintray     | https://bintray.com/codehelixinc/slatekit
 
 
 # Modules
