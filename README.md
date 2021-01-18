@@ -106,15 +106,23 @@ docs | source | desc | download
 Slate Kit has a unique **Dual License** approach using **BSL** (Business Source License) and **Apache 2.0** using the `Additional Use Grants` parameter of the BSL. This is a relatively new approach and license that we are trying out and we plan to improve on this dual licensing approach in time. Currently, we are allowing this software to be used as Apache 2.0 immediately for the groups / usage listed below and for the foreseeable future.
 
 **Apache 2.0**: This is effectively Apache 2.0 for the following groups and usage
-1. Non-Profits ( .org ) 
-2. Educational Institutions ( .edu )
-3. Start Ups ( Same as commercial - see below )
-4. Personal projects
-5. Commercial use : Must NOT be a Cloud Provider company and/or used for building Cloud-Provider infrastructure ( such as AWS, Google Cloud, Azure, Digital Ocean, etc )
+group | note
+----| ------------ 
+**Non-Profits** | Non-Profit organizations ( .org ) 
+**Educational** | Educational institutions ( .edu )
+**Start Ups**   | Same as commercial - see below
+**Personal**    | Same as commercial - see below 
+**Commercial**  | Must NOT be a Cloud Provider company and/or used for building Cloud-Provider infrastructure ( such as AWS, Google Cloud, Azure, Digital Ocean, etc )
 
 **BSL 1.1** 
 For Cloud-Providers such as AWS, Google Cloud, Azure, Digital Ocean, etc, this is a BSL license. 
 It can not be used for production usage without obtaining a license.
+
+param |value
+----| ------------ 
+**Change Date** | Jan 1, 2024  - Converts to Apache 2.0 on Jan 1, 2024
+**Change License** |  Apache 2.0 - Type of license this BSL will convert to
+**Additional Use Grants** |  Grants production use immediately under Apache 2.0 for certain groups and usage ( see above )
 
 **Notes**:
 1. BSL is a relatively new license type.
@@ -125,12 +133,6 @@ It can not be used for production usage without obtaining a license.
 **Links**:
 1. https://mariadb.com/bsl-faq-adopting/
 2. https://blog.adamretter.org.uk/business-source-license-adoption/
-
-
-**Parameters**
-1. **Change Date** : Jan 1, 2024  - Converts to Apache 2.0 on Jan 1, 2024
-2. **Change License** :  Apache 2.0 - Type of license this BSL will convert to
-3. **Additional Use Grants** : Grants production use immediately under Apache 2.0 for certain groups and usage ( see above )
 
 
 # Upcoming
