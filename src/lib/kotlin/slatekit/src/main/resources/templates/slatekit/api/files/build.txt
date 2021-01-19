@@ -51,7 +51,7 @@ dependencies {
     compile "com.slatekit:slatekit-app:$slatekit_version"
     compile "com.slatekit:slatekit-tracking:$slatekit_version"
     compile "com.slatekit:slatekit-apis:$slatekit_version"
-    compile "com.slatekit:slatekit-server:$slatekit_version_beta"
+    compile "com.slatekit:slatekit-server:$slatekit_version"
     compile "com.slatekit:slatekit-serialization:$slatekit_version"
     compile "com.slatekit:slatekit-providers-logback:$slatekit_version"
 }

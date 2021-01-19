@@ -16,7 +16,6 @@ package slatekit.db
 import slatekit.common.DateTime
 import slatekit.common.Record
 import java.sql.ResultSet
-// import java.time.*
 import org.threeten.bp.*
 import slatekit.common.DateTimes
 import slatekit.common.ext.atZone

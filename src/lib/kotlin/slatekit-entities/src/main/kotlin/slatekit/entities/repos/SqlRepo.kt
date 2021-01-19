@@ -27,20 +27,20 @@ import slatekit.query.Query
  * @param info : Holds all info relevant state/members needed to perform repo operations
  * @tparam T
  */
-open class SqlRepo<TId, T>(
+abstract class SqlRepo<TId, T>(
     val db: IDb,
     info: EntityInfo,
     val mapper: Mapper<TId, T>
 ) : BaseRepo<TId, T>(info)
         where TId : Comparable<TId> {
 
-    override fun create(entity: T): TId {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
-    }
-
-    override fun update(entity: T): Boolean {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
-    }
+//    override fun create(entity: T): TId {
+//        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+//    }
+//
+//    override fun update(entity: T): Boolean {
+//        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+//    }
 
     override fun name(): String = "${info.encodedChar}" + super.name() + "${info.encodedChar}"
 

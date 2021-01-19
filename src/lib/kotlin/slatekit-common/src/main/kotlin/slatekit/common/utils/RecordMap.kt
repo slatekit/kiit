@@ -30,9 +30,9 @@ class RecordMap(private val rs: ListMap<String, Any>) : Record {
     override val raw: Any = rs
     override fun size(): Int = rs.size
     override fun get(key: String): Any? = rs.get(key)
-    override fun getPos(key:String):Int = rs.keys().indexOf(key)
+    override fun getPos(name:String):Int = rs.keys().indexOf(name)
     override fun getName(pos:Int):String = rs.keys()[pos]
-    override fun contains(key:String):Boolean = rs.contains(key)
+    override fun contains(name:String):Boolean = rs.contains(name)
     override fun containsKey(key: String): Boolean = rs.contains(key)
 
     override fun getString(key: String): String = rs.get(key) as String

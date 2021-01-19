@@ -152,7 +152,6 @@ class DateTimes {
         fun build(date: Date, zone: ZoneId): ZonedDateTime {
             //val dateTime = ZonedDateTime.ofInstant(date.toInstant(), zone)
             //val date = Instant.ofEpochMilli(date.toInstant().toEpochMilli()))
-            val d = java.util.Date()
             val calendar = java.util.GregorianCalendar()
             calendar.time = date
             val year = calendar.get(Calendar.YEAR)

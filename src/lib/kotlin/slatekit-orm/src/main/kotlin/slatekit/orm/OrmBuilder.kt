@@ -134,4 +134,24 @@ class OrmBuilder(dbCreator: (DbCon) -> IDb,
         val repo = this.repo(vendor, db, info, mapper)
         return repo
     }
+
+
+    inline fun <reified TId, reified T> h2(db: IDb, mapper: Mapper<TId, T>, table: String? = null): SqlRepo<TId, T> where TId : Comparable<TId>, T: Any {
+        return Repo.sqlRepo<TId, T>(db, mapper, table) { idType, enType, info ->
+            SqlRepo(db, info, mapper)
+        }
+    }
+
+
+    inline fun <reified TId, reified T> mysql(db: IDb, mapper: Mapper<TId, T>, table: String? = null): SqlRepo<TId, T> where TId : Comparable<TId>, T: Any {
+        return Repo.sqlRepo<TId, T>(db, mapper, table) { idType, enType, info ->
+            MySqlRepo<TId, T>(db, info, mapper)
+        }
+    }
+
+    inline fun <reified TId, reified T> postgres(db: IDb, mapper: Mapper<TId, T>, table: String? = null): SqlRepo<TId, T> where TId : Comparable<TId>, T: Any {
+        return Repo.sqlRepo<TId, T>(db, mapper, table) { idType, enType, info ->
+            SqlRepo(db, info, mapper)
+        }
+    }
 }

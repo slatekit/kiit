@@ -52,7 +52,6 @@ object Props {
      */
     fun fromUri(cls:Class<*>, uri: Uri):Properties {
         val props = when(uri.root) {
-            null           -> fromJar(cls,uri.path ?: Confs.CONFIG_DEFAULT_PROPERTIES)
             is Alias.Jar   -> fromJar(cls,uri.path ?: Confs.CONFIG_DEFAULT_PROPERTIES)
             is Alias.Other -> fromJar(cls,uri.path ?: Confs.CONFIG_DEFAULT_PROPERTIES)
             else -> fromFileRaw(uri.toFile().absolutePath)

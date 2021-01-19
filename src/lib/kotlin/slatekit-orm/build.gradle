@@ -89,7 +89,7 @@ dependencies {
         compile "com.slatekit:slatekit-common:$slatekit_version"
         compile "com.slatekit:slatekit-query:$slatekit_version_beta"
         compile "com.slatekit:slatekit-meta:$slatekit_version_beta"
-        compile "com.slatekit:slatekit-db:$slatekit_version_beta"
+        compile "com.slatekit:slatekit-db:$slatekit_version"
         compile "com.slatekit:slatekit-entities:$slatekit_version_beta"
     } else {
         // */

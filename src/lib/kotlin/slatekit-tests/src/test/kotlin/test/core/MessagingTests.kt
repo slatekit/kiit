@@ -12,7 +12,6 @@ class MessagingTests {
     fun setup() {
     }
 
-    // TODO implement google tests
 //    @Test fun can_send_notification() {
 //        val io = IOTest()
 //        val cfg = Config()

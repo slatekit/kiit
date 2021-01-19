@@ -46,6 +46,7 @@ interface Status {
         /**
          * Minor optimization to avoid unnecessary copying of Status
          */
+        @Suppress("UNCHECKED_CAST")
         fun <T : Status> ofCode(msg: String?, code: Int?, defaultStatus: T): T {
             // NOTE: There is small optimization here to avoid creating a new instance
             // of [Status] if the msg/code are empty and or they are the same as Success.
@@ -58,6 +59,7 @@ interface Status {
         /**
          * Minor optimization to avoid unnecessary copying of Status
          */
+        @Suppress("UNCHECKED_CAST")
         fun <T : Status> ofStatus(msg: String?, rawStatus: T?, status: T): T {
             // NOTE: There is small optimization here to avoid creating a new instance
             // of [Status] if the msg/code are empty and or they are the same as Success.
