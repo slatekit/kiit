@@ -5,14 +5,18 @@ import slatekit.common.data.IDb
 import slatekit.common.data.Mapper
 import slatekit.common.ext.insertAt
 import slatekit.data.core.*
-import slatekit.data.slatekit.data.core.EntityUtils
+import slatekit.data.core.SqlBased
+import slatekit.data.core.EntityUtils
 
 /**
  * SQL based Repository ( representing a database table )
  * @param db: @see[slatekit.common.data.IDb] to for low level database tasks (inserts/updates/deletes/queries)
  * @param info: Stores information about the Entity/Class assocated with this Repository/table
  */
-open class SqlRepo<TId, T>(val db:IDb, val mapper: Mapper<TId, T>, override val info:EntityInfo) : CrudRepo<TId, T> where TId : Comparable<TId> {
+open class SqlRepo<TId, T>(override val db:IDb,
+                           override val mapper: Mapper<TId, T>,
+                           override val info:EntityInfo)
+    : CrudRepo<TId, T>, SqlBased<TId, T> where TId : Comparable<TId> {
 
     override fun create(entity: T): TId {
         val values = mapper.encode(entity, DataAction.Create, null)

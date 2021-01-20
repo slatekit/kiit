@@ -1,4 +1,4 @@
-package slatekit.data.slatekit.data.core
+package slatekit.data.core
 
 import slatekit.common.ext.toUUId
 import java.util.*
