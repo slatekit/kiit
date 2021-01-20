@@ -1,9 +1,9 @@
-package slatekit.entities.repos
+package slatekit.data.features
 
 /**
  * Repo that has a sequential / serial Id. E.g. Numeric ( int, long )
  */
-interface SeqRepo<TId, T> where TId : Comparable<TId>, TId: Number {
+interface Orderable<TId, T> where TId : Comparable<TId> {
 
     /**
      * gets the top count entities in the datastore sorted by asc order

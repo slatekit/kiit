@@ -26,26 +26,6 @@ interface Reads<TId, T> : ServiceSupport<TId, T> where TId : kotlin.Comparable<T
     }
 
     /**
-     * gets the entity from the datastore using the id
-     * @param id
-     * @return
-     */
-    @Deprecated("Replaced with getById", replaceWith = ReplaceWith("getById"))
-    fun get(id: TId): T? {
-        return repo().getById(id)
-    }
-
-    /**
-     * gets the entity from the datastore using the id
-     * @param id
-     * @return
-     */
-    @Deprecated("Replaced with getByIds", replaceWith = ReplaceWith("getByIds"))
-    fun get(ids: List<TId>): List<T> {
-        return repo().getByIds(ids)
-    }
-
-    /**
      * gets all the entities from the datastore.
      * @return
      */

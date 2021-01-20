@@ -32,7 +32,7 @@ interface IDb : ScalarSupport, ProcSupport {
      * @param inputs : The inputs for the sql or stored proc
      * @return : The id ( primary key )
      */
-    fun insert(sql: String, inputs: List<Any>? = null): Long
+    fun insert(sql: String, inputs: List<Any?>? = null): Long
 
     /**
      * executes an insert using the sql or stored proc and gets the id
@@ -41,7 +41,7 @@ interface IDb : ScalarSupport, ProcSupport {
      * @param inputs : The inputs for the sql or stored proc
      * @return : The id ( primary key )
      */
-    fun insertGetId(sql: String, inputs: List<Any>? = null): String
+    fun insertGetId(sql: String, inputs: List<Any?>? = null): String
 
     /**
      * executes the update sql or stored proc
@@ -50,7 +50,7 @@ interface IDb : ScalarSupport, ProcSupport {
      * @param inputs : The inputs for the sql or stored proc
      * @return : The number of affected records
      */
-    fun update(sql: String, inputs: List<Any>? = null): Int
+    fun update(sql: String, inputs: List<Any?>? = null): Int
 
     /**
      * Executes a sql query

@@ -7,7 +7,7 @@ import slatekit.entities.events.EntityAction
 import slatekit.entities.events.EntityEvent
 import slatekit.entities.core.ServiceSupport
 import slatekit.entities.events.EntityHooks
-import slatekit.entities.slatekit.entities.EntityOptions
+import slatekit.entities.EntityOptions
 import slatekit.results.Try
 import slatekit.results.builders.Tries
 

@@ -20,10 +20,10 @@ apply plugin: 'kotlin'
 
 
 // Slate Kit Component info ( for variables for pom / package / etc )
-def slatekitComponentId = 'db'
-def slatekitComponentName = 'Db'
-def slatekitComponentDesc = 'SlateKit Db: Kotlin Database Utilities'
-def slatekitComponentVersion = ext.slatekit_version
+def slatekitComponentId = 'entities'
+def slatekitComponentName = 'Entities'
+def slatekitComponentDesc = 'SlateKit Entities: Entity Service/Repository pattern'
+def slatekitComponentVersion = ext.slatekit_version_beta
 
 
 // ==================================================================
@@ -50,6 +50,18 @@ task info {
 }
 
 
+tasks.withType(org.jetbrains.kotlin.gradle.tasks.KotlinCompile).all {
+    sourceCompatibility = JavaVersion.VERSION_1_6
+    targetCompatibility = JavaVersion.VERSION_1_6
+
+    kotlinOptions {
+        jvmTarget = '1.6'
+        apiVersion = '1.3'
+        languageVersion = '1.3'
+    }
+}
+
+
 repositories {
     jcenter()
     mavenCentral()
@@ -67,25 +79,26 @@ repositories {
 
 dependencies {
     compile "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
-    compile "org.jetbrains.kotlin:kotlin-reflect:$kotlin_version"
     compile "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin_version"
-	compile fileTree(dir: 'lib', include: '*.jar')
-	compile "com.amazonaws:aws-java-sdk-core:1.11.100"
-    compile "com.amazonaws:aws-java-sdk-s3:1.11.100"
-    compile "com.amazonaws:aws-java-sdk-sqs:1.11.100"
+    compile 'com.squareup.okhttp3:okhttp:3.9.0'
     compile 'org.threeten:threetenbp:1.3.8'
 
     /* <slatekit_local>
     if( slatekitSetupViaBinary ) {
         compile "com.slatekit:slatekit-results:$slatekit_version"
         compile "com.slatekit:slatekit-common:$slatekit_version"
+        compile "com.slatekit:slatekit-context:$slatekit_version"
+        compile "com.slatekit:slatekit-query:$slatekit_version_beta"
+        compile "com.slatekit:slatekit-meta:$slatekit_version_beta"
     } else {
         // */
         compile project(":slatekit-result")
         compile project(":slatekit-common")
+        compile project(":slatekit-context")
+        compile project(":slatekit-query")
+        compile project(":slatekit-meta")
     // } //</slatekit_local>
 }
-
 
 // ==================================================================
 // BinTray Integration

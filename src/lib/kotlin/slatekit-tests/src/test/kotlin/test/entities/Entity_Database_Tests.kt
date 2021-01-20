@@ -106,7 +106,7 @@ class Entity_Database_Tests : TestSupport {
                 test_uuid = UUID.fromString(sampleUUID1),
                 test_uniqueId = UPIDs.parse(sampleUUID2)
         ))
-        val created = svc.get(id)
+        val created = svc.getById(id)
         val update = created!!.copy(
                 test_string = "update",
                 test_string_enc = "original 123 v2",
@@ -125,7 +125,7 @@ class Entity_Database_Tests : TestSupport {
                 test_uniqueId = UPIDs.parse("abc:" + sampleUUID2)
         )
         svc.update(update)
-        val updated = svc.get(id)!!
+        val updated = svc.getById(id)!!
         Assert.assertTrue(updated.id == update.id)
         Assert.assertTrue(updated.test_string == update.test_string)
         Assert.assertTrue(updated.test_string_enc == update.test_string_enc)

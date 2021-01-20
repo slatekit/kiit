@@ -1,4 +1,4 @@
-package slatekit.entities.slatekit.entities.features
+package slatekit.entities.features
 
 import slatekit.entities.Entity
 import slatekit.entities.core.ServiceSupport

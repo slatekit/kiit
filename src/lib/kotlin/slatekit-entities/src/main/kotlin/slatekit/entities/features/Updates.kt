@@ -7,7 +7,7 @@ import slatekit.entities.events.EntityAction
 import slatekit.entities.events.EntityEvent
 import slatekit.entities.core.ServiceSupport
 import slatekit.entities.events.EntityHooks
-import slatekit.entities.slatekit.entities.EntityOptions
+import slatekit.entities.EntityOptions
 import slatekit.meta.Reflector
 import slatekit.meta.kClass
 import slatekit.query.IQuery

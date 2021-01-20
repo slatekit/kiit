@@ -18,6 +18,7 @@ import slatekit.common.DateTime
 import slatekit.common.data.IDb
 import slatekit.common.data.Mapper
 import slatekit.entities.Consts.idCol
+import slatekit.entities.EntityWithTime
 import slatekit.entities.core.EntityInfo
 import slatekit.entities.core.EntityStore
 import slatekit.entities.repos.SqlRepo
@@ -151,23 +152,7 @@ interface Repo<TId, T> : EntityStore where TId : Comparable<TId> {
      * @param id
      * @return
      */
-    @Deprecated("Replaced with getById", replaceWith = ReplaceWith("getById"))
-    fun get(id: TId): T? = getById(id)
-
-    /**
-     * gets the entity from the datastore using the id
-     * @param id
-     * @return
-     */
     fun getById(id: TId): T?
-
-    /**
-     * gets the entity from the datastore using the id
-     * @param ids
-     * @return
-     */
-    @Deprecated("Replaced with getByIds", replaceWith = ReplaceWith("getByIds"))
-    fun get(ids: List<TId>): List<T> = getByIds(ids)
 
     /**
      * gets the entity from the datastore using the id
@@ -374,24 +359,24 @@ interface Repo<TId, T> : EntityStore where TId : Comparable<TId> {
 
     companion object {
 
-//        inline fun <reified TId, reified T> h2(db: IDb, mapper: Mapper<TId, T>, table: String? = null): SqlRepo<TId, T> where TId : Comparable<TId>, T: Any {
-//            return sqlRepo<TId, T>(db, mapper, table) { idType, enType, info ->
-//                SqlRepo(db, info, mapper)
-//            }
-//        }
-//
-//
-//        inline fun <reified TId, reified T> mysql(db: IDb, mapper: Mapper<TId, T>, table: String? = null): SqlRepo<TId, T> where TId : Comparable<TId>, T: Any {
-//            return sqlRepo<TId, T>(db, mapper, table) { idType, enType, info ->
-//                SqlRepo(db, info, mapper)
-//            }
-//        }
-//
-//        inline fun <reified TId, reified T> postgres(db: IDb, mapper: Mapper<TId, T>, table: String? = null): SqlRepo<TId, T> where TId : Comparable<TId>, T: Any {
-//            return sqlRepo<TId, T>(db, mapper, table) { idType, enType, info ->
-//                SqlRepo(db, info, mapper)
-//            }
-//        }
+        inline fun <reified TId, reified T> h2(db: IDb, mapper: Mapper<TId, T>, table: String? = null): SqlRepo<TId, T> where TId : Comparable<TId>, T: Any {
+            return sqlRepo<TId, T>(db, mapper, table) { idType, enType, info ->
+                SqlRepo(db, info, mapper)
+            }
+        }
+
+
+        inline fun <reified TId, reified T> mysql(db: IDb, mapper: Mapper<TId, T>, table: String? = null): SqlRepo<TId, T> where TId : Comparable<TId>, T: Any {
+            return sqlRepo<TId, T>(db, mapper, table) { idType, enType, info ->
+                SqlRepo(db, info, mapper)
+            }
+        }
+
+        inline fun <reified TId, reified T> postgres(db: IDb, mapper: Mapper<TId, T>, table: String? = null): SqlRepo<TId, T> where TId : Comparable<TId>, T: Any {
+            return sqlRepo<TId, T>(db, mapper, table) { idType, enType, info ->
+                SqlRepo(db, info, mapper)
+            }
+        }
 
         inline fun <reified TId, reified T> sqlRepo(db: IDb,
                                                     mapper: Mapper<TId, T>,

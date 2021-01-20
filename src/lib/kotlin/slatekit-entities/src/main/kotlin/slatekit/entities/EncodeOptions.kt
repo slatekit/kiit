@@ -1,4 +1,4 @@
-package slatekit.entities.slatekit.entities
+package slatekit.entities
 
 import slatekit.entities.events.EntityAction
 

@@ -2,8 +2,8 @@ package slatekit.entities.features
 
 import slatekit.entities.Entity
 import slatekit.entities.core.ServiceSupport
-import slatekit.entities.slatekit.entities.EntityOptions
-import slatekit.entities.slatekit.entities.features.Ordered
+import slatekit.entities.EntityOptions
+import slatekit.entities.features.Ordered
 import slatekit.results.Try
 import slatekit.results.builders.Tries
 
