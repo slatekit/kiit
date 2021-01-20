@@ -103,8 +103,8 @@ name | usage | desc
 ------|-----|-----
 [Aliases](kotlin/results/src/main/kotlin/slatekit/results/Aliases.kt) | alias | Aliases for Result to reduce the 2 parameter types to 1 with defaulted error type. Notice&lt;T> is Result&lt;T,String>, Outcome&lt;T> is Result&lt;T,Err>, Try&lt;T> is Result&lt;T,Exception>
 [Results](kotlin/results/src/main/kotlin/slatekit/results/Results.kt) | optional |Object with functions to build either a Success or Failure using the different groups of status/error codes from the StatusCode sealed class. These are here for convenience if you want to use the predefined set of Status/Err types.
-[StatusGroup](kotlin/results/src/main/kotlin/slatekit/results/StatusGroup.kt)  | optional | Default implementation of Status codes as a Sealed class with sub-classes ( Succeeded, Invalid, Ignored, Errored, Unhandled ) to represent a status and logical groups of different types of Statuses
-[StatusCodes](kotlin/results/src/main/kotlin/slatekit/results/StatusCodes.kt)   | optional |Default set of status codes from this library ( which are convertable/compatible with http status codes )
+[Status](kotlin/results/src/main/kotlin/slatekit/results/Status.kt)  | optional | Default implementation of Status codes as a Sealed class with sub-classes ( Succeeded, Invalid, Ignored, Errored, Unhandled ) to represent a status and logical groups of different types of Statuses
+[Codes](kotlin/results/src/main/kotlin/slatekit/results/Codes.kt)   | optional |Default set of status codes from this library ( which are convertable/compatible with http status codes )
 
 
 
