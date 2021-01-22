@@ -11,7 +11,7 @@
  * </slate_header>
  */
 
-package slatekit.entities.repos
+package slatekit.entities
 
 import slatekit.common.data.IDb
 import slatekit.common.ext.tail
@@ -30,7 +30,7 @@ import slatekit.query.Query
  * @param info : Holds all info relevant state/members needed to perform repo operations
  * @tparam T
  */
-open class SqlRepo<TId, T>(
+open class EntitySqlRepo<TId, T>(
     val db: IDb,
     override val info: EntityInfo,
     val mapper: Mapper<TId, T>

@@ -12,7 +12,7 @@ import slatekit.entities.core.EntityBuilder
 import slatekit.entities.EntityRepo
 import slatekit.entities.core.EntityInfo
 import slatekit.entities.core.buildTableName
-import slatekit.entities.repos.InMemoryRepo
+import slatekit.entities.EntityRepoInMemory
 import slatekit.meta.KTypes
 import slatekit.orm.core.SqlBuilder
 import slatekit.orm.databases.vendors.*
@@ -108,8 +108,8 @@ class OrmBuilder(dbCreator: (DbCon) -> IDb,
             PGres -> PostGresRepo(db, info, mapper)
             else -> {
                 val result = when(info.idType){
-                    KTypes.KIntClass  -> InMemoryRepo<TId, T>(info, IntIdGenerator() as IdGenerator<TId>)
-                    KTypes.KLongClass -> InMemoryRepo<TId, T>(info, LongIdGenerator() as IdGenerator<TId>)
+                    KTypes.KIntClass  -> EntityRepoInMemory<TId, T>(info, IntIdGenerator() as IdGenerator<TId>)
+                    KTypes.KLongClass -> EntityRepoInMemory<TId, T>(info, LongIdGenerator() as IdGenerator<TId>)
                     else -> throw Exception("Unexpected entity id type for Slate Kit repo")
                 }
                 return result

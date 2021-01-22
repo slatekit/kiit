@@ -11,7 +11,7 @@
  * </slate_header>
  */
 
-package slatekit.entities.repos
+package slatekit.entities
 
 import slatekit.common.DateTime
 import slatekit.common.utils.ListMap
@@ -44,7 +44,7 @@ import kotlin.reflect.KClass
  * WARNING!!!!!!
  * Should NOT be used outside of prototyping
  */
-open class InMemoryRepo<TId, T>(override val info: EntityInfo, val idGenerator: IdGenerator<TId>)
+open class EntityRepoInMemory<TId, T>(override val info: EntityInfo, val idGenerator: IdGenerator<TId>)
     : EntityRepo<TId, T>, Countable<TId, T>, Orderable<TId, T>
         where TId : kotlin.Comparable<TId>, T: Any {
 
@@ -252,9 +252,9 @@ open class InMemoryRepo<TId, T>(override val info: EntityInfo, val idGenerator: 
 
     companion object {
 
-        inline fun <reified TId, reified T> of():InMemoryRepo<TId, T> where TId : Comparable<TId>, T:Any {
+        inline fun <reified TId, reified T> of(): EntityRepoInMemory<TId, T> where TId : Comparable<TId>, T:Any {
             val idGen = if(TId::class == Int::class) IntIdGenerator() else LongIdGenerator()
-            val repo = InMemoryRepo<TId, T>(EntityInfo.memory(TId::class, T::class), idGen as IdGenerator<TId>)
+            val repo = EntityRepoInMemory<TId, T>(EntityInfo.memory(TId::class, T::class), idGen as IdGenerator<TId>)
             return repo
         }
     }

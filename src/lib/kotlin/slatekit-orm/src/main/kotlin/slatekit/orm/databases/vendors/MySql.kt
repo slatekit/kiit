@@ -2,7 +2,7 @@ package slatekit.orm.databases.vendors
 
 import slatekit.common.data.IDb
 import slatekit.common.naming.Namer
-import slatekit.entities.repos.SqlRepo
+import slatekit.entities.EntitySqlRepo
 import slatekit.query.Query
 import slatekit.entities.Entity
 import slatekit.entities.core.EntityInfo
@@ -36,7 +36,7 @@ class MySqlQuery : Query()
  * @tparam T
  */
 open class MySqlRepo<TId, T>(db: IDb, info:EntityInfo, mapper: OrmMapper<TId, T>)
-    : SqlRepo<TId, T>(db, info, mapper) where TId : Comparable<TId>, T : Any {
+    : EntitySqlRepo<TId, T>(db, info, mapper) where TId : Comparable<TId>, T : Any {
 
     private val ormMapper = mapper
 

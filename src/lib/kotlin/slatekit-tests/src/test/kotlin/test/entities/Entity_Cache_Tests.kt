@@ -17,7 +17,7 @@ import org.junit.Assert
 import org.junit.Test
 import slatekit.entities.EntityService
 import slatekit.entities.core.EntityInfo
-import slatekit.entities.repos.InMemoryRepo
+import slatekit.entities.EntityRepoInMemory
 import slatekit.entities.repos.LongIdGenerator
 import slatekit.entities.support.cache.EntityCache
 import test.setup.User5
@@ -30,7 +30,7 @@ class Entity_Cache_Tests {
               immediateLoad:Boolean,
               fetcher:((EntityService<Long, User5>) -> List<User5>)? = null):EntityCache<Long, String, User5> {
         val info = EntityInfo( Long::class, User5::class, "")
-        val repo = InMemoryRepo<Long, User5>(info, LongIdGenerator())
+        val repo = EntityRepoInMemory<Long, User5>(info, LongIdGenerator())
 
         if(loadData) {
             repo.create(User5(0, "user1@a.com", true , uniqueId = "a1"))

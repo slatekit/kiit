@@ -6,7 +6,7 @@ import slatekit.query.Query
 import slatekit.meta.models.Model
 import slatekit.entities.Entity
 import slatekit.entities.core.EntityInfo
-import slatekit.entities.repos.SqlRepo
+import slatekit.entities.EntitySqlRepo
 import slatekit.orm.core.Converter
 import slatekit.orm.core.SqlBuilder
 import slatekit.orm.core.TypeMap
@@ -36,7 +36,7 @@ class PostGresQuery : Query()
  * @tparam T
  */
 open class PostGresRepo<TId, T>(db: IDb, info: EntityInfo, mapper: OrmMapper<TId, T>)
-    : SqlRepo<TId, T>(db, info, mapper) where TId : Comparable<TId>, T : Entity<TId> {
+    : EntitySqlRepo<TId, T>(db, info, mapper) where TId : Comparable<TId>, T : Entity<TId> {
 
     private val ormMapper = mapper
 

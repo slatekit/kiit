@@ -1,5 +1,6 @@
-package slatekit.entities.slatekit.entities.features
+package slatekit.entities.features
 
+import slatekit.data.features.Countable
 import slatekit.entities.Entity
 import slatekit.entities.core.ServiceSupport
 
@@ -10,7 +11,11 @@ interface Counts<TId, T> : ServiceSupport<TId, T> where TId : kotlin.Comparable<
      * @return
      */
     fun count(): Long {
-        return repo().count()
+        val r = repo()
+        return when (r is Countable<*, *>) {
+            true -> r.count()
+            false -> 0
+        }
     }
 
     /**
@@ -18,7 +23,7 @@ interface Counts<TId, T> : ServiceSupport<TId, T> where TId : kotlin.Comparable<
      * @return
      */
     fun any(): Boolean {
-        return repo().any()
+        return count() > 0
     }
 
     /**
