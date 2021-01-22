@@ -2,13 +2,13 @@ package slatekit.entities.features
 
 import kotlin.reflect.KProperty
 import slatekit.entities.Entity
-import slatekit.entities.core.ServiceSupport
+import slatekit.entities.core.EntityOps
 import slatekit.query.IQuery
 import slatekit.query.Op
 import slatekit.results.Try
 import slatekit.results.builders.Tries
 
-interface Deletes<TId, T> : ServiceSupport<TId, T> where TId : kotlin.Comparable<TId>, T : Entity<TId> {
+interface Deletes<TId, T> : EntityOps<TId, T> where TId : kotlin.Comparable<TId>, T : Entity<TId> {
 
     /**
      * deletes the entity

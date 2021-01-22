@@ -1,13 +1,12 @@
 package slatekit.entities.features
 
 import slatekit.entities.Entity
-import slatekit.entities.core.ServiceSupport
+import slatekit.entities.core.EntityOps
 import slatekit.entities.EntityOptions
-import slatekit.entities.features.Ordered
 import slatekit.results.Try
 import slatekit.results.builders.Tries
 
-interface CRUD<TId, T> : ServiceSupport<TId, T>,
+interface CRUD<TId, T> : EntityOps<TId, T>,
         Creates<TId, T>,
         Reads<TId, T>,
         Updates<TId, T>,

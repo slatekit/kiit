@@ -73,7 +73,7 @@ fun <TId, T> Entities.orm(
     val builder = OrmBuilder(this.builder.dbCreator, this.dbs, this.enc)
 
     // 1. Table name
-    val table = buildTableName(entityType, tableName, namer)
+    val table = EntityInfo.buildTableName(entityType, tableName, namer)
 
     // 2. Model ( schema of the entity which maps fields to columns and has other metadata )
     val model = builder.model(entityType, namer, table)

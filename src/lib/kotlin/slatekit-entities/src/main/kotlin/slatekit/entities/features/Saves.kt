@@ -2,11 +2,11 @@ package slatekit.entities.features
 
 import slatekit.entities.Entity
 import slatekit.data.events.EntityAction
-import slatekit.entities.core.ServiceSupport
+import slatekit.entities.core.EntityOps
 import slatekit.results.Try
 import slatekit.results.builders.Tries
 
-interface Saves<TId, T> : ServiceSupport<TId, T> where TId : kotlin.Comparable<TId>, T : Entity<TId> {
+interface Saves<TId, T> : EntityOps<TId, T> where TId : kotlin.Comparable<TId>, T : Entity<TId> {
 
     /**
      * saves an entity by either creating it or updating it based on

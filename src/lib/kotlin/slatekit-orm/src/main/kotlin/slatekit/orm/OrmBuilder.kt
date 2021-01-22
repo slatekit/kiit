@@ -11,7 +11,6 @@ import slatekit.entities.Entity
 import slatekit.entities.core.EntityBuilder
 import slatekit.entities.EntityRepo
 import slatekit.entities.core.EntityInfo
-import slatekit.entities.core.buildTableName
 import slatekit.entities.EntityRepoInMemory
 import slatekit.meta.KTypes
 import slatekit.orm.core.SqlBuilder
@@ -70,7 +69,7 @@ class OrmBuilder(dbCreator: (DbCon) -> IDb,
     fun <TId, T> mapper(vendor: Vendor, info:EntityInfo): OrmMapper<TId, T>
             where TId:Comparable<TId>, T: Entity<TId> {
         // 1. Table name
-        val table = buildTableName(info.modelType, info.tableName, info.namer)
+        val table = EntityInfo.buildTableName(info.modelType, info.tableName, info.namer)
 
         // 2. Model ( schema of the entity which maps fields to columns and has other metadata )
         val model = this.model(info.modelType, info.namer, table)

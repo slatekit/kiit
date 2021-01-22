@@ -39,5 +39,12 @@ data class EntityInfo(
             val info = EntityInfo(idType, entityType, tableName)
             return info
         }
+
+
+        fun buildTableName(entityType: KClass<*>, tableName: String?, namer: Namer?): String {
+            val raw = if (tableName.isNullOrEmpty()) entityType.simpleName!! else tableName
+            val table = namer?.rename(raw) ?: raw.toLowerCase()
+            return table
+        }
     }
 }

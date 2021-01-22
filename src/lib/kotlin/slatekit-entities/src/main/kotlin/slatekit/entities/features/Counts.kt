@@ -2,9 +2,9 @@ package slatekit.entities.features
 
 import slatekit.data.features.Countable
 import slatekit.entities.Entity
-import slatekit.entities.core.ServiceSupport
+import slatekit.entities.core.EntityOps
 
-interface Counts<TId, T> : ServiceSupport<TId, T> where TId : kotlin.Comparable<TId>, T : Entity<TId> {
+interface Counts<TId, T> : EntityOps<TId, T> where TId : kotlin.Comparable<TId>, T : Entity<TId> {
 
     /**
      * gets the total number of entities in the datastore

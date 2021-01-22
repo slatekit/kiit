@@ -8,6 +8,7 @@ import kotlin.reflect.KClass
 interface IdInfo {
     fun <T> isPersisted(entity:T):Boolean
     fun <TId, T> identity(entity:T):TId
+    fun <TId> convertToId(id: String, entityType: KClass<*>): TId
 }
 
 
@@ -27,7 +28,7 @@ open class EntityIdInfo : IdInfo {
     }
 
     @Suppress("UNCHECKED_CAST")
-    open fun <TId> convertToId(id: String, entityType: KClass<*>): TId {
+    override fun <TId> convertToId(id: String, entityType: KClass<*>): TId {
         return when (entityType) {
             Int::class -> id.toInt() as TId
             Long::class -> id.toLong() as TId

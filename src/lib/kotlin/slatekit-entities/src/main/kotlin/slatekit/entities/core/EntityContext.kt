@@ -17,6 +17,8 @@ import kotlin.reflect.KClass
 import slatekit.common.data.Vendor
 import slatekit.common.data.Vendor.MySql
 import slatekit.entities.EntityMapper
+import slatekit.entities.EntityRepo
+import slatekit.entities.EntityService
 import slatekit.meta.models.Model
 
 /**
@@ -36,13 +38,13 @@ open class EntityContext(
     val entityType: KClass<*>,
     val entityIdType: KClass<*>,
     val entityServiceType: KClass<*>,
-    val entityRepoInstance: EntityStore,
+    val entityRepoInstance: EntityRepo<*, *>,
     val entityMapperInstance: EntityMapper<*, *>,
     val vendor: Vendor = MySql,
     val model: Model,
     val dbKey: String = "",
     val dbShard: String = "",
-    val entityServiceInstance: GenericService? = null,
+    val entityServiceInstance: EntityService<*, *>? = null,
     val entityServiceContext: Any? = null
 ) {
     val entityTypeName = entityType.qualifiedName ?: ""

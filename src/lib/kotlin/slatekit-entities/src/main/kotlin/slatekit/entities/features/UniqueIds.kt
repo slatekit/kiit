@@ -3,7 +3,7 @@ package slatekit.entities.features
 import java.util.*
 import slatekit.entities.Entity
 import slatekit.entities.EntityWithUUID
-import slatekit.entities.core.ServiceSupport
+import slatekit.entities.core.EntityOps
 import slatekit.query.Op
 
 /**
@@ -12,7 +12,7 @@ import slatekit.query.Op
  * supply another type constraint on T to be EntityWithUUID to provide compile time safety.
  *
  */
-interface UniqueIds<TId, T> : ServiceSupport<TId, T> where TId : kotlin.Comparable<TId>, T : Entity<TId> {
+interface UniqueIds<TId, T> : EntityOps<TId, T> where TId : kotlin.Comparable<TId>, T : Entity<TId> {
 
     /**
      * gets the entity from the datastore using the uuid as a string

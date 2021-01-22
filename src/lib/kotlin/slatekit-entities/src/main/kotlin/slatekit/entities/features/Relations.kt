@@ -5,10 +5,10 @@ import kotlin.reflect.KProperty
 import slatekit.common.NOTE
 import slatekit.entities.Entities
 import slatekit.entities.Entity
-import slatekit.entities.core.ServiceSupport
+import slatekit.entities.core.EntityOps
 import slatekit.query.Op
 
-interface Relations<TId, T> : ServiceSupport<TId, T> where TId : kotlin.Comparable<TId>, T : Entity<TId> {
+interface Relations<TId, T> : EntityOps<TId, T> where TId : kotlin.Comparable<TId>, T : Entity<TId> {
 
     fun entities(): Entities
 

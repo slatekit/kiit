@@ -3,7 +3,7 @@ package slatekit.entities.features
 import kotlin.reflect.KProperty
 import slatekit.entities.Entity
 import slatekit.data.events.EntityAction
-import slatekit.entities.core.ServiceSupport
+import slatekit.entities.core.EntityOps
 import slatekit.entities.EntityOptions
 import slatekit.meta.Reflector
 import slatekit.meta.kClass
@@ -11,7 +11,7 @@ import slatekit.query.IQuery
 import slatekit.results.Try
 import slatekit.results.builders.Tries
 
-interface Updates<TId, T> : ServiceSupport<TId, T> where TId : kotlin.Comparable<TId>, T : Entity<TId> {
+interface Updates<TId, T> : EntityOps<TId, T> where TId : kotlin.Comparable<TId>, T : Entity<TId> {
 
     /**
      * directly modifies an entity without any additional processing/hooks/etc

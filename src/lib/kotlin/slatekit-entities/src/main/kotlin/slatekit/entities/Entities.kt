@@ -158,7 +158,7 @@ open class Entities(
         serviceCtx: Any? = null
     ): EntityContext where TId : Comparable<TId>, T : Entity<TId> {
 
-        val table = buildTableName(entityType, tableName, namer)
+        val table = EntityInfo.buildTableName(entityType, tableName, namer)
 
         // 1. Model ( schema of the entity which maps fields to columns and has other metadata )
         val model = if (loadSchema) ModelMapper.loadSchema(entityType) else Model(entityType, table) // Empty model as this is in-memory
@@ -245,17 +245,17 @@ open class Entities(
         return getInfoByKey(key)
     }
 
-    fun getSvcByTypeName(entityType: String, dbKey: String = "", dbShard: String = ""): GenericService {
+    fun getSvcByTypeName(entityType: String, dbKey: String = "", dbShard: String = ""): EntityService<*, *> {
         val info = getInfoByName(entityType, dbKey, dbShard)
         return info.entityServiceInstance ?: throw Exception("Entity service not available")
     }
 
-    fun getSvcByType(entityType: KClass<*>, dbKey: String = "", dbShard: String = ""): GenericService {
+    fun getSvcByType(entityType: KClass<*>, dbKey: String = "", dbShard: String = ""): EntityService<*, *> {
         val info = getInfo(entityType, dbKey, dbShard)
         return info.entityServiceInstance ?: throw Exception("Entity service not available")
     }
 
-    private fun getRepoByType(tpe: KClass<*>, dbKey: String = "", dbShard: String = ""): EntityStore {
+    private fun getRepoByType(tpe: KClass<*>, dbKey: String = "", dbShard: String = ""): EntityRepo<*, *> {
         val info = getInfo(tpe, dbKey, dbShard)
         return info.entityRepoInstance
     }

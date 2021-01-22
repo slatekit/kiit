@@ -3,12 +3,12 @@ package slatekit.entities.features
 import slatekit.entities.Entity
 import slatekit.entities.EntityUpdatable
 import slatekit.data.events.EntityAction
-import slatekit.entities.core.ServiceSupport
+import slatekit.entities.core.EntityOps
 import slatekit.entities.EntityOptions
 import slatekit.results.Try
 import slatekit.results.builders.Tries
 
-interface Creates<TId, T> : ServiceSupport<TId, T> where TId : kotlin.Comparable<TId>, T : Entity<TId> {
+interface Creates<TId, T> : EntityOps<TId, T> where TId : kotlin.Comparable<TId>, T : Entity<TId> {
 
     /**
      * creates an entity in the data store without applying field data and sending events via Hooks

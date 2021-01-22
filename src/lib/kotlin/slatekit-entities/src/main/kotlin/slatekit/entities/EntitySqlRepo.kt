@@ -78,7 +78,7 @@ open class EntitySqlRepo<TId, T>(
      * Delete item
      */
     override fun delete(entity: T?): Boolean {
-        return entity?.let { deleteById(identity(it))} ?: false
+        return entity?.let { deleteById(identity(it)) } ?: false
     }
 
     /**
@@ -121,7 +121,7 @@ open class EntitySqlRepo<TId, T>(
     override fun deleteByFields(conditions: List<Triple<String, Op, Any?>>): Int {
         val first = conditions.first()
         val query = query().where(first.first, first.second, first.third)
-        if(conditions.size > 1) {
+        if (conditions.size > 1) {
             conditions.tail().forEach { query.and(it.first, it.second, it.third) }
         }
         val filter = query.toFilter()
@@ -230,7 +230,7 @@ open class EntitySqlRepo<TId, T>(
     }
 
     protected open fun sqlMapOne(sql: String): T? {
-        return db.mapOne<T>(sql, null) { record ->  mapper.decode(record, null) }
+        return db.mapOne<T>(sql, null) { record -> mapper.decode(record, null) }
     }
 
 //    override fun findByProc(name: String, args: List<Any>?): List<T>? {

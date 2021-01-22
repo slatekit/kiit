@@ -5,9 +5,8 @@ import slatekit.entities.Entity
 import slatekit.entities.EntityRepo
 import slatekit.data.events.EntityAction
 
-interface ServiceSupport<TId, T> where TId : Comparable<TId>, T : Entity<TId> {
+interface EntityOps<TId, T> where TId : Comparable<TId>, T : Entity<TId> {
 
-    fun store(): EntityStore
     fun repo(): EntityRepo<TId, T>
 
     /**
