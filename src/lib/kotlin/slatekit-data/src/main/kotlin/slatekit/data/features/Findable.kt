@@ -48,5 +48,5 @@ interface Findable<TId, T> where TId : Comparable<TId> {
      * @param value: value of field to search against
      * @return
      */
-    fun findOneByField(field: String, op: Op, value: Any): T?
+    fun findOneByField(field: String, op: Op, value: Any): T? = findByFields(listOf(Triple(field, op, value))).firstOrNull()
 }

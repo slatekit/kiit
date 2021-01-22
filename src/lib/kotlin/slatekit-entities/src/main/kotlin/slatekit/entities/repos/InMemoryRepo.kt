@@ -25,6 +25,11 @@ import slatekit.common.Record
 import slatekit.common.crypto.Encryptor
 import slatekit.common.data.DataAction
 import slatekit.common.data.Values
+import slatekit.data.features.Countable
+import slatekit.data.features.Orderable
+import slatekit.data.support.IdGenerator
+import slatekit.data.support.IntIdGenerator
+import slatekit.data.support.LongIdGenerator
 import slatekit.entities.*
 import slatekit.entities.core.EntityInfo
 import slatekit.meta.models.Model
@@ -39,10 +44,20 @@ import kotlin.reflect.KClass
  * WARNING!!!!!!
  * Should NOT be used outside of prototyping
  */
-open class InMemoryRepo<TId, T>(info: EntityInfo, val idGenerator: IdGenerator<TId>) : BaseRepo<TId, T>(info)
+open class InMemoryRepo<TId, T>(override val info: EntityInfo, val idGenerator: IdGenerator<TId>)
+    : EntityRepo<TId, T>, Countable<TId, T>, Orderable<TId, T>
         where TId : kotlin.Comparable<TId>, T: Any {
 
     protected var items = ListMap<TId, T>(listOf())
+
+
+    override fun isPersisted(entity: T): Boolean {
+        return info.idInfo.isPersisted(entity)
+    }
+
+    override fun identity(entity: T): TId {
+        return info.idInfo.identity(entity)
+    }
 
     /**
      * create the entity in memory
@@ -137,21 +152,12 @@ open class InMemoryRepo<TId, T>(info: EntityInfo, val idGenerator: IdGenerator<T
     }
 
     /**
-     * finds items based on the query
-     * @param query
-     * @return
-     */
-    override fun findByField(fieldRaw: String, op: Op, value: Any): List<T> {
-        return filter(items.all(), fieldRaw, op.text, value)
-    }
-
-    /**
      * finds items based on the conditions
      */
-    override fun findByFields(conditions: List<Pair<String, Any>>): List<T> {
+    override fun findByFields(conditions: List<Triple<String, Op, Any>>): List<T> {
         val all = items.all()
         val filtered = conditions.fold(all) { items, condition ->
-            val matches = filter(items, condition.first, "=", condition.second)
+            val matches = filter(items, condition.first, Op.Eq.text, condition.second)
             matches
         }
         return filtered
@@ -177,7 +183,7 @@ open class InMemoryRepo<TId, T>(info: EntityInfo, val idGenerator: IdGenerator<T
 
     override fun count(): Long = items.size.toLong()
 
-    override fun top(count: Int, desc: Boolean): List<T> {
+    override fun seq(count: Int, desc: Boolean): List<T> {
         return if (items.size == 0) {
             listOf()
         } else {
@@ -187,20 +193,7 @@ open class InMemoryRepo<TId, T>(info: EntityInfo, val idGenerator: IdGenerator<T
         }
     }
 
-    override fun patchByFields(fields: List<Pair<String, Any?>>, conditions: List<Pair<String, Any?>>): Int {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
-    }
-
-
-    override fun updateByProc(name: String, args: List<Any>?): Int {
-        TODO("not implemented") // To change body of created functions use File | Settings | File Templates.
-    }
-
     override fun updateByQuery(query: IQuery): Int {
-        TODO("not implemented") // To change body of created functions use File | Settings | File Templates.
-    }
-
-    override fun deleteByField(field: String, op: Op, value: Any): Int {
         TODO("not implemented") // To change body of created functions use File | Settings | File Templates.
     }
 
@@ -264,6 +257,22 @@ open class InMemoryRepo<TId, T>(info: EntityInfo, val idGenerator: IdGenerator<T
             val repo = InMemoryRepo<TId, T>(EntityInfo.memory(TId::class, T::class), idGen as IdGenerator<TId>)
             return repo
         }
+    }
+
+    override fun findFirst(query: IQuery): T? {
+        TODO("Not yet implemented")
+    }
+
+    override fun delete(entity: T?): Boolean {
+        return entity?.let { deleteById(identity(it))} ?: false
+    }
+
+    override fun deleteByFields(conditions: List<Triple<String, Op, Any?>>): Int {
+        TODO("Not yet implemented")
+    }
+
+    override fun patchByFields(fields: List<Pair<String, Any?>>, conditions: List<Triple<String, Op, Any?>>): Int {
+        TODO("Not yet implemented")
     }
 }
 

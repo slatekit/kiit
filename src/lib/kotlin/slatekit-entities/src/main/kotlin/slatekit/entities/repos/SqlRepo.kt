@@ -16,6 +16,9 @@ package slatekit.entities.repos
 import slatekit.common.data.IDb
 import slatekit.common.ext.tail
 import slatekit.common.data.Mapper
+import slatekit.data.features.Countable
+import slatekit.data.features.Orderable
+import slatekit.entities.EntityRepo
 import slatekit.entities.core.EntityInfo
 import slatekit.query.IQuery
 import slatekit.query.Op
@@ -29,10 +32,17 @@ import slatekit.query.Query
  */
 open class SqlRepo<TId, T>(
     val db: IDb,
-    info: EntityInfo,
+    override val info: EntityInfo,
     val mapper: Mapper<TId, T>
-) : BaseRepo<TId, T>(info)
-        where TId : Comparable<TId> {
+) : EntityRepo<TId, T>, Countable<TId, T>, Orderable<TId, T> where TId : Comparable<TId> {
+
+    override fun isPersisted(entity: T): Boolean {
+        return info.idInfo.isPersisted(entity)
+    }
+
+    override fun identity(entity: T): TId {
+        return info.idInfo.identity(entity)
+    }
 
     override fun create(entity: T): TId {
         TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
@@ -44,29 +54,8 @@ open class SqlRepo<TId, T>(
 
     override fun name(): String = "${info.encodedChar}" + super.name() + "${info.encodedChar}"
 
-    override fun patchById(id:TId, values:List<Pair<String,Any?>>): Int {
-        val query = Query()
-        values.forEach { query.set(it.first, it.second) }
-        query.where(id(), Op.Eq, id)
-        val updateSql = query.toUpdatesText()
-        val sql = "update " + name() + updateSql
-        return update(sql)
-    }
 
-
-    /**
-     * updates the table field using the value supplied
-     * @param field: The field name
-     * @param value: The value to set
-     */
-    override fun patchByField(field: String, value: Any?): Int {
-        val query = Query().set(field, value)
-        val updateSql = query.toUpdatesText()
-        val sql = "update " + name() + updateSql
-        return update(sql)
-    }
-
-    override fun patchByFields(fields: List<Pair<String, Any?>>, conditions: List<Pair<String, Any?>>): Int {
+    override fun patchByFields(fields: List<Pair<String, Any?>>, conditions: List<Triple<String, Op, Any?>>): Int {
         val query = Query()
         fields.forEach { query.set(it.first, it.second) }
         conditions.forEach { query.where(it.first, Op.Eq, it.second) }
@@ -83,6 +72,13 @@ open class SqlRepo<TId, T>(
         val updateSql = query.toUpdatesText()
         val sql = "update " + name() + updateSql
         return update(sql)
+    }
+
+    /**
+     * Delete item
+     */
+    override fun delete(entity: T?): Boolean {
+        return entity?.let { deleteById(identity(it))} ?: false
     }
 
     /**
@@ -122,8 +118,12 @@ open class SqlRepo<TId, T>(
      * @param value: The value to check for
      * @return
      */
-    override fun deleteByField(field: String, op: Op, value: Any): Int {
-        val query = Query().where(field, op, value)
+    override fun deleteByFields(conditions: List<Triple<String, Op, Any?>>): Int {
+        val first = conditions.first()
+        val query = query().where(first.first, first.second, first.third)
+        if(conditions.size > 1) {
+            conditions.tail().forEach { query.and(it.first, it.second, it.third) }
+        }
         val filter = query.toFilter()
         val sql = "delete from " + name() + " where " + filter
         return update(sql)
@@ -167,7 +167,7 @@ open class SqlRepo<TId, T>(
         return count
     }
 
-    override fun top(count: Int, desc: Boolean): List<T> {
+    override fun seq(count: Int, desc: Boolean): List<T> {
         val orderBy = if (desc) " order by id desc" else " order by id asc"
         val sql = "select * from " + name() + orderBy + " limit " + count
         val items = sqlMapMany(sql) ?: listOf<T>()
@@ -184,7 +184,7 @@ open class SqlRepo<TId, T>(
         return count
     }
 
-    override fun find(query: IQuery): List<T> {
+    override fun findByQuery(query: IQuery): List<T> {
         val filter = query.toFilter()
         val sql = "select * from ${name()} where " + filter
         val results = sqlMapMany(sql)
@@ -192,48 +192,16 @@ open class SqlRepo<TId, T>(
     }
 
     /**
-     * finds items based on the query
-     * @param field: name of field
-     * @param op : operator e.g. "="
-     * @param value: value of field to search against
-     * @return
-     */
-    override fun findByField(field: String, op: Op, value: Any): List<T> {
-        return find(Query().where(field, op, value))
-    }
-
-    /**
      * finds items based on the conditions
      */
-    override fun findByFields(conditions: List<Pair<String, Any>>): List<T> {
+    override fun findByFields(conditions: List<Triple<String, Op, Any>>): List<T> {
         val first = conditions.first()
         val tail = conditions.tail()
-        val query = Query().where(first.first, Op.Eq, first.second)
+        val query = query().where(first.first, first.second, first.third)
         tail.forEach {
             query.and(it.first, Op.Eq, it.second)
         }
-        return find(query)
-    }
-
-    /**
-     * finds items based on the field in the values provided
-     * @param field: name of field
-     * @param value: values of field to search against
-     * @return
-     */
-    override fun findIn(field: String, value: List<Any>): List<T> {
-        return find(Query().where(field, Op.In.text, value))
-    }
-
-    /**
-     * finds items based on the query
-     * @param field: name of field
-     * @param op : operator e.g. "="
-     * @param value: value of field to search against
-     * @return
-     */
-    override fun findOneByField(field: String, op: Op, value: Any): T? {
-        return find(Query().where(field, op, value)).firstOrNull()
+        return findByQuery(query)
     }
 
     /**
@@ -242,16 +210,7 @@ open class SqlRepo<TId, T>(
      * @return
      */
     override fun findFirst(query: IQuery): T? {
-        return find(query.limit(1)).firstOrNull()
-    }
-
-    /**
-     * finds items by using the sql
-     * @param query
-     * @return
-     */
-    override fun findByProc(name: String, args: List<Any>?): List<T>? {
-        return db.callQueryMapped(name, {r -> mapper.decode(r, null) }, args)
+        return findByQuery(query.limit(1)).firstOrNull()
     }
 
     /**
@@ -260,13 +219,6 @@ open class SqlRepo<TId, T>(
     protected open fun update(sql: String): Int {
         val count = db.update(sql)
         return count
-    }
-
-    /**
-     * updates items using the proc and args
-     */
-    override fun updateByProc(name: String, args: List<Any>?): Int {
-        return db.callUpdate(name, args)
     }
 
     protected open fun getScalarLong(sql: String): Long {
@@ -280,4 +232,12 @@ open class SqlRepo<TId, T>(
     protected open fun sqlMapOne(sql: String): T? {
         return db.mapOne<T>(sql, null) { record ->  mapper.decode(record, null) }
     }
+
+//    override fun findByProc(name: String, args: List<Any>?): List<T>? {
+//        return db.callQueryMapped(name, {r -> mapper.decode(r, null) }, args)
+//    }
+//
+//    override fun updateByProc(name: String, args: List<Any>?): Int {
+//        return db.callUpdate(name, args)
+//    }
 }

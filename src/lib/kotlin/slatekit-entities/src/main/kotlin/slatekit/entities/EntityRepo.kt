@@ -21,6 +21,7 @@ import slatekit.data.CrudRepo
 import slatekit.data.Repo
 import slatekit.data.features.Deletable
 import slatekit.data.features.Findable
+import slatekit.data.features.Patchable
 import slatekit.entities.Consts.idCol
 import slatekit.entities.EntityWithTime
 import slatekit.entities.core.EntityInfo
@@ -37,10 +38,11 @@ import kotlin.reflect.KClass
  * NOTE: This is basically a GenericRepository implementation
  * @tparam T
  */
-interface EntityRepo<TId, T> : EntityStore,
+interface EntityRepo<TId, T> :
     CrudRepo<TId, T>,
     Findable<TId, T>,
-    Deletable<TId, T>
+    Deletable<TId, T>,
+    Patchable<TId, T>
     where TId : Comparable<TId> {
 
     val info: EntityInfo
@@ -75,6 +77,9 @@ interface EntityRepo<TId, T> : EntityStore,
      * Gets the total number of records based on the query provided.
      */
     fun countByQuery(query: IQuery): Long
+
+
+    fun findFirst(query: IQuery): T?
 
     /**
      * Return a query builder for more complex searches

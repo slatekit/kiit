@@ -23,8 +23,8 @@ import slatekit.common.utils.ListMap
 import slatekit.entities.core.*
 import slatekit.entities.repos.EntityMapperEmpty
 import slatekit.entities.repos.InMemoryRepo
-import slatekit.entities.repos.IdGenerator
-import slatekit.entities.repos.LongIdGenerator
+import slatekit.data.support.IdGenerator
+import slatekit.data.support.LongIdGenerator
 import slatekit.meta.models.Model
 import slatekit.meta.models.ModelMapper
 

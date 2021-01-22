@@ -8,6 +8,14 @@ import slatekit.query.Op
  */
 interface Patchable<TId, T> : Table<TId> where TId : Comparable<TId> {
 
+
+
+    /**
+     * patches the items with the field and value supplied
+     */
+    fun patchByField(field: String, value: Any?): Int = patchByFields(listOf(Pair(field, value)), listOf())
+
+
     /**
      * Patch 1 item by its id using the updates provided
      */

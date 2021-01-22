@@ -17,7 +17,7 @@ class InMemoryRepo<TId, T>(private val pk: String,
                            private val tableName: String,
                            private val op: (T) -> TId,
                            private val idGen: IdGenerator<TId>,
-                           private val hooks: EntityHooks<TId, T>?) : SqlRepo<TId, T> where TId : Number, TId : Comparable<TId>, T : Any {
+                           private val hooks: EntityHooks<TId, T>?) : SqlRepo<TId, T> where TId : Comparable<TId>, T : Any {
     // Ordered list + map features
     private var items = ListMap<TId, T>(listOf())
 
@@ -40,7 +40,7 @@ class InMemoryRepo<TId, T>(private val pk: String,
      */
     override fun isPersisted(entity: T): Boolean {
         val id = identity(entity)
-        return id.toLong() > 0
+        return id.toString().toLong() > 0
     }
 
     /**

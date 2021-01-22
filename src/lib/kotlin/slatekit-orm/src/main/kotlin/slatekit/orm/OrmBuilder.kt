@@ -5,12 +5,14 @@ import slatekit.common.crypto.Encryptor
 import slatekit.common.data.Vendor.*
 import slatekit.common.naming.Namer
 import slatekit.common.data.Vendor
+import slatekit.data.support.IntIdGenerator
+import slatekit.data.support.LongIdGenerator
 import slatekit.entities.Entity
 import slatekit.entities.core.EntityBuilder
 import slatekit.entities.EntityRepo
 import slatekit.entities.core.EntityInfo
 import slatekit.entities.core.buildTableName
-import slatekit.entities.repos.*
+import slatekit.entities.repos.InMemoryRepo
 import slatekit.meta.KTypes
 import slatekit.orm.core.SqlBuilder
 import slatekit.orm.databases.vendors.*
