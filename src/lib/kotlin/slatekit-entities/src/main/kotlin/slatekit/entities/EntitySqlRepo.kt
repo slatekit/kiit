@@ -15,10 +15,11 @@ package slatekit.entities
 
 import slatekit.common.data.IDb
 import slatekit.common.ext.tail
+import slatekit.data.core.Meta
 import slatekit.data.features.Countable
 import slatekit.data.features.Orderable
 import slatekit.entities.core.EntityInfo
-import slatekit.entities.statements.Statements
+import slatekit.data.statements.Statements
 import slatekit.query.IQuery
 import slatekit.query.Op
 
@@ -31,6 +32,7 @@ import slatekit.query.Op
 open class EntitySqlRepo<TId, T>(
     val db: IDb,
     override val info: EntityInfo,
+    override val meta: Meta<TId, T>,
     val stmts: Statements<TId, T>,
     val mapper: EntityMapper<TId, T>
 ) : EntityRepo<TId, T>, Countable<TId, T>, Orderable<TId, T> where TId : Comparable<TId>, T : Any {
@@ -38,7 +40,7 @@ open class EntitySqlRepo<TId, T>(
     /**
      * Gets the name of the repository/table
      */
-    override fun name(): String = "${info.encodedChar}" + super.name + "${info.encodedChar}"
+    override val name: String = "${info.encodedChar}" + super.name + "${info.encodedChar}"
 
     /**
      * Creates the entity in the repository/table

@@ -25,6 +25,7 @@ import slatekit.common.Record
 import slatekit.common.crypto.Encryptor
 import slatekit.common.data.DataAction
 import slatekit.common.data.Values
+import slatekit.data.core.*
 import slatekit.data.features.Countable
 import slatekit.data.features.Orderable
 import slatekit.data.support.IdGenerator
@@ -44,7 +45,9 @@ import kotlin.reflect.KClass
  * WARNING!!!!!!
  * Should NOT be used outside of prototyping
  */
-open class EntityRepoInMemory<TId, T>(override val info: EntityInfo, val idGenerator: IdGenerator<TId>)
+open class EntityRepoInMemory<TId, T>(override val meta: Meta<TId, T>,
+                                      override val info: EntityInfo,
+                                      val idGenerator: IdGenerator<TId>)
     : EntityRepo<TId, T>, Countable<TId, T>, Orderable<TId, T>
         where TId : kotlin.Comparable<TId>, T: Any {
 
@@ -254,7 +257,12 @@ open class EntityRepoInMemory<TId, T>(override val info: EntityInfo, val idGener
 
         inline fun <reified TId, reified T> of(): EntityRepoInMemory<TId, T> where TId : Comparable<TId>, T:Any {
             val idGen = if(TId::class == Int::class) IntIdGenerator() else LongIdGenerator()
-            val repo = EntityRepoInMemory<TId, T>(EntityInfo.memory(TId::class, T::class), idGen as IdGenerator<TId>)
+            val id = LongId<T> {
+                val value = Reflector.getFieldValue(it, "id")
+                value?.toString()?.toLong() ?: 0L
+            } as Id<TId, T>
+            val meta = Meta<TId,T>(id, Table(T::class.simpleName!!, '`'))
+            val repo = EntityRepoInMemory<TId, T>(meta, EntityInfo.memory(TId::class, T::class), idGen as IdGenerator<TId>)
             return repo
         }
     }
@@ -276,10 +284,10 @@ open class EntityRepoInMemory<TId, T>(override val info: EntityInfo, val idGener
     }
 }
 
-class EntityMapperEmpty<TId, T>(val model: Model?) :
+class EntityMapperEmpty<TId, T>(override val info:EntityInfo, val model: Model?) :
     EntityMapper<TId, T> where TId : Comparable<TId>, T : Entity<TId> {
 
-    override fun encode(model: T, action:DataAction, encryptor: Encryptor?): Values {
+    override fun encode(model: T, action:DataAction, enc: Encryptor?): Values {
         TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
 

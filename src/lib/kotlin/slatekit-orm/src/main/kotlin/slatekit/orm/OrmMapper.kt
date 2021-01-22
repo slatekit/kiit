@@ -46,7 +46,7 @@ open class OrmMapper<TId, T>(
         val model: Model,
         val db: IDb,
         val converter: Converter<TId, T>,
-        val info:EntityInfo) :
+        override val info:EntityInfo) :
         EntityMapper<TId, T> where TId : kotlin.Comparable<TId>, T:Any  {
 
 

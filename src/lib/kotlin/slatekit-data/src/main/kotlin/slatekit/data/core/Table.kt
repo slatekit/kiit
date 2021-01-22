@@ -5,4 +5,4 @@ package slatekit.data.core
  * @param encodeChar : Char used to encode the terms ( table/column names ) e.g. mysql "`"
  * @param pkey       : Primary key info ( name, type )
  */
-data class Table(val name:String, val encodeChar:Char, val pkey: PKey)
+data class Table(val name:String, val encodeChar:Char, val pkey: PKey = PKey())
