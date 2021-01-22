@@ -1,4 +1,4 @@
-package slatekit.orm.core
+package slatekit.data.encoders
 
 import slatekit.common.Record
 

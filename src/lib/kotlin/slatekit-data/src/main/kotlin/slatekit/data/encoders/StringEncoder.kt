@@ -1,11 +1,11 @@
-package slatekit.orm.databases.converters
+package slatekit.data.encoders
 
-import slatekit.orm.core.SqlEncoder
+
 import slatekit.common.crypto.Encryptor
 import slatekit.query.QueryEncoder
 import slatekit.common.Record
 import slatekit.common.ext.orElse
-import slatekit.orm.Consts
+import slatekit.data.Consts
 
 class StringEncoder : SqlEncoder<String> {
 

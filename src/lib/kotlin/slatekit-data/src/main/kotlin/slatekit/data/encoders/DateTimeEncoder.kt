@@ -1,9 +1,9 @@
-package slatekit.orm.databases.converters
+package slatekit.data.encoders
 
 import slatekit.common.DateTime
-import slatekit.orm.core.SqlEncoder
+
 import slatekit.common.Record
-import slatekit.orm.Consts
+import slatekit.data.Consts
 //import java.time.format.DateTimeFormatter
 import org.threeten.bp.format.*
 import slatekit.common.ext.atUtc

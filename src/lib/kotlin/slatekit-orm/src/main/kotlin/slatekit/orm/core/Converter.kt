@@ -1,5 +1,6 @@
 package slatekit.orm.core
 
+import slatekit.data.encoders.*
 import slatekit.orm.databases.converters.*
 import slatekit.orm.databases.statements.Delete
 import slatekit.orm.databases.statements.Insert

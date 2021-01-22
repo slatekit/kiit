@@ -1,10 +1,10 @@
-package slatekit.orm.databases.converters
+package slatekit.data.encoders
 
 import slatekit.common.*
 import slatekit.common.Record
 import slatekit.meta.Reflector
-import slatekit.orm.Consts.NULL
-import slatekit.orm.core.SqlEncoder
+import slatekit.data.Consts.NULL
+
 import kotlin.reflect.KClass
 
 

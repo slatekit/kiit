@@ -1,9 +1,9 @@
-package slatekit.orm.databases.converters
+package slatekit.data.encoders
 
-import slatekit.orm.core.SqlEncoder
+
 import slatekit.common.ids.UPID
 import slatekit.common.Record
-import slatekit.orm.Consts
+import slatekit.data.Consts
 
 class UPIDEncoder : SqlEncoder<UPID> {
 
