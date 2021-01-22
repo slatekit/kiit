@@ -20,3 +20,26 @@ interface Entity<TId : Comparable<TId>> {
      */
     fun isPersisted(): Boolean
 }
+
+
+/**
+ * interface for entities that can be updatable
+ * e.g. case class copying which must be implemented in the case class
+ * @tparam T
+ */
+interface EntityUpdatable<TId, T> where TId : Comparable<TId>, T : Entity<TId> {
+
+    /**
+     * sets the id on the entity and returns the entity with updated id.
+     * @param id
+     * @return
+     */
+    fun withId(id: TId): T
+
+    /**
+     * sets the id on the entity and returns the entity with updated id.
+     * @param id
+     * @return
+     */
+    fun withIdAny(id: Any): T = withId(id as TId)
+}

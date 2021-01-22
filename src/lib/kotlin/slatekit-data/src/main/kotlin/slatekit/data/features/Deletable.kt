@@ -2,6 +2,9 @@ package slatekit.data.features
 
 import slatekit.query.Op
 
+/**
+ * Supports deletion of records using conditions
+ */
 interface Deletable<TId, T> where TId : Comparable<TId> {
     /**
      * deletes items based on the field name and value

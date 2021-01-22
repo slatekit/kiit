@@ -1,5 +1,8 @@
 package slatekit.data.features
 
+/**
+ * Supports counting of records in the table
+ */
 interface Countable<TId, T> where TId : Comparable<TId> {
     /**
      * gets the total number of entities in the datastore

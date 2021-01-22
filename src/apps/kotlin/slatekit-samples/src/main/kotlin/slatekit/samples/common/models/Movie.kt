@@ -1,6 +1,7 @@
 package slatekit.samples.common.models
 
 import slatekit.common.DateTime
+import slatekit.common.DateTimes
 import slatekit.common.Field
 import slatekit.entities.EntityUpdatable
 import slatekit.entities.EntityWithId
@@ -56,5 +57,29 @@ data class Movie(
      */
     override fun withId(id: Long): Movie {
         return this.copy(id = id)
+    }
+
+    companion object {
+        fun sample():Movie {
+            return sample(
+                        title = "Contact",
+                        category = "sci-fi",
+                        playing = false,
+                        cost = 10,
+                        rating = 4.5,
+                        released = DateTimes.of(1995, 8, 10)
+                )
+        }
+
+        fun sample(title:String, category:String, playing: Boolean, cost:Int, rating:Double, released: DateTime):Movie {
+            return Movie(
+                    title = "Contact",
+                    category = "sci-fi",
+                    playing = false,
+                    cost = 10,
+                    rating = 4.5,
+                    released = DateTimes.of(1995, 8, 10)
+            )
+        }
     }
 }

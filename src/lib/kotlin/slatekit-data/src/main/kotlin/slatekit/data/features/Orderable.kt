@@ -1,7 +1,7 @@
 package slatekit.data.features
 
 /**
- * Repo that has a sequential / serial Id. E.g. Numeric ( int, long )
+ * Supports access to records that are ordered sequential / serial Id. E.g. Numeric ( int, long )
  */
 interface Orderable<TId, T> where TId : Comparable<TId> {
 

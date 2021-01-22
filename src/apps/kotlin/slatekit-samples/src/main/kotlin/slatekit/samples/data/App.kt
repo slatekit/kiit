@@ -9,8 +9,10 @@ import slatekit.common.data.DbConString
 import slatekit.common.data.Vendor
 import slatekit.common.info.About
 import slatekit.connectors.entities.AppEntContext
+import slatekit.data.SqlRepo
+import slatekit.data.support.InMemoryRepo
+import slatekit.data.support.LongIdGenerator
 import slatekit.db.Db
-import slatekit.entities.repos.Repo2
 import slatekit.samples.common.models.Movie
 
 
@@ -64,7 +66,35 @@ class App(ctx: AppEntContext) : App<AppEntContext>(ctx, AppOptions(showWelcome =
         //ent.register<Long, Movie>(Long::class, Movie::class, )
         val con = DbConString(Vendor.MySql, "jdbc:mysql://localhost/slatekit", "user", "banksy1020")
         val db = Db(con)
-        val repo = Repo2<Long, Movie>()
+        val repo:SqlRepo<Long, Movie> = InMemoryRepo(Movie::id.name, "movies", {m -> m.id }, LongIdGenerator())
+
+        // Ordered
+        repo.first()
+        repo.last()
+        repo.oldest(2)
+        repo.recent(2)
+
+        // Size
+        repo.count()
+        repo.any()
+        repo.isEmpty()
+
+        // CRUD
+        val movie = Movie.sample()
+        val id = repo.create(movie)
+        val movie2 = repo.getById(id)
+        movie2?.let { repo.update(movie2) }
+        repo.delete(movie2)
+        repo.save(movie)
+
+        // Misc
+        val all = repo.getAll()
+        repo.deleteAll()
+        repo.save(movie2)
+
+        // Meta
+        val movieId = repo.identity(movie)
+        val moveHasId = repo.isPersisted(movie)
 
         println("initializing")
     }

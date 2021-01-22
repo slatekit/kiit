@@ -37,7 +37,7 @@ interface Exportable<TId, T> where TId : Comparable<TId>, T : Entity<TId> {
      * @throws Exception
      */
     fun exportById(version: String, id: TId): Try<Export<T>> {
-        return exportItem(version, service.get(id))
+        return exportItem(version, service.getById(id))
     }
 
     /**

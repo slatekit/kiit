@@ -1,6 +1,6 @@
-package slatekit.data.features
+package slatekit.data.core
 
-interface Identifiable<TId> where TId : Comparable<TId> {
+interface Table<TId> where TId : Comparable<TId> {
     /**
      * Name of id / primary key of table
      */

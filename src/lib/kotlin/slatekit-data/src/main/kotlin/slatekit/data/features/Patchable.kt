@@ -1,8 +1,12 @@
 package slatekit.data.features
 
+import slatekit.data.core.Table
 import slatekit.query.Op
 
-interface Patchable<TId, T> : Identifiable<TId> where TId : Comparable<TId> {
+/**
+ * Support patching of records by conditions
+ */
+interface Patchable<TId, T> : Table<TId> where TId : Comparable<TId> {
 
     /**
      * Patch 1 item by its id using the updates provided

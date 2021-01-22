@@ -42,7 +42,7 @@ class Entity_ORM_Tests {
         val svc = entities.getSvc<Long,ORMUser>(ORMUser::class)
         val repo = entities.getRepo<Long, ORMUser>(ORMUser::class)
         val id = svc.create(ORMUser(0, "spiderman@nyc.com", true, 30))
-        val user = svc.get(id)
+        val user = svc.getById(id)
         Assert.assertEquals(1L, user?.id)
         println(user)
     }

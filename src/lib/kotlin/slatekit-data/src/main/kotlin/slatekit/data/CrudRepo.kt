@@ -1,5 +1,4 @@
-package slatekit.data.repos
-
+package slatekit.data
 
 
 interface CrudRepo<TId, T> : Repo<TId, T> where TId : Comparable<TId> {
