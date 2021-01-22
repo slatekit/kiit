@@ -1,5 +1,5 @@
 package slatekit.entities
 
-import slatekit.entities.events.EntityAction
+import slatekit.data.events.EntityAction
 
 data class EncodeOptions(val action:EntityAction)

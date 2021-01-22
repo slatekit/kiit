@@ -1,12 +1,9 @@
 package slatekit.entities.features
 
-import slatekit.common.DateTime
 import slatekit.entities.Entity
 import slatekit.entities.EntityUpdatable
-import slatekit.entities.events.EntityAction
-import slatekit.entities.events.EntityEvent
+import slatekit.data.events.EntityAction
 import slatekit.entities.core.ServiceSupport
-import slatekit.entities.events.EntityHooks
 import slatekit.entities.EntityOptions
 import slatekit.results.Try
 import slatekit.results.builders.Tries
@@ -42,16 +39,6 @@ interface Creates<TId, T> : ServiceSupport<TId, T> where TId : kotlin.Comparable
             true -> entityWithMeta.withIdAny(id) as T
             false -> entityWithMeta
         }
-
-        // Event out
-        if (options.applyHooks && this is EntityHooks) {
-            val success = isCreated(id)
-            when (success) {
-                true -> this.onEntityEvent(EntityEvent.EntityCreated(id, entity, DateTime.now()))
-                else -> this.onEntityEvent(EntityEvent.EntityErrored(entity,
-                        Exception("unable to create: " + entity.toString()), DateTime.now()))
-            }
-        }
         return Pair(id, entityFinal)
     }
 
@@ -66,17 +53,6 @@ interface Creates<TId, T> : ServiceSupport<TId, T> where TId : kotlin.Comparable
 
         // Create! get id
         val id = repo().create(entityWithData)
-
-        // Event out
-        if (this is EntityHooks) {
-            val success = isCreated(id)
-            when (success) {
-                true -> this.onEntityEvent(EntityEvent.EntityCreated(id, entity, DateTime.now()))
-                else -> this.onEntityEvent(EntityEvent.EntityErrored(entity,
-                        Exception("unable to create: " + entity.toString()), DateTime.now()))
-            }
-        }
-
         return id
     }
 
