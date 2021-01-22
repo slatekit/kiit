@@ -75,6 +75,7 @@ class Connections(
       return of(conf.dbCon("db"))
     }
 
+
     /**
      * Creates a database lookup with just named databases
      *

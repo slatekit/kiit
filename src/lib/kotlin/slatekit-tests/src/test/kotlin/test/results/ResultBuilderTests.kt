@@ -10,7 +10,7 @@ import slatekit.results.builders.Outcomes
  * 1. defaults ( no parameters )
  * 2. with message
  * 3. with code
- * 4. with code + message ( TODO )
+ * 4. with code + message
  */
 class ResultBuilderTests : ResultTestSupport, OutcomeBuilder {
 

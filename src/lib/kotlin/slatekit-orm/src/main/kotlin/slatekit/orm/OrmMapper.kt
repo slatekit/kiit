@@ -46,7 +46,7 @@ open class OrmMapper<TId, T>(
         val model: Model,
         val db: IDb,
         val converter: Converter<TId, T>,
-        val info:EntityInfo) :
+        override val info:EntityInfo) :
         EntityMapper<TId, T> where TId : kotlin.Comparable<TId>, T:Any  {
 
 
@@ -106,7 +106,7 @@ open class OrmMapper<TId, T>(
     fun insert(entity: T): TId {
         val sql = converter.inserts.sql(entity, model, this)
         val id = db.insertGetId(sql, null)
-        return convertToId(id, info.idType)
+        return info.idInfo.convertToId(id, info.idType)
     }
 
 

@@ -21,7 +21,7 @@ import slatekit.common.data.Connections
 import slatekit.db.Db
 import slatekit.entities.Entities
 import slatekit.entities.Entity
-import slatekit.entities.Repo
+import slatekit.entities.EntityRepo
 import slatekit.entities.EntityService
 import slatekit.entities.features.Relations
 import slatekit.query.Op
@@ -33,6 +33,7 @@ import test.setup.User5
 class Entity_Services_Tests {
 
     private var entities = Entities({ con -> Db(con) })
+
 
 
     @Before fun setup(){
@@ -84,7 +85,7 @@ class Entity_Services_Tests {
     fun can_create_an_item() {
         val userSvc = getUserService(true)
         userSvc.create(User5(0, "jdoe5@abc.com", true, 35, 12.34))
-        val User5 = userSvc.get(5)!!
+        val User5 = userSvc.getById(5)!!
         Assert.assertTrue(User5 != null)
         Assert.assertTrue(User5.email == "jdoe5@abc.com")
         //Assert.assertTrue( User5.get.uuid != "")
@@ -208,7 +209,7 @@ class Entity_Services_Tests {
     }
 
 
-    class EntityServiceRelational<TId, T>(val entities:Entities, repo: Repo<TId, T>)
+    class EntityServiceRelational<TId, T>(val entities:Entities, repo: EntityRepo<TId, T>)
         : EntityService<TId, T>(repo), Relations<TId, T>
             where TId:Comparable<TId>, T: Entity<TId> {
 

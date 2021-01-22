@@ -41,7 +41,7 @@ class CodeGen(val settings: CodeGenSettings, val builder:CodeBuilder) {
         val outputFolderPath = Uris.interpret(outputFolderPathRaw)
         val dateFolder = Files.folderNameByDate()
 
-        // C:\Users\kv\blendlife-kotlin\core\blend.cli\output\
+        // ~/.slatekit/tools/apis/output/
         val codeGenDirs = Directories(File(outputFolderPath ?: ""))
         codeGenDirs.create(log)
         codeGenDirs.log(log)

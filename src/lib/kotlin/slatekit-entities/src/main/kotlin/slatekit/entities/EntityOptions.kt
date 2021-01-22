@@ -1,4 +1,4 @@
-package slatekit.entities.slatekit.entities
+package slatekit.entities
 
 data class EntityOptions(
     val applyId: Boolean,

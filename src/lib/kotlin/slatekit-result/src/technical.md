@@ -4,10 +4,10 @@
 
 ## Abstract
 This paper presents the design and implementation of **Result<T,E>**, a simple, familiar data structure for accurately modeling successes and failures in code. This differs from other implementations with the addition of **optional** `Status Codes`. 
-TODO
+Place holder
 
 ## Intro
-TODO
+Place holder
 
 ## Related
 Result<T,E> is a **variation** of implementations existing in other langauges such as Scala's `Either<L,R>`, Scala's `Try<T>`, Rust's `Result<T,E>`, Swifts `Result<T,E>`, and Kotlin's `Result<T>`. The major difference is the addition of an optional **Status code**. For further reading, the implementation of Result in this paper will be referred to as simply **this Result**, **Result<T,E>** or **SlateKit's Result** ( having originated from the **Slate Kit** Kotlin library). This Result<T,E> is essentially a specialized `Either<L,R>` but the nomenclature is based on Scala's `Try<T>`. It looks and behaves very similarly to Rust's or Swifts `Result<T,E>` except with the addition of the optional status field that contains both an integer code and string message. GRPC and its codes implementation have inspired the use of optional and standardized `Status codes` as well. One other major point about the status code are that they are compatible with **Http Status codes**.
@@ -484,25 +484,25 @@ class UserService {
 
 ## Analysis
 ### Logical groups
-todo 
+Place holder 
 
 ### Representation
-todo
+Place holder
 
 ### Allocation
-todo
+Place holder
 
 ### Construction
-todo
+Place holder
 
 ## Experiments
-todo
+Place holder
 
 ## Conclusion
-TODO
+Place holder
 
 ## Bibliography
-TODO
+Place holder
 
 ## References
 name | source | notes 

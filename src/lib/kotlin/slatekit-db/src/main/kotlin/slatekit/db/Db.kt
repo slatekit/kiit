@@ -23,7 +23,7 @@ import slatekit.common.data.DbCon
 import slatekit.common.data.IDb
 import slatekit.common.repeatWith
 import slatekit.db.DbUtils.executeCon
-import slatekit.db.DbUtils.executePrepAs
+import slatekit.db.DbUtils.executePrep
 import slatekit.db.DbUtils.executeStmt
 import slatekit.db.DbUtils.fillArgs
 
@@ -38,10 +38,7 @@ import slatekit.db.DbUtils.fillArgs
  * 2. sql-server: url = "jdbc:sqlserver://<server_name>:<port>;database=<database>;user=<user>;
  * password=<password>;encrypt=true;hostNameInCertificate=*.database.windows.net;loginTimeout=30;"
  */
-class Db(
-    private val dbCon: DbCon,
-    errorCallback: ((Exception) -> Unit)? = null
-) : IDb {
+class Db(private val dbCon: DbCon, errorCallback: ((Exception) -> Unit)? = null) : IDb {
 
     override val onError = errorCallback ?: this::errorHandler
 
@@ -56,7 +53,7 @@ class Db(
     }
 
     override fun execute(sql: String) {
-        executeStmt(dbCon, { con, stmt -> stmt.execute(sql) }, onError)
+        executeStmt(dbCon, { _, stmt -> stmt.execute(sql) }, onError)
     }
 
     /**
@@ -67,7 +64,7 @@ class Db(
      */
     override fun <T> getScalarOrNull(sql: String, typ: Class<*>, inputs: List<Any>?): T? {
 
-        return executePrepAs<T>(dbCon, sql, { _, stmt ->
+        return executePrep<T>(dbCon, sql, { _, stmt ->
 
             // fill all the arguments into the prepared stmt
             inputs?.let { fillArgs(stmt, inputs) }
@@ -75,12 +72,10 @@ class Db(
             // execute
             val rs = stmt.executeQuery()
             rs.use { r ->
-                val any = r.next()
-                val res: T? =
-                        if (any) {
-                            DbUtils.getScalar<T>(r, typ)
-                        } else
-                            null
+                val res: T? = when (r.next()) {
+                    true -> DbUtils.getScalar<T>(r, typ)
+                    false -> null
+                }
                 res
             }
         }, onError)
@@ -107,10 +102,10 @@ class Db(
                 // get id.
                 val rs = s.generatedKeys
                 rs.use { r ->
-                    val id = if (r.next()) {
-                        r.getLong(1)
-                    } else
-                        0L
+                    val id = when (r.next()) {
+                        true -> r.getLong(1)
+                        false -> 0L
+                    }
                     id
                 }
             }
@@ -139,10 +134,10 @@ class Db(
                 // get id.
                 val rs = s.generatedKeys
                 rs.use { r ->
-                    val id = if (r.next()) {
-                        r.getString(1)
-                    } else
-                        ""
+                    val id = when (r.next()) {
+                        true -> r.getString(1)
+                        false -> ""
+                    }
                     id
                 }
             }
@@ -158,7 +153,7 @@ class Db(
      * @return : The number of affected records
      */
     override fun update(sql: String, inputs: List<Any>?): Int {
-        val result = executePrepAs<Int>(dbCon, sql, { con, stmt ->
+        val result = executePrep<Int>(dbCon, sql, { _, stmt ->
 
             // fill all the arguments into the prepared stmt
             inputs?.let { fillArgs(stmt, inputs) }
@@ -183,7 +178,7 @@ class Db(
         moveNext: Boolean,
         inputs: List<Any>?
     ): T? {
-        val result = executePrepAs<T>(dbCon, sql, { _: Connection, stmt: PreparedStatement ->
+        val result = executePrep<T>(dbCon, sql, { _: Connection, stmt: PreparedStatement ->
 
             // fill all the arguments into the prepared stmt
             inputs?.let { fillArgs(stmt, inputs) }
@@ -191,11 +186,11 @@ class Db(
             // execute
             val rs = stmt.executeQuery()
             rs.use { r ->
-                val any = if (moveNext) r.next() else true
-                if (any)
-                    callback(r)
-                else
-                    null
+                val v = when(if (moveNext) r.next() else true) {
+                    true -> callback(r)
+                    false -> null
+                }
+                v
             }
         }, onError)
         return result
@@ -268,8 +263,7 @@ class Db(
     /**
      * Calls a stored procedure
      * @param procName : The name of the stored procedure e.g. get_by_id
-     * @param callback : The callback to handle the resultset
-     * @param moveNext : Whether or not to automatically move the resultset to the next/first row
+     * @param mapper  : The callback to handle the resultset
      * @param inputs : The parameters for the stored proc. The types will be auto-converted my-sql types.
      */
     override fun <T> callQueryMapped(
@@ -286,8 +280,6 @@ class Db(
     /**
      * Calls a stored procedure
      * @param procName : The name of the stored procedure e.g. get_by_id
-     * @param callback : The callback to handle the resultset
-     * @param moveNext : Whether or not to automatically move the resultset to the next/first row
      * @param inputs : The parameters for the stored proc. The types will be auto-converted my-sql types.
      */
     override fun callUpdate(procName: String, inputs: List<Any>?): Int {
@@ -299,13 +291,13 @@ class Db(
     }
 
     override fun errorHandler(ex: Exception) {
-        println("Database error : " + ex.message)
+        throw ex
     }
 
 
     companion object {
 
-        fun open(con:DbCon):Db {
+        fun open(con: DbCon): Db {
             val db = Db(con)
             db.open()
             return db

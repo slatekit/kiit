@@ -21,7 +21,7 @@ import slatekit.common.data.Vendor.Memory
 import slatekit.db.Db
 import slatekit.entities.Entities
 import slatekit.entities.EntityMapper
-import slatekit.entities.Repo
+import slatekit.entities.EntityRepo
 import slatekit.entities.EntityService
 import slatekit.orm.getModel
 import test.setup.Phone
@@ -75,8 +75,8 @@ class Entity_Reg_Tests {
         ent.prototype<User5>(entityType = User5::class)
         ent.prototype<Phone>(entityType = Phone::class)
 
-        Assert.assertTrue(ent.getRepo<Long, User5>(User5::class) is Repo<Long, User5>)
-        Assert.assertTrue(ent.getRepo<Long, Phone>(Phone::class) is Repo<Long, Phone>)
+        Assert.assertTrue(ent.getRepo<Long, User5>(User5::class) is EntityRepo<Long, User5>)
+        Assert.assertTrue(ent.getRepo<Long, Phone>(Phone::class) is EntityRepo<Long, Phone>)
     }
 
 

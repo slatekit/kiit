@@ -1,20 +1,17 @@
 package slatekit.entities.features
 
 import kotlin.reflect.KProperty
-import slatekit.common.DateTime
 import slatekit.entities.Entity
-import slatekit.entities.events.EntityAction
-import slatekit.entities.events.EntityEvent
-import slatekit.entities.core.ServiceSupport
-import slatekit.entities.events.EntityHooks
-import slatekit.entities.slatekit.entities.EntityOptions
+import slatekit.data.events.EntityAction
+import slatekit.entities.core.EntityOps
+import slatekit.entities.EntityOptions
 import slatekit.meta.Reflector
 import slatekit.meta.kClass
 import slatekit.query.IQuery
 import slatekit.results.Try
 import slatekit.results.builders.Tries
 
-interface Updates<TId, T> : ServiceSupport<TId, T> where TId : kotlin.Comparable<TId>, T : Entity<TId> {
+interface Updates<TId, T> : EntityOps<TId, T> where TId : kotlin.Comparable<TId>, T : Entity<TId> {
 
     /**
      * directly modifies an entity without any additional processing/hooks/etc
@@ -40,9 +37,6 @@ interface Updates<TId, T> : ServiceSupport<TId, T> where TId : kotlin.Comparable
      * @param options: Settings to determine whether to apply metadata, and notify via Hooks
      */
     fun update(entity: T, options: EntityOptions): Pair<Boolean, T> {
-        val useHooks = options.applyHooks && this is EntityHooks
-        val original: T? = if (useHooks) repo().getById(entity.identity()) else null
-
         // Massage
         val entityFinal = when (options.applyMetadata) {
             true -> applyFieldData(EntityAction.Update, entity)
@@ -51,15 +45,6 @@ interface Updates<TId, T> : ServiceSupport<TId, T> where TId : kotlin.Comparable
 
         // Update
         val success = modify(entityFinal)
-
-        // Event out
-        if (this is EntityHooks) {
-            when (success) {
-                true -> this.onEntityEvent(EntityEvent.EntityUpdated(original ?: entity, entityFinal, DateTime.now()))
-                else -> this.onEntityEvent(EntityEvent.EntityErrored(entity,
-                        Exception("unable to update: " + entity.toString()), DateTime.now()))
-            }
-        }
         return Pair(success, entityFinal)
     }
 
@@ -69,18 +54,8 @@ interface Updates<TId, T> : ServiceSupport<TId, T> where TId : kotlin.Comparable
      * @return
      */
     fun update(entity: T): Boolean {
-        val original: T? = if (this is EntityHooks) repo().getById(entity.identity()) else null
         val finalEntity = applyFieldData(EntityAction.Update, entity)
         val success = repo().update(finalEntity)
-
-        // Event out
-        if (this is EntityHooks) {
-            when (success) {
-                true -> this.onEntityEvent(EntityEvent.EntityUpdated(original ?: entity, entity, DateTime.now()))
-                else -> this.onEntityEvent(EntityEvent.EntityErrored(entity,
-                        Exception("unable to update: " + entity.toString()), DateTime.now()))
-            }
-        }
         return success
     }
 

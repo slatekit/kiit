@@ -1,17 +1,14 @@
 package slatekit.entities.features
 
 import kotlin.reflect.KProperty
-import slatekit.common.DateTime
 import slatekit.entities.Entity
-import slatekit.entities.events.EntityEvent
-import slatekit.entities.core.ServiceSupport
-import slatekit.entities.events.EntityHooks
+import slatekit.entities.core.EntityOps
 import slatekit.query.IQuery
 import slatekit.query.Op
 import slatekit.results.Try
 import slatekit.results.builders.Tries
 
-interface Deletes<TId, T> : ServiceSupport<TId, T> where TId : kotlin.Comparable<TId>, T : Entity<TId> {
+interface Deletes<TId, T> : EntityOps<TId, T> where TId : kotlin.Comparable<TId>, T : Entity<TId> {
 
     /**
      * deletes the entity
@@ -19,18 +16,7 @@ interface Deletes<TId, T> : ServiceSupport<TId, T> where TId : kotlin.Comparable
      * @param entity
      */
     fun delete(entity: T?): Boolean {
-        val success = repo().delete(entity)
-
-        // Event out
-        if (entity != null && this is EntityHooks) {
-            when (success) {
-                true -> this.onEntityEvent(EntityEvent.EntityDeleted(entity, DateTime.now()))
-                else -> this.onEntityEvent(EntityEvent.EntityErrored(entity,
-                        Exception("unable to delete: " + entity.toString()), DateTime.now()))
-            }
-        }
-
-        return success
+        return repo().delete(entity)
     }
 
     /**
@@ -53,18 +39,9 @@ interface Deletes<TId, T> : ServiceSupport<TId, T> where TId : kotlin.Comparable
 
     /**
      * deletes the entities
-     *
-     * @param entity
      */
     fun deleteByIds(ids: List<TId>): Int {
-
-        // Event out one by one
-        return if (this is EntityHooks) {
-            val statuses = ids.map { id -> repo().getById(id)?.let { delete(it) } ?: false }
-            statuses.count { it }
-        } else {
-            repo().deleteByIds(ids)
-        }
+        return repo().deleteByIds(ids)
     }
 
     /**

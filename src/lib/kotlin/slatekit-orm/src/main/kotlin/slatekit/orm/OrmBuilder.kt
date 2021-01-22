@@ -5,12 +5,14 @@ import slatekit.common.crypto.Encryptor
 import slatekit.common.data.Vendor.*
 import slatekit.common.naming.Namer
 import slatekit.common.data.Vendor
+import slatekit.data.support.IdGenerator
+import slatekit.data.support.IntIdGenerator
+import slatekit.data.support.LongIdGenerator
 import slatekit.entities.Entity
 import slatekit.entities.core.EntityBuilder
-import slatekit.entities.Repo
+import slatekit.entities.EntityRepo
 import slatekit.entities.core.EntityInfo
-import slatekit.entities.core.buildTableName
-import slatekit.entities.repos.*
+import slatekit.entities.EntityRepoInMemory
 import slatekit.meta.KTypes
 import slatekit.orm.core.SqlBuilder
 import slatekit.orm.databases.vendors.*
@@ -68,7 +70,7 @@ class OrmBuilder(dbCreator: (DbCon) -> IDb,
     fun <TId, T> mapper(vendor: Vendor, info:EntityInfo): OrmMapper<TId, T>
             where TId:Comparable<TId>, T: Entity<TId> {
         // 1. Table name
-        val table = buildTableName(info.modelType, info.tableName, info.namer)
+        val table = EntityInfo.buildTableName(info.modelType, info.tableName, info.namer)
 
         // 2. Model ( schema of the entity which maps fields to columns and has other metadata )
         val model = this.model(info.modelType, info.namer, table)
@@ -98,7 +100,7 @@ class OrmBuilder(dbCreator: (DbCon) -> IDb,
             db:IDb,
             info:EntityInfo,
             mapper: OrmMapper<TId, T>
-    ): Repo<TId, T> where TId:Comparable<TId>, T : Entity<TId> {
+    ): EntityRepo<TId, T> where TId:Comparable<TId>, T : Entity<TId> {
 
         // Repo: Handles all the CRUD / lookup functionality
         return when (vendor) {
@@ -106,8 +108,8 @@ class OrmBuilder(dbCreator: (DbCon) -> IDb,
             PGres -> PostGresRepo(db, info, mapper)
             else -> {
                 val result = when(info.idType){
-                    KTypes.KIntClass  -> InMemoryRepo<TId, T>(info, IntIdGenerator() as IdGenerator<TId>)
-                    KTypes.KLongClass -> InMemoryRepo<TId, T>(info, LongIdGenerator() as IdGenerator<TId>)
+                    KTypes.KIntClass  -> EntityRepoInMemory<TId, T>(info, IntIdGenerator() as IdGenerator<TId>)
+                    KTypes.KLongClass -> EntityRepoInMemory<TId, T>(info, LongIdGenerator() as IdGenerator<TId>)
                     else -> throw Exception("Unexpected entity id type for Slate Kit repo")
                 }
                 return result
@@ -121,7 +123,7 @@ class OrmBuilder(dbCreator: (DbCon) -> IDb,
      * @param vendor: The type of the database to create
      * @param mapper       :  Mapper to conver to/from sql/records
      */
-    fun <TId, T> repo(vendor: Vendor, info:EntityInfo, mapper: OrmMapper<TId, T>): Repo<TId, T>
+    fun <TId, T> repo(vendor: Vendor, info:EntityInfo, mapper: OrmMapper<TId, T>): EntityRepo<TId, T>
             where TId:Comparable<TId>, T: Entity<TId> {
 
         // 1. Connection info ( using default connection )

@@ -20,7 +20,6 @@ interface DbCon {
   val pswd: String
 
   companion object {
-
     @JvmField val empty = DbConString("", "", "", "")
   }
 }
@@ -38,5 +37,7 @@ data class DbConString(
     override val url: String,
     override val user: String,
     override val pswd: String
-) : DbCon
+) : DbCon {
+  constructor(vendor: Vendor, url:String, user:String, pswd:String) : this(vendor.driver, url, user, pswd)
+}
 

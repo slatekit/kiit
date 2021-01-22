@@ -23,7 +23,7 @@ apply plugin: 'kotlin'
 def slatekitComponentId = 'db'
 def slatekitComponentName = 'Db'
 def slatekitComponentDesc = 'SlateKit Db: Kotlin Database Utilities'
-def slatekitComponentVersion = ext.slatekit_version_beta
+def slatekitComponentVersion = ext.slatekit_version
 
 
 // ==================================================================

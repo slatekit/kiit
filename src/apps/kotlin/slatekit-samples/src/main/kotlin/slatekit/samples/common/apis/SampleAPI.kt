@@ -14,7 +14,7 @@ import slatekit.common.info.Build
 import slatekit.common.types.Doc
 import slatekit.results.Outcome
 import slatekit.results.builders.Outcomes
-import slatekit.samples.common.models.SampleMovie
+import slatekit.samples.common.models.Movie
 
 
 /**
@@ -181,9 +181,9 @@ class SampleAPI(context: Context) : ApiBase(context) {
      WEB: curl -X GET http://localhost:5000/api/samples/all/movies
      */
     @Action(desc = "get lists of movies", verb = Verbs.GET)
-    fun movies(): List<SampleMovie> {
+    fun movies(): List<Movie> {
         return listOf(
-                SampleMovie(
+                Movie(
                         title = "Indiana Jones",
                         category = "action",
                         playing = false,
@@ -191,7 +191,7 @@ class SampleAPI(context: Context) : ApiBase(context) {
                         rating = 4.5,
                         released = DateTimes.of(1985, 8, 10)
                 ),
-                SampleMovie(
+                Movie(
                         title = "Contact",
                         category = "sci-fi",
                         playing = false,
@@ -223,8 +223,8 @@ class SampleAPI(context: Context) : ApiBase(context) {
      WEB: curl -X POST http://localhost:5000/api/samples/all/request -d '{ "greeting": "hello" }'
      */
     @Action(desc = "test wrapped result")
-    fun response(request: Request, status: String): Outcome<SampleMovie> {
-        val sampleMovie = SampleMovie(
+    fun response(request: Request, status: String): Outcome<Movie> {
+        val sampleMovie = Movie(
                 title = "Sample Movie 1",
                 category = "action",
                 playing = false,
@@ -232,7 +232,7 @@ class SampleAPI(context: Context) : ApiBase(context) {
                 rating = 4.5,
                 released = DateTimes.of(1985, 8, 10)
         )
-        val result:Outcome<SampleMovie> = when(status) {
+        val result:Outcome<Movie> = when(status) {
             "invalid"  -> Outcomes.invalid ("test status invalid")
             "ignored"  -> Outcomes.ignored ("test status ignored")
             "denied"   -> Outcomes.denied  ("test status denied ")
@@ -253,9 +253,9 @@ class SampleAPI(context: Context) : ApiBase(context) {
      WEB: curl -X POST http://localhost:5000/api/samples/all/recent -d '{ "category": "sci-fi" }'
      */
     @Action(desc = "test movie list", verb = Verbs.GET)
-    fun recent(category: String): List<SampleMovie> {
+    fun recent(category: String): List<Movie> {
         return listOf(
-                SampleMovie(
+                Movie(
                         title = "Sample Movie 1",
                         category = category,
                         playing = false,
@@ -263,7 +263,7 @@ class SampleAPI(context: Context) : ApiBase(context) {
                         rating = 4.5,
                         released = DateTimes.of(1985, 8, 10)
                 ),
-                SampleMovie(
+                Movie(
                         title = "Sample Movie 2",
                         category = category,
                         playing = false,
@@ -302,7 +302,7 @@ class SampleAPI(context: Context) : ApiBase(context) {
             }'
      */
     @Action(desc = "test post", sources = [Sources.API])
-    fun create(movie: SampleMovie): String {
+    fun create(movie: Movie): String {
         return "movie ${movie.title} created"
     }
 
@@ -326,7 +326,7 @@ class SampleAPI(context: Context) : ApiBase(context) {
             }'
      */
     @Action(desc = "test put", sources = [Sources.API])
-    fun update(movie: SampleMovie): String {
+    fun update(movie: Movie): String {
         return "movie ${movie.title} updated"
     }
 
@@ -371,7 +371,7 @@ class SampleAPI(context: Context) : ApiBase(context) {
             }'
      */
     @Action(desc = "test delete", sources = [Sources.API])
-    fun delete(movie: SampleMovie): String {
+    fun delete(movie: Movie): String {
         return "movie ${movie.title} deleted"
     }
 

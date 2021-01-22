@@ -87,11 +87,7 @@ class ConfigMulti(
         } else {
             null
         }
-        return if (value != null && value is String) {
-            value.trim()
-        } else {
-            value
-        }
+        return value?.trim() ?: value
     }
 
     private fun getStringRaw(key: String): String = getInternalString(key)?.trim() ?: ""

@@ -21,10 +21,10 @@ import slatekit.common.log.LogsDefault
 import slatekit.common.naming.Namer
 import slatekit.common.utils.ListMap
 import slatekit.entities.core.*
-import slatekit.entities.repos.EntityMapperEmpty
-import slatekit.entities.repos.InMemoryRepo
-import slatekit.entities.repos.IdGenerator
-import slatekit.entities.repos.LongIdGenerator
+import slatekit.entities.EntityMapperEmpty
+import slatekit.entities.EntityRepoInMemory
+import slatekit.data.support.IdGenerator
+import slatekit.data.support.LongIdGenerator
 import slatekit.meta.models.Model
 import slatekit.meta.models.ModelMapper
 
@@ -110,7 +110,7 @@ open class Entities(
         entityType: KClass<*>,
         entityIdType: KClass<*>,
         serviceType: KClass<*>,
-        repo: Repo<TId, T>,
+        repo: EntityRepo<TId, T>,
         mapper: EntityMapper<TId, T>?,
         vendor: Vendor,
         serviceCtx: Any? = null
@@ -158,7 +158,7 @@ open class Entities(
         serviceCtx: Any? = null
     ): EntityContext where TId : Comparable<TId>, T : Entity<TId> {
 
-        val table = buildTableName(entityType, tableName, namer)
+        val table = EntityInfo.buildTableName(entityType, tableName, namer)
 
         // 1. Model ( schema of the entity which maps fields to columns and has other metadata )
         val model = if (loadSchema) ModelMapper.loadSchema(entityType) else Model(entityType, table) // Empty model as this is in-memory
@@ -168,7 +168,7 @@ open class Entities(
 
         // 3. Repo ( provides CRUD using the Mapper)
         val info = EntityInfo(entityIdType, entityType, table, '`', model, this.enc, this.namer)
-        val repo = InMemoryRepo<TId, T>(info, entityIdGen)
+        val repo = EntityRepoInMemory<TId, T>(info, entityIdGen)
 
         // 4. Service ( used to provide validation, placeholder for business functionality )
         val service = builder.service(this, serviceType, repo, serviceCtx)
@@ -220,8 +220,8 @@ open class Entities(
      * Get a registered repository for the entity type
      */
     @Suppress("UNCHECKED_CAST")
-    fun <TId, T> getRepo(tpe: KClass<*>, dbKey: String = "", dbShard: String = ""): Repo<TId, T> where TId : Comparable<TId>, T : Entity<TId> =
-            getRepoByType(tpe, dbKey, dbShard) as Repo<TId, T>
+    fun <TId, T> getRepo(tpe: KClass<*>, dbKey: String = "", dbShard: String = ""): EntityRepo<TId, T> where TId : Comparable<TId>, T : Entity<TId> =
+            getRepoByType(tpe, dbKey, dbShard) as EntityRepo<TId, T>
 
     /**
      * Get a registered service for the entity type
@@ -245,17 +245,17 @@ open class Entities(
         return getInfoByKey(key)
     }
 
-    fun getSvcByTypeName(entityType: String, dbKey: String = "", dbShard: String = ""): GenericService {
+    fun getSvcByTypeName(entityType: String, dbKey: String = "", dbShard: String = ""): EntityService<*, *> {
         val info = getInfoByName(entityType, dbKey, dbShard)
         return info.entityServiceInstance ?: throw Exception("Entity service not available")
     }
 
-    fun getSvcByType(entityType: KClass<*>, dbKey: String = "", dbShard: String = ""): GenericService {
+    fun getSvcByType(entityType: KClass<*>, dbKey: String = "", dbShard: String = ""): EntityService<*, *> {
         val info = getInfo(entityType, dbKey, dbShard)
         return info.entityServiceInstance ?: throw Exception("Entity service not available")
     }
 
-    private fun getRepoByType(tpe: KClass<*>, dbKey: String = "", dbShard: String = ""): EntityStore {
+    private fun getRepoByType(tpe: KClass<*>, dbKey: String = "", dbShard: String = ""): EntityRepo<*, *> {
         val info = getInfo(tpe, dbKey, dbShard)
         return info.entityRepoInstance
     }

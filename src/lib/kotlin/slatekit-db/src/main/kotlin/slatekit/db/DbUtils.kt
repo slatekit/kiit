@@ -17,7 +17,6 @@ import slatekit.common.DateTime
 import slatekit.common.Types
 import slatekit.common.data.DbCon
 import java.sql.*
-// import java.time.*
 import org.threeten.bp.*
 import slatekit.common.DateTimes
 import slatekit.common.data.DataType
@@ -91,7 +90,7 @@ object DbUtils {
      * @param callback : The callback to call for when the connection is ready
      * @param error : The callback to call for when an error occurrs
      */
-    fun <T> executePrepAs(
+    fun <T> executePrep(
         con: DbCon,
         sql: String,
         callback: (Connection, PreparedStatement) -> T?,
@@ -189,25 +188,25 @@ object DbUtils {
                 text.trim().filter { c -> c.isDigit() || c.isLetter() || c == '_' }
             }
 
-    fun org.threeten.bp.LocalDate.toJava8LocalDate(): java.time.LocalDate {
+    private fun LocalDate.toJava8LocalDate(): java.time.LocalDate {
         return java.time.LocalDate.of(this.year, this.month.value, this.dayOfMonth)
     }
 
-    fun org.threeten.bp.LocalTime.toJava8LocalTime(): java.time.LocalTime {
+    private fun LocalTime.toJava8LocalTime(): java.time.LocalTime {
         return java.time.LocalTime.of(this.hour, this.minute, this.second, this.nano)
     }
 
-    fun org.threeten.bp.LocalDateTime.toJava8LocalDateTime(): java.time.LocalDateTime {
+    private fun LocalDateTime.toJava8LocalDateTime(): java.time.LocalDateTime {
         return java.time.LocalDateTime.of(this.year, this.month.value, this.dayOfMonth,
             this.hour, this.minute, this.second, this.nano)
     }
 
-    fun org.threeten.bp.ZonedDateTime.toJava8ZonedDateTime(): java.time.ZonedDateTime {
+    private fun ZonedDateTime.toJava8ZonedDateTime(): java.time.ZonedDateTime {
         return java.time.ZonedDateTime.of(this.year, this.month.value, this.dayOfMonth,
             this.hour, this.minute, this.second, this.nano, java.time.ZoneId.of(this.zone.id))
     }
 
-    fun org.threeten.bp.Instant.toJava8Instant(): java.time.Instant {
+    private fun Instant.toJava8Instant(): java.time.Instant {
         return java.time.Instant.ofEpochMilli(this.toEpochMilli())
     }
 }

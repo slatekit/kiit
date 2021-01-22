@@ -3,8 +3,8 @@ package slatekit.entities.core
 import kotlin.reflect.KClass
 import slatekit.common.crypto.Encryptor
 import slatekit.common.naming.Namer
-import slatekit.entities.EntityIdInfo
-import slatekit.entities.IdInfo
+import slatekit.entities.core.EntityIdInfo
+import slatekit.entities.core.IdInfo
 import slatekit.meta.models.Model
 import slatekit.query.Query
 
@@ -38,6 +38,13 @@ data class EntityInfo(
             val tableName = entityType.simpleName!!.toLowerCase()
             val info = EntityInfo(idType, entityType, tableName)
             return info
+        }
+
+
+        fun buildTableName(entityType: KClass<*>, tableName: String?, namer: Namer?): String {
+            val raw = if (tableName.isNullOrEmpty()) entityType.simpleName!! else tableName
+            val table = namer?.rename(raw) ?: raw.toLowerCase()
+            return table
         }
     }
 }

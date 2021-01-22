@@ -99,15 +99,15 @@ open class EntityBuilder(
      * @param args: Additional arguments to constructor of service during creation
      */
     fun <TId, T> service(
-        entities: Entities,
-        serviceType: KClass<*>?,
-        repo: Repo<TId, T>,
-        args: Any?
-    ): GenericService where TId : Comparable<TId>, T : Entity<TId> {
+            entities: Entities,
+            serviceType: KClass<*>?,
+            repo: EntityRepo<TId, T>,
+            args: Any?
+    ): EntityService<*, *> where TId : Comparable<TId>, T : Entity<TId> {
         return serviceType?.let {
             // Parameters to service is the context and repo
             val params = args?.let { args -> listOf(args, entities, repo) } ?: listOf(entities, repo)
-            Reflector.createWithArgs<GenericService>(it, params.toTypedArray())
+            Reflector.createWithArgs<EntityService<*,*>>(it, params.toTypedArray())
         } ?: EntityService(repo)
     }
 }
