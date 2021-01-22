@@ -2,13 +2,13 @@ package slatekit.entities.core
 
 import java.util.*
 import slatekit.entities.Entity
-import slatekit.entities.Repo
+import slatekit.entities.EntityRepo
 import slatekit.data.events.EntityAction
 
 interface ServiceSupport<TId, T> where TId : Comparable<TId>, T : Entity<TId> {
 
     fun store(): EntityStore
-    fun repo(): Repo<TId, T>
+    fun repo(): EntityRepo<TId, T>
 
     /**
      * Hook for derived to apply any other logic/field changes before create/update

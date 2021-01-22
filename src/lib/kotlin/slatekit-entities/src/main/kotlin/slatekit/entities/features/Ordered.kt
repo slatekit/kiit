@@ -2,14 +2,9 @@ package slatekit.entities.features
 
 import slatekit.entities.Entity
 import slatekit.entities.core.ServiceSupport
-import slatekit.entities.repos.SeqRepo
 
 
 interface Ordered<TId, T> : ServiceSupport<TId, T> where TId : kotlin.Comparable<TId>, TId:Number, T : Entity<TId> {
-
-//    @Suppress("UNCHECKED_CAST")
-//    fun seq():SeqRepo<TId, T> = repo() as SeqRepo<TId, T>
-
 
     /**
      * gets the top count entities in the datastore sorted by asc order

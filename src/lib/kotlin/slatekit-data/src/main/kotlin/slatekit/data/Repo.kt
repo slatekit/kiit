@@ -1,6 +1,5 @@
 package slatekit.data
 
-import slatekit.data.core.*
 
 /**
  * Repository

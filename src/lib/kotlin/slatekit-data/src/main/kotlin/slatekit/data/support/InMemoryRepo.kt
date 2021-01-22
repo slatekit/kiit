@@ -4,7 +4,6 @@ import slatekit.common.DateTimes
 import slatekit.common.Prototyping
 import slatekit.common.utils.ListMap
 import slatekit.data.SqlRepo
-import slatekit.data.core.EntityUpdatable
 import slatekit.data.events.EntityAction
 import slatekit.data.events.EntityEvent
 import slatekit.data.events.EntityHooks
@@ -67,13 +66,9 @@ class InMemoryRepo<TId, T>(private val pk: String,
                 true -> identity(entity)
                 false -> {
                     val id = idGen.nextId()
-                    val en = when (entity) {
-                        is EntityUpdatable<*, *> -> entity.withIdAny(id) as T
-                        else -> entity
-                    }
                     // store
-                    items = items.add(id, en as T)
-                    notify(EntityAction.Create, en)
+                    items = items.add(id, entity)
+                    notify(EntityAction.Create, entity)
                     id
                 }
             }

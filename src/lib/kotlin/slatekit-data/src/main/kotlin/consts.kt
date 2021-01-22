@@ -17,7 +17,7 @@ mantra: Simplicity above all else
 package slatekit.data
 
 // import java.time.format.DateTimeFormatter
-import org.threeten.bp.format.*
+import org.threeten.bp.format.DateTimeFormatter
 
 object Consts {
 

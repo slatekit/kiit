@@ -32,6 +32,13 @@ interface CrudRepo<TId, T> : Repo<TId, T> where TId : Comparable<TId> {
         }
     }
 
+    /**
+     * Saves all the items using existing save method.
+     * NOTE: This does NOT do a batch insert.
+     * A separate method will be provided for batch inserts
+     */
+    fun saveAll(items: List<T>) = items.forEach { item -> save(item) }
+
 
     /**
      * gets the entity from the datastore using the id

@@ -1,6 +1,6 @@
 package slatekit.data.features
 
-import slatekit.data.core.Table
+import slatekit.data.Table
 import slatekit.query.Op
 
 /**

@@ -1,4 +1,4 @@
-package slatekit.data.core
+package slatekit.data
 
 interface Table<TId> where TId : Comparable<TId> {
     /**

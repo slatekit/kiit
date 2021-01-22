@@ -107,6 +107,15 @@ apply plugin: 'maven'
 apply plugin: 'maven-publish'
 apply plugin: 'com.jfrog.bintray'
 
+sourceSets {
+  main.java.srcDirs += 'src/main/kotlin/'
+  main.kotlin.srcDirs += 'src/main/kotlin/'
+  main {
+    resources {
+      srcDirs = ["src/main/resources"]
+    }
+  }
+}
 
 // Maven packages require the sources/docs.
 task sourcesJar(type: Jar, dependsOn: classes) {

@@ -1,8 +1,6 @@
 package slatekit.entities
 
 import slatekit.entities.core.GenericService
-import slatekit.entities.features.Finds
-import slatekit.entities.features.Reads
 import slatekit.entities.features.CRUD
 
 /**

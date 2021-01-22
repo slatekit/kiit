@@ -177,7 +177,7 @@ open class SqlRepo<TId, T>(
     /**
      * Gets the total number of records based on the query provided.
      */
-    override fun count(query: IQuery): Long {
+    override fun countByQuery(query: IQuery): Long {
         val filter = query.toFilter()
         val sql = "select count( * ) from ${name()} where " + filter
         val count = getScalarLong(sql)

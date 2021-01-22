@@ -99,10 +99,10 @@ open class EntityBuilder(
      * @param args: Additional arguments to constructor of service during creation
      */
     fun <TId, T> service(
-        entities: Entities,
-        serviceType: KClass<*>?,
-        repo: Repo<TId, T>,
-        args: Any?
+            entities: Entities,
+            serviceType: KClass<*>?,
+            repo: EntityRepo<TId, T>,
+            args: Any?
     ): GenericService where TId : Comparable<TId>, T : Entity<TId> {
         return serviceType?.let {
             // Parameters to service is the context and repo

@@ -1,7 +1,6 @@
 package slatekit.data.events
 
 import slatekit.common.DateTime
-import slatekit.data.core.Entity
 
 /**
  * Used to

@@ -31,12 +31,6 @@ import slatekit.meta.models.Model
 import slatekit.query.Op
 import kotlin.reflect.KClass
 
-open class InMemoryRepoWithLongId<T>(info: EntityInfo, idGen: IdGenerator<Long>) :
-    InMemoryRepo<Long, T>(info, idGen) where T: Any {
-
-    constructor(cls: KClass<T>) :
-        this(EntityInfo.memory(Long::class, cls), LongIdGenerator())
-}
 
 /**
  * An In-Memory repository to store entities.
@@ -45,10 +39,7 @@ open class InMemoryRepoWithLongId<T>(info: EntityInfo, idGen: IdGenerator<Long>)
  * WARNING!!!!!!
  * Should NOT be used outside of prototyping
  */
-open class InMemoryRepo<TId, T>(
-    info: EntityInfo,
-    val idGenerator: IdGenerator<TId>
-) : BaseRepo<TId, T>(info)
+open class InMemoryRepo<TId, T>(info: EntityInfo, val idGenerator: IdGenerator<TId>) : BaseRepo<TId, T>(info)
         where TId : kotlin.Comparable<TId>, T: Any {
 
     protected var items = ListMap<TId, T>(listOf())
@@ -217,7 +208,7 @@ open class InMemoryRepo<TId, T>(
         TODO("not implemented") // To change body of created functions use File | Settings | File Templates.
     }
 
-    override fun count(query: IQuery): Long {
+    override fun countByQuery(query: IQuery): Long {
         TODO("not implemented") // To change body of created functions use File | Settings | File Templates.
     }
 

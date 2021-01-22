@@ -3,8 +3,8 @@ package slatekit.entities.core
 import kotlin.reflect.KClass
 import slatekit.common.crypto.Encryptor
 import slatekit.common.naming.Namer
-import slatekit.entities.EntityIdInfo
-import slatekit.entities.IdInfo
+import slatekit.entities.core.EntityIdInfo
+import slatekit.entities.core.IdInfo
 import slatekit.meta.models.Model
 import slatekit.query.Query
 

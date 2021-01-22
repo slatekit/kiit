@@ -7,7 +7,7 @@ import slatekit.common.naming.Namer
 import slatekit.common.data.Vendor
 import slatekit.entities.Entity
 import slatekit.entities.core.EntityBuilder
-import slatekit.entities.Repo
+import slatekit.entities.EntityRepo
 import slatekit.entities.core.EntityInfo
 import slatekit.entities.core.buildTableName
 import slatekit.entities.repos.*
@@ -98,7 +98,7 @@ class OrmBuilder(dbCreator: (DbCon) -> IDb,
             db:IDb,
             info:EntityInfo,
             mapper: OrmMapper<TId, T>
-    ): Repo<TId, T> where TId:Comparable<TId>, T : Entity<TId> {
+    ): EntityRepo<TId, T> where TId:Comparable<TId>, T : Entity<TId> {
 
         // Repo: Handles all the CRUD / lookup functionality
         return when (vendor) {
@@ -121,7 +121,7 @@ class OrmBuilder(dbCreator: (DbCon) -> IDb,
      * @param vendor: The type of the database to create
      * @param mapper       :  Mapper to conver to/from sql/records
      */
-    fun <TId, T> repo(vendor: Vendor, info:EntityInfo, mapper: OrmMapper<TId, T>): Repo<TId, T>
+    fun <TId, T> repo(vendor: Vendor, info:EntityInfo, mapper: OrmMapper<TId, T>): EntityRepo<TId, T>
             where TId:Comparable<TId>, T: Entity<TId> {
 
         // 1. Connection info ( using default connection )

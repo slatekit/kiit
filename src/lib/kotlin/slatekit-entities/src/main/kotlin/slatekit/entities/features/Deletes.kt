@@ -16,8 +16,7 @@ interface Deletes<TId, T> : ServiceSupport<TId, T> where TId : kotlin.Comparable
      * @param entity
      */
     fun delete(entity: T?): Boolean {
-        val success = repo().delete(entity)
-        return success
+        return repo().delete(entity)
     }
 
     /**
@@ -40,8 +39,6 @@ interface Deletes<TId, T> : ServiceSupport<TId, T> where TId : kotlin.Comparable
 
     /**
      * deletes the entities
-     *
-     * @param entity
      */
     fun deleteByIds(ids: List<TId>): Int {
         return repo().deleteByIds(ids)

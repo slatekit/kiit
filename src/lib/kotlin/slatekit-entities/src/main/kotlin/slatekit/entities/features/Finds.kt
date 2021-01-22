@@ -40,11 +40,11 @@ interface Finds<TId, T> : ServiceSupport<TId, T> where TId : kotlin.Comparable<T
      */
     fun findByFields(conditions: List<Pair<String, Any>>): List<T> {
         // Get column name from model schema ( if available )
-        val pairs = conditions.map {
+        val filters = conditions.map {
             val column = columnName(it.first)
-            Pair(column, it.second)
+            Triple(column, Op.Eq, it.second)
         }
-        return repo().findByFields(pairs)
+        return repo().findByFields(filters)
     }
 
     /**
@@ -80,7 +80,7 @@ interface Finds<TId, T> : ServiceSupport<TId, T> where TId : kotlin.Comparable<T
         // Get column name from model schema ( if available )
         val column = columnName(prop.name)
         val query = Query().where(column, op, value).limit(limit)
-        return repo().find(query)
+        return repo().findByQuery(query)
     }
 
     /**
@@ -149,18 +149,11 @@ interface Finds<TId, T> : ServiceSupport<TId, T> where TId : kotlin.Comparable<T
      */
     fun findOneByFields(conditions: List<Pair<String, Any>>): T? {
         // Get column name from model schema ( if available )
-        val pairs = conditions.map {
+        val filters = conditions.map {
             val column = columnName(it.first)
-            Pair(column, it.second)
+            Triple(column, Op.Eq, it.second)
         }
-        return repo().findByFields(pairs).firstOrNull()
-    }
-
-    /**
-     * finds items by a stored proc
-     */
-    fun findByProc(name: String, args: List<Any>? = null): List<T>? {
-        return repo().findByProc(name, args)
+        return repo().findByFields(filters).firstOrNull()
     }
 
     /**
@@ -169,7 +162,7 @@ interface Finds<TId, T> : ServiceSupport<TId, T> where TId : kotlin.Comparable<T
      * @return
      */
     fun findByQuery(query: IQuery): List<T> {
-        return repo().find(query)
+        return repo().findByQuery(query)
     }
 
     /**

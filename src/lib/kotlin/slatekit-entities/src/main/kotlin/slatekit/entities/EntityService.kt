@@ -21,9 +21,9 @@ import slatekit.entities.core.EntityStore
  * on the entities for create/update operations
  * @tparam T
  */
-open class EntityService<TId, T>(protected val repo: Repo<TId, T>) : EntityServices<TId, T>
+open class EntityService<TId, T>(protected val repo: EntityRepo<TId, T>) : EntityServices<TId, T>
         where TId : kotlin.Comparable<TId>, T : Entity<TId> {
 
     override fun store(): EntityStore = repo
-    override fun repo(): Repo<TId, T> = repo
+    override fun repo(): EntityRepo<TId, T> = repo
 }

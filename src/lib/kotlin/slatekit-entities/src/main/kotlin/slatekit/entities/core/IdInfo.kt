@@ -1,6 +1,7 @@
-package slatekit.entities
+package slatekit.entities.core
 
 import slatekit.common.ext.toUUId
+import slatekit.entities.Entity
 import java.util.*
 import kotlin.reflect.KClass
 
@@ -10,7 +11,7 @@ interface IdInfo {
 }
 
 
-open class EntityIdInfo : IdInfo  {
+open class EntityIdInfo : IdInfo {
     override fun <T> isPersisted(entity:T):Boolean {
         return when(entity) {
             is Entity<*> -> entity.isPersisted()
