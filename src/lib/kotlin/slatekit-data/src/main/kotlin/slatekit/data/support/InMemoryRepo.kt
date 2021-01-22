@@ -1,19 +1,24 @@
 package slatekit.data.support
 
+import slatekit.common.DateTimes
 import slatekit.common.Prototyping
 import slatekit.common.utils.ListMap
 import slatekit.data.SqlRepo
 import slatekit.data.core.EntityUpdatable
+import slatekit.data.events.EntityAction
+import slatekit.data.events.EntityEvent
+import slatekit.data.events.EntityHooks
 import slatekit.query.Op
 
 /**
  * Used mostly for Prototyping and Testing.
  */
 @Prototyping("NON-PRODUCTION USAGE: Used for prototyping, proof-of-concept, tests")
-class InMemoryRepo<TId, T>(private val pk:String,
-                           private val tableName:String,
-                           private val op:(T)-> TId,
-                           private val idGen:IdGenerator<TId> ) : SqlRepo<TId, T> where TId: Number, TId : Comparable<TId>, T:Any {
+class InMemoryRepo<TId, T>(private val pk: String,
+                           private val tableName: String,
+                           private val op: (T) -> TId,
+                           private val idGen: IdGenerator<TId>,
+                           private val hooks: EntityHooks<TId, T>?) : SqlRepo<TId, T> where TId : Number, TId : Comparable<TId>, T : Any {
     // Ordered list + map features
     private var items = ListMap<TId, T>(listOf())
 
@@ -57,17 +62,20 @@ class InMemoryRepo<TId, T>(private val pk:String,
      * Creates the entity only in memory in this repo
      */
     override fun create(entity: T): TId {
-        return when(isPersisted((entity))) {
-            true -> identity(entity)
-            false -> {
-                val id = idGen.nextId()
-                val en = when (entity) {
-                    is EntityUpdatable<*, *> -> entity.withIdAny(id) as T
-                    else -> entity
+        return execute(entity) {
+            when (isPersisted((entity))) {
+                true -> identity(entity)
+                false -> {
+                    val id = idGen.nextId()
+                    val en = when (entity) {
+                        is EntityUpdatable<*, *> -> entity.withIdAny(id) as T
+                        else -> entity
+                    }
+                    // store
+                    items = items.add(id, en as T)
+                    notify(EntityAction.Create, en)
+                    id
                 }
-                // store
-                items = items.add(id, en as T)
-                id
             }
         }
     }
@@ -77,12 +85,14 @@ class InMemoryRepo<TId, T>(private val pk:String,
      */
     override fun update(entity: T): Boolean {
         val id = identity(entity)
-        return if (isPersisted(entity) && items.contains(id)) {
-            items = items.minus(id)
-            items = items.add(id, entity)
-            true
+        return execute(entity) {
+            if (isPersisted(entity) && items.contains(id)) {
+                items = items.minus(id)
+                items = items.add(id, entity)
+                notify(EntityAction.Update, entity)
+                true
+            } else false
         }
-        else false
     }
 
     override fun getById(id: TId): T? {
@@ -100,14 +110,24 @@ class InMemoryRepo<TId, T>(private val pk:String,
     override fun delete(entity: T?): Boolean {
         return entity?.let {
             val id = identity(it)
-            deleteById(id)
+            val deleted = deleteById(id)
+            deleted
         } ?: false
     }
 
     override fun deleteById(id: TId): Boolean {
-        return when(!items.contains(id)) {
+        return when (!items.contains(id)) {
             false -> false
-            true -> { items = items.remove(id); true }
+            true -> {
+                val item = items.get(id)
+                item?.let {
+                    execute(it) {
+                        items = items.remove(id)
+                        item?.let { notify(EntityAction.Delete, item) }
+                        true
+                    }
+                } ?: false
+            }
         }
     }
 
@@ -122,9 +142,9 @@ class InMemoryRepo<TId, T>(private val pk:String,
     }
 
     override fun seq(count: Int, desc: Boolean): List<T> {
-        return when(desc) {
+        return when (desc) {
             false -> items.all().take(count)
-            true  -> items.all().takeLast(count)
+            true -> items.all().takeLast(count)
         }
     }
 
@@ -142,5 +162,28 @@ class InMemoryRepo<TId, T>(private val pk:String,
 
     override fun findOneByField(field: String, op: Op, value: Any): T? {
         TODO("This class for prototyping purposes only: Not yet implemented")
+    }
+
+    private fun notify(action: EntityAction, entity:T) {
+        val id = identity(entity)
+        val ts = DateTimes.now()
+        val name = name()
+        when(action) {
+            EntityAction.Create -> hooks?.onEntityEvent(EntityEvent.EntityCreated<TId, T>(name, id, entity, ts))
+            EntityAction.Update -> hooks?.onEntityEvent(EntityEvent.EntityUpdated<TId, T>(name, id, entity, ts))
+            EntityAction.Delete -> hooks?.onEntityEvent(EntityEvent.EntityDeleted<TId, T>(name, id, entity, ts))
+            else -> { }
+        }
+    }
+
+    private fun <A> execute(t:T, op:() -> A): A {
+        return try {
+            op()
+        }
+        catch(ex:Exception) {
+            val id = identity(t)
+            hooks?.onEntityEvent(EntityEvent.EntityErrored(name(), id, t, ex, DateTimes.now()))
+            throw ex
+        }
     }
 }
