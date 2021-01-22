@@ -38,21 +38,7 @@ open class EntitySqlRepo<TId, T>(
     /**
      * Gets the name of the repository/table
      */
-    override fun name(): String = "${info.encodedChar}" + super.name() + "${info.encodedChar}"
-
-    /**
-     * Checks whether this entity is already persistend ( simply by checking its id )
-     */
-    override fun isPersisted(entity: T): Boolean {
-        return info.idInfo.isPersisted(entity)
-    }
-
-    /**
-     * Gets the identity of the entity
-     */
-    override fun identity(entity: T): TId {
-        return info.idInfo.identity(entity)
-    }
+    override fun name(): String = "${info.encodedChar}" + super.name + "${info.encodedChar}"
 
     /**
      * Creates the entity in the repository/table
