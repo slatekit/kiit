@@ -12,5 +12,5 @@ interface SqlRepo<TId, T>:
     Findable<TId, T>,
     Orderable<TId, T>,
     Patchable<TId, T>
-    where TId : Comparable<TId> {
+    where TId : Comparable<TId>, T: Any {
 }

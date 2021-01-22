@@ -31,7 +31,7 @@ interface Statements<TId, T> where TId: kotlin.Comparable<TId>, T: Any {
 }
 
 
-class SqlStatements<TId, T>(val info:EntityInfo, val mapper: EntityMapper<TId, T>) : Statements<TId, T> where TId: kotlin.Comparable<TId>, T: Any {
+class SqlStatements<TId, T>(val meta, val mapper: EntityMapper<TId, T>) : Statements<TId, T> where TId: kotlin.Comparable<TId>, T: Any {
     override val insert = InsertStatement<TId, T>(info, mapper)
     override val update = UpdateStatement<TId, T>(info, mapper)
     override val select = SelectStatement<TId, T>(info, mapper)

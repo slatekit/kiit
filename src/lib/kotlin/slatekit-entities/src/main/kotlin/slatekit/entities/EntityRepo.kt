@@ -39,20 +39,9 @@ interface EntityRepo<TId, T> :
     Findable<TId, T>,
     Deletable<TId, T>,
     Patchable<TId, T>
-    where TId : Comparable<TId> {
+    where TId : Comparable<TId>, T:Any {
 
     val info: EntityInfo
-
-    /**
-     * the name of the id field.
-     * @return
-     */
-    override fun id(): String = info.model?.idField?.name ?: idCol
-
-    /**
-     * The name of the table in the datastore
-     */
-    override fun name(): String = info.name()
 
     /**
      * updates items using the query

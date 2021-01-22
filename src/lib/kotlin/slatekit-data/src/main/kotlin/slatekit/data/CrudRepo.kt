@@ -1,7 +1,7 @@
 package slatekit.data
 
 
-interface CrudRepo<TId, T> : Repo<TId, T> where TId : Comparable<TId> {
+interface CrudRepo<TId, T> : Repo<TId, T> where TId : Comparable<TId>, T:Any {
     /**
      * creates the entity in the data store
      * @param entity

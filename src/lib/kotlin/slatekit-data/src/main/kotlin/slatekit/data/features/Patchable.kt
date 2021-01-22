@@ -1,14 +1,11 @@
 package slatekit.data.features
 
-import slatekit.data.Table
 import slatekit.query.Op
 
 /**
  * Support patching of records by conditions
  */
-interface Patchable<TId, T> : Table<TId> where TId : Comparable<TId> {
-
-
+interface Patchable<TId, T> : Inspectable<TId, T> where TId : Comparable<TId>, T:Any {
 
     /**
      * patches the items with the field and value supplied
@@ -19,7 +16,7 @@ interface Patchable<TId, T> : Table<TId> where TId : Comparable<TId> {
     /**
      * Patch 1 item by its id using the updates provided
      */
-    fun patchById(id: TId, updates: List<Pair<String, Any?>>): Int = patchByFields(updates, listOf(Triple(id(), Op.Eq, id)))
+    fun patchById(id: TId, updates: List<Pair<String, Any?>>): Int = patchByFields(updates, listOf(Triple(meta.pkey.name, Op.Eq, id)))
 
 
     /**

@@ -4,58 +4,26 @@ import slatekit.common.DateTimes
 import slatekit.common.Prototyping
 import slatekit.common.utils.ListMap
 import slatekit.data.SqlRepo
+import slatekit.data.core.Table
 import slatekit.data.events.EntityAction
 import slatekit.data.events.EntityEvent
 import slatekit.data.events.EntityHooks
+import slatekit.data.core.Id
+import slatekit.data.core.Meta
 import slatekit.query.Op
 
 /**
  * Used mostly for Prototyping and Testing.
+ * @param meta: Provides information about id and table
+ * @param idGen: AutoIncrementing Long for this in-memory table to generate ids
+ * @param hooks: "Middleware" support to notify listeners for changes ( create, update, deletes )
  */
 @Prototyping("NON-PRODUCTION USAGE: Used for prototyping, proof-of-concept, tests")
-class InMemoryRepo<TId, T>(private val pk: String,
-                           private val tableName: String,
-                           private val op: (T) -> TId,
+class InMemoryRepo<TId, T>(override val meta: Meta<TId, T>,
                            private val idGen: IdGenerator<TId>,
                            private val hooks: EntityHooks<TId, T>?) : SqlRepo<TId, T> where TId : Comparable<TId>, T : Any {
     // Ordered list + map features
     private var items = ListMap<TId, T>(listOf())
-
-    /**
-     * Name of the Id/Primary key
-     */
-    override fun id(): String {
-        return pk
-    }
-
-    /**
-     * Name of this repo
-     */
-    override fun name(): String {
-        return tableName
-    }
-
-    /**
-     * Whether item is persisted already
-     */
-    override fun isPersisted(entity: T): Boolean {
-        val id = identity(entity)
-        return id.toString().toLong() > 0
-    }
-
-    /**
-     * Gets the identity of the entity ( primary key value )
-     */
-    override fun identity(entity: T): TId {
-        return op(entity)
-    }
-
-    /**
-     * Total number of items in this repo
-     */
-    override fun count(): Long {
-        return items.size.toLong()
-    }
 
     /**
      * Creates the entity only in memory in this repo
@@ -136,6 +104,13 @@ class InMemoryRepo<TId, T>(private val pk: String,
         return count.toLong()
     }
 
+    /**
+     * Total number of items in this repo
+     */
+    override fun count(): Long {
+        return items.size.toLong()
+    }
+
     override fun seq(count: Int, desc: Boolean): List<T> {
         return when (desc) {
             false -> items.all().take(count)
@@ -162,7 +137,6 @@ class InMemoryRepo<TId, T>(private val pk: String,
     private fun notify(action: EntityAction, entity:T) {
         val id = identity(entity)
         val ts = DateTimes.now()
-        val name = name()
         when(action) {
             EntityAction.Create -> hooks?.onEntityEvent(EntityEvent.EntityCreated<TId, T>(name, id, entity, ts))
             EntityAction.Update -> hooks?.onEntityEvent(EntityEvent.EntityUpdated<TId, T>(name, id, entity, ts))
@@ -177,7 +151,7 @@ class InMemoryRepo<TId, T>(private val pk: String,
         }
         catch(ex:Exception) {
             val id = identity(t)
-            hooks?.onEntityEvent(EntityEvent.EntityErrored(name(), id, t, ex, DateTimes.now()))
+            hooks?.onEntityEvent(EntityEvent.EntityErrored(meta.name, id, t, ex, DateTimes.now()))
             throw ex
         }
     }
