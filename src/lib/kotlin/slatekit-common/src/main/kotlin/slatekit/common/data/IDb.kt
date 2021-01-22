@@ -63,7 +63,7 @@ interface IDb : ScalarSupport, ProcSupport {
             sql: String,
             callback: (ResultSet) -> T?,
             moveNext: Boolean = true,
-            inputs: List<Any>? = null
+            inputs: List<Any?>? = null
     ): T?
 
     /**
@@ -75,7 +75,7 @@ interface IDb : ScalarSupport, ProcSupport {
      * @return
      */
     @Suppress("UNCHECKED_CAST")
-    fun <T> mapOne(sql: String, inputs: List<Any>?, mapper: (Record) -> T?): T?
+    fun <T> mapOne(sql: String, inputs: List<Any?>?, mapper: (Record) -> T?): T?
 
     /**
      * maps multiple items using the sql supplied
@@ -86,7 +86,7 @@ interface IDb : ScalarSupport, ProcSupport {
      * @return
      */
     @Suppress("UNCHECKED_CAST")
-    fun <T> mapAll(sql: String, inputs: List<Any>?, mapper: (Record) -> T?): List<T>?
+    fun <T> mapAll(sql: String, inputs: List<Any?>?, mapper: (Record) -> T?): List<T>?
 
 
     fun errorHandler(ex: Exception)

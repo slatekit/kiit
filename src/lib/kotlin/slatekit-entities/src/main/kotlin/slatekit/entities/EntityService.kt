@@ -19,7 +19,7 @@ package slatekit.entities
  * on the entities for create/update operations
  * @tparam T
  */
-open class EntityService<TId, T>(protected val repo: EntityRepo<TId, T>) : EntityServices<TId, T>
+open class EntityService<TId, T>(protected val repo: EntityRepo<TId, T>) : EntitySupport<TId, T>
         where TId : kotlin.Comparable<TId>, T : Entity<TId> {
     override fun repo(): EntityRepo<TId, T> = repo
 }

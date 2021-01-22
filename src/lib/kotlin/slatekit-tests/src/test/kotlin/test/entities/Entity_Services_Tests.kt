@@ -35,6 +35,7 @@ class Entity_Services_Tests {
     private var entities = Entities({ con -> Db(con) })
 
 
+
     @Before fun setup(){
         entities = Entities({ con -> Db(con) }, Connections(DbConString("", "", "", "")))
         entities.prototype<User5>(User5::class, loadSchema = true)
@@ -84,7 +85,7 @@ class Entity_Services_Tests {
     fun can_create_an_item() {
         val userSvc = getUserService(true)
         userSvc.create(User5(0, "jdoe5@abc.com", true, 35, 12.34))
-        val User5 = userSvc.get(5)!!
+        val User5 = userSvc.getById(5)!!
         Assert.assertTrue(User5 != null)
         Assert.assertTrue(User5.email == "jdoe5@abc.com")
         //Assert.assertTrue( User5.get.uuid != "")

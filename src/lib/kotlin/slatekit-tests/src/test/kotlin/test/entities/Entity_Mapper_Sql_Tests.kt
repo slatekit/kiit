@@ -22,8 +22,8 @@ import slatekit.common.ids.UPIDs
 import slatekit.db.Db
 import slatekit.meta.models.ModelMapper
 import slatekit.orm.OrmMapper
-import slatekit.orm.databases.statements.Insert
-import slatekit.orm.databases.statements.Update
+import slatekit.entities.databases.statements.Insert
+import slatekit.entities.databases.statements.Update
 import slatekit.orm.databases.vendors.MySqlConverter
 import test.setup.*
 

@@ -23,8 +23,10 @@ import slatekit.data.features.Patchable
 import slatekit.entities.Consts.idCol
 import slatekit.entities.core.EntityInfo
 import slatekit.entities.EntitySqlRepo
+import slatekit.entities.statements.SqlStatements
 import slatekit.query.IQuery
 import slatekit.query.Query
+import javax.swing.text.html.parser.Entity
 import kotlin.reflect.KClass
 
 /**
@@ -73,7 +75,7 @@ interface EntityRepo<TId, T> :
     fun countByQuery(query: IQuery): Long
 
 
-    fun findFirst(query: IQuery): T?
+    fun findOneByQuery(query: IQuery): T?
 
     /**
      * Return a query builder for more complex searches
@@ -103,27 +105,30 @@ interface EntityRepo<TId, T> :
 
     companion object {
 
-        inline fun <reified TId, reified T> h2(db: IDb, mapper: Mapper<TId, T>, table: String? = null): EntitySqlRepo<TId, T> where TId : Comparable<TId>, T: Any {
+        inline fun <reified TId, reified T> h2(db: IDb, mapper: EntityMapper<TId, T>, table: String? = null): EntitySqlRepo<TId, T> where TId : Comparable<TId>, T: Any {
             return sqlRepo<TId, T>(db, mapper, table) { idType, enType, info ->
-                EntitySqlRepo(db, info, mapper)
+                val stmts = SqlStatements(info, mapper)
+                EntitySqlRepo(db, info, stmts, mapper)
             }
         }
 
 
-        inline fun <reified TId, reified T> mysql(db: IDb, mapper: Mapper<TId, T>, table: String? = null): EntitySqlRepo<TId, T> where TId : Comparable<TId>, T: Any {
+        inline fun <reified TId, reified T> mysql(db: IDb, mapper: EntityMapper<TId, T>, table: String? = null): EntitySqlRepo<TId, T> where TId : Comparable<TId>, T: Any {
             return sqlRepo<TId, T>(db, mapper, table) { idType, enType, info ->
-                EntitySqlRepo(db, info, mapper)
+                val stmts = SqlStatements(info, mapper)
+                EntitySqlRepo(db, info, stmts, mapper)
             }
         }
 
-        inline fun <reified TId, reified T> postgres(db: IDb, mapper: Mapper<TId, T>, table: String? = null): EntitySqlRepo<TId, T> where TId : Comparable<TId>, T: Any {
+        inline fun <reified TId, reified T> postgres(db: IDb, mapper: EntityMapper<TId, T>, table: String? = null): EntitySqlRepo<TId, T> where TId : Comparable<TId>, T: Any {
             return sqlRepo<TId, T>(db, mapper, table) { idType, enType, info ->
-                EntitySqlRepo(db, info, mapper)
+                val stmts = SqlStatements(info, mapper)
+                EntitySqlRepo(db, info, stmts, mapper)
             }
         }
 
         inline fun <reified TId, reified T> sqlRepo(db: IDb,
-                                                    mapper: Mapper<TId, T>,
+                                                    mapper: EntityMapper<TId, T>,
                                                     table: String? = null,
                                                     op: (KClass<TId>, KClass<T>, EntityInfo) -> EntitySqlRepo<TId, T>): EntitySqlRepo<TId, T>
             where TId : Comparable<TId>, T: Any {

@@ -6,6 +6,7 @@ import java.util.*
 import kotlin.reflect.KClass
 
 interface IdInfo {
+    fun name():String
     fun <T> isPersisted(entity:T):Boolean
     fun <TId, T> identity(entity:T):TId
     fun <TId> convertToId(id: String, entityType: KClass<*>): TId
@@ -13,6 +14,11 @@ interface IdInfo {
 
 
 open class EntityIdInfo : IdInfo {
+
+    override fun name(): String {
+        return "id"
+    }
+
     override fun <T> isPersisted(entity:T):Boolean {
         return when(entity) {
             is Entity<*> -> entity.isPersisted()

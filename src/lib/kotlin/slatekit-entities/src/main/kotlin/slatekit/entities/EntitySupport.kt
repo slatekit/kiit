@@ -5,4 +5,4 @@ import slatekit.entities.features.CRUD
 /**
  * Service with generics to support all CRUD operations.
  */
-interface EntityServices<TId, T> :  CRUD<TId, T> where TId : kotlin.Comparable<TId>, T : Entity<TId>
+interface EntitySupport<TId, T> :  CRUD<TId, T> where TId : kotlin.Comparable<TId>, T : Entity<TId>

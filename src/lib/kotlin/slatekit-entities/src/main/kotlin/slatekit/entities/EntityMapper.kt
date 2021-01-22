@@ -14,6 +14,7 @@
 package slatekit.entities
 
 import slatekit.common.data.Mapper
+import slatekit.entities.core.EntityInfo
 import kotlin.reflect.KProperty
 import slatekit.meta.models.Model
 
@@ -34,12 +35,13 @@ import slatekit.meta.models.Model
  */
 interface EntityMapper<TId, T> : Mapper<TId, T> where TId : Comparable<TId> {
 
+    val info:EntityInfo
+
     /**
      * Gets the optional Model schema which stores field/properties
      * and their corresponding column metadata
      */
     fun schema(): Model? = null
-
 
     /**
      * Gets the column name for the Kproperty from the model schema if available

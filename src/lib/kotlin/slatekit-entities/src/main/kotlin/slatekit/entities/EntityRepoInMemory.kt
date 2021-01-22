@@ -259,7 +259,7 @@ open class EntityRepoInMemory<TId, T>(override val info: EntityInfo, val idGener
         }
     }
 
-    override fun findFirst(query: IQuery): T? {
+    override fun findOneByQuery(query: IQuery): T? {
         TODO("Not yet implemented")
     }
 

@@ -5,6 +5,7 @@ import slatekit.common.crypto.Encryptor
 import slatekit.common.data.Vendor.*
 import slatekit.common.naming.Namer
 import slatekit.common.data.Vendor
+import slatekit.data.support.IdGenerator
 import slatekit.data.support.IntIdGenerator
 import slatekit.data.support.LongIdGenerator
 import slatekit.entities.Entity

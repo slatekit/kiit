@@ -5,7 +5,7 @@ sealed class DataAction {
     object Create          : DataAction()
     object Update          : DataAction()
     object Delete          : DataAction()
-    object Fetch           : DataAction()
+    object Select           : DataAction()
     object Schema          : DataAction()
     /* ktlint-enable */
 }
