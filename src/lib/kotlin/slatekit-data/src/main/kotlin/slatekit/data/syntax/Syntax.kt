@@ -37,7 +37,7 @@ interface Syntax<TId, T> where TId: kotlin.Comparable<TId>, T: Any {
 class SqlSyntax<TId, T>(val info: Meta<TId, T>, val mapper: Mapper<TId, T>) : Syntax<TId, T> where TId: kotlin.Comparable<TId>, T: Any {
     override val filters = Filters()
     override val insert = Insert<TId, T>(info, mapper)
-    override val update = Update<TId, T>(info, mapper)
+    override val update = Update<TId, T>(info, mapper, filters)
     override val select = Select<TId, T>(info, mapper, filters)
     override val delete = Delete<TId, T>(info, mapper, filters)
 }

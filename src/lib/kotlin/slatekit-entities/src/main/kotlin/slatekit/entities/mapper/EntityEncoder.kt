@@ -19,20 +19,20 @@ import slatekit.query.QueryEncoder
 
 
 open class EntityEncoder<TId, T>(val model: Model,
-                                 val settings: EntitySettings,
                                  val meta: Meta<TId, T>,
-                                 val encryptor: Encryptor?,
-                                 val encoders: Encoders<TId, T>) : Encoder<TId, T> where TId : kotlin.Comparable<TId>, T : Any {
+                                 val settings: EntitySettings = EntitySettings(true),
+                                 val encryptor: Encryptor? = null,
+                                 val encoders: Encoders<TId, T> = Encoders()) : Encoder<TId, T> where TId : kotlin.Comparable<TId>, T : Any {
 
     /**
      * Gets all the column names mapped to the field names
      */
-    val cols: List<String> by lazy { model.fields.map { it.storedName } }
+    private val cols: List<String> by lazy { model.fields.map { it.storedName } }
 
     /**
      * Primary Key / identity field
      */
-    val idCol = model.idField!!
+    private val idCol = model.idField!!
 
 
     /**

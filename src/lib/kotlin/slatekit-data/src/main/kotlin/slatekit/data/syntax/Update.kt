@@ -10,14 +10,14 @@ import slatekit.data.core.Meta
  * @param info: Meta info to know about the table (name, primary key ) and model id
  * @param mapper: Mapper that converts a model T into its values for a table
  */
-open class Update<TId, T>(val info: Meta<TId, T>, val mapper: Mapper<TId, T>, val filters:Filters) : Statement<TId, T> where TId : kotlin.Comparable<TId>, T : Any {
+open class Update<TId, T>(val info: Meta<TId, T>, val mapper: Mapper<TId, T>, val filters:Filters = Filters()) : Statement<TId, T> where TId : kotlin.Comparable<TId>, T : Any {
     /**
      * Builds the full SQL statement
      * e.g. "update `movies` set name = 'batman', category = 'action';"
      */
     open fun stmt(item: T): String {
         val values = data(item)
-        val args = values.joinToString(",", transform = { "${encode(it.name, info.table.encodeChar)} = ${it.value?.toString() ?: Consts.NULL}" } )
+        val args = values.joinToString(",", transform = { "${it.name} = ${it.value?.toString() ?: Consts.NULL}" } )
         return "${prefix()} SET $args;"
     }
 
@@ -28,7 +28,7 @@ open class Update<TId, T>(val info: Meta<TId, T>, val mapper: Mapper<TId, T>, va
      */
     open fun prep(item: T): Command {
         val values = data(item)
-        val args = values.joinToString(",", transform = { "${encode(it.name, info.table.encodeChar)} = ?" } )
+        val args = values.joinToString(",", transform = { "${it.name} = ?" } )
         val sql = "${prefix()} SET $args;"
         return Command(sql, values, values.map { it.value })
     }

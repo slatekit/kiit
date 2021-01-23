@@ -23,9 +23,7 @@ import java.util.*
 import org.threeten.bp.*
 import slatekit.common.Record
 import slatekit.common.crypto.Encryptor
-import slatekit.common.data.DataAction
-import slatekit.common.data.Mapper
-import slatekit.common.data.Values
+import slatekit.common.data.*
 import slatekit.data.core.*
 import slatekit.data.features.Countable
 import slatekit.data.features.Orderable
@@ -33,7 +31,8 @@ import slatekit.data.support.IdGenerator
 import slatekit.data.support.IntIdGenerator
 import slatekit.data.support.LongIdGenerator
 import slatekit.entities.core.EntityInfo
-import slatekit.common.data.Compare
+import slatekit.entities.mapper.EntityMapper
+import slatekit.meta.models.Model
 import kotlin.reflect.KClass
 
 
@@ -156,10 +155,10 @@ open class EntityRepoInMemory<TId, T>(override val meta: Meta<TId, T>,
     /**
      * finds items based on the conditions
      */
-    override fun findByFields(conditions: List<Triple<String, Compare, Any>>): List<T> {
+    override fun findByFilters(filters: List<Filter>, logical: Logical): List<T> {
         val all = items.all()
-        val filtered = conditions.fold(all) { items, condition ->
-            val matches = filter(items, condition.first, Compare.Eq.text, condition.second)
+        val filtered = filters.fold(all) { items, f ->
+            val matches = filter(items, f.name, f.op.text, f.value!!)
             matches
         }
         return filtered
@@ -274,17 +273,17 @@ open class EntityRepoInMemory<TId, T>(override val meta: Meta<TId, T>,
         return entity?.let { deleteById(identity(it))} ?: false
     }
 
-    override fun deleteByFields(conditions: List<Triple<String, Compare, Any?>>): Int {
+    override fun deleteByFilters(filters: List<Filter>, logical: Logical): Int {
         TODO("Not yet implemented")
     }
 
-    override fun patchByFields(fields: List<Pair<String, Any?>>, conditions: List<Triple<String, Compare, Any?>>): Int {
+    override fun patchByFilters(fields: List<Value>, filters: List<Filter>, logical: Logical): Int {
         TODO("Not yet implemented")
     }
 }
 
 
-class EntityMapperEmpty<TId, T>()  : Mapper<TId, T> where TId : Comparable<TId>, T : Entity<TId> {
+class EntityMapperEmpty<TId, T>(model: Model, meta: Meta<TId, T>, idCls:KClass<TId>, enCls:KClass<T>)  : EntityMapper<TId, T>(model, meta, idCls, enCls) where TId : Comparable<TId>, T : Entity<TId> {
     override fun encode(model: T, action: DataAction, enc: Encryptor?): Values {
         TODO("Not yet implemented")
     }

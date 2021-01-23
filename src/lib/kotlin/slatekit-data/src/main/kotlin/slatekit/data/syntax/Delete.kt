@@ -8,7 +8,7 @@ import slatekit.data.core.Meta
  * @param info: Meta info to know about the table (name, primary key ) and model id
  * @param mapper: Mapper that converts a model T into its values for a table
  */
-open class Delete<TId, T>(val info: Meta<TId, T>, val mapper: Mapper<TId, T>, val filters: Filters) : Statement<TId, T> where TId : kotlin.Comparable<TId>, T : Any {
+open class Delete<TId, T>(val info: Meta<TId, T>, val mapper: Mapper<TId, T>, val filters: Filters = Filters()) : Statement<TId, T> where TId : kotlin.Comparable<TId>, T : Any {
     /**
      * Builds the full SQL statement
      * e.g. "delete from movies where id = 1;"

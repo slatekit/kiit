@@ -13,7 +13,7 @@ open class UUIDEncoder : SqlEncoder<UUID> {
     }
 
     override fun decode(record: Record, name: String): UUID? {
-        return record.getUUID(name)
+        return record.getUUIDOrNull(name)
     }
 }
 
@@ -25,6 +25,6 @@ open class UPIDEncoder : SqlEncoder<UPID> {
     }
 
     override fun decode(record: Record, name: String): UPID? {
-        return record.getUPID(name)
+        return record.getUPIDOrNull(name)
     }
 }

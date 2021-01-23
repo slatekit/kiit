@@ -30,7 +30,7 @@ open class LocalTimeEncoder : SqlEncoder<LocalTime> {
     }
 
     override fun decode(record: Record, name: String): LocalTime? {
-        return record.getLocalTime(name)
+        return record.getLocalTimeOrNull(name)
     }
 }
 
@@ -54,7 +54,7 @@ open class LocalDateTimeEncoder : SqlEncoder<LocalDateTime> {
     }
 
     fun toItem(record: Record, name: String, isUTC: Boolean = false): LocalDateTime? {
-        return record.getLocalDateTime(name)
+        return record.getLocalDateTimeOrNull(name)
     }
 }
 
@@ -78,9 +78,9 @@ open class ZonedDateTimeEncoder : SqlEncoder<ZonedDateTime> {
 
     fun toItem(record: Record, name: String, isUTC: Boolean = false): ZonedDateTime? {
         return if (isUTC)
-            record.getZonedDateTimeUtc(name)
+            record.getZonedDateTimeUtcOrNull(name)
         else
-            record.getZonedDateTime(name)
+            record.getZonedDateTimeOrNull(name)
     }
 }
 
@@ -94,7 +94,7 @@ open class InstantEncoder : SqlEncoder<Instant> {
     }
 
     override fun decode(record: Record, name: String): Instant? {
-        return record.getInstant(name)
+        return record.getInstantOrNull(name)
     }
 }
 
@@ -119,9 +119,9 @@ open class DateTimeEncoder : SqlEncoder<DateTime> {
 
     fun toItem(record: Record, name: String, isUTC: Boolean = false): DateTime? {
         return if (isUTC)
-            record.getZonedDateTimeUtc(name).atUtcLocal()
+            record.getZonedDateTimeUtcOrNull(name)?.atUtcLocal()
         else
-            record.getDateTime(name)
+            record.getDateTimeOrNull(name)
     }
 }
 

@@ -88,43 +88,43 @@ open class Entities(
         mappers[ctx.entityType.qualifiedName!!] = ctx.entityMapperInstance
     }
 
-    /**
-     * Register the entity using a pre-built [EntityContext] object
-     * which contains all the relevant info about an Entity, its id,
-     * and its corresponding mapper, repo, service, etc.
-     */
-    open fun <TId, T> register(
-        entityType: KClass<*>,
-        entityIdType: KClass<*>,
-        service: EntityService<TId, T>,
-        vendor: Vendor
-    ): EntityContext where TId : Comparable<TId>, T : Entity<TId> {
-        val mapper = EntityMapperEmpty<TId, T>()
-        val context = EntityContext(entityType, entityIdType, service::class, service.repo(), mapper, vendor, Model(entityType), "", "", service)
-        register(context)
-        return context
-    }
-
-    /**
-     * Register the entity using a pre-built [EntityContext] object
-     * which contains all the relevant info about an Entity, its id,
-     * and its corresponding mapper, repo, service, etc.
-     */
-    open fun <TId, T> register(
-        entityType: KClass<*>,
-        entityIdType: KClass<*>,
-        serviceType: KClass<*>,
-        repo: EntityRepo<TId, T>,
-        mapper: EntityMapper<TId, T>?,
-        vendor: Vendor,
-        serviceCtx: Any? = null
-    ): EntityContext where TId : Comparable<TId>, T : Entity<TId> {
-        val service = builder.service(this, serviceType, repo, serviceCtx)
-        val finalMapper = mapper ?: EntityMapperEmpty<TId, T>()
-        val context = EntityContext(entityType, entityIdType, serviceType, repo, finalMapper, vendor, Model(entityType), "", "", service, serviceCtx)
-        register(context)
-        return context
-    }
+//    /**
+//     * Register the entity using a pre-built [EntityContext] object
+//     * which contains all the relevant info about an Entity, its id,
+//     * and its corresponding mapper, repo, service, etc.
+//     */
+//    open fun <TId, T> register(
+//        entityType: KClass<*>,
+//        entityIdType: KClass<*>,
+//        service: EntityService<TId, T>,
+//        vendor: Vendor
+//    ): EntityContext where TId : Comparable<TId>, T : Entity<TId> {
+//        val mapper = EntityMapperEmpty<TId, T>()
+//        val context = EntityContext(entityType, entityIdType, service::class, service.repo(), mapper, vendor, Model(entityType), "", "", service)
+//        register(context)
+//        return context
+//    }
+//
+//    /**
+//     * Register the entity using a pre-built [EntityContext] object
+//     * which contains all the relevant info about an Entity, its id,
+//     * and its corresponding mapper, repo, service, etc.
+//     */
+//    open fun <TId, T> register(
+//        entityType: KClass<*>,
+//        entityIdType: KClass<*>,
+//        serviceType: KClass<*>,
+//        repo: EntityRepo<TId, T>,
+//        mapper: EntityMapper<TId, T>?,
+//        vendor: Vendor,
+//        serviceCtx: Any? = null
+//    ): EntityContext where TId : Comparable<TId>, T : Entity<TId> {
+//        val service = builder.service(this, serviceType, repo, serviceCtx)
+//        val finalMapper = mapper ?: EntityMapperEmpty<TId, T>()
+//        val context = EntityContext(entityType, entityIdType, serviceType, repo, finalMapper, vendor, Model(entityType), "", "", service, serviceCtx)
+//        register(context)
+//        return context
+//    }
 
     /**
      * Register a Entity with a Long Id, and an In-Memory Repository for prototyping / testing purposes
@@ -161,20 +161,20 @@ open class Entities(
         idFetcher: (T) -> Long
     ): EntityContext where T : Entity<Long> {
 
-        val entityIdType = Int::class
+        val entityIdType = Long::class
         val gen = LongIdGenerator()
         val id = LongId<T>(idFetcher)
         val table = EntityInfo.buildTableName(entityType, tableName, namer)
 
         // 1. Model ( schema of the entity which maps fields to columns and has other metadata )
         val model = if (loadSchema) ModelMapper.loadSchema(entityType) else Model(entityType, table) // Empty model as this is in-memory
+        val meta = Meta<Long, T>(id, Table(table))
 
         // 2. Mapper ( maps entities to/from sql using the model/schema )
-        val mapper = EntityMapperEmpty<Long, T>() // Empty mapper as this is in-memory
+        val mapper = EntityMapperEmpty<Long, T>(model, meta, entityIdType, entityType as KClass<T>) // Empty mapper as this is in-memory
 
         // 3. Repo ( provides CRUD using the Mapper)
         val info = EntityInfo(entityIdType, entityType, table, '`', model, this.enc, this.namer)
-        val meta = Meta<Long, T>(id, Table(table))
         val repo = EntityRepoInMemory<Long, T>(meta, info, gen)
 
         // 4. Service ( used to provide validation, placeholder for business functionality )

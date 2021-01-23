@@ -10,7 +10,7 @@ open class ShortEncoder : SqlEncoder<Short> {
     }
 
     override fun decode(record: Record, name: String): Short? {
-        return record.getShort(name)
+        return record.getShortOrNull(name)
     }
 }
 
@@ -22,7 +22,7 @@ open class IntEncoder : SqlEncoder<Int> {
     }
 
     override fun decode(record: Record, name: String): Int? {
-        return record.getInt(name)
+        return record.getIntOrNull(name)
     }
 }
 
@@ -34,7 +34,7 @@ open class LongEncoder : SqlEncoder<Long> {
     }
 
     override fun decode(record: Record, name: String): Long? {
-        return record.getLong(name)
+        return record.getLongOrNull(name)
     }
 }
 
@@ -46,7 +46,7 @@ open class FloatEncoder : SqlEncoder<Float> {
     }
 
     override fun decode(record: Record, name: String): Float? {
-        return record.getFloat(name)
+        return record.getFloatOrNull(name)
     }
 }
 
@@ -58,6 +58,6 @@ open class DoubleEncoder : SqlEncoder<Double> {
     }
 
     override fun decode(record: Record, name: String): Double? {
-        return record.getDouble(name)
+        return record.getDoubleOrNull(name)
     }
 }

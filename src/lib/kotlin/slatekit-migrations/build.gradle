@@ -79,10 +79,14 @@ dependencies {
     if( slatekitSetupViaBinary ) {
         compile "com.slatekit:slatekit-results:$slatekit_version"
         compile "com.slatekit:slatekit-common:$slatekit_version"
+        compile "com.slatekit:slatekit-data:$slatekit_version"
+        compile "com.slatekit:slatekit-entities:$slatekit_version"
     } else {
         // */
         compile project(":slatekit-result")
         compile project(":slatekit-common")
+        compile project(":slatekit-data")
+        compile project(":slatekit-entities")
     // } //</slatekit_local>
 }
 

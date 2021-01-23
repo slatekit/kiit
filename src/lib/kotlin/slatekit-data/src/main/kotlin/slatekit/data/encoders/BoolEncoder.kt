@@ -11,6 +11,6 @@ open class BoolEncoder : SqlEncoder<Boolean> {
     }
 
     override fun decode(record: Record, name: String): Boolean? {
-        return record.getBool(name)
+        return record.getBoolOrNull(name)
     }
 }

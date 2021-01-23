@@ -11,10 +11,10 @@ import slatekit.meta.models.ModelField
 import kotlin.reflect.KClass
 
 open class EntityDecoder<TId, T>(val model: Model,
+                                 val meta: Meta<TId, T>,
                                  val idType: KClass<*>,
                                  val clsType: KClass<*>,
                                  val settings: EntitySettings,
-                                 val meta: Meta<TId, T>,
                                  val encryptor: Encryptor?) : Decoder<TId, T> where TId : kotlin.Comparable<TId>, T : Any {
 
     override fun decode(record: Record, enc: Encryptor?): T? {

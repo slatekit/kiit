@@ -34,8 +34,8 @@ open class EntityMapper<TId, T>(val model: Model,
                                 val idClass: KClass<TId>,
                                 val enClass: KClass<T>,
                                 val settings: EntitySettings = EntitySettings(true),
-                                val encoder: Encoder<TId, T> = EntityEncoder(model, settings, meta, null, Encoders()),
-                                val decoder: Decoder<TId, T> = EntityDecoder(model, idClass, enClass, settings, meta, null))
+                                val encoder: Encoder<TId, T> = EntityEncoder(model, meta, settings, null, Encoders()),
+                                val decoder: Decoder<TId, T> = EntityDecoder(model, meta, idClass, enClass, settings, null))
     : Mapper<TId, T> where TId : kotlin.Comparable<TId>, T:Any  {
 
 

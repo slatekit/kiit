@@ -15,6 +15,6 @@ open class StringEncoder : SqlEncoder<String> {
     }
 
     override fun decode(record: Record, name: String): String? {
-        return record.getString(name)
+        return record.getStringOrNull(name)
     }
 }

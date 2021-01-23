@@ -13,7 +13,7 @@
 
 package slatekit.integration.mods
 
-import slatekit.orm.migrations.MigrationService
+import slatekit.migrations.MigrationService
 
 data class ModuleContext(
 

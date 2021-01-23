@@ -13,12 +13,13 @@
 
 package slatekit.entities.core
 
+import slatekit.common.data.Mapper
 import kotlin.reflect.KClass
 import slatekit.common.data.Vendor
 import slatekit.common.data.Vendor.MySql
-import slatekit.entities.EntityMapper
 import slatekit.entities.EntityRepo
 import slatekit.entities.EntityService
+import slatekit.entities.mapper.EntityMapper
 import slatekit.meta.models.Model
 
 /**

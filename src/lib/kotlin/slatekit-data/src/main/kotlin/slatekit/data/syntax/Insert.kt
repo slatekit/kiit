@@ -18,7 +18,7 @@ open class Insert<TId, T>(val info: Meta<TId, T>, val mapper: Mapper<TId, T>) : 
      */
     open fun stmt(item: T): String {
         val values = data(item)
-        val cols = "(" + values.joinToString(",", transform = { encode(it.name, info.table.encodeChar) }) + ") "
+        val cols = "(" + values.joinToString(",", transform = { it.name }) + ") "
         val args = "VALUES (" + values.joinToString(",", transform = { it.value?.toString() ?: Consts.NULL }) + ")"
         return "${prefix()} $cols $args;"
     }
@@ -30,7 +30,7 @@ open class Insert<TId, T>(val info: Meta<TId, T>, val mapper: Mapper<TId, T>) : 
      */
     open fun prep(item: T): Command {
         val values = data(item)
-        val cols = "(" + values.joinToString(",", transform = { encode(it.name, info.table.encodeChar) }) + ") "
+        val cols = "(" + values.joinToString(",", transform = { it.name }) + ") "
         val args = "VALUES (" + values.joinToString(",", transform = { "?" }) + ") "
         val sql = "${prefix()} $cols $args;"
         return Command(sql, values, values.map { it.value })
