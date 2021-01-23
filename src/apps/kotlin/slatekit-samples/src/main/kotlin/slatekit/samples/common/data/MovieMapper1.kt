@@ -6,13 +6,7 @@ import slatekit.common.data.DataAction
 import slatekit.common.data.Mapper
 import slatekit.common.data.Value
 import slatekit.common.data.Values
-import slatekit.data.core.LongId
-import slatekit.data.core.Meta
-import slatekit.data.core.Table
 import slatekit.data.encoders.Encoders
-import slatekit.entities.mapper.EntityMapper
-import slatekit.meta.models.Model
-import slatekit.meta.models.ModelMapper
 import slatekit.samples.common.models.Delivery
 import slatekit.samples.common.models.Movie
 
@@ -21,7 +15,7 @@ import slatekit.samples.common.models.Movie
  * Pros: More performant due to non-reflection use
  * Cons: Manual coding
  */
-class MovieMapperManual(val encoders:Encoders<Long, Movie>) : Mapper<Long, Movie> {
+class MovieMapper1(val encoders:Encoders<Long, Movie>) : Mapper<Long, Movie> {
 
     override fun decode(record: Record, enc: Encryptor?): Movie? {
         return Movie(
@@ -51,39 +45,4 @@ class MovieMapperManual(val encoders:Encoders<Long, Movie>) : Mapper<Long, Movie
     }
 }
 
-val model = Model.of<Long, Movie> {
-    id(Movie::id)
-    field(Movie::uuid)
-    field(Movie::title)
-    field(Movie::category)
-    field(Movie::playing)
-    field(Movie::delivery)
-    field(Movie::cost)
-    field(Movie::rating)
-    field(Movie::released)
-}
-
-/**
- * Option 2: Schema based mapper with reflection
- * Pros: More convenient due to setting up schema once, no manual encoding/decoding
- * Cons: Less performant than manual
- */
-object MovieMapperSchema : EntityMapper<Long, Movie>(
-        model = model,
-        meta = Meta( LongId { m -> m.id }, Table("movie")),
-        idClass = Long::class,
-        enClass = Movie::class)
-
-
-
-/**
- * Option 3: Schema automatically loaded from annotation
- * Pros: More convenient due to setting up schema once, no manual encoding/decoding
- * Cons: Less performant than manual
- */
-object MovieMapperAnnotations : EntityMapper<Long, Movie>(
-        model = ModelMapper.loadSchema(Movie::class),
-        meta = Meta( LongId { m -> m.id }, Table("movie")),
-        idClass = Long::class,
-        enClass = Movie::class)
 
