@@ -1,8 +1,7 @@
 package slatekit.data.encoders
 
-
-import slatekit.query.QueryEncoder
 import slatekit.common.Record
+import slatekit.common.data.Encoding
 import slatekit.common.ext.orElse
 import slatekit.data.Consts
 
@@ -11,7 +10,7 @@ class StringEncoder : SqlEncoder<String> {
     override fun encode(value: String?): String {
         return value?.let {
             val sValFinal = value.orElse("")
-            "'" + QueryEncoder.ensureValue(sValFinal) + "'"
+            "'" + Encoding.ensureValue(sValFinal) + "'"
         } ?: Consts.NULL
     }
 

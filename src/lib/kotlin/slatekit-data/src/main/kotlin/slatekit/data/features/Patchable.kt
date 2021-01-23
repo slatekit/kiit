@@ -1,6 +1,6 @@
 package slatekit.data.features
 
-import slatekit.query.Op
+import slatekit.common.data.Op
 
 /**
  * Support patching of records by conditions

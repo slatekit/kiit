@@ -21,7 +21,7 @@ import slatekit.data.features.Orderable
 import slatekit.entities.core.EntityInfo
 import slatekit.data.statements.Statements
 import slatekit.query.IQuery
-import slatekit.query.Op
+import slatekit.common.data.Op
 
 /**
  *

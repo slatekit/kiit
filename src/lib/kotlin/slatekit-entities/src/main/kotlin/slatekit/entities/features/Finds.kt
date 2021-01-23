@@ -4,7 +4,7 @@ import kotlin.reflect.KProperty
 import slatekit.entities.Entity
 import slatekit.entities.core.EntityOps
 import slatekit.query.IQuery
-import slatekit.query.Op
+import slatekit.common.data.Op
 import slatekit.query.Query
 
 interface Finds<TId, T> : EntityOps<TId, T> where TId : kotlin.Comparable<TId>, T : Entity<TId> {
@@ -26,7 +26,7 @@ interface Finds<TId, T> : EntityOps<TId, T> where TId : kotlin.Comparable<TId>, 
      * @param value: The value to check for
      * @return
      */
-    fun findByField(field: String, op:Op, value: Any): List<T> {
+    fun findByField(field: String, op: Op, value: Any): List<T> {
         // Get column name from model schema ( if available )
         val column = columnName(field)
         return repo().findByField(column, op, value)
@@ -63,7 +63,7 @@ interface Finds<TId, T> : EntityOps<TId, T> where TId : kotlin.Comparable<TId>, 
      * @param value: The value to check for
      * @return
      */
-    fun findByField(prop: KProperty<*>, op:Op, value: Any): List<T> {
+    fun findByField(prop: KProperty<*>, op: Op, value: Any): List<T> {
         // Get column name from model schema ( if available )
         val column = columnName(prop.name)
         return repo().findByField(column, op, value)
@@ -75,7 +75,7 @@ interface Finds<TId, T> : EntityOps<TId, T> where TId : kotlin.Comparable<TId>, 
      * @param value: The value to check for
      * @return
      */
-    fun findByField(prop: KProperty<*>, op:Op, value: Any, limit: Int): List<T> {
+    fun findByField(prop: KProperty<*>, op: Op, value: Any, limit: Int): List<T> {
         // Get column name from model schema ( if available )
         val column = columnName(prop.name)
         val query = Query().where(column, op, value).limit(limit)
@@ -134,7 +134,7 @@ interface Finds<TId, T> : EntityOps<TId, T> where TId : kotlin.Comparable<TId>, 
      * @param value: The value to check for
      * @return
      */
-    fun findOneByField(prop: KProperty<*>, op:Op, value: Any): T? {
+    fun findOneByField(prop: KProperty<*>, op: Op, value: Any): T? {
         // Get column name from model schema ( if available )
         val column = columnName(prop.name)
         return repo().findOneByField(column, op, value)

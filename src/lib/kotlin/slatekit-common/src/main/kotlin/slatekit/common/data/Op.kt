@@ -11,7 +11,7 @@
  * </slate_header>
  */
 
-package slatekit.query
+package slatekit.common.data
 
 enum class Op(val text: String) {
     Eq("="),

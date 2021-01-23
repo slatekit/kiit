@@ -1,6 +1,6 @@
 package slatekit.data.features
 
-import slatekit.query.Op
+import slatekit.common.data.Op
 
 /**
  * Supports finding records by conditions

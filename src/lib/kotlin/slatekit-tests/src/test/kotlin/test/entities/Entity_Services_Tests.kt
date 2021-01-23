@@ -24,7 +24,7 @@ import slatekit.entities.Entity
 import slatekit.entities.EntityRepo
 import slatekit.entities.EntityService
 import slatekit.entities.features.Relations
-import slatekit.query.Op
+import slatekit.common.data.Op
 import test.setup.Group
 import test.setup.Member
 import test.setup.User5

@@ -32,11 +32,8 @@ import slatekit.data.features.Orderable
 import slatekit.data.support.IdGenerator
 import slatekit.data.support.IntIdGenerator
 import slatekit.data.support.LongIdGenerator
-import slatekit.entities.*
 import slatekit.entities.core.EntityInfo
-import slatekit.entities.mapper.EntityMapper
-import slatekit.meta.models.Model
-import slatekit.query.Op
+import slatekit.common.data.Op
 import kotlin.reflect.KClass
 
 

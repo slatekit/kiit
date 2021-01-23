@@ -4,13 +4,11 @@ import slatekit.common.DateTimes
 import slatekit.common.Prototyping
 import slatekit.common.utils.ListMap
 import slatekit.data.SqlRepo
-import slatekit.data.core.Table
 import slatekit.data.events.EntityAction
 import slatekit.data.events.EntityEvent
 import slatekit.data.events.EntityHooks
-import slatekit.data.core.Id
 import slatekit.data.core.Meta
-import slatekit.query.Op
+import slatekit.common.data.Op
 
 /**
  * Used mostly for Prototyping and Testing.

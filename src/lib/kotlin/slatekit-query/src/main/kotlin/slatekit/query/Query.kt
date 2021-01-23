@@ -13,6 +13,7 @@
 
 package slatekit.query
 
+import slatekit.common.data.Op
 import java.util.concurrent.atomic.AtomicInteger
 
 /**
