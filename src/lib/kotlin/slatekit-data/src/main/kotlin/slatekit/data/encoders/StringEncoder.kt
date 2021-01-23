@@ -1,7 +1,6 @@
 package slatekit.data.encoders
 
 
-import slatekit.common.crypto.Encryptor
 import slatekit.query.QueryEncoder
 import slatekit.common.Record
 import slatekit.common.ext.orElse

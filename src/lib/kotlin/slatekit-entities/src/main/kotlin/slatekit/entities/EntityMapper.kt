@@ -13,10 +13,23 @@
 
 package slatekit.entities
 
+import org.threeten.bp.*
+import slatekit.common.EnumLike
+import slatekit.common.Record
+import slatekit.common.crypto.Encryptor
+import slatekit.common.data.DataAction
 import slatekit.common.data.Mapper
+import slatekit.common.data.Values
+import slatekit.common.ids.UPID
+import slatekit.data.encoders.Encoders
 import slatekit.entities.core.EntityInfo
+import slatekit.meta.KTypes
+import slatekit.meta.Reflector
 import kotlin.reflect.KProperty
 import slatekit.meta.models.Model
+import slatekit.meta.models.ModelField
+import slatekit.meta.models.ModelMapper
+import slatekit.query.QueryEncoder
 
 /**
  * Handles mapping an entity to/from a Record.
@@ -33,7 +46,7 @@ import slatekit.meta.models.Model
  * to control how this is done. This also allows for potentially hooking
  * into some other mapping library to handle the heavy / tedious work.
  */
-interface EntityMapper<TId, T> : Mapper<TId, T> where TId : Comparable<TId> {
+interface EntityMapper<TId, T> : Mapper<TId, T> where TId : Comparable<TId>, T:Any {
 
     val info:EntityInfo
 
@@ -55,3 +68,4 @@ interface EntityMapper<TId, T> : Mapper<TId, T> where TId : Comparable<TId> {
         }
     }
 }
+
