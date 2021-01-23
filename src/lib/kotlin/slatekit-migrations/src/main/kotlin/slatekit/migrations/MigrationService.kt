@@ -20,15 +20,9 @@ import slatekit.common.ext.toStringNumeric
 import slatekit.common.info.Folders
 import slatekit.common.io.Files
 import slatekit.common.utils.Props
-import slatekit.entities.Entities
-import slatekit.entities.core.EntityContext
-import slatekit.orm.getDbSource
-import slatekit.orm.getModel
-import slatekit.orm.sqlBuilder
 import slatekit.results.Notice
 import slatekit.results.Success
 import slatekit.results.Try
-import slatekit.results.getOrElse
 
 /**
  * Created by kreddy on 3/23/2016.
