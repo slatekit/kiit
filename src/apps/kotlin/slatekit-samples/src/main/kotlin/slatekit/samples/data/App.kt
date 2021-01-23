@@ -10,6 +10,9 @@ import slatekit.common.data.Vendor
 import slatekit.common.info.About
 import slatekit.connectors.entities.AppEntContext
 import slatekit.data.FullRepo
+import slatekit.data.core.LongId
+import slatekit.data.core.Meta
+import slatekit.data.core.Table
 import slatekit.data.support.InMemoryRepo
 import slatekit.data.support.LongIdGenerator
 import slatekit.db.Db
@@ -66,7 +69,8 @@ class App(ctx: AppEntContext) : App<AppEntContext>(ctx, AppOptions(showWelcome =
         //ent.register<Long, Movie>(Long::class, Movie::class, )
         val con = DbConString(Vendor.MySql, "jdbc:mysql://localhost/slatekit", "user", "banksy1020")
         val db = Db(con)
-        val repo:FullRepo<Long, Movie> = InMemoryRepo(Movie::id.name, "movies", { m -> m.id }, LongIdGenerator())
+        val meta = Meta<Long, Movie>(LongId {m -> m.id}, Table("movie"))
+        val repo:FullRepo<Long, Movie> = InMemoryRepo<Long, Movie>(meta, LongIdGenerator(), null)
 
         // Ordered
         repo.first()

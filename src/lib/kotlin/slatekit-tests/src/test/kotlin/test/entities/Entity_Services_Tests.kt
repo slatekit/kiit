@@ -158,7 +158,7 @@ class Entity_Services_Tests {
 
     @Test fun can_find_by_fields() {
         val svc = getUserService(true)
-        val matches = svc.findByFields(listOf(
+        val matches = svc.findByFilters(listOf(
                 Pair(User5::isActive.name, false),
                 Pair(User5::age.name, 40)
         ))

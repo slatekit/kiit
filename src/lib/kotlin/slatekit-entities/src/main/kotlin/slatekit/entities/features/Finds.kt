@@ -5,6 +5,8 @@ import slatekit.entities.Entity
 import slatekit.entities.core.EntityOps
 import slatekit.query.IQuery
 import slatekit.common.data.Compare
+import slatekit.common.data.Filter
+import slatekit.common.data.Logical
 import slatekit.query.Query
 
 interface Finds<TId, T> : EntityOps<TId, T> where TId : kotlin.Comparable<TId>, T : Entity<TId> {
@@ -34,16 +36,11 @@ interface Finds<TId, T> : EntityOps<TId, T> where TId : kotlin.Comparable<TId>, 
 
     /**
      * finds items based on the pairs of conditions
-     * @param conditions: The list of name/value pairs
+     * @param filters: The list of name/value pairs
      * @return
      */
-    fun findByFields(conditions: List<Pair<String, Any>>): List<T> {
-        // Get column name from model schema ( if available )
-        val filters = conditions.map {
-            val column = columnName(it.first)
-            Triple(column, Compare.Eq, it.second)
-        }
-        return repo().findByFilters(filters)
+    fun findByFilters(filters: List<Filter>, logical: Logical): List<T> {
+        return repo().findByFilters(filters, logical)
     }
 
     /**
@@ -142,17 +139,11 @@ interface Finds<TId, T> : EntityOps<TId, T> where TId : kotlin.Comparable<TId>, 
 
     /**
      * finds items based on the field value
-     * @param prop: The property reference
-     * @param value: The value to check for
+     * @param filters: Filters to use
      * @return
      */
-    fun findOneByFields(conditions: List<Pair<String, Any>>): T? {
-        // Get column name from model schema ( if available )
-        val filters = conditions.map {
-            val column = columnName(it.first)
-            Triple(column, Compare.Eq, it.second)
-        }
-        return repo().findByFilters(filters).firstOrNull()
+    fun findOneByFields(filters: List<Filter>, logical: Logical): T? {
+        return repo().findByFilters(filters, logical).firstOrNull()
     }
 
     /**
