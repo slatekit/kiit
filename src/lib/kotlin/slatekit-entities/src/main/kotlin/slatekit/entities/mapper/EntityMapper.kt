@@ -20,13 +20,22 @@ import slatekit.common.data.DataAction
 import slatekit.meta.models.Model
 import slatekit.common.data.Mapper
 import slatekit.common.data.Values
+import slatekit.data.core.Meta
+import slatekit.data.encoders.Encoders
+import kotlin.reflect.KClass
 
 /**
  * Maps an entity to sql and from sql records.
  *
  * @param model
  */
-open class EntityMapper<TId, T>(val model: Model, val encoder: Encoder<TId, T>, val decoder: Decoder<TId, T>)
+open class EntityMapper<TId, T>(val model: Model,
+                                val meta:Meta<TId, T>,
+                                val idClass: KClass<TId>,
+                                val enClass: KClass<T>,
+                                val settings: EntitySettings = EntitySettings(true),
+                                val encoder: Encoder<TId, T> = EntityEncoder(model, settings, meta, null, Encoders()),
+                                val decoder: Decoder<TId, T> = EntityDecoder(model, idClass, enClass, settings, meta, null))
     : Mapper<TId, T> where TId : kotlin.Comparable<TId>, T:Any  {
 
 
@@ -37,5 +46,4 @@ open class EntityMapper<TId, T>(val model: Model, val encoder: Encoder<TId, T>, 
     override fun decode(record: Record, enc: Encryptor?): T? {
         return decoder.decode(record, enc)
     }
-
 }

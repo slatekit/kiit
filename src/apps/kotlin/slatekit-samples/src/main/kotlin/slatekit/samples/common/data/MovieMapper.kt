@@ -1,14 +1,16 @@
 package slatekit.samples.common.data
 
-import slatekit.common.DateTime
 import slatekit.common.Record
 import slatekit.common.crypto.Encryptor
 import slatekit.common.data.DataAction
 import slatekit.common.data.Mapper
 import slatekit.common.data.Value
 import slatekit.common.data.Values
+import slatekit.data.core.LongId
+import slatekit.data.core.Meta
+import slatekit.data.core.Table
 import slatekit.data.encoders.Encoders
-import slatekit.entities.EntityMapper
+import slatekit.entities.mapper.EntityMapper
 import slatekit.meta.models.Model
 import slatekit.meta.models.ModelMapper
 import slatekit.samples.common.models.Delivery
@@ -49,58 +51,39 @@ class MovieMapperManual(val encoders:Encoders<Long, Movie>) : Mapper<Long, Movie
     }
 }
 
-
+val model = Model.of<Long, Movie> {
+    id(Movie::id)
+    field(Movie::uuid)
+    field(Movie::title)
+    field(Movie::category)
+    field(Movie::playing)
+    field(Movie::delivery)
+    field(Movie::cost)
+    field(Movie::rating)
+    field(Movie::released)
+}
 
 /**
  * Option 2: Schema based mapper with reflection
  * Pros: More convenient due to setting up schema once, no manual encoding/decoding
  * Cons: Less performant than manual
  */
-object MovieMapperSchema : EntityMapper<Long, Movie> {
-    val model = Model.of<Long, Movie> {
-        id(Movie::id)
-        field(Movie::uuid)
-        field(Movie::title)
-        field(Movie::category)
-        field(Movie::playing)
-        field(Movie::delivery)
-        field(Movie::cost)
-        field(Movie::rating)
-        field(Movie::released)
-    }
+object MovieMapperSchema : EntityMapper<Long, Movie>(
+        model = model,
+        meta = Meta( LongId { m -> m.id }, Table("movie")),
+        idClass = Long::class,
+        enClass = Movie::class)
 
-
-    override fun schema(): Model? = model
-
-
-    override fun decode(record: Record, enc: Encryptor?): Movie? {
-
-    }
-
-    override fun encode(model: Movie, action: DataAction, enc: Encryptor?): Values {
-
-    }
-}
 
 
 /**
- * Option 2: Schema based mapper with reflection
+ * Option 3: Schema automatically loaded from annotation
  * Pros: More convenient due to setting up schema once, no manual encoding/decoding
  * Cons: Less performant than manual
  */
-object MovieMapperAuto : EntityMapper<Long, Movie> {
-    val model = ModelMapper.loadSchema(Movie::class)
+object MovieMapperAnnotations : EntityMapper<Long, Movie>(
+        model = ModelMapper.loadSchema(Movie::class),
+        meta = Meta( LongId { m -> m.id }, Table("movie")),
+        idClass = Long::class,
+        enClass = Movie::class)
 
-
-    override fun schema(): Model? = model
-
-
-    override fun decode(record: Record, enc: Encryptor?): Movie? {
-        TODO("Not yet implemented")
-    }
-
-
-    override fun encode(model: Movie, action: DataAction, enc: Encryptor?): Values {
-        TODO("Not yet implemented")
-    }
-}
