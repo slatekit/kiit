@@ -26,7 +26,7 @@ import slatekit.common.data.Values
  *
  * @param model
  */
-open class ModelMapper<TId, T>(val model: Model, val encoder: ModelEncoder<TId, T>, val decoder: ModelDecoder<TId, T>)
+open class EntityMapper<TId, T>(val model: Model, val encoder: Encoder<TId, T>, val decoder: Decoder<TId, T>)
     : Mapper<TId, T> where TId : kotlin.Comparable<TId>, T:Any  {
 
 

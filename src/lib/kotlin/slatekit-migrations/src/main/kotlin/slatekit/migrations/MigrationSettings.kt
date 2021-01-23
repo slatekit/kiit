@@ -11,7 +11,7 @@
  * </slate_header>
  */
 
-package slatekit.orm.migrations
+package slatekit.migrations
 
 data class MigrationSettings(
     val enableLogging: Boolean = true,

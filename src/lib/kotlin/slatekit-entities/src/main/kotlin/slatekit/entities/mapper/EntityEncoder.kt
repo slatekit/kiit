@@ -11,7 +11,6 @@ import slatekit.common.ids.UPID
 import slatekit.data.core.Meta
 import slatekit.data.encoders.Encoders
 import slatekit.entities.Consts
-import slatekit.entities.encoders.Encoder
 import slatekit.meta.KTypes
 import slatekit.meta.Reflector
 import slatekit.meta.models.Model
@@ -19,11 +18,11 @@ import slatekit.meta.models.ModelField
 import slatekit.query.QueryEncoder
 
 
-open class ModelEncoder<TId, T>(val model: Model,
-                           val settings: ModelSettings,
-                           val meta: Meta<TId, T>,
-                           val encryptor: Encryptor?,
-                           val encoders: Encoders<TId, T>) : Encoder<TId, T> where TId : kotlin.Comparable<TId>, T : Any {
+open class EntityEncoder<TId, T>(val model: Model,
+                                 val settings: EntitySettings,
+                                 val meta: Meta<TId, T>,
+                                 val encryptor: Encryptor?,
+                                 val encoders: Encoders<TId, T>) : Encoder<TId, T> where TId : kotlin.Comparable<TId>, T : Any {
 
     /**
      * Gets all the column names mapped to the field names

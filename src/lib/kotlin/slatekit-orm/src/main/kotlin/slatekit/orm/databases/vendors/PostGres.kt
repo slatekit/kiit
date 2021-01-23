@@ -9,14 +9,14 @@ import slatekit.entities.core.EntityInfo
 import slatekit.entities.EntitySqlRepo
 import slatekit.orm.core.Converter
 import slatekit.orm.core.SqlBuilder
-import slatekit.orm.core.TypeMap
+import slatekit.data.slatekit.data.core.Types
 import slatekit.orm.OrmMapper
 
 /**
  * MySql to Java types
  * https://dev.mysql.com/doc/connector-j/5.1/en/connector-j-reference-type-conversions.html
  */
-object PostGresMap : TypeMap()
+object PostGresMap : Types()
 
 
 /**

@@ -11,7 +11,7 @@
  * </slate_header>
  */
 
-package slatekit.orm.migrations
+package slatekit.migrations
 
 import slatekit.common.*
 import slatekit.common.data.DbCon

@@ -4,19 +4,18 @@ import slatekit.common.Record
 import slatekit.common.crypto.Encryptor
 import slatekit.common.newline
 import slatekit.data.core.Meta
-import slatekit.entities.encoders.Decoder
 import slatekit.meta.KTypes
 import slatekit.meta.Reflector
 import slatekit.meta.models.Model
 import slatekit.meta.models.ModelField
 import kotlin.reflect.KClass
 
-open class ModelDecoder<TId, T>(val model: Model,
-                           val idType: KClass<*>,
-                           val clsType: KClass<*>,
-                           val settings: ModelSettings,
-                           val meta: Meta<TId, T>,
-                           val encryptor: Encryptor?) : Decoder<TId, T> where TId : kotlin.Comparable<TId>, T : Any {
+open class EntityDecoder<TId, T>(val model: Model,
+                                 val idType: KClass<*>,
+                                 val clsType: KClass<*>,
+                                 val settings: EntitySettings,
+                                 val meta: Meta<TId, T>,
+                                 val encryptor: Encryptor?) : Decoder<TId, T> where TId : kotlin.Comparable<TId>, T : Any {
 
     override fun decode(record: Record, enc: Encryptor?): T? {
         return if (model.any && model.dataType != null) {

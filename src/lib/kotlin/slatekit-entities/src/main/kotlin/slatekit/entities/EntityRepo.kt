@@ -15,6 +15,7 @@ package slatekit.entities
 
 import kotlin.reflect.KProperty
 import slatekit.common.data.IDb
+import slatekit.common.data.Mapper
 import slatekit.data.CrudRepo
 import slatekit.data.core.Meta
 import slatekit.data.features.Deletable
@@ -91,7 +92,7 @@ interface EntityRepo<TId, T> :
 
     companion object {
 
-        inline fun <reified TId, reified T> h2(db: IDb, meta: Meta<TId, T>, mapper: EntityMapper<TId, T>): EntitySqlRepo<TId, T> where TId : Comparable<TId>, T : Any {
+        inline fun <reified TId, reified T> h2(db: IDb, meta: Meta<TId, T>, mapper: Mapper<TId, T>): EntitySqlRepo<TId, T> where TId : Comparable<TId>, T : Any {
             return sqlRepo<TId, T>(db, mapper, meta.table.name) { idType, enType, info ->
                 val stmts = SqlStatements(meta, mapper)
                 EntitySqlRepo(db, info, meta, stmts, mapper)
@@ -99,7 +100,7 @@ interface EntityRepo<TId, T> :
         }
 
 
-        inline fun <reified TId, reified T> mysql(db: IDb, meta: Meta<TId, T>, mapper: EntityMapper<TId, T>, table: String? = null): EntitySqlRepo<TId, T> where TId : Comparable<TId>, T : Any {
+        inline fun <reified TId, reified T> mysql(db: IDb, meta: Meta<TId, T>, mapper: Mapper<TId, T>, table: String? = null): EntitySqlRepo<TId, T> where TId : Comparable<TId>, T : Any {
             return sqlRepo<TId, T>(db, mapper, meta.table.name) { idType, enType, info ->
                 val stmts = SqlStatements(meta, mapper)
                 EntitySqlRepo(db, info, meta, stmts, mapper)
@@ -107,7 +108,7 @@ interface EntityRepo<TId, T> :
         }
 
 
-        inline fun <reified TId, reified T> postgres(db: IDb, meta: Meta<TId, T>, mapper: EntityMapper<TId, T>, table: String? = null): EntitySqlRepo<TId, T> where TId : Comparable<TId>, T : Any {
+        inline fun <reified TId, reified T> postgres(db: IDb, meta: Meta<TId, T>, mapper: Mapper<TId, T>, table: String? = null): EntitySqlRepo<TId, T> where TId : Comparable<TId>, T : Any {
             return sqlRepo<TId, T>(db, mapper, meta.table.name) { idType, enType, info ->
                 val stmts = SqlStatements(meta, mapper)
                 EntitySqlRepo(db, info, meta, stmts, mapper)
@@ -116,7 +117,7 @@ interface EntityRepo<TId, T> :
 
 
         inline fun <reified TId, reified T> sqlRepo(db: IDb,
-                                                    mapper: EntityMapper<TId, T>,
+                                                    mapper: Mapper<TId, T>,
                                                     table: String? = null,
                                                     op: (KClass<TId>, KClass<T>, EntityInfo) -> EntitySqlRepo<TId, T>): EntitySqlRepo<TId, T>
             where TId : Comparable<TId>, T : Any {

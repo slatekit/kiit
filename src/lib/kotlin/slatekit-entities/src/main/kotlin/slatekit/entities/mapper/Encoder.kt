@@ -1,4 +1,4 @@
-package slatekit.entities.encoders
+package slatekit.entities.mapper
 
 import slatekit.common.crypto.Encryptor
 import slatekit.common.data.DataAction

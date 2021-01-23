@@ -20,11 +20,15 @@ import slatekit.common.log.Logs
 import slatekit.common.log.LogsDefault
 import slatekit.common.naming.Namer
 import slatekit.common.utils.ListMap
+import slatekit.data.core.LongId
+import slatekit.data.core.Meta
+import slatekit.data.core.Table
 import slatekit.entities.core.*
 import slatekit.entities.EntityMapperEmpty
 import slatekit.entities.EntityRepoInMemory
 import slatekit.data.support.IdGenerator
 import slatekit.data.support.LongIdGenerator
+import slatekit.entities.mapper.EntityMapper
 import slatekit.meta.models.Model
 import slatekit.meta.models.ModelMapper
 
@@ -95,7 +99,7 @@ open class Entities(
         service: EntityService<TId, T>,
         vendor: Vendor
     ): EntityContext where TId : Comparable<TId>, T : Entity<TId> {
-        val mapper = EntityMapperEmpty<TId, T>(null)
+        val mapper = EntityMapperEmpty<TId, T>()
         val context = EntityContext(entityType, entityIdType, service::class, service.repo(), mapper, vendor, Model(entityType), "", "", service)
         register(context)
         return context
@@ -116,7 +120,7 @@ open class Entities(
         serviceCtx: Any? = null
     ): EntityContext where TId : Comparable<TId>, T : Entity<TId> {
         val service = builder.service(this, serviceType, repo, serviceCtx)
-        val finalMapper = mapper ?: EntityMapperEmpty(null)
+        val finalMapper = mapper ?: EntityMapperEmpty<TId, T>()
         val context = EntityContext(entityType, entityIdType, serviceType, repo, finalMapper, vendor, Model(entityType), "", "", service, serviceCtx)
         register(context)
         return context
@@ -134,7 +138,7 @@ open class Entities(
         serviceCtx: Any? = null,
         loadSchema: Boolean = false
     ): EntityContext where T : Entity<Long> {
-        return this.prototype<Long, T>(entityType, Long::class, LongIdGenerator(), loadSchema = loadSchema, serviceType = serviceType, serviceCtx = serviceCtx)
+        return this.prototype<T>(entityType,  loadSchema = loadSchema, serviceType = serviceType, serviceCtx = serviceCtx)
     }
 
     /**
@@ -148,27 +152,30 @@ open class Entities(
      * @param serviceType :  Optional type of the [EntityService] to create instance
      * @param serviceCtx :  Context info to pass to the [EntityService] type for creation
      */
-    open fun <TId, T> prototype(
+    open fun <T> prototype(
         entityType: KClass<*>,
-        entityIdType: KClass<*>,
-        entityIdGen: IdGenerator<TId>,
         loadSchema: Boolean,
         tableName: String? = null,
         serviceType: KClass<*>? = null,
-        serviceCtx: Any? = null
-    ): EntityContext where TId : Comparable<TId>, T : Entity<TId> {
+        serviceCtx: Any? = null,
+        idFetcher: (T) -> Long
+    ): EntityContext where T : Entity<Long> {
 
+        val entityIdType = Int::class
+        val gen = LongIdGenerator()
+        val id = LongId<T>(idFetcher)
         val table = EntityInfo.buildTableName(entityType, tableName, namer)
 
         // 1. Model ( schema of the entity which maps fields to columns and has other metadata )
         val model = if (loadSchema) ModelMapper.loadSchema(entityType) else Model(entityType, table) // Empty model as this is in-memory
 
         // 2. Mapper ( maps entities to/from sql using the model/schema )
-        val mapper = EntityMapperEmpty<TId, T>(model) // Empty mapper as this is in-memory
+        val mapper = EntityMapperEmpty<Long, T>() // Empty mapper as this is in-memory
 
         // 3. Repo ( provides CRUD using the Mapper)
         val info = EntityInfo(entityIdType, entityType, table, '`', model, this.enc, this.namer)
-        val repo = EntityRepoInMemory<TId, T>(info, entityIdGen)
+        val meta = Meta<Long, T>(id, Table(table))
+        val repo = EntityRepoInMemory<Long, T>(meta, info, gen)
 
         // 4. Service ( used to provide validation, placeholder for business functionality )
         val service = builder.service(this, serviceType, repo, serviceCtx)

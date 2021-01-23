@@ -1,4 +1,4 @@
-package slatekit.orm.core
+package slatekit.data.slatekit.data.core
 
 import slatekit.common.Types
 import slatekit.common.data.DataType
@@ -8,7 +8,7 @@ import slatekit.common.data.DataTypeMap
  * MySql to Java types
  * https://dev.mysql.com/doc/connector-j/5.1/en/connector-j-reference-type-conversions.html
  */
-open class TypeMap {
+open class Types {
 
     /**
      * BOOL

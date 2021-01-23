@@ -4,6 +4,7 @@ import slatekit.common.naming.Namer
 import slatekit.common.data.DataType
 import slatekit.db.DbUtils
 import slatekit.common.newline
+import slatekit.data.slatekit.data.core.Types
 import slatekit.orm.Consts.idCol
 import slatekit.meta.models.Model
 
@@ -13,7 +14,7 @@ import slatekit.meta.models.Model
  * 2. ALTER TABLE message DROP INDEX idx_status;
  * 3. ALTER TABLE message ADD UNIQUE (uuid);
  */
-open class SqlBuilder(val types: TypeMap, val namer: Namer?) {
+open class SqlBuilder(val types: Types, val namer: Namer?) {
 
     /**
      * Builds the table DDL sql statement using the model supplied.

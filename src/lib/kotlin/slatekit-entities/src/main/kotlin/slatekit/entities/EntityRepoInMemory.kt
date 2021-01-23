@@ -24,6 +24,7 @@ import org.threeten.bp.*
 import slatekit.common.Record
 import slatekit.common.crypto.Encryptor
 import slatekit.common.data.DataAction
+import slatekit.common.data.Mapper
 import slatekit.common.data.Values
 import slatekit.data.core.*
 import slatekit.data.features.Countable
@@ -33,6 +34,7 @@ import slatekit.data.support.IntIdGenerator
 import slatekit.data.support.LongIdGenerator
 import slatekit.entities.*
 import slatekit.entities.core.EntityInfo
+import slatekit.entities.mapper.EntityMapper
 import slatekit.meta.models.Model
 import slatekit.query.Op
 import kotlin.reflect.KClass
@@ -284,14 +286,13 @@ open class EntityRepoInMemory<TId, T>(override val meta: Meta<TId, T>,
     }
 }
 
-class EntityMapperEmpty<TId, T>(override val info:EntityInfo, val model: Model?) :
-    EntityMapper<TId, T> where TId : Comparable<TId>, T : Entity<TId> {
 
-    override fun encode(model: T, action:DataAction, enc: Encryptor?): Values {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+class EntityMapperEmpty<TId, T>()  : Mapper<TId, T> where TId : Comparable<TId>, T : Entity<TId> {
+    override fun encode(model: T, action: DataAction, enc: Encryptor?): Values {
+        TODO("Not yet implemented")
     }
 
-    override fun schema(): Model? = model
-
-    override fun decode(record: Record, encryptor: Encryptor?): T? = null
+    override fun decode(record: Record, enc: Encryptor?): T? {
+        TODO("Not yet implemented")
+    }
 }
