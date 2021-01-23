@@ -1,4 +1,4 @@
-package slatekit.data.slatekit.data.core
+package slatekit.data.core
 
 import slatekit.common.Types
 import slatekit.common.data.DataType

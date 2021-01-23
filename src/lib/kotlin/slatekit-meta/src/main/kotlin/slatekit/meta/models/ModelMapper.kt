@@ -226,7 +226,7 @@ open class ModelMapper(
                 null -> fields
                 else -> mutableListOf(ModelField.ofId(idField.first, "", namer)).plus(fields)
             }
-            return Model(modelName, modelNameFull, dataType, modelFields = allFields, namer = namer, tableName = table ?: "")
+            return Model(modelName, modelNameFull, dataType, modelFields = allFields, namer = namer, tableName = table ?: modelName)
         }
     }
 }

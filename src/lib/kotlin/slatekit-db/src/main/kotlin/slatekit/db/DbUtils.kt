@@ -186,12 +186,6 @@ object DbUtils {
             else if (dataType == Types.JDateTimeClass) DataType.DbDateTime
             else DataType.DbString
 
-    fun ensureField(text: String): String =
-            if (text.isNullOrEmpty())
-                ""
-            else {
-                text.trim().filter { c -> c.isDigit() || c.isLetter() || c == '_' }
-            }
 
     private fun LocalDate.toJava8LocalDate(): java.time.LocalDate {
         return java.time.LocalDate.of(this.year, this.month.value, this.dayOfMonth)

@@ -2,12 +2,14 @@ package test.entities
 
 import org.junit.Assert
 import org.junit.Test
+import slatekit.data.core.Types
 import slatekit.data.syntax.Delete
 import slatekit.data.syntax.Insert
 import slatekit.data.syntax.Update
 import slatekit.entities.mapper.EntityMapper
 import slatekit.entities.mapper.EntitySettings
 import slatekit.meta.models.ModelMapper
+import slatekit.migrations.SqlBuilder
 
 class Data_03_Syntax {
 
@@ -42,6 +44,38 @@ class Data_03_Syntax {
         val stmt = Delete<Long, SampleEntityImmutable>(EntityFixtures.meta, mapper)
         val actual = stmt.stmt(2)
         val expected = """delete from `sample1` where `id` = 2;"""
+        Assert.assertEquals(expected, actual)
+    }
+
+
+    @Test
+    fun can_build_ddl() {
+        val model = ModelMapper.loadSchema(SampleEntityImmutable::class, table = "sample1")
+        val builder = SqlBuilder(Types(), null)
+        val actual = builder.createTable(model)
+        val expected = """create table `sample1` ( 
+`id` BIGINT NOT NULL AUTO_INCREMENT PRIMARY KEY,  
+`test_string` NVARCHAR(30) NOT NULL,  
+`test_string_enc` NVARCHAR(100) NOT NULL,  
+`test_bool` BIT NOT NULL,  
+`test_short` SMALLINT NOT NULL,  
+`test_int` INTEGER NOT NULL,  
+`test_long` BIGINT NOT NULL,  
+`test_float` FLOAT NOT NULL,  
+`test_double` DOUBLE NOT NULL,  
+`test_enum` INTEGER NOT NULL,  
+`test_localdate` DATE NOT NULL,  
+`test_localtime` TIME NOT NULL,  
+`test_localdatetime` DATETIME NOT NULL,  
+`test_zoneddatetime` DATETIME NOT NULL,  
+`test_uuid` NVARCHAR(50) NOT NULL,  
+`test_uniqueid` NVARCHAR(50) NOT NULL,  
+`test_object_addr` NVARCHAR(40) NOT NULL,  
+`test_object_city` NVARCHAR(30) NOT NULL,  
+`test_object_state` NVARCHAR(20) NOT NULL,  
+`test_object_country` INTEGER NOT NULL,  
+`test_object_zip` NVARCHAR(5) NOT NULL,  
+`test_object_ispobox` BIT NOT NULL );"""
         Assert.assertEquals(expected, actual)
     }
 }

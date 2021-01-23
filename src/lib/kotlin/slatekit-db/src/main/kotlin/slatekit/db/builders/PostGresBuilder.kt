@@ -17,8 +17,8 @@ import java.rmi.UnexpectedException
 import slatekit.common.Types
 import slatekit.common.data.DataType
 import slatekit.common.data.DataTypeMap
+import slatekit.common.data.Encoding
 import slatekit.common.newline
-import slatekit.db.DbUtils.ensureField
 
 /**
  * Builds up database tables, indexes and other database components
@@ -73,7 +73,7 @@ open class PostGresBuilder : DbBuilder {
     /**
      * Builds a valid column name
      */
-    override fun colName(name: String): String = "`" + ensureField(name) + "`"
+    override fun colName(name: String): String = "`" + Encoding.ensureField(name) + "`"
 
     /**
      * Builds a valid column type
@@ -88,7 +88,7 @@ open class PostGresBuilder : DbBuilder {
     }
 
     private fun build(name: String, prefix: String): String {
-        val tableName = ensureField(name)
+        val tableName = Encoding.ensureField(name)
         val sql = "$prefix `$tableName`;"
         return sql
     }
