@@ -9,7 +9,6 @@ import slatekit.common.ext.atUtc
 import slatekit.common.ext.atUtcLocal
 import slatekit.common.ext.local
 import slatekit.data.Consts
-import slatekit.data.encoders.SqlEncoder
 
 
 open class LocalDateEncoder : SqlEncoder<LocalDate> {

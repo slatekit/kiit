@@ -116,6 +116,6 @@ interface Updates<TId, T> : EntityOps<TId, T> where TId : kotlin.Comparable<TId>
      */
     fun patchByFields(prop: KProperty<*>, oldValue: Any?, newValue:Any?): Int {
         val column = columnName(prop.name)
-        return repo().patchByFields(listOf(Pair(column, oldValue)), listOf(Pair(column, newValue)))
+        return repo().patchByFilters(listOf(Pair(column, oldValue)), listOf(Pair(column, newValue)))
     }
 }

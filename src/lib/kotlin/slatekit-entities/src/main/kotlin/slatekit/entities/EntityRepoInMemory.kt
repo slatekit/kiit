@@ -33,7 +33,7 @@ import slatekit.data.support.IdGenerator
 import slatekit.data.support.IntIdGenerator
 import slatekit.data.support.LongIdGenerator
 import slatekit.entities.core.EntityInfo
-import slatekit.common.data.Op
+import slatekit.common.data.Compare
 import kotlin.reflect.KClass
 
 
@@ -156,10 +156,10 @@ open class EntityRepoInMemory<TId, T>(override val meta: Meta<TId, T>,
     /**
      * finds items based on the conditions
      */
-    override fun findByFields(conditions: List<Triple<String, Op, Any>>): List<T> {
+    override fun findByFields(conditions: List<Triple<String, Compare, Any>>): List<T> {
         val all = items.all()
         val filtered = conditions.fold(all) { items, condition ->
-            val matches = filter(items, condition.first, Op.Eq.text, condition.second)
+            val matches = filter(items, condition.first, Compare.Eq.text, condition.second)
             matches
         }
         return filtered
@@ -172,7 +172,7 @@ open class EntityRepoInMemory<TId, T>(override val meta: Meta<TId, T>,
      * @param value: value of field to search against
      * @return
      */
-    override fun findOneByField(field: String, op: Op, value: Any): T? {
+    override fun findOneByField(field: String, op: Compare, value: Any): T? {
         return findByField(field, op, value).firstOrNull()
     }
 
@@ -274,11 +274,11 @@ open class EntityRepoInMemory<TId, T>(override val meta: Meta<TId, T>,
         return entity?.let { deleteById(identity(it))} ?: false
     }
 
-    override fun deleteByFields(conditions: List<Triple<String, Op, Any?>>): Int {
+    override fun deleteByFields(conditions: List<Triple<String, Compare, Any?>>): Int {
         TODO("Not yet implemented")
     }
 
-    override fun patchByFields(fields: List<Pair<String, Any?>>, conditions: List<Triple<String, Op, Any?>>): Int {
+    override fun patchByFields(fields: List<Pair<String, Any?>>, conditions: List<Triple<String, Compare, Any?>>): Int {
         TODO("Not yet implemented")
     }
 }

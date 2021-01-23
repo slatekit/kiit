@@ -1,4 +1,4 @@
-package slatekit.data.statements
+package slatekit.data.syntax
 
 
 interface Statement<TId, T> where TId : kotlin.Comparable<TId>, T : Any {

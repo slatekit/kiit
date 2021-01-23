@@ -24,7 +24,7 @@ import slatekit.entities.Entity
 import slatekit.entities.EntityRepo
 import slatekit.entities.EntityService
 import slatekit.entities.features.Relations
-import slatekit.common.data.Op
+import slatekit.common.data.Compare
 import test.setup.Group
 import test.setup.Member
 import test.setup.User5
@@ -150,7 +150,7 @@ class Entity_Services_Tests {
 
     @Test fun can_find_by_field() {
         val svc = getUserService(true)
-        val second = svc.findByField(User5::email, Op.Eq, "jdoe2@abc.com")
+        val second = svc.findByField(User5::email, Compare.Eq, "jdoe2@abc.com")
         Assert.assertTrue(second.size == 1)
         Assert.assertTrue(second[0].email == "jdoe2@abc.com")
     }

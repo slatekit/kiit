@@ -21,7 +21,7 @@ import slatekit.data.core.Meta
 import slatekit.data.features.Deletable
 import slatekit.data.features.Findable
 import slatekit.data.features.Patchable
-import slatekit.data.statements.SqlStatements
+import slatekit.data.syntax.SqlSyntax
 import slatekit.entities.core.EntityInfo
 import slatekit.query.IQuery
 import slatekit.query.Query
@@ -94,7 +94,7 @@ interface EntityRepo<TId, T> :
 
         inline fun <reified TId, reified T> h2(db: IDb, meta: Meta<TId, T>, mapper: Mapper<TId, T>): EntitySqlRepo<TId, T> where TId : Comparable<TId>, T : Any {
             return sqlRepo<TId, T>(db, mapper, meta.table.name) { idType, enType, info ->
-                val stmts = SqlStatements(meta, mapper)
+                val stmts = SqlSyntax(meta, mapper)
                 EntitySqlRepo(db, info, meta, stmts, mapper)
             }
         }
@@ -102,7 +102,7 @@ interface EntityRepo<TId, T> :
 
         inline fun <reified TId, reified T> mysql(db: IDb, meta: Meta<TId, T>, mapper: Mapper<TId, T>, table: String? = null): EntitySqlRepo<TId, T> where TId : Comparable<TId>, T : Any {
             return sqlRepo<TId, T>(db, mapper, meta.table.name) { idType, enType, info ->
-                val stmts = SqlStatements(meta, mapper)
+                val stmts = SqlSyntax(meta, mapper)
                 EntitySqlRepo(db, info, meta, stmts, mapper)
             }
         }
@@ -110,7 +110,7 @@ interface EntityRepo<TId, T> :
 
         inline fun <reified TId, reified T> postgres(db: IDb, meta: Meta<TId, T>, mapper: Mapper<TId, T>, table: String? = null): EntitySqlRepo<TId, T> where TId : Comparable<TId>, T : Any {
             return sqlRepo<TId, T>(db, mapper, meta.table.name) { idType, enType, info ->
-                val stmts = SqlStatements(meta, mapper)
+                val stmts = SqlSyntax(meta, mapper)
                 EntitySqlRepo(db, info, meta, stmts, mapper)
             }
         }

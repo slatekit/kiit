@@ -1,4 +1,4 @@
-package slatekit.data.statements
+package slatekit.data.syntax
 
 import slatekit.common.data.Values
 
@@ -8,4 +8,4 @@ import slatekit.common.data.Values
  * @param pairs : Key/Value pairs    e.g. List<Value>(Value("id", 2))
  * @param values: Just the values    e.g. List<Any?>(2)
  */
-data class StatementData(val sql:String, val pairs:Values, val values:List<Any?>)
+data class Command(val sql:String, val pairs:Values, val values:List<Any?>)

@@ -13,7 +13,7 @@
 
 package slatekit.common.data
 
-enum class Op(val text: String) {
+enum class Compare(val text: String) {
     Eq("="),
     Neq("<>"),
     Gt(">"),
@@ -21,4 +21,10 @@ enum class Op(val text: String) {
     Lt("<"),
     Lte("<="),
     In("in")
+}
+
+
+enum class Logical(val text: String) {
+    And("and"),
+    Or("or")
 }

@@ -13,24 +13,22 @@
 
 package slatekit.data
 
-import slatekit.common.data.IDb
-import slatekit.common.data.Mapper
-import slatekit.common.ext.tail
+import slatekit.common.data.*
 import slatekit.data.core.Meta
-import slatekit.data.statements.Statements
-import slatekit.common.data.Op
+import slatekit.data.syntax.Syntax
 import slatekit.data.slatekit.data.features.Scriptable
 
 /**
  *
  * @param db : Db wrapper to execute sql
- * @param info : Holds all info relevant state/members needed to perform repo operations
+ * @param syntax: Used to build the sql syntax that may be vendor specific
+ * @param mapper: Used to map a model T to/from the repo/table
  * @tparam T
  */
 open class SqlRepo<TId, T>(
     val db: IDb,
     override val meta: Meta<TId, T>,
-    val stmts: Statements<TId, T>,
+    val syntax: Syntax<TId, T>,
     val mapper: Mapper<TId, T>
 ) : FullRepo<TId, T>, Scriptable<TId, T> where TId : Comparable<TId>, T : Any {
 
@@ -44,7 +42,7 @@ open class SqlRepo<TId, T>(
      * Note: You can customize the sql by providing your own statements
      */
     override fun create(entity: T): TId {
-        val result = stmts.insert.prep(entity)
+        val result = syntax.insert.prep(entity)
         val id = db.insertGetId(result.sql, result.values)
         return meta.id.convertToId(id)
     }
@@ -54,7 +52,7 @@ open class SqlRepo<TId, T>(
      * Note: You can customize the sql by providing your own statements
      */
     override fun update(entity: T): Boolean {
-        val result = stmts.update.prep(entity)
+        val result = syntax.update.prep(entity)
         val count = db.update(result.sql, result.values)
         return count > 0
     }
@@ -64,7 +62,7 @@ open class SqlRepo<TId, T>(
      * Note: You can customize the sql by providing your own statements
      */
     override fun getById(id: TId): T? {
-        val result = stmts.select.prep(id)
+        val result = syntax.select.prep(id)
         return mapOne(result.sql, result.values)
     }
 
@@ -73,7 +71,7 @@ open class SqlRepo<TId, T>(
      * Note: You can customize the sql by providing your own statements
      */
     override fun getByIds(ids: List<TId>): List<T> {
-        val result = stmts.select.prep(ids)
+        val result = syntax.select.prep(ids)
         val items = mapAll(result.sql, result.values)
         return items ?: listOf()
     }
@@ -83,7 +81,7 @@ open class SqlRepo<TId, T>(
      * Note: You can customize the sql by providing your own statements
      */
     override fun getAll(): List<T> {
-        val sql = stmts.select.load()
+        val sql = syntax.select.load()
         val items = mapAll(sql)
         return items ?: listOf<T>()
     }
@@ -101,7 +99,7 @@ open class SqlRepo<TId, T>(
      * Note: You can customize the sql by providing your own statements
      */
     override fun deleteById(id: TId): Boolean {
-        val result = stmts.delete.prep(id)
+        val result = syntax.delete.prep(id)
         val count = update(result.sql, result.values)
         return count > 0
     }
@@ -111,7 +109,7 @@ open class SqlRepo<TId, T>(
      * Note: You can customize the sql by providing your own statements
      */
     override fun deleteByIds(ids: List<TId>): Int {
-        val result = stmts.delete.prep(ids)
+        val result = syntax.delete.prep(ids)
         val count = update(result.sql, result.values)
         return count
     }
@@ -121,7 +119,7 @@ open class SqlRepo<TId, T>(
      * Note: You can customize the sql by providing your own statements
      */
     override fun deleteAll(): Long {
-        val sql = stmts.delete.drop()
+        val sql = syntax.delete.drop()
         val count = update(sql)
         return count.toLong()
     }
@@ -139,14 +137,14 @@ open class SqlRepo<TId, T>(
      * Gets total number of records in the repository/table
      */
     override fun count(): Long {
-        val prefix = stmts.select.count()
+        val prefix = syntax.select.count()
         val sql = "$prefix;"
         val count = getScalarLong(sql)
         return count
     }
 
     override fun seq(count: Int, desc: Boolean): List<T> {
-        val sql = stmts.select.take(count, desc)
+        val sql = syntax.select.take(count, desc)
         val items = mapAll(sql) ?: listOf<T>()
         return items
     }
@@ -171,45 +169,29 @@ open class SqlRepo<TId, T>(
     /**
      * finds items based on the conditions
      */
-    override fun findByFields(conditions: List<Triple<String, Op, Any>>): List<T> {
-        val first = conditions.first()
-        val tail = conditions.tail()
-        val query = query().where(first.first, first.second, first.third)
-        tail.forEach {
-            query.and(it.first, Op.Eq, it.second)
-        }
-        return findByQuery(query)
+    override fun findByFilters(filters: List<Filter>, logical: Logical): List<T> {
+        val command = syntax.select.filter(filters, logical)
+        val items = mapAll(command.sql, command.values)
+        return items ?: listOf()
     }
 
     /**
      * Patch items using the fields/conditions
      */
-    override fun patchByFields(fields: List<Pair<String, Any?>>, conditions: List<Triple<String, Op, Any?>>): Int {
-        val prefix = stmts.update.prefix()
-        val query = query()
-        fields.forEach { query.set(it.first, it.second) }
-        conditions.forEach { query.where(it.first, Op.Eq, it.second) }
-        val updateSql = query.toUpdatesText()
-        val sql = "$prefix $updateSql"
-        return update(sql)
+    override fun patchByFilters(fields: List<Value>, filters: List<Filter>, logical: Logical): Int {
+        val command = syntax.update.patch(fields, filters, logical)
+        return db.update(command.sql, command.values)
     }
 
     /**
      * Delete all entities from the repository/table matching the conditions
      * Note: You can customize the sql by providing your own statements
-     * @param conditions: e.g. listOf(Triple("category", Op.Eq, "sci-fi" )
+     * @param filters: e.g. listOf(Filter("category", Op.Eq, "sci-fi" )
      * @return
      */
-    override fun deleteByFields(conditions: List<Triple<String, Op, Any?>>): Int {
-        val first = conditions.first()
-        val query = query().where(first.first, first.second, first.third)
-        if (conditions.size > 1) {
-            conditions.tail().forEach { query.and(it.first, it.second, it.third) }
-        }
-        val filter = query.toFilter()
-        val prefix = stmts.delete.prefix()
-        val sql = "$prefix where $filter"
-        return update(sql)
+    override fun deleteByFilters(filters: List<Filter>, logical: Logical): Int {
+        val command = syntax.delete.filter(filters, logical)
+        return db.update(command.sql, command.values)
     }
 
     /**

@@ -20,9 +20,9 @@ import slatekit.data.core.Meta
 import slatekit.data.features.Countable
 import slatekit.data.features.Orderable
 import slatekit.entities.core.EntityInfo
-import slatekit.data.statements.Statements
+import slatekit.data.syntax.Syntax
 import slatekit.query.IQuery
-import slatekit.common.data.Op
+import slatekit.common.data.Compare
 
 /**
  *
@@ -34,7 +34,7 @@ open class EntitySqlRepo<TId, T>(
     val db: IDb,
     override val info: EntityInfo,
     override val meta: Meta<TId, T>,
-    val stmts: Statements<TId, T>,
+    val stmts: Syntax<TId, T>,
     val mapper: Mapper<TId, T>
 ) : EntityRepo<TId, T>, Countable<TId, T>, Orderable<TId, T> where TId : Comparable<TId>, T : Any {
 
@@ -160,12 +160,12 @@ open class EntitySqlRepo<TId, T>(
     /**
      * finds items based on the conditions
      */
-    override fun findByFields(conditions: List<Triple<String, Op, Any>>): List<T> {
+    override fun findByFields(conditions: List<Triple<String, Compare, Any>>): List<T> {
         val first = conditions.first()
         val tail = conditions.tail()
         val query = query().where(first.first, first.second, first.third)
         tail.forEach {
-            query.and(it.first, Op.Eq, it.second)
+            query.and(it.first, Compare.Eq, it.second)
         }
         return findByQuery(query)
     }
@@ -173,11 +173,11 @@ open class EntitySqlRepo<TId, T>(
     /**
      * Patch items using the fields/conditions
      */
-    override fun patchByFields(fields: List<Pair<String, Any?>>, conditions: List<Triple<String, Op, Any?>>): Int {
+    override fun patchByFields(fields: List<Pair<String, Any?>>, conditions: List<Triple<String, Compare, Any?>>): Int {
         val prefix = stmts.update.prefix()
         val query = query()
         fields.forEach { query.set(it.first, it.second) }
-        conditions.forEach { query.where(it.first, Op.Eq, it.second) }
+        conditions.forEach { query.where(it.first, Compare.Eq, it.second) }
         val updateSql = query.toUpdatesText()
         val sql = "$prefix $updateSql"
         return update(sql)
@@ -189,7 +189,7 @@ open class EntitySqlRepo<TId, T>(
      * @param conditions: e.g. listOf(Triple("category", Op.Eq, "sci-fi" )
      * @return
      */
-    override fun deleteByFields(conditions: List<Triple<String, Op, Any?>>): Int {
+    override fun deleteByFields(conditions: List<Triple<String, Compare, Any?>>): Int {
         val first = conditions.first()
         val query = query().where(first.first, first.second, first.third)
         if (conditions.size > 1) {

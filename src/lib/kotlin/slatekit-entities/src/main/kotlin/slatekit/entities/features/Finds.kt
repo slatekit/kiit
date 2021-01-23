@@ -4,7 +4,7 @@ import kotlin.reflect.KProperty
 import slatekit.entities.Entity
 import slatekit.entities.core.EntityOps
 import slatekit.query.IQuery
-import slatekit.common.data.Op
+import slatekit.common.data.Compare
 import slatekit.query.Query
 
 interface Finds<TId, T> : EntityOps<TId, T> where TId : kotlin.Comparable<TId>, T : Entity<TId> {
@@ -16,7 +16,7 @@ interface Finds<TId, T> : EntityOps<TId, T> where TId : kotlin.Comparable<TId>, 
      * @return
      */
     fun findByField(field: String, value: Any): List<T> {
-        return findByField(field, Op.Eq, value)
+        return findByField(field, Compare.Eq, value)
     }
 
     /**
@@ -26,7 +26,7 @@ interface Finds<TId, T> : EntityOps<TId, T> where TId : kotlin.Comparable<TId>, 
      * @param value: The value to check for
      * @return
      */
-    fun findByField(field: String, op: Op, value: Any): List<T> {
+    fun findByField(field: String, op: Compare, value: Any): List<T> {
         // Get column name from model schema ( if available )
         val column = columnName(field)
         return repo().findByField(column, op, value)
@@ -41,9 +41,9 @@ interface Finds<TId, T> : EntityOps<TId, T> where TId : kotlin.Comparable<TId>, 
         // Get column name from model schema ( if available )
         val filters = conditions.map {
             val column = columnName(it.first)
-            Triple(column, Op.Eq, it.second)
+            Triple(column, Compare.Eq, it.second)
         }
-        return repo().findByFields(filters)
+        return repo().findByFilters(filters)
     }
 
     /**
@@ -53,7 +53,7 @@ interface Finds<TId, T> : EntityOps<TId, T> where TId : kotlin.Comparable<TId>, 
      * @return
      */
     fun findByField(prop: KProperty<*>, value: Any): List<T> {
-        return findByField(prop, Op.Eq, value)
+        return findByField(prop, Compare.Eq, value)
     }
 
     /**
@@ -63,7 +63,7 @@ interface Finds<TId, T> : EntityOps<TId, T> where TId : kotlin.Comparable<TId>, 
      * @param value: The value to check for
      * @return
      */
-    fun findByField(prop: KProperty<*>, op: Op, value: Any): List<T> {
+    fun findByField(prop: KProperty<*>, op: Compare, value: Any): List<T> {
         // Get column name from model schema ( if available )
         val column = columnName(prop.name)
         return repo().findByField(column, op, value)
@@ -75,7 +75,7 @@ interface Finds<TId, T> : EntityOps<TId, T> where TId : kotlin.Comparable<TId>, 
      * @param value: The value to check for
      * @return
      */
-    fun findByField(prop: KProperty<*>, op: Op, value: Any, limit: Int): List<T> {
+    fun findByField(prop: KProperty<*>, op: Compare, value: Any, limit: Int): List<T> {
         // Get column name from model schema ( if available )
         val column = columnName(prop.name)
         val query = Query().where(column, op, value).limit(limit)
@@ -112,7 +112,7 @@ interface Finds<TId, T> : EntityOps<TId, T> where TId : kotlin.Comparable<TId>, 
      * @param value: The value to check for
      * @return
      */
-    fun findOneByField(name: String, op: Op, value: Any): T? {
+    fun findOneByField(name: String, op: Compare, value: Any): T? {
         // Get column name from model schema ( if available )
         val column = columnName(name)
         return repo().findOneByField(column, op, value)
@@ -125,7 +125,7 @@ interface Finds<TId, T> : EntityOps<TId, T> where TId : kotlin.Comparable<TId>, 
      * @return
      */
     fun findOneByField(prop: KProperty<*>, value: Any): T? {
-        return findOneByField(prop, Op.Eq, value)
+        return findOneByField(prop, Compare.Eq, value)
     }
 
     /**
@@ -134,7 +134,7 @@ interface Finds<TId, T> : EntityOps<TId, T> where TId : kotlin.Comparable<TId>, 
      * @param value: The value to check for
      * @return
      */
-    fun findOneByField(prop: KProperty<*>, op: Op, value: Any): T? {
+    fun findOneByField(prop: KProperty<*>, op: Compare, value: Any): T? {
         // Get column name from model schema ( if available )
         val column = columnName(prop.name)
         return repo().findOneByField(column, op, value)
@@ -150,9 +150,9 @@ interface Finds<TId, T> : EntityOps<TId, T> where TId : kotlin.Comparable<TId>, 
         // Get column name from model schema ( if available )
         val filters = conditions.map {
             val column = columnName(it.first)
-            Triple(column, Op.Eq, it.second)
+            Triple(column, Compare.Eq, it.second)
         }
-        return repo().findByFields(filters).firstOrNull()
+        return repo().findByFilters(filters).firstOrNull()
     }
 
     /**

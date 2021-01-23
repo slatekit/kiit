@@ -1,8 +1,7 @@
 package slatekit.data.core
 
-
 /**
- * Holds relevent meta info about table and the id for the model
+ * Holds relevant meta info about table and the id for the model
  * @param: id : Provides operations related to the id the model
  * @param: table: Info about the table
  *

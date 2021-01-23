@@ -1,4 +1,4 @@
-package slatekit.data.statements
+package slatekit.data.syntax
 
 import slatekit.common.data.DataAction
 import slatekit.common.data.Mapper
@@ -6,7 +6,12 @@ import slatekit.common.data.Values
 import slatekit.data.Consts
 import slatekit.data.core.Meta
 
-open class InsertStatement<TId, T>(val info: Meta<TId, T>, val mapper: Mapper<TId, T>) : Statement<TId, T> where TId : kotlin.Comparable<TId>, T : Any {
+/**
+ * Used to build the syntax for insert statements
+ * @param info: Meta info to know about the table (name, primary key ) and model id
+ * @param mapper: Mapper that converts a model T into its values for a table
+ */
+open class Insert<TId, T>(val info: Meta<TId, T>, val mapper: Mapper<TId, T>) : Statement<TId, T> where TId : kotlin.Comparable<TId>, T : Any {
     /**
      * Builds the full SQL statement
      * e.g. "insert into `movies` ( name, category ) values ( 'batman', 'action' );"
@@ -23,12 +28,12 @@ open class InsertStatement<TId, T>(val info: Meta<TId, T>, val mapper: Mapper<TI
      * e.g.
      * "insert into `movies` ( name, category ) values ( ?, ? );"
      */
-    open fun prep(item: T): StatementData {
+    open fun prep(item: T): Command {
         val values = data(item)
         val cols = "(" + values.joinToString(",", transform = { encode(it.name, info.table.encodeChar) }) + ") "
         val args = "VALUES (" + values.joinToString(",", transform = { "?" }) + ") "
         val sql = "${prefix()} $cols $args;"
-        return StatementData(sql, values, values.map { it.value })
+        return Command(sql, values, values.map { it.value })
     }
 
     /**

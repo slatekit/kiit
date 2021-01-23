@@ -2,7 +2,6 @@ package slatekit.data.encoders
 
 import slatekit.common.Record
 import slatekit.data.Consts
-import slatekit.data.encoders.SqlEncoder
 
 open class ShortEncoder : SqlEncoder<Short> {
 

@@ -5,7 +5,7 @@ import slatekit.common.data.DataType
 import slatekit.common.data.DataTypeMap
 
 /**
- * MySql to Java types
+ * Java types to MySql
  * https://dev.mysql.com/doc/connector-j/5.1/en/connector-j-reference-type-conversions.html
  */
 open class Types {

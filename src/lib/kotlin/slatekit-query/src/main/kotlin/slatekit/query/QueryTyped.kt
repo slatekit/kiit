@@ -1,6 +1,6 @@
 package slatekit.query
 
-import slatekit.common.data.Op
+import slatekit.common.data.Compare
 
 fun IQuery.where(field: kotlin.reflect.KProperty<*>, compare: kotlin.String, fieldValue: Any?): IQuery {
     val finalValue = fieldValue ?: Query.Null
@@ -9,7 +9,7 @@ fun IQuery.where(field: kotlin.reflect.KProperty<*>, compare: kotlin.String, fie
 
 fun IQuery.where(field: kotlin.reflect.KProperty<*>, fieldValue: Any?): IQuery {
     val finalValue = fieldValue ?: Query.Null
-    return this.where(field.name, Op.Eq, finalValue)
+    return this.where(field.name, Compare.Eq, finalValue)
 }
 
 fun IQuery.and(field: kotlin.reflect.KProperty<*>, compare: String, fieldValue: Any?): IQuery {

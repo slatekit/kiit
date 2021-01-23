@@ -4,7 +4,7 @@ import kotlin.reflect.KProperty
 import slatekit.entities.Entity
 import slatekit.entities.core.EntityOps
 import slatekit.query.IQuery
-import slatekit.common.data.Op
+import slatekit.common.data.Compare
 import slatekit.results.Try
 import slatekit.results.builders.Tries
 
@@ -59,7 +59,7 @@ interface Deletes<TId, T> : EntityOps<TId, T> where TId : kotlin.Comparable<TId>
      * @return
      */
     fun deleteByField(prop: KProperty<*>, value: Any): Int {
-        return repo().deleteByField(prop.name, Op.Eq, value)
+        return repo().deleteByField(prop.name, Compare.Eq, value)
     }
 
     /**
@@ -68,7 +68,7 @@ interface Deletes<TId, T> : EntityOps<TId, T> where TId : kotlin.Comparable<TId>
      * @param value: The value to check for
      * @return
      */
-    fun deleteByField(prop: KProperty<*>, op: Op, value: Any): Int {
+    fun deleteByField(prop: KProperty<*>, op: Compare, value: Any): Int {
         return repo().deleteByField(prop.name, op, value)
     }
 

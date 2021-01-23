@@ -13,7 +13,7 @@
 
 package slatekit.query
 
-import slatekit.common.data.Op
+import slatekit.common.data.Compare
 
 /**
  * Created by kreddy on 12/24/2015.
@@ -35,15 +35,15 @@ interface IQuery {
 
     fun where(field: String, compare: String, fieldValue: Any?): IQuery
 
-    fun where(field: String, compare: Op, fieldValue: Any?): IQuery
+    fun where(field: String, compare: Compare, fieldValue: Any?): IQuery
 
     fun and(field: String, compare: String, fieldValue: Any?): IQuery
 
-    fun and(field: String, compare: Op, fieldValue: Any?): IQuery
+    fun and(field: String, compare: Compare, fieldValue: Any?): IQuery
 
     fun or(field: String, compare: String, fieldValue: Any?): IQuery
 
-    fun or(field: String, compare: Op, fieldValue: Any?): IQuery
+    fun or(field: String, compare: Compare, fieldValue: Any?): IQuery
 
     fun orderBy(field: String, mode: String): IQuery
 

@@ -8,7 +8,10 @@ import slatekit.data.events.EntityAction
 import slatekit.data.events.EntityEvent
 import slatekit.data.events.EntityHooks
 import slatekit.data.core.Meta
-import slatekit.common.data.Op
+import slatekit.common.data.Compare
+import slatekit.common.data.Filter
+import slatekit.common.data.Logical
+import slatekit.common.data.Value
 
 /**
  * Used mostly for Prototyping and Testing.
@@ -116,19 +119,15 @@ class InMemoryRepo<TId, T>(override val meta: Meta<TId, T>,
         }
     }
 
-    override fun deleteByFields(conditions: List<Triple<String, Op, Any?>>): Int {
+    override fun deleteByFilters(filters: List<Filter>, logical: Logical): Int {
         TODO("This class for prototyping purposes only: Not yet implemented")
     }
 
-    override fun patchByFields(fields: List<Pair<String, Any?>>, conditions: List<Triple<String, Op, Any?>>): Int {
+    override fun patchByFilters(fields: List<Value>, filters: List<Filter>, logical: Logical): Int {
         TODO("This class for prototyping purposes only: Not yet implemented")
     }
 
-    override fun findByFields(conditions: List<Triple<String, Op, Any>>): List<T> {
-        TODO("This class for prototyping purposes only: Not yet implemented")
-    }
-
-    override fun findOneByField(field: String, op: Op, value: Any): T? {
+    override fun findByFilters(filters: List<Filter>, logical: Logical): List<T> {
         TODO("This class for prototyping purposes only: Not yet implemented")
     }
 
