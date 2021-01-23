@@ -5,7 +5,7 @@ import slatekit.common.Record
 import slatekit.data.Consts
 import java.util.*
 
-class UUIDEncoder : SqlEncoder<UUID> {
+open class UUIDEncoder : SqlEncoder<UUID> {
 
     override fun encode(value: UUID?): String {
         return value?.let { "'" + value.toString() + "'" } ?: Consts.NULL

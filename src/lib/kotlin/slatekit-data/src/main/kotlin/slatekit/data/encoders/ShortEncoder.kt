@@ -4,7 +4,7 @@ package slatekit.data.encoders
 import slatekit.common.Record
 import slatekit.data.Consts
 
-class ShortEncoder : SqlEncoder<Short> {
+open class ShortEncoder : SqlEncoder<Short> {
 
     override fun encode(value: Short?): String {
         return value?.toString() ?: Consts.NULL

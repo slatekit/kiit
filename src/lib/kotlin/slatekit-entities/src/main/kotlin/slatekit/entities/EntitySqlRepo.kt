@@ -14,6 +14,7 @@
 package slatekit.entities
 
 import slatekit.common.data.IDb
+import slatekit.common.data.Mapper
 import slatekit.common.ext.tail
 import slatekit.data.core.Meta
 import slatekit.data.features.Countable
@@ -34,7 +35,7 @@ open class EntitySqlRepo<TId, T>(
     override val info: EntityInfo,
     override val meta: Meta<TId, T>,
     val stmts: Statements<TId, T>,
-    val mapper: EntityMapper<TId, T>
+    val mapper: Mapper<TId, T>
 ) : EntityRepo<TId, T>, Countable<TId, T>, Orderable<TId, T> where TId : Comparable<TId>, T : Any {
 
     /**

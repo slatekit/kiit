@@ -120,25 +120,30 @@ object DbUtils {
      * @param stmt
      * @param inputs
      */
-    fun fillArgs(stmt: PreparedStatement, inputs: List<Any>?) {
+    fun fillArgs(stmt: PreparedStatement, inputs: List<Any?>?) {
         inputs?.forEachIndexed { index, arg ->
             val pos = index + 1
-            val jcls = arg.javaClass
-            when (jcls) {
-                Types.JStringAnyClass -> stmt.setString(pos, arg.toString())
-                Types.JBoolAnyClass -> stmt.setBoolean(pos, arg as Boolean)
-                Types.JShortAnyClass -> stmt.setShort(pos, arg as Short)
-                Types.JIntAnyClass -> stmt.setInt(pos, arg as Int)
-                Types.JLongAnyClass -> stmt.setLong(pos, arg as Long)
-                Types.JFloatAnyClass -> stmt.setFloat(pos, arg as Float)
-                Types.JDoubleAnyClass -> stmt.setDouble(pos, arg as Double)
-                // Types.JDecimalClass -> stmt.setBigDecimal(pos, arg as BigDecimal)
-                Types.JLocalDateAnyClass -> stmt.setDate(pos, java.sql.Date.valueOf((arg as LocalDate).toJava8LocalDate()))
-                Types.JLocalTimeAnyClass -> stmt.setTime(pos, java.sql.Time.valueOf((arg as LocalTime).toJava8LocalTime()))
-                Types.JLocalDateTimeAnyClass -> stmt.setTimestamp(pos, java.sql.Timestamp.valueOf((arg as LocalDateTime).toJava8LocalDateTime()))
-                Types.JZonedDateTimeAnyClass -> stmt.setTimestamp(pos, java.sql.Timestamp.valueOf(((arg as ZonedDateTime).toJava8ZonedDateTime()).toLocalDateTime()))
-                Types.JInstantAnyClass -> stmt.setTimestamp(pos, java.sql.Timestamp.valueOf((LocalDateTime.ofInstant(arg as Instant, ZoneId.systemDefault()).toJava8LocalDateTime())))
-                Types.JDateTimeAnyClass -> stmt.setTimestamp(pos, java.sql.Timestamp.valueOf(((arg as DateTime).local()).toJava8LocalDateTime()))
+            when(arg) {
+                null -> stmt.setNull(pos, 0)
+                else -> {
+                    val jcls = arg.javaClass
+                    when (jcls) {
+                        Types.JStringAnyClass -> stmt.setString(pos, arg.toString())
+                        Types.JBoolAnyClass -> stmt.setBoolean(pos, arg as Boolean)
+                        Types.JShortAnyClass -> stmt.setShort(pos, arg as Short)
+                        Types.JIntAnyClass -> stmt.setInt(pos, arg as Int)
+                        Types.JLongAnyClass -> stmt.setLong(pos, arg as Long)
+                        Types.JFloatAnyClass -> stmt.setFloat(pos, arg as Float)
+                        Types.JDoubleAnyClass -> stmt.setDouble(pos, arg as Double)
+                        // Types.JDecimalClass -> stmt.setBigDecimal(pos, arg as BigDecimal)
+                        Types.JLocalDateAnyClass -> stmt.setDate(pos, java.sql.Date.valueOf((arg as LocalDate).toJava8LocalDate()))
+                        Types.JLocalTimeAnyClass -> stmt.setTime(pos, java.sql.Time.valueOf((arg as LocalTime).toJava8LocalTime()))
+                        Types.JLocalDateTimeAnyClass -> stmt.setTimestamp(pos, java.sql.Timestamp.valueOf((arg as LocalDateTime).toJava8LocalDateTime()))
+                        Types.JZonedDateTimeAnyClass -> stmt.setTimestamp(pos, java.sql.Timestamp.valueOf(((arg as ZonedDateTime).toJava8ZonedDateTime()).toLocalDateTime()))
+                        Types.JInstantAnyClass -> stmt.setTimestamp(pos, java.sql.Timestamp.valueOf((LocalDateTime.ofInstant(arg as Instant, ZoneId.systemDefault()).toJava8LocalDateTime())))
+                        Types.JDateTimeAnyClass -> stmt.setTimestamp(pos, java.sql.Timestamp.valueOf(((arg as DateTime).local()).toJava8LocalDateTime()))
+                    }
+                }
             }
         }
     }

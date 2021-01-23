@@ -62,4 +62,10 @@ open class SelectStatement<TId, T>(val info: Meta<TId, T>, val mapper: Mapper<TI
      * basic syntax getting count
      */
     fun count(): String = "select count(*) from " + encode(info.name, info.table.encodeChar)
+
+
+    fun take(count:Int, desc:Boolean): String {
+        val orderBy = if (desc) " order by id desc" else " order by id asc"
+        return "${prefix()} $orderBy limit $count;"
+    }
 }

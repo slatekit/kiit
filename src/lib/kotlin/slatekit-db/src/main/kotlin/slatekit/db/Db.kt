@@ -62,7 +62,7 @@ class Db(private val dbCon: DbCon, errorCallback: ((Exception) -> Unit)? = null)
      * @param sql : The sql text
      * @return
      */
-    override fun <T> getScalarOrNull(sql: String, typ: Class<*>, inputs: List<Any>?): T? {
+    override fun <T> getScalarOrNull(sql: String, typ: Class<*>, inputs: List<Any?>?): T? {
 
         return executePrep<T>(dbCon, sql, { _, stmt ->
 
@@ -88,7 +88,7 @@ class Db(private val dbCon: DbCon, errorCallback: ((Exception) -> Unit)? = null)
      * @param inputs : The inputs for the sql or stored proc
      * @return : The id ( primary key )
      */
-    override fun insert(sql: String, inputs: List<Any>?): Long {
+    override fun insert(sql: String, inputs: List<Any?>?): Long {
         val res = executeCon(dbCon, { con: Connection ->
 
             val stmt = con.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)
@@ -120,7 +120,7 @@ class Db(private val dbCon: DbCon, errorCallback: ((Exception) -> Unit)? = null)
      * @param inputs : The inputs for the sql or stored proc
      * @return : The id ( primary key )
      */
-    override fun insertGetId(sql: String, inputs: List<Any>?): String {
+    override fun insertGetId(sql: String, inputs: List<Any?>?): String {
         val res = executeCon(dbCon, { con: Connection ->
 
             val stmt = con.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)
@@ -152,7 +152,7 @@ class Db(private val dbCon: DbCon, errorCallback: ((Exception) -> Unit)? = null)
      * @param inputs : The inputs for the sql or stored proc
      * @return : The number of affected records
      */
-    override fun update(sql: String, inputs: List<Any>?): Int {
+    override fun update(sql: String, inputs: List<Any?>?): Int {
         val result = executePrep<Int>(dbCon, sql, { _, stmt ->
 
             // fill all the arguments into the prepared stmt
@@ -176,7 +176,7 @@ class Db(private val dbCon: DbCon, errorCallback: ((Exception) -> Unit)? = null)
         sql: String,
         callback: (ResultSet) -> T?,
         moveNext: Boolean,
-        inputs: List<Any>?
+        inputs: List<Any?>?
     ): T? {
         val result = executePrep<T>(dbCon, sql, { _: Connection, stmt: PreparedStatement ->
 
@@ -205,7 +205,7 @@ class Db(private val dbCon: DbCon, errorCallback: ((Exception) -> Unit)? = null)
      * @return
      */
     @Suppress("UNCHECKED_CAST")
-    override fun <T> mapOne(sql: String, inputs: List<Any>?, mapper: (Record) -> T?): T? {
+    override fun <T> mapOne(sql: String, inputs: List<Any?>?, mapper: (Record) -> T?): T? {
         val res = query(sql, { rs ->
 
             val rec = RecordSet(rs)
@@ -226,7 +226,7 @@ class Db(private val dbCon: DbCon, errorCallback: ((Exception) -> Unit)? = null)
      * @return
      */
     @Suppress("UNCHECKED_CAST")
-    override fun <T> mapAll(sql: String, inputs: List<Any>?, mapper: (Record) -> T?): List<T>? {
+    override fun <T> mapAll(sql: String, inputs: List<Any?>?, mapper: (Record) -> T?): List<T>? {
         val res = query(sql, { rs ->
 
             val rec = RecordSet(rs)
@@ -251,7 +251,7 @@ class Db(private val dbCon: DbCon, errorCallback: ((Exception) -> Unit)? = null)
         procName: String,
         callback: (ResultSet) -> T?,
         moveNext: Boolean,
-        inputs: List<Any>?
+        inputs: List<Any?>?
     ): T? {
 
         // {call create_author(?, ?)}
@@ -269,7 +269,7 @@ class Db(private val dbCon: DbCon, errorCallback: ((Exception) -> Unit)? = null)
     override fun <T> callQueryMapped(
         procName: String,
         mapper: (Record) -> T?,
-        inputs: List<Any>?
+        inputs: List<Any?>?
     ): List<T>? {
         // {call create_author(?, ?)}
         val holders = inputs?.let { all -> "?".repeatWith(",", all.size) } ?: ""
@@ -282,7 +282,19 @@ class Db(private val dbCon: DbCon, errorCallback: ((Exception) -> Unit)? = null)
      * @param procName : The name of the stored procedure e.g. get_by_id
      * @param inputs : The parameters for the stored proc. The types will be auto-converted my-sql types.
      */
-    override fun callUpdate(procName: String, inputs: List<Any>?): Int {
+    override fun callCreate(procName: String, inputs: List<Any?>?): String {
+        // {call create_author(?, ?)}
+        val holders = inputs?.let { all -> "?".repeatWith(",", all.size) } ?: ""
+        val sql = "{call $procName($holders)}"
+        return insertGetId(sql, inputs)
+    }
+
+    /**
+     * Calls a stored procedure
+     * @param procName : The name of the stored procedure e.g. get_by_id
+     * @param inputs : The parameters for the stored proc. The types will be auto-converted my-sql types.
+     */
+    override fun callUpdate(procName: String, inputs: List<Any?>?): Int {
 
         // {call create_author(?, ?)}
         val holders = inputs?.let { all -> "?".repeatWith(",", all.size) } ?: ""

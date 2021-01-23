@@ -4,7 +4,7 @@ package slatekit.data.encoders
 import slatekit.common.Record
 import slatekit.data.Consts
 
-class FloatEncoder : SqlEncoder<Float> {
+open class FloatEncoder : SqlEncoder<Float> {
 
     override fun encode(value: Float?): String {
         return value?.toString() ?: Consts.NULL

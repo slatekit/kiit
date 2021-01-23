@@ -4,7 +4,7 @@ package slatekit.data.encoders
 import slatekit.common.Record
 import slatekit.data.Consts
 
-class BoolEncoder : SqlEncoder<Boolean> {
+open class BoolEncoder : SqlEncoder<Boolean> {
 
     override fun encode(value: Boolean?): String {
         return value?.let { if (value) "1" else "0" } ?: Consts.NULL
