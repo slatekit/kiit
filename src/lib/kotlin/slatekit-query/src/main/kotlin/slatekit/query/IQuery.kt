@@ -13,7 +13,6 @@
 
 package slatekit.query
 
-import slatekit.common.data.Op
 
 /**
  * Created by kreddy on 12/24/2015.
