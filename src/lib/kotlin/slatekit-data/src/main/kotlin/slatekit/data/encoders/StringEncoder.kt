@@ -9,8 +9,7 @@ open class StringEncoder : SqlEncoder<String> {
 
     override fun encode(value: String?): String {
         return value?.let {
-            val sValFinal = value.orElse("")
-            "'" + Encoding.ensureValue(sValFinal) + "'"
+            "'" + Encoding.ensureValue(value.orElse("")) + "'"
         } ?: Consts.NULL
     }
 

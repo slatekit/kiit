@@ -31,12 +31,12 @@ interface Id<TId, T> where TId : Comparable<TId>, T: Any {
 /**
  * Long based id support for a model based
  */
-class LongId<T>(val op:(T) -> Long) : Id<Long, T> where T: Any {
+class LongId<T>(val idName:String = "id", val op:(T) -> Long) : Id<Long, T> where T: Any {
 
     /**
      * Name of the field representing the primary key
      */
-    override fun name(): String { return "id" }
+    override fun name(): String { return idName }
 
     /**
      * Determines if the model is persisted

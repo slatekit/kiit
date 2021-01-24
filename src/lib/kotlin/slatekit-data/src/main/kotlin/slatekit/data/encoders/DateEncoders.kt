@@ -12,7 +12,6 @@ import slatekit.data.Consts
 
 
 open class LocalDateEncoder : SqlEncoder<LocalDate> {
-
     override fun encode(value: LocalDate?): String {
         return value?.let { "'" + value.format(Consts.dateFormat) + "'" } ?: Consts.NULL
     }
@@ -24,7 +23,6 @@ open class LocalDateEncoder : SqlEncoder<LocalDate> {
 
 
 open class LocalTimeEncoder : SqlEncoder<LocalTime> {
-
     override fun encode(value: LocalTime?): String {
         return value?.let { "'" + value.format(Consts.timeFormat) + "'" } ?: Consts.NULL
     }
@@ -36,11 +34,9 @@ open class LocalTimeEncoder : SqlEncoder<LocalTime> {
 
 
 open class LocalDateTimeEncoder : SqlEncoder<LocalDateTime> {
-
     override fun encode(value: LocalDateTime?): String {
         return toSql(value, false)
     }
-
 
     fun toSql(value: LocalDateTime?, isUTC: Boolean = false): String {
         return value?.let {
@@ -60,7 +56,6 @@ open class LocalDateTimeEncoder : SqlEncoder<LocalDateTime> {
 
 
 open class ZonedDateTimeEncoder : SqlEncoder<ZonedDateTime> {
-
     override fun encode(value: ZonedDateTime?): String {
         return toSql(value, false)
     }
@@ -86,7 +81,6 @@ open class ZonedDateTimeEncoder : SqlEncoder<ZonedDateTime> {
 
 
 open class InstantEncoder : SqlEncoder<Instant> {
-
     override fun encode(value: Instant?): String {
         return value?.let {
             "'" + LocalDateTime.ofInstant(value, ZoneId.systemDefault()).format(Consts.dateTimeFormat) + "'"
