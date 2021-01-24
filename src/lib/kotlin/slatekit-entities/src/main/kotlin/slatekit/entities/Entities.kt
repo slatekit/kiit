@@ -20,17 +20,9 @@ import slatekit.common.log.Logs
 import slatekit.common.log.LogsDefault
 import slatekit.common.naming.Namer
 import slatekit.common.utils.ListMap
-import slatekit.data.core.LongId
-import slatekit.data.core.Meta
-import slatekit.data.core.PKey
-import slatekit.data.core.Table
+import slatekit.data.core.*
 import slatekit.entities.core.*
-import slatekit.entities.EntityMapperEmpty
-import slatekit.entities.EntityRepoInMemory
-import slatekit.data.support.IdGenerator
-import slatekit.data.support.LongIdGenerator
 import slatekit.data.syntax.SqlSyntax
-import slatekit.data.syntax.Syntax
 import slatekit.entities.mapper.EntityMapper
 import slatekit.entities.mapper.EntitySettings
 import slatekit.meta.kClass
@@ -93,30 +85,29 @@ open class Entities(
         mappers[ctx.entityType.qualifiedName!!] = ctx.entityMapperInstance
     }
 
-
     /**
      * Register the entity using a pre-built [EntityContext] object
      * which contains all the relevant info about an Entity, its id,
      * and its corresponding mapper, repo, service, etc.
      */
-    inline fun <reified TId, reified T> register(id: String = "id",
+    inline fun <reified TId, reified T> register(idOps:Id<TId, T>,
                                                  table: String? = null,
                                                  vendor: Vendor = Vendor.MySql,
                                                  model:Model? = null,
                                                  builder: (EntityRepo<TId, T>) -> EntityService<TId, T>) where TId : Comparable<TId>, T : Entity<TId> {
         // 1. Id/Model types e.g. Long / User
+        val idName = idOps.name()
         val idType = TId::class
         val enType = T::class
-        val className = enType.simpleName!!
 
         // 2. Table info ( name of table supplied or use class name )
-        val tableName = table ?: className
-        val tableKey = PKey(id, DataType.getTypeFromLang(idType.java))
+        val tableName = table ?: enType.simpleName!!
+        val tableKey = PKey(idName, DataType.getTypeFromLang(idType.java))
         val tableInfo = Table(tableName, pkey = tableKey)
 
         // 3. Schema / Meta data
-        val entityModel = ModelMapper.loadSchema(enType, id, null, tableName)
-        val entityMeta = Meta<TId, T>(EntityId<TId, T>(id) { s -> idConverter(s) }, tableInfo)
+        val entityModel = ModelMapper.loadSchema(enType, idName, null, tableName)
+        val entityMeta = Meta<TId, T>(idOps, tableInfo)
         val entityInfo = EntityInfo(idType, enType, entityMeta, model)
 
         // 4. Mapper
@@ -129,7 +120,6 @@ open class Entities(
         val entityContext = EntityContext(enType, idType, entityServiceType, entityRepo, entityMapper, vendor, entityModel, "", "")
         register(entityContext)
     }
-
 
     /**
      * Gets the default database

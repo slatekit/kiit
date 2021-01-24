@@ -3,7 +3,7 @@ package slatekit.entities
 import slatekit.data.core.Id
 
 class EntityId<TId, T>(val idName:String = "id", val converter:(String) -> TId) : Id<TId, T> where TId: Comparable<TId>, T: Entity<TId> {
-    override fun id(): String {
+    override fun name(): String {
         return idName
     }
 
@@ -22,7 +22,7 @@ class EntityId<TId, T>(val idName:String = "id", val converter:(String) -> TId) 
 
 
 class EntityLongId<T>(val idName:String = "id") : Id<Long, T> where T: Entity<Long> {
-    override fun id(): String {
+    override fun name(): String {
         return idName
     }
 

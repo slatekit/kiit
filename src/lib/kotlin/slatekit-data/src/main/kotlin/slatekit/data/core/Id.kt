@@ -9,7 +9,7 @@ interface Id<TId, T> where TId : Comparable<TId>, T: Any {
     /**
      * Name of the field representing the primary key
      */
-    fun id(): String
+    fun name(): String
 
     /**
      * Determines if the model is persisted
@@ -36,7 +36,7 @@ class LongId<T>(val op:(T) -> Long) : Id<Long, T> where T: Any {
     /**
      * Name of the field representing the primary key
      */
-    override fun id(): String { return "id" }
+    override fun name(): String { return "id" }
 
     /**
      * Determines if the model is persisted

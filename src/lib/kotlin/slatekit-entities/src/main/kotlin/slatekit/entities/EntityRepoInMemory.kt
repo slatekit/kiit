@@ -250,21 +250,6 @@ open class EntityRepoInMemory<TId, T>(override val meta: Meta<TId, T>,
         return matched
     }
 
-
-    companion object {
-
-        inline fun <reified TId, reified T> of(): EntityRepoInMemory<TId, T> where TId : Comparable<TId>, T:Any {
-            val idGen = if(TId::class == Int::class) IntIdGenerator() else LongIdGenerator()
-            val id = LongId<T> {
-                val value = Reflector.getFieldValue(it, "id")
-                value?.toString()?.toLong() ?: 0L
-            } as Id<TId, T>
-            val meta = Meta<TId,T>(id, Table(T::class.simpleName!!, '`'))
-            val repo = EntityRepoInMemory<TId, T>(meta, EntityInfo.memory(TId::class, T::class), idGen as IdGenerator<TId>)
-            return repo
-        }
-    }
-
     override fun findOneByQuery(query: IQuery): T? {
         TODO("Not yet implemented")
     }

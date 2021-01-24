@@ -31,20 +31,4 @@ data class EntityInfo(
 ) {
 
     fun name(): String = ""
-
-    companion object {
-
-        fun memory(idType: KClass<*>, entityType: KClass<*>): EntityInfo {
-            val tableName = entityType.simpleName!!.toLowerCase()
-            val info = EntityInfo(idType, entityType, tableName)
-            return info
-        }
-
-
-        fun buildTableName(entityType: KClass<*>, tableName: String?, namer: Namer?): String {
-            val raw = if (tableName.isNullOrEmpty()) entityType.simpleName!! else tableName
-            val table = namer?.rename(raw) ?: raw.toLowerCase()
-            return table
-        }
-    }
 }
