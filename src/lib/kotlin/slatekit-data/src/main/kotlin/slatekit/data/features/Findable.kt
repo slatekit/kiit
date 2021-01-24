@@ -1,7 +1,5 @@
 package slatekit.data.features
 
-import slatekit.common.data.Filter
-import slatekit.common.data.Logical
 import slatekit.query.IQuery
 import slatekit.query.Op
 import slatekit.query.Query

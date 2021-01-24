@@ -1,8 +1,6 @@
 package slatekit.entities.features
 
 import slatekit.query.Op
-import slatekit.common.data.Filter
-import slatekit.common.data.Logical
 import slatekit.common.data.Value
 import kotlin.reflect.KProperty
 import slatekit.entities.Entity

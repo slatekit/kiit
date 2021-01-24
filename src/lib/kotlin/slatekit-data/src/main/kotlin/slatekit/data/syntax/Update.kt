@@ -2,7 +2,6 @@ package slatekit.data.syntax
 
 import slatekit.common.data.*
 import slatekit.data.Consts
-import slatekit.common.data.Filter
 import slatekit.data.core.Meta
 
 /**

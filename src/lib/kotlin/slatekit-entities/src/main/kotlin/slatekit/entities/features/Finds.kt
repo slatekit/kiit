@@ -5,8 +5,6 @@ import slatekit.entities.Entity
 import slatekit.entities.core.EntityOps
 import slatekit.query.IQuery
 import slatekit.query.Op
-import slatekit.common.data.Filter
-import slatekit.common.data.Logical
 import slatekit.query.Query
 
 interface Finds<TId, T> : EntityOps<TId, T> where TId : kotlin.Comparable<TId>, T : Entity<TId> {
@@ -32,15 +30,6 @@ interface Finds<TId, T> : EntityOps<TId, T> where TId : kotlin.Comparable<TId>, 
         // Get column name from model schema ( if available )
         val column = columnName(field)
         return repo().findByField(column, op, value)
-    }
-
-    /**
-     * finds items based on the pairs of conditions
-     * @param filters: The list of name/value pairs
-     * @return
-     */
-    fun findByFilters(filters: List<Filter>, logical: Logical): List<T> {
-        return repo().findByFilters(filters, logical)
     }
 
     /**
@@ -135,15 +124,6 @@ interface Finds<TId, T> : EntityOps<TId, T> where TId : kotlin.Comparable<TId>, 
         // Get column name from model schema ( if available )
         val column = columnName(prop.name)
         return repo().findOneByField(column, op, value)
-    }
-
-    /**
-     * finds items based on the field value
-     * @param filters: Filters to use
-     * @return
-     */
-    fun findOneByFields(filters: List<Filter>, logical: Logical): T? {
-        return repo().findByFilters(filters, logical).firstOrNull()
     }
 
     /**
