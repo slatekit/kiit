@@ -45,30 +45,6 @@ open class Update<TId, T>(val info: Meta<TId, T>, val mapper: Mapper<TId, T>, va
     }
 
     /**
-     * builds a select based on filters
-     */
-    open fun patch(updates:List<Value>, filters: List<Filter>, logical:Logical): Command {
-        val prefix = prefix()
-        // set category = 1
-        val changesValues = updates.map { Encoding.convertVal(it.value) }
-
-        // set category = ?, activated = ?
-        val changes = updates.joinToString(",", transform = { c ->
-            this.filters.update(c.name, c.value, true, true)
-        })
-
-        // where category = ?, activated = ?
-        val op = "and"
-        val conditionValues = filters.map { Encoding.convertVal(it.value) }
-        val conditions = filters.joinToString(" $op ", transform = { f ->
-            this.filters.build(f.name, f.op, f.value, surround = true, placehoder = true)
-        })
-        val sql = "$prefix set ${changes}, where ${conditions};"
-        val values = changesValues + conditionValues
-        return Command(sql, emptyValues, values)
-    }
-
-    /**
      * basic syntax for common to both stmt/prep
      */
     fun prefix(): String = "update " + encode(info.name, info.table.encodeChar)

@@ -21,7 +21,6 @@ import slatekit.data.syntax.Syntax
 
 /**
  * Base Entity repository using generics with support for all the CRUD methods.
- * NOTE: This is basically a GenericRepository implementation
  * @tparam T
  */
 open class EntityRepo<TId, T>(

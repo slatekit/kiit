@@ -12,6 +12,7 @@ import slatekit.entities.EntityOptions
 import slatekit.meta.Reflector
 import slatekit.meta.kClass
 import slatekit.query.IQuery
+import slatekit.query.Query
 import slatekit.results.Try
 import slatekit.results.builders.Tries
 
@@ -91,7 +92,7 @@ interface Updates<TId, T> : EntityOps<TId, T> where TId : kotlin.Comparable<TId>
      * updates items using the query
      */
     fun updateByQuery(query: IQuery): Int {
-        return repo().updateByQuery(query)
+        return repo().patchByQuery(query)
     }
 
     /**
@@ -113,6 +114,6 @@ interface Updates<TId, T> : EntityOps<TId, T> where TId : kotlin.Comparable<TId>
      */
     fun patchByFields(prop: KProperty<*>, oldValue: Any?, newValue:Any?): Int {
         val column = columnName(prop.name)
-        return repo().patchByFields(listOf(Value(column, oldValue)), listOf(Filter(column, Op.Eq, newValue)), Logical.And)
+        return repo().patchByQuery(Query().set(column, oldValue).where(column, Op.Eq, newValue))
     }
 }

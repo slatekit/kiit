@@ -21,6 +21,7 @@ import slatekit.db.Db
 import slatekit.entities.features.Relations
 import slatekit.entities.*
 import slatekit.query.Op
+import slatekit.query.Query
 import test.setup.Group
 import test.setup.Member
 import test.setup.User5
@@ -88,60 +89,60 @@ class Data_04_Entity_Service {
     }
 
 
-    @Test fun can_check_any() {
-        val svc = getUserService(true)
-        val any = svc.any()
-        Assert.assertTrue(any)
-    }
-
-
-    @Test fun can_check_count() {
-        val svc = getUserService(true)
-        val count = svc.count()
-        Assert.assertTrue(count == 7L)
-    }
-
-
-    @Test fun can_get_first() {
-        val svc = getUserService(true)
-        val first = svc.first()
-        Assert.assertTrue(first?.email == "jdoe1@abc.com")
-    }
-
-
-    @Test fun can_get_last() {
-        val svc = getUserService(true)
-        val last = svc.last()
-        Assert.assertTrue(last?.email == "jdoe7@abc.com")
-    }
-
-
-    @Test fun can_get_recent() {
-        val svc = getUserService(true)
-        val recent = svc.recent(2)
-        Assert.assertTrue(recent[0].email == "jdoe7@abc.com")
-        Assert.assertTrue(recent[1].email == "jdoe6@abc.com")
-    }
-
-
-    @Test fun can_get_oldest() {
-        val svc = getUserService(true)
-        val oldest = svc.oldest(2)
-        Assert.assertTrue(oldest[0].email == "jdoe1@abc.com")
-        Assert.assertTrue(oldest[1].email == "jdoe2@abc.com")
-    }
-
-
-    @Test fun can_get_by_id() {
-        val userSvc = getUserService(true)
-        val memsSvc = entities.getService<Long, Member>()
-        val first = userSvc.first()
-        val firstById = userSvc.get(first?.id ?: 1)
-        val memberById = memsSvc.get(first?.id ?: 1)
-        Assert.assertTrue(firstById?.email == "jdoe1@abc.com")
-        Assert.assertTrue(memberById?.groupId == 2L)
-        Assert.assertTrue(memberById?.userId == 1L)
-    }
+//    @Test fun can_check_any() {
+//        val svc = getUserService(true)
+//        val any = svc.any()
+//        Assert.assertTrue(any)
+//    }
+//
+//
+//    @Test fun can_check_count() {
+//        val svc = getUserService(true)
+//        val count = svc.count()
+//        Assert.assertTrue(count == 7L)
+//    }
+//
+//
+//    @Test fun can_get_first() {
+//        val svc = getUserService(true)
+//        val first = svc.first()
+//        Assert.assertTrue(first?.email == "jdoe1@abc.com")
+//    }
+//
+//
+//    @Test fun can_get_last() {
+//        val svc = getUserService(true)
+//        val last = svc.last()
+//        Assert.assertTrue(last?.email == "jdoe7@abc.com")
+//    }
+//
+//
+//    @Test fun can_get_recent() {
+//        val svc = getUserService(true)
+//        val recent = svc.recent(2)
+//        Assert.assertTrue(recent[0].email == "jdoe7@abc.com")
+//        Assert.assertTrue(recent[1].email == "jdoe6@abc.com")
+//    }
+//
+//
+//    @Test fun can_get_oldest() {
+//        val svc = getUserService(true)
+//        val oldest = svc.oldest(2)
+//        Assert.assertTrue(oldest[0].email == "jdoe1@abc.com")
+//        Assert.assertTrue(oldest[1].email == "jdoe2@abc.com")
+//    }
+//
+//
+//    @Test fun can_get_by_id() {
+//        val userSvc = getUserService(true)
+//        val memsSvc = entities.getService<Long, Member>()
+//        val first = userSvc.first()
+//        val firstById = userSvc.get(first?.id ?: 1)
+//        val memberById = memsSvc.get(first?.id ?: 1)
+//        Assert.assertTrue(firstById?.email == "jdoe1@abc.com")
+//        Assert.assertTrue(memberById?.groupId == 2L)
+//        Assert.assertTrue(memberById?.userId == 1L)
+//    }
 
 
     @Test fun can_find_by_field() {
@@ -154,10 +155,9 @@ class Data_04_Entity_Service {
 
     @Test fun can_find_by_fields() {
         val svc = getUserService(true)
-        val matches = svc.findByFilters(listOf(
-                Filter(User5::isActive.name, Op.Eq,false),
-                Filter(User5::age.name, Op.Eq,40)
-        ), Logical.And)
+        val matches = svc.findByQuery(Query()
+                .where(User5::isActive.name, Op.Eq, false)
+                .and(User5::age.name, Op.Eq, 40))
         Assert.assertTrue(matches.size == 2)
         Assert.assertTrue(matches[0].email == "jdoe5@abc.com")
     }

@@ -119,18 +119,6 @@ class InMemoryRepo<TId, T>(override val meta: Meta<TId, T>,
         }
     }
 
-    override fun deleteByFilters(filters: List<Filter>, logical: Logical): Int {
-        TODO("This class for prototyping purposes only: Not yet implemented")
-    }
-
-    override fun patchByFields(fields: List<Value>, filters: List<Filter>, logical: Logical): Int {
-        TODO("This class for prototyping purposes only: Not yet implemented")
-    }
-
-    override fun findByFilters(filters: List<Filter>, logical: Logical): List<T> {
-        TODO("This class for prototyping purposes only: Not yet implemented")
-    }
-
     private fun notify(action: EntityAction, entity:T) {
         val id = identity(entity)
         val ts = DateTimes.now()
@@ -153,19 +141,15 @@ class InMemoryRepo<TId, T>(override val meta: Meta<TId, T>,
         }
     }
 
-    override fun updateByQuery(query: IQuery): Int {
-        TODO("Not yet implemented")
-    }
-
     override fun deleteByQuery(query: IQuery): Int {
         TODO("Not yet implemented")
     }
 
-    override fun countByQuery(query: IQuery): Long {
+    override fun findByQuery(query: IQuery): List<T> {
         TODO("Not yet implemented")
     }
 
-    override fun findOneByQuery(query: IQuery): T? {
+    override fun patchByQuery(query: IQuery): Int {
         TODO("Not yet implemented")
     }
 }
