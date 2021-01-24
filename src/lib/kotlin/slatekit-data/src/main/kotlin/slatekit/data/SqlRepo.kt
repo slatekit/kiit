@@ -154,11 +154,22 @@ open class SqlRepo<TId, T>(
      * updates items using the query
      * @param query: The query builder
      */
-    override fun updateByQuery(query: IQuery): Int {
+    override fun patchByQuery(query: IQuery): Int {
         val prefix = syntax.update.prefix()
         val updateSql = query.toUpdatesText()
         val sql = "$prefix $updateSql;"
         return update(sql)
+    }
+
+    /**
+     * Finds items using the query builder
+     */
+    override fun findByQuery(query: IQuery): List<T> {
+        val prefix = syntax.select.prefix()
+        val filter = query.toFilter()
+        val sql = "$prefix where $filter;"
+        val results = mapAll(sql)
+        return results ?: listOf()
     }
 
     /**
@@ -176,32 +187,12 @@ open class SqlRepo<TId, T>(
     /**
      * Gets the total number of records based on the query provided.
      */
-    override fun countByQuery(query: IQuery): Long {
+    fun countByQuery(query: IQuery): Long {
         val prefix = syntax.select.count()
         val filter = query.toFilter()
         val sql = "$prefix where $filter;"
         val count = getScalarLong(sql)
         return count
-    }
-
-    /**
-     * Finds items using the query builder
-     */
-    override fun findByQuery(query: IQuery): List<T> {
-        val prefix = syntax.select.prefix()
-        val filter = query.toFilter()
-        val sql = "$prefix where $filter;"
-        val results = mapAll(sql)
-        return results ?: listOf()
-    }
-
-    /**
-     * finds first item based on the query
-     * @param query: name of field
-     * @return
-     */
-    override fun findOneByQuery(query: IQuery): T? {
-        return findByQuery(query.limit(1)).firstOrNull()
     }
 
     override fun createByProc(name: String, args: List<Any>?): TId {
@@ -219,34 +210,6 @@ open class SqlRepo<TId, T>(
 
     override fun deleteByProc(name: String, args: List<Any>?): Long {
         return db.callUpdate(name, args).toLong()
-    }
-
-    /**
-     * finds items based on the conditions
-     */
-    override fun findByFilters(filters: List<Filter>, logical: Logical): List<T> {
-        val command = syntax.select.filter(filters, logical)
-        val items = mapAll(command.sql, command.values)
-        return items ?: listOf()
-    }
-
-    /**
-     * Patch items using the fields/conditions
-     */
-    override fun patchByFilters(fields: List<Value>, filters: List<Filter>, logical: Logical): Int {
-        val command = syntax.update.patch(fields, filters, logical)
-        return db.update(command.sql, command.values)
-    }
-
-    /**
-     * Delete all entities from the repository/table matching the conditions
-     * Note: You can customize the sql by providing your own statements
-     * @param filters: e.g. listOf(Filter("category", Op.Eq, "sci-fi" )
-     * @return
-     */
-    override fun deleteByFilters(filters: List<Filter>, logical: Logical): Int {
-        val command = syntax.delete.filter(filters, logical)
-        return db.update(command.sql, command.values)
     }
 
     /**

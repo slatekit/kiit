@@ -13,6 +13,8 @@
 
 package slatekit.query
 
+import slatekit.common.data.Value
+
 
 /**
  * Created by kreddy on 12/24/2015.
@@ -29,6 +31,10 @@ interface IQuery {
     fun getOrderBy(): String
 
     fun set(field: String, fieldValue: Any?): IQuery
+
+    fun set(vararg pairs: Value): IQuery
+
+    fun set(pairs: List<Value>): IQuery
 
     fun set(vararg pairs: Pair<String, Any>): IQuery
 

@@ -20,6 +20,7 @@ import slatekit.common.data.*
 import slatekit.db.Db
 import slatekit.entities.features.Relations
 import slatekit.entities.*
+import slatekit.query.Op
 import test.setup.Group
 import test.setup.Member
 import test.setup.User5
@@ -133,7 +134,7 @@ class Data_04_Entity_Service {
 
     @Test fun can_get_by_id() {
         val userSvc = getUserService(true)
-        val memsSvc = entities.getSvc<Long, Member>(Member::class)
+        val memsSvc = entities.getService<Long, Member>()
         val first = userSvc.first()
         val firstById = userSvc.get(first?.id ?: 1)
         val memberById = memsSvc.get(first?.id ?: 1)
@@ -171,7 +172,7 @@ class Data_04_Entity_Service {
 
     @Test fun can_get_relation() {
         val userSvc = getUserService(true)
-        val memsSvcRaw = entities.getSvc<Long, Member>(Member::class)
+        val memsSvcRaw = entities.getService<Long, Member>()
         val memsSvc = EntityServiceRelational<Long, Member>(entities, memsSvcRaw.repo())
         val user = memsSvc.getRelation<User5>(1, Member::userId, User5::class)
         Assert.assertTrue( user != null)
@@ -181,7 +182,7 @@ class Data_04_Entity_Service {
 
     @Test fun can_get_relation_with_object() {
         val userSvc = getUserService(true)
-        val memsSvcRaw = entities.getSvc<Long, Member>(Member::class)
+        val memsSvcRaw = entities.getService<Long, Member>()
         val memsSvc = EntityServiceRelational<Long, Member>(entities, memsSvcRaw.repo())
         val userAndMember = memsSvc.getWithRelation<User5>(2, Member::userId, User5::class)
         Assert.assertTrue( userAndMember != null)
@@ -193,7 +194,7 @@ class Data_04_Entity_Service {
 
     @Test fun can_get_relations() {
         val userSvc = getUserService(true)
-        val grpSvcRaw = entities.getSvc<Long, Group>(Group::class)
+        val grpSvcRaw = entities.getService<Long, Group>()
         val grpSvc = EntityServiceRelational<Long, Group>(entities, grpSvcRaw.repo())
         val results = grpSvc.getWithRelations<Member>(2, Member::class, Member::groupId)
         Assert.assertTrue(results != null)

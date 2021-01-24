@@ -11,6 +11,7 @@ import slatekit.data.core.Meta
 import slatekit.common.data.Filter
 import slatekit.common.data.Logical
 import slatekit.common.data.Value
+import slatekit.query.IQuery
 
 /**
  * Used mostly for Prototyping and Testing.
@@ -122,7 +123,7 @@ class InMemoryRepo<TId, T>(override val meta: Meta<TId, T>,
         TODO("This class for prototyping purposes only: Not yet implemented")
     }
 
-    override fun patchByFilters(fields: List<Value>, filters: List<Filter>, logical: Logical): Int {
+    override fun patchByFields(fields: List<Value>, filters: List<Filter>, logical: Logical): Int {
         TODO("This class for prototyping purposes only: Not yet implemented")
     }
 
@@ -150,5 +151,21 @@ class InMemoryRepo<TId, T>(override val meta: Meta<TId, T>,
             hooks?.onEntityEvent(EntityEvent.EntityErrored(meta.name, id, t, ex, DateTimes.now()))
             throw ex
         }
+    }
+
+    override fun updateByQuery(query: IQuery): Int {
+        TODO("Not yet implemented")
+    }
+
+    override fun deleteByQuery(query: IQuery): Int {
+        TODO("Not yet implemented")
+    }
+
+    override fun countByQuery(query: IQuery): Long {
+        TODO("Not yet implemented")
+    }
+
+    override fun findOneByQuery(query: IQuery): T? {
+        TODO("Not yet implemented")
     }
 }

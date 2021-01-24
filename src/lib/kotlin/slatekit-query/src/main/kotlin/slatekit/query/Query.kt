@@ -13,6 +13,7 @@
 
 package slatekit.query
 
+import slatekit.common.data.Value
 import java.util.concurrent.atomic.AtomicInteger
 
 /**
@@ -118,6 +119,35 @@ open class Query : IQuery {
         pairs.forEach {
             val col = QueryEncoder.ensureField(it.first)
             data.updates.add(FieldValue(col, it.second))
+        }
+        return this
+    }
+
+
+    /**
+     * builds up a set field clause
+     *
+     * @param pairs: vararg of Pair representing the field names and values to set
+     * @return
+     */
+    override fun set(pairs: List<Value>): IQuery {
+        pairs.forEach {
+            val col = QueryEncoder.ensureField(it.name)
+            data.updates.add(FieldValue(col, it.value))
+        }
+        return this
+    }
+
+    /**
+     * builds up a set field clause
+     *
+     * @param pairs: vararg of Pair representing the field names and values to set
+     * @return
+     */
+    override fun set(vararg pairs: Value): IQuery {
+        pairs.forEach {
+            val col = QueryEncoder.ensureField(it.name)
+            data.updates.add(FieldValue(col, it.value))
         }
         return this
     }

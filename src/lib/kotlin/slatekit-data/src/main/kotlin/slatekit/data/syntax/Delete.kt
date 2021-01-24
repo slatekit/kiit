@@ -61,10 +61,10 @@ open class Delete<TId, T>(val info: Meta<TId, T>, val mapper: Mapper<TId, T>, va
     /**
      * builds a select based on filters
      */
-    open fun filter(filters: List<Filter>, logical:Logical): Command {
+    open fun filter(filters: List<Filter>): Command {
         val prefix = prefix()
         val values = filters.map { Encoding.convertVal(it.value) }
-        val op = if(logical == Logical.And) "and" else "or"
+        val op = "and"
         val conditions = filters.joinToString(" $op ", transform = { f ->
             this.filters.build(f.name, f.op, f.value, surround = true, placehoder = true)
         })

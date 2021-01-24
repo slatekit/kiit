@@ -1,8 +1,8 @@
 package slatekit.data.features
 
 import slatekit.query.Op
-import slatekit.common.data.Filter
-import slatekit.common.data.Logical
+import slatekit.query.IQuery
+import slatekit.query.Query
 
 /**
  * Supports deletion of records using conditions
@@ -24,13 +24,12 @@ interface Deletable<TId, T> where TId : Comparable<TId> {
      * @param value: The value to check for
      * @return
      */
-    fun deleteByField(field: String, op: Op, value: Any?): Int = deleteByFilters(listOf(Filter(field, op, value)), Logical.And)
+    fun deleteByField(field: String, op: Op, value: Any?): Int = deleteByQuery(Query().where(field, op, value))
 
 
     /**
      * Deletes items based on the filters and logical operator
-     * @param filters: The list of filters "id = 2" e.g. listOf( Filter("id", Op.Eq, "2" )
-     * @param logical: The logical operator to use  e.g. "And | Or"
+     * @param query: The query builder to build up dynamic queries
      */
-    fun deleteByFilters(filters: List<Filter>, logical:Logical): Int
+    fun deleteByQuery(query: IQuery): Int
 }

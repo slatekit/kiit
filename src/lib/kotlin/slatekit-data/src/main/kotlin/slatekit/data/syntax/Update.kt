@@ -58,9 +58,9 @@ open class Update<TId, T>(val info: Meta<TId, T>, val mapper: Mapper<TId, T>, va
         })
 
         // where category = ?, activated = ?
-        val op = if(logical == Logical.And) "and" else "or"
+        val op = "and"
         val conditionValues = filters.map { Encoding.convertVal(it.value) }
-        val conditions = filters.joinToString(" and ", transform = { f ->
+        val conditions = filters.joinToString(" $op ", transform = { f ->
             this.filters.build(f.name, f.op, f.value, surround = true, placehoder = true)
         })
         val sql = "$prefix set ${changes}, where ${conditions};"
