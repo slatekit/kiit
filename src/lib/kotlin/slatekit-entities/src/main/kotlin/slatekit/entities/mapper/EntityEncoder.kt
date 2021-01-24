@@ -72,7 +72,7 @@ open class EntityEncoder<TId, T>(val model: Model,
                 when (data) {
                     is List<*> -> data.forEach {
                         when (it) {
-                            is Pair<*, *> -> converted.add(Value(it.first?.toString() ?: "", it.second))
+                            is Value -> converted.add(it)
                             else -> converted.add(Value(col, buildValue(col, it ?: "", false)))
                         }
                     }

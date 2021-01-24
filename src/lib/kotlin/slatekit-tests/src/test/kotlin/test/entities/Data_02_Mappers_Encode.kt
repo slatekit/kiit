@@ -13,7 +13,6 @@ import slatekit.meta.models.ModelMapper
 
 class Data_02_Mappers_Encode {
     val expected = listOf(
-            "`id`"                  to "0",
             "`test_string`"         to "'abc'",
             "`test_string_enc`"     to "'u+DVLRDgvTFnnLRg2mTd2w'",
             "`test_bool`"           to "0",
