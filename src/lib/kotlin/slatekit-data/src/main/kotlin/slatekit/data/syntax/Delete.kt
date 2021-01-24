@@ -19,6 +19,18 @@ open class Delete<TId, T>(val info: Meta<TId, T>, val mapper: Mapper<TId, T>, va
     }
 
     /**
+     * Builds sql statement to remove multiple items by ids
+     * e.g.
+     * "delete from `movies` where id in (?);"
+     */
+    open fun stmt(ids:List<TId>): String {
+        val name = encode(info.pkey.name, info.table.encodeChar)
+        val delimited = ids.joinToString(",")
+        val sql = "${prefix()} where $name in ($delimited);"
+        return sql
+    }
+
+    /**
      * Builds sql statement with values as placeholders for prepared statements
      * e.g.
      * "delete from `movies` where id = ?;"
@@ -27,18 +39,6 @@ open class Delete<TId, T>(val info: Meta<TId, T>, val mapper: Mapper<TId, T>, va
         val name = encode(info.pkey.name, info.table.encodeChar)
         val sql = "${prefix()} where $name = ?;"
         return Command(sql, listOf(Value(name, id)), listOf(id))
-    }
-
-    /**
-     * Builds sql statement to remove multiple items by ids
-     * e.g.
-     * "delete from `movies` where id in (?);"
-     */
-    open fun prep(ids:List<TId>): Command {
-        val name = encode(info.pkey.name, info.table.encodeChar)
-        val sql = "${prefix()} where $name in (?);"
-        val delimited = ids.joinToString(",")
-        return Command(sql, listOf(Value(name, delimited)), listOf(delimited))
     }
 
     /**

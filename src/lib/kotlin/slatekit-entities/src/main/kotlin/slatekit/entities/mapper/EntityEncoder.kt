@@ -40,7 +40,7 @@ open class EntityEncoder<TId, T>(val model: Model,
      * contains a simple list of key/value pairs
      */
     override fun encode(item: T, action: DataAction, enc: Encryptor?): Values {
-        return mapFields(null, item, model, enc).map { Value(it.first, it.second as Any?) }
+        return mapFields(null, item, model, enc)
     }
 
 
@@ -52,9 +52,9 @@ open class EntityEncoder<TId, T>(val model: Model,
      * NOTE: For a simple model, only this 1 function call is required to
      * generate the sql for inserts/updates, allowing 1 record = 1 function call
      */
-    private fun mapFields(prefix: String?, item: Any, model: Model, enc: Encryptor? = null): List<Pair<String, String>> {
+    private fun mapFields(prefix: String?, item: Any, model: Model, enc: Encryptor? = null): List<Value> {
 
-        val converted = mutableListOf<Pair<String, String>>()
+        val converted = mutableListOf<Value>()
         val len = model.fields.size
         for (ndx in 0 until len) {
             val mapping = model.fields[ndx]
@@ -72,15 +72,15 @@ open class EntityEncoder<TId, T>(val model: Model,
                 when (data) {
                     is List<*> -> data.forEach {
                         when (it) {
-                            is Pair<*, *> -> converted.add(it as Pair<String, String>)
-                            else -> converted.add(Pair(col, buildValue(col, it ?: "", false)))
+                            is Pair<*, *> -> converted.add(Value(it.first?.toString() ?: "", it.second))
+                            else -> converted.add(Value(col, buildValue(col, it ?: "", false)))
                         }
                     }
-                    else -> converted.add(Pair(col, buildValue(col, data, false)))
+                    else -> converted.add(Value(col, buildValue(col, data, false)))
                 }
             }
         }
-        return converted
+        return converted.toList()
     }
 
 

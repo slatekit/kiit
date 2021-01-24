@@ -41,18 +41,6 @@ open class Select<TId, T>(val info: Meta<TId, T>, val mapper: Mapper<TId, T>, va
     }
 
     /**
-     * Builds sql statement to get multiple items by ids
-     * e.g.
-     * "select * from `movies` where id in (?);"
-     */
-    open fun prep(ids:List<TId>): Command {
-        val name = encode(info.pkey.name, info.table.encodeChar)
-        val sql = "${prefix()} where $name in (?);"
-        val delimited = ids.joinToString(",")
-        return Command(sql, listOf(Value(name, delimited)), listOf(delimited))
-    }
-
-    /**
      * Builds the values to be inserted as a list of Pair(name:String, value:Any?)
      * e.g. listOf(
      *      Value("id", 2)
