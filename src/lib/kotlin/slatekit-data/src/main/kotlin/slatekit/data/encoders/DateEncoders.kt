@@ -10,7 +10,6 @@ import slatekit.common.ext.atUtcLocal
 import slatekit.common.ext.local
 import slatekit.data.Consts
 
-
 open class LocalDateEncoder : SqlEncoder<LocalDate> {
     override fun encode(value: LocalDate?): String {
         return value?.let { "'" + value.format(Consts.dateFormat) + "'" } ?: Consts.NULL

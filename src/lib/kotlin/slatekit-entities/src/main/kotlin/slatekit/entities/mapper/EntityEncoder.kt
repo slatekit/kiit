@@ -111,49 +111,49 @@ open class EntityEncoder<TId, T>(val model: Model,
                 encryptor != null -> encryptor?.encrypt(sVal)
                 else -> sVal
             }
-            encoders.strings.encode(sVanEnc)
+            encoders.strings(sVanEnc)
         } else if (mapping.dataCls == KTypes.KBoolClass) {
             val bVal = Reflector.getFieldValue(item, mapping.name) as Boolean?
-            encoders.bools.encode(bVal)
+            encoders.bools(bVal)
         } else if (mapping.dataCls == KTypes.KShortClass) {
             val sVal = Reflector.getFieldValue(item, mapping.name) as Short?
-            encoders.shorts.encode(sVal)
+            encoders.shorts(sVal)
         } else if (mapping.dataCls == KTypes.KIntClass) {
             val iVal = Reflector.getFieldValue(item, mapping.name) as Int?
-            encoders.ints.encode(iVal)
+            encoders.ints(iVal)
         } else if (mapping.dataCls == KTypes.KLongClass) {
             val lVal = Reflector.getFieldValue(item, mapping.name) as Long?
-            encoders.longs.encode(lVal)
+            encoders.longs(lVal)
         } else if (mapping.dataCls == KTypes.KFloatClass) {
             val fVal = Reflector.getFieldValue(item, mapping.name) as Float?
-            encoders.floats.encode(fVal)
+            encoders.floats(fVal)
         } else if (mapping.dataCls == KTypes.KDoubleClass) {
             val dVal = Reflector.getFieldValue(item, mapping.name) as Double?
-            encoders.doubles.encode(dVal)
+            encoders.doubles(dVal)
         } else if (mapping.dataCls == KTypes.KDateTimeClass) {
             val dtVal = Reflector.getFieldValue(item, mapping.name) as DateTime?
             encoders.dateTimes.toSql(dtVal, settings.utcTime)
         } else if (mapping.dataCls == KTypes.KLocalDateClass) {
             val raw = Reflector.getFieldValue(item, mapping.name) as LocalDate?
-            encoders.localDates.encode(raw)
+            encoders.localDates(raw)
         } else if (mapping.dataCls == KTypes.KLocalTimeClass) {
             val raw = Reflector.getFieldValue(item, mapping.name) as LocalTime?
-            encoders.localTimes.encode(raw)
+            encoders.localTimes(raw)
         } else if (mapping.dataCls == KTypes.KLocalDateTimeClass) {
             val raw = Reflector.getFieldValue(item, mapping.name) as LocalDateTime?
-            encoders.localDateTimes.encode(raw)
+            encoders.localDateTimes(raw)
         } else if (mapping.dataCls == KTypes.KZonedDateTimeClass) {
             val raw = Reflector.getFieldValue(item, mapping.name) as ZonedDateTime?
             encoders.zonedDateTimes.toSql(raw, settings.utcTime)
         } else if (mapping.dataCls == KTypes.KInstantClass) {
             val raw = Reflector.getFieldValue(item, mapping.name) as Instant?
-            encoders.instants.encode(raw)
+            encoders.instants(raw)
         } else if (mapping.dataCls == KTypes.KUUIDClass) {
             val raw = Reflector.getFieldValue(item, mapping.name) as java.util.UUID?
-            encoders.uuids.encode(raw)
+            encoders.uuids(raw)
         } else if (mapping.dataCls == KTypes.KUPIDClass) {
             val raw = Reflector.getFieldValue(item, mapping.name) as UPID?
-            encoders.uniqueIds.encode(raw)
+            encoders.upids(raw)
         } else if (mapping.isEnum) {
             val raw = Reflector.getFieldValue(item, mapping.name) as EnumLike
             encoders.enums.encode(raw)
