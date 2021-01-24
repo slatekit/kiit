@@ -2,6 +2,7 @@ package slatekit.data.features
 
 import slatekit.common.data.Filter
 import slatekit.common.data.Logical
+import slatekit.query.Op
 
 /**
  * Supports finding records by conditions

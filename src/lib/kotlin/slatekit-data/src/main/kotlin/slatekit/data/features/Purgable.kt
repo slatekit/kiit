@@ -2,6 +2,7 @@ package slatekit.data.slatekit.data.features
 
 import slatekit.common.DateTime
 import slatekit.data.features.Deletable
+import slatekit.query.Op
 
 interface Purgeable<TId, T> : Deletable<TId, T> where TId : Comparable<TId> {
     /**
