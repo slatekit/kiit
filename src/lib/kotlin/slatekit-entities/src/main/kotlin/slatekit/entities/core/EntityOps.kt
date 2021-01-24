@@ -31,7 +31,7 @@ interface EntityOps<TId, T> where TId : Comparable<TId>, T : Entity<TId> {
 
     fun columnName(name:String):String {
         // Get column name from model schema ( if available )
-        val column = this.repo().columnName(name)
+        val column = name
         //val encoded = QueryEncoder.ensureField(column)
         return column
     }
