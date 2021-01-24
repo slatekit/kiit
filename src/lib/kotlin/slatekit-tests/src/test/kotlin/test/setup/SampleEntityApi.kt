@@ -40,7 +40,7 @@ import slatekit.connectors.entities.AppEntContext
  *      SampleREST.patch      -id=1 -title="abc"
  */
 class SampleEntityApi(ctx: AppEntContext)
-    : ApiBaseEntity<Long ,Movie, EntityService<Long, Movie>>(ctx, Long::class, Movie::class, ctx.ent.getSvc(Movie::class)) {
+    : ApiBaseEntity<Long ,Movie, EntityService<Long, Movie>>(ctx, Long::class, Movie::class, ctx.ent.getService()) {
 
     fun patch(id:Long, title:String): String = "patched $id with $title"
 }
@@ -48,7 +48,7 @@ class SampleEntityApi(ctx: AppEntContext)
 
 @Api(area = "app", name = "tests", desc = "sample to test compositional apis with annotations", roles= ["admin"])
 class SampleEntity2Api(ctx: AppEntContext)
-    : ApiBaseEntity<Long, Movie, EntityService<Long, Movie>>(ctx, Long::class, Movie::class, ctx.ent.getSvc(Movie::class)) {
+    : ApiBaseEntity<Long, Movie, EntityService<Long, Movie>>(ctx, Long::class, Movie::class, ctx.ent.getService()) {
 
     @Action(name = "", desc = "gets the total number of users")
     fun patch(id:Long, title:String): String = "patched $id with $title"

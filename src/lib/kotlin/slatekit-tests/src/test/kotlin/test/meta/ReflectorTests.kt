@@ -207,9 +207,8 @@ class ReflectorTests : TestSupport {
 
 
     @Test fun can_call_method() {
-        ctx.ent.prototype<User>(User::class)
         val api = UserApi(ctx)
-        val res = Reflector.callMethod(UserApi::class, api, "activate", arrayOf("123456789", 987, true, DateTimes.of(2017, 5, 27)))
+        val res = Reflector.callMethod(UserApi::class, api, UserApi::activate.name, arrayOf("123456789", 987, true, DateTimes.of(2017, 5, 27)))
         val result = res as Notice<String>
         val v = result.getOrElse { "" }
         Assert.assertTrue(v == "ok")

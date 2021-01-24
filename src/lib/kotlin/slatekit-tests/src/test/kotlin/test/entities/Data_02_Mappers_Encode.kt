@@ -2,7 +2,6 @@ package test.entities
 
 import org.junit.Assert
 import org.junit.Test
-import org.threeten.bp.LocalTime
 import slatekit.common.data.DataAction
 import slatekit.data.core.LongId
 import slatekit.data.core.Meta
@@ -10,9 +9,6 @@ import slatekit.data.core.Table
 import slatekit.entities.mapper.EntityEncoder
 import slatekit.entities.mapper.EntitySettings
 import slatekit.meta.models.ModelMapper
-import java.time.temporal.ChronoField
-import java.time.temporal.TemporalAccessor
-import java.time.temporal.TemporalField
 
 
 class Data_02_Mappers_Encode {
@@ -45,9 +41,9 @@ class Data_02_Mappers_Encode {
     @Test
     fun can_encode_model_immutable() {
         val model = ModelMapper.loadSchema(SampleEntityImmutable::class)
-        val mapper = EntityEncoder<Long, SampleEntityImmutable>(model, EntityFixtures.meta, settings = EntitySettings(false), encryptor = EntityFixtures.enc)
-        val sample = EntityFixtures.sampleImmutable()
-        val values = mapper.encode(sample, DataAction.Create, EntityFixtures.enc)
+        val mapper = EntityEncoder<Long, SampleEntityImmutable>(model, EntitySetup.meta, settings = EntitySettings(false), encryptor = EntitySetup.enc)
+        val sample = EntitySetup.sampleImmutable()
+        val values = mapper.encode(sample, DataAction.Create, EntitySetup.enc)
         values.forEachIndexed { ndx, v ->
             println(v.name + " = " + v.value)
             Assert.assertEquals(expected[ndx].first, v.name)
@@ -60,9 +56,9 @@ class Data_02_Mappers_Encode {
     fun can_encode_model_mutable() {
         val model = ModelMapper.loadSchema(SampleEntityMutable::class)
         val meta = Meta<Long, SampleEntityMutable>(LongId { m -> m.id }, Table("sample1"))
-        val mapper = EntityEncoder<Long, SampleEntityMutable>(model, meta, settings = EntitySettings(false), encryptor = EntityFixtures.enc)
-        val sample = EntityFixtures.sampleMutable()
-        val values = mapper.encode(sample, DataAction.Create, EntityFixtures.enc)
+        val mapper = EntityEncoder<Long, SampleEntityMutable>(model, meta, settings = EntitySettings(false), encryptor = EntitySetup.enc)
+        val sample = EntitySetup.sampleMutable()
+        val values = mapper.encode(sample, DataAction.Create, EntitySetup.enc)
         values.forEachIndexed { ndx, v ->
             val expectedVal = expected.first { it.first == v.name }
             println(v.name + " = " + v.value)

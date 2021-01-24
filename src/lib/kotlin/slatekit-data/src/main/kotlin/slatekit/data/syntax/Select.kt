@@ -20,6 +20,17 @@ open class Select<TId, T>(val info: Meta<TId, T>, val mapper: Mapper<TId, T>, va
     }
 
     /**
+     * Builds the full SQL statement
+     * e.g. "select * from `movies` where id = 1;"
+     */
+    open fun stmt(ids:List<TId>): String {
+        val name = encode(info.pkey.name, info.table.encodeChar)
+        val delimited = ids.joinToString(",")
+        val sql = "${prefix()} where $name in ($delimited);"
+        return sql
+    }
+
+    /**
      * Builds sql statement with values as placeholders for prepared statements
      * e.g. "select * from `movies` where id = ?;"
      */
