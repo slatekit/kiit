@@ -3,14 +3,14 @@ package slatekit.data.support
 import slatekit.common.DateTimes
 import slatekit.common.Prototyping
 import slatekit.common.utils.ListMap
-import slatekit.data.SqlRepo
-import slatekit.data.core.Table
+import slatekit.data.FullRepo
 import slatekit.data.events.EntityAction
 import slatekit.data.events.EntityEvent
 import slatekit.data.events.EntityHooks
-import slatekit.data.core.Id
 import slatekit.data.core.Meta
-import slatekit.query.Op
+import slatekit.common.data.Filter
+import slatekit.common.data.Logical
+import slatekit.common.data.Value
 
 /**
  * Used mostly for Prototyping and Testing.
@@ -21,7 +21,7 @@ import slatekit.query.Op
 @Prototyping("NON-PRODUCTION USAGE: Used for prototyping, proof-of-concept, tests")
 class InMemoryRepo<TId, T>(override val meta: Meta<TId, T>,
                            private val idGen: IdGenerator<TId>,
-                           private val hooks: EntityHooks<TId, T>?) : SqlRepo<TId, T> where TId : Comparable<TId>, T : Any {
+                           private val hooks: EntityHooks<TId, T>?) : FullRepo<TId, T> where TId : Comparable<TId>, T : Any {
     // Ordered list + map features
     private var items = ListMap<TId, T>(listOf())
 
@@ -118,19 +118,15 @@ class InMemoryRepo<TId, T>(override val meta: Meta<TId, T>,
         }
     }
 
-    override fun deleteByFields(conditions: List<Triple<String, Op, Any?>>): Int {
+    override fun deleteByFilters(filters: List<Filter>, logical: Logical): Int {
         TODO("This class for prototyping purposes only: Not yet implemented")
     }
 
-    override fun patchByFields(fields: List<Pair<String, Any?>>, conditions: List<Triple<String, Op, Any?>>): Int {
+    override fun patchByFilters(fields: List<Value>, filters: List<Filter>, logical: Logical): Int {
         TODO("This class for prototyping purposes only: Not yet implemented")
     }
 
-    override fun findByFields(conditions: List<Triple<String, Op, Any>>): List<T> {
-        TODO("This class for prototyping purposes only: Not yet implemented")
-    }
-
-    override fun findOneByField(field: String, op: Op, value: Any): T? {
+    override fun findByFilters(filters: List<Filter>, logical: Logical): List<T> {
         TODO("This class for prototyping purposes only: Not yet implemented")
     }
 

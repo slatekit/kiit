@@ -1,5 +1,7 @@
 package slatekit.entities.features
 
+import slatekit.data.features.Countable
+import slatekit.data.features.Orderable
 import slatekit.entities.Entity
 import slatekit.entities.core.EntityOps
 
@@ -13,7 +15,7 @@ interface Ordered<TId, T> : EntityOps<TId, T> where TId : kotlin.Comparable<TId>
      * @return
      */
     fun top(count: Int, desc: Boolean): List<T> {
-        return repo().top(count, desc)
+        return performCount {  it.seq(count, desc) } ?: listOf()
     }
 
     /**
@@ -21,7 +23,7 @@ interface Ordered<TId, T> : EntityOps<TId, T> where TId : kotlin.Comparable<TId>
      * @return
      */
     fun first(): T? {
-        return repo().first()
+        return performCount { it.first() }
     }
 
     /**
@@ -29,7 +31,7 @@ interface Ordered<TId, T> : EntityOps<TId, T> where TId : kotlin.Comparable<TId>
      * @return
      */
     fun last(): T? {
-        return repo().last()
+        return performCount {  it.last() }
     }
 
     /**
@@ -38,7 +40,7 @@ interface Ordered<TId, T> : EntityOps<TId, T> where TId : kotlin.Comparable<TId>
      * @return
      */
     fun recent(count: Int): List<T> {
-        return repo().recent(count)
+        return performCount {  it.recent(count) } ?: listOf()
     }
 
     /**
@@ -47,6 +49,15 @@ interface Ordered<TId, T> : EntityOps<TId, T> where TId : kotlin.Comparable<TId>
      * @return
      */
     fun oldest(count: Int): List<T> {
-        return repo().oldest(count)
+        return performCount { it.oldest(count) } ?: listOf()
+    }
+
+
+    fun <A> performCount(op:(Orderable<TId, T>)-> A): A? {
+        val r = repo()
+        return if(r is Orderable<*, *>){
+            op(r as Orderable<TId, T>)
+        }
+        else null
     }
 }

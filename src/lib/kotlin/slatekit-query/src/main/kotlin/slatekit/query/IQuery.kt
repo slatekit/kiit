@@ -13,6 +13,7 @@
 
 package slatekit.query
 
+
 /**
  * Created by kreddy on 12/24/2015.
  */

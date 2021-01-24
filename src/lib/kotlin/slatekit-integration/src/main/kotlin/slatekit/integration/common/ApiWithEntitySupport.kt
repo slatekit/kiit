@@ -30,22 +30,14 @@ interface ApiWithEntitySupport<TId, T, TSvc> where TId:Comparable<TId>, T : Enti
     val entities: Entities
     val entitySvc: EntityService<TId, T>
 
-    @Action(name = "", desc = "gets the total number of users")
-    fun total(): Long {
-        return entitySvc.count()
-    }
-
-    @Action(name = "", desc = "whether or not this dataset is empty")
-    fun isEmpty(): Boolean = total() == 0L
-
     @Action(name = "", desc = "gets the first item")
     fun getById(id: TId): T? {
-        return entitySvc.get(id)
+        return entitySvc.getById(id)
     }
 
     @Action(name = "", desc = "gets the first item")
     fun copy(id: TId): T? {
-        val item = entitySvc.get(id)
+        val item = entitySvc.getById(id)
         return item?.let { model ->
             when (model) {
                 is EntityUpdatable<*, *> -> createFrom(model as EntityUpdatable<TId, T>)
@@ -69,25 +61,33 @@ interface ApiWithEntitySupport<TId, T, TSvc> where TId:Comparable<TId>, T : Enti
         entitySvc.update(item)
     }
 
-    @Action(name = "", desc = "gets the first item")
-    fun first(): T? {
-        return entitySvc.first()
-    }
-
-    @Action(name = "", desc = "gets the last item")
-    fun last(): T? {
-        return entitySvc.last()
-    }
-
-    @Action(name = "", desc = "gets recent items in the system")
-    fun recent(count: Int = 5): List<T> {
-        return entitySvc.recent(count)
-    }
-
-    @Action(name = "", desc = "gets oldest items in the system")
-    fun oldest(count: Int = 5): List<T> {
-        return entitySvc.oldest(count)
-    }
+//    @Action(name = "", desc = "gets the total number of users")
+//    fun total(): Long {
+//        return entitySvc.count()
+//    }
+//
+//    @Action(name = "", desc = "whether or not this dataset is empty")
+//    fun isEmpty(): Boolean = total() == 0L
+//
+//    @Action(name = "", desc = "gets the first item")
+//    fun first(): T? {
+//        return entitySvc.first()
+//    }
+//
+//    @Action(name = "", desc = "gets the last item")
+//    fun last(): T? {
+//        return entitySvc.last()
+//    }
+//
+//    @Action(name = "", desc = "gets recent items in the system")
+//    fun recent(count: Int = 5): List<T> {
+//        return entitySvc.recent(count)
+//    }
+//
+//    @Action(name = "", desc = "gets oldest items in the system")
+//    fun oldest(count: Int = 5): List<T> {
+//        return entitySvc.oldest(count)
+//    }
 
     @Action(name = "", desc = "gets distinct items based on the field")
     fun distinct(field: String): List<Any> {

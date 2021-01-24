@@ -11,7 +11,7 @@ import slatekit.context.AppContext
 import slatekit.common.data.Vendor
 import slatekit.integration.apis.InfoApi
 import slatekit.integration.apis.VersionApi
-import slatekit.orm.orm
+//import slatekit.orm.orm
 import slatekit.results.getOrElse
 import test.TestApp
 import test.setup.*
@@ -31,7 +31,7 @@ class Api_Setup_Tests : ApiTestsBase() {
 
 
     @Test fun can_setup_instance_as_new_with_context() {
-        ctx.ent.orm<Long, Movie>(Vendor.Memory, Long::class, Movie::class)
+        //ctx.ent.orm<Long, Movie>(Vendor.Memory, Long::class, Movie::class)
         val apis = ApiServer(ctx, apis = listOf(Api(SampleEntityApi::class, "app", "SampleEntity")))
         val result = apis.get("app", "SampleEntity", "patch" )
 
@@ -77,7 +77,7 @@ class Api_Setup_Tests : ApiTestsBase() {
 
 
     @Test fun can_setup_instance_with_compositional_apis_with_annotations() {
-        ctx.ent.orm<Long, Movie>(Vendor.Memory, Long::class, Movie::class)
+        //ctx.ent.orm<Long, Movie>(Vendor.Memory, Long::class, Movie::class)
         val apis = ApiServer(ctx, apis = listOf(Api(SampleEntity2Api::class, declaredOnly = false, setup = SetupType.Annotated)))
         Assert.assertTrue( apis.get("app"   , "tests", "patch" ).success)
         Assert.assertTrue( apis.get("app"   , "tests", "recent" ).success)

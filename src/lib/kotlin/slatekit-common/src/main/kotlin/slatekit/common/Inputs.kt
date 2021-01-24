@@ -90,6 +90,13 @@ interface Inputs : Gets {
         } ?: mapOf<Any, Any>()
     }
 
-    override fun <T> getOrNull(key: String, fetcher: (String) -> T): T? = if (containsKey(key)) fetcher(key) else null
+    override fun <T> getOrNull(key: String, fetcher: (String) -> T): T? {
+        return if (containsKey(key)) {
+            val v = get(key)
+            v?.let { fetcher(key) }
+        } else {
+            null
+        }
+    }
     override fun <T> getOrElse(key: String, fetcher: (String) -> T, default: T): T = if (containsKey(key)) fetcher(key) else default
 }

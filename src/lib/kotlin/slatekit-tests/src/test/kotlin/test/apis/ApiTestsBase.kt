@@ -67,7 +67,7 @@ open class ApiTestsBase {
                 dbs = of(DbConString("com.mysql.jdbc.Driver", "jdbc:mysql://localhost/World_shard2", "root", "abcdefghi")),
                 enc = MyEncryptor
         )
-        ctx.ent.prototype<User>(User::class, serviceCtx = ctx)
+        //ctx.ent.prototype<User>(User::class, serviceCtx = ctx)
         return ctx
     }
 

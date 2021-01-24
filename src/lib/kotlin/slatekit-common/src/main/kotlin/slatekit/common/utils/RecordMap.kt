@@ -25,7 +25,7 @@ import slatekit.common.ext.local
 import slatekit.common.ext.time
 import java.util.*
 
-class RecordMap(private val rs: ListMap<String, Any>) : Record {
+class RecordMap(private val rs: ListMap<String, Any?>) : Record {
 
     override val raw: Any = rs
     override fun size(): Int = rs.size

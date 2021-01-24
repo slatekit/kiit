@@ -13,18 +13,18 @@
 
 package slatekit.entities.core
 
+import slatekit.common.data.Mapper
 import kotlin.reflect.KClass
 import slatekit.common.data.Vendor
 import slatekit.common.data.Vendor.MySql
-import slatekit.entities.EntityMapper
 import slatekit.entities.EntityRepo
 import slatekit.entities.EntityService
+import slatekit.entities.mapper.EntityMapper
 import slatekit.meta.models.Model
 
 /**
  *
  * @param entityType : the type of the entity
- * @param entityServiceType : the type of the service    ( EntityService[T] or derivative )
  * @param entityServiceInstance : an instance of the service ( singleton usage )
  * @param entityRepoInstance : an instance of the repo    ( singleton usage )
  * @param entityMapperInstance : an instance of the mapper  ( singleton usage )
@@ -37,15 +37,13 @@ import slatekit.meta.models.Model
 open class EntityContext(
     val entityType: KClass<*>,
     val entityIdType: KClass<*>,
-    val entityServiceType: KClass<*>,
+    val entityServiceInstance: EntityService<*, *>,
     val entityRepoInstance: EntityRepo<*, *>,
     val entityMapperInstance: EntityMapper<*, *>,
     val vendor: Vendor = MySql,
     val model: Model,
     val dbKey: String = "",
-    val dbShard: String = "",
-    val entityServiceInstance: EntityService<*, *>? = null,
-    val entityServiceContext: Any? = null
+    val dbShard: String = ""
 ) {
     val entityTypeName = entityType.qualifiedName ?: ""
     val entityRepoType: KClass<*> = entityRepoInstance::class

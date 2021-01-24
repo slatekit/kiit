@@ -1,5 +1,9 @@
 package slatekit.entities.features
 
+import slatekit.query.Op
+import slatekit.common.data.Filter
+import slatekit.common.data.Logical
+import slatekit.common.data.Value
 import kotlin.reflect.KProperty
 import slatekit.entities.Entity
 import slatekit.data.events.EntityAction
@@ -27,7 +31,7 @@ interface Updates<TId, T> : EntityOps<TId, T> where TId : kotlin.Comparable<TId>
      * @param entity
      * @return
      */
-    fun patch(id:TId, values:List<Pair<String,Any?>>): Int {
+    fun patch(id:TId, values:List<Value>): Int {
         return repo().patchById(id, values)
     }
 
@@ -84,13 +88,6 @@ interface Updates<TId, T> : EntityOps<TId, T> where TId : kotlin.Comparable<TId>
     }
 
     /**
-     * updates items by a stored proc
-     */
-    fun updateByProc(name: String, args: List<Any>? = null): Int {
-        return repo().updateByProc(name, args)
-    }
-
-    /**
      * updates items using the query
      */
     fun updateByQuery(query: IQuery): Int {
@@ -116,6 +113,6 @@ interface Updates<TId, T> : EntityOps<TId, T> where TId : kotlin.Comparable<TId>
      */
     fun patchByFields(prop: KProperty<*>, oldValue: Any?, newValue:Any?): Int {
         val column = columnName(prop.name)
-        return repo().patchByFields(listOf(Pair(column, oldValue)), listOf(Pair(column, newValue)))
+        return repo().patchByFilters(listOf(Value(column, oldValue)), listOf(Filter(column, Op.Eq, newValue)), Logical.And)
     }
 }

@@ -104,44 +104,7 @@ open class ModelMapper(
     override fun toString(): String =
             metaModel.fields.fold("", { s, field -> s + field.toString() + newline })
 
-    companion object {
 
-        /**
-         * Builds a schema ( Model ) from the Class/Type supplied.
-         * NOTE: The mapper then works off the Model class for to/from mapping of data to model.
-         * @param dataType
-         * @return
-         */
-        @JvmStatic
-        fun loadSchema(dataType: KClass<*>, idFieldName: String? = null, namer: Namer? = null, table: String? = null): Model {
-            val modelName = dataType.simpleName ?: ""
-            val modelNameFull = dataType.qualifiedName ?: ""
-
-            // Get Id
-            val idFields = Reflector.getAnnotatedProps<Id>(dataType, Id::class)
-            val idField = idFields.firstOrNull()
-
-            // Now add all the fields.
-            val matchedFields = Reflector.getAnnotatedProps<Field>(dataType, Field::class)
-
-            // Loop through each field
-            val withAnnos = matchedFields.filter { it.second != null }
-            val fields = withAnnos.map { matchedField ->
-                val modelField = ModelField.ofData(matchedField.first, matchedField.second!!,
-                        namer, idField == null, idFieldName)
-                val finalModelField = if (!modelField.isBasicType()) {
-                    val model = loadSchema(modelField.dataCls, namer = namer)
-                    modelField.copy(model = model)
-                } else modelField
-                finalModelField
-            }
-            val allFields = when(idField) {
-                null -> fields
-                else -> mutableListOf(ModelField.ofId(idField.first, "", namer)).plus(fields)
-            }
-            return Model(modelName, modelNameFull, dataType, modelFields = allFields, namer = namer, tableName = table ?: "")
-        }
-    }
 
     private fun decodeValType(prefix: String?, record: Record, model: Model, enc:Encryptor? = null): Any? {
         return if (model.any) {
@@ -225,6 +188,45 @@ open class ModelMapper(
             } else {
                 raw
             }
+        }
+    }
+
+    companion object {
+
+        /**
+         * Builds a schema ( Model ) from the Class/Type supplied.
+         * NOTE: The mapper then works off the Model class for to/from mapping of data to model.
+         * @param dataType
+         * @return
+         */
+        @JvmStatic
+        fun loadSchema(dataType: KClass<*>, idFieldName: String? = null, namer: Namer? = null, table: String? = null): Model {
+            val modelName = dataType.simpleName ?: ""
+            val modelNameFull = dataType.qualifiedName ?: ""
+
+            // Get Id
+            val idFields = Reflector.getAnnotatedProps<Id>(dataType, Id::class)
+            val idField = idFields.firstOrNull()
+
+            // Now add all the fields.
+            val matchedFields = Reflector.getAnnotatedProps<Field>(dataType, Field::class)
+
+            // Loop through each field
+            val withAnnos = matchedFields.filter { it.second != null }
+            val fields = withAnnos.map { matchedField ->
+                val modelField = ModelField.ofData(matchedField.first, matchedField.second!!,
+                        namer, idField == null, idFieldName)
+                val finalModelField = if (!modelField.isBasicType()) {
+                    val model = loadSchema(modelField.dataCls, namer = namer)
+                    modelField.copy(model = model)
+                } else modelField
+                finalModelField
+            }
+            val allFields = when(idField) {
+                null -> fields
+                else -> mutableListOf(ModelField.ofId(idField.first, "", namer)).plus(fields)
+            }
+            return Model(modelName, modelNameFull, dataType, modelFields = allFields, namer = namer, tableName = table ?: modelName)
         }
     }
 }

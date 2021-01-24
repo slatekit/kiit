@@ -26,7 +26,7 @@ interface Relations<TId, T> : EntityOps<TId, T> where TId : kotlin.Comparable<TI
         val entity = repo().getById(id)
         return entity?.let { ent ->
             val id = prop.getter.call(entity) as TId
-            val relRepo = entities().getRepo<TId, R>(model)
+            val relRepo = entities().getRepo(model as KClass<R>)
             val rel = relRepo.getById(id)
             rel
         }
@@ -46,7 +46,7 @@ interface Relations<TId, T> : EntityOps<TId, T> where TId : kotlin.Comparable<TI
         val entity = repo().getById(id)
         return entity?.let { ent ->
             val id = prop.getter.call(entity) as TId
-            val relRepo = entities().getRepo<TId, R>(model)
+            val relRepo = entities().getRepo(model as KClass<R>)
             val rel = relRepo.getById(id)
             Pair(entity, rel)
         } ?: Pair(null, null)
@@ -65,7 +65,7 @@ interface Relations<TId, T> : EntityOps<TId, T> where TId : kotlin.Comparable<TI
         NOTE.IMPROVE("entities", "This should ideally be in 1 database call")
         val entity = repo().getById(id)
         return entity?.let { ent ->
-            val relRepo = entities().getRepo<TId, R>(model)
+            val relRepo = entities().getRepo(model as KClass<R>)
             val relations = relRepo.findByField(prop.name, Op.Eq, id)
             Pair(entity, relations)
         } ?: Pair(null, listOf())
