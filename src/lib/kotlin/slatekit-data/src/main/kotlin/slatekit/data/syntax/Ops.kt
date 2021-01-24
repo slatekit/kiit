@@ -1,17 +1,17 @@
 package slatekit.data.syntax
 
-import slatekit.common.data.Compare
+import slatekit.query.Op
 
 open class Ops {
-    open fun toOp(op: Compare):String {
+    open fun toOp(op: Op):String {
         return when (op) {
-            Compare.Gt -> ">"
-            Compare.Gte -> ">="
-            Compare.Lt -> "<"
-            Compare.Lte -> "<="
-            Compare.Eq -> "is"
-            Compare.Neq -> "is not"
-            Compare.In -> "in"
+            Op.Gt -> ">"
+            Op.Gte -> ">="
+            Op.Lt -> "<"
+            Op.Lte -> "<="
+            Op.Eq -> "is"
+            Op.Neq -> "is not"
+            Op.In -> "in"
             else   -> "is"
         }
     }

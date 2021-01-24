@@ -17,6 +17,7 @@ import slatekit.common.data.*
 import slatekit.data.core.Meta
 import slatekit.data.syntax.Syntax
 import slatekit.data.slatekit.data.features.Scriptable
+import slatekit.query.IQuery
 
 /**
  *
@@ -28,8 +29,8 @@ import slatekit.data.slatekit.data.features.Scriptable
 open class SqlRepo<TId, T>(
     val db: IDb,
     override val meta: Meta<TId, T>,
-    val syntax: Syntax<TId, T>,
-    val mapper: Mapper<TId, T>
+    val mapper: Mapper<TId, T>,
+    val syntax: Syntax<TId, T>
 ) : FullRepo<TId, T>, Scriptable<TId, T> where TId : Comparable<TId>, T : Any {
 
     /**
@@ -147,6 +148,60 @@ open class SqlRepo<TId, T>(
         val sql = syntax.select.take(count, desc)
         val items = mapAll(sql) ?: listOf<T>()
         return items
+    }
+
+    /**
+     * updates items using the query
+     * @param query: The query builder
+     */
+    override fun updateByQuery(query: IQuery): Int {
+        val prefix = syntax.update.prefix()
+        val updateSql = query.toUpdatesText()
+        val sql = "$prefix $updateSql;"
+        return update(sql)
+    }
+
+    /**
+     * deletes items using the query
+     * @param query: The query builder
+     * @return
+     */
+    override fun deleteByQuery(query: IQuery): Int {
+        val prefix = syntax.delete.prefix()
+        val filter = query.toFilter()
+        val sql = "$prefix where $filter;"
+        return update(sql)
+    }
+
+    /**
+     * Gets the total number of records based on the query provided.
+     */
+    override fun countByQuery(query: IQuery): Long {
+        val prefix = syntax.select.count()
+        val filter = query.toFilter()
+        val sql = "$prefix where $filter;"
+        val count = getScalarLong(sql)
+        return count
+    }
+
+    /**
+     * Finds items using the query builder
+     */
+    override fun findByQuery(query: IQuery): List<T> {
+        val prefix = syntax.select.prefix()
+        val filter = query.toFilter()
+        val sql = "$prefix where $filter;"
+        val results = mapAll(sql)
+        return results ?: listOf()
+    }
+
+    /**
+     * finds first item based on the query
+     * @param query: name of field
+     * @return
+     */
+    override fun findOneByQuery(query: IQuery): T? {
+        return findByQuery(query.limit(1)).firstOrNull()
     }
 
     override fun createByProc(name: String, args: List<Any>?): TId {

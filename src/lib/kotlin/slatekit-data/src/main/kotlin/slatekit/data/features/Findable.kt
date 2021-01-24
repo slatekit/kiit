@@ -1,6 +1,6 @@
 package slatekit.data.features
 
-import slatekit.common.data.Compare
+import slatekit.common.data.Op
 import slatekit.common.data.Filter
 import slatekit.common.data.Logical
 
@@ -15,7 +15,7 @@ interface Findable<TId, T> where TId : Comparable<TId> {
      * @param value: value of field to search against
      * @return
      */
-    fun findByField(field: String, op: Compare, value: Any): List<T> = findByFilters(listOf(Filter(field, op, value)), Logical.And)
+    fun findByField(field: String, op: Op, value: Any): List<T> = findByFilters(listOf(Filter(field, op, value)), Logical.And)
 
 
     /**
@@ -24,7 +24,7 @@ interface Findable<TId, T> where TId : Comparable<TId> {
      * @param value: values of field to search against
      * @return
      */
-    fun findIn(field: String, value: List<Any>): List<T> = findByFilters(listOf(Filter(field, Compare.In, value)), Logical.And)
+    fun findIn(field: String, value: List<Any>): List<T> = findByFilters(listOf(Filter(field, Op.In, value)), Logical.And)
 
 
     /**
@@ -42,7 +42,7 @@ interface Findable<TId, T> where TId : Comparable<TId> {
      * @param value: value of field to search against
      * @return
      */
-    fun findOneByField(field: String, value: Any): T? = findOneByField(field, Compare.Eq, value)
+    fun findOneByField(field: String, value: Any): T? = findOneByField(field, Op.Eq, value)
 
 
     /**
@@ -52,5 +52,5 @@ interface Findable<TId, T> where TId : Comparable<TId> {
      * @param value: value of field to search against
      * @return
      */
-    fun findOneByField(field: String, op: Compare, value: Any): T? = findByFilters(listOf(Filter(field, op, value)), Logical.And).firstOrNull()
+    fun findOneByField(field: String, op: Op, value: Any): T? = findByFilters(listOf(Filter(field, op, value)), Logical.And).firstOrNull()
 }

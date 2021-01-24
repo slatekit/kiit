@@ -1,6 +1,6 @@
 package slatekit.data.features
 
-import slatekit.common.data.Compare
+import slatekit.query.Op
 import slatekit.common.data.Filter
 import slatekit.common.data.Logical
 
@@ -14,7 +14,7 @@ interface Deletable<TId, T> where TId : Comparable<TId> {
      * @param value: The value to check for
      * @return
      */
-    fun deleteByField(field: String, value: Any?): Int = deleteByField(field, Compare.Eq, value)
+    fun deleteByField(field: String, value: Any?): Int = deleteByField(field, Op.Eq, value)
 
 
     /**
@@ -24,7 +24,7 @@ interface Deletable<TId, T> where TId : Comparable<TId> {
      * @param value: The value to check for
      * @return
      */
-    fun deleteByField(field: String, op: Compare, value: Any?): Int = deleteByFilters(listOf(Filter(field, op, value)), Logical.And)
+    fun deleteByField(field: String, op: Op, value: Any?): Int = deleteByFilters(listOf(Filter(field, op, value)), Logical.And)
 
 
     /**

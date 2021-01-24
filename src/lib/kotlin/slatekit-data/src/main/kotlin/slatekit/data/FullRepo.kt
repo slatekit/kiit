@@ -11,6 +11,7 @@ interface FullRepo<TId, T>:
     Deletable<TId, T>,
     Findable<TId, T>,
     Orderable<TId, T>,
-    Patchable<TId, T>
+    Patchable<TId, T>,
+    Queryable<TId, T>
     where TId : Comparable<TId>, T: Any {
 }

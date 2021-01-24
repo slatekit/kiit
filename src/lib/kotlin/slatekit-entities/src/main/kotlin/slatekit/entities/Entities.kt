@@ -20,6 +20,7 @@ import slatekit.common.log.Logs
 import slatekit.common.log.LogsDefault
 import slatekit.common.naming.Namer
 import slatekit.common.utils.ListMap
+import slatekit.data.SqlRepo
 import slatekit.data.core.*
 import slatekit.entities.core.*
 import slatekit.data.syntax.SqlSyntax
@@ -101,7 +102,7 @@ open class Entities(
 
         // 4. Mapper
         val entityMapper = EntityMapper<TId, T>(entityModel, entityMeta, idType, enType, EntitySettings(true))
-        val entityRepo = EntitySqlRepo<TId, T>(getDb(), entityInfo, entityMeta, entityMapper, SqlSyntax(entityMeta, entityMapper))
+        val entityRepo = EntityRepo<TId, T>(getDb(), entityMeta, entityMapper, SqlSyntax(entityMeta, entityMapper))
         val entityService = builder(entityRepo)
 
         // 5. Context has all relevant info

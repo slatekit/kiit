@@ -1,6 +1,6 @@
 package slatekit.entities.features
 
-import slatekit.common.data.Compare
+import slatekit.common.data.Op
 import slatekit.common.data.Filter
 import slatekit.common.data.Logical
 import slatekit.common.data.Value
@@ -113,6 +113,6 @@ interface Updates<TId, T> : EntityOps<TId, T> where TId : kotlin.Comparable<TId>
      */
     fun patchByFields(prop: KProperty<*>, oldValue: Any?, newValue:Any?): Int {
         val column = columnName(prop.name)
-        return repo().patchByFilters(listOf(Value(column, oldValue)), listOf(Filter(column, Compare.Eq, newValue)), Logical.And)
+        return repo().patchByFilters(listOf(Value(column, oldValue)), listOf(Filter(column, Op.Eq, newValue)), Logical.And)
     }
 }

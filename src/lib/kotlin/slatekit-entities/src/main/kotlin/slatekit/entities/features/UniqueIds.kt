@@ -4,7 +4,7 @@ import java.util.*
 import slatekit.entities.Entity
 import slatekit.entities.EntityWithUUID
 import slatekit.entities.core.EntityOps
-import slatekit.common.data.Compare
+import slatekit.common.data.Op
 
 /**
  * NOTE: There is only 1 type constraint on the type parameter T to be Entity
@@ -20,7 +20,7 @@ interface UniqueIds<TId, T> : EntityOps<TId, T> where TId : kotlin.Comparable<TI
      * @return
      */
     fun getByUUID(id: String): T? {
-        return repo().findOneByField(EntityWithUUID::uuid.name, Compare.Eq, id)
+        return repo().findOneByField(EntityWithUUID::uuid.name, Op.Eq, id)
     }
 
     /**
@@ -29,7 +29,7 @@ interface UniqueIds<TId, T> : EntityOps<TId, T> where TId : kotlin.Comparable<TI
      * @return
      */
     fun getByUUID(id: UUID): T? {
-        return repo().findOneByField(EntityWithUUID::uuid.name, Compare.Eq, id.toString())
+        return repo().findOneByField(EntityWithUUID::uuid.name, Op.Eq, id.toString())
     }
 
     /**
@@ -38,6 +38,6 @@ interface UniqueIds<TId, T> : EntityOps<TId, T> where TId : kotlin.Comparable<TI
      * @return
      */
     fun getByUUIDs(ids: List<String>): List<T>? {
-        return repo().findByField(EntityWithUUID::uuid.name, Compare.In, ids)
+        return repo().findByField(EntityWithUUID::uuid.name, Op.In, ids)
     }
 }

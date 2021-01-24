@@ -13,7 +13,7 @@
 
 package slatekit.query
 
-import slatekit.common.data.Compare
+import slatekit.common.data.Op
 import java.util.concurrent.atomic.AtomicInteger
 
 /**
@@ -146,7 +146,7 @@ open class Query : IQuery {
      * @param fieldValue: The field value
      * @return this instance
      */
-    override fun where(field: String, compare: Compare, fieldValue: Any?): IQuery {
+    override fun where(field: String, compare: Op, fieldValue: Any?): IQuery {
         val finalValue = fieldValue ?: Null
         return where(field, compare.text, finalValue)
     }
@@ -166,7 +166,7 @@ open class Query : IQuery {
         return this
     }
 
-    override fun and(field: String, compare: Compare, fieldValue: Any?): IQuery {
+    override fun and(field: String, compare: Op, fieldValue: Any?): IQuery {
         val finalValue = fieldValue ?: Null
         return and(field, compare.text, finalValue)
     }
@@ -186,7 +186,7 @@ open class Query : IQuery {
         return this
     }
 
-    override fun or(field: String, compare: Compare, fieldValue: Any?): IQuery {
+    override fun or(field: String, compare: Op, fieldValue: Any?): IQuery {
         val finalValue = fieldValue ?: Null
         return or(field, compare.text, finalValue)
     }

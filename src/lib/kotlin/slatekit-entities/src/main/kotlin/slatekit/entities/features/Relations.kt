@@ -6,7 +6,7 @@ import slatekit.common.NOTE
 import slatekit.entities.Entities
 import slatekit.entities.Entity
 import slatekit.entities.core.EntityOps
-import slatekit.common.data.Compare
+import slatekit.common.data.Op
 
 interface Relations<TId, T> : EntityOps<TId, T> where TId : kotlin.Comparable<TId>, T : Entity<TId> {
 
@@ -66,7 +66,7 @@ interface Relations<TId, T> : EntityOps<TId, T> where TId : kotlin.Comparable<TI
         val entity = repo().getById(id)
         return entity?.let { ent ->
             val relRepo = entities().getRepo(model as KClass<R>)
-            val relations = relRepo.findByField(prop.name, Compare.Eq, id)
+            val relations = relRepo.findByField(prop.name, Op.Eq, id)
             Pair(entity, relations)
         } ?: Pair(null, listOf())
     }

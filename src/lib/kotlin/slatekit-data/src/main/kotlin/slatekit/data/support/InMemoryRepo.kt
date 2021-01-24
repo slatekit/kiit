@@ -8,7 +8,6 @@ import slatekit.data.events.EntityAction
 import slatekit.data.events.EntityEvent
 import slatekit.data.events.EntityHooks
 import slatekit.data.core.Meta
-import slatekit.common.data.Compare
 import slatekit.common.data.Filter
 import slatekit.common.data.Logical
 import slatekit.common.data.Value

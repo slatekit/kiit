@@ -11,9 +11,9 @@
  * </slate_header>
  */
 
-package slatekit.common.data
+package slatekit.query
 
-enum class Compare(val text: String) {
+enum class Op(val text: String) {
     Eq("="),
     Neq("<>"),
     Gt(">"),
@@ -24,7 +24,3 @@ enum class Compare(val text: String) {
 }
 
 
-enum class Logical(val text: String) {
-    And("and"),
-    Or("or")
-}

@@ -2,7 +2,7 @@ package slatekit.data.slatekit.data.features
 
 import slatekit.common.DateTime
 import slatekit.data.features.Deletable
-import slatekit.common.data.Compare
+import slatekit.common.data.Op
 
 interface Purgeable<TId, T> : Deletable<TId, T> where TId : Comparable<TId> {
     /**
@@ -17,7 +17,7 @@ interface Purgeable<TId, T> : Deletable<TId, T> where TId : Comparable<TId> {
      * Purges data older before the timestamp
      */
     fun purge(field:String, timestamp:DateTime): Int  {
-        val count = deleteByField(field, Compare.Lt, timestamp)
+        val count = deleteByField(field, Op.Lt, timestamp)
         return count
     }
 }

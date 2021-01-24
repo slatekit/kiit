@@ -1,6 +1,6 @@
 package slatekit.data.features
 
-import slatekit.common.data.Compare
+import slatekit.query.Op
 import slatekit.common.data.Value
 import slatekit.common.data.Filter
 import slatekit.common.data.Logical
@@ -19,7 +19,7 @@ interface Patchable<TId, T> : Inspectable<TId, T> where TId : Comparable<TId>, T
     /**
      * Patch 1 item by its id using the updates provided
      */
-    fun patchById(id: TId, updates: List<Value>): Int = patchByFilters(updates, listOf(Filter(meta.pkey.name, Compare.Eq, id)), Logical.And)
+    fun patchById(id: TId, updates: List<Value>): Int = patchByFilters(updates, listOf(Filter(meta.pkey.name, Op.Eq, id)), Logical.And)
 
 
     /**

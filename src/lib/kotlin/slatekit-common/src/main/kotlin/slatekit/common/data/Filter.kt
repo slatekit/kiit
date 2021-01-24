@@ -7,4 +7,4 @@ package slatekit.common.data
  * @param op   : Operator such as ">, >=, <, <=, not"
  * @param value: Value to for the condition
  */
-data class Filter(val name:String, val op:Compare, val value:Any?)
+data class Filter(val name:String, val op:Op, val value:Any?)
