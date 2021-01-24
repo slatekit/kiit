@@ -281,14 +281,3 @@ open class EntityRepoInMemory<TId, T>(override val meta: Meta<TId, T>,
         TODO("Not yet implemented")
     }
 }
-
-
-class EntityMapperEmpty<TId, T>(model: Model, meta: Meta<TId, T>, idCls:KClass<TId>, enCls:KClass<T>)  : EntityMapper<TId, T>(model, meta, idCls, enCls) where TId : Comparable<TId>, T : Entity<TId> {
-    override fun encode(model: T, action: DataAction, enc: Encryptor?): Values {
-        TODO("Not yet implemented")
-    }
-
-    override fun decode(record: Record, enc: Encryptor?): T? {
-        TODO("Not yet implemented")
-    }
-}

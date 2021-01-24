@@ -45,8 +45,7 @@ open class EntityContext(
     val model: Model,
     val dbKey: String = "",
     val dbShard: String = "",
-    val entityServiceInstance: EntityService<*, *>? = null,
-    val entityServiceContext: Any? = null
+    val entityServiceInstance: EntityService<*, *>? = null
 ) {
     val entityTypeName = entityType.qualifiedName ?: ""
     val entityRepoType: KClass<*> = entityRepoInstance::class

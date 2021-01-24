@@ -59,10 +59,10 @@ data class SampleEntityImmutable(
         @property:Field()
         val test_zoneddatetime: DateTime = DateTimes.now(),
 
-        @property:Field(length = 50)
+        @property:Field(length = 50, unique = true)
         val test_uuid: UUID = UUID.randomUUID(),
 
-        @property:Field(length = 50)
+        @property:Field(length = 50, indexed = true)
         val test_uniqueId: UPID = UPIDs.create("usa"),
 
         @property:Field()
@@ -125,10 +125,10 @@ class SampleEntityMutable {
     @property:Field()
     var test_zoneddatetime: DateTime = DateTimes.now()
 
-    @property:Field(length = 50)
+    @property:Field(length = 50, unique = true)
     var test_uuid: UUID = UUID.randomUUID()
 
-    @property:Field(length = 50)
+    @property:Field(length = 50, indexed = true)
     var test_uniqueId: UPID = UPIDs.create("usa")
 
     @property:Field()

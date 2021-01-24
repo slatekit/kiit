@@ -36,8 +36,8 @@ open class EntitySqlRepo<TId, T>(
     db: IDb,
     override val info: EntityInfo,
     meta: Meta<TId, T>,
-    syntax: Syntax<TId, T>,
-    mapper: Mapper<TId, T>
+    mapper: Mapper<TId, T>,
+    syntax: Syntax<TId, T>
 ) : SqlRepo<TId, T>(db, meta, syntax, mapper), EntityRepo<TId, T>, Countable<TId, T>, Orderable<TId, T> where TId : Comparable<TId>, T : Any {
 
     /** ====================================================================================
