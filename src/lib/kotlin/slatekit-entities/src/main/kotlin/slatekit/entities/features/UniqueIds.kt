@@ -4,7 +4,7 @@ import java.util.*
 import slatekit.entities.Entity
 import slatekit.entities.EntityWithUUID
 import slatekit.entities.core.EntityOps
-import slatekit.common.data.Op
+import slatekit.query.Op
 
 /**
  * NOTE: There is only 1 type constraint on the type parameter T to be Entity

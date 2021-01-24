@@ -4,7 +4,7 @@ import kotlin.reflect.KProperty
 import slatekit.entities.Entity
 import slatekit.entities.core.EntityOps
 import slatekit.query.IQuery
-import slatekit.common.data.Op
+import slatekit.query.Op
 import slatekit.common.data.Filter
 import slatekit.common.data.Logical
 import slatekit.query.Query

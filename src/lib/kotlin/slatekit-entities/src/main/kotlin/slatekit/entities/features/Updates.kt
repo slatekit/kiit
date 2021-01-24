@@ -1,6 +1,6 @@
 package slatekit.entities.features
 
-import slatekit.common.data.Op
+import slatekit.query.Op
 import slatekit.common.data.Filter
 import slatekit.common.data.Logical
 import slatekit.common.data.Value

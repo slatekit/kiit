@@ -6,7 +6,7 @@ import slatekit.common.NOTE
 import slatekit.entities.Entities
 import slatekit.entities.Entity
 import slatekit.entities.core.EntityOps
-import slatekit.common.data.Op
+import slatekit.query.Op
 
 interface Relations<TId, T> : EntityOps<TId, T> where TId : kotlin.Comparable<TId>, T : Entity<TId> {
 
