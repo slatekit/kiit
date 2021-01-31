@@ -170,21 +170,21 @@ object DbUtils {
     }
 
     fun getTypeFromLang(dataType: Class<*>): DataType =
-            if (dataType == Types.JBoolClass) DataType.DbBool
-            else if (dataType == Types.JStringClass) DataType.DbString
-            else if (dataType == Types.JShortClass) DataType.DbShort
-            else if (dataType == Types.JIntClass) DataType.DbNumber
-            else if (dataType == Types.JLongClass) DataType.DbLong
-            else if (dataType == Types.JFloatClass) DataType.DbFloat
-            else if (dataType == Types.JDoubleClass) DataType.DbDouble
+            if (dataType == Types.JBoolClass) DataType.DTBool
+            else if (dataType == Types.JStringClass) DataType.DTString
+            else if (dataType == Types.JShortClass) DataType.DTShort
+            else if (dataType == Types.JIntClass) DataType.DTNumber
+            else if (dataType == Types.JLongClass) DataType.DTLong
+            else if (dataType == Types.JFloatClass) DataType.DTFloat
+            else if (dataType == Types.JDoubleClass) DataType.DTDouble
             // else if (dataType == Types.JDecimalClass) DataType.DbDecimal
-            else if (dataType == Types.JLocalDateClass) DataType.DbLocalDate
-            else if (dataType == Types.JLocalTimeClass) DataType.DbLocalTime
-            else if (dataType == Types.JLocalDateTimeClass) DataType.DbLocalDateTime
-            else if (dataType == Types.JZonedDateTimeClass) DataType.DbZonedDateTime
-            else if (dataType == Types.JInstantClass) DataType.DbInstant
-            else if (dataType == Types.JDateTimeClass) DataType.DbDateTime
-            else DataType.DbString
+            else if (dataType == Types.JLocalDateClass) DataType.DTLocalDate
+            else if (dataType == Types.JLocalTimeClass) DataType.DTLocalTime
+            else if (dataType == Types.JLocalDateTimeClass) DataType.DTLocalDateTime
+            else if (dataType == Types.JZonedDateTimeClass) DataType.DTZonedDateTime
+            else if (dataType == Types.JInstantClass) DataType.DTInstant
+            else if (dataType == Types.JDateTimeClass) DataType.DTDateTime
+            else DataType.DTString
 
 
     private fun LocalDate.toJava8LocalDate(): java.time.LocalDate {

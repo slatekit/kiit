@@ -1,9 +1,9 @@
 package slatekit.entities.core
 
+import slatekit.common.data.DataAction
 import java.util.*
 import slatekit.entities.Entity
 import slatekit.entities.EntityRepo
-import slatekit.data.events.EntityAction
 
 interface EntityOps<TId, T> where TId : Comparable<TId>, T : Entity<TId> {
 
@@ -15,7 +15,7 @@ interface EntityOps<TId, T> where TId : Comparable<TId>, T : Entity<TId> {
      * @param entity
      * @return
      */
-    fun applyFieldData(mode: EntityAction, entity: T): T {
+    fun applyFieldData(mode: DataAction, entity: T): T {
         return entity
     }
 

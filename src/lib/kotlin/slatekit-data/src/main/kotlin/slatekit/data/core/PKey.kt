@@ -8,4 +8,4 @@ import slatekit.common.data.DataType
  * @param type: Type of the primary key e..g "long"
  * NOTE: These are the defaults for Slate Kit, but can be customized here
  */
-data class PKey(val name:String = "id", val type: DataType = DataType.DbLong)
+data class PKey(val name:String = "id", val type: DataType = DataType.DTLong)

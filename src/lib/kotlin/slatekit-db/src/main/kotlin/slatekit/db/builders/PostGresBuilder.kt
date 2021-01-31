@@ -26,20 +26,20 @@ import slatekit.common.newline
 open class PostGresBuilder : DbBuilder {
 
     val types = listOf(
-        DataTypeMap(DataType.DbString, "NVARCHAR", Types.JStringClass),
-        DataTypeMap(DataType.DbBool, "BIT", Types.JBoolClass),
-        DataTypeMap(DataType.DbShort, "TINYINT", Types.JStringClass),
-        DataTypeMap(DataType.DbNumber, "INTEGER", Types.JStringClass),
-        DataTypeMap(DataType.DbLong, "BIGINT", Types.JStringClass),
-        DataTypeMap(DataType.DbFloat, "FLOAT", Types.JStringClass),
-        DataTypeMap(DataType.DbDouble, "DOUBLE", Types.JStringClass),
-        DataTypeMap(DataType.DbDecimal, "DECIMAL", Types.JStringClass),
-        DataTypeMap(DataType.DbLocalDate, "DATE", Types.JStringClass),
-        DataTypeMap(DataType.DbLocalTime, "TIME", Types.JStringClass),
-        DataTypeMap(DataType.DbLocalDateTime, "DATETIME", Types.JStringClass),
-        DataTypeMap(DataType.DbZonedDateTime, "DATETIME", Types.JStringClass),
-        DataTypeMap(DataType.DbInstant, "INSTANT", Types.JStringClass),
-        DataTypeMap(DataType.DbDateTime, "DATETIME", Types.JStringClass)
+        DataTypeMap(DataType.DTString, "NVARCHAR", Types.JStringClass),
+        DataTypeMap(DataType.DTBool, "BIT", Types.JBoolClass),
+        DataTypeMap(DataType.DTShort, "TINYINT", Types.JStringClass),
+        DataTypeMap(DataType.DTNumber, "INTEGER", Types.JStringClass),
+        DataTypeMap(DataType.DTLong, "BIGINT", Types.JStringClass),
+        DataTypeMap(DataType.DTFloat, "FLOAT", Types.JStringClass),
+        DataTypeMap(DataType.DTDouble, "DOUBLE", Types.JStringClass),
+        DataTypeMap(DataType.DTDecimal, "DECIMAL", Types.JStringClass),
+        DataTypeMap(DataType.DTLocalDate, "DATE", Types.JStringClass),
+        DataTypeMap(DataType.DTLocalTime, "TIME", Types.JStringClass),
+        DataTypeMap(DataType.DTLocalDateTime, "DATETIME", Types.JStringClass),
+        DataTypeMap(DataType.DTZonedDateTime, "DATETIME", Types.JStringClass),
+        DataTypeMap(DataType.DTInstant, "INSTANT", Types.JStringClass),
+        DataTypeMap(DataType.DTDateTime, "DATETIME", Types.JStringClass)
     )
 
     /**
@@ -79,9 +79,9 @@ open class PostGresBuilder : DbBuilder {
      * Builds a valid column type
      */
     override fun colType(colType: DataType, maxLen: Int): String {
-        return if (colType == DataType.DbString && maxLen == -1)
+        return if (colType == DataType.DTString && maxLen == -1)
             "longtext"
-        else if (colType == DataType.DbString)
+        else if (colType == DataType.DTString)
             "VARCHAR($maxLen)"
         else
             getColTypeName(colType)

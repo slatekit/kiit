@@ -1,10 +1,10 @@
 package slatekit.entities.features
 
+import slatekit.common.data.DataAction
 import slatekit.query.Op
 import slatekit.common.data.Value
 import kotlin.reflect.KProperty
 import slatekit.entities.Entity
-import slatekit.data.events.EntityAction
 import slatekit.entities.core.EntityOps
 import slatekit.entities.EntityOptions
 import slatekit.meta.Reflector
@@ -42,7 +42,7 @@ interface Updates<TId, T> : EntityOps<TId, T> where TId : kotlin.Comparable<TId>
     fun update(entity: T, options: EntityOptions): Pair<Boolean, T> {
         // Massage
         val entityFinal = when (options.applyMetadata) {
-            true -> applyFieldData(EntityAction.Update, entity)
+            true -> applyFieldData(DataAction.Update, entity)
             false -> entity
         }
 
@@ -57,7 +57,7 @@ interface Updates<TId, T> : EntityOps<TId, T> where TId : kotlin.Comparable<TId>
      * @return
      */
     fun update(entity: T): Boolean {
-        val finalEntity = applyFieldData(EntityAction.Update, entity)
+        val finalEntity = applyFieldData(DataAction.Update, entity)
         val success = repo().update(finalEntity)
         return success
     }
