@@ -20,7 +20,6 @@ import slatekit.common.log.Logs
 import slatekit.common.log.LogsDefault
 import slatekit.common.naming.Namer
 import slatekit.common.utils.ListMap
-import slatekit.data.SqlRepo
 import slatekit.data.core.*
 import slatekit.entities.core.*
 import slatekit.data.syntax.SqlSyntax
@@ -91,7 +90,7 @@ open class Entities(
 
         // 2. Table info ( name of table supplied or use class name )
         val tableName = table ?: enType.simpleName!!
-        val tableKey = PKey(idName, DataType.getTypeFromLang(idType.java))
+        val tableKey = PKey(idName, DataType.fromJava(idType.java))
         val tableChar = if(vendor == Vendor.MySql) '`' else '"'
         val tableInfo = Table(tableName, tableChar, tableKey)
 

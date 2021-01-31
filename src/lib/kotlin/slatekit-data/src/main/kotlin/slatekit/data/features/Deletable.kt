@@ -8,6 +8,15 @@ import slatekit.query.Query
  * Supports deletion of records using conditions
  */
 interface Deletable<TId, T> where TId : Comparable<TId> {
+
+    /**
+     * deletes all entities from the data store using the ids
+     * @param ids
+     * @return
+     */
+    fun deleteAll(): Long
+
+
     /**
      * deletes items based on the field name and value
      * @param field: The property reference

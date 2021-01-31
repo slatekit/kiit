@@ -84,12 +84,4 @@ interface CrudRepo<TId, T> : Repo<TId, T> where TId : Comparable<TId>, T:Any {
      * @return
      */
     fun deleteByIds(ids: List<TId>): Int
-
-
-    /**
-     * deletes all entities from the data store using the ids
-     * @param ids
-     * @return
-     */
-    fun deleteAll(): Long
 }

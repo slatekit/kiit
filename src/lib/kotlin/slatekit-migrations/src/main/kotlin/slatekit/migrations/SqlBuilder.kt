@@ -94,7 +94,7 @@ open class SqlBuilder(val types: Types, val namer: Namer?) {
                 val sql = field.model?.let { createColumns(field.storedName, it, false) }
                 acc + sql
             } else {
-                val sqlType = DataType.getTypeFromLang(field.dataCls.java)
+                val sqlType = DataType.fromJava(field.dataCls.java)
                 acc + ", " + createCol(finalStoredName, sqlType, field.isRequired, field.maxLength)
             }
         }

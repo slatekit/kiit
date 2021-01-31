@@ -34,7 +34,7 @@ sealed class DataType {
     object DTEnum          : DataType()
 
     companion object {
-        fun getTypeFromLang(dataType: Class<*>): DataType =
+        fun fromJava(dataType: Class<*>): DataType =
                 if (dataType == slatekit.common.Types.JBoolClass) DataType.DTBool
                 else if (dataType == slatekit.common.Types.JStringClass) DataType.DTString
                 else if (dataType == slatekit.common.Types.JShortClass) DataType.DTShort
@@ -42,7 +42,7 @@ sealed class DataType {
                 else if (dataType == slatekit.common.Types.JLongClass) DataType.DTLong
                 else if (dataType == slatekit.common.Types.JFloatClass) DataType.DTFloat
                 else if (dataType == slatekit.common.Types.JDoubleClass) DataType.DTDouble
-                // else if (dataType == Types.JDecimalClass) DataType.DbDecimal
+                // else if (dataType == slatekit.common.Types.JDecimalClass) DataType.DbDecimal
                 else if (dataType == slatekit.common.Types.JLocalDateClass) DataType.DTLocalDate
                 else if (dataType == slatekit.common.Types.JLocalTimeClass) DataType.DTLocalTime
                 else if (dataType == slatekit.common.Types.JLocalDateTimeClass) DataType.DTLocalDateTime
@@ -53,6 +53,10 @@ sealed class DataType {
     }
     /* ktlint-enable */
 }
+
+
+data class DataTypeMap(val metaType: DataType, val dbType: String, val langType: Class<*>)
+
 
 
 
