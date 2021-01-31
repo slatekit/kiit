@@ -25,7 +25,10 @@ open class Types {
     /**
      * UUID
      */
-    open val uuidType = DataTypeMap(DataType.DTString, "NVARCHAR", Types.JStringClass)
+    open val uuidType = DataTypeMap(DataType.DTUUID, "NVARCHAR", Types.JStringClass)
+    open val ulidType = DataTypeMap(DataType.DTULID, "NVARCHAR", Types.JStringClass)
+    open val upidType = DataTypeMap(DataType.DTUPID, "NVARCHAR", Types.JStringClass)
+
 
     /**
      * NUMBERS
@@ -54,6 +57,7 @@ open class Types {
     open val dateTimeType = DataTypeMap(DataType.DTDateTime, "DATETIME", Types.JDateTimeClass)
     open val instantType = DataTypeMap(DataType.DTInstant, "INSTANT", Types.JInstantClass)
 
+
     open val lookup = mapOf(
             boolType.metaType to boolType,
             charType.metaType to charType,
@@ -71,6 +75,9 @@ open class Types {
             localDateTimeType.metaType to localDateTimeType,
             zonedDateTimeType.metaType to zonedDateTimeType,
             dateTimeType.metaType to dateTimeType,
-            instantType.metaType to instantType
+            instantType.metaType to instantType,
+            uuidType.metaType to uuidType,
+            ulidType.metaType to ulidType,
+            upidType.metaType to upidType
     )
 }

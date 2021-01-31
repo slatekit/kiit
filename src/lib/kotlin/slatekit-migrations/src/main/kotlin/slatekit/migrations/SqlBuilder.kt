@@ -131,6 +131,8 @@ open class SqlBuilder(val types: Types, val namer: Namer?) {
             types.textType.dbType
         else if (colType == DataType.DTString)
             types.stringType.dbType + "($maxLen)"
+        else if (colType == DataType.DTUUID || colType == DataType.DTULID || colType == DataType.DTUPID)
+            types.stringType.dbType + "($maxLen)"
         else
             types.lookup[colType]?.dbType ?: ""
 

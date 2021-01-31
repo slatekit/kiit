@@ -103,7 +103,7 @@ open class EntityEncoder<TId, T>(val model: Model,
         // =======================================================
         // NOTE: Refactor this to use pattern matching ?
         // Similar to the Mapper class but reversed
-        val data = if (mapping.dataTpe == KTypes.KStringClass) {
+        val data = if (mapping.dataTpe == DataType.DTString) {
             val sVal = Reflector.getFieldValue(item, mapping.name) as String?
             val sVanEnc = when {
                 !mapping.encrypt -> sVal
