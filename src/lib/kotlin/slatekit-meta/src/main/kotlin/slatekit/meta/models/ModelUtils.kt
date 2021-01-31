@@ -6,6 +6,7 @@ import org.threeten.bp.LocalTime
 import org.threeten.bp.ZonedDateTime
 import slatekit.common.DateTime
 import slatekit.common.data.DataType
+import slatekit.common.ids.UPID
 import slatekit.meta.KTypes
 import java.util.*
 import kotlin.reflect.KClass
@@ -36,6 +37,7 @@ object ModelUtils {
             DateTime::class      -> DataType.DTDateTime
             Enum::class          -> DataType.DTEnum
             UUID::class          -> DataType.DTUUID
+            UPID::class          -> DataType.DTUPID
             else                 -> DataType.DTObject
         }
         return fieldType
