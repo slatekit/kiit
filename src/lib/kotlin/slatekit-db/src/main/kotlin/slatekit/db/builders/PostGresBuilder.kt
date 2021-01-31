@@ -29,7 +29,7 @@ open class PostGresBuilder : DbBuilder {
         DataTypeMap(DataType.DTString, "NVARCHAR", Types.JStringClass),
         DataTypeMap(DataType.DTBool, "BIT", Types.JBoolClass),
         DataTypeMap(DataType.DTShort, "TINYINT", Types.JStringClass),
-        DataTypeMap(DataType.DTNumber, "INTEGER", Types.JStringClass),
+        DataTypeMap(DataType.DTInt, "INTEGER", Types.JStringClass),
         DataTypeMap(DataType.DTLong, "BIGINT", Types.JStringClass),
         DataTypeMap(DataType.DTFloat, "FLOAT", Types.JStringClass),
         DataTypeMap(DataType.DTDouble, "DOUBLE", Types.JStringClass),

@@ -16,29 +16,43 @@ sealed class DataType {
 
     /* ktlint-disable */
     object DTBool          : DataType()
+
+    // Chars/Strings
     object DTChar          : DataType()
     object DTString        : DataType()
     object DTText          : DataType()
+
+    // Numbers
     object DTShort         : DataType()
-    object DTNumber        : DataType()
+    object DTInt           : DataType()
     object DTLong          : DataType()
     object DTFloat         : DataType()
     object DTDouble        : DataType()
     object DTDecimal       : DataType()
+
+    // Dates
     object DTLocalDate     : DataType()
     object DTLocalTime     : DataType()
     object DTLocalDateTime : DataType()
     object DTZonedDateTime : DataType()
     object DTInstant       : DataType()
     object DTDateTime      : DataType()
+
+    // Misc
     object DTEnum          : DataType()
+    object DTUUID          : DataType()
+    object DTULID          : DataType()
+    object DTUPID          : DataType()
+
+    // Object
+    object DTObject        : DataType()
 
     companion object {
         fun fromJava(dataType: Class<*>): DataType =
                 if (dataType == slatekit.common.Types.JBoolClass) DataType.DTBool
                 else if (dataType == slatekit.common.Types.JStringClass) DataType.DTString
                 else if (dataType == slatekit.common.Types.JShortClass) DataType.DTShort
-                else if (dataType == slatekit.common.Types.JIntClass) DataType.DTNumber
+                else if (dataType == slatekit.common.Types.JIntClass) DataType.DTInt
                 else if (dataType == slatekit.common.Types.JLongClass) DataType.DTLong
                 else if (dataType == slatekit.common.Types.JFloatClass) DataType.DTFloat
                 else if (dataType == slatekit.common.Types.JDoubleClass) DataType.DTDouble
@@ -49,7 +63,10 @@ sealed class DataType {
                 else if (dataType == slatekit.common.Types.JZonedDateTimeClass) DataType.DTZonedDateTime
                 else if (dataType == slatekit.common.Types.JInstantClass) DataType.DTInstant
                 else if (dataType == slatekit.common.Types.JDateTimeClass) DataType.DTDateTime
-                else DataType.DTString
+                else if (dataType == slatekit.common.Types.JUUIDClass) DataType.DTUUID
+                else if (dataType == slatekit.common.Types.JULIDClass) DataType.DTULID
+                else if (dataType == slatekit.common.Types.JUPIDClass) DataType.DTUPID
+                else DataType.DTObject
     }
     /* ktlint-enable */
 }

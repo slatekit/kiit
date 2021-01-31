@@ -89,7 +89,7 @@ open class SqlBuilder(val types: Types, val namer: Namer?) {
         val dataFieldSql = dataFields.fold("") { acc, field ->
             val finalStoredName = prefix?.let { prefix + "_" + field.storedName } ?: field.storedName
             if (field.isEnum) {
-                acc + ", " + createCol(finalStoredName, DataType.DTNumber, field.isRequired, field.maxLength)
+                acc + ", " + createCol(finalStoredName, DataType.DTInt, field.isRequired, field.maxLength)
             } else if (field.model != null) {
                 val sql = field.model?.let { createColumns(field.storedName, it, false) }
                 acc + sql

@@ -38,7 +38,7 @@ open class Types {
      * BIGINT	  8	                -263	                0	                    263-1	                264-1
      */
     open val shortType = DataTypeMap(DataType.DTShort, "SMALLINT", Types.JShortClass)
-    open val intType = DataTypeMap(DataType.DTNumber, "INTEGER", Types.JIntClass)
+    open val intType = DataTypeMap(DataType.DTInt, "INTEGER", Types.JIntClass)
     open val longType = DataTypeMap(DataType.DTLong, "BIGINT", Types.JLongClass)
     open val floatType = DataTypeMap(DataType.DTFloat, "FLOAT", Types.JFloatClass)
     open val doubleType = DataTypeMap(DataType.DTDouble, "DOUBLE", Types.JDoubleClass)

@@ -173,7 +173,7 @@ object DbUtils {
             if (dataType == Types.JBoolClass) DataType.DTBool
             else if (dataType == Types.JStringClass) DataType.DTString
             else if (dataType == Types.JShortClass) DataType.DTShort
-            else if (dataType == Types.JIntClass) DataType.DTNumber
+            else if (dataType == Types.JIntClass) DataType.DTInt
             else if (dataType == Types.JLongClass) DataType.DTLong
             else if (dataType == Types.JFloatClass) DataType.DTFloat
             else if (dataType == Types.JDoubleClass) DataType.DTDouble

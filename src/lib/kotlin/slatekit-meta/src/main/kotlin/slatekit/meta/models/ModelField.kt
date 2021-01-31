@@ -14,6 +14,7 @@
 package slatekit.meta.models
 
 import slatekit.common.Field
+import slatekit.common.data.DataType
 import slatekit.common.naming.Namer
 import slatekit.meta.KTypes
 import slatekit.meta.Reflector
@@ -25,7 +26,7 @@ data class ModelField(
         @JvmField val desc: String = "",
         @JvmField val prop: KProperty<*>? = null,
         @JvmField val dataCls: KClass<*>,
-        @JvmField val dataTpe: FieldType = ModelUtils.fieldType(dataCls),
+        @JvmField val dataTpe: DataType = ModelUtils.fieldType(dataCls),
         @JvmField val storedName: String = "",
         @JvmField val pos: Int = 0,
         @JvmField val isRequired: Boolean = true,
@@ -85,7 +86,7 @@ data class ModelField(
          * @return
          */
         @JvmStatic
-        fun id(name: String, dataType: KClass<*>, dataTpe: FieldType): ModelField {
+        fun id(name: String, dataType: KClass<*>, dataTpe: DataType): ModelField {
             return build(null, name, "", dataType, dataTpe, true,
                     true, true, false,
                     0, 0, name, 0, cat = FieldCategory.Id)
@@ -111,7 +112,7 @@ data class ModelField(
                 name: String,
                 desc: String = "",
                 dataType: KClass<*>,
-                dataFieldType: FieldType,
+                dataFieldType: DataType,
                 isRequired: Boolean = false,
                 isUnique: Boolean = false,
                 isIndexed: Boolean = false,
