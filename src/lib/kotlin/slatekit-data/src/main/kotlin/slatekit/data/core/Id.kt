@@ -2,7 +2,7 @@ package slatekit.data.core
 
 /**
  * Used to operate on the Id ( primary key ) of a model ( class )
- * This allow us to not but any constraints on the model T.
+ * This allows us to not put any constraints on the model T.
  */
 interface Id<TId, T> where TId : Comparable<TId>, T: Any {
 
@@ -29,7 +29,7 @@ interface Id<TId, T> where TId : Comparable<TId>, T: Any {
 
 
 /**
- * Long based id support for a model based
+ * Long based id support for a model
  */
 class LongId<T>(val idName:String = "id", val op:(T) -> Long) : Id<Long, T> where T: Any {
 

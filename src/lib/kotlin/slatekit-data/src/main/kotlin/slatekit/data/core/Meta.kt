@@ -13,19 +13,13 @@ data class Meta<TId, T>(val id:Id<TId, T>, val table: Table) where TId : Compara
     /**
      * Name of the table for convenience
      */
-    val name: String
-        get() {
-            return table.name
-        }
+    val name: String get() { return table.name }
 
 
     /**
      * Name of the Id/Primary key for convenience
      */
-    val pkey: PKey
-        get() {
-            return table.pkey
-        }
+    val pkey: PKey get() { return table.pkey }
 
 
     fun encode(name:String):String = "${table.encodeChar}${name}${table.encodeChar}"

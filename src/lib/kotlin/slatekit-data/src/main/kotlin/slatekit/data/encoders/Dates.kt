@@ -10,6 +10,10 @@ import slatekit.common.ext.atUtcLocal
 import slatekit.common.ext.local
 import slatekit.data.Consts
 
+/**
+ * Support for encoding to/from kotlin value to a SQL value
+ * The encoders here are all for Date/Time based data types
+ */
 open class LocalDateEncoder : SqlEncoder<LocalDate> {
     override fun encode(value: LocalDate?): String {
         return value?.let { "'" + value.format(Consts.dateFormat) + "'" } ?: Consts.NULL

@@ -6,6 +6,10 @@ import slatekit.common.data.Encoding
 import slatekit.common.ext.orElse
 import slatekit.data.Consts
 
+/**
+ * Support for encoding to/from kotlin value to a SQL value
+ * The encoders here are all for basic data types ( bool, string, short, int, long, double )
+ */
 open class BoolEncoder : SqlEncoder<Boolean> {
     override fun encode(value: Boolean?): String = value?.let { if (value) "1" else "0" } ?: Consts.NULL
     override fun decode(record: Record, name: String): Boolean? = record.getBoolOrNull(name)

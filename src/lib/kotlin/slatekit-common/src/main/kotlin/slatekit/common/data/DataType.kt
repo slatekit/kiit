@@ -12,6 +12,9 @@
  */
 package slatekit.common.data
 
+/**
+ * Non-Reflection/Class based representation of data types.
+ */
 sealed class DataType {
 
     /* ktlint-disable */
