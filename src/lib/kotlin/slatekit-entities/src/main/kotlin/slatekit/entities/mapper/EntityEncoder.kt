@@ -5,6 +5,7 @@ import slatekit.common.DateTime
 import slatekit.common.EnumLike
 import slatekit.common.crypto.Encryptor
 import slatekit.common.data.DataAction
+import slatekit.common.data.DataType
 import slatekit.common.data.Value
 import slatekit.common.data.Values
 import slatekit.common.ids.UPID
@@ -102,7 +103,7 @@ open class EntityEncoder<TId, T>(val model: Model,
         // =======================================================
         // NOTE: Refactor this to use pattern matching ?
         // Similar to the Mapper class but reversed
-        val data = if (mapping.dataCls == KTypes.KStringClass) {
+        val data = if (mapping.dataTpe == KTypes.KStringClass) {
             val sVal = Reflector.getFieldValue(item, mapping.name) as String?
             val sVanEnc = when {
                 !mapping.encrypt -> sVal
@@ -112,46 +113,46 @@ open class EntityEncoder<TId, T>(val model: Model,
                 else -> sVal
             }
             encoders.strings.encode(sVanEnc)
-        } else if (mapping.dataCls == KTypes.KBoolClass) {
+        } else if (mapping.dataTpe == DataType.DTBool) {
             val bVal = Reflector.getFieldValue(item, mapping.name) as Boolean?
             encoders.bools.encode(bVal)
-        } else if (mapping.dataCls == KTypes.KShortClass) {
+        } else if (mapping.dataTpe == DataType.DTShort) {
             val sVal = Reflector.getFieldValue(item, mapping.name) as Short?
             encoders.shorts.encode(sVal)
-        } else if (mapping.dataCls == KTypes.KIntClass) {
+        } else if (mapping.dataTpe == DataType.DTInt) {
             val iVal = Reflector.getFieldValue(item, mapping.name) as Int?
             encoders.ints.encode(iVal)
-        } else if (mapping.dataCls == KTypes.KLongClass) {
+        } else if (mapping.dataTpe == DataType.DTLong) {
             val lVal = Reflector.getFieldValue(item, mapping.name) as Long?
             encoders.longs.encode(lVal)
-        } else if (mapping.dataCls == KTypes.KFloatClass) {
+        } else if (mapping.dataTpe == DataType.DTFloat) {
             val fVal = Reflector.getFieldValue(item, mapping.name) as Float?
             encoders.floats.encode(fVal)
-        } else if (mapping.dataCls == KTypes.KDoubleClass) {
+        } else if (mapping.dataTpe == DataType.DTDouble) {
             val dVal = Reflector.getFieldValue(item, mapping.name) as Double?
             encoders.doubles.encode(dVal)
-        } else if (mapping.dataCls == KTypes.KDateTimeClass) {
+        } else if (mapping.dataTpe == DataType.DTDateTime) {
             val dtVal = Reflector.getFieldValue(item, mapping.name) as DateTime?
             encoders.dateTimes.toSql(dtVal, settings.utcTime)
-        } else if (mapping.dataCls == KTypes.KLocalDateClass) {
+        } else if (mapping.dataTpe == DataType.DTLocalDate) {
             val raw = Reflector.getFieldValue(item, mapping.name) as LocalDate?
             encoders.localDates.encode(raw)
-        } else if (mapping.dataCls == KTypes.KLocalTimeClass) {
+        } else if (mapping.dataTpe == DataType.DTLocalTime) {
             val raw = Reflector.getFieldValue(item, mapping.name) as LocalTime?
             encoders.localTimes.encode(raw)
-        } else if (mapping.dataCls == KTypes.KLocalDateTimeClass) {
+        } else if (mapping.dataTpe == DataType.DTLocalDateTime) {
             val raw = Reflector.getFieldValue(item, mapping.name) as LocalDateTime?
             encoders.localDateTimes.encode(raw)
-        } else if (mapping.dataCls == KTypes.KZonedDateTimeClass) {
+        } else if (mapping.dataTpe == DataType.DTZonedDateTime) {
             val raw = Reflector.getFieldValue(item, mapping.name) as ZonedDateTime?
             encoders.zonedDateTimes.toSql(raw, settings.utcTime)
-        } else if (mapping.dataCls == KTypes.KInstantClass) {
+        } else if (mapping.dataTpe == DataType.DTInstant) {
             val raw = Reflector.getFieldValue(item, mapping.name) as Instant?
             encoders.instants.encode(raw)
-        } else if (mapping.dataCls == KTypes.KUUIDClass) {
+        } else if (mapping.dataTpe == DataType.DTUUID) {
             val raw = Reflector.getFieldValue(item, mapping.name) as java.util.UUID?
             encoders.uuids.encode(raw)
-        } else if (mapping.dataCls == KTypes.KUPIDClass) {
+        } else if (mapping.dataTpe == DataType.DTUPID) {
             val raw = Reflector.getFieldValue(item, mapping.name) as UPID?
             encoders.upids.encode(raw)
         } else if (mapping.isEnum) {
