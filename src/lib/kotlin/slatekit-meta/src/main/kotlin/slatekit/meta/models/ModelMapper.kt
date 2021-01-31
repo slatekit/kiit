@@ -18,7 +18,7 @@ import slatekit.common.crypto.Encryptor
 import slatekit.common.naming.Namer
 import slatekit.meta.Reflector
 import slatekit.common.Record
-import slatekit.meta.KTypes
+import slatekit.common.data.DataType
 import kotlin.reflect.KClass
 
 /**
@@ -108,7 +108,7 @@ open class ModelMapper(
 
     private fun decodeValType(prefix: String?, record: Record, model: Model, enc:Encryptor? = null): Any? {
         return if (model.any) {
-            val isUTC = settings.persisteUTCDate
+            val isUTC = settings.persistUTCDate
             val data = model.fields.map { mapping ->
                 val dataValue = getDataValue(prefix, mapping, record, isUTC, enc)
                 dataValue
@@ -122,7 +122,7 @@ open class ModelMapper(
     private fun decodeVarType(prefix: String?, record: Record, model: Model, enc:Encryptor? = null): Any? {
         return if (model.any) {
 
-            val isUTC = settings.persisteUTCDate
+            val isUTC = settings.persistUTCDate
             val entity: Any? = createEntity()
             model.fields.forEach { mapping ->
                 val dataValue = getDataValue(prefix, mapping, record, isUTC, enc)
@@ -145,22 +145,22 @@ open class ModelMapper(
     private fun getDataValue(prefix: String?, mapping: ModelField, record: Record, isUTC: Boolean, enc:Encryptor? = null): Any? {
         val colName = prefix?.let { prefix + mapping.storedName } ?: mapping.storedName
 
-        val dataValue = when (mapping.dataCls) {
-            KTypes.KStringClass        -> getString(record, mapping, colName, enc ?: encryptor)
-            KTypes.KBoolClass          -> if ( mapping.isRequired ) record.getBool(colName)          else record.getBoolOrNull(colName)
-            KTypes.KShortClass         -> if ( mapping.isRequired ) record.getShort(colName)         else record.getShortOrNull(colName)
-            KTypes.KIntClass           -> if ( mapping.isRequired ) record.getInt(colName)           else record.getIntOrNull(colName)
-            KTypes.KLongClass          -> if ( mapping.isRequired ) record.getLong(colName)          else record.getLongOrNull(colName)
-            KTypes.KFloatClass         -> if ( mapping.isRequired ) record.getFloat(colName)         else record.getFloatOrNull(colName)
-            KTypes.KDoubleClass        -> if ( mapping.isRequired ) record.getDouble(colName)        else record.getDoubleOrNull(colName)
-            KTypes.KLocalDateClass     -> if ( mapping.isRequired ) record.getLocalDate(colName)     else record.getLocalDateOrNull(colName)
-            KTypes.KLocalTimeClass     -> if ( mapping.isRequired ) record.getLocalTime(colName)     else record.getLocalTimeOrNull(colName)
-            KTypes.KLocalDateTimeClass -> if ( mapping.isRequired ) record.getLocalDateTime(colName) else record.getLocalDateOrNull(colName)
-            KTypes.KZonedDateTimeClass -> if ( mapping.isRequired ) record.getZonedDateTime(colName) else record.getZonedDateTimeOrNull(colName)
-            KTypes.KDateTimeClass      -> if ( mapping.isRequired ) record.getDateTime(colName)      else record.getDateTimeOrNull(colName)
-            KTypes.KInstantClass       -> if ( mapping.isRequired ) record.getInstant(colName)       else record.getInstantOrNull(colName)
-            KTypes.KUUIDClass          -> if ( mapping.isRequired ) record.getUUID(colName)          else record.getUUIDOrNull(colName)
-            KTypes.KUPIDClass          -> if ( mapping.isRequired ) record.getUPID(colName)          else record.getUPIDOrNull(colName)
+        val dataValue = when (mapping.dataTpe) {
+            DataType.DTString        -> getString(record, mapping, colName, enc ?: encryptor)
+            DataType.DTBool          -> if ( mapping.isRequired ) record.getBool(colName)          else record.getBoolOrNull(colName)
+            DataType.DTShort         -> if ( mapping.isRequired ) record.getShort(colName)         else record.getShortOrNull(colName)
+            DataType.DTInt           -> if ( mapping.isRequired ) record.getInt(colName)           else record.getIntOrNull(colName)
+            DataType.DTLong          -> if ( mapping.isRequired ) record.getLong(colName)          else record.getLongOrNull(colName)
+            DataType.DTFloat         -> if ( mapping.isRequired ) record.getFloat(colName)         else record.getFloatOrNull(colName)
+            DataType.DTDouble        -> if ( mapping.isRequired ) record.getDouble(colName)        else record.getDoubleOrNull(colName)
+            DataType.DTLocalDate     -> if ( mapping.isRequired ) record.getLocalDate(colName)     else record.getLocalDateOrNull(colName)
+            DataType.DTLocalTime     -> if ( mapping.isRequired ) record.getLocalTime(colName)     else record.getLocalTimeOrNull(colName)
+            DataType.DTLocalDateTime -> if ( mapping.isRequired ) record.getLocalDateTime(colName) else record.getLocalDateOrNull(colName)
+            DataType.DTZonedDateTime -> if ( mapping.isRequired ) record.getZonedDateTime(colName) else record.getZonedDateTimeOrNull(colName)
+            DataType.DTDateTime      -> if ( mapping.isRequired ) record.getDateTime(colName)      else record.getDateTimeOrNull(colName)
+            DataType.DTInstant       -> if ( mapping.isRequired ) record.getInstant(colName)       else record.getInstantOrNull(colName)
+            DataType.DTUUID          -> if ( mapping.isRequired ) record.getUUID(colName)          else record.getUUIDOrNull(colName)
+            DataType.DTUPID          -> if ( mapping.isRequired ) record.getUPID(colName)          else record.getUPIDOrNull(colName)
             else -> {
                 if (mapping.isEnum) {
                     val enumInt = record.getInt(colName)

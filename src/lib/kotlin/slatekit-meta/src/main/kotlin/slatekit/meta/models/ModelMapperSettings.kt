@@ -1,3 +1,3 @@
 package slatekit.meta.models
 
-class ModelMapperSettings(val persisteUTCDate: Boolean = true)
+class ModelMapperSettings(val persistUTCDate: Boolean = true)
