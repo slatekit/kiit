@@ -8,14 +8,14 @@ import slatekit.data.syntax.Insert
 import slatekit.data.syntax.Update
 import slatekit.entities.mapper.EntityMapper
 import slatekit.entities.mapper.EntitySettings
-import slatekit.meta.models.ModelMapper
+import slatekit.meta.models.Model
 import slatekit.migrations.SqlBuilder
 
 class Data_03_Statement_Syntax {
 
     @Test
     fun can_build_insert() {
-        val model = ModelMapper.loadSchema(SampleEntityImmutable::class)
+        val model = Model.loadSchema(SampleEntityImmutable::class)
         val mapper = EntityMapper<Long, SampleEntityImmutable>(model, EntitySetup.meta, Long::class, SampleEntityImmutable::class, EntitySettings(false))
         val stmt = Insert<Long, SampleEntityImmutable>(EntitySetup.meta, mapper)
         val sample = EntitySetup.sampleImmutable()
@@ -27,7 +27,7 @@ class Data_03_Statement_Syntax {
 
     @Test
     fun can_build_update() {
-        val model = ModelMapper.loadSchema(SampleEntityImmutable::class)
+        val model = Model.loadSchema(SampleEntityImmutable::class)
         val mapper = EntityMapper<Long, SampleEntityImmutable>(model, EntitySetup.meta, Long::class, SampleEntityImmutable::class, EntitySettings(false))
         val stmt = Update<Long, SampleEntityImmutable>(EntitySetup.meta, mapper)
         val sample = EntitySetup.sampleImmutable()
@@ -39,7 +39,7 @@ class Data_03_Statement_Syntax {
 
     @Test
     fun can_build_delete() {
-        val model = ModelMapper.loadSchema(SampleEntityImmutable::class)
+        val model = Model.loadSchema(SampleEntityImmutable::class)
         val mapper = EntityMapper<Long, SampleEntityImmutable>(model, EntitySetup.meta, Long::class, SampleEntityImmutable::class, EntitySettings(false))
         val stmt = Delete<Long, SampleEntityImmutable>(EntitySetup.meta, mapper)
         val actual = stmt.stmt(2)
@@ -50,7 +50,7 @@ class Data_03_Statement_Syntax {
 
     @Test
     fun can_build_ddl() {
-        val model = ModelMapper.loadSchema(SampleEntityImmutable::class, table = "sample1")
+        val model = Model.loadSchema(SampleEntityImmutable::class, table = "sample1")
         val builder = SqlBuilder(Types(), null)
         val actual = builder.createTable(model)
         val expected = """create table `sample1` ( 

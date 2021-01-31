@@ -6,7 +6,7 @@ import kotlin.reflect.KClass
 import kotlin.reflect.KProperty
 import kotlin.reflect.KType
 
-open class Schema<TId, T>(val idType:KClass<*>, val enType:KClass<*>, val table:String = enType.simpleName!!) : Builder where TId : Comparable<TId>, T: Any {
+open class Schema<TId, T>(val idType:KClass<*>, val enType:KClass<*>, val table:String = enType.simpleName!!) where TId : Comparable<TId>, T: Any {
 
     private var _model: Model = Model(enType, table)
 

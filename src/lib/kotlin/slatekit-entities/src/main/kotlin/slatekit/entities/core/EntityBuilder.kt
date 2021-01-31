@@ -7,7 +7,6 @@ import slatekit.common.naming.Namer
 import slatekit.entities.*
 import slatekit.meta.Reflector
 import slatekit.meta.models.Model
-import slatekit.meta.models.ModelMapper
 
 /**
  * Responsible for building individual components of this Micro-ORM.
@@ -88,7 +87,7 @@ open class EntityBuilder(
      * This may be removed later
      */
     fun model(entityType: KClass<*>, namer: Namer?, table: String?): Model {
-        return ModelMapper.loadSchema(entityType, EntityWithId<*>::id.name, namer, table)
+        return Model.loadSchema(entityType, EntityWithId<*>::id.name, namer, table)
     }
 
     /**

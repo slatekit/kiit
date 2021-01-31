@@ -27,7 +27,6 @@ import slatekit.entities.mapper.EntityMapper
 import slatekit.entities.mapper.EntitySettings
 import slatekit.meta.kClass
 import slatekit.meta.models.Model
-import slatekit.meta.models.ModelMapper
 
 /**
  *  A registry for all the entities and their corresponding services, repositories, database
@@ -95,7 +94,7 @@ open class Entities(
         val tableInfo = Table(tableName, tableChar, tableKey)
 
         // 3. Schema / Meta data
-        val entityModel = ModelMapper.loadSchema(enType, idName, null, tableName)
+        val entityModel = Model.loadSchema(enType, idName, null, tableName)
         val entityMeta = Meta<TId, T>(idOps, tableInfo)
         val entityInfo = EntityInfo(idType, enType, entityMeta, entityModel)
 
