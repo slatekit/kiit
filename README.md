@@ -1,8 +1,7 @@
 
 [![WebSite](https://img.shields.io/badge/site-slatekit-blue)](https://www.slatekit.com)
 ![Kotlin](https://img.shields.io/badge/kotlin-1.3-orange.svg)
-![Apache 2](https://img.shields.io/badge/license-Apache2-brightgreen.svg?style=flat)
-![BSL ](https://img.shields.io/badge/license-bsl__1.0-yellow.svg?style=flat)
+![Apache 2](https://img.shields.io/badge/license-Apache2-green.svg?style=flat)
 ![Follow us on twitter](https://img.shields.io/badge/twitter-slatekit-blue.svg)
 ![Gradle Release](https://github.com/code-helix/slatekit/workflows/Gradle%20Package/badge.svg)
 
@@ -10,18 +9,19 @@
 
 
 # About
-Slate Kit is a **Kotlin** Tool-Kit, a simple, light-weight, modular framework to build **Apps, APIs, CLIs, Jobs**, and more for **Start-ups, Personal projects, and SMBs** ( small-medium sized businesses ). These libraries can be used for both Server and Android and there are modules for the server that abstract infrastructure ( Queues, Files, SMS, Emails, Alerts ) with integrations for **AWS** ( SQS, S3 ), Twilio ( SMS ), SendGrid ( Email ), Slack ( Alerts ) and more. Multi-platform support is planned as a future state.
+Slate Kit is a **Kotlin** framework, a simple, light-weight, modular tool-kit to build **Apps, APIs, CLIs, Jobs**, and more for **Start-ups, Personal projects, Mobile Apps, and SMBs** ( small-medium sized businesses ). These libraries can be used for both **Server and Android** and there are modules for the server that abstract infrastructure ( Queues, Files, SMS, Emails, Alerts ) with integrations for **AWS** ( SQS, S3 ), Twilio ( SMS ), SendGrid ( Email ), Slack ( Alerts ) and more. Multi-platform support is planned as a future state.
 
 
 # Goals
-1. Simple, light-weight, modular, 100% Kotlin based alternative to Spring Framework
-2. Targeted for Start-Ups, Personal Projects, SMB ( small-medium sized businesses )
-3. Usable on both Server and Android ( due to being simple/light-weight)
-4. Kotlin Multi-Platform planned for the future for Javascript, Native, iOS, etc
-5. Designed as a set of libraries rather than a typical `"framework"`
-6. CLI tools to quickly create new Apps, CLIs, API, Jobs projects
-7. Partial Cloud Provider abstractions for ( Queues, Files, Databases, etc ) 
-8. Default support and integrations for AWS
+1. **Simple** : Easy to use, light-weight, modular ( 100% Kotlin based alternative to Spring Framework ) 
+2. **Projects**: More than just for APIs, use it for Console apps, Jobs, CLIs.
+3. **Usage**  : Designed for Start-Ups, Personal Projects, Mobile Apps, SMB ( small-medium sized businesses )
+4. **Full-Stack**: Usable on both Server and Android ( due to being simple/light-weight)
+5. **Multiplatform** Kotlin Multi-Platform planned for the future for Javascript, Native, iOS, etc
+6. **Modular** : Designed as a set of libraries rather than a typical `"framework"`
+7. **Tools** : CLI tools to quickly create new Apps, CLIs, API, Jobs projects
+8. **Cloud** : Partial Cloud Provider abstractions for ( Queues, Files, Databases, etc ) 
+9. **Defaults** Sensible default implementations, currently support AWS
 
 # Start
 You can quickly get started on **Mac OS** using the **Homebrew** installer and create projects using the Slate Kit CLI. Refer to https://www.slatekit.com/start/generators/ for more info.
@@ -92,43 +92,15 @@ docs | source | desc | download
 [slatekit-cli](http://www.slatekit.com/cli.html)                    | [src](src/lib/kotlin/slatekit-cli)    | command line interface template | [ ![Download](https://api.bintray.com/packages/codehelixinc/slatekit/slatekit-cli/images/download.svg) ](https://bintray.com/codehelixinc/slatekit/slatekit-core/_latestVersion)
 [slatekit-apis](http://www.slatekit.com/kotlin-core-apis.html)         | [src](src/lib/kotlin/slatekit-apis)   | api container | [ ![Download](https://api.bintray.com/packages/codehelixinc/slatekit/slatekit-apis/images/download.svg) ](https://bintray.com/codehelixinc/slatekit/slatekit-apis/_latestVersion)
 [slatekit-jobs](http://www.slatekit.com/kotlin-core-workers.html)    | [src](src/lib/kotlin/slatekit-jobs)  | background jobs for persistant job queues | [ ![Download](https://api.bintray.com/packages/codehelixinc/slatekit/slatekit-jobs/images/download.svg) ](https://bintray.com/codehelixinc/slatekit/slatekit-jobs/_latestVersion)
-[slatekit-db](http://www.slatekit.com/utils.html)                  | [src](src/lib/kotlin/slatekit-db)  |  database utilities | [ ![Download](https://api.bintray.com/packages/codehelixinc/slatekit/slatekit-common/images/download.svg) ](https://bintray.com/codehelixinc/slatekit/slatekit-common/_latestVersion)
-[slatekit-meta](http://www.slatekit.com/utils.html)                    | [src](src/lib/kotlin/slatekit-meta)   | meta/reflection utils | [ ![Download](https://api.bintray.com/packages/codehelixinc/slatekit/slatekit-meta/images/download.svg) ](https://bintray.com/codehelixinc/slatekit/slatekit-meta/_latestVersion)
 [slatekit-core](http://www.slatekit.com/infra.html)                    | [src](src/lib/kotlin/slatekit-core)    | architecture components | [ ![Download](https://api.bintray.com/packages/codehelixinc/slatekit/slatekit-core/images/download.svg) ](https://bintray.com/codehelixinc/slatekit/slatekit-core/_latestVersion)
 [slatekit-notifications](http://www.slatekit.com/infra.html)                    | [src](src/lib/kotlin/slatekit-notifications)    | Apache2.0    | alerts, emails, sms, push notifications | [ ![Download](https://api.bintray.com/packages/codehelixinc/slatekit/slatekit-notifications/images/download.svg) ](https://bintray.com/codehelixinc/slatekit/slatekit-notifications/_latestVersion)
+[slatekit-db](http://www.slatekit.com/utils.html)                  | [src](src/lib/kotlin/slatekit-db)  |  database utilities | [ ![Download](https://api.bintray.com/packages/codehelixinc/slatekit/slatekit-common/images/download.svg) ](https://bintray.com/codehelixinc/slatekit/slatekit-common/_latestVersion)
+[slatekit-data](http://www.slatekit.com/kotlin-core-data.html)      | [src](src/lib/kotlin/slatekit-data)  | repository pattern | [ ![Download](https://api.bintray.com/packages/codehelixinc/slatekit/slatekit-data/images/download.svg) ](https://bintray.com/codehelixinc/slatekit/slatekit-data/_latestVersion)
 [slatekit-entities](http://www.slatekit.com/kotlin-core-orm.html)      | [src](src/lib/kotlin/slatekit-entities)  | Standardized entity repository pattern | [ ![Download](https://api.bintray.com/packages/codehelixinc/slatekit/slatekit-entities/images/download.svg) ](https://bintray.com/codehelixinc/slatekit/slatekit-entities/_latestVersion)
-[slatekit-orm](http://www.slatekit.com/kotlin-core-orm.html)      | [src](src/lib/kotlin/slatekit-orm)  | database entities/orm | [ ![Download](https://api.bintray.com/packages/codehelixinc/slatekit/slatekit-entities/images/download.svg) ](https://bintray.com/codehelixinc/slatekit/slatekit-entities/_latestVersion)
+[slatekit-meta](http://www.slatekit.com/utils.html)                    | [src](src/lib/kotlin/slatekit-meta)   | meta/reflection utils | [ ![Download](https://api.bintray.com/packages/codehelixinc/slatekit/slatekit-meta/images/download.svg) ](https://bintray.com/codehelixinc/slatekit/slatekit-meta/_latestVersion)
 [slatekit-integration](https://www.slatekit.com)                       | [src](src/lib/kotlin/slatekit-integration) | integration components | [ ![Download](https://api.bintray.com/packages/codehelixinc/slatekit/slatekit-integration/images/download.svg) ](https://bintray.com/codehelixinc/slatekit/slatekit-integration/_latestVersion)
 [slatekit-providers-aws](http://www.slatekit.com/infra.html)                   | [src](src/ext/kotlin/slatekit-providers-aws)    | clouder services ( AWS ) | [ ![Download](https://api.bintray.com/packages/codehelixinc/slatekit/slatekit-providers-aws/images/download.svg) ](https://bintray.com/codehelixinc/slatekit/slatekit-providers-aws/_latestVersion)
 
-
-# License
-Slate Kit has a unique **Dual License** approach using **BSL** (Business Source License) and **Apache 2.0** using the `Additional Use Grants` parameter of the BSL. This is a relatively new approach and license that we are trying out and we plan to improve on this dual licensing approach in time. Currently, we are allowing this software to be used as Apache 2.0 immediately for the groups / usage listed below and for the foreseeable future.
-
-**Apache 2.0**: This is effectively Apache 2.0 for the following groups and usage
-group | note
-----| ------------ 
-**Non-Profits** | Non-Profit organizations ( .org ) 
-**Educational** | Educational institutions ( .edu )
-**Start Ups**   | Same as commercial - see below
-**Personal**    | Same as commercial - see below 
-**Commercial**  | Must NOT be a Cloud Provider company and/or used for building Cloud-Provider infrastructure ( such as AWS, Google Cloud, Azure, Digital Ocean, etc )
-
-**BSL 1.1** 
-For Cloud-Providers such as AWS, Google Cloud, Azure, Digital Ocean, etc, this is a BSL license. 
-It can not be used for production usage without obtaining a license.
-
-param |value
-----| ------------ 
-**Change Date** | Jan 1, 2024  - Converts to Apache 2.0 on Jan 1, 2024
-**Change License** |  Apache 2.0 - Type of license this BSL will convert to
-**Additional Use Grants** |  Grants production use immediately under Apache 2.0 for certain groups and usage ( see above )
-
-**Notes**:
-1. BSL is a relatively new license type.
-2. BSL is technically NOT an open-source license but rather `source available`
-3. BSL has parameters `Change Date | Change License | Additional Use` that convert it to open source
-4. BSL `Additional Use Grant` is used to grant additional rights ( we are using this broadly to provide Apache 2.0 licensing rights above )
 
 **Links**:
 1. https://mariadb.com/bsl-faq-adopting/
