@@ -39,7 +39,9 @@ class Data_04_Database_Access : TestSupport {
     val sampleUUID4 = "67bdb72a-1d74-11e8-b467-0ed5f89f7184"
 
     @Test fun can_use_all_types() {
-        val entities = realDb()
+        val entities = EntitySetup.realDb()
+        entities.register<Long, SampleEntityImmutable>(LongId {s -> s.id}, "sample_entity", Vendor.MySql) { repo -> EntityService(repo) }
+
         val svc = entities.getService<Long, SampleEntityImmutable>()
         val id = svc.create(SampleEntityImmutable(
                 test_string = "abc",
@@ -91,12 +93,5 @@ class Data_04_Database_Access : TestSupport {
         Assert.assertTrue(updated.test_localdatetime == update.test_localdatetime)
         Assert.assertTrue(updated.test_uuid  == update.test_uuid)
         Assert.assertTrue(updated.test_uniqueId == update.test_uniqueId)
-    }
-
-    private fun realDb(): Entities {
-        val dbs = Connections.of(EntitySetup.con!!)
-        val entities = Entities({ con -> Db(con) }, dbs, MyEncryptor)
-        entities.register<Long, SampleEntityImmutable>(LongId {s -> s.id}, "sample_entity", Vendor.MySql) { repo -> EntityService(repo) }
-        return entities
     }
 }

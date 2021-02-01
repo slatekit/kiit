@@ -29,6 +29,12 @@ interface Repo<TId, T> : Inspectable<TId, T> where TId : Comparable<TId>, T:Any 
 
 
     /**
+     * Check if entity id is a valid persisted value
+     */
+    fun isPersisted(id:TId): Boolean = meta.id.isPersisted(id)
+
+
+    /**
      * Get identity of entity - for convenience
      */
     fun identity(model: T): TId = meta.id.identity(model)

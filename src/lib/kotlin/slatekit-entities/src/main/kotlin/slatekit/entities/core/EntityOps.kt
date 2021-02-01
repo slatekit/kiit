@@ -20,13 +20,7 @@ interface EntityOps<TId, T> where TId : Comparable<TId>, T : Entity<TId> {
     }
 
     fun isCreated(id: TId): Boolean {
-        return when (id) {
-            is Int -> id > 0
-            is Long -> id > 0L
-            is String -> !id.isEmpty()
-            is UUID -> !id.toString().trim().isEmpty()
-            else -> false
-        }
+        return EntityUtils.isCreated(id)
     }
 
     fun columnName(name:String):String {
@@ -34,5 +28,19 @@ interface EntityOps<TId, T> where TId : Comparable<TId>, T : Entity<TId> {
         val column = name
         //val encoded = QueryEncoder.ensureField(column)
         return column
+    }
+}
+
+
+object EntityUtils {
+
+    fun <TId> isCreated(id: TId): Boolean {
+        return when (id) {
+            is Int -> id > 0
+            is Long -> id > 0L
+            is String -> !id.isEmpty()
+            is UUID -> !id.toString().trim().isEmpty()
+            else -> false
+        }
     }
 }

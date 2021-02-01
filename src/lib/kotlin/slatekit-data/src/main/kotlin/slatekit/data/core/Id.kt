@@ -17,6 +17,11 @@ interface Id<TId, T> where TId : Comparable<TId>, T: Any {
     fun isPersisted(model:T):Boolean
 
     /**
+     * Determines if the model is persisted
+     */
+    fun isPersisted(id:TId):Boolean
+
+    /**
      * Determines the identity of the model
      */
     fun identity(model:T):TId
@@ -42,6 +47,11 @@ class LongId<T>(val idName:String = "id", val op:(T) -> Long) : Id<Long, T> wher
      * Determines if the model is persisted
      */
     override fun isPersisted(model:T):Boolean = op(model) > 0L
+
+    /**
+     * Determines if the model is persisted
+     */
+    override fun isPersisted(id:Long):Boolean = id > 0L
 
     /**
      * Determines the identity of the model

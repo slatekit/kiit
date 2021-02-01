@@ -23,13 +23,17 @@ interface CrudRepo<TId, T> : Repo<TId, T> where TId : Comparable<TId>, T:Any {
      * checking its persisted flag.
      * @param entity
      */
-    fun save(entity: T?) {
-        entity?.let { item ->
-            if (isPersisted(item))
-                update(item)
-            else
-                create(item)
-        }
+    fun save(entity: T?):Pair<TId?, Boolean> {
+        return entity?.let { item ->
+            if (isPersisted(item)) {
+                val updated = update(item)
+                Pair(identity(item), updated)
+            }
+            else {
+                val id = create(item)
+                Pair(id, isPersisted(id))
+            }
+        } ?: Pair(null, false)
     }
 
     /**
@@ -37,7 +41,7 @@ interface CrudRepo<TId, T> : Repo<TId, T> where TId : Comparable<TId>, T:Any {
      * NOTE: This does NOT do a batch insert.
      * A separate method will be provided for batch inserts
      */
-    fun saveAll(items: List<T>) = items.forEach { item -> save(item) }
+    fun saveAll(items: List<T>):List<Pair<TId?, Boolean>> = items.map { item -> save(item) }
 
 
     /**

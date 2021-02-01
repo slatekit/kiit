@@ -13,6 +13,7 @@ import slatekit.data.core.Meta
 import slatekit.data.core.Table
 import slatekit.db.Db
 import slatekit.entities.Entities
+import slatekit.entities.EntityService
 import test.TestApp
 import test.setup.AppEncryptor
 import test.setup.MyEncryptor
@@ -26,6 +27,12 @@ object EntitySetup {
     val upid = "usa:314fef51-43a7-496c-be24-520e73758836"
     val meta = Meta<Long, SampleEntityImmutable>(LongId { m -> m.id }, Table("sample1"))
     val con = Confs.readDbCon(TestApp::class.java,"usr://.slatekit/common/conf/db.conf")
+
+    fun realDb(): Entities {
+        val dbs = Connections.of(EntitySetup.con!!)
+        val entities = Entities({ con -> Db(con) }, dbs, MyEncryptor)
+        return entities
+    }
 
 
     fun sampleImmutable(): SampleEntityImmutable = SampleEntityImmutable(

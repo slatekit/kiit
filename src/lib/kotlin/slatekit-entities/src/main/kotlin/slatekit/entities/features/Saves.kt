@@ -41,7 +41,7 @@ interface Saves<TId, T> : EntityOps<TId, T> where TId : kotlin.Comparable<TId>, 
      *
      * @param items
      */
-    fun saveAll(items: List<T>) {
-        repo().saveAll(items)
+    fun saveAll(items: List<T>):List<Pair<TId?, Boolean>> {
+        return repo().saveAll(items)
     }
 }

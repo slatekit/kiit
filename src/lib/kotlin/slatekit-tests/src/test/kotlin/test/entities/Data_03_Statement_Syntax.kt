@@ -10,6 +10,9 @@ import slatekit.entities.mapper.EntityMapper
 import slatekit.entities.mapper.EntitySettings
 import slatekit.meta.models.Model
 import slatekit.migrations.SqlBuilder
+import test.setup.Group
+import test.setup.Member
+import test.setup.User5
 
 class Data_03_Statement_Syntax {
 
@@ -49,7 +52,7 @@ class Data_03_Statement_Syntax {
 
 
     @Test
-    fun can_build_ddl() {
+    fun can_build_ddl_1() {
         val model = Model.loadSchema(SampleEntityImmutable::class, table = "sample1")
         val builder = SqlBuilder(Types(), null)
         val actual = builder.createTable(model)
@@ -77,5 +80,18 @@ class Data_03_Statement_Syntax {
 `test_object_zip` NVARCHAR(5) NOT NULL,  
 `test_object_ispobox` BIT NOT NULL );"""
         Assert.assertEquals(expected, actual)
+    }
+
+
+    @Test
+    fun can_build_ddl_2() {
+        val models = listOf(
+                Model.loadSchema(User5::class ),
+                Model.loadSchema(Member::class),
+                Model.loadSchema(Group::class )
+        )
+        val builder = SqlBuilder(Types(), null)
+        val ddls = models.map { builder.createTable(it) }
+        println(ddls)
     }
 }
