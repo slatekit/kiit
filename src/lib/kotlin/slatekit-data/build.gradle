@@ -20,9 +20,9 @@ apply plugin: 'kotlin'
 
 
 // Slate Kit Component info ( for variables for pom / package / etc )
-def slatekitComponentId = 'entities'
-def slatekitComponentName = 'Entities'
-def slatekitComponentDesc = 'SlateKit Entities: Entity Service/Repository pattern'
+def slatekitComponentId = 'data'
+def slatekitComponentName = 'Data'
+def slatekitComponentDesc = 'SlateKit Data: Repository pattern'
 def slatekitComponentVersion = ext.slatekit_version
 
 
