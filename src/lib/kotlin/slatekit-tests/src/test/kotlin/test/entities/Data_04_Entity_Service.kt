@@ -52,6 +52,10 @@ import test.setup.User5
         `name` NVARCHAR(30) NOT NULL
     );
  */
+class UserService(repo:EntityRepo<Long, User5>)
+    : EntityService<Long, User5>(repo), Ordered<Long, User5>, Counts<Long, User5>
+
+
 class Data_04_Entity_Service {
 
     private lateinit var entities:Entities
@@ -73,8 +77,6 @@ class Data_04_Entity_Service {
     private fun getUsrs():EntityService<Long, User5> = entities.getService<Long, User5>()
 
 
-    class UserService(repo:EntityRepo<Long, User5>)
-        : EntityService<Long, User5>(repo), Ordered<Long, User5>, Counts<Long, User5>
 
 
     private fun createSamples(setupSamples:Boolean = true, createMembers:Boolean = true): UserService {

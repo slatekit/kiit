@@ -184,7 +184,7 @@ open class Entities(
     }
 
     fun getServiceByType(entityType: KClass<*>): EntityService<*, *> {
-        val info = getInfo(entityType)
+        val info = getInfoInternal(entityType)
         return info.entityServiceInstance ?: throw Exception("Entity service not available")
     }
 
@@ -194,11 +194,15 @@ open class Entities(
     }
 
     fun getRepoByType(tpe: KClass<*>): EntityRepo<*, *> {
-        val info = getInfo(tpe)
+        val info = getInfoInternal(tpe)
         return info.entityRepoInstance
     }
 
-    private fun getInfo(entityType: KClass<*>): EntityContext {
+    inline fun <reified T> getInfo(): EntityContext? {
+        return getInfoByName(T::class.qualifiedName!!)
+    }
+
+    private fun getInfoInternal(entityType: KClass<*>): EntityContext {
         val key = builder.key(entityType)
         return getInfoByKey(key)
     }
