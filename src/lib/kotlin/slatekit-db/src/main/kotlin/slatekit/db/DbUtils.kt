@@ -19,6 +19,7 @@ import slatekit.common.data.DbCon
 import java.sql.*
 import org.threeten.bp.*
 import slatekit.common.DateTimes
+import slatekit.common.EnumLike
 import slatekit.common.data.DataType
 import slatekit.common.data.Value
 import slatekit.common.ext.local
@@ -147,34 +148,41 @@ object DbUtils {
      * @param stmt
      * @param inputs
      */
-    fun fillArgs(stmt: PreparedStatement, inputs: List<Value>?) {
+    fun fillArgs(stmt: PreparedStatement, inputs: List<Value>?, error: (Exception) -> Unit) {
         inputs?.forEachIndexed { index, arg ->
             val pos = index + 1
-            when(arg.value) {
-                null -> {
-                    val type = jdbcTypes[arg.tpe]
-                    stmt.setNull(pos, type ?: java.sql.Types.INTEGER)
-                }
-                else -> {
-                    when (arg.tpe) {
-                        DataType.DTString        -> stmt.setString(pos, arg.toString())
-                        DataType.DTBool          -> stmt.setBoolean(pos, arg as Boolean)
-                        DataType.DTShort         -> stmt.setShort(pos, arg as Short)
-                        DataType.DTInt           -> stmt.setInt(pos, arg as Int)
-                        DataType.DTLong          -> stmt.setLong(pos, arg as Long)
-                        DataType.DTFloat         -> stmt.setFloat(pos, arg as Float)
-                        DataType.DTDouble        -> stmt.setDouble(pos, arg as Double)
-                        DataType.DTLocalDate     -> stmt.setDate(pos, java.sql.Date.valueOf((arg as LocalDate).toJava8LocalDate()))
-                        DataType.DTLocalTime     -> stmt.setTime(pos, java.sql.Time.valueOf((arg as LocalTime).toJava8LocalTime()))
-                        DataType.DTLocalDateTime -> stmt.setTimestamp(pos, java.sql.Timestamp.valueOf((arg as LocalDateTime).toJava8LocalDateTime()))
-                        DataType.DTZonedDateTime -> stmt.setTimestamp(pos, java.sql.Timestamp.valueOf(((arg as ZonedDateTime).toJava8ZonedDateTime()).toLocalDateTime()))
-                        DataType.DTInstant       -> stmt.setTimestamp(pos, java.sql.Timestamp.valueOf((LocalDateTime.ofInstant(arg as Instant, ZoneId.systemDefault()).toJava8LocalDateTime())))
-                        DataType.DTDateTime      -> stmt.setTimestamp(pos, java.sql.Timestamp.valueOf(((arg as DateTime).local()).toJava8LocalDateTime()))
-                        DataType.DTUUID          -> stmt.setString(pos, (arg.value as UUID).toString())
-                        DataType.DTULID          -> stmt.setString(pos, (arg.value as ULID).value)
-                        DataType.DTUPID          -> stmt.setString(pos, (arg.value as UPID).value)
+            try {
+                when (arg.value) {
+                    null -> {
+                        val type = jdbcTypes[arg.tpe]
+                        stmt.setNull(pos, type ?: java.sql.Types.INTEGER)
+                    }
+                    else -> {
+                        when (arg.tpe) {
+                            DataType.DTString -> stmt.setString(pos, arg.value.toString())
+                            DataType.DTBool -> stmt.setBoolean(pos, arg.value as Boolean)
+                            DataType.DTShort -> stmt.setShort(pos, arg.value as Short)
+                            DataType.DTInt -> stmt.setInt(pos, arg.value as Int)
+                            DataType.DTLong -> stmt.setLong(pos, arg.value as Long)
+                            DataType.DTFloat -> stmt.setFloat(pos, arg.value as Float)
+                            DataType.DTDouble -> stmt.setDouble(pos, arg.value as Double)
+                            DataType.DTEnum -> stmt.setInt(pos, (arg.value as EnumLike).value)
+                            DataType.DTLocalDate -> stmt.setDate(pos, java.sql.Date.valueOf((arg.value as LocalDate).toJava8LocalDate()))
+                            DataType.DTLocalTime -> stmt.setTime(pos, java.sql.Time.valueOf((arg.value as LocalTime).toJava8LocalTime()))
+                            DataType.DTLocalDateTime -> stmt.setTimestamp(pos, java.sql.Timestamp.valueOf((arg.value as LocalDateTime).toJava8LocalDateTime()))
+                            DataType.DTZonedDateTime -> stmt.setTimestamp(pos, java.sql.Timestamp.valueOf(((arg.value as ZonedDateTime).toJava8ZonedDateTime()).toLocalDateTime()))
+                            DataType.DTInstant -> stmt.setTimestamp(pos, java.sql.Timestamp.valueOf((LocalDateTime.ofInstant(arg.value as Instant, ZoneId.systemDefault()).toJava8LocalDateTime())))
+                            DataType.DTDateTime -> stmt.setTimestamp(pos, java.sql.Timestamp.valueOf(((arg.value as DateTime).local()).toJava8LocalDateTime()))
+                            DataType.DTUUID -> stmt.setString(pos, (arg.value as UUID).toString())
+                            DataType.DTULID -> stmt.setString(pos, (arg.value as ULID).value)
+                            DataType.DTUPID -> stmt.setString(pos, (arg.value as UPID).value)
+                            else -> stmt.setString(pos, arg.value.toString())
+                        }
                     }
                 }
+            }
+            catch(ex:Exception) {
+                error(ex)
             }
         }
     }

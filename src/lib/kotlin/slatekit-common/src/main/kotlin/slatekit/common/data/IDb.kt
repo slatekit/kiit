@@ -16,7 +16,7 @@ import java.sql.ResultSet
  *    to abstract away JDBC for Android
  */
 interface IDb : ProcSupport {
-    val onError: (Exception) -> Unit
+    val errHandler: (Exception) -> Unit
 
     /**
      * registers the jdbc driver

@@ -19,7 +19,7 @@ open class Insert<TId, T>(val info: Meta<TId, T>, val mapper: Mapper<TId, T>) : 
     open fun stmt(item: T): String {
         val values = data(item)
         val cols = "(" + values.joinToString(",", transform = { it.name }) + ") "
-        val args = "VALUES (" + values.joinToString(",", transform = { it.value?.toString() ?: Consts.NULL }) + ")"
+        val args = "VALUES (" + values.joinToString(",", transform = { it.text ?: Consts.NULL }) + ")"
         return "${prefix()} $cols $args;"
     }
 

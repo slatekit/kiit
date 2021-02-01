@@ -8,10 +8,12 @@ import slatekit.common.DateTime
 import slatekit.common.data.DataType
 import slatekit.common.ids.UPID
 import slatekit.meta.KTypes
+import slatekit.meta.Reflector
 import java.util.*
 import kotlin.reflect.KClass
 import kotlin.reflect.KProperty
 import kotlin.reflect.KType
+import kotlin.reflect.full.isSubclassOf
 
 object ModelUtils {
 
@@ -38,7 +40,19 @@ object ModelUtils {
             Enum::class          -> DataType.DTEnum
             UUID::class          -> DataType.DTUUID
             UPID::class          -> DataType.DTUPID
-            else                 -> DataType.DTObject
+            else                 -> {
+                when {
+                    Reflector.isSlateKitEnum(fieldCls) -> {
+                        DataType.DTEnum
+                    }
+                    fieldCls.isSubclassOf(Enum::class) -> {
+                        DataType.DTEnum
+                    }
+                    else -> {
+                        DataType.DTObject
+                    }
+                }
+            }
         }
         return fieldType
     }

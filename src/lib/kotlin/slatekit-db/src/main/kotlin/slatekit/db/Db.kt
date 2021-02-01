@@ -41,7 +41,7 @@ import slatekit.db.DbUtils.fillArgs
  */
 class Db(private val dbCon: DbCon, errorCallback: ((Exception) -> Unit)? = null) : IDb {
 
-    override val onError = errorCallback ?: this::errorHandler
+    override val errHandler = errorCallback ?: this::errorHandler
 
     /**
      * registers the jdbc driver
@@ -54,7 +54,7 @@ class Db(private val dbCon: DbCon, errorCallback: ((Exception) -> Unit)? = null)
     }
 
     override fun execute(sql: String) {
-        executeStmt(dbCon, { _, stmt -> stmt.execute(sql) }, onError)
+        executeStmt(dbCon, { _, stmt -> stmt.execute(sql) }, errHandler)
     }
 
     /**
@@ -68,7 +68,7 @@ class Db(private val dbCon: DbCon, errorCallback: ((Exception) -> Unit)? = null)
         return executePrep<T>(dbCon, sql, { _, stmt ->
 
             // fill all the arguments into the prepared stmt
-            inputs?.let { fillArgs(stmt, inputs) }
+            inputs?.let { fillArgs(stmt, inputs, errHandler) }
 
             // execute
             val rs = stmt.executeQuery()
@@ -79,7 +79,7 @@ class Db(private val dbCon: DbCon, errorCallback: ((Exception) -> Unit)? = null)
                 }
                 res
             }
-        }, onError)
+        }, errHandler)
     }
 
     /**
@@ -95,7 +95,7 @@ class Db(private val dbCon: DbCon, errorCallback: ((Exception) -> Unit)? = null)
             val stmt = con.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)
             stmt.use { s ->
                 // fill all the arguments into the prepared stmt
-                inputs?.let { fillArgs(s, inputs) }
+                inputs?.let { fillArgs(s, inputs, errHandler) }
 
                 // execute the update
                 s.executeUpdate()
@@ -110,7 +110,7 @@ class Db(private val dbCon: DbCon, errorCallback: ((Exception) -> Unit)? = null)
                     id
                 }
             }
-        }, onError)
+        }, errHandler)
         return res ?: 0
     }
 
@@ -127,7 +127,7 @@ class Db(private val dbCon: DbCon, errorCallback: ((Exception) -> Unit)? = null)
             val stmt = con.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)
             stmt.use { s ->
                 // fill all the arguments into the prepared stmt
-                inputs?.let { fillArgs(s, inputs) }
+                inputs?.let { fillArgs(s, inputs, errHandler) }
 
                 // execute the update
                 s.executeUpdate()
@@ -142,7 +142,7 @@ class Db(private val dbCon: DbCon, errorCallback: ((Exception) -> Unit)? = null)
                     id
                 }
             }
-        }, onError)
+        }, errHandler)
         return res ?: ""
     }
 
@@ -157,12 +157,12 @@ class Db(private val dbCon: DbCon, errorCallback: ((Exception) -> Unit)? = null)
         val result = executePrep<Int>(dbCon, sql, { _, stmt ->
 
             // fill all the arguments into the prepared stmt
-            inputs?.let { fillArgs(stmt, inputs) }
+            inputs?.let { fillArgs(stmt, inputs, errHandler) }
 
             // update and get number of affected records
             val count = stmt.executeUpdate()
             count
-        }, onError)
+        }, errHandler)
         return result ?: 0
     }
 
@@ -182,7 +182,7 @@ class Db(private val dbCon: DbCon, errorCallback: ((Exception) -> Unit)? = null)
         val result = executePrep<T>(dbCon, sql, { _: Connection, stmt: PreparedStatement ->
 
             // fill all the arguments into the prepared stmt
-            inputs?.let { fillArgs(stmt, inputs) }
+            inputs?.let { fillArgs(stmt, inputs, errHandler) }
 
             // execute
             val rs = stmt.executeQuery()
@@ -193,7 +193,7 @@ class Db(private val dbCon: DbCon, errorCallback: ((Exception) -> Unit)? = null)
                 }
                 v
             }
-        }, onError)
+        }, errHandler)
         return result
     }
 

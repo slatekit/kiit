@@ -38,7 +38,7 @@ open class Delete<TId, T>(val info: Meta<TId, T>, val mapper: Mapper<TId, T>, va
     open fun prep(id: TId): Command {
         val name = encode(info.pkey.name, info.table.encodeChar)
         val sql = "${prefix()} where $name = ?;"
-        return Command(sql, listOf(Value(name, info.pkey.type, id)), listOf(id))
+        return Command(sql, listOf(Value(name, info.pkey.type, id, id.toString())), listOf(id))
     }
 
     /**
@@ -49,7 +49,7 @@ open class Delete<TId, T>(val info: Meta<TId, T>, val mapper: Mapper<TId, T>, va
      */
     open fun data(id: TId): Values {
         val name = encode(info.pkey.name, info.table.encodeChar)
-        return listOf<Value>(Value(name, info.pkey.type, id))
+        return listOf<Value>(Value(name, info.pkey.type, id, id.toString()))
     }
 
     /**

@@ -43,8 +43,8 @@ open class SqlRepo<TId, T>(
      * Note: You can customize the sql by providing your own statements
      */
     override fun create(entity: T): TId {
-        val result = syntax.insert.stmt(entity)
-        val id = db.insertGetId(result)
+        val result = syntax.insert.prep(entity)
+        val id = db.insertGetId(result.sql, result.pairs)
         return meta.id.convertToId(id)
     }
 
@@ -53,8 +53,8 @@ open class SqlRepo<TId, T>(
      * Note: You can customize the sql by providing your own statements
      */
     override fun update(entity: T): Boolean {
-        val result = syntax.update.stmt(entity)
-        val count = db.update(result)
+        val result = syntax.update.prep(entity)
+        val count = db.update(result.sql, result.pairs)
         return count > 0
     }
 
@@ -63,8 +63,8 @@ open class SqlRepo<TId, T>(
      * Note: You can customize the sql by providing your own statements
      */
     override fun getById(id: TId): T? {
-        val result = syntax.select.stmt(id)
-        return mapOne(result)
+        val result = syntax.select.prep(id)
+        return mapOne(result.sql, result.pairs)
     }
 
     /**
@@ -100,8 +100,8 @@ open class SqlRepo<TId, T>(
      * Note: You can customize the sql by providing your own statements
      */
     override fun deleteById(id: TId): Boolean {
-        val result = syntax.delete.stmt(id)
-        val count = update(result)
+        val result = syntax.delete.prep(id)
+        val count = update(result.sql, result.pairs)
         return count > 0
     }
 
