@@ -16,17 +16,18 @@ cd slatekit-app           && gradle clean build bintrayUpload && cd ../ && echo 
 cd slatekit-cli           && gradle clean build bintrayUpload && cd ../ && echo 'sleeping 20s' && sleep 20s  
 cd slatekit-jobs          && gradle clean build bintrayUpload && cd ../ && echo 'sleeping 20s' && sleep 20s 
 cd slatekit-apis          && gradle clean build bintrayUpload && cd ../ && echo 'sleeping 20s' && sleep 20s 
-cd slatekit-cache         && gradle clean build bintrayUpload && cd ../ && echo 'sleeping 20s' && sleep 20s 
 
 # Infrastructure
-cd slatekit-db            && gradle clean build bintrayUpload && cd ../ && echo 'sleeping 20s' && sleep 20s 
+cd slatekit-cache         && gradle clean build bintrayUpload && cd ../ && echo 'sleeping 20s' && sleep 20s 
 cd slatekit-cloud         && gradle clean build bintrayUpload && cd ../ && echo 'sleeping 20s' && sleep 20s    
+cd slatekit-db            && gradle clean build bintrayUpload && cd ../ && echo 'sleeping 20s' && sleep 20s 
 cd slatekit-notifications && gradle clean build bintrayUpload && cd ../ && echo 'sleeping 20s' && sleep 20s   
 
-# Entities / ORM
+# Data 
 cd slatekit-query         && gradle clean build bintrayUpload && cd ../ && echo 'sleeping 20s' && sleep 20s    
+cd slatekit-data          && gradle clean build bintrayUpload && cd ../ && echo 'sleeping 20s' && sleep 20s    
 cd slatekit-entities      && gradle clean build bintrayUpload && cd ../ && echo 'sleeping 20s' && sleep 20s       
-cd slatekit-orm           && gradle clean build bintrayUpload && cd ../ && echo 'sleeping 20s' && sleep 20s  
+cd slatekit-migrations    && gradle clean build bintrayUpload && cd ../ && echo 'sleeping 20s' && sleep 20s  
 
 # Providers
 cd ../../ext/kotlin/
