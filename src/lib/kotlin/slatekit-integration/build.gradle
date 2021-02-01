@@ -102,6 +102,7 @@ dependencies {
         compile "com.slatekit:slatekit-jobs:$slatekit_version"
         compile "com.slatekit:slatekit-policy:$slatekit_version"
         compile "com.slatekit:slatekit-cache:$slatekit_version"
+        compile "com.slatekit:slatekit-migrations:$slatekit_version"
         compile "com.slatekit:slatekit-notifications:$slatekit_version"
         compile "com.slatekit:slatekit-connectors-entities:$slatekit_version"
     } else {
@@ -113,12 +114,12 @@ dependencies {
         compile project(":slatekit-query")
         compile project(":slatekit-cli")
         compile project(":slatekit-entities")
-        compile project(":slatekit-orm")
         compile project(":slatekit-core")
         compile project(":slatekit-policy")
         compile project(":slatekit-cache")
         compile project(":slatekit-apis")
         compile project(":slatekit-jobs")
+        compile project(":slatekit-migrations")
         compile project(":slatekit-notifications")
         compile project(":slatekit-connectors-entities")
     } //</slatekit_local>

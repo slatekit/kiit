@@ -127,7 +127,7 @@ dependencies {
         implementation project(":slatekit-query")
         implementation project(":slatekit-data")
         implementation project(":slatekit-entities")
-        implementation project(":slatekit-orm")
+        //implementation project(":slatekit-orm")
         implementation project(":slatekit-meta")
         implementation project(":slatekit-policy")
         implementation project(":slatekit-serialization")

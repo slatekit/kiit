@@ -33,8 +33,8 @@ project(':slatekit-data').projectDir=new File('../slatekit-data')
 include ':slatekit-entities'
 project(':slatekit-entities').projectDir=new File('../slatekit-entities')
 
-include ':slatekit-orm'
-project(':slatekit-orm').projectDir=new File('../slatekit-orm')
+include ':slatekit-migrations'
+project(':slatekit-migrations').projectDir=new File('../slatekit-migrations')
 
 include ':slatekit-http'
 project(':slatekit-http').projectDir=new File('../slatekit-http')
