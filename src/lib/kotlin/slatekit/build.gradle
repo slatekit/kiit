@@ -27,7 +27,7 @@ apply plugin: 'application'
 def slatekitComponentId = 'exe'
 def slatekitComponentName = 'Exe'
 def slatekitComponentDesc = 'SlateKit Exe: CLI application'
-def slatekitComponentVersion = ext.slatekit_version_beta
+def slatekitComponentVersion = ext.slatekit_version
 
 
 // ==================================================================
@@ -89,12 +89,12 @@ dependencies {
         implementation "com.slatekit:slatekit-common:$slatekit_version"
         implementation "com.slatekit:slatekit-context:$slatekit_version"
         implementation "com.slatekit:slatekit-app:$slatekit_version"
-        implementation "com.slatekit:slatekit-meta:$slatekit_version_beta"
+        implementation "com.slatekit:slatekit-meta:$slatekit_version"
         implementation "com.slatekit:slatekit-policy:$slatekit_version"
         implementation "com.slatekit:slatekit-serialization:$slatekit_version"
         implementation "com.slatekit:slatekit-tracking:$slatekit_version"
         implementation "com.slatekit:slatekit-apis:$slatekit_version"
-        implementation "com.slatekit:slatekit-generator:$slatekit_version_beta"
+        implementation "com.slatekit:slatekit-generator:$slatekit_version"
         implementation "com.slatekit:slatekit-cli:$slatekit_version"
         implementation "com.slatekit:slatekit-connectors-cli:$slatekit_version"
         implementation "com.slatekit:slatekit-providers-logback:$slatekit_version"
@@ -109,10 +109,10 @@ dependencies {
 //        implementation "com.slatekit:slatekit-notifications:$slatekit_version"
 //        implementation "com.slatekit:slatekit-cloud:$slatekit_version"
 //        implementation "com.slatekit:slatekit-db:$slatekit_version"
-//        implementation "com.slatekit:slatekit-query:$slatekit_version_beta"
-//        implementation "com.slatekit:slatekit-entities:$slatekit_version_beta"
-//        implementation "com.slatekit:slatekit-orm:$slatekit_version_beta"
-//        implementation "com.slatekit:slatekit-integration:$slatekit_version_beta"
+//        implementation "com.slatekit:slatekit-query:$slatekit_version"
+//        implementation "com.slatekit:slatekit-entities:$slatekit_version"
+//        implementation "com.slatekit:slatekit-orm:$slatekit_version"
+//        implementation "com.slatekit:slatekit-integration:$slatekit_version"
 //        implementation "com.slatekit:slatekit-server:$slatekit_version"
     } else {
         // */
@@ -147,8 +147,8 @@ dependencies {
 //        implementation project(":slatekit-samples")
     } //</slatekit_local>
 //    implementation project(":slatekit-examples")
-    implementation project(":slatekit-samples")
-    implementation project(":slatekit-tests")
+//    implementation project(":slatekit-samples")
+//    implementation project(":slatekit-tests")
 }
 
 // https://www.anexinet.com/blog/six-ways-to-package-a-java-application-with-gradle/
