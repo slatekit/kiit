@@ -1,7 +1,6 @@
 package slatekit.entities.core
 
 import slatekit.common.data.DataAction
-import java.util.*
 import slatekit.entities.Entity
 import slatekit.entities.EntityRepo
 
@@ -32,15 +31,3 @@ interface EntityOps<TId, T> where TId : Comparable<TId>, T : Entity<TId> {
 }
 
 
-object EntityUtils {
-
-    fun <TId> isCreated(id: TId): Boolean {
-        return when (id) {
-            is Int -> id > 0
-            is Long -> id > 0L
-            is String -> !id.isEmpty()
-            is UUID -> !id.toString().trim().isEmpty()
-            else -> false
-        }
-    }
-}
