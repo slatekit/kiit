@@ -13,14 +13,15 @@ Slate Kit is a **Kotlin** framework, a simple, light-weight, modular tool-kit to
 
 
 # Goals
-1. Simple, light-weight, modular, 100% Kotlin based alternative to Spring Framework
-2. Targeted for Start-Ups, Personal Projects, SMB ( small-medium sized businesses )
-3. Usable on both Server and Android ( due to being simple/light-weight)
-4. Kotlin Multi-Platform planned for the future for Javascript, Native, iOS, etc
-5. Designed as a set of libraries rather than a typical `"framework"`
-6. CLI tools to quickly create new Apps, CLIs, API, Jobs projects
-7. Partial Cloud Provider abstractions for ( Queues, Files, Databases, etc ) 
-8. Default support and integrations for AWS
+1. **Simple** : Easy to use, light-weight, modular ( 100% Kotlin based alternative to Spring Framework ) 
+2. **Projects**: More than just for APIs, use it for Console apps, Jobs, CLIs.
+3. **Usage**  : Designed for Start-Ups, Personal Projects, Mobile Apps, SMB ( small-medium sized businesses )
+4. **Full-Stack**: Usable on both Server and Android ( due to being simple/light-weight)
+5. **Multiplatform** Kotlin Multi-Platform planned for the future for Javascript, Native, iOS, etc
+6. **Modular** : Designed as a set of libraries rather than a typical `"framework"`
+7. **Tools** : CLI tools to quickly create new Apps, CLIs, API, Jobs projects
+8. **Cloud** : Partial Cloud Provider abstractions for ( Queues, Files, Databases, etc ) 
+9. **Defaults** Sensible default implementations, currently support AWS
 
 # Start
 You can quickly get started on **Mac OS** using the **Homebrew** installer and create projects using the Slate Kit CLI. Refer to https://www.slatekit.com/start/generators/ for more info.
