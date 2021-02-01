@@ -74,10 +74,10 @@ open class EntityEncoder<TId, T>(val model: Model,
                     is List<*> -> data.forEach {
                         when (it) {
                             is Value -> converted.add(it)
-                            else -> converted.add(Value(col, buildValue(col, it ?: "", false)))
+                            else -> converted.add(Value(col, DataType.DTString, buildValue(col, it ?: "", false)))
                         }
                     }
-                    else -> converted.add(Value(col, buildValue(col, data, false)))
+                    else -> converted.add(Value(col, mapping.dataTpe, buildValue(col, data, false)))
                 }
             }
         }

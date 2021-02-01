@@ -2,10 +2,7 @@ package slatekit.samples.common.data
 
 import slatekit.common.Record
 import slatekit.common.crypto.Encryptor
-import slatekit.common.data.DataAction
-import slatekit.common.data.Mapper
-import slatekit.common.data.Value
-import slatekit.common.data.Values
+import slatekit.common.data.*
 import slatekit.data.encoders.Encoders
 import slatekit.samples.common.models.Delivery
 import slatekit.samples.common.models.Movie
@@ -33,14 +30,14 @@ class MovieMapper1(val encoders:Encoders<Long, Movie>) : Mapper<Long, Movie> {
 
     override fun encode(model: Movie, action: DataAction, enc: Encryptor?): Values {
         return listOf(
-                Value(Movie::uuid.name     , encoders.uuids.encode(model.uuid)),
-                Value(Movie::title.name    , encoders.strings.encode(model.title)),
-                Value(Movie::category.name , encoders.strings.encode(model.category)),
-                Value(Movie::playing.name  , encoders.bools.encode(model.playing)),
-                Value(Movie::delivery.name , encoders.enums.encode(model.delivery)),
-                Value(Movie::cost.name     , encoders.ints.encode(model.cost)),
-                Value(Movie::rating.name   , encoders.doubles.encode(model.rating)),
-                Value(Movie::released.name , encoders.dateTimes.encode(model.released))
+                Value(Movie::uuid.name     , DataType.DTUUID, encoders.uuids.encode(model.uuid)),
+                Value(Movie::title.name    , DataType.DTString, encoders.strings.encode(model.title)),
+                Value(Movie::category.name , DataType.DTString, encoders.strings.encode(model.category)),
+                Value(Movie::playing.name  , DataType.DTBool, encoders.bools.encode(model.playing)),
+                Value(Movie::delivery.name , DataType.DTInt, encoders.enums.encode(model.delivery)),
+                Value(Movie::cost.name     , DataType.DTInt, encoders.ints.encode(model.cost)),
+                Value(Movie::rating.name   , DataType.DTDouble, encoders.doubles.encode(model.rating)),
+                Value(Movie::released.name , DataType.DTDateTime, encoders.dateTimes.encode(model.released))
         )
     }
 }

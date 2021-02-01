@@ -13,7 +13,7 @@ interface Patchable<TId, T> : Inspectable<TId, T> where TId : Comparable<TId>, T
     /**
      * patches the items with the field and value supplied
      */
-    fun patchByField(field: String, value: Any?): Int = patchByQuery(Query().set(Value(field, value)))
+    fun patchByField(field: String, value: Any?): Int = patchByQuery(Query().set(Value(field, meta.pkey.type, value)))
 
 
     /**
