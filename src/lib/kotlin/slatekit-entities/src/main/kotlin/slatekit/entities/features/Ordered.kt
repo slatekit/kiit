@@ -1,6 +1,5 @@
 package slatekit.entities.features
 
-import slatekit.data.features.Countable
 import slatekit.data.features.Orderable
 import slatekit.entities.Entity
 import slatekit.entities.core.EntityOps

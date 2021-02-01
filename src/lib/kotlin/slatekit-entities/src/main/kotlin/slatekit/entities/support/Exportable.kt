@@ -2,7 +2,7 @@ package slatekit.entities.support
 
 import slatekit.common.utils.Export
 import slatekit.entities.Entity
-import slatekit.entities.EntitySupport
+import slatekit.entities.features.CRUD
 import slatekit.meta.kClass
 import slatekit.meta.models.Model
 import slatekit.results.Try
@@ -16,7 +16,7 @@ interface Exportable<TId, T> where TId : Comparable<TId>, T : Entity<TId> {
 
     val schema: Int
     val model: Model
-    val service: EntitySupport<TId, T>
+    val service: CRUD<TId, T>
 
     /**
      * Exports all items

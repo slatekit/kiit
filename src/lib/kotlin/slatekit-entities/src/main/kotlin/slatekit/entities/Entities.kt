@@ -20,7 +20,6 @@ import slatekit.common.log.Logs
 import slatekit.common.log.LogsDefault
 import slatekit.common.naming.Namer
 import slatekit.common.utils.ListMap
-import slatekit.data.SqlRepo
 import slatekit.data.core.*
 import slatekit.entities.core.*
 import slatekit.data.syntax.SqlSyntax
@@ -28,7 +27,6 @@ import slatekit.entities.mapper.EntityMapper
 import slatekit.entities.mapper.EntitySettings
 import slatekit.meta.kClass
 import slatekit.meta.models.Model
-import slatekit.meta.models.ModelMapper
 
 /**
  *  A registry for all the entities and their corresponding services, repositories, database
@@ -91,14 +89,13 @@ open class Entities(
 
         // 2. Table info ( name of table supplied or use class name )
         val tableName = table ?: enType.simpleName!!
-        val tableKey = PKey(idName, DataType.getTypeFromLang(idType.java))
+        val tableKey = PKey(idName, DataType.fromJava(idType.java))
         val tableChar = if(vendor == Vendor.MySql) '`' else '"'
         val tableInfo = Table(tableName, tableChar, tableKey)
 
         // 3. Schema / Meta data
-        val entityModel = ModelMapper.loadSchema(enType, idName, null, tableName)
+        val entityModel = Model.loadSchema(enType, idName, null, tableName)
         val entityMeta = Meta<TId, T>(idOps, tableInfo)
-        val entityInfo = EntityInfo(idType, enType, entityMeta, entityModel)
 
         // 4. Mapper
         val entityMapper = EntityMapper<TId, T>(entityModel, entityMeta, idType, enType, EntitySettings(true))
@@ -186,7 +183,7 @@ open class Entities(
     }
 
     fun getServiceByType(entityType: KClass<*>): EntityService<*, *> {
-        val info = getInfo(entityType)
+        val info = getInfoInternal(entityType)
         return info.entityServiceInstance ?: throw Exception("Entity service not available")
     }
 
@@ -196,11 +193,15 @@ open class Entities(
     }
 
     fun getRepoByType(tpe: KClass<*>): EntityRepo<*, *> {
-        val info = getInfo(tpe)
+        val info = getInfoInternal(tpe)
         return info.entityRepoInstance
     }
 
-    private fun getInfo(entityType: KClass<*>): EntityContext {
+    inline fun <reified T> getInfo(): EntityContext? {
+        return getInfoByName(T::class.qualifiedName!!)
+    }
+
+    private fun getInfoInternal(entityType: KClass<*>): EntityContext {
         val key = builder.key(entityType)
         return getInfoByKey(key)
     }

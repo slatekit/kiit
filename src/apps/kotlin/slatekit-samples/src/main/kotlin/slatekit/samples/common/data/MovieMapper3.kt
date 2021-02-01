@@ -4,7 +4,7 @@ import slatekit.data.core.LongId
 import slatekit.data.core.Meta
 import slatekit.data.core.Table
 import slatekit.entities.mapper.EntityMapper
-import slatekit.meta.models.ModelMapper
+import slatekit.meta.models.Model
 import slatekit.samples.common.models.Movie
 
 /**
@@ -13,7 +13,7 @@ import slatekit.samples.common.models.Movie
  * Cons: Less performant than manual
  */
 object MovieMapper3 : EntityMapper<Long, Movie>(
-        model = ModelMapper.loadSchema(Movie::class),
+        model = Model.loadSchema(Movie::class),
         meta = Meta(LongId { m -> m.id }, Table("movie")),
         idClass = Long::class,
         enClass = Movie::class)

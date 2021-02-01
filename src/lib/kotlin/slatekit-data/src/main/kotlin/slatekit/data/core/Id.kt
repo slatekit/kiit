@@ -2,7 +2,7 @@ package slatekit.data.core
 
 /**
  * Used to operate on the Id ( primary key ) of a model ( class )
- * This allow us to not but any constraints on the model T.
+ * This allows us to not put any constraints on the model T.
  */
 interface Id<TId, T> where TId : Comparable<TId>, T: Any {
 
@@ -17,6 +17,11 @@ interface Id<TId, T> where TId : Comparable<TId>, T: Any {
     fun isPersisted(model:T):Boolean
 
     /**
+     * Determines if the model is persisted
+     */
+    fun isPersisted(id:TId):Boolean
+
+    /**
      * Determines the identity of the model
      */
     fun identity(model:T):TId
@@ -29,19 +34,24 @@ interface Id<TId, T> where TId : Comparable<TId>, T: Any {
 
 
 /**
- * Long based id support for a model based
+ * Long based id support for a model
  */
-class LongId<T>(val op:(T) -> Long) : Id<Long, T> where T: Any {
+class LongId<T>(val idName:String = "id", val op:(T) -> Long) : Id<Long, T> where T: Any {
 
     /**
      * Name of the field representing the primary key
      */
-    override fun name(): String { return "id" }
+    override fun name(): String { return idName }
 
     /**
      * Determines if the model is persisted
      */
     override fun isPersisted(model:T):Boolean = op(model) > 0L
+
+    /**
+     * Determines if the model is persisted
+     */
+    override fun isPersisted(id:Long):Boolean = id > 0L
 
     /**
      * Determines the identity of the model

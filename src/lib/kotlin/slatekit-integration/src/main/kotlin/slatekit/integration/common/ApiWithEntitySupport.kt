@@ -23,7 +23,9 @@ import slatekit.entities.EntityUpdatable
 import java.util.*
 import kotlin.reflect.KClass
 
-interface ApiWithEntitySupport<TId, T, TSvc> where TId:Comparable<TId>, T : Entity<TId>, TSvc : EntityService<TId, T> {
+interface ApiWithEntitySupport<TId, T, TSvc>
+        where TId:Comparable<TId>, T : Entity<TId>,
+              TSvc : EntityService<TId, T> {
 
     val entityIdType:KClass<*>
     val entityType: KClass<*>

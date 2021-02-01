@@ -2,15 +2,13 @@ package slatekit.data.support
 
 import slatekit.common.DateTimes
 import slatekit.common.Prototyping
+import slatekit.common.data.DataAction
 import slatekit.common.utils.ListMap
 import slatekit.data.FullRepo
-import slatekit.data.events.EntityAction
-import slatekit.data.events.EntityEvent
-import slatekit.data.events.EntityHooks
+import slatekit.common.data.DataEvent
+import slatekit.common.data.DataHooks
 import slatekit.data.core.Meta
-import slatekit.common.data.Filter
-import slatekit.common.data.Logical
-import slatekit.common.data.Value
+import slatekit.query.IQuery
 
 /**
  * Used mostly for Prototyping and Testing.
@@ -21,7 +19,7 @@ import slatekit.common.data.Value
 @Prototyping("NON-PRODUCTION USAGE: Used for prototyping, proof-of-concept, tests")
 class InMemoryRepo<TId, T>(override val meta: Meta<TId, T>,
                            private val idGen: IdGenerator<TId>,
-                           private val hooks: EntityHooks<TId, T>?) : FullRepo<TId, T> where TId : Comparable<TId>, T : Any {
+                           private val hooks: DataHooks<TId, T>?) : FullRepo<TId, T> where TId : Comparable<TId>, T : Any {
     // Ordered list + map features
     private var items = ListMap<TId, T>(listOf())
 
@@ -36,7 +34,7 @@ class InMemoryRepo<TId, T>(override val meta: Meta<TId, T>,
                     val id = idGen.nextId()
                     // store
                     items = items.add(id, entity)
-                    notify(EntityAction.Create, entity)
+                    notify(DataAction.Create, entity)
                     id
                 }
             }
@@ -52,7 +50,7 @@ class InMemoryRepo<TId, T>(override val meta: Meta<TId, T>,
             if (isPersisted(entity) && items.contains(id)) {
                 items = items.minus(id)
                 items = items.add(id, entity)
-                notify(EntityAction.Update, entity)
+                notify(DataAction.Update, entity)
                 true
             } else false
         }
@@ -86,7 +84,7 @@ class InMemoryRepo<TId, T>(override val meta: Meta<TId, T>,
                 item?.let {
                     execute(it) {
                         items = items.remove(id)
-                        item?.let { notify(EntityAction.Delete, item) }
+                        item?.let { notify(DataAction.Delete, item) }
                         true
                     }
                 } ?: false
@@ -118,25 +116,13 @@ class InMemoryRepo<TId, T>(override val meta: Meta<TId, T>,
         }
     }
 
-    override fun deleteByFilters(filters: List<Filter>, logical: Logical): Int {
-        TODO("This class for prototyping purposes only: Not yet implemented")
-    }
-
-    override fun patchByFilters(fields: List<Value>, filters: List<Filter>, logical: Logical): Int {
-        TODO("This class for prototyping purposes only: Not yet implemented")
-    }
-
-    override fun findByFilters(filters: List<Filter>, logical: Logical): List<T> {
-        TODO("This class for prototyping purposes only: Not yet implemented")
-    }
-
-    private fun notify(action: EntityAction, entity:T) {
+    private fun notify(action: DataAction, entity:T) {
         val id = identity(entity)
         val ts = DateTimes.now()
         when(action) {
-            EntityAction.Create -> hooks?.onEntityEvent(EntityEvent.EntityCreated<TId, T>(name, id, entity, ts))
-            EntityAction.Update -> hooks?.onEntityEvent(EntityEvent.EntityUpdated<TId, T>(name, id, entity, ts))
-            EntityAction.Delete -> hooks?.onEntityEvent(EntityEvent.EntityDeleted<TId, T>(name, id, entity, ts))
+            DataAction.Create -> hooks?.onDataEvent(DataEvent.DataCreated<TId, T>(name, id, entity, ts))
+            DataAction.Update -> hooks?.onDataEvent(DataEvent.DataUpdated<TId, T>(name, id, entity, ts))
+            DataAction.Delete -> hooks?.onDataEvent(DataEvent.DataDeleted<TId, T>(name, id, entity, ts))
             else -> { }
         }
     }
@@ -147,8 +133,20 @@ class InMemoryRepo<TId, T>(override val meta: Meta<TId, T>,
         }
         catch(ex:Exception) {
             val id = identity(t)
-            hooks?.onEntityEvent(EntityEvent.EntityErrored(meta.name, id, t, ex, DateTimes.now()))
+            hooks?.onDataEvent(DataEvent.DataErrored(meta.name, id, t, ex, DateTimes.now()))
             throw ex
         }
+    }
+
+    override fun deleteByQuery(query: IQuery): Int {
+        TODO("Not yet implemented")
+    }
+
+    override fun findByQuery(query: IQuery): List<T> {
+        TODO("Not yet implemented")
+    }
+
+    override fun patchByQuery(query: IQuery): Int {
+        TODO("Not yet implemented")
     }
 }

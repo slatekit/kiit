@@ -1,11 +1,12 @@
 package slatekit.meta
 
+import slatekit.common.data.DataType
 import slatekit.meta.models.*
 import kotlin.reflect.KClass
 import kotlin.reflect.KProperty
 import kotlin.reflect.KType
 
-open class Schema<TId, T>(val idType:KClass<*>, val enType:KClass<*>, val table:String = enType.simpleName!!) : Builder where TId : Comparable<TId>, T: Any {
+open class Schema<TId, T>(val idType:KClass<*>, val enType:KClass<*>, val table:String = enType.simpleName!!) where TId : Comparable<TId>, T: Any {
 
     private var _model: Model = Model(enType, table)
 
@@ -17,7 +18,7 @@ open class Schema<TId, T>(val idType:KClass<*>, val enType:KClass<*>, val table:
     fun id(
             prop: KProperty<*>,
             name: String? = null,
-            type: FieldType? = null,
+            type: DataType? = null,
             min: Int = -1,
             max: Int = -1,
             defaultValue: Any? = null,
@@ -36,7 +37,7 @@ open class Schema<TId, T>(val idType:KClass<*>, val enType:KClass<*>, val table:
             prop: KProperty<*>,
             name: String? = null,
             desc: String = "",
-            type: FieldType? = null,
+            type: DataType? = null,
             min: Int = -1,
             max: Int = -1,
             defaultValue: Any? = null,

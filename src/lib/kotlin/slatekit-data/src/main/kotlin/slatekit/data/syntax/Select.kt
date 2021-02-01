@@ -67,20 +67,6 @@ open class Select<TId, T>(val info: Meta<TId, T>, val mapper: Mapper<TId, T>, va
     fun count(): String = "select count(*) from " + encode(info.name, info.table.encodeChar)
 
     /**
-     * builds a select based on filters
-     */
-    fun filter(filters: List<Filter>, logical: Logical): Command {
-        val prefix = prefix()
-        val values = filters.map { Encoding.convertVal(it.value) }
-        val op = if(logical == Logical.And) "and" else "or"
-        val conditions = filters.joinToString(" $op ", transform = { f ->
-            this.filters.build(f.name, f.op, f.value, surround = true, placehoder = true)
-        })
-        val sql = "$prefix where ${conditions};"
-        return Command(sql, emptyValues, values)
-    }
-
-    /**
      * Takes the first or last N items
      */
     fun take(count:Int, desc:Boolean): String {

@@ -133,7 +133,7 @@ data class User5(
         @property:Id()
         override val id: Long = 0,
 
-        @property:Field(required = true)
+        @property:Field(length = 100, required = true)
         val email: String = "",
 
         @property:Field(required = true)
@@ -157,7 +157,7 @@ data class User5(
         @property:Field(required = true)
         val updatedBy: Long = 0,
 
-        @property:Field(required = true)
+        @property:Field(length = 50, required = true)
         val uniqueId: String = Random.uuid()
 ) : EntityWithId<Long>, EntityUpdatable<Long, User5> {
 

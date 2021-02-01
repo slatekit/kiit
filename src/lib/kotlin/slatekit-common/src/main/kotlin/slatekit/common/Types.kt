@@ -20,7 +20,11 @@ import slatekit.common.crypto.EncLong
 import slatekit.common.crypto.EncString
 //import java.time.*
 import org.threeten.bp.*
+import slatekit.common.ids.ULID
+import slatekit.common.ids.ULIDs
+import slatekit.common.ids.UPIDs
 import slatekit.common.types.Vars
+import java.util.*
 
 object Types {
 
@@ -39,6 +43,9 @@ object Types {
     val JLocalDateTimeClass = LocalDateTime.MIN.javaClass
     val JZonedDateTimeClass = ZonedDateTime.now().javaClass
     val JInstantClass = Instant.MIN.javaClass
+    val JUUIDClass = UUID.fromString("1bd16d06-a45a-45d8-b4c9-7e864251275f").javaClass
+    val JULIDClass = ULIDs.create().javaClass
+    val JUPIDClass = UPIDs.create().javaClass
     val JDocClass = Doc.javaClass
     val JVarsClass = Vars.javaClass
     val JDecIntClass = EncInt.javaClass

@@ -1,6 +1,9 @@
 package slatekit.data.encoders
 
 
+/**
+ * Stores all the encoders for all supported data types
+ */
 open class Encoders<TId, T> where TId: kotlin.Comparable<TId>, T:Any {
     open val bools              = BoolEncoder()
     open val strings            = StringEncoder()
@@ -16,6 +19,6 @@ open class Encoders<TId, T> where TId: kotlin.Comparable<TId>, T:Any {
     open val dateTimes          = DateTimeEncoder()
     open val instants           = InstantEncoder()
     open val uuids              = UUIDEncoder()
-    open val uniqueIds          = UPIDEncoder()
+    open val upids              = UPIDEncoder()
     open val enums              = EnumEncoder()
 }

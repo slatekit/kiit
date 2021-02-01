@@ -33,6 +33,7 @@ import slatekit.entities.Entities
 import slatekit.connectors.entities.AppEntContext
 import slatekit.meta.KTypes
 import slatekit.results.Notice
+import slatekit.results.Success
 import slatekit.results.getOrElse
 import test.TestApp
 import test.setup.*
@@ -207,8 +208,8 @@ class ReflectorTests : TestSupport {
 
 
     @Test fun can_call_method() {
-        val api = UserApi(ctx)
-        val res = Reflector.callMethod(UserApi::class, api, UserApi::activate.name, arrayOf("123456789", 987, true, DateTimes.of(2017, 5, 27)))
+        val api = ActivationService
+        val res = Reflector.callMethod(ActivationService::class, api, ActivationService::activate.name, arrayOf("123456789", 987, true, DateTimes.of(2017, 5, 27)))
         val result = res as Notice<String>
         val v = result.getOrElse { "" }
         Assert.assertTrue(v == "ok")
@@ -280,9 +281,9 @@ class ReflectorTests : TestSupport {
 
 
     @Test fun can_get_annotation_for_method_with_inherited() {
-        val members = Reflector.getAnnotatedMembers<Action>(UserApi::class, Action::class, false)
-        Assert.assertEquals(41, members.size )
-        Assert.assertEquals("activate", members[0].second.name)
+        val members = Reflector.getAnnotatedMembers<Action>(SampleAnnoExtendedApi::class, Action::class, false)
+        Assert.assertEquals(3, members.size )
+        Assert.assertEquals("seconds", members[0].second.name)
         Assert.assertEquals("", members[1].second.name)
     }
 
@@ -313,6 +314,14 @@ class ReflectorTests : TestSupport {
 
         //AuthorW::email.javaSetter?.invoke(obj, "poster2@abc.com")
         Assert.assertTrue(author.email == "poster2@abc.com")
+    }
+
+
+    object ActivationService {
+        @Action(desc = "activate")
+        fun activate(phone: String, code: Int, isPremiumUser: Boolean, date: DateTime): Notice<String> =
+                Success("ok", msg = "activated $phone, $code, $isPremiumUser, $date")
+
     }
 
     /*

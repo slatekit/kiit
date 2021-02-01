@@ -169,24 +169,6 @@ object DbUtils {
         else null
     }
 
-    fun getTypeFromLang(dataType: Class<*>): DataType =
-            if (dataType == Types.JBoolClass) DataType.DbBool
-            else if (dataType == Types.JStringClass) DataType.DbString
-            else if (dataType == Types.JShortClass) DataType.DbShort
-            else if (dataType == Types.JIntClass) DataType.DbNumber
-            else if (dataType == Types.JLongClass) DataType.DbLong
-            else if (dataType == Types.JFloatClass) DataType.DbFloat
-            else if (dataType == Types.JDoubleClass) DataType.DbDouble
-            // else if (dataType == Types.JDecimalClass) DataType.DbDecimal
-            else if (dataType == Types.JLocalDateClass) DataType.DbLocalDate
-            else if (dataType == Types.JLocalTimeClass) DataType.DbLocalTime
-            else if (dataType == Types.JLocalDateTimeClass) DataType.DbLocalDateTime
-            else if (dataType == Types.JZonedDateTimeClass) DataType.DbZonedDateTime
-            else if (dataType == Types.JInstantClass) DataType.DbInstant
-            else if (dataType == Types.JDateTimeClass) DataType.DbDateTime
-            else DataType.DbString
-
-
     private fun LocalDate.toJava8LocalDate(): java.time.LocalDate {
         return java.time.LocalDate.of(this.year, this.month.value, this.dayOfMonth)
     }

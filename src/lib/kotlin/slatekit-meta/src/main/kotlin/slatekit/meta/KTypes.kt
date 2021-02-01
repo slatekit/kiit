@@ -13,6 +13,7 @@ import org.threeten.bp.*
 import slatekit.common.ext.toStringNumeric
 import slatekit.common.ext.toStringTime
 import slatekit.common.ext.toStringYYYYMMDD
+import slatekit.common.ids.ULID
 import slatekit.common.smartvalues.SmartValue
 import slatekit.common.smartvalues.SmartValued
 import slatekit.common.types.Vars
@@ -62,6 +63,7 @@ object KTypes {
     val KZonedDateTimeType = ZonedDateTime::class.createType()
     val KInstantType = Instant::class.createType()
     val KUUIDType = java.util.UUID::class.createType()
+    val KULIDType = ULID::class.createType()
     val KUPIDType = UPID::class.createType()
     val KDocType = Doc::class.createType()
     val KVarsType = Vars::class.createType()

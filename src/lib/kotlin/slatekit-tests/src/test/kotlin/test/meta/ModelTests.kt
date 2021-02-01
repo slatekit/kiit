@@ -7,7 +7,6 @@ import slatekit.common.ids.UPID
 import slatekit.meta.Reflector
 import slatekit.meta.models.FieldCategory
 import slatekit.meta.models.Model
-import slatekit.meta.models.ModelMapper
 import test.setup.*
 import java.util.*
 import kotlin.reflect.KClass
@@ -18,7 +17,7 @@ class ModelTests {
 
 
     @Test fun can_build_simple_model_from_reflection(){
-        val model = ModelMapper.loadSchema(AuthorR::class, AuthorR::id.name)
+        val model = Model.loadSchema(AuthorR::class, AuthorR::id.name)
         ensureAuthorModel(model)
     }
 
@@ -30,7 +29,7 @@ class ModelTests {
 
 
     @Test fun can_build_complex_model_from_schema(){
-        val model = ModelMapper.loadSchema(UserWithAddress::class, UserWithAddress::id.name)
+        val model = Model.loadSchema(UserWithAddress::class, UserWithAddress::id.name)
         val addrProp = model.fields.find { it.name == "addr" }
         Assert.assertTrue( addrProp != null)
         Assert.assertTrue( addrProp!!.model != null)
@@ -39,7 +38,7 @@ class ModelTests {
 
 
     @Test fun can_build_simple_model_with_nullable(){
-        val model = ModelMapper.loadSchema(AuthorRNull::class, AuthorRNull::id.name)
+        val model = Model.loadSchema(AuthorRNull::class, AuthorRNull::id.name)
         Assert.assertTrue(model.hasId)
         Assert.assertTrue(model.any)
         ensureField(model, "id"        , false, Long::class       )

@@ -1,9 +1,8 @@
 package slatekit.entities.core
 
-import java.util.*
+import slatekit.common.data.DataAction
 import slatekit.entities.Entity
 import slatekit.entities.EntityRepo
-import slatekit.data.events.EntityAction
 
 interface EntityOps<TId, T> where TId : Comparable<TId>, T : Entity<TId> {
 
@@ -15,24 +14,20 @@ interface EntityOps<TId, T> where TId : Comparable<TId>, T : Entity<TId> {
      * @param entity
      * @return
      */
-    fun applyFieldData(mode: EntityAction, entity: T): T {
+    fun applyFieldData(mode: DataAction, entity: T): T {
         return entity
     }
 
     fun isCreated(id: TId): Boolean {
-        return when (id) {
-            is Int -> id > 0
-            is Long -> id > 0L
-            is String -> !id.isEmpty()
-            is UUID -> !id.toString().trim().isEmpty()
-            else -> false
-        }
+        return EntityUtils.isCreated(id)
     }
 
     fun columnName(name:String):String {
         // Get column name from model schema ( if available )
-        val column = this.repo().columnName(name)
+        val column = name
         //val encoded = QueryEncoder.ensureField(column)
         return column
     }
 }
+
+

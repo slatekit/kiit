@@ -1,8 +1,8 @@
 package slatekit.entities.features
 
+import slatekit.common.data.DataAction
 import slatekit.entities.Entity
 import slatekit.entities.EntityUpdatable
-import slatekit.data.events.EntityAction
 import slatekit.entities.core.EntityOps
 import slatekit.entities.EntityOptions
 import slatekit.results.Try
@@ -27,7 +27,7 @@ interface Creates<TId, T> : EntityOps<TId, T> where TId : kotlin.Comparable<TId>
     fun create(entity: T, options: EntityOptions): Pair<TId, T> {
         // Massage
         val entityWithMeta = when (options.applyMetadata) {
-            true -> applyFieldData(EntityAction.Create, entity)
+            true -> applyFieldData(DataAction.Create, entity)
             false -> entity
         }
 
@@ -49,7 +49,7 @@ interface Creates<TId, T> : EntityOps<TId, T> where TId : kotlin.Comparable<TId>
      */
     fun create(entity: T): TId {
         // Massage with timestamps
-        val entityWithData = applyFieldData(EntityAction.Create, entity)
+        val entityWithData = applyFieldData(DataAction.Create, entity)
 
         // Create! get id
         val id = repo().create(entityWithData)

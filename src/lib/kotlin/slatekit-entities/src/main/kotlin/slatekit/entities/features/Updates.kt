@@ -1,17 +1,16 @@
 package slatekit.entities.features
 
+import slatekit.common.data.DataAction
 import slatekit.query.Op
-import slatekit.common.data.Filter
-import slatekit.common.data.Logical
 import slatekit.common.data.Value
 import kotlin.reflect.KProperty
 import slatekit.entities.Entity
-import slatekit.data.events.EntityAction
 import slatekit.entities.core.EntityOps
 import slatekit.entities.EntityOptions
 import slatekit.meta.Reflector
 import slatekit.meta.kClass
 import slatekit.query.IQuery
+import slatekit.query.Query
 import slatekit.results.Try
 import slatekit.results.builders.Tries
 
@@ -43,7 +42,7 @@ interface Updates<TId, T> : EntityOps<TId, T> where TId : kotlin.Comparable<TId>
     fun update(entity: T, options: EntityOptions): Pair<Boolean, T> {
         // Massage
         val entityFinal = when (options.applyMetadata) {
-            true -> applyFieldData(EntityAction.Update, entity)
+            true -> applyFieldData(DataAction.Update, entity)
             false -> entity
         }
 
@@ -58,7 +57,7 @@ interface Updates<TId, T> : EntityOps<TId, T> where TId : kotlin.Comparable<TId>
      * @return
      */
     fun update(entity: T): Boolean {
-        val finalEntity = applyFieldData(EntityAction.Update, entity)
+        val finalEntity = applyFieldData(DataAction.Update, entity)
         val success = repo().update(finalEntity)
         return success
     }
@@ -91,7 +90,7 @@ interface Updates<TId, T> : EntityOps<TId, T> where TId : kotlin.Comparable<TId>
      * updates items using the query
      */
     fun updateByQuery(query: IQuery): Int {
-        return repo().updateByQuery(query)
+        return repo().patchByQuery(query)
     }
 
     /**
@@ -113,6 +112,6 @@ interface Updates<TId, T> : EntityOps<TId, T> where TId : kotlin.Comparable<TId>
      */
     fun patchByFields(prop: KProperty<*>, oldValue: Any?, newValue:Any?): Int {
         val column = columnName(prop.name)
-        return repo().patchByFilters(listOf(Value(column, oldValue)), listOf(Filter(column, Op.Eq, newValue)), Logical.And)
+        return repo().patchByQuery(Query().set(column, oldValue).where(column, Op.Eq, newValue))
     }
 }

@@ -13,7 +13,6 @@
 
 package slatekit.entities.core
 
-import slatekit.common.data.Mapper
 import kotlin.reflect.KClass
 import slatekit.common.data.Vendor
 import slatekit.common.data.Vendor.MySql

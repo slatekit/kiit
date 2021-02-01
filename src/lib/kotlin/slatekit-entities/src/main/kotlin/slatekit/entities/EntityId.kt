@@ -1,6 +1,7 @@
 package slatekit.entities
 
 import slatekit.data.core.Id
+import slatekit.entities.core.EntityUtils
 
 class EntityId<TId, T>(val idName:String = "id", val converter:(String) -> TId) : Id<TId, T> where TId: Comparable<TId>, T: Entity<TId> {
     override fun name(): String {
@@ -9,6 +10,10 @@ class EntityId<TId, T>(val idName:String = "id", val converter:(String) -> TId) 
 
     override fun isPersisted(model: T): Boolean {
         return model.isPersisted()
+    }
+
+    override fun isPersisted(id: TId): Boolean {
+        return EntityUtils.isCreated(id)
     }
 
     override fun identity(model: T): TId {
@@ -28,6 +33,10 @@ class EntityLongId<T>(val idName:String = "id") : Id<Long, T> where T: Entity<Lo
 
     override fun isPersisted(model: T): Boolean {
         return model.isPersisted()
+    }
+
+    override fun isPersisted(id: Long): Boolean {
+        return id > 0L
     }
 
     override fun identity(model: T): Long {

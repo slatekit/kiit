@@ -89,12 +89,12 @@ open class SqlBuilder(val types: Types, val namer: Namer?) {
         val dataFieldSql = dataFields.fold("") { acc, field ->
             val finalStoredName = prefix?.let { prefix + "_" + field.storedName } ?: field.storedName
             if (field.isEnum) {
-                acc + ", " + createCol(finalStoredName, DataType.DbNumber, field.isRequired, field.maxLength)
+                acc + ", " + createCol(finalStoredName, DataType.DTInt, field.isRequired, field.maxLength)
             } else if (field.model != null) {
                 val sql = field.model?.let { createColumns(field.storedName, it, false) }
                 acc + sql
             } else {
-                val sqlType = DataType.getTypeFromLang(field.dataCls.java)
+                val sqlType = DataType.fromJava(field.dataCls.java)
                 acc + ", " + createCol(finalStoredName, sqlType, field.isRequired, field.maxLength)
             }
         }
@@ -125,11 +125,13 @@ open class SqlBuilder(val types: Types, val namer: Namer?) {
      * Builds a valid column type
      */
     fun colType(colType: DataType, maxLen: Int): String {
-        return if (colType == DataType.DbText && maxLen == -1)
+        return if (colType == DataType.DTText && maxLen == -1)
             types.textType.dbType
-        else if (colType == DataType.DbString && maxLen == -1)
+        else if (colType == DataType.DTString && maxLen == -1)
             types.textType.dbType
-        else if (colType == DataType.DbString)
+        else if (colType == DataType.DTString)
+            types.stringType.dbType + "($maxLen)"
+        else if (colType == DataType.DTUUID || colType == DataType.DTULID || colType == DataType.DTUPID)
             types.stringType.dbType + "($maxLen)"
         else
             types.lookup[colType]?.dbType ?: ""

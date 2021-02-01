@@ -2,7 +2,6 @@ package slatekit.data.syntax
 
 import slatekit.common.data.*
 import slatekit.data.Consts
-import slatekit.common.data.Filter
 import slatekit.data.core.Meta
 
 /**
@@ -42,30 +41,6 @@ open class Update<TId, T>(val info: Meta<TId, T>, val mapper: Mapper<TId, T>, va
      */
     open fun data(item: T): Values {
         return mapper.encode(item, DataAction.Update, null)
-    }
-
-    /**
-     * builds a select based on filters
-     */
-    open fun patch(updates:List<Value>, filters: List<Filter>, logical:Logical): Command {
-        val prefix = prefix()
-        // set category = 1
-        val changesValues = updates.map { Encoding.convertVal(it.value) }
-
-        // set category = ?, activated = ?
-        val changes = updates.joinToString(",", transform = { c ->
-            this.filters.update(c.name, c.value, true, true)
-        })
-
-        // where category = ?, activated = ?
-        val op = if(logical == Logical.And) "and" else "or"
-        val conditionValues = filters.map { Encoding.convertVal(it.value) }
-        val conditions = filters.joinToString(" and ", transform = { f ->
-            this.filters.build(f.name, f.op, f.value, surround = true, placehoder = true)
-        })
-        val sql = "$prefix set ${changes}, where ${conditions};"
-        val values = changesValues + conditionValues
-        return Command(sql, emptyValues, values)
     }
 
     /**

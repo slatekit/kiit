@@ -18,7 +18,7 @@ open class EnumEncoder : SqlEncoder<EnumLike> {
         return null
     }
 
-    fun toItem(record: Record, name: String, dataCls: KClass<*>): EnumLike? {
+    fun decode(record: Record, name: String, dataCls: KClass<*>): EnumLike? {
         val enumInt = record.getInt(name)
         val enumValue = Reflector.getEnumValue(dataCls, enumInt)
         return enumValue

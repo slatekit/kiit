@@ -28,37 +28,37 @@ open class MySqlBuilder : DbBuilder {
      * Mapping of normalized types ot postgres type names
      */
     val dataToColumnTypes = mapOf(
-        DataType.DbString to "NVARCHAR",
-        DataType.DbBool to "BIT",
-        DataType.DbShort to "TINYINT",
-        DataType.DbNumber to "INTEGER",
-        DataType.DbLong to "BIGINT",
-        DataType.DbFloat to "FLOAT",
-        DataType.DbDouble to "DOUBLE",
-        DataType.DbDecimal to "DECIMAL",
-        DataType.DbLocalDate to "DATE",
-        DataType.DbLocalTime to "TIME",
-        DataType.DbLocalDateTime to "DATETIME",
-        DataType.DbZonedDateTime to "DATETIME",
-        DataType.DbInstant to "INSTANT",
-        DataType.DbDateTime to "DATETIME"
+        DataType.DTString to "NVARCHAR",
+        DataType.DTBool to "BIT",
+        DataType.DTShort to "TINYINT",
+        DataType.DTInt to "INTEGER",
+        DataType.DTLong to "BIGINT",
+        DataType.DTFloat to "FLOAT",
+        DataType.DTDouble to "DOUBLE",
+        DataType.DTDecimal to "DECIMAL",
+        DataType.DTLocalDate to "DATE",
+        DataType.DTLocalTime to "TIME",
+        DataType.DTLocalDateTime to "DATETIME",
+        DataType.DTZonedDateTime to "DATETIME",
+        DataType.DTInstant to "INSTANT",
+        DataType.DTDateTime to "DATETIME"
     )
 
     val langToDataTypes = mapOf(
-        Types.JBoolClass to DataType.DbBool,
-        Types.JStringClass to DataType.DbString,
-        Types.JShortClass to DataType.DbShort,
-        Types.JIntClass to DataType.DbNumber,
-        Types.JLongClass to DataType.DbLong,
-        Types.JFloatClass to DataType.DbFloat,
-        Types.JDoubleClass to DataType.DbDouble,
+        Types.JBoolClass to DataType.DTBool,
+        Types.JStringClass to DataType.DTString,
+        Types.JShortClass to DataType.DTShort,
+        Types.JIntClass to DataType.DTInt,
+        Types.JLongClass to DataType.DTLong,
+        Types.JFloatClass to DataType.DTFloat,
+        Types.JDoubleClass to DataType.DTDouble,
         // Types.JDecimalClass to  DataType.DbDecimal,
-        Types.JLocalDateClass to DataType.DbLocalDate,
-        Types.JLocalTimeClass to DataType.DbLocalTime,
-        Types.JLocalDateTimeClass to DataType.DbLocalDateTime,
-        Types.JZonedDateTimeClass to DataType.DbZonedDateTime,
-        Types.JInstantClass to DataType.DbInstant,
-        Types.JDateTimeClass to DataType.DbDateTime
+        Types.JLocalDateClass to DataType.DTLocalDate,
+        Types.JLocalTimeClass to DataType.DTLocalTime,
+        Types.JLocalDateTimeClass to DataType.DTLocalDateTime,
+        Types.JZonedDateTimeClass to DataType.DTZonedDateTime,
+        Types.JInstantClass to DataType.DTInstant,
+        Types.JDateTimeClass to DataType.DTDateTime
     )
 
     /**
@@ -92,9 +92,9 @@ open class MySqlBuilder : DbBuilder {
      * Builds a valid column type
      */
     override fun colType(colType: DataType, maxLen: Int): String {
-        return if (colType == DataType.DbString && maxLen == -1)
+        return if (colType == DataType.DTString && maxLen == -1)
             "longtext"
-        else if (colType == DataType.DbString)
+        else if (colType == DataType.DTString)
             "VARCHAR($maxLen)"
         else
             getColTypeName(colType)

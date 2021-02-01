@@ -13,13 +13,22 @@
 
 package slatekit.entities
 
+import slatekit.entities.features.CRUD
+import slatekit.entities.features.Counts
+import slatekit.entities.features.Ordered
+
 /**
  * Entity service with generics to support all CRUD operations.
  * Delegates calls to the entity repository, and also manages the timestamps
  * on the entities for create/update operations
  * @tparam T
  */
-open class EntityService<TId, T>(protected val repo: EntityRepo<TId, T>) : EntitySupport<TId, T>
-        where TId : kotlin.Comparable<TId>, T : Entity<TId> {
+open class EntityService<TId, T>(protected val repo: EntityRepo<TId, T>)
+    : CRUD<TId, T> where TId : kotlin.Comparable<TId>, T : Entity<TId> {
     override fun repo(): EntityRepo<TId, T> = repo
+}
+
+open class EntityServices<TId, T>(repo: EntityRepo<TId, T>)
+: EntityService<TId, T>(repo), Counts<TId, T>, Ordered<TId, T> where TId : kotlin.Comparable<TId>, TId : Number, T : Entity<TId> {
+
 }
