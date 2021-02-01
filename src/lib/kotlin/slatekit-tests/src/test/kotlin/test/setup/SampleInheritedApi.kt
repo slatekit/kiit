@@ -1,5 +1,6 @@
 package test.setup
 
+import slatekit.apis.Action
 import slatekit.common.DateTime
 
 
@@ -20,5 +21,19 @@ import slatekit.common.DateTime
 open class SampleExtendedApi : SamplePOKOApi() {
     fun getSeconds():Int = DateTime.now().second
 
+    fun ping(greeting:String):String = "$greeting back"
+}
+
+
+open class SampleAnnoBaseApi {
+    @Action()
+    fun hello(greeting: String): String = "$greeting back"
+}
+
+open class SampleAnnoExtendedApi : SampleAnnoBaseApi() {
+    @Action(name = "seconds")
+    fun getSeconds():Int = DateTime.now().second
+
+    @Action()
     fun ping(greeting:String):String = "$greeting back"
 }

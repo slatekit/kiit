@@ -5,6 +5,8 @@ import slatekit.apis.Action
 import slatekit.entities.EntityService
 import slatekit.integration.common.ApiBaseEntity
 import slatekit.connectors.entities.AppEntContext
+import slatekit.entities.features.Counts
+import slatekit.entities.features.Ordered
 
 /**
  * REST Sample
@@ -47,9 +49,19 @@ class SampleEntityApi(ctx: AppEntContext)
 
 
 @Api(area = "app", name = "tests", desc = "sample to test compositional apis with annotations", roles= ["admin"])
-class SampleEntity2Api(ctx: AppEntContext)
-    : ApiBaseEntity<Long, Movie, EntityService<Long, Movie>>(ctx, Long::class, Movie::class, ctx.ent.getService()) {
+class SampleEntity2Api(ctx: AppEntContext){
+    private val svc = ctx.ent.getService<Long, Movie>() as Ordered<Long ,Movie>
 
     @Action(name = "", desc = "gets the total number of users")
     fun patch(id:Long, title:String): String = "patched $id with $title"
+
+    @Action(name = "", desc = "gets recent items in the system")
+    fun recent(count: Int = 5): List<Movie> {
+        return svc.recent(count)
+    }
+
+    @Action(name = "", desc = "gets oldest items in the system")
+    fun oldest(count: Int = 5): List<Movie> {
+        return svc.oldest(count)
+    }
 }

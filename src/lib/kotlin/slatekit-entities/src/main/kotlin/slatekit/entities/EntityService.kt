@@ -14,6 +14,8 @@
 package slatekit.entities
 
 import slatekit.entities.features.CRUD
+import slatekit.entities.features.Counts
+import slatekit.entities.features.Ordered
 
 /**
  * Entity service with generics to support all CRUD operations.
@@ -24,4 +26,9 @@ import slatekit.entities.features.CRUD
 open class EntityService<TId, T>(protected val repo: EntityRepo<TId, T>)
     : CRUD<TId, T> where TId : kotlin.Comparable<TId>, T : Entity<TId> {
     override fun repo(): EntityRepo<TId, T> = repo
+}
+
+open class EntityServices<TId, T>(repo: EntityRepo<TId, T>)
+: EntityService<TId, T>(repo), Counts<TId, T>, Ordered<TId, T> where TId : kotlin.Comparable<TId>, TId : Number, T : Entity<TId> {
+
 }

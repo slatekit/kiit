@@ -9,11 +9,15 @@ import slatekit.apis.routes.Api
 import slatekit.apis.SetupType
 import slatekit.context.AppContext
 import slatekit.common.data.Vendor
+import slatekit.entities.EntityLongId
+import slatekit.entities.EntityService
+import slatekit.entities.EntityServices
 import slatekit.integration.apis.InfoApi
 import slatekit.integration.apis.VersionApi
 //import slatekit.orm.orm
 import slatekit.results.getOrElse
 import test.TestApp
+import test.entities.Data_04_Entity_Service
 import test.setup.*
 
 
@@ -31,7 +35,7 @@ class Api_Setup_Tests : ApiTestsBase() {
 
 
     @Test fun can_setup_instance_as_new_with_context() {
-        //ctx.ent.orm<Long, Movie>(Vendor.Memory, Long::class, Movie::class)
+        ctx.ent.register<Long, Movie>(EntityLongId() , vendor = Vendor.Memory) { repo -> EntityService(repo) }
         val apis = ApiServer(ctx, apis = listOf(Api(SampleEntityApi::class, "app", "SampleEntity")))
         val result = apis.get("app", "SampleEntity", "patch" )
 
@@ -77,11 +81,11 @@ class Api_Setup_Tests : ApiTestsBase() {
 
 
     @Test fun can_setup_instance_with_compositional_apis_with_annotations() {
-        //ctx.ent.orm<Long, Movie>(Vendor.Memory, Long::class, Movie::class)
+        ctx.ent.register<Long, Movie>(EntityLongId() , vendor = Vendor.Memory) { repo -> EntityServices(repo) }
         val apis = ApiServer(ctx, apis = listOf(Api(SampleEntity2Api::class, declaredOnly = false, setup = SetupType.Annotated)))
         Assert.assertTrue( apis.get("app"   , "tests", "patch" ).success)
         Assert.assertTrue( apis.get("app"   , "tests", "recent" ).success)
-        Assert.assertTrue( apis.get("app"   , "tests", "deleteById" ).success)
+        Assert.assertTrue( apis.get("app"   , "tests", "oldest" ).success)
     }
 
 
