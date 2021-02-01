@@ -20,9 +20,36 @@ import java.sql.*
 import org.threeten.bp.*
 import slatekit.common.DateTimes
 import slatekit.common.data.DataType
+import slatekit.common.data.Value
 import slatekit.common.ext.local
+import slatekit.common.ids.ULID
+import slatekit.common.ids.UPID
+import java.util.*
 
 object DbUtils {
+
+    val jdbcTypes = mapOf<DataType, Int>(
+        DataType.DTBool          to java.sql.Types.BOOLEAN,
+        DataType.DTChar          to java.sql.Types.CHAR,
+        DataType.DTString        to java.sql.Types.VARCHAR,
+        DataType.DTText          to java.sql.Types.LONGNVARCHAR,
+        DataType.DTShort         to java.sql.Types.SMALLINT,
+        DataType.DTInt           to java.sql.Types.INTEGER,
+        DataType.DTLong          to java.sql.Types.BIGINT,
+        DataType.DTFloat         to java.sql.Types.FLOAT,
+        DataType.DTDouble        to java.sql.Types.DOUBLE,
+        DataType.DTDecimal       to java.sql.Types.DECIMAL,
+        DataType.DTLocalDate     to java.sql.Types.DATE,
+        DataType.DTLocalTime     to java.sql.Types.TIME,
+        DataType.DTLocalDateTime to java.sql.Types.TIMESTAMP,
+        DataType.DTZonedDateTime to java.sql.Types.TIMESTAMP,
+        DataType.DTDateTime      to java.sql.Types.TIMESTAMP,
+        DataType.DTInstant       to java.sql.Types.TIMESTAMP,
+        DataType.DTEnum          to java.sql.Types.INTEGER,
+        DataType.DTUUID          to java.sql.Types.VARCHAR,
+        DataType.DTULID          to java.sql.Types.VARCHAR,
+        DataType.DTUPID          to java.sql.Types.VARCHAR
+    )
 
     /**
      * gets a new jdbc connection via Driver manager
@@ -120,28 +147,32 @@ object DbUtils {
      * @param stmt
      * @param inputs
      */
-    fun fillArgs(stmt: PreparedStatement, inputs: List<Any?>?) {
+    fun fillArgs(stmt: PreparedStatement, inputs: List<Value>?) {
         inputs?.forEachIndexed { index, arg ->
             val pos = index + 1
-            when(arg) {
-                null -> stmt.setNull(pos, 0)
+            when(arg.value) {
+                null -> {
+                    val type = jdbcTypes[arg.tpe]
+                    stmt.setNull(pos, type ?: java.sql.Types.INTEGER)
+                }
                 else -> {
-                    val jcls = arg.javaClass
-                    when (jcls) {
-                        Types.JStringAnyClass        -> stmt.setString(pos, arg.toString())
-                        Types.JBoolAnyClass          -> stmt.setBoolean(pos, arg as Boolean)
-                        Types.JShortAnyClass         -> stmt.setShort(pos, arg as Short)
-                        Types.JIntAnyClass           -> stmt.setInt(pos, arg as Int)
-                        Types.JLongAnyClass          -> stmt.setLong(pos, arg as Long)
-                        Types.JFloatAnyClass         -> stmt.setFloat(pos, arg as Float)
-                        Types.JDoubleAnyClass        -> stmt.setDouble(pos, arg as Double)
-                        // Types.JDecimalClass       -> stmt.setBigDecimal(pos, arg as BigDecimal)
-                        Types.JLocalDateAnyClass     -> stmt.setDate(pos, java.sql.Date.valueOf((arg as LocalDate).toJava8LocalDate()))
-                        Types.JLocalTimeAnyClass     -> stmt.setTime(pos, java.sql.Time.valueOf((arg as LocalTime).toJava8LocalTime()))
-                        Types.JLocalDateTimeAnyClass -> stmt.setTimestamp(pos, java.sql.Timestamp.valueOf((arg as LocalDateTime).toJava8LocalDateTime()))
-                        Types.JZonedDateTimeAnyClass -> stmt.setTimestamp(pos, java.sql.Timestamp.valueOf(((arg as ZonedDateTime).toJava8ZonedDateTime()).toLocalDateTime()))
-                        Types.JInstantAnyClass       -> stmt.setTimestamp(pos, java.sql.Timestamp.valueOf((LocalDateTime.ofInstant(arg as Instant, ZoneId.systemDefault()).toJava8LocalDateTime())))
-                        Types.JDateTimeAnyClass      -> stmt.setTimestamp(pos, java.sql.Timestamp.valueOf(((arg as DateTime).local()).toJava8LocalDateTime()))
+                    when (arg.tpe) {
+                        DataType.DTString        -> stmt.setString(pos, arg.toString())
+                        DataType.DTBool          -> stmt.setBoolean(pos, arg as Boolean)
+                        DataType.DTShort         -> stmt.setShort(pos, arg as Short)
+                        DataType.DTInt           -> stmt.setInt(pos, arg as Int)
+                        DataType.DTLong          -> stmt.setLong(pos, arg as Long)
+                        DataType.DTFloat         -> stmt.setFloat(pos, arg as Float)
+                        DataType.DTDouble        -> stmt.setDouble(pos, arg as Double)
+                        DataType.DTLocalDate     -> stmt.setDate(pos, java.sql.Date.valueOf((arg as LocalDate).toJava8LocalDate()))
+                        DataType.DTLocalTime     -> stmt.setTime(pos, java.sql.Time.valueOf((arg as LocalTime).toJava8LocalTime()))
+                        DataType.DTLocalDateTime -> stmt.setTimestamp(pos, java.sql.Timestamp.valueOf((arg as LocalDateTime).toJava8LocalDateTime()))
+                        DataType.DTZonedDateTime -> stmt.setTimestamp(pos, java.sql.Timestamp.valueOf(((arg as ZonedDateTime).toJava8ZonedDateTime()).toLocalDateTime()))
+                        DataType.DTInstant       -> stmt.setTimestamp(pos, java.sql.Timestamp.valueOf((LocalDateTime.ofInstant(arg as Instant, ZoneId.systemDefault()).toJava8LocalDateTime())))
+                        DataType.DTDateTime      -> stmt.setTimestamp(pos, java.sql.Timestamp.valueOf(((arg as DateTime).local()).toJava8LocalDateTime()))
+                        DataType.DTUUID          -> stmt.setString(pos, (arg.value as UUID).toString())
+                        DataType.DTULID          -> stmt.setString(pos, (arg.value as ULID).value)
+                        DataType.DTUPID          -> stmt.setString(pos, (arg.value as UPID).value)
                     }
                 }
             }
@@ -149,23 +180,22 @@ object DbUtils {
     }
 
     @Suppress("UNCHECKED_CAST")
-    fun <T> getScalar(rs: ResultSet, typ: Class<*>): T? {
+    fun <T> getScalar(rs: ResultSet, typ: DataType): T? {
         val pos = 1
 
-        return if (typ == Types.JStringClass) rs.getString(pos) as T
-        else if (typ == Types.JBoolClass) rs.getBoolean(pos) as T
-        else if (typ == Types.JShortClass) rs.getShort(pos) as T
-        else if (typ == Types.JIntClass) rs.getInt(pos) as T
-        else if (typ == Types.JLongClass) rs.getLong(pos) as T
-        else if (typ == Types.JFloatClass) rs.getFloat(pos) as T
-        else if (typ == Types.JDoubleClass) rs.getDouble(pos) as T
-        // else if (typ == Types.JDecimalClass) rs.getBigDecimal(pos) as T
-        else if (typ == Types.JLocalDateClass) rs.getDate(pos).toLocalDate() as T
-        else if (typ == Types.JLocalTimeClass) rs.getTime(pos).toLocalTime() as T
-        else if (typ == Types.JLocalDateTimeClass) rs.getTimestamp(pos).toLocalDateTime() as T
-        else if (typ == Types.JZonedDateTimeClass) rs.getTimestamp(pos).toLocalDateTime() as T
-        else if (typ == Types.JInstantClass) rs.getTimestamp(pos).toInstant() as T
-        else if (typ == Types.JDateTimeClass) DateTimes.of(rs.getTimestamp(pos)) as T
+        return if (typ == DataType.DTString     ) rs.getString(pos) as T
+        else if (typ == DataType.DTBool         ) rs.getBoolean(pos) as T
+        else if (typ == DataType.DTShort        ) rs.getShort(pos) as T
+        else if (typ == DataType.DTInt          ) rs.getInt(pos) as T
+        else if (typ == DataType.DTLong         ) rs.getLong(pos) as T
+        else if (typ == DataType.DTFloat        ) rs.getFloat(pos) as T
+        else if (typ == DataType.DTDouble       ) rs.getDouble(pos) as T
+        else if (typ == DataType.DTLocalDate    ) rs.getDate(pos).toLocalDate() as T
+        else if (typ == DataType.DTLocalTime    ) rs.getTime(pos).toLocalTime() as T
+        else if (typ == DataType.DTLocalDateTime) rs.getTimestamp(pos).toLocalDateTime() as T
+        else if (typ == DataType.DTZonedDateTime) rs.getTimestamp(pos).toLocalDateTime() as T
+        else if (typ == DataType.DTDateTime     ) DateTimes.of(rs.getTimestamp(pos)) as T
+        else if (typ == DataType.DTInstant      ) rs.getTimestamp(pos).toInstant() as T
         else null
     }
 

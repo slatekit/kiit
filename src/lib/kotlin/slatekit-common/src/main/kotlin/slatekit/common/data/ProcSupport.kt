@@ -16,7 +16,7 @@ interface ProcSupport {
             procName: String,
             callback: (ResultSet) -> T?,
             moveNext: Boolean = true,
-            inputs: List<Any?>? = null
+            inputs: List<Value>? = null
     ): T?
 
     /**
@@ -27,7 +27,7 @@ interface ProcSupport {
     fun <T> callQueryMapped(
             procName: String,
             mapper: (Record) -> T?,
-            inputs: List<Any?>? = null
+            inputs: List<Value>? = null
     ): List<T>?
 
     /**
@@ -35,12 +35,12 @@ interface ProcSupport {
      * @param procName : The name of the stored procedure e.g. createUser
      * @param inputs : The parameters for the stored proc. The types will be auto-converted my-sql types.
      */
-    fun callCreate(procName: String, inputs: List<Any?>? = null): String
+    fun callCreate(procName: String, inputs: List<Value>? = null): String
 
     /**
      * Calls a stored procedure
      * @param procName : The name of the stored procedure e.g. get_by_id
      * @param inputs : The parameters for the stored proc. The types will be auto-converted my-sql types.
      */
-    fun callUpdate(procName: String, inputs: List<Any?>? = null): Int
+    fun callUpdate(procName: String, inputs: List<Value>? = null): Int
 }
