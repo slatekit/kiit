@@ -43,8 +43,8 @@ open class SqlRepo<TId, T>(
      * Note: You can customize the sql by providing your own statements
      */
     override fun create(entity: T): TId {
-        val result = syntax.insert.stmt(entity)
-        val id = db.insertGetId(result)
+        val result = syntax.insert.prep(entity)
+        val id = db.insertGetId(result.sql, result.pairs)
         return meta.id.convertToId(id)
     }
 
@@ -53,8 +53,8 @@ open class SqlRepo<TId, T>(
      * Note: You can customize the sql by providing your own statements
      */
     override fun update(entity: T): Boolean {
-        val result = syntax.update.stmt(entity)
-        val count = db.update(result)
+        val result = syntax.update.prep(entity)
+        val count = db.update(result.sql, result.pairs)
         return count > 0
     }
 
@@ -63,8 +63,8 @@ open class SqlRepo<TId, T>(
      * Note: You can customize the sql by providing your own statements
      */
     override fun getById(id: TId): T? {
-        val result = syntax.select.stmt(id)
-        return mapOne(result)
+        val result = syntax.select.prep(id)
+        return mapOne(result.sql, result.pairs)
     }
 
     /**
@@ -100,8 +100,8 @@ open class SqlRepo<TId, T>(
      * Note: You can customize the sql by providing your own statements
      */
     override fun deleteById(id: TId): Boolean {
-        val result = syntax.delete.stmt(id)
-        val count = update(result)
+        val result = syntax.delete.prep(id)
+        val count = update(result.sql, result.pairs)
         return count > 0
     }
 
@@ -195,27 +195,27 @@ open class SqlRepo<TId, T>(
         return count
     }
 
-    override fun createByProc(name: String, args: List<Any>?): TId {
+    override fun createByProc(name: String, args: List<Value>?): TId {
         val idText = db.callCreate(name, args)
         return meta.id.convertToId(idText)
     }
 
-    override fun updateByProc(name: String, args: List<Any>?): Long {
+    override fun updateByProc(name: String, args: List<Value>?): Long {
         return db.callUpdate(name, args).toLong()
     }
 
-    override fun findByProc(name: String, args: List<Any>?): List<T>? {
+    override fun findByProc(name: String, args: List<Value>?): List<T>? {
         return db.callQueryMapped(name, {r -> mapper.decode(r, null) }, args)
     }
 
-    override fun deleteByProc(name: String, args: List<Any>?): Long {
+    override fun deleteByProc(name: String, args: List<Value>?): Long {
         return db.callUpdate(name, args).toLong()
     }
 
     /**
      * Updates records using sql provided and returns the number of updates made
      */
-    protected open fun update(sql: String, inputs:List<Any?>? = null): Int {
+    protected open fun update(sql: String, inputs:List<Value>? = null): Int {
         val count = db.update(sql, inputs)
         return count
     }
@@ -224,11 +224,11 @@ open class SqlRepo<TId, T>(
         return db.getScalarLong(sql, null)
     }
 
-    protected open fun mapAll(sql: String, inputs:List<Any?>? = null): List<T>? {
+    protected open fun mapAll(sql: String, inputs:List<Value>? = null): List<T>? {
         return db.mapAll(sql, inputs) { record -> mapper.decode(record, null) }
     }
 
-    protected open fun mapOne(sql: String, inputs:List<Any?>? = null): T? {
+    protected open fun mapOne(sql: String, inputs:List<Value>? = null): T? {
         return db.mapOne<T>(sql, inputs) { record -> mapper.decode(record, null) }
     }
 }

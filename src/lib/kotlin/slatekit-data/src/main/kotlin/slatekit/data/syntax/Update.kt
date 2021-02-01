@@ -16,7 +16,7 @@ open class Update<TId, T>(val info: Meta<TId, T>, val mapper: Mapper<TId, T>, va
      */
     open fun stmt(item: T): String {
         val values = data(item)
-        val args = values.joinToString(",", transform = { "${it.name} = ${it.value?.toString() ?: Consts.NULL}" } )
+        val args = values.joinToString(",", transform = { "${it.name} = ${it.text ?: Consts.NULL}" } )
         return "${prefix()} SET $args;"
     }
 

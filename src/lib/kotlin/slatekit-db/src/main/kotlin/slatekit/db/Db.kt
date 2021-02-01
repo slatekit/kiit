@@ -14,13 +14,14 @@
 package slatekit.db
 
 import slatekit.common.Record
+import slatekit.common.data.DataType
 import java.sql.Connection
 import java.sql.PreparedStatement
 import java.sql.ResultSet
 import java.sql.Statement
-import kotlin.io.*
 import slatekit.common.data.DbCon
 import slatekit.common.data.IDb
+import slatekit.common.data.Value
 import slatekit.common.repeatWith
 import slatekit.db.DbUtils.executeCon
 import slatekit.db.DbUtils.executePrep
@@ -40,7 +41,7 @@ import slatekit.db.DbUtils.fillArgs
  */
 class Db(private val dbCon: DbCon, errorCallback: ((Exception) -> Unit)? = null) : IDb {
 
-    override val onError = errorCallback ?: this::errorHandler
+    override val errHandler = errorCallback ?: this::errorHandler
 
     /**
      * registers the jdbc driver
@@ -53,7 +54,7 @@ class Db(private val dbCon: DbCon, errorCallback: ((Exception) -> Unit)? = null)
     }
 
     override fun execute(sql: String) {
-        executeStmt(dbCon, { _, stmt -> stmt.execute(sql) }, onError)
+        executeStmt(dbCon, { _, stmt -> stmt.execute(sql) }, errHandler)
     }
 
     /**
@@ -62,12 +63,12 @@ class Db(private val dbCon: DbCon, errorCallback: ((Exception) -> Unit)? = null)
      * @param sql : The sql text
      * @return
      */
-    override fun <T> getScalarOrNull(sql: String, typ: Class<*>, inputs: List<Any?>?): T? {
+    override fun <T> getScalarOrNull(sql: String, typ: DataType, inputs: List<Value>?): T? {
 
         return executePrep<T>(dbCon, sql, { _, stmt ->
 
             // fill all the arguments into the prepared stmt
-            inputs?.let { fillArgs(stmt, inputs) }
+            inputs?.let { fillArgs(stmt, inputs, errHandler) }
 
             // execute
             val rs = stmt.executeQuery()
@@ -78,7 +79,7 @@ class Db(private val dbCon: DbCon, errorCallback: ((Exception) -> Unit)? = null)
                 }
                 res
             }
-        }, onError)
+        }, errHandler)
     }
 
     /**
@@ -88,13 +89,13 @@ class Db(private val dbCon: DbCon, errorCallback: ((Exception) -> Unit)? = null)
      * @param inputs : The inputs for the sql or stored proc
      * @return : The id ( primary key )
      */
-    override fun insert(sql: String, inputs: List<Any?>?): Long {
+    override fun insert(sql: String, inputs: List<Value>?): Long {
         val res = executeCon(dbCon, { con: Connection ->
 
             val stmt = con.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)
             stmt.use { s ->
                 // fill all the arguments into the prepared stmt
-                inputs?.let { fillArgs(s, inputs) }
+                inputs?.let { fillArgs(s, inputs, errHandler) }
 
                 // execute the update
                 s.executeUpdate()
@@ -109,7 +110,7 @@ class Db(private val dbCon: DbCon, errorCallback: ((Exception) -> Unit)? = null)
                     id
                 }
             }
-        }, onError)
+        }, errHandler)
         return res ?: 0
     }
 
@@ -120,13 +121,13 @@ class Db(private val dbCon: DbCon, errorCallback: ((Exception) -> Unit)? = null)
      * @param inputs : The inputs for the sql or stored proc
      * @return : The id ( primary key )
      */
-    override fun insertGetId(sql: String, inputs: List<Any?>?): String {
+    override fun insertGetId(sql: String, inputs: List<Value>?): String {
         val res = executeCon(dbCon, { con: Connection ->
 
             val stmt = con.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)
             stmt.use { s ->
                 // fill all the arguments into the prepared stmt
-                inputs?.let { fillArgs(s, inputs) }
+                inputs?.let { fillArgs(s, inputs, errHandler) }
 
                 // execute the update
                 s.executeUpdate()
@@ -141,7 +142,7 @@ class Db(private val dbCon: DbCon, errorCallback: ((Exception) -> Unit)? = null)
                     id
                 }
             }
-        }, onError)
+        }, errHandler)
         return res ?: ""
     }
 
@@ -152,16 +153,16 @@ class Db(private val dbCon: DbCon, errorCallback: ((Exception) -> Unit)? = null)
      * @param inputs : The inputs for the sql or stored proc
      * @return : The number of affected records
      */
-    override fun update(sql: String, inputs: List<Any?>?): Int {
+    override fun update(sql: String, inputs: List<Value>?): Int {
         val result = executePrep<Int>(dbCon, sql, { _, stmt ->
 
             // fill all the arguments into the prepared stmt
-            inputs?.let { fillArgs(stmt, inputs) }
+            inputs?.let { fillArgs(stmt, inputs, errHandler) }
 
             // update and get number of affected records
             val count = stmt.executeUpdate()
             count
-        }, onError)
+        }, errHandler)
         return result ?: 0
     }
 
@@ -176,12 +177,12 @@ class Db(private val dbCon: DbCon, errorCallback: ((Exception) -> Unit)? = null)
         sql: String,
         callback: (ResultSet) -> T?,
         moveNext: Boolean,
-        inputs: List<Any?>?
+        inputs: List<Value>?
     ): T? {
         val result = executePrep<T>(dbCon, sql, { _: Connection, stmt: PreparedStatement ->
 
             // fill all the arguments into the prepared stmt
-            inputs?.let { fillArgs(stmt, inputs) }
+            inputs?.let { fillArgs(stmt, inputs, errHandler) }
 
             // execute
             val rs = stmt.executeQuery()
@@ -192,7 +193,7 @@ class Db(private val dbCon: DbCon, errorCallback: ((Exception) -> Unit)? = null)
                 }
                 v
             }
-        }, onError)
+        }, errHandler)
         return result
     }
 
@@ -205,7 +206,7 @@ class Db(private val dbCon: DbCon, errorCallback: ((Exception) -> Unit)? = null)
      * @return
      */
     @Suppress("UNCHECKED_CAST")
-    override fun <T> mapOne(sql: String, inputs: List<Any?>?, mapper: (Record) -> T?): T? {
+    override fun <T> mapOne(sql: String, inputs: List<Value>?, mapper: (Record) -> T?): T? {
         val res = query(sql, { rs ->
 
             val rec = RecordSet(rs)
@@ -226,7 +227,7 @@ class Db(private val dbCon: DbCon, errorCallback: ((Exception) -> Unit)? = null)
      * @return
      */
     @Suppress("UNCHECKED_CAST")
-    override fun <T> mapAll(sql: String, inputs: List<Any?>?, mapper: (Record) -> T?): List<T>? {
+    override fun <T> mapAll(sql: String, inputs: List<Value>?, mapper: (Record) -> T?): List<T>? {
         val res = query(sql, { rs ->
 
             val rec = RecordSet(rs)
@@ -251,7 +252,7 @@ class Db(private val dbCon: DbCon, errorCallback: ((Exception) -> Unit)? = null)
         procName: String,
         callback: (ResultSet) -> T?,
         moveNext: Boolean,
-        inputs: List<Any?>?
+        inputs: List<Value>?
     ): T? {
 
         // {call create_author(?, ?)}
@@ -269,7 +270,7 @@ class Db(private val dbCon: DbCon, errorCallback: ((Exception) -> Unit)? = null)
     override fun <T> callQueryMapped(
         procName: String,
         mapper: (Record) -> T?,
-        inputs: List<Any?>?
+        inputs: List<Value>?
     ): List<T>? {
         // {call create_author(?, ?)}
         val holders = inputs?.let { all -> "?".repeatWith(",", all.size) } ?: ""
@@ -282,7 +283,7 @@ class Db(private val dbCon: DbCon, errorCallback: ((Exception) -> Unit)? = null)
      * @param procName : The name of the stored procedure e.g. get_by_id
      * @param inputs : The parameters for the stored proc. The types will be auto-converted my-sql types.
      */
-    override fun callCreate(procName: String, inputs: List<Any?>?): String {
+    override fun callCreate(procName: String, inputs: List<Value>?): String {
         // {call create_author(?, ?)}
         val holders = inputs?.let { all -> "?".repeatWith(",", all.size) } ?: ""
         val sql = "{call $procName($holders)}"
@@ -294,7 +295,7 @@ class Db(private val dbCon: DbCon, errorCallback: ((Exception) -> Unit)? = null)
      * @param procName : The name of the stored procedure e.g. get_by_id
      * @param inputs : The parameters for the stored proc. The types will be auto-converted my-sql types.
      */
-    override fun callUpdate(procName: String, inputs: List<Any?>?): Int {
+    override fun callUpdate(procName: String, inputs: List<Value>?): Int {
 
         // {call create_author(?, ?)}
         val holders = inputs?.let { all -> "?".repeatWith(",", all.size) } ?: ""

@@ -7,7 +7,7 @@ import slatekit.query.Query
 /**
  * Supports finding records by conditions
  */
-interface Findable<TId, T> where TId : Comparable<TId> {
+interface Findable<TId, T> : Inspectable<TId, T> where TId : Comparable<TId>, T: Any {
     /**
      * finds items based on the field
      * @param field: name of field
@@ -24,7 +24,7 @@ interface Findable<TId, T> where TId : Comparable<TId> {
      * @param value: value of field to search against
      * @return
      */
-    fun findByField(field: String, op: Op, value: Any?): List<T> = findByQuery(Query().where(field, op, value))
+    fun findByField(field: String, op: Op, value: Any?): List<T> = findByQuery(Query().where(columnName(field), op, value))
 
 
     /**
@@ -33,7 +33,7 @@ interface Findable<TId, T> where TId : Comparable<TId> {
      * @param value: values of field to search against
      * @return
      */
-    fun findIn(field: String, value: List<Any>): List<T> = findByQuery(Query().where(field, Op.In, value))
+    fun findIn(field: String, value: List<Any>): List<T> = findByQuery(Query().where(columnName(field), Op.In, value))
 
 
     /**
@@ -53,7 +53,7 @@ interface Findable<TId, T> where TId : Comparable<TId> {
      * @param value: value of field to search against
      * @return
      */
-    fun findOneByField(field: String, op: Op, value: Any): T? = findByQuery(Query().where(field, op, value).limit(1)).firstOrNull()
+    fun findOneByField(field: String, op: Op, value: Any): T? = findByQuery(Query().where(columnName(field), op, value).limit(1)).firstOrNull()
 
 
     /**

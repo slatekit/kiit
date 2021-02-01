@@ -3,12 +3,14 @@ package test.entities
 import org.junit.Assert
 import org.junit.Test
 import slatekit.common.data.DataAction
+import slatekit.common.data.DataType
 import slatekit.data.core.LongId
 import slatekit.data.core.Meta
 import slatekit.data.core.Table
 import slatekit.entities.mapper.EntityEncoder
 import slatekit.entities.mapper.EntitySettings
 import slatekit.meta.models.Model
+import slatekit.meta.models.ModelUtils
 
 
 class Data_02_Mappers_Encode {
@@ -46,7 +48,7 @@ class Data_02_Mappers_Encode {
         values.forEachIndexed { ndx, v ->
             println(v.name + " = " + v.value)
             Assert.assertEquals(expected[ndx].first, v.name)
-            Assert.assertEquals(expected[ndx].second, v.value)
+            Assert.assertEquals(expected[ndx].second, v.text)
         }
     }
 
@@ -62,7 +64,14 @@ class Data_02_Mappers_Encode {
             val expectedVal = expected.first { it.first == v.name }
             println(v.name + " = " + v.value)
             Assert.assertEquals(expectedVal.first, v.name)
-            Assert.assertEquals(expectedVal.second, v.value)
+            Assert.assertEquals(expectedVal.second, v.text)
         }
+    }
+
+    @Test
+    fun can_handle_enum() {
+        val prop = SampleEntityImmutable::test_enum
+        val type = ModelUtils.fieldType(prop)
+        Assert.assertEquals(DataType.DTEnum, type)
     }
 }

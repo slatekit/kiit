@@ -16,7 +16,7 @@ import java.sql.ResultSet
  *    to abstract away JDBC for Android
  */
 interface IDb : ProcSupport {
-    val onError: (Exception) -> Unit
+    val errHandler: (Exception) -> Unit
 
     /**
      * registers the jdbc driver
@@ -37,7 +37,7 @@ interface IDb : ProcSupport {
      * @param inputs : The inputs for the sql or stored proc
      * @return : The id ( primary key )
      */
-    fun insert(sql: String, inputs: List<Any?>? = null): Long
+    fun insert(sql: String, inputs: List<Value>? = null): Long
 
     /**
      * executes an insert using the sql or stored proc and gets the id
@@ -46,7 +46,7 @@ interface IDb : ProcSupport {
      * @param inputs : The inputs for the sql or stored proc
      * @return : The id ( primary key )
      */
-    fun insertGetId(sql: String, inputs: List<Any?>? = null): String
+    fun insertGetId(sql: String, inputs: List<Value>? = null): String
 
     /**
      * executes the update sql or stored proc
@@ -55,7 +55,7 @@ interface IDb : ProcSupport {
      * @param inputs : The inputs for the sql or stored proc
      * @return : The number of affected records
      */
-    fun update(sql: String, inputs: List<Any?>? = null): Int
+    fun update(sql: String, inputs: List<Value>? = null): Int
 
     /**
      * Executes a sql query
@@ -68,7 +68,7 @@ interface IDb : ProcSupport {
             sql: String,
             callback: (ResultSet) -> T?,
             moveNext: Boolean = true,
-            inputs: List<Any?>? = null
+            inputs: List<Value>? = null
     ): T?
 
     /**
@@ -80,7 +80,7 @@ interface IDb : ProcSupport {
      * @return
      */
     @Suppress("UNCHECKED_CAST")
-    fun <T> mapOne(sql: String, inputs: List<Any?>?, mapper: (Record) -> T?): T?
+    fun <T> mapOne(sql: String, inputs: List<Value>?, mapper: (Record) -> T?): T?
 
     /**
      * maps multiple items using the sql supplied
@@ -91,7 +91,7 @@ interface IDb : ProcSupport {
      * @return
      */
     @Suppress("UNCHECKED_CAST")
-    fun <T> mapAll(sql: String, inputs: List<Any?>?, mapper: (Record) -> T?): List<T>?
+    fun <T> mapAll(sql: String, inputs: List<Value>?, mapper: (Record) -> T?): List<T>?
 
 
     fun errorHandler(ex: Exception)
@@ -102,7 +102,7 @@ interface IDb : ProcSupport {
      * @param sql : The sql text
      * @return
      */
-    fun <T> getScalar(sql: String, typ: Class<*>, inputs: List<Any?>?): T =
+    fun <T> getScalar(sql: String, typ: DataType, inputs: List<Value>?): T =
             getScalarOrNull<T>(sql, typ, inputs)!!
 
     /**
@@ -111,7 +111,16 @@ interface IDb : ProcSupport {
      * @param sql : The sql text
      * @return
      */
-    fun <T> getScalarOrNull(sql: String, typ: Class<*>, inputs: List<Any?>?): T?
+    fun <T> getScalarOrNull(sql: String, typ: DataType, inputs: List<Value>?): T?
+
+    /**
+     * gets a scalar bool value using the sql provided
+     *
+     * @param sql : The sql text
+     * @return
+     */
+    fun getScalarBool(sql: String, inputs: List<Value>?): Boolean =
+            getScalarOrNull(sql, DataType.DTBool, inputs) ?: false
 
 
     /**
@@ -120,8 +129,8 @@ interface IDb : ProcSupport {
      * @param sql : The sql text
      * @return
      */
-    fun getScalarString(sql: String, inputs: List<Any?>?): String =
-            getScalarOrNull<String>(sql, slatekit.common.Types.JStringClass, inputs) ?: ""
+    fun getScalarString(sql: String, inputs: List<Value>?): String =
+            getScalarOrNull<String>(sql, DataType.DTString, inputs) ?: ""
 
     /**
      * gets a scalar int value using the sql provided
@@ -129,8 +138,8 @@ interface IDb : ProcSupport {
      * @param sql : The sql text
      * @return
      */
-    fun getScalarShort(sql: String, inputs: List<Any?>?): Short =
-            getScalarOrNull(sql, slatekit.common.Types.JShortClass, inputs) ?: 0.toShort()
+    fun getScalarShort(sql: String, inputs: List<Value>?): Short =
+            getScalarOrNull(sql, DataType.DTShort, inputs) ?: 0.toShort()
 
     /**
      * gets a scalar int value using the sql provided
@@ -138,8 +147,8 @@ interface IDb : ProcSupport {
      * @param sql : The sql text
      * @return
      */
-    fun getScalarInt(sql: String, inputs: List<Any?>?): Int =
-            getScalarOrNull(sql, slatekit.common.Types.JIntClass, inputs) ?: 0
+    fun getScalarInt(sql: String, inputs: List<Value>?): Int =
+            getScalarOrNull(sql, DataType.DTInt, inputs) ?: 0
 
     /**
      * gets a scalar long value using the sql provided
@@ -147,8 +156,8 @@ interface IDb : ProcSupport {
      * @param sql : The sql text
      * @return
      */
-    fun getScalarLong(sql: String, inputs: List<Any?>?): Long =
-            getScalarOrNull(sql, slatekit.common.Types.JLongClass, inputs) ?: 0L
+    fun getScalarLong(sql: String, inputs: List<Value>?): Long =
+            getScalarOrNull(sql, DataType.DTLong, inputs) ?: 0L
 
     /**
      * gets a scalar double value using the sql provided
@@ -156,8 +165,8 @@ interface IDb : ProcSupport {
      * @param sql : The sql text
      * @return
      */
-    fun getScalarFloat(sql: String, inputs: List<Any?>?): Float =
-            getScalarOrNull(sql, slatekit.common.Types.JFloatClass, inputs) ?: 0.0f
+    fun getScalarFloat(sql: String, inputs: List<Value>?): Float =
+            getScalarOrNull(sql, DataType.DTFloat, inputs) ?: 0.0f
 
     /**
      * gets a scalar double value using the sql provided
@@ -165,17 +174,8 @@ interface IDb : ProcSupport {
      * @param sql : The sql text
      * @return
      */
-    fun getScalarDouble(sql: String, inputs: List<Any?>?): Double =
-            getScalarOrNull(sql, slatekit.common.Types.JDoubleClass, inputs) ?: 0.0
-
-    /**
-     * gets a scalar bool value using the sql provided
-     *
-     * @param sql : The sql text
-     * @return
-     */
-    fun getScalarBool(sql: String, inputs: List<Any?>?): Boolean =
-            getScalarOrNull(sql, slatekit.common.Types.JBoolClass, inputs) ?: false
+    fun getScalarDouble(sql: String, inputs: List<Value>?): Double =
+            getScalarOrNull(sql, DataType.DTDouble, inputs) ?: 0.0
 
     /**
      * gets a scalar local date value using the sql provided
@@ -183,8 +183,8 @@ interface IDb : ProcSupport {
      * @param sql : The sql text
      * @return
      */
-    fun getScalarLocalDate(sql: String, inputs: List<Any?>?): LocalDate =
-            getScalarOrNull(sql, slatekit.common.Types.JLocalDateClass, inputs) ?: LocalDate.MIN
+    fun getScalarLocalDate(sql: String, inputs: List<Value>?): LocalDate =
+            getScalarOrNull(sql, DataType.DTLocalDate, inputs) ?: LocalDate.MIN
 
     /**
      * gets a scalar local time value using the sql provided
@@ -192,8 +192,8 @@ interface IDb : ProcSupport {
      * @param sql : The sql text
      * @return
      */
-    fun getScalarLocalTime(sql: String, inputs: List<Any?>?): LocalTime =
-            getScalarOrNull(sql, slatekit.common.Types.JLocalTimeClass, inputs) ?: LocalTime.MIN
+    fun getScalarLocalTime(sql: String, inputs: List<Value>?): LocalTime =
+            getScalarOrNull(sql, DataType.DTLocalTime, inputs) ?: LocalTime.MIN
 
     /**
      * gets a scalar local datetime value using the sql provided
@@ -201,8 +201,8 @@ interface IDb : ProcSupport {
      * @param sql : The sql text
      * @return
      */
-    fun getScalarLocalDateTime(sql: String, inputs: List<Any?>?): LocalDateTime =
-            getScalarOrNull(sql, slatekit.common.Types.JLocalDateTimeClass, inputs) ?: LocalDateTime.MIN
+    fun getScalarLocalDateTime(sql: String, inputs: List<Value>?): LocalDateTime =
+            getScalarOrNull(sql, DataType.DTLocalDateTime, inputs) ?: LocalDateTime.MIN
 
     /**
      * gets a scalar local datetime value using the sql provided
@@ -210,6 +210,6 @@ interface IDb : ProcSupport {
      * @param sql : The sql text
      * @return
      */
-    fun getScalarZonedDateTime(sql: String, inputs: List<Any?>?): DateTime =
-            getScalarOrNull(sql, slatekit.common.Types.JDateTimeClass, inputs) ?: DateTimes.MIN
+    fun getScalarZonedDateTime(sql: String, inputs: List<Value>?): DateTime =
+            getScalarOrNull(sql, DataType.DTZonedDateTime, inputs) ?: DateTimes.MIN
 }

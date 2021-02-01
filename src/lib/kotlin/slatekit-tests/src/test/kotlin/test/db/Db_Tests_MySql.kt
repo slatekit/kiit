@@ -6,6 +6,8 @@ import org.junit.Ignore
 import org.junit.Test
 import slatekit.common.DateTimes
 import slatekit.common.conf.Confs
+import slatekit.common.data.DataType
+import slatekit.common.data.Value
 import slatekit.db.Db
 import test.TestApp
 import test.setup.TestSupport
@@ -122,7 +124,7 @@ class Db_Tests_MySql : TestSupport {
     @Test
     fun can_execute_proc_update() {
         val db = Db(getConnection())
-        val result = db.callUpdate("dbtests_update_by_id", listOf(6))
+        val result = db.callUpdate("dbtests_update_by_id", listOf(Value("", DataType.DTInt, 6)))
         Assert.assertTrue(result!! >= 1)
     }
 
