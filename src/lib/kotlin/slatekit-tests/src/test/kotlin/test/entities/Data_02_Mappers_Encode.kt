@@ -48,7 +48,7 @@ class Data_02_Mappers_Encode {
         values.forEachIndexed { ndx, v ->
             println(v.name + " = " + v.value)
             Assert.assertEquals(expected[ndx].first, v.name)
-            Assert.assertEquals(expected[ndx].second, v.value)
+            Assert.assertEquals(expected[ndx].second, v.text)
         }
     }
 
@@ -64,7 +64,7 @@ class Data_02_Mappers_Encode {
             val expectedVal = expected.first { it.first == v.name }
             println(v.name + " = " + v.value)
             Assert.assertEquals(expectedVal.first, v.name)
-            Assert.assertEquals(expectedVal.second, v.value)
+            Assert.assertEquals(expectedVal.second, v.text)
         }
     }
 
