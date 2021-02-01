@@ -7,7 +7,7 @@ import slatekit.query.Query
 /**
  * Supports deletion of records using conditions
  */
-interface Deletable<TId, T> where TId : Comparable<TId> {
+interface Deletable<TId, T> : Inspectable<TId, T> where TId : Comparable<TId>, T: Any {
 
     /**
      * deletes all entities from the data store using the ids
@@ -33,7 +33,7 @@ interface Deletable<TId, T> where TId : Comparable<TId> {
      * @param value: The value to check for
      * @return
      */
-    fun deleteByField(field: String, op: Op, value: Any?): Int = deleteByQuery(Query().where(field, op, value))
+    fun deleteByField(field: String, op: Op, value: Any?): Int = deleteByQuery(Query().where(columnName(field), op, value))
 
 
     /**
