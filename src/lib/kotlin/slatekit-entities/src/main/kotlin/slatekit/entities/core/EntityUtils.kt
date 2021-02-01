@@ -1,4 +1,4 @@
-package slatekit.entities.slatekit.entities.core
+package slatekit.entities.core
 
 import java.util.*
 
