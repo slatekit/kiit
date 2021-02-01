@@ -23,7 +23,7 @@ apply plugin: 'kotlin'
 def slatekitComponentId = 'query'
 def slatekitComponentName = 'Query'
 def slatekitComponentDesc = 'SlateKit Query: Query Builder component for SQL'
-def slatekitComponentVersion = ext.slatekit_version_beta
+def slatekitComponentVersion = ext.slatekit_version
 
 
 // ==================================================================

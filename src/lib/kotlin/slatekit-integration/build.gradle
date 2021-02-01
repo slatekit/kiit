@@ -25,7 +25,7 @@ apply plugin: 'kotlin'
 def slatekitComponentId = 'integration'
 def slatekitComponentName = 'Integration'
 def slatekitComponentDesc = 'SlateKit Integration: Integrates 2 or more slatekit components'
-def slatekitComponentVersion = ext.slatekit_version_beta
+def slatekitComponentVersion = ext.slatekit_version
 
 
 // ==================================================================
@@ -92,11 +92,10 @@ dependencies {
         compile "com.slatekit:slatekit-results:$slatekit_version"
         compile "com.slatekit:slatekit-common:$slatekit_version"
         compile "com.slatekit:slatekit-context:$slatekit_version"
-        compile "com.slatekit:slatekit-meta:$slatekit_version_beta"
-        compile "com.slatekit:slatekit-query:$slatekit_version_beta"
+        compile "com.slatekit:slatekit-meta:$slatekit_version"
+        compile "com.slatekit:slatekit-query:$slatekit_version"
         compile "com.slatekit:slatekit-cli:$slatekit_version"
-        compile "com.slatekit:slatekit-entities:$slatekit_version_beta"
-        compile "com.slatekit:slatekit-orm:$slatekit_version_beta"
+        compile "com.slatekit:slatekit-entities:$slatekit_version"
         compile "com.slatekit:slatekit-core:$slatekit_version"
         compile "com.slatekit:slatekit-apis:$slatekit_version"
         compile "com.slatekit:slatekit-jobs:$slatekit_version"

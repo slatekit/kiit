@@ -15,8 +15,5 @@ rootProject.name = 'slatekit-integration'
 //include ':slatekit-apis'
 ////project(':slatekit-apis').projectDir=new File('../slatekit-apis')
 //
-//include ':slatekit-workers'
-////project(':slatekit-workers').projectDir=new File('../slatekit-workers')
-//
 //include ':slatekit-query'
 ////project(':slatekit-query').projectDir=new File('../slatekit-query')
