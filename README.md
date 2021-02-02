@@ -75,8 +75,8 @@ num | type | link
 7   | license     | http://www.slatekit.com/arch/license           
 8   | utilities   | http://www.slatekit.com/utils/overview          
 9   | standards   | http://www.slatekit.com/more/standards  
-10  | packages    | http://dl.bintray.com/codehelixinc/slatekit
-11  | bintray     | https://bintray.com/codehelixinc/slatekit
+10  | packages    | https://bintray.com/codehelixinc/slatekit
+11  | bintray     | http://dl.bintray.com/codehelixinc/slatekit
 
 
 # Modules
@@ -95,8 +95,8 @@ docs | source | desc | download
 [slatekit-apis](http://www.slatekit.com/kotlin-core-apis.html)         | [src](src/lib/kotlin/slatekit-apis)   | api container | [ ![Download](https://api.bintray.com/packages/codehelixinc/slatekit/slatekit-apis/images/download.svg) ](https://bintray.com/codehelixinc/slatekit/slatekit-apis/_latestVersion)
 [slatekit-jobs](http://www.slatekit.com/kotlin-core-workers.html)    | [src](src/lib/kotlin/slatekit-jobs)  | background jobs for persistant job queues | [ ![Download](https://api.bintray.com/packages/codehelixinc/slatekit/slatekit-jobs/images/download.svg) ](https://bintray.com/codehelixinc/slatekit/slatekit-jobs/_latestVersion)
 [slatekit-core](http://www.slatekit.com/infra.html)                    | [src](src/lib/kotlin/slatekit-core)    | architecture components | [ ![Download](https://api.bintray.com/packages/codehelixinc/slatekit/slatekit-core/images/download.svg) ](https://bintray.com/codehelixinc/slatekit/slatekit-core/_latestVersion)
-[slatekit-notifications](http://www.slatekit.com/infra.html)                    | [src](src/lib/kotlin/slatekit-notifications)    | Apache2.0    | alerts, emails, sms, push notifications | [ ![Download](https://api.bintray.com/packages/codehelixinc/slatekit/slatekit-notifications/images/download.svg) ](https://bintray.com/codehelixinc/slatekit/slatekit-notifications/_latestVersion)
-[slatekit-db](http://www.slatekit.com/utils.html)                  | [src](src/lib/kotlin/slatekit-db)  |  database utilities | [ ![Download](https://api.bintray.com/packages/codehelixinc/slatekit/slatekit-common/images/download.svg) ](https://bintray.com/codehelixinc/slatekit/slatekit-common/_latestVersion)
+[slatekit-notifications](http://www.slatekit.com/infra.html)                    | [src](src/lib/kotlin/slatekit-notifications)    |  alerts, emails, sms, push | [![Download](https://api.bintray.com/packages/codehelixinc/slatekit/slatekit-notifications/images/download.svg)](https://bintray.com/codehelixinc/slatekit/slatekit-notifications/_latestVersion)
+[slatekit-db](http://www.slatekit.com/utils.html)                  | [src](src/lib/kotlin/slatekit-db)  |  database utilities | [ ![Download](https://api.bintray.com/packages/codehelixinc/slatekit/slatekit-common/images/download.svg) ](https://bintray.com/codehelixinc/slatekit/slatekit-data/_latestVersion)
 [slatekit-data](http://www.slatekit.com/kotlin-core-data.html)      | [src](src/lib/kotlin/slatekit-data)  | repository pattern | [ ![Download](https://api.bintray.com/packages/codehelixinc/slatekit/slatekit-data/images/download.svg) ](https://bintray.com/codehelixinc/slatekit/slatekit-data/_latestVersion)
 [slatekit-entities](http://www.slatekit.com/kotlin-core-orm.html)      | [src](src/lib/kotlin/slatekit-entities)  | Standardized entity repository pattern | [ ![Download](https://api.bintray.com/packages/codehelixinc/slatekit/slatekit-entities/images/download.svg) ](https://bintray.com/codehelixinc/slatekit/slatekit-entities/_latestVersion)
 [slatekit-meta](http://www.slatekit.com/utils.html)                    | [src](src/lib/kotlin/slatekit-meta)   | meta/reflection utils | [ ![Download](https://api.bintray.com/packages/codehelixinc/slatekit/slatekit-meta/images/download.svg) ](https://bintray.com/codehelixinc/slatekit/slatekit-meta/_latestVersion)
