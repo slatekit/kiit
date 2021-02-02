@@ -3,13 +3,13 @@
 ![Kotlin](https://img.shields.io/badge/kotlin-1.3-orange.svg)
 ![Apache 2](https://img.shields.io/badge/license-Apache2-green.svg?style=flat)
 ![Follow us on twitter](https://img.shields.io/badge/twitter-slatekit-blue.svg)
-![Gradle Release](https://github.com/code-helix/slatekit/workflows/Gradle%20Package/badge.svg)
+<!-- ![Gradle Release](https://github.com/code-helix/slatekit/workflows/Gradle%20Package/badge.svg) -->
 
 ![image](media/slatekit-banner.png)
 
 
 # About
-Slate Kit is a **Kotlin** framework, a simple, light-weight, modular tool-kit to build **Apps, APIs, CLIs, Jobs**, and more for **Start-ups, Personal projects, Mobile Apps, and SMBs** ( small-medium sized businesses ). These libraries can be used for both **Server and Android** and there are modules for the server that abstract infrastructure ( Queues, Files, SMS, Emails, Alerts ) with integrations for **AWS** ( SQS, S3 ), Twilio ( SMS ), SendGrid ( Email ), Slack ( Alerts ) and more. Multi-platform support is planned as a future state.
+Slate Kit is a **Kotlin** framework, with simple, light-weight, modular libraries and tools to build **Apps, APIs, CLIs, Jobs**, and more for **Start-ups, Personal projects, Mobile Apps, and SMBs** ( small-medium sized businesses ). These libraries can be used for both **Server and Android** and there are modules for the server that abstract infrastructure ( Queues, Files, SMS, Emails, Alerts ) with integrations for **AWS** ( SQS, S3 ), Twilio ( SMS ), SendGrid ( Email ), Slack ( Alerts ) and more. Multi-platform support is planned as a future state.
 
 
 # Goals
@@ -47,6 +47,8 @@ slatekit new cli -name="MyCLI1" -package="company1.apps"
 # Install
 You can set up gradle using the example below. You can use as few or as many slatekit modules as you need. 
 
+[ ![Latest Version](https://api.bintray.com/packages/codehelixinc/slatekit/slatekit-results/images/download.svg) ](https://bintray.com/codehelixinc/slatekit/slatekit-results/_latestVersion)
+
 ```groovy
 repositories {
     jcenter()
@@ -55,7 +57,7 @@ repositories {
 }
 dependencies {
 	// slatekit-results: Result<T,E> to model successes/failures with optional status codes
-    	compile 'com.slatekit:slatekit-results:1.34.0'
+    	compile 'com.slatekit:slatekit-results:2.0.0'
 }
 ```
 
@@ -109,11 +111,15 @@ docs | source | desc | download
 
 # Upcoming
 1. Additional AWS abstractions/integrations ( Documents, Streams )
-2. Kotlin Flow integration where applicable
-3. Kotlin Multi-Platform
-4. Code Generators and OpenAPI integrations
-5. Docker, Kubernetes build scripts
-6. Slate Kit Cloud Console to manage apps ( initial focus on AWS )
+2. CI/CD improvements ( lint tools, etc ) 
+3. Kotlin Flow integration where applicable
+4. Kotlin Multi-Platform
+5. Code Generators and OpenAPI integrations
+6. Docker, Kubernetes build scripts
+7. Slate Kit MBaaS ( Mobile Backend as a Service )
+
+# MBaaS
+We are working on an Slate Kit based **MBaaS** ( Mobile Backend as a Service ) that cane be **self-hosted or cloud deployed.** This is meant to be an alternative to **Google Firebase**, with default integration with AWS for things like Files(S3), Queues(SQS), Docs(DynamoDB), and support for sending emails, sms, notifications and many more features. 
 
 
 # Contact
