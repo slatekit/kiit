@@ -44,9 +44,9 @@ class Data_03_Query_Where {
 
 
 
-    @Test fun can_build_filter_1() {
-        Assert.assertTrue("api = 'slate kit'",  Query().where("api", "=", "slate kit").toFilter() == "api = 'slate kit'")
-    }
+//    @Test fun can_build_filter_1() {
+//        Assert.assertTrue("api = 'slate kit'",  Query().where("api", "=", "slate kit").toFilter() == "api = 'slate kit'")
+//    }
 
 
 //    @Test fun can_build_where_with_1_field_of_type_bool() {
