@@ -10,7 +10,7 @@ interface Counts<TId, T> : EntityOps<TId, T> where TId : kotlin.Comparable<TId>,
      * gets the total number of entities in the datastore
      * @return
      */
-    fun count(): Long {
+    suspend fun count(): Long {
         val r = repo()
         return when (r is Countable<*, *>) {
             true -> r.count()
@@ -22,12 +22,12 @@ interface Counts<TId, T> : EntityOps<TId, T> where TId : kotlin.Comparable<TId>,
      * determines if there are any entities in the datastore
      * @return
      */
-    fun any(): Boolean {
+    suspend fun any(): Boolean {
         return count() > 0
     }
 
     /**
      * whether this is an empty dataset
      */
-    fun isEmpty(): Boolean = !any()
+    suspend fun isEmpty(): Boolean = !any()
 }

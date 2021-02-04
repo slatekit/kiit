@@ -13,7 +13,7 @@ interface Ordered<TId, T> : EntityOps<TId, T> where TId : kotlin.Comparable<TId>
      * @param desc : Whether to sort by descending
      * @return
      */
-    fun top(count: Int, desc: Boolean): List<T> {
+    suspend fun top(count: Int, desc: Boolean): List<T> {
         return performCount {  it.seq(count, desc) } ?: listOf()
     }
 
@@ -21,7 +21,7 @@ interface Ordered<TId, T> : EntityOps<TId, T> where TId : kotlin.Comparable<TId>
      * Gets the first/oldest item
      * @return
      */
-    fun first(): T? {
+    suspend fun first(): T? {
         return performCount { it.first() }
     }
 
@@ -29,7 +29,7 @@ interface Ordered<TId, T> : EntityOps<TId, T> where TId : kotlin.Comparable<TId>
      * Gets the last/recent item
      * @return
      */
-    fun last(): T? {
+    suspend fun last(): T? {
         return performCount {  it.last() }
     }
 
@@ -38,7 +38,7 @@ interface Ordered<TId, T> : EntityOps<TId, T> where TId : kotlin.Comparable<TId>
      * @param count
      * @return
      */
-    fun recent(count: Int): List<T> {
+    suspend fun recent(count: Int): List<T> {
         return performCount {  it.recent(count) } ?: listOf()
     }
 
@@ -47,12 +47,12 @@ interface Ordered<TId, T> : EntityOps<TId, T> where TId : kotlin.Comparable<TId>
      * @param count
      * @return
      */
-    fun oldest(count: Int): List<T> {
+    suspend fun oldest(count: Int): List<T> {
         return performCount { it.oldest(count) } ?: listOf()
     }
 
 
-    fun <A> performCount(op:(Orderable<TId, T>)-> A): A? {
+    suspend fun <A> performCount(op:(Orderable<TId, T>)-> A): A? {
         val r = repo()
         return if(r is Orderable<*, *>){
             op(r as Orderable<TId, T>)

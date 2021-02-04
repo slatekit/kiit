@@ -22,8 +22,8 @@ import java.util.concurrent.atomic.AtomicInteger
 open class Query : IQuery {
 
     class QueryData(
-        val conditions: MutableList<ICondition>,
-        val updates: MutableList<FieldValue>
+        val conditions: MutableList<Expr>,
+        val updates: MutableList<Set>
     )
 
     protected val limit = AtomicInteger(0)
@@ -35,7 +35,7 @@ open class Query : IQuery {
 
     override fun getOrderBy(): String = orders.joinToString(",") { it.first + it.second }
 
-    override fun toUpdates(): List<FieldValue> = data.updates.toList()
+    override fun toUpdates(): List<Set> = data.updates.toList()
 
     override fun toUpdatesText(): String {
         // No updates ?
@@ -84,8 +84,8 @@ open class Query : IQuery {
         else
             " order by " + orders.joinToString(",", transform = { (fieldRaw, modeRaw) ->
                 val mode = when (modeRaw.toLowerCase()) {
-                    Asc -> "asc"
-                    Desc -> "desc"
+                    Const.Asc -> "asc"
+                    Const.Desc -> "desc"
                     else -> QueryEncoder.convertVal(modeRaw)
                 }
                 val field = QueryEncoder.ensureField(fieldRaw)
@@ -103,9 +103,9 @@ open class Query : IQuery {
      * @return
      */
     override fun set(field: String, fieldValue: Any?): IQuery {
-        val finalValue = fieldValue ?: Null
+        val finalValue = fieldValue ?: Const.Null
         val col = QueryEncoder.ensureField(field)
-        data.updates.add(FieldValue(col, finalValue))
+        data.updates.add(Set(col, finalValue))
         return this
     }
 
@@ -118,7 +118,7 @@ open class Query : IQuery {
     override fun set(vararg pairs: Pair<String, Any>): IQuery {
         pairs.forEach {
             val col = QueryEncoder.ensureField(it.first)
-            data.updates.add(FieldValue(col, it.second))
+            data.updates.add(Set(col, it.second))
         }
         return this
     }
@@ -133,7 +133,7 @@ open class Query : IQuery {
     override fun set(pairs: List<Value>): IQuery {
         pairs.forEach {
             val col = QueryEncoder.ensureField(it.name)
-            data.updates.add(FieldValue(col, it.value))
+            data.updates.add(Set(col, it.value))
         }
         return this
     }
@@ -147,77 +147,9 @@ open class Query : IQuery {
     override fun set(vararg pairs: Value): IQuery {
         pairs.forEach {
             val col = QueryEncoder.ensureField(it.name)
-            data.updates.add(FieldValue(col, it.value))
+            data.updates.add(Set(col, it.value))
         }
         return this
-    }
-
-    /**
-     * builds up a where clause with the supplied arguments
-     *
-     * @param field:  The field name
-     * @param op: The comparison operator ( =, >, >=, <, <=, !=, in )
-     * @param fieldValue: The field value
-     * @return this instance
-     */
-    override fun where(field: String, op: String, fieldValue: Any?): IQuery {
-        val finalValue = fieldValue ?: Null
-        val condition = buildCondition(field, op, finalValue)
-        data.conditions.add(condition)
-        return this
-    }
-
-    /**
-     * builds up a where clause with the supplied arguments
-     *
-     * @param field:  The field name
-     * @param compare: The comparison operator ( =, >, >=, <, <=, != )
-     * @param fieldValue: The field value
-     * @return this instance
-     */
-    override fun where(field: String, compare: Op, fieldValue: Any?): IQuery {
-        val finalValue = fieldValue ?: Null
-        return where(field, compare.text, finalValue)
-    }
-
-    /**
-     * adds an and clause with the supplied arguments
-     *
-     * @param field:  The field name
-     * @param compare: The comparison operator ( =, >, >=, <, <=, != )
-     * @param fieldValue: The field value
-     * @return this instance
-     */
-    override fun and(field: String, compare: String, fieldValue: Any?): IQuery {
-        val finalValue = fieldValue ?: Null
-        val cond = buildCondition(field, compare, finalValue)
-        group("and", cond)
-        return this
-    }
-
-    override fun and(field: String, compare: Op, fieldValue: Any?): IQuery {
-        val finalValue = fieldValue ?: Null
-        return and(field, compare.text, finalValue)
-    }
-
-    /**
-     * adds an or clause with the supplied arguments
-     *
-     * @param field:  The field name
-     * @param compare: The comparison operator ( =, >, >=, <, <=, != )
-     * @param fieldValue: The field value
-     * @return this instance
-     */
-    override fun or(field: String, compare: String, fieldValue: Any?): IQuery {
-        val finalValue = fieldValue ?: Null
-        val cond = buildCondition(field, compare, finalValue)
-        group("or", cond)
-        return this
-    }
-
-    override fun or(field: String, compare: Op, fieldValue: Any?): IQuery {
-        val finalValue = fieldValue ?: Null
-        return or(field, compare.text, finalValue)
     }
 
     override fun limit(max: Int): IQuery {
@@ -235,47 +167,36 @@ open class Query : IQuery {
         return this
     }
 
-    protected fun buildCondition(field: String, op: String, fieldValue: Any): Condition {
-        val col = QueryEncoder.ensureField(field)
-        val comparison = if (fieldValue == Null) {
-            val comp = when (op) {
-                "=" -> "is"
-                "is" -> "is"
-                "!=" -> "is not"
-                "<>" -> "is not"
-                "in" -> "in"
-                else -> "is"
-            }
-            Pair(comp, "null")
-        } else {
-            val comp = QueryEncoder.ensureCompare(op)
-            Pair(comp, fieldValue)
-        }
-        val con = Condition(col, comparison.first, comparison.second)
-        return con
+    override fun where(field: String, op: String, fieldValue: Any?): IQuery {
+        TODO("Not yet implemented")
     }
 
-    protected fun group(op: String, condition: Condition) {
-        // Pop the last one
-        val last = data.conditions.size - 1
-        val left = data.conditions[last]
-        data.conditions.removeAt(last)
+    override fun where(field: String, compare: Op, fieldValue: Any?): IQuery {
+        TODO("Not yet implemented")
+    }
 
-        // Build a binary condition from left and right
-        val group = ConditionGroup(left, op, condition)
+    override fun and(field: String, compare: String, fieldValue: Any?): IQuery {
+        TODO("Not yet implemented")
+    }
 
-        // Push back on condition list
-        data.conditions.add(group)
+    override fun and(field: String, compare: Op, fieldValue: Any?): IQuery {
+        TODO("Not yet implemented")
+    }
+
+    override fun or(field: String, compare: String, fieldValue: Any?): IQuery {
+        TODO("Not yet implemented")
+    }
+
+    override fun or(field: String, compare: Op, fieldValue: Any?): IQuery {
+        TODO("Not yet implemented")
+    }
+
+    override fun group(op: String, condition: Condition) {
+        TODO("Not yet implemented")
     }
 
     protected fun anyLimit(): Boolean = limit.get() > 0
 
     protected fun anyConditions(): Boolean = data.conditions.isNotEmpty()
 
-    companion object {
-        @JvmStatic val Null = "null"
-        @JvmStatic val Asc = "asc"
-        @JvmStatic val Desc = "desc"
-        @JvmStatic val EmptyString = "''"
-    }
 }

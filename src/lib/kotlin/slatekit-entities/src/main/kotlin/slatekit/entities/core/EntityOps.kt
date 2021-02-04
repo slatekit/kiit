@@ -19,7 +19,7 @@ interface EntityOps<TId, T> where TId : Comparable<TId>, T : Entity<TId> {
     }
 
     fun isCreated(id: TId): Boolean {
-        return EntityUtils.isCreated(id)
+        return repo().meta.id.isPersisted(id)
     }
 
     fun columnName(name:String):String {

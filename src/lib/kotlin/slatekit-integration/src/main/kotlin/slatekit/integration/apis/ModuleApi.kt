@@ -23,7 +23,6 @@ import slatekit.common.log.Logger
 import slatekit.common.utils.ListMap
 import slatekit.context.Context
 import slatekit.integration.mods.Mod
-import slatekit.query.Query
 import slatekit.results.Failure
 import slatekit.results.Notice
 import slatekit.results.Success
@@ -39,29 +38,30 @@ class ModuleApi(val ctx: slatekit.integration.mods.ModuleContext, override val c
     private var _items = ListMap<String, Module>()
 
     @Action(desc = "sets up the db to support modules")
-    fun setupDb(): Try<Any> {
+    suspend fun setupDb(): Try<Any> {
         return ctx.setup.install(slatekit.integration.mods.Mod::class.qualifiedName!!, "1", "", "")
     }
 
     @Action(desc = "gets all installed modules")
-    fun installed(): List<slatekit.integration.mods.Mod> {
+    suspend fun installed(): List<slatekit.integration.mods.Mod> {
         return ctx.service.getAll()
     }
 
     @Action(desc = "creates a new invitee")
-    fun enabled(): List<slatekit.integration.mods.Mod> {
-        return ctx.service.findByQuery(Query().where("isEnabled", "=", true))
+    suspend fun enabled(): List<slatekit.integration.mods.Mod> {
+        val select = ctx.service.select()
+        return ctx.service.findByQuery(select.where("isEnabled", "=", true))
     }
 
     @Action(desc = "installs all modules from initial setup")
-    fun installAll(): Notice<Any> {
+    suspend fun installAll(): Notice<Any> {
         val res = _items.all().map { module -> installUpdate(module, false) }
         val finalResult = res.reduce({ acc, item -> if (!acc.success) acc else item })
         return finalResult
     }
 
     @Action(desc = "installs a specific module")
-    fun installByName(name: String): Notice<Any> {
+    suspend fun installByName(name: String): Notice<Any> {
         return _items[name]?.let { installUpdate(it, false) } ?: Failure("Unknown module : $name")
     }
 
@@ -75,7 +75,7 @@ class ModuleApi(val ctx: slatekit.integration.mods.ModuleContext, override val c
     }
 
     @Action(desc = "forces the install of a specific module or updates it. updates the mod entry and creates table")
-    fun forceInstallByName(name: String): Notice<Any> {
+    suspend fun forceInstallByName(name: String): Notice<Any> {
         return _items[name]?.let { installUpdate(it, true) } ?: Failure("Unknown module : $name")
     }
 
@@ -85,7 +85,7 @@ class ModuleApi(val ctx: slatekit.integration.mods.ModuleContext, override val c
     }
 
     @Action(desc = "gets the names of the modules")
-    fun uninstallAll(): Try<String> {
+    suspend fun uninstallAll(): Try<String> {
         val all = _items.all().map { it.info.name }
         val results = all.map { name -> uninstallByName(name) }
         val success = results.foldRight(true, { res, acc -> if (!res.success) false else acc })
@@ -95,7 +95,7 @@ class ModuleApi(val ctx: slatekit.integration.mods.ModuleContext, override val c
     }
 
     @Action(desc = "gets the names of the modules")
-    fun uninstallByName(name: String): Try<String> {
+    suspend fun uninstallByName(name: String): Try<String> {
         val tablesResult = _items[name]?.let { it.uninstall() } ?: Failure("Unknown module : $name").toTry()
         val moduleResult = tablesResult.map { ctx.service.deleteByField(Mod::name, name) }
         return when (moduleResult) {
@@ -145,9 +145,10 @@ class ModuleApi(val ctx: slatekit.integration.mods.ModuleContext, override val c
         return result
     }
 
-    fun installUpdate(mod: slatekit.integration.mods.Module, updateIfPresent: Boolean = false): Notice<Any> {
+    suspend fun installUpdate(mod: slatekit.integration.mods.Module, updateIfPresent: Boolean = false): Notice<Any> {
 
-        val checkResult = ctx.service.findOneByQuery(Query().where("name", "=", mod.info.name))
+        val select = ctx.service.select()
+        val checkResult = ctx.service.findOneByQuery(select.where("name", "=", mod.info.name))
         if (checkResult == null) {
 
             if (mod.info.isEnabled) {

@@ -19,8 +19,8 @@ import slatekit.common.data.Value
 /**
  * Created by kreddy on 12/24/2015.
  */
-interface IQuery {
-    fun toUpdates(): List<FieldValue>
+interface IQuery : Criteria<IQuery> {
+    fun toUpdates(): List<Set>
 
     fun toUpdatesText(): String
 
@@ -37,18 +37,6 @@ interface IQuery {
     fun set(pairs: List<Value>): IQuery
 
     fun set(vararg pairs: Pair<String, Any>): IQuery
-
-    fun where(field: String, compare: String, fieldValue: Any?): IQuery
-
-    fun where(field: String, compare: Op, fieldValue: Any?): IQuery
-
-    fun and(field: String, compare: String, fieldValue: Any?): IQuery
-
-    fun and(field: String, compare: Op, fieldValue: Any?): IQuery
-
-    fun or(field: String, compare: String, fieldValue: Any?): IQuery
-
-    fun or(field: String, compare: Op, fieldValue: Any?): IQuery
 
     fun orderBy(field: String, mode: String): IQuery
 

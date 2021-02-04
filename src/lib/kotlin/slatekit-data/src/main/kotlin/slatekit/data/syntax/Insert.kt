@@ -1,5 +1,6 @@
 package slatekit.data.syntax
 
+import slatekit.common.data.Command
 import slatekit.common.data.DataAction
 import slatekit.common.data.Mapper
 import slatekit.common.data.Values

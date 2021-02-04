@@ -13,7 +13,7 @@ interface Upserts<TId, T> :
     /**
      * Upserts an item by checking if it exists already using it identity
      */
-    fun upsertById(item: T, uuid: String): Try<T> {
+    suspend fun upsertById(item: T, uuid: String): Try<T> {
         return upsertById(item, uuid, { newItem -> this.create(newItem) }, { oldItem -> this.update(oldItem) })
     }
 
@@ -22,7 +22,7 @@ interface Upserts<TId, T> :
      * Upserts an item by checking if it exists already using it identity and calls the create or update
      * operations supplied. If they are null, defaults to using the existing create/update methods
      */
-    fun upsertById(item: T, uuid: String, createOp:((T) -> TId)? = null, updateOp:((T) -> Boolean)? = null): Try<T> {
+    suspend fun upsertById(item: T, uuid: String, createOp:(suspend (T) -> TId)? = null, updateOp:(suspend (T) -> Boolean)? = null): Try<T> {
         return try {
             when (item.isPersisted()) {
                 false -> {
@@ -43,7 +43,7 @@ interface Upserts<TId, T> :
     /**
      * Upserts an item by checking if it exists already using it uuid
      */
-    fun upsertByUUID(item: T, uuid: String): Try<T> {
+    suspend fun upsertByUUID(item: T, uuid: String): Try<T> {
         return upsertByUUID(item, uuid, { newItem -> this.create(newItem) }, { oldItem -> this.update(oldItem) })
     }
 
@@ -52,7 +52,7 @@ interface Upserts<TId, T> :
      * Upserts an item by checking if it exists already using it uuid and calls the create or update
      * operations supplied. If they are null, defaults to using the existing create/update methods
      */
-    fun upsertByUUID(item: T, uuid: String, createOp:((T) -> TId)? = null, updateOp:((T) -> Boolean)? = null): Try<T> {
+    suspend fun upsertByUUID(item: T, uuid: String, createOp:(suspend (T) -> TId)? = null, updateOp:(suspend (T) -> Boolean)? = null): Try<T> {
         return try {
             val existing: T? = this.getByUUID(uuid)
             when (existing) {
@@ -74,7 +74,7 @@ interface Upserts<TId, T> :
     /**
      * Creates an item only if it does NOT exist already by checking its uuid
      */
-    fun createByUUID(item: T, uuid: String, createOp:((T) -> TId)? = null): Try<T> {
+    suspend fun createByUUID(item: T, uuid: String, createOp:((T) -> TId)? = null): Try<T> {
         return try {
             val existing: T? = this.getByUUID(uuid)
             when (existing) {

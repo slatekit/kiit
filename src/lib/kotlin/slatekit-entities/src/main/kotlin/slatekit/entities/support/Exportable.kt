@@ -24,7 +24,7 @@ interface Exportable<TId, T> where TId : Comparable<TId>, T : Entity<TId> {
      * @param version
      * @return
      */
-    fun exportAll(version: String): Try<Export<List<T>>> {
+    suspend fun exportAll(version: String): Try<Export<List<T>>> {
         return exportItems(version, service.getAll())
     }
 
@@ -36,7 +36,7 @@ interface Exportable<TId, T> where TId : Comparable<TId>, T : Entity<TId> {
      * @return
      * @throws Exception
      */
-    fun exportById(version: String, id: TId): Try<Export<T>> {
+    suspend fun exportById(version: String, id: TId): Try<Export<T>> {
         return exportItem(version, service.getById(id))
     }
 
@@ -47,7 +47,7 @@ interface Exportable<TId, T> where TId : Comparable<TId>, T : Entity<TId> {
      * @param item
      * @return
      */
-    fun exportItem(version: String, item: T?): Try<Export<T>> {
+    suspend fun exportItem(version: String, item: T?): Try<Export<T>> {
         if (item == null) {
             return Tries.invalid("Not supplied")
         }
@@ -71,7 +71,7 @@ interface Exportable<TId, T> where TId : Comparable<TId>, T : Entity<TId> {
      * @param items
      * @return
      */
-    fun exportItems(version: String, items: List<T>?): Try<Export<List<T>>> {
+    suspend fun exportItems(version: String, items: List<T>?): Try<Export<List<T>>> {
 
         // Available ?
         if (items == null || items.isEmpty()) {
