@@ -1,6 +1,7 @@
 package slatekit.data.syntax
 
 import slatekit.common.data.*
+import slatekit.data.Consts
 import slatekit.data.core.Meta
 
 /**
@@ -9,52 +10,53 @@ import slatekit.data.core.Meta
  * @param mapper: Mapper that converts a model T into its values for a table
  * @param filters: Used to build conditions
  */
-open class Select<TId, T>(val info: Meta<TId, T>, val mapper: Mapper<TId, T>, val filters: Filters) : Statement<TId, T> where TId : kotlin.Comparable<TId>, T : Any {
-    /**
-     * Builds the full SQL statement
-     * e.g. "select * from `movies` where id = 1;"
-     */
-    open fun stmt(id: TId): String {
-        val name = encode(info.pkey.name, info.table.encodeChar)
-        return "${prefix()} where $name = $id;"
-    }
+open class Select<TId, T>(val info: Meta<TId, T>, val mapper: Mapper<TId, T>, val filters: Filters)
+    : Statement<TId, T> where TId : kotlin.Comparable<TId>, T : Any {
 
     /**
      * Builds the full SQL statement
-     * e.g. "select * from `movies` where id = 1;"
+     * e.g. "delete from movies where id = 1;"
      */
-    open fun stmt(ids:List<TId>): String {
-        val name = encode(info.pkey.name, info.table.encodeChar)
-        val delimited = ids.joinToString(",")
-        val sql = "${prefix()} where $name in ($delimited);"
-        return sql
+    open fun command(id: TId, mode: BuildMode = BuildMode.Prep): Command {
+        val start = prefix()
+        val column = encode(info.pkey.name, info.table.encodeChar)
+        return when(mode) {
+            BuildMode.Sql -> {
+                val sql = "${prefix()} where $column = $id;"
+                Command(sql, emptyValues, emptyValues)
+            }
+            BuildMode.Prep -> {
+                val sql = "$start where $column = ?;"
+                Command(sql, listOf(Value(column, info.pkey.type, id, id.toString())), listOf(id))
+            }
+        }
     }
 
     /**
-     * Builds sql statement with values as placeholders for prepared statements
-     * e.g. "select * from `movies` where id = ?;"
+     * Builds sql statement to remove multiple items by ids
+     * e.g.
+     * "delete from `movies` where id in (?);"
      */
-    open fun prep(id: TId): Command {
-        val name = encode(info.pkey.name, info.table.encodeChar)
-        val sql = "${prefix()} where $name = ?;"
-        return Command(sql, listOf(Value(name, info.pkey.type, id, id.toString())), listOf(id))
-    }
-
-    /**
-     * Builds the values to be inserted as a list of Pair(name:String, value:Any?)
-     * e.g. listOf(
-     *      Value("id", 2)
-     * )
-     */
-    open fun data(id: TId): Values {
-        val name = encode(info.pkey.name, info.table.encodeChar)
-        return listOf<Value>(Value(name, info.pkey.type, id, id.toString()))
+    open fun command(ids:List<TId>, mode: BuildMode = BuildMode.Prep): Command {
+        val column = encode(info.pkey.name, info.table.encodeChar)
+        return when(mode) {
+            BuildMode.Sql -> {
+                val delimited = ids.joinToString(",")
+                val sql = "${prefix()} where $column in ($delimited);"
+                Command(sql, emptyValues, emptyValues)
+            }
+            BuildMode.Prep -> {
+                val sql = "${prefix()} where $column = ?;"
+                val values = ids.map { Value(column, info.pkey.type, it) }
+                Command(sql, values, ids)
+            }
+        }
     }
 
     /**
      * Load all records
      */
-    open fun load(): String = "${prefix()};"
+    open fun all(): Command = Command("${prefix()};", emptyValues, emptyValues)
 
     /**
      * basic syntax for common to both stmt/prep

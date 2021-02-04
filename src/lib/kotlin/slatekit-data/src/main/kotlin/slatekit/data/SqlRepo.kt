@@ -17,6 +17,7 @@ import slatekit.common.data.*
 import slatekit.data.core.Meta
 import slatekit.data.syntax.Syntax
 import slatekit.data.slatekit.data.features.Scriptable
+import slatekit.data.syntax.BuildMode
 import slatekit.query.Select
 import slatekit.query.Update
 import slatekit.query.Where
@@ -46,8 +47,8 @@ open class SqlRepo<TId, T>(
      * Note: You can customize the sql by providing your own statements
      */
     override fun create(entity: T): TId {
-        val result = syntax.insert.prep(entity)
-        val rawId = db.insertGetId(result.sql, result.pairs)
+        val command = syntax.insert.command(entity)
+        val rawId = db.insertGetId(command.sql, command.pairs)
         val id = meta.id.convertToId(rawId)
         val success = isPersisted(id)
         notify(DataAction.Create, id, entity, success)
@@ -60,8 +61,8 @@ open class SqlRepo<TId, T>(
      */
     override fun update(entity: T): Boolean {
         val id = identity(entity)
-        val result = syntax.update.prep(entity)
-        val count = db.update(result.sql, result.pairs)
+        val command = syntax.update.command(entity)
+        val count = db.update(command.sql, command.pairs)
         val success = count > 0
         notify(DataAction.Update, id, entity, success)
         return success
@@ -72,7 +73,7 @@ open class SqlRepo<TId, T>(
      * Note: You can customize the sql by providing your own statements
      */
     override fun getById(id: TId): T? {
-        val result = syntax.select.prep(id)
+        val result = syntax.select.command(id)
         return mapOne(result.sql, result.pairs)
     }
 
@@ -81,8 +82,8 @@ open class SqlRepo<TId, T>(
      * Note: You can customize the sql by providing your own statements
      */
     override fun getByIds(ids: List<TId>): List<T> {
-        val result = syntax.select.stmt(ids)
-        val items = mapAll(result)
+        val command = syntax.select.command(ids)
+        val items = mapAll(command.sql, command.pairs)
         return items ?: listOf()
     }
 
@@ -91,8 +92,8 @@ open class SqlRepo<TId, T>(
      * Note: You can customize the sql by providing your own statements
      */
     override fun getAll(): List<T> {
-        val sql = syntax.select.load()
-        val items = mapAll(sql)
+        val command = syntax.select.all()
+        val items = mapAll(command.sql, command.pairs)
         return items ?: listOf<T>()
     }
 
@@ -117,8 +118,8 @@ open class SqlRepo<TId, T>(
      * Note: You can customize the sql by providing your own statements
      */
     override fun deleteByIds(ids: List<TId>): Int {
-        val result = syntax.delete.stmt(ids)
-        val count = update(result)
+        val command = syntax.delete.command(ids)
+        val count = update(command.sql, command.pairs)
         return count
     }
 
@@ -127,8 +128,8 @@ open class SqlRepo<TId, T>(
      * Note: You can customize the sql by providing your own statements
      */
     override fun deleteAll(): Long {
-        val sql = syntax.delete.drop()
-        val count = update(sql)
+        val command = syntax.delete.drop()
+        val count = update(command.sql, command.pairs)
         return count.toLong()
     }
 
@@ -244,8 +245,8 @@ open class SqlRepo<TId, T>(
      * Note: You can customize the sql by providing your own statements
      */
     protected fun internalDeleteById(id: TId, entity:T? = null): Boolean {
-        val result = syntax.delete.prep(id)
-        val count = update(result.sql, result.pairs)
+        val command = syntax.delete.command(id)
+        val count = update(command.sql, command.pairs)
         val success = count > 0
         notify(DataAction.Create, id, entity, success)
         return success
