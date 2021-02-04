@@ -17,7 +17,6 @@ import slatekit.common.data.*
 import slatekit.data.core.Meta
 import slatekit.data.syntax.Syntax
 import slatekit.data.slatekit.data.features.Scriptable
-import slatekit.data.syntax.BuildMode
 import slatekit.query.Select
 import slatekit.query.Update
 import slatekit.query.Where
@@ -172,7 +171,7 @@ open class SqlRepo<TId, T>(
     /**
      * Finds items using the query builder
      */
-    override fun findByQuery(builder:Select): List<T> {
+    override fun findByQuery(builder: Select): List<T> {
         val prefix = syntax.select.prefix()
         val filter = builder.build()
         val sql = "$prefix where $filter;"

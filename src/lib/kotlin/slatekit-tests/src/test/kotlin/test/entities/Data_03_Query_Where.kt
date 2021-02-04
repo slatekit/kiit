@@ -19,13 +19,15 @@ import org.junit.Test
 import slatekit.common.data.*
 import slatekit.data.syntax.Builders
 import slatekit.entities.*
+import slatekit.query.Op
+import slatekit.query.Where
 import test.setup.User5
 
 class Data_03_Query_Where {
 
     private lateinit var entities:Entities
 
-    private fun where(): slatekit.query.Where = Builders.Where()
+    private fun where(): Where = Builders.Where()
 
     @Before
     fun setup(){
@@ -44,9 +46,10 @@ class Data_03_Query_Where {
 
 
 
-//    @Test fun can_build_filter_1() {
-//        Assert.assertTrue("api = 'slate kit'",  Query().where("api", "=", "slate kit").toFilter() == "api = 'slate kit'")
-//    }
+    @Test fun can_build_filter_1() {
+        val cmd = where().where("api", Op.Eq, "slate kit").toFilter() == "api = 'slate kit'"
+        Assert.assertTrue("api = 'slate kit'",  )
+    }
 
 
 //    @Test fun can_build_where_with_1_field_of_type_bool() {

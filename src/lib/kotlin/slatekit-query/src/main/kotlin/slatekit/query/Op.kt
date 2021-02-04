@@ -24,3 +24,10 @@ enum class Op(val text: String) {
 }
 
 
+
+enum class Logic(val text: String) {
+    And("and"),
+    Or("or")
+}
+
+

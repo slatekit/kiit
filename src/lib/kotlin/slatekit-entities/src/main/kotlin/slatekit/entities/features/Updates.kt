@@ -88,7 +88,7 @@ interface Updates<TId, T> : EntityOps<TId, T> where TId : kotlin.Comparable<TId>
     /**
      * updates items using the query
      */
-    fun updateByQuery(builder:Update): Int {
+    fun updateByQuery(builder: Update): Int {
         return repo().patchByQuery(builder)
     }
 
@@ -115,5 +115,5 @@ interface Updates<TId, T> : EntityOps<TId, T> where TId : kotlin.Comparable<TId>
     }
 
 
-    fun update():Update = repo().update()
+    fun update(): Update = repo().update()
 }

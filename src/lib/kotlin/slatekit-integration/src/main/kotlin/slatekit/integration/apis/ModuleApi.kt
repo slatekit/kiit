@@ -23,6 +23,7 @@ import slatekit.common.log.Logger
 import slatekit.common.utils.ListMap
 import slatekit.context.Context
 import slatekit.integration.mods.Mod
+import slatekit.query.Op
 import slatekit.results.Failure
 import slatekit.results.Notice
 import slatekit.results.Success
@@ -50,7 +51,7 @@ class ModuleApi(val ctx: slatekit.integration.mods.ModuleContext, override val c
     @Action(desc = "creates a new invitee")
     suspend fun enabled(): List<slatekit.integration.mods.Mod> {
         val select = ctx.service.select()
-        return ctx.service.findByQuery(select.where("isEnabled", "=", true))
+        return ctx.service.findByQuery(select.where("isEnabled", Op.Eq, true))
     }
 
     @Action(desc = "installs all modules from initial setup")
@@ -148,7 +149,7 @@ class ModuleApi(val ctx: slatekit.integration.mods.ModuleContext, override val c
     suspend fun installUpdate(mod: slatekit.integration.mods.Module, updateIfPresent: Boolean = false): Notice<Any> {
 
         val select = ctx.service.select()
-        val checkResult = ctx.service.findOneByQuery(select.where("name", "=", mod.info.name))
+        val checkResult = ctx.service.findOneByQuery(select.where("name", Op.Eq, mod.info.name))
         if (checkResult == null) {
 
             if (mod.info.isEnabled) {

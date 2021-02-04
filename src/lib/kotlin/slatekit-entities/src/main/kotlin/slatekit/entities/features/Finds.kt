@@ -137,7 +137,7 @@ interface Finds<TId, T> : EntityOps<TId, T> where TId : kotlin.Comparable<TId>, 
     /**
      * finds the first item by the query
      */
-    suspend fun findOneByQuery(select:Select): T? {
+    suspend fun findOneByQuery(select: Select): T? {
         val results = findByQuery(select.limit(1))
         return results.firstOrNull()
     }

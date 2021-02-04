@@ -47,7 +47,7 @@ data class Set(@JvmField val field: String, @JvmField val fieldValue: Any?) : Ex
  */
 class Condition(
     @JvmField val field: Any,
-    @JvmField val op: String,
+    @JvmField val op: Op,
     @JvmField val value: Any
 ) : Expr {
 
@@ -67,7 +67,7 @@ class Condition(
     fun toStringQueryWithOptions(surround: Boolean = false, left: String = "", right: String = ""): String {
         val fieldName = QueryEncoder.ensureField(this.field.toString())
         val col = if (surround) left + fieldName + right else fieldName
-        val comp = QueryEncoder.ensureCompare(op)
+        val comp = QueryEncoder.ensureCompare(op.text)
         val fieldVal = this.value
         val result = QueryEncoder.convertVal(fieldVal)
 
@@ -84,7 +84,7 @@ class Condition(
  */
 data class LogicalExpr(
     @JvmField val left: Expr,
-    @JvmField val op: String,
+    @JvmField val op: Logic,
     @JvmField val right: Expr
 ) : Expr {
 
