@@ -1,7 +1,6 @@
 package slatekit.data.syntax
 
 import slatekit.common.data.*
-import slatekit.data.Consts
 import slatekit.data.core.Meta
 
 /**
@@ -17,7 +16,7 @@ open class Select<TId, T>(val info: Meta<TId, T>, val mapper: Mapper<TId, T>, va
      * Builds the full SQL statement
      * e.g. "delete from movies where id = 1;"
      */
-    open fun command(id: TId, mode: BuildMode = BuildMode.Prep): Command {
+    open fun build(id: TId, mode: BuildMode = BuildMode.Prep): Command {
         val start = prefix()
         val column = encode(info.pkey.name, info.table.encodeChar)
         return when(mode) {
@@ -37,7 +36,7 @@ open class Select<TId, T>(val info: Meta<TId, T>, val mapper: Mapper<TId, T>, va
      * e.g.
      * "delete from `movies` where id in (?);"
      */
-    open fun command(ids:List<TId>, mode: BuildMode = BuildMode.Prep): Command {
+    open fun build(ids:List<TId>, mode: BuildMode = BuildMode.Prep): Command {
         val column = encode(info.pkey.name, info.table.encodeChar)
         return when(mode) {
             BuildMode.Sql -> {

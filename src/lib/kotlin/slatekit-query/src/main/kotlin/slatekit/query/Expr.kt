@@ -13,7 +13,9 @@
 
 package slatekit.query
 
+import slatekit.common.data.BuildMode
 import slatekit.common.data.Command
+
 
 /**
  * Expression interface to represent conditions, logical and/or, etc.
@@ -24,7 +26,8 @@ interface Expr {
 
 
 interface Stmt {
-    fun build(): Command
+    fun build(): Command = build(BuildMode.Prep)
+    fun build(mode: BuildMode): Command
 }
 
 

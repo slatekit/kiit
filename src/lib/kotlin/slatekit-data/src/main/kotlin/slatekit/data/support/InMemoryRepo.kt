@@ -11,7 +11,7 @@ import slatekit.data.BaseRepo
 import slatekit.data.core.Meta
 import slatekit.query.Select
 import slatekit.query.Update
-import slatekit.query.Where
+import slatekit.query.Delete
 
 /**
  * Used mostly for Prototyping and Testing.
@@ -132,7 +132,7 @@ class InMemoryRepo<TId, T>(meta: Meta<TId, T>,
         }
     }
 
-    override fun deleteByQuery(builder: Where): Int {
+    override fun deleteByQuery(builder: Delete): Int {
         TODO("Not yet implemented")
     }
 
@@ -144,7 +144,7 @@ class InMemoryRepo<TId, T>(meta: Meta<TId, T>,
         TODO("Not yet implemented")
     }
 
-    override fun delete(): Where {
+    override fun delete(): Delete {
         TODO("Not yet implemented")
     }
 

@@ -1,9 +1,6 @@
 package slatekit.data.syntax
 
-import slatekit.common.data.Command
-import slatekit.common.data.DataAction
-import slatekit.common.data.Mapper
-import slatekit.common.data.Values
+import slatekit.common.data.*
 import slatekit.data.Consts
 import slatekit.data.core.Meta
 
@@ -25,7 +22,7 @@ open class Insert<TId, T>(val info: Meta<TId, T>, val mapper: Mapper<TId, T>)
      *              Value("category", "action")
      *          )
      */
-    open fun command(item:T, mode: BuildMode = BuildMode.Prep): Command {
+    open fun build(item:T, mode: BuildMode = BuildMode.Prep): Command {
         val start = "insert into " + encode(info.name, info.table.encodeChar)
         val values = mapper.encode(item, DataAction.Create, null)
         val cols = "(" + values.joinToString(",", transform = { it.name }) + ") "

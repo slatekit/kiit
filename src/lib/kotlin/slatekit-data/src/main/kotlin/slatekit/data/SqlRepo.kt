@@ -19,7 +19,7 @@ import slatekit.data.syntax.Syntax
 import slatekit.data.slatekit.data.features.Scriptable
 import slatekit.query.Select
 import slatekit.query.Update
-import slatekit.query.Where
+import slatekit.query.Delete
 
 /**
  *
@@ -46,7 +46,7 @@ open class SqlRepo<TId, T>(
      * Note: You can customize the sql by providing your own statements
      */
     override fun create(entity: T): TId {
-        val command = syntax.insert.command(entity)
+        val command = syntax.insert.build(entity)
         val rawId = db.insertGetId(command.sql, command.pairs)
         val id = meta.id.convertToId(rawId)
         val success = isPersisted(id)
@@ -60,7 +60,7 @@ open class SqlRepo<TId, T>(
      */
     override fun update(entity: T): Boolean {
         val id = identity(entity)
-        val command = syntax.update.command(entity)
+        val command = syntax.update.build(entity)
         val count = db.update(command.sql, command.pairs)
         val success = count > 0
         notify(DataAction.Update, id, entity, success)
@@ -72,7 +72,7 @@ open class SqlRepo<TId, T>(
      * Note: You can customize the sql by providing your own statements
      */
     override fun getById(id: TId): T? {
-        val result = syntax.select.command(id)
+        val result = syntax.select.build(id)
         return mapOne(result.sql, result.pairs)
     }
 
@@ -81,7 +81,7 @@ open class SqlRepo<TId, T>(
      * Note: You can customize the sql by providing your own statements
      */
     override fun getByIds(ids: List<TId>): List<T> {
-        val command = syntax.select.command(ids)
+        val command = syntax.select.build(ids)
         val items = mapAll(command.sql, command.pairs)
         return items ?: listOf()
     }
@@ -117,7 +117,7 @@ open class SqlRepo<TId, T>(
      * Note: You can customize the sql by providing your own statements
      */
     override fun deleteByIds(ids: List<TId>): Int {
-        val command = syntax.delete.command(ids)
+        val command = syntax.delete.build(ids)
         val count = update(command.sql, command.pairs)
         return count
     }
@@ -184,7 +184,7 @@ open class SqlRepo<TId, T>(
      * @param query: The query builder
      * @return
      */
-    override fun deleteByQuery(builder: Where): Int {
+    override fun deleteByQuery(builder: Delete): Int {
         val prefix = syntax.delete.prefix()
         val filter = builder.build()
         val sql = "$prefix where $filter;"
@@ -194,7 +194,7 @@ open class SqlRepo<TId, T>(
     /**
      * Gets the total number of records based on the query provided.
      */
-    fun countByQuery(builder: Where): Long {
+    fun countByQuery(builder: Delete): Long {
         val prefix = syntax.select.count()
         val filter = builder.build()
         val sql = "$prefix where $filter;"
@@ -244,14 +244,14 @@ open class SqlRepo<TId, T>(
      * Note: You can customize the sql by providing your own statements
      */
     protected fun internalDeleteById(id: TId, entity:T? = null): Boolean {
-        val command = syntax.delete.command(id)
+        val command = syntax.delete.build(id)
         val count = update(command.sql, command.pairs)
         val success = count > 0
         notify(DataAction.Create, id, entity, success)
         return success
     }
 
-    override fun delete(): Where {
+    override fun delete(): Delete {
         TODO("Not yet implemented")
     }
 

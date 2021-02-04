@@ -10,15 +10,3 @@ interface Statement<TId, T> where TId : kotlin.Comparable<TId>, T : Any {
 }
 
 
-sealed class BuildMode {
-    /**
-     * Represents building sql directly
-     */
-    object Sql  : BuildMode()
-
-    /**
-     * Represents building prepared statements
-     */
-    object Prep : BuildMode()
-}
-

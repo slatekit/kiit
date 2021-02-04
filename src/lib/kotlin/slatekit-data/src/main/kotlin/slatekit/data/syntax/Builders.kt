@@ -1,14 +1,44 @@
 package slatekit.data.syntax
 
+import slatekit.common.data.BuildMode
+import slatekit.common.data.Command
+
+/**
+ * Query Builders
+ */
 class Builders {
-    class Where(converter: ((String) -> String)? = null,
-                encoder:((String) -> String)? = null) : slatekit.query.Where()
+    class Delete(table:String,
+                 converter: ((String) -> String)? = null,
+                 encoder:((String) -> String)? = null) : slatekit.query.Delete() {
+        init { fromTable = table }
+
+        override fun build(mode: BuildMode): Command {
+            if(conditions.isEmpty()){
+                return Command("", listOf(), listOf())
+            }
+            return Command("", listOf(), listOf())
+        }
+    }
 
 
-    class Select(converter: ((String) -> String)? = null,
-                 encoder:((String) -> String)? = null) : slatekit.query.Select()
+    class Select(table:String,
+                 converter: ((String) -> String)? = null,
+                 encoder:((String) -> String)? = null) : slatekit.query.Select() {
+        init { fromTable = table }
+
+        override fun build(mode: BuildMode): Command {
+            return Command("", listOf(), listOf())
+        }
+    }
 
 
-    class Update(converter: ((String) -> String)? = null,
-                 encoder:((String) -> String)? = null) : slatekit.query.Update()
+    class Update(table:String,
+                 converter: ((String) -> String)? = null,
+                 encoder:((String) -> String)? = null) : slatekit.query.Update() {
+        init { fromTable = table }
+
+        override fun build(mode: BuildMode): Command {
+            return Command("", listOf(), listOf())
+        }
+    }
 }

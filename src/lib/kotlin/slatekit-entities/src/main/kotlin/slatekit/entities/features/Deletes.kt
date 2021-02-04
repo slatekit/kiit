@@ -4,7 +4,7 @@ import kotlin.reflect.KProperty
 import slatekit.entities.Entity
 import slatekit.entities.core.EntityOps
 import slatekit.query.Op
-import slatekit.query.Where
+import slatekit.query.Delete
 import slatekit.results.Try
 import slatekit.results.builders.Tries
 
@@ -75,10 +75,10 @@ interface Deletes<TId, T> : EntityOps<TId, T> where TId : kotlin.Comparable<TId>
     /**
      * updates items using the query
      */
-    suspend fun deleteByQuery(critera: Where): Int {
+    suspend fun deleteByQuery(critera: Delete): Int {
         return repo().deleteByQuery(critera)
     }
 
 
-    fun delete(): Where = repo().delete()
+    fun delete(): Delete = repo().delete()
 }

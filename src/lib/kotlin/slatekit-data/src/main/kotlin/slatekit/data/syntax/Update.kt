@@ -22,7 +22,7 @@ open class Update<TId, T>(val info: Meta<TId, T>, val mapper: Mapper<TId, T>, va
      *              Value("category", "action")
      *          )
      */
-    open fun command(item: T, mode:BuildMode = BuildMode.Prep): Command {
+    open fun build(item: T, mode: BuildMode = BuildMode.Prep): Command {
         val start = prefix()
         val values = mapper.encode(item, DataAction.Update, null)
         return when(mode){

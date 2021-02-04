@@ -6,6 +6,7 @@ open class CriteriaBase<T>(
     protected val converter: ((String) -> String)? = null,
     protected val encoder:((String) -> String)? = null) : Criteria<T> {
     protected val conditions= mutableListOf<Expr>()
+    protected var fromTable:String = ""
 
     /**
      * builds up a where clause with the supplied arguments

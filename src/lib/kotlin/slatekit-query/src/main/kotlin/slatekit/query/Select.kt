@@ -1,6 +1,5 @@
 package slatekit.query
 
-import slatekit.common.data.Command
 import java.util.concurrent.atomic.AtomicInteger
 
 /**
@@ -27,13 +26,5 @@ abstract class Select(converter: ((String) -> String)? = null,
     fun orderBy(field: String, order: Order): Select {
         this.orders.add(Pair(field, order))
         return this
-    }
-
-
-    /**
-     * Builds the select command
-     */
-    override fun build(): Command {
-        return Command("", listOf(), listOf())
     }
 }

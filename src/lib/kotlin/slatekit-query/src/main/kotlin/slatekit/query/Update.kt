@@ -67,12 +67,4 @@ abstract class Update(converter: ((String) -> String)? = null,
         }
         return this
     }
-
-
-    /**
-     * Builds the select command
-     */
-    override fun build(): Command {
-        return Command("", listOf(), listOf())
-    }
 }
