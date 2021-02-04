@@ -3,6 +3,7 @@ package slatekit.entities.features
 import slatekit.data.features.Orderable
 import slatekit.entities.Entity
 import slatekit.entities.core.EntityOps
+import slatekit.query.Order
 
 
 interface Ordered<TId, T> : EntityOps<TId, T> where TId : kotlin.Comparable<TId>, TId:Number, T : Entity<TId> {
@@ -13,8 +14,8 @@ interface Ordered<TId, T> : EntityOps<TId, T> where TId : kotlin.Comparable<TId>
      * @param desc : Whether to sort by descending
      * @return
      */
-    suspend fun top(count: Int, desc: Boolean): List<T> {
-        return performCount {  it.seq(count, desc) } ?: listOf()
+    suspend fun top(count: Int, order: Order): List<T> {
+        return performCount {  it.seq(count, order) } ?: listOf()
     }
 
     /**

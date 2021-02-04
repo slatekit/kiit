@@ -10,6 +10,7 @@ import slatekit.entities.core.EntityOps
 import slatekit.meta.Reflector
 import slatekit.meta.kClass
 import slatekit.query.Op
+import slatekit.query.Order
 import slatekit.results.Try
 import slatekit.results.builders.Tries
 import java.util.*
@@ -563,11 +564,11 @@ open class EntityServiceSync<TId, T>(val repo: EntityRepo<TId, T>)
     /**
      * gets the top count entities in the datastore sorted by asc order
      * @param count: Top / Limit count of entities
-     * @param desc : Whether to sort by descending
+     * @param order : Whether to sort by descending
      * @return
      */
-    fun top(count: Int, desc: Boolean): List<T> {
-        return performCount {  it.seq(count, desc) } ?: listOf()
+    fun top(count: Int, order: Order): List<T> {
+        return performCount {  it.seq(count, order) } ?: listOf()
     }
 
     /**
