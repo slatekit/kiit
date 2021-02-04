@@ -1,6 +1,7 @@
 package slatekit.data
 
 import slatekit.data.features.*
+import slatekit.data.slatekit.data.features.Scalarable
 
 /**
  * SQL based Repository ( representing a database table )
@@ -11,6 +12,7 @@ interface FullRepo<TId, T>:
     Deletable<TId, T>,
     Findable<TId, T>,
     Orderable<TId, T>,
-    Patchable<TId, T>
+    Patchable<TId, T>,
+    Scalarable<TId, T>
     where TId : Comparable<TId>, T: Any {
 }

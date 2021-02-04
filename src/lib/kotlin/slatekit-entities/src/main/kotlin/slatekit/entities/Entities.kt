@@ -22,7 +22,7 @@ import slatekit.common.naming.Namer
 import slatekit.common.utils.ListMap
 import slatekit.data.core.*
 import slatekit.entities.core.*
-import slatekit.data.syntax.SqlSyntax
+import slatekit.data.slatekit.data.syntax.MySqlDialect
 import slatekit.entities.mapper.EntityMapper
 import slatekit.entities.mapper.EntitySettings
 import slatekit.meta.kClass
@@ -99,7 +99,7 @@ open class Entities(
 
         // 4. Mapper
         val entityMapper = EntityMapper<TId, T>(entityModel, entityMeta, idType, enType, EntitySettings(true))
-        val entityRepo = EntityRepo<TId, T>(getDb(), entityMeta, entityMapper, SqlSyntax(entityMeta, entityMapper))
+        val entityRepo = EntityRepo<TId, T>(getDb(), entityMeta, entityMapper, MySqlDialect(entityMeta, entityMapper))
         val entityService = builder(entityRepo)
 
         // 5. Context has all relevant info

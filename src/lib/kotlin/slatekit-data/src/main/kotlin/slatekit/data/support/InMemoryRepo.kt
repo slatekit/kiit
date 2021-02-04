@@ -7,11 +7,14 @@ import slatekit.common.utils.ListMap
 import slatekit.data.FullRepo
 import slatekit.common.data.DataEvent
 import slatekit.common.data.DataHooks
+import slatekit.common.data.Values
 import slatekit.data.BaseRepo
 import slatekit.data.core.Meta
+import slatekit.data.sql.Dialect
 import slatekit.query.Select
 import slatekit.query.Update
 import slatekit.query.Delete
+import slatekit.query.Order
 
 /**
  * Used mostly for Prototyping and Testing.
@@ -114,10 +117,10 @@ class InMemoryRepo<TId, T>(meta: Meta<TId, T>,
         return items.size.toLong()
     }
 
-    override fun seq(count: Int, desc: Boolean): List<T> {
-        return when (desc) {
-            false -> items.all().take(count)
-            true -> items.all().takeLast(count)
+    override fun seq(count: Int, order: Order): List<T> {
+        return when (order) {
+            Order.Asc -> items.all().take(count)
+            Order.Dsc -> items.all().takeLast(count)
         }
     }
 
@@ -152,7 +155,18 @@ class InMemoryRepo<TId, T>(meta: Meta<TId, T>,
         TODO("Not yet implemented")
     }
 
-    override fun update(): Update {
+    override fun patch(): Update {
+        TODO("Not yet implemented")
+    }
+
+    override val dialect: Dialect
+        get() = TODO("Not yet implemented")
+
+    override fun scalar(sql: String, args: Values): Double {
+        TODO("Not yet implemented")
+    }
+
+    override fun scalar(builder: Select.() -> Unit): Double {
         TODO("Not yet implemented")
     }
 }

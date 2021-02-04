@@ -18,7 +18,7 @@ import org.junit.Before
 import org.junit.Test
 import slatekit.common.data.*
 import slatekit.common.data.BuildMode
-import slatekit.data.syntax.Builders
+import slatekit.data.sql.Builders
 import slatekit.entities.*
 import slatekit.query.Op
 import slatekit.query.Delete

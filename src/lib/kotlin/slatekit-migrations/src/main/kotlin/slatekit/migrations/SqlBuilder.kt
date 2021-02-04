@@ -5,7 +5,7 @@ import slatekit.common.naming.Namer
 import slatekit.common.data.DataType
 import slatekit.common.data.Encoding
 import slatekit.common.newline
-import slatekit.data.core.Types
+import slatekit.data.slatekit.data.syntax.Types
 import slatekit.meta.models.Model
 
 /**

@@ -32,7 +32,7 @@ interface Deletable<TId, T> : Inspectable<TId, T> where TId : Comparable<TId>, T
      * @param value: The value to check for
      * @return
      */
-    fun deleteByField(field: String, op: Op, value: Any?): Int = deleteByQuery(delete().where(columnName(field), op, value))
+    fun deleteByField(field: String, op: Op, value: Any?): Int = deleteByQuery(delete().where(field, op, value))
 
 
     /**

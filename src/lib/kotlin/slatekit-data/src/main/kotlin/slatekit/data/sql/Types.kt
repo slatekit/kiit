@@ -1,10 +1,11 @@
-package slatekit.data.core
+package slatekit.data.slatekit.data.syntax
 
 import slatekit.common.Types
 import slatekit.common.data.DataType
 import slatekit.common.data.DataTypeMap
 
 /**
+ * Maps the DataTypes
  * Java types to MySql
  * https://dev.mysql.com/doc/connector-j/5.1/en/connector-j-reference-type-conversions.html
  */
@@ -18,9 +19,9 @@ open class Types {
     /**
      * STRINGS
      */
-    open val charType = DataTypeMap(DataType.DTChar, "CHAR", Types.JCharClass)
+    open val charType   = DataTypeMap(DataType.DTChar, "CHAR", Types.JCharClass)
     open val stringType = DataTypeMap(DataType.DTString, "NVARCHAR", Types.JStringClass)
-    open val textType = DataTypeMap(DataType.DTText, "TEXT", Types.JStringClass)
+    open val textType   = DataTypeMap(DataType.DTText, "TEXT", Types.JStringClass)
 
     /**
      * UUID

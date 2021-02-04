@@ -115,5 +115,5 @@ interface Updates<TId, T> : EntityOps<TId, T> where TId : kotlin.Comparable<TId>
     }
 
 
-    fun update(): Update = repo().update()
+    fun update(): Update = repo().patch()
 }

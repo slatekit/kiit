@@ -1,16 +1,16 @@
-package slatekit.data.syntax
+package slatekit.data.sql
 
 import slatekit.common.data.*
 import slatekit.data.Consts
 import slatekit.data.core.Meta
 
 /**
- * Used to build the syntax for update statements
+ * Used to build the syntax for update statements for a model using a mapper
  * @param info: Meta info to know about the table (name, primary key ) and model id
  * @param mapper: Mapper that converts a model T into its values for a table
  */
-open class Update<TId, T>(val info: Meta<TId, T>, val mapper: Mapper<TId, T>, val filters:Filters = Filters())
-    : Statement<TId, T> where TId : kotlin.Comparable<TId>, T : Any {
+open class Update<TId, T>(val dialect: Dialect, val meta: Meta<TId, T>, val mapper: Mapper<TId, T>)
+    where TId : kotlin.Comparable<TId>, T : Any {
 
     /**
      * Builds the full SQL statement
@@ -40,5 +40,5 @@ open class Update<TId, T>(val info: Meta<TId, T>, val mapper: Mapper<TId, T>, va
     }
 
 
-    fun prefix(): String = "update " + encode(info.name, info.table.encodeChar)
+    fun prefix(): String = "update " + dialect.encode(meta.name)
 }

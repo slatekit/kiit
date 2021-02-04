@@ -1,6 +1,5 @@
 package slatekit.query
 
-import slatekit.common.data.Command
 import slatekit.common.data.Value
 
 /**

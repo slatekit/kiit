@@ -15,16 +15,15 @@ package slatekit.data
 
 import slatekit.common.data.*
 import slatekit.data.core.Meta
-import slatekit.data.syntax.Syntax
 import slatekit.data.slatekit.data.features.Scriptable
-import slatekit.query.Select
-import slatekit.query.Update
-import slatekit.query.Delete
+import slatekit.data.sql.Dialect
+import slatekit.data.sql.Provider
+import slatekit.query.*
 
 /**
  *
  * @param db : Db wrapper to execute sql
- * @param syntax: Used to build the sql syntax that may be vendor specific
+ * @param provider: Used to build the sql syntax that may be vendor specific
  * @param mapper: Used to map a model T to/from the repo/table
  * @tparam T
  */
@@ -32,21 +31,18 @@ open class SqlRepo<TId, T>(
     val db: IDb,
     meta: Meta<TId, T>,
     val mapper: Mapper<TId, T>,
-    val syntax: Syntax<TId, T>,
+    val provider: Provider<TId, T>,
     hooks: DataHooks<TId, T>? = null
 ) : BaseRepo<TId, T>(meta, hooks), FullRepo<TId, T>, Scriptable<TId, T> where TId : Comparable<TId>, T : Any {
 
-    /**
-     * Gets the name of the repository/table
-     */
-    override val name: String get() { return "${meta.table.encodeChar}" + super.tableName + "${meta.table.encodeChar}" }
+    override val dialect: Dialect = provider.dialect
 
     /**
      * Creates the entity in the repository/table
      * Note: You can customize the sql by providing your own statements
      */
     override fun create(entity: T): TId {
-        val command = syntax.insert.build(entity)
+        val command = provider.insert.build(entity)
         val rawId = db.insertGetId(command.sql, command.pairs)
         val id = meta.id.convertToId(rawId)
         val success = isPersisted(id)
@@ -60,7 +56,7 @@ open class SqlRepo<TId, T>(
      */
     override fun update(entity: T): Boolean {
         val id = identity(entity)
-        val command = syntax.update.build(entity)
+        val command = provider.update.build(entity)
         val count = db.update(command.sql, command.pairs)
         val success = count > 0
         notify(DataAction.Update, id, entity, success)
@@ -68,12 +64,20 @@ open class SqlRepo<TId, T>(
     }
 
     /**
+     * updates items using the query
+     * @param builder: The query builder
+     */
+    override fun patchByQuery(builder: Update): Int {
+        val command = builder.build()
+        return update(command.sql, command.pairs)
+    }
+
+    /**
      * Gets the entity associated with the id from the repository/table
      * Note: You can customize the sql by providing your own statements
      */
     override fun getById(id: TId): T? {
-        val result = syntax.select.build(id)
-        return mapOne(result.sql, result.pairs)
+        return findByQuery(select().where(meta.pkey.name, Op.Eq, id)).firstOrNull()
     }
 
     /**
@@ -81,9 +85,7 @@ open class SqlRepo<TId, T>(
      * Note: You can customize the sql by providing your own statements
      */
     override fun getByIds(ids: List<TId>): List<T> {
-        val command = syntax.select.build(ids)
-        val items = mapAll(command.sql, command.pairs)
-        return items ?: listOf()
+        return findByQuery(select().where(meta.pkey.name, Op.In, ids))
     }
 
     /**
@@ -91,9 +93,16 @@ open class SqlRepo<TId, T>(
      * Note: You can customize the sql by providing your own statements
      */
     override fun getAll(): List<T> {
-        val command = syntax.select.all()
-        val items = mapAll(command.sql, command.pairs)
-        return items ?: listOf<T>()
+        return findByQuery(select())
+    }
+
+    /**
+     * Finds items using the query builder
+     */
+    override fun findByQuery(builder: Select): List<T> {
+        val command = builder.build()
+        val results = mapAll(command.sql, command.pairs)
+        return results ?: listOf()
     }
 
     /**
@@ -117,9 +126,7 @@ open class SqlRepo<TId, T>(
      * Note: You can customize the sql by providing your own statements
      */
     override fun deleteByIds(ids: List<TId>): Int {
-        val command = syntax.delete.build(ids)
-        val count = update(command.sql, command.pairs)
-        return count
+        return deleteByQuery(delete().where(meta.pkey.name, Op.In, ids))
     }
 
     /**
@@ -127,9 +134,18 @@ open class SqlRepo<TId, T>(
      * Note: You can customize the sql by providing your own statements
      */
     override fun deleteAll(): Long {
-        val command = syntax.delete.drop()
+        return deleteByQuery(delete()).toLong()
+    }
+
+    /**
+     * deletes items using the query
+     * @param query: The query builder
+     * @return
+     */
+    override fun deleteByQuery(builder: Delete): Int {
+        val command = builder.build()
         val count = update(command.sql, command.pairs)
-        return count.toLong()
+        return count
     }
 
     /** ====================================================================================
@@ -145,61 +161,22 @@ open class SqlRepo<TId, T>(
      * Gets total number of records in the repository/table
      */
     override fun count(): Long {
-        val prefix = syntax.select.count()
-        val sql = "$prefix;"
-        val count = getScalarLong(sql)
-        return count
+        return this.count("*") {  }.toLong()
     }
 
-    override fun seq(count: Int, desc: Boolean): List<T> {
-        val sql = syntax.select.take(count, desc)
-        val items = mapAll(sql) ?: listOf<T>()
-        return items
+    override fun seq(count: Int, order: Order): List<T> {
+        return findByQuery(select().limit(count).orderBy(meta.pkey.name, order))
     }
 
-    /**
-     * updates items using the query
-     * @param builder: The query builder
-     */
-    override fun patchByQuery(builder: Update): Int {
-        val prefix = syntax.update.prefix()
-        val updateSql = builder.build()
-        val sql = "$prefix $updateSql;"
-        return update(sql)
+    override fun scalar(sql: String, args: Values): Double {
+        return db.getScalarDouble(sql, args)
     }
 
-    /**
-     * Finds items using the query builder
-     */
-    override fun findByQuery(builder: Select): List<T> {
-        val prefix = syntax.select.prefix()
-        val filter = builder.build()
-        val sql = "$prefix where $filter;"
-        val results = mapAll(sql)
-        return results ?: listOf()
-    }
-
-    /**
-     * deletes items using the query
-     * @param query: The query builder
-     * @return
-     */
-    override fun deleteByQuery(builder: Delete): Int {
-        val prefix = syntax.delete.prefix()
-        val filter = builder.build()
-        val sql = "$prefix where $filter;"
-        return update(sql)
-    }
-
-    /**
-     * Gets the total number of records based on the query provided.
-     */
-    fun countByQuery(builder: Delete): Long {
-        val prefix = syntax.select.count()
-        val filter = builder.build()
-        val sql = "$prefix where $filter;"
-        val count = getScalarLong(sql)
-        return count
+    override fun scalar(builder: Select.() -> Unit): Double {
+        val s = select()
+        builder(s)
+        val command = s.build()
+        return db.getScalarDouble(command.sql, command.pairs)
     }
 
     override fun createByProc(name: String, args: List<Value>?): TId {
@@ -219,16 +196,9 @@ open class SqlRepo<TId, T>(
         return db.callUpdate(name, args).toLong()
     }
 
-    /**
-     * Updates records using sql provided and returns the number of updates made
-     */
     protected open fun update(sql: String, inputs:List<Value>? = null): Int {
         val count = db.update(sql, inputs)
         return count
-    }
-
-    protected open fun getScalarLong(sql: String): Long {
-        return db.getScalarLong(sql, null)
     }
 
     protected open fun mapAll(sql: String, inputs:List<Value>? = null): List<T>? {
@@ -239,27 +209,27 @@ open class SqlRepo<TId, T>(
         return db.mapOne<T>(sql, inputs) { record -> mapper.decode(record, null) }
     }
 
+    override fun delete(): Delete {
+        return provider.delete(meta.table)
+    }
+
+    override fun select(): Select {
+        return provider.select(meta.table)
+    }
+
+    override fun patch(): Update {
+        return provider.patch(meta.table)
+    }
+
     /**
      * Delete the entity from the repository/table
      * Note: You can customize the sql by providing your own statements
      */
     protected fun internalDeleteById(id: TId, entity:T? = null): Boolean {
-        val command = syntax.delete.build(id)
+        val command = delete().where(meta.pkey.name, Op.Eq, id).build()
         val count = update(command.sql, command.pairs)
         val success = count > 0
         notify(DataAction.Create, id, entity, success)
         return success
-    }
-
-    override fun delete(): Delete {
-        TODO("Not yet implemented")
-    }
-
-    override fun select(): Select {
-        TODO("Not yet implemented")
-    }
-
-    override fun update(): Update {
-        TODO("Not yet implemented")
     }
 }

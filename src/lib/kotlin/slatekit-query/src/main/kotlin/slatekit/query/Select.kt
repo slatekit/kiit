@@ -8,8 +8,24 @@ import java.util.concurrent.atomic.AtomicInteger
 abstract class Select(converter: ((String) -> String)? = null,
                          encoder:((String) -> String)? = null)
     : CriteriaBase<Select>(converter, encoder), Stmt {
+    private var agg: Agg? = null
+    private val fields = mutableListOf<String>()
     private val limit = AtomicInteger(0)
     private val orders = mutableListOf<Pair<String, Order>>()
+
+    /**
+     * Get all fields
+     */
+    fun all(): Select {
+        return this
+    }
+
+
+    fun agg(name:String, field:String): Select {
+        agg = Agg(name, field)
+        return this
+    }
+
 
     /**
      * Limit x number of records

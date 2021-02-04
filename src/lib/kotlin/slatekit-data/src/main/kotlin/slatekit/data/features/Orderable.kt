@@ -1,5 +1,7 @@
 package slatekit.data.features
 
+import slatekit.query.Order
+
 /**
  * Supports access to records that are ordered sequential / serial Id. E.g. Numeric ( int, long )
  */
@@ -11,7 +13,7 @@ interface Orderable<TId, T> where TId : Comparable<TId> {
      * @param desc : Whether to sort by descending
      * @return
      */
-    fun seq(count: Int, desc: Boolean): List<T>
+    fun seq(count: Int, order:Order): List<T>
 
     /**
      * Gets the first/oldest item
@@ -30,14 +32,14 @@ interface Orderable<TId, T> where TId : Comparable<TId> {
      * @param count
      * @return
      */
-    fun recent(count: Int): List<T> = seq(count, true)
+    fun recent(count: Int): List<T> = seq(count, Order.Dsc)
 
     /**
      * Gets the most oldest n items represented by count
      * @param count
      * @return
      */
-    fun oldest(count: Int): List<T> = seq(count, false)
+    fun oldest(count: Int): List<T> = seq(count, Order.Asc)
 
     /**
      * takes the

@@ -23,16 +23,7 @@ interface Findable<TId, T> : Inspectable<TId, T> where TId : Comparable<TId>, T:
      * @param value: value of field to search against
      * @return
      */
-    fun findByField(field: String, op: Op, value: Any?): List<T> = findByQuery(select().where(columnName(field), op, value))
-
-
-    /**
-     * finds items based on the field in the values provided
-     * @param field: name of field
-     * @param value: values of field to search against
-     * @return
-     */
-    fun findIn(field: String, value: List<Any>): List<T> = findByQuery(select().where(columnName(field), Op.In, value))
+    fun findByField(field: String, op: Op, value: Any?): List<T> = findByQuery(select().where(field, op, value))
 
 
     /**
@@ -52,7 +43,16 @@ interface Findable<TId, T> : Inspectable<TId, T> where TId : Comparable<TId>, T:
      * @param value: value of field to search against
      * @return
      */
-    fun findOneByField(field: String, op: Op, value: Any): T? = findByQuery(select().where(columnName(field), op, value).limit(1)).firstOrNull()
+    fun findOneByField(field: String, op: Op, value: Any): T? = findByQuery(select().where(field, op, value).limit(1)).firstOrNull()
+
+
+    /**
+     * finds items based on the field in the values provided
+     * @param field: name of field
+     * @param value: values of field to search against
+     * @return
+     */
+    fun findIn(field: String, value: List<Any>): List<T> = findByQuery(select().where(field, Op.In, value))
 
 
     /**

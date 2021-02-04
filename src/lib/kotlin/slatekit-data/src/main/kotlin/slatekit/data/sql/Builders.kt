@@ -1,4 +1,4 @@
-package slatekit.data.syntax
+package slatekit.data.sql
 
 import slatekit.common.data.BuildMode
 import slatekit.common.data.Command
@@ -32,9 +32,9 @@ class Builders {
     }
 
 
-    class Update(table:String,
-                 converter: ((String) -> String)? = null,
-                 encoder:((String) -> String)? = null) : slatekit.query.Update() {
+    class Patch(table:String,
+                converter: ((String) -> String)? = null,
+                encoder:((String) -> String)? = null) : slatekit.query.Update() {
         init { fromTable = table }
 
         override fun build(mode: BuildMode): Command {

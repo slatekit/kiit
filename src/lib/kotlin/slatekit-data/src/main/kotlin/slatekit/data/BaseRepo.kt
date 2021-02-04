@@ -15,15 +15,15 @@ abstract class BaseRepo<TId, T>(override val meta: Meta<TId, T>,
         val ts = DateTimes.now()
         if(success) {
             when (action) {
-                DataAction.Create -> hooks?.onDataEvent(DataEvent.DataCreated<TId, T>(name, id, entity, ts))
-                DataAction.Update -> hooks?.onDataEvent(DataEvent.DataUpdated<TId, T>(name, id, entity, ts))
-                DataAction.Delete -> hooks?.onDataEvent(DataEvent.DataDeleted<TId, T>(name, id, entity, ts))
+                DataAction.Create -> hooks?.onDataEvent(DataEvent.DataCreated<TId, T>(meta.name, id, entity, ts))
+                DataAction.Update -> hooks?.onDataEvent(DataEvent.DataUpdated<TId, T>(meta.name, id, entity, ts))
+                DataAction.Delete -> hooks?.onDataEvent(DataEvent.DataDeleted<TId, T>(meta.name, id, entity, ts))
                 else -> {
                 }
             }
         }
         else {
-            hooks?.onDataEvent(DataEvent.DataErrored<TId, T>(name, id, entity, null, ts))
+            hooks?.onDataEvent(DataEvent.DataErrored<TId, T>(meta.name, id, entity, null, ts))
         }
     }
 }
