@@ -97,3 +97,10 @@ interface EntityWithUser {
 interface EntityWithUUID {
     val uuid: String
 }
+
+/**
+ * Entity with support for create/update timestamps, create/update user id, and uuid
+ */
+interface EntityAuditable : EntityWithTime, EntityWithUser
+interface EntityAuditableWithUUID : EntityAuditable, EntityWithUUID
+
