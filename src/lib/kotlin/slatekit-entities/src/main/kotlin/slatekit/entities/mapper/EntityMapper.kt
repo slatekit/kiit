@@ -14,19 +14,15 @@
 
 package slatekit.entities.mapper
 
-import slatekit.common.Field
-import slatekit.common.Id
 import slatekit.common.Record
 import slatekit.common.crypto.Encryptor
 import slatekit.common.data.DataAction
+import slatekit.common.data.DataType
 import slatekit.meta.models.Model
-import slatekit.common.data.Mapper
+import slatekit.data.slatekit.data.Mapper
 import slatekit.common.data.Values
-import slatekit.common.naming.Namer
 import slatekit.data.core.Meta
 import slatekit.data.encoders.Encoders
-import slatekit.meta.Reflector
-import slatekit.meta.models.ModelField
 import kotlin.reflect.KClass
 
 /**
@@ -43,11 +39,31 @@ open class EntityMapper<TId, T>(val model: Model,
                                 val decoder: Decoder<TId, T> = EntityDecoder(model, meta, idClass, enClass, settings, null))
     : Mapper<TId, T> where TId : kotlin.Comparable<TId>, T:Any  {
 
+    /**
+     * Gets the table column name mapped to the field name
+     */
+    override fun column(field:String): String = model.lookup[field]?.storedName ?: field
 
+    /**
+     * Gets the data type of the field
+     */
+    override fun datatype(field:String): DataType {
+        return when(val mappedField =model.lookup[field]){
+            null -> throw Exception("Field not mapped! model=${model.name}, field=$field")
+            else -> mappedField.dataTpe
+        }
+    }
+
+    /**
+     * Gets the encode values for the model to be used for building a sql statement
+     */
     override fun encode(model: T, action: DataAction, enc: Encryptor?): Values {
         return encoder.encode(model, action, enc)
     }
 
+    /**
+     * Decodes the record into the model
+     */
     override fun decode(record: Record, enc: Encryptor?): T? {
         return decoder.decode(record, enc)
     }

@@ -15,6 +15,7 @@ package slatekit.data
 
 import slatekit.common.data.*
 import slatekit.data.core.Meta
+import slatekit.data.slatekit.data.Mapper
 import slatekit.data.slatekit.data.features.Scriptable
 import slatekit.data.sql.Dialect
 import slatekit.data.sql.Provider

@@ -1,7 +1,10 @@
-package slatekit.common.data
+package slatekit.data.slatekit.data
 
 import slatekit.common.Record
 import slatekit.common.crypto.Encryptor
+import slatekit.common.data.DataAction
+import slatekit.common.data.DataType
+import slatekit.common.data.Values
 
 
 /**
@@ -21,7 +24,23 @@ import slatekit.common.crypto.Encryptor
  */
 interface Mapper<TId, T> where TId : Comparable<TId> {
 
+    /**
+     * Gets the table column name mapped to the field name
+     */
+    fun column(field:String): String = field
+
+    /**
+     * Gets the data type of the field
+     */
+    fun datatype(field:String): DataType
+
+    /**
+     * Gets the encode values for the model to be used for building a sql statement
+     */
     fun encode(model:T, action: DataAction, enc: Encryptor?): Values
 
+    /**
+     * Decodes the record into the model
+     */
     fun decode(record: Record, enc:Encryptor?): T?
 }

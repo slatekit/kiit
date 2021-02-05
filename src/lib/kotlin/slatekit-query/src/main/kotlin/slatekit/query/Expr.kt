@@ -60,9 +60,9 @@ data class Agg(@JvmField val name: String, @JvmField val field: Any?) : Expr {
  * @param value : 20
  */
 class Condition(
-    @JvmField val field: Any,
+    @JvmField val field: String,
     @JvmField val op: Op,
-    @JvmField val value: Any
+    @JvmField val value: Any?
 ) : Expr {
 
     /**

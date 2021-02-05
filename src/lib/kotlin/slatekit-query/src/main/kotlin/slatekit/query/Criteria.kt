@@ -2,6 +2,11 @@ package slatekit.query
 
 interface Criteria<T> {
     /**
+     * Source to apply the criteria ( e.g. table name )
+     */
+    fun from(source:String): T
+
+    /**
      * builds up a where clause with the supplied arguments
      *
      * @param field:  The field name
@@ -30,5 +35,16 @@ interface Criteria<T> {
      * @return this instance
      */
     fun or(field: String, op: Op, fieldValue: Any?): T
-    fun group(op: Logic, condition: Condition)
+
+
+    /**
+     * Limit x number of records
+     */
+    fun limit(max: Int): T
+
+
+    /**
+     * Order by field1 asc, field2 desc
+     */
+    fun orderBy(field: String, order: Order): T
 }

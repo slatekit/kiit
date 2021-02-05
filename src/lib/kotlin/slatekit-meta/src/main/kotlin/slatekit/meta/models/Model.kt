@@ -49,6 +49,11 @@ class Model(
     val fields: List<ModelField> = modelFields ?: listOf()
 
     /**
+     * Lookup of field names to column names
+     */
+    val lookup: Map<String, ModelField> = fields.map { it.name to it }.toMap()
+
+    /**
      * The field that represents the id
      */
     val idField: ModelField? = fields.find { p -> p.category == FieldCategory.Id }

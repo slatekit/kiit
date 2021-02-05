@@ -20,6 +20,8 @@ enum class Op(val text: String) {
     Gte(">="),
     Lt("<"),
     Lte("<="),
+    IsEq("ieq"),
+    IsNeq("ineq"),
     In("in")
 }
 

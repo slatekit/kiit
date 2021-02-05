@@ -5,8 +5,19 @@ package slatekit.query
 open class CriteriaBase<T>(
     protected val converter: ((String) -> String)? = null,
     protected val encoder:((String) -> String)? = null) : Criteria<T> {
-    protected val conditions= mutableListOf<Expr>()
-    protected var fromTable:String = ""
+    protected var where:Expr? = null
+    protected var source:String? = null
+    protected var limit: Int? = null
+    protected val orders = mutableListOf<Pair<String, Order>>()
+
+
+    /**
+     * Source to apply the criteria ( e.g. table name )
+     */
+    override fun from(source:String):T  {
+        this.source = source
+        return this as T
+    }
 
     /**
      * builds up a where clause with the supplied arguments
@@ -18,8 +29,11 @@ open class CriteriaBase<T>(
      */
     override fun where(field: String, op: Op, fieldValue: Any?): T {
         val finalValue = fieldValue ?: Const.Null
-        val condition = buildCondition(field, op, finalValue)
-        conditions.add(condition)
+        val condition = condition(field, op, finalValue)
+        when(where == null) {
+            true -> where = condition
+            false -> combine(Logic.And, condition)
+        }
         return this as T
     }
 
@@ -33,8 +47,8 @@ open class CriteriaBase<T>(
      */
     override fun and(field: String, op: Op, fieldValue: Any?): T {
         val finalValue = fieldValue ?: Const.Null
-        val cond = buildCondition(field, op, finalValue)
-        group(Logic.And, cond)
+        val cond = condition(field, op, finalValue)
+        combine(Logic.And, cond)
         return this as T
     }
 
@@ -48,40 +62,35 @@ open class CriteriaBase<T>(
      */
     override fun or(field: String, op: Op, fieldValue: Any?): T {
         val finalValue = fieldValue ?: Const.Null
-        val cond = buildCondition(field, op, finalValue)
-        group(Logic.Or, cond)
+        val cond = condition(field, op, finalValue)
+        combine(Logic.Or, cond)
         return this as T
     }
 
 
-    protected fun buildCondition(field: String, op: Op, fieldValue: Any): Condition {
-        val col = QueryEncoder.ensureField(field)
-        val comparison = if (fieldValue == Const.Null) {
-            val comp = when (op) {
-                Op.Eq  -> "is"
-                Op.Neq -> "is not"
-                Op.In  -> "in"
-                else   -> "is"
-            }
-            Pair(comp, Const.Null)
-        } else {
-            val comp = QueryEncoder.ensureCompare(op.text)
-            Pair(comp, fieldValue)
-        }
-        val con = Condition(col, op, comparison.second)
-        return con
+    /**
+     * Limit x number of records
+     */
+    override fun limit(max: Int): T  {
+        this.limit = max
+        return this as T
     }
 
-    override fun group(op: Logic, condition: Condition) {
-        // Pop the last one
-        val last = conditions.size - 1
-        val left = conditions[last]
-        conditions.removeAt(last)
 
-        // Build a binary condition from left and right
-        val group = LogicalExpr(left, op, condition)
+    /**
+     * Order by field1 asc, field2 desc
+     */
+    override fun orderBy(field: String, order: Order): T {
+        this.orders.add(Pair(field, order))
+        return this as T
+    }
 
-        // Push back on condition list
-        conditions.add(group)
+
+    protected fun condition(field: String, op: Op, fieldValue: Any): Condition {
+        return Condition(field, op, fieldValue)
+    }
+
+    protected fun combine(logic:Logic, condition:Condition) {
+        where?.let { where = LogicalExpr(it, logic, condition) }
     }
 }

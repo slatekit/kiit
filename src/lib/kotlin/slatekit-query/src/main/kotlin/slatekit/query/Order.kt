@@ -4,9 +4,9 @@ import slatekit.common.EnumLike
 import slatekit.common.EnumSupport
 
 
-enum class Order(override val value:Int) : EnumLike {
-    Asc (0),
-    Dsc(1);
+enum class Order(val text:String, override val value:Int) : EnumLike {
+    Asc ("asc", 0),
+    Dsc("desc", 1);
 
     companion object : EnumSupport()  {
         override fun all(): Array<EnumLike> {

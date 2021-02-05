@@ -3,6 +3,7 @@ package slatekit.data.sql
 import slatekit.common.data.*
 import slatekit.data.Consts
 import slatekit.data.core.Meta
+import slatekit.data.slatekit.data.Mapper
 
 /**
  * Used to build the insert statements for a model using a mapper
