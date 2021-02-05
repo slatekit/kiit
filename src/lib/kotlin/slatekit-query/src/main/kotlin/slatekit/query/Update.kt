@@ -8,7 +8,7 @@ import slatekit.common.data.Value
 abstract class Update(converter: ((String) -> String)? = null,
                     encoder:((String) -> String)? = null)
     : CriteriaBase<Update>(converter, encoder), Stmt {
-    private val updates = mutableListOf<Set>()
+    protected val updates = mutableListOf<Set>()
 
     /**
      * builds up a set field clause

@@ -1,5 +1,6 @@
 package slatekit.data.features
 
+import slatekit.query.Delete
 import slatekit.query.Op
 import slatekit.query.Select
 
@@ -53,6 +54,17 @@ interface Findable<TId, T> : Inspectable<TId, T> where TId : Comparable<TId>, T:
      * @return
      */
     fun findIn(field: String, value: List<Any>): List<T> = findByQuery(select().where(field, Op.In, value))
+
+
+    /**
+     * finds items using a query builder
+     * select { where("level", Op.Eq, 3).and("active", Op.Eq, true) }
+     */
+    fun find(builder: Select.() -> Unit): List<T> {
+        val q = select()
+        builder(q)
+        return findByQuery(q)
+    }
 
 
     /**

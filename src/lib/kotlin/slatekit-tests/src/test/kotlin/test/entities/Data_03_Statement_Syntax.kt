@@ -42,17 +42,6 @@ class Data_03_Statement_Syntax {
     }
 
 
-//    @Test
-//    fun can_build_delete() {
-//        val model = Model.loadSchema(SampleEntityImmutable::class)
-//        val mapper = EntityMapper<Long, SampleEntityImmutable>(model, EntitySetup.meta, Long::class, SampleEntityImmutable::class, EntitySettings(false))
-//        val stmt = Delete<Long, SampleEntityImmutable>(EntitySetup.meta, mapper)
-//        val actual = stmt.build(2, BuildMode.Sql).sql
-//        val expected = """delete from `sample1` where `id` = 2;"""
-//        Assert.assertEquals(expected, actual)
-//    }
-
-
     @Test
     fun can_build_ddl_1() {
         val model = Model.loadSchema(SampleEntityImmutable::class, table = "sample1")

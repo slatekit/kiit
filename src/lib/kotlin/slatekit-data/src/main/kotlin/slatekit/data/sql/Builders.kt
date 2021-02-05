@@ -1,7 +1,7 @@
 package slatekit.data.sql
 
 import slatekit.common.data.*
-import slatekit.query.*
+
 
 /**
  * Query Builders
@@ -10,11 +10,11 @@ class Builders {
     /**
      * Delete Query builder
      */
-    class Delete(val dialect: Dialect,
-                 val table: String,
-                 val types: (String) -> DataType,
-                 val columns: ((String) -> String)? = null
-    ) : slatekit.query.Delete() {
+    class Delete(override val dialect: Dialect,
+                 override val table: String,
+                 override val types: (String) -> DataType,
+                 override val columns: ((String) -> String)? = null
+    ) : slatekit.query.Delete(), Builder  {
 
         override fun build(mode: BuildMode): Command {
             val tableName =  dialect.encode(source ?: table)
@@ -24,19 +24,8 @@ class Builders {
             // Delete
             buffer.append("delete from $tableName")
 
-            // Where
-            where?.let {
-                buffer.append(" where ")
-                filter(dialect, columns, types, mode, buffer, it, values)
-            }
-
-            // Order By
-            if(orders.isNotEmpty()) {
-                orders(dialect, orders, buffer, columns)
-            }
-
-            // Limit
-            limit?.let { limit(mode, it, buffer, values) }
+            // Where, Order by, Limit
+            clauses(mode, buffer, values, where, orders, limit)
 
             // End
             buffer.append(";")
@@ -46,11 +35,11 @@ class Builders {
     }
 
 
-    class Select(val dialect: Dialect,
-                 val table: String,
-                 val types: (String) -> DataType,
-                 val columns: ((String) -> String)? = null
-    ) : slatekit.query.Select() {
+    class Select(override val dialect: Dialect,
+                 override val table: String,
+                 override val types: (String) -> DataType,
+                 override val columns: ((String) -> String)? = null
+    ) : slatekit.query.Select(), Builder {
         override fun build(mode: BuildMode): Command {
             val tableName =  dialect.encode(source ?: table)
             val buffer = StringBuilder()
@@ -59,135 +48,55 @@ class Builders {
             // Delete
             buffer.append("select * from $tableName")
 
-            // Where
-            where?.let {
-                buffer.append(" where ")
-                filter(dialect, columns, types, mode, buffer, it, values)
-            }
-
-            // Order By
-            if(orders.isNotEmpty()) {
-                orders(dialect, orders, buffer, columns)
-            }
-
-            // Limit
-            limit?.let { limit(mode, it, buffer, values) }
+            // Where, Order by, Limit
+            clauses(mode, buffer, values, where, orders, limit)
 
             // End
             buffer.append(";")
-
             return command(mode, buffer, values)
         }
     }
 
 
-    class Patch(val dialect: Dialect,
-                val table: String,
-                val types: (String) -> DataType,
-                val columns: ((String) -> String)? = null) : slatekit.query.Update() {
+    class Patch(override val dialect: Dialect,
+                override val table: String,
+                override val types: (String) -> DataType,
+                override val columns: ((String) -> String)? = null) : slatekit.query.Update(), Builder {
+
         override fun build(mode: BuildMode): Command {
-            return Command("", listOf(), listOf())
-        }
-    }
+            val tableName =  dialect.encode(source ?: table)
+            val buffer = StringBuilder()
+            val values = mutableListOf<Value>()
 
-
-    companion object {
-
-        fun command(mode: BuildMode, buffer: StringBuilder, values: MutableList<Value>):Command {
-            return when (mode) {
+            // Delete
+            buffer.append("update $tableName")
+            buffer.append(" set ")
+            when(mode){
                 BuildMode.Sql -> {
-                    val stmt = buffer.toString()
-                    Command(stmt, listOf(), listOf())
+                    updates.forEachIndexed { ndx, update ->
+                        val column = column(update.field)
+                        val value = Encoding.convertVal(update.fieldValue)
+                        val prefix = if(ndx > 0) ", " else ""
+                        buffer.append("$prefix$column = $value")
+                    }
                 }
                 BuildMode.Prep -> {
-                    val stmt = buffer.toString()
-                    Command(stmt, values.toList(), listOf())
-                }
-            }
-        }
-
-
-        fun orders(dialect: Dialect, orders:MutableList<Pair<String, Order>>, buffer: StringBuilder, columns: ((String) -> String)?) {
-            // Order By
-            if(orders.isNotEmpty()) {
-                buffer.append(" order by ")
-                orders.forEachIndexed { ndx, order ->
-                    val rawColumn = columns?.invoke(order.first) ?: order.first
-                    val column = dialect.encode(rawColumn)
-                    val prefix = if(ndx > 0) ", " else ""
-                    buffer.append("$prefix$column ${order.second.text}")
-                }
-            }
-        }
-
-
-        fun limit(mode: BuildMode, limit:Int?, buffer: StringBuilder, values: MutableList<Value>) {
-            // Limit
-            limit?.let {
-                when (mode) {
-                    BuildMode.Sql -> {
-                        buffer.append(" limit $limit")
-                    }
-                    BuildMode.Prep -> {
-                        buffer.append(" limit ?")
-                        values.add(Value("", DataType.DTInt, limit))
+                    updates.forEachIndexed { ndx, update ->
+                        val column = column(update.field)
+                        val type = types(update.field)
+                        val prefix = if(ndx > 0) ", " else ""
+                        buffer.append("$prefix$column = ?")
+                        values.add(Value(column, type, update.fieldValue, null))
                     }
                 }
             }
-        }
 
+            // Where, Order by, Limit
+            clauses(mode, buffer, values, where, orders, limit)
 
-        /**
-         * Recursively build the filters
-         * @param mode: Sql or Prepared statement mode
-         * @param buffer: Holds the sql being built
-         * @param expr: Current expression to evaluate
-         * @param values: Stores values to use when in prepared statement mode e.g. sql = ?, value = 1
-         */
-        fun filter(dialect: Dialect, columns: ((String) -> String)?, types: (String) -> DataType, mode: BuildMode, buffer: StringBuilder, expr: Expr, values: MutableList<Value>) {
-            when (expr) {
-                is Condition -> {
-                    // Get the actual name of the column ( could be different than field )
-                    val rawColumn = columns?.invoke(expr.field) ?: expr.field
-
-                    // Enclose it e.g. level = `level`
-                    val column = dialect.encode(rawColumn)
-
-                    // Data Type ( for used in setting prepared statement value )
-                    val type = types(expr.field)
-
-                    // Convert op e.g. "eq" -> "="
-                    val op = dialect.op(expr.op)
-
-                    when (mode) {
-                        BuildMode.Sql -> {
-                            val text = Encoding.convertVal(expr.value)
-                            buffer.append("$column $op $text")
-                        }
-                        BuildMode.Prep -> {
-                            if(expr.op == Op.In && expr.value is List<*>) {
-                                val inputs = (expr.value as List<*>)
-                                val delimited = inputs.joinToString(",") { it -> "?" }
-                                val all = inputs.map { Value(column, type, it) }
-                                buffer.append("$column $op ($delimited)")
-                                values.addAll(all)
-                            }
-                            else {
-                                buffer.append("$column $op ?")
-                                values.add(Value(column, type, expr.value, null))
-                            }
-                        }
-                    }
-                }
-                is LogicalExpr -> {
-                    // Build "`level` = 1 and `category` = 2
-                    buffer.append("(")
-                    filter(dialect, columns, types, mode, buffer, expr.left, values)
-                    buffer.append(" ${expr.op.text} ")
-                    filter(dialect, columns, types, mode, buffer, expr.right, values)
-                    buffer.append(")")
-                }
-            }
+            // End
+            buffer.append(";")
+            return command(mode, buffer, values)
         }
     }
 }

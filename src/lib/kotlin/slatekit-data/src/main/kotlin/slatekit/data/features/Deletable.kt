@@ -2,6 +2,7 @@ package slatekit.data.features
 
 import slatekit.query.Op
 import slatekit.query.Delete
+import slatekit.query.Update
 
 /**
  * Supports deletion of records using conditions
@@ -34,6 +35,16 @@ interface Deletable<TId, T> : Inspectable<TId, T> where TId : Comparable<TId>, T
      */
     fun deleteByField(field: String, op: Op, value: Any?): Int = deleteByQuery(delete().where(field, op, value))
 
+
+    /**
+     * Deletes using a query builder
+     * delete { where("level", Op.Eq, 3).and("active", Op.Eq, true) }
+     */
+    fun delete(builder: Delete.() -> Unit): Int {
+        val q = delete()
+        builder(q)
+        return deleteByQuery(q)
+    }
 
     /**
      * Deletes items based on the filters and logical operator
