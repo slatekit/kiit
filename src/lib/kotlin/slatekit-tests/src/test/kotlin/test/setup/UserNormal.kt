@@ -140,7 +140,7 @@ data class User5(
         val isActive: Boolean = false,
 
         @property:Field(required = true)
-        val age: Int = 35,
+        val level: Int = 35,
 
         @property:Field(required = true)
         val salary: Double = 20.5,

@@ -23,6 +23,7 @@ import slatekit.entities.*
 import slatekit.entities.features.Counts
 import slatekit.entities.features.Ordered
 import slatekit.query.Op
+import slatekit.query.set
 import slatekit.query.where
 import test.setup.Group
 import test.setup.Member
@@ -129,7 +130,7 @@ class Data_04_Entity_Service {
             Assert.assertTrue(User5 != null)
             Assert.assertTrue(User5?.email == "test_create@abc.com")
             Assert.assertTrue(User5?.isActive == true)
-            Assert.assertTrue(User5?.age == 35)
+            Assert.assertTrue(User5?.level == 35)
             Assert.assertTrue(User5?.salary == 12.34)
         }
     }
@@ -233,11 +234,26 @@ class Data_04_Entity_Service {
             val svc = createSamples()
             val matches = svc.find {
                 where(User5::isActive.name, Op.Eq, false)
-                        .and(User5::age.name, Op.Eq, 40)
+                        .and(User5::level.name, Op.Eq, 40)
             }
             Assert.assertTrue(matches.size == 2)
             Assert.assertTrue(matches[0].email == "setup_5@abc.com")
             Assert.assertTrue(matches[1].email == "setup_6@abc.com")
+        }
+    }
+
+
+    @Test
+    fun can_patch_by_query() {
+        runBlocking {
+            val svc = createSamples()
+            val updated = svc.patch {
+                set(User5::level,  210).where(User5::level.name, Op.Eq, 42)
+            }
+            Assert.assertEquals(1, updated)
+            val item = svc.find { where(User5::level, Op.Eq, 210) }.firstOrNull()
+            Assert.assertEquals("setup_7@abc.com", item?.email)
+            Assert.assertEquals(210, item?.level)
         }
     }
 
