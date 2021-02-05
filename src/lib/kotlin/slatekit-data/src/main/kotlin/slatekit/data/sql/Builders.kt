@@ -57,11 +57,11 @@ class Builders {
             val values = mutableListOf<Value>()
 
             // Delete
-            buffer.append("select * from $tableName ")
+            buffer.append("select * from $tableName")
 
             // Where
             where?.let {
-                buffer.append("where ")
+                buffer.append(" where ")
                 filter(dialect, columns, types, mode, buffer, it, values)
             }
 

@@ -25,6 +25,7 @@ import slatekit.entities.*
 import slatekit.query.Op
 import slatekit.query.Delete
 import slatekit.query.Order
+import slatekit.query.Select
 import test.setup.User5
 
 class Data_03_Builder_Select {
@@ -37,7 +38,7 @@ class Data_03_Builder_Select {
             "level" to DataType.DTInt,
             "category" to DataType.DTString
     )
-    private fun builder(): Delete = Builders.Delete(MySqlDialect,"user", { name -> lookup[name]!! }, { name -> name })
+    private fun builder(): Select = Builders.Select(MySqlDialect,"user", { name -> lookup[name]!! }, { name -> name })
 
     @Before
     fun setup(){
@@ -144,7 +145,7 @@ class Data_03_Builder_Select {
     }
 
 
-    fun ensure(builder:Delete, expectSqlRaw:String, expectSqlPrep:String, expectPairs:Values){
+    fun ensure(builder:Select, expectSqlRaw:String, expectSqlPrep:String, expectPairs:Values){
         val cmd1 = builder.build(BuildMode.Sql)
         val cmd2 = builder.build(BuildMode.Prep)
         Assert.assertEquals(expectSqlRaw, cmd1.sql)
