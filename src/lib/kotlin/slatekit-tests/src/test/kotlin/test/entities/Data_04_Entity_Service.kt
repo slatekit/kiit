@@ -23,63 +23,61 @@ import slatekit.entities.*
 import slatekit.entities.features.Counts
 import slatekit.entities.features.Ordered
 import slatekit.query.Op
+import slatekit.query.where
 import test.setup.Group
 import test.setup.Member
 import test.setup.User5
 
 /**
-    create table `User5` (
-        `id` BIGINT NOT NULL AUTO_INCREMENT PRIMARY KEY,
-        `email` NVARCHAR(100) NOT NULL,
-        `isactive` BIT NOT NULL,
-        `age` INTEGER NOT NULL,
-        `salary` DOUBLE NOT NULL,
-        `createdat` DATETIME NOT NULL,
-        `createdby` BIGINT NOT NULL,
-        `updatedat` DATETIME NOT NULL,
-        `updatedby` BIGINT NOT NULL,
-        `uniqueid` NVARCHAR(50) NOT NULL
-    );
+create table `User5` (
+`id` BIGINT NOT NULL AUTO_INCREMENT PRIMARY KEY,
+`email` NVARCHAR(100) NOT NULL,
+`isactive` BIT NOT NULL,
+`age` INTEGER NOT NULL,
+`salary` DOUBLE NOT NULL,
+`createdat` DATETIME NOT NULL,
+`createdby` BIGINT NOT NULL,
+`updatedat` DATETIME NOT NULL,
+`updatedby` BIGINT NOT NULL,
+`uniqueid` NVARCHAR(50) NOT NULL
+);
 
-    create table `Member` (
-        `id` BIGINT NOT NULL AUTO_INCREMENT PRIMARY KEY,
-        `groupid` BIGINT NOT NULL,
-        `userid` BIGINT NOT NULL
-    );
+create table `Member` (
+`id` BIGINT NOT NULL AUTO_INCREMENT PRIMARY KEY,
+`groupid` BIGINT NOT NULL,
+`userid` BIGINT NOT NULL
+);
 
-    create table `Group` (
-        `id` BIGINT NOT NULL AUTO_INCREMENT PRIMARY KEY,
-        `name` NVARCHAR(30) NOT NULL
-    );
+create table `Group` (
+`id` BIGINT NOT NULL AUTO_INCREMENT PRIMARY KEY,
+`name` NVARCHAR(30) NOT NULL
+);
  */
-class UserService(repo:EntityRepo<Long, User5>)
+class UserService(repo: EntityRepo<Long, User5>)
     : EntityService<Long, User5>(repo), Ordered<Long, User5>, Counts<Long, User5>
 
 
 class Data_04_Entity_Service {
 
-    private lateinit var entities:Entities
-
+    private lateinit var entities: Entities
 
 
     @Before
-    fun setup(){
+    fun setup() {
 //        entities = Entities({ con -> Db(con) }, Connections(DbConString("", "", "", "")))
         entities = EntitySetup.realDb()
         //entities.register<Long, SampleEntityImmutable>(LongId { s -> s.id}, "sample_entity", Vendor.MySql) { repo -> EntityService(repo) }
-        entities.register<Long, User5>(EntityLongId() , vendor = Vendor.MySql) { repo -> UserService(repo) }
+        entities.register<Long, User5>(EntityLongId(), vendor = Vendor.MySql) { repo -> UserService(repo) }
         entities.register<Long, Member>(EntityLongId(), vendor = Vendor.MySql) { repo -> EntityService(repo) }
-        entities.register<Long, Group>(EntityLongId() , vendor = Vendor.MySql) { repo -> EntityService(repo) }
+        entities.register<Long, Group>(EntityLongId(), vendor = Vendor.MySql) { repo -> EntityService(repo) }
     }
 
 
-    private fun getSvc():EntityService<Long, SampleEntityImmutable> = entities.getService<Long, SampleEntityImmutable>()
-    private fun getUsrs():EntityService<Long, User5> = entities.getService<Long, User5>()
+    private fun getSvc(): EntityService<Long, SampleEntityImmutable> = entities.getService<Long, SampleEntityImmutable>()
+    private fun getUsrs(): EntityService<Long, User5> = entities.getService<Long, User5>()
 
 
-
-
-    private suspend fun createSamples(setupSamples:Boolean = true, createMembers:Boolean = true): UserService {
+    private suspend fun createSamples(setupSamples: Boolean = true, createMembers: Boolean = true): UserService {
         val userSvc = entities.getService<Long, User5>() as UserService
         val memsSvc = entities.getService<Long, Member>()
         val grpSvc = entities.getService<Long, Group>()
@@ -88,29 +86,29 @@ class Data_04_Entity_Service {
         memsSvc.deleteAll()
         grpSvc.deleteAll()
 
-        if(setupSamples) {
+        if (setupSamples) {
             // 1. Create first user
             userSvc.create(User5(0, "setup_1@abc.com", true, 35, 12.34))
 
             // 2. Create many
             val userIds = userSvc.saveAll(listOf(
-                    User5(0, "setup_2@abc.com", true , 35, 12.34),
-                    User5(0, "setup_3@abc.com", true , 35, 12.34),
-                    User5(0, "setup_4@abc.com", true , 35, 12.34),
+                    User5(0, "setup_2@abc.com", true, 35, 12.34),
+                    User5(0, "setup_3@abc.com", true, 35, 12.34),
+                    User5(0, "setup_4@abc.com", true, 35, 12.34),
                     User5(0, "setup_5@abc.com", false, 40, 12.34),
                     User5(0, "setup_6@abc.com", false, 40, 12.34),
                     User5(0, "setup_7@abc.com", false, 42, 12.34)
             ))
 
             // 2. Create groups
-            val groupIds=  grpSvc.saveAll(listOf(
+            val groupIds = grpSvc.saveAll(listOf(
                     Group(0, "group 1"),
                     Group(0, "group 2"),
                     Group(0, "group 3")
             ))
 
             // 3. Create many
-            if(createMembers) {
+            if (createMembers) {
                 val memberIds = memsSvc.saveAll(listOf(
                         Member(0, groupIds[0].first!!, userIds[0].first!!),
                         Member(0, groupIds[1].first!!, userIds[1].first!!),
@@ -137,7 +135,8 @@ class Data_04_Entity_Service {
     }
 
 
-    @Test fun can_count_any() {
+    @Test
+    fun can_count_any() {
         runBlocking {
             val svc = createSamples(false)
             val any1 = svc.any()
@@ -149,7 +148,8 @@ class Data_04_Entity_Service {
     }
 
 
-    @Test fun can_count_size() {
+    @Test
+    fun can_count_size() {
         runBlocking {
             val svc = createSamples(false)
             val count1 = svc.count()
@@ -164,7 +164,8 @@ class Data_04_Entity_Service {
     }
 
 
-    @Test fun can_get_first() {
+    @Test
+    fun can_get_first() {
         runBlocking {
             val svc = createSamples()
             val first = svc.first()
@@ -173,7 +174,8 @@ class Data_04_Entity_Service {
     }
 
 
-    @Test fun can_get_last() {
+    @Test
+    fun can_get_last() {
         runBlocking {
             val svc = createSamples()
             val last = svc.last()
@@ -182,7 +184,8 @@ class Data_04_Entity_Service {
     }
 
 
-    @Test fun can_get_recent() {
+    @Test
+    fun can_get_recent() {
         runBlocking {
             val svc = createSamples()
             val recent = svc.recent(2)
@@ -192,7 +195,8 @@ class Data_04_Entity_Service {
     }
 
 
-    @Test fun can_get_oldest() {
+    @Test
+    fun can_get_oldest() {
         runBlocking {
             val svc = createSamples()
             val oldest = svc.oldest(2)
@@ -202,7 +206,8 @@ class Data_04_Entity_Service {
     }
 
 
-    @Test fun can_get_all() {
+    @Test
+    fun can_get_all() {
         runBlocking {
             val svc = createSamples()
             val all = svc.getAll()
@@ -211,7 +216,8 @@ class Data_04_Entity_Service {
     }
 
 
-    @Test fun can_find_by_field() {
+    @Test
+    fun can_find_by_field() {
         runBlocking {
             val svc = createSamples()
             val second = svc.findByField(User5::email, Op.Eq, "setup_2@abc.com")
@@ -221,12 +227,14 @@ class Data_04_Entity_Service {
     }
 
 
-    @Test fun can_find_by_fields() {
+    @Test
+    fun can_find_by_query() {
         runBlocking {
             val svc = createSamples()
-            val matches = svc.findByQuery(svc.select()
-                    .where(User5::isActive.name, Op.Eq, false)
-                    .and(User5::age.name, Op.Eq, 40))
+            val matches = svc.find {
+                where(User5::isActive.name, Op.Eq, false)
+                        .and(User5::age.name, Op.Eq, 40)
+            }
             Assert.assertTrue(matches.size == 2)
             Assert.assertTrue(matches[0].email == "setup_5@abc.com")
             Assert.assertTrue(matches[1].email == "setup_6@abc.com")
@@ -234,7 +242,8 @@ class Data_04_Entity_Service {
     }
 
 
-    @Test fun can_get_relation() {
+    @Test
+    fun can_get_relation() {
         runBlocking {
             createSamples()
             val memsSvcRaw = entities.getService<Long, Member>()
@@ -247,7 +256,8 @@ class Data_04_Entity_Service {
     }
 
 
-    @Test fun can_get_relations() {
+    @Test
+    fun can_get_relations() {
         runBlocking {
             val userSvc = createSamples(createMembers = false)
             val groupSvc = entities.getService<Long, Group>()
@@ -271,7 +281,8 @@ class Data_04_Entity_Service {
     }
 
 
-    @Test fun can_get_relation_with_object() {
+    @Test
+    fun can_get_relation_with_object() {
         runBlocking {
             val userSvc = createSamples(createMembers = false)
             val groupSvc = entities.getService<Long, Group>()
@@ -292,9 +303,9 @@ class Data_04_Entity_Service {
     }
 
 
-    class EntityServiceRelational<TId, T>(val entities:Entities, repo: EntityRepo<TId, T>)
+    class EntityServiceRelational<TId, T>(val entities: Entities, repo: EntityRepo<TId, T>)
         : EntityService<TId, T>(repo), Relations<TId, T>
-            where TId:Comparable<TId>, T: Entity<TId> {
+            where TId : Comparable<TId>, T : Entity<TId> {
 
         override fun entities(): Entities {
             return entities

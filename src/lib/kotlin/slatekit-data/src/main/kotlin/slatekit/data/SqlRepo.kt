@@ -164,7 +164,7 @@ open class SqlRepo<TId, T>(
      * Gets total number of records in the repository/table
      */
     override fun count(): Long {
-        return this.count("*") { }.toLong()
+        return this.count() { }.toLong()
     }
 
     override fun seq(count: Int, order: Order): List<T> {

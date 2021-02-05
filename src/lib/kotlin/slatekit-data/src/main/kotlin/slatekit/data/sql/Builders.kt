@@ -45,8 +45,22 @@ class Builders {
             val buffer = StringBuilder()
             val values = mutableListOf<Value>()
 
-            // Delete
-            buffer.append("select * from $tableName")
+            // Select * or count(*)
+            val selects = when(agg) {
+                null -> "*"
+                else -> {
+                    val aggregate =agg!!
+                    when(aggregate.name) {
+                        dialect.aggr.count -> "count(*)"
+                        dialect.aggr.avg   -> "avg(${column(aggregate.field)})"
+                        dialect.aggr.min   -> "min(${column(aggregate.field)})"
+                        dialect.aggr.max   -> "max(${column(aggregate.field)})"
+                        dialect.aggr.sum   -> "sum(${column(aggregate.field)})"
+                        else -> "*"
+                    }
+                }
+            }
+            buffer.append("select $selects from $tableName")
 
             // Where, Order by, Limit
             clauses(mode, buffer, values, where, orders, limit)

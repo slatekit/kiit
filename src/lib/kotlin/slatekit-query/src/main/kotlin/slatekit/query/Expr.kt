@@ -45,7 +45,7 @@ data class Set(@JvmField val field: String, @JvmField val fieldValue: Any?) : Ex
 /**
  * Represents a set expression category = 1 for Update statements
  */
-data class Agg(@JvmField val name: String, @JvmField val field: Any?) : Expr {
+data class Agg(@JvmField val name: String, @JvmField val field: String) : Expr {
 
     override fun toStringQuery(): kotlin.String {
         return ""

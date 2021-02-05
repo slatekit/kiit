@@ -79,6 +79,10 @@ interface Deletes<TId, T> : EntityOps<TId, T> where TId : kotlin.Comparable<TId>
         return repo().deleteByQuery(critera)
     }
 
-
-    fun delete(): Delete = repo().delete()
+    /**
+     * updates items using the query
+     */
+    suspend fun delete(builder: Delete.() -> Unit): Int {
+        return repo().delete(builder)
+    }
 }

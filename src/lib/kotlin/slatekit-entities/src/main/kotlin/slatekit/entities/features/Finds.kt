@@ -26,9 +26,7 @@ interface Finds<TId, T> : EntityOps<TId, T> where TId : kotlin.Comparable<TId>, 
      * @return
      */
     suspend fun findByField(field: String, op: Op, value: Any): List<T> {
-        // Get column name from model schema ( if available )
-        val column = columnName(field)
-        return repo().findByField(column, op, value)
+        return repo().findByField(field, op, value)
     }
 
     /**
@@ -49,9 +47,7 @@ interface Finds<TId, T> : EntityOps<TId, T> where TId : kotlin.Comparable<TId>, 
      * @return
      */
     suspend fun findByField(prop: KProperty<*>, op: Op, value: Any): List<T> {
-        // Get column name from model schema ( if available )
-        val column = columnName(prop.name)
-        return repo().findByField(column, op, value)
+        return repo().findByField(prop.name, op, value)
     }
 
     /**
@@ -61,9 +57,7 @@ interface Finds<TId, T> : EntityOps<TId, T> where TId : kotlin.Comparable<TId>, 
      * @return
      */
     suspend fun findByField(prop: KProperty<*>, op: Op, value: Any, limit: Int): List<T> {
-        // Get column name from model schema ( if available )
-        val column = columnName(prop.name)
-        val query = repo().select().where(column, op, value).limit(limit)
+        val query = repo().select().where(prop.name, op, value).limit(limit)
         return repo().findByQuery(query)
     }
 
@@ -74,9 +68,7 @@ interface Finds<TId, T> : EntityOps<TId, T> where TId : kotlin.Comparable<TId>, 
      * @return
      */
     suspend fun findIn(prop: KProperty<*>, value: List<Any>): List<T> {
-        // Get column name from model schema ( if available )
-        val column = columnName(prop.name)
-        return repo().findIn(column, value)
+        return repo().findIn(prop.name, value)
     }
 
     /**
@@ -86,9 +78,7 @@ interface Finds<TId, T> : EntityOps<TId, T> where TId : kotlin.Comparable<TId>, 
      * @return
      */
     suspend fun findIn(name:String, values: List<Any>): List<T> {
-        // Get column name from model schema ( if available )
-        val column = columnName(name)
-        return repo().findIn(column, values)
+        return repo().findIn(name, values)
     }
 
     /**
@@ -98,9 +88,7 @@ interface Finds<TId, T> : EntityOps<TId, T> where TId : kotlin.Comparable<TId>, 
      * @return
      */
     suspend fun findOneByField(name: String, op: Op, value: Any): T? {
-        // Get column name from model schema ( if available )
-        val column = columnName(name)
-        return repo().findOneByField(column, op, value)
+        return repo().findOneByField(name, op, value)
     }
 
     /**
@@ -120,9 +108,7 @@ interface Finds<TId, T> : EntityOps<TId, T> where TId : kotlin.Comparable<TId>, 
      * @return
      */
     suspend fun findOneByField(prop: KProperty<*>, op: Op, value: Any): T? {
-        // Get column name from model schema ( if available )
-        val column = columnName(prop.name)
-        return repo().findOneByField(column, op, value)
+        return repo().findOneByField(prop.name, op, value)
     }
 
     /**
@@ -143,5 +129,5 @@ interface Finds<TId, T> : EntityOps<TId, T> where TId : kotlin.Comparable<TId>, 
     }
 
 
-    fun select(): Select = repo().select()
+    fun find(builder:Select.() -> Unit): List<T> = repo().find(builder)
 }

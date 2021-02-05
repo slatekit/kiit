@@ -17,6 +17,12 @@ interface Patchable<TId, T> : Inspectable<TId, T> where TId : Comparable<TId>, T
 
 
     /**
+     * patches the items with old and new value
+     */
+    fun patchByValue(field: String, oldValue: Any?, newValue:Any?): Int = patchByQuery(patch().set(field, newValue).where(field, Op.Eq, oldValue))
+
+
+    /**
      * Patch 1 item by its id using the updates provided
      */
     fun patchById(id: TId, updates: List<Value>): Int = patchByQuery(patch().set(updates).where(meta.pkey.name, Op.Eq, id))

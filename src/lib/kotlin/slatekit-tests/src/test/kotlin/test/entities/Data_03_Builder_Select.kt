@@ -22,10 +22,7 @@ import slatekit.data.sql.Builders
 import slatekit.data.sql.vendors.MySqlDialect
 import slatekit.data.sql.vendors.MySqlProvider
 import slatekit.entities.*
-import slatekit.query.Op
-import slatekit.query.Delete
-import slatekit.query.Order
-import slatekit.query.Select
+import slatekit.query.*
 import test.setup.User5
 
 class Data_03_Builder_Select {
@@ -38,6 +35,7 @@ class Data_03_Builder_Select {
             "level" to DataType.DTInt,
             "category" to DataType.DTString
     )
+
     private fun builder(): Select = Builders.Select(MySqlDialect,"user", { name -> lookup[name]!! }, { name -> name })
 
     @Before
@@ -52,6 +50,16 @@ class Data_03_Builder_Select {
         val cmd = builder().build(BuildMode.Sql)
         Assert.assertEquals("select * from `user`;", cmd.sql)
         Assert.assertEquals(0, cmd.values.size)
+    }
+
+
+    @Test fun can_build_count() {
+        val builder = builder().agg(MySqlDialect.aggr.count, Const.All).where("id", Op.Eq, 2L)
+        ensure(builder = builder,
+                expectSqlRaw  = "select count(*) from `user` where `id` = 2;",
+                expectSqlPrep = "select count(*) from `user` where `id` = ?;",
+                expectPairs = listOf(Value("email", DataType.DTLong, 2L))
+        )
     }
 
 

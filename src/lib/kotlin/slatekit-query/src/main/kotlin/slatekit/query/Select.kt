@@ -7,8 +7,7 @@ package slatekit.query
 abstract class Select(converter: ((String) -> String)? = null,
                          encoder:((String) -> String)? = null)
     : CriteriaBase<Select>(converter, encoder), Stmt {
-    private var agg: Agg? = null
-    private val fields = mutableListOf<String>()
+    protected var agg: Agg? = null
 
     /**
      * Get all fields
