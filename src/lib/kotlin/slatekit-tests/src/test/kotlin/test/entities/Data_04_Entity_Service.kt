@@ -89,16 +89,16 @@ class Data_04_Entity_Service {
 
         if (setupSamples) {
             // 1. Create first user
-            userSvc.create(User5(0, "setup_1@abc.com", true, 35, 12.34))
+            userSvc.create(User5(0, "setup_1@abc.com", true, 1, 12.34))
 
             // 2. Create many
             val userIds = userSvc.saveAll(listOf(
-                    User5(0, "setup_2@abc.com", true, 35, 12.34),
-                    User5(0, "setup_3@abc.com", true, 35, 12.34),
-                    User5(0, "setup_4@abc.com", true, 35, 12.34),
-                    User5(0, "setup_5@abc.com", false, 40, 12.34),
-                    User5(0, "setup_6@abc.com", false, 40, 12.34),
-                    User5(0, "setup_7@abc.com", false, 42, 12.34)
+                    User5(0, "setup_2@abc.com", true, 2, 12.34),
+                    User5(0, "setup_3@abc.com", true, 3, 12.34),
+                    User5(0, "setup_4@abc.com", true, 4, 12.34),
+                    User5(0, "setup_5@abc.com", false, 5, 12.34),
+                    User5(0, "setup_6@abc.com", false, 6, 12.34),
+                    User5(0, "setup_7@abc.com", false, 7, 12.34)
             ))
 
             // 2. Create groups
@@ -229,16 +229,34 @@ class Data_04_Entity_Service {
 
 
     @Test
+    fun can_get_aggregates() {
+        runBlocking {
+            val svc = createSamples()
+            val count = svc.count()
+            val sum = svc.repo().sum(User5::level.name) { }
+            val avg = svc.repo().avg(User5::level.name) { }
+            val min = svc.repo().min(User5::level.name) { }
+            val max = svc.repo().max(User5::level.name) { }
+            Assert.assertEquals(7, count)
+            Assert.assertEquals(28.0, sum, 0.0)
+            Assert.assertEquals(4.0, avg, 0.0)
+            Assert.assertEquals(1.0, min, 0.0)
+            Assert.assertEquals(7.0, max, 0.0)
+        }
+    }
+
+
+    @Test
     fun can_find_by_query() {
         runBlocking {
             val svc = createSamples()
             val matches = svc.find {
                 where(User5::isActive.name, Op.Eq, false)
-                        .and(User5::level.name, Op.Eq, 40)
+                        .and(User5::level.name, Op.Gt, 5)
             }
             Assert.assertTrue(matches.size == 2)
-            Assert.assertTrue(matches[0].email == "setup_5@abc.com")
-            Assert.assertTrue(matches[1].email == "setup_6@abc.com")
+            Assert.assertTrue(matches[0].email == "setup_6@abc.com")
+            Assert.assertTrue(matches[1].email == "setup_7@abc.com")
         }
     }
 
@@ -248,7 +266,7 @@ class Data_04_Entity_Service {
         runBlocking {
             val svc = createSamples()
             val updated = svc.patch {
-                set(User5::level,  210).where(User5::level.name, Op.Eq, 42)
+                set(User5::level,  210).where(User5::level.name, Op.Eq, 7)
             }
             Assert.assertEquals(1, updated)
             val item = svc.find { where(User5::level, Op.Eq, 210) }.firstOrNull()
