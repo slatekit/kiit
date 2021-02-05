@@ -1,6 +1,5 @@
-package slatekit.data.syntax
+package slatekit.common.data
 
-import slatekit.common.data.Values
 
 /**
  * Stores the result of a built statement.

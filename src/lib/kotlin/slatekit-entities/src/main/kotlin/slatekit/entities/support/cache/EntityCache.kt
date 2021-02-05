@@ -12,23 +12,14 @@ import slatekit.entities.support.Cacheable
  * This enriches the Cacheable interface with additional
  * operations to get batches of data using the Batch<T> interface.
  */
-open class EntityCache<TId, TKey, T>(
+open class EntityCache<TId, TKey, T> private constructor(
     val settings: EntityCacheSettings<TId, TKey, T>,
-    val load: Boolean
+    contents:CacheContents<T>
 ) : Batch<T>, Cacheable<TId, TKey, T>
         where TId : Comparable<TId>, T : Entity<TId> {
 
-    /**
-     * Convenience constructor
-     */
-    constructor(
-        service: EntityService<TId, T>,
-        keyLookup: (T) -> TKey,
-        fetcher: (EntityService<TId, T>) -> List<T>,
-        load: Boolean
-    ) : this(EntityCacheSettings(service, keyLookup, fetcher), load)
 
-    protected var cacheContents = if (load) load(settings) else CacheContents()
+    protected var cacheContents = contents
 
     /**
      * Gets the current cache contents
@@ -40,7 +31,7 @@ open class EntityCache<TId, TKey, T>(
     /**
      * Refreshes the internal cache
      */
-    override fun refresh() {
+    override suspend fun refresh() {
         cacheContents = load(settings)
     }
 
@@ -54,7 +45,7 @@ open class EntityCache<TId, TKey, T>(
         /**
          * Loads the entire cache contents using settings
          */
-        fun <TId, TKey, T> load(settings: EntityCacheSettings<TId, TKey, T>, fetcher: ((EntityService<TId, T>) -> List<T>)? = null): CacheContents<T>
+        suspend fun <TId, TKey, T> load(settings: EntityCacheSettings<TId, TKey, T>, fetcher: ((EntityService<TId, T>) -> List<T>)? = null): CacheContents<T>
                 where TId : Comparable<TId>, T : Entity<TId> {
             val itemList = fetcher?.invoke(settings.service) ?: settings.service.getAll()
             val itemIdMap = itemList.map { Pair(it.identity().toString(), it) }.toMap()
@@ -62,6 +53,15 @@ open class EntityCache<TId, TKey, T>(
             val itemListCopy = itemList.toList()
             val contents = CacheContents<T>(itemListCopy, itemList, itemIdMap, itemKeyMap)
             return contents
+        }
+
+        /**
+         * Loads the entire cache contents using settings
+         */
+        suspend fun <TId, TKey, T> of(settings: EntityCacheSettings<TId, TKey, T>): EntityCache<TId, TKey, T>
+            where TId : Comparable<TId>, T : Entity<TId> {
+            val contents = load(settings)
+            return EntityCache<TId, TKey, T>(settings, contents)
         }
     }
 }

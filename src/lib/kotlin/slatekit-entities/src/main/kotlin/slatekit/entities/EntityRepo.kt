@@ -14,10 +14,10 @@
 package slatekit.entities
 
 import slatekit.common.data.IDb
-import slatekit.common.data.Mapper
+import slatekit.data.Mapper
 import slatekit.data.SqlRepo
 import slatekit.data.core.Meta
-import slatekit.data.syntax.Syntax
+import slatekit.data.sql.Provider
 import slatekit.entities.mapper.EntityMapper
 
 /**
@@ -25,10 +25,10 @@ import slatekit.entities.mapper.EntityMapper
  * @tparam T
  */
 open class EntityRepo<TId, T>(
-    db: IDb,
-    meta: Meta<TId, T>,
-    mapper: Mapper<TId, T>,
-    syntax: Syntax<TId, T>) : SqlRepo<TId, T>(db, meta, mapper, syntax) where TId : Comparable<TId>, T : Any {
+        db: IDb,
+        meta: Meta<TId, T>,
+        mapper: Mapper<TId, T>,
+        syntax: Provider<TId, T>) : SqlRepo<TId, T>(db, meta, mapper, syntax) where TId : Comparable<TId>, T : Any {
     private val lookup:Map<String, String> = if(mapper is EntityMapper<*, *>) {
         mapper.model.fields.map { it.name to it.storedName }.toMap()
     }

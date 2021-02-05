@@ -19,13 +19,6 @@ import org.junit.Test
 import slatekit.common.data.*
 import slatekit.entities.features.Relations
 import slatekit.entities.*
-import slatekit.entities.features.Counts
-import slatekit.entities.features.Ordered
-import slatekit.query.Op
-import slatekit.query.Query
-import test.setup.Group
-import test.setup.Member
-import test.setup.Movie
 import test.setup.User5
 
 /**

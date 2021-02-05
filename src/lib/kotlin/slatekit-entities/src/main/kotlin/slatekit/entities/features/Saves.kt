@@ -13,7 +13,7 @@ interface Saves<TId, T> : EntityOps<TId, T> where TId : kotlin.Comparable<TId>, 
      * checking its persisted flag.
      * @param entity
      */
-    fun save(entity: T?): Try<TId> {
+    suspend fun save(entity: T?): Try<TId> {
         val result = try {
             entity?.let { item ->
                 val saveResult = when (item.isPersisted()) {
@@ -41,7 +41,7 @@ interface Saves<TId, T> : EntityOps<TId, T> where TId : kotlin.Comparable<TId>, 
      *
      * @param items
      */
-    fun saveAll(items: List<T>):List<Pair<TId?, Boolean>> {
+    suspend fun saveAll(items: List<T>):List<Pair<TId?, Boolean>> {
         return repo().saveAll(items)
     }
 }

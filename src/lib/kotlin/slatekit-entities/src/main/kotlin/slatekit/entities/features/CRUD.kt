@@ -21,7 +21,7 @@ interface CRUD<TId, T> : EntityOps<TId, T>,
      * checking its persisted flag.
      * @param entity
      */
-    fun save(entity: T?, options: EntityOptions): Try<Pair<TId, T>> {
+    suspend fun save(entity: T?, options: EntityOptions): Try<Pair<TId, T>> {
         val result = try {
             entity?.let { item ->
                 val saveResult = when (item.isPersisted()) {

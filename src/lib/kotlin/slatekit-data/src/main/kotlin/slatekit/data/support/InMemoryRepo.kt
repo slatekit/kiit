@@ -7,8 +7,14 @@ import slatekit.common.utils.ListMap
 import slatekit.data.FullRepo
 import slatekit.common.data.DataEvent
 import slatekit.common.data.DataHooks
+import slatekit.common.data.Values
+import slatekit.data.BaseRepo
 import slatekit.data.core.Meta
-import slatekit.query.IQuery
+import slatekit.data.sql.Dialect
+import slatekit.query.Select
+import slatekit.query.Update
+import slatekit.query.Delete
+import slatekit.query.Order
 
 /**
  * Used mostly for Prototyping and Testing.
@@ -17,9 +23,9 @@ import slatekit.query.IQuery
  * @param hooks: "Middleware" support to notify listeners for changes ( create, update, deletes )
  */
 @Prototyping("NON-PRODUCTION USAGE: Used for prototyping, proof-of-concept, tests")
-class InMemoryRepo<TId, T>(override val meta: Meta<TId, T>,
+class InMemoryRepo<TId, T>(meta: Meta<TId, T>,
                            private val idGen: IdGenerator<TId>,
-                           private val hooks: DataHooks<TId, T>?) : FullRepo<TId, T> where TId : Comparable<TId>, T : Any {
+                           hooks: DataHooks<TId, T>?) : BaseRepo<TId, T>(meta, hooks), FullRepo<TId, T> where TId : Comparable<TId>, T : Any {
     // Ordered list + map features
     private var items = ListMap<TId, T>(listOf())
 
@@ -34,7 +40,8 @@ class InMemoryRepo<TId, T>(override val meta: Meta<TId, T>,
                     val id = idGen.nextId()
                     // store
                     items = items.add(id, entity)
-                    notify(DataAction.Create, entity)
+                    val success = isPersisted(id)
+                    notify(DataAction.Create, id, entity, success)
                     id
                 }
             }
@@ -50,7 +57,8 @@ class InMemoryRepo<TId, T>(override val meta: Meta<TId, T>,
             if (isPersisted(entity) && items.contains(id)) {
                 items = items.minus(id)
                 items = items.add(id, entity)
-                notify(DataAction.Update, entity)
+                val success = true
+                notify(DataAction.Update, id, entity, success)
                 true
             } else false
         }
@@ -84,7 +92,7 @@ class InMemoryRepo<TId, T>(override val meta: Meta<TId, T>,
                 item?.let {
                     execute(it) {
                         items = items.remove(id)
-                        item?.let { notify(DataAction.Delete, item) }
+                        item?.let { notify(DataAction.Delete, id, item, true) }
                         true
                     }
                 } ?: false
@@ -109,21 +117,10 @@ class InMemoryRepo<TId, T>(override val meta: Meta<TId, T>,
         return items.size.toLong()
     }
 
-    override fun seq(count: Int, desc: Boolean): List<T> {
-        return when (desc) {
-            false -> items.all().take(count)
-            true -> items.all().takeLast(count)
-        }
-    }
-
-    private fun notify(action: DataAction, entity:T) {
-        val id = identity(entity)
-        val ts = DateTimes.now()
-        when(action) {
-            DataAction.Create -> hooks?.onDataEvent(DataEvent.DataCreated<TId, T>(name, id, entity, ts))
-            DataAction.Update -> hooks?.onDataEvent(DataEvent.DataUpdated<TId, T>(name, id, entity, ts))
-            DataAction.Delete -> hooks?.onDataEvent(DataEvent.DataDeleted<TId, T>(name, id, entity, ts))
-            else -> { }
+    override fun seq(count: Int, order: Order): List<T> {
+        return when (order) {
+            Order.Asc -> items.all().take(count)
+            Order.Dsc -> items.all().takeLast(count)
         }
     }
 
@@ -138,15 +135,38 @@ class InMemoryRepo<TId, T>(override val meta: Meta<TId, T>,
         }
     }
 
-    override fun deleteByQuery(query: IQuery): Int {
+    override fun deleteByQuery(builder: Delete): Int {
         TODO("Not yet implemented")
     }
 
-    override fun findByQuery(query: IQuery): List<T> {
+    override fun findByQuery(builder: Select): List<T> {
         TODO("Not yet implemented")
     }
 
-    override fun patchByQuery(query: IQuery): Int {
+    override fun patchByQuery(builder: Update): Int {
+        TODO("Not yet implemented")
+    }
+
+    override fun delete(): Delete {
+        TODO("Not yet implemented")
+    }
+
+    override fun select(): Select {
+        TODO("Not yet implemented")
+    }
+
+    override fun patch(): Update {
+        TODO("Not yet implemented")
+    }
+
+    override val dialect: Dialect
+        get() = TODO("Not yet implemented")
+
+    override fun scalar(sql: String, args: Values): Double {
+        TODO("Not yet implemented")
+    }
+
+    override fun scalar(builder: Select.() -> Unit): Double {
         TODO("Not yet implemented")
     }
 }

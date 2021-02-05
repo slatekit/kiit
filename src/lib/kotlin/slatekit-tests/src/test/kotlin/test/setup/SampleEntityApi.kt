@@ -56,12 +56,12 @@ class SampleEntity2Api(ctx: AppEntContext){
     fun patch(id:Long, title:String): String = "patched $id with $title"
 
     @Action(name = "", desc = "gets recent items in the system")
-    fun recent(count: Int = 5): List<Movie> {
+    suspend fun recent(count: Int = 5): List<Movie> {
         return svc.recent(count)
     }
 
     @Action(name = "", desc = "gets oldest items in the system")
-    fun oldest(count: Int = 5): List<Movie> {
+    suspend fun oldest(count: Int = 5): List<Movie> {
         return svc.oldest(count)
     }
 }

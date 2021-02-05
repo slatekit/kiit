@@ -28,7 +28,10 @@ open class EntityService<TId, T>(protected val repo: EntityRepo<TId, T>)
     override fun repo(): EntityRepo<TId, T> = repo
 }
 
+
+/**
+ * Contains all features beyond simple CRUD functions ( counts, ordered, etc )
+ */
 open class EntityServices<TId, T>(repo: EntityRepo<TId, T>)
 : EntityService<TId, T>(repo), Counts<TId, T>, Ordered<TId, T> where TId : kotlin.Comparable<TId>, TId : Number, T : Entity<TId> {
-
 }

@@ -19,7 +19,7 @@ interface UniqueIds<TId, T> : EntityOps<TId, T> where TId : kotlin.Comparable<TI
      * @param id
      * @return
      */
-    fun getByUUID(id: String): T? {
+    suspend fun getByUUID(id: String): T? {
         return repo().findOneByField(EntityWithUUID::uuid.name, Op.Eq, id)
     }
 
@@ -28,7 +28,7 @@ interface UniqueIds<TId, T> : EntityOps<TId, T> where TId : kotlin.Comparable<TI
      * @param id
      * @return
      */
-    fun getByUUID(id: UUID): T? {
+    suspend fun getByUUID(id: UUID): T? {
         return repo().findOneByField(EntityWithUUID::uuid.name, Op.Eq, id.toString())
     }
 
@@ -37,7 +37,7 @@ interface UniqueIds<TId, T> : EntityOps<TId, T> where TId : kotlin.Comparable<TI
      * @param id
      * @return
      */
-    fun getByUUIDs(ids: List<String>): List<T>? {
+    suspend fun getByUUIDs(ids: List<String>): List<T>? {
         return repo().findByField(EntityWithUUID::uuid.name, Op.In, ids)
     }
 }

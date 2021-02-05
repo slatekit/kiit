@@ -25,7 +25,7 @@ object QueryEncoder {
     fun convertVal(value: Any?): String {
         /* ktlint-disable */
         return when (value) {
-            Query.Null       -> "null"
+            Const.Null       -> "null"
             null             -> "null"
             is String        -> toString(value)
             is Int           -> value.toString()

@@ -20,7 +20,7 @@ interface Cacheable<TId, TKey, T>
     /**
      * Refreshes the internal cache
      */
-    fun refresh()
+    suspend fun refresh()
 
     /**
      * Size of the entries in the cache

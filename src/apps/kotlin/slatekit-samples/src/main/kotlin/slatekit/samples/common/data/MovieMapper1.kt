@@ -4,6 +4,7 @@ import slatekit.common.Record
 import slatekit.common.crypto.Encryptor
 import slatekit.common.data.*
 import slatekit.data.encoders.Encoders
+import slatekit.data.Mapper
 import slatekit.samples.common.models.Delivery
 import slatekit.samples.common.models.Movie
 

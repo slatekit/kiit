@@ -10,7 +10,7 @@ interface Reads<TId, T> : EntityOps<TId, T> where TId : kotlin.Comparable<TId>, 
      * @param id
      * @return
      */
-    fun getById(id: TId): T? {
+    suspend fun getById(id: TId): T? {
         return repo().getById(id)
     }
 
@@ -19,7 +19,7 @@ interface Reads<TId, T> : EntityOps<TId, T> where TId : kotlin.Comparable<TId>, 
      * @param ids
      * @return
      */
-    fun getByIds(ids: List<TId>): List<T> {
+    suspend fun getByIds(ids: List<TId>): List<T> {
         return repo().getByIds(ids)
     }
 
@@ -27,7 +27,7 @@ interface Reads<TId, T> : EntityOps<TId, T> where TId : kotlin.Comparable<TId>, 
      * gets all the entities from the datastore.
      * @return
      */
-    fun getAll(): List<T> {
+    suspend fun getAll(): List<T> {
         return repo().getAll()
     }
 }

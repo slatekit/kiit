@@ -15,11 +15,11 @@ package slatekit.integration.common
 
 import slatekit.apis.Action
 import slatekit.common.Ignore
-import slatekit.query.Query
 import slatekit.entities.Entities
 import slatekit.entities.Entity
 import slatekit.entities.EntityService
 import slatekit.entities.EntityUpdatable
+import slatekit.query.Op
 import java.util.*
 import kotlin.reflect.KClass
 
@@ -33,12 +33,12 @@ interface ApiWithEntitySupport<TId, T, TSvc>
     val entitySvc: EntityService<TId, T>
 
     @Action(name = "", desc = "gets the first item")
-    fun getById(id: TId): T? {
+    suspend fun getById(id: TId): T? {
         return entitySvc.getById(id)
     }
 
     @Action(name = "", desc = "gets the first item")
-    fun copy(id: TId): T? {
+    suspend fun copy(id: TId): T? {
         val item = entitySvc.getById(id)
         return item?.let { model ->
             when (model) {
@@ -49,17 +49,17 @@ interface ApiWithEntitySupport<TId, T, TSvc>
     }
 
     @Action(name = "", desc = "gets all items")
-    fun getAll(): List<T> {
+    suspend fun getAll(): List<T> {
         return entitySvc.getAll()
     }
 
     @Action(name = "", desc = "creates an item")
-    fun create(item: T): TId {
+    suspend fun create(item: T): TId {
         return entitySvc.create(item)
     }
 
     @Action(name = "", desc = "updates an item")
-    fun update(item: T) {
+    suspend fun update(item: T) {
         entitySvc.update(item)
     }
 
@@ -92,32 +92,32 @@ interface ApiWithEntitySupport<TId, T, TSvc>
 //    }
 
     @Action(name = "", desc = "gets distinct items based on the field")
-    fun distinct(field: String): List<Any> {
+    suspend fun distinct(field: String): List<Any> {
         return listOf<Any>()
     }
 
     @Action(name = "", desc = "finds items by field name and value")
-    fun findBy(field: String, value: String): List<T> {
-        return entitySvc.findByQuery(Query().where(field, "=", value))
+    suspend fun findBy(field: String, value: String): List<T> {
+        return entitySvc.findByField(field, Op.Eq, value)
     }
 
     @Action(name = "", desc = "finds items by field name and value")
-    fun updateField(id: TId, field: String, value: String) {
+    suspend fun updateField(id: TId, field: String, value: String) {
         entitySvc.update(id, field, value)
     }
 
     @Action(name = "", desc = "deletes an item by its id")
-    fun delete(item: T): Boolean {
+    suspend fun delete(item: T): Boolean {
         return entitySvc.deleteById(item.identity())
     }
 
     @Action(name = "", desc = "deletes an item by its id")
-    fun deleteById(id: TId): Boolean {
+    suspend fun deleteById(id: TId): Boolean {
         return entitySvc.deleteById(id)
     }
 
     @Ignore
-    fun createFrom(updatable: EntityUpdatable<TId, T>): T {
+    suspend fun createFrom(updatable: EntityUpdatable<TId, T>): T {
         val copy = updatable.withId(zeroId())
         val newId = entitySvc.create(copy)
         val final = updatable.withId(newId)

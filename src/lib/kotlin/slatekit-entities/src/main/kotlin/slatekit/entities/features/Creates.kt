@@ -15,7 +15,7 @@ interface Creates<TId, T> : EntityOps<TId, T> where TId : kotlin.Comparable<TId>
      * @param entity
      * @return
      */
-    fun insert(entity: T): TId {
+    suspend fun insert(entity: T): TId {
         return repo().create(entity)
     }
 
@@ -24,7 +24,7 @@ interface Creates<TId, T> : EntityOps<TId, T> where TId : kotlin.Comparable<TId>
      * @param entity : The entity to save
      * @param options: Settings to determine whether to apply metadata, and notify via Hooks
      */
-    fun create(entity: T, options: EntityOptions): Pair<TId, T> {
+    suspend fun create(entity: T, options: EntityOptions): Pair<TId, T> {
         // Massage
         val entityWithMeta = when (options.applyMetadata) {
             true -> applyFieldData(DataAction.Create, entity)
@@ -47,7 +47,7 @@ interface Creates<TId, T> : EntityOps<TId, T> where TId : kotlin.Comparable<TId>
      * @param entity
      * @return
      */
-    fun create(entity: T): TId {
+    suspend fun create(entity: T): TId {
         // Massage with timestamps
         val entityWithData = applyFieldData(DataAction.Create, entity)
 
@@ -61,7 +61,7 @@ interface Creates<TId, T> : EntityOps<TId, T> where TId : kotlin.Comparable<TId>
      * @param entity
      * @return
      */
-    fun createWithId(entity: T): T {
+    suspend fun createWithId(entity: T): T {
         val id = create(entity)
 
         // Update id
@@ -76,7 +76,7 @@ interface Creates<TId, T> : EntityOps<TId, T> where TId : kotlin.Comparable<TId>
      * @param entity
      * @return
      */
-    fun createAsTry(entity: T): Try<TId> {
+    suspend fun createAsTry(entity: T): Try<TId> {
         return Tries.of {
             create(entity)
         }

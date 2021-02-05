@@ -3,8 +3,8 @@ package slatekit.entities.features
 import kotlin.reflect.KProperty
 import slatekit.entities.Entity
 import slatekit.entities.core.EntityOps
-import slatekit.query.IQuery
 import slatekit.query.Op
+import slatekit.query.Delete
 import slatekit.results.Try
 import slatekit.results.builders.Tries
 
@@ -15,7 +15,7 @@ interface Deletes<TId, T> : EntityOps<TId, T> where TId : kotlin.Comparable<TId>
      *
      * @param entity
      */
-    fun delete(entity: T?): Boolean {
+    suspend fun delete(entity: T?): Boolean {
         return repo().delete(entity)
     }
 
@@ -24,7 +24,7 @@ interface Deletes<TId, T> : EntityOps<TId, T> where TId : kotlin.Comparable<TId>
      * @param entity
      * @return
      */
-    fun deleteAsTry(entity: T): Try<Boolean> {
+    suspend fun deleteAsTry(entity: T): Try<Boolean> {
         return Tries.of { delete(entity) }
     }
 
@@ -33,14 +33,14 @@ interface Deletes<TId, T> : EntityOps<TId, T> where TId : kotlin.Comparable<TId>
      * @param id
      * @return
      */
-    fun deleteById(id: TId): Boolean {
+    suspend fun deleteById(id: TId): Boolean {
         return repo().deleteById(id)
     }
 
     /**
      * deletes the entities
      */
-    fun deleteByIds(ids: List<TId>): Int {
+    suspend fun deleteByIds(ids: List<TId>): Int {
         return repo().deleteByIds(ids)
     }
 
@@ -48,7 +48,7 @@ interface Deletes<TId, T> : EntityOps<TId, T> where TId : kotlin.Comparable<TId>
      * deletes all the items in the table
      * @return
      */
-    fun deleteAll(): Long {
+    suspend fun deleteAll(): Long {
         return repo().deleteAll()
     }
 
@@ -58,7 +58,7 @@ interface Deletes<TId, T> : EntityOps<TId, T> where TId : kotlin.Comparable<TId>
      * @param value: The value to check for
      * @return
      */
-    fun deleteByField(prop: KProperty<*>, value: Any): Int {
+    suspend fun deleteByField(prop: KProperty<*>, value: Any): Int {
         return repo().deleteByField(prop.name, Op.Eq, value)
     }
 
@@ -68,14 +68,21 @@ interface Deletes<TId, T> : EntityOps<TId, T> where TId : kotlin.Comparable<TId>
      * @param value: The value to check for
      * @return
      */
-    fun deleteByField(prop: KProperty<*>, op: Op, value: Any): Int {
+    suspend fun deleteByField(prop: KProperty<*>, op: Op, value: Any): Int {
         return repo().deleteByField(prop.name, op, value)
     }
 
     /**
      * updates items using the query
      */
-    fun deleteByQuery(query: IQuery): Int {
-        return repo().deleteByQuery(query)
+    suspend fun deleteByQuery(critera: Delete): Int {
+        return repo().deleteByQuery(critera)
+    }
+
+    /**
+     * updates items using the query
+     */
+    suspend fun delete(builder: Delete.() -> Unit): Int {
+        return repo().delete(builder)
     }
 }

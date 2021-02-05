@@ -20,7 +20,7 @@ interface Relations<TId, T> : EntityOps<TId, T> where TId : kotlin.Comparable<TI
      * @param prop : the field to check on current model for the foreign key id
      * @sample member.getRelation[User](1, Member::userId, User::class)
      */
-    fun <R> getRelation(id: TId, prop: KProperty<*>, model: KClass<*>): R? where R : Entity<TId> {
+    suspend fun <R> getRelation(id: TId, prop: KProperty<*>, model: KClass<*>): R? where R : Entity<TId> {
 
         NOTE.IMPROVE("entities", "This should ideally be in 1 database call")
         val entity = repo().getById(id)
@@ -40,7 +40,7 @@ interface Relations<TId, T> : EntityOps<TId, T> where TId : kotlin.Comparable<TI
      * @param prop : the field to check on current model for the foreign key id
      * @sample member.getRelation[User](1, Member::userId, User::class)
      */
-    fun <R> getWithRelation(id: TId, prop: KProperty<*>, model: KClass<*>): Pair<T?, R?> where R : Entity<TId> {
+    suspend fun <R> getWithRelation(id: TId, prop: KProperty<*>, model: KClass<*>): Pair<T?, R?> where R : Entity<TId> {
 
         NOTE.IMPROVE("entities", "This should ideally be in 1 database call")
         val entity = repo().getById(id)
@@ -60,7 +60,7 @@ interface Relations<TId, T> : EntityOps<TId, T> where TId : kotlin.Comparable<TI
      * @param prop : the field to check on current model for the foreign key id
      * @sample group.getWithRelations[Member](1, Member::class, Member::groupId)
      */
-    fun <R> getWithRelations(id: TId, model: KClass<*>, prop: KProperty<*>): Pair<T?, List<R>> where R : Entity<TId> {
+    suspend fun <R> getWithRelations(id: TId, model: KClass<*>, prop: KProperty<*>): Pair<T?, List<R>> where R : Entity<TId> {
 
         NOTE.IMPROVE("entities", "This should ideally be in 1 database call")
         val entity = repo().getById(id)
