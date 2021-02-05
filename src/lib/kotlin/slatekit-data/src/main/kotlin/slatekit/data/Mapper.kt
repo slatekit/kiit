@@ -1,4 +1,4 @@
-package slatekit.data.slatekit.data
+package slatekit.data
 
 import slatekit.common.Record
 import slatekit.common.crypto.Encryptor

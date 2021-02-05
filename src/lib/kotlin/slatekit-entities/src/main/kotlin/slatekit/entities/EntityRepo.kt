@@ -14,7 +14,7 @@
 package slatekit.entities
 
 import slatekit.common.data.IDb
-import slatekit.data.slatekit.data.Mapper
+import slatekit.data.Mapper
 import slatekit.data.SqlRepo
 import slatekit.data.core.Meta
 import slatekit.data.sql.Provider

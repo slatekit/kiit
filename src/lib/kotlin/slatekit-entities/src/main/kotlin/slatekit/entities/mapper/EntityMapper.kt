@@ -19,7 +19,7 @@ import slatekit.common.crypto.Encryptor
 import slatekit.common.data.DataAction
 import slatekit.common.data.DataType
 import slatekit.meta.models.Model
-import slatekit.data.slatekit.data.Mapper
+import slatekit.data.Mapper
 import slatekit.common.data.Values
 import slatekit.data.core.Meta
 import slatekit.data.encoders.Encoders

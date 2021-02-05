@@ -1,4 +1,4 @@
-package slatekit.data.slatekit.data.features
+package slatekit.data.features
 
 import slatekit.common.DateTime
 import slatekit.data.features.Deletable

@@ -1,7 +1,7 @@
 package slatekit.data.sql
 
 import slatekit.data.core.Table
-import slatekit.data.slatekit.data.syntax.Types
+import slatekit.data.syntax.Types
 import slatekit.query.Op
 
 /**

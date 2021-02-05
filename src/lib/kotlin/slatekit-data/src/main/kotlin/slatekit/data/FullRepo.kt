@@ -1,7 +1,7 @@
 package slatekit.data
 
 import slatekit.data.features.*
-import slatekit.data.slatekit.data.features.Scalarable
+import slatekit.data.features.Scalarable
 
 /**
  * SQL based Repository ( representing a database table )

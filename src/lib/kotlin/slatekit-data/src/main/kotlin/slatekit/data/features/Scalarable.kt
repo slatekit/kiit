@@ -1,4 +1,4 @@
-package slatekit.data.slatekit.data.features
+package slatekit.data.features
 
 import slatekit.common.data.Values
 import slatekit.data.features.Inspectable

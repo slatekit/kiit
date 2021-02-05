@@ -2,7 +2,7 @@ package test.entities
 
 import org.junit.Assert
 import org.junit.Test
-import slatekit.data.slatekit.data.syntax.Types
+import slatekit.data.syntax.Types
 import slatekit.common.data.BuildMode
 import slatekit.data.sql.Insert
 import slatekit.data.sql.Update

@@ -1,6 +1,6 @@
 package slatekit.data.sql.vendors
 
-import slatekit.data.slatekit.data.Mapper
+import slatekit.data.Mapper
 import slatekit.data.core.Meta
 import slatekit.data.core.Table
 import slatekit.data.sql.*
