@@ -1,13 +1,12 @@
 package slatekit.data.features
 
-import slatekit.query.Delete
 import slatekit.query.Op
 import slatekit.query.Select
 
 /**
  * Supports finding records by conditions
  */
-interface Findable<TId, T> : Inspectable<TId, T> where TId : Comparable<TId>, T: Any {
+interface Findable<TId, T> : Inspectable<TId, T> where TId : Comparable<TId>, T : Any {
     /**
      * finds items based on the field
      * @param field: name of field
@@ -46,7 +45,6 @@ interface Findable<TId, T> : Inspectable<TId, T> where TId : Comparable<TId>, T:
      */
     fun findOneByField(field: String, op: Op, value: Any): T? = findByQuery(select().where(field, op, value).limit(1)).firstOrNull()
 
-
     /**
      * finds items based on the field in the values provided
      * @param field: name of field
@@ -55,6 +53,13 @@ interface Findable<TId, T> : Inspectable<TId, T> where TId : Comparable<TId>, T:
      */
     fun findIn(field: String, value: List<Any>): List<T> = findByQuery(select().where(field, Op.In, value))
 
+    /**
+     * finds one item using a query builder
+     * select { where("level", Op.Eq, 3).and("active", Op.Eq, true) }
+     */
+    fun findOne(builder: Select.() -> Unit): T? {
+        return this.find(builder).firstOrNull()
+    }
 
     /**
      * finds items using a query builder
