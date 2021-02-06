@@ -1,7 +1,6 @@
 package slatekit.entities.features
 
 import slatekit.common.data.DataAction
-import slatekit.query.Op
 import slatekit.common.data.Value
 import kotlin.reflect.KProperty
 import slatekit.entities.Entity
@@ -9,7 +8,6 @@ import slatekit.entities.core.EntityOps
 import slatekit.entities.EntityOptions
 import slatekit.meta.Reflector
 import slatekit.meta.kClass
-import slatekit.query.Delete
 import slatekit.query.Update
 import slatekit.results.Try
 import slatekit.results.builders.Tries
@@ -21,7 +19,7 @@ interface Updates<TId, T> : EntityOps<TId, T> where TId : kotlin.Comparable<TId>
      * @param entity
      * @return
      */
-    fun modify(entity: T): Boolean {
+    suspend fun modify(entity: T): Boolean {
         return repo().update(entity)
     }
 
@@ -30,7 +28,7 @@ interface Updates<TId, T> : EntityOps<TId, T> where TId : kotlin.Comparable<TId>
      * @param entity
      * @return
      */
-    fun patch(id:TId, values:List<Value>): Int {
+    suspend fun patch(id:TId, values:List<Value>): Int {
         return repo().patchById(id, values)
     }
 
@@ -39,7 +37,7 @@ interface Updates<TId, T> : EntityOps<TId, T> where TId : kotlin.Comparable<TId>
      * @param entity : The entity to save
      * @param options: Settings to determine whether to apply metadata, and notify via Hooks
      */
-    fun update(entity: T, options: EntityOptions): Pair<Boolean, T> {
+    suspend fun update(entity: T, options: EntityOptions): Pair<Boolean, T> {
         // Massage
         val entityFinal = when (options.applyMetadata) {
             true -> applyFieldData(DataAction.Update, entity)
@@ -56,7 +54,7 @@ interface Updates<TId, T> : EntityOps<TId, T> where TId : kotlin.Comparable<TId>
      * @param entity
      * @return
      */
-    fun update(entity: T): Boolean {
+    suspend fun update(entity: T): Boolean {
         val finalEntity = applyFieldData(DataAction.Update, entity)
         val success = repo().update(finalEntity)
         return success
@@ -67,7 +65,7 @@ interface Updates<TId, T> : EntityOps<TId, T> where TId : kotlin.Comparable<TId>
      * @param entity
      * @return
      */
-    fun updateAsTry(entity: T): Try<Boolean> {
+    suspend fun updateAsTry(entity: T): Try<Boolean> {
         return Tries.of { update(entity) }
     }
 
@@ -78,7 +76,7 @@ interface Updates<TId, T> : EntityOps<TId, T> where TId : kotlin.Comparable<TId>
      * @param value: the value to set on the field
      * @return
      */
-    fun update(id: TId, field: String, value: String) {
+    suspend fun update(id: TId, field: String, value: String) {
         val item = repo().getById(id)
         item?.let { entity ->
             Reflector.setFieldValue(entity.kClass, entity, field, value)
@@ -89,7 +87,7 @@ interface Updates<TId, T> : EntityOps<TId, T> where TId : kotlin.Comparable<TId>
     /**
      * updates items using the query
      */
-    fun updateByQuery(builder: Update): Int {
+    suspend fun updateByQuery(builder: Update): Int {
         return repo().patchByQuery(builder)
     }
 
@@ -99,7 +97,7 @@ interface Updates<TId, T> : EntityOps<TId, T> where TId : kotlin.Comparable<TId>
      * @param value: The value to check for
      * @return
      */
-    fun patchByField(prop: KProperty<*>, value: Any): Int {
+    suspend fun patchByField(prop: KProperty<*>, value: Any): Int {
         return repo().patchByField(prop.name, value)
     }
 
@@ -109,7 +107,7 @@ interface Updates<TId, T> : EntityOps<TId, T> where TId : kotlin.Comparable<TId>
      * @param value: The value to check for
      * @return
      */
-    fun patchByFields(prop: KProperty<*>, oldValue: Any?, newValue:Any?): Int {
+    suspend fun patchByFields(prop: KProperty<*>, oldValue: Any?, newValue:Any?): Int {
         return repo().patchByValue(prop.name, oldValue, newValue)
     }
 

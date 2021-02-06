@@ -130,4 +130,5 @@ interface Finds<TId, T> : EntityOps<TId, T> where TId : kotlin.Comparable<TId>, 
 
 
     fun find(builder:Select.() -> Unit): List<T> = repo().find(builder)
+    fun findOne(builder:Select.() -> Unit): T? = repo().findOne(builder)
 }

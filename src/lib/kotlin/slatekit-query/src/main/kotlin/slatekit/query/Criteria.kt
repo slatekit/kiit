@@ -10,7 +10,7 @@ interface Criteria<T> {
      * builds up a where clause with the supplied arguments
      *
      * @param field:  The field name
-     * @param compare: The comparison operator ( =, >, >=, <, <=, != )
+     * @param op: The comparison operator ( =, >, >=, <, <=, != )
      * @param fieldValue: The field value
      * @return this instance
      */
@@ -20,7 +20,7 @@ interface Criteria<T> {
      * adds an and clause with the supplied arguments
      *
      * @param field:  The field name
-     * @param compare: The comparison operator ( =, >, >=, <, <=, != )
+     * @param op: The comparison operator ( =, >, >=, <, <=, != )
      * @param fieldValue: The field value
      * @return this instance
      */
