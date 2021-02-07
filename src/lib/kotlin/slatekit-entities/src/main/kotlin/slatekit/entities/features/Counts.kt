@@ -3,6 +3,8 @@ package slatekit.entities.features
 import slatekit.data.features.Countable
 import slatekit.entities.Entity
 import slatekit.entities.core.EntityOps
+import slatekit.query.Delete
+import slatekit.query.Select
 
 interface Counts<TId, T> : EntityOps<TId, T> where TId : kotlin.Comparable<TId>, T : Entity<TId> {
 
@@ -30,4 +32,13 @@ interface Counts<TId, T> : EntityOps<TId, T> where TId : kotlin.Comparable<TId>,
      * whether this is an empty dataset
      */
     suspend fun isEmpty(): Boolean = !any()
+
+
+
+    /**
+     * updates items using the query
+     */
+    suspend fun count(builder: Select.() -> Unit): Double {
+        return repo().count(builder)
+    }
 }

@@ -37,7 +37,7 @@ class Data_03_Statement_Syntax {
         val stmt = Update<Long, SampleEntityImmutable>(MySqlDialect, EntitySetup.meta, mapper)
         val sample = EntitySetup.sampleImmutable()
         val actual = stmt.build(sample, BuildMode.Sql).sql
-        val expected = """update `sample1` SET `test_string` = 'abc',`test_string_enc` = 'abc123',`test_bool` = 0,`test_short` = 1,`test_int` = 2,`test_long` = 3,`test_float` = 4.5,`test_double` = 5.5,`test_enum` = 1,`test_localdate` = '2021-01-20',`test_localtime` = '13:30:45',`test_localdatetime` = '2021-01-20 13:30:45',`test_zoneddatetime` = '2021-01-20 13:30:45',`test_uuid` = '497dea41-8658-4bb7-902c-361014799214',`test_uniqueId` = 'usa:314fef51-43a7-496c-be24-520e73758836',`test_object_addr` = 'street 1',`test_object_city` = 'city 1',`test_object_state` = 'state 1',`test_object_country` = 1,`test_object_zip` = '12345',`test_object_isPOBox` = 1;"""
+        val expected = """update `sample1` SET `test_string` = 'abc',`test_string_enc` = 'abc123',`test_bool` = 0,`test_short` = 1,`test_int` = 2,`test_long` = 3,`test_float` = 4.5,`test_double` = 5.5,`test_enum` = 1,`test_localdate` = '2021-01-20',`test_localtime` = '13:30:45',`test_localdatetime` = '2021-01-20 13:30:45',`test_zoneddatetime` = '2021-01-20 13:30:45',`test_uuid` = '497dea41-8658-4bb7-902c-361014799214',`test_uniqueId` = 'usa:314fef51-43a7-496c-be24-520e73758836',`test_object_addr` = 'street 1',`test_object_city` = 'city 1',`test_object_state` = 'state 1',`test_object_country` = 1,`test_object_zip` = '12345',`test_object_isPOBox` = 1 WHERE `id` = 0;"""
         Assert.assertEquals(expected, actual)
     }
 

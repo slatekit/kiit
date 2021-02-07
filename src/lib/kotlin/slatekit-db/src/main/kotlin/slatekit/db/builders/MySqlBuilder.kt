@@ -44,23 +44,6 @@ open class MySqlBuilder : DbBuilder {
         DataType.DTDateTime to "DATETIME"
     )
 
-    val langToDataTypes = mapOf(
-        Types.JBoolClass to DataType.DTBool,
-        Types.JStringClass to DataType.DTString,
-        Types.JShortClass to DataType.DTShort,
-        Types.JIntClass to DataType.DTInt,
-        Types.JLongClass to DataType.DTLong,
-        Types.JFloatClass to DataType.DTFloat,
-        Types.JDoubleClass to DataType.DTDouble,
-        // Types.JDecimalClass to  DataType.DbDecimal,
-        Types.JLocalDateClass to DataType.DTLocalDate,
-        Types.JLocalTimeClass to DataType.DTLocalTime,
-        Types.JLocalDateTimeClass to DataType.DTLocalDateTime,
-        Types.JZonedDateTimeClass to DataType.DTZonedDateTime,
-        Types.JInstantClass to DataType.DTInstant,
-        Types.JDateTimeClass to DataType.DTDateTime
-    )
-
     /**
      * Builds the drop table DDL for the name supplied.
      */

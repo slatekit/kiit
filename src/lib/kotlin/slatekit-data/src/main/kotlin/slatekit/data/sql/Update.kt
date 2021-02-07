@@ -15,8 +15,8 @@ open class Update<TId, T>(val dialect: Dialect, val meta: Meta<TId, T>, val mapp
 
     /**
      * Builds the full SQL statement
-     * e.g. "update `movies` set name = 'batman', category = 'action';"
-     * sql = "update `movies` set name = 'batman', category = 'action';"
+     * e.g. "update `movies` set name = 'batman', category = 'action' where id = 1;"
+     * sql = "update `movies` set name = 'batman', category = 'action' where id = ?;"
      * prep = "update `movies` set name = ?, `category` = ?
      *          listOf(
      *              Value("name", "batman"),
@@ -26,16 +26,19 @@ open class Update<TId, T>(val dialect: Dialect, val meta: Meta<TId, T>, val mapp
     open fun build(item: T, mode: BuildMode = BuildMode.Prep): Command {
         val start = prefix()
         val values = mapper.encode(item, DataAction.Update, null)
+        val idName = meta.encode(meta.pkey.name)
+        val idValue = meta.id.identity(item)
         return when(mode){
             BuildMode.Sql -> {
                 val args = values.joinToString(",", transform = { "${it.name} = ${it.text ?: Consts.NULL}" } )
-                val sql ="$start SET $args;"
+                val sql ="$start SET $args WHERE $idName = $idValue;"
                 Command(sql, listOf(), listOf())
             }
             BuildMode.Prep -> {
                 val args = values.joinToString(",", transform = { "${it.name} = ?" } )
-                val sql = "$start SET $args;"
-                Command(sql, values, values.map { it.value })
+                val sql = "$start SET $args WHERE $idName = ?;"
+                val finalValues = values + Value(meta.pkey.name, meta.pkey.type, idValue)
+                Command(sql, finalValues, listOf())
             }
         }
     }
