@@ -76,13 +76,6 @@ class ReflectorTests : TestSupport {
     }
 
 
-    @Test fun can_match_types_dynamically() {
-
-        val id:Any = 0
-        val actualCls = id.javaClass
-        Assert.assertTrue(Types.JIntAnyClass == actualCls)
-    }
-
 
     @Test fun can_check_subtype(){
         val tpe = PhoneUS::class

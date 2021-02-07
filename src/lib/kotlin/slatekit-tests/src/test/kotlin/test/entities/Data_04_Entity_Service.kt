@@ -137,6 +137,26 @@ class Data_04_Entity_Service {
 
 
     @Test
+    fun can_update_an_item() {
+        val lc = slatekit.common.Types.JLongClass
+        val kc = Long::class.java
+        val isEqual = lc == kc
+        println(isEqual)
+        runBlocking {
+            val userSvc = createSamples(true)
+            val user = userSvc.findOneByField(User5::email, "setup_2@abc.com")!!
+            val count = userSvc.count { where(User5::level, 7) }
+            Assert.assertEquals(1.0, count, 0.0)
+            val updated = user.copy(level = 8)
+            val isUpdated = userSvc.update(updated)
+            Assert.assertTrue(isUpdated)
+            val matches = userSvc.findByField(User5::level, 8)
+            Assert.assertEquals(1, matches.size)
+        }
+    }
+
+
+    @Test
     fun can_count_any() {
         runBlocking {
             val svc = createSamples(false)

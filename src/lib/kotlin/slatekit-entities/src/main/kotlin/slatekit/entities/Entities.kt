@@ -85,11 +85,12 @@ open class Entities(
         // 1. Id/Model types e.g. Long / User
         val idName = idOps.name()
         val idType = TId::class
+        val idTypeJ = idType.javaPrimitiveType!!
         val enType = T::class
 
         // 2. Table info ( name of table supplied or use class name )
         val tableName = table ?: enType.simpleName!!
-        val tableKey = PKey(idName, DataType.fromJava(idType.java))
+        val tableKey = PKey(idName, DataType.fromJava(idTypeJ))
         val tableChar = if(vendor == Vendor.MySql) '`' else '"'
         val tableInfo = Table(tableName, tableChar, tableKey)
 
