@@ -3,10 +3,12 @@ package test.meta
 import org.junit.Assert
 import org.junit.Test
 import slatekit.common.DateTime
+import slatekit.common.data.DataType
 import slatekit.common.ids.UPID
 import slatekit.meta.Reflector
 import slatekit.meta.models.FieldCategory
 import slatekit.meta.models.Model
+import test.entities.SampleEntityImmutable
 import test.setup.*
 import java.util.*
 import kotlin.reflect.KClass
@@ -48,6 +50,22 @@ class ModelTests {
         ensureField(model, "status"    , false, StatusEnum::class )
         ensureField(model, "salary"    , false, Double::class     )
         ensureField(model, "createdAt" , false, DateTime::class   )
+    }
+
+
+    @Test fun can_build_simple_with_sub_objects(){
+        val model = Model.loadSchema(SampleEntityImmutable::class, SampleEntityImmutable::id.name)
+        Assert.assertTrue(model.hasId)
+        Assert.assertTrue(model.any)
+        fun ensure(name:String, storedAs:String, type:DataType, model: Model){
+            Assert.assertTrue(model.lookup[name] != null)
+            Assert.assertEquals(storedAs, model.lookup[name]?.storedName)
+            Assert.assertEquals(type, model.lookup[name]?.dataTpe)
+        }
+        ensure("test_object", "test_object", DataType.DTObject, model)
+        ensure("test_object_state", "test_object_state", DataType.DTString, model)
+        ensure("test_object_country", "test_object_country", DataType.DTInt, model)
+        ensure("test_object_isPOBox", "test_object_isPOBox", DataType.DTBool, model)
     }
 
 

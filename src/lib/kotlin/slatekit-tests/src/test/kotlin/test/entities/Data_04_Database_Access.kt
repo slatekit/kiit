@@ -21,11 +21,14 @@ import org.threeten.bp.*
 import slatekit.common.DateTimes
 import slatekit.common.data.Connections
 import slatekit.common.data.Vendor
+import slatekit.common.ext.toStringYYYYMMDD
 import slatekit.common.ids.UPIDs
 import slatekit.data.core.LongId
 import slatekit.db.Db
 import slatekit.entities.Entities
 import slatekit.entities.EntityService
+import slatekit.query.Op
+import test.setup.Address
 import test.setup.MyEncryptor
 import test.setup.StatusEnum
 import test.setup.TestSupport
@@ -95,6 +98,39 @@ class Data_04_Database_Access : TestSupport {
             Assert.assertTrue(updated.test_localdatetime == update.test_localdatetime)
             Assert.assertTrue(updated.test_uuid == update.test_uuid)
             Assert.assertTrue(updated.test_uniqueId == update.test_uniqueId)
+        }
+    }
+
+
+    @Test fun can_query_use_sub_object() {
+        runBlocking {
+            val entities = EntitySetup.realDb()
+            entities.register<Long, SampleEntityImmutable>(LongId { s -> s.id }, "sample_entity", Vendor.MySql) { repo -> EntityService(repo) }
+
+            val svc = entities.getService<Long, SampleEntityImmutable>()
+            val zip = "10208"
+            val id = svc.create(SampleEntityImmutable(
+                    test_string = "abc",
+                    test_string_enc = "abc123",
+                    test_bool = false,
+                    test_short = 1,
+                    test_int = 2,
+                    test_long = 3,
+                    test_float = 4.5f,
+                    test_double = 5.5,
+                    test_enum = StatusEnum.Active,
+                    test_localdate = LocalDate.of(2021, 1, 20),
+                    test_localtime = LocalTime.of(13, 30, 45),
+                    test_localdatetime = LocalDateTime.of(2021, 1, 20, 13, 30, 45),
+                    test_zoneddatetime = DateTimes.of(2021, 1, 20, 13, 30, 45),
+                    test_uuid = UUID.fromString(EntitySetup.uuid),
+                    test_uniqueId = UPIDs.parse(EntitySetup.upid),
+                    test_object = Address("addr 1", "queens", "new york", 100, zip, false)
+            ))
+
+            val update = svc.findOneByField("test_object_" + Address::zip.name, Op.Eq,"10012")
+            Assert.assertNotNull(update)
+            Assert.assertEquals("10012", update?.test_object?.zip)
         }
     }
 }

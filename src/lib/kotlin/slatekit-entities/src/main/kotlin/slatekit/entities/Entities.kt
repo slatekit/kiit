@@ -67,7 +67,6 @@ open class Entities(
     val logs: Logs = LogsDefault,
     val namer: Namer? = null
 ) {
-
     private var info = ListMap<String, EntityContext>(listOf())
     val mappers = mutableMapOf<String, EntityMapper<*, *>>()
     val logger = logs.getLogger("db")
