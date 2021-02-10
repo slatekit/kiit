@@ -51,7 +51,7 @@ class Model(
     /**
      * Lookup of field names to column names
      */
-    val lookup: Map<String, ModelField> = fields.map { it.name to it }.toMap()
+    val lookup: Map<String, ModelField> = loadFields(fields)
 
     /**
      * The field that represents the id
@@ -131,6 +131,27 @@ class Model(
                 else -> mutableListOf(ModelField.ofId(idField.first, "", namer)).plus(fields)
             }
             return Model(modelName, modelNameFull, dataType, modelFields = allFields, namer = namer, tableName = table ?: modelName)
+        }
+
+
+        fun loadFields(modelFields: List<ModelField>):Map<String, ModelField> {
+            val fields = modelFields.fold(mutableListOf<Pair<String, ModelField>>()) { acc, field ->
+                when(field.model) {
+                    null -> acc.add(field.name to field)
+                    else -> {
+                        acc.add(field.name to field)
+                        field.model.fields.forEach { subField ->
+                            // Need to modify the field name and stored name here as "a_b"
+                            val subFieldName = field.name + "_" + subField.name
+                            val subFieldColumn = field.name + "_" + subField.storedName
+                            val subFieldFinal = subField.copy(storedName = subFieldColumn)
+                            acc.add(subFieldName to subFieldFinal)
+                        }
+                    }
+                }
+                acc
+            }.toMap()
+            return fields
         }
     }
 }

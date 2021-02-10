@@ -48,7 +48,7 @@ open class EntityMapper<TId, T>(val model: Model,
      * Gets the data type of the field
      */
     override fun datatype(field:String): DataType {
-        return when(val mappedField =model.lookup[field]){
+        return when(val mappedField = model.lookup[field]){
             null -> throw Exception("Field not mapped! model=${model.name}, field=$field")
             else -> mappedField.dataTpe
         }

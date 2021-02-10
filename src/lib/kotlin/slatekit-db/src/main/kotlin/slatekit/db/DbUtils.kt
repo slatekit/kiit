@@ -166,7 +166,7 @@ object DbUtils {
                             DataType.DTLong -> stmt.setLong(pos, arg.value as Long)
                             DataType.DTFloat -> stmt.setFloat(pos, arg.value as Float)
                             DataType.DTDouble -> stmt.setDouble(pos, arg.value as Double)
-                            DataType.DTEnum -> stmt.setInt(pos, (arg.value as EnumLike).value)
+                            DataType.DTEnum -> stmt.setInt(pos, toEnumValue(arg.value!!))
                             DataType.DTLocalDate -> stmt.setDate(pos, java.sql.Date.valueOf((arg.value as LocalDate).toJava8LocalDate()))
                             DataType.DTLocalTime -> stmt.setTime(pos, java.sql.Time.valueOf((arg.value as LocalTime).toJava8LocalTime()))
                             DataType.DTLocalDateTime -> stmt.setTimestamp(pos, java.sql.Timestamp.valueOf((arg.value as LocalDateTime).toJava8LocalDateTime()))
@@ -184,6 +184,16 @@ object DbUtils {
             catch(ex:Exception) {
                 error(ex)
             }
+        }
+    }
+
+    fun toEnumValue(value:Any):Int {
+        return when(value) {
+            is Int      -> value
+            is EnumLike -> value.value
+            is Enum<*>  -> value.ordinal
+            is String   -> value.toInt()
+            else        -> value.toString().toInt()
         }
     }
 

@@ -89,7 +89,7 @@ data class SimpleIdentity(
      * {AREA}.{SERVICE}.{AGENT}.{ENV}
      * signup.alerts.job.qat
      */
-    override val fullname: String = "$name.${agent.name.toLowerCase()}.${env.toLowerCase()}"
+    override val fullname: String = "$name.${agent.name.toLowerCase()}.${env.toLowerCase()}.${version.replace(".", "_")}"
 
     /**
      * The id contains the instance name
