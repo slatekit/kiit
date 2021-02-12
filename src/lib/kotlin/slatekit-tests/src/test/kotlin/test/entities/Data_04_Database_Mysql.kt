@@ -10,6 +10,8 @@ import slatekit.common.data.*
 import slatekit.common.ids.ULIDs
 import slatekit.db.Db
 import test.TestApp
+import test.setup.Address
+import test.setup.StatusEnum
 import test.setup.TestSupport
 import java.util.*
 
@@ -184,6 +186,41 @@ class Data_04_Database_Mysql : TestSupport {
     }
 
 
+    @Test
+    fun can_get() {
+        val db = db()
+        // 1. add
+        val id = db.insert(INSERT_ITEM)
+        Assert.assertTrue(id > 0)
+
+        // 2. update
+        val sqlGet = "select * from `$table` where `id` = $id;"
+        val item = db.mapOne(sqlGet, null) { rec ->
+            val longid = rec.getLong("id")
+            SampleEntityImmutable(
+                    longid,
+                    rec.getString("test_string"),
+                    rec.getString("test_string_enc"),
+                    rec.getBool("test_bool"),
+                    rec.getShort("test_short"),
+                    rec.getInt("test_int"),
+                    rec.getLong("test_long"),
+                    rec.getFloat("test_float"),
+                    rec.getDouble("test_double"),
+                    StatusEnum.convert(rec.getInt("test_enum")) as StatusEnum,
+                    rec.getLocalDate("test_localdate"),
+                    rec.getLocalTime("test_localtime"),
+                    rec.getLocalDateTime("test_localdatetime"),
+                    rec.getZonedDateTime("test_zoneddatetime"),
+                    rec.getUUID("test_uuid"),
+                    rec.getUPID("test_uniqueId"),
+                    Address("", "", "", 1, "", true)
+            )
+        }
+        Assert.assertNotNull(item)
+    }
+
+
     fun <T> ensure_scalar(colName: String, callback: (IDb, String) -> T, expected: T): Unit {
         val db = db()
         val id = db.insert(INSERT_ITEM)
@@ -193,10 +230,10 @@ class Data_04_Database_Mysql : TestSupport {
     }
 
 
-    open fun db(vendor: Vendor = Vendor.MySql): IDb {
+    open fun db(vendor: Vendor = Vendor.H2): IDb {
         return when(vendor){
             Vendor.H2 -> {
-                val db = Db(H2_CON)
+                val db = Db.of(H2_CON)
                 val ddl = DDL_SAMPLE_ENTITY.replace("`sample_entity`", "IF NOT EXISTS `sample_entity`")
                 db.execute(ddl)
                 db

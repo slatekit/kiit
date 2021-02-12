@@ -31,11 +31,13 @@ object EntitySetup {
     val con = Confs.readDbCon(TestApp::class.java, dbConfPath)!!
     val cons = Connections.of(con)
 
-    fun db(): IDb = Db(con)
+    fun db(): IDb {
+        return Db.of(con)
+    }
 
     fun realDb(): Entities {
         val dbs = Connections.of(con)
-        val entities = Entities({ con -> Db(con) }, dbs, MyEncryptor)
+        val entities = Entities({ con -> Db.of(con) }, dbs, MyEncryptor)
         return entities
     }
 

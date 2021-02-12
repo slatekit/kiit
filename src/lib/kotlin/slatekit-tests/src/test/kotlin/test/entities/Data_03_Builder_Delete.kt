@@ -20,7 +20,6 @@ import slatekit.common.data.*
 import slatekit.common.data.BuildMode
 import slatekit.data.sql.Builders
 import slatekit.data.sql.vendors.MySqlDialect
-import slatekit.data.sql.vendors.MySqlProvider
 import slatekit.entities.*
 import slatekit.query.Op
 import slatekit.query.Delete
@@ -85,7 +84,7 @@ class Data_03_Builder_Delete {
 
 
     @Test fun can_build_filter_1_of_type_bool() {
-        val builder = builder().where("active", Op.IsNeq, false)
+        val builder = builder().where("active", Op.IsNot, false)
         ensure(builder = builder,
                 expectSqlRaw  = "delete from `user` where `active` is not 0;",
                 expectSqlPrep = "delete from `user` where `active` is not ?;",
@@ -96,7 +95,7 @@ class Data_03_Builder_Delete {
 
     @Test fun can_build_filter_multiple_conditions() {
         val builder = builder()
-                .where("active", Op.IsNeq, false)
+                .where("active", Op.IsNot, false)
                 .and("category", Op.Eq, "action")
                 .and("level", Op.Gte, 2)
 

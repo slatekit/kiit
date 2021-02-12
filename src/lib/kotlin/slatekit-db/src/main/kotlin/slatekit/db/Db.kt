@@ -39,7 +39,7 @@ import slatekit.db.DbUtils.fillArgs
  */
 class Db(private val dbCon: DbCon,
          errorCallback: ((Exception) -> Unit)? = null,
-         val settings:DbSettings = DbSettings(false)) : IDb {
+         val settings:DbSettings = DbSettings(true)) : IDb {
 
     override val errHandler = errorCallback ?: this::errorHandler
 

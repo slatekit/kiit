@@ -14,9 +14,9 @@ package slatekit.common.data
 
 sealed class Vendor(val name: String, val driver: String) {
   object MySql    : Vendor("mysql", "com.mysql.jdbc.Driver")
-  object PGres    : Vendor("pgres", "org.postgresql.Driver")
-  object SqServer : Vendor("sqlserver", "com.microsoft.sqlserver.jdbc.SQLServerDriver")
-  object SqLite   : Vendor("sqlite", "org.sqlite.JDBC")
   object H2       : Vendor("h2", "org.h2.Driver")
+  object SqLite   : Vendor("sqlite", "org.sqlite.JDBC")
+//  object PGres    : Vendor("pgres", "org.postgresql.Driver")
+//  object SqServer : Vendor("sqlserver", "com.microsoft.sqlserver.jdbc.SQLServerDriver")
   object Memory   : Vendor("memory", "com.slatekit.entities.repository-in-memory")
 }
