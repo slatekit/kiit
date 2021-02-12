@@ -119,68 +119,52 @@ open class EntityEncoder<TId, T>(val model: Model,
                 encryptor != null -> encryptor?.encrypt(sVal)
                 else -> sVal
             }
-            val txtValue = encoders.strings.encode(sValEnc)
-            Value(columnName, DataType.DTString, sValEnc, txtValue)
+            encoders.strings.convert(sValEnc)
         } else if (mapping.dataTpe == DataType.DTBool) {
             val raw = Reflector.getFieldValue(item, mapping.name) as Boolean?
-            val txtValue = encoders.bools.encode(raw)
-            Value(columnName, mapping.dataTpe, raw, txtValue)
+            encoders.bools.convert(raw)
         } else if (mapping.dataTpe == DataType.DTShort) {
             val raw = Reflector.getFieldValue(item, mapping.name) as Short?
-            val txtValue = encoders.shorts.encode(raw)
-            Value(columnName, mapping.dataTpe, raw, txtValue)
+            encoders.shorts.convert(raw)
         } else if (mapping.dataTpe == DataType.DTInt) {
             val raw = Reflector.getFieldValue(item, mapping.name) as Int?
-            val txtValue = encoders.ints.encode(raw)
-            Value(columnName, mapping.dataTpe, raw, txtValue)
+            encoders.ints.convert(raw)
         } else if (mapping.dataTpe == DataType.DTLong) {
             val raw = Reflector.getFieldValue(item, mapping.name) as Long?
-            val txtValue = encoders.longs.encode(raw)
-            Value(columnName, mapping.dataTpe, raw, txtValue)
+            encoders.longs.convert(raw)
         } else if (mapping.dataTpe == DataType.DTFloat) {
             val raw = Reflector.getFieldValue(item, mapping.name) as Float?
-            val txtValue = encoders.floats.encode(raw)
-            Value(columnName, mapping.dataTpe, raw, txtValue)
+            encoders.floats.convert(raw)
         } else if (mapping.dataTpe == DataType.DTDouble) {
             val raw = Reflector.getFieldValue(item, mapping.name) as Double?
-            val txtValue = encoders.doubles.encode(raw)
-            Value(columnName, mapping.dataTpe, raw, txtValue)
+            encoders.doubles.convert(raw)
         } else if (mapping.dataTpe == DataType.DTDateTime) {
             val raw = Reflector.getFieldValue(item, mapping.name) as DateTime?
-            val txtValue = encoders.dateTimes.toSql(raw, settings.utcTime)
-            Value(columnName, mapping.dataTpe, raw, txtValue)
+            encoders.dateTimes.toSql(raw, settings.utcTime)
         } else if (mapping.dataTpe == DataType.DTLocalDate) {
             val raw = Reflector.getFieldValue(item, mapping.name) as LocalDate?
-            val txtValue = encoders.localDates.encode(raw)
-            Value(columnName, mapping.dataTpe, raw, txtValue)
+            encoders.localDates.convert(raw)
         } else if (mapping.dataTpe == DataType.DTLocalTime) {
             val raw = Reflector.getFieldValue(item, mapping.name) as LocalTime?
-            val txtValue = encoders.localTimes.encode(raw)
-            Value(columnName, mapping.dataTpe, raw, txtValue)
+            encoders.localTimes.convert(raw)
         } else if (mapping.dataTpe == DataType.DTLocalDateTime) {
             val raw = Reflector.getFieldValue(item, mapping.name) as LocalDateTime?
-            val txtValue = encoders.localDateTimes.encode(raw)
-            Value(columnName, mapping.dataTpe, raw, txtValue)
+            encoders.localDateTimes.convert(raw)
         } else if (mapping.dataTpe == DataType.DTZonedDateTime) {
             val raw = Reflector.getFieldValue(item, mapping.name) as ZonedDateTime?
-            val txtValue = encoders.zonedDateTimes.toSql(raw, settings.utcTime)
-            Value(columnName, mapping.dataTpe, raw, txtValue)
+            encoders.zonedDateTimes.toSql(raw, settings.utcTime)
         } else if (mapping.dataTpe == DataType.DTInstant) {
             val raw = Reflector.getFieldValue(item, mapping.name) as Instant?
-            val txtValue = encoders.instants.encode(raw)
-            Value(columnName, mapping.dataTpe, raw, txtValue)
+            encoders.instants.convert(raw)
         } else if (mapping.dataTpe == DataType.DTUUID) {
             val raw = Reflector.getFieldValue(item, mapping.name) as java.util.UUID?
-            val txtValue = encoders.uuids.encode(raw)
-            Value(columnName, mapping.dataTpe, raw, txtValue)
+            encoders.uuids.convert(raw)
         } else if (mapping.dataTpe == DataType.DTUPID) {
             val raw = Reflector.getFieldValue(item, mapping.name) as UPID?
-            val txtValue = encoders.upids.encode(raw)
-            Value(columnName, mapping.dataTpe, raw, txtValue)
+            encoders.upids.convert(raw)
         } else if (mapping.isEnum) {
             val raw = Reflector.getFieldValue(item, mapping.name) as EnumLike
-            val txtValue = encoders.enums.encode(raw)
-            Value(columnName, mapping.dataTpe, raw, txtValue)
+            encoders.enums.convert(raw)
         } else if (mapping.model != null) {
             val subObject = Reflector.getFieldValue(item, mapping.name)
             subObject?.let { mapFields(mapping.name, subObject, mapping.model!!, enc) } ?: Consts.NULL
