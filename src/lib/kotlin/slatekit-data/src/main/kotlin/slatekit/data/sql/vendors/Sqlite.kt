@@ -9,7 +9,13 @@ object SqliteDialect : Dialect(encodeChar = '"') {
 }
 
 /**
- * MySql based dialect
+ * Sqlite based dialect, this has limited data types
+ * see: https://www.sqlite.org/datatype3.html
+ * 1. null
+ * 2. integer
+ * 3. real
+ * 4. text
+ * 5. blob
  */
 open class SqliteProvider<TId, T>(val meta: Meta<TId, T>, val mapper: Mapper<TId, T>)
     : Provider<TId, T> where TId: kotlin.Comparable<TId>, T: Any {
