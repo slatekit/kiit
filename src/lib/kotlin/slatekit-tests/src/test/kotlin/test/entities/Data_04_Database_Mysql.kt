@@ -230,7 +230,7 @@ class Data_04_Database_Mysql : TestSupport {
     }
 
 
-    open fun db(vendor: Vendor = Vendor.H2): IDb {
+    open fun db(vendor: Vendor = Vendor.MySql): IDb {
         return when(vendor){
             Vendor.H2 -> {
                 val db = Db.of(H2_CON)
