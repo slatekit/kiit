@@ -20,12 +20,12 @@ open class EnumEncoder(val dataType:DataType = DataType.DTEnum) : SqlEncoder<Enu
         return null
     }
 
-    override fun convert(value: EnumLike?): Value {
+    override fun convert(name:String, value: EnumLike?): Value {
         val finalValue = when(dataType){
             DataType.DTInt -> value?.let { it.value }
             else -> value
         }
-        return Value("", dataType, finalValue, encode(value))
+        return Value(name, dataType, finalValue, encode(value))
     }
 
     fun decode(record: Record, name: String, dataCls: KClass<*>): EnumLike? {

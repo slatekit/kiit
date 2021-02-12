@@ -105,7 +105,7 @@ open class Entities(
 
         // 4. Mapper
         val encoders = when(vendor){
-            Vendor.SqLite -> SqliteEncoders<TId, T>()
+            Vendor.SqLite -> SqliteEncoders<TId, T>(true)
             else -> Encoders<TId, T>()
         }
         val entityMapper = EntityMapper<TId, T>(entityModel, entityMeta, idType, enType, EntitySettings(true), encoders)

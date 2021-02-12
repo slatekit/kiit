@@ -18,7 +18,7 @@ interface SqlEncoder<T> {
      * Converts the value to a @see[slatekit.common.data.Value]
      * which can be more easily automapped to database type
      */
-    fun convert(value:T?): Value
+    fun convert(name:String, value:T?): Value
 
     /**
      * Decodes the value from the record

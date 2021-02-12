@@ -23,12 +23,12 @@ open class LocalDateEncoder(val dataType:DataType = DataType.DTLocalDate) : SqlE
         return record.getLocalDate(name)
     }
 
-    override fun convert(value: LocalDate?): Value {
+    override fun convert(name:String, value: LocalDate?): Value {
         val finalValue = when(dataType){
             DataType.DTInt -> value?.let { it.toNumeric() }
             else -> value
         }
-        return Value("", dataType, finalValue, encode(value))
+        return Value(name, dataType, finalValue, encode(value))
     }
 }
 
@@ -42,12 +42,12 @@ open class LocalTimeEncoder(val dataType:DataType = DataType.DTLocalTime) : SqlE
         return record.getLocalTimeOrNull(name)
     }
 
-    override fun convert(value: LocalTime?): Value {
+    override fun convert(name:String, value: LocalTime?): Value {
         val finalValue = when(dataType){
             DataType.DTInt -> value?.let { it.toNumeric() }
             else -> value
         }
-        return Value("", dataType, finalValue, encode(value))
+        return Value(name, dataType, finalValue, encode(value))
     }
 }
 
@@ -69,12 +69,12 @@ open class LocalDateTimeEncoder(val dataType:DataType = DataType.DTLocalDateTime
         return toItem(record, name, false)
     }
 
-    override fun convert(value: LocalDateTime?): Value {
+    override fun convert(name:String, value: LocalDateTime?): Value {
         val finalValue = when(dataType){
             DataType.DTDouble -> value?.let { it.zoned().toEpochSecond() }
             else -> value
         }
-        return Value("", dataType, finalValue, encode(value))
+        return Value(name, dataType, finalValue, encode(value))
     }
 
     fun toItem(record: Record, name: String, isUTC: Boolean = false): LocalDateTime? {
@@ -83,35 +83,27 @@ open class LocalDateTimeEncoder(val dataType:DataType = DataType.DTLocalDateTime
 }
 
 
-open class ZonedDateTimeEncoder(val dataType:DataType = DataType.DTZonedDateTime) : SqlEncoder<ZonedDateTime> {
+open class ZonedDateTimeEncoder(val dataType:DataType = DataType.DTZonedDateTime, private val utc:Boolean = true) : SqlEncoder<ZonedDateTime> {
     override fun encode(value: ZonedDateTime?): String {
-        return toSql(value, false)
-    }
-
-    fun toSql(value: ZonedDateTime?, isUTC: Boolean = false): String {
         return value?.let {
-            val converted = if (isUTC) it.atUtc() else value
+            val converted = if (utc) it.atUtc() else value
             "'" + converted.format(Consts.dateTimeFormat) + "'"
         } ?: Consts.NULL
     }
 
     override fun decode(record: Record, name: String): ZonedDateTime? {
-        return toItem(record, name, false)
+        return if (utc)
+            record.getZonedDateTimeUtcOrNull(name)
+        else
+            record.getZonedDateTimeOrNull(name)
     }
 
-    override fun convert(value: ZonedDateTime?): Value {
+    override fun convert(name:String, value: ZonedDateTime?): Value {
         val finalValue = when(dataType){
             DataType.DTDouble -> value?.let { it.toEpochSecond() }
             else -> value
         }
-        return Value("", dataType, finalValue, encode(value))
-    }
-
-    fun toItem(record: Record, name: String, isUTC: Boolean = false): ZonedDateTime? {
-        return if (isUTC)
-            record.getZonedDateTimeUtcOrNull(name)
-        else
-            record.getZonedDateTimeOrNull(name)
+        return Value(name, dataType, finalValue, encode(value))
     }
 }
 
@@ -123,12 +115,12 @@ open class InstantEncoder(val dataType:DataType = DataType.DTInstant) : SqlEncod
         } ?: Consts.NULL
     }
 
-    override fun convert(value: Instant?): Value {
+    override fun convert(name:String, value: Instant?): Value {
         val finalValue = when(dataType){
             DataType.DTDouble -> value?.let { it.toEpochMilli() }
             else -> value
         }
-        return Value("", dataType, finalValue, encode(value))
+        return Value(name, dataType, finalValue, encode(value))
     }
 
     override fun decode(record: Record, name: String): Instant? {
@@ -137,37 +129,29 @@ open class InstantEncoder(val dataType:DataType = DataType.DTInstant) : SqlEncod
 }
 
 
-open class DateTimeEncoder(val dataType:DataType = DataType.DTDateTime) : SqlEncoder<DateTime> {
+open class DateTimeEncoder(val dataType:DataType = DataType.DTDateTime, private val utc:Boolean = true) : SqlEncoder<DateTime> {
     private val dateTimeFormat: DateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")
 
     override fun encode(value: DateTime?): String {
-        return toSql(value, false)
-    }
-
-    open fun toSql(value: DateTime?, isUTC: Boolean = false): String {
         return value?.let {
-            val converted = if (isUTC) value.atUtc() else value
+            val converted = if (utc) value.atUtc() else value
             "'" + converted.format(dateTimeFormat) + "'"
         } ?: Consts.NULL
     }
 
     override fun decode(record: Record, name: String): DateTime? {
-        return toItem(record, name, false)
+        return if (utc)
+            record.getZonedDateTimeUtcOrNull(name)?.atUtcLocal()
+        else
+            record.getDateTimeOrNull(name)
     }
 
-    override fun convert(value: DateTime?): Value {
+    override fun convert(name:String, value: DateTime?): Value {
         val finalValue = when(dataType){
             DataType.DTDouble -> value?.let { it.toEpochSecond() }
             else -> value
         }
-        return Value("", dataType, finalValue, encode(value))
-    }
-
-    fun toItem(record: Record, name: String, isUTC: Boolean = false): DateTime? {
-        return if (isUTC)
-            record.getZonedDateTimeUtcOrNull(name)?.atUtcLocal()
-        else
-            record.getDateTimeOrNull(name)
+        return Value(name, dataType, finalValue, encode(value))
     }
 }
 
