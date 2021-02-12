@@ -19,6 +19,11 @@ interface IDb : ProcSupport {
     val errHandler: (Exception) -> Unit
 
     /**
+     * JDBC driver
+     */
+    val driver:String
+
+    /**
      * registers the jdbc driver
      *
      * @return

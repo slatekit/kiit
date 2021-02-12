@@ -14,14 +14,12 @@
 package slatekit.db
 
 import slatekit.common.Record
-import slatekit.common.data.DataType
+import slatekit.common.conf.Confs
+import slatekit.common.data.*
 import java.sql.Connection
 import java.sql.PreparedStatement
 import java.sql.ResultSet
 import java.sql.Statement
-import slatekit.common.data.DbCon
-import slatekit.common.data.IDb
-import slatekit.common.data.Value
 import slatekit.common.repeatWith
 import slatekit.db.DbUtils.executeCon
 import slatekit.db.DbUtils.executePrep
@@ -42,6 +40,12 @@ import slatekit.db.DbUtils.fillArgs
 class Db(private val dbCon: DbCon, errorCallback: ((Exception) -> Unit)? = null) : IDb {
 
     override val errHandler = errorCallback ?: this::errorHandler
+
+    /**
+     * Driver name e.g. com.mysql.jdbc.Driver
+     */
+    override val driver: String = dbCon.driver
+
 
     /**
      * registers the jdbc driver
@@ -310,10 +314,37 @@ class Db(private val dbCon: DbCon, errorCallback: ((Exception) -> Unit)? = null)
 
     companion object {
 
-        fun open(con: DbCon): Db {
-            val db = Db(con)
-            db.open()
-            return db
+        /**
+         * Load Db from config file, which could be a java packaged resource or on file
+         * @param cls: Class holding resource files
+         * @param path: URI of file
+         * 1. "usr://.slatekit/common/conf/db.conf"
+         * 2. "jar://env.conf
+         */
+        fun of(cls:Class<*>, path:String):IDb {
+            return when(val con = Confs.readDbCon(cls,path)) {
+                null -> throw Exception("Unable to load database connection from $path")
+                else -> of(con)
+            }
+        }
+
+
+        /**
+         * Load Db using a default connection from Connections
+         * @param cons: Connection collection
+         */
+        fun of(cons:Connections):IDb {
+            return when(val con = cons.default()){
+                null -> throw Exception("Unable to load default connection from connections")
+                else -> of(con)
+            }
+        }
+
+        /**
+         * Only here for convenience to call open
+         */
+        fun of(con:DbCon):IDb {
+            return with(Db(con)) { open() }
         }
     }
 

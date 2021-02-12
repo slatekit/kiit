@@ -16,20 +16,17 @@ package test.entities
 import kotlinx.coroutines.runBlocking
 import org.junit.Assert
 import org.junit.Test
-//import java.time.*
 import org.threeten.bp.*
 import slatekit.common.DateTimes
 import slatekit.common.data.Connections
 import slatekit.common.data.Vendor
-import slatekit.common.ext.toStringYYYYMMDD
 import slatekit.common.ids.UPIDs
 import slatekit.data.core.LongId
 import slatekit.db.Db
-import slatekit.entities.Entities
 import slatekit.entities.EntityService
 import slatekit.query.Op
+import test.TestApp
 import test.setup.Address
-import test.setup.MyEncryptor
 import test.setup.StatusEnum
 import test.setup.TestSupport
 import java.util.*
@@ -41,6 +38,16 @@ class Data_04_Database_Access : TestSupport {
      val sampleUUID2 = "67bdb72a-1d74-11e8-b467-0ed5f89f7182"
     val sampleUUID3 = "67bdb72a-1d74-11e8-b467-0ed5f89f7183"
     val sampleUUID4 = "67bdb72a-1d74-11e8-b467-0ed5f89f7184"
+
+    @Test fun can_build() {
+        val db1 = Db.of(TestApp::class.java, EntitySetup.dbConfPath)
+        val db2 = Db.of(EntitySetup.con)
+        val db3 = Db.of(EntitySetup.cons)
+        Assert.assertEquals(db1.driver, db2.driver)
+        Assert.assertEquals(db2.driver, db3.driver)
+    }
+
+
 
     @Test fun can_use_all_types() {
         runBlocking {

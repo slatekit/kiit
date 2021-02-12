@@ -208,12 +208,12 @@ object DbUtils {
         else if (typ == DataType.DTLong         ) rs.getLong(pos) as T
         else if (typ == DataType.DTFloat        ) rs.getFloat(pos) as T
         else if (typ == DataType.DTDouble       ) rs.getDouble(pos) as T
-        else if (typ == DataType.DTLocalDate    ) rs.getDate(pos).toLocalDate() as T
-        else if (typ == DataType.DTLocalTime    ) rs.getTime(pos).toLocalTime() as T
-        else if (typ == DataType.DTLocalDateTime) rs.getTimestamp(pos).toLocalDateTime() as T
-        else if (typ == DataType.DTZonedDateTime) rs.getTimestamp(pos).toLocalDateTime() as T
+        else if (typ == DataType.DTLocalDate    ) DateTimeUtils.toLocalDate(rs.getDate(pos)) as T
+        else if (typ == DataType.DTLocalTime    ) DateTimeUtils.toLocalTime(rs.getTime(pos)) as T
+        else if (typ == DataType.DTLocalDateTime) DateTimeUtils.toLocalDateTime(rs.getTimestamp(pos)) as T
+        else if (typ == DataType.DTZonedDateTime) DateTimes.of(rs.getTimestamp(pos)) as T
         else if (typ == DataType.DTDateTime     ) DateTimes.of(rs.getTimestamp(pos)) as T
-        else if (typ == DataType.DTInstant      ) rs.getTimestamp(pos).toInstant() as T
+        else if (typ == DataType.DTInstant      ) DateTimeUtils.toInstant(rs.getTimestamp(pos)) as T
         else null
     }
 
