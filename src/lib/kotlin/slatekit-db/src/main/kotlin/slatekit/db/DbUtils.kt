@@ -133,7 +133,7 @@ object DbUtils {
         val result =
         try {
             conn.use { c ->
-                val stmt = c.prepareCall(sql)
+                val stmt = c.prepareStatement(sql)
                 stmt.use { s ->
                     val r = callback(c, s)
                     r
@@ -143,6 +143,39 @@ object DbUtils {
             error(ex)
             null
         }
+        return result
+    }
+
+    /**
+     * Execution template providing connection, prepared statement with error-handling & conn closing
+     *
+     * @param con : The connection string
+     * @param sql : The sql text or stored proc name.
+     * @param callback : The callback to call for when the connection is ready
+     * @param error : The callback to call for when an error occurrs
+     */
+    fun <T> executeCall(
+        con: DbCon,
+        settings: DbSettings,
+        sql: String,
+        callback: (Connection, PreparedStatement) -> T?,
+        error: (Exception) -> Unit
+    ): T? {
+
+        val conn = connect(con, settings)
+        val result =
+            try {
+                conn.use { c ->
+                    val stmt = c.prepareCall(sql)
+                    stmt.use { s ->
+                        val r = callback(c, s)
+                        r
+                    }
+                }
+            } catch (ex: Exception) {
+                error(ex)
+                null
+            }
         return result
     }
 

@@ -45,7 +45,7 @@ open class ShortEncoder(val dataType: DataType = DataType.DTShort) : SqlEncoder<
     override fun decode(record: Record, name: String): Short? = record.getShortOrNull(name)
     override fun convert(name:String, value: Short?): Value {
         val finalValue = when(dataType){
-            DataType.DTInt -> value?.let { it.toInt() }
+            DataType.DTLong -> value?.let { it.toInt() }
             else -> value
         }
         return Value(name, dataType, finalValue, encode(value))
@@ -53,10 +53,16 @@ open class ShortEncoder(val dataType: DataType = DataType.DTShort) : SqlEncoder<
 }
 
 
-open class IntEncoder : SqlEncoder<Int> {
+open class IntEncoder(val dataType: DataType = DataType.DTInt) : SqlEncoder<Int> {
     override fun encode(value: Int?): String = value?.toString() ?: Consts.NULL
     override fun decode(record: Record, name: String): Int? = record.getIntOrNull(name)
-    override fun convert(name:String, value: Int?): Value = Value(name, DataType.DTInt, value, encode(value))
+    override fun convert(name:String, value: Int?): Value {
+        val finalValue = when(dataType){
+            DataType.DTLong -> value?.let { it.toLong() }
+            else -> value
+        }
+        return Value(name, dataType, finalValue, encode(value))
+    }
 }
 
 
@@ -66,13 +72,7 @@ open class IntEncoder : SqlEncoder<Int> {
 open class LongEncoder(val dataType: DataType = DataType.DTLong) : SqlEncoder<Long> {
     override fun encode(value: Long?): String = value?.toString() ?: Consts.NULL
     override fun decode(record: Record, name: String): Long? = record.getLongOrNull(name)
-    override fun convert(name:String, value: Long?): Value {
-        val finalValue = when(dataType){
-            DataType.DTDouble -> value?.let { it.toDouble() }
-            else -> value
-        }
-        return Value(name, dataType, finalValue, encode(value))
-    }
+    override fun convert(name:String, value: Long?): Value = Value(name, dataType, value, encode(value))
 }
 
 

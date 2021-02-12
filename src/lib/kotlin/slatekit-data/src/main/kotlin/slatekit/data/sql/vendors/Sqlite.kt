@@ -62,14 +62,13 @@ open class SqliteProvider<TId, T>(val meta: Meta<TId, T>, val mapper: Mapper<TId
 open class SqliteEncoders<TId, T>(utc:Boolean) : Encoders<TId, T>(utc) where TId: kotlin.Comparable<TId>, T:Any {
     override val bools              = BoolEncoder(DataType.DTInt)
     override val shorts             = ShortEncoder(DataType.DTInt)
-    override val longs              = LongEncoder(DataType.DTDouble)
-    override val floats             = FloatEncoder(DataType.DTDouble)
+    override val ints               = IntEncoder(DataType.DTLong)
     override val localDates         = LocalDateEncoder(DataType.DTInt)
     override val localTimes         = LocalTimeEncoder(DataType.DTInt)
-    override val localDateTimes     = LocalDateTimeEncoder(DataType.DTDouble)
-    override val zonedDateTimes     = ZonedDateTimeEncoder(DataType.DTDouble, utc)
-    override val dateTimes          = DateTimeEncoder(DataType.DTDouble, utc)
-    override val instants           = InstantEncoder(DataType.DTDouble)
+    override val localDateTimes     = LocalDateTimeEncoder(DataType.DTLong)
+    override val zonedDateTimes     = ZonedDateTimeEncoder(DataType.DTLong, utc)
+    override val dateTimes          = DateTimeEncoder(DataType.DTLong, utc)
+    override val instants           = InstantEncoder(DataType.DTLong)
 }
 
 

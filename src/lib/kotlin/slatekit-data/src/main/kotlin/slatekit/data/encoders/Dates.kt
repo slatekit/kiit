@@ -71,7 +71,7 @@ open class LocalDateTimeEncoder(val dataType:DataType = DataType.DTLocalDateTime
 
     override fun convert(name:String, value: LocalDateTime?): Value {
         val finalValue = when(dataType){
-            DataType.DTDouble -> value?.let { it.zoned().toEpochSecond() }
+            DataType.DTLong -> value?.let { it.zoned().toEpochSecond() }
             else -> value
         }
         return Value(name, dataType, finalValue, encode(value))
@@ -100,7 +100,7 @@ open class ZonedDateTimeEncoder(val dataType:DataType = DataType.DTZonedDateTime
 
     override fun convert(name:String, value: ZonedDateTime?): Value {
         val finalValue = when(dataType){
-            DataType.DTDouble -> value?.let { it.toEpochSecond() }
+            DataType.DTLong -> value?.let { it.toEpochSecond() }
             else -> value
         }
         return Value(name, dataType, finalValue, encode(value))
@@ -117,7 +117,7 @@ open class InstantEncoder(val dataType:DataType = DataType.DTInstant) : SqlEncod
 
     override fun convert(name:String, value: Instant?): Value {
         val finalValue = when(dataType){
-            DataType.DTDouble -> value?.let { it.toEpochMilli() }
+            DataType.DTLong -> value?.let { it.toEpochMilli() }
             else -> value
         }
         return Value(name, dataType, finalValue, encode(value))
@@ -148,7 +148,7 @@ open class DateTimeEncoder(val dataType:DataType = DataType.DTDateTime, private 
 
     override fun convert(name:String, value: DateTime?): Value {
         val finalValue = when(dataType){
-            DataType.DTDouble -> value?.let { it.toEpochSecond() }
+            DataType.DTLong -> value?.let { it.toEpochSecond() }
             else -> value
         }
         return Value(name, dataType, finalValue, encode(value))

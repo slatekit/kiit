@@ -45,8 +45,9 @@ dependencies {
     compile 'org.jetbrains.kotlinx:kotlinx-coroutines-core:1.1.0'
     compile "mysql:mysql-connector-java:5.1.13"
     // https://mvnrepository.com/artifact/com.h2database/h2
-    testCompile group: 'com.h2database', name: 'h2', version: '1.4.200'
-    compile "com.h2database:h2:1.4.200"
+    testCompile group: 'com.h2database', name: 'h2'        , version: '1.4.200'
+    testCompile group: 'org.xerial'    , name:'sqlite-jdbc', version:'3.8.11.2'
+    //compile "com.h2database:h2:1.4.200"
     compile 'org.koin:koin-core:2.0.0-rc-2'
     compile "org.json:json:20201115"
     //compile group: 'org.json', name: 'json', version: '20201115'

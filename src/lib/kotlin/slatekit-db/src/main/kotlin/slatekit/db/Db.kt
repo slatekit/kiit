@@ -21,6 +21,7 @@ import java.sql.PreparedStatement
 import java.sql.ResultSet
 import java.sql.Statement
 import slatekit.common.repeatWith
+import slatekit.db.DbUtils.executeCall
 import slatekit.db.DbUtils.executeCon
 import slatekit.db.DbUtils.executePrep
 import slatekit.db.DbUtils.executeStmt
@@ -73,6 +74,25 @@ class Db(private val dbCon: DbCon,
      */
     override fun update(sql: String, inputs: List<Value>?): Int {
         val result = executePrep<Int>(dbCon, settings, sql, { _, stmt ->
+
+            // fill all the arguments into the prepared stmt
+            inputs?.let { fillArgs(stmt, inputs, errHandler) }
+
+            // update and get number of affected records
+            val count = stmt.executeUpdate()
+            count
+        }, errHandler)
+        return result ?: 0
+    }
+
+    /**
+     * executes the update sql with prepared statement using inputs
+     * @param sql : sql statement
+     * @param inputs : Inputs for the sql or stored proc
+     * @return : The number of affected records
+     */
+    override fun call(sql: String, inputs: List<Value>?): Int {
+        val result = executeCall<Int>(dbCon, settings, sql, { _, stmt ->
 
             // fill all the arguments into the prepared stmt
             inputs?.let { fillArgs(stmt, inputs, errHandler) }
@@ -307,7 +327,7 @@ class Db(private val dbCon: DbCon,
         // {call create_author(?, ?)}
         val holders = inputs?.let { all -> "?".repeatWith(",", all.size) } ?: ""
         val sql = "{call $procName($holders)}"
-        return update(sql, inputs)
+        return call(sql, inputs)
     }
 
     override fun errorHandler(ex: Exception) {

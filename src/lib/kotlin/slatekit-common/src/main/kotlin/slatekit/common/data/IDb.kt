@@ -54,13 +54,22 @@ interface IDb : ProcSupport {
     fun insertGetId(sql: String, inputs: List<Value>? = null): String
 
     /**
-     * executes the update sql or stored proc
+     * executes the update sql using prepared statements
      *
      * @param sql : The sql or stored proc
      * @param inputs : The inputs for the sql or stored proc
      * @return : The number of affected records
      */
     fun update(sql: String, inputs: List<Value>? = null): Int
+
+    /**
+     * executes the update sql for stored proc
+     *
+     * @param sql : The sql or stored proc
+     * @param inputs : The inputs for the sql or stored proc
+     * @return : The number of affected records
+     */
+    fun call(sql: String, inputs: List<Value>?): Int
 
     /**
      * Executes a sql query

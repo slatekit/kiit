@@ -319,8 +319,7 @@ open class Data_04_Entity_Service_MySql {
     }
 
 
-
-    protected suspend fun createSamples(setupSamples: Boolean = true, createMembers: Boolean = true): UserService {
+    protected open suspend fun createSamples(setupSamples: Boolean = true, createMembers: Boolean = true): UserService {
         val userSvc = entities.getService<Long, User5>() as UserService
         val memsSvc = entities.getService<Long, Member>()
         val grpSvc = entities.getService<Long, Group>()
