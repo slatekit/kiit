@@ -6,9 +6,7 @@ import org.threeten.bp.LocalDate
 import org.threeten.bp.LocalDateTime
 import org.threeten.bp.LocalTime
 import slatekit.common.DateTimes
-import slatekit.common.data.DataType
-import slatekit.common.data.IDb
-import slatekit.common.data.Value
+import slatekit.common.data.*
 import slatekit.common.ids.ULIDs
 import slatekit.db.Db
 import test.TestApp
@@ -16,18 +14,18 @@ import test.setup.TestSupport
 import java.util.*
 
 /**
+ * DONE:
  * 1. connect : Db.of() // config, con, etc
  * 2. prepare : db.update("sql..", listOf(...) )
  * 3. methodX : db....
+ *
+ *
  * 4. ddl     : db.createTable, createColumn, createKey, createIndex ( just for models )
  * 4. Sqlite  : SqliteProvider ....
  * 5. Postgres: PostgresProvider ....
  */
 class Data_04_Database_Mysql : TestSupport {
 
-    companion object {
-        var id = 0L
-    }
 
     private val localDate = LocalDate.of(2021, 2, 1)
     private val localTime = LocalTime.of(9, 30, 45)
@@ -35,32 +33,26 @@ class Data_04_Database_Mysql : TestSupport {
     private val zonedDateTime = DateTimes.of(2021, 2, 1, 9, 30, 45)
 
     private val table = "sample_entity"
-    private val sql = """
-            insert into `sample_entity` ( 
-                    `test_string`,`test_string_enc`,`test_bool`,
-                    `test_short`,`test_int`,`test_long`,`test_float`,`test_double`,`test_enum`,
-                    `test_localdate`,`test_localtime`,`test_localdatetime`,`test_zoneddatetime`,
-                    `test_uuid`,`test_uniqueId`,
-                    `test_object_addr`,`test_object_city`,`test_object_state`,`test_object_country`,`test_object_zip`,`test_object_isPOBox`
-            )  VALUES ('abc','abc123',1,
-                    123, 123456, 123456789,123.45, 123456.789, 1,
-                    '2021-02-01','09:30:45','2021-02-01 09:30:45','2021-02-01 09:30:45',
-                    '497dea41-8658-4bb7-902c-361014799214','usa:314fef51-43a7-496c-be24-520e73758836',
-                    'street 1','city 1','state 1',1,'12345',1
-            );
-        """
 
+
+    @Test fun can_build() {
+        val db1 = Db.of(TestApp::class.java, EntitySetup.dbConfPath)
+        val db2 = Db.of(EntitySetup.con)
+        val db3 = Db.of(EntitySetup.cons)
+        Assert.assertEquals(db1.driver, db2.driver)
+        Assert.assertEquals(db2.driver, db3.driver)
+    }
 
 
     @Test fun can_execute_sql_raw() {
-        val db = EntitySetup.db()
-        val id = db.insertGetId(sql).toLong()
+        val db = db()
+        val id = db.insertGetId(INSERT_ITEM).toLong()
         Assert.assertTrue(id > 0L)
     }
 
 
     @Test fun can_execute_sql_prep() {
-        val db = EntitySetup.db()
+        val db = db()
         val sql = """
             insert into `sample_entity` ( 
                     `test_string`,`test_string_enc`,`test_bool`,
@@ -174,56 +166,92 @@ class Data_04_Database_Mysql : TestSupport {
 
 
     @Test
-    fun can_execute_proc() {
-        val db = EntitySetup.db()
-        val result = db.callQuery("dbtests_get_max_id", { rs -> rs.getLong(1) })
-        Assert.assertTrue(result!! > 0L)
-    }
-
-
-    @Test
-    fun can_execute_proc_update() {
-        val db = EntitySetup.db()
-        val result = db.callUpdate("dbtests_update_by_id", listOf(Value("", DataType.DTInt, 6)))
-        Assert.assertTrue(result!! >= 1)
-    }
-
-
-    @Test
     fun can_add_update() {
-        val db = EntitySetup.db()
-        val sqlInsert = """
-            INSERT INTO `slatekit`.`db_tests`
-            (
-                `test_string`, `test_bool`, `test_short`, `test_int`, `test_long`, `test_float`, `test_double`,  `test_localdate`, `test_localtime`, `test_localdatetime`, `test_timestamp`
-            )
-            VALUES
-            (
-                'abcd', 1, 123, 123456, 123456789, 123.45, 123456.789, '2017-06-01', '09:25:00', '2017-07-06 09:25:00', timestamp(curdate(), curtime())
-            );
-        """
-
+        val db = db()
         // 1. add
-        val id = db.insert(sqlInsert)
+        val id = db.insert(INSERT_ITEM)
         Assert.assertTrue(id > 0)
 
         // 2. update
-        val sqlUpdate = "update `slatekit`.`db_tests` set test_int = 987 where id = $id"
+        val sqlUpdate = "update `sample_entity` set test_int = 987 where id = $id"
         val count = db.update(sqlUpdate)
         Assert.assertTrue(count > 0)
 
         // 3. get
-        val sql = "select test_int from db_tests where id = $id"
+        val sql = "select test_int from sample_entity where id = $id"
         val updatedVal = db.getScalarInt(sql, null)
         Assert.assertTrue(updatedVal == 987)
     }
 
 
     fun <T> ensure_scalar(colName: String, callback: (IDb, String) -> T, expected: T): Unit {
-        val db = EntitySetup.db()
-        val id = db.insert(sql)
+        val db = db()
+        val id = db.insert(INSERT_ITEM)
         val sql = "select $colName from $table where id = $id;"
         val actual = callback(db, sql)
         Assert.assertTrue(expected == actual)
+    }
+
+
+    open fun db(vendor: Vendor = Vendor.MySql): IDb {
+        return when(vendor){
+            Vendor.H2 -> {
+                val db = Db(H2_CON)
+                val ddl = DDL_SAMPLE_ENTITY.replace("`sample_entity`", "IF NOT EXISTS `sample_entity`")
+                db.execute(ddl)
+                db
+            }
+            Vendor.MySql -> {
+                EntitySetup.db()
+            }
+            else -> {
+                EntitySetup.db()
+            }
+        }
+    }
+
+    companion object {
+
+        var id = 0L
+        val H2_CON = DbConString(Vendor.H2, "jdbc:h2:mem:test;DB_CLOSE_DELAY=-1", "", "")
+        val DDL_SAMPLE_ENTITY = """create table `sample_entity` ( 
+`id` BIGINT NOT NULL AUTO_INCREMENT PRIMARY KEY,  
+`test_string` NVARCHAR(30) NOT NULL,  
+`test_string_enc` NVARCHAR(100) NOT NULL,  
+`test_bool` BIT NOT NULL,  
+`test_short` SMALLINT NOT NULL,  
+`test_int` INTEGER NOT NULL,  
+`test_long` BIGINT NOT NULL,  
+`test_float` FLOAT NOT NULL,  
+`test_double` DOUBLE NOT NULL,  
+`test_enum` INTEGER NOT NULL,  
+`test_localdate` DATE NOT NULL,  
+`test_localtime` TIME NOT NULL,  
+`test_localdatetime` DATETIME NOT NULL,  
+`test_zoneddatetime` DATETIME NOT NULL,  
+`test_uuid` NVARCHAR(50) NOT NULL,  
+`test_uniqueid` NVARCHAR(50) NOT NULL,  
+`test_object_addr` NVARCHAR(40) NOT NULL,  
+`test_object_city` NVARCHAR(30) NOT NULL,  
+`test_object_state` NVARCHAR(20) NOT NULL,  
+`test_object_country` INTEGER NOT NULL,  
+`test_object_zip` NVARCHAR(5) NOT NULL,  
+`test_object_ispobox` BIT NOT NULL );"""
+
+
+        val INSERT_ITEM = """
+            insert into `sample_entity` ( 
+                    `test_string`,`test_string_enc`,`test_bool`,
+                    `test_short`,`test_int`,`test_long`,`test_float`,`test_double`,`test_enum`,
+                    `test_localdate`,`test_localtime`,`test_localdatetime`,`test_zoneddatetime`,
+                    `test_uuid`,`test_uniqueId`,
+                    `test_object_addr`,`test_object_city`,`test_object_state`,`test_object_country`,`test_object_zip`,`test_object_isPOBox`
+            )  VALUES ('abc','abc123',1,
+                    123, 123456, 123456789,123.45, 123456.789, 1,
+                    '2021-02-01','09:30:45','2021-02-01 09:30:45','2021-02-01 09:30:45',
+                    '497dea41-8658-4bb7-902c-361014799214','usa:314fef51-43a7-496c-be24-520e73758836',
+                    'street 1','city 1','state 1',1,'12345',1
+            );
+        """
     }
 }

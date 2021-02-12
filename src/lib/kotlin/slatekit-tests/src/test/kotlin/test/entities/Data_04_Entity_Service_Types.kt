@@ -32,7 +32,7 @@ import test.setup.TestSupport
 import java.util.*
 
 
-class Data_04_Database_Access : TestSupport {
+class Data_04_Entity_Service_Types : TestSupport {
 
     val sampleUUID1 = "67bdb72a-1d74-11e8-b467-0ed5f89f7181"
      val sampleUUID2 = "67bdb72a-1d74-11e8-b467-0ed5f89f7182"
