@@ -13,11 +13,10 @@
 
 package test.entities
 
-import org.junit.Assert
 import org.junit.Before
 import org.junit.Test
 import slatekit.common.data.*
-import slatekit.data.sql.vendors.ifNotExists
+import slatekit.data.sql.vendors.sqliteIfNotExists
 import slatekit.db.Db
 import slatekit.entities.*
 import test.setup.Group
@@ -34,9 +33,9 @@ class Data_04_Entity_Service_Sqlite : Data_04_Entity_Service_MySql() {
         val con = DbConString(Vendor.H2, "jdbc:h2:mem:test;DB_CLOSE_DELAY=-1", "", "")
         val cons = Connections.of(con)
         val db = Db.of(con)
-        db.execute(USERS_DDL.ifNotExists("User5"))
-        db.execute(GROUP_DDL.ifNotExists("Group"))
-        db.execute(MEMBER_DDL.ifNotExists("Member"))
+        db.execute(USERS_DDL.sqliteIfNotExists("User5"))
+        db.execute(GROUP_DDL.sqliteIfNotExists("Group"))
+        db.execute(MEMBER_DDL.sqliteIfNotExists("Member"))
 
         entities = Entities({ _ -> db }, cons, MyEncryptor)
         entities.register<Long, User5>(EntityLongId(), vendor = Vendor.SqLite) { repo -> UserService(repo) }
@@ -143,37 +142,37 @@ class Data_04_Entity_Service_Sqlite : Data_04_Entity_Service_MySql() {
 
     companion object {
         val USERS_DDL = """
-            CREATE TABLE `User5` (
-              `id` bigint(20) NOT NULL AUTO_INCREMENT,
-              `email` varchar(100) NOT NULL,
-              `isactive` bit(1) NOT NULL,
-              `level` int(11) DEFAULT NULL,
-              `salary` double NOT NULL,
-              `createdat` datetime NOT NULL,
-              `createdby` bigint(20) NOT NULL,
-              `updatedat` datetime NOT NULL,
-              `updatedby` bigint(20) NOT NULL,
-              `uniqueid` varchar(50) NOT NULL,
-              PRIMARY KEY (`id`)
+            CREATE TABLE "User5" (
+              "id" real PRIMARY KEY AUTOINCREMENT,
+              "email" text NOT NULL,
+              "isactive" integer NOT NULL,
+              "level" integer DEFAULT NULL,
+              "salary" real NOT NULL,
+              "createdat" real NOT NULL,
+              "createdby" real NOT NULL,
+              "updatedat" real NOT NULL,
+              "updatedby" real NOT NULL,
+              "uniqueid" text NOT NULL,
+              PRIMARY KEY ("id")
             );
         """.trimIndent()
 
 
         val GROUP_DDL = """
-            CREATE TABLE `Group` (
-              `id` bigint(20) NOT NULL AUTO_INCREMENT,
-              `name` varchar(30) NOT NULL,
-              PRIMARY KEY (`id`)
+            CREATE TABLE "Group" (
+              "id" real PRIMARY KEY AUTOINCREMENT,
+              "name" text NOT NULL,
+              PRIMARY KEY ("id")
             );
         """.trimIndent()
 
 
         val MEMBER_DDL = """
-            CREATE TABLE `Member` (
-              `id` bigint(20) NOT NULL AUTO_INCREMENT,
-              `groupid` bigint(20) NOT NULL,
-              `userid` bigint(20) NOT NULL,
-              PRIMARY KEY (`id`)
+            CREATE TABLE "Member" (
+              "id" real PRIMARY KEY  AUTOINCREMENT,
+              "groupid" real NOT NULL,
+              "userid" real NOT NULL,
+              PRIMARY KEY ("id")
             );
         """.trimIndent()
     }

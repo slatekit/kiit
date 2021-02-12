@@ -21,6 +21,7 @@ import slatekit.common.log.LogsDefault
 import slatekit.common.naming.Namer
 import slatekit.common.utils.ListMap
 import slatekit.data.core.*
+import slatekit.data.encoders.Encoders
 import slatekit.data.sql.vendors.*
 import slatekit.entities.core.*
 import slatekit.entities.mapper.EntityMapper
@@ -103,7 +104,11 @@ open class Entities(
         val entityMeta = Meta<TId, T>(idOps, tableInfo)
 
         // 4. Mapper
-        val entityMapper = EntityMapper<TId, T>(entityModel, entityMeta, idType, enType, EntitySettings(true))
+        val encoders = when(vendor){
+            Vendor.SqLite -> SqliteEncoders<TId, T>()
+            else -> Encoders<TId, T>()
+        }
+        val entityMapper = EntityMapper<TId, T>(entityModel, entityMeta, idType, enType, EntitySettings(true), encoders)
         val provider = when(vendor){
             Vendor.MySql -> MySqlProvider(entityMeta, entityMapper)
             Vendor.H2 -> H2Provider(entityMeta, entityMapper)
