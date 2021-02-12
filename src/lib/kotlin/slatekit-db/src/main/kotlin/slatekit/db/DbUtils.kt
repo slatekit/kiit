@@ -14,7 +14,6 @@
 package slatekit.db
 
 import slatekit.common.DateTime
-import slatekit.common.Types
 import slatekit.common.data.DbCon
 import java.sql.*
 import org.threeten.bp.*
@@ -57,11 +56,14 @@ object DbUtils {
      *
      * @return
      */
-    fun connect(con: DbCon): Connection =
-            if (con.driver == "com.mysql.jdbc.Driver")
-                DriverManager.getConnection(con.url, con.user, con.pswd)
-            else
-                DriverManager.getConnection(con.url)
+    fun connect(con: DbCon, settings: DbSettings): Connection {
+        val con = if (con.driver == "com.mysql.jdbc.Driver")
+            DriverManager.getConnection(con.url, con.user, con.pswd)
+        else
+            DriverManager.getConnection(con.url)
+        con.autoCommit = settings.autoCommit
+        return con
+    }
 
     /**
      * Execution template providing connection with error-handling and connection closing
@@ -70,8 +72,8 @@ object DbUtils {
      * @param callback : The callback to call for when the connection is ready
      * @param error : The callback to call for when an error occurrs
      */
-    fun <T> executeCon(con: DbCon, callback: (Connection) -> T, error: (Exception) -> Unit): T? {
-        val conn = connect(con)
+    fun <T> executeCon(con: DbCon, settings: DbSettings, callback: (Connection) -> T, error: (Exception) -> Unit): T? {
+        val conn = connect(con, settings)
         val result =
         try {
             conn.use { c ->
@@ -93,11 +95,12 @@ object DbUtils {
      */
     fun executeStmt(
         con: DbCon,
+        settings: DbSettings,
         callback: (Connection, Statement) -> Unit,
         error: (Exception) -> Unit
     ) {
 
-        val conn = connect(con)
+        val conn = connect(con, settings)
         try {
             conn.use { c ->
                 val stmt = c.createStatement()
@@ -120,12 +123,13 @@ object DbUtils {
      */
     fun <T> executePrep(
         con: DbCon,
+        settings: DbSettings,
         sql: String,
         callback: (Connection, PreparedStatement) -> T?,
         error: (Exception) -> Unit
     ): T? {
 
-        val conn = connect(con)
+        val conn = connect(con, settings)
         val result =
         try {
             conn.use { c ->

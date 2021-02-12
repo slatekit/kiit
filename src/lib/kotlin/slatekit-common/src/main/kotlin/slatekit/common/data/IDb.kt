@@ -107,7 +107,7 @@ interface IDb : ProcSupport {
      * @param sql : The sql text
      * @return
      */
-    fun <T> getScalar(sql: String, typ: DataType, inputs: List<Value>?): T =
+    fun <T> getScalar(sql: String, typ: DataType, inputs: List<Value>? = listOf()): T =
             getScalarOrNull<T>(sql, typ, inputs)!!
 
     /**
@@ -116,7 +116,7 @@ interface IDb : ProcSupport {
      * @param sql : The sql text
      * @return
      */
-    fun <T> getScalarOrNull(sql: String, typ: DataType, inputs: List<Value>?): T?
+    fun <T> getScalarOrNull(sql: String, typ: DataType, inputs: List<Value>? = listOf()): T?
 
     /**
      * gets a scalar bool value using the sql provided
@@ -124,7 +124,7 @@ interface IDb : ProcSupport {
      * @param sql : The sql text
      * @return
      */
-    fun getScalarBool(sql: String, inputs: List<Value>?): Boolean =
+    fun getScalarBool(sql: String, inputs: List<Value>? = listOf()): Boolean =
             getScalarOrNull(sql, DataType.DTBool, inputs) ?: false
 
 
@@ -134,7 +134,7 @@ interface IDb : ProcSupport {
      * @param sql : The sql text
      * @return
      */
-    fun getScalarString(sql: String, inputs: List<Value>?): String =
+    fun getScalarString(sql: String, inputs: List<Value>? = listOf()): String =
             getScalarOrNull<String>(sql, DataType.DTString, inputs) ?: ""
 
     /**
@@ -143,7 +143,7 @@ interface IDb : ProcSupport {
      * @param sql : The sql text
      * @return
      */
-    fun getScalarShort(sql: String, inputs: List<Value>?): Short =
+    fun getScalarShort(sql: String, inputs: List<Value>? = listOf()): Short =
             getScalarOrNull(sql, DataType.DTShort, inputs) ?: 0.toShort()
 
     /**
@@ -152,7 +152,7 @@ interface IDb : ProcSupport {
      * @param sql : The sql text
      * @return
      */
-    fun getScalarInt(sql: String, inputs: List<Value>?): Int =
+    fun getScalarInt(sql: String, inputs: List<Value>? = listOf()): Int =
             getScalarOrNull(sql, DataType.DTInt, inputs) ?: 0
 
     /**
@@ -161,7 +161,7 @@ interface IDb : ProcSupport {
      * @param sql : The sql text
      * @return
      */
-    fun getScalarLong(sql: String, inputs: List<Value>?): Long =
+    fun getScalarLong(sql: String, inputs: List<Value>? = listOf()): Long =
             getScalarOrNull(sql, DataType.DTLong, inputs) ?: 0L
 
     /**
@@ -170,7 +170,7 @@ interface IDb : ProcSupport {
      * @param sql : The sql text
      * @return
      */
-    fun getScalarFloat(sql: String, inputs: List<Value>?): Float =
+    fun getScalarFloat(sql: String, inputs: List<Value>? = listOf()): Float =
             getScalarOrNull(sql, DataType.DTFloat, inputs) ?: 0.0f
 
     /**
@@ -179,7 +179,7 @@ interface IDb : ProcSupport {
      * @param sql : The sql text
      * @return
      */
-    fun getScalarDouble(sql: String, inputs: List<Value>?): Double =
+    fun getScalarDouble(sql: String, inputs: List<Value>? = listOf()): Double =
             getScalarOrNull(sql, DataType.DTDouble, inputs) ?: 0.0
 
     /**
@@ -188,7 +188,7 @@ interface IDb : ProcSupport {
      * @param sql : The sql text
      * @return
      */
-    fun getScalarLocalDate(sql: String, inputs: List<Value>?): LocalDate =
+    fun getScalarLocalDate(sql: String, inputs: List<Value>? = listOf()): LocalDate =
             getScalarOrNull(sql, DataType.DTLocalDate, inputs) ?: LocalDate.MIN
 
     /**
@@ -197,7 +197,7 @@ interface IDb : ProcSupport {
      * @param sql : The sql text
      * @return
      */
-    fun getScalarLocalTime(sql: String, inputs: List<Value>?): LocalTime =
+    fun getScalarLocalTime(sql: String, inputs: List<Value>? = listOf()): LocalTime =
             getScalarOrNull(sql, DataType.DTLocalTime, inputs) ?: LocalTime.MIN
 
     /**
@@ -206,7 +206,7 @@ interface IDb : ProcSupport {
      * @param sql : The sql text
      * @return
      */
-    fun getScalarLocalDateTime(sql: String, inputs: List<Value>?): LocalDateTime =
+    fun getScalarLocalDateTime(sql: String, inputs: List<Value>? = listOf()): LocalDateTime =
             getScalarOrNull(sql, DataType.DTLocalDateTime, inputs) ?: LocalDateTime.MIN
 
     /**
@@ -215,6 +215,6 @@ interface IDb : ProcSupport {
      * @param sql : The sql text
      * @return
      */
-    fun getScalarZonedDateTime(sql: String, inputs: List<Value>?): DateTime =
+    fun getScalarZonedDateTime(sql: String, inputs: List<Value>? = listOf()): DateTime =
             getScalarOrNull(sql, DataType.DTZonedDateTime, inputs) ?: DateTimes.MIN
 }

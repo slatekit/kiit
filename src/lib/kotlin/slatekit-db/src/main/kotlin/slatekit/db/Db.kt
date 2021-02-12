@@ -37,7 +37,9 @@ import slatekit.db.DbUtils.fillArgs
  * 2. sql-server: url = "jdbc:sqlserver://<server_name>:<port>;database=<database>;user=<user>;
  * password=<password>;encrypt=true;hostNameInCertificate=*.database.windows.net;loginTimeout=30;"
  */
-class Db(private val dbCon: DbCon, errorCallback: ((Exception) -> Unit)? = null) : IDb {
+class Db(private val dbCon: DbCon,
+         errorCallback: ((Exception) -> Unit)? = null,
+         val settings:DbSettings = DbSettings(false)) : IDb {
 
     override val errHandler = errorCallback ?: this::errorHandler
 
@@ -49,7 +51,6 @@ class Db(private val dbCon: DbCon, errorCallback: ((Exception) -> Unit)? = null)
 
     /**
      * registers the jdbc driver
-     *
      * @return
      */
     override fun open(): Db {
@@ -57,33 +58,30 @@ class Db(private val dbCon: DbCon, errorCallback: ((Exception) -> Unit)? = null)
         return this
     }
 
+    /**
+     * Execute raw sql ( used for DDL )
+     */
     override fun execute(sql: String) {
-        executeStmt(dbCon, { _, stmt -> stmt.execute(sql) }, errHandler)
+        executeStmt(dbCon, settings, { _, stmt -> stmt.execute(sql) }, errHandler)
     }
 
     /**
-     * gets a scalar string value using the sql provided
-     *
-     * @param sql : The sql text
-     * @return
+     * executes the update sql with prepared statement using inputs
+     * @param sql : sql statement
+     * @param inputs : Inputs for the sql or stored proc
+     * @return : The number of affected records
      */
-    override fun <T> getScalarOrNull(sql: String, typ: DataType, inputs: List<Value>?): T? {
-
-        return executePrep<T>(dbCon, sql, { _, stmt ->
+    override fun update(sql: String, inputs: List<Value>?): Int {
+        val result = executePrep<Int>(dbCon, settings, sql, { _, stmt ->
 
             // fill all the arguments into the prepared stmt
             inputs?.let { fillArgs(stmt, inputs, errHandler) }
 
-            // execute
-            val rs = stmt.executeQuery()
-            rs.use { r ->
-                val res: T? = when (r.next()) {
-                    true -> DbUtils.getScalar<T>(r, typ)
-                    false -> null
-                }
-                res
-            }
+            // update and get number of affected records
+            val count = stmt.executeUpdate()
+            count
         }, errHandler)
+        return result ?: 0
     }
 
     /**
@@ -94,7 +92,7 @@ class Db(private val dbCon: DbCon, errorCallback: ((Exception) -> Unit)? = null)
      * @return : The id ( primary key )
      */
     override fun insert(sql: String, inputs: List<Value>?): Long {
-        val res = executeCon(dbCon, { con: Connection ->
+        val res = executeCon(dbCon, settings, { con: Connection ->
 
             val stmt = con.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)
             stmt.use { s ->
@@ -126,7 +124,7 @@ class Db(private val dbCon: DbCon, errorCallback: ((Exception) -> Unit)? = null)
      * @return : The id ( primary key )
      */
     override fun insertGetId(sql: String, inputs: List<Value>?): String {
-        val res = executeCon(dbCon, { con: Connection ->
+        val res = executeCon(dbCon, settings, { con: Connection ->
 
             val stmt = con.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)
             stmt.use { s ->
@@ -151,23 +149,28 @@ class Db(private val dbCon: DbCon, errorCallback: ((Exception) -> Unit)? = null)
     }
 
     /**
-     * executes the update sql or stored proc
+     * gets a scalar string value using the sql provided
      *
-     * @param sql : The sql or stored proc
-     * @param inputs : The inputs for the sql or stored proc
-     * @return : The number of affected records
+     * @param sql : The sql text
+     * @return
      */
-    override fun update(sql: String, inputs: List<Value>?): Int {
-        val result = executePrep<Int>(dbCon, sql, { _, stmt ->
+    override fun <T> getScalarOrNull(sql: String, typ: DataType, inputs: List<Value>?): T? {
+
+        return executePrep<T>(dbCon, settings, sql, { _, stmt ->
 
             // fill all the arguments into the prepared stmt
             inputs?.let { fillArgs(stmt, inputs, errHandler) }
 
-            // update and get number of affected records
-            val count = stmt.executeUpdate()
-            count
+            // execute
+            val rs = stmt.executeQuery()
+            rs.use { r ->
+                val res: T? = when (r.next()) {
+                    true -> DbUtils.getScalar<T>(r, typ)
+                    false -> null
+                }
+                res
+            }
         }, errHandler)
-        return result ?: 0
     }
 
     /**
@@ -183,7 +186,7 @@ class Db(private val dbCon: DbCon, errorCallback: ((Exception) -> Unit)? = null)
         moveNext: Boolean,
         inputs: List<Value>?
     ): T? {
-        val result = executePrep<T>(dbCon, sql, { _: Connection, stmt: PreparedStatement ->
+        val result = executePrep<T>(dbCon, settings, sql, { _: Connection, stmt: PreparedStatement ->
 
             // fill all the arguments into the prepared stmt
             inputs?.let { fillArgs(stmt, inputs, errHandler) }
