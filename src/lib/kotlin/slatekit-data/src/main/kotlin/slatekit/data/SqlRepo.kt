@@ -41,11 +41,16 @@ open class SqlRepo<TId, T>(
     override val dialect: Dialect = provider.dialect
 
     /**
+     * Use prepared statements
+     */
+    protected open val buildMode = BuildMode.Prep
+
+    /**
      * Creates the entity in the repository/table
      * Note: You can customize the sql by providing your own statements
      */
     override fun create(entity: T): TId {
-        val command = provider.insert.build(entity)
+        val command = provider.insert.build(entity, buildMode)
         val rawId = db.insertGetId(command.sql, command.pairs)
         val id = meta.id.convertToId(rawId)
         val success = isPersisted(id)
@@ -59,7 +64,7 @@ open class SqlRepo<TId, T>(
      */
     override fun update(entity: T): Boolean {
         val id = identity(entity)
-        val command = provider.update.build(entity)
+        val command = provider.update.build(entity, buildMode)
         val count = db.update(command.sql, command.pairs)
         val success = count > 0
         notify(DataAction.Update, id, entity, success)
@@ -71,7 +76,7 @@ open class SqlRepo<TId, T>(
      * @param builder: The query builder
      */
     override fun patchByQuery(builder: Update): Int {
-        val command = builder.build()
+        val command = builder.build(buildMode)
         return update(command.sql, command.pairs)
     }
 
@@ -103,7 +108,7 @@ open class SqlRepo<TId, T>(
      * Finds items using the query builder
      */
     override fun findByQuery(builder: Select): List<T> {
-        val command = builder.build()
+        val command = builder.build(buildMode)
         val results = mapAll(command.sql, command.pairs)
         return results ?: listOf()
     }
@@ -146,7 +151,7 @@ open class SqlRepo<TId, T>(
      * @return
      */
     override fun deleteByQuery(builder: Delete): Int {
-        val command = builder.build()
+        val command = builder.build(buildMode)
         val count = update(command.sql, command.pairs)
         return count
     }
@@ -178,7 +183,7 @@ open class SqlRepo<TId, T>(
     override fun scalar(builder: Select.() -> Unit): Double {
         val s = select()
         builder(s)
-        val command = s.build()
+        val command = s.build(buildMode)
         return db.getScalarDouble(command.sql, command.pairs)
     }
 
@@ -229,7 +234,7 @@ open class SqlRepo<TId, T>(
      * Note: You can customize the sql by providing your own statements
      */
     protected fun internalDeleteById(id: TId, entity: T? = null): Boolean {
-        val command = delete().where(meta.pkey.name, Op.Eq, id).build()
+        val command = delete().where(meta.pkey.name, Op.Eq, id).build(buildMode)
         val count = update(command.sql, command.pairs)
         val success = count > 0
         notify(DataAction.Create, id, entity, success)

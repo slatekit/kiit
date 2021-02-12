@@ -17,7 +17,6 @@ import slatekit.integration.apis.VersionApi
 //import slatekit.orm.orm
 import slatekit.results.getOrElse
 import test.TestApp
-import test.entities.Data_04_Entity_Service
 import test.setup.*
 
 

@@ -90,11 +90,11 @@ project(':slatekit-connectors-entities').projectDir=new File('../../../ext/kotli
 include ':slatekit-connectors-jobs'
 project(':slatekit-connectors-jobs').projectDir=new File('../../../ext/kotlin/slatekit-connectors-jobs')
 
-//include ':slatekit-samples'
-//project(':slatekit-samples').projectDir=new File('../../../apps/kotlin/slatekit-samples')
-
 //include ':slatekit-examples'
 //project(':slatekit-examples').projectDir=new File('../slatekit-examples')
 
+//include ':slatekit-samples'
+//project(':slatekit-samples').projectDir=new File('../../../apps/kotlin/slatekit-samples')
+//
 //include ':slatekit-tests'
 //project(':slatekit-tests').projectDir=new File('../slatekit-tests')

@@ -20,7 +20,6 @@ import slatekit.common.data.*
 import slatekit.common.data.BuildMode
 import slatekit.data.sql.Builders
 import slatekit.data.sql.vendors.MySqlDialect
-import slatekit.data.sql.vendors.MySqlProvider
 import slatekit.entities.*
 import slatekit.query.*
 import test.setup.User5
@@ -93,7 +92,7 @@ class Data_03_Builder_Patch {
 
 
     @Test fun can_build_filter_1_of_type_bool() {
-        val builder = builder().set("active", true).where("active", Op.IsNeq, false)
+        val builder = builder().set("active", true).where("active", Op.IsNot, false)
         ensure(builder = builder,
                 expectSqlRaw  = "update `user` set `active` = 1 where `active` is not 0;",
                 expectSqlPrep = "update `user` set `active` = ? where `active` is not ?;",
@@ -108,7 +107,7 @@ class Data_03_Builder_Patch {
     @Test fun can_build_filter_multiple_conditions() {
         val builder = builder()
                 .set("level", 3)
-                .where("active", Op.IsNeq, false)
+                .where("active", Op.IsNot, false)
                 .and("category", Op.Eq, "action")
                 .and("level", Op.Gte, 2)
 

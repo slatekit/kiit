@@ -16,14 +16,7 @@ open class Dialect(val types: Types = Types(),
     fun encode(name:String): String = "${encodeChar}${name}${encodeChar}"
 
 
-    open fun op(op: Op): String =
-        when (op) {
-            Op.Eq -> "="
-            Op.Neq -> "<>"
-            Op.IsEq -> "is"
-            Op.IsNeq -> "is not"
-            else -> op.text
-        }
+    open fun op(op: Op): String = op.text
 }
 
 

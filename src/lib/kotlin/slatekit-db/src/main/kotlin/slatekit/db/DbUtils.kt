@@ -14,7 +14,6 @@
 package slatekit.db
 
 import slatekit.common.DateTime
-import slatekit.common.Types
 import slatekit.common.data.DbCon
 import java.sql.*
 import org.threeten.bp.*
@@ -57,11 +56,14 @@ object DbUtils {
      *
      * @return
      */
-    fun connect(con: DbCon): Connection =
-            if (con.driver == "com.mysql.jdbc.Driver")
-                DriverManager.getConnection(con.url, con.user, con.pswd)
-            else
-                DriverManager.getConnection(con.url)
+    fun connect(con: DbCon, settings: DbSettings): Connection {
+        val con = if (con.driver == "com.mysql.jdbc.Driver")
+            DriverManager.getConnection(con.url, con.user, con.pswd)
+        else
+            DriverManager.getConnection(con.url)
+        con.autoCommit = settings.autoCommit
+        return con
+    }
 
     /**
      * Execution template providing connection with error-handling and connection closing
@@ -70,8 +72,8 @@ object DbUtils {
      * @param callback : The callback to call for when the connection is ready
      * @param error : The callback to call for when an error occurrs
      */
-    fun <T> executeCon(con: DbCon, callback: (Connection) -> T, error: (Exception) -> Unit): T? {
-        val conn = connect(con)
+    fun <T> executeCon(con: DbCon, settings: DbSettings, callback: (Connection) -> T, error: (Exception) -> Unit): T? {
+        val conn = connect(con, settings)
         val result =
         try {
             conn.use { c ->
@@ -93,11 +95,12 @@ object DbUtils {
      */
     fun executeStmt(
         con: DbCon,
+        settings: DbSettings,
         callback: (Connection, Statement) -> Unit,
         error: (Exception) -> Unit
     ) {
 
-        val conn = connect(con)
+        val conn = connect(con, settings)
         try {
             conn.use { c ->
                 val stmt = c.createStatement()
@@ -120,16 +123,17 @@ object DbUtils {
      */
     fun <T> executePrep(
         con: DbCon,
+        settings: DbSettings,
         sql: String,
         callback: (Connection, PreparedStatement) -> T?,
         error: (Exception) -> Unit
     ): T? {
 
-        val conn = connect(con)
+        val conn = connect(con, settings)
         val result =
         try {
             conn.use { c ->
-                val stmt = c.prepareCall(sql)
+                val stmt = c.prepareStatement(sql)
                 stmt.use { s ->
                     val r = callback(c, s)
                     r
@@ -139,6 +143,39 @@ object DbUtils {
             error(ex)
             null
         }
+        return result
+    }
+
+    /**
+     * Execution template providing connection, prepared statement with error-handling & conn closing
+     *
+     * @param con : The connection string
+     * @param sql : The sql text or stored proc name.
+     * @param callback : The callback to call for when the connection is ready
+     * @param error : The callback to call for when an error occurrs
+     */
+    fun <T> executeCall(
+        con: DbCon,
+        settings: DbSettings,
+        sql: String,
+        callback: (Connection, PreparedStatement) -> T?,
+        error: (Exception) -> Unit
+    ): T? {
+
+        val conn = connect(con, settings)
+        val result =
+            try {
+                conn.use { c ->
+                    val stmt = c.prepareCall(sql)
+                    stmt.use { s ->
+                        val r = callback(c, s)
+                        r
+                    }
+                }
+            } catch (ex: Exception) {
+                error(ex)
+                null
+            }
         return result
     }
 
@@ -208,12 +245,12 @@ object DbUtils {
         else if (typ == DataType.DTLong         ) rs.getLong(pos) as T
         else if (typ == DataType.DTFloat        ) rs.getFloat(pos) as T
         else if (typ == DataType.DTDouble       ) rs.getDouble(pos) as T
-        else if (typ == DataType.DTLocalDate    ) rs.getDate(pos).toLocalDate() as T
-        else if (typ == DataType.DTLocalTime    ) rs.getTime(pos).toLocalTime() as T
-        else if (typ == DataType.DTLocalDateTime) rs.getTimestamp(pos).toLocalDateTime() as T
-        else if (typ == DataType.DTZonedDateTime) rs.getTimestamp(pos).toLocalDateTime() as T
+        else if (typ == DataType.DTLocalDate    ) DateTimeUtils.toLocalDate(rs.getDate(pos)) as T
+        else if (typ == DataType.DTLocalTime    ) DateTimeUtils.toLocalTime(rs.getTime(pos)) as T
+        else if (typ == DataType.DTLocalDateTime) DateTimeUtils.toLocalDateTime(rs.getTimestamp(pos)) as T
+        else if (typ == DataType.DTZonedDateTime) DateTimes.of(rs.getTimestamp(pos)) as T
         else if (typ == DataType.DTDateTime     ) DateTimes.of(rs.getTimestamp(pos)) as T
-        else if (typ == DataType.DTInstant      ) rs.getTimestamp(pos).toInstant() as T
+        else if (typ == DataType.DTInstant      ) DateTimeUtils.toInstant(rs.getTimestamp(pos)) as T
         else null
     }
 

@@ -26,6 +26,29 @@ class EntityId<TId, T>(val idName:String = "id", val converter:(String) -> TId) 
 }
 
 
+class EntityIntId<T>(val idName:String = "id") : Id<Int, T> where T: Entity<Int> {
+    override fun name(): String {
+        return idName
+    }
+
+    override fun isPersisted(model: T): Boolean {
+        return model.isPersisted()
+    }
+
+    override fun isPersisted(id: Int): Boolean {
+        return id > 0
+    }
+
+    override fun identity(model: T): Int {
+        return model.identity()
+    }
+
+    override fun convertToId(id: String): Int {
+        return id.toInt()
+    }
+}
+
+
 class EntityLongId<T>(val idName:String = "id") : Id<Long, T> where T: Entity<Long> {
     override fun name(): String {
         return idName

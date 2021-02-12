@@ -14,15 +14,14 @@
 package slatekit.db
 
 import slatekit.common.Record
-import slatekit.common.data.DataType
+import slatekit.common.conf.Confs
+import slatekit.common.data.*
 import java.sql.Connection
 import java.sql.PreparedStatement
 import java.sql.ResultSet
 import java.sql.Statement
-import slatekit.common.data.DbCon
-import slatekit.common.data.IDb
-import slatekit.common.data.Value
 import slatekit.common.repeatWith
+import slatekit.db.DbUtils.executeCall
 import slatekit.db.DbUtils.executeCon
 import slatekit.db.DbUtils.executePrep
 import slatekit.db.DbUtils.executeStmt
@@ -39,13 +38,20 @@ import slatekit.db.DbUtils.fillArgs
  * 2. sql-server: url = "jdbc:sqlserver://<server_name>:<port>;database=<database>;user=<user>;
  * password=<password>;encrypt=true;hostNameInCertificate=*.database.windows.net;loginTimeout=30;"
  */
-class Db(private val dbCon: DbCon, errorCallback: ((Exception) -> Unit)? = null) : IDb {
+class Db(private val dbCon: DbCon,
+         errorCallback: ((Exception) -> Unit)? = null,
+         val settings:DbSettings = DbSettings(true)) : IDb {
 
     override val errHandler = errorCallback ?: this::errorHandler
 
     /**
+     * Driver name e.g. com.mysql.jdbc.Driver
+     */
+    override val driver: String = dbCon.driver
+
+
+    /**
      * registers the jdbc driver
-     *
      * @return
      */
     override fun open(): Db {
@@ -53,33 +59,49 @@ class Db(private val dbCon: DbCon, errorCallback: ((Exception) -> Unit)? = null)
         return this
     }
 
+    /**
+     * Execute raw sql ( used for DDL )
+     */
     override fun execute(sql: String) {
-        executeStmt(dbCon, { _, stmt -> stmt.execute(sql) }, errHandler)
+        executeStmt(dbCon, settings, { _, stmt -> stmt.execute(sql) }, errHandler)
     }
 
     /**
-     * gets a scalar string value using the sql provided
-     *
-     * @param sql : The sql text
-     * @return
+     * executes the update sql with prepared statement using inputs
+     * @param sql : sql statement
+     * @param inputs : Inputs for the sql or stored proc
+     * @return : The number of affected records
      */
-    override fun <T> getScalarOrNull(sql: String, typ: DataType, inputs: List<Value>?): T? {
-
-        return executePrep<T>(dbCon, sql, { _, stmt ->
+    override fun update(sql: String, inputs: List<Value>?): Int {
+        val result = executePrep<Int>(dbCon, settings, sql, { _, stmt ->
 
             // fill all the arguments into the prepared stmt
             inputs?.let { fillArgs(stmt, inputs, errHandler) }
 
-            // execute
-            val rs = stmt.executeQuery()
-            rs.use { r ->
-                val res: T? = when (r.next()) {
-                    true -> DbUtils.getScalar<T>(r, typ)
-                    false -> null
-                }
-                res
-            }
+            // update and get number of affected records
+            val count = stmt.executeUpdate()
+            count
         }, errHandler)
+        return result ?: 0
+    }
+
+    /**
+     * executes the update sql with prepared statement using inputs
+     * @param sql : sql statement
+     * @param inputs : Inputs for the sql or stored proc
+     * @return : The number of affected records
+     */
+    override fun call(sql: String, inputs: List<Value>?): Int {
+        val result = executeCall<Int>(dbCon, settings, sql, { _, stmt ->
+
+            // fill all the arguments into the prepared stmt
+            inputs?.let { fillArgs(stmt, inputs, errHandler) }
+
+            // update and get number of affected records
+            val count = stmt.executeUpdate()
+            count
+        }, errHandler)
+        return result ?: 0
     }
 
     /**
@@ -90,7 +112,7 @@ class Db(private val dbCon: DbCon, errorCallback: ((Exception) -> Unit)? = null)
      * @return : The id ( primary key )
      */
     override fun insert(sql: String, inputs: List<Value>?): Long {
-        val res = executeCon(dbCon, { con: Connection ->
+        val res = executeCon(dbCon, settings, { con: Connection ->
 
             val stmt = con.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)
             stmt.use { s ->
@@ -122,7 +144,7 @@ class Db(private val dbCon: DbCon, errorCallback: ((Exception) -> Unit)? = null)
      * @return : The id ( primary key )
      */
     override fun insertGetId(sql: String, inputs: List<Value>?): String {
-        val res = executeCon(dbCon, { con: Connection ->
+        val res = executeCon(dbCon, settings, { con: Connection ->
 
             val stmt = con.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)
             stmt.use { s ->
@@ -147,23 +169,28 @@ class Db(private val dbCon: DbCon, errorCallback: ((Exception) -> Unit)? = null)
     }
 
     /**
-     * executes the update sql or stored proc
+     * gets a scalar string value using the sql provided
      *
-     * @param sql : The sql or stored proc
-     * @param inputs : The inputs for the sql or stored proc
-     * @return : The number of affected records
+     * @param sql : The sql text
+     * @return
      */
-    override fun update(sql: String, inputs: List<Value>?): Int {
-        val result = executePrep<Int>(dbCon, sql, { _, stmt ->
+    override fun <T> getScalarOrNull(sql: String, typ: DataType, inputs: List<Value>?): T? {
+
+        return executePrep<T>(dbCon, settings, sql, { _, stmt ->
 
             // fill all the arguments into the prepared stmt
             inputs?.let { fillArgs(stmt, inputs, errHandler) }
 
-            // update and get number of affected records
-            val count = stmt.executeUpdate()
-            count
+            // execute
+            val rs = stmt.executeQuery()
+            rs.use { r ->
+                val res: T? = when (r.next()) {
+                    true -> DbUtils.getScalar<T>(r, typ)
+                    false -> null
+                }
+                res
+            }
         }, errHandler)
-        return result ?: 0
     }
 
     /**
@@ -179,7 +206,7 @@ class Db(private val dbCon: DbCon, errorCallback: ((Exception) -> Unit)? = null)
         moveNext: Boolean,
         inputs: List<Value>?
     ): T? {
-        val result = executePrep<T>(dbCon, sql, { _: Connection, stmt: PreparedStatement ->
+        val result = executePrep<T>(dbCon, settings, sql, { _: Connection, stmt: PreparedStatement ->
 
             // fill all the arguments into the prepared stmt
             inputs?.let { fillArgs(stmt, inputs, errHandler) }
@@ -300,7 +327,7 @@ class Db(private val dbCon: DbCon, errorCallback: ((Exception) -> Unit)? = null)
         // {call create_author(?, ?)}
         val holders = inputs?.let { all -> "?".repeatWith(",", all.size) } ?: ""
         val sql = "{call $procName($holders)}"
-        return update(sql, inputs)
+        return call(sql, inputs)
     }
 
     override fun errorHandler(ex: Exception) {
@@ -310,10 +337,37 @@ class Db(private val dbCon: DbCon, errorCallback: ((Exception) -> Unit)? = null)
 
     companion object {
 
-        fun open(con: DbCon): Db {
-            val db = Db(con)
-            db.open()
-            return db
+        /**
+         * Load Db from config file, which could be a java packaged resource or on file
+         * @param cls: Class holding resource files
+         * @param path: URI of file
+         * 1. "usr://.slatekit/common/conf/db.conf"
+         * 2. "jar://env.conf
+         */
+        fun of(cls:Class<*>, path:String):IDb {
+            return when(val con = Confs.readDbCon(cls,path)) {
+                null -> throw Exception("Unable to load database connection from $path")
+                else -> of(con)
+            }
+        }
+
+
+        /**
+         * Load Db using a default connection from Connections
+         * @param cons: Connection collection
+         */
+        fun of(cons:Connections):IDb {
+            return when(val con = cons.default()){
+                null -> throw Exception("Unable to load default connection from connections")
+                else -> of(con)
+            }
+        }
+
+        /**
+         * Only here for convenience to call open
+         */
+        fun of(con:DbCon):IDb {
+            return with(Db(con)) { open() }
         }
     }
 

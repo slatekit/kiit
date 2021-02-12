@@ -41,11 +41,11 @@ class RecordSet(private val rs: ResultSet) : Record {
     override fun getLong(key: String): Long = rs.getLong(key)
     override fun getFloat(key: String): Float = rs.getFloat(key)
     override fun getDouble(key: String): Double = rs.getDouble(key)
-    override fun getInstant(key: String): Instant = DateTimes.of(rs.getTimestamp(key)).toInstant()
+    override fun getInstant(key: String): Instant = DateTimeUtils.toInstant(rs.getTimestamp(key))
     override fun getDateTime(key: String): DateTime = rs.getTimestamp(key).let { DateTimes.of(it) }
-    override fun getLocalDate(key: String): LocalDate = DateTimes.of(rs.getDate(key)).date()
-    override fun getLocalTime(key: String): LocalTime = DateTimes.of(rs.getTime(key)).time()
-    override fun getLocalDateTime(key: String): LocalDateTime = DateTimes.of(rs.getTimestamp(key)).local()
+    override fun getLocalDate(key: String): LocalDate = DateTimeUtils.toLocalDate(rs.getDate(key))
+    override fun getLocalTime(key: String): LocalTime = DateTimeUtils.toLocalTime(rs.getTime(key))
+    override fun getLocalDateTime(key: String): LocalDateTime = DateTimeUtils.toLocalDateTime(rs.getTimestamp(key))
     override fun getZonedDateTime(key: String): ZonedDateTime = DateTimes.of(rs.getTimestamp(key)).atZone(ZoneId.systemDefault())
     override fun getZonedDateTimeUtc(key: String): ZonedDateTime = DateTimes.build(rs.getTimestamp(key), DateTimes.UTC)
 

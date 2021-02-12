@@ -107,7 +107,7 @@ class Data_01_Encoders_Encode {
                 DateTimes.of(2021, 12, 5 , 9 , 10, 10) to "'2021-12-05 09:10:10'",
                 DateTimes.of(2021, 12, 30, 15, 15, 15) to "'2021-12-30 15:15:15'",
                 null to slatekit.data.Consts.NULL)
-        ensure(DateTimeEncoder(), tests)
+        ensure(DateTimeEncoder(utc = false), tests)
     }
 
 

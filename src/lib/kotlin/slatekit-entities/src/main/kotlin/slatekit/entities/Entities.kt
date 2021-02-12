@@ -21,8 +21,9 @@ import slatekit.common.log.LogsDefault
 import slatekit.common.naming.Namer
 import slatekit.common.utils.ListMap
 import slatekit.data.core.*
+import slatekit.data.encoders.Encoders
+import slatekit.data.sql.vendors.*
 import slatekit.entities.core.*
-import slatekit.data.sql.vendors.MySqlProvider
 import slatekit.entities.mapper.EntityMapper
 import slatekit.entities.mapper.EntitySettings
 import slatekit.meta.kClass
@@ -88,9 +89,14 @@ open class Entities(
         val enType = T::class
 
         // 2. Table info ( name of table supplied or use class name )
+        val tableChar = when(vendor){
+            Vendor.MySql -> MySqlDialect.encodeChar
+            Vendor.H2 -> H2Dialect.encodeChar
+            Vendor.SqLite -> SqliteDialect.encodeChar
+            Vendor.Memory -> MySqlDialect.encodeChar
+        }
         val tableName = table ?: enType.simpleName!!
         val tableKey = PKey(idName, DataType.fromJava(idTypeJ))
-        val tableChar = if(vendor == Vendor.MySql) '`' else '"'
         val tableInfo = Table(tableName, tableChar, tableKey)
 
         // 3. Schema / Meta data
@@ -98,8 +104,18 @@ open class Entities(
         val entityMeta = Meta<TId, T>(idOps, tableInfo)
 
         // 4. Mapper
-        val entityMapper = EntityMapper<TId, T>(entityModel, entityMeta, idType, enType, EntitySettings(true))
-        val entityRepo = EntityRepo<TId, T>(getDb(), entityMeta, entityMapper, MySqlProvider(entityMeta, entityMapper))
+        val encoders = when(vendor){
+            Vendor.SqLite -> SqliteEncoders<TId, T>(true)
+            else -> Encoders<TId, T>()
+        }
+        val entityMapper = EntityMapper<TId, T>(entityModel, entityMeta, idType, enType, EntitySettings(true), encoders)
+        val provider = when(vendor){
+            Vendor.MySql -> MySqlProvider(entityMeta, entityMapper)
+            Vendor.H2 -> H2Provider(entityMeta, entityMapper)
+            Vendor.SqLite -> SqliteProvider(entityMeta, entityMapper)
+            Vendor.Memory -> MySqlProvider(entityMeta, entityMapper)
+        }
+        val entityRepo = EntityRepo<TId, T>(getDb(), entityMeta, entityMapper, provider)
         val entityService = builder(entityRepo)
 
         // 5. Context has all relevant info

@@ -6,6 +6,7 @@ import org.threeten.bp.LocalTime
 import slatekit.common.DateTimes
 import slatekit.common.conf.Confs
 import slatekit.common.data.Connections
+import slatekit.common.data.IDb
 import slatekit.common.data.Vendor
 import slatekit.common.ids.UPIDs
 import slatekit.data.core.LongId
@@ -26,11 +27,17 @@ object EntitySetup {
     val uuid = "497dea41-8658-4bb7-902c-361014799214"
     val upid = "usa:314fef51-43a7-496c-be24-520e73758836"
     val meta = Meta<Long, SampleEntityImmutable>(LongId { m -> m.id }, Table("sample1"))
-    val con = Confs.readDbCon(TestApp::class.java,"usr://.slatekit/common/conf/db.conf")
+    val dbConfPath = "usr://.slatekit/common/conf/db.conf"
+    val con = Confs.readDbCon(TestApp::class.java, dbConfPath)!!
+    val cons = Connections.of(con)
+
+    fun db(): IDb {
+        return Db.of(con)
+    }
 
     fun realDb(): Entities {
-        val dbs = Connections.of(EntitySetup.con!!)
-        val entities = Entities({ con -> Db(con) }, dbs, MyEncryptor)
+        val dbs = Connections.of(con)
+        val entities = Entities({ con -> Db.of(con) }, dbs, MyEncryptor)
         return entities
     }
 
