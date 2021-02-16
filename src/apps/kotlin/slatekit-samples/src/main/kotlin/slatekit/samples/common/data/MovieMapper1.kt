@@ -41,6 +41,20 @@ class MovieMapper1(val encoders:Encoders<Long, Movie>) : Mapper<Long, Movie> {
                 Value(Movie::released.name , DataType.DTDateTime, encoders.dateTimes.encode(model.released))
         )
     }
+
+    override fun datatype(field: String): DataType {
+        return when(field) {
+            Movie::uuid.name     -> DataType.DTUUID
+            Movie::title.name    -> DataType.DTString
+            Movie::category.name -> DataType.DTString
+            Movie::playing.name  -> DataType.DTBool
+            Movie::delivery.name -> DataType.DTInt
+            Movie::cost.name     -> DataType.DTInt
+            Movie::rating.name   -> DataType.DTDouble
+            Movie::released.name -> DataType.DTDateTime
+            else -> DataType.DTString
+        }
+    }
 }
 
 

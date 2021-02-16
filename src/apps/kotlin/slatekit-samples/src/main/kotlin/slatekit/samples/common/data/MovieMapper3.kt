@@ -4,6 +4,7 @@ import slatekit.data.core.LongId
 import slatekit.data.core.Meta
 import slatekit.data.core.Table
 import slatekit.entities.mapper.EntityMapper
+import slatekit.entities.mapper.EntitySettings
 import slatekit.meta.models.Model
 import slatekit.samples.common.models.Movie
 
@@ -16,4 +17,4 @@ object MovieMapper3 : EntityMapper<Long, Movie>(
         model = Model.loadSchema(Movie::class),
         meta = Meta(LongId { m -> m.id }, Table("movie")),
         idClass = Long::class,
-        enClass = Movie::class)
+        enClass = Movie::class, settings = EntitySettings(true))

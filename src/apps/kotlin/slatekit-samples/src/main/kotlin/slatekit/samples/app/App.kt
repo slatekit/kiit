@@ -2,6 +2,7 @@ package slatekit.samples.app
 
 import slatekit.app.App
 import slatekit.app.AppOptions
+import slatekit.common.DateTimes
 import slatekit.context.Context
 import slatekit.common.args.ArgsSchema
 import slatekit.common.utils.B64Java8
@@ -58,6 +59,9 @@ class App(ctx: Context) : App<Context>(ctx, AppOptions(showWelcome = true)) {
 
 
     override suspend fun exec(): Any? {
+        val logger = ctx.logs.getLogger("app")
+        val values = listOf("a" to 1, "b" to true, "c" to "kotlin", "d" to DateTimes.now())
+        logger.warn("test warn", values)
         println("executing")
         println("Your work should be done here...")
         return OK
