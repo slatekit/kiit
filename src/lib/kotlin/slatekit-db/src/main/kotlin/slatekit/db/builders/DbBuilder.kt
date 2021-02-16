@@ -13,6 +13,7 @@ mantra: Simplicity above all else
 package slatekit.db.builders
 
 import slatekit.common.data.DataType
+import slatekit.common.data.Encoding
 
 /**
  * Created by kishorereddy on 6/14/17.

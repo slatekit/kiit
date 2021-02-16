@@ -140,6 +140,10 @@ open class Entities(
      */
     fun getDb(): IDb = builder.db()
 
+    fun getDDL(entityType: KClass<*>):DDL {
+
+    }
+
     /**
      * Gets a database by its name/alias
      */
@@ -191,6 +195,18 @@ open class Entities(
      */
     inline fun <reified T> getModel(): Model {
         return getInfoByName(T::class.qualifiedName!!).model
+    }
+
+    /**
+     * Gets the model tied to the entity type T
+     */
+    inline fun getModel(cls:KClass<*>): Model {
+        return getModel(cls.qualifiedName!!)
+    }
+
+
+    inline fun getModel(qualifiedName:String): Model {
+        return getInfoByName(qualifiedName).model
     }
 
     fun getInfoByName(entityType: String): EntityContext {
