@@ -18,7 +18,7 @@ sealed class LogLevel(val name: String, val code: Int) {
     operator fun compareTo(lv: LogLevel): Int = this.code.compareTo(lv.code)
 
     object Debug : LogLevel("Debug", 1)
-    object Info  : LogLevel("Meta", 2 )
+    object Info  : LogLevel("Info", 2 )
     object Warn  : LogLevel("Warn", 3 )
     object Error : LogLevel("Error", 4)
     object Fatal : LogLevel("Fatal", 5)

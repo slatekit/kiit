@@ -14,7 +14,7 @@ class LogbackLogger(private val instance: org.slf4j.Logger) : Logger(parseLevel(
      * @param entry: 
      */
     override fun log(entry: LogEntry) {
-        when (level) {
+        when (entry.level) {
             LogLevel.Debug -> instance.debug(entry.msg, entry.ex)
             LogLevel.Info  -> instance.info (entry.msg, entry.ex)
             LogLevel.Warn  -> instance.warn (entry.msg, entry.ex)
