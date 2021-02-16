@@ -57,7 +57,7 @@ repositories {
 }
 dependencies {
 	// slatekit-results: Result<T,E> to model successes/failures with optional status codes
-    	compile 'com.slatekit:slatekit-results:2.0.0'
+    	compile 'com.slatekit:slatekit-results:2.2.0'
 }
 ```
 
