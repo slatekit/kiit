@@ -4,9 +4,12 @@ import slatekit.app.App
 import slatekit.app.AppOptions
 import slatekit.context.Context
 import slatekit.common.args.ArgsSchema
+import slatekit.common.conf.Confs
 import slatekit.common.utils.B64Java8
 import slatekit.common.crypto.Encryptor
+import slatekit.common.data.Connections
 import slatekit.common.info.About
+import slatekit.connectors.entities.AppEntContext
 
 
 /**
@@ -66,7 +69,11 @@ class App(ctx: Context) : App<Context>(ctx, AppOptions(showWelcome = false, show
         // samples.cli.greet -greeting="whats up"
         // samples.cli.movies
         // samples.cli.inputs -name="kishore" -isActive=true -age=41 -dept=2 -account=123 -average=2.4 -salary=120000 -date="2019-04-01T11:05:30Z"
-        val cli = CLI(ctx)
+        val dbConfPath = "usr://.slatekit/common/conf/db.conf"
+        val con = Confs.readDbCon(App::class.java, dbConfPath)!!
+        val cons = Connections.of(con)
+        val entCtx = AppEntContext.fromContext(ctx, cons = cons)
+        val cli = CLI(entCtx)
         return cli.execute()
     }
 
