@@ -95,7 +95,7 @@ open class SqlBuilderDDL(override val dialect: Dialect, val namer: Namer?) : Sql
 
 
     override fun createIndexes(model: Model): List<String> {
-        val tableName = namer?.rename(model.name) ?: model.name
+        val tableName = dialect.encode(model.table)
         val indexes = model.fields.filter { it.isIndexed }
         val indexSql = indexes.map { field ->
             "CREATE INDEX idx_${field.storedName} ON $tableName (${field.storedName});"

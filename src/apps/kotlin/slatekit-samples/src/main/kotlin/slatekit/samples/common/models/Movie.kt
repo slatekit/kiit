@@ -5,12 +5,14 @@ import slatekit.common.DateTimes
 import slatekit.entities.Column
 import slatekit.entities.EntityUpdatable
 import slatekit.entities.EntityWithId
+import slatekit.entities.Id
 import java.util.*
 
 data class Movie(
         /**
          * Primary key ( auto-increment )
          */
+        @property:Id()
         override val id: Long = 0L,
 
         /**

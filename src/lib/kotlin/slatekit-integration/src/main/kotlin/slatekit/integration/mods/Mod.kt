@@ -14,12 +14,13 @@
 package slatekit.integration.mods
 
 import slatekit.common.DateTime
-import slatekit.entities.Column
 import slatekit.entities.EntityWithUUID
 import slatekit.entities.EntityWithId
+import slatekit.entities.Id
+import slatekit.entities.Column
 
 data class Mod(
-    @property:Column()
+    @property:Id()
     override val id: Long = 0L,
 
     @property:Column(length = 50)

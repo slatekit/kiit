@@ -65,7 +65,8 @@ class EntitiesApi(context: AppEntContext) : ApiBase(context) {
 
     @Action(desc = "installs all the models in the default database")
     fun names(): List<Pair<String, String>> {
-        return service().names()
+        val service = service()
+        return service.names()
     }
 
     @Action(desc = "installs all the models in the default database")
@@ -104,9 +105,7 @@ class EntitiesApi(context: AppEntContext) : ApiBase(context) {
         return service().connectionByName(name)
     }
 
-    private val dbLookup by lazy { Connections.from(context.app, context.conf) }
-
     private fun service(): MigrationService {
-        return MigrationService(appContext.ent, dbLookup, MigrationSettings(), context.dirs)
+        return MigrationService(appContext.ent, appContext.dbs, MigrationSettings(), context.dirs)
     }
 }

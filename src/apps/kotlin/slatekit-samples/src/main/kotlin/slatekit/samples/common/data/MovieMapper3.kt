@@ -14,7 +14,7 @@ import slatekit.samples.common.models.Movie
  * Cons: Less performant than manual
  */
 object MovieMapper3 : EntityMapper<Long, Movie>(
-        model = Model.loadSchema(Movie::class),
+        model = Model.load(Movie::class),
         meta = Meta(LongId { m -> m.id }, Table("movie")),
         idClass = Long::class,
         enClass = Movie::class, settings = EntitySettings(true))

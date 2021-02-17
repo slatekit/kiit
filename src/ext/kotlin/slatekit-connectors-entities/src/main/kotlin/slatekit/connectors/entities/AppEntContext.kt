@@ -83,24 +83,10 @@ data class AppEntContext(
          * converts this to an app context which is basically
          * the same context without the Entities
          */
-        fun fromContext(ctx: Context, namer: Namer? = null): AppEntContext {
-            val dbCons = Connections.from(ctx.app, ctx.conf)
-            val id = Context.identity(ctx.info, ctx.envs)
+        fun fromContext(ctx: Context, namer: Namer? = null, cons:Connections? = null): AppEntContext {
+            val dbCons = cons ?: Connections.from(ctx.app, ctx.conf)
             return AppEntContext(
-                    ctx.app, ctx.args, ctx.envs, ctx.conf, ctx.logs, ctx.info, id, Entities({ con -> Db(con) }, dbCons, ctx.enc, namer = namer), dbCons, ctx.enc, ctx.dirs
-            )
-
-        }
-
-        /**
-         * converts this to an app context which is basically
-         * the same context without the Entities
-         */
-        fun fromAppContext(ctx: Context, namer: Namer? = null): AppEntContext {
-            val dbCons = Connections.from(ctx.app, ctx.conf)
-            val id = Context.identity(ctx.info, ctx.envs)
-            return AppEntContext(
-                    ctx.app, ctx.args, ctx.envs, ctx.conf, ctx.logs, ctx.info, id, Entities({ con -> Db(con) }, dbCons, ctx.enc, namer = namer), dbCons, ctx.enc, ctx.dirs
+                    ctx.app, ctx.args, ctx.envs, ctx.conf, ctx.logs, ctx.info, ctx.id, Entities({ con -> Db(con) }, dbCons, ctx.enc, namer = namer), dbCons, ctx.enc, ctx.dirs
             )
 
         }

@@ -40,7 +40,6 @@ class MigrationService(
 
     fun names(): List<Pair<String, String>> = entities.getEntities().map {
         Pair(it.entityTypeName, it.model.table )
-        return listOf()
     }
 
 
