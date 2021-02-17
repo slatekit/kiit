@@ -71,8 +71,7 @@ class EntitiesApi(context: AppEntContext) : ApiBase(context) {
 
     @Action(desc = "installs all the models in the default database")
     fun counts(): List<Pair<String, Long>> {
-        //return service().counts()
-        return listOf()
+        return service().counts()
     }
 
     @Action(desc = "generates sql install files for the model")
