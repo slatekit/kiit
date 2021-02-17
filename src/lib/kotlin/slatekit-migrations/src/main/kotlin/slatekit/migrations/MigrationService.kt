@@ -128,7 +128,6 @@ class MigrationService(
             filePath
         } ?: "Folders not available, sql files not written"
         return slatekit.results.Success(filePath)
-        return Tries.success("")
     }
 
     fun generateSqlAllUninstall(): Try<String> {
@@ -149,7 +148,6 @@ class MigrationService(
             filePath
         } ?: "Folders not available, sql files not written"
         return slatekit.results.Success(filePath)
-        return Tries.success("")
     }
 
     fun deleteAll(): Try<List<String>> {
@@ -194,7 +192,6 @@ class MigrationService(
         val path = result.second
         val info = if (success) "generated sql for model: $moduleName $path" else "error generating sql"
         return if (success) slatekit.results.Success(sql, msg = info) else slatekit.results.Failure(Exception(info), msg = info)
-        return Tries.success(listOf())
     }
 
     fun connection(): Notice<DbCon> {
@@ -222,7 +219,6 @@ class MigrationService(
         } catch (ex: Exception) {
             slatekit.results.Failure(ex, msg = "Unable to delete :$table. ${ex.message}")
         }
-        return Tries.success("")
     }
 
     private fun each(operation: (EntityContext) -> Try<String>): Try<List<String>> {
