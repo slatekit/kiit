@@ -5,7 +5,6 @@ import slatekit.common.ids.UPIDs
 import slatekit.entities.EntityWithId
 import slatekit.meta.models.Id
 import slatekit.meta.models.Field
-import test.setup.Address
 import test.setup.UUIDSamples
 import java.util.*
 

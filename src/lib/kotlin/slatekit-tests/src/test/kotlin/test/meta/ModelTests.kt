@@ -8,7 +8,6 @@ import slatekit.common.ids.UPID
 import slatekit.meta.Reflector
 import slatekit.meta.models.FieldCategory
 import slatekit.meta.models.Model
-import test.entities.SampleEntityImmutable
 import test.setup.*
 import java.util.*
 import kotlin.reflect.KClass
