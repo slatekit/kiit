@@ -18,8 +18,6 @@ import org.junit.Assert
 import org.junit.Before
 import org.junit.Test
 import slatekit.common.DateTime
-import slatekit.common.Field
-import slatekit.common.Id
 import slatekit.common.data.*
 import slatekit.common.utils.Random
 import slatekit.data.sql.vendors.sqliteIfNotExists
@@ -379,31 +377,31 @@ class Data_04_Entity_Service_Sqlite : Data_04_Entity_Service_MySql() {
             @property:Id()
             override val id: Int = 0,
 
-            @property:Field(length = 100, required = true)
+            @property:Column(length = 100, required = true)
             val email: String = "",
 
-            @property:Field(required = true)
+            @property:Column(required = true)
             val isActive: Boolean = false,
 
-            @property:Field(required = true)
+            @property:Column(required = true)
             val level: Int = 35,
 
-            @property:Field(required = true)
+            @property:Column(required = true)
             val salary: Double = 20.5,
 
-            @property:Field(required = true)
+            @property:Column(required = true)
             val createdAt: DateTime = DateTime.now(),
 
-            @property:Field(required = true)
+            @property:Column(required = true)
             val createdBy: Int = 0,
 
-            @property:Field(required = true)
+            @property:Column(required = true)
             val updatedAt: DateTime = DateTime.now(),
 
-            @property:Field(required = true)
+            @property:Column(required = true)
             val updatedBy: Int = 0,
 
-            @property:Field(length = 50, required = true)
+            @property:Column(length = 50, required = true)
             val uniqueId: String = Random.uuid()
     ) : EntityWithId<Int>, EntityUpdatable<Int, User> {
 
@@ -413,10 +411,10 @@ class Data_04_Entity_Service_Sqlite : Data_04_Entity_Service_MySql() {
 
 
     data class Group(
-            @property:Field(required = true)
+            @property:Column(required = true)
             val id: Int,
 
-            @property:Field(required = true, length = 30)
+            @property:Column(required = true, length = 30)
             val name: String
     ) : Entity<Int>, EntityUpdatable<Int, Group> {
 
@@ -427,13 +425,13 @@ class Data_04_Entity_Service_Sqlite : Data_04_Entity_Service_MySql() {
 
 
     data class Member(
-            @property:Field(required = true)
+            @property:Column(required = true)
             val id: Int,
 
-            @property:Field(required = true)
+            @property:Column(required = true)
             val groupId: Int,
 
-            @property:Field(required = true)
+            @property:Column(required = true)
             val userId: Int
     ) : Entity<Int>, EntityUpdatable<Int, Member> {
 

@@ -31,6 +31,7 @@ import slatekit.db.Db
 import slatekit.meta.Reflector
 import slatekit.entities.Entities
 import slatekit.connectors.entities.AppEntContext
+import slatekit.entities.Column
 import slatekit.meta.KTypes
 import slatekit.results.Notice
 import slatekit.results.Success
@@ -288,7 +289,7 @@ class ReflectorTests : TestSupport {
             mem.annotations.forEach { ano -> println(ano) }
         }
         println("done")
-        val props = Reflector.getAnnotatedProps<Field>(User3::class, Field::class)
+        val props = Reflector.getAnnotatedProps<Column>(User3::class, Column::class)
         Assert.assertEquals(2, props.size)
         Assert.assertEquals(props[0].second?.name, "email")
         Assert.assertEquals(props[0].second?.required, true)

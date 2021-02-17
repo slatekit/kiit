@@ -3,53 +3,53 @@ package test.setup
 
 import slatekit.common.DateTime
 import slatekit.common.DateTimes
-import slatekit.common.Field
-import slatekit.common.Id
+import slatekit.entities.Column
 import slatekit.entities.EntityWithId
+import slatekit.entities.Id
 
 data class Movie(
         @property:Id()
         override val id :Long = 0L,
 
 
-        @property:Field(required = true, length = 50)
+        @property:Column(required = true, length = 50)
         val title :String = "",
 
 
-        @property:Field(length = 20)
+        @property:Column(length = 20)
         val category :String = "",
 
 
-        @property:Field(required = true)
+        @property:Column(required = true)
         val playing :Boolean = false,
 
 
-        @property:Field(required = true)
+        @property:Column(required = true)
         val cost:Int,
 
 
-        @property:Field(required = true)
+        @property:Column(required = true)
         val rating: Double,
 
 
-        @property:Field(required = true)
+        @property:Column(required = true)
         val released: DateTime,
 
 
         // These are the timestamp and audit fields.
-        @property:Field(required = true)
+        @property:Column(required = true)
         val createdAt : DateTime = DateTime.now(),
 
 
-        @property:Field(required = true)
+        @property:Column(required = true)
         val createdBy :Long  = 0,
 
 
-        @property:Field(required = true)
+        @property:Column(required = true)
         val updatedAt : DateTime =  DateTime.now(),
 
 
-        @property:Field(required = true)
+        @property:Column(required = true)
         val updatedBy :Long  = 0
 )
     : EntityWithId<Long> {

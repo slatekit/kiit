@@ -14,54 +14,55 @@
 package slatekit.integration.mods
 
 import slatekit.common.DateTime
-import slatekit.common.Field
 import slatekit.entities.EntityWithUUID
 import slatekit.entities.EntityWithId
+import slatekit.entities.Id
+import slatekit.entities.Column
 
 data class Mod(
-    @property:Field()
+    @property:Id()
     override val id: Long = 0L,
 
-    @property:Field(length = 50)
+    @property:Column(length = 50)
     val name: String = "",
 
-    @property:Field(length = 200)
+    @property:Column(length = 200)
     val desc: String = "",
 
-    @property:Field(length = 30)
+    @property:Column(length = 30)
     val version: String = "",
 
-    @property:Field()
+    @property:Column()
     val isInstalled: Boolean = false,
 
-    @property:Field()
+    @property:Column()
     val isEnabled: Boolean = false,
 
-    @property:Field()
+    @property:Column()
     val isDbDependent: Boolean = false,
 
-    @property:Field()
+    @property:Column()
     val totalModels: Int = 0,
 
-    @property:Field(length = 50)
+    @property:Column(length = 50)
     val source: String = "",
 
-    @property:Field(length = 100)
+    @property:Column(length = 100)
     val dependencies: String = "",
 
-    @property:Field()
+    @property:Column()
     val createdAt: DateTime = DateTime.now(),
 
-    @property:Field()
+    @property:Column()
     val createdBy: Int = 0,
 
-    @property:Field()
+    @property:Column()
     val updatedAt: DateTime = DateTime.now(),
 
-    @property:Field()
+    @property:Column()
     val updatedBy: Int = 0,
 
-    @property:Field(length = 50)
+    @property:Column(length = 50)
     override val uuid: String = ""
 )
     : EntityWithId<Long>, EntityWithUUID {

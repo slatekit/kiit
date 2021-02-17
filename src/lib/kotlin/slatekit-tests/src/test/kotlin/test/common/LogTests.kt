@@ -45,6 +45,16 @@ class LogTests {
     }
 
 
+    @Test fun can_build_message_with_key_value_pairs(){
+        val info = listOf("a" to 1, "b" to true, "email" to "user1@gmail.com", "c" to "kotlin", "phone" to "123-456-7890", "d" to 2.3)
+        val logger = MemoryLogger(LogLevel.Info)
+        logger.info("pairs", info)
+        val actual = logger.entries.first().msg
+        val expected = "pairs : a=1, b=true, c=kotlin, d=2.3"
+        Assert.assertEquals(expected, actual)
+    }
+
+
     @Test fun can_ensure_level() {
         fun test(level: LogLevel) {
             val logger = MemoryLogger(level)

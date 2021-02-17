@@ -13,8 +13,6 @@
 
 package slatekit.meta.models
 
-import slatekit.common.Field
-import slatekit.common.Id
 import slatekit.common.naming.Namer
 import slatekit.common.ext.orElse
 import slatekit.meta.Reflector
@@ -104,7 +102,7 @@ class Model(
          * @return
          */
         @JvmStatic
-        fun loadSchema(dataType: KClass<*>, idFieldName: String? = null, namer: Namer? = null, table: String? = null): Model {
+        fun load (dataType: KClass<*>, idFieldName: String? = null, namer: Namer? = null, table: String? = null): Model {
             val modelName = dataType.simpleName ?: ""
             val modelNameFull = dataType.qualifiedName ?: ""
 
@@ -121,7 +119,7 @@ class Model(
                 val modelField = ModelField.ofData(matchedField.first, matchedField.second!!,
                         namer, idField == null, idFieldName)
                 val finalModelField = if (!modelField.isBasicType()) {
-                    val model = loadSchema(modelField.dataCls, namer = namer)
+                    val model = load(modelField.dataCls, namer = namer)
                     modelField.copy(model = model)
                 } else modelField
                 finalModelField

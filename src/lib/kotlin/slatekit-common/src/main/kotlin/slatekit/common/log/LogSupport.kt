@@ -28,6 +28,8 @@ interface LogSupport {
 
     /** =====================================================================
      * Logging using string with optional args for formatting
+     *
+     * log.error("updating user {0}", user.id )
      * ======================================================================
      */
     @Ignore fun debug(msg: String?, vararg args:Any?) = log(LogLevel.Debug, null, msg, *args)
@@ -38,6 +40,8 @@ interface LogSupport {
 
     /** =====================================================================
      * Logging using exceptions + messages
+     *
+     * log.error( ex, "upating user {0}", user.id )
      * ======================================================================
      */
     @Ignore fun debug(ex:Exception?, msg: String?, vararg args:Any?) = log(LogLevel.Debug, ex, msg, *args)
@@ -48,6 +52,8 @@ interface LogSupport {
 
     /** =====================================================================
      * Logging using exceptions only
+     *
+     * log.error( ex )
      * ======================================================================
      */
     @Ignore fun debug(ex:Exception?) = log(LogLevel.Debug, ex, null)
@@ -58,6 +64,8 @@ interface LogSupport {
 
     /** =====================================================================
      * Lazy logging
+     *
+     * log.error( "updating user" ) { " some expensive message to build" }
      * ======================================================================
      */
     @Ignore fun debug(msg: String? = null, callback: () -> String) = log(LogLevel.Debug, msg, callback)
@@ -65,6 +73,18 @@ interface LogSupport {
     @Ignore fun warn (msg: String? = null, callback: () -> String) = log(LogLevel.Warn , msg, callback)
     @Ignore fun error(msg: String? = null, callback: () -> String) = log(LogLevel.Error, msg, callback)
     @Ignore fun fatal(msg: String? = null, callback: () -> String) = log(LogLevel.Fatal, msg, callback)
+
+    /** =====================================================================
+     * Structured logging ( key-value pairs )
+     *
+     * log.error( "updating user", listOf( "user_id" to "abc123", "promo-code" to "xyz-111" ) )
+     * ======================================================================
+     */
+    @Ignore fun debug(msg: String, pairs:List<Pair<String, Any?>>) = log(LogLevel.Debug, "$msg : ${format(pairs)}")
+    @Ignore fun info (msg: String, pairs:List<Pair<String, Any?>>) = log(LogLevel.Info , "$msg : ${format(pairs)}")
+    @Ignore fun warn (msg: String, pairs:List<Pair<String, Any?>>) = log(LogLevel.Warn , "$msg : ${format(pairs)}")
+    @Ignore fun error(msg: String, pairs:List<Pair<String, Any?>>) = log(LogLevel.Error, "$msg : ${format(pairs)}")
+    @Ignore fun fatal(msg: String, pairs:List<Pair<String, Any?>>) = log(LogLevel.Fatal, "$msg : ${format(pairs)}")
 
     /**
      * Logs an entry
@@ -122,5 +142,16 @@ interface LogSupport {
         return trace
     }
 
+
     fun format(msg:String, args:Array<out Any?>):String = msg.format(*args)
+
+    /**
+     * Format key/value pairs into "structured value"
+     * e.g. a=1, b=2, c=3 etc for easier searches in logs
+     * NOTE: Logs can be configured to output JSON and/or provide structured arguments.
+     * This varies from logging provider so this is an easier text/classic only way to do ( for now )
+     */
+    fun format(pairs:List<Pair<String, Any?>>):String  {
+        return LogUtils.format(pairs)
+    }
 }

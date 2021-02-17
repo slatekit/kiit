@@ -8,10 +8,12 @@ import slatekit.data.sql.Insert
 import slatekit.data.sql.Update
 import slatekit.data.sql.vendors.MySqlDialect
 import slatekit.data.sql.vendors.MySqlProvider
+import slatekit.entities.Schema
 import slatekit.entities.mapper.EntityMapper
 import slatekit.entities.mapper.EntitySettings
 import slatekit.meta.models.Model
 import slatekit.migrations.SqlBuilder
+import slatekit.migrations.SqlBuilderDDL
 import test.setup.Group
 import test.setup.Member
 import test.setup.User5
@@ -20,7 +22,7 @@ class Data_03_Statement_Syntax {
 
     @Test
     fun can_build_insert() {
-        val model = Model.loadSchema(SampleEntityImmutable::class)
+        val model = Schema.load(SampleEntityImmutable::class)
         val mapper = EntityMapper<Long, SampleEntityImmutable>(model, EntitySetup.meta, Long::class, SampleEntityImmutable::class, EntitySettings(false))
         val stmt = Insert<Long, SampleEntityImmutable>(MySqlDialect, EntitySetup.meta, mapper)
         val sample = EntitySetup.sampleImmutable()
@@ -32,7 +34,7 @@ class Data_03_Statement_Syntax {
 
     @Test
     fun can_build_update() {
-        val model = Model.loadSchema(SampleEntityImmutable::class)
+        val model = Schema.load(SampleEntityImmutable::class)
         val mapper = EntityMapper<Long, SampleEntityImmutable>(model, EntitySetup.meta, Long::class, SampleEntityImmutable::class, EntitySettings(false))
         val stmt = Update<Long, SampleEntityImmutable>(MySqlDialect, EntitySetup.meta, mapper)
         val sample = EntitySetup.sampleImmutable()
@@ -44,9 +46,9 @@ class Data_03_Statement_Syntax {
 
     @Test
     fun can_build_ddl_1() {
-        val model = Model.loadSchema(SampleEntityImmutable::class, table = "sample1")
-        val builder = SqlBuilder(Types(), null)
-        val actual = builder.createTable(model)
+        val model = Schema.load(SampleEntityImmutable::class, table = "sample1")
+        val builder = SqlBuilderDDL(MySqlDialect, null)
+        val actual = builder.create(model)
         val expected = """create table `sample1` ( 
 `id` BIGINT NOT NULL AUTO_INCREMENT PRIMARY KEY,  
 `test_string` NVARCHAR(30) NOT NULL,  
@@ -63,26 +65,13 @@ class Data_03_Statement_Syntax {
 `test_localdatetime` DATETIME NOT NULL,  
 `test_zoneddatetime` DATETIME NOT NULL,  
 `test_uuid` NVARCHAR(50) NOT NULL,  
-`test_uniqueid` NVARCHAR(50) NOT NULL,  
+`test_uniqueId` NVARCHAR(50) NOT NULL,  
 `test_object_addr` NVARCHAR(40) NOT NULL,  
 `test_object_city` NVARCHAR(30) NOT NULL,  
 `test_object_state` NVARCHAR(20) NOT NULL,  
 `test_object_country` INTEGER NOT NULL,  
 `test_object_zip` NVARCHAR(5) NOT NULL,  
-`test_object_ispobox` BIT NOT NULL );"""
+`test_object_isPOBox` BIT NOT NULL );"""
         Assert.assertEquals(expected, actual)
-    }
-
-
-    @Test
-    fun can_build_ddl_2() {
-        val models = listOf(
-                Model.loadSchema(User5::class ),
-                Model.loadSchema(Member::class),
-                Model.loadSchema(Group::class )
-        )
-        val builder = SqlBuilder(Types(), null)
-        val ddls = models.map { builder.createTable(it) }
-        println(ddls)
     }
 }
