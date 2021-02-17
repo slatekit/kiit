@@ -1,10 +1,12 @@
-package test.setup
+package test.meta
 
 import slatekit.common.DateTime
-import slatekit.common.Field
+import slatekit.meta.models.Field
+import slatekit.meta.models.Id
+import test.setup.StatusEnum
 
 data class AuthorRNull(
-        @property:Field(required = false)
+        @property:Id()
         val id: Long ? = null,
 
         @property:Field(required = false)
@@ -17,7 +19,7 @@ data class AuthorRNull(
         val age:Int?  = null,
 
         @property:Field(required = false)
-        val status:StatusEnum = StatusEnum.Pending,
+        val status: StatusEnum = StatusEnum.Pending,
 
         @property:Field(required = false)
         val salary:Double? = null,

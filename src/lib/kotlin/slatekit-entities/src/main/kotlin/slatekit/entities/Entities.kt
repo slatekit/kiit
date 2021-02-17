@@ -78,7 +78,7 @@ open class Entities(
      * which contains all the relevant info about an Entity, its id,
      * and its corresponding mapper, repo, service, etc.
      */
-    inline fun <reified TId, reified T> register(idOps:Id<TId, T>,
+    inline fun <reified TId, reified T> register(idOps:slatekit.data.core.Id<TId, T>,
                                                  table: String? = null,
                                                  vendor: Vendor = Vendor.MySql,
                                                  builder: (EntityRepo<TId, T>) -> EntityService<TId, T>) where TId : Comparable<TId>, T : Entity<TId> {
@@ -100,7 +100,7 @@ open class Entities(
         val tableInfo = Table(tableName, tableChar, tableKey)
 
         // 3. Schema / Meta data
-        val entityModel = Model.loadSchema(enType, idName, null, tableName)
+        val entityModel = Schema.load(enType, idName, null, tableName)
         val entityMeta = Meta<TId, T>(idOps, tableInfo)
 
         // 4. Mapper
@@ -139,10 +139,6 @@ open class Entities(
      * Gets the default database
      */
     fun getDb(): IDb = builder.db()
-
-    fun getDDL(entityType: KClass<*>):DDL {
-
-    }
 
     /**
      * Gets a database by its name/alias

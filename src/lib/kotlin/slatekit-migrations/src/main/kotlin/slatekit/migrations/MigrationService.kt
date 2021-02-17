@@ -39,14 +39,14 @@ class MigrationService(
 ) {
 
     fun names(): List<Pair<String, String>> = entities.getEntities().map {
-        Pair(it.entityTypeName, it.entityRepoInstance.name() )
+        Pair(it.entityTypeName, it.model.table )
         return listOf()
     }
 
 
-//    fun counts(): List<Pair<String, Long>> = _entities.getEntities().map {
-//        Pair(it.entityTypeName, it.entityRepoInstance?.count() ?: 0)
-//    }
+    fun counts(): List<Pair<String, Long>> = entities.getEntities().map {
+        Pair(it.entityTypeName, it.entityRepoInstance.count())
+    }
 
     /**
      * installs the model name supplied into the database.
@@ -90,13 +90,11 @@ class MigrationService(
     }
 
     fun delete(name: String): Try<String> {
-        //return operate("Delete", name, { info, tableName -> entities.getDbSource().truncate(tableName) })
-        return Tries.success("")
+        return operate("Delete", name) { info -> builder(info.entityTypeName).clear(info.model) }
     }
 
     fun drop(name: String): Try<String> {
-        //return operate("Drop", name, { info, tableName -> entities.getDbSource().dropTable(tableName) })
-        return Tries.success("")
+        return operate("Drop", name) { info -> builder(info.entityTypeName).remove(info.model) }
     }
 
     fun installAll(): Try<List<String>> {
@@ -136,9 +134,8 @@ class MigrationService(
     fun generateSqlAllUninstall(): Try<String> {
         val fileName = "sql-all-uninstall-" + DateTime.now().toStringNumeric()
         val results = entities.getEntities().map { entity ->
-            val ormEntityInfo = entity
-            val dropTable = entities.getDbSource().dropTable(ormEntityInfo.model.table)
-
+            val builder = builder(entity.entityTypeName)
+            val dropTable = builder.remove(entity.model)
             Success(dropTable, msg = "Dropping table for model : " + entity.model.name)
         }
         val succeeded = results.filter { it.success }
@@ -174,9 +171,9 @@ class MigrationService(
         val result = try {
             val fullName = moduleName
             val info = entities.getInfoByName(moduleName)
-            val ddl = entities.sqlBuilder(fullName)
-            val sqlTable = ddl.createTable(info.model)
-            val sqlIndexes = ddl.createIndex(info.model)
+            val ddl = builder(fullName)
+            val sqlTable = ddl.create(info.model)
+            val sqlIndexes = ddl.createIndexes(info.model)
             val sql: List<String> = listOf(sqlTable).plus(sqlIndexes)
             val filePath = if (settings.enableOutput) {
                 folders?.let { folders ->
@@ -212,12 +209,12 @@ class MigrationService(
         } ?: slatekit.results.Failure("no db setup")
     }
 
-    private fun operate(operationName: String, entityName: String, sqlBuilder: (EntityContext, String) -> String): Try<String> {
+    private fun operate(operationName: String, entityName: String, sqlBuilder: (EntityContext) -> String): Try<String> {
         val ent = entities.getInfoByName(entityName)
         val svc = entities.getServiceByTypeName(entityName)
         val model = entities.getModel(entityName)
-        val table = model?.table ?: throw Exception("Unknown model : $entityName")
-        val sql = sqlBuilder(ent, table)
+        val table = model.table
+        val sql = sqlBuilder(ent)
         return try {
             val db = entities.getDb()
             db.update(sql)
@@ -234,5 +231,10 @@ class MigrationService(
         val messages = results.map { it.desc ?: "" }
         val error = if (success) "" else messages.joinToString(newline)
         return if (success) slatekit.results.Success(messages, msg = "") else slatekit.results.Failure(Exception(error), msg = error)
+    }
+
+    private fun builder(name:String):SqlBuilder {
+        val info = entities.getInfoByName(name)
+        return SqlBuilderDDL(info.entityRepoInstance.dialect, null)
     }
 }

@@ -14,11 +14,7 @@ package test.setup
 
 import slatekit.common.utils.Random
 import slatekit.common.DateTime
-import slatekit.common.Field
-import slatekit.common.Id
-import slatekit.entities.Entity
-import slatekit.entities.EntityUpdatable
-import slatekit.entities.EntityWithId
+import slatekit.entities.*
 
 /**
  * Created by kishorereddy on 5/23/17.
@@ -45,10 +41,10 @@ data class User(
 
 
 data class Group(
-        @property:Field(required = true)
+        @property:Id()
         val id: Long,
 
-        @property:Field(required = true, length = 30)
+        @property:Column(required = true, length = 30)
         val name: String
 ) : Entity<Long>, EntityUpdatable<Long, Group> {
 
@@ -59,13 +55,13 @@ data class Group(
 
 
 data class Member(
-        @property:Field(required = true)
+        @property:Column(required = true)
         val id: Long,
 
-        @property:Field(required = true)
+        @property:Column(required = true)
         val groupId: Long,
 
-        @property:Field(required = true)
+        @property:Column(required = true)
         val userId: Long
 ) : Entity<Long>, EntityUpdatable<Long, Member> {
 
@@ -99,10 +95,10 @@ class UserNormal2(var email: String, var name: String) {
 
 data class User3(
 
-        @property:Field(name = "email", desc = "email address", required = true, example = "clark@metro.com")
+        @property:Column(name = "email", desc = "email address", required = true, example = "clark@metro.com")
         val email: String,
 
-        @property:Field(desc = "full api", required = false, example = "clark kent")
+        @property:Column(desc = "full api", required = false, example = "clark kent")
         val name: String
 ) {
 
@@ -133,31 +129,31 @@ data class User5(
         @property:Id()
         override val id: Long = 0,
 
-        @property:Field(length = 100, required = true)
+        @property:Column(length = 100, required = true)
         val email: String = "",
 
-        @property:Field(required = true)
+        @property:Column(required = true)
         val isActive: Boolean = false,
 
-        @property:Field(required = true)
+        @property:Column(required = true)
         val level: Int = 35,
 
-        @property:Field(required = true)
+        @property:Column(required = true)
         val salary: Double = 20.5,
 
-        @property:Field(required = true)
+        @property:Column(required = true)
         val createdAt: DateTime = DateTime.now(),
 
-        @property:Field(required = true)
+        @property:Column(required = true)
         val createdBy: Long = 0,
 
-        @property:Field(required = true)
+        @property:Column(required = true)
         val updatedAt: DateTime = DateTime.now(),
 
-        @property:Field(required = true)
+        @property:Column(required = true)
         val updatedBy: Long = 0,
 
-        @property:Field(length = 50, required = true)
+        @property:Column(length = 50, required = true)
         val uniqueId: String = Random.uuid()
 ) : EntityWithId<Long>, EntityUpdatable<Long, User5> {
 

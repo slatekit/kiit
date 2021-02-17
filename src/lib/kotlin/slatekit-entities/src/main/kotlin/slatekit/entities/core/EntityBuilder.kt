@@ -87,7 +87,7 @@ open class EntityBuilder(
      * This may be removed later
      */
     fun model(entityType: KClass<*>, namer: Namer?, table: String?): Model {
-        return Model.loadSchema(entityType, EntityWithId<*>::id.name, namer, table)
+        return Schema.load(entityType, EntityWithId<*>::id.name, namer, table)
     }
 
     /**

@@ -2,7 +2,7 @@ package slatekit.samples.common.models
 
 import slatekit.common.DateTime
 import slatekit.common.DateTimes
-import slatekit.common.Field
+import slatekit.entities.Column
 import slatekit.entities.EntityUpdatable
 import slatekit.entities.EntityWithId
 import java.util.*
@@ -16,35 +16,35 @@ data class Movie(
         /**
          * Indexed also using uuid ( for sample purposes )
          */
-        @property:Field(length = 50, indexed = true)
+        @property:Column(length = 50, indexed = true)
         val uuid: UUID = UUID.randomUUID(),
 
 
-        @property:Field(required = true, length = 50)
+        @property:Column(required = true, length = 50)
         val title: String = "",
 
 
-        @property:Field(length = 20)
+        @property:Column(length = 20)
         val category: String = "",
 
 
-        @property:Field(required = true)
+        @property:Column(required = true)
         val playing: Boolean = false,
 
 
-        @property:Field(required = true)
+        @property:Column(required = true)
         val delivery: Delivery = Delivery.Theater,
 
 
-        @property:Field(required = true)
+        @property:Column(required = true)
         val cost: Int,
 
 
-        @property:Field(required = true)
+        @property:Column(required = true)
         val rating: Double,
 
 
-        @property:Field(required = true)
+        @property:Column(required = true)
         val released: DateTime
 
 ) : EntityWithId<Long>, EntityUpdatable<Long, Movie> {

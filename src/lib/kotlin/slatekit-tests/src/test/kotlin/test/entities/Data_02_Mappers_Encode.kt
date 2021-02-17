@@ -7,6 +7,7 @@ import slatekit.common.data.DataType
 import slatekit.data.core.LongId
 import slatekit.data.core.Meta
 import slatekit.data.core.Table
+import slatekit.entities.Schema
 import slatekit.entities.mapper.EntityEncoder
 import slatekit.entities.mapper.EntitySettings
 import slatekit.meta.models.Model
@@ -41,7 +42,7 @@ class Data_02_Mappers_Encode {
 
     @Test
     fun can_encode_model_immutable() {
-        val model = Model.loadSchema(SampleEntityImmutable::class)
+        val model = Schema.load(SampleEntityImmutable::class)
         val mapper = EntityEncoder<Long, SampleEntityImmutable>(model, EntitySetup.meta, settings = EntitySettings(false), encryptor = EntitySetup.enc)
         val sample = EntitySetup.sampleImmutable()
         val values = mapper.encode(sample, DataAction.Create, EntitySetup.enc)
@@ -55,7 +56,7 @@ class Data_02_Mappers_Encode {
 
     @Test
     fun can_encode_model_mutable() {
-        val model = Model.loadSchema(SampleEntityMutable::class)
+        val model = Schema.load(SampleEntityMutable::class)
         val meta = Meta<Long, SampleEntityMutable>(LongId { m -> m.id }, Table("sample1"))
         val mapper = EntityEncoder<Long, SampleEntityMutable>(model, meta, settings = EntitySettings(false), encryptor = EntitySetup.enc)
         val sample = EntitySetup.sampleMutable()

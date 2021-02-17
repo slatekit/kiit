@@ -24,7 +24,7 @@ open class SqlBuilderDDL(override val dialect: Dialect, val namer: Namer?) : Sql
 
         // 1. build the "CREATE <tablename>
         val tableName = dialect.encode(model.table)
-        buff.append(tableName)
+        buff.append("create table $tableName ( $newline")
 
         // 2. build the primary key column
         val idCol = model.idField?.storedName ?: defaultID
@@ -40,6 +40,18 @@ open class SqlBuilderDDL(override val dialect: Dialect, val namer: Namer?) : Sql
         buff.append(" );")
         val sql = buff.toString()
         return sql
+    }
+
+
+    override fun remove(model: Model): String {
+        val tableName = dialect.encode(model.table)
+        return "drop table if exists $tableName;"
+    }
+
+
+    override fun clear(model: Model): String {
+        val tableName = dialect.encode(model.table)
+        return "truncate table $tableName;"
     }
 
 
@@ -66,13 +78,13 @@ open class SqlBuilderDDL(override val dialect: Dialect, val namer: Namer?) : Sql
         val dataFieldSql = dataFields.fold("") { acc, field ->
             val finalStoredName = prefix?.let { prefix + "_" + field.storedName } ?: field.storedName
             if (field.isEnum) {
-                acc + ", " + createCol(finalStoredName, DataType.DTInt, field.isRequired, field.maxLength)
+                acc + ", " + createColumn(finalStoredName, DataType.DTInt, field.isRequired, field.maxLength)
             } else if (field.model != null) {
                 val sql = field.model?.let { createColumns(field.storedName, it, false) }
                 acc + sql
             } else {
                 val sqlType = DataType.fromJava(field.dataCls.java)
-                acc + ", " + createCol(finalStoredName, sqlType, field.isRequired, field.maxLength)
+                acc + ", " + createColumn(finalStoredName, sqlType, field.isRequired, field.maxLength)
             }
         }
         buff.append(dataFieldSql)
@@ -96,7 +108,7 @@ open class SqlBuilderDDL(override val dialect: Dialect, val namer: Namer?) : Sql
     }
 
 
-    private fun createCol(name: String, dataType: DataType, required: Boolean, maxLen: Int): String {
+    private fun createColumn(name: String, dataType: DataType, required: Boolean, maxLen: Int): String {
         val nullText = if (required) "NOT NULL" else ""
         val colType = colType(dataType, maxLen)
         val colName = dialect.encode(name)
@@ -107,7 +119,7 @@ open class SqlBuilderDDL(override val dialect: Dialect, val namer: Namer?) : Sql
 
 
     /**
-     * Builds a valid column type
+     * Handle length for Strings
      */
     private fun colType(colType: DataType, maxLen: Int): String {
         return if (colType == DataType.DTText && maxLen == -1)

@@ -16,6 +16,12 @@ interface SqlBuilder {
      */
     fun create(model: Model): String
 
+
+    fun remove(model: Model): String
+
+
+    fun clear(model: Model): String
+
     /**
      * Creates primary key DDL
      */

@@ -13,7 +13,6 @@
 
 package slatekit.meta.models
 
-import slatekit.common.Field
 import slatekit.common.data.DataType
 import slatekit.common.naming.Namer
 import slatekit.meta.KTypes
