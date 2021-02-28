@@ -29,6 +29,7 @@ class Data_03_Builder_Patch {
     private lateinit var entities:Entities
     private val lookup = mapOf(
             "id" to DataType.DTLong,
+            "userId" to DataType.DTLong,
             "email" to DataType.DTString,
             "active" to DataType.DTBool,
             "level" to DataType.DTInt,
@@ -60,6 +61,19 @@ class Data_03_Builder_Patch {
                 expectPairs = listOf(
                         Value("id", DataType.DTLong, 1L),
                         Value("id", DataType.DTLong, 2L)
+                )
+        )
+    }
+
+
+    @Test fun can_build_filter_retaining_name() {
+        val builder = builder().set("userId", 1L).where("userId", Op.Eq, 2L)
+        ensure(builder = builder,
+                expectSqlRaw  = "update `user` set `userId` = 1 where `userId` = 2;",
+                expectSqlPrep = "update `user` set `userId` = ? where `userId` = ?;",
+                expectPairs = listOf(
+                        Value("userId", DataType.DTLong, 1L),
+                        Value("userId", DataType.DTLong, 2L)
                 )
         )
     }
