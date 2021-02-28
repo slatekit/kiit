@@ -40,7 +40,7 @@ open class EntityDecoder<TId, T>(val model: Model,
             when(type.primaryConstructor) {
                 null -> {
                     val con = type.constructors.firstOrNull()
-                    val entity = con!!.call()
+                    val entity = con?.call()
                     entity
                 }
                 else -> Reflector.create<Any>(type)
