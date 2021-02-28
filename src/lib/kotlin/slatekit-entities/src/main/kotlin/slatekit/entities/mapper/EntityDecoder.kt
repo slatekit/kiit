@@ -10,6 +10,7 @@ import slatekit.meta.Reflector
 import slatekit.meta.models.Model
 import slatekit.meta.models.ModelField
 import kotlin.reflect.KClass
+import kotlin.reflect.full.primaryConstructor
 
 open class EntityDecoder<TId, T>(val model: Model,
                                  val meta: Meta<TId, T>,
@@ -34,8 +35,18 @@ open class EntityDecoder<TId, T>(val model: Model,
      * Creates the entity/model expecting a 0 parameter constructor
      * @return
      */
-    open fun createEntity(): Any? =
-        model.dataType?.let { type -> Reflector.create<Any>(type) }
+    open fun createEntity(): Any? {
+        return model.dataType?.let { type ->
+            when(type.primaryConstructor) {
+                null -> {
+                    val con = type.constructors.firstOrNull()
+                    val entity = con?.call()
+                    entity
+                }
+                else -> Reflector.create<Any>(type)
+            }
+        }
+    }
 
     /**
      * Creates the entity/model with all the supplied constructor parameters (ideal for case classes)
@@ -77,7 +88,7 @@ open class EntityDecoder<TId, T>(val model: Model,
 
 
 
-    private fun decodeValType(prefix: String?, record: Record, model: Model, enc:Encryptor? = null): Any? {
+    protected open fun decodeValType(prefix: String?, record: Record, model: Model, enc:Encryptor? = null): Any? {
         return if (model.any) {
             val isUTC = settings.utcTime
             val data = model.fields.map { mapping ->
@@ -90,7 +101,7 @@ open class EntityDecoder<TId, T>(val model: Model,
             null
     }
 
-    private fun decodeVarType(prefix: String?, record: Record, model: Model, enc:Encryptor? = null): Any? {
+    protected open fun decodeVarType(prefix: String?, record: Record, model: Model, enc:Encryptor? = null): Any? {
         return if (model.any) {
 
             val isUTC = settings.utcTime
@@ -113,7 +124,7 @@ open class EntityDecoder<TId, T>(val model: Model,
      * @param isUTC : Whether to handle dates as UTC
      */
     @Suppress("IMPLICIT_CAST_TO_ANY")
-    private fun getDataValue(prefix: String?, mapping: ModelField, record: Record, isUTC: Boolean, enc:Encryptor? = null): Any? {
+    protected open fun getDataValue(prefix: String?, mapping: ModelField, record: Record, isUTC: Boolean, enc:Encryptor? = null): Any? {
         val colName = prefix?.let { prefix + mapping.storedName } ?: mapping.storedName
 
         val dataValue = when (mapping.dataTpe) {

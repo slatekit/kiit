@@ -67,44 +67,6 @@ class Db(private val dbCon: DbCon,
     }
 
     /**
-     * executes the update sql with prepared statement using inputs
-     * @param sql : sql statement
-     * @param inputs : Inputs for the sql or stored proc
-     * @return : The number of affected records
-     */
-    override fun update(sql: String, inputs: List<Value>?): Int {
-        val result = executePrep<Int>(dbCon, settings, sql, { _, stmt ->
-
-            // fill all the arguments into the prepared stmt
-            inputs?.let { fillArgs(stmt, inputs, errHandler) }
-
-            // update and get number of affected records
-            val count = stmt.executeUpdate()
-            count
-        }, errHandler)
-        return result ?: 0
-    }
-
-    /**
-     * executes the update sql with prepared statement using inputs
-     * @param sql : sql statement
-     * @param inputs : Inputs for the sql or stored proc
-     * @return : The number of affected records
-     */
-    override fun call(sql: String, inputs: List<Value>?): Int {
-        val result = executeCall<Int>(dbCon, settings, sql, { _, stmt ->
-
-            // fill all the arguments into the prepared stmt
-            inputs?.let { fillArgs(stmt, inputs, errHandler) }
-
-            // update and get number of affected records
-            val count = stmt.executeUpdate()
-            count
-        }, errHandler)
-        return result ?: 0
-    }
-
-    /**
      * executes an insert using the sql or stored proc and gets the id
      *
      * @param sql : The sql or stored proc
@@ -166,6 +128,44 @@ class Db(private val dbCon: DbCon,
             }
         }, errHandler)
         return res ?: ""
+    }
+
+    /**
+     * executes the update sql with prepared statement using inputs
+     * @param sql : sql statement
+     * @param inputs : Inputs for the sql or stored proc
+     * @return : The number of affected records
+     */
+    override fun update(sql: String, inputs: List<Value>?): Int {
+        val result = executePrep<Int>(dbCon, settings, sql, { _, stmt ->
+
+            // fill all the arguments into the prepared stmt
+            inputs?.let { fillArgs(stmt, inputs, errHandler) }
+
+            // update and get number of affected records
+            val count = stmt.executeUpdate()
+            count
+        }, errHandler)
+        return result ?: 0
+    }
+
+    /**
+     * executes the update sql with prepared statement using inputs
+     * @param sql : sql statement
+     * @param inputs : Inputs for the sql or stored proc
+     * @return : The number of affected records
+     */
+    override fun call(sql: String, inputs: List<Value>?): Int {
+        val result = executeCall<Int>(dbCon, settings, sql, { _, stmt ->
+
+            // fill all the arguments into the prepared stmt
+            inputs?.let { fillArgs(stmt, inputs, errHandler) }
+
+            // update and get number of affected records
+            val count = stmt.executeUpdate()
+            count
+        }, errHandler)
+        return result ?: 0
     }
 
     /**

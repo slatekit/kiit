@@ -64,7 +64,7 @@ object QueryEncoder {
             if (text.isNullOrEmpty()) {
                 ""
             } else {
-                text.toLowerCase().trim().filter { c -> c.isDigit() || c.isLetter() || c == '_' || c == '.' }
+                text.trim().filter { c -> c.isDigit() || c.isLetter() || c == '_' || c == '.' }
             }
 
     /**

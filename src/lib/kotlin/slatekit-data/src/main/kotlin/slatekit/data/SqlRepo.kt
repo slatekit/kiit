@@ -35,15 +35,11 @@ open class SqlRepo<TId, T>(
     meta: Meta<TId, T>,
     val mapper: Mapper<TId, T>,
     val provider: Provider<TId, T>,
-    hooks: DataHooks<TId, T>? = null
+    hooks: DataHooks<TId, T>? = null,
+    protected open val buildMode:BuildMode = BuildMode.Prep
 ) : BaseRepo<TId, T>(meta, hooks), FullRepo<TId, T>, Scriptable<TId, T> where TId : Comparable<TId>, T : Any {
 
     override val dialect: Dialect = provider.dialect
-
-    /**
-     * Use prepared statements
-     */
-    protected open val buildMode = BuildMode.Prep
 
     /**
      * Creates the entity in the repository/table
