@@ -15,6 +15,29 @@ import test.setup.Address
 import test.setup.StatusEnum
 import java.util.*
 
+data class SampleEdgeCases(
+        @property:Id()
+        val id: Long = 0L,
+
+        @property:Column(length = 30, required = true)
+        val name: String = "",
+
+        @property:Column()
+        val active: Boolean = true,
+
+        @property:Column()
+        val item: SampleSubobject = SampleSubobject("sub1", "123")
+)
+
+data class SampleSubobject(
+        @property:Column(length = 30, required = true)
+        val name: String = "",
+
+        @property:Column()
+        val uuid: String = ""
+)
+
+
 data class SampleEntityImmutable(
         @property:Id()
         override val id: Long = 0L,

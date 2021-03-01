@@ -55,6 +55,22 @@ class Data_02_Mappers_Encode {
 
 
     @Test
+    fun can_encode_model_immutable_same_values() {
+        val model = Schema.load(SampleEdgeCases::class)
+        val meta = Meta<Long, SampleEdgeCases>(LongId { m -> m.id }, Table("sample1"))
+        val mapper = EntityEncoder<Long, SampleEdgeCases>(model, meta, settings = EntitySettings(false), encryptor = EntitySetup.enc)
+        val sample = SampleEdgeCases(1, "root")
+        val values = mapper.encode(sample, DataAction.Create, EntitySetup.enc)
+        Assert.assertEquals(4, values.size)
+        Assert.assertEquals("`name`", values[0].name)
+        Assert.assertEquals("root", values[0].value)
+        Assert.assertEquals("`item_name`", values[2].name)
+        Assert.assertEquals("sub1", values[2].value)
+
+    }
+
+
+    @Test
     fun can_encode_model_mutable() {
         val model = Schema.load(SampleEntityMutable::class)
         val meta = Meta<Long, SampleEntityMutable>(LongId { m -> m.id }, Table("sample1"))
