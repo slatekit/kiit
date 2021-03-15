@@ -31,7 +31,7 @@ object Options : OptionsBuilder {
      * Build a Notice<T> ( type alias ) for Result<T,String> using the supplied function
      */
     @JvmStatic
-    inline fun <T> of(f: () -> T): Option<T> = build(f, { e -> Codes.ERRORED })
+    inline fun <T> of(f: () -> T): Option<T> = build(f, { _ -> Codes.ERRORED })
 
     /**
      * Build a Result<T,E> using the supplied callback and error handler
