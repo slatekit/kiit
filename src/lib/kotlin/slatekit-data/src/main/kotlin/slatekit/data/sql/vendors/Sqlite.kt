@@ -69,6 +69,7 @@ open class SqliteEncoders<TId, T>(utc:Boolean) : Encoders<TId, T>(utc) where TId
     override val zonedDateTimes     = ZonedDateTimeEncoder(DataType.DTLong, utc)
     override val dateTimes          = DateTimeEncoder(DataType.DTLong, utc)
     override val instants           = InstantEncoder(DataType.DTLong)
+    override val enums              = EnumEncoder(DataType.DTInt)
 }
 
 

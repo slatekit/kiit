@@ -22,14 +22,19 @@ open class EnumEncoder(val dataType:DataType = DataType.DTEnum) : SqlEncoder<Enu
 
     override fun convert(name:String, value: EnumLike?): Value {
         val finalValue = when(dataType){
-            DataType.DTInt -> value?.let { it.value }
+            DataType.DTInt  -> value?.let { it.value }
+            DataType.DTLong -> value?.let { it.value.toLong() }
             else -> value
         }
         return Value(name, dataType, finalValue, encode(value))
     }
 
     fun decode(record: Record, name: String, dataCls: KClass<*>): EnumLike? {
-        val enumInt = record.getInt(name)
+        val enumInt = when(dataType) {
+            DataType.DTInt -> record.getInt(name)
+            DataType.DTLong -> record.getLong(name).toInt()
+            else -> record.getInt(name)
+        }
         val enumValue = Reflector.getEnumValue(dataCls, enumInt)
         return enumValue
     }
