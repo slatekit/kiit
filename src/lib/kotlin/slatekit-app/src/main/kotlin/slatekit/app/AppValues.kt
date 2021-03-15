@@ -58,6 +58,6 @@ class AppValues(val args: Args, val conf: Conf) {
         return if (!arg.isNullOrEmpty())
             arg
         else
-            cfg ?: finalDefaultValue
+            cfg
     }
 }

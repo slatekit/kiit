@@ -113,10 +113,13 @@ data class Envs(val all: List<Env>, val current: Env) : EnvSupport {
          * /resources/env.conf     ( common      config )
          * /resources/env.loc.conf ( local       config )
          * /resources/env.dev.conf ( development config )
-         * /resources/env.qa1.conf ( qa1         config )
-         * /resources/env.qa2.conf ( qa2         config )
+         * /resources/env.qat.conf ( qat         config )
          * /resources/env.stg.conf ( staging     config )
          * /resources/env.pro.conf ( production  config )
+         *
+         * e.g. For multiple QAT environments ( qa1, qa2 )
+         * /resources/env.qa1.conf ( qa1         config )
+         * /resources/env.qa2.conf ( qa2         config )
          *
          * @return
          */
@@ -125,8 +128,7 @@ data class Envs(val all: List<Env>, val current: Env) : EnvSupport {
             val envs = Envs(listOf(
                     Env("loc", EnvMode.Dev, desc = "Dev environment (local)"),
                     Env("dev", EnvMode.Dev, desc = "Dev environment (shared)"),
-                    Env("qa1", EnvMode.Qat, desc = "QA environment  (current release)"),
-                    Env("qa2", EnvMode.Qat, desc = "QA environment  (last release)"),
+                    Env("qat", EnvMode.Qat, desc = "QA environment  (current release)"),
                     Env("stg", EnvMode.Uat, desc = "STG environment (demo)"),
                     Env("pro", EnvMode.Pro, desc = "LIVE environment")
             ))

@@ -40,7 +40,7 @@ object AppBuilder {
      *
      * @return
      */
-    fun dbs(cls:Class<*>, conf: Conf): Connections = Connections.of(conf.dbCon("db"))
+    fun dbs(conf: Conf): Connections = Connections.of(conf.dbCon("db"))
 
     /**
      * builds all the info for this application including its
@@ -141,7 +141,7 @@ object AppBuilder {
     /**
      * Gets the build info file
      */
-    fun build(cls:Class<*>, args: Args, loc:Uri): Build {
+    fun build(cls:Class<*>, loc:Uri): Build {
         val result = Tries.of {
             val uri = loc.combine("build.conf")
             val props = Props.fromUri(cls, uri)
@@ -169,7 +169,7 @@ object AppBuilder {
      * 5. dirs ( defaults )
      */
     fun context(cls:Class<*>, inputs: AppUtils.AppInputs, enc: Encryptor?, logs: Logs?): AppContext {
-        val build = build(cls, inputs.args, inputs.loc)
+        val build = build(cls, inputs.loc)
         val args = inputs.args
         val env = inputs.envs
 

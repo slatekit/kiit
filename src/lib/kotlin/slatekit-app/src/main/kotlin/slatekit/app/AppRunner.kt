@@ -70,7 +70,7 @@ object AppRunner {
         // STEP 5: Build App - Create App using supplied lambda and context
         // STEP 6: Run App   - Finally run the application with workflow ( init, exec, end )
         val result = argsResult.then { args -> AppHelp.process(cls, source, rawArgs.toList(), args, about, schema) }
-            .then { args    -> Tries.of { AppUtils.context(cls, args, envs, about, schema ?: AppBuilder.schema(), enc, logs, source) } }
+            .then { args    -> Tries.of { AppUtils.context(cls, args, envs, enc, logs, source) } }
             .then { context -> Tries.of { context.copy(args = ArgsSchema.transform(schema, context.args)) } }
             .then { context -> validate(context.args, schema).map { context } }
             .then { context -> Tries.of { builder(context) } }

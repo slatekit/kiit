@@ -58,12 +58,12 @@ sealed class EnvMode(val name: String) {
          */
         @JvmStatic
         fun parse(text:String): EnvMode = when(text.trim().toLowerCase()) {
-            EnvMode.Dev.name -> EnvMode.Dev
-            EnvMode.Qat.name -> EnvMode.Qat
-            EnvMode.Uat.name -> EnvMode.Uat
-            EnvMode.Dis.name -> EnvMode.Dis
-            EnvMode.Pro.name -> EnvMode.Pro
-            else             -> EnvMode.Other(text)
+            Dev.name -> Dev
+            Qat.name -> Qat
+            Uat.name -> Uat
+            Dis.name -> Dis
+            Pro.name -> Pro
+            else     -> Other(text)
         }
     }
 }

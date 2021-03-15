@@ -44,8 +44,7 @@ class EnvTests {
         val envs = Envs.defaults()
         ensureMatch( envs, "loc", EnvMode.Dev , "Dev environment (local)" )
         ensureMatch( envs, "dev", EnvMode.Dev , "Dev environment (shared)" )
-        ensureMatch( envs, "qa1", EnvMode.Qat  , "QA environment  (current release)" )
-        ensureMatch( envs, "qa2", EnvMode.Qat  , "QA environment  (last release)" )
+        ensureMatch( envs, "qat", EnvMode.Qat  , "QA environment  (current release)" )
         ensureMatch( envs, "stg", EnvMode.Uat , "STG environment (demo)" )
         ensureMatch( envs, "pro", EnvMode.Pro, "LIVE environment" )
     }
@@ -62,9 +61,9 @@ class EnvTests {
 
     @Test fun default_envs_can_select_environment() {
         val envAll = Envs.defaults()
-        val envs = envAll.select("qa1")
+        val envs = envAll.select("qat")
         Assert.assertTrue( envs.current != null )
-        Assert.assertTrue( envs.name == "qa1")
+        Assert.assertTrue( envs.name == "qat")
         Assert.assertTrue( envs.env == EnvMode.Qat.name )
         Assert.assertTrue( envs.isQat )
     }
@@ -72,7 +71,7 @@ class EnvTests {
 
     @Test fun default_envs_can_validate_env_against_defaults() {
         val envAll = Envs.defaults()
-        Assert.assertTrue( envAll.isValid("qa1") )
+        Assert.assertTrue( envAll.isValid("qat") )
         Assert.assertTrue( !envAll.isValid("abc") )
     }
 

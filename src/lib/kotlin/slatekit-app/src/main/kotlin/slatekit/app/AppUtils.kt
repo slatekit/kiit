@@ -61,12 +61,12 @@ object AppUtils {
         }
     }
 
-    fun context(cls:Class<*>, args: Args, envs: Envs, about: About, schema: ArgsSchema, enc: Encryptor?, logs: Logs?, confSource:Alias = Alias.Jar): AppContext {
-        val inputs = inputs(cls, args, envs, about, schema, enc, logs, confSource)
+    fun context(cls:Class<*>, args: Args, envs: Envs, enc: Encryptor?, logs: Logs?, confSource:Alias = Alias.Jar): AppContext {
+        val inputs = inputs(cls, args, envs, enc, confSource)
         return AppBuilder.context(cls, inputs, enc, logs)
     }
 
-    private fun inputs(cls:Class<*>, args: Args, envs: Envs, about: About, schema: ArgsSchema, enc: Encryptor?, logs: Logs?, alias:Alias = Alias.Jar): AppInputs {
+    private fun inputs(cls:Class<*>, args: Args, envs: Envs, enc: Encryptor?, alias:Alias = Alias.Jar): AppInputs {
         // We need to determine where the "env.conf" is loaded from.
         // The location is defaulted to load from jars but can be explicitly supplied in args
         // or specified in the "conf.dirs" config setting in the env.conf file
