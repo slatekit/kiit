@@ -48,18 +48,10 @@ class AppLoaderTests  {
     }
 
     @Test
-    fun can_select_and_use_env_qa1() {
+    fun can_select_and_use_env_qat() {
         run(
-                arrayOf("-env='qa1'"),
-                ConfigValueTest("qa1", "env qa1", 3, 20.3),
-                Codes.SUCCESS
-        )
-    }
-
-    @Test
-    fun can_select_and_use_env_qa2() {
-        run(arrayOf("-env='qa2'"),
-                ConfigValueTest("qa2", "env qa2", 4, 20.4),
+                arrayOf("-env='qat'"),
+                ConfigValueTest("qat", "env qat", 3, 20.3),
                 Codes.SUCCESS
         )
     }
