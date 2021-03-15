@@ -40,7 +40,9 @@ suspend fun awaitHttpTry(callback: (HttpRPC.HttpRPCResult) -> Unit ) : Try<Respo
 suspend fun awaitHttpOutcome(callback: (HttpRPC.HttpRPCResult) -> Unit ) : Outcome<Response> {
     return suspendCoroutine { cont ->
         callback(object : HttpRPC.HttpRPCResult {
-            override fun onSuccess(result: Response) = cont.resume(Outcomes.success(result))
+            override fun onSuccess(result: Response) {
+                cont.resume(Outcomes.success(result))
+            }
             override fun onFailure(e: Exception?) {
                 e?.let { cont.resume(Outcomes.errored(e)) }
             }

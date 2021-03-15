@@ -20,6 +20,9 @@ import slatekit.http.HttpRPC
 import slatekit.results.*
 import slatekit.results.builders.Outcomes
 
+import org.json.simple.JSONArray
+import org.json.simple.JSONObject
+
 class SendGrid(
     user: String,
     key: String,
@@ -29,7 +32,8 @@ class SendGrid(
     EmailService(templates) {
 
     val settings = EmailSettings(user, key, phone)
-    private val baseUrl = "https://api.sendgrid.com/api/mail.send.json"
+    //private val baseUrlOld = "https://api.sendgrid.com/api/mail.send.json"
+    private val baseUrl = "https://api.sendgrid.com/v3/mail/send"
 
     /**
      * Initialize with api credentials
@@ -51,24 +55,77 @@ class SendGrid(
     /**
      * Builds the HttpRequest for the model
      * @param model: The data model to send ( e.g. EmailMessage )
+     *
+     * {
+     *       "personalizations": [
+     *           {
+     *               "to": [
+     *                   {
+     *                       "email": "jl@gmail.com",
+     *                       "name": "justice league"
+     *                   }
+     *               ]
+     *           }
+     *       ],
+     *       "from": {
+     *           "email": "support@slatekit.com",
+     *           "name": "Slate.Kit"
+     *       },
+     *       "subject": "Hello, World from Postman!",
+     *       "content": [
+     *           {
+     *               "type": "text/html",
+     *               "value": "<strong>Testing</strong> hello world from <span style='color:Red'>Postman</span>"
+     *           }
+     *       ]
+     *   }
      */
     override fun build(model: EmailMessage): Outcome<Request> {
         // Parameters
-        val bodyArg = if (model.html) "html" else "text"
+        val contentType = if (model.html) "text/html" else "text/plain"
+        val root = JSONObject()
+
+        // To
+        val to = JSONObject()
+        to["email"] = model.to
+        to["name"] = ""
+
+        // From
+        val from = JSONObject()
+        from["email"] = settings.account
+        from["name"] = settings.user
+
+        // Content
+        val contentArray = JSONArray()
+        val content = JSONObject()
+        content["type"] = contentType
+        content["value"] = model.body
+        contentArray.add(content)
+
+        // Personalizations
+        val pers = JSONArray()
+        val personalTo = JSONObject()
+        val tos = JSONArray()
+        tos.add(to)
+        personalTo["to"] = tos
+        pers.add(personalTo)
+
+        // Full object
+        root["subject"] = model.subject
+        root["from"] = from
+        root["content"] = contentArray
+        root["personalizations"] = pers
+
+        val json = root.toJSONString()
         val request = HttpRPC().build(
                 method = HttpRPC.Method.Post,
                 urlRaw = baseUrl,
-                headerParams = null,
-                creds = HttpRPC.Auth.Basic(settings.user, settings.key),
-                body = HttpRPC.Body.FormData(listOf(
-                        "api_user" to settings.user,
-                        "api_key"  to settings.key,
-                        "to"       to model.to,
-                        "from"     to settings.account,
-                        "subject"  to model.subject,
-                        bodyArg    to model.body
-                )
-        ))
+                headerParams = mapOf(
+                    "Authorization" to "Bearer ${settings.key}",
+                    "Content-Type" to "application/json"
+                ),
+                body = HttpRPC.Body.JsonContent(json)
+        )
         return Success(request)
     }
 }
