@@ -60,13 +60,13 @@ object OutcomeEncoder {
                 val desc = root.get("desc") as String
                 val type = root.get("type") as String
                 when(type) {
-                    Passed::Succeeded.name -> Passed.Succeeded(name, code, desc)
-                    Passed::Pending.name   -> Passed.Pending  (name, code, desc)
-                    Failed::Denied .name   -> Failed.Denied (name, code, desc)
-                    Failed::Ignored.name   -> Failed.Ignored(name, code, desc)
-                    Failed::Invalid.name   -> Failed.Invalid(name, code, desc)
-                    Failed::Errored.name   -> Failed.Errored(name, code, desc)
-                    else                   -> Failed.Unknown(name, code, desc)
+                    "Succeeded" -> Passed.Succeeded(name, code, desc)
+                    "Pending"   -> Passed.Pending(name, code, desc)
+                    "Denied"   -> Failed.Denied (name, code, desc)
+                    "Ignored"   -> Failed.Ignored(name, code, desc)
+                    "Invalid"   -> Failed.Invalid(name, code, desc)
+                    "Errored"   -> Failed.Errored(name, code, desc)
+                    else        -> Failed.Unknown(name, code, desc)
                 }
             }
             else -> s
