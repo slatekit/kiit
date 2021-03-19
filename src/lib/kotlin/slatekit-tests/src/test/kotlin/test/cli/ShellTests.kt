@@ -32,6 +32,7 @@ import slatekit.connectors.cli.CliApi
 import slatekit.integration.apis.VersionApi
 import slatekit.connectors.entities.AppEntContext
 import slatekit.results.Codes
+import slatekit.results.Status
 import slatekit.results.getOrElse
 import slatekit.serialization.Serialization
 import test.TestApp
@@ -45,7 +46,7 @@ class ShellTests  {
       val result = runBlocking { cli.executeText("app.version.host") }
 
       val res = result.getOrElse {
-        CliResponse( CliRequest.build(Args.empty(), ""),true, Codes.SUCCESS.name, 1, mapOf(), "" )
+        CliResponse( CliRequest.build(Args.empty(), ""),true, Status.toType(Codes.SUCCESS), Codes.SUCCESS.name, 1, mapOf(), "" )
       }
       val req = res.request
       Assert.assertTrue( req.area == "app" )

@@ -1,11 +1,11 @@
-package slatekit.apis.core
+package slatekit.serialization.responses
 
 import org.json.simple.JSONArray
 import org.json.simple.JSONObject
 import slatekit.common.requests.Response
 import slatekit.results.Err
 
-object Errs {
+object ResponseEncoder {
 
     /**
      * Builds a Slate Kit standardized response object
@@ -30,9 +30,11 @@ object Errs {
     fun response(err: Err, result: Response<Any?>):JSONObject{
         val errors = JSONArray()
         flatten(err, errors, 0)
+
         val json = JSONObject()
         json["success"] = false
         json["name"] = result.name
+        json["type"] = result.type
         json["code"] = result.code
         json["desc"] = result.desc
         json["meta"] = result.meta

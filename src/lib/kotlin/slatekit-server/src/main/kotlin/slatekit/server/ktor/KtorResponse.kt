@@ -19,7 +19,7 @@ import io.ktor.http.HttpStatusCode
 import io.ktor.response.header
 import io.ktor.response.respondBytes
 import io.ktor.response.respondText
-import slatekit.apis.core.Errs
+import slatekit.serialization.responses.ResponseEncoder
 import slatekit.common.types.Content
 import slatekit.common.types.Doc
 import slatekit.common.requests.Response
@@ -97,7 +97,7 @@ class KtorResponse(val settings:ServerSettings)  : ResponseHandler {
 
 
     private suspend fun error(call: ApplicationCall, result: Response<Any?>, err: Err){
-        val json = Errs.response(err, result)
+        val json = ResponseEncoder.response(err, result)
         val text = json.toJSONString()
         val contentType = io.ktor.http.ContentType.Application.Json // "application/json"
         val statusCode = toHttpStatus(result)

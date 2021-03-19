@@ -22,6 +22,7 @@ import slatekit.results.Codes
 interface Response<out T>  {
     val success: Boolean
     val name: String
+    val type: String
     val code: Int
     val meta: Map<String, String>?
     val value: T?

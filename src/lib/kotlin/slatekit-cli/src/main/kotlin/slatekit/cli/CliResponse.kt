@@ -15,6 +15,7 @@ package slatekit.cli
 import slatekit.common.args.Args
 import slatekit.common.requests.Response
 import slatekit.results.Codes
+import slatekit.results.Passed
 
 /**
  * General purpose class to model a Response at an application boundary ( such as http response )
@@ -31,6 +32,7 @@ data class CliResponse<out T>(
         val request: CliRequest,
         override val success: Boolean,
         override val name: String,
+        override val type: String,
         override val code: Int,
         override val meta: Map<String, String>?,
         override val value: T?,
@@ -53,6 +55,7 @@ data class CliResponse<out T>(
                 CliRequest.build(Args.empty(), ""),
                 true,
                 Codes.SUCCESS.name,
+                Passed::Succeeded.name,
                 1,
                 mapOf(),
                 "empty"

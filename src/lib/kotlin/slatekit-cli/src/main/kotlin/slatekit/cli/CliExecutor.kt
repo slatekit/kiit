@@ -64,6 +64,7 @@ open class CliExecutor {
                     request,
                     true,
                     Codes.SUCCESS.name,
+                    Status.toType(Codes.SUCCESS),
                     0,
                     mapOf(),
                     ""
