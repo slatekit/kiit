@@ -1,9 +1,11 @@
 package test.results
+import org.junit.Assert
 import org.junit.Test
 import slatekit.results.*
 import slatekit.results.Codes
 import slatekit.results.builders.OutcomeBuilder
 import slatekit.results.builders.Outcomes
+import slatekit.serialization.errors.OutcomeEncoder
 
 /**
  * These tests the building/construction of the Result model in simple/advance cases
@@ -13,7 +15,6 @@ import slatekit.results.builders.Outcomes
  * 4. with code + message
  */
 class ResultBuilderTests : ResultTestSupport, OutcomeBuilder {
-
 
     @Test
     fun can_build_successes() {
@@ -84,5 +85,99 @@ class ResultBuilderTests : ResultTestSupport, OutcomeBuilder {
         ensureFailure(Outcomes.unexpected<Int>("unexpected-x"), status, expectedError = "unexpected-x")
         ensureFailure(Outcomes.unexpected<Int>(Exception("unexpected-x")), status, expectedError = "unexpected-x")
         ensureFailure(Outcomes.unexpected<Int>(Err.of("unexpected-x")), status, expectedError = "unexpected-x")
+    }
+
+
+    @Test
+    fun can_parse_error() {
+        val json = """
+            {
+            	"errs": [
+                    {
+                        "field": "email",
+                        "type": "input",
+                        "message": "Email already exists",
+                        "value": "slate.kit@gmail.com"
+            	    },
+                    {
+                        "field": "",
+                        "type": "action",
+                        "message": "Unable to register user",
+                        "value": ""
+            	    }
+                ],
+            	"code": 500004,
+            	"success": false,
+            	"meta": null,
+            	"name": "CONFLICT",
+            	"tag": null,
+            	"value": null,
+            	"desc": "Conflict"
+            }
+        """.trimIndent()
+        val result = OutcomeEncoder.decode(json, Int::class.java) { Outcomes.success(42) }
+        Assert.assertFalse(result.success)
+        result.onFailure {err ->
+            Assert.assertTrue( err is Err.ErrorList)
+            Assert.assertTrue( (err as Err.ErrorList).errors[0] is Err.ErrorField)
+            Assert.assertTrue( (err as Err.ErrorList).errors[1] is Err.ErrorInfo)
+            val errs = err as Err.ErrorList
+
+            val err1 = errs.errors[0] as Err.ErrorField
+            Assert.assertEquals("email", err1.field)
+            Assert.assertEquals("slate.kit@gmail.com", err1.value)
+            Assert.assertEquals("Email already exists", err1.msg)
+
+            val err2 = errs.errors[1] as Err.ErrorInfo
+            Assert.assertEquals("Unable to register user", err2.msg)
+        }
+    }
+
+    @Test
+    fun can_parse_value_using_default_code() {
+        val json = """
+            {
+            	"success": true,
+            	"name": "SUCCESS",
+            	"type": "Succeeded",
+            	"code": 200001,
+            	"desc": "Successful operation",
+            	"value": 42,
+            	"errs": null,
+            	"meta": null,
+            	"tag": null
+            }
+        """.trimIndent()
+        val result = OutcomeEncoder.decode(json, Int::class.java) { 42 }
+        Assert.assertTrue(result.success)
+        Assert.assertTrue(result.status is Passed.Succeeded)
+        Assert.assertEquals(42, result.getOrNull())
+        Assert.assertEquals(Codes.SUCCESS.name, result.status.name)
+        Assert.assertEquals(Codes.SUCCESS.code, result.status.code)
+        Assert.assertEquals(Codes.SUCCESS.desc, result.status.desc)
+    }
+
+    @Test
+    fun can_parse_value_using_custom_code() {
+        val json = """
+            {
+            	"success": true,
+            	"name": "REGISTERED",
+            	"type": "Succeeded",
+            	"code": 900001,
+            	"desc": "Registration successful",
+            	"value": 42,
+            	"errs": null,
+            	"meta": null,
+            	"tag": null
+            }
+        """.trimIndent()
+        val result = OutcomeEncoder.decode(json, Int::class.java) { 42 }
+        Assert.assertTrue(result.success)
+        Assert.assertTrue(result.status is Passed.Succeeded)
+        Assert.assertEquals(42, result.getOrNull())
+        Assert.assertEquals("REGISTERED", result.status.name)
+        Assert.assertEquals(900001, result.status.code)
+        Assert.assertEquals("Registration successful", result.status.desc)
     }
 }

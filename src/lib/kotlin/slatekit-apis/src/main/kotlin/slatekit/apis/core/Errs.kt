@@ -30,9 +30,11 @@ object Errs {
     fun response(err: Err, result: Response<Any?>):JSONObject{
         val errors = JSONArray()
         flatten(err, errors, 0)
+
         val json = JSONObject()
         json["success"] = false
         json["name"] = result.name
+        json["type"] = result.type
         json["code"] = result.code
         json["desc"] = result.desc
         json["meta"] = result.meta

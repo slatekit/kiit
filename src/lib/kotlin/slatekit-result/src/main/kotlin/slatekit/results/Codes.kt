@@ -141,12 +141,17 @@ object Codes {
     private val lookupHttp = mappings.map{ Pair(it.first, it) }.toMap()
     private val lookupCode = mappings.map{ Pair(it.third, it) }.toMap()
 
+    @JvmStatic
+    fun contains(code:Int):Boolean {
+        return lookupCode.contains(code)
+    }
 
     /**
      * Converts a status to a compatible http status code
      * @return Triple with http status code, original code, and optional exception
      */
-    @JvmStatic fun toHttp(status: Status):Pair<Int, Status> {
+    @JvmStatic
+    fun toHttp(status: Status):Pair<Int, Status> {
         val exists = lookupHttp.containsKey(status.code)
         return when(exists){
             true -> {
@@ -160,12 +165,28 @@ object Codes {
         }
     }
 
+    /**
+     * Converts a status to a compatible http status code
+     * @return Triple with http status code, original code, and optional exception
+     */
+    @JvmStatic
+    fun toStatus(code:Int): Status? {
+        return when(lookupHttp.containsKey(code)){
+            true -> {
+                val httpCode = lookupHttp[code]
+                httpCode?.second
+            }
+            else -> null
+        }
+    }
+
 
     /**
      * Converts a code to a compatible http status with code
      * @return Triple with http status code, original code, and optional exception
      */
-    @JvmStatic fun fromHttp(code: Int):Status {
+    @JvmStatic
+    fun ofCode(code: Int):Status {
         val exists = lookupCode.containsKey(code)
         return when(exists){
             true -> {

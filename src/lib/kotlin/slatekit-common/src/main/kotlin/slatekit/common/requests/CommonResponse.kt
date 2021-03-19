@@ -14,6 +14,7 @@ package slatekit.common.requests
 data class CommonResponse<out T>(
         override val success: Boolean,
         override val name: String,
+        override val type: String,
         override val code: Int,
         override val meta: Map<String, String>?,
         override val value: T?,
