@@ -1,11 +1,11 @@
-package slatekit.apis.core
+package slatekit.serialization.responses
 
 import org.json.simple.JSONArray
 import org.json.simple.JSONObject
 import slatekit.common.requests.Response
 import slatekit.results.Err
 
-object Errs {
+object ResponseEncoder {
 
     /**
      * Builds a Slate Kit standardized response object

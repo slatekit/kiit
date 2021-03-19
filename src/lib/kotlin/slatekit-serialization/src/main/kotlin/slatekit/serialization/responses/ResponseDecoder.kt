@@ -1,4 +1,4 @@
-package slatekit.serialization.errors
+package slatekit.serialization.responses
 
 import org.json.simple.JSONArray
 import org.json.simple.JSONObject
@@ -23,13 +23,9 @@ import slatekit.results.builders.Outcomes
     "desc": "Conflict"
     }
  */
-object OutcomeEncoder {
+object ResponseDecoder {
 
-    fun <T> encode(data: T?): String? {
-        TODO("Not yet implemented")
-    }
-
-    fun <T> decode(json: String?, cls:Class<*>, converter:(JSONObject) -> T): Outcome<T> {
+    fun <T> outcome(json: String?, cls:Class<*>, converter:(JSONObject) -> T): Outcome<T> {
         val parser = JSONParser()
         val doc = parser.parse(json)
         val root = doc as JSONObject

@@ -5,7 +5,7 @@ import slatekit.results.*
 import slatekit.results.Codes
 import slatekit.results.builders.OutcomeBuilder
 import slatekit.results.builders.Outcomes
-import slatekit.serialization.errors.OutcomeEncoder
+import slatekit.serialization.responses.ResponseDecoder
 
 /**
  * These tests the building/construction of the Result model in simple/advance cases
@@ -115,7 +115,7 @@ class ResultBuilderTests : ResultTestSupport, OutcomeBuilder {
             	"desc": "Conflict"
             }
         """.trimIndent()
-        val result = OutcomeEncoder.decode(json, Int::class.java) { Outcomes.success(42) }
+        val result = ResponseDecoder.outcome(json, Int::class.java) { Outcomes.success(42) }
         Assert.assertFalse(result.success)
         result.onFailure {err ->
             Assert.assertTrue( err is Err.ErrorList)
@@ -148,7 +148,7 @@ class ResultBuilderTests : ResultTestSupport, OutcomeBuilder {
             	"tag": null
             }
         """.trimIndent()
-        val result = OutcomeEncoder.decode(json, Int::class.java) { 42 }
+        val result = ResponseDecoder.outcome(json, Int::class.java) { 42 }
         Assert.assertTrue(result.success)
         Assert.assertTrue(result.status is Passed.Succeeded)
         Assert.assertEquals(42, result.getOrNull())
@@ -172,7 +172,7 @@ class ResultBuilderTests : ResultTestSupport, OutcomeBuilder {
             	"tag": null
             }
         """.trimIndent()
-        val result = OutcomeEncoder.decode(json, Int::class.java) { 42 }
+        val result = ResponseDecoder.outcome(json, Int::class.java) { 42 }
         Assert.assertTrue(result.success)
         Assert.assertTrue(result.status is Passed.Succeeded)
         Assert.assertEquals(42, result.getOrNull())
