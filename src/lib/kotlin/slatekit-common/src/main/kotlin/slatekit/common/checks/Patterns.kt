@@ -23,7 +23,7 @@ data class Pattern(val pattern: String)
   * Named regex pattern
   */
 object Patterns {
-    @JvmField val email = Pattern("""(\w+)@([\w\.]+)""")
+    @JvmField val email = Pattern("""([\w\.\-\_]+)@([\w\.\-\_]+)""")
     @JvmField val alpha = Pattern("""^[a-zA-Z]*$""")
     @JvmField val alphaUpperCase = Pattern("""^[A-Z]*$""")
     @JvmField val alphaLowerCase = Pattern("""^[a-z]*$""")

@@ -121,6 +121,9 @@ class ValidationTests {
         Assert.assertTrue( !isEmail("@amazonian.com"))
         Assert.assertTrue( !isEmail("wonderwoman_amazonian.com"))
         Assert.assertTrue(  isEmail("wonderwoman@amazonian.com"))
+        Assert.assertTrue(  isEmail("wonder.woman@amazon-ian.com"))
+        Assert.assertTrue(  isEmail("wonder-woman@amazon_ian.com"))
+        Assert.assertTrue(  isEmail("wonder_woman@amazonian.com"))
     }
 
 
