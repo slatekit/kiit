@@ -69,18 +69,19 @@ interface Status {
             if (msg != null && rawStatus != null) return rawStatus.copyDesc(msg) as T
             return status
         }
-        
+
         fun toType(status:Status):String {
-            return when(status) {
-                is Passed.Succeeded -> Passed::Succeeded.name
-                is Passed.Pending -> Passed::Pending.name
-                is Failed.Denied  -> Failed::Denied .name
-                is Failed.Ignored -> Failed::Ignored.name
-                is Failed.Invalid -> Failed::Invalid.name
-                is Failed.Errored -> Failed::Errored.name
-                is Failed.Unknown -> Failed::Unknown.name
+            val name:String = when(status) {
+                is Passed.Succeeded -> "Succeeded"
+                is Passed.Pending   -> "Pending"
+                is Failed.Denied    -> "Denied"
+                is Failed.Ignored   -> "Ignored"
+                is Failed.Invalid   -> "Invalid"
+                is Failed.Errored   -> "Errored"
+                is Failed.Unknown   -> "Unknown"
                 else -> Failed::Unknown.name
             }
+            return name
         }
     }
 }

@@ -26,6 +26,7 @@ import slatekit.samples.common.models.Movie
  * ROUTE                | SOURCE        | PURPOSE
  * samples/all/about    , CLI + WEB     , 0 params: get version info
  * samples/all/greet    , CLI + WEB     , 1 param : simple hello world greeting
+ * samples/all/outcome  , CLI + WEB     , 1 param : shows how to model success and failure
  * samples/all/inc      , CLI + WEB     , 0 params: increment a accumulator
  * samples/all/add      , CLI + WEB     , 1 param : add to a accumulator
  * samples/all/value    , CLI + WEB     , get value of the counter
@@ -94,6 +95,27 @@ class SampleAPI(context: Context) : ApiBase(context) {
     @Action(desc = "simple hello world greeting")
     fun greet(greeting: String): String {
         return "$greeting back"
+    }
+
+
+    /*
+     Sample acton to show how to model success/failure values
+     Examples:
+     CLI: samples.all.about
+     WEB: curl -X POST http://localhost:5000/api/samples/all/about
+     */
+    @Action(desc = "show how to model success and failure")
+    fun outcome(name:String): Outcome<Int> {
+        return when(name.toLowerCase()){
+            "succeeded" -> Outcomes.success(1)
+            "pending"   -> Outcomes.pending(2)
+            "denied"    -> Outcomes.denied("Sample denied error")
+            "ignored"   -> Outcomes.ignored("Sample ignored error")
+            "invalid"   -> Outcomes.invalid("Sample invalid error")
+            "errored"   -> Outcomes.errored("Sample expected error")
+            "unknown"   -> Outcomes.unexpected("Sample unexpected error")
+            else       -> Outcomes.unexpected("Sample unexpected error")
+        }
     }
 
 

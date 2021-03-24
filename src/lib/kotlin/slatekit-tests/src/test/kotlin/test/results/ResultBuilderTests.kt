@@ -1,6 +1,7 @@
 package test.results
 import org.junit.Assert
 import org.junit.Test
+import slatekit.meta.kClass
 import slatekit.results.*
 import slatekit.results.Codes
 import slatekit.results.builders.OutcomeBuilder
@@ -110,6 +111,7 @@ class ResultBuilderTests : ResultTestSupport, OutcomeBuilder {
             	"success": false,
             	"meta": null,
             	"name": "CONFLICT",
+                "type": "Errored",
             	"tag": null,
             	"value": null,
             	"desc": "Conflict"
@@ -117,6 +119,9 @@ class ResultBuilderTests : ResultTestSupport, OutcomeBuilder {
         """.trimIndent()
         val result = ResponseDecoder.outcome(json, Int::class.java) { Outcomes.success(42) }
         Assert.assertFalse(result.success)
+        Assert.assertEquals( Codes.CONFLICT.name, result.status.name)
+        Assert.assertEquals( Codes.CONFLICT.desc, result.status.desc)
+        Assert.assertEquals( Codes.CONFLICT.code, result.status.code)
         result.onFailure {err ->
             Assert.assertTrue( err is Err.ErrorList)
             Assert.assertTrue( (err as Err.ErrorList).errors[0] is Err.ErrorField)
@@ -179,5 +184,17 @@ class ResultBuilderTests : ResultTestSupport, OutcomeBuilder {
         Assert.assertEquals("REGISTERED", result.status.name)
         Assert.assertEquals(900001, result.status.code)
         Assert.assertEquals("Registration successful", result.status.desc)
+    }
+
+
+    @Test
+    fun can_get_type_of_status() {
+        Assert.assertEquals("Succeeded" , Status.toType(Codes.SUCCESS))
+        Assert.assertEquals("Pending"   , Status.toType(Codes.PENDING))
+        Assert.assertEquals("Denied"    , Status.toType(Codes.DENIED))
+        Assert.assertEquals("Ignored"   , Status.toType(Codes.IGNORED))
+        Assert.assertEquals("Invalid"   , Status.toType(Codes.INVALID))
+        Assert.assertEquals("Errored"   , Status.toType(Codes.ERRORED))
+        Assert.assertEquals("Unknown"   , Status.toType(Codes.UNEXPECTED))
     }
 }

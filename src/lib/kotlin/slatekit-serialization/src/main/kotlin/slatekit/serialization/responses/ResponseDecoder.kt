@@ -36,11 +36,12 @@ object ResponseDecoder {
                 Success(value, status)
             }
             false -> {
+                val status = decodeStatus(root) as Failed
                 if (root.containsKey("errs")) {
                     val errList = decodeErrs(root)
-                    Outcomes.errored<T>(errList)
+                    Failure<Err>(errList, status)
                 } else {
-                    Outcomes.errored<T>("unable to parse result")
+                    Failure<Err>(Err.of("unable to parse result"), status)
                 }
             }
         }
