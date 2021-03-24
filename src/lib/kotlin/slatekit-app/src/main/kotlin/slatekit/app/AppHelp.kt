@@ -138,9 +138,7 @@ class AppHelp(val info: Info, val args: ArgsSchema, val envs: Envs = Envs.defaul
     }
 
     private fun version() {
-        wrap {
-            println("version : " + info.build.version)
-        }
+        println("version : " + info.build.version)
     }
 
     private fun options() {
