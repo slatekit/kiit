@@ -17,7 +17,7 @@ num | type | link
 ----| ------------ | ------------ 
 1 | **Simple** | Easy to use, light, modular, 100% Kotlin (alternative to Spring Framework) 
 2 | **Projects** | More than just for APIs, use it for Console apps, Jobs, CLIs.
-3 | **Usage**  | For Start-Ups, Personal Projects, Mobile Apps, SMB (small-medium sized businesses)
+3 | **Usage**  | Start-Ups, Personal, Mobile Apps, SMB (small-mid sized business)
 4 | **Full-Stack** | Usable on both Server and Android ( due to being simple/light-weight)
 5 | **Multiplatform** |  Kotlin Multi-Platform planned for the future for Javascript, Native, iOS, etc
 6 | **Modular**  |  Designed as a set of libraries rather than a typical `"framework"`
