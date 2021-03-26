@@ -118,11 +118,6 @@ Providers                                                              | --     
 [datadog](http://www.slatekit.com/arch/tracking)             | [src](src/ext/kotlin/slatekit-providers-datadog) | DataDog metrics provider | [ ![Download](https://api.bintray.com/packages/codehelixinc/slatekit/slatekit-providers-aws/images/download.svg) ](https://bintray.com/codehelixinc/slatekit/slatekit-providers-aws/_latestVersion)
 
 
-**Links**:
-1. https://mariadb.com/bsl-faq-adopting/
-2. https://blog.adamretter.org.uk/business-source-license-adoption/
-
-
 # ⁉️ Upcoming
 1. Additional AWS abstractions/integrations ( Documents, Streams )
 2. CI/CD improvements ( lint tools, etc ) 
