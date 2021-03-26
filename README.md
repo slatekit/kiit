@@ -8,22 +8,24 @@
 ![image](media/slatekit-banner.png)
 
 
-# About
+# ❓ About
 Slate Kit is a **Kotlin** framework, with simple, light-weight, modular libraries and tools to build **Apps, APIs, CLIs, Jobs, Mobile Apps**. It is targetd for **Start-ups, Personal projects, Mobile Apps, and SMBs** ( small-medium sized businesses ). These libraries can be used for both **Server and Android** and there are modules for the server that abstract infrastructure ( Queues, Files, SMS, Emails, Alerts ) with integrations for **AWS** ( SQS, S3 ), Twilio ( SMS ), SendGrid ( Email ), Slack ( Alerts ) and more. Multi-platform support is planned as a future state.
 
 
-# Goals
-1. **Simple** : Easy to use, light-weight, modular ( 100% Kotlin based alternative to Spring Framework ) 
-2. **Projects**: More than just for APIs, use it for Console apps, Jobs, CLIs.
-3. **Usage**  : Designed for Start-Ups, Personal Projects, Mobile Apps, SMB ( small-medium sized businesses )
-4. **Full-Stack**: Usable on both Server and Android ( due to being simple/light-weight)
-5. **Multiplatform** Kotlin Multi-Platform planned for the future for Javascript, Native, iOS, etc
-6. **Modular** : Designed as a set of libraries rather than a typical `"framework"`
-7. **Tools** : CLI tools to quickly create new Apps, CLIs, API, Jobs projects
-8. **Cloud** : Partial Cloud Provider abstractions for ( Queues, Files, Databases, etc ) 
-9. **Defaults** Sensible default implementations, currently support AWS
+# 💡 Goals
+num | type | link 
+----| ------------ | ------------ 
+1 | **Simple** | Easy to use, light-weight, modular ( 100% Kotlin based alternative to Spring Framework ) 
+2 | **Projects** | More than just for APIs, use it for Console apps, Jobs, CLIs.
+3 | **Usage**  | Designed for Start-Ups, Personal Projects, Mobile Apps, SMB ( small-medium sized businesses )
+4 | **Full-Stack** | Usable on both Server and Android ( due to being simple/light-weight)
+5 | **Multiplatform** |  Kotlin Multi-Platform planned for the future for Javascript, Native, iOS, etc
+6 | **Modular**  |  Designed as a set of libraries rather than a typical `"framework"`
+7 | **Tools**  |  CLI tools to quickly create new Apps, CLIs, API, Jobs projects
+8 | **Cloud**  |  Partial Cloud Provider abstractions for ( Queues, Files, Databases, etc ) 
+9 | **Defaults** |  Sensible default implementations, currently support AWS
 
-# Start
+# 🏁 Start
 You can quickly get started on **Mac OS** using the **Homebrew** installer and create projects using the Slate Kit CLI. Refer to https://www.slatekit.com/start/generators/ for more info.
 ```bash
 brew tap slatekit/slatekit
@@ -44,7 +46,7 @@ slatekit new cli -name="MyCLI1" -package="company1.apps"
 3. Ensure security -> privacy -> full disk access -> iterm2 ( of what ever terminal you use )
 
 
-# Install
+# 🏁 Install
 You can set up gradle using the example below. You can use as few or as many slatekit modules as you need. 
 
 [ ![Latest Version](https://api.bintray.com/packages/codehelixinc/slatekit/slatekit-results/images/download.svg) ](https://bintray.com/codehelixinc/slatekit/slatekit-results/_latestVersion)
@@ -61,7 +63,7 @@ dependencies {
 }
 ```
 
-# Links
+# 🔗 Links
 Some important links / pages for more info.
 
 num | type | link 
@@ -79,7 +81,7 @@ num | type | link
 11  | bintray     | http://dl.bintray.com/codehelixinc/slatekit
 
 
-# Modules
+# ⚙️ Modules
 Slate Kit contains many useful architecture components, utilities and applications features. Many of the modules are organized into logical groups and the entire design can be visualized in this diagram
 
 ![image](doc/diagrams/slatekit-overview.png)
@@ -117,7 +119,7 @@ Providers                                                              | --     
 2. https://blog.adamretter.org.uk/business-source-license-adoption/
 
 
-# Upcoming
+# ⁉️ Upcoming
 1. Additional AWS abstractions/integrations ( Documents, Streams )
 2. CI/CD improvements ( lint tools, etc ) 
 3. Kotlin Flow integration where applicable
@@ -126,16 +128,16 @@ Providers                                                              | --     
 6. Docker, Kubernetes build scripts
 7. Slate Kit MBaaS ( Mobile Backend as a Service )
 
-# MBaaS
+# ⚙️ MBaaS
 We are working on an Slate Kit based **MBaaS** ( Mobile Backend as a Service ) that cane be **self-hosted or cloud deployed.** This is meant to be an alternative to **Google Firebase**, with default integration with AWS for things like Files(S3), Queues(SQS), Docs(DynamoDB), and support for sending emails, sms, notifications and many more features. 
 
 
-# Contact
+# ✉️ Contact
 - **author**: Kishore Reddy
 - **website**: www.slatekit.com
 - **company**: www.codehelix.co
 - **email**: kishore  codehelix.co
 
-# Like Us ? :heart:
+# ❤️ Like Us ? 
 - Support Slate Kit by clicking the :star: button on the upper right of this page. :v:
 - Contribute to continued development via Sponsorship ( being set up soon )
