@@ -9,10 +9,14 @@
 
 
 # ❓ About
-Slate Kit is a **Kotlin** framework, with simple, light-weight, modular libraries and tools to build **Apps, APIs, CLIs, Jobs, Mobile Apps**. It is targetd for **Start-ups, Personal projects, Mobile Apps, and SMBs** ( small-medium sized businesses ). These libraries can be used for both **Server and Android** and there are modules for the server that abstract infrastructure ( Queues, Files, SMS, Emails, Alerts ) with integrations for **AWS** ( SQS, S3 ), Twilio ( SMS ), SendGrid ( Email ), Slack ( Alerts ) and more. Multi-platform support is planned as a future state.
+Slate Kit is a modular **Kotlin** framework to build Server and Android apps.
 
 
-# 💡 Goals
+# ℹ️ Details
+Slate Kit is a Kotlin framework, designed to be a simple, light-weight, modular set of libraries and tools to build **Apps, APIs, CLIs, Jobs, Mobile Apps**. It is targetd for **Start-ups, Personal projects, Mobile Apps, and SMBs** ( small-medium sized businesses ). These libraries can be used for both **Server and Android** and there are modules for the server that abstract infrastructure ( Queues, Files, SMS, Emails, Alerts ) with integrations for **AWS** ( SQS, S3 ), Twilio ( SMS ), SendGrid ( Email ), Slack ( Alerts ) and more. Multi-platform support is planned as a future state.
+
+
+# ✨ Goals
 num | type | link 
 ----| ------------ | ------------ 
 1 | **Simple** | Easy to use, light, modular, 100% Kotlin (alternative to Spring Framework) 
