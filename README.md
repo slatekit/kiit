@@ -67,7 +67,7 @@ dependencies {
 }
 ```
 
-# 🔗 Links
+# 📌 Links
 Some important links / pages for more info.
 
 num | type | link 
