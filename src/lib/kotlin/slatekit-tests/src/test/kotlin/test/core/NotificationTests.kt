@@ -70,4 +70,16 @@ class NotificationTests {
             }
         }
     }
+
+    //@Test
+    fun can_build_twilio2() {
+        val conf = Config.of(TestApp::class.java, "usr://.slatekit/common/conf/sms.conf")
+        val key = conf.apiLogin("sms")
+        val india = Countries.find("in")!!
+        val service = TwilioSms(key, countries = listOf(Countries.usa, india))
+        runBlocking {
+            val result = service.send("testing from unit-tests", Countries.usa.iso2, "1234567890")
+            println(result)
+        }
+    }
 }

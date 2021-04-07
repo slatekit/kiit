@@ -17,6 +17,7 @@ import slatekit.common.templates.Templates
 import slatekit.common.types.Countries
 import slatekit.common.types.Vars
 import slatekit.common.types.Country
+import slatekit.http.HttpRPC
 import slatekit.notifications.common.TemplateSender
 import slatekit.results.*
 
@@ -27,7 +28,8 @@ import slatekit.results.*
  */
 abstract class SmsService(
     override val templates: Templates? = null,
-    val countries:List<Country> = listOf(Countries.usa)
+    val countries:List<Country> = listOf(Countries.usa),
+    override val client: HttpRPC = HttpRPC()
 ) : TemplateSender<SmsMessage> {
 
     /**

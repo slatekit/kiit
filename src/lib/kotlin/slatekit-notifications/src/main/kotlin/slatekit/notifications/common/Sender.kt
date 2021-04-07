@@ -9,6 +9,8 @@ import slatekit.results.builders.Outcomes
 
 interface Sender<T> {
 
+    val client:HttpRPC
+
     /**
      * Whether or not sending is enabled
      */
@@ -61,7 +63,7 @@ interface Sender<T> {
      * @param request: A prebuilt http request representing the send
      */
     suspend fun send(request: Request): Outcome<Response> {
-        return awaitHttpOutcome { HttpRPC().sendAsync(request, it) }
+        return awaitHttpOutcome { client.sendAsync(request, it) }
     }
 
     /**
@@ -69,7 +71,7 @@ interface Sender<T> {
      * @param request: A prebuilt http request representing the send
      */
     fun sendSync(request: Request): Outcome<Response> {
-        val response = HttpRPC().call(request)
+        val response = client.call(request)
         return response.toOutcome()
     }
 

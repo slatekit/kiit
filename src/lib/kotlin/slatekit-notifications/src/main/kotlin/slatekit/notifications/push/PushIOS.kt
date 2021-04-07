@@ -14,10 +14,11 @@
 package slatekit.notifications.push
 
 import okhttp3.Request
+import slatekit.http.HttpRPC
 import slatekit.notifications.common.Sender
 import slatekit.results.Outcome
 
-class PushIOS : Sender<PushMessage> {
+class PushIOS(override val client: HttpRPC = HttpRPC()) : Sender<PushMessage> {
 
     override fun validate(model: PushMessage): Outcome<PushMessage> {
         TODO("not implemented") // To change body of created functions use File | Settings | File Templates.

@@ -27,9 +27,10 @@ class SendGrid(
     user: String,
     key: String,
     phone: String,
-    templates: Templates? = null
+    templates: Templates? = null,
+    client: HttpRPC = HttpRPC()
 ) :
-    EmailService(templates) {
+    EmailService(templates, client) {
 
     val settings = EmailSettings(user, key, phone)
     //private val baseUrlOld = "https://api.sendgrid.com/api/mail.send.json"

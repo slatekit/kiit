@@ -14,7 +14,8 @@ import slatekit.results.builders.Outcomes
  */
 class SlackAlerts(
     override val identity: Identity,
-    override val settings: AlertSettings
+    override val settings: AlertSettings,
+    override val client: HttpRPC = HttpRPC()
 ) : AlertService() {
 
     private val baseUrl = "https://hooks.slack.com/services"

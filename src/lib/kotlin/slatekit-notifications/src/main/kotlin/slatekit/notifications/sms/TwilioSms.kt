@@ -44,9 +44,10 @@ class TwilioSms(
     password: String,
     phone: String,
     templates: Templates? = null,
-    countries: List<Country> = listOf(Countries.usa)
+    countries: List<Country> = listOf(Countries.usa),
+    client: HttpRPC = HttpRPC()
 ) :
-    SmsService(templates, countries) {
+    SmsService(templates, countries, client) {
     private val settings = SmsSettings(key, password, phone)
     private val baseUrl = "https://api.twilio.com/2010-04-01/Accounts/$key/Messages.json"
 

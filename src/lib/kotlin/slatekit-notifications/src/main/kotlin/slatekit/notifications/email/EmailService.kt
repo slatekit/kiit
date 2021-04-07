@@ -15,10 +15,14 @@ package slatekit.notifications.email
 
 import slatekit.common.templates.Templates
 import slatekit.common.types.Vars
+import slatekit.http.HttpRPC
 import slatekit.notifications.common.TemplateSender
 import slatekit.results.*
 
-abstract class EmailService(override val templates: Templates? = null) : TemplateSender<EmailMessage> {
+abstract class EmailService(
+    override val templates: Templates? = null,
+    override val client: HttpRPC = HttpRPC()
+) : TemplateSender<EmailMessage> {
 
     /**
      * Sends the email message
