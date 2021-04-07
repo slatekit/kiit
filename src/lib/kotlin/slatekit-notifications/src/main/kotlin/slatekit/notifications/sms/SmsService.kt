@@ -80,14 +80,7 @@ abstract class SmsService(
         // Case 3: Inputs valid so massage
         else {
             val country = countryLookup[finalIso]
-            val finalPhone = country?.let { c ->
-                if (!phone.startsWith(country.phoneCode)) {
-                    "${c.phoneCode}$phone"
-                } else {
-                    phone
-                }
-            }
-
+            val finalPhone = country?.normalize(phone)
             Success(finalPhone ?: phone)
         }
     }
