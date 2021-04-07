@@ -17,6 +17,7 @@ import slatekit.common.templates.Templates
 import slatekit.common.types.Countries
 import slatekit.common.types.Vars
 import slatekit.common.types.Country
+import slatekit.http.HttpRPC
 import slatekit.notifications.common.TemplateSender
 import slatekit.results.*
 
@@ -27,7 +28,8 @@ import slatekit.results.*
  */
 abstract class SmsService(
     override val templates: Templates? = null,
-    val countries:List<Country> = listOf(Countries.usa)
+    val countries:List<Country> = listOf(Countries.usa),
+    override val client: HttpRPC = HttpRPC()
 ) : TemplateSender<SmsMessage> {
 
     /**
@@ -80,14 +82,7 @@ abstract class SmsService(
         // Case 3: Inputs valid so massage
         else {
             val country = countryLookup[finalIso]
-            val finalPhone = country?.let { c ->
-                if (!phone.startsWith(country.phoneCode)) {
-                    "${c.phoneCode}$phone"
-                } else {
-                    phone
-                }
-            }
-
+            val finalPhone = country?.normalize(phone)
             Success(finalPhone ?: phone)
         }
     }

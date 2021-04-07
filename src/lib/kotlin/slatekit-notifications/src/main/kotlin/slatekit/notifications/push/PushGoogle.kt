@@ -81,7 +81,8 @@ import slatekit.results.builders.Outcomes
 open class PushGoogle(
     _key: String,
     val config: Conf,
-    val logs: Logs
+    val logs: Logs,
+    override val client: HttpRPC = HttpRPC()
 ) : Sender<PushMessage> {
 
     private val settings = PushSettings("", _key, "")
