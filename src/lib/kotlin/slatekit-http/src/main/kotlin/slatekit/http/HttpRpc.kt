@@ -10,7 +10,17 @@ import java.io.IOException
  * Minimal Http Client for making RPC like calls over Http
  * Uses OkHttp under the hood.
  */
-class HttpRPC(val serializer:((Any?) -> String)? = null) {
+class HttpRPC(private val serializer:((Any?) -> String)? = null,
+              private val clientBuilder: (() -> OkHttpClient)? = null,
+              private val singletonClient:Boolean = true) {
+
+    /**
+     * Singleton recommended but configurable based on flag
+     * See: https://square.github.io/okhttp/4.x/okhttp/okhttp3/-ok-http-client/
+     * NOTE: This is only called if singletonClient = true
+     */
+    private val client:OkHttpClient by lazy { build(clientBuilder) }
+
 
     enum class Method(val value:Int) {
         Get(0),
@@ -61,7 +71,7 @@ class HttpRPC(val serializer:((Any?) -> String)? = null) {
             queryParams: Map<String, String>? = null,
             creds: Auth? = null,
             callback: (Result<Response, IOException>) -> Unit) {
-        val client = OkHttpClient()
+        val client = httpClient()
         val url = buildUrl(url, queryParams)
         val headers = buildHeaders(headerParams)
         val builder = Request.Builder().url(url).headers(headers)
@@ -182,7 +192,7 @@ class HttpRPC(val serializer:((Any?) -> String)? = null) {
 
     fun sendAsync(request: Request,
                   callback: (Result<Response, IOException>) -> Unit) {
-        val client = OkHttpClient()
+        val client = httpClient()
         client.newCall(request).enqueue(object : Callback {
             override fun onResponse(call: Call?, response: Response) {
                 callback(Success(response))
@@ -196,7 +206,7 @@ class HttpRPC(val serializer:((Any?) -> String)? = null) {
 
     fun sendAsync(request: Request,
                   callback: HttpRPCResult) {
-        val client = OkHttpClient()
+        val client = httpClient()
         client.newCall(request).enqueue(object : Callback {
             override fun onResponse(call: Call?, response: Response) {
                 callback.onSuccess(response)
@@ -231,7 +241,7 @@ class HttpRPC(val serializer:((Any?) -> String)? = null) {
      * @param request     : A pre-built okhttp request
      */
     fun call(request:Request): Result<Response, Exception> {
-        val client = OkHttpClient()
+        val client = httpClient()
         val response = client.newCall(request).execute()
         return if(response.isSuccessful) {
             Success(response)
@@ -299,5 +309,19 @@ class HttpRPC(val serializer:((Any?) -> String)? = null) {
 
     private fun buildHeaders(headers: Map<String, String>? = null): Headers {
         return headers?.let { Headers.of(it) } ?: Headers.of(mapOf())
+    }
+
+
+    private fun httpClient():OkHttpClient {
+        return when(singletonClient) {
+            true  -> client
+            false -> build(clientBuilder)
+        }
+    }
+
+    companion object {
+        private fun build(builder: (() -> OkHttpClient)? = null): OkHttpClient {
+            return builder?.invoke() ?: OkHttpClient()
+        }
     }
 }
