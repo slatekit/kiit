@@ -1,36 +1,62 @@
-apply from: '../../../../build/gradle/slatekit-common.gradle'
-
 buildscript {
-    ext.kotlin_version = '1.3.21'
-    ext.slatekit_version = new File('../version.txt').text
-    ext.slatekit_version_beta = new File('../version-beta.txt').text
+  ext.kotlin_version = '1.3.72'
+  ext.slatekit_version = new File('../version.txt').text
+  ext.slatekit_version_beta = new File('../version-beta.txt').text
 
-    repositories {
-        jcenter()
-        mavenCentral()
-    }
-    dependencies {
-        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
-        classpath "com.jfrog.bintray.gradle:gradle-bintray-plugin:1.8.3"
-    }
+  repositories {
+    jcenter()
+    mavenCentral()
+  }
+  dependencies {
+    classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
+  }
 }
 
-apply plugin: 'java'
-apply plugin: 'kotlin'
+plugins {
+  id "java"
+  id "maven-publish"
+  id "org.jetbrains.kotlin.jvm" version "$kotlin_version"
+}
 
+apply from: '../../../../build/gradle/slatekit-common.gradle'
 
-// Slate Kit Component info ( for variables for pom / package / etc )
+compileJava {
+  sourceCompatibility = JavaVersion.VERSION_1_8
+  targetCompatibility = JavaVersion.VERSION_1_8
+}
+
+repositories {
+  jcenter()
+  mavenCentral()
+  maven {
+    url "https://maven.pkg.github.com/slatekit/slatekit"
+    credentials {
+      username = System.getenv('SLATEKIT_INSTALL_ACTOR')
+      password = System.getenv('SLATEKIT_INSTALL_TOKEN')
+    }
+  }
+}
+
+dependencies {
+  compile "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
+  compile "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin_version"
+  testCompile 'junit:junit:4.12'
+}
+
+// ==================================================================
+// Slate Kit Component Info
+// ==================================================================
 def slatekitComponentId = 'results'
 def slatekitComponentName = 'Results'
 def slatekitComponentDesc = 'SlateKit Result: Model successes and failures with optional status codes'
 def slatekitComponentVersion = ext.slatekit_version
-
 
 // ==================================================================
 // Slate Kit Setup mode: defaults to maven vs loading project sources
 // ==================================================================
 ext.slatekitSetupViaBinary = System.getenv('SLATEKIT_PROJECT_MODE') != 'sources'
 task info {
+  doLast {
     println('slatekit.setup     : ' + System.getenv('SLATEKIT_PROJECT_MODE'))
     println('slatekit.maven     : ' + slatekitSetupViaBinary)
     println('slatekit.comp.id   : ' + slatekitComponentId)
@@ -47,157 +73,27 @@ task info {
     println('build.commit       : ' + gitCommitId())
     println('build.branch       : ' + gitBranchName())
     println('build.date         : ' + getBuildDate())
-}
-
-
-tasks.withType(org.jetbrains.kotlin.gradle.tasks.KotlinCompile).all {
-    sourceCompatibility = JavaVersion.VERSION_1_6
-    targetCompatibility = JavaVersion.VERSION_1_6
-
-    kotlinOptions {
-        jvmTarget = '1.6'
-        apiVersion = '1.3'
-        languageVersion = '1.3'
-    }
-}
-
-
-repositories {
-    jcenter()
-    mavenCentral()
-    maven {
-        url  "https://dl.bintray.com/codehelixinc/slatekit"
-    }
-    maven {
-      url  "https://maven.pkg.github.com/code-helix/slatekit"
-      credentials {
-        username = System.getenv('SLATEKIT_INSTALL_ACTOR')
-        password = System.getenv('SLATEKIT_INSTALL_TOKEN')
-      }
-    }
-}
-
-dependencies {
-    compile "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
-    compile "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin_version"
-    testCompile 'junit:junit:4.12'
-    //testCompile "org.jetbrains.kotlin:kotlin-test"
-    //testCompile "org.jetbrains.kotlin:kotlin-test-junit"
-}
-
-// ==================================================================
-// BinTray Integration
-// ==================================================================
-apply plugin: 'maven'
-apply plugin: 'maven-publish'
-apply plugin: 'com.jfrog.bintray'
-
-
-// Maven packages require the sources/docs.
-task sourcesJar(type: Jar, dependsOn: classes) {
-    classifier = 'sources'
-    from sourceSets.main.allSource
-}
-
-javadoc.failOnError = false
-task javadocJar(type: Jar, dependsOn: javadoc) {
-    classifier = 'javadoc'
-    from javadoc.destinationDir
-}
-
-artifacts {
-    archives sourcesJar
-    archives javadocJar
-}
-
-def pomConfig = {
-    licenses {
-        license {
-            name "Apache 2.0"
-            url "http://www.apache.org/licenses/LICENSE-2.0.txt"
-            distribution "repo"
-        }
-    }
-    developers {
-        developer {
-            id "codehelix"
-            name "kishore reddy"
-            email "kishore@codehelix.co"
-        }
-    }
-
-    scm {
-        url "https://github.com/code-helix/slatekit-${slatekitComponentId}"
-    }
+  }
 }
 
 publishing {
-    publications {
-        mavenPublication(MavenPublication) {
-            from components.java
-            artifact sourcesJar {
-                classifier "sources"
-            }
-            artifact javadocJar {
-                classifier "javadoc"
-            }
-            groupId 'com.slatekit'
-            artifactId "slatekit-${slatekitComponentId}"
-            version "${slatekitComponentVersion}"
-            pom.withXml {
-                def root = asNode()
-                root.appendNode('description', "${slatekitComponentDesc}")
-                root.appendNode('name', "SlateKit ${slatekitComponentName}")
-                root.appendNode('url', "https://github.com/code-helix/slatekit-${slatekitComponentId}")
-                root.children().last() + pomConfig
-            }
-        }
-    }
-    repositories {
-      maven {
-        url = "https://maven.pkg.github.com/code-helix/slatekit"
-        credentials {
-          username = System.getenv("SLATEKIT_PUBLISH_ACTOR")
-          password = System.getenv("SLATEKIT_PUBLISH_TOKEN")
-        }
+  repositories {
+    maven {
+      name = "GitHubPackages"
+      url = "https://maven.pkg.github.com/slatekit/slatekit"
+      credentials {
+        username = System.getenv("SLATEKIT_PUBLISH_ACTOR")
+        password = System.getenv("SLATEKIT_PUBLISH_TOKEN")
       }
     }
-}
+  }
 
-// gradle bintrayUpload
-bintray {
-    user = project.hasProperty('bintrayUser') ? project.property('bintrayUser') : System.getenv('SLATEKIT_BINTRAY_ACTOR')
-    key = project.hasProperty('bintrayApiKey') ? project.property('bintrayApiKey') : System.getenv('SLATEKIT_BINTRAY_TOKEN')
-    publish = true
-    //configurations = ['archives']
-    publications = ['mavenPublication']
-    pkg {
-        repo            = "slatekit"
-        name            = "slatekit-${slatekitComponentId}"
-        userOrg         = "codehelixinc"
-        desc            = "${slatekitComponentDesc}"
-        websiteUrl      = "http://www.slatekit.com/"
-        issueTrackerUrl = "https://github.com/code-helix/slatekit-${slatekitComponentId}/issues"
-        vcsUrl          = "https://github.com/code-helix/slatekit-${slatekitComponentId}"
-        licenses        = ['Apache-2.0']
-        publicDownloadNumbers = false
-        version {
-            name = "${slatekitComponentVersion}"
-        }
+  publications {
+    gpr(MavenPublication) {
+      from(components.java)
+      groupId 'com.slatekit'
+      artifactId "slatekit-${slatekitComponentId}"
+      version "${slatekitComponentVersion}"
     }
+  }
 }
-
-/* ==================================================================
-*
-* DEPLOY:
-* 1. ensure bin-tray user/pswd env vars are set: bintrayUser, bintrayApiKey
-* 2. replace the version number(s) in this file
-* 3. cd into root directory
-* 4. run gradle bintrayUpload
-*
-* LINKS:
-* https://reflectoring.io/guide-publishing-to-bintray-with-gradle/
-* https://stackoverflow.com/questions/52359686/configure-gradle-for-kotlin-with-java-1-7
-*
-* ===================================================================
-*/

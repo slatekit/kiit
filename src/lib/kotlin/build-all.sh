@@ -4,6 +4,8 @@ cd slatekit-result        && gradle clean build bintrayUpload && cd ../ && echo 
 cd slatekit-actors        && gradle clean build bintrayUpload && cd ../ && echo 'sleeping 20s' && sleep 20s     
 cd slatekit-common        && gradle clean build bintrayUpload && cd ../ && echo 'sleeping 20s' && sleep 20s     
 cd slatekit-context       && gradle clean build bintrayUpload && cd ../ && echo 'sleeping 20s' && sleep 20s     
+
+# Support
 cd slatekit-tracking      && gradle clean build bintrayUpload && cd ../ && echo 'sleeping 20s' && sleep 20s   
 cd slatekit-policy        && gradle clean build bintrayUpload && cd ../ && echo 'sleeping 20s' && sleep 20s   
 cd slatekit-meta          && gradle clean build bintrayUpload && cd ../ && echo 'sleeping 20s' && sleep 20s   
@@ -19,7 +21,6 @@ cd slatekit-apis          && gradle clean build bintrayUpload && cd ../ && echo 
 
 # Infrastructure
 cd slatekit-cache         && gradle clean build bintrayUpload && cd ../ && echo 'sleeping 20s' && sleep 20s 
-cd slatekit-cloud         && gradle clean build bintrayUpload && cd ../ && echo 'sleeping 20s' && sleep 20s    
 cd slatekit-db            && gradle clean build bintrayUpload && cd ../ && echo 'sleeping 20s' && sleep 20s 
 cd slatekit-notifications && gradle clean build bintrayUpload && cd ../ && echo 'sleeping 20s' && sleep 20s   
 

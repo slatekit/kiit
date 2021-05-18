@@ -1,6 +1,6 @@
 
 buildscript {
-    ext.kotlin_version = '1.3.21'
+    ext.kotlin_version = '1.3.72'
     ext.slatekit_version = new File('../version.txt').text
     ext.slatekit_version_beta = new File('../version-beta.txt').text
 
@@ -13,11 +13,13 @@ buildscript {
     }
 }
 
+plugins {
+    id "java"
+    id "maven-publish"
+    id "org.jetbrains.kotlin.jvm" version "$kotlin_version"
+}
 
-apply plugin: 'kotlin'
-apply plugin: 'java'
-apply plugin: 'org.junit.platform.gradle.plugin'
-
+//apply plugin: 'org.junit.platform.gradle.plugin'
 
 compileKotlin {
     sourceCompatibility = JavaVersion.VERSION_1_8
@@ -33,10 +35,14 @@ compileKotlin {
 repositories {
     jcenter()
     mavenCentral()
-    maven { url "http://dl.bintray.com/jetbrains/spek" }
-    maven { url  "https://dl.bintray.com/codehelixinc/slatekit" }
+    maven {
+        url "https://maven.pkg.github.com/slatekit/slatekit"
+        credentials {
+            username = System.getenv('SLATEKIT_INSTALL_ACTOR')
+            password = System.getenv('SLATEKIT_INSTALL_TOKEN')
+        }
+    }
 }
-
 
 dependencies {
     compile "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
