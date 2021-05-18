@@ -1,12 +1,5 @@
-apply from: '../../../../build/gradle/slatekit-common.gradle'
-apply plugin: 'java'
-apply plugin: 'kotlin'
-apply plugin: 'maven'
-apply plugin: 'maven-publish'
-
-
 buildscript {
-  ext.kotlin_version = '1.3.21'
+  ext.kotlin_version = '1.3.72'
   ext.slatekit_version = new File('../version.txt').text
   ext.slatekit_version_beta = new File('../version-beta.txt').text
 
@@ -16,10 +9,39 @@ buildscript {
   }
   dependencies {
     classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
-    classpath "com.jfrog.bintray.gradle:gradle-bintray-plugin:1.8.3"
   }
 }
 
+plugins {
+  id "java"
+  id "maven-publish"
+  id "org.jetbrains.kotlin.jvm" // version "$kotlin_version"
+}
+
+apply from: '../../../../build/gradle/slatekit-common.gradle'
+
+compileJava {
+  sourceCompatibility = JavaVersion.VERSION_1_8
+  targetCompatibility = JavaVersion.VERSION_1_8
+}
+
+repositories {
+  jcenter()
+  mavenCentral()
+  maven {
+    url "https://maven.pkg.github.com/slatekit/slatekit"
+    credentials {
+      username = System.getenv('SLATEKIT_INSTALL_ACTOR')
+      password = System.getenv('SLATEKIT_INSTALL_TOKEN')
+    }
+  }
+}
+
+dependencies {
+  compile "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
+  compile "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin_version"
+  testCompile 'junit:junit:4.12'
+}
 
 // ==================================================================
 // Slate Kit Component Info
@@ -52,41 +74,6 @@ task info {
     println('build.branch       : ' + gitBranchName())
     println('build.date         : ' + getBuildDate())
   }
-}
-
-compileJava {
-  sourceCompatibility = JavaVersion.VERSION_1_8
-  targetCompatibility = JavaVersion.VERSION_1_8
-}
-
-tasks.withType(org.jetbrains.kotlin.gradle.tasks.KotlinCompile).all {
-  sourceCompatibility = JavaVersion.VERSION_1_8
-  targetCompatibility = JavaVersion.VERSION_1_8
-
-  kotlinOptions {
-    jvmTarget = '1.6'
-    apiVersion = '1.3'
-    languageVersion = '1.3'
-  }
-}
-
-
-repositories {
-  jcenter()
-  mavenCentral()
-  maven {
-    url "https://maven.pkg.github.com/slatekit/slatekit"
-    credentials {
-      username = System.getenv('SLATEKIT_INSTALL_ACTOR')
-      password = System.getenv('SLATEKIT_INSTALL_TOKEN')
-    }
-  }
-}
-
-dependencies {
-  compile "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
-  compile "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin_version"
-  testCompile 'junit:junit:4.12'
 }
 
 publishing {
