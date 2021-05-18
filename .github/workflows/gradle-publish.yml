@@ -40,7 +40,7 @@ jobs:
 
     - name: Build SlateKit.Result with Gradle
       working-directory: src/lib/kotlin/slatekit-result
-      run: gradle clean build bintrayUpload
+      run: gradle clean build publish
     - name: Sleep for 30 seconds
       uses: whatnick/wait-action@master
       with: 
@@ -182,6 +182,14 @@ jobs:
       with: 
         time: '30s'
 
+    - name: Build SlateKit.db with Gradle
+      working-directory: src/lib/kotlin/slatekit-db
+      run: gradle clean build publish
+    - name: Sleep for 30 seconds
+      uses: whatnick/wait-action@master
+      with: 
+        time: '30s'
+
     - name: Build SlateKit.entities with Gradle
       working-directory: src/lib/kotlin/slatekit-entities
       run: gradle clean build publish
@@ -190,15 +198,23 @@ jobs:
       with: 
         time: '30s'
 
-    - name: Build SlateKit.orm with Gradle
-      working-directory: src/lib/kotlin/slatekit-orm
-      run: gradle clean build bintrayUpload
+    - name: Build SlateKit.migrations with Gradle
+      working-directory: src/lib/kotlin/slatekit-migrations
+      run: gradle clean build publish
     - name: Sleep for 30 seconds
       uses: whatnick/wait-action@master
       with: 
         time: '30s'
 
     # Providers
+    - name: Build Slate Kit Providers - AWS with Gradle
+      working-directory: src/ext/kotlin/slatekit-providers-aws
+      run: gradle clean build publish
+    - name: Sleep for 30 seconds
+      uses: whatnick/wait-action@master
+      with: 
+        time: '30s'
+
     - name: Build Slate Kit Providers - AWS with Gradle
       working-directory: src/ext/kotlin/slatekit-providers-aws
       run: gradle clean build publish
@@ -226,7 +242,7 @@ jobs:
     # Connectors
     - name: Build Slate Kit Connectors - AWS with Gradle
       working-directory: src/ext/kotlin/slatekit-connectors-cli
-      run: gradle clean build bintrayUpload
+      run: gradle clean build publish
     - name: Sleep for 30 seconds
       uses: whatnick/wait-action@master
       with: 
