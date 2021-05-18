@@ -52,8 +52,7 @@ slatekit new cli -name="MyCLI1" -package="company1.apps"
 
 # 🏁 Install
 You can set up gradle using the example below. You can use as few or as many slatekit modules as you need. 
-
-[ ![Latest Version](https://api.bintray.com/packages/codehelixinc/slatekit/slatekit-results/images/download.svg) ](https://bintray.com/codehelixinc/slatekit/slatekit-results/_latestVersion)
+See https://github.com/orgs/slatekit/packages?repo_name=slatekit for latest versions
 
 ```groovy
 repositories {
@@ -63,7 +62,7 @@ repositories {
 }
 dependencies {
 	// slatekit-results: Result<T,E> to model successes/failures with optional status codes
-    	compile 'com.slatekit:slatekit-results:2.2.0'
+    	compile 'com.slatekit:slatekit-results:2.4.5'
 }
 ```
 
@@ -92,30 +91,30 @@ Slate Kit contains many useful architecture components, utilities and applicatio
 
 Here are some of the main ones:
 
-docs | source | desc | download
------------- | ------------ | ------------- | ------------- 
-Foundations                                                         | --                                        | Used by most modules                | --
-[results](https://www.slatekit.com/arch/results)             | [src](src/lib/kotlin/slatekit-result)            | Modeling of Successes/Failures | [ ![Download](https://api.bintray.com/packages/codehelixinc/slatekit/slatekit-results/images/download.svg) ](https://bintray.com/codehelixinc/slatekit/slatekit-results/_latestVersion)
-[common](https://www.slatekit.com/utils/overview)            | [src](src/lib/kotlin/slatekit-common)            | Utility Components   | [ ![Download](https://api.bintray.com/packages/codehelixinc/slatekit/slatekit-common/images/download.svg) ](https://bintray.com/codehelixinc/slatekit/slatekit-common/_latestVersion)
-[context](https://www.slatekit.com/arch/context)             | [src](src/lib/kotlin/slatekit-context)           | Stores Common Dependencies | [ ![Download](https://api.bintray.com/packages/codehelixinc/slatekit/slatekit-common/images/download.svg) ](https://bintray.com/codehelixinc/slatekit/slatekit-common/_latestVersion)
-[actors](https://www.slatekit.com/arch/actors)               | [src](src/lib/kotlin/slatekit-actors)            | Micro Actor Library | [ ![Download](https://api.bintray.com/packages/codehelixinc/slatekit/slatekit-common/images/download.svg) ](https://bintray.com/codehelixinc/slatekit/slatekit-common/_latestVersion)
-Apps                                                                | --                                        | Runnable apps/Services                  | --
-[app](http://www.slatekit.com/arch/app)                      | [src](src/lib/kotlin/slatekit-app)               | Runnable App Template | [ ![Download](https://api.bintray.com/packages/codehelixinc/slatekit/slatekit-app/images/download.svg) ](https://bintray.com/codehelixinc/slatekit/slatekit-core/_latestVersion)
-[cli](http://www.slatekit.com/arch/cli)                      | [src](src/lib/kotlin/slatekit-cli)               | Command Line Interface | [ ![Download](https://api.bintray.com/packages/codehelixinc/slatekit/slatekit-cli/images/download.svg) ](https://bintray.com/codehelixinc/slatekit/slatekit-core/_latestVersion)
-[apis](http://www.slatekit.com/arch/apis)                    | [src](src/lib/kotlin/slatekit-apis)              | RPC-like Web APIs | [ ![Download](https://api.bintray.com/packages/codehelixinc/slatekit/slatekit-apis/images/download.svg) ](https://bintray.com/codehelixinc/slatekit/slatekit-apis/_latestVersion)
-[jobs](http://www.slatekit.com/arch/jobs)                    | [src](src/lib/kotlin/slatekit-jobs)              | Pausable jobs on persistent queues | [ ![Download](https://api.bintray.com/packages/codehelixinc/slatekit/slatekit-jobs/images/download.svg) ](https://bintray.com/codehelixinc/slatekit/slatekit-jobs/_latestVersion)
-Infrastructure                                                      | --                                        | Infrastructure components                  | --
-[core](http://www.slatekit.com/arch/core)                    | [src](src/lib/kotlin/slatekit-core)              | Infrastructure Abstractions(Files, Queues) | [ ![Download](https://api.bintray.com/packages/codehelixinc/slatekit/slatekit-core/images/download.svg) ](https://bintray.com/codehelixinc/slatekit/slatekit-core/_latestVersion)
-[cache](http://www.slatekit.com/arch/cache)                  | [src](src/lib/kotlin/slatekit-cache)             | Caching library | [ ![Download](https://api.bintray.com/packages/codehelixinc/slatekit/slatekit-core/images/download.svg) ](https://bintray.com/codehelixinc/slatekit/slatekit-core/_latestVersion)
-[notifications](http://www.slatekit.com/arch/notifications)  | [src](src/lib/kotlin/slatekit-notifications)     | Email, SMS, Slack, Push | [![Download](https://api.bintray.com/packages/codehelixinc/slatekit/slatekit-notifications/images/download.svg)](https://bintray.com/codehelixinc/slatekit/slatekit-notifications/_latestVersion)
-Data                                                                | --                                        | Database modules                 | --
-[db](http://www.slatekit.com/arch/data)                      | [src](src/lib/kotlin/slatekit-db)                | Easy database operations over JDBC | [ ![Download](https://api.bintray.com/packages/codehelixinc/slatekit/slatekit-common/images/download.svg) ](https://bintray.com/codehelixinc/slatekit/slatekit-data/_latestVersion)
-[data](http://www.slatekit.com/arch/data)                    | [src](src/lib/kotlin/slatekit-data)              | Repository pattern for data persistence | [ ![Download](https://api.bintray.com/packages/codehelixinc/slatekit/slatekit-data/images/download.svg) ](https://bintray.com/codehelixinc/slatekit/slatekit-data/_latestVersion)
-[entities](http://www.slatekit.com/arch/data)                | [src](src/lib/kotlin/slatekit-entities)          | Light-weight Data-Mapper for models | [ ![Download](https://api.bintray.com/packages/codehelixinc/slatekit/slatekit-entities/images/download.svg) ](https://bintray.com/codehelixinc/slatekit/slatekit-entities/_latestVersion)
-Providers                                                              | --                                     | 3rd Party Integrations                | --
-[aws](http://www.slatekit.com/arch/files)                    | [src](src/ext/kotlin/slatekit-providers-aws)     | AWS S3, SQS provider files/queues | [ ![Download](https://api.bintray.com/packages/codehelixinc/slatekit/slatekit-providers-aws/images/download.svg) ](https://bintray.com/codehelixinc/slatekit/slatekit-providers-aws/_latestVersion)
-[logback](http://www.slatekit.com/utils/logs)                | [src](src/ext/kotlin/slatekit-providers-logback) | Logback logging provider | [ ![Download](https://api.bintray.com/packages/codehelixinc/slatekit/slatekit-providers-aws/images/download.svg) ](https://bintray.com/codehelixinc/slatekit/slatekit-providers-aws/_latestVersion)
-[datadog](http://www.slatekit.com/arch/tracking)             | [src](src/ext/kotlin/slatekit-providers-datadog) | DataDog metrics provider | [ ![Download](https://api.bintray.com/packages/codehelixinc/slatekit/slatekit-providers-aws/images/download.svg) ](https://bintray.com/codehelixinc/slatekit/slatekit-providers-aws/_latestVersion)
+docs | source | desc 
+------------ | ------------ | -------------
+Foundations                                                         | --                                        | Used by most modules                
+[results](https://www.slatekit.com/arch/results)             | [src](src/lib/kotlin/slatekit-result)            | Modeling of Successes/Failures 
+[common](https://www.slatekit.com/utils/overview)            | [src](src/lib/kotlin/slatekit-common)            | Utility Components   
+[context](https://www.slatekit.com/arch/context)             | [src](src/lib/kotlin/slatekit-context)           | Stores Common Dependencies 
+[actors](https://www.slatekit.com/arch/actors)               | [src](src/lib/kotlin/slatekit-actors)            | Micro Actor Library 
+Apps                                                                | --                                        | Runnable apps/Services                
+[app](http://www.slatekit.com/arch/app)                      | [src](src/lib/kotlin/slatekit-app)               | Runnable App Template 
+[cli](http://www.slatekit.com/arch/cli)                      | [src](src/lib/kotlin/slatekit-cli)               | Command Line Interface 
+[apis](http://www.slatekit.com/arch/apis)                    | [src](src/lib/kotlin/slatekit-apis)              | RPC-like Web APIs
+[jobs](http://www.slatekit.com/arch/jobs)                    | [src](src/lib/kotlin/slatekit-jobs)              | Pausable jobs on persistent queues 
+Infrastructure                                                      | --                                        | Infrastructure components               
+[core](http://www.slatekit.com/arch/core)                    | [src](src/lib/kotlin/slatekit-core)              | Infrastructure Abstractions(Files, Queues)
+[cache](http://www.slatekit.com/arch/cache)                  | [src](src/lib/kotlin/slatekit-cache)             | Caching library 
+[notifications](http://www.slatekit.com/arch/notifications)  | [src](src/lib/kotlin/slatekit-notifications)     | Email, SMS, Slack, Push 
+Data                                                                | --                                        | Database modules                 
+[db](http://www.slatekit.com/arch/data)                      | [src](src/lib/kotlin/slatekit-db)                | Easy database operations over JDBC 
+[data](http://www.slatekit.com/arch/data)                    | [src](src/lib/kotlin/slatekit-data)              | Repository pattern for data persistence 
+[entities](http://www.slatekit.com/arch/data)                | [src](src/lib/kotlin/slatekit-entities)          | Light-weight Data-Mapper for models 
+Providers                                                              | --                                     | 3rd Party Integrations                
+[aws](http://www.slatekit.com/arch/files)                    | [src](src/ext/kotlin/slatekit-providers-aws)     | AWS S3, SQS provider files/queues 
+[logback](http://www.slatekit.com/utils/logs)                | [src](src/ext/kotlin/slatekit-providers-logback) | Logback logging provider 
+[datadog](http://www.slatekit.com/arch/tracking)             | [src](src/ext/kotlin/slatekit-providers-datadog) | DataDog metrics provider 
 
 
 # ⁉️ Upcoming
