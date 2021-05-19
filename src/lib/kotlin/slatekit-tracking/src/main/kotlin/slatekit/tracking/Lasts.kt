@@ -59,13 +59,13 @@ open class Lasts<TRequest, TResponse, TFailure>(val id: Identity,
         getCustom(name)?.let { c -> c.set(Triple(sender, req, error)) }
     }
 
-    fun lastProcessed ():TRequest                  = _lastRequest.get()
-    fun lastSuccess   ():Triple<Any, TRequest, TResponse> = _lastSuccess.get()
-    fun lastInvalid   ():Triple<Any, TRequest, Failure<TFailure>> = _lastInvalid.get()
-    fun lastIgnored   ():Triple<Any, TRequest, Failure<TFailure>> = _lastIgnored.get()
-    fun lastDenied    ():Triple<Any, TRequest, Failure<TFailure>> = _lastDenied.get()
-    fun lastErrored   ():Triple<Any, TRequest, Failure<TFailure>> = _lastErrored.get()
-    fun lastUnexpected():Triple<Any, TRequest, Failure<TFailure>> = _lastUnexpected.get()
+    fun lastProcessed ():TRequest?                  = _lastRequest.get()
+    fun lastSuccess   ():Triple<Any, TRequest, TResponse>? = _lastSuccess.get()
+    fun lastInvalid   ():Triple<Any, TRequest, Failure<TFailure>>? = _lastInvalid.get()
+    fun lastIgnored   ():Triple<Any, TRequest, Failure<TFailure>>? = _lastIgnored.get()
+    fun lastDenied    ():Triple<Any, TRequest, Failure<TFailure>>? = _lastDenied.get()
+    fun lastErrored   ():Triple<Any, TRequest, Failure<TFailure>>? = _lastErrored.get()
+    fun lastUnexpected():Triple<Any, TRequest, Failure<TFailure>>? = _lastUnexpected.get()
     fun lastCustom(name:String):Triple<Any, TRequest, Failure<TFailure>>? = getCustom(name)?.get()
 
     fun clear(){
