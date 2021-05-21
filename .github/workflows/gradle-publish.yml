@@ -182,8 +182,8 @@ jobs:
       with: 
         time: '30s'
 
-    - name: Build SlateKit.db with Gradle
-      working-directory: src/lib/kotlin/slatekit-db
+    - name: Build SlateKit.data with Gradle
+      working-directory: src/lib/kotlin/slatekit-data
       run: gradle clean build publish
     - name: Sleep for 30 seconds
       uses: whatnick/wait-action@master
@@ -207,14 +207,6 @@ jobs:
         time: '30s'
 
     # Providers
-    - name: Build Slate Kit Providers - AWS with Gradle
-      working-directory: src/ext/kotlin/slatekit-providers-aws
-      run: gradle clean build publish
-    - name: Sleep for 30 seconds
-      uses: whatnick/wait-action@master
-      with: 
-        time: '30s'
-
     - name: Build Slate Kit Providers - AWS with Gradle
       working-directory: src/ext/kotlin/slatekit-providers-aws
       run: gradle clean build publish
