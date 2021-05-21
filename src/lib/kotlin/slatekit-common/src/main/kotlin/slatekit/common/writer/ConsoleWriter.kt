@@ -54,10 +54,16 @@ class ConsoleWriter(
      */
     private fun write(color: String?, text: String, endLine: Boolean) {
         val finalColor = if(color == null || color == "") "" else "$color "
+        val resetText = "$finalColor$text$RESET"
         val finalText = if (endLine)
-            finalColor + text + newline
+            resetText + newline
         else
-            finalColor + text
+            resetText
         io.perform(finalText)
+    }
+
+    companion object {
+        const val ESCAPE = '\u001B'
+        const val RESET = "$ESCAPE[0m"
     }
 }

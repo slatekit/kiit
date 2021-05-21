@@ -14,10 +14,11 @@ interface SlateKitServices {
 
     fun apis(settings:Conf): List<Api> {
         // APIs
-        val toolSettings = ToolSettings(settings.getString("slatekit.version"), settings.getString("slatekit.version.beta"))
+        val toolSettings = ToolSettings(settings.getString("slatekit.version"), settings.getString("slatekit.version.beta"), "logs/logback.log")
         val buildSettings = BuildSettings(settings.getString("kotlin.version"))
+        val logger = ctx.logs.getLogger("gen")
         return listOf(
-                Api(GeneratorApi(ctx, GeneratorService(ctx, settings, SlateKit::class.java, GeneratorSettings(toolSettings, buildSettings))), declaredOnly = true, setup = SetupType.Annotated),
+                Api(GeneratorApi(ctx, GeneratorService(ctx, settings, SlateKit::class.java, GeneratorSettings(toolSettings, buildSettings), logger = logger)), declaredOnly = true, setup = SetupType.Annotated),
                 Api(DocApi(ctx), declaredOnly = true, setup = SetupType.Annotated),
                 Api(CodeGenApi(), declaredOnly = true, setup = SetupType.Annotated)
         )

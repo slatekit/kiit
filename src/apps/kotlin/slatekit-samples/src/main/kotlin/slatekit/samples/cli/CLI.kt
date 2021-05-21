@@ -4,12 +4,10 @@ import slatekit.apis.*
 import slatekit.apis.routes.Api
 import slatekit.apis.support.Authenticator
 import slatekit.cli.CliSettings
-import slatekit.common.types.Content
 import slatekit.common.info.ApiKey
-import slatekit.common.types.ContentType
+import slatekit.common.types.*
 import slatekit.connectors.cli.CliApi
 import slatekit.connectors.entities.AppEntContext
-import slatekit.entities.EntityId
 import slatekit.entities.EntityLongId
 import slatekit.entities.EntityService
 import slatekit.results.Try
@@ -74,12 +72,25 @@ class CLI(val ctx: AppEntContext) {
 
 
     private fun print(item:Any?, type:ContentType) : Content {
-        val text = Serialization.json().serialize(item)
-        val wrap = """{ "value" : $text }""".trimMargin()
-        val body = org.json.JSONObject(wrap)
-        val pretty = body.toString(4)
-        val content = Content.text(pretty)
-        return content
+        val serializer = when(type){
+            ContentTypeCsv -> Serialization.csv()
+            ContentTypeProp -> Serialization.props()
+            else -> Serialization.json()
+        }
+        val text = serializer.serialize(item)
+        return if(type == ContentTypeJson) {
+            val wrap = """{ "value" : $text }""".trimMargin()
+            val body = org.json.JSONObject(wrap)
+            val pretty = body.toString(4)
+            Content.text(pretty)
+        }
+        else {
+            when(type){
+                ContentTypeCsv -> Content.csv(text)
+                ContentTypeProp -> Content.prop(text)
+                else -> Content.text(text)
+            }
+        }
     }
 
     class MovieModule(ctx:AppEntContext, mod:ModuleContext) : Module(ctx, mod) {

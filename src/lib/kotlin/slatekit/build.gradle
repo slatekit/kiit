@@ -114,7 +114,7 @@ dependencies {
     } //</slatekit_local>
 //    implementation project(":slatekit-examples")
 //    implementation project(":slatekit-samples")
-    implementation project(":slatekit-tests")
+//    implementation project(":slatekit-tests")
 }
 
 // ==================================================================

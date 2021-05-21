@@ -167,7 +167,7 @@ open class CLI(
         // and also the startup commands
         return this.transform(text) { args ->
 
-            val evalResult = runBlocking { eval(args) }
+            val evalResult = eval(args)
             when (evalResult) {
 
                 // Transfer value back upstream with original parsed args
@@ -192,10 +192,9 @@ open class CLI(
      * Evaluates the arguments read in from user input.
      */
     suspend fun eval(args: Args): Try<Boolean> {
-
         // Single command ( e.g. help, quit, about, version )
         // These are typically system level
-        return if (args.parts.size == 1) {
+        val res = if (args.parts.size == 1) {
             when (args.line) {
                 Reserved.About.id   -> { context.help.showAbout()    ; Tries.success(true, Codes.ABOUT) }
                 Reserved.Help.id    -> { context.help.showHelp()      ; Tries.success(true, Codes.HELP) }
@@ -209,6 +208,7 @@ open class CLI(
         } else {
             executeRepl(args)
         }
+        return res
     }
 
     /**
@@ -236,7 +236,8 @@ open class CLI(
      */
     suspend fun executeRepl(args: Args): Try<Boolean> {
         return try {
-            val result = executeRequest(CliUtils.convert(args))
+            val request = CliUtils.convert(args)
+            val result = executeRequest(request)
 
             // If the request was a help at the application level, the app
             // should handle that, so don't let it propagate back up because
@@ -287,7 +288,7 @@ open class CLI(
     /**
      * Evaluates the text read in from user input.
      */
-    private fun <T> transform(text: String, callback: (Args) -> Try<T>): Try<T> {
+    private suspend fun <T> transform(text: String, callback: suspend (Args) -> Try<T>): Try<T> {
         // Parse lexically into arguments
         val argsResult = Args.parse(text, settings.argPrefix, settings.argSeparator, true)
 

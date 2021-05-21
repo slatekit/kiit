@@ -6,7 +6,8 @@ package slatekit.generator
  */
 data class ToolSettings(
         val slatekitVersion:String,
-        val slatekitVersionBeta:String)
+        val slatekitVersionBeta:String,
+        val logFile:String)
 
 /**
  * Used for Kotlin related build settings

@@ -1,6 +1,7 @@
 package slatekit.generator
 
 import slatekit.common.conf.Conf
+import slatekit.common.log.Logger
 import slatekit.common.writer.ConsoleWriter
 import slatekit.context.Context
 import slatekit.results.Success
@@ -14,9 +15,13 @@ import java.io.File
  * @param cls      : Class containing the startup resources ( if applicable )
  * @param settings : Settings for the generator
  */
-class GeneratorService(val context: Context, val conf: Conf, val cls:Class<*>, val settings: GeneratorSettings) {
+class GeneratorService(val context: Context,
+                       val conf: Conf,
+                       val cls:Class<*>,
+                       val settings: GeneratorSettings,
+                       val logger: Logger = context.logs.getLogger()
+                        ) {
 
-    val logger = context.logs.getLogger()
     val currentDir = System.getProperty("user.dir")
 
     fun generate(setupCtx: GeneratorContext, template: Template): Try<GeneratorResult> {
@@ -37,8 +42,8 @@ class GeneratorService(val context: Context, val conf: Conf, val cls:Class<*>, v
             // e.g. ~/slatekit/gen/MyApp1 or CURRENT_DIR/MyApp1
             val targetRoot = File(ctx.destDir.absolutePath)
             val targetDir = File(ctx.destDir.absolutePath, setupCtx.name)
-            println("creating : ${targetRoot.absolutePath}")
-            println("creating : ${targetDir.absolutePath}")
+            logger.info("creating : ${targetRoot.absolutePath}")
+            logger.info("creating : ${targetDir.absolutePath}")
             targetRoot.mkdir()
             targetDir.mkdir()
 
@@ -49,7 +54,8 @@ class GeneratorService(val context: Context, val conf: Conf, val cls:Class<*>, v
 
             // Execute the template actions
             execute(finalCtx, template, targetDir)
-            GeneratorResult("Created project", targetDir.absolutePath, template.path.absolutePath)
+            writer.text("Created project, check log file for more details.")
+            GeneratorResult("Created ${setupCtx.name}", targetDir.absolutePath, template.path.absolutePath, setupCtx.settings.tool.logFile)
         }
     }
 
@@ -60,7 +66,7 @@ class GeneratorService(val context: Context, val conf: Conf, val cls:Class<*>, v
             null -> targetDir
             else -> File(targetDir, templateRootDirAction.path)
         }
-        val creator = Creator(context, ctx, template, cls)
+        val creator = Creator(context, ctx, template, cls, logger)
         logger.info("")
         logger.info("template.name=${template.name}, template.path: ${template.dir.absolutePath}, target.dir=${finalTargetDir.absolutePath}")
 
