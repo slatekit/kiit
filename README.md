@@ -58,11 +58,19 @@ See https://github.com/orgs/slatekit/packages?repo_name=slatekit for latest vers
 repositories {
     jcenter()
     mavenCentral()
-    maven { url  "https://dl.bintray.com/codehelixinc/slatekit" }
+    maven {
+        url "https://maven.pkg.github.com/slatekit/slatekit"
+        credentials {
+            username = System.getenv('GITHUB_PACKAGES_INSTALL_ACTOR')
+            password = System.getenv('GITHUB_PACKAGES_INSTALL_TOKEN')
+        }
+    }
 }
+
 dependencies {
 	// slatekit-results: Result<T,E> to model successes/failures with optional status codes
-    	compile 'com.slatekit:slatekit-results:2.4.5'
+    	compile 'com.slatekit:slatekit-results:2.4.6'
+	// ... Other packages here 
 }
 ```
 
