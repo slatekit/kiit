@@ -17,7 +17,7 @@ buildscript {
 plugins {
     id "java"
     id "maven-publish"
-    id "org.jetbrains.kotlin.jvm" // version "$kotlin_version"
+    id "org.jetbrains.kotlin.jvm" version "$kotlin_version"
 }
 
 apply from: '../../../../build/gradle/slatekit-common.gradle'
@@ -41,7 +41,7 @@ repositories {
 }
 apply from: '../../../../build/gradle/slatekit-common.gradle'
 
-ext.slatekitSetupViaBinary = true //System.getenv('SLATEKIT_PROJECT_MODE') != 'sources'
+ext.slatekitSetupViaBinary = false //System.getenv('SLATEKIT_PROJECT_MODE') != 'sources'
 
 // ==================================================================
 // Slate Kit Component Info
