@@ -1,11 +1,9 @@
-apply from: '../../../../build/gradle/slatekit-common.gradle'
-
 buildscript {
-    ext.kotlin_version = '1.3.21'
+    ext.kotlin_version = '1.3.72'
     ext.slatekit_version = new File('../version.txt').text
     ext.slatekit_version_beta = new File('../version-beta.txt').text
     ext.ktor_version = '1.1.1'
-    ext.logback_contrib_version = '0.1.5'
+    ext.logback_contrib_version ='1.2.3'
 
     repositories {
         jcenter()
@@ -13,15 +11,37 @@ buildscript {
     }
     dependencies {
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
-        classpath "com.jfrog.bintray.gradle:gradle-bintray-plugin:1.8.3"
     }
-
 }
 
-apply plugin: 'java'
-apply plugin: 'kotlin'
+plugins {
+    id "java"
+    id "maven-publish"
+    id "org.jetbrains.kotlin.jvm" // version "$kotlin_version"
+}
+
+apply from: '../../../../build/gradle/slatekit-common.gradle'
 apply plugin: 'application'
 
+compileJava {
+    sourceCompatibility = JavaVersion.VERSION_1_8
+    targetCompatibility = JavaVersion.VERSION_1_8
+}
+
+repositories {
+    jcenter()
+    mavenCentral()
+    maven {
+        url "https://maven.pkg.github.com/slatekit/slatekit"
+        credentials {
+            username = System.getenv('SLATEKIT_INSTALL_ACTOR')
+            password = System.getenv('SLATEKIT_INSTALL_TOKEN')
+        }
+    }
+}
+apply from: '../../../../build/gradle/slatekit-common.gradle'
+
+ext.slatekitSetupViaBinary = true //System.getenv('SLATEKIT_PROJECT_MODE') != 'sources'
 
 // ==================================================================
 // Slate Kit Component Info
@@ -35,7 +55,6 @@ def slatekitComponentVersion = ext.slatekit_version
 // ==================================================================
 // Slate Kit Setup mode: defaults to maven vs loading project sources
 // ==================================================================
-ext.slatekitSetupViaBinary = true //System.getenv('SLATEKIT_PROJECT_MODE') != 'sources'
 task info {
     println('slatekit.setup     : ' + System.getenv('SLATEKIT_PROJECT_MODE'))
     println('slatekit.maven     : ' + slatekitSetupViaBinary)
@@ -55,26 +74,6 @@ task info {
     println('build.date         : ' + getBuildDate())
 }
 
-tasks.withType(org.jetbrains.kotlin.gradle.tasks.KotlinCompile).all {
-    sourceCompatibility = JavaVersion.VERSION_1_8
-    targetCompatibility = JavaVersion.VERSION_1_8
-
-    kotlinOptions {
-        jvmTarget = '1.8'
-        apiVersion = '1.3'
-        languageVersion = '1.3'
-    }
-}
-
-
-repositories {
-    jcenter()
-    mavenCentral()
-    maven {
-        url  "https://dl.bintray.com/codehelixinc/slatekit"
-    }
-}
-
 
 dependencies {
     compile "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
@@ -88,8 +87,9 @@ dependencies {
     compile "mysql:mysql-connector-java:5.1.13"
     compile 'com.squareup.okhttp3:okhttp:3.9.0'
     compile 'org.threeten:threetenbp:1.3.8'
-    compile "ch.qos.logback.contrib:logback-jackson:$logback_contrib_version"
-    compile "ch.qos.logback.contrib:logback-json-classic:$logback_contrib_version"
+    compile group: 'ch.qos.logback', name: 'logback-classic', version: '1.2.3'
+    compile group: 'ch.qos.logback', name: 'logback-core'   , version: '1.2.3'
+    compile group: 'org.logback-extensions', name: 'logback-ext-loggly'   , version: '0.1.5'
     compile "com.fasterxml.jackson.core:jackson-databind:2.9.5"
     compile "org.slf4j:slf4j-api:1.7.25"
 
