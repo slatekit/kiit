@@ -10,22 +10,27 @@ buildscript {
     dependencies {
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
     }
-
 }
 
-apply plugin: 'java'
-apply plugin: 'kotlin'
-apply plugin:'application'
+plugins {
+    id "java"
+    id "application"
+    id "org.jetbrains.kotlin.jvm" version '${build.kotlin.version}'
+}
+
+
 mainClassName = "${app.package}.RunKt"
-
 sourceCompatibility = 1.8
-
 
 repositories {
     jcenter()
     mavenCentral()
     maven {
-        url  "https://dl.bintray.com/codehelixinc/slatekit"
+        url "https://maven.pkg.github.com/slatekit/slatekit"
+        credentials {
+            username = System.getenv('GITHUB_PACKAGES_INSTALL_ACTOR')
+            password = System.getenv('GITHUB_PACKAGES_INSTALL_TOKEN')
+        }
     }
 }
 
@@ -43,6 +48,8 @@ dependencies {
     // Slate Kit
     compile "com.slatekit:slatekit-results:$slatekit_version"
     compile "com.slatekit:slatekit-common:$slatekit_version"
+    compile "com.slatekit:slatekit-meta:$slatekit_version"
+    compile "com.slatekit:slatekit-entities:$slatekit_version"
     compile "com.slatekit:slatekit-app:$slatekit_version"
     compile "com.slatekit:slatekit-cli:$slatekit_version"
     compile "com.slatekit:slatekit-apis:$slatekit_version"
