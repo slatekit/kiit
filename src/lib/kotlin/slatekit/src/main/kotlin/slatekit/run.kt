@@ -9,6 +9,7 @@ import slatekit.common.writer.ConsoleWriter
 import slatekit.context.AppContext
 import slatekit.context.Context
 import slatekit.generator.Help
+import slatekit.providers.logback.LogbackLogs
 import slatekit.results.Failure
 import slatekit.results.Success
 
@@ -94,7 +95,7 @@ fun run(args:Array<String>){
                 about = SlateKit.about,
                 schema = SlateKit.schema,
                 enc = SlateKit.encryptor,
-                logs = LogsDefault,
+                logs = LogbackLogs(),
                 hasAction = true,
                 source = Alias.Jar,
                 builder = { ctx -> SlateKit(ctx) }

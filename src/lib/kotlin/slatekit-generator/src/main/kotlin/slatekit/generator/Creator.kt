@@ -3,16 +3,14 @@ package slatekit.generator
 import slatekit.context.Context
 import slatekit.common.io.Uris
 import slatekit.common.ext.toId
+import slatekit.common.log.Logger
 import slatekit.common.utils.Props
 import java.io.File
 
 /**
  * This processes all the [Action]s supported
  */
-class Creator(val context: Context, val ctx: GeneratorContext, val template: Template, val cls:Class<*>) {
-
-    val logger = context.logs.getLogger()
-
+class Creator(val context: Context, val ctx: GeneratorContext, val template: Template, val cls:Class<*>, val logger: Logger) {
 
     /**
      * Creates the directory after first interpreting the path.
