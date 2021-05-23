@@ -60,6 +60,7 @@ repositories {
     mavenCentral()
     maven {
         url "https://maven.pkg.github.com/slatekit/slatekit"
+	// Your GitHub user name + personal access token
         credentials {
             username = System.getenv('GITHUB_PACKAGES_INSTALL_ACTOR')
             password = System.getenv('GITHUB_PACKAGES_INSTALL_TOKEN')
