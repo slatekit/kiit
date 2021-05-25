@@ -89,8 +89,16 @@ num | type | link
 7   | license     | http://www.slatekit.com/arch/license           
 8   | utilities   | http://www.slatekit.com/utils/overview          
 9   | standards   | http://www.slatekit.com/more/standards  
-10  | packages    | https://bintray.com/codehelixinc/slatekit
-11  | bintray     | http://dl.bintray.com/codehelixinc/slatekit
+10  | packages    | https://github.com/orgs/slatekit/packages?repo_name=slatekit
+
+# 🧰 Tools
+These are the vendors and tools we currently use to build and maintain Slate Kit
+
+Name | Type | Notes
+----|------|-------
+![your kit](https://www.yourkit.com/images/yklogo.png) | Profiler | [YourKit](https://www.yourkit.com) supports open source projects with innovative and intelligent tools for monitoring and profiling Java and .NET applications.
+![ktor](media/ktor.png) | Profiler | [Ktor](https://www.ktor.io) is an asynchronous framework for creating microservices, web applications, and more. It’s fun, free, and open source.
+
 
 
 # ⚙️ Modules
