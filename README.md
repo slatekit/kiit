@@ -96,8 +96,9 @@ These are the vendors and tools we currently use to build and maintain Slate Kit
 
 Name | Type | Notes
 ----|------|-------
-![your kit](https://www.yourkit.com/images/yklogo.png) | Profiler | [YourKit](https://www.yourkit.com) supports open source projects with innovative and intelligent tools for monitoring and profiling Java and .NET applications.
-![ktor](media/ktor.png) | Profiler | [Ktor](https://www.ktor.io) is an asynchronous framework for creating microservices, web applications, and more. It’s fun, free, and open source.
+![intellij](media/intellij.png) | IDE | [Kotlin/Java IDE](https://www.jetbrains.com/idea/). Every aspect of IntelliJ IDEA has been designed to maximize developer productivity. Together, intelligent coding assistance and ergonomic design make development not only productive but also enjoyable.
+![your kit](https://www.yourkit.com/images/yklogo.png) | Profiler | [YourKit](https://www.yourkit.com) supports open source projects with innovative and intelligent tools for monitoring and profiling Java and .NET applications. YourKit is the creator of [YourKit Java Profiler](https://www.yourkit.com/java/profiler)
+![ktor](media/ktor.png) | HTTP Server | [Ktor](https://www.ktor.io) is an asynchronous framework for creating microservices, web applications, and more. It’s fun, free, and open source.
 
 
 
