@@ -81,6 +81,9 @@ project(':slatekit-providers-logback').projectDir=new File('../../../ext/kotlin/
 include ':slatekit-providers-datadog'
 project(':slatekit-providers-datadog').projectDir=new File('../../../ext/kotlin/slatekit-providers-datadog')
 
+include ':slatekit-providers-kafka'
+project(':slatekit-providers-kafka').projectDir=new File('../../../ext/kotlin/slatekit-providers-kafka')
+
 include ':slatekit-connectors-cli'
 project(':slatekit-connectors-cli').projectDir=new File('../../../ext/kotlin/slatekit-connectors-cli')
 
