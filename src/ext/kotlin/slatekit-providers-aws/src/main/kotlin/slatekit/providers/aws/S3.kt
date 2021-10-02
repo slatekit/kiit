@@ -25,6 +25,7 @@ import slatekit.core.common.FileUtils
 import slatekit.results.Try
 import slatekit.results.builders.Tries
 import slatekit.results.getOrElse
+import java.io.ByteArrayInputStream
 import java.io.File
 
 /**
@@ -83,6 +84,17 @@ class S3(
     }
 
     /**
+     * creates a file with the supplied folder name, file name, and content
+     *
+     * @param folder
+     * @param name
+     * @param content
+     */
+    override suspend fun create(folder: String, name: String, content: ByteArray): Try<String> {
+        return put("create", folder, name, content)
+    }
+
+    /**
      * updates a file with the supplied folder name, file name, and content
      *
      * @param folder
@@ -90,6 +102,17 @@ class S3(
      * @param content
      */
     override suspend fun update(folder: String, name: String, content: String): Try<String> {
+        return put("update", folder, name, content)
+    }
+
+    /**
+     * updates a file with the supplied folder name, file name, and content
+     *
+     * @param folder
+     * @param name
+     * @param content
+     */
+    override suspend fun update(folder: String, name: String, content: ByteArray): Try<String> {
         return put("update", folder, name, content)
     }
 
@@ -179,6 +202,25 @@ class S3(
         return executeResult(SOURCE, action, data = fullName, call = {
 
             s3.putObject(rootFolder, fullName, FileUtils.toInputStream(content), ObjectMetadata())
+            fullName
+        })
+    }
+
+
+    /**
+     * uploads the file to the datasource using the supplied folder, filename, and content
+     *
+     * @param folder
+     * @param name
+     * @param content
+     * @return
+     */
+    suspend fun put(action: String, folder: String, name: String, content: ByteArray): Try<String> {
+        // full name of the file is folder + name
+        val fullName = getName(folder, name)
+
+        return executeResult(SOURCE, action, data = fullName, call = {
+            s3.putObject(rootFolder, fullName, ByteArrayInputStream(content), ObjectMetadata())
             fullName
         })
     }
