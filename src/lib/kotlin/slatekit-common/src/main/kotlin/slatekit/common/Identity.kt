@@ -5,6 +5,7 @@ import slatekit.common.ids.ULIDs
 
 /**
  * Used to identity services / components
+ * form = area.service.agent.env.instance
  * name = signup.alerts.job.qat
  * full = signup.alerts.job.qat.4a3b300b-d0ac-4776-8a9c-31aa75e412b3
  */
