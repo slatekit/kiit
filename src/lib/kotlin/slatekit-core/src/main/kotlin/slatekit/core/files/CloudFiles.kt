@@ -43,6 +43,10 @@ interface CloudFiles : CloudSupport {
         return create(rootFolder, name, content)
     }
 
+    suspend fun create(name: String, content: ByteArray): Try<String> {
+        return create(rootFolder, name, content)
+    }
+
     suspend fun createFromPath(name: String, filePath: String):Try<String> {
         val content = Try.attempt {  FileUtils.loadFromFile(filePath) }
         return content.then {  create(rootFolder, name, it) }
@@ -58,6 +62,8 @@ interface CloudFiles : CloudSupport {
         return delete(rootFolder, name)
     }
 
+    suspend fun getAsBytes(name: String): Try<ByteArray> = getAsBytes(rootFolder, name)
+
     suspend fun getAsText(name: String): Try<String> = getAsText(rootFolder, name)
 
     suspend fun download(name: String, localFolder: String): Try<String> {
@@ -69,6 +75,10 @@ interface CloudFiles : CloudSupport {
     }
 
     suspend fun update(name: String, content: String):Try<String> {
+        return update(rootFolder, name, content)
+    }
+
+    suspend fun update(name: String, content: ByteArray):Try<String> {
         return update(rootFolder, name, content)
     }
 
@@ -88,9 +98,15 @@ interface CloudFiles : CloudSupport {
 
     suspend fun update(folder: String, name: String, content: String): Try<String>
 
+    suspend fun create(folder: String, name: String, content: ByteArray): Try<String>
+
+    suspend fun update(folder: String, name: String, content: ByteArray): Try<String>
+
     suspend fun delete(folder: String, name: String): Try<String>
 
     suspend fun getAsText(folder: String, name: String): Try<String>
+
+    suspend fun getAsBytes(folder: String, name: String): Try<ByteArray>
 
     suspend fun download(folder: String, name: String, localFolder: String): Try<String>
 

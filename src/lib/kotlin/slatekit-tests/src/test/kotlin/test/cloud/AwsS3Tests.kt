@@ -8,6 +8,7 @@ import slatekit.providers.aws.S3
 import slatekit.common.DateTime
 import slatekit.common.io.Uris
 import slatekit.common.ext.toStringNumeric
+import slatekit.core.common.FileUtils
 import slatekit.core.files.CloudFiles
 import slatekit.results.getOrElse
 import test.TestApp
@@ -26,7 +27,7 @@ class AwsS3Tests : TestSupport {
             // Not storing any key/secret in source code for security purposes
             // Setup 1: Use the default aws config file in "{user_dir}/.aws/credentials"
             val bucket = "slatekit-unit-tests"
-            val files = S3.of(app,"us-east-1", bucket, false, "~/$SLATEKIT_DIR/conf/aws.conf", "aws")
+            val files = S3.of(app,"us-west-2", bucket, false, "~/$SLATEKIT_DIR/common/conf/aws.conf", "aws")
             files.onSuccess { files ->
                 files.init()
 
@@ -36,7 +37,17 @@ class AwsS3Tests : TestSupport {
                 // 1. Test Create
                 val contentCreate = "version 1 : $filename"
                 files.create(filename, contentCreate)
-                ensureFile(files, filename, contentCreate)
+
+                // 2. Test binary
+                val binaryName = "bin-" + DateTime.now().toStringNumeric()
+                val binaryContent = "version 1 : $filename"
+                val binaryBytes = binaryContent.toByteArray()
+                files.create(binaryName, binaryBytes)
+                val actualBytes = files.getAsBytes(binaryName)
+                actualBytes.onSuccess {
+                    val actualContent = String(it)
+                    Assert.assertEquals(binaryContent, actualContent)
+                }
 
                 // 2. Test update
                 val contentUpdate = "version 2 : $filename"
