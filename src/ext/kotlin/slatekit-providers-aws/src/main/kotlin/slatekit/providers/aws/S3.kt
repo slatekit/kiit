@@ -137,6 +137,24 @@ class S3(
      * @param name
      * @return
      */
+    override suspend fun getAsBytes(folder: String, name: String): Try<ByteArray> {
+        val fullName = getName(folder, name)
+        return executeResult(SOURCE, "getAsBytes", data = fullName, call = {
+
+            val obj = s3.getObject(GetObjectRequest(rootFolder, fullName))
+            val content = obj.getObjectContent()
+            content.readBytes()
+        })
+    }
+
+
+    /**
+     * gets the file specified by folder and name, as text content
+     *
+     * @param folder
+     * @param name
+     * @return
+     */
     override suspend fun getAsText(folder: String, name: String): Try<String> {
         val fullName = getName(folder, name)
         return executeResult(SOURCE, "getAsText", data = fullName, call = {

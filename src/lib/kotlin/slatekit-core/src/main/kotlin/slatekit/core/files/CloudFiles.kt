@@ -62,6 +62,8 @@ interface CloudFiles : CloudSupport {
         return delete(rootFolder, name)
     }
 
+    suspend fun getAsBytes(name: String): Try<ByteArray> = getAsBytes(rootFolder, name)
+
     suspend fun getAsText(name: String): Try<String> = getAsText(rootFolder, name)
 
     suspend fun download(name: String, localFolder: String): Try<String> {
@@ -103,6 +105,8 @@ interface CloudFiles : CloudSupport {
     suspend fun delete(folder: String, name: String): Try<String>
 
     suspend fun getAsText(folder: String, name: String): Try<String>
+
+    suspend fun getAsBytes(folder: String, name: String): Try<ByteArray>
 
     suspend fun download(folder: String, name: String, localFolder: String): Try<String>
 
