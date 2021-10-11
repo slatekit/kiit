@@ -51,6 +51,8 @@ dependencies {
   if( slatekitSetupViaBinary ) {
       compile "com.slatekit:slatekit-results:$slatekit_version"
       compile "com.slatekit:slatekit-common:$slatekit_version"
+      compile "com.slatekit:slatekit-utils:$slatekit_version"
+      compile "com.slatekit:slatekit-requests:$slatekit_version"
       compile "com.slatekit:slatekit-context:$slatekit_version"
       compile "com.slatekit:slatekit-meta:$slatekit_version"
       compile "com.slatekit:slatekit-serialization:$slatekit_version"
@@ -58,6 +60,8 @@ dependencies {
       // */
   compile project(":slatekit-result")
   compile project(":slatekit-common")
+  compile project(":slatekit-utils")
+  compile project(":slatekit-requests")
   compile project(":slatekit-context")
   compile project(":slatekit-meta")
   compile project(":slatekit-serialization")

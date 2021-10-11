@@ -9,6 +9,9 @@ project(':slatekit-actors').projectDir=new File('../slatekit-actors')
 include ':slatekit-common'
 project(':slatekit-common').projectDir=new File('../slatekit-common')
 
+include ':slatekit-utils'
+project(':slatekit-utils').projectDir=new File('../slatekit-utils')
+
 include ':slatekit-context'
 project(':slatekit-context').projectDir=new File('../slatekit-context')
 
@@ -47,6 +50,9 @@ project(':slatekit-policy').projectDir=new File('../slatekit-policy')
 
 include ':slatekit-cache'
 project(':slatekit-cache').projectDir=new File('../slatekit-cache')
+
+include ':slatekit-requests'
+project(':slatekit-requests').projectDir=new File('../slatekit-requests')
 
 include ':slatekit-apis'
 project(':slatekit-apis').projectDir=new File('../slatekit-apis')

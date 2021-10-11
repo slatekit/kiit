@@ -54,6 +54,8 @@ dependencies {
       // */
   compile project(":slatekit-result")
   compile project(":slatekit-common")
+  compile project(":slatekit-utils")
+  compile project(":slatekit-requests")
   } //</slatekit_local>
 }
 

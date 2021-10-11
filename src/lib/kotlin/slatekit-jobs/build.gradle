@@ -49,11 +49,13 @@ dependencies {
       compile "com.slatekit:slatekit-results:$slatekit_version"
       compile "com.slatekit:slatekit-actors:$slatekit_version"
       compile "com.slatekit:slatekit-common:$slatekit_version"
+      compile "com.slatekit:slatekit-utils:$slatekit_version"
   } else {
       // */
   compile project(":slatekit-result")
   compile project(":slatekit-actors")
   compile project(":slatekit-common")
+  compile project(":slatekit-utils")
   } //</slatekit_local>
 }
 
