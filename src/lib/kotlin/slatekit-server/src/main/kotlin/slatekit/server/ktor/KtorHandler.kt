@@ -10,8 +10,8 @@ import io.ktor.routing.*
 import slatekit.apis.ApiServer
 import slatekit.context.Context
 import slatekit.tracking.Diagnostics
-import slatekit.common.requests.Request
-import slatekit.common.ext.toResponse
+import slatekit.requests.Request
+import slatekit.requests.toResponse
 import slatekit.server.ServerSettings
 import slatekit.server.common.RequestHandler
 import slatekit.server.common.ResponseHandler

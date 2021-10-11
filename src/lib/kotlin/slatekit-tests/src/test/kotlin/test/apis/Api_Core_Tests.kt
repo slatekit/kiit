@@ -20,7 +20,7 @@ import slatekit.apis.SetupType
 import slatekit.requests.CommonRequest
 import slatekit.common.DateTimes
 import slatekit.common.Source
-import slatekit.common.ext.toResponse
+import slatekit.requests.toResponse
 import slatekit.results.Codes
 import slatekit.results.Failure
 import slatekit.results.Success

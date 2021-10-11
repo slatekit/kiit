@@ -15,11 +15,11 @@ import slatekit.apis.setup.loadAll
 import slatekit.common.*
 import slatekit.common.ext.numbered
 import slatekit.common.ext.structured
-import slatekit.common.ext.toResponse
+import slatekit.requests.toResponse
 import slatekit.common.log.Logger
 import slatekit.requests.CommonRequest
-import slatekit.common.requests.Request
-import slatekit.common.requests.Response
+import slatekit.requests.Request
+import slatekit.requests.Response
 import slatekit.context.Context
 import slatekit.meta.*
 import slatekit.serialization.deserializer.Deserializer
