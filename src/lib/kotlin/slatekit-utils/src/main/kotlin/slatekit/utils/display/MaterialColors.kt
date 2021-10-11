@@ -1,4 +1,4 @@
-package slatekit.common.display
+package slatekit.utils.display
 
 object MaterialColors {
     //@JvmField val Red500  = 0xFFF44336

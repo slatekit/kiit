@@ -1,4 +1,4 @@
-package slatekit.common.display
+package slatekit.utils.display
 
 /**
  * Selectable colors ( e.g. for handling/changing themes )
@@ -13,6 +13,6 @@ data class Colors(val items:List<ColorGroup>) {
     fun all():List<ColorGroup> = items
     fun size():Int = items.size
     fun get(ndx:Int) = items[ndx]
-    fun get(name:String):ColorGroup? = items.firstOrNull { it.name == name }
+    fun get(name:String): ColorGroup? = items.firstOrNull { it.name == name }
     fun colors():List<Int> = items.map { it.color }
 }
