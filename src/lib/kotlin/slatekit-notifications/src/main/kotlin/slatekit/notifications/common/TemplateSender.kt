@@ -1,7 +1,7 @@
 package slatekit.notifications.common
 
-import slatekit.common.types.Vars
-import slatekit.common.templates.Templates
+import slatekit.common.values.Vars
+import slatekit.utils.templates.Templates
 import slatekit.results.Outcome
 import slatekit.results.builders.Outcomes
 

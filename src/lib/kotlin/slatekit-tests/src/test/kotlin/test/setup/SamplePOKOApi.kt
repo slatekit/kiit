@@ -1,7 +1,7 @@
 package test.setup
 
 import slatekit.common.DateTime
-import slatekit.common.requests.Request
+import slatekit.requests.Request
 import slatekit.results.Failure
 import slatekit.results.Notice
 import slatekit.results.Success

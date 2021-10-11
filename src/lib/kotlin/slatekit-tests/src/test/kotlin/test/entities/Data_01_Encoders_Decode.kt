@@ -2,15 +2,9 @@ package test.entities
 
 import org.junit.Assert
 import org.junit.Test
-import org.threeten.bp.LocalDate
-import org.threeten.bp.LocalDateTime
-import org.threeten.bp.LocalTime
-import org.threeten.bp.ZonedDateTime
-import slatekit.common.DateTimes
-import slatekit.common.utils.ListMap
-import slatekit.common.utils.RecordMap
+import slatekit.common.values.ListMap
+import slatekit.common.values.RecordMap
 import slatekit.data.encoders.*
-import java.sql.Timestamp
 import java.util.*
 
 

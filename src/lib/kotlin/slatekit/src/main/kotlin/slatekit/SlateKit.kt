@@ -7,7 +7,7 @@ import slatekit.cli.CliSettings
 import slatekit.context.Context
 import slatekit.common.args.ArgsSchema
 import slatekit.common.conf.Conf
-import slatekit.common.utils.B64Java8
+import slatekit.common.convert.B64Java8
 import slatekit.common.crypto.Encryptor
 import slatekit.common.info.About
 import slatekit.common.info.ApiKey

@@ -13,7 +13,7 @@
 
 package slatekit.db
 
-import slatekit.common.Record
+import slatekit.common.values.Record
 import slatekit.common.conf.Confs
 import slatekit.common.data.*
 import java.sql.Connection
@@ -295,9 +295,9 @@ class Db(private val dbCon: DbCon,
      * @param inputs : The parameters for the stored proc. The types will be auto-converted my-sql types.
      */
     override fun <T> callQueryMapped(
-        procName: String,
-        mapper: (Record) -> T?,
-        inputs: List<Value>?
+            procName: String,
+            mapper: (Record) -> T?,
+            inputs: List<Value>?
     ): List<T>? {
         // {call create_author(?, ?)}
         val holders = inputs?.let { all -> "?".repeatWith(",", all.size) } ?: ""

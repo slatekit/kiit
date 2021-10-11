@@ -2,14 +2,14 @@ package slatekit.cli
 
 import java.io.InputStream
 import slatekit.common.DateTime
-import slatekit.common.Inputs
-import slatekit.common.Metadata
+import slatekit.common.values.Inputs
+import slatekit.common.values.Metadata
 import slatekit.common.io.Uris
 import slatekit.common.args.Args
 import slatekit.common.types.Doc
-import slatekit.common.requests.InputArgs
-import slatekit.common.requests.Request
-import slatekit.common.requests.RequestSupport
+import slatekit.requests.InputArgs
+import slatekit.requests.Request
+import slatekit.requests.RequestSupport
 import slatekit.common.Source
 
 /**
@@ -87,7 +87,7 @@ data class CliRequest(
         otherSource: Source,
         otherVerb: String,
         otherData: Inputs,
-        otherMeta: slatekit.common.Metadata,
+        otherMeta: Metadata,
         otherRaw: Any?,
         otherOutput: String?,
         otherTag: String,
@@ -113,7 +113,7 @@ data class CliRequest(
         otherArgs: Args,
         otherPath: String,
         otherData: Inputs,
-        otherMeta: slatekit.common.Metadata,
+        otherMeta: Metadata,
         otherRaw: Any?,
         otherOutput: String?,
         otherTag: String,

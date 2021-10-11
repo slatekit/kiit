@@ -1,11 +1,10 @@
 package slatekit.entities.mapper
 
-import slatekit.common.Record
+import slatekit.common.values.Record
 import slatekit.common.crypto.Encryptor
 import slatekit.common.data.DataType
 import slatekit.common.newline
 import slatekit.data.core.Meta
-import slatekit.meta.KTypes
 import slatekit.meta.Reflector
 import slatekit.meta.models.Model
 import slatekit.meta.models.ModelField

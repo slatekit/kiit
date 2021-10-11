@@ -14,9 +14,9 @@
 package slatekit.common.args
 
 import slatekit.common.Types
-import slatekit.common.writer.ConsoleWriter
 import slatekit.results.Try
 import slatekit.results.builders.Tries
+
 
 /**
  * stores and builds a list of 1 or more arguments which collectively represent the schema.
@@ -24,7 +24,7 @@ import slatekit.results.builders.Tries
  * @note this schema is immutable and returns a  schema when adding additional arguments
  * @param items : the list of arguments.
  */
-class ArgsSchema(val items: List<Arg> = listOf()) {
+class ArgsSchema(val items: List<Arg> = listOf(), val builder:ArgsWriter? = null) {
 
     val any: Boolean get() = items.isNotEmpty()
 
@@ -146,14 +146,33 @@ class ArgsSchema(val items: List<Arg> = listOf()) {
 
 
     fun buildHelp(prefix: String? = "-", separator: String? = "=") {
-
-        // For color and semantic writing
-        val writer = ConsoleWriter()
         val maxLen = maxLengthOfName()
-
         items.forEach { arg ->
-            val semanticHelp = arg.semantic(prefix, separator, maxLen)
-            writer.writeItems(semanticHelp)
+            when(builder) {
+                null -> {
+                    val nameLen = maxLen ?: arg.name.length
+                    val nameFill = arg.name.padEnd(nameLen)
+                    val namePart = (prefix ?: "-") + nameFill
+
+                    println(namePart)
+                    print(separator ?: "=")
+                    println(arg.desc)
+                    print(" ".repeat(nameLen + 6))
+
+                    if (arg.isRequired) {
+                        println("!"        )
+                        println("required ")
+                    } else {
+                        println("?"        )
+                        println("optional ")
+                    }
+                    println("[${arg.dataType}] " )
+                    println("e.g. ${arg.example}")
+                }
+                else -> {
+                    builder.write(arg, prefix, separator, maxLen)
+                }
+            }
         }
     }
 

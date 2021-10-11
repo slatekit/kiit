@@ -5,7 +5,7 @@ import slatekit.app.AppRunner
 import slatekit.common.args.Args
 import slatekit.common.io.Alias
 import slatekit.common.log.LogsDefault
-import slatekit.common.writer.ConsoleWriter
+import slatekit.utils.writer.ConsoleWriter
 import slatekit.context.AppContext
 import slatekit.context.Context
 import slatekit.generator.Help

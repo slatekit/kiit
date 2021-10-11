@@ -20,8 +20,8 @@ import slatekit.apis.*
 import slatekit.apis.routes.Api
 import slatekit.apis.services.Restify
 import slatekit.common.*
-import slatekit.common.naming.LowerHyphenNamer
-import slatekit.common.naming.Namer
+import slatekit.utils.naming.LowerHyphenNamer
+import slatekit.utils.naming.Namer
 import slatekit.results.Result
 import slatekit.results.Codes
 import slatekit.results.getOrElse

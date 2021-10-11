@@ -5,7 +5,7 @@ import slatekit.tracking.Diagnostics
 import slatekit.common.crypto.Encryptor
 import slatekit.common.log.Logger
 import slatekit.tracking.MetricsLite
-import slatekit.common.requests.Request
+import slatekit.requests.Request
 import slatekit.serialization.deserializer.Deserializer
 
 data class ServerContext(

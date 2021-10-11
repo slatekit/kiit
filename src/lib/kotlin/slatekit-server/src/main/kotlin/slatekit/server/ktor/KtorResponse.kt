@@ -22,11 +22,11 @@ import io.ktor.response.respondText
 import slatekit.serialization.responses.ResponseEncoder
 import slatekit.common.types.Content
 import slatekit.common.types.Doc
-import slatekit.common.requests.Response
+import slatekit.requests.Response
 import slatekit.serialization.Serialization
 import slatekit.results.*
 import slatekit.server.ServerSettings
-import slatekit.server.common.ResponseHandler
+import slatekit.server.core.ResponseHandler
 
 
 class KtorResponse(val settings:ServerSettings)  : ResponseHandler {

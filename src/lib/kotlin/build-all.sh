@@ -2,7 +2,9 @@
 # Foundational
 cd slatekit-result        && gradle clean build publish && cd ../ && echo 'sleeping 20s' && sleep 20s     
 cd slatekit-actors        && gradle clean build publish && cd ../ && echo 'sleeping 20s' && sleep 20s     
-cd slatekit-common        && gradle clean build publish && cd ../ && echo 'sleeping 20s' && sleep 20s     
+cd slatekit-common        && gradle clean build publish && cd ../ && echo 'sleeping 20s' && sleep 20s   
+cd slatekit-utils         && gradle clean build publish && cd ../ && echo 'sleeping 20s' && sleep 20s   
+cd slatekit-requests      && gradle clean build publish && cd ../ && echo 'sleeping 20s' && sleep 20s     
 cd slatekit-context       && gradle clean build publish && cd ../ && echo 'sleeping 20s' && sleep 20s     
 
 # Support

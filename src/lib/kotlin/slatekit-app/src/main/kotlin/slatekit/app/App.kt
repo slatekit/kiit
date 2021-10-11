@@ -13,7 +13,7 @@
 
 package slatekit.app
 
-import slatekit.common.display.Banner
+import slatekit.utils.display.Banner
 import slatekit.context.Context
 import slatekit.common.args.ArgsSchema
 import slatekit.common.crypto.EncryptSupport

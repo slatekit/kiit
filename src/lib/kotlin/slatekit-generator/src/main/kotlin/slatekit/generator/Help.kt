@@ -2,7 +2,7 @@ package slatekit.generator
 
 import slatekit.common.conf.Conf
 import slatekit.common.ext.orElse
-import slatekit.common.writer.ConsoleWriter
+import slatekit.utils.writer.ConsoleWriter
 import slatekit.context.Context
 
 class Help(val name:String) {

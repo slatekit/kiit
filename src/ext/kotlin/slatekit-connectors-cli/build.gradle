@@ -57,6 +57,8 @@ dependencies {
         compile "com.slatekit:slatekit-results:$slatekit_version"
         compile "com.slatekit:slatekit-common:$slatekit_version"
         compile "com.slatekit:slatekit-context:$slatekit_version"
+        compile "com.slatekit:slatekit-utils:$slatekit_version"
+        compile "com.slatekit:slatekit-requests:$slatekit_version"
         compile "com.slatekit:slatekit-apis:$slatekit_version"
         compile "com.slatekit:slatekit-cli:$slatekit_version"
     } else {
@@ -64,6 +66,8 @@ dependencies {
     compile project(":slatekit-result")
     compile project(":slatekit-common")
     compile project(":slatekit-context")
+    compile project(":slatekit-utils")
+    compile project(":slatekit-requests")
     compile project(":slatekit-apis")
     compile project(":slatekit-cli")
     } //</slatekit_local>

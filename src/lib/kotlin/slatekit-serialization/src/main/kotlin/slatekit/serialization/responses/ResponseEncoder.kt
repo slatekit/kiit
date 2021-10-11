@@ -2,7 +2,7 @@ package slatekit.serialization.responses
 
 import org.json.simple.JSONArray
 import org.json.simple.JSONObject
-import slatekit.common.requests.Response
+import slatekit.requests.Response
 import slatekit.results.Err
 
 object ResponseEncoder {

@@ -13,7 +13,7 @@ mantra: Simplicity above all else
 package slatekit.cli
 
 import slatekit.common.args.Args
-import slatekit.common.requests.Response
+import slatekit.requests.Response
 import slatekit.results.Codes
 import slatekit.results.Passed
 

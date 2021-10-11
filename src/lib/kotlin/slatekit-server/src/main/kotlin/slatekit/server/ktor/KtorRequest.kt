@@ -20,10 +20,12 @@ import io.ktor.request.*
 import kotlinx.coroutines.runBlocking
 //import kotlinx.coroutines.experimental.async
 import slatekit.common.types.Doc
-import slatekit.common.requests.Request
-import slatekit.common.requests.RequestSupport
+import slatekit.requests.Request
+import slatekit.requests.RequestSupport
 import slatekit.common.Source
 import slatekit.common.utils.Random
+import slatekit.common.values.Inputs
+import slatekit.common.values.Metadata
 import slatekit.context.Context
 import java.io.*
 
@@ -63,7 +65,7 @@ data class KtorRequest(
             otherSource: Source,
             otherVerb: String,
             otherData: Inputs,
-            otherMeta: slatekit.common.Metadata,
+            otherMeta: Metadata,
             otherRaw: Any?,
             otherOutput: String?,
             otherTag: String,

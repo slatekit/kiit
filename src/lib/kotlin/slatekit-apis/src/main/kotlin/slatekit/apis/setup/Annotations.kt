@@ -5,7 +5,7 @@ import slatekit.apis.routes.Action
 import slatekit.apis.routes.Api
 import slatekit.apis.routes.Lookup
 import slatekit.common.Ignore
-import slatekit.common.naming.Namer
+import slatekit.utils.naming.Namer
 import slatekit.meta.Reflector
 
 class Annotations(val cls: KClass<*>, val raw: Api? = null) : Loader {

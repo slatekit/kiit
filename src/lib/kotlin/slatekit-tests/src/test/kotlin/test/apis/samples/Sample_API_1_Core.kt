@@ -16,8 +16,9 @@ package test.apis.samples
 import slatekit.apis.*
 import slatekit.common.*
 import slatekit.common.types.Doc
-import slatekit.common.requests.Request
+import slatekit.requests.Request
 import slatekit.common.checks.Check
+import slatekit.common.values.Metadata
 import slatekit.context.Context
 import slatekit.results.Outcome
 import slatekit.results.Success

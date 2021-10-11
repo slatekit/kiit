@@ -14,10 +14,11 @@ package slatekit.serialization.deserializer
 
 import org.json.simple.JSONObject
 import org.json.simple.parser.JSONParser
-import slatekit.common.*
 import slatekit.common.crypto.*
-import slatekit.common.requests.InputArgs
-import slatekit.common.requests.Request
+import slatekit.common.values.Inputs
+import slatekit.common.values.Metadata
+import slatekit.requests.InputArgs
+import slatekit.requests.Request
 import slatekit.meta.Conversion
 import slatekit.meta.JSONTransformer
 import slatekit.meta.KTypes

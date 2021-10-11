@@ -20,7 +20,7 @@ import slatekit.common.crypto.Encryptor
  */
 
 import org.junit.Test
-import slatekit.common.utils.B64Java8
+import slatekit.common.convert.B64Java8
 
 
 class EncryptTests {

@@ -5,7 +5,7 @@ import org.junit.Test
 import slatekit.common.log.LogEntry
 import slatekit.common.log.LogLevel
 import slatekit.common.log.Logger
-import slatekit.common.naming.*
+import slatekit.utils.naming.*
 import slatekit.common.newline
 
 

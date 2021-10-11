@@ -3,7 +3,7 @@ package slatekit.jobs.support
 import slatekit.actors.Action
 import slatekit.actors.Message
 import slatekit.common.DateTime
-import slatekit.common.Event
+import slatekit.utils.events.Event
 import slatekit.common.Identity
 import slatekit.actors.Status
 import slatekit.common.ext.toStringMySql
@@ -88,21 +88,21 @@ object Events {
         val code = status.toCode()
         val tag = if(id.tags.isEmpty()) "" else id.tags.first()
         return Event(
-            uuid    = ULIDs.create().value,
-            area    = id.area,
+            uuid = ULIDs.create().value,
+            area = id.area,
             service = id.name,
-            agent   = id.agent.name,
-            env     = id.env,
-            inst    = id.instance,
-            name    = name,
-            desc    = desc,
-            status  = code,
-            source  = source,
-            target  = target,
-            value   = value,
-            time    = DateTime.now(),
-            tag     = tag,
-            fields  = fields
+            agent = id.agent.name,
+            env = id.env,
+            inst = id.instance,
+            name = name,
+            desc = desc,
+            status = code,
+            source = source,
+            target = target,
+            value = value,
+            time = DateTime.now(),
+            tag = tag,
+            fields = fields
         )
     }
 

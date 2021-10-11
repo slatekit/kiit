@@ -6,7 +6,7 @@ import slatekit.apis.core.Roles
 import slatekit.common.auth.AuthFuncs
 import slatekit.common.ext.splitToMapWithPairs
 import slatekit.common.info.ApiKey
-import slatekit.common.requests.Request
+import slatekit.requests.Request
 import slatekit.results.Outcome
 import slatekit.results.builders.Outcomes
 

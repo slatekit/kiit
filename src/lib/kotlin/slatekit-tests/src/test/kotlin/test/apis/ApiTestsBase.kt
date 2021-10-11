@@ -18,7 +18,7 @@ import slatekit.apis.*
 import slatekit.apis.routes.Api
 import slatekit.apis.core.Auth
 import slatekit.apis.SetupType
-import slatekit.common.requests.CommonRequest
+import slatekit.requests.CommonRequest
 import slatekit.common.Source
 import slatekit.common.args.Args
 import slatekit.common.conf.Config
@@ -28,8 +28,8 @@ import slatekit.common.data.Connections.Companion.of
 import slatekit.common.envs.Envs
 import slatekit.common.info.*
 import slatekit.common.log.LogsDefault
-import slatekit.common.requests.Request
-import slatekit.common.requests.Response
+import slatekit.requests.Request
+import slatekit.requests.Response
 import slatekit.db.Db
 import slatekit.entities.Entities
 import slatekit.policy.hooks.Middleware
@@ -39,7 +39,6 @@ import test.TestApp
 import test.setup.MyAuthProvider
 import test.setup.UserApi
 import test.setup.MyEncryptor
-import test.setup.User
 
 /**
  * Created by kishorereddy on 6/12/17.

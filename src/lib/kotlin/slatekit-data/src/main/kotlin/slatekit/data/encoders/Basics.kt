@@ -1,12 +1,11 @@
 package slatekit.data.encoders
 
 
-import slatekit.common.Record
+import slatekit.common.values.Record
 import slatekit.common.data.DataType
 import slatekit.common.data.Encoding
 import slatekit.common.data.Value
 import slatekit.common.ext.orElse
-import slatekit.common.ext.zoned
 import slatekit.data.Consts
 
 /**

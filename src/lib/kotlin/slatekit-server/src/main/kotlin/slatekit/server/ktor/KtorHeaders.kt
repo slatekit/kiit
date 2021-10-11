@@ -19,7 +19,7 @@ import slatekit.common.crypto.Encryptor
 
 import io.ktor.request.*
 import org.json.simple.JSONObject
-import slatekit.common.Metadata
+import slatekit.common.values.Metadata
 import slatekit.common.Strings
 //import java.time.*
 import org.threeten.bp.*

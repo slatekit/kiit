@@ -1,6 +1,6 @@
 package slatekit.data
 
-import slatekit.common.Record
+import slatekit.common.values.Record
 import slatekit.common.crypto.Encryptor
 import slatekit.common.data.DataAction
 import slatekit.common.data.DataType

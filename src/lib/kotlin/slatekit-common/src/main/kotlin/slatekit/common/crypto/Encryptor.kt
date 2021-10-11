@@ -13,7 +13,7 @@
 
 package slatekit.common.crypto
 
-import slatekit.common.utils.B64
+import slatekit.common.convert.B64
 
 /**
  * Provides a simple facade for encryption using AES

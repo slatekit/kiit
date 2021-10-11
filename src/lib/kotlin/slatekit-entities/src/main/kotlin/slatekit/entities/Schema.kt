@@ -1,6 +1,6 @@
 package slatekit.entities
 
-import slatekit.common.naming.Namer
+import slatekit.utils.naming.Namer
 import slatekit.meta.Reflector
 import slatekit.meta.models.FieldCategory
 import slatekit.meta.models.Model
@@ -50,7 +50,7 @@ object Schema {
 
 
     @JvmStatic
-    fun column(prop: KProperty<*>, anno: Column, namer:Namer?, checkForId:Boolean, idFieldName:String?):ModelField {
+    fun column(prop: KProperty<*>, anno: Column, namer: Namer?, checkForId:Boolean, idFieldName:String?):ModelField {
         val name = if (anno.name.isNullOrEmpty()) prop.name else anno.name
         val cat = idFieldName?.let {
             if(it == name)

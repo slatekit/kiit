@@ -1,8 +1,8 @@
 package slatekit.cli
 
-import slatekit.common.writer.ConsoleWriter
-import slatekit.common.writer.TextType
-import slatekit.common.writer.Writer
+import slatekit.utils.writer.ConsoleWriter
+import slatekit.utils.writer.TextType
+import slatekit.utils.writer.Writer
 import slatekit.common.io.IO
 
 /**

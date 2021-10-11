@@ -1,7 +1,7 @@
 package slatekit.apis.support
 
 import slatekit.apis.ApiRequest
-import slatekit.common.InputsUpdateable
+import slatekit.common.values.InputsUpdateable
 
 interface RewriteSupport {
 

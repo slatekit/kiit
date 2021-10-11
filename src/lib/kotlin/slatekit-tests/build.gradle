@@ -64,6 +64,8 @@ dependencies {
     implementation project(":slatekit-result")
     implementation project(":slatekit-actors")
     implementation project(":slatekit-common")
+    implementation project(":slatekit-utils")
+    implementation project(":slatekit-requests")
     implementation project(":slatekit-context")
     implementation project(":slatekit-app")
     implementation project(":slatekit-cli")

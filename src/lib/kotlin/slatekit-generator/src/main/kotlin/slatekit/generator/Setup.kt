@@ -6,7 +6,7 @@ import slatekit.common.conf.PropSettings
 import slatekit.common.conf.Props
 import slatekit.common.info.About
 import slatekit.common.info.Folders
-import slatekit.common.writer.ConsoleWriter
+import slatekit.utils.writer.ConsoleWriter
 import slatekit.context.Context
 import java.io.File
 

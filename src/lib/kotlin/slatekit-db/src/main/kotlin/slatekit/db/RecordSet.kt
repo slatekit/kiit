@@ -14,14 +14,11 @@
 package slatekit.db
 
 import slatekit.common.DateTime
-import slatekit.common.Record
+import slatekit.common.values.Record
 import java.sql.ResultSet
 import org.threeten.bp.*
 import slatekit.common.DateTimes
 import slatekit.common.ext.atZone
-import slatekit.common.ext.date
-import slatekit.common.ext.local
-import slatekit.common.ext.time
 
 class RecordSet(private val rs: ResultSet) : Record {
 

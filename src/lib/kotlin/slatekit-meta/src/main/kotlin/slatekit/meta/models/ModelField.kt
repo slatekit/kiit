@@ -14,7 +14,7 @@
 package slatekit.meta.models
 
 import slatekit.common.data.DataType
-import slatekit.common.naming.Namer
+import slatekit.utils.naming.Namer
 import slatekit.meta.KTypes
 import slatekit.meta.Reflector
 import kotlin.reflect.*
@@ -164,7 +164,7 @@ data class ModelField(
 
 
         @JvmStatic
-        fun ofId(prop:KProperty<*>, rawName:String, namer:Namer?):ModelField {
+        fun ofId(prop:KProperty<*>, rawName:String, namer: Namer?):ModelField {
             val name = if (rawName.isNullOrEmpty()) prop.name else rawName
             val fieldKType = prop.returnType
             val fieldType = ModelUtils.fieldType(prop)
@@ -186,7 +186,7 @@ data class ModelField(
 
 
         @JvmStatic
-        fun ofData(prop:KProperty<*>, anno: Field, namer:Namer?, checkForId:Boolean, idFieldName:String?):ModelField {
+        fun ofData(prop:KProperty<*>, anno: Field, namer: Namer?, checkForId:Boolean, idFieldName:String?):ModelField {
             val name = if (anno.name.isNullOrEmpty()) prop.name else anno.name
             val cat = idFieldName?.let {
                 if(it == name)

@@ -4,7 +4,7 @@ import slatekit.apis.ApiRequest
 import slatekit.apis.Verb
 import slatekit.apis.Verbs
 import slatekit.common.Source
-import slatekit.common.requests.Request
+import slatekit.requests.Request
 import slatekit.results.Outcome
 import slatekit.results.builders.Outcomes
 import slatekit.results.flatMap

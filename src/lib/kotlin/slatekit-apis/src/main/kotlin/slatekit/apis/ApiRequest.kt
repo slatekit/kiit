@@ -3,7 +3,7 @@ package slatekit.apis
 import slatekit.apis.core.Auth
 import slatekit.apis.core.Target
 import slatekit.context.Context
-import slatekit.common.requests.Request
+import slatekit.requests.Request
 
 /**
  * @param host : Host running the Apis

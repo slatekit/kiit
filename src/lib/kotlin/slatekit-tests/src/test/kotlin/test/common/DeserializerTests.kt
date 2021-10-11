@@ -4,7 +4,7 @@ import org.json.simple.JSONObject
 import org.junit.Assert
 import org.junit.Test
 import slatekit.common.DateTime
-import slatekit.common.requests.InputArgs
+import slatekit.requests.InputArgs
 import slatekit.common.utils.Random
 import slatekit.common.crypto.EncDouble
 import slatekit.common.crypto.EncInt
@@ -14,9 +14,9 @@ import test.setup.Movie
 import org.threeten.bp.*
 import slatekit.apis.core.Transformer
 import slatekit.common.DateTimes
-import slatekit.common.requests.CommonRequest
+import slatekit.requests.CommonRequest
 import slatekit.common.Source
-import slatekit.common.requests.Request
+import slatekit.requests.Request
 import slatekit.meta.*
 import slatekit.serialization.deserializer.Deserializer
 import test.setup.MyEncryptor

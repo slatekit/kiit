@@ -13,7 +13,7 @@
 
 package slatekit.common.crypto
 
-import slatekit.common.utils.B64
+import slatekit.common.convert.B64
 import javax.crypto.Cipher
 import javax.crypto.spec.IvParameterSpec
 import javax.crypto.spec.SecretKeySpec

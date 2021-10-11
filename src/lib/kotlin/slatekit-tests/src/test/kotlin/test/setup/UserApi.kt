@@ -21,7 +21,8 @@ import slatekit.common.crypto.EncDouble
 import slatekit.common.crypto.EncString
 import slatekit.common.crypto.EncInt
 import slatekit.common.crypto.EncLong
-import slatekit.common.requests.Request
+import slatekit.common.values.Metadata
+import slatekit.requests.Request
 import slatekit.integration.common.ApiBaseEntity
 import slatekit.entities.EntityService
 import slatekit.connectors.entities.AppEntContext

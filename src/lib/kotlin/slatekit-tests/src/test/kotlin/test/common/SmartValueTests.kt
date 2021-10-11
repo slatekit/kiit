@@ -2,7 +2,7 @@ package test.common
 
 import org.junit.Assert
 import org.junit.Test
-import slatekit.common.smartvalues.Email
+import slatekit.utils.smartvalues.Email
 
 
 class SmartValueTests {

@@ -4,7 +4,7 @@ import org.json.simple.JSONArray
 import org.json.simple.JSONObject
 import slatekit.common.convert.Conversions
 import slatekit.common.crypto.*
-import slatekit.common.requests.Request
+import slatekit.requests.Request
 import slatekit.meta.*
 import java.util.*
 import kotlin.reflect.KClass

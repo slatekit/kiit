@@ -3,10 +3,10 @@ package slatekit.meta
 import org.json.simple.JSONArray
 import org.json.simple.JSONObject
 import slatekit.common.convert.Conversions
-import slatekit.common.requests.Request
-import slatekit.common.requests.RequestSupport
-import slatekit.common.smartvalues.SmartCreation
-import slatekit.common.smartvalues.SmartValue
+import slatekit.requests.Request
+import slatekit.requests.RequestSupport
+import slatekit.utils.smartvalues.SmartCreation
+import slatekit.utils.smartvalues.SmartValue
 import slatekit.common.types.Doc
 import kotlin.reflect.KClass
 import kotlin.reflect.KType

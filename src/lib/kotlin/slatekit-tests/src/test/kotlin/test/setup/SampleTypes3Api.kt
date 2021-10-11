@@ -8,8 +8,8 @@ import slatekit.common.crypto.EncDouble
 import slatekit.common.crypto.EncInt
 import slatekit.common.crypto.EncLong
 import slatekit.common.crypto.EncString
-import slatekit.common.smartvalues.Email
-import slatekit.common.smartvalues.PhoneUS
+import slatekit.utils.smartvalues.Email
+import slatekit.utils.smartvalues.PhoneUS
 
 
 @Api(area = "samples", name = "types3", desc = "sample api to test other features", auth = AuthModes.NONE, roles = [Roles.NONE])

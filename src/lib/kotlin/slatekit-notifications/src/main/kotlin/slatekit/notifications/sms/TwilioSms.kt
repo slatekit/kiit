@@ -15,7 +15,7 @@ package slatekit.notifications.sms
 
 import okhttp3.Request
 import slatekit.common.info.ApiLogin
-import slatekit.common.templates.Templates
+import slatekit.utils.templates.Templates
 import slatekit.common.types.Countries
 import slatekit.common.types.Country
 import slatekit.http.HttpRPC
@@ -40,12 +40,12 @@ curl -X POST 'https://api.twilio.com/2010-04-01/Accounts/BCa1234567890d49dcffd51
 -u ACb1234567890d49dcffd51736e0e2e123:xyz5a123456d78d415eaab7ab90e4bab
  */
 class TwilioSms(
-    key: String,
-    password: String,
-    phone: String,
-    templates: Templates? = null,
-    countries: List<Country> = listOf(Countries.usa),
-    client: HttpRPC = HttpRPC()
+        key: String,
+        password: String,
+        phone: String,
+        templates: Templates? = null,
+        countries: List<Country> = listOf(Countries.usa),
+        client: HttpRPC = HttpRPC()
 ) :
     SmsService(templates, countries, client) {
     private val settings = SmsSettings(key, password, phone)

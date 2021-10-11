@@ -13,7 +13,7 @@
 
 package slatekit.meta.models
 
-import slatekit.common.naming.Namer
+import slatekit.utils.naming.Namer
 import slatekit.common.ext.orElse
 import slatekit.meta.Reflector
 import slatekit.meta.Schema

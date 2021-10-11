@@ -1,9 +1,5 @@
 package entities
 
-import slatekit.common.Record
-import slatekit.common.data.IDb
-import java.sql.ResultSet
-
 //class SqliteDb : IDb {
 //    override val onError: (Exception) -> Unit
 //        get() = TODO("not implemented") //To change initializer of created properties use File | Settings | File Templates.
