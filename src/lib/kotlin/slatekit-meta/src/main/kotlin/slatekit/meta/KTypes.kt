@@ -14,8 +14,8 @@ import slatekit.common.ext.toStringNumeric
 import slatekit.common.ext.toStringTime
 import slatekit.common.ext.toStringYYYYMMDD
 import slatekit.common.ids.ULID
-import slatekit.common.smartvalues.SmartValue
-import slatekit.common.smartvalues.SmartValued
+import slatekit.utils.smartvalues.SmartValue
+import slatekit.utils.smartvalues.SmartValued
 import slatekit.common.types.Vars
 import kotlin.reflect.KClass
 import kotlin.reflect.KType

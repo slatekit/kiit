@@ -1,4 +1,4 @@
-package slatekit.common.smartvalues
+package slatekit.utils.smartvalues
 
 /**
  * Email as a [SmartValue]
@@ -22,14 +22,14 @@ data class Email internal constructor(val value:String) : SmartValued(metadata) 
          * Metadata about the [SmartValue]
          */
         override val metadata = SmartMetadata(
-            name = "Email",
-            desc = "Email Address",
-            required = true,
-            minLength = 6,
-            maxLength = 30,
-            examples = listOf("user@abc.com"),
-            formats = listOf("xxxx@xxxxxxx.xx"),
-            expressions = listOf("""([\w\$\.\-_]+)@([\w\.]+)""")
+                name = "Email",
+                desc = "Email Address",
+                required = true,
+                minLength = 6,
+                maxLength = 30,
+                examples = listOf("user@abc.com"),
+                formats = listOf("xxxx@xxxxxxx.xx"),
+                expressions = listOf("""([\w\$\.\-_]+)@([\w\.]+)""")
         )
 
         /**
@@ -43,7 +43,7 @@ data class Email internal constructor(val value:String) : SmartValued(metadata) 
 /**
  * Phone as a [SmartValue]
  */
-data class PhoneUS internal constructor(val value:String) : SmartValued(metadata ) {
+data class PhoneUS internal constructor(val value:String) : SmartValued(metadata) {
 
     /**
      * Construction of this [Email] as a [SmartValue] is safely

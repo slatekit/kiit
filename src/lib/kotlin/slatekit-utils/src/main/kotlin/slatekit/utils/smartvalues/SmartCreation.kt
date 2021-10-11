@@ -1,4 +1,4 @@
-package slatekit.common.smartvalues
+package slatekit.utils.smartvalues
 
 import slatekit.results.*
 import slatekit.results.builders.Tries

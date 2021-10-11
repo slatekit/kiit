@@ -1,4 +1,4 @@
-package slatekit.common.paged
+package slatekit.utils.paged
 
 import slatekit.results.Outcome
 import java.util.concurrent.atomic.AtomicReference
@@ -11,7 +11,7 @@ import java.util.concurrent.atomic.AtomicReference
  */
 abstract class PagedFetch<TOffset, TValue>(override val source:String,
                                            val startOffset:TOffset,
-                                           val batchSize:Int) : Paged<TOffset, TValue>  {
+                                           val batchSize:Int) : Paged<TOffset, TValue> {
     protected val state = AtomicReference(PagedState<TOffset, TValue>(-1, startOffset, null))
 
     /**

@@ -1,4 +1,4 @@
-package slatekit.common.paged
+package slatekit.utils.paged
 
 import slatekit.results.Outcome
 

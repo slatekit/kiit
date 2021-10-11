@@ -1,4 +1,4 @@
-package slatekit.common.paged
+package slatekit.utils.paged
 
 /**
  * Allows safe paging and navigation in various ways including:
@@ -116,7 +116,7 @@ class Pager<T>(
     }
 
 
-    fun clone():Pager<T> = Pager<T>(list, circular, 0)
+    fun clone(): Pager<T> = Pager<T>(list, circular, 0)
 
 
     private fun trackLast(){

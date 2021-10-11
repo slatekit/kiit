@@ -1,6 +1,6 @@
 package slatekit.jobs.support
 
-import slatekit.common.paged.Pager
+import slatekit.utils.paged.Pager
 
 /**
  * Used to cycle through exponential "backoff" time in seconds
