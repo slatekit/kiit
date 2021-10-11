@@ -1,8 +1,8 @@
 
 # Foundational
-# cd slatekit-result        && gradle clean build publish && cd ../ && echo 'sleeping 20s' && sleep 20s     
-# cd slatekit-actors        && gradle clean build publish && cd ../ && echo 'sleeping 20s' && sleep 20s     
-# cd slatekit-common        && gradle clean build publish && cd ../ && echo 'sleeping 20s' && sleep 20s     
+cd slatekit-result        && gradle clean build publish && cd ../ && echo 'sleeping 20s' && sleep 20s     
+cd slatekit-actors        && gradle clean build publish && cd ../ && echo 'sleeping 20s' && sleep 20s     
+cd slatekit-common        && gradle clean build publish && cd ../ && echo 'sleeping 20s' && sleep 20s     
 cd slatekit-context       && gradle clean build publish && cd ../ && echo 'sleeping 20s' && sleep 20s     
 
 # Support
@@ -35,6 +35,7 @@ cd ../../ext/kotlin/
 cd slatekit-providers-aws         && gradle clean build publish && cd ../ && echo 'sleeping 20s' && sleep 20s          
 cd slatekit-providers-datadog     && gradle clean build publish && cd ../ && echo 'sleeping 20s' && sleep 20s          
 cd slatekit-providers-logback     && gradle clean build publish && cd ../ && echo 'sleeping 20s' && sleep 20s          
+cd slatekit-providers-kafka       && gradle clean build publish && cd ../ && echo 'sleeping 20s' && sleep 20s          
 
 # Connectors
 cd slatekit-connectors-cli        && gradle clean build publish && cd ../ && echo 'sleeping 20s' && sleep 20s          
