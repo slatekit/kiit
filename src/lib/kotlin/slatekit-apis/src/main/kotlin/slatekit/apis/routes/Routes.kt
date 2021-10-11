@@ -3,7 +3,7 @@ package slatekit.apis.routes
 import slatekit.apis.core.Target
 import kotlin.reflect.full.primaryConstructor
 import slatekit.context.Context
-import slatekit.common.naming.Namer
+import slatekit.utils.naming.Namer
 import slatekit.meta.Reflector
 import slatekit.results.Codes
 import slatekit.results.Err

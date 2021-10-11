@@ -11,7 +11,7 @@
  * </slate_header>
  */
 
-package slatekit.common.templates
+package slatekit.utils.templates
 
 import slatekit.common.DateTimes
 import slatekit.common.ext.toStringYYYYMMDD

@@ -1,4 +1,4 @@
-package slatekit.common.naming
+package slatekit.utils.naming
 
 object Cases {
     val hyphenReplacements = setOf(' ', '_')

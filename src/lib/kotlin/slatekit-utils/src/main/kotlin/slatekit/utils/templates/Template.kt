@@ -11,7 +11,7 @@
  * </slate_header>
  */
 
-package slatekit.common.templates
+package slatekit.utils.templates
 
 /**
   * Represents a template that can be processed for variables/substitutions.

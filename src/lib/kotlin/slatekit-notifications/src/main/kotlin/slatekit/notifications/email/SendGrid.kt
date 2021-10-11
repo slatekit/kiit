@@ -15,7 +15,7 @@ package slatekit.notifications.email
 
 import okhttp3.Request
 import slatekit.common.info.ApiLogin
-import slatekit.common.templates.Templates
+import slatekit.utils.templates.Templates
 import slatekit.http.HttpRPC
 import slatekit.results.*
 import slatekit.results.builders.Outcomes
@@ -24,11 +24,11 @@ import org.json.simple.JSONArray
 import org.json.simple.JSONObject
 
 class SendGrid(
-    user: String,
-    key: String,
-    phone: String,
-    templates: Templates? = null,
-    client: HttpRPC = HttpRPC()
+        user: String,
+        key: String,
+        phone: String,
+        templates: Templates? = null,
+        client: HttpRPC = HttpRPC()
 ) :
     EmailService(templates, client) {
 

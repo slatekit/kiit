@@ -12,7 +12,7 @@ import slatekit.apis.routes.Lookup
 import slatekit.apis.routes.Area
 import slatekit.common.Source
 import slatekit.common.ext.orElse
-import slatekit.common.naming.Namer
+import slatekit.utils.naming.Namer
 import slatekit.meta.Reflector
 
 fun toVerb(name: String?): Verb {

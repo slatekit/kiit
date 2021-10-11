@@ -2,7 +2,7 @@ package slatekit.apis.setup
 
 import slatekit.apis.routes.Action
 import slatekit.apis.routes.Api
-import slatekit.common.naming.Namer
+import slatekit.utils.naming.Namer
 
 interface Loader {
 

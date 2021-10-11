@@ -11,7 +11,7 @@
  * </slate_header>
  */
 
-package slatekit.common.templates
+package slatekit.utils.templates
 
 object TemplateConstants {
     val TypeText: Short = 0

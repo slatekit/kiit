@@ -3,7 +3,7 @@ package slatekit.entities.core
 import kotlin.reflect.KClass
 import slatekit.common.data.*
 import slatekit.common.crypto.Encryptor
-import slatekit.common.naming.Namer
+import slatekit.utils.naming.Namer
 import slatekit.entities.*
 import slatekit.meta.Reflector
 import slatekit.meta.models.Model

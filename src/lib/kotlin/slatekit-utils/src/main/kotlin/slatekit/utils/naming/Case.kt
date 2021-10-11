@@ -1,4 +1,4 @@
-package slatekit.common.naming
+package slatekit.utils.naming
 
 /**
  * LowerCamel       lowerCamel

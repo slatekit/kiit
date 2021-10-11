@@ -1,7 +1,7 @@
 package slatekit.migrations
 
 import slatekit.common.data.DataType
-import slatekit.common.naming.Namer
+import slatekit.utils.naming.Namer
 import slatekit.common.newline
 import slatekit.data.sql.Dialect
 import slatekit.meta.models.Model

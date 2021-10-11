@@ -1,4 +1,4 @@
-package slatekit.common.naming
+package slatekit.utils.naming
 
 interface Namer {
     fun rename(text: String): String

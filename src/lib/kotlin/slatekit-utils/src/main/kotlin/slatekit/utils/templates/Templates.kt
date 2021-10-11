@@ -11,10 +11,8 @@
  * </slate_header>
  */
 
-package slatekit.common.templates
+package slatekit.utils.templates
 
-import slatekit.common.templates.TemplateConstants.TypeSub
-import slatekit.common.templates.TemplateConstants.TypeText
 import slatekit.results.Try
 import slatekit.results.getOrElse
 
@@ -26,9 +24,9 @@ import slatekit.results.getOrElse
  * @param setDefaults
  */
 class Templates(
-    val templates: List<Template>? = null,
-    val variables: List<Pair<String, (TemplatePart) -> String>>? = null,
-    setDefaults: Boolean = true
+        val templates: List<Template>? = null,
+        val variables: List<Pair<String, (TemplatePart) -> String>>? = null,
+        setDefaults: Boolean = true
 ) {
 
     /**
@@ -131,8 +129,8 @@ class Templates(
     private fun resolveParts(tokens: List<TemplatePart>, substitutions: Subs): String? {
         val finalText = tokens.fold("", { s, t ->
             when (t.subType) {
-                TypeText -> s + t.text
-                TypeSub -> s + substitutions.lookup(t.text)
+                TemplateConstants.TypeText -> s + t.text
+                TemplateConstants.TypeSub -> s + substitutions.lookup(t.text)
                 else -> s + ""
             }
         })
@@ -142,8 +140,8 @@ class Templates(
     private fun resolvePartsWithVars(tokens: List<TemplatePart>, vars: Map<String, Any>?): String? {
         val finalText = tokens.fold("", { s, t ->
             when (t.subType) {
-                TypeText -> s + t.text
-                TypeSub -> s + resolveToken(t, vars)
+                TemplateConstants.TypeText -> s + t.text
+                TemplateConstants.TypeSub -> s + resolveToken(t, vars)
                 else -> s + ""
             }
         })
@@ -175,8 +173,8 @@ class Templates(
          */
         @JvmStatic
         fun build(
-            templates: List<Template>,
-            subs: List<Pair<String, (TemplatePart) -> String>>? = null
+                templates: List<Template>,
+                subs: List<Pair<String, (TemplatePart) -> String>>? = null
         ): Templates {
 
             // Each template

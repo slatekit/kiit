@@ -23,7 +23,7 @@ import slatekit.common.crypto.Encryptor
 import slatekit.common.info.*
 import slatekit.common.log.Logs
 import slatekit.common.log.LogsDefault
-import slatekit.common.naming.Namer
+import slatekit.utils.naming.Namer
 import slatekit.context.AppContext
 import slatekit.common.envs.Envs
 import slatekit.context.Context

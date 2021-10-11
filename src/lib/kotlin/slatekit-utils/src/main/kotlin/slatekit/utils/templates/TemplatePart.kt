@@ -11,7 +11,7 @@
  * </slate_header>
  */
 
-package slatekit.common.templates
+package slatekit.utils.templates
 
 /**
  * Represents either a plain text or variable in the template.

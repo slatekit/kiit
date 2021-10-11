@@ -10,7 +10,7 @@ import slatekit.common.crypto.Encryptor
 import slatekit.common.data.Connections
 import slatekit.common.info.About
 import slatekit.common.info.Folders
-import slatekit.common.templates.Subs
+import slatekit.utils.templates.Subs
 import slatekit.common.ext.toId
 import slatekit.common.info.Build
 import slatekit.common.info.Info
@@ -108,17 +108,17 @@ object AppBuilder {
      */
     fun vars(abt: About): Subs {
         return Subs(listOf(
-                Pair("user.home", { _ -> System.getProperty("user.home") }),
-                Pair("company.id", { _ -> abt.company.toId() }),
-                Pair("company.name", { _ -> abt.company }),
-                Pair("company.dir", { _ -> "@{user.home}/@{company.id}" }),
-                Pair("root.dir", { _ -> "@{company.dir}" }),
-                Pair("area.id" , { _ -> abt.area.toId() }),
-                Pair("area.name", { _ -> abt.area }),
-                Pair("area.dir", { _ -> "@{root.dir}/@{area.id}" }),
-                Pair("app.id", { _ -> abt.id }),
-                Pair("app.name", { _ -> abt.name }),
-                Pair("app.dir", { _ -> "@{root.dir}/@{area.id}/@{app.id}" })
+            Pair("user.home", { _ -> System.getProperty("user.home") }),
+            Pair("company.id", { _ -> abt.company.toId() }),
+            Pair("company.name", { _ -> abt.company }),
+            Pair("company.dir", { _ -> "@{user.home}/@{company.id}" }),
+            Pair("root.dir", { _ -> "@{company.dir}" }),
+            Pair("area.id", { _ -> abt.area.toId() }),
+            Pair("area.name", { _ -> abt.area }),
+            Pair("area.dir", { _ -> "@{root.dir}/@{area.id}" }),
+            Pair("app.id", { _ -> abt.id }),
+            Pair("app.name", { _ -> abt.name }),
+            Pair("app.dir", { _ -> "@{root.dir}/@{area.id}/@{app.id}" })
         ))
     }
 

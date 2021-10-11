@@ -4,7 +4,7 @@ import kotlin.reflect.KVisibility
 import slatekit.apis.routes.Lookup
 import slatekit.apis.routes.Action
 import slatekit.apis.routes.Api
-import slatekit.common.naming.Namer
+import slatekit.utils.naming.Namer
 import slatekit.meta.Reflector
 
 class Methods(val api: Api) : Loader {

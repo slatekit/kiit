@@ -11,11 +11,9 @@
  * </slate_header>
  */
 
-package slatekit.common.templates
+package slatekit.utils.templates
 
 import slatekit.common.lex.LexState
-import slatekit.common.templates.TemplateConstants.TypeSub
-import slatekit.common.templates.TemplateConstants.TypeText
 import slatekit.common.utils.Loops
 import slatekit.results.Failure
 import slatekit.results.Success
@@ -60,7 +58,7 @@ class TemplateParser(val text: String) {
                         // CASE 1: substitution
                         if (c == '@' && hasMore && n == '{') {
                             if (!lastText.isNullOrEmpty()) {
-                                val sub = TemplatePart(lastText, TypeText, lastPos, state.pos - lastPos)
+                                val sub = TemplatePart(lastText, TemplateConstants.TypeText, lastPos, state.pos - lastPos)
                                 subs.add(sub)
                             }
                             val sub = readSub()
@@ -112,7 +110,7 @@ class TemplateParser(val text: String) {
             TemplatePart("", 0, start, end)
         } else {
             // 2. read sub
-            Loops.doUntil({
+            Loops.doUntil {
                 if (state.pos < state.END) {
                     val curr = state.text[state.pos]
                     if (curr == '}') {
@@ -126,10 +124,10 @@ class TemplateParser(val text: String) {
                 } else {
                     false
                 }
-            })
+            }
 
             val text = state.substringInclusive(start)
-            val sub = TemplatePart(text, TypeSub, start, state.pos)
+            val sub = TemplatePart(text, TemplateConstants.TypeSub, start, state.pos)
             state.pos += 1
             sub
         }
@@ -137,7 +135,7 @@ class TemplateParser(val text: String) {
 
     fun advanceAndExpect(expected: Char): Char {
         val ch = advance()
-        require(ch == expected, { "Expected $expected but found $ch" })
+        require(ch == expected) { "Expected $expected but found $ch" }
         return ch
     }
 
