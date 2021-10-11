@@ -11,7 +11,7 @@
  * </slate_header>
  */
 
-package slatekit.common.requests
+package slatekit.requests
 
 import slatekit.common.*
 //import java.time.*

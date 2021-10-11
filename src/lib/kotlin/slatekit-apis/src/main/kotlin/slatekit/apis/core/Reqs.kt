@@ -19,9 +19,8 @@ import slatekit.apis.ApiConstants
 import slatekit.apis.support.JsonSupport
 import slatekit.common.*
 import slatekit.common.crypto.Encryptor
-import slatekit.common.ext.toStringUtc
 import slatekit.common.io.Uris
-import slatekit.common.requests.CommonRequest
+import slatekit.requests.CommonRequest
 import slatekit.common.requests.Request
 import slatekit.serialization.Serialization
 
@@ -94,16 +93,16 @@ object Reqs {
         val sep = if (path.contains("/")) "/" else "."
 
         return CommonRequest(
-            version = version,
-            path = path,
-            parts = path.split(sep),
-            source = Source.parse(sourceOverride ?: source),
-            verb = verbOverride ?: verb,
-            meta = Meta(rawSource ?: "json", jsonMeta, enc),
-            data = Data(rawSource ?: "json", Source.File.id, true, enc, jsonData),
-            raw = rawSource,
-            tag = tag,
-            timestamp = time
+                version = version,
+                path = path,
+                parts = path.split(sep),
+                source = Source.parse(sourceOverride ?: source),
+                verb = verbOverride ?: verb,
+                meta = Meta(rawSource ?: "json", jsonMeta, enc),
+                data = Data(rawSource ?: "json", Source.File.id, true, enc, jsonData),
+                raw = rawSource,
+                tag = tag,
+                timestamp = time
         )
     }
 

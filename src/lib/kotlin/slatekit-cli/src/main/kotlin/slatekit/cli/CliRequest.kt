@@ -9,7 +9,7 @@ import slatekit.common.args.Args
 import slatekit.common.types.Doc
 import slatekit.common.requests.InputArgs
 import slatekit.common.requests.Request
-import slatekit.common.requests.RequestSupport
+import slatekit.requests.RequestSupport
 import slatekit.common.Source
 
 /**

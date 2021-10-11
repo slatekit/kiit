@@ -1,4 +1,4 @@
-package slatekit.common.requests
+package slatekit.requests
 
 import slatekit.common.DateTime
 import slatekit.common.Inputs

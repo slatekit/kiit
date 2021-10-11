@@ -17,7 +17,7 @@ import slatekit.apis.routes.Api
 import slatekit.apis.SetupType
 import slatekit.apis.Verbs
 import slatekit.common.info.Credentials
-import slatekit.common.requests.CommonRequest
+import slatekit.requests.CommonRequest
 import slatekit.common.Source
 import slatekit.common.ext.toResponse
 import slatekit.results.Success

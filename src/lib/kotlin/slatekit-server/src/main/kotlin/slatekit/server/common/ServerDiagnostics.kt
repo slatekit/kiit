@@ -3,7 +3,6 @@ package slatekit.server.common
 import slatekit.tracking.Diagnostics
 import slatekit.common.log.Logger
 import slatekit.tracking.Metrics
-import slatekit.common.requests.*
 
 /**
  * Standardized diagnostics using the Diagnostics component from common.

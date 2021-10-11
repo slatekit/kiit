@@ -1,4 +1,4 @@
-package slatekit.common.requests
+package slatekit.requests
 
 /**
  * General purpose class to model a Response at an application boundary ( such as http response )

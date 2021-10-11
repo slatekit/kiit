@@ -17,7 +17,7 @@ import slatekit.common.ext.numbered
 import slatekit.common.ext.structured
 import slatekit.common.ext.toResponse
 import slatekit.common.log.Logger
-import slatekit.common.requests.CommonRequest
+import slatekit.requests.CommonRequest
 import slatekit.common.requests.Request
 import slatekit.common.requests.Response
 import slatekit.context.Context

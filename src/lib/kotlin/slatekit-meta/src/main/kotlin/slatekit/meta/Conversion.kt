@@ -4,7 +4,7 @@ import org.json.simple.JSONArray
 import org.json.simple.JSONObject
 import slatekit.common.convert.Conversions
 import slatekit.common.requests.Request
-import slatekit.common.requests.RequestSupport
+import slatekit.requests.RequestSupport
 import slatekit.utils.smartvalues.SmartCreation
 import slatekit.utils.smartvalues.SmartValue
 import slatekit.common.types.Doc

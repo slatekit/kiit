@@ -14,7 +14,7 @@ import test.setup.Movie
 import org.threeten.bp.*
 import slatekit.apis.core.Transformer
 import slatekit.common.DateTimes
-import slatekit.common.requests.CommonRequest
+import slatekit.requests.CommonRequest
 import slatekit.common.Source
 import slatekit.common.requests.Request
 import slatekit.meta.*

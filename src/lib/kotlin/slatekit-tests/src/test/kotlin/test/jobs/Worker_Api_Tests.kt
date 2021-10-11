@@ -15,13 +15,12 @@ import slatekit.core.queues.InMemoryQueue
 import slatekit.context.AppContext
 import slatekit.common.requests.InputArgs
 import slatekit.common.Source
-import slatekit.common.requests.CommonRequest
+import slatekit.requests.CommonRequest
 import slatekit.core.queues.AsyncQueue
 import slatekit.core.queues.WrappedAsyncQueue
 import slatekit.connectors.jobs.JobAPIWorker
 import slatekit.connectors.jobs.JobQueue
 import slatekit.jobs.*
-import test.TestApp
 import test.jobs.samples.SampleWorkerAPI
 import test.setup.SampleTypes2Api
 import test.setup.TestSupport

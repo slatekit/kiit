@@ -21,7 +21,7 @@ import kotlinx.coroutines.runBlocking
 //import kotlinx.coroutines.experimental.async
 import slatekit.common.types.Doc
 import slatekit.common.requests.Request
-import slatekit.common.requests.RequestSupport
+import slatekit.requests.RequestSupport
 import slatekit.common.Source
 import slatekit.common.utils.Random
 import slatekit.context.Context
