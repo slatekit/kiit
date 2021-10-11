@@ -15,7 +15,7 @@ package slatekit.notifications.sms
 
 import slatekit.utils.templates.Templates
 import slatekit.common.types.Countries
-import slatekit.common.types.Vars
+import slatekit.common.values.Vars
 import slatekit.common.types.Country
 import slatekit.http.HttpRPC
 import slatekit.notifications.common.TemplateSender

@@ -18,7 +18,7 @@ import slatekit.common.args.Args
 import slatekit.common.conf.Config
 import slatekit.common.conf.Conf
 import slatekit.common.data.Connections
-import slatekit.common.utils.B64Java8
+import slatekit.common.convert.B64Java8
 import slatekit.common.crypto.Encryptor
 import slatekit.common.info.*
 import slatekit.common.log.Logs

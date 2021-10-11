@@ -15,7 +15,7 @@ package slatekit.utils.templates
 
 import slatekit.common.DateTimes
 import slatekit.common.ext.toStringYYYYMMDD
-import slatekit.common.utils.ListMap
+import slatekit.common.values.ListMap
 
 /**
  * Performs dynamic substitutions of variables in text.

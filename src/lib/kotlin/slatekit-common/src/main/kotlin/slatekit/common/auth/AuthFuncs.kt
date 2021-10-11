@@ -15,7 +15,7 @@ package slatekit.common.auth
 
 import slatekit.common.info.ApiKey
 import slatekit.common.values.Inputs
-import slatekit.common.utils.ListMap
+import slatekit.common.values.ListMap
 import slatekit.results.Notice
 import slatekit.results.builders.Notices
 

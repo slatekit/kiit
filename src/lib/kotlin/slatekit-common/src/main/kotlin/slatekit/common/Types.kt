@@ -21,7 +21,7 @@ import slatekit.common.crypto.EncString
 import org.threeten.bp.*
 import slatekit.common.ids.ULIDs
 import slatekit.common.ids.UPIDs
-import slatekit.common.types.Vars
+import slatekit.common.values.Vars
 import java.util.*
 
 object Types {

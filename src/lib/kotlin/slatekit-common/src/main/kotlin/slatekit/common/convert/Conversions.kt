@@ -19,7 +19,7 @@ import org.threeten.bp.*
 import slatekit.common.DateTime
 import slatekit.common.DateTimes
 import slatekit.common.Types
-import slatekit.common.types.Vars
+import slatekit.common.values.Vars
 import slatekit.common.io.Uris
 
 /**

@@ -11,10 +11,9 @@
  * </slate_header>
  */
 
-package slatekit.common.utils
+package slatekit.common.values
 
 import slatekit.common.DateTime
-import slatekit.common.values.Record
 import slatekit.common.ids.UPID
 //import java.time.*
 import org.threeten.bp.*

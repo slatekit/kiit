@@ -11,10 +11,9 @@
  * </slate_header>
  */
 
-package slatekit.common.types
+package slatekit.common.values
 
 import slatekit.common.ext.splitToMapWithPairs
-import slatekit.common.utils.ListMap
 
 /**
  * Short hand representation of a list of "variables" backed

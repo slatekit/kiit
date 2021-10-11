@@ -12,7 +12,7 @@
  */
 package test.setup
 
-import slatekit.common.utils.B64Java8
+import slatekit.common.convert.B64Java8
 import slatekit.common.crypto.Encryptor
 
 object MyEncryptor : Encryptor("wejklhviuxywehjk", "3214maslkdf03292", B64Java8) {

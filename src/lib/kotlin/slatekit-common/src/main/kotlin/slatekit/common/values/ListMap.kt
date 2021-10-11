@@ -11,12 +11,11 @@
  * </slate_header>
  */
 
-package slatekit.common.utils
+package slatekit.common.values
 
 /**
- * Created by kishorereddy on 5/24/17.
+ * Sorted, readonly map
  */
-
 open class ListMap<A, B>(protected val list: List<Pair<A, B>> = listOf()) {
 
     protected val map = convert(list)

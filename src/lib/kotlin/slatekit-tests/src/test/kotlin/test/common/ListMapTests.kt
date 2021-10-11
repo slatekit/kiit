@@ -14,8 +14,8 @@ package test.common
 
 import org.junit.Assert
 import org.junit.Test
-import slatekit.common.utils.ListMap
-import slatekit.common.types.Vars
+import slatekit.common.values.ListMap
+import slatekit.common.values.Vars
 
 /**
  * Created by kishorereddy on 6/4/17.
@@ -26,10 +26,10 @@ class ListMapTests {
 
 
     @Test fun can_add() {
-        val items =   ListMap(listOf(
-            Pair("a", 1),
-            Pair("b", 2),
-            Pair("c", 3)
+        val items = ListMap(listOf(
+                Pair("a", 1),
+                Pair("b", 2),
+                Pair("c", 3)
         ))
         Assert.assertTrue( items.size == 3)
         Assert.assertTrue( items.contains("a"))
@@ -40,7 +40,7 @@ class ListMapTests {
 
 
     @Test fun can_get_by_name() {
-        val items =   ListMap(listOf(
+        val items = ListMap(listOf(
                 Pair("a", 1),
                 Pair("b", 2),
                 Pair("c", 3)
@@ -52,7 +52,7 @@ class ListMapTests {
 
 
     @Test fun can_get_by_index() {
-        val items =   ListMap(listOf(
+        val items = ListMap(listOf(
                 Pair("a", 1),
                 Pair("b", 2),
                 Pair("c", 3)
@@ -64,7 +64,7 @@ class ListMapTests {
 
 
     @Test fun can_remove() {
-        val items =  ListMap(listOf(
+        val items = ListMap(listOf(
                 Pair("a", 1),
                 Pair("b", 2),
                 Pair("c", 3)
@@ -87,10 +87,10 @@ class ListMapTests {
 
 
     @Test fun can_add_and_remove() {
-        val items =   ListMap(listOf(
-            Pair(1, User(1)),
-            Pair(2, User(2)),
-            Pair(3, User(3))
+        val items = ListMap(listOf(
+                Pair(1, User(1)),
+                Pair(2, User(2)),
+                Pair(3, User(3))
         ))
 
         val items2 = items.remove(2)
