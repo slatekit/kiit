@@ -60,9 +60,9 @@ dependencies {
 // ==================================================================
 // Slate Kit Component Info
 // ==================================================================
-def slatekitComponentId = 'app'
-def slatekitComponentName = 'App'
-def slatekitComponentDesc = 'SlateKit App: Application template'
+def slatekitComponentId = 'utils'
+def slatekitComponentName = 'Utils'
+def slatekitComponentDesc = 'SlateKit Utils: Utilities and Helpers'
 def slatekitComponentVersion = ext.slatekit_version
 
 
