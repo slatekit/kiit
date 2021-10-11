@@ -28,8 +28,8 @@ import slatekit.common.data.Connections.Companion.of
 import slatekit.common.envs.Envs
 import slatekit.common.info.*
 import slatekit.common.log.LogsDefault
-import slatekit.common.requests.Request
-import slatekit.common.requests.Response
+import slatekit.requests.Request
+import slatekit.requests.Response
 import slatekit.db.Db
 import slatekit.entities.Entities
 import slatekit.policy.hooks.Middleware

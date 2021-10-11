@@ -19,7 +19,7 @@ import slatekit.apis.AuthModes
 import slatekit.apis.Verbs
 import slatekit.context.Context
 import slatekit.common.Sources
-import slatekit.common.requests.Request
+import slatekit.requests.Request
 import slatekit.common.info.*
 
 @Api(area = "app", name = "info", desc = "api info about the application and host",

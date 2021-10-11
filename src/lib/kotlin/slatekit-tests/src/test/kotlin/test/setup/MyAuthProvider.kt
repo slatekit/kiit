@@ -14,7 +14,7 @@ package test.setup
 
 import slatekit.apis.support.Authenticator
 import slatekit.common.info.ApiKey
-import slatekit.common.requests.Request
+import slatekit.requests.Request
 
 
 // =======================================================================================

@@ -12,7 +12,7 @@ import slatekit.common.*
 import slatekit.common.ext.orElse
 import slatekit.common.io.Files
 import slatekit.common.io.Uris
-import slatekit.common.requests.Request
+import slatekit.requests.Request
 import slatekit.common.utils.Props
 
 class CodeGen(val settings: CodeGenSettings, val builder:CodeBuilder) {

@@ -13,7 +13,7 @@ import slatekit.apis.SetupType
 import slatekit.common.*
 import slatekit.core.queues.InMemoryQueue
 import slatekit.context.AppContext
-import slatekit.common.requests.InputArgs
+import slatekit.requests.InputArgs
 import slatekit.common.Source
 import slatekit.requests.CommonRequest
 import slatekit.core.queues.AsyncQueue

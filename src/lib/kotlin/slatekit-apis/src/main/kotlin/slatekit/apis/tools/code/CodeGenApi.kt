@@ -8,7 +8,7 @@ import slatekit.apis.tools.code.builders.JavaBuilder
 import slatekit.apis.tools.code.builders.KotlinBuilder
 import slatekit.common.*
 import slatekit.common.auth.Roles
-import slatekit.common.requests.Request
+import slatekit.requests.Request
 import slatekit.results.Notice
 
 /**

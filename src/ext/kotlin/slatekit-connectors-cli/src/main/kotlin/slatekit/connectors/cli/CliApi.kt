@@ -20,7 +20,7 @@ import slatekit.cli.*
 import slatekit.common.Source
 import slatekit.common.types.Content
 import slatekit.common.types.ContentType
-import slatekit.common.requests.InputArgs
+import slatekit.requests.InputArgs
 import slatekit.utils.writer.ConsoleWriter
 import slatekit.context.Context
 import slatekit.results.Codes

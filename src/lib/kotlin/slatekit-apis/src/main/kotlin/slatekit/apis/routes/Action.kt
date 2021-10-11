@@ -23,7 +23,7 @@ import slatekit.apis.core.Roles
 import slatekit.apis.core.Sources
 import slatekit.common.Metadata
 import slatekit.common.ext.tail
-import slatekit.common.requests.Request
+import slatekit.requests.Request
 
 /**
  * ================================================================

@@ -16,7 +16,7 @@ import org.junit.Assert
 import org.junit.Test
 import slatekit.common.convert.Conversions
 import slatekit.common.DateTimes
-import slatekit.common.requests.InputArgs
+import slatekit.requests.InputArgs
 import slatekit.requests.CommonRequest
 import slatekit.common.Source
 import slatekit.meta.Reflector

@@ -7,8 +7,8 @@ import slatekit.common.Metadata
 import slatekit.common.io.Uris
 import slatekit.common.args.Args
 import slatekit.common.types.Doc
-import slatekit.common.requests.InputArgs
-import slatekit.common.requests.Request
+import slatekit.requests.InputArgs
+import slatekit.requests.Request
 import slatekit.requests.RequestSupport
 import slatekit.common.Source
 

@@ -1,7 +1,7 @@
 package slatekit.apis.tools.code
 
 import slatekit.apis.ApiServer
-import slatekit.common.requests.Request
+import slatekit.requests.Request
 
 data class CodeGenSettings(
     val host: ApiServer,

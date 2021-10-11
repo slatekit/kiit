@@ -8,7 +8,7 @@ import slatekit.common.crypto.EncDouble
 import slatekit.common.crypto.EncInt
 import slatekit.common.crypto.EncLong
 import slatekit.common.crypto.EncString
-import slatekit.common.requests.Request
+import slatekit.requests.Request
 import slatekit.utils.smartvalues.Email
 import slatekit.utils.smartvalues.PhoneUS
 import slatekit.connectors.entities.AppEntContext

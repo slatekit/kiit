@@ -3,7 +3,7 @@ package slatekit.apis.tools.docs
 import slatekit.apis.ApiConstants
 import slatekit.apis.core.Part
 import slatekit.common.args.ArgsCheck
-import slatekit.common.requests.Request
+import slatekit.requests.Request
 import slatekit.results.Outcome
 import slatekit.results.builders.Outcomes
 

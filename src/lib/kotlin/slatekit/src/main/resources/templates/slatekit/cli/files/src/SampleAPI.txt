@@ -4,7 +4,7 @@ import slatekit.apis.*
 import slatekit.apis.core.Patch
 import slatekit.common.DateTime
 import slatekit.common.DateTimes
-import slatekit.common.requests.Request
+import slatekit.requests.Request
 import slatekit.context.Context
 import slatekit.common.Sources
 import slatekit.common.ext.toId

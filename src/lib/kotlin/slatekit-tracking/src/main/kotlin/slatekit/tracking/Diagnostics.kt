@@ -1,7 +1,7 @@
 package slatekit.tracking
 
 import slatekit.common.log.Logger
-import slatekit.common.requests.*
+import slatekit.requests.*
 
 /**
  * Interface for diagnostics for core components

@@ -19,7 +19,7 @@ import slatekit.apis.tools.docs.DocWeb
 import slatekit.common.Source
 import slatekit.common.crypto.Encryptor
 import slatekit.utils.naming.Namer
-import slatekit.common.requests.Request
+import slatekit.requests.Request
 import slatekit.serialization.deserializer.Deserializer
 
 /**

@@ -4,7 +4,7 @@ import io.ktor.application.ApplicationCall
 import io.ktor.http.HttpStatusCode
 import slatekit.common.types.Content
 import slatekit.common.types.Doc
-import slatekit.common.requests.Response
+import slatekit.requests.Response
 
 interface ResponseHandler {
     /**
