@@ -2,8 +2,8 @@ package slatekit.apis.tools.docs
 
 import slatekit.apis.routes.Action
 import slatekit.apis.routes.Api
-import slatekit.common.writer.Writer
-import slatekit.common.writer.WebWriter
+import slatekit.utils.writer.Writer
+import slatekit.utils.writer.WebWriter
 
 /**
  * Generates help docs on the console.

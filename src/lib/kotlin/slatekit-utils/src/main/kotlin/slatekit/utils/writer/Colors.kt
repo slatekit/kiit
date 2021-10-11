@@ -10,7 +10,7 @@
  * mantra: Simplicity above all else
  * </slate_header>
  */
-package slatekit.common.writer
+package slatekit.utils.writer
 
 /**
  * Created by kishorereddy on 5/19/17.

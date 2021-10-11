@@ -11,7 +11,7 @@
  * </slate_header>
  */
 
-package slatekit.common.writer
+package slatekit.utils.writer
 
 import slatekit.common.ext.escapeHtml
 
@@ -47,17 +47,17 @@ class WebWriter : Writer {
      */
     override fun writeItem(mode: TextType, msg: String, endLine: Boolean) {
         when (mode) {
-            TextType.Title     -> writeTag("H1", mode.format(msg), endLine, "color:Black ")
-            TextType.Subtitle  -> writeTag("H2", mode.format(msg), endLine, "color:Black ")
-            TextType.Url       -> writeLink(msg, mode.format(msg), endLine, "color:Blue ")
+            TextType.Title -> writeTag("H1", mode.format(msg), endLine, "color:Black ")
+            TextType.Subtitle -> writeTag("H2", mode.format(msg), endLine, "color:Black ")
+            TextType.Url -> writeLink(msg, mode.format(msg), endLine, "color:Blue ")
             TextType.Important -> writeTag(tag("span", endLine,"h4"), mode.format(msg), endLine, "color:Black ")
             TextType.Highlight -> writeTag(tag("span", endLine,"p" ), mode.format(msg), endLine, "color:Orange")
-            TextType.Success   -> writeTag(tag("span", endLine,"p" ), mode.format(msg), endLine, "color:Green ")
-            TextType.Failure   -> writeTag(tag("span", endLine,"p" ), mode.format(msg), endLine, "color:Red   ")
-            TextType.Text      -> writeTag("span", mode.format(msg), endLine, "color:Black ")
-            TextType.NoFormat  -> writeTag("", mode.format(msg), endLine, "")
-            TextType.NewLine   -> buffer.append(NEWLINE)
-            TextType.Tab       -> buffer.append(TAB)
+            TextType.Success -> writeTag(tag("span", endLine,"p" ), mode.format(msg), endLine, "color:Green ")
+            TextType.Failure -> writeTag(tag("span", endLine,"p" ), mode.format(msg), endLine, "color:Red   ")
+            TextType.Text -> writeTag("span", mode.format(msg), endLine, "color:Black ")
+            TextType.NoFormat -> writeTag("", mode.format(msg), endLine, "")
+            TextType.NewLine -> buffer.append(NEWLINE)
+            TextType.Tab -> buffer.append(TAB)
         }
     }
 
@@ -99,7 +99,7 @@ class WebWriter : Writer {
     /**
      * prints text using a label : value format
      *
-     * @param key: 
+     * @param key:
      * @param value : the text to print
      * @param endLine : whether or not to include a newline at the end
      */

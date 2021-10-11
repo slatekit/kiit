@@ -11,7 +11,7 @@
  * </slate_header>
  */
 
-package slatekit.common.writer
+package slatekit.utils.writer
 
 import slatekit.common.newline
 
@@ -174,7 +174,7 @@ interface Writer {
     /**
      * prints text using a label : value format
      *
-     * @param key: 
+     * @param key:
      * @param value : the text to print
      * @param endLine : whether or not to include a newline at the end
      */

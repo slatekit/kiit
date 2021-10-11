@@ -13,7 +13,7 @@
 
 package slatekit.common.args
 
-import slatekit.common.writer.*
+//import slatekit.common.writer.*
 
 /**
  *
@@ -44,51 +44,4 @@ data class Arg(
         val defaultVal: String = "",
         val example: String = "",
         val exampleMany: String = ""
-) {
-
-    /**
-     * prints the arg for command line display
-     *
-     * -env     :  the environment to run in
-     *             ! required  [String]  e.g. dev
-     * -log     :  the log level for logging
-     *             ? optional  [String]  e.g. info
-     * -enc     :  whether encryption is on
-     *             ? optional  [String]  e.g. false
-     * -region  :  the region linked to app
-     *             ? optional  [String]  e.g. us
-     *
-     * @param tab
-     * @param prefix
-     * @param separator
-     * @param maxWidth
-     */
-    fun semantic(
-            prefix: String? = "-",
-            separator: String? = "=",
-            maxWidth: Int? = null
-    ): List<TextOutput> {
-
-        val nameLen = maxWidth ?: name.length
-        val nameFill = name.padEnd(nameLen)
-        val namePart = (prefix ?: "-") + nameFill
-
-        val logs = mutableListOf(
-                TextOutput(TextType.Highlight, namePart, false),
-                TextOutput(TextType.Text, separator ?: "=", false),
-                TextOutput(TextType.Text, desc, true),
-                TextOutput(TextType.Text, " ".repeat(nameLen + 6), false))
-
-        if (isRequired) {
-            logs.add(TextOutput(TextType.Important, "!", false))
-            logs.add(TextOutput(TextType.Text, "required ", false))
-        } else {
-            logs.add(TextOutput(TextType.Success, "?", false))
-            logs.add(TextOutput(TextType.Text, "optional ", false))
-        }
-
-        logs.add(TextOutput(TextType.Subtitle, "[$dataType] ", false))
-        logs.add(TextOutput(TextType.Text, "e.g. $example", true))
-        return logs.toList()
-    }
-}
+)

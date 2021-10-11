@@ -1,7 +1,7 @@
 package slatekit.docs
 
 import slatekit.common.*
-import slatekit.common.writer.ConsoleWriter
+import slatekit.utils.writer.ConsoleWriter
 import slatekit.common.ext.toStringYYYYMMDD
 import slatekit.common.utils.StringParser
 import slatekit.results.Notice

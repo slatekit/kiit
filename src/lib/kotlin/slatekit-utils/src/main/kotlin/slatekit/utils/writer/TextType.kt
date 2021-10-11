@@ -11,7 +11,7 @@
  * </slate_header>
  */
 
-package slatekit.common.writer
+package slatekit.utils.writer
 
 sealed class TextType(val name:String, val color: String, private val upperCase: Boolean, val format:Boolean = true) {
 
@@ -42,17 +42,17 @@ sealed class TextType(val name:String, val color: String, private val upperCase:
          */
         fun parse(mode: String): TextType {
             return when (mode.toLowerCase()) {
-                Title    .name -> Title
-                Subtitle .name -> Subtitle
-                Url      .name -> Url
+                Title.name -> Title
+                Subtitle.name -> Subtitle
+                Url.name -> Url
                 Important.name -> Important
                 Highlight.name -> Highlight
-                Success  .name -> Success
-                Failure  .name -> Failure
-                Text     .name -> Text
-                NoFormat .name -> NoFormat
-                NewLine  .name -> NewLine
-                Tab      .name -> Tab
+                Success.name -> Success
+                Failure.name -> Failure
+                Text.name -> Text
+                NoFormat.name -> NoFormat
+                NewLine.name -> NewLine
+                Tab.name -> Tab
                 else           -> Text
             }
         }

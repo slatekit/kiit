@@ -18,9 +18,9 @@ import slatekit.apis.routes.Action
 import slatekit.apis.routes.Api
 import slatekit.apis.routes.Area
 import slatekit.apis.routes.Lookup
-import slatekit.common.writer.ConsoleWriter
-import slatekit.common.writer.TextSettings
-import slatekit.common.writer.Writer
+import slatekit.utils.writer.ConsoleWriter
+import slatekit.utils.writer.TextSettings
+import slatekit.utils.writer.Writer
 import kotlin.reflect.KClass
 
 abstract class Doc  {
