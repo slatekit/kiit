@@ -1,8 +1,9 @@
-package slatekit.server.common
+package slatekit.server.core
 
 import slatekit.tracking.Diagnostics
 import slatekit.common.log.Logger
 import slatekit.tracking.Metrics
+import slatekit.requests.*
 
 /**
  * Standardized diagnostics using the Diagnostics component from common.

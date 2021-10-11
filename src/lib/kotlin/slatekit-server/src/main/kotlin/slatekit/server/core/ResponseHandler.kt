@@ -1,4 +1,4 @@
-package slatekit.server.common
+package slatekit.server.core
 
 import io.ktor.application.ApplicationCall
 import io.ktor.http.HttpStatusCode

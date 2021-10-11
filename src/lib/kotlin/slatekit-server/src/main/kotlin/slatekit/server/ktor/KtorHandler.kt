@@ -13,9 +13,9 @@ import slatekit.tracking.Diagnostics
 import slatekit.requests.Request
 import slatekit.requests.toResponse
 import slatekit.server.ServerSettings
-import slatekit.server.common.RequestHandler
-import slatekit.server.common.ResponseHandler
-import slatekit.server.common.ServerDiagnostics
+import slatekit.server.core.RequestHandler
+import slatekit.server.core.ResponseHandler
+import slatekit.server.core.ServerDiagnostics
 import slatekit.tracking.MetricsLite
 
 
