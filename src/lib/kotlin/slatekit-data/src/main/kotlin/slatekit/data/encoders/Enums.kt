@@ -1,7 +1,7 @@
 package slatekit.data.encoders
 
 import slatekit.common.*
-import slatekit.common.Record
+import slatekit.common.values.Record
 import slatekit.common.data.DataType
 import slatekit.common.data.Value
 import slatekit.meta.Reflector

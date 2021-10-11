@@ -5,7 +5,7 @@ import org.threeten.bp.LocalDateTime
 import org.threeten.bp.LocalTime
 import slatekit.common.DateTime
 import slatekit.common.DateTimes
-import slatekit.common.Record
+import slatekit.common.values.Record
 import java.sql.ResultSet
 
 /**

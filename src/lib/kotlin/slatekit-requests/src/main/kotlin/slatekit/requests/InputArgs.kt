@@ -17,6 +17,9 @@ import slatekit.common.*
 //import java.time.*
 import org.threeten.bp.*
 import slatekit.common.convert.Conversions
+import slatekit.common.values.Inputs
+import slatekit.common.values.InputsUpdateable
+import slatekit.common.values.Metadata
 
 /**
  * Created by kishorereddy on 5/25/17.

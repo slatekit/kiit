@@ -11,7 +11,7 @@
  * </slate_header>
  */
 
-package slatekit.common
+package slatekit.common.values
 
 import slatekit.common.convert.Conversions
 import slatekit.common.ext.splitToMapOfType

@@ -19,7 +19,7 @@ import slatekit.apis.Verbs
 import slatekit.common.info.Credentials
 import slatekit.requests.CommonRequest
 import slatekit.common.Source
-import slatekit.common.ext.toResponse
+import slatekit.requests.toResponse
 import slatekit.results.Success
 import slatekit.results.builders.Notices
 import slatekit.results.builders.Outcomes

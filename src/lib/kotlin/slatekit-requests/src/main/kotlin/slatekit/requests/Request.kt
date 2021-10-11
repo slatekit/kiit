@@ -14,9 +14,10 @@
 package slatekit.requests
 
 import slatekit.common.DateTime
-import slatekit.common.Inputs
+import slatekit.common.values.Inputs
 import slatekit.common.Source
 import slatekit.common.ext.toStringUtc
+import slatekit.common.values.Metadata
 
 
 /**
@@ -37,7 +38,7 @@ interface Request {
     val source: Source
     val verb: String
     val data: Inputs
-    val meta: slatekit.common.Metadata
+    val meta: Metadata
     val raw: Any?
     val output: String?
     val tag: String
@@ -101,16 +102,16 @@ interface Request {
      * To transform / rewrite the request
      */
     fun clone(
-            otherPath: String,
-            otherParts: List<String>,
-            otherSource: Source,
-            otherVerb: String,
-            otherData: Inputs,
-            otherMeta: slatekit.common.Metadata,
-            otherRaw: Any?,
-            otherOutput: String?,
-            otherTag: String,
-            otherVersion: String,
-            otherTimestamp:DateTime) : Request
+        otherPath: String,
+        otherParts: List<String>,
+        otherSource: Source,
+        otherVerb: String,
+        otherData: Inputs,
+        otherMeta: Metadata,
+        otherRaw: Any?,
+        otherOutput: String?,
+        otherTag: String,
+        otherVersion: String,
+        otherTimestamp:DateTime) : Request
 }
 

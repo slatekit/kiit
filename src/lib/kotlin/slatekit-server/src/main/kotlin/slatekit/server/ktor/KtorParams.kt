@@ -22,6 +22,8 @@ import slatekit.common.crypto.Encryptor
 //import java.time.*
 import org.threeten.bp.*
 import slatekit.common.convert.Conversions
+import slatekit.common.values.Inputs
+import slatekit.common.values.InputsUpdateable
 
 /**
  * @param req : The raw request

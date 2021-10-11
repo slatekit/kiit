@@ -1,6 +1,6 @@
 package slatekit.data.encoders
 
-import slatekit.common.Record
+import slatekit.common.values.Record
 import slatekit.common.data.Value
 
 /**

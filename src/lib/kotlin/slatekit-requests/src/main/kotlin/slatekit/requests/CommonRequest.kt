@@ -1,8 +1,8 @@
 package slatekit.requests
 
 import slatekit.common.DateTime
-import slatekit.common.Inputs
-import slatekit.common.Metadata
+import slatekit.common.values.Inputs
+import slatekit.common.values.Metadata
 import slatekit.common.Source
 import slatekit.common.args.Args
 
@@ -20,34 +20,34 @@ import slatekit.common.args.Args
  * @param tag : Optional tag for tracking individual requests and for error logging.
  */
 data class CommonRequest(
-        override val path: String,
-        override val parts: List<String>,
-        override val source: Source,
-        override val verb: String,
-        override val data: Inputs,
-        override val meta: Metadata,
-        override val raw: Any? = null,
-        override val output: String? = "",
-        override val tag: String = "",
-        override val version: String = "1.0",
-        override val timestamp: DateTime = DateTime.now()
+    override val path: String,
+    override val parts: List<String>,
+    override val source: Source,
+    override val verb: String,
+    override val data: Inputs,
+    override val meta: Metadata,
+    override val raw: Any? = null,
+    override val output: String? = "",
+    override val tag: String = "",
+    override val version: String = "1.0",
+    override val timestamp: DateTime = DateTime.now()
 ) : Request {
 
     /**
      * To transform / rewrite the request
      */
     override fun clone(
-            otherPath: String,
-            otherParts: List<String>,
-            otherSource: Source,
-            otherVerb: String,
-            otherData: Inputs,
-            otherMeta: Metadata,
-            otherRaw: Any?,
-            otherOutput: String?,
-            otherTag: String,
-            otherVersion: String,
-            otherTimestamp: DateTime) : Request {
+        otherPath: String,
+        otherParts: List<String>,
+        otherSource: Source,
+        otherVerb: String,
+        otherData: Inputs,
+        otherMeta: Metadata,
+        otherRaw: Any?,
+        otherOutput: String?,
+        otherTag: String,
+        otherVersion: String,
+        otherTimestamp: DateTime) : Request {
         return this.copy(
                 path      = otherPath,
                 parts     = otherParts,

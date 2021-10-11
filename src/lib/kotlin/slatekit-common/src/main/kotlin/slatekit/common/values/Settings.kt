@@ -1,4 +1,4 @@
-package slatekit.common
+package slatekit.common.values
 
 /**
  * Provides both gets ( Reads ) / puts ( Writes ) on configurable settings

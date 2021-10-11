@@ -1,6 +1,6 @@
 package slatekit.common.data
 
-import slatekit.common.Record
+import slatekit.common.values.Record
 import java.sql.ResultSet
 
 interface ProcSupport {

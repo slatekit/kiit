@@ -1,6 +1,6 @@
 package slatekit.tracking
 
-import slatekit.common.Event
+import slatekit.utils.events.Event
 import slatekit.common.Identity
 import slatekit.common.log.Logger
 import slatekit.common.log.LoggerConsole

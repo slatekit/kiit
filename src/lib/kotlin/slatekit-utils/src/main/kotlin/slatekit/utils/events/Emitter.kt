@@ -1,4 +1,4 @@
-package slatekit.common
+package slatekit.utils.events
 
 import java.util.concurrent.atomic.AtomicLong
 

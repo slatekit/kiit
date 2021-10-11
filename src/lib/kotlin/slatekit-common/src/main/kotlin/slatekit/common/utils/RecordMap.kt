@@ -14,7 +14,7 @@
 package slatekit.common.utils
 
 import slatekit.common.DateTime
-import slatekit.common.Record
+import slatekit.common.values.Record
 import slatekit.common.ids.UPID
 //import java.time.*
 import org.threeten.bp.*
