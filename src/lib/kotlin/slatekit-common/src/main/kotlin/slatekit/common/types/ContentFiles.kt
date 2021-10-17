@@ -25,22 +25,19 @@ package slatekit.common.types
  */
 object ContentFiles {
         @JvmStatic
-        val empty = ContentFile("", byteArrayOf(),"", ContentTypeText)
+        val empty = ContentFile("", byteArrayOf(),"", ContentTypes.Plain)
 
         @JvmStatic
-        fun text(name: String, content: String): ContentFile = ContentFile(name, content.toByteArray(), content, ContentTypeText)
+        fun text(name: String, content: String): ContentFile = ContentFile(name, content.toByteArray(), content, ContentTypes.Plain)
 
         @JvmStatic
-        fun html(name: String, content: String): ContentFile = ContentFile(name, content.toByteArray(), content, ContentTypeHtml)
+        fun html(name: String, content: String): ContentFile = ContentFile(name, content.toByteArray(), content, ContentTypes.Html)
 
         @JvmStatic
-        fun json(name: String, content: String): ContentFile = ContentFile(name, content.toByteArray(), content, ContentTypeJson)
+        fun json(name: String, content: String): ContentFile = ContentFile(name, content.toByteArray(), content, ContentTypes.Json)
 
         @JvmStatic
-        fun csv(name: String, content: String): ContentFile = ContentFile(name, content.toByteArray(), content, ContentTypeCsv)
-
-        @JvmStatic
-        fun prop(name: String, content: String): ContentFile = ContentFile(name, content.toByteArray(), content, ContentTypeProp)
+        fun csv(name: String, content: String): ContentFile = ContentFile(name, content.toByteArray(), content, ContentTypes.Csv)
 
         @JvmStatic
         fun other(name: String, content: String, tpe: ContentType): ContentFile = ContentFile(name, content.toByteArray(), content, tpe)

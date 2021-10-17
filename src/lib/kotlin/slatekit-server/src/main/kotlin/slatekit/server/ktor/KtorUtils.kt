@@ -11,8 +11,9 @@ import io.ktor.request.isMultipart
 import io.ktor.request.receiveMultipart
 import org.json.simple.JSONObject
 import org.json.simple.parser.JSONParser
-import slatekit.common.types.ContentTypeText
 import slatekit.common.types.ContentFile
+import slatekit.common.types.ContentFiles
+import slatekit.common.types.ContentTypes
 import java.io.BufferedInputStream
 import java.io.ByteArrayOutputStream
 import java.io.InputStream
@@ -90,7 +91,7 @@ object KtorUtils {
                 }
             }
             doc
-        } ?: ContentFile.empty
+        } ?: ContentFiles.empty
         return doc
     }
 
@@ -104,7 +105,7 @@ object KtorUtils {
             ris = bis.read()
         }
         val text = buf.toString()
-        val doc = ContentFile(name, buf.toByteArray(), text, ContentTypeText, text.length.toLong())
+        val doc = ContentFile(name, buf.toByteArray(), text, ContentTypes.Plain)
         return doc
     }
 

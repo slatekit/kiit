@@ -50,22 +50,19 @@ class ContentFile(val name:String, override val data:ByteArray, val raw:String?,
 object Contents {
 
     @JvmStatic
-    fun csv(text: String): Content = ContentText(text.toByteArray(), text, ContentTypeCsv)
+    fun csv(text: String): Content = ContentText(text.toByteArray(), text, ContentTypes.Csv)
 
     @JvmStatic
-    fun html(text: String): Content = ContentText(text.toByteArray(), text, ContentTypeHtml)
+    fun html(text: String): Content = ContentText(text.toByteArray(), text, ContentTypes.Html)
 
     @JvmStatic
-    fun json(text: String): Content = ContentText(text.toByteArray(), text, ContentTypeJson)
+    fun json(text: String): Content = ContentText(text.toByteArray(), text, ContentTypes.Json)
 
     @JvmStatic
-    fun text(text: String): Content = ContentText(text.toByteArray(), text, ContentTypeText)
+    fun text(text: String): Content = ContentText(text.toByteArray(), text, ContentTypes.Plain)
 
     @JvmStatic
-    fun prop(text: String): Content = ContentText(text.toByteArray(), text, ContentTypeProp)
-
-    @JvmStatic
-    fun xml(text: String): Content = ContentText(text.toByteArray(), text, ContentTypeXml)
+    fun xml(text: String): Content = ContentText(text.toByteArray(), text, ContentTypes.Xml)
 
     @JvmStatic
     fun other(text: String, tpe: ContentType): Content = ContentText(text.toByteArray(), text, tpe)

@@ -14,9 +14,9 @@ object Serialization {
 
     fun serialize(item:Any?, type: ContentType): Content {
         return when(type){
-            ContentTypeCsv  -> Contents.csv (csv().serialize(item))
-            ContentTypeJson -> Contents.json(json().serialize(item))
-            else            -> Contents.prop(props().serialize(item))
+            ContentTypes.Csv  -> Contents.csv (csv().serialize(item))
+            ContentTypes.Json -> Contents.json(json().serialize(item))
+            else            -> Contents.text(props().serialize(item))
         }
     }
 
