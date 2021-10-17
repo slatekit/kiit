@@ -13,7 +13,7 @@
 
 package slatekit.common
 
-import slatekit.common.types.Doc
+import slatekit.common.types.ContentFile
 import slatekit.common.crypto.EncDouble
 import slatekit.common.crypto.EncInt
 import slatekit.common.crypto.EncLong
@@ -43,7 +43,7 @@ object Types {
     val JUUIDClass = UUID.fromString("1bd16d06-a45a-45d8-b4c9-7e864251275f").javaClass
     val JULIDClass = ULIDs.create().javaClass
     val JUPIDClass = UPIDs.create().javaClass
-    val JDocClass = Doc.javaClass
+    val JDocClass = ContentFile::class.java
     val JVarsClass = Vars.javaClass
     val JDecIntClass = EncInt.javaClass
     val JDecLongClass = EncLong.javaClass

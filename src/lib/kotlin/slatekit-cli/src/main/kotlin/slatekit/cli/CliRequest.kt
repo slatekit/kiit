@@ -6,7 +6,7 @@ import slatekit.common.values.Inputs
 import slatekit.common.values.Metadata
 import slatekit.common.io.Uris
 import slatekit.common.args.Args
-import slatekit.common.types.Doc
+import slatekit.common.types.ContentFile
 import slatekit.requests.InputArgs
 import slatekit.requests.Request
 import slatekit.requests.RequestSupport
@@ -58,14 +58,14 @@ data class CliRequest(
     /**
      * Get a document referenced by name in the arguments as a Doc of string content
      */
-    override fun getDoc(name: String): Doc? {
+    override fun getDoc(name: String): ContentFile? {
         return this.args.getStringOrNull(name)?.let { Uris.readDoc(it) }
     }
 
     /**
      * Get a file referenced by name in the arguments
      */
-    override fun getDoc(name: String, callback: (InputStream) -> Doc): Doc? {
+    override fun getDoc(name: String, callback: (InputStream) -> ContentFile): ContentFile? {
         return this.args.getStringOrNull(name)?.let { Uris.readDoc(it) }
     }
 

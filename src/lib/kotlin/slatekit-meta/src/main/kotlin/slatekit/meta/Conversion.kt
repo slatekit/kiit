@@ -7,7 +7,7 @@ import slatekit.requests.Request
 import slatekit.requests.RequestSupport
 import slatekit.utils.smartvalues.SmartCreation
 import slatekit.utils.smartvalues.SmartValue
-import slatekit.common.types.Doc
+import slatekit.common.types.ContentFile
 import kotlin.reflect.KClass
 import kotlin.reflect.KType
 import kotlin.reflect.full.companionObjectInstance
@@ -51,7 +51,7 @@ class Conversion(val converter: (parent: Any, raw: Any?, paramName:String, param
         return result
     }
 
-    fun toDoc(req:Request, name:String): Doc? {
+    fun toDoc(req:Request, name:String): ContentFile? {
         // Conversions.toDoc(data.getString(paramName))
         val doc = when(req){
             is RequestSupport -> req.getDoc(name)

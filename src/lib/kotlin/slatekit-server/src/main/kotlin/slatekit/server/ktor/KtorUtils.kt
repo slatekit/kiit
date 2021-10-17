@@ -12,7 +12,7 @@ import io.ktor.request.receiveMultipart
 import org.json.simple.JSONObject
 import org.json.simple.parser.JSONParser
 import slatekit.common.types.ContentTypeText
-import slatekit.common.types.Doc
+import slatekit.common.types.ContentFile
 import java.io.BufferedInputStream
 import java.io.ByteArrayOutputStream
 import java.io.InputStream
@@ -79,7 +79,7 @@ object KtorUtils {
     }
 
 
-    suspend fun loadFile(call:ApplicationCall, name:String?, callback:((InputStream)-> Doc?)? = null):Doc {
+    suspend fun loadFile(call:ApplicationCall, name:String?, callback:((InputStream)-> ContentFile?)? = null):ContentFile {
         val filePart = loadFilePart(call, name)
         val doc = filePart?.let {
             val file = it
@@ -90,12 +90,12 @@ object KtorUtils {
                 }
             }
             doc
-        } ?: Doc.empty
+        } ?: ContentFile.empty
         return doc
     }
 
 
-    fun buildDoc(name:String, stream:InputStream):Doc {
+    fun buildDoc(name:String, stream:InputStream):ContentFile {
         val bis = BufferedInputStream(stream)
         val buf = ByteArrayOutputStream()
         var ris = bis.read()
@@ -104,7 +104,7 @@ object KtorUtils {
             ris = bis.read()
         }
         val text = buf.toString()
-        val doc = Doc(name, buf.toByteArray(), text, ContentTypeText, text.length.toLong())
+        val doc = ContentFile(name, buf.toByteArray(), text, ContentTypeText, text.length.toLong())
         return doc
     }
 

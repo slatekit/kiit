@@ -13,7 +13,7 @@
 
 package slatekit.common.convert
 
-import slatekit.common.types.Doc
+import slatekit.common.types.ContentFile
 //import java.time.*
 import org.threeten.bp.*
 import slatekit.common.DateTime
@@ -21,6 +21,7 @@ import slatekit.common.DateTimes
 import slatekit.common.Types
 import slatekit.common.values.Vars
 import slatekit.common.io.Uris
+import slatekit.common.types.ContentFiles
 
 /**
  * Conversions from text to types
@@ -91,9 +92,9 @@ object Conversions {
      * @param paramName
      * @return
      */
-    fun toDoc(uri: String): Doc {
+    fun toDoc(uri: String): ContentFile {
         val doc = Uris.readDoc(uri)
-        return doc ?: Doc.text("", "")
+        return doc ?: ContentFiles.text("", "")
     }
 
     fun converterFor(tpe: Class<*>): (String) -> Any {

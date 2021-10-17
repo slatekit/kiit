@@ -19,7 +19,7 @@ import slatekit.server.ServerSettings
 import io.ktor.request.*
 import kotlinx.coroutines.runBlocking
 //import kotlinx.coroutines.experimental.async
-import slatekit.common.types.Doc
+import slatekit.common.types.ContentFile
 import slatekit.requests.Request
 import slatekit.requests.RequestSupport
 import slatekit.common.Source
@@ -94,12 +94,12 @@ data class KtorRequest(
     /**
      * Access to an uploaded file
      */
-    override fun getDoc(name: String): Doc? {
+    override fun getDoc(name: String): ContentFile? {
         return getDoc(name) { stream -> KtorUtils.buildDoc(name, stream) }
     }
 
 
-    override fun getDoc(name: String, callback: (InputStream) -> Doc): Doc {
+    override fun getDoc(name: String, callback: (InputStream) -> ContentFile): ContentFile {
         NOTE.IMPLEMENT("Server", "Make this non-blocking")
         return runBlocking {
             KtorUtils.loadFile(call, name, callback)

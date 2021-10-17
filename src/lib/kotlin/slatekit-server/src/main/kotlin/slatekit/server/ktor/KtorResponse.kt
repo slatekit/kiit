@@ -19,9 +19,8 @@ import io.ktor.http.HttpStatusCode
 import io.ktor.response.header
 import io.ktor.response.respondBytes
 import io.ktor.response.respondText
+import slatekit.common.types.*
 import slatekit.serialization.responses.ResponseEncoder
-import slatekit.common.types.Content
-import slatekit.common.types.Doc
 import slatekit.requests.Response
 import slatekit.serialization.Serialization
 import slatekit.results.*
@@ -44,8 +43,9 @@ class KtorResponse(val settings:ServerSettings)  : ResponseHandler {
             }
             true -> {
                 when (result.value) {
-                    is Content -> content(call, result, result.value as Content)
-                    is Doc -> file(call, result, result.value as Doc)
+                    is ContentText -> contentText(call, result, result.value as ContentText)
+                    is ContentData -> contentData(call, result, result.value as ContentData)
+                    is ContentFile -> contentFile(call, result, result.value as ContentFile)
                     else -> json(call, result)
                 }
             }
@@ -70,23 +70,32 @@ class KtorResponse(val settings:ServerSettings)  : ResponseHandler {
      * Explicitly supplied content
      * Return the value of the result as a content with type
      */
-    override suspend fun content(call: ApplicationCall, result: Response<Any?>, content: Content?) {
-        val text = content?.text ?: ""
-        val contentType = content?.let { ContentType.parse(it.tpe.http) } ?: io.ktor.http.ContentType.Text.Plain
+    override suspend fun contentText(call: ApplicationCall, result: Response<Any?>, content: ContentText) {
+        val text = Contents.toText(content)
         val statusCode = toHttpStatus(result)
-        call.respondText(text, contentType, statusCode)
+        val contentType = ContentType.parse(content.tpe.http)
+        call.respondText(text ?: "", contentType, statusCode)
+    }
+
+    /**
+     * Explicitly supplied content
+     * Return the value of the result as a content with type
+     */
+    override suspend fun contentData(call: ApplicationCall, result: Response<Any?>, content: ContentData) {
+        val statusCode = toHttpStatus(result)
+        val contentType = ContentType.parse(content.tpe.http)
+        call.respondBytes(content.data, contentType, statusCode)
     }
 
     /**
      * Returns the value of the result as a file document
      */
-    override suspend fun file(call: ApplicationCall, result: Response<Any?>, doc: Doc) {
-        val bytes = doc.text.toByteArray()
-        val statusCode = toHttpStatus(result)
-
+    override suspend fun contentFile(call: ApplicationCall, result: Response<Any?>, content: ContentFile) {
         // Make files downloadable
-        call.response.header("Content-Disposition", "attachment; filename=" + doc.name)
-        call.respondBytes(bytes, ContentType.parse(doc.tpe.http), statusCode)
+        val statusCode = toHttpStatus(result)
+        val contentType = ContentType.parse(content.tpe.http)
+        call.response.header("Content-Disposition", "attachment; filename=" + content.name)
+        call.respondBytes(content.data, contentType, statusCode)
     }
 
 

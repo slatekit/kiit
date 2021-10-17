@@ -16,7 +16,7 @@ package test.setup
 import slatekit.apis.*
 import slatekit.common.*
 import slatekit.common.auth.Roles
-import slatekit.common.types.Doc
+import slatekit.common.types.ContentFile
 import slatekit.common.crypto.EncDouble
 import slatekit.common.crypto.EncString
 import slatekit.common.crypto.EncInt
@@ -167,8 +167,8 @@ class UserApi(context: AppEntContext)
 
 
   @Action(desc = "gets the current promo code", roles=[Roles.ALL], verb = Verbs.POST)
-  fun argTypeFile(doc: Doc): Notice<String> {
-    return Success("ok", msg =doc.text)
+  fun argTypeFile(doc: ContentFile): Notice<String> {
+    return Success("ok", msg = String(doc.data))
   }
 
 

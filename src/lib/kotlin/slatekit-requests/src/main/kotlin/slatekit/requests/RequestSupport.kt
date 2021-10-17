@@ -1,6 +1,6 @@
 package slatekit.requests
 
-import slatekit.common.types.Doc
+import slatekit.common.types.ContentFile
 import java.io.InputStream
 
 /**
@@ -8,7 +8,7 @@ import java.io.InputStream
  */
 interface RequestSupport {
     fun raw(): Any?
-    fun getDoc(name: String): Doc?
-    fun getDoc(name: String, callback: (InputStream) -> Doc): Doc?
+    fun getDoc(name: String): ContentFile?
+    fun getDoc(name: String, callback: (InputStream) -> ContentFile): ContentFile?
     fun getFileStream(name: String): InputStream?
 }
