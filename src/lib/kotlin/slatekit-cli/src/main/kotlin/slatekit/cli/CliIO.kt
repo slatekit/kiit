@@ -111,7 +111,7 @@ open class CliIO(private val io: IO<CliOutput, Unit>,
         if (log.trim() == "true") {
             val fileName = Files.fileNameAsAsTimeStamp()
             val filePath = File(outputDir, fileName)
-            filePath.writeText(text)
+            filePath.writeText(text ?: "")
             text("Wrote content to: ${filePath.absolutePath}")
         }
     }

@@ -53,7 +53,7 @@ class FilesApi(val files: CloudFiles, override val context: Context) : slatekit.
 
     @Action(desc = "creates a file with the supplied folder name, file name, and content from doc")
     suspend fun createFromDoc(folder: String, name: String, doc: Doc): Try<String> {
-        return files.create(folder, name, doc.text)
+        return files.create(folder, name, doc.data)
     }
 
     @Action(desc = "updates a file with the supplied folder name, file name, and content")
@@ -68,7 +68,7 @@ class FilesApi(val files: CloudFiles, override val context: Context) : slatekit.
 
     @Action(desc = "updates a file with the supplied folder name, file name, and content from doc")
     suspend fun updateFromDoc(folder: String, name: String, doc: Doc): Try<String> {
-        return files.updateFromPath(folder, name, doc.text)
+        return files.updateFromPath(folder, name, String(doc.data))
     }
 
     @Action(desc = "deletes a file with the supplied folder name, file name")

@@ -65,7 +65,7 @@ class Sample_API_1_Core(context: Context) {
 
     @Action(desc = "processes with an Document type")
     fun processFile(doc: Doc): Outcome<String> {
-        return Success("ok", msg = doc.text)
+        return Success("ok", msg = String(doc.data))
     }
 
 

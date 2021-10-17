@@ -101,6 +101,6 @@ class QueueApi(val queue: AsyncQueue<String>, override val context: Context) : F
 
     @Action(desc = "sends a message to queue using content from file")
     suspend fun sendFromDoc(doc: Doc, tagName: String = "", tagValue: String = ""): Try<String> {
-        return queue.send(doc.text, tagName, tagValue)
+        return queue.send(String(doc.data), tagName, tagValue)
     }
 }
