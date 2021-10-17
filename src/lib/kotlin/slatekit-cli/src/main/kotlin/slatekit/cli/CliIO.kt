@@ -21,6 +21,7 @@ import slatekit.common.types.Content
 import slatekit.common.types.ContentType
 import slatekit.common.io.Files
 import slatekit.common.io.IO
+import slatekit.common.types.Contents
 import slatekit.results.*
 
 open class CliIO(private val io: IO<CliOutput, Unit>,
@@ -102,7 +103,7 @@ open class CliIO(private val io: IO<CliOutput, Unit>,
         text("===============================")
         val contentType = ContentType.parse(format)
         val content = serializer(obj, contentType)
-        val text = content.text
+        val text = Contents.toText(content)
         text("RESULTS: $text")
         text("===============================")
 

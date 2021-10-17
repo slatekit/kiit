@@ -19,6 +19,7 @@ import slatekit.apis.routes.Routes
 import slatekit.apis.tools.docs.Doc
 import slatekit.apis.tools.docs.DocUtils
 import slatekit.common.types.Content
+import slatekit.common.types.Contents
 import slatekit.requests.Request
 import slatekit.results.*
 import slatekit.results.builders.Outcomes
@@ -64,7 +65,7 @@ open class Help(val host: ApiServer, val routes: Routes, val docKey: String?, va
                     action(req.parts[0], req.parts[1], req.parts[2])
                 }
             }
-            Outcomes.success(Content.html(content))
+            Outcomes.success(Contents.html(content))
         }
     }
 
