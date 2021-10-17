@@ -1,5 +1,16 @@
 package slatekit.common.types
 
+
+interface Content2 {
+    val data: ByteArray
+    val tpe : ContentType
+}
+
+class ContentText(override val data:ByteArray, val raw:String, override val tpe: ContentType) : Content2
+class ContentData(override val data:ByteArray, val raw:String?, override val tpe: ContentType) : Content2
+class ContentFile(val name:String, override val data:ByteArray, val raw:String?, override val tpe: ContentType, val size: Long) : Content2
+
+
 /**
  * Represents string content with type/format information.
  *
@@ -10,16 +21,22 @@ package slatekit.common.types
  *    e.g. the API server can determine that if a service returns a Content instead of a string,
  *         then the Content can be sent back with a specific content-type for http.
  *
- * @param text
- * @param format
  */
-data class Content(val text: String, val tpe: ContentType) {
+class Content(val data:ByteArray, val raw:String?, val tpe: ContentType) {
+
+    constructor(content: String, tpe: ContentType) :
+            this(content.toByteArray(), content, tpe)
+
+
+    val text: String? by lazy { raw ?: String(data) }
+
 
     /**
      * whether this content is empty
      * @return
      */
-    val isEmpty: Boolean = text.isNullOrEmpty()
+    val isEmpty: Boolean = data.isEmpty()
+
 
     /**
      * whether this content is present
@@ -27,11 +44,13 @@ data class Content(val text: String, val tpe: ContentType) {
      */
     val isDefined: Boolean = !isEmpty
 
+
     /**
      * the length of the content
      * @return
      */
-    val size: Int = text.length
+    val size: Int = data.size
+
 
     companion object {
 

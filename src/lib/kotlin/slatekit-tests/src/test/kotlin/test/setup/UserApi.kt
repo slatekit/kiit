@@ -168,7 +168,7 @@ class UserApi(context: AppEntContext)
 
   @Action(desc = "gets the current promo code", roles=[Roles.ALL], verb = Verbs.POST)
   fun argTypeFile(doc: Doc): Notice<String> {
-    return Success("ok", msg =doc.content)
+    return Success("ok", msg =doc.text)
   }
 
 

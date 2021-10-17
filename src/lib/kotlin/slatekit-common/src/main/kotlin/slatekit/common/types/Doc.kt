@@ -23,35 +23,32 @@ package slatekit.common.types
  *    e.g. the API server can determine that if a service returns a Doc instead of a string,
  *         then the Doc should be sent back as a File instead of a string
  */
-data class Doc(val name: String, val content: String, val tpe: ContentType, val size: Long) {
+class Doc(val name: String, val data:ByteArray, val raw: String?, val tpe: ContentType, val size: Long) {
+
+    constructor(name:String, content: String, tpe: ContentType, size: Long) :
+        this(name, content.toByteArray(), content, tpe, size)
+
+    val text: String? by lazy { raw ?: String(data) }
+
 
     companion object {
         @JvmStatic
-        val empty = Doc("", "", ContentTypeText, 0)
+        val empty = Doc("", byteArrayOf(),"", ContentTypeText, 0)
 
         @JvmStatic
-        fun csv(name: String, content: String): Doc =
-                Doc(name, content, ContentTypeCsv, content.length.toLong())
+        fun text(name: String, content: String): Doc = Doc(name, content, ContentTypeText, content.length.toLong())
 
         @JvmStatic
-        fun html(name: String, content: String): Doc =
-                Doc(name, content, ContentTypeHtml, content.length.toLong())
+        fun html(name: String, content: String): Doc = Doc(name, content, ContentTypeHtml, content.length.toLong())
 
         @JvmStatic
-        fun json(name: String, content: String): Doc =
-                Doc(name, content, ContentTypeJson, content.length.toLong())
+        fun json(name: String, content: String): Doc = Doc(name, content, ContentTypeJson, content.length.toLong())
 
         @JvmStatic
-        fun text(name: String, content: String): Doc =
-                Doc(name, content, ContentTypeText, content.length.toLong())
+        fun csv(name: String, content: String): Doc = Doc(name, content, ContentTypeCsv, content.length.toLong())
 
         @JvmStatic
-        fun prop(name: String, content: String): Doc =
-                Doc(name, content, ContentTypeProp, content.length.toLong())
-
-        @JvmStatic
-        fun xml(name: String, content: String): Doc =
-                Doc(name, content, ContentTypeXml, content.length.toLong())
+        fun prop(name: String, content: String): Doc = Doc(name, content, ContentTypeProp, content.length.toLong())
 
         @JvmStatic
         fun other(name: String, content: String, tpe: ContentType): Doc =

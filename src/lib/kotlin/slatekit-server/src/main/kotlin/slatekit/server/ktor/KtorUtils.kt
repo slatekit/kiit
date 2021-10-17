@@ -11,7 +11,6 @@ import io.ktor.request.isMultipart
 import io.ktor.request.receiveMultipart
 import org.json.simple.JSONObject
 import org.json.simple.parser.JSONParser
-import slatekit.common.types.ContentTypeHtml
 import slatekit.common.types.ContentTypeText
 import slatekit.common.types.Doc
 import java.io.BufferedInputStream
@@ -44,25 +43,49 @@ object KtorUtils {
     }
 
 
-    suspend fun loadFile(call:ApplicationCall, callback:((InputStream)-> Doc?)? = null):Doc {
+    suspend fun loadPart(call: ApplicationCall, filter:(PartData) -> Boolean ) : PartData? {
         val multiPart = call.receiveMultipart()
         //val parts = multiPart.readAllParts()
         //val part = parts.find { (it.name ?: "") == name }
-        var filePart: PartData.FileItem? = null
+        var part: PartData? = null
         multiPart.forEachPart {
-            when(it) {
-                is PartData.FileItem -> {
-                    if(filePart == null) {
-                        filePart = it
-                    }
+            if(filter(it)) {
+                if(part == null) {
+                    part = it
                 }
             }
         }
+        return part
+    }
+
+
+    suspend fun loadFilePart(call: ApplicationCall, name:String?) : PartData.FileItem? {
+        val filePart = loadPart(call) {
+            when(it is PartData.FileItem){
+                true -> {
+                    val file = it
+                    if(name == null) true else file.originalFileName == name
+                }
+                false -> false
+            }
+        } as PartData.FileItem?
+        return filePart
+    }
+
+
+    suspend fun loadFileStream(call: ApplicationCall, name:String?) : InputStream? {
+        val filePart = loadFilePart(call, name)
+        return filePart?.streamProvider?.invoke()
+    }
+
+
+    suspend fun loadFile(call:ApplicationCall, name:String?, callback:((InputStream)-> Doc?)? = null):Doc {
+        val filePart = loadFilePart(call, name)
         val doc = filePart?.let {
             val file = it
             val doc = file.streamProvider().use{ stream ->
                 when(callback) {
-                    null -> loadFile( file.originalFileName ?: "", stream)
+                    null -> buildDoc( file.originalFileName ?: "", stream)
                     else -> callback(stream)
                 }
             }
@@ -72,7 +95,7 @@ object KtorUtils {
     }
 
 
-    fun loadFile(name:String, stream:InputStream):Doc {
+    fun buildDoc(name:String, stream:InputStream):Doc {
         val bis = BufferedInputStream(stream)
         val buf = ByteArrayOutputStream()
         var ris = bis.read()
@@ -81,7 +104,7 @@ object KtorUtils {
             ris = bis.read()
         }
         val text = buf.toString()
-        val doc = Doc(name, text, ContentTypeText, text.length.toLong())
+        val doc = Doc(name, buf.toByteArray(), text, ContentTypeText, text.length.toLong())
         return doc
     }
 

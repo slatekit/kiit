@@ -42,7 +42,7 @@ import java.io.*
  * @param tag : Optional tag for tracking individual requests and for error logging.
  */
 data class KtorRequest(
-        private  val call: ApplicationCall,
+                 val call: ApplicationCall,
         override val path: String,
         override val parts: List<String>,
         override val source: Source,
@@ -95,31 +95,25 @@ data class KtorRequest(
      * Access to an uploaded file
      */
     override fun getDoc(name: String): Doc? {
-        // This can be expensive. So cache it.
-        return getFile(name) { stream -> KtorUtils.loadFile(name, stream) }
+        return getDoc(name) { stream -> KtorUtils.buildDoc(name, stream) }
     }
 
 
-    override fun getFile(name: String, callback: (InputStream) -> Doc): Doc {
-        NOTE.IMPLEMENT("API", "Make this non-blocking")
-        val d = runBlocking {
-            KtorUtils.loadFile(call, callback)
+    override fun getDoc(name: String, callback: (InputStream) -> Doc): Doc {
+        NOTE.IMPLEMENT("Server", "Make this non-blocking")
+        return runBlocking {
+            KtorUtils.loadFile(call, name, callback)
         }
-        return d
     }
 
     /**
      * Access to an uploaded file
      */
-    override fun getFileStream(name: String, callback: (InputStream) -> Unit) {
-//        async {
-//            val multiPart = call.receiveMultipart()
-//            val part = multiPart.readAllParts().find { (it.name ?: "") == name }
-//            part?.let {
-//                val file = it as PartData.FileItem
-//                file.streamProvider().use(callback)
-//            }
-//        }
+    override fun getFileStream(name: String):InputStream? {
+        NOTE.IMPLEMENT("Server", "Make this non-blocking")
+        return runBlocking {
+            KtorUtils.loadFileStream(call, name)
+        }
     }
 
     companion object {

@@ -35,8 +35,4 @@ class SampleFiles3Api {
 
     @Action(desc = "test getting Doc as xml")
     fun getDocText(): Doc = Doc.text("file1.txt", "user: kishore")
-
-
-    @Action(desc = "test getting Doc as xml")
-    fun getDocXml(): Doc = Doc.xml("file1.xml", "<user><name>kishore</name></user>")
 }

@@ -81,7 +81,7 @@ class KtorResponse(val settings:ServerSettings)  : ResponseHandler {
      * Returns the value of the result as a file document
      */
     override suspend fun file(call: ApplicationCall, result: Response<Any?>, doc: Doc) {
-        val bytes = doc.content.toByteArray()
+        val bytes = doc.text.toByteArray()
         val statusCode = toHttpStatus(result)
 
         // Make files downloadable
