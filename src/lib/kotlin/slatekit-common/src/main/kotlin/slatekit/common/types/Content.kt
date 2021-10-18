@@ -10,50 +10,69 @@ package slatekit.common.types
  *    e.g. the API server can determine that if a service returns a Content instead of a string,
  *         then the Content can be sent back with a specific content-type for http.
  *
- * @param text
- * @param format
  */
-data class Content(val text: String, val tpe: ContentType) {
+interface Content {
+    val data: ByteArray
+    val tpe : ContentType
 
     /**
      * whether this content is empty
      * @return
      */
-    val isEmpty: Boolean = text.isNullOrEmpty()
+    val isEmpty: Boolean get() { return data.isEmpty() }
+
 
     /**
      * whether this content is present
      * @return
      */
-    val isDefined: Boolean = !isEmpty
+    val isDefined: Boolean get() { return !isEmpty }
+
 
     /**
      * the length of the content
      * @return
      */
-    val size: Int = text.length
+    val size: Int get() { return data.size }
+
 
     companion object {
 
-        @JvmStatic
-        fun csv(text: String): Content = Content(text, ContentTypeCsv)
+    }
+}
 
-        @JvmStatic
-        fun html(text: String): Content = Content(text, ContentTypeHtml)
+class ContentText(override val data:ByteArray, val raw:String, override val tpe: ContentType) : Content
+class ContentData(override val data:ByteArray, val raw:String?, override val tpe: ContentType) : Content
+class ContentFile(val name:String, override val data:ByteArray, val raw:String?, override val tpe: ContentType) : Content
 
-        @JvmStatic
-        fun json(text: String): Content = Content(text, ContentTypeJson)
 
-        @JvmStatic
-        fun text(text: String): Content = Content(text, ContentTypeText)
 
-        @JvmStatic
-        fun prop(text: String): Content = Content(text, ContentTypeProp)
+object Contents {
 
-        @JvmStatic
-        fun xml(text: String): Content = Content(text, ContentTypeXml)
+    @JvmStatic
+    fun csv(text: String): Content = ContentText(text.toByteArray(), text, ContentTypes.Csv)
 
-        @JvmStatic
-        fun other(text: String, tpe: ContentType): Content = Content(text, tpe)
+    @JvmStatic
+    fun html(text: String): Content = ContentText(text.toByteArray(), text, ContentTypes.Html)
+
+    @JvmStatic
+    fun json(text: String): Content = ContentText(text.toByteArray(), text, ContentTypes.Json)
+
+    @JvmStatic
+    fun text(text: String): Content = ContentText(text.toByteArray(), text, ContentTypes.Plain)
+
+    @JvmStatic
+    fun xml(text: String): Content = ContentText(text.toByteArray(), text, ContentTypes.Xml)
+
+    @JvmStatic
+    fun other(text: String, tpe: ContentType): Content = ContentText(text.toByteArray(), text, tpe)
+
+    fun toText(content:Content?):String? {
+        return when (content) {
+            null -> ""
+            is ContentText -> content.raw ?: String(content.data)
+            is ContentData -> content.raw ?: String(content.data)
+            else -> String(content.data)
+        }
     }
 }

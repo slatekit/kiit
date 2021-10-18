@@ -1,6 +1,7 @@
 package slatekit.common.io
 
-import slatekit.common.types.Doc
+import slatekit.common.types.ContentFile
+import slatekit.common.types.ContentFiles
 import java.io.File
 
 
@@ -99,12 +100,12 @@ object Uris {
      * Loads the file represented by the URI and loads into as a @see[slatekit.common.content.Doc]
      * @return
      */
-    fun readDoc(uri: String): Doc? = buildDoc(readFile(uri))
+    fun readDoc(uri: String): ContentFile? = buildDoc(readFile(uri))
 
 
-    private fun buildDoc(file: File): Doc {
+    private fun buildDoc(file: File): ContentFile {
         val content = file.readText()
-        return Doc.text(file.name, content)
+        return ContentFiles.text(file.name, content)
     }
 
     private fun substringOrNull(text:String, start:Int):String? {

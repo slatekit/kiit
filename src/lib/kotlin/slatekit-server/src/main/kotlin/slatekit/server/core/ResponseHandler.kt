@@ -3,7 +3,9 @@ package slatekit.server.core
 import io.ktor.application.ApplicationCall
 import io.ktor.http.HttpStatusCode
 import slatekit.common.types.Content
-import slatekit.common.types.Doc
+import slatekit.common.types.ContentData
+import slatekit.common.types.ContentFile
+import slatekit.common.types.ContentText
 import slatekit.requests.Response
 
 interface ResponseHandler {
@@ -21,12 +23,19 @@ interface ResponseHandler {
      * Explicitly supplied content
      * Return the value of the result as a content with type
      */
-    suspend fun content(call: ApplicationCall, result: Response<Any?>, content: Content?)
+    suspend fun contentText(call: ApplicationCall, result: Response<Any?>, content: ContentText)
+
+    /**
+     * Explicitly supplied content
+     * Return the value of the result as a content with type
+     */
+    suspend fun contentData(call: ApplicationCall, result: Response<Any?>, content: ContentData)
 
     /**
      * Returns the value of the result as a file document
      */
-    suspend fun file(call: ApplicationCall, result: Response<Any?>, doc: Doc)
+    suspend fun contentFile(call: ApplicationCall, result: Response<Any?>, doc: ContentFile)
+
 
     fun toHttpStatus(response: Response<Any?>): HttpStatusCode
 }

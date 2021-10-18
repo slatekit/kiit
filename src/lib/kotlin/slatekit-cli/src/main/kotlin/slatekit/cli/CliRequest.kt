@@ -6,7 +6,7 @@ import slatekit.common.values.Inputs
 import slatekit.common.values.Metadata
 import slatekit.common.io.Uris
 import slatekit.common.args.Args
-import slatekit.common.types.Doc
+import slatekit.common.types.ContentFile
 import slatekit.requests.InputArgs
 import slatekit.requests.Request
 import slatekit.requests.RequestSupport
@@ -15,9 +15,6 @@ import slatekit.common.Source
 /**
  * Represents an abstraction of a Web Api Request and also a CLI ( Command Line ) request
  * @param path : route(endpoint) e.g. /{area}/{name}/{action} e.g. /app/reg/activateUser
- * @param parts : list of the parts of the action e.g. [ "app", "reg", "activateUser" ]
- * @param source : protocol e.g. "cli" for command line and "http"
- * @param verb : get / post ( similar to http verb )
  * @param meta : options representing settings/configurations ( similar to http-headers )
  * @param data : arguments to the command
  * @param raw : Optional raw request ( e.g. either the HttpRequest via Spark or ShellCommmand via CLI )
@@ -61,21 +58,22 @@ data class CliRequest(
     /**
      * Get a document referenced by name in the arguments as a Doc of string content
      */
-    override fun getDoc(name: String): Doc? {
-        return this.args.getStringOrNull(name)?.let { Uris.readDoc(it) }
+    override fun getDoc(name: String?): ContentFile? {
+        return name?.let { n -> this.args.getStringOrNull(name)?.let { Uris.readDoc(it) } }
     }
 
     /**
      * Get a file referenced by name in the arguments
      */
-    override fun getFile(name: String, callback: (InputStream) -> Doc): Doc? {
-        return this.args.getStringOrNull(name)?.let { Uris.readDoc(it) }
+    override fun getDoc(name: String?, callback: (InputStream) -> ContentFile): ContentFile? {
+        return name?.let { n -> this.args.getStringOrNull(n)?.let { Uris.readDoc(it) } }
     }
 
     /**
      * Get a file referenced by name in the arguments as a stream
      */
-    override fun getFileStream(name: String, callback: (InputStream) -> Unit) {
+    override fun getFileStream(name: String?):InputStream? {
+        return null
     }
 
     /**

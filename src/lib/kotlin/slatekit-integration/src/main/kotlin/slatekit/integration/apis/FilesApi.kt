@@ -18,7 +18,7 @@ import slatekit.apis.Action
 import slatekit.apis.AuthModes
 import slatekit.apis.Verbs
 import slatekit.common.Sources
-import slatekit.common.types.Doc
+import slatekit.common.types.ContentFile
 import slatekit.common.crypto.Encryptor
 import slatekit.common.io.Uris
 import slatekit.common.log.Logger
@@ -52,8 +52,8 @@ class FilesApi(val files: CloudFiles, override val context: Context) : slatekit.
     }
 
     @Action(desc = "creates a file with the supplied folder name, file name, and content from doc")
-    suspend fun createFromDoc(folder: String, name: String, doc: Doc): Try<String> {
-        return files.create(folder, name, doc.content)
+    suspend fun createFromDoc(folder: String, name: String, doc: ContentFile): Try<String> {
+        return files.create(folder, name, doc.data)
     }
 
     @Action(desc = "updates a file with the supplied folder name, file name, and content")
@@ -67,8 +67,8 @@ class FilesApi(val files: CloudFiles, override val context: Context) : slatekit.
     }
 
     @Action(desc = "updates a file with the supplied folder name, file name, and content from doc")
-    suspend fun updateFromDoc(folder: String, name: String, doc: Doc): Try<String> {
-        return files.updateFromPath(folder, name, doc.content)
+    suspend fun updateFromDoc(folder: String, name: String, doc: ContentFile): Try<String> {
+        return files.updateFromPath(folder, name, String(doc.data))
     }
 
     @Action(desc = "deletes a file with the supplied folder name, file name")

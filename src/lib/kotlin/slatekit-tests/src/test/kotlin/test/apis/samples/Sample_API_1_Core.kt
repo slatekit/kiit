@@ -15,7 +15,7 @@ package test.apis.samples
 
 import slatekit.apis.*
 import slatekit.common.*
-import slatekit.common.types.Doc
+import slatekit.common.types.ContentFile
 import slatekit.requests.Request
 import slatekit.common.checks.Check
 import slatekit.common.values.Metadata
@@ -64,8 +64,8 @@ class Sample_API_1_Core(context: Context) {
 
 
     @Action(desc = "processes with an Document type")
-    fun processFile(doc: Doc): Outcome<String> {
-        return Success("ok", msg = doc.content)
+    fun processFile(doc: ContentFile): Outcome<String> {
+        return Success("ok", msg = String(doc.data))
     }
 
 

@@ -7,7 +7,7 @@ import slatekit.common.crypto.EncLong
 import slatekit.common.crypto.EncString
 import slatekit.common.ids.UPID
 import slatekit.common.types.Content
-import slatekit.common.types.Doc
+import slatekit.common.types.ContentFile
 //import java.time.*
 import org.threeten.bp.*
 import slatekit.common.ext.toStringNumeric
@@ -38,7 +38,7 @@ object KTypes {
     val KInstantClass = Instant::class
     val KUUIDClass = java.util.UUID::class
     val KUPIDClass = UPID::class
-    val KDocClass = Doc::class
+    val KDocClass = ContentFile::class
     val KVarsClass = Vars::class
     val KSmartValueClass = SmartValue::class
     val KEnumLikeClass = EnumLike::class
@@ -65,7 +65,7 @@ object KTypes {
     val KUUIDType = java.util.UUID::class.createType()
     val KULIDType = ULID::class.createType()
     val KUPIDType = UPID::class.createType()
-    val KDocType = Doc::class.createType()
+    val KDocType = ContentFile::class.createType()
     val KVarsType = Vars::class.createType()
     val KSmartValueType = SmartValue::class.createType()
     val KSmartValuedType = SmartValued::class.createType()

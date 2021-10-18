@@ -84,10 +84,10 @@ class TwilioSms(
             is Success -> {
                 val phone = phoneResult.value
                 val request = HttpRPC().build(
-                        method = HttpRPC.Method.Post,
-                        urlRaw = baseUrl,
-                        headerParams = null,
-                        creds = HttpRPC.Auth.Basic(settings.key, settings.password),
+                        verb = HttpRPC.Method.Post,
+                        url  = baseUrl,
+                        meta = null,
+                        auth = HttpRPC.Auth.Basic(settings.key, settings.password),
                         body = HttpRPC.Body.FormData(listOf(
                                 Pair("To", phone),
                                 Pair("From", settings.account),

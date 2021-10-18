@@ -1,10 +1,7 @@
 package slatekit.serialization
 
 import slatekit.common.EnumLike
-import slatekit.common.types.Content
-import slatekit.common.types.ContentType
-import slatekit.common.types.ContentTypeCsv
-import slatekit.common.types.ContentTypeJson
+import slatekit.common.types.*
 import slatekit.meta.Reflector
 import slatekit.meta.kClass
 
@@ -17,9 +14,9 @@ object Serialization {
 
     fun serialize(item:Any?, type: ContentType): Content {
         return when(type){
-            ContentTypeCsv  -> Content.csv (csv().serialize(item))
-            ContentTypeJson -> Content.json(json().serialize(item))
-            else            -> Content.prop(props().serialize(item))
+            ContentTypes.Csv  -> Contents.csv (csv().serialize(item))
+            ContentTypes.Json -> Contents.json(json().serialize(item))
+            else            -> Contents.text(props().serialize(item))
         }
     }
 

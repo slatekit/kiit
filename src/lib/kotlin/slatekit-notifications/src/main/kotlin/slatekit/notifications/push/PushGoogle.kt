@@ -137,9 +137,9 @@ open class PushGoogle(
 
         // 3. Send off w/ json
         val request = HttpRPC().build(
-                method = HttpRPC.Method.Post,
-                urlRaw = baseUrl,
-                headerParams = mapOf(
+                verb = HttpRPC.Method.Post,
+                url  = baseUrl,
+                meta = mapOf(
                         "Content-Type" to "application/json",
                         "Authorization" to "key=" + settings.key
                 ),
