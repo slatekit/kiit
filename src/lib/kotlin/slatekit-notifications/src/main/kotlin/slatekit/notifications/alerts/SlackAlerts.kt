@@ -53,9 +53,9 @@ class SlackAlerts(
         val json = build(model, target)
         val jsonString = json.toString()
         val request = HttpRPC().build(
-                method = HttpRPC.Method.Post,
-                urlRaw = url,
-                headerParams = mapOf("Content-type" to "application/json"),
+                url  = url,
+                verb = HttpRPC.Method.Post,
+                meta = mapOf("Content-type" to "application/json"),
                 body = HttpRPC.Body.JsonContent(jsonString))
         return Success(request)
     }

@@ -119,9 +119,9 @@ class SendGrid(
 
         val json = root.toJSONString()
         val request = HttpRPC().build(
-                method = HttpRPC.Method.Post,
-                urlRaw = baseUrl,
-                headerParams = mapOf(
+                url  = baseUrl,
+                verb = HttpRPC.Method.Post,
+                meta = mapOf(
                     "Authorization" to "Bearer ${settings.key}",
                     "Content-Type" to "application/json"
                 ),
