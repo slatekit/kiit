@@ -65,22 +65,13 @@ fun main(args: Array<String>) {
                 help.show()
             }
             else {
-                //run(args)
-                api(args)
+                run(args)
             }
         }
         is Failure -> {
             writer.failure("Error parsing command line arguments")
             help.show()
         }
-    }
-}
-
-fun api(args: Array<String>) {
-    val ctx = AppContext.simple(Server::class.java, "test")
-    runBlocking {
-        val srv = Server(ctx)
-        srv.execute()
     }
 }
 
