@@ -95,7 +95,10 @@ data class KtorRequest(
      * Access to an uploaded file
      */
     override fun getDoc(name: String?): ContentFile? {
-        return getDoc(name) { stream -> KtorUtils.buildDoc(name, stream) }
+        NOTE.IMPLEMENT("Server", "Make this non-blocking")
+        return runBlocking {
+            KtorUtils.loadFile(call, name)
+        }
     }
 
 
