@@ -6,17 +6,24 @@ import org.junit.Assert
 import org.junit.Test
 import slatekit.common.conf.Config
 import slatekit.common.info.ApiLogin
+import slatekit.common.types.ContentFile
+import slatekit.common.types.ContentTypes
 import slatekit.common.types.Countries
+import slatekit.http.HttpRPC
 import slatekit.notifications.email.EmailMessage
 import slatekit.notifications.email.SendGrid
 import slatekit.notifications.sms.SmsMessage
 import slatekit.notifications.sms.TwilioSms
 import test.TestApp
+import java.io.File
 
 //import slatekit.providers.metrics.dropwizard.MetricService
 
 
 class NotificationTests {
+
+
+
 
     @Test
     fun can_build_sendgrid() {
@@ -81,5 +88,22 @@ class NotificationTests {
             val result = service.send("testing from unit-tests", Countries.usa.iso2, "1234567890")
             println(result)
         }
+    }
+
+    //@Test
+    fun can_upload_file() {
+        val bytes = File("/Users/kishorereddy/git/slate/slatekit/tests/img/cat1-test.jpeg").readBytes()
+        val file = ContentFile("file1.jpeg", bytes, null, ContentTypes.Jpeg)
+        val http = HttpRPC()
+        http.post(
+                url   = "http://localhost:5000/api/samples/files/upload3?id=1",
+                meta  = mapOf("userId" to "user123", "postId" to "post123"),
+                args  = mapOf("a" to "1", "b" to "2"),
+                body  = HttpRPC.Body.MultiPart(listOf("file1" to file)),
+                call  = { res ->
+                    println(res.status)
+                }
+        )
+        Thread.sleep(20000)
     }
 }
