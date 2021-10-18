@@ -96,7 +96,7 @@ object KtorUtils {
     }
 
 
-    fun buildDoc(name:String, stream:InputStream):ContentFile {
+    fun buildDoc(name:String?, stream:InputStream):ContentFile {
         val bis = BufferedInputStream(stream)
         val buf = ByteArrayOutputStream()
         var ris = bis.read()
@@ -105,7 +105,7 @@ object KtorUtils {
             ris = bis.read()
         }
         val text = buf.toString()
-        val doc = ContentFile(name, buf.toByteArray(), text, ContentTypes.Plain)
+        val doc = ContentFile(name?:"", buf.toByteArray(), text, ContentTypes.Plain)
         return doc
     }
 

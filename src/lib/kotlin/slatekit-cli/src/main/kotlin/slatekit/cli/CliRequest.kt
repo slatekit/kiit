@@ -58,21 +58,21 @@ data class CliRequest(
     /**
      * Get a document referenced by name in the arguments as a Doc of string content
      */
-    override fun getDoc(name: String): ContentFile? {
-        return this.args.getStringOrNull(name)?.let { Uris.readDoc(it) }
+    override fun getDoc(name: String?): ContentFile? {
+        return name?.let { n -> this.args.getStringOrNull(name)?.let { Uris.readDoc(it) } }
     }
 
     /**
      * Get a file referenced by name in the arguments
      */
-    override fun getDoc(name: String, callback: (InputStream) -> ContentFile): ContentFile? {
-        return this.args.getStringOrNull(name)?.let { Uris.readDoc(it) }
+    override fun getDoc(name: String?, callback: (InputStream) -> ContentFile): ContentFile? {
+        return name?.let { n -> this.args.getStringOrNull(n)?.let { Uris.readDoc(it) } }
     }
 
     /**
      * Get a file referenced by name in the arguments as a stream
      */
-    override fun getFileStream(name: String):InputStream? {
+    override fun getFileStream(name: String?):InputStream? {
         return null
     }
 

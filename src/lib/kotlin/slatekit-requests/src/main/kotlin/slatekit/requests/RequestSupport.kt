@@ -8,7 +8,7 @@ import java.io.InputStream
  */
 interface RequestSupport {
     fun raw(): Any?
-    fun getDoc(name: String): ContentFile?
-    fun getDoc(name: String, callback: (InputStream) -> ContentFile): ContentFile?
-    fun getFileStream(name: String): InputStream?
+    fun getDoc(name: String?): ContentFile?
+    fun getDoc(name: String?, callback: (InputStream) -> ContentFile): ContentFile?
+    fun getFileStream(name: String?): InputStream?
 }

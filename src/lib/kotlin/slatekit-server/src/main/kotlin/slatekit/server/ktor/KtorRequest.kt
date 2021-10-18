@@ -94,12 +94,12 @@ data class KtorRequest(
     /**
      * Access to an uploaded file
      */
-    override fun getDoc(name: String): ContentFile? {
+    override fun getDoc(name: String?): ContentFile? {
         return getDoc(name) { stream -> KtorUtils.buildDoc(name, stream) }
     }
 
 
-    override fun getDoc(name: String, callback: (InputStream) -> ContentFile): ContentFile {
+    override fun getDoc(name: String?, callback: (InputStream) -> ContentFile): ContentFile {
         NOTE.IMPLEMENT("Server", "Make this non-blocking")
         return runBlocking {
             KtorUtils.loadFile(call, name, callback)
@@ -109,7 +109,7 @@ data class KtorRequest(
     /**
      * Access to an uploaded file
      */
-    override fun getFileStream(name: String):InputStream? {
+    override fun getFileStream(name: String?):InputStream? {
         NOTE.IMPLEMENT("Server", "Make this non-blocking")
         return runBlocking {
             KtorUtils.loadFileStream(call, name)
