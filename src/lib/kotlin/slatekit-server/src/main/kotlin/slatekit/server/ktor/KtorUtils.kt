@@ -2,23 +2,21 @@ package slatekit.server.ktor
 
 import io.ktor.application.ApplicationCall
 import io.ktor.http.HttpMethod
+import io.ktor.http.HttpStatusCode
 import io.ktor.http.content.PartData
-import io.ktor.http.content.forEachPart
-import io.ktor.http.content.streamProvider
-import io.ktor.request.ApplicationRequest
-import io.ktor.request.httpMethod
-import io.ktor.request.isMultipart
-import io.ktor.request.receiveMultipart
+import io.ktor.request.*
+import io.ktor.response.respondBytes
 import org.json.simple.JSONObject
 import org.json.simple.parser.JSONParser
-import slatekit.common.types.ContentFile
-import slatekit.common.types.ContentFiles
-import slatekit.common.types.ContentTypes
+import slatekit.common.ext.toId
+import slatekit.common.types.*
+import slatekit.results.*
 import java.io.BufferedInputStream
 import java.io.ByteArrayOutputStream
 import java.io.InputStream
 
 object KtorUtils {
+
     /**
      * Load json from the post/put body using json-simple
      */
@@ -44,59 +42,7 @@ object KtorUtils {
     }
 
 
-    suspend fun loadPart(call: ApplicationCall, filter:(PartData) -> Boolean ) : PartData? {
-        val multiPart = call.receiveMultipart()
-        //val parts = multiPart.readAllParts()
-        //val part = parts.find { (it.name ?: "") == name }
-        var part: PartData? = null
-        multiPart.forEachPart {
-            if(filter(it)) {
-                if(part == null) {
-                    part = it
-                }
-            }
-        }
-        return part
-    }
-
-
-    suspend fun loadFilePart(call: ApplicationCall, name:String?) : PartData.FileItem? {
-        val filePart = loadPart(call) {
-            when(it is PartData.FileItem){
-                true -> {
-                    val file = it
-                    if(name == null) true else file.originalFileName == name
-                }
-                false -> false
-            }
-        } as PartData.FileItem?
-        return filePart
-    }
-
-
-    suspend fun loadFileStream(call: ApplicationCall, name:String?) : InputStream? {
-        val filePart = loadFilePart(call, name)
-        return filePart?.streamProvider?.invoke()
-    }
-
-
-    suspend fun loadFile(call:ApplicationCall, name:String?, callback:((InputStream)-> ContentFile?)? = null):ContentFile {
-        val filePart = loadFilePart(call, name)
-        val doc = filePart?.let {
-            val file = it
-            val doc = file.streamProvider().use{ stream ->
-                when(callback) {
-                    null -> buildDoc( file.originalFileName ?: "", stream)
-                    else -> callback(stream)
-                }
-            }
-            doc
-        } ?: ContentFiles.empty
-        return doc
-    }
-
-
-    fun buildDoc(name:String?, stream:InputStream):ContentFile {
+    fun buildDoc(part: PartData.FileItem, stream: InputStream):ContentFile {
         val bis = BufferedInputStream(stream)
         val buf = ByteArrayOutputStream()
         var ris = bis.read()
@@ -104,8 +50,14 @@ object KtorUtils {
             buf.write(ris.toByte().toInt())
             ris = bis.read()
         }
-        val text = buf.toString()
-        val doc = ContentFile(name?:"", buf.toByteArray(), text, ContentTypes.Plain)
+        val defaultName = part.name ?: "file"
+        val name = cleanName(part.originalFileName, defaultName)
+        val contentType = when {
+            part.contentType?.contentType == null -> ContentTypes.Octet
+            part.contentType?.contentSubtype == null -> ContentTypes.Octet
+            else ->  ContentType(part.contentType?.contentType + "/" + part.contentType?.contentSubtype, part.contentType?.contentSubtype ?: "")
+        }
+        val doc = ContentFile(name, buf.toByteArray(), null, contentType)
         return doc
     }
 
@@ -115,5 +67,27 @@ object KtorUtils {
             HttpMethod.Post, HttpMethod.Put, HttpMethod.Patch, HttpMethod.Delete -> true
             else -> false
         }
+    }
+
+
+    fun cleanName(suppliedName:String?, fileName:String): String {
+        val fullname = when {
+            suppliedName == null -> fileName
+            suppliedName.isNullOrEmpty() -> fileName
+            else -> suppliedName
+        }
+        val info = extractInfo(fullname)
+        val name = info.first.toId()
+        return name
+    }
+
+    /**
+     * Remove this in place of some file utilities or Path
+     */
+    fun extractInfo(fullName:String):Pair<String, String> {
+        val ndxDot = fullName.lastIndexOf(".")
+        val ext = fullName.substring(ndxDot + 1)
+        val name = fullName.substring(0, ndxDot)
+        return Pair(name, ext)
     }
 }

@@ -5,7 +5,7 @@ object ContentTypes {
     object Csv   : ContentType("text/csv", "csv")
     object Css   : ContentType("text/css", "css")
     object Html  : ContentType("text/html", "html")
-    object Plain : ContentType("text/plain", "plain")
+    object Plain : ContentType("text/plain", "txt")
     object Xml   : ContentType("text/xml", "xml")
 
     // Image
@@ -23,4 +23,7 @@ object ContentTypes {
     // Apps
     object Json : ContentType("application/json", "json")
     object Pdf  : ContentType("application/pdf", "pdf")
+
+    // Default
+    object Octet: ContentType("application/octet-stream", "bin")
 }
