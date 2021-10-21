@@ -97,7 +97,7 @@ data class KtorRequest(
     override fun getDoc(name: String?): ContentFile? {
         NOTE.IMPLEMENT("Server", "Make this non-blocking")
         return runBlocking {
-            KtorUtils.loadFile(call, name)
+            KtorMultiParts.loadFile(call, name)
         }
     }
 
@@ -105,7 +105,7 @@ data class KtorRequest(
     override fun getDoc(name: String?, callback: (InputStream) -> ContentFile): ContentFile {
         NOTE.IMPLEMENT("Server", "Make this non-blocking")
         return runBlocking {
-            KtorUtils.loadFile(call, name, callback)
+            KtorMultiParts.loadFile(call, name, callback)
         }
     }
 
@@ -115,7 +115,7 @@ data class KtorRequest(
     override fun getFileStream(name: String?):InputStream? {
         NOTE.IMPLEMENT("Server", "Make this non-blocking")
         return runBlocking {
-            KtorUtils.loadFileStream(call, name)
+            KtorMultiParts.loadFileStream(call, name)
         }
     }
 

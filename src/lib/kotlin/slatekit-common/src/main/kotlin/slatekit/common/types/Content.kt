@@ -44,8 +44,7 @@ interface Content {
 class ContentText(override val data:ByteArray, val raw:String, override val tpe: ContentType) : Content
 class ContentData(override val data:ByteArray, val raw:String?, override val tpe: ContentType) : Content
 class ContentFile(val name:String, override val data:ByteArray, val raw:String?, override val tpe: ContentType) : Content
-
-
+data class ContentMulti(val fields:Map<String, ContentText>, val files:Map<String,ContentFile>)
 
 object Contents {
 
