@@ -91,19 +91,15 @@ class NotificationTests {
     }
 
     //@Test
-    fun can_upload_file() {
+    suspend fun can_upload_file() {
         val bytes = File("/Users/kishorereddy/git/slate/slatekit/tests/img/cat1-test.jpeg").readBytes()
         val file = ContentFile("file1.jpeg", bytes, null, ContentTypes.Jpeg)
         val http = HttpRPC()
-        http.post(
+        val result = http.post(
                 url   = "http://localhost:5000/api/samples/files/upload3?id=1",
                 meta  = mapOf("userId" to "user123", "postId" to "post123"),
                 args  = mapOf("a" to "1", "b" to "2"),
-                body  = HttpRPC.Body.MultiPart(listOf("file1" to file)),
-                call  = { res ->
-                    println(res.status)
-                }
+                body  = HttpRPC.Body.MultiPart(listOf("file1" to file))
         )
-        Thread.sleep(20000)
     }
 }
