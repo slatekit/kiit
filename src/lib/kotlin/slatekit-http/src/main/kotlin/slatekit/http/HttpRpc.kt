@@ -89,11 +89,10 @@ class HttpRPC(private val serializer:((Any?) -> String)? = null,
      * @param call : The callback to call when the response is available.
      * @param <T>  : The datatype of the expected result
      */
-    fun get(url: String,
+    suspend fun get(url: String,
             meta: Map<String, String>? = null,
             args: Map<String, String>? = null,
-            auth: Auth? = null,
-            call: (Result<Response, IOException>) -> Unit) {
+            auth: Auth? = null) :Result<Response, Exception> {
         val client = httpClient()
         val finalUrl = buildUrl(url, args)
         val finalMeta = buildHeaders(meta)
@@ -104,16 +103,8 @@ class HttpRPC(private val serializer:((Any?) -> String)? = null,
 
         // REQUEST
         val request = builder.build()
-
-        client.newCall(request).enqueue(object : Callback {
-            override fun onResponse(call: Call?, response: Response) {
-                call(Success(response))
-            }
-
-            override fun onFailure(call: Call?, ex: IOException) {
-                call(Failure(ex))
-            }
-        })
+        val result = awaitHttpTry { sendAsync(request, it) }
+        return result
     }
 
 
@@ -125,13 +116,12 @@ class HttpRPC(private val serializer:((Any?) -> String)? = null,
      * @param body  : Body data
      * @param call  : The callback to call when the response is available.
      */
-    fun post(url: String,
+    suspend fun post(url: String,
              meta: Map<String, String>? = null,
              args: Map<String, String>? = null,
              auth: Auth? = null,
-             body: Body? = null,
-             call: (Result<Response, IOException>) -> Unit) {
-        this.sendAsync(Method.Post, url, meta, args, auth, body, call)
+             body: Body? = null):Result<Response, Exception> {
+        return this.sendAsync(Method.Post, url, meta, args, auth, body)
     }
 
 
@@ -143,13 +133,12 @@ class HttpRPC(private val serializer:((Any?) -> String)? = null,
      * @param body  : Body data
      * @param call  : The callback to call when the response is available.
      */
-    fun patch(url: String,
+    suspend fun patch(url: String,
               meta: Map<String, String>? = null,
               args: Map<String, String>? = null,
               auth: Auth? = null,
-              body: Body? = null,
-              call: (Result<Response, IOException>) -> Unit) {
-        this.sendAsync(Method.Patch, url, meta, args, auth, body, call)
+              body: Body? = null):Result<Response, Exception> {
+        return this.sendAsync(Method.Patch, url, meta, args, auth, body)
     }
 
 
@@ -161,13 +150,12 @@ class HttpRPC(private val serializer:((Any?) -> String)? = null,
      * @param body  : Body data
      * @param call  : The callback to call when the response is available.
      */
-    fun put(url: String,
+    suspend fun put(url: String,
             meta: Map<String, String>? = null,
             args: Map<String, String>? = null,
             auth: Auth? = null,
-            body: Body? = null,
-            call: (Result<Response, IOException>) -> Unit) {
-        this.sendAsync(Method.Put, url, meta, args, auth, body, call)
+            body: Body? = null):Result<Response, Exception> {
+        return this.sendAsync(Method.Put, url, meta, args, auth, body)
     }
 
 
@@ -179,13 +167,33 @@ class HttpRPC(private val serializer:((Any?) -> String)? = null,
      * @param body  : Body data
      * @param call  : The callback to call when the response is available.
      */
-    fun delete(url: String,
+    suspend fun delete(url: String,
                meta: Map<String, String>? = null,
                args: Map<String, String>? = null,
                auth: Auth? = null,
-               body: Body? = null,
-               call: (Result<Response, IOException>) -> Unit) {
-        this.sendAsync(Method.Delete, url, meta, args, auth, body, call)
+               body: Body? = null):Result<Response, Exception> {
+        return this.sendAsync(Method.Delete, url, meta, args, auth, body)
+    }
+
+
+    /**
+     * Performs an HTTP operation and supplies the response back in the Callback
+     * @param verb  : The http verb
+     * @param url   : The url endpoint ( without the base url )
+     * @param meta  : Http headers to use
+     * @param args  : Query parameters to use
+     * @param body  : Body data
+     * @param call  : The callback to call when the response is available.
+     */
+    suspend fun sendAsync(verb: Method,
+                  url : String,
+                  meta: Map<String, String>? = null,
+                  args: Map<String, String>? = null,
+                  auth: Auth? = null,
+                  body: Body? = null): Result<Response, Exception> {
+        val request = build(verb, url, meta, args, auth, body)
+        val result = awaitHttpTry { sendAsync(request, it) }
+        return result
     }
 
 
@@ -335,7 +343,7 @@ class HttpRPC(private val serializer:((Any?) -> String)? = null,
                     val name = content.name.toId()
                     builder.addFormDataPart(name, content.name, file)
                 }
-                is ContentText -> builder.addFormDataPart("some-field", "some-value")
+                is ContentText -> builder.addFormDataPart(part.first, (part.second as ContentText).raw)
                 else           -> {}
             }
         }

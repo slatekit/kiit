@@ -1,9 +1,7 @@
 package slatekit.http
 
 import okhttp3.Response
-import slatekit.results.Notice
-import slatekit.results.Outcome
-import slatekit.results.Try
+import slatekit.results.*
 import slatekit.results.builders.Notices
 import slatekit.results.builders.Outcomes
 import slatekit.results.builders.Tries
