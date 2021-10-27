@@ -104,10 +104,10 @@ class KtorHandler(
     }
 
 
-    suspend fun testFile(call:ApplicationCall){
-        val doc = KtorUtils.loadFile(call, null)
-        println(doc)
-    }
+    //suspend fun testFile(call:ApplicationCall){
+    //    val doc = KtorUtils.loadFile(call, null)
+    //    println(doc)
+    //}
 
 
     companion object {
