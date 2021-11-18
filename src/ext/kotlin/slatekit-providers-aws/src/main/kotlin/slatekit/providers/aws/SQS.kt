@@ -22,6 +22,7 @@ import slatekit.common.utils.Random
 import slatekit.common.info.ApiLogin
 import slatekit.common.io.Uris
 import slatekit.common.ext.toStringUtc
+import slatekit.common.Provider
 import slatekit.core.queues.QueueEntry
 import slatekit.core.queues.QueueValueConverter
 import slatekit.core.queues.CloudQueue
@@ -52,6 +53,9 @@ class SQS<T>(
     private val SOURCE = "aws:sqs"
     private val sqs: AmazonSQSClient = AwsFuncs.sqs(credentials, region)
     private val queueUrl = sqs.getQueueUrl(this.name).queueUrl
+
+    override val provider: Any = sqs
+
 
     override suspend fun init() {
 

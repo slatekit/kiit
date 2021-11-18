@@ -1,6 +1,7 @@
 package slatekit.tracking
 
 import slatekit.common.Identity
+import slatekit.common.Provider
 
 
 /**
@@ -12,15 +13,13 @@ import slatekit.common.Identity
  * 2. Not currently sure whether to go w/ Drop-Wizard or Micrometer.
  * 3. Basic counters, timer.record are enough for most INTERNAL Slate Kit metrics gathering
  */
-interface Metrics {
+interface Metrics : Provider {
 
     val id: Identity
 
     val source:String
 
     val settings: MetricsSettings
-
-    fun provider():Any
 
     fun total(name: String): Double
 

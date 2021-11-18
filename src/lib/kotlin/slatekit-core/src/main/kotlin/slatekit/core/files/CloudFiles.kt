@@ -13,6 +13,7 @@
 
 package slatekit.core.files
 
+import slatekit.common.Provider
 import slatekit.core.cloud.CloudSupport
 import slatekit.core.common.FileUtils
 import slatekit.results.Try
@@ -26,7 +27,7 @@ import slatekit.results.then
  * 3. This is to "future proof" this public API to make it Async
  * 4. The AWS S3 component in slatekit.providers.aws will be migrated to Java SDK 2.0 ( async ) version in the future
  */
-interface CloudFiles : CloudSupport {
+interface CloudFiles : CloudSupport, Provider {
 
     val rootFolder:String
     val createRootFolder:Boolean

@@ -22,6 +22,7 @@ import slatekit.common.info.ApiLogin
 import slatekit.common.io.Uris
 import slatekit.core.files.CloudFiles
 import slatekit.core.common.FileUtils
+import slatekit.common.Provider
 import slatekit.results.Try
 import slatekit.results.builders.Tries
 import slatekit.results.getOrElse
@@ -49,6 +50,7 @@ class S3(
     private val FOLDER_SEPARATOR = "/"
     private val s3: AmazonS3Client = AwsFuncs.s3(credentials, region)
 
+    override val provider: Any = s3
 
     /**
      * hook for any initialization
@@ -238,6 +240,9 @@ class S3(
         val fullName = getName(folder, name)
 
         return executeResult(SOURCE, action, data = fullName, call = {
+            val meta = ObjectMetadata()
+            meta.addUserMetadata("xtype", "data")
+            meta.addUserMetadata("xname", "avatar")
             s3.putObject(rootFolder, fullName, ByteArrayInputStream(content), ObjectMetadata())
             fullName
         })

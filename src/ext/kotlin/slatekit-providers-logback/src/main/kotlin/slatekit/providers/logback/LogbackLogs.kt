@@ -6,6 +6,8 @@ import slatekit.common.log.Logs
 import org.slf4j.LoggerFactory
 
 class LogbackLogs : Logs {
+    override val provider: Any = "logback"
+
     override fun getLogger(name: String?): Logger {
         val instance = LoggerFactory.getLogger(name ?: "")
        return LogbackLogger(instance)
