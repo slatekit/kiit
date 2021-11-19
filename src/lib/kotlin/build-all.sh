@@ -6,14 +6,13 @@ cd slatekit-common        && gradle clean build publish && cd ../ && echo 'sleep
 cd slatekit-utils         && gradle clean build publish && cd ../ && echo 'sleeping 20s' && sleep 20s   
 cd slatekit-requests      && gradle clean build publish && cd ../ && echo 'sleeping 20s' && sleep 20s     
 cd slatekit-context       && gradle clean build publish && cd ../ && echo 'sleeping 20s' && sleep 20s     
+cd slatekit-http          && gradle clean build publish && cd ../ && echo 'sleeping 20s' && sleep 20s   
 
 # Support
-cd slatekit-tracking      && gradle clean build publish && cd ../ && echo 'sleeping 20s' && sleep 20s   
+cd slatekit-telemetry     && gradle clean build publish && cd ../ && echo 'sleeping 20s' && sleep 20s   
 cd slatekit-policy        && gradle clean build publish && cd ../ && echo 'sleeping 20s' && sleep 20s   
 cd slatekit-meta          && gradle clean build publish && cd ../ && echo 'sleeping 20s' && sleep 20s   
 cd slatekit-serialization && gradle clean build publish && cd ../ && echo 'sleeping 20s' && sleep 20s   
-cd slatekit-http          && gradle clean build publish && cd ../ && echo 'sleeping 20s' && sleep 20s   
-cd slatekit-core          && gradle clean build publish && cd ../ && echo 'sleeping 20s' && sleep 20s   
 
 # Apps / Services
 cd slatekit-app           && gradle clean build publish && cd ../ && echo 'sleeping 20s' && sleep 20s  
@@ -22,6 +21,7 @@ cd slatekit-jobs          && gradle clean build publish && cd ../ && echo 'sleep
 cd slatekit-apis          && gradle clean build publish && cd ../ && echo 'sleeping 20s' && sleep 20s 
 
 # Infrastructure
+cd slatekit-core          && gradle clean build publish && cd ../ && echo 'sleeping 20s' && sleep 20s   
 cd slatekit-cache         && gradle clean build publish && cd ../ && echo 'sleeping 20s' && sleep 20s 
 cd slatekit-db            && gradle clean build publish && cd ../ && echo 'sleeping 20s' && sleep 20s 
 cd slatekit-notifications && gradle clean build publish && cd ../ && echo 'sleeping 20s' && sleep 20s   
