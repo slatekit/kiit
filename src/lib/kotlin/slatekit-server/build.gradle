@@ -67,7 +67,7 @@ dependencies {
         compile "com.slatekit:slatekit-utils:$slatekit_version"
         compile "com.slatekit:slatekit-requests:$slatekit_version"
         compile "com.slatekit:slatekit-context:$slatekit_version"
-        compile "com.slatekit:slatekit-tracking:$slatekit_version"
+        compile "com.slatekit:slatekit-telemetry:$slatekit_version"
         compile "com.slatekit:slatekit-apis:$slatekit_version"
         compile "com.slatekit:slatekit-serialization:$slatekit_version"
     } else {
@@ -77,7 +77,7 @@ dependencies {
     compile project(":slatekit-utils")
     compile project(":slatekit-requests")
     compile project(":slatekit-context")
-    compile project(":slatekit-tracking")
+    compile project(":slatekit-telemetry")
     compile project(":slatekit-apis")
     compile project(":slatekit-serialization")
     } //</slatekit_local>

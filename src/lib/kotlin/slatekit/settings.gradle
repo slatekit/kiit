@@ -75,8 +75,8 @@ project(':slatekit-jobs').projectDir=new File('../slatekit-jobs')
 include ':slatekit-serialization'
 project(':slatekit-serialization').projectDir=new File('../slatekit-serialization')
 
-include ':slatekit-tracking'
-project(':slatekit-tracking').projectDir=new File('../slatekit-tracking')
+include ':slatekit-telemetry'
+project(':slatekit-telemetry').projectDir=new File('../slatekit-telemetry')
 
 include ':slatekit-providers-aws'
 project(':slatekit-providers-aws').projectDir=new File('../../../ext/kotlin/slatekit-providers-aws')

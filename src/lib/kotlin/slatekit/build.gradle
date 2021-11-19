@@ -58,7 +58,7 @@ dependencies {
         implementation "com.slatekit:slatekit-meta:$slatekit_version"
         implementation "com.slatekit:slatekit-policy:$slatekit_version"
         implementation "com.slatekit:slatekit-serialization:$slatekit_version"
-        implementation "com.slatekit:slatekit-tracking:$slatekit_version"
+        implementation "com.slatekit:slatekit-telemetry:$slatekit_version"
         implementation "com.slatekit:slatekit-apis:$slatekit_version"
         implementation "com.slatekit:slatekit-generator:$slatekit_version"
         implementation "com.slatekit:slatekit-cli:$slatekit_version"
@@ -90,7 +90,7 @@ dependencies {
     implementation project(":slatekit-meta")
     implementation project(":slatekit-policy")
     implementation project(":slatekit-serialization")
-    implementation project(":slatekit-tracking")
+    implementation project(":slatekit-telemetry")
     implementation project(":slatekit-requests")
     implementation project(":slatekit-apis")
     implementation project(":slatekit-generator")
