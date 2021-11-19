@@ -18,17 +18,17 @@ import slatekit.common.types.ContentFile
 import org.threeten.bp.*
 import slatekit.common.DateTime
 import slatekit.common.DateTimes
+import slatekit.common.Internal
 import slatekit.common.Types
 import slatekit.common.values.Vars
 import slatekit.common.io.Uris
 import slatekit.common.types.ContentFiles
 
 /**
- * Conversions from text to types
- * NOTE: While the standard library has extension methods
- * to convert string to a certain type, these are here to
- * support lamdas using in other places
+ * TODO: Many of these can be deprecated for built-in std-lib methods.
+ * These were originally ported over from a Java lib and supplemented with Date X methods.
  */
+@Internal("INTERNAL USAGE: Used for internal use, unit-tests, prototyping only")
 object Conversions {
 
     fun toString(text: String): String = text
