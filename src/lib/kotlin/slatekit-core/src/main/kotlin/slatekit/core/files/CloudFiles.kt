@@ -42,35 +42,35 @@ interface CloudFiles : CloudSupport, Provider {
     }
 
     suspend fun create(name: String, content: String): Try<String> {
-        return create(CloudFileEntry(rootFolder, name, content.toByteArray(), content, null))
+        return create(CloudFileEntry(rootFolder, name, content.toByteArray(), null))
     }
 
     suspend fun create(name: String, content: ByteArray): Try<String> {
-        return create(CloudFileEntry(rootFolder, name, content, null, null))
+        return create(CloudFileEntry(rootFolder, name, content, null))
     }
 
     suspend fun create(folder: String, name: String, content: String): Try<String> {
-        return create(CloudFileEntry(folder, name, content.toByteArray(), content, null))
+        return create(CloudFileEntry(folder, name, content.toByteArray(), null))
     }
 
     suspend fun create(folder: String, name: String, content: ByteArray): Try<String> {
-        return create(CloudFileEntry(rootFolder, name, content, null, null))
+        return create(CloudFileEntry(rootFolder, name, content, null))
     }
 
     suspend fun update(name: String, content: String): Try<String> {
-        return update(CloudFileEntry(rootFolder, name, content.toByteArray(), content, null))
+        return update(CloudFileEntry(rootFolder, name, content.toByteArray(), null))
     }
 
     suspend fun update(name: String, content: ByteArray): Try<String> {
-        return update(CloudFileEntry(rootFolder, name, content, null, null))
+        return update(CloudFileEntry(rootFolder, name, content, null))
     }
 
     suspend fun update(folder: String, name: String, content: String): Try<String> {
-        return update(CloudFileEntry(folder, name, content.toByteArray(), content, null))
+        return update(CloudFileEntry(folder, name, content.toByteArray(), null))
     }
 
     suspend fun update(folder: String, name: String, content: ByteArray): Try<String> {
-        return update(CloudFileEntry(rootFolder, name, content, null, null))
+        return update(CloudFileEntry(rootFolder, name, content, null))
     }
 
     suspend fun delete(name: String):Try<String> {
@@ -100,9 +100,11 @@ interface CloudFiles : CloudSupport, Provider {
         return update(folder, name, content)
     }
 
+    suspend fun buildSignedGetUrl(folder: String?, name: String, expiresInSeconds:Int):String
+    suspend fun buildSignedPutUrl(folder: String?, name: String, expiresInSeconds:Int):String
 
     suspend fun getFile(name: String): Try<CloudFile> = getFile(rootFolder, name)
-    suspend fun getFile(folder: String, name: String): Try<CloudFile> = getFile(CloudFileEntry(rootFolder, name, byteArrayOf(), null, null))
+    suspend fun getFile(folder: String, name: String): Try<CloudFile> = getFile(CloudFileEntry(rootFolder, name, byteArrayOf(), null))
     suspend fun getFileBytes(name: String): Try<ByteArray> = getFileBytes(rootFolder, name)
     suspend fun getFileBytes(folder: String, name: String):Try<ByteArray> = getFile(folder, name).map { it.data }
     suspend fun getFileText(name: String): Try<String> = getFileText(rootFolder, name)
@@ -122,5 +124,4 @@ interface CloudFiles : CloudSupport, Provider {
     suspend fun delete(entry: CloudFile): Try<String>
     suspend fun getFile(entry:CloudFile): Try<CloudFile>
     suspend fun downloadToFile(folder: String, name: String, filePath: String): Try<String>
-
 }

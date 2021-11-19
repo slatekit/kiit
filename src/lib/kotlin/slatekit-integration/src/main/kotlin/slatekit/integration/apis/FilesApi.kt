@@ -77,8 +77,8 @@ class FilesApi(val files: CloudFiles, override val context: Context) : slatekit.
     }
 
     @Action(desc = "get file as text")
-    suspend fun getAsText(folder: String, name: String):Try<String> {
-        return files.getAsText(folder, name)
+    suspend fun getFileText(folder: String, name: String):Try<String> {
+        return files.getFileText(folder, name)
     }
 
     @Action(desc = "downloads the file specified by folder and name to the local folder specified.")

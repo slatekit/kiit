@@ -111,7 +111,7 @@ class S3(
         return executeResult(SOURCE, action, data = fullName, call = {
             val meta = ObjectMetadata()
             entry.atts?.map { meta.addUserMetadata("x-amz-meta-${it.key}", it.value) }
-            s3.putObject(rootFolder, fullName, ByteArrayInputStream(entry.data), ObjectMetadata())
+            s3.putObject(rootFolder, fullName, ByteArrayInputStream(entry.data), meta)
             fullName
         })
     }
@@ -123,27 +123,9 @@ class S3(
             val obj = s3.getObject(GetObjectRequest(rootFolder, fullName))
             val content = obj.getObjectContent()
             val data = content.readBytes()
-            val atts = obj.objectMetadata
-            CloudFileEntry(entry.name, entry.path, data, null)
+            val atts = obj.objectMetadata.userMetadata
+            CloudFileEntry(entry.path, entry.name, data, atts)
         })
-    }
-
-    suspend fun signedGet(folder: String, name:String, expiresInSeconds:Int): String {
-        val now = Instant.now().toEpochMilli()
-        val expires = now + 1000 * expiresInSeconds
-        val exp = java.util.Date(expires)
-        val req = GeneratePresignedUrlRequest(folder, name, HttpMethod.GET).withExpiration(exp)
-        val url = s3.generatePresignedUrl(req)
-        return url.toString()
-    }
-
-    suspend fun signedPut(folder: String, name:String, expiresInSeconds:Int): String {
-        val now = Instant.now().toEpochMilli()
-        val expires = now + 1000 * expiresInSeconds
-        val exp = java.util.Date(expires)
-        val req = GeneratePresignedUrlRequest(folder, name, HttpMethod.PUT).withExpiration(exp)
-        val url = s3.generatePresignedUrl(req)
-        return url.toString()
     }
 
     /**
@@ -165,6 +147,25 @@ class S3(
             }
             result.getOrElse { "" }
         })
+    }
+
+    override suspend fun buildSignedGetUrl(folder: String?, name:String, expiresInSeconds:Int): String {
+        return buildSignedUrl(folder, name, HttpMethod.GET, expiresInSeconds)
+    }
+
+    override suspend fun buildSignedPutUrl(folder: String?, name:String, expiresInSeconds:Int): String {
+        return buildSignedUrl(folder, name, HttpMethod.GET, expiresInSeconds)
+    }
+
+
+    private suspend fun buildSignedUrl(folder: String?, name:String, method:HttpMethod, expiresInSeconds:Int): String {
+        val now = Instant.now().toEpochMilli()
+        val expires = now + 1000 * expiresInSeconds
+        val exp = java.util.Date(expires)
+        val finalFolder = folder ?: rootFolder
+        val req = GeneratePresignedUrlRequest(finalFolder, name, method).withExpiration(exp)
+        val url = s3.generatePresignedUrl(req)
+        return url.toString()
     }
 
     private fun getName(folder: String?, name: String): String {
