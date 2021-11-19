@@ -25,6 +25,7 @@ import slatekit.common.utils.Random
 data class ULID internal constructor(val instant:String, val node:String, val random:String, val version:String) : UID {
     override val name: String = "ulid"
     override val value: String = "$instant$node$random$version"
+    override fun toString(): String = value
 }
 
 

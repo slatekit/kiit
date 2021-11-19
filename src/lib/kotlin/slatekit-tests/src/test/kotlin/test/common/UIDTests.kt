@@ -13,12 +13,14 @@ class UPIDTests {
     fun upid_can_create(){
         val id = UPIDs.create("spc")
         Assert.assertTrue(id.value.startsWith("spc:"))
+        Assert.assertEquals(id.value, id.toString())
     }
 
     @Test
     fun upid_can_create_empty(){
         val id = UPIDs.create()
         Assert.assertTrue(id.value.startsWith(":"))
+        Assert.assertEquals(id.value, id.toString())
     }
 
     @Test
@@ -45,12 +47,14 @@ class UUIDTests {
     fun upid_can_create(){
         val id = UUIDs.create()
         Assert.assertTrue(id.value == id.uuid.toString())
+        Assert.assertTrue(id.value == id.toString())
     }
 
     @Test
     fun upid_can_create_empty(){
         val id = UUIDs.create("")
         Assert.assertTrue(id.value == id.uuid.toString())
+        Assert.assertTrue(id.value == id.toString())
     }
 
     @Test
@@ -74,12 +78,14 @@ class ULIDTests {
     fun upid_can_create(){
         val id = ULIDs.create()
         Assert.assertTrue(id.value == "${id.instant}${id.node}${id.random}${id.version}")
+        Assert.assertEquals(id.value, id.toString())
     }
 
     @Test
     fun upid_can_create_empty(){
         val id = ULIDs.create("kprmac01")
         Assert.assertTrue(id.value == "${id.instant}kprmac01${id.random}${id.version}")
+        Assert.assertEquals(id.value, id.toString())
     }
 
     @Test
