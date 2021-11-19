@@ -6,7 +6,7 @@ import slatekit.results.Failure
 import slatekit.results.Outcome
 import slatekit.results.Success
 import slatekit.results.builders.Tries
-import slatekit.tracking.Counter
+import slatekit.telemetry.Counter
 
 /**
  * Policy to limit the operation based on the total processed items from the metric counts

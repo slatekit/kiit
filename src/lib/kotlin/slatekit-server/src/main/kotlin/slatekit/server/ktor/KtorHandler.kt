@@ -9,14 +9,14 @@ import io.ktor.request.receiveText
 import io.ktor.routing.*
 import slatekit.apis.ApiServer
 import slatekit.context.Context
-import slatekit.tracking.Diagnostics
+import slatekit.telemetry.Diagnostics
 import slatekit.requests.Request
 import slatekit.requests.toResponse
 import slatekit.server.ServerSettings
 import slatekit.server.core.RequestHandler
 import slatekit.server.core.ResponseHandler
 import slatekit.server.core.ServerDiagnostics
-import slatekit.tracking.MetricsLite
+import slatekit.telemetry.MetricsLite
 
 
 class KtorHandler(

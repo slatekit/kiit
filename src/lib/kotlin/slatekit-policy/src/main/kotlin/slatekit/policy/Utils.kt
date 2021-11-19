@@ -6,7 +6,7 @@ import slatekit.results.Outcome
 import slatekit.results.Status
 import slatekit.results.Try
 import slatekit.results.builders.Outcomes
-import slatekit.tracking.Counters
+import slatekit.telemetry.Counters
 
 /**
  * Retryable operation

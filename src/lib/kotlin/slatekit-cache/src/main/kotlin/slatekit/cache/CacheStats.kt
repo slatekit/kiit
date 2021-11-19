@@ -1,7 +1,7 @@
 package slatekit.cache
 
-import slatekit.tracking.Expiry
-import slatekit.tracking.Tracked
+import slatekit.telemetry.Expiry
+import slatekit.telemetry.Tracked
 
 /**
  * Provides a copy of the CacheValue

@@ -1,7 +1,7 @@
 package slatekit.policy.policies
 
 import slatekit.policy.Policy
-import slatekit.tracking.Calls
+import slatekit.telemetry.Calls
 import slatekit.results.Codes
 import slatekit.results.Outcome
 import slatekit.results.builders.Outcomes

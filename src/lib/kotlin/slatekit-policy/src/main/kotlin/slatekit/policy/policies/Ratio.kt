@@ -3,7 +3,7 @@ package slatekit.policy.policies
 import slatekit.common.log.Logger
 import slatekit.policy.Policy
 import slatekit.results.*
-import slatekit.tracking.Counters
+import slatekit.telemetry.Counters
 import slatekit.results.builders.Outcomes
 
 /**

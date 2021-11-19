@@ -2,7 +2,7 @@ package slatekit.policy.policies
 
 import slatekit.common.log.Logger
 import slatekit.policy.Policy
-import slatekit.tracking.Counters
+import slatekit.telemetry.Counters
 import slatekit.results.Codes
 import slatekit.results.Outcome
 import slatekit.results.builders.Outcomes
