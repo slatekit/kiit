@@ -44,11 +44,11 @@ interface LogSupport {
      * log.error( ex, "upating user {0}", user.id )
      * ======================================================================
      */
-    @Ignore fun debug(ex:Exception?, msg: String?, vararg args:Any?) = log(LogLevel.Debug, ex, msg, *args)
-    @Ignore fun info (ex:Exception?, msg: String?, vararg args:Any?) = log(LogLevel.Info , ex, msg, *args)
-    @Ignore fun warn (ex:Exception?, msg: String?, vararg args:Any?) = log(LogLevel.Warn , ex, msg, *args)
-    @Ignore fun error(ex:Exception?, msg: String?, vararg args:Any?) = log(LogLevel.Error, ex, msg, *args)
-    @Ignore fun fatal(ex:Exception?, msg: String?, vararg args:Any?) = log(LogLevel.Fatal, ex, msg, *args)
+    @Ignore fun debug(ex:Throwable?, msg: String?, vararg args:Any?) = log(LogLevel.Debug, ex, msg, *args)
+    @Ignore fun info (ex:Throwable?, msg: String?, vararg args:Any?) = log(LogLevel.Info , ex, msg, *args)
+    @Ignore fun warn (ex:Throwable?, msg: String?, vararg args:Any?) = log(LogLevel.Warn , ex, msg, *args)
+    @Ignore fun error(ex:Throwable?, msg: String?, vararg args:Any?) = log(LogLevel.Error, ex, msg, *args)
+    @Ignore fun fatal(ex:Throwable?, msg: String?, vararg args:Any?) = log(LogLevel.Fatal, ex, msg, *args)
 
     /** =====================================================================
      * Logging using exceptions only
@@ -56,11 +56,11 @@ interface LogSupport {
      * log.error( ex )
      * ======================================================================
      */
-    @Ignore fun debug(ex:Exception?) = log(LogLevel.Debug, ex, null)
-    @Ignore fun info (ex:Exception?) = log(LogLevel.Info , ex, null)
-    @Ignore fun warn (ex:Exception?) = log(LogLevel.Warn , ex, null)
-    @Ignore fun error(ex:Exception?) = log(LogLevel.Error, ex, null)
-    @Ignore fun fatal(ex:Exception?) = log(LogLevel.Fatal, ex, null)
+    @Ignore fun debug(ex:Throwable?) = log(LogLevel.Debug, ex, null)
+    @Ignore fun info (ex:Throwable?) = log(LogLevel.Info , ex, null)
+    @Ignore fun warn (ex:Throwable?) = log(LogLevel.Warn , ex, null)
+    @Ignore fun error(ex:Throwable?) = log(LogLevel.Error, ex, null)
+    @Ignore fun fatal(ex:Throwable?) = log(LogLevel.Fatal, ex, null)
 
     /** =====================================================================
      * Lazy logging
@@ -93,7 +93,7 @@ interface LogSupport {
      * @param ex
      */
     @Ignore
-    fun log(level: LogLevel, ex: Exception?, msg: String?, vararg args:Any?) {
+    fun log(level: LogLevel, ex: Throwable?, msg: String?, vararg args:Any?) {
         var fmsg = msg
         val hasMsg = !msg.isNullOrEmpty()
         val hasArgs = args.isNotEmpty()
@@ -107,7 +107,7 @@ interface LogSupport {
      * Logs key/value pairs
      */
     @Ignore
-    fun log(level: LogLevel, ex:Exception?, msg: String?, pairs:List<Pair<String,String>>) {
+    fun log(level: LogLevel, ex:Throwable?, msg: String?, pairs:List<Pair<String,String>>) {
         val info = pairs.joinToString { it -> it.first + "=" + it.second }
         log(level, "$msg $info", ex)
     }
@@ -119,7 +119,7 @@ interface LogSupport {
      * @param ex
      */
     @Ignore
-    fun log(level: LogLevel, msg: String?, ex: Exception? = null) {
+    fun log(level: LogLevel, msg: String?, ex: Throwable? = null) {
         val hasMsg = !msg.isNullOrEmpty()
         val hasEx = ex != null
         var fmsg = msg

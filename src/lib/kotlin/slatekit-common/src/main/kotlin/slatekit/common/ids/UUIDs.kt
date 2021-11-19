@@ -10,6 +10,7 @@ import java.util.*
 data class UUID4(val uuid: UUID) : UID {
     override val name: String = "4"
     override val value: String = uuid.toString()
+    override fun toString(): String = value
 }
 
 

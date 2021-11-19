@@ -9,6 +9,7 @@ import io.micrometer.core.instrument.binder.jvm.JvmThreadMetrics
 import io.micrometer.core.instrument.binder.system.ProcessorMetrics
 import io.micrometer.datadog.DatadogMeterRegistry
 import slatekit.common.Identity
+import slatekit.common.Provider
 import slatekit.tracking.*
 
 
@@ -21,10 +22,7 @@ class DDMetrics(val registry: MeterRegistry,
     val emptyLocalTags = arrayOf<String>()
 
 
-    /**
-     * The provider of the metrics ( Micrometer for now )
-     */
-    override fun provider(): Any = registry
+    override val provider: Any = registry
 
 
     override fun total(name: String): Double {

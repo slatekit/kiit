@@ -141,7 +141,7 @@ object AppRunner {
         return finalResult
     }
 
-    private fun showError(result: Try<Any?>, ex: Exception?) : Try<Any?> {
+    private fun showError(result: Try<Any?>, ex: Throwable?) : Try<Any?> {
         println("success: " + result.success)
         println("code   : " + result.code)
         println("message: " + result.desc)

@@ -1,4 +1,5 @@
 package test.results
+import org.junit.Assert
 import org.junit.Test
 
 import slatekit.results.*
@@ -19,7 +20,18 @@ import slatekit.results.builders.Outcomes
  * 1. Success branch
  * 2. Failure branch
  */
-class ResultCreateTests : ResultTestSupport {
+class ResultStatusTests : ResultTestSupport {
+
+    @Test
+    fun can_test_success() {
+        Assert.assertEquals(true , Codes.SUCCESS.success)
+        Assert.assertEquals(true , Codes.PENDING.success)
+        Assert.assertEquals(false, Codes.IGNORED.success)
+        Assert.assertEquals(false, Codes.BAD_REQUEST.success)
+        Assert.assertEquals(false, Codes.UNAUTHENTICATED.success)
+        Assert.assertEquals(false, Codes.ERRORED.success)
+        Assert.assertEquals(false, Codes.UNEXPECTED.success)
+    }
 
     @Test
     fun can_create_success() {

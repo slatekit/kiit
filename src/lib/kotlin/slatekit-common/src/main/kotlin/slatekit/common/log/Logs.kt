@@ -13,8 +13,10 @@
 
 package slatekit.common.log
 
+import slatekit.common.Provider
 
-interface Logs {
+
+interface Logs : Provider {
 
     fun getLogger(name: String? = ""): Logger
     fun getLogger(cls: Class<*>): Logger
@@ -27,6 +29,11 @@ interface Logs {
  * slateKit.common has only 0 dependencies!!!
  */
 object LogsDefault : Logs {
+
+    /**
+     * Can't return an singleton of Console
+     */
+    override val provider: Any = "console"
 
     override fun getLogger(cls: Class<*>): Logger {
         return LoggerConsole(name = cls.simpleName, logType = cls)

@@ -2,6 +2,7 @@ package slatekit.core.eventing
 
 import kotlinx.coroutines.CompletableDeferred
 import slatekit.common.Identity
+import slatekit.common.Provider
 import slatekit.results.Outcome
 
 /**
@@ -18,7 +19,7 @@ import slatekit.results.Outcome
  * @tparam TEvent    : Full event type ( e.g. SignupEvent  )
  * @tparam TResult   : Result type     ( e.g. RecordMetadata - for kafka )
  */
-interface EventProducer<TData, TEvent, TResult> {
+interface EventProducer<TData, TEvent, TResult> : Provider {
 
     /**
      * Identifies producer with name, uuid ( used in logging )

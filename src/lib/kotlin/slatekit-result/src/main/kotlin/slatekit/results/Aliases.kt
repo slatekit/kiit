@@ -35,7 +35,7 @@ typealias Option<T> = Result<T, Unit>
  * 2. avoid collision with the Kotlin Result type
  * 3. similarity to Try type available in other languages like Scala
  */
-typealias Try<T> = Result<T, Exception>
+typealias Try<T> = Result<T, Throwable>
 
 /**
  * Alias for Result<T,E> defaulting the E error type ( [Failure] branch ) to [String]

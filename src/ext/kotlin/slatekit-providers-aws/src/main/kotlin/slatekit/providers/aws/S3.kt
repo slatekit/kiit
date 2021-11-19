@@ -13,20 +13,27 @@
 
 package slatekit.providers.aws
 
+import com.amazonaws.HttpMethod
 import com.amazonaws.auth.AWSCredentials
 import com.amazonaws.regions.Regions
 import com.amazonaws.services.s3.AmazonS3Client
+import com.amazonaws.services.s3.model.GeneratePresignedUrlRequest
 import com.amazonaws.services.s3.model.GetObjectRequest
 import com.amazonaws.services.s3.model.ObjectMetadata
 import slatekit.common.info.ApiLogin
 import slatekit.common.io.Uris
 import slatekit.core.files.CloudFiles
 import slatekit.core.common.FileUtils
+import slatekit.common.Provider
+import slatekit.core.files.CloudFile
+import slatekit.core.files.CloudFileEntry
 import slatekit.results.Try
 import slatekit.results.builders.Tries
 import slatekit.results.getOrElse
 import java.io.ByteArrayInputStream
 import java.io.File
+import java.time.Instant
+import kotlin.math.exp
 
 /**
  *
@@ -49,6 +56,7 @@ class S3(
     private val FOLDER_SEPARATOR = "/"
     private val s3: AmazonS3Client = AwsFuncs.s3(credentials, region)
 
+    override val provider: Any = s3
 
     /**
      * hook for any initialization
@@ -72,117 +80,51 @@ class S3(
         }
     }
 
-    /**
-     * creates a file with the supplied folder name, file name, and content
-     *
-     * @param folder
-     * @param name
-     * @param content
-     */
-    override suspend fun create(folder: String, name: String, content: String): Try<String> {
-        return put("create", folder, name, content)
+    override suspend fun create(entry: CloudFile): Try<String> {
+        return put("create", entry)
     }
 
-    /**
-     * creates a file with the supplied folder name, file name, and content
-     *
-     * @param folder
-     * @param name
-     * @param content
-     */
-    override suspend fun create(folder: String, name: String, content: ByteArray): Try<String> {
-        return put("create", folder, name, content)
+
+    override suspend fun update(entry: CloudFile): Try<String> {
+        return put("update", entry)
     }
 
-    /**
-     * updates a file with the supplied folder name, file name, and content
-     *
-     * @param folder
-     * @param name
-     * @param content
-     */
-    override suspend fun update(folder: String, name: String, content: String): Try<String> {
-        return put("update", folder, name, content)
-    }
 
-    /**
-     * updates a file with the supplied folder name, file name, and content
-     *
-     * @param folder
-     * @param name
-     * @param content
-     */
-    override suspend fun update(folder: String, name: String, content: ByteArray): Try<String> {
-        return put("update", folder, name, content)
-    }
-
-    /**
-     * deletes a file with the supplied folder name, file name
-     *
-     * @param folder
-     * @param name
-     */
-    override suspend fun delete(folder: String, name: String): Try<String> {
-        val fullName = getName(folder, name)
+    override suspend fun delete(entry: CloudFile): Try<String> {
+        val fullName = getName(entry.path, entry.name)
         return executeResult(SOURCE, "delete", data = fullName, call = {
             s3.deleteObject(rootFolder, fullName)
             fullName
         })
     }
 
+
     /**
-     * gets the file specified by folder and name, as text content
-     *
-     * @param folder
-     * @param name
+     * uploads the file to the datasource using the supplied folder, filename, and content
+     * @param action: "create" | "update"
+     * @param entry : content of file
      * @return
      */
-    override suspend fun getAsBytes(folder: String, name: String): Try<ByteArray> {
-        val fullName = getName(folder, name)
-        return executeResult(SOURCE, "getAsBytes", data = fullName, call = {
+    suspend fun put(action: String, entry:CloudFile): Try<String> {
+        // full name of the file is folder + name
+        val fullName = getName(entry.path, entry.name)
+        return executeResult(SOURCE, action, data = fullName, call = {
+            val meta = ObjectMetadata()
+            entry.atts?.map { meta.addUserMetadata("x-amz-meta-${it.key}", it.value) }
+            s3.putObject(rootFolder, fullName, ByteArrayInputStream(entry.data), meta)
+            fullName
+        })
+    }
 
+
+    override suspend fun getFile(entry: CloudFile): Try<CloudFile> {
+        val fullName = getName(entry.path, entry.name)
+        return executeResult(SOURCE, "getfile", data = fullName, call = {
             val obj = s3.getObject(GetObjectRequest(rootFolder, fullName))
             val content = obj.getObjectContent()
-            content.readBytes()
-        })
-    }
-
-
-    /**
-     * gets the file specified by folder and name, as text content
-     *
-     * @param folder
-     * @param name
-     * @return
-     */
-    override suspend fun getAsText(folder: String, name: String): Try<String> {
-        val fullName = getName(folder, name)
-        return executeResult(SOURCE, "getAsText", data = fullName, call = {
-
-            val obj = s3.getObject(GetObjectRequest(rootFolder, fullName))
-            val content = FileUtils.toString(obj.getObjectContent())
-            // val content = "simulating download of " + fullName
-            content
-        })
-    }
-
-    /**
-     * downloads the file specified by folder and name to the local folder specified.
-     *
-     * @param folder
-     * @param name
-     * @param localFolder
-     * @return
-     */
-    override suspend fun download(folder: String, name: String, localFolder: String): Try<String> {
-        val fullName = getName(folder, name)
-        return executeResult<String>(SOURCE, "download", data = fullName, call = {
-            val content = getAsText(folder, name)
-            val finalFolder = Uris.interpret(localFolder)
-            val localFile = File(finalFolder, name)
-            val localFileName = localFile.absolutePath
-            File(localFileName).writeText(content.getOrElse { "" })
-            localFileName
+            val data = content.readBytes()
+            val atts = obj.objectMetadata.userMetadata
+            CloudFileEntry(entry.path, entry.name, data, atts)
         })
     }
 
@@ -196,54 +138,37 @@ class S3(
      */
     override suspend fun downloadToFile(folder: String, name: String, filePath: String): Try<String> {
         val fullName = getName(folder, name)
-        return executeResult(SOURCE, "download", data = fullName, call = {
-            val content = getAsText(folder, name)
-            val localFile = Uris.interpret(filePath)
-            val localFileName = localFile ?: name
-            File(localFileName).writeText(content.getOrElse { "" })
-            localFileName
+        return executeResult<String>(SOURCE, "download", data = fullName, call = {
+            val content = getFile(folder, name)
+            val localFile = File(filePath)
+            val result = content.map { f ->
+                localFile.writeBytes(f.data)
+                localFile.absolutePath
+            }
+            result.getOrElse { "" }
         })
     }
 
-    /**
-     * uploads the file to the datasource using the supplied folder, filename, and content
-     *
-     * @param folder
-     * @param name
-     * @param content
-     * @return
-     */
-    suspend fun put(action: String, folder: String, name: String, content: String): Try<String> {
-        // full name of the file is folder + name
-        val fullName = getName(folder, name)
+    override suspend fun buildSignedGetUrl(folder: String?, name:String, expiresInSeconds:Int): String {
+        return buildSignedUrl(folder, name, HttpMethod.GET, expiresInSeconds)
+    }
 
-        return executeResult(SOURCE, action, data = fullName, call = {
-
-            s3.putObject(rootFolder, fullName, FileUtils.toInputStream(content), ObjectMetadata())
-            fullName
-        })
+    override suspend fun buildSignedPutUrl(folder: String?, name:String, expiresInSeconds:Int): String {
+        return buildSignedUrl(folder, name, HttpMethod.GET, expiresInSeconds)
     }
 
 
-    /**
-     * uploads the file to the datasource using the supplied folder, filename, and content
-     *
-     * @param folder
-     * @param name
-     * @param content
-     * @return
-     */
-    suspend fun put(action: String, folder: String, name: String, content: ByteArray): Try<String> {
-        // full name of the file is folder + name
-        val fullName = getName(folder, name)
-
-        return executeResult(SOURCE, action, data = fullName, call = {
-            s3.putObject(rootFolder, fullName, ByteArrayInputStream(content), ObjectMetadata())
-            fullName
-        })
+    private suspend fun buildSignedUrl(folder: String?, name:String, method:HttpMethod, expiresInSeconds:Int): String {
+        val now = Instant.now().toEpochMilli()
+        val expires = now + 1000 * expiresInSeconds
+        val exp = java.util.Date(expires)
+        val finalFolder = folder ?: rootFolder
+        val req = GeneratePresignedUrlRequest(finalFolder, name, method).withExpiration(exp)
+        val url = s3.generatePresignedUrl(req)
+        return url.toString()
     }
 
-    private fun getName(folder: String, name: String): String {
+    private fun getName(folder: String?, name: String): String {
         // Case 1: no folder supplied, assume in root bucket
         return when {
             folder.isNullOrEmpty() -> name

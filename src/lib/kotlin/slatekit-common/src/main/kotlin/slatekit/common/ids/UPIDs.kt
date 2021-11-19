@@ -10,6 +10,7 @@ import java.util.UUID
 data class UPID(val prefix: String, val uuid: UUID) : UID {
     override val name: String = "P"
     override val value: String = "$prefix:$uuid"
+    override fun toString(): String = value
 }
 
 

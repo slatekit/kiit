@@ -93,18 +93,7 @@ class HttpRPC(private val serializer:((Any?) -> String)? = null,
             meta: Map<String, String>? = null,
             args: Map<String, String>? = null,
             auth: Auth? = null) :Result<Response, Exception> {
-        val client = httpClient()
-        val finalUrl = buildUrl(url, args)
-        val finalMeta = buildHeaders(meta)
-        val builder = Request.Builder().url(finalUrl).headers(finalMeta)
-
-        // AUTHORIZATION
-        buildAuth(auth, builder)
-
-        // REQUEST
-        val request = builder.build()
-        val result = awaitHttpTry { sendAsync(request, it) }
-        return result
+        return this.sendAsync(Method.Get, url, meta, args, auth, null)
     }
 
 
@@ -294,13 +283,9 @@ class HttpRPC(private val serializer:((Any?) -> String)? = null,
         val builder = Request.Builder().url(finalUrl).headers(headers)
 
         // BODY
-        val finalBody = when(body) {
-            is Body.MultiPart   -> buildMulti(body)
-            is Body.FormData    -> buildFormEncoded(body.values)
-            is Body.RawContent  -> RequestBody.create(textType, body.content )
-            is Body.JsonContent -> RequestBody.create(jsonType, body.content )
-            is Body.JsonObject  -> RequestBody.create(jsonType, serializer?.let{ it(body.toString()) } ?: "" )
-            else                -> RequestBody.create(jsonType, serializer?.let{ it(body.toString()) } ?: "" )
+        val finalBody = when(verb) {
+            Method.Get -> emptyBody
+            else -> buildBody(body)
         }
 
         // AUTHORIZATION
@@ -308,11 +293,11 @@ class HttpRPC(private val serializer:((Any?) -> String)? = null,
 
         // SEND ( post / put / etc )
         val request = when (verb) {
-            Method.Get -> builder.get().build()
-            Method.Post -> builder.post(finalBody).build()
+            Method.Get    -> builder.get().build()
+            Method.Post   -> builder.post(finalBody).build()
+            Method.Put    -> builder.put(finalBody).build()
+            Method.Patch  -> builder.patch(finalBody).build()
             Method.Delete -> builder.delete(finalBody).build()
-            Method.Put -> builder.put(finalBody).build()
-            Method.Patch -> builder.patch(finalBody).build()
             else          -> builder.post(finalBody).build()
         }
         return request
@@ -325,15 +310,26 @@ class HttpRPC(private val serializer:((Any?) -> String)? = null,
         return urlBuilder.build()
     }
 
+    private fun buildBody(body:Body?): RequestBody {
+        val finalBody= when(body) {
+            is Body.MultiPart   -> buildBodyMulti(body)
+            is Body.FormData    -> buildBodyFormEncoded(body.values)
+            is Body.RawContent  -> RequestBody.create(textType, body.content )
+            is Body.JsonContent -> RequestBody.create(jsonType, body.content )
+            is Body.JsonObject  -> RequestBody.create(jsonType, serializer?.let{ it(body.toString()) } ?: "" )
+            else                -> RequestBody.create(jsonType, serializer?.let{ it(body.toString()) } ?: "" )
+        }
+        return finalBody
+    }
 
-    private fun buildFormEncoded(dataParams: List<Pair<String, String>>): FormBody {
+    private fun buildBodyFormEncoded(dataParams: List<Pair<String, String>>): FormBody {
         val fe = FormBody.Builder()
         dataParams.forEach { fe.add(it.first, it.second) }
         return fe.build()
     }
 
 
-    private fun buildMulti(body:Body.MultiPart): MultipartBody {
+    private fun buildBodyMulti(body:Body.MultiPart): MultipartBody {
         val builder = MultipartBody.Builder().setType(MultipartBody.FORM)
         body.values.forEachIndexed { ndx, part ->
             when(part.second) {
@@ -365,7 +361,6 @@ class HttpRPC(private val serializer:((Any?) -> String)? = null,
         }
     }
 
-
     private fun httpClient():OkHttpClient {
         return when(singletonClient) {
             true  -> client
@@ -374,6 +369,7 @@ class HttpRPC(private val serializer:((Any?) -> String)? = null,
     }
 
     companion object {
+        private val emptyBody: RequestBody by lazy {RequestBody.create(MediaType.parse(slatekit.common.types.ContentTypes.Plain.http), "")}
         private fun build(builder: (() -> OkHttpClient)? = null): OkHttpClient {
             return builder?.invoke() ?: OkHttpClient()
         }

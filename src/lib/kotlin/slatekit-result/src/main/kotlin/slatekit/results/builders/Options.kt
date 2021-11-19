@@ -18,7 +18,7 @@ import slatekit.results.*
  * Builds [Result] with [Failure] error type of [Unit]
  */
 interface OptionsBuilder : Builder<Unit> {
-    override fun errorFromEx(ex: Exception, defaultStatus: Status): Unit = Unit
+    override fun errorFromEx(ex: Throwable, defaultStatus: Status): Unit = Unit
     override fun errorFromStr(msg: String?, defaultStatus: Status): Unit = Unit
     override fun errorFromErr(err: Err, defaultStatus: Status): Unit = Unit
 }
@@ -37,11 +37,11 @@ object Options : OptionsBuilder {
      * Build a Result<T,E> using the supplied callback and error handler
      */
     @JvmStatic
-    inline fun <T> build(f: () -> T, onError: (Exception) -> Failed): Option<T> =
+    inline fun <T> build(f: () -> T, onError: (Throwable) -> Failed): Option<T> =
         try {
             val data = f()
             Success(data)
-        } catch (e: Exception) {
+        } catch (e: Throwable) {
             val status = onError(e)
             Failure(Unit, status)
         }

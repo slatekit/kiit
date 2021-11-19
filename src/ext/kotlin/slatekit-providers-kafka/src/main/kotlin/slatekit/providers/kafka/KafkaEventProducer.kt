@@ -34,6 +34,8 @@ class KafkaEventProducer<TData, TEvent>(
     protected val kconfig  = KafkaConfig.load(config, true)
     protected val kafka = KafkaProducer<String, String>(kconfig.props())
 
+    override val provider: Any = kafka
+
     /**
      * Enforced naming convention for NEW topics ( {name} can not have "-", only "_" ).
      * This ensures the name can be easily split via "-" from the other parts.

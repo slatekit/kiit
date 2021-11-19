@@ -38,6 +38,11 @@ interface Status {
      */
     val desc: String
 
+    /**
+     * Represents success or failure
+     */
+    val success:Boolean
+
     fun copyDesc(msg: String): Status
     fun copyAll(msg: String, code: Int): Status
 
@@ -91,8 +96,8 @@ interface Status {
  * Sum Type to represent the different possible Statuses that can be supplied to the @see[Success]
  */
 sealed class Passed : Status {
-    data class Succeeded (override val name:String, override val code: Int, override val desc: String) : Passed()
-    data class Pending   (override val name:String, override val code: Int, override val desc: String) : Passed()
+    data class Succeeded (override val name:String, override val code: Int, override val desc: String) : Passed() { override val success = true }
+    data class Pending   (override val name:String, override val code: Int, override val desc: String) : Passed() { override val success = true }
 
     override fun copyAll(msg: String, code: Int): Status {
         return when (this) {
@@ -114,11 +119,11 @@ sealed class Passed : Status {
  * Sum Type to represent the different possible Statuses that can be supplied to the @see[Failure]
  */
 sealed class Failed : Status {
-    data class Denied    (override val name:String, override val code: Int, override val desc: String) : Failed() // Security related
-    data class Ignored   (override val name:String, override val code: Int, override val desc: String) : Failed() // Ignored for processing
-    data class Invalid   (override val name:String, override val code: Int, override val desc: String) : Failed() // Bad inputs
-    data class Errored   (override val name:String, override val code: Int, override val desc: String) : Failed() // Expected failures
-    data class Unknown   (override val name:String, override val code: Int, override val desc: String) : Failed() // Unexpected failures
+    data class Denied    (override val name:String, override val code: Int, override val desc: String) : Failed() { override val success = false }// Security related
+    data class Ignored   (override val name:String, override val code: Int, override val desc: String) : Failed() { override val success = false }// Ignored for processing
+    data class Invalid   (override val name:String, override val code: Int, override val desc: String) : Failed() { override val success = false }// Bad inputs
+    data class Errored   (override val name:String, override val code: Int, override val desc: String) : Failed() { override val success = false }// Expected failures
+    data class Unknown   (override val name:String, override val code: Int, override val desc: String) : Failed() { override val success = false }// Unexpected failures
 
 
     override fun copyAll(msg: String, code: Int): Status {

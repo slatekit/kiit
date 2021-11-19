@@ -18,7 +18,7 @@ import slatekit.results.*
  * Builds [Result] with [Failure] error type of [Err]
  */
 interface OutcomeBuilder : Builder<Err> {
-    override fun errorFromEx(ex: Exception, defaultStatus: Status): Err = Err.ex(ex)
+    override fun errorFromEx(ex: Throwable, defaultStatus: Status): Err = Err.ex(ex)
     override fun errorFromStr(msg: String?, defaultStatus: Status): Err = Err.of(msg ?: defaultStatus.desc)
     override fun errorFromErr(err: Err, defaultStatus: Status): Err = err
 }
@@ -38,11 +38,11 @@ object Outcomes : OutcomeBuilder {
      * Build a Result<T,E> using the supplied callback and error handler
      */
     @JvmStatic
-    inline fun <T> build(f: () -> T, onError: (Exception) -> Err): Outcome<T> =
+    inline fun <T> build(f: () -> T, onError: (Throwable) -> Err): Outcome<T> =
         try {
             val data = f()
             Success(data)
-        } catch (e: Exception) {
+        } catch (e: Throwable) {
             Failure(onError(e))
         }
 }

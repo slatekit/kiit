@@ -63,7 +63,7 @@ sealed class Err {
         }
 
         @JvmStatic
-        fun ex(ex: Exception): Err {
+        fun ex(ex: Throwable): Err {
             return ErrorInfo(ex.message ?: "", ex)
         }
 

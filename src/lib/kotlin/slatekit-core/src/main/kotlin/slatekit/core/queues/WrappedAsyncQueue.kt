@@ -31,7 +31,7 @@ class WrappedAsyncQueue<T>(val queue:Queue<T>) : AsyncQueue<T> {
         return queue.done(entry)
     }
 
-    override suspend fun done(entries: List<QueueEntry<T>>?):slatekit.results.Result<String, List<Pair<QueueEntry<T>, Exception>>> {
+    override suspend fun done(entries: List<QueueEntry<T>>?):slatekit.results.Result<String, List<Pair<QueueEntry<T>, Throwable>>> {
         return queue.done(entries)
     }
 

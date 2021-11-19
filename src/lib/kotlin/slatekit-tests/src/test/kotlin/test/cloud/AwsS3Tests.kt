@@ -8,8 +8,11 @@ import slatekit.providers.aws.S3
 import slatekit.common.DateTime
 import slatekit.common.io.Uris
 import slatekit.common.ext.toStringNumeric
+import slatekit.common.ids.ULIDs
 import slatekit.core.common.FileUtils
+import slatekit.core.files.CloudFileEntry
 import slatekit.core.files.CloudFiles
+import slatekit.http.HttpRPC
 import slatekit.results.getOrElse
 import test.TestApp
 import test.setup.TestSupport
@@ -32,31 +35,63 @@ class AwsS3Tests : TestSupport {
                 files.init()
 
                 // Create unique file name "yyyyMMddhhmmss
-                val filename = "file-" + DateTime.now().toStringNumeric()
+                val filename = "file-2021-11-18-22-11-45" //"file-" + DateTime.now().toStringNumeric()
 
                 // 1. Test Create
                 val contentCreate = "version 1 : $filename"
-                files.create(filename, contentCreate)
+                val createResult = files.create(filename, contentCreate)
 
-                // 2. Test binary
+                // 2. Test Create With Atts
+                val fileName2 = "17d362e56eejjpamsr86swnuzyjvva.txt" //"${ULIDs.create()}.txt"
+                val contentCreate2 = "version 2 : $filename"
+                val createResult2 = files.create(
+                        CloudFileEntry(
+                                null,
+                                fileName2,
+                                contentCreate2.toByteArray(),
+                                mapOf("name" to  fileName2, "type" to "data")
+                        )
+                )
+
+                // 3. Test binary
                 val binaryName = "bin-" + DateTime.now().toStringNumeric()
                 val binaryContent = "version 1 : $filename"
                 val binaryBytes = binaryContent.toByteArray()
-                files.create(binaryName, binaryBytes)
-                val actualBytes = files.getAsBytes(binaryName)
-                actualBytes.onSuccess {
-                    val actualContent = String(it)
-                    Assert.assertEquals(binaryContent, actualContent)
+                val updateResult = files.create(binaryName, binaryBytes)
+
+                // 4. Get
+                val actualFileResult = files.getFile(binaryName)
+                val actualTextResult = files.getFileText(binaryName)
+                val actualByteResult = files.getFileBytes(binaryName)
+                Assert.assertTrue(actualFileResult.success)
+                actualFileResult.onSuccess {
+                    Assert.assertEquals(contentCreate, it.text)
+                }
+                Assert.assertTrue(actualTextResult.success)
+                actualTextResult.onSuccess {
+                    Assert.assertEquals(contentCreate, it)
+                }
+                Assert.assertTrue(actualByteResult.success)
+                actualByteResult.onSuccess {
+                    val content = String(it)
+                    Assert.assertEquals(contentCreate, content)
                 }
 
-                // 2. Test update
+                // 6. SignUrl
+                val http = HttpRPC()
+                val url = files.buildSignedGetUrl(null, filename, 180)
+                val httpResult = http.get(url)
+                val content = httpResult.getOrNull()?.body()?.string() ?: ""
+                Assert.assertEquals(contentCreate, content)
+
+                // 5. Test update
                 val contentUpdate = "version 2 : $filename"
                 files.update(filename, contentUpdate)
                 ensureFile(files, filename, contentUpdate)
 
                 // 3. Test delete
                 files.delete(filename)
-                val result = files.getAsText(filename)
+                val result = files.getFileText(filename)
                 Assert.assertTrue(!result.success)
             }
         }
@@ -67,7 +102,7 @@ class AwsS3Tests : TestSupport {
 
         runBlocking {
             // Get text
-            val result1 = files.getAsText(fileName)
+            val result1 = files.getFileText(fileName)
             Assert.assertTrue(result1.success)
             Assert.assertTrue(result1.getOrElse { null } == expectedContent)
 
@@ -81,7 +116,7 @@ class AwsS3Tests : TestSupport {
 
             // Download as
             val newFileName = fileName + "-01"
-            val filePath = Uris.interpret("user://$SLATEKIT_DIR/temp/$newFileName")
+            val filePath = Uris.interpret("usr://$SLATEKIT_DIR/temp/$newFileName")
             val downloadResult2 = files.downloadToFile(fileName, filePath!!)
             val downloadFilePath2 = downloadResult2.getOrElse { null }
             val file = File(downloadFilePath2)
