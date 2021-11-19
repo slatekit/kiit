@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+
+    <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+        <!-- encoders are assigned the type
+             ch.qos.logback.classic.encoder.PatternLayoutEncoder by default -->
+        <encoder>
+            <pattern>%d{HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n</pattern>
+        </encoder>
+    </appender>
+    <appender name="FILE" class="ch.qos.logback.core.FileAppender">
+        <file>/Users/kishorereddy/git/slatekit/test/logback.log</file>
+        <encoder>
+            <pattern>%date %level [%thread] %logger{10} [%file : %line] %msg%n</pattern>
+        </encoder>
+    </appender>
+    <appender name="LOGGLY" class="ch.qos.logback.ext.loggly.LogglyAppender">
+        <endpointUrl>https://logs-01.loggly.com/inputs/2ea79aee-83f3-4c71-bd30-5fa17411d6c6</endpointUrl>
+        <pattern>%d{"ISO8601", UTC}  %p %t %c %M - %m%n</pattern>
+        <flushIntervalInSeconds>2</flushIntervalInSeconds>
+    </appender>
+
+    <appender name="ASYNC" class="ch.qos.logback.classic.AsyncAppender">
+        <appender-ref ref="LOGGLY" />
+    </appender>
+
+
+    <logger name="api" level="warn" additivity="false">
+        <appender-ref ref="ASYNC" />
+    </logger>
+    <logger name="db" level="error" additivity="false">
+        <!--
+        <appender-ref ref="STDOUT" />
+        <appender-ref ref="FILE" />
+        <appender-ref ref="ASYNC" />
+        -->
+        <appender-ref ref="ASYNC" />
+    </logger>
+    <root level="debug">
+        <appender-ref ref="STDOUT" />
+    </root>
+</configuration>
