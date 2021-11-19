@@ -19,7 +19,7 @@ data class LogEntry(
     val name: String = "",
     val level: LogLevel,
     val msg: String = "",
-    val ex: Exception? = null,
+    val ex: Throwable? = null,
     val tag: String? = null,
     val time: DateTime = DateTime.now()
 )

@@ -34,7 +34,7 @@ abstract class Logger(
      * @param ex
      */
     @Ignore
-    fun performLog(level: LogLevel, msg: String?, ex: Exception?) {
+    fun performLog(level: LogLevel, msg: String?, ex: Throwable?) {
         if(level >= this.level) {
             log(LogEntry(name, level, msg ?: "", ex))
         }
