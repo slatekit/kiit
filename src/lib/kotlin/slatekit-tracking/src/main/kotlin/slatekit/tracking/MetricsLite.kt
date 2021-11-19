@@ -35,7 +35,7 @@ class MetricsLite(
     /**
      * The provider of the metrics ( Micrometer for now )
      */
-    override fun provider(): Any = this
+    override val provider: Any = this
 
 
     override fun total(name: String): Double {
