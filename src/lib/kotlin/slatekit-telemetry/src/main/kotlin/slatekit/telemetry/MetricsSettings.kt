@@ -1,4 +1,4 @@
-package slatekit.tracking
+package slatekit.telemetry
 
 data class MetricsSettings(
         val enabled:Boolean,

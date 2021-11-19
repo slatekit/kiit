@@ -1,4 +1,4 @@
-package slatekit.tracking
+package slatekit.telemetry
 
 import slatekit.common.log.Logger
 import slatekit.requests.*

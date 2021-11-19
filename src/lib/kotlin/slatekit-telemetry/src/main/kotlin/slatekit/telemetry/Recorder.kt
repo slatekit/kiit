@@ -1,4 +1,4 @@
-package slatekit.tracking
+package slatekit.telemetry
 
 import slatekit.utils.events.Event
 import slatekit.common.Identity

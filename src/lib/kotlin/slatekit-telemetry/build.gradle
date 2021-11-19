@@ -15,7 +15,7 @@ buildscript {
 plugins {
   id "java"
   id "maven-publish"
-  id "org.jetbrains.kotlin.jvm" version "$kotlin_version"
+  id "org.jetbrains.kotlin.jvm" // version "$kotlin_version"
 }
 
 apply from: '../../../../build/gradle/slatekit-common.gradle'
@@ -64,9 +64,9 @@ dependencies {
 // ==================================================================
 // Slate Kit Component Info
 // ==================================================================
-def slatekitComponentId = 'tracking'
-def slatekitComponentName = 'Tracking'
-def slatekitComponentDesc = 'SlateKit Tracking: Diagnostics, Metrics'
+def slatekitComponentId = 'telemetry'
+def slatekitComponentName = 'Telemetry'
+def slatekitComponentDesc = 'SlateKit Telemetry: Diagnostics, Metrics'
 def slatekitComponentVersion = ext.slatekit_version
 
 // ==================================================================

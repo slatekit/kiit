@@ -1,4 +1,4 @@
-package slatekit.tracking
+package slatekit.telemetry
 
 /**
  * Represents a single tag ( name/value pair ) to associate metrics with

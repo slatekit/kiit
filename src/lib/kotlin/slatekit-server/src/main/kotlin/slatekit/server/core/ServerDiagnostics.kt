@@ -1,8 +1,8 @@
 package slatekit.server.core
 
-import slatekit.tracking.Diagnostics
+import slatekit.telemetry.Diagnostics
 import slatekit.common.log.Logger
-import slatekit.tracking.Metrics
+import slatekit.telemetry.Metrics
 import slatekit.requests.*
 
 /**

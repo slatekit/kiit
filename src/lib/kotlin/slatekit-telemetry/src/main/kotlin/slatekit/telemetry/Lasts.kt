@@ -10,7 +10,7 @@ about: A Kotlin utility library, tool-kit and server backend.
 mantra: Simplicity above all else
 </slate_header>
  */
-package slatekit.tracking
+package slatekit.telemetry
 
 import slatekit.common.Identity
 import slatekit.results.Failure

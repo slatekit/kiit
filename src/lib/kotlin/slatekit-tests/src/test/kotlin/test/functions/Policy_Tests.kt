@@ -7,8 +7,8 @@ import org.junit.Test
 import slatekit.common.Identity
 import slatekit.policy.Policies
 import slatekit.policy.Policy
-import slatekit.tracking.Calls
-import slatekit.tracking.Counters
+import slatekit.telemetry.Calls
+import slatekit.telemetry.Counters
 import slatekit.policy.policies.*
 import slatekit.results.*
 import slatekit.results.builders.Outcomes

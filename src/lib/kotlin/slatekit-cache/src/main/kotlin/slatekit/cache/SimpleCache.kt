@@ -18,7 +18,7 @@ import slatekit.common.log.Logger
 import slatekit.common.utils.Random
 import slatekit.results.Outcome
 import slatekit.results.builders.Outcomes
-import slatekit.tracking.Tracker
+import slatekit.telemetry.Tracker
 
 /**
  * This light-weight implementation of a Cache ( LRU - Least recently used )

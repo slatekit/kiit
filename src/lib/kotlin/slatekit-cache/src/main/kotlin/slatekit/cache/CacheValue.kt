@@ -13,8 +13,8 @@
 
 package slatekit.cache
 
-import slatekit.tracking.Expiry
-import slatekit.tracking.Tracker
+import slatekit.telemetry.Expiry
+import slatekit.telemetry.Tracker
 
 /**
  * Represents a single cache item

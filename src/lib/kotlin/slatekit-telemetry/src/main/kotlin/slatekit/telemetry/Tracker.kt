@@ -1,4 +1,4 @@
-package slatekit.tracking
+package slatekit.telemetry
 
 import slatekit.common.DateTime
 import java.util.concurrent.atomic.AtomicInteger

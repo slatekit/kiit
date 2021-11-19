@@ -1,4 +1,4 @@
-package slatekit.tracking
+package slatekit.telemetry
 
 import org.threeten.bp.Instant
 import org.threeten.bp.ZonedDateTime

@@ -1,4 +1,4 @@
-package slatekit.tracking
+package slatekit.telemetry
 
 import java.util.concurrent.atomic.AtomicReference
 

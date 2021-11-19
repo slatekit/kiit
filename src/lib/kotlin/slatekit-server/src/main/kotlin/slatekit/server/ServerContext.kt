@@ -1,10 +1,10 @@
 package slatekit.server
 
 import slatekit.apis.support.Authenticator
-import slatekit.tracking.Diagnostics
+import slatekit.telemetry.Diagnostics
 import slatekit.common.crypto.Encryptor
 import slatekit.common.log.Logger
-import slatekit.tracking.MetricsLite
+import slatekit.telemetry.MetricsLite
 import slatekit.requests.Request
 import slatekit.serialization.deserializer.Deserializer
 
