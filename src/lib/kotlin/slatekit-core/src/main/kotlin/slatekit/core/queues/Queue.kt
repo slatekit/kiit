@@ -74,7 +74,7 @@ interface Queue<T> {
      * Completes the items ( essentially removing it from the queue )
      * Basically an ack ( acknowledgement )
      */
-    fun done(entries: List<QueueEntry<T>>?): slatekit.results.Result<String, List<Pair<QueueEntry<T>, Exception>>> {
+    fun done(entries: List<QueueEntry<T>>?): slatekit.results.Result<String, List<Pair<QueueEntry<T>, Throwable>>> {
         return completeAllSync(entries) { done(it) }
     }
 

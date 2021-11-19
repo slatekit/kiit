@@ -29,20 +29,20 @@ import slatekit.results.UnexpectedException
 /**
  * Builds [Result] with [Failure] error type of [Exception]
  */
-interface TryBuilder : Builder<Exception> {
-    override fun errorFromEx(ex: Exception, defaultStatus: Status): Exception = ex
-    override fun errorFromStr(msg: String?, defaultStatus: Status): Exception = Exception(msg ?: defaultStatus.desc)
-    override fun errorFromErr(err: Err, defaultStatus: Status): Exception = ExceptionErr(defaultStatus.desc, err)
+interface TryBuilder : Builder<Throwable> {
+    override fun errorFromEx(ex: Throwable, defaultStatus: Status): Throwable = ex
+    override fun errorFromStr(msg: String?, defaultStatus: Status): Throwable = Throwable(msg ?: defaultStatus.desc)
+    override fun errorFromErr(err: Err, defaultStatus: Status): Throwable = ExceptionErr(defaultStatus.desc, err)
 }
 
 /**
- * Builds [Result] with [Failure] error type of [Exception]
+ * Builds [Result] with [Failure] error type of [Throwable]
  */
 object Tries : TryBuilder {
 
     /**
-     * Build a Try<T> ( Result<T,Exception> ) using the supplied callback.
-     * This allows for using throw [Exception] to build the Try
+     * Build a Try<T> ( Result<T,Throwable> ) using the supplied callback.
+     * This allows for using throw [Throwable] to build the Try
      * by getting the appropriate status code out of the defined exception
      */
     @JvmStatic
@@ -60,13 +60,13 @@ object Tries : TryBuilder {
             Tries.errored(e, Status.ofStatus(e.msg, e.status, Codes.ERRORED))
         } catch (e: UnexpectedException) {
             // Theoretically, anything outside of Denied/Ignored/Invalid/Errored
-            // is an unexpected expection ( even a normal [Exception].
+            // is an unexpected expection ( even a normal [Throwable].
             // However, this is here for completeness ( to have exceptions
             // that correspond to the various [Status] groups), and to cover the
             // case when someone wants to explicitly use an UnhandledException
             // or Status group/code
             Tries.unexpected(e, Status.ofStatus(e.message, null, Codes.UNEXPECTED))
-        } catch (e: Exception) {
+        } catch (e: Throwable) {
             Tries.unexpected(e)
         }
 }
