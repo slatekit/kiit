@@ -1,4 +1,4 @@
-package sample
+package slatekit.status
 
 actual class Sample {
     actual fun checkMe() = 12

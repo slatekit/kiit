@@ -1,4 +1,4 @@
-package sample
+package slatekit.status
 
 import kotlin.test.Test
 import kotlin.test.assertTrue

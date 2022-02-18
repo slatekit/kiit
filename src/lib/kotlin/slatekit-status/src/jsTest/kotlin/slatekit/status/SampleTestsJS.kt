@@ -1,11 +1,11 @@
-package sample
+package slatekit.status
 
 import kotlin.test.Test
 import kotlin.test.assertTrue
 
-class SampleTestsNative {
+class SampleTestsJS {
     @Test
     fun testHello() {
-        assertTrue("Native" in hello())
+        assertTrue("JS" in hello())
     }
 }

@@ -1,4 +1,4 @@
-package sample
+package slatekit.status
 
 expect class Sample() {
     fun checkMe(): Int
