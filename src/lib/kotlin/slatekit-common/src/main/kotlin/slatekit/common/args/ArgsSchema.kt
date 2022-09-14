@@ -181,7 +181,7 @@ class ArgsSchema(val items: List<Arg> = listOf(), val builder:ArgsWriter? = null
      *
      * @return
      */
-    private fun maxLengthOfName(): Int = if (items.isEmpty()) 0 else items.maxBy { it.name.length }?.name?.length ?: 0
+    private fun maxLengthOfName(): Int = if (items.isEmpty()) 0 else items.maxByOrNull { it.name.length }?.name ?.length ?: 0
 
 
     companion object {

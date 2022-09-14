@@ -4,7 +4,7 @@ buildscript {
     ext.kotlin_version = '${build.kotlin.version}'
     ext.slatekit_version = "${build.slatekit.version}"
     ext.slatekit_version_beta = "${build.slatekit.version.beta}"
-    ext.ktor_version = '1.1.1'
+    ext.ktor_version = '1.6.8'
 
     repositories {
         jcenter()
@@ -117,7 +117,7 @@ task pack(type: Copy) {
     from file("$buildDir/libs/${APP_NAME}.jar") into file("$APP_DIR_VERSION")
 
     // 5. Procfile for aws
-    // web: java -jar blend-server.jar -env=dev -conf.dir=conf
+    // web: java -jar app-server.jar -env=dev -conf.dir=conf
     def proc = new File("${APP_DIR_VERSION}/Procfile")
     proc.write("web: java -jar ${APP_NAME}.jar -env=dev -conf.dir=conf")
 }
