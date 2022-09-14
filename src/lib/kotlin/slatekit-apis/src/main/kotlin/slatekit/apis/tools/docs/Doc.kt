@@ -142,7 +142,7 @@ abstract class Doc  {
 
             // Actions
             writer.subTitle("ACTIONS", endLine = true)
-            val maxLength = api.actions.items.maxBy { it.name.length }?.name?.length ?: 15
+            val maxLength = api.actions.items.maxByOrNull { it.name.length }?.name?.length ?: 15
             api.actions.items.sortedBy { it.name }.forEach{ buildAction(api, it, maxLength,false)}
             writer.line()
 

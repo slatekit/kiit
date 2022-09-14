@@ -57,7 +57,7 @@ class DocService(val rootdir: String, val outputDir: String, val templatePathRaw
     fun process(): Try<String> {
 
         val keys = docs.map { d -> d.name }.toList()
-        val maxLength = (keys.maxBy { it.length }?.length ?: 0) + 3
+        val maxLength = (keys.maxByOrNull { it.length }?.length ?: 0) + 3
         var pos = 1
         docs.forEach { doc ->
             process(doc, pos, maxLength)
@@ -71,7 +71,7 @@ class DocService(val rootdir: String, val outputDir: String, val templatePathRaw
 
         val docs = docs.filter{ names.contains(it.name) }
         val keys = docs.map { d -> d.name }.toList()
-        val maxLength = (keys.maxBy { it.length }?.length ?: 0) + 3
+        val maxLength = (keys.maxByOrNull { it.length }?.length ?: 0) + 3
         var pos = 1
         docs.forEach { doc ->
             process(doc, pos, maxLength)
@@ -85,7 +85,7 @@ class DocService(val rootdir: String, val outputDir: String, val templatePathRaw
 
         val docs = docs.filter{ it.proj == project }
         val keys = docs.map { d -> d.name }.toList()
-        val maxLength = (keys.maxBy { it.length }?.length ?: 0) + 3
+        val maxLength = (keys.maxByOrNull { it.length }?.length ?: 0) + 3
         var pos = 1
         docs.forEach { doc ->
             process(doc, pos, maxLength)

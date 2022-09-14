@@ -44,7 +44,7 @@ object Serialization {
 
         // Standardize the display of the props
         val maxLen = if (serializer.standardizeWidth) {
-            fields.maxBy { it.name.length }?.name?.length ?: 0
+            fields.maxByOrNull { it.name.length }?.name?.length ?: 0
         } else {
             0
         }
