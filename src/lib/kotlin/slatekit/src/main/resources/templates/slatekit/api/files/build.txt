@@ -117,7 +117,7 @@ task pack(type: Copy) {
     from file("$buildDir/libs/${APP_NAME}.jar") into file("$APP_DIR_VERSION")
 
     // 5. Procfile for aws
-    // web: java -jar blend-server.jar -env=dev -conf.dir=conf
+    // web: java -jar app-server.jar -env=dev -conf.dir=conf
     def proc = new File("${APP_DIR_VERSION}/Procfile")
     proc.write("web: java -jar ${APP_NAME}.jar -env=dev -conf.dir=conf")
 }
