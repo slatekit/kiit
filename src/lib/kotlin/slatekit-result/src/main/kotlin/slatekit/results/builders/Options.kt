@@ -12,7 +12,14 @@
 
 package slatekit.results.builders
 
-import slatekit.results.*
+import slatekit.results.Codes
+import slatekit.results.Err
+import slatekit.results.Failure
+import slatekit.results.Failed
+import slatekit.results.Option
+import slatekit.results.Result
+import slatekit.results.Status
+import slatekit.results.Success
 
 /**
  * Builds [Result] with [Failure] error type of [Unit]

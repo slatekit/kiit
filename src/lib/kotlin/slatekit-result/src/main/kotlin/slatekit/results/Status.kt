@@ -9,15 +9,11 @@
  * about: A Kotlin Tool-Kit for Server + Android
  * </slate_header>
  */
-
 package slatekit.results
-
-
-
 
 /**
  * Interface to represent a Status with both an integer code and description
- * @sample :
+ * @sample:
  * { name: "INVALID"     , code: 400000, msg: "Invalid request" }
  * { name: "UNAUTHORIZED", code: 400001, msg: "Unauthorized"    }
  *
@@ -26,12 +22,12 @@ interface Status {
     /**
      * Used as short user-friendly enum e.g. "INVALID", "UNAUTHORIZED"
      */
-    val name:String
+    val name: String
 
     /**
      * Used as a generic application code that can be converted to other codes such as HTTP.
      */
-    val code:Int
+    val code: Int
 
     /**
      * Description for status
@@ -41,7 +37,7 @@ interface Status {
     /**
      * Represents success or failure
      */
-    val success:Boolean
+    val success: Boolean
 
     fun copyDesc(msg: String): Status
     fun copyAll(msg: String, code: Int): Status
@@ -75,15 +71,15 @@ interface Status {
             return status
         }
 
-        fun toType(status:Status):String {
-            val name:String = when(status) {
+        fun toType(status: Status): String {
+            val name: String = when (status) {
                 is Passed.Succeeded -> "Succeeded"
-                is Passed.Pending   -> "Pending"
-                is Failed.Denied    -> "Denied"
-                is Failed.Ignored   -> "Ignored"
-                is Failed.Invalid   -> "Invalid"
-                is Failed.Errored   -> "Errored"
-                is Failed.Unknown   -> "Unknown"
+                is Passed.Pending -> "Pending"
+                is Failed.Denied -> "Denied"
+                is Failed.Ignored -> "Ignored"
+                is Failed.Invalid -> "Invalid"
+                is Failed.Errored -> "Errored"
+                is Failed.Unknown -> "Unknown"
                 else -> Failed::Unknown.name
             }
             return name
@@ -91,13 +87,17 @@ interface Status {
     }
 }
 
-
 /**
  * Sum Type to represent the different possible Statuses that can be supplied to the @see[Success]
  */
 sealed class Passed : Status {
-    data class Succeeded (override val name:String, override val code: Int, override val desc: String) : Passed() { override val success = true }
-    data class Pending   (override val name:String, override val code: Int, override val desc: String) : Passed() { override val success = true }
+    data class Succeeded(override val name: String, override val code: Int, override val desc: String) : Passed() {
+        override val success = true
+    }
+
+    data class Pending(override val name: String, override val code: Int, override val desc: String) : Passed() {
+        override val success = true
+    }
 
     override fun copyAll(msg: String, code: Int): Status {
         return when (this) {
@@ -114,21 +114,38 @@ sealed class Passed : Status {
     }
 }
 
-
 /**
  * Sum Type to represent the different possible Statuses that can be supplied to the @see[Failure]
  */
 sealed class Failed : Status {
-    data class Denied    (override val name:String, override val code: Int, override val desc: String) : Failed() { override val success = false }// Security related
-    data class Ignored   (override val name:String, override val code: Int, override val desc: String) : Failed() { override val success = false }// Ignored for processing
-    data class Invalid   (override val name:String, override val code: Int, override val desc: String) : Failed() { override val success = false }// Bad inputs
-    data class Errored   (override val name:String, override val code: Int, override val desc: String) : Failed() { override val success = false }// Expected failures
-    data class Unknown   (override val name:String, override val code: Int, override val desc: String) : Failed() { override val success = false }// Unexpected failures
+    // Security related
+    data class Denied(override val name: String, override val code: Int, override val desc: String) : Failed() {
+        override val success = false
+    }
 
+    // Ignored for processing
+    data class Ignored(override val name: String, override val code: Int, override val desc: String) : Failed() {
+        override val success = false
+    }
+
+    // Bad inputs
+    data class Invalid(override val name: String, override val code: Int, override val desc: String) : Failed() {
+        override val success = false
+    }
+
+    // Expected failures
+    data class Errored(override val name: String, override val code: Int, override val desc: String) : Failed() {
+        override val success = false
+    }
+
+    // Unexpected failures
+    data class Unknown(override val name: String, override val code: Int, override val desc: String) : Failed() {
+        override val success = false
+    }
 
     override fun copyAll(msg: String, code: Int): Status {
         return when (this) {
-            is Denied  -> this.copy(name = name, code = code, desc = msg)
+            is Denied -> this.copy(name = name, code = code, desc = msg)
             is Invalid -> this.copy(name = name, code = code, desc = msg)
             is Ignored -> this.copy(name = name, code = code, desc = msg)
             is Errored -> this.copy(name = name, code = code, desc = msg)
@@ -138,7 +155,7 @@ sealed class Failed : Status {
 
     override fun copyDesc(msg: String): Status {
         return when (this) {
-            is Denied  -> this.copy(desc = msg)
+            is Denied -> this.copy(desc = msg)
             is Invalid -> this.copy(desc = msg)
             is Ignored -> this.copy(desc = msg)
             is Errored -> this.copy(desc = msg)
@@ -146,6 +163,3 @@ sealed class Failed : Status {
         }
     }
 }
-
-
-

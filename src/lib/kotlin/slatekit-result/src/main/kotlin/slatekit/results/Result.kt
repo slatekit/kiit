@@ -152,6 +152,7 @@ sealed class Result<out T, out E> {
             f(this.value)
             this
         }
+
         is Failure -> this
     }
 
@@ -304,7 +305,7 @@ sealed class Result<out T, out E> {
 data class Success<out T>(
     val value: T,
     override val status: Passed
-    ) : Result<T, Nothing>() {
+) : Result<T, Nothing>() {
 
     // NOTE: These overloads are here for convenience + Java Interoperability
     /**
@@ -347,11 +348,9 @@ data class Success<out T>(
      */
     constructor(value: T, msg: String?, code: Int?) : this(value, Status.ofCode<Passed>(msg, code, Codes.SUCCESS))
 
-
     companion object {
-        fun <T> pending(value:T, status:Passed.Pending? = null):Success<T> = Success(value, status ?: Codes.PENDING)
+        fun <T> pending(value: T, status: Passed.Pending? = null): Success<T> = Success(value, status ?: Codes.PENDING)
     }
-
 }
 
 /**
@@ -360,7 +359,7 @@ data class Success<out T>(
  * @param error : Error representing the failure
  * @param status : Optional status code as [Status]
  */
-data class Failure<out E> (
+data class Failure<out E>(
     val error: E,
     override val status: Failed
 ) : Result<Nothing, E>() {
@@ -407,13 +406,13 @@ data class Failure<out E> (
     constructor(error: E, msg: String?, code: Int?) : this(error, Status.ofCode<Failed>(msg, code, Codes.ERRORED))
 
     companion object {
-        fun <E> denied    (err: E, status:Failed.Denied     ? = null):Failure<E> = Failure(err, status ?: Codes.DENIED)
-        fun <E> ignored   (err: E, status:Failed.Ignored    ? = null):Failure<E> = Failure(err, status ?: Codes.IGNORED)
-        fun <E> invalid   (err: E, status:Failed.Invalid    ? = null):Failure<E> = Failure(err, status ?: Codes.INVALID)
-        fun <E> errored   (err: E, status:Failed.Errored    ? = null):Failure<E> = Failure(err, status ?: Codes.ERRORED)
-        fun <E> unexpected(err: E, status:Failed.Unknown ? = null):Failure<E> = Failure(err, status ?: Codes.UNEXPECTED)
+        fun <E> denied(err: E, status: Failed.Denied? = null): Failure<E> = Failure(err, status ?: Codes.DENIED)
+        fun <E> ignored(err: E, status: Failed.Ignored? = null): Failure<E> = Failure(err, status ?: Codes.IGNORED)
+        fun <E> invalid(err: E, status: Failed.Invalid? = null): Failure<E> = Failure(err, status ?: Codes.INVALID)
+        fun <E> errored(err: E, status: Failed.Errored? = null): Failure<E> = Failure(err, status ?: Codes.ERRORED)
+        fun <E> unexpected(err: E, status: Failed.Unknown? = null): Failure<E> =
+            Failure(err, status ?: Codes.UNEXPECTED)
     }
-
 }
 
 /**
@@ -470,14 +469,12 @@ inline fun <T, E> Result<T, E>.or(other: (Result<T, E>)): Result<T, E> {
     }
 }
 
-
 @Suppress("NOTHING_TO_INLINE")
-inline fun <T,E> Result<T,E>.and(other:Result<T, E>):Result<T,E> =
-    when(this){
+inline fun <T, E> Result<T, E>.and(other: Result<T, E>): Result<T, E> =
+    when (this) {
         is Success -> other
         is Failure -> this
     }
-
 
 /**
  * Applies supplied function `op` if this is a [Success]. The difference to flatMap / then is that the whole
