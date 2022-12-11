@@ -15,7 +15,7 @@ package slatekit.results
  * Alias for Result<T,E> to avoid collision with the Kotlin Result type
  */
 
-typealias Expect<T,E> = slatekit.results.Result<T,E>
+typealias Expect<T, E> = slatekit.results.Result<T, E>
 
 /**
  * Alias for Result<T,E> defaulting the E error type ( [Failure] branch ) to [Unit]

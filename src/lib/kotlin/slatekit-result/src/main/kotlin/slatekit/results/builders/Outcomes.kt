@@ -12,7 +12,12 @@
 
 package slatekit.results.builders
 
-import slatekit.results.*
+import slatekit.results.Err
+import slatekit.results.Failure
+import slatekit.results.Outcome
+import slatekit.results.Result
+import slatekit.results.Status
+import slatekit.results.Success
 
 /**
  * Builds [Result] with [Failure] error type of [Err]
