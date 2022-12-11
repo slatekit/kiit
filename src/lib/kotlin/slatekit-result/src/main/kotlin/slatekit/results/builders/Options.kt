@@ -14,8 +14,8 @@ package slatekit.results.builders
 
 import slatekit.results.Codes
 import slatekit.results.Err
-import slatekit.results.Failure
 import slatekit.results.Failed
+import slatekit.results.Failure
 import slatekit.results.Option
 import slatekit.results.Result
 import slatekit.results.Status
