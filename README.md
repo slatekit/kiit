@@ -5,16 +5,13 @@
 ![Follow us on twitter](https://img.shields.io/badge/twitter-slatekit-blue.svg)
 <!-- ![Gradle Release](https://github.com/code-helix/slatekit/workflows/Gradle%20Package/badge.svg) -->
 
-![image](media/27-dev.png)
-
-
-# ❓ About
+# ❓ Kiit
 Kiit ( Formerly Slate Kit ) is a modular **Kotlin** framework to build Server and Android apps.
-
 
 # 🗒️ Details
 Kiit is a Kotlin framework, designed to be a simple, light-weight, modular set of libraries and tools to build **Apps, APIs, CLIs, Jobs, Mobile Apps**. It is targetd for **Start-ups, Personal projects, Mobile Apps, and SMBs** ( small-medium sized businesses ). These libraries can be used for both **Server and Android** and there are modules for the server that abstract infrastructure ( Queues, Files, SMS, Emails, Alerts ) with integrations for **AWS** ( SQS, S3 ), Twilio ( SMS ), SendGrid ( Email ), Slack ( Alerts ) and more. Multi-platform support is planned as a future state.
 
+![image](media/27-dev.png)
 
 # ✨ Goals
 num | type | link 
