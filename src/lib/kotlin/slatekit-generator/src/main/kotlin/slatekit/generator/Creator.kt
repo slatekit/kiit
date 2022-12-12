@@ -116,8 +116,8 @@ class Creator(val context: Context, val ctx: GeneratorContext, val template: Tem
                 .replace("\${app.url}", ctx.name)
                 .replace("\${app.company}", ctx.company)
                 .replace("\${app.area}", ctx.area)
-                .replace("\${build.slatekit.version}", ctx.settings.tool.slatekitVersion)
-                .replace("\${build.slatekit.version.beta}", ctx.settings.tool.slatekitVersionBeta)
+                .replace("\${build.kiit.version}", ctx.settings.tool.slatekitVersion)
+                .replace("\${build.kiit.version.beta}", ctx.settings.tool.slatekitVersionBeta)
                 .replace("\${build.kotlin.version}", ctx.settings.build.kotlinVersion)
         return converted
     }

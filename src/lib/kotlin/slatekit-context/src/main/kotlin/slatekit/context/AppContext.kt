@@ -49,7 +49,7 @@ data class AppContext(
                     conf = conf,
                     logs = LogsDefault,
                     info = Info.none,
-                    dirs = Folders.userDir("slatekit", name.toIdent(), name.toIdent())
+                    dirs = Folders.userDir("kiit", name.toIdent(), name.toIdent())
             )
         }
     }

@@ -1,21 +1,21 @@
 #!/bin/bash
 
 # Initialize variables
-SLATEKIT_ROOT=/Users/kishorereddy/git/slatekit
-SLATEKIT_HOME=${SLATEKIT_ROOT}/slatekit
-SLATEKIT_DIST=${SLATEKIT_HOME}/src/lib/kotlin/slatekit/build/distributions
-SLATEKIT_REL=${SLATEKIT_HOME}/src/lib/kotlin/slatekit/build/distributions/slatekit
-SLATEKIT_CLI=${SLATEKIT_ROOT}/slatekit-cli
+KIIT_ROOT=/Users/kishorereddy/git/slatekit
+KIIT_HOME=${KIIT_ROOT}/slatekit
+KIIT_DIST=${KIIT_HOME}/src/lib/kotlin/kiit/build/distributions
+KIIT_REL=${KIIT_HOME}/src/lib/kotlin/kiit/build/distributions/kiit
+KIIT_CLI=${KIIT_ROOT}/kiit-cli
 
 # Unzip 
-#cd $SLATEKIT_DIST
-#unzip ${SLATEKIT_DIST}/slatekit.zip
+#cd $KIIT_DIST
+#unzip ${KIIT_DIST}/slatekit.zip
 
 # Copy bin/lib/templates
-cp $SLATEKIT_REL/bin/slatekit   $SLATEKIT_CLI/slatekit
-cp $SLATEKIT_REL/bin/slatekit.bat   $SLATEKIT_CLI/slatekit.bat
-cp -R $SLATEKIT_REL/lib $SLATEKIT_CLI/
-cp $SLATEKIT_HOME/src/lib/kotlin/slatekit/src/main/resources/*.conf $SLATEKIT_CLI/conf/
-cp -R $SLATEKIT_HOME/src/lib/kotlin/slatekit/src/main/resources/templates $SLATEKIT_CLI/
+cp $KIIT_REL/bin/kiit   $KIIT_CLI/kiit
+cp $KIIT_REL/bin/kiit.bat   $KIIT_CLI/kiit.bat
+cp -R $KIIT_REL/lib $KIIT_CLI/
+cp $KIIT_HOME/src/lib/kotlin/kiit/src/main/resources/*.conf $KIIT_CLI/conf/
+cp -R $KIIT_HOME/src/lib/kotlin/kiit/src/main/resources/templates $KIIT_CLI/
 
 

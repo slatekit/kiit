@@ -1,0 +1,17 @@
+{
+  "name": "app",
+  "description": "Generates a kiit.app console application",
+  "version": "1.28.0",
+  "url": "https://www.slatekit.com",
+  "contact": "https://www.slatekit.com",
+  "keywords": ["slatekit", "app"],
+  "type": "application",
+  "actions": [
+    { "name":"copy", "type": "Code", "source": "/templates/app/Run.txt", "target": "/src/main/kotlin/@app.package/Run.kt" },
+    { "name": "copy", "type": "Code", "source": "/templates/app/App.txt", "target": "/src/main/kotlin/@app.package/App.kt" }
+  ],
+  "dependencies": {
+    "common": "1.0.0",
+    "conf": "1.0.0"
+  }
+}
