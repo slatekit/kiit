@@ -1,0 +1,179 @@
+buildscript {
+    ext.kotlin_version = '1.6.20'
+    ext.slatekit_version = new File('../version.txt').text
+    ext.slatekit_version_beta = new File('../version-beta.txt').text
+
+    repositories {
+        jcenter()
+        mavenCentral()
+    }
+    dependencies {
+        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
+    }
+}
+
+plugins {
+    id "java"
+    id "maven-publish"
+    id "org.jetbrains.kotlin.jvm" version "$kotlin_version"
+}
+
+apply from: '../../../../build/gradle/slatekit-common.gradle'
+apply plugin: 'application'
+
+compileJava {
+    sourceCompatibility = JavaVersion.VERSION_1_8
+    targetCompatibility = JavaVersion.VERSION_1_8
+}
+
+repositories {
+    jcenter()
+    mavenCentral()
+    maven {
+        url "https://maven.pkg.github.com/slatekit/slatekit"
+        credentials {
+            username = System.getenv('SLATEKIT_INSTALL_ACTOR')
+            password = System.getenv('SLATEKIT_INSTALL_TOKEN')
+        }
+    }
+}
+
+ext.slatekitSetupViaBinary = System.getenv('SLATEKIT_PROJECT_MODE') != 'sources'
+
+dependencies {
+    compile "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
+    compile "org.jetbrains.kotlin:kotlin-reflect:$kotlin_version"
+    compile "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin_version"
+    compile 'org.jetbrains.kotlinx:kotlinx-coroutines-core:1.1.0'
+//    compile "mysql:mysql-connector-java:5.1.13"
+//    compile 'com.squareup.okhttp3:okhttp:3.9.0'
+    compile 'org.threeten:threetenbp:1.3.8'
+
+    // /* <slatekit_local>
+    if( slatekitSetupViaBinary ) {
+        implementation "com.slatekit:slatekit-results:$slatekit_version"
+        implementation "com.slatekit:slatekit-common:$slatekit_version"
+        implementation "com.slatekit:slatekit-context:$slatekit_version"
+        implementation "com.slatekit:slatekit-app:$slatekit_version"
+        implementation "com.slatekit:slatekit-meta:$slatekit_version"
+        implementation "com.slatekit:slatekit-policy:$slatekit_version"
+        implementation "com.slatekit:slatekit-serialization:$slatekit_version"
+        implementation "com.slatekit:slatekit-telemetry:$slatekit_version"
+        implementation "com.slatekit:slatekit-apis:$slatekit_version"
+        implementation "com.slatekit:slatekit-generator:$slatekit_version"
+        implementation "com.slatekit:slatekit-cli:$slatekit_version"
+        implementation "com.slatekit:slatekit-connectors-cli:$slatekit_version"
+        implementation "com.slatekit:slatekit-providers-logback:$slatekit_version"
+//        implementation "com.slatekit:slatekit-providers-aws:$slatekit_version"
+//        implementation "com.slatekit:slatekit-providers-datadog:$slatekit_version"
+//        implementation "com.slatekit:slatekit-connectors-entities:$slatekit_version"
+//        implementation "com.slatekit:slatekit-connectors-jobs:$slatekit_version"
+//        implementation "com.slatekit:slatekit-core:$slatekit_version"
+//        implementation "com.slatekit:slatekit-http:$slatekit_version"
+//        implementation "com.slatekit:slatekit-cache:$slatekit_version"
+//        implementation "com.slatekit:slatekit-jobs:$slatekit_version"
+//        implementation "com.slatekit:slatekit-notifications:$slatekit_version"
+//        implementation "com.slatekit:slatekit-cloud:$slatekit_version"
+//        implementation "com.slatekit:slatekit-db:$slatekit_version"
+//        implementation "com.slatekit:slatekit-query:$slatekit_version"
+//        implementation "com.slatekit:slatekit-entities:$slatekit_version"
+//        implementation "com.slatekit:slatekit-orm:$slatekit_version"
+//        implementation "com.slatekit:slatekit-integration:$slatekit_version"
+//        implementation "com.slatekit:slatekit-server:$slatekit_version"
+    } else {
+        // */
+    implementation project(":slatekit-result")
+    implementation project(":slatekit-common")
+    implementation project(":slatekit-utils")
+    implementation project(":slatekit-context")
+    implementation project(":slatekit-app")
+    implementation project(":slatekit-meta")
+    implementation project(":slatekit-policy")
+    implementation project(":slatekit-serialization")
+    implementation project(":slatekit-telemetry")
+    implementation project(":slatekit-requests")
+    implementation project(":slatekit-apis")
+    implementation project(":slatekit-generator")
+    implementation project(":slatekit-cli")
+    implementation project(":slatekit-connectors-cli")
+    implementation project(":slatekit-providers-logback")
+    implementation project(":slatekit-providers-kafka")
+//        implementation project(":slatekit-connectors-entities")
+//        implementation project(":slatekit-connectors-jobs")
+//        implementation project(":slatekit-providers-aws")
+//        implementation project(":slatekit-providers-datadog")
+//        implementation project(":slatekit-core")
+//        implementation project(":slatekit-http")
+//        implementation project(":slatekit-cache")
+//        implementation project(":slatekit-jobs")
+//        implementation project(":slatekit-notifications")
+//        implementation project(":slatekit-cloud")
+//        implementation project(":slatekit-db")
+//        implementation project(":slatekit-query")
+//        implementation project(":slatekit-entities")
+//        implementation project(":slatekit-integration")
+        implementation project(":slatekit-server")
+//        implementation project(":slatekit-samples")
+    } //</slatekit_local>
+//    implementation project(":slatekit-examples")
+//    implementation project(":slatekit-samples")
+//    implementation project(":slatekit-tests")
+}
+
+// ==================================================================
+// Slate Kit Component Info
+// ==================================================================
+def slatekitComponentId = 'exe'
+def slatekitComponentName = 'Exe'
+def slatekitComponentDesc = 'SlateKit Exe: CLI application'
+def slatekitComponentVersion = ext.slatekit_version
+
+// ==================================================================
+// Slate Kit Setup mode: defaults to maven vs loading project sources
+// ==================================================================
+task info {
+    println('slatekit.setup     : ' + System.getenv('SLATEKIT_PROJECT_MODE'))
+    println('slatekit.maven     : ' + slatekitSetupViaBinary)
+    println('slatekit.comp.id   : ' + slatekitComponentId)
+    println('slatekit.comp.name : ' + slatekitComponentName)
+    println('slatekit.comp.desc : ' + slatekitComponentDesc)
+    println('slatekit.comp.vers : ' + slatekitComponentVersion)
+    println()
+    println('project.name       : ' + project.name)
+    println('project.path       : ' + project.path)
+    println('project.desc       : ' + project.description)
+    println('project.projectDir : ' + project.projectDir)
+    println('project.buildDir   : ' + project.buildDir)
+    println()
+    println('build.commit       : ' + gitCommitId())
+    println('build.branch       : ' + gitBranchName())
+    println('build.date         : ' + getBuildDate())
+}
+
+// https://www.anexinet.com/blog/six-ways-to-package-a-java-application-with-gradle/
+// gradle build distZip
+mainClassName = 'kiit.RunKt'
+
+sourceSets {
+    main.java.srcDirs += 'src/main/kotlin/'
+    main {
+        resources {
+            srcDirs = ["src/main/resources"]
+        }
+    }
+}
+
+//jar {
+//    manifest {
+//        attributes(
+//                'Main-Class': 'kiit.RunKt',
+//                "Class-Path": configurations.compile.collect { it.getName() }.join(' ')
+//        )
+//    }
+//}
+
+task copyAllJars(type: Copy) {
+    dependsOn build
+    into "lib"
+    from configurations.runtime
+}

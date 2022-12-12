@@ -14,7 +14,7 @@ class Setup(val cls:Class<*>, val ctx: Context) {
     private val writer = ConsoleWriter()
 
     /**
-     * Creates / Updates the Slate Kit home directory and settings ~/.slatekit/tools/cli/conf/settings.conf
+     * Creates / Updates the Slate Kit home directory and settings ~/.kiit/tools/cli/conf/settings.conf
      * 1. Updates the current version number
      * 2. Updates the path to the templates of the slate kit version installed/upgraded to
      */
@@ -23,7 +23,7 @@ class Setup(val cls:Class<*>, val ctx: Context) {
         ctx.dirs?.create()
 
         // Current version
-        val slatekitVersionCli = ctx.conf.getString(KEY_SLATEKIT_VERSION_CLI)
+        val slatekitVersionCli = ctx.conf.getString(KEY_KIIT_VERSION_CLI)
         val info = SetupInfo(slatekitVersionCli, ctx.info.about)
 
         // Check for ~/.slatekit/tools/cli/conf/settings.conf
@@ -47,14 +47,14 @@ class Setup(val cls:Class<*>, val ctx: Context) {
 
 
     /**
-     * Creates the slatekit home directory and settings
-     * settings: ~/.slatekit/tools/cli/conf/settings.conf
+     * Creates the kiit home directory and settings
+     * settings: ~/.kiit/tools/cli/conf/settings.conf
      */
     private fun create(conf: Conf, info: SetupInfo) {
-        writer.highlight("Creating settings at ~/.slatekit/tools/cli/conf/settings.conf to ${info.slatekitVersion}")
+        writer.highlight("Creating settings at ~/.kiit/tools/cli/conf/settings.conf to ${info.slatekitVersion}")
         val settings = PropSettings(dir = info.confDir.absolutePath, name = info.settingsName)
-        settings.putString(KEY_SLATEKIT_VERSION, conf.getString(KEY_SLATEKIT_VERSION))
-        settings.putString(KEY_SLATEKIT_VERSION_BETA, conf.getString(KEY_SLATEKIT_VERSION_BETA))
+        settings.putString(KEY_KIIT_VERSION, conf.getString(KEY_KIIT_VERSION))
+        settings.putString(KEY_KIIT_VERSION_BETA, conf.getString(KEY_KIIT_VERSION_BETA))
         settings.putString(KEY_KOTLIN_VERSION, conf.getString(KEY_KOTLIN_VERSION))
         settings.putString(KEY_GENERATION_SOURCE, "${info.installLocation}/templates")
         settings.putString(KEY_GENERATION_OUTPUT, "")
@@ -65,7 +65,7 @@ class Setup(val cls:Class<*>, val ctx: Context) {
 
     /**
      * Updates the settings to path to templates of slate kit LATEST version
-     * settings: ~/.slatekit/tools/cli/conf/settings.conf
+     * settings: ~/.kiit/tools/cli/conf/settings.conf
      */
     private fun update(conf: Conf, info: SetupInfo){
         val file = File(info.confDir, info.settingsName)
@@ -73,12 +73,12 @@ class Setup(val cls:Class<*>, val ctx: Context) {
         val settings = PropSettings(raw, dir = info.confDir.absolutePath, name = info.settingsName)
 
         // Only update if different version
-        val current = settings.getString(KEY_SLATEKIT_VERSION)
+        val current = settings.getString(KEY_KIIT_VERSION)
         val custom = settings.getBool(KEY_GENERATION_CUSTOM)
         if(!custom && current != info.slatekitVersion) {
-            writer.highlight("Upgrading settings at ~/.slatekit/tools/cli/conf/settings.conf to ${info.slatekitVersion}")
-            settings.putString(KEY_SLATEKIT_VERSION, conf.getString(KEY_SLATEKIT_VERSION))
-            settings.putString(KEY_SLATEKIT_VERSION_BETA, conf.getString(KEY_SLATEKIT_VERSION_BETA))
+            writer.highlight("Upgrading settings at ~/.kiit/tools/cli/conf/settings.conf to ${info.slatekitVersion}")
+            settings.putString(KEY_KIIT_VERSION, conf.getString(KEY_KIIT_VERSION))
+            settings.putString(KEY_KIIT_VERSION_BETA, conf.getString(KEY_KIIT_VERSION_BETA))
             settings.putString(KEY_KOTLIN_VERSION, conf.getString(KEY_KOTLIN_VERSION))
             settings.putString(KEY_GENERATION_SOURCE, "${info.installLocation}/templates")
             settings.save(desc = "upgrade to ${info.slatekitVersion}")
@@ -89,7 +89,7 @@ class Setup(val cls:Class<*>, val ctx: Context) {
     data class SetupInfo(val slatekitVersion:String, val about: About) {
 
         // For MAC
-        val brewAppLocation = "/usr/local/Cellar/slatekit/${slatekitVersion}"
+        val brewAppLocation = "/usr/local/Cellar/kiit/${slatekitVersion}"
 
         // Build folder structure from {company}/{area}/{name}
         val folders = Folders.userDir(about)
@@ -98,10 +98,10 @@ class Setup(val cls:Class<*>, val ctx: Context) {
         val pathToHOME = folders.pathToApp
 
         // Allow override for HOME DIR
-        val homeLocation = System.getenv("SLATEKIT_TOOLS_CLI_HOME") ?:pathToHOME
+        val homeLocation = System.getenv("KIIT_TOOLS_CLI_HOME") ?:pathToHOME
 
         // Allow override for INSTALL DIR ( for non *nix )
-        val installLocation = System.getenv("SLATEKIT_TOOLS_CLI_HOME") ?: brewAppLocation
+        val installLocation = System.getenv("KIIT_TOOLS_CLI_HOME") ?: brewAppLocation
 
         // Settings file ~/.slatekit/tools/cli/conf/settings.conf
         val settingsName = "settings.conf"
@@ -113,9 +113,9 @@ class Setup(val cls:Class<*>, val ctx: Context) {
 
     companion object {
         const val KEY_KOTLIN_VERSION = "kotlin.version"
-        const val KEY_SLATEKIT_VERSION = "slatekit.version"
-        const val KEY_SLATEKIT_VERSION_BETA = "slatekit.version.beta"
-        const val KEY_SLATEKIT_VERSION_CLI = "slatekit.version.cli"
+        const val KEY_KIIT_VERSION = "kiit.version"
+        const val KEY_KIIT_VERSION_BETA = "kiit.version.beta"
+        const val KEY_KIIT_VERSION_CLI = "kiit.version.cli"
         const val KEY_GENERATION_CUSTOM = "generation.custom"
         const val KEY_GENERATION_SOURCE = "generation.source"
         const val KEY_GENERATION_OUTPUT = "generation.output"

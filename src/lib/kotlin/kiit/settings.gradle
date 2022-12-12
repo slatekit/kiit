@@ -1,0 +1,109 @@
+rootProject.name = 'kiit'
+
+include ':slatekit-result'
+project(':slatekit-result').projectDir=new File('../slatekit-result')
+
+include ':slatekit-actors'
+project(':slatekit-actors').projectDir=new File('../slatekit-actors')
+
+include ':slatekit-common'
+project(':slatekit-common').projectDir=new File('../slatekit-common')
+
+include ':slatekit-utils'
+project(':slatekit-utils').projectDir=new File('../slatekit-utils')
+
+include ':slatekit-context'
+project(':slatekit-context').projectDir=new File('../slatekit-context')
+
+include ':slatekit-app'
+project(':slatekit-app').projectDir=new File('../slatekit-app')
+
+include ':slatekit-cli'
+project(':slatekit-cli').projectDir=new File('../slatekit-cli')
+
+include ':slatekit-db'
+project(':slatekit-db').projectDir=new File('../slatekit-db')
+
+include ':slatekit-query'
+project(':slatekit-query').projectDir=new File('../slatekit-query')
+
+include ':slatekit-meta'
+project(':slatekit-meta').projectDir=new File('../slatekit-meta')
+
+include ':slatekit-data'
+project(':slatekit-data').projectDir=new File('../slatekit-data')
+
+include ':slatekit-entities'
+project(':slatekit-entities').projectDir=new File('../slatekit-entities')
+
+include ':slatekit-migrations'
+project(':slatekit-migrations').projectDir=new File('../slatekit-migrations')
+
+include ':slatekit-http'
+project(':slatekit-http').projectDir=new File('../slatekit-http')
+
+include ':slatekit-core'
+project(':slatekit-core').projectDir=new File('../slatekit-core')
+
+include ':slatekit-policy'
+project(':slatekit-policy').projectDir=new File('../slatekit-policy')
+
+include ':slatekit-cache'
+project(':slatekit-cache').projectDir=new File('../slatekit-cache')
+
+include ':slatekit-requests'
+project(':slatekit-requests').projectDir=new File('../slatekit-requests')
+
+include ':slatekit-apis'
+project(':slatekit-apis').projectDir=new File('../slatekit-apis')
+
+include ':slatekit-generator'
+project(':slatekit-generator').projectDir=new File('../slatekit-generator')
+
+include ':slatekit-integration'
+project(':slatekit-integration').projectDir=new File('../slatekit-integration')
+
+include ':slatekit-notifications'
+project(':slatekit-notifications').projectDir=new File('../slatekit-notifications')
+
+include ':slatekit-server'
+project(':slatekit-server').projectDir=new File('../slatekit-server')
+
+include ':slatekit-jobs'
+project(':slatekit-jobs').projectDir=new File('../slatekit-jobs')
+
+include ':slatekit-serialization'
+project(':slatekit-serialization').projectDir=new File('../slatekit-serialization')
+
+include ':slatekit-telemetry'
+project(':slatekit-telemetry').projectDir=new File('../slatekit-telemetry')
+
+include ':slatekit-providers-aws'
+project(':slatekit-providers-aws').projectDir=new File('../../../ext/kotlin/slatekit-providers-aws')
+
+include ':slatekit-providers-logback'
+project(':slatekit-providers-logback').projectDir=new File('../../../ext/kotlin/slatekit-providers-logback')
+
+include ':slatekit-providers-datadog'
+project(':slatekit-providers-datadog').projectDir=new File('../../../ext/kotlin/slatekit-providers-datadog')
+
+include ':slatekit-providers-kafka'
+project(':slatekit-providers-kafka').projectDir=new File('../../../ext/kotlin/slatekit-providers-kafka')
+
+include ':slatekit-connectors-cli'
+project(':slatekit-connectors-cli').projectDir=new File('../../../ext/kotlin/slatekit-connectors-cli')
+
+include ':slatekit-connectors-entities'
+project(':slatekit-connectors-entities').projectDir=new File('../../../ext/kotlin/slatekit-connectors-entities')
+
+include ':slatekit-connectors-jobs'
+project(':slatekit-connectors-jobs').projectDir=new File('../../../ext/kotlin/slatekit-connectors-jobs')
+
+//include ':slatekit-examples'
+//project(':slatekit-examples').projectDir=new File('../slatekit-examples')
+
+//include ':slatekit-samples'
+//project(':slatekit-samples').projectDir=new File('../../../apps/kotlin/slatekit-samples')
+//
+//include ':slatekit-tests'
+//project(':slatekit-tests').projectDir=new File('../slatekit-tests')
