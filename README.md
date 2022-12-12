@@ -5,7 +5,7 @@
 ![Follow us on twitter](https://img.shields.io/badge/twitter-slatekit-blue.svg)
 <!-- ![Gradle Release](https://github.com/code-helix/slatekit/workflows/Gradle%20Package/badge.svg) -->
 
-![image](media/slatekit-banner.png)
+![image](media/27-dev.png)
 
 
 # ❓ About
