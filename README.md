@@ -9,11 +9,11 @@
 
 
 # ❓ About
-Slate Kit is a modular **Kotlin** framework to build Server and Android apps.
+Kiit ( Formerly Slate Kit ) is a modular **Kotlin** framework to build Server and Android apps.
 
 
 # 🗒️ Details
-Slate Kit is a Kotlin framework, designed to be a simple, light-weight, modular set of libraries and tools to build **Apps, APIs, CLIs, Jobs, Mobile Apps**. It is targetd for **Start-ups, Personal projects, Mobile Apps, and SMBs** ( small-medium sized businesses ). These libraries can be used for both **Server and Android** and there are modules for the server that abstract infrastructure ( Queues, Files, SMS, Emails, Alerts ) with integrations for **AWS** ( SQS, S3 ), Twilio ( SMS ), SendGrid ( Email ), Slack ( Alerts ) and more. Multi-platform support is planned as a future state.
+Kiit is a Kotlin framework, designed to be a simple, light-weight, modular set of libraries and tools to build **Apps, APIs, CLIs, Jobs, Mobile Apps**. It is targetd for **Start-ups, Personal projects, Mobile Apps, and SMBs** ( small-medium sized businesses ). These libraries can be used for both **Server and Android** and there are modules for the server that abstract infrastructure ( Queues, Files, SMS, Emails, Alerts ) with integrations for **AWS** ( SQS, S3 ), Twilio ( SMS ), SendGrid ( Email ), Slack ( Alerts ) and more. Multi-platform support is planned as a future state.
 
 
 # ✨ Goals
@@ -30,18 +30,18 @@ num | type | link
 9 | **Defaults** |  Sensible default implementations, currently support AWS
 
 # 🏁 Start
-You can quickly get started on **Mac OS** using the **Homebrew** installer and create projects using the Slate Kit CLI. Refer to https://www.slatekit.com/start/generators/ for more info.
+You can quickly get started on **Mac OS** using the **Homebrew** installer and create projects using the Kiit CLI. Refer to https://www.slatekit.com/start/generators/ for more info.
 ```bash
-brew tap slatekit/slatekit
+brew tap slatekit/kiit
 
 # NOTE: Install may take a long time on Mac (Catalina) due to issues noted below
-brew install slatekit
+brew install kiit
 
-slatekit new app -name="MyApp1" -package="company1.apps"
-slatekit new api -name="MyAPI1" -package="company1.apis"
-slatekit new job -name="MyJob1" -package="company1.jobs"
-slatekit new env -name="MyApp2" -package="company1.apps"
-slatekit new cli -name="MyCLI1" -package="company1.apps"
+kiit new app -name="MyApp1" -package="company1.apps"
+kiit new api -name="MyAPI1" -package="company1.apis"
+kiit new job -name="MyJob1" -package="company1.jobs"
+kiit new env -name="MyApp2" -package="company1.apps"
+kiit new cli -name="MyCLI1" -package="company1.apps"
 ```
 
 ### Notes
@@ -59,7 +59,7 @@ repositories {
     jcenter()
     mavenCentral()
     maven {
-        url "https://maven.pkg.github.com/slatekit/slatekit"
+        url "https://maven.pkg.github.com/slatekit/kiit"
 	// Your GitHub user name + personal access token
         credentials {
             username = System.getenv('GITHUB_PACKAGES_INSTALL_ACTOR')
@@ -92,7 +92,7 @@ num | type | link
 10  | packages    | https://github.com/orgs/slatekit/packages?repo_name=slatekit
 
 # 🧰 Tools
-These are the vendors and tools we currently use to build and maintain Slate Kit
+These are the vendors and tools we currently use to build and maintain Kiit
 
 Name | Type | Notes
 ----|------|-------
@@ -103,7 +103,7 @@ Name | Type | Notes
 
 
 # ⚙️ Modules
-Slate Kit contains many useful architecture components, utilities and applications features. Many of the modules are organized into logical groups and the entire design can be visualized in this diagram
+Kiit contains many useful architecture components, utilities and applications features. Many of the modules are organized into logical groups and the entire design can be visualized in this diagram
 
 ![image](doc/diagrams/slatekit-overview.png)
 
@@ -142,10 +142,6 @@ Providers                                                              | --     
 4. Kotlin Multi-Platform
 5. Code Generators and OpenAPI integrations
 6. Docker, Kubernetes build scripts
-7. Slate Kit MBaaS ( Mobile Backend as a Service )
-
-# ⚙️ MBaaS
-We are working on an Slate Kit based **MBaaS** ( Mobile Backend as a Service ) that cane be **self-hosted or cloud deployed.** This is meant to be an alternative to **Google Firebase**, with default integration with AWS for things like Files(S3), Queues(SQS), Docs(DynamoDB), and support for sending emails, sms, notifications and many more features. 
 
 
 # ✉️ Contact
@@ -155,5 +151,5 @@ We are working on an Slate Kit based **MBaaS** ( Mobile Backend as a Service ) t
 - **email**: kishore  codehelix.co
 
 # ❤️ Like Us ? 
-- Support Slate Kit by clicking the :star: button on the upper right of this page. :v:
+- Support Kiit by clicking the :star: button on the upper right of this page. :v:
 - Contribute to continued development via Sponsorship ( being set up soon )
