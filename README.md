@@ -78,11 +78,11 @@ Some important links / pages for more info.
 num | type | link 
 ----| ------------ | ------------ 
 1   | website     | www.kiit.dev                            
-2   | start       | www.kiit.dev /start/hello_world           
-3   | modules     | https://www.slatekit.com/arch/overview/             
-4   | releases    | https://github.com/slatekit/kit/releases 
-5   | issues      | https://github.com/slatekit/kit/issues   
-6   | discuss     | https://github.com/slatekit/kit/discussions   
+2   | start       | www.kiit.dev/start           
+3   | modules     | https://www.kiit.dev/arch/overview/             
+4   | releases    | https://github.com/slatekit/kiit/releases 
+5   | issues      | https://github.com/slatekit/kiit/issues   
+6   | discuss     | https://github.com/slatekit/kiit/discussions   
 7   | license     | http://www.kiit.dev/more/license           
 8   | utilities   | http://www.kiit.dev/utils/overview          
 9   | standards   | http://www.kiit.dev/more/standards  
