@@ -78,26 +78,26 @@ project(':slatekit-serialization').projectDir=new File('../slatekit-serializatio
 include ':slatekit-telemetry'
 project(':slatekit-telemetry').projectDir=new File('../slatekit-telemetry')
 
-include ':slatekit-providers-aws'
-project(':slatekit-providers-aws').projectDir=new File('../../../ext/kotlin/slatekit-providers-aws')
+include ':providers-aws'
+project(':providers-aws').projectDir=new File('../../../providers/providers-aws')
 
-include ':slatekit-providers-logback'
-project(':slatekit-providers-logback').projectDir=new File('../../../ext/kotlin/slatekit-providers-logback')
+include ':providers-logback'
+project(':providers-logback').projectDir=new File('../../../providers/providers-logback')
 
-include ':slatekit-providers-datadog'
-project(':slatekit-providers-datadog').projectDir=new File('../../../ext/kotlin/slatekit-providers-datadog')
+include ':providers-datadog'
+project(':providers-datadog').projectDir=new File('../../../providers/providers-datadog')
 
-include ':slatekit-providers-kafka'
-project(':slatekit-providers-kafka').projectDir=new File('../../../ext/kotlin/slatekit-providers-kafka')
+include ':providers-kafka'
+project(':providers-kafka').projectDir=new File('../../../providers/providers-kafka')
 
-include ':slatekit-connectors-cli'
-project(':slatekit-connectors-cli').projectDir=new File('../../../ext/kotlin/slatekit-connectors-cli')
+include ':connectors-cli'
+project(':connectors-cli').projectDir=new File('../../../connectors/connectors-cli')
 
-include ':slatekit-connectors-entities'
-project(':slatekit-connectors-entities').projectDir=new File('../../../ext/kotlin/slatekit-connectors-entities')
+include ':connectors-entities'
+project(':connectors-entities').projectDir=new File('../../../connectors/connectors-entities')
 
-include ':slatekit-connectors-jobs'
-project(':slatekit-connectors-jobs').projectDir=new File('../../../ext/kotlin/slatekit-connectors-jobs')
+include ':connectors-jobs'
+project(':connectors-jobs').projectDir=new File('../../../connectors/connectors-jobs')
 
 //include ':slatekit-examples'
 //project(':slatekit-examples').projectDir=new File('../slatekit-examples')

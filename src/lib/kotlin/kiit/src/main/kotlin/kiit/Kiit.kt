@@ -13,7 +13,7 @@ import slatekit.common.info.About
 import slatekit.common.info.ApiKey
 import slatekit.common.info.Folders
 import slatekit.common.log.Logger
-import slatekit.connectors.cli.CliApi
+import kiit.connectors.cli.CliApi
 import slatekit.generator.Help
 import slatekit.generator.Setup
 import slatekit.results.Success

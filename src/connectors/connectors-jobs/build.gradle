@@ -18,7 +18,7 @@ plugins {
     id "org.jetbrains.kotlin.jvm" version "$kotlin_version"
 }
 
-apply from: '../../../../build/gradle/slatekit-common.gradle'
+apply from: '../../../build/gradle/slatekit-common.gradle'
 
 compileJava {
     sourceCompatibility = JavaVersion.VERSION_1_8
@@ -40,59 +40,49 @@ repositories {
 ext.slatekitSetupViaBinary = System.getenv('SLATEKIT_PROJECT_MODE') != 'sources'
 
 dependencies {
+
+    //compile group: 'org.slf4j'     , name: 'slf4j-api', version: '1.7.7'
+    compile group: 'ch.qos.logback', name: 'logback-classic', version: '1.1.2'
+    compile group: 'ch.qos.logback', name: 'logback-core'   , version: '1.1.2'
+    compile group: 'org.logback-extensions', name: 'logback-ext-loggly'   , version: '0.1.2'
+
+
     compile "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
-    compile "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin_version"
     compile "org.jetbrains.kotlin:kotlin-reflect:$kotlin_version"
-    compile 'org.jetbrains.kotlinx:kotlinx-coroutines-core:1.1.0'
-    compile "com.googlecode.json-simple:json-simple:1.1"
-    compile 'com.squareup.okhttp3:okhttp:3.9.0'
+    compile "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin_version"
     compile 'org.threeten:threetenbp:1.3.8'
 
     // /* <slatekit_local>
     if( slatekitSetupViaBinary ) {
         compile "com.slatekit:slatekit-results:$slatekit_version"
         compile "com.slatekit:slatekit-common:$slatekit_version"
-        compile "com.slatekit:slatekit-context:$slatekit_version"
-        compile "com.slatekit:slatekit-requests:$slatekit_version"
-        compile "com.slatekit:slatekit-meta:$slatekit_version"
-        compile "com.slatekit:slatekit-query:$slatekit_version"
-        compile "com.slatekit:slatekit-cli:$slatekit_version"
-        compile "com.slatekit:slatekit-entities:$slatekit_version"
+        compile "com.slatekit:slatekit-actors:$slatekit_version"
         compile "com.slatekit:slatekit-core:$slatekit_version"
+        compile "com.slatekit:slatekit-context:$slatekit_version"
         compile "com.slatekit:slatekit-apis:$slatekit_version"
         compile "com.slatekit:slatekit-jobs:$slatekit_version"
-        compile "com.slatekit:slatekit-policy:$slatekit_version"
-        compile "com.slatekit:slatekit-cache:$slatekit_version"
-        compile "com.slatekit:slatekit-migrations:$slatekit_version"
-        compile "com.slatekit:slatekit-notifications:$slatekit_version"
         compile "com.slatekit:connectors-entities:$slatekit_version"
+        compile "com.slatekit:providers-aws:$slatekit_version"
     } else {
         // */
     compile project(":slatekit-result")
     compile project(":slatekit-common")
-    compile project(":slatekit-context")
-    compile project(":slatekit-requests")
-    compile project(":slatekit-meta")
-    compile project(":slatekit-query")
-    compile project(":slatekit-cli")
-    compile project(":slatekit-entities")
+    compile project(":slatekit-actors")
     compile project(":slatekit-core")
-    compile project(":slatekit-policy")
-    compile project(":slatekit-cache")
+    compile project(":slatekit-context")
     compile project(":slatekit-apis")
     compile project(":slatekit-jobs")
-    compile project(":slatekit-migrations")
-    compile project(":slatekit-notifications")
     compile project(":connectors-entities")
+    compile project(":providers-aws")
     } //</slatekit_local>
 }
 
 // ==================================================================
 // Slate Kit Component Info
 // ==================================================================
-def slatekitComponentId = 'integration'
-def slatekitComponentName = 'Integration'
-def slatekitComponentDesc = 'SlateKit Integration: Integrates 2 or more slatekit components'
+def slatekitComponentId = 'connectors-jobs'
+def slatekitComponentName = 'Connectors Jobs'
+def slatekitComponentDesc = 'SlateKit Connectors: Connects the Jobs, APIs Core, modules'
 def slatekitComponentVersion = ext.slatekit_version
 
 
@@ -133,8 +123,8 @@ publishing {
     publications {
         gpr(MavenPublication) {
             from(components.java)
-            groupId 'com.slatekit'
-            artifactId "slatekit-${slatekitComponentId}"
+            groupId 'dev.kiit'
+            artifactId "${slatekitComponentId}"
             version "${slatekitComponentVersion}"
         }
     }

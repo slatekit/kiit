@@ -53,8 +53,8 @@ dependencies {
     compile "com.slatekit:slatekit-app:$slatekit_version"
     compile "com.slatekit:slatekit-cli:$slatekit_version"
     compile "com.slatekit:slatekit-apis:$slatekit_version"
-    compile "com.slatekit:slatekit-providers-logback:$slatekit_version"
-    compile "com.slatekit:slatekit-connectors-cli:$slatekit_version"
+    compile "com.slatekit:providers-logback:$slatekit_version"
+    compile "com.slatekit:connectors-cli:$slatekit_version"
 }
 
 
