@@ -62,12 +62,12 @@ dependencies {
         implementation "com.slatekit:slatekit-apis:$slatekit_version"
         implementation "com.slatekit:slatekit-generator:$slatekit_version"
         implementation "com.slatekit:slatekit-cli:$slatekit_version"
-        implementation "com.slatekit:slatekit-connectors-cli:$slatekit_version"
-        implementation "com.slatekit:slatekit-providers-logback:$slatekit_version"
-//        implementation "com.slatekit:slatekit-providers-aws:$slatekit_version"
-//        implementation "com.slatekit:slatekit-providers-datadog:$slatekit_version"
-//        implementation "com.slatekit:slatekit-connectors-entities:$slatekit_version"
-//        implementation "com.slatekit:slatekit-connectors-jobs:$slatekit_version"
+        implementation "com.slatekit:connectors-cli:$slatekit_version"
+        implementation "com.slatekit:providers-logback:$slatekit_version"
+//        implementation "com.slatekit:providers-aws:$slatekit_version"
+//        implementation "com.slatekit:providers-datadog:$slatekit_version"
+//        implementation "com.slatekit:connectors-entities:$slatekit_version"
+//        implementation "com.slatekit:connectors-jobs:$slatekit_version"
 //        implementation "com.slatekit:slatekit-core:$slatekit_version"
 //        implementation "com.slatekit:slatekit-http:$slatekit_version"
 //        implementation "com.slatekit:slatekit-cache:$slatekit_version"
@@ -95,13 +95,13 @@ dependencies {
     implementation project(":slatekit-apis")
     implementation project(":slatekit-generator")
     implementation project(":slatekit-cli")
-    implementation project(":slatekit-connectors-cli")
-    implementation project(":slatekit-providers-logback")
-    implementation project(":slatekit-providers-kafka")
-//        implementation project(":slatekit-connectors-entities")
-//        implementation project(":slatekit-connectors-jobs")
-//        implementation project(":slatekit-providers-aws")
-//        implementation project(":slatekit-providers-datadog")
+    implementation project(":connectors-cli")
+    implementation project(":providers-logback")
+    implementation project(":providers-kafka")
+//        implementation project(":connectors-entities")
+//        implementation project(":connectors-jobs")
+//        implementation project(":providers-aws")
+//        implementation project(":providers-datadog")
 //        implementation project(":slatekit-core")
 //        implementation project(":slatekit-http")
 //        implementation project(":slatekit-cache")

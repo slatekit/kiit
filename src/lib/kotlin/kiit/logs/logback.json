@@ -1,0 +1,1 @@
+{"timestamp":"2021-03-24T03:05:50.095Z","level":"WARN","thread":"main","logger":"app","message":"test warn : a=1, b=true, c=kotlin, d=2021-03-23T23:05:50.093-04:00[America/New_York]","context":"default"}
