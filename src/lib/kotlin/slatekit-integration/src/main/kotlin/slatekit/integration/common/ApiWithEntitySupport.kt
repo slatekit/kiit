@@ -13,7 +13,7 @@
 
 package slatekit.integration.common
 
-import slatekit.apis.Action
+import kiit.apis.Action
 import slatekit.common.Ignore
 import slatekit.entities.Entities
 import slatekit.entities.Entity

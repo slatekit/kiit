@@ -6,9 +6,9 @@ import slatekit.common.Identity
 import slatekit.common.args.Args
 import slatekit.core.queues.AsyncQueue
 import slatekit.core.queues.InMemoryQueue
-import slatekit.connectors.jobs.JobQueue
-import slatekit.jobs.Manager
-import slatekit.jobs.Priority
+import kiit.connectors.jobs.JobQueue
+import kiit.jobs.Manager
+import kiit.jobs.Priority
 import slatekit.results.Failure
 import slatekit.results.Success
 

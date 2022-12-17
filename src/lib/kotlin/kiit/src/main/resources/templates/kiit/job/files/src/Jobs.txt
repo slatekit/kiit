@@ -3,9 +3,9 @@ package ${app.package}
 
 import slatekit.common.Identity
 import slatekit.actors.Status
-import slatekit.jobs.WResult
-import slatekit.jobs.Task
-import slatekit.jobs.Worker
+import kiit.jobs.WResult
+import kiit.jobs.Task
+import kiit.jobs.Worker
 import java.util.concurrent.atomic.AtomicInteger
 
 // Sample User model

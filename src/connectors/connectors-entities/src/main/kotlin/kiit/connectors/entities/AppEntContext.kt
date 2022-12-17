@@ -11,7 +11,7 @@
  * </slate_header>
  */
 
-package slatekit.connectors.entities
+package kiit.connectors.entities
 
 import slatekit.common.Identity
 import slatekit.common.args.Args

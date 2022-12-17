@@ -13,11 +13,11 @@
 
 package slatekit.integration.common
 
-import slatekit.apis.ApiBase
+import kiit.apis.ApiBase
 import slatekit.entities.Entities
 import slatekit.entities.Entity
 import slatekit.entities.EntityService
-import slatekit.connectors.entities.AppEntContext
+import kiit.connectors.entities.AppEntContext
 import kotlin.reflect.KClass
 
 /**

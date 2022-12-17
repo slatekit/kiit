@@ -54,14 +54,14 @@ dependencies {
         implementation "com.slatekit:slatekit-results:$slatekit_version"
         implementation "com.slatekit:slatekit-common:$slatekit_version"
         implementation "com.slatekit:slatekit-context:$slatekit_version"
-        implementation "com.slatekit:slatekit-app:$slatekit_version"
+        implementation "com.slatekit:kiit-app:$slatekit_version"
         implementation "com.slatekit:slatekit-meta:$slatekit_version"
         implementation "com.slatekit:slatekit-policy:$slatekit_version"
         implementation "com.slatekit:slatekit-serialization:$slatekit_version"
         implementation "com.slatekit:slatekit-telemetry:$slatekit_version"
-        implementation "com.slatekit:slatekit-apis:$slatekit_version"
+        implementation "com.slatekit:kiit-apis:$slatekit_version"
         implementation "com.slatekit:slatekit-generator:$slatekit_version"
-        implementation "com.slatekit:slatekit-cli:$slatekit_version"
+        implementation "com.slatekit:kiit-cli:$slatekit_version"
         implementation "com.slatekit:connectors-cli:$slatekit_version"
         implementation "com.slatekit:providers-logback:$slatekit_version"
 //        implementation "com.slatekit:providers-aws:$slatekit_version"
@@ -71,7 +71,7 @@ dependencies {
 //        implementation "com.slatekit:slatekit-core:$slatekit_version"
 //        implementation "com.slatekit:slatekit-http:$slatekit_version"
 //        implementation "com.slatekit:slatekit-cache:$slatekit_version"
-//        implementation "com.slatekit:slatekit-jobs:$slatekit_version"
+//        implementation "com.slatekit:kiit-jobs:$slatekit_version"
 //        implementation "com.slatekit:slatekit-notifications:$slatekit_version"
 //        implementation "com.slatekit:slatekit-cloud:$slatekit_version"
 //        implementation "com.slatekit:slatekit-db:$slatekit_version"
@@ -79,22 +79,22 @@ dependencies {
 //        implementation "com.slatekit:slatekit-entities:$slatekit_version"
 //        implementation "com.slatekit:slatekit-orm:$slatekit_version"
 //        implementation "com.slatekit:slatekit-integration:$slatekit_version"
-//        implementation "com.slatekit:slatekit-server:$slatekit_version"
+//        implementation "com.slatekit:kiit-server:$slatekit_version"
     } else {
         // */
     implementation project(":slatekit-result")
     implementation project(":slatekit-common")
     implementation project(":slatekit-utils")
     implementation project(":slatekit-context")
-    implementation project(":slatekit-app")
+    implementation project(":kiit-app")
     implementation project(":slatekit-meta")
     implementation project(":slatekit-policy")
     implementation project(":slatekit-serialization")
     implementation project(":slatekit-telemetry")
     implementation project(":slatekit-requests")
-    implementation project(":slatekit-apis")
+    implementation project(":kiit-apis")
     implementation project(":slatekit-generator")
-    implementation project(":slatekit-cli")
+    implementation project(":kiit-cli")
     implementation project(":connectors-cli")
     implementation project(":providers-logback")
     implementation project(":providers-kafka")
@@ -105,14 +105,14 @@ dependencies {
 //        implementation project(":slatekit-core")
 //        implementation project(":slatekit-http")
 //        implementation project(":slatekit-cache")
-//        implementation project(":slatekit-jobs")
+//        implementation project(":kiit-jobs")
 //        implementation project(":slatekit-notifications")
 //        implementation project(":slatekit-cloud")
 //        implementation project(":slatekit-db")
 //        implementation project(":slatekit-query")
 //        implementation project(":slatekit-entities")
 //        implementation project(":slatekit-integration")
-        implementation project(":slatekit-server")
+        implementation project(":kiit-server")
 //        implementation project(":slatekit-samples")
     } //</slatekit_local>
 //    implementation project(":slatekit-examples")

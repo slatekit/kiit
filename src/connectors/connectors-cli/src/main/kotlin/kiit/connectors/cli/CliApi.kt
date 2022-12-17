@@ -13,10 +13,10 @@
 
 package kiit.connectors.cli
 
-import slatekit.apis.ApiServer
-import slatekit.apis.routes.Api
-import slatekit.apis.core.Part
-import slatekit.cli.*
+import kiit.apis.ApiServer
+import kiit.apis.routes.Api
+import kiit.apis.core.Part
+import kiit.cli.*
 import slatekit.common.Source
 import slatekit.common.types.Content
 import slatekit.common.types.ContentType
@@ -49,7 +49,7 @@ import slatekit.results.Try
  */
 open class CliApi(
         val ctx: Context,
-        val auth: slatekit.apis.core.Auth,
+        val auth: kiit.apis.core.Auth,
         settings: CliSettings = CliSettings(),
         apiItems: List<Api> = listOf(),
         serializer:(Any?, ContentType) -> Content,

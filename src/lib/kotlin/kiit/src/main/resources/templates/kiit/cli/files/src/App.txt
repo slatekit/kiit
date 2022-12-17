@@ -1,7 +1,7 @@
 package ${app.package}
 
-import slatekit.app.App
-import slatekit.app.AppOptions
+import kiit.app.App
+import kiit.app.AppOptions
 import slatekit.context.Context
 import slatekit.common.args.ArgsSchema
 import slatekit.common.convert.B64Java8

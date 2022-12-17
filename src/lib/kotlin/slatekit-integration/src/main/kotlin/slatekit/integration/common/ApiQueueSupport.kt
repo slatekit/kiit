@@ -1,10 +1,10 @@
 package slatekit.integration.common
 
-import slatekit.apis.ApiRequest
-import slatekit.apis.ApiResult
-import slatekit.apis.Middleware
-import slatekit.apis.core.Reqs
-import slatekit.apis.support.QueueSupport
+import kiit.apis.ApiRequest
+import kiit.apis.ApiResult
+import kiit.apis.Middleware
+import kiit.apis.core.Reqs
+import kiit.apis.support.QueueSupport
 import slatekit.common.Source
 import slatekit.common.utils.Random
 import slatekit.core.queues.AsyncQueue
@@ -36,7 +36,7 @@ interface ApiQueueSupport : QueueSupport, Middleware{
     /**
      * Creates a request from the parameters and api info and serializes that as json
      * and submits it to a random queue.
-     * This is designed to work with slatekit.jobs
+     * This is designed to work with kiit.jobs
      *  @param id       = "ABC123",
      *  @param name     = "users.sendWelcomeEmail",
      *  @param data     = "JSON data...",

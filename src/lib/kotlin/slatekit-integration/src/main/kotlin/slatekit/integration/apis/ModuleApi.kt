@@ -13,10 +13,10 @@
 package slatekit.integration.apis
 
 import slatekit.integration.mods.Module
-import slatekit.apis.Api
-import slatekit.apis.Action
-import slatekit.apis.AuthModes
-import slatekit.apis.Verbs
+import kiit.apis.Api
+import kiit.apis.Action
+import kiit.apis.AuthModes
+import kiit.apis.Verbs
 import slatekit.common.*
 import slatekit.common.crypto.Encryptor
 import slatekit.common.log.Logger
@@ -41,7 +41,7 @@ import slatekit.results.Try
  */
 @Api(area = "setup", name = "modules", desc = "management of system modules",
         auth = AuthModes.KEYED, roles = ["admin"], verb = Verbs.AUTO, sources = [Sources.ALL])
-class ModuleApi(val ctx: slatekit.integration.mods.ModuleContext, override val context: Context) : slatekit.apis.support.FileSupport {
+class ModuleApi(val ctx: slatekit.integration.mods.ModuleContext, override val context: Context) : kiit.apis.support.FileSupport {
 
     override val encryptor: Encryptor? = context.enc
     override val logger: Logger? = context.logs.getLogger()

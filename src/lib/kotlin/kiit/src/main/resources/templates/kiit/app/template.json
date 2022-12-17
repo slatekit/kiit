@@ -1,6 +1,6 @@
 {
   "name": "app",
-  "description": "Generates a slatekit.app console application",
+  "description": "Generates a kiit.app console application",
   "version": "1.28.0",
   "url": "https://www.slatekit.com",
   "contact": "https://www.slatekit.com",

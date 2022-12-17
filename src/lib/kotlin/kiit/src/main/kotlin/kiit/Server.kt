@@ -7,9 +7,9 @@ import io.ktor.routing.get
 import io.ktor.routing.routing
 import io.ktor.server.engine.embeddedServer
 import io.ktor.server.netty.Netty
-import slatekit.apis.*
-import slatekit.apis.core.Auth
-import slatekit.apis.routes.Api
+import kiit.apis.*
+import kiit.apis.core.Auth
+import kiit.apis.routes.Api
 
 // Slate Kit - Common Utilities
 import slatekit.common.*
@@ -23,9 +23,9 @@ import slatekit.context.Context
 import slatekit.core.common.FileUtils
 
 // Slate Kit - Server ( Ktor support )
-import slatekit.server.ServerSettings
-import slatekit.server.ktor.KtorHandler
-import slatekit.server.ktor.KtorResponse
+import kiit.server.ServerSettings
+import kiit.server.ktor.KtorHandler
+import kiit.server.ktor.KtorResponse
 import java.io.File
 
 
@@ -108,7 +108,7 @@ class Server(val ctx: Context)  {
 
 
 
-@slatekit.apis.Api(area = "samples", name = "files", desc = "sample api to test other features")
+@kiit.apis.Api(area = "samples", name = "files", desc = "sample api to test other features")
 class SampleFiles3Api {
 
     val sampleCSV = "user1,u1@a.com,true,1234\r\nuser2,u2@a.com,true,1234"

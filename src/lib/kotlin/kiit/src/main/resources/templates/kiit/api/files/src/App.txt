@@ -8,8 +8,8 @@ import slatekit.common.info.*
 import slatekit.results.*
 
 // Slate Kit - App ( provides args, help, life-cycle methods, etc )
-import slatekit.app.App
-import slatekit.app.AppOptions
+import kiit.app.App
+import kiit.app.AppOptions
 import slatekit.common.convert.B64Java8
 import slatekit.context.Context
 

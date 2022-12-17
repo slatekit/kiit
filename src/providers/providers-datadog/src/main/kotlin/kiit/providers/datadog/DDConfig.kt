@@ -1,4 +1,4 @@
-package slatekit.providers.datadog
+package kiit.providers.datadog
 
 import io.micrometer.datadog.DatadogConfig
 import java.time.*

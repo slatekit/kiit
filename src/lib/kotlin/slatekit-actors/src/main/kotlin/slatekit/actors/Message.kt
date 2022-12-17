@@ -37,7 +37,7 @@ class Content<T>(override val id:Long, val data: T, override val reference: Stri
 
 /**
  * Used for actors that can load payloads them selves
- * NOTE: This is for usage in slatekit.jobs
+ * NOTE: This is for usage in kiit.jobs
  */
 class Request<T>(override val id:Long, override val reference: String = NONE) : Message<T>()
 

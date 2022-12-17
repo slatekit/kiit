@@ -1,4 +1,4 @@
-package slatekit.providers.kafka
+package kiit.providers.kafka
 
 import slatekit.common.conf.Conf
 

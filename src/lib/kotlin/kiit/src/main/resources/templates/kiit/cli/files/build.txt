@@ -50,9 +50,9 @@ dependencies {
     compile "com.slatekit:slatekit-common:$slatekit_version"
     compile "com.slatekit:slatekit-meta:$slatekit_version"
     compile "com.slatekit:slatekit-entities:$slatekit_version"
-    compile "com.slatekit:slatekit-app:$slatekit_version"
-    compile "com.slatekit:slatekit-cli:$slatekit_version"
-    compile "com.slatekit:slatekit-apis:$slatekit_version"
+    compile "com.slatekit:kiit-app:$slatekit_version"
+    compile "com.slatekit:kiit-cli:$slatekit_version"
+    compile "com.slatekit:kiit-apis:$slatekit_version"
     compile "com.slatekit:providers-logback:$slatekit_version"
     compile "com.slatekit:connectors-cli:$slatekit_version"
 }

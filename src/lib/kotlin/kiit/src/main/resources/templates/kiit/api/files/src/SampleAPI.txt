@@ -1,7 +1,7 @@
 package ${app.package}.apis
 
-import slatekit.apis.*
-import slatekit.apis.core.Patch
+import kiit.apis.*
+import kiit.apis.core.Patch
 import slatekit.common.DateTime
 import slatekit.common.DateTimes
 import slatekit.requests.Request

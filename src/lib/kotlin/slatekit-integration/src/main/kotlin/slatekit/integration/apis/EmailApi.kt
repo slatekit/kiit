@@ -13,11 +13,11 @@
 
 package slatekit.integration.apis
 
-import slatekit.apis.Api
-import slatekit.apis.Action
-import slatekit.apis.AuthModes
-import slatekit.apis.Verbs
-import slatekit.apis.support.FileSupport
+import kiit.apis.Api
+import kiit.apis.Action
+import kiit.apis.AuthModes
+import kiit.apis.Verbs
+import kiit.apis.support.FileSupport
 import slatekit.context.Context
 import slatekit.common.Sources
 import slatekit.common.io.Uris
