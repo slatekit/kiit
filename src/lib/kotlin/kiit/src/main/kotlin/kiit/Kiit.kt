@@ -1,9 +1,9 @@
 package kiit
 
-import slatekit.apis.support.Authenticator
-import slatekit.app.App
-import slatekit.app.AppOptions
-import slatekit.cli.CliSettings
+import kiit.apis.support.Authenticator
+import kiit.app.App
+import kiit.app.AppOptions
+import kiit.cli.CliSettings
 import slatekit.context.Context
 import slatekit.common.args.ArgsSchema
 import slatekit.common.conf.Conf

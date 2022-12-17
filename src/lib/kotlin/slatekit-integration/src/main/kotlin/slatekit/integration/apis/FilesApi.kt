@@ -13,10 +13,10 @@
 
 package slatekit.integration.apis
 
-import slatekit.apis.Api
-import slatekit.apis.Action
-import slatekit.apis.AuthModes
-import slatekit.apis.Verbs
+import kiit.apis.Api
+import kiit.apis.Action
+import kiit.apis.AuthModes
+import kiit.apis.Verbs
 import slatekit.common.Sources
 import slatekit.common.types.ContentFile
 import slatekit.common.crypto.Encryptor
@@ -31,7 +31,7 @@ import slatekit.results.getOrElse
 
 @Api(area = "cloud", name = "files", desc = "api info about the application and host",
         auth = AuthModes.KEYED, roles = ["admin"], verb = Verbs.AUTO, sources = [Sources.ALL])
-class FilesApi(val files: CloudFiles, override val context: Context) : slatekit.apis.support.FileSupport {
+class FilesApi(val files: CloudFiles, override val context: Context) : kiit.apis.support.FileSupport {
 
     override val encryptor: Encryptor? = context.enc
     override val logger: Logger? = context.logs.getLogger()

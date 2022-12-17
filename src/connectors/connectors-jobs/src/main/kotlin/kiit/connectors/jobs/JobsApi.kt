@@ -11,19 +11,19 @@
  * </slate_header>
  */
 
-package slatekit.connectors.jobs
+package kiit.connectors.jobs
 
 import slatekit.actors.pause.Feedback
-import slatekit.apis.Api
-import slatekit.apis.Action
-import slatekit.apis.AuthModes
-import slatekit.apis.Verbs
-import slatekit.apis.support.FileSupport
+import kiit.apis.Api
+import kiit.apis.Action
+import kiit.apis.AuthModes
+import kiit.apis.Verbs
+import kiit.apis.support.FileSupport
 import slatekit.common.Sources
 import slatekit.common.crypto.Encryptor
 import slatekit.common.log.Logger
-import slatekit.connectors.entities.AppEntContext
-import slatekit.jobs.Jobs
+import kiit.connectors.entities.AppEntContext
+import kiit.jobs.Jobs
 import slatekit.results.Outcome
 import slatekit.results.builders.Outcomes
 

@@ -1,0 +1,138 @@
+buildscript {
+    ext.kotlin_version = '1.6.20'
+    ext.ktor_version = '1.6.8'
+    ext.slatekit_version = new File('../version.txt').text
+    ext.slatekit_version_beta = new File('../version-beta.txt').text
+
+    repositories {
+        jcenter()
+        mavenCentral()
+    }
+    dependencies {
+        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
+    }
+}
+
+plugins {
+    id "java"
+    id "maven-publish"
+    id "org.jetbrains.kotlin.jvm" version "$kotlin_version"
+}
+
+apply from: '../../../build/gradle/slatekit-common.gradle'
+
+compileJava {
+    sourceCompatibility = JavaVersion.VERSION_1_8
+    targetCompatibility = JavaVersion.VERSION_1_8
+}
+
+repositories {
+    jcenter()
+    mavenCentral()
+    maven {
+        url "https://maven.pkg.github.com/slatekit/slatekit"
+        credentials {
+            username = System.getenv('SLATEKIT_INSTALL_ACTOR')
+            password = System.getenv('SLATEKIT_INSTALL_TOKEN')
+        }
+    }
+}
+
+ext.slatekitSetupViaBinary = System.getenv('SLATEKIT_PROJECT_MODE') != 'sources'
+
+kotlin {
+    experimental {
+        coroutines "enable"
+    }
+}
+
+dependencies {
+    compile "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
+    compile "org.jetbrains.kotlin:kotlin-reflect:$kotlin_version"
+    compile "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin_version"
+    compile "io.ktor:ktor-server-netty:$ktor_version"
+    compile "io.ktor:ktor-metrics:$ktor_version"
+
+
+    compile "org.json:json:20201115"
+    compile "com.googlecode.json-simple:json-simple:1.1"
+    //compile 'com.sparkjava:spark-core:2.6.0'
+    compile 'org.threeten:threetenbp:1.3.8'
+    compile fileTree(dir: 'lib', include: '*.jar')
+
+    // /* <slatekit_local>
+    if( slatekitSetupViaBinary ) {
+        compile "com.slatekit:slatekit-results:$slatekit_version"
+        compile "com.slatekit:slatekit-common:$slatekit_version"
+        compile "com.slatekit:slatekit-utils:$slatekit_version"
+        compile "com.slatekit:slatekit-requests:$slatekit_version"
+        compile "com.slatekit:slatekit-context:$slatekit_version"
+        compile "com.slatekit:slatekit-telemetry:$slatekit_version"
+        compile "com.slatekit:kiit-apis:$slatekit_version"
+        compile "com.slatekit:slatekit-serialization:$slatekit_version"
+    } else {
+        // */
+    compile project(":slatekit-result")
+    compile project(":slatekit-common")
+    compile project(":slatekit-utils")
+    compile project(":slatekit-requests")
+    compile project(":slatekit-context")
+    compile project(":slatekit-telemetry")
+    compile project(":kiit-apis")
+    compile project(":slatekit-serialization")
+    } //</slatekit_local>
+}
+
+// ==================================================================
+// Slate Kit Component Info
+// ==================================================================
+def slatekitComponentId = 'server'
+def slatekitComponentName = 'Server'
+def slatekitComponentDesc = 'SlateKit Server: Universal API Server using Ktor or Spark'
+def slatekitComponentVersion = ext.slatekit_version
+
+// ==================================================================
+// Slate Kit Setup mode: defaults to maven vs loading project sources
+// ==================================================================
+task info {
+    println('slatekit.setup     : ' + System.getenv('SLATEKIT_PROJECT_MODE'))
+    println('slatekit.maven     : ' + slatekitSetupViaBinary)
+    println('slatekit.comp.id   : ' + slatekitComponentId)
+    println('slatekit.comp.name : ' + slatekitComponentName)
+    println('slatekit.comp.desc : ' + slatekitComponentDesc)
+    println('slatekit.comp.vers : ' + slatekitComponentVersion)
+    println()
+    println('project.name       : ' + project.name)
+    println('project.path       : ' + project.path)
+    println('project.desc       : ' + project.description)
+    println('project.projectDir : ' + project.projectDir)
+    println('project.buildDir   : ' + project.buildDir)
+    println()
+    println('build.commit       : ' + gitCommitId())
+    println('build.branch       : ' + gitBranchName())
+    println('build.date         : ' + getBuildDate())
+}
+
+publishing {
+    repositories {
+        maven {
+            name = "GitHubPackages"
+            url = "https://maven.pkg.github.com/slatekit/slatekit"
+            credentials {
+                username = System.getenv("SLATEKIT_PUBLISH_ACTOR")
+                password = System.getenv("SLATEKIT_PUBLISH_TOKEN")
+            }
+        }
+    }
+
+    publications {
+        gpr(MavenPublication) {
+            from(components.java)
+            groupId 'dev.kiit'
+            artifactId "${slatekitComponentId}"
+            version "${slatekitComponentVersion}"
+        }
+    }
+}
+
+

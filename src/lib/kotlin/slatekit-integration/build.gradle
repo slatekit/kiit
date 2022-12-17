@@ -56,11 +56,11 @@ dependencies {
         compile "com.slatekit:slatekit-requests:$slatekit_version"
         compile "com.slatekit:slatekit-meta:$slatekit_version"
         compile "com.slatekit:slatekit-query:$slatekit_version"
-        compile "com.slatekit:slatekit-cli:$slatekit_version"
+        compile "com.slatekit:kiit-cli:$slatekit_version"
         compile "com.slatekit:slatekit-entities:$slatekit_version"
         compile "com.slatekit:slatekit-core:$slatekit_version"
-        compile "com.slatekit:slatekit-apis:$slatekit_version"
-        compile "com.slatekit:slatekit-jobs:$slatekit_version"
+        compile "com.slatekit:kiit-apis:$slatekit_version"
+        compile "com.slatekit:kiit-jobs:$slatekit_version"
         compile "com.slatekit:slatekit-policy:$slatekit_version"
         compile "com.slatekit:slatekit-cache:$slatekit_version"
         compile "com.slatekit:slatekit-migrations:$slatekit_version"
@@ -74,13 +74,13 @@ dependencies {
     compile project(":slatekit-requests")
     compile project(":slatekit-meta")
     compile project(":slatekit-query")
-    compile project(":slatekit-cli")
+    compile project(":kiit-cli")
     compile project(":slatekit-entities")
     compile project(":slatekit-core")
     compile project(":slatekit-policy")
     compile project(":slatekit-cache")
-    compile project(":slatekit-apis")
-    compile project(":slatekit-jobs")
+    compile project(":kiit-apis")
+    compile project(":kiit-jobs")
     compile project(":slatekit-migrations")
     compile project(":slatekit-notifications")
     compile project(":connectors-entities")

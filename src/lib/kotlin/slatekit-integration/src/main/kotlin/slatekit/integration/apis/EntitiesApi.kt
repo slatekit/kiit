@@ -13,16 +13,16 @@
 
 package slatekit.integration.apis
 
-import slatekit.apis.Api
-import slatekit.apis.Action
-import slatekit.apis.AuthModes
-import slatekit.apis.Verbs
-import slatekit.apis.ApiBase
+import kiit.apis.Api
+import kiit.apis.Action
+import kiit.apis.AuthModes
+import kiit.apis.Verbs
+import kiit.apis.ApiBase
 import slatekit.common.Sources
 import slatekit.common.data.DbCon
 import slatekit.common.newline
 import slatekit.common.data.Connections
-import slatekit.connectors.entities.AppEntContext
+import kiit.connectors.entities.AppEntContext
 import slatekit.migrations.MigrationService
 import slatekit.migrations.MigrationSettings
 import slatekit.results.Notice

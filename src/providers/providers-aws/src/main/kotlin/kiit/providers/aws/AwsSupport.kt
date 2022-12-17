@@ -11,7 +11,7 @@
  * </slate_header>
  */
 
-package slatekit.providers.aws
+package kiit.providers.aws
 
 import com.amazonaws.auth.AWSCredentials
 import com.amazonaws.auth.BasicAWSCredentials

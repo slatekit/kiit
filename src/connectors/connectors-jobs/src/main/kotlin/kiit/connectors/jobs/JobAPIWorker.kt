@@ -1,12 +1,12 @@
-package slatekit.connectors.jobs
+package kiit.connectors.jobs
 
-import slatekit.jobs.WResult
-import slatekit.apis.ApiServer
-import slatekit.apis.core.Reqs
+import kiit.jobs.WResult
+import kiit.apis.ApiServer
+import kiit.apis.core.Reqs
 import slatekit.common.Identity
 import slatekit.common.Sources
-import slatekit.jobs.*
-import slatekit.jobs.Worker
+import kiit.jobs.*
+import kiit.jobs.Worker
 
 open class JobAPIWorker(
         val server: ApiServer,

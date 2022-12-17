@@ -1,9 +1,9 @@
 package ${app.package}
 
-import slatekit.apis.*
-import slatekit.apis.routes.Api
-import slatekit.apis.support.Authenticator
-import slatekit.cli.CliSettings
+import kiit.apis.*
+import kiit.apis.routes.Api
+import kiit.apis.support.Authenticator
+import kiit.cli.CliSettings
 import slatekit.context.Context
 import slatekit.common.types.*
 import slatekit.common.info.ApiKey

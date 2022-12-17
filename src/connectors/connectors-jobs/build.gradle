@@ -59,8 +59,8 @@ dependencies {
         compile "com.slatekit:slatekit-actors:$slatekit_version"
         compile "com.slatekit:slatekit-core:$slatekit_version"
         compile "com.slatekit:slatekit-context:$slatekit_version"
-        compile "com.slatekit:slatekit-apis:$slatekit_version"
-        compile "com.slatekit:slatekit-jobs:$slatekit_version"
+        compile "com.slatekit:kiit-apis:$slatekit_version"
+        compile "com.slatekit:kiit-jobs:$slatekit_version"
         compile "com.slatekit:connectors-entities:$slatekit_version"
         compile "com.slatekit:providers-aws:$slatekit_version"
     } else {
@@ -70,8 +70,8 @@ dependencies {
     compile project(":slatekit-actors")
     compile project(":slatekit-core")
     compile project(":slatekit-context")
-    compile project(":slatekit-apis")
-    compile project(":slatekit-jobs")
+    compile project(":kiit-apis")
+    compile project(":kiit-jobs")
     compile project(":connectors-entities")
     compile project(":providers-aws")
     } //</slatekit_local>

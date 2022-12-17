@@ -15,11 +15,21 @@ project(':slatekit-utils').projectDir=new File('../slatekit-utils')
 include ':slatekit-context'
 project(':slatekit-context').projectDir=new File('../slatekit-context')
 
-include ':slatekit-app'
-project(':slatekit-app').projectDir=new File('../slatekit-app')
+// Services - Runnable applications
+include ':kiit-app'
+project(':kiit-app').projectDir=new File('../../../services/app')
 
-include ':slatekit-cli'
-project(':slatekit-cli').projectDir=new File('../slatekit-cli')
+include ':kiit-cli'
+project(':kiit-cli').projectDir=new File('../../../services/cli')
+
+include ':kiit-jobs'
+project(':kiit-jobs').projectDir=new File('../../../services/jobs')
+
+include ':kiit-apis'
+project(':kiit-apis').projectDir=new File('../../../services/apis')
+
+include ':kiit-server'
+project(':kiit-server').projectDir=new File('../../../services/server')
 
 include ':slatekit-db'
 project(':slatekit-db').projectDir=new File('../slatekit-db')
@@ -54,9 +64,6 @@ project(':slatekit-cache').projectDir=new File('../slatekit-cache')
 include ':slatekit-requests'
 project(':slatekit-requests').projectDir=new File('../slatekit-requests')
 
-include ':slatekit-apis'
-project(':slatekit-apis').projectDir=new File('../slatekit-apis')
-
 include ':slatekit-generator'
 project(':slatekit-generator').projectDir=new File('../slatekit-generator')
 
@@ -65,12 +72,6 @@ project(':slatekit-integration').projectDir=new File('../slatekit-integration')
 
 include ':slatekit-notifications'
 project(':slatekit-notifications').projectDir=new File('../slatekit-notifications')
-
-include ':slatekit-server'
-project(':slatekit-server').projectDir=new File('../slatekit-server')
-
-include ':slatekit-jobs'
-project(':slatekit-jobs').projectDir=new File('../slatekit-jobs')
 
 include ':slatekit-serialization'
 project(':slatekit-serialization').projectDir=new File('../slatekit-serialization')

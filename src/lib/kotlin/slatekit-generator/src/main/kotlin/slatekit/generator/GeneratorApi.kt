@@ -1,9 +1,9 @@
 package slatekit.generator
 
-import slatekit.apis.Api
-import slatekit.apis.Action
-import slatekit.apis.AuthModes
-import slatekit.apis.Verbs
+import kiit.apis.Api
+import kiit.apis.Action
+import kiit.apis.AuthModes
+import kiit.apis.Verbs
 import slatekit.context.Context
 import slatekit.common.Sources
 import slatekit.common.auth.Roles

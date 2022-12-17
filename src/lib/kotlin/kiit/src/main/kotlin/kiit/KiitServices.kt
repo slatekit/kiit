@@ -1,8 +1,8 @@
 package kiit
 
-import slatekit.apis.SetupType
-import slatekit.apis.routes.Api
-import slatekit.apis.tools.code.CodeGenApi
+import kiit.apis.SetupType
+import kiit.apis.routes.Api
+import kiit.apis.tools.code.CodeGenApi
 import slatekit.common.conf.Conf
 import slatekit.context.Context
 import kiit.docs.DocApi

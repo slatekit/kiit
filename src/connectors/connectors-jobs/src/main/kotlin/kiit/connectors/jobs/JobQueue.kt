@@ -1,10 +1,10 @@
-package slatekit.connectors.jobs
+package kiit.connectors.jobs
 
 import slatekit.common.Identity
 import slatekit.core.queues.*
-import slatekit.jobs.Priority
-import slatekit.jobs.Queue
-import slatekit.jobs.Task
+import kiit.jobs.Priority
+import kiit.jobs.Queue
+import kiit.jobs.Task
 import slatekit.results.Try
 
 /**

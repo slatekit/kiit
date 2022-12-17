@@ -8,8 +8,8 @@ import io.ktor.routing.get
 import io.ktor.routing.routing
 import io.ktor.server.engine.embeddedServer
 import io.ktor.server.netty.Netty
-import slatekit.apis.*
-import slatekit.apis.routes.Api
+import kiit.apis.*
+import kiit.apis.routes.Api
 
 // Slate Kit - Common Utilities
 import slatekit.common.*
@@ -20,9 +20,9 @@ import slatekit.common.ext.toResponse
 import slatekit.context.Context
 
 // Slate Kit - Server ( Ktor support )
-import slatekit.server.ServerSettings
-import slatekit.server.ktor.KtorHandler
-import slatekit.server.ktor.KtorResponse
+import kiit.server.ServerSettings
+import kiit.server.ktor.KtorHandler
+import kiit.server.ktor.KtorResponse
 
 // Sample App
 import ${app.package}.apis.SampleAPI

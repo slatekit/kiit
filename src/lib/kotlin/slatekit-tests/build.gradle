@@ -16,7 +16,7 @@ buildscript {
 plugins {
     id "java"
     id "maven-publish"
-    id "org.jetbrains.kotlin.jvm" version "$kotlin_version"
+    id "org.jetbrains.kotlin.jvm" //version "$kotlin_version"
 }
 
 //apply plugin: 'org.junit.platform.gradle.plugin'
@@ -82,12 +82,12 @@ dependencies {
     implementation project(":slatekit-telemetry")
     implementation project(":slatekit-policy")
     implementation project(":slatekit-integration")
-    implementation project(":slatekit-connectors-cli")
-    implementation project(":slatekit-connectors-entities")
-    implementation project(":slatekit-connectors-jobs")
-    implementation project(":slatekit-providers-aws")
-    implementation project(":slatekit-providers-logback")
-    implementation project(":slatekit-providers-datadog")
+    implementation project(":connectors-cli")
+    implementation project(":connectors-entities")
+    implementation project(":connectors-jobs")
+    implementation project(":providers-aws")
+    implementation project(":providers-logback")
+    implementation project(":providers-datadog")
     //compile project(":slatekit-support")
 
     compile 'io.micrometer:micrometer-registry-datadog:latest.release'

@@ -45,7 +45,7 @@ interface Inputs : Gets {
     // Get list and maps
     /**
      * gets a list of items of the type supplied.
-     * NOTE: derived classes should override this. e.g. HttpInputs in slatekit.server
+     * NOTE: derived classes should override this. e.g. HttpInputs in kiit.server
      * @param key
      * @param tpe
      * @return
@@ -68,7 +68,7 @@ interface Inputs : Gets {
 
     /**
      * gets a map of items of the type supplied.
-     * NOTE: derived classes should override this. e.g. HttpInputs in slatekit.server
+     * NOTE: derived classes should override this. e.g. HttpInputs in kiit.server
      * @param key
      * @return
      */
