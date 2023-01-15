@@ -1,7 +1,7 @@
 buildscript {
     ext.kotlin_version = '1.6.20'
-    ext.slatekit_version = new File('../version.txt').text
-    ext.slatekit_version_beta = new File('../version-beta.txt').text
+    ext.kiit_version = new File('../version.txt').text
+    ext.kiit_version_beta = new File('../version-beta.txt').text
 
     repositories {
         jcenter()
@@ -30,15 +30,15 @@ repositories {
     jcenter()
     mavenCentral()
     maven {
-        url "https://maven.pkg.github.com/slatekit/slatekit"
+        url "https://maven.pkg.github.com/slatekit/kiit"
         credentials {
-            username = System.getenv('SLATEKIT_INSTALL_ACTOR')
-            password = System.getenv('SLATEKIT_INSTALL_TOKEN')
+            username = System.getenv('KIIT_INSTALL_ACTOR')
+            password = System.getenv('KIIT_INSTALL_TOKEN')
         }
     }
 }
 
-ext.slatekitSetupViaBinary = System.getenv('SLATEKIT_PROJECT_MODE') != 'sources'
+ext.kiitSetupViaBinary = System.getenv('KIIT_PROJECT_MODE') != 'sources'
 
 dependencies {
     compile "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
@@ -50,36 +50,36 @@ dependencies {
     compile 'org.threeten:threetenbp:1.3.8'
 
     // /* <slatekit_local>
-    if( slatekitSetupViaBinary ) {
-        implementation "com.slatekit:slatekit-results:$slatekit_version"
-        implementation "com.slatekit:slatekit-common:$slatekit_version"
-        implementation "com.slatekit:slatekit-context:$slatekit_version"
-        implementation "com.slatekit:kiit-app:$slatekit_version"
-        implementation "com.slatekit:slatekit-meta:$slatekit_version"
-        implementation "com.slatekit:slatekit-policy:$slatekit_version"
-        implementation "com.slatekit:slatekit-serialization:$slatekit_version"
-        implementation "com.slatekit:slatekit-telemetry:$slatekit_version"
-        implementation "com.slatekit:kiit-apis:$slatekit_version"
-        implementation "com.slatekit:slatekit-generator:$slatekit_version"
-        implementation "com.slatekit:kiit-cli:$slatekit_version"
-        implementation "com.slatekit:connectors-cli:$slatekit_version"
-        implementation "com.slatekit:providers-logback:$slatekit_version"
-//        implementation "com.slatekit:providers-aws:$slatekit_version"
-//        implementation "com.slatekit:providers-datadog:$slatekit_version"
-//        implementation "com.slatekit:connectors-entities:$slatekit_version"
-//        implementation "com.slatekit:connectors-jobs:$slatekit_version"
-//        implementation "com.slatekit:slatekit-core:$slatekit_version"
-//        implementation "com.slatekit:slatekit-http:$slatekit_version"
-//        implementation "com.slatekit:slatekit-cache:$slatekit_version"
-//        implementation "com.slatekit:kiit-jobs:$slatekit_version"
-//        implementation "com.slatekit:slatekit-notifications:$slatekit_version"
-//        implementation "com.slatekit:slatekit-cloud:$slatekit_version"
-//        implementation "com.slatekit:slatekit-db:$slatekit_version"
-//        implementation "com.slatekit:slatekit-query:$slatekit_version"
-//        implementation "com.slatekit:slatekit-entities:$slatekit_version"
-//        implementation "com.slatekit:slatekit-orm:$slatekit_version"
-//        implementation "com.slatekit:slatekit-integration:$slatekit_version"
-//        implementation "com.slatekit:kiit-server:$slatekit_version"
+    if( kiitSetupViaBinary ) {
+        implementation "com.slatekit:slatekit-results:$kiit_version"
+        implementation "com.slatekit:slatekit-common:$kiit_version"
+        implementation "com.slatekit:slatekit-context:$kiit_version"
+        implementation "com.slatekit:kiit-app:$kiit_version"
+        implementation "com.slatekit:slatekit-meta:$kiit_version"
+        implementation "com.slatekit:slatekit-policy:$kiit_version"
+        implementation "com.slatekit:slatekit-serialization:$kiit_version"
+        implementation "com.slatekit:slatekit-telemetry:$kiit_version"
+        implementation "com.slatekit:kiit-apis:$kiit_version"
+        implementation "com.slatekit:slatekit-generator:$kiit_version"
+        implementation "com.slatekit:kiit-cli:$kiit_version"
+        implementation "com.slatekit:connectors-cli:$kiit_version"
+        implementation "com.slatekit:providers-logback:$kiit_version"
+//        implementation "com.slatekit:providers-aws:$kiit_version"
+//        implementation "com.slatekit:providers-datadog:$kiit_version"
+//        implementation "com.slatekit:connectors-entities:$kiit_version"
+//        implementation "com.slatekit:connectors-jobs:$kiit_version"
+//        implementation "com.slatekit:slatekit-core:$kiit_version"
+//        implementation "com.slatekit:slatekit-http:$kiit_version"
+//        implementation "com.slatekit:slatekit-cache:$kiit_version"
+//        implementation "com.slatekit:kiit-jobs:$kiit_version"
+//        implementation "com.slatekit:slatekit-notifications:$kiit_version"
+//        implementation "com.slatekit:slatekit-cloud:$kiit_version"
+//        implementation "com.slatekit:slatekit-db:$kiit_version"
+//        implementation "com.slatekit:slatekit-query:$kiit_version"
+//        implementation "com.slatekit:slatekit-entities:$kiit_version"
+//        implementation "com.slatekit:slatekit-orm:$kiit_version"
+//        implementation "com.slatekit:slatekit-integration:$kiit_version"
+//        implementation "com.slatekit:kiit-server:$kiit_version"
     } else {
         // */
     implementation project(":slatekit-result")
@@ -123,21 +123,21 @@ dependencies {
 // ==================================================================
 // Slate Kit Component Info
 // ==================================================================
-def slatekitComponentId = 'exe'
-def slatekitComponentName = 'Exe'
-def slatekitComponentDesc = 'SlateKit Exe: CLI application'
-def slatekitComponentVersion = ext.slatekit_version
+def kiitComponentId = 'exe'
+def kiitComponentName = 'Exe'
+def kiitComponentDesc = 'Kiit Exe: CLI application'
+def kiitComponentVersion = ext.kiit_version
 
 // ==================================================================
 // Slate Kit Setup mode: defaults to maven vs loading project sources
 // ==================================================================
 task info {
-    println('slatekit.setup     : ' + System.getenv('SLATEKIT_PROJECT_MODE'))
-    println('slatekit.maven     : ' + slatekitSetupViaBinary)
-    println('slatekit.comp.id   : ' + slatekitComponentId)
-    println('slatekit.comp.name : ' + slatekitComponentName)
-    println('slatekit.comp.desc : ' + slatekitComponentDesc)
-    println('slatekit.comp.vers : ' + slatekitComponentVersion)
+    println('slatekit.setup     : ' + System.getenv('KIIT_PROJECT_MODE'))
+    println('slatekit.maven     : ' + kiitSetupViaBinary)
+    println('slatekit.comp.id   : ' + kiitComponentId)
+    println('slatekit.comp.name : ' + kiitComponentName)
+    println('slatekit.comp.desc : ' + kiitComponentDesc)
+    println('slatekit.comp.vers : ' + kiitComponentVersion)
     println()
     println('project.name       : ' + project.name)
     println('project.path       : ' + project.path)

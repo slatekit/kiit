@@ -2,8 +2,8 @@ import java.nio.file.Paths
 
 buildscript {
     ext.kotlin_version = '${build.kotlin.version}'
-    ext.slatekit_version = "${build.kiit.version}"
-    ext.slatekit_version_beta = "${build.kiit.version.beta}"
+    ext.kiit_version = "${build.kiit.version}"
+    ext.kiit_version_beta = "${build.kiit.version.beta}"
     ext.ktor_version = '1.6.8'
 
     repositories {
@@ -29,7 +29,7 @@ repositories {
     jcenter()
     mavenCentral()
     maven {
-        url "https://maven.pkg.github.com/slatekit/slatekit"
+        url "https://maven.pkg.github.com/slatekit/kiit"
         credentials {
             username = System.getenv('GITHUB_PACKAGES_INSTALL_ACTOR')
             password = System.getenv('GITHUB_PACKAGES_INSTALL_TOKEN')
@@ -51,15 +51,15 @@ dependencies {
     compile "org.json:json:20201115"
 
     // Slate Kit
-    compile "com.slatekit:slatekit-results:$slatekit_version"
-    compile "com.slatekit:slatekit-common:$slatekit_version"
-    compile "com.slatekit:slatekit-context:$slatekit_version"
-    compile "com.slatekit:kiit-app:$slatekit_version"
-    compile "com.slatekit:slatekit-telemetry:$slatekit_version"
-    compile "com.slatekit:kiit-apis:$slatekit_version"
-    compile "com.slatekit:kiit-server:$slatekit_version"
-    compile "com.slatekit:slatekit-serialization:$slatekit_version"
-    compile "com.slatekit:providers-logback:$slatekit_version"
+    compile "com.slatekit:slatekit-results:$kiit_version"
+    compile "com.slatekit:slatekit-common:$kiit_version"
+    compile "com.slatekit:slatekit-context:$kiit_version"
+    compile "com.slatekit:kiit-app:$kiit_version"
+    compile "com.slatekit:slatekit-telemetry:$kiit_version"
+    compile "com.slatekit:kiit-apis:$kiit_version"
+    compile "com.slatekit:kiit-server:$kiit_version"
+    compile "com.slatekit:slatekit-serialization:$kiit_version"
+    compile "com.slatekit:providers-logback:$kiit_version"
 }
 
 
