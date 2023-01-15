@@ -64,7 +64,7 @@ dependencies {
 // ==================================================================
 def slatekitComponentId = 'jobs'
 def slatekitComponentName = 'Jobs'
-def slatekitComponentDesc = 'SlateKit Jobs: Background job/task queue system'
+def slatekitComponentDesc = 'Kiit Jobs: Background job/task queue system'
 def slatekitComponentVersion = ext.slatekit_version
 
 // ==================================================================

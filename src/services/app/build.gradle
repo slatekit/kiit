@@ -66,7 +66,7 @@ dependencies {
 // ==================================================================
 def slatekitComponentId = 'app'
 def slatekitComponentName = 'App'
-def slatekitComponentDesc = 'SlateKit App: Application template'
+def slatekitComponentDesc = 'Kiit App: Application template'
 def slatekitComponentVersion = ext.slatekit_version
 
 
