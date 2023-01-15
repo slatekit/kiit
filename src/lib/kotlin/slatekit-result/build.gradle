@@ -1,7 +1,7 @@
 buildscript {
   ext.kotlin_version = '1.6.20'
-  ext.slatekit_version = new File('../version.txt').text
-  ext.slatekit_version_beta = new File('../version-beta.txt').text
+  ext.kiit_version = new File('../version.txt').text
+  ext.kiit_version_beta = new File('../version-beta.txt').text
 
   repositories {
     jcenter()
@@ -30,10 +30,10 @@ repositories {
   jcenter()
   mavenCentral()
   maven {
-    url "https://maven.pkg.github.com/slatekit/slatekit"
+    url "https://maven.pkg.github.com/slatekit/kiit"
     credentials {
-      username = System.getenv('SLATEKIT_INSTALL_ACTOR')
-      password = System.getenv('SLATEKIT_INSTALL_TOKEN')
+      username = System.getenv('KIIT_INSTALL_ACTOR')
+      password = System.getenv('KIIT_INSTALL_TOKEN')
     }
   }
 }
@@ -47,23 +47,23 @@ dependencies {
 // ==================================================================
 // Slate Kit Component Info
 // ==================================================================
-def slatekitComponentId = 'results'
-def slatekitComponentName = 'Results'
-def slatekitComponentDesc = 'SlateKit Result: Model successes and failures with optional status codes'
-def slatekitComponentVersion = ext.slatekit_version
+def kiitComponentId = 'results'
+def kiitComponentName = 'Results'
+def kiitComponentDesc = 'Kiit Result: Model successes and failures with optional status codes'
+def kiitComponentVersion = ext.kiit_version
 
 // ==================================================================
 // Slate Kit Setup mode: defaults to maven vs loading project sources
 // ==================================================================
-ext.slatekitSetupViaBinary = System.getenv('SLATEKIT_PROJECT_MODE') != 'sources'
+ext.kiitSetupViaBinary = System.getenv('KIIT_PROJECT_MODE') != 'sources'
 task info {
   doLast {
-    println('slatekit.setup     : ' + System.getenv('SLATEKIT_PROJECT_MODE'))
-    println('slatekit.maven     : ' + slatekitSetupViaBinary)
-    println('slatekit.comp.id   : ' + slatekitComponentId)
-    println('slatekit.comp.name : ' + slatekitComponentName)
-    println('slatekit.comp.desc : ' + slatekitComponentDesc)
-    println('slatekit.comp.vers : ' + slatekitComponentVersion)
+    println('slatekit.setup     : ' + System.getenv('KIIT_PROJECT_MODE'))
+    println('slatekit.maven     : ' + kiitSetupViaBinary)
+    println('slatekit.comp.id   : ' + kiitComponentId)
+    println('slatekit.comp.name : ' + kiitComponentName)
+    println('slatekit.comp.desc : ' + kiitComponentDesc)
+    println('slatekit.comp.vers : ' + kiitComponentVersion)
     println()
     println('project.name       : ' + project.name)
     println('project.path       : ' + project.path)
@@ -81,10 +81,10 @@ publishing {
   repositories {
     maven {
       name = "GitHubPackages"
-      url = "https://maven.pkg.github.com/slatekit/slatekit"
+      url = "https://maven.pkg.github.com/slatekit/kiit"
       credentials {
-        username = System.getenv("SLATEKIT_PUBLISH_ACTOR")
-        password = System.getenv("SLATEKIT_PUBLISH_TOKEN")
+        username = System.getenv("KIIT_PUBLISH_ACTOR")
+        password = System.getenv("KIIT_PUBLISH_TOKEN")
       }
     }
   }
@@ -92,9 +92,9 @@ publishing {
   publications {
     gpr(MavenPublication) {
       from(components.java)
-      groupId 'com.slatekit'
-      artifactId "slatekit-${slatekitComponentId}"
-      version "${slatekitComponentVersion}"
+      groupId 'dev.kiit'
+      artifactId "${kiitComponentId}"
+      version "${kiitComponentVersion}"
     }
   }
 }

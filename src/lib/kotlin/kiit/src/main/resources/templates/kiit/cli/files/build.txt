@@ -1,7 +1,7 @@
 buildscript {
     ext.kotlin_version = '${build.kotlin.version}'
-    ext.slatekit_version = "${build.kiit.version}"
-    ext.slatekit_version_beta = "${build.kiit.version.beta}"
+    ext.kiit_version = "${build.kiit.version}"
+    ext.kiit_version_beta = "${build.kiit.version.beta}"
 
     repositories {
         jcenter()
@@ -26,7 +26,7 @@ repositories {
     jcenter()
     mavenCentral()
     maven {
-        url "https://maven.pkg.github.com/slatekit/slatekit"
+        url "https://maven.pkg.github.com/slatekit/kiit"
         credentials {
             username = System.getenv('GITHUB_PACKAGES_INSTALL_ACTOR')
             password = System.getenv('GITHUB_PACKAGES_INSTALL_TOKEN')
@@ -46,15 +46,15 @@ dependencies {
     compile "org.json:json:20201115"
 
     // Slate Kit
-    compile "com.slatekit:slatekit-results:$slatekit_version"
-    compile "com.slatekit:slatekit-common:$slatekit_version"
-    compile "com.slatekit:slatekit-meta:$slatekit_version"
-    compile "com.slatekit:slatekit-entities:$slatekit_version"
-    compile "com.slatekit:kiit-app:$slatekit_version"
-    compile "com.slatekit:kiit-cli:$slatekit_version"
-    compile "com.slatekit:kiit-apis:$slatekit_version"
-    compile "com.slatekit:providers-logback:$slatekit_version"
-    compile "com.slatekit:connectors-cli:$slatekit_version"
+    compile "com.slatekit:slatekit-results:$kiit_version"
+    compile "com.slatekit:slatekit-common:$kiit_version"
+    compile "com.slatekit:slatekit-meta:$kiit_version"
+    compile "com.slatekit:slatekit-entities:$kiit_version"
+    compile "com.slatekit:kiit-app:$kiit_version"
+    compile "com.slatekit:kiit-cli:$kiit_version"
+    compile "com.slatekit:kiit-apis:$kiit_version"
+    compile "com.slatekit:providers-logback:$kiit_version"
+    compile "com.slatekit:connectors-cli:$kiit_version"
 }
 
 
