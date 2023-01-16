@@ -16,13 +16,13 @@ package slate.test
 import kotlinx.coroutines.runBlocking
 import org.junit.Assert
 import org.junit.Test
-import slatekit.context.Context
-import slatekit.common.info.About
+import kiit.context.Context
+import kiit.common.info.About
 import slatekit.app.App
 import slatekit.app.AppRunner
-import slatekit.results.Status
-import slatekit.results.Codes
-import slatekit.results.Success
+import kiit.results.Status
+import kiit.results.Codes
+import kiit.results.Success
 import test.TestApp
 
 

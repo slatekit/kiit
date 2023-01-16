@@ -3,7 +3,7 @@ package test.setup
 import slatekit.apis.Api
 import slatekit.apis.Action
 import slatekit.apis.AuthModes
-import slatekit.common.auth.Roles
+import kiit.common.auth.Roles
 
 
 @Api(area = "samples", name = "rolesapp", desc = "sample to test security", roles= ["admin"], auth = AuthModes.TOKEN)

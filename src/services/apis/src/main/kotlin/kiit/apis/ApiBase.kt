@@ -14,9 +14,9 @@
 package kiit.apis
 
 import kiit.apis.support.FileSupport
-import slatekit.common.crypto.Encryptor
-import slatekit.common.log.Logger
-import slatekit.context.Context
+import kiit.common.crypto.Encryptor
+import kiit.common.log.Logger
+import kiit.context.Context
 
 
 /**

@@ -1,6 +1,6 @@
 package slatekit.generator
 
-import slatekit.common.ext.toId
+import kiit.common.ext.toId
 import java.io.File
 
 /**

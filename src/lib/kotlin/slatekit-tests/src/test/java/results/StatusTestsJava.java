@@ -2,8 +2,8 @@ package results;
 
 import org.junit.Assert;
 import org.junit.Test;
-import slatekit.results.Status;
-import slatekit.results.Codes;
+import kiit.results.Status;
+import kiit.results.Codes;
 
 public class StatusTestsJava {
 

@@ -1,8 +1,8 @@
 package kiit.apis.rules
 
 import kiit.apis.ApiRequest
-import slatekit.results.Outcome
-import slatekit.results.builders.Outcomes
+import kiit.results.Outcome
+import kiit.results.builders.Outcomes
 
 
 object AuthRule : Rule {

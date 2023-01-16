@@ -1,7 +1,7 @@
 package kiit.policy.hooks
 
-import slatekit.common.Ignore
-import slatekit.results.Outcome
+import kiit.common.Ignore
+import kiit.results.Outcome
 
 /**
  * A "Hooks" based middle-ware that allows only handling before/after events

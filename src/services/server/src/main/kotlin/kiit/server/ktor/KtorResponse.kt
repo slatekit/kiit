@@ -19,11 +19,11 @@ import io.ktor.http.HttpStatusCode
 import io.ktor.response.header
 import io.ktor.response.respondBytes
 import io.ktor.response.respondText
-import slatekit.common.types.*
+import kiit.common.types.*
 import kiit.serialization.responses.ResponseEncoder
-import slatekit.requests.Response
+import kiit.requests.Response
 import kiit.serialization.Serialization
-import slatekit.results.*
+import kiit.results.*
 import kiit.server.ServerSettings
 import kiit.server.core.ResponseHandler
 

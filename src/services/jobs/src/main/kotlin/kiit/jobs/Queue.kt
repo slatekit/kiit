@@ -1,7 +1,7 @@
 package kiit.jobs
 
-import slatekit.common.Identity
-import slatekit.results.Try
+import kiit.common.Identity
+import kiit.results.Try
 
 /**
  * Represents a simple interface for a Queue that can store Tasks which represent a unit of work.

@@ -14,26 +14,26 @@ package test.common
 
 import org.junit.Assert
 import org.junit.Test
-import slatekit.common.checks.Check.hasCharsLCase
-import slatekit.common.checks.Check.hasCharsUCase
-import slatekit.common.checks.Check.hasDigits
-import slatekit.common.checks.Check.hasSymbols
-import slatekit.common.checks.Check.isAlpha
-import slatekit.common.checks.Check.isAlphaLowerCase
-import slatekit.common.checks.Check.isAlphaNumeric
-import slatekit.common.checks.Check.isAlphaUpperCase
-import slatekit.common.checks.Check.isEmail
-import slatekit.common.checks.Check.isEmpty
-import slatekit.common.checks.Check.isLength
-import slatekit.common.checks.Check.isMinValue
-import slatekit.common.checks.Check.isMaxValue
-import slatekit.common.checks.Check.isMinLength
-import slatekit.common.checks.Check.isMaxLength
-import slatekit.common.checks.Check.isNotEmpty
-import slatekit.common.checks.Check.isNumeric
-import slatekit.common.checks.Check.isPhoneUS
-import slatekit.common.checks.Check.isUrl
-import slatekit.common.checks.Check.isZipCodeUS
+import kiit.common.checks.Check.hasCharsLCase
+import kiit.common.checks.Check.hasCharsUCase
+import kiit.common.checks.Check.hasDigits
+import kiit.common.checks.Check.hasSymbols
+import kiit.common.checks.Check.isAlpha
+import kiit.common.checks.Check.isAlphaLowerCase
+import kiit.common.checks.Check.isAlphaNumeric
+import kiit.common.checks.Check.isAlphaUpperCase
+import kiit.common.checks.Check.isEmail
+import kiit.common.checks.Check.isEmpty
+import kiit.common.checks.Check.isLength
+import kiit.common.checks.Check.isMinValue
+import kiit.common.checks.Check.isMaxValue
+import kiit.common.checks.Check.isMinLength
+import kiit.common.checks.Check.isMaxLength
+import kiit.common.checks.Check.isNotEmpty
+import kiit.common.checks.Check.isNumeric
+import kiit.common.checks.Check.isPhoneUS
+import kiit.common.checks.Check.isUrl
+import kiit.common.checks.Check.isZipCodeUS
 
 /**
  * Created by kishorereddy on 5/23/17.

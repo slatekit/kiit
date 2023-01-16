@@ -1,7 +1,7 @@
 package test.setup
 
 import slatekit.jobs.WResult
-import slatekit.common.Identity
+import kiit.common.Identity
 import slatekit.jobs.*
 import slatekit.jobs.Worker
 

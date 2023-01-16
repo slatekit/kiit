@@ -2,14 +2,14 @@ package kiit
 
 import kotlinx.coroutines.*
 import kiit.app.AppRunner
-import slatekit.common.args.Args
-import slatekit.common.io.Alias
-import slatekit.utils.writer.ConsoleWriter
-import slatekit.context.AppContext
+import kiit.common.args.Args
+import kiit.common.io.Alias
+import kiit.utils.writer.ConsoleWriter
+import kiit.context.AppContext
 import slatekit.generator.Help
 import kiit.providers.logback.LogbackLogs
-import slatekit.results.Failure
-import slatekit.results.Success
+import kiit.results.Failure
+import kiit.results.Success
 
 
 /**

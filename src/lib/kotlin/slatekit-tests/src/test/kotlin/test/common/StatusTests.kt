@@ -3,7 +3,7 @@ package test.common
 import kotlinx.coroutines.runBlocking
 import org.junit.Assert
 import org.junit.Test
-import slatekit.actors.Status
+import kiit.actors.Status
 import test.setup.MyWorker
 
 

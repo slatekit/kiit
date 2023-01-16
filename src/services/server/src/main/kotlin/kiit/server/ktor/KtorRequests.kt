@@ -2,7 +2,7 @@ package kiit.server.ktor
 
 import io.ktor.application.ApplicationCall
 import io.ktor.request.uri
-import slatekit.requests.Request
+import kiit.requests.Request
 
 object KtorRequests {
     /**

@@ -13,8 +13,8 @@
 
 package kiit.query
 
-import slatekit.common.data.BuildMode
-import slatekit.common.data.Command
+import kiit.common.data.BuildMode
+import kiit.common.data.Command
 
 
 /**

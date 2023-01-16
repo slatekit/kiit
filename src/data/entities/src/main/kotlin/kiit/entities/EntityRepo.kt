@@ -13,9 +13,9 @@
 
 package kiit.entities
 
-import slatekit.common.data.BuildMode
-import slatekit.common.data.DataHooks
-import slatekit.common.data.IDb
+import kiit.common.data.BuildMode
+import kiit.common.data.DataHooks
+import kiit.common.data.IDb
 import kiit.data.Mapper
 import kiit.data.SqlRepo
 import kiit.data.core.Meta

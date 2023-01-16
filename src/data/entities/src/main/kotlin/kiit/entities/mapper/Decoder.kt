@@ -1,7 +1,7 @@
 package kiit.entities.mapper
 
-import slatekit.common.values.Record
-import slatekit.common.crypto.Encryptor
+import kiit.common.values.Record
+import kiit.common.crypto.Encryptor
 
 interface Decoder<TId, T> where TId : kotlin.Comparable<TId>, T : Any {
     fun decode(record: Record, enc: Encryptor?): T?

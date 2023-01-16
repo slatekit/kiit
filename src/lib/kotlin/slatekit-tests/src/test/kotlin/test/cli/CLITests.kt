@@ -17,12 +17,12 @@ import kotlinx.coroutines.runBlocking
 import org.junit.Assert
 import org.junit.Test
 import slatekit.cli.*
-import slatekit.common.args.Args
-import slatekit.common.types.Content
-import slatekit.common.info.Folders
-import slatekit.common.info.Info
-import slatekit.common.types.Contents
-import slatekit.results.*
+import kiit.common.args.Args
+import kiit.common.types.Content
+import kiit.common.info.Folders
+import kiit.common.info.Info
+import kiit.common.types.Contents
+import kiit.results.*
 import kiit.serialization.Serialization
 
 

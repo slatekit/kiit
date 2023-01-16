@@ -4,9 +4,9 @@ import kiit.apis.Api
 import kiit.apis.Action
 import kiit.apis.AuthModes
 import kiit.apis.Verbs
-import slatekit.context.Context
-import slatekit.common.Sources
-import slatekit.results.Try
+import kiit.context.Context
+import kiit.common.Sources
+import kiit.results.Try
 
 @Api(area = "slatekit", name = "docs", desc= "help doc generator",
         auth = AuthModes.KEYED, roles = ["admin"], verb = Verbs.AUTO, sources = [Sources.CLI])

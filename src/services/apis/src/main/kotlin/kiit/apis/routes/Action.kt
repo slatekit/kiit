@@ -21,9 +21,9 @@ import kiit.apis.AuthMode
 import kiit.apis.Verb
 import kiit.apis.core.Roles
 import kiit.apis.core.Sources
-import slatekit.common.values.Metadata
-import slatekit.common.ext.tail
-import slatekit.requests.Request
+import kiit.common.values.Metadata
+import kiit.common.ext.tail
+import kiit.requests.Request
 
 /**
  * ================================================================

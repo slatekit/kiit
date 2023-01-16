@@ -1,7 +1,7 @@
 package kiit.providers.logback
 
-import slatekit.common.log.Logger
-import slatekit.common.log.Logs
+import kiit.common.log.Logger
+import kiit.common.log.Logs
 
 import org.slf4j.LoggerFactory
 

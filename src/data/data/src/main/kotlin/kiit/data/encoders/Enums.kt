@@ -1,9 +1,9 @@
 package kiit.data.encoders
 
-import slatekit.common.*
-import slatekit.common.values.Record
-import slatekit.common.data.DataType
-import slatekit.common.data.Value
+import kiit.common.*
+import kiit.common.values.Record
+import kiit.common.data.DataType
+import kiit.common.data.Value
 import kiit.meta.Reflector
 import kiit.data.Consts.NULL
 

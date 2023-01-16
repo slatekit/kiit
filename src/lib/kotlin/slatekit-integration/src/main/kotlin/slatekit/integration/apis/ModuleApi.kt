@@ -17,17 +17,17 @@ import kiit.apis.Api
 import kiit.apis.Action
 import kiit.apis.AuthModes
 import kiit.apis.Verbs
-import slatekit.common.*
-import slatekit.common.crypto.Encryptor
-import slatekit.common.log.Logger
-import slatekit.common.values.ListMap
-import slatekit.context.Context
+import kiit.common.*
+import kiit.common.crypto.Encryptor
+import kiit.common.log.Logger
+import kiit.common.values.ListMap
+import kiit.context.Context
 import slatekit.integration.mods.Mod
 import kiit.query.Op
-import slatekit.results.Failure
-import slatekit.results.Notice
-import slatekit.results.Success
-import slatekit.results.Try
+import kiit.results.Failure
+import kiit.results.Notice
+import kiit.results.Success
+import kiit.results.Try
 
 /**
  * The modules service supports the install of a "feature" module.

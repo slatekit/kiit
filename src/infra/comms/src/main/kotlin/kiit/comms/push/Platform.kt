@@ -12,8 +12,8 @@ mantra: Simplicity above all else
  */
 package kiit.comms.push
 
-import slatekit.common.EnumLike
-import slatekit.common.EnumSupport
+import kiit.common.EnumLike
+import kiit.common.EnumSupport
 
 sealed class Platform(
     override val name: String,

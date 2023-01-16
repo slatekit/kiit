@@ -14,12 +14,12 @@
 package kiit.entities
 
 import kotlin.reflect.KClass
-import slatekit.common.data.*
-import slatekit.common.crypto.Encryptor
-import slatekit.common.log.Logs
-import slatekit.common.log.LogsDefault
-import slatekit.utils.naming.Namer
-import slatekit.common.values.ListMap
+import kiit.common.data.*
+import kiit.common.crypto.Encryptor
+import kiit.common.log.Logs
+import kiit.common.log.LogsDefault
+import kiit.utils.naming.Namer
+import kiit.common.values.ListMap
 import kiit.data.core.*
 import kiit.data.encoders.Encoders
 import kiit.data.sql.vendors.*

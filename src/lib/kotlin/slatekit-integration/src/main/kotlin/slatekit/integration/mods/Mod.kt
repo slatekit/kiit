@@ -13,7 +13,7 @@
 
 package slatekit.integration.mods
 
-import slatekit.common.DateTime
+import kiit.common.DateTime
 import kiit.entities.EntityWithUUID
 import kiit.entities.EntityWithId
 import kiit.entities.Id

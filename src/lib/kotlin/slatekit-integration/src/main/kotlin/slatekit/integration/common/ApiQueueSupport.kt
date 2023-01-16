@@ -5,11 +5,11 @@ import kiit.apis.ApiResult
 import kiit.apis.Middleware
 import kiit.apis.core.Reqs
 import kiit.apis.support.QueueSupport
-import slatekit.common.Source
-import slatekit.common.utils.Random
+import kiit.common.Source
+import kiit.common.utils.Random
 import kiit.core.queues.AsyncQueue
-import slatekit.results.Outcome
-import slatekit.results.Success
+import kiit.results.Outcome
+import kiit.results.Success
 
 interface ApiQueueSupport : QueueSupport, Middleware{
 

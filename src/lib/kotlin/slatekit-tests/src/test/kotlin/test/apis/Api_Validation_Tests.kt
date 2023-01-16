@@ -19,8 +19,8 @@ import org.threeten.bp.ZoneId
 import slatekit.apis.*
 import slatekit.apis.routes.Api
 import slatekit.apis.SetupType
-import slatekit.common.DateTimes
-import slatekit.results.*
+import kiit.common.DateTimes
+import kiit.results.*
 import test.apis.samples.Sample_API_1_Validation
 
 /**

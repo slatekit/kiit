@@ -51,9 +51,9 @@ dependencies {
 
     // /* <slatekit_local>
     if( kiitSetupViaBinary ) {
-        implementation "com.slatekit:slatekit-results:$kiit_version"
-        implementation "com.slatekit:slatekit-common:$kiit_version"
-        implementation "com.slatekit:slatekit-context:$kiit_version"
+        implementation "com.slatekit:kiit-results:$kiit_version"
+        implementation "com.slatekit:kiit-common:$kiit_version"
+        implementation "com.slatekit:kiit-context:$kiit_version"
         implementation "dev.kiit:app:$kiit_version"
         implementation "dev.kiit:apis:$kiit_version"
         implementation "dev.kiit:cli:$kiit_version"
@@ -72,7 +72,7 @@ dependencies {
 //        implementation "dev.kiit:core:$kiit_version"
 //        implementation "dev.kiit:cache:$kiit_version"
 //        implementation "dev.kiit:comms:$kiit_version"
-//        implementation "com.slatekit:slatekit-http:$kiit_version"
+//        implementation "com.slatekit:kiit-http:$kiit_version"
 //        implementation "com.slatekit:kiit-jobs:$kiit_version"
 //        implementation "com.slatekit:slatekit-cloud:$kiit_version"
 //        implementation "com.slatekit:kiit-query:$kiit_version"
@@ -82,10 +82,10 @@ dependencies {
 //        implementation "com.slatekit:kiit-server:$kiit_version"
     } else {
         // */
-    implementation project(":slatekit-result")
-    implementation project(":slatekit-common")
-    implementation project(":slatekit-utils")
-    implementation project(":slatekit-context")
+    implementation project(":kiit-result")
+    implementation project(":kiit-common")
+    implementation project(":kiit-utils")
+    implementation project(":kiit-context")
     implementation project(":kiit-app")
     implementation project(":kiit-apis")
     implementation project(":kiit-cli")
@@ -93,7 +93,7 @@ dependencies {
     implementation project(":kiit-policy")
     implementation project(":kiit-serialization")
     implementation project(":slatekit-telemetry")
-    implementation project(":slatekit-requests")
+    implementation project(":kiit-requests")
     implementation project(":slatekit-generator")
     implementation project(":connectors-cli")
     implementation project(":providers-logback")
@@ -103,7 +103,7 @@ dependencies {
 //        implementation project(":providers-aws")
 //        implementation project(":providers-datadog")
 //        implementation project(":kiit-core")
-//        implementation project(":slatekit-http")
+//        implementation project(":kiit-http")
 //        implementation project(":kiit-cache")
 //        implementation project(":kiit-jobs")
 //        implementation project(":kiit-comms")

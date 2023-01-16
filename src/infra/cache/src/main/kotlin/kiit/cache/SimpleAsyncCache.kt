@@ -4,10 +4,10 @@ import kotlinx.coroutines.CompletableDeferred
 import kotlinx.coroutines.Deferred
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.yield
-import slatekit.common.Identity
-import slatekit.common.log.Logger
-import slatekit.common.log.LoggerConsole
-import slatekit.results.Outcome
+import kiit.common.Identity
+import kiit.common.log.Logger
+import kiit.common.log.LoggerConsole
+import kiit.results.Outcome
 
 /**
  * Cache implementation using channels for managing shared state ( cache data / stats )

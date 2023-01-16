@@ -32,7 +32,7 @@ class DocFiles(val ext: String = "kt", val lang: String = "kotlin") {
 
     fun buildSourceFolder(proj: String, folder: String): String {
         return when (proj) {
-            "common" -> "slatekit-common/src/main/${lang}/slatekit/common/${folder}"
+            "common" -> "kiit-common/src/main/${lang}/slatekit/common/${folder}"
             "entities" -> "slatekit-entities/src/main/${lang}/slatekit/entities/${folder}"
             "core" -> "slatekit-core/src/main/${lang}/slatekit/core/${folder}"
             "cloud" -> "slatekit-cloud/src/main/${lang}/slatekit/cloud/${folder}"

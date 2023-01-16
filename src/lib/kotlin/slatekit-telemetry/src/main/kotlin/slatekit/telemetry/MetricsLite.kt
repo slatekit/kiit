@@ -2,8 +2,8 @@ package slatekit.telemetry
 
 import org.threeten.bp.Instant
 import org.threeten.bp.ZonedDateTime
-import slatekit.common.ext.durationFrom
-import slatekit.common.Identity
+import kiit.common.ext.durationFrom
+import kiit.common.Identity
 import java.util.concurrent.atomic.AtomicLong
 import java.util.concurrent.atomic.AtomicReference
 
@@ -17,7 +17,7 @@ import java.util.concurrent.atomic.AtomicReference
  * 3. SlateKit custom diagnostics components ( Calls, Counters, Events, Lasts ) are orthogonal to metrics
  * 4. SlateKit has its own ( just a few ) diagnostic level components like Calls/Counters/Events/Lasts
  *    that are not available in other metrics libraries. These are specifically designed to work with
- *    the Result<T, E> component in @see[slatekit.results.Result] for counting/tracking successes/failures
+ *    the Result<T, E> component in @see[kiit.results.Result] for counting/tracking successes/failures
  *
  */
 class MetricsLite(

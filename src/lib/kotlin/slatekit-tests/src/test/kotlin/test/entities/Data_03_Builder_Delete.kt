@@ -16,8 +16,8 @@ package test.entities
 import org.junit.Assert
 import org.junit.Before
 import org.junit.Test
-import slatekit.common.data.*
-import slatekit.common.data.BuildMode
+import kiit.common.data.*
+import kiit.common.data.BuildMode
 import kiit.data.sql.Builders
 import kiit.data.sql.vendors.MySqlDialect
 import kiit.entities.*

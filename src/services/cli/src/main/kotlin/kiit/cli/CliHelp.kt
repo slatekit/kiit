@@ -13,10 +13,10 @@
 
 package kiit.cli
 
-import slatekit.utils.writer.TextType
-import slatekit.utils.writer.Writer
-import slatekit.common.info.Info
-import slatekit.common.io.IO
+import kiit.utils.writer.TextType
+import kiit.utils.writer.Writer
+import kiit.common.info.Info
+import kiit.common.io.IO
 
 open class CliHelp(private val info: Info, private val io: IO<CliOutput, Unit>) : Writer {
 

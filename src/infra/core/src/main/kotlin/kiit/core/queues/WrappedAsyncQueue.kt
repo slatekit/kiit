@@ -1,6 +1,6 @@
 package kiit.core.queues
 
-import slatekit.results.Try
+import kiit.results.Try
 
 class WrappedAsyncQueue<T>(val queue:Queue<T>) : AsyncQueue<T> {
 
@@ -31,7 +31,7 @@ class WrappedAsyncQueue<T>(val queue:Queue<T>) : AsyncQueue<T> {
         return queue.done(entry)
     }
 
-    override suspend fun done(entries: List<QueueEntry<T>>?):slatekit.results.Result<String, List<Pair<QueueEntry<T>, Throwable>>> {
+    override suspend fun done(entries: List<QueueEntry<T>>?):kiit.results.Result<String, List<Pair<QueueEntry<T>, Throwable>>> {
         return queue.done(entries)
     }
 

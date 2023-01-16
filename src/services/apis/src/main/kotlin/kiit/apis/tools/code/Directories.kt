@@ -2,7 +2,7 @@ package kiit.apis.tools.code
 
 import java.io.File
 import java.io.FileNotFoundException
-import slatekit.common.log.Logger
+import kiit.common.log.Logger
 
 /**
  * @param outputFolder     : e.g. ~/dev/app1/src/main/kotlin/app/

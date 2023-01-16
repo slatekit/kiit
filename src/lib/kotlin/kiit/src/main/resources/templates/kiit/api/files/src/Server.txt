@@ -12,12 +12,12 @@ import kiit.apis.*
 import kiit.apis.routes.Api
 
 // Slate Kit - Common Utilities
-import slatekit.common.*
-import slatekit.results.*
+import kiit.common.*
+import kiit.results.*
 
 // Slate Kit - App ( provides args, help, life-cycle methods, etc )
-import slatekit.common.ext.toResponse
-import slatekit.context.Context
+import kiit.common.ext.toResponse
+import kiit.context.Context
 
 // Slate Kit - Server ( Ktor support )
 import kiit.server.ServerSettings

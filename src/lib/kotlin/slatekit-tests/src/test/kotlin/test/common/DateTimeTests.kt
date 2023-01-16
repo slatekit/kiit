@@ -18,11 +18,11 @@ package test.common
 
 import org.junit.Assert
 import org.junit.Test
-import slatekit.common.DateTime
-import slatekit.common.ext.*
+import kiit.common.DateTime
+import kiit.common.ext.*
 //import java.time.*
 import org.threeten.bp.*
-import slatekit.common.DateTimes
+import kiit.common.DateTimes
 
 
 class DateTimeTests {

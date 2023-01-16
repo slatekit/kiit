@@ -1,6 +1,6 @@
 package kiit.meta
 
-import slatekit.common.data.DataType
+import kiit.common.data.DataType
 import kiit.meta.models.*
 import kotlin.reflect.KClass
 import kotlin.reflect.KProperty

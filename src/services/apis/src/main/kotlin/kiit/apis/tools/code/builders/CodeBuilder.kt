@@ -2,7 +2,7 @@ package kiit.apis.tools.code.builders
 
 import kiit.apis.routes.Action
 import kiit.apis.tools.code.TypeInfo
-import slatekit.common.newline
+import kiit.common.newline
 import kiit.meta.KTypes
 import kiit.meta.Reflector
 import kotlin.reflect.KClass
@@ -56,7 +56,7 @@ interface CodeBuilder {
             val cls = tpe.classifier as KClass<*>
             if (Reflector.isSlateKitEnum(cls)) {
                 buildTypeName(KTypes.KIntType)
-            } else if (cls == slatekit.results.Result::class) {
+            } else if (cls == kiit.results.Result::class) {
                 val genType = tpe.arguments[0].type!!
                 val finalType = buildTypeName(genType)
                 finalType

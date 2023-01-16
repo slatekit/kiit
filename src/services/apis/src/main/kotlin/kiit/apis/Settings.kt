@@ -16,10 +16,10 @@ package kiit.apis
 import kiit.apis.tools.docs.Doc
 import kiit.apis.tools.docs.DocConsole
 import kiit.apis.tools.docs.DocWeb
-import slatekit.common.Source
-import slatekit.common.crypto.Encryptor
-import slatekit.utils.naming.Namer
-import slatekit.requests.Request
+import kiit.common.Source
+import kiit.common.crypto.Encryptor
+import kiit.utils.naming.Namer
+import kiit.requests.Request
 import kiit.serialization.deserializer.Deserializer
 
 /**

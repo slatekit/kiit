@@ -2,15 +2,15 @@ package ${app.package}
 
 
 import kotlinx.coroutines.runBlocking
-import slatekit.common.Identity
-import slatekit.common.args.Args
+import kiit.common.Identity
+import kiit.common.args.Args
 import kiit.core.queues.AsyncQueue
 import kiit.core.queues.InMemoryQueue
 import kiit.connectors.jobs.JobQueue
 import kiit.jobs.Manager
 import kiit.jobs.Priority
-import slatekit.results.Failure
-import slatekit.results.Success
+import kiit.results.Failure
+import kiit.results.Success
 
 
 /**

@@ -4,8 +4,8 @@ import kotlinx.coroutines.runBlocking
 import org.threeten.bp.Duration
 import java.util.concurrent.Executors
 import java.util.concurrent.ScheduledExecutorService
-import slatekit.common.DateTime
-import slatekit.common.ext.atUtc
+import kiit.common.DateTime
+import kiit.common.ext.atUtc
 import java.util.concurrent.TimeUnit
 
 interface Scheduler {

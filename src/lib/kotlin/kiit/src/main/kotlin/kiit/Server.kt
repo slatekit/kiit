@@ -12,14 +12,14 @@ import kiit.apis.core.Auth
 import kiit.apis.routes.Api
 
 // Slate Kit - Common Utilities
-import slatekit.common.*
-import slatekit.common.ext.toStringMySql
-import slatekit.common.types.*
-import slatekit.results.*
+import kiit.common.*
+import kiit.common.ext.toStringMySql
+import kiit.common.types.*
+import kiit.results.*
 
 // Slate Kit - App ( provides args, help, life-cycle methods, etc )
-import slatekit.requests.toResponse
-import slatekit.context.Context
+import kiit.requests.toResponse
+import kiit.context.Context
 import kiit.core.common.FileUtils
 
 // Slate Kit - Server ( Ktor support )

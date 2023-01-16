@@ -3,11 +3,11 @@ package test.jobs.support
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.runBlocking
 import org.junit.Assert
-import slatekit.actors.Issuable
-import slatekit.actors.Issuer
-import slatekit.actors.Message
-import slatekit.actors.Status
-import slatekit.common.Identity
+import kiit.actors.Issuable
+import kiit.actors.Issuer
+import kiit.actors.Message
+import kiit.actors.Status
+import kiit.common.Identity
 import slatekit.jobs.*
 import slatekit.jobs.Context
 import slatekit.jobs.Worker

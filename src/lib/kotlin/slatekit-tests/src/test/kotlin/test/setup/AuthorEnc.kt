@@ -1,9 +1,9 @@
 package test.setup
 
-import slatekit.common.DateTime
-import slatekit.common.ids.UPID
-import slatekit.common.ids.UPIDs
-import slatekit.common.utils.Random
+import kiit.common.DateTime
+import kiit.common.ids.UPID
+import kiit.common.ids.UPIDs
+import kiit.common.utils.Random
 import kiit.entities.EntityWithId
 import kiit.entities.Id
 import kiit.entities.Column

@@ -1,7 +1,7 @@
 package kiit.apis.tools.code
 
-import slatekit.common.io.Uris
-import slatekit.common.pascalCase
+import kiit.common.io.Uris
+import kiit.common.pascalCase
 import java.io.File
 
 /**

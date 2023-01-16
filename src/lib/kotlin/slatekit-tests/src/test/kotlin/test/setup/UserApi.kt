@@ -14,20 +14,20 @@
 package test.setup
 
 import slatekit.apis.*
-import slatekit.common.*
-import slatekit.common.auth.Roles
-import slatekit.common.types.ContentFile
-import slatekit.common.crypto.EncDouble
-import slatekit.common.crypto.EncString
-import slatekit.common.crypto.EncInt
-import slatekit.common.crypto.EncLong
-import slatekit.common.values.Metadata
-import slatekit.requests.Request
+import kiit.common.*
+import kiit.common.auth.Roles
+import kiit.common.types.ContentFile
+import kiit.common.crypto.EncDouble
+import kiit.common.crypto.EncString
+import kiit.common.crypto.EncInt
+import kiit.common.crypto.EncLong
+import kiit.common.values.Metadata
+import kiit.requests.Request
 import slatekit.integration.common.ApiBaseEntity
 import kiit.entities.EntityService
 import slatekit.connectors.entities.AppEntContext
-import slatekit.results.Notice
-import slatekit.results.Success
+import kiit.results.Notice
+import kiit.results.Success
 
 
 @Api(area = "app", name = "users", desc = "api to access and manage users 3", roles= ["admin"], auth = AuthModes.TOKEN, verb = Verbs.AUTO, sources = [Sources.ALL])

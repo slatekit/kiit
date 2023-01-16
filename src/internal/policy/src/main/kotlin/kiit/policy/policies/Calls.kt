@@ -2,9 +2,9 @@ package kiit.policy.policies
 
 import kiit.policy.Policy
 import slatekit.telemetry.Calls
-import slatekit.results.Codes
-import slatekit.results.Outcome
-import slatekit.results.builders.Outcomes
+import kiit.results.Codes
+import kiit.results.Outcome
+import kiit.results.builders.Outcomes
 
 /**
  * Policy to limit the operation based on the total calls/runs

@@ -1,6 +1,6 @@
 package kiit.providers.kafka
 
-import slatekit.common.conf.Conf
+import kiit.common.conf.Conf
 
 import org.apache.kafka.clients.CommonClientConfigs
 import org.apache.kafka.clients.producer.ProducerConfig

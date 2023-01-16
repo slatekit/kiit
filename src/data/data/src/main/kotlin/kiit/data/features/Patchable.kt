@@ -1,6 +1,6 @@
 package kiit.data.features
 
-import slatekit.common.data.Value
+import kiit.common.data.Value
 import kiit.query.Op
 import kiit.query.Select
 import kiit.query.Update

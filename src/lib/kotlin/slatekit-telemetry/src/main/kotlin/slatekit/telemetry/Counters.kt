@@ -1,14 +1,14 @@
 package slatekit.telemetry
 
-import slatekit.common.Identity
-import slatekit.results.Failed
-import slatekit.results.Passed
-import slatekit.results.Status
+import kiit.common.Identity
+import kiit.results.Failed
+import kiit.results.Passed
+import kiit.results.Status
 import java.util.concurrent.atomic.AtomicLong
 
 
 /**
- * Used for diagnostics / metrics to track and count various @see[slatekit.results.Status]
+ * Used for diagnostics / metrics to track and count various @see[kiit.results.Status]
  * representing successes / failures of some operation identified by @param id.
  * This serves to track the following:
  *
@@ -102,7 +102,7 @@ class Counters(val id: Identity = Identity.empty,
         /**
          * Tracks the status of all the results using the counters
          */
-        fun <S,F> count(counters: Counters, results:List<slatekit.results.Result<S, F>>): Unit {
+        fun <S,F> count(counters: Counters, results:List<kiit.results.Result<S, F>>): Unit {
             // 1. Track processed, failed, etc
             results.forEach { result -> counters.increment(result.status) }
         }

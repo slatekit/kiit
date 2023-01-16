@@ -1,16 +1,16 @@
 package kiit.cli
 
 import java.io.InputStream
-import slatekit.common.DateTime
-import slatekit.common.values.Inputs
-import slatekit.common.values.Metadata
-import slatekit.common.io.Uris
-import slatekit.common.args.Args
-import slatekit.common.types.ContentFile
-import slatekit.requests.InputArgs
-import slatekit.requests.Request
-import slatekit.requests.RequestSupport
-import slatekit.common.Source
+import kiit.common.DateTime
+import kiit.common.values.Inputs
+import kiit.common.values.Metadata
+import kiit.common.io.Uris
+import kiit.common.args.Args
+import kiit.common.types.ContentFile
+import kiit.requests.InputArgs
+import kiit.requests.Request
+import kiit.requests.RequestSupport
+import kiit.common.Source
 
 /**
  * Represents an abstraction of a Web Api Request and also a CLI ( Command Line ) request

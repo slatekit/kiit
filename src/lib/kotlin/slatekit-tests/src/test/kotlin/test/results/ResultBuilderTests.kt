@@ -2,10 +2,10 @@ package test.results
 import org.junit.Assert
 import org.junit.Test
 import kiit.meta.kClass
-import slatekit.results.*
-import slatekit.results.Codes
-import slatekit.results.builders.OutcomeBuilder
-import slatekit.results.builders.Outcomes
+import kiit.results.*
+import kiit.results.Codes
+import kiit.results.builders.OutcomeBuilder
+import kiit.results.builders.Outcomes
 import kiit.serialization.responses.ResponseDecoder
 
 /**

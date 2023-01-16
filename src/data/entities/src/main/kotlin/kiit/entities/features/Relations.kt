@@ -2,7 +2,7 @@ package kiit.entities.features
 
 import kotlin.reflect.KClass
 import kotlin.reflect.KProperty
-import slatekit.common.NOTE
+import kiit.common.NOTE
 import kiit.entities.Entities
 import kiit.entities.Entity
 import kiit.entities.core.EntityOps

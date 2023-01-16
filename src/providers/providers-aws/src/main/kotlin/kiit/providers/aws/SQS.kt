@@ -17,17 +17,17 @@ import com.amazonaws.auth.AWSCredentials
 import com.amazonaws.regions.Regions
 import com.amazonaws.services.sqs.AmazonSQSClient
 import com.amazonaws.services.sqs.model.*
-import slatekit.common.DateTime
-import slatekit.common.utils.Random
-import slatekit.common.info.ApiLogin
-import slatekit.common.io.Uris
-import slatekit.common.ext.toStringUtc
-import slatekit.common.Provider
+import kiit.common.DateTime
+import kiit.common.utils.Random
+import kiit.common.info.ApiLogin
+import kiit.common.io.Uris
+import kiit.common.ext.toStringUtc
+import kiit.common.Provider
 import kiit.core.queues.QueueEntry
 import kiit.core.queues.QueueValueConverter
 import kiit.core.queues.CloudQueue
-import slatekit.results.Try
-import slatekit.results.builders.Tries
+import kiit.results.Try
+import kiit.results.builders.Tries
 import java.io.File
 import java.io.IOException
 
@@ -159,8 +159,8 @@ class SQS<T>(
             val value = converter.decode(content)
             value?.let {
                 send(value, tagName, tagValue)
-            } ?: slatekit.results.Failure(IOException("Invalid file path: $fileNameLocal"))
-        } ?: slatekit.results.Failure(IOException("Invalid file path: $fileNameLocal"),
+            } ?: kiit.results.Failure(IOException("Invalid file path: $fileNameLocal"))
+        } ?: kiit.results.Failure(IOException("Invalid file path: $fileNameLocal"),
                 msg = "Invalid file path: $fileNameLocal")
     }
 

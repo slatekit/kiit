@@ -17,7 +17,7 @@ import kotlinx.coroutines.runBlocking
 import org.junit.Assert
 import org.junit.Before
 import org.junit.Test
-import slatekit.common.data.*
+import kiit.common.data.*
 import kiit.entities.features.Relations
 import kiit.entities.*
 import kiit.entities.features.Counts
@@ -90,7 +90,7 @@ open class Data_04_Entity_Service_MySql {
 
     @Test
     open fun can_update_an_item() {
-        val lc = slatekit.common.Types.JLongClass
+        val lc = kiit.common.Types.JLongClass
         val kc = Long::class.java
         val isEqual = lc == kc
         println(isEqual)

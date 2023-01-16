@@ -13,8 +13,8 @@
 
 package kiit.meta
 
-import slatekit.common.EnumLike
-import slatekit.common.EnumSupport
+import kiit.common.EnumLike
+import kiit.common.EnumSupport
 import kotlin.reflect.*
 import kotlin.reflect.full.*
 import kotlin.reflect.jvm.javaSetter
@@ -264,9 +264,9 @@ object Reflector {
     //        "java.time.LocalDate"      -> KTypes.KLocalDateClass
     //        "java.time.LocalTime"      -> KTypes.KLocalTimeClass
     //        "java.time.LocalDateTime"  -> KTypes.KLocalDateTimeClass
-    //        "slatekit.common.DateTime" -> KTypes.KDateTimeClass
+    //        "kiit.common.DateTime" -> KTypes.KDateTimeClass
     //        "java.util.UUID"           -> KTypes.KUUIDClass
-    //        "slatekit.common.ids.UniqueId" -> KTypes.KUniqueIdClass
+    //        "kiit.common.ids.UniqueId" -> KTypes.KUniqueIdClass
     //        else                       -> Any::class
     //    }
     // }

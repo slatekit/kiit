@@ -3,9 +3,9 @@ package kiit.server.core
 import io.ktor.application.ApplicationCall
 import io.ktor.routing.Routing
 import kiit.apis.ApiServer
-import slatekit.context.Context
+import kiit.context.Context
 import slatekit.telemetry.Diagnostics
-import slatekit.requests.Request
+import kiit.requests.Request
 
 interface RequestHandler {
     val context: Context

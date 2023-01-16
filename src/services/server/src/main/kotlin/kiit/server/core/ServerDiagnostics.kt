@@ -1,9 +1,9 @@
 package kiit.server.core
 
 import slatekit.telemetry.Diagnostics
-import slatekit.common.log.Logger
+import kiit.common.log.Logger
 import slatekit.telemetry.Metrics
-import slatekit.requests.*
+import kiit.requests.*
 
 /**
  * Standardized diagnostics using the Diagnostics component from common.

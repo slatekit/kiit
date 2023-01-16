@@ -13,14 +13,14 @@
 
 package kiit.server.ktor
 
-import slatekit.common.convert.Conversions
-import slatekit.common.DateTime
-import slatekit.common.crypto.Encryptor
+import kiit.common.convert.Conversions
+import kiit.common.DateTime
+import kiit.common.crypto.Encryptor
 
 import io.ktor.request.*
 import org.json.simple.JSONObject
-import slatekit.common.values.Metadata
-import slatekit.common.Strings
+import kiit.common.values.Metadata
+import kiit.common.Strings
 //import java.time.*
 import org.threeten.bp.*
 import kiit.apis.support.JsonSupport

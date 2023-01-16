@@ -1,8 +1,8 @@
 package kiit.entities.features
 
 import kiit.entities.Entity
-import slatekit.results.Try
-import slatekit.results.builders.Tries
+import kiit.results.Try
+import kiit.results.builders.Tries
 
 interface Upserts<TId, T> :
     Creates<TId, T>,

@@ -13,11 +13,11 @@
 
 package kiit.app
 
-import slatekit.utils.display.Banner
-import slatekit.context.Context
-import slatekit.common.args.ArgsSchema
-import slatekit.common.crypto.EncryptSupport
-import slatekit.common.log.LogSupport
+import kiit.utils.display.Banner
+import kiit.context.Context
+import kiit.common.args.ArgsSchema
+import kiit.common.crypto.EncryptSupport
+import kiit.common.log.LogSupport
 
 /**
  * Application base class providing most of the scaffolding to support command line argument

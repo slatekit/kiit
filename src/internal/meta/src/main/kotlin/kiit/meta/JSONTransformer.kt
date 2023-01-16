@@ -2,7 +2,7 @@ package kiit.meta
 
 import org.json.simple.JSONObject
 import org.json.simple.parser.JSONParser
-import slatekit.common.convert.Transformer
+import kiit.common.convert.Transformer
 
 interface JSONTransformer<S> : Transformer<S, JSONObject, String> {
     /**

@@ -1,8 +1,8 @@
 package kiit.entities.mapper
 
-import slatekit.common.crypto.Encryptor
-import slatekit.common.data.DataAction
-import slatekit.common.data.Values
+import kiit.common.crypto.Encryptor
+import kiit.common.data.DataAction
+import kiit.common.data.Values
 
 
 interface Encoder<TId, T> where TId : kotlin.Comparable<TId>, T : Any {

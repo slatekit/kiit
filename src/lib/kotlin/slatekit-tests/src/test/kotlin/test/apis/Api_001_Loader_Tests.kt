@@ -22,8 +22,8 @@ import slatekit.apis.setup.Annotations
 import slatekit.apis.setup.Methods
 import slatekit.apis.setup.loadAll
 import slatekit.apis.setup.toApi
-import slatekit.common.Source
-import slatekit.common.auth.Roles
+import kiit.common.Source
+import kiit.common.auth.Roles
 import test.setup.*
 
 /**

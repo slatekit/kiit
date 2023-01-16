@@ -2,10 +2,10 @@ package test.common
 
 import org.junit.Assert
 import org.junit.Test
-import slatekit.common.io.Alias
-import slatekit.common.io.Files
-import slatekit.common.io.Uri
-import slatekit.common.io.Uris
+import kiit.common.io.Alias
+import kiit.common.io.Files
+import kiit.common.io.Uri
+import kiit.common.io.Uris
 import java.io.File
 
 

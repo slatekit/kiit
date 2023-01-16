@@ -2,13 +2,13 @@ package ${app.package}
 
 import kiit.app.App
 import kiit.app.AppOptions
-import slatekit.context.Context
-import slatekit.common.args.ArgsSchema
-import slatekit.common.convert.B64Java8
-import slatekit.common.crypto.Encryptor
-import slatekit.common.info.About
-import slatekit.results.Success
-import slatekit.results.Try
+import kiit.context.Context
+import kiit.common.args.ArgsSchema
+import kiit.common.convert.B64Java8
+import kiit.common.crypto.Encryptor
+import kiit.common.info.About
+import kiit.results.Success
+import kiit.results.Try
 
 
 /**

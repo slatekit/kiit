@@ -13,13 +13,13 @@ mantra: Simplicity above all else
 package test.common
 
 import org.junit.Assert
-import slatekit.common.envs.*
+import kiit.common.envs.*
 
 import org.junit.Test
-import slatekit.common.Agent
-import slatekit.common.Identity
-import slatekit.common.SimpleIdentity
-import slatekit.common.ids.ULIDs
+import kiit.common.Agent
+import kiit.common.Identity
+import kiit.common.SimpleIdentity
+import kiit.common.ids.ULIDs
 
 
 class IdentityTests {

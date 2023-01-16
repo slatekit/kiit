@@ -1,6 +1,6 @@
 package test
 
-import slatekit.common.utils.Random
+import kiit.common.utils.Random
 import kiit.comms.sms.SmsService
 
 /**

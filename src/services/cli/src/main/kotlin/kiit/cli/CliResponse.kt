@@ -12,10 +12,10 @@ mantra: Simplicity above all else
  */
 package kiit.cli
 
-import slatekit.common.args.Args
-import slatekit.requests.Response
-import slatekit.results.Codes
-import slatekit.results.Passed
+import kiit.common.args.Args
+import kiit.requests.Response
+import kiit.results.Codes
+import kiit.results.Passed
 
 /**
  * General purpose class to model a Response at an application boundary ( such as http response )

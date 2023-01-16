@@ -1,11 +1,11 @@
 package kiit.migrations
 
-import slatekit.common.data.IDb
-import slatekit.common.log.LogSupport
-import slatekit.common.log.Logger
-import slatekit.results.Outcome
-import slatekit.results.builders.Outcomes
-import slatekit.results.builders.Tries
+import kiit.common.data.IDb
+import kiit.common.log.LogSupport
+import kiit.common.log.Logger
+import kiit.results.Outcome
+import kiit.results.builders.Outcomes
+import kiit.results.builders.Tries
 
 data class SimpleMigration(
     override val desc: String,

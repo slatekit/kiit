@@ -15,7 +15,7 @@ package test
 import org.junit.Assert
 import org.junit.Test
 import kiit.cache.*
-import slatekit.common.DateTime
+import kiit.common.DateTime
 
 
 class Cache_Sync_Tests {

@@ -1,7 +1,7 @@
 package kiit.entities.features
 
-import slatekit.common.data.DataAction
-import slatekit.common.data.Value
+import kiit.common.data.DataAction
+import kiit.common.data.Value
 import kotlin.reflect.KProperty
 import kiit.entities.Entity
 import kiit.entities.core.EntityOps
@@ -9,8 +9,8 @@ import kiit.entities.EntityOptions
 import kiit.meta.Reflector
 import kiit.meta.kClass
 import kiit.query.Update
-import slatekit.results.Try
-import slatekit.results.builders.Tries
+import kiit.results.Try
+import kiit.results.builders.Tries
 
 interface Updates<TId, T> : EntityOps<TId, T> where TId : kotlin.Comparable<TId>, T : Entity<TId> {
 

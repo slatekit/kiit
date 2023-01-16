@@ -1,6 +1,6 @@
 package kiit.core.common
 
-import slatekit.utils.paged.Pager
+import kiit.utils.paged.Pager
 
 /**
  * Used to cycle through exponential "backoff" time in seconds

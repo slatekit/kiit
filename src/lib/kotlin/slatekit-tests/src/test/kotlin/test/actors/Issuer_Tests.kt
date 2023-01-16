@@ -3,7 +3,7 @@ package test.actors
 import kotlinx.coroutines.runBlocking
 import org.junit.Assert
 import org.junit.Test
-import slatekit.actors.*
+import kiit.actors.*
 
 class Issuer_Tests : ActorTestSupport{
 

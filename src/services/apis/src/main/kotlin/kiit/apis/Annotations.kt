@@ -1,6 +1,6 @@
 package kiit.apis
 
-import slatekit.common.Sources
+import kiit.common.Sources
 
 /**
  * ================================================================

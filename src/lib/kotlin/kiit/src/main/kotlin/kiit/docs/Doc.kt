@@ -20,7 +20,7 @@ data class Doc(
         //"slate.common.args.Args"
         val path = namespace.replace(".", "/")
 
-        // Adjust for file in root namespace ( e.g. slatekit.common.Result.kt )
+        // Adjust for file in root namespace ( e.g. kiit.common.Result.kt )
         val sourceFolderPath = "src/lib/${files.lang}/${proj}/src/main/kotlin/${path}"
         return sourceFolderPath
     }
@@ -36,8 +36,8 @@ data class Doc(
         val tokens = depends.split(',')
         tokens.forEach { token ->
             when (token) {
-                "res" -> items += " slatekit-results"
-                "com" -> items += " slatekit-common"
+                "res" -> items += " kiit-results"
+                "com" -> items += " kiit-common"
                 "ent" -> items += " slatekit-entities"
                 "core" -> items += " slatekit-core"
                 "cloud" -> items += " providers-aws"

@@ -18,11 +18,11 @@ import kiit.apis.Action
 import kiit.apis.AuthModes
 import kiit.apis.Verbs
 import kiit.apis.support.FileSupport
-import slatekit.context.Context
-import slatekit.common.Sources
-import slatekit.common.crypto.Encryptor
-import slatekit.common.info.Host
-import slatekit.common.log.Logger
+import kiit.context.Context
+import kiit.common.Sources
+import kiit.common.crypto.Encryptor
+import kiit.common.info.Host
+import kiit.common.log.Logger
 
 @Api(area = "app", name = "version", desc = "api to get version information",
         auth = AuthModes.KEYED, roles = ["admin"], verb = Verbs.AUTO, sources = [Sources.ALL])

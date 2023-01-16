@@ -17,17 +17,17 @@ import kiit.apis.Api
 import kiit.apis.Action
 import kiit.apis.AuthModes
 import kiit.apis.Verbs
-import slatekit.common.Sources
-import slatekit.common.types.ContentFile
-import slatekit.common.crypto.Encryptor
-import slatekit.common.io.Uris
-import slatekit.common.log.Logger
-import slatekit.context.Context
+import kiit.common.Sources
+import kiit.common.types.ContentFile
+import kiit.common.crypto.Encryptor
+import kiit.common.io.Uris
+import kiit.common.log.Logger
+import kiit.context.Context
 import kiit.core.files.CloudFiles
-import slatekit.results.Failure
-import slatekit.results.Success
-import slatekit.results.Try
-import slatekit.results.getOrElse
+import kiit.results.Failure
+import kiit.results.Success
+import kiit.results.Try
+import kiit.results.getOrElse
 
 @Api(area = "cloud", name = "files", desc = "api info about the application and host",
         auth = AuthModes.KEYED, roles = ["admin"], verb = Verbs.AUTO, sources = [Sources.ALL])
@@ -95,7 +95,7 @@ class FilesApi(val files: CloudFiles, override val context: Context) : kiit.apis
         val path = result.getOrElse { "" }
         val output = if (display) {
             val text = java.io.File(path).readText()
-            "PATH   : " + path + slatekit.common.newline +
+            "PATH   : " + path + kiit.common.newline +
                     "CONTENT: " + text
         } else
             "PATH   : " + path

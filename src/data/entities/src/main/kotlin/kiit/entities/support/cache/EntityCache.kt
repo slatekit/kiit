@@ -1,6 +1,6 @@
 package kiit.entities.support.cache
 
-import slatekit.common.utils.Batch
+import kiit.common.utils.Batch
 import kiit.entities.Entity
 import kiit.entities.EntityService
 import kiit.entities.support.Cacheable

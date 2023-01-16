@@ -3,13 +3,13 @@ package test.setup
 import slatekit.apis.Api
 import slatekit.apis.Action
 import slatekit.apis.AuthModes
-import slatekit.common.auth.Roles
-import slatekit.common.crypto.EncDouble
-import slatekit.common.crypto.EncInt
-import slatekit.common.crypto.EncLong
-import slatekit.common.crypto.EncString
-import slatekit.utils.smartvalues.Email
-import slatekit.utils.smartvalues.PhoneUS
+import kiit.common.auth.Roles
+import kiit.common.crypto.EncDouble
+import kiit.common.crypto.EncInt
+import kiit.common.crypto.EncLong
+import kiit.common.crypto.EncString
+import kiit.utils.smartvalues.Email
+import kiit.utils.smartvalues.PhoneUS
 
 
 @Api(area = "samples", name = "types3", desc = "sample api to test other features", auth = AuthModes.NONE, roles = [Roles.NONE])

@@ -2,14 +2,14 @@ package kiit.apis.routes
 
 import kiit.apis.core.Target
 import kotlin.reflect.full.primaryConstructor
-import slatekit.context.Context
-import slatekit.utils.naming.Namer
+import kiit.context.Context
+import kiit.utils.naming.Namer
 import kiit.meta.Reflector
-import slatekit.results.Codes
-import slatekit.results.Err
-import slatekit.results.Outcome
-import slatekit.results.Success
-import slatekit.results.builders.Outcomes
+import kiit.results.Codes
+import kiit.results.Err
+import kiit.results.Outcome
+import kiit.results.Success
+import kiit.results.builders.Outcomes
 
 /**
  * The top most level qualifier in the Universal Routing Structure

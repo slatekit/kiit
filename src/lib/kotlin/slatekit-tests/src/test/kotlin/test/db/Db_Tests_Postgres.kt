@@ -4,10 +4,10 @@ import org.junit.Assert
 import org.junit.Before
 import org.junit.Ignore
 import org.junit.Test
-import slatekit.common.DateTimes
-import slatekit.common.conf.Confs
-import slatekit.common.data.DataType
-import slatekit.common.data.Value
+import kiit.common.DateTimes
+import kiit.common.conf.Confs
+import kiit.common.data.DataType
+import kiit.common.data.Value
 import kiit.db.Db
 import test.TestApp
 import test.setup.TestSupport

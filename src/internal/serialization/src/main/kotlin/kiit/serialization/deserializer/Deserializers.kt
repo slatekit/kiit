@@ -2,9 +2,9 @@ package kiit.serialization.deserializer
 
 import org.json.simple.JSONArray
 import org.json.simple.JSONObject
-import slatekit.common.convert.Conversions
-import slatekit.common.crypto.*
-import slatekit.requests.Request
+import kiit.common.convert.Conversions
+import kiit.common.crypto.*
+import kiit.requests.Request
 import kiit.meta.*
 import java.util.*
 import kotlin.reflect.KClass

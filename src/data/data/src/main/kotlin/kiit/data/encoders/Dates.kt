@@ -2,12 +2,12 @@ package kiit.data.encoders
 
 import org.threeten.bp.*
 import org.threeten.bp.format.DateTimeFormatter
-import slatekit.common.DateTime
-import slatekit.common.DateTimes
-import slatekit.common.values.Record
-import slatekit.common.data.DataType
-import slatekit.common.data.Value
-import slatekit.common.ext.*
+import kiit.common.DateTime
+import kiit.common.DateTimes
+import kiit.common.values.Record
+import kiit.common.data.DataType
+import kiit.common.data.Value
+import kiit.common.ext.*
 import kiit.data.Consts
 
 /**

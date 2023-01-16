@@ -2,8 +2,8 @@ package test.entities
 
 import org.junit.Assert
 import org.junit.Test
-import slatekit.common.data.DataAction
-import slatekit.common.data.DataType
+import kiit.common.data.DataAction
+import kiit.common.data.DataType
 import kiit.data.core.LongId
 import kiit.data.core.Meta
 import kiit.data.core.Table

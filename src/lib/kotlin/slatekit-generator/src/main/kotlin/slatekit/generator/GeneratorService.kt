@@ -1,12 +1,12 @@
 package slatekit.generator
 
-import slatekit.common.conf.Conf
-import slatekit.common.log.Logger
-import slatekit.utils.writer.ConsoleWriter
-import slatekit.context.Context
-import slatekit.results.Success
-import slatekit.results.Try
-import slatekit.results.builders.Tries
+import kiit.common.conf.Conf
+import kiit.common.log.Logger
+import kiit.utils.writer.ConsoleWriter
+import kiit.context.Context
+import kiit.results.Success
+import kiit.results.Try
+import kiit.results.builders.Tries
 import java.io.File
 
 /**

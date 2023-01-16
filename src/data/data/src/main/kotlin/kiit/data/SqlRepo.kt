@@ -13,7 +13,7 @@
 
 package kiit.data
 
-import slatekit.common.data.*
+import kiit.common.data.*
 import kiit.data.core.Meta
 import kiit.data.Mapper
 import kiit.data.features.Scriptable

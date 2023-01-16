@@ -13,10 +13,10 @@
 
 package kiit.query
 
-import slatekit.common.ext.toStringMySql
+import kiit.common.ext.toStringMySql
 // import java.time.*
 import org.threeten.bp.*
-import slatekit.common.ext.toNumeric
+import kiit.common.ext.toNumeric
 import java.util.*
 
 object QueryEncoder {

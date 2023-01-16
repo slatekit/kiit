@@ -14,11 +14,11 @@ package test.meta
 
 import org.junit.Assert
 import org.junit.Test
-import slatekit.common.convert.Conversions
-import slatekit.common.DateTimes
-import slatekit.requests.InputArgs
-import slatekit.requests.CommonRequest
-import slatekit.common.Source
+import kiit.common.convert.Conversions
+import kiit.common.DateTimes
+import kiit.requests.InputArgs
+import kiit.requests.CommonRequest
+import kiit.common.Source
 import kiit.meta.Reflector
 import kiit.serialization.deserializer.Deserializer
 import test.setup.UserApi

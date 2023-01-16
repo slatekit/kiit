@@ -17,10 +17,10 @@ import kiit.apis.Api
 import kiit.apis.Action
 import kiit.apis.AuthModes
 import kiit.apis.Verbs
-import slatekit.context.Context
-import slatekit.common.Sources
-import slatekit.requests.Request
-import slatekit.common.info.*
+import kiit.context.Context
+import kiit.common.Sources
+import kiit.requests.Request
+import kiit.common.info.*
 
 @Api(area = "app", name = "info", desc = "api info about the application and host",
         auth = AuthModes.KEYED, roles = ["admin"], verb = Verbs.AUTO, sources = [Sources.ALL])

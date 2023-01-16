@@ -13,20 +13,20 @@
 
 package kiit.connectors.entities
 
-import slatekit.common.Identity
-import slatekit.common.args.Args
-import slatekit.common.conf.Config
-import slatekit.common.conf.Conf
-import slatekit.common.data.Connections
-import slatekit.common.convert.B64Java8
-import slatekit.common.crypto.Encryptor
-import slatekit.common.info.*
-import slatekit.common.log.Logs
-import slatekit.common.log.LogsDefault
-import slatekit.utils.naming.Namer
-import slatekit.context.AppContext
-import slatekit.common.envs.Envs
-import slatekit.context.Context
+import kiit.common.Identity
+import kiit.common.args.Args
+import kiit.common.conf.Config
+import kiit.common.conf.Conf
+import kiit.common.data.Connections
+import kiit.common.convert.B64Java8
+import kiit.common.crypto.Encryptor
+import kiit.common.info.*
+import kiit.common.log.Logs
+import kiit.common.log.LogsDefault
+import kiit.utils.naming.Namer
+import kiit.context.AppContext
+import kiit.common.envs.Envs
+import kiit.context.Context
 import kiit.db.Db
 import kiit.entities.Entities
 

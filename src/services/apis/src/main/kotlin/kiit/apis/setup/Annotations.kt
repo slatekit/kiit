@@ -4,8 +4,8 @@ import kotlin.reflect.KClass
 import kiit.apis.routes.Action
 import kiit.apis.routes.Api
 import kiit.apis.routes.Lookup
-import slatekit.common.Ignore
-import slatekit.utils.naming.Namer
+import kiit.common.Ignore
+import kiit.utils.naming.Namer
 import kiit.meta.Reflector
 
 class Annotations(val cls: KClass<*>, val raw: Api? = null) : Loader {

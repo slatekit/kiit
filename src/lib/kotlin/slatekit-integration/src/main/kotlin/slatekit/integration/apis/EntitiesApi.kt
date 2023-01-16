@@ -18,15 +18,15 @@ import kiit.apis.Action
 import kiit.apis.AuthModes
 import kiit.apis.Verbs
 import kiit.apis.ApiBase
-import slatekit.common.Sources
-import slatekit.common.data.DbCon
-import slatekit.common.newline
-import slatekit.common.data.Connections
+import kiit.common.Sources
+import kiit.common.data.DbCon
+import kiit.common.newline
+import kiit.common.data.Connections
 import kiit.connectors.entities.AppEntContext
 import kiit.migrations.MigrationService
 import kiit.migrations.MigrationSettings
-import slatekit.results.Notice
-import slatekit.results.Try
+import kiit.results.Notice
+import kiit.results.Try
 
 @Api(area = "infra", name = "entities", desc = "api to access and manage data models",
         auth = AuthModes.KEYED, roles = ["admin"], verb = Verbs.AUTO, sources = [Sources.ALL])

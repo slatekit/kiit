@@ -2,7 +2,7 @@ package kiit.apis.rules
 
 import kiit.apis.ApiRequest
 import kiit.apis.services.Calls
-import slatekit.results.Outcome
+import kiit.results.Outcome
 
 object ParamsRule : Rule {
     override fun validate(req: ApiRequest): Outcome<Boolean> {

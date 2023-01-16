@@ -1,10 +1,10 @@
 package slatekit.generator
 
-import slatekit.context.Context
-import slatekit.common.io.Uris
-import slatekit.common.ext.toId
-import slatekit.common.log.Logger
-import slatekit.common.utils.Props
+import kiit.context.Context
+import kiit.common.io.Uris
+import kiit.common.ext.toId
+import kiit.common.log.Logger
+import kiit.common.utils.Props
 import java.io.File
 
 /**

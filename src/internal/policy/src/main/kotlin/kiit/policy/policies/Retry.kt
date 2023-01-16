@@ -2,10 +2,10 @@ package kiit.policy.policies
 
 import kotlinx.coroutines.delay
 import kiit.policy.Policy
-import slatekit.results.Failure
-import slatekit.results.Outcome
-import slatekit.results.Success
-import slatekit.results.builders.Tries
+import kiit.results.Failure
+import kiit.results.Outcome
+import kiit.results.Success
+import kiit.results.builders.Tries
 import slatekit.telemetry.Counter
 
 /**

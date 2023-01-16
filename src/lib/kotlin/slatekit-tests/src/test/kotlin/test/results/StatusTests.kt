@@ -1,7 +1,7 @@
 package test.results
 import org.junit.Assert
 import org.junit.Test
-import slatekit.results.*
+import kiit.results.*
 
 class StatusTests {
 

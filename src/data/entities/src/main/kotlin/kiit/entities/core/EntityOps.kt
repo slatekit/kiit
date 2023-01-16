@@ -1,6 +1,6 @@
 package kiit.entities.core
 
-import slatekit.common.data.DataAction
+import kiit.common.data.DataAction
 import kiit.entities.Entity
 import kiit.entities.EntityRepo
 

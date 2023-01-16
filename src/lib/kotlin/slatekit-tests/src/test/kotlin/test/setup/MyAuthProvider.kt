@@ -13,8 +13,8 @@
 package test.setup
 
 import slatekit.apis.support.Authenticator
-import slatekit.common.info.ApiKey
-import slatekit.requests.Request
+import kiit.common.info.ApiKey
+import kiit.requests.Request
 
 
 // =======================================================================================

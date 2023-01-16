@@ -1,6 +1,6 @@
 package slatekit.telemetry
 
-import slatekit.common.DateTime
+import kiit.common.DateTime
 
 data class Expiry(val seconds:Long,
                   val started:DateTime = DateTime.now(),

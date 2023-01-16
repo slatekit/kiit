@@ -1,9 +1,9 @@
 package kiit.core.eventing
 
 import kotlinx.coroutines.CompletableDeferred
-import slatekit.common.Identity
-import slatekit.common.Provider
-import slatekit.results.Outcome
+import kiit.common.Identity
+import kiit.common.Provider
+import kiit.results.Outcome
 
 /**
  * Interface for any event producer

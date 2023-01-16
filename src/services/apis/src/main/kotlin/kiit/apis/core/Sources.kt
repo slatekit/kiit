@@ -1,6 +1,6 @@
 package kiit.apis.core
 
-import slatekit.common.Source
+import kiit.common.Source
 
 data class Sources(val all: List<Source>) {
 

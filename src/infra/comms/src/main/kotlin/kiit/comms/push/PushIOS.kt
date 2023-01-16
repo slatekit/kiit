@@ -14,9 +14,9 @@
 package kiit.comms.push
 
 import okhttp3.Request
-import slatekit.http.HttpRPC
+import kiit.http.HttpRPC
 import kiit.comms.common.Sender
-import slatekit.results.Outcome
+import kiit.results.Outcome
 
 class PushIOS(override val client: HttpRPC = HttpRPC()) : Sender<PushMessage> {
 

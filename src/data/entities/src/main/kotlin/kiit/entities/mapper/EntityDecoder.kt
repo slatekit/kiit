@@ -1,9 +1,9 @@
 package kiit.entities.mapper
 
-import slatekit.common.values.Record
-import slatekit.common.crypto.Encryptor
-import slatekit.common.data.DataType
-import slatekit.common.newline
+import kiit.common.values.Record
+import kiit.common.crypto.Encryptor
+import kiit.common.data.DataType
+import kiit.common.newline
 import kiit.data.core.Meta
 import kiit.meta.Reflector
 import kiit.meta.models.Model

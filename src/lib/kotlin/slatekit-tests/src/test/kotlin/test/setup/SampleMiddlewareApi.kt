@@ -3,8 +3,8 @@ package test.setup
 import slatekit.apis.ApiRequest
 import slatekit.apis.ApiResult
 import slatekit.apis.Middleware
-import slatekit.results.*
-import slatekit.results.builders.Outcomes
+import kiit.results.*
+import kiit.results.builders.Outcomes
 
 
 open class SampleMiddlewareApi : Middleware {

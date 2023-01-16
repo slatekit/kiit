@@ -14,11 +14,11 @@
 package kiit.comms.email
 
 import okhttp3.Request
-import slatekit.common.info.ApiLogin
-import slatekit.utils.templates.Templates
-import slatekit.http.HttpRPC
-import slatekit.results.*
-import slatekit.results.builders.Outcomes
+import kiit.common.info.ApiLogin
+import kiit.utils.templates.Templates
+import kiit.http.HttpRPC
+import kiit.results.*
+import kiit.results.builders.Outcomes
 
 import org.json.simple.JSONArray
 import org.json.simple.JSONObject

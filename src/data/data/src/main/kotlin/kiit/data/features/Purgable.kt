@@ -1,6 +1,6 @@
 package kiit.data.features
 
-import slatekit.common.DateTime
+import kiit.common.DateTime
 import kiit.data.features.Deletable
 import kiit.data.features.Inspectable
 import kiit.query.Op

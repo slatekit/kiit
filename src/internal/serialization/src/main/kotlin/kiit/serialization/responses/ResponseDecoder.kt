@@ -3,8 +3,8 @@ package kiit.serialization.responses
 import org.json.simple.JSONArray
 import org.json.simple.JSONObject
 import org.json.simple.parser.JSONParser
-import slatekit.results.*
-import slatekit.results.builders.Outcomes
+import kiit.results.*
+import kiit.results.builders.Outcomes
 
 /**
  * {

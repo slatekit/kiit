@@ -20,9 +20,9 @@ import com.amazonaws.regions.Region
 import com.amazonaws.regions.Regions
 import com.amazonaws.services.s3.AmazonS3Client
 import com.amazonaws.services.sqs.AmazonSQSClient
-import slatekit.common.conf.Config
-import slatekit.results.Try
-import slatekit.results.builders.Tries
+import kiit.common.conf.Config
+import kiit.results.Try
+import kiit.results.builders.Tries
 
 
 /**

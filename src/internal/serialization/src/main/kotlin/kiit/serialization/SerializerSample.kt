@@ -1,7 +1,7 @@
 package kiit.serialization
 
-import slatekit.common.DateTimes
-import slatekit.common.ext.local
+import kiit.common.DateTimes
+import kiit.common.ext.local
 import kiit.meta.KTypes
 import kiit.meta.Reflector
 import kotlin.reflect.KClass

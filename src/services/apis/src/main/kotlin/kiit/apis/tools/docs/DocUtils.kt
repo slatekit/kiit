@@ -2,10 +2,10 @@ package kiit.apis.tools.docs
 
 import kiit.apis.ApiConstants
 import kiit.apis.core.Part
-import slatekit.common.args.ArgsCheck
-import slatekit.requests.Request
-import slatekit.results.Outcome
-import slatekit.results.builders.Outcomes
+import kiit.common.args.ArgsCheck
+import kiit.requests.Request
+import kiit.results.Outcome
+import kiit.results.builders.Outcomes
 
 object DocUtils {
     fun isHelp(request: Request): Outcome<Part> {

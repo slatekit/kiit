@@ -10,9 +10,9 @@ import kiit.apis.routes.Api
 import kiit.apis.core.Sources
 import kiit.apis.routes.Lookup
 import kiit.apis.routes.Area
-import slatekit.common.Source
-import slatekit.common.ext.orElse
-import slatekit.utils.naming.Namer
+import kiit.common.Source
+import kiit.common.ext.orElse
+import kiit.utils.naming.Namer
 import kiit.meta.Reflector
 
 fun toVerb(name: String?): Verb {

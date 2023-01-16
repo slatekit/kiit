@@ -1,7 +1,7 @@
 package test.jobs.support
 
 import kotlinx.coroutines.channels.Channel
-import slatekit.common.DateTime
+import kiit.common.DateTime
 import slatekit.jobs.support.Scheduler
 
 

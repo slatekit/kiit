@@ -13,11 +13,11 @@
 
 package kiit.comms.email
 
-import slatekit.utils.templates.Templates
-import slatekit.common.values.Vars
-import slatekit.http.HttpRPC
+import kiit.utils.templates.Templates
+import kiit.common.values.Vars
+import kiit.http.HttpRPC
 import kiit.comms.common.TemplateSender
-import slatekit.results.*
+import kiit.results.*
 
 abstract class EmailService(
         override val templates: Templates? = null,

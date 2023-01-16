@@ -1,6 +1,6 @@
 package kiit.jobs.support
 
-import slatekit.actors.Status
+import kiit.actors.Status
 
 /**
  * Rules to control switching of State (Paused, Running, etc ) for job/workers

@@ -1,8 +1,8 @@
 package test.setup
 
-import slatekit.common.checks.Check
-import slatekit.results.Notice
-import slatekit.results.builders.Notices
+import kiit.common.checks.Check
+import kiit.results.Notice
+import kiit.results.builders.Notices
 
 
 open class SampleErrorsNoMiddlewareApi  {

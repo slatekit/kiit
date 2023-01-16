@@ -1,8 +1,8 @@
 package kiit.jobs
 
-import slatekit.actors.Action
-import slatekit.actors.pause.Controls
-import slatekit.actors.pause.Feedback
+import kiit.actors.Action
+import kiit.actors.pause.Controls
+import kiit.actors.pause.Feedback
 
 interface Ops : Controls {
     suspend fun delay(name: String): Feedback = control(Action.Delay  , "", name)

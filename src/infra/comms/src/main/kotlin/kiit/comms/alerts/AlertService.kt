@@ -1,6 +1,6 @@
 package kiit.comms.alerts
 
-import slatekit.common.Identity
+import kiit.common.Identity
 import kiit.comms.common.Sender
 
 abstract class AlertService : Sender<Alert> {

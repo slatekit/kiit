@@ -1,6 +1,6 @@
 package kiit.entities
 
-import slatekit.utils.naming.Namer
+import kiit.utils.naming.Namer
 import kiit.meta.Reflector
 import kiit.meta.models.FieldCategory
 import kiit.meta.models.Model

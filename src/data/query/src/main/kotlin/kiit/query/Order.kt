@@ -1,7 +1,7 @@
 package kiit.query
 
-import slatekit.common.EnumLike
-import slatekit.common.EnumSupport
+import kiit.common.EnumLike
+import kiit.common.EnumSupport
 
 
 enum class Order(val text:String, override val value:Int) : EnumLike {

@@ -18,8 +18,8 @@ import kiit.apis.Action
 import kiit.apis.AuthModes
 import kiit.apis.Verbs
 import kiit.apis.ApiBase
-import slatekit.context.Context
-import slatekit.common.Sources
+import kiit.context.Context
+import kiit.common.Sources
 
 /**
  * Created by kreddy on 3/23/2016.

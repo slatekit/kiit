@@ -3,8 +3,8 @@ package kiit
 import kiit.apis.SetupType
 import kiit.apis.routes.Api
 import kiit.apis.tools.code.CodeGenApi
-import slatekit.common.conf.Conf
-import slatekit.context.Context
+import kiit.common.conf.Conf
+import kiit.context.Context
 import kiit.docs.DocApi
 import slatekit.generator.*
 

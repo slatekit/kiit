@@ -1,7 +1,7 @@
 package test.results
 import org.junit.Assert
-import slatekit.results.*
-import slatekit.results.Status
+import kiit.results.*
+import kiit.results.Status
 
 interface ResultTestSupport {
 

@@ -2,7 +2,7 @@ package test.common
 
 import org.junit.Assert
 import org.junit.Test
-import slatekit.utils.paged.Pager
+import kiit.utils.paged.Pager
 
 
 class PagerTests {

@@ -5,7 +5,7 @@ import org.junit.Test
 import org.threeten.bp.LocalDate
 import org.threeten.bp.LocalDateTime
 import org.threeten.bp.LocalTime
-import slatekit.common.DateTimes
+import kiit.common.DateTimes
 import kiit.data.encoders.*
 import java.util.*
 

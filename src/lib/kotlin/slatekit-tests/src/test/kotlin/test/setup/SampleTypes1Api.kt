@@ -1,10 +1,10 @@
 package test.setup
 
 import slatekit.apis.Api
-import slatekit.common.crypto.Encryptor
-import slatekit.results.*
-import slatekit.results.builders.Notices
-import slatekit.results.builders.Tries
+import kiit.common.crypto.Encryptor
+import kiit.results.*
+import kiit.results.builders.Notices
+import kiit.results.builders.Tries
 
 
 @Api(area = "samples", name = "types1", desc = "sample api to test getting different values")

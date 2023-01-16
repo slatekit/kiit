@@ -4,9 +4,9 @@ import org.threeten.bp.LocalDate
 import org.threeten.bp.LocalDateTime
 import org.threeten.bp.LocalTime
 import org.threeten.bp.ZonedDateTime
-import slatekit.common.DateTime
-import slatekit.common.data.DataType
-import slatekit.common.ids.UPID
+import kiit.common.DateTime
+import kiit.common.data.DataType
+import kiit.common.ids.UPID
 import kiit.meta.KTypes
 import kiit.meta.Reflector
 import java.util.*

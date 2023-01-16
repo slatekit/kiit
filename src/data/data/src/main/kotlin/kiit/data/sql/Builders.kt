@@ -1,6 +1,6 @@
 package kiit.data.sql
 
-import slatekit.common.data.*
+import kiit.common.data.*
 
 
 /**

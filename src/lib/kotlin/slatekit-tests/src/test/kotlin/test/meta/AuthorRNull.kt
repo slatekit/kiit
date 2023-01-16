@@ -3,10 +3,10 @@ package test.meta
 import org.threeten.bp.LocalDate
 import org.threeten.bp.LocalDateTime
 import org.threeten.bp.LocalTime
-import slatekit.common.DateTime
-import slatekit.common.DateTimes
-import slatekit.common.ids.UPID
-import slatekit.common.ids.UPIDs
+import kiit.common.DateTime
+import kiit.common.DateTimes
+import kiit.common.ids.UPID
+import kiit.common.ids.UPIDs
 import kiit.entities.EntityUpdatable
 import kiit.entities.EntityWithId
 import kiit.meta.models.Field

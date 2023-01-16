@@ -13,8 +13,8 @@
 
 package kiit.meta.models
 
-import slatekit.utils.naming.Namer
-import slatekit.common.ext.orElse
+import kiit.utils.naming.Namer
+import kiit.common.ext.orElse
 import kiit.meta.Reflector
 import kiit.meta.Schema
 import kotlin.reflect.KClass

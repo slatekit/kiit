@@ -4,10 +4,10 @@ import slatekit.apis.Api
 import slatekit.apis.Action
 import slatekit.apis.ApiRequest
 import slatekit.apis.ApiResult
-import slatekit.common.*
-import slatekit.results.Notice
-import slatekit.results.Outcome
-import slatekit.results.Success
+import kiit.common.*
+import kiit.results.Notice
+import kiit.results.Outcome
+import kiit.results.Success
 
 
 @Api(area = "app", name = "retry", desc = "sample to test features of Slate Kit APIs")

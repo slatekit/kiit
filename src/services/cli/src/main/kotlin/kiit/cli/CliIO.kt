@@ -14,15 +14,15 @@
 package kiit.cli
 
 import java.io.File
-import slatekit.utils.writer.TextType
-import slatekit.utils.writer.Writer
-import slatekit.common.ext.flatten
-import slatekit.common.types.Content
-import slatekit.common.types.ContentType
-import slatekit.common.io.Files
-import slatekit.common.io.IO
-import slatekit.common.types.Contents
-import slatekit.results.*
+import kiit.utils.writer.TextType
+import kiit.utils.writer.Writer
+import kiit.common.ext.flatten
+import kiit.common.types.Content
+import kiit.common.types.ContentType
+import kiit.common.io.Files
+import kiit.common.io.IO
+import kiit.common.types.Contents
+import kiit.results.*
 
 open class CliIO(private val io: IO<CliOutput, Unit>,
                  private val serializer:(Any?, ContentType) -> Content) : Writer {

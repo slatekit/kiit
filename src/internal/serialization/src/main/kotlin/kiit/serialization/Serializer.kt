@@ -13,12 +13,12 @@
 
 package kiit.serialization
 
-import slatekit.results.Result
-import slatekit.results.getOrElse
+import kiit.results.Result
+import kiit.results.getOrElse
 //import java.time.*
 import org.threeten.bp.*
 import org.threeten.bp.format.*
-import slatekit.common.ext.atUtc
+import kiit.common.ext.atUtc
 import java.util.*
 
 //import java.time.format.DateTimeFormatter
@@ -35,7 +35,7 @@ import java.util.*
  * serialization of entities/models for the ORM for logging purposes.
  *
  * @param objectSerializer: The function that can handle serialization of an option.
- * This is supplied to remove kotlin reflect as a dependency on SlateKit.common project.
+ * This is supplied to remove kotlin reflect as a dependency on kiit.common project.
  * Refer to kiit.meta.serialization.serializeObject for a sample implementation.
  *
  */

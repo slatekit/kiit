@@ -2,16 +2,16 @@ package ${app.package}
 
 
 // Slate Kit - Common Utilities
-import slatekit.common.args.ArgsSchema
-import slatekit.common.crypto.*
-import slatekit.common.info.*
-import slatekit.results.*
+import kiit.common.args.ArgsSchema
+import kiit.common.crypto.*
+import kiit.common.info.*
+import kiit.results.*
 
 // Slate Kit - App ( provides args, help, life-cycle methods, etc )
 import kiit.app.App
 import kiit.app.AppOptions
-import slatekit.common.convert.B64Java8
-import slatekit.context.Context
+import kiit.common.convert.B64Java8
+import kiit.context.Context
 
 
 /**

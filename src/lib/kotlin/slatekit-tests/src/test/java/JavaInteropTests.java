@@ -1,8 +1,8 @@
 
 import org.junit.Test;
-import slatekit.common.envs.Env;
-import slatekit.common.envs.EnvMode;
-import slatekit.common.envs.Envs;
+import kiit.common.envs.Env;
+import kiit.common.envs.EnvMode;
+import kiit.common.envs.Envs;
 
 import java.util.ArrayList;
 import java.util.List;

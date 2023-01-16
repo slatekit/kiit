@@ -2,9 +2,9 @@ package kiit.apis.support
 
 import kiit.apis.ApiRequest
 import kiit.apis.core.Reqs
-import slatekit.common.Source
-import slatekit.common.utils.Random
-import slatekit.results.Notice
+import kiit.common.Source
+import kiit.common.utils.Random
+import kiit.results.Notice
 
 interface QueueSupport {
 
@@ -17,7 +17,7 @@ interface QueueSupport {
         val req = request.request
         val payload = Reqs.toJsonAsQueued(req)
         enueue(Random.uuid(), req.path, payload, req.tag)
-        return slatekit.results.Success("Request processed as queue")
+        return kiit.results.Success("Request processed as queue")
     }
 
 
@@ -30,7 +30,7 @@ interface QueueSupport {
         return if (req.source != Source.Queue && request.target?.action?.tags?.contains("queued") == true) {
             enueue(request)
         } else {
-            slatekit.results.Failure("Continue processing")
+            kiit.results.Failure("Continue processing")
         }
     }
 

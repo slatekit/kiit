@@ -2,8 +2,8 @@ package kiit.apis.tools.docs
 
 import kiit.apis.routes.Action
 import kiit.apis.routes.Api
-import slatekit.utils.writer.Writer
-import slatekit.utils.writer.WebWriter
+import kiit.utils.writer.Writer
+import kiit.utils.writer.WebWriter
 
 /**
  * Generates help docs on the console.

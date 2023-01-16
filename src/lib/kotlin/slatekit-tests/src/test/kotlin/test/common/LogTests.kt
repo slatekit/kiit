@@ -2,11 +2,11 @@ package test.common
 
 import org.junit.Assert
 import org.junit.Test
-import slatekit.common.log.LogEntry
-import slatekit.common.log.LogLevel
-import slatekit.common.log.Logger
-import slatekit.utils.naming.*
-import slatekit.common.newline
+import kiit.common.log.LogEntry
+import kiit.common.log.LogLevel
+import kiit.common.log.Logger
+import kiit.utils.naming.*
+import kiit.common.newline
 
 
 class LogTests {

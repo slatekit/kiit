@@ -1,19 +1,25 @@
 rootProject.name = 'kiit'
 
-include ':slatekit-result'
-project(':slatekit-result').projectDir=new File('../slatekit-result')
+include ':kiit-result'
+project(':kiit-result').projectDir=new File('../../../common/result')
 
-include ':slatekit-actors'
-project(':slatekit-actors').projectDir=new File('../slatekit-actors')
+include ':kiit-actors'
+project(':kiit-actors').projectDir=new File('../../../common/actors')
 
-include ':slatekit-common'
-project(':slatekit-common').projectDir=new File('../slatekit-common')
+include ':kiit-common'
+project(':kiit-common').projectDir=new File('../../../common/common')
 
-include ':slatekit-utils'
-project(':slatekit-utils').projectDir=new File('../slatekit-utils')
+include ':kiit-utils'
+project(':kiit-utils').projectDir=new File('../../../common/utils')
 
-include ':slatekit-context'
-project(':slatekit-context').projectDir=new File('../slatekit-context')
+include ':kiit-context'
+project(':kiit-context').projectDir=new File('../../../common/context')
+
+include ':kiit-http'
+project(':kiit-http').projectDir=new File('../../../common/http')
+
+include ':kiit-requests'
+project(':kiit-requests').projectDir=new File('../../../common/requests')
 
 // Services - Runnable applications
 include ':kiit-apis'
@@ -63,12 +69,6 @@ project(':kiit-policy').projectDir=new File('../../../internal/policy')
 
 include ':kiit-serialization'
 project(':kiit-serialization').projectDir=new File('../../../internal/serialization')
-
-include ':slatekit-http'
-project(':slatekit-http').projectDir=new File('../slatekit-http')
-
-include ':slatekit-requests'
-project(':slatekit-requests').projectDir=new File('../slatekit-requests')
 
 include ':slatekit-generator'
 project(':slatekit-generator').projectDir=new File('../slatekit-generator')

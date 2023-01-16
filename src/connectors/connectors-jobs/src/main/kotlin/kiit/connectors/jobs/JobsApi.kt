@@ -13,19 +13,19 @@
 
 package kiit.connectors.jobs
 
-import slatekit.actors.pause.Feedback
+import kiit.actors.pause.Feedback
 import kiit.apis.Api
 import kiit.apis.Action
 import kiit.apis.AuthModes
 import kiit.apis.Verbs
 import kiit.apis.support.FileSupport
-import slatekit.common.Sources
-import slatekit.common.crypto.Encryptor
-import slatekit.common.log.Logger
+import kiit.common.Sources
+import kiit.common.crypto.Encryptor
+import kiit.common.log.Logger
 import kiit.connectors.entities.AppEntContext
 import kiit.jobs.Jobs
-import slatekit.results.Outcome
-import slatekit.results.builders.Outcomes
+import kiit.results.Outcome
+import kiit.results.builders.Outcomes
 
 
 @Api(area = "infra", name = "workers", desc = "api to get version information",

@@ -1,7 +1,7 @@
 package kiit.entities.features
 
 import kiit.entities.Entity
-import slatekit.results.Try
+import kiit.results.Try
 
 /**
  * Dynamic CRUD Support without knowning what type of Entity[T] it is.

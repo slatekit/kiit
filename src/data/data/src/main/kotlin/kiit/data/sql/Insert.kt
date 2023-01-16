@@ -1,6 +1,6 @@
 package kiit.data.sql
 
-import slatekit.common.data.*
+import kiit.common.data.*
 import kiit.data.Consts
 import kiit.data.core.Meta
 import kiit.data.Mapper

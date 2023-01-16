@@ -14,10 +14,10 @@
 package kiit.db.builders
 
 import java.rmi.UnexpectedException
-import slatekit.common.Types
-import slatekit.common.data.DataType
-import slatekit.common.data.Encoding
-import slatekit.common.newline
+import kiit.common.Types
+import kiit.common.data.DataType
+import kiit.common.data.Encoding
+import kiit.common.newline
 
 /**
  * Builds up database tables, indexes and other database components

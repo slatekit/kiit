@@ -1,9 +1,9 @@
 package kiit.policy.policies
 
-import slatekit.common.DateTime
+import kiit.common.DateTime
 import kiit.policy.Policy
-import slatekit.results.Outcome
-import slatekit.results.builders.Outcomes
+import kiit.results.Outcome
+import kiit.results.builders.Outcomes
 import java.util.concurrent.atomic.AtomicReference
 
 
@@ -14,7 +14,7 @@ import java.util.concurrent.atomic.AtomicReference
  * @param O : Output type
  * @param timeInSeconds: Number of seconds between intervals
  */
-class Periodic<I, O>(private val timeInSeconds: Long, val logger: slatekit.common.log.Logger? = null) : Policy<I, O> {
+class Periodic<I, O>(private val timeInSeconds: Long, val logger: kiit.common.log.Logger? = null) : Policy<I, O> {
     private val expiry = AtomicReference<DateTime>(null)
 
     override suspend fun run(i: I, operation: suspend(I) -> Outcome<O>): Outcome<O> {

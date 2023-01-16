@@ -14,11 +14,11 @@
 package kiit.apis.support
 
 import java.io.File
-import slatekit.context.Context
-import slatekit.common.Ignore
-import slatekit.common.crypto.EncryptSupport
-import slatekit.common.log.LogSupport
-import slatekit.common.ext.subStringPair
+import kiit.context.Context
+import kiit.common.Ignore
+import kiit.common.crypto.EncryptSupport
+import kiit.common.log.LogSupport
+import kiit.common.ext.subStringPair
 
 interface FileSupport : EncryptSupport, LogSupport {
 

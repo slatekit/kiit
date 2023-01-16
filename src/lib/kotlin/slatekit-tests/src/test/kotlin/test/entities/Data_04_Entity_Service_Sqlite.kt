@@ -17,9 +17,9 @@ import kotlinx.coroutines.runBlocking
 import org.junit.Assert
 import org.junit.Before
 import org.junit.Test
-import slatekit.common.DateTime
-import slatekit.common.data.*
-import slatekit.common.utils.Random
+import kiit.common.DateTime
+import kiit.common.data.*
+import kiit.common.utils.Random
 import kiit.data.sql.vendors.sqliteIfNotExists
 import kiit.db.Db
 import kiit.entities.*
@@ -73,7 +73,7 @@ class Data_04_Entity_Service_Sqlite : Data_04_Entity_Service_MySql() {
 
     @Test
     override fun can_update_an_item() {
-        val lc = slatekit.common.Types.JLongClass
+        val lc = kiit.common.Types.JLongClass
         val kc = Long::class.java
         val isEqual = lc == kc
         println(isEqual)

@@ -1,6 +1,6 @@
 package kiit.providers.logback
 
-import slatekit.common.log.*
+import kiit.common.log.*
 
 class LogbackLogger(private val instance: org.slf4j.Logger) : Logger(parseLevel(instance), instance.name) {
 

@@ -1,10 +1,10 @@
 package kiit.policy.policies
 
-import slatekit.common.log.Logger
+import kiit.common.log.Logger
 import kiit.policy.Policy
-import slatekit.results.*
+import kiit.results.*
 import slatekit.telemetry.Counters
-import slatekit.results.builders.Outcomes
+import kiit.results.builders.Outcomes
 
 /**
  * Policy to limit the operation based on the ration/threshold of Outcome.status

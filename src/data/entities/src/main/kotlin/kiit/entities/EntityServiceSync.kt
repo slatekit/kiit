@@ -1,8 +1,8 @@
 package kiit.entities.kiit.entities
 
-import slatekit.common.Compatibility
-import slatekit.common.data.DataAction
-import slatekit.common.data.Value
+import kiit.common.Compatibility
+import kiit.common.data.DataAction
+import kiit.common.data.Value
 import kiit.data.features.Countable
 import kiit.data.features.Orderable
 import kiit.entities.*
@@ -11,8 +11,8 @@ import kiit.meta.Reflector
 import kiit.meta.kClass
 import kiit.query.Op
 import kiit.query.Order
-import slatekit.results.Try
-import slatekit.results.builders.Tries
+import kiit.results.Try
+import kiit.results.builders.Tries
 import java.util.*
 import kotlin.reflect.KProperty
 

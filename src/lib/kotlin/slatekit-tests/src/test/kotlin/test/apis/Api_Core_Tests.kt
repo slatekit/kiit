@@ -17,13 +17,13 @@ import org.threeten.bp.ZoneId
 import slatekit.apis.Verbs
 import slatekit.apis.routes.Api
 import slatekit.apis.SetupType
-import slatekit.requests.CommonRequest
-import slatekit.common.DateTimes
-import slatekit.common.Source
-import slatekit.requests.toResponse
-import slatekit.results.Codes
-import slatekit.results.Failure
-import slatekit.results.Success
+import kiit.requests.CommonRequest
+import kiit.common.DateTimes
+import kiit.common.Source
+import kiit.requests.toResponse
+import kiit.results.Codes
+import kiit.results.Failure
+import kiit.results.Success
 import test.apis.samples.Sample_API_1_Core
 
 /**

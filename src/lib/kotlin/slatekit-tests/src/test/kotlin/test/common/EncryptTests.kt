@@ -13,14 +13,14 @@ mantra: Simplicity above all else
 package test.common
 
 import org.junit.Assert
-import slatekit.common.crypto.Encryptor
+import kiit.common.crypto.Encryptor
 
 /**
  * Created by kishorereddy on 5/22/17.
  */
 
 import org.junit.Test
-import slatekit.common.convert.B64Java8
+import kiit.common.convert.B64Java8
 
 
 class EncryptTests {

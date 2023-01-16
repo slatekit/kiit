@@ -16,9 +16,9 @@ import kotlinx.coroutines.*
 import org.junit.Assert
 import org.junit.Test
 import kiit.cache.*
-import slatekit.common.DateTime
-import slatekit.common.Identity
-import slatekit.common.log.LoggerConsole
+import kiit.common.DateTime
+import kiit.common.Identity
+import kiit.common.log.LoggerConsole
 
 
 class Cache_Channel_Tests {

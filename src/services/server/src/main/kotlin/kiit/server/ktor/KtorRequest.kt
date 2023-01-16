@@ -14,19 +14,19 @@
 package kiit.server.ktor
 
 import io.ktor.application.ApplicationCall
-import slatekit.common.*
+import kiit.common.*
 import kiit.server.ServerSettings
 import io.ktor.request.*
 import kotlinx.coroutines.runBlocking
 //import kotlinx.coroutines.experimental.async
-import slatekit.common.types.ContentFile
-import slatekit.requests.Request
-import slatekit.requests.RequestSupport
-import slatekit.common.Source
-import slatekit.common.utils.Random
-import slatekit.common.values.Inputs
-import slatekit.common.values.Metadata
-import slatekit.context.Context
+import kiit.common.types.ContentFile
+import kiit.requests.Request
+import kiit.requests.RequestSupport
+import kiit.common.Source
+import kiit.common.utils.Random
+import kiit.common.values.Inputs
+import kiit.common.values.Metadata
+import kiit.context.Context
 import java.io.*
 
 /**

@@ -13,7 +13,7 @@
 
 package kiit.core.queues
 
-import slatekit.common.Provider
+import kiit.common.Provider
 import kiit.core.cloud.CloudSupport
 
 /**

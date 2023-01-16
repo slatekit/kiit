@@ -1,6 +1,6 @@
 package kiit.apis.support
 
-import slatekit.common.auth.Roles
+import kiit.common.auth.Roles
 
 interface RolesSupport {
     /**

@@ -3,9 +3,9 @@ package kiit.server.ktor
 import io.ktor.application.ApplicationCall
 import io.ktor.http.HttpStatusCode
 import io.ktor.response.respondBytes
-import slatekit.common.types.ContentData
-import slatekit.common.types.ContentTypes
-import slatekit.results.*
+import kiit.common.types.ContentData
+import kiit.common.types.ContentTypes
+import kiit.results.*
 
 object KtorResponses {
 

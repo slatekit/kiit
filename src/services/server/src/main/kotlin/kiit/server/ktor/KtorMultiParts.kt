@@ -5,16 +5,16 @@ import io.ktor.http.content.PartData
 import io.ktor.http.content.forEachPart
 import io.ktor.http.content.streamProvider
 import io.ktor.request.receiveMultipart
-import slatekit.common.types.*
-import slatekit.requests.Request
-import slatekit.results.Outcome
-import slatekit.results.builders.Outcomes
+import kiit.common.types.*
+import kiit.requests.Request
+import kiit.results.Outcome
+import kiit.results.builders.Outcomes
 import java.io.InputStream
 
 object KtorMultiParts {
 
     /**
-     * Gets all the data in the multi-part / form-data as @see[slatekit.common.types.Content]
+     * Gets all the data in the multi-part / form-data as @see[kiit.common.types.Content]
      * 1. FormField  -> ContentText
      * 2. FileUpload -> ContentFile
      *

@@ -2,9 +2,9 @@ package test.common
 
 import org.junit.Assert
 import org.junit.Test
-import slatekit.common.ids.ULIDs
-import slatekit.common.ids.UPIDs
-import slatekit.common.ids.UUIDs
+import kiit.common.ids.ULIDs
+import kiit.common.ids.UPIDs
+import kiit.common.ids.UUIDs
 
 
 class UPIDTests {

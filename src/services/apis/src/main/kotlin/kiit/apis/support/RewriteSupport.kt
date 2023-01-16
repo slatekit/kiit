@@ -1,7 +1,7 @@
 package kiit.apis.support
 
 import kiit.apis.ApiRequest
-import slatekit.common.values.InputsUpdateable
+import kiit.common.values.InputsUpdateable
 
 interface RewriteSupport {
 

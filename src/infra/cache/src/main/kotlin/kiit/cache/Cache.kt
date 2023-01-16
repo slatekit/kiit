@@ -13,14 +13,14 @@
 
 package kiit.cache
 
-import slatekit.common.Identity
-import slatekit.common.log.Logger
-import slatekit.results.Outcome
+import kiit.common.Identity
+import kiit.common.log.Logger
+import kiit.results.Outcome
 
 interface Cache {
     /**
      * Identity of the cache, used to identify it between multiple caches
-     * @see[slatekit.common.Identity]
+     * @see[kiit.common.Identity]
      */
     val id: Identity
 

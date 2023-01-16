@@ -1,10 +1,10 @@
 package test.setup
 
-import slatekit.common.DateTime
-import slatekit.requests.Request
-import slatekit.results.Failure
-import slatekit.results.Notice
-import slatekit.results.Success
+import kiit.common.DateTime
+import kiit.requests.Request
+import kiit.results.Failure
+import kiit.results.Notice
+import kiit.results.Success
 
 
 /**

@@ -1,8 +1,8 @@
 package kiit.cache
 
-import slatekit.common.Identity
-import slatekit.common.log.Logger
-import slatekit.results.Outcome
+import kiit.common.Identity
+import kiit.common.log.Logger
+import kiit.results.Outcome
 
 
 class SimpleSyncCache(private val cache: Cache) : Cache {

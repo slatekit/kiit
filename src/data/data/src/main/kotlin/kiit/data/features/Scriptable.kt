@@ -1,6 +1,6 @@
 package kiit.data.features
 
-import slatekit.common.data.Value
+import kiit.common.data.Value
 
 /**
  * Provides support for calling stored procs

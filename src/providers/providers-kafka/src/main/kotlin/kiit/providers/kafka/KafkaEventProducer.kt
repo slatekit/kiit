@@ -4,15 +4,15 @@ package kiit.providers.kafka
 import kotlinx.coroutines.CompletableDeferred
 import org.apache.kafka.clients.producer.RecordMetadata
 import org.apache.kafka.clients.producer.*
-import slatekit.common.Identity
-import slatekit.common.conf.Conf
-import slatekit.common.log.Logger
+import kiit.common.Identity
+import kiit.common.conf.Conf
+import kiit.common.log.Logger
 import kiit.core.eventing.EventConverter
 import kiit.core.eventing.EventProducer
 import kiit.core.eventing.EventTopic
 import kiit.core.eventing.EventUtils
-import slatekit.results.Outcome
-import slatekit.results.builders.Outcomes
+import kiit.results.Outcome
+import kiit.results.builders.Outcomes
 
 
 /**

@@ -1,6 +1,6 @@
 package ${app.package}.models
 
-import slatekit.common.DateTime
+import kiit.common.DateTime
 import kiit.meta.models.Id
 import kiit.meta.models.Field
 

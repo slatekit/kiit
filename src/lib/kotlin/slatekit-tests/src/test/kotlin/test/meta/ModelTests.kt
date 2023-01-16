@@ -2,9 +2,9 @@ package test.meta
 
 import org.junit.Assert
 import org.junit.Test
-import slatekit.common.DateTime
-import slatekit.common.data.DataType
-import slatekit.common.ids.UPID
+import kiit.common.DateTime
+import kiit.common.data.DataType
+import kiit.common.ids.UPID
 import kiit.meta.Reflector
 import kiit.meta.models.FieldCategory
 import kiit.meta.models.Model

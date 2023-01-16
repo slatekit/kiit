@@ -1,7 +1,7 @@
 package slatekit.generator
 
-import slatekit.common.EnumLike
-import slatekit.common.EnumSupport
+import kiit.common.EnumLike
+import kiit.common.EnumSupport
 
 /**
  * Represents how to generate/reference credentials in the config file

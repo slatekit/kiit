@@ -17,8 +17,8 @@ import org.junit.Assert
 import org.junit.Test
 import slatekit.apis.*
 import slatekit.apis.routes.Api
-import slatekit.results.Codes
-import slatekit.results.getOrElse
+import kiit.results.Codes
+import kiit.results.getOrElse
 import test.setup.SampleMiddlewareApi
 
 /**

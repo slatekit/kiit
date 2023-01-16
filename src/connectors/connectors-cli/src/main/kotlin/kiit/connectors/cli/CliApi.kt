@@ -17,16 +17,16 @@ import kiit.apis.ApiServer
 import kiit.apis.routes.Api
 import kiit.apis.core.Part
 import kiit.cli.*
-import slatekit.common.Source
-import slatekit.common.types.Content
-import slatekit.common.types.ContentType
-import slatekit.requests.InputArgs
-import slatekit.utils.writer.ConsoleWriter
-import slatekit.context.Context
-import slatekit.results.Codes
-import slatekit.results.Status
-import slatekit.results.Success
-import slatekit.results.Try
+import kiit.common.Source
+import kiit.common.types.Content
+import kiit.common.types.ContentType
+import kiit.requests.InputArgs
+import kiit.utils.writer.ConsoleWriter
+import kiit.context.Context
+import kiit.results.Codes
+import kiit.results.Status
+import kiit.results.Success
+import kiit.results.Try
 
 /**
  * Layer on top of the core CliService to provide support for handling command line requests

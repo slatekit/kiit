@@ -3,12 +3,12 @@ package kiit.apis.support
 import kiit.apis.AuthMode
 import kiit.apis.core.Auth
 import kiit.apis.core.Roles
-import slatekit.common.auth.AuthFuncs
-import slatekit.common.ext.splitToMapWithPairs
-import slatekit.common.info.ApiKey
-import slatekit.requests.Request
-import slatekit.results.Outcome
-import slatekit.results.builders.Outcomes
+import kiit.common.auth.AuthFuncs
+import kiit.common.ext.splitToMapWithPairs
+import kiit.common.info.ApiKey
+import kiit.requests.Request
+import kiit.results.Outcome
+import kiit.results.builders.Outcomes
 
 /**
  * Class used to authenticate an api with support for 3 modes:

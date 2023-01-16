@@ -3,8 +3,8 @@ package test.cloud
 import kotlinx.coroutines.runBlocking
 import org.junit.Assert
 import slatekit.providers.aws.SQS
-import slatekit.common.DateTime
-import slatekit.common.ext.toStringNumeric
+import kiit.common.DateTime
+import kiit.common.ext.toStringNumeric
 import kiit.core.queues.QueueStringConverter
 import kiit.core.queues.CloudQueue
 import test.TestApp

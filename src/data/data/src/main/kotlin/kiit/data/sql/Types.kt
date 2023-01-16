@@ -1,8 +1,8 @@
 package kiit.data.syntax
 
-import slatekit.common.Types
-import slatekit.common.data.DataType
-import slatekit.common.data.DataTypeMap
+import kiit.common.Types
+import kiit.common.data.DataType
+import kiit.common.data.DataTypeMap
 
 /**
  * Maps the DataTypes

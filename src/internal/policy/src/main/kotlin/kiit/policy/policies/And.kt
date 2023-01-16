@@ -1,9 +1,9 @@
 package kiit.policy.policies
 
 import kiit.policy.Policy
-import slatekit.results.Failure
-import slatekit.results.Outcome
-import slatekit.results.Success
+import kiit.results.Failure
+import kiit.results.Outcome
+import kiit.results.Success
 import java.util.concurrent.atomic.AtomicLong
 
 /**
@@ -17,7 +17,7 @@ import java.util.concurrent.atomic.AtomicLong
 class And<I, O>(val op1: Policy<I, O>,
                 val op2: Policy<I, O>,
                 val empty: Outcome<O>,
-                val logger: slatekit.common.log.Logger? = null) : Policy<I, O> {
+                val logger: kiit.common.log.Logger? = null) : Policy<I, O> {
     private val count = AtomicLong(0L)
 
     override suspend fun run(i: I, operation: suspend(I) -> Outcome<O>): Outcome<O> {
