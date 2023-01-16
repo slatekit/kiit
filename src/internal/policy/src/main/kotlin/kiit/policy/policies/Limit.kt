@@ -2,7 +2,7 @@ package kiit.policy.policies
 
 import kiit.common.log.Logger
 import kiit.policy.Policy
-import slatekit.telemetry.Counters
+import kiit.telemetry.Counters
 import kiit.results.Codes
 import kiit.results.Outcome
 import kiit.results.builders.Outcomes

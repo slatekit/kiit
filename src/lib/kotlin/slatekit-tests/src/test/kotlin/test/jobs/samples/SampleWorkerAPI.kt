@@ -3,7 +3,7 @@ package test.jobs.samples
 import slatekit.apis.*
 import kiit.context.AppContext
 import kiit.core.queues.AsyncQueue
-import slatekit.integration.common.ApiQueueSupport
+import kiit.integration.common.ApiQueueSupport
 
 
 @Api(area = "samples", name = "workerqueue", desc = "sample api to integrating workers, queues, apis")

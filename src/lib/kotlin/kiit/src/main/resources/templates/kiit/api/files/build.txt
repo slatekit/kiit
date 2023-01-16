@@ -51,15 +51,15 @@ dependencies {
     compile "org.json:json:20201115"
 
     // Slate Kit
-    compile "com.slatekit:kiit-results:$kiit_version"
-    compile "com.slatekit:kiit-common:$kiit_version"
-    compile "com.slatekit:kiit-context:$kiit_version"
+    compile "dev.kiit:results:$kiit_version"
+    compile "dev.kiit:common:$kiit_version"
+    compile "dev.kiit:context:$kiit_version"
     compile "dev.kiit:app:$kiit_version"
-    compile "com.slatekit:slatekit-telemetry:$kiit_version"
+    compile "dev.kiit:telemetry:$kiit_version"
     compile "dev.kiit:apis:$kiit_version"
-    compile "com.slatekit:kiit-server:$kiit_version"
+    compile "dev.kiit:server:$kiit_version"
     compile "dev.kiit:serialization:$kiit_version"
-    compile "com.slatekit:providers-logback:$kiit_version"
+    compile "dev.kiit:providers-logback:$kiit_version"
 }
 
 

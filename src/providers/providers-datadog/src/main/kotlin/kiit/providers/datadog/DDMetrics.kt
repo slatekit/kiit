@@ -10,7 +10,7 @@ import io.micrometer.core.instrument.binder.system.ProcessorMetrics
 import io.micrometer.datadog.DatadogMeterRegistry
 import kiit.common.Identity
 import kiit.common.Provider
-import slatekit.telemetry.*
+import kiit.telemetry.*
 
 
 class DDMetrics(val registry: MeterRegistry,

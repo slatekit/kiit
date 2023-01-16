@@ -48,9 +48,9 @@ dependencies {
 
     // /* <slatekit_local>
     if( kiitSetupViaBinary ) {
-        compile "com.slatekit:kiit-results:$kiit_version"
-        compile "com.slatekit:kiit-common:$kiit_version"
-        compile "com.slatekit:kiit-requests:$kiit_version"
+        compile "dev.kiit:results:$kiit_version"
+        compile "dev.kiit:common:$kiit_version"
+        compile "dev.kiit:requests:$kiit_version"
         compile "dev.kiit:meta:$kiit_version"
     } else {
         // */

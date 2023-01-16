@@ -7,7 +7,7 @@ import kiit.common.Source
 import kiit.context.AppContext
 import kiit.common.utils.Random
 import kiit.core.queues.AsyncQueue
-import slatekit.integration.common.ApiQueueSupport
+import kiit.integration.common.ApiQueueSupport
 import kiit.results.*
 
 

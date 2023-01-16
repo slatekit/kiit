@@ -9,14 +9,14 @@ import io.ktor.request.receiveText
 import io.ktor.routing.*
 import kiit.apis.ApiServer
 import kiit.context.Context
-import slatekit.telemetry.Diagnostics
+import kiit.telemetry.Diagnostics
 import kiit.requests.Request
 import kiit.requests.toResponse
 import kiit.server.ServerSettings
 import kiit.server.core.RequestHandler
 import kiit.server.core.ResponseHandler
 import kiit.server.core.ServerDiagnostics
-import slatekit.telemetry.MetricsLite
+import kiit.telemetry.MetricsLite
 
 
 class KtorHandler(

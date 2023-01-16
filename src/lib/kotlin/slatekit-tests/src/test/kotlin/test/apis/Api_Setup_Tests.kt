@@ -12,8 +12,8 @@ import kiit.common.data.Vendor
 import kiit.entities.EntityLongId
 import kiit.entities.EntityService
 import kiit.entities.EntityServices
-import slatekit.integration.apis.InfoApi
-import slatekit.integration.apis.VersionApi
+import kiit.integration.apis.InfoApi
+import kiit.integration.apis.VersionApi
 //import slatekit.orm.orm
 import kiit.results.getOrElse
 import test.TestApp

@@ -23,7 +23,7 @@ import kiit.common.crypto.EncInt
 import kiit.common.crypto.EncLong
 import kiit.common.values.Metadata
 import kiit.requests.Request
-import slatekit.integration.common.ApiBaseEntity
+import kiit.integration.common.ApiBaseEntity
 import kiit.entities.EntityService
 import slatekit.connectors.entities.AppEntContext
 import kiit.results.Notice

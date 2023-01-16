@@ -1,7 +1,7 @@
 package kiit.cache
 
-import slatekit.telemetry.Expiry
-import slatekit.telemetry.Tracked
+import kiit.telemetry.Expiry
+import kiit.telemetry.Tracked
 
 /**
  * Provides a copy of the CacheValue

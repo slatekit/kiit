@@ -1,0 +1,19 @@
+rootProject.name = 'kiit-integration'
+
+//include ':kiit-common'
+////project(':kiit-common').projectDir=new File('../kiit-common')
+//
+//include ':kiit-meta'
+////project(':kiit-meta').projectDir=new File('../kiit-meta')
+//
+//include ':kiit-entities'
+////project(':kiit-entities').projectDir=new File('../slatekit-entities')
+//
+//include ':kiit-core'
+////project(':kiit-core').projectDir=new File('../slatekit-core')
+//
+//include ':kiit-apis'
+////project(':kiit-apis').projectDir=new File('../kiit-apis')
+//
+//include ':kiit-query'
+////project(':kiit-query').projectDir=new File('../slatekit-query')

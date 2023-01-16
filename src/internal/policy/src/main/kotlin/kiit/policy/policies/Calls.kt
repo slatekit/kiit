@@ -1,7 +1,7 @@
 package kiit.policy.policies
 
 import kiit.policy.Policy
-import slatekit.telemetry.Calls
+import kiit.telemetry.Calls
 import kiit.results.Codes
 import kiit.results.Outcome
 import kiit.results.builders.Outcomes
