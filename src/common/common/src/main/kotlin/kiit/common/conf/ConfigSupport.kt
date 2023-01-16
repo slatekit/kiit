@@ -112,7 +112,7 @@ interface ConfigSupport {
 fun <T> ConfigSupport.mapTo(key: String, mapper: (Conf) -> T): T? {
 
     // Reference to file location.
-    // e.g. db.location = "user://.slatekit/tools/apis/conf/db.conf"
+    // e.g. db.location = "user://.kiit/tools/apis/conf/db.conf"
     val locationKey = "$key.location"
 
     // Section not present!

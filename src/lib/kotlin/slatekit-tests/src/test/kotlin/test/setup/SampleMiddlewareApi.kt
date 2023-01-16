@@ -1,8 +1,8 @@
 package test.setup
 
-import slatekit.apis.ApiRequest
-import slatekit.apis.ApiResult
-import slatekit.apis.Middleware
+import kiit.apis.ApiRequest
+import kiit.apis.ApiResult
+import kiit.apis.Middleware
 import kiit.results.*
 import kiit.results.builders.Outcomes
 

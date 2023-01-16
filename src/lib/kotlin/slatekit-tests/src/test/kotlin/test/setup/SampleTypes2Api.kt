@@ -1,6 +1,6 @@
 package test.setup
 
-import slatekit.apis.Api
+import kiit.apis.Api
 import kiit.common.DateTime
 import kiit.requests.Request
 

@@ -12,7 +12,7 @@ import kiit.common.crypto.EncLong
 import kiit.common.crypto.EncString
 import test.setup.Movie
 import org.threeten.bp.*
-import slatekit.apis.core.Transformer
+import kiit.apis.core.Transformer
 import kiit.common.DateTimes
 import kiit.requests.CommonRequest
 import kiit.common.Source

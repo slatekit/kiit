@@ -1,6 +1,6 @@
 package test.setup
 
-import slatekit.apis.Api
+import kiit.apis.Api
 import kiit.common.crypto.Encryptor
 import kiit.results.*
 import kiit.results.builders.Notices

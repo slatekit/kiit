@@ -1,6 +1,6 @@
 /**
  <kiit_header>
-url: www.slatekit.com
+url: www.kiit.dev
 git: www.github.com/slatekit/kiit
 org: www.codehelix.co
 author: Kishore Reddy
@@ -171,7 +171,7 @@ class TemplateTests {
         val templates = Templates(variables =
                 listOf(
             Pair("company.api" , { s  -> "CodeHelix"                       }),
-            Pair("app.api"     , { s  -> "slatekit.sampleapp"              }),
+            Pair("app.api"     , { s  -> "kiit.sampleapp"              }),
             Pair("user.api"    , { s  -> "john.doe"                        }),
             Pair("code"         , { s  -> Random.alpha6()                   })
         ))
@@ -185,7 +185,7 @@ class TemplateTests {
         val templates = Templates()
         val subs = Templates.subs( listOf(
             Pair("company.api" , { s -> "CodeHelix"                       }),
-            Pair("app.api"     , { s -> "slatekit.sampleapp"              }),
+            Pair("app.api"     , { s -> "kiit.sampleapp"              }),
             Pair("user.api"    , { s -> "john.doe"                        }),
             Pair("code"         , { s -> Random.alpha6()                   })
         ))
@@ -204,7 +204,7 @@ class TemplateTests {
                 ),
                 subs = listOf(
                         Pair("company.api" , { s -> "CodeHelix"                       }),
-                        Pair("app.api"     , { s -> "slatekit.sampleapp"              }),
+                        Pair("app.api"     , { s -> "kiit.sampleapp"              }),
                         Pair("user.api"    , { s -> "john.doe"                        }),
                         Pair("code"         , { s -> Random.alpha6()                   })
                 ))
@@ -224,7 +224,7 @@ class TemplateTests {
 
         val subs = Templates.subs(listOf(
                 Pair("company.api" , { s -> "CodeHelix"                       }),
-                Pair("app.api"     , { s -> "slatekit.sampleapp"              }),
+                Pair("app.api"     , { s -> "kiit.sampleapp"              }),
                 Pair("user.api"    , { s -> "john.doe"                        }),
                 Pair("code"         , { s -> Random.alpha6()                   })
         ))
@@ -242,7 +242,7 @@ class TemplateTests {
         ),
         subs = listOf(
                 Pair("company.api" , { s -> "CodeHelix"                       }),
-                Pair("app.api"     , { s -> "slatekit.sampleapp2"             }),
+                Pair("app.api"     , { s -> "kiit.sampleapp2"             }),
                 Pair("user.api"    , { s -> "john.doe"                        }),
                 Pair("code"         , { s -> Random.alpha6()                   })
         ))
@@ -254,7 +254,7 @@ class TemplateTests {
         )
         val result = templates.resolveTemplateWithVars("confirm", subs)
         Assert.assertTrue(result != null)
-        Assert.assertTrue(result!! == "Your confirmation code for slatekit.sampleapp2 is abc123.")
+        Assert.assertTrue(result!! == "Your confirmation code for kiit.sampleapp2 is abc123.")
     }
 
 
@@ -288,11 +288,11 @@ class TemplateTests {
                         Pair("user.home", { s -> "c:/users/johndoe" }),
                         Pair("company.id", { s -> "slatekit" }),
                         Pair("company.api", { s -> "CodeHelix" }),
-                        Pair("company.url", { s -> "http://www.slatekit.com" }),
+                        Pair("company.url", { s -> "http://www.kiit.dev" }),
                         Pair("company.dir", { s -> "@{user.home}/@{company.id}" }),
                         Pair("company.confs", { s -> "@{user.home}/@{company.id}/confs" }),
-                        Pair("app.id", { s -> "slatekit.tests" }),
-                        Pair("app.api", { s -> "slatekit.sampleapp" }),
+                        Pair("app.id", { s -> "kiit.tests" }),
+                        Pair("app.api", { s -> "kiit.sampleapp" }),
                         Pair("app.dir", { s -> "@{company.dir}/@{app.id}" }),
                         Pair("app.confs", { s -> "@{app.dir}/confs" }),
                         Pair("user.api", { s -> "john.doe" }),

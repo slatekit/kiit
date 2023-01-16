@@ -8,7 +8,7 @@ import kiit.actors.Issuable
 import kiit.actors.Issuer
 import kiit.common.Identity
 import kiit.actors.Status
-import slatekit.jobs.*
+import kiit.jobs.*
 import test.jobs.support.JobTestSupport
 
 class Job_Create_Tests : JobTestSupport {

@@ -1,9 +1,9 @@
 package test.setup
 
-import slatekit.apis.Api
-import slatekit.apis.Action
-import slatekit.apis.ApiRequest
-import slatekit.apis.ApiResult
+import kiit.apis.Api
+import kiit.apis.Action
+import kiit.apis.ApiRequest
+import kiit.apis.ApiResult
 import kiit.common.*
 import kiit.results.Notice
 import kiit.results.Outcome

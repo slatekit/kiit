@@ -6,7 +6,7 @@ import kiit.data.features.Inspectable
 
 /**
  * Repository interface, simply contains info about its id and table
- * @see[slatekit.data.core.Meta] for more info.
+ * @see[kiit.data.core.Meta] for more info.
  * NOTE: This does NOT use Reflection
  */
 interface Repo<TId, T> : Inspectable<TId, T> where TId : Comparable<TId>, T:Any {

@@ -1,6 +1,6 @@
 /**
  *  <kiit_header>
- * url: www.slatekit.com
+ * url: www.kiit.dev
  * git: www.github.com/slatekit/kiit
  * org: www.codehelix.co
  * author: Kishore Reddy
@@ -16,8 +16,8 @@ import org.junit.Assert
 import org.junit.Test
 import kiit.common.*
 import kiit.common.info.About
-import slatekit.app.App
-import slatekit.app.AppRunner
+import kiit.app.App
+import kiit.app.AppRunner
 import kiit.results.Codes
 import test.TestApp
 

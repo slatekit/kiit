@@ -1,6 +1,6 @@
 /**
  <kiit_header>
-url: www.slatekit.com
+url: www.kiit.dev
 git: www.github.com/slatekit/kiit
 org: www.codehelix.co
 author: Kishore Reddy
@@ -16,9 +16,9 @@ import kotlinx.coroutines.runBlocking
 import org.json.simple.JSONObject
 import org.junit.Assert
 import org.junit.Test
-import slatekit.apis.*
-import slatekit.apis.routes.Api
-import slatekit.apis.services.Restify
+import kiit.apis.*
+import kiit.apis.routes.Api
+import kiit.apis.services.Restify
 import kiit.common.*
 import kiit.utils.naming.LowerHyphenNamer
 import kiit.utils.naming.Namer
@@ -182,7 +182,7 @@ class Api_Restful_Tests : ApiTestsBase() {
         }
         callback(r1)
 
-        val api2 = ApiServer(ctx, writer = Restify(), apis = listOf(Api(SampleRESTApi::class, "app", "SampleREST")), settings = slatekit.apis.Settings(naming = namer))
+        val api2 = ApiServer(ctx, writer = Restify(), apis = listOf(Api(SampleRESTApi::class, "app", "SampleREST")), settings = kiit.apis.Settings(naming = namer))
         val name = namer?.rename("SampleREST")  ?: "SampleREST"
         val act  = namer?.rename(action) ?: action
         val r2 = runBlocking {

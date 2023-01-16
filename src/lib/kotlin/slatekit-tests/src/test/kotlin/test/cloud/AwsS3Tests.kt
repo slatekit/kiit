@@ -4,7 +4,7 @@ import kotlinx.coroutines.runBlocking
 import org.junit.Assert
 import org.junit.Ignore
 import org.junit.Test
-import slatekit.providers.aws.S3
+import kiit.providers.aws.S3
 import kiit.common.DateTime
 import kiit.common.io.Uris
 import kiit.common.ext.toStringNumeric

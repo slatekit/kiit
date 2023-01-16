@@ -1,6 +1,6 @@
 /**
  <kiit_header>
-url: www.slatekit.com
+url: www.kiit.dev
 git: www.github.com/slatekit/kiit
 org: www.codehelix.co
 author: Kishore Reddy
@@ -14,14 +14,14 @@ package test.apis
 
 import org.junit.Assert
 import org.junit.Test
-import slatekit.apis.*
-import slatekit.apis.routes.Api
-import slatekit.apis.core.Sources
-import slatekit.apis.routes.Routes
-import slatekit.apis.setup.Annotations
-import slatekit.apis.setup.Methods
-import slatekit.apis.setup.loadAll
-import slatekit.apis.setup.toApi
+import kiit.apis.*
+import kiit.apis.routes.Api
+import kiit.apis.core.Sources
+import kiit.apis.routes.Routes
+import kiit.apis.setup.Annotations
+import kiit.apis.setup.Methods
+import kiit.apis.setup.loadAll
+import kiit.apis.setup.toApi
 import kiit.common.Source
 import kiit.common.auth.Roles
 import test.setup.*
@@ -82,7 +82,7 @@ class Api_001_Loader_Tests : ApiTestsBase() {
         Assert.assertTrue(action.protocol == api.protocol)
         Assert.assertTrue(action.verb == Verb.Post)
         Assert.assertTrue(action.auth == AuthMode.Keyed)
-        Assert.assertTrue(action.roles == slatekit.apis.core.Roles(listOf("user")))
+        Assert.assertTrue(action.roles == kiit.apis.core.Roles(listOf("user")))
         Assert.assertTrue(action.sources == api.sources)
         Assert.assertTrue(action.access == api.access)
         Assert.assertTrue(action.params.size == 1)
@@ -98,7 +98,7 @@ class Api_001_Loader_Tests : ApiTestsBase() {
         Assert.assertTrue(action.protocol == Source.CLI)
         Assert.assertTrue(action.verb == Verb.Post)
         Assert.assertTrue(action.auth == AuthMode.Keyed)
-        Assert.assertTrue(action.roles == slatekit.apis.core.Roles(listOf("user")))
+        Assert.assertTrue(action.roles == kiit.apis.core.Roles(listOf("user")))
         Assert.assertTrue(action.sources == Sources(listOf(Source.CLI)))
         Assert.assertTrue(action.access == Access.Internal)
         Assert.assertTrue(action.params.size == 1)
@@ -136,7 +136,7 @@ class Api_001_Loader_Tests : ApiTestsBase() {
     @Test fun can_load_api_from_public_methods() {
         val api = Methods(toApi(SampleExtendedApi::class,
                 "app", "sampleExtended", "sample using plain kotlin class",
-                roles = slatekit.apis.core.Roles(listOf("users")), local = true, auth = AuthMode.Token, protocol = Sources(listOf(Source.All)))).api(null)
+                roles = kiit.apis.core.Roles(listOf("users")), local = true, auth = AuthMode.Token, protocol = Sources(listOf(Source.All)))).api(null)
 
         Assert.assertTrue(api.actions.size == 2)
         Assert.assertTrue(api.area == "app")
@@ -156,7 +156,7 @@ class Api_001_Loader_Tests : ApiTestsBase() {
     @Test fun can_load_api_from_public_methods_inherited() {
         val api = Methods(toApi(SampleExtendedApi::class,
                 "app", "sampleExtended", "sample using plain kotlin class",
-                roles = slatekit.apis.core.Roles(listOf("users")), local = false, auth = AuthMode.Token, protocol = Sources(listOf(Source.All)))).api(null)
+                roles = kiit.apis.core.Roles(listOf("users")), local = false, auth = AuthMode.Token, protocol = Sources(listOf(Source.All)))).api(null)
 
         Assert.assertTrue(api.actions.size == 8)
         Assert.assertTrue(api.area == "app")
@@ -175,9 +175,9 @@ class Api_001_Loader_Tests : ApiTestsBase() {
     @Test fun can_load_areas() {
 
         val areas = loadAll(listOf(
-                Api(SampleRolesByApp::class, "app", "sampleRolesByApp", "sample roles by application auth", roles = slatekit.apis.core.Roles(listOf("users")), auth = AuthMode.Token, sources = Sources(listOf(Source.CLI)), declaredOnly = true),
-                Api(SampleRolesByKey::class, "app", "sampleRolesByKey", "sample roles by api-key", roles = slatekit.apis.core.Roles(listOf("users")), auth = AuthMode.Keyed, sources = Sources(listOf(Source.CLI)), declaredOnly = true),
-                Api(SampleExtendedApi::class, "tests", "sampleExtended", "sample plain kotlin class", roles = slatekit.apis.core.Roles(listOf("users")), auth = AuthMode.Token, sources = Sources(listOf(Source.CLI)), declaredOnly = false)
+                Api(SampleRolesByApp::class, "app", "sampleRolesByApp", "sample roles by application auth", roles = kiit.apis.core.Roles(listOf("users")), auth = AuthMode.Token, sources = Sources(listOf(Source.CLI)), declaredOnly = true),
+                Api(SampleRolesByKey::class, "app", "sampleRolesByKey", "sample roles by api-key", roles = kiit.apis.core.Roles(listOf("users")), auth = AuthMode.Keyed, sources = Sources(listOf(Source.CLI)), declaredOnly = true),
+                Api(SampleExtendedApi::class, "tests", "sampleExtended", "sample plain kotlin class", roles = kiit.apis.core.Roles(listOf("users")), auth = AuthMode.Token, sources = Sources(listOf(Source.CLI)), declaredOnly = false)
         ))
         Assert.assertTrue(areas.size == 2)
         Assert.assertTrue(areas.contains("app"))

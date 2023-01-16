@@ -1,6 +1,6 @@
 /**
  <kiit_header>
-url: www.slatekit.com
+url: www.kiit.dev
 git: www.github.com/slatekit/kiit
 org: www.codehelix.co
 author: Kishore Reddy
@@ -13,9 +13,9 @@ about: A Kotlin utility library, tool-kit and server backend.
 package test.apis
 
 import org.junit.Test
-import slatekit.apis.routes.Api
-import slatekit.apis.SetupType
-import slatekit.apis.Verbs
+import kiit.apis.routes.Api
+import kiit.apis.SetupType
+import kiit.apis.Verbs
 import kiit.common.info.Credentials
 import kiit.requests.CommonRequest
 import kiit.common.Source

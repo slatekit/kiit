@@ -50,10 +50,10 @@ class Kiit(ctx: Context) : App<Context>(ctx, AppOptions(showWelcome = false, sho
                 name = "cli",
                 desc = "Slate Kit CLI for creating projects and access to other tools",
                 region = "NY",
-                url = "www.slatekit.life",
+                url = "www.kiit.life",
                 contact = "user@company.co",
                 tags = "sample, template, app",
-                examples = "http://www.slatekit.com"
+                examples = "http://www.kiit.dev"
         )
 
         /**

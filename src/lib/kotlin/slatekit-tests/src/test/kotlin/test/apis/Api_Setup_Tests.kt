@@ -3,10 +3,10 @@ package test.apis
 import kotlinx.coroutines.runBlocking
 import org.junit.Assert
 import org.junit.Test
-import slatekit.apis.ApiServer
-import slatekit.apis.Verb
-import slatekit.apis.routes.Api
-import slatekit.apis.SetupType
+import kiit.apis.ApiServer
+import kiit.apis.Verb
+import kiit.apis.routes.Api
+import kiit.apis.SetupType
 import kiit.context.AppContext
 import kiit.common.data.Vendor
 import kiit.entities.EntityLongId
@@ -14,7 +14,7 @@ import kiit.entities.EntityService
 import kiit.entities.EntityServices
 import kiit.integration.apis.InfoApi
 import kiit.integration.apis.VersionApi
-//import slatekit.orm.orm
+//import kiit.orm.orm
 import kiit.results.getOrElse
 import test.TestApp
 import test.setup.*

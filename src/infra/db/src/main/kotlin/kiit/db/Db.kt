@@ -339,7 +339,7 @@ class Db(private val dbCon: DbCon,
          * Load Db from config file, which could be a java packaged resource or on file
          * @param cls: Class holding resource files
          * @param path: URI of file
-         * 1. "usr://.slatekit/common/conf/db.conf"
+         * 1. "usr://.kiit/common/conf/db.conf"
          * 2. "jar://env.conf
          */
         fun of(cls:Class<*>, path:String):IDb {

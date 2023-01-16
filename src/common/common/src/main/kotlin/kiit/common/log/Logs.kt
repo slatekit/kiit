@@ -24,7 +24,7 @@ interface Logs : Provider {
 
 /**
  * Simple console logger as a default.
- * Use slatekit.providers.logs.LogbackLogs as provider for LogBack
+ * Use kiit.providers.logs.LogbackLogs as provider for LogBack
  *
  * kiit.common has only 0 dependencies!!!
  */

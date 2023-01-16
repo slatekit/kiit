@@ -1,6 +1,6 @@
 /**
  *  <kiit_header>
- * url: www.slatekit.com
+ * url: www.kiit.dev
  * git: www.github.com/slatekit/kiit
  * org: www.codehelix.co
  * author: Kishore Reddy
@@ -16,11 +16,11 @@ package slate.test
 import kotlinx.coroutines.runBlocking
 import org.junit.Assert
 import org.junit.Test
-import slatekit.apis.routes.Api
-import slatekit.apis.SetupType
-import slatekit.apis.support.Authenticator
-import slatekit.cli.CliRequest
-import slatekit.cli.CliResponse
+import kiit.apis.routes.Api
+import kiit.apis.SetupType
+import kiit.apis.support.Authenticator
+import kiit.cli.CliRequest
+import kiit.cli.CliResponse
 import kiit.common.info.ApiKey
 import kiit.common.info.Credentials
 import kiit.common.args.Args
@@ -29,9 +29,9 @@ import kiit.common.types.Content
 import kiit.common.info.Host
 import kiit.common.types.Contents
 import kiit.integration.apis.InfoApi
-import slatekit.connectors.cli.CliApi
+import kiit.connectors.cli.CliApi
 import kiit.integration.apis.VersionApi
-import slatekit.connectors.entities.AppEntContext
+import kiit.connectors.entities.AppEntContext
 import kiit.results.Codes
 import kiit.results.Status
 import kiit.results.getOrElse

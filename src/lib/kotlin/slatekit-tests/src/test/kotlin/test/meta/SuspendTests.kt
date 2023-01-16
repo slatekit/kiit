@@ -3,7 +3,7 @@ package test.meta
 import kotlinx.coroutines.runBlocking
 import org.junit.Assert
 import org.junit.Test
-import slatekit.apis.services.Calls
+import kiit.apis.services.Calls
 
 class SuspendTests {
 

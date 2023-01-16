@@ -1,8 +1,8 @@
 package test.setup
 
-import slatekit.apis.*
-import slatekit.apis.Action
-import slatekit.apis.core.Reqs
+import kiit.apis.*
+import kiit.apis.Action
+import kiit.apis.core.Reqs
 import kiit.common.Source
 import kiit.context.AppContext
 import kiit.common.utils.Random

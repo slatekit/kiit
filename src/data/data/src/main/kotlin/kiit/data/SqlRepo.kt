@@ -1,6 +1,6 @@
 /**
  *  <kiit_header>
- * url: www.slatekit.com
+ * url: www.kiit.dev
  * git: www.github.com/slatekit/kiit
  * org: www.codehelix.co
  * author: Kishore Reddy
@@ -153,9 +153,9 @@ open class SqlRepo<TId, T>(
     /** ====================================================================================
      * Custom methods beyond simple CRUD
      * Implementations for all the interfaces
-     * @see[slatekit.data.features.Countable]
-     * @see[slatekit.data.features.Deletable]
-     * @see[slatekit.data.features.Countable]
+     * @see[kiit.data.features.Countable]
+     * @see[kiit.data.features.Deletable]
+     * @see[kiit.data.features.Countable]
      * ====================================================================================
      */
 

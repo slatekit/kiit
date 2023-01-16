@@ -18,7 +18,7 @@ plugins {
    id "org.jetbrains.kotlin.jvm" version "$kotlin_version"
 }
 
-apply from: '../../../build/gradle/slatekit-common.gradle'
+apply from: '../../../build/gradle/gradle-utils.gradle'
 
 compileJava {
   sourceCompatibility = JavaVersion.VERSION_1_8

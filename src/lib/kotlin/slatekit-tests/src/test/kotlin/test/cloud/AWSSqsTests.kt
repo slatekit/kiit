@@ -2,7 +2,7 @@ package test.cloud
 
 import kotlinx.coroutines.runBlocking
 import org.junit.Assert
-import slatekit.providers.aws.SQS
+import kiit.providers.aws.SQS
 import kiit.common.DateTime
 import kiit.common.ext.toStringNumeric
 import kiit.core.queues.QueueStringConverter

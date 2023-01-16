@@ -8,9 +8,9 @@ import kiit.actors.Issuer
 import kiit.actors.Message
 import kiit.actors.Status
 import kiit.common.Identity
-import slatekit.jobs.*
-import slatekit.jobs.Context
-import slatekit.jobs.Worker
+import kiit.jobs.*
+import kiit.jobs.Context
+import kiit.jobs.Worker
 import test.jobs.samples.TestWorker
 
 interface JobTestSupport {

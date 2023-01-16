@@ -19,7 +19,7 @@ package kiit.common.log
  * using the ConsoleWriter in slate kit which has support
  * for colors and text semantics.
  * This is just used mostly for defaults.
- * You should be using the slatekit.providers module with support for logback
+ * You should be using the kiit.providers module with support for logback
  */
 class LoggerConsole(
     level: LogLevel = LogLevel.Debug,

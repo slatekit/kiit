@@ -1,6 +1,6 @@
 package test.jobs.samples
 
-import slatekit.apis.*
+import kiit.apis.*
 import kiit.context.AppContext
 import kiit.core.queues.AsyncQueue
 import kiit.integration.common.ApiQueueSupport

@@ -3,7 +3,7 @@ package test
 //import kiit.common.utils.Random
 //import kiit.db.Db
 //import kiit.entities.Entities
-//import slatekit.support.ioc.DI
+//import kiit.support.ioc.DI
 
 
 //

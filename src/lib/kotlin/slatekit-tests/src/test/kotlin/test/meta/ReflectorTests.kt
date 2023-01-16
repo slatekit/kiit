@@ -1,6 +1,6 @@
 /**
  *  <kiit_header>
- * url: www.slatekit.com
+ * url: www.kiit.dev
  * git: www.github.com/slatekit/kiit
  * org: www.codehelix.co
  * author: Kishore Reddy
@@ -13,7 +13,7 @@ package slate.test
 
 import org.junit.Assert
 import org.junit.Test
-import slatekit.apis.*
+import kiit.apis.*
 import kiit.common.*
 import kiit.common.args.Args
 import kiit.common.conf.Config
@@ -28,7 +28,7 @@ import kiit.utils.smartvalues.SmartValued
 import kiit.db.Db
 import kiit.meta.Reflector
 import kiit.entities.Entities
-import slatekit.connectors.entities.AppEntContext
+import kiit.connectors.entities.AppEntContext
 import kiit.entities.Column
 import kiit.meta.KTypes
 import kiit.results.Notice

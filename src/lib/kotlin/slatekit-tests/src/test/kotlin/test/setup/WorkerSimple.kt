@@ -1,9 +1,9 @@
 package test.setup
 
-import slatekit.jobs.WResult
+import kiit.jobs.WResult
 import kiit.common.Identity
-import slatekit.jobs.*
-import slatekit.jobs.Worker
+import kiit.jobs.*
+import kiit.jobs.Worker
 
 class MyWorker(
     var acc: Int = 0

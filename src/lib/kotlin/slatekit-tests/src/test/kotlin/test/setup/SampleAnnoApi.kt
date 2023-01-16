@@ -1,7 +1,7 @@
 package test.setup
 
-import slatekit.apis.*
-import slatekit.apis.AuthModes
+import kiit.apis.*
+import kiit.apis.AuthModes
 import kiit.common.*
 import kiit.common.auth.Roles
 import kiit.common.crypto.EncDouble
@@ -11,7 +11,7 @@ import kiit.common.crypto.EncString
 import kiit.requests.Request
 import kiit.utils.smartvalues.Email
 import kiit.utils.smartvalues.PhoneUS
-import slatekit.connectors.entities.AppEntContext
+import kiit.connectors.entities.AppEntContext
 import kiit.results.Notice
 import kiit.results.Success
 

@@ -1,12 +1,12 @@
 package test.setup
 
-import slatekit.apis.*
-import slatekit.apis.AuthModes
-import slatekit.apis.Verbs
-import slatekit.apis.ApiBase
+import kiit.apis.*
+import kiit.apis.AuthModes
+import kiit.apis.Verbs
+import kiit.apis.ApiBase
 import kiit.context.Context
 import kiit.common.Sources
-import slatekit.connectors.entities.AppEntContext
+import kiit.connectors.entities.AppEntContext
 
 
 @Api(area = "app", name = "tests", desc = "sample to test features of Slate Kit APIs",

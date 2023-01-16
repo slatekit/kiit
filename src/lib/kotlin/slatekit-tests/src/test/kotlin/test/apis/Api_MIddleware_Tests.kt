@@ -1,6 +1,6 @@
 /**
  <kiit_header>
-url: www.slatekit.com
+url: www.kiit.dev
 git: www.github.com/slatekit/kiit
 org: www.codehelix.co
 author: Kishore Reddy
@@ -15,8 +15,8 @@ package test.apis
 import kotlinx.coroutines.runBlocking
 import org.junit.Assert
 import org.junit.Test
-import slatekit.apis.*
-import slatekit.apis.routes.Api
+import kiit.apis.*
+import kiit.apis.routes.Api
 import kiit.results.Codes
 import kiit.results.getOrElse
 import test.setup.SampleMiddlewareApi

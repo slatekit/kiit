@@ -1,10 +1,10 @@
 package test.setup
 
-import slatekit.apis.Api
-import slatekit.apis.Action
+import kiit.apis.Api
+import kiit.apis.Action
 import kiit.entities.EntityService
 import kiit.integration.common.ApiBaseEntity
-import slatekit.connectors.entities.AppEntContext
+import kiit.connectors.entities.AppEntContext
 import kiit.entities.features.Counts
 import kiit.entities.features.Ordered
 

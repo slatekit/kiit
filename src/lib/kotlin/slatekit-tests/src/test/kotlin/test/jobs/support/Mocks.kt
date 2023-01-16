@@ -2,7 +2,7 @@ package test.jobs.support
 
 import kotlinx.coroutines.channels.Channel
 import kiit.common.DateTime
-import slatekit.jobs.support.Scheduler
+import kiit.jobs.support.Scheduler
 
 
 class MockScheduler : Scheduler {

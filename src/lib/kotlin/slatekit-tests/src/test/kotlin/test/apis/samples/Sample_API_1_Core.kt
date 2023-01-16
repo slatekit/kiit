@@ -1,6 +1,6 @@
 /**
  *  <kiit_header>
- * url: www.slatekit.com
+ * url: www.kiit.dev
  * git: www.github.com/slatekit/kiit
  * org: www.codehelix.co
  * author: Kishore Reddy
@@ -11,7 +11,7 @@
 
 package test.apis.samples
 
-import slatekit.apis.*
+import kiit.apis.*
 import kiit.common.*
 import kiit.common.types.ContentFile
 import kiit.requests.Request

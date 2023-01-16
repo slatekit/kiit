@@ -5,11 +5,11 @@ import org.junit.Assert
 import org.junit.Test
 import org.threeten.bp.ZoneId
 
-import slatekit.apis.ApiServer
-import slatekit.apis.Verb
-import slatekit.apis.routes.Api
-import slatekit.apis.core.Reqs
-import slatekit.apis.SetupType
+import kiit.apis.ApiServer
+import kiit.apis.Verb
+import kiit.apis.routes.Api
+import kiit.apis.core.Reqs
+import kiit.apis.SetupType
 import kiit.common.*
 import kiit.core.queues.InMemoryQueue
 import kiit.context.AppContext
@@ -18,9 +18,9 @@ import kiit.common.Source
 import kiit.requests.CommonRequest
 import kiit.core.queues.AsyncQueue
 import kiit.core.queues.WrappedAsyncQueue
-import slatekit.connectors.jobs.JobAPIWorker
-import slatekit.connectors.jobs.JobQueue
-import slatekit.jobs.*
+import kiit.connectors.jobs.JobAPIWorker
+import kiit.connectors.jobs.JobQueue
+import kiit.jobs.*
 import test.jobs.samples.SampleWorkerAPI
 import test.setup.SampleTypes2Api
 import test.setup.TestSupport

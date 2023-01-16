@@ -10,7 +10,7 @@ import org.junit.Test
 import java.time.Duration
 import java.util.concurrent.ConcurrentLinkedQueue
 
-//import slatekit.providers.metrics.dropwizard.MetricService
+//import kiit.providers.metrics.dropwizard.MetricService
 
 
 class MetricTests {

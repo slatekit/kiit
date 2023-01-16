@@ -17,7 +17,7 @@ import kiit.comms.sms.TwilioSms
 import test.TestApp
 import java.io.File
 
-//import slatekit.providers.metrics.dropwizard.MetricService
+//import kiit.providers.metrics.dropwizard.MetricService
 
 
 class NotificationTests {
@@ -27,9 +27,9 @@ class NotificationTests {
 
     @Test
     fun can_build_sendgrid() {
-        //val conf = Config.of(TestApp::class.java, "usr://.slatekit/common/conf/email.conf")
+        //val conf = Config.of(TestApp::class.java, "usr://.kiit/common/conf/email.conf")
         //val key = conf.apiLogin("email")
-        val key = ApiLogin("support@slatekit.com", "slatekit", "pswd", "dev", "test")
+        val key = ApiLogin("support@kiit.dev", "slatekit", "pswd", "dev", "test")
         val service = SendGrid(key)
         val req = service.build(EmailMessage("jl@dc.com", "Series 123", "The totality", true))
         runBlocking {
@@ -39,7 +39,7 @@ class NotificationTests {
                 Assert.assertEquals("POST", it.method())
                 Assert.assertTrue(it.header("Authorization").isNotEmpty())
 
-                val expected = """{"personalizations":[{"to":[{"name":"","email":"jl@dc.com"}]}],"subject":"Series 123","from":{"name":"slatekit","email":"support@slatekit.com"},"content":[{"type":"text\/html","value":"The totality"}]}"""
+                val expected = """{"personalizations":[{"to":[{"name":"","email":"jl@dc.com"}]}],"subject":"Series 123","from":{"name":"slatekit","email":"support@kiit.dev"},"content":[{"type":"text\/html","value":"The totality"}]}"""
                 val buffer = Buffer()
                 it.body()?.writeTo(buffer)
                 val content = buffer.readUtf8()
@@ -80,7 +80,7 @@ class NotificationTests {
 
     //@Test
     fun can_build_twilio2() {
-        val conf = Config.of(TestApp::class.java, "usr://.slatekit/common/conf/sms.conf")
+        val conf = Config.of(TestApp::class.java, "usr://.kiit/common/conf/sms.conf")
         val key = conf.apiLogin("sms")
         val india = Countries.find("in")!!
         val service = TwilioSms(key, countries = listOf(Countries.usa, india))

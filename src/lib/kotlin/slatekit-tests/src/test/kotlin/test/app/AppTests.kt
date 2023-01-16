@@ -1,6 +1,6 @@
 /**
  *  <kiit_header>
- * url: www.slatekit.com
+ * url: www.kiit.dev
  * git: www.github.com/slatekit/kiit
  * org: www.codehelix.co
  * author: Kishore Reddy
@@ -16,13 +16,13 @@ package test.app
 import kotlinx.coroutines.runBlocking
 import org.junit.Assert
 import org.junit.Test
-import slatekit.app.App
-import slatekit.app.AppRunner
+import kiit.app.App
+import kiit.app.AppRunner
 import kiit.context.Context
 import kiit.common.args.ArgsSchema
 import kiit.common.crypto.Encryptor
 import kiit.common.info.About
-import slatekit.providers.logback.LogbackLogs
+import kiit.providers.logback.LogbackLogs
 import kiit.results.Success
 import kiit.results.Try
 import kiit.results.getOrElse

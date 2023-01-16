@@ -1,6 +1,6 @@
 /**
  <kiit_header>
-url: www.slatekit.com
+url: www.kiit.dev
 git: www.github.com/slatekit/kiit
 org: www.codehelix.co
 author: Kishore Reddy
@@ -16,9 +16,9 @@ import kotlinx.coroutines.runBlocking
 import org.junit.Assert
 import org.junit.Test
 import org.threeten.bp.ZoneId
-import slatekit.apis.*
-import slatekit.apis.routes.Api
-import slatekit.apis.SetupType
+import kiit.apis.*
+import kiit.apis.routes.Api
+import kiit.apis.SetupType
 import kiit.common.DateTimes
 import kiit.results.*
 import test.apis.samples.Sample_API_1_Validation

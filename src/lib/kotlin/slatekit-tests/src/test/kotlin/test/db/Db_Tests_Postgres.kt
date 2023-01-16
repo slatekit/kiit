@@ -43,7 +43,7 @@ class Db_Tests_Postgres : TestSupport {
         var id = 0L
     }
 
-    val con = Confs.readDbCon(app,"user://.slatekit/conf/db_postgres.conf")
+    val con = Confs.readDbCon(app,"user://.kiit/conf/db_postgres.conf")
     val tableName = "sample_entity"
 
 

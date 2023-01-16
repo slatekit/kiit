@@ -1,6 +1,6 @@
 /**
  *  <kiit_header>
- * url: www.slatekit.com
+ * url: www.kiit.dev
  * git: www.github.com/slatekit/kiit
  * org: www.codehelix.co
  * author: Kishore Reddy
@@ -10,7 +10,7 @@
  */
 package test.setup
 
-import slatekit.apis.support.Authenticator
+import kiit.apis.support.Authenticator
 import kiit.common.info.ApiKey
 import kiit.requests.Request
 

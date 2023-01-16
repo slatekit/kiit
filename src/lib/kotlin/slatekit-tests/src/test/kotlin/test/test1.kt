@@ -1,7 +1,7 @@
 
 package test
 
-//import slatekit.support.alerts.*
+//import kiit.support.alerts.*
 
 
 /**
@@ -13,7 +13,7 @@ fun main(args: Array<String>) {
 
 //    DIKoin().test()
 //    DITest().test()
-//    println("slatekit.tests 1.1")
+//    println("kiit.tests 1.1")
     //testSlack()
     //testWorkers()
 }

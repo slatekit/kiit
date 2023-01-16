@@ -1,6 +1,6 @@
 /**
  <kiit_header>
-url: www.slatekit.com
+url: www.kiit.dev
 git: www.github.com/slatekit/kiit
 org: www.codehelix.co
 author: Kishore Reddy
@@ -180,13 +180,13 @@ class ValidationTests {
         Assert.assertTrue( !isUrl("ABCDEFG"))
         Assert.assertTrue( !isUrl("http"))
         Assert.assertTrue( !isUrl("http://"))
-        Assert.assertTrue( isUrl("http://slatekit.com"))
-        Assert.assertTrue( isUrl("http://www.slatekit.com"))
-        Assert.assertTrue( isUrl("http://www.slatekit.com/"))
-        Assert.assertTrue( isUrl("http://www.slatekit.com/about"))
-        Assert.assertTrue( isUrl("http://www.slatekit.com/about?"))
-        Assert.assertTrue( isUrl("http://www.slatekit.com/about.json"))
-        Assert.assertTrue( isUrl("http://www.slatekit.com/about?version=1.2"))
+        Assert.assertTrue( isUrl("http://kiit.com"))
+        Assert.assertTrue( isUrl("http://www.kiit.dev"))
+        Assert.assertTrue( isUrl("http://www.kiit.dev/"))
+        Assert.assertTrue( isUrl("http://www.kiit.dev/about"))
+        Assert.assertTrue( isUrl("http://www.kiit.dev/about?"))
+        Assert.assertTrue( isUrl("http://www.kiit.dev/about.json"))
+        Assert.assertTrue( isUrl("http://www.kiit.dev/about?version=1.2"))
     }
 
 

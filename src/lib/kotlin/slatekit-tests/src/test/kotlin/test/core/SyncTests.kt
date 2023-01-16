@@ -1,6 +1,6 @@
 package test.core
 
-//import slatekit.functions.syncs.Sync
+//import kiit.functions.syncs.Sync
 
 //class SyncTests {
 //

@@ -1,6 +1,6 @@
 /**
  <kiit_header>
-url: www.slatekit.com
+url: www.kiit.dev
 git: www.github.com/slatekit/kiit
 org: www.codehelix.co
 author: Kishore Reddy
@@ -14,7 +14,7 @@ package test.apis
 
 import org.junit.Assert
 import org.junit.Test
-import slatekit.apis.core.Roles
+import kiit.apis.core.Roles
 
 /**
  * Created by kishorereddy on 6/12/17.

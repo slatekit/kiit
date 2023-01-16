@@ -12,7 +12,7 @@ import java.util.concurrent.atomic.AtomicReference
  * Simple / Light-Weight implementation of the Metric interface for quick/in-memory purposes.
  *
  * NOTES:
- * 1. There is a provider/wrapper for https://micrometer.io/ available in the slatekit.providers
+ * 1. There is a provider/wrapper for https://micrometer.io/ available in the kiit.providers
  * 2. If you are already using micro-meter, then use the wrapper above.
  * 3. SlateKit custom diagnostics components ( Calls, Counters, Events, Lasts ) are orthogonal to metrics
  * 4. SlateKit has its own ( just a few ) diagnostic level components like Calls/Counters/Events/Lasts

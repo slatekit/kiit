@@ -1,6 +1,6 @@
 /**
  <kiit_header>
-url: www.slatekit.com
+url: www.kiit.dev
 git: www.github.com/slatekit/kiit
 org: www.codehelix.co
 author: Kishore Reddy
@@ -14,14 +14,14 @@ package test.apis
 
 import org.junit.Assert
 import org.junit.Test
-import slatekit.apis.*
-import slatekit.apis.routes.Api
-import slatekit.apis.core.Sources
-import slatekit.apis.routes.Routes
-import slatekit.apis.setup.Annotations
-import slatekit.apis.setup.Methods
-import slatekit.apis.setup.loadAll
-import slatekit.apis.setup.toApi
+import kiit.apis.*
+import kiit.apis.routes.Api
+import kiit.apis.core.Sources
+import kiit.apis.routes.Routes
+import kiit.apis.setup.Annotations
+import kiit.apis.setup.Methods
+import kiit.apis.setup.loadAll
+import kiit.apis.setup.toApi
 import kiit.common.Source
 import kiit.common.auth.Roles
 import test.setup.*
@@ -36,9 +36,9 @@ class Api_010_Route_Tests : ApiTestsBase() {
 
     @Test fun can_load_routes() {
         val areas = loadAll(listOf(
-                Api(SampleRolesByApp::class, "app", "sampleRolesByApp", "sample roles by application auth", roles = slatekit.apis.core.Roles(listOf("users")), auth = AuthMode.Token, sources = Sources(listOf(Source.CLI)), declaredOnly = true),
-                Api(SampleRolesByKey::class, "app", "sampleRolesByKey", "sample roles by api-key", roles = slatekit.apis.core.Roles(listOf("users")), auth = AuthMode.Keyed, sources = Sources(listOf(Source.CLI)), declaredOnly = true),
-                Api(SampleExtendedApi::class, "tests", "sampleExtended", "sample plain kotlin class", roles = slatekit.apis.core.Roles(listOf("users")), auth = AuthMode.Token, sources = Sources(listOf(Source.CLI)), declaredOnly = false)
+                Api(SampleRolesByApp::class, "app", "sampleRolesByApp", "sample roles by application auth", roles = kiit.apis.core.Roles(listOf("users")), auth = AuthMode.Token, sources = Sources(listOf(Source.CLI)), declaredOnly = true),
+                Api(SampleRolesByKey::class, "app", "sampleRolesByKey", "sample roles by api-key", roles = kiit.apis.core.Roles(listOf("users")), auth = AuthMode.Keyed, sources = Sources(listOf(Source.CLI)), declaredOnly = true),
+                Api(SampleExtendedApi::class, "tests", "sampleExtended", "sample plain kotlin class", roles = kiit.apis.core.Roles(listOf("users")), auth = AuthMode.Token, sources = Sources(listOf(Source.CLI)), declaredOnly = false)
         ))
 
         val routes = Routes(areas, null)

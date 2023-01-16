@@ -1,6 +1,6 @@
 /**
  *  <kiit_header>
- * url: www.slatekit.com
+ * url: www.kiit.dev
  * git: www.github.com/slatekit/kiit
  * org: www.codehelix.co
  * author: Kishore Reddy
@@ -11,7 +11,7 @@
 
 package test.setup
 
-import slatekit.apis.*
+import kiit.apis.*
 import kiit.common.*
 import kiit.common.auth.Roles
 import kiit.common.types.ContentFile
@@ -23,7 +23,7 @@ import kiit.common.values.Metadata
 import kiit.requests.Request
 import kiit.integration.common.ApiBaseEntity
 import kiit.entities.EntityService
-import slatekit.connectors.entities.AppEntContext
+import kiit.connectors.entities.AppEntContext
 import kiit.results.Notice
 import kiit.results.Success
 

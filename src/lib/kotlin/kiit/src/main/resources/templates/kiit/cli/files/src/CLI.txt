@@ -8,7 +8,7 @@ import kiit.context.Context
 import kiit.common.types.*
 import kiit.common.info.ApiKey
 import kiit.common.types.ContentType
-import slatekit.connectors.cli.CliApi
+import kiit.connectors.cli.CliApi
 import kiit.results.Try
 import kiit.serialization.Serialization
 import ${app.package}.apis.SampleAPI

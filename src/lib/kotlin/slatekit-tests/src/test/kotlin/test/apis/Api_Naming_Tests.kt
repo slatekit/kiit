@@ -3,10 +3,10 @@ package test.apis
 import kotlinx.coroutines.runBlocking
 import org.junit.Assert
 import org.junit.Test
-import slatekit.apis.routes.Api
-import slatekit.apis.ApiServer
-import slatekit.apis.Settings
-import slatekit.apis.Verb
+import kiit.apis.routes.Api
+import kiit.apis.ApiServer
+import kiit.apis.Settings
+import kiit.apis.Verb
 import kiit.utils.naming.LowerHyphenNamer
 import kiit.utils.naming.LowerUnderscoreNamer
 import kiit.results.getOrElse

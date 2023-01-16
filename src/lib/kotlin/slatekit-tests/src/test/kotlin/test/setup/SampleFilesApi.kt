@@ -1,7 +1,7 @@
 package test.setup
 
-import slatekit.apis.Api
-import slatekit.apis.Action
+import kiit.apis.Api
+import kiit.apis.Action
 import kiit.common.types.Content
 import kiit.common.types.ContentFile
 import kiit.common.types.ContentFiles

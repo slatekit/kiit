@@ -1,6 +1,6 @@
 /**
  <kiit_header>
-url: www.slatekit.com
+url: www.kiit.dev
 git: www.github.com/slatekit/kiit
 org: www.codehelix.co
 author: Kishore Reddy
@@ -14,7 +14,7 @@ about: A Kotlin utility library, tool-kit and server backend.
  * Created by kishorereddy on 5/19/17.
  */
 
-package slatekit.data
+package kiit.data
 
 // import java.time.format.DateTimeFormatter
 import org.threeten.bp.format.DateTimeFormatter

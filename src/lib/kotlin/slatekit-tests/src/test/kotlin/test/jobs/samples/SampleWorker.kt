@@ -2,9 +2,9 @@ package test.jobs.samples
 
 import kiit.common.Identity
 import kiit.actors.Status
-import slatekit.jobs.WResult
-import slatekit.jobs.*
-import slatekit.jobs.Worker
+import kiit.jobs.WResult
+import kiit.jobs.*
+import kiit.jobs.Worker
 import java.util.concurrent.atomic.AtomicInteger
 
 class OneTimeWorker(val start:Int, val end:Int, id: Identity) : Worker<Int>(id) {

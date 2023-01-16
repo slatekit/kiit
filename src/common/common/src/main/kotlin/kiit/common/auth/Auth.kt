@@ -22,7 +22,7 @@ package kiit.common.auth
  * 3. Since authorization is a fairly complex feature with implementations such as
  *    OAuth, Social Auth, Slate Kit has purposely left out the Authentication to more reliable
  *    libraries and frameworks.
- * 4. The SlateKit.Api component, while supporting basic api "Keys" based authentication,
+ * 4. The kiit.Api component, while supporting basic api "Keys" based authentication,
  *    and a roles based authentication, it leaves the login/logout and actual generating
  *    of tokens to libraries such as OAuth.
  *
