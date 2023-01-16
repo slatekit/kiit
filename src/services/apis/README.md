@@ -1,4 +1,4 @@
 # About
-More information on this component at https://www.slatekit.com/arch/apis/
+More information on this component at https://www.kiit.dev/arch/apis/
 
-![image](https://www.slatekit.com/assets/app/media/arch/kiit-apis.png)
+![image](https://www.kiit.dev/assets/app/media/arch/kiit-apis.png)

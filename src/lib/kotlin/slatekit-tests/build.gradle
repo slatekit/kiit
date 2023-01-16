@@ -16,7 +16,7 @@ buildscript {
 plugins {
     id "java"
     id "maven-publish"
-    id "org.jetbrains.kotlin.jvm" version "$kotlin_version"
+     id "org.jetbrains.kotlin.jvm" version "$kotlin_version"
 }
 
 //apply plugin: 'org.junit.platform.gradle.plugin'
@@ -75,7 +75,6 @@ dependencies {
     implementation project(":kiit-query")
     implementation project(":kiit-meta")
     implementation project(":kiit-entities")
-    //implementation project(":slatekit-orm")
     implementation project(":kiit-http")
     implementation project(":kiit-jobs")
     implementation project(":kiit-apis")
@@ -88,7 +87,6 @@ dependencies {
     implementation project(":providers-aws")
     implementation project(":providers-logback")
     implementation project(":providers-datadog")
-    //compile project(":slatekit-support")
 
     compile 'io.micrometer:micrometer-registry-datadog:latest.release'
 

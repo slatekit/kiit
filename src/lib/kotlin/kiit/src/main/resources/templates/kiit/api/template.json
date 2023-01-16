@@ -2,8 +2,8 @@
   "name": "api",
   "description": "Generates a kiit.app console application",
   "version": "1.28.0",
-  "url": "https://www.slatekit.com",
-  "contact": "https://www.slatekit.com",
+  "url": "https://www.kiit.dev",
+  "contact": "https://www.kiit.dev",
   "keywords": ["slatekit", "api"],
   "type": "application",
   "actions": [

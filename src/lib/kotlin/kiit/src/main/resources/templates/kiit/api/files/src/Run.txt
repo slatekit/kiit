@@ -26,7 +26,7 @@ import kiit.providers.logback.LogbackLogs
  */
 fun main(args: Array<String>) {
     /**
-     * DOCS : https://www.slatekit.com/arch/app/
+     * DOCS : https://www.kiit.dev/arch/app/
      *
      * NOTES: The AppRunner does the following:
      *
