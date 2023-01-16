@@ -59,8 +59,8 @@ dependencies {
         compile "com.slatekit:slatekit-context:$kiit_version"
         compile "com.slatekit:slatekit-utils:$kiit_version"
         compile "com.slatekit:slatekit-requests:$kiit_version"
-        compile "com.slatekit:kiit-apis:$kiit_version"
-        compile "com.slatekit:kiit-cli:$kiit_version"
+        compile "dev.kiit:apis:$kiit_version"
+        compile "dev.kiit:cli:$kiit_version"
     } else {
         // */
     compile project(":slatekit-result")

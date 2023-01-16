@@ -32,7 +32,16 @@ include ':kiit-server'
 project(':kiit-server').projectDir=new File('../../../services/server')
 
 include ':slatekit-db'
-project(':slatekit-db').projectDir=new File('../slatekit-db')
+project(':slatekit-db').projectDir=new File('../../../infra/db')
+
+include ':slatekit-core'
+project(':slatekit-core').projectDir=new File('../../../infra/core')
+
+include ':slatekit-cache'
+project(':slatekit-cache').projectDir=new File('../../../infra/cache')
+
+include ':slatekit-notifications'
+project(':slatekit-notifications').projectDir=new File('../../../infra/comms')
 
 include ':slatekit-query'
 project(':slatekit-query').projectDir=new File('../slatekit-query')
@@ -52,14 +61,8 @@ project(':slatekit-migrations').projectDir=new File('../slatekit-migrations')
 include ':slatekit-http'
 project(':slatekit-http').projectDir=new File('../slatekit-http')
 
-include ':slatekit-core'
-project(':slatekit-core').projectDir=new File('../slatekit-core')
-
 include ':slatekit-policy'
 project(':slatekit-policy').projectDir=new File('../slatekit-policy')
-
-include ':slatekit-cache'
-project(':slatekit-cache').projectDir=new File('../slatekit-cache')
 
 include ':slatekit-requests'
 project(':slatekit-requests').projectDir=new File('../slatekit-requests')
@@ -69,9 +72,6 @@ project(':slatekit-generator').projectDir=new File('../slatekit-generator')
 
 include ':slatekit-integration'
 project(':slatekit-integration').projectDir=new File('../slatekit-integration')
-
-include ':slatekit-notifications'
-project(':slatekit-notifications').projectDir=new File('../slatekit-notifications')
 
 include ':slatekit-serialization'
 project(':slatekit-serialization').projectDir=new File('../slatekit-serialization')
@@ -106,5 +106,5 @@ project(':connectors-jobs').projectDir=new File('../../../connectors/connectors-
 //include ':slatekit-samples'
 //project(':slatekit-samples').projectDir=new File('../../../apps/kotlin/slatekit-samples')
 //
-//include ':slatekit-tests'
-//project(':slatekit-tests').projectDir=new File('../slatekit-tests')
+include ':slatekit-tests'
+project(':slatekit-tests').projectDir=new File('../slatekit-tests')
