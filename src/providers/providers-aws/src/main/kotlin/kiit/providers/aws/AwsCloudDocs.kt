@@ -2,7 +2,7 @@ package kiit.providers.aws
 
 import com.amazonaws.auth.AWSCredentials
 import com.amazonaws.auth.AWSStaticCredentialsProvider
-import slatekit.core.docs.CloudDocs
+import kiit.core.docs.CloudDocs
 
 import com.amazonaws.services.dynamodbv2.AmazonDynamoDBClientBuilder
 import com.amazonaws.services.dynamodbv2.document.DynamoDB

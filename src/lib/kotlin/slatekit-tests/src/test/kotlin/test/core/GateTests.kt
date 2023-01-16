@@ -2,7 +2,7 @@ package test.core
 
 import org.junit.Assert
 import org.junit.Test
-//import slatekit.core.gate.*
+//import kiit.core.gate.*
 
 /*
 class GateTests {

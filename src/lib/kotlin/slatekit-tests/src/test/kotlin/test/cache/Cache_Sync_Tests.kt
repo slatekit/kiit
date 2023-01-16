@@ -14,7 +14,7 @@ package test
 
 import org.junit.Assert
 import org.junit.Test
-import slatekit.cache.*
+import kiit.cache.*
 import slatekit.common.DateTime
 
 

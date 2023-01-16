@@ -23,9 +23,9 @@ import slatekit.common.info.ApiLogin
 import slatekit.common.io.Uris
 import slatekit.common.ext.toStringUtc
 import slatekit.common.Provider
-import slatekit.core.queues.QueueEntry
-import slatekit.core.queues.QueueValueConverter
-import slatekit.core.queues.CloudQueue
+import kiit.core.queues.QueueEntry
+import kiit.core.queues.QueueValueConverter
+import kiit.core.queues.CloudQueue
 import slatekit.results.Try
 import slatekit.results.builders.Tries
 import java.io.File

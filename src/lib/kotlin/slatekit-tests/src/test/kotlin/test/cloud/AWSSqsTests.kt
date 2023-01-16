@@ -5,8 +5,8 @@ import org.junit.Assert
 import slatekit.providers.aws.SQS
 import slatekit.common.DateTime
 import slatekit.common.ext.toStringNumeric
-import slatekit.core.queues.QueueStringConverter
-import slatekit.core.queues.CloudQueue
+import kiit.core.queues.QueueStringConverter
+import kiit.core.queues.CloudQueue
 import test.TestApp
 import test.setup.TestSupport
 

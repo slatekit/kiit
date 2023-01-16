@@ -10,10 +10,10 @@ import slatekit.common.types.ContentFile
 import slatekit.common.types.ContentTypes
 import slatekit.common.types.Countries
 import slatekit.http.HttpRPC
-import slatekit.notifications.email.EmailMessage
-import slatekit.notifications.email.SendGrid
-import slatekit.notifications.sms.SmsMessage
-import slatekit.notifications.sms.TwilioSms
+import kiit.comms.email.EmailMessage
+import kiit.comms.email.SendGrid
+import kiit.comms.sms.SmsMessage
+import kiit.comms.sms.TwilioSms
 import test.TestApp
 import java.io.File
 

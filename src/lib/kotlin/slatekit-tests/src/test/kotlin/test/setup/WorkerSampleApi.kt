@@ -6,7 +6,7 @@ import slatekit.apis.core.Reqs
 import slatekit.common.Source
 import slatekit.context.AppContext
 import slatekit.common.utils.Random
-import slatekit.core.queues.AsyncQueue
+import kiit.core.queues.AsyncQueue
 import slatekit.integration.common.ApiQueueSupport
 import slatekit.results.*
 

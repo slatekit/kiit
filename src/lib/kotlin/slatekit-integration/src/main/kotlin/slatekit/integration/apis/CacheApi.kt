@@ -18,7 +18,7 @@ import kiit.apis.Action
 import kiit.apis.AuthModes
 import kiit.apis.Verbs
 import kiit.apis.support.FileSupport
-import slatekit.cache.*
+import kiit.cache.*
 import slatekit.common.crypto.Encryptor
 import slatekit.common.log.Logger
 import slatekit.common.Sources

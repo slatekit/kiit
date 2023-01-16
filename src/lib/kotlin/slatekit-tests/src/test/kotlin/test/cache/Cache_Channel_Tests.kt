@@ -15,7 +15,7 @@ package test
 import kotlinx.coroutines.*
 import org.junit.Assert
 import org.junit.Test
-import slatekit.cache.*
+import kiit.cache.*
 import slatekit.common.DateTime
 import slatekit.common.Identity
 import slatekit.common.log.LoggerConsole

@@ -22,11 +22,11 @@ import com.amazonaws.services.s3.model.GetObjectRequest
 import com.amazonaws.services.s3.model.ObjectMetadata
 import slatekit.common.info.ApiLogin
 import slatekit.common.io.Uris
-import slatekit.core.files.CloudFiles
-import slatekit.core.common.FileUtils
+import kiit.core.files.CloudFiles
+import kiit.core.common.FileUtils
 import slatekit.common.Provider
-import slatekit.core.files.CloudFile
-import slatekit.core.files.CloudFileEntry
+import kiit.core.files.CloudFile
+import kiit.core.files.CloudFileEntry
 import slatekit.results.Try
 import slatekit.results.builders.Tries
 import slatekit.results.getOrElse

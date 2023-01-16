@@ -68,7 +68,7 @@ dependencies {
         compile "com.slatekit:slatekit-requests:$kiit_version"
         compile "com.slatekit:slatekit-context:$kiit_version"
         compile "com.slatekit:slatekit-telemetry:$kiit_version"
-        compile "com.slatekit:kiit-apis:$kiit_version"
+        compile "dev.kiit:apis:$kiit_version"
         compile "com.slatekit:slatekit-serialization:$kiit_version"
     } else {
         // */
@@ -129,7 +129,7 @@ publishing {
         gpr(MavenPublication) {
             from(components.java)
             groupId 'dev.kiit'
-            artifactId "${slatekitComponentId}"
+            artifactId "${kiitComponentId}"
             version "${kiitComponentVersion}"
         }
     }

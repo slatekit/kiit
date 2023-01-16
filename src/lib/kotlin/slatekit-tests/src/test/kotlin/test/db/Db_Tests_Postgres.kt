@@ -8,7 +8,7 @@ import slatekit.common.DateTimes
 import slatekit.common.conf.Confs
 import slatekit.common.data.DataType
 import slatekit.common.data.Value
-import slatekit.db.Db
+import kiit.db.Db
 import test.TestApp
 import test.setup.TestSupport
 import java.time.LocalDate

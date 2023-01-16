@@ -52,7 +52,7 @@ dependencies {
         compile "com.slatekit:slatekit-common:$kiit_version"
         compile "com.slatekit:slatekit-utils:$kiit_version"
         compile "com.slatekit:slatekit-context:$kiit_version"
-        compile "com.slatekit:kiit-apis:$kiit_version"
+        compile "dev.kiit:apis:$kiit_version"
     } else {
         // */
     compile project(":slatekit-result")

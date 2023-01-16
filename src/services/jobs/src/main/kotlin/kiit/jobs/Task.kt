@@ -23,7 +23,7 @@ package kiit.jobs
  *  data     = "JSON data...",
  *  xid      = "abc123"
  *  tag      = "JIRA-1234"
- *  entry    = e.g. @see[slatekit.core.queues.QueueEntry]
+ *  entry    = e.g. @see[kiit.core.queues.QueueEntry]
  */
 data class Task(
     val id: String,

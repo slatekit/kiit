@@ -1,7 +1,7 @@
 package test
 
 //import slatekit.common.utils.Random
-//import slatekit.db.Db
+//import kiit.db.Db
 //import slatekit.entities.Entities
 //import slatekit.support.ioc.DI
 

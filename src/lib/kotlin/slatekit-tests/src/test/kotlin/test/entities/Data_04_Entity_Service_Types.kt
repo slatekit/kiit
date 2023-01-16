@@ -22,7 +22,7 @@ import slatekit.common.data.Connections
 import slatekit.common.data.Vendor
 import slatekit.common.ids.UPIDs
 import slatekit.data.core.LongId
-import slatekit.db.Db
+import kiit.db.Db
 import slatekit.entities.EntityService
 import slatekit.query.Op
 import test.TestApp

@@ -2,7 +2,7 @@ package test.common
 
 import org.junit.Assert
 import org.junit.Test
-import slatekit.core.queues.InMemoryQueue
+import kiit.core.queues.InMemoryQueue
 
 class QueueTests {
 

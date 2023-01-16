@@ -1,7 +1,7 @@
 package test
 
 import slatekit.common.utils.Random
-import slatekit.notifications.sms.SmsService
+import kiit.comms.sms.SmsService
 
 /**
  * Generice Interfaces

@@ -27,7 +27,7 @@ import slatekit.common.info.Info
 import slatekit.common.log.LogsDefault
 import slatekit.utils.smartvalues.PhoneUS
 import slatekit.utils.smartvalues.SmartValued
-import slatekit.db.Db
+import kiit.db.Db
 import slatekit.meta.Reflector
 import slatekit.entities.Entities
 import slatekit.connectors.entities.AppEntContext

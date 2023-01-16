@@ -21,7 +21,7 @@ import slatekit.common.DateTime
 import slatekit.common.data.*
 import slatekit.common.utils.Random
 import slatekit.data.sql.vendors.sqliteIfNotExists
-import slatekit.db.Db
+import kiit.db.Db
 import slatekit.entities.*
 import slatekit.entities.features.Counts
 import slatekit.entities.features.Ordered

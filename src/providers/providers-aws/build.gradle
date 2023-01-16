@@ -54,12 +54,12 @@ dependencies {
     if( kiitSetupViaBinary ) {
         compile "com.slatekit:slatekit-results:$kiit_version"
         compile "com.slatekit:slatekit-common:$kiit_version"
-        compile "com.slatekit:slatekit-core:$kiit_version"
+        compile "dev.kiit:core:$kiit_version"
     } else {
         // */
     compile project(":slatekit-result")
     compile project(":slatekit-common")
-    compile project(":slatekit-core")
+    compile project(":kiit-core")
     } //</slatekit_local>
 }
 

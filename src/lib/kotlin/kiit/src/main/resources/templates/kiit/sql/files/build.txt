@@ -44,7 +44,7 @@ dependencies {
     compile "com.slatekit:slatekit-results:$kiit_version"
     compile "com.slatekit:slatekit-common:$kiit_version"
     compile "com.slatekit:kiit-providers:$kiit_version"
-    compile "com.slatekit:kiit-app:$kiit_version"
+    compile "dev.kiit:app:$kiit_version"
 }
 
 

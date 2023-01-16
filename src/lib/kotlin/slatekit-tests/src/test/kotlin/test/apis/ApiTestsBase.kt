@@ -30,7 +30,7 @@ import slatekit.common.info.*
 import slatekit.common.log.LogsDefault
 import slatekit.requests.Request
 import slatekit.requests.Response
-import slatekit.db.Db
+import kiit.db.Db
 import slatekit.entities.Entities
 import slatekit.policy.hooks.Middleware
 import slatekit.connectors.entities.AppEntContext

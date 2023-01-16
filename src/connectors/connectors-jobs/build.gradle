@@ -57,9 +57,9 @@ dependencies {
         compile "com.slatekit:slatekit-results:$kiit_version"
         compile "com.slatekit:slatekit-common:$kiit_version"
         compile "com.slatekit:slatekit-actors:$kiit_version"
-        compile "com.slatekit:slatekit-core:$kiit_version"
+        compile "dev.kiit:core:$kiit_version"
         compile "com.slatekit:slatekit-context:$kiit_version"
-        compile "com.slatekit:kiit-apis:$kiit_version"
+        compile "dev.kiit:apis:$kiit_version"
         compile "com.slatekit:kiit-jobs:$kiit_version"
         compile "com.slatekit:connectors-entities:$kiit_version"
         compile "com.slatekit:providers-aws:$kiit_version"
@@ -68,7 +68,7 @@ dependencies {
     compile project(":slatekit-result")
     compile project(":slatekit-common")
     compile project(":slatekit-actors")
-    compile project(":slatekit-core")
+    compile project(":kiit-core")
     compile project(":slatekit-context")
     compile project(":kiit-apis")
     compile project(":kiit-jobs")
