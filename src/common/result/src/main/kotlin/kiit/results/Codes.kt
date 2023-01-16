@@ -1,13 +1,13 @@
 /**
- * <slate_header>
+ *  <kiit_header>
  * url: www.slatekit.com
- * git: www.github.com/code-helix/slatekit
+ * git: www.github.com/slatekit/kiit
  * org: www.codehelix.co
  * author: Kishore Reddy
  * copyright: 2016 CodeHelix Solutions Inc.
  * license: refer to website and/or github
  * about: A Kotlin Tool-Kit for Server + Android
- * </slate_header>
+  *  </kiit_header>
  */
 
 /* ktlint-disable */

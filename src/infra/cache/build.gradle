@@ -15,7 +15,7 @@ buildscript {
 plugins {
   id "java"
   id "maven-publish"
-  id "org.jetbrains.kotlin.jvm" version "$kotlin_version"
+   id "org.jetbrains.kotlin.jvm" version "$kotlin_version"
 }
 
 apply from: '../../../build/gradle/slatekit-common.gradle'
@@ -50,7 +50,7 @@ dependencies {
   if( kiitSetupViaBinary ) {
       compile "dev.kiit:results:$kiit_version"
       compile "dev.kiit:common:$kiit_version"
-      compile "dev.kiit:slatekit-core:$kiit_version"
+      compile "dev.kiit:core:$kiit_version"
       compile "dev.kiit:telemetry:$kiit_version"
   } else {
       // */

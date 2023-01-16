@@ -17,7 +17,7 @@ import kiit.results.Success
  * NOTES:
  * 1. You can use the Slate Kit Application template to
  * get support for command line args, environment selection, confs, life-cycle methods and help usage
- * @see https://www.slatekit.com/arch/app/
+ * @see https://www.kiit.dev/arch/app/
  *
  * RUN OPTIONS:
  *
