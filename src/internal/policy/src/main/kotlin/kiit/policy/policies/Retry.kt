@@ -6,7 +6,7 @@ import kiit.results.Failure
 import kiit.results.Outcome
 import kiit.results.Success
 import kiit.results.builders.Tries
-import slatekit.telemetry.Counter
+import kiit.telemetry.Counter
 
 /**
  * Policy to limit the operation based on the total processed items from the metric counts

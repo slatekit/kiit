@@ -28,9 +28,9 @@ import kiit.common.conf.Config
 import kiit.common.types.Content
 import kiit.common.info.Host
 import kiit.common.types.Contents
-import slatekit.integration.apis.InfoApi
+import kiit.integration.apis.InfoApi
 import slatekit.connectors.cli.CliApi
-import slatekit.integration.apis.VersionApi
+import kiit.integration.apis.VersionApi
 import slatekit.connectors.entities.AppEntContext
 import kiit.results.Codes
 import kiit.results.Status

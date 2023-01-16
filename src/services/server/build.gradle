@@ -62,12 +62,12 @@ dependencies {
 
     // /* <slatekit_local>
     if( kiitSetupViaBinary ) {
-        compile "com.slatekit:kiit-results:$kiit_version"
-        compile "com.slatekit:kiit-common:$kiit_version"
-        compile "com.slatekit:kiit-utils:$kiit_version"
-        compile "com.slatekit:kiit-requests:$kiit_version"
-        compile "com.slatekit:kiit-context:$kiit_version"
-        compile "com.slatekit:slatekit-telemetry:$kiit_version"
+        compile "dev.kiit:results:$kiit_version"
+        compile "dev.kiit:common:$kiit_version"
+        compile "dev.kiit:utils:$kiit_version"
+        compile "dev.kiit:requests:$kiit_version"
+        compile "dev.kiit:context:$kiit_version"
+        compile "dev.kiit:telemetry:$kiit_version"
         compile "dev.kiit:apis:$kiit_version"
         compile "dev.kiit:serialization:$kiit_version"
     } else {
@@ -77,7 +77,7 @@ dependencies {
     compile project(":kiit-utils")
     compile project(":kiit-requests")
     compile project(":kiit-context")
-    compile project(":slatekit-telemetry")
+    compile project(":kiit-telemetry")
     compile project(":kiit-apis")
     compile project(":kiit-serialization")
     } //</slatekit_local>

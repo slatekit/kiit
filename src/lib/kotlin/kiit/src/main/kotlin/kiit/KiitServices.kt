@@ -6,7 +6,7 @@ import kiit.apis.tools.code.CodeGenApi
 import kiit.common.conf.Conf
 import kiit.context.Context
 import kiit.docs.DocApi
-import slatekit.generator.*
+import kiit.generator.*
 
 interface KiitServices {
 

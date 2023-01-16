@@ -51,35 +51,35 @@ dependencies {
 
     // /* <slatekit_local>
     if( kiitSetupViaBinary ) {
-        implementation "com.slatekit:kiit-results:$kiit_version"
-        implementation "com.slatekit:kiit-common:$kiit_version"
-        implementation "com.slatekit:kiit-context:$kiit_version"
+        implementation "dev.kiit:results:$kiit_version"
+        implementation "dev.kiit:common:$kiit_version"
+        implementation "dev.kiit:context:$kiit_version"
         implementation "dev.kiit:app:$kiit_version"
         implementation "dev.kiit:apis:$kiit_version"
         implementation "dev.kiit:cli:$kiit_version"
         implementation "dev.kiit:meta:$kiit_version"
         implementation "dev.kiit:policy:$kiit_version"
         implementation "dev.kiit:serialization:$kiit_version"
-        implementation "com.slatekit:slatekit-telemetry:$kiit_version"
-        implementation "com.slatekit:slatekit-generator:$kiit_version"
+        implementation "dev.kiit:telemetry:$kiit_version"
+        implementation "dev.kiit:integration:$kiit_version"
         implementation "dev.kiit:connectors-cli:$kiit_version"
         implementation "dev.kiit:providers-logback:$kiit_version"
-//        implementation "com.slatekit:providers-aws:$kiit_version"
-//        implementation "com.slatekit:providers-datadog:$kiit_version"
-//        implementation "com.slatekit:connectors-entities:$kiit_version"
-//        implementation "com.slatekit:connectors-jobs:$kiit_version"
+//        implementation "dev.kiit:providers-aws:$kiit_version"
+//        implementation "dev.kiit:providers-datadog:$kiit_version"
+//        implementation "dev.kiit:connectors-entities:$kiit_version"
+//        implementation "dev.kiit:connectors-jobs:$kiit_version"
 //        implementation "dev.kiit:db:$kiit_version"
 //        implementation "dev.kiit:core:$kiit_version"
 //        implementation "dev.kiit:cache:$kiit_version"
 //        implementation "dev.kiit:comms:$kiit_version"
-//        implementation "com.slatekit:kiit-http:$kiit_version"
-//        implementation "com.slatekit:kiit-jobs:$kiit_version"
+//        implementation "dev.kiit:http:$kiit_version"
+//        implementation "dev.kiit:jobs:$kiit_version"
 //        implementation "com.slatekit:slatekit-cloud:$kiit_version"
-//        implementation "com.slatekit:kiit-query:$kiit_version"
+//        implementation "dev.kiit:query:$kiit_version"
 //        implementation "dev.kiit:entities:$kiit_version"
 //        implementation "com.slatekit:slatekit-orm:$kiit_version"
-//        implementation "com.slatekit:slatekit-integration:$kiit_version"
-//        implementation "com.slatekit:kiit-server:$kiit_version"
+//        implementation "dev.kiit:integration:$kiit_version"
+//        implementation "dev.kiit:server:$kiit_version"
     } else {
         // */
     implementation project(":kiit-result")
@@ -92,9 +92,10 @@ dependencies {
     implementation project(":kiit-meta")
     implementation project(":kiit-policy")
     implementation project(":kiit-serialization")
-    implementation project(":slatekit-telemetry")
+    implementation project(":kiit-telemetry")
     implementation project(":kiit-requests")
-    implementation project(":slatekit-generator")
+    implementation project(":kiit-generator")
+    implementation project(":kiit-integration")
     implementation project(":connectors-cli")
     implementation project(":providers-logback")
     implementation project(":providers-kafka")
@@ -111,7 +112,7 @@ dependencies {
 //        implementation project(":kiit-db")
 //        implementation project(":kiit-query")
 //        implementation project(":kiit-entities")
-//        implementation project(":slatekit-integration")
+//        implementation project(":kiit-integration")
         implementation project(":kiit-server")
 //        implementation project(":slatekit-samples")
     } //</slatekit_local>

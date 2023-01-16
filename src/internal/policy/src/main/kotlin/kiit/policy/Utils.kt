@@ -6,7 +6,7 @@ import kiit.results.Outcome
 import kiit.results.Status
 import kiit.results.Try
 import kiit.results.builders.Outcomes
-import slatekit.telemetry.Counters
+import kiit.telemetry.Counters
 
 /**
  * Retryable operation

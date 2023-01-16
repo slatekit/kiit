@@ -18,7 +18,7 @@ import kiit.common.log.Logger
 import kiit.common.utils.Random
 import kiit.results.Outcome
 import kiit.results.builders.Outcomes
-import slatekit.telemetry.Tracker
+import kiit.telemetry.Tracker
 
 /**
  * This light-weight implementation of a Cache ( LRU - Least recently used )

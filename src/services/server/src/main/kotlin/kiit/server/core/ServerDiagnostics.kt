@@ -1,8 +1,8 @@
 package kiit.server.core
 
-import slatekit.telemetry.Diagnostics
+import kiit.telemetry.Diagnostics
 import kiit.common.log.Logger
-import slatekit.telemetry.Metrics
+import kiit.telemetry.Metrics
 import kiit.requests.*
 
 /**

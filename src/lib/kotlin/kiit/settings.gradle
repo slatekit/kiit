@@ -49,6 +49,9 @@ project(':kiit-cache').projectDir=new File('../../../infra/cache')
 include ':kiit-comms'
 project(':kiit-comms').projectDir=new File('../../../infra/comms')
 
+include ':kiit-telemetry'
+project(':kiit-telemetry').projectDir=new File('../../../infra/telemetry')
+
 include ':kiit-data'
 project(':kiit-data').projectDir=new File('../../../data/data')
 
@@ -70,14 +73,11 @@ project(':kiit-policy').projectDir=new File('../../../internal/policy')
 include ':kiit-serialization'
 project(':kiit-serialization').projectDir=new File('../../../internal/serialization')
 
-include ':slatekit-generator'
-project(':slatekit-generator').projectDir=new File('../slatekit-generator')
+include ':kiit-generator'
+project(':kiit-generator').projectDir=new File('../../../support/generator')
 
-include ':slatekit-integration'
-project(':slatekit-integration').projectDir=new File('../slatekit-integration')
-
-include ':slatekit-telemetry'
-project(':slatekit-telemetry').projectDir=new File('../slatekit-telemetry')
+include ':kiit-integration'
+project(':kiit-integration').projectDir=new File('../../../support/integration')
 
 include ':providers-aws'
 project(':providers-aws').projectDir=new File('../../../providers/providers-aws')

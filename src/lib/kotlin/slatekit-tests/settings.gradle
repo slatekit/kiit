@@ -21,8 +21,8 @@
 //include ':slatekit-workers'
 //project(':slatekit-workers').projectDir=new File('../slatekit-workers')
 //
-//include ':slatekit-integration'
-//project(':slatekit-integration').projectDir=new File('../slatekit-integration')
+//include ':kiit-integration'
+//project(':kiit-integration').projectDir=new File('../kiit-integration')
 //
 //include ':slatekit-cloud'
 //project(':slatekit-cloud').projectDir=new File('../slatekit-cloud')

@@ -13,8 +13,8 @@
 
 package kiit.cache
 
-import slatekit.telemetry.Expiry
-import slatekit.telemetry.Tracker
+import kiit.telemetry.Expiry
+import kiit.telemetry.Tracker
 
 /**
  * Represents a single cache item

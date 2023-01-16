@@ -14,8 +14,8 @@ import kiit.common.info.ApiKey
 import kiit.common.info.Folders
 import kiit.common.log.Logger
 import kiit.connectors.cli.CliApi
-import slatekit.generator.Help
-import slatekit.generator.Setup
+import kiit.generator.Help
+import kiit.generator.Setup
 import kiit.results.Success
 import kiit.serialization.Serialization
 import kiit.results.Failure

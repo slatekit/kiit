@@ -6,7 +6,7 @@ import kiit.common.args.Args
 import kiit.common.io.Alias
 import kiit.utils.writer.ConsoleWriter
 import kiit.context.AppContext
-import slatekit.generator.Help
+import kiit.generator.Help
 import kiit.providers.logback.LogbackLogs
 import kiit.results.Failure
 import kiit.results.Success

@@ -4,7 +4,7 @@ import io.ktor.application.ApplicationCall
 import io.ktor.routing.Routing
 import kiit.apis.ApiServer
 import kiit.context.Context
-import slatekit.telemetry.Diagnostics
+import kiit.telemetry.Diagnostics
 import kiit.requests.Request
 
 interface RequestHandler {

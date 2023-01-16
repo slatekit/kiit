@@ -16,7 +16,7 @@ package kiit.cache
 import kotlinx.coroutines.runBlocking
 import kiit.results.Outcome
 import kiit.results.builders.Outcomes
-import slatekit.telemetry.*
+import kiit.telemetry.*
 import java.util.concurrent.atomic.AtomicReference
 
 /**

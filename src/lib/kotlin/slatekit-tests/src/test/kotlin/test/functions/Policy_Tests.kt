@@ -7,8 +7,8 @@ import org.junit.Test
 import kiit.common.Identity
 import kiit.policy.Policies
 import kiit.policy.Policy
-import slatekit.telemetry.Calls
-import slatekit.telemetry.Counters
+import kiit.telemetry.Calls
+import kiit.telemetry.Counters
 import kiit.policy.policies.*
 import kiit.results.*
 import kiit.results.builders.Outcomes
