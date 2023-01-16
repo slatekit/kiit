@@ -18,7 +18,7 @@ import slatekit.common.values.Record
 import slatekit.common.crypto.Encryptor
 import slatekit.common.data.DataAction
 import slatekit.common.data.DataType
-import slatekit.meta.models.Model
+import kiit.meta.models.Model
 import kiit.data.Mapper
 import slatekit.common.data.Values
 import kiit.data.core.Meta

@@ -10,7 +10,7 @@ import slatekit.common.info.ApiKey
 import slatekit.common.types.ContentType
 import slatekit.connectors.cli.CliApi
 import slatekit.results.Try
-import slatekit.serialization.Serialization
+import kiit.serialization.Serialization
 import ${app.package}.apis.SampleAPI
 
 class CLI(val ctx: Context) {

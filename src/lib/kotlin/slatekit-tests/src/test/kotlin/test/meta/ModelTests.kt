@@ -5,9 +5,9 @@ import org.junit.Test
 import slatekit.common.DateTime
 import slatekit.common.data.DataType
 import slatekit.common.ids.UPID
-import slatekit.meta.Reflector
-import slatekit.meta.models.FieldCategory
-import slatekit.meta.models.Model
+import kiit.meta.Reflector
+import kiit.meta.models.FieldCategory
+import kiit.meta.models.Model
 import test.setup.*
 import java.util.*
 import kotlin.reflect.KClass

@@ -5,7 +5,7 @@ import kiit.apis.routes.Lookup
 import kiit.apis.routes.Action
 import kiit.apis.routes.Api
 import slatekit.utils.naming.Namer
-import slatekit.meta.Reflector
+import kiit.meta.Reflector
 
 class Methods(val api: Api) : Loader {
     /**

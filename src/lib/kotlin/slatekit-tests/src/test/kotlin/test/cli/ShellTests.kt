@@ -35,7 +35,7 @@ import slatekit.connectors.entities.AppEntContext
 import slatekit.results.Codes
 import slatekit.results.Status
 import slatekit.results.getOrElse
-import slatekit.serialization.Serialization
+import kiit.serialization.Serialization
 import test.TestApp
 
 

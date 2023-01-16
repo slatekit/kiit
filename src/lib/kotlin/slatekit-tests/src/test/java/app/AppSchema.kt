@@ -1,6 +1,6 @@
 package app
 
-import slatekit.meta.models.Model
+import kiit.meta.models.Model
 
 object AppSchema {
 

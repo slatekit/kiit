@@ -18,7 +18,7 @@ import kiit.apis.core.Target
 import kiit.apis.routes.Action
 import slatekit.common.values.Inputs
 import slatekit.requests.Request
-import slatekit.meta.KTypes
+import kiit.meta.KTypes
 import slatekit.results.*
 import slatekit.results.builders.Outcomes
 import kotlin.reflect.KClass

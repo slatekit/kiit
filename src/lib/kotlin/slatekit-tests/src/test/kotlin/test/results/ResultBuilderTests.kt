@@ -1,12 +1,12 @@
 package test.results
 import org.junit.Assert
 import org.junit.Test
-import slatekit.meta.kClass
+import kiit.meta.kClass
 import slatekit.results.*
 import slatekit.results.Codes
 import slatekit.results.builders.OutcomeBuilder
 import slatekit.results.builders.Outcomes
-import slatekit.serialization.responses.ResponseDecoder
+import kiit.serialization.responses.ResponseDecoder
 
 /**
  * These tests the building/construction of the Result model in simple/advance cases

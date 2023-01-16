@@ -17,7 +17,7 @@ import kiit.jobs.support.Work
  * 5. Action    : Actions ( start | stop | pause | resume | delay ) to control a job or individual worker
  * 6. Events    : Used to subscribe to events on the job/worker ( only status changes for now )
  * 7. Stats     : Reasonable statistics / diagnostics for workers such as total calls, processed, logging
- * 8. Policies  : @see[slatekit.policy.Policy] associated with a worker such as limits, retries
+ * 8. Policies  : @see[kiit.policy.Policy] associated with a worker such as limits, retries
  * 9. Backoffs  : Exponential sequence of seconds to use to back off from processing queues when queue is empty
  * 10. Channel  : The mode of communication to send commands to a job for safe access to shared state
  *

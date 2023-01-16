@@ -48,7 +48,7 @@ dependencies {
     // Slate Kit
     compile "com.slatekit:slatekit-results:$kiit_version"
     compile "com.slatekit:slatekit-common:$kiit_version"
-    compile "com.slatekit:slatekit-meta:$kiit_version"
+    compile "dev.kiit:meta:$kiit_version"
     compile "dev.kiit:entities:$kiit_version"
     compile "dev.kiit:app:$kiit_version"
     compile "dev.kiit:cli:$kiit_version"

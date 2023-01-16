@@ -21,12 +21,12 @@ import slatekit.requests.CommonRequest
 import slatekit.requests.Request
 import slatekit.requests.Response
 import slatekit.context.Context
-import slatekit.meta.*
-import slatekit.serialization.deserializer.Deserializer
+import kiit.meta.*
+import kiit.serialization.deserializer.Deserializer
 import slatekit.results.*
 import slatekit.results.builders.Outcomes
-import slatekit.serialization.Serialization
-import slatekit.serialization.SerializerSample
+import kiit.serialization.Serialization
+import kiit.serialization.SerializerSample
 import kotlin.reflect.KCallable
 
 /**

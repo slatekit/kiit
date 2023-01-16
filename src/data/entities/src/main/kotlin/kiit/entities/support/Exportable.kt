@@ -3,8 +3,8 @@ package kiit.entities.support
 import slatekit.common.utils.Export
 import kiit.entities.Entity
 import kiit.entities.features.CRUD
-import slatekit.meta.kClass
-import slatekit.meta.models.Model
+import kiit.meta.kClass
+import kiit.meta.models.Model
 import slatekit.results.Try
 import slatekit.results.builders.Tries
 

@@ -8,7 +8,7 @@ import kiit.apis.routes.Action
 import kiit.apis.tools.code.CodeGenSettings
 import kiit.apis.tools.code.TypeInfo
 import slatekit.common.newline
-import slatekit.meta.Reflector
+import kiit.meta.Reflector
 
 class KotlinBuilder(val settings: CodeGenSettings) : CodeBuilder {
 

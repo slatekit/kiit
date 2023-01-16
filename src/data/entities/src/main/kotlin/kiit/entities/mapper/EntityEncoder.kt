@@ -12,9 +12,9 @@ import slatekit.common.ids.UPID
 import kiit.data.core.Meta
 import kiit.data.encoders.Encoders
 import kiit.entities.Consts
-import slatekit.meta.kClass
-import slatekit.meta.models.Model
-import slatekit.meta.models.ModelField
+import kiit.meta.kClass
+import kiit.meta.models.Model
+import kiit.meta.models.ModelField
 import kiit.query.QueryEncoder
 import kotlin.reflect.full.memberProperties
 

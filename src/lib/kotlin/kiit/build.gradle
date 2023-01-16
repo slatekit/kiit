@@ -57,9 +57,9 @@ dependencies {
         implementation "dev.kiit:app:$kiit_version"
         implementation "dev.kiit:apis:$kiit_version"
         implementation "dev.kiit:cli:$kiit_version"
-        implementation "com.slatekit:slatekit-meta:$kiit_version"
-        implementation "com.slatekit:slatekit-policy:$kiit_version"
-        implementation "com.slatekit:slatekit-serialization:$kiit_version"
+        implementation "dev.kiit:meta:$kiit_version"
+        implementation "dev.kiit:policy:$kiit_version"
+        implementation "dev.kiit:serialization:$kiit_version"
         implementation "com.slatekit:slatekit-telemetry:$kiit_version"
         implementation "com.slatekit:slatekit-generator:$kiit_version"
         implementation "dev.kiit:connectors-cli:$kiit_version"
@@ -89,9 +89,9 @@ dependencies {
     implementation project(":kiit-app")
     implementation project(":kiit-apis")
     implementation project(":kiit-cli")
-    implementation project(":slatekit-meta")
-    implementation project(":slatekit-policy")
-    implementation project(":slatekit-serialization")
+    implementation project(":kiit-meta")
+    implementation project(":kiit-policy")
+    implementation project(":kiit-serialization")
     implementation project(":slatekit-telemetry")
     implementation project(":slatekit-requests")
     implementation project(":slatekit-generator")

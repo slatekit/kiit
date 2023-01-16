@@ -19,8 +19,8 @@ import slatekit.common.DateTimes
 import slatekit.requests.InputArgs
 import slatekit.requests.CommonRequest
 import slatekit.common.Source
-import slatekit.meta.Reflector
-import slatekit.serialization.deserializer.Deserializer
+import kiit.meta.Reflector
+import kiit.serialization.deserializer.Deserializer
 import test.setup.UserApi
 
 /**

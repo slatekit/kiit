@@ -4,7 +4,7 @@ import kiit.apis.core.Target
 import kotlin.reflect.full.primaryConstructor
 import slatekit.context.Context
 import slatekit.utils.naming.Namer
-import slatekit.meta.Reflector
+import kiit.meta.Reflector
 import slatekit.results.Codes
 import slatekit.results.Err
 import slatekit.results.Outcome

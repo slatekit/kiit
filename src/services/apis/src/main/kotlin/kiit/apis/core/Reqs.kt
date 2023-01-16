@@ -25,7 +25,7 @@ import slatekit.common.values.Inputs
 import slatekit.common.values.Metadata
 import slatekit.requests.CommonRequest
 import slatekit.requests.Request
-import slatekit.serialization.Serialization
+import kiit.serialization.Serialization
 
 object Reqs {
 

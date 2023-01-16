@@ -13,7 +13,7 @@ import kiit.apis.routes.Area
 import slatekit.common.Source
 import slatekit.common.ext.orElse
 import slatekit.utils.naming.Namer
-import slatekit.meta.Reflector
+import kiit.meta.Reflector
 
 fun toVerb(name: String?): Verb {
     return when (name) {

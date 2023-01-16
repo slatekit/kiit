@@ -7,7 +7,7 @@ import org.junit.Test
 import slatekit.common.convert.Converter
 import slatekit.common.DateTimes
 import slatekit.common.ext.toStringUtc
-import slatekit.meta.InputsJSON
+import kiit.meta.InputsJSON
 import test.setup.Movie
 import kotlin.reflect.full.createType
 

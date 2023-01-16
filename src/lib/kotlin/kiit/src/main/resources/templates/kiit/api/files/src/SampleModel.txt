@@ -1,8 +1,8 @@
 package ${app.package}.models
 
 import slatekit.common.DateTime
-import slatekit.meta.models.Id
-import slatekit.meta.models.Field
+import kiit.meta.models.Id
+import kiit.meta.models.Field
 
 data class SampleMovie(
         @property:Id()

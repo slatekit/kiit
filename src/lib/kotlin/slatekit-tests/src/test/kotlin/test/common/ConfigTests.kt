@@ -26,7 +26,7 @@ import slatekit.common.envs.EnvMode
 import slatekit.common.ext.zoned
 import slatekit.common.ids.UPID
 import slatekit.common.ids.UPIDs
-import slatekit.meta.map
+import kiit.meta.map
 import test.TestApp
 import test.setup.Movie
 import test.setup.MyEncryptor

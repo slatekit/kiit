@@ -4,7 +4,7 @@ import slatekit.common.data.DataType
 import slatekit.utils.naming.Namer
 import slatekit.common.newline
 import kiit.data.sql.Dialect
-import slatekit.meta.models.Model
+import kiit.meta.models.Model
 
 /**
  * 1. CREATE INDEX idx_lastname ON message (status);

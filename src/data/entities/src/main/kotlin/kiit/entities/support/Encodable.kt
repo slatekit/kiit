@@ -1,7 +1,7 @@
 package kiit.entities.support
 
 import kiit.entities.Entity
-import slatekit.meta.models.Model
+import kiit.meta.models.Model
 import slatekit.results.Try
 
 /**

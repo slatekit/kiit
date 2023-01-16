@@ -19,7 +19,7 @@ import slatekit.common.data.Vendor.MySql
 import kiit.entities.EntityRepo
 import kiit.entities.EntityService
 import kiit.entities.mapper.EntityMapper
-import slatekit.meta.models.Model
+import kiit.meta.models.Model
 
 /**
  *

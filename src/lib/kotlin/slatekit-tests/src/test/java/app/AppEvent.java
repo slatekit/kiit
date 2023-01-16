@@ -4,7 +4,7 @@ import core.Event;
 import entities.IEntityUnique;
 import org.threeten.bp.ZonedDateTime;
 import kiit.entities.Entity;
-import slatekit.meta.models.Model;
+import kiit.meta.models.Model;
 
 /**
  * Created by kv on 6/11/2015.

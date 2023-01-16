@@ -2,7 +2,7 @@ package kiit.migrations
 
 
 import kiit.data.sql.Dialect
-import slatekit.meta.models.Model
+import kiit.meta.models.Model
 
 /**
  * DDL building is very basic, just deal w/ the table creation only.

@@ -6,7 +6,7 @@ import slatekit.common.crypto.Encryptor
 import slatekit.common.log.Logger
 import slatekit.telemetry.MetricsLite
 import slatekit.requests.Request
-import slatekit.serialization.deserializer.Deserializer
+import kiit.serialization.deserializer.Deserializer
 
 data class ServerContext(
         val logs: Logger,

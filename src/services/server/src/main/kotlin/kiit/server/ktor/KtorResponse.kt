@@ -20,9 +20,9 @@ import io.ktor.response.header
 import io.ktor.response.respondBytes
 import io.ktor.response.respondText
 import slatekit.common.types.*
-import slatekit.serialization.responses.ResponseEncoder
+import kiit.serialization.responses.ResponseEncoder
 import slatekit.requests.Response
-import slatekit.serialization.Serialization
+import kiit.serialization.Serialization
 import slatekit.results.*
 import kiit.server.ServerSettings
 import kiit.server.core.ResponseHandler
