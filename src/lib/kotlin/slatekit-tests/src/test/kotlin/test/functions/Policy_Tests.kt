@@ -5,11 +5,11 @@ import kotlinx.coroutines.runBlocking
 import org.junit.Assert
 import org.junit.Test
 import slatekit.common.Identity
-import slatekit.policy.Policies
-import slatekit.policy.Policy
+import kiit.policy.Policies
+import kiit.policy.Policy
 import slatekit.telemetry.Calls
 import slatekit.telemetry.Counters
-import slatekit.policy.policies.*
+import kiit.policy.policies.*
 import slatekit.results.*
 import slatekit.results.builders.Outcomes
 

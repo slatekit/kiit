@@ -6,8 +6,8 @@
 //include ':slatekit-app'
 //project(':slatekit-app').projectDir=new File('../../../../lib/kotlin/slatekit-app')
 //
-//include ':slatekit-meta'
-//project(':slatekit-meta').projectDir=new File('../slatekit-meta')
+//include ':kiit-meta'
+//project(':kiit-meta').projectDir=new File('../kiit-meta')
 //
 //include ':kiit-entities'
 //project(':kiit-entities').projectDir=new File('../slatekit-entities')

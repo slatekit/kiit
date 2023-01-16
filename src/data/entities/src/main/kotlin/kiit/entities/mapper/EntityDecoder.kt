@@ -5,9 +5,9 @@ import slatekit.common.crypto.Encryptor
 import slatekit.common.data.DataType
 import slatekit.common.newline
 import kiit.data.core.Meta
-import slatekit.meta.Reflector
-import slatekit.meta.models.Model
-import slatekit.meta.models.ModelField
+import kiit.meta.Reflector
+import kiit.meta.models.Model
+import kiit.meta.models.ModelField
 import kotlin.reflect.KClass
 import kotlin.reflect.full.primaryConstructor
 

@@ -6,8 +6,8 @@ import kotlin.reflect.KProperty
 import kiit.entities.Entity
 import kiit.entities.core.EntityOps
 import kiit.entities.EntityOptions
-import slatekit.meta.Reflector
-import slatekit.meta.kClass
+import kiit.meta.Reflector
+import kiit.meta.kClass
 import kiit.query.Update
 import slatekit.results.Try
 import slatekit.results.builders.Tries

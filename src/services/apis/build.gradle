@@ -54,8 +54,8 @@ dependencies {
       compile "com.slatekit:slatekit-utils:$kiit_version"
       compile "com.slatekit:slatekit-requests:$kiit_version"
       compile "com.slatekit:slatekit-context:$kiit_version"
-      compile "com.slatekit:slatekit-meta:$kiit_version"
-      compile "com.slatekit:slatekit-serialization:$kiit_version"
+      compile "dev.kiit:meta:$kiit_version"
+      compile "dev.kiit:serialization:$kiit_version"
   } else {
       // */
   compile project(":slatekit-result")
@@ -63,8 +63,8 @@ dependencies {
   compile project(":slatekit-utils")
   compile project(":slatekit-requests")
   compile project(":slatekit-context")
-  compile project(":slatekit-meta")
-  compile project(":slatekit-serialization")
+  compile project(":kiit-meta")
+  compile project(":kiit-serialization")
   } //</slatekit_local>
 }
 

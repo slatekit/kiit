@@ -26,8 +26,8 @@ import kiit.data.sql.vendors.*
 import kiit.entities.core.*
 import kiit.entities.mapper.EntityMapper
 import kiit.entities.mapper.EntitySettings
-import slatekit.meta.kClass
-import slatekit.meta.models.Model
+import kiit.meta.kClass
+import kiit.meta.models.Model
 
 /**
  *  A registry for all the entities and their corresponding services, repositories, database

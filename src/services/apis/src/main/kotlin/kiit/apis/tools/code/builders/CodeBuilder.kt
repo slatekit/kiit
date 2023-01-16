@@ -3,8 +3,8 @@ package kiit.apis.tools.code.builders
 import kiit.apis.routes.Action
 import kiit.apis.tools.code.TypeInfo
 import slatekit.common.newline
-import slatekit.meta.KTypes
-import slatekit.meta.Reflector
+import kiit.meta.KTypes
+import kiit.meta.Reflector
 import kotlin.reflect.KClass
 import kotlin.reflect.KParameter
 import kotlin.reflect.KType

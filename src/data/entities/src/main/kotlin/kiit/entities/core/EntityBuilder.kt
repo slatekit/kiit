@@ -5,8 +5,8 @@ import slatekit.common.data.*
 import slatekit.common.crypto.Encryptor
 import slatekit.utils.naming.Namer
 import kiit.entities.*
-import slatekit.meta.Reflector
-import slatekit.meta.models.Model
+import kiit.meta.Reflector
+import kiit.meta.models.Model
 
 /**
  * Responsible for building individual components of this Micro-ORM.

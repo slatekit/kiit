@@ -9,8 +9,8 @@ import slatekit.common.ids.UPID
 import slatekit.common.ids.UPIDs
 import kiit.entities.EntityUpdatable
 import kiit.entities.EntityWithId
-import slatekit.meta.models.Field
-import slatekit.meta.models.Id
+import kiit.meta.models.Field
+import kiit.meta.models.Id
 import test.setup.StatusEnum
 import java.util.*
 

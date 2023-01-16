@@ -1,11 +1,11 @@
 package kiit.entities
 
 import slatekit.utils.naming.Namer
-import slatekit.meta.Reflector
-import slatekit.meta.models.FieldCategory
-import slatekit.meta.models.Model
-import slatekit.meta.models.ModelField
-import slatekit.meta.models.ModelUtils
+import kiit.meta.Reflector
+import kiit.meta.models.FieldCategory
+import kiit.meta.models.Model
+import kiit.meta.models.ModelField
+import kiit.meta.models.ModelUtils
 import kotlin.reflect.KClass
 import kotlin.reflect.KProperty
 import kotlin.reflect.jvm.jvmErasure

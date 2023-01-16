@@ -7,8 +7,8 @@ import kiit.data.features.Countable
 import kiit.data.features.Orderable
 import kiit.entities.*
 import kiit.entities.core.EntityOps
-import slatekit.meta.Reflector
-import slatekit.meta.kClass
+import kiit.meta.Reflector
+import kiit.meta.kClass
 import kiit.query.Op
 import kiit.query.Order
 import slatekit.results.Try

@@ -1,7 +1,7 @@
 package kiit.apis.core
 
 import org.json.simple.JSONObject
-import slatekit.meta.JSONTransformer
+import kiit.meta.JSONTransformer
 
 
 /**

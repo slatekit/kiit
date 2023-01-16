@@ -58,7 +58,7 @@ dependencies {
     compile "com.slatekit:slatekit-telemetry:$kiit_version"
     compile "dev.kiit:apis:$kiit_version"
     compile "com.slatekit:kiit-server:$kiit_version"
-    compile "com.slatekit:slatekit-serialization:$kiit_version"
+    compile "dev.kiit:serialization:$kiit_version"
     compile "com.slatekit:providers-logback:$kiit_version"
 }
 

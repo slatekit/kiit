@@ -55,14 +55,17 @@ project(':kiit-migrations').projectDir=new File('../../../data/migrations')
 include ':kiit-query'
 project(':kiit-query').projectDir=new File('../../../data/query')
 
-include ':slatekit-meta'
-project(':slatekit-meta').projectDir=new File('../slatekit-meta')
+include ':kiit-meta'
+project(':kiit-meta').projectDir=new File('../../../internal/meta')
+
+include ':kiit-policy'
+project(':kiit-policy').projectDir=new File('../../../internal/policy')
+
+include ':kiit-serialization'
+project(':kiit-serialization').projectDir=new File('../../../internal/serialization')
 
 include ':slatekit-http'
 project(':slatekit-http').projectDir=new File('../slatekit-http')
-
-include ':slatekit-policy'
-project(':slatekit-policy').projectDir=new File('../slatekit-policy')
 
 include ':slatekit-requests'
 project(':slatekit-requests').projectDir=new File('../slatekit-requests')
@@ -72,9 +75,6 @@ project(':slatekit-generator').projectDir=new File('../slatekit-generator')
 
 include ':slatekit-integration'
 project(':slatekit-integration').projectDir=new File('../slatekit-integration')
-
-include ':slatekit-serialization'
-project(':slatekit-serialization').projectDir=new File('../slatekit-serialization')
 
 include ':slatekit-telemetry'
 project(':slatekit-telemetry').projectDir=new File('../slatekit-telemetry')

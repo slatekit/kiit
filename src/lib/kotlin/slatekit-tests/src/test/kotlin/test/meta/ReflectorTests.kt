@@ -28,11 +28,11 @@ import slatekit.common.log.LogsDefault
 import slatekit.utils.smartvalues.PhoneUS
 import slatekit.utils.smartvalues.SmartValued
 import kiit.db.Db
-import slatekit.meta.Reflector
+import kiit.meta.Reflector
 import kiit.entities.Entities
 import slatekit.connectors.entities.AppEntContext
 import kiit.entities.Column
-import slatekit.meta.KTypes
+import kiit.meta.KTypes
 import slatekit.results.Notice
 import slatekit.results.Success
 import slatekit.results.getOrElse

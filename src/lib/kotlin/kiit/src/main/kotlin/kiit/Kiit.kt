@@ -17,7 +17,7 @@ import kiit.connectors.cli.CliApi
 import slatekit.generator.Help
 import slatekit.generator.Setup
 import slatekit.results.Success
-import slatekit.serialization.Serialization
+import kiit.serialization.Serialization
 import slatekit.results.Failure
 
 class Kiit(ctx: Context) : App<Context>(ctx, AppOptions(showWelcome = false, showDisplay = false, showSummary = false)), KiitServices {

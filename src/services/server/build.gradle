@@ -69,7 +69,7 @@ dependencies {
         compile "com.slatekit:slatekit-context:$kiit_version"
         compile "com.slatekit:slatekit-telemetry:$kiit_version"
         compile "dev.kiit:apis:$kiit_version"
-        compile "com.slatekit:slatekit-serialization:$kiit_version"
+        compile "dev.kiit:serialization:$kiit_version"
     } else {
         // */
     compile project(":slatekit-result")
@@ -79,7 +79,7 @@ dependencies {
     compile project(":slatekit-context")
     compile project(":slatekit-telemetry")
     compile project(":kiit-apis")
-    compile project(":slatekit-serialization")
+    compile project(":kiit-serialization")
     } //</slatekit_local>
 }
 

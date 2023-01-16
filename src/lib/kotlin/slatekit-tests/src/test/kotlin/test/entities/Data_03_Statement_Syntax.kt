@@ -11,7 +11,7 @@ import kiit.data.sql.vendors.MySqlProvider
 import kiit.entities.Schema
 import kiit.entities.mapper.EntityMapper
 import kiit.entities.mapper.EntitySettings
-import slatekit.meta.models.Model
+import kiit.meta.models.Model
 import kiit.migrations.SqlBuilder
 import kiit.migrations.SqlBuilderDDL
 import test.setup.Group

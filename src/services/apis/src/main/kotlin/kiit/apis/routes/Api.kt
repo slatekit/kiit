@@ -19,7 +19,7 @@ import kiit.apis.SetupType
 import kiit.apis.core.Roles
 import kiit.apis.core.Sources
 import slatekit.common.Source
-import slatekit.meta.kClass
+import kiit.meta.kClass
 
 /**
  * ================================================================

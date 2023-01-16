@@ -52,7 +52,7 @@ dependencies {
       compile "com.slatekit:slatekit-utils:$kiit_version"
       compile "com.slatekit:slatekit-context:$kiit_version"
       compile "dev.kiit:query:$kiit_version"
-      compile "com.slatekit:slatekit-meta:$kiit_version"
+      compile "dev.kiit:meta:$kiit_version"
       compile "dev.kiit:data:$kiit_version"
   } else {
       // */
@@ -62,7 +62,7 @@ dependencies {
   compile project(":slatekit-context")
   compile project(":kiit-data")
   compile project(":kiit-query")
-  compile project(":slatekit-meta")
+  compile project(":kiit-meta")
   } //</slatekit_local>
 }
 

@@ -17,8 +17,8 @@ import slatekit.common.DateTimes
 import slatekit.requests.CommonRequest
 import slatekit.common.Source
 import slatekit.requests.Request
-import slatekit.meta.*
-import slatekit.serialization.deserializer.Deserializer
+import kiit.meta.*
+import kiit.serialization.deserializer.Deserializer
 import test.setup.MyEncryptor
 import test.setup.StatusEnum
 import java.util.*

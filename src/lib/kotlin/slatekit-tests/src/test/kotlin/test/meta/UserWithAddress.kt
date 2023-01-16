@@ -3,8 +3,8 @@ package test.meta
 import slatekit.common.ids.UPID
 import slatekit.common.ids.UPIDs
 import kiit.entities.EntityWithId
-import slatekit.meta.models.Id
-import slatekit.meta.models.Field
+import kiit.meta.models.Id
+import kiit.meta.models.Field
 import test.setup.UUIDSamples
 import java.util.*
 

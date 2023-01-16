@@ -10,8 +10,8 @@ import kiit.data.core.Table
 import kiit.entities.Schema
 import kiit.entities.mapper.EntityEncoder
 import kiit.entities.mapper.EntitySettings
-import slatekit.meta.models.Model
-import slatekit.meta.models.ModelUtils
+import kiit.meta.models.Model
+import kiit.meta.models.ModelUtils
 
 
 class Data_02_Mappers_Encode {

@@ -23,7 +23,7 @@ import slatekit.common.info.Folders
 import slatekit.common.info.Info
 import slatekit.common.types.Contents
 import slatekit.results.*
-import slatekit.serialization.Serialization
+import kiit.serialization.Serialization
 
 
 class CLITests {
