@@ -11,10 +11,10 @@
  * </slate_header>
  */
 
-package slatekit.core.queues
+package kiit.core.queues
 
 import slatekit.common.Provider
-import slatekit.core.cloud.CloudSupport
+import kiit.core.cloud.CloudSupport
 
 /**
  * Abstraction for cloud based message queue storage and retrieval

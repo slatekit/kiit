@@ -1,4 +1,4 @@
-package slatekit.notifications.alerts
+package kiit.comms.alerts
 
 /**
  * Settings for Alerts, currently just a list of targets

@@ -11,7 +11,7 @@
  * </slate_header>
  */
 
-package slatekit.cache
+package kiit.cache
 
 import slatekit.common.Identity
 import slatekit.common.log.Logger
@@ -19,7 +19,7 @@ import slatekit.results.Outcome
 
 interface Cache {
     /**
-     * Identity of the this cache, used to identify it between multiple caches
+     * Identity of the cache, used to identify it between multiple caches
      * @see[slatekit.common.Identity]
      */
     val id: Identity

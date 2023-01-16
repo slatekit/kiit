@@ -11,6 +11,6 @@
  * </slate_header>
  */
 
-package slatekit.notifications.sms
+package kiit.comms.sms
 
 data class SmsMessage(val msg: String = "", val countryCode: String = "", val phone: String = "")

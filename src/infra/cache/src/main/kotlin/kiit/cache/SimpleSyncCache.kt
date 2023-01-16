@@ -1,4 +1,4 @@
-package slatekit.cache
+package kiit.cache
 
 import slatekit.common.Identity
 import slatekit.common.log.Logger

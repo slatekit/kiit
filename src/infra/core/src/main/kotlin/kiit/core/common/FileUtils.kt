@@ -1,4 +1,4 @@
-package slatekit.core.common
+package kiit.core.common
 
 import java.io.ByteArrayInputStream
 import java.io.File

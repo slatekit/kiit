@@ -11,7 +11,7 @@
  * </slate_header>
  */
 
-package slatekit.db
+package kiit.db
 
 import slatekit.common.values.Record
 import slatekit.common.conf.Confs
@@ -21,11 +21,11 @@ import java.sql.PreparedStatement
 import java.sql.ResultSet
 import java.sql.Statement
 import slatekit.common.repeatWith
-import slatekit.db.DbUtils.executeCall
-import slatekit.db.DbUtils.executeCon
-import slatekit.db.DbUtils.executePrep
-import slatekit.db.DbUtils.executeStmt
-import slatekit.db.DbUtils.fillArgs
+import kiit.db.DbUtils.executeCall
+import kiit.db.DbUtils.executeCon
+import kiit.db.DbUtils.executePrep
+import kiit.db.DbUtils.executeStmt
+import kiit.db.DbUtils.fillArgs
 
 /**
  * Light-weight JDBC based database access wrapper

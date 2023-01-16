@@ -1,4 +1,4 @@
-package slatekit.db
+package kiit.db
 
 /**
  * Most sql statements ( by the data mapper ) are single table statements

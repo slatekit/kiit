@@ -1,4 +1,4 @@
-package slatekit.core.eventing
+package kiit.core.eventing
 
 object EventUtils {
 

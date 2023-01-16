@@ -16,7 +16,7 @@ buildscript {
 plugins {
     id "java"
     id "maven-publish"
-    id "org.jetbrains.kotlin.jvm" //version "$kotlin_version"
+    id "org.jetbrains.kotlin.jvm" version "$kotlin_version"
 }
 
 //apply plugin: 'org.junit.platform.gradle.plugin'
@@ -67,18 +67,18 @@ dependencies {
     implementation project(":slatekit-utils")
     implementation project(":slatekit-requests")
     implementation project(":slatekit-context")
-    implementation project(":slatekit-app")
-    implementation project(":slatekit-cli")
-    implementation project(":slatekit-db")
-    implementation project(":slatekit-cache")
+    implementation project(":kiit-app")
+    implementation project(":kiit-cli")
+    implementation project(":kiit-cache")
+    implementation project(":kiit-core")
+    implementation project(":kiit-db")
     implementation project(":slatekit-query")
     implementation project(":slatekit-meta")
     implementation project(":slatekit-entities")
     //implementation project(":slatekit-orm")
     implementation project(":slatekit-http")
-    implementation project(":slatekit-core")
-    implementation project(":slatekit-apis")
-    implementation project(":slatekit-jobs")
+    implementation project(":kiit-jobs")
+    implementation project(":kiit-apis")
     implementation project(":slatekit-telemetry")
     implementation project(":slatekit-policy")
     implementation project(":slatekit-integration")

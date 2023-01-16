@@ -1,7 +1,7 @@
-package slatekit.notifications.alerts
+package kiit.comms.alerts
 
 import slatekit.common.Identity
-import slatekit.notifications.common.Sender
+import kiit.comms.common.Sender
 
 abstract class AlertService : Sender<Alert> {
     abstract val identity: Identity

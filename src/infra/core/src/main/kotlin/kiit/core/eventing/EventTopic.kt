@@ -1,4 +1,4 @@
-package slatekit.core.eventing
+package kiit.core.eventing
 
 /**
  * Naming convention enforced on the event topic

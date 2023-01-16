@@ -27,7 +27,7 @@ import slatekit.utils.naming.Namer
 import slatekit.context.AppContext
 import slatekit.common.envs.Envs
 import slatekit.context.Context
-import slatekit.db.Db
+import kiit.db.Db
 import slatekit.entities.Entities
 
 /**

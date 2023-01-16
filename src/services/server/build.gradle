@@ -129,7 +129,7 @@ publishing {
         gpr(MavenPublication) {
             from(components.java)
             groupId 'dev.kiit'
-            artifactId "${slatekitComponentId}"
+            artifactId "${kiitComponentId}"
             version "${kiitComponentVersion}"
         }
     }

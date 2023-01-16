@@ -1,4 +1,4 @@
-package slatekit.notifications.alerts
+package kiit.comms.alerts
 
 /**
  * @param area : logical group/project this alert is associated with

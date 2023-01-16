@@ -14,7 +14,7 @@ mantra: Simplicity above all else
  * Created by kishorereddy on 5/19/17.
  */
 
-package slatekit.core
+package kiit.core
 
 object Consts {
     val version = "0.9.0"

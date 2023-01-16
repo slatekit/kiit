@@ -1,4 +1,4 @@
-package slatekit.notifications.common
+package kiit.comms.common
 
 import slatekit.common.values.Vars
 import slatekit.utils.templates.Templates

@@ -62,8 +62,8 @@ dependencies {
         implementation "com.slatekit:slatekit-serialization:$kiit_version"
         implementation "com.slatekit:slatekit-telemetry:$kiit_version"
         implementation "com.slatekit:slatekit-generator:$kiit_version"
-        implementation "com.slatekit:connectors-cli:$kiit_version"
-        implementation "com.slatekit:providers-logback:$kiit_version"
+        implementation "dev.kiit:connectors-cli:$kiit_version"
+        implementation "dev.kiit:providers-logback:$kiit_version"
 //        implementation "com.slatekit:providers-aws:$kiit_version"
 //        implementation "com.slatekit:providers-datadog:$kiit_version"
 //        implementation "com.slatekit:connectors-entities:$kiit_version"
@@ -102,13 +102,13 @@ dependencies {
 //        implementation project(":connectors-jobs")
 //        implementation project(":providers-aws")
 //        implementation project(":providers-datadog")
-//        implementation project(":slatekit-core")
+//        implementation project(":kiit-core")
 //        implementation project(":slatekit-http")
-//        implementation project(":slatekit-cache")
+//        implementation project(":kiit-cache")
 //        implementation project(":kiit-jobs")
-//        implementation project(":slatekit-notifications")
+//        implementation project(":kiit-comms")
 //        implementation project(":slatekit-cloud")
-//        implementation project(":slatekit-db")
+//        implementation project(":kiit-db")
 //        implementation project(":slatekit-query")
 //        implementation project(":slatekit-entities")
 //        implementation project(":slatekit-integration")

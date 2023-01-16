@@ -68,7 +68,7 @@ dependencies {
     compile project(":slatekit-result")
     compile project(":slatekit-common")
     compile project(":slatekit-actors")
-    compile project(":slatekit-core")
+    compile project(":kiit-core")
     compile project(":slatekit-context")
     compile project(":kiit-apis")
     compile project(":kiit-jobs")

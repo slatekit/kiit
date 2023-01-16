@@ -8,7 +8,7 @@ import org.threeten.bp.LocalTime
 import slatekit.common.DateTimes
 import slatekit.common.data.*
 import slatekit.common.ids.ULIDs
-import slatekit.db.Db
+import kiit.db.Db
 import test.setup.TestSupport
 import java.util.*
 

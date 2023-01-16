@@ -1,4 +1,4 @@
-package slatekit.cache
+package kiit.cache
 
 import slatekit.common.DateTime
 import slatekit.common.Identity

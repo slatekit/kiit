@@ -1,4 +1,4 @@
-package slatekit.notifications.push
+package kiit.comms.push
 
 object PushConstants {
 

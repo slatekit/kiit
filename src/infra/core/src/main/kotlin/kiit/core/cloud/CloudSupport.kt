@@ -11,7 +11,7 @@
  * </slate_header>
  */
 
-package slatekit.core.cloud
+package kiit.core.cloud
 
 import slatekit.results.Try
 

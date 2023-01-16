@@ -1,4 +1,4 @@
-package slatekit.notifications.alerts
+package kiit.comms.alerts
 
 /**
  * Represents a target/destination for an alert.

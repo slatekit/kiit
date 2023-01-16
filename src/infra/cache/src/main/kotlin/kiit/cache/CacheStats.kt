@@ -1,4 +1,4 @@
-package slatekit.cache
+package kiit.cache
 
 import slatekit.telemetry.Expiry
 import slatekit.telemetry.Tracked

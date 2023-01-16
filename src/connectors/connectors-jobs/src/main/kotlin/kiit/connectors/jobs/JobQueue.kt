@@ -1,7 +1,7 @@
 package kiit.connectors.jobs
 
 import slatekit.common.Identity
-import slatekit.core.queues.*
+import kiit.core.queues.*
 import kiit.jobs.Priority
 import kiit.jobs.Queue
 import kiit.jobs.Task

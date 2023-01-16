@@ -11,7 +11,7 @@
  * </slate_header>
  */
 
-package slatekit.core.queues
+package kiit.core.queues
 
 import slatekit.common.*
 import slatekit.common.utils.Random.uuid

@@ -11,13 +11,13 @@
  * </slate_header>
  */
 
-package slatekit.notifications.push
+package kiit.comms.push
 
 import okhttp3.Request
 import slatekit.common.conf.Conf
 import slatekit.common.log.Logs
 import slatekit.http.HttpRPC
-import slatekit.notifications.common.Sender
+import kiit.comms.common.Sender
 import slatekit.results.Outcome
 import slatekit.results.Success
 import slatekit.results.builders.Outcomes

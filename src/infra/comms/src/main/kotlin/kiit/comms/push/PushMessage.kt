@@ -11,7 +11,7 @@
  * </slate_header>
  */
 
-package slatekit.notifications.push
+package kiit.comms.push
 
 /**
  * @param to : Metadata about the message

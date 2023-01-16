@@ -1,4 +1,4 @@
-package slatekit.core.docs
+package kiit.core.docs
 
 interface CloudDoc<TEntity, TPartition, TCluster> {
     val partition:TPartition

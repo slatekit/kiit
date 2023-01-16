@@ -23,7 +23,7 @@ import slatekit.common.crypto.Encryptor
 import slatekit.common.io.Uris
 import slatekit.common.log.Logger
 import slatekit.context.Context
-import slatekit.core.files.CloudFiles
+import kiit.core.files.CloudFiles
 import slatekit.results.Failure
 import slatekit.results.Success
 import slatekit.results.Try

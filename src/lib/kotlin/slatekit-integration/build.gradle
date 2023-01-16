@@ -76,13 +76,13 @@ dependencies {
     compile project(":slatekit-query")
     compile project(":kiit-cli")
     compile project(":slatekit-entities")
-    compile project(":slatekit-core")
+    compile project(":kiit-core")
     compile project(":slatekit-policy")
-    compile project(":slatekit-cache")
+    compile project(":kiit-cache")
     compile project(":kiit-apis")
     compile project(":kiit-jobs")
     compile project(":slatekit-migrations")
-    compile project(":slatekit-notifications")
+    compile project(":kiit-comms")
     compile project(":connectors-entities")
     } //</slatekit_local>
 }

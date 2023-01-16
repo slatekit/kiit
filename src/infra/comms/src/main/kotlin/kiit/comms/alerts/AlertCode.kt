@@ -1,4 +1,4 @@
-package slatekit.notifications.alerts
+package kiit.comms.alerts
 
 /**
  * Used for color coding/specifying intent

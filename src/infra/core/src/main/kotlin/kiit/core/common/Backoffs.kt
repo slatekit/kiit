@@ -1,4 +1,4 @@
-package slatekit.core.common
+package kiit.core.common
 
 import slatekit.utils.paged.Pager
 

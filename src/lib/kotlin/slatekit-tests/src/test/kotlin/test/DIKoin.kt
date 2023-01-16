@@ -9,10 +9,10 @@ package test
 //import slatekit.common.utils.Random
 //import slatekit.common.crypto.HMAC
 //import slatekit.common.info.ApiLogin
-//import slatekit.core.email.EmailService
-//import slatekit.core.email.EmailServiceSendGrid
-//import slatekit.core.sms.SmsService
-//import slatekit.core.sms.SmsServiceTwilio
+//import kiit.core.email.EmailService
+//import kiit.core.email.EmailServiceSendGrid
+//import kiit.core.sms.SmsService
+//import kiit.core.sms.SmsServiceTwilio
 //
 //
 //object CoreModule : KoinComponent {

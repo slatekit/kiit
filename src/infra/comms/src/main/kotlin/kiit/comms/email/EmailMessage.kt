@@ -11,7 +11,7 @@
  * </slate_header>
  */
 
-package slatekit.notifications.email
+package kiit.comms.email
 
 data class EmailMessage(
     val to: String,

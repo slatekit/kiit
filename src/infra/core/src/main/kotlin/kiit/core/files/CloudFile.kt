@@ -1,4 +1,4 @@
-package slatekit.core.files
+package kiit.core.files
 
 interface CloudFile {
     val path:String?

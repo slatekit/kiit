@@ -1,4 +1,4 @@
-package slatekit.core.eventing
+package kiit.core.eventing
 
 import kotlinx.coroutines.CompletableDeferred
 import slatekit.common.Identity

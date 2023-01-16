@@ -23,7 +23,7 @@ import slatekit.common.Sources
 import slatekit.common.values.Vars
 import slatekit.common.crypto.Encryptor
 import slatekit.common.log.Logger
-import slatekit.notifications.sms.SmsService
+import kiit.comms.sms.SmsService
 import slatekit.results.Outcome
 
 @Api(area = "cloud", name = "sms", desc = "api to send sms",

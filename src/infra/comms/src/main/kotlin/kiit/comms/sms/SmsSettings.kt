@@ -11,6 +11,6 @@
  * </slate_header>
  */
 
-package slatekit.notifications.sms
+package kiit.comms.sms
 
 data class SmsSettings(val key: String, val password: String, val account: String)

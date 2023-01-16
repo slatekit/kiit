@@ -10,7 +10,7 @@ about: A Kotlin utility library, tool-kit and server backend.
 mantra: Simplicity above all else
 </slate_header>
  */
-package slatekit.db.builders
+package kiit.db.builders
 
 import slatekit.common.data.DataType
 import slatekit.common.data.Encoding

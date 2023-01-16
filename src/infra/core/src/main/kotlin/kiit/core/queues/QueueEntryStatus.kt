@@ -1,4 +1,4 @@
-package slatekit.core.queues
+package kiit.core.queues
 
 import slatekit.common.EnumLike
 import slatekit.common.EnumSupport

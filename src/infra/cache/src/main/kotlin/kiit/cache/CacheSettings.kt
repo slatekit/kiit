@@ -11,7 +11,7 @@
  * </slate_header>
  */
 
-package slatekit.cache
+package kiit.cache
 
 data class CacheSettings(val size: Int,
                          val updateCount:Int = 20)

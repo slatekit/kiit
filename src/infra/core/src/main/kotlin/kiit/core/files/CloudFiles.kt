@@ -11,12 +11,12 @@
  * </slate_header>
  */
 
-package slatekit.core.files
+package kiit.core.files
 
 import slatekit.common.Provider
 import slatekit.common.io.Uris
-import slatekit.core.cloud.CloudSupport
-import slatekit.core.common.FileUtils
+import kiit.core.cloud.CloudSupport
+import kiit.core.common.FileUtils
 import slatekit.results.Try
 import slatekit.results.then
 import java.io.File

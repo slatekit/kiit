@@ -11,7 +11,7 @@
  * </slate_header>
  */
 
-package slatekit.db.builders
+package kiit.db.builders
 
 import java.rmi.UnexpectedException
 import slatekit.common.Types

@@ -1,4 +1,4 @@
-package slatekit.core.docs
+package kiit.core.docs
 
 import slatekit.results.Outcome
 

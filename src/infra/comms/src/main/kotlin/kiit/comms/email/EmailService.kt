@@ -11,12 +11,12 @@
  * </slate_header>
  */
 
-package slatekit.notifications.email
+package kiit.comms.email
 
 import slatekit.utils.templates.Templates
 import slatekit.common.values.Vars
 import slatekit.http.HttpRPC
-import slatekit.notifications.common.TemplateSender
+import kiit.comms.common.TemplateSender
 import slatekit.results.*
 
 abstract class EmailService(

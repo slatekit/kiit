@@ -20,7 +20,7 @@ import slatekit.results.*
 // Slate Kit - App ( provides args, help, life-cycle methods, etc )
 import slatekit.requests.toResponse
 import slatekit.context.Context
-import slatekit.core.common.FileUtils
+import kiit.core.common.FileUtils
 
 // Slate Kit - Server ( Ktor support )
 import kiit.server.ServerSettings

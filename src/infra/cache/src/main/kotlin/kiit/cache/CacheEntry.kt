@@ -11,7 +11,7 @@
  * </slate_header>
  */
 
-package slatekit.cache
+package kiit.cache
 
 import kotlinx.coroutines.runBlocking
 import slatekit.results.Outcome

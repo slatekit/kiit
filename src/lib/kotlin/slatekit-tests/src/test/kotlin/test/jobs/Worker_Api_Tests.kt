@@ -11,13 +11,13 @@ import slatekit.apis.routes.Api
 import slatekit.apis.core.Reqs
 import slatekit.apis.SetupType
 import slatekit.common.*
-import slatekit.core.queues.InMemoryQueue
+import kiit.core.queues.InMemoryQueue
 import slatekit.context.AppContext
 import slatekit.requests.InputArgs
 import slatekit.common.Source
 import slatekit.requests.CommonRequest
-import slatekit.core.queues.AsyncQueue
-import slatekit.core.queues.WrappedAsyncQueue
+import kiit.core.queues.AsyncQueue
+import kiit.core.queues.WrappedAsyncQueue
 import slatekit.connectors.jobs.JobAPIWorker
 import slatekit.connectors.jobs.JobQueue
 import slatekit.jobs.*

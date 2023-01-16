@@ -7,10 +7,10 @@ import org.apache.kafka.clients.producer.*
 import slatekit.common.Identity
 import slatekit.common.conf.Conf
 import slatekit.common.log.Logger
-import slatekit.core.eventing.EventConverter
-import slatekit.core.eventing.EventProducer
-import slatekit.core.eventing.EventTopic
-import slatekit.core.eventing.EventUtils
+import kiit.core.eventing.EventConverter
+import kiit.core.eventing.EventProducer
+import kiit.core.eventing.EventTopic
+import kiit.core.eventing.EventUtils
 import slatekit.results.Outcome
 import slatekit.results.builders.Outcomes
 

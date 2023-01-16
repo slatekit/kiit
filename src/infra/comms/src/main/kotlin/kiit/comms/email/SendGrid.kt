@@ -11,7 +11,7 @@
  * </slate_header>
  */
 
-package slatekit.notifications.email
+package kiit.comms.email
 
 import okhttp3.Request
 import slatekit.common.info.ApiLogin

@@ -18,7 +18,7 @@ import org.junit.Before
 import org.junit.Test
 import slatekit.common.data.*
 import slatekit.data.sql.vendors.ifNotExists
-import slatekit.db.Db
+import kiit.db.Db
 import slatekit.entities.*
 import test.setup.Group
 import test.setup.Member

@@ -1,4 +1,4 @@
-package slatekit.cache
+package kiit.cache
 
 import kotlinx.coroutines.CompletableDeferred
 import kotlinx.coroutines.Deferred

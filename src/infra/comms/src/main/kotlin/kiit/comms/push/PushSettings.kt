@@ -11,6 +11,6 @@
  * </slate_header>
  */
 
-package slatekit.notifications.push
+package kiit.comms.push
 
 data class PushSettings(val user: String, val key: String, val account: String)

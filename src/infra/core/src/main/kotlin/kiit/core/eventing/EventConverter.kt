@@ -1,4 +1,4 @@
-package slatekit.core.eventing
+package kiit.core.eventing
 
 /**
  * Publishing an event to a stream in JSON contains a lot of boiler plate code.

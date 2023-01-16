@@ -1,4 +1,4 @@
-package slatekit.notifications.alerts
+package kiit.comms.alerts
 
 /**
  * Represents a field that is part of the alert.

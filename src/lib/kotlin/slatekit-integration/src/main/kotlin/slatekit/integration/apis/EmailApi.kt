@@ -24,7 +24,7 @@ import slatekit.common.io.Uris
 import slatekit.common.values.Vars
 import slatekit.common.crypto.Encryptor
 import slatekit.common.log.Logger
-import slatekit.notifications.email.EmailService
+import kiit.comms.email.EmailService
 import slatekit.results.Outcome
 
 @Api(area = "cloud", name = "email", desc = "api to send emails",

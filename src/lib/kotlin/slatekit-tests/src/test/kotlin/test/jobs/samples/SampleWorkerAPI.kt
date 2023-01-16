@@ -2,7 +2,7 @@ package test.jobs.samples
 
 import slatekit.apis.*
 import slatekit.context.AppContext
-import slatekit.core.queues.AsyncQueue
+import kiit.core.queues.AsyncQueue
 import slatekit.integration.common.ApiQueueSupport
 
 

@@ -18,7 +18,7 @@ plugins {
   id "org.jetbrains.kotlin.jvm" version "$kotlin_version"
 }
 
-apply from: '../../../../build/gradle/slatekit-common.gradle'
+apply from: '../../../build/gradle/slatekit-common.gradle'
 
 compileJava {
   sourceCompatibility = JavaVersion.VERSION_1_8
@@ -56,7 +56,7 @@ dependencies {
       // */
   compile project(":slatekit-result")
   compile project(":slatekit-common")
-  compile project(":slatekit-core")
+  compile project(":kiit-core")
   compile project(":slatekit-telemetry")
   } //</slatekit_local>
 }

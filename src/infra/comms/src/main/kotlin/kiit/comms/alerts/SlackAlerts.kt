@@ -1,4 +1,4 @@
-package slatekit.notifications.alerts
+package kiit.comms.alerts
 
 import okhttp3.Request
 import org.json.simple.JSONArray

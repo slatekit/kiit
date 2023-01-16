@@ -12,7 +12,7 @@ import slatekit.common.ids.UPIDs
 import slatekit.data.core.LongId
 import slatekit.data.core.Meta
 import slatekit.data.core.Table
-import slatekit.db.Db
+import kiit.db.Db
 import slatekit.entities.Entities
 import slatekit.entities.EntityService
 import test.TestApp

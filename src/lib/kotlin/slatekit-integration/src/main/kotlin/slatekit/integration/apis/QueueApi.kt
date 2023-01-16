@@ -23,7 +23,7 @@ import slatekit.common.Sources
 import slatekit.common.types.ContentFile
 import slatekit.common.crypto.Encryptor
 import slatekit.common.log.Logger
-import slatekit.core.queues.AsyncQueue
+import kiit.core.queues.AsyncQueue
 import slatekit.results.Try
 
 @Api(area = "cloud", name = "queues", desc = "api info about the application and host",

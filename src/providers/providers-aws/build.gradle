@@ -59,7 +59,7 @@ dependencies {
         // */
     compile project(":slatekit-result")
     compile project(":slatekit-common")
-    compile project(":slatekit-core")
+    compile project(":kiit-core")
     } //</slatekit_local>
 }
 

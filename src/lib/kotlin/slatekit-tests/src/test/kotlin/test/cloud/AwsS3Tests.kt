@@ -9,9 +9,9 @@ import slatekit.common.DateTime
 import slatekit.common.io.Uris
 import slatekit.common.ext.toStringNumeric
 import slatekit.common.ids.ULIDs
-import slatekit.core.common.FileUtils
-import slatekit.core.files.CloudFileEntry
-import slatekit.core.files.CloudFiles
+import kiit.core.common.FileUtils
+import kiit.core.files.CloudFileEntry
+import kiit.core.files.CloudFiles
 import slatekit.http.HttpRPC
 import slatekit.results.getOrElse
 import test.TestApp

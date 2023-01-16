@@ -1,4 +1,4 @@
-package slatekit.core.files
+package kiit.core.files
 
 /**
  * @param name : "file1.txt"

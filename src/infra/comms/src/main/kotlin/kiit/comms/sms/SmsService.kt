@@ -11,14 +11,14 @@
  * </slate_header>
  */
 
-package slatekit.notifications.sms
+package kiit.comms.sms
 
 import slatekit.utils.templates.Templates
 import slatekit.common.types.Countries
 import slatekit.common.values.Vars
 import slatekit.common.types.Country
 import slatekit.http.HttpRPC
-import slatekit.notifications.common.TemplateSender
+import kiit.comms.common.TemplateSender
 import slatekit.results.*
 
 /**
