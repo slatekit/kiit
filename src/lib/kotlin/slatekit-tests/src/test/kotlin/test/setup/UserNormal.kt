@@ -14,7 +14,7 @@ package test.setup
 
 import slatekit.common.utils.Random
 import slatekit.common.DateTime
-import slatekit.entities.*
+import kiit.entities.*
 
 /**
  * Created by kishorereddy on 5/23/17.

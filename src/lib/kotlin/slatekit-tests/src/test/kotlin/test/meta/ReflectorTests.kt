@@ -29,9 +29,9 @@ import slatekit.utils.smartvalues.PhoneUS
 import slatekit.utils.smartvalues.SmartValued
 import kiit.db.Db
 import slatekit.meta.Reflector
-import slatekit.entities.Entities
+import kiit.entities.Entities
 import slatekit.connectors.entities.AppEntContext
-import slatekit.entities.Column
+import kiit.entities.Column
 import slatekit.meta.KTypes
 import slatekit.results.Notice
 import slatekit.results.Success

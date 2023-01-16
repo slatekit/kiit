@@ -1,6 +1,6 @@
 package app;
 
-import slatekit.entities.features.CRUD;
+import kiit.entities.features.CRUD;
 
 public interface ISimpleEventService extends CRUD<Integer, SimpleEvent> {
 

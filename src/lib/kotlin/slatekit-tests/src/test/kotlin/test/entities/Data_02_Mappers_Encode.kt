@@ -4,12 +4,12 @@ import org.junit.Assert
 import org.junit.Test
 import slatekit.common.data.DataAction
 import slatekit.common.data.DataType
-import slatekit.data.core.LongId
-import slatekit.data.core.Meta
-import slatekit.data.core.Table
-import slatekit.entities.Schema
-import slatekit.entities.mapper.EntityEncoder
-import slatekit.entities.mapper.EntitySettings
+import kiit.data.core.LongId
+import kiit.data.core.Meta
+import kiit.data.core.Table
+import kiit.entities.Schema
+import kiit.entities.mapper.EntityEncoder
+import kiit.entities.mapper.EntitySettings
 import slatekit.meta.models.Model
 import slatekit.meta.models.ModelUtils
 

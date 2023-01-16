@@ -15,11 +15,11 @@
 //
 //import org.junit.Assert
 //import org.junit.Test
-//import slatekit.entities.EntityService
-//import slatekit.entities.core.EntityInfo
-//import slatekit.entities.EntityRepoInMemory
-//import slatekit.entities.repos.LongIdGenerator
-//import slatekit.entities.support.cache.EntityCache
+//import kiit.entities.EntityService
+//import kiit.entities.core.EntityInfo
+//import kiit.entities.EntityRepoInMemory
+//import kiit.entities.repos.LongIdGenerator
+//import kiit.entities.support.cache.EntityCache
 //import test.setup.User5
 //
 //

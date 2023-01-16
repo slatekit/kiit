@@ -59,7 +59,7 @@ dependencies {
         compile "com.slatekit:slatekit-context:$kiit_version"
         compile "com.slatekit:slatekit-utils:$kiit_version"
         compile "dev.kiit:db:$kiit_version"
-        compile "com.slatekit:slatekit-entities:$kiit_version"
+        compile "dev.kiit:entities:$kiit_version"
     } else {
         // */
     compile project(":slatekit-result")
@@ -67,7 +67,7 @@ dependencies {
     compile project(":slatekit-context")
     compile project(":slatekit-utils")
     compile project(":kiit-db")
-    compile project(":slatekit-entities")
+    compile project(":kiit-entities")
     } //</slatekit_local>
 }
 

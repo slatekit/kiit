@@ -17,8 +17,8 @@ import org.junit.Assert
 import org.junit.Before
 import org.junit.Test
 import slatekit.common.data.*
-import slatekit.entities.features.Relations
-import slatekit.entities.*
+import kiit.entities.features.Relations
+import kiit.entities.*
 import test.setup.User5
 
 /**

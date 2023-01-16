@@ -4,7 +4,7 @@ import org.junit.Assert
 import org.junit.Test
 import slatekit.common.values.ListMap
 import slatekit.common.values.RecordMap
-import slatekit.data.encoders.*
+import kiit.data.encoders.*
 import java.util.*
 
 

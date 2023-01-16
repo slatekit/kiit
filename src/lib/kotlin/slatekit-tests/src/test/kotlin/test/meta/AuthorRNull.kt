@@ -7,8 +7,8 @@ import slatekit.common.DateTime
 import slatekit.common.DateTimes
 import slatekit.common.ids.UPID
 import slatekit.common.ids.UPIDs
-import slatekit.entities.EntityUpdatable
-import slatekit.entities.EntityWithId
+import kiit.entities.EntityUpdatable
+import kiit.entities.EntityWithId
 import slatekit.meta.models.Field
 import slatekit.meta.models.Id
 import test.setup.StatusEnum

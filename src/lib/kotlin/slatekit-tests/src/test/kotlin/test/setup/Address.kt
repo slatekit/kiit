@@ -1,6 +1,6 @@
 package test.setup
 
-import slatekit.entities.Column
+import kiit.entities.Column
 
 data class Address(
 

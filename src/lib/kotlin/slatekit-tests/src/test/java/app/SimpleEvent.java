@@ -2,8 +2,8 @@ package app;
 
 import meta.ModelHelpers;
 import org.jetbrains.annotations.NotNull;
-import slatekit.entities.Entity;
-import slatekit.entities.EntityUpdatable;
+import kiit.entities.Entity;
+import kiit.entities.EntityUpdatable;
 import slatekit.meta.models.Model;
 
 // Temp to represent a vacation day

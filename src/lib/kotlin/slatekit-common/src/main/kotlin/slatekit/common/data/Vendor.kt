@@ -18,5 +18,5 @@ sealed class Vendor(val name: String, val driver: String) {
   object SqLite   : Vendor("sqlite", "org.sqlite.JDBC")
 //  object PGres    : Vendor("pgres", "org.postgresql.Driver")
 //  object SqServer : Vendor("sqlserver", "com.microsoft.sqlserver.jdbc.SQLServerDriver")
-  object Memory   : Vendor("memory", "com.slatekit.entities.repository-in-memory")
+  object Memory   : Vendor("memory", "com.kiit.entities.repository-in-memory")
 }

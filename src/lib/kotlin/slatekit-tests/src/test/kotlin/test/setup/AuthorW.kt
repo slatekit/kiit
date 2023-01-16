@@ -4,9 +4,9 @@ import slatekit.common.DateTime
 import slatekit.common.utils.Random
 import slatekit.common.ids.UPID
 import slatekit.common.ids.UPIDs
-import slatekit.entities.Column
-import slatekit.entities.EntityWithId
-import slatekit.entities.Id
+import kiit.entities.Column
+import kiit.entities.EntityWithId
+import kiit.entities.Id
 import java.util.*
 
 class AuthorW : EntityWithId<Long> {

@@ -23,7 +23,7 @@ import slatekit.common.log.Logger
 import slatekit.common.values.ListMap
 import slatekit.context.Context
 import slatekit.integration.mods.Mod
-import slatekit.query.Op
+import kiit.query.Op
 import slatekit.results.Failure
 import slatekit.results.Notice
 import slatekit.results.Success
@@ -32,7 +32,7 @@ import slatekit.results.Try
 /**
  * The modules service supports the install of a "feature" module.
  * A feature module is a logical feature/product area of an application. It can:
- * 1. Optionally contain 1 or more @see[slatekit.entities.Entity] that is mapped to a database table
+ * 1. Optionally contain 1 or more @see[kiit.entities.Entity] that is mapped to a database table
  * 2. Can be installed as a table to the database
  * 3. Can be uninstalled as a table in the database
  * 4. Registered so that we know what modules are set up

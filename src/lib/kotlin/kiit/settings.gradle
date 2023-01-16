@@ -43,20 +43,20 @@ project(':kiit-cache').projectDir=new File('../../../infra/cache')
 include ':kiit-comms'
 project(':kiit-comms').projectDir=new File('../../../infra/comms')
 
-include ':slatekit-query'
-project(':slatekit-query').projectDir=new File('../slatekit-query')
+include ':kiit-data'
+project(':kiit-data').projectDir=new File('../../../data/data')
+
+include ':kiit-entities'
+project(':kiit-entities').projectDir=new File('../../../data/entities')
+
+include ':kiit-migrations'
+project(':kiit-migrations').projectDir=new File('../../../data/migrations')
+
+include ':kiit-query'
+project(':kiit-query').projectDir=new File('../../../data/query')
 
 include ':slatekit-meta'
 project(':slatekit-meta').projectDir=new File('../slatekit-meta')
-
-include ':slatekit-data'
-project(':slatekit-data').projectDir=new File('../slatekit-data')
-
-include ':slatekit-entities'
-project(':slatekit-entities').projectDir=new File('../slatekit-entities')
-
-include ':slatekit-migrations'
-project(':slatekit-migrations').projectDir=new File('../slatekit-migrations')
 
 include ':slatekit-http'
 project(':slatekit-http').projectDir=new File('../slatekit-http')

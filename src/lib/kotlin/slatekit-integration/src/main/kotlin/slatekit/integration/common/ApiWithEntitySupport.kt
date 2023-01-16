@@ -15,11 +15,11 @@ package slatekit.integration.common
 
 import kiit.apis.Action
 import slatekit.common.Ignore
-import slatekit.entities.Entities
-import slatekit.entities.Entity
-import slatekit.entities.EntityService
-import slatekit.entities.EntityUpdatable
-import slatekit.query.Op
+import kiit.entities.Entities
+import kiit.entities.Entity
+import kiit.entities.EntityService
+import kiit.entities.EntityUpdatable
+import kiit.query.Op
 import java.util.*
 import kotlin.reflect.KClass
 

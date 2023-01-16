@@ -13,8 +13,8 @@
 
 package slatekit.integration.mods
 
-import slatekit.entities.Entities
-import slatekit.entities.EntityRepo
-import slatekit.entities.EntityService
+import kiit.entities.Entities
+import kiit.entities.EntityRepo
+import kiit.entities.EntityService
 
 class ModService(entities: Entities, repo: EntityRepo<Long, Mod>) : EntityService<Long, Mod>(repo)

@@ -31,7 +31,7 @@ import slatekit.common.log.LogsDefault
 import slatekit.requests.Request
 import slatekit.requests.Response
 import kiit.db.Db
-import slatekit.entities.Entities
+import kiit.entities.Entities
 import slatekit.policy.hooks.Middleware
 import slatekit.connectors.entities.AppEntContext
 import slatekit.results.Try
