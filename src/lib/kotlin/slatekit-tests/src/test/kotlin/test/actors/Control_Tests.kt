@@ -3,8 +3,8 @@ import kotlinx.coroutines.*
 import kotlinx.coroutines.channels.Channel
 import org.junit.Assert
 import org.junit.Test
-import slatekit.actors.*
-import slatekit.actors.Status
+import kiit.actors.*
+import kiit.actors.Status
 
 class Control_Tests : ActorTestSupport {
 

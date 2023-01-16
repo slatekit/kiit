@@ -3,7 +3,7 @@ package kiit.apis.core
 import kiit.apis.Verb
 import kiit.apis.routes.Action
 import kiit.apis.routes.Api
-import slatekit.common.Source
+import kiit.common.Source
 
 data class Target(val api: Api, val action: Action, val instance: Any) {
 

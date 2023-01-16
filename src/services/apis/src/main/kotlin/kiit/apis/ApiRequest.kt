@@ -2,12 +2,12 @@ package kiit.apis
 
 import kiit.apis.core.Auth
 import kiit.apis.core.Target
-import slatekit.context.Context
-import slatekit.requests.Request
+import kiit.context.Context
+import kiit.requests.Request
 
 /**
  * @param host : Host running the Apis
- * @param context: Context ( for env, args, conf, logs, about, etc ), @see[slatekit.common.Context]
+ * @param context: Context ( for env, args, conf, logs, about, etc ), @see[kiit.common.Context]
  * @param request: Abstracted HTTP | CLI | QUEUE request
  * @param target : Code/method associated with this request to execute
  * @param source : Source of the call

@@ -1,9 +1,9 @@
 package kiit.data
 
-import slatekit.common.DateTimes
-import slatekit.common.data.DataAction
-import slatekit.common.data.DataEvent
-import slatekit.common.data.DataHooks
+import kiit.common.DateTimes
+import kiit.common.data.DataAction
+import kiit.common.data.DataEvent
+import kiit.common.data.DataHooks
 import kiit.data.core.Meta
 
 abstract class BaseRepo<TId, T>(override val meta: Meta<TId, T>,

@@ -1,6 +1,6 @@
 package kiit.query
 
-import slatekit.common.data.Value
+import kiit.common.data.Value
 
 /**
  * Interface for building an update statement with criteria

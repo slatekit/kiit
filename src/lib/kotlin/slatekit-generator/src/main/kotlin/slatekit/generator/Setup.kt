@@ -1,13 +1,13 @@
 package slatekit.generator
 
-import slatekit.common.conf.Conf
-import slatekit.common.conf.Config
-import slatekit.common.conf.PropSettings
-import slatekit.common.conf.Props
-import slatekit.common.info.About
-import slatekit.common.info.Folders
-import slatekit.utils.writer.ConsoleWriter
-import slatekit.context.Context
+import kiit.common.conf.Conf
+import kiit.common.conf.Config
+import kiit.common.conf.PropSettings
+import kiit.common.conf.Props
+import kiit.common.info.About
+import kiit.common.info.Folders
+import kiit.utils.writer.ConsoleWriter
+import kiit.context.Context
 import java.io.File
 
 class Setup(val cls:Class<*>, val ctx: Context) {

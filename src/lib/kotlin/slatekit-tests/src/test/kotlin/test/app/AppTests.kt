@@ -18,14 +18,14 @@ import org.junit.Assert
 import org.junit.Test
 import slatekit.app.App
 import slatekit.app.AppRunner
-import slatekit.context.Context
-import slatekit.common.args.ArgsSchema
-import slatekit.common.crypto.Encryptor
-import slatekit.common.info.About
+import kiit.context.Context
+import kiit.common.args.ArgsSchema
+import kiit.common.crypto.Encryptor
+import kiit.common.info.About
 import slatekit.providers.logback.LogbackLogs
-import slatekit.results.Success
-import slatekit.results.Try
-import slatekit.results.getOrElse
+import kiit.results.Success
+import kiit.results.Try
+import kiit.results.getOrElse
 import test.TestApp
 
 

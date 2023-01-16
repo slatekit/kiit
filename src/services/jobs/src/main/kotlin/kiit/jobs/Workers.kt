@@ -1,7 +1,7 @@
 package kiit.jobs
 
-import slatekit.common.Identity
-import slatekit.actors.Status
+import kiit.common.Identity
+import kiit.actors.Status
 
 /**
  * Represents a request for work by a worker

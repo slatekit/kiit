@@ -3,7 +3,7 @@ package slatekit.generator
 import org.json.simple.JSONArray
 import org.json.simple.JSONObject
 import org.json.simple.parser.JSONParser
-import slatekit.common.io.Uris
+import kiit.common.io.Uris
 import java.io.File
 
 

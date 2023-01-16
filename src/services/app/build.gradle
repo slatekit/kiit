@@ -48,16 +48,16 @@ dependencies {
 
   // /* <slatekit_local>
   if( kiitSetupViaBinary ) {
-      compile "com.slatekit:slatekit-results:$kiit_version"
-      compile "com.slatekit:slatekit-common:$kiit_version"
-      compile "com.slatekit:slatekit-utils:$kiit_version"
-      compile "com.slatekit:slatekit-context:$kiit_version"
+      compile "com.slatekit:kiit-results:$kiit_version"
+      compile "com.slatekit:kiit-common:$kiit_version"
+      compile "com.slatekit:kiit-utils:$kiit_version"
+      compile "com.slatekit:kiit-context:$kiit_version"
   } else {
       // */
-  compile project(":slatekit-result")
-  compile project(":slatekit-common")
-  compile project(":slatekit-utils")
-  compile project(":slatekit-context")
+  compile project(":kiit-result")
+  compile project(":kiit-common")
+  compile project(":kiit-utils")
+  compile project(":kiit-context")
   } //</slatekit_local>
 }
 

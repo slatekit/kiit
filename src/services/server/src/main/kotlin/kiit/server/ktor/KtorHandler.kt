@@ -8,10 +8,10 @@ import io.ktor.request.isMultipart
 import io.ktor.request.receiveText
 import io.ktor.routing.*
 import kiit.apis.ApiServer
-import slatekit.context.Context
+import kiit.context.Context
 import slatekit.telemetry.Diagnostics
-import slatekit.requests.Request
-import slatekit.requests.toResponse
+import kiit.requests.Request
+import kiit.requests.toResponse
 import kiit.server.ServerSettings
 import kiit.server.core.RequestHandler
 import kiit.server.core.ResponseHandler

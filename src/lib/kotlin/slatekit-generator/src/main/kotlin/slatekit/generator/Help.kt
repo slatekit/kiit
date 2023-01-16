@@ -1,9 +1,9 @@
 package slatekit.generator
 
-import slatekit.common.conf.Conf
-import slatekit.common.ext.orElse
-import slatekit.utils.writer.ConsoleWriter
-import slatekit.context.Context
+import kiit.common.conf.Conf
+import kiit.common.ext.orElse
+import kiit.utils.writer.ConsoleWriter
+import kiit.context.Context
 
 class Help(val name:String) {
 

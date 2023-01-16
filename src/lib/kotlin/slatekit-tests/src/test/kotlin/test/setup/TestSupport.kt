@@ -1,7 +1,7 @@
 package test.setup
 
-import slatekit.common.conf.Confs
-import slatekit.common.data.DbCon
+import kiit.common.conf.Confs
+import kiit.common.data.DbCon
 import test.TestApp
 
 interface TestSupport {

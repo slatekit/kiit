@@ -3,7 +3,7 @@ package test.entities
 import org.junit.Assert
 import org.junit.Test
 import kiit.data.syntax.Types
-import slatekit.common.data.BuildMode
+import kiit.common.data.BuildMode
 import kiit.data.sql.Insert
 import kiit.data.sql.Update
 import kiit.data.sql.vendors.MySqlDialect

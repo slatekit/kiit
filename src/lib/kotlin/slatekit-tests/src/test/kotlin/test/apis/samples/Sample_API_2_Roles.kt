@@ -14,10 +14,10 @@
 package test.apis.samples
 
 import slatekit.apis.*
-import slatekit.common.*
-import slatekit.common.auth.Roles
-import slatekit.results.Outcome
-import slatekit.results.Success
+import kiit.common.*
+import kiit.common.auth.Roles
+import kiit.results.Outcome
+import kiit.results.Success
 
 
 @Api(area = "app", name = "rolesTest", desc = "api to access and manage users 3", roles= ["admin"], auth = AuthModes.TOKEN, verb = Verbs.AUTO, sources = [Sources.ALL])

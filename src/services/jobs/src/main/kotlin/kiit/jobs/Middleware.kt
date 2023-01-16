@@ -1,6 +1,6 @@
 package kiit.jobs
 
-import slatekit.actors.Message
+import kiit.actors.Message
 
 interface Middleware {
     /**

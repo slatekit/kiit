@@ -6,9 +6,9 @@ package test
 //import org.koin.core.inject
 //import org.koin.core.module.Module
 //import org.koin.dsl.module
-//import slatekit.common.utils.Random
-//import slatekit.common.crypto.HMAC
-//import slatekit.common.info.ApiLogin
+//import kiit.common.utils.Random
+//import kiit.common.crypto.HMAC
+//import kiit.common.info.ApiLogin
 //import kiit.core.email.EmailService
 //import kiit.core.email.EmailServiceSendGrid
 //import kiit.core.sms.SmsService

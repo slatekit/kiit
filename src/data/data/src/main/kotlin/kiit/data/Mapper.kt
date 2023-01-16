@@ -1,10 +1,10 @@
 package kiit.data
 
-import slatekit.common.values.Record
-import slatekit.common.crypto.Encryptor
-import slatekit.common.data.DataAction
-import slatekit.common.data.DataType
-import slatekit.common.data.Values
+import kiit.common.values.Record
+import kiit.common.crypto.Encryptor
+import kiit.common.data.DataAction
+import kiit.common.data.DataType
+import kiit.common.data.Values
 
 
 /**

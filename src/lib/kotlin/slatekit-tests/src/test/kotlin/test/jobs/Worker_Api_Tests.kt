@@ -10,12 +10,12 @@ import slatekit.apis.Verb
 import slatekit.apis.routes.Api
 import slatekit.apis.core.Reqs
 import slatekit.apis.SetupType
-import slatekit.common.*
+import kiit.common.*
 import kiit.core.queues.InMemoryQueue
-import slatekit.context.AppContext
-import slatekit.requests.InputArgs
-import slatekit.common.Source
-import slatekit.requests.CommonRequest
+import kiit.context.AppContext
+import kiit.requests.InputArgs
+import kiit.common.Source
+import kiit.requests.CommonRequest
 import kiit.core.queues.AsyncQueue
 import kiit.core.queues.WrappedAsyncQueue
 import slatekit.connectors.jobs.JobAPIWorker

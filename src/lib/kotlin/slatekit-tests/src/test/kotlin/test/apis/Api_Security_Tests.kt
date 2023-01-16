@@ -16,13 +16,13 @@ import org.junit.Test
 import slatekit.apis.routes.Api
 import slatekit.apis.SetupType
 import slatekit.apis.Verbs
-import slatekit.common.info.Credentials
-import slatekit.requests.CommonRequest
-import slatekit.common.Source
-import slatekit.requests.toResponse
-import slatekit.results.Success
-import slatekit.results.builders.Notices
-import slatekit.results.builders.Outcomes
+import kiit.common.info.Credentials
+import kiit.requests.CommonRequest
+import kiit.common.Source
+import kiit.requests.toResponse
+import kiit.results.Success
+import kiit.results.builders.Notices
+import kiit.results.builders.Outcomes
 import test.apis.samples.Sample_API_2_Roles
 
 /**

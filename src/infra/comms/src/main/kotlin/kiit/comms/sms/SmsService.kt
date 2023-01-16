@@ -13,13 +13,13 @@
 
 package kiit.comms.sms
 
-import slatekit.utils.templates.Templates
-import slatekit.common.types.Countries
-import slatekit.common.values.Vars
-import slatekit.common.types.Country
-import slatekit.http.HttpRPC
+import kiit.utils.templates.Templates
+import kiit.common.types.Countries
+import kiit.common.values.Vars
+import kiit.common.types.Country
+import kiit.http.HttpRPC
 import kiit.comms.common.TemplateSender
-import slatekit.results.*
+import kiit.results.*
 
 /**
  * Sms Service base class with support for templates and countries

@@ -17,10 +17,10 @@ import kotlinx.coroutines.runBlocking
 import org.junit.Assert
 import org.junit.Test
 import org.threeten.bp.*
-import slatekit.common.DateTimes
-import slatekit.common.data.Connections
-import slatekit.common.data.Vendor
-import slatekit.common.ids.UPIDs
+import kiit.common.DateTimes
+import kiit.common.data.Connections
+import kiit.common.data.Vendor
+import kiit.common.ids.UPIDs
 import kiit.data.core.LongId
 import kiit.db.Db
 import kiit.entities.EntityService

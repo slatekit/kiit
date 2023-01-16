@@ -1,9 +1,9 @@
 package kiit.policy.hooks
 
-import slatekit.common.*
-import slatekit.results.Err
-import slatekit.results.Failure
-import slatekit.results.Outcome
+import kiit.common.*
+import kiit.results.Err
+import kiit.results.Failure
+import kiit.results.Outcome
 
 /**
  * A "Filter" based middle-ware that either allows/disallows an API call to proceed

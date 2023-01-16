@@ -1,8 +1,8 @@
 package slatekit.telemetry
 
-import slatekit.common.DateTime
-import slatekit.common.Identity
-import slatekit.results.Err
+import kiit.common.DateTime
+import kiit.common.Identity
+import kiit.results.Err
 import java.util.concurrent.atomic.AtomicReference
 
 /**

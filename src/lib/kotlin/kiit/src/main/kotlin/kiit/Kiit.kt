@@ -4,21 +4,21 @@ import kiit.apis.support.Authenticator
 import kiit.app.App
 import kiit.app.AppOptions
 import kiit.cli.CliSettings
-import slatekit.context.Context
-import slatekit.common.args.ArgsSchema
-import slatekit.common.conf.Conf
-import slatekit.common.convert.B64Java8
-import slatekit.common.crypto.Encryptor
-import slatekit.common.info.About
-import slatekit.common.info.ApiKey
-import slatekit.common.info.Folders
-import slatekit.common.log.Logger
+import kiit.context.Context
+import kiit.common.args.ArgsSchema
+import kiit.common.conf.Conf
+import kiit.common.convert.B64Java8
+import kiit.common.crypto.Encryptor
+import kiit.common.info.About
+import kiit.common.info.ApiKey
+import kiit.common.info.Folders
+import kiit.common.log.Logger
 import kiit.connectors.cli.CliApi
 import slatekit.generator.Help
 import slatekit.generator.Setup
-import slatekit.results.Success
+import kiit.results.Success
 import kiit.serialization.Serialization
-import slatekit.results.Failure
+import kiit.results.Failure
 
 class Kiit(ctx: Context) : App<Context>(ctx, AppOptions(showWelcome = false, showDisplay = false, showSummary = false)), KiitServices {
 

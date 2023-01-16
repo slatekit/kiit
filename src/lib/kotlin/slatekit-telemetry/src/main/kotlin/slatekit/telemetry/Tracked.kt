@@ -1,6 +1,6 @@
 package slatekit.telemetry
 
-import slatekit.common.DateTime
+import kiit.common.DateTime
 
 /**
  * @param value   : Current value tracked

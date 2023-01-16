@@ -51,9 +51,9 @@ dependencies {
     compile "org.json:json:20201115"
 
     // Slate Kit
-    compile "com.slatekit:slatekit-results:$kiit_version"
-    compile "com.slatekit:slatekit-common:$kiit_version"
-    compile "com.slatekit:slatekit-context:$kiit_version"
+    compile "com.slatekit:kiit-results:$kiit_version"
+    compile "com.slatekit:kiit-common:$kiit_version"
+    compile "com.slatekit:kiit-context:$kiit_version"
     compile "dev.kiit:app:$kiit_version"
     compile "com.slatekit:slatekit-telemetry:$kiit_version"
     compile "dev.kiit:apis:$kiit_version"

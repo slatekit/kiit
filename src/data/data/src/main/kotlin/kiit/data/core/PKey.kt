@@ -1,6 +1,6 @@
 package kiit.data.core
 
-import slatekit.common.data.DataType
+import kiit.common.data.DataType
 
 /**
  * Primary key info

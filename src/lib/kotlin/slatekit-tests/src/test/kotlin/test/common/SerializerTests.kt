@@ -14,10 +14,10 @@ package test.common
 
 import org.junit.Assert
 import org.junit.Test
-import slatekit.common.DateTime
-import slatekit.common.DateTimes
-import slatekit.common.ext.tail
-import slatekit.common.newline
+import kiit.common.DateTime
+import kiit.common.DateTimes
+import kiit.common.ext.tail
+import kiit.common.newline
 import kiit.serialization.*
 import test.setup.StatusEnum
 import test.setup.StatusEnum2

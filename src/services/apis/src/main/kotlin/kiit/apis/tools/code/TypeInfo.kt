@@ -1,7 +1,7 @@
 package kiit.apis.tools.code
 
-import slatekit.context.Context
-import slatekit.requests.Request
+import kiit.context.Context
+import kiit.requests.Request
 import kiit.meta.KTypes
 import kotlin.reflect.KClass
 import kotlin.reflect.KType

@@ -3,12 +3,12 @@ package test.setup
 import slatekit.apis.*
 import slatekit.apis.Action
 import slatekit.apis.core.Reqs
-import slatekit.common.Source
-import slatekit.context.AppContext
-import slatekit.common.utils.Random
+import kiit.common.Source
+import kiit.context.AppContext
+import kiit.common.utils.Random
 import kiit.core.queues.AsyncQueue
 import slatekit.integration.common.ApiQueueSupport
-import slatekit.results.*
+import kiit.results.*
 
 
 @Api(area = "samples", name = "workerqueue", desc = "sample api to integrating workers, queues, apis")

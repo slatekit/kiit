@@ -13,8 +13,8 @@
 
 package kiit.policy.hooks
 
-import slatekit.common.*
-import slatekit.results.Outcome
+import kiit.common.*
+import kiit.results.Outcome
 
 /**
  * A middle-ware that handles the request

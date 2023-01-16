@@ -13,7 +13,7 @@
 
 package kiit.entities
 
-import slatekit.common.DateTime
+import kiit.common.DateTime
 
 interface Entity<TId : Comparable<TId>> {
 

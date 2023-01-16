@@ -16,12 +16,12 @@ import org.junit.Test
 import slatekit.apis.routes.Api
 import slatekit.apis.SetupType
 import slatekit.apis.Verbs
-import slatekit.requests.CommonRequest
-import slatekit.common.Source
-import slatekit.requests.toResponse
-import slatekit.results.Err
-import slatekit.results.Failure
-import slatekit.results.Success
+import kiit.requests.CommonRequest
+import kiit.common.Source
+import kiit.requests.toResponse
+import kiit.results.Err
+import kiit.results.Failure
+import kiit.results.Success
 import test.apis.samples.Sample_API_1_Protocol
 
 /**

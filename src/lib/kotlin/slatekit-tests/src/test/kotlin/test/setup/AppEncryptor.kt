@@ -13,8 +13,8 @@
 
 package test.setup
 
-import slatekit.common.convert.B64Java8
-import slatekit.common.crypto.Encryptor
+import kiit.common.convert.B64Java8
+import kiit.common.crypto.Encryptor
 
 object AppEncryptor : Encryptor("UrbanDonut201607", "25SK1CA6F75827B5", B64Java8){
 }

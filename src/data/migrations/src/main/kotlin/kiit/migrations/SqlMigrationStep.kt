@@ -1,8 +1,8 @@
 package kiit.migrations
 
-import slatekit.common.data.IDb
-import slatekit.results.Outcome
-import slatekit.results.builders.Outcomes
+import kiit.common.data.IDb
+import kiit.results.Outcome
+import kiit.results.builders.Outcomes
 
 data class SqlMigrationStep(
     override val type: MigrationType,

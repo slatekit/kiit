@@ -14,8 +14,8 @@
 package kiit.entities.core
 
 import kotlin.reflect.KClass
-import slatekit.common.data.Vendor
-import slatekit.common.data.Vendor.MySql
+import kiit.common.data.Vendor
+import kiit.common.data.Vendor.MySql
 import kiit.entities.EntityRepo
 import kiit.entities.EntityService
 import kiit.entities.mapper.EntityMapper

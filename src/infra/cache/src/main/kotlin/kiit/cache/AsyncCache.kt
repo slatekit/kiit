@@ -1,9 +1,9 @@
 package kiit.cache
 
 import kotlinx.coroutines.Deferred
-import slatekit.common.Identity
-import slatekit.common.log.Logger
-import slatekit.results.Outcome
+import kiit.common.Identity
+import kiit.common.log.Logger
+import kiit.results.Outcome
 
 interface AsyncCache {
     /**

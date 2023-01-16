@@ -13,11 +13,11 @@
 
 package slatekit.integration.mods
 
-import slatekit.common.newline
-import slatekit.context.Context
-import slatekit.results.Failure
-import slatekit.results.Success
-import slatekit.results.Try
+import kiit.common.newline
+import kiit.context.Context
+import kiit.results.Failure
+import kiit.results.Success
+import kiit.results.Try
 
 abstract class Module(
         val appCtx: Context,

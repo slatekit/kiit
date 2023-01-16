@@ -1,6 +1,6 @@
 package kiit.jobs
 
-import slatekit.common.Identity
+import kiit.common.Identity
 
 /**
  * Worker that wraps a function call

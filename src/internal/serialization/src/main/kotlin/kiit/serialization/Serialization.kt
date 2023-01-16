@@ -1,7 +1,7 @@
 package kiit.serialization
 
-import slatekit.common.EnumLike
-import slatekit.common.types.*
+import kiit.common.EnumLike
+import kiit.common.types.*
 import kiit.meta.Reflector
 import kiit.meta.kClass
 

@@ -13,20 +13,20 @@
 
 package kiit.migrations
 
-import slatekit.common.*
-import slatekit.common.data.DbCon
-import slatekit.common.data.Connections
-import slatekit.common.ext.toStringNumeric
-import slatekit.common.info.Folders
-import slatekit.common.io.Files
-import slatekit.common.utils.Props
+import kiit.common.*
+import kiit.common.data.DbCon
+import kiit.common.data.Connections
+import kiit.common.ext.toStringNumeric
+import kiit.common.info.Folders
+import kiit.common.io.Files
+import kiit.common.utils.Props
 import kiit.entities.Entities
 import kiit.entities.core.EntityContext
-import slatekit.results.Notice
-import slatekit.results.Success
-import slatekit.results.Try
-import slatekit.results.builders.Tries
-import slatekit.results.getOrElse
+import kiit.results.Notice
+import kiit.results.Success
+import kiit.results.Try
+import kiit.results.builders.Tries
+import kiit.results.getOrElse
 
 /**
  * Created by kreddy on 3/23/2016.
@@ -61,15 +61,15 @@ class MigrationService(
         val err = "Unable to install, can not generate sql for model $name"
 
        return when (result) {
-            is slatekit.results.Success -> {
+            is kiit.results.Success -> {
                 val db = entities.builder.db(dbKey, dbShard)
                 result.value.forEach {
                     if (!it.isNullOrEmpty()) { db.update(it) }
                 }
-                slatekit.results.Success("Installed all tables")
+                kiit.results.Success("Installed all tables")
             }
-            is slatekit.results.Failure -> {
-                slatekit.results.Failure(result.error, msg = err)
+            is kiit.results.Failure -> {
+                kiit.results.Failure(result.error, msg = err)
             }
         }
     }
@@ -126,7 +126,7 @@ class MigrationService(
             val filePath = folders.pathToOutputs + Props.pathSeparator + finalFileName
             filePath
         } ?: "Folders not available, sql files not written"
-        return slatekit.results.Success(filePath)
+        return kiit.results.Success(filePath)
     }
 
     fun generateSqlAllUninstall(): Try<String> {
@@ -146,7 +146,7 @@ class MigrationService(
             val filePath = folders.pathToOutputs + Props.pathSeparator + finalFileName
             filePath
         } ?: "Folders not available, sql files not written"
-        return slatekit.results.Success(filePath)
+        return kiit.results.Success(filePath)
     }
 
     fun deleteAll(): Try<List<String>> {
@@ -190,19 +190,19 @@ class MigrationService(
         val sql = result.third
         val path = result.second
         val info = if (success) "generated sql for model: $moduleName $path" else "error generating sql"
-        return if (success) slatekit.results.Success(sql, msg = info) else slatekit.results.Failure(Exception(info), msg = info)
+        return if (success) kiit.results.Success(sql, msg = info) else kiit.results.Failure(Exception(info), msg = info)
     }
 
     fun connection(): Notice<DbCon> {
         return dbs?.let { dbs ->
-            slatekit.results.Success(dbs.default() ?: DbCon.empty)
-        } ?: slatekit.results.Failure("no db setup")
+            kiit.results.Success(dbs.default() ?: DbCon.empty)
+        } ?: kiit.results.Failure("no db setup")
     }
 
     fun connectionByName(name: String): Notice<DbCon> {
         return dbs?.let { dbs ->
-            slatekit.results.Success(dbs.named(name) ?: DbCon.empty)
-        } ?: slatekit.results.Failure("no db setup")
+            kiit.results.Success(dbs.named(name) ?: DbCon.empty)
+        } ?: kiit.results.Failure("no db setup")
     }
 
     private fun operate(operationName: String, entityName: String, sqlBuilder: (EntityContext) -> String): Try<String> {
@@ -214,9 +214,9 @@ class MigrationService(
         return try {
             val db = entities.getDb()
             db.update(sql)
-            slatekit.results.Success("Operation $operationName successful on $table")
+            kiit.results.Success("Operation $operationName successful on $table")
         } catch (ex: Exception) {
-            slatekit.results.Failure(ex, msg = "Unable to delete :$table. ${ex.message}")
+            kiit.results.Failure(ex, msg = "Unable to delete :$table. ${ex.message}")
         }
     }
 
@@ -225,7 +225,7 @@ class MigrationService(
         val success = results.all { it.success }
         val messages = results.map { it.desc ?: "" }
         val error = if (success) "" else messages.joinToString(newline)
-        return if (success) slatekit.results.Success(messages, msg = "") else slatekit.results.Failure(Exception(error), msg = error)
+        return if (success) kiit.results.Success(messages, msg = "") else kiit.results.Failure(Exception(error), msg = error)
     }
 
     private fun builder(name:String):SqlBuilder {

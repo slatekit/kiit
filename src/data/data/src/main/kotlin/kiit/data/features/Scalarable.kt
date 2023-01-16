@@ -1,6 +1,6 @@
 package kiit.data.features
 
-import slatekit.common.data.Values
+import kiit.common.data.Values
 import kiit.data.features.Inspectable
 import kiit.query.Const
 import kiit.query.Select

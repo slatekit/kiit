@@ -7,7 +7,7 @@ import kiit.apis.Verb
 import kiit.apis.routes.Action
 import kiit.apis.tools.code.CodeGenSettings
 import kiit.apis.tools.code.TypeInfo
-import slatekit.common.newline
+import kiit.common.newline
 import kiit.meta.KTypes
 import kiit.meta.Reflector
 

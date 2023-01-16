@@ -37,18 +37,18 @@ class Api_Roles_Tests : ApiTestsBase() {
 
     @Test
     fun allow_guest() {
-        Assert.assertEquals(true, Roles(listOf(slatekit.common.auth.Roles.GUEST)).allowGuest)
+        Assert.assertEquals(true, Roles(listOf(kiit.common.auth.Roles.GUEST)).allowGuest)
     }
 
 
     @Test
     fun allow_all() {
-        Assert.assertEquals(false, Roles(listOf(slatekit.common.auth.Roles.ALL)).allowGuest)
+        Assert.assertEquals(false, Roles(listOf(kiit.common.auth.Roles.ALL)).allowGuest)
     }
 
 
     @Test fun can_refer_to_parent() {
-        val action = Roles(listOf(slatekit.common.auth.Roles.PARENT))
+        val action = Roles(listOf(kiit.common.auth.Roles.PARENT))
         val api = Roles(listOf("ops"))
         val roles = action.orElse(api)
         Assert.assertEquals("ops", roles.all.first())

@@ -14,8 +14,8 @@ package kiit.apis.core
 
 import kiit.apis.ApiRequest
 import kiit.apis.ApiServer
-import slatekit.context.Context
-import slatekit.requests.Request
+import kiit.context.Context
+import kiit.requests.Request
 
 data class Ctx(val host: ApiServer, val context: Context, val req: Request, val target: Target) {
 

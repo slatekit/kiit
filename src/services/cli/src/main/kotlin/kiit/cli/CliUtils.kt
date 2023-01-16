@@ -13,11 +13,11 @@
 
 package kiit.cli
 
-import slatekit.common.args.Args
-import slatekit.common.info.Folders
-import slatekit.common.io.Files
-import slatekit.common.types.*
-import slatekit.results.*
+import kiit.common.args.Args
+import kiit.common.info.Folders
+import kiit.common.io.Files
+import kiit.common.types.*
+import kiit.results.*
 
 object CliUtils {
 

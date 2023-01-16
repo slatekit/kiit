@@ -1,8 +1,8 @@
 package kiit.migrations
 
-import slatekit.common.data.DataType
-import slatekit.utils.naming.Namer
-import slatekit.common.newline
+import kiit.common.data.DataType
+import kiit.utils.naming.Namer
+import kiit.common.newline
 import kiit.data.sql.Dialect
 import kiit.meta.models.Model
 

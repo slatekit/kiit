@@ -1,7 +1,7 @@
 package slatekit.telemetry
 
-import slatekit.common.Identity
-import slatekit.common.Provider
+import kiit.common.Identity
+import kiit.common.Provider
 
 
 /**

@@ -1,6 +1,6 @@
 package kiit.jobs
 
-import slatekit.actors.Status
+import kiit.actors.Status
 
 /**
  * Future use

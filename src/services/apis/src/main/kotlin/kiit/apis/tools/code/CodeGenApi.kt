@@ -6,10 +6,10 @@ import kiit.apis.Verbs
 import kiit.apis.setup.HostAware
 import kiit.apis.tools.code.builders.JavaBuilder
 import kiit.apis.tools.code.builders.KotlinBuilder
-import slatekit.common.*
-import slatekit.common.auth.Roles
-import slatekit.requests.Request
-import slatekit.results.Notice
+import kiit.common.*
+import kiit.common.auth.Roles
+import kiit.requests.Request
+import kiit.results.Notice
 
 /**
  * slatekit.codegen.toJava   -templatesFolder="user://git/slatekit/scripts/templates/codegen/java"       -outputFolder="user://dev/temp/codegen/java"  -packageName="blendlife" -classFile="" -methodFile="" -modelFile=""
@@ -73,8 +73,8 @@ class CodeGenApi : HostAware {
             }
             val generator = CodeGen(settings.copy(createDtos = createDtos), builder)
             generator.generate(req)
-            slatekit.results.Success("")
-        } ?: slatekit.results.Failure("Api Container has not been set")
+            kiit.results.Success("")
+        } ?: kiit.results.Failure("Api Container has not been set")
         return result
     }
 }

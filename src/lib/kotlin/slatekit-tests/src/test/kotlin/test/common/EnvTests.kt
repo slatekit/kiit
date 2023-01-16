@@ -16,7 +16,7 @@ package test.common
 //import org.jetbrains.spek.api.dsl.*
 //import kotlin.test.assertEquals
 import org.junit.Assert
-import slatekit.common.envs.*
+import kiit.common.envs.*
 
 import org.junit.Test
 

@@ -2,8 +2,8 @@ package kiit.serialization.responses
 
 import org.json.simple.JSONArray
 import org.json.simple.JSONObject
-import slatekit.requests.Response
-import slatekit.results.Err
+import kiit.requests.Response
+import kiit.results.Err
 
 object ResponseEncoder {
 
@@ -11,7 +11,7 @@ object ResponseEncoder {
      * Builds a Slate Kit standardized response object
      * NOTES:
      * 1. code is in the application level status code ( not to be conflated with HTTP status code )
-     * 2. errs is a list of Err types @see[slatekit.results.Err]
+     * 2. errs is a list of Err types @see[kiit.results.Err]
      * 3. tag is used a correlation id
      * 4. meta is for additional meta data to be provided to the client
      * @sample
@@ -48,9 +48,9 @@ object ResponseEncoder {
     /**
      * Recursively flattens the err into the list provided.
      * E.g. Err could be
-     * 1. @see[slatekit.results.Err.ErrorInfo]
-     * 2. @see[slatekit.results.Err.ErrorField]
-     * 3. @see[slatekit.results.Err.ErrorList]
+     * 1. @see[kiit.results.Err.ErrorInfo]
+     * 2. @see[kiit.results.Err.ErrorField]
+     * 3. @see[kiit.results.Err.ErrorList]
      */
     fun flatten(error: Err, list: JSONArray, depth: Int) {
         when (error) {

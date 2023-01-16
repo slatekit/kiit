@@ -1,12 +1,12 @@
 package kiit.entities.support
 
-import slatekit.common.utils.Export
+import kiit.common.utils.Export
 import kiit.entities.Entity
 import kiit.entities.features.CRUD
 import kiit.meta.kClass
 import kiit.meta.models.Model
-import slatekit.results.Try
-import slatekit.results.builders.Tries
+import kiit.results.Try
+import kiit.results.builders.Tries
 
 /**
  * Created by kishorereddy on 6/3/18.

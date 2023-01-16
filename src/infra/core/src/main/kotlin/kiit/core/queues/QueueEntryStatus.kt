@@ -1,7 +1,7 @@
 package kiit.core.queues
 
-import slatekit.common.EnumLike
-import slatekit.common.EnumSupport
+import kiit.common.EnumLike
+import kiit.common.EnumSupport
 
 enum class QueueEntryStatus(override val value: Int) : EnumLike {
     InActive(0),

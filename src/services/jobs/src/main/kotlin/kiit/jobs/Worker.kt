@@ -1,9 +1,9 @@
 package kiit.jobs
 
 import java.util.concurrent.atomic.AtomicReference
-import slatekit.common.Identity
-import slatekit.actors.Status
-import slatekit.actors.pause.Check
+import kiit.common.Identity
+import kiit.actors.Status
+import kiit.actors.pause.Check
 
 
 /**

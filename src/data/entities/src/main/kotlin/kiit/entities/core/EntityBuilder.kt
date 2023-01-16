@@ -1,9 +1,9 @@
 package kiit.entities.core
 
 import kotlin.reflect.KClass
-import slatekit.common.data.*
-import slatekit.common.crypto.Encryptor
-import slatekit.utils.naming.Namer
+import kiit.common.data.*
+import kiit.common.crypto.Encryptor
+import kiit.utils.naming.Namer
 import kiit.entities.*
 import kiit.meta.Reflector
 import kiit.meta.models.Model

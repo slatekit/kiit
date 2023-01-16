@@ -2,10 +2,10 @@ package kiit.jobs
 
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.channels.Channel
-import slatekit.actors.Message
-import slatekit.common.Identity
-import slatekit.common.log.Logger
-import slatekit.common.log.LoggerConsole
+import kiit.actors.Message
+import kiit.common.Identity
+import kiit.common.log.Logger
+import kiit.common.log.LoggerConsole
 import kiit.jobs.support.DefaultScheduler
 import kiit.jobs.support.Backoffs
 import kiit.jobs.support.Scheduler
@@ -13,7 +13,7 @@ import kiit.jobs.support.Notifier
 
 /**
  * Represents all the dependencies needed for a Job
- * @param id        : Identity of the job e.g. signup.alerts.job.qat.ABC123 @see[slatekit.common.Identity]
+ * @param id        : Identity of the job e.g. signup.alerts.job.qat.ABC123 @see[kiit.common.Identity]
  * @param channel   : Channel to communicate commands to a job and between job/workers
  * @param workers   : List of all @see[Worker] involved in this job
  * @param logger    : Logger used inside the job

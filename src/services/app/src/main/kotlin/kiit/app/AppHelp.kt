@@ -1,15 +1,15 @@
 package kiit.app
 
-import slatekit.common.Types
-import slatekit.common.args.Args
-import slatekit.common.args.ArgsSchema
-import slatekit.utils.writer.ConsoleWriter
-import slatekit.common.envs.Envs
-import slatekit.common.info.About
-import slatekit.common.info.Info
-import slatekit.common.io.Alias
-import slatekit.results.*
-import slatekit.results.builders.Tries
+import kiit.common.Types
+import kiit.common.args.Args
+import kiit.common.args.ArgsSchema
+import kiit.utils.writer.ConsoleWriter
+import kiit.common.envs.Envs
+import kiit.common.info.About
+import kiit.common.info.Info
+import kiit.common.io.Alias
+import kiit.results.*
+import kiit.results.builders.Tries
 
 /**
  * Builds the display for help / version / about requests.

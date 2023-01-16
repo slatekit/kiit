@@ -2,7 +2,7 @@ package kiit.apis.setup
 
 import kiit.apis.routes.Action
 import kiit.apis.routes.Api
-import slatekit.utils.naming.Namer
+import kiit.utils.naming.Namer
 
 interface Loader {
 

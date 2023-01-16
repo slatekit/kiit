@@ -14,12 +14,12 @@ package test.common
 
 import org.junit.Assert
 import org.junit.Test
-import slatekit.utils.templates.TemplateConstants.TypeSub
-import slatekit.utils.templates.*
-import slatekit.utils.templates.TemplateConstants.TypeText
-import slatekit.common.utils.Random
-import slatekit.results.Success
-import slatekit.results.Try
+import kiit.utils.templates.TemplateConstants.TypeSub
+import kiit.utils.templates.*
+import kiit.utils.templates.TemplateConstants.TypeText
+import kiit.common.utils.Random
+import kiit.results.Success
+import kiit.results.Try
 
 /**
  * Created by kishorereddy on 6/3/17.

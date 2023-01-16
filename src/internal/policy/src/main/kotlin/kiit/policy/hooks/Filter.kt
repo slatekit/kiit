@@ -1,7 +1,7 @@
 package kiit.policy.hooks
 
-import slatekit.common.Ignore
-import slatekit.results.Outcome
+import kiit.common.Ignore
+import kiit.results.Outcome
 
 /**
  * A "Filter" based middle-ware that either allows/disallows an API call to proceed
@@ -14,7 +14,7 @@ interface Filter<TReq> : Middleware {
     /**
      * Middleware to filter a request
      * @param req : The request ( e.g. call )
-     * @sample: slatekit.results.Success("")
+     * @sample: kiit.results.Success("")
      */
     @Ignore
     suspend fun filter(req: TReq): Outcome<TReq>

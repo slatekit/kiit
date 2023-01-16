@@ -13,8 +13,8 @@
 
 package kiit.meta.models
 
-import slatekit.common.data.DataType
-import slatekit.utils.naming.Namer
+import kiit.common.data.DataType
+import kiit.utils.naming.Namer
 import kiit.meta.KTypes
 import kiit.meta.Reflector
 import kotlin.reflect.*

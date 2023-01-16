@@ -4,10 +4,10 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.runBlocking
 import org.junit.Assert
 import org.junit.Test
-import slatekit.actors.Issuable
-import slatekit.actors.Issuer
-import slatekit.common.Identity
-import slatekit.actors.Status
+import kiit.actors.Issuable
+import kiit.actors.Issuer
+import kiit.common.Identity
+import kiit.actors.Status
 import slatekit.jobs.*
 import test.jobs.support.JobTestSupport
 

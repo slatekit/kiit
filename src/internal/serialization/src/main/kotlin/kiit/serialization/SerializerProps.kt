@@ -13,7 +13,7 @@
 
 package kiit.serialization
 
-import slatekit.common.newline
+import kiit.common.newline
 
 /**
  * Created by kishorereddy on 6/3/17.

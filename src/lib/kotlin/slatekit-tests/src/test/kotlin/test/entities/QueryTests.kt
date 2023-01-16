@@ -14,8 +14,8 @@ package test.entities
 
 import org.junit.Assert
 import org.junit.Test
-import slatekit.common.DateTimes
-import slatekit.common.data.Encoding
+import kiit.common.DateTimes
+import kiit.common.data.Encoding
 import kiit.query.Const
 import kiit.query.QueryEncoder
 import kiit.query.where

@@ -18,7 +18,7 @@ import kiit.apis.*
 import kiit.apis.SetupType
 import kiit.apis.core.Roles
 import kiit.apis.core.Sources
-import slatekit.common.Source
+import kiit.common.Source
 import kiit.meta.kClass
 
 /**

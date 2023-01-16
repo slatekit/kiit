@@ -1,9 +1,9 @@
 package test.meta
 
-import slatekit.common.DateTime
-import slatekit.common.utils.Random
-import slatekit.common.ids.UPID
-import slatekit.common.ids.UPIDs
+import kiit.common.DateTime
+import kiit.common.utils.Random
+import kiit.common.ids.UPID
+import kiit.common.ids.UPIDs
 import kiit.entities.EntityWithId
 import kiit.meta.models.Id
 import kiit.meta.models.Field

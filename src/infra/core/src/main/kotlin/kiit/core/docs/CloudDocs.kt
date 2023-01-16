@@ -1,6 +1,6 @@
 package kiit.core.docs
 
-import slatekit.results.Outcome
+import kiit.results.Outcome
 
 
 interface CloudDocs<TEntity, TPartition, TCluster> {

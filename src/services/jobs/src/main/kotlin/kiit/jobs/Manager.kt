@@ -1,8 +1,8 @@
 package kiit.jobs
 
 import kotlinx.coroutines.*
-import slatekit.actors.*
-import slatekit.common.Identity
+import kiit.actors.*
+import kiit.common.Identity
 import kiit.jobs.support.Rules
 import kiit.jobs.support.Work
 
@@ -10,7 +10,7 @@ import kiit.jobs.support.Work
  * A Job is the top level model in this Background Job/Task Queue system. A job is composed of the following:
  *
  * TERMS:
- * 1. Identity  : An id, @see[slatekit.common.Identity] to distinctly identify a job
+ * 1. Identity  : An id, @see[kiit.common.Identity] to distinctly identify a job
  * 3. Task      : A single work item with a payload that a worker can work on. @see[kiit.jobs.Task]
  * 2. Queue     : Interface for a Queue that workers can optional source tasks from
  * 4. Workers   : 1 or more @see[kiit.jobs.workers.Worker]s that can work on this job
@@ -58,19 +58,19 @@ class Manager(val jctx: Context, val settings: Settings = Settings())
 
 
     /**
-     * Subscribe to any @see[slatekit.actors.Status] being changed
+     * Subscribe to any @see[kiit.actors.Status] being changed
      */
     fun on(op: suspend (Event) -> Unit) = events.on(op)
 
 
     /**
-     * Subscribe to @see[slatekit.actors.Status] beging changed to the one supplied
+     * Subscribe to @see[kiit.actors.Status] beging changed to the one supplied
      */
     fun on(status: Status, op: suspend (Event) -> Unit) = events.on(status.name, op)
 
 
     /**
-     * Subscribe to @see[slatekit.actors.Status] beging changed to the one supplied
+     * Subscribe to @see[kiit.actors.Status] beging changed to the one supplied
      */
     fun onErr(op: suspend (Event) -> Unit) = events.on(ERROR_KEY, op)
 

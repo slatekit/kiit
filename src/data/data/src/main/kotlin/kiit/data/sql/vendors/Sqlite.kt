@@ -1,6 +1,6 @@
 package kiit.data.sql.vendors
 
-import slatekit.common.data.DataType
+import kiit.common.data.DataType
 import kiit.data.Mapper
 import kiit.data.core.Meta
 import kiit.data.core.Table

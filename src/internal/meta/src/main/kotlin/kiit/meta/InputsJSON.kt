@@ -3,10 +3,10 @@ package kiit.meta
 import org.json.simple.JSONObject
 import org.json.simple.parser.JSONParser
 import org.threeten.bp.*
-import slatekit.common.*
-import slatekit.common.convert.Conversions
-import slatekit.common.crypto.Encryptor
-import slatekit.common.values.Inputs
+import kiit.common.*
+import kiit.common.convert.Conversions
+import kiit.common.crypto.Encryptor
+import kiit.common.values.Inputs
 
 /**
  * Used to represent a request that originate from a json file.

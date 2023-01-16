@@ -1,6 +1,6 @@
 package kiit.cli
 
-import slatekit.utils.writer.TextType
+import kiit.utils.writer.TextType
 
 data class CliOutput(
         val type: TextType,

@@ -14,8 +14,8 @@ package test.common
 
 import org.junit.Assert
 import org.junit.Test
-import slatekit.common.values.ListMap
-import slatekit.common.values.Vars
+import kiit.common.values.ListMap
+import kiit.common.values.Vars
 
 /**
  * Created by kishorereddy on 6/4/17.

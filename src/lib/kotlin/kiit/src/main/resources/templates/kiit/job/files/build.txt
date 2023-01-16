@@ -43,8 +43,8 @@ dependencies {
     compile 'org.jetbrains.kotlinx:kotlinx-coroutines-core:1.1.0'
 
     // Slate Kit
-    compile "com.slatekit:slatekit-results:$kiit_version"
-    compile "com.slatekit:slatekit-common:$kiit_version"
+    compile "com.slatekit:kiit-results:$kiit_version"
+    compile "com.slatekit:kiit-common:$kiit_version"
     compile "dev.kiit:app:$kiit_version"
     compile "dev.kiit:core:$kiit_version"
     compile "com.slatekit:kiit-jobs:$kiit_version"

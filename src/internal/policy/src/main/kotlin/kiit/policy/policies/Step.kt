@@ -1,9 +1,9 @@
 package kiit.policy.policies
 
-import slatekit.common.log.Logger
+import kiit.common.log.Logger
 import kiit.policy.Policy
-import slatekit.results.Outcome
-import slatekit.results.builders.Outcomes
+import kiit.results.Outcome
+import kiit.results.builders.Outcomes
 import java.util.concurrent.atomic.AtomicLong
 
 /**

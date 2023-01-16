@@ -15,9 +15,9 @@ package kiit.apis.core
 
 import kiit.apis.AuthMode
 import kiit.apis.support.RolesSupport
-import slatekit.requests.Request
-import slatekit.results.Notice
-import slatekit.results.Outcome
+import kiit.requests.Request
+import kiit.results.Notice
+import kiit.results.Outcome
 
 /**
  * Class used to authenticate an api with support for 3 modes:

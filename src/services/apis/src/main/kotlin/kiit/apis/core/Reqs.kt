@@ -17,14 +17,14 @@ import org.json.simple.JSONObject
 import org.json.simple.parser.JSONParser
 import kiit.apis.ApiConstants
 import kiit.apis.support.JsonSupport
-import slatekit.common.*
-import slatekit.common.ext.toStringUtc
-import slatekit.common.crypto.Encryptor
-import slatekit.common.io.Uris
-import slatekit.common.values.Inputs
-import slatekit.common.values.Metadata
-import slatekit.requests.CommonRequest
-import slatekit.requests.Request
+import kiit.common.*
+import kiit.common.ext.toStringUtc
+import kiit.common.crypto.Encryptor
+import kiit.common.io.Uris
+import kiit.common.values.Inputs
+import kiit.common.values.Metadata
+import kiit.requests.CommonRequest
+import kiit.requests.Request
 import kiit.serialization.Serialization
 
 object Reqs {

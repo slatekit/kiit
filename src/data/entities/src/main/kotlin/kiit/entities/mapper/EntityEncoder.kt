@@ -1,14 +1,14 @@
 package kiit.entities.mapper
 
 import org.threeten.bp.*
-import slatekit.common.DateTime
-import slatekit.common.EnumLike
-import slatekit.common.crypto.Encryptor
-import slatekit.common.data.DataAction
-import slatekit.common.data.DataType
-import slatekit.common.data.Value
-import slatekit.common.data.Values
-import slatekit.common.ids.UPID
+import kiit.common.DateTime
+import kiit.common.EnumLike
+import kiit.common.crypto.Encryptor
+import kiit.common.data.DataAction
+import kiit.common.data.DataType
+import kiit.common.data.Value
+import kiit.common.data.Values
+import kiit.common.ids.UPID
 import kiit.data.core.Meta
 import kiit.data.encoders.Encoders
 import kiit.entities.Consts
@@ -37,7 +37,7 @@ open class EntityEncoder<TId, T>(val model: Model,
     protected val idCol = model.idField!!
 
     /**
-     * Encodes the item into @see[slatekit.common.data.Values] which
+     * Encodes the item into @see[kiit.common.data.Values] which
      * contains a simple list of key/value pairs
      */
     override fun encode(item: T, action: DataAction, enc: Encryptor?): Values {

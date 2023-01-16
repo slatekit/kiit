@@ -1,7 +1,7 @@
 package test.setup
 
-import slatekit.common.DateTime
-import slatekit.common.DateTimes
+import kiit.common.DateTime
+import kiit.common.DateTimes
 
 
 data class Book(

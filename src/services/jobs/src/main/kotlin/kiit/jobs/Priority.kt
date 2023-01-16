@@ -12,8 +12,8 @@ mantra: Simplicity above all else
  */
 package kiit.jobs
 
-import slatekit.common.EnumLike
-import slatekit.common.EnumSupport
+import kiit.common.EnumLike
+import kiit.common.EnumSupport
 
 /**
  * General purpose priority Enum to be used for Queue to indicate

@@ -12,8 +12,8 @@ mantra: Simplicity above all else
  */
 package kiit.db.builders
 
-import slatekit.common.data.DataType
-import slatekit.common.data.Encoding
+import kiit.common.data.DataType
+import kiit.common.data.Encoding
 
 /**
  * Created by kishorereddy on 6/14/17.

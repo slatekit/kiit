@@ -1,8 +1,8 @@
 package kiit.jobs
 
 import kotlinx.coroutines.*
-import slatekit.actors.Action
-import slatekit.actors.pause.Feedback
+import kiit.actors.Action
+import kiit.actors.pause.Feedback
 
 /**
  * Registry of all the jobs and queues. This registry is used to:

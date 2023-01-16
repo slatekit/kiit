@@ -14,13 +14,13 @@
 package kiit.comms.push
 
 import okhttp3.Request
-import slatekit.common.conf.Conf
-import slatekit.common.log.Logs
-import slatekit.http.HttpRPC
+import kiit.common.conf.Conf
+import kiit.common.log.Logs
+import kiit.http.HttpRPC
 import kiit.comms.common.Sender
-import slatekit.results.Outcome
-import slatekit.results.Success
-import slatekit.results.builders.Outcomes
+import kiit.results.Outcome
+import kiit.results.Success
+import kiit.results.builders.Outcomes
 
 /**
  * Google FCM ( Fire base Cloud Messaging ) Service.

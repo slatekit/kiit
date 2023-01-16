@@ -18,14 +18,14 @@ import kiit.apis.Action
 import kiit.apis.AuthModes
 import kiit.apis.Verbs
 import kiit.apis.support.FileSupport
-import slatekit.context.Context
-import slatekit.common.Sources
-import slatekit.common.io.Uris
-import slatekit.common.values.Vars
-import slatekit.common.crypto.Encryptor
-import slatekit.common.log.Logger
+import kiit.context.Context
+import kiit.common.Sources
+import kiit.common.io.Uris
+import kiit.common.values.Vars
+import kiit.common.crypto.Encryptor
+import kiit.common.log.Logger
 import kiit.comms.email.EmailService
-import slatekit.results.Outcome
+import kiit.results.Outcome
 
 @Api(area = "cloud", name = "email", desc = "api to send emails",
         auth = AuthModes.KEYED, roles = ["ops"], verb = Verbs.AUTO, sources = [Sources.ALL])

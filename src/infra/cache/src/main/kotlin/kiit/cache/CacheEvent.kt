@@ -1,9 +1,9 @@
 package kiit.cache
 
-import slatekit.common.DateTime
-import slatekit.common.Identity
-import slatekit.common.ext.toStringUtc
-import slatekit.common.utils.Random
+import kiit.common.DateTime
+import kiit.common.Identity
+import kiit.common.ext.toStringUtc
+import kiit.common.utils.Random
 
 /**
  * @param id     : Id of this event

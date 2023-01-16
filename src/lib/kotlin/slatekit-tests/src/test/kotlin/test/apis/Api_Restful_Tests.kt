@@ -19,12 +19,12 @@ import org.junit.Test
 import slatekit.apis.*
 import slatekit.apis.routes.Api
 import slatekit.apis.services.Restify
-import slatekit.common.*
-import slatekit.utils.naming.LowerHyphenNamer
-import slatekit.utils.naming.Namer
-import slatekit.results.Result
-import slatekit.results.Codes
-import slatekit.results.getOrElse
+import kiit.common.*
+import kiit.utils.naming.LowerHyphenNamer
+import kiit.utils.naming.Namer
+import kiit.results.Result
+import kiit.results.Codes
+import kiit.results.getOrElse
 import test.setup.SampleRESTApi
 import test.setup.Movie
 

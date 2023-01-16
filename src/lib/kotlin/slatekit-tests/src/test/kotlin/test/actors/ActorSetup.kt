@@ -3,8 +3,8 @@ package test.actors
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.channels.Channel
-import slatekit.actors.*
-import slatekit.actors.Action
+import kiit.actors.*
+import kiit.actors.Action
 
 interface ActorTestSupport {
     fun issuer(id:String = "test" ):Issuer<Int> {

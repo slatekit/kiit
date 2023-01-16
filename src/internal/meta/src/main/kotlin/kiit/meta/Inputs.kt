@@ -1,8 +1,8 @@
 package kiit.meta
 
-import slatekit.common.convert.Conversions
-import slatekit.common.values.Inputs
-import slatekit.common.crypto.*
+import kiit.common.convert.Conversions
+import kiit.common.values.Inputs
+import kiit.common.crypto.*
 import kotlin.reflect.KClass
 import kotlin.reflect.KType
 

@@ -1,12 +1,12 @@
 package slatekit.telemetry
 
-import slatekit.utils.events.Event
-import slatekit.common.Identity
-import slatekit.common.log.Logger
-import slatekit.common.log.LoggerConsole
-import slatekit.results.Failed
-import slatekit.results.Passed
-import slatekit.results.builders.Tries
+import kiit.utils.events.Event
+import kiit.common.Identity
+import kiit.common.log.Logger
+import kiit.common.log.LoggerConsole
+import kiit.results.Failed
+import kiit.results.Passed
+import kiit.results.builders.Tries
 
 /**
  * Used for diagnostics / metrics to record a request/response/failure for some function/operation
@@ -24,12 +24,12 @@ open class Recorder<TRequest, TResponse, TFailure>(val id: Identity,
                                          val counts: Counters,
                                          val lasts : Lasts<TRequest, TResponse, TFailure>?,
                                          val events: Events<TRequest, TResponse, TFailure>?,
-                                         val converter: ((TRequest, slatekit.results.Result<TResponse,TFailure>) -> Event)? = null) {
+                                         val converter: ((TRequest, kiit.results.Result<TResponse,TFailure>) -> Event)? = null) {
 
     /**
      * Record all relevant diagnostics
      */
-    fun record(sender: Any, request: TRequest, result: slatekit.results.Result<TResponse,TFailure>) {
+    fun record(sender: Any, request: TRequest, result: kiit.results.Result<TResponse,TFailure>) {
         Tries.of {
             // Structured logging ( convert the request/result into an Event
             converter?.let { c -> log(logger, id, c(request, result)) }
@@ -46,7 +46,7 @@ open class Recorder<TRequest, TResponse, TFailure>(val id: Identity,
     }
 
 
-    fun log(sender: Any, request: TRequest, result: slatekit.results.Result<TResponse,TFailure>){
+    fun log(sender: Any, request: TRequest, result: kiit.results.Result<TResponse,TFailure>){
         // Structured logging ( convert the request/result into an Event
         converter?.let { c -> log(logger, id, c(request, result)) }
     }
@@ -55,19 +55,19 @@ open class Recorder<TRequest, TResponse, TFailure>(val id: Identity,
     /**
      * Stores the last
      */
-    fun last(sender: Any, request: TRequest, result: slatekit.results.Result<TResponse,TFailure>){
+    fun last(sender: Any, request: TRequest, result: kiit.results.Result<TResponse,TFailure>){
         // Track the last response
         lasts?.let { lasts.handle(sender, request, result) }
     }
 
 
-    fun count(sender: Any, request: TRequest, result: slatekit.results.Result<TResponse,TFailure>){
+    fun count(sender: Any, request: TRequest, result: kiit.results.Result<TResponse,TFailure>){
         // Update metrics
         counts.let { Counters.count(counts, result.status) }
     }
 
 
-    fun event(sender: Any, request: TRequest, result: slatekit.results.Result<TResponse,TFailure>){
+    fun event(sender: Any, request: TRequest, result: kiit.results.Result<TResponse,TFailure>){
         // Notify event listeners
         events?.let { events.handle(sender, request, result) }
     }
@@ -78,7 +78,7 @@ open class Recorder<TRequest, TResponse, TFailure>(val id: Identity,
         fun <TRequest, TResponse, TFailure> of(id: Identity,
                                      tags:List<Tag>? = null,
                                      logger: Logger = LoggerConsole(),
-                                     converter: ((TRequest, slatekit.results.Result<TResponse,TFailure>) -> Event)? = null): Recorder<TRequest, TResponse, TFailure> {
+                                     converter: ((TRequest, kiit.results.Result<TResponse,TFailure>) -> Event)? = null): Recorder<TRequest, TResponse, TFailure> {
             val events = when(converter) {
                 null -> null
                 else -> Events<TRequest, TResponse, TFailure>(tags ?: listOf())

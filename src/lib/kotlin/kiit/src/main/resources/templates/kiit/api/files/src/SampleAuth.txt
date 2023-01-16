@@ -4,10 +4,10 @@ package ${app.package}.auth
 import kiit.apis.AuthMode
 import kiit.apis.core.Roles
 import kiit.apis.support.Authenticator
-import slatekit.common.info.ApiKey
-import slatekit.requests.Request
-import slatekit.results.Outcome
-import slatekit.results.Success
+import kiit.common.info.ApiKey
+import kiit.requests.Request
+import kiit.results.Outcome
+import kiit.results.Success
 
 class SampleAuth : Authenticator(listOf()) {
 

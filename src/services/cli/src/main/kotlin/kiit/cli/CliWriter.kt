@@ -1,9 +1,9 @@
 package kiit.cli
 
-import slatekit.utils.writer.ConsoleWriter
-import slatekit.utils.writer.TextType
-import slatekit.utils.writer.Writer
-import slatekit.common.io.IO
+import kiit.utils.writer.ConsoleWriter
+import kiit.utils.writer.TextType
+import kiit.utils.writer.Writer
+import kiit.common.io.IO
 
 /**
  * Default writer to console ( unless overridden by the writer from constructor )

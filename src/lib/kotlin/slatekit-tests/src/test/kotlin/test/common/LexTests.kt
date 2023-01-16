@@ -19,7 +19,7 @@ package test.common
 
 import org.junit.Assert
 import org.junit.Test
-import slatekit.common.lex.Lexer
+import kiit.common.lex.Lexer
 
 
 class LexTests {

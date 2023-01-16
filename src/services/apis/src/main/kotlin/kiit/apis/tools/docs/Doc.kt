@@ -18,9 +18,9 @@ import kiit.apis.routes.Action
 import kiit.apis.routes.Api
 import kiit.apis.routes.Area
 import kiit.apis.routes.Lookup
-import slatekit.utils.writer.ConsoleWriter
-import slatekit.utils.writer.TextSettings
-import slatekit.utils.writer.Writer
+import kiit.utils.writer.ConsoleWriter
+import kiit.utils.writer.TextSettings
+import kiit.utils.writer.Writer
 import kotlin.reflect.KClass
 
 abstract class Doc  {

@@ -1,11 +1,11 @@
 package kiit.connectors.jobs
 
-import slatekit.common.Identity
+import kiit.common.Identity
 import kiit.core.queues.*
 import kiit.jobs.Priority
 import kiit.jobs.Queue
 import kiit.jobs.Task
-import slatekit.results.Try
+import kiit.results.Try
 
 /**
  * Wraps the underlying queue holding the messages with other metadata ( name, priority )

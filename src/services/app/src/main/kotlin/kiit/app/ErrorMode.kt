@@ -1,7 +1,7 @@
 package kiit.app
 
-import slatekit.common.EnumLike
-import slatekit.common.EnumSupport
+import kiit.common.EnumLike
+import kiit.common.EnumSupport
 
 enum class ErrorMode(override val value: Int) : EnumLike {
     Throw(0),

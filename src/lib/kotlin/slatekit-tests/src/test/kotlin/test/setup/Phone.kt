@@ -1,6 +1,6 @@
 package test.setup
 
-import slatekit.common.DateTime
+import kiit.common.DateTime
 import kiit.entities.EntityWithId
 
 

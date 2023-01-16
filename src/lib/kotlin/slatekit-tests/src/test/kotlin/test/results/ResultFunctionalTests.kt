@@ -2,11 +2,11 @@ package test.results
 
 import org.junit.Assert
 import org.junit.Test
-import slatekit.results.*
-import slatekit.results.Codes
-import slatekit.results.builders.Outcomes
-import slatekit.results.builders.Outcomes.success
-import slatekit.results.builders.Outcomes.errored
+import kiit.results.*
+import kiit.results.Codes
+import kiit.results.builders.Outcomes
+import kiit.results.builders.Outcomes.success
+import kiit.results.builders.Outcomes.errored
 
 /**
  * Tests Operations on the Result class which include:

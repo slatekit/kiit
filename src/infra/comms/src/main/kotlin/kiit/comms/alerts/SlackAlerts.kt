@@ -3,11 +3,11 @@ package kiit.comms.alerts
 import okhttp3.Request
 import org.json.simple.JSONArray
 import org.json.simple.JSONObject
-import slatekit.http.HttpRPC
-import slatekit.common.Identity
-import slatekit.results.Outcome
-import slatekit.results.Success
-import slatekit.results.builders.Outcomes
+import kiit.http.HttpRPC
+import kiit.common.Identity
+import kiit.results.Outcome
+import kiit.results.Success
+import kiit.results.builders.Outcomes
 
 /**
  * @param settings: The list of slack channels

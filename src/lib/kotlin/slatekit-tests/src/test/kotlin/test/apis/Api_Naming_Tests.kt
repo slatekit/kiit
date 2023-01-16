@@ -7,9 +7,9 @@ import slatekit.apis.routes.Api
 import slatekit.apis.ApiServer
 import slatekit.apis.Settings
 import slatekit.apis.Verb
-import slatekit.utils.naming.LowerHyphenNamer
-import slatekit.utils.naming.LowerUnderscoreNamer
-import slatekit.results.getOrElse
+import kiit.utils.naming.LowerHyphenNamer
+import kiit.utils.naming.LowerUnderscoreNamer
+import kiit.results.getOrElse
 import test.setup.SampleExtendedApi
 import test.setup.SamplePOKOApi
 

@@ -13,11 +13,11 @@
 
 package kiit.cache
 
-import slatekit.common.Identity
-import slatekit.common.log.Logger
-import slatekit.common.utils.Random
-import slatekit.results.Outcome
-import slatekit.results.builders.Outcomes
+import kiit.common.Identity
+import kiit.common.log.Logger
+import kiit.common.utils.Random
+import kiit.results.Outcome
+import kiit.results.builders.Outcomes
 import slatekit.telemetry.Tracker
 
 /**

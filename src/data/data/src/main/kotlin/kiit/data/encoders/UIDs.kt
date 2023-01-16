@@ -1,9 +1,9 @@
 package kiit.data.encoders
 
-import slatekit.common.values.Record
-import slatekit.common.data.DataType
-import slatekit.common.data.Value
-import slatekit.common.ids.UPID
+import kiit.common.values.Record
+import kiit.common.data.DataType
+import kiit.common.data.Value
+import kiit.common.ids.UPID
 import kiit.data.Consts
 import java.util.*
 

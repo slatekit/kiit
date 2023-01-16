@@ -5,9 +5,9 @@ import org.junit.Test
 import org.threeten.bp.LocalDate
 import org.threeten.bp.LocalDateTime
 import org.threeten.bp.LocalTime
-import slatekit.common.DateTimes
-import slatekit.common.data.*
-import slatekit.common.ids.ULIDs
+import kiit.common.DateTimes
+import kiit.common.data.*
+import kiit.common.ids.ULIDs
 import kiit.db.Db
 import test.TestApp
 import test.setup.Address

@@ -12,8 +12,8 @@ mantra: Simplicity above all else
  */
 package test.setup
 
-import slatekit.common.utils.Random
-import slatekit.common.DateTime
+import kiit.common.utils.Random
+import kiit.common.DateTime
 import kiit.entities.*
 
 /**

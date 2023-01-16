@@ -19,12 +19,12 @@ import kiit.apis.AuthModes
 import kiit.apis.Verbs
 import kiit.apis.support.FileSupport
 import kiit.cache.*
-import slatekit.common.crypto.Encryptor
-import slatekit.common.log.Logger
-import slatekit.common.Sources
-import slatekit.context.Context
-import slatekit.results.Outcome
-import slatekit.results.builders.Outcomes
+import kiit.common.crypto.Encryptor
+import kiit.common.log.Logger
+import kiit.common.Sources
+import kiit.context.Context
+import kiit.results.Outcome
+import kiit.results.builders.Outcomes
 
 @Api(area = "infra", name = "cache", desc = "api info about the application and host",
         auth = AuthModes.KEYED, roles = ["admin"], verb = Verbs.AUTO, sources = [Sources.ALL])

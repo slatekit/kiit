@@ -1,6 +1,6 @@
 package kiit.serialization.deserializer
 
-import slatekit.common.crypto.Encryptor
+import kiit.common.crypto.Encryptor
 import kiit.meta.Conversion
 import kotlin.reflect.KType
 

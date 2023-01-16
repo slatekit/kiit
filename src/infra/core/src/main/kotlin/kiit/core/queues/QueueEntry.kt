@@ -13,7 +13,7 @@
 
 package kiit.core.queues
 
-import slatekit.common.DateTime
+import kiit.common.DateTime
 
 
 /**

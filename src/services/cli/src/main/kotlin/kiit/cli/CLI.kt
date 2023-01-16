@@ -16,14 +16,14 @@ package kiit.cli
 import java.nio.file.Paths
 import java.util.concurrent.atomic.AtomicReference
 import kotlinx.coroutines.runBlocking
-import slatekit.common.args.Args
-import slatekit.common.types.Content
-import slatekit.common.types.ContentType
-import slatekit.common.info.Folders
-import slatekit.common.info.Info
-import slatekit.common.utils.Loops.doUntil
-import slatekit.results.*
-import slatekit.results.builders.Tries
+import kiit.common.args.Args
+import kiit.common.types.Content
+import kiit.common.types.ContentType
+import kiit.common.info.Folders
+import kiit.common.info.Info
+import kiit.common.utils.Loops.doUntil
+import kiit.results.*
+import kiit.results.builders.Tries
 
 /**
  * Core CLI( Command line interface ) shell provider with life-cycle events,

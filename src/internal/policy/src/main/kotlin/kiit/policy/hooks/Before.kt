@@ -1,6 +1,6 @@
 package kiit.policy.hooks
 
-import slatekit.common.Ignore
+import kiit.common.Ignore
 
 /**
  * A "Hooks" based middle-ware that allows only handling before/after events

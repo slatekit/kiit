@@ -4,8 +4,8 @@ import slatekit.apis.*
 import slatekit.apis.AuthModes
 import slatekit.apis.Verbs
 import slatekit.apis.ApiBase
-import slatekit.context.Context
-import slatekit.common.Sources
+import kiit.context.Context
+import kiit.common.Sources
 import slatekit.connectors.entities.AppEntContext
 
 

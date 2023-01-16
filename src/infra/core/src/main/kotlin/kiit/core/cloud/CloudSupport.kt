@@ -13,7 +13,7 @@
 
 package kiit.core.cloud
 
-import slatekit.results.Try
+import kiit.results.Try
 
 interface CloudSupport {
 
@@ -45,10 +45,10 @@ interface CloudSupport {
     ): Try<T> {
         val result = try {
             val resultValue = call()
-            slatekit.results.Success(resultValue)
+            kiit.results.Success(resultValue)
         } catch (ex: Exception) {
             onError(source, action, tag, data, ex)
-            slatekit.results.Failure(ex, msg = "Error performing action $action on $source with tag $tag. $ex")
+            kiit.results.Failure(ex, msg = "Error performing action $action on $source with tag $tag. $ex")
         }
         return result
     }
@@ -81,10 +81,10 @@ interface CloudSupport {
     ): Try<T> {
         val result = try {
             val resultValue = call()
-            slatekit.results.Success(resultValue)
+            kiit.results.Success(resultValue)
         } catch (ex: Exception) {
             onError(source, action, tag, data, ex)
-            slatekit.results.Failure(ex, msg = "Error performing action $action on $source with tag $tag. $ex")
+            kiit.results.Failure(ex, msg = "Error performing action $action on $source with tag $tag. $ex")
         }
         return result
     }

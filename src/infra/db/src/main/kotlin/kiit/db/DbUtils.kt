@@ -13,17 +13,17 @@
 
 package kiit.db
 
-import slatekit.common.DateTime
-import slatekit.common.data.DbCon
+import kiit.common.DateTime
+import kiit.common.data.DbCon
 import java.sql.*
 import org.threeten.bp.*
-import slatekit.common.DateTimes
-import slatekit.common.EnumLike
-import slatekit.common.data.DataType
-import slatekit.common.data.Value
-import slatekit.common.ext.local
-import slatekit.common.ids.ULID
-import slatekit.common.ids.UPID
+import kiit.common.DateTimes
+import kiit.common.EnumLike
+import kiit.common.data.DataType
+import kiit.common.data.Value
+import kiit.common.ext.local
+import kiit.common.ids.ULID
+import kiit.common.ids.UPID
 import java.util.*
 
 object DbUtils {

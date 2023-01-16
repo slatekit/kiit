@@ -14,17 +14,17 @@ package kiit.serialization.deserializer
 
 import org.json.simple.JSONObject
 import org.json.simple.parser.JSONParser
-import slatekit.common.crypto.*
-import slatekit.common.values.Inputs
-import slatekit.common.values.Metadata
-import slatekit.requests.InputArgs
-import slatekit.requests.Request
+import kiit.common.crypto.*
+import kiit.common.values.Inputs
+import kiit.common.values.Metadata
+import kiit.requests.InputArgs
+import kiit.requests.Request
 import kiit.meta.Conversion
 import kiit.meta.JSONTransformer
 import kiit.meta.KTypes
 import kiit.meta.Reflector
-import slatekit.results.Err
-import slatekit.results.ExceptionErr
+import kiit.results.Err
+import kiit.results.ExceptionErr
 import kotlin.reflect.KClass
 import kotlin.reflect.KParameter
 import kotlin.reflect.KType
@@ -233,7 +233,7 @@ open class Deserializer(
                 data.getMap(paramName, clsKey.java, clsVal.java)
             }
             // Case 3: Smart String ( e.g. PhoneUS, Email, SSN, ZipCode )
-            // Refer to slatekit.common.types
+            // Refer to kiit.common.types
             else if (cls.supertypes.indexOf(KTypes.KSmartValueType) >= 0) {
                 deserializers.smart.deserialize(this.req, data, raw, paramName, tpe)
             }

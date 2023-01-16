@@ -1,6 +1,6 @@
 package kiit.core.queues
 
-import slatekit.results.Try
+import kiit.results.Try
 
 interface AsyncQueue<T> {
     val name: String
@@ -17,7 +17,7 @@ interface AsyncQueue<T> {
 
     suspend fun done(entry: QueueEntry<T>?): Try<QueueEntry<T>>
 
-    suspend fun done(entries: List<QueueEntry<T>>?):slatekit.results.Result<String, List<Pair<QueueEntry<T>, Throwable>>> {
+    suspend fun done(entries: List<QueueEntry<T>>?):kiit.results.Result<String, List<Pair<QueueEntry<T>, Throwable>>> {
         return completeAll(entries) { done(it) }
     }
 

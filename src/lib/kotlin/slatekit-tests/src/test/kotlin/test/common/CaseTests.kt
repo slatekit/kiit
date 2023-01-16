@@ -2,7 +2,7 @@ package test.common
 
 import org.junit.Assert
 import org.junit.Test
-import slatekit.utils.naming.*
+import kiit.utils.naming.*
 
 
 class CaseTests {

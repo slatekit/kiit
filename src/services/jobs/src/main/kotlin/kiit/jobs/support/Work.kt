@@ -2,21 +2,21 @@ package kiit.jobs.support
 
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.launch
-import slatekit.actors.*
-import slatekit.actors.Action
-import slatekit.actors.Status
-import slatekit.common.Identity
-import slatekit.common.NOTE
+import kiit.actors.*
+import kiit.actors.Action
+import kiit.actors.Status
+import kiit.common.Identity
+import kiit.common.NOTE
 import kiit.jobs.*
-import slatekit.results.Failure
-import slatekit.results.Success
-import slatekit.results.Try
-import slatekit.results.builders.Tries
-import slatekit.results.then
+import kiit.results.Failure
+import kiit.results.Success
+import kiit.results.Try
+import kiit.results.builders.Tries
+import kiit.results.then
 
 /**
  * Controls a Worker by :
- * 1. Moving its @see[slatekit.actors.Status] ( Running to Paused )
+ * 1. Moving its @see[kiit.actors.Status] ( Running to Paused )
  * 2. Scheduling resuming via a scheduled Resume command
  * 3. Notifying listeners of status changes
  * 4. Handling the running of a workers work method and checking for completion

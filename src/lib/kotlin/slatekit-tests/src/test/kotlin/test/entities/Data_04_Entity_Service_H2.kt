@@ -16,7 +16,7 @@ package test.entities
 import org.junit.Assert
 import org.junit.Before
 import org.junit.Test
-import slatekit.common.data.*
+import kiit.common.data.*
 import kiit.data.sql.vendors.ifNotExists
 import kiit.db.Db
 import kiit.entities.*

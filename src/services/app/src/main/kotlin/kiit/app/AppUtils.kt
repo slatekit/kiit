@@ -13,22 +13,22 @@
 
 package kiit.app
 
-import slatekit.context.AppContext
-import slatekit.common.args.Args
-import slatekit.common.args.ArgsCheck
-import slatekit.common.args.ArgsCheck.isExit
-import slatekit.common.args.ArgsCheck.isVersion
-import slatekit.common.args.ArgsSchema
-import slatekit.common.conf.*
-import slatekit.common.conf.Confs.CONFIG_DEFAULT_SUFFIX
-import slatekit.common.crypto.Encryptor
-import slatekit.common.envs.Envs
-import slatekit.common.info.About
-import slatekit.common.io.Alias
-import slatekit.common.io.Uri
-import slatekit.common.log.Logs
-import slatekit.results.*
-import slatekit.results.builders.Outcomes
+import kiit.context.AppContext
+import kiit.common.args.Args
+import kiit.common.args.ArgsCheck
+import kiit.common.args.ArgsCheck.isExit
+import kiit.common.args.ArgsCheck.isVersion
+import kiit.common.args.ArgsSchema
+import kiit.common.conf.*
+import kiit.common.conf.Confs.CONFIG_DEFAULT_SUFFIX
+import kiit.common.crypto.Encryptor
+import kiit.common.envs.Envs
+import kiit.common.info.About
+import kiit.common.io.Alias
+import kiit.common.io.Uri
+import kiit.common.log.Logs
+import kiit.results.*
+import kiit.results.builders.Outcomes
 import java.io.File
 
 object AppUtils {

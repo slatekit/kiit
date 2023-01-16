@@ -3,7 +3,7 @@ package test.setup
 import slatekit.apis.Api
 import slatekit.apis.Action
 import slatekit.apis.AuthModes
-import slatekit.common.auth.Roles
+import kiit.common.auth.Roles
 
 /**
  * REST Sample

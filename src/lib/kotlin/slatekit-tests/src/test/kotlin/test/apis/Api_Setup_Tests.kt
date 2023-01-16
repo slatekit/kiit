@@ -7,15 +7,15 @@ import slatekit.apis.ApiServer
 import slatekit.apis.Verb
 import slatekit.apis.routes.Api
 import slatekit.apis.SetupType
-import slatekit.context.AppContext
-import slatekit.common.data.Vendor
+import kiit.context.AppContext
+import kiit.common.data.Vendor
 import kiit.entities.EntityLongId
 import kiit.entities.EntityService
 import kiit.entities.EntityServices
 import slatekit.integration.apis.InfoApi
 import slatekit.integration.apis.VersionApi
 //import slatekit.orm.orm
-import slatekit.results.getOrElse
+import kiit.results.getOrElse
 import test.TestApp
 import test.setup.*
 

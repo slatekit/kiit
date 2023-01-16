@@ -1,9 +1,9 @@
 package kiit.comms.common
 
-import slatekit.common.values.Vars
-import slatekit.utils.templates.Templates
-import slatekit.results.Outcome
-import slatekit.results.builders.Outcomes
+import kiit.common.values.Vars
+import kiit.utils.templates.Templates
+import kiit.results.Outcome
+import kiit.results.builders.Outcomes
 
 interface TemplateSender<T> : Sender<T> {
     val templates: Templates?

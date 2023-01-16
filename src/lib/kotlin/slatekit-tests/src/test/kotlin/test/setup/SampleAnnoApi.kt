@@ -2,18 +2,18 @@ package test.setup
 
 import slatekit.apis.*
 import slatekit.apis.AuthModes
-import slatekit.common.*
-import slatekit.common.auth.Roles
-import slatekit.common.crypto.EncDouble
-import slatekit.common.crypto.EncInt
-import slatekit.common.crypto.EncLong
-import slatekit.common.crypto.EncString
-import slatekit.requests.Request
-import slatekit.utils.smartvalues.Email
-import slatekit.utils.smartvalues.PhoneUS
+import kiit.common.*
+import kiit.common.auth.Roles
+import kiit.common.crypto.EncDouble
+import kiit.common.crypto.EncInt
+import kiit.common.crypto.EncLong
+import kiit.common.crypto.EncString
+import kiit.requests.Request
+import kiit.utils.smartvalues.Email
+import kiit.utils.smartvalues.PhoneUS
 import slatekit.connectors.entities.AppEntContext
-import slatekit.results.Notice
-import slatekit.results.Success
+import kiit.results.Notice
+import kiit.results.Success
 
 
 @Api(area = "app", name = "tests", desc = "sample to test features of Slate Kit APIs", auth = AuthModes.TOKEN, roles= ["admin"])

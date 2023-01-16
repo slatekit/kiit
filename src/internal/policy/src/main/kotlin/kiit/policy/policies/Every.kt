@@ -1,9 +1,9 @@
 package kiit.policy.policies
 
 import java.util.concurrent.atomic.AtomicLong
-import slatekit.common.log.Logger
+import kiit.common.log.Logger
 import kiit.policy.Policy
-import slatekit.results.Outcome
+import kiit.results.Outcome
 
 /**
  * Policy to call the operation supplied after every x calls

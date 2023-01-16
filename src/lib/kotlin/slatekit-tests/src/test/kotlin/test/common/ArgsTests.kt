@@ -19,11 +19,11 @@ package test.common
 
 import org.junit.Assert
 import org.junit.Test
-import slatekit.common.args.Args
-import slatekit.common.args.ArgsCheck
-import slatekit.common.args.ArgsSchema
-import slatekit.results.Try
-import slatekit.results.getOrElse
+import kiit.common.args.Args
+import kiit.common.args.ArgsCheck
+import kiit.common.args.ArgsSchema
+import kiit.results.Try
+import kiit.results.getOrElse
 
 
 class ArgsTests {

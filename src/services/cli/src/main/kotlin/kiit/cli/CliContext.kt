@@ -1,10 +1,10 @@
 package kiit.cli
 
-import slatekit.common.types.Content
-import slatekit.common.types.ContentType
-import slatekit.common.info.Info
-import slatekit.common.io.IO
-import slatekit.common.io.Readln
+import kiit.common.types.Content
+import kiit.common.types.ContentType
+import kiit.common.info.Info
+import kiit.common.io.IO
+import kiit.common.io.Readln
 
 class CliContext(
     val info: Info,

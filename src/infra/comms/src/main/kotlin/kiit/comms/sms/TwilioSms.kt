@@ -14,13 +14,13 @@
 package kiit.comms.sms
 
 import okhttp3.Request
-import slatekit.common.info.ApiLogin
-import slatekit.utils.templates.Templates
-import slatekit.common.types.Countries
-import slatekit.common.types.Country
-import slatekit.http.HttpRPC
-import slatekit.results.*
-import slatekit.results.builders.Outcomes
+import kiit.common.info.ApiLogin
+import kiit.utils.templates.Templates
+import kiit.common.types.Countries
+import kiit.common.types.Country
+import kiit.http.HttpRPC
+import kiit.results.*
+import kiit.results.builders.Outcomes
 
 /**
  * simple service to send sms messages using Twilio with support for templates and
@@ -57,7 +57,7 @@ class TwilioSms(
      * @param apiKey
      */
     constructor(apiKey: ApiLogin, templates: Templates? = null, countries: List<Country>? = null) :
-            this(apiKey.key, apiKey.pass, apiKey.account, templates, countries ?: listOf(slatekit.common.types.Countries.usa))
+            this(apiKey.key, apiKey.pass, apiKey.account, templates, countries ?: listOf(kiit.common.types.Countries.usa))
 
     /**
      * Validates the model supplied

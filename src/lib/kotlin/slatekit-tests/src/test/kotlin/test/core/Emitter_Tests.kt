@@ -15,7 +15,7 @@ package test
 import kotlinx.coroutines.runBlocking
 import org.junit.Assert
 import org.junit.Test
-import slatekit.utils.events.Emitter
+import kiit.utils.events.Emitter
 
 
 class Emitter_Tests {

@@ -1,10 +1,10 @@
 package slatekit.telemetry
 
-import slatekit.utils.events.Event
-import slatekit.results.*
+import kiit.utils.events.Event
+import kiit.results.*
 
 /**
- * Handles the various success / failures statuses represented in the @see[slatekit.results.Status]
+ * Handles the various success / failures statuses represented in the @see[kiit.results.Status]
  */
 open class Events<TRequest, TResponse, TFailure>(
     override val tags: List<Tag> = listOf(),

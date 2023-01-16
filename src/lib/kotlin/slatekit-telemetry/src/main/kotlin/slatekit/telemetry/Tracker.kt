@@ -1,6 +1,6 @@
 package slatekit.telemetry
 
-import slatekit.common.DateTime
+import kiit.common.DateTime
 import java.util.concurrent.atomic.AtomicInteger
 import java.util.concurrent.atomic.AtomicLong
 import java.util.concurrent.atomic.AtomicReference

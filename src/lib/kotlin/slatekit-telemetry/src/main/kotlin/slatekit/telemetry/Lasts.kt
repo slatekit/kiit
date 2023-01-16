@@ -12,8 +12,8 @@ mantra: Simplicity above all else
  */
 package slatekit.telemetry
 
-import slatekit.common.Identity
-import slatekit.results.Failure
+import kiit.common.Identity
+import kiit.results.Failure
 import java.util.concurrent.atomic.AtomicReference
 
 /**

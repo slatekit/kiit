@@ -1,11 +1,11 @@
 package kiit.jobs
 
-import slatekit.common.DateTime
-import slatekit.common.Identity
-import slatekit.actors.Status
+import kiit.common.DateTime
+import kiit.common.Identity
+import kiit.actors.Status
 
 /**
- * @param id    : Identity of the job/worker @see[slatekit.common.Identity]
+ * @param id    : Identity of the job/worker @see[kiit.common.Identity]
  * @param name  : Name of the event ( e.g. STATE_CHANGED )
  * @param source: Name of the source either "job" or "worker"
  * @param status: Status of the worker

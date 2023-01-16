@@ -15,13 +15,13 @@ package kiit.apis.core
 
 import org.json.simple.JSONObject
 import kiit.apis.support.JsonSupport
-import slatekit.common.*
-import slatekit.common.crypto.Encryptor
+import kiit.common.*
+import kiit.common.crypto.Encryptor
 // import java.time.*
 import org.threeten.bp.*
-import slatekit.common.convert.Conversions
-import slatekit.common.values.Inputs
-import slatekit.common.values.InputsUpdateable
+import kiit.common.convert.Conversions
+import kiit.common.values.Inputs
+import kiit.common.values.InputsUpdateable
 
 /**
  * Used to represent a request that originate from a json file.

@@ -1,22 +1,22 @@
 package kiit.jobs.support
 
-import slatekit.actors.Action
-import slatekit.actors.Message
-import slatekit.common.DateTime
-import slatekit.utils.events.Event
-import slatekit.common.Identity
-import slatekit.actors.Status
-import slatekit.common.ext.toStringMySql
-import slatekit.common.ids.ULIDs
-import slatekit.common.log.LogLevel
+import kiit.actors.Action
+import kiit.actors.Message
+import kiit.common.DateTime
+import kiit.utils.events.Event
+import kiit.common.Identity
+import kiit.actors.Status
+import kiit.common.ext.toStringMySql
+import kiit.common.ids.ULIDs
+import kiit.common.log.LogLevel
 import kiit.jobs.Manager
 import kiit.jobs.Context
 import kiit.jobs.Task
 import kiit.jobs.WorkerContext
-import slatekit.results.Codes
+import kiit.results.Codes
 
 /**
- * Builds events using the @see[slatekit.common.Event] model
+ * Builds events using the @see[kiit.common.Event] model
  * to represent either a job or worker's current state.
  * This event model is used for structured logging.
  *
@@ -122,7 +122,7 @@ object Events {
     }
 
 
-    private fun Status.toCode(): slatekit.results.Status {
+    private fun Status.toCode(): kiit.results.Status {
         return when (this) {
             is Status.InActive -> Codes.INACTIVE
             is Status.Started -> Codes.STARTING

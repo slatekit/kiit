@@ -2,12 +2,12 @@ package kiit.meta
 
 import org.json.simple.JSONArray
 import org.json.simple.JSONObject
-import slatekit.common.convert.Conversions
-import slatekit.requests.Request
-import slatekit.requests.RequestSupport
-import slatekit.utils.smartvalues.SmartCreation
-import slatekit.utils.smartvalues.SmartValue
-import slatekit.common.types.ContentFile
+import kiit.common.convert.Conversions
+import kiit.requests.Request
+import kiit.requests.RequestSupport
+import kiit.utils.smartvalues.SmartCreation
+import kiit.utils.smartvalues.SmartValue
+import kiit.common.types.ContentFile
 import kotlin.reflect.KClass
 import kotlin.reflect.KType
 import kotlin.reflect.full.companionObjectInstance

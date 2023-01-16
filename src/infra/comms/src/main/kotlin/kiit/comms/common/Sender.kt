@@ -2,10 +2,10 @@ package kiit.comms.common
 
 import okhttp3.Request
 import okhttp3.Response
-import slatekit.http.HttpRPC
-import slatekit.http.awaitHttpOutcome
-import slatekit.results.*
-import slatekit.results.builders.Outcomes
+import kiit.http.HttpRPC
+import kiit.http.awaitHttpOutcome
+import kiit.results.*
+import kiit.results.builders.Outcomes
 
 interface Sender<T> {
 

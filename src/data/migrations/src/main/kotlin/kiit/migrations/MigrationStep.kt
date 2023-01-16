@@ -1,7 +1,7 @@
 package kiit.migrations
 
-import slatekit.common.data.IDb
-import slatekit.results.Outcome
+import kiit.common.data.IDb
+import kiit.results.Outcome
 
 interface MigrationStep {
     val type: MigrationType

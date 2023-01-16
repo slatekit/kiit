@@ -4,12 +4,12 @@ import kiit.apis.*
 import kiit.apis.routes.Api
 import kiit.apis.support.Authenticator
 import kiit.cli.CliSettings
-import slatekit.context.Context
-import slatekit.common.types.*
-import slatekit.common.info.ApiKey
-import slatekit.common.types.ContentType
+import kiit.context.Context
+import kiit.common.types.*
+import kiit.common.info.ApiKey
+import kiit.common.types.ContentType
 import slatekit.connectors.cli.CliApi
-import slatekit.results.Try
+import kiit.results.Try
 import kiit.serialization.Serialization
 import ${app.package}.apis.SampleAPI
 

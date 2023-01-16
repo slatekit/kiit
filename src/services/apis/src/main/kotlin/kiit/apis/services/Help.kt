@@ -18,11 +18,11 @@ import kiit.apis.core.Part
 import kiit.apis.routes.Routes
 import kiit.apis.tools.docs.Doc
 import kiit.apis.tools.docs.DocUtils
-import slatekit.common.types.Content
-import slatekit.common.types.Contents
-import slatekit.requests.Request
-import slatekit.results.*
-import slatekit.results.builders.Outcomes
+import kiit.common.types.Content
+import kiit.common.types.Contents
+import kiit.requests.Request
+import kiit.results.*
+import kiit.results.builders.Outcomes
 
 
 open class Help(val host: ApiServer, val routes: Routes, val docKey: String?, val docBuilder: () -> Doc) {

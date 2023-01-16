@@ -3,7 +3,7 @@ package kiit.apis.tools.code
 import kiit.apis.Access
 import kiit.apis.routes.Action
 import kiit.apis.routes.Api
-import slatekit.common.Source
+import kiit.common.Source
 
 class CodeRules(val settings: CodeGenSettings) {
 

@@ -1,9 +1,9 @@
 package kiit.app
 
-import slatekit.common.args.Args
-import slatekit.common.conf.Conf
-import slatekit.common.envs.Env
-import slatekit.common.log.LogLevel
+import kiit.common.args.Args
+import kiit.common.conf.Conf
+import kiit.common.envs.Env
+import kiit.common.log.LogLevel
 
 /**
  * Handles getting values/settings from either command line args or config

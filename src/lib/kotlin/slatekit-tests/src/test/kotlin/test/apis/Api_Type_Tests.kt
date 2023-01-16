@@ -18,7 +18,7 @@ import org.junit.Test
 import slatekit.apis.*
 import slatekit.apis.routes.Api
 import slatekit.apis.SetupType
-import slatekit.results.getOrElse
+import kiit.results.getOrElse
 import test.setup.SampleTypes3Api
 import test.setup.MyEncryptor
 import test.setup.StatusEnum

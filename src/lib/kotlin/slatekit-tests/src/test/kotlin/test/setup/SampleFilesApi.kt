@@ -2,10 +2,10 @@ package test.setup
 
 import slatekit.apis.Api
 import slatekit.apis.Action
-import slatekit.common.types.Content
-import slatekit.common.types.ContentFile
-import slatekit.common.types.ContentFiles
-import slatekit.common.types.Contents
+import kiit.common.types.Content
+import kiit.common.types.ContentFile
+import kiit.common.types.ContentFiles
+import kiit.common.types.Contents
 
 
 @Api(area = "samples", name = "files", desc = "sample api to test other features")

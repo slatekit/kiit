@@ -2,10 +2,10 @@ package test.common
 
 import org.junit.Assert
 import org.junit.Test
-import slatekit.common.ext.*
-import slatekit.common.repeatWith
-import slatekit.common.utils.Random
-import slatekit.common.utils.StringSearch
+import kiit.common.ext.*
+import kiit.common.repeatWith
+import kiit.common.utils.Random
+import kiit.common.utils.StringSearch
 
 
 class StringTests {

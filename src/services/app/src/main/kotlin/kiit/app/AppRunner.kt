@@ -13,16 +13,16 @@
 
 package kiit.app
 
-import slatekit.common.args.Args
-import slatekit.common.args.ArgsSchema
-import slatekit.context.Context
-import slatekit.common.crypto.Encryptor
-import slatekit.common.envs.Envs
-import slatekit.common.info.About
-import slatekit.common.io.Alias
-import slatekit.common.log.Logs
-import slatekit.results.*
-import slatekit.results.builders.Tries
+import kiit.common.args.Args
+import kiit.common.args.ArgsSchema
+import kiit.context.Context
+import kiit.common.crypto.Encryptor
+import kiit.common.envs.Envs
+import kiit.common.info.About
+import kiit.common.io.Alias
+import kiit.common.log.Logs
+import kiit.results.*
+import kiit.results.builders.Tries
 
 object AppRunner {
 

@@ -3,11 +3,11 @@ package kiit.apis.rules
 import kiit.apis.ApiRequest
 import kiit.apis.Verb
 import kiit.apis.Verbs
-import slatekit.common.Source
-import slatekit.requests.Request
-import slatekit.results.Outcome
-import slatekit.results.builders.Outcomes
-import slatekit.results.flatMap
+import kiit.common.Source
+import kiit.requests.Request
+import kiit.results.Outcome
+import kiit.results.builders.Outcomes
+import kiit.results.flatMap
 
 object ProtoRule : Rule {
 

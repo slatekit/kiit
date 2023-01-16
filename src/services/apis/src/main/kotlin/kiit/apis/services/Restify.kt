@@ -3,7 +3,7 @@ package kiit.apis.services
 import kiit.apis.ApiRequest
 import kiit.apis.ApiServer
 import kiit.apis.support.RewriteSupport
-import slatekit.common.checks.Check
+import kiit.common.checks.Check
 
 open class Restify : Rewriter, RewriteSupport {
 

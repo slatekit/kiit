@@ -14,15 +14,15 @@
 package test.apis.samples
 
 import slatekit.apis.*
-import slatekit.common.*
-import slatekit.common.types.ContentFile
-import slatekit.requests.Request
-import slatekit.common.checks.Check
-import slatekit.common.values.Metadata
-import slatekit.context.Context
-import slatekit.results.Outcome
-import slatekit.results.Success
-import slatekit.results.builders.Outcomes
+import kiit.common.*
+import kiit.common.types.ContentFile
+import kiit.requests.Request
+import kiit.common.checks.Check
+import kiit.common.values.Metadata
+import kiit.context.Context
+import kiit.results.Outcome
+import kiit.results.Success
+import kiit.results.builders.Outcomes
 
 @Api(area = "samples", name = "core", desc = "api to access and manage users 3", auth = AuthModes.NONE)
 class Sample_API_1_Core(context: Context) {

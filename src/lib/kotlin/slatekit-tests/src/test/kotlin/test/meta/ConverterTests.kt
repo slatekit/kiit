@@ -4,9 +4,9 @@ import org.json.simple.JSONObject
 import org.json.simple.parser.JSONParser
 import org.junit.Assert
 import org.junit.Test
-import slatekit.common.convert.Converter
-import slatekit.common.DateTimes
-import slatekit.common.ext.toStringUtc
+import kiit.common.convert.Converter
+import kiit.common.DateTimes
+import kiit.common.ext.toStringUtc
 import kiit.meta.InputsJSON
 import test.setup.Movie
 import kotlin.reflect.full.createType

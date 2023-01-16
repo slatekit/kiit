@@ -1,6 +1,6 @@
 package kiit.data.sql
 
-import slatekit.common.data.*
+import kiit.common.data.*
 import kiit.data.sql.Dialect
 import kiit.query.*
 
@@ -40,7 +40,7 @@ interface Builder {
 
 
     /**
-     * Last step of construction, builds the @see[slatekit.common.data.Command] containing
+     * Last step of construction, builds the @see[kiit.common.data.Command] containing
      * 1. the sql statement as text e.g. "select * from `user` where `id` = 1
      * 2. the values if used prepared statement mode ( e.g. `id`, 1 )
      * @param mode: Whether to build full sql or prepared statements

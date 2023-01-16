@@ -13,14 +13,14 @@
 
 package kiit.db
 
-import slatekit.common.values.Record
-import slatekit.common.conf.Confs
-import slatekit.common.data.*
+import kiit.common.values.Record
+import kiit.common.conf.Confs
+import kiit.common.data.*
 import java.sql.Connection
 import java.sql.PreparedStatement
 import java.sql.ResultSet
 import java.sql.Statement
-import slatekit.common.repeatWith
+import kiit.common.repeatWith
 import kiit.db.DbUtils.executeCall
 import kiit.db.DbUtils.executeCon
 import kiit.db.DbUtils.executePrep

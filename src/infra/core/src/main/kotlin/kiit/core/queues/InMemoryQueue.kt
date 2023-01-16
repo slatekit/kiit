@@ -13,15 +13,15 @@
 
 package kiit.core.queues
 
-import slatekit.common.*
-import slatekit.common.utils.Random.uuid
-import slatekit.common.io.Uris
-import slatekit.common.utils.Random
-import slatekit.results.Codes
-import slatekit.results.Failure
-import slatekit.results.Success
-import slatekit.results.Try
-import slatekit.results.builders.Tries
+import kiit.common.*
+import kiit.common.utils.Random.uuid
+import kiit.common.io.Uris
+import kiit.common.utils.Random
+import kiit.results.Codes
+import kiit.results.Failure
+import kiit.results.Success
+import kiit.results.Try
+import kiit.results.builders.Tries
 import java.io.File
 import java.util.concurrent.LinkedBlockingQueue
 
@@ -148,8 +148,8 @@ class InMemoryQueue<T>(
             val value = converter.decode(content)
             value?.let {
                 send(it, tagName, tagValue)
-            } ?: slatekit.results.Failure(Exception("Invalid file path: $fileNameLocal"))
-        } ?: slatekit.results.Failure(Exception("Invalid file path: $fileNameLocal"))
+            } ?: kiit.results.Failure(Exception("Invalid file path: $fileNameLocal"))
+        } ?: kiit.results.Failure(Exception("Invalid file path: $fileNameLocal"))
     }
 
     /**

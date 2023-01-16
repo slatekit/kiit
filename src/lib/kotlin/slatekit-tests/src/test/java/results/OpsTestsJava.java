@@ -2,11 +2,11 @@
 import kotlin.Unit;
 import org.junit.Assert;
 import org.junit.Test;
-import slatekit.results.*;
+import kiit.results.*;
 
 /*
-import static slatekit.results.Builder.DefaultImpls.success;
-import static slatekit.results.builders.Results.INSTANCE.success;
+import static kiit.results.Builder.DefaultImpls.success;
+import static kiit.results.builders.Results.INSTANCE.success;
 
 public class OpsTestsJava  {
 

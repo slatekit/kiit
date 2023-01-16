@@ -18,18 +18,18 @@ import kiit.apis.Action
 import kiit.apis.AuthModes
 import kiit.apis.Verbs
 import kiit.apis.support.FileSupport
-import slatekit.common.Sources
-import slatekit.common.info.ApiKey
-import slatekit.common.info.ApiLogin
-import slatekit.common.info.Credentials
-import slatekit.common.conf.Confs
-import slatekit.common.conf.Config
-import slatekit.common.data.DbCon
-import slatekit.common.data.DbConString
-import slatekit.common.data.Vendor.MySql
-import slatekit.common.crypto.Encryptor
-import slatekit.common.log.Logger
-import slatekit.context.Context
+import kiit.common.Sources
+import kiit.common.info.ApiKey
+import kiit.common.info.ApiLogin
+import kiit.common.info.Credentials
+import kiit.common.conf.Confs
+import kiit.common.conf.Config
+import kiit.common.data.DbCon
+import kiit.common.data.DbConString
+import kiit.common.data.Vendor.MySql
+import kiit.common.crypto.Encryptor
+import kiit.common.log.Logger
+import kiit.context.Context
 
 @Api(area = "infra", name = "configs", desc = "api info about the application and host",
         auth = AuthModes.KEYED, roles = ["admin"], verb = Verbs.AUTO, sources = [Sources.CLI])
@@ -41,7 +41,7 @@ class ConfigApi(override val context: Context) : FileSupport {
     @Action(desc = "creates an api key in the directory")
     fun createApiKey(rootDir: String, name: String, key: String, roles: String): ApiKey {
         val apiKey = ApiKey(name, key, roles)
-        slatekit.common.conf.Confs.createApiKey(rootDir, name, apiKey, context.enc)
+        kiit.common.conf.Confs.createApiKey(rootDir, name, apiKey, context.enc)
         return apiKey
     }
 
@@ -53,9 +53,9 @@ class ConfigApi(override val context: Context) : FileSupport {
     }
 
     @Action(desc = "creates db login in the directory")
-    fun createDbConMySql(rootDir: String, name: String, url: String, user: String, pass: String): slatekit.common.data.DbConString {
+    fun createDbConMySql(rootDir: String, name: String, url: String, user: String, pass: String): kiit.common.data.DbConString {
         val dbCon = DbConString(MySql.driver, url, user, pass)
-        slatekit.common.conf.Confs.createDbCon(rootDir, name, dbCon, context.enc)
+        kiit.common.conf.Confs.createDbCon(rootDir, name, dbCon, context.enc)
         return dbCon
     }
 

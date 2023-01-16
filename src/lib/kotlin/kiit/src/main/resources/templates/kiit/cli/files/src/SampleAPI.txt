@@ -2,18 +2,18 @@ package ${app.package}.apis
 
 import kiit.apis.*
 import kiit.apis.core.Patch
-import slatekit.common.DateTime
-import slatekit.common.DateTimes
-import slatekit.requests.Request
-import slatekit.context.Context
-import slatekit.common.Sources
-import slatekit.common.ext.toId
-import slatekit.common.ext.toStringUtc
-import slatekit.common.info.About
-import slatekit.common.info.Build
-import slatekit.common.types.Doc
-import slatekit.results.Outcome
-import slatekit.results.builders.Outcomes
+import kiit.common.DateTime
+import kiit.common.DateTimes
+import kiit.requests.Request
+import kiit.context.Context
+import kiit.common.Sources
+import kiit.common.ext.toId
+import kiit.common.ext.toStringUtc
+import kiit.common.info.About
+import kiit.common.info.Build
+import kiit.common.types.Doc
+import kiit.results.Outcome
+import kiit.results.builders.Outcomes
 import ${app.package}.models.SampleMovie
 
 

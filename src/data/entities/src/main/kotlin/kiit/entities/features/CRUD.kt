@@ -3,8 +3,8 @@ package kiit.entities.features
 import kiit.entities.Entity
 import kiit.entities.core.EntityOps
 import kiit.entities.EntityOptions
-import slatekit.results.Try
-import slatekit.results.builders.Tries
+import kiit.results.Try
+import kiit.results.builders.Tries
 
 interface CRUD<TId, T> : EntityOps<TId, T>,
         Creates<TId, T>,

@@ -8,12 +8,12 @@ import kiit.apis.Verbs
 import kiit.apis.routes.Action
 import kiit.apis.routes.Api
 import kiit.apis.tools.code.builders.CodeBuilder
-import slatekit.common.*
-import slatekit.common.ext.orElse
-import slatekit.common.io.Files
-import slatekit.common.io.Uris
-import slatekit.requests.Request
-import slatekit.common.utils.Props
+import kiit.common.*
+import kiit.common.ext.orElse
+import kiit.common.io.Files
+import kiit.common.io.Uris
+import kiit.requests.Request
+import kiit.common.utils.Props
 
 class CodeGen(val settings: CodeGenSettings, val builder:CodeBuilder) {
 

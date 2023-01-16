@@ -5,8 +5,8 @@ import io.ktor.http.content.PartData
 import io.ktor.request.*
 import org.json.simple.JSONObject
 import org.json.simple.parser.JSONParser
-import slatekit.common.ext.toId
-import slatekit.common.types.*
+import kiit.common.ext.toId
+import kiit.common.types.*
 import java.io.BufferedInputStream
 import java.io.ByteArrayOutputStream
 import java.io.InputStream

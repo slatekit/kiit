@@ -14,7 +14,7 @@
 package slatekit.integration.common
 
 import kiit.apis.Action
-import slatekit.common.Ignore
+import kiit.common.Ignore
 import kiit.entities.Entities
 import kiit.entities.Entity
 import kiit.entities.EntityService

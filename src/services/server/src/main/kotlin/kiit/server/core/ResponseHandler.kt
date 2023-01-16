@@ -2,11 +2,11 @@ package kiit.server.core
 
 import io.ktor.application.ApplicationCall
 import io.ktor.http.HttpStatusCode
-import slatekit.common.types.Content
-import slatekit.common.types.ContentData
-import slatekit.common.types.ContentFile
-import slatekit.common.types.ContentText
-import slatekit.requests.Response
+import kiit.common.types.Content
+import kiit.common.types.ContentData
+import kiit.common.types.ContentFile
+import kiit.common.types.ContentText
+import kiit.requests.Response
 
 interface ResponseHandler {
     /**

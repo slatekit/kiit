@@ -50,10 +50,10 @@ dependencies {
 
     // /* <slatekit_local>
     if( kiitSetupViaBinary ) {
-        compile "com.slatekit:slatekit-results:$kiit_version"
-        compile "com.slatekit:slatekit-common:$kiit_version"
-        compile "com.slatekit:slatekit-context:$kiit_version"
-        compile "com.slatekit:slatekit-requests:$kiit_version"
+        compile "com.slatekit:kiit-results:$kiit_version"
+        compile "com.slatekit:kiit-common:$kiit_version"
+        compile "com.slatekit:kiit-context:$kiit_version"
+        compile "com.slatekit:kiit-requests:$kiit_version"
         compile "dev.kiit:meta:$kiit_version"
         compile "com.slatekit:kiit-query:$kiit_version"
         compile "dev.kiit:cli:$kiit_version"
@@ -68,10 +68,10 @@ dependencies {
         compile "com.slatekit:connectors-entities:$kiit_version"
     } else {
         // */
-    compile project(":slatekit-result")
-    compile project(":slatekit-common")
-    compile project(":slatekit-context")
-    compile project(":slatekit-requests")
+    compile project(":kiit-result")
+    compile project(":kiit-common")
+    compile project(":kiit-context")
+    compile project(":kiit-requests")
     compile project(":kiit-meta")
     compile project(":kiit-query")
     compile project(":kiit-cli")

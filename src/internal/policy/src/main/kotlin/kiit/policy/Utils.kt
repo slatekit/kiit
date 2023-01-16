@@ -1,11 +1,11 @@
 package kiit.policy
 
-import slatekit.common.Identity
+import kiit.common.Identity
 import kiit.policy.policies.*
-import slatekit.results.Outcome
-import slatekit.results.Status
-import slatekit.results.Try
-import slatekit.results.builders.Outcomes
+import kiit.results.Outcome
+import kiit.results.Status
+import kiit.results.Try
+import kiit.results.builders.Outcomes
 import slatekit.telemetry.Counters
 
 /**

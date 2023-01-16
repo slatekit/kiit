@@ -1,6 +1,6 @@
 package kiit.policy
 
-import slatekit.results.Outcome
+import kiit.results.Outcome
 
 /**
  * @param I : Input type

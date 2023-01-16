@@ -1,11 +1,11 @@
 package kiit.data.encoders
 
 
-import slatekit.common.values.Record
-import slatekit.common.data.DataType
-import slatekit.common.data.Encoding
-import slatekit.common.data.Value
-import slatekit.common.ext.orElse
+import kiit.common.values.Record
+import kiit.common.data.DataType
+import kiit.common.data.Encoding
+import kiit.common.data.Value
+import kiit.common.ext.orElse
 import kiit.data.Consts
 
 /**

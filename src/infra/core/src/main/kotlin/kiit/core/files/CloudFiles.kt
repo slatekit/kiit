@@ -13,12 +13,12 @@
 
 package kiit.core.files
 
-import slatekit.common.Provider
-import slatekit.common.io.Uris
+import kiit.common.Provider
+import kiit.common.io.Uris
 import kiit.core.cloud.CloudSupport
 import kiit.core.common.FileUtils
-import slatekit.results.Try
-import slatekit.results.then
+import kiit.results.Try
+import kiit.results.then
 import java.io.File
 
 /**

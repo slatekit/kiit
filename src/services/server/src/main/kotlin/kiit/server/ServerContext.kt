@@ -2,10 +2,10 @@ package kiit.server
 
 import kiit.apis.support.Authenticator
 import slatekit.telemetry.Diagnostics
-import slatekit.common.crypto.Encryptor
-import slatekit.common.log.Logger
+import kiit.common.crypto.Encryptor
+import kiit.common.log.Logger
 import slatekit.telemetry.MetricsLite
-import slatekit.requests.Request
+import kiit.requests.Request
 import kiit.serialization.deserializer.Deserializer
 
 data class ServerContext(

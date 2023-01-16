@@ -18,13 +18,13 @@ import kiit.apis.Action
 import kiit.apis.AuthModes
 import kiit.apis.Verbs
 import kiit.apis.support.FileSupport
-import slatekit.context.Context
-import slatekit.common.Sources
-import slatekit.common.types.ContentFile
-import slatekit.common.crypto.Encryptor
-import slatekit.common.log.Logger
+import kiit.context.Context
+import kiit.common.Sources
+import kiit.common.types.ContentFile
+import kiit.common.crypto.Encryptor
+import kiit.common.log.Logger
 import kiit.core.queues.AsyncQueue
-import slatekit.results.Try
+import kiit.results.Try
 
 @Api(area = "cloud", name = "queues", desc = "api info about the application and host",
         auth = AuthModes.KEYED, roles = ["admin"], verb = Verbs.AUTO, sources = [Sources.ALL])

@@ -1,6 +1,6 @@
 package kiit.apis
 
-import slatekit.results.Outcome
+import kiit.results.Outcome
 
 
 interface Middleware {

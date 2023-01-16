@@ -1,12 +1,12 @@
 package kiit.entities.features
 
-import slatekit.common.data.DataAction
+import kiit.common.data.DataAction
 import kiit.entities.Entity
 import kiit.entities.EntityUpdatable
 import kiit.entities.core.EntityOps
 import kiit.entities.EntityOptions
-import slatekit.results.Try
-import slatekit.results.builders.Tries
+import kiit.results.Try
+import kiit.results.builders.Tries
 
 interface Creates<TId, T> : EntityOps<TId, T> where TId : kotlin.Comparable<TId>, T : Entity<TId> {
 

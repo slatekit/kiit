@@ -5,8 +5,8 @@ import kiit.entities.Entity
 import kiit.entities.core.EntityOps
 import kiit.query.Op
 import kiit.query.Delete
-import slatekit.results.Try
-import slatekit.results.builders.Tries
+import kiit.results.Try
+import kiit.results.builders.Tries
 
 interface Deletes<TId, T> : EntityOps<TId, T> where TId : kotlin.Comparable<TId>, T : Entity<TId> {
 

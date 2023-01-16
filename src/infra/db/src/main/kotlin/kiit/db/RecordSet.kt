@@ -13,12 +13,12 @@
 
 package kiit.db
 
-import slatekit.common.DateTime
-import slatekit.common.values.Record
+import kiit.common.DateTime
+import kiit.common.values.Record
 import java.sql.ResultSet
 import org.threeten.bp.*
-import slatekit.common.DateTimes
-import slatekit.common.ext.atZone
+import kiit.common.DateTimes
+import kiit.common.ext.atZone
 
 class RecordSet(private val rs: ResultSet) : Record {
 

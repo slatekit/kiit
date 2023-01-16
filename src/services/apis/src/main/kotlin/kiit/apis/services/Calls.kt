@@ -16,11 +16,11 @@ package kiit.apis.services
 import kiit.apis.ApiRequest
 import kiit.apis.core.Target
 import kiit.apis.routes.Action
-import slatekit.common.values.Inputs
-import slatekit.requests.Request
+import kiit.common.values.Inputs
+import kiit.requests.Request
 import kiit.meta.KTypes
-import slatekit.results.*
-import slatekit.results.builders.Outcomes
+import kiit.results.*
+import kiit.results.builders.Outcomes
 import kotlin.reflect.KClass
 
 object Calls {

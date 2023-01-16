@@ -1,7 +1,7 @@
 package kiit.apis.tools.code
 
 import kiit.apis.ApiServer
-import slatekit.requests.Request
+import kiit.requests.Request
 
 data class CodeGenSettings(
     val host: ApiServer,

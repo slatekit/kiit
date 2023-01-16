@@ -1,6 +1,6 @@
 package kiit.policy
 
-import slatekit.results.Outcome
+import kiit.results.Outcome
 
 /**
  * Policy to rewrite / transform the input before applying the operation

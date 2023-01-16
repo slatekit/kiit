@@ -2,8 +2,8 @@ package test.entities
 
 import org.junit.Assert
 import org.junit.Test
-import slatekit.common.values.ListMap
-import slatekit.common.values.RecordMap
+import kiit.common.values.ListMap
+import kiit.common.values.RecordMap
 import kiit.data.encoders.*
 import java.util.*
 

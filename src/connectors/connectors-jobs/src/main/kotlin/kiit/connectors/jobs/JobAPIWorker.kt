@@ -3,8 +3,8 @@ package kiit.connectors.jobs
 import kiit.jobs.WResult
 import kiit.apis.ApiServer
 import kiit.apis.core.Reqs
-import slatekit.common.Identity
-import slatekit.common.Sources
+import kiit.common.Identity
+import kiit.common.Sources
 import kiit.jobs.*
 import kiit.jobs.Worker
 
@@ -30,7 +30,7 @@ open class JobAPIWorker(
         // let the container execute the request
         // this will follow the same pipeline/flow as the http requests now.
         val result = server.execute(req)
-        slatekit.common.NOTE.IMPLEMENT("jobs", "Success/Failure handling")
+        kiit.common.NOTE.IMPLEMENT("jobs", "Success/Failure handling")
         return WResult.More
     }
 }

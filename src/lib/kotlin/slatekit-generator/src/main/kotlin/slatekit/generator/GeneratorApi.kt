@@ -4,13 +4,13 @@ import kiit.apis.Api
 import kiit.apis.Action
 import kiit.apis.AuthModes
 import kiit.apis.Verbs
-import slatekit.context.Context
-import slatekit.common.Sources
-import slatekit.common.auth.Roles
-import slatekit.common.io.Uris
-import slatekit.results.Try
-import slatekit.results.builders.Tries
-import slatekit.results.flatMap
+import kiit.context.Context
+import kiit.common.Sources
+import kiit.common.auth.Roles
+import kiit.common.io.Uris
+import kiit.results.Try
+import kiit.results.builders.Tries
+import kiit.results.flatMap
 
 
 @Api(area = "kiit", name = "new", desc = "generator for new projects",
