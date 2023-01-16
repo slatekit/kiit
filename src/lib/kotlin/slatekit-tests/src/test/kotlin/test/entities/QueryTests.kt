@@ -16,9 +16,9 @@ import org.junit.Assert
 import org.junit.Test
 import slatekit.common.DateTimes
 import slatekit.common.data.Encoding
-import slatekit.query.Const
-import slatekit.query.QueryEncoder
-import slatekit.query.where
+import kiit.query.Const
+import kiit.query.QueryEncoder
+import kiit.query.where
 import test.setup.Book
 import test.setup.StatusEnum
 

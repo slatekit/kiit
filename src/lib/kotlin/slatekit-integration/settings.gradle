@@ -6,8 +6,8 @@ rootProject.name = 'slatekit-integration'
 //include ':slatekit-meta'
 ////project(':slatekit-meta').projectDir=new File('../slatekit-meta')
 //
-//include ':slatekit-entities'
-////project(':slatekit-entities').projectDir=new File('../slatekit-entities')
+//include ':kiit-entities'
+////project(':kiit-entities').projectDir=new File('../slatekit-entities')
 //
 //include ':kiit-core'
 ////project(':kiit-core').projectDir=new File('../slatekit-core')
@@ -15,5 +15,5 @@ rootProject.name = 'slatekit-integration'
 //include ':kiit-apis'
 ////project(':kiit-apis').projectDir=new File('../kiit-apis')
 //
-//include ':slatekit-query'
-////project(':slatekit-query').projectDir=new File('../slatekit-query')
+//include ':kiit-query'
+////project(':kiit-query').projectDir=new File('../slatekit-query')

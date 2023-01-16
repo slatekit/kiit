@@ -9,12 +9,12 @@ import slatekit.common.data.Connections
 import slatekit.common.data.IDb
 import slatekit.common.data.Vendor
 import slatekit.common.ids.UPIDs
-import slatekit.data.core.LongId
-import slatekit.data.core.Meta
-import slatekit.data.core.Table
+import kiit.data.core.LongId
+import kiit.data.core.Meta
+import kiit.data.core.Table
 import kiit.db.Db
-import slatekit.entities.Entities
-import slatekit.entities.EntityService
+import kiit.entities.Entities
+import kiit.entities.EntityService
 import test.TestApp
 import test.setup.AppEncryptor
 import test.setup.MyEncryptor

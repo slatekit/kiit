@@ -23,8 +23,8 @@ import slatekit.common.data.DbCon
 import slatekit.common.newline
 import slatekit.common.data.Connections
 import kiit.connectors.entities.AppEntContext
-import slatekit.migrations.MigrationService
-import slatekit.migrations.MigrationSettings
+import kiit.migrations.MigrationService
+import kiit.migrations.MigrationSettings
 import slatekit.results.Notice
 import slatekit.results.Try
 

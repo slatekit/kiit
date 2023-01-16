@@ -9,8 +9,8 @@
 //include ':slatekit-meta'
 //project(':slatekit-meta').projectDir=new File('../slatekit-meta')
 //
-//include ':slatekit-entities'
-//project(':slatekit-entities').projectDir=new File('../slatekit-entities')
+//include ':kiit-entities'
+//project(':kiit-entities').projectDir=new File('../slatekit-entities')
 //
 //include ':slatekit-core'
 //project(':slatekit-core').projectDir=new File('../slatekit-core')
@@ -30,5 +30,5 @@
 //include ':slatekit-db'
 //project(':slatekit-db').projectDir=new File('../slatekit-db')
 //
-//include ':slatekit-query'
-//project(':slatekit-query').projectDir=new File('../slatekit-query')
+//include ':kiit-query'
+//project(':kiit-query').projectDir=new File('../slatekit-query')

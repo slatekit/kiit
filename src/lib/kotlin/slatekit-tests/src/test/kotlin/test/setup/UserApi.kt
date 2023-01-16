@@ -24,7 +24,7 @@ import slatekit.common.crypto.EncLong
 import slatekit.common.values.Metadata
 import slatekit.requests.Request
 import slatekit.integration.common.ApiBaseEntity
-import slatekit.entities.EntityService
+import kiit.entities.EntityService
 import slatekit.connectors.entities.AppEntContext
 import slatekit.results.Notice
 import slatekit.results.Success

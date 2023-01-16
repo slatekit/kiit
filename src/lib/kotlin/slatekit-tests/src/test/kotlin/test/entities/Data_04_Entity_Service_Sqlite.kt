@@ -20,14 +20,14 @@ import org.junit.Test
 import slatekit.common.DateTime
 import slatekit.common.data.*
 import slatekit.common.utils.Random
-import slatekit.data.sql.vendors.sqliteIfNotExists
+import kiit.data.sql.vendors.sqliteIfNotExists
 import kiit.db.Db
-import slatekit.entities.*
-import slatekit.entities.features.Counts
-import slatekit.entities.features.Ordered
-import slatekit.query.Op
-import slatekit.query.set
-import slatekit.query.where
+import kiit.entities.*
+import kiit.entities.features.Counts
+import kiit.entities.features.Ordered
+import kiit.query.Op
+import kiit.query.set
+import kiit.query.where
 import test.setup.MyEncryptor
 
 

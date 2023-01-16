@@ -55,16 +55,16 @@ dependencies {
         compile "com.slatekit:slatekit-context:$kiit_version"
         compile "com.slatekit:slatekit-requests:$kiit_version"
         compile "com.slatekit:slatekit-meta:$kiit_version"
-        compile "com.slatekit:slatekit-query:$kiit_version"
+        compile "com.slatekit:kiit-query:$kiit_version"
         compile "dev.kiit:cli:$kiit_version"
-        compile "com.slatekit:slatekit-entities:$kiit_version"
+        compile "dev.kiit:entities:$kiit_version"
         compile "dev.kiit:core:$kiit_version"
         compile "dev.kiit:comms:$kiit_version"
         compile "dev.kiit:cache:$kiit_version"
         compile "dev.kiit:apis:$kiit_version"
         compile "com.slatekit:kiit-jobs:$kiit_version"
         compile "com.slatekit:slatekit-policy:$kiit_version"
-        compile "com.slatekit:slatekit-migrations:$kiit_version"
+        compile "com.slatekit:kiit-migrations:$kiit_version"
         compile "com.slatekit:connectors-entities:$kiit_version"
     } else {
         // */
@@ -73,15 +73,15 @@ dependencies {
     compile project(":slatekit-context")
     compile project(":slatekit-requests")
     compile project(":slatekit-meta")
-    compile project(":slatekit-query")
+    compile project(":kiit-query")
     compile project(":kiit-cli")
-    compile project(":slatekit-entities")
+    compile project(":kiit-entities")
     compile project(":kiit-core")
     compile project(":slatekit-policy")
     compile project(":kiit-cache")
     compile project(":kiit-apis")
     compile project(":kiit-jobs")
-    compile project(":slatekit-migrations")
+    compile project(":kiit-migrations")
     compile project(":kiit-comms")
     compile project(":connectors-entities")
     } //</slatekit_local>

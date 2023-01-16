@@ -1,8 +1,8 @@
 package app;
 
-import slatekit.entities.Entities;
-import slatekit.entities.EntityRepo;
-import slatekit.entities.EntityService;
+import kiit.entities.Entities;
+import kiit.entities.EntityRepo;
+import kiit.entities.EntityService;
 
 public class SimpleEventService extends EntityService<Integer, SimpleEvent> implements ISimpleEventService {
 

@@ -7,10 +7,10 @@ import slatekit.common.DateTime
 import slatekit.common.DateTimes
 import slatekit.common.ids.UPID
 import slatekit.common.ids.UPIDs
-import slatekit.entities.EntityUpdatable
-import slatekit.entities.EntityWithId
-import slatekit.entities.Id
-import slatekit.entities.Column
+import kiit.entities.EntityUpdatable
+import kiit.entities.EntityWithId
+import kiit.entities.Id
+import kiit.entities.Column
 import test.setup.Address
 import test.setup.StatusEnum
 import java.util.*

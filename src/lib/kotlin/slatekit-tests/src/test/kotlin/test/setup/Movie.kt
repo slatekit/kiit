@@ -3,9 +3,9 @@ package test.setup
 
 import slatekit.common.DateTime
 import slatekit.common.DateTimes
-import slatekit.entities.Column
-import slatekit.entities.EntityWithId
-import slatekit.entities.Id
+import kiit.entities.Column
+import kiit.entities.EntityWithId
+import kiit.entities.Id
 
 data class Movie(
         @property:Id()

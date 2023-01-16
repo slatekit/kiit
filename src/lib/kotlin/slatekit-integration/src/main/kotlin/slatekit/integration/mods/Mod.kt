@@ -14,10 +14,10 @@
 package slatekit.integration.mods
 
 import slatekit.common.DateTime
-import slatekit.entities.EntityWithUUID
-import slatekit.entities.EntityWithId
-import slatekit.entities.Id
-import slatekit.entities.Column
+import kiit.entities.EntityWithUUID
+import kiit.entities.EntityWithId
+import kiit.entities.Id
+import kiit.entities.Column
 
 data class Mod(
     @property:Id()

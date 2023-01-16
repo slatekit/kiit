@@ -2,11 +2,11 @@ package test.setup
 
 import slatekit.apis.Api
 import slatekit.apis.Action
-import slatekit.entities.EntityService
+import kiit.entities.EntityService
 import slatekit.integration.common.ApiBaseEntity
 import slatekit.connectors.entities.AppEntContext
-import slatekit.entities.features.Counts
-import slatekit.entities.features.Ordered
+import kiit.entities.features.Counts
+import kiit.entities.features.Ordered
 
 /**
  * REST Sample

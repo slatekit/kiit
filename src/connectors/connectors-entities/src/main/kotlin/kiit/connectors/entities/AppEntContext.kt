@@ -28,7 +28,7 @@ import slatekit.context.AppContext
 import slatekit.common.envs.Envs
 import slatekit.context.Context
 import kiit.db.Db
-import slatekit.entities.Entities
+import kiit.entities.Entities
 
 /**
   *

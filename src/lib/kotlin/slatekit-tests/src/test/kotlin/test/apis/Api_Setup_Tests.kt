@@ -9,9 +9,9 @@ import slatekit.apis.routes.Api
 import slatekit.apis.SetupType
 import slatekit.context.AppContext
 import slatekit.common.data.Vendor
-import slatekit.entities.EntityLongId
-import slatekit.entities.EntityService
-import slatekit.entities.EntityServices
+import kiit.entities.EntityLongId
+import kiit.entities.EntityService
+import kiit.entities.EntityServices
 import slatekit.integration.apis.InfoApi
 import slatekit.integration.apis.VersionApi
 //import slatekit.orm.orm

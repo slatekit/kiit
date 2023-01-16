@@ -75,8 +75,8 @@ dependencies {
 //        implementation "com.slatekit:slatekit-http:$kiit_version"
 //        implementation "com.slatekit:kiit-jobs:$kiit_version"
 //        implementation "com.slatekit:slatekit-cloud:$kiit_version"
-//        implementation "com.slatekit:slatekit-query:$kiit_version"
-//        implementation "com.slatekit:slatekit-entities:$kiit_version"
+//        implementation "com.slatekit:kiit-query:$kiit_version"
+//        implementation "dev.kiit:entities:$kiit_version"
 //        implementation "com.slatekit:slatekit-orm:$kiit_version"
 //        implementation "com.slatekit:slatekit-integration:$kiit_version"
 //        implementation "com.slatekit:kiit-server:$kiit_version"
@@ -109,8 +109,8 @@ dependencies {
 //        implementation project(":kiit-comms")
 //        implementation project(":slatekit-cloud")
 //        implementation project(":kiit-db")
-//        implementation project(":slatekit-query")
-//        implementation project(":slatekit-entities")
+//        implementation project(":kiit-query")
+//        implementation project(":kiit-entities")
 //        implementation project(":slatekit-integration")
         implementation project(":kiit-server")
 //        implementation project(":slatekit-samples")

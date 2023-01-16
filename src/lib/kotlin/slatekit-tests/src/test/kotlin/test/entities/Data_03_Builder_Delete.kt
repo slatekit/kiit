@@ -18,12 +18,12 @@ import org.junit.Before
 import org.junit.Test
 import slatekit.common.data.*
 import slatekit.common.data.BuildMode
-import slatekit.data.sql.Builders
-import slatekit.data.sql.vendors.MySqlDialect
-import slatekit.entities.*
-import slatekit.query.Op
-import slatekit.query.Delete
-import slatekit.query.Order
+import kiit.data.sql.Builders
+import kiit.data.sql.vendors.MySqlDialect
+import kiit.entities.*
+import kiit.query.Op
+import kiit.query.Delete
+import kiit.query.Order
 import test.setup.User5
 
 class Data_03_Builder_Delete {

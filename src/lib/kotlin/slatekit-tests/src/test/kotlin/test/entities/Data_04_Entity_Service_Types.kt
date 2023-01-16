@@ -21,10 +21,10 @@ import slatekit.common.DateTimes
 import slatekit.common.data.Connections
 import slatekit.common.data.Vendor
 import slatekit.common.ids.UPIDs
-import slatekit.data.core.LongId
+import kiit.data.core.LongId
 import kiit.db.Db
-import slatekit.entities.EntityService
-import slatekit.query.Op
+import kiit.entities.EntityService
+import kiit.query.Op
 import test.TestApp
 import test.setup.Address
 import test.setup.StatusEnum
