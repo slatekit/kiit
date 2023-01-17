@@ -12,8 +12,10 @@ cd ../../
 
 
 # Support
-cd ./internal/
+cd ./infra/
 cd telemetry     && gradle clean build publish && cd ../ && echo 'sleeping 20s' && sleep 20s   
+cd ../../
+cd ./internal/
 cd policy        && gradle clean build publish && cd ../ && echo 'sleeping 20s' && sleep 20s   
 cd meta          && gradle clean build publish && cd ../ && echo 'sleeping 20s' && sleep 20s   
 cd serialization && gradle clean build publish && cd ../ && echo 'sleeping 20s' && sleep 20s   
