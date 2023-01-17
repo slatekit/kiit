@@ -7,7 +7,7 @@
  * copyright: 2016 CodeHelix Solutions Inc.
  * license: refer to website and/or github
  * about: A Kotlin Tool-Kit for Server + Android
-  *  </kiit_header>
+ *  </kiit_header>
  */
 
 /* ktlint-disable */

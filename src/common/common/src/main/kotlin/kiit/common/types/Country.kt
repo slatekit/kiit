@@ -8,7 +8,7 @@
  * license: refer to website and/or github
  * 
  *
-  *  </kiit_header>
+ *  </kiit_header>
  */
 
 package kiit.common.types

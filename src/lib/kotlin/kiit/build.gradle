@@ -1,7 +1,7 @@
 buildscript {
     ext.kotlin_version = '1.6.20'
-    ext.kiit_version = new File('../version.txt').text
-    ext.kiit_version_beta = new File('../version-beta.txt').text
+    ext.kiit_version = new File('../../version.txt').text
+    ext.kiit_version_beta = new File('../../version-beta.txt').text
 
     repositories {
         jcenter()
@@ -15,7 +15,7 @@ buildscript {
 plugins {
     id "java"
     id "maven-publish"
-    id "org.jetbrains.kotlin.jvm" version "$kotlin_version"
+    id "org.jetbrains.kotlin.jvm" //version "$kotlin_version"
 }
 
 apply from: '../../../../build/gradle/gradle-utils.gradle'
