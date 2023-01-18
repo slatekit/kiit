@@ -46,7 +46,7 @@ jobs:
 # ====================================================
     - name: Build Result with Gradle
       working-directory: src/common/result
-      run: gradle clean build publish
+      run: ./gradlew clean build publish
     - name: Sleep for 20 seconds
       uses: whatnick/wait-action@master
       with: 
