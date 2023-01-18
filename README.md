@@ -109,27 +109,27 @@ Here are some of the main ones:
 docs | source | desc 
 ------------ | ------------ | -------------
 Foundations                                                         | --                                        | Used by most modules                
-[results](https://www.kiit.dev/arch/results)             | [src](src/lib/kotlin/slatekit-result)            | Modeling of Successes/Failures 
-[common](https://www.kiit.dev/utils/overview)            | [src](src/lib/kotlin/slatekit-common)            | Utility Components   
-[context](https://www.kiit.dev/arch/context)             | [src](src/lib/kotlin/slatekit-context)           | Stores Common Dependencies 
-[actors](https://www.kiit.dev/arch/actors)               | [src](src/lib/kotlin/slatekit-actors)            | Micro Actor Library 
+[results](https://www.kiit.dev/arch/results)             | [src](src/common/result)            | Modeling of Successes/Failures 
+[common](https://www.kiit.dev/utils/overview)            | [src](src/common/common)            | Utility Components   
+[context](https://www.kiit.dev/arch/context)             | [src](src/common/context)           | Stores Common Dependencies 
+[actors](https://www.kiit.dev/arch/actors)               | [src](src/common/actors)            | Micro Actor Library 
 Apps                                                                | --                                        | Runnable apps/Services                
-[app](http://www.kiit.dev/arch/app)                      | [src](src/lib/kotlin/slatekit-app)               | Runnable App Template 
-[cli](http://www.kiit.dev/arch/cli)                      | [src](src/lib/kotlin/slatekit-cli)               | Command Line Interface 
-[apis](http://www.kiit.dev/arch/apis)                    | [src](src/lib/kotlin/slatekit-apis)              | RPC-like Web APIs
-[jobs](http://www.kiit.dev/arch/jobs)                    | [src](src/lib/kotlin/slatekit-jobs)              | Pausable jobs on persistent queues 
+[app](http://www.kiit.dev/arch/app)                      | [src](src/services/app)               | Runnable App Template 
+[cli](http://www.kiit.dev/arch/cli)                      | [src](src/services/cli)               | Command Line Interface 
+[apis](http://www.kiit.dev/arch/apis)                    | [src](src/services/apis)              | RPC-like Web APIs
+[jobs](http://www.kiit.dev/arch/jobs)                    | [src](src/services/jobs)              | Pausable jobs on persistent queues 
 Infrastructure                                                      | --                                        | Infrastructure components               
-[core](http://www.kiit.dev/arch/core)                    | [src](src/lib/kotlin/slatekit-core)              | Infrastructure Abstractions(Files, Queues)
-[cache](http://www.kiit.dev/arch/cache)                  | [src](src/lib/kotlin/slatekit-cache)             | Caching library 
-[notifications](http://www.kiit.dev/arch/notifications)  | [src](src/lib/kotlin/slatekit-notifications)     | Email, SMS, Slack, Push 
+[core](http://www.kiit.dev/arch/core)                    | [src](src/infra/core)              | Infrastructure Abstractions(Files, Queues)
+[cache](http://www.kiit.dev/arch/cache)                  | [src](src/infra/cache)             | Caching library 
+[notifications](http://www.kiit.dev/arch/notifications)  | [src](src/infra/comms)     | Email, SMS, Slack, Push 
 Data                                                                | --                                        | Database modules                 
-[db](http://www.kiit.dev/arch/data)                      | [src](src/lib/kotlin/slatekit-db)                | Easy database operations over JDBC 
-[data](http://www.kiit.dev/arch/data)                    | [src](src/lib/kotlin/slatekit-data)              | Repository pattern for data persistence 
-[entities](http://www.kiit.dev/arch/data)                | [src](src/lib/kotlin/slatekit-entities)          | Light-weight Data-Mapper for models 
+[db](http://www.kiit.dev/arch/data)                      | [src](src/data/db)                | Easy database operations over JDBC 
+[data](http://www.kiit.dev/arch/data)                    | [src](src/data/data)              | Repository pattern for data persistence 
+[entities](http://www.kiit.dev/arch/data)                | [src](src/data/entities)          | Light-weight Data-Mapper for models 
 Providers                                                              | --                                     | 3rd Party Integrations                
-[aws](http://www.kiit.dev/arch/files)                    | [src](src/ext/kotlin/slatekit-providers-aws)     | AWS S3, SQS provider files/queues 
-[logback](http://www.kiit.dev/utils/logs)                | [src](src/ext/kotlin/slatekit-providers-logback) | Logback logging provider 
-[datadog](http://www.kiit.dev/arch/tracking)             | [src](src/ext/kotlin/slatekit-providers-datadog) | DataDog metrics provider 
+[aws](http://www.kiit.dev/arch/files)                    | [src](src/providers/providers-aws)     | AWS S3, SQS provider files/queues 
+[logback](http://www.kiit.dev/utils/logs)                | [src](src/providers/providers-logback) | Logback logging provider 
+[datadog](http://www.kiit.dev/arch/tracking)             | [src](src/providers/providers-datadog) | DataDog metrics provider 
 
 
 # ⁉️ Upcoming
