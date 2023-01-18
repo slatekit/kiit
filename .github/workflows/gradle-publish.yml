@@ -317,7 +317,7 @@ jobs:
 # Integration
 # ====================================================
     - name: Build integration with Gradle
-      working-directory: src/lib/kotlin/integration
+      working-directory: src/support/integration
       run: gradle clean build publish
     - name: Sleep for 20 seconds
       uses: whatnick/wait-action@master
@@ -325,7 +325,7 @@ jobs:
         time: '25s'
 
     - name: Build generator with Gradle
-      working-directory: src/lib/kotlin/generator
+      working-directory: src/support/generator
       run: gradle clean build publish
     - name: Sleep for 20 seconds
       uses: whatnick/wait-action@master
