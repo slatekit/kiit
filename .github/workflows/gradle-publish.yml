@@ -40,13 +40,16 @@ jobs:
         java-version: 1.8
         server-id: github # Value of the distributionManagement/repository/id field of the pom.xml
         settings-path: ${{ github.workspace }} # location for the settings.xml file
+    - uses: gradle/gradle-build-action@v2
+      with:
+        gradle-version: 6.7.1
 
 # ====================================================
 # Common
 # ====================================================
     - name: Build Result with Gradle
       working-directory: src/common/result
-      run: ./gradlew clean build publish
+      run: gradle clean build publish
     - name: Sleep for 20 seconds
       uses: whatnick/wait-action@master
       with: 
