@@ -26,13 +26,11 @@ jobs:
   build:
     runs-on: ubuntu-latest
     env:
-        SLATEKIT_PROJECT_MODE: binary
-        SLATEKIT_INSTALL_ACTOR: ${{ secrets.SLATEKIT_INSTALL_ACTOR }}
-        SLATEKIT_INSTALL_TOKEN: ${{ secrets.SLATEKIT_INSTALL_TOKEN }}
-        SLATEKIT_BINTRAY_ACTOR: ${{ secrets.SLATEKIT_BINTRAY_ACTOR }}
-        SLATEKIT_BINTRAY_TOKEN: ${{ secrets.SLATEKIT_BINTRAY_TOKEN }}
-        SLATEKIT_PUBLISH_ACTOR: ${{ github.actor }}
-        SLATEKIT_PUBLISH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        KIIT_PROJECT_MODE: binary
+        KIIT_INSTALL_ACTOR: ${{ secrets.KIIT_INSTALL_ACTOR }}
+        KIIT_INSTALL_TOKEN: ${{ secrets.KIIT_INSTALL_TOKEN }}
+        KIIT_PUBLISH_ACTOR: ${{ github.actor }}
+        KIIT_PUBLISH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
     steps:
     - uses: actions/checkout@v2
@@ -44,278 +42,289 @@ jobs:
         settings-path: ${{ github.workspace }} # location for the settings.xml file
 
 # ====================================================
-# Foundations
+# Common
 # ====================================================
-    - name: Build SlateKit.Result with Gradle
-      working-directory: src/lib/kotlin/slatekit-result
+    - name: Build Result with Gradle
+      working-directory: src/common/result
       run: gradle clean build publish
     - name: Sleep for 20 seconds
       uses: whatnick/wait-action@master
       with: 
-        time: '20s'
+        time: '25s'
 
-    - name: Build SlateKit.Actors with Gradle
-      working-directory: src/lib/kotlin/slatekit-actors
+    - name: Build Actors with Gradle
+      working-directory: src/common/actors
       run: gradle clean build publish
     - name: Sleep for 20 seconds
       uses: whatnick/wait-action@master
       with: 
-        time: '20s'
+        time: '25s'
 
-    - name: Build SlateKit.Common with Gradle
-      working-directory: src/lib/kotlin/slatekit-common
+    - name: Build Common with Gradle
+      working-directory: src/common/common
       run: gradle clean build publish
     - name: Sleep for 20 seconds
       uses: whatnick/wait-action@master
       with: 
-        time: '20s'
+        time: '25s'
 
-    - name: Build SlateKit.Utils with Gradle
-      working-directory: src/lib/kotlin/slatekit-utils
+    - name: Build Utils with Gradle
+      working-directory: src/common/utils
       run: gradle clean build publish
     - name: Sleep for 20 seconds
       uses: whatnick/wait-action@master
       with: 
-        time: '20s'
+        time: '25s'
 
-    - name: Build SlateKit.Requests with Gradle
-      working-directory: src/lib/kotlin/slatekit-requests
+    - name: Build Requests with Gradle
+      working-directory: src/common/requests
       run: gradle clean build publish
     - name: Sleep for 20 seconds
       uses: whatnick/wait-action@master
       with: 
-        time: '20s'
+        time: '25s'
 
-    - name: Build SlateKit.Context with Gradle
-      working-directory: src/lib/kotlin/slatekit-context
+    - name: Build Context with Gradle
+      working-directory: src/common/context
       run: gradle clean build publish
     - name: Sleep for 20 seconds
       uses: whatnick/wait-action@master
       with: 
-        time: '20s'
+        time: '25s'
 
-    - name: Build SlateKit.http with Gradle
-      working-directory: src/lib/kotlin/slatekit-http
+    - name: Build http with Gradle
+      working-directory: src/common/http
       run: gradle clean build publish
     - name: Sleep for 20 seconds
       uses: whatnick/wait-action@master
       with: 
-        time: '20s'
+        time: '25s'
 
 # ====================================================
-# Support
+# Internal
 # ====================================================
-    - name: Build SlateKit.Telemetry with Gradle
-      working-directory: src/lib/kotlin/slatekit-telemetry
+    - name: Build Telemetry with Gradle
+      working-directory: src/infra/telemetry
       run: gradle clean build publish
     - name: Sleep for 20 seconds
       uses: whatnick/wait-action@master
       with: 
-        time: '20s'
+        time: '25s'
 
-    - name: Build SlateKit.policy with Gradle
-      working-directory: src/lib/kotlin/slatekit-policy
+    - name: Build policy with Gradle
+      working-directory: src/internal/policy
       run: gradle clean build publish
     - name: Sleep for 20 seconds
       uses: whatnick/wait-action@master
       with: 
-        time: '20s'
+        time: '25s'
 
-    - name: Build SlateKit.meta with Gradle
-      working-directory: src/lib/kotlin/slatekit-meta
+    - name: Build meta with Gradle
+      working-directory: src/internal/meta
       run: gradle clean build publish
     - name: Sleep for 20 seconds
       uses: whatnick/wait-action@master
       with: 
-        time: '20s'
+        time: '25s'
 
-    - name: Build SlateKit.serialization with Gradle
-      working-directory: src/lib/kotlin/slatekit-serialization
+    - name: Build serialization with Gradle
+      working-directory: src/internal/serialization
       run: gradle clean build publish
     - name: Sleep for 20 seconds
       uses: whatnick/wait-action@master
       with: 
-        time: '20s'
+        time: '25s'
 
 # ====================================================
 # Runnable services
 # ====================================================
-    - name: Build SlateKit.app with Gradle
-      working-directory: src/lib/kotlin/slatekit-app
+    - name: Build app with Gradle
+      working-directory: src/services/app
       run: gradle clean build publish
     - name: Sleep for 20 seconds
       uses: whatnick/wait-action@master
       with: 
-        time: '30s'
+        time: '25s'
 
-    - name: Build SlateKit.cli with Gradle
-      working-directory: src/lib/kotlin/slatekit-cli
+    - name: Build cli with Gradle
+      working-directory: src/services/cli
       run: gradle clean build publish
     - name: Sleep for 20 seconds
       uses: whatnick/wait-action@master
       with: 
-        time: '30s'
+        time: '25s'
 
-    - name: Build SlateKit.jobs with Gradle
-      working-directory: src/lib/kotlin/slatekit-jobs
+    - name: Build jobs with Gradle
+      working-directory: src/services/jobs
       run: gradle clean build publish
     - name: Sleep for 20 seconds
       uses: whatnick/wait-action@master
       with: 
-        time: '30s'
+        time: '25s'
 
-    - name: Build SlateKit.apis with Gradle
-      working-directory: src/lib/kotlin/slatekit-apis
+    - name: Build apis with Gradle
+      working-directory: src/services/apis
       run: gradle clean build publish
     - name: Sleep for 20 seconds
       uses: whatnick/wait-action@master
       with: 
-        time: '30s'
+        time: '25s'
+
+    - name: Build server with Gradle
+      working-directory: src/services/server
+      run: gradle clean build publish
+    - name: Sleep for 20 seconds
+      uses: whatnick/wait-action@master
+      with:
+        time: '25s'
 
 # ====================================================
 # Infrastructure
 # ====================================================
-    - name: Build SlateKit.core with Gradle
-      working-directory: src/lib/kotlin/slatekit-core
+    - name: Build core with Gradle
+      working-directory: src/infra/core
       run: gradle clean build publish
     - name: Sleep for 20 seconds
       uses: whatnick/wait-action@master
       with: 
-        time: '30s'
+        time: '25s'
 
-    - name: Build SlateKit.cache with Gradle
-      working-directory: src/lib/kotlin/slatekit-cache
+    - name: Build cache with Gradle
+      working-directory: src/infra/cache
       run: gradle clean build publish
     - name: Sleep for 20 seconds
       uses: whatnick/wait-action@master
       with: 
-        time: '30s'
+        time: '25s'
 
-    - name: Build SlateKit.db with Gradle
-      working-directory: src/lib/kotlin/slatekit-db
+    - name: Build db with Gradle
+      working-directory: src/infra/db
       run: gradle clean build publish
     - name: Sleep for 20 seconds
       uses: whatnick/wait-action@master
       with: 
-        time: '30s'
+        time: '25s'
 
-    - name: Build SlateKit.notifications with Gradle
-      working-directory: src/lib/kotlin/slatekit-notifications
+    - name: Build notifications with Gradle
+      working-directory: src/infra/comms
       run: gradle clean build publish
     - name: Sleep for 20 seconds
       uses: whatnick/wait-action@master
       with: 
-        time: '30s'
+        time: '25s'
 
 # ====================================================
 # Data
 # ====================================================
-    - name: Build SlateKit.query with Gradle
-      working-directory: src/lib/kotlin/slatekit-query
+    - name: Build query with Gradle
+      working-directory: src/data/query
       run: gradle clean build publish
     - name: Sleep for 20 seconds
       uses: whatnick/wait-action@master
       with: 
-        time: '30s'
+        time: '25s'
 
-    - name: Build SlateKit.data with Gradle
-      working-directory: src/lib/kotlin/slatekit-data
+    - name: Build data with Gradle
+      working-directory: src/data/data
       run: gradle clean build publish
     - name: Sleep for 20 seconds
       uses: whatnick/wait-action@master
       with: 
-        time: '30s'
+        time: '25s'
 
-    - name: Build SlateKit.entities with Gradle
-      working-directory: src/lib/kotlin/slatekit-entities
+    - name: Build entities with Gradle
+      working-directory: src/data/entities
       run: gradle clean build publish
     - name: Sleep for 20 seconds
       uses: whatnick/wait-action@master
       with: 
-        time: '30s'
+        time: '25s'
 
-    - name: Build SlateKit.migrations with Gradle
-      working-directory: src/lib/kotlin/slatekit-migrations
+    - name: Build migrations with Gradle
+      working-directory: src/data/migrations
       run: gradle clean build publish
     - name: Sleep for 20 seconds
       uses: whatnick/wait-action@master
       with: 
-        time: '30s'
+        time: '25s'
 
 # ====================================================
 # Providers
 # ====================================================
-    # Providers
-    # - name: Build Slate Kit Providers - AWS with Gradle
-    #   working-directory: src/ext/kotlin/slatekit-providers-aws
-    #   run: gradle clean build publish
-    # - name: Sleep for 20 seconds
-    #   uses: whatnick/wait-action@master
-    #   with: 
-    #     time: '30s'
+    - name: Build Providers - AWS with Gradle
+      working-directory: src/providers/providers-aws
+      run: gradle clean build publish
+    - name: Sleep for 20 seconds
+      uses: whatnick/wait-action@master
+      with:
+        time: '25s'
 
-    # - name: Build Slate Kit Providers - DataDog with Gradle
-    #   working-directory: src/ext/kotlin/slatekit-providers-datadog
-    #   run: gradle clean build publish
-    # - name: Sleep for 20 seconds
-    #   uses: whatnick/wait-action@master
-    #   with: 
-    #     time: '30s'
+    - name: Build Providers - DataDog with Gradle
+      working-directory: src/providers/providers-datadog
+      run: gradle clean build publish
+    - name: Sleep for 20 seconds
+      uses: whatnick/wait-action@master
+      with:
+        time: '25s'
 
-    # - name: Build Slate Kit Providers - Logback with Gradle
-    #   working-directory: src/ext/kotlin/slatekit-providers-logback
-    #   run: gradle clean build publish
-    # - name: Sleep for 20 seconds
-    #   uses: whatnick/wait-action@master
-    #   with: 
-    #     time: '30s'
+    - name: Build Providers - Logback with Gradle
+      working-directory: src/providers/providers-logback
+      run: gradle clean build publish
+    - name: Sleep for 20 seconds
+      uses: whatnick/wait-action@master
+      with:
+        time: '25s'
 
-    # # Connectors
-    # - name: Build Slate Kit Connectors - AWS with Gradle
-    #   working-directory: src/ext/kotlin/slatekit-connectors-cli
-    #   run: gradle clean build publish
-    # - name: Sleep for 20 seconds
-    #   uses: whatnick/wait-action@master
-    #   with: 
-    #     time: '30s'
+    - name: Build Providers - Kafka
+      working-directory: src/providers/providers-kafka
+      run: gradle clean build publish
+    - name: Sleep for 20 seconds
+      uses: whatnick/wait-action@master
+      with:
+        time: '25s'
 
-    # - name: Build Slate Kit Connectors - DataDog with Gradle
-    #   working-directory: src/ext/kotlin/slatekit-connectors-entities
-    #   run: gradle clean build publish
-    # - name: Sleep for 20 seconds
-    #   uses: whatnick/wait-action@master
-    #   with: 
-    #     time: '30s'
+# ====================================================
+# Connectors
+# ====================================================
+    - name: Build Connectors - AWS with Gradle
+      working-directory: src/connectors/connectors-cli
+      run: gradle clean build publish
+    - name: Sleep for 20 seconds
+      uses: whatnick/wait-action@master
+      with:
+        time: '25s'
 
-    # - name: Build Slate Kit Connectors - Logback with Gradle
-    #   working-directory: src/ext/kotlin/slatekit-connectors-jobs
-    #   run: gradle clean build publish
-    # - name: Sleep for 20 seconds
-    #   uses: whatnick/wait-action@master
-    #   with: 
-    #     time: '30s'
+    - name: Build Connectors - DataDog with Gradle
+      working-directory: src/connectors/connectors-entities
+      run: gradle clean build publish
+    - name: Sleep for 20 seconds
+      uses: whatnick/wait-action@master
+      with:
+        time: '25s'
 
-    # # Integration
-    # - name: Build SlateKit.integration with Gradle
-    #   working-directory: src/lib/kotlin/slatekit-integration
-    #   run: gradle clean build publish
-    # - name: Sleep for 20 seconds
-    #   uses: whatnick/wait-action@master
-    #   with: 
-    #     time: '30s'
+    - name: Build Connectors - Logback with Gradle
+      working-directory: src/connectors/connectors-jobs
+      run: gradle clean build publish
+    - name: Sleep for 20 seconds
+      uses: whatnick/wait-action@master
+      with:
+        time: '25s'
 
-    # - name: Build SlateKit.server with Gradle
-    #   working-directory: src/lib/kotlin/slatekit-server
-    #   run: gradle clean build publish
-    # - name: Sleep for 20 seconds
-    #   uses: whatnick/wait-action@master
-    #   with: 
-    #     time: '30s'
+# ====================================================
+# Integration
+# ====================================================
+    - name: Build integration with Gradle
+      working-directory: src/lib/kotlin/integration
+      run: gradle clean build publish
+    - name: Sleep for 20 seconds
+      uses: whatnick/wait-action@master
+      with:
+        time: '25s'
 
-    # - name: Build SlateKit.generator with Gradle
-    #   working-directory: src/lib/kotlin/slatekit-generator
-    #   run: gradle clean build publish
-    # - name: Sleep for 20 seconds
-    #   uses: whatnick/wait-action@master
-    #   with: 
-    #     time: '30s'
+    - name: Build generator with Gradle
+      working-directory: src/lib/kotlin/generator
+      run: gradle clean build publish
+    - name: Sleep for 20 seconds
+      uses: whatnick/wait-action@master
+      with:
+        time: '25s'
