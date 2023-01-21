@@ -23,7 +23,8 @@ interface Writer {
     /**
      * Map the text type to functions that can implement it.
      */
-    val lookup: Map<TextType, (String, Boolean) -> Unit> get() = mapOf(
+    val lookup: Map<TextType, (String, Boolean) -> Unit>
+        get() = mapOf(
             TextType.Title to this::title,
             TextType.Subtitle to this::subTitle,
             TextType.Url to this::url,
@@ -32,7 +33,7 @@ interface Writer {
             TextType.Success to this::success,
             TextType.Failure to this::failure,
             TextType.Text to this::text
-    )
+        )
 
     /**
      * Write many items based on the semantic modes
@@ -150,7 +151,7 @@ interface Writer {
      * @param text : the text to print
      * @param endLine : whether or not to include a newline at the end
      */
-    fun label(text: String, endLine: Boolean = true):Unit = write(TextType.Label, text, endLine)
+    fun label(text: String, endLine: Boolean = true): Unit = write(TextType.Label, text, endLine)
 
     /**
      * Prints a list of items with indentation

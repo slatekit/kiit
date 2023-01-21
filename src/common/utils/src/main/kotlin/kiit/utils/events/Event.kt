@@ -51,19 +51,19 @@ import kiit.results.Status
  *  )
  */
 data class Event(
-        @JvmField val uuid: String,
-        @JvmField val area: String,
-        @JvmField val service: String,
-        @JvmField val agent: String,
-        @JvmField val env: String,
-        @JvmField val inst: String,
-        @JvmField val name: String,
-        @JvmField val desc: String,
-        @JvmField val status: Status,
-        @JvmField val source: String,
-        @JvmField val target: String,
-        @JvmField val value: String,
-        @JvmField val time: DateTime,
-        @JvmField val tag: String,
-        @JvmField val fields: List<Triple<String, String, String>>?
+    @JvmField val uuid: String,
+    @JvmField val area: String,
+    @JvmField val service: String,
+    @JvmField val agent: String,
+    @JvmField val env: String,
+    @JvmField val inst: String,
+    @JvmField val name: String,
+    @JvmField val desc: String,
+    @JvmField val status: Status,
+    @JvmField val source: String,
+    @JvmField val target: String,
+    @JvmField val value: String,
+    @JvmField val time: DateTime,
+    @JvmField val tag: String,
+    @JvmField val fields: List<Triple<String, String, String>>?
 )

@@ -1,6 +1,8 @@
 package kiit.utils.display
 
+/* ktlint-disable */
 object MaterialColors {
+
     //@JvmField val Red500  = 0xFFF44336
     @JvmField val Red50   = 0xFFFFEBEE
     @JvmField val Red100  = 0xFFFFCDD2

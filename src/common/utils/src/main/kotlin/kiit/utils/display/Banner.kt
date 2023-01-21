@@ -6,9 +6,11 @@ import kiit.common.info.Info
 import kiit.common.log.LogSupport
 import kiit.common.log.Logger
 
-open class Banner(val info: Info,
-                  val envs: Envs,
-                  override val logger: Logger?) : LogSupport {
+open class Banner(
+    val info: Info,
+    val envs: Envs,
+    override val logger: Logger?
+) : LogSupport {
 
     /**
      * Shows the welcome header

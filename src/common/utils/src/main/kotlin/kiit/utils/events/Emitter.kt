@@ -8,7 +8,6 @@ import java.util.concurrent.atomic.AtomicLong
  */
 class Emitter<T> {
 
-
     private val _listeners = mutableMapOf<String, MutableList<Listener<T>>>()
 
     val listeners: List<Listener<T>>
@@ -16,22 +15,21 @@ class Emitter<T> {
             return _listeners.values.flatten()
         }
 
-    suspend fun emit(args:T) {
+    suspend fun emit(args: T) {
         emit(ALL, args)
     }
 
-    suspend fun emit(name:String, args:T) {
+    suspend fun emit(name: String, args: T) {
         process(name, create = false) { all ->
             val removals = mutableListOf<Int>()
             all.forEachIndexed { ndx, listener ->
-                when(listener.limit) {
+                when (listener.limit) {
                     null -> listener.call.invoke(args)
-                    else  -> {
+                    else -> {
                         val count = listener.count()
-                        if(count >= listener.limit) {
+                        if (count >= listener.limit) {
                             removals.add(ndx)
-                        }
-                        else {
+                        } else {
                             listener.inc()
                             listener.call.invoke(args)
                         }
@@ -84,17 +82,17 @@ class Emitter<T> {
         _listeners.clear()
     }
 
-    private fun update(name:String, create:Boolean, op:(MutableList<Listener<T>>) -> Unit) {
+    private fun update(name: String, create: Boolean, op: (MutableList<Listener<T>>) -> Unit) {
         val listeners = filter(name, create)
         listeners?.let { op(it) }
     }
 
-    private suspend fun process(name:String, create:Boolean, op:suspend (MutableList<Listener<T>>) -> Unit) {
+    private suspend fun process(name: String, create: Boolean, op: suspend (MutableList<Listener<T>>) -> Unit) {
         val listeners = filter(name, create)
         listeners?.let { op(it) }
     }
 
-    private fun filter(name:String, create:Boolean) : MutableList<Listener<T>>? {
+    private fun filter(name: String, create: Boolean): MutableList<Listener<T>>? {
         val existing = _listeners[name]
         return when {
             existing != null -> existing
@@ -117,9 +115,9 @@ class Emitter<T> {
     data class Listener<T>(val name: String, val limit: Int?, val call: suspend (T) -> Unit) {
         private val counter = AtomicLong(0L)
 
-        fun hasLimit():Boolean = limit != null
+        fun hasLimit(): Boolean = limit != null
         fun inc() = counter.incrementAndGet()
-        fun count():Long = counter.get()
+        fun count(): Long = counter.get()
     }
 
     companion object {

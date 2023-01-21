@@ -20,8 +20,9 @@ import kiit.common.newline
  * things like title, subtitle, url etc.
  */
 class ConsoleWriter(
-        val settings: TextSettings = Colors.defaults(),
-        writer  : IO<Any?, Unit>? = null ) : Writer {
+    val settings: TextSettings = Colors.defaults(),
+    writer: IO<Any?, Unit>? = null
+) : Writer {
 
     /**
      * IO abstraction for system.println.
@@ -30,7 +31,6 @@ class ConsoleWriter(
      * Refer to IO.kt for details.
      */
     private val io: IO<Any?, Unit> = writer ?: Print()
-
 
     /**
      * Writes the text using the TextType
@@ -43,7 +43,6 @@ class ConsoleWriter(
         write(mode.color, mode.format(text), endLine)
     }
 
-
     /**
      * prints text in the color supplied.
      *
@@ -51,7 +50,7 @@ class ConsoleWriter(
      * @param endLine : whether or not to include a newline at the end
      */
     private fun write(color: String?, text: String, endLine: Boolean) {
-        val finalColor = if(color == null || color == "") "" else "$color "
+        val finalColor = if (color == null || color == "") "" else "$color "
         val resetText = "$finalColor$text$RESET"
         val finalText = if (endLine)
             resetText + newline
