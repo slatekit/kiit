@@ -5,9 +5,8 @@ import kiit.apis.ApiServer
 import kiit.apis.core.Reqs
 import kiit.common.Identity
 import kiit.common.Sources
-import kiit.jobs.*
+import kiit.jobs.Task
 import kiit.jobs.Worker
-
 open class JobAPIWorker(
         val server: ApiServer,
         identity: Identity
