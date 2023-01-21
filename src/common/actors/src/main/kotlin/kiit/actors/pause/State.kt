@@ -12,7 +12,7 @@ import java.util.concurrent.atomic.AtomicReference
  * 3. pause   -> paused
  * 4. resume  -> running
  */
-open class State(val changed:(suspend(Action, Status, Status) -> Unit)? = null)  {
+open class State(val changed: (suspend (Action, Status, Status) -> Unit)? = null) {
 
     private val _status = AtomicReference<Status>(Status.InActive)
 
@@ -20,7 +20,6 @@ open class State(val changed:(suspend(Action, Status, Status) -> Unit)? = null) 
      * Get running status of this Actor
      */
     fun status(): Status = _status.get()
-
 
     /**
      * Handles a @see[Control] message to start, stop, pause, resume this actor.
@@ -36,41 +35,37 @@ open class State(val changed:(suspend(Action, Status, Status) -> Unit)? = null) 
             is Action.Kill -> move(newStatus)
             is Action.Pause -> move(newStatus)
             else -> {
-
             }
         }
         changed?.invoke(action, oldStatus, newStatus)
         return newStatus
     }
 
-
     /**
      * Sets the status to running if started
      */
-    suspend fun begin(notify:Boolean) {
+    suspend fun begin(notify: Boolean) {
         val current = status()
         if (current == Status.Started) {
             move(Status.Running)
-            if(notify){
+            if (notify) {
                 changed?.invoke(Action.Process, Status.Started, Status.Running)
             }
         }
     }
-
 
     /**
      * Moves this actors status to the one supplied.
      */
-    suspend fun complete(notify:Boolean) {
+    suspend fun complete(notify: Boolean) {
         val current = status()
         if (current == Status.Running) {
             move(Status.Completed)
-            if(notify){
+            if (notify) {
                 changed?.invoke(Action.Process, Status.Started, Status.Running)
             }
         }
     }
-
 
     /**
      * Moves this actors status to the one supplied.
@@ -78,7 +73,6 @@ open class State(val changed:(suspend(Action, Status, Status) -> Unit)? = null) 
     protected fun move(newStatus: Status) {
         _status.set(newStatus)
     }
-
 
     /**
      * Validate the action based on the current status

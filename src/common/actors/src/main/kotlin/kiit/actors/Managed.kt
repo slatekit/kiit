@@ -5,9 +5,8 @@ import kotlinx.coroutines.channels.Channel
 /**
  * Base class for an Actor that can be started, stopped, paused, and resumed
  */
-abstract class Managed<T>(ctx: Context, channel: Channel<Message<T>>, enableStrictMode: Boolean = true)
-    : Pausable<T>(ctx, channel, enableStrictMode), Actor<T> {
-
+abstract class Managed<T>(ctx: Context, channel: Channel<Message<T>>, enableStrictMode: Boolean = true) :
+    Pausable<T>(ctx, channel, enableStrictMode), Actor<T> {
 
     /**
      * Sends a content message using the payload supplied
@@ -19,7 +18,6 @@ abstract class Managed<T>(ctx: Context, channel: Channel<Message<T>>, enableStri
         }
     }
 
-
     /**
      * Sends a content message using the payload and target supplied
      * @param item  : The payload to process
@@ -30,7 +28,6 @@ abstract class Managed<T>(ctx: Context, channel: Channel<Message<T>>, enableStri
             channel.send(Content<T>(nextId(), data = item, reference = reference))
         }
     }
-
 
     /**
      *  Handles each message based on its type @see[Content], @see[Control],
@@ -44,16 +41,17 @@ abstract class Managed<T>(ctx: Context, channel: Channel<Message<T>>, enableStri
             is Control -> {
                 state.handle(item.action)
             }
+
             is Content -> {
                 state.begin(false)
                 handle(item)
             }
+
             else -> {
                 // Does not support Request<T>
             }
         }
     }
-
 
     /**
      * Implementing classes need to handle the work.

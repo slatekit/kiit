@@ -5,30 +5,27 @@ import kotlinx.coroutines.channels.Channel
 /**
  * Base class for an Actor that can be started, stopped, paused, and resumed
  */
-abstract class Loader<T>(ctx: Context, channel: Channel<Message<T>>, enableStrictMode:Boolean = true)
-    : Pausable<T>(ctx, channel, enableStrictMode) {
-
+abstract class Loader<T>(ctx: Context, channel: Channel<Message<T>>, enableStrictMode: Boolean = true) :
+    Pausable<T>(ctx, channel, enableStrictMode) {
 
     /**
      * Request to load a payload internally into the channel
      */
-    suspend fun load():Receipt {
+    suspend fun load(): Receipt {
         return allow {
             channel.send(Request(nextId(), reference = Message.NONE))
         }
     }
 
-
     /**
      * Request to load a payload internally into the channel, pay load is associated with the reference
      * @param reference  : Value to associate with the payload
      */
-    suspend fun load(reference: String):Receipt {
+    suspend fun load(reference: String): Receipt {
         return allow {
             channel.send(Request(nextId(), reference = reference))
         }
     }
-
 
     /**
      *  Handles each message based on its type @see[Content], @see[Control],
@@ -42,16 +39,17 @@ abstract class Loader<T>(ctx: Context, channel: Channel<Message<T>>, enableStric
             is Control -> {
                 state.handle(item.action)
             }
+
             is Request -> {
                 state.begin(false)
                 handle(item)
             }
+
             else -> {
                 // Does not support Request<T>
             }
         }
     }
-
 
     /**
      * Handles a request for to produce a payload and dispatches

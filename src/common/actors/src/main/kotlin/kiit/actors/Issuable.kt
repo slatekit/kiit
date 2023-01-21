@@ -5,5 +5,5 @@ package kiit.actors
  * without being sent through its channel.
  */
 interface Issuable<T> {
-    suspend fun issue(item:Message<T>)
+    suspend fun issue(item: Message<T>)
 }

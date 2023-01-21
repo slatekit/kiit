@@ -5,9 +5,7 @@ import kotlinx.coroutines.channels.Channel
 /**
  * Simple base class for an Actor that supports sending and receiving of content ( payload ) messages only
  */
-abstract class Basic<T>(ctx: Context, channel: Channel<Message<T>>)
-    : Messageable<T>(ctx, channel), Actor<T> {
-
+abstract class Basic<T>(ctx: Context, channel: Channel<Message<T>>) : Messageable<T>(ctx, channel), Actor<T> {
 
     /**
      * Sends a payload to the actor
@@ -18,7 +16,6 @@ abstract class Basic<T>(ctx: Context, channel: Channel<Message<T>>)
         return Receipt.Accepted
     }
 
-
     /**
      * Sends a payload with target to the actor
      * @param item  : Data / payload for message
@@ -28,7 +25,6 @@ abstract class Basic<T>(ctx: Context, channel: Channel<Message<T>>)
         channel.send(Content(nextId(), item, reference = reference))
         return Receipt.Accepted
     }
-
 
     /**
      *  Handles each message based on its type @see[Content], @see[Control],
@@ -42,15 +38,16 @@ abstract class Basic<T>(ctx: Context, channel: Channel<Message<T>>)
             is Content -> {
                 handle(item)
             }
+
             is Control -> {
                 // Does not support Control<T>
             }
+
             else -> {
                 // Does not support Content<T>
             }
         }
     }
-
 
     /**
      * Implementing classes need to handle the work.

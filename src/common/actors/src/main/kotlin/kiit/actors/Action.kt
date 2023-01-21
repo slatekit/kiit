@@ -11,21 +11,21 @@ package kiit.actors
  */
 sealed class Action(val name: String) {
     /* ktlint-disable */
-    object Start    : Action( "Start"  )
-    object Pause    : Action( "Pause"  )
-    object Resume   : Action( "Resume" )
-    object Delay    : Action( "Delay"  )
-    object Stop     : Action( "Stop"   )
-    object Kill     : Action( "Kill"   )
-    object Check    : Action( "Check"  )
-    object Process  : Action( "Process")
+    object Start : Action("Start")
+    object Pause : Action("Pause")
+    object Resume : Action("Resume")
+    object Delay : Action("Delay")
+    object Stop : Action("Stop")
+    object Kill : Action("Kill")
+    object Check : Action("Check")
+    object Process : Action("Process")
     /* ktlint-enable */
 
     fun toStatus(current: Status): Status {
-        return when(current) {
+        return when (current) {
             Status.Completed -> current
-            Status.Killed    -> current
-            else -> when(this) {
+            Status.Killed -> current
+            else -> when (this) {
                 Delay -> Status.InActive
                 Start -> Status.Started
                 Pause -> Status.Paused
