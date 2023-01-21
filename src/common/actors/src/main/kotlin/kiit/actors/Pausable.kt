@@ -6,8 +6,8 @@ import kiit.actors.pause.*
 /**
  * Base class to support Actors that can be started, stopped, paused, and resumed
  */
-abstract class Pausable<T>(ctx: Context, channel: Channel<Message<T>>, private val enableStrictMode: Boolean)
-    : Messageable<T>(ctx, channel), Controls, Check {
+abstract class Pausable<T>(ctx: Context, channel: Channel<Message<T>>, private val enableStrictMode: Boolean) :
+    Messageable<T>(ctx, channel), Controls, Check {
 
     protected val state: State = State { action, oldState, newState
         ->
@@ -19,7 +19,6 @@ abstract class Pausable<T>(ctx: Context, channel: Channel<Message<T>>, private v
      */
     override fun status(): Status = state.status()
 
-
     /**
      * Sends a control message to start, pause, resume, stop processing
      */
@@ -27,7 +26,6 @@ abstract class Pausable<T>(ctx: Context, channel: Channel<Message<T>>, private v
         channel.send(Control<T>(nextId(), action, msg, reference = reference))
         return Feedback(true, "")
     }
-
 
     /**
      * Forces an immediate change to running status
@@ -40,10 +38,10 @@ abstract class Pausable<T>(ctx: Context, channel: Channel<Message<T>>, private v
                 onChanged(action, oldStatus, newStatus)
                 Feedback(true, "")
             }
+
             false -> Feedback(false, "Unable to force change, current status = : ${status().name}")
         }
     }
-
 
     /**
      * Allows the operation to proceed only if this is started or running
@@ -54,9 +52,16 @@ abstract class Pausable<T>(ctx: Context, channel: Channel<Message<T>>, private v
                 op()
                 Receipt.Accepted
             }
+
             true -> when (status()) {
-                is Status.Started -> { op(); Receipt.Accepted }
-                is Status.Running -> { op(); Receipt.Accepted }
+                is Status.Started -> {
+                    op(); Receipt.Accepted
+                }
+
+                is Status.Running -> {
+                    op(); Receipt.Accepted
+                }
+
                 else -> {
                     Receipt.Rejected
                 }
@@ -64,11 +69,9 @@ abstract class Pausable<T>(ctx: Context, channel: Channel<Message<T>>, private v
         }
     }
 
-
     /**
      * Serves as a hook for implementations to override to listen to state changes
      */
     protected open suspend fun onChanged(action: Action, oldStatus: Status, newStatus: Status) {
     }
 }
-

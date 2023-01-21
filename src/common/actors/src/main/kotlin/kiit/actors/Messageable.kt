@@ -9,17 +9,18 @@ import java.util.concurrent.atomic.AtomicLong
 /**
  * Base class for any @see[Actor]
  */
-abstract class Messageable<T>(val ctx:Context, val channel:Channel<Message<T>>) : Workable {
+abstract class Messageable<T>(val ctx: Context, val channel: Channel<Message<T>>) : Workable {
 
     private val idGen = AtomicLong(0L)
-
 
     /**
      * Id of the actor e.g. {AREA}.{NAME}.{ENV}.{INSTANCE}
      * e.g. "signup.emails.dev.abc123"
      */
-    val id: String get() { return ctx.id }
-
+    val id: String
+        get() {
+            return ctx.id
+        }
 
     /**
      * Launches this actor to start processing messages.
@@ -35,7 +36,6 @@ abstract class Messageable<T>(val ctx:Context, val channel:Channel<Message<T>>) 
         }
     }
 
-
     /**
      *  Handles each message based on its type @see[Content], @see[Control],
      *  This handles following message types and moves this actor to a running state correctly
@@ -45,13 +45,11 @@ abstract class Messageable<T>(val ctx:Context, val channel:Channel<Message<T>>) 
      */
     protected abstract suspend fun work(item: Message<T>)
 
-
     /**
      * Serves as a hook for implementations to override for add custom diagnostics
      */
     protected open suspend fun track(source: String, data: Message<T>) {
     }
-
 
     /**
      * Gets the next id used in creating a new Message
