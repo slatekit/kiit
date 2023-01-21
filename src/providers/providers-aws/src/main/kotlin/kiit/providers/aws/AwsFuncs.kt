@@ -6,7 +6,7 @@
  * author: Kishore Reddy
  * copyright: 2016 CodeHelix Solutions Inc.
  * license: refer to website and/or github
- * 
+ *
  *
  *  </kiit_header>
  */
@@ -28,35 +28,34 @@ import kiit.results.builders.Tries
 /**
  * Gets the region from the name
  */
-fun String?.toRegion():Regions? {
+fun String?.toRegion(): Regions? {
     // Use .getName instead of name as .name uses the Enum.name instead of the "us-east-1"
-    return when(this){
-        null                             -> null
-        Regions.GovCloud.getName()       -> Regions.GovCloud
-        Regions.US_EAST_1.getName()      -> Regions.US_EAST_1
-        Regions.US_EAST_2.getName()      -> Regions.US_EAST_2
-        Regions.US_WEST_1.getName()      -> Regions.US_WEST_1
-        Regions.US_WEST_2.getName()      -> Regions.US_WEST_2
-        Regions.EU_WEST_1.getName()      -> Regions.EU_WEST_1
-        Regions.EU_WEST_2.getName()      -> Regions.EU_WEST_2
-        Regions.EU_CENTRAL_1.getName()   -> Regions.EU_CENTRAL_1
-        Regions.AP_SOUTH_1.getName()     -> Regions.AP_SOUTH_1
+    return when (this) {
+        null -> null
+        Regions.GovCloud.getName() -> Regions.GovCloud
+        Regions.US_EAST_1.getName() -> Regions.US_EAST_1
+        Regions.US_EAST_2.getName() -> Regions.US_EAST_2
+        Regions.US_WEST_1.getName() -> Regions.US_WEST_1
+        Regions.US_WEST_2.getName() -> Regions.US_WEST_2
+        Regions.EU_WEST_1.getName() -> Regions.EU_WEST_1
+        Regions.EU_WEST_2.getName() -> Regions.EU_WEST_2
+        Regions.EU_CENTRAL_1.getName() -> Regions.EU_CENTRAL_1
+        Regions.AP_SOUTH_1.getName() -> Regions.AP_SOUTH_1
         Regions.AP_SOUTHEAST_1.getName() -> Regions.AP_SOUTHEAST_1
         Regions.AP_SOUTHEAST_2.getName() -> Regions.AP_SOUTHEAST_2
         Regions.AP_NORTHEAST_1.getName() -> Regions.AP_NORTHEAST_1
         Regions.AP_NORTHEAST_2.getName() -> Regions.AP_NORTHEAST_2
-        Regions.SA_EAST_1.getName()      -> Regions.SA_EAST_1
-        Regions.CN_NORTH_1.getName()     -> Regions.CN_NORTH_1
-        Regions.CA_CENTRAL_1.getName()   -> Regions.CA_CENTRAL_1
-        else                             -> null
+        Regions.SA_EAST_1.getName() -> Regions.SA_EAST_1
+        Regions.CN_NORTH_1.getName() -> Regions.CN_NORTH_1
+        Regions.CA_CENTRAL_1.getName() -> Regions.CA_CENTRAL_1
+        else -> null
     }
 }
 
 
-
-fun <T> build(region: String, op:(Regions)-> T) : Try<T> {
+fun <T> build(region: String, op: (Regions) -> T): Try<T> {
     val regions = region.toRegion()
-    return when(regions) {
+    return when (regions) {
         null -> Tries.invalid("Invalid region: $region")
         else -> Tries.of { op(regions) }
     }
@@ -66,7 +65,7 @@ fun <T> build(region: String, op:(Regions)-> T) : Try<T> {
 /**
  * See: https://docs.aws.amazon.com/AmazonS3/latest/dev/BucketRestrictions.html
  */
-fun formatBucket(name:String):String {
+fun formatBucket(name: String): String {
     return name.trim().replace("_", "-").toLowerCase()
 }
 
@@ -78,7 +77,7 @@ object AwsFuncs {
      * @param section : Section name in config containing slate kit ApiCredentials
      * @return
      */
-    fun sqs(cls:Class<*>, path: String? = null, section: String? = null, region:Regions?): AmazonSQSClient {
+    fun sqs(cls: Class<*>, path: String? = null, section: String? = null, region: Regions?): AmazonSQSClient {
 
         // Get credentials from either default location of specific config
         val credentials = creds(cls, path, section)
@@ -89,7 +88,7 @@ object AwsFuncs {
      * build sqs client from optional conf paths
      * @return
      */
-    fun sqs(credentials: AWSCredentials, region:Regions): AmazonSQSClient {
+    fun sqs(credentials: AWSCredentials, region: Regions): AmazonSQSClient {
 
         val reg = Region.getRegion(region)
         val sqs = AmazonSQSClient(credentials)
@@ -102,7 +101,7 @@ object AwsFuncs {
      * @param path : Path to config ( None => default aws {user_dir}/.aws/credentials file}
      * @param section : Section name in config containing slate kit ApiCredentials
      */
-    fun s3(cls:Class<*>, path: String? = null, section: String? = null, region:Regions?): AmazonS3Client {
+    fun s3(cls: Class<*>, path: String? = null, section: String? = null, region: Regions?): AmazonS3Client {
         // Get credentials from either default location of specific config
         val credentials = creds(cls, path, section)
         return s3(credentials, region ?: Regions.US_EAST_1)
@@ -127,7 +126,7 @@ object AwsFuncs {
      * @param section : Section name in config containing slate kit ApiCredentials
      * @return
      */
-    fun creds(cls:Class<*>, path: String? = null, section: String? = null): AWSCredentials {
+    fun creds(cls: Class<*>, path: String? = null, section: String? = null): AWSCredentials {
         val credentials = path?.let { filePath ->
 
             // Get api key from config path supplied

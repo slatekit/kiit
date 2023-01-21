@@ -6,7 +6,7 @@
  * author: Kishore Reddy
  * copyright: 2016 CodeHelix Solutions Inc.
  * license: refer to website and/or github
- * 
+ *
  *
  *  </kiit_header>
  */
@@ -16,17 +16,20 @@ package kiit.connectors.cli
 import kiit.apis.ApiServer
 import kiit.apis.routes.Api
 import kiit.apis.core.Part
-import kiit.cli.*
+import kiit.cli.CLI
+import kiit.cli.CliRequest
+import kiit.cli.CliResponse
+import kiit.cli.CliSettings
 import kiit.common.Source
 import kiit.common.types.Content
 import kiit.common.types.ContentType
 import kiit.requests.InputArgs
-import kiit.utils.writer.ConsoleWriter
 import kiit.context.Context
 import kiit.results.Codes
 import kiit.results.Status
 import kiit.results.Success
 import kiit.results.Try
+import kiit.utils.writer.ConsoleWriter
 
 /**
  * Layer on top of the core CliService to provide support for handling command line requests
@@ -48,16 +51,13 @@ import kiit.results.Try
  *  3. code gen : generates client code for apis : $codegen=true -lang="kotlin"
  */
 open class CliApi(
-        val ctx: Context,
-        val auth: kiit.apis.core.Auth,
-        settings: CliSettings = CliSettings(),
-        apiItems: List<Api> = listOf(),
-        serializer:(Any?, ContentType) -> Content,
-        val metaTransform: ((Map<String,Any>) -> List<Pair<String,String>>)? = null
-)
-    : CLI(settings, ctx.info, ctx.dirs, serializer = serializer)
-{
-
+    val ctx: Context,
+    val auth: kiit.apis.core.Auth,
+    settings: CliSettings = CliSettings(),
+    apiItems: List<Api> = listOf(),
+    serializer: (Any?, ContentType) -> Content,
+    val metaTransform: ((Map<String, Any>) -> List<Pair<String, String>>)? = null
+) : CLI(settings, ctx.info, ctx.dirs, serializer = serializer) {
     // api container holding all the apis.
     val apis = ApiServer.of(ctx, apiItems, auth, Source.CLI)
 
@@ -65,17 +65,27 @@ open class CliApi(
      * executes a line of text by handing it off to the executor
      * This can be overridden in derived class
      */
-    override suspend fun executeRequest(request:CliRequest) : Try<CliResponse<*>> {
+    override suspend fun executeRequest(request: CliRequest): Try<CliResponse<*>> {
         val args = request.args
         context.writer.highlight("Executing ${info.about.name} api command " + request.fullName)
 
         // Check for help
         val helpCheck = checkForHelp(request)
-        return if(helpCheck.first) {
+        return if (helpCheck.first) {
             showHelpFor(request, helpCheck.second)
-            Success(CliResponse(request, true, Codes.HELP.name, Status.toType(Codes.HELP),  Codes.HELP.code, mapOf(), args.line), Codes.HELP)
-        }
-        else {
+            Success(
+                CliResponse(
+                    request,
+                    true,
+                    Codes.HELP.name,
+                    Status.toType(Codes.HELP),
+                    Codes.HELP.code,
+                    mapOf(),
+                    args.line
+                ),
+                Codes.HELP
+            )
+        } else {
             // Supply the api-key into each command.
             val existingMeta = request.meta.toMap()
             val transformedMeta = metaTransform?.invoke(existingMeta)?.toMap() ?: existingMeta
@@ -83,21 +93,20 @@ open class CliApi(
             val requestWithMeta = request.copy(meta = metaUpdated)
             val response = apis.executeResponse(requestWithMeta)
             val cliResponse = CliResponse(
-                    requestWithMeta,
-                    response.success,
-                    response.name,
-                    response.type,
-                    response.code,
-                    response.meta,
-                    response.value,
-                    response.desc,
-                    response.err,
-                    response.tag
+                requestWithMeta,
+                response.success,
+                response.name,
+                response.type,
+                response.code,
+                response.meta,
+                response.value,
+                response.desc,
+                response.err,
+                response.tag
             )
             Success(cliResponse)
         }
     }
-
 
     /**
      * Handles help request on any part of the api request. Api requests are typically in
@@ -124,29 +133,29 @@ open class CliApi(
                 apis.help.api(req.args.getVerb(0), req.args.getVerb(1))
             }
             // 4. {area}.{api}.{action} = help on api action
-            Part.Action-> {
+            Part.Action -> {
                 apis.help.action(req.args.getVerb(0), req.args.getVerb(1), req.args.getVerb(2))
             }
+
             else -> {
                 context.writer.failure("Unexpected command")
             }
         }
     }
 
-
-    fun checkForHelp(req:CliRequest):Pair<Boolean, Part> {
+    fun checkForHelp(req: CliRequest): Pair<Boolean, Part> {
         val args = req.args
         val hasQuestion = args.parts.isNotEmpty() && args.parts.last() == "?"
-        return if( hasQuestion ) {
-            when(args.parts.size ) {
-                1    -> Pair(true , Part.All)
-                2    -> Pair(true , Part.Area)
-                3    -> Pair(true , Part.Api)
-                4    -> Pair(true , Part.Action)
+        return if (hasQuestion) {
+            when (args.parts.size) {
+                1 -> Pair(true, Part.All)
+                2 -> Pair(true, Part.Area)
+                3 -> Pair(true, Part.Api)
+                4 -> Pair(true, Part.Action)
                 else -> Pair(false, Part.All)
             }
         } else {
-            if(args.parts.isNotEmpty() && args.parts[0] == "?" ){
+            if (args.parts.isNotEmpty() && args.parts[0] == "?") {
                 Pair(true, Part.All)
             } else {
                 Pair(false, Part.All)
@@ -154,8 +163,7 @@ open class CliApi(
         }
     }
 
-
-    open fun showOverview(name:String) {
+    open fun showOverview(name: String) {
         val writer = ConsoleWriter()
 
         writer.text("**********************************************")

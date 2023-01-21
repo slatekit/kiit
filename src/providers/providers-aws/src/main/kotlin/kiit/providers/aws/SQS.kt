@@ -6,8 +6,8 @@
  * author: Kishore Reddy
  * copyright: 2016 CodeHelix Solutions Inc.
  * license: refer to website and/or github
- * 
- * 
+ *
+ *
  *  </kiit_header>
  */
 
@@ -43,11 +43,11 @@ import java.io.IOException
  * 2. https://docs.aws.amazon.com/sdk-for-java/v1/developer-guide/examples-sqs-long-polling.html
  */
 class SQS<T>(
-        credentials: AWSCredentials,
-        val region: Regions,
-        override val name: String,
-        override val converter: QueueValueConverter<T>,
-        val waitTimeInSeconds: Int = 0
+    credentials: AWSCredentials,
+    val region: Regions,
+    override val name: String,
+    override val converter: QueueValueConverter<T>,
+    val waitTimeInSeconds: Int = 0
 ) : CloudQueue<T>, AwsSupport {
 
     private val SOURCE = "aws:sqs"
@@ -55,7 +55,6 @@ class SQS<T>(
     private val queueUrl = sqs.getQueueUrl(this.name).queueUrl
 
     override val provider: Any = sqs
-
 
     override suspend fun init() {
 
@@ -84,7 +83,6 @@ class SQS<T>(
         return count ?: 0
     }
 
-
     /**Gets the next item in the queue
      *
      * @return : An message object from the underlying queue provider
@@ -94,7 +92,6 @@ class SQS<T>(
         return result.firstOrNull()
     }
 
-
     /**Gets the next batch of items in the queue
      *
      * @param size : The number of items to get at once
@@ -103,7 +100,7 @@ class SQS<T>(
     override suspend fun next(size: Int): List<QueueEntry<T>> {
         val results = executeSync(SOURCE, "nextbatch", data = size, call = { ->
             val reqRaw = ReceiveMessageRequest(queueUrl)
-                    .withMaxNumberOfMessages(size)
+                .withMaxNumberOfMessages(size)
             val req1 = if (waitTimeInSeconds > 0) reqRaw.withWaitTimeSeconds(waitTimeInSeconds) else reqRaw
             val req2 = req1.withAttributeNames(QueueAttributeName.All)
             val req = req2.withMessageAttributeNames(QueueAttributeName.All.name)
@@ -122,10 +119,12 @@ class SQS<T>(
     override suspend fun send(value: T, tagName: String, tagValue: String): Try<String> {
         return when (tagName) {
             null, "" -> send(value, mapOf("id" to Random.uuid(), "createdAt" to DateTime.now().toStringUtc()))
-            else -> send(value, mapOf(tagName to tagValue, "id" to Random.uuid(), "createdAt" to DateTime.now().toStringUtc()))
+            else -> send(
+                value,
+                mapOf(tagName to tagValue, "id" to Random.uuid(), "createdAt" to DateTime.now().toStringUtc())
+            )
         }
     }
-
 
     /**Sends the message with the attributes supplied to the queue
      *
@@ -142,7 +141,10 @@ class SQS<T>(
             // Add the attributes
             attributes?.let {
                 req.withMessageAttributes(it.map { pair ->
-                    Pair(pair.key, MessageAttributeValue().withDataType("String").withStringValue(pair.value.toString()))
+                    Pair(
+                        pair.key,
+                        MessageAttributeValue().withDataType("String").withStringValue(pair.value.toString())
+                    )
                 }.toMap())
             }
 
@@ -150,7 +152,6 @@ class SQS<T>(
             result.messageId
         })
     }
-
 
     override suspend fun sendFromFile(fileNameLocal: String, tagName: String, tagValue: String): Try<String> {
         val path = Uris.interpret(fileNameLocal)
@@ -160,16 +161,17 @@ class SQS<T>(
             value?.let {
                 send(value, tagName, tagValue)
             } ?: kiit.results.Failure(IOException("Invalid file path: $fileNameLocal"))
-        } ?: kiit.results.Failure(IOException("Invalid file path: $fileNameLocal"),
-                msg = "Invalid file path: $fileNameLocal")
+        } ?: kiit.results.Failure(
+            IOException("Invalid file path: $fileNameLocal"),
+            msg = "Invalid file path: $fileNameLocal"
+        )
     }
-
 
     /** Abandons the message supplied    *
      *
      * @param entry : The message to abandon/delete
      */
-    override suspend fun abandon(entry: QueueEntry<T>?):Try<QueueEntry<T>> {
+    override suspend fun abandon(entry: QueueEntry<T>?): Try<QueueEntry<T>> {
         return entry?.let {
             Tries.of {
                 discard(it, "abandon")
@@ -178,12 +180,11 @@ class SQS<T>(
         } ?: Tries.invalid()
     }
 
-
     /** Completes the message by deleting it from the queue
      *
      * @param entry : The message to complete
      */
-    override suspend fun done(entry: QueueEntry<T>?):Try<QueueEntry<T>> {
+    override suspend fun done(entry: QueueEntry<T>?): Try<QueueEntry<T>> {
         return entry?.let {
             Tries.of {
                 discard(it, "done")
@@ -191,7 +192,6 @@ class SQS<T>(
             }
         } ?: Tries.invalid()
     }
-
 
     private fun getOrDefault(map: Map<String, Any>, key: String, defaultVal: Any): Any {
         return map.getOrDefault(key, defaultVal)
@@ -210,12 +210,12 @@ class SQS<T>(
                     sqs.deleteMessage(DeleteMessageRequest(queueUrl, msgHandle))
                 })
             }
+
             else -> {
                 throw Exception("Incorrect QueueEntry for AWS Queue")
             }
         }
     }
-
 
     private fun createEntry(msg: Message): QueueEntry<T> {
         val bodyAsString = msg.body
@@ -227,12 +227,11 @@ class SQS<T>(
         return entry
     }
 
-
     data class AwsQueueEntry<T>(
-            val entry: T?,
-            val message: Message,
-            override val id: String = Random.uuid(),
-            override val createdAt: DateTime = DateTime.now()
+        val entry: T?,
+        val message: Message,
+        override val id: String = Random.uuid(),
+        override val createdAt: DateTime = DateTime.now()
     ) : QueueEntry<T> {
 
         /**
@@ -241,11 +240,9 @@ class SQS<T>(
          */
         override val raw: Any? = message
 
-
         override fun getValue(): T? {
             return entry
         }
-
 
         /**
          * Gets the named tag stored in this entry
@@ -253,7 +250,6 @@ class SQS<T>(
         override fun getTag(name: String): String? {
             return getMessageTag(message, name)
         }
-
 
         companion object {
 
@@ -270,13 +266,34 @@ class SQS<T>(
     }
 
     companion object {
-        fun <T> of(cls:Class<*>, region: String, name: String, apiKey: ApiLogin, converter: QueueValueConverter<T>, waitTimeInSeconds: Int = 0): Try<SQS<T>> {
+        fun <T> of(
+            cls: Class<*>,
+            region: String,
+            name: String,
+            apiKey: ApiLogin,
+            converter: QueueValueConverter<T>,
+            waitTimeInSeconds: Int = 0
+        ): Try<SQS<T>> {
             return build(region) { regions ->
-                SQS<T>(AwsFuncs.credsWithKeySecret(apiKey.key, apiKey.pass), regions, name, converter, waitTimeInSeconds)
+                SQS<T>(
+                    AwsFuncs.credsWithKeySecret(apiKey.key, apiKey.pass),
+                    regions,
+                    name,
+                    converter,
+                    waitTimeInSeconds
+                )
             }
         }
 
-        fun <T> of(cls:Class<*>, region: String, name: String, converter: QueueValueConverter<T>, confPath: String? = null, confSection: String? = null, waitTimeInSeconds: Int = 0): Try<SQS<T>> {
+        fun <T> of(
+            cls: Class<*>,
+            region: String,
+            name: String,
+            converter: QueueValueConverter<T>,
+            confPath: String? = null,
+            confSection: String? = null,
+            waitTimeInSeconds: Int = 0
+        ): Try<SQS<T>> {
             return build(region) { regions ->
                 SQS<T>(AwsFuncs.creds(cls, confPath, confSection), regions, name, converter, waitTimeInSeconds)
             }

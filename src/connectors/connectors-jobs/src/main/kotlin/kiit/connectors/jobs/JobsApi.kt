@@ -27,7 +27,6 @@ import kiit.jobs.Jobs
 import kiit.results.Outcome
 import kiit.results.builders.Outcomes
 
-
 @Api(area = "infra", name = "workers", desc = "api to get version information",
         auth = AuthModes.KEYED, roles = ["admin"], verb = Verbs.AUTO, sources = [Sources.ALL])
 class JobsApi(override val context: AppEntContext) : FileSupport {
@@ -92,7 +91,6 @@ class JobsApi(override val context: AppEntContext) : FileSupport {
         val ids = workers?.getIds()?.map { it.id }
         ids
     }.flatten()
-
 
     private fun Feedback.outcome():Outcome<String> = Outcomes.of(this.success, "", this.msg)
 }

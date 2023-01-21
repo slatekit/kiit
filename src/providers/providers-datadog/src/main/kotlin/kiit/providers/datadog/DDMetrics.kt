@@ -9,24 +9,23 @@ import io.micrometer.core.instrument.binder.jvm.JvmThreadMetrics
 import io.micrometer.core.instrument.binder.system.ProcessorMetrics
 import io.micrometer.datadog.DatadogMeterRegistry
 import kiit.common.Identity
-import kiit.common.Provider
-import kiit.telemetry.*
+import kiit.telemetry.Metrics
+import kiit.telemetry.MetricsSettings
+import kiit.telemetry.Tag
 
-
-class DDMetrics(val registry: MeterRegistry,
-                override val id: Identity,
-                override val settings: MetricsSettings) : Metrics {
-
+class DDMetrics(
+    val registry: MeterRegistry,
+    override val id: Identity,
+    override val settings: MetricsSettings
+) : Metrics {
 
     override val source: String = "micrometer"
     val emptyLocalTags = arrayOf<String>()
 
-
     override val provider: Any = registry
 
-
     override fun total(name: String): Double {
-        return if(settings.enabled)
+        return if (settings.enabled)
             registry.counter(name, listOf()).count()
         else
             0.0
@@ -36,42 +35,38 @@ class DDMetrics(val registry: MeterRegistry,
      * Increment a counter
      */
     override fun count(name: String, tags: List<String>?) {
-        if(settings.enabled) {
+        if (settings.enabled) {
             val counter = registry.counter(name, *(tags?.toTypedArray() ?: emptyLocalTags))
             counter.increment()
         }
     }
 
-
     /**
      * Set value on a gauge
      */
-    override fun <T> gauge(name: String, call: () -> T, tags: List<Tag>?) where T: kotlin.Number {
-        if(settings.enabled){
+    override fun <T> gauge(name: String, call: () -> T, tags: List<Tag>?) where T : kotlin.Number {
+        if (settings.enabled) {
             registry.gauge(name, toTags(tags ?: listOf()), call(), { it -> it.toDouble() })
         }
     }
 
-
     /**
      * Set value on a gauge
      */
-    override fun <T> gauge(name: String, value:T) where T: kotlin.Number {
-        if(settings.enabled) {
+    override fun <T> gauge(name: String, value: T) where T : kotlin.Number {
+        if (settings.enabled) {
             registry.gauge(name, value)
         }
     }
 
-
     /**
      * Times an event
      */
-    override fun time(name: String, tags: List<String>?, call:() -> Unit ) {
-        if(settings.enabled){
+    override fun time(name: String, tags: List<String>?, call: () -> Unit) {
+        if (settings.enabled) {
             registry.timer(name, *(tags?.toTypedArray() ?: emptyLocalTags)).record(call)
         }
     }
-
 
     companion object {
         fun toTags(tags: List<Tag>): List<io.micrometer.core.instrument.Tag> {
@@ -80,13 +75,13 @@ class DDMetrics(val registry: MeterRegistry,
             }
         }
 
-        fun build(settings:MetricsSettings, config:DDConfig, bindMetrics:Boolean):MeterRegistry {
+        fun build(settings: MetricsSettings, config: DDConfig, bindMetrics: Boolean): MeterRegistry {
             val registry = DatadogMeterRegistry(config, Clock.SYSTEM)
-            if(settings.standardize) {
+            if (settings.standardize) {
                 val globalTags = toTags(settings.tags.global).toMutableList()
                 registry.config().commonTags(globalTags)
             }
-            if(settings.enabled && bindMetrics) {
+            if (settings.enabled && bindMetrics) {
                 ClassLoaderMetrics().bindTo(registry)
                 JvmMemoryMetrics().bindTo(registry)
                 JvmGcMetrics().bindTo(registry)

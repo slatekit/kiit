@@ -19,7 +19,8 @@ data class JobQueue(
     override val name: String,
     override val priority: Priority,
     private val queue: AsyncQueue<String>,
-    val id: Identity = Identity.empty) : Queue {
+    val id: Identity = Identity.empty
+) : Queue {
 
     /**
      * Sends an payload / task into the queue
@@ -48,7 +49,7 @@ data class JobQueue(
      */
     override suspend fun done(task: Task) {
         val entry = task.entry
-        if(task.entry is QueueEntry<*>) {
+        if (task.entry is QueueEntry<*>) {
             queue.done(entry as QueueEntry<String>)
         }
     }
@@ -60,7 +61,7 @@ data class JobQueue(
      */
     override suspend fun fail(task: Task) {
         val entry = task.entry
-        if(task.entry is QueueEntry<*>) {
+        if (task.entry is QueueEntry<*>) {
             queue.abandon(entry as QueueEntry<String>)
         }
     }
@@ -71,9 +72,9 @@ data class JobQueue(
          * Converts a message from any queue into a Task
          */
         fun task(identity: Identity, entry: QueueEntry<String>, queue: Queue): Task {
-            val id  = entry.getTag("id") ?: ""
-            val name= entry.getTag("name") ?: ""
-            val data= entry.getValue()?.toString() ?: ""
+            val id = entry.getTag("id") ?: ""
+            val name = entry.getTag("name") ?: ""
+            val data = entry.getValue()?.toString() ?: ""
             val xid = entry.getTag("xid") ?: ""
             val tag = entry.getTag("tag") ?: ""
             val task = Task(id, queue.name, identity.id, name, data, xid, tag, entry, queue)

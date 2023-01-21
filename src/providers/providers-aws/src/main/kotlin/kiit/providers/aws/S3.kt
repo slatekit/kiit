@@ -7,7 +7,7 @@
  * copyright: 2016 CodeHelix Solutions Inc.
  * license: refer to website and/or github
  *
- * 
+ *
  *  </kiit_header>
  */
 
@@ -21,10 +21,7 @@ import com.amazonaws.services.s3.model.GeneratePresignedUrlRequest
 import com.amazonaws.services.s3.model.GetObjectRequest
 import com.amazonaws.services.s3.model.ObjectMetadata
 import kiit.common.info.ApiLogin
-import kiit.common.io.Uris
 import kiit.core.files.CloudFiles
-import kiit.core.common.FileUtils
-import kiit.common.Provider
 import kiit.core.files.CloudFile
 import kiit.core.files.CloudFileEntry
 import kiit.results.Try
@@ -33,7 +30,6 @@ import kiit.results.getOrElse
 import java.io.ByteArrayInputStream
 import java.io.File
 import java.time.Instant
-import kotlin.math.exp
 
 /**
  *
@@ -43,10 +39,10 @@ import kotlin.math.exp
  * @param createBucket : Whether or not to create the bucket
  */
 class S3(
-        credentials: AWSCredentials,
-        val region: Regions,
-        bucket: String,
-        createBucket: Boolean
+    credentials: AWSCredentials,
+    val region: Regions,
+    bucket: String,
+    createBucket: Boolean
 ) : CloudFiles, AwsSupport {
 
     override val rootFolder = formatBucket(bucket)
@@ -84,11 +80,9 @@ class S3(
         return put("create", entry)
     }
 
-
     override suspend fun update(entry: CloudFile): Try<String> {
         return put("update", entry)
     }
-
 
     override suspend fun delete(entry: CloudFile): Try<String> {
         val fullName = getName(entry.path, entry.name)
@@ -98,14 +92,13 @@ class S3(
         })
     }
 
-
     /**
      * uploads the file to the datasource using the supplied folder, filename, and content
      * @param action: "create" | "update"
      * @param entry : content of file
      * @return
      */
-    suspend fun put(action: String, entry:CloudFile): Try<String> {
+    suspend fun put(action: String, entry: CloudFile): Try<String> {
         // full name of the file is folder + name
         val fullName = getName(entry.path, entry.name)
         return executeResult(SOURCE, action, data = fullName, call = {
@@ -115,7 +108,6 @@ class S3(
             fullName
         })
     }
-
 
     override suspend fun getFile(entry: CloudFile): Try<CloudFile> {
         val fullName = getName(entry.path, entry.name)
@@ -149,16 +141,20 @@ class S3(
         })
     }
 
-    override suspend fun buildSignedGetUrl(folder: String?, name:String, expiresInSeconds:Int): String {
+    override suspend fun buildSignedGetUrl(folder: String?, name: String, expiresInSeconds: Int): String {
         return buildSignedUrl(folder, name, HttpMethod.GET, expiresInSeconds)
     }
 
-    override suspend fun buildSignedPutUrl(folder: String?, name:String, expiresInSeconds:Int): String {
+    override suspend fun buildSignedPutUrl(folder: String?, name: String, expiresInSeconds: Int): String {
         return buildSignedUrl(folder, name, HttpMethod.GET, expiresInSeconds)
     }
 
-
-    private suspend fun buildSignedUrl(folder: String?, name:String, method:HttpMethod, expiresInSeconds:Int): String {
+    private suspend fun buildSignedUrl(
+        folder: String?,
+        name: String,
+        method: HttpMethod,
+        expiresInSeconds: Int
+    ): String {
         val now = Instant.now().toEpochMilli()
         val expires = now + 1000 * expiresInSeconds
         val exp = java.util.Date(expires)
@@ -181,7 +177,6 @@ class S3(
         }
     }
 
-
     companion object {
         fun of(region: String, bucket: String, createBucket: Boolean, apiKey: ApiLogin): Try<S3> {
             return build(region) { regions ->
@@ -189,7 +184,14 @@ class S3(
             }
         }
 
-        fun of(cls:Class<*>, region: String, bucket: String, createBucket: Boolean, confPath: String? = null, confSection: String? = null): Try<S3> {
+        fun of(
+            cls: Class<*>,
+            region: String,
+            bucket: String,
+            createBucket: Boolean,
+            confPath: String? = null,
+            confSection: String? = null
+        ): Try<S3> {
             return build(region) { regions ->
                 S3(AwsFuncs.creds(cls, confPath, confSection), regions, bucket, createBucket)
             }

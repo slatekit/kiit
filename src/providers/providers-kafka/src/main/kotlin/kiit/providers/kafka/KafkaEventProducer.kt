@@ -1,9 +1,7 @@
 package kiit.providers.kafka
 
-
 import kotlinx.coroutines.CompletableDeferred
 import org.apache.kafka.clients.producer.RecordMetadata
-import org.apache.kafka.clients.producer.*
 import kiit.common.Identity
 import kiit.common.conf.Conf
 import kiit.common.log.Logger
@@ -13,7 +11,8 @@ import kiit.core.eventing.EventTopic
 import kiit.core.eventing.EventUtils
 import kiit.results.Outcome
 import kiit.results.builders.Outcomes
-
+import org.apache.kafka.clients.producer.KafkaProducer
+import org.apache.kafka.clients.producer.ProducerRecord
 
 /**
  * Reusable Kafka Event Publisher, with this there no need to create a custom EventX Producer.
@@ -26,12 +25,13 @@ import kiit.results.builders.Outcomes
  * @tparam TPayload
  */
 class KafkaEventProducer<TData, TEvent>(
-        val config: Conf,
-        topicName: String,
-        val logger: Logger,
-        override val converter: EventConverter<TData, TEvent>): EventProducer<TData, TEvent, RecordMetadata> {
+    val config: Conf,
+    topicName: String,
+    val logger: Logger,
+    override val converter: EventConverter<TData, TEvent>
+) : EventProducer<TData, TEvent, RecordMetadata> {
 
-    protected val kconfig  = KafkaConfig.load(config, true)
+    protected val kconfig = KafkaConfig.load(config, true)
     protected val kafka = KafkaProducer<String, String>(kconfig.props())
 
     override val provider: Any = kafka
@@ -50,7 +50,7 @@ class KafkaEventProducer<TData, TEvent>(
      * {name}.{instance}
      * e.g. "journal_events_all_v1.123456
      */
-    override val id: Identity = Identity.job( topic.name, "")
+    override val id: Identity = Identity.job(topic.name, "")
 
     /**
      * Publish typed event that will be converted to the full standardized envelope ( headers + payload )
@@ -58,12 +58,12 @@ class KafkaEventProducer<TData, TEvent>(
      * @param key     : Optional key for partitioning ( e.g. user uuid )
      * @return
      */
-    override suspend fun publish(data: TData, key:String?): Outcome<RecordMetadata> {
+    override suspend fun publish(data: TData, key: String?): Outcome<RecordMetadata> {
         return try {
             val envelope = converter.convert(data)
             val json = converter.encode(envelope)
             publish(envelope, key, json)
-        } catch(ex:Exception) {
+        } catch (ex: Exception) {
             Outcomes.unexpected<RecordMetadata>(ex)
         }
     }
@@ -78,7 +78,7 @@ class KafkaEventProducer<TData, TEvent>(
      * @param message  : Optional JSON representation of the envelope if available ( to avoid duplicate JSON serialization )
      * @return
      */
-    override suspend fun publish(envelope: TEvent, key:String?, message: String?): Outcome<RecordMetadata> {
+    override suspend fun publish(event: TEvent, key: String?, message: String?): Outcome<RecordMetadata> {
 //        val promise = Job[Either[WWError, RecordMetadata]]()
 //        publish(promise, envelope, key, message)
 //        val result:Future[Either[WWError, RecordMetadata]] = promise.future
@@ -94,7 +94,12 @@ class KafkaEventProducer<TData, TEvent>(
      * @param message  : Optional JSON representation of the envelope if available ( to avoid duplicate JSON serialization )
      * @return
      */
-    override suspend fun publish(promise: CompletableDeferred<Outcome<RecordMetadata>>, event: TEvent, key:String?, message: String?):Unit {
+    override suspend fun publish(
+        promise: CompletableDeferred<Outcome<RecordMetadata>>,
+        event: TEvent,
+        key: String?,
+        message: String?
+    ) {
         // NOTE: No need for object allocation via Try, plain "try" is good enough
         // at this level where we are publishing many events.
         try {
@@ -107,18 +112,19 @@ class KafkaEventProducer<TData, TEvent>(
                 // Regardless of exception, we are modeling success/failure using Either.
                 // Only unhandled exception ( see catch below ) is reason for promise.failure
                 if (ex == null) {
-                    //logger.info("Action='kafka-publish', success=true, status=succeeded, producer=${id.instance}, topic=$topic, id=${event.headers.id}, type=${event.headers.`type`}, action=${envelope.headers.action}, partition=${metadata.partition()}")
+                    // logger.info("Action='kafka-publish', success=true, status=succeeded, producer=${id.instance}, topic=$topic, id=${event.headers.id}, type=${event.headers.`type`}, action=${envelope.headers.action}, partition=${metadata.partition()}")
                     logger.info("Action='kafka-publish', success=true, status=succeeded, producer=${id.instance}, topic=$topic,  partition=${metadata.partition()}")
                     promise.complete(Outcomes.success(metadata))
                 } else {
-                    val msg = "Action='kafka-publish', success=false, status=unexpected, producer=${id.instance}, topic=$topic}"
+                    val msg =
+                        "Action='kafka-publish', success=false, status=unexpected, producer=${id.instance}, topic=$topic}"
                     logger.error(msg, ex)
                     promise.complete(Outcomes.unexpected(ex))
                 }
             }
             // No need to flush, kakfa will handle that itself
             // kafka.flush()
-        } catch(ex: Exception) {
+        } catch (ex: Exception) {
             val msg = "Action='kafka-publish', success=false, status=unexpected, producer=${id.instance}, topic=$topic}"
             logger.error(msg, ex)
             promise.complete(Outcomes.unexpected(ex))
@@ -136,19 +142,19 @@ class KafkaEventProducer<TData, TEvent>(
      * @param message  : Optional JSON representation of the envelope if available ( to avoid duplicate JSON serialization )
      * @return
      */
-    override fun publishSync(event: TEvent, key:String?, message: String?): Outcome<RecordMetadata> {
+    override fun publishSync(event: TEvent, key: String?, message: String?): Outcome<RecordMetadata> {
         return try {
             // Ensure partitioning by key/uuid if supplied
-            val finalMessage =  message ?: converter.encode(event)
+            val finalMessage = message ?: converter.encode(event)
             val record: ProducerRecord<String, String> = build(key, finalMessage)
             val future = kafka.send(record)
             val metadata = future.get()
             // No need to flush, kakfa will handle that itself
             // kafka.flush()
-            //logger.info("Action='kafka-publish', success=true, status=succeeded, producer=${id.instance}, topic=$topic, id=${envelope.headers.id}, type=${envelope.headers.`type`}, action=${envelope.headers.action}, partition=${metadata.partition()}")
+            // logger.info("Action='kafka-publish', success=true, status=succeeded, producer=${id.instance}, topic=$topic, id=${envelope.headers.id}, type=${envelope.headers.`type`}, action=${envelope.headers.action}, partition=${metadata.partition()}")
             logger.info("Action='kafka-publish', success=true, status=succeeded, producer=${id.instance}, topic=$topic, partition=${metadata.partition()}")
             Outcomes.success(metadata)
-        } catch ( ex:Exception) {
+        } catch (ex: Exception) {
             val msg = "Action='kafka-publish', success=false, status=unexpected, producer=${id.instance}, topic=$topic}"
             logger.error(msg, ex)
             Outcomes.unexpected(ex)
@@ -156,16 +162,13 @@ class KafkaEventProducer<TData, TEvent>(
     }
 
     override suspend fun flush() {
-
     }
 
     override suspend fun close() {
-
     }
 
-
-    private fun build(key:String?, message:String): ProducerRecord<String, String> {
-        val record: ProducerRecord<String, String> = when(key) {
+    private fun build(key: String?, message: String): ProducerRecord<String, String> {
+        val record: ProducerRecord<String, String> = when (key) {
             null -> ProducerRecord(topic.fullname, message)
             else -> ProducerRecord(topic.fullname, key, message)
         }
