@@ -1,6 +1,8 @@
 package kiit.providers.logback
 
-import kiit.common.log.*
+import kiit.common.log.LogEntry
+import kiit.common.log.LogLevel
+import kiit.common.log.Logger
 
 class LogbackLogger(private val instance: org.slf4j.Logger) : Logger(parseLevel(instance), instance.name) {
 
@@ -11,13 +13,13 @@ class LogbackLogger(private val instance: org.slf4j.Logger) : Logger(parseLevel(
      * NOTE: Logback logger doesn't seem to have a .log method so
      * check log level and log to corresponding method
      *
-     * @param entry: 
+     * @param entry:
      */
     override fun log(entry: LogEntry) {
         when (entry.level) {
             LogLevel.Debug -> instance.debug(entry.msg, entry.ex)
-            LogLevel.Info  -> instance.info (entry.msg, entry.ex)
-            LogLevel.Warn  -> instance.warn (entry.msg, entry.ex)
+            LogLevel.Info -> instance.info(entry.msg, entry.ex)
+            LogLevel.Warn -> instance.warn(entry.msg, entry.ex)
             LogLevel.Error -> instance.error(entry.msg, entry.ex)
             LogLevel.Fatal -> instance.error(entry.msg, entry.ex)
         }
@@ -26,9 +28,9 @@ class LogbackLogger(private val instance: org.slf4j.Logger) : Logger(parseLevel(
     companion object {
         fun parseLevel(instance: org.slf4j.Logger): LogLevel {
             return if (instance.isDebugEnabled) LogLevel.Debug
-            else if (instance.isInfoEnabled)    LogLevel.Info
-            else if (instance.isWarnEnabled)    LogLevel.Warn
-            else if (instance.isErrorEnabled)   LogLevel.Error
+            else if (instance.isInfoEnabled) LogLevel.Info
+            else if (instance.isWarnEnabled) LogLevel.Warn
+            else if (instance.isErrorEnabled) LogLevel.Error
             else LogLevel.Info
         }
     }
