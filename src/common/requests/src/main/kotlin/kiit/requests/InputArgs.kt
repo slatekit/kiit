@@ -23,8 +23,8 @@ import kiit.common.values.Metadata
  * Created by kishorereddy on 5/25/17.
  */
 open class InputArgs(
-        val map: Map<String, Any>,
-        private val decryptor: ((String) -> String)? = null
+    val map: Map<String, Any>,
+    private val decryptor: ((String) -> String)? = null
 ) : Metadata, InputsUpdateable {
 
     override val raw: Any = map
@@ -46,6 +46,7 @@ open class InputArgs(
     override fun getZonedDateTimeUtc(key: String): ZonedDateTime = Conversions.toZonedDateTimeUtc(map[key].toString())
 
     override fun get(key: String): Any? = if (map.contains(key)) map[key] else null
+
     //override fun getObject(key: String): Any? = if (_map.contains(key)) _map[key] else null
     override fun containsKey(key: String): Boolean = map.contains(key)
     override fun size(): Int = map.size

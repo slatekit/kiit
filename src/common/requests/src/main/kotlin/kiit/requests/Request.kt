@@ -17,7 +17,6 @@ import kiit.common.Source
 import kiit.common.ext.toStringUtc
 import kiit.common.values.Metadata
 
-
 /**
  * Represents an abstraction of a Web Api Request and also a CLI ( Command Line ) request
  * path : route(endpoint) e.g. /{area}/{name}/{action} e.g. /app/reg/activateUser
@@ -46,31 +45,41 @@ interface Request {
     /**
      * The full path of the route
      */
-    val fullName: String get() {
-        return if (name.isNullOrEmpty())
-            area
-        else if (action.isNullOrEmpty())
-            "$area.$name"
-        else
-            "$area.$name.$action"
-    }
+    val fullName: String
+        get() {
+            return if (name.isNullOrEmpty())
+                area
+            else if (action.isNullOrEmpty())
+                "$area.$name"
+            else
+                "$area.$name.$action"
+        }
 
     /**
      * The top-most, first part of the route
      * e.g. Given /app/users/activate  , the area is 'app'
      */
-    val area:String get(){ return parts.getOrElse(0) { "" } }
+    val area: String
+        get() {
+            return parts.getOrElse(0) { "" }
+        }
 
     /**
      * The second part of the route
      * e.g. Given /app/users/activate , the name is 'users'
      */
-    val name:String get(){ return parts.getOrElse(1) { "" } }
+    val name: String
+        get() {
+            return parts.getOrElse(1) { "" }
+        }
 
     /**
      * The third part of the route
      */
-    val action:String get(){ return  parts.getOrElse(2) { "" } }
+    val action: String
+        get() {
+            return parts.getOrElse(2) { "" }
+        }
 
     /**
      * Whether or not this is the path
@@ -79,22 +88,20 @@ interface Request {
         return area == targetArea && name == targetName && action == targetAction
     }
 
-
     /**
      * Descturctured into key/value pairs for structured logging
      */
-    fun structured():List<Pair<String, Any?>>{
+    fun structured(): List<Pair<String, Any?>> {
         return listOf(
-                Request::area.name      to area,
-                Request::name.name      to name,
-                Request::action.name    to action,
-                Request::source.name    to source.id,
-                Request::verb.name      to verb,
-                Request::tag.name       to tag,
-                Request::timestamp.name to timestamp.toStringUtc()
+            Request::area.name to area,
+            Request::name.name to name,
+            Request::action.name to action,
+            Request::source.name to source.id,
+            Request::verb.name to verb,
+            Request::tag.name to tag,
+            Request::timestamp.name to timestamp.toStringUtc()
         )
     }
-
 
     /**
      * To transform / rewrite the request
@@ -110,6 +117,6 @@ interface Request {
         otherOutput: String?,
         otherTag: String,
         otherVersion: String,
-        otherTimestamp:DateTime) : Request
+        otherTimestamp: DateTime
+    ): Request
 }
-

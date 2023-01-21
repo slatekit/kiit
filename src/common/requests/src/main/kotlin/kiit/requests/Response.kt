@@ -1,5 +1,5 @@
 /**
- <kiit_header>
+<kiit_header>
 url: www.kiit.dev
 git: www.github.com/slatekit/kiit
 org: www.codehelix.co
@@ -8,18 +8,17 @@ copyright: 2016 CodeHelix Solutions Inc.
 license: refer to website and/or github
 about: A Kotlin utility library, tool-kit and server backend.
 
- </kiit_header>
+</kiit_header>
  */
 package kiit.requests
 
 import kiit.results.Codes
 
-
 /**
  * General purpose class to model a Response at an application boundary ( such as http response )
  * NOTE: This is used for the APIs in Slate Kit
  */
-interface Response<out T>  {
+interface Response<out T> {
     val success: Boolean
     val name: String
     val type: String
@@ -36,8 +35,7 @@ interface Response<out T>  {
     fun withMeta(meta: List<Pair<String, String>>): Response<T>
 }
 
-
-fun <T> Response<T>.isInSuccessRange(): Boolean = this.code in Codes.SUCCESS.code .. Codes.QUEUED.code
+fun <T> Response<T>.isInSuccessRange(): Boolean = this.code in Codes.SUCCESS.code..Codes.QUEUED.code
 fun <T> Response<T>.isFilteredOut(): Boolean = this.code == Codes.IGNORED.code
-fun <T> Response<T>.isInBadRequestRange(): Boolean = this.code in Codes.BAD_REQUEST.code .. Codes.UNAUTHORIZED.code
-fun <T> Response<T>.isInFailureRange(): Boolean = this.code in Codes.ERRORED.code .. Codes.UNEXPECTED.code
+fun <T> Response<T>.isInBadRequestRange(): Boolean = this.code in Codes.BAD_REQUEST.code..Codes.UNAUTHORIZED.code
+fun <T> Response<T>.isInFailureRange(): Boolean = this.code in Codes.ERRORED.code..Codes.UNEXPECTED.code
