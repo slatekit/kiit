@@ -21,21 +21,27 @@ import kiit.common.log.Logs
  * enc  : encryption/decryption service
  * dirs : directories used for the app
  */
-interface Context  {
-    val app : Class<*>
+interface Context {
+    val app: Class<*>
     val args: Args
     val envs: Envs
     val conf: Conf
     val logs: Logs
     val info: Info
-    val id : Identity
+    val id: Identity
     val enc: Encryptor?
     val dirs: Folders?
 
     companion object {
-        fun identity(info:Info, envs: Envs):Identity {
-            return SimpleIdentity(info.about.area, info.about.name, Agent.App, envs.name, version = info.build.version, desc = info.about.desc)
+        fun identity(info: Info, envs: Envs): Identity {
+            return SimpleIdentity(
+                info.about.area,
+                info.about.name,
+                Agent.App,
+                envs.name,
+                version = info.build.version,
+                desc = info.about.desc
+            )
         }
     }
 }
-
