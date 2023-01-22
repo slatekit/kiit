@@ -42,51 +42,51 @@ class TemplateParser(val text: String) {
 
         val subs = mutableListOf<TemplatePart>()
         val result =
-                try {
-                    var lastText: String = ""
-                    var lastPos = state.pos
+            try {
+                var lastText: String = ""
+                var lastPos = state.pos
 
-                    while (state.pos < state.END) {
-                        val c = state.text[state.pos]
-                        val hasMore = state.pos + 1 < state.END
-                        val n = if (hasMore) state.text[state.pos + 1] else ' '
+                while (state.pos < state.END) {
+                    val c = state.text[state.pos]
+                    val hasMore = state.pos + 1 < state.END
+                    val n = if (hasMore) state.text[state.pos + 1] else ' '
 
-                        state.count = state.count + 1
+                    state.count = state.count + 1
 
-                        // CASE 1: substitution
-                        if (c == '@' && hasMore && n == '{') {
-                            if (!lastText.isNullOrEmpty()) {
-                                val sub = TemplatePart(lastText, TemplateConstants.TypeText, lastPos, state.pos - lastPos)
-                                subs.add(sub)
-                            }
-                            val sub = readSub()
+                    // CASE 1: substitution
+                    if (c == '@' && hasMore && n == '{') {
+                        if (!lastText.isNullOrEmpty()) {
+                            val sub = TemplatePart(lastText, TemplateConstants.TypeText, lastPos, state.pos - lastPos)
                             subs.add(sub)
-
-                            // reset
-                            lastText = ""
-                            lastPos = state.pos
                         }
-                        // CASE 2: Keep reading until sub
-                        else {
-                            lastText += c
-                            state.pos += 1
-                        }
-                    }
-
-                    // Last part was text ?!
-                    if (!lastText.isNullOrEmpty()) {
-                        val sub = TemplatePart(lastText, TemplateConstants.TypeText, lastPos, state.pos - lastPos)
+                        val sub = readSub()
                         subs.add(sub)
-                    }
 
-                    // Success!
-                    Success(subs.toList())
-                } catch (ex: Exception) {
-                    val line = state.line
-                    val text = "Error occurred at : line : $line, char : ${state.pos}" + ex.message
-                    val err = Exception(text, ex)
-                    Failure(err, msg = text)
+                        // reset
+                        lastText = ""
+                        lastPos = state.pos
+                    }
+                    // CASE 2: Keep reading until sub
+                    else {
+                        lastText += c
+                        state.pos += 1
+                    }
                 }
+
+                // Last part was text ?!
+                if (!lastText.isNullOrEmpty()) {
+                    val sub = TemplatePart(lastText, TemplateConstants.TypeText, lastPos, state.pos - lastPos)
+                    subs.add(sub)
+                }
+
+                // Success!
+                Success(subs.toList())
+            } catch (ex: Exception) {
+                val line = state.line
+                val text = "Error occurred at : line : $line, char : ${state.pos}" + ex.message
+                val err = Exception(text, ex)
+                Failure(err, msg = text)
+            }
         return result
     }
 

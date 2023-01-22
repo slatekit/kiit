@@ -22,9 +22,9 @@ import kiit.results.getOrElse
  * @param setDefaults
  */
 class Templates(
-        val templates: List<Template>? = null,
-        val variables: List<Pair<String, (TemplatePart) -> String>>? = null,
-        setDefaults: Boolean = true
+    val templates: List<Template>? = null,
+    val variables: List<Pair<String, (TemplatePart) -> String>>? = null,
+    setDefaults: Boolean = true
 ) {
 
     /**
@@ -51,14 +51,14 @@ class Templates(
     fun parseTemplate(name: String, text: String): Template {
         val result = parse(text)
         return Template(
-                name = name,
-                content = text,
-                parsed = true,
-                valid = result.success,
-                status = result.desc,
-                group = null,
-                path = null,
-                parts = result.getOrElse({ listOf<TemplatePart>() })
+            name = name,
+            content = text,
+            parsed = true,
+            valid = result.success,
+            status = result.desc,
+            group = null,
+            path = null,
+            parts = result.getOrElse({ listOf<TemplatePart>() })
         )
     }
 
@@ -114,8 +114,8 @@ class Templates(
         val finalResult = if (result.success) {
             val parts = result.getOrElse { listOf() }
             if (parts.isEmpty()) {
-                    text
-                } else {
+                text
+            } else {
                 resolveParts(parts, substitutions ?: subs)
             }
         } else {
@@ -171,8 +171,8 @@ class Templates(
          */
         @JvmStatic
         fun build(
-                templates: List<Template>,
-                subs: List<Pair<String, (TemplatePart) -> String>>? = null
+            templates: List<Template>,
+            subs: List<Pair<String, (TemplatePart) -> String>>? = null
         ): Templates {
 
             // Each template
@@ -193,9 +193,10 @@ class Templates(
                 val result = TemplateParser(template.content).parse()
 
                 // Build the  template
-                template.copy(parsed = true,
-                        valid = result.success,
-                        parts = result.getOrElse{ listOf() }
+                template.copy(
+                    parsed = true,
+                    valid = result.success,
+                    parts = result.getOrElse { listOf() }
                 )
             }
             return parsed

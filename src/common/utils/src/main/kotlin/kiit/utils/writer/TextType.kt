@@ -11,26 +11,25 @@
 
 package kiit.utils.writer
 
-sealed class TextType(val name:String, val color: String, private val upperCase: Boolean, val format:Boolean = true) {
+sealed class TextType(val name: String, val color: String, private val upperCase: Boolean, val format: Boolean = true) {
 
-    object Title     : TextType("title"    , Colors.BLUE, true)
-    object Subtitle  : TextType("subtitle" , Colors.CYAN, false)
-    object Url       : TextType("url"      , Colors.BLUE, false)
+    object Title : TextType("title", Colors.BLUE, true)
+    object Subtitle : TextType("subtitle", Colors.CYAN, false)
+    object Url : TextType("url", Colors.BLUE, false)
     object Important : TextType("important", Colors.RED, false)
     object Highlight : TextType("highlight", Colors.YELLOW, false)
-    object Success   : TextType("success"  , Colors.GREEN, false)
-    object Failure   : TextType("failure"  , Colors.RED, false)
-    object Text      : TextType("text"     , Colors.WHITE, false)
-    object Label     : TextType("label"    , Colors.WHITE, false)
-    object NoFormat  : TextType("none"     , "",false)
-    object NewLine   : TextType("newline"  , "",false)
-    object Tab       : TextType("tab"      , "",false)
-    object Raw       : TextType("raw"      , "",false, false)
+    object Success : TextType("success", Colors.GREEN, false)
+    object Failure : TextType("failure", Colors.RED, false)
+    object Text : TextType("text", Colors.WHITE, false)
+    object Label : TextType("label", Colors.WHITE, false)
+    object NoFormat : TextType("none", "", false)
+    object NewLine : TextType("newline", "", false)
+    object Tab : TextType("tab", "", false)
+    object Raw : TextType("raw", "", false, false)
 
     fun format(text: String): String {
         return if (upperCase) text.toUpperCase() else text
     }
-
 
     companion object {
         /**
@@ -51,7 +50,7 @@ sealed class TextType(val name:String, val color: String, private val upperCase:
                 NoFormat.name -> NoFormat
                 NewLine.name -> NewLine
                 Tab.name -> Tab
-                else           -> Text
+                else -> Text
             }
         }
     }

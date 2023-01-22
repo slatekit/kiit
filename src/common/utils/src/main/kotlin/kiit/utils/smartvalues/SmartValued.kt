@@ -1,6 +1,5 @@
 package kiit.utils.smartvalues
 
-
 /**
  * Provides a base class to have an easy reference to the underlying
  * metadata ( which should be a singleton on the companion object )

@@ -24,7 +24,6 @@ import kiit.common.values.ListMap
 class Subs(items: List<Pair<String, (TemplatePart) -> String>>? = null, setDefaults: Boolean = true) {
 
     private val groups = ListMap(items ?: listOf())
-
     init {
 
         // Add the default subs/variables
@@ -67,23 +66,23 @@ class Subs(items: List<Pair<String, (TemplatePart) -> String>>? = null, setDefau
      * @return
      */
     fun lookup(key: String): String =
-            if (!groups.contains(key)) {
-                ""
-            } else {
-                val sub = groups[key]
-                sub?.invoke(TemplatePart(key, TemplateConstants.TypeText, -1, -1)) ?: ""
-            }
+        if (!groups.contains(key)) {
+            ""
+        } else {
+            val sub = groups[key]
+            sub?.invoke(TemplatePart(key, TemplateConstants.TypeText, -1, -1)) ?: ""
+        }
 
     private fun defaults() {
 
         // Default functions.
-        groups.add("today"    , {  DateTimes.today().toStringYYYYMMDD() })
-        groups.add("yesterday", {  DateTimes.today().plusDays(-1).toStringYYYYMMDD() })
-        groups.add("tomorrow" , {  DateTimes.today().plusDays(1).toStringYYYYMMDD() })
-        groups.add("t"        , {  DateTimes.today().toStringYYYYMMDD() })
-        groups.add("t-1"      , {  DateTimes.today().plusDays(-1).toStringYYYYMMDD() })
-        groups.add("t+1"      , {  DateTimes.today().plusDays(1).toStringYYYYMMDD() })
-        groups.add("today+1"  , {  DateTimes.today().plusDays(1).toStringYYYYMMDD() })
-        groups.add("today-1"  , {  DateTimes.today().plusDays(-1).toStringYYYYMMDD() })
+        groups.add("today", { DateTimes.today().toStringYYYYMMDD() })
+        groups.add("yesterday", { DateTimes.today().plusDays(-1).toStringYYYYMMDD() })
+        groups.add("tomorrow", { DateTimes.today().plusDays(1).toStringYYYYMMDD() })
+        groups.add("t", { DateTimes.today().toStringYYYYMMDD() })
+        groups.add("t-1", { DateTimes.today().plusDays(-1).toStringYYYYMMDD() })
+        groups.add("t+1", { DateTimes.today().plusDays(1).toStringYYYYMMDD() })
+        groups.add("today+1", { DateTimes.today().plusDays(1).toStringYYYYMMDD() })
+        groups.add("today-1", { DateTimes.today().plusDays(-1).toStringYYYYMMDD() })
     }
 }

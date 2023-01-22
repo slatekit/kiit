@@ -2,31 +2,27 @@ package kiit.utils.paged
 
 import kiit.results.Outcome
 
-
 /**
  * Paging support for a large data set/source
  */
-interface Paged<TOffset, TValue>  {
+interface Paged<TOffset, TValue> {
 
     /**
      *
      */
-    val source:String
-
+    val source: String
 
     /**
      * The current batch number
      * @return
      */
-    fun batch() :Long
-
+    fun batch(): Long
 
     /**
      * The current offset in the data source ( e.g. primary key )
      * @return
      */
-    fun offset():TOffset
-
+    fun offset(): TOffset
 
     /**
      * Gets the next page.
@@ -36,7 +32,6 @@ interface Paged<TOffset, TValue>  {
      */
     fun next(): List<Outcome<TValue>>?
 
-
     /**
      * Gets the next page using explicitly supplied offset
      * There could be no more items, so it returns an Option
@@ -44,5 +39,5 @@ interface Paged<TOffset, TValue>  {
      * @param offset
      * @return
      */
-    fun next(offset:TOffset, batchSize:Int): List<Outcome<TValue>>?
+    fun next(offset: TOffset, batchSize: Int): List<Outcome<TValue>>?
 }

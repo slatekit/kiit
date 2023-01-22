@@ -3,15 +3,16 @@ package kiit.utils.paged
 import kiit.results.Outcome
 import java.util.concurrent.atomic.AtomicReference
 
-
 /**
  * Implementation of a full table scan(reading of all records) via paging using an offset ( e.g. primary key/partition key )
  * @param startOffset: Starting token to begin the paging
  *
  */
-abstract class PagedFetch<TOffset, TValue>(override val source:String,
-                                           val startOffset:TOffset,
-                                           val batchSize:Int) : Paged<TOffset, TValue> {
+abstract class PagedFetch<TOffset, TValue>(
+    override val source: String,
+    val startOffset: TOffset,
+    val batchSize: Int
+) : Paged<TOffset, TValue> {
     protected val state = AtomicReference(PagedState<TOffset, TValue>(-1, startOffset, null))
 
     /**
@@ -20,13 +21,11 @@ abstract class PagedFetch<TOffset, TValue>(override val source:String,
      */
     override fun offset(): TOffset = state.get().offset
 
-
     /**
      * Current batch number e.g. batch 2 where each batch handles 1000 records at a time
      * @return
      */
-    override fun batch() : Long = state.get().batch
-
+    override fun batch(): Long = state.get().batch
 
     /**
      * Gets the next page of records using current offset
@@ -37,12 +36,11 @@ abstract class PagedFetch<TOffset, TValue>(override val source:String,
         return next(curr.offset, batchSize)
     }
 
-
     /**
      * Gets the next page of records explicitly supplied offset
      * @return
      */
-    override fun next(offset:TOffset,  batchSize:Int): List<Outcome<TValue>>? {
+    override fun next(offset: TOffset, batchSize: Int): List<Outcome<TValue>>? {
         // Fetch the next batch.
         // NOTE: This returns:
         // 1. offset of the last record
@@ -56,12 +54,11 @@ abstract class PagedFetch<TOffset, TValue>(override val source:String,
         return nextState.values
     }
 
-
     /**
      * Fetches the batch at the explicitly supplied offset
      * @param offset
      * @param batchSize
      * @return
      */
-    abstract fun fetch(offset:TOffset, batchSize:Int): Pair<TOffset, List<Outcome<TValue>>?>
+    abstract fun fetch(offset: TOffset, batchSize: Int): Pair<TOffset, List<Outcome<TValue>>?>
 }

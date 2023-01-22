@@ -3,7 +3,7 @@ package kiit.utils.smartvalues
 /**
  * Email as a [SmartValue]
  */
-data class Email internal constructor(val value:String) : SmartValued(metadata) {
+data class Email internal constructor(val value: String) : SmartValued(metadata) {
 
     /**
      * Construction of this [Email] as a [SmartValue] is safely
@@ -22,14 +22,14 @@ data class Email internal constructor(val value:String) : SmartValued(metadata) 
          * Metadata about the [SmartValue]
          */
         override val metadata = SmartMetadata(
-                name = "Email",
-                desc = "Email Address",
-                required = true,
-                minLength = 6,
-                maxLength = 30,
-                examples = listOf("user@abc.com"),
-                formats = listOf("xxxx@xxxxxxx.xx"),
-                expressions = listOf("""([\w\$\.\-_]+)@([\w\.]+)""")
+            name = "Email",
+            desc = "Email Address",
+            required = true,
+            minLength = 6,
+            maxLength = 30,
+            examples = listOf("user@abc.com"),
+            formats = listOf("xxxx@xxxxxxx.xx"),
+            expressions = listOf("""([\w\$\.\-_]+)@([\w\.]+)""")
         )
 
         /**
@@ -39,11 +39,10 @@ data class Email internal constructor(val value:String) : SmartValued(metadata) 
     }
 }
 
-
 /**
  * Phone as a [SmartValue]
  */
-data class PhoneUS internal constructor(val value:String) : SmartValued(metadata) {
+data class PhoneUS internal constructor(val value: String) : SmartValued(metadata) {
 
     /**
      * Construction of this [Email] as a [SmartValue] is safely
@@ -62,19 +61,19 @@ data class PhoneUS internal constructor(val value:String) : SmartValued(metadata
          * Metadata about the [SmartValue]
          */
         override val metadata = SmartMetadata(
-                name = "PhoneUS",
-                desc = "United States Phone Format",
-                required = true,
-                minLength = 10,
-                maxLength = 14,
-                examples = listOf("1234567890", "11234567890", "123-456-7890", "1-234-567-8901"),
-                formats = listOf("xxxxxxxxxx", "xxxxxxxxxxx", "xxx-xxx-xxxx", "x-xxx-xxx-xxxx"),
-                expressions = listOf(
-                        """\d{10}""",
-                        """\d{11}""",
-                        """\d{3}[-]?\d{3}[-]?\d{4}""",
-                        """\d{1}[-]?\d{3}[-]?\d{3}[-]?\d{4}"""
-                )
+            name = "PhoneUS",
+            desc = "United States Phone Format",
+            required = true,
+            minLength = 10,
+            maxLength = 14,
+            examples = listOf("1234567890", "11234567890", "123-456-7890", "1-234-567-8901"),
+            formats = listOf("xxxxxxxxxx", "xxxxxxxxxxx", "xxx-xxx-xxxx", "x-xxx-xxx-xxxx"),
+            expressions = listOf(
+                """\d{10}""",
+                """\d{11}""",
+                """\d{3}[-]?\d{3}[-]?\d{4}""",
+                """\d{1}[-]?\d{3}[-]?\d{3}[-]?\d{4}"""
+            )
         )
 
         /**

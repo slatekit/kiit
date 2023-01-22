@@ -24,16 +24,19 @@ class ColorArgsWriter : ArgsWriter {
      * @param maxWidth
      */
     override fun write(arg: Arg, prefix: String?, separator: String?, maxLength: Int) {
-        val nameLen = maxLength?: arg.name.length
+        val nameLen = maxLength ?: arg.name.length
         val nameFill = arg.name.padEnd(nameLen)
         val namePart = (prefix ?: "-") + nameFill
 
         val logs = mutableListOf(
-                TextOutput(TextType.Highlight, namePart, false),
-                TextOutput(TextType.Text, separator
-                        ?: "=", false),
-                TextOutput(TextType.Text, arg.desc, true),
-                TextOutput(TextType.Text, " ".repeat(nameLen + 6), false))
+            TextOutput(TextType.Highlight, namePart, false),
+            TextOutput(
+                TextType.Text,
+                separator ?: "=", false
+            ),
+            TextOutput(TextType.Text, arg.desc, true),
+            TextOutput(TextType.Text, " ".repeat(nameLen + 6), false)
+        )
 
         if (arg.isRequired) {
             logs.add(TextOutput(TextType.Important, "!", false))
@@ -45,7 +48,7 @@ class ColorArgsWriter : ArgsWriter {
 
         logs.add(TextOutput(TextType.Subtitle, "[${arg.dataType}] ", false))
         logs.add(TextOutput(TextType.Text, "e.g. ${arg.example}", true))
-        logs.forEach {entry ->
+        logs.forEach { entry ->
             writer.write(entry.textType, entry.msg, entry.endLine)
         }
     }

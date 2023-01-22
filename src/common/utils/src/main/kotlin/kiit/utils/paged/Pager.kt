@@ -11,12 +11,12 @@ package kiit.utils.paged
  * 4. move to a specific position via move
  */
 class Pager<T>(
-        val list: List<T>,
-        val circular: Boolean,
-        start:Int = 0
+    val list: List<T>,
+    val circular: Boolean,
+    start: Int = 0
 ) {
 
-    private var index = if(start < 0 || start >= list.size ) 0 else start
+    private var index = if (start < 0 || start >= list.size) 0 else start
     private var indexPrevious = index
     private var hasMoved = false
 
@@ -46,9 +46,9 @@ class Pager<T>(
 
     fun canMoveBack(): Boolean = !isAtStart() || circular
 
-    fun current(moveNext:Boolean): T {
+    fun current(moveNext: Boolean): T {
         val curr = current()
-        if(moveNext) {
+        if (moveNext) {
             next()
         }
         return curr
@@ -59,9 +59,9 @@ class Pager<T>(
         return index
     }
 
-    fun moveFirst():Int = move(start)
+    fun moveFirst(): Int = move(start)
 
-    fun moveLast():Int = move(end)
+    fun moveLast(): Int = move(end)
 
     fun move(desired: Int): Int {
         val next = when {
@@ -83,6 +83,7 @@ class Pager<T>(
                 trackLast()
                 start
             }
+
             else -> {
                 trackLast()
                 index + 1
@@ -98,6 +99,7 @@ class Pager<T>(
                 trackLast()
                 end
             }
+
             else -> {
                 trackLast()
                 index - 1
@@ -106,8 +108,7 @@ class Pager<T>(
         return list[index]
     }
 
-
-    fun get(pos:Int): T {
+    fun get(pos: Int): T {
         return when {
             pos < 0 -> current()
             pos >= size -> current()
@@ -115,13 +116,11 @@ class Pager<T>(
         }
     }
 
-
     fun clone(): Pager<T> = Pager<T>(list, circular, 0)
 
-
-    private fun trackLast(){
+    private fun trackLast() {
         indexPrevious = index
-        if(!hasMoved){
+        if (!hasMoved) {
             hasMoved = true
         }
     }

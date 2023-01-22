@@ -1,6 +1,10 @@
 package kiit.utils.smartvalues
 
-import kiit.results.*
+import kiit.results.Err
+import kiit.results.Outcome
+import kiit.results.Try
+import kiit.results.Failure
+import kiit.results.Success
 import kiit.results.builders.Tries
 
 abstract class SmartCreation<T : SmartValue> {

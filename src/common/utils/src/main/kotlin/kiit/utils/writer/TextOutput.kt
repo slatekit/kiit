@@ -15,4 +15,4 @@ package kiit.utils.writer
  * Created by kishorereddy on 5/19/17.
  */
 
-data class TextOutput(val textType: TextType, val msg: String, val endLine: Boolean = false, val format:Boolean = true)
+data class TextOutput(val textType: TextType, val msg: String, val endLine: Boolean = false, val format: Boolean = true)
