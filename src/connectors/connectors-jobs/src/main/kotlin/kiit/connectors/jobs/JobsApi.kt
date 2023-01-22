@@ -6,8 +6,8 @@
  * author: Kishore Reddy
  * copyright: 2016 CodeHelix Solutions Inc.
  * license: refer to website and/or github
- * 
- * 
+ *
+ *
  *  </kiit_header>
  */
 
@@ -27,8 +27,10 @@ import kiit.jobs.Jobs
 import kiit.results.Outcome
 import kiit.results.builders.Outcomes
 
-@Api(area = "infra", name = "workers", desc = "api to get version information",
-        auth = AuthModes.KEYED, roles = ["admin"], verb = Verbs.AUTO, sources = [Sources.ALL])
+@Api(
+    area = "infra", name = "workers", desc = "api to get version information",
+    auth = AuthModes.KEYED, roles = ["admin"], verb = Verbs.AUTO, sources = [Sources.ALL]
+)
 class JobsApi(override val context: AppEntContext) : FileSupport {
 
     override val encryptor: Encryptor? = context.enc
@@ -36,7 +38,7 @@ class JobsApi(override val context: AppEntContext) : FileSupport {
 
     private lateinit var jobs: Jobs
 
-    fun configure(jobs: Jobs){
+    fun configure(jobs: Jobs) {
         this.jobs = jobs
     }
 
@@ -44,53 +46,53 @@ class JobsApi(override val context: AppEntContext) : FileSupport {
      * starts the system
      */
     @Action(desc = "start the job")
-    suspend fun start(name:String):Outcome<String> = jobs.start(name).outcome()
+    suspend fun start(name: String): Outcome<String> = jobs.start(name).outcome()
 
     /**
      * pauses the system
      */
     @Action(desc = "pauses the job")
-    suspend fun pause(name:String):Outcome<String> =jobs.pause(name).outcome()
+    suspend fun pause(name: String): Outcome<String> = jobs.pause(name).outcome()
 
     /**
      * resumes the system
      */
     @Action(desc = "resumes job")
-    suspend fun resume(name:String):Outcome<String> = jobs.resume(name).outcome()
+    suspend fun resume(name: String): Outcome<String> = jobs.resume(name).outcome()
 
     /**
      * stops the system
      */
     @Action(desc = "stops the job")
-    suspend fun delay(name:String):Outcome<String> = jobs.delay(name).outcome()
+    suspend fun delay(name: String): Outcome<String> = jobs.delay(name).outcome()
 
     /**
      * stops the system
      */
     @Action(desc = "stops the job")
-    suspend fun process(name:String):Outcome<String> = jobs.process(name).outcome()
+    suspend fun process(name: String): Outcome<String> = jobs.process(name).outcome()
 
     /**
      * stops the system
      */
     @Action(desc = "stops the job")
-    suspend fun stop(name:String):Outcome<String> = jobs.stop(name).outcome()
+    suspend fun stop(name: String): Outcome<String> = jobs.stop(name).outcome()
 
     /**
      * Get the names of all jobs
      */
     @Action(desc = "gets the names of all the workers")
-    fun jobs():List<String> = jobs.ids.map { it.id }
+    fun jobs(): List<String> = jobs.ids.map { it.id }
 
     /**
      * Get the names of all workers on a job
      */
     @Action(desc = "gets the names of all the workers")
-    fun workers():List<String> = jobs.ids.mapNotNull {
+    fun workers(): List<String> = jobs.ids.mapNotNull {
         val workers = jobs.get(it.name)?.workers
         val ids = workers?.getIds()?.map { it.id }
         ids
     }.flatten()
 
-    private fun Feedback.outcome():Outcome<String> = Outcomes.of(this.success, "", this.msg)
+    private fun Feedback.outcome(): Outcome<String> = Outcomes.of(this.success, "", this.msg)
 }

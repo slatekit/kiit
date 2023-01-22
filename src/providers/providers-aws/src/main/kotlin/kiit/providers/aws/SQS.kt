@@ -16,13 +16,18 @@ package kiit.providers.aws
 import com.amazonaws.auth.AWSCredentials
 import com.amazonaws.regions.Regions
 import com.amazonaws.services.sqs.AmazonSQSClient
-import com.amazonaws.services.sqs.model.*
+import com.amazonaws.services.sqs.model.DeleteMessageRequest
+import com.amazonaws.services.sqs.model.GetQueueAttributesRequest
+import com.amazonaws.services.sqs.model.QueueAttributeName
+import com.amazonaws.services.sqs.model.ReceiveMessageRequest
+import com.amazonaws.services.sqs.model.SendMessageRequest
+import com.amazonaws.services.sqs.model.MessageAttributeValue
+import com.amazonaws.services.sqs.model.Message
 import kiit.common.DateTime
 import kiit.common.utils.Random
 import kiit.common.info.ApiLogin
 import kiit.common.io.Uris
 import kiit.common.ext.toStringUtc
-import kiit.common.Provider
 import kiit.core.queues.QueueEntry
 import kiit.core.queues.QueueValueConverter
 import kiit.core.queues.CloudQueue
@@ -57,11 +62,9 @@ class SQS<T>(
     override val provider: Any = sqs
 
     override suspend fun init() {
-
     }
 
     override suspend fun close() {
-
     }
 
     /**Gets the total number of items in the queue
@@ -134,23 +137,30 @@ class SQS<T>(
     override suspend fun send(value: T, attributes: Map<String, Any>?): Try<String> {
         // Send the message, any message that fails will get caught
         // and the onError method is called for that message
-        return executeResultSync<String>(SOURCE, "send", data = value, call = {
-            val message = converter.encode(value) ?: ""
-            val req = SendMessageRequest(queueUrl, message)
+        return executeResultSync<String>(
+            SOURCE,
+            "send",
+            data = value,
+            call = {
+                val message = converter.encode(value) ?: ""
+                val req = SendMessageRequest(queueUrl, message)
 
-            // Add the attributes
-            attributes?.let {
-                req.withMessageAttributes(it.map { pair ->
-                    Pair(
-                        pair.key,
-                        MessageAttributeValue().withDataType("String").withStringValue(pair.value.toString())
+                // Add the attributes
+                attributes?.let {
+                    req.withMessageAttributes(
+                        it.map { pair ->
+                            Pair(
+                                pair.key,
+                                MessageAttributeValue().withDataType("String").withStringValue(pair.value.toString())
+                            )
+                        }.toMap()
                     )
-                }.toMap())
-            }
+                }
 
-            val result = sqs.sendMessage(req)
-            result.messageId
-        })
+                val result = sqs.sendMessage(req)
+                result.messageId
+            }
+        )
     }
 
     override suspend fun sendFromFile(fileNameLocal: String, tagName: String, tagValue: String): Try<String> {

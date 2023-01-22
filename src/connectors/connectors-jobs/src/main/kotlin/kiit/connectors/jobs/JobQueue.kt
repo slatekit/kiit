@@ -1,7 +1,8 @@
 package kiit.connectors.jobs
 
 import kiit.common.Identity
-import kiit.core.queues.*
+import kiit.core.queues.AsyncQueue
+import kiit.core.queues.QueueEntry
 import kiit.jobs.Priority
 import kiit.jobs.Queue
 import kiit.jobs.Task

@@ -7,11 +7,11 @@ import kiit.common.Identity
 import kiit.common.Sources
 import kiit.jobs.Task
 import kiit.jobs.Worker
+
 open class JobAPIWorker(
-        val server: ApiServer,
-        identity: Identity
-)
-    : Worker<Any>( identity ) {
+    val server: ApiServer,
+    identity: Identity
+) : Worker<Any>(identity) {
 
     /**
      * Process an message from the queue represented as an API request.

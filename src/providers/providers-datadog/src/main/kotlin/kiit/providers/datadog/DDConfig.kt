@@ -3,7 +3,7 @@ package kiit.providers.datadog
 import io.micrometer.datadog.DatadogConfig
 import java.time.Duration
 
-//import org.threeten.bp.Duration
+// import org.threeten.bp.Duration
 
 /**
  * Configuration class for datadog

@@ -24,7 +24,6 @@ import kiit.common.conf.Config
 import kiit.results.Try
 import kiit.results.builders.Tries
 
-
 /**
  * Gets the region from the name
  */
@@ -52,7 +51,6 @@ fun String?.toRegion(): Regions? {
     }
 }
 
-
 fun <T> build(region: String, op: (Regions) -> T): Try<T> {
     val regions = region.toRegion()
     return when (regions) {
@@ -60,7 +58,6 @@ fun <T> build(region: String, op: (Regions) -> T): Try<T> {
         else -> Tries.of { op(regions) }
     }
 }
-
 
 /**
  * See: https://docs.aws.amazon.com/AmazonS3/latest/dev/BucketRestrictions.html
