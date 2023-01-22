@@ -7,17 +7,19 @@
  * copyright: 2016 CodeHelix Solutions Inc.
  * license: refer to website and/or github
  *
- * 
+ *
  *  </kiit_header>
  */
 
 package kiit.common.values
 
 import kiit.common.ids.UPID
-//import java.time.*
-import org.threeten.bp.*
+import org.threeten.bp.LocalDate
+import org.threeten.bp.LocalTime
+import org.threeten.bp.ZonedDateTime
+import org.threeten.bp.Instant
+import org.threeten.bp.LocalDateTime
 import kiit.common.DateTime
-
 
 /**
  * Supplies default methods for reading inputs from a record
@@ -25,10 +27,9 @@ import kiit.common.DateTime
  */
 interface Record : Inputs {
 
-    fun getPos(name:String):Int
-    fun getName(pos:Int):String
-    fun contains(name:String):Boolean
-
+    fun getPos(name: String): Int
+    fun getName(pos: Int): String
+    fun contains(name: String): Boolean
     fun getString(pos: Int): String = getString(getName(pos))
     fun getBool(pos: Int): Boolean = getBool(getName(pos))
     fun getShort(pos: Int): Short = getShort(getName(pos))

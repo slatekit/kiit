@@ -57,7 +57,7 @@ object Encoding {
     fun ensureField(text: String): String {
         return when(text.isNullOrEmpty()) {
             true -> ""
-            false -> text.toLowerCase().trim().filter { c -> c.isDigit() || c.isLetter() || c == '_' || c == '.' }
+            false -> text.lowercase().trim().filter { c -> c.isDigit() || c.isLetter() || c == '_' || c == '.' }
         }
     }
 }

@@ -26,7 +26,7 @@ sealed class LogLevel(val name: String, val code: Int) {
 
     companion object {
         fun parse(level: String): LogLevel {
-            return when (level.trim().toLowerCase()) {
+            return when (level.trim().lowercase()) {
                 Debug.name -> Debug
                 Info.name  -> Info
                 Warn.name  -> Warn

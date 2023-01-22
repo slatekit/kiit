@@ -8,7 +8,7 @@ open class ContentType(
 
         @JvmStatic
         fun parse(format: String): ContentType {
-            return when (format.toLowerCase()) {
+            return when (format.lowercase()) {
                 ContentTypes.Csv.ext  -> ContentTypes.Csv
                 ContentTypes.Html.ext -> ContentTypes.Html
                 ContentTypes.Json.ext -> ContentTypes.Json

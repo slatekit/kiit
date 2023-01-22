@@ -51,7 +51,7 @@ object ULIDs : UIDGen<ULID> {
             else                -> NODE_ID
         }
         val timestamp = getTime()
-        val instant = java.lang.Long.toHexString(timestamp).toLowerCase()
+        val instant = java.lang.Long.toHexString(timestamp).lowercase()
         val random = Random.randomize(10, RANDOM_CHARS)
         return ULID(instant, node, random, VERSION)
     }

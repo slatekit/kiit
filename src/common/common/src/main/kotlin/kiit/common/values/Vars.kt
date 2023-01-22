@@ -6,8 +6,8 @@
  * author: Kishore Reddy
  * copyright: 2016 CodeHelix Solutions Inc.
  * license: refer to website and/or github
- * 
- * 
+ *
+ *
  *  </kiit_header>
  */
 
@@ -21,7 +21,6 @@ import kiit.common.ext.splitToMapWithPairs
  * and provides lookup by both the key and index/iteration like a list
  */
 class Vars(items: List<Pair<String, Any>>) : ListMap<String, Any>(items) {
-
     companion object {
 
         /**

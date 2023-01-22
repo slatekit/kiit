@@ -6,8 +6,8 @@
  * author: Kishore Reddy
  * copyright: 2016 CodeHelix Solutions Inc.
  * license: refer to website and/or github
- * 
- * 
+ *
+ *
  *  </kiit_header>
  */
 
@@ -22,7 +22,7 @@ data class Envs(val all: List<Env>, val current: Env) : EnvSupport {
     /**
      * Initialize with the first one
      */
-    constructor(all: List<Env>) : this(all, all.first{ it.isDev })
+    constructor(all: List<Env>) : this(all, all.first { it.isDev })
 
     /**
      * Name of the currently selected environment e.g. ( dev1, qa1, qa2, beta, prod )
@@ -97,7 +97,6 @@ data class Envs(val all: List<Env>, val current: Env) : EnvSupport {
      */
     fun get(name: String): Env? = all.firstOrNull { item -> item.name == name }
 
-
     companion object {
         /**
          * The list of defaults environments to choose from.
@@ -124,14 +123,16 @@ data class Envs(val all: List<Env>, val current: Env) : EnvSupport {
          * @return
          */
         @JvmStatic
-        fun defaults(selected:String? = null): Envs {
-            val envs = Envs(listOf(
+        fun defaults(selected: String? = null): Envs {
+            val envs = Envs(
+                listOf(
                     Env("loc", EnvMode.Dev, desc = "Dev environment (local)"),
                     Env("dev", EnvMode.Dev, desc = "Dev environment (shared)"),
                     Env("qat", EnvMode.Qat, desc = "QA environment  (current release)"),
                     Env("stg", EnvMode.Uat, desc = "STG environment (demo)"),
                     Env("pro", EnvMode.Pro, desc = "LIVE environment")
-            ))
+                )
+            )
             return selected?.let { envs.select(it) } ?: envs
         }
     }

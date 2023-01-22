@@ -5,7 +5,7 @@
  * org: www.codehelix.co
  * author: Kishore Reddy
  * copyright: 2016 CodeHelix Solutions Inc.
- * license: refer to website and/or github 
+ * license: refer to website and/or github
  *  </kiit_header>
  */
 
@@ -47,7 +47,6 @@ data class Env(
         @JvmStatic
         val empty = Env("", EnvMode.Dev, "", "")
 
-
         /**
          * parses the environment name e.g. "qa1:qa" = name:mode
          * @param env
@@ -76,13 +75,13 @@ data class Env(
          */
         @JvmStatic
         fun interpret(mode: String): EnvMode =
-                when (mode) {
-                    EnvMode.Dev.name -> EnvMode.Dev
-                    EnvMode.Qat.name -> EnvMode.Qat
-                    EnvMode.Uat.name -> EnvMode.Uat
-                    EnvMode.Pro.name -> EnvMode.Pro
-                    EnvMode.Dis.name -> EnvMode.Dis
-                    else -> EnvMode.Other(mode)
-                }
+            when (mode) {
+                EnvMode.Dev.name -> EnvMode.Dev
+                EnvMode.Qat.name -> EnvMode.Qat
+                EnvMode.Uat.name -> EnvMode.Uat
+                EnvMode.Pro.name -> EnvMode.Pro
+                EnvMode.Dis.name -> EnvMode.Dis
+                else -> EnvMode.Other(mode)
+            }
     }
 }

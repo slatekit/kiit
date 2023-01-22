@@ -6,7 +6,7 @@
  * author: Kishore Reddy
  * copyright: 2016 CodeHelix Solutions Inc.
  * license: refer to website and/or github
- * 
+ *
  *
  *  </kiit_header>
  */
@@ -46,7 +46,6 @@ sealed class EnvMode(val name: String) {
      */
     class Other(m: String) : EnvMode(m)
 
-
     companion object {
 
         /**
@@ -57,14 +56,13 @@ sealed class EnvMode(val name: String) {
          * when trying to instantiate it.
          */
         @JvmStatic
-        fun parse(text:String): EnvMode = when(text.trim().toLowerCase()) {
+        fun parse(text: String): EnvMode = when (text.trim().lowercase()) {
             Dev.name -> Dev
             Qat.name -> Qat
             Uat.name -> Uat
             Dis.name -> Dis
             Pro.name -> Pro
-            else     -> Other(text)
+            else -> Other(text)
         }
     }
 }
-

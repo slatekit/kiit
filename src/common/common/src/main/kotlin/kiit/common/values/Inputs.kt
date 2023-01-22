@@ -6,7 +6,7 @@
  * author: Kishore Reddy
  * copyright: 2016 CodeHelix Solutions Inc.
  * license: refer to website and/or github
- * 
+ *
  *
  *  </kiit_header>
  */
@@ -15,7 +15,6 @@ package kiit.common.values
 
 import kiit.common.convert.Conversions
 import kiit.common.ext.splitToMapOfType
-
 
 interface InputsUpdateable {
     // Immutable add
@@ -40,7 +39,6 @@ interface Inputs : Gets {
     fun get(key: String): Any?
     fun containsKey(key: String): Boolean
     fun size(): Int
-
 
     // Get list and maps
     /**
@@ -80,9 +78,9 @@ interface Inputs : Gets {
         return input?.let { inputVal ->
 
             val result = when (inputVal) {
-                "null"       -> emptyMap
-                "\"\""       -> emptyMap
-                is String    -> inputVal.toString().splitToMapOfType(',', true, '=', keyConverter, valConverter)
+                "null" -> emptyMap
+                "\"\"" -> emptyMap
+                is String -> inputVal.toString().splitToMapOfType(',', true, '=', keyConverter, valConverter)
                 is Map<*, *> -> inputVal
                 else -> emptyMap
             }
@@ -98,5 +96,7 @@ interface Inputs : Gets {
             null
         }
     }
-    override fun <T> getOrElse(key: String, fetcher: (String) -> T, default: T): T = if (containsKey(key)) fetcher(key) else default
+
+    override fun <T> getOrElse(key: String, fetcher: (String) -> T, default: T): T =
+        if (containsKey(key)) fetcher(key) else default
 }

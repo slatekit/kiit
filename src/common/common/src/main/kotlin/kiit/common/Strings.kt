@@ -61,7 +61,7 @@ fun String.repeatWith(delimiter: String, count: Int): String {
  * Converts the text to PascalCase e.g. "userName" becomes "UserName"
  */
 fun String.pascalCase(): String {
-    return this[0].toUpperCase() + this.substring(1)
+    return this[0].uppercase() + this.substring(1)
 }
 
 val String.toCharMap: Map<Char, Boolean> get() = this.toCharArray().map { c -> c to true }.toMap()
