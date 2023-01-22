@@ -23,7 +23,7 @@ fun String.trim(count: Int): String {
 fun String.toId(lowerCase: Boolean = true): String {
     val trimmed = this.trim()
     val filtered = trimmed.filter { it.isDigit() || it.isLetter() || it == ' ' || it == '-' || it == '_' || it == '.' }
-    val converted = if (lowerCase) filtered.toLowerCase() else filtered
+    val converted = if (lowerCase) filtered.lowercase() else filtered
     val replaced = converted.replace(' ', '_')
     val finalText = if (replaced.isNullOrBlank()) "_" else replaced
     return finalText
@@ -49,7 +49,7 @@ fun String.toUUIdOrCreate(): UUID {
  * e.g: "abc& $[]123" = "abc"
  */
 fun String.toIdent(lowerCase: Boolean = true): String {
-    val trimmed = if (lowerCase) this.trim().toLowerCase() else this.trim()
+    val trimmed = if (lowerCase) this.trim().lowercase() else this.trim()
     val filtered = trimmed.filter { it.isDigit() || it.isLetter() || it == '-' || it == '_' || it == ' ' }
     val cleaned = if (filtered.isNullOrBlank()) "_" else filtered
     return cleaned.replace(' ', '_')
@@ -210,8 +210,8 @@ fun String.intAfterLast(text:String):Int {
 fun String.toSentenceCase():String {
     return when(this.length) {
         0 -> ""
-        1 -> this[0].toUpperCase().toString()
-        else -> this[0].toUpperCase() + this.substring(1)
+        1 -> this[0].uppercase().toString()
+        else -> this[0].uppercase() + this.substring(1)
     }
 }
 

@@ -49,7 +49,7 @@ abstract class EnumSupport {
             if(caseSensitive) {
                 it.name == t
             } else {
-                it.name.toLowerCase() == t.toLowerCase()
+                it.name.lowercase() == t.lowercase()
             }
         }
         val first = member ?: if (isUnknownSupported()) {

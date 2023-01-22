@@ -8,7 +8,7 @@ interface Settings : Inputs, Puts {
     /**
      * Convenience method to initiate and complete editing of settings
      */
-    fun edit(op:() -> Unit ) {
+    fun edit(op: () -> Unit) {
         init()
         op()
         done()
@@ -20,18 +20,14 @@ interface Settings : Inputs, Puts {
      */
     fun init()
 
-
     /**
      * Designates completion of editing settings
      */
     fun done()
 
-
-    fun put(key:String, value:String, overwrite:Boolean = false) {
-        if(!containsKey(key) || overwrite){
+    fun put(key: String, value: String, overwrite: Boolean = false) {
+        if (!containsKey(key) || overwrite) {
             putString(key, value)
         }
     }
 }
-
-

@@ -8,9 +8,9 @@ package kiit.utils.display
  * @param colorDark : hex for dark  version of color
  */
 data class ColorGroup(
-        @JvmField val name: String,
-        @JvmField val color: Int,
-        @JvmField val colorHex: Int,
-        @JvmField val colorLightHex: Int,
-        @JvmField val colorDarkHex: Int
+    @JvmField val name: String,
+    @JvmField val color: Int,
+    @JvmField val colorHex: Int,
+    @JvmField val colorLightHex: Int,
+    @JvmField val colorDarkHex: Int
 )

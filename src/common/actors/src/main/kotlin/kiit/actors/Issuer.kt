@@ -9,8 +9,10 @@ import kotlinx.coroutines.channels.Channel
  * and also for cleanup in some cases.
  * This allows to ull, poll, wipe ( clear ) messages from the channel.
  */
-open class Issuer<T>(val channel: Channel<Message<T>>,
-                     val issuable: Issuable<T>, val tracker:((Message<T>) -> Unit)? = null) {
+open class Issuer<T>(
+    val channel: Channel<Message<T>>,
+    val issuable: Issuable<T>, val tracker: ((Message<T>) -> Unit)? = null
+) {
 
     suspend fun pull(count: Int = 1) {
         // Process X off the channel
@@ -23,7 +25,6 @@ open class Issuer<T>(val channel: Channel<Message<T>>,
         }
     }
 
-
     suspend fun poll() {
         var item: Message<T>? = channel.poll()
         while (item != null) {
@@ -33,7 +34,6 @@ open class Issuer<T>(val channel: Channel<Message<T>>,
         }
     }
 
-
     suspend fun wipe() {
         var item: Message<T>? = channel.poll()
         while (item != null) {
@@ -42,11 +42,9 @@ open class Issuer<T>(val channel: Channel<Message<T>>,
         }
     }
 
-
     suspend fun track(source: String, item: Message<T>) {
         tracker?.invoke(item)
     }
-
 
     companion object {
         const val PULL = "PULL"

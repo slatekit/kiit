@@ -84,7 +84,7 @@ object Random {
 
     @JvmStatic fun uuid(includeDashes: Boolean = true, upperCase: Boolean = false): String {
         val uuid = java.util.UUID.randomUUID()
-        val result = if (upperCase) uuid.toString().toUpperCase() else uuid.toString()
+        val result = if (upperCase) uuid.toString().uppercase() else uuid.toString()
         return if (!includeDashes)
             result.replace("-", "")
         else

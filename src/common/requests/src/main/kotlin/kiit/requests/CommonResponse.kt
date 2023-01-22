@@ -12,15 +12,15 @@ package kiit.requests
  * @param tag : Tag used as a correlation field
  */
 data class CommonResponse<out T>(
-        override val success: Boolean,
-        override val name: String,
-        override val type: String,
-        override val code: Int,
-        override val meta: Map<String, String>?,
-        override val value: T?,
-        override val desc: String? = null,
-        override val err: Exception? = null,
-        override val tag: String? = null
+    override val success: Boolean,
+    override val name: String,
+    override val type: String,
+    override val code: Int,
+    override val meta: Map<String, String>?,
+    override val value: T?,
+    override val desc: String? = null,
+    override val err: Exception? = null,
+    override val tag: String? = null
 ) : Response<T> {
 
     override fun withMeta(meta: List<Pair<String, String>>): Response<T> {

@@ -13,14 +13,11 @@ fun Month.daysInMonth(year:Int): Int = this.length(Year.isLeap(year.toLong()))
 fun LocalDate.format(pattern: String): String = this.format(DateTimeFormatter.ofPattern(pattern))
 fun LocalDate.toDateDisplay(): String = this.format("MMM dd, yyyy")
 fun LocalDate.toNumeric(): Int = format("yyyyMMdd").toInt()
-
 fun LocalTime.format(pattern: String): String = this.format(DateTimeFormatter.ofPattern(pattern))
 fun LocalTime.toNumeric(): Int = format("HHmmss").toInt()
 fun LocalTime.tohhmm():String = this.format("hh:mm a")
 fun LocalTime.tohmm():String = this.format("h:mm a")
-
 fun LocalDateTime.zoned(): ZonedDateTime = this.atZone(ZoneId.systemDefault())
-
 fun ZonedDateTime.local(): LocalDateTime = this.toLocalDateTime()
 fun ZonedDateTime.date(): LocalDate = this.toLocalDate()
 fun ZonedDateTime.time(): LocalTime = this.toLocalTime()
@@ -47,11 +44,11 @@ fun ZonedDateTime.hoursFrom(dt: ZonedDateTime): Long = this.durationFrom(dt).toH
 // ********************************************
 // Comparisons
 // ********************************************
-operator fun ZonedDateTime.compareTo(dt: ZonedDateTime): Int = this.compareTo(dt)
-operator fun ZonedDateTime.plus(duration: Duration): ZonedDateTime = this.plus(duration)
-operator fun ZonedDateTime.plus(period: Period): ZonedDateTime = this.plus(period)
-operator fun ZonedDateTime.minus(duration: Duration): ZonedDateTime = this.minus(duration)
-operator fun ZonedDateTime.minus(period: Period): ZonedDateTime = this.minus(period)
+//operator fun ZonedDateTime.compareTo(dt: ZonedDateTime): Int = this.compareTo(dt)
+//operator fun ZonedDateTime.plus(duration: Duration): ZonedDateTime = this.plus(duration)
+//operator fun ZonedDateTime.plus(period: Period): ZonedDateTime = this.plus(period)
+//operator fun ZonedDateTime.minus(duration: Duration): ZonedDateTime = this.minus(duration)
+//operator fun ZonedDateTime.minus(period: Period): ZonedDateTime = this.minus(period)
 
 
 // ********************************************

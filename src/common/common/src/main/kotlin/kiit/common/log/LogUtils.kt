@@ -32,7 +32,7 @@ object LogUtils {
     }
 
     @Suppress("NOTHING_TO_INLINE")
-    inline fun toKey(key:String):String = key.trim().toLowerCase().replace(" ", "-")
+    inline fun toKey(key:String):String = key.trim().lowercase().replace(" ", "-")
 
     @Suppress("NOTHING_TO_INLINE")
     inline fun isSensitive(key:String) : Boolean = sensitiveFields.any { key.contains(it) }

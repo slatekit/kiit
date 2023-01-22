@@ -1,9 +1,13 @@
 package kiit.common.values
 
-import org.threeten.bp.*
+import org.threeten.bp.LocalDate
+import org.threeten.bp.LocalTime
+import org.threeten.bp.ZonedDateTime
+import org.threeten.bp.Instant
+import org.threeten.bp.LocalDateTime
 import kiit.common.DateTime
 import kiit.common.ids.UPID
-import java.util.*
+import java.util.UUID
 
 interface Puts {
     fun putString(key: String, value: String)
@@ -13,14 +17,14 @@ interface Puts {
     fun putLong(key: String, value: Long)
     fun putFloat(key: String, value: Float)
     fun putDouble(key: String, value: Double)
-    fun putInstant(key:String, value: Instant)
+    fun putInstant(key: String, value: Instant)
     fun putDateTime(key: String, value: DateTime)
     fun putLocalDate(key: String, value: LocalDate)
     fun putLocalTime(key: String, value: LocalTime)
     fun putLocalDateTime(key: String, value: LocalDateTime)
     fun putZonedDateTime(key: String, value: ZonedDateTime)
     fun putZonedDateTimeUtc(key: String, value: ZonedDateTime)
-    fun putUUID(key: String, value: java.util.UUID)
+    fun putUUID(key: String, value: UUID)
     fun putUPID(key: String, value: UPID)
 
     // put values as Option[T]

@@ -48,10 +48,10 @@ class WebWriter : Writer {
             TextType.Title -> writeTag("H1", mode.format(msg), endLine, "color:Black ")
             TextType.Subtitle -> writeTag("H2", mode.format(msg), endLine, "color:Black ")
             TextType.Url -> writeLink(msg, mode.format(msg), endLine, "color:Blue ")
-            TextType.Important -> writeTag(tag("span", endLine,"h4"), mode.format(msg), endLine, "color:Black ")
-            TextType.Highlight -> writeTag(tag("span", endLine,"p" ), mode.format(msg), endLine, "color:Orange")
-            TextType.Success -> writeTag(tag("span", endLine,"p" ), mode.format(msg), endLine, "color:Green ")
-            TextType.Failure -> writeTag(tag("span", endLine,"p" ), mode.format(msg), endLine, "color:Red   ")
+            TextType.Important -> writeTag(tag("span", endLine, "h4"), mode.format(msg), endLine, "color:Black ")
+            TextType.Highlight -> writeTag(tag("span", endLine, "p"), mode.format(msg), endLine, "color:Orange")
+            TextType.Success -> writeTag(tag("span", endLine, "p"), mode.format(msg), endLine, "color:Green ")
+            TextType.Failure -> writeTag(tag("span", endLine, "p"), mode.format(msg), endLine, "color:Red   ")
             TextType.Text -> writeTag("span", mode.format(msg), endLine, "color:Black ")
             TextType.NoFormat -> writeTag("", mode.format(msg), endLine, "")
             TextType.NewLine -> buffer.append(NEWLINE)
@@ -126,6 +126,6 @@ class WebWriter : Writer {
         return template.replace("{{content_here}}", content)
     }
 
-
-    private fun tag(tagName:String, newLine:Boolean, tagIfNewLine:String) :String = if(newLine) tagIfNewLine else tagName
+    private fun tag(tagName: String, newLine: Boolean, tagIfNewLine: String): String =
+        if (newLine) tagIfNewLine else tagName
 }

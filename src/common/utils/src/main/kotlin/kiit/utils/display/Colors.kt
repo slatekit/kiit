@@ -9,10 +9,10 @@ package kiit.utils.display
  *     ColorGroup("Midnight" , 0xFF34495E.toInt(), MaterialColors.BlueGray800.toInt(), MaterialColors.BlueGray400.toInt(), MaterialColors.BlueGray900.toInt())
  * )
  */
-data class Colors(val items:List<ColorGroup>) {
-    fun all():List<ColorGroup> = items
-    fun size():Int = items.size
-    fun get(ndx:Int) = items[ndx]
-    fun get(name:String): ColorGroup? = items.firstOrNull { it.name == name }
-    fun colors():List<Int> = items.map { it.color }
+data class Colors(val items: List<ColorGroup>) {
+    fun all(): List<ColorGroup> = items
+    fun size(): Int = items.size
+    fun get(ndx: Int) = items[ndx]
+    fun get(name: String): ColorGroup? = items.firstOrNull { it.name == name }
+    fun colors(): List<Int> = items.map { it.color }
 }

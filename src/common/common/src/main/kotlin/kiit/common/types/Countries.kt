@@ -45,7 +45,7 @@ interface CountryLookup {
     fun find(iso2: String?): Country? {
         return when (iso2) {
             null -> null
-            else -> supported.firstOrNull { it.iso2 == iso2.toUpperCase() }
+            else -> supported.firstOrNull { it.iso2 == iso2.uppercase() }
         }
     }
 }

@@ -67,7 +67,7 @@ sealed class Alias(val name: String, val value:String) {
          * Parse the text for a matching Alias type
          */
         @JvmStatic
-        fun parse(text: String): Alias = when (text.trim().toLowerCase()) {
+        fun parse(text: String): Alias = when (text.trim().lowercase()) {
             Abs.name -> Abs
             Usr.name -> Usr
             Cur.name -> Cur

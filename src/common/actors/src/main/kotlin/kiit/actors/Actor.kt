@@ -10,14 +10,12 @@ interface Actor<T> : Workable {
      * 1. "emailer"
      * 2. {area}.{service} e.g. "signup.emailer"
      */
-    val id:String
-
+    val id: String
 
     /**
      * Contains relevant info about the actor
      */
     val ctx: Context
-
 
     /**
      * Sends a payload to the actor
@@ -25,11 +23,10 @@ interface Actor<T> : Workable {
      */
     suspend fun send(item: T): Receipt
 
-
     /**
      * Sends a payload with target to the actor
      * @param item  : Data / payload for message
      * @param reference: Optional value to associate with the item
      */
-    suspend fun send(item:T, reference:String): Receipt
+    suspend fun send(item: T, reference: String): Receipt
 }

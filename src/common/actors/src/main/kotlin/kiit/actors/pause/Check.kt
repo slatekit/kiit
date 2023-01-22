@@ -78,7 +78,8 @@ interface Check {
      *
      * @return
      */
-    fun isStoppedOrPausedOrKilled(): Boolean = isState(Status.Stopped) || isState(Status.Paused) || isState(Status.Killed)
+    fun isStoppedOrPausedOrKilled(): Boolean =
+        isState(Status.Stopped) || isState(Status.Paused) || isState(Status.Killed)
 
     /**
      * whether the current state is at the one supplied.
