@@ -1,7 +1,10 @@
 package kiit.actors
 
 import kotlinx.coroutines.channels.Channel
-import kiit.actors.pause.*
+import kiit.actors.pause.Controls
+import kiit.actors.pause.Check
+import kiit.actors.pause.Feedback
+import kiit.actors.pause.State
 
 /**
  * Base class to support Actors that can be started, stopped, paused, and resumed

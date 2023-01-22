@@ -11,9 +11,9 @@ import kotlinx.coroutines.channels.Channel
  */
 open class Issuer<T>(
     val channel: Channel<Message<T>>,
-    val issuable: Issuable<T>, val tracker: ((Message<T>) -> Unit)? = null
+    val issuable: Issuable<T>,
+    val tracker: ((Message<T>) -> Unit)? = null
 ) {
-
     suspend fun pull(count: Int = 1) {
         // Process X off the channel
         for (x in 1..count) {
