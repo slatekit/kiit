@@ -16,7 +16,7 @@ buildscript {
 plugins {
     id "java"
     id "maven-publish"
-     id "org.jetbrains.kotlin.jvm" version "$kotlin_version"
+     id "org.jetbrains.kotlin.jvm" // version "$kotlin_version"
 }
 
 //apply plugin: 'org.junit.platform.gradle.plugin'
