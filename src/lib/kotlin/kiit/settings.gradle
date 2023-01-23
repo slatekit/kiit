@@ -112,5 +112,5 @@ project(':connectors-jobs').projectDir=new File('../../../connectors/connectors-
 //include ':slatekit-samples'
 //project(':slatekit-samples').projectDir=new File('../../../apps/kotlin/slatekit-samples')
 //
-include ':slatekit-tests'
-project(':slatekit-tests').projectDir=new File('../slatekit-tests')
+include ':kiit-tests'
+project(':kiit-tests').projectDir=new File('../slatekit-tests')
