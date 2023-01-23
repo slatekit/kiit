@@ -17,7 +17,7 @@ jobs:
   build:
     runs-on: ubuntu-latest
     env:
-        KIIT_PROJECT_MODE: binary
+        KIIT_PROJECT_MODE: sources
         KIIT_INSTALL_ACTOR: ${{ secrets.KIIT_INSTALL_ACTOR }}
         KIIT_INSTALL_TOKEN: ${{ secrets.KIIT_INSTALL_TOKEN }}
         KIIT_PUBLISH_ACTOR: ${{ github.actor }}
