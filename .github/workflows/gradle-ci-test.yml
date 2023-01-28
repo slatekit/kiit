@@ -22,6 +22,9 @@ jobs:
         KIIT_INSTALL_TOKEN: ${{ secrets.KIIT_INSTALL_TOKEN }}
         KIIT_PUBLISH_ACTOR: ${{ github.actor }}
         KIIT_PUBLISH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        MYSQL_DB_DATABASE: kiit-tests
+        MYSQL_DB_USER: root
+        MYSQL_DB_PASSWORD: root
 
     steps:
     - uses: actions/checkout@v2
@@ -35,6 +38,10 @@ jobs:
       with:
         gradle-version: 6.7.1
 
+    - name: Set up MySQL
+      run: |
+        sudo /etc/init.d/mysql start
+        mysql -e 'CREATE DATABASE ${{ env.MYSQL_DB_DATABASE }};' -u${{ env.MYSQL_DB_USER }} -p${{ env.MYSQL_DB_PASSWORD }}
 # ====================================================
 # Common
 # ====================================================
