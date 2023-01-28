@@ -9,6 +9,7 @@ import kiit.common.DateTimes
 import kiit.common.data.*
 import kiit.common.ids.ULIDs
 import kiit.db.Db
+import org.threeten.bp.ZoneId
 import test.TestApp
 import test.setup.Address
 import test.setup.StatusEnum
@@ -27,12 +28,11 @@ import java.util.*
  * 5. Postgres: PostgresProvider ....
  */
 class Data_04_Database_Mysql : TestSupport {
-
-
+    private val zoneId = ZoneId.systemDefault()
     private val localDate = LocalDate.of(2021, 2, 1)
     private val localTime = LocalTime.of(9, 30, 45)
     private val localDateTime = LocalDateTime.of(2021, 2, 1, 9, 30, 45)
-    private val zonedDateTime = DateTimes.of(2021, 2, 1, 9, 30, 45)
+    private val zonedDateTime = DateTimes.of(2021, 2, 1, 9, 30, 45, zoneId = zoneId)
 
     private val table = "sample_entity"
 

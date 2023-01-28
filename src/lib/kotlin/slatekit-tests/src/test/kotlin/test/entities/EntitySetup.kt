@@ -6,6 +6,7 @@ import org.threeten.bp.LocalTime
 import kiit.common.DateTimes
 import kiit.common.conf.Confs
 import kiit.common.data.Connections
+import kiit.common.data.DbCon
 import kiit.common.data.IDb
 import kiit.common.data.Vendor
 import kiit.common.ids.UPIDs
@@ -36,7 +37,14 @@ object EntitySetup {
     }
 
     fun realDb(): Entities {
+        val con = Confs.readDbCon(TestApp::class.java, dbConfPath)!!
         val dbs = Connections.of(con)
+        val entities = Entities({ con -> Db.of(con) }, dbs, MyEncryptor)
+        return entities
+    }
+
+    fun fakeDb(): Entities {
+        val dbs = Connections.of(DbCon.empty)
         val entities = Entities({ con -> Db.of(con) }, dbs, MyEncryptor)
         return entities
     }
