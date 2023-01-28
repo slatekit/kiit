@@ -34,6 +34,7 @@ import kiit.meta.KTypes
 import kiit.results.Notice
 import kiit.results.Success
 import kiit.results.getOrElse
+import org.threeten.bp.ZoneId
 import test.TestApp
 import test.setup.*
 import kotlin.reflect.KClass
@@ -201,7 +202,9 @@ class ReflectorTests : TestSupport {
 
     @Test fun can_call_method() {
         val api = ActivationService
-        val res = Reflector.callMethod(ActivationService::class, api, ActivationService::activate.name, arrayOf("123456789", 987, true, DateTimes.of(2017, 5, 27)))
+        val zone = "America/New_York"
+        val zoneId = ZoneId.of(zone)
+        val res = Reflector.callMethod(ActivationService::class, api, ActivationService::activate.name, arrayOf("123456789", 987, true, DateTimes.of(2017, 5, 27, zoneId = zoneId)))
         val result = res as Notice<String>
         val v = result.getOrElse { "" }
         Assert.assertTrue(v == "ok")
