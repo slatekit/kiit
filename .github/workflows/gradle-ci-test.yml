@@ -22,7 +22,7 @@ jobs:
         KIIT_INSTALL_TOKEN: ${{ secrets.KIIT_INSTALL_TOKEN }}
         KIIT_PUBLISH_ACTOR: ${{ github.actor }}
         KIIT_PUBLISH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        MYSQL_DB_DATABASE: kiit-tests
+        MYSQL_DB_DATABASE: kiit
         MYSQL_DB_USER: root
         MYSQL_DB_PASSWORD: root
 
