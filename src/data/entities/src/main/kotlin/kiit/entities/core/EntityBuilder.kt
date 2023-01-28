@@ -77,8 +77,17 @@ open class EntityBuilder(
      * @param open: whether or not to open the database
      */
     fun db(con: DbCon, open: Boolean = true): IDb {
-        require(con != DbCon.empty) { "Db connection supplied is empty" }
-        return if (open) dbCreator(con).open() else dbCreator(con)
+        //require(con != DbCon.empty) { "Db connection supplied is empty" }
+        return when(open) {
+            true  -> {
+                val db = dbCreator(con)
+                if(con != DbCon.empty) {
+                    db.open()
+                }
+                db
+            }
+            false -> dbCreator(con)
+        }
     }
 
     /**

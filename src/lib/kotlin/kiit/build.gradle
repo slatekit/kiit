@@ -14,7 +14,7 @@ buildscript {
 
 // NOTE: The version is set up in the settings.gradle file for all projects.
 // THERE MAY BE A BETTER WAY TO DO THIS.
-// 
+//
 // SETUP
 // This multi-module set up supports building in 2 modes
 // 1. Mode = Binary ( references kiit dependencies via binary reference )
