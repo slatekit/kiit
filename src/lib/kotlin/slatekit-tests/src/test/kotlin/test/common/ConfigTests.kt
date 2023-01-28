@@ -27,6 +27,7 @@ import kiit.common.ext.zoned
 import kiit.common.ids.UPID
 import kiit.common.ids.UPIDs
 import kiit.meta.map
+import org.junit.Ignore
 import test.TestApp
 import test.setup.Movie
 import test.setup.MyEncryptor
@@ -35,6 +36,37 @@ import java.util.*
 import java.io.FileInputStream
 
 
+@Ignore
+class ConfigTestsLocal : TestSupport {
+
+    @Test fun test_read_api_from() {
+        val key = Confs.readApiKey(app,"usr://.kiit/common/conf/env.conf", sectionName = "aws-sqs")
+        matchkey(key!!, ApiLogin("mycompany1.dev", "key1", "pass1", "env1", "tag1"))
+    }
+
+
+    @Test fun test_loading_from_dir_explicit() {
+        val conf  = Config.of(app, "abs:///Users/kishorereddy/.kiit/common/conf/env.conf")
+        val key = conf.apiLogin("aws-sqs")
+        matchkey(key, ApiLogin("mycompany1.dev", "key1", "pass1", "env1", "tag1"))
+    }
+
+
+    @Test fun test_loading_from_dir_user() {
+        val conf  = Config.of(app, "usr://.kiit/common/conf/env.conf")
+        val key = conf.apiLogin("aws-sqs")
+        matchkey(key, ApiLogin("mycompany1.dev", "key1", "pass1", "env1", "tag1"))
+    }
+
+
+    fun matchkey(actual: ApiLogin, expected: ApiLogin):Unit {
+        Assert.assertTrue(expected.account == actual.account)
+        Assert.assertTrue(expected.key == actual.key)
+        Assert.assertTrue(expected.env == actual.env)
+        Assert.assertTrue(expected.pass == actual.pass)
+        Assert.assertTrue(expected.tag == actual.tag)
+    }
+}
 
 /**
  * Created by kishorereddy on 6/4/17.
@@ -145,26 +177,6 @@ class ConfigTests : TestSupport {
 
     @Test fun test_model_api_key() {
         val conf  = Config.of(app, Confs.CONFIG_DEFAULT_PROPERTIES)
-        val key = conf.apiLogin("aws-sqs")
-        matchkey(key, ApiLogin("mycompany1.dev", "key1", "pass1", "env1", "tag1"))
-    }
-
-
-    @Test fun test_read_api_from() {
-        val key = Confs.readApiKey(app,"usr://.kiit/common/conf/env.conf", sectionName = "aws-sqs")
-        matchkey(key!!, ApiLogin("mycompany1.dev", "key1", "pass1", "env1", "tag1"))
-    }
-
-
-    @Test fun test_loading_from_dir_user() {
-        val conf  = Config.of(app, "usr://.kiit/common/conf/env.conf")
-        val key = conf.apiLogin("aws-sqs")
-        matchkey(key, ApiLogin("mycompany1.dev", "key1", "pass1", "env1", "tag1"))
-    }
-
-
-    @Test fun test_loading_from_dir_explicit() {
-        val conf  = Config.of(app, "abs:///Users/kishorereddy/.kiit/common/conf/env.conf")
         val key = conf.apiLogin("aws-sqs")
         matchkey(key, ApiLogin("mycompany1.dev", "key1", "pass1", "env1", "tag1"))
     }
