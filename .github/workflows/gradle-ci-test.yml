@@ -36,8 +36,8 @@ jobs:
         KIIT_PUBLISH_ACTOR: ${{ github.actor }}
         KIIT_PUBLISH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         KIIT_DB_NAME: kiit
-        KIIT_DB_USER: user
-        KIIT_DB_PSWD: password
+        KIIT_DB_USER: root
+        KIIT_DB_PSWD: root
 
     steps:
     - uses: actions/checkout@v2
