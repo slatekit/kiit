@@ -5,10 +5,7 @@ import org.threeten.bp.LocalDateTime
 import org.threeten.bp.LocalTime
 import kiit.common.DateTimes
 import kiit.common.conf.Confs
-import kiit.common.data.Connections
-import kiit.common.data.DbCon
-import kiit.common.data.IDb
-import kiit.common.data.Vendor
+import kiit.common.data.*
 import kiit.common.ids.UPIDs
 import kiit.data.core.LongId
 import kiit.data.core.Meta
@@ -49,6 +46,20 @@ object EntitySetup {
 
     fun realDb(): Entities {
         val con = Confs.readDbCon(TestApp::class.java, dbConfPath)!!
+        val dbs = Connections.of(con)
+        val entities = Entities({ con -> Db.of(con) }, dbs, MyEncryptor)
+        return entities
+    }
+
+    /**
+     * @param envPrefix : The environment variable prefix for connection parameters.
+     *                    e.g. "MYSQL" -> MYSQL_DB_NAME, MYSQL_DB_USER, MYSQL_DB_PSWD
+     */
+    fun realDb(vendor: Vendor, envPrefix:String): Entities {
+        val dbName = System.getenv("${envPrefix}_DB_NAME")
+        val dbUser = System.getenv("${envPrefix}_DB_USER")
+        val dbPswd = System.getenv("${envPrefix}_DB_PSWD")
+        val con = DbConString(vendor.driver, "jdbc:mysql://localhost/${dbName}", dbUser, dbPswd)
         val dbs = Connections.of(con)
         val entities = Entities({ con -> Db.of(con) }, dbs, MyEncryptor)
         return entities

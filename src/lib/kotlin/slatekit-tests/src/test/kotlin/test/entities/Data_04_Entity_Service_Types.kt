@@ -48,7 +48,6 @@ class Data_04_Entity_Service_Types : TestSupport {
     }
 
 
-
     @Test fun can_use_all_types() {
         runBlocking {
             val entities = EntitySetup.realDb()

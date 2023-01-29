@@ -22,9 +22,9 @@ jobs:
         KIIT_INSTALL_TOKEN: ${{ secrets.KIIT_INSTALL_TOKEN }}
         KIIT_PUBLISH_ACTOR: ${{ github.actor }}
         KIIT_PUBLISH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        MYSQL_DB_DATABASE: kiit
-        MYSQL_DB_USER: root
-        MYSQL_DB_PASSWORD: root
+        KIIT_DB_NAME: kiit
+        KIIT_DB_USER: root
+        KIIT_DB_PSWD: root
 
     steps:
     - uses: actions/checkout@v2
@@ -41,7 +41,7 @@ jobs:
     - name: Set up MySQL
       run: |
         sudo /etc/init.d/mysql start
-        mysql -e 'CREATE DATABASE ${{ env.MYSQL_DB_DATABASE }};' -u${{ env.MYSQL_DB_USER }} -p${{ env.MYSQL_DB_PASSWORD }}
+        mysql -e 'CREATE DATABASE ${{ env.KIIT_DB_NAME }};' -u${{ env.KIIT_DB_USER }} -p${{ env.KIIT_DB_PSWD }}
 # ====================================================
 # Common
 # ====================================================
