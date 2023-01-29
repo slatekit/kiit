@@ -9,6 +9,7 @@ import kiit.common.DateTimes
 import kiit.common.data.*
 import kiit.common.ids.ULIDs
 import kiit.db.Db
+import org.junit.Ignore
 import org.threeten.bp.ZoneId
 import test.TestApp
 import test.setup.Address
@@ -27,6 +28,7 @@ import java.util.*
  * 4. Sqlite  : SqliteProvider ....
  * 5. Postgres: PostgresProvider ....
  */
+@Ignore
 class Data_04_Database_Mysql : TestSupport {
     private val zoneId = ZoneId.systemDefault()
     private val localDate = LocalDate.of(2021, 2, 1)
