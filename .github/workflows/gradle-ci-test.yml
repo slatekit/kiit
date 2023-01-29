@@ -53,7 +53,8 @@ jobs:
 
     - name: Set up MySQL
       run: |
-        sudo /etc/init.d/mysql start
+        sudo systemctl enable mysql.service
+        sudo systemctl start mysql.service
         mysql -e 'CREATE DATABASE ${{ env.KIIT_DB_NAME }};' -u${{ env.KIIT_DB_USER }} -p${{ env.KIIT_DB_PSWD }}
 # ====================================================
 # Common
