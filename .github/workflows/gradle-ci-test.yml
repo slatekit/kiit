@@ -22,7 +22,7 @@ jobs:
         image: mysql:5.7
         env:
           MYSQL_DATABASE: kiit
-          MYSQL_USER: root
+          MYSQL_USER: user
           MYSQL_PASSWORD: password
           MYSQL_ROOT_PASSWORD: rootpassword
         ports:
@@ -36,7 +36,7 @@ jobs:
         KIIT_PUBLISH_ACTOR: ${{ github.actor }}
         KIIT_PUBLISH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         KIIT_DB_NAME: kiit
-        KIIT_DB_USER: root
+        KIIT_DB_USER: user
         KIIT_DB_PSWD: password
 
     steps:
