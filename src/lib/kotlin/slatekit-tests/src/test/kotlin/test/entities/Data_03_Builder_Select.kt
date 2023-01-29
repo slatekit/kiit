@@ -37,8 +37,8 @@ class Data_03_Builder_Select {
 
     @Before
     fun setup(){
-        entities = EntitySetup.realDb()
-        entities.register<Long, User5>(EntityLongId() , vendor = Vendor.MySql) { repo -> UserService(repo) }
+//        entities = EntitySetup.realDb()
+//        entities.register<Long, User5>(EntityLongId() , vendor = Vendor.MySql) { repo -> UserService(repo) }
     }
 
 

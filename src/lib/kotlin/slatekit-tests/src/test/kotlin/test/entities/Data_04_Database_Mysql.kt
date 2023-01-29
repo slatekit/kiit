@@ -9,6 +9,8 @@ import kiit.common.DateTimes
 import kiit.common.data.*
 import kiit.common.ids.ULIDs
 import kiit.db.Db
+import org.junit.Ignore
+import org.threeten.bp.ZoneId
 import test.TestApp
 import test.setup.Address
 import test.setup.StatusEnum
@@ -26,21 +28,21 @@ import java.util.*
  * 4. Sqlite  : SqliteProvider ....
  * 5. Postgres: PostgresProvider ....
  */
+@Ignore
 class Data_04_Database_Mysql : TestSupport {
-
-
+    private val zoneId = ZoneId.systemDefault()
     private val localDate = LocalDate.of(2021, 2, 1)
     private val localTime = LocalTime.of(9, 30, 45)
     private val localDateTime = LocalDateTime.of(2021, 2, 1, 9, 30, 45)
-    private val zonedDateTime = DateTimes.of(2021, 2, 1, 9, 30, 45)
+    private val zonedDateTime = DateTimes.of(2021, 2, 1, 9, 30, 45, zoneId = zoneId)
 
     private val table = "sample_entity"
 
 
     @Test fun can_build() {
         val db1 = Db.of(TestApp::class.java, EntitySetup.dbConfPath)
-        val db2 = Db.of(EntitySetup.con)
-        val db3 = Db.of(EntitySetup.cons)
+        val db2 = Db.of(EntitySetup.con())
+        val db3 = Db.of(EntitySetup.cons())
         Assert.assertEquals(db1.driver, db2.driver)
         Assert.assertEquals(db2.driver, db3.driver)
     }

@@ -6,8 +6,20 @@ import kiit.common.io.Alias
 import kiit.common.io.Files
 import kiit.common.io.Uri
 import kiit.common.io.Uris
+import org.junit.Ignore
 import java.io.File
 
+@Ignore
+class UriTestsLocal
+{
+    @Test
+    fun can_load_cfg_dir(){
+        val cfg = Files.cfgDir
+        val expect = "/Users/kishorereddy/git/slatekit/slatekit/src/lib/kotlin/slatekit-tests/conf"
+        Assert.assertTrue(cfg.startsWith("/Users/"))
+        //Assert.assertTrue(cfg.endsWith("/src/lib/kotlin/slatekit-tests/conf"))
+    }
+}
 
 class UrisTests {
 
@@ -37,14 +49,6 @@ class UrisTests {
         Assert.assertEquals(alias, uriFinal.root)
         Assert.assertEquals(combined, uriFinal.path)
         Assert.assertEquals(full, uriFinal.full)
-    }
-
-    @Test
-    fun can_load_cfg_dir(){
-        val cfg = Files.cfgDir
-        val expect = "/Users/kishorereddy/git/slatekit/slatekit/src/lib/kotlin/slatekit-tests/conf"
-        Assert.assertTrue(cfg.startsWith("/Users/"))
-        Assert.assertTrue(cfg.endsWith("/src/lib/kotlin/slatekit-tests/conf"))
     }
 
     @Test

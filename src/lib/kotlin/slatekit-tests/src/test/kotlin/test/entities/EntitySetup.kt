@@ -5,9 +5,7 @@ import org.threeten.bp.LocalDateTime
 import org.threeten.bp.LocalTime
 import kiit.common.DateTimes
 import kiit.common.conf.Confs
-import kiit.common.data.Connections
-import kiit.common.data.IDb
-import kiit.common.data.Vendor
+import kiit.common.data.*
 import kiit.common.ids.UPIDs
 import kiit.data.core.LongId
 import kiit.data.core.Meta
@@ -28,15 +26,47 @@ object EntitySetup {
     val upid = "usa:314fef51-43a7-496c-be24-520e73758836"
     val meta = Meta<Long, SampleEntityImmutable>(LongId { m -> m.id }, Table("sample1"))
     val dbConfPath = "usr://.kiit/common/conf/db.conf"
-    val con = Confs.readDbCon(TestApp::class.java, dbConfPath)!!
-    val cons = Connections.of(con)
 
     fun db(): IDb {
+        val con = con()
         return Db.of(con)
     }
 
+    fun con(): DbCon {
+        val con = Confs.readDbCon(TestApp::class.java, dbConfPath)!!
+        return con
+    }
+
+
+    fun cons(): Connections {
+        val con = con()
+        val cons = Connections.of(con)
+        return cons
+    }
+
     fun realDb(): Entities {
+        val con = Confs.readDbCon(TestApp::class.java, dbConfPath)!!
         val dbs = Connections.of(con)
+        val entities = Entities({ con -> Db.of(con) }, dbs, MyEncryptor)
+        return entities
+    }
+
+    /**
+     * @param envPrefix : The environment variable prefix for connection parameters.
+     *                    e.g. "MYSQL" -> MYSQL_DB_NAME, MYSQL_DB_USER, MYSQL_DB_PSWD
+     */
+    fun realDb(vendor: Vendor, envPrefix:String): Entities {
+        val dbName = System.getenv("${envPrefix}_DB_NAME")
+        val dbUser = System.getenv("${envPrefix}_DB_USER")
+        val dbPswd = System.getenv("${envPrefix}_DB_PSWD")
+        val con = DbConString(vendor.driver, "jdbc:mysql://localhost/${dbName}", dbUser, dbPswd)
+        val dbs = Connections.of(con)
+        val entities = Entities({ con -> Db.of(con) }, dbs, MyEncryptor)
+        return entities
+    }
+
+    fun fakeDb(): Entities {
+        val dbs = Connections.of(DbCon.empty)
         val entities = Entities({ con -> Db.of(con) }, dbs, MyEncryptor)
         return entities
     }

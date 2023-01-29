@@ -365,7 +365,9 @@ class Db(private val dbCon: DbCon,
          * Only here for convenience to call open
          */
         fun of(con:DbCon):IDb {
-            return with(Db(con)) { open() }
+            val db = Db(con)
+            if(con != DbCon.empty) db.open()
+            return db
         }
     }
 

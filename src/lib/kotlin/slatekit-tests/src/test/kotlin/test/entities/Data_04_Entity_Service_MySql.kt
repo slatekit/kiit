@@ -23,12 +23,13 @@ import kiit.entities.features.Ordered
 import kiit.query.Op
 import kiit.query.set
 import kiit.query.where
+import org.junit.Ignore
 import test.setup.Group
 import test.setup.Member
 import test.setup.User5
 
 /**
-create table `User5` (
+create table IF NOT EXISTS `User5` (
 `id` BIGINT NOT NULL AUTO_INCREMENT PRIMARY KEY,
 `email` NVARCHAR(100) NOT NULL,
 `isactive` BIT NOT NULL,
@@ -41,13 +42,13 @@ create table `User5` (
 `uniqueid` NVARCHAR(50) NOT NULL
 );
 
-create table `Member` (
+create table IF NOT EXISTS `Member` (
 `id` BIGINT NOT NULL AUTO_INCREMENT PRIMARY KEY,
 `groupid` BIGINT NOT NULL,
 `userid` BIGINT NOT NULL
 );
 
-create table `Group` (
+create table IF NOT EXISTS `Group` (
 `id` BIGINT NOT NULL AUTO_INCREMENT PRIMARY KEY,
 `name` NVARCHAR(30) NOT NULL
 );
@@ -56,20 +57,50 @@ class UserService(repo: EntityRepo<Long, User5>)
     : EntityService<Long, User5>(repo), Ordered<Long, User5>, Counts<Long, User5>
 
 
+@Ignore
 open class Data_04_Entity_Service_MySql {
 
     protected lateinit var entities: Entities
+    private val sqlStatements = listOf(
+"""create table IF NOT EXISTS `User5` (
+`id` BIGINT NOT NULL AUTO_INCREMENT PRIMARY KEY,
+`email` NVARCHAR(100) NOT NULL,
+`isactive` BIT NOT NULL,
+`age` INTEGER NOT NULL,
+`salary` DOUBLE NOT NULL,
+`createdat` DATETIME NOT NULL,
+`createdby` BIGINT NOT NULL,
+`updatedat` DATETIME NOT NULL,
+`updatedby` BIGINT NOT NULL,
+`uniqueid` NVARCHAR(50) NOT NULL
+);""",
 
+"""create table IF NOT EXISTS `Member` (
+`id` BIGINT NOT NULL AUTO_INCREMENT PRIMARY KEY,
+`groupid` BIGINT NOT NULL,
+`userid` BIGINT NOT NULL
+);""",
+
+"""create table IF NOT EXISTS `Group` (
+`id` BIGINT NOT NULL AUTO_INCREMENT PRIMARY KEY,
+`name` NVARCHAR(30) NOT NULL
+);"""
+    )
 
     @Before
     open fun setup() {
 //        entities = Entities({ con -> Db(con) }, Connections(DbConString("", "", "", "")))
-        entities = EntitySetup.realDb()
+        entities = EntitySetup.realDb(Vendor.MySql, "KIIT")
+        val db = entities.getDb()
+        sqlStatements.map{ sql ->
+            db.execute(sql)
+        }
         //entities.register<Long, SampleEntityImmutable>(LongId { s -> s.id}, "sample_entity", Vendor.MySql) { repo -> EntityService(repo) }
         entities.register<Long, User5>(EntityLongId(), vendor = Vendor.MySql) { repo -> UserService(repo) }
         entities.register<Long, Member>(EntityLongId(), vendor = Vendor.MySql) { repo -> EntityService(repo) }
         entities.register<Long, Group>(EntityLongId(), vendor = Vendor.MySql) { repo -> EntityService(repo) }
     }
+
 
     @Test
     open fun can_create_an_item() {

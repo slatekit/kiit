@@ -16,12 +16,28 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
+
+    # services:
+    #   mysql:
+    #     image: mysql:5.7
+    #     env:
+    #       MYSQL_DATABASE: kiit
+    #       MYSQL_USER: user
+    #       MYSQL_PASSWORD: password
+    #       MYSQL_ROOT_PASSWORD: rootpassword
+    #     ports:
+    #       - 3306:3306
+    #     options: --health-cmd="mysqladmin ping" --health-interval=10s --health-timeout=5s --health-retries=3
+
     env:
-        KIIT_PROJECT_MODE: binary
+        KIIT_PROJECT_MODE: sources
         KIIT_INSTALL_ACTOR: ${{ secrets.KIIT_INSTALL_ACTOR }}
         KIIT_INSTALL_TOKEN: ${{ secrets.KIIT_INSTALL_TOKEN }}
         KIIT_PUBLISH_ACTOR: ${{ github.actor }}
         KIIT_PUBLISH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        KIIT_DB_NAME: kiit
+        KIIT_DB_USER: root
+        KIIT_DB_PSWD: root
 
     steps:
     - uses: actions/checkout@v2
@@ -35,6 +51,16 @@ jobs:
       with:
         gradle-version: 6.7.1
 
+    - name: Set up MySQL
+      # run: |
+      #   sudo /lib/systemd/systemd-sysv-install enable mysql
+      #   sudo systemctl enable mysql.service
+      #   sudo systemctl start mysql.service
+      #   sudo systemctl status mysql.service
+      #   mysql -e 'CREATE DATABASE ${{ env.KIIT_DB_NAME }};' -u${{ env.KIIT_DB_USER }} -p${{ env.KIIT_DB_PSWD }}
+      run: |
+        sudo /etc/init.d/mysql start
+        mysql -e 'CREATE DATABASE ${{ env.KIIT_DB_NAME }};' -u${{ env.KIIT_DB_USER }} -p${{ env.KIIT_DB_PSWD }}
 # ====================================================
 # Common
 # ====================================================

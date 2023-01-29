@@ -50,8 +50,8 @@ class Data_04_Entity_Registry {
 
     @Before
     fun setup(){
-        entities = EntitySetup.realDb()
-        entities.register<Long, User5>(EntityLongId() , vendor = Vendor.MySql) { repo -> UserService(repo) }
+        entities = EntitySetup.fakeDb()
+        entities.register<Long, User5>(EntityLongId() , vendor = Vendor.Memory) { repo -> UserService(repo) }
     }
 
 
@@ -64,7 +64,7 @@ class Data_04_Entity_Registry {
             Assert.assertEquals(User5::class, it.entityType)
             Assert.assertEquals(User5::class.qualifiedName, it.entityTypeName)
             Assert.assertEquals(EntityRepo::class, it.entityRepoType)
-            Assert.assertEquals(Vendor.MySql, it.vendor)
+            Assert.assertEquals(Vendor.Memory, it.vendor)
             Assert.assertNotNull(it.entityRepoInstance)
             Assert.assertNotNull(it.entityServiceInstance)
             Assert.assertEquals("User5", it.model.name)

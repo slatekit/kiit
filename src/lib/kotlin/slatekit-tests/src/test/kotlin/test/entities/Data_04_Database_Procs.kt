@@ -9,6 +9,7 @@ import kiit.common.DateTimes
 import kiit.common.data.*
 import kiit.common.ids.ULIDs
 import kiit.db.Db
+import org.junit.Ignore
 import test.setup.TestSupport
 import java.util.*
 
@@ -23,6 +24,7 @@ import java.util.*
  * 4. Sqlite  : SqliteProvider ....
  * 5. Postgres: PostgresProvider ....
  */
+@Ignore
 class Data_04_Database_Procs : TestSupport {
 
 

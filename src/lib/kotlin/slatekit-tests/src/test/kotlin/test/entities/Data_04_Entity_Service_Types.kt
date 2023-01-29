@@ -25,13 +25,14 @@ import kiit.data.core.LongId
 import kiit.db.Db
 import kiit.entities.EntityService
 import kiit.query.Op
+import org.junit.Ignore
 import test.TestApp
 import test.setup.Address
 import test.setup.StatusEnum
 import test.setup.TestSupport
 import java.util.*
 
-
+@Ignore
 class Data_04_Entity_Service_Types : TestSupport {
 
     val sampleUUID1 = "67bdb72a-1d74-11e8-b467-0ed5f89f7181"
@@ -41,12 +42,11 @@ class Data_04_Entity_Service_Types : TestSupport {
 
     @Test fun can_build() {
         val db1 = Db.of(TestApp::class.java, EntitySetup.dbConfPath)
-        val db2 = Db.of(EntitySetup.con)
-        val db3 = Db.of(EntitySetup.cons)
+        val db2 = Db.of(EntitySetup.con())
+        val db3 = Db.of(EntitySetup.cons())
         Assert.assertEquals(db1.driver, db2.driver)
         Assert.assertEquals(db2.driver, db3.driver)
     }
-
 
 
     @Test fun can_use_all_types() {

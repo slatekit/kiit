@@ -19,6 +19,7 @@ import kiit.common.DateTimes
 import kiit.common.ext.tail
 import kiit.common.newline
 import kiit.serialization.*
+import org.threeten.bp.ZoneId
 import test.setup.StatusEnum
 import test.setup.StatusEnum2
 import test.setup.StatusEnum3
@@ -92,10 +93,12 @@ class SerializerTests {
 
 
     @Test fun can_serialize_dates() {
+        val zone = "America/New_York"
+        val zoneId = ZoneId.of(zone)
         val serializer = Serialization.json()
-        val d1 = serializer.serialize(DateTimes.of(2017,6,1))
-        val d2 = serializer.serialize(DateTimes.of(2017,6,1,9,5,0))
-        val d3 = serializer.serialize(DateTimes.of(2017,6,1,9,5,5))
+        val d1 = serializer.serialize(DateTimes.of(2017,6,1, zoneId = zoneId))
+        val d2 = serializer.serialize(DateTimes.of(2017,6,1,9,5,0, zoneId = zoneId))
+        val d3 = serializer.serialize(DateTimes.of(2017,6,1,9,5,5, zoneId = zoneId))
 
         Assert.assertTrue( d1 == "\"2017-06-01T00:00:00-04:00\"" )
         Assert.assertTrue( d2 == "\"2017-06-01T09:05:00-04:00\"" )
@@ -104,12 +107,14 @@ class SerializerTests {
 
 
     @Test fun can_serialize_list() {
+        val zone = "America/New_York"
+        val zoneId = ZoneId.of(zone)
         val serializer = Serialization.json()
         Assert.assertTrue( serializer.serialize(listOf("a", "b", "c")) == "[\"a\", \"b\", \"c\"]")
         Assert.assertTrue( serializer.serialize(listOf(1, 2, 3)) == "[1, 2, 3]")
         Assert.assertTrue( serializer.serialize(listOf(true, false, true)) == "[true, false, true]")
         Assert.assertTrue( serializer.serialize(listOf(1.2, 3.4, 5.6)) == "[1.2, 3.4, 5.6]")
-        Assert.assertTrue( serializer.serialize(listOf("a", 1, 2.3, true, DateTimes.of(2017,6,1,9,5,5))) == "[\"a\", 1, 2.3, true, \"2017-06-01T09:05:05-04:00\"]")
+        Assert.assertTrue( serializer.serialize(listOf("a", 1, 2.3, true, DateTimes.of(2017,6,1,9,5,5, zoneId = zoneId))) == "[\"a\", 1, 2.3, true, \"2017-06-01T09:05:05-04:00\"]")
     }
 
 
@@ -164,10 +169,13 @@ class SerializerTests {
 
 
     @Test fun can_serialize_sample_using_parameters() {
+        val zoneId = ZoneId.systemDefault()
+        val expectedDate = DateTimes.of(2017, 8, 20, zoneId = zoneId)
+        val expectedDateValue = expectedDate.toString()
         val serializer = Serialization.sampler()
         val parameters = SerializerTests::sampleParams.parameters.tail()
         val text = serializer.serialize(parameters)
-        val expected = """["str" : "abc", "bln" : true, "numI" : 10, "numL" : 100, "date" : "2017-08-20T00:00-04:00[America/New_York]", "status" : 0, "user" : {"id" : 100, "email" : "abc", "firstName" : "abc", "lastName" : "abc", "male" : true, "age" : 10}]"""
+        val expected = """["str" : "abc", "bln" : true, "numI" : 10, "numL" : 100, "date" : "${expectedDateValue}", "status" : 0, "user" : {"id" : 100, "email" : "abc", "firstName" : "abc", "lastName" : "abc", "male" : true, "age" : 10}]"""
         Assert.assertTrue(text == expected)
     }
 

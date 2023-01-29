@@ -25,6 +25,7 @@ import kiit.common.conf.Config
 import kiit.common.data.DbConString
 import kiit.common.data.Connections
 import kiit.common.data.Connections.Companion.of
+import kiit.common.data.DbCon
 import kiit.common.envs.Envs
 import kiit.common.info.*
 import kiit.common.log.LogsDefault
@@ -59,7 +60,7 @@ open class ApiTestsBase {
                 envs = Envs.defaults().select("loc"),
                 conf = cfg,
                 logs = LogsDefault,
-                ent = Entities({ con -> Db(con) }, Connections(cfg.dbCon())),
+                ent = Entities({ con -> Db(con) }, Connections.of(DbCon.empty)),
                 info = Info.of(
                         About("tests", "myapp", "sample app", "slatekit", "ny", "", "", "")
                 ),

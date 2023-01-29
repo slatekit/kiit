@@ -12,6 +12,23 @@ buildscript {
     }
 }
 
+// NOTE: The version is set up in the settings.gradle file for all projects.
+// THERE MAY BE A BETTER WAY TO DO THIS.
+//
+// SETUP
+// This multi-module set up supports building in 2 modes
+// 1. Mode = Binary ( references kiit dependencies via binary reference )
+// 2. Mode = Source ( references kiit dependencies via source projects )
+//
+// MULTI
+// 1. To run Publish, we need to build in Binary mode ( to publish from each project )
+// 2. To run CI-Test, we need to build in Source mode ( to run unit-tests )
+// 3. In order to do both 1 and 2 above, we need to have have version specified in settings
+// 4. If version is supplied in build.gradle in all projects, loading of kiit will fail,
+//    as there can only be 1 version supplied. However, but putting it into the settings,
+//    we can remove the "version" reference in all build.gradle files but still have it work
+//    when publishing artifacts ( since version of kotlin is needed
+//
 plugins {
     id "java"
     id "maven-publish"
