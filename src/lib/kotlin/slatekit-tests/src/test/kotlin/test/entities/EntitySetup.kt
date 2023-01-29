@@ -29,11 +29,22 @@ object EntitySetup {
     val upid = "usa:314fef51-43a7-496c-be24-520e73758836"
     val meta = Meta<Long, SampleEntityImmutable>(LongId { m -> m.id }, Table("sample1"))
     val dbConfPath = "usr://.kiit/common/conf/db.conf"
-    val con = Confs.readDbCon(TestApp::class.java, dbConfPath)!!
-    val cons = Connections.of(con)
 
     fun db(): IDb {
+        val con = con()
         return Db.of(con)
+    }
+
+    fun con(): DbCon {
+        val con = Confs.readDbCon(TestApp::class.java, dbConfPath)!!
+        return con
+    }
+
+
+    fun cons(): Connections {
+        val con = con()
+        val cons = Connections.of(con)
+        return cons
     }
 
     fun realDb(): Entities {

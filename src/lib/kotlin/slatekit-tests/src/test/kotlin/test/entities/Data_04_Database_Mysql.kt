@@ -39,8 +39,8 @@ class Data_04_Database_Mysql : TestSupport {
 
     @Test fun can_build() {
         val db1 = Db.of(TestApp::class.java, EntitySetup.dbConfPath)
-        val db2 = Db.of(EntitySetup.con)
-        val db3 = Db.of(EntitySetup.cons)
+        val db2 = Db.of(EntitySetup.con())
+        val db3 = Db.of(EntitySetup.cons())
         Assert.assertEquals(db1.driver, db2.driver)
         Assert.assertEquals(db2.driver, db3.driver)
     }
