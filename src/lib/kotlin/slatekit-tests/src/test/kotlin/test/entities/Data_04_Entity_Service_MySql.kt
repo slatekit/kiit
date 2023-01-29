@@ -89,8 +89,9 @@ open class Data_04_Entity_Service_MySql {
     open fun setup() {
 //        entities = Entities({ con -> Db(con) }, Connections(DbConString("", "", "", "")))
         entities = EntitySetup.realDb(Vendor.MySql, "KIIT")
+        val db = entities.getDb()
         sqlStatements.map{ sql ->
-            entities.getDb().execute(sql)
+            db.execute(sql)
         }
         //entities.register<Long, SampleEntityImmutable>(LongId { s -> s.id}, "sample_entity", Vendor.MySql) { repo -> EntityService(repo) }
         entities.register<Long, User5>(EntityLongId(), vendor = Vendor.MySql) { repo -> UserService(repo) }
