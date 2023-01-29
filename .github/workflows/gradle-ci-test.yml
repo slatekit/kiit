@@ -13,21 +13,22 @@ on:
   release:
    types: [created]
 
-services:
-  mysql:
-    image: mysql:5.7
-    env:
-      MYSQL_DATABASE: kiit
-      MYSQL_USER: root
-      MYSQL_PASSWORD: password
-      MYSQL_ROOT_PASSWORD: rootpassword
-    ports:
-      - 3306:3306
-    options: --health-cmd="mysqladmin ping" --health-interval=10s --health-timeout=5s --health-retries=3
-
 jobs:
   build:
     runs-on: ubuntu-latest
+
+    services:
+      mysql:
+        image: mysql:5.7
+        env:
+          MYSQL_DATABASE: kiit
+          MYSQL_USER: root
+          MYSQL_PASSWORD: password
+          MYSQL_ROOT_PASSWORD: rootpassword
+        ports:
+          - 3306:3306
+        options: --health-cmd="mysqladmin ping" --health-interval=10s --health-timeout=5s --health-retries=3
+
     env:
         KIIT_PROJECT_MODE: sources
         KIIT_INSTALL_ACTOR: ${{ secrets.KIIT_INSTALL_ACTOR }}
