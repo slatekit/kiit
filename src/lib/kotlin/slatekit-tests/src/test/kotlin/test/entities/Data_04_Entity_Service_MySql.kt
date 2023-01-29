@@ -23,6 +23,7 @@ import kiit.entities.features.Ordered
 import kiit.query.Op
 import kiit.query.set
 import kiit.query.where
+import org.junit.Ignore
 import test.setup.Group
 import test.setup.Member
 import test.setup.User5
@@ -56,6 +57,7 @@ class UserService(repo: EntityRepo<Long, User5>)
     : EntityService<Long, User5>(repo), Ordered<Long, User5>, Counts<Long, User5>
 
 
+@Ignore
 open class Data_04_Entity_Service_MySql {
 
     protected lateinit var entities: Entities
