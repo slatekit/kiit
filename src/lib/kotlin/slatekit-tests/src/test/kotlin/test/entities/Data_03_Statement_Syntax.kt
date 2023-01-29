@@ -39,7 +39,8 @@ class Data_03_Statement_Syntax {
             Assert.assertEquals(expected, actual)
         }catch(ex:Exception){
             println(ex.message)
-            throw ex 
+            println(ex.cause?.message)
+            throw ex
         }
     }
 
