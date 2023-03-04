@@ -67,7 +67,7 @@ repositories {
 
 dependencies {
 	// slatekit-results: Result<T,E> to model successes/failures with optional status codes
-    	compile 'com.slatekit:slatekit-results:2.4.6'
+    	compile 'dev.kiit:results:2.10.2'
 	// ... Other packages here 
 }
 ```
@@ -80,13 +80,13 @@ num | type | link
 1   | website     | www.kiit.dev                            
 2   | start       | www.kiit.dev/start           
 3   | modules     | https://www.kiit.dev/arch/overview/             
-4   | releases    | https://github.com/slatekit/kiit/releases 
-5   | issues      | https://github.com/slatekit/kiit/issues   
-6   | discuss     | https://github.com/slatekit/kiit/discussions   
-7   | license     | http://www.kiit.dev/more/license           
-8   | utilities   | http://www.kiit.dev/utils/overview          
-9   | standards   | http://www.kiit.dev/more/standards  
-10  | packages    | https://github.com/orgs/slatekit/packages?repo_name=kit
+4   | releases    | https://github.com/slatekit/kiit/releases              
+5   | packages    | https://github.com/orgs/slatekit/packages?repo_name=kit
+6   | issues      | https://github.com/slatekit/kiit/issues   
+7   | discuss     | https://github.com/slatekit/kiit/discussions   
+8   | license     | http://www.kiit.dev/more/license           
+9   | utilities   | http://www.kiit.dev/utils/overview          
+10   | standards   | http://www.kiit.dev/more/standards  
 
 # 🧰 Tools
 These are the vendors and tools we currently use to build and maintain Kiit
@@ -112,7 +112,7 @@ Foundations                                                         | --        
 [results](https://www.kiit.dev/arch/results)             | [src](src/common/result)            | Modeling of Successes/Failures 
 [common](https://www.kiit.dev/utils/overview)            | [src](src/common/common)            | Utility Components   
 [context](https://www.kiit.dev/arch/context)             | [src](src/common/context)           | Stores Common Dependencies 
-[actors](https://www.kiit.dev/arch/actors)               | [src](src/common/actors)            | Micro Actor Library 
+[actors](https://www.kiit.dev/arch/actors)               | [src](src/internal/actors)            | Micro Actor Library 
 Apps                                                                | --                                        | Runnable apps/Services                
 [app](http://www.kiit.dev/arch/app)                      | [src](src/services/app)               | Runnable App Template 
 [cli](http://www.kiit.dev/arch/cli)                      | [src](src/services/cli)               | Command Line Interface 
@@ -133,12 +133,9 @@ Providers                                                              | --     
 
 
 # ⁉️ Upcoming
-1. Additional AWS abstractions/integrations ( Documents, Streams )
-2. CI/CD improvements ( lint tools, etc ) 
-3. Kotlin Flow integration where applicable
-4. Kotlin Multi-Platform
-5. Code Generators and OpenAPI integrations
-6. Docker, Kubernetes build scripts
+1. Kotlin Flow integration where applicable
+2. Kotlin Multi-Platform
+3. Code Generators and OpenAPI integrations
 
 
 # ✉️ Contact
