@@ -2,20 +2,18 @@
 # Foundational
 cd ./common/
 cd result        && gradle clean build publish && cd ../ && echo 'sleeping 20s' && sleep 20s     
-cd actors        && gradle clean build publish && cd ../ && echo 'sleeping 20s' && sleep 20s     
 cd common        && gradle clean build publish && cd ../ && echo 'sleeping 20s' && sleep 20s   
 cd utils         && gradle clean build publish && cd ../ && echo 'sleeping 20s' && sleep 20s   
 cd requests      && gradle clean build publish && cd ../ && echo 'sleeping 20s' && sleep 20s     
 cd context       && gradle clean build publish && cd ../ && echo 'sleeping 20s' && sleep 20s     
-cd http          && gradle clean build publish && cd ../ && echo 'sleeping 20s' && sleep 20s   
+cd telemetry     && gradle clean build publish && cd ../ && echo 'sleeping 20s' && sleep 20s   
 cd ../
 
 
 # Support
-cd ./infra/
-cd telemetry     && gradle clean build publish && cd ../ && echo 'sleeping 20s' && sleep 20s   
-cd ../
 cd ./internal/
+cd actors        && gradle clean build publish && cd ../ && echo 'sleeping 20s' && sleep 20s     
+cd http          && gradle clean build publish && cd ../ && echo 'sleeping 20s' && sleep 20s   
 cd policy        && gradle clean build publish && cd ../ && echo 'sleeping 20s' && sleep 20s   
 cd meta          && gradle clean build publish && cd ../ && echo 'sleeping 20s' && sleep 20s   
 cd serialization && gradle clean build publish && cd ../ && echo 'sleeping 20s' && sleep 20s   

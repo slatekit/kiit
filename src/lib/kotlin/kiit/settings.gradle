@@ -9,9 +9,6 @@ rootProject.name = 'kiit'
 include ':kiit-result'
 project(':kiit-result').projectDir=new File('../../../common/result')
 
-include ':kiit-actors'
-project(':kiit-actors').projectDir=new File('../../../common/actors')
-
 include ':kiit-common'
 project(':kiit-common').projectDir=new File('../../../common/common')
 
@@ -21,11 +18,11 @@ project(':kiit-utils').projectDir=new File('../../../common/utils')
 include ':kiit-context'
 project(':kiit-context').projectDir=new File('../../../common/context')
 
-include ':kiit-http'
-project(':kiit-http').projectDir=new File('../../../common/http')
-
 include ':kiit-requests'
 project(':kiit-requests').projectDir=new File('../../../common/requests')
+
+include ':kiit-telemetry'
+project(':kiit-telemetry').projectDir=new File('../../../common/telemetry')
 
 // Services - Runnable applications
 include ':kiit-apis'
@@ -55,9 +52,6 @@ project(':kiit-cache').projectDir=new File('../../../infra/cache')
 include ':kiit-comms'
 project(':kiit-comms').projectDir=new File('../../../infra/comms')
 
-include ':kiit-telemetry'
-project(':kiit-telemetry').projectDir=new File('../../../infra/telemetry')
-
 include ':kiit-data'
 project(':kiit-data').projectDir=new File('../../../data/data')
 
@@ -69,6 +63,12 @@ project(':kiit-migrations').projectDir=new File('../../../data/migrations')
 
 include ':kiit-query'
 project(':kiit-query').projectDir=new File('../../../data/query')
+
+include ':kiit-actors'
+project(':kiit-actors').projectDir=new File('../../../internal/actors')
+
+include ':kiit-http'
+project(':kiit-http').projectDir=new File('../../../internal/http')
 
 include ':kiit-meta'
 project(':kiit-meta').projectDir=new File('../../../internal/meta')
