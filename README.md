@@ -66,7 +66,7 @@ repositories {
 }
 
 dependencies {
-	// slatekit-results: Result<T,E> to model successes/failures with optional status codes
+	// Use the results module: Result<T,E> to model successes/failures with optional status codes
     	compile 'dev.kiit:results:2.10.2'
 	// ... Other packages here 
 }
