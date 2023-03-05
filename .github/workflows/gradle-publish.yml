@@ -55,14 +55,6 @@ jobs:
       with: 
         time: '25s'
 
-    - name: Build Actors with Gradle
-      working-directory: src/common/actors
-      run: gradle clean build publish
-    - name: Sleep for 20 seconds
-      uses: whatnick/wait-action@master
-      with: 
-        time: '25s'
-
     - name: Build Common with Gradle
       working-directory: src/common/common
       run: gradle clean build publish
@@ -95,8 +87,8 @@ jobs:
       with: 
         time: '25s'
 
-    - name: Build http with Gradle
-      working-directory: src/common/http
+    - name: Build Telemetry with Gradle
+      working-directory: src/infra/telemetry
       run: gradle clean build publish
     - name: Sleep for 20 seconds
       uses: whatnick/wait-action@master
@@ -106,8 +98,17 @@ jobs:
 # ====================================================
 # Internal
 # ====================================================
-    - name: Build Telemetry with Gradle
-      working-directory: src/infra/telemetry
+
+    - name: Build Actors with Gradle
+      working-directory: src/common/actors
+      run: gradle clean build publish
+    - name: Sleep for 20 seconds
+      uses: whatnick/wait-action@master
+      with: 
+        time: '25s'
+
+    - name: Build http with Gradle
+      working-directory: src/common/http
       run: gradle clean build publish
     - name: Sleep for 20 seconds
       uses: whatnick/wait-action@master
