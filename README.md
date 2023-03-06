@@ -102,7 +102,7 @@ Name | Type | Notes
 # ⚙️ Modules
 Kiit contains many useful architecture components, utilities and applications features. Many of the modules are organized into logical groups and the entire design can be visualized in this diagram
 
-![image](doc/diagrams/slatekit-overview.png)
+![image](doc/diagrams/kiit-overview.png)
 
 Here are some of the main ones:
 
