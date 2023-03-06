@@ -1,4 +1,14 @@
 
+# ======================
+# major   = 2
+# minor   = 11
+# patch   = 1
+# version = 2.11.1
+# tag     = v2.11.1
+# release = Kiit Release 2.11.1
+# gh release create ${KIIT_RELEASE_TAG} -title ${KIIT_RELEASE_NAME} --generate-notes
+# gh release create v2.11.1 --generate-notes
+# ======================
 MAJOR=$1
 MINOR=$2
 PATCH=$3
