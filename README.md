@@ -67,7 +67,7 @@ repositories {
 
 dependencies {
 	// Use the results module: Result<T,E> to model successes/failures with optional status codes
-    	compile 'dev.kiit:results:2.10.2'
+    	compile 'dev.kiit:results:2.11.1'
 	// ... Other packages here 
 }
 ```
@@ -134,8 +134,10 @@ Providers                                                              | --     
 
 # ⁉️ Upcoming
 1. Kotlin Flow integration where applicable
-2. Kotlin Multi-Platform
-3. Code Generators and OpenAPI integrations
+2. Use of newer Kotlin features 
+3. Kotlin Multi-Platform
+4. Improved templates, Code Generators 
+5. OpenAPI integrations
 
 
 # ✉️ Contact
