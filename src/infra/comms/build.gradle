@@ -61,10 +61,10 @@ dependencies {
 
   // /* <slatekit_local>
   if( kiitSetupViaBinary ) {
-      compile "dev.kiit:results:$kiit_version"
-      compile "dev.kiit:common:$kiit_version"
-      compile "dev.kiit:utils:$kiit_version"
-      compile "dev.kiit:http:$kiit_version"
+      compile "dev.kiit:kiit-results:$kiit_version"
+      compile "dev.kiit:kiit-common:$kiit_version"
+      compile "dev.kiit:kiit-utils:$kiit_version"
+      compile "dev.kiit:kiit-http:$kiit_version"
   } else {
       // */
   compile project(":kiit-result")
@@ -122,7 +122,7 @@ publishing {
     gpr(MavenPublication) {
       from(components.java)
       groupId 'dev.kiit'
-      artifactId "${kiitComponentId}"
+      artifactId "kiit-${kiitComponentId}"
       version "${kiitComponentVersion}"
     }
   }

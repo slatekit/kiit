@@ -61,7 +61,7 @@ dependencies {
 
     // /* <slatekit_local>
     if (kiitSetupViaBinary) {
-        compile "dev.kiit:results:$kiit_version"
+        compile "dev.kiit:kiit-results:$kiit_version"
     } else {
         // */
         compile project(":kiit-result")
@@ -114,7 +114,7 @@ publishing {
         gpr(MavenPublication) {
             from(components.java)
             groupId 'dev.kiit'
-            artifactId "${kiitComponentId}"
+            artifactId "kiit-${kiitComponentId}"
             version "${kiitComponentVersion}"
         }
     }
