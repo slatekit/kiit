@@ -67,15 +67,15 @@ dependencies {
 
     // /* <slatekit_local>
     if( kiitSetupViaBinary ) {
-        compile "dev.kiit:results:$kiit_version"
-        compile "dev.kiit:common:$kiit_version"
-        compile "dev.kiit:actors:$kiit_version"
-        compile "dev.kiit:core:$kiit_version"
-        compile "dev.kiit:context:$kiit_version"
-        compile "dev.kiit:apis:$kiit_version"
-        compile "dev.kiit:jobs:$kiit_version"
-        compile "dev.kiit:connectors-entities:$kiit_version"
-        compile "dev.kiit:providers-aws:$kiit_version"
+        compile "dev.kiit:kiit-results:$kiit_version"
+        compile "dev.kiit:kiit-common:$kiit_version"
+        compile "dev.kiit:kiit-actors:$kiit_version"
+        compile "dev.kiit:kiit-core:$kiit_version"
+        compile "dev.kiit:kiit-context:$kiit_version"
+        compile "dev.kiit:kiit-apis:$kiit_version"
+        compile "dev.kiit:kiit-jobs:$kiit_version"
+        compile "dev.kiit:kiit-connectors-entities:$kiit_version"
+        compile "dev.kiit:kiit-providers-aws:$kiit_version"
     } else {
         // */
     compile project(":kiit-result")
@@ -137,7 +137,7 @@ publishing {
         gpr(MavenPublication) {
             from(components.java)
             groupId 'dev.kiit'
-            artifactId "${kiitComponentId}"
+            artifactId "kiit-${kiitComponentId}"
             version "${kiitComponentVersion}"
         }
     }

@@ -62,22 +62,22 @@ dependencies {
 
     // /* <slatekit_local>
     if( kiitSetupViaBinary ) {
-        compile "dev.kiit:results:$kiit_version"
-        compile "dev.kiit:common:$kiit_version"
-        compile "dev.kiit:context:$kiit_version"
-        compile "dev.kiit:requests:$kiit_version"
-        compile "dev.kiit:meta:$kiit_version"
-        compile "dev.kiit:query:$kiit_version"
-        compile "dev.kiit:cli:$kiit_version"
-        compile "dev.kiit:entities:$kiit_version"
-        compile "dev.kiit:core:$kiit_version"
-        compile "dev.kiit:comms:$kiit_version"
-        compile "dev.kiit:cache:$kiit_version"
-        compile "dev.kiit:apis:$kiit_version"
-        compile "dev.kiit:jobs:$kiit_version"
-        compile "dev.kiit:policy:$kiit_version"
-        compile "dev.kiit:migrations:$kiit_version"
-        compile "dev.kiit:connectors-entities:$kiit_version"
+        compile "dev.kiit:kiit-results:$kiit_version"
+        compile "dev.kiit:kiit-common:$kiit_version"
+        compile "dev.kiit:kiit-context:$kiit_version"
+        compile "dev.kiit:kiit-requests:$kiit_version"
+        compile "dev.kiit:kiit-meta:$kiit_version"
+        compile "dev.kiit:kiit-query:$kiit_version"
+        compile "dev.kiit:kiit-cli:$kiit_version"
+        compile "dev.kiit:kiit-entities:$kiit_version"
+        compile "dev.kiit:kiit-core:$kiit_version"
+        compile "dev.kiit:kiit-comms:$kiit_version"
+        compile "dev.kiit:kiit-cache:$kiit_version"
+        compile "dev.kiit:kiit-apis:$kiit_version"
+        compile "dev.kiit:kiit-jobs:$kiit_version"
+        compile "dev.kiit:kiit-policy:$kiit_version"
+        compile "dev.kiit:kiit-migrations:$kiit_version"
+        compile "dev.kiit:kiit-connectors-entities:$kiit_version"
     } else {
         // */
     compile project(":kiit-result")
@@ -146,7 +146,7 @@ publishing {
         gpr(MavenPublication) {
             from(components.java)
             groupId 'dev.kiit'
-            artifactId "${kiitComponentId}"
+            artifactId "kiit-${kiitComponentId}"
             version "${kiitComponentVersion}"
         }
     }
