@@ -67,7 +67,7 @@ repositories {
 
 dependencies {
 	// Use the results module: Result<T,E> to model successes/failures with optional status codes
-    	compile 'dev.kiit:results:2.11.1'
+    	compile 'dev.kiit:kiit-results:2.12.0'
 	// ... Other packages here 
 }
 ```
