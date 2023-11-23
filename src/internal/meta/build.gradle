@@ -1,7 +1,7 @@
 buildscript {
     ext.kotlin_version = '1.6.20'
-    ext.kiit_version = new File('../../version.txt').text
-    ext.kiit_version_beta = new File('../../version-beta.txt').text
+    ext.kiit_version = file('../../version.txt').text
+    ext.kiit_version_beta = file('../../version-beta.txt').text
 
     repositories {
         jcenter()
