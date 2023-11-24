@@ -96,13 +96,14 @@ data class Identity(
             return of(company, "tests", name, Agent.Test, EnvMode.Dev)
         }
 
-        fun of(company:String, area: String, service: String, agent:Agent, env: EnvMode = EnvMode.Dev, version: String? = null, desc:String? = null): Identity {
+        fun of(company:String, area: String, service: String, agent:Agent, env: EnvMode = EnvMode.Dev, version: String? = null, desc:String? = null, instance:String? = null): Identity {
             return Identity(
                 company.toIdent(),
                 area.toIdent(),
                 service.toIdent(),
                 agent,
                 env.name.lowercase(Locale.getDefault()),
+                instance = instance ?: ULIDs.create().value,
                 version = version ?: "latest",
                 desc = desc ?: "")
         }
