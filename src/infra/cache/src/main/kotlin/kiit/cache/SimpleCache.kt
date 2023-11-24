@@ -32,7 +32,7 @@ import kiit.telemetry.Tracker
  *
  * @param settings
  */
-open class SimpleCache(override val id:Identity = Identity.app("app", "cache"),
+open class SimpleCache(override val id:Identity = Identity.api("kiit", "infra", "cache"),
                        override val settings: CacheSettings,
                        override val listener:((CacheEvent) -> Unit)? = null,
                        override val logger: Logger? = null ) : Cache {

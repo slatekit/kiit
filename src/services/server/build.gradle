@@ -72,7 +72,7 @@ dependencies {
     implementation 'org.threeten:threetenbp:1.3.8'
     implementation fileTree(dir: 'lib', include: '*.jar')
 
-    // /* <slatekit_local>
+    /* <slatekit_local>
     if( kiitSetupViaBinary ) {
         implementation "dev.kiit:kiit-results:$kiit_version"
         implementation "dev.kiit:kiit-common:$kiit_version"
@@ -92,7 +92,7 @@ dependencies {
     implementation project(":kiit-telemetry")
     implementation project(":kiit-apis")
     implementation project(":kiit-serialization")
-    } //</slatekit_local>
+    // } //</slatekit_local>
 }
 
 // ==================================================================

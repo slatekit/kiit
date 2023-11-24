@@ -3,6 +3,7 @@ package kiit.common
 import kiit.common.envs.EnvMode
 import kiit.common.ext.toIdent
 import kiit.common.ids.ULIDs
+import java.util.*
 
 /**
  * Identity used to identity services / components
@@ -95,13 +96,15 @@ data class Identity(
             return of(company, "tests", name, Agent.Test, EnvMode.Dev)
         }
 
-        fun of(company:String, area: String, service: String, agent:Agent, env: EnvMode = EnvMode.Dev): Identity {
+        fun of(company:String, area: String, service: String, agent:Agent, env: EnvMode = EnvMode.Dev, version: String? = null, desc:String? = null): Identity {
             return Identity(
                 company.toIdent(),
                 area.toIdent(),
                 service.toIdent(),
                 agent,
-                env.name)
+                env.name.lowercase(Locale.getDefault()),
+                version = version ?: "LATEST",
+                desc = desc ?: "")
         }
     }
 }

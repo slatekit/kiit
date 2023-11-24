@@ -33,12 +33,12 @@ interface Context {
 
     companion object {
         fun identity(info: Info, envs: Envs): Identity {
-            return kiit.common.Identity.of(
+            return Identity.of(
                 info.about.company,
                 info.about.area,
                 info.about.name,
                 Agent.App,
-                envs.name,
+                envs.current.mode,
                 version = info.build.version,
                 desc = info.about.desc
             )
