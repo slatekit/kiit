@@ -95,6 +95,4 @@ class SampleAnnoApi(val context: AppEntContext) {
 
     @Action(desc = "accepts a smart string of email", roles= [Roles.GUEST])
     fun smartStringEmail(text: Email): String = "${text.value}"
-
-
 }
