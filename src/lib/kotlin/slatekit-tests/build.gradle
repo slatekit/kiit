@@ -1,8 +1,8 @@
 
 buildscript {
     ext.kotlin_version = '1.6.20'
-    ext.slatekit_version = new File('../../version.txt').text
-    ext.slatekit_version_beta = new File('../../version-beta.txt').text
+    ext.slatekit_version = file('../../version.txt').text
+    ext.slatekit_version_beta = file('../../version-beta.txt').text
 
     repositories {
         mavenCentral()
@@ -36,10 +36,10 @@ repositories {
     jcenter()
     mavenCentral()
     maven {
-        url "https://maven.pkg.github.com/slatekit/slatekit"
+        url "https://maven.pkg.github.com/slatekit/kiit"
         credentials {
-            username = System.getenv('SLATEKIT_INSTALL_ACTOR')
-            password = System.getenv('SLATEKIT_INSTALL_TOKEN')
+            username = System.getenv('KIIT_INSTALL_ACTOR')
+            password = System.getenv('KIIT_INSTALL_TOKEN')
         }
     }
 }

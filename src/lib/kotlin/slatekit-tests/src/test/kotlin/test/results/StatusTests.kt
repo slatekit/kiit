@@ -6,11 +6,28 @@ import kiit.results.*
 class StatusTests {
 
     @Test
-    fun can_build_basic(){
+    fun can_build_basic_passed_category(){
         val status = Passed.Succeeded("SUCCESS", 1, "success")
         Assert.assertEquals("SUCCESS", status.name)
         Assert.assertEquals(1, status.code)
         Assert.assertEquals("success", status.desc)
+        Assert.assertEquals(true, status.success)
+    }
+
+
+    @Test
+    fun can_build_basic_failed_category(){
+        fun validate(status:Failed, name:String, code:Int, desc:String) {
+            Assert.assertEquals(name, status.name)
+            Assert.assertEquals(code, status.code)
+            Assert.assertEquals(desc, status.desc)
+            Assert.assertEquals(false, status.success)
+        }
+        validate(Failed.Ignored("IGNORED", 2, "ignored"), "IGNORED", 2, "ignored")
+        validate(Failed.Invalid("INVALID", 3, "invalid"), "INVALID", 3, "invalid")
+        validate(Failed.Denied ("DENIED" , 4, "denied" ), "DENIED" , 4, "denied" )
+        validate(Failed.Errored("ERRORED", 5, "errored"), "ERRORED", 5, "errored")
+        validate(Failed.Unknown("UNKNOWN", 6, "unknown"), "UNKNOWN", 6, "unknown")
     }
 
 
