@@ -84,12 +84,12 @@ def kiitComponentVersion = ext.kiit_version
 // Slate Kit Setup mode: defaults to maven vs loading project sources
 // ==================================================================
 task info {
-    println('slatekit.setup     : ' + System.getenv('KIIT_PROJECT_MODE'))
-    println('slatekit.maven     : ' + kiitSetupViaBinary)
-    println('slatekit.comp.id   : ' + kiitComponentId)
-    println('slatekit.comp.name : ' + kiitComponentName)
-    println('slatekit.comp.desc : ' + kiitComponentDesc)
-    println('slatekit.comp.vers : ' + kiitComponentVersion)
+    println('kiit.setup     : ' + System.getenv('KIIT_PROJECT_MODE'))
+    println('kiit.maven     : ' + kiitSetupViaBinary)
+    println('kiit.comp.id   : ' + kiitComponentId)
+    println('kiit.comp.name : ' + kiitComponentName)
+    println('kiit.comp.desc : ' + kiitComponentDesc)
+    println('kiit.comp.vers : ' + kiitComponentVersion)
     println()
     println('project.name       : ' + project.name)
     println('project.path       : ' + project.path)
