@@ -77,7 +77,7 @@ class Worker_Api_Tests : TestSupport {
     fun can_run_from_queue() {
         val container = buildContainer()
         val queues = listOf(InMemoryQueue.stringQueue())
-        val worker = JobAPIWorker(container, Identity.test("api-worker"))
+        val worker = JobAPIWorker(container, Identity.test("kiit", "api-worker"))
         val sampleDate = DateTime.of(2018, 1, 27, 9, 30, 45, 0, ZoneId.of("UTC"))
         val sampleRequest = CommonRequest(
                 path = "samples.types2.loadBasicTypes",
@@ -106,7 +106,7 @@ class Worker_Api_Tests : TestSupport {
         val entry = queue.next()!!
 
         val queueInfo = JobQueue("tests", Priority.Mid, WrappedAsyncQueue(queue))
-        val job = JobQueue.task(Identity.test("samples"), entry, queueInfo)
+        val job = JobQueue.task(Identity.test("kiit", "samples"), entry, queueInfo)
         val result = runBlocking {
             worker.work(job)
         }

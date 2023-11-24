@@ -8,7 +8,7 @@ import kiit.jobs.Worker
 class MyWorker(
     var acc: Int = 0
 ) : Worker<Int>(
-    Identity.test("myworker")) {
+    Identity.test("kiit", "myworker")) {
     var isInitialized = false
     var isEnded = false
 

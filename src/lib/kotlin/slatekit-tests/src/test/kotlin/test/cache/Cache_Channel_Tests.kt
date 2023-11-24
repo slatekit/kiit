@@ -22,7 +22,7 @@ import kiit.common.log.LoggerConsole
 class Cache_Channel_Tests {
 
     val CACHE_NAME = "unit-tests-cache"
-    val id = Identity.app("app", "cache")
+    val id = Identity.app("kiit", "app", "cache")
     fun getCache(initialize: Boolean = true, settings: CacheSettings = CacheSettings(10), listener: ((CacheEvent) -> Unit)? = null): SimpleAsyncCache {
         val cache = SimpleAsyncCache.of(id, LoggerConsole(), settings, listener)
         return cache

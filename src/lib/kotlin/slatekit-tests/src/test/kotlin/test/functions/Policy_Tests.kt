@@ -18,7 +18,7 @@ class Policy_Tests {
 
     @Test
     fun test_limit_success(){
-        val counters = Counters(Identity.test("policy"))
+        val counters = Counters(Identity.test("kiit", "policy"))
         val policy: Policy<String, Int> = Limit(2, true, { counters } )
         val result = runBlocking {
             policy.run("1") {
@@ -33,7 +33,7 @@ class Policy_Tests {
 
     @Test
     fun test_limit_failure(){
-        val counters = Counters(Identity.test("policy"))
+        val counters = Counters(Identity.test("kiit", "policy"))
         val policy: Policy<String, Int> = Limit(2, true, { counters } )
         val result = runBlocking {
             policy.run("1") { Outcomes.of(it.toInt()) }
@@ -48,7 +48,7 @@ class Policy_Tests {
 
     @Test
     fun test_calls_success(){
-        val calls = Calls(Identity.test("policy"))
+        val calls = Calls(Identity.test("kiit", "policy"))
         val policy: Policy<String, Int> = Calls(2, { calls } )
         val result = runBlocking {
             policy.run("1") {
@@ -64,7 +64,7 @@ class Policy_Tests {
 
     @Test
     fun test_calls_failure(){
-        val calls = Calls(Identity.test("policy"))
+        val calls = Calls(Identity.test("kiit", "policy"))
         val policy: Policy<String, Int> = Calls(2, { calls } )
         val result = runBlocking {
             policy.run("1") { calls.inc(); Outcomes.of(it.toInt()) }
@@ -111,7 +111,7 @@ class Policy_Tests {
 
     @Test
     fun test_ratio_success(){
-        val counts = Counters(Identity.test("policy"))
+        val counts = Counters(Identity.test("kiit", "policy"))
         val policy: Policy<String, Int> = Ratio(.4, Failed.Denied(Codes.DENIED.name, 0, ""), { counts })
         val result = runBlocking {
             policy.run("1") { counts.processed.inc(); counts.succeeded.inc(); Outcomes.of(it.toInt()) }
@@ -126,7 +126,7 @@ class Policy_Tests {
 
     @Test
     fun test_ratio_failure(){
-        val counts = Counters(Identity.test("policy"))
+        val counts = Counters(Identity.test("kiit", "policy"))
         val policy: Policy<String, Int> = Ratio(.5, Failed.Denied(Codes.DENIED.name, 0, ""), { counts })
         val result = runBlocking {
             policy.run("1") { counts.processed.inc(); counts.succeeded.inc(); Outcomes.of(it.toInt()) }
@@ -141,7 +141,7 @@ class Policy_Tests {
 
     @Test
     fun test_compose() {
-        val id = Identity.test("policy")
+        val id = Identity.test("kiit", "policy")
         val calls = Calls(id)
         val counts = Counters(id)
         val p1 = Limit<String, Int>(4, true, { i -> counts })
@@ -161,7 +161,7 @@ class Policy_Tests {
 
     @Test
     fun test_chaining() {
-        val id = Identity.test("policy")
+        val id = Identity.test("kiit", "policy")
         val calls = Calls(id)
         val counts = Counters(id)
         var everyValue = 0
