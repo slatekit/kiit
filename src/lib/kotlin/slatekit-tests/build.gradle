@@ -50,6 +50,7 @@ dependencies {
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin_version"
     implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-core:1.1.0'
     implementation "com.googlecode.json-simple:json-simple:1.1"
+    implementation 'com.squareup.okhttp3:okhttp:3.9.0'
     implementation "mysql:mysql-connector-java:5.1.13"
     // https://mvnrepository.com/artifact/com.h2database/h2
     testImplementation group: 'com.h2database', name: 'h2'        , version: '1.4.200'
@@ -85,6 +86,7 @@ dependencies {
     implementation project(":kiit-serialization")
     implementation project(":kiit-policy")
     implementation project(":kiit-integration")
+    implementation project(":kiit-migrations")
     implementation project(":connectors-cli")
     implementation project(":connectors-entities")
     implementation project(":connectors-jobs")

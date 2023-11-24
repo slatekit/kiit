@@ -18,7 +18,6 @@ import kiit.common.envs.*
 import org.junit.Test
 import kiit.common.Agent
 import kiit.common.Identity
-import kiit.common.SimpleIdentity
 import kiit.common.ids.ULIDs
 
 
@@ -31,15 +30,15 @@ class IdentityTests {
         Assert.assertEquals( "alerts", id1.service )
         Assert.assertEquals( Agent.App, id1.agent )
         Assert.assertEquals( EnvMode.Qat.name, id1.env )
-        Assert.assertEquals( "LATEST", id1.version )
-        Assert.assertEquals( "app_12.signup.alerts", id1.name )
-        Assert.assertEquals( "app_1.signup.alerts.app.qat.LATEST", id1.full )
+        Assert.assertEquals( "latest", id1.version )
+        Assert.assertEquals( "app_12.signup.alerts.app", id1.name )
+        Assert.assertEquals( "app_1.signup.alerts.app.qat.latest", id1.full )
     }
 
 
     @Test fun can_create_manually() {
-        val id1 = Identity("app 1", "signup", "alerts", Agent.App, EnvMode.Qat.name, version = "1.2")
-        Assert.assertEquals( "app_1", id1.area )
+        val id1 = Identity.of("app 1", "signup", "alerts", Agent.App, EnvMode.Qat, version = "1.2")
+        Assert.assertEquals( "app_1", id1.company )
         Assert.assertEquals( "signup", id1.area )
         Assert.assertEquals( "alerts", id1.service )
         Assert.assertEquals( Agent.App, id1.agent )
@@ -52,13 +51,13 @@ class IdentityTests {
 
     @Test fun can_create_with_id() {
         val id = ULIDs.create()
-        val id1 = Identity("app_1","signup", "alerts", Agent.App, EnvMode.Qat.name, version = "1.2", instance= id.value)
+        val id1 = Identity.of("app_1","signup", "alerts", Agent.App, EnvMode.Qat, version = "1.2", instance= id.value)
         Assert.assertEquals( "signup", id1.area )
         Assert.assertEquals( "alerts", id1.service )
         Assert.assertEquals( Agent.App, id1.agent )
         Assert.assertEquals( EnvMode.Qat.name, id1.env )
         Assert.assertEquals( "1.2", id1.version )
-        Assert.assertEquals( "app_1.signup.alerts", id1.name )
+        Assert.assertEquals( "app_1.signup.alerts.app", id1.name )
         Assert.assertEquals( "app_1.signup.alerts.app.qat.1_2.${id.value}", id1.id )
     }
 }

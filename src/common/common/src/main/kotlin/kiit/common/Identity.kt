@@ -31,7 +31,7 @@ data class Identity(
     val agent: Agent,
     val env: String,
     val instance: String = ULIDs.create().value,
-    val version: String = "LATEST",
+    val version: String = "latest",
     val desc: String = "",
     val tags: List<String> = listOf()
 )  {
@@ -42,7 +42,7 @@ data class Identity(
      * {COMPANY}.{AREA}.{SERVICE}.{AGENT}
      * @sample: app1.signup.alerts.job
      */
-    val name = "$company.$area.$service.${agent.name}"
+    val name = "$company.$area.$service.${agent.name.lowercase(Locale.getDefault())}"
 
     /**
      * Enforced naming convention for application's full name with agent and env
@@ -103,7 +103,7 @@ data class Identity(
                 service.toIdent(),
                 agent,
                 env.name.lowercase(Locale.getDefault()),
-                version = version ?: "LATEST",
+                version = version ?: "latest",
                 desc = desc ?: "")
         }
     }
