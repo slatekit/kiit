@@ -58,7 +58,7 @@ dependencies {
   implementation 'com.squareup.okhttp3:okhttp:3.9.0'
   implementation 'org.threeten:threetenbp:1.3.8'
 
-  /* <slatekit_local>
+  // /* <slatekit_local>
   if( kiitSetupViaBinary ) {
       implementation "dev.kiit:kiit-results:$kiit_version"
       implementation "dev.kiit:kiit-common:$kiit_version"
@@ -70,7 +70,7 @@ dependencies {
   implementation project(":kiit-common")
   implementation project(":kiit-utils")
   implementation project(":kiit-context")
-  // } //</slatekit_local>
+  } //</slatekit_local>
 }
 
 // ==================================================================
