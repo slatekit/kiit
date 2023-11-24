@@ -36,10 +36,10 @@ repositories {
     jcenter()
     mavenCentral()
     maven {
-        url "https://maven.pkg.github.com/slatekit/slatekit"
+        url "https://maven.pkg.github.com/slatekit/kiit"
         credentials {
-            username = System.getenv('SLATEKIT_INSTALL_ACTOR')
-            password = System.getenv('SLATEKIT_INSTALL_TOKEN')
+            username = System.getenv('KIIT_INSTALL_ACTOR')
+            password = System.getenv('KIIT_INSTALL_TOKEN')
         }
     }
 }
