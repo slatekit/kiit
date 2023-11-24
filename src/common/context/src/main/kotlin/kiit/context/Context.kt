@@ -2,7 +2,6 @@ package kiit.context
 
 import kiit.common.Agent
 import kiit.common.Identity
-import kiit.common.SimpleIdentity
 import kiit.common.args.Args
 import kiit.common.conf.Conf
 import kiit.common.crypto.Encryptor
@@ -34,11 +33,12 @@ interface Context {
 
     companion object {
         fun identity(info: Info, envs: Envs): Identity {
-            return SimpleIdentity(
+            return Identity.of(
+                info.about.company,
                 info.about.area,
                 info.about.name,
                 Agent.App,
-                envs.name,
+                envs.current.mode,
                 version = info.build.version,
                 desc = info.about.desc
             )

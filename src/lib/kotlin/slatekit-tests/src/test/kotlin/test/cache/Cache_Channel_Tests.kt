@@ -22,7 +22,7 @@ import kiit.common.log.LoggerConsole
 class Cache_Channel_Tests {
 
     val CACHE_NAME = "unit-tests-cache"
-    val id = Identity.app("app", "cache")
+    val id = Identity.app("kiit", "app", "cache")
     fun getCache(initialize: Boolean = true, settings: CacheSettings = CacheSettings(10), listener: ((CacheEvent) -> Unit)? = null): SimpleAsyncCache {
         val cache = SimpleAsyncCache.of(id, LoggerConsole(), settings, listener)
         return cache
@@ -101,7 +101,7 @@ class Cache_Channel_Tests {
             Assert.assertEquals(CacheAction.Create, event?.action)
             Assert.assertEquals("countries", event?.key)
             Assert.assertTrue(!event?.uuid.isNullOrEmpty())
-            Assert.assertEquals("app.cache.${CacheAction.Create.name}.countries", event?.name ?: "")
+            Assert.assertEquals("kiit.app.cache.app.${CacheAction.Create.name}.countries", event?.name ?: "")
         }
     }
 
@@ -195,7 +195,7 @@ class Cache_Channel_Tests {
             Assert.assertEquals(CacheAction.DeleteAll, event?.action)
             Assert.assertEquals("*", event?.key)
             Assert.assertTrue(!event?.uuid.isNullOrEmpty())
-            Assert.assertEquals("app.cache.${CacheAction.DeleteAll.name}.*", event?.name ?: "")
+            Assert.assertEquals("kiit.app.cache.app.${CacheAction.DeleteAll.name}.*", event?.name ?: "")
         }
     }
 
@@ -360,7 +360,7 @@ class Cache_Channel_Tests {
             Assert.assertEquals(CacheAction.Expire, event?.action)
             Assert.assertEquals("countries", event?.key)
             Assert.assertTrue(!event?.uuid.isNullOrEmpty())
-            Assert.assertEquals("app.cache.${CacheAction.Expire.name}.countries", event?.name ?: "")
+            Assert.assertEquals("kiit.app.cache.app.${CacheAction.Expire.name}.countries", event?.name ?: "")
         }
     }
 }

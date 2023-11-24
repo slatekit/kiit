@@ -10,7 +10,7 @@ import java.util.concurrent.atomic.AtomicInteger
 class OneTimeWorker(val start:Int, val end:Int, id: Identity) : Worker<Int>(id) {
 
 
-    constructor(start:Int, end:Int):this(start, end, Identity.test(OneTimeWorker::class.simpleName!!))
+    constructor(start:Int, end:Int):this(start, end, Identity.test("kiit", OneTimeWorker::class.simpleName!!))
 
 
     private val current = AtomicInteger(start)
@@ -62,7 +62,7 @@ class OneTimeWorker(val start:Int, val end:Int, id: Identity) : Worker<Int>(id) 
 
 
 class PagedWorker(start:Int, val maxRuns:Int, val countsPerRun:Int, id: Identity? = null)
-    : Worker<Int>( id ?: Identity.test(PagedWorker::class.simpleName!!)) {
+    : Worker<Int>( id ?: Identity.test("kiit", PagedWorker::class.simpleName!!)) {
 
     private val runs = AtomicInteger(0)
     private val counts = AtomicInteger(start)
@@ -100,7 +100,7 @@ class PagedWorker(start:Int, val maxRuns:Int, val countsPerRun:Int, id: Identity
 
 
 class TestWorker(id: Identity? = null, val limit:Int = 10)
-    : Worker<Int>( id ?: Identity.test(TestWorker::class.simpleName!!)) {
+    : Worker<Int>( id ?: Identity.test("kiit", TestWorker::class.simpleName!!)) {
 
     val counts = AtomicInteger(0)
     val cycles = mutableMapOf<String, Boolean>()

@@ -19,7 +19,7 @@ import kiit.actors.pause.Check
  * 2. Clients should only extend worker to use/enrich the life-cycle, state change, alerting, diagnostic methods above
  */
 open class Worker<T>(id: Identity) : Check, Cycle {
-    val id = if (id.tags.isEmpty() || !id.tags.contains("worker")) id.with(tags = listOf("worker")) else id
+    val id = if (id.tags.isEmpty() || !id.tags.contains("worker")) id.with(null, tags = listOf("worker")) else id
     protected val _status = AtomicReference<Pair<Status, String>>(Pair(Status.InActive, Status.InActive.name))
 
 

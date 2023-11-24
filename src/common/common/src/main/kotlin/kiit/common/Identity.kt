@@ -1,61 +1,19 @@
 package kiit.common
 
 import kiit.common.envs.EnvMode
+import kiit.common.ext.toIdent
 import kiit.common.ids.ULIDs
+import java.util.*
 
 /**
- * Used to identity services / components
- * form = area.service.agent.env.instance
- * name = signup.alerts.job.qat
- * full = signup.alerts.job.qat.4a3b300b-d0ac-4776-8a9c-31aa75e412b3
- */
-interface Identity {
-
-    val id: String
-    val name: String
-    val fullname: String
-    val idWithTags: String
-
-    val area: String
-    val service: String
-    val agent: Agent
-    val env: String
-    val version: String
-    val desc: String
-    val instance: String
-    val tags: List<String>
-
-    fun newInstance(): Identity
-    fun with(inst: String? = null, tags: List<String>): Identity
-
-    companion object {
-
-        val empty = SimpleIdentity("empty", "empty", Agent.Test, "empty")
-
-        fun app(area: String, service: String, env: EnvMode = EnvMode.Dev): Identity {
-            return SimpleIdentity(area, service, Agent.App, env.name)
-        }
-
-        fun api(area: String, service: String, env: EnvMode = EnvMode.Dev): Identity {
-            return SimpleIdentity(area, service, Agent.API, env.name)
-        }
-
-        fun cli(area: String, service: String, env: EnvMode = EnvMode.Dev): Identity {
-            return SimpleIdentity(area, service, Agent.CLI, env.name)
-        }
-
-        fun job(area: String, service: String, env: EnvMode = EnvMode.Dev): Identity {
-            return SimpleIdentity(area, service, Agent.Job, env.name)
-        }
-
-        fun test(name: String): Identity {
-            return SimpleIdentity("tests", name, Agent.Test, EnvMode.Dev.name)
-        }
-    }
-}
-
-/**
- * Simple Identity used to identity services / components
+ * Identity used to identity services / components
+ *
+ * form = company.area.service.agent.env.version.instance
+ * name = app1.accounts.signup.alerts.job.qat
+ * vers = app1.accounts.signup.alerts.job.qat.1_0_2_3
+ * full = app1.accounts.signup.alerts.job.qat.1_0_2_3.4a3b300b-d0ac-4776-8a9c-31aa75e412b3
+ *
+ * @param company : app1  | jetbrains   - company name/origin
  * @param area    : area  | dept | org  - logical group
  * @param service : user1 | job  | svc  - to distinguish multiple agents/users
  * @param agent   : api   | app  | job  - environment
@@ -66,48 +24,88 @@ interface Identity {
  * name = signup.alerts.job.qat
  * full = signup.alerts.job.qat.4a3b300b-d0ac-4776-8a9c-31aa75e412b3
  */
-data class SimpleIdentity(
-    override val area: String,
-    override val service: String,
-    override val agent: Agent,
-    override val env: String,
-    override val instance: String = ULIDs.create().value,
-    override val version: String = "LATEST",
-    override val desc: String = "",
-    override val tags: List<String> = listOf()
-) : Identity {
+data class Identity(
+    val company: String,
+    val area: String,
+    val service: String,
+    val agent: Agent,
+    val env: String,
+    val instance: String = ULIDs.create().value,
+    val version: String = "latest",
+    val desc: String = "",
+    val tags: List<String> = listOf()
+)  {
     private val tagged = tags.joinToString()
 
     /**
      * Enforced naming convention for an application's name ( simple name )
-     * {AREA}.{SERVICE}
-     * @sample: signup.alerts
+     * {COMPANY}.{AREA}.{SERVICE}.{AGENT}
+     * @sample: app1.signup.alerts.job
      */
-    override val name = "$area.$service"
+    val name = "$company.$area.$service.${agent.name.lowercase(Locale.getDefault())}"
 
     /**
      * Enforced naming convention for application's full name with agent and env
-     * {AREA}.{SERVICE}.{AGENT}.{ENV}
-     * signup.alerts.job.qat
+     * {COMPANY}.{AREA}.{SERVICE}.{AGENT}.{ENV}.{VERSION}
+     * app1.signup.alerts.job.qat.
      */
-    override val fullname: String =
-        "$name.${agent.name.lowercase()}.${env.lowercase()}.${version.replace(".", "_")}"
+    val full: String =
+        "$name.${env.lowercase()}.${version.replace(".", "_")}"
 
     /**
      * The id contains the instance name
-     * @sample: signup.alerts.job.qat.4a3b300b-d0ac-4776-8a9c-31aa75e412b3
+     * @sample: app1.signup.alerts.job.qat.4a3b300b-d0ac-4776-8a9c-31aa75e412b3
      *
      */
-    override val id: String = "$fullname.$instance"
+    val id: String = "$full.$instance"
 
     /**
      * The id contains the instance name
      * @sample: signup.alerts.job.qat.4a3b300b-d0ac-4776-8a9c-31aa75e412b3.a1,b2,c3
      *
      */
-    override val idWithTags: String = "$fullname.$instance" + if (tagged.isNullOrEmpty()) "" else ".$tagged"
+    val idWithTags: String = "$full.$instance" + if (tagged.isEmpty()) "" else ".$tagged"
 
-    override fun newInstance(): Identity = this.copy(instance = ULIDs.create().value)
-    override fun with(inst: String?, tags: List<String>): Identity =
+    fun newInstance(): Identity = this.copy(instance = ULIDs.create().value)
+
+    fun with(inst: String?, tags: List<String>): Identity =
         this.copy(instance = inst ?: ULIDs.create().value, tags = tags)
+
+
+    companion object {
+
+        val empty = Identity("", "empty", "empty", Agent.Test, "empty")
+
+        fun app(company:String, area: String, service: String, env: EnvMode = EnvMode.Dev): Identity {
+            return of(company, area, service, Agent.App, env)
+        }
+
+        fun api(company:String, area: String, service: String, env: EnvMode = EnvMode.Dev): Identity {
+            return of(company, area, service, Agent.API, env)
+        }
+
+        fun cli(company:String, area: String, service: String, env: EnvMode = EnvMode.Dev): Identity {
+            return of(company, area, service, Agent.CLI, env)
+        }
+
+        fun job(company:String, area: String, service: String, env: EnvMode = EnvMode.Dev): Identity {
+            return of(company, area, service, Agent.Job, env)
+        }
+
+        fun test(company:String, name: String): Identity {
+            return of(company, "tests", name, Agent.Test, EnvMode.Dev)
+        }
+
+        fun of(company:String, area: String, service: String, agent:Agent, env: EnvMode = EnvMode.Dev, version: String? = null, desc:String? = null, instance:String? = null): Identity {
+            return Identity(
+                company.toIdent(),
+                area.toIdent(),
+                service.toIdent(),
+                agent,
+                env.name.lowercase(Locale.getDefault()),
+                instance = instance ?: ULIDs.create().value,
+                version = version ?: "latest",
+                desc = desc ?: "")
+        }
+    }
 }

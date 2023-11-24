@@ -51,9 +51,9 @@ repositories {
 }
 
 dependencies {
-  compile "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
-  compile "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin_version"
-  testCompile 'junit:junit:4.12'
+  implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
+  implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin_version"
+  testImplementation 'junit:junit:4.12'
 }
 
 // ==================================================================
@@ -70,12 +70,12 @@ def kiitComponentVersion = ext.kiit_version
 ext.kiitSetupViaBinary = System.getenv('KIIT_PROJECT_MODE') != 'sources'
 task info {
   doLast {
-    println('slatekit.setup     : ' + System.getenv('KIIT_PROJECT_MODE'))
-    println('slatekit.maven     : ' + kiitSetupViaBinary)
-    println('slatekit.comp.id   : ' + kiitComponentId)
-    println('slatekit.comp.name : ' + kiitComponentName)
-    println('slatekit.comp.desc : ' + kiitComponentDesc)
-    println('slatekit.comp.vers : ' + kiitComponentVersion)
+    println('kiit.setup     : ' + System.getenv('KIIT_PROJECT_MODE'))
+    println('kiit.maven     : ' + kiitSetupViaBinary)
+    println('kiit.comp.id   : ' + kiitComponentId)
+    println('kiit.comp.name : ' + kiitComponentName)
+    println('kiit.comp.desc : ' + kiitComponentDesc)
+    println('kiit.comp.vers : ' + kiitComponentVersion)
     println()
     println('project.name       : ' + project.name)
     println('project.path       : ' + project.path)

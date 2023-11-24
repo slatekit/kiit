@@ -92,7 +92,7 @@ data class About(
     fun dir(): String = company.orElse(name).replace(" ", "-")
 
 
-    fun toId(): Identity = SimpleIdentity(area, name, Agent.App, EnvMode.Dev.name)
+    fun toId(): Identity = Identity.of(company, area, name, Agent.App, EnvMode.Dev)
 
     companion object {
         @JvmStatic
