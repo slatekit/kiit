@@ -101,7 +101,7 @@ class Cache_Channel_Tests {
             Assert.assertEquals(CacheAction.Create, event?.action)
             Assert.assertEquals("countries", event?.key)
             Assert.assertTrue(!event?.uuid.isNullOrEmpty())
-            Assert.assertEquals("app.cache.${CacheAction.Create.name}.countries", event?.name ?: "")
+            Assert.assertEquals("kiit.app.cache.app.${CacheAction.Create.name}.countries", event?.name ?: "")
         }
     }
 
@@ -195,7 +195,7 @@ class Cache_Channel_Tests {
             Assert.assertEquals(CacheAction.DeleteAll, event?.action)
             Assert.assertEquals("*", event?.key)
             Assert.assertTrue(!event?.uuid.isNullOrEmpty())
-            Assert.assertEquals("app.cache.${CacheAction.DeleteAll.name}.*", event?.name ?: "")
+            Assert.assertEquals("kiit.app.cache.app.${CacheAction.DeleteAll.name}.*", event?.name ?: "")
         }
     }
 
@@ -360,7 +360,7 @@ class Cache_Channel_Tests {
             Assert.assertEquals(CacheAction.Expire, event?.action)
             Assert.assertEquals("countries", event?.key)
             Assert.assertTrue(!event?.uuid.isNullOrEmpty())
-            Assert.assertEquals("app.cache.${CacheAction.Expire.name}.countries", event?.name ?: "")
+            Assert.assertEquals("kiit.app.cache.app.${CacheAction.Expire.name}.countries", event?.name ?: "")
         }
     }
 }

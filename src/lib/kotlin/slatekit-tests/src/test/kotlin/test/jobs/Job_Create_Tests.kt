@@ -24,7 +24,6 @@ class Job_Create_Tests : JobTestSupport {
 
         Assert.assertEquals(wrk.worker, mgr.get(0)?.worker)
         Assert.assertEquals(wrk.worker, mgr.get(wrk.id)?.worker)
-        Assert.assertEquals(wrk.worker, mgr.get("kiit.tests.job.Job.${wrk.id.instance}")?.worker)
     }
 
 

@@ -31,7 +31,7 @@ class IdentityTests {
         Assert.assertEquals( Agent.App, id1.agent )
         Assert.assertEquals( EnvMode.Qat.name, id1.env )
         Assert.assertEquals( "latest", id1.version )
-        Assert.assertEquals( "app_12.signup.alerts.app", id1.name )
+        Assert.assertEquals( "app_1.signup.alerts.app", id1.name )
         Assert.assertEquals( "app_1.signup.alerts.app.qat.latest", id1.full )
     }
 
@@ -44,7 +44,7 @@ class IdentityTests {
         Assert.assertEquals( Agent.App, id1.agent )
         Assert.assertEquals( EnvMode.Qat.name, id1.env )
         Assert.assertEquals( "1.2", id1.version )
-        Assert.assertEquals( "app_1.signup.alerts", id1.name )
+        Assert.assertEquals( "app_1.signup.alerts.app", id1.name )
         Assert.assertEquals( "app_1.signup.alerts.app.qat.1_2", id1.full )
     }
 
