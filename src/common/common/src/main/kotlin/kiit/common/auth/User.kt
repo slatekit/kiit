@@ -16,9 +16,8 @@ package kiit.common.auth
 /**
  * Represents a user for authentication purposes
  * @param id               : User id
- * @param userName         : User name of user
+ * @param userName         : Username of user
  * @param displayName      : Display name of user
- * @param fullName         : Full name of user
  * @param firstName        : First name
  * @param lastName         : Last name
  * @param email            : Email
@@ -30,50 +29,27 @@ package kiit.common.auth
  * @param schema           : The schema version of this model
  * @param tag              : A tag used for external / correlation ids
  */
-open class User(
+data class User(
         val id: String,
         val userName: String,
         val displayName: String,
-        val fullName: String = "",
         val firstName: String = "",
         val lastName: String = "",
         val email: String = "",
         val phone: String = "",
         val country: String = "",
+        val shard: String = "",
+        val deviceId: String = "",
         val isPhoneVerified: Boolean = false,
         val isDeviceVerified: Boolean = false,
         val isEmailVerified: Boolean = false,
         val schema: String = "1",
+        val image: String = "",
         val tag: String = "",
         val fields: List<Pair<String, Any?>> = listOf()
 ) {
-
-
-    /**
-     * NOTE: Perhaps a better hashCode / equals implementation ??
-     */
-    override fun hashCode(): Int {
-        return this.javaClass.hashCode() * this.id.hashCode()
-    }
-
-
-    /**
-     * NOTE: Perhaps a better hashCode / equals implementation ??
-     */
-    override fun equals(other: Any?): Boolean {
-        return when(other) {
-            is User -> this.id == other.id
-            else    -> false
-        }
-    }
-
-
     companion object {
         @JvmField
-        val empty = User("", "", "")
-
-        @JvmField
         val guest = User("guest", "guest", "guest")
-
     }
 }
