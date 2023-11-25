@@ -61,7 +61,6 @@ interface ConfigSupport {
      */
     fun buildStamp(name: String): Build =
             mapTo(name) { conf ->
-
                 Build(
                         conf.getString(name + ".version"),
                         conf.getString(name + ".commit"),
@@ -80,7 +79,6 @@ interface ConfigSupport {
 
         val finalPrefix = prefix ?: name
         return mapTo(name) { conf ->
-
             ApiLogin(
                     conf.getString("$finalPrefix.account"),
                     conf.getString("$finalPrefix.key"),
@@ -98,7 +96,6 @@ interface ConfigSupport {
      * @return
      */
     fun dbCon(prefix: String = "db"): DbCon =
-
             mapTo(prefix) { conf ->
                 DbConString(
                         conf.getString(prefix + ".driver"),
