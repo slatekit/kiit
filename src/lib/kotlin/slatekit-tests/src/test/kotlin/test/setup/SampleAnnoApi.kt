@@ -2,8 +2,8 @@ package test.setup
 
 import kiit.apis.*
 import kiit.apis.AuthModes
+import kiit.apis.core.Roles
 import kiit.common.*
-import kiit.common.auth.Roles
 import kiit.common.crypto.EncDouble
 import kiit.common.crypto.EncInt
 import kiit.common.crypto.EncLong

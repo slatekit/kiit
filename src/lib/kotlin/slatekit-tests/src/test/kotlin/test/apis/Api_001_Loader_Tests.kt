@@ -23,7 +23,7 @@ import kiit.apis.setup.Methods
 import kiit.apis.setup.loadAll
 import kiit.apis.setup.toApi
 import kiit.common.Source
-import kiit.common.auth.Roles
+import kiit.apis.core.Roles
 import test.setup.*
 
 /**

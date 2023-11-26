@@ -3,7 +3,7 @@ package test.setup
 import kiit.apis.Api
 import kiit.apis.Action
 import kiit.apis.AuthModes
-import kiit.common.auth.Roles
+import kiit.apis.core.Roles
 
 
 @Api(area = "samples", name = "rolesapp", desc = "sample to test security", roles= ["admin"], auth = AuthModes.TOKEN)

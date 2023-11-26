@@ -1,6 +1,7 @@
 package kiit.apis.support
 
-import kiit.common.auth.Roles
+import kiit.apis.core.Roles
+
 
 interface RolesSupport {
     /**

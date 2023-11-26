@@ -4,9 +4,9 @@ import kiit.apis.Api
 import kiit.apis.Action
 import kiit.apis.AuthModes
 import kiit.apis.Verbs
+import kiit.apis.core.Roles
 import kiit.context.Context
 import kiit.common.Sources
-import kiit.common.auth.Roles
 import kiit.common.io.Uris
 import kiit.results.Try
 import kiit.results.builders.Tries

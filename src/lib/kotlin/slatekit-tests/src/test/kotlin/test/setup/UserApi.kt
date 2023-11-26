@@ -13,7 +13,7 @@ package test.setup
 
 import kiit.apis.*
 import kiit.common.*
-import kiit.common.auth.Roles
+import kiit.apis.core.Roles
 import kiit.common.types.ContentFile
 import kiit.common.crypto.EncDouble
 import kiit.common.crypto.EncString
