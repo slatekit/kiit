@@ -221,10 +221,10 @@ open class ApiServer(
 
     private suspend fun executeWithMiddleware(req:ApiRequest, middleware: Middleware?): Outcome<ApiResult> {
         return when(middleware) {
-            null -> executeMethod(Ctx.of(this, this.ctx, req), req)
+            null -> executeMethod(Ctx(this, this.ctx), req)
             else  -> {
                 middleware.process(req) {
-                    executeMethod(Ctx.of(this, this.ctx, req), req)
+                    executeMethod(Ctx(this, this.ctx), req)
                 }
             }
         }
@@ -233,9 +233,8 @@ open class ApiServer(
     @Suppress("UNCHECKED_CAST")
     protected open suspend fun executeMethod(context: Ctx, request: ApiRequest): Outcome<ApiResult> {
         // Finally make call.
-        val req = context.req
         val target = request.target
-        val converter = settings.decoder?.invoke(req, ctx.enc) ?: Deserializer(req, ctx.enc)
+        val converter = settings.decoder?.invoke(request.request, ctx.enc) ?: Deserializer(request.request, ctx.enc)
         val executor = target!!.handler as MethodExecutor
         val call = executor.call
         val inputs = fillArgs(converter, target, call, request.request)
