@@ -4,7 +4,7 @@ import java.io.File
 import kotlin.reflect.KClass
 import kiit.apis.core.*
 import kiit.apis.core.Target
-import kiit.apis.routes.Routes
+import kiit.apis.routes.*
 import kiit.apis.rules.AuthRule
 import kiit.apis.rules.ParamsRule
 import kiit.apis.rules.ProtoRule
@@ -49,7 +49,7 @@ open class ApiServer(
      * Load all the routes from the APIs supplied.
      * The API setup can be either annotation based or public methods on the Class
      */
-    val routes = Routes(loadAll(apis, settings.source, settings.naming), settings.naming)
+    val routes = Routes(AreaLookup(kiit.apis.routes.Area(""), listOf()), settings.naming)
 
     /**
      * The help class to handle help on an area, api, or action
@@ -66,7 +66,15 @@ open class ApiServer(
      * Initialize all the routes with reference to this server
      */
     init {
-        routes.visitApis { _, api -> setApiHost(api.singleton, this) }
+        routes.visitApis { _, api ->
+            if(api.items.isNotEmpty()) {
+                val action = api.items[0]
+                if(action.handler is MethodExecutor) {
+                    val executor = action.handler as MethodExecutor
+                    setApiHost(executor.call.instance, this)
+                }
+            }
+        }
     }
 
 
@@ -85,8 +93,9 @@ open class ApiServer(
      * @param req : Request to get route info from
      * @return
      */
-    fun get(req: Request): Outcome<Target> {
-        return get(req.area, req.name, req.action)
+    fun get(req: Request): RouteMapping? {
+        val version = req.meta.getStringOrNull("x-api-version")
+        return get(req.area, req.name, req.action, version)
     }
 
 
@@ -97,24 +106,9 @@ open class ApiServer(
      * @param action : e.g. "register"
      * @return
      */
-    fun get(area: String, name: String, action: String): Outcome<Target> {
-        return routes.api(area, name, action, ctx)
-    }
-
-
-    /**
-     * gets the @see[Target] ( mapped method ) associated with annotations on the class/method supplied
-     * @return
-     */
-    fun get(clsType: KClass<*>, member: KCallable<*>): Outcome<Target> {
-        val apiAnno = Reflector.getAnnotationForClassOpt<Api>(clsType, Api::class)
-        return apiAnno?.let { anno ->
-            val action = when(val actionAnno = Reflector.getAnnotationForMember<Action>(member, Action::class)){
-                null -> member.name
-                else -> if (actionAnno.name.isBlank()) member.name else actionAnno.name
-            }
-            get(anno.area, anno.name, action)
-        } ?: Outcomes.errored("member/annotation not found for : ${member.name}")
+    fun get(area: String, name: String, action: String, version:String? = null): RouteMapping? {
+        val action = routes.action(area, name, action, version)
+        return action
     }
 
 
@@ -190,8 +184,8 @@ open class ApiServer(
 
         // Target
         val targetResult = get(request.request.area, request.request.name, request.request.action)
-        if(!targetResult.success) return targetResult
-        val req = request.copy(target = targetResult.getOrNull())
+        if(targetResult == null) return Outcomes.invalid("Unable to find action")
+        val req = request.copy(target = targetResult)
 
         // Protocol : e.g. cli, web, que
         val protocolResult = ProtoRule.validate(req)
@@ -210,8 +204,8 @@ open class ApiServer(
             val instance = req.target
             when {
                 instance == null  -> Outcomes.errored("Route not mapped")
-                instance.instance is Middleware -> executeWithMiddleware(req, instance.instance)
-                middleware != null -> executeWithMiddleware(req, middleware)
+//                instance.instance is Middleware -> executeWithMiddleware(req, instance.instance)
+//                middleware != null -> executeWithMiddleware(req, middleware)
                 else -> executeWithMiddleware(req, null)
             }
 
@@ -240,10 +234,12 @@ open class ApiServer(
     protected open suspend fun executeMethod(context: Ctx, request: ApiRequest): Outcome<ApiResult> {
         // Finally make call.
         val req = context.req
-        val target = context.target
+        val target = request.target
         val converter = settings.decoder?.invoke(req, ctx.enc) ?: Deserializer(req, ctx.enc)
-        val inputs = fillArgs(converter, target, req)
-        val returnVal = Calls.callMethod(target.api.klass, target.instance, target.action.member.name, inputs)
+        val executor = target!!.handler as MethodExecutor
+        val call = executor.call
+        val inputs = fillArgs(converter, target, call, request.request)
+        val returnVal = Calls.callMethod(call.klass, call.instance, call.member.name, inputs)
         val wrapped = returnVal?.let { res ->
             if (res is Result<*, *>) {
                 (res as Result<ApiResult, Err>)
@@ -264,18 +260,18 @@ open class ApiServer(
         "DateTime" to DateTime.now()
     )
 
-    private fun fillArgs(deserializer: Deserializer, apiRef: Target, cmd: Request): Array<Any?> {
-        val action = apiRef.action
+    private fun fillArgs(deserializer: Deserializer, apiRef: RouteMapping, call: Call, cmd: Request): Array<Any?> {
+        val action = apiRef.route.action
         // Check 1: No args ?
-        return if (!action.hasArgs)
+        return if (!call.hasArgs)
             arrayOf()
         // Check 2: 1 param with default and no args
-        else if (action.isSingleDefaultedArg() && cmd.data.size() == 0) {
-            val argType = action.paramsUser[0].type.toString()
+        else if (call.isSingleDefaultedArg() && cmd.data.size() == 0) {
+            val argType = call.paramsUser[0].type.toString()
             val defaultVal = if (typeDefaults.contains(argType)) typeDefaults[argType] else null
             arrayOf<Any?>(defaultVal ?: "")
         } else {
-            deserializer.deserialize(action.params)
+            deserializer.deserialize(call.params)
         }
     }
 
@@ -306,14 +302,15 @@ open class ApiServer(
          */
         fun sample(server:ApiServer, req: Request, path: File): Notice<String> {
             val action = server.get(req)
-            val sample = if (action.success) {
-                val parameters = when (action) {
-                    is Success -> action.value.action.paramsUser
-                    is Failure -> listOf()
-                }
-                val serializer = Serialization.sampler() as SerializerSample
-                val text = serializer.serializeParams(parameters)
-                text
+            val sample = if (action != null ) {
+//                val parameters = when (action) {
+//                    is Success -> action.value.action.paramsUser
+//                    is Failure -> listOf()
+//                }
+//                val serializer = Serialization.sampler() as SerializerSample
+//                val text = serializer.serializeParams(parameters)
+//                text
+                 "NOT implemented"
             } else "Unable to find command: " + req.path
 
             path.writeText(sample)

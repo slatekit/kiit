@@ -14,6 +14,9 @@ package kiit.apis.services
 import kiit.apis.ApiRequest
 import kiit.apis.core.Target
 import kiit.apis.routes.Action
+import kiit.apis.routes.Call
+import kiit.apis.routes.MethodExecutor
+import kiit.apis.routes.RouteMapping
 import kiit.common.values.Inputs
 import kiit.requests.Request
 import kiit.meta.KTypes
@@ -52,42 +55,44 @@ object Calls {
         request: ApiRequest,
         fetcher: (Request) -> Outcome<Target>,
         allowSingleDefaultParam: Boolean = false
-    ): Outcome<Target> {
+    ): Outcome<RouteMapping> {
         val req = request.request
         val fullName = req.fullName
         val args = req.data
-        val apiRefCheck = request.host.get(req.area, req.name, req.action).toOutcome()
-        return apiRefCheck.flatMap { check ->
+        val apiRefCheck = request.host.get(req.area, req.name, req.action)
+        return apiRefCheck?.let { check ->
             val target = request.target!!
-            val action = target.action
+            val action = target.route.action
+            val executor = target.handler as MethodExecutor
+            val call = executor.call
 
             // 1 param with default argument.
-            val res = if (allowSingleDefaultParam && action.isSingleDefaultedArg() && args.size() == 0) {
+            val res = if (allowSingleDefaultParam && call.isSingleDefaultedArg() && args.size() == 0) {
                 Outcomes.success(target)
             }
             // Param: Raw ApiCmd itself!
-            else if (action.isSingleArg() && action.paramsUser.isEmpty()) {
+            else if (call.isSingleArg() && call.paramsUser.isEmpty()) {
                 Outcomes.success(target)
             }
             // Data - check args needed
-            else if (!allowSingleDefaultParam && action.hasArgs && args.size() == 0)
+            else if (!allowSingleDefaultParam && call.hasArgs && args.size() == 0)
                 Outcomes.invalid("bad request : $fullName: inputs not supplied")
 
             // Data - ensure matching args
-            else if (action.hasArgs) {
-                val argCheck = validateArgs(request, action, args)
+            else if (call.hasArgs) {
+                val argCheck = validateArgs(request, action, call, args)
                 val result = argCheck.map { target }
                 result
             } else
                 Outcomes.success(target)
             res
-        }
+        } ?: Outcomes.errored("Unable to find action")
     }
 
-    private fun validateArgs(request: ApiRequest, action: Action, args: Inputs): Outcome<Boolean> {
+    private fun validateArgs(request: ApiRequest, action: Action, call: Call, args: Inputs): Outcome<Boolean> {
         // Check each parameter to api call
-        val errors = (0 until action.paramsUser.size).map { ndx ->
-            val param = action.paramsUser[ndx]
+        val errors = (0 until call.paramsUser.size).map { ndx ->
+            val param = call.paramsUser[ndx]
             val name = param.name ?: ""
             val exists = when(param.type) {
                 KTypes.KDocType -> {

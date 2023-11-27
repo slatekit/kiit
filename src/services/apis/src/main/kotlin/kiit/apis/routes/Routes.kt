@@ -129,14 +129,14 @@ data class Routes(
         return apiLookup.get(info.third)
     }
 
-    fun visitApis(visitor: (Area, Api) -> Unit) {
+    fun visitApis(visitor: (Area, ActionLookup) -> Unit) {
 
         // 1. Each top level area in the system
         // e.g. {area}/{api}/{action}
         this.areas.items.forEach { area ->
 
             area.items.forEach { api ->
-                visitor(area.area, api.api)
+                visitor(area.area, api)
             }
         }
     }
