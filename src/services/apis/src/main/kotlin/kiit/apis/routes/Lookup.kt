@@ -1,14 +1,49 @@
 package kiit.apis.routes
 
-open class Lookup<T>(
-    val items: List<T>,
-    val nameFetcher: (T) -> String
-) {
 
-    val size = items.size
-    val keys = items.map(this.nameFetcher)
-    val map = items.map { it -> Pair(this.nameFetcher(it), it) }.toMap()
+interface Lookup<T> {
+    val parent:String
+    val items:List<T>
+    val map:Map<String, T>
+    val size:Int get() { return map.size }
+    fun contains(key:String):Boolean = map.containsKey(key)
+    fun get(key:String):T? = map[key]
+}
 
-    fun contains(name: String): Boolean = map.contains(name)
-    operator fun get(name: String): T? = if (contains(name)) map[name] else null
+/**
+ * Look up for all actions on an API
+ */
+class ActionLookup(val api:Api, override val items: List<RouteMapping>) : Lookup<RouteMapping> {
+    override val parent: String = "${api.version}:${api.name}"
+    override val map: Map<String, RouteMapping> = toMap(items)
+
+    companion object {
+        fun toMap(mappings: List<RouteMapping>): Map<String, RouteMapping> {
+            val pairs = mappings.map {
+                // key = "{VERB}.{VERSION}.{NAME}"
+                val action = it.route.action
+                val name = "${action.version}.${action.version}:${action.name}"
+                name to it
+            }
+            return pairs.toMap()
+        }
+    }
+}
+
+
+/**
+ * Lookup for all apis on an Area
+ */
+class ApiLookup(val area:Area, override val items: List<ActionLookup>) : Lookup<ActionLookup> {
+    override val parent: String = area.name
+    override val map: Map<String, ActionLookup> = items.map { Pair("${it.api.version}:${it.api.name}", it) }.toMap()
+}
+
+
+/**
+ * Lookup for all areas in the routes
+ */
+class AreaLookup(val area:Area, override val items: List<ApiLookup>) : Lookup<ApiLookup> {
+    override val parent: String = ""
+    override val map: Map<String, ApiLookup> = items.map { Pair(it.parent, it) }.toMap()
 }

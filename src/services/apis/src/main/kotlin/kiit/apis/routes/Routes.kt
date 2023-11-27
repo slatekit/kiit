@@ -1,15 +1,9 @@
 package kiit.apis.routes
 
-import kiit.apis.core.Target
 import kotlin.reflect.full.primaryConstructor
 import kiit.context.Context
 import kiit.utils.naming.Namer
 import kiit.meta.Reflector
-import kiit.results.Codes
-import kiit.results.Err
-import kiit.results.Outcome
-import kiit.results.Success
-import kiit.results.builders.Outcomes
 
 /**
  * The top most level qualifier in the Universal Routing Structure
@@ -18,33 +12,27 @@ import kiit.results.builders.Outcomes
  *
  * Format :  {area}.{api}.{action}
  * Routes :
- *          { Area 1 }
- *              - { API 1 }
- *                  - { Action a }
- *                  - { Action b }
+ *          { Area A }
+ *              - { API X - v1 }
+ *                  - { Action a - v1 }
+ *                  - { Action a - v2 }
+ *                  - { Action b - v1 }
  *
- *              - { API 2 }
- *                  - { Action c }
- *                  - { Action d }
- *
- *         { Area 2 }
- *              - { API 1 }
- *                  - { Action a }
- *                  - { Action b }
- *
- *              - { API 2 }
- *                  - { Action c }
- *                  - { Action d }
+ *         { Area B }
+ *              - { API Y - v1 }
+ *                  - { Action a - v1 }
+ *                  - { Action a - v2 }
+ *                  - { Action b - v1 }
 */
 data class Routes(
-    val areas: Lookup<Area>,
+    val areas: AreaLookup,
     val namer: Namer? = null,
     val onInstanceCreated: ((Any?) -> Unit)? = null
 ) {
 
     init {
         onInstanceCreated?.let {
-            visitApis({ area, api -> onInstanceCreated.invoke(api.singleton) })
+            //visitApis({ area, api -> onInstanceCreated.invoke(api.singleton) })
         }
     }
 
@@ -67,27 +55,51 @@ data class Routes(
     /**
      * Whether there is an area w/ the supplied name.
      */
-    fun contains(area: String): Boolean = areas.contains(area)
-
-    /**
-     * Whether there is an api in the area supplied
-     */
-    fun contains(area: String, api: String): Boolean {
-        return areas[area]?.apis?.contains(api) ?: false
+    fun contains(area: String, version:String? = null): Boolean {
+        if (area.isEmpty()) return false
+        val name = version?.let { "${it}:${area}" } ?: area
+        return areas.contains(name)
     }
 
     /**
      * Whether there is an api in the area supplied
+     * @param area    : The name of the area e.g. "accounts"
+     * @param api     : The name of the api  e.g. "signup"
+     * @param version : The version to check for e.g. "1.1" indicates area:version=1, api:version = 1
      */
-    fun contains(area: String, api: String, action: String): Boolean {
-        return areas[area]?.apis?.get(api)?.actions?.contains(action) ?: false
+    fun contains(area: String, api: String, version:String? = null): Boolean {
+        return api(area, api, version) != null
+    }
+
+    /**
+     * Whether there is an action in the area/api supplied
+     * @param area    : The name of the area e.g. "accounts"
+     * @param api     : The name of the api  e.g. "signup"
+     * @param action  : The name of the action  e.g. "login"
+     * @param version : The version to check for e.g. "1.1" indicates area:version=1, api:version = 1
+     */
+    fun contains(area: String, api: String, action: String, version:String? = null): Boolean {
+        return action(area, api, action, version) != null
     }
 
     /**
      * Gets the API model associated with the area.name
      */
-    fun api(area: String, name: String): Api? {
-        return areas[area]?.apis?.get(name)
+    fun api(area: String, api: String, version: String? = null): ActionLookup? {
+        if (area.isEmpty()) return null
+        if (api.isEmpty()) return null
+        val info = when (version) {
+            null -> Pair("0:${area}", "0:${api}")
+            else -> {
+                val parts = version.split(".")
+                val areaVersion = parts[0]
+                val apiVersion = parts[1]
+                Pair("${areaVersion}:${area}", "${apiVersion}:${api}")
+            }
+        }
+
+        val areaLookup = areas.get(info.first) ?: return null
+        return areaLookup.get(info.second)
     }
 
     /**
@@ -97,34 +109,24 @@ data class Routes(
      * @param action
      * @return
      */
-    fun api(area: String, name: String, action: String, ctx: Context): Outcome<Target> {
-        if (area.isEmpty()) return Outcomes.invalid("area not supplied")
-        if (name.isEmpty()) return Outcomes.invalid("api not supplied")
-        if (action.isEmpty()) return Outcomes.invalid("action not supplied")
-        if (!contains(area, name, action)) return Outcomes.invalid(Err.of("api route $area $name $action not found"), status = Codes.NOT_FOUND)
-
-        val api = api(area, name)!!
-        val act = api.actions[action]!!
-        val instance = instance(area, name, ctx)
-        return instance?.let { inst ->
-            Success(Target(api, act, inst))
-        } ?: Outcomes.errored("api route $area $name $action not found")
-    }
-
-    /**
-     * gets an instance of the API for the corresponding area.name
-     */
-    fun instance(area: String, name: String, ctx: Context): Any? {
-        val api = api(area, name)
-        val instance = api?.let { info ->
-            info.singleton ?: if (info.klass.primaryConstructor!!.parameters.isEmpty()) {
-                Reflector.create<Any>(info.klass)
-            } else {
-                Reflector.createWithArgs<Any>(info.klass, arrayOf(ctx))
+    fun action(area: String, api: String, action: String, version: String?): RouteMapping? {
+        if (area.isEmpty()) return null
+        if (api.isEmpty()) return null
+        if (action.isEmpty()) return null
+        val info = when (version) {
+            null -> Triple("0:${area}", "0:${api}", "0:${action}")
+            else -> {
+                val parts = version.split(".")
+                val areaVersion = parts[0]
+                val apiVersion = parts[1]
+                val actionVersion = parts[2]
+                Triple("${areaVersion}:${area}", "${apiVersion}:${api}", "${actionVersion}:${action}")
             }
         }
-        onInstanceCreated?.invoke(instance)
-        return instance
+
+        val areaLookup = areas.get(info.first) ?: return null
+        val apiLookup = areaLookup.get(info.second) ?: return null
+        return apiLookup.get(info.third)
     }
 
     fun visitApis(visitor: (Area, Api) -> Unit) {
@@ -133,8 +135,8 @@ data class Routes(
         // e.g. {area}/{api}/{action}
         this.areas.items.forEach { area ->
 
-            area.apis.items.forEach { api ->
-                visitor(area, api)
+            area.items.forEach { api ->
+                visitor(area.area, api.api)
             }
         }
     }
@@ -145,10 +147,10 @@ data class Routes(
         // e.g. {area}/{api}/{action}
         this.areas.items.forEach { area ->
 
-            area.apis.items.forEach { api ->
+            area.items.forEach { api ->
 
-                api.actions.items.forEach { action ->
-                    visitor(area, api, action)
+                api.items.forEach { action ->
+                    visitor(area.area, api.api, action.route.action)
                 }
             }
         }

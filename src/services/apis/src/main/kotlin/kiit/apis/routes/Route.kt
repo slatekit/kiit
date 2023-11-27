@@ -18,6 +18,7 @@ interface RouteHandler {
 
 class MethodExecutor(val call: Call) : RouteHandler {
     override suspend fun handle(ctx: ApiContext, request: ApiRequest, route: Route): Outcome<*> {
+        //ctx.server.executeAttempt()
         return Outcomes.success("")
     }
 }

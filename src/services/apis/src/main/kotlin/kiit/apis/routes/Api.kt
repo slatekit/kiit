@@ -17,14 +17,6 @@ import kiit.apis.core.Roles
 import kiit.apis.core.Sources
 import kotlin.reflect.KClass
 
-data class LoadOptions(
-    val klass: KClass<*>,
-    val declared: Boolean = true,
-    val singleton: Any? = null,
-    val setup: SetupType = SetupType.Methods
-)
-
-
 
 /**
  * ================================================================
