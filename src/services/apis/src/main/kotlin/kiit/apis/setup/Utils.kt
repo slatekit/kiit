@@ -41,49 +41,31 @@ fun toVerb(name: String?): Verb {
  * @param cls : The class representing the API
  * @param namer: The naming convention
  */
-fun toApi(cls: KClass<*>, instance: Any?, access: Access?, namer: Namer?): Api {
+fun toApi(cls: KClass<*>, namer: Namer?): Api {
 
     // get the @Api annotation on the class
     val anno = Reflector.getAnnotationForClassOpt<kiit.apis.Api>(cls, kiit.apis.Api::class)!!
     val accessAnno = Access.parse(anno.access)
-    val api = Api(
-        cls,
-        anno.area,
-        anno.name,
+    val areaName = namer?.rename(anno.area) ?: anno.area
+    val apiName = namer?.rename(anno.name) ?: anno.name
+
+    val api = kiit.apis.routes.Api(
+        areaName,
+        apiName,
         anno.desc,
         AuthMode.parse(anno.auth),
         Roles(anno.roles.toList()),
-        accessAnno.min(access),
+        accessAnno,
         Sources(anno.sources.toList().map { Source.parse(it) }),
         Verb.parse(anno.verb),
-        false,
-        instance,
-        SetupType.Annotated
+        anno.version,
+        anno.tags.toList()
     )
+
     return api
 }
 
-fun toApi(
-    cls: KClass<*>,
-    area: String,
-    name: String,
-    desc: String?,
-    local: Boolean = true,
-    roles: Roles = Roles.empty,
-    access: Access = Access.Public,
-    auth: AuthMode = AuthMode.Keyed,
-    verb: Verb = Verb.Auto,
-    protocol: Sources = Sources.all,
-    singleton: Boolean = false
-): Api {
-    // Create initial temporary api
-    // with all settings that can be used for override values
-    val api = Api(cls, area, name, desc
-        ?: "", auth, roles, access, protocol, verb, local, singleton)
-    return api
-}
-
-fun toAction(member: KCallable<*>, api: Api, apiAction: kiit.apis.Action?, namer: Namer?): Action {
+fun toAction(member: KCallable<*>, api: kiit.apis.routes.Api, apiAction: kiit.apis.Action?, namer: Namer?): kiit.apis.routes.Action {
 
     val methodName = member.name
     val actionNameRaw = apiAction?.name.orElse(methodName)
@@ -96,6 +78,7 @@ fun toAction(member: KCallable<*>, api: Api, apiAction: kiit.apis.Action?, namer
     val actionRoles = Roles.of(apiAction?.roles ?: arrayOf()).orElse(api.roles)
     val actionAccess = (apiAction?.access?.let{ Access.parse(it) } ?: api.access).orElse(api.access)
     val actionProtocol = Sources.of(apiAction?.sources ?: arrayOf()).orElse(api.sources)
+    val actionVersion = apiAction?.version ?: api.version
     val rawVerb = toVerb(apiAction?.verb).orElse(api.verb)
 
     // Determine the actual verb
@@ -103,8 +86,7 @@ fun toAction(member: KCallable<*>, api: Api, apiAction: kiit.apis.Action?, namer
         is Verb.Auto -> toVerb(actionNameRaw)
         else -> rawVerb
     }
-    return Action(
-        member,
+    return kiit.apis.routes.Action(
         actionName,
         actionDesc,
         actionAuth,
@@ -112,7 +94,8 @@ fun toAction(member: KCallable<*>, api: Api, apiAction: kiit.apis.Action?, namer
         actionAccess,
         actionProtocol,
         actionVerb,
-        actionTags
+        actionVersion,
+        actionTags.toList()
     )
 }
 
@@ -160,7 +143,7 @@ fun loadApiFromSetup(api: Api, hostSource: Source, namer: Namer?): Api {
         } else { // if(api.setup == PublicMethods){
             val area = rename(api.area, namer)
             val name = rename(api.name, namer)
-            val actions = Methods(api).actions(api, api.declaredOnly, namer)
+            val actions = Methods(api).actions(api, api.declared, namer)
             api.copy(area = area, name = name, actions = Lookup(actions) { t -> t.name })
         }
         // Filter out actions that are only applicable for the host source

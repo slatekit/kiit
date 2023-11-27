@@ -11,13 +11,20 @@
 
 package kiit.apis.routes
 
-import kotlin.reflect.KClass
 import kiit.apis.*
 import kiit.apis.SetupType
 import kiit.apis.core.Roles
 import kiit.apis.core.Sources
-import kiit.common.Source
-import kiit.meta.kClass
+import kotlin.reflect.KClass
+
+data class LoadOptions(
+    val klass: KClass<*>,
+    val declared: Boolean = true,
+    val singleton: Any? = null,
+    val setup: SetupType = SetupType.Methods
+)
+
+
 
 /**
  * ================================================================
@@ -43,11 +50,11 @@ import kiit.meta.kClass
  * @param roles : the roles allowed to access this api ( "admin", "ops" )
  * @param auth : the authorization mode ( "app-key" | "app-roles", "key-roles" )
  * @param verb : the verb ( "get", "post", "cli", "*" )
- * @param source : the platforms this is accessible to ( "web" | "cli" | "*" )
+ * @param version : the version of this api e.g. "1", "2"
+ * @param sources : the platforms this is accessible to ( "web" | "cli" | "*" )
  * @param actions : the collection of actions / methods on this API.
  */
 data class Api(
-    val klass: KClass<*>,
     val area: String = "",
     val name: String = "",
     val desc: String = "",
@@ -56,26 +63,6 @@ data class Api(
     val access: Access = Access.Public,
     val sources: Sources = Sources.all,
     val verb: Verb = Verb.Auto,
-    val declaredOnly: Boolean = true,
-    val singleton: Any? = null,
-    val setup: SetupType = SetupType.Methods,
-    val actions: Lookup<Action> = Lookup(listOf()) { t -> t.name }
-) {
-
-    val protocol = sources.all.first()
-
-    constructor(
-        instance: Any,
-        area: String = "",
-        name: String = "",
-        desc: String = "",
-        roles: List<String> = listOf(),
-        access: Access = Access.Public,
-        auth: AuthMode = AuthMode.Token,
-        protocol: List<Source> = listOf(Source.All),
-        verb: Verb = Verb.Auto,
-        declaredOnly: Boolean = true,
-        setup: SetupType = SetupType.Methods
-    ) : this(instance.kClass, area, name, desc, auth, Roles(roles), access, Sources(protocol), verb, declaredOnly, instance, setup)
-
-}
+    val version:String = "",
+    val tags: List<String> = listOf()
+)

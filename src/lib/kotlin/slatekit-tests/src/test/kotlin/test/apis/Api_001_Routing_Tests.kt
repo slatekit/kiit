@@ -17,13 +17,9 @@ import org.junit.Test
 import kiit.apis.*
 import kiit.apis.routes.Api
 import kiit.apis.core.Sources
-import kiit.apis.routes.Routes
-import kiit.apis.setup.Annotations
-import kiit.apis.setup.Methods
-import kiit.apis.setup.loadAll
-import kiit.apis.setup.toApi
 import kiit.common.Source
 import kiit.apis.core.Roles
+import kiit.apis.setup.*
 import test.setup.*
 
 /**
@@ -34,8 +30,30 @@ import test.setup.*
 class Api_001_Loader_Tests : ApiTestsBase() {
 
 
+    @Test fun can_add_simple_route() {
+        val apis = listOf(Api(SimpleCalsApi(), "", setup = SetupType.Annotated))
+
+//        val router = Router()
+//        val executors = ClassExecutors()
+//        executors.add("calcs", SimpleCalsApi())
+//
+//        router.on(
+//            api      = Api2("math", "calcs"),
+//            action   = Action2("add"),
+//            executor = MethodExecutor("calcs", SimpleCalsApi::add)
+//        )
+//        router.on(
+//            area     = "math", api = "calcs", action   = "adder",
+//            executor = MethodForwarder("math", "calcs", "add")
+//        )
+    }
+
+
+    /**
+     * x-version-action:v1,v2,v2
+     */
     @Test fun can_load_api_from_annotations() {
-        val api = Annotations(SampleAnnoApi::class).api(null)
+        val api = AnnotationLoader(SampleAnnoApi::class).api(null)
         Assert.assertTrue(api.actions.size == 13)
         Assert.assertTrue(api.area == "app")
         Assert.assertTrue(api.name == "tests")
@@ -175,9 +193,9 @@ class Api_001_Loader_Tests : ApiTestsBase() {
     @Test fun can_load_areas() {
 
         val areas = loadAll(listOf(
-                Api(SampleRolesByApp::class, "app", "sampleRolesByApp", "sample roles by application auth", roles = kiit.apis.core.Roles(listOf("users")), auth = AuthMode.Token, sources = Sources(listOf(Source.CLI)), declaredOnly = true),
-                Api(SampleRolesByKey::class, "app", "sampleRolesByKey", "sample roles by api-key", roles = kiit.apis.core.Roles(listOf("users")), auth = AuthMode.Keyed, sources = Sources(listOf(Source.CLI)), declaredOnly = true),
-                Api(SampleExtendedApi::class, "tests", "sampleExtended", "sample plain kotlin class", roles = kiit.apis.core.Roles(listOf("users")), auth = AuthMode.Token, sources = Sources(listOf(Source.CLI)), declaredOnly = false)
+                Api(SampleRolesByApp::class, "app", "sampleRolesByApp", "sample roles by application auth", roles = kiit.apis.core.Roles(listOf("users")), auth = AuthMode.Token, sources = Sources(listOf(Source.CLI)), declared = true),
+                Api(SampleRolesByKey::class, "app", "sampleRolesByKey", "sample roles by api-key", roles = kiit.apis.core.Roles(listOf("users")), auth = AuthMode.Keyed, sources = Sources(listOf(Source.CLI)), declared = true),
+                Api(SampleExtendedApi::class, "tests", "sampleExtended", "sample plain kotlin class", roles = kiit.apis.core.Roles(listOf("users")), auth = AuthMode.Token, sources = Sources(listOf(Source.CLI)), declared = false)
         ))
         Assert.assertTrue(areas.size == 2)
         Assert.assertTrue(areas.contains("app"))

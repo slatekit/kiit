@@ -1,57 +1,50 @@
 package kiit.apis.setup
 
+import kiit.apis.routes.*
 import kotlin.reflect.KClass
-import kiit.apis.routes.Action
-import kiit.apis.routes.Api
-import kiit.apis.routes.Lookup
-import kiit.common.Ignore
 import kiit.utils.naming.Namer
 import kiit.meta.Reflector
 
-class Annotations(val cls: KClass<*>, val raw: Api? = null) : Loader {
+class AnnotationLoader(val cls: KClass<*>, val instance: Any, val namer: Namer?) : Loader {
     /**
      * Loads an api using class and method annotations e.g. @Api on class and @ApiAction on members.
-     * NOTE: This allows all the API setup to be in 1 place ( in the class/memebers )
+     * NOTE: This allows all the API setup to be in 1 place ( in the class/members )
      *
-     * @param cls : The class representing the API
-     * @param namer: The naming convention
      */
-    override fun api(namer: Namer?): Api {
-        val api = toApi(cls, raw?.singleton, raw?.access, namer)
+    override fun api(): Pair<Api, List<RouteMapping>> {
+        val api = toApi(cls, namer)
+        val area = Area(api.area)
 
         // Get all the actions using the @ApiAction
-        val actions = actions(api, false, namer)
-        return api.copy(actions = Lookup(actions, { t -> t.name }))
+        val mappings = actions(area, api)
+        return Pair(api, mappings)
     }
 
     /**
      * Load all actions available in the API
      */
-    override fun actions(api: Api, local: Boolean, namer: Namer?): List<Action> {
+    override fun actions(area: Area, api: Api): List<RouteMapping> {
 
-        // 1. get all the methods with the apiAction annotation
-        val rawMatches = Reflector.getAnnotatedMembers<kiit.apis.Action>(api.klass, kiit.apis.Action::class, api.declaredOnly)
-        val rawIgnores = Reflector.getAnnotatedMembers<Ignore>(api.klass, Ignore::class, api.declaredOnly)
-        val rawIgnoresLookup = rawIgnores.map { it -> Pair(it.first.name, true) }.toMap()
+        // Get all the methods with the apiAction annotation
+        val matches = Reflector.getAnnotatedMembers<kiit.apis.Action>(cls, kiit.apis.Action::class, true)
 
-        // 2. Filter out builtin methods
-        val matches = rawMatches.filter { it -> !Reflector.isBuiltIn(it.first) }
+        // Convert to RouteMapping ( route -> handler )
+        val actions: List<RouteMapping> = matches.map { item ->
+            val action = toAction(item.first, api, item.second, namer)
 
-        // 3. Convert to Action
-        val actions: List<Action?> = matches.map { item ->
+            // area/api/action objects ( with version info )
+            val route = Route(area, api, action)
 
-            // a) The member
-            val member = item.first
+            // Reflection based KCallable
+            val call = Call(cls, item.first, instance)
 
-            // Ensure it does not have an Ignore annotation
-            if (rawIgnoresLookup.containsKey(member.name)) {
-                null
-            } else {
-                toAction(item.first, api, item.second, namer)
-            }
+            // Type of route handler
+            val handler = MethodExecutor(call)
+
+            // Final mapping of route -> handler
+            RouteMapping(route, handler)
         }
 
-        // 4. Filter out ignored ones.
-        return actions.filterNotNull()
+        return actions
     }
 }

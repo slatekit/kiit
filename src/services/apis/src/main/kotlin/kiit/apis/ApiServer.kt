@@ -189,7 +189,7 @@ open class ApiServer(
         if(!routeResult) return Outcomes.invalid("Route ${request.request.path} invalid")
 
         // Target
-        val targetResult = request.host.get(request.request.area, request.request.name, request.request.action)
+        val targetResult = get(request.request.area, request.request.name, request.request.action)
         if(!targetResult.success) return targetResult
         val req = request.copy(target = targetResult.getOrNull())
 

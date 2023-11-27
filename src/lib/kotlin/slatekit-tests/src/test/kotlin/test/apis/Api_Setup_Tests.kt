@@ -67,7 +67,7 @@ class Api_Setup_Tests : ApiTestsBase() {
 
 
     @Test fun can_setup_instance_with_inheritance() {
-        val apis = ApiServer(ctx, apis = listOf(Api(SampleExtendedApi::class, "app", "SampleExtended", declaredOnly = false)))
+        val apis = ApiServer(ctx, apis = listOf(Api(SampleExtendedApi::class, "app", "SampleExtended", declared = false)))
         Assert.assertTrue( apis.get("app"   , "SampleExtended", "getSeconds" ).success)
         Assert.assertTrue( apis.get("app"   , "SampleExtended", "getTime"    ).success)
         Assert.assertTrue( apis.get("app"   , "SampleExtended", "getCounter" ).success)
@@ -81,7 +81,7 @@ class Api_Setup_Tests : ApiTestsBase() {
 
     @Test fun can_setup_instance_with_compositional_apis_with_annotations() {
         ctx.ent.register<Long, Movie>(EntityLongId() , vendor = Vendor.Memory) { repo -> EntityServices(repo) }
-        val apis = ApiServer(ctx, apis = listOf(Api(SampleEntity2Api::class, declaredOnly = false, setup = SetupType.Annotated)))
+        val apis = ApiServer(ctx, apis = listOf(Api(SampleEntity2Api::class, declared = false, setup = SetupType.Annotated)))
         Assert.assertTrue( apis.get("app"   , "tests", "patch" ).success)
         Assert.assertTrue( apis.get("app"   , "tests", "recent" ).success)
         Assert.assertTrue( apis.get("app"   , "tests", "oldest" ).success)
@@ -138,7 +138,7 @@ class Api_Setup_Tests : ApiTestsBase() {
 
 
     @Test fun can_call_action_in_base_class() {
-        val apis = ApiServer(ctx, apis = listOf(Api(SampleExtendedApi::class, "app", "SampleExtended", declaredOnly = false)))
+        val apis = ApiServer(ctx, apis = listOf(Api(SampleExtendedApi::class, "app", "SampleExtended", declared = false)))
         val result = runBlocking { apis.executeAttempt("app", "SampleExtended", "getCounter", Verb.Get, mapOf(), mapOf()) }
         Assert.assertTrue(result.success)
         Assert.assertTrue(result.getOrElse { 0 } == 1)

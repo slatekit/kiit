@@ -40,7 +40,7 @@ class Api_Naming_Tests : ApiTestsBase() {
 
     @Test fun can_use_naming_convention_lowerUnderscore() {
         val apis = ApiServer(ctx, apis = listOf(Api(SampleExtendedApi::class,
-                "app", "SampleExtended", declaredOnly = false)),
+                "app", "SampleExtended", declared = false)),
                 settings = Settings(naming = LowerUnderscoreNamer())
         )
         Assert.assertTrue( apis.get("app"   , "sample_extended", "get_seconds" ).success)
