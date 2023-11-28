@@ -21,8 +21,9 @@ interface ApiQueueSupport : QueueSupport, Middleware{
      */
     override suspend fun process(req: ApiRequest, next:suspend(ApiRequest) -> Outcome<ApiResult>): Outcome<ApiResult>  {
         // Coming in as http request ? and mode is queued ?
-        return if(req.source != Source.Queue && req.target?.action?.tags?.contains("queued") == true){
-            // Convert from web request to Queued request
+        val isQueued = true //&& req.target?.action?.tags?.contains("queued") == true
+        return if(req.source != Source.Queue && isQueued){
+//            // Convert from web request to Queued request
             val queuedReq = Reqs.toJsonAsQueued(req.request)
             enueue(Random.guid(), req.request.fullName, queuedReq,  "api-queue")
             Success("Request processed as queue")

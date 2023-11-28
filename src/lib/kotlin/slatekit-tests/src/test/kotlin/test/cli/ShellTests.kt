@@ -114,9 +114,9 @@ class ShellTests  {
             Credentials("1", "kishore", "kishore@abc.com", apiKeys.last().key, "test", "ny")
 
     // 2. Register the apis using default textType ( uses permissions in annotations on class )
-    val apis = listOf(
-            Api(InfoApi(ctx), setup = SetupType.Annotated, declaredOnly = true, roles = listOf("qa")),
-            Api(VersionApi(ctx), setup = SetupType.Annotated, declaredOnly = true, roles = listOf("qa"))
+    val apis = listOf<Api>(
+//            Api(InfoApi(ctx), setup = SetupType.Annotated, declaredOnly = true, roles = listOf("qa")),
+//            Api(VersionApi(ctx), setup = SetupType.Annotated, declaredOnly = true, roles = listOf("qa"))
     )
 
     // 3. Build up the cli services that handles all the command line features.

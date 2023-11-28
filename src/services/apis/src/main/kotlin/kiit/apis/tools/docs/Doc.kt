@@ -105,12 +105,12 @@ abstract class Doc  {
 
             // APISs
             writer.subTitle("APIs", endLine = true)
-            area.apis.items.sortedBy { it.name }.forEach { buildApi(it, details = false) }
+            //area.apis.items.sortedBy { it.name }.forEach { buildApi(it, details = false) }
             writer.line()
 
             // Usage
             writer.text("use {area}$helpSeparator{api}$helpSuffix to list all Actions in an API. ")
-            writer.url("e.g. ${area.name}$helpSeparator${area.apis.items.first().name}?", endLine = true)
+            //writer.url("e.g. ${area.name}$helpSeparator${area.apis.items.first().name}?", endLine = true)
         }
     }
 
@@ -140,13 +140,13 @@ abstract class Doc  {
 
             // Actions
             writer.subTitle("ACTIONS", endLine = true)
-            val maxLength = api.actions.items.maxByOrNull { it.name.length }?.name?.length ?: 15
-            api.actions.items.sortedBy { it.name }.forEach{ buildAction(api, it, maxLength,false)}
+//            val maxLength = api.actions.items.maxByOrNull { it.name.length }?.name?.length ?: 15
+//            api.actions.items.sortedBy { it.name }.forEach{ buildAction(api, it, maxLength,false)}
             writer.line()
 
             // Usage
             writer.text("use {area}$helpSeparator{api}$helpSeparator{action}$helpSuffix to list Action details. ")
-            writer.url("e.g. ${area.name}$helpSeparator${api.name}$helpSeparator${api.actions.items.first().name}?", endLine = true)
+            //writer.url("e.g. ${area.name}$helpSeparator${api.name}$helpSeparator${api.actions.items.first().name}?", endLine = true)
         }
     }
 
@@ -186,7 +186,7 @@ abstract class Doc  {
 
             // Usage
             writer.text("use {area}$helpSeparator{api}$helpSeparator{action}$helpSuffix to list Action details. ")
-            writer.url("e.g. ${area.name}$helpSeparator${api.name}$helpSeparator${api.actions.items.first().name}?", endLine = true)
+            //writer.url("e.g. ${area.name}$helpSeparator${api.name}$helpSeparator${api.actions.items.first().name}?", endLine = true)
         }
     }
 
@@ -236,18 +236,18 @@ abstract class Doc  {
             }
             writer.line()
             writer.subTitle("INPUTS", endLine = true)
-            action.paramsUser.forEachIndexed { ndx, input ->
-                writer.tab()
-                writer.highlight( (ndx + 1).toString() + ". " + input.name!!, endLine = true)
-                val cls = input.type.classifier as KClass<*>
-                val type = when(input.type.arguments.isEmpty()){
-                    true -> cls.simpleName!!
-                    false -> input.type.arguments.joinToString { (it.type?.classifier as KClass<*>).simpleName!! }
-                }
-                writer.tab(); writer.keyValue("type    ", type, true)
-                writer.tab(); writer.keyValue("required", (!input.isOptional).toString(), true)
-                writer.line()
-            }
+//            action.paramsUser.forEachIndexed { ndx, input ->
+//                writer.tab()
+//                writer.highlight( (ndx + 1).toString() + ". " + input.name!!, endLine = true)
+//                val cls = input.type.classifier as KClass<*>
+//                val type = when(input.type.arguments.isEmpty()){
+//                    true -> cls.simpleName!!
+//                    false -> input.type.arguments.joinToString { (it.type?.classifier as KClass<*>).simpleName!! }
+//                }
+//                writer.tab(); writer.keyValue("type    ", type, true)
+//                writer.tab(); writer.keyValue("required", (!input.isOptional).toString(), true)
+//                writer.line()
+//            }
         }
     }
 

@@ -16,8 +16,26 @@ import kiit.results.Notice
 import kiit.results.Success
 
 
-@Api(area = "app", name = "tests", desc = "sample to test features of Slate Kit APIs", auth = AuthModes.TOKEN, roles= ["admin"])
-class SampleAnnoApi(val context: AppEntContext) {
+@Api(area = "app", name = "tests", desc = "sample to test features of Slate Kit APIs")
+class SampleAnnotatedApiWithDefaults() {
+    @Action(desc = "accepts supplied basic data types from send")
+    fun add(a:Int, b:Int): Int {
+        return a + b
+    }
+}
+
+@Api(version = "1", area = "app", name = "tests", desc = "sample to test features of Slate Kit APIs",
+    auth = AuthModes.TOKEN, roles = ["admin"], verb = Verbs.AUTO, access = AccessLevel.INTERNAL, sources = [Sources.CLI])
+class SampleAnnotatedApiWithOverrides() {
+    @Action(version = "1", name = "adder", desc = "accepts supplied basic data types from send", verb = Verbs.PUT, access = AccessLevel.PUBLIC, auth = AuthModes.KEYED, roles = ["user"], sources = [Sources.API])
+    fun add(a:Int, b:Int): Int {
+        return a + b
+    }
+}
+
+
+@Api(version = "1", area = "app", name = "tests", desc = "sample to test features of Slate Kit APIs", auth = AuthModes.TOKEN, roles= ["admin"])
+class SampleAnnoApi() {
 
     @Action(desc = "accepts supplied basic data types from send")
     fun inputBasicTypes(string1: String, bool1: Boolean, numShort: Short, numInt: Int, numLong: Long, numFloat: Float, numDouble: Double, date: DateTime): String {

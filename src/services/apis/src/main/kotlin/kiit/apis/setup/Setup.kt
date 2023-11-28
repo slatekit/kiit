@@ -21,7 +21,7 @@ class Loader(val namer: Namer?, val options: LoadOptions? = null)  {
      * NOTE: This allows all the API setup to be in 1 place ( in the class/members )
      *
      */
-    fun code(cls: KClass<*>, instance: Any): Pair<Api, List<RouteMapping>> {
+    fun code(cls: KClass<*>, instance: Any): ActionLookup {
         val api = toApi(cls, namer)
         val area = Area(api.area)
 
@@ -45,7 +45,7 @@ class Loader(val namer: Namer?, val options: LoadOptions? = null)  {
             // Final mapping of route -> handler
             RouteMapping(route, handler)
         }
-        return Pair(api, mappings)
+        return ActionLookup(api, mappings)
     }
 
 
@@ -54,7 +54,7 @@ class Loader(val namer: Namer?, val options: LoadOptions? = null)  {
      * NOTE: This allows all the API setup to be in 1 place ( in the class/members )
      *
      */
-    fun config(cls: KClass<*>, instance: Any): Pair<Api, List<RouteMapping>> {
-        return Pair(Api(", "), listOf())
+    fun config(cls: KClass<*>, instance: Any): ActionLookup {
+        return ActionLookup(Api(", "), listOf())
     }
 }

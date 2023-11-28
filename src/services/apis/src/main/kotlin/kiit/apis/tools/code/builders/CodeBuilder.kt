@@ -30,7 +30,8 @@ interface CodeBuilder {
      * Builds the arguments
      */
     fun buildArgs(action: Action): String {
-        return collect(action.paramsUser, "\t\t", ",", true) { buildArg(it) }
+        //return collect(action.paramsUser, "\t\t", ",", true) { buildArg(it) }
+        return ""
     }
 
     /**

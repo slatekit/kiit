@@ -30,7 +30,7 @@ class Worker_Api_Tests : TestSupport {
     fun buildContainer(): ApiServer {
         val ctx = AppContext.simple(app,"queues")
         val api = SampleTypes2Api()
-        val apis = ApiServer(ctx, apis = listOf(Api(api, area = "samples", name = "types2")))
+        val apis = ApiServer(ctx, apis = listOf(Api())) //api, area = "samples", name = "types2")))
         return apis
     }
 
@@ -48,7 +48,7 @@ class Worker_Api_Tests : TestSupport {
             val api = SampleWorkerAPI(ctx, queues)
 
             // 4. container
-            val apis = ApiServer(ctx, apis = listOf(Api(api, setup = SetupType.Annotated)))
+            val apis = ApiServer(ctx, apis = listOf() )//Api(api, setup = SetupType.Annotated)))
 
             // 5. send method call to queue
             val result = runBlocking {

@@ -124,9 +124,9 @@ open class ApiTestsBase {
     }
 
 
-    fun buildUserApiRegSingleton(ctx: AppEntContext): Api {
-        return Api(UserApi(ctx), setup = SetupType.Annotated)
-    }
+//    fun buildUserApiRegSingleton(ctx: AppEntContext): Api {
+//        return Api(UserApi(ctx), setup = SetupType.Annotated)
+//    }
 
 
     fun ensure(

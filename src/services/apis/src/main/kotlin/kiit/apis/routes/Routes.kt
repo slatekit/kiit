@@ -155,4 +155,9 @@ data class Routes(
             }
         }
     }
+
+
+    companion object {
+
+    }
 }

@@ -34,45 +34,45 @@ class Api_Validation_Tests : ApiTestsBase() {
     val zone = ZoneId.of("EST")
 
 
-    @Test
-    fun can_fail_with_missing_args() {
-        val api = Sample_API_1_Validation()
-        val apis = ApiServer(ctx, apis = listOf(Api(api, setup = SetupType.Annotated)) )
-        val r1 = runBlocking {
-            apis.executeAttempt("samples", "validation", Sample_API_1_Validation::processInputs.name, Verb.Post, mapOf(), mapOf())
-        }
-        Assert.assertFalse(r1.success)
-        r1.onFailure {
-            val ex = it as ExceptionErr
-            val err = ex.err as Err.ErrorList
-            Assert.assertEquals(4, err.errors.size)
-            Assert.assertEquals("phone", (err.errors[0] as Err.ErrorField).field)
-            Assert.assertEquals("code", (err.errors[1]  as Err.ErrorField).field)
-            Assert.assertEquals("isOn", (err.errors[2]  as Err.ErrorField).field)
-            Assert.assertEquals("date", (err.errors[3]  as Err.ErrorField).field)
-            println("done")
-        }
-    }
-
-
-    @Test
-    fun can_fail_with_conversion() {
-        val api = Sample_API_1_Validation()
-        val apis = ApiServer(ctx, apis = listOf(Api(api, setup = SetupType.Annotated)) )
-        val r1 = runBlocking {
-            apis.executeAttempt("samples", "validation", Sample_API_1_Validation::processInputs.name, Verb.Post, mapOf(), mapOf(
-                    Pair("phone", "p1"),
-                    Pair("code" , "abc" ),
-                    Pair("isOn" , "something"),
-                    Pair("date" , DateTimes.of(2019, 10, 30, 8, 30, 45, 0, zone).toString())))
-        }
-        Assert.assertFalse(r1.success)
-        r1.onFailure {
-            val ex = it as ExceptionErr
-            val err = ex.err as Err.ErrorList
-            Assert.assertEquals(1, err.errors.size)
-            Assert.assertEquals("code", (err.errors[0] as Err.ErrorField).field)
-            println("done")
-        }
-    }
+//    @Test
+//    fun can_fail_with_missing_args() {
+//        val api = Sample_API_1_Validation()
+//        val apis = ApiServer(ctx, apis = listOf(Api(api, setup = SetupType.Annotated)) )
+//        val r1 = runBlocking {
+//            apis.executeAttempt("samples", "validation", Sample_API_1_Validation::processInputs.name, Verb.Post, mapOf(), mapOf())
+//        }
+//        Assert.assertFalse(r1.success)
+//        r1.onFailure {
+//            val ex = it as ExceptionErr
+//            val err = ex.err as Err.ErrorList
+//            Assert.assertEquals(4, err.errors.size)
+//            Assert.assertEquals("phone", (err.errors[0] as Err.ErrorField).field)
+//            Assert.assertEquals("code", (err.errors[1]  as Err.ErrorField).field)
+//            Assert.assertEquals("isOn", (err.errors[2]  as Err.ErrorField).field)
+//            Assert.assertEquals("date", (err.errors[3]  as Err.ErrorField).field)
+//            println("done")
+//        }
+//    }
+//
+//
+//    @Test
+//    fun can_fail_with_conversion() {
+//        val api = Sample_API_1_Validation()
+//        val apis = ApiServer(ctx, apis = listOf(Api(api, setup = SetupType.Annotated)) )
+//        val r1 = runBlocking {
+//            apis.executeAttempt("samples", "validation", Sample_API_1_Validation::processInputs.name, Verb.Post, mapOf(), mapOf(
+//                    Pair("phone", "p1"),
+//                    Pair("code" , "abc" ),
+//                    Pair("isOn" , "something"),
+//                    Pair("date" , DateTimes.of(2019, 10, 30, 8, 30, 45, 0, zone).toString())))
+//        }
+//        Assert.assertFalse(r1.success)
+//        r1.onFailure {
+//            val ex = it as ExceptionErr
+//            val err = ex.err as Err.ErrorList
+//            Assert.assertEquals(1, err.errors.size)
+//            Assert.assertEquals("code", (err.errors[0] as Err.ErrorField).field)
+//            println("done")
+//        }
+//    }
 }

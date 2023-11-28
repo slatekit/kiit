@@ -74,8 +74,8 @@ open class Help(val host: ApiServer, val routes: Routes, val docKey: String?, va
      */
     open fun areas(): String {
         val doc = docBuilder()
-        doc.areas(routes.areas)
-        return doc.toString()
+        //doc.areas(routes.areas)
+        return "" //doc.toString()
     }
 
     /**
@@ -85,14 +85,15 @@ open class Help(val host: ApiServer, val routes: Routes, val docKey: String?, va
      * @return
      */
     open fun area(name: String): String {
-        val doc = docBuilder()
-        if (!routes.contains(name)) {
-            doc.error("Area : $name not found")
-        } else {
-            val area = routes.areas[name]
-            area?.let { doc.area(it) }
-        }
-        return doc.toString()
+//        val doc = docBuilder()
+//        if (!routes.contains(name)) {
+//            doc.error("Area : $name not found")
+//        } else {
+//            val area = routes.areas[name]
+//            area?.let { doc.area(it) }
+//        }
+//        return doc.toString()
+        return ""
     }
 
     /**
@@ -103,19 +104,20 @@ open class Help(val host: ApiServer, val routes: Routes, val docKey: String?, va
      * @return
      */
     open fun api(areaName: String, apiName: String): String {
-        val doc = docBuilder()
-        if (!routes.contains(areaName, apiName)) {
-            doc.error("Area : $areaName not found")
-        } else {
-            val area = routes.areas[areaName]
-            area?.let { area ->
-                val api = area.apis[apiName]
-                api?.let { api ->
-                    doc.api(area, api)
-                }
-            }
-        }
-        return doc.toString()
+//        val doc = docBuilder()
+//        if (!routes.contains(areaName, apiName)) {
+//            doc.error("Area : $areaName not found")
+//        } else {
+//            val area = routes.areas[areaName]
+//            area?.let { area ->
+//                val api = area.apis[apiName]
+//                api?.let { api ->
+//                    doc.api(area, api)
+//                }
+//            }
+//        }
+//        return doc.toString()
+        return ""
     }
 
     /**
@@ -127,21 +129,22 @@ open class Help(val host: ApiServer, val routes: Routes, val docKey: String?, va
      * @return
      */
     open fun action(areaName: String, apiName: String, actionName: String): String {
-        val doc = docBuilder()
-        if (!routes.contains(areaName, apiName)) {
-            doc.error("Area : $areaName not found")
-        } else {
-            val area = routes.areas[areaName]
-            area?.let { area ->
-                val api = area.apis[apiName]
-                api?.let { api ->
-                    val action = api.actions[actionName]
-                    action?.let { action ->
-                        doc.action(area, api, action)
-                    }
-                }
-            }
-        }
-        return doc.toString()
+//        val doc = docBuilder()
+//        if (!routes.contains(areaName, apiName)) {
+//            doc.error("Area : $areaName not found")
+//        } else {
+//            val area = routes.areas[areaName]
+//            area?.let { area ->
+//                val api = area.apis[apiName]
+//                api?.let { api ->
+//                    val action = api.actions[actionName]
+//                    action?.let { action ->
+//                        doc.action(area, api, action)
+//                    }
+//                }
+//            }
+//        }
+//        return doc.toString()
+        return ""
     }
 }

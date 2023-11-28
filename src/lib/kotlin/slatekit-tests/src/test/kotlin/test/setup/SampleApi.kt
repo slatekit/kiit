@@ -11,7 +11,7 @@ import kiit.connectors.entities.AppEntContext
 
 @Api(area = "app", name = "tests", desc = "sample to test features of Slate Kit APIs",
     auth = AuthModes.TOKEN, roles= ["admin"], verb = Verbs.AUTO, sources = [Sources.ALL])
-class SampleApi(context: AppEntContext): ApiBase(context) {
+class SampleApi()  {
 
     @Action(desc = "accepts supplied basic data types from send")
     fun defaultAnnotationValues(string1: String): String {

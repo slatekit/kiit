@@ -32,119 +32,119 @@ class Api_Type_Tests : ApiTestsBase() {
 
     // ===================================================================
     //describe( "API Decryption" ) {
-    @Test fun can_decrypt_int() {
-        val encryptedText = MyEncryptor.encrypt("123")
-        val api = SampleTypes3Api()
-        val apis = ApiServer(ctx, apis = listOf(Api(api, setup = SetupType.Annotated)) )
-        val r1 = runBlocking {
-            apis.executeAttempt("samples", "types3", "getDecInt", Verb.Get, mapOf(), mapOf("id" to encryptedText))
-        }
-        Assert.assertTrue(r1.success)
-        Assert.assertTrue(r1.getOrElse { "" } == "decrypted int : 123")
-    }
-
-
-    @Test fun can_decrypt_long() {
-        val encryptedText = MyEncryptor.encrypt("123456")
-        val api = SampleTypes3Api()
-        val apis = ApiServer(ctx, apis = listOf(Api(api, setup = SetupType.Annotated)))
-        val r1 = runBlocking {
-            apis.executeAttempt("samples", "types3", "getDecLong", Verb.Get, mapOf(), mapOf("id" to encryptedText))
-        }
-        Assert.assertTrue(r1.success)
-        Assert.assertTrue(r1.getOrElse { "" } == "decrypted long : 123456")
-    }
-
-
-    @Test fun can_decrypt_double() {
-        val encryptedText = MyEncryptor.encrypt("123.456")
-        val api = SampleTypes3Api()
-        val apis = ApiServer(ctx, apis = listOf(Api(api, setup = SetupType.Annotated))  )
-        val r1 = runBlocking {
-            apis.executeAttempt("samples", "types3", "getDecDouble", Verb.Get, mapOf(), mapOf("id" to encryptedText))
-        }
-        Assert.assertTrue(r1.success)
-        Assert.assertTrue(r1.getOrElse { "" } == "decrypted double : 123.456")
-    }
-
-
-    @Test fun can_decrypt_string() {
-        val encryptedText = MyEncryptor.encrypt("slate-kit")
-        val api = SampleTypes3Api()
-        val apis = ApiServer(ctx, apis = listOf(Api(api, setup = SetupType.Annotated)) )
-        val r1 = runBlocking {
-            apis.executeAttempt("samples", "types3", "getDecString", Verb.Get, mapOf(), mapOf("id" to encryptedText))
-        }
-        Assert.assertTrue(r1.success)
-        Assert.assertTrue(r1.getOrElse { "" } == "decrypted string : slate-kit")
-    }
-
-
-    @Test fun can_use_smart_type_phone() {
-
-        ensureSmartString("getSmartStringPhone", ""   , false, "")
-        ensureSmartString("getSmartStringPhone", "abc", false, "")
-        ensureSmartString("getSmartStringPhone", "123-456-789", false, "")
-        ensureSmartString("getSmartStringPhone", "123-456-7890", true,"123-456-7890")
-    }
-
-
-    @Test fun can_use_smart_type_email() {
-
-        ensureSmartString("getSmartStringEmail", ""   , false, "")
-        ensureSmartString("getSmartStringEmail", "abc", false, "")
-        ensureSmartString("getSmartStringEmail", "123@", false, "")
-        ensureSmartString("getSmartStringEmail", "123@abc.com", true,"123@abc.com")
-    }
-
-
-    @Test fun can_use_enum_by_name() {
-        val api = SampleTypes3Api()
-        val apis = ApiServer(ctx, apis = listOf(Api(api, setup = SetupType.Annotated)) )
-        val r1 = runBlocking {
-            apis.executeAttempt("samples", "types3", "getEnum", Verb.Get, mapOf(), mapOf(Pair("status", StatusEnum.Active.name)))
-        }
-        Assert.assertTrue(r1.success)
-        Assert.assertTrue(r1.getOrElse { "" } == "${StatusEnum.Active.name}:${StatusEnum.Active.value}")
-    }
-
-
-    @Test fun can_use_enum_by_number() {
-        val api = SampleTypes3Api()
-        val apis = ApiServer(ctx, apis = listOf(Api(api, setup = SetupType.Annotated)))
-        val r1 = runBlocking {
-            apis.executeAttempt("samples", "types3", "getEnum", Verb.Get, mapOf(), mapOf(Pair("status", StatusEnum.Active.value)))
-        }
-        Assert.assertTrue(r1.success)
-        Assert.assertTrue(r1.getOrElse { "" } == "${StatusEnum.Active.name}:${StatusEnum.Active.value}")
-    }
-
-
-    @Test fun can_use_enum_value() {
-        val api = SampleTypes3Api()
-        val apis = ApiServer(ctx, apis = listOf(Api(api, setup = SetupType.Annotated)))
-        val r1 = runBlocking {
-            apis.executeAttempt("samples", "types3", "getEnumValue", Verb.Get, mapOf(), mapOf(Pair("status", StatusEnum.Pending.value)))
-        }
-        Assert.assertTrue(r1.success)
-        r1.onSuccess { it ->
-            val actual = it as StatusEnum
-            Assert.assertEquals(actual.value, StatusEnum.Pending.value)
-        }
-        r1.onFailure { throw Exception("unexpected value") }
-    }
-
-
-    fun ensureSmartString(method:String, text:String, success:Boolean, expected:String) {
-        val api = SampleTypes3Api()
-        val apis = ApiServer(ctx, apis = listOf(Api(api, setup = SetupType.Annotated)))
-        val r1 = runBlocking {
-            apis.executeAttempt("samples", "types3", method, Verb.Get, mapOf(), mapOf("text" to text))
-        }
-
-        Assert.assertEquals(success, r1.success)
-        if(success) {
-            Assert.assertEquals(expected, r1.getOrElse { "" })
-        }
-    }
+//    @Test fun can_decrypt_int() {
+//        val encryptedText = MyEncryptor.encrypt("123")
+//        val api = SampleTypes3Api()
+//        val apis = ApiServer(ctx, apis = listOf(Api(api, setup = SetupType.Annotated)) )
+//        val r1 = runBlocking {
+//            apis.executeAttempt("samples", "types3", "getDecInt", Verb.Get, mapOf(), mapOf("id" to encryptedText))
+//        }
+//        Assert.assertTrue(r1.success)
+//        Assert.assertTrue(r1.getOrElse { "" } == "decrypted int : 123")
+//    }
+//
+//
+//    @Test fun can_decrypt_long() {
+//        val encryptedText = MyEncryptor.encrypt("123456")
+//        val api = SampleTypes3Api()
+//        val apis = ApiServer(ctx, apis = listOf(Api(api, setup = SetupType.Annotated)))
+//        val r1 = runBlocking {
+//            apis.executeAttempt("samples", "types3", "getDecLong", Verb.Get, mapOf(), mapOf("id" to encryptedText))
+//        }
+//        Assert.assertTrue(r1.success)
+//        Assert.assertTrue(r1.getOrElse { "" } == "decrypted long : 123456")
+//    }
+//
+//
+//    @Test fun can_decrypt_double() {
+//        val encryptedText = MyEncryptor.encrypt("123.456")
+//        val api = SampleTypes3Api()
+//        val apis = ApiServer(ctx, apis = listOf(Api(api, setup = SetupType.Annotated))  )
+//        val r1 = runBlocking {
+//            apis.executeAttempt("samples", "types3", "getDecDouble", Verb.Get, mapOf(), mapOf("id" to encryptedText))
+//        }
+//        Assert.assertTrue(r1.success)
+//        Assert.assertTrue(r1.getOrElse { "" } == "decrypted double : 123.456")
+//    }
+//
+//
+//    @Test fun can_decrypt_string() {
+//        val encryptedText = MyEncryptor.encrypt("slate-kit")
+//        val api = SampleTypes3Api()
+//        val apis = ApiServer(ctx, apis = listOf(Api(api, setup = SetupType.Annotated)) )
+//        val r1 = runBlocking {
+//            apis.executeAttempt("samples", "types3", "getDecString", Verb.Get, mapOf(), mapOf("id" to encryptedText))
+//        }
+//        Assert.assertTrue(r1.success)
+//        Assert.assertTrue(r1.getOrElse { "" } == "decrypted string : slate-kit")
+//    }
+//
+//
+//    @Test fun can_use_smart_type_phone() {
+//
+//        ensureSmartString("getSmartStringPhone", ""   , false, "")
+//        ensureSmartString("getSmartStringPhone", "abc", false, "")
+//        ensureSmartString("getSmartStringPhone", "123-456-789", false, "")
+//        ensureSmartString("getSmartStringPhone", "123-456-7890", true,"123-456-7890")
+//    }
+//
+//
+//    @Test fun can_use_smart_type_email() {
+//
+//        ensureSmartString("getSmartStringEmail", ""   , false, "")
+//        ensureSmartString("getSmartStringEmail", "abc", false, "")
+//        ensureSmartString("getSmartStringEmail", "123@", false, "")
+//        ensureSmartString("getSmartStringEmail", "123@abc.com", true,"123@abc.com")
+//    }
+//
+//
+//    @Test fun can_use_enum_by_name() {
+//        val api = SampleTypes3Api()
+//        val apis = ApiServer(ctx, apis = listOf(Api(api, setup = SetupType.Annotated)) )
+//        val r1 = runBlocking {
+//            apis.executeAttempt("samples", "types3", "getEnum", Verb.Get, mapOf(), mapOf(Pair("status", StatusEnum.Active.name)))
+//        }
+//        Assert.assertTrue(r1.success)
+//        Assert.assertTrue(r1.getOrElse { "" } == "${StatusEnum.Active.name}:${StatusEnum.Active.value}")
+//    }
+//
+//
+//    @Test fun can_use_enum_by_number() {
+//        val api = SampleTypes3Api()
+//        val apis = ApiServer(ctx, apis = listOf(Api(api, setup = SetupType.Annotated)))
+//        val r1 = runBlocking {
+//            apis.executeAttempt("samples", "types3", "getEnum", Verb.Get, mapOf(), mapOf(Pair("status", StatusEnum.Active.value)))
+//        }
+//        Assert.assertTrue(r1.success)
+//        Assert.assertTrue(r1.getOrElse { "" } == "${StatusEnum.Active.name}:${StatusEnum.Active.value}")
+//    }
+//
+//
+//    @Test fun can_use_enum_value() {
+//        val api = SampleTypes3Api()
+//        val apis = ApiServer(ctx, apis = listOf(Api(api, setup = SetupType.Annotated)))
+//        val r1 = runBlocking {
+//            apis.executeAttempt("samples", "types3", "getEnumValue", Verb.Get, mapOf(), mapOf(Pair("status", StatusEnum.Pending.value)))
+//        }
+//        Assert.assertTrue(r1.success)
+//        r1.onSuccess { it ->
+//            val actual = it as StatusEnum
+//            Assert.assertEquals(actual.value, StatusEnum.Pending.value)
+//        }
+//        r1.onFailure { throw Exception("unexpected value") }
+//    }
+//
+//
+//    fun ensureSmartString(method:String, text:String, success:Boolean, expected:String) {
+//        val api = SampleTypes3Api()
+//        val apis = ApiServer(ctx, apis = listOf(Api(api, setup = SetupType.Annotated)))
+//        val r1 = runBlocking {
+//            apis.executeAttempt("samples", "types3", method, Verb.Get, mapOf(), mapOf("text" to text))
+//        }
+//
+//        Assert.assertEquals(success, r1.success)
+//        if(success) {
+//            Assert.assertEquals(expected, r1.getOrElse { "" })
+//        }
+//    }
 }

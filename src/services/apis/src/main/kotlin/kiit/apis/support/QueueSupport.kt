@@ -27,11 +27,12 @@ interface QueueSupport {
     suspend fun enqueOrProcess(request: ApiRequest): Notice<String> {
         // Coming in as http request and mode is queued ?
         val req = request.request
-        return if (req.source != Source.Queue && request.target?.action?.tags?.contains("queued") == true) {
-            enueue(request)
-        } else {
-            kiit.results.Failure("Continue processing")
-        }
+//        return if (req.source != Source.Queue && request.target?.action?.tags?.contains("queued") == true) {
+//            enueue(request)
+//        } else {
+//            kiit.results.Failure("Continue processing")
+//        }
+        return kiit.results.Failure("Continue processing")
     }
 
 

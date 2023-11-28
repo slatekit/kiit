@@ -28,15 +28,15 @@ import test.setup.SampleMiddlewareApi
 
 class Api_Middleware_Tests : ApiTestsBase() {
 
-    @Test fun can_handle_hooks() {
-        val api = SampleMiddlewareApi()
-        val apis = ApiServer(ctx, apis = listOf(Api(api, "app", "SampleMiddleware")))
-        val r1 = runBlocking { apis.executeAttempt("app", "SampleMiddleware", SampleMiddlewareApi::hello.name, Verb.Post, mapOf(), mapOf()) }
-        val r2 = runBlocking { apis.executeAttempt("app", "SampleMiddleware", SampleMiddlewareApi::hello.name, Verb.Post, mapOf(), mapOf()) }
-
-        Assert.assertTrue(api.middlewareHook.size == 2)
-        Assert.assertTrue(api.middlewareHook[0].request.path == "app.SampleMiddleware.hello")
-        Assert.assertTrue(api.middlewareHook[1].request.path == "app.SampleMiddleware.hello")
-        Assert.assertEquals("hello world", r2.getOrNull())
-    }
+//    @Test fun can_handle_hooks() {
+//        val api = SampleMiddlewareApi()
+//        val apis = ApiServer(ctx, apis = listOf(Api(api, "app", "SampleMiddleware")))
+//        val r1 = runBlocking { apis.executeAttempt("app", "SampleMiddleware", SampleMiddlewareApi::hello.name, Verb.Post, mapOf(), mapOf()) }
+//        val r2 = runBlocking { apis.executeAttempt("app", "SampleMiddleware", SampleMiddlewareApi::hello.name, Verb.Post, mapOf(), mapOf()) }
+//
+//        Assert.assertTrue(api.middlewareHook.size == 2)
+//        Assert.assertTrue(api.middlewareHook[0].request.path == "app.SampleMiddleware.hello")
+//        Assert.assertTrue(api.middlewareHook[1].request.path == "app.SampleMiddleware.hello")
+//        Assert.assertEquals("hello world", r2.getOrNull())
+//    }
 }

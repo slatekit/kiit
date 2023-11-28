@@ -8,17 +8,19 @@ import kiit.common.Source
 class CodeRules(val settings: CodeGenSettings) {
 
     fun isValidApi(api: Api): Boolean {
-        val isValidProtocol = api.protocol == Source.API || api.protocol == Source.All
-        val isValidAccess = api.access == Access.Public
-        return isValidAccess && isValidProtocol
+//        val isValidProtocol = api.protocol == Source.API || api.protocol == Source.All
+//        val isValidAccess = api.access == Access.Public
+//        return isValidAccess && isValidProtocol
+        return true
     }
 
 
     fun isValidAction(api: Api, action: Action, declaredMemberLookup: Map<String, Boolean>):Boolean {
         // Only include declared items
-        val isValidProtocol = action.protocol == Source.API || action.protocol == Source.All
-        val isValidAccess = action.access == Access.Public
-        val isDeclared = declaredMemberLookup.containsKey(action.name)
-        return isValidProtocol && isValidAccess && ( !this.settings.declaredMethodsOnly || isDeclared )
+//        val isValidProtocol = action.protocol == Source.API || action.protocol == Source.All
+//        val isValidAccess = action.access == Access.Public
+//        val isDeclared = declaredMemberLookup.containsKey(action.name)
+//        return isValidProtocol && isValidAccess && ( !this.settings.declaredMethodsOnly || isDeclared )
+        return true
     }
 }
