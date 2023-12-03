@@ -34,10 +34,29 @@ class SampleAnnotatedApiWithOverrides() {
 }
 
 
-@Api(area = "tests", name = "hello", desc = "sample to test features of Slate Kit APIs")
-class SampleAnnotatedApi2() {
+@Api(area = "tests", name = "loader", desc = "sample to test features of Slate Kit APIs")
+open class SampleAnnotatedTestApi() {
+    @Action(name = "hi1", desc = "")
+    fun publicHi1(name:String): String {
+        return "hi 1 $name"
+    }
+
+    @Action(desc = "")
+    fun publicHi2(name:String): String {
+        return "hi 2 $name"
+    }
+
     @Action(desc = "accepts supplied basic data types from send")
-    fun hi(name:String): String {
+    protected fun protectedHi(name:String): String {
+        return "hi $name"
+    }
+
+    @Action(desc = "accepts supplied basic data types from send")
+    private fun privateHi(name:String): String {
+        return "hi $name"
+    }
+
+    fun nonAnnotatedHi(name:String): String {
         return "hi $name"
     }
 }

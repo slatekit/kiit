@@ -5,6 +5,7 @@ import kiit.apis.routes.*
 import kotlin.reflect.KClass
 import kiit.utils.naming.Namer
 import kiit.meta.Reflector
+import kotlin.reflect.KVisibility
 
 
 data class ApiSetup(
@@ -62,10 +63,12 @@ class Loader(val namer: Namer?)  {
 
         // Get all the actions using the @ApiAction
         // Get all the methods with the apiAction annotation
-        val matches = Reflector.getAnnotatedMembers<kiit.apis.Action>(cls, kiit.apis.Action::class, true)
+        val rawMatches = Reflector.getAnnotatedMembers<kiit.apis.Action>(cls, kiit.apis.Action::class, true)
+        val matches = rawMatches.filter { it.first.visibility != null && it.first.visibility!! == KVisibility.PUBLIC }
 
         // Convert to RouteMapping ( route -> handler )
         val mappings: List<RouteMapping> = matches.map { item ->
+
             val action = toAction(item.first, api, item.second, namer)
 
             // area/api/action objects ( with version info )

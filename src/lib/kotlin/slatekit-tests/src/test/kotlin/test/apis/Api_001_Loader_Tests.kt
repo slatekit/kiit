@@ -132,4 +132,27 @@ class Api_001_Loader_Tests : ApiTestsBase() {
         Assert.assertFalse(router.containsAction (verb = Verb.Put.name , area = "tests", api = "overrides", action = "add", globalVersion = "0", version = "1.1"))
         Assert.assertTrue(router.containsAction (verb = Verb.Put.name , area = "tests", api = "overrides", action = "adder", globalVersion = "0", version = "1.1"))
     }
+
+    @Test fun can_load_routes_only_public_and_annotated() {
+        val router = router(
+            versions = listOf(
+                global(version = "0", apis = listOf(
+                    api(SampleAnnotatedTestApi::class , SampleAnnotatedTestApi())
+                ))
+            )
+        )
+        val apiOpt = router.api("tests", "loader", "0")
+        Assert.assertNotNull(apiOpt)
+        val actions = apiOpt!!
+        val api = actions.api
+        Assert.assertEquals(2, actions.size)
+        Assert.assertEquals("tests", api.area)
+        Assert.assertEquals("loader", api.name)
+        Assert.assertTrue(router.containsAction(verb = Verb.Post.name, area = "tests", api = "loader", action = "hi1"))
+        Assert.assertTrue(router.containsAction(verb = Verb.Post.name, area = "tests", api = "loader", action = "publicHi2"))
+        Assert.assertFalse(router.containsAction(verb = Verb.Post.name, area = "tests", api = "loader", action = "protectedHi"))
+        Assert.assertFalse(router.containsAction(verb = Verb.Post.name, area = "tests", api = "loader", action = "privateHi"))
+        Assert.assertFalse(router.containsAction(verb = Verb.Post.name, area = "tests", api = "loader", action = "nonAnnotatedHi"))
+
+    }
 }
