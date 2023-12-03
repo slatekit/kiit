@@ -53,15 +53,12 @@ object Calls {
      */
     fun validateCall(
         request: ApiRequest,
-        fetcher: (Request) -> Outcome<Target>,
         allowSingleDefaultParam: Boolean = false
     ): Outcome<RouteMapping> {
         val req = request.request
         val fullName = req.fullName
         val args = req.data
-        val apiRefCheck = request.host.get(req.verb, req.area, req.name, req.action)
-        return apiRefCheck?.let { check ->
-            val target = request.target!!
+        return request.target?.let { target ->
             val action = target.route.action
             val executor = target.handler as MethodExecutor
             val call = executor.call

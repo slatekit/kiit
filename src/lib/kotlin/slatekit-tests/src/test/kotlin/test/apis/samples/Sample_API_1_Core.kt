@@ -26,7 +26,7 @@ import kiit.results.builders.Outcomes
 class Sample_API_1_Core(context: Context) {
 
 
-    @Action(desc = "processes an request with 0 parameters")
+    @Action( desc = "processes an request with 0 parameters")
     fun processEmpty(): Outcome<String> {
         return Success("ok", msg = "no inputs")
     }

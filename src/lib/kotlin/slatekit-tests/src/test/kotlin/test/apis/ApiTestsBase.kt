@@ -15,9 +15,7 @@ package test.apis
 import kotlinx.coroutines.runBlocking
 import org.junit.Assert
 import kiit.apis.*
-import kiit.apis.routes.Api
 import kiit.apis.core.Auth
-import kiit.apis.SetupType
 import kiit.apis.routes.VersionAreas
 import kiit.requests.CommonRequest
 import kiit.common.Source
@@ -39,7 +37,6 @@ import kiit.connectors.entities.AppEntContext
 import kiit.results.Try
 import test.TestApp
 import test.setup.MyAuthProvider
-import test.setup.UserApi
 import test.setup.MyEncryptor
 
 /**
@@ -130,21 +127,21 @@ open class ApiTestsBase {
 //    }
 
 
-    fun ensure(
-            protocol: Source,
-            middleware: List<Middleware> = listOf(),
-            apis: List<VersionAreas>,
-            user: Credentials?,
-            request: Request,
-            response: Response<*>,
-            checkFailMsg:Boolean = false) {
+    fun checkCall(
+        protocol: Source,
+        middleware: List<Middleware> = listOf(),
+        routes: List<VersionAreas>,
+        user: Credentials?,
+        request: Request,
+        response: Response<*>,
+        checkFailMsg:Boolean = false) {
 
         // Optional auth
         val auth = user?.let { u -> MyAuthProvider(u.name, u.roles, buildKeys()) }
 
         // Host
         val host = ApiServer(ctx,
-                routes = apis,
+                routes = routes,
                 auth = auth,
                 settings = Settings(protocol))
 
