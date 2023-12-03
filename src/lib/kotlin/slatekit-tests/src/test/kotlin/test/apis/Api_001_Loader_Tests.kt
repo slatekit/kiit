@@ -97,18 +97,20 @@ class Api_001_Loader_Tests : ApiTestsBase() {
         Assert.assertTrue(router.containsArea(area = "tests", globalVersion = "0"))
         Assert.assertTrue(router.containsApi(area = "tests", api = "defaults"))
         Assert.assertTrue(router.containsApi(area = "tests", api = "defaults", globalVersion = "0"))
-        Assert.assertTrue(router.containsAction(area = "tests", api = "defaults", action = "add"))
-        Assert.assertTrue(router.containsAction(area = "tests", api = "defaults", action = "add", globalVersion = "0"))
+        Assert.assertTrue(router.containsAction(verb = Verb.Post.name, area = "tests", api = "defaults", action = "add"))
+        Assert.assertTrue(router.containsAction(verb = Verb.Post.name, area = "tests", api = "defaults", action = "add", globalVersion = "0"))
 
         // Check overrides
         Assert.assertTrue(router.containsArea(area = "tests"))
         Assert.assertTrue(router.containsArea(area = "tests", globalVersion = "0"))
         Assert.assertFalse(router.containsArea(area = "tests", globalVersion = "1"))
-        Assert.assertTrue(router.containsApi(area = "tests", api = "overrides"))
+        Assert.assertFalse(router.containsApi(area = "tests", api = "overrides", globalVersion = "1", version = "1.0"))
         Assert.assertTrue(router.containsApi(area = "tests", api = "overrides", globalVersion = "0", version = "1.0"))
-        Assert.assertFalse(router.containsApi(area = "tests", api = "overrides", globalVersion = "0", version = "1.0"))
-        Assert.assertFalse(router.containsAction(area = "tests", api = "overrides", action = "add", globalVersion = "0", version = "1.1"))
-        Assert.assertFalse(router.containsAction(area = "tests", api = "overrides", action = "add", globalVersion = "0", version = "1.0"))
-        Assert.assertFalse(router.containsAction(area = "tests", api = "overrides", action = "add", globalVersion = "1"))
+        Assert.assertFalse(router.containsApi(area = "tests", api = "overrides", globalVersion = "0", version = "0.0"))
+        Assert.assertFalse(router.containsAction(verb = Verb.Post.name, area = "tests", api = "overrides", action = "add", globalVersion = "0", version = "1.0"))
+        Assert.assertFalse(router.containsAction(verb = Verb.Post.name, area = "tests", api = "overrides", action = "add", globalVersion = "1", version = "1.0"))
+        Assert.assertFalse(router.containsAction(verb = Verb.Post.name, area = "tests", api = "overrides", action = "add", globalVersion = "0", version = "1.1"))
+        Assert.assertFalse(router.containsAction (verb = Verb.Put.name , area = "tests", api = "overrides", action = "add", globalVersion = "0", version = "1.1"))
+        Assert.assertTrue(router.containsAction (verb = Verb.Put.name , area = "tests", api = "overrides", action = "adder", globalVersion = "0", version = "1.1"))
     }
 }

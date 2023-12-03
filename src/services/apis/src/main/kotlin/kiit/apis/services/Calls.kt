@@ -59,7 +59,7 @@ object Calls {
         val req = request.request
         val fullName = req.fullName
         val args = req.data
-        val apiRefCheck = request.host.get(req.area, req.name, req.action)
+        val apiRefCheck = request.host.get(req.verb, req.area, req.name, req.action)
         return apiRefCheck?.let { check ->
             val target = request.target!!
             val action = target.route.action

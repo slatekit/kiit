@@ -22,7 +22,7 @@ class ApiActions(val api:Api, override val items: List<RouteMapping>) : Lookup<R
             val pairs = mappings.map {
                 // key = "{VERB}.{VERSION}.{NAME}"
                 val action = it.route.action
-                val name = "${action.version}.${action.version}:${action.name}"
+                val name = "${action.verb.name}.${action.version}:${action.name}"
                 name to it
             }
             return pairs.toMap()

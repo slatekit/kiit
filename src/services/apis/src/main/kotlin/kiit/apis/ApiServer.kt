@@ -91,7 +91,7 @@ open class ApiServer(
     fun get(req: Request): RouteMapping? {
         val gblVersion = req.version
         val apiVersion = req.meta.getStringOrNull("x-api-version")
-        return get(req.area, req.name, req.action, gblVersion, apiVersion)
+        return get(req.verb, req.area, req.name, req.action, gblVersion, apiVersion)
     }
 
 
@@ -102,8 +102,8 @@ open class ApiServer(
      * @param action : e.g. "register"
      * @return
      */
-    fun get(area: String, name: String, action: String, globalVersion:String = "0", version:String? = null): RouteMapping? {
-        val action = router.action(area, name, action, globalVersion, version)
+    fun get(verb:String, area: String, name: String, action: String, globalVersion:String = "0", version:String? = null): RouteMapping? {
+        val action = router.action(verb, area, name, action, globalVersion, version)
         return action
     }
 
@@ -179,7 +179,7 @@ open class ApiServer(
         if(!routeResult) return Outcomes.invalid("Route ${request.request.path} invalid")
 
         // Target
-        val targetResult = get(request.request.area, request.request.name, request.request.action)
+        val targetResult = get(request.request.verb, request.request.area, request.request.name, request.request.action)
         if(targetResult == null) return Outcomes.invalid("Unable to find action")
         val req = request.copy(target = targetResult)
 

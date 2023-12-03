@@ -38,13 +38,13 @@ data class Router(
      * @param cmd
      * @return
      */
-    fun check(path: String): Boolean {
+    fun check(verb:String, path: String): Boolean {
         val parts = path.split('.')
         return when (parts.size) {
             0 -> false
             1 -> containsArea(parts[0]) || containsArea("", parts[0])
             2 -> containsApi(parts[0], parts[1]) || containsApi("", parts[0], parts[1])
-            3 -> containsAction(parts[0], parts[1], parts[2])
+            3 -> containsAction(verb, parts[0], parts[1], parts[2])
             else -> false
         }
     }
@@ -77,8 +77,8 @@ data class Router(
      * @param globalVersion : The global version of entire api set to check for
      * @param version : The version to check for e.g. "1.1" indicates api:version=1, action:version = 1
      */
-    fun containsAction(area: String, api: String, action: String, globalVersion: String = "0", version:String? = null): Boolean {
-        return action(area, api, action, globalVersion, version) != null
+    fun containsAction(verb: String, area: String, api: String, action: String, globalVersion: String = "0", version:String? = null): Boolean {
+        return action(verb, area, api, action, globalVersion, version) != null
     }
 
     /**
@@ -89,7 +89,7 @@ data class Router(
         if (area.isEmpty()) return null
         if (api.isEmpty()) return null
         val info = when (version) {
-            null -> Pair("0:${api}", "0:")
+            null -> Pair("0:${api}", "0")
             else -> {
                 val parts = version.split(".")
                 val apiVersion = parts[0]
@@ -98,9 +98,9 @@ data class Router(
             }
         }
 
-        val versionLookup = versions.first { it.version == globalVersion }
-        val areaLookup = versionLookup.get(area)
-        val actionLookup = areaLookup?.get(info.first)
+        val versionLookup = versions.firstOrNull { it.version == globalVersion } ?: return null
+        val areaLookup = versionLookup.get(area) ?: return null
+        val actionLookup = areaLookup.get(info.first)
         return actionLookup
     }
 
@@ -111,21 +111,22 @@ data class Router(
      * @param action
      * @return
      */
-    fun action(area: String, api: String, action: String, globalVersion: String = "0", version: String?): RouteMapping? {
+    fun action(verb:String, area: String, api: String, action: String, globalVersion: String = "0", version: String?): RouteMapping? {
         if (globalVersion.isEmpty()) return null
         if (area.isEmpty()) return null
         if (api.isEmpty()) return null
         val info = when (version) {
-            null -> Pair("0:${api}", "0:")
+            null -> Pair("0", "0")
             else -> {
                 val parts = version.split(".")
                 val apiVersion = parts[0]
                 val actionVersion = parts[1]
-                Pair("${apiVersion}:${api}", "${actionVersion}:")
+                Pair(apiVersion, actionVersion)
             }
         }
         val apiLookup = api(area, api, globalVersion, version)
-        val mapping = apiLookup?.get(action)
+        val actionName = "${verb}.${info.second}:${action}"
+        val mapping = apiLookup?.get(actionName)
         return mapping
     }
 
