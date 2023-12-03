@@ -13,7 +13,7 @@ interface Lookup<T> {
 /**
  * Look up for all actions on an API
  */
-class ActionLookup(val api:Api, override val items: List<RouteMapping>) : Lookup<RouteMapping> {
+class ApiActions(val api:Api, override val items: List<RouteMapping>) : Lookup<RouteMapping> {
     override val name: String = "${api.version}:${api.name}"
     override val map: Map<String, RouteMapping> = toMap(items)
 
@@ -34,16 +34,16 @@ class ActionLookup(val api:Api, override val items: List<RouteMapping>) : Lookup
 /**
  * Lookup for all apis on an Area
  */
-class ApiLookup(val area:Area, override val items: List<ActionLookup>) : Lookup<ActionLookup> {
+class AreaApis(val area:Area, override val items: List<ApiActions>) : Lookup<ApiActions> {
     override val name: String = area.name
-    override val map: Map<String, ActionLookup> = items.map { Pair(it.name, it) }.toMap()
+    override val map: Map<String, ApiActions> = items.map { Pair(it.name, it) }.toMap()
 }
 
 
 /**
- * Lookup for all areas in the routes
+ * Lookup for all areas in a global version
  */
-class AreaLookup(override val items: List<ApiLookup>) : Lookup<ApiLookup> {
-    override val name: String = ""
-    override val map: Map<String, ApiLookup> = items.map { Pair(it.name, it) }.toMap()
+class VersionAreas(val version:String, override val items: List<AreaApis>) : Lookup<AreaApis> {
+    override val name: String = version
+    override val map: Map<String, AreaApis> = items.map { Pair(it.name, it) }.toMap()
 }

@@ -84,8 +84,14 @@ class Api_001_Loader_Tests : ApiTestsBase() {
 
 
     @Test fun can_load_routes() {
-        val actions1 = Loader(null).code(SampleAnnotatedApi2::class, SampleAnnotatedApi2())
-        val actions2 = Loader(null).code(SampleAnnotatedApiWithOverrides::class, SampleAnnotatedApiWithOverrides())
-        val
+        val router = routes(
+            versions = listOf(
+                global(version = "1", apis = listOf(
+                    api(SampleAnnotatedApiWithDefaults::class , SampleAnnotatedApiWithDefaults()),
+                    api(SampleAnnotatedApiWithOverrides::class, SampleAnnotatedApiWithOverrides())
+                ))
+            )
+        )
+        router.api()
     }
 }

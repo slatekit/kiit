@@ -1,7 +1,6 @@
 package kiit.apis
 
 import java.io.File
-import kotlin.reflect.KClass
 import kiit.apis.core.*
 import kiit.apis.core.Target
 import kiit.apis.routes.*
@@ -45,7 +44,7 @@ open class ApiServer(
      * Load all the routes from the APIs supplied.
      * The API setup can be either annotation based or public methods on the Class
      */
-    val routes = Routes(AreaLookup(kiit.apis.routes.Area(""), listOf()), settings.naming)
+    val routes = Router(VersionAreas(kiit.apis.routes.Area(""), listOf()), settings.naming)
 
     /**
      * The help class to handle help on an area, api, or action

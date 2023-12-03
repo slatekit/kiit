@@ -9,14 +9,27 @@ import kiit.meta.Reflector
 
 data class ApiSetup(
     val klass: KClass<*>,
-    val declared: Boolean = true,
     val singleton: Any? = null,
-    val setup: SetupType = SetupType.Annotated
+    val setup: SetupType = SetupType.Annotated,
+    val declared: Boolean = true
 )
 
 
+data class GlobalVersion(val version:String, val apis:List<ApiSetup>)
+
+
+fun routes(versions: List<GlobalVersion>) : Router {
+    return Router()
+}
+
+fun global(version:String, apis:List<ApiSetup>) : GlobalVersion = GlobalVersion(version, apis)
+
+fun api(klass: KClass<*>, singleton: Any?, setup: SetupType = SetupType.Annotated, declared: Boolean = true)
+    : ApiSetup = ApiSetup(klass, singleton, setup, declared)
+
+
 class Loader(val namer: Namer?)  {
-    fun routes(setup:List<ApiSetup>) : Routes {
+    fun routes(setup:List<ApiSetup>) : Router {
         val actions = setup.map {
             when(it.setup) {
                 SetupType.Annotated -> code(it.klass, it.singleton!!)
@@ -24,9 +37,9 @@ class Loader(val namer: Namer?)  {
             }
         }
         val areaNames = actions.map { Area(it.api.area) }.distinctBy { it.fullname }
-        val apis = areaNames.map { area -> ApiLookup(area, actions.filter { it.api.area == area.name }) }
-        val areas = AreaLookup(apis)
-        return Routes(areas, namer)
+        val apis = areaNames.map { area -> AreaApis(area, actions.filter { it.api.area == area.name }) }
+        val areas = kiit.apis.routes.VersionAreas(apis)
+        return Router(areas, namer)
     }
 
 
@@ -35,7 +48,7 @@ class Loader(val namer: Namer?)  {
      * NOTE: This allows all the API setup to be in 1 place ( in the class/members )
      *
      */
-    fun code(cls: KClass<*>, instance: Any): ActionLookup {
+    fun code(cls: KClass<*>, instance: Any): ApiActions {
         val api = toApi(cls, namer)
         val area = Area(api.area)
 
@@ -59,7 +72,7 @@ class Loader(val namer: Namer?)  {
             // Final mapping of route -> handler
             RouteMapping(route, handler)
         }
-        return ActionLookup(api, mappings)
+        return ApiActions(api, mappings)
     }
 
 
@@ -68,7 +81,7 @@ class Loader(val namer: Namer?)  {
      * NOTE: This allows all the API setup to be in 1 place ( in the class/members )
      *
      */
-    fun config(cls: KClass<*>, instance: Any): ActionLookup {
-        return ActionLookup(Api(", "), listOf())
+    fun config(cls: KClass<*>, instance: Any): ApiActions {
+        return ApiActions(Api(", "), listOf())
     }
 }

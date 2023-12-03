@@ -1,9 +1,6 @@
 package kiit.apis.routes
 
-import kotlin.reflect.full.primaryConstructor
-import kiit.context.Context
 import kiit.utils.naming.Namer
-import kiit.meta.Reflector
 
 /**
  * The top most level qualifier in the Universal Routing Structure
@@ -24,8 +21,8 @@ import kiit.meta.Reflector
  *                  - { Action a - v2 }
  *                  - { Action b - v1 }
 */
-data class Routes(
-    val areas: AreaLookup,
+data class Router(
+    val areas: List<VersionAreas>,
     val namer: Namer? = null,
     val onInstanceCreated: ((Any?) -> Unit)? = null
 ) {
@@ -55,20 +52,21 @@ data class Routes(
     /**
      * Whether there is an area w/ the supplied name.
      */
-    fun contains(area: String, version:String? = null): Boolean {
+    fun contains(area: String, globalVersion:String = "0"): Boolean {
         if (area.isEmpty()) return false
-        val name = version?.let { "${it}:${area}" } ?: area
-        return areas.contains(name)
+        val match = areas.firstOrNull { it.version == globalVersion && it.get(area) != null }
+        return match != null
     }
 
     /**
      * Whether there is an api in the area supplied
      * @param area    : The name of the area e.g. "accounts"
      * @param api     : The name of the api  e.g. "signup"
-     * @param version : The version to check for e.g. "1.1" indicates area:version=1, api:version = 1
+     * @param globalVersion : The global version of entire api set to check for
+     * @param version : The version to check for e.g. "1.1" indicates api:version=1, action:version = 1
      */
-    fun contains(area: String, api: String, version:String? = null): Boolean {
-        return api(area, api, version) != null
+    fun contains(area: String, api: String, globalVersion: String = "0", version:String? = null): Boolean {
+        return api(area, api, globalVersion, version) != null
     }
 
     /**
@@ -76,16 +74,18 @@ data class Routes(
      * @param area    : The name of the area e.g. "accounts"
      * @param api     : The name of the api  e.g. "signup"
      * @param action  : The name of the action  e.g. "login"
-     * @param version : The version to check for e.g. "1.1" indicates area:version=1, api:version = 1
+     * @param globalVersion : The global version of entire api set to check for
+     * @param version : The version to check for e.g. "1.1" indicates api:version=1, action:version = 1
      */
-    fun contains(area: String, api: String, action: String, version:String? = null): Boolean {
-        return action(area, api, action, version) != null
+    fun contains(area: String, api: String, action: String, globalVersion: String = "0", version:String? = null): Boolean {
+        return action(area, api, action, globalVersion, version) != null
     }
 
     /**
      * Gets the API model associated with the area.name
      */
-    fun api(area: String, api: String, version: String? = null): ActionLookup? {
+    fun api(area: String, api: String, globalVersion: String = "0", version: String? = null): ApiActions? {
+        if (globalVersion.isEmpty()) return null
         if (area.isEmpty()) return null
         if (api.isEmpty()) return null
         val info = when (version) {
@@ -109,18 +109,18 @@ data class Routes(
      * @param action
      * @return
      */
-    fun action(area: String, api: String, action: String, version: String?): RouteMapping? {
+    fun action(area: String, api: String, action: String, globalVersion: String = "0", version: String?): RouteMapping? {
+        if (globalVersion.isEmpty()) return null
         if (area.isEmpty()) return null
         if (api.isEmpty()) return null
         if (action.isEmpty()) return null
         val info = when (version) {
-            null -> Triple("0:${area}", "0:${api}", "0:${action}")
+            null -> Pair("0:${area}", "0:${api}")
             else -> {
                 val parts = version.split(".")
                 val areaVersion = parts[0]
                 val apiVersion = parts[1]
-                val actionVersion = parts[2]
-                Triple("${areaVersion}:${area}", "${apiVersion}:${api}", "${actionVersion}:${action}")
+                Pair("${areaVersion}:${area}", "${apiVersion}:${api}")
             }
         }
 
@@ -129,31 +129,31 @@ data class Routes(
         return apiLookup.get(info.third)
     }
 
-    fun visitApis(visitor: (Area, ActionLookup) -> Unit) {
+    fun visitApis(visitor: (Area, ApiActions) -> Unit) {
 
-        // 1. Each top level area in the system
-        // e.g. {area}/{api}/{action}
-        this.areas.items.forEach { area ->
-
-            area.items.forEach { api ->
-                visitor(area.area, api)
-            }
-        }
+//        // 1. Each top level area in the system
+//        // e.g. {area}/{api}/{action}
+//        this.areas.items.forEach { area ->
+//
+//            area.items.forEach { api ->
+//                visitor(area.area, api)
+//            }
+//        }
     }
 
     fun visitActions(visitor: (Area, Api, Action) -> Unit) {
 
-        // 1. Each top level area in the system
-        // e.g. {area}/{api}/{action}
-        this.areas.items.forEach { area ->
-
-            area.items.forEach { api ->
-
-                api.items.forEach { action ->
-                    visitor(area.area, api.api, action.route.action)
-                }
-            }
-        }
+//        // 1. Each top level area in the system
+//        // e.g. {area}/{api}/{action}
+//        this.areas.items.forEach { area ->
+//
+//            area.items.forEach { api ->
+//
+//                api.items.forEach { action ->
+//                    visitor(area.area, api.api, action.route.action)
+//                }
+//            }
+//        }
     }
 
 
