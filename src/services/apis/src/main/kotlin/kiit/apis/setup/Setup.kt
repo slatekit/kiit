@@ -18,8 +18,16 @@ data class ApiSetup(
 data class GlobalVersion(val version:String, val apis:List<ApiSetup>)
 
 
-fun routes(versions: List<GlobalVersion>) : Router {
-    return Router()
+fun routes(versions: List<GlobalVersion>, namer: Namer? = null) : List<VersionAreas> {
+    val loader =  Loader(namer)
+    val versionedRoutes = versions.map { loader.routes(it.version, it.apis) }
+    return versionedRoutes
+}
+
+
+fun router(versions: List<GlobalVersion>, namer: Namer? = null) : Router {
+    val versionedRoutes = routes(versions, namer)
+    return Router(versionedRoutes, namer)
 }
 
 fun global(version:String, apis:List<ApiSetup>) : GlobalVersion = GlobalVersion(version, apis)
@@ -29,7 +37,7 @@ fun api(klass: KClass<*>, singleton: Any?, setup: SetupType = SetupType.Annotate
 
 
 class Loader(val namer: Namer?)  {
-    fun routes(setup:List<ApiSetup>) : Router {
+    fun routes(version:String, setup:List<ApiSetup>) : VersionAreas {
         val actions = setup.map {
             when(it.setup) {
                 SetupType.Annotated -> code(it.klass, it.singleton!!)
@@ -38,8 +46,8 @@ class Loader(val namer: Namer?)  {
         }
         val areaNames = actions.map { Area(it.api.area) }.distinctBy { it.fullname }
         val apis = areaNames.map { area -> AreaApis(area, actions.filter { it.api.area == area.name }) }
-        val areas = kiit.apis.routes.VersionAreas(apis)
-        return Router(areas, namer)
+        val areas = VersionAreas(version, apis)
+        return areas
     }
 
 

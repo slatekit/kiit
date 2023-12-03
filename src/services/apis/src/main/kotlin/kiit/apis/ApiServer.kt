@@ -33,7 +33,7 @@ import kiit.results.builders.Outcomes
  */
 open class ApiServer(
     val ctx: Context,
-    val apis: List<kiit.apis.routes.Api>,
+    val routes: List<VersionAreas>,
     val writer: Rewriter? = null,
     val middleware: Middleware? = null,
     val auth: Auth? = null,
@@ -44,12 +44,12 @@ open class ApiServer(
      * Load all the routes from the APIs supplied.
      * The API setup can be either annotation based or public methods on the Class
      */
-    val routes = Router(VersionAreas(kiit.apis.routes.Area(""), listOf()), settings.naming)
+    val router = Router(routes, settings.naming)
 
     /**
      * The help class to handle help on an area, api, or action
      */
-    val help: Help get() = Help(this, routes, settings.docKey) { settings.docGen() }
+    val help: Help get() = Help(this, router, settings.docKey) { settings.docGen() }
 
     /**
      * Logger for this server
@@ -61,7 +61,7 @@ open class ApiServer(
      * Initialize all the routes with reference to this server
      */
     init {
-        routes.visitApis { _, api ->
+        router.visitApis { _, api ->
             if(api.items.isNotEmpty()) {
                 val action = api.items[0]
                 if(action.handler is MethodExecutor) {
@@ -89,8 +89,9 @@ open class ApiServer(
      * @return
      */
     fun get(req: Request): RouteMapping? {
-        val version = req.meta.getStringOrNull("x-api-version")
-        return get(req.area, req.name, req.action, version)
+        val gblVersion = req.version
+        val apiVersion = req.meta.getStringOrNull("x-api-version")
+        return get(req.area, req.name, req.action, gblVersion, apiVersion)
     }
 
 
@@ -101,8 +102,8 @@ open class ApiServer(
      * @param action : e.g. "register"
      * @return
      */
-    fun get(area: String, name: String, action: String, version:String? = null): RouteMapping? {
-        val action = routes.action(area, name, action, version)
+    fun get(area: String, name: String, action: String, globalVersion:String = "0", version:String? = null): RouteMapping? {
+        val action = router.action(area, name, action, globalVersion, version)
         return action
     }
 
@@ -279,8 +280,8 @@ open class ApiServer(
     companion object {
 
         @JvmStatic
-        fun of(ctx: Context, apis: List<kiit.apis.routes.Api>, auth: Auth? = null, source: Source? = null): ApiServer {
-            val server = ApiServer(ctx, apis, null, null, auth, Settings(source ?: Source.API))
+        fun of(ctx: Context, routes: List<VersionAreas>, auth: Auth? = null, source: Source? = null): ApiServer {
+            val server = ApiServer(ctx, routes, null, null, auth, Settings(source ?: Source.API))
             return server
         }
 

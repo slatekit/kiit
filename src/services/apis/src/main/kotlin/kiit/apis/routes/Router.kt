@@ -22,7 +22,7 @@ import kiit.utils.naming.Namer
  *                  - { Action b - v1 }
 */
 data class Router(
-    val areas: List<VersionAreas>,
+    val versions: List<VersionAreas>,
     val namer: Namer? = null,
     val onInstanceCreated: ((Any?) -> Unit)? = null
 ) {
@@ -42,9 +42,9 @@ data class Router(
         val parts = path.split('.')
         return when (parts.size) {
             0 -> false
-            1 -> contains(parts[0]) || contains("", parts[0])
-            2 -> contains(parts[0], parts[1]) || contains("", parts[0], parts[1])
-            3 -> contains(parts[0], parts[1], parts[2])
+            1 -> containsArea(parts[0]) || containsArea("", parts[0])
+            2 -> containsApi(parts[0], parts[1]) || containsApi("", parts[0], parts[1])
+            3 -> containsAction(parts[0], parts[1], parts[2])
             else -> false
         }
     }
@@ -52,10 +52,10 @@ data class Router(
     /**
      * Whether there is an area w/ the supplied name.
      */
-    fun contains(area: String, globalVersion:String = "0"): Boolean {
+    fun containsArea(area: String, globalVersion:String = "0"): Boolean {
         if (area.isEmpty()) return false
-        val match = areas.firstOrNull { it.version == globalVersion && it.get(area) != null }
-        return match != null
+        val match = versions.firstOrNull { it.version == globalVersion }
+        return match?.let { it.get(area) != null } ?: false
     }
 
     /**
@@ -65,7 +65,7 @@ data class Router(
      * @param globalVersion : The global version of entire api set to check for
      * @param version : The version to check for e.g. "1.1" indicates api:version=1, action:version = 1
      */
-    fun contains(area: String, api: String, globalVersion: String = "0", version:String? = null): Boolean {
+    fun containsApi(area: String, api: String, globalVersion: String = "0", version:String? = null): Boolean {
         return api(area, api, globalVersion, version) != null
     }
 
@@ -77,7 +77,7 @@ data class Router(
      * @param globalVersion : The global version of entire api set to check for
      * @param version : The version to check for e.g. "1.1" indicates api:version=1, action:version = 1
      */
-    fun contains(area: String, api: String, action: String, globalVersion: String = "0", version:String? = null): Boolean {
+    fun containsAction(area: String, api: String, action: String, globalVersion: String = "0", version:String? = null): Boolean {
         return action(area, api, action, globalVersion, version) != null
     }
 
@@ -89,17 +89,19 @@ data class Router(
         if (area.isEmpty()) return null
         if (api.isEmpty()) return null
         val info = when (version) {
-            null -> Pair("0:${area}", "0:${api}")
+            null -> Pair("0:${api}", "0:")
             else -> {
                 val parts = version.split(".")
-                val areaVersion = parts[0]
-                val apiVersion = parts[1]
-                Pair("${areaVersion}:${area}", "${apiVersion}:${api}")
+                val apiVersion = parts[0]
+                val actionVersion = parts[1]
+                Pair("${apiVersion}:${api}", "${actionVersion}:")
             }
         }
 
-        val areaLookup = areas.get(info.first) ?: return null
-        return areaLookup.get(info.second)
+        val versionLookup = versions.first { it.version == globalVersion }
+        val areaLookup = versionLookup.get(area)
+        val actionLookup = areaLookup?.get(info.first)
+        return actionLookup
     }
 
     /**
@@ -113,20 +115,18 @@ data class Router(
         if (globalVersion.isEmpty()) return null
         if (area.isEmpty()) return null
         if (api.isEmpty()) return null
-        if (action.isEmpty()) return null
         val info = when (version) {
-            null -> Pair("0:${area}", "0:${api}")
+            null -> Pair("0:${api}", "0:")
             else -> {
                 val parts = version.split(".")
-                val areaVersion = parts[0]
-                val apiVersion = parts[1]
-                Pair("${areaVersion}:${area}", "${apiVersion}:${api}")
+                val apiVersion = parts[0]
+                val actionVersion = parts[1]
+                Pair("${apiVersion}:${api}", "${actionVersion}:")
             }
         }
-
-        val areaLookup = areas.get(info.first) ?: return null
-        val apiLookup = areaLookup.get(info.second) ?: return null
-        return apiLookup.get(info.third)
+        val apiLookup = api(area, api, globalVersion, version)
+        val mapping = apiLookup?.get(action)
+        return mapping
     }
 
     fun visitApis(visitor: (Area, ApiActions) -> Unit) {

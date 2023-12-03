@@ -18,6 +18,7 @@ import kiit.apis.*
 import kiit.apis.routes.Api
 import kiit.apis.core.Auth
 import kiit.apis.SetupType
+import kiit.apis.routes.VersionAreas
 import kiit.requests.CommonRequest
 import kiit.common.Source
 import kiit.common.args.Args
@@ -87,7 +88,7 @@ open class ApiTestsBase {
 
     fun getApis(source: Source,
                 auth: Auth? = null,
-                apis: List<Api> = listOf()): ApiServer {
+                apis: List<VersionAreas> = listOf()): ApiServer {
 
         // 2. apis
         val container = ApiServer.of(ctx, apis, auth, source)
@@ -95,7 +96,7 @@ open class ApiTestsBase {
     }
 
 
-    fun ensureCall(apis: List<Api> = listOf(),
+    fun ensureCall(apis: List<VersionAreas> = listOf(),
                    protocolCt: String,
                    protocol: String,
                    authMode: String,
@@ -132,7 +133,7 @@ open class ApiTestsBase {
     fun ensure(
             protocol: Source,
             middleware: List<Middleware> = listOf(),
-            apis: List<Api>,
+            apis: List<VersionAreas>,
             user: Credentials?,
             request: Request,
             response: Response<*>,
@@ -143,7 +144,7 @@ open class ApiTestsBase {
 
         // Host
         val host = ApiServer(ctx,
-                apis = apis,
+                routes = apis,
                 auth = auth,
                 settings = Settings(protocol))
 

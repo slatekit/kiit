@@ -84,14 +84,31 @@ class Api_001_Loader_Tests : ApiTestsBase() {
 
 
     @Test fun can_load_routes() {
-        val router = routes(
+        val router = router(
             versions = listOf(
-                global(version = "1", apis = listOf(
+                global(version = "0", apis = listOf(
                     api(SampleAnnotatedApiWithDefaults::class , SampleAnnotatedApiWithDefaults()),
                     api(SampleAnnotatedApiWithOverrides::class, SampleAnnotatedApiWithOverrides())
                 ))
             )
         )
-        router.api()
+        // Check defaults
+        Assert.assertTrue(router.containsArea(area = "tests"))
+        Assert.assertTrue(router.containsArea(area = "tests", globalVersion = "0"))
+        Assert.assertTrue(router.containsApi(area = "tests", api = "defaults"))
+        Assert.assertTrue(router.containsApi(area = "tests", api = "defaults", globalVersion = "0"))
+        Assert.assertTrue(router.containsAction(area = "tests", api = "defaults", action = "add"))
+        Assert.assertTrue(router.containsAction(area = "tests", api = "defaults", action = "add", globalVersion = "0"))
+
+        // Check overrides
+        Assert.assertTrue(router.containsArea(area = "tests"))
+        Assert.assertTrue(router.containsArea(area = "tests", globalVersion = "0"))
+        Assert.assertFalse(router.containsArea(area = "tests", globalVersion = "1"))
+        Assert.assertTrue(router.containsApi(area = "tests", api = "overrides"))
+        Assert.assertTrue(router.containsApi(area = "tests", api = "overrides", globalVersion = "0", version = "1.0"))
+        Assert.assertFalse(router.containsApi(area = "tests", api = "overrides", globalVersion = "0", version = "1.0"))
+        Assert.assertFalse(router.containsAction(area = "tests", api = "overrides", action = "add", globalVersion = "0", version = "1.1"))
+        Assert.assertFalse(router.containsAction(area = "tests", api = "overrides", action = "add", globalVersion = "0", version = "1.0"))
+        Assert.assertFalse(router.containsAction(area = "tests", api = "overrides", action = "add", globalVersion = "1"))
     }
 }
