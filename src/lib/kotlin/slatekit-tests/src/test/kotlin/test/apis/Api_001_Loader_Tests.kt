@@ -29,8 +29,17 @@ class Api_001_Loader_Tests : ApiTestsBase() {
     /**
      * x-version-action:v1,v2,v2
      */
-    @Test fun can_load_api_from_annotations_with_overrides() {
-        val actions = Loader(null).code(SampleAnnotatedApiWithDefaults::class, SampleAnnotatedApiWithDefaults())
+    @Test fun can_load_routes_from_annotations_with_defaults() {
+        val router = router(
+            versions = listOf(
+                global(version = "0", apis = listOf(
+                    api(SampleAnnotatedApiWithDefaults::class, SampleAnnotatedApiWithDefaults())
+                ))
+            )
+        )
+        val apiOpt = router.api("tests", "defaults", "0")
+        Assert.assertNotNull(apiOpt)
+        val actions = apiOpt!!
         val api = actions.api
         Assert.assertEquals(1, actions.size)
         Assert.assertEquals("tests", api.area)
@@ -55,9 +64,19 @@ class Api_001_Loader_Tests : ApiTestsBase() {
     }
 
 
-    @Test fun can_load_api_from_annotations_with_defaults() {
-        val actions = Loader(null).code(SampleAnnotatedApiWithOverrides::class, SampleAnnotatedApiWithOverrides())
+    @Test fun can_load_routes_from_annotations_with_overrides() {
+        val router = router(
+            versions = listOf(
+                global(version = "0", apis = listOf(
+                    api(SampleAnnotatedApiWithOverrides::class, SampleAnnotatedApiWithOverrides())
+                ))
+            )
+        )
+        val apiOpt = router.api("tests", "overrides", "0", "1.0")
+        Assert.assertNotNull(apiOpt)
+        val actions = apiOpt!!
         val api = actions.api
+
         Assert.assertEquals(1, actions.size)
         Assert.assertEquals("tests", api.area)
         Assert.assertEquals("overrides", api.name)
@@ -83,7 +102,7 @@ class Api_001_Loader_Tests : ApiTestsBase() {
     }
 
 
-    @Test fun can_load_routes() {
+    @Test fun can_load_routes_and_check_contains() {
         val router = router(
             versions = listOf(
                 global(version = "0", apis = listOf(
