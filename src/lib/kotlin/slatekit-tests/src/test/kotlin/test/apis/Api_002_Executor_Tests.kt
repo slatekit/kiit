@@ -12,25 +12,13 @@ about: A Kotlin utility library, tool-kit and server backend.
  */
 package test.apis
 
-import org.junit.Test
-import org.threeten.bp.ZoneId
-import kiit.apis.Verbs
-import kiit.apis.routes.Api
-import kiit.apis.SetupType
-import kiit.requests.CommonRequest
-import kiit.common.DateTimes
-import kiit.common.Source
-import kiit.requests.toResponse
-import kiit.results.Codes
-import kiit.results.Failure
-import kiit.results.Success
 import test.apis.samples.Sample_API_1_Core
 
 /**
  * Created by kishorereddy on 6/12/17.
  */
 
-class Api_Core_Tests : ApiTestsBase() {
+class Api_002_Executor_Tests : ApiTestsBase() {
 
     val AREA = "samples"
     val NAME = "core"

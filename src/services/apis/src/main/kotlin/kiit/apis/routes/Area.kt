@@ -18,4 +18,6 @@ package kiit.apis.routes
  * ================================================================
  * From the example above, this represents the area "accounts" and it's mapped list of apis/classes
  */
-class Area(val name: String, val version:String = "0")
+class Area(val name: String, val version:String = "0") {
+    val fullname:String = "$version.$name"
+}

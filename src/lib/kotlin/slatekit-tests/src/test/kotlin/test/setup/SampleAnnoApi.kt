@@ -16,7 +16,7 @@ import kiit.results.Notice
 import kiit.results.Success
 
 
-@Api(area = "app", name = "tests", desc = "sample to test features of Slate Kit APIs")
+@Api(area = "tests", name = "defaults", desc = "sample to test features of Slate Kit APIs")
 class SampleAnnotatedApiWithDefaults() {
     @Action(desc = "accepts supplied basic data types from send")
     fun add(a:Int, b:Int): Int {
@@ -24,12 +24,21 @@ class SampleAnnotatedApiWithDefaults() {
     }
 }
 
-@Api(version = "1", area = "app", name = "tests", desc = "sample to test features of Slate Kit APIs",
+@Api(version = "1", area = "tests", name = "overrides", desc = "sample to test features of Slate Kit APIs",
     auth = AuthModes.TOKEN, roles = ["admin"], verb = Verbs.AUTO, access = AccessLevel.INTERNAL, sources = [Sources.CLI])
 class SampleAnnotatedApiWithOverrides() {
     @Action(version = "1", name = "adder", desc = "accepts supplied basic data types from send", verb = Verbs.PUT, access = AccessLevel.PUBLIC, auth = AuthModes.KEYED, roles = ["user"], sources = [Sources.API])
     fun add(a:Int, b:Int): Int {
         return a + b
+    }
+}
+
+
+@Api(area = "tests", name = "hello", desc = "sample to test features of Slate Kit APIs")
+class SampleAnnotatedApi2() {
+    @Action(desc = "accepts supplied basic data types from send")
+    fun hi(name:String): String {
+        return "hi $name"
     }
 }
 

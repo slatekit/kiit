@@ -7,15 +7,29 @@ import kiit.utils.naming.Namer
 import kiit.meta.Reflector
 
 
-data class LoadOptions(
+data class ApiSetup(
     val klass: KClass<*>,
     val declared: Boolean = true,
     val singleton: Any? = null,
-    val setup: SetupType = SetupType.Methods
+    val setup: SetupType = SetupType.Annotated
 )
 
 
-class Loader(val namer: Namer?, val options: LoadOptions? = null)  {
+class Loader(val namer: Namer?)  {
+    fun routes(setup:List<ApiSetup>) : Routes {
+        val actions = setup.map {
+            when(it.setup) {
+                SetupType.Annotated -> code(it.klass, it.singleton!!)
+                SetupType.Methods -> config(it.klass, it.singleton!!)
+            }
+        }
+        val areaNames = actions.map { Area(it.api.area) }.distinctBy { it.fullname }
+        val apis = areaNames.map { area -> ApiLookup(area, actions.filter { it.api.area == area.name }) }
+        val areas = AreaLookup(apis)
+        return Routes(areas, namer)
+    }
+
+
     /**
      * Loads an api using class and method annotations e.g. @Api on class and @ApiAction on members.
      * NOTE: This allows all the API setup to be in 1 place ( in the class/members )

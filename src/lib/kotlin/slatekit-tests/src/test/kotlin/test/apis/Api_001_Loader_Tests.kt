@@ -33,8 +33,8 @@ class Api_001_Loader_Tests : ApiTestsBase() {
         val actions = Loader(null).code(SampleAnnotatedApiWithDefaults::class, SampleAnnotatedApiWithDefaults())
         val api = actions.api
         Assert.assertEquals(1, actions.size)
-        Assert.assertEquals("app", api.area)
-        Assert.assertEquals("tests", api.name)
+        Assert.assertEquals("tests", api.area)
+        Assert.assertEquals("defaults", api.name)
         Assert.assertEquals("sample to test features of Slate Kit APIs", api.desc)
         Assert.assertEquals(true, api.roles.isEmpty)
         Assert.assertEquals(AuthMode.Keyed, api.auth)
@@ -59,8 +59,8 @@ class Api_001_Loader_Tests : ApiTestsBase() {
         val actions = Loader(null).code(SampleAnnotatedApiWithOverrides::class, SampleAnnotatedApiWithOverrides())
         val api = actions.api
         Assert.assertEquals(1, actions.size)
-        Assert.assertEquals("app", api.area)
-        Assert.assertEquals("tests", api.name)
+        Assert.assertEquals("tests", api.area)
+        Assert.assertEquals("overrides", api.name)
         Assert.assertEquals("sample to test features of Slate Kit APIs", api.desc)
         Assert.assertEquals(true, api.roles.contains("admin"))
         Assert.assertEquals(AuthMode.Token, api.auth)
@@ -80,5 +80,12 @@ class Api_001_Loader_Tests : ApiTestsBase() {
         Assert.assertEquals(false, actions.items[0].route.action.sources.hasCLI())
         Assert.assertEquals(2, (actions.items[0].handler as MethodExecutor).call.params.size)
         Assert.assertEquals(2, (actions.items[0].handler as MethodExecutor).call.paramsUser.size)
+    }
+
+
+    @Test fun can_load_routes() {
+        val actions1 = Loader(null).code(SampleAnnotatedApi2::class, SampleAnnotatedApi2())
+        val actions2 = Loader(null).code(SampleAnnotatedApiWithOverrides::class, SampleAnnotatedApiWithOverrides())
+        val
     }
 }
