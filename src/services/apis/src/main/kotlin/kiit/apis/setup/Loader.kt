@@ -14,7 +14,7 @@ class Loader(val namer: Namer?)  {
         val actions = setup.map {
             when(it.setup) {
                 SetupType.Annotated -> code(it.klass, it.singleton!!)
-                SetupType.Methods -> config(it.klass, it.singleton!!)
+                SetupType.Config -> config(it.klass, it.singleton!!, it.content)
             }
         }
         val areaNames = actions.map { Area(it.api.area) }.distinctBy { it.fullname }

@@ -24,6 +24,13 @@ class SampleAnnotatedApiWithDefaults() {
     }
 }
 
+
+class SampleApiWithConfigSetup() {
+    fun add(a:Int, b:Int): Int {
+        return a + b
+    }
+}
+
 @Api(version = "1", area = "tests", name = "overrides", desc = "sample to test features of Slate Kit APIs",
     auth = AuthModes.TOKEN, roles = ["admin"], verb = Verbs.AUTO, access = AccessLevel.INTERNAL, sources = [Sources.CLI])
 class SampleAnnotatedApiWithOverrides() {

@@ -12,7 +12,8 @@ data class ApiSetup(
     val klass: KClass<*>,
     val singleton: Any? = null,
     val setup: SetupType = SetupType.Annotated,
-    val declared: Boolean = true
+    val declared: Boolean = true,
+    val content:String = ""
 )
 
 
@@ -33,7 +34,7 @@ fun router(versions: List<GlobalVersion>, namer: Namer? = null) : Router {
 
 fun global(version:String, apis:List<ApiSetup>) : GlobalVersion = GlobalVersion(version, apis)
 
-fun api(klass: KClass<*>, singleton: Any?, setup: SetupType = SetupType.Annotated, declared: Boolean = true)
-    : ApiSetup = ApiSetup(klass, singleton, setup, declared)
+fun api(klass: KClass<*>, singleton: Any?, setup: SetupType = SetupType.Annotated, declared: Boolean = true, content:String = "")
+    : ApiSetup = ApiSetup(klass, singleton, setup, declared, content)
 
 

@@ -15,6 +15,7 @@ package test.apis
 import org.junit.Assert
 import org.junit.Test
 import kiit.apis.*
+import kiit.apis.routes.ApiActions
 import kiit.apis.routes.MethodExecutor
 import kiit.apis.setup.*
 import test.setup.*
@@ -26,10 +27,9 @@ import test.setup.*
 
 class Api_001_Loader_Tests : ApiTestsBase() {
 
-    /**
-     * x-version-action:v1,v2,v2
-     */
-    @Test fun can_load_routes_from_annotations_with_defaults() {
+
+    @Test
+    fun can_load_routes_from_annotations_with_defaults() {
         val router = router(
             versions = listOf(
                 global(version = "0", apis = listOf(
@@ -40,6 +40,26 @@ class Api_001_Loader_Tests : ApiTestsBase() {
         val apiOpt = router.api("tests", "defaults", "0")
         Assert.assertNotNull(apiOpt)
         val actions = apiOpt!!
+        ensureDefaultSetup(actions)
+    }
+
+    @Test
+    fun can_load_routes_from_config_with_defaults() {
+        val router = router(
+            versions = listOf(
+                global(version = "0", apis = listOf(
+                    api(SampleAnnotatedApiWithDefaults::class, SampleAnnotatedApiWithDefaults(), setup = SetupType.Config, content = JSON_DEFAULTS.trim())
+                ))
+            )
+        )
+        val apiOpt = router.api("tests", "defaults", "0")
+        Assert.assertNotNull(apiOpt)
+        val actions = apiOpt!!
+        ensureDefaultSetup(actions)
+    }
+
+
+    private fun ensureDefaultSetup(actions:ApiActions) {
         val api = actions.api
         Assert.assertEquals(1, actions.size)
         Assert.assertEquals("tests", api.area)
@@ -158,18 +178,18 @@ class Api_001_Loader_Tests : ApiTestsBase() {
 
     @Test
     fun can_load_routes_via_configuration() {
-        val json = JSON
-        val api = Loader(null).config(SampleAnnotatedApiWithDefaults::class, SampleAnnotatedApiWithDefaults(), json)
+        val json = JSON_DEFAULTS
+        val api = Loader(null).config(SampleApiWithConfigSetup::class, SampleApiWithConfigSetup(), json)
         print(api)
     }
 
-    val JSON = """
-    {
-          "area"     : "spaces",
-          "name"     : "manage",
-          "desc2"     : "rpc calls for managing spaces",
-          "auth"      : "token",
-          "roles"    : ["user"],
+    val JSON_DEFAULTS = """
+    {   
+          "area"     : "tests",
+          "name"     : "defaults",
+          "desc"     : "sample to test features of Slate Kit APIs",
+          "auth"     : "keyed",
+          "roles"    : [],
           "verb"     : "auto",
           "access"   : "public",
           "sources"  : ["all"],
@@ -177,7 +197,27 @@ class Api_001_Loader_Tests : ApiTestsBase() {
           "tags"     : [],
           "actions"  : [
               {
-                  "name"     : "create",
+                  "execute"  :  { "type": "method", "target": "add" }
+              }
+          ]
+    }
+    """.trimIndent()
+
+    val JSON_OVERRIDES = """
+    {
+          "area"     : "tests",
+          "name"     : "defaults",
+          "desc"     : "rpc calls for managing spaces",
+          "auth"     : "keyed",
+          "roles"    : [],
+          "verb"     : "auto",
+          "access"   : "public",
+          "sources"  : ["all"],
+          "version"  : "0",
+          "tags"     : [],
+          "actions"  : [
+              {
+                  "name"     : "add",
                   "desc"     : "Description here",
                   "auth"      : "@parent",
                   "roles"    : [],

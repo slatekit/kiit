@@ -79,7 +79,8 @@ class ConfigLoader(val cls: KClass<*>, val instance: Any) {
     fun loadActions(area: Area, api: Api, methods: Map<String, KCallable<*>>, doc: JSONObject): List<RouteMapping> {
         val actions = doc.get("actions") as JSONArray
         val apiActions = actions.map { action ->
-            val executor = doc.get("execute") as JSONObject
+            val actionJson = action as JSONObject
+            val executor = actionJson.get("execute") as JSONObject
             val type = executor.get("type") as String
             val route:RouteMapping? = when (type) {
                 EXECUTOR_TYPE_METHOD   -> {
@@ -125,10 +126,13 @@ class ConfigLoader(val cls: KClass<*>, val instance: Any) {
         val isExecutor = handler is MethodExecutor
         val method = if(isExecutor) (handler as MethodExecutor).call.member.name else ""
         val actionVerb = References.verb(api.verb, verb, name ?: method)
-
+        val actionName = when {
+            name.isNullOrEmpty() -> if(isExecutor) method else ""
+            else -> name
+        }
         // Action to be used in route
         val action = Action(
-            name ?: api.name,
+            actionName,
             desc ?: "",
             actionAuth,
             actionRoles,
@@ -182,7 +186,7 @@ class ConfigLoader(val cls: KClass<*>, val instance: Any) {
     }
 
     companion object {
-        const val EXECUTOR_TYPE_METHOD   = "execute"
+        const val EXECUTOR_TYPE_METHOD   = "method"
         const val EXECUTOR_TYPE_REDIRECT = "redirect"
     }
 }
