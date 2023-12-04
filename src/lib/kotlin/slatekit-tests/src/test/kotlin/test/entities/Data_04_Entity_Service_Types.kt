@@ -32,7 +32,6 @@ import test.setup.StatusEnum
 import test.setup.TestSupport
 import java.util.*
 
-@Ignore
 class Data_04_Entity_Service_Types : TestSupport {
 
     val sampleUUID1 = "67bdb72a-1d74-11e8-b467-0ed5f89f7181"
@@ -134,10 +133,10 @@ class Data_04_Entity_Service_Types : TestSupport {
                     test_uniqueId = UPIDs.parse(EntitySetup.upid),
                     test_object = Address("addr 1", "queens", "new york", 100, zip, false)
             ))
-
-            val update = svc.findOneByField("test_object_" + Address::zip.name, Op.Eq,"10012")
+            println(id)
+            val update = svc.findOneByField("test_object_" + Address::zip.name, Op.Eq,zip)
             Assert.assertNotNull(update)
-            Assert.assertEquals("10012", update?.test_object?.zip)
+            Assert.assertEquals(zip, update?.test_object?.zip)
         }
     }
 }

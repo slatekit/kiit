@@ -28,7 +28,6 @@ import java.util.*
  * 4. Sqlite  : SqliteProvider ....
  * 5. Postgres: PostgresProvider ....
  */
-@Ignore
 class Data_04_Database_Mysql : TestSupport {
     private val zoneId = ZoneId.systemDefault()
     private val localDate = LocalDate.of(2021, 2, 1)
