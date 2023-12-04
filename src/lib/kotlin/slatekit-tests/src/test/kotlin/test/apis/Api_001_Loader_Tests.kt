@@ -64,7 +64,7 @@ class Api_001_Loader_Tests : ApiTestsBase() {
         Assert.assertEquals(1, actions.size)
         Assert.assertEquals("tests", api.area)
         Assert.assertEquals("defaults", api.name)
-        Assert.assertEquals("sample to test features of Slate Kit APIs", api.desc)
+        Assert.assertEquals("sample to test features of Kiit APIs", api.desc)
         Assert.assertEquals(true, api.roles.isEmpty)
         Assert.assertEquals(AuthMode.Keyed, api.auth)
         Assert.assertEquals(Verb.Auto, api.verb)
@@ -95,12 +95,31 @@ class Api_001_Loader_Tests : ApiTestsBase() {
         val apiOpt = router.api("tests", "overrides", "0", "1.0")
         Assert.assertNotNull(apiOpt)
         val actions = apiOpt!!
-        val api = actions.api
+        ensureOverrideSetup(actions)
+    }
 
+
+    @Test fun can_load_routes_from_config_with_overrides() {
+        val router = router(
+            versions = listOf(
+                global(version = "0", apis = listOf(
+                    api(SampleApiWithConfigSetup::class, SampleApiWithConfigSetup(), setup = SetupType.Config, content = JSON_OVERRIDES.trim())
+                ))
+            )
+        )
+        val apiOpt = router.api("tests", "overrides", "0", "1.0")
+        Assert.assertNotNull(apiOpt)
+        val actions = apiOpt!!
+        ensureOverrideSetup(actions)
+    }
+
+
+    fun ensureOverrideSetup(actions: ApiActions) {
+        val api = actions.api
         Assert.assertEquals(1, actions.size)
         Assert.assertEquals("tests", api.area)
         Assert.assertEquals("overrides", api.name)
-        Assert.assertEquals("sample to test features of Slate Kit APIs", api.desc)
+        Assert.assertEquals("sample to test features of Kiit APIs", api.desc)
         Assert.assertEquals(true, api.roles.contains("admin"))
         Assert.assertEquals(AuthMode.Token, api.auth)
         Assert.assertEquals(Verb.Auto, api.verb)
@@ -187,7 +206,7 @@ class Api_001_Loader_Tests : ApiTestsBase() {
     {   
           "area"     : "tests",
           "name"     : "defaults",
-          "desc"     : "sample to test features of Slate Kit APIs",
+          "desc"     : "sample to test features of Kiit APIs",
           "auth"     : "keyed",
           "roles"    : [],
           "verb"     : "auto",
@@ -206,28 +225,27 @@ class Api_001_Loader_Tests : ApiTestsBase() {
     val JSON_OVERRIDES = """
     {
           "area"     : "tests",
-          "name"     : "defaults",
-          "desc"     : "rpc calls for managing spaces",
-          "auth"     : "keyed",
-          "roles"    : [],
+          "name"     : "overrides",
+          "desc"     : "sample to test features of Kiit APIs",
+          "auth"     : "token",
+          "roles"    : ["admin"],
           "verb"     : "auto",
-          "access"   : "public",
-          "sources"  : ["all"],
-          "version"  : "0",
+          "access"   : "internal",
+          "sources"  : ["cli"],
+          "version"  : "1",
           "tags"     : [],
           "actions"  : [
               {
-                  "name"     : "add",
-                  "desc"     : "Description here",
-                  "auth"      : "@parent",
-                  "roles"    : [],
-                  "verb"     : "Post",
+                  "name"     : "adder",
+                  "desc"     : "accepts supplied basic data types from send",
+                  "auth"     : "keyed",
+                  "roles"    : ["user"],
+                  "verb"     : "put",
                   "access"   : "public",
-                  "sources"  : ["all"],
+                  "sources"  : ["api"],
                   "version"  : "1",
                   "tags"     : [],
-                  "handler"  : { "type": "MethodExecutor", "target": { "method": "create" } },
-                  "handler"  : { "type": "RouteForwarder", "target": { "globalVersion": "1", "path": "spaces/manage/create", "verb": "Post" } }
+                  "execute"  :  { "type": "method", "target": "add" }
               }
           ]
     }

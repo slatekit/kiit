@@ -91,7 +91,7 @@ class ConfigLoader(val cls: KClass<*>, val instance: Any) {
                 }
                 EXECUTOR_TYPE_REDIRECT -> {
                     val handler = buildRedirect(executor, methods)
-                    val action = loadAction(api, action as JSONObject, handler!!)
+                    val action = Action(handler.action.name)
                     val route = buildRoute(area, api, action, handler)
                     route
                 }
@@ -147,7 +147,7 @@ class ConfigLoader(val cls: KClass<*>, val instance: Any) {
 
 
     /**
-     * "execute"  : { "type": "Method"  , "target": "create" }
+     * "execute"  : { "type": "method"  , "target": "create" }
      */
     private fun buildExecutor(json: JSONObject, methods: Map<String, KCallable<*>>): MethodExecutor? {
         val target = json.get("target") as String
@@ -164,12 +164,14 @@ class ConfigLoader(val cls: KClass<*>, val instance: Any) {
 
 
     /**
-     * "execute"  : { "type": "Method"  , "target": "create" }
+     * "execute"  : { "type": "redirect"  , "target": "spaces/manage/create", "globalVersion": "1", "verb": "post"  }
      */
-    private fun buildRedirect(json: JSONObject, methods: Map<String, KCallable<*>>): RouteForwarder? {
+    private fun buildRedirect(json: JSONObject, methods: Map<String, KCallable<*>>): RouteForwarder {
         val target = json.get("target") as String
-        val method = methods.get(target)
-        return null
+        val parts = target.split("/")
+        val version = json.get("globalVersion") as String
+        val verb = Verb.parse(json.get("verb") as String)
+        return RouteForwarder(version, verb, Area(parts[0]), Versioned(parts[1]), Versioned(parts[2]))
     }
 
 
