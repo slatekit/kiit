@@ -10,6 +10,10 @@ import kiit.apis.Verb
 import kiit.apis.routes.Api
 import kiit.apis.core.Reqs
 import kiit.apis.SetupType
+import kiit.apis.Verbs
+import kiit.apis.setup.GlobalVersion
+import kiit.apis.setup.api
+import kiit.apis.setup.routes
 import kiit.common.*
 import kiit.core.queues.InMemoryQueue
 import kiit.context.AppContext
@@ -21,6 +25,7 @@ import kiit.core.queues.WrappedAsyncQueue
 import kiit.connectors.jobs.JobAPIWorker
 import kiit.connectors.jobs.JobQueue
 import kiit.jobs.*
+import test.apis.samples.Sample_API_1_Core
 import test.jobs.samples.SampleWorkerAPI
 import test.setup.SampleTypes2Api
 import test.setup.TestSupport
@@ -30,7 +35,8 @@ class Worker_Api_Tests : TestSupport {
     fun buildContainer(): ApiServer {
         val ctx = AppContext.simple(app,"queues")
         val api = SampleTypes2Api()
-        val apis = ApiServer(ctx, routes = listOf()) //api, area = "samples", name = "types2")))
+        val routes = routes(versions = listOf(GlobalVersion("0", listOf(api(SampleTypes2Api::class, api)))))
+        val apis = ApiServer(ctx, routes = routes)
         return apis
     }
 
@@ -48,7 +54,8 @@ class Worker_Api_Tests : TestSupport {
             val api = SampleWorkerAPI(ctx, queues)
 
             // 4. container
-            val apis = ApiServer(ctx, routes = listOf() )//Api(api, setup = SetupType.Annotated)))
+            val routes = routes(versions = listOf(GlobalVersion("0", listOf(api(SampleWorkerAPI::class, api)))))
+            val apis = ApiServer(ctx, routes = routes)
 
             // 5. send method call to queue
             val result = runBlocking {
@@ -61,7 +68,8 @@ class Worker_Api_Tests : TestSupport {
             }
 
             // 6. Ensure item is in queue
-            Assert.assertEquals(1, queues[0].count())
+            val count = queues[0].count()
+            Assert.assertEquals(1, count)
             val entry = queues[0].next()
             Assert.assertNotNull(entry)
             entry?.let {
@@ -83,7 +91,7 @@ class Worker_Api_Tests : TestSupport {
                 path = "samples.types2.loadBasicTypes",
                 parts = listOf("samples", "types2", "loadBasicTypes"),
                 source = Source.Queue,
-                verb = "queue",
+                verb = Verbs.POST,
                 data = InputArgs(mapOf(
                         "s" to "user1@abc.com",
                         "b" to true,

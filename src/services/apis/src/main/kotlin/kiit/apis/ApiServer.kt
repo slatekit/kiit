@@ -23,6 +23,7 @@ import kiit.meta.*
 import kiit.serialization.deserializer.Deserializer
 import kiit.results.*
 import kiit.results.builders.Outcomes
+import java.lang.reflect.Method
 
 /**
  * This is the core container hosting, managing and executing the source independent apis.
@@ -200,9 +201,22 @@ open class ApiServer(
             val instance = req.target
             when {
                 instance == null  -> Outcomes.errored("Route not mapped")
-//                instance.instance is Middleware -> executeWithMiddleware(req, instance.instance)
-//                middleware != null -> executeWithMiddleware(req, middleware)
-                else -> executeWithMiddleware(req, null)
+                else -> {
+                    val handler = instance.handler
+                    if(handler is MethodExecutor) {
+                        val executor = handler
+                        if(executor.call.instance is Middleware) {
+                            executeWithMiddleware(req, executor.call.instance)
+                        }
+                        else {
+                            executeWithMiddleware(req, null)
+                        }
+                    } else if(middleware != null) {
+                        executeWithMiddleware(req, middleware)
+                    } else {
+                        executeWithMiddleware(req, null)
+                    }
+                }
             }
 
         } catch(ex:Exception){

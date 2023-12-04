@@ -11,7 +11,7 @@ import kiit.core.queues.AsyncQueue
 import kiit.results.Outcome
 import kiit.results.Success
 
-interface ApiQueueSupport : QueueSupport, Middleware{
+interface ApiQueueSupport : QueueSupport, Middleware {
 
 
     fun queues(): List<AsyncQueue<String>>
