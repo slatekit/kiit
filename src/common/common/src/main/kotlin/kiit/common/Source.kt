@@ -1,5 +1,7 @@
 package kiit.common
 
+import java.util.*
+
 /**
  * Used to represent the source / origin of a request/item being processed
  */
@@ -91,9 +93,10 @@ sealed class Source(val id: String) {
     companion object {
 
         fun parse(name:String): Source {
-            return when(name) {
+            return when(name.lowercase(Locale.getDefault())) {
                 Parent.id -> Parent
                 All.id    -> All
+                "all"     -> All
                 API.id    -> API
                 Auto.id   -> Auto
                 Bot.id    -> Bot

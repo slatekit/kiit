@@ -153,6 +153,43 @@ class Api_001_Loader_Tests : ApiTestsBase() {
         Assert.assertFalse(router.containsAction(verb = Verb.Post.name, area = "tests", api = "loader", action = "protectedHi"))
         Assert.assertFalse(router.containsAction(verb = Verb.Post.name, area = "tests", api = "loader", action = "privateHi"))
         Assert.assertFalse(router.containsAction(verb = Verb.Post.name, area = "tests", api = "loader", action = "nonAnnotatedHi"))
-
     }
+
+
+    @Test
+    fun can_load_routes_via_configuration() {
+        val json = JSON
+        val api = Loader(null).config(SampleAnnotatedApiWithDefaults::class, SampleAnnotatedApiWithDefaults(), json)
+        print(api)
+    }
+
+    val JSON = """
+    {
+          "area"     : "spaces",
+          "name"     : "manage",
+          "desc2"     : "rpc calls for managing spaces",
+          "auth"      : "token",
+          "roles"    : ["user"],
+          "verb"     : "auto",
+          "access"   : "public",
+          "sources"  : ["all"],
+          "version"  : "0",
+          "tags"     : [],
+          "actions"  : [
+              {
+                  "name"     : "create",
+                  "desc"     : "Description here",
+                  "auth"      : "@parent",
+                  "roles"    : [],
+                  "verb"     : "Post",
+                  "access"   : "public",
+                  "sources"  : ["all"],
+                  "version"  : "1",
+                  "tags"     : [],
+                  "handler"  : { "type": "MethodExecutor", "target": { "method": "create" } },
+                  "handler"  : { "type": "RouteForwarder", "target": { "globalVersion": "1", "path": "spaces/manage/create", "verb": "Post" } }
+              }
+          ]
+    }
+    """.trimIndent()
 }
