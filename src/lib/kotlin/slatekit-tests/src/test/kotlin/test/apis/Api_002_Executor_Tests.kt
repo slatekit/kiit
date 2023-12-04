@@ -26,6 +26,7 @@ import kiit.requests.toResponse
 import kiit.results.Failure
 import kiit.results.Success
 import org.threeten.bp.ZoneId
+import test.setup.SampleApiWithConfigSetup
 
 /**
  * Created by kishorereddy on 6/12/17.
@@ -76,6 +77,20 @@ class Api_002_Executor_Tests : ApiTestsBase() {
                     Pair("date" , DateTimes.of(2019, 10, 30, 8, 30, 45, 0, zone).toString())
             )),
             response = Success("ok", msg = "inputs p1, 2, true, 2019-10-30T08:30:45-05:00[EST]").toResponse()
+        )
+    }
+
+    @Test
+    fun can_execute_with_redirect() {
+        checkCall(
+            protocol = Source.CLI,
+            routes = routes(versions = listOf(GlobalVersion("0", listOf(api(SampleApiWithConfigSetup::class, SampleApiWithConfigSetup(), setup = SetupType.Config, content = Api_001_Loader_Tests.JSON_REDIRECTS))))),
+            user = null,
+            request = CommonRequest.path("tests.redirects.adder", Verbs.POST, mapOf(), mapOf(
+                Pair("a" , 1   ),
+                Pair("b" , 2   )
+            )),
+            response = Success(3).toResponse()
         )
     }
 

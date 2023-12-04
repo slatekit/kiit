@@ -34,7 +34,7 @@ open class ApiServer(
     val ctx: Context,
     val routes: List<VersionAreas>,
     val rewriter: Rewriter? = null,
-    val middleware: Middleware? = null,
+    val namedMiddlewares: List<Pair<String,Middleware>> = listOf(),
     val auth: Auth? = null,
     val settings: Settings = Settings()
 )  {
@@ -54,6 +54,9 @@ open class ApiServer(
      * Logger for this server
      */
     private val logger: Logger = ctx.logs.getLogger("api")
+
+
+    private val middlewares = namedMiddlewares.map { it.second }
 
 
     /**
@@ -209,8 +212,10 @@ open class ApiServer(
                         else {
                             executeWithMiddleware(req, null)
                         }
-                    } else if(middleware != null) {
-                        executeWithMiddleware(req, middleware)
+                    } else if(middlewares.isNotEmpty()) {
+                        Middleware.process(req, 0, middlewares) {
+                            executeMethod(req)
+                        }
                     } else {
                         executeWithMiddleware(req, null)
                     }
@@ -229,17 +234,17 @@ open class ApiServer(
 
     private suspend fun executeWithMiddleware(req:ApiRequest, middleware: Middleware?): Outcome<ApiResult> {
         return when(middleware) {
-            null -> executeMethod(Ctx(this, this.ctx), req)
+            null -> executeMethod( req)
             else  -> {
                 middleware.process(req) {
-                    executeMethod(Ctx(this, this.ctx), req)
+                    executeMethod(req)
                 }
             }
         }
     }
 
     @Suppress("UNCHECKED_CAST")
-    protected open suspend fun executeMethod(context: Ctx, request: ApiRequest): Outcome<ApiResult> {
+    protected open suspend fun executeMethod(request: ApiRequest): Outcome<ApiResult> {
         // Finally make call.
         val target = request.target
         val converter = settings.decoder?.invoke(request.request, ctx.enc) ?: Deserializer(request.request, ctx.enc)
@@ -293,7 +298,7 @@ open class ApiServer(
 
         @JvmStatic
         fun of(ctx: Context, routes: List<VersionAreas>, auth: Auth? = null, source: Source? = null): ApiServer {
-            val server = ApiServer(ctx, routes, null, null, auth, Settings(source ?: Source.API))
+            val server = ApiServer(ctx, routes, null, listOf(), auth, Settings(source ?: Source.API))
             return server
         }
 
