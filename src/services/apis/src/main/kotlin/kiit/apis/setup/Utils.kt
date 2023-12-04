@@ -14,21 +14,27 @@ import kiit.common.Source
 import kiit.common.ext.orElse
 import kiit.utils.naming.Namer
 import kiit.meta.Reflector
+import java.util.*
 
 fun toVerb(name: String?): Verb {
     return when (name) {
         null -> Verb.Auto
         else -> {
-            val nameToCheck = name.toLowerCase()
+            val nameToCheck = name.lowercase(Locale.getDefault())
             val verb = when {
-                nameToCheck.startsWith(Verbs.AUTO)   -> Verb.Auto
-                nameToCheck.startsWith(Verbs.GET)    -> Verb.Get
-                nameToCheck.startsWith(Verbs.POST)   -> Verb.Post
-                nameToCheck.startsWith(Verbs.PUT)    -> Verb.Put
-                nameToCheck.startsWith(Verbs.PATCH)  -> Verb.Patch
-                nameToCheck.startsWith(Verbs.DELETE) -> Verb.Delete
-                nameToCheck.startsWith(Verbs.CREATE) -> Verb.Post
-                nameToCheck.startsWith(Verbs.UPDATE) -> Verb.Put
+                nameToCheck.startsWith(Verbs.AUTO)        -> Verb.Auto
+                nameToCheck.startsWith(Verbs.GET)         -> Verb.Get
+                nameToCheck.startsWith(Verbs.POST)        -> Verb.Post
+                nameToCheck.startsWith(Verbs.PUT)         -> Verb.Put
+                nameToCheck.startsWith(Verbs.PATCH)       -> Verb.Patch
+                nameToCheck.startsWith(Verbs.DELETE)      -> Verb.Delete
+                nameToCheck.startsWith(Verbs.CREATE)      -> Verb.Post
+                nameToCheck.startsWith(Verbs.UPDATE)      -> Verb.Put
+                nameToCheck.startsWith("add")       -> Verb.Post
+                nameToCheck.startsWith("insert")    -> Verb.Post
+                nameToCheck.startsWith("upsert")    -> Verb.Put
+                nameToCheck.startsWith("purge")     -> Verb.Delete
+                nameToCheck.startsWith("remove")    -> Verb.Delete
                 else -> Verb.Post
             }
             verb

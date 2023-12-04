@@ -34,7 +34,7 @@ import kiit.results.builders.Outcomes
 open class ApiServer(
     val ctx: Context,
     val routes: List<VersionAreas>,
-    val writer: Rewriter? = null,
+    val rewriter: Rewriter? = null,
     val middleware: Middleware? = null,
     val auth: Auth? = null,
     val settings: Settings = Settings()
@@ -172,7 +172,7 @@ open class ApiServer(
 
         // Build ApiRequest from the raw request ( this is used for middleware )
         val initial = ApiRequest(this, auth, ctx, raw, null, raw.source, null)
-        val request = writer?.process(initial) ?: initial
+        val request = rewriter?.process(initial) ?: initial
 
         // Route    : area.api.action
         val routeResult = RouteRule.isValid(request)

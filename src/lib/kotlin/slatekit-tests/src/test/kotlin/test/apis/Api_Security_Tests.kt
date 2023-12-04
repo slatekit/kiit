@@ -29,7 +29,7 @@ import test.apis.samples.Sample_API_2_Roles
  * Created by kishorereddy on 6/12/17.
  */
 
-class Api_Security_TestsTests : ApiTestsBase() {
+class Api_Security_Tests : ApiTestsBase() {
 
 
     // ===================================================================
