@@ -1,5 +1,6 @@
 package kiit.apis.routes
 
+import kiit.apis.ApiConstants
 import kiit.utils.naming.Namer
 
 /**
@@ -52,7 +53,7 @@ data class Router(
     /**
      * Whether there is an area w/ the supplied name.
      */
-    fun containsArea(area: String, globalVersion:String = "0"): Boolean {
+    fun containsArea(area: String, globalVersion:String = ApiConstants.versionZero): Boolean {
         if (area.isEmpty()) return false
         val match = versions.firstOrNull { it.version == globalVersion }
         return match?.let { it.get(area) != null } ?: false
@@ -65,7 +66,7 @@ data class Router(
      * @param globalVersion : The global version of entire api set to check for
      * @param version : The version to check for e.g. "1.1" indicates api:version=1, action:version = 1
      */
-    fun containsApi(area: String, api: String, globalVersion: String = "0", version:String? = null): Boolean {
+    fun containsApi(area: String, api: String, globalVersion: String = ApiConstants.versionZero, version:String? = null): Boolean {
         return api(area, api, globalVersion, version) != null
     }
 
@@ -77,7 +78,7 @@ data class Router(
      * @param globalVersion : The global version of entire api set to check for
      * @param version : The version to check for e.g. "1.1" indicates api:version=1, action:version = 1
      */
-    fun containsAction(verb: String, area: String, api: String, action: String, globalVersion: String = "0", version:String? = null): Boolean {
+    fun containsAction(verb: String, area: String, api: String, action: String, globalVersion: String = ApiConstants.versionZero, version:String? = null): Boolean {
         return action(verb, area, api, action, globalVersion, version) != null
     }
 
@@ -89,7 +90,7 @@ data class Router(
         if (area.isEmpty()) return null
         if (api.isEmpty()) return null
         val info = when (version) {
-            null -> Pair("0:${api}", "0")
+            null -> Pair("0:${api}", ApiConstants.versionZero)
             else -> {
                 val parts = version.split(".")
                 val apiVersion = parts[0]
@@ -111,12 +112,25 @@ data class Router(
      * @param action
      * @return
      */
-    fun action(verb:String, area: String, api: String, action: String, globalVersion: String = "0", version: String?): RouteMapping? {
+    fun action(verb:String, area: String, api: String, action: String, globalVersion: String = ApiConstants.versionZero, version: String? = null): RouteMapping? {
+        val mapping = actionInternal(verb, area, api, action, globalVersion, version)
+        return when {
+            mapping != null && (mapping.handler is MethodExecutor) -> mapping
+            mapping != null && (mapping.handler is RouteForwarder) -> {
+                val rf = mapping.handler as RouteForwarder
+                val redirect = actionInternal(rf.verb.name, rf.area.name, rf.api.name, rf.action.name, rf.globalVersion, null)
+                redirect
+            }
+            else -> mapping
+        }
+    }
+
+    private fun actionInternal(verb:String, area: String, api: String, action: String, globalVersion: String = ApiConstants.versionZero, version: String?): RouteMapping? {
         if (globalVersion.isEmpty()) return null
         if (area.isEmpty()) return null
         if (api.isEmpty()) return null
         val info = when (version) {
-            null -> Pair("0", "0")
+            null -> Pair(ApiConstants.versionZero, ApiConstants.versionZero)
             else -> {
                 val parts = version.split(".")
                 val apiVersion = parts[0]

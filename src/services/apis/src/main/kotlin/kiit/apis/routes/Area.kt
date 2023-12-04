@@ -1,5 +1,7 @@
 package kiit.apis.routes
 
+import kiit.apis.ApiConstants
+
 /**
  * * ================================================================
  * Universal Route =  {AREA}.{API}.{ACTION}
@@ -18,6 +20,6 @@ package kiit.apis.routes
  * ================================================================
  * From the example above, this represents the area "accounts" and it's mapped list of apis/classes
  */
-class Area(val name: String, val version:String = "0") {
+class Area(val name: String, val version:String = ApiConstants.versionZero) {
     val fullname:String = "$version.$name"
 }

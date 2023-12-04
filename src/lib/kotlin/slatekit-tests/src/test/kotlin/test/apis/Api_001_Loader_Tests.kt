@@ -141,6 +141,24 @@ class Api_001_Loader_Tests : ApiTestsBase() {
     }
 
 
+    @Test fun can_load_routes_with_redirects() {
+        val router = router(
+            versions = listOf(
+                global(version = "0", apis = listOf(
+                    api(SampleApiWithConfigSetup::class, SampleApiWithConfigSetup(), setup = SetupType.Config, content = JSON_REDIRECTS.trim())
+                ))
+            )
+        )
+        val actionOpt = router.action(Verbs.POST, "tests","redirects", "adder", version = null)
+        Assert.assertNotNull(actionOpt)
+        val actions = actionOpt!!
+        Assert.assertEquals("tests", actions.route.area.name)
+        Assert.assertEquals("redirects", actions.route.api.name)
+        Assert.assertEquals("add", actions.route.action.name)
+        Assert.assertEquals(Verb.Post, actions.route.action.verb)
+    }
+
+
     @Test fun can_load_routes_and_check_contains() {
         val router = router(
             versions = listOf(
@@ -245,6 +263,31 @@ class Api_001_Loader_Tests : ApiTestsBase() {
                   "sources"  : ["api"],
                   "version"  : "1",
                   "tags"     : [],
+                  "execute"  :  { "type": "method", "target": "add" }
+              }
+          ]
+    }
+    """.trimIndent()
+
+    val JSON_REDIRECTS = """
+    {   
+          "area"     : "tests",
+          "name"     : "redirects",
+          "desc"     : "sample to test features of Kiit APIs",
+          "auth"     : "keyed",
+          "roles"    : [],
+          "verb"     : "auto",
+          "access"   : "public",
+          "sources"  : ["all"],
+          "version"  : "0",
+          "tags"     : [],
+          "actions"  : [
+              {
+                  "name"     : "adder",
+                  "verb"     : "post",
+                  "execute"  :  { "type": "redirect", "target": "tests/redirects/add", "globalVersion": "0", "verb": "post" }
+              },
+              {
                   "execute"  :  { "type": "method", "target": "add" }
               }
           ]

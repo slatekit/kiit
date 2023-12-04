@@ -1,3 +1,5 @@
 package kiit.apis.routes
 
-data class Versioned(val name:String, val version:String = "0")
+import kiit.apis.ApiConstants
+
+data class Versioned(val name:String, val version:String = ApiConstants.versionZero)

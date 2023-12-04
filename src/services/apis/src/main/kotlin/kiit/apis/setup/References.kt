@@ -1,9 +1,6 @@
 package kiit.apis.setup
 
-import kiit.apis.Access
-import kiit.apis.AuthMode
-import kiit.apis.AuthModes
-import kiit.apis.Verb
+import kiit.apis.*
 import kiit.apis.core.Roles
 import kiit.apis.core.Sources
 
@@ -44,7 +41,7 @@ object References {
 
 
     fun version(parent:String, childAccess:String?): String {
-        return childAccess ?: "0"
+        return childAccess ?: ApiConstants.versionZero
     }
 
 

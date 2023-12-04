@@ -101,7 +101,7 @@ open class ApiServer(
      * @param action : e.g. "register"
      * @return
      */
-    fun get(verb:String, area: String, name: String, action: String, globalVersion:String = "0", version:String? = null): RouteMapping? {
+    fun get(verb:String, area: String, name: String, action: String, globalVersion:String = ApiConstants.versionZero, version:String? = null): RouteMapping? {
         val action = router.action(verb, area, name, action, globalVersion, version)
         return action
     }

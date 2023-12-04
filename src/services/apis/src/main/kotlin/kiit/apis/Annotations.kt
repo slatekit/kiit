@@ -39,7 +39,7 @@ annotation class Api(
     val verb: String = Verbs.AUTO,
     val access: String = AccessLevel.PUBLIC,
     val sources: Array<String> = [Sources.ALL],
-    val version: String = "0",
+    val version: String = ApiConstants.versionZero,
     val tags: Array<String> = []
 )
 
@@ -66,7 +66,7 @@ annotation class Action(
     val verb: String = Verbs.AUTO,
     val access: String = AccessLevel.PARENT,
     val sources: Array<String> = [Sources.ALL],
-    val version: String = "0",
+    val version: String = ApiConstants.versionZero,
     val tags: Array<String> = []
 )
 

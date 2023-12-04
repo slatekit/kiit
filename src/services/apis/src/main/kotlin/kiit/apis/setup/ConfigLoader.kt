@@ -1,6 +1,7 @@
 package kiit.apis.setup
 
 import kiit.apis.Access
+import kiit.apis.ApiConstants
 import kiit.apis.AuthMode
 import kiit.apis.Verb
 import kiit.apis.core.Roles
@@ -85,13 +86,17 @@ class ConfigLoader(val cls: KClass<*>, val instance: Any) {
             val route:RouteMapping? = when (type) {
                 EXECUTOR_TYPE_METHOD   -> {
                     val handler = buildExecutor(executor, methods)
-                    val action = loadAction(api, action as JSONObject, handler!!)
+                    val action = loadAction(api, actionJson, handler!!)
                     val route = buildRoute(area, api, action, handler)
                     route
                 }
                 EXECUTOR_TYPE_REDIRECT -> {
                     val handler = buildRedirect(executor, methods)
-                    val action = Action(handler.action.name)
+                    val actionName = actionJson.get("name") as String
+                    val actionVerb = actionJson.get("verb") as String?
+                    val actionVersion = actionJson.get("version") as String?
+                    val verb = References.verb(api.verb, actionVerb, actionName)
+                    val action = Action(actionName, verb = verb, version = actionVersion ?: ApiConstants.versionZero)
                     val route = buildRoute(area, api, action, handler)
                     route
                 }

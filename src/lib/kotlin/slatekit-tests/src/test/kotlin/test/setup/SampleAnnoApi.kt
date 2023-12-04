@@ -24,7 +24,6 @@ class SampleAnnotatedApiWithDefaults() {
     }
 }
 
-
 class SampleApiWithConfigSetup() {
     fun add(a:Int, b:Int): Int {
         return a + b
