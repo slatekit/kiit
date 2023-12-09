@@ -22,6 +22,8 @@ import kiit.meta.*
 import kiit.serialization.deserializer.Deserializer
 import kiit.results.*
 import kiit.results.builders.Outcomes
+import kiit.serialization.deserializer.json.DeserializerJSON
+import org.json.simple.JSONObject
 
 /**
  * This is the core container hosting, managing and executing the source independent apis.
@@ -247,7 +249,7 @@ open class ApiServer(
     protected open suspend fun executeMethod(request: ApiRequest): Outcome<ApiResult> {
         // Finally make call.
         val target = request.target
-        val converter = settings.decoder?.invoke(request.request, ctx.enc) ?: Deserializer(request.request, ctx.enc)
+        val converter = settings.decoder?.invoke(request.request, ctx.enc) ?: DeserializerJSON(request.request, ctx.enc)
         val executor = target!!.handler as MethodExecutor
         val call = executor.call
         val inputs = fillArgs(converter, target, call, request.request)
@@ -272,7 +274,7 @@ open class ApiServer(
         "DateTime" to DateTime.now()
     )
 
-    private fun fillArgs(deserializer: Deserializer, apiRef: RouteMapping, call: Call, cmd: Request): Array<Any?> {
+    private fun fillArgs(deserializer: Deserializer<JSONObject>, apiRef: RouteMapping, call: Call, cmd: Request): Array<Any?> {
         val action = apiRef.route.action
         // Check 1: No args ?
         return if (!call.hasArgs)
