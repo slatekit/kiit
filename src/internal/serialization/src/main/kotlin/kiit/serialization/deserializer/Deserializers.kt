@@ -1,3 +1,5 @@
+@file:Suppress("IMPLICIT_CAST_TO_ANY")
+
 package kiit.serialization.deserializer
 
 import org.json.simple.JSONArray
@@ -9,6 +11,7 @@ import kiit.meta.*
 import java.util.*
 import kotlin.reflect.KClass
 import kotlin.reflect.KType
+import kotlin.reflect.full.createType
 
 
 class Deserializers(conversion: Conversion, enc: Encryptor?, decoders:Map<String, JSONTransformer<*>>) {
@@ -20,6 +23,12 @@ class Deserializers(conversion: Conversion, enc: Encryptor?, decoders:Map<String
     val objs   = ObjectDeserializer(conversion, enc)
     val custom = CustomDeserializer(conversion, enc, decoders)
 }
+
+interface Decoder {
+    val ktype:KType
+    fun decode(parent: Any, paramName: String, paramValue: Any?): Any?
+}
+
 
 
 class BasicDeserializer(override val conversion: Conversion,
@@ -50,7 +59,7 @@ class BasicDeserializer(override val conversion: Conversion,
             KTypes.KDecDoubleType.classifier -> enc?.let { e -> EncDouble(paramValue as String, e.decrypt(paramValue).toDouble()) } ?: EncDouble("", 0.0)
             KTypes.KDecStringType.classifier -> enc?.let { e -> EncString(paramValue as String, e.decrypt(paramValue)) } ?: EncString("", "")
 
-            // Slate Kit
+            // Kiit
             KTypes.KVarsType.classifier -> paramValue?.let { Conversions.toVars(it) }
             KTypes.KDocType.classifier  -> conversion.toDoc(context as Request, paramName)
             KTypes.KUUIDType.classifier -> UUID.fromString(paramValue.toString())
