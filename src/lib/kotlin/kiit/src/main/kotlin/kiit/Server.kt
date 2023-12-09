@@ -9,7 +9,10 @@ import io.ktor.server.engine.embeddedServer
 import io.ktor.server.netty.Netty
 import kiit.apis.*
 import kiit.apis.core.Auth
-import kiit.apis.routes.Api
+import kiit.apis.core.Meta
+import kiit.apis.setup.GlobalVersion
+import kiit.apis.setup.api
+import kiit.apis.setup.routes
 
 // Slate Kit - Common Utilities
 import kiit.common.*
@@ -20,7 +23,7 @@ import kiit.results.*
 // Slate Kit - App ( provides args, help, life-cycle methods, etc )
 import kiit.requests.toResponse
 import kiit.context.Context
-import kiit.core.common.FileUtils
+import kiit.requests.Request
 
 // Slate Kit - Server ( Ktor support )
 import kiit.server.ServerSettings
@@ -39,7 +42,7 @@ class Server(val ctx: Context)  {
     suspend fun execute(): Try<Any> {
 
         // 1. Settings
-        val settings = ServerSettings(port = 5000, prefix = "/api/", docs = true, docKey = "abc123", formatJson = true)
+        val settings = ServerSettings(port = 5200, prefix = "/api/", docs = true, docKey = "abc123", formatJson = true)
 
         // 2. APIs ( these are Slate Kit Universal APIs )
         val apis = apis()
@@ -48,7 +51,8 @@ class Server(val ctx: Context)  {
         val auth: Auth? = null //SampleAuth()
 
         // 4. API host
-        val apiHost = ApiServer.of( ctx, apis, auth = null)
+        val routes = routes(apis)
+        val apiHost = ApiServer.of( ctx, routes, auth = null)
 
         // Ktor response handler
         val responder = KtorResponse(settings)
@@ -89,10 +93,9 @@ class Server(val ctx: Context)  {
     }
 
 
-    fun apis(): List<Api> {
-        return listOf(
-                Api(klass = SampleFiles3Api::class, singleton = SampleFiles3Api(), setup = SetupType.Annotated)
-        )
+    fun apis(): List<GlobalVersion> {
+        val apis = listOf(GlobalVersion("0", listOf(api(SampleFiles3Api::class, SampleFiles3Api()))))
+        return apis
     }
 
 
@@ -114,9 +117,15 @@ class SampleFiles3Api {
     val sampleCSV = "user1,u1@a.com,true,1234\r\nuser2,u2@a.com,true,1234"
     val sampleCSVData = sampleCSV.toByteArray()
 
+    @Action()
+    fun getRequest(request: Request, meta:Meta) : String {
+        return "got inputs"
+    }
 
     @Action(desc = "test getting content as xml")
-    fun getData(): String = DateTime.now().toStringMySql()
+    fun getData(request: Request): String {
+        return DateTime.now().toStringMySql()
+    }
 
     @Action(desc = "test getting content as xml")
     fun getContentCsv(): Content = Contents.csv("user1,u1@a.com,true,1234\r\nuser2,u2@a.com,true,1234")

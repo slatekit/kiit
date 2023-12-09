@@ -63,8 +63,8 @@ fun main(args: Array<String>) {
                 help.show()
             }
             else {
-                run(args)
-                //api(args)
+                //run(args)
+                api(args)
             }
         }
         is Failure -> {
