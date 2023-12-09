@@ -25,6 +25,8 @@ import test.setup.StatusEnum2
 import test.setup.StatusEnum3
 import test.setup.User
 import java.util.*
+import kotlin.reflect.KClass
+import kotlin.reflect.full.createType
 
 /**
  * Created by kishorereddy on 6/14/17.
@@ -32,6 +34,25 @@ import java.util.*
 
 class SerializerTests {
 
+    @Test
+    fun testTypes() {
+        val scls = String::class
+        val styp = String::class.createType()
+        println(scls.qualifiedName)
+        val ksf = styp.classifier as KClass<*>
+        val isSame = ksf == scls
+        println(isSame)
+
+        val typeLookup = mapOf(
+            String::class to "this is a string",
+            Int::class    to "this is a int"
+        )
+        println(typeLookup[scls])
+        println(typeLookup[Int::class])
+        println(typeLookup[ksf])
+        println(typeLookup[styp.classifier])
+        println("done")
+    }
 
     @Test fun can_serialize_string() {
         val serializer = Serialization.json()

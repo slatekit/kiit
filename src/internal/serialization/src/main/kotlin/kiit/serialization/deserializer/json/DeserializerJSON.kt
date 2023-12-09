@@ -1,8 +1,7 @@
-package kiit.serialization.deserializer
+package kiit.serialization.deserializer.json
 
 import kiit.common.crypto.Encryptor
 import kiit.common.values.Metadata
-import kiit.meta.Conversion
 import kiit.meta.JSONTransformer
 import kiit.meta.KTypes
 import kiit.meta.Reflector
@@ -10,6 +9,8 @@ import kiit.requests.InputArgs
 import kiit.requests.Request
 import kiit.results.Err
 import kiit.results.ExceptionErr
+import kiit.serialization.deserializer.DecodeUtils
+import kiit.serialization.deserializer.Deserializer
 import org.json.simple.JSONObject
 import org.json.simple.parser.JSONParser
 import kotlin.reflect.KClass
@@ -36,31 +37,11 @@ open class DeserializerJSON(
     private val decoders: Map<String, JSONTransformer<*>> = mapOf()
 ) : Deserializer<JSONObject> {
 
-    private val conversion  = Conversion(this::convert)
+    private val conversion  = JsonConverter(this::convert)
     private val typeRequest = Request::class.createType()
     private val typeMeta    = Metadata::class.createType()
-    private val deserializers = Deserializers(conversion, enc, decoders)
-    private val basicTypes = mapOf(
-        KTypes.KStringClass.qualifiedName!! to true,
-        KTypes.KBoolClass.qualifiedName!! to true,
-        KTypes.KShortClass.qualifiedName!! to true,
-        KTypes.KIntClass.qualifiedName!! to true,
-        KTypes.KLongClass.qualifiedName!! to true,
-        KTypes.KFloatClass.qualifiedName!! to true,
-        KTypes.KDoubleClass.qualifiedName!! to true,
-        KTypes.KLocalDateClass.qualifiedName!! to true,
-        KTypes.KLocalTimeClass.qualifiedName!! to true,
-        KTypes.KLocalDateTimeClass.qualifiedName!! to true,
-        KTypes.KZonedDateTimeClass.qualifiedName!! to true,
-        KTypes.KDateTimeClass.qualifiedName!! to true,
-        KTypes.KDecIntClass.qualifiedName!! to true,
-        KTypes.KDecLongClass.qualifiedName!! to true,
-        KTypes.KDecDoubleClass.qualifiedName!! to true,
-        KTypes.KDecStringClass.qualifiedName!! to true,
-        KTypes.KVarsClass.qualifiedName!! to true,
-        KTypes.KDocClass.qualifiedName!! to true,
-        KTypes.KUUIDClass.qualifiedName!! to true
-    )
+    private val deserializers = JsonDecoders(conversion, enc, decoders)
+    private val basicTypes = DecodeUtils.basicMapTypes()
 
 
     /**
@@ -113,7 +94,7 @@ open class DeserializerJSON(
                 when(isBasicType) {
                     true -> {
                         val paramValue = req.data.get(paramName)
-                        deserializers.basic.deserialize(req, inputs, paramValue, paramName, paramType)
+                        deserializers.basic.decode(req, inputs, paramName, paramValue, paramType)
                     }
                     false -> {
                         when(paramType) {
@@ -144,7 +125,7 @@ open class DeserializerJSON(
     private fun convert(parent: Any, paramValue: Any?, paramName:String, paramType: KType): Any? {
         val cls = paramType.classifier as KClass<*>
         val result = when(basicTypes.containsKey(cls.qualifiedName)) {
-            true -> deserializers.basic.deserialize(req, parent, paramValue, paramName, paramType)
+            true -> deserializers.basic.decode(req, parent, paramName, paramValue, paramType)
             else -> handleComplex(parent, paramValue, paramName, paramType)
         }
         return result
@@ -161,27 +142,27 @@ open class DeserializerJSON(
         val cls = paramType.classifier as KClass<*>
         val fullName = cls.qualifiedName
         return if (cls == List::class) {
-            deserializers.lists.deserialize(this.req, parent, paramValue, paramName, paramType)
+            deserializers.lists.decode(this.req, parent, paramName, paramValue, paramType)
         }
         // Case 2: Map
         else if (cls == Map::class) {
-            deserializers.maps.deserialize(this.req, parent, paramValue, paramName, paramType)
+            deserializers.maps.decode(this.req, parent, paramName, paramValue, paramType)
         }
         // Case 3: Custom Decoders ( for custom types )
         else if (decoders.containsKey(fullName)) {
-            deserializers.custom.deserialize(this.req, parent, paramValue, paramName, paramType)
+            deserializers.custom.decode(this.req, parent, paramName, paramValue, paramType)
         }
         // Case 4: Smart String ( e.g. PhoneUS, Email, SSN, ZipCode )
         else if (cls.supertypes.indexOf(KTypes.KSmartValueType) >= 0) {
-            deserializers.smart.deserialize(this.req, parent, paramValue, paramName, paramType)
+            deserializers.smart.decode(this.req, parent, paramName, paramValue, paramType)
         }
         // Case 5: Slate Kit Enm
         else if (cls.supertypes.indexOf(KTypes.KEnumLikeType) >= 0) {
-            deserializers.enums.deserialize(this.req, parent, paramValue, paramName, paramType)
+            deserializers.enums.decode(this.req, parent, paramName, paramValue, paramType)
         }
         // Case 6: Class / Object
         else {
-            deserializers.objs.deserialize(this.req, parent, paramValue, paramName, paramType)!!
+            deserializers.objs.decode(this.req, parent, paramName, paramValue, paramType)!!
         }
     }
 
@@ -189,15 +170,15 @@ open class DeserializerJSON(
      * Handles building of a list from various source types
      * @return
      */
-    private fun handleComplex(context: Request, parameter: KParameter, tpe: KType, jsonRaw: JSONObject?, raw: Any?): Any? {
+    private fun handleComplex(context: Request, parameter: KParameter, tpe: KType, jsonRaw: JSONObject?, rawValue: Any?): Any? {
         val data = context.data
         val paramName = parameter.name!!
         val cls = tpe.classifier as KClass<*>
 
         val result = if (cls.supertypes.indexOf(KTypes.KSmartValueType) >= 0) {
-            deserializers.smart.deserialize(this.req, data, raw, paramName, tpe)
+            deserializers.smart.decode(this.req, data, paramName,  rawValue, tpe)
         } else if (cls.supertypes.indexOf(KTypes.KSmartValuedType) >= 0) {
-            deserializers.smart.deserialize(this.req, data, raw, paramName, tpe)
+            deserializers.smart.decode(this.req, data, paramName, rawValue, tpe)
         } else if (cls.supertypes.indexOf(KTypes.KEnumLikeType) >= 0) {
             val enumVal = data.get(paramName)
             Reflector.getEnumValue(cls, enumVal)
@@ -220,7 +201,7 @@ open class DeserializerJSON(
             // Case 3: Smart String ( e.g. PhoneUS, Email, SSN, ZipCode )
             // Refer to kiit.common.types
             else if (cls.supertypes.indexOf(KTypes.KSmartValueType) >= 0) {
-                deserializers.smart.deserialize(this.req, data, raw, paramName, tpe)
+                deserializers.smart.decode(this.req, data, paramName, rawValue, tpe)
             }
             // Case 4: Object / Complex type
             else {

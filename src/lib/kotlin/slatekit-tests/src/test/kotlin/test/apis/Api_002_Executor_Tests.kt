@@ -26,8 +26,7 @@ import kiit.requests.Request
 import kiit.requests.toResponse
 import kiit.results.Failure
 import kiit.results.Success
-import kiit.serialization.deserializer.Deserializer
-import kiit.serialization.deserializer.DeserializerJSON
+import kiit.serialization.deserializer.json.DeserializerJSON
 import org.threeten.bp.ZoneId
 import test.apis.samples.*
 import test.setup.SampleApiWithConfigSetup

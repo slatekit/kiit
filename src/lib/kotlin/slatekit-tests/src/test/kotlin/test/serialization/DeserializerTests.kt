@@ -18,7 +18,7 @@ import kiit.requests.CommonRequest
 import kiit.common.Source
 import kiit.requests.Request
 import kiit.meta.*
-import kiit.serialization.deserializer.DeserializerJSON
+import kiit.serialization.deserializer.json.DeserializerJSON
 import test.setup.MyEncryptor
 import test.setup.StatusEnum
 import java.util.*

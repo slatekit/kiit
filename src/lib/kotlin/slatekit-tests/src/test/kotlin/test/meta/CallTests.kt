@@ -20,8 +20,7 @@ import kiit.requests.InputArgs
 import kiit.requests.CommonRequest
 import kiit.common.Source
 import kiit.meta.Reflector
-import kiit.serialization.deserializer.Deserializer
-import kiit.serialization.deserializer.DeserializerJSON
+import kiit.serialization.deserializer.json.DeserializerJSON
 import test.setup.UserApi
 
 /**
