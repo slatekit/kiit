@@ -12,18 +12,12 @@ import java.util.*
 import kotlin.reflect.KType
 
 
-class SimpleDecoder(val op:DecodeFunction) : Decoder<JSONObject> {
-    override fun decode(context: Any, parent: JSONObject, paramName: String, paramValue: Any?, paramType: KType): Any? {
-        return op(parent, paramName, paramValue, paramType)
-    }
-}
-
 class JsonBasicDecoder(
     private val converter: JsonConverter,
     private val enc: Encryptor?
 ) : Decoder<JSONObject>, DecodeSupport {
 
-    override fun decode(context: Any, parent: JSONObject, paramName: String, paramValue: Any?, paramType: KType): Any? {
+    override fun decode(context: Any, parent: Any, paramName: String, paramValue: Any?, paramType: KType): Any? {
         val result = when (paramType.classifier) {
             // Basic
             KTypes.KStringClass -> paramValue?.let { Conversions.handleString(it) }

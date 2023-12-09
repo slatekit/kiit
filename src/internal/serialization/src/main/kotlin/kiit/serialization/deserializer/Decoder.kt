@@ -27,7 +27,7 @@ interface Decoder<T> {
      * @param paramValue: Parameter value of current item : e.g. if "account", this is value 1234567
      * @param paramType : Parameter type of current item  : e.g. if "account", this is Int
      */
-    fun decode(context:Any, parent: T, paramName: String, paramValue: Any?, paramType: KType): Any?
+    fun decode(context:Any, parent: Any, paramName: String, paramValue: Any?, paramType: KType): Any?
 }
 
 

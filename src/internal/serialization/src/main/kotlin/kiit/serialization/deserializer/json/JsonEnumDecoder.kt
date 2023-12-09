@@ -13,7 +13,7 @@ class JsonEnumDecoder(
     private val enc: Encryptor?
 ) : Decoder<JSONObject>, DecodeSupport {
 
-    override fun decode(context: Any, parent: JSONObject, paramName: String, paramValue: Any?, paramType: KType): Any? {
+    override fun decode(context: Any, parent: Any, paramName: String, paramValue: Any?, paramType: KType): Any? {
         val cls = paramType.classifier as KClass<*>
         val result = Reflector.getEnumValue(cls, paramValue)
         return result

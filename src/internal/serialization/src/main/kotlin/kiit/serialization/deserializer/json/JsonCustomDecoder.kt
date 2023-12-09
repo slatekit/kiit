@@ -16,13 +16,13 @@ class JsonCustomDecoder(
     private val decoders: Map<String, JSONTransformer<*>> = mapOf()
 ) : Decoder<JSONObject>, DecodeSupport {
 
-    override fun decode(context: Any, parent: JSONObject, paramName: String, paramValue: Any?, paramType: KType): Any? {
+    override fun decode(context: Any, parent: Any, paramName: String, paramValue: Any?, paramType: KType): Any? {
         val cls = paramType.classifier as KClass<*>
         val fullName = cls.qualifiedName
         val decoder = decoders[fullName]
-        val json = when (paramValue) {
+        val json:JSONObject? = when (paramValue) {
             is JSONObject -> paramValue
-            else -> parent
+            else -> parent as? JSONObject
         }
         val result = when (decoder) {
             is JSONRestoreWithContext<*> -> {
