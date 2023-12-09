@@ -37,6 +37,7 @@ import kiit.policy.hooks.Middleware
 import kiit.connectors.entities.AppEntContext
 import kiit.results.Try
 import kiit.serialization.deserializer.Deserializer
+import org.json.simple.JSONObject
 import test.TestApp
 import test.setup.MyAuthProvider
 import test.setup.MyEncryptor
@@ -137,7 +138,7 @@ open class ApiTestsBase {
         request: Request,
         response: Response<*>,
         checkFailMsg:Boolean = false,
-        decoder: ((Request, Encryptor?) -> Deserializer)? = null
+        decoder: ((Request, Encryptor?) -> Deserializer<JSONObject>)? = null
         ) {
 
         // Optional auth

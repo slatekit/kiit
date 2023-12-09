@@ -10,7 +10,7 @@ about: A Kotlin utility library, tool-kit and server backend.
 
  </kiit_header>
  */
-package test.common
+package test.serialization
 
 import org.junit.Assert
 import org.junit.Test

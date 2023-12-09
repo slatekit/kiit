@@ -21,6 +21,7 @@ import kiit.requests.CommonRequest
 import kiit.common.Source
 import kiit.meta.Reflector
 import kiit.serialization.deserializer.Deserializer
+import kiit.serialization.deserializer.DeserializerJSON
 import test.setup.UserApi
 
 /**
@@ -86,7 +87,7 @@ class CallTests {
 
         fun ensureTypes(inputs: InputArgs):Unit {
             val req = CommonRequest("app.users.testTypes", listOf("app", "users", "testTypes"), Source.CLI, "post", inputs, InputArgs(mapOf()))
-            val deserializer = Deserializer(req)
+            val deserializer = DeserializerJSON(req)
             val method = Reflector.getMethod(UserApi::class, UserApi::testTypes.name)
             val args = deserializer.deserialize(method!!.parameters.drop(1))
 
@@ -128,7 +129,7 @@ class CallTests {
         fun ensureList(inputs: InputArgs, expected:List<Int>):Unit {
             val name = "argTypeListInt"
             val req = CommonRequest("app.users.$name", listOf("app", "users", name), Source.CLI, "post", inputs, InputArgs(mapOf()))
-            val deserializer = Deserializer(req)
+            val deserializer = DeserializerJSON(req)
             val method = Reflector.getMethod(UserApi::class, name)
             val args = deserializer.deserialize(method!!.parameters.drop(1))
 
@@ -150,7 +151,7 @@ class CallTests {
         fun ensureMap(inputs: InputArgs, expected:Map<String,Int>):Unit {
             val name = "argTypeMapInt"
             val req = CommonRequest("app.users.$name", listOf("app", "users", name), Source.CLI, "post", inputs, InputArgs(mapOf()))
-            val deserializer = Deserializer(req)
+            val deserializer = DeserializerJSON(req)
             val method = Reflector.getMethod(UserApi::class, name)
             val args = deserializer.deserialize(method!!.parameters.drop(1))
 
