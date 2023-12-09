@@ -26,7 +26,7 @@ import kiit.requests.Request
 import kiit.requests.toResponse
 import kiit.results.Failure
 import kiit.results.Success
-import kiit.serialization.deserializer.json.DeserializerJSON
+import kiit.serialization.deserializer.json.JsonDeserializer
 import org.threeten.bp.ZoneId
 import test.apis.samples.*
 import test.setup.SampleApiWithConfigSetup
@@ -117,7 +117,7 @@ class Api_002_Executor_Tests : ApiTestsBase() {
                 Pair(Custom1::class.qualifiedName!!, Custom1Decoder()),
                 Pair(Custom2::class.qualifiedName!!, Custom2Decoder()),
             )
-            DeserializerJSON(req, enc, decoders)
+            JsonDeserializer(req, enc, decoders)
         }
 
         checkCall(

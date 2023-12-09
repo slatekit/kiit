@@ -148,7 +148,8 @@ open class ApiTestsBase {
         val host = ApiServer(ctx,
                 routes = routes,
                 auth = auth,
-                settings = Settings(protocol, decoder = decoder))
+                decoder = decoder,
+                settings = Settings(protocol))
 
         // Get result
         val actual = runBlocking {

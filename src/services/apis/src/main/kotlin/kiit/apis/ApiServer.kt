@@ -10,6 +10,7 @@ import kiit.apis.rules.RouteRule
 import kiit.apis.services.*
 import kiit.apis.setup.HostAware
 import kiit.common.*
+import kiit.common.crypto.Encryptor
 import kiit.common.ext.numbered
 import kiit.common.ext.structured
 import kiit.requests.toResponse
@@ -22,7 +23,7 @@ import kiit.meta.*
 import kiit.serialization.deserializer.Deserializer
 import kiit.results.*
 import kiit.results.builders.Outcomes
-import kiit.serialization.deserializer.json.DeserializerJSON
+import kiit.serialization.deserializer.json.JsonDeserializer
 import org.json.simple.JSONObject
 
 /**
@@ -38,6 +39,7 @@ open class ApiServer(
     val rewriter: Rewriter? = null,
     val namedMiddlewares: List<Pair<String,Middleware>> = listOf(),
     val auth: Auth? = null,
+    val decoder: ((Request, Encryptor?) -> Deserializer<JSONObject>)? = null,
     val settings: Settings = Settings()
 )  {
 
@@ -249,7 +251,7 @@ open class ApiServer(
     protected open suspend fun executeMethod(request: ApiRequest): Outcome<ApiResult> {
         // Finally make call.
         val target = request.target
-        val converter = settings.decoder?.invoke(request.request, ctx.enc) ?: DeserializerJSON(request.request, ctx.enc)
+        val converter = decoder?.invoke(request.request, ctx.enc) ?: JsonDeserializer(request.request, ctx.enc)
         val executor = target!!.handler as MethodExecutor
         val call = executor.call
         val inputs = fillArgs(converter, target, call, request.request)
@@ -300,7 +302,7 @@ open class ApiServer(
 
         @JvmStatic
         fun of(ctx: Context, routes: List<VersionAreas>, auth: Auth? = null, source: Source? = null): ApiServer {
-            val server = ApiServer(ctx, routes, null, listOf(), auth, Settings(source ?: Source.API))
+            val server = ApiServer(ctx, routes, null, listOf(), auth, null, Settings(source ?: Source.API))
             return server
         }
 

@@ -31,7 +31,7 @@ import kotlin.reflect.full.createType
  * 1. A context object ( in this case the Request - API, CLI, etc ) is supplied to the deserializers
  * 2. Deserialization is passed the specific parameters ( list ) not a single value to deserialize
  */
-open class DeserializerJSON(
+open class JsonDeserializer(
     private val req:Request,
     private val enc: Encryptor? = null,
     private val decoders: Map<String, JSONTransformer<*>> = mapOf()

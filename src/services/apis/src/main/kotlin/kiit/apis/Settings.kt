@@ -33,7 +33,6 @@ import org.json.simple.JSONObject
 data class Settings(
     val source: Source = Source.API,
     val naming: Namer? = null,
-    val decoder: ((Request, Encryptor?) -> Deserializer<JSONObject>)? = null,
     val encoder: ((String, Any?) -> String)? = null,
     val record : Boolean = false,
     val docKey: String? = null,
