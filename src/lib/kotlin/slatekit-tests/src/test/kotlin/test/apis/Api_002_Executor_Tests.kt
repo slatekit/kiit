@@ -12,7 +12,6 @@ about: A Kotlin utility library, tool-kit and server backend.
  */
 package test.apis
 
-import test.apis.samples.Sample_API_1_Core
 import org.junit.Test
 import kiit.apis.*
 import kiit.apis.setup.GlobalVersion
@@ -20,12 +19,16 @@ import kiit.apis.setup.api
 import kiit.apis.setup.routes
 import kiit.common.Source
 import kiit.common.*
+import kiit.common.crypto.Encryptor
 import kiit.context.AppContext
 import kiit.requests.CommonRequest
+import kiit.requests.Request
 import kiit.requests.toResponse
 import kiit.results.Failure
 import kiit.results.Success
+import kiit.serialization.deserializer.Deserializer
 import org.threeten.bp.ZoneId
+import test.apis.samples.*
 import test.setup.SampleApiWithConfigSetup
 
 /**
@@ -102,6 +105,30 @@ class Api_002_Executor_Tests : ApiTestsBase() {
             routes = routes(versions = listOf(GlobalVersion("0", listOf(api(Sample_API_1_Core::class, Sample_API_1_Core(context)))))),
             user = null,
             request = CommonRequest.path("$AREA.$NAME.${Sample_API_1_Core::processRequest.name}", Verbs.POST, mapOf(), mapOf(Pair("id", "2"))),
+            response = Success("ok", msg = "raw send id: 2").toResponse()
+        )
+    }
+
+
+    @Test
+    fun can_execute_with_custom_inputs() {
+        val decoder = { req: Request, enc: Encryptor? ->
+            val decoders = mapOf(
+                Pair(Custom1::class.qualifiedName!!, Custom1Decoder()),
+                Pair(Custom2::class.qualifiedName!!, Custom2Decoder()),
+            )
+            Deserializer(req, enc, decoders)
+        }
+
+        checkCall(
+            protocol = Source.CLI,
+            routes = routes(versions = listOf(GlobalVersion("0", listOf(api(Sample_API_1_Core::class, Sample_API_1_Core(context)))))),
+            user = null,
+            request = CommonRequest.path("$AREA.$NAME.${Sample_API_1_Core::processCustom.name}", Verbs.POST,
+                mapOf(Pair("name", "c1"), Pair("code", 2)),
+                mapOf(Pair("note", "custom_inputs"))
+            ),
+            decoder = decoder,
             response = Success("ok", msg = "raw send id: 2").toResponse()
         )
     }

@@ -118,7 +118,7 @@ class SampleFiles3Api {
     val sampleCSVData = sampleCSV.toByteArray()
 
     @Action()
-    fun getRequest(request: Request, meta:Meta) : String {
+    fun getRequest(request: Request) : String {
         return "got inputs"
     }
 

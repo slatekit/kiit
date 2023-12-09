@@ -33,13 +33,13 @@ import kiit.results.Success
  * java -jar ${app.name}.jar -env=dev -log.level=info -conf.dir = "file://./conf-sample-shell"
  * java -jar ${app.name}.jar -env=dev -log.level=info -conf.dir = "file://./conf-sample-server"
  *
- * slatekit new app -name="MyApp1" -packageName="company1.apps"
- * slatekit new api -name="MyAPI1" -packageName="company1.apis"
- * slatekit new cli -name="MyCLI1" -packageName="company1.apps"
- * slatekit new env -name="MyApp2" -packageName="company1.apps"
- * slatekit new job -name="MyJob1" -packageName="company1.jobs"
- * slatekit new lib -name="MyLib1" -packageName="company1.libs"
- * slatekit new orm -name="MyApp1" -packageName="company1.apps"
+ * kiit new app -name="MyApp1" -packageName="company1.apps"
+ * kiit new api -name="MyAPI1" -packageName="company1.apis"
+ * kiit new cli -name="MyCLI1" -packageName="company1.apps"
+ * kiit new env -name="MyApp2" -packageName="company1.apps"
+ * kiit new job -name="MyJob1" -packageName="company1.jobs"
+ * kiit new lib -name="MyLib1" -packageName="company1.libs"
+ * kiit new orm -name="MyApp1" -packageName="company1.apps"
  *
  * -job.name=queued
  *
@@ -84,7 +84,7 @@ fun api(args: Array<String>) {
 }
 
 
-fun run(args:Array<String>){
+fun run(args:Array<String>) {
     /**
      * DOCS : https://www.kiit.dev/arch/app/
      *

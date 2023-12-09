@@ -21,6 +21,7 @@ import kiit.requests.CommonRequest
 import kiit.common.Source
 import kiit.common.args.Args
 import kiit.common.conf.Config
+import kiit.common.crypto.Encryptor
 import kiit.common.data.DbConString
 import kiit.common.data.Connections
 import kiit.common.data.Connections.Companion.of
@@ -35,6 +36,7 @@ import kiit.entities.Entities
 import kiit.policy.hooks.Middleware
 import kiit.connectors.entities.AppEntContext
 import kiit.results.Try
+import kiit.serialization.deserializer.Deserializer
 import test.TestApp
 import test.setup.MyAuthProvider
 import test.setup.MyEncryptor
@@ -134,7 +136,9 @@ open class ApiTestsBase {
         user: Credentials?,
         request: Request,
         response: Response<*>,
-        checkFailMsg:Boolean = false) {
+        checkFailMsg:Boolean = false,
+        decoder: ((Request, Encryptor?) -> Deserializer)? = null
+        ) {
 
         // Optional auth
         val auth = user?.let { u -> MyAuthProvider(u.name, u.roles, buildKeys()) }
@@ -143,7 +147,7 @@ open class ApiTestsBase {
         val host = ApiServer(ctx,
                 routes = routes,
                 auth = auth,
-                settings = Settings(protocol))
+                settings = Settings(protocol, decoder = decoder))
 
         // Get result
         val actual = runBlocking {

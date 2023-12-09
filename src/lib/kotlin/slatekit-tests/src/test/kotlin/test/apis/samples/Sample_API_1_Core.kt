@@ -12,15 +12,19 @@
 package test.apis.samples
 
 import kiit.apis.*
+import kiit.apis.core.Transformer
 import kiit.common.*
 import kiit.common.types.ContentFile
 import kiit.requests.Request
 import kiit.common.checks.Check
 import kiit.common.values.Metadata
 import kiit.context.Context
+import kiit.meta.JSONRestoreWithContext
+import kiit.meta.JSONTransformer
 import kiit.results.Outcome
 import kiit.results.Success
 import kiit.results.builders.Outcomes
+import org.json.simple.JSONObject
 
 @Api(area = "samples", name = "core", desc = "api to access and manage users 3", auth = AuthModes.NONE)
 class Sample_API_1_Core(context: Context) {
@@ -67,6 +71,12 @@ class Sample_API_1_Core(context: Context) {
     }
 
 
+    @Action(desc = "processes a request with raw request, meta")
+    fun processCustom(req:Request, custom1:Custom1, custom2: Custom2, note:String): Outcome<String> {
+        return Success("custom1=${custom1.name}, custom2=${custom2.code}, note=$note", msg = "raw both")
+    }
+
+
     @Action(desc = "processes with an Document type")
     fun processFile(doc: ContentFile): Outcome<String> {
         return Success("ok", msg = String(doc.data))
@@ -104,5 +114,25 @@ class Sample_API_1_Core(context: Context) {
         else {
             Outcomes.success(text.toInt(), msg = "You supplied a valid number")
         }
+    }
+}
+
+data class Custom1(val name:String)
+data class Custom2(val code:Int)
+
+class Custom1Decoder : Transformer<Custom1>(Custom1::class.java), JSONRestoreWithContext<Custom1> {
+    override fun <T> restore(ctx: T, model: JSONObject?, key:String): Custom1? {
+        val req = ctx as Request
+        val name = req.meta.getString("name")
+        return Custom1(name)
+    }
+}
+
+
+class Custom2Decoder : Transformer<Custom2>(Custom2::class.java), JSONRestoreWithContext<Custom2> {
+    override fun <T> restore(ctx: T, model: JSONObject?, key:String): Custom2? {
+        val req = ctx as Request
+        val code = req.meta.getInt("code")
+        return Custom2(code)
     }
 }
