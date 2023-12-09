@@ -15,7 +15,7 @@ package test.apis.samples
 
 import kiit.apis.*
 import kiit.common.*
-import kiit.common.auth.Roles
+import kiit.apis.core.Roles
 import kiit.results.Outcome
 import kiit.results.Success
 

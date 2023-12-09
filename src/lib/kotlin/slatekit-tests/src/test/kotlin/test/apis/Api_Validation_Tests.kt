@@ -19,8 +19,12 @@ import org.threeten.bp.ZoneId
 import kiit.apis.*
 import kiit.apis.routes.Api
 import kiit.apis.SetupType
+import kiit.apis.setup.GlobalVersion
+import kiit.apis.setup.api
+import kiit.apis.setup.routes
 import kiit.common.DateTimes
 import kiit.results.*
+import test.apis.samples.Sample_API_1_Core
 import test.apis.samples.Sample_API_1_Validation
 
 /**
@@ -36,10 +40,10 @@ class Api_Validation_Tests : ApiTestsBase() {
 
     @Test
     fun can_fail_with_missing_args() {
-        val api = Sample_API_1_Validation()
-        val apis = ApiServer(ctx, apis = listOf(Api(api, setup = SetupType.Annotated)) )
+        val routes = routes(versions = listOf(GlobalVersion("0", listOf(api(Sample_API_1_Validation::class, Sample_API_1_Validation())))))
+        val apis = ApiServer(ctx, routes = routes)
         val r1 = runBlocking {
-            apis.executeAttempt("samples", "validation", Sample_API_1_Validation::processInputs.name, Verb.Post, mapOf(), mapOf())
+            apis.executeAttempt("tests", "validation", Sample_API_1_Validation::processInputs.name, Verb.Post, mapOf(), mapOf())
         }
         Assert.assertFalse(r1.success)
         r1.onFailure {
@@ -57,10 +61,10 @@ class Api_Validation_Tests : ApiTestsBase() {
 
     @Test
     fun can_fail_with_conversion() {
-        val api = Sample_API_1_Validation()
-        val apis = ApiServer(ctx, apis = listOf(Api(api, setup = SetupType.Annotated)) )
+        val routes = routes(versions = listOf(GlobalVersion("0", listOf(api(Sample_API_1_Validation::class, Sample_API_1_Validation())))))
+        val apis = ApiServer(ctx, routes = routes)
         val r1 = runBlocking {
-            apis.executeAttempt("samples", "validation", Sample_API_1_Validation::processInputs.name, Verb.Post, mapOf(), mapOf(
+            apis.executeAttempt("tests", "validation", Sample_API_1_Validation::processInputs.name, Verb.Post, mapOf(), mapOf(
                     Pair("phone", "p1"),
                     Pair("code" , "abc" ),
                     Pair("isOn" , "something"),

@@ -17,7 +17,7 @@ interface Middleware {
                 return middleware[index].process(req, next)
 
             val curr = middleware[index]
-            return curr.process(req) {
+            return curr.process(req,) {
                 process(it, index + 1, middleware, next)
             }
         }

@@ -37,9 +37,10 @@ class JavaBuilder(val settings: CodeGenSettings) : CodeBuilder {
      */
     override fun buildQueryParams(action: Action): String {
         return if (action.verb == Verb.Get) {
-            action.paramsUser.foldIndexed("") { ndx: Int, acc: String, param: KParameter ->
-                acc + (if (ndx > 0) "\t\t" else "") + "queryParams.put(\"" + param.name + "\", String.valueOf(" + param.name + "));" + newline
-            }
+//            action.paramsUser.foldIndexed("") { ndx: Int, acc: String, param: KParameter ->
+//                acc + (if (ndx > 0) "\t\t" else "") + "queryParams.put(\"" + param.name + "\", String.valueOf(" + param.name + "));" + newline
+//            }
+            ""
         } else {
             ""
         }
@@ -51,9 +52,10 @@ class JavaBuilder(val settings: CodeGenSettings) : CodeBuilder {
      */
     override fun buildDataParams(action: Action): String {
         return if (action.verb != Verb.Get) {
-            action.paramsUser.foldIndexed("") { ndx: Int, acc: String, param: KParameter ->
-                acc + (if (ndx > 0) "\t\t" else "") + "postData.put(\"" + param.name + "\", " + param.name + ");" + newline
-            }
+//            action.paramsUser.foldIndexed("") { ndx: Int, acc: String, param: KParameter ->
+//                acc + (if (ndx > 0) "\t\t" else "") + "postData.put(\"" + param.name + "\", " + param.name + ");" + newline
+//            }
+            ""
         } else {
             ""
         }

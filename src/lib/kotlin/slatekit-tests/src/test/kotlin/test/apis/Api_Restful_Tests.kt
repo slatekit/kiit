@@ -1,5 +1,5 @@
 /**
- <kiit_header>
+<kiit_header>
 url: www.kiit.dev
 git: www.github.com/slatekit/kiit
 org: www.codehelix.co
@@ -8,7 +8,7 @@ copyright: 2016 CodeHelix Solutions Inc.
 license: refer to website and/or github
 about: A Kotlin utility library, tool-kit and server backend.
 
- </kiit_header>
+</kiit_header>
  */
 package test.apis
 
@@ -19,12 +19,17 @@ import org.junit.Test
 import kiit.apis.*
 import kiit.apis.routes.Api
 import kiit.apis.services.Restify
+import kiit.apis.setup.GlobalVersion
+import kiit.apis.setup.api
+import kiit.apis.setup.routes
 import kiit.common.*
+import kiit.context.AppContext
 import kiit.utils.naming.LowerHyphenNamer
 import kiit.utils.naming.Namer
 import kiit.results.Result
 import kiit.results.Codes
 import kiit.results.getOrElse
+import test.apis.samples.Sample_API_1_Core
 import test.setup.SampleRESTApi
 import test.setup.Movie
 
@@ -34,34 +39,37 @@ import test.setup.Movie
 
 
 class Api_Restful_Tests : ApiTestsBase() {
+    val context = AppContext.simple(Sample_API_1_Core::class.java, "test")
 
-/*
-* GET    /tickets    - Retrieves a list of tickets
-* GET    /tickets/12 - Retrieves a specific ticket
-* POST   /tickets    - Creates a new ticket
-* PUT    /tickets/12 - Updates ticket #12
-* PATCH  /tickets/12 - Partially updates ticket #12
-* DELETE /tickets/12 - Deletes ticket #12
-*
-*/
-    @Test fun can_get_all() {
+    /*
+    * GET    /tickets    - Retrieves a list of tickets
+    * GET    /tickets/12 - Retrieves a specific ticket
+    * POST   /tickets    - Creates a new ticket
+    * PUT    /tickets/12 - Updates ticket #12
+    * PATCH  /tickets/12 - Partially updates ticket #12
+    * DELETE /tickets/12 - Deletes ticket #12
+    *
+    */
+    @Test
+    fun can_get_all() {
 
-       ensure("", Verb.Get, mapOf(), namer = LowerHyphenNamer(), callback ={ r1 ->
+        ensure("", Verb.Get, mapOf(), namer = LowerHyphenNamer(), callback = { r1 ->
 
             Assert.assertTrue(r1.success)
             Assert.assertTrue(r1.code == Codes.SUCCESS.code)
 
             val all = r1.getOrElse { Movie.samples() } as List<Movie>
-           Assert.assertTrue(all.size == 2 )
+            Assert.assertTrue(all.size == 2)
         })
     }
 
 
-    @Test fun can_get_by_id() {
-
-        val apis = ApiServer(ctx, writer = Restify(), apis = listOf(Api(SampleRESTApi::class, "app", "SampleREST")))
+    @Test
+    fun can_get_by_id() {
+        val routes = routes(versions = listOf(GlobalVersion("0", listOf(api(SampleRESTApi::class, SampleRESTApi())))))
+        val apis = ApiServer(ctx, rewriter = Restify(), routes = routes)
         val r1 = runBlocking {
-            apis.executeAttempt("app", "SampleREST", "1", Verb.Get, mapOf(), mapOf())
+            apis.executeAttempt("tests", "SampleREST", "1", Verb.Get, mapOf(), mapOf())
         }
         Assert.assertTrue(r1.success)
         Assert.assertTrue(r1.code == Codes.SUCCESS.code)
@@ -71,12 +79,16 @@ class Api_Restful_Tests : ApiTestsBase() {
     }
 
 
-    @Test fun can_patch() {
+    @Test
+    fun can_patch() {
 
-        val apis = ApiServer(ctx, writer = Restify(), apis = listOf(Api(SampleRESTApi::class, "app", "SampleREST")))
+        val routes = routes(versions = listOf(GlobalVersion("0", listOf(api(SampleRESTApi::class, SampleRESTApi())))))
+        val apis = ApiServer(ctx, rewriter = Restify(), routes = routes)
         val r1 = runBlocking {
-            apis.executeAttempt("app", "SampleREST", "1", Verb.Patch, mapOf(),
-                    mapOf("title" to "Indiana Jones Original"))
+            apis.executeAttempt(
+                "tests", "SampleREST", "1", Verb.Patch, mapOf(),
+                mapOf("title" to "Indiana Jones Original")
+            )
         }
 
         Assert.assertTrue(r1.success)
@@ -85,11 +97,13 @@ class Api_Restful_Tests : ApiTestsBase() {
     }
 
 
-    @Test fun can_delete_by_id() {
+    @Test
+    fun can_delete_by_id() {
 
-        val apis = ApiServer(ctx, writer = Restify(), apis = listOf(Api(SampleRESTApi::class, "app", "SampleREST")))
+        val routes = routes(versions = listOf(GlobalVersion("0", listOf(api(SampleRESTApi::class, SampleRESTApi())))))
+        val apis = ApiServer(ctx, rewriter = Restify(), routes = routes)
         val r1 = runBlocking {
-            apis.executeAttempt("app", "SampleREST", "1", Verb.Delete, mapOf(), mapOf())
+            apis.executeAttempt("tests", "SampleREST", "1", Verb.Delete, mapOf(), mapOf())
         }
 
         Assert.assertTrue(r1.success)
@@ -98,11 +112,13 @@ class Api_Restful_Tests : ApiTestsBase() {
     }
 
 
-    @Test fun can_activate_by_id() {
+    @Test
+    fun can_activate_by_id() {
 
-        val apis = ApiServer(ctx, writer = Restify(), apis = listOf(Api(SampleRESTApi::class, "app", "SampleREST")))
+        val routes = routes(versions = listOf(GlobalVersion("0", listOf(api(SampleRESTApi::class, SampleRESTApi())))))
+        val apis = ApiServer(ctx, rewriter = Restify(), routes = routes)
         val r1 = runBlocking {
-            apis.executeAttempt("app", "SampleREST", "activateById", Verb.Post, mapOf(), mapOf("id" to 1))
+            apis.executeAttempt("tests", "SampleREST", "activateById", Verb.Post, mapOf(), mapOf("id" to 1))
         }
 
         Assert.assertTrue(r1.success)
@@ -112,28 +128,27 @@ class Api_Restful_Tests : ApiTestsBase() {
 
 
     @Test
-    fun can_create(){
+    fun can_create() {
+        val routes = routes(versions = listOf(GlobalVersion("0", listOf(api(SampleRESTApi::class, SampleRESTApi())))))
         val json = JSONObject()
-        json.put("id"        , "0")
-        json.put("title"     , "Indiana Jones")
-        json.put("category"  , "adventure")
-        json.put("playing"   , "false")
-        json.put("cost"      , "30")
-        json.put("rating"    , "4.8")
-        json.put("released"  , DateTimes.of(1981, 6, 12).toString())
-        json.put("createdAt" , DateTimes.of(2017, 7, 17).toString())
-        json.put("createdBy" , "0")
-        json.put("updatedAt" , DateTimes.of(2017, 7, 17).toString())
-        json.put("updatedBy" , "0")
-        val data = mapOf( "item" to json )
-        val apis = ApiServer(ctx, writer = Restify(),
-                apis = listOf(Api(SampleRESTApi::class, "app", "SampleREST"))
-        )
+        json.put("id", "0")
+        json.put("title", "Indiana Jones")
+        json.put("category", "adventure")
+        json.put("playing", "false")
+        json.put("cost", "30")
+        json.put("rating", "4.8")
+        json.put("released", DateTimes.of(1981, 6, 12).toString())
+        json.put("createdAt", DateTimes.of(2017, 7, 17).toString())
+        json.put("createdBy", "0")
+        json.put("updatedAt", DateTimes.of(2017, 7, 17).toString())
+        json.put("updatedBy", "0")
+        val data = mapOf("item" to json)
+        val apis = ApiServer(ctx, rewriter = Restify(), routes = routes)
         val r1 = runBlocking {
             apis.executeAttempt(
-                    "app", "SampleREST", "", Verb.Post,
-                    mapOf("api-key" to "3E35584A8DE0460BB28D6E0D32FB4CFD"),
-                    data
+                "tests", "SampleREST", "", Verb.Post,
+                mapOf("api-key" to "3E35584A8DE0460BB28D6E0D32FB4CFD"),
+                data
             )
         }
 
@@ -144,27 +159,27 @@ class Api_Restful_Tests : ApiTestsBase() {
 
 
     @Test
-    fun can_update(){
-
+    fun can_update() {
+        val routes = routes(versions = listOf(GlobalVersion("0", listOf(api(SampleRESTApi::class, SampleRESTApi())))))
         val json = JSONObject()
-        json.put("id"        , "1")
-        json.put("title"     , "Indiana Jones")
-        json.put("category"  , "adventure")
-        json.put("playing"   , "false")
-        json.put("cost"      , "30")
-        json.put("rating"    , "4.8")
-        json.put("released"  , DateTimes.of(1981, 6, 12).toString())
-        json.put("createdAt" , DateTimes.of(2017, 7, 17).toString())
-        json.put("createdBy" , "0")
-        json.put("updatedAt" , DateTimes.of(2017, 7, 17).toString())
-        json.put("updatedBy" , "0")
-        val data = mapOf( "item" to json )
-        val apis = ApiServer(ctx, writer = Restify(), apis = listOf(Api(SampleRESTApi::class, "app", "SampleREST")))
+        json.put("id", "1")
+        json.put("title", "Indiana Jones")
+        json.put("category", "adventure")
+        json.put("playing", "false")
+        json.put("cost", "30")
+        json.put("rating", "4.8")
+        json.put("released", DateTimes.of(1981, 6, 12).toString())
+        json.put("createdAt", DateTimes.of(2017, 7, 17).toString())
+        json.put("createdBy", "0")
+        json.put("updatedAt", DateTimes.of(2017, 7, 17).toString())
+        json.put("updatedBy", "0")
+        val data = mapOf("item" to json)
+        val apis = ApiServer(ctx, rewriter = Restify(), routes = routes )
         val r1 = runBlocking {
             apis.executeAttempt(
-                    "app", "SampleREST", "", Verb.Put,
-                    mapOf("api-key" to "3E35584A8DE0460BB28D6E0D32FB4CFD"),
-                    data
+                "tests", "SampleREST", "", Verb.Put,
+                mapOf("api-key" to "3E35584A8DE0460BB28D6E0D32FB4CFD"),
+                data
             )
         }
 
@@ -174,19 +189,27 @@ class Api_Restful_Tests : ApiTestsBase() {
     }
 
 
-    fun ensure(action:String, verb:Verb, args:Map<String,Any>, namer: Namer?, callback:(Result<*, *>) -> Unit): Unit {
+    fun ensure(
+        action: String,
+        verb: Verb,
+        args: Map<String, Any>,
+        namer: Namer?,
+        callback: (Result<*, *>) -> Unit
+    ) {
 
-        val apis = ApiServer(ctx, writer = Restify(), apis = listOf(Api(SampleRESTApi::class, "app", "SampleREST")))
+        val routes1 = routes(versions = listOf(GlobalVersion("0", listOf(api(SampleRESTApi::class, SampleRESTApi())))))
+        val apis = ApiServer(ctx, rewriter = Restify(), routes = routes1)
         val r1 = runBlocking {
-            apis.executeAttempt("app", "SampleREST", action, verb, mapOf(), args)
+            apis.executeAttempt("tests", "SampleREST", action, verb, mapOf(), args)
         }
         callback(r1)
 
-        val api2 = ApiServer(ctx, writer = Restify(), apis = listOf(Api(SampleRESTApi::class, "app", "SampleREST")), settings = kiit.apis.Settings(naming = namer))
-        val name = namer?.rename("SampleREST")  ?: "SampleREST"
-        val act  = namer?.rename(action) ?: action
+        val routes2 = routes(versions = listOf(GlobalVersion("0", listOf(api(SampleRESTApi::class, SampleRESTApi())))), namer)
+        val api2 = ApiServer(ctx, rewriter = Restify(), routes = routes2, settings = kiit.apis.Settings(naming = namer))
+        val name = namer?.rename("SampleREST") ?: "SampleREST"
+        val act = namer?.rename(action) ?: action
         val r2 = runBlocking {
-            api2.executeAttempt("app", name, act, verb, mapOf(), args)
+            api2.executeAttempt("tests", name, act, verb, mapOf(), args)
         }
         callback(r2)
     }

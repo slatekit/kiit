@@ -46,59 +46,59 @@ class CodeGen(val settings: CodeGenSettings, val builder:CodeBuilder) {
         codeGenDirs.create(log)
         codeGenDirs.log(log)
 
-        // Collection of all custom types
-        val routes = this.settings.host.routes
-        val rules = CodeRules(this.settings)
-        val allApis = routes.areas.items.map { it.apis.items }.flatten()
-        val apis = allApis.filter { rules.isValidApi(it) }
-
-        apis.forEach { api ->
-            try {
-                println("API: " + api.area + "." + api.name)
-
-                // Get only the declared members in the api/class
-                val declaredMembers = api.klass.declaredMemberFunctions
-                val declaredMemberLookup = declaredMembers.map { func -> (func.name to true) }.toMap()
-
-                // Get all the actions on the api
-                val methodsBuffer = StringBuilder()
-
-                // Iterate over all the api actions
-                api.actions.items.forEach { action ->
-
-                    log.info("Processing : " + api.area + "/" + api.name + "/" + action.name)
-
-                    // Ok to generate ?
-                    if (rules.isValidAction(api, action, declaredMemberLookup)) {
-                        // Generate code here.
-                        val methodInfo = generateMethod(api, action)
-                        log.info("generating method for: " + api.area + "/" + api.name + "/" + action.name)
-                        methodsBuffer.append(methodInfo)
-                        methodsBuffer.append(newline)
-                    }
-                }
-
-                // Get unique types
-                // Iterate over all the api actions
-                if(this.settings.createDtos) {
-                    api.actions.items.map { action ->
-                        println(action.member.name)
-                        generateModelFromType(action.paramsUser.map { it.type }, codeGenDirs.modelFolder)
-                        try {
-                            generateModelFromType(listOf(action.member.returnType), codeGenDirs.modelFolder)
-                        } catch (ex: Exception) {
-                            log.error("Error trying to generate types from return type:" + action.member.name + ", " + action.member.returnType.classifier?.toString())
-                        }
-                    }
-                }
-
-                // Generate file.
-                generateApi(req, api, codeGenDirs.apiFolder, methodsBuffer.toString())
-            } catch (ex: Exception) {
-                log.error("Error inspecting and generating code for: ${api.area}.${api.name}")
-                throw ex
-            }
-        }
+//        // Collection of all custom types
+//        val routes = this.settings.host.routes
+//        val rules = CodeRules(this.settings)
+//        val allApis = routes.areas.items.map { it.apis.items }.flatten()
+//        val apis = allApis.filter { rules.isValidApi(it) }
+//
+//        apis.forEach { api ->
+//            try {
+//                println("API: " + api.area + "." + api.name)
+//
+//                // Get only the declared members in the api/class
+//                val declaredMembers = api.klass.declaredMemberFunctions
+//                val declaredMemberLookup = declaredMembers.map { func -> (func.name to true) }.toMap()
+//
+//                // Get all the actions on the api
+//                val methodsBuffer = StringBuilder()
+//
+//                // Iterate over all the api actions
+//                api.actions.items.forEach { action ->
+//
+//                    log.info("Processing : " + api.area + "/" + api.name + "/" + action.name)
+//
+//                    // Ok to generate ?
+//                    if (rules.isValidAction(api, action, declaredMemberLookup)) {
+//                        // Generate code here.
+//                        val methodInfo = generateMethod(api, action)
+//                        log.info("generating method for: " + api.area + "/" + api.name + "/" + action.name)
+//                        methodsBuffer.append(methodInfo)
+//                        methodsBuffer.append(newline)
+//                    }
+//                }
+//
+//                // Get unique types
+//                // Iterate over all the api actions
+//                if(this.settings.createDtos) {
+//                    api.actions.items.map { action ->
+//                        println(action.member.name)
+//                        generateModelFromType(action.paramsUser.map { it.type }, codeGenDirs.modelFolder)
+//                        try {
+//                            generateModelFromType(listOf(action.member.returnType), codeGenDirs.modelFolder)
+//                        } catch (ex: Exception) {
+//                            log.error("Error trying to generate types from return type:" + action.member.name + ", " + action.member.returnType.classifier?.toString())
+//                        }
+//                    }
+//                }
+//
+//                // Generate file.
+//                generateApi(req, api, codeGenDirs.apiFolder, methodsBuffer.toString())
+//            } catch (ex: Exception) {
+//                log.error("Error inspecting and generating code for: ${api.area}.${api.name}")
+//                throw ex
+//            }
+//        }
     }
 
     /**
@@ -120,23 +120,24 @@ class CodeGen(val settings: CodeGenSettings, val builder:CodeBuilder) {
      * Collect all variables for Action
      */
     private fun collect(api: Api, action: Action):Map<String, String>{
-        val typeInfo = builder.buildTypeName(action.member.returnType)
-        val verb = action.verb
-        return mapOf(
-            "route" to api.area + "/" + api.name + "/" + action.name,
-            "verb" to verb.name,
-            "methodName" to action.name,
-            "methodDesc" to action.desc,
-            "methodParams" to builder.buildArgs(action),
-            "methodReturnType" to typeInfo.returnType(),
-            "queryParams" to builder.buildQueryParams(action),
-            "postDataDecl" to if (verb.name == Verbs.GET) "" else builder.mapTypeDecl,
-            "postDataVars" to builder.buildDataParams(action),
-            "postDataParam" to if (verb.name == Verbs.GET) "" else "postData,",
-            "converterClass" to typeInfo.converterTypeName(),
-            "parameterizedClassNames" to typeInfo.parameterizedNames,
-            "parameterizedClassTypes" to typeInfo.parameterizedTypes(builder.buildTypeLoader())
-        )
+//        val typeInfo = builder.buildTypeName(action.member.returnType)
+//        val verb = action.verb
+//        return mapOf(
+//            "route" to api.area + "/" + api.name + "/" + action.name,
+//            "verb" to verb.name,
+//            "methodName" to action.name,
+//            "methodDesc" to action.desc,
+//            "methodParams" to builder.buildArgs(action),
+//            "methodReturnType" to typeInfo.returnType(),
+//            "queryParams" to builder.buildQueryParams(action),
+//            "postDataDecl" to if (verb.name == Verbs.GET) "" else builder.mapTypeDecl,
+//            "postDataVars" to builder.buildDataParams(action),
+//            "postDataParam" to if (verb.name == Verbs.GET) "" else "postData,",
+//            "converterClass" to typeInfo.converterTypeName(),
+//            "parameterizedClassNames" to typeInfo.parameterizedNames,
+//            "parameterizedClassTypes" to typeInfo.parameterizedTypes(builder.buildTypeLoader())
+//        )
+        return mapOf()
     }
 
     private fun generateModelFromType(types: List<KType>, modelFolder: File) {

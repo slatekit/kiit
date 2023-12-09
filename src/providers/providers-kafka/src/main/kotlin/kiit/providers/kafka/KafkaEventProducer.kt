@@ -50,7 +50,7 @@ class KafkaEventProducer<TData, TEvent>(
      * {name}.{instance}
      * e.g. "journal_events_all_v1.123456
      */
-    override val id: Identity = Identity.job(topic.name, "")
+    override val id: Identity = Identity.job(topic.name, "", "")
 
     /**
      * Publish typed event that will be converted to the full standardized envelope ( headers + payload )

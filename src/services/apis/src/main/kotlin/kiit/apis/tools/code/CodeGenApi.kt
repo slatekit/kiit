@@ -1,13 +1,11 @@
 package kiit.apis.tools.code
 
 import kiit.apis.*
-import kiit.apis.AuthModes
 import kiit.apis.Verbs
 import kiit.apis.setup.HostAware
 import kiit.apis.tools.code.builders.JavaBuilder
 import kiit.apis.tools.code.builders.KotlinBuilder
 import kiit.common.*
-import kiit.common.auth.Roles
 import kiit.requests.Request
 import kiit.results.Notice
 

@@ -15,13 +15,13 @@ package test.apis
 import kotlinx.coroutines.runBlocking
 import org.junit.Assert
 import kiit.apis.*
-import kiit.apis.routes.Api
 import kiit.apis.core.Auth
-import kiit.apis.SetupType
+import kiit.apis.routes.VersionAreas
 import kiit.requests.CommonRequest
 import kiit.common.Source
 import kiit.common.args.Args
 import kiit.common.conf.Config
+import kiit.common.crypto.Encryptor
 import kiit.common.data.DbConString
 import kiit.common.data.Connections
 import kiit.common.data.Connections.Companion.of
@@ -36,9 +36,9 @@ import kiit.entities.Entities
 import kiit.policy.hooks.Middleware
 import kiit.connectors.entities.AppEntContext
 import kiit.results.Try
+import kiit.serialization.deserializer.Deserializer
 import test.TestApp
 import test.setup.MyAuthProvider
-import test.setup.UserApi
 import test.setup.MyEncryptor
 
 /**
@@ -87,7 +87,7 @@ open class ApiTestsBase {
 
     fun getApis(source: Source,
                 auth: Auth? = null,
-                apis: List<Api> = listOf()): ApiServer {
+                apis: List<VersionAreas> = listOf()): ApiServer {
 
         // 2. apis
         val container = ApiServer.of(ctx, apis, auth, source)
@@ -95,7 +95,7 @@ open class ApiTestsBase {
     }
 
 
-    fun ensureCall(apis: List<Api> = listOf(),
+    fun ensureCall(apis: List<VersionAreas> = listOf(),
                    protocolCt: String,
                    protocol: String,
                    authMode: String,
@@ -124,28 +124,30 @@ open class ApiTestsBase {
     }
 
 
-    fun buildUserApiRegSingleton(ctx: AppEntContext): Api {
-        return Api(UserApi(ctx), setup = SetupType.Annotated)
-    }
+//    fun buildUserApiRegSingleton(ctx: AppEntContext): Api {
+//        return Api(UserApi(ctx), setup = SetupType.Annotated)
+//    }
 
 
-    fun ensure(
-            protocol: Source,
-            middleware: List<Middleware> = listOf(),
-            apis: List<Api>,
-            user: Credentials?,
-            request: Request,
-            response: Response<*>,
-            checkFailMsg:Boolean = false) {
+    fun checkCall(
+        protocol: Source,
+        middleware: List<Middleware> = listOf(),
+        routes: List<VersionAreas>,
+        user: Credentials?,
+        request: Request,
+        response: Response<*>,
+        checkFailMsg:Boolean = false,
+        decoder: ((Request, Encryptor?) -> Deserializer)? = null
+        ) {
 
         // Optional auth
         val auth = user?.let { u -> MyAuthProvider(u.name, u.roles, buildKeys()) }
 
         // Host
         val host = ApiServer(ctx,
-                apis = apis,
+                routes = routes,
                 auth = auth,
-                settings = Settings(protocol))
+                settings = Settings(protocol, decoder = decoder))
 
         // Get result
         val actual = runBlocking {

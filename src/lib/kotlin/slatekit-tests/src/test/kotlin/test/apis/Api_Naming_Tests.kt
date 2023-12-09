@@ -7,9 +7,14 @@ import kiit.apis.routes.Api
 import kiit.apis.ApiServer
 import kiit.apis.Settings
 import kiit.apis.Verb
+import kiit.apis.Verbs
+import kiit.apis.setup.GlobalVersion
+import kiit.apis.setup.api
+import kiit.apis.setup.routes
 import kiit.utils.naming.LowerHyphenNamer
 import kiit.utils.naming.LowerUnderscoreNamer
 import kiit.results.getOrElse
+import test.apis.samples.Sample_API_1_Core
 import test.setup.SampleExtendedApi
 import test.setup.SamplePOKOApi
 
@@ -18,20 +23,20 @@ class Api_Naming_Tests : ApiTestsBase() {
 
 
     @Test fun can_use_naming_convention_lowerHyphen() {
-        val apis = ApiServer(ctx, apis = listOf(Api(SamplePOKOApi::class,
-                "app", "SamplePOKO")), settings = Settings(naming = LowerHyphenNamer())
-        )
-        Assert.assertTrue( apis.get("app"   , "sample-poko", "get-time"    ).success)
-        Assert.assertTrue(!apis.get("app"   , "SamplePOKO" , "getTime"     ).success)
-        Assert.assertTrue( apis.get("app"   , "sample-poko", "get-counter" ).success)
-        Assert.assertTrue( apis.get("app"   , "sample-poko", "hello"       ).success)
-        Assert.assertTrue( apis.get("app"   , "sample-poko", "request"     ).success)
-        Assert.assertTrue( apis.get("app"   , "sample-poko", "response"    ).success)
-        Assert.assertTrue(!apis.get("app"   , "sample-poko", "get-email"   ).success)
-        Assert.assertTrue(!apis.get("app"   , "sample-poko", "get-ssn"     ).success)
+        val namer = LowerHyphenNamer()
+        val routes = routes(versions = listOf(GlobalVersion("0", listOf(api(SamplePOKOApi::class, SamplePOKOApi())))), namer = namer)
+        val apis = ApiServer(ctx, routes, settings = Settings(naming = namer))
+        Assert.assertNotNull( apis.get(Verbs.GET , "tests"   , "sample-poko", "get-time"    ))
+        Assert.assertNull   ( apis.get(Verbs.GET , "tests"   , "SamplePOKO" , "getTime"     ))
+        Assert.assertNotNull( apis.get(Verbs.GET , "tests"   , "sample-poko", "get-counter" ))
+        Assert.assertNotNull( apis.get(Verbs.POST, "tests"   , "sample-poko", "hello"       ))
+        Assert.assertNotNull( apis.get(Verbs.POST, "tests"   , "sample-poko", "request"     ))
+        Assert.assertNotNull( apis.get(Verbs.POST, "tests"   , "sample-poko", "response"    ))
+        Assert.assertNull   ( apis.get(Verbs.GET , "tests"   , "sample-poko", "get-email"   ))
+        Assert.assertNull   ( apis.get(Verbs.GET , "tests"   , "sample-poko", "get-ssn"))
 
         val result = runBlocking {
-            apis.executeAttempt("app", "sample-poko", "get-counter", Verb.Get, mapOf(), mapOf())
+            apis.executeAttempt("tests", "sample-poko", "get-counter", Verb.Get, mapOf(), mapOf())
         }
         Assert.assertTrue(result.success)
         Assert.assertTrue(result.getOrElse { 0 } == 1)
@@ -39,21 +44,20 @@ class Api_Naming_Tests : ApiTestsBase() {
 
 
     @Test fun can_use_naming_convention_lowerUnderscore() {
-        val apis = ApiServer(ctx, apis = listOf(Api(SampleExtendedApi::class,
-                "app", "SampleExtended", declaredOnly = false)),
-                settings = Settings(naming = LowerUnderscoreNamer())
-        )
-        Assert.assertTrue( apis.get("app"   , "sample_extended", "get_seconds" ).success)
-        Assert.assertTrue( apis.get("app"   , "sample_extended", "get_time"    ).success)
-        Assert.assertTrue( apis.get("app"   , "sample_extended", "get_counter" ).success)
-        Assert.assertTrue( apis.get("app"   , "sample_extended", "hello"       ).success)
-        Assert.assertTrue( apis.get("app"   , "sample_extended", "request"     ).success)
-        Assert.assertTrue( apis.get("app"   , "sample_extended", "response"    ).success)
-        Assert.assertTrue(!apis.get("app"   , "sample_extended", "get_email"   ).success)
-        Assert.assertTrue(!apis.get("app"   , "sample_extended", "get_ssn"     ).success)
+        val namer = LowerUnderscoreNamer()
+        val routes = routes(versions = listOf(GlobalVersion("0", listOf(api(SampleExtendedApi::class, SampleExtendedApi(), declared = false)))), namer = namer)
+        val apis = ApiServer(ctx, routes, settings = Settings(naming = namer))
+        Assert.assertNotNull( apis.get(Verbs.GET , "tests"   , "sample_extended", "get_seconds" ))
+        Assert.assertNotNull( apis.get(Verbs.GET , "tests"   , "sample_extended", "get_time"    ))
+        Assert.assertNotNull( apis.get(Verbs.GET , "tests"   , "sample_extended", "get_counter" ))
+        Assert.assertNotNull( apis.get(Verbs.POST, "tests"   , "sample_extended", "hello"       ))
+        Assert.assertNotNull( apis.get(Verbs.POST, "tests"   , "sample_extended", "request"     ))
+        Assert.assertNotNull( apis.get(Verbs.POST, "tests"   , "sample_extended", "response"    ))
+        Assert.assertNull(    apis.get(Verbs.POST, "tests"   , "sample_extended", "get_email"   ))
+        Assert.assertNull(    apis.get(Verbs.GET , "tests"   , "sample_extended", "get_ssn"     ))
 
         val result = runBlocking {
-            apis.executeAttempt("app", "sample_extended", "get_seconds", Verb.Get, mapOf(), mapOf())
+            apis.executeAttempt("tests", "sample_extended", "get_seconds", Verb.Get, mapOf(), mapOf())
         }
         Assert.assertTrue(result.success)
         Assert.assertTrue(result.getOrElse { 0 } in 0..59)

@@ -15,14 +15,15 @@ object ProtoRule : Rule {
         // Ensure verb is correct get/post
         val request = req.request
         val target = req.target!!
-        val actionVerb = target.action.verb.orElse(target.api.verb)
-        val actionProtocols = target.action.sources.orElse(target.api.sources)
+        val actionVerb = target.route.action.verb.orElse(target.route.api.verb)
+        val actionProtocols = target.route.action.sources.orElse(target.route.api.sources)
         val hasCli = actionProtocols.hasCLI()
         val hasApi = actionProtocols.hasAPI()
 
         val verbResult = validateVerb(hasApi, hasCli, actionVerb, request, req)
         val finalResult = verbResult.flatMap { validateProto(actionProtocols, request, req) }
         return finalResult.map { true }
+        return Outcomes.success(true)
     }
 
 

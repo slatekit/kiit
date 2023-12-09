@@ -1,5 +1,6 @@
 package kiit
 
+import kiit.apis.setup.routes
 import kiit.apis.support.Authenticator
 import kiit.app.App
 import kiit.app.AppOptions
@@ -170,7 +171,7 @@ class Kiit(ctx: Context) : App<Context>(ctx, AppOptions(showWelcome = false, sho
                 ctx = ctx,
                 auth = auth,
                 settings = CliSettings(enableLogging = true, enableOutput = true),
-                apiItems = apis,
+                routes = routes(apis),
                 metaTransform = {
                     listOf("api-key" to keys.first().key)
                 },

@@ -28,7 +28,7 @@ data class CommonRequest(
     override val raw: Any? = null,
     override val output: String? = "",
     override val tag: String = "",
-    override val version: String = "1.0",
+    override val version: String = "0",
     override val timestamp: DateTime = DateTime.now()
 ) : Request {
 
@@ -101,7 +101,8 @@ data class CommonRequest(
             verb: String,
             opts: Map<String, Any>,
             args: Map<String, Any>,
-            raw: Any? = null
+            raw: Any? = null,
+            version: String = "0"
         ): Request {
             val path = if (area.isNullOrEmpty()) "$api.$action" else "$area.$api.$action"
             return CommonRequest(
@@ -111,7 +112,8 @@ data class CommonRequest(
                 verb,
                 InputArgs(args),
                 meta = InputArgs(opts),
-                raw = raw
+                raw = raw,
+                version = version
             )
         }
 
@@ -160,13 +162,14 @@ data class CommonRequest(
             verb: String,
             opts: Map<String, Any>,
             args: Map<String, Any>,
-            raw: Any? = null
+            raw: Any? = null,
+            version: String = "0"
         ): Request {
             val parts = path.split(".")
             val area = parts[0]
             val api = parts[1]
             val action = parts[2]
-            return cli(area, api, action, verb, opts, args, raw)
+            return cli(area, api, action, verb, opts, args, raw, version)
         }
     }
 }

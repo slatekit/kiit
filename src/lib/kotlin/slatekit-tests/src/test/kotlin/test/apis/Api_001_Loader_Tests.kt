@@ -1,5 +1,5 @@
 /**
- <kiit_header>
+<kiit_header>
 url: www.kiit.dev
 git: www.github.com/slatekit/kiit
 org: www.codehelix.co
@@ -8,22 +8,16 @@ copyright: 2016 CodeHelix Solutions Inc.
 license: refer to website and/or github
 about: A Kotlin utility library, tool-kit and server backend.
 
- </kiit_header>
+</kiit_header>
  */
 package test.apis
 
 import org.junit.Assert
 import org.junit.Test
 import kiit.apis.*
-import kiit.apis.routes.Api
-import kiit.apis.core.Sources
-import kiit.apis.routes.Routes
-import kiit.apis.setup.Annotations
-import kiit.apis.setup.Methods
-import kiit.apis.setup.loadAll
-import kiit.apis.setup.toApi
-import kiit.common.Source
-import kiit.common.auth.Roles
+import kiit.apis.routes.ApiActions
+import kiit.apis.routes.MethodExecutor
+import kiit.apis.setup.*
 import test.setup.*
 
 /**
@@ -34,155 +28,394 @@ import test.setup.*
 class Api_001_Loader_Tests : ApiTestsBase() {
 
 
-    @Test fun can_load_api_from_annotations() {
-        val api = Annotations(SampleAnnoApi::class).api(null)
-        Assert.assertTrue(api.actions.size == 13)
-        Assert.assertTrue(api.area == "app")
-        Assert.assertTrue(api.name == "tests")
-        Assert.assertTrue(api.desc == "sample to test features of Slate Kit APIs")
-        Assert.assertTrue(api.roles.contains("admin"))
-        Assert.assertTrue(api.auth == AuthMode.Token)
-        Assert.assertTrue(api.verb == Verb.Auto)
-        Assert.assertTrue(api.protocol == Source.All)
-        Assert.assertTrue(api.actions.items[0].name == "inputBasicTypes")
-        Assert.assertTrue(api.actions.items[0].params.size == 8)
-        Assert.assertTrue(api.actions.items[0].paramsUser.size == 8)
+    @Test
+    fun can_load_routes_from_annotations_with_defaults() {
+        val router = router(
+            versions = listOf(
+                global(
+                    version = "0", apis = listOf(
+                        api(SampleAnnotatedApiWithDefaults::class, SampleAnnotatedApiWithDefaults())
+                    )
+                )
+            )
+        )
+        val apiOpt = router.api("tests", "defaults", "0")
+        Assert.assertNotNull(apiOpt)
+        val actions = apiOpt!!
+        ensureDefaultSetup(actions)
+    }
+
+    @Test
+    fun can_load_routes_from_config_with_defaults() {
+        val router = router(
+            versions = listOf(
+                global(
+                    version = "0", apis = listOf(
+                        api(
+                            SampleAnnotatedApiWithDefaults::class,
+                            SampleAnnotatedApiWithDefaults(),
+                            setup = SetupType.Config,
+                            content = JSON_DEFAULTS.trim()
+                        )
+                    )
+                )
+            )
+        )
+        val apiOpt = router.api("tests", "defaults", "0")
+        Assert.assertNotNull(apiOpt)
+        val actions = apiOpt!!
+        ensureDefaultSetup(actions)
     }
 
 
-    @Test fun can_load_api_from_annotations_with_defaults() {
-        val api = Annotations(SampleApi::class).api(null)
-        Assert.assertTrue(api.actions.size == 3)
-        Assert.assertTrue(api.area == "app")
-        Assert.assertTrue(api.name == "tests")
-        Assert.assertTrue(api.desc == "sample to test features of Slate Kit APIs")
-        Assert.assertTrue(api.roles.contains("admin"))
-        Assert.assertTrue(api.auth == AuthMode.Token)
-        Assert.assertTrue(api.verb == Verb.Auto)
-        Assert.assertTrue(api.sources == Sources(listOf(Source.All)))
-        Assert.assertTrue(api.access == Access.Public)
-        Assert.assertTrue(api.protocol == Source.All)
+    private fun ensureDefaultSetup(actions: ApiActions) {
+        val api = actions.api
+        Assert.assertEquals(1, actions.size)
+        Assert.assertEquals("tests", api.area)
+        Assert.assertEquals("defaults", api.name)
+        Assert.assertEquals("sample to test features of Kiit APIs", api.desc)
+        Assert.assertEquals(true, api.roles.isEmpty)
+        Assert.assertEquals(AuthMode.Keyed, api.auth)
+        Assert.assertEquals(Verb.Auto, api.verb)
+        Assert.assertEquals("0", api.version)
+        Assert.assertEquals(Access.Public, api.access)
+        Assert.assertEquals(true, api.sources.hasAPI())
 
-        val action = api.actions.items.first { it.name == SampleApi::defaultAnnotationValues.name }
-        Assert.assertTrue(action.name == SampleApi::defaultAnnotationValues.name )
-        Assert.assertTrue(action.protocol == api.protocol)
-        Assert.assertTrue(action.verb == Verb.Post)
-        Assert.assertTrue(action.auth == AuthMode.Token)
-        Assert.assertTrue(action.roles == api.roles)
-        Assert.assertTrue(action.params.size == 1)
-        Assert.assertTrue(action.paramsUser.size == 1)
+        Assert.assertEquals("add", actions.items[0].route.action.name)
+        Assert.assertEquals(true, actions.items[0].route.action.roles.isEmpty)
+        Assert.assertEquals(AuthMode.Keyed, actions.items[0].route.action.auth)
+        Assert.assertEquals(Verb.Post, actions.items[0].route.action.verb)
+        Assert.assertEquals("0", actions.items[0].route.action.version)
+        Assert.assertEquals(Access.Public, actions.items[0].route.action.access)
+        Assert.assertEquals(true, actions.items[0].route.action.sources.hasAPI())
+        Assert.assertEquals(2, (actions.items[0].handler as MethodExecutor).call.params.size)
+        Assert.assertEquals(2, (actions.items[0].handler as MethodExecutor).call.paramsUser.size)
     }
 
 
-    @Test fun can_load_action_from_annotations_with_overrides_partial() {
-        val api = Annotations(SampleApi::class).api(null)
-
-        val action = api.actions.items.first { it.name == SampleApi::overridePartial.name }
-        Assert.assertTrue(action.name == SampleApi::overridePartial.name)
-        Assert.assertTrue(action.protocol == api.protocol)
-        Assert.assertTrue(action.verb == Verb.Post)
-        Assert.assertTrue(action.auth == AuthMode.Keyed)
-        Assert.assertTrue(action.roles == kiit.apis.core.Roles(listOf("user")))
-        Assert.assertTrue(action.sources == api.sources)
-        Assert.assertTrue(action.access == api.access)
-        Assert.assertTrue(action.params.size == 1)
-        Assert.assertTrue(action.paramsUser.size == 1)
+    @Test
+    fun can_load_routes_from_annotations_with_overrides() {
+        val router = router(
+            versions = listOf(
+                global(
+                    version = "0", apis = listOf(
+                        api(SampleAnnotatedApiWithOverrides::class, SampleAnnotatedApiWithOverrides())
+                    )
+                )
+            )
+        )
+        val apiOpt = router.api("tests", "overrides", "0", "1.0")
+        Assert.assertNotNull(apiOpt)
+        val actions = apiOpt!!
+        ensureOverrideSetup(actions)
     }
 
 
-    @Test fun can_load_action_from_annotations_with_overrides_full() {
-        val api = Annotations(SampleApi::class).api(null)
-
-        val action = api.actions.items.first { it.name == SampleApi::overrideFull.name }
-        Assert.assertTrue(action.name == SampleApi::overrideFull.name)
-        Assert.assertTrue(action.protocol == Source.CLI)
-        Assert.assertTrue(action.verb == Verb.Post)
-        Assert.assertTrue(action.auth == AuthMode.Keyed)
-        Assert.assertTrue(action.roles == kiit.apis.core.Roles(listOf("user")))
-        Assert.assertTrue(action.sources == Sources(listOf(Source.CLI)))
-        Assert.assertTrue(action.access == Access.Internal)
-        Assert.assertTrue(action.params.size == 1)
-        Assert.assertTrue(action.paramsUser.size == 1)
+    @Test
+    fun can_load_routes_from_config_with_overrides() {
+        val router = router(
+            versions = listOf(
+                global(
+                    version = "0", apis = listOf(
+                        api(
+                            SampleApiWithConfigSetup::class,
+                            SampleApiWithConfigSetup(),
+                            setup = SetupType.Config,
+                            content = JSON_OVERRIDES.trim()
+                        )
+                    )
+                )
+            )
+        )
+        val apiOpt = router.api("tests", "overrides", "0", "1.0")
+        Assert.assertNotNull(apiOpt)
+        val actions = apiOpt!!
+        ensureOverrideSetup(actions)
     }
 
 
-    @Test fun can_load_api_from_annotations_verb_mode_auto() {
-        val api = Annotations(SampleRESTVerbModeAutoApi::class).api(null)
-        Assert.assertTrue(api.actions.size == 8)
-        Assert.assertTrue(api.area == "samples")
-        Assert.assertTrue(api.name == "restVerbAuto")
-        Assert.assertTrue(api.desc == "sample api for testing verb mode with auto")
-        Assert.assertTrue(api.roles.contains(Roles.ALL))
-        Assert.assertTrue(api.auth == AuthMode.Token)
-        Assert.assertTrue(api.verb == Verb.Auto)
-        Assert.assertTrue(api.protocol == Source.All)
+    fun ensureOverrideSetup(actions: ApiActions) {
+        val api = actions.api
+        Assert.assertEquals(1, actions.size)
+        Assert.assertEquals("tests", api.area)
+        Assert.assertEquals("overrides", api.name)
+        Assert.assertEquals("sample to test features of Kiit APIs", api.desc)
+        Assert.assertEquals(true, api.roles.contains("admin"))
+        Assert.assertEquals(AuthMode.Token, api.auth)
+        Assert.assertEquals(Verb.Auto, api.verb)
+        Assert.assertEquals("1", api.version)
+        Assert.assertEquals(Access.Internal, api.access)
+        Assert.assertEquals(false, api.sources.hasAPI())
+        Assert.assertEquals(true, api.sources.hasCLI())
 
-        val actions = api.actions.items.map { Pair(it.name, it) }.toMap()
-        Assert.assertEquals(Verb.Get  , actions[SampleRESTVerbModeAutoApi::getAll.name]!!.verb)
-        Assert.assertEquals(Verb.Get  , actions[SampleRESTVerbModeAutoApi::getById.name]!!.verb)
-        Assert.assertEquals(Verb.Post  , actions[SampleRESTVerbModeAutoApi::create.name]!!.verb)
-        Assert.assertEquals(Verb.Put   , actions[SampleRESTVerbModeAutoApi::update.name]!!.verb)
-        Assert.assertEquals(Verb.Patch , actions[SampleRESTVerbModeAutoApi::patch.name]!!.verb)
-        Assert.assertEquals(Verb.Delete, actions[SampleRESTVerbModeAutoApi::delete.name]!!.verb)
-        Assert.assertEquals(Verb.Delete, actions[SampleRESTVerbModeAutoApi::deleteById.name]!!.verb)
-        Assert.assertEquals(Verb.Post  , actions[SampleRESTVerbModeAutoApi::activateById.name]!!.verb)
+        Assert.assertEquals("adder", actions.items[0].route.action.name)
+        Assert.assertEquals(true, actions.items[0].route.action.roles.contains("user"))
+        Assert.assertEquals(AuthMode.Keyed, actions.items[0].route.action.auth)
+        Assert.assertEquals(Verb.Put, actions.items[0].route.action.verb)
+        Assert.assertEquals("1", actions.items[0].route.action.version)
+        Assert.assertEquals(Access.Public, actions.items[0].route.action.access)
+        Assert.assertEquals(true, actions.items[0].route.action.sources.hasAPI())
+        Assert.assertEquals(false, actions.items[0].route.action.sources.hasCLI())
+        Assert.assertEquals(2, (actions.items[0].handler as MethodExecutor).call.params.size)
+        Assert.assertEquals(2, (actions.items[0].handler as MethodExecutor).call.paramsUser.size)
     }
 
 
-    /**
-     * POKO : Plain Old Kotlin Object
-     * No annotations
-     */
-    @Test fun can_load_api_from_public_methods() {
-        val api = Methods(toApi(SampleExtendedApi::class,
-                "app", "sampleExtended", "sample using plain kotlin class",
-                roles = kiit.apis.core.Roles(listOf("users")), local = true, auth = AuthMode.Token, protocol = Sources(listOf(Source.All)))).api(null)
-
-        Assert.assertTrue(api.actions.size == 2)
-        Assert.assertTrue(api.area == "app")
-        Assert.assertTrue(api.name == "sampleExtended")
-        Assert.assertTrue(api.desc == "sample using plain kotlin class")
-        Assert.assertTrue(api.roles.contains("users"))
-        Assert.assertTrue(api.auth == AuthMode.Token)
-        Assert.assertTrue(api.verb == Verb.Auto)
-        Assert.assertTrue(api.protocol ==  Source.All)
+    @Test
+    fun can_load_routes_with_redirects() {
+        val router = router(
+            versions = listOf(
+                global(
+                    version = "0", apis = listOf(
+                        api(
+                            SampleApiWithConfigSetup::class,
+                            SampleApiWithConfigSetup(),
+                            setup = SetupType.Config,
+                            content = JSON_REDIRECTS.trim()
+                        )
+                    )
+                )
+            )
+        )
+        val actionOpt = router.action(Verbs.POST, "tests", "redirects", "adder", version = null)
+        Assert.assertNotNull(actionOpt)
+        val actions = actionOpt!!
+        Assert.assertEquals("tests", actions.route.area.name)
+        Assert.assertEquals("redirects", actions.route.api.name)
+        Assert.assertEquals("add", actions.route.action.name)
+        Assert.assertEquals(Verb.Post, actions.route.action.verb)
     }
 
 
-    /**
-     * POKO : Plain Old Kotlin Object
-     * No annotations
-     */
-    @Test fun can_load_api_from_public_methods_inherited() {
-        val api = Methods(toApi(SampleExtendedApi::class,
-                "app", "sampleExtended", "sample using plain kotlin class",
-                roles = kiit.apis.core.Roles(listOf("users")), local = false, auth = AuthMode.Token, protocol = Sources(listOf(Source.All)))).api(null)
+    @Test
+    fun can_load_routes_and_check_contains() {
+        val router = router(
+            versions = listOf(
+                global(
+                    version = "0", apis = listOf(
+                        api(SampleAnnotatedApiWithDefaults::class, SampleAnnotatedApiWithDefaults()),
+                        api(SampleAnnotatedApiWithOverrides::class, SampleAnnotatedApiWithOverrides())
+                    )
+                )
+            )
+        )
+        // Check defaults
+        Assert.assertTrue(router.containsArea(area = "tests"))
+        Assert.assertTrue(router.containsArea(area = "tests", globalVersion = "0"))
+        Assert.assertTrue(router.containsApi(area = "tests", api = "defaults"))
+        Assert.assertTrue(router.containsApi(area = "tests", api = "defaults", globalVersion = "0"))
+        Assert.assertTrue(
+            router.containsAction(
+                verb = Verb.Post.name,
+                area = "tests",
+                api = "defaults",
+                action = "add"
+            )
+        )
+        Assert.assertTrue(
+            router.containsAction(
+                verb = Verb.Post.name,
+                area = "tests",
+                api = "defaults",
+                action = "add",
+                globalVersion = "0"
+            )
+        )
 
-        Assert.assertTrue(api.actions.size == 8)
-        Assert.assertTrue(api.area == "app")
-        Assert.assertTrue(api.name == "sampleExtended")
-        Assert.assertTrue(api.desc == "sample using plain kotlin class")
-        Assert.assertTrue(api.roles.contains("users"))
-        Assert.assertTrue(api.auth == AuthMode.Token)
-        Assert.assertTrue(api.verb == Verb.Auto)
-        Assert.assertTrue(api.protocol ==  Source.All)
+        // Check overrides
+        Assert.assertTrue(router.containsArea(area = "tests"))
+        Assert.assertTrue(router.containsArea(area = "tests", globalVersion = "0"))
+        Assert.assertFalse(router.containsArea(area = "tests", globalVersion = "1"))
+        Assert.assertFalse(router.containsApi(area = "tests", api = "overrides", globalVersion = "1", version = "1.0"))
+        Assert.assertTrue(router.containsApi(area = "tests", api = "overrides", globalVersion = "0", version = "1.0"))
+        Assert.assertFalse(router.containsApi(area = "tests", api = "overrides", globalVersion = "0", version = "0.0"))
+        Assert.assertFalse(
+            router.containsAction(
+                verb = Verb.Post.name,
+                area = "tests",
+                api = "overrides",
+                action = "add",
+                globalVersion = "0",
+                version = "1.0"
+            )
+        )
+        Assert.assertFalse(
+            router.containsAction(
+                verb = Verb.Post.name,
+                area = "tests",
+                api = "overrides",
+                action = "add",
+                globalVersion = "1",
+                version = "1.0"
+            )
+        )
+        Assert.assertFalse(
+            router.containsAction(
+                verb = Verb.Post.name,
+                area = "tests",
+                api = "overrides",
+                action = "add",
+                globalVersion = "0",
+                version = "1.1"
+            )
+        )
+        Assert.assertFalse(
+            router.containsAction(
+                verb = Verb.Put.name,
+                area = "tests",
+                api = "overrides",
+                action = "add",
+                globalVersion = "0",
+                version = "1.1"
+            )
+        )
+        Assert.assertTrue(
+            router.containsAction(
+                verb = Verb.Put.name,
+                area = "tests",
+                api = "overrides",
+                action = "adder",
+                globalVersion = "0",
+                version = "1.1"
+            )
+        )
+    }
+
+    @Test
+    fun can_load_routes_only_public_and_annotated() {
+        val router = router(
+            versions = listOf(
+                global(
+                    version = "0", apis = listOf(
+                        api(SampleAnnotatedTestApi::class, SampleAnnotatedTestApi())
+                    )
+                )
+            )
+        )
+        val apiOpt = router.api("tests", "loader", "0")
+        Assert.assertNotNull(apiOpt)
+        val actions = apiOpt!!
+        val api = actions.api
+        Assert.assertEquals(2, actions.size)
+        Assert.assertEquals("tests", api.area)
+        Assert.assertEquals("loader", api.name)
+        Assert.assertTrue(router.containsAction(verb = Verb.Post.name, area = "tests", api = "loader", action = "hi1"))
+        Assert.assertTrue(
+            router.containsAction(
+                verb = Verb.Post.name,
+                area = "tests",
+                api = "loader",
+                action = "publicHi2"
+            )
+        )
+        Assert.assertFalse(
+            router.containsAction(
+                verb = Verb.Post.name,
+                area = "tests",
+                api = "loader",
+                action = "protectedHi"
+            )
+        )
+        Assert.assertFalse(
+            router.containsAction(
+                verb = Verb.Post.name,
+                area = "tests",
+                api = "loader",
+                action = "privateHi"
+            )
+        )
+        Assert.assertFalse(
+            router.containsAction(
+                verb = Verb.Post.name,
+                area = "tests",
+                api = "loader",
+                action = "nonAnnotatedHi"
+            )
+        )
     }
 
 
-    /**
-     * Load areas
-     */
-    @Test fun can_load_areas() {
+    @Test
+    fun can_load_routes_via_configuration() {
+        val json = JSON_DEFAULTS
+        val api = Loader(null).config(SampleApiWithConfigSetup::class, SampleApiWithConfigSetup(), json)
+        print(api)
+    }
 
-        val areas = loadAll(listOf(
-                Api(SampleRolesByApp::class, "app", "sampleRolesByApp", "sample roles by application auth", roles = kiit.apis.core.Roles(listOf("users")), auth = AuthMode.Token, sources = Sources(listOf(Source.CLI)), declaredOnly = true),
-                Api(SampleRolesByKey::class, "app", "sampleRolesByKey", "sample roles by api-key", roles = kiit.apis.core.Roles(listOf("users")), auth = AuthMode.Keyed, sources = Sources(listOf(Source.CLI)), declaredOnly = true),
-                Api(SampleExtendedApi::class, "tests", "sampleExtended", "sample plain kotlin class", roles = kiit.apis.core.Roles(listOf("users")), auth = AuthMode.Token, sources = Sources(listOf(Source.CLI)), declaredOnly = false)
-        ))
-        Assert.assertTrue(areas.size == 2)
-        Assert.assertTrue(areas.contains("app"))
-        Assert.assertTrue(areas.contains("tests"))
-        Assert.assertTrue(areas.get("app")?.apis?.size == 2)
-        Assert.assertTrue(areas.get("tests")?.apis?.size == 1)
+    companion object {
+
+        val JSON_DEFAULTS = """
+    {   
+          "area"     : "tests",
+          "name"     : "defaults",
+          "desc"     : "sample to test features of Kiit APIs",
+          "auth"     : "keyed",
+          "roles"    : [],
+          "verb"     : "auto",
+          "access"   : "public",
+          "sources"  : ["all"],
+          "version"  : "0",
+          "tags"     : [],
+          "actions"  : [
+              {
+                  "execute"  :  { "type": "method", "target": "add" }
+              }
+          ]
+    }
+    """.trimIndent()
+
+        val JSON_OVERRIDES = """
+    {
+          "area"     : "tests",
+          "name"     : "overrides",
+          "desc"     : "sample to test features of Kiit APIs",
+          "auth"     : "token",
+          "roles"    : ["admin"],
+          "verb"     : "auto",
+          "access"   : "internal",
+          "sources"  : ["cli"],
+          "version"  : "1",
+          "tags"     : [],
+          "actions"  : [
+              {
+                  "name"     : "adder",
+                  "desc"     : "accepts supplied basic data types from send",
+                  "auth"     : "keyed",
+                  "roles"    : ["user"],
+                  "verb"     : "put",
+                  "access"   : "public",
+                  "sources"  : ["api"],
+                  "version"  : "1",
+                  "tags"     : [],
+                  "execute"  :  { "type": "method", "target": "add" }
+              }
+          ]
+    }
+    """.trimIndent()
+
+        val JSON_REDIRECTS = """
+    {   
+          "area"     : "tests",
+          "name"     : "redirects",
+          "desc"     : "sample to test features of Kiit APIs",
+          "auth"     : "keyed",
+          "roles"    : [],
+          "verb"     : "auto",
+          "access"   : "public",
+          "sources"  : ["all"],
+          "version"  : "0",
+          "tags"     : [],
+          "actions"  : [
+              {
+                  "name"     : "adder",
+                  "verb"     : "post",
+                  "execute"  :  { "type": "redirect", "target": "tests/redirects/add", "globalVersion": "0", "verb": "post" }
+              },
+              {
+                  "execute"  :  { "type": "method", "target": "add" }
+              }
+          ]
+    }
+    """.trimIndent()
     }
 }

@@ -2,8 +2,8 @@ package test.setup
 
 import kiit.apis.*
 import kiit.apis.AuthModes
+import kiit.apis.core.Roles
 import kiit.common.*
-import kiit.common.auth.Roles
 import kiit.common.crypto.EncDouble
 import kiit.common.crypto.EncInt
 import kiit.common.crypto.EncLong
@@ -16,8 +16,60 @@ import kiit.results.Notice
 import kiit.results.Success
 
 
-@Api(area = "app", name = "tests", desc = "sample to test features of Slate Kit APIs", auth = AuthModes.TOKEN, roles= ["admin"])
-class SampleAnnoApi(val context: AppEntContext) {
+@Api(area = "tests", name = "defaults", desc = "sample to test features of Kiit APIs")
+class SampleAnnotatedApiWithDefaults() {
+    @Action(desc = "accepts supplied basic data types from send")
+    fun add(a:Int, b:Int): Int {
+        return a + b
+    }
+}
+
+class SampleApiWithConfigSetup() {
+    fun add(a:Int, b:Int): Int {
+        return a + b
+    }
+}
+
+@Api(version = "1", area = "tests", name = "overrides", desc = "sample to test features of Kiit APIs",
+    auth = AuthModes.TOKEN, roles = ["admin"], verb = Verbs.AUTO, access = AccessLevel.INTERNAL, sources = [Sources.CLI])
+class SampleAnnotatedApiWithOverrides() {
+    @Action(version = "1", name = "adder", desc = "accepts supplied basic data types from send", verb = Verbs.PUT, access = AccessLevel.PUBLIC, auth = AuthModes.KEYED, roles = ["user"], sources = [Sources.API])
+    fun add(a:Int, b:Int): Int {
+        return a + b
+    }
+}
+
+
+@Api(area = "tests", name = "loader", desc = "sample to test features of Slate Kit APIs")
+open class SampleAnnotatedTestApi() {
+    @Action(name = "hi1", desc = "")
+    fun publicHi1(name:String): String {
+        return "hi 1 $name"
+    }
+
+    @Action(desc = "")
+    fun publicHi2(name:String): String {
+        return "hi 2 $name"
+    }
+
+    @Action(desc = "accepts supplied basic data types from send")
+    protected fun protectedHi(name:String): String {
+        return "hi $name"
+    }
+
+    @Action(desc = "accepts supplied basic data types from send")
+    private fun privateHi(name:String): String {
+        return "hi $name"
+    }
+
+    fun nonAnnotatedHi(name:String): String {
+        return "hi $name"
+    }
+}
+
+
+@Api(version = "1", area = "app", name = "tests", desc = "sample to test features of Slate Kit APIs", auth = AuthModes.TOKEN, roles= ["admin"])
+class SampleAnnoApi() {
 
     @Action(desc = "accepts supplied basic data types from send")
     fun inputBasicTypes(string1: String, bool1: Boolean, numShort: Short, numInt: Int, numLong: Long, numFloat: Float, numDouble: Double, date: DateTime): String {

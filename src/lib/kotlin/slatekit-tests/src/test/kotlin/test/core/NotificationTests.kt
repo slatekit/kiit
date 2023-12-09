@@ -22,9 +22,6 @@ import java.io.File
 
 class NotificationTests {
 
-
-
-
     @Test
     fun can_build_sendgrid() {
         //val conf = Config.of(TestApp::class.java, "usr://.kiit/common/conf/email.conf")

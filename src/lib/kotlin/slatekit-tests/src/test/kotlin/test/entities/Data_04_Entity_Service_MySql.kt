@@ -57,7 +57,6 @@ class UserService(repo: EntityRepo<Long, User5>)
     : EntityService<Long, User5>(repo), Ordered<Long, User5>, Counts<Long, User5>
 
 
-@Ignore
 open class Data_04_Entity_Service_MySql {
 
     protected lateinit var entities: Entities
@@ -65,8 +64,8 @@ open class Data_04_Entity_Service_MySql {
 """create table IF NOT EXISTS `User5` (
 `id` BIGINT NOT NULL AUTO_INCREMENT PRIMARY KEY,
 `email` NVARCHAR(100) NOT NULL,
-`isactive` BIT NOT NULL,
-`age` INTEGER NOT NULL,
+`isActive` BIT NOT NULL,
+`level` INTEGER NOT NULL,
 `salary` DOUBLE NOT NULL,
 `createdat` DATETIME NOT NULL,
 `createdby` BIGINT NOT NULL,
@@ -90,7 +89,7 @@ open class Data_04_Entity_Service_MySql {
     @Before
     open fun setup() {
 //        entities = Entities({ con -> Db(con) }, Connections(DbConString("", "", "", "")))
-        entities = EntitySetup.realDb(Vendor.MySql, "KIIT")
+        entities = EntitySetup.realDb() //Vendor.MySql, "KIIT")
         val db = entities.getDb()
         sqlStatements.map{ sql ->
             db.execute(sql)

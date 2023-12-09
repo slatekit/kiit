@@ -17,8 +17,12 @@ import org.junit.Assert
 import org.junit.Test
 import kiit.apis.*
 import kiit.apis.routes.Api
+import kiit.apis.setup.GlobalVersion
+import kiit.apis.setup.api
+import kiit.apis.setup.routes
 import kiit.results.Codes
 import kiit.results.getOrElse
+import test.apis.samples.Sample_API_1_Core
 import test.setup.SampleMiddlewareApi
 
 /**
@@ -28,9 +32,11 @@ import test.setup.SampleMiddlewareApi
 
 class Api_Middleware_Tests : ApiTestsBase() {
 
-    @Test fun can_handle_hooks() {
+    @Test
+    fun can_handle_hooks() {
         val api = SampleMiddlewareApi()
-        val apis = ApiServer(ctx, apis = listOf(Api(api, "app", "SampleMiddleware")))
+        val routes = routes(versions = listOf(GlobalVersion("0", listOf(api(SampleMiddlewareApi::class, api)))))
+        val apis = ApiServer(ctx, routes = routes)
         val r1 = runBlocking { apis.executeAttempt("app", "SampleMiddleware", SampleMiddlewareApi::hello.name, Verb.Post, mapOf(), mapOf()) }
         val r2 = runBlocking { apis.executeAttempt("app", "SampleMiddleware", SampleMiddlewareApi::hello.name, Verb.Post, mapOf(), mapOf()) }
 

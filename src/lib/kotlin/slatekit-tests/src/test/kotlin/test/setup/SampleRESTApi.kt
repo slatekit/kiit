@@ -3,7 +3,8 @@ package test.setup
 import kiit.apis.Api
 import kiit.apis.Action
 import kiit.apis.AuthModes
-import kiit.common.auth.Roles
+import kiit.apis.Verbs
+import kiit.apis.core.Roles
 
 /**
  * REST Sample
@@ -38,29 +39,38 @@ import kiit.common.auth.Roles
  *      SampleREST.deleteById -id=1
  *      SampleREST.patch      -id=1 -title="abc"
  */
+@Api(area = "tests", name = "SampleREST", desc = "api to access and manage users 3", auth = AuthModes.NONE)
 class SampleRESTApi {
 
+    @Action()
     fun getAll(): List<Movie> = Movie.samples()
 
 
+    @Action()
     fun getById(id:Long): Movie = Movie.samples().first { it.id == id }
 
 
+    @Action()
     fun create(item: Movie): Long = item.copy(id = Movie.samples().last().id + 1).id
 
 
+    @Action()
     fun update(item: Movie): String = "updated ${item.id}"
 
 
+    @Action()
     fun patch(id:Long, title:String): String = "patched $id with $title"
 
 
+    @Action()
     fun delete(item: Movie): String = "deleted ${item.id}"
 
 
+    @Action()
     fun deleteById(id:Long): String = "deleteById $id"
 
 
+    @Action()
     fun activateById(id:Long): String = "activateById $id"
 }
 
