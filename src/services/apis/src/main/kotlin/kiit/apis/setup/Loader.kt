@@ -13,8 +13,8 @@ class Loader(val namer: Namer?)  {
     fun routes(version:String, setup:List<ApiSetup>) : VersionAreas {
         val actions = setup.map {
             when(it.setup) {
-                SetupType.Annotated -> code(it.klass, it.singleton!!)
-                SetupType.Config -> config(it.klass, it.singleton!!, it.content)
+                SetupType.Annotated -> code(it.klass, it.singleton!!, it.declared)
+                SetupType.Config -> config(it.klass, it.singleton!!, it.content, it.declared)
             }
         }
         val areaNames = actions.map { Area(it.api.area) }.distinctBy { it.fullname }
@@ -29,14 +29,14 @@ class Loader(val namer: Namer?)  {
      * NOTE: This allows all the API setup to be in 1 place ( in the class/members )
      *
      */
-    fun code(cls: KClass<*>, instance: Any): ApiActions {
+    fun code(cls: KClass<*>, instance: Any, declared:Boolean = true ): ApiActions {
         val loader = AnnoLoader(cls, instance, namer)
         val api = loader.loadApi()
         val area = Area(api.area)
 
         // Get all the actions using the @ApiAction
         // Get all the methods with the apiAction annotation
-        val rawMatches = Reflector.getAnnotatedMembers<kiit.apis.Action>(cls, kiit.apis.Action::class, true)
+        val rawMatches = Reflector.getAnnotatedMembers<kiit.apis.Action>(cls, kiit.apis.Action::class, declared)
         val matches = rawMatches.filter { it.first.visibility != null && it.first.visibility!! == KVisibility.PUBLIC }
 
         // Convert to RouteMapping ( route -> handler )
@@ -60,7 +60,7 @@ class Loader(val namer: Namer?)  {
     }
 
 
-    fun config(cls: KClass<*>, instance: Any, json:String = ""): ApiActions {
+    fun config(cls: KClass<*>, instance: Any, json:String = "", declared: Boolean = true): ApiActions {
         val parser = JSONParser()
         val doc = parser.parse(json) as JSONObject
         val conf = ConfigLoader(cls, instance)
@@ -68,7 +68,7 @@ class Loader(val namer: Namer?)  {
         val api = conf.loadApi(doc)
 
         // Get all public members
-        val methods = Reflector.getMembers(cls,true, false, KVisibility.PUBLIC)
+        val methods = Reflector.getMembers(cls,declared, false, KVisibility.PUBLIC)
         val methodMap = methods.map { it.name to it }.toMap()
 
         // Load actions from the "actions" child

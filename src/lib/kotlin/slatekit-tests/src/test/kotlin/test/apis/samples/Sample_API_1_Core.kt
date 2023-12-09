@@ -61,6 +61,12 @@ class Sample_API_1_Core(context: Context) {
     }
 
 
+    @Action(desc = "processes a request with raw request, meta")
+    fun processBoth(req:Request, meta: Metadata): Outcome<String> {
+        return Success("ok", msg = "raw both")
+    }
+
+
     @Action(desc = "processes with an Document type")
     fun processFile(doc: ContentFile): Outcome<String> {
         return Success("ok", msg = String(doc.data))

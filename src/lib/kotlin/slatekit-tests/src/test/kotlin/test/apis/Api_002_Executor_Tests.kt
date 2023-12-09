@@ -120,6 +120,18 @@ class Api_002_Executor_Tests : ApiTestsBase() {
 
 
     @Test
+    fun can_execute_with_type_raw_both() {
+        checkCall(
+            protocol = Source.CLI,
+            routes = routes(versions = listOf(GlobalVersion("0", listOf(api(Sample_API_1_Core::class, Sample_API_1_Core(context)))))),
+            user = null,
+            request = CommonRequest.path("$AREA.$NAME.${Sample_API_1_Core::processBoth.name}", Verbs.POST, mapOf(Pair("token", "abc")), mapOf(Pair("id", "2"))),
+            response = Success("ok", msg = "raw both").toResponse()
+        )
+    }
+
+
+    @Test
     fun can_run_functional_error() {
         val number = "abc"
         checkCall(

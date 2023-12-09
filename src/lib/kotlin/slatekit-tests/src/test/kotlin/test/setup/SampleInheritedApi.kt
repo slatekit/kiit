@@ -1,6 +1,8 @@
 package test.setup
 
 import kiit.apis.Action
+import kiit.apis.Api
+import kiit.apis.AuthModes
 import kiit.common.DateTime
 
 
@@ -18,9 +20,13 @@ import kiit.common.DateTime
  * 5. Annotations: This examples has 0 annotations, but you can add them
  *                 to explicitly declare and configure the APIs
  */
+
+@Api(area = "tests", name = "SampleExtended", desc = "api to access and manage users 3", auth = AuthModes.NONE)
 open class SampleExtendedApi : SamplePOKOApi() {
+    @Action
     fun getSeconds():Int = DateTime.now().second
 
+    @Action
     fun ping(greeting:String):String = "$greeting back"
 }
 
