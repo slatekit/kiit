@@ -16,13 +16,27 @@ import kiit.apis.routes.Action
 import kiit.apis.routes.Call
 import kiit.apis.routes.MethodExecutor
 import kiit.apis.routes.RouteMapping
+import kiit.common.DateTime
 import kiit.common.values.Inputs
 import kiit.meta.KTypes
+import kiit.requests.Request
 import kiit.results.*
 import kiit.results.builders.Outcomes
+import kiit.serialization.deserializer.Deserializer
+import org.json.simple.JSONObject
 import kotlin.reflect.KClass
 
+
 object Calls {
+
+    val typeDefaults = mapOf(
+        "String" to "",
+        "Boolean" to false,
+        "Int" to 0,
+        "Long" to 0L,
+        "Double" to 0.0,
+        "DateTime" to DateTime.now()
+    )
 
     /**
      * https://stackoverflow.com/questions/47654537/how-to-run-suspend-method-via-reflection
@@ -49,10 +63,7 @@ object Calls {
      * @param req : the command input
      * @return
      */
-    fun validateCall(
-        request: ApiRequest,
-        allowSingleDefaultParam: Boolean = false
-    ): Outcome<RouteMapping> {
+    fun validateCall( request: ApiRequest, allowSingleDefaultParam: Boolean = false ): Outcome<RouteMapping> {
         val req = request.request
         val fullName = req.fullName
         val args = req.data
@@ -61,29 +72,61 @@ object Calls {
             val executor = target.handler as MethodExecutor
             val call = executor.call
 
-            // 1 param with default argument.
+            // Case 1: Single optional parameter with default value
             val res = if (allowSingleDefaultParam && call.isSingleDefaultedArg() && args.size() == 0) {
                 Outcomes.success(target)
             }
-            // Param: Raw ApiCmd itself!
-            else if (call.isSingleArg() && call.paramsUser.isEmpty()) {
+            // Case 2: Request parameter - fun process(request:Request) : Outcome<String>
+            else if (call.isSingleArg() && call.paramsUser.isEmpty()
+                && (call.params[0].type == Call.TypeRequest || call.params[0].type == Call.TypeMeta) ) {
                 Outcomes.success(target)
             }
-            // Data - check args needed
-            else if (!allowSingleDefaultParam && call.hasArgs && args.size() == 0)
+            // Case 3: Data - check args needed
+            else if (!allowSingleDefaultParam && call.hasArgs && args.size() == 0) {
                 Outcomes.invalid("bad request : $fullName: inputs not supplied")
-
-            // Data - ensure matching args
+            }
+            // Case 4: Data - ensure matching args
             else if (call.hasArgs) {
                 val argCheck = validateArgs(request, action, call, args)
                 val result = argCheck.map { target }
                 result
-            } else
+            } else {
                 Outcomes.success(target)
+            }
             res
         } ?: Outcomes.errored("Unable to find action")
     }
 
+    fun fillArgs(deserializer: Deserializer<JSONObject>, apiRef: RouteMapping, call: Call, cmd: Request): Array<Any?> {
+        val action = apiRef.route.action
+        // Check 1: No args ?
+        return if (!call.hasArgs)
+            arrayOf()
+        // Check 2: 1 param with default and no args
+        else if (call.isSingleDefaultedArg() && cmd.data.size() == 0) {
+            val argType = call.paramsUser[0].type.toString()
+            val defaultVal = if (typeDefaults.contains(argType)) typeDefaults[argType] else null
+            arrayOf<Any?>(defaultVal ?: "")
+        } else {
+            deserializer.deserialize(call.params)
+        }
+    }
+
+    /**
+     * Checks that the action/method parameters are available in the inputs( json payload )
+     * Given the following method and JSON payload
+     *
+     * 1. method  : fun add( req:Request, a:Int, b:Int ) : Int
+     * 2. payload : { "a" : 1, "b": 2 }
+     *
+     * This validates that each parameter in the method ( "a", "b" ) exist in the payload.
+     *
+     * SPECIAL PARAMETERS:
+     * There are some special parameters that are handled automatically without deserialization.
+     *
+     * 1. Request: This represents the Request itself and if exists in the parameters, is supplied
+     * 2. Custom : Custom parameter builders using the request itself.
+     */
     private fun validateArgs(request: ApiRequest, action: Action, call: Call, args: Inputs): Outcome<Boolean> {
         // Check each parameter to api call
         val errors = (0 until call.paramsUser.size).map { ndx ->

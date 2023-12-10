@@ -2,10 +2,6 @@ package test.setup
 
 import kiit.apis.Api
 import kiit.apis.Action
-import kiit.apis.ApiRequest
-import kiit.apis.ApiResult
-import kiit.common.*
-import kiit.results.Notice
 import kiit.results.Outcome
 import kiit.results.Success
 
@@ -22,7 +18,7 @@ open class SampleRetryApi()  {
      * successes and failures for all scenarios
      */
     @Action(desc = "tests a retry attempt with the error queue")
-    fun test(text:String): Notice<Int> {
+    fun test(text:String): Outcome<Int> {
         counter += 1
         if(counter % 2 == 0){
             throw Exception("testing retry")

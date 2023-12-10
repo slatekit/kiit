@@ -42,7 +42,6 @@ import kiit.requests.Request
  * ================================================================
  * From the example above, this represents the action "register" and it's mapped method.
  *
- * @param member  : The callable method associated w/ the action
  * @param name    : Name of action which may have a different name than method due to conventions
  * @param desc    : Description of the action
  * @param auth    : Authentication mode @see[AuthMode] for the action/method

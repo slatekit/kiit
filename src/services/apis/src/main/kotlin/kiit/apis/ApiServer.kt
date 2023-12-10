@@ -254,7 +254,7 @@ open class ApiServer(
         val converter = decoder?.invoke(request.request, ctx.enc) ?: JsonDeserializer(request.request, ctx.enc)
         val executor = target!!.handler as MethodExecutor
         val call = executor.call
-        val inputs = fillArgs(converter, target, call, request.request)
+        val inputs = Calls.fillArgs(converter, target, call, request.request)
         val returnVal = Calls.callMethod(call.klass, call.instance, call.member.name, inputs)
         val wrapped = returnVal?.let { res ->
             if (res is Result<*, *>) {
@@ -267,31 +267,7 @@ open class ApiServer(
     }
 
 
-    private val typeDefaults = mapOf(
-        "String" to "",
-        "Boolean" to false,
-        "Int" to 0,
-        "Long" to 0L,
-        "Double" to 0.0,
-        "DateTime" to DateTime.now()
-    )
-
-    private fun fillArgs(deserializer: Deserializer<JSONObject>, apiRef: RouteMapping, call: Call, cmd: Request): Array<Any?> {
-        val action = apiRef.route.action
-        // Check 1: No args ?
-        return if (!call.hasArgs)
-            arrayOf()
-        // Check 2: 1 param with default and no args
-        else if (call.isSingleDefaultedArg() && cmd.data.size() == 0) {
-            val argType = call.paramsUser[0].type.toString()
-            val defaultVal = if (typeDefaults.contains(argType)) typeDefaults[argType] else null
-            arrayOf<Any?>(defaultVal ?: "")
-        } else {
-            deserializer.deserialize(call.params)
-        }
-    }
-
-    private suspend fun handleError(req: Request, ex: Exception) {
+    private fun handleError(req: Request, ex: Exception) {
         val parts = req.structured()
         val info = parts.joinToString { "${it.first}=${it.second?.toString()}" }
         logger.error("API Server: ERROR: $info", ex)

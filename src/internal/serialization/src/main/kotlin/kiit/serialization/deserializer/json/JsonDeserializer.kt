@@ -80,7 +80,7 @@ open class JsonDeserializer(
 
     override fun deserialize(parameters: List<KParameter>): Array<Any?> {
         // Check each parameter to api call
-        val source = req.data.raw as? JSONObject ?: JSONObject()
+        val source = req.data.raw as? JSONObject
         val inputs = mutableListOf<Any?>()
         for (ndx in 0 until parameters.size) {
             // Get each parameter to the method
@@ -106,7 +106,6 @@ open class JsonDeserializer(
                         }
                     }
                 }
-                //convert(source, paramValue, paramName, paramType)
             }
             catch(ex:Exception) {
                 val errValue = this.req.data.getStringOrNull(paramName)
