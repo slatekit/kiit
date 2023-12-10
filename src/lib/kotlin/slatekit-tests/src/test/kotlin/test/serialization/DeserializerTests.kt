@@ -27,6 +27,27 @@ import kotlin.reflect.KType
 
 class DeserializerTests {
 
+//    @Test
+//    fun testJSON() {
+//        val test = """{
+//                "tstr": "abc",
+//                "tbool": false,
+//                "movie": {
+//                    "id": 123,
+//                    "title": "dark knight",
+//                    "category": "action",
+//                    "playing": false,
+//                    "cost": 15,
+//                    "rating": 4.5,
+//                    "released": "2012-07-04T18:00:00Z"
+//                }
+//            }""".trimIndent()
+//        val json = org.json.JSONObject(test)
+//        val jar = json.getJSONArray("")
+//        val json2 = org.json.simple.parser.JSONParser().parse(test) as JSONObject
+//        val jar2 = json2.get("") as org.json.simple.JSONArray
+//
+//    }
 
     fun test_basic_types(tstr:String, tbool:Boolean, tshort:Short, tint:Int, tlong:Long, tdoub:Double):Unit {}
     @Test fun can_parse_basictypes(){

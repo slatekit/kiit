@@ -15,6 +15,7 @@ package kiit.common.values
 
 import kiit.common.convert.Conversions
 import kiit.common.ext.splitToMapOfType
+import kotlin.reflect.KClass
 
 interface InputsUpdateable {
     // Immutable add

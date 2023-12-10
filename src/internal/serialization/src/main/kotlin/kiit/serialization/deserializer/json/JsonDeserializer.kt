@@ -58,7 +58,6 @@ open class JsonDeserializer(
      * @param source : The json object to containing the data
      */
     override fun deserialize(parameters: List<KParameter>, source: JSONObject): Array<Any?> {
-
         // Check each parameter to api call
         val inputs = (0 until parameters.size).map { index ->
             val parameter = parameters[index]
@@ -81,7 +80,7 @@ open class JsonDeserializer(
 
     override fun deserialize(parameters: List<KParameter>): Array<Any?> {
         // Check each parameter to api call
-        val source = req.data.raw as? JSONObject
+        val source = req.data.raw as? JSONObject ?: JSONObject()
         val inputs = mutableListOf<Any?>()
         for (ndx in 0 until parameters.size) {
             // Get each parameter to the method
@@ -89,6 +88,7 @@ open class JsonDeserializer(
             val paramName = parameter.name!!
             val paramType = parameter.type
             val paramCls = paramType.classifier as KClass<*>
+            val paramValue = req.data.get(paramName)
             val result:Any? = try {
                 val isBasicType = basicTypes.containsKey(paramCls.qualifiedName)
                 when(isBasicType) {
@@ -101,11 +101,12 @@ open class JsonDeserializer(
                             typeRequest -> req
                             typeMeta -> req.meta
                             else -> {
-                                handleComplex(req, parameter, paramType, source, req.data.get(paramName))
+                                handleComplex(req, parameter, paramType, source, paramValue)
                             }
                         }
                     }
                 }
+                //convert(source, paramValue, paramName, paramType)
             }
             catch(ex:Exception) {
                 val errValue = this.req.data.getStringOrNull(paramName)
@@ -141,10 +142,11 @@ open class JsonDeserializer(
     private fun handleComplex(parent: Any, paramValue: Any?, paramName:String, paramType: KType): Any? {
         val cls = paramType.classifier as KClass<*>
         val fullName = cls.qualifiedName
+        // Case 1: List<T>
         return if (cls == List::class) {
             deserializers.lists.decode(this.req, parent, paramName, paramValue, paramType)
         }
-        // Case 2: Map
+        // Case 2: Map<TKey, T>
         else if (cls == Map::class) {
             deserializers.maps.decode(this.req, parent, paramName, paramValue, paramType)
         }
@@ -156,7 +158,7 @@ open class JsonDeserializer(
         else if (cls.supertypes.indexOf(KTypes.KSmartValueType) >= 0) {
             deserializers.smart.decode(this.req, parent, paramName, paramValue, paramType)
         }
-        // Case 5: Slate Kit Enm
+        // Case 5: EnumLike
         else if (cls.supertypes.indexOf(KTypes.KEnumLikeType) >= 0) {
             deserializers.enums.decode(this.req, parent, paramName, paramValue, paramType)
         }
@@ -167,7 +169,7 @@ open class JsonDeserializer(
     }
 
     /**
-     * Handles building of a list from various source types
+     * Handles building of a list from various source types ( CLI, WEB, QUE, etc )
      * @return
      */
     private fun handleComplex(context: Request, parameter: KParameter, tpe: KType, jsonRaw: JSONObject?, rawValue: Any?): Any? {
@@ -176,13 +178,15 @@ open class JsonDeserializer(
         val cls = tpe.classifier as KClass<*>
 
         val result = if (cls.supertypes.indexOf(KTypes.KSmartValueType) >= 0) {
-            deserializers.smart.decode(this.req, data, paramName,  rawValue, tpe)
+            deserializers.smart.decode(this.req, data, paramName, rawValue, tpe)
         } else if (cls.supertypes.indexOf(KTypes.KSmartValuedType) >= 0) {
             deserializers.smart.decode(this.req, data, paramName, rawValue, tpe)
         } else if (cls.supertypes.indexOf(KTypes.KEnumLikeType) >= 0) {
             val enumVal = data.get(paramName)
             Reflector.getEnumValue(cls, enumVal)
-        } else if (jsonRaw == null) {
+        }
+        // CLI: JSON is not available in the CLI.
+        else if (jsonRaw == null) {
             // Case 1: List<*>
             if (cls == List::class) {
                 val listType = tpe.arguments[0]!!.type!!
