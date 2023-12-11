@@ -1,10 +1,21 @@
 package kiit.apis.routes
 
-import kiit.apis.Verb
+/**
+ * Represents the 3 part routing convention in Kiit API actions.
+ * Example:
+ * 1. format: {area}/{api}/{action}
+ * 2. sample: content/blog/create
+ *
+ * @param area   : 1st level logical group that the api belongs to
+ * @param api    : 2nd level logical group of related actions/endpoints
+ * @param action : 3rd level executable portion that maps to a method
+ */
+data class Path(val area:Area, val api:Api, val action: Action)
 
-data class Route(val area:Area, val api:Api, val action: Action)
-data class RouteMapping(val route: Route, val handler: RouteHandler)
 
-interface RouteHandler
-class MethodExecutor(val call: Call) : RouteHandler
-class RouteForwarder(val globalVersion: String, val verb: Verb, val area:Area, val api:Versioned, val action:Versioned) : RouteHandler
+/**
+ * Represents a mapping of the path and handle to execute action in the path
+ * Example:
+ * content/blog/create -> MethodExecutor( BlogApi::create method )
+ */
+data class Route(val path: Path, val handler: RouteHandler)

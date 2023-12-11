@@ -40,12 +40,12 @@ class Loader(val namer: Namer?)  {
         val matches = rawMatches.filter { it.first.visibility != null && it.first.visibility!! == KVisibility.PUBLIC }
 
         // Convert to RouteMapping ( route -> handler )
-        val mappings: List<RouteMapping> = matches.map { item ->
+        val mappings: List<Route> = matches.map { item ->
 
             val action = loader.toAction(item.first, api, item.second, namer)
 
             // area/api/action objects ( with version info )
-            val route = Route(area, api, action)
+            val path = Path(area, api, action)
 
             // Reflection based KCallable
             val call = Call(cls, item.first, instance)
@@ -54,7 +54,7 @@ class Loader(val namer: Namer?)  {
             val handler = MethodExecutor(call)
 
             // Final mapping of route -> handler
-            RouteMapping(route, handler)
+            Route(path, handler)
         }
         return ApiActions(api, mappings)
     }

@@ -13,15 +13,15 @@ interface Lookup<T> {
 /**
  * Look up for all actions on an API
  */
-class ApiActions(val api:Api, override val items: List<RouteMapping>) : Lookup<RouteMapping> {
+class ApiActions(val api:Api, override val items: List<Route>) : Lookup<Route> {
     override val name: String = "${api.version}:${api.name}"
-    override val map: Map<String, RouteMapping> = toMap(items)
+    override val map: Map<String, Route> = toMap(items)
 
     companion object {
-        fun toMap(mappings: List<RouteMapping>): Map<String, RouteMapping> {
+        fun toMap(mappings: List<Route>): Map<String, Route> {
             val pairs = mappings.map {
                 // key = "{VERB}.{VERSION}.{NAME}"
-                val action = it.route.action
+                val action = it.path.action
                 val name = "${action.verb.name}.${action.version}:${action.name}"
                 name to it
             }

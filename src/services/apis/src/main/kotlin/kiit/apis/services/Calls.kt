@@ -12,11 +12,10 @@
 package kiit.apis.services
 
 import kiit.apis.ApiRequest
-import kiit.apis.meta.MetaDecoder
 import kiit.apis.routes.Action
 import kiit.apis.routes.Call
 import kiit.apis.routes.MethodExecutor
-import kiit.apis.routes.RouteMapping
+import kiit.apis.routes.Route
 import kiit.common.DateTime
 import kiit.common.values.Inputs
 import kiit.meta.KTypes
@@ -65,12 +64,12 @@ object Calls {
      * @param req : the command input
      * @return
      */
-    fun validateCall( request: ApiRequest, allowSingleDefaultParam: Boolean = false ): Outcome<RouteMapping> {
+    fun validateCall( request: ApiRequest, allowSingleDefaultParam: Boolean = false ): Outcome<Route> {
         val req = request.request
         val fullName = req.fullName
         val args = req.data
         return request.target?.let { target ->
-            val action = target.route.action
+            val action = target.path.action
             val executor = target.handler as MethodExecutor
             val call = executor.call
 
@@ -99,8 +98,8 @@ object Calls {
         } ?: Outcomes.errored("Unable to find action")
     }
 
-    fun fillArgs(deserializer: Deserializer<JSONObject>, apiRef: RouteMapping, call: Call, cmd: Request): Array<Any?> {
-        val action = apiRef.route.action
+    fun fillArgs(deserializer: Deserializer<JSONObject>, apiRef: Route, call: Call, cmd: Request): Array<Any?> {
+        val action = apiRef.path.action
         // Check 1: No args ?
         return if (!call.hasArgs)
             arrayOf()

@@ -23,5 +23,5 @@ object ApiConstants {
 
     const val docKeyName = "doc-key"
     const val parent = "@parent"
-    const val versionZero = "0"
+    const val zero = "0"
 }

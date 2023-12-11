@@ -13,7 +13,6 @@ import kiit.apis.rules.RouteRule
 import kiit.apis.services.*
 import kiit.apis.setup.HostAware
 import kiit.common.*
-import kiit.common.crypto.Encryptor
 import kiit.common.ext.numbered
 import kiit.common.ext.structured
 import kiit.requests.toResponse
@@ -109,7 +108,7 @@ open class ApiServer(
      * @param req : Request to get route info from
      * @return
      */
-    fun get(req: Request): RouteMapping? {
+    fun get(req: Request): Route? {
         val gblVersion = req.version
         val apiVersion = req.meta.getStringOrNull("x-api-version")
         return get(req.verb, req.area, req.name, req.action, gblVersion, apiVersion)
@@ -123,7 +122,7 @@ open class ApiServer(
      * @param action : e.g. "register"
      * @return
      */
-    fun get(verb:String, area: String, name: String, action: String, globalVersion:String = ApiConstants.versionZero, version:String? = null): RouteMapping? {
+    fun get(verb:String, area: String, name: String, action: String, globalVersion:String = ApiConstants.zero, version:String? = null): Route? {
         val action = router.action(verb, area, name, action, globalVersion, version)
         return action
     }
