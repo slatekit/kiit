@@ -13,7 +13,7 @@ class JsonListDecoder(
     private val enc: Encryptor?
 ) : Decoder<JSONObject>, DecodeSupport {
 
-    override fun decode(context: Any, parent: Any, paramName: String, paramValue: Any?, paramType: KType): Any? {
+    override fun decode(parent: Any, paramName: String, paramValue: Any?, paramType: KType): Any? {
         val listType = paramType.arguments[0]!!.type!!
         return when (paramValue) {
             is JSONArray -> converter.toList(paramValue, paramName, listType)

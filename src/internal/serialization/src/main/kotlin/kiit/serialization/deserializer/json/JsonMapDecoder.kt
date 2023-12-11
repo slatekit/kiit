@@ -12,7 +12,7 @@ class JsonMapDecoder(
     private val enc: Encryptor?
 ) : Decoder<JSONObject>, DecodeSupport {
 
-    override fun decode(context: Any, parent: Any, paramName: String, paramValue: Any?, paramType: KType): Any? {
+    override fun decode(parent: Any, paramName: String, paramValue: Any?, paramType: KType): Any? {
         val tpeKey = paramType.arguments[0].type!!
         val tpeVal = paramType.arguments[1].type!!
         val emptyMap = mapOf<Any, Any>()

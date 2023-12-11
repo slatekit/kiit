@@ -12,6 +12,7 @@ about: A Kotlin utility library, tool-kit and server backend.
  */
 package kiit.serialization.deserializer
 
+import kiit.requests.Request
 import kotlin.reflect.KParameter
 
 /**
@@ -44,7 +45,7 @@ interface Deserializer<TSource> {
     /**
      * converts data from the json object as an instance of the parameter type
      */
-    fun deserialize(parameters: List<KParameter>): Array<Any?>
+    fun deserialize(parameters: List<KParameter>, req:Request): Array<Any?>
 }
 
 

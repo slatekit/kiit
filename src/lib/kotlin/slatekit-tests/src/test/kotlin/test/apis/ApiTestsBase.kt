@@ -138,7 +138,7 @@ open class ApiTestsBase {
         request: Request,
         response: Response<*>,
         checkFailMsg:Boolean = false,
-        decoder: ((Request, Encryptor?) -> Deserializer<JSONObject>)? = null
+        decoder: Deserializer<JSONObject>? = null
         ) {
 
         // Optional auth
@@ -148,7 +148,7 @@ open class ApiTestsBase {
         val host = ApiServer(ctx,
                 routes = routes,
                 auth = auth,
-                decoder = decoder,
+                deserializer = decoder,
                 settings = Settings(protocol))
 
         // Get result

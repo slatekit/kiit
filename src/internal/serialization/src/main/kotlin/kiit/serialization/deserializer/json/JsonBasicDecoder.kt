@@ -17,7 +17,7 @@ class JsonBasicDecoder(
     private val enc: Encryptor?
 ) : Decoder<JSONObject>, DecodeSupport {
 
-    override fun decode(context: Any, parent: Any, paramName: String, paramValue: Any?, paramType: KType): Any? {
+    override fun decode(parent: Any, paramName: String, paramValue: Any?, paramType: KType): Any? {
         val result = when (paramType.classifier) {
             // Basic
             KTypes.KStringClass -> paramValue?.let { Conversions.handleString(it) }
@@ -43,7 +43,7 @@ class JsonBasicDecoder(
 
             // Kiit
             KTypes.KVarsClass -> paramValue?.let { Conversions.toVars(it) }
-            KTypes.KDocClass  -> converter.toDoc(context as Request, paramName)
+            //KTypes.KDocClass  -> converter.toDoc(context as Request, paramName)
             KTypes.KUUIDClass -> UUID.fromString(paramValue.toString())
 
             else -> null

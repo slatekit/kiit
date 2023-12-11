@@ -52,7 +52,7 @@ class DeserializerTests {
     fun test_basic_types(tstr:String, tbool:Boolean, tshort:Short, tint:Int, tlong:Long, tdoub:Double):Unit {}
     @Test fun can_parse_basictypes(){
         val test = """{ "tstr": "abc", "tbool": false, "tshort": 1, "tint": 12, "tlong": 123, "tdoub": 123.45 }"""
-        val deserializer = JsonDeserializer(CommonRequest.cli("a", "b", "c", "post", mapOf(), mapOf()))
+        val deserializer = JsonDeserializer()
         val results = deserializer.deserialize(this::test_basic_types.parameters, test)
         Assert.assertTrue(results[0] == "abc")
         Assert.assertTrue(results[1] == false)
@@ -66,7 +66,7 @@ class DeserializerTests {
     fun test_dates(tdate: LocalDate, ttime: LocalTime, tlocaldatetime: LocalDateTime, tdatetime: DateTime):Unit{}
     @Test fun can_parse_dates(){
         val test = """{ "tdate": "2017-07-06", "ttime": "10:30:45", "tlocaldatetime": "2017-07-06T10:30:45", "tdatetime": "201707061030" }"""
-        val deserializer = JsonDeserializer(CommonRequest.cli("a", "b", "c", "post", mapOf(), mapOf()))
+        val deserializer = JsonDeserializer()
         val results = deserializer.deserialize(this::test_dates.parameters, test)
         Assert.assertTrue(results[0] == LocalDate.of(2017, 7, 6))
         Assert.assertTrue(results[1] == LocalTime.of(10,30,45))
@@ -79,7 +79,7 @@ class DeserializerTests {
     @Test fun can_parse_uuids(){
         val uuid = Random.uuid()
         val test = """{ "uid": "$uuid" }"""
-        val deserializer = JsonDeserializer(CommonRequest.cli("a", "b", "c", "post", mapOf(), mapOf()))
+        val deserializer = JsonDeserializer()
         val results = deserializer.deserialize(this::test_uuid.parameters, test)
         Assert.assertTrue(results[0] == UUID.fromString(uuid))
     }
@@ -89,7 +89,7 @@ class DeserializerTests {
     @Test fun can_parse_enum(){
         val enumVal = StatusEnum.Active
         val test = """{ "status": ${enumVal.value} }"""
-        val deserializer = JsonDeserializer(CommonRequest.cli("a", "b", "c", "post", mapOf(), mapOf()))
+        val deserializer = JsonDeserializer()
         val results = deserializer.deserialize(this::test_enum.parameters, test)
         Assert.assertTrue(results[0] == enumVal)
     }
@@ -104,7 +104,7 @@ class DeserializerTests {
         val decDoub = MyEncryptor.encrypt("12345.67")
 
         val test = """{ "decString": "$decStr", "decInt": "$decInt", "decLong": "$decLong", "decDouble": "$decDoub" }"""
-        val deserializer = JsonDeserializer(CommonRequest.cli("a", "b", "c", "post", mapOf(), mapOf()), MyEncryptor)
+        val deserializer = JsonDeserializer(MyEncryptor)
         val results = deserializer.deserialize(this::test_decrypted.parameters, test)
         Assert.assertTrue((results[0] as EncString).value == "abc123")
         Assert.assertTrue((results[1] as EncInt).value == 123)
@@ -116,7 +116,7 @@ class DeserializerTests {
     fun test_arrays(strings: List<String>, bools:List<Boolean>, ints:List<Int>, longs:List<Long>, doubles:List<Double>):Unit {}
     @Test fun can_parse_arrays(){
         val test = """{ "strings": ["a", "b", "c"], "bools": [true, false, true], "ints": [1,2,3], "longs": [100,200,300], "doubles": [1.2,3.4,5.6] }"""
-        val deserializer = JsonDeserializer(CommonRequest.cli("a", "b", "c", "post", mapOf(), mapOf()), MyEncryptor)
+        val deserializer = JsonDeserializer(MyEncryptor)
         val results = deserializer.deserialize(this::test_arrays.parameters, test)
         Assert.assertTrue((results[0] as List<String>)[0] == "a")
         Assert.assertTrue((results[0] as List<String>)[1] == "b")
@@ -140,7 +140,7 @@ class DeserializerTests {
     fun test_object(sample1: SampleObject1):Unit{}
     @Test fun can_parse_object(){
         val test = """{ "sample1": { "tstr": "abc", "tbool": false, "tshort": 1, "tint": 12, "tlong": 123, "tdoub": 123.45 } }"""
-        val deserializer = JsonDeserializer(CommonRequest.cli("a", "b", "c", "post", mapOf(), mapOf()))
+        val deserializer = JsonDeserializer()
         val results = deserializer.deserialize(this::test_object.parameters, test)
         Assert.assertTrue(results[0] == SampleObject1("abc", false, 1, 12, 123, 123.45))
     }
@@ -153,7 +153,7 @@ class DeserializerTests {
             { "tstr": "abc", "tbool": false, "tshort": 1, "tint": 12, "tlong": 123, "tdoub": 123.45 },
             { "tstr": "def", "tbool": true , "tshort": 2, "tint": 34, "tlong": 456, "tdoub": 678.91 }
         ]}"""
-        val deserializer = JsonDeserializer(CommonRequest.cli("a", "b", "c", "post", mapOf(), mapOf()))
+        val deserializer = JsonDeserializer()
         val inputs = deserializer.deserialize(this::test_object_list.parameters, test)
         val results = inputs.get(0) as ArrayList<*>
         println(results)
@@ -177,7 +177,7 @@ class DeserializerTests {
                 ]
             }
         }"""
-        val deserializer = JsonDeserializer(CommonRequest.cli("a", "b", "c", "post", mapOf(), mapOf()))
+        val deserializer = JsonDeserializer()
         val results = deserializer.deserialize(this::test_nested_object_list.parameters, test)
         val item = results[1] as NestedObject1
         Assert.assertTrue(results[0] == "abc")
@@ -208,7 +208,7 @@ class DeserializerTests {
         val decoder = Transformer(Movie::class.java, null) { _, _ ->
             Movie(0L, "batman", cost = 0, rating = 4.0, released = DateTime.now())
         }
-        val deserializer = JsonDeserializer(req, null, mapOf(Pair(Movie::class.qualifiedName!!, decoder)))
+        val deserializer = JsonDeserializer(null, mapOf(Pair(Movie::class.qualifiedName!!, decoder)))
         val results = deserializer.deserialize(this::test_custom_converter.parameters, test)
         Assert.assertTrue(results[0] == "abc")
         Assert.assertTrue(results[1] == false)
@@ -233,7 +233,7 @@ class DeserializerTests {
         val req = CommonRequest("a.b.c", listOf("a", "b", "c"), Source.CLI, "post",
                 InputArgs(mapOf()), InputArgs(mapOf(Pair("movie", "batman"))))
 
-        val deserializer = JsonDeserializer(req, null, mapOf(Pair(Movie::class.qualifiedName!!, MovieDecoder())))
+        val deserializer = JsonDeserializer(null, mapOf(Pair(Movie::class.qualifiedName!!, MovieDecoder())))
         val results = deserializer.deserialize(this::test_custom_converter.parameters, test)
         Assert.assertTrue(results[0] == "abc")
         Assert.assertTrue(results[1] == false)
@@ -278,7 +278,7 @@ class DeserializerTests {
         val req = CommonRequest("a.b.c", listOf("a", "b", "c"), Source.CLI, "post",
                 InputArgs(mapOf(Pair("movie", "batman"))), InputArgs(mapOf("Authorization" to "a.user123.c")))
 
-        val deserializer = JsonDeserializer(req, null, mapOf(Pair(Self::class.qualifiedName!!, JWTSelfDecoder())))
+        val deserializer = JsonDeserializer(null, mapOf(Pair(Self::class.qualifiedName!!, JWTSelfDecoder())))
         val results = deserializer.deserialize(this::test_context_converter.parameters, test)
         Assert.assertTrue(results[0] == Self("user123"))
         Assert.assertTrue(results[1] == "abc")
@@ -295,7 +295,7 @@ class DeserializerTests {
         val req = CommonRequest("a.b.c", listOf("a", "b", "c"), Source.CLI, "post",
                 InputArgs(mapOf(Pair("movie", "batman"))), InputArgs(mapOf("Authorization" to "a.user123.c")))
 
-        val deserializer = JsonDeserializer(req, null, mapOf(Pair(Self::class.qualifiedName!!, JWTSelfDecoder())))
+        val deserializer = JsonDeserializer(null, mapOf(Pair(Self::class.qualifiedName!!, JWTSelfDecoder())))
         val results = deserializer.deserialize(this::test_context_converter.parameters, test)
         Assert.assertTrue(results[0] == Self("user999"))
         Assert.assertTrue(results[1] == "abc")
@@ -313,8 +313,8 @@ class DeserializerTests {
         val req = CommonRequest("a.b.c", listOf("a", "b", "c"), Source.CLI, "post",
                 json, InputArgs(mapOf("Authorization" to "a.user123.c")))
 
-        val deserializer = JsonDeserializer(req, null, mapOf(Pair(Self::class.qualifiedName!!, JWTSelfDecoder())))
-        val results = deserializer.deserialize(this::test_context_converter.parameters)
+        val deserializer = JsonDeserializer(null, mapOf(Pair(Self::class.qualifiedName!!, JWTSelfDecoder())))
+        val results = deserializer.deserialize(this::test_context_converter.parameters, req)
         Assert.assertTrue(results[0] == Self("user901"))
         Assert.assertTrue(results[1] == "abc")
         Assert.assertTrue(results[2] == false )

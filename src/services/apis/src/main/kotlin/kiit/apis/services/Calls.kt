@@ -110,7 +110,7 @@ object Calls {
             val defaultVal = if (typeDefaults.contains(argType)) typeDefaults[argType] else null
             arrayOf<Any?>(defaultVal ?: "")
         } else {
-            deserializer.deserialize(call.params)
+            deserializer.deserialize(call.params,cmd)
         }
     }
 

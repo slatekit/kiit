@@ -43,7 +43,7 @@ open class ApiServer(
     val rewriter: Rewriter? = null,
     val namedMiddlewares: List<Pair<String,Middleware>> = listOf(),
     val auth: Auth? = null,
-    val decoder: ((Request, Encryptor?) -> Deserializer<JSONObject>)? = null,
+    deserializer: Deserializer<JSONObject>? = null,
     metas : List<Pair<KClass<*>, MetaHandler>> = listOf(),
     val settings: Settings = Settings()
 )  {
@@ -54,6 +54,10 @@ open class ApiServer(
      */
     val router = Router(routes, settings.naming)
 
+    /**
+     * Decoder for converting Request Body JSON to method parameter values.
+     */
+    val decoder: Deserializer<JSONObject> = deserializer ?: JsonDeserializer(ctx.enc)
 
     /**
      * Builds/Deserializes types from the Request and its metadata
@@ -262,10 +266,9 @@ open class ApiServer(
     protected open suspend fun executeMethod(request: ApiRequest): Outcome<ApiResult> {
         // Finally make call.
         val target = request.target
-        val converter = decoder?.invoke(request.request, ctx.enc) ?: JsonDeserializer(request.request, ctx.enc)
         val executor = target!!.handler as MethodExecutor
         val call = executor.call
-        val inputs = Calls.fillArgs(converter, target, call, request.request)
+        val inputs = Calls.fillArgs(decoder, target, call, request.request)
         val returnVal = Calls.callMethod(call.klass, call.instance, call.member.name, inputs)
         val wrapped = returnVal?.let { res ->
             if (res is Result<*, *>) {

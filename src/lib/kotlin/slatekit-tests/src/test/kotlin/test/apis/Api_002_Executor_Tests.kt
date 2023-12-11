@@ -117,7 +117,7 @@ class Api_002_Executor_Tests : ApiTestsBase() {
                 Pair(Custom1::class.qualifiedName!!, Custom1Decoder()),
                 Pair(Custom2::class.qualifiedName!!, Custom2Decoder()),
             )
-            JsonDeserializer(req, enc, decoders)
+            JsonDeserializer(enc, decoders)
         }
 
         checkCall(
@@ -128,7 +128,6 @@ class Api_002_Executor_Tests : ApiTestsBase() {
                 mapOf(Pair("name", "c1"), Pair("code", 2)),
                 mapOf(Pair("note", "custom_inputs"))
             ),
-            decoder = decoder,
             response = Success("ok", msg = "raw send id: 2").toResponse()
         )
     }
