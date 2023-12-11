@@ -38,8 +38,6 @@ open class JsonDeserializer(
 ) : Deserializer<JSONObject> {
 
     private val conversion  = JsonConverter(this::convert)
-    private val typeRequest = Request::class.createType()
-    private val typeMeta    = Metadata::class.createType()
     private val deserializers = JsonDecoders(conversion, enc, decoders)
     private val basicTypes = DecodeUtils.basicMapTypes()
 
@@ -96,15 +94,7 @@ open class JsonDeserializer(
                         val paramValue = req.data.get(paramName)
                         deserializers.basic.decode(req, inputs, paramName, paramValue, paramType)
                     }
-                    false -> {
-                        when(paramType) {
-                            typeRequest -> req
-                            typeMeta -> req.meta
-                            else -> {
-                                handleComplex(req, parameter, paramType, source, paramValue)
-                            }
-                        }
-                    }
+                    false ->handleComplex(req, parameter, paramType, source, paramValue)
                 }
             }
             catch(ex:Exception) {

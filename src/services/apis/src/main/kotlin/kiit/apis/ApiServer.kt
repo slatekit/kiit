@@ -2,6 +2,9 @@ package kiit.apis
 
 import java.io.File
 import kiit.apis.core.*
+import kiit.apis.meta.MetaBuilder
+import kiit.apis.meta.MetaDecoder
+import kiit.apis.meta.MetaHandler
 import kiit.apis.routes.*
 import kiit.apis.rules.AuthRule
 import kiit.apis.rules.ParamsRule
@@ -25,6 +28,7 @@ import kiit.results.*
 import kiit.results.builders.Outcomes
 import kiit.serialization.deserializer.json.JsonDeserializer
 import org.json.simple.JSONObject
+import kotlin.reflect.KClass
 
 /**
  * This is the core container hosting, managing and executing the source independent apis.
@@ -40,6 +44,7 @@ open class ApiServer(
     val namedMiddlewares: List<Pair<String,Middleware>> = listOf(),
     val auth: Auth? = null,
     val decoder: ((Request, Encryptor?) -> Deserializer<JSONObject>)? = null,
+    metas : List<Pair<KClass<*>, MetaHandler>> = listOf(),
     val settings: Settings = Settings()
 )  {
 
@@ -48,6 +53,12 @@ open class ApiServer(
      * The API setup can be either annotation based or public methods on the Class
      */
     val router = Router(routes, settings.naming)
+
+
+    /**
+     * Builds/Deserializes types from the Request and its metadata
+     */
+    val metas : MetaBuilder = MetaBuilder(MetaDecoder.of(metas))
 
     /**
      * The help class to handle help on an area, api, or action
@@ -278,7 +289,7 @@ open class ApiServer(
 
         @JvmStatic
         fun of(ctx: Context, routes: List<VersionAreas>, auth: Auth? = null, source: Source? = null): ApiServer {
-            val server = ApiServer(ctx, routes, null, listOf(), auth, null, Settings(source ?: Source.API))
+            val server = ApiServer(ctx, routes, null, listOf(), auth, null, listOf(), Settings(source ?: Source.API))
             return server
         }
 

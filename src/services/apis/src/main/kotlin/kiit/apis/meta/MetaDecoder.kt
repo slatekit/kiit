@@ -1,17 +1,7 @@
-package kiit.apis.services
+package kiit.apis.meta
 
 import kiit.apis.ApiRequest
 import kotlin.reflect.KClass
-
-
-/**
- * Takes an API Request and builds a resulting object from the request metadata.
- * This is used for decoded metadata into some data type.
- * Examples:
- * 1. Request: Take the Request itself and return it ( for parameters to actions/methods )
- * 2. Self   : Take the JWT from "Authorization" and build Self type containing user id
- */
-typealias MetaHandler = (ApiRequest) -> Any?
 
 
 /**
@@ -34,7 +24,12 @@ class MetaDecoder(val mtype: KClass<*>, val op:MetaHandler) {
          * 2. Self::class.qualifiedName    to MetaDecoder(Self::class   , (ApiRequest) -> Any?)
          */
         fun of(mappings: List<Pair<KClass<*>, MetaHandler>>) : Map<String, MetaDecoder> {
-            return mappings.map { Pair(it.first.qualifiedName!!, MetaDecoder(it.first, it.second)) }.toMap()
+            val metas = when(mappings.isEmpty()) {
+                true -> MetaUtils.builtins
+                false -> MetaUtils.build(mappings)
+            }
+            val decoders = metas.map { Pair(it.first.qualifiedName!!, MetaDecoder(it.first, it.second)) }
+            return decoders.toMap()
         }
     }
 }
