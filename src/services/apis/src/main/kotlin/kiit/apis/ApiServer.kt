@@ -213,28 +213,11 @@ open class ApiServer(
         // Step 5: Execute request
         val result:Outcome<ApiResult> = try {
             val instance = req.target
-            when {
-                instance == null  -> Outcomes.errored("Route not mapped")
-                else -> {
-                    val handler = instance.handler
-                    if(handler is MethodExecutor) {
-                        val executor = handler
-                        if(executor.call.instance is Middleware) {
-                            executeWithMiddleware(req, executor.call.instance)
-                        }
-                        else {
-                            executeWithMiddleware(req, null)
-                        }
-                    } else if(middlewares.isNotEmpty()) {
-                        Middleware.process(req, 0, middlewares) {
-                            executor.execute(req)
-                        }
-                    } else {
-                        executeWithMiddleware(req, null)
-                    }
-                }
+            val hasInstance = instance == null
+            when(hasInstance) {
+                false -> Outcomes.errored("Route not mapped")
+                true  -> executor.execute(request)
             }
-
         } catch(ex:Exception){
             when(ex){
                 is ExceptionErr -> Outcomes.unexpected(ex.err, Codes.UNEXPECTED)
@@ -242,18 +225,6 @@ open class ApiServer(
             }
         }
         return result
-    }
-
-
-    private suspend fun executeWithMiddleware(req:ApiRequest, middleware: Middleware?): Outcome<ApiResult> {
-        return when(middleware) {
-            null -> executor.execute( req)
-            else  -> {
-                middleware.process(req) {
-                    executor.execute(req)
-                }
-            }
-        }
     }
 
 
