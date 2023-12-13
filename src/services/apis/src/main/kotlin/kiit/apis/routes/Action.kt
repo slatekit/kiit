@@ -59,5 +59,6 @@ data class Action(
     val sources: Sources = Sources.all,
     val verb: Verb = Verb.Auto,
     val version:String = "",
+    val policies: List<String> = listOf(),
     val tags: List<String> = listOf()
 )

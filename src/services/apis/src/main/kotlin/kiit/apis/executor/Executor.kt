@@ -2,6 +2,7 @@ package kiit.apis.executor
 
 import kiit.apis.ApiRequest
 import kiit.apis.ApiResult
+import kiit.apis.Middleware
 import kiit.apis.routes.Call
 import kiit.apis.routes.MethodExecutor
 import kiit.meta.KTypes
@@ -14,10 +15,20 @@ import kotlin.reflect.KClass
 import kotlin.reflect.KParameter
 
 /**
+ * This handles execution of api actions by going through a series of steps
+ * and finally invoking the associated method linked to the action. This
+ * is really the core of the ApiServer in terms of processing requests.
+ * The ApiServer has other checks for routes, auth, protocol.
+ * Steps :
+ * 1. middleware flow ( ensure all api/action middleware/policies run )
+ * 2. decode metadata ( build params from any request metadata        )
+ * 3. validate inputs ( method params exist in request body json      )
+ * 4. invoke method   ( finally, invoke the method with the params    )
  */
 class Executor(
     private val dataDecoder: Deserializer<JSONObject>,
-    private val metaDecoder: MetaDecoder
+    private val metaDecoder: MetaDecoder,
+    private val middlewares: Map<String, Middleware> = mapOf()
 ) {
 
     @Suppress("UNCHECKED_CAST")
@@ -26,17 +37,39 @@ class Executor(
         val target = request.target
         val executor = target!!.handler as MethodExecutor
         val call = executor.call
-        val inputs = build(request, call)
-        if(!inputs.success) return inputs
-        val output = invoke(call.instance, call.member, inputs.getOrElse { arrayOf() })
-        val wrapped = output?.let { res ->
-            if (res is Result<*, *>) {
-                (res as Result<ApiResult, Err>)
+        val result = executeFlow(request) {
+            val inputs = build(request, call)
+            if(!inputs.success) {
+                inputs
             } else {
-                Outcomes.of(res!!)
+                val args = inputs.getOrElse { arrayOf() }
+                val result = invoke(call.instance, call.member, args)
+                convert(result)
             }
-        } ?: Outcomes.of(Exception("Received null"))
-        return wrapped
+        }
+        return result
+    }
+
+    /**
+     * Ensures all middlewares are executed in the proper flow before the api action is executed.
+     * This is done by doing 2 things :
+     * 1. api level: Api level middlewares are applied first
+     * 2. action level: Action level middlewares then applied.
+     * 3. action execute: Finally, the action method execution is run.
+     */
+    private suspend fun executeFlow(req:ApiRequest, op:suspend (ApiRequest) -> Outcome<ApiResult>): Outcome<ApiResult> {
+        val path = req.target!!.path
+
+        // Level: Action ( this executes last )
+        val actions = path.action.policies.map { middlewares[it] }.filterNotNull()
+        val actionFlow: suspend (ApiRequest) -> Outcome<ApiResult> = { r ->
+            Middleware.process(r, 0, actions, op)
+        }
+
+        // Level: API
+        val global = path.api.policies.map { middlewares[it] }.filterNotNull()
+        val result = Middleware.process(req, 0, global, actionFlow)
+        return result
     }
 
     /**
@@ -140,11 +173,33 @@ class Executor(
         }
     }
 
+
+    /**
+     * Ensures that the result of any action/method call is wrapped an Outcome.
+     * This is because this is the enforced contract / standardized response
+     * from any api/action call. For example: Given a Int output, it is wrapped
+     *
+     * fun add(a:Int, b:Int) : Int = a + b
+     * val result = add(1, 2)
+     * Outcomes.success(result)
+     */
+    private fun convert(output:Any?):Outcome<ApiResult> {
+        val wrapped = output?.let { res ->
+            if (res is Result<*, *>) {
+                (res as Result<ApiResult, Err>)
+            } else {
+                Outcomes.of(res!!)
+            }
+        } ?: Outcomes.of(Exception("Received null"))
+        return wrapped
+    }
+
+
     companion object {
         /**
          * https://stackoverflow.com/questions/47654537/how-to-run-suspend-method-via-reflection
          */
-        public suspend fun invoke(instance: Any, member: KCallable<*>, args: Array<Any?>): Any? {
+        suspend fun invoke(instance: Any, member: KCallable<*>, args: Array<Any?>): Any? {
             val params = arrayOf(instance, *args)
             val result = if (member.isSuspend) {
                 kotlin.coroutines.intrinsics.suspendCoroutineUninterceptedOrReturn { cont ->
