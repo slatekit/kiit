@@ -3,7 +3,8 @@ package test.meta
 import kotlinx.coroutines.runBlocking
 import org.junit.Assert
 import org.junit.Test
-import kiit.apis.services.Calls
+import kiit.apis.executor.Executor
+import kiit.meta.Reflector
 
 class SuspendTests {
 
@@ -11,7 +12,8 @@ class SuspendTests {
     fun callSuspend(){
         val sample = ReflectSample()
         runBlocking {
-            val result = Calls.callMethod(ReflectSample::class, sample, "add", arrayOf(1, 2))
+            val member = Reflector.getMethod(ReflectSample::class, "add")
+            val result = Executor.invoke(sample, member!!, arrayOf(1, 2))
             Assert.assertEquals(3, result)
         }
     }
@@ -21,7 +23,8 @@ class SuspendTests {
     fun callNormal(){
         val sample = ReflectSample()
         runBlocking {
-            val result = Calls.callMethod(ReflectSample::class, sample, "inc", arrayOf(1, 2))
+            val member = Reflector.getMethod(ReflectSample::class, "inc")
+            val result = Executor.invoke(sample, member!!, arrayOf(1, 2))
             Assert.assertEquals(3, result)
         }
     }

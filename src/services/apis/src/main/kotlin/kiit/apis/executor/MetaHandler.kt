@@ -1,9 +1,9 @@
-package kiit.apis.meta
+package kiit.apis.executor
 
 import kiit.apis.ApiRequest
 
 /**
- * Takes an API Request and builds a resulting object from the request metadata.
+ * Takes an API Request and builds a resulting object from the request or its metadata.
  * This is used for decoded metadata into some data type.
  * Examples:
  * 1. Request: Take the Request itself and return it ( for parameters to actions/methods )

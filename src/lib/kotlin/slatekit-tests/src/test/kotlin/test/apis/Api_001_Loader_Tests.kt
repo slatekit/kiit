@@ -89,7 +89,6 @@ class Api_001_Loader_Tests : ApiTestsBase() {
         Assert.assertEquals(Access.Public, actions.items[0].path.action.access)
         Assert.assertEquals(true, actions.items[0].path.action.sources.hasAPI())
         Assert.assertEquals(2, (actions.items[0].handler as MethodExecutor).call.params.size)
-        Assert.assertEquals(2, (actions.items[0].handler as MethodExecutor).call.paramsUser.size)
     }
 
 
@@ -157,7 +156,6 @@ class Api_001_Loader_Tests : ApiTestsBase() {
         Assert.assertEquals(true, actions.items[0].path.action.sources.hasAPI())
         Assert.assertEquals(false, actions.items[0].path.action.sources.hasCLI())
         Assert.assertEquals(2, (actions.items[0].handler as MethodExecutor).call.params.size)
-        Assert.assertEquals(2, (actions.items[0].handler as MethodExecutor).call.paramsUser.size)
     }
 
 

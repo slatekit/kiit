@@ -10,7 +10,9 @@ package kiit.apis.routes
  * @param api    : 2nd level logical group of related actions/endpoints
  * @param action : 3rd level executable portion that maps to a method
  */
-data class Path(val area:Area, val api:Api, val action: Action)
+data class Path(val area:Area, val api:Api, val action: Action) {
+    val name:String = "${area.name}/${api.name}/${action.name}"
+}
 
 
 /**

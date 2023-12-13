@@ -2,12 +2,11 @@ package kiit.apis
 
 import java.io.File
 import kiit.apis.core.*
-import kiit.apis.meta.MetaBuilder
-import kiit.apis.meta.MetaDecoder
-import kiit.apis.meta.MetaHandler
+import kiit.apis.executor.Executor
+import kiit.apis.executor.MetaDecoder
+import kiit.apis.executor.MetaHandler
 import kiit.apis.routes.*
 import kiit.apis.rules.AuthRule
-import kiit.apis.rules.ParamsRule
 import kiit.apis.rules.ProtoRule
 import kiit.apis.rules.RouteRule
 import kiit.apis.services.*
@@ -61,7 +60,7 @@ open class ApiServer(
     /**
      * Builds/Deserializes types from the Request and its metadata
      */
-    val metas : MetaBuilder = MetaBuilder(MetaDecoder.of(metas))
+    val executor : Executor = Executor(decoder, MetaDecoder(metas))
 
     /**
      * The help class to handle help on an area, api, or action
@@ -207,13 +206,9 @@ open class ApiServer(
         val protocolResult = ProtoRule.validate(req)
         if(!protocolResult.success) return protocolResult
 
-        // Auth     : e.g. cli, web, que
+        // Auth     : e.g. jwt token/keys
         val authResult = AuthRule.validate(req)
         if(!authResult.success) return authResult
-
-        // Params   : e.g. cli, web, que
-        val paramsResult = ParamsRule.validate(req)
-        if(!paramsResult.success) return paramsResult
 
         // Step 5: Execute request
         val result:Outcome<ApiResult> = try {
@@ -232,7 +227,7 @@ open class ApiServer(
                         }
                     } else if(middlewares.isNotEmpty()) {
                         Middleware.process(req, 0, middlewares) {
-                            executeMethod(req)
+                            executor.execute(req)
                         }
                     } else {
                         executeWithMiddleware(req, null)
@@ -252,31 +247,13 @@ open class ApiServer(
 
     private suspend fun executeWithMiddleware(req:ApiRequest, middleware: Middleware?): Outcome<ApiResult> {
         return when(middleware) {
-            null -> executeMethod( req)
+            null -> executor.execute( req)
             else  -> {
                 middleware.process(req) {
-                    executeMethod(req)
+                    executor.execute(req)
                 }
             }
         }
-    }
-
-    @Suppress("UNCHECKED_CAST")
-    protected open suspend fun executeMethod(request: ApiRequest): Outcome<ApiResult> {
-        // Finally make call.
-        val target = request.target
-        val executor = target!!.handler as MethodExecutor
-        val call = executor.call
-        val inputs = Calls.fillArgs(decoder, target, call, request.request)
-        val returnVal = Calls.callMethod(call.klass, call.instance, call.member.name, inputs)
-        val wrapped = returnVal?.let { res ->
-            if (res is Result<*, *>) {
-                (res as Result<ApiResult, Err>)
-            } else {
-                Outcomes.of(res!!)
-            }
-        } ?: Outcomes.of(Exception("Received null"))
-        return wrapped
     }
 
 
