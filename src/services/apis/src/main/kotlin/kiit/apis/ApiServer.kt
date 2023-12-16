@@ -213,10 +213,10 @@ open class ApiServer(
         // Step 5: Execute request
         val result:Outcome<ApiResult> = try {
             val instance = req.target
-            val hasInstance = instance == null
+            val hasInstance = instance != null
             when(hasInstance) {
                 false -> Outcomes.errored("Route not mapped")
-                true  -> executor.execute(request)
+                true  -> executor.execute(req)
             }
         } catch(ex:Exception){
             when(ex){
