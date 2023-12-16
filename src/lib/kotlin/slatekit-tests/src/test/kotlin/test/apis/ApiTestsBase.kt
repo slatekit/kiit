@@ -16,6 +16,7 @@ import kotlinx.coroutines.runBlocking
 import org.junit.Assert
 import kiit.apis.*
 import kiit.apis.core.Auth
+import kiit.apis.executor.MetaHandler
 import kiit.apis.routes.VersionAreas
 import kiit.requests.CommonRequest
 import kiit.common.Source
@@ -41,6 +42,7 @@ import org.json.simple.JSONObject
 import test.TestApp
 import test.setup.MyAuthProvider
 import test.setup.MyEncryptor
+import kotlin.reflect.KClass
 
 /**
  * Created by kishorereddy on 6/12/17.
@@ -138,7 +140,8 @@ open class ApiTestsBase {
         request: Request,
         response: Response<*>,
         checkFailMsg:Boolean = false,
-        decoder: Deserializer<JSONObject>? = null
+        decoder: Deserializer<JSONObject>? = null,
+        metas: List<Pair<KClass<*>, MetaHandler>> = listOf(),
         ) {
 
         // Optional auth
@@ -149,6 +152,7 @@ open class ApiTestsBase {
                 routes = routes,
                 auth = auth,
                 deserializer = decoder,
+                metas = metas,
                 settings = Settings(protocol))
 
         // Get result

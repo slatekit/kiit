@@ -126,6 +126,7 @@ class MetaDecoder(val metas: List<Pair<KClass<*>, MetaHandler>>) {
             if(!hasMetadata) {
                 finalMappings.add(Pair(Metadata::class) { req: ApiRequest -> req.request.meta })
             }
+            mappings.forEach { finalMappings.add(it) }
             return finalMappings
         }
     }
