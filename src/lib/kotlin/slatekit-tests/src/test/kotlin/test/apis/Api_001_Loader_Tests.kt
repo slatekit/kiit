@@ -81,15 +81,14 @@ class Api_001_Loader_Tests : ApiTestsBase() {
         Assert.assertEquals(Access.Public, api.access)
         Assert.assertEquals(true, api.sources.hasAPI())
 
-        Assert.assertEquals("add", actions.items[0].route.action.name)
-        Assert.assertEquals(true, actions.items[0].route.action.roles.isEmpty)
-        Assert.assertEquals(AuthMode.Keyed, actions.items[0].route.action.auth)
-        Assert.assertEquals(Verb.Post, actions.items[0].route.action.verb)
-        Assert.assertEquals("0", actions.items[0].route.action.version)
-        Assert.assertEquals(Access.Public, actions.items[0].route.action.access)
-        Assert.assertEquals(true, actions.items[0].route.action.sources.hasAPI())
+        Assert.assertEquals("add", actions.items[0].path.action.name)
+        Assert.assertEquals(true, actions.items[0].path.action.roles.isEmpty)
+        Assert.assertEquals(AuthMode.Keyed, actions.items[0].path.action.auth)
+        Assert.assertEquals(Verb.Post, actions.items[0].path.action.verb)
+        Assert.assertEquals("0", actions.items[0].path.action.version)
+        Assert.assertEquals(Access.Public, actions.items[0].path.action.access)
+        Assert.assertEquals(true, actions.items[0].path.action.sources.hasAPI())
         Assert.assertEquals(2, (actions.items[0].handler as MethodExecutor).call.params.size)
-        Assert.assertEquals(2, (actions.items[0].handler as MethodExecutor).call.paramsUser.size)
     }
 
 
@@ -148,16 +147,15 @@ class Api_001_Loader_Tests : ApiTestsBase() {
         Assert.assertEquals(false, api.sources.hasAPI())
         Assert.assertEquals(true, api.sources.hasCLI())
 
-        Assert.assertEquals("adder", actions.items[0].route.action.name)
-        Assert.assertEquals(true, actions.items[0].route.action.roles.contains("user"))
-        Assert.assertEquals(AuthMode.Keyed, actions.items[0].route.action.auth)
-        Assert.assertEquals(Verb.Put, actions.items[0].route.action.verb)
-        Assert.assertEquals("1", actions.items[0].route.action.version)
-        Assert.assertEquals(Access.Public, actions.items[0].route.action.access)
-        Assert.assertEquals(true, actions.items[0].route.action.sources.hasAPI())
-        Assert.assertEquals(false, actions.items[0].route.action.sources.hasCLI())
+        Assert.assertEquals("adder", actions.items[0].path.action.name)
+        Assert.assertEquals(true, actions.items[0].path.action.roles.contains("user"))
+        Assert.assertEquals(AuthMode.Keyed, actions.items[0].path.action.auth)
+        Assert.assertEquals(Verb.Put, actions.items[0].path.action.verb)
+        Assert.assertEquals("1", actions.items[0].path.action.version)
+        Assert.assertEquals(Access.Public, actions.items[0].path.action.access)
+        Assert.assertEquals(true, actions.items[0].path.action.sources.hasAPI())
+        Assert.assertEquals(false, actions.items[0].path.action.sources.hasCLI())
         Assert.assertEquals(2, (actions.items[0].handler as MethodExecutor).call.params.size)
-        Assert.assertEquals(2, (actions.items[0].handler as MethodExecutor).call.paramsUser.size)
     }
 
 
@@ -180,10 +178,10 @@ class Api_001_Loader_Tests : ApiTestsBase() {
         val actionOpt = router.action(Verbs.POST, "tests", "redirects", "adder", version = null)
         Assert.assertNotNull(actionOpt)
         val actions = actionOpt!!
-        Assert.assertEquals("tests", actions.route.area.name)
-        Assert.assertEquals("redirects", actions.route.api.name)
-        Assert.assertEquals("add", actions.route.action.name)
-        Assert.assertEquals(Verb.Post, actions.route.action.verb)
+        Assert.assertEquals("tests", actions.path.area.name)
+        Assert.assertEquals("redirects", actions.path.api.name)
+        Assert.assertEquals("add", actions.path.action.name)
+        Assert.assertEquals(Verb.Post, actions.path.action.verb)
     }
 
 

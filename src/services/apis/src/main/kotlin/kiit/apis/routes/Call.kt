@@ -29,26 +29,20 @@ data class Call(
      * discovered, documented, validated against
      *
      * 1. 0th instance parameter for kotlin
-     * 2. a possible request/meta paramter
-     */
-    val paramsUser = Call.filter(member.parameters)
-
-    /**
-     * All the parameters that can me mapped over for
-     * populating during calls on the CLI / Web
      */
     val params:List<KParameter> = if (paramsAll.size <= 1) listOf() else paramsAll.tail()
 
     /**
      * Whether the action has any arguments.
      */
-    val hasArgs = !params.isEmpty()
+    val hasArgs = params.isNotEmpty()
+
 
     fun isSingleDefaultedArg(): Boolean {
         return if (!hasArgs || params.size > 1) {
             false
         } else {
-            paramsUser.isNotEmpty() && paramsUser[0].isOptional
+            params.isNotEmpty() && params[0].isOptional
         }
     }
 
@@ -61,15 +55,5 @@ data class Call(
 
         @JvmStatic
         val TypeMeta = Metadata::class.createType()
-
-        @JvmStatic
-        fun filter(args: List<KParameter>): List<KParameter> {
-            if (args.isEmpty()) return args
-            val finalArgs = args.tail().filter { arg ->
-                val type = arg.type
-                type != TypeRequest && arg.type != TypeMeta
-            }.toList()
-            return finalArgs
-        }
     }
 }

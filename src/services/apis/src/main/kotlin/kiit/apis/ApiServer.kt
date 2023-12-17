@@ -2,9 +2,11 @@ package kiit.apis
 
 import java.io.File
 import kiit.apis.core.*
+import kiit.apis.executor.Executor
+import kiit.apis.executor.MetaDecoder
+import kiit.apis.executor.MetaHandler
 import kiit.apis.routes.*
 import kiit.apis.rules.AuthRule
-import kiit.apis.rules.ParamsRule
 import kiit.apis.rules.ProtoRule
 import kiit.apis.rules.RouteRule
 import kiit.apis.services.*
@@ -22,6 +24,9 @@ import kiit.meta.*
 import kiit.serialization.deserializer.Deserializer
 import kiit.results.*
 import kiit.results.builders.Outcomes
+import kiit.serialization.deserializer.json.JsonDeserializer
+import org.json.simple.JSONObject
+import kotlin.reflect.KClass
 
 /**
  * This is the core container hosting, managing and executing the source independent apis.
@@ -36,6 +41,8 @@ open class ApiServer(
     val rewriter: Rewriter? = null,
     val namedMiddlewares: List<Pair<String,Middleware>> = listOf(),
     val auth: Auth? = null,
+    deserializer: Deserializer<JSONObject>? = null,
+    metas : List<Pair<KClass<*>, MetaHandler>> = listOf(),
     val settings: Settings = Settings()
 )  {
 
@@ -44,6 +51,16 @@ open class ApiServer(
      * The API setup can be either annotation based or public methods on the Class
      */
     val router = Router(routes, settings.naming)
+
+    /**
+     * Decoder for converting Request Body JSON to method parameter values.
+     */
+    val decoder: Deserializer<JSONObject> = deserializer ?: JsonDeserializer(ctx.enc)
+
+    /**
+     * Builds/Deserializes types from the Request and its metadata
+     */
+    val executor : Executor = Executor(decoder, MetaDecoder(metas))
 
     /**
      * The help class to handle help on an area, api, or action
@@ -90,7 +107,7 @@ open class ApiServer(
      * @param req : Request to get route info from
      * @return
      */
-    fun get(req: Request): RouteMapping? {
+    fun get(req: Request): Route? {
         val gblVersion = req.version
         val apiVersion = req.meta.getStringOrNull("x-api-version")
         return get(req.verb, req.area, req.name, req.action, gblVersion, apiVersion)
@@ -104,7 +121,7 @@ open class ApiServer(
      * @param action : e.g. "register"
      * @return
      */
-    fun get(verb:String, area: String, name: String, action: String, globalVersion:String = ApiConstants.versionZero, version:String? = null): RouteMapping? {
+    fun get(verb:String, area: String, name: String, action: String, globalVersion:String = ApiConstants.zero, version:String? = null): Route? {
         val action = router.action(verb, area, name, action, globalVersion, version)
         return action
     }
@@ -189,39 +206,18 @@ open class ApiServer(
         val protocolResult = ProtoRule.validate(req)
         if(!protocolResult.success) return protocolResult
 
-        // Auth     : e.g. cli, web, que
+        // Auth     : e.g. jwt token/keys
         val authResult = AuthRule.validate(req)
         if(!authResult.success) return authResult
-
-        // Params   : e.g. cli, web, que
-        val paramsResult = ParamsRule.validate(req)
-        if(!paramsResult.success) return paramsResult
 
         // Step 5: Execute request
         val result:Outcome<ApiResult> = try {
             val instance = req.target
-            when {
-                instance == null  -> Outcomes.errored("Route not mapped")
-                else -> {
-                    val handler = instance.handler
-                    if(handler is MethodExecutor) {
-                        val executor = handler
-                        if(executor.call.instance is Middleware) {
-                            executeWithMiddleware(req, executor.call.instance)
-                        }
-                        else {
-                            executeWithMiddleware(req, null)
-                        }
-                    } else if(middlewares.isNotEmpty()) {
-                        Middleware.process(req, 0, middlewares) {
-                            executeMethod(req)
-                        }
-                    } else {
-                        executeWithMiddleware(req, null)
-                    }
-                }
+            val hasInstance = instance != null
+            when(hasInstance) {
+                false -> Outcomes.errored("Route not mapped")
+                true  -> executor.execute(req)
             }
-
         } catch(ex:Exception){
             when(ex){
                 is ExceptionErr -> Outcomes.unexpected(ex.err, Codes.UNEXPECTED)
@@ -232,62 +228,7 @@ open class ApiServer(
     }
 
 
-    private suspend fun executeWithMiddleware(req:ApiRequest, middleware: Middleware?): Outcome<ApiResult> {
-        return when(middleware) {
-            null -> executeMethod( req)
-            else  -> {
-                middleware.process(req) {
-                    executeMethod(req)
-                }
-            }
-        }
-    }
-
-    @Suppress("UNCHECKED_CAST")
-    protected open suspend fun executeMethod(request: ApiRequest): Outcome<ApiResult> {
-        // Finally make call.
-        val target = request.target
-        val converter = settings.decoder?.invoke(request.request, ctx.enc) ?: Deserializer(request.request, ctx.enc)
-        val executor = target!!.handler as MethodExecutor
-        val call = executor.call
-        val inputs = fillArgs(converter, target, call, request.request)
-        val returnVal = Calls.callMethod(call.klass, call.instance, call.member.name, inputs)
-        val wrapped = returnVal?.let { res ->
-            if (res is Result<*, *>) {
-                (res as Result<ApiResult, Err>)
-            } else {
-                Outcomes.of(res!!)
-            }
-        } ?: Outcomes.of(Exception("Received null"))
-        return wrapped
-    }
-
-
-    private val typeDefaults = mapOf(
-        "String" to "",
-        "Boolean" to false,
-        "Int" to 0,
-        "Long" to 0L,
-        "Double" to 0.0,
-        "DateTime" to DateTime.now()
-    )
-
-    private fun fillArgs(deserializer: Deserializer, apiRef: RouteMapping, call: Call, cmd: Request): Array<Any?> {
-        val action = apiRef.route.action
-        // Check 1: No args ?
-        return if (!call.hasArgs)
-            arrayOf()
-        // Check 2: 1 param with default and no args
-        else if (call.isSingleDefaultedArg() && cmd.data.size() == 0) {
-            val argType = call.paramsUser[0].type.toString()
-            val defaultVal = if (typeDefaults.contains(argType)) typeDefaults[argType] else null
-            arrayOf<Any?>(defaultVal ?: "")
-        } else {
-            deserializer.deserialize(call.params)
-        }
-    }
-
-    private suspend fun handleError(req: Request, ex: Exception) {
+    private fun handleError(req: Request, ex: Exception) {
         val parts = req.structured()
         val info = parts.joinToString { "${it.first}=${it.second?.toString()}" }
         logger.error("API Server: ERROR: $info", ex)
@@ -298,7 +239,7 @@ open class ApiServer(
 
         @JvmStatic
         fun of(ctx: Context, routes: List<VersionAreas>, auth: Auth? = null, source: Source? = null): ApiServer {
-            val server = ApiServer(ctx, routes, null, listOf(), auth, Settings(source ?: Source.API))
+            val server = ApiServer(ctx, routes, null, listOf(), auth, null, listOf(), Settings(source ?: Source.API))
             return server
         }
 

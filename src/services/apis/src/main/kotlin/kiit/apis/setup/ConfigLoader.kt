@@ -77,13 +77,13 @@ class ConfigLoader(val cls: KClass<*>, val instance: Any) {
         return api
     }
 
-    fun loadActions(area: Area, api: Api, methods: Map<String, KCallable<*>>, doc: JSONObject): List<RouteMapping> {
+    fun loadActions(area: Area, api: Api, methods: Map<String, KCallable<*>>, doc: JSONObject): List<Route> {
         val actions = doc.get("actions") as JSONArray
         val apiActions = actions.map { action ->
             val actionJson = action as JSONObject
             val executor = actionJson.get("execute") as JSONObject
             val type = executor.get("type") as String
-            val route:RouteMapping? = when (type) {
+            val route:Route? = when (type) {
                 EXECUTOR_TYPE_METHOD   -> {
                     val handler = buildExecutor(executor, methods)
                     val action = loadAction(api, actionJson, handler!!)
@@ -96,7 +96,7 @@ class ConfigLoader(val cls: KClass<*>, val instance: Any) {
                     val actionVerb = actionJson.get("verb") as String?
                     val actionVersion = actionJson.get("version") as String?
                     val verb = References.verb(api.verb, actionVerb, actionName)
-                    val action = Action(actionName, verb = verb, version = actionVersion ?: ApiConstants.versionZero)
+                    val action = Action(actionName, verb = verb, version = actionVersion ?: ApiConstants.zero)
                     val route = buildRoute(area, api, action, handler)
                     route
                 }
@@ -180,12 +180,12 @@ class ConfigLoader(val cls: KClass<*>, val instance: Any) {
     }
 
 
-    private fun buildRoute(area: Area, api: Api, action: Action, handler: RouteHandler): RouteMapping {
+    private fun buildRoute(area: Area, api: Api, action: Action, handler: RouteHandler): Route {
         // area/api/action objects ( with version info )
-        val route = Route(area, api, action)
+        val path = Path(area, api, action)
 
         // Final mapping of route -> handler
-        return RouteMapping(route, handler)
+        return Route(path, handler)
     }
 
     fun toList(items:JSONArray?) : List<String> {

@@ -17,16 +17,21 @@ import kiit.apis.Api
 import kiit.apis.Action
 import kiit.apis.AuthModes
 import kiit.apis.Verbs
-import kiit.apis.ApiBase
+import kiit.apis.support.FileSupport
 import kiit.context.Context
 import kiit.common.Sources
+import kiit.common.crypto.Encryptor
+import kiit.common.log.Logger
 
 /**
  * Created by kreddy on 3/23/2016.
  */
 @Api(area = "infra", name = "encryption", desc = "api to encryption and decryption",
         auth = AuthModes.KEYED, roles = ["admin"], verb = Verbs.AUTO, sources = [Sources.CLI])
-class EncryptApi(context: Context) : ApiBase(context) {
+class EncryptApi(override val context: Context) : FileSupport {
+
+    override val encryptor: Encryptor? = context.enc
+    override val logger: Logger? = context.logs.getLogger()
 
     @Action(desc = "encryptes the text")
     override fun encrypt(text: String): String {

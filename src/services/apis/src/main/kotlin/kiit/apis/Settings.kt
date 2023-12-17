@@ -19,6 +19,7 @@ import kiit.common.crypto.Encryptor
 import kiit.utils.naming.Namer
 import kiit.requests.Request
 import kiit.serialization.deserializer.Deserializer
+import org.json.simple.JSONObject
 
 /**
  * Server Settings
@@ -32,7 +33,6 @@ import kiit.serialization.deserializer.Deserializer
 data class Settings(
     val source: Source = Source.API,
     val naming: Namer? = null,
-    val decoder: ((Request, Encryptor?) -> Deserializer)? = null,
     val encoder: ((String, Any?) -> String)? = null,
     val record : Boolean = false,
     val docKey: String? = null,

@@ -41,7 +41,7 @@ object References {
 
 
     fun version(parent:String, childAccess:String?): String {
-        return childAccess ?: ApiConstants.versionZero
+        return childAccess ?: ApiConstants.zero
     }
 
 

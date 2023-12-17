@@ -14,6 +14,7 @@ package test.apis
 
 import org.junit.Test
 import kiit.apis.*
+import kiit.apis.executor.MetaHandler
 import kiit.apis.setup.GlobalVersion
 import kiit.apis.setup.api
 import kiit.apis.setup.routes
@@ -26,10 +27,11 @@ import kiit.requests.Request
 import kiit.requests.toResponse
 import kiit.results.Failure
 import kiit.results.Success
-import kiit.serialization.deserializer.Deserializer
+import kiit.serialization.deserializer.json.JsonDeserializer
 import org.threeten.bp.ZoneId
 import test.apis.samples.*
 import test.setup.SampleApiWithConfigSetup
+import kotlin.reflect.KClass
 
 /**
  * Created by kishorereddy on 6/12/17.
@@ -112,13 +114,16 @@ class Api_002_Executor_Tests : ApiTestsBase() {
 
     @Test
     fun can_execute_with_custom_inputs() {
-        val decoder = { req: Request, enc: Encryptor? ->
-            val decoders = mapOf(
-                Pair(Custom1::class.qualifiedName!!, Custom1Decoder()),
-                Pair(Custom2::class.qualifiedName!!, Custom2Decoder()),
-            )
-            Deserializer(req, enc, decoders)
-        }
+        val metas = listOf<Pair<KClass<*>, MetaHandler>>(
+            Pair(Custom1::class) { req ->
+                val name = req.request.meta.getString("name")
+                Custom1(name)
+            },
+            Pair(Custom2::class)  { req ->
+                val code = req.request.meta.getInt("code")
+                Custom2(code)
+            }
+        )
 
         checkCall(
             protocol = Source.CLI,
@@ -128,8 +133,8 @@ class Api_002_Executor_Tests : ApiTestsBase() {
                 mapOf(Pair("name", "c1"), Pair("code", 2)),
                 mapOf(Pair("note", "custom_inputs"))
             ),
-            decoder = decoder,
-            response = Success("ok", msg = "raw send id: 2").toResponse()
+            metas = metas,
+            response = Success("custom1=c1, custom2=2, note=custom_inputs", msg = "raw both").toResponse()
         )
     }
 

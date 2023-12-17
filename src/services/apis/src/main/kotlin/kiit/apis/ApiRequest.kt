@@ -1,7 +1,7 @@
 package kiit.apis
 
 import kiit.apis.core.Auth
-import kiit.apis.routes.RouteMapping
+import kiit.apis.routes.Route
 import kiit.context.Context
 import kiit.requests.Request
 
@@ -18,7 +18,7 @@ data class ApiRequest(
     val auth: Auth?,
     val context: Context,
     val request: Request,
-    val target: RouteMapping?,
+    val target: Route?,
     val source: Any,
     val args: Map<String, Any>?
 )
