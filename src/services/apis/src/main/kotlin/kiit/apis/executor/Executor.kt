@@ -115,8 +115,8 @@ class Executor(
         // Arguments to the method tied to action to execute.
         val args = if (params.isEmpty()) {
             Outcomes.success(arrayOf())
-        } else if(call.hasArgs && req.data.size() == 0) {
-            Outcomes.invalid("bad request : ${path.name}: inputs not supplied")
+        //} else if(call.hasArgs && req.data.size() == 0) {
+          //  Outcomes.invalid("bad request : ${path.name}: inputs not supplied")
         } else {
             // Validate
             val checkResult = validate(request, params)

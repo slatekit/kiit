@@ -35,7 +35,7 @@ data class Call(
     /**
      * Whether the action has any arguments.
      */
-    val hasArgs = !params.isEmpty()
+    val hasArgs = params.isNotEmpty()
 
 
     fun isSingleDefaultedArg(): Boolean {
