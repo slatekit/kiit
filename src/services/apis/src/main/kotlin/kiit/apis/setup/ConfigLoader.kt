@@ -61,7 +61,8 @@ class ConfigLoader(val cls: KClass<*>, val instance: Any) {
         val access = doc.get("access") as String
         val sources = toList(doc.get("sources") as JSONArray).map { Source.parse(it) }
         val version = doc.get("version") as String
-        val tags = toList(doc.get("tags") as JSONArray)
+        val policies = toList(doc.get("policies") as JSONArray?)
+        val tags = toList(doc.get("tags") as JSONArray?)
         val api = Api(
             area,
             name,
@@ -72,6 +73,7 @@ class ConfigLoader(val cls: KClass<*>, val instance: Any) {
             Sources(sources),
             Verb.parse(verb),
             version,
+            policies,
             tags
         )
         return api
@@ -118,6 +120,7 @@ class ConfigLoader(val cls: KClass<*>, val instance: Any) {
         val access = doc.get("access") as String?
         val sources = toList(doc.get("sources") as JSONArray?)
         val version = doc.get("version") as String?
+        val policies = toList(doc.get("policies") as JSONArray?)
         val tags = toList(doc.get("tags") as JSONArray?)
 
         // Override with api ( if null or reference to parent via "@parent"
@@ -145,6 +148,7 @@ class ConfigLoader(val cls: KClass<*>, val instance: Any) {
             actionSources,
             actionVerb,
             actionVersion,
+            policies,
             tags
         )
         return action

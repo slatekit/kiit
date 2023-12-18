@@ -40,7 +40,8 @@ annotation class Api(
     val access: String = AccessLevel.PUBLIC,
     val sources: Array<String> = [Sources.ALL],
     val version: String = ApiConstants.zero,
-    val tags: Array<String> = []
+    val tags: Array<String> = [],
+    val policies: Array<String> = []
 )
 
 /**
@@ -67,7 +68,8 @@ annotation class Action(
     val access: String = AccessLevel.PARENT,
     val sources: Array<String> = [Sources.ALL],
     val version: String = ApiConstants.zero,
-    val tags: Array<String> = []
+    val tags: Array<String> = [],
+    val policies: Array<String> = []
 )
 
 /**

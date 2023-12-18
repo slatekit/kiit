@@ -21,6 +21,7 @@ import kiit.common.types.ContentFile
 import kiit.requests.Request
 import kiit.requests.RequestSupport
 import kiit.common.Source
+import kiit.common.ext.tail
 import kiit.common.utils.Random
 import kiit.common.values.Inputs
 import kiit.common.values.Metadata
@@ -50,7 +51,7 @@ data class KtorRequest(
         override val raw: Any? = null,
         override val output: String? = "",
         override val tag: String = "",
-        override val version: String = "1.0",
+        override val version: String = "0",
         override val timestamp: DateTime = DateTime.now()
 ) : Request, RequestSupport {
 
@@ -131,7 +132,12 @@ data class KtorRequest(
             } else {
                 rawUri
             }
-            val parts = uri.split('/')
+            // 1. no version: /{area}/{api}/{action}
+            // 2. w/ version: /1/{area}/{api}/${action}
+            val rawParts = uri.split('/')
+            val has3PartPath = rawParts.size == 3
+            val parts = if(has3PartPath) rawParts else rawParts.tail()
+            val version = if(has3PartPath) settings.versionDefault else rawParts[0]
             // val headers = req.headers().map { key -> Pair(key, req.headers(key)) }.toMap()
             val method = req.httpMethod.value.toLowerCase()
 
@@ -155,6 +161,7 @@ data class KtorRequest(
                     meta = KtorHeaders(req, ctx.enc),
                     data = KtorParams(body, req, ctx.enc),
                     raw = call.request,
+                    version = version,
                     tag = Random.uuid()
             )
         }

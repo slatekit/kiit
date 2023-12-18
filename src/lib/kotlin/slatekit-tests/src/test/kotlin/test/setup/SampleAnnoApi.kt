@@ -31,9 +31,13 @@ class SampleApiWithConfigSetup() {
 }
 
 @Api(version = "1", area = "tests", name = "overrides", desc = "sample to test features of Kiit APIs",
-    auth = AuthModes.TOKEN, roles = ["admin"], verb = Verbs.AUTO, access = AccessLevel.INTERNAL, sources = [Sources.CLI])
+    auth = AuthModes.TOKEN, roles = ["admin"], verb = Verbs.AUTO, access = AccessLevel.INTERNAL, sources = [Sources.CLI],
+    tags = ["apiTag1", "apiTag2"], policies = ["apiPolicy1", "apiPolicy2"])
 class SampleAnnotatedApiWithOverrides() {
-    @Action(version = "1", name = "adder", desc = "accepts supplied basic data types from send", verb = Verbs.PUT, access = AccessLevel.PUBLIC, auth = AuthModes.KEYED, roles = ["user"], sources = [Sources.API])
+
+    @Action(version = "1", name = "adder", desc = "accepts supplied basic data types from send", verb = Verbs.PUT,
+        access = AccessLevel.PUBLIC, auth = AuthModes.KEYED, roles = ["user"], sources = [Sources.API],
+        tags = ["actionTag1", "actionTag2"], policies = ["actionPolicy1", "actionPolicy2"])
     fun add(a:Int, b:Int): Int {
         return a + b
     }

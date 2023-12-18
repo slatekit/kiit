@@ -17,6 +17,7 @@ plugins {
     id "java"
     id "maven-publish"
     id "org.jetbrains.kotlin.jvm" // version "$kotlin_version"
+
 }
 
 //apply plugin: 'org.junit.platform.gradle.plugin'
@@ -49,15 +50,16 @@ dependencies {
     implementation "org.jetbrains.kotlin:kotlin-reflect:$kotlin_version"
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin_version"
     implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-core:1.1.0'
+    //implementation "org.jetbrains.kotlinx:kotlinx-serialization-json:1.6.1"
     implementation "com.googlecode.json-simple:json-simple:1.1"
     implementation 'com.squareup.okhttp3:okhttp:3.9.0'
-    implementation "mysql:mysql-connector-java:5.1.13"
+    implementation "mysql:mysql-connector-java:5.1.48"
     // https://mvnrepository.com/artifact/com.h2database/h2
     implementation group: 'com.h2database', name: 'h2'        , version: '1.4.200'
     implementation group: 'org.xerial'    , name:'sqlite-jdbc', version:'3.8.11.2'
     //implementation "com.h2database:h2:1.4.200"
     implementation 'org.koin:koin-core:2.0.0-rc-2'
-    implementation "org.json:json:20201115"
+    implementation "org.json:json:20230227"
     //implementation group: 'org.json', name: 'json', version: '20201115'
 
     //implementation "postgresql:postgresql:42.1.1"
