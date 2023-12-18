@@ -42,7 +42,7 @@ class Server(val ctx: Context)  {
     suspend fun execute(): Try<Any> {
 
         // 1. Settings
-        val settings = ServerSettings(port = 5200, prefix = "/api/", docs = true, docKey = "abc123", formatJson = true)
+        val settings = ServerSettings(port = 5200, prefix = "/api/", docs = true, docKey = "abc123", formatJson = true, versionDefault = "v0")
 
         // 2. APIs ( these are Slate Kit Universal APIs )
         val apis = apis()
@@ -94,7 +94,19 @@ class Server(val ctx: Context)  {
 
 
     fun apis(): List<GlobalVersion> {
-        val apis = listOf(GlobalVersion("0", listOf(api(SampleFiles3Api::class, SampleFiles3Api()))))
+        val apis = listOf(
+                GlobalVersion("v0",
+                    listOf(
+                        api(SampleFiles3Api::class, SampleFiles3Api()),
+                        api(SampleVersionApi::class, SampleVersionApi("0")),
+                    )
+                ),
+                GlobalVersion("v1",
+                    listOf(
+                        api(SampleVersionApi::class, SampleVersionApi("1")),
+                    )
+                )
+            )
         return apis
     }
 
@@ -109,6 +121,16 @@ class Server(val ctx: Context)  {
     }
 }
 
+
+
+@Api(area = "samples", name = "versioning", desc = "sample api to test other features")
+class SampleVersionApi(val version:String) {
+
+    @Action()
+    fun getHi(request: Request): String {
+        return "version=${version}"
+    }
+}
 
 
 @kiit.apis.Api(area = "samples", name = "files", desc = "sample api to test other features")
