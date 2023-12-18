@@ -109,7 +109,7 @@ open class ApiServer(
      */
     fun get(req: Request): Route? {
         val gblVersion = req.version
-        val apiVersion = req.meta.getStringOrNull("x-api-version")
+        val apiVersion = req.meta.getStringOrNull(VERSION_HEADER_KEY)
         return get(req.verb, req.area, req.name, req.action, gblVersion, apiVersion)
     }
 
@@ -198,7 +198,7 @@ open class ApiServer(
         if(!routeResult) return Outcomes.invalid("Route ${request.request.path} invalid")
 
         // Target
-        val targetResult = get(request.request.verb, request.request.area, request.request.name, request.request.action)
+        val targetResult = get(request.request)
         if(targetResult == null) return Outcomes.invalid("Unable to find action")
         val req = request.copy(target = targetResult)
 
@@ -236,6 +236,9 @@ open class ApiServer(
 
 
     companion object {
+
+
+        const val VERSION_HEADER_KEY = "x-api-version"
 
         @JvmStatic
         fun of(ctx: Context, routes: List<VersionAreas>, auth: Auth? = null, source: Source? = null): ApiServer {
