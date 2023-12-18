@@ -82,13 +82,13 @@ class Api_001_Loader_Tests : ApiTestsBase() {
         Assert.assertEquals(true, api.sources.hasAPI())
 
         Assert.assertEquals("add", actions.items[0].path.action.name)
-        Assert.assertEquals(true, actions.items[0].path.action.roles.isEmpty)
+        Assert.assertEquals(true , actions.items[0].path.action.roles.isEmpty)
         Assert.assertEquals(AuthMode.Keyed, actions.items[0].path.action.auth)
-        Assert.assertEquals(Verb.Post, actions.items[0].path.action.verb)
-        Assert.assertEquals("0", actions.items[0].path.action.version)
-        Assert.assertEquals(Access.Public, actions.items[0].path.action.access)
-        Assert.assertEquals(true, actions.items[0].path.action.sources.hasAPI())
-        Assert.assertEquals(2, (actions.items[0].handler as MethodExecutor).call.params.size)
+        Assert.assertEquals(Verb.Post     , actions.items[0].path.action.verb)
+        Assert.assertEquals("0"  , actions.items[0].path.action.version)
+        Assert.assertEquals(Access.Public , actions.items[0].path.action.access)
+        Assert.assertEquals(true , actions.items[0].path.action.sources.hasAPI())
+        Assert.assertEquals(2    , (actions.items[0].handler as MethodExecutor).call.params.size)
     }
 
 
@@ -146,7 +146,12 @@ class Api_001_Loader_Tests : ApiTestsBase() {
         Assert.assertEquals(Access.Internal, api.access)
         Assert.assertEquals(false, api.sources.hasAPI())
         Assert.assertEquals(true, api.sources.hasCLI())
+        Assert.assertEquals("apiTag1", api.tags[0])
+        Assert.assertEquals("apiTag2", api.tags[1])
+        Assert.assertEquals("apiPolicy1", api.policies[0])
+        Assert.assertEquals("apiPolicy2", api.policies[1])
 
+        val action = actions.items[0].path.action
         Assert.assertEquals("adder", actions.items[0].path.action.name)
         Assert.assertEquals(true, actions.items[0].path.action.roles.contains("user"))
         Assert.assertEquals(AuthMode.Keyed, actions.items[0].path.action.auth)
@@ -156,6 +161,10 @@ class Api_001_Loader_Tests : ApiTestsBase() {
         Assert.assertEquals(true, actions.items[0].path.action.sources.hasAPI())
         Assert.assertEquals(false, actions.items[0].path.action.sources.hasCLI())
         Assert.assertEquals(2, (actions.items[0].handler as MethodExecutor).call.params.size)
+        Assert.assertEquals("actionTag1", action.tags[0])
+        Assert.assertEquals("actionTag2", action.tags[1])
+        Assert.assertEquals("actionPolicy1", action.policies[0])
+        Assert.assertEquals("actionPolicy2", action.policies[1])
     }
 
 
@@ -353,6 +362,7 @@ class Api_001_Loader_Tests : ApiTestsBase() {
           "access"   : "public",
           "sources"  : ["all"],
           "version"  : "0",
+          "policies" : [],
           "tags"     : [],
           "actions"  : [
               {
@@ -373,7 +383,8 @@ class Api_001_Loader_Tests : ApiTestsBase() {
           "access"   : "internal",
           "sources"  : ["cli"],
           "version"  : "1",
-          "tags"     : [],
+          "policies" : ["apiPolicy1", "apiPolicy2"],
+          "tags"     : ["apiTag1", "apiTag2"],
           "actions"  : [
               {
                   "name"     : "adder",
@@ -384,7 +395,8 @@ class Api_001_Loader_Tests : ApiTestsBase() {
                   "access"   : "public",
                   "sources"  : ["api"],
                   "version"  : "1",
-                  "tags"     : [],
+                  "policies" : ["actionPolicy1", "actionPolicy2"],
+                  "tags"     : ["actionTag1", "actionTag2"],
                   "execute"  :  { "type": "method", "target": "add" }
               }
           ]

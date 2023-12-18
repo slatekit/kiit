@@ -38,7 +38,8 @@ class AnnoLoader(val cls: KClass<*>, val instance: Any, val namer: Namer?) {
             Sources(anno.sources.toList().map { Source.parse(it) }),
             Verb.parse(anno.verb),
             anno.version,
-            anno.tags.toList()
+            anno.policies.toList(),
+            anno.tags.toList(),
         )
 
         return api
@@ -50,7 +51,8 @@ class AnnoLoader(val cls: KClass<*>, val instance: Any, val namer: Namer?) {
         val actionNameRaw = apiAction?.name.orElse(methodName)
         val actionName = namer?.rename(actionNameRaw) ?: actionNameRaw
         val actionDesc = apiAction.desc ?: ""
-        val actionTags = apiAction?.tags?.toList() ?: listOf()
+        val actionTags = apiAction.tags.toList()
+        val actionPolicies = apiAction.policies.toList()
 
         // Default these from api if empty
         val actionAuth = References.auth(api.auth, apiAction.auth)
@@ -69,7 +71,8 @@ class AnnoLoader(val cls: KClass<*>, val instance: Any, val namer: Namer?) {
             actionProtocol,
             actionVerb,
             actionVersion,
-            actionTags.toList()
+            actionPolicies.toList(),
+            actionTags.toList(),
         )
     }
 }

@@ -30,8 +30,8 @@ import kotlin.reflect.KClass
 
 /**
  * This is the core container hosting, managing and executing the source independent apis.
- * @param ctx : Context of the environment @see[slatekti.common.Context]
- * @param apis : APIs to host/serve
+ * @param ctx : Context of the environment @see[kiit.common.Context]
+ * @param routes : APIs to host/serve
  * @param middleware : Hooks and middleware for filters, conversions, execution
  * @param settings : Settings for the server
  */
@@ -39,7 +39,7 @@ open class ApiServer(
     val ctx: Context,
     val routes: List<VersionAreas>,
     val rewriter: Rewriter? = null,
-    val namedMiddlewares: List<Pair<String,Middleware>> = listOf(),
+    middleware: List<Pair<String,Middleware>> = listOf(),
     val auth: Auth? = null,
     deserializer: Deserializer<JSONObject>? = null,
     metas : List<Pair<KClass<*>, MetaHandler>> = listOf(),
@@ -50,17 +50,20 @@ open class ApiServer(
      * Load all the routes from the APIs supplied.
      * The API setup can be either annotation based or public methods on the Class
      */
-    val router = Router(routes, settings.naming)
+    private val router = Router(routes, settings.naming)
 
     /**
      * Decoder for converting Request Body JSON to method parameter values.
      */
-    val decoder: Deserializer<JSONObject> = deserializer ?: JsonDeserializer(ctx.enc)
+    private val decoder: Deserializer<JSONObject> = deserializer ?: JsonDeserializer(ctx.enc)
+
+
+    private val policies = middleware.toMap()
 
     /**
      * Builds/Deserializes types from the Request and its metadata
      */
-    val executor : Executor = Executor(decoder, MetaDecoder(metas))
+    val executor : Executor = Executor(decoder, MetaDecoder(metas), policies)
 
     /**
      * The help class to handle help on an area, api, or action
@@ -71,9 +74,6 @@ open class ApiServer(
      * Logger for this server
      */
     private val logger: Logger = ctx.logs.getLogger("api")
-
-
-    private val middlewares = namedMiddlewares.map { it.second }
 
 
     /**

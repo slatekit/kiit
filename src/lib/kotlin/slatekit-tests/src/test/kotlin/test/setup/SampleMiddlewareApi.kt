@@ -5,15 +5,23 @@ import kiit.results.*
 import kiit.results.builders.Outcomes
 
 
-@Api(area = "app", name = "SampleMiddleware", desc = "api to access and manage users 3", auth = AuthModes.NONE)
-open class SampleMiddlewareApi : Middleware {
+@Api(area = "app", name = "SampleMiddleware", desc = "api to access and manage users 3", auth = AuthModes.NONE, policies = ["api_test"])
+open class SampleMiddlewareApi  {
 
     // Used for demo/testing purposes
     var middlewareHook = mutableListOf<ApiRequest>()
 
 
-    @Action()
-    fun hi(): String = "hi world"
+    @Action(policies = ["action_test"])
+    fun hi(): String {
+        return "hi world"
+    }
+
+
+    @Action(policies = ["action_test"])
+    fun hello(): String {
+        return "hello world"
+    }
 
 
     @Action()
@@ -25,15 +33,5 @@ open class SampleMiddlewareApi : Middleware {
     @Action()
     fun errored(): Outcome<String> {
         return Outcomes.errored("test failed")
-    }
-
-
-    @Action()
-    fun hello(): String = "hello world"
-
-
-    override suspend fun process(req: ApiRequest, next: suspend (ApiRequest) -> Outcome<ApiResult>): Outcome<ApiResult> {
-        middlewareHook.add(req)
-        return next(req)
     }
 }
