@@ -7,14 +7,11 @@ import kiit.integration.common.ApiQueueSupport
 
 
 @Api(area = "samples", name = "workerqueue", desc = "sample api to integrating workers, queues, apis")
-class SampleWorkerAPI(val ctx: AppContext, val queues:List<AsyncQueue<String>> = listOf()) : ApiQueueSupport {
+class SampleWorkerAPI(val ctx: AppContext) {
 
     var _lastResult = ""
 
-    override fun queues(): List<AsyncQueue<String>> = queues
-
-
-    @Action(tags = ["queued"])
+    @Action(policies = ["queued"])
     fun test1(s: String, b: Boolean, i: Int): String {
         _lastResult = "$s, $b, $i"
         return _lastResult
