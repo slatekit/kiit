@@ -24,7 +24,7 @@ class KtorHandler(
         val settings: ServerSettings,
         override val container:ApiServer,
         override val diagnostics: Diagnostics<Request> = diagnostics(context),
-        override val responses: ResponseHandler = KtorResponse(settings)
+        override val responses: ResponseHandler = KtorResponse(settings),
 ) : RequestHandler {
 
     private fun path(prefix: String, path:String, version:String?) : String {

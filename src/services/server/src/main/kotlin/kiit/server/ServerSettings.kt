@@ -23,6 +23,7 @@ package kiit.server
 data class ServerSettings(
     val port: Int = 5000,
     val prefix: String = "/api/",
+    val versionDefault:String = "0",
     val info: Boolean = true,
     val docs: Boolean = false,
     val docKey: String = "",

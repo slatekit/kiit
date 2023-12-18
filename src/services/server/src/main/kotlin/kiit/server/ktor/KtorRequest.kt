@@ -137,7 +137,7 @@ data class KtorRequest(
             val rawParts = uri.split('/')
             val has3PartPath = rawParts.size == 3
             val parts = if(has3PartPath) rawParts else rawParts.tail()
-            val version = if(has3PartPath) "0" else rawParts[0]
+            val version = if(has3PartPath) settings.versionDefault else rawParts[0]
             // val headers = req.headers().map { key -> Pair(key, req.headers(key)) }.toMap()
             val method = req.httpMethod.value.toLowerCase()
 
