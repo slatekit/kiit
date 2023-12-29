@@ -7,7 +7,7 @@ import kiit.data.sql.*
 import kiit.query.Op
 
 
-object PostgresDialect : Dialect(encodeChar = '`') {
+object PostgresDialect : Dialect(encodeChar = '"') {
 
     override fun op(op: Op): String =
         when (op) {
