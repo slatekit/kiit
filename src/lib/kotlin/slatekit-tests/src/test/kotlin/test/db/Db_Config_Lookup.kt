@@ -23,7 +23,7 @@ import kiit.common.data.Connections.Companion.named
 /**
  * Created by kishorereddy on 6/4/17.
  */
-class DbLookupTests {
+class Db_Config_Lookup {
 
     fun buildDefaultConnection(name: String = "db1"): DbConString =
         DbConString(

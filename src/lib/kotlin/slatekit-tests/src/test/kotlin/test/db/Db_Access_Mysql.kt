@@ -1,4 +1,4 @@
-package test.entities
+package test.db
 
 import org.junit.Assert
 import org.junit.Test
@@ -9,9 +9,10 @@ import kiit.common.DateTimes
 import kiit.common.data.*
 import kiit.common.ids.ULIDs
 import kiit.db.Db
-import org.junit.Ignore
 import org.threeten.bp.ZoneId
 import test.TestApp
+import test.entities.EntitySetup
+import test.entities.SampleEntityImmutable
 import test.setup.Address
 import test.setup.StatusEnum
 import test.setup.TestSupport
@@ -28,7 +29,7 @@ import java.util.*
  * 4. Sqlite  : SqliteProvider ....
  * 5. Postgres: PostgresProvider ....
  */
-class Data_04_Database_Mysql : TestSupport {
+class Db_Access_Mysql : TestSupport {
     private val zoneId = ZoneId.systemDefault()
     private val localDate = LocalDate.of(2021, 2, 1)
     private val localTime = LocalTime.of(9, 30, 45)

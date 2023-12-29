@@ -9,7 +9,6 @@ import kiit.common.conf.Confs
 import kiit.common.data.DataType
 import kiit.common.data.Value
 import kiit.db.Db
-import test.TestApp
 import test.setup.TestSupport
 import java.time.LocalDate
 import java.time.LocalDateTime
@@ -37,7 +36,7 @@ $$ LANGUAGE sql;
 
  */
 @Ignore
-class Db_Tests_Postgres : TestSupport {
+class Db_Access_Postgres : TestSupport {
 
     companion object {
         var id = 0L
@@ -72,7 +71,7 @@ class Db_Tests_Postgres : TestSupport {
 
         // 1. add
         val id = db.insert(sqlInsert)
-        Db_Tests_Postgres.id = id
+        Db_Access_Postgres.id = id
     }
 
 
@@ -203,7 +202,7 @@ class Db_Tests_Postgres : TestSupport {
     fun <T> ensure_scalar(colName: String, callback: (Db, String) -> T, expected: T): Unit {
 
         val db = Db(getConnection())
-        val sql = "select $colName from $tableName where id = " + Db_Tests_Postgres.id
+        val sql = "select $colName from $tableName where id = " + Db_Access_Postgres.id
         val actual = callback(db, sql)
         Assert.assertTrue(expected == actual)
     }
