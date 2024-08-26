@@ -58,7 +58,7 @@ dependencies {
     implementation group: 'com.h2database', name: 'h2'        , version: '1.4.200'
     implementation group: 'org.xerial'    , name:'sqlite-jdbc', version:'3.8.11.2'
     //implementation "com.h2database:h2:1.4.200"
-    implementation 'org.koin:koin-core:2.0.0-rc-2'
+    implementation 'io.insert-koin:koin-core:3.5.6'
     implementation "org.json:json:20230227"
     //implementation group: 'org.json', name: 'json', version: '20201115'
 

@@ -33,7 +33,7 @@ object EntitySetup {
     }
 
     fun con(): DbCon {
-        val con = Confs.readDbCon(TestApp::class.java, dbConfPath)!!
+        val con = DbConString(Vendor.MySql, "jdbc:mysql://localhost/kiit", "root", "12345qwert") //Confs.readDbCon(TestApp::class.java, dbConfPath)!!
         return con
     }
 
@@ -45,7 +45,7 @@ object EntitySetup {
     }
 
     fun realDb(): Entities {
-        val con = Confs.readDbCon(TestApp::class.java, dbConfPath)!!
+        val con = con() //Confs.readDbCon(TestApp::class.java, dbConfPath)!!
         val dbs = Connections.of(con)
         val entities = Entities({ con -> Db.of(con) }, dbs, MyEncryptor)
         return entities
