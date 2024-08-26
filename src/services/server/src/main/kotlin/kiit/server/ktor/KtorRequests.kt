@@ -1,7 +1,7 @@
 package kiit.server.ktor
 
-import io.ktor.application.ApplicationCall
-import io.ktor.request.uri
+import io.ktor.server.application.ApplicationCall
+import io.ktor.server.request.uri
 import kiit.requests.Request
 
 object KtorRequests {

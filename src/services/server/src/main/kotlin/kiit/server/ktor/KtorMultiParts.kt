@@ -1,10 +1,10 @@
 package kiit.server.ktor
 
-import io.ktor.application.ApplicationCall
+import io.ktor.server.application.ApplicationCall
 import io.ktor.http.content.PartData
 import io.ktor.http.content.forEachPart
 import io.ktor.http.content.streamProvider
-import io.ktor.request.receiveMultipart
+import io.ktor.server.request.receiveMultipart
 import kiit.common.types.*
 import kiit.requests.Request
 import kiit.results.Outcome
