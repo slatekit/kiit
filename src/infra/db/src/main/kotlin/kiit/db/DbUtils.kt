@@ -54,11 +54,12 @@ object DbUtils {
      *
      * @return
      */
-    fun connect(con: DbCon, settings: DbSettings): Connection {
-        val con = if (con.driver == "com.mysql.jdbc.Driver")
-            DriverManager.getConnection(con.url, con.user, con.pswd)
+    fun connect(dbCon: DbCon, settings: DbSettings): Connection {
+        //val con = if (dbCon.user.isNotEmpty())
+        val con = if (dbCon.driver == "com.mysql.jdbc.Driver")
+            DriverManager.getConnection(dbCon.url, dbCon.user, dbCon.pswd)
         else
-            DriverManager.getConnection(con.url)
+            DriverManager.getConnection(dbCon.url)
         con.autoCommit = settings.autoCommit
         return con
     }
