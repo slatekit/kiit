@@ -11,10 +11,10 @@
 
 package kiit.server.ktor
 
-import io.ktor.application.ApplicationCall
+import io.ktor.server.application.ApplicationCall
 import kiit.common.*
 import kiit.server.ServerSettings
-import io.ktor.request.*
+import io.ktor.server.request.*
 import kotlinx.coroutines.runBlocking
 //import kotlinx.coroutines.experimental.async
 import kiit.common.types.ContentFile

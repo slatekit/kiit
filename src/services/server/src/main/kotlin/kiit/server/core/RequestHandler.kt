@@ -1,7 +1,7 @@
 package kiit.server.core
 
-import io.ktor.application.ApplicationCall
-import io.ktor.routing.Routing
+import io.ktor.server.application.ApplicationCall
+import io.ktor.server.routing.Routing
 import kiit.apis.ApiServer
 import kiit.context.Context
 import kiit.telemetry.Diagnostics

@@ -1,6 +1,6 @@
 package kiit.server.core
 
-import io.ktor.application.ApplicationCall
+import io.ktor.server.application.ApplicationCall
 import io.ktor.http.HttpStatusCode
 import kiit.common.types.Content
 import kiit.common.types.ContentData

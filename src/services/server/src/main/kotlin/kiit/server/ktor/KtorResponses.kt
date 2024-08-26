@@ -1,8 +1,8 @@
 package kiit.server.ktor
 
-import io.ktor.application.ApplicationCall
+import io.ktor.server.application.ApplicationCall
 import io.ktor.http.HttpStatusCode
-import io.ktor.response.respondBytes
+import io.ktor.server.response.respondBytes
 import kiit.common.types.ContentData
 import kiit.common.types.ContentTypes
 import kiit.results.*

@@ -56,6 +56,8 @@ class WebWriter : Writer {
             TextType.NoFormat -> writeTag("", mode.format(msg), endLine, "")
             TextType.NewLine -> buffer.append(NEWLINE)
             TextType.Tab -> buffer.append(TAB)
+            TextType.Label -> writeTag("span", mode.format(msg), endLine, "color:Black ")
+            TextType.Raw -> writeTag("span", mode.format(msg), endLine, "color:Black ")
         }
     }
 

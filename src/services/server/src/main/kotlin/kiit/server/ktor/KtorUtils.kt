@@ -2,7 +2,7 @@ package kiit.server.ktor
 
 import io.ktor.http.HttpMethod
 import io.ktor.http.content.PartData
-import io.ktor.request.*
+import io.ktor.server.request.*
 import org.json.simple.JSONObject
 import org.json.simple.parser.JSONParser
 import kiit.common.ext.toId

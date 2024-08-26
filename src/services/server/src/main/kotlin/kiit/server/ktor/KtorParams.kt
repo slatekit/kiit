@@ -13,8 +13,8 @@
 
 package kiit.server.ktor
 
-import io.ktor.request.ApplicationRequest
-import io.ktor.request.httpMethod
+import io.ktor.server.request.ApplicationRequest
+import io.ktor.server.request.httpMethod
 import org.json.simple.JSONObject
 import kiit.apis.support.JsonSupport
 import kiit.common.*

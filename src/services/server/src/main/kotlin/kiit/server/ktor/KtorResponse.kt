@@ -11,12 +11,12 @@
 
 package kiit.server.ktor
 
-import io.ktor.application.ApplicationCall
+import io.ktor.server.application.ApplicationCall
 import io.ktor.http.ContentType
 import io.ktor.http.HttpStatusCode
-import io.ktor.response.header
-import io.ktor.response.respondBytes
-import io.ktor.response.respondText
+import io.ktor.server.response.header
+import io.ktor.server.response.respondBytes
+import io.ktor.server.response.respondText
 import kiit.common.types.*
 import kiit.serialization.responses.ResponseEncoder
 import kiit.requests.Response
