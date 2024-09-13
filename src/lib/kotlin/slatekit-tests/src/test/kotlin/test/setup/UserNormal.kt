@@ -168,3 +168,49 @@ data class User5(
         return this.copy(id = id)
     }
 }
+
+
+
+data class UserNullable(
+    @property:Id()
+    override val id: Long = 0,
+
+    @property:Column(length = 50, required = true)
+    val uuid: String = Random.uuid(),
+
+    @property:Column(length = 100, required = false)
+    val email: String? = null,
+
+    @property:Column(required = false)
+    val isActive: Boolean? = null,
+
+    @property:Column(required = false)
+    val level: Int? = null,
+
+    @property:Column(required = false)
+    val salary: Double? = null,
+
+    @property:Column(required = false)
+    val createdAt: DateTime? = null,
+
+    @property:Column(required = false)
+    val createdBy: Long? = null,
+
+    @property:Column(required = false)
+    val updatedAt: DateTime? = null,
+
+    @property:Column(required = false)
+    val updatedBy: Long? = null
+) : EntityWithId<Long>, EntityUpdatable<Long, UserNullable> {
+
+    override fun isPersisted(): Boolean = id > 0
+
+    /**
+     * sets the id on the entity and returns the entity with updated id.
+     * @param id
+     * @return
+     */
+    override fun withId(id: Long): UserNullable {
+        return this.copy(id = id)
+    }
+}

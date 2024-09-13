@@ -22,10 +22,10 @@ import java.util.*
 object EntitySetup {
     val enc = AppEncryptor
     val encrypted = enc.encrypt("abc123")
-    val uuid = "497dea41-8658-4bb7-902c-361014799214"
-    val upid = "usa:314fef51-43a7-496c-be24-520e73758836"
+    const val uuid = "497dea41-8658-4bb7-902c-361014799214"
+    const val upid = "usa:314fef51-43a7-496c-be24-520e73758836"
     val meta = Meta<Long, SampleEntityImmutable>(LongId { m -> m.id }, Table("sample1"))
-    val dbConfPath = "usr://.kiit/common/conf/db.conf"
+    const val dbConfPath = "usr://.kiit/common/conf/db.conf"
 
     fun db(): IDb {
         val con = con()

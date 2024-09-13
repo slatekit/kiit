@@ -27,8 +27,22 @@ import org.junit.Ignore
 import test.setup.Group
 import test.setup.Member
 import test.setup.User5
+import test.setup.UserNullable
 
 /**
+create table IF NOT EXISTS `UserNullable` (
+`id`        BIGINT NOT NULL AUTO_INCREMENT PRIMARY KEY,
+`uuid`      NVARCHAR(50) NOT NULL,
+`email`     NVARCHAR(100),
+`isActive`  BIT ,
+`level`     INTEGER,
+`salary`    DOUBLE,
+`createdAt` DATETIME,
+`createdBy` BIGINT,
+`updatedAt` DATETIME,
+`updatedBy` BIGINT
+);
+
 create table IF NOT EXISTS `User5` (
 `id` BIGINT NOT NULL AUTO_INCREMENT PRIMARY KEY,
 `email` NVARCHAR(100) NOT NULL,
@@ -74,6 +88,19 @@ open class Data_04_Entity_Service_MySql {
 `uniqueid` NVARCHAR(50) NOT NULL
 );""",
 
+""" create table IF NOT EXISTS `UserNullable` (
+`id`        BIGINT NOT NULL AUTO_INCREMENT PRIMARY KEY,
+`uuid`      NVARCHAR(50) NOT NULL,
+`email`     NVARCHAR(100),
+`isActive`  BIT ,
+`level`     INTEGER,
+`salary`    DOUBLE,
+`createdAt` DATETIME,
+`createdBy` BIGINT,
+`updatedAt` DATETIME,
+`updatedBy` BIGINT
+);""",
+
 """create table IF NOT EXISTS `Member` (
 `id` BIGINT NOT NULL AUTO_INCREMENT PRIMARY KEY,
 `groupid` BIGINT NOT NULL,
@@ -98,6 +125,7 @@ open class Data_04_Entity_Service_MySql {
         entities.register<Long, User5>(EntityLongId(), vendor = Vendor.MySql) { repo -> UserService(repo) }
         entities.register<Long, Member>(EntityLongId(), vendor = Vendor.MySql) { repo -> EntityService(repo) }
         entities.register<Long, Group>(EntityLongId(), vendor = Vendor.MySql) { repo -> EntityService(repo) }
+        entities.register<Long, UserNullable>(EntityLongId(), vendor = Vendor.MySql) { repo -> EntityService(repo) }
     }
 
 
@@ -112,6 +140,26 @@ open class Data_04_Entity_Service_MySql {
             Assert.assertTrue(User5?.isActive == true)
             Assert.assertTrue(User5?.level == 35)
             Assert.assertTrue(User5?.salary == 12.34)
+        }
+    }
+
+
+    @Test
+    open fun can_use_model_with_nullable_fields() {
+        runBlocking {
+            val userSvc = entities.getService<Long, UserNullable>()
+            val created = UserNullable()
+            val id = userSvc.create(created)
+            val user = userSvc.getById(id)
+            Assert.assertTrue(user != null)
+            Assert.assertNull(user?.email)
+            Assert.assertNull(user?.isActive)
+            Assert.assertNull(user?.level)
+            Assert.assertNull(user?.salary)
+            Assert.assertNull(user?.createdAt)
+            Assert.assertNull(user?.createdBy)
+            Assert.assertNull(user?.updatedAt)
+            Assert.assertNull(user?.updatedBy)
         }
     }
 
