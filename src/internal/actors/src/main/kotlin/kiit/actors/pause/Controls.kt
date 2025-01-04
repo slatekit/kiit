@@ -4,7 +4,7 @@ import kiit.actors.Action
 import kiit.actors.Message
 
 /**
- * Provides convenience methods to support sending actions
+ * Provides convenience methods to support controlling a component
  * to an actor to control its status.
  */
 interface Controls {

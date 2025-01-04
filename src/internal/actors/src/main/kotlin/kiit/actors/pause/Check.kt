@@ -2,6 +2,9 @@ package kiit.actors.pause
 
 import kiit.actors.Status
 
+/**
+ * Provides convenience methods for checking the status
+ */
 interface Check {
     /**
      * gets the current status of the application

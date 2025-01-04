@@ -106,6 +106,8 @@ dependencies {
     implementation project(":kiit-common")
     implementation project(":kiit-utils")
     implementation project(":kiit-context")
+    implementation project(":kiit-actors")
+    implementation project(":kiit-jobs")
     implementation project(":kiit-app")
     implementation project(":kiit-db")
     implementation project(":kiit-apis")

@@ -3,7 +3,7 @@ package kiit.jobs
 import kiit.common.Identity
 
 /**
- * Worker that wraps a function call
+ * Used for wrapping a simple function into a @see[Worker]
  * @param id: Identity of worker
  * @param op: Operation that actually does the work
  */

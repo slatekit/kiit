@@ -1,7 +1,7 @@
 package kiit.actors
 
 /**
- * Represents the different "states" a @see[Managed] actor can be in
+ * Represents the different "states" a @see[Pausable] actor can be in
  */
 sealed class Status(val name: String, val value: Int) {
     object InActive : Status("InActive", 0)

@@ -48,7 +48,7 @@ abstract class Managed<T>(ctx: Context, channel: Channel<Message<T>>, enableStri
             }
 
             else -> {
-                // Does not support Request<T>
+                // Derived classes to implement handling for Request<T>
             }
         }
     }

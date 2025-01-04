@@ -5,7 +5,7 @@ import kiit.actors.Status
 import java.util.concurrent.atomic.AtomicReference
 
 /**
- * Base class for an Actor that can be started, stopped, paused, and resumed
+ * Helper class that handles changing the status and sending notifications via the changed handler.
  * 1. start   -> started
  * 2. process -> running
  * 2. stop    -> stopped

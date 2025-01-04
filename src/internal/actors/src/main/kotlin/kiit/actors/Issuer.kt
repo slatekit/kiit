@@ -7,7 +7,7 @@ import kotlinx.coroutines.channels.Channel
  * and send them to the Issuable to handle directly ( which could be the same actor ).
  * This is useful for controlling the content of the channel ( such as for tests )
  * and also for cleanup in some cases.
- * This allows to ull, poll, wipe ( clear ) messages from the channel.
+ * This allows to pull, poll, wipe ( clear ) messages from the channel.
  */
 open class Issuer<T>(
     val channel: Channel<Message<T>>,

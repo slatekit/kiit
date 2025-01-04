@@ -3,7 +3,8 @@ package kiit.jobs
 import kiit.actors.Status
 
 /**
- * Future use
+ * Represents the result of a worker/operation performing a single task.
+ * This provides a way to communicate back whether this is completely done or can continue
  */
 sealed class WResult(val name: String) {
     object More : WResult("More")

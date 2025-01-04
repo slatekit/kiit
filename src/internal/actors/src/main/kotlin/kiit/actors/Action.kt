@@ -1,13 +1,13 @@
 package kiit.actors
 
 /**
- * Represents the actions that control the state @see[Status] of a @see[Managed] actor
- * 1. started
- * 2. stopped
- * 3. paused
- * 4. resumed
- * 5. Processed ( 1 time )
- * 6. Delayed ( delayed start )
+ * Represents the actions that control the state @see[Status] of a @see[Pausable]
+ * 1. Start
+ * 2. Stop
+ * 3. Pause
+ * 4. Resume
+ * 5. Process ( 1 time )
+ * 6. Delay
  */
 sealed class Action(val name: String) {
     /* ktlint-disable */

@@ -7,7 +7,7 @@ import kotlinx.coroutines.yield
 import java.util.concurrent.atomic.AtomicLong
 
 /**
- * Base class for any @see[Actor]
+ * Base class for any @see[Actor] to provide a way to send messages to it.
  */
 abstract class Messageable<T>(val ctx: Context, val channel: Channel<Message<T>>) : Workable {
 

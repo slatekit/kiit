@@ -44,7 +44,7 @@ abstract class Basic<T>(ctx: Context, channel: Channel<Message<T>>) : Messageabl
             }
 
             else -> {
-                // Does not support Content<T>
+                // Does not support Request<T>
             }
         }
     }

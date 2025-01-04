@@ -2,6 +2,10 @@ package kiit.actors
 
 /**
  * Represents the "envelope" / container for all items sent to the actor.
+ * Currently, this can be of 3 types
+ * 1. Control : To send actions to control it ( Start, Stop, Pause, Resume, etc )
+ * 2. Content : Actual message for the actor to process
+ * 3. Request : A request for actors that load payloads themselves ( typically used in jobs ).
  */
 sealed class Message<T> {
     abstract val id: Long

@@ -46,7 +46,7 @@ abstract class Loader<T>(ctx: Context, channel: Channel<Message<T>>, enableStric
             }
 
             else -> {
-                // Does not support Request<T>
+                // Derived classes to implement handling for Content<T>
             }
         }
     }

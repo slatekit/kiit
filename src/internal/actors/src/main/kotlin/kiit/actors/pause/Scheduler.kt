@@ -6,6 +6,9 @@ import java.util.concurrent.Executors
 import java.util.concurrent.ScheduledExecutorService
 import java.util.concurrent.TimeUnit
 
+/**
+ * Simple scheduler for performing timed operations
+ */
 class Scheduler(
     val scope: CoroutineScope,
     val scheduler: ScheduledExecutorService = scheduler(2)
