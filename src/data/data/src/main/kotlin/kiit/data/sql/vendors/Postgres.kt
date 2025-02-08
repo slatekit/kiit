@@ -19,7 +19,7 @@ import kiit.query.Op
  * local datetime  = timestamp
  * zoned datetime  = timestamptz
  */
-object PostgresDialect : Dialect(encodeChar = '"', encodeNames = true) {
+object PostgresDialect : Dialect(encodeChar = '"', useSchema = true) {
 
     override fun op(op: Op): String =
         when (op) {

@@ -10,12 +10,19 @@ import kiit.query.Op
 open class Dialect(val types: Types = Types(),
                    val aggr: Aggregates = Aggregates(),
                    val encodeChar:Char = '`',
-                   val encodeNames:Boolean = true
+                   val useSchema:Boolean = false
     ) {
     /**
      * Encodes the name using the encode char e.g. column1 = `column1`
      */
     fun encode(name:String): String = "${encodeChar}${name}${encodeChar}"
+
+    fun encode(schema:String, name:String): String {
+        return when(useSchema) {
+            true  -> "${encodeChar}${name}${encodeChar}"
+            false -> "${encodeChar}${schema}${encodeChar}.${encodeChar}${name}${encodeChar}"
+        }
+    }
 
 
     open fun op(op: Op): String = op.text

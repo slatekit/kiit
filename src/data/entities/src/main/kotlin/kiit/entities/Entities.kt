@@ -20,6 +20,7 @@ import kiit.utils.naming.Namer
 import kiit.common.values.ListMap
 import kiit.data.core.*
 import kiit.data.encoders.Encoders
+import kiit.data.kiit.data.sql.vendors.PostgresDialect
 import kiit.data.kiit.data.sql.vendors.PostgresProvider
 import kiit.data.sql.vendors.*
 import kiit.entities.core.*
@@ -89,10 +90,11 @@ open class Entities(
 
         // 2. Table info ( name of table supplied or use class name )
         val tableChar = when(vendor){
-            Vendor.MySql -> MySqlDialect.encodeChar
-            Vendor.H2 -> H2Dialect.encodeChar
-            Vendor.SqLite -> SqliteDialect.encodeChar
-            Vendor.Memory -> MySqlDialect.encodeChar
+            Vendor.Postgres  -> PostgresDialect.encodeChar
+            Vendor.MySql     -> MySqlDialect.encodeChar
+            Vendor.SqLite    -> SqliteDialect.encodeChar
+            Vendor.H2        -> H2Dialect.encodeChar
+            Vendor.Memory    -> MySqlDialect.encodeChar
         }
         val tableName = table ?: enType.simpleName!!
         val tableKey = PKey(idName, DataType.fromJava(idTypeJ))
@@ -111,8 +113,8 @@ open class Entities(
         val provider = when(vendor){
             Vendor.Postgres -> PostgresProvider(entityMeta, entityMapper)
             Vendor.MySql    -> MySqlProvider(entityMeta, entityMapper)
-            Vendor.H2       -> H2Provider(entityMeta, entityMapper)
             Vendor.SqLite   -> SqliteProvider(entityMeta, entityMapper)
+            Vendor.H2       -> H2Provider(entityMeta, entityMapper)
             Vendor.Memory   -> MySqlProvider(entityMeta, entityMapper)
         }
         val entityRepo = EntityRepo<TId, T>(getDb(), entityMeta, entityMapper, provider)
