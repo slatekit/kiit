@@ -10,6 +10,7 @@ import kiit.query.Op
  * NOTES
  * 1. https://www.postgresql.org/docs/current/sql-syntax-lexical.html#SQL-SYNTAX-IDENTIFIERS
  * 2. https://www.postgresql.org/docs/current/datatype.html
+ * 3. https://www.baeldung.com/java-postgresql-store-date-time
  *
  * CONVERSIONS:
  * bigint          = bigserial ( primary key only )
