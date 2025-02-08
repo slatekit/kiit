@@ -9,7 +9,7 @@
  *  </kiit_header>
  */
 
-package test.entities
+package test.entities.postgres
 
 import kotlinx.coroutines.runBlocking
 import org.junit.Assert
@@ -23,7 +23,7 @@ import kiit.entities.features.Ordered
 import kiit.query.Op
 import kiit.query.set
 import kiit.query.where
-import org.junit.Ignore
+import test.entities.EntitySetup
 import test.setup.Group
 import test.setup.Member
 import test.setup.User5
@@ -38,7 +38,7 @@ class UserService(repo: EntityRepo<Long, User5>)
     : EntityService<Long, User5>(repo), Ordered<Long, User5>, Counts<Long, User5>
 
 
-open class Data_04_Entity_Service_MySql {
+open class Entity_Postgres_Service_Tests {
 
     protected lateinit var entities: Entities
     private val sqlStatements = listOf(

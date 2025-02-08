@@ -13,13 +13,14 @@
 
 package test.entities
 
-import org.junit.Assert
 import org.junit.Before
 import org.junit.Test
 import kiit.common.data.*
 import kiit.data.sql.vendors.ifNotExists
 import kiit.db.Db
 import kiit.entities.*
+import test.entities.mysql.Data_04_Entity_Service_MySql
+import test.entities.mysql.UserService
 import test.setup.Group
 import test.setup.Member
 import test.setup.MyEncryptor

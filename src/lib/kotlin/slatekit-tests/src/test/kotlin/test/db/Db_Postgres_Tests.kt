@@ -9,7 +9,6 @@ import kiit.common.conf.Confs
 import kiit.common.data.DataType
 import kiit.common.data.Value
 import kiit.db.Db
-import test.TestApp
 import test.setup.TestSupport
 import java.time.LocalDate
 import java.time.LocalDateTime

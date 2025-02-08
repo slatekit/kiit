@@ -15,8 +15,8 @@ import org.junit.Assert
 import org.junit.Before
 import org.junit.Test
 import kiit.common.data.*
-import kiit.entities.features.Relations
 import kiit.entities.*
+import test.entities.mysql.UserService
 import test.setup.User5
 
 class Data_04_Entity_Registry {

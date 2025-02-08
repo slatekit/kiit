@@ -28,6 +28,7 @@ import kiit.entities.features.Ordered
 import kiit.query.Op
 import kiit.query.set
 import kiit.query.where
+import test.entities.mysql.Data_04_Entity_Service_MySql
 import test.setup.MyEncryptor
 
 

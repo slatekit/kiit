@@ -136,7 +136,7 @@ open class Entities(
      * and its corresponding mapper, repo, service, etc.
      */
     inline fun <reified TId, reified T> register(idOps:kiit.data.core.Id<TId, T>,
-                                                 table: String? = null, schema: String?,
+                                                 table: String? = null, schema: String? = null,
                                                  vendor: Vendor = Vendor.MySql,
                                                  builder: (EntityRepo<TId, T>) -> EntityService<TId, T>) where TId : Comparable<TId>, T : Entity<TId> {
         // 1. Id/Model types e.g. Long / User
