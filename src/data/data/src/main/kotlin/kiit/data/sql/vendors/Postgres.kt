@@ -21,9 +21,9 @@ object PostgresDialect : Dialect(encodeChar = '"', encodeNames = true) {
 }
 
 /**
- * MySql based dialect
+ * Postgres based dialect
  */
-open class MySqlProvider<TId, T>(val meta: Meta<TId, T>, val mapper: Mapper<TId, T>)
+open class PostgresProvider<TId, T>(val meta: Meta<TId, T>, val mapper: Mapper<TId, T>)
     : Provider<TId, T> where TId: kotlin.Comparable<TId>, T: Any {
     override val dialect: Dialect = PostgresDialect
 
