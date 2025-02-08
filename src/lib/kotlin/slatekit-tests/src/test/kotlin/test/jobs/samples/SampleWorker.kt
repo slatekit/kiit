@@ -38,21 +38,21 @@ class OneTimeWorker(val start:Int, val end:Int, id: Identity) : Worker<Int>(id) 
     }
 
 
-    override suspend fun completed(note:String?) {
+    override suspend fun onCompleted(note:String?) {
         audit.add("done")
-        super.completed(note)
+        super.onCompleted(note)
     }
 
 
-    override suspend fun paused(reason: String?) {
+    override suspend fun onPaused(reason: String?) {
     }
 
 
-    override suspend fun stopped(reason: String?) {
+    override suspend fun onStopped(reason: String?) {
     }
 
 
-    override suspend fun resumed(reason: String?) {
+    override suspend fun onResumed(reason: String?) {
     }
 
 
@@ -85,15 +85,15 @@ class PagedWorker(start:Int, val maxRuns:Int, val countsPerRun:Int, id: Identity
     }
 
 
-    override suspend fun paused(reason: String?) {
+    override suspend fun onPaused(reason: String?) {
     }
 
 
-    override suspend fun stopped(reason: String?) {
+    override suspend fun onStopped(reason: String?) {
     }
 
 
-    override suspend fun resumed(reason: String?) {
+    override suspend fun onResumed(reason: String?) {
     }
 
 }
@@ -119,25 +119,25 @@ class TestWorker(id: Identity? = null, val limit:Int = 10)
         }
     }
 
-    override suspend fun paused(reason: String?) {
+    override suspend fun onPaused(reason: String?) {
         cycles[Status.Paused.name] = true
 
     }
 
-    override suspend fun resumed(reason: String?) {
+    override suspend fun onResumed(reason: String?) {
         cycles["Resumed"] = true
 
     }
 
-    override suspend fun stopped(reason: String?) {
+    override suspend fun onStopped(reason: String?) {
         cycles[Status.Stopped.name] = true
     }
 
-    override suspend fun completed(note:String?) {
+    override suspend fun onCompleted(note:String?) {
         cycles[Status.Completed.name] = true
     }
 
-    override suspend fun killed(reason: String?) {
+    override suspend fun onKilled(reason: String?) {
         cycles[Status.Killed.name] = true
     }
 }

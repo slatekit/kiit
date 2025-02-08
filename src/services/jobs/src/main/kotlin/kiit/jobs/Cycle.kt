@@ -5,30 +5,30 @@ package kiit.jobs
  */
 interface Cycle {
 
-    suspend fun started() {
+    suspend fun onStarted() {
     }
 
 
-    suspend fun paused(note:String?) {
+    suspend fun onPaused(note:String?) {
     }
 
 
-    suspend fun resumed(note:String?) {
+    suspend fun onResumed(note:String?) {
     }
 
 
-    suspend fun stopped(note:String?) {
+    suspend fun onStopped(note:String?) {
     }
 
 
-    suspend fun failed(note:String?) {
+    suspend fun onFailed(note:String?) {
     }
 
 
-    suspend fun completed(note:String?) {
+    suspend fun onCompleted(note:String?) {
     }
 
 
-    suspend fun killed(note:String?) {
+    suspend fun onKilled(note:String?) {
     }
 }

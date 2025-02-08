@@ -16,7 +16,7 @@ class MyWorker(
         isInitialized = true
     }
 
-    override suspend fun completed(note:String?) {
+    override suspend fun onCompleted(note:String?) {
         isEnded = true
     }
 

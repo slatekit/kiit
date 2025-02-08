@@ -42,7 +42,9 @@ class Work(val job: Manager) {
      */
     suspend fun start(wctx: WorkerContext, handle: Boolean = true, notify: Boolean = true): Try<Status> {
         return perform(wctx.id, Status.Started, notify = notify) {
-            wctx.worker.started()
+            if(wctx.worker is Cycle) {
+                wctx.worker.onStarted()
+            }
         }
         .then { perform(wctx.id, Status.Running, notify = notify ) {
             request(wctx.id)
@@ -56,7 +58,9 @@ class Work(val job: Manager) {
      */
     suspend fun pause(wctx: WorkerContext, handle: Boolean = true, notify: Boolean = true, seconds: Long = 30, reason: String? = null): Try<Status> {
         return perform(wctx.id, Status.Paused, notify = notify) {
-            wctx.worker.paused(reason)
+            if(wctx.worker is Cycle) {
+                wctx.worker.onPaused(reason)
+            }
             if (handle) {
                 schedule(seconds, Action.Resume, wctx.id)
             }
@@ -70,7 +74,9 @@ class Work(val job: Manager) {
      */
     suspend fun resume(wctx: WorkerContext, notify: Boolean = true, reason: String? = null): Try<Status> {
         return perform(wctx.id, Status.Running, notify = notify) {
-            wctx.worker.resumed(reason)
+            if(wctx.worker is Cycle) {
+                wctx.worker.onResumed(reason)
+            }
             request(wctx.id)
         }
     }
@@ -82,7 +88,9 @@ class Work(val job: Manager) {
      */
     suspend fun stop(wctx: WorkerContext, notify: Boolean = true, reason: String? = null): Try<Status> {
         return perform(wctx.id, Status.Stopped, notify = notify) {
-            wctx.worker.stopped(reason)
+            if(wctx.worker is Cycle) {
+                wctx.worker.onStopped(reason)
+            }
         }
     }
 
@@ -93,7 +101,9 @@ class Work(val job: Manager) {
      */
     suspend fun kill(wctx: WorkerContext, notify: Boolean = true, reason: String? = null): Try<Status> {
         return perform(wctx.id, Status.Killed, notify = notify) {
-            wctx.worker.killed(reason)
+            if(wctx.worker is Cycle) {
+                wctx.worker.onKilled(reason)
+            }
         }
     }
 
@@ -101,9 +111,11 @@ class Work(val job: Manager) {
     /**
      * Checks the worker
      */
-    suspend fun check(wctx: WorkerContext, notify: Boolean = true, reason: String? = null): Try<Status> {
+    suspend fun check(wctx: WorkerContext, notify: Boolean = false, reason: String? = null): Try<Status> {
         return Tries.of {
-            notify(reason, wctx.id)
+            if(notify) {
+                wctx.worker.notify("check", null)
+            }
             job.status()
         }
     }
@@ -130,7 +142,9 @@ class Work(val job: Manager) {
                 is WResult.Next -> request(wctx.id)
                 is WResult.Done -> {
                     move(Status.Completed, true, wctx.id, null)
-                    wctx.worker.completed(null)
+                    if(wctx.worker is Cycle) {
+                        wctx.worker.onCompleted(null)
+                    }
                     job.check()
                 }
                 else -> {
@@ -187,10 +201,10 @@ class Work(val job: Manager) {
 
      */
     suspend fun move(status: Status, notify: Boolean, id:Identity, msg: String?) {
-
-        job.get(id)?.worker?.move(status, msg)
+        val worker = job.get(id)?.worker
+        worker?.move(status, msg)
         if (notify) {
-            notify(msg, id)
+            worker?.notify(msg, null)
         }
     }
 
@@ -213,10 +227,5 @@ class Work(val job: Manager) {
             Channel.UNLIMITED -> job.load(Workers.shortId(id))
             else -> job.jctx.scope.launch { job.load(Workers.shortId(id)) }
         }
-    }
-
-
-    private suspend fun notify(reason:String?, id:Identity) {
-
     }
 }

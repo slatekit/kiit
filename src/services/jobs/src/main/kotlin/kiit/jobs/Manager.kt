@@ -7,15 +7,16 @@ import kiit.jobs.support.Rules
 import kiit.jobs.support.Work
 
 /**
- * A Job is the top level model in this Background Job/Task Queue system. A job is composed of the following:
+ * A Manager is the top level model in this Background Job/Task Queue system.
  *
  * TERMS:
+ * Various terms / concepts used in this task queue system.
  * 1. Identity  : An id, @see[kiit.common.Identity] to distinctly identify a job
  * 3. Task      : A single work item with a payload that a worker can work on. @see[kiit.jobs.Task]
  * 2. Queue     : Interface for a Queue that workers can optional source tasks from
  * 4. Workers   : 1 or more @see[kiit.jobs.workers.Worker]s that can work on this job
  * 5. Action    : Actions ( start | stop | pause | resume | delay ) to control a job or individual worker
- * 6. Events    : Used to subscribe to events on the job/worker ( only status changes for now )
+ * 6. Event     : Used to subscribe to events on the job/worker ( only status changes for now )
  * 7. Stats     : Reasonable statistics / diagnostics for workers such as total calls, processed, logging
  * 8. Policies  : @see[kiit.policy.Policy] associated with a worker such as limits, retries
  * 9. Backoffs  : Exponential sequence of seconds to use to back off from processing queues when queue is empty
@@ -168,7 +169,8 @@ class Manager(val jctx: Context, val settings: Settings = Settings())
         }
 
         // Run
-        if(Rules.canWork(status())) {
+        val status = status()
+        if(Rules.canWork(status)) {
             one(id) { run(it) }
         }
     }

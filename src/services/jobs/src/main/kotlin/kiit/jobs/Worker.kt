@@ -9,8 +9,8 @@ import kiit.actors.pause.Check
 /**
  * Optional base class for Workers.
  * All work is done inside this worker which has
- * 1. life-cycle methods : [started], [work], [completed]
- * 2. state changes      : [paused], [stopped], [resumed], [move]
+ * 1. life-cycle methods : [started], [work], [onCompleted]
+ * 2. state changes      : [onPaused], [onStopped], [onResumed], [move]
  * 3. alerting ability   : [notify]
  * 4. diagnostic features: [info] method to build diagnostics info
  *
@@ -18,7 +18,7 @@ import kiit.actors.pause.Check
  * 1. All anonymous functions supplied to a Job are wrapped in a worker
  * 2. Clients should only extend worker to use/enrich the life-cycle, state change, alerting, diagnostic methods above
  */
-open class Worker<T>(id: Identity) : Check, Cycle {
+open class Worker<T>(id: Identity) : Check {
     val id = if (id.tags.isEmpty() || !id.tags.contains("worker")) id.with(null, tags = listOf("worker")) else id
     protected val _status = AtomicReference<Pair<Status, String>>(Pair(Status.InActive, Status.InActive.name))
 

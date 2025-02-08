@@ -24,7 +24,7 @@ import kiit.jobs.support.Notifier
 data class Context(val id: Identity,
                    val workers: List<Worker<*>>,
                    val mode   : Int = Channel.UNLIMITED,
-                   val channel: Channel<Message<Task>> = Channel(Channel.UNLIMITED),
+                   val channel: Channel<Message<Task>> = Channel(capacity = 10),
                    val logger : Logger = LoggerConsole(),
                    val queue  : Queue? = null,
                    val scope  : CoroutineScope = Jobs.scope,
