@@ -20,6 +20,7 @@ import kiit.utils.naming.Namer
 import kiit.common.values.ListMap
 import kiit.data.core.*
 import kiit.data.encoders.Encoders
+import kiit.data.kiit.data.sql.vendors.PostgresProvider
 import kiit.data.sql.vendors.*
 import kiit.entities.core.*
 import kiit.entities.mapper.EntityMapper
@@ -108,10 +109,11 @@ open class Entities(
         }
         val entityMapper = EntityMapper<TId, T>(entityModel, entityMeta, idType, enType, EntitySettings(true), encoders)
         val provider = when(vendor){
-            Vendor.MySql -> MySqlProvider(entityMeta, entityMapper)
-            Vendor.H2 -> H2Provider(entityMeta, entityMapper)
-            Vendor.SqLite -> SqliteProvider(entityMeta, entityMapper)
-            Vendor.Memory -> MySqlProvider(entityMeta, entityMapper)
+            Vendor.Postgres -> PostgresProvider(entityMeta, entityMapper)
+            Vendor.MySql    -> MySqlProvider(entityMeta, entityMapper)
+            Vendor.H2       -> H2Provider(entityMeta, entityMapper)
+            Vendor.SqLite   -> SqliteProvider(entityMeta, entityMapper)
+            Vendor.Memory   -> MySqlProvider(entityMeta, entityMapper)
         }
         val entityRepo = EntityRepo<TId, T>(getDb(), entityMeta, entityMapper, provider)
         val entityService = builder(entityRepo)

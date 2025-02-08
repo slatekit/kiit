@@ -11,6 +11,7 @@
 package kiit.common.data
 
 sealed class Vendor(val name: String, val driver: String) {
+  object Postgres : Vendor("postgres", "org.postgresql.Driver")
   object MySql    : Vendor("mysql", "com.mysql.jdbc.Driver")
   object H2       : Vendor("h2", "org.h2.Driver")
   object SqLite   : Vendor("sqlite", "org.sqlite.JDBC")
