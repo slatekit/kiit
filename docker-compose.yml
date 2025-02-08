@@ -5,7 +5,7 @@ version: '3'
 services:
 # MySql - For Kiit Data/Entities
   mysql:
-    container_name: mysql-8
+    container_name: kiit-mysql
     image: mysql:8.0.35
     command: mysqld --default-authentication-plugin=mysql_native_password --character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci
     environment:
@@ -14,11 +14,12 @@ services:
     ports:
       - '3306:3306'
     volumes:
-      - kiit-db-mysql-volume:/var/lib/mysql/data
+      - kiit-db-mysql-volume:/var/lib/mysql
       - './install/db/mysql/3.x:/docker-entrypoint-initdb.d'
 
 # Postgres - For Kiit Data/Entities 
   postgres:
+    container_name: kiit-pgres
     image: "postgres:14.7"
     ports:
       - "5432:5432"
