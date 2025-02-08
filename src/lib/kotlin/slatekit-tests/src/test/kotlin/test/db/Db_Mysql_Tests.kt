@@ -30,15 +30,6 @@ import java.util.*
  * 5. Postgres: PostgresProvider ....
  */
 class Data_04_Database_Mysql : TestSupport {
-    private val zoneId = ZoneId.systemDefault()
-    private val localDate = LocalDate.of(2021, 2, 1)
-    private val localTime = LocalTime.of(9, 30, 45)
-    private val localDateTime = LocalDateTime.of(2021, 2, 1, 9, 30, 45)
-    private val zonedDateTime = DateTimes.of(2021, 2, 1, 9, 30, 45, zoneId = zoneId)
-
-    private val table = "sample_entity"
-
-
     @Test fun can_build() {
         val db1 = Db.of(TestApp::class.java, EntitySetup.dbConfPath)
         val db2 = Db.of(EntitySetup.con())
@@ -83,10 +74,10 @@ class Data_04_Database_Mysql : TestSupport {
                 Value("", DataType.DTDouble, 123456.789),
                 Value("", DataType.DTEnum, 1),
 
-                Value("", DataType.DTLocalDate, localDate),
-                Value("", DataType.DTLocalTime, localTime),
-                Value("", DataType.DTLocalDateTime, localDateTime),
-                Value("", DataType.DTZonedDateTime, zonedDateTime),
+                Value("", DataType.DTLocalDate, Db_Fixtures.localDate),
+                Value("", DataType.DTLocalTime, Db_Fixtures.localTime),
+                Value("", DataType.DTLocalDateTime, Db_Fixtures.localDateTime),
+                Value("", DataType.DTZonedDateTime, Db_Fixtures.zonedDateTime),
                 Value("", DataType.DTUUID, UUID.fromString("497dea41-8658-4bb7-902c-361014799214")),
                 Value("", DataType.DTULID, ULIDs.parse("usa:314fef51-43a7-496c-be24-520e73758836")),
                 Value("", DataType.DTString, "street 1"),
@@ -143,13 +134,13 @@ class Data_04_Database_Mysql : TestSupport {
 
     @Test
     fun can_query_scalar_localdate() {
-        ensure_scalar("test_localdate", { db, sql -> db.getScalarLocalDate(sql, null) }, localDate)
+        ensure_scalar("test_localdate", { db, sql -> db.getScalarLocalDate(sql, null) }, Db_Fixtures.localDate)
     }
 
 
     @Test
     fun can_query_scalar_localtime() {
-        ensure_scalar("test_localtime", { db, sql -> db.getScalarLocalTime(sql, null) }, localTime)
+        ensure_scalar("test_localtime", { db, sql -> db.getScalarLocalTime(sql, null) }, Db_Fixtures.localTime)
     }
 
 
@@ -158,14 +149,14 @@ class Data_04_Database_Mysql : TestSupport {
         ensure_scalar(
             "test_localdatetime",
             { db, sql -> db.getScalarLocalDateTime(sql, null) },
-            localDateTime
+            Db_Fixtures.localDateTime
         )
     }
 
 
     @Test
     fun can_query_scalar_date() {
-        ensure_scalar("test_localdatetime", { db, sql -> db.getScalarZonedDateTime(sql, null) }, zonedDateTime)
+        ensure_scalar("test_localdatetime", { db, sql -> db.getScalarZonedDateTime(sql, null) }, Db_Fixtures.zonedDateTime)
     }
 
 
@@ -196,7 +187,7 @@ class Data_04_Database_Mysql : TestSupport {
         Assert.assertTrue(id > 0)
 
         // 2. update
-        val sqlGet = "select * from `$table` where `id` = $id;"
+        val sqlGet = "select * from `${Db_Fixtures.table}` where `id` = $id;"
         val item = db.mapOne(sqlGet, null) { rec ->
             val longid = rec.getLong("id")
             SampleEntityImmutable(
@@ -226,7 +217,7 @@ class Data_04_Database_Mysql : TestSupport {
     fun <T> ensure_scalar(colName: String, callback: (IDb, String) -> T, expected: T): Unit {
         val db = db()
         val id = db.insert(INSERT_ITEM)
-        val sql = "select $colName from $table where id = $id;"
+        val sql = "select $colName from ${Db_Fixtures.table} where id = $id;"
         val actual = callback(db, sql)
         Assert.assertTrue(expected == actual)
     }
