@@ -7,8 +7,16 @@ import kiit.data.sql.*
 import kiit.query.Op
 
 /**
- * Refer to:
+ * NOTES
  * 1. https://www.postgresql.org/docs/current/sql-syntax-lexical.html#SQL-SYNTAX-IDENTIFIERS
+ * 2. https://www.postgresql.org/docs/current/datatype.html
+ *
+ * CONVERSIONS:
+ * bigint          = bigserial ( primary key only )
+ * nvarchar        = varchar
+ * double          = float8
+ * local datetime  = timestamp
+ * zoned datetime  = timestamptz
  */
 object PostgresDialect : Dialect(encodeChar = '"', encodeNames = true) {
 
