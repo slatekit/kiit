@@ -30,42 +30,9 @@ import test.setup.User5
 import test.setup.UserNullable
 
 /**
-create table IF NOT EXISTS `UserNullable` (
-`id`        BIGINT NOT NULL AUTO_INCREMENT PRIMARY KEY,
-`uuid`      NVARCHAR(50) NOT NULL,
-`email`     NVARCHAR(100),
-`isActive`  BIT ,
-`level`     INTEGER,
-`salary`    DOUBLE,
-`createdAt` DATETIME,
-`createdBy` BIGINT,
-`updatedAt` DATETIME,
-`updatedBy` BIGINT
-);
-
-create table IF NOT EXISTS `User5` (
-`id` BIGINT NOT NULL AUTO_INCREMENT PRIMARY KEY,
-`email` NVARCHAR(100) NOT NULL,
-`isactive` BIT NOT NULL,
-`age` INTEGER NOT NULL,
-`salary` DOUBLE NOT NULL,
-`createdat` DATETIME NOT NULL,
-`createdby` BIGINT NOT NULL,
-`updatedat` DATETIME NOT NULL,
-`updatedby` BIGINT NOT NULL,
-`uniqueid` NVARCHAR(50) NOT NULL
-);
-
-create table IF NOT EXISTS `Member` (
-`id` BIGINT NOT NULL AUTO_INCREMENT PRIMARY KEY,
-`groupid` BIGINT NOT NULL,
-`userid` BIGINT NOT NULL
-);
-
-create table IF NOT EXISTS `Group` (
-`id` BIGINT NOT NULL AUTO_INCREMENT PRIMARY KEY,
-`name` NVARCHAR(30) NOT NULL
-);
+Sql scripts located :
+ 1. ./install/db/mysql/3.x/
+ 2. ./install/db/postgres/3.x/
  */
 class UserService(repo: EntityRepo<Long, User5>)
     : EntityService<Long, User5>(repo), Ordered<Long, User5>, Counts<Long, User5>

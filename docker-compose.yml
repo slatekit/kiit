@@ -29,7 +29,7 @@ services:
       POSTGRES_DB: kiit
     volumes:
       - kiit-db-pgres-volume:/var/lib/postgresql/data
-      - './install/db/mysql/3.x:/docker-entrypoint-initdb.d'
+      - './install/db/postgres/3.x:/docker-entrypoint-initdb.d'
 
 volumes:
   kiit-db-mysql-volume: {}
