@@ -9,7 +9,9 @@ import kiit.query.Op
  */
 open class Dialect(val types: Types = Types(),
                    val aggr: Aggregates = Aggregates(),
-                   val encodeChar:Char = '`') {
+                   val encodeChar:Char = '`',
+                   val encodeNames:Boolean = true
+    ) {
     /**
      * Encodes the name using the encode char e.g. column1 = `column1`
      */
