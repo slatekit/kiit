@@ -33,7 +33,7 @@ class Data_03_Builder_Select {
             "category" to DataType.DTString
     )
 
-    private fun builder(): Select = Builders.Select(MySqlDialect,"user", { name -> lookup[name]!! }, { name -> name })
+    private fun builder(): Select = Builders.Select(MySqlDialect,"unit_tests", "user", { name -> lookup[name]!! }, { name -> name })
 
     @Before
     fun setup(){

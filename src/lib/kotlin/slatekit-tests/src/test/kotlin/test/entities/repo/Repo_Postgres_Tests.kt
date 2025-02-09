@@ -23,7 +23,7 @@ open class Repo_Postgres_Tests : Repo_Common_Tests() {
     override fun process(op: (EntityRepo<Long, User5>) -> Unit) {
         val db = EntitySetup.db(Vendor.Postgres)
         val entities = Entities( {_ -> db } )
-        val repo = entities.repo(EntityLongId(), Long::class, User5::class, "user", null, Vendor.Postgres)
+        val repo = entities.repo(EntityLongId(), Long::class, User5::class, "user", "unit_tests", Vendor.Postgres)
         runBlocking {
             op(repo)
         }

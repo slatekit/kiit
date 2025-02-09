@@ -28,17 +28,17 @@ create table "unit_tests"."sample_entity" (
 );
 
 
-create table IF NOT EXISTS `User5` (
-`id`         BIGINT        NOT NULL AUTO_INCREMENT PRIMARY KEY,
-`email`      NVARCHAR(100) NOT NULL,
-`isActive`   BIT           NOT NULL,
-`level`      INTEGER       NOT NULL,
-`salary`     DOUBLE        NOT NULL,
-`createdat`  DATETIME      NOT NULL,
-`createdby`  BIGINT        NOT NULL,
-`updatedat`  DATETIME      NOT NULL,
-`updatedby`  BIGINT        NOT NULL,
-`uniqueid`   NVARCHAR(50)  NOT NULL
+create table IF NOT EXISTS "unit_tests"."user" (
+"id"        BIGSERIAL     NOT NULL  PRIMARY KEY,
+"userId"    VARCHAR(50)   NOT NULL,
+"email"     VARCHAR(100)  NOT NULL,
+"isActive"  BOOLEAN       NOT NULL,
+"level"     INTEGER       NOT NULL,
+"salary"    FLOAT8        NOT NULL,
+"createdat" TIMESTAMPTZ   NOT NULL,
+"createdby" BIGINT        NOT NULL,
+"updatedat" TIMESTAMPTZ   NOT NULL,
+"updatedby" BIGINT        NOT NULL
 );
 
 create table IF NOT EXISTS `Member` (

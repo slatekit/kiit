@@ -33,7 +33,7 @@ class Data_03_Builder_Patch {
             "level" to DataType.DTInt,
             "category" to DataType.DTString
     )
-    private fun builder(): Update = Builders.Patch(MySqlDialect,"user", { name -> lookup[name]!! }, { name -> name })
+    private fun builder(): Update = Builders.Patch(MySqlDialect,"unit_tests", "user", { name -> lookup[name]!! }, { name -> name })
 
 
     @Before

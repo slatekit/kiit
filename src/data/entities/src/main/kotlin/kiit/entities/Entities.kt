@@ -175,7 +175,7 @@ open class Entities(
         }
         val tableName = table ?: enType.simpleName!!
         val tableKey = PKey(idName, DataType.fromJava(idTypeJ))
-        val tableInfo = Table(tableName, tableChar, tableKey)
+        val tableInfo = Table(tableName, tableChar, tableKey, schema ?: "")
 
         // 3. Schema / Meta data
         val entityModel = Schema.load(enType, idName, null, tableName)

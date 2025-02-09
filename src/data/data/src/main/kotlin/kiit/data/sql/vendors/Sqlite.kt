@@ -41,9 +41,9 @@ open class SqliteProvider<TId, T>(val meta: Meta<TId, T>, val mapper: Mapper<TId
      */
     override val insert = Insert<TId, T>(SqliteDialect, meta, mapper)
     override val update = Update<TId, T>(SqliteDialect, meta, mapper)
-    override fun select(table: Table): kiit.query.Select = Builders.Select(dialect, meta.table.name, { name -> mapper.datatype(name)}, { name -> mapper.column(name) })
-    override fun delete(table: Table): kiit.query.Delete = Builders.Delete(dialect, meta.table.name, { name -> mapper.datatype(name)}, { name -> mapper.column(name) })
-    override fun patch (table: Table): kiit.query.Update = Builders.Patch(dialect, meta.table.name, { name -> mapper.datatype(name)}, { name -> mapper.column(name) })
+    override fun select(table: Table): kiit.query.Select = Builders.Select(dialect, meta.table.schema, meta.table.name, { name -> mapper.datatype(name)}, { name -> mapper.column(name) })
+    override fun delete(table: Table): kiit.query.Delete = Builders.Delete(dialect, meta.table.schema, meta.table.name, { name -> mapper.datatype(name)}, { name -> mapper.column(name) })
+    override fun patch (table: Table): kiit.query.Update = Builders.Patch(dialect, meta.table.schema, meta.table.name, { name -> mapper.datatype(name)}, { name -> mapper.column(name) })
 }
 
 

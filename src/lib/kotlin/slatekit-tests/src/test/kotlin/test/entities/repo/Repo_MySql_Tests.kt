@@ -30,7 +30,7 @@ Sql scripts located :
  */
 
 
-open class Entity_MySql_Repo_Tests : Repo_Common_Tests() {
+open class Repo_MySql_Tests : Repo_Common_Tests() {
 
     /**
      * This provices the implementation for the repo ( using mysql as vendor )
