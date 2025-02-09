@@ -1,4 +1,4 @@
-package test.entities.repo
+package test.data.repo
 
 import kiit.common.data.Vendor
 import kiit.entities.Entities

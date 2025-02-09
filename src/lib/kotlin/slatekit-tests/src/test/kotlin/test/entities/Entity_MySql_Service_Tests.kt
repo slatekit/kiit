@@ -9,7 +9,7 @@
  *  </kiit_header>
  */
 
-package test.entities.repo
+package test.entities
 
 import kotlinx.coroutines.runBlocking
 import org.junit.Assert
@@ -23,8 +23,6 @@ import kiit.entities.features.Ordered
 import kiit.query.Op
 import kiit.query.set
 import kiit.query.where
-import test.entities.EntitySetup
-import test.entities.EntityTestCases
 import test.setup.Group
 import test.setup.Member
 import test.setup.User5

@@ -9,17 +9,11 @@
  *  </kiit_header>
  */
 
-package test.entities.repo
+package test.data.repo
 
 import kotlinx.coroutines.runBlocking
-import org.junit.Assert
-import org.junit.Test
 import kiit.common.data.*
-import kiit.common.utils.Random
 import kiit.entities.*
-import kiit.query.Op
-import kiit.query.set
-import kiit.query.where
 import test.entities.EntitySetup
 import test.setup.*
 

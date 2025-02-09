@@ -10,7 +10,7 @@ about: A Kotlin utility library, tool-kit and server backend.
 
  </kiit_header>
  */
-package test.db
+package test.data.db
 
 import org.junit.Assert
 import org.junit.Test

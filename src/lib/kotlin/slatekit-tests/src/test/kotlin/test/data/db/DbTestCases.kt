@@ -1,4 +1,4 @@
-package test.db
+package test.data.db
 
 import kiit.common.data.IDb
 

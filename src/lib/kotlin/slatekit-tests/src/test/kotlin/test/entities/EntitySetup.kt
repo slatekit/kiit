@@ -14,8 +14,8 @@ import kiit.db.Db
 import kiit.entities.Entities
 import kiit.entities.EntityService
 import test.TestApp
-import test.db.Db_Fixtures
-import test.db.Db_Mysql_Tests
+import test.data.db.Db_Fixtures
+import test.data.db.Db_Mysql_Tests
 import test.setup.AppEncryptor
 import test.setup.MyEncryptor
 import test.setup.StatusEnum

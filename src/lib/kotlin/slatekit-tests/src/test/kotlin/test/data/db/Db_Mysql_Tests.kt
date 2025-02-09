@@ -1,12 +1,10 @@
-package test.db
+package test.data.db
 
 import org.junit.Assert
 import org.junit.Test
-import kiit.common.DateTimes
 import kiit.common.data.*
 import kiit.common.ids.ULIDs
 import kiit.db.Db
-import org.junit.Ignore
 import test.entities.EntitySetup
 import test.entities.SampleEntityImmutable
 import test.setup.Address
@@ -29,15 +27,16 @@ import java.util.*
  * 1. Docker: at root of folder : {root}/docker-compose.yml
  * 2. MySql : See credentials in the docker file
  */
-class Db_Postgres_Tests : Db_Common_Tests(), DbTestCases {
+class Db_Mysql_Tests : Db_Common_Tests(), DbTestCases {
 
-    override fun db(): IDb = EntitySetup.db(Vendor.Postgres)
+    override fun db(): IDb = EntitySetup.db(Vendor.MySql)
 
 
     @Test
     override fun can_build() {
-        val db1 = Db.of(EntitySetup.con(Vendor.Postgres))
-        Assert.assertEquals(db1.driver, Vendor.Postgres.driver)
+        //val db0 = Db.of(TestApp::class.java, EntitySetup.dbConfPath)
+        val db1 = Db.of(EntitySetup.con(Vendor.MySql))
+        Assert.assertEquals(db1.driver, Vendor.MySql.driver)
     }
 
     @Test
@@ -67,25 +66,9 @@ class Db_Postgres_Tests : Db_Common_Tests(), DbTestCases {
             Value("", DataType.DTString, "state 1"),
             Value("", DataType.DTInt, 1),
             Value("", DataType.DTString, "12345"),
-            Value("", DataType.DTBool, false)
+            Value("", DataType.DTInt, 1)
         )).toLong()
         Assert.assertTrue(id > 0L)
-    }
-
-
-    @Ignore
-    fun can_execute_proc() {
-        val db = db()
-        val result = db.callQuery("get_max_id", { rs -> rs.getLong(1) })
-        Assert.assertTrue(result!! > 0L)
-    }
-
-
-    @Ignore
-    fun can_execute_proc_update() {
-        val db = db()
-        val result = db.callUpdate("dbtests_update_by_id", listOf(Value("", DataType.DTInt, 6)))
-        Assert.assertTrue(result!! >= 1)
     }
 
 
@@ -94,26 +77,20 @@ class Db_Postgres_Tests : Db_Common_Tests(), DbTestCases {
         val id = db.insert(insertSqlRaw())
         val sql = "select $colName from ${table()} where id = $id;"
         val actual = callback(db, sql)
-        println(actual)
-        println(expected)
-        Assert.assertEquals(expected, actual)
+        Assert.assertTrue(expected == actual)
     }
 
-
-    override fun table():String = """"unit_tests"."sample_entity""""
-    override fun encode(column:String):String = "\"${column}\""
+    override fun table():String = "`sample_entity`"
+    override fun encode(column:String):String = "`${column}`"
 
     override fun insertSqlPrep():String = """
-            INSERT INTO "unit_tests"."sample_entity"
-            (
-                "test_string"      , "test_string_enc"  , "test_bool",
-                "test_short"       , "test_int"         , "test_long",
-                "test_float"       , "test_double"      , "test_enum",
-                "test_localdate"   , "test_localtime"   , "test_localdatetime", "test_zoneddatetime", 
-                "test_uuid"        , "test_uniqueid"    ,
-                "test_object_addr" , "test_object_city" , "test_object_state", "test_object_country", "test_object_zip", "test_object_ispobox"
-            )
-            VALUES (?, ?, ?,
+            insert into `sample_entity` ( 
+                    `test_string`,`test_string_enc`,`test_bool`,
+                    `test_short`,`test_int`,`test_long`,`test_float`,`test_double`,`test_enum`,
+                    `test_localdate`,`test_localtime`,`test_localdatetime`,`test_zoneddatetime`,
+                    `test_uuid`,`test_uniqueId`,
+                    `test_object_addr`,`test_object_city`,`test_object_state`,`test_object_country`,`test_object_zip`,`test_object_isPOBox`
+            )  VALUES (?, ?, ?,
                     ?, ?, ?, ?, ?, ?,
                     ?, ?, ?, ?,
                     ?, ?,
@@ -122,27 +99,24 @@ class Db_Postgres_Tests : Db_Common_Tests(), DbTestCases {
         """
 
     override fun insertSqlRaw():String = """
-            INSERT INTO "unit_tests"."sample_entity"
-            (
-                "test_string"      , "test_string_enc"  , "test_bool",
-                "test_short"       , "test_int"         , "test_long",
-                "test_float"       , "test_double"      , "test_enum",
-                "test_localdate"   , "test_localtime"   , "test_localdatetime", "test_zoneddatetime", 
-                "test_uuid"        , "test_uniqueid"    ,
-                "test_object_addr" , "test_object_city" , "test_object_state", "test_object_country", "test_object_zip", "test_object_ispobox"
-            )
-            VALUES
-            (
-                'abc', 'abcd_enc', true,
-                123, 123456, 123456789,
-                123.45, 123456.789, 1,
-                '2021-02-01','09:30:45','2021-02-01 09:30:45','2021-02-01 09:30:45',
-                '497dea41-8658-4bb7-902c-361014799214','usa:314fef51-43a7-496c-be24-520e73758836',
-                'street 1','city 1','state 1',1,'12345', false
+            insert into `sample_entity` ( 
+                    `test_string`    , `test_string_enc`, `test_bool`,
+                    `test_short`     ,`test_int`        , `test_long`, 
+                    `test_float`     ,`test_double`     , `test_enum`,
+                    `test_localdate` ,`test_localtime`  , `test_localdatetime`, `test_zoneddatetime`,
+                    `test_uuid`      ,`test_uniqueId`,
+                    `test_object_addr`,`test_object_city`,`test_object_state`,`test_object_country`,`test_object_zip`,`test_object_isPOBox`
+            )  VALUES ('abc','abc123',1,
+                    123, 123456, 123456789,123.45, 123456.789, 1,
+                    '2021-02-01','09:30:45','2021-02-01 09:30:45','2021-02-01 09:30:45',
+                    '497dea41-8658-4bb7-902c-361014799214','usa:314fef51-43a7-496c-be24-520e73758836',
+                    'street 1','city 1','state 1',1,'12345',1
             );
         """
 
-
     companion object {
+
+        var id = 0L
+        val H2_CON = DbConString(Vendor.H2, "jdbc:h2:mem:test;DB_CLOSE_DELAY=-1", "", "")
     }
 }

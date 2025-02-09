@@ -1,4 +1,4 @@
-package test.db
+package test.data.db
 
 import kiit.common.data.DataType
 import kiit.common.data.IDb
@@ -147,7 +147,9 @@ abstract class Db_Common_Tests : DbTestCases {
 
     @Test
     override fun can_query_scalar_date() {
-        ensure_scalar("test_localdatetime", { db, sql -> db.getScalarZonedDateTime(sql, null) }, Db_Fixtures.zonedDateTime)
+        ensure_scalar("test_localdatetime", { db, sql -> db.getScalarZonedDateTime(sql, null) },
+            Db_Fixtures.zonedDateTime
+        )
     }
 
 
