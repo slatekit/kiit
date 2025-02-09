@@ -47,6 +47,7 @@ open class Entity_MySql_Service_Tests : EntityTestCases {
     private val sqlStatements = listOf(
 """create table IF NOT EXISTS `User5` (
 `id` BIGINT NOT NULL AUTO_INCREMENT PRIMARY KEY,
+`uuid` NVARCHAR(50) NOT NULL,
 `email` NVARCHAR(100) NOT NULL,
 `isActive` BIT NOT NULL,
 `level` INTEGER NOT NULL,
@@ -54,8 +55,7 @@ open class Entity_MySql_Service_Tests : EntityTestCases {
 `createdat` DATETIME NOT NULL,
 `createdby` BIGINT NOT NULL,
 `updatedat` DATETIME NOT NULL,
-`updatedby` BIGINT NOT NULL,
-`uniqueid` NVARCHAR(50) NOT NULL
+`updatedby` BIGINT NOT NULL
 );""",
 
 """ create table IF NOT EXISTS `UserNullable` (

@@ -11,7 +11,7 @@ insert into `sample_entity` (
                     ?, ?, ?, ?, ?, ?
             );
 
-            
+
 create table `sample_entity` ( 
 `id` BIGINT NOT NULL AUTO_INCREMENT PRIMARY KEY,  
 `test_string` NVARCHAR(30) NOT NULL,  
@@ -37,16 +37,16 @@ create table `sample_entity` (
 `test_object_ispobox` BIT NOT NULL );
 
 create table IF NOT EXISTS `User5` (
-`id` BIGINT NOT NULL AUTO_INCREMENT PRIMARY KEY,
-`email` NVARCHAR(100) NOT NULL,
-`isActive` BIT NOT NULL,
-`level` INTEGER NOT NULL,
-`salary` DOUBLE NOT NULL,
-`createdat` DATETIME NOT NULL,
-`createdby` BIGINT NOT NULL,
-`updatedat` DATETIME NOT NULL,
-`updatedby` BIGINT NOT NULL,
-`uniqueid` NVARCHAR(50) NOT NULL
+`id`        BIGINT        NOT NULL AUTO_INCREMENT PRIMARY KEY,
+`userId`    NVARCHAR(50)  NOT NULL,
+`email`     NVARCHAR(100) NOT NULL,
+`isActive`  BIT           NOT NULL,
+`level`     INTEGER       NOT NULL,
+`salary`    DOUBLE        NOT NULL,
+`createdat` DATETIME      NOT NULL,
+`createdby` BIGINT        NOT NULL,
+`updatedat` DATETIME      NOT NULL,
+`updatedby` BIGINT        NOT NULL
 );
 
 create table IF NOT EXISTS `Member` (

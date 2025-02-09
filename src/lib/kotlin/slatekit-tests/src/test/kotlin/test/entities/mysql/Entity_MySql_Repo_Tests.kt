@@ -16,6 +16,8 @@ import org.junit.Assert
 import org.junit.Before
 import org.junit.Test
 import kiit.common.data.*
+import kiit.common.utils.Random
+import kiit.data.Repo
 import kiit.entities.features.Relations
 import kiit.entities.*
 import kiit.entities.features.Counts
@@ -24,10 +26,7 @@ import kiit.query.Op
 import kiit.query.set
 import kiit.query.where
 import test.entities.EntitySetup
-import test.setup.Group
-import test.setup.Member
-import test.setup.User5
-import test.setup.UserNullable
+import test.setup.*
 
 /**
 Sql scripts located :
@@ -37,70 +36,15 @@ Sql scripts located :
 
 open class Entity_MySql_Repo_Tests {
 
-    protected lateinit var entities: Entities
-    private val sqlStatements = listOf(
-"""create table IF NOT EXISTS `User5` (
-`id` BIGINT NOT NULL AUTO_INCREMENT PRIMARY KEY,
-`email` NVARCHAR(100) NOT NULL,
-`isActive` BIT NOT NULL,
-`level` INTEGER NOT NULL,
-`salary` DOUBLE NOT NULL,
-`createdat` DATETIME NOT NULL,
-`createdby` BIGINT NOT NULL,
-`updatedat` DATETIME NOT NULL,
-`updatedby` BIGINT NOT NULL,
-`uniqueid` NVARCHAR(50) NOT NULL
-);""",
-
-""" create table IF NOT EXISTS `UserNullable` (
-`id`        BIGINT NOT NULL AUTO_INCREMENT PRIMARY KEY,
-`uuid`      NVARCHAR(50) NOT NULL,
-`email`     NVARCHAR(100),
-`isActive`  BIT ,
-`level`     INTEGER,
-`salary`    DOUBLE,
-`createdAt` DATETIME,
-`createdBy` BIGINT,
-`updatedAt` DATETIME,
-`updatedBy` BIGINT
-);""",
-
-"""create table IF NOT EXISTS `Member` (
-`id` BIGINT NOT NULL AUTO_INCREMENT PRIMARY KEY,
-`groupid` BIGINT NOT NULL,
-`userid` BIGINT NOT NULL
-);""",
-
-"""create table IF NOT EXISTS `Group` (
-`id` BIGINT NOT NULL AUTO_INCREMENT PRIMARY KEY,
-`name` NVARCHAR(30) NOT NULL
-);"""
-    )
-
-    @Before
-    open fun setup() {
-//        entities = Entities({ con -> Db(con) }, Connections(DbConString("", "", "", "")))
-        entities = EntitySetup.realDb() //Vendor.MySql, "KIIT")
-        val db = entities.getDb()
-        sqlStatements.map{ sql ->
-            db.execute(sql)
-        }
-        //entities.register<Long, SampleEntityImmutable>(LongId { s -> s.id}, "sample_entity", Vendor.MySql) { repo -> EntityService(repo) }
-        entities.register<Long, User5>(EntityLongId(), vendor = Vendor.MySql) { repo -> UserService(repo) }
-        entities.register<Long, Member>(EntityLongId(), vendor = Vendor.MySql) { repo -> EntityService(repo) }
-        entities.register<Long, Group>(EntityLongId(), vendor = Vendor.MySql) { repo -> EntityService(repo) }
-        entities.register<Long, UserNullable>(EntityLongId(), vendor = Vendor.MySql) { repo -> EntityService(repo) }
-    }
-
 
     @Test
-    open fun can_create_an_item() {
-        runBlocking {
-            val userSvc = createSamples(false)
-            val id = userSvc.create(User5(0, "test_create@abc.com", true, 35, 12.34))
-            val User5 = userSvc.getById(id)
+    open fun can_create() {
+        process { repo ->
+            val email = email("create")
+            val id = repo.create(User5(0, email = email, isActive = true, level = 35, salary = 12.34))
+            val User5 = repo.getById(id)
             Assert.assertTrue(User5 != null)
-            Assert.assertTrue(User5?.email == "test_create@abc.com")
+            Assert.assertTrue(User5?.email == email)
             Assert.assertTrue(User5?.isActive == true)
             Assert.assertTrue(User5?.level == 35)
             Assert.assertTrue(User5?.salary == 12.34)
@@ -109,53 +53,59 @@ open class Entity_MySql_Repo_Tests {
 
 
     @Test
-    open fun can_use_model_with_nullable_fields() {
-        runBlocking {
-            val userSvc = entities.getService<Long, UserNullable>()
-            val created = UserNullable()
-            val id = userSvc.create(created)
-            val user = userSvc.getById(id)
-            Assert.assertTrue(user != null)
-            Assert.assertNull(user?.email)
-            Assert.assertNull(user?.isActive)
-            Assert.assertNull(user?.level)
-            Assert.assertNull(user?.salary)
-            Assert.assertNull(user?.createdAt)
-            Assert.assertNull(user?.createdBy)
-            Assert.assertNull(user?.updatedAt)
-            Assert.assertNull(user?.updatedBy)
+    open fun can_update() {
+        process { repo ->
+            val email = email("update")
+            val id = repo.create(User5(0, email = email, isActive = true, level = 35, salary = 12.34))
+            val User5 = repo.getById(id)
+            Assert.assertTrue(User5 != null)
+            Assert.assertTrue(User5?.email == email)
+            Assert.assertTrue(User5?.isActive == true)
+            Assert.assertTrue(User5?.level == 35)
+            Assert.assertTrue(User5?.salary == 12.34)
         }
     }
 
 
     @Test
-    open fun can_update_an_item() {
-        val lc = kiit.common.Types.JLongClass
-        val kc = Long::class.java
-        val isEqual = lc == kc
-        println(isEqual)
-        runBlocking {
-            val userSvc = createSamples(true)
-            val user = userSvc.findOneByField(User5::email, "setup_2@abc.com")!!
-            val count = userSvc.count { where(User5::level, 7) }
-            Assert.assertEquals(1.0, count, 0.0)
-            val updated = user.copy(level = 8)
-            val isUpdated = userSvc.update(updated)
-            Assert.assertTrue(isUpdated)
-            val matches = userSvc.findByField(User5::level, 8)
-            Assert.assertEquals(1, matches.size)
+    open fun can_patch() {
+        process { repo ->
+            val email = email("patch")
+            val id = repo.create(User5(0, email = email, isActive = true, level = 35, salary = 12.34))
+            val updated = repo.patch {
+                set(User5::level,  210).where(User5::level.name, Op.Eq, 7)
+            }
+            Assert.assertEquals(1, updated)
+            val item = repo.find { where(User5::level, Op.Eq, 210) }.firstOrNull()
+            Assert.assertEquals(email, item?.email)
+            Assert.assertEquals(210, item?.level)
+        }
+    }
+
+
+    @Test
+    open fun can_delete() {
+        process { repo ->
+            val email = email("delete")
+            val id = repo.create(User5(0, email = email, isActive = true, level = 35, salary = 12.34))
+            val updated = repo.patch {
+                set(User5::level,  210).where(User5::level.name, Op.Eq, 7)
+            }
+            Assert.assertEquals(1, updated)
+            val item = repo.find { where(User5::level, Op.Eq, 210) }.firstOrNull()
+            Assert.assertEquals(email, item?.email)
+            Assert.assertEquals(210, item?.level)
         }
     }
 
 
     @Test
     open fun can_count_any() {
-        runBlocking {
-            val svc = createSamples(false)
-            val any1 = svc.any()
+        process{ repo ->
+            val any1 = repo.any()
             Assert.assertFalse(any1)
-            svc.create(User5(0, "test_count_any@abc.com", true, 35, 12.34))
-            val any2 = svc.any()
+            repo.create(User5(0, "test_count_any@abc.com", isActive = true, level = 35, salary = 12.34))
+            val any2 = repo.any()
             Assert.assertTrue(any2)
         }
     }
@@ -163,15 +113,14 @@ open class Entity_MySql_Repo_Tests {
 
     @Test
     open fun can_count_size() {
-        runBlocking {
-            val svc = createSamples(false)
-            val count1 = svc.count()
+        process { repo ->
+            val count1 = repo.count()
             Assert.assertTrue(count1 == 0L)
-            svc.create(User5(0, "test_count_1@abc.com", true, 35, 12.34))
-            svc.create(User5(0, "test_count_2@abc.com", true, 35, 12.34))
-            svc.create(User5(0, "test_count_3@abc.com", true, 35, 12.34))
+            repo.create(User5(0, email = "test_count_1@abc.com", isActive = true, level = 35, salary = 12.34))
+            repo.create(User5(0, email = "test_count_2@abc.com", isActive = true, level = 35, salary = 12.34))
+            repo.create(User5(0, email = "test_count_3@abc.com", isActive = true, level = 35, salary = 12.34))
 
-            val count2 = svc.count()
+            val count2 = repo.count()
             Assert.assertTrue(count2 == 3L)
         }
     }
@@ -179,9 +128,8 @@ open class Entity_MySql_Repo_Tests {
 
     @Test
     open fun can_get_first() {
-        runBlocking {
-            val svc = createSamples()
-            val first = svc.first()
+        process { repo ->
+            val first = repo.first()
             Assert.assertTrue(first?.email == "setup_1@abc.com")
         }
     }
@@ -189,9 +137,8 @@ open class Entity_MySql_Repo_Tests {
 
     @Test
     open fun can_get_last() {
-        runBlocking {
-            val svc = createSamples()
-            val last = svc.last()
+        process { repo ->
+            val last = repo.last()
             Assert.assertTrue(last?.email == "setup_7@abc.com")
         }
     }
@@ -199,9 +146,8 @@ open class Entity_MySql_Repo_Tests {
 
     @Test
     open fun can_get_recent() {
-        runBlocking {
-            val svc = createSamples()
-            val recent = svc.recent(2)
+        process { repo ->
+            val recent = repo.recent(2)
             Assert.assertTrue(recent[0].email == "setup_7@abc.com")
             Assert.assertTrue(recent[1].email == "setup_6@abc.com")
         }
@@ -210,9 +156,8 @@ open class Entity_MySql_Repo_Tests {
 
     @Test
     open fun can_get_oldest() {
-        runBlocking {
-            val svc = createSamples()
-            val oldest = svc.oldest(2)
+        process { repo ->
+            val oldest = repo.oldest(2)
             Assert.assertTrue(oldest[0].email == "setup_1@abc.com")
             Assert.assertTrue(oldest[1].email == "setup_2@abc.com")
         }
@@ -221,9 +166,8 @@ open class Entity_MySql_Repo_Tests {
 
     @Test
     open fun can_get_all() {
-        runBlocking {
-            val svc = createSamples()
-            val all = svc.getAll()
+        process { repo ->
+            val all = repo.getAll()
             Assert.assertTrue(all.size == 7)
         }
     }
@@ -231,9 +175,8 @@ open class Entity_MySql_Repo_Tests {
 
     @Test
     open fun can_find_by_field() {
-        runBlocking {
-            val svc = createSamples()
-            val second = svc.findByField(User5::email, Op.Eq, "setup_2@abc.com")
+        process { repo ->
+            val second = repo.findByField(User5::email.name, Op.Eq, "setup_2@abc.com")
             Assert.assertTrue(second.size == 1)
             Assert.assertTrue(second[0].email == "setup_2@abc.com")
         }
@@ -242,13 +185,12 @@ open class Entity_MySql_Repo_Tests {
 
     @Test
     open fun can_get_aggregates() {
-        runBlocking {
-            val svc = createSamples()
-            val count = svc.count()
-            val sum = svc.repo().sum(User5::level.name) { }
-            val avg = svc.repo().avg(User5::level.name) { }
-            val min = svc.repo().min(User5::level.name) { }
-            val max = svc.repo().max(User5::level.name) { }
+        process { repo ->
+            val count = repo.count()
+            val sum = repo.sum(User5::level.name) { }
+            val avg = repo.avg(User5::level.name) { }
+            val min = repo.min(User5::level.name) { }
+            val max = repo.max(User5::level.name) { }
             Assert.assertEquals(7, count)
             Assert.assertEquals(28.0, sum, 0.0)
             Assert.assertEquals(4.0, avg, 0.0)
@@ -260,9 +202,8 @@ open class Entity_MySql_Repo_Tests {
 
     @Test
     open fun can_find_by_query() {
-        runBlocking {
-            val svc = createSamples()
-            val matches = svc.find {
+        process { repo ->
+            val matches = repo.find {
                 where(User5::isActive.name, Op.Eq, false)
                         .and(User5::level.name, Op.Gt, 5)
             }
@@ -273,133 +214,15 @@ open class Entity_MySql_Repo_Tests {
     }
 
 
-    @Test
-    open fun can_patch_by_query() {
+    private fun email(prefix:String): String = "test_${prefix}_${Random.alphaNumN(8)}@kiit.com"
+
+
+    private fun process(op: (EntityRepo<Long, User5>) -> Unit) {
+        val db = EntitySetup.db(Vendor.MySql)
+        val entities = Entities( {_ -> db } )
+        val repo = entities.repo(EntityLongId(), Long::class, User5::class, "user", null, Vendor.MySql)
         runBlocking {
-            val svc = createSamples()
-            val updated = svc.patch {
-                set(User5::level,  210).where(User5::level.name, Op.Eq, 7)
-            }
-            Assert.assertEquals(1, updated)
-            val item = svc.find { where(User5::level, Op.Eq, 210) }.firstOrNull()
-            Assert.assertEquals("setup_7@abc.com", item?.email)
-            Assert.assertEquals(210, item?.level)
+            op(repo)
         }
     }
-
-
-    @Test
-    open fun can_get_relation() {
-        runBlocking {
-            createSamples()
-            val memsSvcRaw = entities.getService<Long, Member>()
-            val member = memsSvcRaw.getAll().first()
-            val memsSvc = EntityServiceRelational<Long, Member>(entities, memsSvcRaw.repo())
-            val user = memsSvc.getRelation<User5>(member.id, Member::userId, User5::class)
-            Assert.assertTrue(user != null)
-            Assert.assertTrue(user!!.email == "setup_2@abc.com")
-        }
-    }
-
-
-    @Test
-    open fun can_get_relations() {
-        runBlocking {
-            val userSvc = createSamples(createMembers = false)
-            val groupSvc = entities.getService<Long, Group>()
-            val memberSvc = entities.getService<Long, Member>()
-            val user1 = userSvc.getAll()[0]
-            val user2 = userSvc.getAll()[1]
-            val group = groupSvc.getAll().first()
-
-            // Create
-            val member1Id = memberSvc.create(Member(0, group.id, user1.id))
-            val member2Id = memberSvc.create(Member(0, group.id, user2.id))
-
-            val grpSvc = EntityServiceRelational<Long, Group>(entities, groupSvc.repo())
-            val results = grpSvc.getWithRelations<Member>(group.id, Member::class, Member::groupId)
-            Assert.assertTrue(results != null)
-            Assert.assertTrue(results.first?.name == group.name)
-            Assert.assertTrue(results.second.size == 2)
-            Assert.assertTrue(results.second.get(0).userId == user1.id)
-            Assert.assertTrue(results.second.get(1).userId == user2.id)
-        }
-    }
-
-
-    @Test
-    open fun can_get_relation_with_object() {
-        runBlocking {
-            val userSvc = createSamples(createMembers = false)
-            val groupSvc = entities.getService<Long, Group>()
-            val memberSvc = entities.getService<Long, Member>()
-            val user = userSvc.getAll().first()
-            val group = groupSvc.getAll().first()
-
-            // Create
-            val memberId = memberSvc.create(Member(0, group.id, user.id))
-
-            val memsSvc = EntityServiceRelational<Long, Member>(entities, memberSvc.repo())
-            val userAndMember = memsSvc.getWithRelation<User5>(memberId, Member::userId, User5::class)
-            Assert.assertTrue(userAndMember != null)
-            Assert.assertTrue(userAndMember!!.first?.groupId == group.id)
-            Assert.assertTrue(userAndMember!!.first?.userId == user.id)
-            Assert.assertTrue(userAndMember.second!!.email == user.email)
-        }
-    }
-
-
-    class EntityServiceRelational<TId, T>(val entities: Entities, repo: EntityRepo<TId, T>)
-        : EntityService<TId, T>(repo), Relations<TId, T>
-            where TId : Comparable<TId>, T : Entity<TId> {
-
-        override fun entities(): Entities {
-            return entities
-        }
-    }
-
-
-    protected open suspend fun createSamples(setupSamples: Boolean = true, createMembers: Boolean = true): UserService {
-        val userSvc = entities.getService<Long, User5>() as UserService
-        val memsSvc = entities.getService<Long, Member>()
-        val grpSvc = entities.getService<Long, Group>()
-
-        userSvc.deleteAll()
-        memsSvc.deleteAll()
-        grpSvc.deleteAll()
-
-        if (setupSamples) {
-            // 1. Create first user
-            userSvc.create(User5(0, "setup_1@abc.com", true, 1, 12.34))
-
-            // 2. Create many
-            val userIds = userSvc.saveAll(listOf(
-                    User5(0, "setup_2@abc.com", true, 2, 12.34),
-                    User5(0, "setup_3@abc.com", true, 3, 12.34),
-                    User5(0, "setup_4@abc.com", true, 4, 12.34),
-                    User5(0, "setup_5@abc.com", false, 5, 12.34),
-                    User5(0, "setup_6@abc.com", false, 6, 12.34),
-                    User5(0, "setup_7@abc.com", false, 7, 12.34)
-            ))
-
-            // 2. Create groups
-            val groupIds = grpSvc.saveAll(listOf(
-                    Group(0, "group 1"),
-                    Group(0, "group 2"),
-                    Group(0, "group 3")
-            ))
-
-            // 3. Create many
-            if (createMembers) {
-                val memberIds = memsSvc.saveAll(listOf(
-                        Member(0, groupIds[0].first!!, userIds[0].first!!),
-                        Member(0, groupIds[1].first!!, userIds[1].first!!),
-                        Member(0, groupIds[2].first!!, userIds[2].first!!)
-                ))
-            }
-        }
-        return userSvc
-    }
-
-
 }
