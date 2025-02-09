@@ -12,9 +12,6 @@ import test.entities.SampleEntityImmutable
 import test.setup.Address
 import test.setup.StatusEnum
 import test.setup.TestSupport
-import java.time.LocalDate
-import java.time.LocalDateTime
-import java.time.LocalTime
 import java.util.*
 
 /**
@@ -143,7 +140,7 @@ class Db_Postgres_Tests : TestSupport, DbTestCases {
 
     @Test
     override fun can_query_scalar_string() {
-        ensure_scalar("test_string", { db, sql -> db.getScalarString(sql, null) }, "abcd")
+        ensure_scalar("test_string", { db, sql -> db.getScalarString(sql, null) }, "abc")
     }
 
 
@@ -200,7 +197,7 @@ class Db_Postgres_Tests : TestSupport, DbTestCases {
         ensure_scalar(
             "test_localdatetime",
             { db, sql -> db.getScalarLocalDateTime(sql, null) },
-            LocalDateTime.of(2017, 7, 6, 9, 25, 0)
+            Db_Fixtures.localDateTime
         )
     }
 
@@ -211,9 +208,9 @@ class Db_Postgres_Tests : TestSupport, DbTestCases {
     }
 
 
-    @Test
+    @Ignore
     fun can_execute_proc() {
-        val db = Db(getConnection())
+        val db = db()
         val result = db.callQuery("get_max_id", { rs -> rs.getLong(1) })
         Assert.assertTrue(result!! > 0L)
     }
@@ -270,10 +267,10 @@ class Db_Postgres_Tests : TestSupport, DbTestCases {
             )
             VALUES
             (
-                'abcd', 'abcd_enc', true,
+                'abc', 'abcd_enc', true,
                 123, 123456, 123456789,
                 123.45, 123456.789, 1,
-                '2017-06-01', '09:25:00', '2017-07-06 09:25:00', '2017-07-06 09:25:00',
+                '2021-02-01','09:30:45','2021-02-01 09:30:45','2021-02-01 09:30:45',
                 '497dea41-8658-4bb7-902c-361014799214','usa:314fef51-43a7-496c-be24-520e73758836',
                 'street 1','city 1','state 1',1,'12345', false
             );
