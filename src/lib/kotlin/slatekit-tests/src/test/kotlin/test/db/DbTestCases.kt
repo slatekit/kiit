@@ -8,6 +8,7 @@ interface DbTestCases {
     fun can_insert_sql_raw()
     fun can_insert_sql_prep()
     fun can_update()
+    fun can_delete()
     fun can_get()
 
     fun can_query_scalar_string()

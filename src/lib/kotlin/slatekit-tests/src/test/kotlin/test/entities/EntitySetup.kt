@@ -52,7 +52,7 @@ object EntitySetup {
     fun con(vendor: Vendor): DbCon {
         return when(vendor) {
             Vendor.H2       -> DbConString(Vendor.H2, "jdbc:h2:mem:test;DB_CLOSE_DELAY=-1", "", "")
-            Vendor.MySql    -> DbConString(vendor, "jdbc:mysql://localhost/kiit", "root", "12345qwert")
+            Vendor.MySql    -> DbConString(vendor, "jdbc:mysql://localhost:3306/kiit", "root", "12345qwert")
             Vendor.Postgres -> DbConString(vendor, "jdbc:postgresql://localhost:5432/kiit", "kiit", "12345qwert")
             else            -> DbConString(vendor, "jdbc:postgresql://localhost:5432/kiit", "kiit", "12345qwert")
         }

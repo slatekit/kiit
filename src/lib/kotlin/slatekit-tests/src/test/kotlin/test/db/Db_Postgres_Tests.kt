@@ -29,7 +29,7 @@ import java.util.*
  * 1. Docker: at root of folder : {root}/docker-compose.yml
  * 2. MySql : See credentials in the docker file
  */
-class Db_Postgres_Tests : TestSupport, DbTestCases {
+class Db_Postgres_Tests : DbTestCases {
 
     private fun db(): IDb = EntitySetup.db(Vendor.Postgres)
 
@@ -37,7 +37,6 @@ class Db_Postgres_Tests : TestSupport, DbTestCases {
 
     @Test
     override fun can_build() {
-        //val db0 = Db.of(TestApp::class.java, EntitySetup.dbConfPath)
         val db1 = Db.of(EntitySetup.con(Vendor.Postgres))
         Assert.assertEquals(db1.driver, Vendor.Postgres.driver)
     }
@@ -137,6 +136,27 @@ class Db_Postgres_Tests : TestSupport, DbTestCases {
         Assert.assertNotNull(item)
     }
 
+    @Test
+    override fun can_delete() {
+        val db = db()
+        // 1. add
+        val id = db.insert(insertSqlRaw)
+        Assert.assertTrue(id > 0)
+
+        // 2. get count
+        val sqlCount = "select count(*) from $table where id = $id;"
+        val countBefore = db.getScalarInt(sqlCount)
+        Assert.assertTrue(countBefore == 1)
+
+        // 3. delete
+        val sql = "delete from $table where id = $id;"
+        db.execute(sql)
+
+        // 4. get count after delete
+        val countAfter = db.getScalarInt(sqlCount)
+        Assert.assertTrue(countAfter == 0)
+    }
+
 
     @Test
     override fun can_query_scalar_string() {
@@ -218,7 +238,7 @@ class Db_Postgres_Tests : TestSupport, DbTestCases {
 
     @Ignore
     fun can_execute_proc_update() {
-        val db = Db(getConnection())
+        val db = db()
         val result = db.callUpdate("dbtests_update_by_id", listOf(Value("", DataType.DTInt, 6)))
         Assert.assertTrue(result!! >= 1)
     }

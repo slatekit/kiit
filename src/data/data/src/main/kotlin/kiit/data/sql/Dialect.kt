@@ -19,8 +19,8 @@ open class Dialect(val types: Types = Types(),
 
     fun encode(schema:String, name:String): String {
         return when(useSchema) {
-            true  -> "${encodeChar}${name}${encodeChar}"
-            false -> "${encodeChar}${schema}${encodeChar}.${encodeChar}${name}${encodeChar}"
+            false -> "${encodeChar}${name}${encodeChar}"
+            true  -> "${encodeChar}${schema}${encodeChar}.${encodeChar}${name}${encodeChar}"
         }
     }
 

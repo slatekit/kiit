@@ -36,7 +36,7 @@ create table `sample_entity` (
 `test_object_zip` NVARCHAR(5) NOT NULL,  
 `test_object_ispobox` BIT NOT NULL );
 
-create table IF NOT EXISTS `User5` (
+create table IF NOT EXISTS `user` (
 `id`        BIGINT        NOT NULL AUTO_INCREMENT PRIMARY KEY,
 `userId`    NVARCHAR(50)  NOT NULL,
 `email`     NVARCHAR(100) NOT NULL,
