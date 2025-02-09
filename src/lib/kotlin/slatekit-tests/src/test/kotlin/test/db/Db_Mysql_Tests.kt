@@ -39,73 +39,36 @@ class Db_Mysql_Tests : Db_Common_Tests(), DbTestCases {
         Assert.assertEquals(db1.driver, Vendor.MySql.driver)
     }
 
-
-
     @Test
     override fun can_insert_sql_prep() {
         val db = db()
-        val sql = insertSqlPrep
+        val sql = insertSqlPrep()
         val id = db.insertGetId(sql, listOf(
-                Value("", DataType.DTString, "abc"),
-                Value("", DataType.DTString, "abc123"),
-                Value("", DataType.DTBool, true),
+            Value("", DataType.DTString, "abc"),
+            Value("", DataType.DTString, "abc123"),
+            Value("", DataType.DTBool, true),
 
-                Value("", DataType.DTShort, 123.toShort()),
-                Value("", DataType.DTInt, 123456),
-                Value("", DataType.DTLong, 123456789L),
-                Value("", DataType.DTFloat, 123.45.toFloat()),
-                Value("", DataType.DTDouble, 123456.789),
-                Value("", DataType.DTEnum, 1),
+            Value("", DataType.DTShort, 123.toShort()),
+            Value("", DataType.DTInt, 123456),
+            Value("", DataType.DTLong, 123456789L),
+            Value("", DataType.DTFloat, 123.45.toFloat()),
+            Value("", DataType.DTDouble, 123456.789),
+            Value("", DataType.DTEnum, 1),
 
-                Value("", DataType.DTLocalDate, Db_Fixtures.localDate),
-                Value("", DataType.DTLocalTime, Db_Fixtures.localTime),
-                Value("", DataType.DTLocalDateTime, Db_Fixtures.localDateTime),
-                Value("", DataType.DTZonedDateTime, Db_Fixtures.zonedDateTime),
-                Value("", DataType.DTUUID, UUID.fromString("497dea41-8658-4bb7-902c-361014799214")),
-                Value("", DataType.DTULID, ULIDs.parse("usa:314fef51-43a7-496c-be24-520e73758836")),
-                Value("", DataType.DTString, "street 1"),
-                Value("", DataType.DTString, "city 1"),
-                Value("", DataType.DTString, "state 1"),
-                Value("", DataType.DTInt, 1),
-                Value("", DataType.DTString, "12345"),
-                Value("", DataType.DTInt, 1)
+            Value("", DataType.DTLocalDate, Db_Fixtures.localDate),
+            Value("", DataType.DTLocalTime, Db_Fixtures.localTime),
+            Value("", DataType.DTLocalDateTime, Db_Fixtures.localDateTime),
+            Value("", DataType.DTZonedDateTime, Db_Fixtures.zonedDateTime),
+            Value("", DataType.DTUUID, UUID.fromString("497dea41-8658-4bb7-902c-361014799214")),
+            Value("", DataType.DTULID, ULIDs.parse("usa:314fef51-43a7-496c-be24-520e73758836")),
+            Value("", DataType.DTString, "street 1"),
+            Value("", DataType.DTString, "city 1"),
+            Value("", DataType.DTString, "state 1"),
+            Value("", DataType.DTInt, 1),
+            Value("", DataType.DTString, "12345"),
+            Value("", DataType.DTInt, 1)
         )).toLong()
         Assert.assertTrue(id > 0L)
-    }
-
-
-    @Test
-    override fun can_get() {
-        val db = db()
-        // 1. add
-        val id = db.insert(insertSqlRaw())
-        Assert.assertTrue(id > 0)
-
-        // 2. update
-        val sqlGet = "select * from ${table()} where `id` = $id;"
-        val item = db.mapOne(sqlGet, null) { rec ->
-            val longid = rec.getLong("id")
-            SampleEntityImmutable(
-                longid,
-                rec.getString("test_string"),
-                rec.getString("test_string_enc"),
-                rec.getBool("test_bool"),
-                rec.getShort("test_short"),
-                rec.getInt("test_int"),
-                rec.getLong("test_long"),
-                rec.getFloat("test_float"),
-                rec.getDouble("test_double"),
-                StatusEnum.convert(rec.getInt("test_enum")) as StatusEnum,
-                rec.getLocalDate("test_localdate"),
-                rec.getLocalTime("test_localtime"),
-                rec.getLocalDateTime("test_localdatetime"),
-                rec.getZonedDateTime("test_zoneddatetime"),
-                rec.getUUID("test_uuid"),
-                rec.getUPID("test_uniqueId"),
-                Address("", "", "", 1, "", true)
-            )
-        }
-        Assert.assertNotNull(item)
     }
 
 
@@ -118,8 +81,9 @@ class Db_Mysql_Tests : Db_Common_Tests(), DbTestCases {
     }
 
     override fun table():String = "`sample_entity`"
+    override fun encode(column:String):String = "`${column}`"
 
-    private val insertSqlPrep = """
+    override fun insertSqlPrep():String = """
             insert into `sample_entity` ( 
                     `test_string`,`test_string_enc`,`test_bool`,
                     `test_short`,`test_int`,`test_long`,`test_float`,`test_double`,`test_enum`,

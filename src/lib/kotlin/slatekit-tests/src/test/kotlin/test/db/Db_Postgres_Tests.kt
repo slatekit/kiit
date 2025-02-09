@@ -40,19 +40,10 @@ class Db_Postgres_Tests : Db_Common_Tests(), DbTestCases {
         Assert.assertEquals(db1.driver, Vendor.Postgres.driver)
     }
 
-
-    @Test
-    override fun can_insert_sql_raw() {
-        val db = db()
-        val id = db.insertGetId(insertSqlRaw()).toLong()
-        Assert.assertTrue(id > 0L)
-    }
-
-
     @Test
     override fun can_insert_sql_prep() {
         val db = db()
-        val sql = insertSqlPrep
+        val sql = insertSqlPrep()
         val id = db.insertGetId(sql, listOf(
             Value("", DataType.DTString, "abc"),
             Value("", DataType.DTString, "abc123"),
@@ -79,81 +70,6 @@ class Db_Postgres_Tests : Db_Common_Tests(), DbTestCases {
             Value("", DataType.DTBool, false)
         )).toLong()
         Assert.assertTrue(id > 0L)
-    }
-
-
-    @Test
-    override fun can_update() {
-        val db = db()
-
-        // 1. add
-        val id = db.insert(insertSqlRaw())
-        Assert.assertTrue(id > 0)
-
-        // 2. update
-        val sqlUpdate = """update ${table()} set test_int = 987 where "id" = $id;"""
-        val count = db.update(sqlUpdate)
-        Assert.assertTrue(count > 0)
-
-        // 3. get
-        val sql = """select test_int from ${table()} where "id" = $id;"""
-        val updatedVal = db.getScalarInt(sql, null)
-        Assert.assertTrue(updatedVal == 987)
-    }
-
-    @Test
-    override fun can_get() {
-        val db = db()
-        // 1. add
-        val id = db.insert(insertSqlRaw())
-        Assert.assertTrue(id > 0)
-
-        // 2. update
-        val sqlGet = """select * from ${table()} where "id" = $id;"""
-        val item = db.mapOne(sqlGet, null) { rec ->
-            val longid = rec.getLong("id")
-            SampleEntityImmutable(
-                longid,
-                rec.getString("test_string"),
-                rec.getString("test_string_enc"),
-                rec.getBool("test_bool"),
-                rec.getShort("test_short"),
-                rec.getInt("test_int"),
-                rec.getLong("test_long"),
-                rec.getFloat("test_float"),
-                rec.getDouble("test_double"),
-                StatusEnum.convert(rec.getInt("test_enum")) as StatusEnum,
-                rec.getLocalDate("test_localdate"),
-                rec.getLocalTime("test_localtime"),
-                rec.getLocalDateTime("test_localdatetime"),
-                rec.getZonedDateTime("test_zoneddatetime"),
-                rec.getUUID("test_uuid"),
-                rec.getUPID("test_uniqueid"),
-                Address("", "", "", 1, "", true)
-            )
-        }
-        Assert.assertNotNull(item)
-    }
-
-    @Test
-    override fun can_delete() {
-        val db = db()
-        // 1. add
-        val id = db.insert(insertSqlRaw())
-        Assert.assertTrue(id > 0)
-
-        // 2. get count
-        val sqlCount = "select count(*) from ${table()} where id = $id;"
-        val countBefore = db.getScalarInt(sqlCount)
-        Assert.assertTrue(countBefore == 1)
-
-        // 3. delete
-        val sql = "delete from ${table()} where id = $id;"
-        db.execute(sql)
-
-        // 4. get count after delete
-        val countAfter = db.getScalarInt(sqlCount)
-        Assert.assertTrue(countAfter == 0)
     }
 
 
@@ -185,8 +101,9 @@ class Db_Postgres_Tests : Db_Common_Tests(), DbTestCases {
 
 
     override fun table():String = """"unit_tests"."sample_entity""""
+    override fun encode(column:String):String = "\"${column}\""
 
-    private val insertSqlPrep = """
+    override fun insertSqlPrep():String = """
             INSERT INTO "unit_tests"."sample_entity"
             (
                 "test_string"      , "test_string_enc"  , "test_bool",
