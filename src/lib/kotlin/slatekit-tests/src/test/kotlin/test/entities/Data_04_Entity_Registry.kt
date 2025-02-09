@@ -16,7 +16,6 @@ import org.junit.Before
 import org.junit.Test
 import kiit.common.data.*
 import kiit.entities.*
-import test.entities.repo.UserService
 import test.setup.User5
 
 class Data_04_Entity_Registry {

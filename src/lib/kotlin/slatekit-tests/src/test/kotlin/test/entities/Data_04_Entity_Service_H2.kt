@@ -19,8 +19,6 @@ import kiit.common.data.*
 import kiit.data.sql.vendors.ifNotExists
 import kiit.db.Db
 import kiit.entities.*
-import test.entities.repo.Entity_MySql_Service_Tests
-import test.entities.repo.UserService
 import test.setup.Group
 import test.setup.Member
 import test.setup.MyEncryptor
