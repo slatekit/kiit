@@ -10,7 +10,7 @@ about: A Kotlin utility library, tool-kit and server backend.
 
  </kiit_header>
  */
-package test.db
+package test.data.db
 
 import org.junit.Assert
 import org.junit.Test
@@ -23,7 +23,7 @@ import kiit.common.data.Connections.Companion.named
 /**
  * Created by kishorereddy on 6/4/17.
  */
-class DbLookupTests {
+class Db_Setup_Tests {
 
     fun buildDefaultConnection(name: String = "db1"): DbConString =
         DbConString(

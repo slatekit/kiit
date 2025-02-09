@@ -7,11 +7,11 @@ import kiit.data.Mapper
 
 /**
  * Used to build the insert statements for a model using a mapper
- * @param info: Meta info to know about the table (name, primary key ) and model id
+ * @param meta: Meta info to know about the table (name, primary key ) and model id
  * @param mapper: Mapper that converts a model T into its values for a table
  */
 open class Insert<TId, T>(val dialect: Dialect,
-                          val info: Meta<TId, T>,
+                          val meta: Meta<TId, T>,
                           val mapper: Mapper<TId, T>) where TId : kotlin.Comparable<TId>, T : Any {
 
     /**
@@ -25,7 +25,8 @@ open class Insert<TId, T>(val dialect: Dialect,
      *          )
      */
     open fun build(item:T, mode: BuildMode = BuildMode.Prep): Command {
-        val start = "insert into " + dialect.encode(info.name)
+
+        val start = "insert into " + dialect.encode(meta.table.schema, meta.table.name)
         val values = mapper.encode(item, DataAction.Create, null)
         val cols = "(" + values.joinToString(",", transform = { it.name }) + ") "
         return when(mode){

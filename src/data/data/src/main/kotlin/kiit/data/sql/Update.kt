@@ -44,5 +44,5 @@ open class Update<TId, T>(val dialect: Dialect, val meta: Meta<TId, T>, val mapp
     }
 
 
-    fun prefix(): String = "update " + dialect.encode(meta.name)
+    fun prefix(): String = "update " + dialect.encode(meta.table.schema, meta.table.name)
 }

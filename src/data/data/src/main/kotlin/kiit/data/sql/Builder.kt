@@ -6,6 +6,7 @@ import kiit.query.*
 
 interface Builder {
     val dialect: Dialect
+    val schema: String
     val table: String
     val types: (String) -> DataType
     val columns: ((String) -> String)?

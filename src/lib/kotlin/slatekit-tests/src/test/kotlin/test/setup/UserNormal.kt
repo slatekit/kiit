@@ -129,6 +129,9 @@ data class User5(
         @property:Id()
         override val id: Long = 0,
 
+        @property:Column(length = 50, required = true)
+        val userId: String = Random.uuid(),
+
         @property:Column(length = 100, required = true)
         val email: String = "",
 
@@ -141,20 +144,17 @@ data class User5(
         @property:Column(required = true)
         val salary: Double = 20.5,
 
-        @property:Column(required = true)
+        @property:Column(name = "createdat", required = true)
         val createdAt: DateTime = DateTime.now(),
 
-        @property:Column(required = true)
+        @property:Column(name = "createdby", required = true)
         val createdBy: Long = 0,
 
-        @property:Column(required = true)
+        @property:Column(name = "updatedat", required = true)
         val updatedAt: DateTime = DateTime.now(),
 
-        @property:Column(required = true)
-        val updatedBy: Long = 0,
-
-        @property:Column(length = 50, required = true)
-        val uniqueId: String = Random.uuid()
+        @property:Column(name = "updatedby", required = true)
+        val updatedBy: Long = 0
 ) : EntityWithId<Long>, EntityUpdatable<Long, User5> {
 
     override fun isPersisted(): Boolean = id > 0

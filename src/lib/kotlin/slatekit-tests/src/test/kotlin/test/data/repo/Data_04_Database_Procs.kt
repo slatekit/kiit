@@ -1,17 +1,11 @@
-package test.entities
+package test.data.repo
 
 import org.junit.Assert
 import org.junit.Test
-import org.threeten.bp.LocalDate
-import org.threeten.bp.LocalDateTime
-import org.threeten.bp.LocalTime
-import kiit.common.DateTimes
 import kiit.common.data.*
-import kiit.common.ids.ULIDs
-import kiit.db.Db
 import org.junit.Ignore
+import test.entities.EntitySetup
 import test.setup.TestSupport
-import java.util.*
 
 /**
  * DONE:

@@ -1,4 +1,4 @@
-package test.entities
+package test.data.mapper
 
 import org.junit.Assert
 import org.junit.Test
@@ -10,8 +10,11 @@ import kiit.data.core.Table
 import kiit.entities.Schema
 import kiit.entities.mapper.EntityEncoder
 import kiit.entities.mapper.EntitySettings
-import kiit.meta.models.Model
 import kiit.meta.models.ModelUtils
+import test.entities.EntitySetup
+import test.entities.SampleEdgeCases
+import test.entities.SampleEntityImmutable
+import test.entities.SampleEntityMutable
 
 
 class Data_02_Mappers_Encode {
@@ -43,7 +46,9 @@ class Data_02_Mappers_Encode {
     @Test
     fun can_encode_model_immutable() {
         val model = Schema.load(SampleEntityImmutable::class)
-        val mapper = EntityEncoder<Long, SampleEntityImmutable>(model, EntitySetup.meta, settings = EntitySettings(false), encryptor = EntitySetup.enc)
+        val mapper = EntityEncoder<Long, SampleEntityImmutable>(model,
+            EntitySetup.meta, settings = EntitySettings(false), encryptor = EntitySetup.enc
+        )
         val sample = EntitySetup.sampleImmutable()
         val values = mapper.encode(sample, DataAction.Create, EntitySetup.enc)
         values.forEachIndexed { ndx, v ->

@@ -11,13 +11,14 @@ class Builders {
      * Delete Query builder
      */
     class Delete(override val dialect: Dialect,
+                 override val schema: String,
                  override val table: String,
                  override val types: (String) -> DataType,
                  override val columns: ((String) -> String)? = null
     ) : kiit.query.Delete(), Builder  {
 
         override fun build(mode: BuildMode): Command {
-            val tableName =  dialect.encode(source ?: table)
+            val tableName =  dialect.encode(schema,source ?: table)
             val buffer = StringBuilder()
             val values = mutableListOf<Value>()
 
@@ -36,12 +37,13 @@ class Builders {
 
 
     class Select(override val dialect: Dialect,
+                 override val schema: String,
                  override val table: String,
                  override val types: (String) -> DataType,
                  override val columns: ((String) -> String)? = null
     ) : kiit.query.Select(), Builder {
         override fun build(mode: BuildMode): Command {
-            val tableName =  dialect.encode(source ?: table)
+            val tableName =  dialect.encode(schema,source ?: table)
             val buffer = StringBuilder()
             val values = mutableListOf<Value>()
 
@@ -73,12 +75,13 @@ class Builders {
 
 
     class Patch(override val dialect: Dialect,
+                override val schema: String,
                 override val table: String,
                 override val types: (String) -> DataType,
                 override val columns: ((String) -> String)? = null) : kiit.query.Update(), Builder {
 
         override fun build(mode: BuildMode): Command {
-            val tableName =  dialect.encode(source ?: table)
+            val tableName =  dialect.encode(schema,source ?: table)
             val buffer = StringBuilder()
             val values = mutableListOf<Value>()
 

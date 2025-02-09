@@ -1,3 +1,17 @@
+insert into `sample_entity` ( 
+                    `test_string`,`test_string_enc`,`test_bool`,
+                    `test_short`,`test_int`,`test_long`,`test_float`,`test_double`,`test_enum`,
+                    `test_localdate`,`test_localtime`,`test_localdatetime`,`test_zoneddatetime`,
+                    `test_uuid`,`test_uniqueId`,
+                    `test_object_addr`,`test_object_city`,`test_object_state`,`test_object_country`,`test_object_zip`,`test_object_ispobox`
+            )  VALUES (?, ?, ?,
+                    ?, ?, ?, ?, ?, ?,
+                    ?, ?, ?, ?,
+                    ?, ?,
+                    ?, ?, ?, ?, ?, ?
+            );
+
+
 create table `sample_entity` ( 
 `id` BIGINT NOT NULL AUTO_INCREMENT PRIMARY KEY,  
 `test_string` NVARCHAR(30) NOT NULL,  
@@ -22,17 +36,17 @@ create table `sample_entity` (
 `test_object_zip` NVARCHAR(5) NOT NULL,  
 `test_object_ispobox` BIT NOT NULL );
 
-create table IF NOT EXISTS `User5` (
-`id` BIGINT NOT NULL AUTO_INCREMENT PRIMARY KEY,
-`email` NVARCHAR(100) NOT NULL,
-`isActive` BIT NOT NULL,
-`level` INTEGER NOT NULL,
-`salary` DOUBLE NOT NULL,
-`createdat` DATETIME NOT NULL,
-`createdby` BIGINT NOT NULL,
-`updatedat` DATETIME NOT NULL,
-`updatedby` BIGINT NOT NULL,
-`uniqueid` NVARCHAR(50) NOT NULL
+create table IF NOT EXISTS `user` (
+`id`        BIGINT        NOT NULL AUTO_INCREMENT PRIMARY KEY,
+`userId`    NVARCHAR(50)  NOT NULL,
+`email`     NVARCHAR(100) NOT NULL,
+`isActive`  BIT           NOT NULL,
+`level`     INTEGER       NOT NULL,
+`salary`    DOUBLE        NOT NULL,
+`createdat` DATETIME      NOT NULL,
+`createdby` BIGINT        NOT NULL,
+`updatedat` DATETIME      NOT NULL,
+`updatedby` BIGINT        NOT NULL
 );
 
 create table IF NOT EXISTS `Member` (

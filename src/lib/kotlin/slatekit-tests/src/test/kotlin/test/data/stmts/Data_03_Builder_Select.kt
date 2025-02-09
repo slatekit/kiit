@@ -5,13 +5,11 @@
  * org: www.codehelix.co
  * author: Kishore Reddy
  * copyright: 2016 CodeHelix Solutions Inc.
- * license: refer to website and/or github
- * 
- * 
+ * license: refer to website and/or github 
  *  </kiit_header>
  */
 
-package test.entities
+package test.data.stmts
 
 import org.junit.Assert
 import org.junit.Before
@@ -21,12 +19,9 @@ import kiit.common.data.BuildMode
 import kiit.data.sql.Builders
 import kiit.data.sql.vendors.MySqlDialect
 import kiit.entities.*
-import kiit.query.Op
-import kiit.query.Delete
-import kiit.query.Order
-import test.setup.User5
+import kiit.query.*
 
-class Data_03_Builder_Delete {
+class Data_03_Builder_Select {
 
     private lateinit var entities:Entities
     private val lookup = mapOf(
@@ -36,7 +31,8 @@ class Data_03_Builder_Delete {
             "level" to DataType.DTInt,
             "category" to DataType.DTString
     )
-    private fun builder(): Delete = Builders.Delete(MySqlDialect,"user", { name -> lookup[name]!! }, { name -> name })
+
+    private fun builder(): Select = Builders.Select(MySqlDialect,"unit_tests", "user", { name -> lookup[name]!! }, { name -> name })
 
     @Before
     fun setup(){
@@ -48,16 +44,26 @@ class Data_03_Builder_Delete {
     @Test
     fun can_build_empty(){
         val cmd = builder().build(BuildMode.Sql)
-        Assert.assertEquals("delete from `user`;", cmd.sql)
+        Assert.assertEquals("select * from `user`;", cmd.sql)
         Assert.assertEquals(0, cmd.values.size)
+    }
+
+
+    @Test fun can_build_count() {
+        val builder = builder().agg(MySqlDialect.aggr.count, Const.All).where("id", Op.Eq, 2L)
+        ensure(builder = builder,
+                expectSqlRaw  = "select count(*) from `user` where `id` = 2;",
+                expectSqlPrep = "select count(*) from `user` where `id` = ?;",
+                expectPairs = listOf(Value("email", DataType.DTLong, 2L))
+        )
     }
 
 
     @Test fun can_build_filter_1_of_id() {
         val builder = builder().where("id", Op.Eq, 2L)
         ensure(builder = builder,
-                expectSqlRaw  = "delete from `user` where `id` = 2;",
-                expectSqlPrep = "delete from `user` where `id` = ?;",
+                expectSqlRaw  = "select * from `user` where `id` = 2;",
+                expectSqlPrep = "select * from `user` where `id` = ?;",
                 expectPairs = listOf(Value("email", DataType.DTLong, 2L))
         )
     }
@@ -66,8 +72,8 @@ class Data_03_Builder_Delete {
     @Test fun can_build_filter_1_of_type_string() {
         val builder = builder().where("email", Op.Eq, "user1@abc.com")
         ensure(builder = builder,
-                expectSqlRaw  = "delete from `user` where `email` = 'user1@abc.com';",
-                expectSqlPrep = "delete from `user` where `email` = ?;",
+                expectSqlRaw  = "select * from `user` where `email` = 'user1@abc.com';",
+                expectSqlPrep = "select * from `user` where `email` = ?;",
                 expectPairs = listOf(Value("email", DataType.DTString, "user1@abc.com"))
         )
     }
@@ -76,8 +82,8 @@ class Data_03_Builder_Delete {
     @Test fun can_build_filter_1_of_type_int() {
         val builder = builder().where("level", Op.Gte, 2)
         ensure(builder = builder,
-                expectSqlRaw  = "delete from `user` where `level` >= 2;",
-                expectSqlPrep = "delete from `user` where `level` >= ?;",
+                expectSqlRaw  = "select * from `user` where `level` >= 2;",
+                expectSqlPrep = "select * from `user` where `level` >= ?;",
                 expectPairs = listOf(Value("email", DataType.DTInt, 2))
         )
     }
@@ -86,8 +92,8 @@ class Data_03_Builder_Delete {
     @Test fun can_build_filter_1_of_type_bool() {
         val builder = builder().where("active", Op.IsNot, false)
         ensure(builder = builder,
-                expectSqlRaw  = "delete from `user` where `active` is not 0;",
-                expectSqlPrep = "delete from `user` where `active` is not ?;",
+                expectSqlRaw  = "select * from `user` where `active` is not 0;",
+                expectSqlPrep = "select * from `user` where `active` is not ?;",
                 expectPairs = listOf(Value("email", DataType.DTBool, false))
         )
     }
@@ -100,8 +106,8 @@ class Data_03_Builder_Delete {
                 .and("level", Op.Gte, 2)
 
         ensure(builder = builder,
-                expectSqlRaw  = "delete from `user` where ((`active` is not 0 and `category` = 'action') and `level` >= 2);",
-                expectSqlPrep = "delete from `user` where ((`active` is not ? and `category` = ?) and `level` >= ?);",
+                expectSqlRaw  = "select * from `user` where ((`active` is not 0 and `category` = 'action') and `level` >= 2);",
+                expectSqlPrep = "select * from `user` where ((`active` is not ? and `category` = ?) and `level` >= ?);",
                 expectPairs = listOf(
                         Value("active"  , DataType.DTBool, false),
                         Value("category", DataType.DTString, "action"),
@@ -119,8 +125,8 @@ class Data_03_Builder_Delete {
                 .limit(2)
 
         ensure(builder = builder,
-                expectSqlRaw  = "delete from `users` where `level` = 1 order by `id` desc limit 2;",
-                expectSqlPrep = "delete from `users` where `level` = ? order by `id` desc limit ?;",
+                expectSqlRaw  = "select * from `users` where `level` = 1 order by `id` desc limit 2;",
+                expectSqlPrep = "select * from `users` where `level` = ? order by `id` desc limit ?;",
                 expectPairs = listOf(
                         Value("level", DataType.DTInt, 1),
                         Value("", DataType.DTInt, 2)
@@ -132,8 +138,8 @@ class Data_03_Builder_Delete {
     @Test fun can_build_filter_in() {
         val builder = builder().where("id", Op.In, listOf(1L, 2L, 3L))
         ensure(builder = builder,
-                expectSqlRaw  = "delete from `user` where `id` in (1,2,3);",
-                expectSqlPrep = "delete from `user` where `id` in (?,?,?);",
+                expectSqlRaw  = "select * from `user` where `id` in (1,2,3);",
+                expectSqlPrep = "select * from `user` where `id` in (?,?,?);",
                 expectPairs = listOf(
                         Value("id", DataType.DTLong, 1L),
                         Value("id", DataType.DTLong, 2L),
@@ -143,7 +149,7 @@ class Data_03_Builder_Delete {
     }
 
 
-    fun ensure(builder:Delete, expectSqlRaw:String, expectSqlPrep:String, expectPairs:Values){
+    fun ensure(builder:Select, expectSqlRaw:String, expectSqlPrep:String, expectPairs:Values){
         val cmd1 = builder.build(BuildMode.Sql)
         val cmd2 = builder.build(BuildMode.Prep)
         Assert.assertEquals(expectSqlRaw, cmd1.sql)

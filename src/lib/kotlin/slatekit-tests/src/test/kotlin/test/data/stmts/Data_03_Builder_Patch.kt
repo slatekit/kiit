@@ -9,7 +9,7 @@
  *  </kiit_header>
  */
 
-package test.entities
+package test.data.stmts
 
 import org.junit.Assert
 import org.junit.Before
@@ -20,7 +20,6 @@ import kiit.data.sql.Builders
 import kiit.data.sql.vendors.MySqlDialect
 import kiit.entities.*
 import kiit.query.*
-import test.setup.User5
 
 class Data_03_Builder_Patch {
 
@@ -33,7 +32,7 @@ class Data_03_Builder_Patch {
             "level" to DataType.DTInt,
             "category" to DataType.DTString
     )
-    private fun builder(): Update = Builders.Patch(MySqlDialect,"user", { name -> lookup[name]!! }, { name -> name })
+    private fun builder(): Update = Builders.Patch(MySqlDialect,"unit_tests", "user", { name -> lookup[name]!! }, { name -> name })
 
 
     @Before

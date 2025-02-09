@@ -31,7 +31,7 @@ import kiit.query.where
 import test.setup.MyEncryptor
 
 
-class Data_04_Entity_Service_Sqlite : Data_04_Entity_Service_MySql() {
+class Data_04_Entity_Service_Sqlite : Entity_MySql_Service_Tests() {
 
 
     @Before

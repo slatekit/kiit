@@ -13,7 +13,6 @@
 
 package test.entities
 
-import org.junit.Assert
 import org.junit.Before
 import org.junit.Test
 import kiit.common.data.*
@@ -26,7 +25,7 @@ import test.setup.MyEncryptor
 import test.setup.User5
 
 
-class Data_04_Entity_Service_H2 : Data_04_Entity_Service_MySql() {
+class Data_04_Entity_Service_H2 : Entity_MySql_Service_Tests() {
 
 
     @Before

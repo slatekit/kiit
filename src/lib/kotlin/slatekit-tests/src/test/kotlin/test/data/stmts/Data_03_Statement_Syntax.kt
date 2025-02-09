@@ -1,22 +1,17 @@
-package test.entities
+package test.data.stmts
 
 import org.junit.Assert
 import org.junit.Test
-import kiit.data.syntax.Types
 import kiit.common.data.BuildMode
 import kiit.data.sql.Insert
 import kiit.data.sql.Update
 import kiit.data.sql.vendors.MySqlDialect
-import kiit.data.sql.vendors.MySqlProvider
 import kiit.entities.Schema
 import kiit.entities.mapper.EntityMapper
 import kiit.entities.mapper.EntitySettings
-import kiit.meta.models.Model
-import kiit.migrations.SqlBuilder
 import kiit.migrations.SqlBuilderDDL
-import test.setup.Group
-import test.setup.Member
-import test.setup.User5
+import test.entities.EntitySetup
+import test.entities.SampleEntityImmutable
 
 class Data_03_Statement_Syntax {
 
@@ -48,7 +43,8 @@ class Data_03_Statement_Syntax {
     @Test
     fun can_build_update() {
         val model = Schema.load(SampleEntityImmutable::class)
-        val mapper = EntityMapper<Long, SampleEntityImmutable>(model, EntitySetup.meta, Long::class, SampleEntityImmutable::class, EntitySettings(false))
+        val mapper = EntityMapper<Long, SampleEntityImmutable>(model,
+            EntitySetup.meta, Long::class, SampleEntityImmutable::class, EntitySettings(false))
         val stmt = Update<Long, SampleEntityImmutable>(MySqlDialect, EntitySetup.meta, mapper)
         val sample = EntitySetup.sampleImmutable()
         val actual = stmt.build(sample, BuildMode.Sql).sql

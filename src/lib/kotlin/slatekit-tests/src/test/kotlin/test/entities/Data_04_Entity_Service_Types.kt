@@ -51,7 +51,7 @@ class Data_04_Entity_Service_Types : TestSupport {
     @Test fun can_use_all_types() {
         runBlocking {
             val entities = EntitySetup.realDb()
-            entities.register<Long, SampleEntityImmutable>(LongId { s -> s.id }, "sample_entity", Vendor.MySql) { repo -> EntityService(repo) }
+            entities.register<Long, SampleEntityImmutable>(LongId { s -> s.id }, "sample_entity", "", Vendor.MySql) { repo -> EntityService(repo) }
 
             val svc = entities.getService<Long, SampleEntityImmutable>()
             val id = svc.create(SampleEntityImmutable(
@@ -111,7 +111,7 @@ class Data_04_Entity_Service_Types : TestSupport {
     @Test fun can_query_use_sub_object() {
         runBlocking {
             val entities = EntitySetup.realDb()
-            entities.register<Long, SampleEntityImmutable>(LongId { s -> s.id }, "sample_entity", Vendor.MySql) { repo -> EntityService(repo) }
+            entities.register<Long, SampleEntityImmutable>(LongId { s -> s.id }, "sample_entity", null, Vendor.MySql) { repo -> EntityService(repo) }
 
             val svc = entities.getService<Long, SampleEntityImmutable>()
             val zip = "10208"

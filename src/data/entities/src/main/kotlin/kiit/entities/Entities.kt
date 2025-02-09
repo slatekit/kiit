@@ -30,32 +30,34 @@ import kiit.meta.models.Model
 /**
  *  A registry for all the entities and their corresponding services, repositories, database
  *  types, and connection keys.
+ *  val entities = Entities(...)
+ *  entities.register<Long, User5>(EntityLongId(), vendor = Vendor.MySql) { repo -> UserService(repo) }
  *
- *   // Case 1: In-memory
- *   Entities.Register[Invitation](sqlRepo: false)
+ *  // Case 1: In-memory
+ *  entities.register<Long, Invitation>(EntityLongId(), vendor = Vendor.MySql)
  *
- *   // Case 2: In-memory, with custom service
- *   Entities.register[Invitation](sqlRepo: false, serviceType: typeof(InvitationService));
+ *  // Case 2: In-memory, with custom service
+ *  entities.register<Long, Invitation>(EntityLongId(), vendor = Vendor.MySql, serviceType: typeof(InvitationService));
  *
- *   // Case 3: Sql-repo
- *   Entities.register[Invitation](sqlRepo: true)
+ *  // Case 3: Sql-repo
+ *  entities.register<Long, Invitation>(EntityLongId(), sqlRepo: true)
  *
- *   // Case 4: Sql-repo, with custom service
- *   Entities.register[Invitation](sqlRepo: true, serviceType: typeof(InvitationService));
+ *  // Case 4: Sql-repo, with custom service
+ *  entities.register<Long, Invitation>(EntityLongId(), vendor = Vendor.MySql, serviceType: typeof(InvitationService));
  *
- *   // Case 5: Custom repository
- *   Entities.register[Invitation](sqlRepo: true, repo: InvitationRepository());
+ *  // Case 5: Custom repository
+ *  entities.register<Long, Invitation>(EntityLongId(), vendor = Vendor.MySql, repo: InvitationRepository());
  *
- *   // Case 6: Custom repo with provider type specified
- *   Entities.register[Invitation](sqlRepo: true, repo: InvitationRepository(),
- *     vendor: "mysql");
+ *  // Case 6: Custom repo with provider type specified
+ *  entities.register<Long, Invitation>(EntityLongId(), vendor = Vendor.MySql, repo: InvitationRepository(),
+ *    vendor: "mysql");
  *
- *   // Case 7: Full customization
- *   Entities.register[Invitation](sqlRepo: true, serviceType: typeof(InvitationService),
- *     repo: InvitationRepository(), vendor: "mysql");
+ *  // Case 7: Full customization
+ *  entities.register<Long, Invitation>(EntityLongId(), vendor = Vendor.MySql, serviceType: typeof(InvitationService),
+ *    repo: InvitationRepository(), vendor: "mysql");
  *
- *   // Case 8: Full customization
- *   Entities.register[Invitation](sqlRepo: true, serviceType: typeof(InvitationService),
+ *  // Case 8: Full customization
+ *  entities.register<Long, Invitation>(EntityLongId(), vendor = Vendor.MySql, serviceType: typeof(InvitationService),
  *     repo: InvitationRepository(), mapper: null, vendor: "mysql");
  *
  */
@@ -76,6 +78,7 @@ open class Entities(
      * which contains all the relevant info about an Entity, its id,
      * and its corresponding mapper, repo, service, etc.
      */
+    /*
     inline fun <reified TId, reified T> register(idOps:kiit.data.core.Id<TId, T>,
                                                  table: String? = null,
                                                  vendor: Vendor = Vendor.MySql,
@@ -88,10 +91,11 @@ open class Entities(
 
         // 2. Table info ( name of table supplied or use class name )
         val tableChar = when(vendor){
-            Vendor.MySql -> MySqlDialect.encodeChar
-            Vendor.H2 -> H2Dialect.encodeChar
-            Vendor.SqLite -> SqliteDialect.encodeChar
-            Vendor.Memory -> MySqlDialect.encodeChar
+            Vendor.Postgres  -> PostgresDialect.encodeChar
+            Vendor.MySql     -> MySqlDialect.encodeChar
+            Vendor.SqLite    -> SqliteDialect.encodeChar
+            Vendor.H2        -> H2Dialect.encodeChar
+            Vendor.Memory    -> MySqlDialect.encodeChar
         }
         val tableName = table ?: enType.simpleName!!
         val tableKey = PKey(idName, DataType.fromJava(idTypeJ))
@@ -108,10 +112,11 @@ open class Entities(
         }
         val entityMapper = EntityMapper<TId, T>(entityModel, entityMeta, idType, enType, EntitySettings(true), encoders)
         val provider = when(vendor){
-            Vendor.MySql -> MySqlProvider(entityMeta, entityMapper)
-            Vendor.H2 -> H2Provider(entityMeta, entityMapper)
-            Vendor.SqLite -> SqliteProvider(entityMeta, entityMapper)
-            Vendor.Memory -> MySqlProvider(entityMeta, entityMapper)
+            Vendor.Postgres -> PostgresProvider(entityMeta, entityMapper)
+            Vendor.MySql    -> MySqlProvider(entityMeta, entityMapper)
+            Vendor.SqLite   -> SqliteProvider(entityMeta, entityMapper)
+            Vendor.H2       -> H2Provider(entityMeta, entityMapper)
+            Vendor.Memory   -> MySqlProvider(entityMeta, entityMapper)
         }
         val entityRepo = EntityRepo<TId, T>(getDb(), entityMeta, entityMapper, provider)
         val entityService = builder(entityRepo)
@@ -120,6 +125,75 @@ open class Entities(
         val entityServiceType = entityService.kClass
         val entityContext = EntityContext(enType, idType, entityService, entityRepo, entityMapper, vendor, entityModel, "", "")
         register(entityContext)
+    }
+    */
+
+    /**
+     * Register the entity using a pre-built [EntityContext] object
+     * which contains all the relevant info about an Entity, its id,
+     * and its corresponding mapper, repo, service, etc.
+     */
+    inline fun <reified TId, reified T> register(idOps:kiit.data.core.Id<TId, T>,
+                                                 table: String? = null, schema: String? = null,
+                                                 vendor: Vendor = Vendor.MySql,
+                                                 builder: (EntityRepo<TId, T>) -> EntityService<TId, T>) where TId : Comparable<TId>, T : Entity<TId> {
+        // 1. Id/Model types e.g. Long / User
+        val idName = idOps.name()
+        val idType = TId::class
+        val enType = T::class
+
+        val entityRepo:EntityRepo<TId, T> = repo(idOps, idType, enType, table, schema, vendor)
+        val entityMapper:EntityMapper<TId, T> = entityRepo.mapper as EntityMapper<TId, T>
+        val entityModel:Model = entityMapper.model
+        val entityService = builder(entityRepo)
+
+        // 5. Context has all relevant info
+        val entityServiceType = entityService.kClass
+        val entityContext = EntityContext(enType, idType, entityService, entityRepo, entityMapper, vendor, entityModel, "", "")
+        register(entityContext)
+    }
+
+
+    fun <TId, T> repo(idOps:kiit.data.core.Id<TId, T>, idType:KClass<TId>, enType:KClass<T>,
+                                             table: String? = null, schema: String? = null,
+                                             vendor: Vendor = Vendor.MySql) : EntityRepo<TId, T>
+        where TId : Comparable<TId>, T : Entity<TId> {
+
+        // 1. Id/Model types e.g. Long / User
+        val idName = idOps.name()
+        val idTypeJ = idType.javaPrimitiveType!!
+
+        // 2. Table info ( name of table supplied or use class name )
+        val tableChar = when(vendor){
+            Vendor.Postgres  -> PostgresDialect.encodeChar
+            Vendor.MySql     -> MySqlDialect.encodeChar
+            Vendor.SqLite    -> SqliteDialect.encodeChar
+            Vendor.H2        -> H2Dialect.encodeChar
+            Vendor.Memory    -> MySqlDialect.encodeChar
+        }
+        val tableName = table ?: enType.simpleName!!
+        val tableKey = PKey(idName, DataType.fromJava(idTypeJ))
+        val tableInfo = Table(tableName, tableChar, tableKey, schema ?: "")
+
+        // 3. Schema / Meta data
+        val entityModel = Schema.load(enType, idName, null, tableName)
+        val entityMeta = Meta<TId, T>(idOps, tableInfo)
+
+        // 4. Mapper
+        val encoders = when(vendor){
+            Vendor.SqLite -> SqliteEncoders<TId, T>(true)
+            else -> Encoders<TId, T>()
+        }
+        val entityMapper = EntityMapper<TId, T>(entityModel, entityMeta, idType, enType, EntitySettings(true), encoders)
+        val provider = when(vendor){
+            Vendor.Postgres -> PostgresProvider(entityMeta, entityMapper)
+            Vendor.MySql    -> MySqlProvider(entityMeta, entityMapper)
+            Vendor.SqLite   -> SqliteProvider(entityMeta, entityMapper)
+            Vendor.H2       -> H2Provider(entityMeta, entityMapper)
+            Vendor.Memory   -> MySqlProvider(entityMeta, entityMapper)
+        }
+        val entityRepo = EntityRepo<TId, T>(getDb(), entityMeta, entityMapper, provider)
+        return entityRepo
     }
 
     /**
