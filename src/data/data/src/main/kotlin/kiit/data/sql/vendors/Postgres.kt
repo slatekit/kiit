@@ -1,4 +1,4 @@
-package kiit.data.kiit.data.sql.vendors
+package kiit.data.sql.vendors
 
 import kiit.data.Mapper
 import kiit.data.core.Meta

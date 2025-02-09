@@ -20,8 +20,6 @@ import kiit.utils.naming.Namer
 import kiit.common.values.ListMap
 import kiit.data.core.*
 import kiit.data.encoders.Encoders
-import kiit.data.kiit.data.sql.vendors.PostgresDialect
-import kiit.data.kiit.data.sql.vendors.PostgresProvider
 import kiit.data.sql.vendors.*
 import kiit.entities.core.*
 import kiit.entities.mapper.EntityMapper
