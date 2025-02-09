@@ -5,7 +5,6 @@ import org.junit.Test
 import kiit.common.data.*
 import kiit.common.ids.ULIDs
 import kiit.db.Db
-import test.TestApp
 import test.entities.EntitySetup
 import test.entities.SampleEntityImmutable
 import test.setup.Address
@@ -28,13 +27,13 @@ import java.util.*
  * 1. Docker: at root of folder : {root}/docker-compose.yml
  * 2. MySql : See credentials in the docker file
  */
-class Db_Mysql_Tests : TestSupport {
+class Db_Mysql_Tests : TestSupport, DbTestCases {
 
     private fun db(): IDb = EntitySetup.db(Vendor.MySql)
 
 
     @Test
-    fun can_build() {
+    override fun can_build() {
         //val db0 = Db.of(TestApp::class.java, EntitySetup.dbConfPath)
         val db1 = Db.of(EntitySetup.con(Vendor.MySql))
         Assert.assertEquals(db1.driver, Vendor.MySql.driver)
@@ -42,17 +41,17 @@ class Db_Mysql_Tests : TestSupport {
 
 
     @Test
-    fun can_insert_sql_raw() {
+    override fun can_insert_sql_raw() {
         val db = db()
-        val id = db.insertGetId(Db_Fixtures.insertSqlRaw).toLong()
+        val id = db.insertGetId(insertSqlRaw).toLong()
         Assert.assertTrue(id > 0L)
     }
 
 
     @Test
-    fun can_insert_sql_prep() {
+    override fun can_insert_sql_prep() {
         val db = db()
-        val sql = Db_Fixtures.insertSqlPrep
+        val sql = insertSqlPrep
         val id = db.insertGetId(sql, listOf(
                 Value("", DataType.DTString, "abc"),
                 Value("", DataType.DTString, "abc123"),
@@ -83,10 +82,10 @@ class Db_Mysql_Tests : TestSupport {
 
 
     @Test
-    fun can_update() {
+    override fun can_update() {
         val db = db()
         // 1. add
-        val id = db.insert(Db_Fixtures.insertSqlRaw)
+        val id = db.insert(insertSqlRaw)
         Assert.assertTrue(id > 0)
 
         // 2. update
@@ -102,14 +101,14 @@ class Db_Mysql_Tests : TestSupport {
 
 
     @Test
-    fun can_get() {
+    override fun can_get() {
         val db = db()
         // 1. add
-        val id = db.insert(Db_Fixtures.insertSqlRaw)
+        val id = db.insert(insertSqlRaw)
         Assert.assertTrue(id > 0)
 
         // 2. update
-        val sqlGet = "select * from `${Db_Fixtures.table}` where `id` = $id;"
+        val sqlGet = "select * from $table where `id` = $id;"
         val item = db.mapOne(sqlGet, null) { rec ->
             val longid = rec.getLong("id")
             SampleEntityImmutable(
@@ -136,61 +135,61 @@ class Db_Mysql_Tests : TestSupport {
     }
 
     @Test
-    fun can_query_scalar_string() {
+    override fun can_query_scalar_string() {
         ensure_scalar("test_string", { db, sql -> db.getScalarString(sql, null) }, "abc")
     }
 
 
     @Test
-    fun can_query_scalar_bool() {
+    override fun can_query_scalar_bool() {
         ensure_scalar("test_bool", { db, sql -> db.getScalarBool(sql, null) }, true)
     }
 
 
     @Test
-    fun can_query_scalar_short() {
+    override fun can_query_scalar_short() {
         ensure_scalar("test_short", { db, sql -> db.getScalarShort(sql, null) }, 123)
     }
 
 
     @Test
-    fun can_query_scalar_int() {
+    override fun can_query_scalar_int() {
         ensure_scalar("test_int", { db, sql -> db.getScalarInt(sql, null) }, 123456)
     }
 
 
     @Test
-    fun can_query_scalar_long() {
+    override fun can_query_scalar_long() {
         ensure_scalar("test_long", { db, sql -> db.getScalarLong(sql, null) }, 123456789)
     }
 
 
     @Test
-    fun can_query_scalar_float() {
+    override fun can_query_scalar_float() {
         ensure_scalar("test_float", { db, sql -> db.getScalarFloat(sql, null) }, 123.45f)
     }
 
 
     @Test
-    fun can_query_scalar_double() {
+    override fun can_query_scalar_double() {
         ensure_scalar("test_double", { db, sql -> db.getScalarDouble(sql, null) }, 123456.789)
     }
 
 
     @Test
-    fun can_query_scalar_localdate() {
+    override fun can_query_scalar_localdate() {
         ensure_scalar("test_localdate", { db, sql -> db.getScalarLocalDate(sql, null) }, Db_Fixtures.localDate)
     }
 
 
     @Test
-    fun can_query_scalar_localtime() {
+    override fun can_query_scalar_localtime() {
         ensure_scalar("test_localtime", { db, sql -> db.getScalarLocalTime(sql, null) }, Db_Fixtures.localTime)
     }
 
 
     @Test
-    fun can_query_scalar_localdatetime() {
+    override fun can_query_scalar_localdatetime() {
         ensure_scalar(
             "test_localdatetime",
             { db, sql -> db.getScalarLocalDateTime(sql, null) },
@@ -200,18 +199,51 @@ class Db_Mysql_Tests : TestSupport {
 
 
     @Test
-    fun can_query_scalar_date() {
+    override fun can_query_scalar_date() {
         ensure_scalar("test_localdatetime", { db, sql -> db.getScalarZonedDateTime(sql, null) }, Db_Fixtures.zonedDateTime)
     }
 
 
-    fun <T> ensure_scalar(colName: String, callback: (IDb, String) -> T, expected: T): Unit {
+    override fun <T> ensure_scalar(colName: String, callback: (IDb, String) -> T, expected: T): Unit {
         val db = db()
-        val id = db.insert(Db_Fixtures.insertSqlRaw)
-        val sql = "select $colName from ${Db_Fixtures.table} where id = $id;"
+        val id = db.insert(insertSqlRaw)
+        val sql = "select $colName from $table where id = $id;"
         val actual = callback(db, sql)
         Assert.assertTrue(expected == actual)
     }
+
+    private val table get() = "`sample_entity`"
+
+    private val insertSqlPrep = """
+            insert into `sample_entity` ( 
+                    `test_string`,`test_string_enc`,`test_bool`,
+                    `test_short`,`test_int`,`test_long`,`test_float`,`test_double`,`test_enum`,
+                    `test_localdate`,`test_localtime`,`test_localdatetime`,`test_zoneddatetime`,
+                    `test_uuid`,`test_uniqueId`,
+                    `test_object_addr`,`test_object_city`,`test_object_state`,`test_object_country`,`test_object_zip`,`test_object_isPOBox`
+            )  VALUES (?, ?, ?,
+                    ?, ?, ?, ?, ?, ?,
+                    ?, ?, ?, ?,
+                    ?, ?,
+                    ?, ?, ?, ?, ?, ?
+            );
+        """
+
+    private val insertSqlRaw = """
+            insert into `sample_entity` ( 
+                    `test_string`    , `test_string_enc`, `test_bool`,
+                    `test_short`     ,`test_int`        , `test_long`, 
+                    `test_float`     ,`test_double`     , `test_enum`,
+                    `test_localdate` ,`test_localtime`  , `test_localdatetime`, `test_zoneddatetime`,
+                    `test_uuid`      ,`test_uniqueId`,
+                    `test_object_addr`,`test_object_city`,`test_object_state`,`test_object_country`,`test_object_zip`,`test_object_isPOBox`
+            )  VALUES ('abc','abc123',1,
+                    123, 123456, 123456789,123.45, 123456.789, 1,
+                    '2021-02-01','09:30:45','2021-02-01 09:30:45','2021-02-01 09:30:45',
+                    '497dea41-8658-4bb7-902c-361014799214','usa:314fef51-43a7-496c-be24-520e73758836',
+                    'street 1','city 1','state 1',1,'12345',1
+            );
+        """
 
     companion object {
 

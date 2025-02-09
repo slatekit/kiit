@@ -6,7 +6,7 @@ create table "unit_tests"."sample_entity" (
 "id"                  BIGSERIAL      NOT NULL PRIMARY KEY,  
 "test_string"         VARCHAR(30)    NOT NULL,  
 "test_string_enc"     VARCHAR(100)   NOT NULL,  
-"test_bool"           BIT            NOT NULL,  
+"test_bool"           BOOLEAN        NOT NULL,  
 "test_short"          SMALLINT       NOT NULL,  
 "test_int"            INTEGER        NOT NULL,  
 "test_long"           BIGINT         NOT NULL,  
@@ -24,7 +24,7 @@ create table "unit_tests"."sample_entity" (
 "test_object_state"   VARCHAR(20)    NOT NULL,  
 "test_object_country" INTEGER        NOT NULL,  
 "test_object_zip"     VARCHAR(5)     NOT NULL,  
-"test_object_ispobox" BIT            NOT NULL 
+"test_object_ispobox" BOOLEAN        NOT NULL 
 );
 
 
