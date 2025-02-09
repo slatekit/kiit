@@ -1,3 +1,17 @@
+insert into `sample_entity` ( 
+                    `test_string`,`test_string_enc`,`test_bool`,
+                    `test_short`,`test_int`,`test_long`,`test_float`,`test_double`,`test_enum`,
+                    `test_localdate`,`test_localtime`,`test_localdatetime`,`test_zoneddatetime`,
+                    `test_uuid`,`test_uniqueId`,
+                    `test_object_addr`,`test_object_city`,`test_object_state`,`test_object_country`,`test_object_zip`,`test_object_ispobox`
+            )  VALUES (?, ?, ?,
+                    ?, ?, ?, ?, ?, ?,
+                    ?, ?, ?, ?,
+                    ?, ?,
+                    ?, ?, ?, ?, ?, ?
+            );
+
+            
 create table `sample_entity` ( 
 `id` BIGINT NOT NULL AUTO_INCREMENT PRIMARY KEY,  
 `test_string` NVARCHAR(30) NOT NULL,  

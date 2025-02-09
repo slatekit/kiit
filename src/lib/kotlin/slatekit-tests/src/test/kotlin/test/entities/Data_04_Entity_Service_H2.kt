@@ -19,7 +19,7 @@ import kiit.common.data.*
 import kiit.data.sql.vendors.ifNotExists
 import kiit.db.Db
 import kiit.entities.*
-import test.entities.mysql.Data_04_Entity_Service_MySql
+import test.entities.mysql.Entity_MySql_Service_Tests
 import test.entities.mysql.UserService
 import test.setup.Group
 import test.setup.Member
@@ -27,7 +27,7 @@ import test.setup.MyEncryptor
 import test.setup.User5
 
 
-class Data_04_Entity_Service_H2 : Data_04_Entity_Service_MySql() {
+class Data_04_Entity_Service_H2 : Entity_MySql_Service_Tests() {
 
 
     @Before

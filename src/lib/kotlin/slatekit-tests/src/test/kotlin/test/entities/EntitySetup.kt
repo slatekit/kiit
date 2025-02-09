@@ -14,6 +14,8 @@ import kiit.db.Db
 import kiit.entities.Entities
 import kiit.entities.EntityService
 import test.TestApp
+import test.db.Db_Fixtures
+import test.db.Db_Mysql_Tests
 import test.setup.AppEncryptor
 import test.setup.MyEncryptor
 import test.setup.StatusEnum
@@ -32,9 +34,28 @@ object EntitySetup {
         return Db.of(con)
     }
 
+    fun db(vendor: Vendor = Vendor.MySql): IDb {
+        val con = con(vendor)
+        val db = Db.of(con)
+        if(vendor == Vendor.H2){
+            val ddl = Db_Fixtures.DDL_SAMPLE_ENTITY.replace("`sample_entity`", "IF NOT EXISTS `sample_entity`")
+            db.execute(ddl)
+        }
+        return db
+    }
+
     fun con(): DbCon {
         val con = DbConString(Vendor.MySql, "jdbc:mysql://localhost/kiit", "root", "12345qwert") //Confs.readDbCon(TestApp::class.java, dbConfPath)!!
         return con
+    }
+
+    fun con(vendor: Vendor): DbCon {
+        return when(vendor) {
+            Vendor.H2       -> DbConString(Vendor.H2, "jdbc:h2:mem:test;DB_CLOSE_DELAY=-1", "", "")
+            Vendor.MySql    -> DbConString(vendor, "jdbc:mysql://localhost/kiit", "root", "12345qwert")
+            Vendor.Postgres -> DbConString(vendor, "jdbc:postgresql://localhost/kiit", "kiit", "12345qwert")
+            else            -> DbConString(vendor, "jdbc:postgresql://localhost/kiit", "kiit", "12345qwert")
+        }
     }
 
 

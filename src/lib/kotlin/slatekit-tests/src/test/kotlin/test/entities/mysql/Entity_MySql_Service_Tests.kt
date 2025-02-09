@@ -24,6 +24,7 @@ import kiit.query.Op
 import kiit.query.set
 import kiit.query.where
 import test.entities.EntitySetup
+import test.entities.EntityTestCases
 import test.setup.Group
 import test.setup.Member
 import test.setup.User5
@@ -38,7 +39,9 @@ class UserService(repo: EntityRepo<Long, User5>)
     : EntityService<Long, User5>(repo), Ordered<Long, User5>, Counts<Long, User5>
 
 
-open class Entity_MySql_Service_Tests {
+
+
+open class Entity_MySql_Service_Tests : EntityTestCases {
 
     protected lateinit var entities: Entities
     private val sqlStatements = listOf(
@@ -81,7 +84,7 @@ open class Entity_MySql_Service_Tests {
     )
 
     @Before
-    open fun setup() {
+    override fun setup() {
 //        entities = Entities({ con -> Db(con) }, Connections(DbConString("", "", "", "")))
         entities = EntitySetup.realDb() //Vendor.MySql, "KIIT")
         val db = entities.getDb()
@@ -97,7 +100,7 @@ open class Entity_MySql_Service_Tests {
 
 
     @Test
-    open fun can_create_an_item() {
+    override fun can_create_an_item() {
         runBlocking {
             val userSvc = createSamples(false)
             val id = userSvc.create(User5(0, "test_create@abc.com", true, 35, 12.34))
@@ -112,7 +115,7 @@ open class Entity_MySql_Service_Tests {
 
 
     @Test
-    open fun can_use_model_with_nullable_fields() {
+    override fun can_use_model_with_nullable_fields() {
         runBlocking {
             val userSvc = entities.getService<Long, UserNullable>()
             val created = UserNullable()
@@ -132,7 +135,7 @@ open class Entity_MySql_Service_Tests {
 
 
     @Test
-    open fun can_update_an_item() {
+    override fun can_update_an_item() {
         val lc = kiit.common.Types.JLongClass
         val kc = Long::class.java
         val isEqual = lc == kc
@@ -152,7 +155,7 @@ open class Entity_MySql_Service_Tests {
 
 
     @Test
-    open fun can_count_any() {
+    override fun can_count_any() {
         runBlocking {
             val svc = createSamples(false)
             val any1 = svc.any()
@@ -165,7 +168,7 @@ open class Entity_MySql_Service_Tests {
 
 
     @Test
-    open fun can_count_size() {
+    override fun can_count_size() {
         runBlocking {
             val svc = createSamples(false)
             val count1 = svc.count()
@@ -181,7 +184,7 @@ open class Entity_MySql_Service_Tests {
 
 
     @Test
-    open fun can_get_first() {
+    override fun can_get_first() {
         runBlocking {
             val svc = createSamples()
             val first = svc.first()
@@ -191,7 +194,7 @@ open class Entity_MySql_Service_Tests {
 
 
     @Test
-    open fun can_get_last() {
+    override fun can_get_last() {
         runBlocking {
             val svc = createSamples()
             val last = svc.last()
@@ -201,7 +204,7 @@ open class Entity_MySql_Service_Tests {
 
 
     @Test
-    open fun can_get_recent() {
+    override fun can_get_recent() {
         runBlocking {
             val svc = createSamples()
             val recent = svc.recent(2)
@@ -212,7 +215,7 @@ open class Entity_MySql_Service_Tests {
 
 
     @Test
-    open fun can_get_oldest() {
+    override fun can_get_oldest() {
         runBlocking {
             val svc = createSamples()
             val oldest = svc.oldest(2)
@@ -223,7 +226,7 @@ open class Entity_MySql_Service_Tests {
 
 
     @Test
-    open fun can_get_all() {
+    override fun can_get_all() {
         runBlocking {
             val svc = createSamples()
             val all = svc.getAll()
@@ -233,7 +236,7 @@ open class Entity_MySql_Service_Tests {
 
 
     @Test
-    open fun can_find_by_field() {
+    override fun can_find_by_field() {
         runBlocking {
             val svc = createSamples()
             val second = svc.findByField(User5::email, Op.Eq, "setup_2@abc.com")
@@ -244,7 +247,7 @@ open class Entity_MySql_Service_Tests {
 
 
     @Test
-    open fun can_get_aggregates() {
+    override fun can_get_aggregates() {
         runBlocking {
             val svc = createSamples()
             val count = svc.count()
@@ -262,7 +265,7 @@ open class Entity_MySql_Service_Tests {
 
 
     @Test
-    open fun can_find_by_query() {
+    override fun can_find_by_query() {
         runBlocking {
             val svc = createSamples()
             val matches = svc.find {
@@ -277,7 +280,7 @@ open class Entity_MySql_Service_Tests {
 
 
     @Test
-    open fun can_patch_by_query() {
+    override fun can_patch_by_query() {
         runBlocking {
             val svc = createSamples()
             val updated = svc.patch {
@@ -292,7 +295,7 @@ open class Entity_MySql_Service_Tests {
 
 
     @Test
-    open fun can_get_relation() {
+    override fun can_get_relation() {
         runBlocking {
             createSamples()
             val memsSvcRaw = entities.getService<Long, Member>()
@@ -306,7 +309,7 @@ open class Entity_MySql_Service_Tests {
 
 
     @Test
-    open fun can_get_relations() {
+    override fun can_get_relations() {
         runBlocking {
             val userSvc = createSamples(createMembers = false)
             val groupSvc = entities.getService<Long, Group>()
@@ -331,7 +334,7 @@ open class Entity_MySql_Service_Tests {
 
 
     @Test
-    open fun can_get_relation_with_object() {
+    override fun can_get_relation_with_object() {
         runBlocking {
             val userSvc = createSamples(createMembers = false)
             val groupSvc = entities.getService<Long, Group>()

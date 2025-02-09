@@ -36,7 +36,7 @@ $$ LANGUAGE sql;
 
  */
 @Ignore
-class Db_Tests_Postgres : TestSupport {
+class Db_Postgres_Tests : TestSupport {
 
     companion object {
         var id = 0L
@@ -71,7 +71,7 @@ class Db_Tests_Postgres : TestSupport {
 
         // 1. add
         val id = db.insert(sqlInsert)
-        Db_Tests_Postgres.id = id
+        Db_Postgres_Tests.id = id
     }
 
 
@@ -202,7 +202,7 @@ class Db_Tests_Postgres : TestSupport {
     fun <T> ensure_scalar(colName: String, callback: (Db, String) -> T, expected: T): Unit {
 
         val db = Db(getConnection())
-        val sql = "select $colName from $tableName where id = " + Db_Tests_Postgres.id
+        val sql = "select $colName from $tableName where id = " + Db_Postgres_Tests.id
         val actual = callback(db, sql)
         Assert.assertTrue(expected == actual)
     }
