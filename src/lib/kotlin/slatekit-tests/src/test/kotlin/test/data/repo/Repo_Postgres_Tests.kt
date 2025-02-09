@@ -18,7 +18,7 @@ Sql scripts located :
 open class Repo_Postgres_Tests : Repo_Common_Tests() {
 
     /**
-     * This provices the implementation for the repo ( using mysql as vendor )
+     * This provides the implementation for the repo ( using mysql as vendor )
      */
     override fun process(op: (EntityRepo<Long, User5>) -> Unit) {
         val db = EntitySetup.db(Vendor.Postgres)
