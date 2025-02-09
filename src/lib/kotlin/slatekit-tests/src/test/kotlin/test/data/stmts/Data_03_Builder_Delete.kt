@@ -11,7 +11,7 @@
  *  </kiit_header>
  */
 
-package test.entities
+package test.data.stmts
 
 import org.junit.Assert
 import org.junit.Before
@@ -24,7 +24,6 @@ import kiit.entities.*
 import kiit.query.Op
 import kiit.query.Delete
 import kiit.query.Order
-import test.setup.User5
 
 class Data_03_Builder_Delete {
 

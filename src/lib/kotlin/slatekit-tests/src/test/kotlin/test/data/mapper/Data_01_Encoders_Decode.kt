@@ -1,4 +1,4 @@
-package test.entities
+package test.data.mapper
 
 import org.junit.Assert
 import org.junit.Test
