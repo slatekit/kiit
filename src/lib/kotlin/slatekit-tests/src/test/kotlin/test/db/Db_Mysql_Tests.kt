@@ -40,13 +40,6 @@ class Db_Mysql_Tests : Db_Common_Tests(), DbTestCases {
     }
 
 
-    @Test
-    override fun can_insert_sql_raw() {
-        val db = db()
-        val id = db.insertGetId(insertSqlRaw).toLong()
-        Assert.assertTrue(id > 0L)
-    }
-
 
     @Test
     override fun can_insert_sql_prep() {
@@ -82,54 +75,14 @@ class Db_Mysql_Tests : Db_Common_Tests(), DbTestCases {
 
 
     @Test
-    override fun can_update() {
-        val db = db()
-        // 1. add
-        val id = db.insert(insertSqlRaw)
-        Assert.assertTrue(id > 0)
-
-        // 2. update
-        val sqlUpdate = "update $table set test_int = 987 where id = $id"
-        val count = db.update(sqlUpdate)
-        Assert.assertTrue(count > 0)
-
-        // 3. get
-        val sql = "select test_int from $table where id = $id"
-        val updatedVal = db.getScalarInt(sql, null)
-        Assert.assertTrue(updatedVal == 987)
-    }
-
-    @Test
-    override fun can_delete() {
-        val db = db()
-        // 1. add
-        val id = db.insert(insertSqlRaw)
-        Assert.assertTrue(id > 0)
-
-        // 2. get count
-        val sqlCount = "select count(*) from $table where id = $id;"
-        val countBefore = db.getScalarInt(sqlCount)
-        Assert.assertTrue(countBefore == 1)
-
-        // 3. delete
-        val sql = "delete from $table where id = $id;"
-        db.execute(sql)
-
-        // 4. get count after delete
-        val countAfter = db.getScalarInt(sqlCount)
-        Assert.assertTrue(countAfter == 0)
-    }
-
-
-    @Test
     override fun can_get() {
         val db = db()
         // 1. add
-        val id = db.insert(insertSqlRaw)
+        val id = db.insert(insertSqlRaw())
         Assert.assertTrue(id > 0)
 
         // 2. update
-        val sqlGet = "select * from $table where `id` = $id;"
+        val sqlGet = "select * from ${table()} where `id` = $id;"
         val item = db.mapOne(sqlGet, null) { rec ->
             val longid = rec.getLong("id")
             SampleEntityImmutable(
@@ -158,13 +111,13 @@ class Db_Mysql_Tests : Db_Common_Tests(), DbTestCases {
 
     override fun <T> ensure_scalar(colName: String, callback: (IDb, String) -> T, expected: T): Unit {
         val db = db()
-        val id = db.insert(insertSqlRaw)
-        val sql = "select $colName from $table where id = $id;"
+        val id = db.insert(insertSqlRaw())
+        val sql = "select $colName from ${table()} where id = $id;"
         val actual = callback(db, sql)
         Assert.assertTrue(expected == actual)
     }
 
-    private val table get() = "`sample_entity`"
+    override fun table():String = "`sample_entity`"
 
     private val insertSqlPrep = """
             insert into `sample_entity` ( 
@@ -181,7 +134,7 @@ class Db_Mysql_Tests : Db_Common_Tests(), DbTestCases {
             );
         """
 
-    private val insertSqlRaw = """
+    override fun insertSqlRaw():String = """
             insert into `sample_entity` ( 
                     `test_string`    , `test_string_enc`, `test_bool`,
                     `test_short`     ,`test_int`        , `test_long`, 
