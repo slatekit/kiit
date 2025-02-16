@@ -24,6 +24,7 @@ import kiit.data.sql.vendors.*
 import kiit.entities.core.*
 import kiit.entities.mapper.EntityMapper
 import kiit.entities.mapper.EntitySettings
+import kiit.meta.Reflector
 import kiit.meta.kClass
 import kiit.meta.models.Model
 
@@ -151,6 +152,13 @@ open class Entities(
         val entityServiceType = entityService.kClass
         val entityContext = EntityContext(enType, idType, entityService, entityRepo, entityMapper, vendor, entityModel, "", "")
         register(entityContext)
+    }
+
+    fun <TId, T> repo(idOps:kiit.data.core.Id<TId, T>, idType:KClass<TId>, enType:KClass<T>,
+                      vendor: Vendor = Vendor.MySql) : EntityRepo<TId, T>
+        where TId : Comparable<TId>, T : Entity<TId> {
+        val table = Reflector.getAnnotation<Table>(enType, Table::class)
+        return repo<TId, T>(idOps, idType, enType, table.name, table.schema, vendor)
     }
 
 

@@ -192,6 +192,24 @@ object Reflector {
                 .map { (first, second) -> Pair(first, second as T) }
     }
 
+    @Suppress("UNCHECKED_CAST")
+    fun <T> getAnnotation(cls: KClass<*>, anoType: KClass<*>): T {
+
+        val anno = cls.annotations.filter { annotation ->
+                annotation.annotationClass == anoType
+            }.first()
+        return anno as T
+    }
+
+    @Suppress("UNCHECKED_CAST")
+    fun <T> getAnnotationOrNull(cls: KClass<*>, anoType: KClass<*>): T? {
+
+        val anno = cls.annotations.filter { annotation ->
+            annotation.annotationClass == anoType
+        }.firstOrNull()
+        return anno as T?
+    }
+
     fun setFieldValue(cls: KClass<*>, inst: Any?, name: String, value: Any?) {
         val prop = cls.declaredMemberProperties.find { it.name == name }
         val item = prop as KMutableProperty1<Any, *>

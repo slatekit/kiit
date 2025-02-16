@@ -5,6 +5,8 @@ import kiit.entities.Entities
 import kiit.entities.EntityLongId
 import kiit.entities.EntityRepo
 import kotlinx.coroutines.runBlocking
+import org.junit.Assert
+import org.junit.Test
 import test.entities.EntitySetup
 import test.setup.User5
 
@@ -27,5 +29,14 @@ open class Repo_Postgres_Tests : Repo_Common_Tests() {
         runBlocking {
             op(repo)
         }
+    }
+
+    @Test
+    open fun can_setup_with_annotation() {
+        val db = EntitySetup.db(Vendor.Postgres)
+        val entities = Entities( {_ -> db } )
+        val repo = entities.repo(EntityLongId(), Long::class, User5::class, Vendor.Postgres)
+        Assert.assertEquals("user", repo.meta.table.name)
+        Assert.assertEquals("unit_tests", repo.meta.table.schema)
     }
 }
