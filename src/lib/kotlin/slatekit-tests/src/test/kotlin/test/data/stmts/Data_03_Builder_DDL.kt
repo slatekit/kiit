@@ -6,14 +6,14 @@ import kiit.common.data.BuildMode
 import kiit.data.sql.Insert
 import kiit.data.sql.Update
 import kiit.data.sql.vendors.MySqlDialect
+import kiit.data.sql.vendors.SqlDDLBuilder
 import kiit.entities.Schema
 import kiit.entities.mapper.EntityMapper
 import kiit.entities.mapper.EntitySettings
-import kiit.migrations.SqlBuilderDDL
 import test.entities.EntitySetup
 import test.entities.SampleEntityImmutable
 
-class Data_03_Statement_Syntax {
+class Data_03_Builder_DDL {
 
     @Test
     fun can_build_insert() {
@@ -56,7 +56,7 @@ class Data_03_Statement_Syntax {
     @Test
     fun can_build_ddl_1() {
         val model = Schema.load(SampleEntityImmutable::class, table = "sample1")
-        val builder = SqlBuilderDDL(MySqlDialect, null)
+        val builder = SqlDDLBuilder(MySqlDialect, null)
         val actual = builder.create(model)
         val expected = """create table `sample1` ( 
 `id` BIGINT NOT NULL AUTO_INCREMENT PRIMARY KEY,  

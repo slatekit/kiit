@@ -18,6 +18,7 @@ import kiit.common.ext.toStringNumeric
 import kiit.common.info.Folders
 import kiit.common.io.Files
 import kiit.common.utils.Props
+import kiit.data.sql.vendors.SqlDDLBuilder
 import kiit.entities.Entities
 import kiit.entities.core.EntityContext
 import kiit.results.Notice
@@ -91,7 +92,7 @@ class MigrationService(
     }
 
     fun drop(name: String): Try<String> {
-        return operate("Drop", name) { info -> builder(info.entityTypeName).remove(info.model) }
+        return operate("Drop", name) { info -> builder(info.entityTypeName).delete(info.model) }
     }
 
     fun installAll(): Try<List<String>> {
@@ -131,7 +132,7 @@ class MigrationService(
         val fileName = "sql-all-uninstall-" + DateTime.now().toStringNumeric()
         val results = entities.getEntities().map { entity ->
             val builder = builder(entity.entityTypeName)
-            val dropTable = builder.remove(entity.model)
+            val dropTable = builder.delete(entity.model)
             Success(dropTable, msg = "Dropping table for model : " + entity.model.name)
         }
         val succeeded = results.filter { it.success }
@@ -226,8 +227,8 @@ class MigrationService(
         return if (success) kiit.results.Success(messages, msg = "") else kiit.results.Failure(Exception(error), msg = error)
     }
 
-    private fun builder(name:String):SqlBuilder {
+    private fun builder(name:String):SqlDDLBuilder {
         val info = entities.getInfoByName(name)
-        return SqlBuilderDDL(info.entityRepoInstance.dialect, null)
+        return SqlDDLBuilder(info.entityRepoInstance.dialect, null)
     }
 }

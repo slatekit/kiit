@@ -33,25 +33,6 @@ object PostgresDialect : Dialect(encodeChar = '"', useSchema = true) {
             else -> op.text
         }
     }
-
-
-    val dbMap: DbTypeMap = DbTypeMap(
-        Vendor.MySql, listOf(
-        DataTypeMap(DataType.DTString       , "VARCHAR"     , Types.JStringClass),
-        DataTypeMap(DataType.DTBool         , "BOOLEAN"     , Types.JBoolClass  ),
-        DataTypeMap(DataType.DTShort        , "SMALLINT"    , Types.JStringClass),
-        DataTypeMap(DataType.DTInt          , "INTEGER"     , Types.JStringClass),
-        DataTypeMap(DataType.DTLong         , "BIGINT"      , Types.JStringClass),
-        DataTypeMap(DataType.DTFloat        , "FLOAT"       , Types.JStringClass),
-        DataTypeMap(DataType.DTDouble       , "FLOAT8"      , Types.JStringClass),
-        DataTypeMap(DataType.DTDecimal      , "FLOAT8"      , Types.JStringClass),
-        DataTypeMap(DataType.DTLocalDate    , "DATE"        , Types.JStringClass),
-        DataTypeMap(DataType.DTLocalTime    , "TIME"        , Types.JStringClass),
-        DataTypeMap(DataType.DTLocalDateTime, "TIMESTAMP"   , Types.JStringClass),
-        DataTypeMap(DataType.DTZonedDateTime, "TIMESTAMPTZ" , Types.JStringClass),
-        DataTypeMap(DataType.DTDateTime     , "TIMESTAMPTZ" , Types.JStringClass),
-        DataTypeMap(DataType.DTInstant      , "INSTANT"     , Types.JStringClass)
-    ))
 }
 
 /**

@@ -20,24 +20,6 @@ object MySqlDialect : Dialect(encodeChar = '`') {
             else -> op.text
         }
     }
-
-
-    val dbMap: DbTypeMap = DbTypeMap(Vendor.MySql, listOf(
-        DataTypeMap(DataType.DTString       , "NVARCHAR"    , Types.JStringClass),
-        DataTypeMap(DataType.DTBool         , "BIT"         , Types.JBoolClass  ),
-        DataTypeMap(DataType.DTShort        , "SMALLINT"    , Types.JStringClass),
-        DataTypeMap(DataType.DTInt          , "INTEGER"     , Types.JStringClass),
-        DataTypeMap(DataType.DTLong         , "BIGINT"      , Types.JStringClass),
-        DataTypeMap(DataType.DTFloat        , "FLOAT"       , Types.JStringClass),
-        DataTypeMap(DataType.DTDouble       , "DOUBLE"      , Types.JStringClass),
-        DataTypeMap(DataType.DTDecimal      , "DECIMAL"     , Types.JStringClass),
-        DataTypeMap(DataType.DTLocalDate    , "DATE"        , Types.JStringClass),
-        DataTypeMap(DataType.DTLocalTime    , "TIME"        , Types.JStringClass),
-        DataTypeMap(DataType.DTLocalDateTime, "DATETIME"    , Types.JStringClass),
-        DataTypeMap(DataType.DTZonedDateTime, "DATETIME"    , Types.JStringClass),
-        DataTypeMap(DataType.DTDateTime     , "DATETIME"    , Types.JStringClass),
-        DataTypeMap(DataType.DTInstant      , "INSTANT"     , Types.JStringClass)
-    ))
 }
 
 /**

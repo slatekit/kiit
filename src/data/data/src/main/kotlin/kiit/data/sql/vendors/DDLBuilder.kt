@@ -1,4 +1,4 @@
-package kiit.data.kiit.data.sql.vendors
+package kiit.data.sql.vendors
 
 import kiit.common.data.DataType
 import kiit.common.newline
@@ -12,6 +12,7 @@ interface DDLBuilder {
     fun create(model: Model): String
     fun delete(model: Model): String
     fun clear(model: Model) : String
+    fun createIndexes(model: Model): List<String>
 }
 
 /**
@@ -33,7 +34,7 @@ open class SqlDDLBuilder(override val dialect: Dialect,
 
         // 1. build the "CREATE <tablename>
         val tableName = dialect.encode(model.schema, model.table)
-        buff.append("create table $tableName ( $newline")
+        buff.append("create table if not exists $tableName ( $newline")
 
         // 2. build the primary key column
         val idCol = model.idField?.storedName ?: defaultID
@@ -103,7 +104,7 @@ open class SqlDDLBuilder(override val dialect: Dialect,
     }
 
 
-    protected open fun createIndexes(model: Model): List<String> {
+    override fun createIndexes(model: Model): List<String> {
         val tableName = dialect.encode(model.schema ?: "", model.table)
         val indexes = model.fields.filter { it.isIndexed }
         val indexSql = indexes.map { field ->
