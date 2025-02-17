@@ -1,17 +1,27 @@
-package kiit.migrations
+package kiit.data.sql.vendors
 
 import kiit.common.data.DataType
-import kiit.utils.naming.Namer
 import kiit.common.newline
 import kiit.data.sql.Dialect
 import kiit.meta.models.Model
+import kiit.utils.naming.Namer
+
+interface DDLBuilder {
+    val namer:Namer?
+    val dialect:Dialect
+    fun create(model: Model): String
+    fun delete(model: Model): String
+    fun clear(model: Model) : String
+    fun createIndexes(model: Model): List<String>
+}
 
 /**
  * 1. CREATE INDEX idx_lastname ON message (status);
  * 2. ALTER TABLE message DROP INDEX idx_status;
  * 3. ALTER TABLE message ADD UNIQUE (uuid);
  */
-open class SqlBuilderDDL(override val dialect: Dialect, val namer: Namer?) : SqlBuilder {
+open class SqlDDLBuilder(override val dialect: Dialect,
+                         override val namer: Namer?) : DDLBuilder {
     private val defaultID = "id"
     private val types = dialect.types
 
@@ -23,8 +33,8 @@ open class SqlBuilderDDL(override val dialect: Dialect, val namer: Namer?) : Sql
         val buff = StringBuilder()
 
         // 1. build the "CREATE <tablename>
-        val tableName = dialect.encode(model.table)
-        buff.append("create table $tableName ( $newline")
+        val tableName = dialect.encode(model.schema, model.table)
+        buff.append("create table if not exists $tableName ( $newline")
 
         // 2. build the primary key column
         val idCol = model.idField?.storedName ?: defaultID
@@ -43,21 +53,22 @@ open class SqlBuilderDDL(override val dialect: Dialect, val namer: Namer?) : Sql
     }
 
 
-    override fun remove(model: Model): String {
-        val tableName = dialect.encode(model.table)
+    override fun delete(model: Model): String {
+        val tableName = dialect.encode(model.schema, model.table)
         return "drop table if exists $tableName;"
     }
 
 
     override fun clear(model: Model): String {
-        val tableName = dialect.encode(model.table)
+        val tableName = dialect.encode(model.schema, model.table)
         return "truncate table $tableName;"
     }
 
 
-    override fun createPrimaryKey(name: String): String
+    protected open fun createPrimaryKey(name: String): String
     {
         val finalName = dialect.encode(name)
+        // BIGSERIAL      NOT NULL PRIMARY KEY
         return "$finalName BIGINT NOT NULL AUTO_INCREMENT PRIMARY KEY"
     }
 
@@ -65,7 +76,7 @@ open class SqlBuilderDDL(override val dialect: Dialect, val namer: Namer?) : Sql
     /**
      * Builds the table DDL sql statement using the model supplied.
      */
-    override fun createColumns(prefix: String?, model: Model, filterId: Boolean): String
+    protected open fun createColumns(prefix: String?, model: Model, filterId: Boolean): String
     {
         val buff = StringBuilder()
         val idCol = model.idField?.storedName ?: defaultID
@@ -95,7 +106,7 @@ open class SqlBuilderDDL(override val dialect: Dialect, val namer: Namer?) : Sql
 
 
     override fun createIndexes(model: Model): List<String> {
-        val tableName = dialect.encode(model.table)
+        val tableName = dialect.encode(model.schema ?: "", model.table)
         val indexes = model.fields.filter { it.isIndexed }
         val indexSql = indexes.map { field ->
             "CREATE INDEX idx_${field.storedName} ON $tableName (${field.storedName});"
@@ -108,7 +119,7 @@ open class SqlBuilderDDL(override val dialect: Dialect, val namer: Namer?) : Sql
     }
 
 
-    private fun createColumn(name: String, dataType: DataType, required: Boolean, maxLen: Int): String {
+    protected open fun createColumn(name: String, dataType: DataType, required: Boolean, maxLen: Int): String {
         val nullText = if (required) "NOT NULL" else ""
         val colType = colType(dataType, maxLen)
         val colName = dialect.encode(name)
@@ -133,5 +144,21 @@ open class SqlBuilderDDL(override val dialect: Dialect, val namer: Namer?) : Sql
         else
             types.lookup[colType]?.dbType ?: ""
 
+    }
+}
+
+
+
+
+/**
+ * 1. CREATE INDEX idx_lastname ON message (status);
+ * 2. ALTER TABLE message DROP INDEX idx_status;
+ * 3. ALTER TABLE message ADD UNIQUE (uuid);
+ */
+open class PostgresSqlDDLBuilder(dialect: Dialect, namer: Namer?) : SqlDDLBuilder(dialect, namer) {
+
+    override fun createPrimaryKey(name: String): String {
+        val finalName = dialect.encode(name)
+        return "$finalName BIGSERIAL      NOT NULL PRIMARY KEY"
     }
 }

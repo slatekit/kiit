@@ -23,7 +23,7 @@ public class SimpleEvent extends AppEvent implements Entity<Integer>, EntityUpda
 
     public static Model asModel() {
 
-        Model model = new Model(ModelHelpers.model(SimpleEvent.class), "");
+        Model model = new Model(ModelHelpers.model(SimpleEvent.class), "", "");
         Model finalModel = AppSchema.setupEventMappings(model);
         return finalModel;
     }

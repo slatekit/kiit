@@ -39,7 +39,7 @@ class UserService(repo: EntityRepo<Long, User5>)
 
 
 
-open class Entity_MySql_Service_Tests : EntityTestCases {
+open class Entity_Service_Tests  {
 
     protected lateinit var entities: Entities
     private val sqlStatements = listOf(
@@ -82,7 +82,7 @@ open class Entity_MySql_Service_Tests : EntityTestCases {
     )
 
     @Before
-    override fun setup() {
+    fun setup() {
 //        entities = Entities({ con -> Db(con) }, Connections(DbConString("", "", "", "")))
         entities = EntitySetup.realDb() //Vendor.MySql, "KIIT")
         val db = entities.getDb()
@@ -98,7 +98,7 @@ open class Entity_MySql_Service_Tests : EntityTestCases {
 
 
     @Test
-    override fun can_create_an_item() {
+    fun can_create_an_item() {
 //        runBlocking {
 //            val userSvc = createSamples(false)
 //            val id = userSvc.create(User5(0, "test_create@abc.com", true, 35, 12.34))
@@ -113,7 +113,7 @@ open class Entity_MySql_Service_Tests : EntityTestCases {
 
 
     @Test
-    override fun can_use_model_with_nullable_fields() {
+    fun can_use_model_with_nullable_fields() {
         runBlocking {
             val userSvc = entities.getService<Long, UserNullable>()
             val created = UserNullable()
@@ -133,7 +133,7 @@ open class Entity_MySql_Service_Tests : EntityTestCases {
 
 
     @Test
-    override fun can_update_an_item() {
+    fun can_update_an_item() {
         val lc = kiit.common.Types.JLongClass
         val kc = Long::class.java
         val isEqual = lc == kc
@@ -153,147 +153,7 @@ open class Entity_MySql_Service_Tests : EntityTestCases {
 
 
     @Test
-    override fun can_count_any() {
-//        runBlocking {
-//            val svc = createSamples(false)
-//            val any1 = svc.any()
-//            Assert.assertFalse(any1)
-//            svc.create(User5(0, "test_count_any@abc.com", true, 35, 12.34))
-//            val any2 = svc.any()
-//            Assert.assertTrue(any2)
-//        }
-    }
-
-
-    @Test
-    override fun can_count_size() {
-//        runBlocking {
-//            val svc = createSamples(false)
-//            val count1 = svc.count()
-//            Assert.assertTrue(count1 == 0L)
-//            svc.create(User5(0, "test_count_1@abc.com", true, 35, 12.34))
-//            svc.create(User5(0, "test_count_2@abc.com", true, 35, 12.34))
-//            svc.create(User5(0, "test_count_3@abc.com", true, 35, 12.34))
-//
-//            val count2 = svc.count()
-//            Assert.assertTrue(count2 == 3L)
-//        }
-    }
-
-
-    @Test
-    override fun can_get_first() {
-        runBlocking {
-            val svc = createSamples()
-            val first = svc.first()
-            Assert.assertTrue(first?.email == "setup_1@abc.com")
-        }
-    }
-
-
-    @Test
-    override fun can_get_last() {
-        runBlocking {
-            val svc = createSamples()
-            val last = svc.last()
-            Assert.assertTrue(last?.email == "setup_7@abc.com")
-        }
-    }
-
-
-    @Test
-    override fun can_get_recent() {
-        runBlocking {
-            val svc = createSamples()
-            val recent = svc.recent(2)
-            Assert.assertTrue(recent[0].email == "setup_7@abc.com")
-            Assert.assertTrue(recent[1].email == "setup_6@abc.com")
-        }
-    }
-
-
-    @Test
-    override fun can_get_oldest() {
-        runBlocking {
-            val svc = createSamples()
-            val oldest = svc.oldest(2)
-            Assert.assertTrue(oldest[0].email == "setup_1@abc.com")
-            Assert.assertTrue(oldest[1].email == "setup_2@abc.com")
-        }
-    }
-
-
-    @Test
-    override fun can_get_all() {
-        runBlocking {
-            val svc = createSamples()
-            val all = svc.getAll()
-            Assert.assertTrue(all.size == 7)
-        }
-    }
-
-
-    @Test
-    override fun can_find_by_field() {
-        runBlocking {
-            val svc = createSamples()
-            val second = svc.findByField(User5::email, Op.Eq, "setup_2@abc.com")
-            Assert.assertTrue(second.size == 1)
-            Assert.assertTrue(second[0].email == "setup_2@abc.com")
-        }
-    }
-
-
-    @Test
-    override fun can_get_aggregates() {
-        runBlocking {
-            val svc = createSamples()
-            val count = svc.count()
-            val sum = svc.repo().sum(User5::level.name) { }
-            val avg = svc.repo().avg(User5::level.name) { }
-            val min = svc.repo().min(User5::level.name) { }
-            val max = svc.repo().max(User5::level.name) { }
-            Assert.assertEquals(7, count)
-            Assert.assertEquals(28.0, sum, 0.0)
-            Assert.assertEquals(4.0, avg, 0.0)
-            Assert.assertEquals(1.0, min, 0.0)
-            Assert.assertEquals(7.0, max, 0.0)
-        }
-    }
-
-
-    @Test
-    override fun can_find_by_query() {
-        runBlocking {
-            val svc = createSamples()
-            val matches = svc.find {
-                where(User5::isActive.name, Op.Eq, false)
-                        .and(User5::level.name, Op.Gt, 5)
-            }
-            Assert.assertTrue(matches.size == 2)
-            Assert.assertTrue(matches[0].email == "setup_6@abc.com")
-            Assert.assertTrue(matches[1].email == "setup_7@abc.com")
-        }
-    }
-
-
-    @Test
-    override fun can_patch_by_query() {
-        runBlocking {
-            val svc = createSamples()
-            val updated = svc.patch {
-                set(User5::level,  210).where(User5::level.name, Op.Eq, 7)
-            }
-            Assert.assertEquals(1, updated)
-            val item = svc.find { where(User5::level, Op.Eq, 210) }.firstOrNull()
-            Assert.assertEquals("setup_7@abc.com", item?.email)
-            Assert.assertEquals(210, item?.level)
-        }
-    }
-
-
-    @Test
-    override fun can_get_relation() {
+    fun can_get_relation() {
         runBlocking {
             createSamples()
             val memsSvcRaw = entities.getService<Long, Member>()
@@ -307,7 +167,7 @@ open class Entity_MySql_Service_Tests : EntityTestCases {
 
 
     @Test
-    override fun can_get_relations() {
+    fun can_get_relations() {
         runBlocking {
             val userSvc = createSamples(createMembers = false)
             val groupSvc = entities.getService<Long, Group>()
@@ -332,7 +192,7 @@ open class Entity_MySql_Service_Tests : EntityTestCases {
 
 
     @Test
-    override fun can_get_relation_with_object() {
+    fun can_get_relation_with_object() {
         runBlocking {
             val userSvc = createSamples(createMembers = false)
             val groupSvc = entities.getService<Long, Group>()
@@ -404,6 +264,5 @@ open class Entity_MySql_Service_Tests : EntityTestCases {
 //        }
         return userSvc
     }
-
 
 }

@@ -64,12 +64,14 @@ dependencies {
       implementation "dev.kiit:kiit-common:$kiit_version"
       implementation "dev.kiit:kiit-meta:$kiit_version"
       implementation "dev.kiit:kiit-query:$kiit_version"
+      implementation "dev.kiit:kiit-utils:$kiit_version"
   } else {
       // */
   implementation project(":kiit-result")
   implementation project(":kiit-common")
   implementation project(":kiit-meta")
   implementation project(":kiit-query")
+  implementation project(":kiit-utils")
   } //</kiit_local>
 }
 

@@ -5,6 +5,7 @@ import org.junit.Test
 import kiit.common.data.*
 import kiit.common.ids.ULIDs
 import kiit.db.Db
+import org.junit.Ignore
 import test.entities.EntitySetup
 import test.entities.SampleEntityImmutable
 import test.setup.Address
@@ -69,6 +70,22 @@ class Db_Mysql_Tests : Db_Common_Tests(), DbTestCases {
             Value("", DataType.DTInt, 1)
         )).toLong()
         Assert.assertTrue(id > 0L)
+    }
+
+
+    @Ignore
+    fun can_execute_proc() {
+        val db = db()
+        val result = db.callQuery("dbtests_get_max_id", { rs -> rs.getLong(1) })
+        Assert.assertTrue(result!! > 0L)
+    }
+
+
+    @Ignore
+    fun can_execute_proc_update() {
+        val db = db()
+        val result = db.callUpdate("dbtests_update_by_id", listOf(Value("", DataType.DTInt, 6)))
+        Assert.assertTrue(result!! >= 1)
     }
 
 

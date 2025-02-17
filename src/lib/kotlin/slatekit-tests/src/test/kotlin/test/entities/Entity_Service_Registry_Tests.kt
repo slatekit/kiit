@@ -18,7 +18,7 @@ import kiit.common.data.*
 import kiit.entities.*
 import test.setup.User5
 
-class Data_04_Entity_Registry {
+class Entity_Service_Registry_Tests {
 
     private lateinit var entities:Entities
 

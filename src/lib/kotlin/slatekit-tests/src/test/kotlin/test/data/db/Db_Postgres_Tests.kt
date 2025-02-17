@@ -72,7 +72,6 @@ class Db_Postgres_Tests : Db_Common_Tests(), DbTestCases {
         Assert.assertTrue(id > 0L)
     }
 
-
     @Ignore
     fun can_execute_proc() {
         val db = db()

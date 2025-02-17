@@ -19,7 +19,7 @@ object Schema {
      * @return
      */
     @JvmStatic
-    fun load (dataType: KClass<*>, idFieldName: String? = null, namer: Namer? = null, table: String? = null): Model {
+    fun load (dataType: KClass<*>, idFieldName: String? = null, namer: Namer? = null, table: String? = null, schema:String? = null): Model {
         val modelName = dataType.simpleName ?: ""
         val modelNameFull = dataType.qualifiedName ?: ""
 
@@ -45,7 +45,7 @@ object Schema {
             null -> fields
             else -> mutableListOf(ModelField.ofId(idField.first, "", namer)).plus(fields)
         }
-        return Model(modelName, modelNameFull, dataType, modelFields = allFields, namer = namer, tableName = table ?: modelName)
+        return Model(modelName, modelNameFull, schema ?: "", dataType, modelFields = allFields, namer = namer, tableName = table ?: modelName)
     }
 
 

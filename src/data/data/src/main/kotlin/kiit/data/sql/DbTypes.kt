@@ -4,12 +4,13 @@ import kiit.common.Types
 import kiit.common.data.DataType
 import kiit.common.data.DataTypeMap
 
+
 /**
  * Maps the DataTypes
  * Java types to MySql
  * https://dev.mysql.com/doc/connector-j/5.1/en/connector-j-reference-type-conversions.html
  */
-open class Types {
+abstract class DbTypes {
 
     /**
      * BOOL
@@ -59,26 +60,5 @@ open class Types {
     open val instantType = DataTypeMap(DataType.DTInstant, "INSTANT", Types.JInstantClass)
 
 
-    open val lookup = mapOf(
-            boolType.metaType to boolType,
-            charType.metaType to charType,
-            stringType.metaType to stringType,
-            textType.metaType to textType,
-            uuidType.metaType to uuidType,
-            shortType.metaType to shortType,
-            intType.metaType to intType,
-            longType.metaType to longType,
-            floatType.metaType to floatType,
-            doubleType.metaType to doubleType,
-            //decimalType.metaType to decimalType,
-            localdateType.metaType to localdateType,
-            localtimeType.metaType to localtimeType,
-            localDateTimeType.metaType to localDateTimeType,
-            zonedDateTimeType.metaType to zonedDateTimeType,
-            dateTimeType.metaType to dateTimeType,
-            instantType.metaType to instantType,
-            uuidType.metaType to uuidType,
-            ulidType.metaType to ulidType,
-            upidType.metaType to upidType
-    )
+    abstract val lookup:Map<DataType, DataTypeMap>
 }
