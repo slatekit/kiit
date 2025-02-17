@@ -41,10 +41,10 @@ data class User(
 
 
 data class Group(
-        @property:Id()
+        @Id()
         val id: Long,
 
-        @property:Column(required = true, length = 30)
+        @Column(required = true, length = 30)
         val name: String
 ) : Entity<Long>, EntityUpdatable<Long, Group> {
 
@@ -55,13 +55,13 @@ data class Group(
 
 
 data class Member(
-        @property:Column(required = true)
+        @Column(required = true)
         val id: Long,
 
-        @property:Column(required = true)
+        @Column(required = true)
         val groupId: Long,
 
-        @property:Column(required = true)
+        @Column(required = true)
         val userId: Long
 ) : Entity<Long>, EntityUpdatable<Long, Member> {
 
@@ -95,10 +95,10 @@ class UserNormal2(var email: String, var name: String) {
 
 data class User3(
 
-        @property:Column(name = "email", desc = "email address", required = true, example = "clark@metro.com")
+        @Column(name = "email", desc = "email address", required = true, example = "clark@metro.com")
         val email: String,
 
-        @property:Column(desc = "full api", required = false, example = "clark kent")
+        @Column(desc = "full api", required = false, example = "clark kent")
         val name: String
 ) {
 
@@ -125,35 +125,36 @@ data class User4(
 }
 
 
+@Table("user", schema = "unit_tests")
 data class User5(
-        @property:Id()
+        @Id()
         override val id: Long = 0,
 
-        @property:Column(length = 50, required = true)
+        @Column(length = 50, required = true)
         val userId: String = Random.uuid(),
 
-        @property:Column(length = 100, required = true)
+        @Column(length = 100, required = true)
         val email: String = "",
 
-        @property:Column(required = true)
+        @Column(required = true)
         val isActive: Boolean = false,
 
-        @property:Column(required = true)
+        @Column(required = true)
         val level: Int = 35,
 
-        @property:Column(required = true)
+        @Column(required = true)
         val salary: Double = 20.5,
 
-        @property:Column(name = "createdat", required = true)
+        @Column(name = "createdat", required = true)
         val createdAt: DateTime = DateTime.now(),
 
-        @property:Column(name = "createdby", required = true)
+        @Column(name = "createdby", required = true)
         val createdBy: Long = 0,
 
-        @property:Column(name = "updatedat", required = true)
+        @Column(name = "updatedat", required = true)
         val updatedAt: DateTime = DateTime.now(),
 
-        @property:Column(name = "updatedby", required = true)
+        @Column(name = "updatedby", required = true)
         val updatedBy: Long = 0
 ) : EntityWithId<Long>, EntityUpdatable<Long, User5> {
 
@@ -172,34 +173,34 @@ data class User5(
 
 
 data class UserNullable(
-    @property:Id()
+    @Id()
     override val id: Long = 0,
 
-    @property:Column(length = 50, required = true)
+    @Column(length = 50, required = true)
     val uuid: String = Random.uuid(),
 
-    @property:Column(length = 100, required = false)
+    @Column(length = 100, required = false)
     val email: String? = null,
 
-    @property:Column(required = false)
+    @Column(required = false)
     val isActive: Boolean? = null,
 
-    @property:Column(required = false)
+    @Column(required = false)
     val level: Int? = null,
 
-    @property:Column(required = false)
+    @Column(required = false)
     val salary: Double? = null,
 
-    @property:Column(required = false)
+    @Column(required = false)
     val createdAt: DateTime? = null,
 
-    @property:Column(required = false)
+    @Column(required = false)
     val createdBy: Long? = null,
 
-    @property:Column(required = false)
+    @Column(required = false)
     val updatedAt: DateTime? = null,
 
-    @property:Column(required = false)
+    @Column(required = false)
     val updatedBy: Long? = null
 ) : EntityWithId<Long>, EntityUpdatable<Long, UserNullable> {
 
