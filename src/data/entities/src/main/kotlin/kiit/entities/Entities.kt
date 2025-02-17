@@ -184,7 +184,7 @@ open class Entities(
         val tableInfo = Table(tableName, tableChar, tableKey, schema ?: "")
 
         // 3. Schema / Meta data
-        val entityModel = Schema.load(enType, idName, null, tableName)
+        val entityModel = Schema.load(enType, idName, null, tableName, schema)
         val entityMeta = Meta<TId, T>(idOps, tableInfo)
 
         // 4. Mapper

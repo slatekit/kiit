@@ -95,8 +95,8 @@ open class EntityBuilder(
      * NOTE: Currently the system enforces an primary key be named as "id"
      * This may be removed later
      */
-    fun model(entityType: KClass<*>, namer: Namer?, table: String?): Model {
-        return Schema.load(entityType, EntityWithId<*>::id.name, namer, table)
+    fun model(entityType: KClass<*>, namer: Namer?, table: String?, schema:String?): Model {
+        return Schema.load(entityType, EntityWithId<*>::id.name, namer, table, schema)
     }
 
     /**

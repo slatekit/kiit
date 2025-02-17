@@ -58,7 +58,7 @@ class Data_03_Builder_DDL {
         val model = Schema.load(SampleEntityImmutable::class, table = "sample1")
         val builder = SqlDDLBuilder(MySqlDialect, null)
         val actual = builder.create(model)
-        val expected = """create table `sample1` ( 
+        val expected = """create table if not exists `sample1` ( 
 `id` BIGINT NOT NULL AUTO_INCREMENT PRIMARY KEY,  
 `test_string` NVARCHAR(30) NOT NULL,  
 `test_string_enc` NVARCHAR(100) NOT NULL,  
