@@ -1,13 +1,15 @@
 package kiit.data.sql.vendors
 
 import kiit.common.data.DataType
+import kiit.common.data.DataTypeMap
 import kiit.data.Mapper
 import kiit.data.core.Meta
 import kiit.data.core.Table
 import kiit.data.encoders.*
 import kiit.data.sql.*
+import kiit.data.syntax.DbTypes
 
-object SqliteDialect : Dialect(encodeChar = '"') {
+object SqliteDialect : Dialect(types = SqliteTypes, encodeChar = '"') {
 }
 
 /**
@@ -77,4 +79,30 @@ open class SqliteEncoders<TId, T>(utc:Boolean) : Encoders<TId, T>(utc) where TId
 fun String.sqliteIfNotExists(table:String):String {
     return this.replace("\"$table\"", "IF NOT EXISTS \"$table\"")
 
+}
+
+object SqliteTypes : DbTypes() {
+
+    override val lookup:Map<DataType, DataTypeMap> = mapOf(
+        boolType.metaType to boolType,
+        charType.metaType to charType,
+        stringType.metaType to stringType,
+        textType.metaType to textType,
+        uuidType.metaType to uuidType,
+        shortType.metaType to shortType,
+        intType.metaType to intType,
+        longType.metaType to longType,
+        floatType.metaType to floatType,
+        doubleType.metaType to doubleType,
+        //decimalType.metaType to decimalType,
+        localdateType.metaType to localdateType,
+        localtimeType.metaType to localtimeType,
+        localDateTimeType.metaType to localDateTimeType,
+        zonedDateTimeType.metaType to zonedDateTimeType,
+        dateTimeType.metaType to dateTimeType,
+        instantType.metaType to instantType,
+        uuidType.metaType to uuidType,
+        ulidType.metaType to ulidType,
+        upidType.metaType to upidType
+    )
 }

@@ -68,6 +68,7 @@ open class SqlDDLBuilder(override val dialect: Dialect,
     protected open fun createPrimaryKey(name: String): String
     {
         val finalName = dialect.encode(name)
+        // BIGSERIAL      NOT NULL PRIMARY KEY
         return "$finalName BIGINT NOT NULL AUTO_INCREMENT PRIMARY KEY"
     }
 
@@ -143,5 +144,21 @@ open class SqlDDLBuilder(override val dialect: Dialect,
         else
             types.lookup[colType]?.dbType ?: ""
 
+    }
+}
+
+
+
+
+/**
+ * 1. CREATE INDEX idx_lastname ON message (status);
+ * 2. ALTER TABLE message DROP INDEX idx_status;
+ * 3. ALTER TABLE message ADD UNIQUE (uuid);
+ */
+open class PostgresSqlDDLBuilder(dialect: Dialect, namer: Namer?) : SqlDDLBuilder(dialect, namer) {
+
+    override fun createPrimaryKey(name: String): String {
+        val finalName = dialect.encode(name)
+        return "$finalName BIGSERIAL      NOT NULL PRIMARY KEY"
     }
 }

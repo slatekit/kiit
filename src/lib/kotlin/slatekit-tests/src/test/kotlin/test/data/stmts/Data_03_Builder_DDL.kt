@@ -6,6 +6,8 @@ import kiit.common.data.BuildMode
 import kiit.data.sql.Insert
 import kiit.data.sql.Update
 import kiit.data.sql.vendors.MySqlDialect
+import kiit.data.sql.vendors.PostgresDialect
+import kiit.data.sql.vendors.PostgresSqlDDLBuilder
 import kiit.data.sql.vendors.SqlDDLBuilder
 import kiit.entities.Schema
 import kiit.entities.mapper.EntityMapper
@@ -54,7 +56,7 @@ class Data_03_Builder_DDL {
 
 
     @Test
-    fun can_build_ddl_1() {
+    fun can_build_ddl_mysql() {
         val model = Schema.load(SampleEntityImmutable::class, table = "sample1")
         val builder = SqlDDLBuilder(MySqlDialect, null)
         val actual = builder.create(model)
@@ -81,6 +83,42 @@ class Data_03_Builder_DDL {
 `test_object_country` INTEGER NOT NULL,  
 `test_object_zip` NVARCHAR(5) NOT NULL,  
 `test_object_isPOBox` BIT NOT NULL );"""
+        Assert.assertEquals(expected, actual)
+    }
+
+
+
+
+    @Test
+    fun can_build_ddl_postgres() {
+        val model = Schema.load(SampleEntityImmutable::class, table = "sample1", schema = "unit_tests")
+        val builder = PostgresSqlDDLBuilder(PostgresDialect, null)
+        val actual = builder.create(model)
+        val expected = """
+            create table if not exists "unit_tests"."sample1" ( 
+            "id" BIGSERIAL      NOT NULL PRIMARY KEY,  
+            "test_string" VARCHAR(30) NOT NULL,  
+            "test_string_enc" VARCHAR(100) NOT NULL,  
+            "test_bool" BOOLEAN NOT NULL,  
+            "test_short" SMALLINT NOT NULL,  
+            "test_int" INTEGER NOT NULL,  
+            "test_long" BIGINT NOT NULL,  
+            "test_float" FLOAT NOT NULL,  
+            "test_double" DOUBLE NOT NULL,  
+            "test_enum" INTEGER NOT NULL,  
+            "test_localdate" DATE NOT NULL,  
+            "test_localtime" TIME NOT NULL,  
+            "test_localdatetime" TIMESTAMP NOT NULL,  
+            "test_zoneddatetime" TIMESTAMPTZ NOT NULL,  
+            "test_uuid" VARCHAR(50) NOT NULL,  
+            "test_uniqueId" VARCHAR(50) NOT NULL,  
+            "test_object_addr" VARCHAR(40) NOT NULL,  
+            "test_object_city" VARCHAR(30) NOT NULL,  
+            "test_object_state" VARCHAR(20) NOT NULL,  
+            "test_object_country" INTEGER NOT NULL,  
+            "test_object_zip" VARCHAR(5) NOT NULL,  
+            "test_object_isPOBox" BOOLEAN NOT NULL );
+        """.trimIndent()
         Assert.assertEquals(expected, actual)
     }
 }

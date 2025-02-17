@@ -1,13 +1,13 @@
 package kiit.data.sql
 
 import kiit.data.core.Table
-import kiit.data.syntax.Types
+import kiit.data.syntax.DbTypes
 import kiit.query.Op
 
 /**
  * Contains syntax builders to build Sql and/or Prepared Sql/statements
  */
-open class Dialect(val types: Types = Types(),
+open class Dialect(val types: DbTypes,
                    val aggr: Aggregates = Aggregates(),
                    val encodeChar:Char = '`',
                    val useSchema:Boolean = false
