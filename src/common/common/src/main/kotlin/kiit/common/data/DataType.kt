@@ -73,6 +73,7 @@ sealed class DataType {
 }
 
 
+data class DbTypeMap(val vendor: Vendor, val types:List<DataTypeMap>)
 data class DataTypeMap(val metaType: DataType, val dbType: String, val langType: Class<*>)
 
 

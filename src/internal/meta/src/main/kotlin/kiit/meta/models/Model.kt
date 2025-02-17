@@ -25,6 +25,7 @@ import kotlin.reflect.KClass
 class Model(
         val name: String,
         val fullName: String,
+        val schema:String,
         val dataType: KClass<*>? = null,
         val desc: String = "",
         tableName: String = "",
@@ -32,8 +33,8 @@ class Model(
         val namer: Namer? = null
 ) {
 
-    constructor(dataType: KClass<*>, tableName: String = "") : this(dataType.simpleName!!, dataType.qualifiedName!!, dataType, tableName = tableName)
-    constructor(dataType: KClass<*>, fields: List<ModelField>, tableName: String = "") : this(dataType.simpleName!!, dataType.qualifiedName!!, dataType, tableName = tableName, modelFields = fields)
+    constructor(dataType: KClass<*>, tableName: String = "", schema:String = "") : this(dataType.simpleName!!, dataType.qualifiedName!!, schema, dataType, tableName = tableName)
+    constructor(dataType: KClass<*>, fields: List<ModelField>, tableName: String = "", schema:String = "") : this(dataType.simpleName!!, dataType.qualifiedName!!, schema, dataType, tableName = tableName, modelFields = fields)
 
     /**
      * The name of the table
@@ -77,7 +78,7 @@ class Model(
 
     fun add(field: ModelField): Model {
         val newPropList = fields.plus(field)
-        return Model(this.name, fullName, this.dataType, desc, table, newPropList)
+        return Model(this.name, fullName, this.schema, this.dataType, desc, table, newPropList)
     }
 
 
@@ -102,7 +103,7 @@ class Model(
          * @return
          */
         @JvmStatic
-        fun load (dataType: KClass<*>, idFieldName: String? = null, namer: Namer? = null, table: String? = null): Model {
+        fun load (dataType: KClass<*>, idFieldName: String? = null, namer: Namer? = null, table: String? = null, schema:String? = null): Model {
             val modelName = dataType.simpleName ?: ""
             val modelNameFull = dataType.qualifiedName ?: ""
 
@@ -128,7 +129,7 @@ class Model(
                 null -> fields
                 else -> mutableListOf(ModelField.ofId(idField.first, "", namer)).plus(fields)
             }
-            return Model(modelName, modelNameFull, dataType, modelFields = allFields, namer = namer, tableName = table ?: modelName)
+            return Model(modelName, modelNameFull, schema ?: "", dataType, modelFields = allFields, namer = namer, tableName = table ?: modelName)
         }
 
 

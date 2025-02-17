@@ -16,7 +16,9 @@ import kiit.common.Types
 import kiit.common.data.DataType
 import kiit.common.data.DataTypeMap
 import kiit.common.data.Encoding
+import kiit.common.data.Vendor
 import kiit.common.newline
+
 
 /**
  * Builds up database tables, indexes and other database components

@@ -1,5 +1,10 @@
 package kiit.data.sql.vendors
 
+import kiit.common.Types
+import kiit.common.data.DataType
+import kiit.common.data.DataTypeMap
+import kiit.common.data.DbTypeMap
+import kiit.common.data.Vendor
 import kiit.data.Mapper
 import kiit.data.core.Meta
 import kiit.data.core.Table
@@ -8,12 +13,31 @@ import kiit.query.Op
 
 object MySqlDialect : Dialect(encodeChar = '`') {
 
-    override fun op(op:Op): String =
-        when (op) {
+    override fun op(op:Op): String {
+        return when (op) {
             Op.Is -> "is"
             Op.IsNot -> "is not"
             else -> op.text
         }
+    }
+
+
+    val dbMap: DbTypeMap = DbTypeMap(Vendor.MySql, listOf(
+        DataTypeMap(DataType.DTString       , "NVARCHAR"    , Types.JStringClass),
+        DataTypeMap(DataType.DTBool         , "BIT"         , Types.JBoolClass  ),
+        DataTypeMap(DataType.DTShort        , "SMALLINT"    , Types.JStringClass),
+        DataTypeMap(DataType.DTInt          , "INTEGER"     , Types.JStringClass),
+        DataTypeMap(DataType.DTLong         , "BIGINT"      , Types.JStringClass),
+        DataTypeMap(DataType.DTFloat        , "FLOAT"       , Types.JStringClass),
+        DataTypeMap(DataType.DTDouble       , "DOUBLE"      , Types.JStringClass),
+        DataTypeMap(DataType.DTDecimal      , "DECIMAL"     , Types.JStringClass),
+        DataTypeMap(DataType.DTLocalDate    , "DATE"        , Types.JStringClass),
+        DataTypeMap(DataType.DTLocalTime    , "TIME"        , Types.JStringClass),
+        DataTypeMap(DataType.DTLocalDateTime, "DATETIME"    , Types.JStringClass),
+        DataTypeMap(DataType.DTZonedDateTime, "DATETIME"    , Types.JStringClass),
+        DataTypeMap(DataType.DTDateTime     , "DATETIME"    , Types.JStringClass),
+        DataTypeMap(DataType.DTInstant      , "INSTANT"     , Types.JStringClass)
+    ))
 }
 
 /**
