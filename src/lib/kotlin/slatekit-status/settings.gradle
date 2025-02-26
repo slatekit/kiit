@@ -1,0 +1,4 @@
+rootProject.name = 'slatekit-status'
+
+
+enableFeaturePreview('GRADLE_METADATA')
