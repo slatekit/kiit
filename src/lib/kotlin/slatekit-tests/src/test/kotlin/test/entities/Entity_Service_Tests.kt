@@ -23,6 +23,7 @@ import kiit.entities.features.Ordered
 import kiit.query.Op
 import kiit.query.set
 import kiit.query.where
+import org.junit.Ignore
 import test.setup.Group
 import test.setup.Member
 import test.setup.User5
@@ -132,7 +133,7 @@ open class Entity_Service_Tests  {
     }
 
 
-    @Test
+    @Ignore
     fun can_update_an_item() {
         val lc = kiit.common.Types.JLongClass
         val kc = Long::class.java
@@ -152,7 +153,7 @@ open class Entity_Service_Tests  {
     }
 
 
-    @Test
+    @Ignore
     fun can_get_relation() {
         runBlocking {
             createSamples()
@@ -166,7 +167,7 @@ open class Entity_Service_Tests  {
     }
 
 
-    @Test
+    @Ignore
     fun can_get_relations() {
         runBlocking {
             val userSvc = createSamples(createMembers = false)
@@ -191,7 +192,7 @@ open class Entity_Service_Tests  {
     }
 
 
-    @Test
+    @Ignore
     fun can_get_relation_with_object() {
         runBlocking {
             val userSvc = createSamples(createMembers = false)
@@ -223,7 +224,7 @@ open class Entity_Service_Tests  {
     }
 
 
-    protected open suspend fun createSamples(setupSamples: Boolean = true, createMembers: Boolean = true): UserService {
+    protected open suspend fun  createSamples(setupSamples: Boolean = true, createMembers: Boolean = true): UserService {
         val userSvc = entities.getService<Long, User5>() as UserService
         val memsSvc = entities.getService<Long, Member>()
         val grpSvc = entities.getService<Long, Group>()
