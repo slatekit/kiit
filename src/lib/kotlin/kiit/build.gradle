@@ -1,5 +1,5 @@
 buildscript {
-    ext.kotlin_version = '1.8.22'
+    ext.kotlin_version = '1.9.25'
     ext.ktor_version = '2.3.12'
     ext.kiit_version = file('../../../version.txt').text
     ext.kiit_version_beta = file('../../../version-beta.txt').text
@@ -42,6 +42,14 @@ apply plugin: 'application'
 compileJava {
     sourceCompatibility = JavaVersion.VERSION_1_8
     targetCompatibility = JavaVersion.VERSION_1_8
+}
+
+compileKotlin {
+    kotlinOptions.jvmTarget = '1.8'
+}
+
+compileTestKotlin {
+    kotlinOptions.jvmTarget = '1.8'
 }
 
 repositories {
