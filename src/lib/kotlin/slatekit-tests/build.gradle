@@ -1,6 +1,6 @@
 
 buildscript {
-    ext.kotlin_version = '1.8.22'
+    ext.kotlin_version = '1.9.25'
     ext.slatekit_version = file('../../version.txt').text
     ext.slatekit_version_beta = file('../../version-beta.txt').text
 
