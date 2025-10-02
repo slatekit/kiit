@@ -31,14 +31,11 @@ class Api_001_Loader_Tests : ApiTestsBase() {
     @Test
     fun can_load_routes_from_annotations_with_defaults() {
         val router = router(
-            versions = listOf(
-                global(
-                    version = "0", apis = listOf(
-                        api(SampleAnnotatedApiWithDefaults::class, SampleAnnotatedApiWithDefaults())
-                    )
-                )
+    listOf(
+                api(SampleAnnotatedApiWithDefaults::class, SampleAnnotatedApiWithDefaults())
             )
         )
+
         val apiOpt = router.getApi("tests", "defaults", "0")
         Assert.assertNotNull(apiOpt)
         val actions = apiOpt!!
@@ -48,19 +45,16 @@ class Api_001_Loader_Tests : ApiTestsBase() {
     @Test
     fun can_load_routes_from_config_with_defaults() {
         val router = router(
-            versions = listOf(
-                global(
-                    version = "0", apis = listOf(
-                        api(
-                            SampleAnnotatedApiWithDefaults::class,
-                            SampleAnnotatedApiWithDefaults(),
-                            setup = SetupType.Config,
-                            content = JSON_DEFAULTS.trim()
-                        )
-                    )
+        listOf(
+                api(
+                    SampleAnnotatedApiWithDefaults::class,
+                    SampleAnnotatedApiWithDefaults(),
+                    setup = SetupType.Config,
+                    content = JSON_DEFAULTS.trim()
                 )
             )
         )
+
         val apiOpt = router.getApi("tests", "defaults", "0")
         Assert.assertNotNull(apiOpt)
         val actions = apiOpt!!
@@ -81,13 +75,13 @@ class Api_001_Loader_Tests : ApiTestsBase() {
         Assert.assertEquals(Access.Public, api.access)
         Assert.assertEquals(true, api.sources.hasAPI())
 
-        Assert.assertEquals("add", actions.items[0].path.action.name)
-        Assert.assertEquals(true , actions.items[0].path.action.roles.isEmpty)
-        Assert.assertEquals(AuthMode.Keyed, actions.items[0].path.action.auth)
-        Assert.assertEquals(Verb.Post     , actions.items[0].path.action.verb)
-        Assert.assertEquals("0"  , actions.items[0].path.action.version)
-        Assert.assertEquals(Access.Public , actions.items[0].path.action.access)
-        Assert.assertEquals(true , actions.items[0].path.action.sources.hasAPI())
+        Assert.assertEquals("add", actions.items[0].action.name)
+        Assert.assertEquals(true , actions.items[0].action.roles.isEmpty)
+        Assert.assertEquals(AuthMode.Keyed, actions.items[0].action.auth)
+        Assert.assertEquals(Verb.Post     , actions.items[0].action.verb)
+        Assert.assertEquals("0"  , actions.items[0].action.version)
+        Assert.assertEquals(Access.Public , actions.items[0].action.access)
+        Assert.assertEquals(true , actions.items[0].action.sources.hasAPI())
         Assert.assertEquals(2    , (actions.items[0].handler as MethodExecutor).call.params.size)
     }
 
@@ -95,15 +89,12 @@ class Api_001_Loader_Tests : ApiTestsBase() {
     @Test
     fun can_load_routes_from_annotations_with_overrides() {
         val router = router(
-            versions = listOf(
-                global(
-                    version = "0", apis = listOf(
-                        api(SampleAnnotatedApiWithOverrides::class, SampleAnnotatedApiWithOverrides())
-                    )
-                )
+    listOf(
+                api(SampleAnnotatedApiWithOverrides::class, SampleAnnotatedApiWithOverrides())
             )
         )
-        val apiOpt = router.getApi("tests", "overrides", "0", "1.0")
+
+        val apiOpt = router.getApi("tests", "overrides", "0")
         Assert.assertNotNull(apiOpt)
         val actions = apiOpt!!
         ensureOverrideSetup(actions)
@@ -113,20 +104,17 @@ class Api_001_Loader_Tests : ApiTestsBase() {
     @Test
     fun can_load_routes_from_config_with_overrides() {
         val router = router(
-            versions = listOf(
-                global(
-                    version = "0", apis = listOf(
-                        api(
-                            SampleApiWithConfigSetup::class,
-                            SampleApiWithConfigSetup(),
-                            setup = SetupType.Config,
-                            content = JSON_OVERRIDES.trim()
-                        )
-                    )
+        listOf(
+                api(
+                    SampleApiWithConfigSetup::class,
+                    SampleApiWithConfigSetup(),
+                    setup = SetupType.Config,
+                    content = JSON_OVERRIDES.trim()
                 )
             )
         )
-        val apiOpt = router.getApi("tests", "overrides", "0", "1.0")
+
+        val apiOpt = router.getApi("tests", "overrides", "0")
         Assert.assertNotNull(apiOpt)
         val actions = apiOpt!!
         ensureOverrideSetup(actions)
@@ -151,15 +139,15 @@ class Api_001_Loader_Tests : ApiTestsBase() {
         Assert.assertEquals("apiPolicy1", api.policies[0])
         Assert.assertEquals("apiPolicy2", api.policies[1])
 
-        val action = actions.items[0].path.action
-        Assert.assertEquals("adder", actions.items[0].path.action.name)
-        Assert.assertEquals(true, actions.items[0].path.action.roles.contains("user"))
-        Assert.assertEquals(AuthMode.Keyed, actions.items[0].path.action.auth)
-        Assert.assertEquals(Verb.Put, actions.items[0].path.action.verb)
-        Assert.assertEquals("1", actions.items[0].path.action.version)
-        Assert.assertEquals(Access.Public, actions.items[0].path.action.access)
-        Assert.assertEquals(true, actions.items[0].path.action.sources.hasAPI())
-        Assert.assertEquals(false, actions.items[0].path.action.sources.hasCLI())
+        val action = actions.items[0].action
+        Assert.assertEquals("adder", actions.items[0].action.name)
+        Assert.assertEquals(true, actions.items[0].action.roles.contains("user"))
+        Assert.assertEquals(AuthMode.Keyed, actions.items[0].action.auth)
+        Assert.assertEquals(Verb.Put, actions.items[0].action.verb)
+        Assert.assertEquals("1", actions.items[0].action.version)
+        Assert.assertEquals(Access.Public, actions.items[0].action.access)
+        Assert.assertEquals(true, actions.items[0].action.sources.hasAPI())
+        Assert.assertEquals(false, actions.items[0].action.sources.hasCLI())
         Assert.assertEquals(2, (actions.items[0].handler as MethodExecutor).call.params.size)
         Assert.assertEquals("actionTag1", action.tags[0])
         Assert.assertEquals("actionTag2", action.tags[1])
@@ -170,47 +158,38 @@ class Api_001_Loader_Tests : ApiTestsBase() {
 
     @Test
     fun can_load_routes_with_redirects() {
-        val router = router(
-            versions = listOf(
-                global(
-                    version = "0", apis = listOf(
-                        api(
-                            SampleApiWithConfigSetup::class,
-                            SampleApiWithConfigSetup(),
-                            setup = SetupType.Config,
-                            content = JSON_REDIRECTS.trim()
-                        )
-                    )
+        val router = router(listOf(
+                api(
+                    SampleApiWithConfigSetup::class,
+                    SampleApiWithConfigSetup(),
+                    setup = SetupType.Config,
+                    content = JSON_REDIRECTS.trim()
                 )
             )
         )
-        val actionOpt = router.getAction(Verbs.POST, "tests", "redirects", "adder", version = null)
+
+        val actionOpt = router.getAction(Verbs.POST, "tests", "redirects", "1", "adder", "1")
         Assert.assertNotNull(actionOpt)
         val actions = actionOpt!!
-        Assert.assertEquals("tests", actions.path.area.name)
-        Assert.assertEquals("redirects", actions.path.api.name)
-        Assert.assertEquals("add", actions.path.action.name)
-        Assert.assertEquals(Verb.Post, actions.path.action.verb)
+        Assert.assertEquals("tests", actions.area.name)
+        Assert.assertEquals("redirects", actions.api.name)
+        Assert.assertEquals("add", actions.action.name)
+        Assert.assertEquals(Verb.Post, actions.action.verb)
     }
 
 
     @Test
     fun can_load_routes_and_check_contains() {
         val router = router(
-            versions = listOf(
-                global(
-                    version = "0", apis = listOf(
-                        api(SampleAnnotatedApiWithDefaults::class, SampleAnnotatedApiWithDefaults()),
-                        api(SampleAnnotatedApiWithOverrides::class, SampleAnnotatedApiWithOverrides())
-                    )
-                )
+            listOf(
+                api(SampleAnnotatedApiWithDefaults::class, SampleAnnotatedApiWithDefaults()),
+                api(SampleAnnotatedApiWithOverrides::class, SampleAnnotatedApiWithOverrides())
             )
         )
         // Check defaults
         Assert.assertTrue(router.containsArea(area = "tests"))
-        Assert.assertTrue(router.containsArea(area = "tests", globalVersion = "0"))
         Assert.assertTrue(router.containsApi(area = "tests", api = "defaults"))
-        Assert.assertTrue(router.containsApi(area = "tests", api = "defaults", globalVersion = "0"))
+        Assert.assertTrue(router.containsApi(area = "tests", api = "defaults", version = "0"))
         Assert.assertTrue(
             router.containsAction(
                 verb = Verb.Post.name,
@@ -225,25 +204,23 @@ class Api_001_Loader_Tests : ApiTestsBase() {
                 area = "tests",
                 api = "defaults",
                 action = "add",
-                globalVersion = "0"
+                apiVersion = "0",
+                actionVersion = "1"
             )
         )
 
         // Check overrides
         Assert.assertTrue(router.containsArea(area = "tests"))
-        Assert.assertTrue(router.containsArea(area = "tests", globalVersion = "0"))
-        Assert.assertFalse(router.containsArea(area = "tests", globalVersion = "1"))
-        Assert.assertFalse(router.containsApi(area = "tests", api = "overrides", globalVersion = "1", version = "1.0"))
-        Assert.assertTrue(router.containsApi(area = "tests", api = "overrides", globalVersion = "0", version = "1.0"))
-        Assert.assertFalse(router.containsApi(area = "tests", api = "overrides", globalVersion = "0", version = "0.0"))
+        Assert.assertFalse(router.containsApi(area = "tests", api = "overrides", version = "0"))
+        Assert.assertTrue(router.containsApi(area = "tests", api = "overrides", version = "1"))
         Assert.assertFalse(
             router.containsAction(
                 verb = Verb.Post.name,
                 area = "tests",
                 api = "overrides",
                 action = "add",
-                globalVersion = "0",
-                version = "1.0"
+                apiVersion = "0",
+                actionVersion = "1.0"
             )
         )
         Assert.assertFalse(
@@ -252,8 +229,8 @@ class Api_001_Loader_Tests : ApiTestsBase() {
                 area = "tests",
                 api = "overrides",
                 action = "add",
-                globalVersion = "1",
-                version = "1.0"
+                apiVersion = "1",
+                actionVersion = "1.0"
             )
         )
         Assert.assertFalse(
@@ -262,8 +239,8 @@ class Api_001_Loader_Tests : ApiTestsBase() {
                 area = "tests",
                 api = "overrides",
                 action = "add",
-                globalVersion = "0",
-                version = "1.1"
+                apiVersion = "0",
+                actionVersion = "1.1"
             )
         )
         Assert.assertFalse(
@@ -272,8 +249,8 @@ class Api_001_Loader_Tests : ApiTestsBase() {
                 area = "tests",
                 api = "overrides",
                 action = "add",
-                globalVersion = "0",
-                version = "1.1"
+                apiVersion = "0",
+                actionVersion = "1.1"
             )
         )
         Assert.assertTrue(
@@ -282,8 +259,8 @@ class Api_001_Loader_Tests : ApiTestsBase() {
                 area = "tests",
                 api = "overrides",
                 action = "adder",
-                globalVersion = "0",
-                version = "1.1"
+                apiVersion = "0",
+                actionVersion = "1.1"
             )
         )
     }
@@ -291,12 +268,8 @@ class Api_001_Loader_Tests : ApiTestsBase() {
     @Test
     fun can_load_routes_only_public_and_annotated() {
         val router = router(
-            versions = listOf(
-                global(
-                    version = "0", apis = listOf(
-                        api(SampleAnnotatedTestApi::class, SampleAnnotatedTestApi())
-                    )
-                )
+            listOf(
+                api(SampleAnnotatedTestApi::class, SampleAnnotatedTestApi())
             )
         )
         val apiOpt = router.getApi("tests", "loader", "0")

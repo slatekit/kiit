@@ -19,7 +19,6 @@ import org.junit.Test
 import kiit.apis.*
 import kiit.apis.routes.Api
 import kiit.apis.services.Restify
-import kiit.apis.setup.GlobalVersion
 import kiit.apis.setup.api
 import kiit.apis.setup.routes
 import kiit.common.*
@@ -66,7 +65,7 @@ class Api_Restful_Tests : ApiTestsBase() {
 
     @Test
     fun can_get_by_id() {
-        val routes = routes(versions = listOf(GlobalVersion("0", listOf(api(SampleRESTApi::class, SampleRESTApi())))))
+        val routes = routes(listOf(api(SampleRESTApi::class, SampleRESTApi())))
         val apis = ApiServer(ctx, rewriter = Restify(), routes = routes)
         val r1 = runBlocking {
             apis.executeAttempt("tests", "SampleREST", "1", Verb.Get, mapOf(), mapOf())
@@ -82,7 +81,7 @@ class Api_Restful_Tests : ApiTestsBase() {
     @Test
     fun can_patch() {
 
-        val routes = routes(versions = listOf(GlobalVersion("0", listOf(api(SampleRESTApi::class, SampleRESTApi())))))
+        val routes = routes(listOf(api(SampleRESTApi::class, SampleRESTApi())))
         val apis = ApiServer(ctx, rewriter = Restify(), routes = routes)
         val r1 = runBlocking {
             apis.executeAttempt(
@@ -100,7 +99,7 @@ class Api_Restful_Tests : ApiTestsBase() {
     @Test
     fun can_delete_by_id() {
 
-        val routes = routes(versions = listOf(GlobalVersion("0", listOf(api(SampleRESTApi::class, SampleRESTApi())))))
+        val routes = routes(listOf(api(SampleRESTApi::class, SampleRESTApi())))
         val apis = ApiServer(ctx, rewriter = Restify(), routes = routes)
         val r1 = runBlocking {
             apis.executeAttempt("tests", "SampleREST", "1", Verb.Delete, mapOf(), mapOf())
@@ -115,7 +114,7 @@ class Api_Restful_Tests : ApiTestsBase() {
     @Test
     fun can_activate_by_id() {
 
-        val routes = routes(versions = listOf(GlobalVersion("0", listOf(api(SampleRESTApi::class, SampleRESTApi())))))
+        val routes = routes(listOf(api(SampleRESTApi::class, SampleRESTApi())))
         val apis = ApiServer(ctx, rewriter = Restify(), routes = routes)
         val r1 = runBlocking {
             apis.executeAttempt("tests", "SampleREST", "activateById", Verb.Post, mapOf(), mapOf("id" to 1))
@@ -129,7 +128,7 @@ class Api_Restful_Tests : ApiTestsBase() {
 
     @Test
     fun can_create() {
-        val routes = routes(versions = listOf(GlobalVersion("0", listOf(api(SampleRESTApi::class, SampleRESTApi())))))
+        val routes = routes(listOf(api(SampleRESTApi::class, SampleRESTApi())))
         val json = JSONObject()
         json.put("id", "0")
         json.put("title", "Indiana Jones")
@@ -160,7 +159,7 @@ class Api_Restful_Tests : ApiTestsBase() {
 
     @Test
     fun can_update() {
-        val routes = routes(versions = listOf(GlobalVersion("0", listOf(api(SampleRESTApi::class, SampleRESTApi())))))
+        val routes = routes(listOf(api(SampleRESTApi::class, SampleRESTApi())))
         val json = JSONObject()
         json.put("id", "1")
         json.put("title", "Indiana Jones")
@@ -197,14 +196,14 @@ class Api_Restful_Tests : ApiTestsBase() {
         callback: (Result<*, *>) -> Unit
     ) {
 
-        val routes1 = routes(versions = listOf(GlobalVersion("0", listOf(api(SampleRESTApi::class, SampleRESTApi())))))
+        val routes1 = routes(listOf(api(SampleRESTApi::class, SampleRESTApi())))
         val apis = ApiServer(ctx, rewriter = Restify(), routes = routes1)
         val r1 = runBlocking {
             apis.executeAttempt("tests", "SampleREST", action, verb, mapOf(), args)
         }
         callback(r1)
 
-        val routes2 = routes(versions = listOf(GlobalVersion("0", listOf(api(SampleRESTApi::class, SampleRESTApi())))), namer)
+        val routes2 = routes(listOf(api(SampleRESTApi::class, SampleRESTApi())), namer)
         val api2 = ApiServer(ctx, rewriter = Restify(), routes = routes2, settings = kiit.apis.Settings(naming = namer))
         val name = namer?.rename("SampleREST") ?: "SampleREST"
         val act = namer?.rename(action) ?: action

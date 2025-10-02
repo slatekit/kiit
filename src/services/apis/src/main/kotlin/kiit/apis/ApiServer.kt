@@ -36,7 +36,7 @@ import kotlin.reflect.KClass
  */
 open class ApiServer(
     val ctx: Context,
-    val routes: List<VersionAreas>,
+    val routes: Areas,
     val rewriter: Rewriter? = null,
     middleware: List<Pair<String,Middleware>> = listOf(),
     val auth: Auth? = null,
@@ -120,8 +120,8 @@ open class ApiServer(
      * @param action : e.g. "register"
      * @return
      */
-    fun get(verb:String, area: String, name: String, action: String, globalVersion:String = ApiConstants.zero, version:String? = null): Route? {
-        val action = router.getAction(verb, area, name, action, globalVersion, version)
+    fun get(verb:String, area: String, name: String, action: String, apiVersion:String = ApiConstants.zero, actionVersion:String? = null): Route? {
+        val action = router.getAction(verb, area, name, apiVersion, action, actionVersion ?: ApiConstants.zero)
         return action
     }
 
@@ -239,8 +239,9 @@ open class ApiServer(
 
         const val VERSION_HEADER_KEY = "x-api-version"
 
+
         @JvmStatic
-        fun of(ctx: Context, routes: List<VersionAreas>, auth: Auth? = null, source: Source? = null): ApiServer {
+        fun of(ctx: Context, routes: Areas, auth: Auth? = null, source: Source? = null): ApiServer {
             val server = ApiServer(ctx, routes, null, listOf(), auth, null, listOf(), Settings(source ?: Source.API))
             return server
         }

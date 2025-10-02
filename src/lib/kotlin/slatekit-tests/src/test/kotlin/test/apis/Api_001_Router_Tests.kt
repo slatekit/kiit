@@ -1,7 +1,6 @@
 package test.apis
 
 import kiit.apis.setup.api
-import kiit.apis.setup.global
 import kiit.apis.setup.router
 import kiit.context.AppContext
 import org.junit.Test
@@ -14,22 +13,18 @@ class Api_001_Router_Tests : ApiTestsBase() {
     @Test
     fun can_load_routes_with_versions() {
         val context = AppContext.simple(Api_001_Router_Tests::class.java, "simple")
-        val router = router(
-            versions = listOf(
-                global(
-                    version = "0", apis = listOf(
-                        api(SampleApi1V1::class, SampleApi1V1(context)),
-                        api(SampleApi2V2::class, SampleApi2V2(context))
-                    )
-                )
+        val router = router(listOf(
+                api(SampleApi1V1::class, SampleApi1V1(context)),
+                api(SampleApi2V2::class, SampleApi2V2(context))
             )
         )
-        router.versions.forEachIndexed { ndx , version ->
-            println("Version ndx = $ndx, name = ${version.name}, version = ${version.version}")
-            version.items.forEachIndexed { ndxArea, area ->
-                println("Area ndx = $ndxArea, name = ${area.name}, version = ${area.name}")
-                area.items.forEachIndexed { ndxApi, api ->
-                    println("Api ndx = $ndxApi, name = ${api.name}, version = ${api.api.version}")
+
+        router.areas.items.forEachIndexed { ndx , area ->
+            println("Version ndx = $ndx, name = ${area.name}")
+            area.items.forEachIndexed { ndxApi, api ->
+                println("Area ndx = $ndxApi, name = ${api.api.name}, version = ${api.api.version}")
+                api.items.forEachIndexed { ndxAction, action ->
+                    println("Action ndx = $ndxAction, name = ${action.action.name}, version = ${action.action.version}")
                 }
             }
         }

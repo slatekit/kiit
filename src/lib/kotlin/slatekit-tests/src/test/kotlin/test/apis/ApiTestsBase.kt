@@ -17,6 +17,7 @@ import org.junit.Assert
 import kiit.apis.*
 import kiit.apis.core.Auth
 import kiit.apis.executor.MetaHandler
+import kiit.apis.routes.Areas
 import kiit.apis.routes.VersionAreas
 import kiit.requests.CommonRequest
 import kiit.common.Source
@@ -135,7 +136,7 @@ open class ApiTestsBase {
     fun checkCall(
         protocol: Source,
         middleware: List<Middleware> = listOf(),
-        routes: List<VersionAreas>,
+        routes: Areas,
         user: Credentials?,
         request: Request,
         response: Response<*>,

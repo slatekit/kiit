@@ -17,14 +17,10 @@ import org.junit.Assert
 import org.junit.Test
 import org.threeten.bp.ZoneId
 import kiit.apis.*
-import kiit.apis.routes.Api
-import kiit.apis.SetupType
-import kiit.apis.setup.GlobalVersion
 import kiit.apis.setup.api
 import kiit.apis.setup.routes
 import kiit.common.DateTimes
 import kiit.results.*
-import test.apis.samples.Sample_API_1_Core
 import test.apis.samples.Sample_API_1_Validation
 
 /**
@@ -40,7 +36,7 @@ class Api_Validation_Tests : ApiTestsBase() {
 
     @Test
     fun can_fail_with_missing_args() {
-        val routes = routes(versions = listOf(GlobalVersion("0", listOf(api(Sample_API_1_Validation::class, Sample_API_1_Validation())))))
+        val routes = routes(listOf(api(Sample_API_1_Validation::class, Sample_API_1_Validation())))
         val apis = ApiServer(ctx, routes = routes)
         val r1 = runBlocking {
             apis.executeAttempt("tests", "validation", Sample_API_1_Validation::processInputs.name, Verb.Post, mapOf(), mapOf())
@@ -61,7 +57,7 @@ class Api_Validation_Tests : ApiTestsBase() {
 
     @Test
     fun can_fail_with_conversion() {
-        val routes = routes(versions = listOf(GlobalVersion("0", listOf(api(Sample_API_1_Validation::class, Sample_API_1_Validation())))))
+        val routes = routes(listOf(api(Sample_API_1_Validation::class, Sample_API_1_Validation())))
         val apis = ApiServer(ctx, routes = routes)
         val r1 = runBlocking {
             apis.executeAttempt("tests", "validation", Sample_API_1_Validation::processInputs.name, Verb.Post, mapOf(), mapOf(

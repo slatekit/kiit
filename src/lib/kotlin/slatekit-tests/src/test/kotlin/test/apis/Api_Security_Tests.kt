@@ -13,10 +13,7 @@ about: A Kotlin utility library, tool-kit and server backend.
 package test.apis
 
 import org.junit.Test
-import kiit.apis.routes.Api
-import kiit.apis.SetupType
 import kiit.apis.Verbs
-import kiit.apis.setup.GlobalVersion
 import kiit.apis.setup.api
 import kiit.apis.setup.routes
 import kiit.common.info.Credentials
@@ -26,7 +23,6 @@ import kiit.requests.toResponse
 import kiit.results.Success
 import kiit.results.builders.Notices
 import kiit.results.builders.Outcomes
-import test.apis.samples.Sample_API_1_Core
 import test.apis.samples.Sample_API_2_Roles
 
 /**
@@ -41,7 +37,7 @@ class Api_Security_Tests : ApiTestsBase() {
     fun roles_should_work_when_role_is_any() {
         checkCall(
             protocol = Source.All,
-            routes = routes(versions = listOf(GlobalVersion("0", listOf(api(Sample_API_2_Roles::class, Sample_API_2_Roles()))))),
+            routes = routes(listOf(api(Sample_API_2_Roles::class, Sample_API_2_Roles()))),
             user = Credentials(name = "kishore", roles = "dev"),
             request = CommonRequest.path(
                 "app.rolesTest.rolesAny", Verbs.POST, mapOf(), mapOf(
@@ -54,7 +50,7 @@ class Api_Security_Tests : ApiTestsBase() {
 
         checkCall(
             protocol = Source.All,
-            routes = routes(versions = listOf(GlobalVersion("0", listOf(api(Sample_API_2_Roles::class, Sample_API_2_Roles()))))),
+            routes = routes(listOf(api(Sample_API_2_Roles::class, Sample_API_2_Roles()))),
             user = Credentials(name = "kishore", roles = "qa"),
             request = CommonRequest.path(
                 "app.rolesTest.rolesAny", Verbs.POST, mapOf(), mapOf(
@@ -67,7 +63,7 @@ class Api_Security_Tests : ApiTestsBase() {
 
         checkCall(
             protocol = Source.All,
-            routes = routes(versions = listOf(GlobalVersion("0", listOf(api(Sample_API_2_Roles::class, Sample_API_2_Roles()))))),
+            routes = routes(listOf(api(Sample_API_2_Roles::class, Sample_API_2_Roles()))),
             user = Credentials(name = "kishore", roles = ""),
             request = CommonRequest.path(
                 "app.rolesTest.rolesAny", Verbs.POST, mapOf(), mapOf(
@@ -84,7 +80,7 @@ class Api_Security_Tests : ApiTestsBase() {
     fun roles_should_fail_for_any_role_any_with_no_user() {
         checkCall(
             protocol = Source.All,
-            routes = routes(versions = listOf(GlobalVersion("0", listOf(api(Sample_API_2_Roles::class, Sample_API_2_Roles()))))),
+            routes = routes(listOf(api(Sample_API_2_Roles::class, Sample_API_2_Roles()))),
             user = null,
             request = CommonRequest.path(
                 "app.rolesTest.rolesAny", Verbs.POST, mapOf(), mapOf(
@@ -101,7 +97,7 @@ class Api_Security_Tests : ApiTestsBase() {
     fun roles_should_work_for_a_specific_role() {
         checkCall(
             protocol = Source.All,
-            routes = routes(versions = listOf(GlobalVersion("0", listOf(api(Sample_API_2_Roles::class, Sample_API_2_Roles()))))),
+            routes = routes(listOf(api(Sample_API_2_Roles::class, Sample_API_2_Roles()))),
             user = Credentials(name = "kishore", roles = "dev"),
             request = CommonRequest.path(
                 "app.rolesTest.rolesSpecific", Verbs.POST, mapOf(), mapOf(
@@ -118,7 +114,7 @@ class Api_Security_Tests : ApiTestsBase() {
     fun roles_should_fail_for_a_specific_role_when_user_has_a_different_role() {
         checkCall(
             protocol = Source.All,
-            routes = routes(versions = listOf(GlobalVersion("0", listOf(api(Sample_API_2_Roles::class, Sample_API_2_Roles()))))),
+            routes = routes(listOf(api(Sample_API_2_Roles::class, Sample_API_2_Roles()))),
             user = Credentials(name = "kishore", roles = "ops"),
             request = CommonRequest.path(
                 "app.rolesTest.rolesSpecific", Verbs.POST, mapOf(), mapOf(
@@ -135,7 +131,7 @@ class Api_Security_Tests : ApiTestsBase() {
     fun roles_should_work_for_a_specific_role_when_referring_to_its_parent_role() {
         checkCall(
             protocol = Source.All,
-            routes = routes(versions = listOf(GlobalVersion("0", listOf(api(Sample_API_2_Roles::class, Sample_API_2_Roles()))))),
+            routes = routes(listOf(api(Sample_API_2_Roles::class, Sample_API_2_Roles()))),
             user = Credentials(name = "kishore", roles = "admin"),
             request = CommonRequest.path(
                 "app.rolesTest.rolesParent", Verbs.POST, mapOf(), mapOf(
@@ -152,7 +148,7 @@ class Api_Security_Tests : ApiTestsBase() {
     fun roles_should_fail_for_a_specific_role_when_referring_to_its_parent_role_when_user_has_a_different_role() {
         checkCall(
             protocol = Source.All,
-            routes = routes(versions = listOf(GlobalVersion("0", listOf(api(Sample_API_2_Roles::class, Sample_API_2_Roles()))))),
+            routes = routes(listOf(api(Sample_API_2_Roles::class, Sample_API_2_Roles()))),
             user = Credentials(name = "kishore", roles = "dev"),
             request = CommonRequest.path(
                 "app.rolesTest.rolesParent", Verbs.POST, mapOf(), mapOf(
@@ -170,7 +166,7 @@ class Api_Security_Tests : ApiTestsBase() {
     fun roles_by_key_should_work_when_role_is_any() {
         checkCall(
             protocol = Source.All,
-            routes = routes(versions = listOf(GlobalVersion("0", listOf(api(Sample_API_2_Roles::class, Sample_API_2_Roles()))))),
+            routes = routes(listOf(api(Sample_API_2_Roles::class, Sample_API_2_Roles()))),
             user = Credentials(name = "kishore", roles = "dev"),
             request = CommonRequest.path(
                 "app.rolesTest.rolesAny", Verbs.POST, mapOf(
@@ -189,7 +185,7 @@ class Api_Security_Tests : ApiTestsBase() {
     fun roles_by_key_should_fail_for_any_role_with_no_user() {
         checkCall(
             protocol = Source.All,
-            routes = routes(versions = listOf(GlobalVersion("0", listOf(api(Sample_API_2_Roles::class, Sample_API_2_Roles()))))),
+            routes = routes(listOf(api(Sample_API_2_Roles::class, Sample_API_2_Roles()))),
             user = null,
             request = CommonRequest.path(
                 "app.rolesTest.rolesAny", Verbs.POST, mapOf(), mapOf(
@@ -206,7 +202,7 @@ class Api_Security_Tests : ApiTestsBase() {
     fun roles_by_key_should_work_for_a_specific_role() {
         checkCall(
             protocol = Source.All,
-            routes = routes(versions = listOf(GlobalVersion("0", listOf(api(Sample_API_2_Roles::class, Sample_API_2_Roles()))))),
+            routes = routes(listOf(api(Sample_API_2_Roles::class, Sample_API_2_Roles()))),
             user = Credentials(name = "kishore", roles = "dev"),
             request = CommonRequest.path(
                 "app.rolesTest.rolesSpecific", Verbs.POST, mapOf(
@@ -225,7 +221,7 @@ class Api_Security_Tests : ApiTestsBase() {
     fun roles_by_key_should_fail_for_a_specific_role_when_user_has_a_different_role() {
         checkCall(
             protocol = Source.All,
-            routes = routes(versions = listOf(GlobalVersion("0", listOf(api(Sample_API_2_Roles::class, Sample_API_2_Roles()))))),
+            routes = routes(listOf(api(Sample_API_2_Roles::class, Sample_API_2_Roles()))),
             user = Credentials(name = "kishore", roles = "qa"),
             request = CommonRequest.path(
                 "app.rolesTest.rolesSpecific", Verbs.POST, mapOf(
@@ -244,7 +240,7 @@ class Api_Security_Tests : ApiTestsBase() {
     fun roles_by_key_should_work_for_a_specific_role_when_referring_to_its_parent_role() {
         checkCall(
             protocol = Source.All,
-            routes = routes(versions = listOf(GlobalVersion("0", listOf(api(Sample_API_2_Roles::class, Sample_API_2_Roles()))))),
+            routes = routes(listOf(api(Sample_API_2_Roles::class, Sample_API_2_Roles()))),
             user = Credentials(name = "kishore", roles = "admin"),
             request = CommonRequest.path(
                 "app.rolesTest.rolesParent", Verbs.POST, mapOf(
@@ -263,7 +259,7 @@ class Api_Security_Tests : ApiTestsBase() {
     fun roles_by_key_should_fail_for_a_specific_role_when_referring_to_its_parent_role_when_user_has_a_different_role() {
         checkCall(
             protocol = Source.All,
-            routes = routes(versions = listOf(GlobalVersion("0", listOf(api(Sample_API_2_Roles::class, Sample_API_2_Roles()))))),
+            routes = routes(listOf(api(Sample_API_2_Roles::class, Sample_API_2_Roles()))),
             user = Credentials(name = "kishore", roles = "dev"),
             request = CommonRequest.path(
                 "app.rolesTest.rolesParent", Verbs.POST, mapOf(
@@ -282,7 +278,7 @@ class Api_Security_Tests : ApiTestsBase() {
     fun should_use_action_auth_as_override() {
         checkCall(
             protocol = Source.All,
-            routes = routes(versions = listOf(GlobalVersion("0", listOf(api(Sample_API_2_Roles::class, Sample_API_2_Roles()))))),
+            routes = routes(listOf(api(Sample_API_2_Roles::class, Sample_API_2_Roles()))),
             user = Credentials(name = "kishore", roles = "dev"),
             request = CommonRequest.path(
                 "app.rolesTest.authOverride", Verbs.POST, mapOf(
@@ -301,7 +297,7 @@ class Api_Security_Tests : ApiTestsBase() {
     fun should_use_action_auth_as_override_fails_with_bad_key() {
         checkCall(
             protocol = Source.All,
-            routes = routes(versions = listOf(GlobalVersion("0", listOf(api(Sample_API_2_Roles::class, Sample_API_2_Roles()))))),
+            routes = routes(listOf(api(Sample_API_2_Roles::class, Sample_API_2_Roles()))),
             user = Credentials(name = "kishore", roles = "dev"),
             request = CommonRequest.path(
                 "app.rolesTest.authOverride", Verbs.POST, mapOf(

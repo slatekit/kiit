@@ -16,14 +16,10 @@ import kotlinx.coroutines.runBlocking
 import org.junit.Assert
 import org.junit.Test
 import kiit.apis.*
-import kiit.apis.routes.Api
-import kiit.apis.setup.GlobalVersion
 import kiit.apis.setup.api
 import kiit.apis.setup.routes
 import kiit.results.Codes
 import kiit.results.Outcome
-import kiit.results.getOrElse
-import test.apis.samples.Sample_API_1_Core
 import test.setup.SampleMiddlewareApi
 
 /**
@@ -42,7 +38,7 @@ class Api_Middleware_Tests : ApiTestsBase() {
             "api_test" to apiMiddleware,
             "action_test" to actionMiddleware
         )
-        val routes = routes(versions = listOf(GlobalVersion("0", listOf(api(SampleMiddlewareApi::class, api)))))
+        val routes = routes(listOf(api(SampleMiddlewareApi::class, api)))
         val apis = ApiServer(ctx, routes = routes, middleware = policies )
         val r1 = runBlocking { apis.executeAttempt("app", "SampleMiddleware", SampleMiddlewareApi::hi.name, Verb.Post, mapOf(), mapOf()) }
         val r2 = runBlocking { apis.executeAttempt("app", "SampleMiddleware", SampleMiddlewareApi::hello.name, Verb.Post, mapOf(), mapOf()) }

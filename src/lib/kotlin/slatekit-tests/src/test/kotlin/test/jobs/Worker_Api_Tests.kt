@@ -1,15 +1,12 @@
 package test.jobs
 
 import kiit.apis.*
-import kiit.apis.Middleware
 import kotlinx.coroutines.runBlocking
 import org.junit.Assert
 import org.junit.Test
 import org.threeten.bp.ZoneId
 
-import kiit.apis.routes.Api
 import kiit.apis.core.Reqs
-import kiit.apis.setup.GlobalVersion
 import kiit.apis.setup.api
 import kiit.apis.setup.routes
 import kiit.common.*
@@ -35,7 +32,7 @@ class Worker_Api_Tests : TestSupport {
     fun buildContainer(): ApiServer {
         val ctx = AppContext.simple(app,"queues")
         val api = SampleTypes2Api()
-        val routes = routes(versions = listOf(GlobalVersion("0", listOf(api(SampleTypes2Api::class, api)))))
+        val routes = routes(listOf(api(SampleTypes2Api::class, api)))
         val apis = ApiServer(ctx, routes = routes)
         return apis
     }
@@ -58,7 +55,7 @@ class Worker_Api_Tests : TestSupport {
             val policies = listOf("queued" to policy)
 
             // 4. container
-            val routes = routes(versions = listOf(GlobalVersion("0", listOf(api(SampleWorkerAPI::class, api)))))
+            val routes = routes(listOf(api(SampleWorkerAPI::class, api)))
             val apis = ApiServer(ctx, routes = routes, middleware = policies)
 
             // 5. send method call to queue

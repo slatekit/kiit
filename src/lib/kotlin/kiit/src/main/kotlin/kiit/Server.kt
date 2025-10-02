@@ -9,8 +9,7 @@ import io.ktor.server.engine.embeddedServer
 import io.ktor.server.netty.Netty
 import kiit.apis.*
 import kiit.apis.core.Auth
-import kiit.apis.core.Meta
-import kiit.apis.setup.GlobalVersion
+import kiit.apis.setup.ApiSetup
 import kiit.apis.setup.api
 import kiit.apis.setup.routes
 
@@ -93,20 +92,11 @@ class Server(val ctx: Context)  {
     }
 
 
-    fun apis(): List<GlobalVersion> {
+    fun apis(): List<ApiSetup> {
         val apis = listOf(
-                GlobalVersion("v0",
-                    listOf(
-                        api(SampleFiles3Api::class, SampleFiles3Api()),
-                        api(SampleVersionApi::class, SampleVersionApi("0")),
-                    )
-                ),
-                GlobalVersion("v1",
-                    listOf(
-                        api(SampleVersionApi::class, SampleVersionApi("1")),
-                    )
-                )
-            )
+            api(SampleFiles3Api::class, SampleFiles3Api()),
+            api(SampleVersionApi::class, SampleVersionApi("1")),
+        )
         return apis
     }
 
