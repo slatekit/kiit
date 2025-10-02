@@ -178,7 +178,7 @@ class ConfigLoader(val cls: KClass<*>, val instance: Any) {
     private fun buildRedirect(json: JSONObject, methods: Map<String, KCallable<*>>): RouteForwarder {
         val target = json.get("target") as String
         val parts = target.split("/")
-        val version = json.get("globalVersion") as String
+        val version = json.get("version") as String
         val verb = Verb.parse(json.get("verb") as String)
         return RouteForwarder(version, verb, Area(parts[0]), Versioned(parts[1]), Versioned(parts[2]))
     }

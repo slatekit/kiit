@@ -94,7 +94,7 @@ class Api_001_Loader_Tests : ApiTestsBase() {
             )
         )
 
-        val apiOpt = router.getApi("tests", "overrides", "0")
+        val apiOpt = router.getApi("tests", "overrides", "1")
         Assert.assertNotNull(apiOpt)
         val actions = apiOpt!!
         ensureOverrideSetup(actions)
@@ -188,8 +188,8 @@ class Api_001_Loader_Tests : ApiTestsBase() {
         )
         // Check defaults
         Assert.assertTrue(router.containsArea(area = "tests"))
-        Assert.assertTrue(router.containsApi(area = "tests", api = "defaults", version = "1"))
         Assert.assertTrue(router.containsApi(area = "tests", api = "defaults", version = "0"))
+        Assert.assertFalse(router.containsApi(area = "tests", api = "defaults", version = "1"))
         Assert.assertTrue(
             router.containsAction(
                 verb = Verb.Post.name,
@@ -205,7 +205,7 @@ class Api_001_Loader_Tests : ApiTestsBase() {
                 api = "defaults",
                 action = "add",
                 apiVersion = "0",
-                actionVersion = "1"
+                actionVersion = "0"
             )
         )
 
@@ -220,7 +220,7 @@ class Api_001_Loader_Tests : ApiTestsBase() {
                 api = "overrides",
                 action = "add",
                 apiVersion = "0",
-                actionVersion = "1.0"
+                actionVersion = "1"
             )
         )
         Assert.assertFalse(
@@ -230,7 +230,7 @@ class Api_001_Loader_Tests : ApiTestsBase() {
                 api = "overrides",
                 action = "add",
                 apiVersion = "1",
-                actionVersion = "1.0"
+                actionVersion = "1"
             )
         )
         Assert.assertFalse(
@@ -250,7 +250,7 @@ class Api_001_Loader_Tests : ApiTestsBase() {
                 api = "overrides",
                 action = "add",
                 apiVersion = "0",
-                actionVersion = "1.1"
+                actionVersion = "1"
             )
         )
         Assert.assertTrue(
@@ -259,8 +259,8 @@ class Api_001_Loader_Tests : ApiTestsBase() {
                 area = "tests",
                 api = "overrides",
                 action = "adder",
-                apiVersion = "0",
-                actionVersion = "1.1"
+                apiVersion = "1",
+                actionVersion = "1"
             )
         )
     }
@@ -392,7 +392,7 @@ class Api_001_Loader_Tests : ApiTestsBase() {
               {
                   "name"     : "adder",
                   "verb"     : "post",
-                  "execute"  :  { "type": "redirect", "target": "tests/redirects/add", "globalVersion": "0", "verb": "post" }
+                  "execute"  :  { "type": "redirect", "target": "tests/redirects/add", "version": "0", "verb": "post" }
               },
               {
                   "execute"  :  { "type": "method", "target": "add" }

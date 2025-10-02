@@ -123,17 +123,8 @@ data class DefaultRouter(
     private fun actionInternal(verb:String, area: String, api: String, apiVersion: String, action: String, actionVersion: String): Route? {
         if (area.isEmpty()) return null
         if (api.isEmpty()) return null
-        val info = when (actionVersion) {
-            null -> Pair(ApiConstants.zero, ApiConstants.zero)
-            else -> {
-                val parts = apiVersion.split(".")
-                val apiVersion = parts[0]
-                val actionVersion = parts[1]
-                Pair(apiVersion, actionVersion)
-            }
-        }
         val apiLookup = getApi(area, api, apiVersion)
-        val actionName = "${verb}.${info.second}:${action}"
+        val actionName = "${verb}.${actionVersion}:${action}"
         val mapping = apiLookup?.get(actionName)
         return mapping
     }
