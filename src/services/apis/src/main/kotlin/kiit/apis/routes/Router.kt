@@ -1,5 +1,6 @@
 package kiit.apis.routes
 
+import kiit.apis.ApiConstants
 import kiit.utils.naming.Namer
 
 /**
@@ -55,6 +56,10 @@ data class DefaultRouter(
      */
     fun containsApi(area: String, api: String, version:String?): Boolean {
         return getApi(area, api, version) != null
+    }
+
+    fun containsAction(verb: String, area: String, api: String, action: String): Boolean {
+        return containsAction(verb, area, api, ApiConstants.zero, action, ApiConstants.zero)
     }
 
     /**
