@@ -114,7 +114,7 @@ class Api_001_Loader_Tests : ApiTestsBase() {
             )
         )
 
-        val apiOpt = router.getApi("tests", "overrides", "0")
+        val apiOpt = router.getApi("tests", "overrides", "1")
         Assert.assertNotNull(apiOpt)
         val actions = apiOpt!!
         ensureOverrideSetup(actions)
@@ -168,7 +168,7 @@ class Api_001_Loader_Tests : ApiTestsBase() {
             )
         )
 
-        val actionOpt = router.getAction(Verbs.POST, "tests", "redirects", "1", "adder", "1")
+        val actionOpt = router.getAction(Verbs.POST, "tests", "redirects", "0", "adder", "0")
         Assert.assertNotNull(actionOpt)
         val actions = actionOpt!!
         Assert.assertEquals("tests", actions.area.name)

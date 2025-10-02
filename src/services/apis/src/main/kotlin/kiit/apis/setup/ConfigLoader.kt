@@ -180,7 +180,7 @@ class ConfigLoader(val cls: KClass<*>, val instance: Any) {
         val parts = target.split("/")
         val version = json.get("version") as String
         val verb = Verb.parse(json.get("verb") as String)
-        return RouteForwarder(version, verb, Area(parts[0]), Versioned(parts[1]), Versioned(parts[2]))
+        return RouteForwarder("0", verb, Area(parts[0]), Versioned(parts[1], version), Versioned(parts[2]))
     }
 
 
