@@ -17,7 +17,9 @@ import org.junit.Assert
 import kiit.apis.*
 import kiit.apis.core.Auth
 import kiit.apis.executor.MetaHandler
-import kiit.apis.routes.VersionAreas
+import kiit.apis.routes.Areas
+import kiit.apis.setup.ApiSetup
+import kiit.apis.setup.routes
 import kiit.requests.CommonRequest
 import kiit.common.Source
 import kiit.common.args.Args
@@ -90,15 +92,15 @@ open class ApiTestsBase {
 
     fun getApis(source: Source,
                 auth: Auth? = null,
-                apis: List<VersionAreas> = listOf()): ApiServer {
+                apis: List<ApiSetup> = listOf()): ApiServer {
 
         // 2. apis
-        val container = ApiServer.of(ctx, apis, auth, source)
+        val container = ApiServer.of(ctx, routes(apis), auth, source)
         return container
     }
 
 
-    fun ensureCall(apis: List<VersionAreas> = listOf(),
+    fun ensureCall(apis: List<ApiSetup> = listOf(),
                    protocolCt: String,
                    protocol: String,
                    authMode: String,
@@ -135,7 +137,7 @@ open class ApiTestsBase {
     fun checkCall(
         protocol: Source,
         middleware: List<Middleware> = listOf(),
-        routes: List<VersionAreas>,
+        routes: Areas,
         user: Credentials?,
         request: Request,
         response: Response<*>,

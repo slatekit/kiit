@@ -13,12 +13,12 @@
 
 package slate.test
 
+import kiit.apis.setup.ApiSetup
+import kiit.apis.setup.api
+import kiit.apis.setup.routes
 import kotlinx.coroutines.runBlocking
 import org.junit.Assert
 import org.junit.Test
-import kiit.apis.routes.Api
-import kiit.apis.SetupType
-import kiit.apis.routes.VersionAreas
 import kiit.apis.support.Authenticator
 import kiit.cli.CliRequest
 import kiit.cli.CliResponse
@@ -117,10 +117,10 @@ class ShellTests  {
             Credentials("1", "kishore", "kishore@abc.com", apiKeys.last().key, "test", "ny")
 
     // 2. Register the apis using default textType ( uses permissions in annotations on class )
-    val apis = listOf<VersionAreas>(
-//            Api(InfoApi(ctx), setup = SetupType.Annotated, declaredOnly = true, roles = listOf("qa")),
-//            Api(VersionApi(ctx), setup = SetupType.Annotated, declaredOnly = true, roles = listOf("qa"))
-    )
+    val apis = routes(listOf<ApiSetup>(
+        api(InfoApi::class, InfoApi(ctx)),
+        api(VersionApi::class, VersionApi(ctx))
+    ))
 
     // 3. Build up the cli services that handles all the command line features.
     // And setup the api container to hold all the apis.

@@ -21,5 +21,5 @@ import kiit.apis.ApiConstants
  * From the example above, this represents the area "accounts" and it's mapped list of apis/classes
  */
 class Area(val name: String, val version:String = ApiConstants.zero) {
-    val fullname:String = "$version.$name"
+    val fullName:String = "$version.$name"
 }

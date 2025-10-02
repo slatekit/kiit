@@ -178,18 +178,15 @@ class ConfigLoader(val cls: KClass<*>, val instance: Any) {
     private fun buildRedirect(json: JSONObject, methods: Map<String, KCallable<*>>): RouteForwarder {
         val target = json.get("target") as String
         val parts = target.split("/")
-        val version = json.get("globalVersion") as String
+        val version = json.get("version") as String
         val verb = Verb.parse(json.get("verb") as String)
-        return RouteForwarder(version, verb, Area(parts[0]), Versioned(parts[1]), Versioned(parts[2]))
+        return RouteForwarder("0", verb, Area(parts[0]), Versioned(parts[1], version), Versioned(parts[2]))
     }
 
 
     private fun buildRoute(area: Area, api: Api, action: Action, handler: RouteHandler): Route {
-        // area/api/action objects ( with version info )
-        val path = Path(area, api, action)
-
-        // Final mapping of route -> handler
-        return Route(path, handler)
+        // Final mapping of route(area, api, action) -> handler
+        return Route(area, api, action, handler)
     }
 
     fun toList(items:JSONArray?) : List<String> {

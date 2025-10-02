@@ -58,16 +58,16 @@ class Executor(
      * 3. action execute: Finally, the action method execution is run.
      */
     private suspend fun executeFlow(req:ApiRequest, op:suspend (ApiRequest) -> Outcome<ApiResult>): Outcome<ApiResult> {
-        val path = req.target!!.path
+        val route = req.target!!
 
         // Level: Action ( this executes last )
-        val actions = path.action.policies.map { middlewares[it] }.filterNotNull()
+        val actions = route.action.policies.map { middlewares[it] }.filterNotNull()
         val actionFlow: suspend (ApiRequest) -> Outcome<ApiResult> = { r ->
             Middleware.process(r, 0, actions, op)
         }
 
         // Level: API
-        val global = path.api.policies.map { middlewares[it] }.filterNotNull()
+        val global = route.api.policies.map { middlewares[it] }.filterNotNull()
         val result = Middleware.process(req, 0, global, actionFlow)
         return result
     }

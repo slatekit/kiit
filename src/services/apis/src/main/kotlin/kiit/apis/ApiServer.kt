@@ -20,7 +20,6 @@ import kiit.requests.CommonRequest
 import kiit.requests.Request
 import kiit.requests.Response
 import kiit.context.Context
-import kiit.meta.*
 import kiit.serialization.deserializer.Deserializer
 import kiit.results.*
 import kiit.results.builders.Outcomes
@@ -37,7 +36,7 @@ import kotlin.reflect.KClass
  */
 open class ApiServer(
     val ctx: Context,
-    val routes: List<VersionAreas>,
+    val routes: Areas,
     val rewriter: Rewriter? = null,
     middleware: List<Pair<String,Middleware>> = listOf(),
     val auth: Auth? = null,
@@ -50,7 +49,7 @@ open class ApiServer(
      * Load all the routes from the APIs supplied.
      * The API setup can be either annotation based or public methods on the Class
      */
-    private val router = Router(routes, settings.naming)
+    private val router = DefaultRouter(routes, settings.naming)
 
     /**
      * Decoder for converting Request Body JSON to method parameter values.
@@ -121,8 +120,8 @@ open class ApiServer(
      * @param action : e.g. "register"
      * @return
      */
-    fun get(verb:String, area: String, name: String, action: String, globalVersion:String = ApiConstants.zero, version:String? = null): Route? {
-        val action = router.action(verb, area, name, action, globalVersion, version)
+    fun get(verb:String, area: String, name: String, action: String, apiVersion:String = ApiConstants.zero, actionVersion:String? = null): Route? {
+        val action = router.getAction(verb, area, name, apiVersion, action, actionVersion ?: ApiConstants.zero)
         return action
     }
 
@@ -240,8 +239,9 @@ open class ApiServer(
 
         const val VERSION_HEADER_KEY = "x-api-version"
 
+
         @JvmStatic
-        fun of(ctx: Context, routes: List<VersionAreas>, auth: Auth? = null, source: Source? = null): ApiServer {
+        fun of(ctx: Context, routes: Areas, auth: Auth? = null, source: Source? = null): ApiServer {
             val server = ApiServer(ctx, routes, null, listOf(), auth, null, listOf(), Settings(source ?: Source.API))
             return server
         }

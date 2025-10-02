@@ -39,7 +39,42 @@ class SampleApi1(val context: Context) {
     @Action(desc = "test simple action with inputs")
     @Documented(path = "docs/apis", key = "actions.tests.repeat")
     fun repeat(word: String, count:Int): String {
-        return (0 until count).map { word }.joinToString(" ")
+        return (0 until count).joinToString(" ") { word }
+    }
+}
+
+
+
+@Api(area = "app", name = "sample1", version = "v1", desc = "sample to test features of Slate Kit APIs")
+class SampleApi1V1(val context: Context) {
+
+    @Action(desc = "test simple action with inputs")
+    @Documented(path = "docs/apis", key = "actions.tests.repeat")
+    fun repeat(word: String, count:Int): String {
+        return (0 until count).joinToString(" ") { word }
+    }
+
+    @Action(desc = "test simple action with inputs")
+    @Documented(path = "docs/apis", key = "actions.tests.repeat")
+    fun loop(word: String, count:Int): String {
+        return (0 until count).joinToString(" ") { word }
+    }
+}
+
+
+@Api(area = "app", name = "sample2", version = "v2", desc = "sample to test features of Slate Kit APIs")
+class SampleApi2V2(val context: Context) {
+
+    @Action(desc = "test simple action with inputs")
+    @Documented(path = "docs/apis", key = "actions.tests.repeat")
+    fun repeat(word: String, count:Int): String {
+        return (0 until count).joinToString(" ") { word }
+    }
+
+    @Action(desc = "test simple action with inputs")
+    @Documented(path = "docs/apis", key = "actions.tests.repeat")
+    fun loop(word: String, count:Int): String {
+        return (0 until count).joinToString(" ") { word }
     }
 }
 

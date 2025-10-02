@@ -15,8 +15,8 @@ object ProtoRule : Rule {
         // Ensure verb is correct get/post
         val request = req.request
         val target = req.target!!
-        val actionVerb = target.path.action.verb.orElse(target.path.api.verb)
-        val actionProtocols = target.path.action.sources.orElse(target.path.api.sources)
+        val actionVerb = target.action.verb.orElse(target.api.verb)
+        val actionProtocols = target.action.sources.orElse(target.api.sources)
         val hasCli = actionProtocols.hasCLI()
         val hasApi = actionProtocols.hasAPI()
 

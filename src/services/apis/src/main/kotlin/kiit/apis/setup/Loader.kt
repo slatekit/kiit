@@ -10,17 +10,17 @@ import org.json.simple.JSONObject
 import org.json.simple.parser.JSONParser
 
 class Loader(val namer: Namer?)  {
-    fun routes(version:String, setup:List<ApiSetup>) : VersionAreas {
+
+    fun routes(setup:List<ApiSetup>) : Areas {
         val actions = setup.map {
             when(it.setup) {
                 SetupType.Annotated -> code(it.klass, it.singleton!!, it.declared)
                 SetupType.Config -> config(it.klass, it.singleton!!, it.content, it.declared)
             }
         }
-        val areaNames = actions.map { Area(it.api.area) }.distinctBy { it.fullname }
+        val areaNames = actions.map { Area(it.api.area) }.distinctBy { it.fullName }
         val apis = areaNames.map { area -> AreaApis(area, actions.filter { it.api.area == area.name }) }
-        val areas = VersionAreas(version, apis)
-        return areas
+        return Areas(apis)
     }
 
 
@@ -44,17 +44,14 @@ class Loader(val namer: Namer?)  {
 
             val action = loader.toAction(item.first, api, item.second, namer)
 
-            // area/api/action objects ( with version info )
-            val path = Path(area, api, action)
-
             // Reflection based KCallable
             val call = Call(cls, item.first, instance)
 
             // Type of route handler
             val handler = MethodExecutor(call)
 
-            // Final mapping of route -> handler
-            Route(path, handler)
+            // Final mapping of route(area, api, action) -> handler
+            Route(area, api, action, handler)
         }
         return ApiActions(api, mappings)
     }

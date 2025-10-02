@@ -8,7 +8,6 @@ import kiit.apis.ApiServer
 import kiit.apis.Settings
 import kiit.apis.Verb
 import kiit.apis.Verbs
-import kiit.apis.setup.GlobalVersion
 import kiit.apis.setup.api
 import kiit.apis.setup.routes
 import kiit.utils.naming.LowerHyphenNamer
@@ -24,7 +23,7 @@ class Api_Naming_Tests : ApiTestsBase() {
 
     @Test fun can_use_naming_convention_lowerHyphen() {
         val namer = LowerHyphenNamer()
-        val routes = routes(versions = listOf(GlobalVersion("0", listOf(api(SamplePOKOApi::class, SamplePOKOApi())))), namer = namer)
+        val routes = routes(listOf(api(SamplePOKOApi::class, SamplePOKOApi())), namer = namer)
         val apis = ApiServer(ctx, routes, settings = Settings(naming = namer))
         Assert.assertNotNull( apis.get(Verbs.GET , "tests"   , "sample-poko", "get-time"    ))
         Assert.assertNull   ( apis.get(Verbs.GET , "tests"   , "SamplePOKO" , "getTime"     ))
@@ -45,7 +44,7 @@ class Api_Naming_Tests : ApiTestsBase() {
 
     @Test fun can_use_naming_convention_lowerUnderscore() {
         val namer = LowerUnderscoreNamer()
-        val routes = routes(versions = listOf(GlobalVersion("0", listOf(api(SampleExtendedApi::class, SampleExtendedApi(), declared = false)))), namer = namer)
+        val routes = routes(listOf(api(SampleExtendedApi::class, SampleExtendedApi(), declared = false)), namer = namer)
         val apis = ApiServer(ctx, routes, settings = Settings(naming = namer))
         Assert.assertNotNull( apis.get(Verbs.GET , "tests"   , "sample_extended", "get_seconds" ))
         Assert.assertNotNull( apis.get(Verbs.GET , "tests"   , "sample_extended", "get_time"    ))

@@ -4,8 +4,6 @@ import kiit.apis.SetupType
 import kiit.apis.routes.*
 import kotlin.reflect.KClass
 import kiit.utils.naming.Namer
-import kiit.meta.Reflector
-import kotlin.reflect.KVisibility
 
 
 data class ApiSetup(
@@ -17,22 +15,18 @@ data class ApiSetup(
 )
 
 
-data class GlobalVersion(val version:String, val apis:List<ApiSetup>)
-
-
-fun routes(versions: List<GlobalVersion>, namer: Namer? = null) : List<VersionAreas> {
+fun routes(all:List<ApiSetup>, namer: Namer? = null) : Areas {
     val loader =  Loader(namer)
-    val versionedRoutes = versions.map { loader.routes(it.version, it.apis) }
-    return versionedRoutes
+    val routes = loader.routes(all)
+    return routes
 }
 
 
-fun router(versions: List<GlobalVersion>, namer: Namer? = null) : Router {
-    val versionedRoutes = routes(versions, namer)
-    return Router(versionedRoutes, namer)
+fun router(all:List<ApiSetup>, namer: Namer? = null) : DefaultRouter {
+    val routes = routes(all, namer)
+    return DefaultRouter(routes, namer)
 }
 
-fun global(version:String, apis:List<ApiSetup>) : GlobalVersion = GlobalVersion(version, apis)
 
 fun api(klass: KClass<*>, singleton: Any?, setup: SetupType = SetupType.Annotated, declared: Boolean = true, content:String = "")
     : ApiSetup = ApiSetup(klass, singleton, setup, declared, content)
