@@ -48,7 +48,7 @@ interface Router {
  *                  - { Action b - v1 }
 */
 data class DefaultRouter(
-    val versions: List<VersionAreas>,
+    val areas: Areas,
     val namer: Namer? = null,
     val onInstanceCreated: ((Any?) -> Unit)? = null
 ) : Router {
@@ -64,8 +64,7 @@ data class DefaultRouter(
      */
     override fun containsArea(area: String): Boolean {
         if (area.isEmpty()) return false
-        val match = versions.firstOrNull { it.version == ApiConstants.zero }
-        return match?.let { it.get(area) != null } ?: false
+        return areas.contains(area)
     }
 
     /**
@@ -106,8 +105,7 @@ data class DefaultRouter(
             }
         }
 
-        val versionLookup = versions.firstOrNull { it.version == ApiConstants.zero } ?: return null
-        val areaLookup = versionLookup.get(area) ?: return null
+        val areaLookup = areas.get(area) ?: return null
         val actionLookup = areaLookup.get(info.first)
         return actionLookup
     }

@@ -17,7 +17,7 @@ class Loader(val namer: Namer?)  {
                 SetupType.Config -> config(it.klass, it.singleton!!, it.content, it.declared)
             }
         }
-        val areaNames = actions.map { Area(it.api.area) }.distinctBy { it.fullname }
+        val areaNames = actions.map { Area(it.api.area) }.distinctBy { it.fullName }
         val apis = areaNames.map { area -> Apis(area, actions.filter { it.api.area == area.name }) }
         val areas = VersionAreas(version, apis)
         return areas
