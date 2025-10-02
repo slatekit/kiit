@@ -88,22 +88,16 @@ data class DefaultRouter(
     /**
      * Gets the API model associated with the area.name
      */
-    fun getApi(area: String, api: String, version: String? = null): Actions? {
+    fun getApi(area: String, api: String, version: String? = null): ApiActions? {
         if (area.isEmpty()) return null
         if (api.isEmpty()) return null
-        val info = when (version) {
-            null -> Pair("0:${api}", ApiConstants.zero)
-            else -> {
-                val parts = version.split(".")
-                val apiVersion = parts[0]
-                val actionVersion = parts[1]
-                Pair("${apiVersion}:${api}", "${actionVersion}:")
-            }
+        val apis = areas.get(area) ?: return null
+        val name = when(version) {
+            null -> "0:${api}"
+            else -> "$version:${api}"
         }
-
-        val areaLookup = areas.get(area) ?: return null
-        val actionLookup = areaLookup.get(info.first)
-        return actionLookup
+        val api = apis.get(name)
+        return api
     }
 
     /**
@@ -144,7 +138,7 @@ data class DefaultRouter(
         return mapping
     }
 
-    fun visitApis(visitor: (Area, Actions) -> Unit) {
+    fun visitApis(visitor: (Area, ApiActions) -> Unit) {
 
 //        // 1. Each top level area in the system
 //        // e.g. {area}/{api}/{action}

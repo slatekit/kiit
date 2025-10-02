@@ -14,25 +14,25 @@ interface Lookup<T> {
 /**
  * Lookup for all apis on an Area
  */
-class Areas(override val items: List<Apis>) : Lookup<Apis> {
+class Areas(override val items: List<AreaApis>) : Lookup<AreaApis> {
     override val name: String = "root"
-    override val map: Map<String, Apis> = items.associateBy { it.name }
+    override val map: Map<String, AreaApis> = items.associateBy { it.name }
 }
 
 
 /**
  * Lookup for all apis on an Area
  */
-class Apis(val area:Area, override val items: List<Actions>) : Lookup<Actions> {
+class AreaApis(val area:Area, override val items: List<ApiActions>) : Lookup<ApiActions> {
     override val name: String = area.name
-    override val map: Map<String, Actions> = items.associateBy { it.name }
+    override val map: Map<String, ApiActions> = items.associateBy { it.name }
 }
 
 
 /**
  * Look up for all actions on an API
  */
-class Actions(val api:Api, override val items: List<Route>) : Lookup<Route> {
+class ApiActions(val api:Api, override val items: List<Route>) : Lookup<Route> {
     override val name: String = "${api.version}:${api.name}"
     override val map: Map<String, Route> = toMap(items)
 

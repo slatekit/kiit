@@ -15,7 +15,7 @@ package test.apis
 import org.junit.Assert
 import org.junit.Test
 import kiit.apis.*
-import kiit.apis.routes.Actions
+import kiit.apis.routes.ApiActions
 import kiit.apis.routes.MethodExecutor
 import kiit.apis.setup.*
 import test.setup.*
@@ -62,7 +62,7 @@ class Api_001_Loader_Tests : ApiTestsBase() {
     }
 
 
-    private fun ensureDefaultSetup(actions: Actions) {
+    private fun ensureDefaultSetup(actions: ApiActions) {
         val api = actions.api
         Assert.assertEquals(1, actions.size)
         Assert.assertEquals("tests", api.area)
@@ -121,7 +121,7 @@ class Api_001_Loader_Tests : ApiTestsBase() {
     }
 
 
-    fun ensureOverrideSetup(actions: Actions) {
+    fun ensureOverrideSetup(actions: ApiActions) {
         val api = actions.api
         Assert.assertEquals(1, actions.size)
         Assert.assertEquals("tests", api.area)

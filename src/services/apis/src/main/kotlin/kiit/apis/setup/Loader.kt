@@ -19,7 +19,7 @@ class Loader(val namer: Namer?)  {
             }
         }
         val areaNames = actions.map { Area(it.api.area) }.distinctBy { it.fullName }
-        val apis = areaNames.map { area -> Apis(area, actions.filter { it.api.area == area.name }) }
+        val apis = areaNames.map { area -> AreaApis(area, actions.filter { it.api.area == area.name }) }
         return Areas(apis)
     }
 
@@ -29,7 +29,7 @@ class Loader(val namer: Namer?)  {
      * NOTE: This allows all the API setup to be in 1 place ( in the class/members )
      *
      */
-    fun code(cls: KClass<*>, instance: Any, declared:Boolean = true ): Actions {
+    fun code(cls: KClass<*>, instance: Any, declared:Boolean = true ): ApiActions {
         val loader = AnnoLoader(cls, instance, namer)
         val api = loader.loadApi()
         val area = Area(api.area)
@@ -53,11 +53,11 @@ class Loader(val namer: Namer?)  {
             // Final mapping of route(area, api, action) -> handler
             Route(area, api, action, handler)
         }
-        return Actions(api, mappings)
+        return ApiActions(api, mappings)
     }
 
 
-    fun config(cls: KClass<*>, instance: Any, json:String = "", declared: Boolean = true): Actions {
+    fun config(cls: KClass<*>, instance: Any, json:String = "", declared: Boolean = true): ApiActions {
         val parser = JSONParser()
         val doc = parser.parse(json) as JSONObject
         val conf = ConfigLoader(cls, instance)
@@ -70,6 +70,6 @@ class Loader(val namer: Namer?)  {
 
         // Load actions from the "actions" child
         val actions = conf.loadActions(Area(api.area), api, methodMap, doc)
-        return Actions(api, actions)
+        return ApiActions(api, actions)
     }
 }
