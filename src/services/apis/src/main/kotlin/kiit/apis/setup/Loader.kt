@@ -11,7 +11,7 @@ import org.json.simple.parser.JSONParser
 
 class Loader(val namer: Namer?)  {
 
-    fun routes(setup:List<ApiSetup>) : Areas {
+    fun routes(setup:List<ApiSetup>) : Routes {
         val actions = setup.map {
             when(it.setup) {
                 SetupType.Annotated -> code(it.klass, it.singleton!!, it.declared)
@@ -20,7 +20,7 @@ class Loader(val namer: Namer?)  {
         }
         val areaNames = actions.map { Area(it.api.area) }.distinctBy { it.fullName }
         val apis = areaNames.map { area -> AreaApis(area, actions.filter { it.api.area == area.name }) }
-        return Areas(apis)
+        return Routes(apis)
     }
 
 

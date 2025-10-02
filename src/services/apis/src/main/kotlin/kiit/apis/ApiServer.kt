@@ -36,7 +36,7 @@ import kotlin.reflect.KClass
  */
 open class ApiServer(
     val ctx: Context,
-    val routes: Areas,
+    val routes: Routes,
     val rewriter: Rewriter? = null,
     middleware: List<Pair<String,Middleware>> = listOf(),
     val auth: Auth? = null,
@@ -241,7 +241,7 @@ open class ApiServer(
 
 
         @JvmStatic
-        fun of(ctx: Context, routes: Areas, auth: Auth? = null, source: Source? = null): ApiServer {
+        fun of(ctx: Context, routes: Routes, auth: Auth? = null, source: Source? = null): ApiServer {
             val server = ApiServer(ctx, routes, null, listOf(), auth, null, listOf(), Settings(source ?: Source.API))
             return server
         }

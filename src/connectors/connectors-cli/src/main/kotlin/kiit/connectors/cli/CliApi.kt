@@ -14,9 +14,8 @@
 package kiit.connectors.cli
 
 import kiit.apis.ApiServer
-import kiit.apis.routes.Api
 import kiit.apis.core.Part
-import kiit.apis.routes.Areas
+import kiit.apis.routes.Routes
 import kiit.cli.CLI
 import kiit.cli.CliRequest
 import kiit.cli.CliResponse
@@ -55,7 +54,7 @@ open class CliApi(
     val ctx: Context,
     val auth: kiit.apis.core.Auth,
     settings: CliSettings = CliSettings(),
-    routes: Areas,
+    routes: Routes,
     serializer: (Any?, ContentType) -> Content,
     val metaTransform: ((Map<String, Any>) -> List<Pair<String, String>>)? = null
 ) : CLI(settings, ctx.info, ctx.dirs, serializer = serializer) {

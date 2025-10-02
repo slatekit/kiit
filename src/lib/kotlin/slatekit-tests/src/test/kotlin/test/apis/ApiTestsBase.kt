@@ -17,14 +17,13 @@ import org.junit.Assert
 import kiit.apis.*
 import kiit.apis.core.Auth
 import kiit.apis.executor.MetaHandler
-import kiit.apis.routes.Areas
+import kiit.apis.routes.Routes
 import kiit.apis.setup.ApiSetup
 import kiit.apis.setup.routes
 import kiit.requests.CommonRequest
 import kiit.common.Source
 import kiit.common.args.Args
 import kiit.common.conf.Config
-import kiit.common.crypto.Encryptor
 import kiit.common.data.DbConString
 import kiit.common.data.Connections
 import kiit.common.data.Connections.Companion.of
@@ -137,7 +136,7 @@ open class ApiTestsBase {
     fun checkCall(
         protocol: Source,
         middleware: List<Middleware> = listOf(),
-        routes: Areas,
+        routes: Routes,
         user: Credentials?,
         request: Request,
         response: Response<*>,

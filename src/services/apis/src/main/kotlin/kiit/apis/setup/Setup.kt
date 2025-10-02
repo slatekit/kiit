@@ -15,7 +15,7 @@ data class ApiSetup(
 )
 
 
-fun routes(all:List<ApiSetup>, namer: Namer? = null) : Areas {
+fun routes(all:List<ApiSetup>, namer: Namer? = null) : Routes {
     val loader =  Loader(namer)
     val routes = loader.routes(all)
     return routes

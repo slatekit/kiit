@@ -19,7 +19,7 @@ class Api_001_Router_Tests : ApiTestsBase() {
             )
         )
 
-        router.areas.items.forEachIndexed { ndx , area ->
+        router.routes.items.forEachIndexed { ndx, area ->
             println("Version ndx = $ndx, name = ${area.name}")
             area.items.forEachIndexed { ndxApi, api ->
                 println("- Area  ndx = $ndxApi, version = ${api.api.version}, name = ${api.api.name}")

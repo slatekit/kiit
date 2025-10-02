@@ -1,6 +1,5 @@
 package kiit.apis.routes
 
-import kiit.apis.ApiConstants
 import kiit.utils.naming.Namer
 
 /**
@@ -9,22 +8,7 @@ import kiit.utils.naming.Namer
  * 1. Area/Global  versioning : e.g. /v1/{area}/{api} v1 of area ( with many apis )
  * 2. API/Resource versioning : e.g. /{area}/v1/{api} v1 of api
  * 3. Action level versioning : e.g. /{area}/v1/{api} v2 of action ( via a header )
- */
-interface Router {
-    fun containsArea(area: String): Boolean
-
-    fun containsApi(area: String, api: String, version:String?): Boolean
-
-    fun containsAction(verb: String, area: String, api: String, action: String): Boolean {
-        return containsAction(verb, area, api, ApiConstants.zero, action, ApiConstants.zero)
-    }
-    fun containsAction(verb: String, area: String, api: String, apiVersion:String, action: String, actionVersion:String): Boolean
-//    fun getArea(area: String, globalVersion: String = ApiConstants.zero): Area
-//    fun getApi(area: String, globalVersion: String = ApiConstants.zero, api: String, version: String? = null): ApiActions?
-//    fun getAction(verb:String, area: String, globalVersion: String = ApiConstants.zero, api: String, action: String, version: String? = null): Route?
-}
-
-/**
+ *
  * The top most level qualifier in the Universal Routing Structure
  * Essentially the root of the Routing tree
  * e.g.
@@ -44,10 +28,10 @@ interface Router {
  *                  - { Action b - v1 }
 */
 data class DefaultRouter(
-    val areas: Areas,
+    val routes: Routes,
     val namer: Namer? = null,
     val onInstanceCreated: ((Any?) -> Unit)? = null
-) : Router {
+)  {
 
     init {
         onInstanceCreated?.let {
@@ -58,9 +42,9 @@ data class DefaultRouter(
     /**
      * Whether there is an area w/ the supplied name.
      */
-    override fun containsArea(area: String): Boolean {
+    fun containsArea(area: String): Boolean {
         if (area.isEmpty()) return false
-        return areas.contains(area)
+        return routes.contains(area)
     }
 
     /**
@@ -69,7 +53,7 @@ data class DefaultRouter(
      * @param api     : The name of the api  e.g. "signup"
      * @param version : The version to check for e.g. "1.1" indicates api:version=1, action:version = 1
      */
-    override fun containsApi(area: String, api: String, version:String?): Boolean {
+    fun containsApi(area: String, api: String, version:String?): Boolean {
         return getApi(area, api, version) != null
     }
 
@@ -81,7 +65,7 @@ data class DefaultRouter(
      * @param action  : The name of the action  e.g. "login"
      * @param actionVersion : The version to check for e.g. "1.1" indicates api:version=1, action:version = 1
      */
-    override fun containsAction(verb: String, area: String, api: String, apiVersion:String, action: String, actionVersion:String): Boolean {
+    fun containsAction(verb: String, area: String, api: String, apiVersion:String, action: String, actionVersion:String): Boolean {
         return getAction(verb, area, api, apiVersion, action, actionVersion) != null
     }
 
@@ -91,7 +75,7 @@ data class DefaultRouter(
     fun getApi(area: String, api: String, version: String? = null): ApiActions? {
         if (area.isEmpty()) return null
         if (api.isEmpty()) return null
-        val apis = areas.get(area) ?: return null
+        val apis = routes.get(area) ?: return null
         val name = when(version) {
             null -> "0:${api}"
             else -> "$version:${api}"
