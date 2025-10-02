@@ -20,7 +20,6 @@ import kiit.requests.CommonRequest
 import kiit.requests.Request
 import kiit.requests.Response
 import kiit.context.Context
-import kiit.meta.*
 import kiit.serialization.deserializer.Deserializer
 import kiit.results.*
 import kiit.results.builders.Outcomes
@@ -50,7 +49,7 @@ open class ApiServer(
      * Load all the routes from the APIs supplied.
      * The API setup can be either annotation based or public methods on the Class
      */
-    private val router = Router(routes, settings.naming)
+    private val router = DefaultRouter(routes, settings.naming)
 
     /**
      * Decoder for converting Request Body JSON to method parameter values.
@@ -122,7 +121,7 @@ open class ApiServer(
      * @return
      */
     fun get(verb:String, area: String, name: String, action: String, globalVersion:String = ApiConstants.zero, version:String? = null): Route? {
-        val action = router.action(verb, area, name, action, globalVersion, version)
+        val action = router.getAction(verb, area, name, action, globalVersion, version)
         return action
     }
 

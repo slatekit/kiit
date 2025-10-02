@@ -13,7 +13,7 @@ package kiit.apis.services
 
 import kiit.apis.ApiServer
 import kiit.apis.core.Part
-import kiit.apis.routes.Router
+import kiit.apis.routes.DefaultRouter
 import kiit.apis.tools.docs.Doc
 import kiit.apis.tools.docs.DocUtils
 import kiit.common.types.Content
@@ -23,7 +23,7 @@ import kiit.results.*
 import kiit.results.builders.Outcomes
 
 
-open class Help(val host: ApiServer, val routes: Router, val docKey: String?, val docBuilder: () -> Doc) {
+open class Help(val host: ApiServer, val routes: DefaultRouter, val docKey: String?, val docBuilder: () -> Doc) {
 
     fun process(req: Request): Outcome<Content> {
         val result = DocUtils.isHelp(req)

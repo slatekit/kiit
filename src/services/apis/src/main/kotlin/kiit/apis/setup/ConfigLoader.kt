@@ -185,11 +185,8 @@ class ConfigLoader(val cls: KClass<*>, val instance: Any) {
 
 
     private fun buildRoute(area: Area, api: Api, action: Action, handler: RouteHandler): Route {
-        // area/api/action objects ( with version info )
-        val path = Path(area, api, action)
-
-        // Final mapping of route -> handler
-        return Route(path, handler)
+        // Final mapping of route(area, api, action) -> handler
+        return Route(area, api, action, handler)
     }
 
     fun toList(items:JSONArray?) : List<String> {

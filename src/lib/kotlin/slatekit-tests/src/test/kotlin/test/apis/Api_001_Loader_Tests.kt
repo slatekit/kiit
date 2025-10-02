@@ -15,7 +15,7 @@ package test.apis
 import org.junit.Assert
 import org.junit.Test
 import kiit.apis.*
-import kiit.apis.routes.ApiActions
+import kiit.apis.routes.Actions
 import kiit.apis.routes.MethodExecutor
 import kiit.apis.setup.*
 import test.setup.*
@@ -39,7 +39,7 @@ class Api_001_Loader_Tests : ApiTestsBase() {
                 )
             )
         )
-        val apiOpt = router.api("tests", "defaults", "0")
+        val apiOpt = router.getApi("tests", "defaults", "0")
         Assert.assertNotNull(apiOpt)
         val actions = apiOpt!!
         ensureDefaultSetup(actions)
@@ -61,14 +61,14 @@ class Api_001_Loader_Tests : ApiTestsBase() {
                 )
             )
         )
-        val apiOpt = router.api("tests", "defaults", "0")
+        val apiOpt = router.getApi("tests", "defaults", "0")
         Assert.assertNotNull(apiOpt)
         val actions = apiOpt!!
         ensureDefaultSetup(actions)
     }
 
 
-    private fun ensureDefaultSetup(actions: ApiActions) {
+    private fun ensureDefaultSetup(actions: Actions) {
         val api = actions.api
         Assert.assertEquals(1, actions.size)
         Assert.assertEquals("tests", api.area)
@@ -103,7 +103,7 @@ class Api_001_Loader_Tests : ApiTestsBase() {
                 )
             )
         )
-        val apiOpt = router.api("tests", "overrides", "0", "1.0")
+        val apiOpt = router.getApi("tests", "overrides", "0", "1.0")
         Assert.assertNotNull(apiOpt)
         val actions = apiOpt!!
         ensureOverrideSetup(actions)
@@ -126,14 +126,14 @@ class Api_001_Loader_Tests : ApiTestsBase() {
                 )
             )
         )
-        val apiOpt = router.api("tests", "overrides", "0", "1.0")
+        val apiOpt = router.getApi("tests", "overrides", "0", "1.0")
         Assert.assertNotNull(apiOpt)
         val actions = apiOpt!!
         ensureOverrideSetup(actions)
     }
 
 
-    fun ensureOverrideSetup(actions: ApiActions) {
+    fun ensureOverrideSetup(actions: Actions) {
         val api = actions.api
         Assert.assertEquals(1, actions.size)
         Assert.assertEquals("tests", api.area)
@@ -184,7 +184,7 @@ class Api_001_Loader_Tests : ApiTestsBase() {
                 )
             )
         )
-        val actionOpt = router.action(Verbs.POST, "tests", "redirects", "adder", version = null)
+        val actionOpt = router.getAction(Verbs.POST, "tests", "redirects", "adder", version = null)
         Assert.assertNotNull(actionOpt)
         val actions = actionOpt!!
         Assert.assertEquals("tests", actions.path.area.name)
@@ -299,7 +299,7 @@ class Api_001_Loader_Tests : ApiTestsBase() {
                 )
             )
         )
-        val apiOpt = router.api("tests", "loader", "0")
+        val apiOpt = router.getApi("tests", "loader", "0")
         Assert.assertNotNull(apiOpt)
         val actions = apiOpt!!
         val api = actions.api
