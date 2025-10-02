@@ -48,12 +48,3 @@ class Actions(val api:Api, override val items: List<Route>) : Lookup<Route> {
         }
     }
 }
-
-
-/**
- * Lookup for all areas in a global version
- */
-class VersionAreas(val version:String, override val items: List<Apis>) : Lookup<Apis> {
-    override val name: String = version
-    override val map: Map<String, Apis> = items.associateBy { it.name }
-}
