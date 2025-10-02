@@ -22,9 +22,9 @@ class Api_001_Router_Tests : ApiTestsBase() {
         router.areas.items.forEachIndexed { ndx , area ->
             println("Version ndx = $ndx, name = ${area.name}")
             area.items.forEachIndexed { ndxApi, api ->
-                println("Area ndx = $ndxApi, name = ${api.api.name}, version = ${api.api.version}")
+                println("- Area  ndx = $ndxApi, version = ${api.api.version}, name = ${api.api.name}")
                 api.items.forEachIndexed { ndxAction, action ->
-                    println("Action ndx = $ndxAction, name = ${action.action.name}, version = ${action.action.version}")
+                    println("  - Action  ndx = $ndxAction, version = ${action.action.version}, name = ${action.action.name}, ")
                 }
             }
         }

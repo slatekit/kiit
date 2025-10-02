@@ -53,6 +53,12 @@ class SampleApi1V1(val context: Context) {
     fun repeat(word: String, count:Int): String {
         return (0 until count).joinToString(" ") { word }
     }
+
+    @Action(desc = "test simple action with inputs")
+    @Documented(path = "docs/apis", key = "actions.tests.repeat")
+    fun loop(word: String, count:Int): String {
+        return (0 until count).joinToString(" ") { word }
+    }
 }
 
 
@@ -62,6 +68,12 @@ class SampleApi2V2(val context: Context) {
     @Action(desc = "test simple action with inputs")
     @Documented(path = "docs/apis", key = "actions.tests.repeat")
     fun repeat(word: String, count:Int): String {
+        return (0 until count).joinToString(" ") { word }
+    }
+
+    @Action(desc = "test simple action with inputs")
+    @Documented(path = "docs/apis", key = "actions.tests.repeat")
+    fun loop(word: String, count:Int): String {
         return (0 until count).joinToString(" ") { word }
     }
 }

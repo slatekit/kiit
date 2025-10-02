@@ -13,11 +13,7 @@ import kiit.utils.naming.Namer
 interface Router {
     fun containsArea(area: String): Boolean
 
-    fun containsApi(area: String, api: String, version:String? = null): Boolean {
-        return containsApi(area, api, version ?: ApiConstants.zero)
-    }
-
-    fun containsApi(area: String, api: String, version:String): Boolean
+    fun containsApi(area: String, api: String, version:String?): Boolean
 
     fun containsAction(verb: String, area: String, api: String, action: String): Boolean {
         return containsAction(verb, area, api, ApiConstants.zero, action, ApiConstants.zero)
@@ -73,7 +69,7 @@ data class DefaultRouter(
      * @param api     : The name of the api  e.g. "signup"
      * @param version : The version to check for e.g. "1.1" indicates api:version=1, action:version = 1
      */
-    override fun containsApi(area: String, api: String, version:String): Boolean {
+    override fun containsApi(area: String, api: String, version:String?): Boolean {
         return getApi(area, api, version) != null
     }
 

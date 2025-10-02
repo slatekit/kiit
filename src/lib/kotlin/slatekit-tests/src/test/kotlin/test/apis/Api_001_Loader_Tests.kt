@@ -188,7 +188,7 @@ class Api_001_Loader_Tests : ApiTestsBase() {
         )
         // Check defaults
         Assert.assertTrue(router.containsArea(area = "tests"))
-        Assert.assertTrue(router.containsApi(area = "tests", api = "defaults"))
+        Assert.assertTrue(router.containsApi(area = "tests", api = "defaults", version = "1"))
         Assert.assertTrue(router.containsApi(area = "tests", api = "defaults", version = "0"))
         Assert.assertTrue(
             router.containsAction(

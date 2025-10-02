@@ -17,7 +17,6 @@ import kiit.apis.ApiServer
 import kiit.apis.routes.Api
 import kiit.apis.core.Part
 import kiit.apis.routes.Areas
-import kiit.apis.routes.VersionAreas
 import kiit.cli.CLI
 import kiit.cli.CliRequest
 import kiit.cli.CliResponse
