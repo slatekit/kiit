@@ -28,10 +28,11 @@ class KtorHandler(
 ) : RequestHandler {
 
     private fun path(prefix: String, path:String, version:String?) : String {
-        val finalPrefix = if(prefix.endsWith("/")) prefix else "${prefix}/"
+        val finalPrefix = if(prefix.endsWith("/")) prefix.substring(0, prefix.length) else prefix
         val fullPath = when (version) {
-            null -> "${finalPrefix}${path}"
-            else -> "${finalPrefix}${version}/${path}"
+            null -> "${finalPrefix}/${path.replace("{version}/", "")}"
+            ""   -> "${finalPrefix}/${path.replace("{version}/", "")}"
+            else -> "${finalPrefix}/${path.replace("{version}", version)}"
         }
         println("full path = $fullPath")
         return fullPath
@@ -39,37 +40,46 @@ class KtorHandler(
 
 
     override fun register(routes:Routing){
-        val explicitVersions = container.routes.map { it.version }.distinct()
+        val allRoutes = container.routes.items.map { it.items.map { it } }
         // This is for backwards compatibility /{area}/{api}/{action} ( without version )
-        // This defaults version to "version" = 0
-        val implicitVersion = listOf<String?>(null)
-        val versions = implicitVersion + explicitVersions
-        versions.forEach { version ->
-            routes.get(path(settings.prefix, "help", version)) {
+        val allVersions = allRoutes.map { actions ->
+            actions.map { action -> action.api.version }
+        }.flatten()
+
+        // Structures
+        // Format  = {prefix}/{area}/{version}/{api}/{action}
+        // Example: api/accounts/v1/signup/register
+        // prefix  = api
+        // area    = accounts
+        // version = v1
+        // api     = signup
+        // action  = register
+        allVersions.forEach { version ->
+            routes.get(path(settings.prefix, "{version}/help", version)) {
                 exec(call)
             }
-            routes.get(path(settings.prefix, "*/help", version)) {
+            routes.get(path(settings.prefix, "{version}/*/help", version)) {
                 exec(call)
             }
-            routes.get(path(settings.prefix, "*/*/help", version)) {
+            routes.get(path(settings.prefix   , "{version}/*/*/help", version)) {
                 exec(call)
             }
-            routes.get(path(settings.prefix, "*/*/*/help", version)) {
+            routes.get(path(settings.prefix   , "*/{version}/*/*/help", version)) {
                 exec(call)
             }
-            routes.get(path(settings.prefix, "*/*/*", version)) {
+            routes.get(path(settings.prefix   , "*/{version}/*/*", version)) {
                 exec(call)
             }
-            routes.post(path(settings.prefix, "*/*/*", version)) {
+            routes.post(path(settings.prefix  , "*/{version}/*/*", version)) {
                 exec(call)
             }
-            routes.put(path(settings.prefix, "*/*/*", version)) {
+            routes.put(path(settings.prefix   , "*/{version}/*/*", version)) {
                 exec(call)
             }
-            routes.patch(path(settings.prefix, "*/*/*", version)) {
+            routes.patch(path(settings.prefix , "*/{version}/*/*", version)) {
                 exec(call)
             }
-            routes.delete(path(settings.prefix, "*/*/*", version)) {
+            routes.delete(path(settings.prefix, "*/{version}/*/*", version)) {
                 exec(call)
             }
         }
