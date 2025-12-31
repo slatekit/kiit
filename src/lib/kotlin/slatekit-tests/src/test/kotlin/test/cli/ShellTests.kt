@@ -29,9 +29,7 @@ import kiit.common.conf.Config
 import kiit.common.types.Content
 import kiit.common.info.Host
 import kiit.common.types.Contents
-import kiit.integration.apis.InfoApi
 import kiit.connectors.cli.CliApi
-import kiit.integration.apis.VersionApi
 import kiit.connectors.entities.AppEntContext
 import kiit.results.Codes
 import kiit.results.Status
