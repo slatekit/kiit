@@ -161,7 +161,7 @@ class SampleFiles3Api {
 
     @Action(desc = "test getting Doc as xml")
     fun getDataImg(): ContentData {
-        val bytes = File("/Users/kishorereddy/git/blend/blend-server/tests/img/cat1-test.jpeg").readBytes()
+        val bytes = File("/Users/kishorereddy/git/myapp/myapp-server/tests/img/cat1-test.jpeg").readBytes()
         return ContentData(bytes, null, ContentTypes.Jpeg)
     }
 

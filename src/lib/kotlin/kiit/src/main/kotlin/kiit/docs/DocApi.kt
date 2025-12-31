@@ -17,7 +17,7 @@ class DocApi(val context: Context) {
      * @param root    : /Users/kishore.reddy/dev/tmp/slatekit/slatekit
      * @param template: scripts/doc/doc_template_kotlin.md
      * @param output  : src/site/slatekit
-     * slate.docs.generateAll -root="C:/Dev/github/blend-server/" -template="scripts/doc/doc_template_kotlin.md" -output="src/site/slatekit"
+     * slate.docs.generateAll -root="C:/Dev/github/myapp-server/" -template="scripts/doc/doc_template_kotlin.md" -output="src/site/slatekit"
      * slate.docs.generateAll -root="/Users/kishore.reddy/dev/tmp/slatekit/slatekit" -template="scripts/doc/doc_template_utils.md" -output="src/site/slatekit"
      */
     @Action(desc= "generates the markdown docs")
@@ -34,7 +34,7 @@ class DocApi(val context: Context) {
      * @param template: scripts/doc/doc_template_kotlin.md
      * @param output  : src/site/slatekit
      * @param name    : name of the component
-     * sys.docs.generateComponent -root="C:/Dev/github/blend-server/" -template="scripts/doc/doc_template_kotlin.md" -output="src/site/slatekit" -name="Api"
+     * sys.docs.generateComponent -root="C:/Dev/github/myapp-server/" -template="scripts/doc/doc_template_kotlin.md" -output="src/site/slatekit" -name="Api"
      */
     @Action(name = "", desc= "generates the markdown docs")
     fun generateComponent(root:String, template:String, output:String, name:String): Try<String> {
