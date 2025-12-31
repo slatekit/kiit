@@ -34,8 +34,8 @@ project(':kiit-app').projectDir=new File('../../../services/app')
 include ':kiit-cli'
 project(':kiit-cli').projectDir=new File('../../../services/cli')
 
-include ':kiit-jobs'
-project(':kiit-jobs').projectDir=new File('../../../services/jobs')
+//include ':kiit-tasks'
+//project(':kiit-tasks').projectDir=new File('../../../services/tasks')
 
 include ':kiit-server'
 project(':kiit-server').projectDir=new File('../../../services/server')
@@ -64,9 +64,6 @@ project(':kiit-migrations').projectDir=new File('../../../data/migrations')
 include ':kiit-query'
 project(':kiit-query').projectDir=new File('../../../data/query')
 
-include ':kiit-actors'
-project(':kiit-actors').projectDir=new File('../../../internal/actors')
-
 include ':kiit-http'
 project(':kiit-http').projectDir=new File('../../../internal/http')
 
@@ -81,9 +78,6 @@ project(':kiit-serialization').projectDir=new File('../../../internal/serializat
 
 include ':kiit-generator'
 project(':kiit-generator').projectDir=new File('../../../support/generator')
-
-include ':kiit-integration'
-project(':kiit-integration').projectDir=new File('../../../support/integration')
 
 include ':providers-aws'
 project(':providers-aws').projectDir=new File('../../../providers/providers-aws')
@@ -102,9 +96,6 @@ project(':connectors-cli').projectDir=new File('../../../connectors/connectors-c
 
 include ':connectors-entities'
 project(':connectors-entities').projectDir=new File('../../../connectors/connectors-entities')
-
-include ':connectors-jobs'
-project(':connectors-jobs').projectDir=new File('../../../connectors/connectors-jobs')
 
 //include ':slatekit-examples'
 //project(':slatekit-examples').projectDir=new File('../slatekit-examples')

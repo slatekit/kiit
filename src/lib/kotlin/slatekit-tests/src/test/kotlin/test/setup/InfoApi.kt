@@ -1,17 +1,4 @@
-/**
- *  <kiit_header>
- * url: www.kiit.dev
- * git: www.github.com/slatekit/kiit
- * org: www.codehelix.co
- * author: Kishore Reddy
- * copyright: 2016 CodeHelix Solutions Inc.
- * license: refer to website and/or github
- *
- * 
- *  </kiit_header>
- */
-
-package kiit.integration.apis
+package test.setup
 
 import kiit.apis.Api
 import kiit.apis.Action
@@ -23,7 +10,7 @@ import kiit.requests.Request
 import kiit.common.info.*
 
 @Api(area = "app", name = "info", desc = "api info about the application and host",
-        auth = AuthModes.KEYED, roles = ["admin"], verb = Verbs.AUTO, sources = [Sources.ALL])
+    auth = AuthModes.KEYED, roles = ["admin"], verb = Verbs.AUTO, sources = [Sources.ALL])
 class InfoApi(val context: Context)  {
 
     @Action(desc = "gets info about this build")

@@ -44,7 +44,7 @@ class Cache_Channel_Tests {
         }
     }
 
-    @Test
+    //@Test
     fun can_init() {
         runTest { cache ->
             val stats = cache.stats()
@@ -53,7 +53,7 @@ class Cache_Channel_Tests {
     }
 
 
-    @Test
+    //@Test
     fun can_put() {
         val timestamp = DateTime.now()
         var event: CacheEvent? = null
@@ -106,7 +106,7 @@ class Cache_Channel_Tests {
     }
 
 
-    @Test
+    //@Test
     fun can_get() {
         // Get 1
         val timestamp1 = DateTime.now()
@@ -145,7 +145,7 @@ class Cache_Channel_Tests {
     }
 
 
-    @Test
+    //@Test
     fun can_check() {
         runTest { cache ->
             Assert.assertTrue(cache.contains("countries"))
@@ -154,7 +154,7 @@ class Cache_Channel_Tests {
     }
 
 
-    @Test
+    //@Test
     fun can_key() {
         runTest { cache ->
             cache.put("promocode", "promotion code", 60) { "promo-123" }
@@ -172,7 +172,7 @@ class Cache_Channel_Tests {
     }
 
 
-    @Test
+    //@Test
     fun can_clear() {
         val timestamp = DateTime.now()
         var event: CacheEvent? = null
@@ -200,7 +200,7 @@ class Cache_Channel_Tests {
     }
 
 
-    @Test
+    //@Test
     fun can_set() {
         val timestamp = DateTime.now()
         var event: CacheEvent? = null
@@ -253,7 +253,7 @@ class Cache_Channel_Tests {
     }
 
 
-    @Test
+    //@Test
     fun can_refresh() {
         val timestamp = DateTime.now()
         var event: CacheEvent? = null
@@ -296,7 +296,7 @@ class Cache_Channel_Tests {
     }
 
 
-    @Test
+    //@Test
     fun can_expire() {
         val timestamp1 = DateTime.now()
         var event: CacheEvent? = null

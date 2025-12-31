@@ -21,16 +21,14 @@ import kiit.common.crypto.EncInt
 import kiit.common.crypto.EncLong
 import kiit.common.values.Metadata
 import kiit.requests.Request
-import kiit.integration.common.ApiBaseEntity
-import kiit.entities.EntityService
 import kiit.connectors.entities.AppEntContext
 import kiit.results.Notice
 import kiit.results.Success
 
 
 @Api(area = "app", name = "users", desc = "api to access and manage users 3", roles= ["admin"], auth = AuthModes.TOKEN, verb = Verbs.AUTO, sources = [Sources.ALL])
-class UserApi(context: AppEntContext)
-  : ApiBaseEntity<Long, User, EntityService<Long, User>>(context, Long::class, User::class, context.ent.getService())
+class UserApi(val context: AppEntContext)
+  //: ApiBaseEntity<Long, User, EntityService<Long, User>>(context, Long::class, User::class, context.ent.getService())
 {
 
   @Action(name = "activate", desc = "activates a users account 3", roles= [Roles.PARENT], sources = [Sources.PARENT])

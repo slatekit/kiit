@@ -3,7 +3,6 @@ package test.setup
 import kiit.apis.Api
 import kiit.apis.Action
 import kiit.entities.EntityService
-import kiit.integration.common.ApiBaseEntity
 import kiit.connectors.entities.AppEntContext
 import kiit.entities.features.Counts
 import kiit.entities.features.Ordered
@@ -41,9 +40,8 @@ import kiit.entities.features.Ordered
  *      SampleREST.deleteById -id=1
  *      SampleREST.patch      -id=1 -title="abc"
  */
-class SampleEntityApi(ctx: AppEntContext)
-    : ApiBaseEntity<Long ,Movie, EntityService<Long, Movie>>(ctx, Long::class, Movie::class, ctx.ent.getService()) {
-
+class SampleEntityApi(val ctx: AppEntContext) {
+    //: ApiBaseEntity<Long ,Movie, EntityService<Long, Movie>>(ctx, Long::class, Movie::class, ctx.ent.getService()) {
     fun patch(id:Long, title:String): String = "patched $id with $title"
 }
 

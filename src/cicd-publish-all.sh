@@ -12,7 +12,6 @@ cd ../
 
 # Support
 cd ./internal/
-cd actors        && gradle clean build publish && cd ../ && echo 'sleeping 20s' && sleep 20s     
 cd http          && gradle clean build publish && cd ../ && echo 'sleeping 20s' && sleep 20s   
 cd policy        && gradle clean build publish && cd ../ && echo 'sleeping 20s' && sleep 20s   
 cd meta          && gradle clean build publish && cd ../ && echo 'sleeping 20s' && sleep 20s   
@@ -23,7 +22,6 @@ cd ../
 cd ./services/
 cd app           && gradle clean build publish && cd ../ && echo 'sleeping 20s' && sleep 20s  
 cd cli           && gradle clean build publish && cd ../ && echo 'sleeping 20s' && sleep 20s  
-cd jobs          && gradle clean build publish && cd ../ && echo 'sleeping 20s' && sleep 20s 
 cd apis          && gradle clean build publish && cd ../ && echo 'sleeping 20s' && sleep 20s 
 cd server        && gradle clean build publish && cd ../ && echo 'sleeping 20s' && sleep 20s
 cd ../
@@ -56,12 +54,10 @@ cd ../
 cd ./connectors/
 cd connectors-cli        && gradle clean build publish && cd ../ && echo 'sleeping 20s' && sleep 20s          
 cd connectors-entities   && gradle clean build publish && cd ../ && echo 'sleeping 20s' && sleep 20s          
-cd connectors-jobs       && gradle clean build publish && cd ../ && echo 'sleeping 20s' && sleep 20s          
 cd ../
 
 # Integration
 cd ./support/
-cd integration   && gradle clean build publish && cd ../ && echo 'sleeping 20s' && sleep 20s          
 cd generator     && gradle clean build publish && cd ../ && echo 'sleeping 20s' && sleep 20s   
 cd ../
 #cd slatekit-tools       && gradle clean build && cd ../ && echo 'sleeping 5s' && sleep 5s       

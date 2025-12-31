@@ -29,9 +29,7 @@ import kiit.common.conf.Config
 import kiit.common.types.Content
 import kiit.common.info.Host
 import kiit.common.types.Contents
-import kiit.integration.apis.InfoApi
 import kiit.connectors.cli.CliApi
-import kiit.integration.apis.VersionApi
 import kiit.connectors.entities.AppEntContext
 import kiit.results.Codes
 import kiit.results.Status
@@ -39,6 +37,7 @@ import kiit.results.getOrElse
 import kiit.serialization.Serialization
 import org.junit.Ignore
 import test.TestApp
+import test.setup.InfoApi
 
 
 class ShellTests  {
@@ -119,7 +118,6 @@ class ShellTests  {
     // 2. Register the apis using default textType ( uses permissions in annotations on class )
     val apis = routes(listOf<ApiSetup>(
         api(InfoApi::class, InfoApi(ctx)),
-        api(VersionApi::class, VersionApi(ctx))
     ))
 
     // 3. Build up the cli services that handles all the command line features.
