@@ -99,14 +99,6 @@ jobs:
 # Internal
 # ====================================================
 
-    - name: Build Actors with Gradle
-      working-directory: src/internal/actors
-      run: gradle clean build publish
-    - name: Sleep for 20 seconds
-      uses: whatnick/wait-action@master
-      with: 
-        time: '25s'
-
     - name: Build http with Gradle
       working-directory: src/internal/http
       run: gradle clean build publish
@@ -152,14 +144,6 @@ jobs:
 
     - name: Build cli with Gradle
       working-directory: src/services/cli
-      run: gradle clean build publish
-    - name: Sleep for 20 seconds
-      uses: whatnick/wait-action@master
-      with: 
-        time: '25s'
-
-    - name: Build jobs with Gradle
-      working-directory: src/services/jobs
       run: gradle clean build publish
     - name: Sleep for 20 seconds
       uses: whatnick/wait-action@master
@@ -306,25 +290,9 @@ jobs:
       with:
         time: '25s'
 
-    - name: Build Connectors - Logback with Gradle
-      working-directory: src/connectors/connectors-jobs
-      run: gradle clean build publish
-    - name: Sleep for 20 seconds
-      uses: whatnick/wait-action@master
-      with:
-        time: '25s'
-
 # ====================================================
 # Integration
 # ====================================================
-    - name: Build integration with Gradle
-      working-directory: src/support/integration
-      run: gradle clean build publish
-    - name: Sleep for 20 seconds
-      uses: whatnick/wait-action@master
-      with:
-        time: '25s'
-
     - name: Build generator with Gradle
       working-directory: src/support/generator
       run: gradle clean build publish
