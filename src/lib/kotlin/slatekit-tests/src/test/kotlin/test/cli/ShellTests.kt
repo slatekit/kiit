@@ -37,6 +37,7 @@ import kiit.results.getOrElse
 import kiit.serialization.Serialization
 import org.junit.Ignore
 import test.TestApp
+import test.setup.InfoApi
 
 
 class ShellTests  {
@@ -117,7 +118,6 @@ class ShellTests  {
     // 2. Register the apis using default textType ( uses permissions in annotations on class )
     val apis = routes(listOf<ApiSetup>(
         api(InfoApi::class, InfoApi(ctx)),
-        api(VersionApi::class, VersionApi(ctx))
     ))
 
     // 3. Build up the cli services that handles all the command line features.

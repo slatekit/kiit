@@ -40,9 +40,8 @@ import kiit.entities.features.Ordered
  *      SampleREST.deleteById -id=1
  *      SampleREST.patch      -id=1 -title="abc"
  */
-class SampleEntityApi(val ctx: AppEntContext)
+class SampleEntityApi(val ctx: AppEntContext) {
     //: ApiBaseEntity<Long ,Movie, EntityService<Long, Movie>>(ctx, Long::class, Movie::class, ctx.ent.getService()) {
-
     fun patch(id:Long, title:String): String = "patched $id with $title"
 }
 
