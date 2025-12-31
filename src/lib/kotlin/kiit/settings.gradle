@@ -34,8 +34,8 @@ project(':kiit-app').projectDir=new File('../../../services/app')
 include ':kiit-cli'
 project(':kiit-cli').projectDir=new File('../../../services/cli')
 
-//include ':kiit-tasks'
-//project(':kiit-tasks').projectDir=new File('../../../services/tasks')
+include ':kiit-tasks'
+project(':kiit-tasks').projectDir=new File('../../../services/tasks')
 
 include ':kiit-server'
 project(':kiit-server').projectDir=new File('../../../services/server')

@@ -62,11 +62,13 @@ dependencies {
       implementation "dev.kiit:kiit-results:$kiit_version"
       implementation "dev.kiit:kiit-common:$kiit_version"
       implementation "dev.kiit:kiit-utils:$kiit_version"
+      implementation "dev.kiit:kiit-meta:$kiit_version"
   } else {
       // */
   implementation project(":kiit-result")
   implementation project(":kiit-common")
   implementation project(":kiit-utils")
+  implementation project(":kiit-meta")
   } //</kiit_local>
 }
 
