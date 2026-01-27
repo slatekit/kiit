@@ -166,6 +166,9 @@ class QueueWorkflow(context: WorkContext, worker: Worker) : WorkflowBase(context
                     }
                     else -> {
                         worker.work(qtask)
+                        // Complete regardless as listener should be
+                        // handling all failures accordingly
+                        context.queue?.done(qtask)
                         processed += 1
                     }
                 }
