@@ -2,10 +2,15 @@ package kiit
 
 import kotlinx.coroutines.*
 import kiit.app.AppRunner
+import kiit.common.DateTime
 import kiit.common.args.Args
+import kiit.common.conf.Conf
+import kiit.common.conf.Config
+import kiit.common.data.*
 import kiit.common.io.Alias
 import kiit.utils.writer.ConsoleWriter
 import kiit.context.AppContext
+import kiit.db.Db
 import kiit.generator.Help
 import kiit.providers.logback.LogbackLogs
 import kiit.results.Failure
@@ -47,12 +52,68 @@ import kiit.results.Success
  * 1. Support more args: -app.envs="dev,qat,stg,pro" -app.dest="some directory" -sk.version='0.9.28'
  *
  * CODEGEN:
- * 1. kiit.codegen.toKotlin -templatesFolder="usr://dev/tmp/slatekit/slatekit/scripts/templates/codegen/kotlin" -outputFolder="usr://dev/tmp/codegen/kotlin" -packageName="blendlife"
+ * 1. kiit.codegen.toKotlin -templatesFolder="usr://dev/tmp/slatekit/slatekit/scripts/templates/codegen/kotlin" -outputFolder="usr://dev/tmp/codegen/kotlin" -packageName="myapp"
  *
  * // Test
  * /Users/kishorereddy/git/slatekit/slatekit/src/lib/kotlin/slatekit/build/distributions/slatekit/bin
  */
+
+data class DbVersion(val version:Int, val dated:String, val name:String, val details:String,
+                     val status:String, val code:Int, val message:String?,
+                     val label:String?, val tags:String?, val createdAt:DateTime, val createdBy:String)
+
+
 fun main(args: Array<String>) {
+    runBlocking {
+    }
+//    //test(args)
+//    val tester = Tester1()
+//    tester.run()
+}
+
+/**
+ * Simulates some non-blocking/async operation like an API call
+ */
+suspend fun task(name:String, delay:Long) {
+    println("starting name=$name, thread=${Thread.currentThread().name}")
+    delay(delay)
+    println("finished name=$name, thread=${Thread.currentThread().name}")
+}
+
+
+fun test_db() {
+    val url = System.getenv("APP_DB_URL")
+    val user = System.getenv("APP_DB_USER")
+    val pass = System.getenv("APP_DB_PASS")
+    val dbcon = DbConString(vendor = Vendor.MySql, url = url, user = user, pswd = pass)
+    val db = Db(dbcon)
+    val version = db.mapOne("select * from `version` order by id desc limit 1;", null) { rec ->
+        DbVersion(
+            version = rec.getInt("version"),
+            dated = rec.getString("dated"),
+            name = rec.getString("name"),
+            details = rec.getString("details"),
+            status = rec.getString("status"),
+            code = rec.getInt("code"),
+            message = rec.getStringOrNull("message"),
+            label = rec.getStringOrNull("label"),
+            tags = rec.getStringOrNull("tags"),
+            createdAt = rec.getDateTime("createdAt"),
+            createdBy = rec.getString("createdBy")
+        )
+    }
+    println(version)
+}
+
+fun conf(env:String = "qat"):Conf {
+    val basepath = "usr://dev/myapp/myapp-server/src/server/kotlin/myapp-server/src/main/resources/env.conf"
+    val envpath  = "usr://dev/myapp/myapp-server/src/server/kotlin/myapp-server/src/main/resources/env.${env}.conf"
+
+    val conf = Config.of(Server::class.java, envpath, basepath, null) //, basepath, null)
+    return conf
+}
+
+fun test(args:Array<String>) {
     val parsed = Args.parseArgs(args)
     val help = Help(Kiit.TITLE)
     val writer = ConsoleWriter()
