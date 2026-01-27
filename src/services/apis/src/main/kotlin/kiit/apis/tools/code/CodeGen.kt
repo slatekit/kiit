@@ -23,7 +23,7 @@ class CodeGen(val settings: CodeGenSettings, val builder:CodeBuilder) {
     val templates = Templates.load(settings.templatesFolder, settings.lang)
 
     /**
-     * @command="codegen" -lang="java" -package="blendlife.api" -pathToTemplates="C:\Dev\github\blend-server\scripts\templates\codegen"
+     * @command="codegen" -lang="java" -package="myapp.api" -pathToTemplates="C:\Dev\github\myapp-server\scripts\templates\codegen"
      */
     fun generate(req: Request) {
         val log = this.settings.host.ctx.logs.getLogger("slate")
