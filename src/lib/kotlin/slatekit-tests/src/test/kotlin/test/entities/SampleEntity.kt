@@ -42,8 +42,11 @@ data class SampleEntityImmutable(
         @property:Id()
         override val id: Long = 0L,
 
-        @property:Column(length = 30, required = true)
+        @property:Column(length = 30)
         val test_string: String = "",
+
+        @property:Column(length = 30)
+        val test_stringOpt: String? = null,
 
         @property:Column(length = 100, encrypt = true)
         val test_string_enc: String = "",
