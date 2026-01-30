@@ -77,7 +77,8 @@ object Schema {
             maxLength = length,
             encrypt = encrypt,
             cat = cat,
-            namer = namer
+            namer = namer,
+            tags = anno.tags.toList()
         )
         return field
     }

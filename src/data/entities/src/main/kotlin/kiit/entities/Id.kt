@@ -38,5 +38,6 @@ annotation class Column(
     val length: Int = 0,
     val defaultVal: String = "",
     val encrypt: Boolean = false,
-    val example: String = ""
+    val example: String = "",
+    val tags: Array<String> = [],
 )
