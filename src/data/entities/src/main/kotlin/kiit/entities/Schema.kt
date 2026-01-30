@@ -51,7 +51,7 @@ object Schema {
 
     @JvmStatic
     fun column(prop: KProperty<*>, anno: Column, namer: Namer?, checkForId:Boolean, idFieldName:String?):ModelField {
-        val name = if (anno.name.isNullOrEmpty()) prop.name else anno.name
+        val name = anno.name.ifEmpty { prop.name }
         val cat = idFieldName?.let {
             if(it == name)
                 FieldCategory.Id
@@ -59,7 +59,12 @@ object Schema {
                 FieldCategory.Data
         } ?: FieldCategory.Data
 
-        val required = anno.required
+        // Get whether its required based on nullable property.
+        val required = when {
+            !prop.returnType.isMarkedNullable -> true
+            anno.required -> true
+            else -> false
+        }
         val length = anno.length
         val encrypt = anno.encrypt
         val fieldKType = prop.returnType
@@ -76,7 +81,8 @@ object Schema {
             maxLength = length,
             encrypt = encrypt,
             cat = cat,
-            namer = namer
+            namer = namer,
+            tags = anno.tags.toList()
         )
         return field
     }

@@ -1,9 +1,11 @@
 package test.data.repo
 
 import kiit.common.data.Vendor
+import kiit.data.sql.vendors.PostgresTypes
 import kiit.entities.Entities
 import kiit.entities.EntityLongId
 import kiit.entities.EntityRepo
+import kiit.entities.mapper.EntityMapper
 import kotlinx.coroutines.runBlocking
 import org.junit.Assert
 import org.junit.Test
@@ -38,5 +40,8 @@ open class Repo_Postgres_Tests : Repo_Common_Tests() {
         val repo = entities.repo(EntityLongId(), Long::class, User5::class, Vendor.Postgres)
         Assert.assertEquals("user", repo.meta.table.name)
         Assert.assertEquals("unit_tests", repo.meta.table.schema)
+        val mapper = repo.mapper as EntityMapper<Long, User5>
+        val field = mapper.model.fields.first { it.name ==  "salary" }
+        Assert.assertEquals(PostgresTypes.doubleType.metaType, field.dataTpe)
     }
 }

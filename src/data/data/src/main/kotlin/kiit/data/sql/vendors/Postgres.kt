@@ -66,6 +66,8 @@ object PostgresTypes : DbTypes() {
     override val localDateTimeType = DataTypeMap(DataType.DTLocalDateTime, "TIMESTAMP", Types.JLocalDateTimeClass)
     override val zonedDateTimeType = DataTypeMap(DataType.DTZonedDateTime, "TIMESTAMPTZ", Types.JZonedDateTimeClass)
     override val dateTimeType = DataTypeMap(DataType.DTDateTime, "TIMESTAMPTZ", Types.JDateTimeClass)
+    override val doubleType = DataTypeMap(DataType.DTDouble, "FLOAT8", Types.JDoubleClass)
+
 
 
     override val lookup:Map<DataType, DataTypeMap> = mapOf(

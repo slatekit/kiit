@@ -171,6 +171,56 @@ data class User5(
 }
 
 
+@Table("user", schema = "unit_tests")
+data class UserTypes(
+    @Id()
+    override val id: Long = 0,
+
+    @Column(length = 50)
+    val userId: String = Random.uuid(),
+
+    @Column(length = 100)
+    val email: String = "",
+
+    @Column(length = 100)
+    val website: String? = null,
+
+    @Column(length = 100, required = true)
+    val link: String? = null,
+
+    @Column()
+    val isActive: Boolean = false,
+
+    @Column()
+    val level: Int = 35,
+
+    @Column()
+    val salary: Double = 20.5,
+
+    @Column(name = "createdat", required = true)
+    val createdAt: DateTime = DateTime.now(),
+
+    @Column(name = "createdby", required = true)
+    val createdBy: Long = 0,
+
+    @Column(name = "updatedat")
+    val updatedAt: DateTime? = null,
+
+    @Column(name = "updatedby")
+    val updatedBy: Long? = null
+) : EntityWithId<Long>, EntityUpdatable<Long, UserTypes> {
+
+    override fun isPersisted(): Boolean = id > 0
+
+    /**
+     * sets the id on the entity and returns the entity with updated id.
+     * @param id
+     * @return
+     */
+    override fun withId(id: Long): UserTypes {
+        return this.copy(id = id)
+    }
+}
 
 data class UserNullable(
     @Id()
