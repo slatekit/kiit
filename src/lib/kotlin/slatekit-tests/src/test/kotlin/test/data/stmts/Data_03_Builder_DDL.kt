@@ -95,29 +95,31 @@ class Data_03_Builder_DDL {
         val builder = PostgresSqlDDLBuilder(PostgresDialect, null)
         val actual = builder.create(model)
         val expected = """
-            create table if not exists "unit_tests"."sample1" ( 
-            "id" BIGSERIAL      NOT NULL PRIMARY KEY,  
-            "test_string" VARCHAR(30) NOT NULL,  
-            "test_string_enc" VARCHAR(100) NOT NULL,  
-            "test_bool" BOOLEAN NOT NULL,  
-            "test_short" SMALLINT NOT NULL,  
-            "test_int" INTEGER NOT NULL,  
-            "test_long" BIGINT NOT NULL,  
-            "test_float" FLOAT NOT NULL,  
-            "test_double" DOUBLE NOT NULL,  
-            "test_enum" INTEGER NOT NULL,  
-            "test_localdate" DATE NOT NULL,  
-            "test_localtime" TIME NOT NULL,  
-            "test_localdatetime" TIMESTAMP NOT NULL,  
-            "test_zoneddatetime" TIMESTAMPTZ NOT NULL,  
-            "test_uuid" VARCHAR(50) NOT NULL,  
-            "test_uniqueId" VARCHAR(50) NOT NULL,  
-            "test_object_addr" VARCHAR(40) NOT NULL,  
-            "test_object_city" VARCHAR(30) NOT NULL,  
-            "test_object_state" VARCHAR(20) NOT NULL,  
-            "test_object_country" INTEGER NOT NULL,  
-            "test_object_zip" VARCHAR(5) NOT NULL,  
-            "test_object_isPOBox" BOOLEAN NOT NULL );
+create table if not exists "unit_tests"."sample1" ( 
+"id"                  BIGSERIAL    NOT NULL  PRIMARY KEY, 
+"test_string"         VARCHAR(30)  NOT NULL  , 
+"test_stringOpt"      VARCHAR(30)            , 
+"test_string_enc"     VARCHAR(100) NOT NULL  , 
+"test_bool"           BOOLEAN      NOT NULL  , 
+"test_short"          SMALLINT     NOT NULL  , 
+"test_int"            INTEGER      NOT NULL  , 
+"test_long"           BIGINT       NOT NULL  , 
+"test_float"          FLOAT        NOT NULL  , 
+"test_double"         FLOAT8       NOT NULL  , 
+"test_enum"           INTEGER      NOT NULL  , 
+"test_localdate"      DATE         NOT NULL  , 
+"test_localtime"      TIME         NOT NULL  , 
+"test_localdatetime"  TIMESTAMP    NOT NULL  , 
+"test_zoneddatetime"  TIMESTAMPTZ  NOT NULL  , 
+"test_uuid"           VARCHAR(50)  NOT NULL  , 
+"test_uniqueId"       VARCHAR(50)  NOT NULL  , 
+"test_object_addr"    VARCHAR(40)  NOT NULL  , 
+"test_object_city"    VARCHAR(30)  NOT NULL  , 
+"test_object_state"   VARCHAR(20)  NOT NULL  , 
+"test_object_country" INTEGER      NOT NULL  , 
+"test_object_zip"     VARCHAR(5)   NOT NULL  , 
+"test_object_isPOBox" BOOLEAN      NOT NULL   );
+
         """.trimIndent()
         Assert.assertEquals(expected, actual)
     }

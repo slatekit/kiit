@@ -76,6 +76,7 @@ abstract class Db_Common_Tests : DbTestCases {
             SampleEntityImmutable(
                 longid,
                 rec.getString("test_string"),
+                rec.getString("test_stringOpt"),
                 rec.getString("test_string_enc"),
                 rec.getBool("test_bool"),
                 rec.getShort("test_short"),
