@@ -61,12 +61,12 @@ object Codes {
     @JvmField val NOT_FOUND       = Failed.Invalid   ("NOT_FOUND"  , 400004, "Not found")       // E.g. Resource/End point not found
 
     // Security related
-    @JvmField val DENIED          = Failed.Denied    ("DENIED"         ,400004, "Denied")          // Presumes a checked condition
-    @JvmField val UNSUPPORTED     = Failed.Denied    ("UNSUPPORTED"    ,400005, "Not supported")   // Presumes a checked condition
-    @JvmField val UNIMPLEMENTED   = Failed.Denied    ("UNIMPLEMENTED"  ,400006, "Not implemented") // Presumes a checked condition
-    @JvmField val UNAVAILABLE     = Failed.Denied    ("UNAVAILABLE"    ,400007, "Not available")   // Presumes a checked condition
-    @JvmField val UNAUTHENTICATED = Failed.Denied    ("UNAUTHENTICATED",400008, "Unauthenticated") // Presumes a checked condition
-    @JvmField val UNAUTHORIZED    = Failed.Denied    ("UNAUTHORIZED"   ,400009, "Unauthorized")    // Presumes a checked condition
+    @JvmField val DENIED          = Failed.Denied    ("DENIED"         ,400005, "Denied")          // Presumes a checked condition
+    @JvmField val UNSUPPORTED     = Failed.Denied    ("UNSUPPORTED"    ,400006, "Not supported")   // Presumes a checked condition
+    @JvmField val UNIMPLEMENTED   = Failed.Denied    ("UNIMPLEMENTED"  ,400007, "Not implemented") // Presumes a checked condition
+    @JvmField val UNAVAILABLE     = Failed.Denied    ("UNAVAILABLE"    ,400008, "Not available")   // Presumes a checked condition
+    @JvmField val UNAUTHENTICATED = Failed.Denied    ("UNAUTHENTICATED",400009, "Unauthenticated") // Presumes a checked condition
+    @JvmField val UNAUTHORIZED    = Failed.Denied    ("UNAUTHORIZED"   ,400010, "Unauthorized")    // Presumes a checked condition
 
     // Expected errors: 500000 + range
     @JvmField val MISSING         = Failed.Errored   ("MISSING"   ,500002, "Missing item")    // E.g. Domain model not found

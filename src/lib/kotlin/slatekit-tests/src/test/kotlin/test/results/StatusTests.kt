@@ -63,7 +63,7 @@ class StatusTests {
         checkCode(Codes.PENDING   , 200008, "Pending")
         checkCode(Codes.IGNORED   , 400001, "Ignored")
         checkCode(Codes.INVALID   , 400003, "Invalid")
-        checkCode(Codes.DENIED    , 400004, "Denied" )
+        checkCode(Codes.DENIED    , 400005, "Denied" )
         checkCode(Codes.ERRORED   , 500007, "Errored")
         checkCode(Codes.UNEXPECTED, 500008, "Unexpected")
     }
