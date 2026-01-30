@@ -31,6 +31,20 @@ class Entity_Service_Registry_Tests {
 
 
     @Test
+    fun can_load_model_field_name() {
+        val model = Schema.load(UserTypes::class, UserTypes::id.name)
+
+        // Case 1: Type is required
+        val email = model.fields.first { it.name == "email" }
+        Assert.assertEquals("email", email.storedName)
+
+        // Case 2: Class property name is different from the stored name
+        val createdAt = model.fields.first { it.name == "createdat" }
+        Assert.assertEquals("createdAt", createdAt.prop!!.name)
+    }
+
+
+    @Test
     fun can_load_model_field_required_from_type() {
         val model = Schema.load(UserTypes::class, UserTypes::id.name)
 
@@ -48,6 +62,7 @@ class Entity_Service_Registry_Tests {
         Assert.assertEquals(1, link.tags.size)
         Assert.assertEquals("secondary_url", link.tags[0])
     }
+
 
 
     @Test
