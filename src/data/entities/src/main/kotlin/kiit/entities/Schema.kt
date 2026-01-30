@@ -65,7 +65,12 @@ object Schema {
             anno.required -> true
             else -> false
         }
-        val length = anno.length
+        // If length = 0, then text is unlimited and marked as -1 ( not applicable )
+        // Because, it doesn't make sense for length to = 0 for strings/text.
+        val length = when {
+            anno.length == 0 -> SchemaConstants.UNLIMITED
+            else -> anno.length
+        }
         val encrypt = anno.encrypt
         val fieldKType = prop.returnType
         val fieldType = ModelUtils.fieldType(prop)

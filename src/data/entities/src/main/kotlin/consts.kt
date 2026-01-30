@@ -19,6 +19,10 @@ package kiit.entities
 // import java.time.format.DateTimeFormatter
 import org.threeten.bp.format.*
 
+object SchemaConstants {
+    const val UNLIMITED: Int = -1
+}
+
 object Consts {
 
     val version = "0.9.0"

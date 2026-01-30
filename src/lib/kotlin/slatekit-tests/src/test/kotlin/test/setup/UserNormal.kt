@@ -182,10 +182,10 @@ data class UserTypes(
     @Column(length = 100)
     val email: String = "",
 
-    @Column(length = 100)
+    @Column(length = SchemaConstants.UNLIMITED)
     val website: String? = null,
 
-    @Column(length = 100, required = true, tags = ["secondary_url"])
+    @Column(required = true, tags = ["secondary_url"])
     val link: String? = null,
 
     @Column()
