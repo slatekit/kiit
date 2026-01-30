@@ -19,6 +19,7 @@ import kiit.common.info.Folders
 import kiit.common.io.Files
 import kiit.common.utils.Props
 import kiit.data.sql.vendors.SqlDDLBuilder
+import kiit.data.sql.vendors.SqlDDLGroup
 import kiit.entities.Entities
 import kiit.entities.core.EntityContext
 import kiit.results.Notice
@@ -82,7 +83,7 @@ class MigrationService(
      * @param dbShard : the dbShard pointing to the database to install the model to. leave empty to use default db
      * @return
      */
-    fun uinstall(name: String): Try<String> {
+    fun uninstall(name: String): Try<String> {
         delete(name)
         return drop(name)
     }
@@ -106,46 +107,95 @@ class MigrationService(
         }
     }
 
-    fun generateSqlAllInstall(): Try<String> {
-        val fileName = "sql-all-install-" + DateTime.now().toStringNumeric()
-        val results = entities.getEntities().map { entity ->
-            val result = generateSql(entity.entityTypeName)
-            result.map {
-                val allSqlForModel = it.joinToString(newline)
-                allSqlForModel
+    /**
+     * Generates SQL DDL files to drop tables.
+     * 1. Grouping : Groups the models/tables by schema ( Postgres ).
+     * 2. If exists: Generates safe drop table if exists
+     * 3. File name: Uses optional file name prefixes
+     * @param schemaFilePrefixes : schema name to schema file prefix e.g. "users" -> "delete-01-app-users"
+     *
+     * @sample
+     * 1. File: 01-app-users.sql ( "users" schema )
+     *    create table if not exists "users"."account" ...
+     *    create table if not exists "users"."device"  ...
+     *
+     * 2. File: 02-app-content.sql ( "content" schema )
+     *    create table if not exists "content"."event" ...
+     *    create table if not exists "content"."task"  ...
+     */
+    fun generateSqlAllInstall(schemaFilePrefixes:List<Pair<String,String>> = listOf()): Try<String> {
+        if(folders == null) {
+            return Tries.errored("Folders not provided")
+        }
+
+        // 1. Get all the entities ( Context which has the Model containing schema names )
+        val entities = entities.getEntities()
+
+        // 2. Group all entities by their schema. e.g. "users"
+        val schemas = entities.groupBy { it.model.schema }.values.toList()
+
+        // 3. Convert all the models per schema into drop statements.
+        schemas.map { items ->
+            val ddls = items.map { entity ->
+                generateSql(entity.entityTypeName).map { Pair(entity, it) }
             }
+            val successes = ddls.filter { it.success }.map { (it as Success).value }
+            val tableDDLs = successes.map { it.second.joinToString(newline) }
+            val schemaDDL = tableDDLs.joinToString(newline + newline)
+            val schema = items.first().model.schema
+            val statements = listOf(schemaDDL)
+            write(schema, statements, "sql-install", schemaFilePrefixes)
         }
-        val succeeded = results.filter { it.success }
-        val allSql = succeeded.fold("") { acc, result ->
-            acc + newline + "-- ${result.desc}" + newline + result.getOrElse { "Error generating sql" }
-        }
-        val finalFileName = "$fileName.sql"
-        val filePath = folders?.let {
-            Files.writeDatedFile(folders.pathToOutputs, finalFileName, allSql)
-            val filePath = folders.pathToOutputs + Props.pathSeparator + finalFileName
-            filePath
-        } ?: "Folders not available, sql files not written"
-        return kiit.results.Success(filePath)
+        return kiit.results.Success(folders.pathToOutputs)
     }
 
-    fun generateSqlAllUninstall(): Try<String> {
-        val fileName = "sql-all-uninstall-" + DateTime.now().toStringNumeric()
-        val results = entities.getEntities().map { entity ->
-            val builder = builder(entity.entityTypeName)
-            val dropTable = builder.delete(entity.model)
-            Success(dropTable, msg = "Dropping table for model : " + entity.model.name)
+
+    /**
+     * Generates SQL DDL files to drop tables.
+     * 1. Grouping : Groups the models/tables by schema ( Postgres ).
+     * 2. If exists: Generates safe drop table if exists
+     * 3. File name: Uses optional file name prefixes
+     * @param schemaFilePrefixes : schema name to schema file prefix e.g. "users" -> "delete-01-app-users"
+     *
+     * @sample
+     * 1. File: delete-01-app-users.sql ( "users" schema )
+     *    drop table if exists "users"."account";
+     *    drop table if exists "users"."device";
+     *
+     * 2. File: delete-02-app-content.sql ( "content" schema )
+     *    drop table if exists "content"."event";
+     *    drop table if exists "content"."task";
+     */
+    fun generateSqlAllUninstall(schemaFilePrefixes:List<Pair<String,String>> = listOf()): Try<String> {
+        if(folders == null) {
+            return Tries.errored("Folders not provided")
         }
-        val succeeded = results.filter { it.success }
-        val allSql = succeeded.fold("") { acc, result ->
-            acc + newline + "-- ${result.desc}" + newline + result.getOrElse { "Error generating sql" }
+
+        // 1. Get all the entities ( Context which has the Model containing schema names )
+        val entities = entities.getEntities()
+
+        // 2. Group all entities by their schema. e.g. "users"
+        val schemas = entities.groupBy { it.model.schema }.values.toList()
+
+        // 3. Convert all the models per schema into drop statements.
+        val schemaDDLs = schemas.map { items ->
+            val ddl = items.map { entity ->
+                val builder = builder(entity.entityTypeName)
+                val stmt = builder.delete(entity.model)
+                stmt
+            }
+            SqlDDLGroup(items[0].model.schema, ddl)
         }
-        val finalFileName = "$fileName.sql"
-        val filePath = folders?.let {
-            Files.writeDatedFile(folders.pathToOutputs, finalFileName, allSql)
-            val filePath = folders.pathToOutputs + Props.pathSeparator + finalFileName
-            filePath
-        } ?: "Folders not available, sql files not written"
-        return kiit.results.Success(filePath)
+
+        // 4. Generate ddl per schema
+        schemaDDLs.forEach { schemaDDL ->
+
+            // 5. Use a prefix name here.
+            val schema = schemaDDL.schema
+            val statements = schemaDDL.statements
+            write(schema, statements, "sql-remove", schemaFilePrefixes)
+        }
+        return kiit.results.Success(folders.pathToOutputs)
     }
 
     fun deleteAll(): Try<List<String>> {
@@ -204,6 +254,16 @@ class MigrationService(
         } ?: kiit.results.Failure("no db setup")
     }
 
+    private fun write(schema:String, statements:List<String>, prefixDefault:String,  schemaFilePrefixes:List<Pair<String,String>> = listOf()): String {
+        val prefixMatch = schemaFilePrefixes.firstOrNull { it.first.lowercase() == schema.lowercase() }
+        val prefix = prefixMatch?.second ?: prefixDefault
+        val fileName = "${prefix}-${schema}.sql"
+        val allSql = statements.joinToString(newline)
+        Files.writeDatedFile(folders!!.pathToOutputs, fileName, allSql)
+        val filePath = folders.pathToOutputs + Props.pathSeparator + fileName
+        return filePath
+    }
+
     private fun operate(operationName: String, entityName: String, sqlBuilder: (EntityContext) -> String): Try<String> {
         val ent = entities.getInfoByName(entityName)
         val svc = entities.getServiceByTypeName(entityName)
@@ -232,3 +292,4 @@ class MigrationService(
         return SqlDDLBuilder(info.entityRepoInstance.dialect, null)
     }
 }
+
