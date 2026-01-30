@@ -16,7 +16,7 @@ import kiit.results.Notice
  * slatekit.codegen.toJava   -templatesFolder="user://git/slatekit/scripts/templates/codegen/java"       -outputFolder="user://dev/temp/codegen/java"  -packageName="myapp" -classFile="" -methodFile="" -modelFile=""
  * slatekit.codegen.toKotlin -templatesFolder="usr://dev/tmp/slatekit/slatekit/scripts/templates/codegen/kotlin" -outputFolder="usr://dev/tmp/codegen/kotlin" -packageName="myapp"
  */
-@Api(area = "slatekit", name = "codegen", desc = "client code generator", verb = Verbs.AUTO, sources = [Sources.CLI])
+@Api(area = "kiit", name = "codegen", desc = "client code generator", verb = Verbs.AUTO, sources = [Sources.CLI])
 class CodeGenApi : HostAware {
 
     private var host: ApiServer? = null
