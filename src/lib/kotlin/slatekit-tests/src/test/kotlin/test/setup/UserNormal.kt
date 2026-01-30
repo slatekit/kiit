@@ -185,7 +185,7 @@ data class UserTypes(
     @Column(length = 100)
     val website: String? = null,
 
-    @Column(length = 100, required = true)
+    @Column(length = 100, required = true, tags = ["secondary_url"])
     val link: String? = null,
 
     @Column()
