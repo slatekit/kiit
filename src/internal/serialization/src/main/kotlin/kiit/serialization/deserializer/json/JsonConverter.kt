@@ -17,9 +17,9 @@ import kotlin.reflect.full.companionObjectInstance
 class JsonConverter(val converter: (parent: Any, raw: Any?, paramName:String, paramType: KType) -> Any?) {
 
     fun toList(source: JSONArray, name:String, tpe: KType): List<*> {
-        val items = source.map { item ->
+        val items = source.mapNotNull { item ->
             item?.let { jsonItem -> converter(source, jsonItem, name, tpe) }
-        }.filterNotNull()
+        }
         return items
     }
 

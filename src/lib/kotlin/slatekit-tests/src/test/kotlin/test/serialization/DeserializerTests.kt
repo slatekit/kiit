@@ -49,9 +49,19 @@ class DeserializerTests {
 //
 //    }
 
-    fun test_basic_types(tstr:String, tbool:Boolean, tshort:Short, tint:Int, tlong:Long, tdoub:Double):Unit {}
-    @Test fun can_parse_basictypes(){
-        val test = """{ "tstr": "abc", "tbool": false, "tshort": 1, "tint": 12, "tlong": 123, "tdoub": 123.45 }"""
+
+    fun test_basic_types(tStr:String, tBool:Boolean, tShort:Short, tInt:Int, tLong:Long, tDouble:Double):Unit {}
+    @Test fun can_parse_basicTypes(){
+        val test = """
+        { 
+            "tStr": "abc", 
+            "tBool": false, 
+            "tShort": 1, 
+            "tInt": 12, 
+            "tLong": 123, 
+            "tDouble": 123.45 
+        }   
+        """.trimMargin()
         val deserializer = JsonDeserializer()
         val results = deserializer.deserialize(this::test_basic_types.parameters, test)
         Assert.assertTrue(results[0] == "abc")
@@ -63,9 +73,16 @@ class DeserializerTests {
     }
 
 
-    fun test_dates(tdate: LocalDate, ttime: LocalTime, tlocaldatetime: LocalDateTime, tdatetime: DateTime):Unit{}
+    fun test_dates(tDate: LocalDate, tTime: LocalTime, tLocalDatetime: LocalDateTime, tDatetime: DateTime):Unit{}
     @Test fun can_parse_dates(){
-        val test = """{ "tdate": "2017-07-06", "ttime": "10:30:45", "tlocaldatetime": "2017-07-06T10:30:45", "tdatetime": "201707061030" }"""
+        val test = """
+        { 
+            "tDate": "2017-07-06", 
+            "tTime": "10:30:45", 
+            "tLocalDatetime": "2017-07-06T10:30:45", 
+            "tDatetime": "201707061030" 
+        }
+        """.trimIndent()
         val deserializer = JsonDeserializer()
         val results = deserializer.deserialize(this::test_dates.parameters, test)
         Assert.assertTrue(results[0] == LocalDate.of(2017, 7, 6))
@@ -78,7 +95,11 @@ class DeserializerTests {
     fun test_uuid(uid: UUID) {}
     @Test fun can_parse_uuids(){
         val uuid = Random.uuid()
-        val test = """{ "uid": "$uuid" }"""
+        val test = """
+        { 
+            "uid": "$uuid" 
+        }
+        """.trimIndent()
         val deserializer = JsonDeserializer()
         val results = deserializer.deserialize(this::test_uuid.parameters, test)
         Assert.assertTrue(results[0] == UUID.fromString(uuid))
@@ -88,7 +109,11 @@ class DeserializerTests {
     fun test_enum(status: StatusEnum) {}
     @Test fun can_parse_enum(){
         val enumVal = StatusEnum.Active
-        val test = """{ "status": ${enumVal.value} }"""
+        val test = """
+        { 
+            "status": ${enumVal.value} 
+        }
+        """.trimIndent()
         val deserializer = JsonDeserializer()
         val results = deserializer.deserialize(this::test_enum.parameters, test)
         Assert.assertTrue(results[0] == enumVal)
@@ -97,13 +122,19 @@ class DeserializerTests {
 
     fun test_decrypted(decString: EncString, decInt: EncInt, decLong: EncLong, decDouble: EncDouble):Unit {}
     @Test fun can_parse_decrypted(){
-
         val decStr = MyEncryptor.encrypt("abc123")
         val decInt = MyEncryptor.encrypt("123")
         val decLong = MyEncryptor.encrypt("12345")
         val decDoub = MyEncryptor.encrypt("12345.67")
 
-        val test = """{ "decString": "$decStr", "decInt": "$decInt", "decLong": "$decLong", "decDouble": "$decDoub" }"""
+        val test = """
+        { 
+            "decString": "$decStr", 
+            "decInt": "$decInt", 
+            "decLong": "$decLong", 
+            "decDouble": "$decDoub" 
+        }
+        """.trimIndent()
         val deserializer = JsonDeserializer(MyEncryptor)
         val results = deserializer.deserialize(this::test_decrypted.parameters, test)
         Assert.assertTrue((results[0] as EncString).value == "abc123")
@@ -113,9 +144,17 @@ class DeserializerTests {
     }
 
 
-    fun test_arrays(strings: List<String>, bools:List<Boolean>, ints:List<Int>, longs:List<Long>, doubles:List<Double>):Unit {}
+    fun test_arrays(strings: List<String>, bools:List<Boolean>, ints:List<Int>, longs:List<Long>, doubles:List<Double>) : Unit {}
     @Test fun can_parse_arrays(){
-        val test = """{ "strings": ["a", "b", "c"], "bools": [true, false, true], "ints": [1,2,3], "longs": [100,200,300], "doubles": [1.2,3.4,5.6] }"""
+        val test = """
+        { 
+            "strings": ["a", "b", "c"], 
+            "bools"  : [true, false, true], 
+            "ints"   : [1,2,3], 
+            "longs"  : [100,200,300], 
+            "doubles": [1.2,3.4,5.6] 
+        }
+        """.trimMargin()
         val deserializer = JsonDeserializer(MyEncryptor)
         val results = deserializer.deserialize(this::test_arrays.parameters, test)
         Assert.assertTrue((results[0] as List<String>)[0] == "a")
@@ -136,10 +175,21 @@ class DeserializerTests {
     }
 
 
-    data class SampleObject1(val tstr:String, val tbool:Boolean, val tshort:Short, val tint:Int, val tlong:Long, val tdoub:Double)
+    data class SampleObject1(val tStr:String, val tBool:Boolean, val tShort:Short, val tInt:Int, val tLong:Long, val tDoub:Double)
     fun test_object(sample1: SampleObject1):Unit{}
     @Test fun can_parse_object(){
-        val test = """{ "sample1": { "tstr": "abc", "tbool": false, "tshort": 1, "tint": 12, "tlong": 123, "tdoub": 123.45 } }"""
+        val test = """
+        { 
+            "sample1": { 
+                "tStr"  : "abc", 
+                "tBool" : false, 
+                "tShort": 1, 
+                "tInt"  : 12, 
+                "tLong" : 123, 
+                "tDoub" : 123.45 
+            } 
+        }
+        """.trimMargin()
         val deserializer = JsonDeserializer()
         val results = deserializer.deserialize(this::test_object.parameters, test)
         Assert.assertTrue(results[0] == SampleObject1("abc", false, 1, 12, 123, 123.45))
@@ -148,11 +198,27 @@ class DeserializerTests {
 
     fun test_object_list(items:List<SampleObject1>):Unit{}
     @Test fun can_parse_object_lists(){
-        val test = """{ "items":
-        [
-            { "tstr": "abc", "tbool": false, "tshort": 1, "tint": 12, "tlong": 123, "tdoub": 123.45 },
-            { "tstr": "def", "tbool": true , "tshort": 2, "tint": 34, "tlong": 456, "tdoub": 678.91 }
-        ]}"""
+        val test = """
+        { 
+            "items": [
+                { 
+                    "tStr"  : "abc", 
+                    "tBool" : false, 
+                    "tShort": 1, 
+                    "tInt"  : 12, 
+                    "tLong" : 123, 
+                    "tDoub" : 123.45 
+                },
+                { 
+                    "tStr"  : "def", 
+                    "tBool" : true, 
+                    "tShort": 2, 
+                    "tInt"  : 34, 
+                    "tLong" : 456, 
+                    "tDoub" : 678.91 
+                }
+            ]
+        }"""
         val deserializer = JsonDeserializer()
         val inputs = deserializer.deserialize(this::test_object_list.parameters, test)
         val results = inputs.get(0) as ArrayList<*>
@@ -170,10 +236,23 @@ class DeserializerTests {
         "item":
             {
                 "name": "nested_objects",
-                "items":
-                [
-                    { "tstr": "abc", "tbool": false, "tshort": 1, "tint": 12, "tlong": 123, "tdoub": 123.45 },
-                    { "tstr": "def", "tbool": true , "tshort": 2, "tint": 34, "tlong": 456, "tdoub": 678.91 }
+                "items": [
+                    { 
+                        "tStr"  : "abc", 
+                        "tBool" : false, 
+                        "tShort": 1, 
+                        "tInt"  : 12, 
+                        "tLong" : 123, 
+                        "tDoub" : 123.45 
+                    },
+                    { 
+                        "tStr"  : "def", 
+                        "tBool" : true, 
+                        "tShort": 2, 
+                        "tInt"  : 34, 
+                        "tLong" : 456, 
+                        "tDoub" : 678.91 
+                    }
                 ]
             }
         }"""
@@ -186,12 +265,11 @@ class DeserializerTests {
     }
 
 
-    fun test_custom_converter(tstr:String, tbool:Boolean, movie: Movie):Unit {}
-
+    fun test_custom_converter(tStr:String, tBool:Boolean, movie: Movie):Unit {}
     @Test fun can_parse_custom_types_using_lambda_decoder(){
         val test = """{
-                "tstr": "abc",
-                "tbool": false,
+                "tStr": "abc",
+                "tBool": false,
                 "movie": {
                     "id": 123,
                     "title": "dark knight",
@@ -218,8 +296,8 @@ class DeserializerTests {
 
     @Test fun can_parse_custom_types_using_simple_decoder(){
         val test = """{
-                "tstr": "abc",
-                "tbool": false,
+                "tStr": "abc",
+                "tBool": false,
                 "movie": {
                     "id": 123,
                     "title": "dark knight",
