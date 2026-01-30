@@ -51,7 +51,7 @@ object Schema {
 
     @JvmStatic
     fun column(prop: KProperty<*>, anno: Column, namer: Namer?, checkForId:Boolean, idFieldName:String?):ModelField {
-        val name = if (anno.name.isNullOrEmpty()) prop.name else anno.name
+        val name = anno.name.ifEmpty { prop.name }
         val cat = idFieldName?.let {
             if(it == name)
                 FieldCategory.Id
