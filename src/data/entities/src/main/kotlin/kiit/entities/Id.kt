@@ -31,7 +31,7 @@ annotation class Id(
 annotation class Column(
     val name: String = "",
     val desc: String = "",
-    val required: Boolean = true,
+    val required: Boolean = false,
     val unique: Boolean = false,
     val updatable: Boolean = true,
     val indexed: Boolean = false,

@@ -60,7 +60,11 @@ object Schema {
         } ?: FieldCategory.Data
 
         // Get whether its required based on nullable property.
-        val required = !prop.returnType.isMarkedNullable
+        val required = when {
+            !prop.returnType.isMarkedNullable -> true
+            anno.required -> true
+            else -> false
+        }
         val length = anno.length
         val encrypt = anno.encrypt
         val fieldKType = prop.returnType

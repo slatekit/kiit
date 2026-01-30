@@ -17,6 +17,7 @@ import org.junit.Test
 import kiit.common.data.*
 import kiit.entities.*
 import test.setup.User5
+import test.setup.UserTypes
 
 class Entity_Service_Registry_Tests {
 
@@ -26,6 +27,24 @@ class Entity_Service_Registry_Tests {
     fun setup(){
         entities = EntitySetup.fakeDb()
         entities.register<Long, User5>(EntityLongId() , vendor = Vendor.Memory) { repo -> UserService(repo) }
+    }
+
+
+    @Test
+    fun can_load_model_field_required_from_type() {
+        val model = Schema.load(UserTypes::class, UserTypes::id.name)
+
+        // Case 1: Type is required
+        val email = model.fields.first { it.name == "email" }
+        Assert.assertEquals(true, email.isRequired)
+
+        // Case 2: Type is nullable ( Optional )
+        val website = model.fields.first { it.name == "website" }
+        Assert.assertEquals(false, website.isRequired)
+
+        // Case 3: Type is nullable ( Optional ), but annotation marked as required
+        val link = model.fields.first { it.name == "link" }
+        Assert.assertEquals(true, link.isRequired)
     }
 
 
