@@ -34,7 +34,7 @@ open class EntityRepo<TId, T>(
     : SqlRepo<TId, T>(db, meta, mapper, syntax, hooks, mode) where TId : Comparable<TId>, T : Any {
 
     private val lookup:Map<String, String> = if(mapper is EntityMapper<*, *>) {
-        mapper.model.fields.map { it.name to it.storedName }.toMap()
+        mapper.model.fields.associate { it.name to it.storedName }
     }
     else {
         mapOf()
