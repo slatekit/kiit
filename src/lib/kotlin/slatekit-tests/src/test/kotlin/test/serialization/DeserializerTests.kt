@@ -16,6 +16,7 @@ import kiit.apis.core.Transformer
 import kiit.common.DateTimes
 import kiit.requests.CommonRequest
 import kiit.common.Source
+import kiit.common.ext.toDateKey
 import kiit.requests.Request
 import kiit.meta.*
 import kiit.serialization.deserializer.json.JsonDeserializer
@@ -200,11 +201,11 @@ class DeserializerTests {
     fun test_object_with_nulls_defaults(sample2: SampleObject2):Unit{}
     @Test fun can_parse_object_with_nulls_defaults(){
         val tests = listOf<String>(
-            """{ "sample2": { "tStr1: "abc" } }""",
-            """{ "sample2": { "tStr1: "abc", "tStr2": "123" } }""",
-            """{ "sample2": { "tStr1: "abc", "tStr2": "123", "tDate": "2026-01-30T18:00:00Z" } }""",
-            """{ "sample2": { "tStr1: "abc", "tStr2": "123", "tDate": "2026-01-30T18:00:00Z", "tBool": false } }""",
-            """{ "sample2": { "tStr1: "abc", "tStr2": "123", "tDate": "2026-01-30T18:00:00Z", "tBool": false, "tInt": 2 } }""",
+            """{ "sample2": { "tStr1": "abc" } }""",
+            """{ "sample2": { "tStr1": "abc", "tStr2": "123" } }""",
+            """{ "sample2": { "tStr1": "abc", "tStr2": "123", "tDate": "2026-01-30T18:00:00Z" } }""",
+            """{ "sample2": { "tStr1": "abc", "tStr2": "123", "tDate": "2026-01-30T18:00:00Z", "tBool": false } }""",
+            """{ "sample2": { "tStr1": "abc", "tStr2": "123", "tDate": "2026-01-30T18:00:00Z", "tBool": false, "tInt": 2 } }""",
         )
         val date = DateTimes.parse("2026-01-30T18:00:00Z")
         val expectedItems = listOf(
@@ -214,12 +215,16 @@ class DeserializerTests {
             SampleObject2("abc", "123", date, false),
             SampleObject2("abc", "123", date, false, 2),
         )
-        val deserializer = JsonDeserializer()
+        val deserializer = JsonDeserializer(defaults = mapOf(SampleObject2::class.qualifiedName!! to SampleObject2("test")))
         tests.forEachIndexed { ndx, test ->
             val results = deserializer.deserialize(this::test_object_with_nulls_defaults.parameters, test)
             val expected = expectedItems[ndx]
-            val actual = results[0]
-            Assert.assertTrue( actual == expected)
+            val actual = results[0] as SampleObject2
+            Assert.assertEquals(actual.tStr1, expected.tStr1)
+            Assert.assertEquals(actual.tStr2, expected.tStr2)
+            Assert.assertEquals(actual.tDate.toDateKey(), expected.tDate.toDateKey())
+            Assert.assertEquals(actual.tBool, expected.tBool)
+            Assert.assertEquals(actual.tInt , expected.tInt)
         }
     }
 

@@ -34,27 +34,50 @@ import kotlin.reflect.full.createType
  */
 open class JsonDeserializer(
     private val enc: Encryptor? = null,
-    private val decoders: Map<String, JSONTransformer<*>> = mapOf()
+    private val decoders: Map<String, JSONTransformer<*>> = mapOf(),
+    private val defaults: Map<String, Any> = mapOf()
 ) : Deserializer<JSONObject> {
 
-    private val conversion  = JsonConverter(this::convert)
+    private val conversion  = JsonConverter(defaults,this::convert)
     private val deserializers = JsonDecoders(conversion, enc, decoders)
     private val basicTypes = DecodeUtils.basicMapTypes()
 
 
     /**
      * Deserializes the JSON text associated with the parameters supplied
+     * @param parameters: List of the of data types to expect ( see example below )
+     * @param source    : JSON text
+     * @sample
+     *  - data class Task(val title: String, priority:Int = 0 )
+     *  - fun create(folder:String, item: Task)
+     *  - {
+     *      "folder": "home",
+     *      "task" : {
+     *          "title": "Check messages",
+     *          "priority": 1
+     *      }
+     *    }
      */
-    open fun deserialize(parameters: List<KParameter>, text: String): Array<Any?> {
-        val jsonObj = JSONParser().parse(text) as JSONObject
+    open fun deserialize(parameters: List<KParameter>, source: String): Array<Any?> {
+        val jsonObj = JSONParser().parse(source) as JSONObject
         return deserialize(parameters, jsonObj)
     }
 
 
     /**
-     * converts the JSON object data into the instances of the parameter types
-     * @param parameters: The parameter info to convert
-     * @param source : The json object to containing the data
+     * Deserializes the JSON into instances of the parameters supplied
+     * @param parameters: List of the of data types to expect ( see example below )
+     * @param source    : JSON object
+     * @sample
+     *  - data class Task(val title: String, priority:Int = 0 )
+     *  - fun create(folder:String, item: Task)
+     *  - {
+     *      "folder": "home",
+     *      "task" : {
+     *          "title": "Check messages",
+     *          "priority": 1
+     *      }
+     *    }
      */
     override fun deserialize(parameters: List<KParameter>, source: JSONObject): Array<Any?> {
         // Check each parameter to api call
@@ -67,7 +90,15 @@ open class JsonDeserializer(
 
 
     /**
-     * converts data from the json object as an instance of the parameter type
+     * Deserializes the JSON into instances of the parameter supplied
+     * @param parameter: Type to deserialize the JSON as
+     * @param source    : JSON object
+     * @sample
+     *  - data class Task(val title: String, priority:Int = 0 )
+     *  - {
+     *         "title": "Check messages",
+     *         "priority": 1
+     *    }
      */
     override fun deserialize(parameter: KParameter, source: JSONObject): Any? {
         val paramName = parameter.name!!
