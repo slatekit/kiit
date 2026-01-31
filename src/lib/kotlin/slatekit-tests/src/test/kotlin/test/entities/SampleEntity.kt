@@ -45,9 +45,6 @@ data class SampleEntityImmutable(
         @property:Column(length = 30)
         val test_string: String = "",
 
-        @property:Column(length = 30)
-        val test_stringOpt: String? = null,
-
         @property:Column(length = 100, encrypt = true)
         val test_string_enc: String = "",
 
@@ -102,6 +99,75 @@ data class SampleEntityImmutable(
      * @return
      */
     override fun withId(id: Long): SampleEntityImmutable {
+        return this.copy(id = id)
+    }
+}
+
+
+data class SampleEntityImmutableWithNulls(
+    @property:Id()
+    override val id: Long = 0L,
+
+    @property:Column(length = 30)
+    val test_string: String = "",
+
+    @property:Column(length = 30)
+    val test_stringOpt: String? = null,
+
+    @property:Column(length = 100, encrypt = true)
+    val test_string_enc: String = "",
+
+    @property:Column()
+    val test_bool: Boolean = false,
+
+    @property:Column()
+    val test_short: Short = 35,
+
+    @property:Column()
+    val test_int: Int = 35,
+
+    @property:Column()
+    val test_long: Long = 35,
+
+    @property:Column()
+    val test_float: Float = 20.5f,
+
+    @property:Column()
+    val test_double: Double = 20.5,
+
+    @property:Column()
+    val test_enum: StatusEnum = StatusEnum.Pending,
+
+    @property:Column()
+    val test_localdate: LocalDate = LocalDate.now(),
+
+    @property:Column()
+    val test_localtime: LocalTime = LocalTime.now(),
+
+    @property:Column()
+    val test_localdatetime: LocalDateTime = LocalDateTime.now(),
+
+    @property:Column()
+    val test_zoneddatetime: DateTime = DateTimes.now(),
+
+    @property:Column(length = 50, unique = true)
+    val test_uuid: UUID = UUID.randomUUID(),
+
+    @property:Column(length = 50, indexed = true)
+    val test_uniqueId: UPID = UPIDs.create("usa"),
+
+    @property:Column()
+    val test_object: Address = Address("street 1", "city 1", "state 1", 1,"12345", true)
+
+) : EntityWithId<Long>, EntityUpdatable<Long, SampleEntityImmutableWithNulls> {
+    override fun isPersisted(): Boolean = id > 0
+
+    /**
+     * sets the id on the entity and returns the entity with updated id.
+     * @param id
+     * @return
+     */
+    override fun withId(id: Long): SampleEntityImmutableWithNulls {
         return this.copy(id = id)
     }
 }

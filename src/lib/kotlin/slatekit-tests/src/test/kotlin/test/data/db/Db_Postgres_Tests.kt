@@ -109,8 +109,8 @@ class Db_Postgres_Tests : Db_Common_Tests(), DbTestCases {
                 "test_short"       , "test_int"         , "test_long",
                 "test_float"       , "test_double"      , "test_enum",
                 "test_localdate"   , "test_localtime"   , "test_localdatetime", "test_zoneddatetime", 
-                "test_uuid"        , "test_uniqueid"    ,
-                "test_object_addr" , "test_object_city" , "test_object_state", "test_object_country", "test_object_zip", "test_object_ispobox"
+                "test_uuid"        , "test_uniqueId"    ,
+                "test_object_addr" , "test_object_city" , "test_object_state", "test_object_country", "test_object_zip", "test_object_isPOBox"
             )
             VALUES (?, ?, ?,
                     ?, ?, ?, ?, ?, ?,
@@ -127,8 +127,8 @@ class Db_Postgres_Tests : Db_Common_Tests(), DbTestCases {
                 "test_short"       , "test_int"         , "test_long",
                 "test_float"       , "test_double"      , "test_enum",
                 "test_localdate"   , "test_localtime"   , "test_localdatetime", "test_zoneddatetime", 
-                "test_uuid"        , "test_uniqueid"    ,
-                "test_object_addr" , "test_object_city" , "test_object_state", "test_object_country", "test_object_zip", "test_object_ispobox"
+                "test_uuid"        , "test_uniqueId"    ,
+                "test_object_addr" , "test_object_city" , "test_object_state", "test_object_country", "test_object_zip", "test_object_isPOBox"
             )
             VALUES
             (
