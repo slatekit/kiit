@@ -196,6 +196,34 @@ class DeserializerTests {
     }
 
 
+    data class SampleObject2(val tStr1:String, val tStr2:String? = null, val tDate: DateTime = DateTimes.now(), val tBool:Boolean = true, val tInt:Int = 0)
+    fun test_object_with_nulls_defaults(sample2: SampleObject2):Unit{}
+    @Test fun can_parse_object_with_nulls_defaults(){
+        val tests = listOf<String>(
+            """{ "sample2": { "tStr1: "abc" } }""",
+            """{ "sample2": { "tStr1: "abc", "tStr2": "123" } }""",
+            """{ "sample2": { "tStr1: "abc", "tStr2": "123", "tDate": "2026-01-30T18:00:00Z" } }""",
+            """{ "sample2": { "tStr1: "abc", "tStr2": "123", "tDate": "2026-01-30T18:00:00Z", "tBool": false } }""",
+            """{ "sample2": { "tStr1: "abc", "tStr2": "123", "tDate": "2026-01-30T18:00:00Z", "tBool": false, "tInt": 2 } }""",
+        )
+        val date = DateTimes.parse("2026-01-30T18:00:00Z")
+        val expectedItems = listOf(
+            SampleObject2("abc"),
+            SampleObject2("abc", "123"),
+            SampleObject2("abc", "123", date),
+            SampleObject2("abc", "123", date, false),
+            SampleObject2("abc", "123", date, false, 2),
+        )
+        val deserializer = JsonDeserializer()
+        tests.forEachIndexed { ndx, test ->
+            val results = deserializer.deserialize(this::test_object_with_nulls_defaults.parameters, test)
+            val expected = expectedItems[ndx]
+            val actual = results[0]
+            Assert.assertTrue( actual == expected)
+        }
+    }
+
+
     fun test_object_list(items:List<SampleObject1>):Unit{}
     @Test fun can_parse_object_lists(){
         val test = """
@@ -370,7 +398,8 @@ class DeserializerTests {
     }
 
 
-    @Test fun can_check_types(){
+    @Test
+    fun can_check_types(){
         val params = this::test_arrays.parameters
         val first = params[0]
         println(first.type)
@@ -382,10 +411,5 @@ class DeserializerTests {
         val cls = tpe.classifier as KClass<*>
         println(cls.toString())
         println(cls.qualifiedName)
-    }
-
-
-    fun printInfo(item:Any?):Unit {
-        println(item)
     }
 }
