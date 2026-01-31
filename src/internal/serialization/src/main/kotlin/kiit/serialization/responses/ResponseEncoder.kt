@@ -13,7 +13,7 @@ object ResponseEncoder {
      * 1. code is in the application level status code ( not to be conflated with HTTP status code )
      * 2. errs is a list of Err types @see[kiit.results.Err]
      * 3. tag is used a correlation id
-     * 4. meta is for additional meta data to be provided to the client
+     * 4. meta is for additional metadata to be provided to the client
      * @sample
      * {
      *      "success": false,

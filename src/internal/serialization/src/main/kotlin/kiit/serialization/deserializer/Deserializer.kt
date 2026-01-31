@@ -31,19 +31,23 @@ import kotlin.reflect.KParameter
  */
 interface Deserializer<TSource> {
     /**
-     * converts the JSON object data into the instances of the parameter types
+     * converts the source object data ( JSON ) into the instances of the parameter types
      * @param parameters: The parameter info to convert
-     * @param source : The json object to containing the data
+     * @param source : The json object containing the data
      */
     fun deserialize(parameters: List<KParameter>, source: TSource): Array<Any?>
 
     /**
-     * converts data from the json object as an instance of the parameter type
+     * converts the source object data ( JSON ) into the instances of the parameter types
+     * @param parameter: The parameter info to convert
+     * @param source : The json object containing the data
      */
     fun deserialize(parameter: KParameter, source: TSource): Any?
 
     /**
-     * converts data from the json object as an instance of the parameter type
+     * converts the source object data ( JSON ) into the instances of the parameter types
+     * @param parameters: The parameter info to convert
+     * @param req : The kiit request contain data
      */
     fun deserialize(parameters: List<KParameter>, req:Request): Array<Any?>
 }
