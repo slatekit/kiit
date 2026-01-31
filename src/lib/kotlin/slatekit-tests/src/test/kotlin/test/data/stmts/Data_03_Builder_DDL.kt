@@ -14,6 +14,7 @@ import kiit.entities.mapper.EntityMapper
 import kiit.entities.mapper.EntitySettings
 import test.entities.EntitySetup
 import test.entities.SampleEntityImmutable
+import test.entities.SampleEntityImmutableWithNulls
 
 class Data_03_Builder_DDL {
 
@@ -61,28 +62,29 @@ class Data_03_Builder_DDL {
         val builder = SqlDDLBuilder(MySqlDialect, null)
         val actual = builder.create(model)
         val expected = """create table if not exists `sample1` ( 
-`id` BIGINT NOT NULL AUTO_INCREMENT PRIMARY KEY,  
-`test_string` NVARCHAR(30) NOT NULL,  
-`test_string_enc` NVARCHAR(100) NOT NULL,  
-`test_bool` BIT NOT NULL,  
-`test_short` SMALLINT NOT NULL,  
-`test_int` INTEGER NOT NULL,  
-`test_long` BIGINT NOT NULL,  
-`test_float` FLOAT NOT NULL,  
-`test_double` DOUBLE NOT NULL,  
-`test_enum` INTEGER NOT NULL,  
-`test_localdate` DATE NOT NULL,  
-`test_localtime` TIME NOT NULL,  
-`test_localdatetime` DATETIME NOT NULL,  
-`test_zoneddatetime` DATETIME NOT NULL,  
-`test_uuid` NVARCHAR(50) NOT NULL,  
-`test_uniqueId` NVARCHAR(50) NOT NULL,  
-`test_object_addr` NVARCHAR(40) NOT NULL,  
-`test_object_city` NVARCHAR(30) NOT NULL,  
-`test_object_state` NVARCHAR(20) NOT NULL,  
-`test_object_country` INTEGER NOT NULL,  
-`test_object_zip` NVARCHAR(5) NOT NULL,  
-`test_object_isPOBox` BIT NOT NULL );"""
+`id`                  BIGINT        NOT NULL AUTO_INCREMENT PRIMARY KEY, 
+`test_string`         NVARCHAR(30)  NOT NULL , 
+`test_string_enc`     NVARCHAR(100) NOT NULL , 
+`test_bool`           BIT           NOT NULL , 
+`test_short`          SMALLINT      NOT NULL , 
+`test_int`            INTEGER       NOT NULL , 
+`test_long`           BIGINT        NOT NULL , 
+`test_float`          FLOAT         NOT NULL , 
+`test_double`         DOUBLE        NOT NULL , 
+`test_enum`           INTEGER       NOT NULL , 
+`test_localdate`      DATE          NOT NULL , 
+`test_localtime`      TIME          NOT NULL , 
+`test_localdatetime`  DATETIME      NOT NULL , 
+`test_zoneddatetime`  DATETIME      NOT NULL , 
+`test_uuid`           NVARCHAR(50)  NOT NULL , 
+`test_uniqueId`       NVARCHAR(50)  NOT NULL , 
+`test_object_addr`    NVARCHAR(40)  NOT NULL , 
+`test_object_city`    NVARCHAR(30)  NOT NULL , 
+`test_object_state`   NVARCHAR(20)  NOT NULL , 
+`test_object_country` INTEGER       NOT NULL , 
+`test_object_zip`     NVARCHAR(5)   NOT NULL , 
+`test_object_isPOBox` BIT           NOT NULL  );
+"""
         Assert.assertEquals(expected, actual)
     }
 
@@ -91,7 +93,7 @@ class Data_03_Builder_DDL {
 
     @Test
     fun can_build_ddl_postgres() {
-        val model = Schema.load(SampleEntityImmutable::class, table = "sample1", schema = "unit_tests")
+        val model = Schema.load(SampleEntityImmutableWithNulls::class, table = "sample1", schema = "unit_tests")
         val builder = PostgresSqlDDLBuilder(PostgresDialect, null)
         val actual = builder.create(model)
         val expected = """
