@@ -144,8 +144,6 @@ Providers                                                              | --     
 - **author**: Kishore Reddy
 - **website**: www.kiit.dev
 - **company**: www.codehelix.co
-- **email**: kishore  codehelix.co
 
 # ❤️ Like Us ? 
 - Support Kiit by clicking the :star: button on the upper right of this page. :v:
-- Contribute to continued development via Sponsorship ( being set up soon )
