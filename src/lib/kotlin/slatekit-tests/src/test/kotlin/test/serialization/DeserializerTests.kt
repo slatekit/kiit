@@ -202,6 +202,7 @@ class DeserializerTests {
     @Test fun can_parse_object_with_nulls_defaults(){
         val tests = listOf<String>(
             """{ "sample2": { "tStr1": "abc" } }""",
+            """{ "sample2": { "tStr1": "abc", "tStr2": null  } }""",
             """{ "sample2": { "tStr1": "abc", "tStr2": "123" } }""",
             """{ "sample2": { "tStr1": "abc", "tStr2": "123", "tDate": "2026-01-30T18:00:00Z" } }""",
             """{ "sample2": { "tStr1": "abc", "tStr2": "123", "tDate": "2026-01-30T18:00:00Z", "tBool": false } }""",
@@ -210,6 +211,7 @@ class DeserializerTests {
         val date = DateTimes.parse("2026-01-30T18:00:00Z")
         val expectedItems = listOf(
             SampleObject2("abc"),
+            SampleObject2("abc", null),
             SampleObject2("abc", "123"),
             SampleObject2("abc", "123", date),
             SampleObject2("abc", "123", date, false),
