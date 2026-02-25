@@ -5,9 +5,10 @@ plugins {
     alias(libs.plugins.kotlinMultiplatform)
     alias(libs.plugins.android.kotlin.multiplatform.library)
     alias(libs.plugins.vanniktech.mavenPublish)
+    id("maven-publish")
 }
 
-group = "io.github.kotlin"
+group = "dev.kiit"
 version = "1.0.0"
 
 kotlin {
@@ -47,36 +48,61 @@ kotlin {
     }
 }
 
-mavenPublishing {
-    publishToMavenCentral()
+publishing {
+    repositories {
+        maven {
+            name = "GitHubPackages"
+            // The URL format is https://maven.pkg.github.com
+            url = uri("https://maven.pkg.github.com/slatekit/kiit")
 
-    signAllPublications()
-
-    coordinates(group.toString(), "library", version.toString())
-
-    pom {
-        name = "My library"
-        description = "A library."
-        inceptionYear = "2024"
-        url = "https://github.com/kotlin/multiplatform-library-template/"
-        licenses {
-            license {
-                name = "XXX"
-                url = "YYY"
-                distribution = "ZZZ"
+            credentials {
+                // Use environment variables for credentials
+                username = System.getenv("KIIT_PUBLISH_ACTOR") ?: ""
+                password = System.getenv("KIIT_PUBLISH_TOKEN") ?: ""
             }
         }
-        developers {
-            developer {
-                id = "XXX"
-                name = "YYY"
-                url = "ZZZ"
-            }
-        }
-        scm {
-            url = "XXX"
-            connection = "YYY"
-            developerConnection = "ZZZ"
+    }
+    publications {
+        // Register a publication for the Kotlin component
+        register<MavenPublication>("gpr") {
+            from(components["kotlin"])
+            groupId = project.group.toString()
+            artifactId = "kiit-common-env"
+            version = project.version.toString()
         }
     }
 }
+
+//mavenPublishing {
+//    publishToMavenCentral()
+//
+//    signAllPublications()
+//
+//    coordinates(group.toString(), "library", version.toString())
+//
+//    pom {
+//        name = "My library"
+//        description = "A library."
+//        inceptionYear = "2024"
+//        url = "https://github.com/kotlin/multiplatform-library-template/"
+//        licenses {
+//            license {
+//                name = "XXX"
+//                url = "YYY"
+//                distribution = "ZZZ"
+//            }
+//        }
+//        developers {
+//            developer {
+//                id = "XXX"
+//                name = "YYY"
+//                url = "ZZZ"
+//            }
+//        }
+//        scm {
+//            url = "XXX"
+//            connection = "YYY"
+//            developerConnection = "ZZZ"
+//        }
+//    }
+//}
