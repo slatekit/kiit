@@ -100,6 +100,12 @@ tasks.register("publishJvmToGitHubPackages") {
     dependsOn("publishJvmPublicationToGitHubPackagesRepository")
 }
 
+tasks.register("publishAndroidToGitHubPackages") {
+    group = "publishing"
+    description = "Publishes the Android AAR publication to GitHub Package Registry"
+    dependsOn("publishAndroidPublicationToGitHubPackagesRepository")
+}
+
 val jsDistDir = layout.buildDirectory.dir("dist/js/productionLibrary")
 
 // Patches the Kotlin-generated package.json with the scoped npm name, description,
