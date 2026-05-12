@@ -13,6 +13,7 @@
 .worksheet
 .idea
 .gradle
+.kotlin/metadata
 
 # ROOT DIRS
 lib/

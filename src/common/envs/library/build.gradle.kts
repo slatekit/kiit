@@ -1,5 +1,7 @@
 import com.android.build.api.dsl.androidLibrary
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
+import org.jetbrains.kotlin.gradle.plugin.mpp.apple.XCFramework
+import java.security.MessageDigest
 
 plugins {
     alias(libs.plugins.kotlinMultiplatform)
@@ -9,6 +11,9 @@ plugins {
 
 group = "dev.kiit"
 version = rootProject.layout.projectDirectory.file("../../version.txt").asFile.readText().trim()
+
+val xcfName = "KiitCommonEnvs"
+val xcf = XCFramework(xcfName)
 
 kotlin {
     jvm {
@@ -33,9 +38,27 @@ kotlin {
         }
     }
 
-    iosX64()
-    iosArm64()
-    iosSimulatorArm64()
+    iosX64 {
+        binaries.framework {
+            baseName = xcfName
+            isStatic = true
+            xcf.add(this)
+        }
+    }
+    iosArm64 {
+        binaries.framework {
+            baseName = xcfName
+            isStatic = true
+            xcf.add(this)
+        }
+    }
+    iosSimulatorArm64 {
+        binaries.framework {
+            baseName = xcfName
+            isStatic = true
+            xcf.add(this)
+        }
+    }
 
     js {
         browser()
@@ -54,6 +77,10 @@ kotlin {
         }
     }
 }
+
+// ---------------------------------------------------------------------------
+// Maven / GitHub Packages publishing (JVM, Android)
+// ---------------------------------------------------------------------------
 
 publishing {
     repositories {
@@ -106,11 +133,12 @@ tasks.register("publishAndroidToGitHubPackages") {
     dependsOn("publishAndroidPublicationToGitHubPackagesRepository")
 }
 
+// ---------------------------------------------------------------------------
+// npm / GitHub Packages publishing (JS)
+// ---------------------------------------------------------------------------
+
 val jsDistDir = layout.buildDirectory.dir("dist/js/productionLibrary")
 
-// Patches the Kotlin-generated package.json with the scoped npm name, description,
-// repository, and GitHub Package Registry publishConfig. Runs at execution time so
-// it is fully compatible with Gradle's configuration cache.
 val patchNpmPackageJson = tasks.register("patchNpmPackageJson") {
     group = "publishing"
     dependsOn("assemble")
@@ -142,5 +170,119 @@ tasks.register<Exec>("publishNpmToGitHubPackages") {
         jsDistDir.get().asFile.resolve(".npmrc").writeText(
             "//npm.pkg.github.com/:_authToken=${token}\n"
         )
+    }
+}
+
+// ---------------------------------------------------------------------------
+// SPM / GitHub Releases publishing (iOS XCFramework)
+// ---------------------------------------------------------------------------
+
+val xcfOutputDir  = layout.buildDirectory.dir("XCFrameworks/release")
+val spmOutputDir  = layout.buildDirectory.dir("spm")
+val xcfZipName    = "${xcfName}.xcframework.zip"
+val assembleXCFTask = "assemble${xcfName}ReleaseXCFramework"
+
+// 1. Zip the assembled XCFramework.
+val zipXCFramework = tasks.register<Zip>("zipXCFramework") {
+    group = "publishing"
+    description = "Zips the $xcfName XCFramework for SPM distribution"
+    dependsOn(assembleXCFTask)
+    from(xcfOutputDir) {
+        include("${xcfName}.xcframework/**")
+    }
+    archiveFileName.set(xcfZipName)
+    destinationDirectory.set(spmOutputDir)
+}
+
+// 2. Compute the SHA-256 checksum required by SPM binaryTarget.
+val computeXCFrameworkChecksum = tasks.register("computeXCFrameworkChecksum") {
+    group = "publishing"
+    description = "Computes SHA-256 checksum of the zipped XCFramework"
+    dependsOn(zipXCFramework)
+    doLast {
+        val zipFile = spmOutputDir.get().asFile.resolve(xcfZipName)
+        val digest   = MessageDigest.getInstance("SHA-256")
+        val checksum = digest.digest(zipFile.readBytes()).joinToString("") { "%02x".format(it) }
+        spmOutputDir.get().asFile.resolve("${xcfName}.xcframework.zip.sha256").writeText(checksum)
+        println("XCFramework SHA-256: $checksum")
+    }
+}
+
+// 3. Generate Package.swift referencing the GitHub Release asset.
+val generatePackageSwift = tasks.register("generatePackageSwift") {
+    group = "publishing"
+    description = "Generates Package.swift for SPM binary distribution"
+    dependsOn(computeXCFrameworkChecksum)
+    doLast {
+        val ver      = project.version.toString()
+        val checksum = spmOutputDir.get().asFile
+            .resolve("${xcfName}.xcframework.zip.sha256")
+            .readText().trim()
+        val url = "https://github.com/slatekit/kiit/releases/download/v${ver}/${xcfZipName}"
+
+        val content = """
+            // swift-tools-version:5.5
+            import PackageDescription
+
+            let package = Package(
+                name: "$xcfName",
+                platforms: [.iOS(.v13)],
+                products: [
+                    .library(name: "$xcfName", targets: ["$xcfName"]),
+                ],
+                targets: [
+                    .binaryTarget(
+                        name: "$xcfName",
+                        url: "$url",
+                        checksum: "$checksum"
+                    ),
+                ]
+            )
+        """.trimIndent()
+
+        // Write to build/spm/ for inspection, and to the module project root for git.
+        spmOutputDir.get().asFile.resolve("Package.swift").writeText(content)
+        projectDir.parentFile.resolve("Package.swift").writeText(content)
+        println("Generated Package.swift → ${projectDir.parentFile.resolve("Package.swift")}")
+        println("  url:      $url")
+        println("  checksum: $checksum")
+    }
+}
+
+// 4. Upload the zip to GitHub Releases (creates the release tag if absent).
+tasks.register("publishIosToGitHubPackages") {
+    group = "publishing"
+    description = "Uploads the XCFramework zip to a GitHub Release for SPM consumption"
+    dependsOn(generatePackageSwift)
+    doLast {
+        val token   = System.getenv("KIIT_PUBLISH_TOKEN")
+            ?: error("KIIT_PUBLISH_TOKEN must be set to publish to GitHub Package Registry")
+        val ver     = project.version.toString()
+        val tag     = "v${ver}"
+        val zipPath = spmOutputDir.get().asFile.resolve(xcfZipName).absolutePath
+
+        // Create the GitHub Release for this tag if it does not yet exist.
+        exec {
+            environment("GITHUB_TOKEN", token)
+            commandLine(
+                "sh", "-c",
+                "gh release view $tag --repo slatekit/kiit > /dev/null 2>&1 || " +
+                "gh release create $tag --repo slatekit/kiit " +
+                "--title \"Release $tag\" --notes \"KMP $tag\""
+            )
+        }
+
+        // Upload (or replace) the XCFramework zip asset.
+        exec {
+            environment("GITHUB_TOKEN", token)
+            commandLine(
+                "gh", "release", "upload", tag, zipPath,
+                "--repo", "slatekit/kiit", "--clobber"
+            )
+        }
+
+        println("Uploaded $xcfZipName to GitHub Release $tag")
+        println("Add to your Xcode project / Package.swift:")
+        println("  https://github.com/slatekit/kiit/releases/download/$tag/$xcfZipName")
     }
 }
