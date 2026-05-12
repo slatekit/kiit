@@ -68,3 +68,42 @@ publishing {
         groupId = project.group.toString()
     }
 }
+
+val jsDistDir = layout.buildDirectory.dir("dist/js/productionLibrary")
+
+// Patches the Kotlin-generated package.json with the scoped npm name, description,
+// repository, and GitHub Package Registry publishConfig. Runs at execution time so
+// it is fully compatible with Gradle's configuration cache.
+val patchNpmPackageJson = tasks.register("patchNpmPackageJson") {
+    group = "publishing"
+    dependsOn("assemble")
+    doLast {
+        val pkgFile = jsDistDir.get().asFile.resolve("package.json")
+        @Suppress("UNCHECKED_CAST")
+        val pkg = groovy.json.JsonSlurper().parse(pkgFile) as MutableMap<String, Any>
+        pkg["name"] = "@slatekit/kiit-common-envs"
+        pkg["description"] = "Kiit environment management — Kotlin Multiplatform library"
+        pkg["publishConfig"] = mapOf("registry" to "https://npm.pkg.github.com")
+        pkg["repository"] = mapOf(
+            "type" to "git",
+            "url" to "git+https://github.com/slatekit/kiit.git"
+        )
+        pkgFile.writeText(groovy.json.JsonOutput.prettyPrint(groovy.json.JsonOutput.toJson(pkg)))
+    }
+}
+
+tasks.register<Exec>("publishNpmToGitHubPackages") {
+    group = "publishing"
+    description = "Publishes the npm package to GitHub Package Registry"
+    dependsOn(patchNpmPackageJson)
+    workingDir(jsDistDir)
+    commandLine("npm", "publish")
+
+    doFirst {
+        val token = System.getenv("KIIT_PUBLISH_TOKEN")
+            ?: error("KIIT_PUBLISH_TOKEN must be set to publish to GitHub Package Registry")
+        jsDistDir.get().asFile.resolve(".npmrc").writeText(
+            "//npm.pkg.github.com/:_authToken=${token}\n"
+        )
+    }
+}
