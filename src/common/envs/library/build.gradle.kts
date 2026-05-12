@@ -35,7 +35,17 @@ kotlin {
     iosArm64()
     iosSimulatorArm64()
 
+    js {
+        browser()
+        nodejs()
+        generateTypeScriptDefinitions()
+        binaries.library()
+    }
+
     sourceSets {
+        all {
+            languageSettings.optIn("kotlin.js.ExperimentalJsExport")
+        }
         commonMain.dependencies {}
         commonTest.dependencies {
             implementation(libs.kotlin.test)

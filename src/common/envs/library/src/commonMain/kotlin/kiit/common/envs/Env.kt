@@ -11,6 +11,8 @@
 
 package kiit.common.envs
 
+import kotlin.js.JsExport
+
 /**
  * Represents a system environment
  * @param name : e.g. Quality Assurance test
@@ -18,6 +20,7 @@ package kiit.common.envs
  * @param region : new york
  * @param desc : Qat environment 1 in new york
  */
+@JsExport
 data class Env(
     val name: String,
     val mode: EnvMode,

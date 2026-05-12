@@ -13,6 +13,9 @@
 
 package kiit.common.envs
 
+import kotlin.js.JsExport
+
+@JsExport
 sealed class EnvMode(val name: String) {
 
     /**

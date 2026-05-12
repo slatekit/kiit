@@ -13,15 +13,20 @@
 
 package kiit.common.envs
 
+import kotlin.js.JsExport
+import kotlin.js.JsName
+
 /**
  * Store the currently selected environment ( local, dev, qa, stg, prod ) and provides some
  * utility functions to parse an environment
  */
+@JsExport
 data class Envs(val all: List<Env>, val current: Env) : EnvSupport {
 
     /**
-     * Initialize with the first one
+     * Initialize with the first dev environment as current
      */
+    @JsName("fromList")
     constructor(all: List<Env>) : this(all, all.first { it.isDev })
 
     /**

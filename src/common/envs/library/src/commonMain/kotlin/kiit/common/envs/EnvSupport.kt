@@ -13,6 +13,9 @@
 
 package kiit.common.envs
 
+import kotlin.js.JsExport
+
+@JsExport
 interface EnvSupport {
 
     val isPro: Boolean get() = isEnv(EnvMode.Pro)
