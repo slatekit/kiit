@@ -11,7 +11,9 @@ group = "dev.kiit"
 version = rootProject.layout.projectDirectory.file("../../version.txt").asFile.readText().trim()
 
 kotlin {
-    jvm()
+    jvm {
+        withSourcesJar()
+    }
 
     androidLibrary {
         namespace = "kiit.common.envs"
@@ -66,7 +68,36 @@ publishing {
     }
     publications.withType<MavenPublication>().configureEach {
         groupId = project.group.toString()
+        pom {
+            name.set("kiit-common-envs")
+            description.set("Kiit environment management — Kotlin Multiplatform library")
+            url.set("https://github.com/slatekit/kiit")
+            licenses {
+                license {
+                    name.set("Apache License, Version 2.0")
+                    url.set("https://www.apache.org/licenses/LICENSE-2.0")
+                }
+            }
+            developers {
+                developer {
+                    id.set("kishorereddy")
+                    name.set("Kishore Reddy")
+                    url.set("https://github.com/kishorereddy")
+                }
+            }
+            scm {
+                url.set("https://github.com/slatekit/kiit")
+                connection.set("scm:git:git://github.com/slatekit/kiit.git")
+                developerConnection.set("scm:git:ssh://github.com/slatekit/kiit.git")
+            }
+        }
     }
+}
+
+tasks.register("publishJvmToGitHubPackages") {
+    group = "publishing"
+    description = "Publishes the JVM Maven publication to GitHub Package Registry"
+    dependsOn("publishJvmPublicationToGitHubPackagesRepository")
 }
 
 val jsDistDir = layout.buildDirectory.dir("dist/js/productionLibrary")
