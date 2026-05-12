@@ -2,6 +2,7 @@
 *.log
 *.iml
 *.jar
+*.DS_Store
 
 # sbt specific
 .cache
