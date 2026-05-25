@@ -1,0 +1,124 @@
+{
+  "key"                   : "core",
+  "description"           : "Foundational primitives depended on by other kiit libraries internally. Must have no kiit dependencies of their own. No category segment in artifactId or package name.",
+  "omitCategoryInArtifact": true,
+  "defaultTargets"        : ["jvm", "android", "js", "ios"],
+  "location": {
+    "current": "src/lib/kotlin/slatekit-common",
+    "desired": "src/core"
+  },
+  "build": {
+    "current": {
+      "dsl"           : "groovy",
+      "multiplatform" : false,
+      "publishing"    : "github-packages",
+      "versionCatalog": false,
+      "ktlint"        : false
+    },
+    "desired": {
+      "dsl"           : "kotlin",
+      "multiplatform" : true,
+      "publishing"    : "maven-central",
+      "versionCatalog": true,
+      "ktlint"        : true
+    }
+  },
+  "libraries": [
+    {
+      "name"       : "result",
+      "description": "Custom Result<T, E> / Outcome monad for typed success and failure without exceptions",
+      "artifactId" : "kiit-result",
+      "package"    : "kiit.result",
+      "npm"        : "@kiit/result",
+      "ios"        : { "baseName": "KiitResult" },
+      "targets"    : ["jvm", "android", "js", "ios"],
+      "stability"  : "stable",
+      "published"  : true,
+      "migration"  : {
+        "status"            : "pending",
+        "currentArtifactId" : "slatekit-result",
+        "currentPackage"    : "slatekit.results",
+        "currentLocation"   : "src/lib/kotlin/slatekit-common/src/main/kotlin/slatekit/results",
+        "desiredLocation"   : "src/core/result",
+        "notes"             : ""
+      },
+      "docs": {
+        "exampleFile": "src/apps/kotlin/slatekit-examples/src/main/kotlin/slatekit/examples/Example_Result.kt",
+        "readme"     : "src/core/result/README.md",
+        "tags"       : ["import_required", "import_examples", "examples", "examples_support", "output"]
+      }
+    },
+    {
+      "name"       : "codes",
+      "description": "Typed status and error codes used by kiit-result for structured success and failure classification",
+      "artifactId" : "kiit-codes",
+      "package"    : "kiit.codes",
+      "npm"        : "@kiit/codes",
+      "ios"        : { "baseName": "KiitCodes" },
+      "targets"    : ["jvm", "android", "js", "ios"],
+      "stability"  : "stable",
+      "published"  : true,
+      "migration"  : {
+        "status"            : "pending",
+        "currentArtifactId" : "slatekit-common",
+        "currentPackage"    : "slatekit.common.codes",
+        "currentLocation"   : "src/lib/kotlin/slatekit-common/src/main/kotlin/slatekit/common/codes",
+        "desiredLocation"   : "src/core/codes",
+        "notes"             : ""
+      },
+      "docs": {
+        "exampleFile": "src/apps/kotlin/slatekit-examples/src/main/kotlin/slatekit/examples/Example_Codes.kt",
+        "readme"     : "src/core/codes/README.md",
+        "tags"       : ["import_required", "import_examples", "examples", "output"]
+      }
+    },
+    {
+      "name"       : "identity",
+      "description": "Fully qualified resource and service ID primitives with structured naming conventions",
+      "artifactId" : "kiit-identity",
+      "package"    : "kiit.identity",
+      "npm"        : "@kiit/identity",
+      "ios"        : { "baseName": "KiitIdentity" },
+      "targets"    : ["jvm", "android", "js", "ios"],
+      "stability"  : "stable",
+      "published"  : true,
+      "migration"  : {
+        "status"            : "pending",
+        "currentArtifactId" : "slatekit-common",
+        "currentPackage"    : "slatekit.common.identity",
+        "currentLocation"   : "src/lib/kotlin/slatekit-common/src/main/kotlin/slatekit/common/identity",
+        "desiredLocation"   : "src/core/identity",
+        "notes"             : ""
+      },
+      "docs": {
+        "exampleFile": "src/apps/kotlin/slatekit-examples/src/main/kotlin/slatekit/examples/Example_Identity.kt",
+        "readme"     : "src/core/identity/README.md",
+        "tags"       : ["import_required", "import_examples", "examples", "output"]
+      }
+    },
+    {
+      "name"       : "emitter",
+      "description": "JavaScript-style in-memory event emitter for typed in-process publish/subscribe",
+      "artifactId" : "kiit-emitter",
+      "package"    : "kiit.emitter",
+      "npm"        : "@kiit/emitter",
+      "ios"        : { "baseName": "KiitEmitter" },
+      "targets"    : ["jvm", "android", "js", "ios"],
+      "stability"  : "experimental",
+      "published"  : true,
+      "migration"  : {
+        "status"            : "pending",
+        "currentArtifactId" : "slatekit-common",
+        "currentPackage"    : "slatekit.common.emitter",
+        "currentLocation"   : "src/lib/kotlin/slatekit-common/src/main/kotlin/slatekit/common/emitter",
+        "desiredLocation"   : "src/core/emitter",
+        "notes"             : ""
+      },
+      "docs": {
+        "exampleFile": "src/apps/kotlin/slatekit-examples/src/main/kotlin/slatekit/examples/Example_Emitter.kt",
+        "readme"     : "src/core/emitter/README.md",
+        "tags"       : ["import_required", "import_examples", "examples", "output"]
+      }
+    }
+  ]
+}
