@@ -54,20 +54,20 @@ is always present.
 The framework is currently in a pre-migration state. All libraries exist but do not yet
 follow the naming conventions, structure, or build configuration described in this document.
 
-| Concern              | Current State                                              |
-|----------------------|------------------------------------------------------------|
-| Gradle DSL           | Groovy (`build.gradle`)                                    |
-| Kotlin version       | 1.8.x                                                      |
-| Ktor version         | 2.x.x (tied to Kotlin 1.8.x)                              |
-| Gradle version       | 7.x                                                        |
-| Version catalog      | Not in use — versions hardcoded in build files             |
-| Multiplatform (KMP)  | Not configured — JVM only                                  |
-| Folder structure     | Does not match desired category structure                  |
-| Artifact IDs         | Prefixed with `slatekit-` not `kiit-`                      |
-| Package names        | Rooted at `slatekit.*` not `kiit.*`                        |
-| Publishing           | GitHub Packages only                                       |
-| ktlint               | Not configured                                             |
-| Android Gradle Plugin| 7.x                                                        |
+| Concern                | Current State                                                  |
+|------------------------|----------------------------------------------------------------|
+| Gradle DSL             | Groovy (`build.gradle`)                                        |
+| Kotlin version         | 1.9.x                                                          |
+| Ktor version           | 2.x.x (tied to Kotlin 1.8.x)                                   |
+| Gradle version         | 8.x                                                            |
+| Version catalog        | Not in use — versions hardcoded in build files                 |
+| Multiplatform (KMP)    | Not configured — JVM only                                      |
+| Folder structure       | Does not match desired category structure                      |
+| Artifact IDs           | Prefixed with `kiit-{library}` not `kiit-{category}-{library}` |
+| Package names          | Rooted at `kiit.*` not `kiit.{category}.{library}*`            |
+| Publishing             | GitHub Packages only                                           |
+| ktlint                 | Not configured                                                 |
+| Android Gradle Plugin  | 7.x                                                            |
 
 The `migration` block in each library's category JSON captures the current artifact ID,
 current package name, current folder location, and migration status for every library.
@@ -76,20 +76,20 @@ current package name, current folder location, and migration status for every li
 
 ## Desired / Future State of the Framework
 
-| Concern              | Desired State                                              |
-|----------------------|------------------------------------------------------------|
-| Gradle DSL           | Kotlin (`build.gradle.kts`)                                |
-| Kotlin version       | 2.0.21                                                     |
-| Ktor version         | 3.0.1                                                      |
-| Gradle version       | 8.11                                                       |
-| Version catalog      | `gradle/libs.versions.toml` — single source for versions   |
-| Multiplatform (KMP)  | Configured per platform target matrix in definition files  |
-| Folder structure     | Matches category structure under `src/{category}/{library}`|
-| Artifact IDs         | Follow `kiit-{category}-{library}` convention              |
-| Package names        | Rooted at `kiit.*` following naming conventions            |
-| Publishing           | Maven Central (stable), GitHub Packages (pre-release)      |
-| ktlint               | Configured and enforced across all modules                 |
-| Android Gradle Plugin| 8.2.0                                                      |
+| Concern                | Desired State                                               |
+|------------------------|-------------------------------------------------------------|
+| Gradle DSL             | Kotlin (`build.gradle.kts`)                                 |
+| Kotlin version         | 2.3.21                                                      |
+| Ktor version           | 3.x                                                         |
+| Gradle version         | 8.11                                                        |
+| Version catalog        | `gradle/libs.versions.toml` — single source for versions    |
+| Multiplatform (KMP)    | Configured per platform target matrix in definition files   |
+| Folder structure       | Matches category structure under `src/{category}/{library}` |
+| Artifact IDs           | Follow `kiit-{category}-{library}` convention               |
+| Package names          | Rooted at `kiit.*` following naming conventions             |
+| Publishing             | Maven Central (stable), GitHub Packages (pre-release)       |
+| ktlint                 | Configured and enforced across all modules                  |
+| Android Gradle Plugin  | 8.2.0                                                       |
 
 Versions are managed centrally in `gradle/libs.versions.toml`. No module-level
 `build.gradle.kts` should hardcode a library version — always reference the catalog.
@@ -115,21 +115,21 @@ Versions are managed centrally in `gradle/libs.versions.toml`. No module-level
 
 ### Kotlin Package Names
 
-| Rule                                                                                  | Example                 |
-|---------------------------------------------------------------------------------------|-------------------------|
-| Mirror the `artifactId`: drop `kiit-`, replace hyphens with dots                     | `kiit.infra.queues`     |
-| All lowercase, dot-separated, no hyphens                                              | `kiit.data.repo`        |
-| Do NOT use `dev.` prefix — `dev.kiit` is a Maven registry concern, not a namespace   | `kiit.result` ✓         |
-| Vendor libraries use dots for sub-segments                                            | `kiit.vendor.aws.sqs`   |
-| Core libraries use a single segment after `kiit`                                      | `kiit.result`           |
+| Rule                                                                                   | Example                 |
+|----------------------------------------------------------------------------------------|-------------------------|
+| Mirror the `artifactId`: drop `kiit-`, replace hyphens with dots                       | `kiit.infra.queues`     |
+| All lowercase, dot-separated, no hyphens                                               | `kiit.data.repo`        |
+| Do NOT use `dev.` prefix — `dev.kiit` is a Maven registry concern, not a namespace     | `kiit.result` ✓         |
+| Vendor libraries use dots for sub-segments                                             | `kiit.vendor.aws.sqs`   |
+| Core libraries use a single segment after `kiit`                                       | `kiit.result`           |
 
 ### npm / JavaScript
 
-| Rule                                                              | Example              |
-|-------------------------------------------------------------------|----------------------|
-| Scoped under `@kiit`                                              | `@kiit/result`       |
-| Drop the `kiit-` prefix from the artifact ID, keep hyphens       | `@kiit/infra-queues` |
-| Only publish multiplatform libraries (core, infra, app-envs, app-info) | —           |
+| Rule                                                                   | Example              |
+|------------------------------------------------------------------------|----------------------|
+| Scoped under `@kiit`                                                   | `@kiit/result`       |
+| Drop the `kiit-` prefix from the artifact ID, keep hyphens             | `@kiit/infra-queues` |
+| Only publish multiplatform libraries (core, infra, app-envs, app-info) | —                    |
 
 ### iOS / Swift Package Manager
 
@@ -169,26 +169,27 @@ Full category definitions, library lists, platform targets, and migration metada
 are in `.kiit/definition/categories/{category}.json`. The summary below is for
 orientation only.
 
-| Category     | Artifact prefix          | Default targets           | Published |
-|--------------|--------------------------|---------------------------|-----------|
-| `core`       | `kiit-{library}`         | all platforms             | Yes       |
-| `parse`      | `kiit-parse-{library}`   | all platforms             | Yes       |
-| `app`        | `kiit-app-{library}`     | mixed (see category file) | Yes       |
-| `infra`      | `kiit-infra-{library}`   | all platforms             | Yes       |
-| `resilience` | `kiit-resilience-{lib}`  | all platforms             | Yes       |
-| `data`       | `kiit-data-{library}`    | JVM · Android             | Yes       |
-| `services`   | `kiit-services-{library}`| JVM only                  | Yes       |
-| `vendor`     | `kiit-vendor-{library}`  | JVM only                  | Yes       |
-| `connect`    | `kiit-connect-{library}` | JVM only                  | Yes       |
-| `internal`   | `kiit-internal-{library}`| JVM only                  | No        |
+| Category     | Artifact prefix            | Default targets           | Published |
+|--------------|----------------------------|---------------------------|-----------|
+| `core`       | `kiit-{library}`           | all platforms             | Yes       |
+| `parse`      | `kiit-parse-{library}`     | all platforms             | Yes       |
+| `app`        | `kiit-app-{library}`       | mixed (see category file) | Yes       |
+| `infra`      | `kiit-infra-{library}`     | all platforms             | Yes       |
+| `resilience` | `kiit-resilience-{lib}`    | all platforms             | Yes       |
+| `data`       | `kiit-data-{library}`      | JVM · Android             | Yes       |
+| `services`   | `kiit-services-{library}`  | JVM only                  | Yes       |
+| `vendor`     | `kiit-vendor-{library}`    | JVM only                  | Yes       |
+| `connect`    | `kiit-connect-{library}`   | JVM only                  | Yes       |
+| `internal`   | `kiit-internal-{library}`  | JVM only                  | No        |
 
 ### Core membership test
 
 A library belongs in `core` if **both** conditions are true:
 1. Other kiit libraries depend on it internally (not just consumers).
-2. It has no kiit dependencies of its own.
+2. It only depends on other kiit `core` dependencies or ideally none at all.
+3. It can NOT depend on any kiit dependencies in other categories.
 
-If a library fails either condition, it belongs in another category.
+If a library fails these conditions, it belongs in another category.
 
 ---
 
