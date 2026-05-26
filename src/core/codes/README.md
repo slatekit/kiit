@@ -198,6 +198,68 @@ codes by constructing any `Passed` or `Failed` subtype directly.
 
 ---
 
+## Exceptions
+
+`StatusException` and `StatusError` let you propagate a structured `Status` across call
+boundaries using the platform's native exception mechanism, without losing the structured
+information.
+
+### JVM / Android — `StatusException`
+
+```kotlin
+throw StatusException(Codes.UNAUTHORIZED)
+
+// with a cause
+throw StatusException(Codes.TIMEOUT, cause = ioException)
+
+try {
+    // ...
+} catch (e: StatusException) {
+    when (e.status) {
+        is Failed.Denied  -> // handle auth failure
+        is Failed.Errored -> // handle business error
+        else              -> // ...
+    }
+}
+```
+
+### JS / TypeScript — `StatusError`
+
+`StatusError` is exported to the `.d.ts` file so TypeScript consumers see an idiomatic name:
+
+```ts
+import { StatusError, Codes } from '@kiit/codes'
+
+throw new StatusError(Codes.UNAUTHORIZED)
+
+try { ... } catch (e) {
+    if (e instanceof StatusError) { console.log(e.status.name) }
+}
+```
+
+### iOS / Swift — `StatusError`
+
+`@ObjCName("StatusError")` gives Swift consumers an idiomatic name instead of the
+auto-generated `KiitCodesStatusException` form:
+
+```swift
+do {
+    try someKotlinApi()
+} catch let e as StatusError {
+    print(e.status.name)  // e.g. "UNAUTHORIZED"
+}
+```
+
+### Platform summary
+
+| Platform       | Class              | How                                         |
+|----------------|--------------------|---------------------------------------------|
+| JVM / Android  | `StatusException`  | `commonMain` — extends `Exception`          |
+| JS / TS        | `StatusError`      | `jsMain` — `@JsExport` subclass             |
+| iOS / Swift    | `StatusError`      | `iosMain` — `@ObjCName` subclass            |
+
+---
+
 ## Related
 
 **kiit-result** — Wraps a value (`Success<T>`) or error (`Failure<E>`) and uses `Status` codes
