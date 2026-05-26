@@ -75,8 +75,9 @@ interface Status {
             val name: String = when (status) {
                 is Passed.Succeeded -> "Succeeded"
                 is Passed.Pending -> "Pending"
+                is Passed.Filtered -> "Filtered"
+                is Passed.Ignored -> "Ignored"
                 is Failed.Denied -> "Denied"
-                is Failed.Ignored -> "Ignored"
                 is Failed.Invalid -> "Invalid"
                 is Failed.Errored -> "Errored"
                 is Failed.Unknown -> "Unknown"
@@ -99,10 +100,22 @@ sealed class Passed : Status {
         override val success = true
     }
 
+    // Ignored for processing
+    data class Filtered(override val name: String, override val code: Int, override val desc: String) : Passed() {
+        override val success = false
+    }
+
+    // Ignored for processing
+    data class Ignored(override val name: String, override val code: Int, override val desc: String) : Passed() {
+        override val success = false
+    }
+
     override fun copyAll(msg: String, code: Int): Status {
         return when (this) {
             is Succeeded -> this.copy(code = code, desc = msg)
-            is Pending -> this.copy(code = code, desc = msg)
+            is Pending   -> this.copy(code = code, desc = msg)
+            is Filtered  -> this.copy(code = code, desc = msg)
+            is Ignored   -> this.copy(code = code, desc = msg)
         }
     }
 
@@ -110,6 +123,8 @@ sealed class Passed : Status {
         return when (this) {
             is Succeeded -> this.copy(desc = msg)
             is Pending -> this.copy(desc = msg)
+            is Filtered -> this.copy(desc = msg)
+            is Ignored -> this.copy(desc = msg)
         }
     }
 }
@@ -120,11 +135,6 @@ sealed class Passed : Status {
 sealed class Failed : Status {
     // Security related
     data class Denied(override val name: String, override val code: Int, override val desc: String) : Failed() {
-        override val success = false
-    }
-
-    // Ignored for processing
-    data class Ignored(override val name: String, override val code: Int, override val desc: String) : Failed() {
         override val success = false
     }
 
@@ -147,7 +157,6 @@ sealed class Failed : Status {
         return when (this) {
             is Denied -> this.copy(name = name, code = code, desc = msg)
             is Invalid -> this.copy(name = name, code = code, desc = msg)
-            is Ignored -> this.copy(name = name, code = code, desc = msg)
             is Errored -> this.copy(name = name, code = code, desc = msg)
             is Unknown -> this.copy(name = name, code = code, desc = msg)
         }
@@ -157,7 +166,6 @@ sealed class Failed : Status {
         return when (this) {
             is Denied -> this.copy(desc = msg)
             is Invalid -> this.copy(desc = msg)
-            is Ignored -> this.copy(desc = msg)
             is Errored -> this.copy(desc = msg)
             is Unknown -> this.copy(desc = msg)
         }

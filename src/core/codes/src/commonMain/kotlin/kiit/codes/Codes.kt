@@ -38,6 +38,8 @@ object Codes {
     @JvmField val PENDING         = Passed.Pending   ("PENDING", 200008, "Pending")
     @JvmField val QUEUED          = Passed.Pending   ("QUEUED" , 200009, "Queued" )
     @JvmField val CONFIRM         = Passed.Pending   ("CONFIRM", 200010, "Confirm")
+    @JvmField val FILTERED        = Passed.Filtered  ("FILTERED", 200204, "Filtered")         // E.g. Ignored, not exactly an error
+    @JvmField val IGNORED         = Passed.Ignored   ("IGNORED" , 200204, "Ignored")         // E.g. Ignored, not exactly an error
 
     // Success: 200000 + range ( useful for JOB States )
     @JvmField val ACTIVE          = Passed.Pending   ("ACTIVE"  , 200101, "Active"  )
@@ -50,7 +52,6 @@ object Codes {
     @JvmField val COMPLETE        = Passed.Pending   ("COMPLETE", 200108, "Complete")
 
     // Invalid: 400000 + range
-    @JvmField val IGNORED         = Failed.Ignored   ("IGNORED"    , 400001, "Ignored")         // E.g. Ignored, not exactly an error
     @JvmField val BAD_REQUEST     = Failed.Invalid   ("BAD_REQUEST", 400002, "Bad Request")     // E.g. Invalid JSON
     @JvmField val INVALID         = Failed.Invalid   ("INVALID"    , 400003, "Invalid")         // E.g. Valid   JSON but invalid values
     @JvmField val NOT_FOUND       = Failed.Invalid   ("NOT_FOUND"  , 400004, "Not found")       // E.g. Resource/End point not found
