@@ -45,20 +45,20 @@ graph TD
     classDef erroredNode   fill:#dc2626,stroke:#b91c1c,color:#ffffff,font-weight:bold
     classDef unknownNode   fill:#7f1d1d,stroke:#450a0a,color:#ffffff,font-weight:bold
 
-    Status["Status<br/>name / type / code<br/>message / success"]
+    Status["Status<br/>name / code / message / success"]:::statusNode
 
-    Passed["Passed<br/>success: true"]
-    Failed["Failed<br/>success: false"]
+    Passed["Passed<br/>success: true"]:::passedNode
+    Failed["Failed<br/>success: false"]:::failedNode
 
-    Succeeded["Succeeded<br/>type: succeeded"]
-    Pending["Pending<br/>type: pending"]
-    Filtered["Filtered<br/>type: filtered"]
-    Ignored["Ignored<br/>type: ignored"]
+    Succeeded["Succeeded<br/>type: succeeded"]:::succeededNode
+    Pending["Pending<br/>type: pending"]:::pendingNode
+    Filtered["Filtered<br/>type: filtered"]:::filteredNode
+    Ignored["Ignored<br/>type: ignored"]:::ignoredNode
 
-    Denied["Denied<br/>type: denied"]
-    Invalid["Invalid<br/>type: invalid"]
-    Errored["Errored<br/>type: errored"]
-    Unknown["Unknown<br/>type: unknown"]
+    Denied["Denied<br/>type: denied"]:::deniedNode
+    Invalid["Invalid<br/>type: invalid"]:::invalidNode
+    Errored["Errored<br/>type: errored"]:::erroredNode
+    Unknown["Unknown<br/>type: unknown"]:::unknownNode
 
     Status --> Passed
     Status --> Failed
@@ -70,18 +70,6 @@ graph TD
     Failed --> Invalid
     Failed --> Errored
     Failed --> Unknown
-
-    class Status    statusNode
-    class Passed    passedNode
-    class Succeeded succeededNode
-    class Pending   pendingNode
-    class Filtered  filteredNode
-    class Ignored   ignoredNode
-    class Failed    failedNode
-    class Denied    deniedNode
-    class Invalid   invalidNode
-    class Errored   erroredNode
-    class Unknown   unknownNode
 ```
 
 ---
