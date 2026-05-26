@@ -22,7 +22,19 @@ Every `Status` can be represented as a structured response, for example as an AP
 ```
 
 ---
+## Purpose
 
+1. **Universal**  — Usable at any layer: service, background job, route handler, CLI command.
+2. **Hierarchy**  — Logical grouping of successes and failures for branching and aggregation.
+3. **Standard**   — Precise, consistent status representation across all layers and targets.
+4. **Compliant**  — Convertible to HTTP status codes via `Codes.toHttp(status)`.
+5. **Reusable**   — A single status instance can be shared across many call sites.
+6. **Extensible** — Create domain codes by constructing `Passed.*` or `Failed.*` subtypes directly.
+7. **Searchable** — `name` and `type` are stable, unique keys suitable for log queries.
+8. **Aggregated** — The `type` or `name` can be grouped and counted in logs and metrics.
+9. **Exceptions** — Compatible with exception patterns; wrap a `Status` in an exception to propagate it across call boundaries.
+
+---
 ## Hierarchy
 
 ```
@@ -71,7 +83,6 @@ graph TD
     Failed --> Errored
     Failed --> Unknown
 ```
-
 ---
 
 ## Grouping
@@ -184,20 +195,6 @@ codes by constructing any `Passed` or `Failed` subtype directly.
 | Code         | Value  | HTTP |
 |--------------|--------|------|
 | `UNEXPECTED` | 500008 | 500  |
-
----
-
-## Purpose
-
-1. **Universal**  — Usable at any layer: service, background job, route handler, CLI command.
-2. **Hierarchy**  — Logical grouping of successes and failures for branching and aggregation.
-3. **Standard**   — Precise, consistent status representation across all layers and targets.
-4. **Compliant**  — Convertible to HTTP status codes via `Codes.toHttp(status)`.
-5. **Reusable**   — A single status instance can be shared across many call sites.
-6. **Extensible** — Create domain codes by constructing `Passed.*` or `Failed.*` subtypes directly.
-7. **Searchable** — `name` and `type` are stable, unique keys suitable for log queries.
-8. **Aggregated** — The `type` or `name` can be grouped and counted in logs and metrics.
-9. **Exceptions** — Compatible with exception patterns; wrap a `Status` in an exception to propagate it across call boundaries.
 
 ---
 
