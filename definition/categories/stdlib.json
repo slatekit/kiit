@@ -1,0 +1,52 @@
+{
+  "key"                   : "stdlib",
+  "description"           : "Abstractions for infrastructure concerns. Interfaces, types, and in-memory implementations only. No vendor SDK dependencies. Consumers depend on these directly and swap in vendor implementations via the vendor category.",
+  "omitCategoryInArtifact": false,
+  "defaultTargets"        : ["jvm", "android", "js", "ios"],
+  "location": {
+    "current": "src/common/common",
+    "desired": "src/stdlib"
+  },
+  "build": {
+    "current": {
+      "dsl"           : "groovy",
+      "multiplatform" : false,
+      "publishing"    : "github-packages",
+      "versionCatalog": false,
+      "ktlint"        : false
+    },
+    "desired": {
+      "dsl"           : "kotlin",
+      "multiplatform" : true,
+      "publishing"    : "maven-central",
+      "versionCatalog": true,
+      "ktlint"        : true
+    }
+  },
+  "libraries": [
+    {
+      "name"       : "args",
+      "description": "Command line arguments parser with fully qualified names, meta arguments and more.",
+      "artifactId" : "kiit-stdlib-args",
+      "package"    : "kiit.stdlib.args",
+      "npm"        : "@kiit/stdlib-args",
+      "ios"        : { "baseName": "KiitStdlibArgs" },
+      "targets"    : ["jvm", "android", "js", "ios"],
+      "stability"  : "stable",
+      "published"  : true,
+      "migration"  : {
+        "status"            : "pending",
+        "currentArtifactId" : "kiit-common",
+        "currentPackage"    : "kiit.common.args",
+        "currentLocation"   : "src/common/common/src/main/kotlin/kiit/common/args",
+        "desiredLocation"   : "src/stdlib/args",
+        "notes"             : "Currently a package within the common sub-project"
+      },
+      "docs": {
+        "exampleFile": "src/apps/kotlin/slatekit-examples/src/main/kotlin/slatekit/examples/Example_Args.kt",
+        "readme"     : "src/stdlib/args/README.md",
+        "tags"       : ["import_required", "import_examples", "examples", "examples_support", "output"]
+      }
+    }
+  ]
+}

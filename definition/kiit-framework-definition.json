@@ -82,18 +82,11 @@
         "definitionFile"        : "categories/core.json"
       },
       {
-        "key"                   : "parse",
-        "description"           : "Text and naming utilities for lexical parsing and naming conventions. Pure logic, no I/O. Consumed internally by identity, data, and conf. Rarely depended on directly by consumers.",
+        "key"                   : "stdlib",
+        "description"           : "Supplemental utilities and libraries to a standard library, such as arguments parser, config file loading, environemnt selection.",
         "omitCategoryInArtifact": false,
         "defaultTargets"        : ["jvm", "android", "js", "ios"],
-        "definitionFile"        : "categories/parse.json"
-      },
-      {
-        "key"                   : "app",
-        "description"           : "Application bootstrap and runtime context. Libraries for environment selection, config loading, directory layout, CLI args, and startup banners.",
-        "omitCategoryInArtifact": false,
-        "defaultTargets"        : ["jvm", "android", "js", "ios"],
-        "definitionFile"        : "categories/app.json"
+        "definitionFile"        : "categories/stdlib.json"
       },
       {
         "key"                   : "infra",
