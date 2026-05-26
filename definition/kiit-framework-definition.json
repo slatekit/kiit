@@ -1,0 +1,142 @@
+{
+  "version": "1.0.0",
+  "organization": {
+    "name"  : "CodeHelix",
+    "group" : "dev.kiit",
+    "domain": "kiit.dev",
+    "github": "https://github.com/slatekit/kiit",
+    "npm": {
+      "scope"   : "@kiit",
+      "registry": "https://registry.npmjs.org"
+    },
+    "maven": {
+      "central"   : "https://repo1.maven.org/maven2",
+      "prerelease": "https://maven.pkg.github.com/slatekit/kiit"
+    }
+  },
+  "build": {
+    "current": {
+      "kotlin"      : "1.8.x",
+      "ktor"        : "2.x.x",
+      "gradle"      : "7.x",
+      "agp"         : "7.x",
+      "dsl"         : "groovy",
+      "versionCatalog": false
+    },
+    "desired": {
+      "kotlin"      : "2.0.21",
+      "ktor"        : "3.0.1",
+      "gradle"      : "8.11",
+      "agp"         : "8.2.0",
+      "dsl"         : "kotlin",
+      "versionCatalog": true
+    }
+  },
+  "targets": {
+    "description": "Valid platform targets for kiit libraries",
+    "items": [
+      { "key": "jvm",     "description": "Kotlin / Java server-side JVM"         },
+      { "key": "android", "description": "Android via AAR"                        },
+      { "key": "js",      "description": "JavaScript / TypeScript via npm"        },
+      { "key": "ios",     "description": "iOS / macOS via XCFramework and SPM"    }
+    ]
+  },
+  "stability": {
+    "description": "Valid stability levels for kiit libraries",
+    "items": [
+      { "key": "stable",       "description": "Production ready. No breaking changes without a major version bump." },
+      { "key": "experimental", "description": "API may change. Opt-in via @ExperimentalKiitApi."                   },
+      { "key": "internal",     "description": "Not for consumer use. Annotated @InternalKiitApi."                  },
+      { "key": "deprecated",   "description": "Scheduled for removal. Migration notes in library README."           }
+    ]
+  },
+  "migration": {
+    "description": "Migration status for each library from current to desired state",
+    "items": [
+      { "key": "pending",    "description": "Not yet started"                                        },
+      { "key": "inProgress", "description": "Migration underway, not yet verified"                   },
+      { "key": "partial",    "description": "Some aspects migrated, others still pending"            },
+      { "key": "complete",   "description": "Fully migrated and verified"                            },
+      { "key": "removed",    "description": "Library removed, no longer part of kiit"               }
+    ]
+  },
+  "docTags": {
+    "description": "Valid documentation marker tags used in Kotlin example source files",
+    "syntax"     : "//<doc:{key}> ... //</doc:{key}>",
+    "items": [
+      { "key": "import_required",  "description": "Imports the consumer must add to use the library"        },
+      { "key": "import_examples",  "description": "Additional imports used only within the example code"    },
+      { "key": "examples",         "description": "Primary usage examples for the library"                  },
+      { "key": "examples_support", "description": "Helper and support functions used by the examples"       },
+      { "key": "output",           "description": "Expected console output, wrapped in Hugo highlight block" }
+    ]
+  },
+  "categories": {
+    "description": "All kiit library categories. Each category maps to a segment in the artifactId and Kotlin package name, except where omitCategoryInArtifact is true. Libraries and full metadata are defined in each category's definitionFile.",
+    "items": [
+      {
+        "key"                   : "core",
+        "description"           : "Foundational primitives depended on by other kiit libraries internally. Must have no kiit dependencies of their own. No category segment in artifactId or package name.",
+        "omitCategoryInArtifact": true,
+        "defaultTargets"        : ["jvm", "android", "js", "ios"],
+        "definitionFile"        : "categories/core.json"
+      },
+      {
+        "key"                   : "stdlib",
+        "description"           : "Supplemental utilities and libraries to a standard library, such as arguments parser, config file loading, environemnt selection.",
+        "omitCategoryInArtifact": false,
+        "defaultTargets"        : ["jvm", "android", "js", "ios"],
+        "definitionFile"        : "categories/stdlib.json"
+      },
+      {
+        "key"                   : "infra",
+        "description"           : "Abstractions for infrastructure concerns. Interfaces, types, and in-memory implementations only. No vendor SDK dependencies.",
+        "omitCategoryInArtifact": false,
+        "defaultTargets"        : ["jvm", "android", "js", "ios"],
+        "definitionFile"        : "categories/infra.json"
+      },
+      {
+        "key"                   : "resilience",
+        "description"           : "Flow control and fault tolerance primitives. Libraries that protect systems from overload, cascading failure, and resource exhaustion.",
+        "omitCategoryInArtifact": false,
+        "defaultTargets"        : ["jvm", "android", "js", "ios"],
+        "definitionFile"        : "categories/resilience.json"
+      },
+      {
+        "key"                   : "data",
+        "description"           : "Database access abstractions and opinionated implementations. Low-level SQL, repository pattern, and entity service layer.",
+        "omitCategoryInArtifact": false,
+        "defaultTargets"        : ["jvm", "android"],
+        "definitionFile"        : "categories/data.json"
+      },
+      {
+        "key"                   : "services",
+        "description"           : "Runnable application templates and higher-level service libraries. Application base, background jobs, and RPC-style API server.",
+        "omitCategoryInArtifact": false,
+        "defaultTargets"        : ["jvm"],
+        "definitionFile"        : "categories/services.json"
+      },
+      {
+        "key"                   : "vendor",
+        "description"           : "Concrete implementations of infra abstractions using real vendor SDKs. JVM only. Never depended on by other kiit libraries.",
+        "omitCategoryInArtifact": false,
+        "defaultTargets"        : ["jvm"],
+        "definitionFile"        : "categories/vendor.json"
+      },
+      {
+        "key"                   : "connect",
+        "description"           : "Connector libraries that wire two or more kiit libraries together.",
+        "omitCategoryInArtifact": false,
+        "defaultTargets"        : ["jvm"],
+        "definitionFile"        : "categories/connect.json"
+      },
+      {
+        "key"                   : "internal",
+        "description"           : "Internal libraries used only within the kiit monorepo for build or test purposes. Never published externally.",
+        "omitCategoryInArtifact": false,
+        "defaultTargets"        : ["jvm"],
+        "definitionFile"        : "categories/internal.json"
+      }
+    ]
+  }
+}

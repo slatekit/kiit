@@ -1,0 +1,100 @@
+{
+  "key"                   : "infra",
+  "description"           : "Abstractions for infrastructure concerns. Interfaces, types, and in-memory implementations only. No vendor SDK dependencies. Consumers depend on these directly and swap in vendor implementations via the vendor category.",
+  "omitCategoryInArtifact": false,
+  "defaultTargets"        : ["jvm", "android", "js", "ios"],
+  "location": {
+    "current": "src/lib/kotlin/slatekit-core",
+    "desired": "src/infra"
+  },
+  "build": {
+    "current": {
+      "dsl"           : "groovy",
+      "multiplatform" : false,
+      "publishing"    : "github-packages",
+      "versionCatalog": false,
+      "ktlint"        : false
+    },
+    "desired": {
+      "dsl"           : "kotlin",
+      "multiplatform" : true,
+      "publishing"    : "maven-central",
+      "versionCatalog": true,
+      "ktlint"        : true
+    }
+  },
+  "libraries": [
+    {
+      "name"       : "queues",
+      "description": "Queue abstraction for async messaging. Includes interface, types, and an in-memory implementation. Vendor implementations live in kiit-vendor-aws-sqs etc.",
+      "artifactId" : "kiit-infra-queues",
+      "package"    : "kiit.infra.queues",
+      "npm"        : "@kiit/infra-queues",
+      "ios"        : { "baseName": "KiitInfraQueues" },
+      "targets"    : ["jvm", "android", "js", "ios"],
+      "stability"  : "stable",
+      "published"  : true,
+      "migration"  : {
+        "status"            : "pending",
+        "currentArtifactId" : "slatekit-core",
+        "currentPackage"    : "slatekit.core.queues",
+        "currentLocation"   : "src/lib/kotlin/slatekit-core/src/main/kotlin/slatekit/core/queues",
+        "desiredLocation"   : "src/infra/queues",
+        "notes"             : ""
+      },
+      "docs": {
+        "exampleFile": "src/apps/kotlin/slatekit-examples/src/main/kotlin/slatekit/examples/Example_Queue.kt",
+        "readme"     : "src/infra/queues/README.md",
+        "tags"       : ["import_required", "import_examples", "examples", "examples_support", "output"]
+      }
+    },
+    {
+      "name"       : "files",
+      "description": "File storage abstraction for reading and writing binary and text content. Includes interface, types, and an in-memory implementation. Vendor implementations live in kiit-vendor-aws-s3 etc.",
+      "artifactId" : "kiit-infra-files",
+      "package"    : "kiit.infra.files",
+      "npm"        : "@kiit/infra-files",
+      "ios"        : { "baseName": "KiitInfraFiles" },
+      "targets"    : ["jvm", "android", "js", "ios"],
+      "stability"  : "stable",
+      "published"  : true,
+      "migration"  : {
+        "status"            : "pending",
+        "currentArtifactId" : "slatekit-core",
+        "currentPackage"    : "slatekit.core.files",
+        "currentLocation"   : "src/lib/kotlin/slatekit-core/src/main/kotlin/slatekit/core/files",
+        "desiredLocation"   : "src/infra/files",
+        "notes"             : ""
+      },
+      "docs": {
+        "exampleFile": "src/apps/kotlin/slatekit-examples/src/main/kotlin/slatekit/examples/Example_Files.kt",
+        "readme"     : "src/infra/files/README.md",
+        "tags"       : ["import_required", "import_examples", "examples", "examples_support", "output"]
+      }
+    },
+    {
+      "name"       : "cache",
+      "description": "Cache abstraction for key-value storage with expiry. Includes interface, types, and an in-memory implementation. Vendor implementations live in kiit-vendor-redis etc.",
+      "artifactId" : "kiit-infra-cache",
+      "package"    : "kiit.infra.cache",
+      "npm"        : "@kiit/infra-cache",
+      "ios"        : { "baseName": "KiitInfraCache" },
+      "targets"    : ["jvm", "android", "js", "ios"],
+      "stability"  : "stable",
+      "published"  : true,
+      "migration"  : {
+        "status"            : "pending",
+        "currentArtifactId" : "slatekit-core",
+        "currentPackage"    : "slatekit.core.cache",
+        "currentLocation"   : "src/lib/kotlin/slatekit-core/src/main/kotlin/slatekit/core/cache",
+        "desiredLocation"   : "src/infra/cache",
+        "notes"             : ""
+      },
+      "docs": {
+        "exampleFile": "src/apps/kotlin/slatekit-examples/src/main/kotlin/slatekit/examples/Example_Cache.kt",
+        "readme"     : "src/infra/cache/README.md",
+        "tags"       : ["import_required", "import_examples", "examples", "examples_support", "output"]
+      }
+    }
+  ]
+}
