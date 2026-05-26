@@ -80,8 +80,8 @@ current package name, current folder location, and migration status for every li
 |------------------------|-------------------------------------------------------------|
 | Gradle DSL             | Kotlin (`build.gradle.kts`)                                 |
 | Kotlin version         | 2.3.21                                                      |
-| Ktor version           | 3.x                                                         |
-| Gradle version         | 8.11                                                        |
+| Ktor version           | 3.5.0                                                       |
+| Gradle version         | 8.13                                                        |
 | Version catalog        | `gradle/libs.versions.toml` — single source for versions    |
 | Multiplatform (KMP)    | Configured per platform target matrix in definition files   |
 | Folder structure       | Matches category structure under `src/{category}/{library}` |
@@ -227,9 +227,9 @@ No `build.gradle.kts` file should hardcode a version string — always use catal
 
 ```toml
 [versions]
-kotlin = "2.0.21"
-ktor   = "3.0.1"
-gradle = "8.11"
+kotlin = "2.3.21"
+ktor   = "3.5.0"
+gradle = "8.13"
 agp    = "8.2.0"
 
 [libraries]
