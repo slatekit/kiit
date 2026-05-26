@@ -89,7 +89,7 @@ current package name, current folder location, and migration status for every li
 | Package names          | Rooted at `kiit.*` following naming conventions             |
 | Publishing             | Maven Central (stable), GitHub Packages (pre-release)       |
 | ktlint                 | Configured and enforced across all modules                  |
-| Android Gradle Plugin  | 8.2.0                                                       |
+| Android Gradle Plugin  | 8.7.0                                                       |
 
 Versions are managed centrally in `gradle/libs.versions.toml`. No module-level
 `build.gradle.kts` should hardcode a library version — always reference the catalog.
@@ -230,7 +230,7 @@ No `build.gradle.kts` file should hardcode a version string — always use catal
 kotlin = "2.3.21"
 ktor   = "3.5.0"
 gradle = "8.13"
-agp    = "8.2.0"
+agp    = "8.7.0"
 
 [libraries]
 ktor-client-core = { module = "io.ktor:ktor-client-core", version.ref = "ktor" }

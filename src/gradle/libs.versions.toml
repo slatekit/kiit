@@ -1,7 +1,7 @@
 [versions]
 kotlin             = "2.3.21"
 ktor               = "3.5.0"
-agp                = "8.2.0"
+agp                = "8.7.0"
 android-minSdk     = "24"
 android-compileSdk = "35"
 vanniktechMavenPublish = "0.34.0"
