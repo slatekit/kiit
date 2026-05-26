@@ -12,162 +12,172 @@
 package kiit.codes
 
 /**
- * Interface to represent a Status with both an integer code and description
- * @sample:
- * { name: "INVALID"     , code: 400000, msg: "Invalid request" }
- * { name: "UNAUTHORIZED", code: 400001, msg: "Unauthorized"    }
+ * Platform-agnostic status type describing the outcome of any operation.
  *
+ * Shape (maps directly to JSON / API error responses):
+ *   { "name": "TOKEN_EXPIRED", "code": 400009, "message": "Session token expired", "success": false }
+ *
+ * Hierarchy:
+ *   Status  = Passed  | Failed
+ *   Passed  = Succeeded | Pending | Filtered | Ignored
+ *   Failed  = Denied    | Invalid | Errored  | Unknown
  */
 interface Status {
     /**
-     * Used as short user-friendly enum e.g. "INVALID", "UNAUTHORIZED"
+     * Unique domain label, e.g. "TOKEN_EXPIRED", "RATE_LIMITED".
+     * Should be SCREAMING_SNAKE_CASE and stable — used as a searchable key in logs.
      */
     val name: String
 
     /**
-     * Used as a generic application code that can be converted to other codes such as HTTP.
+     * Numeric code whose defaults align with HTTP status codes (200, 400, 500 ranges).
+     * Flexible for non-HTTP runtimes — convert via [Codes.toHttp].
      */
     val code: Int
 
     /**
-     * Description for status
+     * Human-readable description of this status.
+     * Must be a constant — never constructed from runtime data.
      */
-    val desc: String
+    val message: String
 
     /**
-     * Represents success or failure
+     * Boolean shortcut — true for [Passed.Succeeded] and [Passed.Pending],
+     * false for [Passed.Filtered], [Passed.Ignored], and all [Failed] subtypes.
+     * Callers that don't need to narrow the sealed type can use this directly.
      */
     val success: Boolean
 
-    fun copyDesc(msg: String): Status
+    fun copyMessage(msg: String): Status
     fun copyAll(msg: String, code: Int): Status
 
     companion object {
 
         /**
-         * Minor optimization to avoid unnecessary copying of Status
+         * Returns a copy of [defaultStatus] with an updated [msg] and/or [code].
+         * Optimised to return the original instance when nothing would change.
          */
         @Suppress("UNCHECKED_CAST")
         fun <T : Status> ofCode(msg: String?, code: Int?, defaultStatus: T): T {
-            // NOTE: There is small optimization here to avoid creating a new instance
-            // of [Status] if the msg/code are empty and or they are the same as Success.
             if (code == null && msg == null || msg == "") return defaultStatus
             if (code == defaultStatus.code && msg == null) return defaultStatus
-            if (code == defaultStatus.code && msg == defaultStatus.desc) return defaultStatus
-            return defaultStatus.copyAll(msg ?: defaultStatus.desc, code ?: defaultStatus.code) as T
+            if (code == defaultStatus.code && msg == defaultStatus.message) return defaultStatus
+            return defaultStatus.copyAll(msg ?: defaultStatus.message, code ?: defaultStatus.code) as T
         }
 
         /**
-         * Minor optimization to avoid unnecessary copying of Status
+         * Returns a copy of [status] with an updated [msg] and/or the override from [rawStatus].
+         * Optimised to return the original instance when nothing would change.
          */
         @Suppress("UNCHECKED_CAST")
         fun <T : Status> ofStatus(msg: String?, rawStatus: T?, status: T): T {
-            // NOTE: There is small optimization here to avoid creating a new instance
-            // of [Status] if the msg/code are empty and or they are the same as Success.
             if (msg == null && rawStatus == null) return status
             if (msg == null && rawStatus != null) return rawStatus
-            if (msg != null && rawStatus == null) return status.copyDesc(msg) as T
-            if (msg != null && rawStatus != null) return rawStatus.copyDesc(msg) as T
+            if (msg != null && rawStatus == null) return status.copyMessage(msg) as T
+            if (msg != null && rawStatus != null) return rawStatus.copyMessage(msg) as T
             return status
         }
 
         fun toType(status: Status): String {
-            val name: String = when (status) {
-                is Passed.Succeeded -> "Succeeded"
-                is Passed.Pending -> "Pending"
-                is Passed.Filtered -> "Filtered"
-                is Passed.Ignored -> "Ignored"
-                is Failed.Denied -> "Denied"
-                is Failed.Invalid -> "Invalid"
-                is Failed.Errored -> "Errored"
-                is Failed.Unknown -> "Unknown"
-                else -> Failed::Unknown.name
+            return when (status) {
+                is Passed.Succeeded -> "succeeded"
+                is Passed.Pending   -> "pending"
+                is Passed.Filtered  -> "filtered"
+                is Passed.Ignored   -> "ignored"
+                is Failed.Denied    -> "denied"
+                is Failed.Invalid   -> "invalid"
+                is Failed.Errored   -> "errored"
+                is Failed.Unknown   -> "unknown"
+                else                -> "unknown"
             }
-            return name
         }
     }
 }
 
 /**
- * Sum Type to represent the different possible Statuses that can be supplied to the @see[Success]
+ * Parent sealed type for all non-failure statuses.
+ * Subtypes: [Succeeded], [Pending], [Filtered], [Ignored].
  */
 sealed class Passed : Status {
-    data class Succeeded(override val name: String, override val code: Int, override val desc: String) : Passed() {
+    /** Operation completed successfully. */
+    data class Succeeded(override val name: String, override val code: Int, override val message: String) : Passed() {
         override val success = true
     }
 
-    data class Pending(override val name: String, override val code: Int, override val desc: String) : Passed() {
+    /** Operation accepted but not yet fully processed (e.g. queued, waiting). */
+    data class Pending(override val name: String, override val code: Int, override val message: String) : Passed() {
         override val success = true
     }
 
-    // Ignored for processing
-    data class Filtered(override val name: String, override val code: Int, override val desc: String) : Passed() {
-        override val success = false
+    /** Item was intentionally excluded from processing (e.g. deduplicated, out of scope). */
+    data class Filtered(override val name: String, override val code: Int, override val message: String) : Passed() {
+        override val success = true
     }
 
-    // Ignored for processing
-    data class Ignored(override val name: String, override val code: Int, override val desc: String) : Passed() {
-        override val success = false
+    /** Item was processed but its result was deliberately discarded or suppressed. */
+    data class Ignored(override val name: String, override val code: Int, override val message: String) : Passed() {
+        override val success = true
     }
 
     override fun copyAll(msg: String, code: Int): Status {
         return when (this) {
-            is Succeeded -> this.copy(code = code, desc = msg)
-            is Pending   -> this.copy(code = code, desc = msg)
-            is Filtered  -> this.copy(code = code, desc = msg)
-            is Ignored   -> this.copy(code = code, desc = msg)
+            is Succeeded -> this.copy(code = code, message = msg)
+            is Pending   -> this.copy(code = code, message = msg)
+            is Filtered  -> this.copy(code = code, message = msg)
+            is Ignored   -> this.copy(code = code, message = msg)
         }
     }
 
-    override fun copyDesc(msg: String): Status {
+    override fun copyMessage(msg: String): Status {
         return when (this) {
-            is Succeeded -> this.copy(desc = msg)
-            is Pending -> this.copy(desc = msg)
-            is Filtered -> this.copy(desc = msg)
-            is Ignored -> this.copy(desc = msg)
+            is Succeeded -> this.copy(message = msg)
+            is Pending   -> this.copy(message = msg)
+            is Filtered  -> this.copy(message = msg)
+            is Ignored   -> this.copy(message = msg)
         }
     }
 }
 
 /**
- * Sum Type to represent the different possible Statuses that can be supplied to the @see[Failure]
+ * Parent sealed type for all failure statuses (success = false for all subtypes).
+ * Subtypes: [Denied], [Invalid], [Errored], [Unknown].
  */
 sealed class Failed : Status {
-    // Security related
-    data class Denied(override val name: String, override val code: Int, override val desc: String) : Failed() {
+    /** Security / access-control failure — the caller is not permitted to perform this action. */
+    data class Denied(override val name: String, override val code: Int, override val message: String) : Failed() {
         override val success = false
     }
 
-    // Bad inputs
-    data class Invalid(override val name: String, override val code: Int, override val desc: String) : Failed() {
+    /** The input data is malformed or fails validation rules. */
+    data class Invalid(override val name: String, override val code: Int, override val message: String) : Failed() {
         override val success = false
     }
 
-    // Expected failures
-    data class Errored(override val name: String, override val code: Int, override val desc: String) : Failed() {
+    /** A known business-rule failure — expected, handled, and recoverable. */
+    data class Errored(override val name: String, override val code: Int, override val message: String) : Failed() {
         override val success = false
     }
 
-    // Unexpected failures
-    data class Unknown(override val name: String, override val code: Int, override val desc: String) : Failed() {
+    /** An unexpected or unhandled failure — equivalent to an uncaught exception path. */
+    data class Unknown(override val name: String, override val code: Int, override val message: String) : Failed() {
         override val success = false
     }
 
     override fun copyAll(msg: String, code: Int): Status {
         return when (this) {
-            is Denied -> this.copy(name = name, code = code, desc = msg)
-            is Invalid -> this.copy(name = name, code = code, desc = msg)
-            is Errored -> this.copy(name = name, code = code, desc = msg)
-            is Unknown -> this.copy(name = name, code = code, desc = msg)
+            is Denied  -> this.copy(name = name, code = code, message = msg)
+            is Invalid -> this.copy(name = name, code = code, message = msg)
+            is Errored -> this.copy(name = name, code = code, message = msg)
+            is Unknown -> this.copy(name = name, code = code, message = msg)
         }
     }
 
-    override fun copyDesc(msg: String): Status {
+    override fun copyMessage(msg: String): Status {
         return when (this) {
-            is Denied -> this.copy(desc = msg)
-            is Invalid -> this.copy(desc = msg)
-            is Errored -> this.copy(desc = msg)
-            is Unknown -> this.copy(desc = msg)
+            is Denied  -> this.copy(message = msg)
+            is Invalid -> this.copy(message = msg)
+            is Errored -> this.copy(message = msg)
+            is Unknown -> this.copy(message = msg)
         }
     }
 }

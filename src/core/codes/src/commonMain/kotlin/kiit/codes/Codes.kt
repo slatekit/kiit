@@ -12,18 +12,22 @@
 package kiit.codes
 
 /**
- * Default set of status codes
+ * Built-in registry of standard [Status] codes covering the most common operation outcomes.
  *
- * # GOALS:
- * 1. General purpose enough and can be used to model most logical groups of successes/failures
- * 2. Completely OPTIONAL to use but here for convenience
- * 3. Used as default codes for the [Result] builder methods
- * 4. Can be used at almost any layer of your application ( controller/service/utils etc )
- * 5. HTTP support via utility methods below to convert codes to compatible HTTP codes
+ * Using these is optional — they are provided for convenience and as defaults for kiit-result
+ * builder methods. Custom codes can be created by constructing any [Passed] or [Failed] subtype
+ * directly.
  *
- * # NOTES:
- * 1. [JvmField] is applied for Java Interop to access the value as a static field e.g. `Codes.SUCCESS`
- * 2. [Status] has logical grouping of errors
+ * Numeric codes default to HTTP-compatible ranges:
+ *   - 200xxx → success / pending
+ *   - 400xxx → client / validation failures
+ *   - 500xxx → server / unexpected failures
+ *   - 600xxx → interactive / metadata
+ *
+ * HTTP conversion is available via [toHttp]. Each code maps to the closest semantic HTTP status.
+ *
+ * @JvmField is applied for Java interop — JVM callers can access codes as static fields,
+ * e.g. `Codes.SUCCESS`. The annotation is a no-op on JS and iOS targets.
  */
 object Codes {
 
@@ -163,9 +167,9 @@ object Codes {
         val entry = lookupByHttp[code]
         return when {
             entry != null      -> entry.second
-            code in 1..999     -> Passed.Succeeded(SUCCESS.name, code, SUCCESS.desc)
-            code in 2000..2999 -> Failed.Invalid(INVALID.name, code, INVALID.desc)
-            code >= 3000       -> Failed.Errored(ERRORED.name, code, ERRORED.desc)
+            code in 1..999     -> Passed.Succeeded(SUCCESS.name, code, SUCCESS.message)
+            code in 2000..2999 -> Failed.Invalid(INVALID.name, code, INVALID.message)
+            code >= 3000       -> Failed.Errored(ERRORED.name, code, ERRORED.message)
             else               -> Failed.Errored(UNEXPECTED.name, code, "Unexpected")
         }
     }
