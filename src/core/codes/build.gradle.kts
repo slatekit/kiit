@@ -52,6 +52,7 @@ android {
  * signing.gnupg.keyName=
  * signing.gnupg.passphrase=
  *
+ * Maven local: ~/.m2/repository/dev/kiit/kiit-codes/
  */
 mavenPublishing {
     publishToMavenCentral(automaticRelease = true)
@@ -59,7 +60,7 @@ mavenPublishing {
     coordinates(
         groupId    = "dev.kiit",
         artifactId = "kiit-codes",
-        version    = "0.1.0"
+        version    = "0.1.1"
     )
     pom {
         name        = "kiit-codes"
@@ -86,11 +87,7 @@ mavenPublishing {
     }
 }
 
-// Signing is configured in afterEvaluate so that Android publications created by AGP
-// (which registers its own afterEvaluate) are present when sign() is called.
-afterEvaluate {
-    signing {
-        useGpgCmd()
-        sign(publishing.publications)
-    }
+signing {
+    useGpgCmd()
+    sign(publishing.publications)
 }
