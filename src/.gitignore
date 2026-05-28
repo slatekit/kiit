@@ -1,0 +1,18 @@
+# Gradle build outputs
+build/
+**/build/
+
+# Gradle caches and daemon
+.gradle/
+**/.gradle/
+
+# Gradle wrapper jar (checked in properties file is enough)
+gradle/wrapper/gradle-wrapper.jar
+
+# IntelliJ / Android Studio
+.idea/
+*.iml
+local.properties
+
+# macOS
+.DS_Store

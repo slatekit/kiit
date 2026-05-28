@@ -59,7 +59,7 @@
       "stability"  : "stable",
       "published"  : true,
       "migration"  : {
-        "status"            : "pending",
+        "status"            : "complete",
         "currentArtifactId" : "slatekit-common",
         "currentPackage"    : "slatekit.common.codes",
         "currentLocation"   : "src/lib/kotlin/slatekit-common/src/main/kotlin/slatekit/common/codes",
