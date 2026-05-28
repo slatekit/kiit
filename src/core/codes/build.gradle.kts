@@ -1,11 +1,16 @@
 plugins {
     alias(libs.plugins.kotlinMultiplatform)
+    alias(libs.plugins.androidLibrary)
     alias(libs.plugins.vanniktech.mavenPublish)
     id("signing")
 }
 
 kotlin {
     jvm()
+
+    androidTarget {
+        publishLibraryVariants("release")
+    }
 
     js(IR) {
         browser()
@@ -31,9 +36,17 @@ kotlin {
     }
 }
 
+android {
+    namespace  = "kiit.codes"
+    compileSdk = libs.versions.android.compileSdk.get().toInt()
+    defaultConfig {
+        minSdk = libs.versions.android.minSdk.get().toInt()
+    }
+}
+
 /**
  * Store the following in ~/.gradle/gradle.properties
- * 
+ *
  * signingInMemoryKeyPassword=
  * signingInMemoryKey=
  * signing.gnupg.keyName=
@@ -73,8 +86,8 @@ mavenPublishing {
     }
 }
 
-// Configure signing after all publications are created, using findProperty
-// to avoid Gradle issue #23572 where providers.gradleProperty misses user-home properties.
+// Signing is configured in afterEvaluate so that Android publications created by AGP
+// (which registers its own afterEvaluate) are present when sign() is called.
 afterEvaluate {
     signing {
         useGpgCmd()
