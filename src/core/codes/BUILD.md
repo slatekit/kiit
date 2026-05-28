@@ -67,14 +67,75 @@ Pass them as `-P` flags because dots in the property names are not valid bash va
     -PmavenCentralPassword=$KIIT_MAVEN_PSWD
 ```
 
-For GitHub Actions, set repository secrets and reference them in the workflow `env:` block:
-```yaml
-env:
-  ORG_GRADLE_PROJECT_mavenCentralUsername:     ${{ secrets.KIIT_MAVEN_USER }}
-  ORG_GRADLE_PROJECT_mavenCentralPassword:     ${{ secrets.KIIT_MAVEN_PSWD }}
-  ORG_GRADLE_PROJECT_signing.gnupg.keyName:    ${{ secrets.KIIT_MAVEN_GPGNAME }}
-  ORG_GRADLE_PROJECT_signing.gnupg.passphrase: ${{ secrets.KIIT_MAVEN_GPGPASS }}
+---
+
+## CI — GitHub Actions
+
+CI runners are ephemeral — there is no persistent GPG keyring. The secret key must be imported at the start of every run.
+
+### 1. Repository secrets
+
+Add these five secrets under `Settings → Secrets and variables → Actions`:
+
+| Secret name           | Value |
+|-----------------------|-------|
+| `KIIT_GPG_SECRET_KEY` | Base64-encoded GPG secret key (see below) |
+| `KIIT_MAVEN_GPGNAME`  | GPG key ID |
+| `KIIT_MAVEN_GPGPASS`  | GPG passphrase |
+| `KIIT_MAVEN_USER`     | Maven Central portal token username |
+| `KIIT_MAVEN_PSWD`     | Maven Central portal token password |
+
+Encode your secret key for the `KIIT_GPG_SECRET_KEY` secret (run locally):
+```bash
+gpg --armor --export-secret-keys <your-key-id> | base64 | pbcopy
 ```
+
+### 2. Workflow
+
+```yaml
+name: Publish kiit-codes
+
+on:
+  workflow_dispatch:
+  push:
+    tags: [ 'codes-v*' ]
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-java@v4
+        with:
+          java-version: '17'
+          distribution: 'temurin'
+
+      - name: Import GPG key
+        run: |
+          echo "${{ secrets.KIIT_GPG_SECRET_KEY }}" | base64 --decode | gpg --import
+          gpg --list-secret-keys --keyid-format LONG
+
+      - name: Publish to Maven Central
+        run: |
+          ./gradlew :core-codes:publishAndReleaseToMavenCentral \
+            -Psigning.gnupg.keyName=${{ secrets.KIIT_MAVEN_GPGNAME }} \
+            -Psigning.gnupg.passphrase=${{ secrets.KIIT_MAVEN_GPGPASS }} \
+            -PmavenCentralUsername=${{ secrets.KIIT_MAVEN_USER }} \
+            -PmavenCentralPassword=${{ secrets.KIIT_MAVEN_PSWD }}
+```
+
+### 3. GPG pinentry on Linux (if signing hangs)
+
+GPG 2.1+ on Linux defaults to a GUI pinentry dialog which blocks in CI. If the passphrase is silently rejected, add this before the import step:
+
+```bash
+echo "pinentry-mode loopback" >> ~/.gnupg/gpg.conf
+echo "allow-loopback-pinentry" >> ~/.gnupg/gpg-agent.conf
+gpgconf --kill gpg-agent
+```
+
+Ubuntu runners usually work without this because Gradle passes `--batch --pinentry-mode loopback` automatically when shelling out to `gpg`.
 
 ---
 
