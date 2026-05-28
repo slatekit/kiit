@@ -15,6 +15,7 @@ Every `Status` can be represented as a structured response, for example as an AP
 ```json
 {
     "name"   : "TOKEN_EXPIRED",
+    "type"   : "Denied",
     "code"   : 400009,
     "success": false,
     "message": "Session token expired"
