@@ -23,7 +23,7 @@ package kiit.codes
  * On JS, prefer the [StatusError] subclass defined in `jsMain` — it is annotated with
  * `@JsExport` so TypeScript consumers see it in the generated `.d.ts` file.
  */
-class StatusException(
+open class StatusException(
     val status: Status,
     cause: Throwable? = null
 ) : Exception(status.message, cause)

@@ -140,14 +140,12 @@ object Codes {
     private val lookupByCode = mappings.associateBy { it.first }
     private val lookupByHttp = mappings.associateBy { it.third }
 
-    @JvmStatic
     fun contains(code: Int): Boolean = lookupByHttp.containsKey(code)
 
     /**
      * Converts a status to a compatible HTTP status code.
      * TODO: HttpCode support to be added when kiit-codes gains an HttpCode dependency.
      */
-    @JvmStatic
     fun toHttp(status: Status): Pair<Int, Status> {
         val entry = lookupByCode[status.code]
         return if (entry != null) Pair(entry.third, status) else Pair(status.code, status)
@@ -156,13 +154,11 @@ object Codes {
     /**
      * Converts an HTTP status code to a matching [Status], or null if not found.
      */
-    @JvmStatic
     fun toStatus(code: Int): Status? = lookupByCode[code]?.second
 
     /**
      * Converts a numeric code to its matching [Status].
      */
-    @JvmStatic
     fun ofCode(code: Int): Status {
         val entry = lookupByHttp[code]
         return when {

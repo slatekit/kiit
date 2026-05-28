@@ -19,6 +19,7 @@ package kiit.codes
  * With the SKIE plugin, functions annotated with `@Throws(StatusError::class)` are
  * automatically bridged to idiomatic Swift `throws` with no manual NSError casting.
  */
+@OptIn(kotlin.experimental.ExperimentalObjCName::class)
 @ObjCName("StatusError", swiftName = "StatusError")
 class StatusError(
     status: Status,
