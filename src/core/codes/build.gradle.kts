@@ -60,7 +60,7 @@ mavenPublishing {
     coordinates(
         groupId    = "dev.kiit",
         artifactId = "kiit-codes",
-        version    = "0.1.1"
+        version    = "0.1.2"
     )
     pom {
         name        = "kiit-codes"
