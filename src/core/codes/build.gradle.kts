@@ -45,10 +45,13 @@ android {
 }
 
 mavenPublishing {
+    publishToMavenCentral(automaticRelease = true)
+    signAllPublications()
+
     coordinates(
         groupId    = "dev.kiit",
         artifactId = "kiit-codes",
-        version    = "0.1.0-alpha"
+        version    = "0.1.0"
     )
     pom {
         name        = "kiit-codes"
