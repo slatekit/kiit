@@ -3,6 +3,7 @@ plugins {
     alias(libs.plugins.androidLibrary)
     alias(libs.plugins.vanniktech.mavenPublish)
     alias(libs.plugins.ktlint)
+    alias(libs.plugins.detekt)
     id("signing")
 }
 
@@ -86,6 +87,16 @@ mavenPublishing {
             developerConnection = "scm:git:ssh://git@github.com/slatekit/kiit.git"
         }
     }
+}
+
+detekt {
+    config.setFrom("$projectDir/detekt.yml")
+    buildUponDefaultConfig = true
+    source.setFrom(
+        "src/commonMain/kotlin",
+        "src/jsMain/kotlin",
+        "src/iosMain/kotlin",
+    )
 }
 
 signing {
