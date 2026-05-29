@@ -25,5 +25,5 @@ package kiit.codes
  */
 open class StatusException(
     val status: Status,
-    cause: Throwable? = null
+    cause: Throwable? = null,
 ) : Exception(status.message, cause)

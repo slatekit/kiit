@@ -23,5 +23,5 @@ package kiit.codes
 @ObjCName("StatusError", swiftName = "StatusError")
 class StatusError(
     status: Status,
-    cause: Throwable? = null
+    cause: Throwable? = null,
 ) : StatusException(status, cause)

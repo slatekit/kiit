@@ -1,26 +1,52 @@
 package kiit.codes
 
-import kotlin.test.*
+import kotlin.test.Test
+import kotlin.test.assertEquals
+import kotlin.test.assertFalse
+import kotlin.test.assertNotSame
+import kotlin.test.assertSame
+import kotlin.test.assertTrue
 
 class StatusTest {
-
     // -------------------------------------------------------------------------
     // success flag — Passed subtypes
     // -------------------------------------------------------------------------
 
-    @Test fun succeededHasSuccessTrue()  { assertTrue(Passed.Succeeded("S", 200001, "S").success) }
-    @Test fun pendingHasSuccessTrue()    { assertTrue(Passed.Pending  ("P", 200008, "P").success) }
-    @Test fun filteredHasSuccessTrue()   { assertTrue(Passed.Filtered ("F", 200204, "F").success) }
-    @Test fun ignoredHasSuccessTrue()    { assertTrue(Passed.Ignored  ("I", 200204, "I").success) }
+    @Test fun succeededHasSuccessTrue() {
+        assertTrue(Passed.Succeeded("S", 200001, "S").success)
+    }
+
+    @Test fun pendingHasSuccessTrue() {
+        assertTrue(Passed.Pending("P", 200008, "P").success)
+    }
+
+    @Test fun filteredHasSuccessTrue() {
+        assertTrue(Passed.Filtered("F", 200204, "F").success)
+    }
+
+    @Test fun ignoredHasSuccessTrue() {
+        assertTrue(Passed.Ignored("I", 200204, "I").success)
+    }
 
     // -------------------------------------------------------------------------
     // success flag — Failed subtypes
     // -------------------------------------------------------------------------
 
-    @Test fun deniedHasSuccessFalse()    { assertFalse(Failed.Denied ("D", 400005, "D").success) }
-    @Test fun invalidHasSuccessFalse()   { assertFalse(Failed.Invalid("I", 400003, "I").success) }
-    @Test fun erroredHasSuccessFalse()   { assertFalse(Failed.Errored("E", 500007, "E").success) }
-    @Test fun unknownHasSuccessFalse()   { assertFalse(Failed.Unknown("U", 500008, "U").success) }
+    @Test fun deniedHasSuccessFalse() {
+        assertFalse(Failed.Denied("D", 400005, "D").success)
+    }
+
+    @Test fun invalidHasSuccessFalse() {
+        assertFalse(Failed.Invalid("I", 400003, "I").success)
+    }
+
+    @Test fun erroredHasSuccessFalse() {
+        assertFalse(Failed.Errored("E", 500007, "E").success)
+    }
+
+    @Test fun unknownHasSuccessFalse() {
+        assertFalse(Failed.Unknown("U", 500008, "U").success)
+    }
 
     // -------------------------------------------------------------------------
     // copyMessage — updates message, preserves name and code
@@ -30,9 +56,9 @@ class StatusTest {
     fun copyMessageOnSucceeded() {
         val s = Passed.Succeeded("SUCCESS", 200001, "Success")
         val copy = s.copyMessage("Custom")
-        assertEquals("Custom",  copy.message)
-        assertEquals(s.name,    copy.name)
-        assertEquals(s.code,    copy.code)
+        assertEquals("Custom", copy.message)
+        assertEquals(s.name, copy.name)
+        assertEquals(s.code, copy.code)
         assertTrue(copy.success)
     }
 
@@ -41,7 +67,7 @@ class StatusTest {
         val s = Passed.Pending("PENDING", 200008, "Pending")
         val copy = s.copyMessage("Custom")
         assertEquals("Custom", copy.message)
-        assertEquals(s.code,   copy.code)
+        assertEquals(s.code, copy.code)
     }
 
     @Test
@@ -96,8 +122,8 @@ class StatusTest {
         val s = Passed.Succeeded("SUCCESS", 200001, "Success")
         val copy = s.copyAll("Custom", 200099)
         assertEquals("Custom", copy.message)
-        assertEquals(200099,   copy.code)
-        assertEquals(s.name,   copy.name)
+        assertEquals(200099, copy.code)
+        assertEquals(s.name, copy.name)
     }
 
     @Test
@@ -105,8 +131,8 @@ class StatusTest {
         val s = Failed.Denied("DENIED", 400005, "Denied")
         val copy = s.copyAll("Custom", 403)
         assertEquals("Custom", copy.message)
-        assertEquals(403,      copy.code)
-        assertEquals(s.name,   copy.name)
+        assertEquals(403, copy.code)
+        assertEquals(s.name, copy.name)
     }
 
     // -------------------------------------------------------------------------
@@ -116,13 +142,13 @@ class StatusTest {
     @Test
     fun toTypeReturnsCorrectStringForAllSubtypes() {
         assertEquals("succeeded", Status.toType(Passed.Succeeded("S", 1, "S")))
-        assertEquals("pending",   Status.toType(Passed.Pending  ("P", 2, "P")))
-        assertEquals("filtered",  Status.toType(Passed.Filtered ("F", 3, "F")))
-        assertEquals("ignored",   Status.toType(Passed.Ignored  ("I", 4, "I")))
-        assertEquals("denied",    Status.toType(Failed.Denied   ("D", 5, "D")))
-        assertEquals("invalid",   Status.toType(Failed.Invalid  ("I", 6, "I")))
-        assertEquals("errored",   Status.toType(Failed.Errored  ("E", 7, "E")))
-        assertEquals("unknown",   Status.toType(Failed.Unknown  ("U", 8, "U")))
+        assertEquals("pending", Status.toType(Passed.Pending("P", 2, "P")))
+        assertEquals("filtered", Status.toType(Passed.Filtered("F", 3, "F")))
+        assertEquals("ignored", Status.toType(Passed.Ignored("I", 4, "I")))
+        assertEquals("denied", Status.toType(Failed.Denied("D", 5, "D")))
+        assertEquals("invalid", Status.toType(Failed.Invalid("I", 6, "I")))
+        assertEquals("errored", Status.toType(Failed.Errored("E", 7, "E")))
+        assertEquals("unknown", Status.toType(Failed.Unknown("U", 8, "U")))
     }
 
     // -------------------------------------------------------------------------
@@ -158,8 +184,8 @@ class StatusTest {
         val default = Codes.SUCCESS
         val result = Status.ofCode("Custom", null, default)
         assertNotSame(default, result)
-        assertEquals("Custom",      result.message)
-        assertEquals(default.code,  result.code)
+        assertEquals("Custom", result.message)
+        assertEquals(default.code, result.code)
     }
 
     @Test
@@ -167,8 +193,8 @@ class StatusTest {
         val default = Codes.SUCCESS
         val result = Status.ofCode(null, 200099, default)
         assertNotSame(default, result)
-        assertEquals(200099,           result.code)
-        assertEquals(default.message,  result.message)
+        assertEquals(200099, result.code)
+        assertEquals(default.message, result.message)
     }
 
     // -------------------------------------------------------------------------
@@ -191,7 +217,7 @@ class StatusTest {
     @Test
     fun ofStatusReturnsStatusWithUpdatedMsgWhenRawIsNull() {
         val result = Status.ofStatus("Custom", null, Codes.SUCCESS)
-        assertEquals("Custom",          result.message)
+        assertEquals("Custom", result.message)
         assertEquals(Codes.SUCCESS.code, result.code)
     }
 
@@ -199,7 +225,7 @@ class StatusTest {
     fun ofStatusReturnsRawWithUpdatedMsgWhenBothProvided() {
         val raw = Codes.CREATED
         val result = Status.ofStatus("Custom", raw, Codes.SUCCESS)
-        assertEquals("Custom",    result.message)
-        assertEquals(raw.code,    result.code)
+        assertEquals("Custom", result.message)
+        assertEquals(raw.code, result.code)
     }
 }

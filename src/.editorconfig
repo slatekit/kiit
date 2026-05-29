@@ -1,0 +1,22 @@
+root = true
+
+[*]
+charset                  = utf-8
+end_of_line              = lf
+indent_style             = space
+indent_size              = 4
+trim_trailing_whitespace = true
+insert_final_newline     = true
+
+[*.{kt,kts}]
+indent_size                         = 4
+ktlint_standard_no-wildcard-imports                                             = enabled
+ktlint_standard_trailing-comma-on-declaration-site                              = disabled
+ktlint_function_signature_rule_force_multiline_when_parameter_count_greater_or_equal_than = 5
+
+# Example_*.kt files follow the kiit doc-generation naming convention (underscore prefix)
+# and are intentionally sparse (they contain only doc marker comments)
+[**/Example_*.kt]
+ktlint_standard_filename      = disabled
+ktlint_standard_no-empty-file = disabled
+ktlint_standard_comment-spacing = disabled

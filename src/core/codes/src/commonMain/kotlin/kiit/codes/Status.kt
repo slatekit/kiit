@@ -49,10 +49,10 @@ interface Status {
     val success: Boolean
 
     fun copyMessage(msg: String): Status
+
     fun copyAll(msg: String, code: Int): Status
 
     companion object {
-
         /**
          * Returns a copy of [defaultStatus] with an updated [msg] and/or [code].
          * Optimised to return the original instance when nothing would change.
@@ -81,14 +81,14 @@ interface Status {
         fun toType(status: Status): String {
             return when (status) {
                 is Passed.Succeeded -> "succeeded"
-                is Passed.Pending   -> "pending"
-                is Passed.Filtered  -> "filtered"
-                is Passed.Ignored   -> "ignored"
-                is Failed.Denied    -> "denied"
-                is Failed.Invalid   -> "invalid"
-                is Failed.Errored   -> "errored"
-                is Failed.Unknown   -> "unknown"
-                else                -> "unknown"
+                is Passed.Pending -> "pending"
+                is Passed.Filtered -> "filtered"
+                is Passed.Ignored -> "ignored"
+                is Failed.Denied -> "denied"
+                is Failed.Invalid -> "invalid"
+                is Failed.Errored -> "errored"
+                is Failed.Unknown -> "unknown"
+                else -> "unknown"
             }
         }
     }
@@ -122,18 +122,18 @@ sealed class Passed : Status {
     override fun copyAll(msg: String, code: Int): Status {
         return when (this) {
             is Succeeded -> this.copy(code = code, message = msg)
-            is Pending   -> this.copy(code = code, message = msg)
-            is Filtered  -> this.copy(code = code, message = msg)
-            is Ignored   -> this.copy(code = code, message = msg)
+            is Pending -> this.copy(code = code, message = msg)
+            is Filtered -> this.copy(code = code, message = msg)
+            is Ignored -> this.copy(code = code, message = msg)
         }
     }
 
     override fun copyMessage(msg: String): Status {
         return when (this) {
             is Succeeded -> this.copy(message = msg)
-            is Pending   -> this.copy(message = msg)
-            is Filtered  -> this.copy(message = msg)
-            is Ignored   -> this.copy(message = msg)
+            is Pending -> this.copy(message = msg)
+            is Filtered -> this.copy(message = msg)
+            is Ignored -> this.copy(message = msg)
         }
     }
 }
@@ -165,7 +165,7 @@ sealed class Failed : Status {
 
     override fun copyAll(msg: String, code: Int): Status {
         return when (this) {
-            is Denied  -> this.copy(name = name, code = code, message = msg)
+            is Denied -> this.copy(name = name, code = code, message = msg)
             is Invalid -> this.copy(name = name, code = code, message = msg)
             is Errored -> this.copy(name = name, code = code, message = msg)
             is Unknown -> this.copy(name = name, code = code, message = msg)
@@ -174,7 +174,7 @@ sealed class Failed : Status {
 
     override fun copyMessage(msg: String): Status {
         return when (this) {
-            is Denied  -> this.copy(message = msg)
+            is Denied -> this.copy(message = msg)
             is Invalid -> this.copy(message = msg)
             is Errored -> this.copy(message = msg)
             is Unknown -> this.copy(message = msg)
