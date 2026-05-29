@@ -1,9 +1,12 @@
 package kiit.codes
 
-import kotlin.test.*
+import kotlin.test.Test
+import kotlin.test.assertEquals
+import kotlin.test.assertNotNull
+import kotlin.test.assertNull
+import kotlin.test.assertSame
 
 class StatusExceptionTest {
-
     @Test
     fun messageComesFromStatus() {
         val ex = StatusException(Codes.UNAUTHORIZED)
@@ -31,12 +34,13 @@ class StatusExceptionTest {
 
     @Test
     fun canBeCaughtAsException() {
-        val caught = try {
-            throw StatusException(Codes.NOT_FOUND)
-            null
-        } catch (e: StatusException) {
-            e
-        }
+        val caught =
+            try {
+                throw StatusException(Codes.NOT_FOUND)
+                null
+            } catch (e: StatusException) {
+                e
+            }
         assertNotNull(caught)
         assertEquals(Codes.NOT_FOUND.name, caught.status.name)
     }
