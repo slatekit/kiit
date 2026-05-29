@@ -91,3 +91,74 @@ Reports: `{module}/build/reports/detekt/detekt.html`
 # ktlint + detekt + tests in one pass
 ./gradlew :core-codes:check
 ```
+
+---
+
+## Global Setup — Applying to All Subprojects
+
+To enforce quality tools across every module automatically, configure them in the
+root `build.gradle.kts` using a `subprojects {}` block. Each tool still reads its
+own config from the module directory or a shared root-level file.
+
+### ktlint (all subprojects)
+
+```kotlin
+// build.gradle.kts (root)
+subprojects {
+    apply(plugin = "org.jlleitschuh.gradle.ktlint")
+}
+```
+
+`.editorconfig` at `src/` is already picked up automatically by all modules — no
+extra wiring needed.
+
+### detekt (all subprojects)
+
+Move `detekt.yml` to the repo root so all modules share one rule set, then apply
+the plugin globally:
+
+```kotlin
+// build.gradle.kts (root)
+subprojects {
+    apply(plugin = "io.gitlab.arturbosch.detekt")
+
+    detekt {
+        config.setFrom("${rootProject.projectDir}/detekt.yml")
+        buildUponDefaultConfig = true
+        source.setFrom(
+            "src/commonMain/kotlin",
+            "src/jsMain/kotlin",
+            "src/iosMain/kotlin",
+        )
+    }
+}
+```
+
+Module-specific overrides can be layered by passing multiple files:
+
+```kotlin
+config.setFrom(
+    "${rootProject.projectDir}/detekt.yml",   // shared baseline
+    "$projectDir/detekt-overrides.yml",        // module-specific tweaks
+)
+```
+
+### dokka (all subprojects)
+
+```kotlin
+// build.gradle.kts (root)
+subprojects {
+    apply(plugin = "org.jetbrains.dokka")
+}
+```
+
+Vanniktech automatically wires the `-javadoc.jar` per module once dokka is applied.
+
+### Run checks across all modules
+
+```bash
+# Check all modules at once
+./gradlew ktlintCheck
+./gradlew detekt
+./gradlew check        # ktlint + detekt + tests for every module
+```
