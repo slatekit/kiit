@@ -6,6 +6,7 @@ android-minSdk     = "24"
 android-compileSdk = "35"
 vanniktechMavenPublish = "0.34.0"
 ktlint                 = "12.1.2"
+detekt                 = "1.23.7"
 
 [libraries]
 kotlin-test            = { module = "org.jetbrains.kotlin:kotlin-test",              version.ref = "kotlin" }
@@ -20,3 +21,4 @@ kotlinMultiplatform        = { id = "org.jetbrains.kotlin.multiplatform",    ver
 androidLibrary             = { id = "com.android.library",                   version.ref = "agp"    }
 vanniktech-mavenPublish    = { id = "com.vanniktech.maven.publish",          version.ref = "vanniktechMavenPublish" }
 ktlint                     = { id = "org.jlleitschuh.gradle.ktlint",          version.ref = "ktlint"                }
+detekt                     = { id = "io.gitlab.arturbosch.detekt",             version.ref = "detekt"                }
