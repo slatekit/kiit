@@ -16,6 +16,9 @@ src_managed/
 project/boot/
 project/plugins/project/
 
+# kotlin
+.kotlin/
+.gradle
 
 # test/
 

@@ -12,155 +12,197 @@
 package kiit.codes
 
 /**
- * Built-in registry of standard [Status] codes covering the most common operation outcomes.
+ * Built-in registry of standard [Status] codes covering common operation outcomes.
  *
- * Using these is optional — they are provided for convenience and as defaults for kiit-result
- * builder methods. Custom codes can be created by constructing any [Passed] or [Failed] subtype
- * directly.
+ * Using these is optional — they're provided as sensible defaults and for kiit-result builder
+ * methods. Custom domain codes can be created by constructing any [Passed] or [Failed] subtype
+ * directly; only the four categories under each are fixed/closed (see [Status]).
  *
- * Numeric codes default to HTTP-compatible ranges:
- *   - 200xxx → success / pending
- *   - 400xxx → client / validation failures
- *   - 500xxx → server / unexpected failures
- *   - 600xxx → interactive / metadata
+ * Numeric code ranges (conceptual grouping only — see the NOTE on [Status.code]):
+ *   200000-200099 Succeeded     200100-200199 Pending
+ *   200200-200299 Filtered      200300-200399 Information
+ *   400000-400099 Denied        400100-400199 Invalid
+ *   500000-500099 Errored       500100-500199 Unserviceable
  *
- * HTTP conversion is available via [toHttp]. Each code maps to the closest semantic HTTP status.
- *
+ * Uniqueness of every code in this registry is enforced at object-init time (see the `init`
+ * block below) — a duplicate code will fail loudly the first time [Codes] is touched, rather
+ * than silently producing a wrong HTTP mapping.
  */
 object Codes {
-    // Success: 200000 + range ( useful for CRUD operations )
+    // ---- Succeeded (200000-200099) ----
     val SUCCESS = Passed.Succeeded("SUCCESS", 200001, "Success")
     val CREATED = Passed.Succeeded("CREATED", 200002, "Created")
     val UPDATED = Passed.Succeeded("UPDATED", 200003, "Updated")
     val FETCHED = Passed.Succeeded("FETCHED", 200004, "Fetched")
-    val PATCHED = Passed.Succeeded("PATCHED", 200005, "Patched") // E.g. Update a small subset of info
+    val PATCHED = Passed.Succeeded("PATCHED", 200005, "Patched")
     val DELETED = Passed.Succeeded("DELETED", 200006, "Deleted")
-    val HANDLED = Passed.Succeeded("HANDLED", 200007, "Handled") // E.g. A silent ok ( similar to http 204 )
-    val PENDING = Passed.Pending("PENDING", 200008, "Pending")
-    val QUEUED = Passed.Pending("QUEUED", 200009, "Queued")
-    val CONFIRM = Passed.Pending("CONFIRM", 200010, "Confirm")
-    val FILTERED = Passed.Filtered("FILTERED", 200204, "Filtered") // E.g. Ignored, not exactly an error
-    val IGNORED = Passed.Ignored("IGNORED", 200204, "Ignored") // E.g. Ignored, not exactly an error
+    val HANDLED = Passed.Succeeded("HANDLED", 200007, "Handled") // e.g. a silent OK, similar to HTTP 204
 
-    // Success: 200000 + range ( useful for JOB States )
-    val ACTIVE = Passed.Pending("ACTIVE", 200101, "Active")
-    val INACTIVE = Passed.Pending("INACTIVE", 200102, "Inactive")
-    val STARTING = Passed.Pending("STARTING", 200103, "Starting")
-    val WAITING = Passed.Pending("WAITING", 200104, "Waiting")
-    val RUNNING = Passed.Pending("RUNNING", 200105, "Running")
-    val PAUSED = Passed.Pending("PAUSED", 200106, "Paused")
-    val STOPPED = Passed.Pending("STOPPED", 200107, "Stopped")
-    val COMPLETE = Passed.Pending("COMPLETE", 200108, "Complete")
+    // ---- Pending (200100-200199) ----
+    val PENDING = Passed.Pending("PENDING", 200101, "Pending")
+    val QUEUED = Passed.Pending("QUEUED", 200102, "Queued")
+    val CONFIRM = Passed.Pending("CONFIRM", 200103, "Confirm")
 
-    // Invalid: 400000 + range
-    val BAD_REQUEST = Failed.Invalid("BAD_REQUEST", 400002, "Bad Request") // E.g. Invalid JSON
-    val INVALID = Failed.Invalid("INVALID", 400003, "Invalid") // E.g. Valid   JSON but invalid values
-    val NOT_FOUND = Failed.Invalid("NOT_FOUND", 400004, "Not found") // E.g. Resource/End point not found
+    // ---- Filtered (200200-200299) ----
+    val SKIPPED = Passed.Filtered("SKIPPED", 200201, "Skipped") // not processed at all
+    val DISCARDED = Passed.Filtered("DISCARDED", 200202, "Discarded") // processed, result thrown away
 
-    // Security related
-    val DENIED = Failed.Denied("DENIED", 400005, "Denied") // Presumes a checked condition
-    val UNSUPPORTED = Failed.Denied("UNSUPPORTED", 400006, "Not supported") // Presumes a checked condition
-    val UNIMPLEMENTED = Failed.Denied("UNIMPLEMENTED", 400007, "Not implemented") // Presumes a checked condition
-    val UNAVAILABLE = Failed.Denied("UNAVAILABLE", 400008, "Not available") // Presumes a checked condition
-    val UNAUTHENTICATED = Failed.Denied("UNAUTHENTICATED", 400009, "Unauthenticated") // Presumes a checked condition
-    val UNAUTHORIZED = Failed.Denied("UNAUTHORIZED", 400010, "Unauthorized") // Presumes a checked condition
+    // ---- Information (200300-200399) ----
+    val HELP = Passed.Information("HELP", 200301, "Help")
+    val ABOUT = Passed.Information("ABOUT", 200302, "About")
+    val VERSION = Passed.Information("VERSION", 200303, "Version")
+    val EXIT = Passed.Information("EXIT", 200304, "Exiting")
 
-    // Expected errors: 500000 + range
-    val MISSING = Failed.Errored("MISSING", 500002, "Missing item") // E.g. Domain model not found
-    val FORBIDDEN = Failed.Errored("FORBIDDEN", 500003, "Forbidden")
-    val CONFLICT = Failed.Errored("CONFLICT", 500004, "Conflict")
-    val DEPRECATED = Failed.Errored("DEPRECATED", 500005, "Deprecated")
-    val TIMEOUT = Failed.Errored("TIMEOUT", 500006, "Timeout")
-    val ERRORED = Failed.Errored("ERRORED", 500007, "Errored") // General purpose use
-    val LIMITED = Failed.Errored("LIMITED", 500009, "Limited")
+    // ---- Denied (400000-400099) — security / access-control ----
+    val DENIED = Failed.Denied("DENIED", 400001, "Denied")
+    val UNAUTHENTICATED = Failed.Denied("UNAUTHENTICATED", 400002, "Unauthenticated")
+    val UNAUTHORIZED = Failed.Denied("UNAUTHORIZED", 400003, "Unauthorized")
 
-    // Unexpected
-    val UNEXPECTED = Failed.Unknown("UNEXPECTED", 500008, "Unexpected")
+    // ---- Invalid (400100-400199) — bad input ----
+    val BAD_REQUEST = Failed.Invalid("BAD_REQUEST", 400101, "Bad request") // e.g. malformed JSON
+    val INVALID = Failed.Invalid("INVALID", 400102, "Invalid") // e.g. well-formed but invalid values
+    val NOT_FOUND = Failed.Invalid("NOT_FOUND", 400103, "Not found") // e.g. resource/endpoint not found
 
-    // Success ( Interactive / Metadata )
-    val EXIT = Passed.Succeeded("EXIT", 600002, "Exiting")
-    val HELP = Passed.Succeeded("HELP", 600003, "Help")
-    val ABOUT = Passed.Succeeded("ABOUT", 600004, "About")
-    val VERSION = Passed.Succeeded("VERSION", 600005, "Version")
+    // ---- Errored (500000-500099) — known, expected business-rule failure ----
+    val MISSING = Failed.Errored("MISSING", 500001, "Missing item") // e.g. domain model not found
+    val FORBIDDEN = Failed.Errored("FORBIDDEN", 500002, "Forbidden")
+    val CONFLICT = Failed.Errored("CONFLICT", 500003, "Conflict")
+    val DEPRECATED = Failed.Errored("DEPRECATED", 500004, "Deprecated")
+    val ERRORED = Failed.Errored("ERRORED", 500005, "Errored") // general purpose use
 
-    private val mappings =
+    // ---- Unserviceable (500100-500199) — valid & permitted, can't be serviced right now ----
+    val UNIMPLEMENTED = Failed.Unserviceable("UNIMPLEMENTED", 500101, "Not implemented")
+    val UNSUPPORTED = Failed.Unserviceable("UNSUPPORTED", 500102, "Not supported")
+    val TIMEOUT = Failed.Unserviceable("TIMEOUT", 500103, "Timeout")
+    val RATE_LIMITED = Failed.Unserviceable("RATE_LIMITED", 500104, "Rate limited")
+    val UNREACHABLE = Failed.Unserviceable("UNREACHABLE", 500105, "Unreachable") // e.g. dependency down
+    val UNDER_MAINTENANCE = Failed.Unserviceable("UNDER_MAINTENANCE", 500106, "Under maintenance")
+    val UNEXPECTED = Failed.Unserviceable("UNEXPECTED", 500107, "Unexpected") // unhandled/uncaught path
+
+    /** All built-in codes. Used for reverse lookups — see [CodesToHttp], [CompositeLookup]. */
+    val all: List<Status> =
         listOf(
-            // CRUD
-            Triple(SUCCESS.code, SUCCESS, 200),
-            Triple(CREATED.code, CREATED, 201),
-            Triple(UPDATED.code, UPDATED, 200),
-            Triple(FETCHED.code, FETCHED, 200),
-            Triple(PATCHED.code, PATCHED, 200),
-            Triple(DELETED.code, DELETED, 200),
-            Triple(PENDING.code, PENDING, 202),
-            Triple(QUEUED.code, QUEUED, 202),
-            Triple(HANDLED.code, HANDLED, 204),
-            Triple(CONFIRM.code, CONFIRM, 200),
-            // JOB States
-            Triple(ACTIVE.code, ACTIVE, 200),
-            Triple(INACTIVE.code, INACTIVE, 200),
-            Triple(STARTING.code, STARTING, 200),
-            Triple(WAITING.code, WAITING, 200),
-            Triple(RUNNING.code, RUNNING, 200),
-            Triple(PAUSED.code, PAUSED, 200),
-            Triple(STOPPED.code, STOPPED, 200),
-            Triple(COMPLETE.code, COMPLETE, 200),
-            // Info
-            Triple(HELP.code, HELP, 200),
-            Triple(ABOUT.code, ABOUT, 200),
-            Triple(VERSION.code, VERSION, 200),
-            // Invalid
-            Triple(IGNORED.code, IGNORED, 400),
-            Triple(BAD_REQUEST.code, BAD_REQUEST, 400),
-            Triple(INVALID.code, INVALID, 400),
-            Triple(UNSUPPORTED.code, UNSUPPORTED, 501),
-            Triple(UNIMPLEMENTED.code, UNIMPLEMENTED, 501),
-            Triple(UNAVAILABLE.code, UNAVAILABLE, 503),
-            // Errors
-            Triple(MISSING.code, MISSING, 400),
-            Triple(NOT_FOUND.code, NOT_FOUND, 404),
-            Triple(DENIED.code, DENIED, 401),
-            Triple(UNAUTHENTICATED.code, UNAUTHENTICATED, 401),
-            Triple(UNAUTHORIZED.code, UNAUTHORIZED, 401),
-            Triple(FORBIDDEN.code, FORBIDDEN, 403),
-            Triple(TIMEOUT.code, TIMEOUT, 408),
-            Triple(CONFLICT.code, CONFLICT, 409),
-            Triple(DEPRECATED.code, DEPRECATED, 426),
-            Triple(ERRORED.code, ERRORED, 500),
-            Triple(UNEXPECTED.code, UNEXPECTED, 500),
-            Triple(EXIT.code, EXIT, 503),
+            SUCCESS, CREATED, UPDATED, FETCHED, PATCHED, DELETED, HANDLED,
+            PENDING, QUEUED, CONFIRM,
+            SKIPPED, DISCARDED,
+            HELP, ABOUT, VERSION, EXIT,
+            DENIED, UNAUTHENTICATED, UNAUTHORIZED,
+            BAD_REQUEST, INVALID, NOT_FOUND,
+            MISSING, FORBIDDEN, CONFLICT, DEPRECATED, ERRORED,
+            UNIMPLEMENTED, UNSUPPORTED, TIMEOUT, RATE_LIMITED, UNREACHABLE, UNDER_MAINTENANCE, UNEXPECTED,
         )
 
-    private val lookupByCode = mappings.associateBy { it.first }
-    private val lookupByHttp = mappings.associateBy { it.third }
+    private val byCode: Map<Int, Status> = all.associateBy { it.code }
 
-    fun contains(code: Int): Boolean = lookupByHttp.containsKey(code)
+    init {
+        check(byCode.size == all.size) {
+            val dupes = all.groupBy { it.code }.filterValues { it.size > 1 }.keys
+            "Duplicate Status codes detected in Codes registry: $dupes"
+        }
+    }
 
-    /**
-     * Converts a status to a compatible HTTP status code.
-     * TODO: HttpCode support to be added when kiit-codes gains an HttpCode dependency.
-     */
-    fun toHttp(status: Status): Pair<Int, Status> {
-        val entry = lookupByCode[status.code]
-        return if (entry != null) Pair(entry.third, status) else Pair(status.code, status)
+    /** Looks up a built-in [Status] by its internal registry code (e.g. 400001). Null if unknown. */
+    fun statusForCode(code: Int): Status? = byCode[code]
+}
+
+/**
+ * Bidirectional conversion between a [Status] and a target protocol's status code (e.g. HTTP).
+ *
+ * Implementations should be exhaustive over [Status]'s categories ([Passed]/[Failed] subtypes),
+ * typically via a `when` with no `else` branch, so a newly added category is caught at compile
+ * time. Individual codes within a category do not need an exhaustive mapping — they can be
+ * handled via a small overrides table layered on top of the category default (see [CodesToHttp]).
+ */
+interface CodeLookup {
+    /** Converts a [Status] to the target protocol's code. */
+    fun toCode(status: Status): Int
+
+    /** Converts a target protocol [code] to a matching [Status], or null if there is no match. */
+    fun toStatus(code: Int): Status?
+}
+
+/**
+ * Default [CodeLookup] implementation mapping [Status] to HTTP status codes.
+ *
+ * Category -> HTTP default:
+ *   Succeeded / Filtered / Information -> 200      Pending -> 202
+ *   Denied -> 401      Invalid -> 400      Errored -> 500      Unserviceable -> 503
+ *
+ * Individual codes can differ from their category's default via [overrides] (e.g. CREATED -> 201,
+ * NOT_FOUND -> 404). [toStatus] is derived from [toCode] rather than a separately maintained
+ * reverse table, so the two directions can never drift out of sync with each other.
+ *
+ * Clients needing additional/custom codes should compose with [CompositeLookup] rather than
+ * subclassing this type directly — see [CompositeLookup] for why.
+ */
+open class CodesToHttp(
+    private val overrides: Map<Int, Int> = DEFAULT_OVERRIDES,
+) : CodeLookup {
+    override fun toCode(status: Status): Int {
+        overrides[status.code]?.let { return it }
+        return when (status) {
+            is Passed.Succeeded -> 200
+            is Passed.Pending -> 202
+            is Passed.Filtered -> 200
+            is Passed.Information -> 200
+            is Failed.Denied -> 401
+            is Failed.Invalid -> 400
+            is Failed.Errored -> 500
+            is Failed.Unserviceable -> 503
+        }
     }
 
     /**
-     * Converts an HTTP status code to a matching [Status], or null if not found.
+     * Reverse lookup, derived from [toCode] over the built-in [Codes.all] registry. Note this
+     * only finds statuses registered in [Codes] — a caller's own custom [Status] instances that
+     * were never added to that registry won't be found here even if they'd resolve to [code]
+     * via [toCode]. Use [CompositeLookup] if you need custom statuses to also be reverse-lookupable.
      */
-    fun toStatus(code: Int): Status? = lookupByCode[code]?.second
+    override fun toStatus(code: Int): Status? = Codes.all.firstOrNull { toCode(it) == code }
 
-    /**
-     * Converts a numeric code to its matching [Status].
-     */
-    fun ofCode(code: Int): Status {
-        val entry = lookupByHttp[code]
-        return when {
-            entry != null -> entry.second
-            code in 1..999 -> Passed.Succeeded(SUCCESS.name, code, SUCCESS.message)
-            code in 2000..2999 -> Failed.Invalid(INVALID.name, code, INVALID.message)
-            code >= 3000 -> Failed.Errored(ERRORED.name, code, ERRORED.message)
-            else -> Failed.Errored(UNEXPECTED.name, code, "Unexpected")
-        }
+    companion object {
+        val DEFAULT_OVERRIDES: Map<Int, Int> =
+            mapOf(
+                Codes.CREATED.code to 201,
+                Codes.HANDLED.code to 204,
+                Codes.CONFIRM.code to 200,
+                Codes.NOT_FOUND.code to 404,
+                Codes.MISSING.code to 400,
+                Codes.FORBIDDEN.code to 403,
+                Codes.CONFLICT.code to 409,
+                Codes.DEPRECATED.code to 426,
+                Codes.UNIMPLEMENTED.code to 501,
+                Codes.UNSUPPORTED.code to 501,
+                Codes.TIMEOUT.code to 408,
+                Codes.RATE_LIMITED.code to 429,
+                Codes.UNEXPECTED.code to 500,
+            )
+    }
+}
+
+/**
+ * Composes a [base] [CodeLookup] with client-supplied [extensions], without modifying or
+ * subclassing the base implementation (composition over inheritance). [extensions] take
+ * precedence over [base] for both directions.
+ *
+ * [extensions] is keyed by the actual [Status] instance (not just its numeric code) so that
+ * [toStatus] can be answered correctly for custom statuses that aren't part of the [Codes.all]
+ * registry — a plain `Map<Int, Int>` of code-to-code can't support that, since it never holds
+ * a reference to the actual custom Status object to return.
+ *
+ * ```kotlin
+ * val MY_DOMAIN_CODE = Failed.Errored("PAYMENT_DECLINED", 700123, "Payment declined")
+ * val lookup = CompositeLookup(CodesToHttp(), mapOf(MY_DOMAIN_CODE to 402))
+ * ```
+ */
+class CompositeLookup(
+    private val base: CodeLookup,
+    private val extensions: Map<Status, Int>,
+) : CodeLookup {
+    override fun toCode(status: Status): Int = extensions[status] ?: base.toCode(status)
+
+    override fun toStatus(code: Int): Status? {
+        val extended = extensions.entries.firstOrNull { it.value == code }?.key
+        return extended ?: base.toStatus(code)
     }
 }
