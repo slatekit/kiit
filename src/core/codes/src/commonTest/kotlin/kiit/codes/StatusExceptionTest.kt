@@ -5,6 +5,11 @@ import kotlin.test.assertEquals
 import kotlin.test.assertNotNull
 import kotlin.test.assertNull
 import kotlin.test.assertSame
+import kotlin.test.assertTrue
+
+// =================================================================================================
+// StatusExceptionTest
+// =================================================================================================
 
 class StatusExceptionTest {
     @Test
@@ -47,9 +52,16 @@ class StatusExceptionTest {
 
     @Test
     fun worksWithCustomStatus() {
-        val custom = Failed.Errored("RATE_LIMITED", 500099, "Rate limited")
+        val custom = Failed.Errored("RATE_LIMITED", 500199, "Rate limited")
         val ex = StatusException(custom)
         assertEquals("Rate limited", ex.message)
         assertSame(custom, ex.status)
+    }
+
+    @Test
+    fun worksWithUnserviceableStatus() {
+        val ex = StatusException(Codes.UNREACHABLE)
+        assertEquals(Codes.UNREACHABLE.message, ex.message)
+        assertTrue(ex.status is Failed.Unserviceable)
     }
 }
