@@ -7,9 +7,13 @@ import kotlin.test.assertNotSame
 import kotlin.test.assertSame
 import kotlin.test.assertTrue
 
+// =================================================================================================
+// StatusTest — Passed/Failed subtypes, copy helpers, ofCode/ofStatus companion functions
+// =================================================================================================
+
 class StatusTest {
     // -------------------------------------------------------------------------
-    // success flag — Passed subtypes
+    // success flag — Passed subtypes (hoisted onto Passed itself; see Passed.success)
     // -------------------------------------------------------------------------
 
     @Test fun succeededHasSuccessTrue() {
@@ -17,35 +21,35 @@ class StatusTest {
     }
 
     @Test fun pendingHasSuccessTrue() {
-        assertTrue(Passed.Pending("P", 200008, "P").success)
+        assertTrue(Passed.Pending("P", 200101, "P").success)
     }
 
     @Test fun filteredHasSuccessTrue() {
-        assertTrue(Passed.Filtered("F", 200204, "F").success)
+        assertTrue(Passed.Filtered("F", 200201, "F").success)
     }
 
-    @Test fun ignoredHasSuccessTrue() {
-        assertTrue(Passed.Ignored("I", 200204, "I").success)
+    @Test fun informationHasSuccessTrue() {
+        assertTrue(Passed.Information("I", 200301, "I").success)
     }
 
     // -------------------------------------------------------------------------
-    // success flag — Failed subtypes
+    // success flag — Failed subtypes (hoisted onto Failed itself; see Failed.success)
     // -------------------------------------------------------------------------
 
     @Test fun deniedHasSuccessFalse() {
-        assertFalse(Failed.Denied("D", 400005, "D").success)
+        assertFalse(Failed.Denied("D", 400001, "D").success)
     }
 
     @Test fun invalidHasSuccessFalse() {
-        assertFalse(Failed.Invalid("I", 400003, "I").success)
+        assertFalse(Failed.Invalid("I", 400102, "I").success)
     }
 
     @Test fun erroredHasSuccessFalse() {
-        assertFalse(Failed.Errored("E", 500007, "E").success)
+        assertFalse(Failed.Errored("E", 500005, "E").success)
     }
 
-    @Test fun unknownHasSuccessFalse() {
-        assertFalse(Failed.Unknown("U", 500008, "U").success)
+    @Test fun unserviceableHasSuccessFalse() {
+        assertFalse(Failed.Unserviceable("U", 500107, "U").success)
     }
 
     // -------------------------------------------------------------------------
@@ -64,7 +68,7 @@ class StatusTest {
 
     @Test
     fun copyMessageOnPending() {
-        val s = Passed.Pending("PENDING", 200008, "Pending")
+        val s = Passed.Pending("PENDING", 200101, "Pending")
         val copy = s.copyMessage("Custom")
         assertEquals("Custom", copy.message)
         assertEquals(s.code, copy.code)
@@ -72,21 +76,22 @@ class StatusTest {
 
     @Test
     fun copyMessageOnFiltered() {
-        val s = Passed.Filtered("FILTERED", 200204, "Filtered")
+        val s = Passed.Filtered("SKIPPED", 200201, "Skipped")
         val copy = s.copyMessage("Custom")
         assertEquals("Custom", copy.message)
     }
 
     @Test
-    fun copyMessageOnIgnored() {
-        val s = Passed.Ignored("IGNORED", 200204, "Ignored")
+    fun copyMessageOnInformation() {
+        val s = Passed.Information("HELP", 200301, "Help")
         val copy = s.copyMessage("Custom")
         assertEquals("Custom", copy.message)
+        assertTrue(copy.success)
     }
 
     @Test
     fun copyMessageOnDenied() {
-        val s = Failed.Denied("DENIED", 400005, "Denied")
+        val s = Failed.Denied("DENIED", 400001, "Denied")
         val copy = s.copyMessage("Custom")
         assertEquals("Custom", copy.message)
         assertFalse(copy.success)
@@ -94,23 +99,24 @@ class StatusTest {
 
     @Test
     fun copyMessageOnInvalid() {
-        val s = Failed.Invalid("INVALID", 400003, "Invalid")
+        val s = Failed.Invalid("INVALID", 400102, "Invalid")
         val copy = s.copyMessage("Custom")
         assertEquals("Custom", copy.message)
     }
 
     @Test
     fun copyMessageOnErrored() {
-        val s = Failed.Errored("ERRORED", 500007, "Errored")
+        val s = Failed.Errored("ERRORED", 500005, "Errored")
         val copy = s.copyMessage("Custom")
         assertEquals("Custom", copy.message)
     }
 
     @Test
-    fun copyMessageOnUnknown() {
-        val s = Failed.Unknown("UNKNOWN", 500008, "Unknown")
+    fun copyMessageOnUnserviceable() {
+        val s = Failed.Unserviceable("UNEXPECTED", 500107, "Unexpected")
         val copy = s.copyMessage("Custom")
         assertEquals("Custom", copy.message)
+        assertFalse(copy.success)
     }
 
     // -------------------------------------------------------------------------
@@ -128,15 +134,24 @@ class StatusTest {
 
     @Test
     fun copyAllOnDenied() {
-        val s = Failed.Denied("DENIED", 400005, "Denied")
+        val s = Failed.Denied("DENIED", 400001, "Denied")
         val copy = s.copyAll("Custom", 403)
         assertEquals("Custom", copy.message)
         assertEquals(403, copy.code)
         assertEquals(s.name, copy.name)
     }
 
+    @Test
+    fun copyAllOnUnserviceable() {
+        val s = Failed.Unserviceable("TIMEOUT", 500103, "Timeout")
+        val copy = s.copyAll("Custom", 408)
+        assertEquals("Custom", copy.message)
+        assertEquals(408, copy.code)
+        assertEquals(s.name, copy.name)
+    }
+
     // -------------------------------------------------------------------------
-    // toType — returns lowercase discriminant string
+    // toType — returns lowercase category discriminant, exhaustive over all 8 subtypes
     // -------------------------------------------------------------------------
 
     @Test
@@ -144,15 +159,15 @@ class StatusTest {
         assertEquals("succeeded", Status.toType(Passed.Succeeded("S", 1, "S")))
         assertEquals("pending", Status.toType(Passed.Pending("P", 2, "P")))
         assertEquals("filtered", Status.toType(Passed.Filtered("F", 3, "F")))
-        assertEquals("ignored", Status.toType(Passed.Ignored("I", 4, "I")))
+        assertEquals("information", Status.toType(Passed.Information("N", 4, "N")))
         assertEquals("denied", Status.toType(Failed.Denied("D", 5, "D")))
         assertEquals("invalid", Status.toType(Failed.Invalid("I", 6, "I")))
         assertEquals("errored", Status.toType(Failed.Errored("E", 7, "E")))
-        assertEquals("unknown", Status.toType(Failed.Unknown("U", 8, "U")))
+        assertEquals("unserviceable", Status.toType(Failed.Unserviceable("U", 8, "U")))
     }
 
     // -------------------------------------------------------------------------
-    // ofCode — returns same instance when nothing changes (optimisation)
+    // ofCode — returns same instance when nothing changes; applies overrides independently
     // -------------------------------------------------------------------------
 
     @Test
@@ -194,6 +209,21 @@ class StatusTest {
         val result = Status.ofCode(null, 200099, default)
         assertNotSame(default, result)
         assertEquals(200099, result.code)
+        assertEquals(default.message, result.message)
+    }
+
+    /**
+     * Regression test for the original operator-precedence bug:
+     *   `if (code == null && msg == null || msg == "") return defaultStatus`
+     * bound as `(code == null && msg == null) || (msg == "")`, so any call with msg == ""
+     * returned defaultStatus regardless of a supplied code, silently dropping the override.
+     */
+    @Test
+    fun ofCodeAppliesCodeOverrideEvenWhenMsgIsEmptyString() {
+        val default = Codes.DENIED
+        val result = Status.ofCode("", 401099, default)
+        assertNotSame(default, result)
+        assertEquals(401099, result.code)
         assertEquals(default.message, result.message)
     }
 
